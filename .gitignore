@@ -1,0 +1,8 @@
+**/.vs/**
+**/bin/**
+**/packages/**
+**/obj/**
+*.csproj.DotSettings
+*.csproj.user
+**/Web.Debug.config
+**/Web.Release.config
