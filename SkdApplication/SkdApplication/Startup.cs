@@ -6,10 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
-using Vue2Spa.Services.CallWeb;
-using Vue2Spa.Services.Logic;
+using WebRequests;
 
-namespace Vue2Spa
+
+namespace SkdApplication
 {
     public class Startup
     {
@@ -23,17 +23,24 @@ namespace Vue2Spa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var assembly = typeof(SkdLogic.SkdLogic).GetType().Assembly;
+
+
+
             // Add framework services.
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddApplicationPart(assembly);
+
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
                 options.CookieName = ".MyApp.Session";
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
             });           // Simple example with dependency injection for a data provider.
-            services.AddSingleton<ISKDLogic, SKDLogic>();
-            services.AddSingleton<IWebRequestsTools, WebRequestsTools>();
+            services.AddSingleton<SkdLogic.SkdLogic>();
+            services.AddSingleton<WebRequestsTools>();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

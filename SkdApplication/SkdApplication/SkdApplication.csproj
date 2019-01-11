@@ -6,7 +6,6 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="RestSharp" Version="106.5.4" />
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to show in IDE -->
@@ -18,6 +17,10 @@
     <Content Remove="packages\**" />
     <EmbeddedResource Remove="packages\**" />
     <None Remove="packages\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SkdLogic\SkdLogic.csproj" />
+    <ProjectReference Include="..\WebRequests\WebRequests.csproj" />
   </ItemGroup>
 
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">

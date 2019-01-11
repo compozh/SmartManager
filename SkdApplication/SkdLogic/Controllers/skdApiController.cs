@@ -1,32 +1,31 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vue2Spa.Models;
-using Vue2Spa.Services.CallWeb;
-using Vue2Spa.Services.Logic;
+using SkdLogic.Models;
+using WebRequests;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Vue2Spa.Controllers
+namespace SkdLogic.Controllers
 {
     [Route("api/[controller]")]
     public class SkdApiController : Controller
     {
-        //private readonly ISKDLogic _skdLogic;
-        private readonly IServiceProvider  _provider;
-        private IWebRequestsTools _iWebRequest { get { return _provider.GetService<IWebRequestsTools>(); } }//сокращаем
-        // сокращаем
-        private ISKDLogic _iSKDLogic { get { return _provider.GetService<ISKDLogic>(); } }
+		private readonly WebRequestsTools _webRequestTools;
+		// сокращаем
+		private readonly SkdLogic _skdLogic;
         //нужно добиться того, чтобы убрать эти интерфейсы
 
-        public SkdApiController( /*ISKDLogic skdLogic*/ IServiceProvider provider)
+        public SkdApiController(SkdLogic skdLogic, WebRequestsTools webRequestTools)
         {
-            this._provider = provider;
-        }
-        private bool InternalLogin(string login, string password)
+			_skdLogic = skdLogic;
+			_webRequestTools = webRequestTools;
+		}
+        private async Task<bool> internalLoginAsync(string login, string password)
         {
-            string userJson = _iWebRequest.Login(login, password);//приходит Json
+            string userJson = await _webRequestTools.LoginAsync(login, password);//приходит Json
             var user = JsonConvert.DeserializeObject<User>(userJson);
             if(user.Success==true)
             {
@@ -43,9 +42,9 @@ namespace Vue2Spa.Controllers
         }
         // подумать, стоит ли записать тикет, логи и пароль не в методе сервиса "Login"
         [HttpPost("[action]")]
-        public object Login([FromQuery(Name = "login")] string login, [FromQuery(Name = "password")] string password)
+        public async Task<object> LoginAsync([FromQuery(Name = "login")] string login, [FromQuery(Name = "password")] string password)
         {
-            if(InternalLogin(login, password)==true)
+            if (await internalLoginAsync(login, password) == true)
             {
                 return JsonConvert.DeserializeObject<User>(HttpContext.Session.GetString("user"));
             }
@@ -55,7 +54,7 @@ namespace Vue2Spa.Controllers
             }
         }
         [HttpPost("[action]")]
-        public object GetUsers()
+        public async Task<object> GetUsers()
         {
             //проверка на null не ест ьправильная, нужно будет сделать проверку на корректный логин и пароль
             if (string.IsNullOrEmpty(HttpContext.Session.Get<User>("user").Ticket))// или чему там равняется умершая сессия
@@ -64,11 +63,11 @@ namespace Vue2Spa.Controllers
             }
             else
             {
-                var users = _iSKDLogic.GetFullUsers(HttpContext.Session.Get<User>("user").Ticket);
+                var users = await _skdLogic.GetFullUsersAsync(HttpContext.Session.Get<User>("user").Ticket);
 
                 if (users == null)
                 {
-                    return Login(HttpContext.Session.GetString("login"), HttpContext.Session.GetString("password"));
+                    return await LoginAsync(HttpContext.Session.GetString("login"), HttpContext.Session.GetString("password"));
                 }
                 else { 
                     return users;

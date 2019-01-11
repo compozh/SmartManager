@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkdApplication", "SkdApplication.csproj", "{B5FE715F-AB99-4FA6-AEC1-D3B644C76DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkdApplication", ".\SkdApplication\SkdApplication.csproj", "{B5FE715F-AB99-4FA6-AEC1-D3B644C76DF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRequests", ".\WebRequests\WebRequests.csproj", "{EB2C11AA-7215-4D6E-8F35-CAA12140935D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkdLogic", ".\SkdLogic\SkdLogic.csproj", "{B333E777-9215-43EE-A60C-5C76CCC18769}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{B5FE715F-AB99-4FA6-AEC1-D3B644C76DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5FE715F-AB99-4FA6-AEC1-D3B644C76DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5FE715F-AB99-4FA6-AEC1-D3B644C76DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB2C11AA-7215-4D6E-8F35-CAA12140935D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2C11AA-7215-4D6E-8F35-CAA12140935D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2C11AA-7215-4D6E-8F35-CAA12140935D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2C11AA-7215-4D6E-8F35-CAA12140935D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B333E777-9215-43EE-A60C-5C76CCC18769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B333E777-9215-43EE-A60C-5C76CCC18769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B333E777-9215-43EE-A60C-5C76CCC18769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B333E777-9215-43EE-A60C-5C76CCC18769}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

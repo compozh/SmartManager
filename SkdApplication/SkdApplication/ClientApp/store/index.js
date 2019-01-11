@@ -26,7 +26,7 @@ const mutations = {
 // ACTIONS действиямогу твыполнятсья асинхронно предназначена для того, чтобы подготовить данные для мутации
 const actions = ({
   actionLoadUser(context, datauser){
-    Axios.post('/api/skdapi/login?login='+datauser.login+'&password='+datauser.password+'')
+    Axios.post('/api/skdapi/LoginAsync?login='+datauser.login+'&password='+datauser.password+'')
             .then((response)=>{
             context.commit('loadUser', response.data)//суём в мутацию
             console.log(response.data)

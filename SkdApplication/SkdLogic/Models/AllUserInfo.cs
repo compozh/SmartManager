@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vue2Spa.Models
+namespace SkdLogic.Models
 {
     public class AllUserInfo
     {
@@ -41,20 +41,7 @@ namespace Vue2Spa.Models
         [JsonProperty("USERID")]
         public string UserID { get; set; }
         public string Photo { get; set; }
-
-
-        //[JsonProperty("EXITED")]
-        //public string Exited { get; set; }
-        //[JsonProperty("HASKEY")]
-        //public string Haskey { get; set; }
-        
-        //[JsonProperty("KEYOWNER")]
-        //public string Keyowner { get; set; }
-        //[JsonProperty("KITF")]
-        //public string KITF { get; set; }
-        //[JsonProperty("OTDELID")]
-        //public string Otdelid { get; set; }
-        
+    
 
     }
 }
