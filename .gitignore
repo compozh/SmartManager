@@ -6,3 +6,4 @@
 *.csproj.user
 **/Web.Debug.config
 **/Web.Release.config
+/SkdApplication/.idea/.idea.SkdApplication

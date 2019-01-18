@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using WebRequests.Models;
+using WebTools;
 
 namespace WebRequests
 {
@@ -11,13 +13,19 @@ namespace WebRequests
 	{
 		private readonly IHttpClientFactory _clientFactory;
 		
-		public WebRequestsTools(System.Net.Http.IHttpClientFactory clientFactory)
+		public WebRequestsTools(IHttpClientFactory clientFactory)
 		{
 			_clientFactory = clientFactory;
 		}
 
-        //метод на авторизацию
-        public async Task<string> LoginAsync(string login, string password)
+		private const string WRONG_TICKET = "WRONG_TICKET";
+        /// <summary>
+        /// Авторизация через Web расчеты
+        /// </summary>
+        /// <param name="login">Имя пользователя</param>
+        /// <param name="password">Пароль</param>
+        /// <returns></returns>
+        public async Task<User> LoginAsync(string login, string password)
         {
 			var client = _clientFactory.CreateClient();
 			var request = new HttpRequestMessage(HttpMethod.Post,
@@ -25,27 +33,70 @@ namespace WebRequests
 			request.Headers.Add("Data-Type", "json");
 			request.Content = new StringContent($"{{login:'{login}', password:'{password}'}}", Encoding.UTF8, "application/json");
 			var response = await client.SendAsync(request);
-			var content = await response.Content.ReadAsStringAsync();
+			var content = await response.Content.ReadAsStringAsync();	
+			
 			var valuesUser = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-            string valueUser;
-            valuesUser.TryGetValue("d", out valueUser);
-            return valueUser;
-        }
+			valuesUser.TryGetValue("d", out var valueUser);
+			var user = JsonConvert.DeserializeObject<User>(valueUser);
+
+			_login = login;
+			_password = password;
+			_ticket = user.Ticket;
+
+			return user;
+
+		}
+
+		private string _login
+		{
+			get => SessionHandler.Current.Get<string>("UserName");
+			set => SessionHandler.Current.Set("UserName", value);
+		}
+		private string _password
+		{
+			get => SessionHandler.Current.Get<string>("Password");
+			set => SessionHandler.Current.Set("Password", value);
+		}
+        private string _ticket
+		{
+			get => SessionHandler.Current.Get<string>("Ticket");
+			set => SessionHandler.Current.Set("Ticket", value);
+		}
+    
         //метод на достать другие данные
-        public async Task<string> CallWebRequestAsync(string calcId, string args, string ticket)
-        {
-			var client = _clientFactory.CreateClient();
-			var request = new HttpRequestMessage(HttpMethod.Post,
-			"http://m.it.ua/ws/WebService.asmx/ExecuteEx");
-			request.Headers.Add("Data-Type", "json");
-			request.Content = new StringContent($"{{calcId:'{calcId}', args:'{args}', ticket:'{ticket}'}}", Encoding.UTF8, "application/json");
-			var response = await client.SendAsync(request);
-			var content = await response.Content.ReadAsStringAsync();
+        public async Task<string> CallWebRequestAsync(string calcId, string args)
+		{
+			
+			var content = await callWebRequestInternalAsync(calcId, args);
+
+			if (content == WRONG_TICKET)
+			{
+				var user = await LoginAsync(_login, _password);
+				if (!user.Success)
+				{
+					return null;
+				}
+
+				content = await callWebRequestInternalAsync(calcId, args);
+			}
+			
+			
 			var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-            string value;
-            values.TryGetValue("d", out value);
+			values.TryGetValue("d", out var value);
             return value;
         }
-    }
+
+		private async Task<string> callWebRequestInternalAsync(string calcId, string args)
+		{
+			var client = _clientFactory.CreateClient();
+			var request = new HttpRequestMessage(HttpMethod.Post,
+				"http://m.it.ua/ws/WebService.asmx/ExecuteEx");
+			request.Headers.Add("Data-Type", "json");
+			request.Content = new StringContent($"{{calcId:'{calcId}', args:'{args}', ticket:'{_ticket}'}}", Encoding.UTF8, "application/json");
+			var response = await client.SendAsync(request);
+			var content = await response.Content.ReadAsStringAsync();
+			return content;
+		}
+	}
 }
 

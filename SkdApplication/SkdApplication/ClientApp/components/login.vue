@@ -28,7 +28,7 @@
       </v-flex>
       <v-flex xs4>
         <v-card >
-          <v-text-field  v-model="datauser.password" v:rules="[rules.password, rules.length(6)]" 
+          <v-text-field  v-model="datauser.password" v:rules="[rules.password, rules.length(6)]"
               box color="deep-purple" counter="20" label="Password" style="max-height: 60px;" :type="show_password">
           </v-text-field>
           <v-switch class="checklog" :label="'Показать пароль'" v-model="choice">
@@ -49,7 +49,7 @@
       <v-flex xs4>
         <v-card ></v-card>
       </v-flex>
-        
+
       <v-flex xs4>
           <v-card></v-card>
       </v-flex>
@@ -64,7 +64,7 @@
   </v-layout>
 </v-container>
     <!-- <router-link to="/users"><v-btn :click="SigIn"> go to users</v-btn></router-link> -->
-    
+
   </v-app>
 </template>
 
@@ -95,22 +95,22 @@ export default {
   },
   watch:{
       user: function(){
-      if(this.user.success==true)
+        if(this.user.success==true)
          {
            if(this.users_list==''){//если список пользователей пуст то загружаем
-            this.$store.dispatch('actionLoadUsersList')//загружаем фейсы(пользователей) через Action(actionLoadUsersList)---> (store/index.js) 
-            this.$router.push('users')
+            this.$store.dispatch('loginsList')//загружаем фейсы(пользователей) через Action(actionLoadUsersList)---> (store/index.js)
+            this.$router.push('/')
             }
             else{//иначе просто переходим
-            this.$router.push('users')
+            this.$router.push('/')
             }
             console.log('true')
 
          }
-      else if(this.user=="wrong"){
-            this.inspection="не правильный логин или пароль"
-            console.log('false')
-      }
+        else if(this.user=="wrong"){
+              this.inspection="не правильный логин или пароль"
+              console.log('false')
+        }
     },
     choice:function(){
       if(!this.choice)
@@ -120,10 +120,12 @@ export default {
     }
   },
   methods:{
-      // ...mapActions(['actionLoadUser']) , а это другйо способ как пользвоатсья экшинами
+      // ...mapActions(['login']) , а это другйо способ как пользвоатсья экшинами
     SigIn:function(){
-          this.$store.dispatch('actionLoadUser',this.datauser)//загружаем фейсы(пользователей) через Action(actionLoadUser)---> (store/index.js) 
-          // this.actionLoadUser(this.datauser);
+          this.$store.dispatch('login',this.datauser).then(()=>{
+            this.$router.push('/');
+          })  //загружаем фейсы(пользователей) через Action(login)---> (store/index.js)
+          // this.login(this.datauser);
     },
   }
 }
@@ -142,7 +144,7 @@ export default {
 }
 .checklog{
   position: relative;
-  left: 15px; 
+  left: 15px;
 }
 </style>
 

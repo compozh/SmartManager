@@ -5,8 +5,7 @@ namespace SkdApplication.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View("/Views/Index.cshtml");
         }
-
     }
 }

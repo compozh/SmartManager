@@ -5,9 +5,9 @@
       <v-text-field label="Поиск" color="success">
       </v-text-field>
     </v-flex>
-    <div v-for="userCom in users_list" :key="userCom.USERID"> 
+    <div v-for="userCom in users_list" :key="userCom.USERID">
       <list-component :userCopmonent='userCom'> <!-- передаю "привязываю" пользовательскому компоненту  данные  -->
-      </list-component> 
+      </list-component>
     </div>
   </v-app>
 </template>
@@ -34,14 +34,15 @@ export default {
     created: function () {
     },
     beforeMount: function(){
-      //подробно разобрать beforeMount !!!!!!!!!!!!!!!!!!!!!!!!
-      if(this.user=='wrong' || this.user==''){ // после рефреш появляется проблема с тем что, приходиться логинется, хотя состояние должно сохраниться
-         this.$router.push('login')
-      }
+      this.$store.dispatch('loadUsersList')
+      // //подробно разобрать beforeMount !!!!!!!!!!!!!!!!!!!!!!!!
+      // if(this.user=='wrong' || this.user==''){ // после рефреш появляется проблема с тем что, приходиться логинется, хотя состояние должно сохраниться
+      //    this.$router.push('login')
+      // }
     },
     methods: {
-      
-    } 
+
+    }
 }
 </script>
 
