@@ -6,6 +6,7 @@
         <NeutralLanguage></NeutralLanguage>
         <Description></Description>
         <AssemblyName>Authentification</AssemblyName>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>

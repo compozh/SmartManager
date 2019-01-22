@@ -8,9 +8,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Authentification;
+using Web.Authentification;
 
-namespace Authentification
+namespace Web.Authentification
 {
 	[Route("api/[controller]")]
 	public class AccountController : Controller
