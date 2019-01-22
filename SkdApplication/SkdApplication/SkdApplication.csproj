@@ -6,6 +6,8 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Web.Authentification" Version="1.0.0" />
+    <PackageReference Include="Web.WebRequests" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to show in IDE -->
@@ -19,9 +21,7 @@
     <None Remove="packages\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Authentification\Authentification.csproj" />
     <ProjectReference Include="..\SkdLogic\SkdLogic.csproj" />
-    <ProjectReference Include="..\WebRequests\WebRequests.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\dist\" />
