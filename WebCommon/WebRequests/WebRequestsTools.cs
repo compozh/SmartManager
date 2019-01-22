@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using WebRequests.Models;
-using WebTools;
+using Web.WebRequests.Models;
+using Web.Tools;
 
-namespace WebRequests
+namespace Web.WebRequests
 {
 	//в дальнейшем пойдёт в отдельную либу
 	public class WebRequestsTools

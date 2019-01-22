@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Authentification;
-using WebTools;
+using Web.Authentification;
+using Web.Tools;
 
 
-namespace WebRequests
+namespace Web.WebRequests
 {
 	public class WebRequestsIdentityProvider:IIdentityProvider
 	{
