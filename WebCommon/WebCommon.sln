@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentification", "Authentification\Authentification.csproj", "{F8031A00-7AD1-4EEB-A404-85E76EB7721C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Authentification", "Web.Authentification\Web.Authentification.csproj", "{F8031A00-7AD1-4EEB-A404-85E76EB7721C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRequests", "WebRequests\WebRequests.csproj", "{2FD571B8-FEE8-4D21-B0EF-A03A8FA2AE69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.WebRequests", "Web.WebRequests\Web.WebRequests.csproj", "{2FD571B8-FEE8-4D21-B0EF-A03A8FA2AE69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTools", "WebTools\WebTools.csproj", "{15C9E9EA-CB3D-47D0-ADEE-C696199D3EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tools", "Web.Tools\Web.Tools.csproj", "{15C9E9EA-CB3D-47D0-ADEE-C696199D3EEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

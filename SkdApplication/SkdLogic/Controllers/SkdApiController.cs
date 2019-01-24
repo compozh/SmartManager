@@ -7,10 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SkdLogic.Models;
-using WebRequests;
+using Web.WebRequests;
 using Microsoft.Extensions.DependencyInjection;
-using WebRequests.Models;
-using WebTools;
+using Web.WebRequests.Models;
 
 namespace SkdLogic.Controllers
 {

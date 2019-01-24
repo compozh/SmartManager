@@ -9,11 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 using SkdApplication.Authentification;
 using System;
 using System.Linq;
-using Authentification;
+using Web.Authentification;
 using Microsoft.AspNetCore.Http;
-using WebRequests;
-using WebTools;
-
+using Web.WebRequests;
+using Web.Tools;
 namespace SkdApplication
 {
 	public class Startup

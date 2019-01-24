@@ -6,8 +6,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Web.Authentification" Version="1.0.0" />
-    <PackageReference Include="Web.WebRequests" Version="1.0.0" />
+    <PackageReference Include="Web.Authentification" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to show in IDE -->
