@@ -16,15 +16,16 @@
     "install": "npm run build-vendor:dev"
   },
   "dependencies": {
+    "@it-enterprise/fontawesome-icons": "^1.0.3",
     "axios": "^0.15.3",
     "core-js": "^2.5.3",
     "vue": "^2.5.16",
     "vue-router": "^2.8.1",
     "vue-server-renderer": "^2.5.16",
     "vue-template-compiler": "^2.5.16",
+    "vuetify": "1.4.0-alpha.1",
     "vuex": "^2.5.0",
-    "vuex-router-sync": "^4.3.2",
-    "vuetify": "1.4.0-alpha.1"
+    "vuex-router-sync": "^4.3.2"
   },
   "devDependencies": {
     "@fortawesome/fontawesome": "^1.1.4",
