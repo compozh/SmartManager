@@ -1,17 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SkdLogic.Models;
 using Web.WebRequests;
-using Microsoft.Extensions.DependencyInjection;
 using Web.Authentication;
-using Web.WebRequests.Models;
 
 namespace SkdLogic.Controllers
 {

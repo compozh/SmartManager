@@ -4,9 +4,11 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <PackageId>Web.WebRequests</PackageId>
     <AssemblyName>Web.WebRequests</AssemblyName>
-    <Version>1.0.2</Version>
-    <Authors>Web.WebRequests</Authors>
+    <Version>1.0.3</Version>
+    <Authors>It-Enterprise</Authors>
     <Product>Web.WebRequests</Product>
+    <PackageVersion>1.0.3</PackageVersion>
+    <Description>Web.WebRequests</Description>
   </PropertyGroup>
 
   <ItemGroup>
