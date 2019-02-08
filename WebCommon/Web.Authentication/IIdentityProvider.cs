@@ -3,7 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Web.Authentification
+namespace Web.Authentication
 {
 	public interface IIdentityProvider
 	{
