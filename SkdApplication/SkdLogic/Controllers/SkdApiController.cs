@@ -1,45 +1,42 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SkdLogic.Models;
-using Web.Authentication;
+using Web.WebRequests;
+using Microsoft.Extensions.DependencyInjection;
+using Web.WebRequests.Models;
 
 namespace SkdLogic.Controllers
 {
 	[Route("api/[controller]")]
 	public class SkdApiController : Controller
 	{
-		private readonly AuthenticationTools _authenticateTools;
+		private readonly WebRequestsTools _webRequestTools;
 
 		// сокращаем
 		private readonly SkdLogic _skdLogic;
 		//нужно добиться того, чтобы убрать эти интерфейсы
 
-		public SkdApiController(SkdLogic skdLogic, AuthenticationTools authenticateTools)
+		public SkdApiController(SkdLogic skdLogic, WebRequestsTools webRequestTools)
 		{
 			_skdLogic = skdLogic;
-			_authenticateTools = authenticateTools;
+			_webRequestTools = webRequestTools;
 		}
-
-
+		
+	
 		[Authorize]
 		[HttpPost("[action]")]
-		public async Task<IEnumerable<AllUserInfo>> GetUsers()
+		public async Task<object> GetUsers()
 		{
-			var response = await _skdLogic.GetFullUsersAsync();
-			if (response != null)
-			{
-				return response;
-			}
+		
+			var users = await _skdLogic.GetFullUsersAsync();
 
-			var authResult = await _authenticateTools.ReLogin(HttpContext);
-			if (authResult.Result)
-			{
-				return await _skdLogic.GetFullUsersAsync();
-			}
-
-			return null;
+			return users;
 		}
 	}
 }

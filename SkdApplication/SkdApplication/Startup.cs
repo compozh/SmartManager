@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using SkdApplication.Authentification;
 using System;
+using System.Linq;
+using Web.Authentification;
 using Microsoft.AspNetCore.Http;
-using SkdApplication.Authentication;
-using Web.Authentication;
-using Web.Tools;
 using Web.WebRequests;
-
+using Web.Tools;
 namespace SkdApplication
 {
 	public class Startup
@@ -52,7 +52,8 @@ namespace SkdApplication
 			// Add framework services.
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-				.AddApplicationPart(typeof(SkdLogic.SkdLogic).Assembly);
+				.AddApplicationPart(typeof(SkdLogic.SkdLogic).Assembly)
+				.AddApplicationPart(typeof(AccountController).Assembly);
 
 			services.AddDistributedMemoryCache();
 			services.AddSession(options => {
@@ -64,8 +65,6 @@ namespace SkdApplication
 			services.AddSingleton<IAuthOptions, AuthOptions>();
 			services.AddSingleton<IIdentityProvider, WebRequestsIdentityProvider>();
 			services.AddSingleton<SkdLogic.SkdLogic>();
-			services.AddSingleton<AuthenticationTools>();
-
 			services.AddSingleton<WebRequestsTools>();
 			services.AddHttpClient();
 		}

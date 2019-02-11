@@ -18,60 +18,30 @@ namespace SkdLogic
 		
 		private readonly WebRequestsTools _webRequestsTools;
 		
-		private async Task<List<UserInfo>> getUserInfoAsync(IEnumerable<AllUserInfo> result)
+		private async Task<string> getUserInfoAsync(IEnumerable<AllUserInfo> result)
 		{
 			var calcId = "GETUSERSINFO";
 			var temp = result.Select(x => new { USERID = x.UserID, HASH = "" });
 			var args = JsonConvert.SerializeObject(new { Users = temp, ByLogin = false, SaveInContent = true });
-			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
-			var requestResult = await task;
-			switch (requestResult.ResultFlag)
-			{
-				case WebRequestsResponseFlags.WrongTicket:
-				case WebRequestsResponseFlags.NotAuthorised:
-					return null;
-				default:
-					return JsonConvert.DeserializeObject<List<UserInfo>>(requestResult.Content);
-
-			}
-
+			return await _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
 		}
-		//метод получения фото для всех пользователей
-		private async Task<List<AllUserInfo>> getUsersAsync()
+		//метод получения фото для всех пользователей 
+		private async Task<string> getUsersAsync()
 		{
 			var calcId = "_SKD_STATE";
 			var args = "{\\\"SecretPhrase\\\":\\\"291263\\\"}";
-
-			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);
-			var requestResult = await task;
-			switch (requestResult.ResultFlag)
-			{
-				case WebRequestsResponseFlags.WrongTicket:
-				case WebRequestsResponseFlags.NotAuthorised:
-					return null;
-				default:
-					return JsonConvert.DeserializeObject<List<AllUserInfo>>(requestResult.Content);
-
-			}
+			return await _webRequestsTools.CallWebRequestAsync(calcId, args); //достаю объект из IServiceProvider
 		}
 
 		/// <summary>
 		/// Получение готового списка пользователей
 		/// </summary>
+		/// <param name="ticket">ticket с сервера приложений</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<AllUserInfo>> GetFullUsersAsync()
+		public async Task<IEnumerable<AllUserInfo>> GetFullUsersAsync()//тикет пришедший из сессии
 		{
-			var users = await getUsersAsync();//при логине отправляю тикет на получение всех пользователей
-			if (users == null)
-			{
-				return null;
-			}
-			var userInfo = await getUserInfoAsync(users);//при логине отправляю тикет на получение информации пользователей
-
-			if (userInfo == null)
-			{
-				return null;
-			}
+			var users = JsonConvert.DeserializeObject<List<AllUserInfo>>(await getUsersAsync());//при логине отправляю тикет на получение всех пользователей
+			var userInfo = JsonConvert.DeserializeObject<List<UserInfo>>(await getUserInfoAsync(users));//при логине отправляю тикет на получение информации пользователей
 
 			var superUser = users.Zip(userInfo, (u, i) => new AllUserInfo
 			{
