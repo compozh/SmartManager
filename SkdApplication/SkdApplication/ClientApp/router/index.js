@@ -14,14 +14,12 @@ let router = new VueRouter({
 // Если маршрут требует авторизации, перенаправляем на логин
 router.beforeEach((to, from, next) => {
 	
+	
 	let token = sessionStorage.getItem('authToken');
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-	const unauthentificated = to.matched.some(record => record.meta.unauthentificated);
-	
 	if (requiresAuth && !token) {
 		next('/login');
-	} else if(unauthentificated && token){
-		next('users');
+		console.log('all Not OK')
 	} else {
 		next();
 	}

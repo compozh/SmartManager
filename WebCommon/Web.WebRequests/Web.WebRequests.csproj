@@ -4,11 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <PackageId>Web.WebRequests</PackageId>
     <AssemblyName>Web.WebRequests</AssemblyName>
-    <Version>1.0.3</Version>
-    <Authors>It-Enterprise</Authors>
+    <Version>1.0.2</Version>
+    <Authors>Web.WebRequests</Authors>
     <Product>Web.WebRequests</Product>
-    <PackageVersion>1.0.3</PackageVersion>
-    <Description>Web.WebRequests</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Web.Authentification\Web.Authentification.csproj" />
     <ProjectReference Include="..\Web.Tools\Web.Tools.csproj" />
   </ItemGroup>
 
