@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Web.Authentification;
+using Web.Authentication;
 
-namespace SkdApplication.Authentification
+namespace SkdApplication.Authentication
 {
     public class AuthOptions : IAuthOptions
     {

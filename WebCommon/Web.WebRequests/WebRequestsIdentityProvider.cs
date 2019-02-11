@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Web.Authentification;
+using Microsoft.AspNetCore.Authentication;
+using Web.Authentication;
 using Web.Tools;
 
 
@@ -25,9 +26,11 @@ namespace Web.WebRequests
 			}
 
 			var claims = new List<Claim> {
-				new Claim(ClaimsIdentity.DefaultNameClaimType, username)
+				new Claim(ClaimsIdentity.DefaultNameClaimType, username),
 			};
+			
 			return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 		}
+		
 	}
 }
