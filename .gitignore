@@ -2,6 +2,8 @@
 **/bin/**
 **/packages/**
 **/obj/**
+**/dist/**
+**/node_modules/**
 *.csproj.DotSettings
 *.csproj.user
 **/Web.Debug.config
