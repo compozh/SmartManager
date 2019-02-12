@@ -2,7 +2,7 @@ import _ from 'lodash'
 export default function FindMaxValue(arrayElement, maxValue){
     // var t=_.max(arrayElement);
     if(arrayElement>maxValue){
-        return '#FF4560'
+        return '#f55a4e'
     }
     else{
         return '#008FFB'

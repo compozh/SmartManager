@@ -72,7 +72,7 @@ export default {
         color:#008FFB;
     }
     .icon-color-error{
-        color:#FF4560;
+        color:#f55a4e;
     }
     .icon-info > i{
        font-size: 50px;
@@ -100,6 +100,6 @@ export default {
     color:#008FFB; ;
 }
 .errors{
-    color:#FF4560 ;
+    color:#f55a4e;
 }
 </style>

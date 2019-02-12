@@ -148,7 +148,7 @@ export default {
       background: rgba(223, 12, 12, 0.2);
   }
   .text-head-color{
-    color:black !important;
+    color:#008FFB !important;
     /* #008FFB */
   }
   .text-td-position{

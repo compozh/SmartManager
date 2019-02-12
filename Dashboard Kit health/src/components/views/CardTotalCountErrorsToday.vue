@@ -62,7 +62,7 @@ export default {
         color:#008FFB;
     }
     .icon-color-error{
-        color:#FF4560;
+        color:#f55a4e;
     }
     .icon-info > i{
         width: 100%;
@@ -91,6 +91,6 @@ export default {
         color:#008FFB;
     }
     .errors{
-        color:#FF4560 ;
+        color:#f55a4e ;
     }
 </style>

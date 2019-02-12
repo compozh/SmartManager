@@ -7,9 +7,6 @@ const mutations = {
   setLoginStatus(state,payload){
     state.loginStatus=payload;
   },
-  setTicket(state, payload){
-    state.ticket=payload;
-  },
   setErrorToday(state, payload){
     state.errorToday=payload
   }

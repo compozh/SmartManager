@@ -114,6 +114,14 @@ export default {
       return this.$store.getters.getLoginStatus
     }
   },
+  created: function () {
+    if(sessionStorage.getItem('ticket')){
+        this.$store.dispatch('IsLogin',true);
+        this.$store.dispatch('getInfoFromServer');
+      }else{
+        this.$store.dispatch('IsLogin',false);
+      }
+  }
 }
 </script>
 <style scoped>
@@ -127,7 +135,6 @@ export default {
     border-radius: 10px;
     text-align: center;
     color: #999;
-
   }
  .all-page{
    margin-top: 60px;

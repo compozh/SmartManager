@@ -1,6 +1,6 @@
 <template>
     <material-card
-          color="#FF4560"
+          color="#f55a4e"
           title="Ошибки на сегодня"
         >
           <v-data-table
@@ -75,6 +75,6 @@ export default {
 </script>
 <style scoped>
 .font-weight-light{
-  color:#FF4560  !important;
+  color:#f55a4e  !important;
 }
 </style>
