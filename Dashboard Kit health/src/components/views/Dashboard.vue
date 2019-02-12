@@ -5,20 +5,25 @@
     grid-list-xl
     class="all-page"
   >
-    <v-layout wrap>
-        <v-flex sm6 xs12 md6 lg3 >
+<v-layout wrap>
+        <v-layout align-center justify-center row fill-height v-if="!loginStatus">
+            <login></login>
+        </v-layout>
+
+    <v-layout wrap v-if="loginStatus">
+        <v-flex sm6 xs12 md6 lg3 class="card">
         <card-total-count-queries-for-today></card-total-count-queries-for-today>
         </v-flex>
-          <v-flex sm6  xs12 md6  lg2 >
+          <v-flex sm6  xs12 md6  lg2 class="card">
             <card-total-count-errors-today></card-total-count-errors-today>
           </v-flex>
-        <v-flex sm6 xs12 md6 lg2 >
+        <v-flex sm6 xs12 md6 lg2 class="card">
           <card-total-count-of-web-request-escalations-for-today></card-total-count-of-web-request-escalations-for-today>
         </v-flex>
-        <v-flex sm6 xs6 md6 lg2>
+        <v-flex sm6 xs6 md6 lg2 class="card">
             <card-total-count-of-scheduler-fail></card-total-count-of-scheduler-fail>
         </v-flex>
-        <v-flex sm6 xs6 md6 lg3>
+        <v-flex sm6 xs6 md6 lg3 class="card">
             <card-total-count-of-perfomance-exceedances-for-today></card-total-count-of-perfomance-exceedances-for-today>
         </v-flex>
 
@@ -27,7 +32,6 @@
         <diagram-perf-exceedances-for-week></diagram-perf-exceedances-for-week>
       </div>
     </v-flex>
-     
       
       <v-flex  md12 sm12 lg6 >
         <div class="wrapDiagram">
@@ -58,7 +62,7 @@
      <v-flex md12 lg12 >
       <table-servers></table-servers>
       </v-flex>
-    
+    </v-layout>
     </v-layout>
   </v-container>
 </template>
@@ -77,123 +81,47 @@ import CTotalCountErrorsToday from './CardTotalCountErrorsToday'
 import CTotalCountOfWebRequestEscalationsForToday from './CardTotalCountOfWebRequestEscalationsForToday'
 import CTotalCountOfPerformanceExceedancesForToday from './CardTotalCountOfPerformanceExceedancesForToday'
 import CTotalCountOfSchedulerFail from './CardTotalCountOfSchedulerFail'
-// import DExceedancesForYesterday from './DiagramPerfExceedancesForYesterday'
 import ApexCharts from 'apexcharts'
 import TServersParameters from './TableServersParameters'
-
-
-
-
+import Login from './Login'
 
 
 export default {
   components: {
-        'table-errors-for-today': TErrorsForToday, // объявляю пользовательский компонент
-        'table-scheduler-fails': TSchedulerFails, // объявляю пользовательский компонент
-        'diagram-errors-for-week': DErrorsForWeek, // объявляю пользовательский компонент
-        'table-long-sql-queries-for-today': TLongSqlQueriesForToday, // объявляю пользовательский компонент
-        'diagram-long-sql-queries-for-week': DLongSqlQueriesForWeek, // объявляю пользовательский компонент
-        'diagram-web-request-escalations-for-week': DWebRequestEscalationsForWeek, // объявляю пользовательский компонент
-        'diagram-perf-exceedances-for-week': DPerfExceedancesForWeek, // объявляю пользовательский компонент
-        'card-total-count-queries-for-today': CTotalCountOfLongQueriesForToday, // объявляю пользовательский компонент
-        'card-total-count-errors-today': CTotalCountErrorsToday, // объявляю пользовательский компонент
-        'card-total-count-of-web-request-escalations-for-today': CTotalCountOfWebRequestEscalationsForToday, // объявляю пользовательский компонент
-        'card-total-count-of-perfomance-exceedances-for-today': CTotalCountOfPerformanceExceedancesForToday, // объявляю пользовательский компонент
-        'card-total-count-of-scheduler-fail': CTotalCountOfSchedulerFail, // объявляю пользовательский компонент
-        // 'card-exceedances-for-yesterday': DExceedancesForYesterday, // объявляю пользовательский компонент
-        'table-servers': TServersParameters, // объявляю пользовательский компонент
+        'table-errors-for-today': TErrorsForToday, 
+        'table-scheduler-fails': TSchedulerFails, 
+        'diagram-errors-for-week': DErrorsForWeek, 
+        'table-long-sql-queries-for-today': TLongSqlQueriesForToday, 
+        'diagram-long-sql-queries-for-week': DLongSqlQueriesForWeek, 
+        'diagram-web-request-escalations-for-week': DWebRequestEscalationsForWeek, 
+        'diagram-perf-exceedances-for-week': DPerfExceedancesForWeek, 
+        'card-total-count-queries-for-today': CTotalCountOfLongQueriesForToday, 
+        'card-total-count-errors-today': CTotalCountErrorsToday, 
+        'card-total-count-of-web-request-escalations-for-today': CTotalCountOfWebRequestEscalationsForToday, 
+        'card-total-count-of-perfomance-exceedances-for-today': CTotalCountOfPerformanceExceedancesForToday, 
+        'card-total-count-of-scheduler-fail': CTotalCountOfSchedulerFail, 
+        'table-servers': TServersParameters, 
+        'login': Login, // объявляю  компонент логина
     },
   data () {
     return {
       stateSwitch:false,
       typeDiagram:'Bar',
-     
-      dataPerfExceedancesForToday:[
-        {
-        Name:"",
-        Caption:"",
-        MaxValue:"",
-        Dates:""
-      }
-      ],
-      headersExceedances: [
-        {
-          sortable: false,
-          text: 'ID',
-          value: 'id'
-        },
-        {
-          sortable: false,
-          text: 'Name',
-          value: 'name'
-        },
-        {
-          sortable: false,
-          text: 'Caption',
-          value: 'caption',
-          align: 'right'
-        },
-        {
-          sortable: false,
-          text: 'MaxValue',
-          value: 'maxValue',
-          align: 'right'
-        }, 
-        {
-          sortable: false,
-          text: 'Dates',
-          value: 'dates',
-          align: 'right'
-        },
-      ],
-      tabs: 0,
-      list: {
-        0: false,
-        1: false,
-        2: false
-      }
     }
   },
   computed: {
-    perfExceedancesForToday(){
-      return this.$store.getters.getInfoList.PerfExceedancesForToday
-    },
+    loginStatus(){
+      return this.$store.getters.getLoginStatus
+    }
   },
-  methods: {
-   
-    ChangeTypeDiagram(stateSwitch){
-        if(stateSwitch){
-          this.typeDiagram='Line';
-          }else{
-          this.typeDiagram='Bar';
-          }
-    },
-    complete (index) {
-      this.list[index] = !this.list[index]
-    },
-    GetInfoFromServer(){
-      this.$store.dispatch('getInfoFromServer');
-    },
-    GetPerfExceedancesForToday(){
-        this.dataPerfExceedancesForToday=[];
-        for(var key in this.perfExceedancesForToday){
-          this.dataPerfExceedancesForToday.push(this.perfExceedancesForToday[key]);
-        }
-    },
-  },
-  created() {
-    console.log('created')
-    this.GetInfoFromServer();
-  },
-  watch:{
-      perfExceedancesForToday:function(){
-        this.GetPerfExceedancesForToday();
-      },
-  },
-  
 }
 </script>
 <style scoped>
+  .card{
+    margin-bottom: 10px;
+    margin-top: 25px;
+    height: 170px;
+  } 
   .wrapDiagram{
     background: white;
     border-radius: 10px;
@@ -201,13 +129,14 @@ export default {
     color: #999;
 
   }
- /* .header-title{
-   position: relative;
-    top: 30px;
- } */
  .all-page{
    margin-top: 60px;
  }
- 
+ .login-div{
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 10px;
+ }
 </style>
 

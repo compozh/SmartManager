@@ -11,15 +11,6 @@
         </div>
         
     </div>
-    <!-- <material-stats-card
-        color="info"
-        icon="mdi-twitter"
-        title="Общее количество эскалаций веб-запросов за сегодня"
-        :value=dataTotalCountOfWebRequestEscalationsForToday
-        sub-icon="mdi-update"
-        sub-text="Just Updated"
-        :class="textColor"
-    /> -->
 </template>
 
 <script>
@@ -50,6 +41,7 @@ export default {
             else{
                 this.textColor='errors'
                 this.iconColor='icon-color-error'
+                this.$store.dispatch('ErrorToday',true);
             }
             this.dataTotalCountOfWebRequestEscalationsForToday=String(this.totalCountOfWebRequestEscalationsForToday)
 
@@ -67,9 +59,8 @@ export default {
 
 <style scoped>
  .icon-info{
-        color:#ef5350;
-        position: relative;
-        top:40%;
+       position: absolute;
+        bottom:0;
     }
     .icon-info > i{
        font-size: 50px;
@@ -80,29 +71,29 @@ export default {
         top: 10%;
     }
      .icon-color{
-        color:rgb(90, 175, 75);
+        color:#008FFB;
     }
     .icon-color-error{
-        color:#ef5350;
+        color:#FF4560;
     }
     .card-info{
-        margin-top: 25px;
+        position: relative;
         width: 100%;
-        height: 80%;
+        height: 100%;
         background: white;
         border-radius: 10px;
     }
     .info-value{
-        position: relative;
-        top: -15%;
+        position: absolute;
+        bottom: 0;
         width: 100%;
         text-align: center;
         font-size: 48px !important;
     }
 .not-error{
-    color:rgb(90, 175, 75); ;
+    color:#008FFB;
 }
 .errors{
-    color:rgb(234, 64, 47) ;
+    color:#FF4560 ;
 }
 </style>

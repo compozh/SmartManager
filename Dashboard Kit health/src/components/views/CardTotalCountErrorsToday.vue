@@ -40,6 +40,7 @@ export default {
             else{
                 this.textColor='errors'
                 this.iconColor='icon-color-error'
+                this.$store.dispatch('ErrorToday',true);
             }
             this.dataTotalCountErrorsToday=String(this.totalCountOfErrorsForToday);
         },
@@ -54,16 +55,17 @@ export default {
 
 <style scoped>
     .icon-info{
-        position: relative;
-        top:55%;
+       position: absolute;
+        bottom:0; 
     }
     .icon-color{
-        color:rgb(90, 175, 75);
+        color:#008FFB;
     }
     .icon-color-error{
-        color:#ef5350;
+        color:#FF4560;
     }
     .icon-info > i{
+        width: 100%;
        font-size: 50px;
     }
     .description{
@@ -72,23 +74,23 @@ export default {
         top: 10%;
     }
     .card-info{
-        margin-top: 25px;
+        position: relative;
         width: 100%;
-        height: 80%;
+        height: 100%;
         background: white;
         border-radius: 10px;
     }
     .info-value{
-        position: relative;
-        top: 0%;
+        position: absolute;
+        bottom: 0;
         width: 100%;
         text-align: center;
         font-size: 48px !important;
     }
     .not-error{
-        color:rgb(90, 175, 75);
+        color:#008FFB;
     }
     .errors{
-        color:rgb(234, 64, 47) ;
+        color:#FF4560 ;
     }
 </style>

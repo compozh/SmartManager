@@ -2,6 +2,9 @@
 //состояние
 const state = {
     //состояние инфы пришедшей с сервера
-	information_from_server_list: []
+    information_from_server_list: [],
+    loginStatus:false,
+    ticket:'',
+    errorToday:false
 };
 export default state
