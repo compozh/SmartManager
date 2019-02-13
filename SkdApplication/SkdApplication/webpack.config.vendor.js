@@ -42,7 +42,7 @@ module.exports = () => {
         name: '[name]_[hash]'
       }),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"'
+		  'process.env.NODE_ENV': JSON.stringify(isDevBuild? 'development': 'production')
       })
     ].concat(isDevBuild ? [] : [
       new webpack.optimize.UglifyJsPlugin()
