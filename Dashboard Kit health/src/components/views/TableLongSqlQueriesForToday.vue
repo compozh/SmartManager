@@ -1,6 +1,6 @@
 <template>
           <material-card
-          color="info"
+          color="#008FFB"
           title="Длинные SQL запросы за сегодня"
         >
           <v-data-table
@@ -90,7 +90,7 @@ export default {
     left: -20%
   }
 .font-weight-light{
-  color:#26c6da  !important;
+  color:#008FFB  !important;
 }
 
   

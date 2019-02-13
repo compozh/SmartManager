@@ -1,6 +1,6 @@
 <template>
     <material-card
-          color="warning"
+          color="#008FFB"
           title="Планировщик"
         >
           <v-data-table
@@ -79,6 +79,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.font-weight-light{
+  color:#008FFB  !important;
+}
 </style>

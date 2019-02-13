@@ -11,14 +11,7 @@
         </div>
         
     </div>
-   <!-- <material-stats-card
-          color="red"
-          icon="mdi-information-outline"
-          title="Общее количество ошибок планировщика"
-          :value=dataTotalCountOfSchedulerFail
-          sub-icon="mdi-tag"
-          sub-text="Tracked from Github"
-    /> -->
+   
 </template>
 
 <script>
@@ -48,11 +41,11 @@ export default {
 
 <style scoped>
  .icon-info{
-        color:rgb(90, 175, 75);
-        position: relative;
-        top:40%;
+       position: absolute;
+        bottom:0;
     }
     .icon-info > i{
+       color:#008FFB; 
        font-size: 50px;
     }
     .description{
@@ -61,20 +54,20 @@ export default {
         top: 10%;
     }
     .card-info{
-        margin-top: 25px;
+        position: relative;
         width: 100%;
-        height: 80%;
+        height: 100%;
         background: white;
         border-radius: 10px;
     }
     .info-value{
-        position: relative;
-        top: -15%;
+        position: absolute;
+        bottom: 0;
         width: 100%;
         text-align: center;
         font-size: 48px !important;
     }
     .not-error{
-    color:rgb(90, 175, 75); ;
+    color:#008FFB ;
 }
 </style>
