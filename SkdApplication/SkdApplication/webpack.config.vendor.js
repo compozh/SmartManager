@@ -7,7 +7,7 @@ module.exports = () => {
   console.log('Building vendor files for \x1b[33m%s\x1b[0m', process.env.NODE_ENV)
 
   const isDevBuild = !(process.env.NODE_ENV && process.env.NODE_ENV === 'production')
-  const extractCSS = new ExtractTextPlugin('vendor.css')
+  // const extractCSS = new ExtractTextPlugin('vendor.css')
 
   return [{
     stats: { modules: false },
@@ -30,7 +30,7 @@ module.exports = () => {
       library: '[name]_[hash]'
     },
     plugins: [
-      extractCSS,
+   //   extractCSS,
       // Compress extracted CSS.
       new OptimizeCSSPlugin({
         cssProcessorOptions: {
