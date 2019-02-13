@@ -1,6 +1,6 @@
 <template>
     <material-card
-          color="error"
+          color="#f55a4e"
           title="Ошибки на сегодня"
         >
           <v-data-table

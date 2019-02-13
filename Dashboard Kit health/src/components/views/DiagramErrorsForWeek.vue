@@ -77,4 +77,7 @@ watch:{
   stroke: rgb(255,0,0);
     stroke-width: 2;
 } */
+.apexcharts-toolbar{
+  z-index: 0 !important;
+}
 </style>

@@ -12,9 +12,9 @@ namespace SkdLogic.Controllers
 	{
 		private readonly AuthenticationTools _authenticateTools;
 
-		// СЃРѕРєСЂР°С‰Р°РµРј
+		// сокращаем
 		private readonly SkdLogic _skdLogic;
-		//РЅСѓР¶РЅРѕ РґРѕР±РёС‚СЊСЃСЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ СѓР±СЂР°С‚СЊ СЌС‚Рё РёРЅС‚РµСЂС„РµР№СЃС‹
+		//нужно добиться того, чтобы убрать эти интерфейсы
 
 		public SkdApiController(SkdLogic skdLogic, AuthenticationTools authenticateTools)
 		{
@@ -43,4 +43,3 @@ namespace SkdLogic.Controllers
 		}
 	}
 }
-
