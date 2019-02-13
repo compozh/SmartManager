@@ -1,6 +1,7 @@
 // https://vuex.vuejs.org/en/actions.html
 import Axios from "axios";
 import myJson from "../../AppSettings.json"
+// import myJson from "../../public/AppSettings.json"
 //Действия
 const actions = ({
   ErrorToday(context,state){
@@ -10,6 +11,10 @@ const actions = ({
     context.commit('setLoginStatus', state);
   },
   Login(context,loginParam){
+    // Axios.get('http://localhost:8080/AppSettings.json')
+    //         .then((response) => {
+    //           console.log(response.data.webServiceUrl)
+    //         })
     var postdata = {
       login:loginParam.login,
       password: loginParam.password

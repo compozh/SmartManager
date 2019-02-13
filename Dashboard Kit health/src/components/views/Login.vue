@@ -24,8 +24,8 @@ export default {
         data(){
             return{
                 userLoginPassword:{
-                    login:'',
-                    password:'',
+                    login:'baharev@it-enterprise.com',
+                    password:'tacek3121412',
                 },
             }
         },

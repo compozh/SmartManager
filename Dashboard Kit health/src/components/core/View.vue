@@ -6,7 +6,7 @@
         <!-- <i class="material-icons" >exit_to_app</i> -->
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click="Exit">
+      <v-btn icon @click="Exit" v-if="">
         <v-icon >exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
@@ -46,7 +46,8 @@ export default {
   computed: {
     errorStatus() {
       return this.$store.getters.getErrorToday;
-    }
+    },
+    
   }
 };
 </script>
