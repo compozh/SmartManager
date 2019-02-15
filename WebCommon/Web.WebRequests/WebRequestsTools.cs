@@ -31,7 +31,7 @@ namespace Web.WebRequests
         {
 			var client = _clientFactory.CreateClient();
 			var request = new HttpRequestMessage(HttpMethod.Post,
-			"http://m.it.ua/ws/WebService.asmx/Loginex");
+			"http://m.it.ua/ws/WebService.asmx/LoginEx");
 			request.Headers.Add("Data-Type", "json");
 			request.Content = new StringContent($"{{login:'{login}', password:'{password}'}}", Encoding.UTF8, "application/json");
 			var response = await client.SendAsync(request);
