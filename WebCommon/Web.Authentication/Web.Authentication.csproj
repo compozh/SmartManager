@@ -6,7 +6,7 @@
         <NeutralLanguage></NeutralLanguage>
         <Description>Web Authentication</Description>
         <AssemblyName>Web.Authentication</AssemblyName>
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
         <Authors>It-Enterprise</Authors>
         <Product>Web.Authentication</Product>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
