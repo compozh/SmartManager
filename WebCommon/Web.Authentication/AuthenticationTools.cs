@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Web.Tools;
 
 namespace Web.Authentication
 {
@@ -42,6 +43,12 @@ namespace Web.Authentication
 			return new AuthResult { Result = false, Message = "Authorization header not found" };
 		}
 
+		public User CurrentUser
+		{
+			get => SessionHandler.Current.Get<User>("CurrentUser");
+			private set => SessionHandler.Current.Set("CurrentUser", value);
+		}
+
 		/// <summary>
 		/// ¬ход в It-Enterprise
 		/// </summary>
@@ -56,14 +63,13 @@ namespace Web.Authentication
 				return new AuthResult{ Result = false, Message = "Invalid username or password."};
 			}
 
+			CurrentUser = user;
 			var claims = new List<Claim> {
 				new Claim(ClaimsIdentity.DefaultNameClaimType, userAuth.Login),
+				new Claim("auth", JsonConvert.SerializeObject(userAuth))
 			};
 			var identity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-		
-			claims = identity.Claims.ToList();
-			claims.Add(new Claim("auth", JsonConvert.SerializeObject(userAuth)));
-			
+
 			var now = DateTime.UtcNow;
 			var expires = now.Add(TimeSpan.FromMinutes(_options.Lifetime));
 			if (userAuth.RememberMe)
@@ -86,7 +92,7 @@ namespace Web.Authentication
 			};
 			var stringResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented });
 
-			return new AuthResult { Result = true, Message = stringResponse, UserInfo = user};
+			return new AuthResult { Result = true, Message = stringResponse};
 		}
 	}
 	
@@ -99,7 +105,6 @@ namespace Web.Authentication
 	
 	public class AuthResult
 	{
-		public User UserInfo { get; set; }
 		public string Message { get; set; }
 		public bool Result { get; set; }
 	}

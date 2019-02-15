@@ -13,10 +13,13 @@ namespace SkdLogic
 {
 	public class SkdLogic
 	{
+		private readonly AuthenticationTools _authenticateTools;
+
 		// не очень нравиться что в конструкторе
-		public SkdLogic(WebRequestsTools webRequestsTools)
+		public SkdLogic(WebRequestsTools webRequestsTools, AuthenticationTools authenticateTools)
 		{
 			_webRequestsTools = webRequestsTools;
+			_authenticateTools = authenticateTools;
 		}
 
 		private readonly WebRequestsTools _webRequestsTools;
@@ -75,7 +78,7 @@ namespace SkdLogic
 			{
 				return null;
 			}
-
+			var currentUserInfo = _authenticateTools.CurrentUser;
 			var superUser = users.Zip(userInfo, (u, i) => new AllUserInfo
 			{
 				UserID = u.UserID,

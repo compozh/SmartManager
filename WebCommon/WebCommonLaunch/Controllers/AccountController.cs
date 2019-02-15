@@ -39,7 +39,7 @@ namespace Web.Authentication
 				return;
 			}
 
-			SessionHandler.Current.Set("User", response.UserInfo);
+			var userInfo = _auth.CurrentUser;
 			// сериализация ответа
 			Response.ContentType = "application/json";
 			await Response.WriteAsync(response.Message);
