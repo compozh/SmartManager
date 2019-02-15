@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Web.WebRequests.Models;
+using Web.Authentication;
 using Web.Tools;
 
 namespace Web.WebRequests

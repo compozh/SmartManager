@@ -17,20 +17,10 @@ namespace Web.WebRequests
 			_webRequestsTools = webRequestsTools;
 		}
 
-		public async Task<ClaimsIdentity> GetIdentity(string username, string password)
-		{
-			var user = await _webRequestsTools.LoginAsync(username, password);
-			if (user == null || !user.Success)
-			{
-				return null;
-			}
 
-			var claims = new List<Claim> {
-				new Claim(ClaimsIdentity.DefaultNameClaimType, username),
-			};
-			
-			return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+		public async Task<User> GetUser(string login, string password)
+		{
+			return await _webRequestsTools.LoginAsync(login, password);
 		}
-		
 	}
 }

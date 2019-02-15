@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Web.Authentication;
+using Web.Tools;
 
 namespace Web.Authentication
 {
@@ -24,7 +25,7 @@ namespace Web.Authentication
 		{
 			_auth = auth;
 		}
-		
+
 
 		[HttpPost("[action]")]
 		public async Task Login([FromBody]AuthData user)
@@ -37,8 +38,9 @@ namespace Web.Authentication
 				await Response.WriteAsync(response.Message);
 				return;
 			}
-			
-			// сериализация ответа
+
+			SessionHandler.Current.Set("User", response.UserInfo);
+			// СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ РѕС‚РІРµС‚Р°
 			Response.ContentType = "application/json";
 			await Response.WriteAsync(response.Message);
 		}
@@ -46,5 +48,5 @@ namespace Web.Authentication
 
 	}
 
-	
+
 }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace SkdApplication
+namespace WebCommonLaunch
 {
 	public class Program
 	{

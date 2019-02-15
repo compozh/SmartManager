@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -13,7 +12,7 @@ namespace Web.Authentication
 {
 	public class AuthenticationTools
 	{
-		private IIdentityProvider _identityProvider;
+		private readonly IIdentityProvider _identityProvider;
 		private readonly IAuthOptions _options;
 
 		public AuthenticationTools(IIdentityProvider identityProvider, IAuthOptions options)
@@ -22,6 +21,11 @@ namespace Web.Authentication
 			_options = options;
 		}
 
+		/// <summary>
+		/// Повторный вход, если срок жизни токена вышел
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
 		public async Task<AuthResult> ReLogin(HttpContext context)
 		{
 			var header = context.Request.Headers["Authorization"];
@@ -37,30 +41,40 @@ namespace Web.Authentication
 
 			return new AuthResult { Result = false, Message = "Authorization header not found" };
 		}
-		
-		public async Task<AuthResult> Login(AuthData user)
+
+		/// <summary>
+		/// Вход в It-Enterprise
+		/// </summary>
+		/// <param name="userAuth"></param>
+		/// <returns></returns>
+		public async Task<AuthResult> Login(AuthData userAuth)
 		{
-			var identity = await _identityProvider.GetIdentity(user.Login, user.Password);
+			var user = await _identityProvider.GetUser(userAuth.Login, userAuth.Password);
 			
-			if (identity == null)
+			if (user == null || !user.Success)
 			{
-				return new AuthResult{ Result = true, Message = "Invalid username or password."};
+				return new AuthResult{ Result = false, Message = "Invalid username or password."};
 			}
 
-			var claims = identity.Claims.ToList();
-			claims.Add(new Claim("auth", JsonConvert.SerializeObject(user)));
+			var claims = new List<Claim> {
+				new Claim(ClaimsIdentity.DefaultNameClaimType, userAuth.Login),
+			};
+			var identity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+		
+			claims = identity.Claims.ToList();
+			claims.Add(new Claim("auth", JsonConvert.SerializeObject(userAuth)));
 			
 			var now = DateTime.UtcNow;
 			var expires = now.Add(TimeSpan.FromMinutes(_options.Lifetime));
-			if (user.RememberMe)
+			if (userAuth.RememberMe)
 			{
 				expires = expires.Add(TimeSpan.FromDays(365));
 			}
 			
 			// создаем JWT-токен
 			var jwt = new JwtSecurityToken(
-				issuer: _options.Issuer,
-				audience: _options.Audience,
+				_options.Issuer,
+				_options.Audience,
 				notBefore: now,
 				claims: claims,
 				expires: expires,
@@ -72,17 +86,20 @@ namespace Web.Authentication
 			};
 			var stringResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented });
 
-			return new AuthResult { Result = true, Message = stringResponse};
+			return new AuthResult { Result = true, Message = stringResponse, UserInfo = user};
 		}
 	}
+	
 	public class AuthData
 	{
 		public string Login { get; set; }
 		public string Password { get; set; }
 		public bool RememberMe { get; set; }
 	}
+	
 	public class AuthResult
 	{
+		public User UserInfo { get; set; }
 		public string Message { get; set; }
 		public bool Result { get; set; }
 	}

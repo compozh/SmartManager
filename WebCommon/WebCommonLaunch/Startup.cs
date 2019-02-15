@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using SkdApplication.Authentication;
 using System;
 using System.Linq;
 using Web.Authentication;
 using Microsoft.AspNetCore.Http;
 using Web.WebRequests;
 using Web.Tools;
-namespace SkdApplication
+using WebCommonLaunch.Authentication;
+
+namespace WebCommonLaunch
 {
 	public class Startup
 	{

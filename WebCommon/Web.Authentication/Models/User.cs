@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.WebRequests.Models
+namespace Web.Authentication
 {
 	public class User
 	{

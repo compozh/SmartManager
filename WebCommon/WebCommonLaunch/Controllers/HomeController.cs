@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-namespace SkdApplication.Controllers
+namespace WebCommonLaunch.Controllers
 {
     public class HomeController : Controller
     {

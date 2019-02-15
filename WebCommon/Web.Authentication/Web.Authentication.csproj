@@ -4,11 +4,13 @@
         <TargetFramework>netcoreapp2.1</TargetFramework>
         <PackageId>Web.Authentication</PackageId>
         <NeutralLanguage></NeutralLanguage>
-        <Description></Description>
+        <Description>Web Authentication</Description>
         <AssemblyName>Web.Authentication</AssemblyName>
         <Version>1.0.4</Version>
         <Authors>It-Enterprise</Authors>
         <Product>Web.Authentication</Product>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>1.0.5</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>

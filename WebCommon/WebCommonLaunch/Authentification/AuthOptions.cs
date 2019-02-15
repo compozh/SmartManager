@@ -2,7 +2,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Web.Authentication;
 
-namespace SkdApplication.Authentication
+namespace WebCommonLaunch.Authentication
 {
     public class AuthOptions : IAuthOptions
     {

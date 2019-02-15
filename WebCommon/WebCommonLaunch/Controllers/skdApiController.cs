@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SkdLogic.Models;
 using Web.WebRequests;
 using Web.Authentication;
+using Web.Tools;
 
 namespace SkdLogic.Controllers
 {
@@ -30,6 +31,8 @@ namespace SkdLogic.Controllers
 		[HttpPost("[action]")]
 		public async Task<IEnumerable<AllUserInfo>> GetUsers()
 		{
+			var user = SessionHandler.Current.Get<User>("User");
+
 			var response = await _skdLogic.GetFullUsersAsync();
 			if (response != null)
 			{

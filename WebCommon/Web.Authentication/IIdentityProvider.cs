@@ -7,7 +7,7 @@ namespace Web.Authentication
 {
 	public interface IIdentityProvider
 	{
-		Task<ClaimsIdentity> GetIdentity(string login, string password);
+		Task<User> GetUser(string login, string password);
 	}
 
 	public interface IAuthOptions
