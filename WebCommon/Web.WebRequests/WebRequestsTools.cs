@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Web.Authentication;
 using Web.Tools;
 
@@ -11,11 +12,14 @@ namespace Web.WebRequests
 	//в дальнейшем пойдёт в отдельную либу
 	public class WebRequestsTools
 	{
+		private readonly WebRequestOptions _webRequestsOptions;
+
 		private readonly IHttpClientFactory _clientFactory;
 		
-		public WebRequestsTools(IHttpClientFactory clientFactory)
+		public WebRequestsTools(IHttpClientFactory clientFactory, IOptionsMonitor<WebRequestOptions> webRequestsOptions)
 		{
 			_clientFactory = clientFactory;
+			_webRequestsOptions = webRequestsOptions.CurrentValue;
 		}
 
 		private const string WRONG_TICKET = "WRONG_TICKET";
@@ -31,7 +35,7 @@ namespace Web.WebRequests
         {
 			var client = _clientFactory.CreateClient();
 			var request = new HttpRequestMessage(HttpMethod.Post,
-			"http://m.it.ua/ws/WebService.asmx/LoginEx");
+			$"{_webRequestsOptions.WebServicesUrl}/ws/WebService.asmx/LoginEx");
 			request.Headers.Add("Data-Type", "json");
 			request.Content = new StringContent($"{{login:'{login}', password:'{password}'}}", Encoding.UTF8, "application/json");
 			var response = await client.SendAsync(request);
@@ -83,7 +87,7 @@ namespace Web.WebRequests
 				return NOT_AUTHORISED;
 			}
 			var client = _clientFactory.CreateClient();
-			var request = new HttpRequestMessage(HttpMethod.Post,"http://m.it.ua/ws/WebService.asmx/ExecuteEx");
+			var request = new HttpRequestMessage(HttpMethod.Post,$"{_webRequestsOptions.WebServicesUrl}/ws/WebService.asmx/ExecuteEx");
 			request.Headers.Add("Data-Type", "json");
 			request.Content = new StringContent($"{{calcId:'{calcId}', args:'{args}', ticket:'{_ticket}'}}", Encoding.UTF8, "application/json");
 			var response = await client.SendAsync(request);

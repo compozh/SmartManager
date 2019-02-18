@@ -68,6 +68,7 @@ namespace WebCommonLaunch
 			services.AddSingleton<AuthenticationTools>();
 			services.AddSingleton<WebRequestsTools>();
 			services.AddHttpClient();
+			services.Configure<WebRequestOptions>(Configuration.GetSection("WebRequests"));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
