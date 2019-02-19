@@ -1,6 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Web.Tools;
 
 namespace Web.Authentication
 {
@@ -20,7 +22,6 @@ namespace Web.Authentication
 		public async Task Login([FromBody]AuthData user)
 		{
 			var response = await _auth.Login(user);
-
 			if (!response.Result)
 			{
 				Response.StatusCode = 400;

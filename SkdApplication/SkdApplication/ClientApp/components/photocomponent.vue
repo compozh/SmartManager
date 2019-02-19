@@ -1,5 +1,5 @@
 <template>
-	<div class="photo-container">
+	<div :class="['photo', $vuetify.breakpoint.mdAndDown ? 'md-photo-container':'photo-container' ]">
 		<i class="material-icons" v-if="'https://m.it.ua/ws/GetFile.ashx?file=&folder=content&nodownload=1'==photo">person</i>
 		<img :src="photo" height="auto" v-else alt="Photo">
 	</div>
@@ -12,22 +12,33 @@
 </script>
 
 <style lang="scss" scoped>
-	$size: 80px;
-	.photo-container {
-		margin:10px;
+	.md-photo-container{
+		margin:5px;
+		height: 50px;
+		width: 50px;
+		.material-icons {
+			font-size: 50px;
+		}
+
+	}
+	.photo{
 		border-radius: 50%;
 		overflow: hidden;
-		height: $size;
-		width: $size;
 		box-shadow: 0 0 17px -7px black;
-
 		img {
 			width: inherit;
 		}
-
 		.material-icons {
-			font-size: $size;
 			color: #ddd;
+
+		}
+	}
+	.photo-container {
+		margin:10px;
+		height: 80px;
+		width: 80px;
+		.material-icons {
+			font-size: 80px;
 		}
 	}
 </style>

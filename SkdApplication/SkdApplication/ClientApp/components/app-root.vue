@@ -1,6 +1,6 @@
 <template>
 	<v-app id="app">
-		<v-navigation-drawer fixed v-model="drawer" app>
+		<v-navigation-drawer v-if="authorized" app fixed v-model="drawer">
 			<v-toolbar class="transparent" flat>
 				<v-list class="pa-0">
 					<v-list-tile avatar>
@@ -9,60 +9,110 @@
 						</v-list-tile-avatar>
 
 						<v-list-tile-content>
-							<v-list-tile-title class="textname">{{user.userName}}</v-list-tile-title>
+							<v-list-tile-title class="textname">{{user.P_FIO}}</v-list-tile-title>
 						</v-list-tile-content>
+						<v-btn flat icon v-on:click="logOut">
+							<v-icon >exit_to_app</v-icon>
+						</v-btn>
 					</v-list-tile>
 				</v-list>
 			</v-toolbar>
 
-			<v-list class="pt-3" dense>
+			<v-list class="pt-0" dense>
 				<v-divider></v-divider>
 
-				<v-list-tile :key="item.display" @click="" class="list" v-for="item in routes">
+				<v-list-tile :key="item.key" @click="changeGrouping(item.key)" v-for="item in groupingItems">
 					<v-list-tile-action>
-
+						<v-icon v-if="item.selected">done</v-icon>
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<router-link :to="item.path" exact-active-class="active" tag="h1">
-							<v-btn block flat>
-								<v-list-tile-title class="texticon"> {{ item.display }}</v-list-tile-title>
-							</v-btn>
-						</router-link>
+						<v-list-tile-title>{{ item.caption }}</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 			</v-list>
 		</v-navigation-drawer>
-		<v-toolbar color="indigo" dark fixed app>
-			<v-toolbar-side-icon  @click.stop="drawer = !drawer" ></v-toolbar-side-icon>
-			<v-toolbar-title>СКД - ItEnterprise</v-toolbar-title>
+		<v-toolbar app color="indigo" dark fixed>
+			<v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="authorized"></v-toolbar-side-icon>
+			<v-toolbar-title class="hidden-md-and-down">Посетители</v-toolbar-title>
+			<v-tooltip bottom v-if="authorized">
+				<v-btn color="white" flat icon slot="activator" v-on:click="changeSort">
+					<v-icon v-if="(sort == 1)">av_timer</v-icon>
+					<v-icon v-if="(sort == 0)">sort_by_alpha</v-icon>
+				</v-btn>
+				<span>Изменить сортировку</span>
+			</v-tooltip>
+
+
+			<v-text-field class="mx-3"
+						  clearable
+						  flat
+						  hide-details
+						  label="Поиск"
+						  solo-inverted
+						  v-if="authorized"
+						  v-model="filter"
+			></v-text-field>
+
+
 		</v-toolbar>
 		<v-content>
 			<router-view></router-view>
 		</v-content>
-		<v-footer color="indigo" app inset>
-			<span class="white--text">&copy; 2017</span>
-		</v-footer>
 	</v-app>
 </template>
 
 
 <script>
-	import NavMenu from './nav-menu'
-	import {routes} from '../router/routes'
 
+	const groups = ["Все", "В офисе", "В офисе с ключами", "Вне офиса", "По командам", "По комнатам"];
 	export default {
-		components: {
-			'nav-menu': NavMenu
-		},
 		data: () => ({
-			routes,
 			drawer: false
 		}),
+		methods: {
+			logOut(){
+				this.drawer = false;
+				this.$store.commit("logOut")
+				this.$router.push("login")
+			},
+			changeSort () {
+				this.$store.commit("changeSort")
+			},
+			changeGrouping (value) {
+				this.$store.commit("changeGrouping", value)
+			}
+		},
 		computed: {
-			user () {return this.$store.getters.getUser } //getters из vuex папка (store/index.js)
+			sort () {
+				return this.$store.state.sort
+			},
+			grouping () {
+				return this.$store.state.grouping
+			},
+			groupingItems () {
+				var that = this;
+				return groups.map((el, ind) => ({key: ind, caption: el, selected: that.grouping == ind}))
+			},
+			authorized () {
+				return this.$store.state.authorized
+			},
+			user () {
+				return this.$store.getters.getUser
+			}, //getters из vuex папка (store/index.js)
+			filter: {
+				get () {
+					return this.$store.getters.filter
+				},
+				set (value) {
+					this.$store.dispatch("setFilter", value)
+				}
+			}
 		},
 	}
 </script>
 
 <style>
+	.unselected-grouping {
+		visibility: hidden;
+	}
 </style>

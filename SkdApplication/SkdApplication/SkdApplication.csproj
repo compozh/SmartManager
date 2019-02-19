@@ -6,7 +6,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Web.Authentication" Version="1.0.4" />
+    <PackageReference Include="Web.Authentication" Version="1.0.7" />
     <PackageReference Include="Web.Tools" Version="1.0.2" />
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +25,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\dist\" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="publish\web.config" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+    <_ContentIncludedByDefault Remove="publish\package-lock.json" />
+    <_ContentIncludedByDefault Remove="publish\package.json" />
+    <_ContentIncludedByDefault Remove="publish\SkdApplication.deps.json" />
+    <_ContentIncludedByDefault Remove="publish\SkdApplication.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="publish\wwwroot\dist\vendor-manifest.json" />
   </ItemGroup>
 
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">

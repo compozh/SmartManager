@@ -15,7 +15,7 @@ console.log(process.env.NODE_ENV);
 // Если маршрут требует авторизации, перенаправляем на логин
 router.beforeEach((to, from, next) => {
 	
-	let token = sessionStorage.getItem('authToken');
+	let token = localStorage.getItem('authToken');
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 	const unauthentificated = to.matched.some(record => record.meta.unauthentificated);
 	
