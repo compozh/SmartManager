@@ -11,7 +11,12 @@ const actions = ({
 			.then((response) => {
 				if (response.data.access_token) {
 					// сохраняем тикет в sessionStorage
-					sessionStorage.setItem('authToken', response.data.access_token);
+					debugger;
+					context.commit("setAuthorized",true);
+					//context.commit("setUserName",response.data.username);
+					console.log(response.data)
+					
+					localStorage.setItem('authToken', response.data.access_token);
 				}
 			}, response => {
 			
@@ -21,13 +26,17 @@ const actions = ({
 	// загрузка списка пользователей
 	loadUsersList (context) {
 		
-		return Axios.post(`${subfodler}/api/SkdApi/GetUsers`, undefined, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('authToken')}})
+		return Axios.post(`${subfodler}/api/SkdApi/GetUsers`, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')}})
 			.then((response) => {
 				context.commit('setUsersList', response.data);//суём в мутацию
-				context.commit('setPhotoToUser', _.find(context.getters.getUsersList, function (item) {
-					return item.USERID === context.getters.getUser.id;
-				}));
+				
+				let currentUser = _.find(response.data, u=>u.IsCurrent);
+				context.commit('setCurrentUser', currentUser);
 			});
+	},
+	
+	setFilter (context, filter){
+		context.commit('setFilter', filter)
 	}
 });
 

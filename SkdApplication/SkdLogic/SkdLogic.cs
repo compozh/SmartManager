@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SkdLogic.Models;
+using Web.Authentication;
 using Web.WebRequests;
 
 namespace SkdLogic
@@ -11,11 +11,13 @@ namespace SkdLogic
 	public class SkdLogic
 	{
 		// не очень нравиться что в конструкторе
-		public SkdLogic(WebRequestsTools webRequestsTools)
+		public SkdLogic(WebRequestsTools webRequestsTools, AuthenticationTools authenticateTools)
 		{
-			_webRequestsTools = webRequestsTools;			
+			_webRequestsTools = webRequestsTools;
+			_authenticateTools = authenticateTools;
 		}
-		
+		private readonly AuthenticationTools _authenticateTools;
+
 		private readonly WebRequestsTools _webRequestsTools;
 		
 		private async Task<List<UserInfo>> getUserInfoAsync(IEnumerable<AllUserInfo> result)
@@ -34,8 +36,8 @@ namespace SkdLogic
 					return JsonConvert.DeserializeObject<List<UserInfo>>(requestResult.Content);
 
 			}
-
 		}
+		
 		//метод получения фото для всех пользователей
 		private async Task<List<AllUserInfo>> getUsersAsync()
 		{
@@ -73,6 +75,8 @@ namespace SkdLogic
 				return null;
 			}
 
+			var user = _authenticateTools.CurrentUser;
+
 			var superUser = users.Zip(userInfo, (u, i) => new AllUserInfo
 			{
 				UserID = u.UserID,
@@ -86,8 +90,11 @@ namespace SkdLogic
 				Tel = u.Tel,
 				Email = u.Email,
 				Skype = u.Skype,
-				Photo = "https://m.it.ua/ws/GetFile.ashx?file=" + i.Photo + "&folder=content&nodownload=1"
-			});
+				Photo = "https://m.it.ua/ws/GetFile.ashx?file=" + i.Photo + "&folder=content&nodownload=1",
+				IsCurrent = user?.Id == u.UserID
+			}).ToList();
+			
+			
 			return superUser;
 		}
 	}

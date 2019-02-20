@@ -1,16 +1,19 @@
 <template>
+	<v-layout >
+		<v-flex offset-lg2 lg8 >
+			<v-layout  column :key="user_group.group" v-for="user_group in users_list">
 
-	<v-flex lg8 offset-lg2>
-		<v-flex md3 sm6 xl12>
-			<!-- <icon :icon="['fa', 'search']"/> -->
-			<v-text-field color="success" label="Поиск">
-			</v-text-field>
+				<v-flex  >
+					<h3>{{user_group.group}}</h3>
+					<v-layout :key="userCom.USERID+userCom.EMAIL+userCom.P_FIO" v-for="userCom in user_group.users">
+						<list-component :userCopmonent='userCom'> <!-- передаю "привязываю" пользовательскому компоненту  данные  -->
+						</list-component>
+					</v-layout>
+				</v-flex>
+			</v-layout>
 		</v-flex>
-		<v-layout :key="userCom.USERID" v-for="userCom in users_list">
-			<list-component :userCopmonent='userCom'> <!-- передаю "привязываю" пользовательскому компоненту  данные  -->
-			</list-component>
-		</v-layout>
-	</v-flex>
+	</v-layout>
+
 </template>
 
 <script>
@@ -26,7 +29,7 @@
 		},
 		computed: {
 			users_list () {
-				return this.$store.getters.getUsersList;//getters из vuex папка (store/index.js)
+				return this.$store.getters.getGroupedUserList;//getters из vuex папка (store/index.js)
 			},
 			user () {
 				return this.$store.getters.getUser;//getters из vuex папка (store/index.js)
@@ -36,10 +39,6 @@
 		},
 		beforeMount: function () {
 			this.$store.dispatch('loadUsersList')
-			// //подробно разобрать beforeMount !!!!!!!!!!!!!!!!!!!!!!!!
-			// if(this.user=='wrong' || this.user==''){ // после рефреш появляется проблема с тем что, приходиться логинется, хотя состояние должно сохраниться
-			//    this.$router.push('login')
-			// }
 		},
 		methods: {}
 	}

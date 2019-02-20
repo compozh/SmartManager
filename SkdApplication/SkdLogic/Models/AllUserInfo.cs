@@ -40,8 +40,11 @@ namespace SkdLogic.Models
 
         [JsonProperty("USERID")]
         public string UserID { get; set; }
+
         public string Photo { get; set; }
-    
+        
+		[JsonProperty("IsCurrent")]
+        public bool IsCurrent { get; set; }
 
     }
 }

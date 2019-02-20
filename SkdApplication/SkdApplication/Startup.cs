@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using SkdApplication.Authentication;
 using Web.Authentication;
@@ -65,9 +66,9 @@ namespace SkdApplication
 			services.AddSingleton<IIdentityProvider, WebRequestsIdentityProvider>();
 			services.AddSingleton<SkdLogic.SkdLogic>();
 			services.AddSingleton<AuthenticationTools>();
-
 			services.AddSingleton<WebRequestsTools>();
 			services.AddHttpClient();
+			services.Configure<WebRequestOptions>(Configuration.GetSection("WebReqConfiguration"));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
