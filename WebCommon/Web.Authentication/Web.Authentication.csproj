@@ -6,11 +6,11 @@
         <NeutralLanguage></NeutralLanguage>
         <Description>Web Authentication</Description>
         <AssemblyName>Web.Authentication</AssemblyName>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <Authors>It-Enterprise</Authors>
         <Product>Web.Authentication</Product>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.0.6</PackageVersion>
+        <PackageVersion>1.0.7</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
