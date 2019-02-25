@@ -12,6 +12,7 @@ const state = {
 	user: {}, //состояние юзера
 	loginError:"",
 	filter:"",
+	loaded:false,
 	authorized:!!localStorage.getItem('authToken'),
 	grouping:localStorage.getItem('grouping')||0,
 	sort:localStorage.getItem('sorting')||0
