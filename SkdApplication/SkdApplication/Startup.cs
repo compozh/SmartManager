@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using SkdApplication.Authentication;
 using Web.Authentication;
+using Web.Data;
 using Web.Tools;
 using Web.WebRequests;
 
@@ -68,7 +68,9 @@ namespace SkdApplication
 			services.AddSingleton<AuthenticationTools>();
 			services.AddSingleton<WebRequestsTools>();
 			services.AddHttpClient();
-			services.Configure<WebRequestOptions>(Configuration.GetSection("WebReqConfiguration"));
+
+			services.AddSqlClientInstance(Configuration);
+			services.AddSingleton<PureWebCalculations>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,8 +93,7 @@ namespace SkdApplication
 				routes.MapSpaFallbackRoute(name: "spa-fallback",defaults: new { controller = "Home", action = "Index" });
 			});
 
-			SessionHandler.Configure(contextAccessor);
-
+			HttpContextAccessorHandler.Configure(contextAccessor);
 		}
 	}
 }

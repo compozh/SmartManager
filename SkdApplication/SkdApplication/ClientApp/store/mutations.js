@@ -43,7 +43,8 @@ const mutations = {
 			}
 			
 		});
-		state.users_list = payload
+		state.users_list = payload;
+		state.loaded = true;
 	},
 	setFilter (state, filter){
 		state.filter = filter

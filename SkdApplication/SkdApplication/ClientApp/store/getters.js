@@ -53,5 +53,6 @@ export default {
 	},
 	getUsersList: state => state.users_list,
 	getUser: state => state.user,
-	getFilter:state=>state.filter
+	getFilter:state=>state.filter,
+	loaded: state=> state.loaded
 };

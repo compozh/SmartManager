@@ -8,8 +8,8 @@
 				</v-flex>
 
 				<v-flex class="commoninformation">
-					<v-flex xl12><h4>{{userCopmonent.P_FIO}}</h4></v-flex>
-					<v-flex xl12>
+					<v-flex ><h4>{{userCopmonent.P_FIO}}</h4></v-flex>
+					<v-flex >
 						<div v-if="!userCopmonent.DateTimeText.Today" class="user-date">
 							<span class="user-date-date">{{userCopmonent.DateTimeText.Date}}</span>
 							<span class="user-date-day">{{userCopmonent.DateTimeText.Day}}</span>
@@ -24,14 +24,14 @@
 				</v-flex>
 
 				<v-flex  class="contactiformation hidden-md-and-down">
-					<v-flex xl12><a :href="'mailto:'+userCopmonent.EMAIL"> {{userCopmonent.EMAIL}}</a></v-flex>
-					<v-flex xl12><a :href="'callto:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a> </v-flex>
-					<v-flex xl12>{{userCopmonent.TEL2}}</v-flex>
+					<v-flex ><a :href="'mailto:'+userCopmonent.EMAIL"> {{userCopmonent.EMAIL}}</a></v-flex>
+					<v-flex ><a :href="'callto:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a> </v-flex>
+					<v-flex >{{userCopmonent.TEL2}}</v-flex>
 				</v-flex>
 
 				<v-flex class="contactiformation hidden-md-and-down" >
-					<v-flex xl12>{{userCopmonent.BIRTHDAY}}</v-flex>
-					<v-flex xl12>{{userCopmonent.SKYPE}}</v-flex>
+					<v-flex >{{userCopmonent.BIRTHDAY}}</v-flex>
+					<v-flex >{{userCopmonent.SKYPE}}</v-flex>
 				</v-flex>
 				<v-flex class="departament" >{{userCopmonent.DEPARTMENT}}</v-flex>
 
