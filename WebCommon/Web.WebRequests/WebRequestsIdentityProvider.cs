@@ -18,6 +18,8 @@ namespace Web.WebRequests
 		{
 			var user = _webCalculationsCore.LoginEx(login, password, out claims);
 			SessionHandler.Current.SetTicket(user.Ticket);
+			SessionHandler.Current.SetCurrentUser(user);
+
 			return user;
 		}
 
@@ -25,6 +27,8 @@ namespace Web.WebRequests
 		{
 			var valueUser = _webCalculationsCore.LoginByToken();			
 			SessionHandler.Current.SetTicket(valueUser.Ticket);
+			SessionHandler.Current.SetCurrentUser(valueUser);
+
 			return valueUser;
 		}
 		

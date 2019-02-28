@@ -36,7 +36,6 @@ namespace Web.Authentication
 			{
 				return new AuthResult { Result = true};				
 			}
-			SessionHandler.Current.SetCurrentUser(result);
 			return new AuthResult { Result = false, Message = "Authorization header not found" };
 		}
 
