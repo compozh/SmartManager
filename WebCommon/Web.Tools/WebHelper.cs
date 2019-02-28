@@ -17,7 +17,7 @@ namespace Web.Tools
 	{
 		private static IHttpContextAccessor _httpContextAccessor;
 
-		public static void Configure(IHttpContextAccessor httpContextAccessor)
+		internal static void Configure(IHttpContextAccessor httpContextAccessor)
 		{
 			_httpContextAccessor = httpContextAccessor;
 		}
@@ -29,7 +29,7 @@ namespace Web.Tools
 	{
 		private static IHttpContextAccessor _httpContextAccessor;
 
-		public static void Configure(IHttpContextAccessor httpContextAccessor)
+		internal static void Configure(IHttpContextAccessor httpContextAccessor)
 		{
 			_httpContextAccessor = httpContextAccessor;
 		}
