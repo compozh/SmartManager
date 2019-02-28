@@ -1,6 +1,8 @@
 // ACTIONS действия могут выполнятсья асинхронно предназначена для того, чтобы подготовить данные для мутации
 import Axios from "axios";
 import _ from "lodash"
+import router from '../router/index'
+
 
 let subfodler = process.env.NODE_ENV && process.env.NODE_ENV === 'production' ? "/skd":"";
 
@@ -32,6 +34,11 @@ const actions = ({
 				
 				let currentUser = _.find(response.data, u=>u.IsCurrent);
 				context.commit('setCurrentUser', currentUser);
+			}, (data)=>{
+				if(data.response.status == 401){
+					localStorage.setItem('authToken', "");
+					router.push("login")
+				}
 			});
 	},
 	

@@ -42,7 +42,7 @@ namespace SkdLogic
 		private async Task<List<AllUserInfo>> getUsersAsync()
 		{
 			var calcId = "_SKD_STATE";
-			var args = "{\\\"SecretPhrase\\\":\\\"291263\\\"}";
+			var args = "{\"SecretPhrase\":\"291263\"}";
 
 			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);
 			var requestResult = await task;
@@ -91,7 +91,7 @@ namespace SkdLogic
 				Email = u.Email,
 				Skype = u.Skype,
 				Photo = "https://m.it.ua/ws/GetFile.ashx?file=" + i.Photo + "&folder=content&nodownload=1",
-				IsCurrent = user?.Id == u.UserID
+				IsCurrent = user?.UserId == u.UserID
 			}).ToList();
 			
 			
