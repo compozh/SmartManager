@@ -30,7 +30,7 @@ namespace Web.Authentication
 		[HttpPost("[action]")]
 		public async Task Login([FromBody]AuthData user)
 		{
-			var response = await _auth.Login(user);
+			var response = _auth.Login(user);
 
 			if (!response.Result)
 			{

@@ -1,64 +1,25 @@
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Web.Authentication;
 using Web.Tools;
 
 namespace Web.WebRequests
 {
-	//в дальнейшем пойдёт в отдельную либу
 	public class WebRequestsTools
 	{
-		private readonly WebRequestOptions _webRequestsOptions;
-
-		private readonly IHttpClientFactory _clientFactory;
-		
-		public WebRequestsTools(IHttpClientFactory clientFactory, IOptionsMonitor<WebRequestOptions> webRequestsOptions)
-		{
-			_clientFactory = clientFactory;
-			_webRequestsOptions = webRequestsOptions.CurrentValue;
-		}
-
+		private readonly PureWebCalculations _webCalculationsCore;
+		private readonly IIdentityProvider _identityProvider;
 		private const string WRONG_TICKET = "WRONG_TICKET";
 		private const string NOT_AUTHORISED = "NOT_AUTHORISED";
-		
-        /// <summary>
-        /// Авторизация через Web расчеты
-        /// </summary>
-        /// <param name="login">Имя пользователя</param>
-        /// <param name="password">Пароль</param>
-        /// <returns></returns>
-        public async Task<User> LoginAsync(string login, string password)
-        {
-			var client = _clientFactory.CreateClient();
-			var request = new HttpRequestMessage(HttpMethod.Post,
-			$"{_webRequestsOptions.WebServicesUrl}/ws/WebService.asmx/LoginEx");
-			request.Headers.Add("Data-Type", "json");
-			request.Content = new StringContent($"{{login:'{login}', password:'{password}'}}", Encoding.UTF8, "application/json");
-			var response = await client.SendAsync(request);
-			var content = await response.Content.ReadAsStringAsync();	
-			
-			var valuesUser = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-			valuesUser.TryGetValue("d", out var valueUser);
-			var user = JsonConvert.DeserializeObject<User>(valueUser);
-			
-			_ticket = user.Ticket;
 
-			return user;
 
-		}
-
-        private string _ticket
+		public WebRequestsTools(PureWebCalculations webCalculationsCore,IIdentityProvider identityProvider)
 		{
-			get => SessionHandler.Current.Get<string>("Ticket");
-			set => SessionHandler.Current.Set("Ticket", value);
+			_webCalculationsCore = webCalculationsCore;
+			_identityProvider = identityProvider;
 		}
-    
-        //метод на достать другие данные
-        public async Task<WebRequestResult> CallWebRequestAsync(string calcId, string args)
+
+		//����� �� ������� ������ ������
+		public async Task<WebRequestResult> CallWebRequestAsync(string calcId, string args)
 		{
 			var result = new WebRequestResult();
 			var content = await callWebRequestInternalAsync(calcId, args);
@@ -72,40 +33,34 @@ namespace Web.WebRequests
 					return result;
 				default:
 					result.ResultFlag = WebRequestsResponseFlags.Ok;
-					var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-					values.TryGetValue("d", out var value);
-					result.Content = value;
-					return result;	
+					result.Content = content;
+					return result;
 			}
-			
-        }
-
-		private async Task<string> callWebRequestInternalAsync(string calcId, string args)
+		}
+		
+		private async Task<string> callWebRequestInternalAsync(string calcId, string args, bool anonymously = false)
 		{
-			if (string.IsNullOrEmpty(_ticket))
+			if (!anonymously && string.IsNullOrEmpty(SessionHandler.Current.GetTicket()))
 			{
-				return NOT_AUTHORISED;
+				var authResult = _identityProvider.LoginByToken();
+				if (!authResult.Success)
+				{
+					return NOT_AUTHORISED;
+				}
 			}
-			var client = _clientFactory.CreateClient();
-			var request = new HttpRequestMessage(HttpMethod.Post,$"{_webRequestsOptions.WebServicesUrl}/ws/WebService.asmx/ExecuteEx");
-			request.Headers.Add("Data-Type", "json");
-			request.Content = new StringContent($"{{calcId:'{calcId}', args:'{args}', ticket:'{_ticket}'}}", Encoding.UTF8, "application/json");
-			var response = await client.SendAsync(request);
-			var content = await response.Content.ReadAsStringAsync();
-			return content;
+
+			var result = await _webCalculationsCore.ExecuteExAsync(calcId, args, anonymously ? null : SessionHandler.Current.GetTicket());
+			if (result == PureWebCalculations.WrongTicketResult)
+			{
+				var authResult = _identityProvider.LoginByToken();
+				if (!authResult.Success)
+				{
+					return WRONG_TICKET;
+				}
+				result = await _webCalculationsCore.ExecuteExAsync(calcId, args, anonymously ? null : SessionHandler.Current.GetTicket());
+			}
+
+			return result;
 		}
 	}
-	
-	public enum WebRequestsResponseFlags{
-		Ok,
-		WrongTicket,
-		NotAuthorised
-	}
-
-	public class WebRequestResult
-	{
-		public WebRequestsResponseFlags ResultFlag { get; set; }
-		public string Content { get; set; }
-	}
 }
-
