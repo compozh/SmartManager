@@ -1,26 +1,42 @@
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Web.Authentication;
 using Web.Tools;
 
-
 namespace Web.WebRequests
 {
-	public class WebRequestsIdentityProvider:IIdentityProvider
+	public class WebRequestsIdentityProvider : IIdentityProvider
 	{
-		private readonly WebRequestsTools _webRequestsTools;
+		private readonly PureWebCalculations _webCalculationsCore;
 
-		public WebRequestsIdentityProvider(WebRequestsTools webRequestsTools)
+		public WebRequestsIdentityProvider( PureWebCalculations webCalculationsCore)
 		{
-			_webRequestsTools = webRequestsTools;
+			_webCalculationsCore = webCalculationsCore;
 		}
 
-
-		public async Task<User> GetUser(string login, string password)
+		public LoginResult Login(string login, string password, out IEnumerable<Claim> claims)
 		{
-			return await _webRequestsTools.LoginAsync(login, password);
+			var user = _webCalculationsCore.LoginEx(login, password, out claims);
+			SessionHandler.Current.SetTicket(user.Ticket);
+			return user;
 		}
+
+		public LoginResult LoginByToken()
+		{
+			var valueUser = _webCalculationsCore.LoginByToken();			
+			SessionHandler.Current.SetTicket(valueUser.Ticket);
+			return valueUser;
+		}
+		
+	}
+	public enum WebRequestsResponseFlags{
+		Ok,
+		WrongTicket,
+		NotAuthorised
+	}
+	public class WebRequestResult
+	{
+		public WebRequestsResponseFlags ResultFlag { get; set; }
+		public string Content { get; set; }
 	}
 }

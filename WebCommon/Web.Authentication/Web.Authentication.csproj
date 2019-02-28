@@ -6,11 +6,11 @@
         <NeutralLanguage></NeutralLanguage>
         <Description>Web Authentication</Description>
         <AssemblyName>Web.Authentication</AssemblyName>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <Authors>It-Enterprise</Authors>
         <Product>Web.Authentication</Product>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.0.7</PackageVersion>
+        <PackageVersion>1.0.8</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +21,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Web.Tools\Web.Tools.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="nugetTool.ps1" />
     </ItemGroup>
 
 </Project>

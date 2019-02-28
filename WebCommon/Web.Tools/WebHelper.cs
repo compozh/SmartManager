@@ -1,10 +1,18 @@
-﻿
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Web.Tools
 {
+
+	public static class HttpContextAccessorHandler
+	{
+		public static void Configure(IHttpContextAccessor httpContextAccessor)
+		{
+			SessionHandler.Configure(httpContextAccessor);
+			HttpContext.Configure(httpContextAccessor);
+		}
+	}
 	public static class SessionHandler
 	{
 		private static IHttpContextAccessor _httpContextAccessor;
@@ -15,6 +23,18 @@ namespace Web.Tools
 		}
 
 		public static ISession Current => _httpContextAccessor.HttpContext.Session;
+	}
+	
+	public static class HttpContext
+	{
+		private static IHttpContextAccessor _httpContextAccessor;
+
+		public static void Configure(IHttpContextAccessor httpContextAccessor)
+		{
+			_httpContextAccessor = httpContextAccessor;
+		}
+
+		public static Microsoft.AspNetCore.Http.HttpContext Current => _httpContextAccessor.HttpContext;
 	}
 	
 	public static class SessionExtensions
@@ -34,4 +54,6 @@ namespace Web.Tools
 			return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
 		}
 	}
+
+	
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +9,8 @@ namespace Web.Authentication
 {
 	public interface IIdentityProvider
 	{
-		Task<User> GetUser(string login, string password);
+		LoginResult Login(string login, string password, out IEnumerable<Claim> claims);
+		LoginResult LoginByToken();
 	}
 
 	public interface IAuthOptions

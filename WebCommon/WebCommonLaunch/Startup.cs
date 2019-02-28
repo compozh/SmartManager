@@ -7,9 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Linq;
 using Web.Authentication;
 using Microsoft.AspNetCore.Http;
+using Web.Data;
 using Web.WebRequests;
 using Web.Tools;
 using WebCommonLaunch.Authentication;
@@ -66,9 +66,14 @@ namespace WebCommonLaunch
 			services.AddSingleton<IIdentityProvider, WebRequestsIdentityProvider>();
 			services.AddSingleton<SkdLogic.SkdLogic>();
 			services.AddSingleton<AuthenticationTools>();
+
 			services.AddSingleton<WebRequestsTools>();
 			services.AddHttpClient();
-			services.Configure<WebRequestOptions>(Configuration.GetSection("WebRequests"));
+
+			services.AddSqlClientInstance(Configuration);
+			services.AddSingleton<PureWebCalculations>();
+
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +96,7 @@ namespace WebCommonLaunch
 				routes.MapSpaFallbackRoute(name: "spa-fallback",defaults: new { controller = "Home", action = "Index" });
 			});
 
-			SessionHandler.Configure(contextAccessor);
+			HttpContextAccessorHandler.Configure(contextAccessor);
 
 		}
 	}

@@ -22,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Web.Data\Web.Data.csproj" />
     <ProjectReference Include="..\Web.WebRequests\Web.WebRequests.csproj" />
   </ItemGroup>
   <ItemGroup>

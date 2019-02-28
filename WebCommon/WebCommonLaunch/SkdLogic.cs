@@ -13,13 +13,10 @@ namespace SkdLogic
 {
 	public class SkdLogic
 	{
-		private readonly AuthenticationTools _authenticateTools;
-
 		// не очень нравиться что в конструкторе
-		public SkdLogic(WebRequestsTools webRequestsTools, AuthenticationTools authenticateTools)
+		public SkdLogic(WebRequestsTools webRequestsTools)
 		{
 			_webRequestsTools = webRequestsTools;
-			_authenticateTools = authenticateTools;
 		}
 
 		private readonly WebRequestsTools _webRequestsTools;
@@ -46,7 +43,7 @@ namespace SkdLogic
 		private async Task<List<AllUserInfo>> getUsersAsync()
 		{
 			var calcId = "_SKD_STATE";
-			var args = "{\\\"SecretPhrase\\\":\\\"291263\\\"}";
+			var args = "{\"SecretPhrase\":\"291263\"}";
 
 			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);
 			var requestResult = await task;
@@ -57,7 +54,6 @@ namespace SkdLogic
 					return null;
 				default:
 					return JsonConvert.DeserializeObject<List<AllUserInfo>>(requestResult.Content);
-
 			}
 		}
 
@@ -78,7 +74,6 @@ namespace SkdLogic
 			{
 				return null;
 			}
-			var currentUserInfo = _authenticateTools.CurrentUser;
 			var superUser = users.Zip(userInfo, (u, i) => new AllUserInfo
 			{
 				UserID = u.UserID,

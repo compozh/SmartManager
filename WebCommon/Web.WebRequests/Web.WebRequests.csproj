@@ -4,10 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <PackageId>Web.WebRequests</PackageId>
     <AssemblyName>Web.WebRequests</AssemblyName>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <Authors>It-Enterprise</Authors>
     <Product>Web.WebRequests</Product>
-    <PackageVersion>1.0.6</PackageVersion>
+    <PackageVersion>1.0.7</PackageVersion>
     <Description>Web.WebRequests</Description>
   </PropertyGroup>
 
@@ -18,7 +18,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Web.Authentication\Web.Authentication.csproj" />
+    <ProjectReference Include="..\Web.Data\Web.Data.csproj" />
     <ProjectReference Include="..\Web.Tools\Web.Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.http.features\2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

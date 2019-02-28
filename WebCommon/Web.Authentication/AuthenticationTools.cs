@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Web.Tools;
+using HttpContext = Web.Tools.HttpContext;
 
 namespace Web.Authentication
 {
@@ -27,36 +28,32 @@ namespace Web.Authentication
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public async Task<AuthResult> ReLogin(HttpContext context)
-		{
-			var header = context.Request.Headers["Authorization"];
-			var tokenString = header[0].Substring(7);
-			var token = new JwtSecurityTokenHandler().ReadJwtToken(tokenString);
-			var claim = token.Claims.FirstOrDefault(c => c.Type == "auth");
+		public AuthResult LoginByToken(){
+			
+			var result = _identityProvider.LoginByToken();
 
-			if (claim != null)
+			if (result.Success)
 			{
-				var authData = JsonConvert.DeserializeObject<AuthData>(claim.Value);
-				return await Login(authData);
+				return new AuthResult { Result = true};				
 			}
-
 			return new AuthResult { Result = false, Message = "Authorization header not found" };
 		}
 
-		public User CurrentUser
+		public LoginResult CurrentUser
 		{
-			get => SessionHandler.Current.Get<User>("CurrentUser");
+			get => SessionHandler.Current.Get<LoginResult>("CurrentUser");
 			private set => SessionHandler.Current.Set("CurrentUser", value);
 		}
-
+		
 		/// <summary>
 		/// ¬ход в It-Enterprise
 		/// </summary>
 		/// <param name="userAuth"></param>
 		/// <returns></returns>
-		public async Task<AuthResult> Login(AuthData userAuth)
+		public AuthResult Login(AuthData userAuth)
 		{
-			var user = await _identityProvider.GetUser(userAuth.Login, userAuth.Password);
+			
+			var user = _identityProvider.Login(userAuth.Login, userAuth.Password, out IEnumerable<Claim> claims);
 			
 			if (user == null || !user.Success)
 			{
@@ -64,10 +61,7 @@ namespace Web.Authentication
 			}
 
 			CurrentUser = user;
-			var claims = new List<Claim> {
-				new Claim(ClaimsIdentity.DefaultNameClaimType, userAuth.Login),
-				new Claim("auth", JsonConvert.SerializeObject(userAuth))
-			};
+			
 			var identity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
 			var now = DateTime.UtcNow;
