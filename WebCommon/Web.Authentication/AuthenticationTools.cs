@@ -36,14 +36,10 @@ namespace Web.Authentication
 			{
 				return new AuthResult { Result = true};				
 			}
+			SessionHandler.Current.SetCurrentUser(result);
 			return new AuthResult { Result = false, Message = "Authorization header not found" };
 		}
 
-		public LoginResult CurrentUser
-		{
-			get => SessionHandler.Current.Get<LoginResult>("CurrentUser");
-			private set => SessionHandler.Current.Set("CurrentUser", value);
-		}
 		
 		/// <summary>
 		/// ¬ход в It-Enterprise
@@ -60,8 +56,8 @@ namespace Web.Authentication
 				return new AuthResult{ Result = false, Message = "Invalid username or password."};
 			}
 
-			CurrentUser = user;
-			
+			SessionHandler.Current.SetCurrentUser(user);
+
 			var identity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
 			var now = DateTime.UtcNow;

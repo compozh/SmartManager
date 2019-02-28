@@ -38,8 +38,6 @@ namespace Web.Authentication
 				await Response.WriteAsync(response.Message);
 				return;
 			}
-
-			var userInfo = _auth.CurrentUser;
 			// сериализация ответа
 			Response.ContentType = "application/json";
 			await Response.WriteAsync(response.Message);
