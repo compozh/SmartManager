@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SkdLogic.Models;
 using Web.Authentication;
+using Web.Tools;
 using Web.WebRequests;
 
 namespace SkdLogic
@@ -75,7 +76,7 @@ namespace SkdLogic
 				return null;
 			}
 
-			var user = _authenticateTools.CurrentUser;
+			var user = SessionHandler.Current.GetCurrentUser();
 
 			var superUser = users.Zip(userInfo, (u, i) => new AllUserInfo
 			{

@@ -23,3 +23,9 @@ export {
 	router,
 	store
 }
+
+(function() {
+	if('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('dist/service-worker-cache.js');
+	}
+})();
