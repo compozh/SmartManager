@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+//const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = () => {
@@ -23,6 +23,9 @@ module.exports = () => {
     entry: {
       vendor: ['event-source-polyfill', 'vue', 'vuex', 'axios', 'vue-router']
     },
+	  optimization:{
+    	minimize:false
+	  },
     output: {
       path: path.join(__dirname, 'wwwroot', 'dist'),
       publicPath: '/dist/',
@@ -44,8 +47,6 @@ module.exports = () => {
       new webpack.DefinePlugin({
 		  'process.env.NODE_ENV': JSON.stringify(isDevBuild? 'development': 'production')
       })
-    ].concat(isDevBuild ? [] : [
-      new webpack.optimize.UglifyJsPlugin()
-    ])
+    ]
   }]
 }

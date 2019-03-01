@@ -8,8 +8,9 @@
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Web.Authentication" Version="1.0.9" />
-    <PackageReference Include="Web.WebRequests" Version="1.0.8" />
+    <PackageReference Include="Web.Authentication" Version="1.0.10" />
+    <PackageReference Include="Web.Tools" Version="1.0.4" />
+    <PackageReference Include="Web.WebRequests" Version="1.0.9" />
   </ItemGroup>
 
   <ItemGroup>
