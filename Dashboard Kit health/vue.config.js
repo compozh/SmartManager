@@ -2,8 +2,8 @@ module.exports = {
   // publicPath : process.env.NODE_ENV === 'production'
   // ? './HEALTH_SUMMARY'
   // : './my-coputer',
-  publicPath: "./"
+  publicPath: "./",
   // devServer: {
-  //   disableHostCheck: true
+  //   proxy: 'http://localhost:4000'
   // }
 }

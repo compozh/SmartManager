@@ -1,7 +1,7 @@
 <template>
     <div class="card-info">
         <div class="description">
-            Общее количество ошибок планировщика
+            {{title}}
         </div>
         <div class="icon-info">
             <i class="material-icons " >error</i>
@@ -25,6 +25,9 @@ export default {
         totalCountOfSchedulerFail(){
             return this.$store.getters.getInfoList.TotalCountOfSchedulerFail
         },
+        title(){
+            return this.$store.getters.getInfoList.TitleForSchedulerTestName
+        }
     },
     methods:{
         GetTotalCountOfSchedulerFail(){
@@ -40,18 +43,20 @@ export default {
 </script>
 
 <style scoped>
- .icon-info{
+    .icon-info{
        position: absolute;
         bottom:0;
     }
     .icon-info > i{
-       color:#008FFB; 
+       color:#48a420; 
        font-size: 50px;
+       margin-left: 8px;
     }
     .description{
         text-align: center;
         position: relative;
         top: 10%;
+        color: #363d3f;
     }
     .card-info{
         position: relative;
@@ -68,6 +73,6 @@ export default {
         font-size: 48px !important;
     }
     .not-error{
-    color:#008FFB ;
-}
+    color:#48a420 ;
+    }
 </style>

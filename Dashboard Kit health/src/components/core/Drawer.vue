@@ -173,13 +173,6 @@ export default {
         this.responsive = false
       }
     },
-    onBtnGetInfoFromServer(){
-      this.$store.dispatch('getInfoFromServer');
-      // console.log(errorsForToday);
-    },
-    test(){
-       console.log(this.errorsForToday);
-    }
   }
 }
 </script>

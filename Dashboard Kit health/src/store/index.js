@@ -17,8 +17,11 @@ import modules from './modules'
 import mutations from './mutations'
 import state from './state'
 import VueApexCharts from 'vue-apexcharts'
+import Spinner from 'vue-spinkit'
+import moment from 'moment'
 Vue.use(VueApexCharts)
-
+Vue.component('Spinner', Spinner)
+Vue.component('apexchart', VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
 Vue.use(Vuex)
 
@@ -28,7 +31,7 @@ const store = new Vuex.Store({
   getters,
   modules,
   mutations,
-  state
+  state,
 })
 
 export default store

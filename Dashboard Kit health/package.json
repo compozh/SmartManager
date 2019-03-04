@@ -13,14 +13,19 @@
     "chartist-plugin-pointlabels": "0.0.6",
     "chartist-plugin-targetline": "^1.0.1",
     "lodash": "^4.17.11",
+    "luxon": "^1.11.3",
     "moment": "^2.24.0",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
+    "v-calendar": "^0.9.7",
     "vue": "^2.5.17",
     "vue-apexcharts": "^1.2.9",
     "vue-chartist": "^2.1.2",
+    "vue-datetime": "^1.0.0-beta.10",
     "vue-meta": "^1.5.2",
-    "vuetify": "^1.2.5"
+    "vue-spinkit": "^1.4.1",
+    "vuetify": "^1.2.5",
+    "weekstart": "^1.0.0"
   },
   "devDependencies": {
     "@mdi/font": "^2.5.94",
