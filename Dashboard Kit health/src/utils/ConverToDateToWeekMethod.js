@@ -1,5 +1,5 @@
 export default function ConvertToDayToWeek(date){
-        var day=  new Date(date.replace('T00:00:00','')).getDay();
+        var day=  new Date(date).getDay();
             switch (day) {
             case 1:
                 return 'Пн'

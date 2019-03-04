@@ -1,49 +1,40 @@
 <template>
     <div class="card-info">
         <div class="description">
-            Общее количество длинных запросов на сегодня
+            {{title}}
         </div>
         <div class="icon-info" :class="iconColor">
-            <i class="material-icons">error</i>
+            <i class="material-icons ">error</i>
         </div>
-        <div class="info-value" :class="textColor" >
-            {{dataTotalCountOfLongQueriesForToday}}
+        <div class="info-value"  :class="textColor">
+            {{dataTotalCountOfPerformanceExceedancesForToday}}
         </div>
-        
     </div>
-    <!-- <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Общее количество длинных запросов на сегодня"
-          :value=dataTotalCountOfLongQueriesForToday
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-          :class="textColor"
-        /> -->
 </template>
 
 <script>
 export default {
     data(){
         return{
-            dataTotalCountOfLongQueriesForToday:"",
+            dataTotalCountOfPerformanceExceedancesForToday:"",
             textColor:'not-error',
             iconColor:'icon-color'
         }
     },
     computed:{
-        totalCountOfLongQueriesForToday(){
-            return this.$store.getters.getInfoList.TotalCountOfLongQueriesForToday
+        totalCountOfPerformanceExceedancesForToday(){
+            return this.$store.getters.getInfoList.TotalCountOfPerformanceExceedancesForDate
         },
-        minCountofLogs(){
-            return this.$store.getters.getInfoList.MinCountOfLogs
-            
+        minCountOfPerfExceedances(){
+            return this.$store.getters.getInfoList.MinCountOfPerfExceedances
+        },
+        title(){
+            return this.$store.getters.getInfoList.TitleForPerfExcTestName
         }
     },
     methods:{
-        GetTotalCountOfLongQueriesForToday(){
-            if(this.totalCountOfLongQueriesForToday<=this.minCountofLogs)
-            {
+        GetTotalCountOfPerformanceExceedancesForToday(){
+            if(this.totalCountOfPerformanceExceedancesForToday < this.minCountOfPerfExceedances){
                 this.textColor='not-error'
                 this.iconColor='icon-color'
             }
@@ -52,12 +43,12 @@ export default {
                 this.iconColor='icon-color-error'
                 this.$store.dispatch('ErrorToday',true);
             }
-            this.dataTotalCountOfLongQueriesForToday=String(this.totalCountOfLongQueriesForToday);
+            this.dataTotalCountOfPerformanceExceedancesForToday=String(this.totalCountOfPerformanceExceedancesForToday)
         },
     },
     watch:{
-        totalCountOfLongQueriesForToday:function(){
-            this.GetTotalCountOfLongQueriesForToday();
+        totalCountOfPerformanceExceedancesForToday:function(){
+            this.GetTotalCountOfPerformanceExceedancesForToday();
         },
     }
 }
@@ -69,18 +60,20 @@ export default {
         bottom:0;
     }
     .icon-color{
-        color:#008FFB;
+        color:#48a420;
     }
     .icon-color-error{
         color:#f55a4e;
     }
     .icon-info > i{
        font-size: 50px;
+       margin-left: 8px;
     }
     .description{
         text-align: center;
         position: relative;
         top: 10%;
+        color: #363d3f;
     }
     .card-info{
         position: relative;
@@ -96,10 +89,10 @@ export default {
         text-align: center;
         font-size: 48px !important;
     }
-.not-error{
-    color:#008FFB; ;
-}
-.errors{
-    color:#f55a4e;
-}
+    .not-error{
+        color:#48a420; ;
+    }
+    .errors{
+        color:#f55a4e;
+    }
 </style>
