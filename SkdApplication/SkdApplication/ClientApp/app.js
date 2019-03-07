@@ -5,8 +5,6 @@ import store from './store'
 import {sync} from 'vuex-router-sync'
 import App from 'components/app-root'
 
-
-
 Vue.prototype.$http = axios
 
 
@@ -24,8 +22,15 @@ export {
 	store
 }
 
-(function() {
-	if('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('dist/service-worker-cache.js');
-	}
+(function registerServiceWorker() {
+	// регистрирует скрипт sw в поддерживаемых браузерах
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('service-worker.js', { scope: '/' }).then(() => {
+		  console.log('Service Worker registered successfully.');
+		}).catch(error => {
+		  console.log('Service Worker registration failed:', error);
+		});
+	  }
+	  const rootDir = '/';
+
 })();
