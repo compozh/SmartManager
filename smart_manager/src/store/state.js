@@ -1,5 +1,5 @@
 const state = {
-    button:{},
-    appData:undefined
+    appData:undefined,
+    loginStatus:false,
 };
 export default state

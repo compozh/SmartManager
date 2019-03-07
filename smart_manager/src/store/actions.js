@@ -1,11 +1,11 @@
 import Axios from "axios";
 
 const actions = ({
-    SendCOntrolParameters(context,parameters){
-      
+    SetLoginStatus(context,status){
+      context.commit("setLoginStatus",status )
     },
     SetButtonParameters(context, parameters){
-      context.commit('setButton', parameters)    
+      context.commit('setAppData', parameters)    
     },
     Login(context,loginParam){
         //логин
@@ -25,6 +25,7 @@ const actions = ({
             localStorage.setItem('userName', username);
             if(localStorage.getItem('authToken')){
               context.dispatch('GetControls');
+              context.dispatch('SetLoginStatus',true);
             }
           }
         })
@@ -34,13 +35,22 @@ const actions = ({
         .then((response=>{
           console.log(response.data)
           if(response.data != 'WRONG_TICKET' && response.data !=""){
-            context.commit('setButton', response.data)
+            context.commit('setAppData', response.data)
+            context.dispatch('GetToolbar');
           }else{
             localStorage.clear();
           }
         })
     )},
     
+    GetToolbar(context){
+      return Axios.post('https://localhost:5001/api/values/GetToolbar', undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
+        .then((response=>{
+          console.log("toolbar = ",response.data)
+            context.commit('setToolbar', response.data)
+      })
+      )
+    },
     callAction(context, data){
       setTimeout(() => {
         alert

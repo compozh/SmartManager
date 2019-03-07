@@ -1,13 +1,16 @@
 const mutations = {
-    setButton(state,payload){
-        state.button=payload;
+    setToolbar(state,payload){
+        state.toolbar=payload;
+    },
+    setLoginStatus(state,payload){
+      state.loginStatus=payload;
     },
     setAppData(state, data){
-        state.appData = data
-      },
+        state.test = data
+    },
       updateData(state, data){
         var stack = data.path.split('.');
-        var object = state.appData
+        var object = state.toolbar
         while(stack.length>1){
           object = object[stack.shift()];
         }    
