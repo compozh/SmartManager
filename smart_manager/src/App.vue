@@ -1,25 +1,32 @@
 <template>
   <div id="app">
-    <component :is="dynamicComponent"></component>
+
+     <common-component :component="app"></common-component> 
+     <v-btn @click="zzz" style="position:fixed; top:0; left:0; z-index:1000">TEST</v-btn>
+
   </div>
 </template>
 
 <script>
-import home from '@/components/DefaultApp.vue';
-//import { setTimeout } from 'timers';
+
+import appConfig from './app.js';
+import appData from './app.data.js';
+import appData1 from './app.data.1.js';
 
 export default {
   data(){
     return {
-      dynamicComponent:""
+      app:undefined
     }
   },
-  components: {
-    home,
-  },
   created(){
-    setTimeout(()=>{ this.dynamicComponent = "home" }, 1000)
-    
+    setTimeout(()=>{ this.app = appConfig }, 0)
+    setTimeout(()=>{ this.$store.commit('setAppData', appData) }, 0)
+  },
+  methods:{
+    zzz(){
+      this.$store.commit('updateData', appData1) 
+    }
   }
 };
 </script>
