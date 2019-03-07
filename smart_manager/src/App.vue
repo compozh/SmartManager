@@ -1,10 +1,14 @@
 <template>
   <div id="app">
-
+    <div v-if="loginStatus">
      <common-component :component="app"></common-component> 
-     <v-btn @click="zzz" style="position:fixed; top:0; left:0; z-index:1000">TEST</v-btn>
-
+     <v-btn @click="zzz" color="warning" style="position:absolute; top:30%; left:90%; z-index:1000">change</v-btn>
+    </div>
+     <div class="login" v-if="!loginStatus">
+        <login ></login>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -12,11 +16,24 @@
 import appConfig from './app.js';
 import appData from './app.data.js';
 import appData1 from './app.data.1.js';
+import login from "../src/components/Login.vue";
 
 export default {
+  components:{
+    login
+  },
+  props: ["toolbarTitle"],
   data(){
     return {
-      app:undefined
+      app:undefined,
+    }
+  },
+  computed:{
+    controls:function(){
+      return this.$store.state.test
+    },
+    loginStatus:function(){
+      return this.$store.getters.getLoginStatus
     }
   },
   created(){
@@ -25,7 +42,11 @@ export default {
   },
   methods:{
     zzz(){
+      if(this.controls){
+        console.log('title = ',this.controls.props.toolbarTitle)
+      setTimeout(()=>{ this.app = this.controls }, 0)
       this.$store.commit('updateData', appData1) 
+      }
     }
   }
 };
@@ -49,5 +70,10 @@ export default {
       color: #42b983;
     }
   }
+}
+.login{
+  position: fixed;
+  left: 45%;
+  top: 30%;
 }
 </style>

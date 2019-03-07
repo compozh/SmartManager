@@ -34,7 +34,7 @@ export default {
         return el.slot || "";
       });
       var a = _.keys(groups).map(el => ({ key: el, components: groups[el] }));
-      console.log(a)
+       console.log(a)
       return _.filter(a, el => !!el.key);
     },
     defaultSlotGroup(){
