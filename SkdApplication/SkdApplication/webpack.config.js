@@ -63,6 +63,9 @@ module.exports = () => {
 		new CopyWebpackPlugin([
 			{ from: './ClientApp/static', to: 'static', toType:"dir" }
 		]),
+	    new CopyWebpackPlugin([
+			{ from: './ClientApp/service-worker.js', to: '../../wwwroot', toType: "dir" }
+	    ]),
     ].concat(isDevBuild ? [
       // Plugins that apply in development builds only
       new webpack.SourceMapDevToolPlugin({
