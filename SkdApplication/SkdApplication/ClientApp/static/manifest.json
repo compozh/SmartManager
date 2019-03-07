@@ -1,21 +1,17 @@
 {
-	"short_name": "SKD",
 	"name": "IT-Enterprise SKD",
+	"short_name": "SKD",
 	"icons": [
 		{
-			"src": "/192.png",
-			"type": "image/png",
-			"sizes": "192x192"
+			
 		},
 		{
-			"src": "/512.png",
-			"type": "image/png",
-			"sizes": "512x512"
 		}
 	],
-	"start_url": "/",
-	"background_color": "#FFFFFF",
+	"start_url": "/skd",
 	"display": "standalone",
+	"background_color": "#FFFFFF",
 	"scope": "/",
 	"theme_color": "#FFFFFF"
 }
+

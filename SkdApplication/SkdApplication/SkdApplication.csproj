@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
@@ -29,9 +29,6 @@
     <ProjectReference Include="..\SkdLogic\SkdLogic.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot" />
-  </ItemGroup>
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="publish\web.config" />
     <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
     <_ContentIncludedByDefault Remove="publish\appsettings.json" />
@@ -50,6 +47,15 @@
   </ItemGroup>
   <ItemGroup>
     <DistFiles Remove="wwwroot\dist\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\service-worker.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ClientApp\static\manifest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\service-worker.js" />
   </ItemGroup>
 
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
