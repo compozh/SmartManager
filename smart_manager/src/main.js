@@ -2,10 +2,10 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import store from './store/index';
 import './registerServiceWorker';
 import 'vuetify/dist/vuetify.min.css';
-import CommonComponent from '@/components/CommonComponent.vue';
+import CommonComponent from '@/components/CommonComponent.js';
 import DefaultApp from '@/components/DefaultApp.vue';
 
 

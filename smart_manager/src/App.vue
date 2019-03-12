@@ -1,53 +1,47 @@
+<!--=========================================================
+            TEMPLATE
+=========================================================-->
 <template>
   <div id="app">
-
      <common-component :component="app"></common-component> 
-     <v-btn @click="zzz" style="position:fixed; top:0; left:0; z-index:1000">TEST</v-btn>
-
   </div>
 </template>
 
+<!--=========================================================
+            SCRIPT
+=========================================================-->
 <script>
-
-import appConfig from './app.js';
-import appData from './app.data.js';
-import appData1 from './app.data.1.js';
+import appLayout from './mock/app.js';
+import appData from './mock/app.data.js';
+import appData1 from './mock/app.data.1.js';
 
 export default {
-  data(){
-    return {
-      app:undefined
-    }
+  computed:{
+    app(){
+      return this.$store.state.appLayout;
+    } 
   },
   created(){
-    setTimeout(()=>{ this.app = appConfig }, 0)
-    setTimeout(()=>{ this.$store.commit('setAppData', appData) }, 0)
+    setTimeout(()=>{ this.$store.commit('setAppLayout', appLayout) }, 1)
+    setTimeout(()=>{ this.$store.commit('setAppData', appData) }, 1)
   },
   methods:{
     zzz(){
-      this.$store.commit('updateData', appData1) 
+      this.$store.commit('updateData', [{"op":"add", "path":"/Data/1", "value":{"Caption":"zzzz",Done:true}}]) 
+      this.$store.commit('updateData',[appData1]) 
     }
   }
 };
 </script>
 
-
+<!--=========================================================
+            STYLE
+============================================================-->
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Roboto';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>

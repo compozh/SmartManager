@@ -1,17 +1,22 @@
+import * as jsonpatch from '../patching'
+
 const mutations = {
-    setButton(state,payload){
-        state.button=payload;
-    },
-    setAppData(state, data){
-        state.appData = data
-      },
-      updateData(state, data){
-        var stack = data.path.split('.');
-        var object = state.appData
-        while(stack.length>1){
-          object = object[stack.shift()];
-        }    
-        object[stack.shift()] = data.value;
-      }
+  /** Загрузка хранилища */
+  setAppData(state, data){
+    state.appData = data
+  },
+  /** Загрузка Layout приложения */    
+  setAppLayout(state, data){
+    state.appLayout = data
+  },
+  /** Обновить данные патчем */
+  updateData(state, patchlist){
+    jsonpatch.applyPatchList(state.appData, patchlist);
+  },
+  /** Обновить Layout патчем */
+  updateLayout(state, patchlist){
+    jsonpatch.applyPatchList(state.appLayout, patchlist);
+  }
 };
+ 
 export default mutations

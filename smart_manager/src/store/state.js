@@ -1,5 +1,5 @@
 const state = {
-    button:{},
-    appData:undefined
+    appData:undefined,
+    appLayout:undefined
 };
 export default state
