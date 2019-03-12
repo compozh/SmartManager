@@ -1,5 +1,6 @@
 const state = {
     appData:undefined,
-    appLayout:undefined
+    appLayout:undefined,
+    loginStatus:false,
 };
 export default state

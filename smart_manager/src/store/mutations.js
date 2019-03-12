@@ -16,7 +16,7 @@ const mutations = {
   /** Обновить Layout патчем */
   updateLayout(state, patchlist){
     jsonpatch.applyPatchList(state.appLayout, patchlist);
-  }
+  } 
 };
  
 export default mutations

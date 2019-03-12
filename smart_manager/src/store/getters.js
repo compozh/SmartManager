@@ -1,4 +1,7 @@
 const getters = ({
-    getButton: state=> state.button,
+    getAppData: state=> state.appData,
+    getLoginStatus: state=> state.loginStatus,
+    getToolbar: state=> state.toolbar,
+    
 });
 export default getters
