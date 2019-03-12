@@ -23,7 +23,7 @@ export default {
   name: "default-app",
   data() {
     return {
-      drawer: null
+      drawer: false
     };
   },
   computed:{
