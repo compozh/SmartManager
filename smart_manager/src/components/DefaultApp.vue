@@ -3,7 +3,7 @@
     <v-navigation-drawer fixed app v-model="drawer"></v-navigation-drawer>
     <v-toolbar app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title><slot name="toolbarTitle">{{_toolbarTitle}}</slot></v-toolbar-title>
+      <v-toolbar-title><slot name="toolbarTitle">{{toolbarTitle}}</slot></v-toolbar-title>
       <slot name="toolbar"></slot>
     </v-toolbar>
     <v-content>
@@ -27,23 +27,6 @@ export default {
     };
   },
   computed:{
-    _toolbarTitle(){
-      
-      if(this.toolbarTitle && this.toolbarTitle.indexOf("@@") == 0){
-        
-        var subRes = this.$store.state.appData;
-        if(!subRes){
-          return ""
-        }
-        var path= this.toolbarTitle.substr(2).split(".");
-        for (const pathSegment of path) {
-          subRes = subRes[pathSegment]
-        }
-        return subRes
-      }
-      return this.toolbarTitle || "Application" 
-    }
-
   },
   props: ["toolbarTitle"]
 };

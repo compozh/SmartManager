@@ -1,7 +1,0 @@
-export default { 
-   Toolbar:{
-       Caption:{
-           Value:"TEST -asd-as-d-asd"
-       }
-   }
-};
