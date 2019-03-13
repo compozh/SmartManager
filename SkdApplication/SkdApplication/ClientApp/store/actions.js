@@ -12,55 +12,40 @@ const actions = ({
 		return Axios.post(`${subfodler}/api/Account/Login`, {Login: datauser.login, Password: datauser.password})
 			.then((response) => {
 				if (response.data.access_token) {
-					// сохраняем тикет в sessionStorage
 					debugger;
 					context.commit("setAuthorized",true);
-					//context.commit("setUserName",response.data.username);
-					console.log(response.data)
 					
 					localStorage.setItem('authToken', response.data.access_token);
 				}
 			}, response => {
-			
-			
 			});
 	},
 	// загрузка списка пользователей
 	loadUsersList (context) {
-		
-		if ('caches' in window) {
-			console.log('yea!!!')
-			caches.match('/api/SkdApi/GetUsers').then(function(response) {
-				if (response) {
-					// response.json().then(function updateFromCache(json) {
-					// 	var results = json.query.results;
-					// 	results.key = key;
-					// 	results.label = label;
-					// 	results.created = json.query.created;
-					// 	app.updateForecastCard(results);
-					//   });
-					console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + response)
-				}
-			  });
+		if ('caches' in window && localStorage.getItem("allUsers")) {
+			context.commit('setUsersList', JSON.parse(localStorage.getItem("allUsers")));//суём в мутацию
 		}
-
 		return Axios.post(`${subfodler}/api/SkdApi/GetUsers`, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')}})
 			.then((response) => {
-				context.commit('setUsersList', response.data);//суём в мутацию
-				
-				let currentUser = _.find(response.data, u=>u.IsCurrent);
-				context.commit('setCurrentUser', currentUser);
+				if(response.data){
+					context.commit('setUsersList', response.data);//суём в мутацию
+					let currentUser = _.find(response.data, u=>u.IsCurrent);
+					context.commit('setCurrentUser', currentUser);
+					localStorage.setItem('allUsers', JSON.stringify(response.data));
+				}
 			}, (data)=>{
 				if(data.response.status == 401){
 					localStorage.setItem('authToken', "");
 					router.push("login")
+				}else{
+					if(localStorage.getItem("allUsers")){
+						context.commit('setUsersList', JSON.parse(localStorage.getItem("allUsers")));//суём в мутацию
+					}
 				}
 			});
 	},
-	
 	setFilter (context, filter){
 		context.commit('setFilter', filter)
 	}
 });
-
 export default actions
