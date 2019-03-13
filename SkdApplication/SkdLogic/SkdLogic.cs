@@ -86,6 +86,7 @@ namespace SkdLogic
 				Departament = u.Departament,
 				Place = u.Place,
 				SensorName = u.SensorName,
+				HASKEY = u.HASKEY,
 				Time = u.Time,
 				MobileTel = u.MobileTel,
 				Tel = u.Tel,

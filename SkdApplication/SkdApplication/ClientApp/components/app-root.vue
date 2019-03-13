@@ -52,12 +52,18 @@
 						  v-if="authorized"
 						  v-model="filter"
 			></v-text-field>
-
+			
 
 		</v-toolbar>
 		<v-content>
 			<router-view></router-view>
 		</v-content>
+		<v-footer color="grey lighten-2" class="last-status" app inset>
+			<template v-if="authorized">
+				<span color="grey darken-3" class="status"><span class="on-state">По состоянию на</span> {{lastLoad}}</span>
+				<span v-if="!onlineStatus" class="offline"> &nbsp; Нет соединения</span>
+			</template>
+    </v-footer>
 	</v-app>
 </template>
 
@@ -80,6 +86,9 @@
 			},
 			changeGrouping (value) {
 				this.$store.commit("changeGrouping", value)
+				if(this.$vuetify.breakpoint.mdAndDown){
+					this.drawer=false;
+				}
 			}
 		},
 		computed: {
@@ -106,6 +115,12 @@
 				set (value) {
 					this.$store.dispatch("setFilter", value)
 				}
+			},
+			lastLoad(){
+				return this.$store.getters.getTimeLastLoad;
+			},
+			onlineStatus(){
+				return this.$store.getters.getOnlineStatus;
 			}
 		},
 	}
@@ -114,5 +129,24 @@
 <style>
 	.unselected-grouping {
 		visibility: hidden;
+	}
+	.status{
+		color:#424242;
+	}
+	.on-state{
+		color: #757575;
+	}
+	.last-status{
+		background-color: gray !important;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+    	line-height: 1;
+	}
+	.online{
+		color: green;
+	}
+	.offline{
+		color: #F44336;
 	}
 </style>
