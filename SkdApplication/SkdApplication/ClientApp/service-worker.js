@@ -41,7 +41,8 @@ self.addEventListener('fetch', function(e) {
       caches.open(dataCacheusersPhoto).then(function(cache) {
         return fetch(e.request).then(function(response){
           cache.put(e.request.url, response.clone());
-          return response;
+          return response; 
+          
         });
       })
     );

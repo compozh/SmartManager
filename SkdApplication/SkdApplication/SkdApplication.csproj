@@ -49,13 +49,7 @@
     <DistFiles Remove="wwwroot\dist\**" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="wwwroot\service-worker.js" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="ClientApp\static\manifest.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\service-worker.js" />
   </ItemGroup>
 
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">

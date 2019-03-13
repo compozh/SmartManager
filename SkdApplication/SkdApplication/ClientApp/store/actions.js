@@ -12,9 +12,7 @@ const actions = ({
 		return Axios.post(`${subfodler}/api/Account/Login`, {Login: datauser.login, Password: datauser.password})
 			.then((response) => {
 				if (response.data.access_token) {
-					debugger;
 					context.commit("setAuthorized",true);
-					
 					localStorage.setItem('authToken', response.data.access_token);
 				}
 			}, response => {
@@ -22,7 +20,7 @@ const actions = ({
 	},
 	// загрузка списка пользователей
 	loadUsersList (context) {
-		if ('caches' in window && localStorage.getItem("allUsers")) {
+		if (localStorage.getItem("allUsers")) {
 			context.commit('setUsersList', JSON.parse(localStorage.getItem("allUsers")));//суём в мутацию
 		}
 		return Axios.post(`${subfodler}/api/SkdApi/GetUsers`, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')}})
@@ -37,10 +35,6 @@ const actions = ({
 				if(data.response.status == 401){
 					localStorage.setItem('authToken', "");
 					router.push("login")
-				}else{
-					if(localStorage.getItem("allUsers")){
-						context.commit('setUsersList', JSON.parse(localStorage.getItem("allUsers")));//суём в мутацию
-					}
 				}
 			});
 	},
