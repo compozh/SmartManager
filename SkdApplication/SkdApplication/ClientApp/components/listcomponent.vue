@@ -245,25 +245,16 @@ export default {
     return {
       openMoreInformation: false
     };
-  },
-  methods: {
-    test: function() {
-      console.log("test");
-    }
   }
 };
 </script>
-
 <style scoped lang="scss">
 .information-arraw{
 	height: 35px;
 }
 .container-information-arrow{
-	width: 30px;
 	height: 100%;
-	right: 0;
-	position: fixed;
-	text-align: center;
+	text-align: right;
 }
 .information-layout{
 	padding-bottom: 15px;
