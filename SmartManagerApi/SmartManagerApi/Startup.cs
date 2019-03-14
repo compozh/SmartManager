@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +11,6 @@ using SmartManagerApi.Authentification;
 using Web.Authentication;
 using Web.WebRequests;
 using Web.Tools;
-using SmartManagerApi.Logic;
 using Web.Data;
 namespace SmartManagerApi
 {
@@ -30,7 +28,7 @@ namespace SmartManagerApi
 		{
 			services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 			{
-				builder.WithOrigins("http://localhost:8080/", "http://localhost:8080", "https://localhost:8080/", "https://localhost:8080")
+				builder.WithOrigins("http://localhost:8080", "https://localhost:8080")
 					.AllowAnyMethod()
 					.AllowCredentials()
 					.WithHeaders("Authorization", "Accept")
@@ -70,7 +68,6 @@ namespace SmartManagerApi
 			services.AddSingleton<AuthenticationTools>();
 			services.AddSingleton<IAuthOptions, AuthOptions>();
 			services.AddSingleton<IIdentityProvider, WebRequestsIdentityProvider>();
-			services.AddSingleton<SmartManagerLogic>();
 			services.AddSingleton<WebRequestsTools>();
 			services.AddHttpClient();
 

@@ -8,8 +8,8 @@ export default {
   /////////////////////////////////////////////////
   methods: {
     /** Получить значение из хранилища по ссылке для использования в свойствах */
-    getStoreValue(path,storeScope) {
-      var path = this.getStorePath(path, storeScope);
+    getStoreValue(path) {
+      var path = this.getStorePath(path);
       var object = this.$store.state.appData;
       if (!object) {
         return undefined
@@ -18,32 +18,32 @@ export default {
     },
 
     /** Обновить значение в хранилище (используется в модели) */
-    updateStoreValue(path,storeScope, value) {
-      var path = this.getStorePath(path, storeScope);
+    updateStoreValue(path, value) {
+      var path = this.getStorePath(path);
       this.$store.commit('updateData', [{ "op": "replace", path, value }]);
     },
 
     /** Путь к свойству в хранилище с учетом контекста */
-    getStorePath(path, storeScope){
-      storeScope = storeScope || {};
-      for (var storeScopeKey in storeScope) {
-        path = _.replace(path, new RegExp(`\\b(${storeScopeKey})\\b`), storeScope[storeScopeKey])
+    getStorePath(path){
+      for (var storeScopeKey in this.storeScope) {        
+        path = _.replace(path, new RegExp(`\\b(${storeScopeKey})\\b`), this.storeScope[storeScopeKey])
       }
       return path;
     },
 
     /** Обработать ссылки на хранилище в объекте свойств */
-    transfotmProps(props, storeScope) {
+    transfotmProps(props) {
       return _.transform(props, (result, value, key) => {
         // свойство - ссылка на хранилище
         if (typeof value == 'object' && value.source) {
-          result[key] = this.getStoreValue(value.source, storeScope)
+          result[key] = this.getStoreValue(value.source)
           return
         }
         result[key] = value
       }, {})
     },
 
+    /** Отрисока компонента */
     createCommonComponentInternal(component, scope, createElement) {
       switch (component.type) {
         case "component":
@@ -58,12 +58,9 @@ export default {
       }
     },
 
-    /**
-     * Отрисовка компонента в зависимости от типа
-     * @param {*} component Отрисовываемый компонент
-     * @param {*} createElement Функция отрисовки компонента
-     */
+    /** Отрисовка компонента в зависимости от типа */
     createCommonComponent(component, storeScope, createElement) {
+      // Единичный компонент
       if (!component.loop) {
         return this.createCommonComponentInternal(component, storeScope, createElement)  
       }
@@ -76,6 +73,11 @@ export default {
         return this.createCommonComponentInternal(component, scope, createElement)
       })
       
+    },
+    /** Вызов события из компонента по имени */
+    callAction(eventName){
+      var actionInfo = this.component.actions[eventName]
+      this.$store.dispatch('CallAction', {source:this.component.Id, event:eventName, arguments:this.transfotmProps(actionInfo.arguments)})
     }
   },
 
@@ -119,32 +121,40 @@ export default {
     // модель компонента:
     let model;
     if(this.component.model){
-      model = this.transfotmProps({value:this.component.model}, this.storeScope);
+      model = this.transfotmProps({value:this.component.model});
       model.callback = ($v) => {
-        this.updateStoreValue(this.component.model.source, this.storeScope, $v);
+        this.updateStoreValue(this.component.model.source, $v);
       }
     }
+
+
+    // Вложенные компоненты
+    // Компоненты в именованных слотах
+    let componentsInNamedSlots =  this.slotGroups.map(slotGroup => {
+      return createElement('template',  { slot: slotGroup.key } ,
+        slotGroup.components.map(subComponent => this.createCommonComponent(subComponent, this.storeScope, createElement)))
+    })
+     // Компоненты в слоте по умолчанию
+    let componentsInDefaultSlot = this.defaultSlotGroup.map(defSlotComp => this.createCommonComponent(defSlotComp,this.storeScope, createElement))
+
+    // Формирование обработчиков событий
     
+    
+    let on = _.transform(this.component.actions || {}, (result, value, key)=>{
+      result[key] = (event) => {
+        this.callAction(key);
+      }
+    },{})
+      
+
     // Создание корневого компонента
     return createElement(this.component.name, {
-        attrs: {
-          ...this.transfotmProps(this.component.attrs, this.storeScope)
-        },
-        model
+        attrs: {...this.transfotmProps(this.component.attrs)},
+        model,
+        on
       },
       // Наполнение корневого компонента дочерними
-      [
-        // Компоненты в именованных слотах
-        this.slotGroups.map(slotGroup => {
-          return createElement('template', slotGroup.key && slotGroup.key != "default" ? {
-              slot: slotGroup.key
-            } : undefined,
-            slotGroup.components.map(subComponent => this.createCommonComponent(subComponent, this.storeScope,
-              createElement)))
-        }),
-        // Компоненты в слоте по умолчанию
-        this.defaultSlotGroup.map(defSlotComp => this.createCommonComponent(defSlotComp,this.storeScope,
-          createElement))
-      ])
+      [componentsInNamedSlots, componentsInDefaultSlot])
   }
 };
+
