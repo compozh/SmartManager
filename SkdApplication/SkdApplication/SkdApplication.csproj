@@ -46,7 +46,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\dist\static\manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <DistFiles Remove="wwwroot\dist\**" />
+    <DistFiles Remove="wwwroot\**" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\static\manifest.json" />
@@ -60,7 +60,7 @@
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <DistFiles Include="wwwroot\dist\**; ClientApp\dist\**" />
+      <DistFiles Include="wwwroot\**" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
