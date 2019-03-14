@@ -57,7 +57,12 @@ const mutations = {
 		state.user = {};
 		state.users_list =[];
 		localStorage.setItem('authToken', "");
-		
+	},
+	setTimeLastLoad(state, payload){
+		state.timeLastLoad=payload;
+	},
+	setOnlineStatus(state, payload){
+		state.onlineStatus=payload;
 	}
 };
 

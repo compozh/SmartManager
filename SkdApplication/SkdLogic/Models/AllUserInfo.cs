@@ -46,5 +46,7 @@ namespace SkdLogic.Models
 		[JsonProperty("IsCurrent")]
         public bool IsCurrent { get; set; }
 
-    }
+	    [JsonProperty("HASKEY")]
+	    public string HASKEY { get; set; }
+	}
 }

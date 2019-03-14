@@ -35,10 +35,12 @@ export default {
 				return [{group:"", users}]
 			case 1:
 				return [{group:"", users: _.filter(users, u => !u.IsGone && !u.IsAbsend)}]
+			case 2:
+				return [{group:"", users: _.filter(users, u => u.HASKEY == "+" && !u.IsGone && !u.IsAbsend)}]
 			case 3:
 				return [{group:"", users: _.filter(users, u => u.IsGone || u.IsAbsend)}]
 			case 4:
-				
+
 				return _.transform(_.groupBy(users, u => u.DEPARTMENT), (result, users, group) => {
 					result.push({group, users})
 				}, []);
@@ -47,12 +49,14 @@ export default {
 				return _.transform(_.groupBy(users, u => u.PLACENAME), (result, users, group) => {
 					result.push({group, users})
 				}, []);
-			
+
 		}
 		
 	},
 	getUsersList: state => state.users_list,
 	getUser: state => state.user,
 	getFilter:state=>state.filter,
-	loaded: state=> state.loaded
+	loaded: state=> state.loaded,
+	getTimeLastLoad:state=>state.timeLastLoad,
+	getOnlineStatus:state=>state.onlineStatus,
 };

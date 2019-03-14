@@ -1,8 +1,5 @@
 var cacheName = 'SkdCach';
-var test=[];
 var dataCacheusersPhoto = 'usersPhoto';
-var dataUsersInformation = 'TokenUser';
-var dataAllUsers = 'allUsers';
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
@@ -42,7 +39,6 @@ self.addEventListener('fetch', function(e) {
         return fetch(e.request).then(function(response){
           cache.put(e.request.url, response.clone());
           return response; 
-          
         });
       })
     );
