@@ -11,10 +11,8 @@ module.exports = () => {
   console.log('Building for \x1b[33m%s\x1b[0m', process.env.NODE_ENV)
 
 	const isDevBuild = !(process.env.NODE_ENV && process.env.NODE_ENV === 'production')
-	const serviceWorkerPath = "../"
-	if (isDevBuild === "production") {
-		serviceWorkerPath = "/wwwroot/service-worker.js";
-	}
+	
+	
   //const extractCSS = new MiniCssExtractPlugin ({'site.css'})
 	
 
@@ -68,13 +66,7 @@ module.exports = () => {
 			{ from: './ClientApp/static', to: 'static', toType:"dir" }
 		]),
 		new CopyWebpackPlugin([
-			{ from: './ClientApp/service-worker.js', to: "../", toType: "dir" }
-		]),
-	    new CopyWebpackPlugin([
-		    { from: './ClientApp/service-worker.js', to: "./", toType: "dir" }
-		]),
-	    new CopyWebpackPlugin([
-		    { from: './ClientApp/service-worker.js', to: "../wwwroot", toType: "dir" }
+			{ from: './ClientApp/service-worker.js', to: "../", toType: "file" }
 	    ]),
     ].concat(isDevBuild ? [
       // Plugins that apply in development builds only
