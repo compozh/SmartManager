@@ -13,7 +13,7 @@ module.exports = () => {
 	const isDevBuild = !(process.env.NODE_ENV && process.env.NODE_ENV === 'production')
 	const serviceWorkerPath = "../"
 	if (isDevBuild === "production") {
-		serviceWorkerPath = "../wwwroot";
+		serviceWorkerPath = "/wwwroot/service-worker.js";
 	}
   //const extractCSS = new MiniCssExtractPlugin ({'site.css'})
 	
