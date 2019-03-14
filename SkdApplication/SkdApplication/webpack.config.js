@@ -71,7 +71,7 @@ module.exports = () => {
 			{ from: './ClientApp/service-worker.js', to: "../", toType: "dir" }
 		]),
 	    new CopyWebpackPlugin([
-		    { from: './ClientApp/service-worker.js', to: "/", toType: "dir" }
+		    { from: './ClientApp/service-worker.js', to: "./", toType: "dir" }
 		]),
 	    new CopyWebpackPlugin([
 		    { from: './ClientApp/service-worker.js', to: "../wwwroot", toType: "dir" }
