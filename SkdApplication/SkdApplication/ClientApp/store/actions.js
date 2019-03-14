@@ -40,6 +40,7 @@ const actions = ({
 		return Axios.post(`${subfodler}/api/SkdApi/GetUsers`, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')}})
 			.then((response) => {
 				if(response.data){
+					console.log(response.data)
 					context.commit('setUsersList', response.data);//суём в мутацию
 					let currentUser = _.find(response.data, u=>u.IsCurrent);
 					let lastTimeDownload = moment();
