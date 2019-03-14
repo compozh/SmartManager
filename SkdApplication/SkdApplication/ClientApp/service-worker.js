@@ -21,14 +21,13 @@ self.addEventListener('install', function(e) {
 self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(keyList) {
-      return Promise.all(keyList.map(function(key) {
-        if (key !== cacheName && key !== dataCacheusersPhoto) {
-          return caches.delete(key);
-        }
-      }));
+      return Promise.all(keyList.filter(function(key) {
+          return key.startsWith('/dist') && key !=cacheName
+        }).map(function(key){
+          return caches.delete(key)
+        }));
     })
   );
-  return self.clients.claim();
 });
 
 self.addEventListener('fetch', function(e) {
