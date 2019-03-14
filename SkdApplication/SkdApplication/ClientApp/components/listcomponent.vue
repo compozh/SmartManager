@@ -55,7 +55,7 @@
           </v-flex>
           <v-flex class="departament">{{userCopmonent.DEPARTMENT}}</v-flex>
           <v-flex v-on:click="openMoreInformation=!openMoreInformation">
-            <div class="container-information-arrow">
+            <div class="container-information-arrow"  v-if="$vuetify.breakpoint.mdAndDown">
               <i
                 v-if="!openMoreInformation"
                 class="material-icons information-arraw"
