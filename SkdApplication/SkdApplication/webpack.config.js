@@ -68,7 +68,6 @@ module.exports = () => {
 			{ from: './ClientApp/static', to: 'static', toType:"dir" }
 		]),
 		new CopyWebpackPlugin([
-
 			{ from: './ClientApp/service-worker.js', to: serviceWorkerPath, toType: "dir" }
 	    ]),
     ].concat(isDevBuild ? [
