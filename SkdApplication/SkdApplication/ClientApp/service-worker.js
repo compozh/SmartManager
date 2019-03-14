@@ -3,12 +3,12 @@ var dataCacheusersPhoto = 'usersPhoto';
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
-      return cache.addAll(['/',
-      '/dist/main.js',
-      '/dist/main.js.map',
-      '/dist/site.css',
-      '/dist/vendor.js',
-      '/dist/vendor-manifest.json',
+      return cache.addAll(['/skd/',
+      '/skd/dist/main.js',
+      '/skd/dist/main.js.map',
+      '/skd/dist/site.css',
+      '/skd/dist/vendor.js',
+      '/skd/dist/vendor-manifest.json',
       'https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css',
       'https://fonts.googleapis.com/css?family=Material+Icons',
       'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900%7CRoboto+Mono:500'
