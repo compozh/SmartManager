@@ -160,6 +160,7 @@ export default {
 }
 .container-key {
   height: 20px;
+  padding-left: 10px;
 }
 .with-key {
   color: #ff9800;

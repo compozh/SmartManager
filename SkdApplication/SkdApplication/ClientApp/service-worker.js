@@ -7,7 +7,6 @@ self.addEventListener('install', function(e) {
       '/dist/main.js',
       '/dist/main.js.map',
       '/dist/site.css',
-      '/dist/vendor.css',
       '/dist/vendor.js',
       '/dist/vendor-manifest.json',
       'https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css',
