@@ -24,7 +24,6 @@ self.addEventListener('activate', function (e) {
 			return Promise.all(keyList.filter(function (key) {
 				return avalaible.indexOf(key) == -1
 			}).map(function (key) {
-				console.log("cashe delated = " + key)
 				return caches.delete(key)
 			}));
 		})
@@ -45,23 +44,20 @@ self.addEventListener('fetch', function (e) {
 
 				caches.open(getCashName(e.request.url)).then(function (cache) {
 					if (getCashName(e.request.url)) {
-						console.log("cash put= ", e.request.url)
 						cache.put(e.request, response);
 					}
-        });
-					return response.clone();
+				});
+				return response.clone();
 			});
 		})
 	);
 });
 
 checkCash = function (url) {
-	 if(url.indexOf('/ws/GetFile.ashx')>-1)
-		console.log("users")
-	
+	if (url.indexOf('/ws/GetFile.ashx') > -1)
+
 	return (staticFiles.some(function (file) {
 		if (url.indexOf(file) + file.length == url.length)
-			console.log(url, file)
 		return url.indexOf(file) + file.length == url.length
 	}))
 }
