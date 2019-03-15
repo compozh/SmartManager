@@ -55,11 +55,9 @@ self.addEventListener('fetch', function (e) {
 
 checkCash = function (url) {
 	if (url.indexOf('/ws/GetFile.ashx') > -1)
-
-	return (staticFiles.some(function (file) {
-		if (url.indexOf(file) + file.length == url.length)
-		return url.indexOf(file) + file.length == url.length
-	}))
+		return (staticFiles.some(function (file) {
+			return url.indexOf(file) + file.length == url.length
+		}))
 }
 
 getCashName = function (url) {
