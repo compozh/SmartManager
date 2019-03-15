@@ -34,14 +34,15 @@ const actions = ({
         }
       })
   },
-  GetAppLayout(context) {
-    return Axios.post('http://localhost:5000/api/Core/GetAppLayout', undefined, {
+  GetAppLayout(context,componentName) {
+    return Axios.post('http://localhost:5000/api/Core/GetAppLayout?componentName='+ componentName,undefined, {
         // headers: {
         //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
         // },
         // withCredentials: true
       })
       .then((response => {
+        console.log(response.data)
         if (response.data != 'WRONG_TICKET' && response.data != "") {
           context.commit('setAppLayout', response.data)
         } else {
@@ -57,12 +58,16 @@ const actions = ({
         // withCredentials: true
       })
       .then((response => {
+        console.log("data = ",response.data)
         if (response.data != 'WRONG_TICKET' && response.data != "") {
           context.commit('setAppData', response.data)
         } else {
           localStorage.clear();
         }
       }))
+  },
+  GetApplication(context){
+    
   },
 
   CallAction(context, data) {

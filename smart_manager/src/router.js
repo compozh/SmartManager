@@ -1,24 +1,38 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
+import Axios from 'axios'
+import Login from './components/Login'
+import common from "./components/CommonComponent"
 Vue.use(Router);
 
-export default new Router({
+let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: Home,
-    // },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    // },
-  ],
-});
+  routes: []
+})
+export default router;
+Axios.post('http://localhost:5000/api/Core/GetApplication', undefined, {}).then(r => r.data).then(
+  routes => {
+    routes.pages.forEach((e) => {
+      console.log(router)
+      router.addRoutes(
+        [{
+          path: e.path,
+          component: {
+            render: function (createElement) {
+              this.$store.dispatch("GetAppLayout",e.component);
+              this.$store.dispatch('GetAppData');
+              // if (this.$store.state.appLayout.id == e.component) {
+                return createElement('common-component', {
+                  props: {
+                    componentName:e.component
+                    // component: this.$store.state.appLayout
+                  }
+                })
+              // }
+            }
+          }
+        }]);
+      console.log(router)
+    })
+  });

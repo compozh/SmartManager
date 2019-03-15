@@ -48,16 +48,32 @@ namespace SmartManagerApi.Controllers
 		[HttpPost("[action]")]
 		public string GetAppData()
 		{
-			return System.IO.File.ReadAllText("./MockData/app.data.json");		
+			//if (componentName == "component_one")
+			//	return System.IO.File.ReadAllText("./MockData/app.layout.json");
+			//if (componentName == "component_two")
+			//	return System.IO.File.ReadAllText("./MockData/app.layout.two.json");
+
+			return System.IO.File.ReadAllText("./MockData/app.layout.json");
+
 		}
 
 		[HttpPost("[action]")]
-		public string GetAppLayout()
+		public string GetAppLayout(string componentName)
 		{
-			return System.IO.File.ReadAllText("./MockData/app.json");
+			if(componentName== "component_one")
+			return System.IO.File.ReadAllText("./MockData/app.layout.json");
+			if(componentName == "component_two")
+			return System.IO.File.ReadAllText("./MockData/app.layout.two.json");
+
+			return null;
 		}
-		
-		
+		[HttpPost("[action]")]
+		public string GetApplication()
+		{
+			return System.IO.File.ReadAllText("./MockData/app.routing.json");
+		}
+
+
 		[HttpPost("[action]")]
 		public string CallAction(ActionArguments actionArgumentsArguments)
 		{

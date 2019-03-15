@@ -10,11 +10,11 @@ export default {
     /** Получить значение из хранилища по ссылке для использования в свойствах */
     getStoreValue(path) {
       var path = this.getStorePath(path);
-      var object = this.$store.state.appData;
+      var object = this.$store.getters.getAppData;
       if (!object) {
         return undefined
       }
-      return jsonpatcher.get(this.$store.state.appData, path)
+      return jsonpatcher.get(this.$store.getters.getAppData, path)
     },
 
     /** Обновить значение в хранилище (используется в модели) */
@@ -100,7 +100,7 @@ export default {
     // компоненты в слотах по умолчанию
     defaultSlotGroup() {
       return _.filter(this.component.content, el => !el.slot || el.slot == "default")
-    }
+    },
   },
 
 
@@ -108,17 +108,21 @@ export default {
   ////              STATIC PROPERTIES
   //////////////////////////////////////////////////
 
-  props: {component:{type:Object, required: false}, storeScope:{type:Object, required: false}},
+  props: {componentName:{type: String,required: false},component:{type:Object, required: false}, storeScope:{type:Object, required: false}},
   
   
   //////////////////////////////////////////////////
   /////             RENDER FUNCTION
   //////////////////////////////////////////////////
   render(createElement) {
+    if(this.componentName){
+        this.component = this.$store.getters.getAppLayout;
+    }
+    
     if (!this.component) {
       return undefined;
     }
-    // модель компонента:
+     // модель компонента:
     let model;
     if(this.component.model){
       model = this.transfotmProps({value:this.component.model});
