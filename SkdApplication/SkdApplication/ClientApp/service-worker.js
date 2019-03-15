@@ -1,5 +1,5 @@
-var cacheName = 'SkdCach9';
-var dataCacheusersPhoto = 'usersPhoto9';
+var cacheName = 'SkdCach1';
+var dataCacheusersPhoto = 'usersPhoto1';
 var avalaible = [cacheName, dataCacheusersPhoto];
 var staticFiles = ['/skd/',
 	'/skd/dist/main.js',
@@ -54,9 +54,8 @@ self.addEventListener('fetch', function (e) {
 });
 
 checkCash = function (url) {
-	if (url.indexOf('/ws/GetFile.ashx') > -1)
 		return (staticFiles.some(function (file) {
-			return url.indexOf(file) + file.length == url.length
+			return url.endsWith(file)
 		}))
 }
 
