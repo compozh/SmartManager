@@ -14,25 +14,18 @@ export default router;
 Axios.post('http://localhost:5000/api/Core/GetApplication', undefined, {}).then(r => r.data).then(
   routes => {
     routes.pages.forEach((e) => {
-      console.log(router)
       router.addRoutes(
         [{
           path: e.path,
           component: {
             render: function (createElement) {
-              this.$store.dispatch("GetAppLayout",e.component);
-              this.$store.dispatch('GetAppData');
-              // if (this.$store.state.appLayout.id == e.component) {
-                return createElement('common-component', {
-                  props: {
-                    componentName:e.component
-                    // component: this.$store.state.appLayout
-                  }
-                })
-              // }
+              return createElement('common-component', {
+                props: {
+                  componentName: e.component
+                }
+              })
             }
           }
         }]);
-      console.log(router)
     })
   });

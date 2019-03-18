@@ -1,6 +1,7 @@
 {
 	"name": "default-app",
-	"id": "component_one",
+	"layoutId": "component_one",
+	"dataSourceId": "component_one_data",
 	"attrs": {
 		"toolbarTitle": {
 			"source": "Toolbar/Caption/Value"

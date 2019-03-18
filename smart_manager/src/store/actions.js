@@ -34,51 +34,59 @@ const actions = ({
         }
       })
   },
-  GetAppLayout(context,componentName) {
-    return Axios.post('http://localhost:5000/api/Core/GetAppLayout?componentName='+ componentName,undefined, {
-        // headers: {
-        //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-        // },
-        // withCredentials: true
-      })
+  GetAppLayout(context, componentName) {
+    return Axios.post('http://localhost:5000/api/Core/GetAppLayout?componentName=' +
+        componentName, undefined, {
+          // headers: {
+          //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+          // },
+          // withCredentials: true
+        })
       .then((response => {
-        console.log(response.data)
         if (response.data != 'WRONG_TICKET' && response.data != "") {
-          context.commit('setAppLayout', response.data)
+          var myObject = {
+            data: response.data,
+            key: componentName
+          }
+          context.commit('setAppLayout', myObject)
         } else {
           localStorage.clear();
         }
       }))
   },
-  GetAppData(context) {
-    return Axios.post('http://localhost:5000/api/Core/GetAppData', undefined, {
-        // headers: {
-        //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-        // },
-        // withCredentials: true
-      })
+  GetAppData(context, componentSourceId) {
+    return Axios.post('http://localhost:5000/api/Core/GetAppData?componentSourceId=' +
+        componentSourceId, undefined, {
+          // headers: {
+          //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+          // },
+          // withCredentials: true
+        })
       .then((response => {
-        console.log("data = ",response.data)
         if (response.data != 'WRONG_TICKET' && response.data != "") {
-          context.commit('setAppData', response.data)
+          var myObject = {
+            data: response.data,
+            key: componentSourceId
+          }
+          context.commit('setAppData', myObject)
         } else {
           localStorage.clear();
         }
       }))
   },
-  GetApplication(context){
-    
+  GetApplication(context) {
+
   },
 
   CallAction(context, data) {
     return Axios.post('http://localhost:5000/api/Core/CallAction', {
-        source: data.source,
-        event: data.event,
-        arguments: data.arguments
-      }).then((response => {
-        console.log(response.data)
+      source: data.source,
+      event: data.event,
+      arguments: data.arguments
+    }).then((response => {
+      console.log(response.data)
 
-      }))
+    }))
   }
 });
 export default actions
