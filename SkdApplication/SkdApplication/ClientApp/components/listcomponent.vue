@@ -89,7 +89,7 @@
             </v-flex>
             <v-flex class="icon-text-alignment" v-if="userCopmonent.TEL">
               <svg-mobile-phone></svg-mobile-phone>
-              <a class="text-information" :href="'callto:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a>
+              <a class="text-information" :href="'tel:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a>
             </v-flex>
             <v-flex class="icon-text-alignment" v-if="userCopmonent.TEL2">
               <svg-office-phone></svg-office-phone>
