@@ -1,5 +1,5 @@
-var cacheName = 'SkdCach7';
-var dataCacheusersPhoto = 'usersPhoto7';
+var cacheName = 'SkdCach8';
+var dataCacheusersPhoto = 'usersPhoto8';
 var avalaible = [cacheName, dataCacheusersPhoto];
 var staticFiles = ['/skd/',
 	'/skd/dist/main.js',
