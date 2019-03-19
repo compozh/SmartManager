@@ -7,8 +7,8 @@
             <photo-component :photo="userCopmonent.photo"></photo-component>
           </v-flex>
 
-          <v-flex class="commoninformation">
-            <v-flex class="container-fio-key">
+          <v-flex :class="positionFIOInformationClass">
+            <v-flex class="container-fio-key icon-text-alignment">
               <h4>{{userCopmonent.P_FIO}}</h4>
               <div class="container-key" v-if="userCopmonent.HASKEY == '+'">
                 <svg-key></svg-key>
@@ -28,34 +28,41 @@
             </v-flex>
           </v-flex>
 
-          <v-flex class="contactiformation hidden-md-and-down">
-            <v-flex v-if="userCopmonent.EMAIL">
+          <v-flex :class="contactInformationComponentClass">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.EMAIL">
               <svg-email></svg-email>
-              <a :href="'mailto:'+userCopmonent.EMAIL">{{userCopmonent.EMAIL}}</a>
+              <a
+                class="text-information"
+                :href="'mailto:'+userCopmonent.EMAIL"
+              >{{userCopmonent.EMAIL}}</a>
             </v-flex>
-            <v-flex v-if="userCopmonent.TEL">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.TEL">
               <svg-mobile-phone></svg-mobile-phone>
-              <a :href="'callto:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a>
+              <a class="text-information" :href="'tel:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a>
             </v-flex>
-            <v-flex v-if="userCopmonent.TEL2">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.TEL2">
               <svg-office-phone></svg-office-phone>
-              {{userCopmonent.TEL2}}
+              <span class="text-information">{{userCopmonent.TEL2}}</span>
             </v-flex>
           </v-flex>
 
-          <v-flex class="contactiformation hidden-md-and-down">
-            <v-flex v-if="userCopmonent.BIRTHDAY">
+          <v-flex :class="dateSkypeComponentClass">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.BIRTHDAY">
               <svg-birthday></svg-birthday>
-              {{userCopmonent.BIRTHDAY}}
+              <span class="text-information">{{userCopmonent.BIRTHDAY}}</span>
             </v-flex>
-            <v-flex v-if="userCopmonent.SKYPE">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.SKYPE">
               <svg-skype></svg-skype>
-              {{userCopmonent.SKYPE}}
+              <span class="text-information">{{userCopmonent.SKYPE}}</span>
             </v-flex>
           </v-flex>
-          <v-flex class="departament">{{userCopmonent.DEPARTMENT}}</v-flex>
-          <v-flex v-on:click="openMoreInformation=!openMoreInformation">
-            <div class="container-information-arrow"  v-if="$vuetify.breakpoint.mdAndDown">
+          <v-flex :class="departamentComponentClass">{{userCopmonent.DEPARTMENT}}</v-flex>
+          <v-flex
+            class="container-arrow"
+            v-if="$vuetify.breakpoint.mdAndDown"
+            v-on:click="openMoreInformation=!openMoreInformation"
+          >
+            <div class="container-information-arrow">
               <i
                 v-if="!openMoreInformation"
                 class="material-icons information-arraw"
@@ -72,30 +79,32 @@
           v-if="$vuetify.breakpoint.mdAndDown && openMoreInformation"
           class="information-layout"
         >
-          <v-flex></v-flex>
-          <v-flex>
-            <v-flex v-if="userCopmonent.EMAIL">
+          <v-flex :class="mobileContactInformationClass">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.EMAIL">
               <svg-email></svg-email>
-              <a :href="'mailto:'+userCopmonent.EMAIL">{{userCopmonent.EMAIL}}</a>
+              <a
+                class="text-information"
+                :href="'mailto:'+userCopmonent.EMAIL"
+              >{{userCopmonent.EMAIL}}</a>
             </v-flex>
-            <v-flex v-if="userCopmonent.TEL">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.TEL">
               <svg-mobile-phone></svg-mobile-phone>
-              <a :href="'callto:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a>
+              <a class="text-information" :href="'callto:'+userCopmonent.TEL">{{userCopmonent.TEL}}</a>
             </v-flex>
-            <v-flex v-if="userCopmonent.TEL2">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.TEL2">
               <svg-office-phone></svg-office-phone>
-              {{userCopmonent.TEL2}}
+              <span class="text-information">{{userCopmonent.TEL2}}</span>
             </v-flex>
           </v-flex>
 
           <v-flex>
-            <v-flex v-if="userCopmonent.BIRTHDAY">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.BIRTHDAY">
               <svg-birthday></svg-birthday>
-              {{userCopmonent.BIRTHDAY}}
+              <span class="text-information">{{userCopmonent.BIRTHDAY}}</span>
             </v-flex>
-            <v-flex v-if="userCopmonent.SKYPE">
+            <v-flex class="icon-text-alignment" v-if="userCopmonent.SKYPE">
               <svg-skype></svg-skype>
-              {{userCopmonent.SKYPE}}
+              <span class="text-information">{{userCopmonent.SKYPE}}</span>
             </v-flex>
           </v-flex>
         </v-layout>
@@ -129,10 +138,72 @@ export default {
     return {
       openMoreInformation: false
     };
+  },
+  computed: {
+    positionFIOInformationClass() {
+      if (!this.$vuetify.breakpoint.mdAndDown) {
+        return "contactinformation common-component-flex";
+      }
+    },
+    contactInformationComponentClass() {
+      if (!this.$vuetify.breakpoint.mdAndDown) {
+        return "contactinformation hidden-md-and-down common-component-flex";
+      } else {
+        return "dont-show-contact-information";
+      }
+    },
+    dateSkypeComponentClass() {
+      if (!this.$vuetify.breakpoint.mdAndDown) {
+        return "contactinformation hidden-md-and-down date-skype-component-flexx";
+      } else {
+        return "dont-show-contact-information";
+      }
+    },
+    departamentComponentClass() {
+      if (!this.$vuetify.breakpoint.mdAndDown) {
+        return "departament departament-component-flex";
+      } else {
+        return "departament-mobile-component";
+      }
+    },
+    mobileContactInformationClass() {
+      if (this.$vuetify.breakpoint.mdAndDown) {
+        return "mobile-contact-information";
+      }
+    }
   }
 };
 </script>
 <style scoped lang="scss">
+.text-information {
+  padding-left: 3px;
+}
+.icon-text-alignment {
+  display: flex;
+  align-items: center;
+}
+.mobile-contact-information {
+  padding-left: 5px;
+}
+.container-arrow {
+  flex: 0 0 30px;
+}
+.departament-mobile-component {
+  flex: 0 0 100px;
+}
+.date-skype-component-flex {
+  flex: 0 0 100px;
+}
+.dont-show-contact-information {
+  display: none;
+}
+.common-component-flex {
+  flex-basis: 0;
+}
+.departament-component-flex {
+  flex-basis: 0;
+  flex-grow: 0.5;
+}
 .information-arraw {
   height: 35px;
 }
