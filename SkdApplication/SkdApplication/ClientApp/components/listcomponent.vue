@@ -154,7 +154,7 @@ export default {
     },
     dateSkypeComponentClass() {
       if (!this.$vuetify.breakpoint.mdAndDown) {
-        return "contactinformation hidden-md-and-down date-skype-component-flexx";
+        return "contactinformation hidden-md-and-down date-skype-component-flex";
       } else {
         return "dont-show-contact-information";
       }
@@ -186,13 +186,13 @@ export default {
   padding-left: 5px;
 }
 .container-arrow {
-  flex: 0 0 30px;
+  flex-basis: 30px;
 }
 .departament-mobile-component {
-  flex: 0 0 100px;
+  flex-basis: 100px;
 }
 .date-skype-component-flex {
-  flex: 0 0 100px;
+  flex-basis: 0;
 }
 .dont-show-contact-information {
   display: none;
