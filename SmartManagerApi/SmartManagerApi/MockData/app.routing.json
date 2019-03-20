@@ -1,0 +1,25 @@
+{
+	"pages": [
+		{
+			"path": "/one",
+			"name": "one", 
+			"component": "component_one"
+		},
+		{
+			"path": "/two",
+			"name": "two",
+
+			"component": "component_two"
+		},
+		{
+			"path": "/three",
+			"name": "three",
+			"component": "component_three"
+		},
+		{
+			"path": "/four",
+			"name": "four",
+			"component": "component_four"
+		}
+	]
+}

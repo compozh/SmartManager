@@ -1,22 +1,29 @@
 import * as jsonpatch from '../patching'
+import Vue from 'vue'
 
 const mutations = {
   /** Загрузка хранилища */
-  setAppData(state, data){
-    state.appData = data
+  setAppData(state, payload) {
+    Vue.set(state.appData, payload.key, payload.data)
   },
-  /** Загрузка Layout приложения */    
-  setAppLayout(state, data){
-    state.appLayout = data
+  /** Загрузка Layout приложения */
+  setAppLayout(state, payload) {
+    Vue.set(state.appLayout, payload.key, payload.data)
   },
   /** Обновить данные патчем */
-  updateData(state, patchlist){
-    jsonpatch.applyPatchList(state.appData, patchlist);
+  updateData(state, {
+    key,
+    patchlist
+  }) {
+    jsonpatch.applyPatchList(state.appData[key], patchlist);
   },
   /** Обновить Layout патчем */
-  updateLayout(state, patchlist){
-    jsonpatch.applyPatchList(state.appLayout, patchlist);
-  } 
+  updateLayout(state, {
+    key,
+    patchlist
+  }) {
+    jsonpatch.applyPatchList(state.appLayout[key], patchlist);
+  }
 };
- 
+
 export default mutations
