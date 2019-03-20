@@ -13,7 +13,7 @@ const state = {
 	users_list: [],//состояние юзеров
 	user: {}, //состояние юзера
 	loginError:"",
-	filter:"",
+	filter:localStorage.getItem('filter')||"",
 	loaded:false,
 	authorized:!!localStorage.getItem('authToken'),
 	grouping:localStorage.getItem('grouping')||0,

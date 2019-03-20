@@ -110,7 +110,7 @@
 			}, //getters из vuex папка (store/index.js)
 			filter: {
 				get () {
-					return this.$store.getters.filter
+					return this.$store.getters.getFilter;
 				},
 				set (value) {
 					this.$store.dispatch("setFilter", value)

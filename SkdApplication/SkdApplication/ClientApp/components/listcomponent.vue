@@ -186,10 +186,10 @@ export default {
   padding-left: 5px;
 }
 .container-arrow {
-  flex-basis: 30px;
+  flex: 0 0 30px;
 }
 .departament-mobile-component {
-  flex-basis: 100px;
+  flex: 0 0 100px;
 }
 .date-skype-component-flex {
   flex-basis: 0;

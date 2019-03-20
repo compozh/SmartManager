@@ -47,6 +47,12 @@ const mutations = {
 		state.loaded = true;
 	},
 	setFilter (state, filter){
+		let findFilter=filter;
+		if(!filter)
+		{
+			findFilter=''
+		}
+		localStorage.setItem("filter",findFilter)
 		state.filter = filter
 	},
 	setAuthorized(state, value){
