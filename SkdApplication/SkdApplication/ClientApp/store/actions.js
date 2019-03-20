@@ -28,22 +28,6 @@ const actions = ({
 	// загрузка списка пользователей
 	loadUsersList (context) {
 		
-		if ('caches' in window) {
-			console.log('yea!!!')
-			caches.match('/api/SkdApi/GetUsers').then(function(response) {
-				if (response) {
-					// response.json().then(function updateFromCache(json) {
-					// 	var results = json.query.results;
-					// 	results.key = key;
-					// 	results.label = label;
-					// 	results.created = json.query.created;
-					// 	app.updateForecastCard(results);
-					//   });
-					console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + response)
-				}
-			  });
-		}
-
 		return Axios.post(`${subfodler}/api/SkdApi/GetUsers`, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')}})
 			.then((response) => {
 				context.commit('setUsersList', response.data);//суём в мутацию
