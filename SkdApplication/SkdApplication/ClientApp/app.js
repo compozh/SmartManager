@@ -25,7 +25,7 @@ export {
 (function registerServiceWorker() {
 	// регистрирует скрипт sw в поддерживаемых браузерах
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/skd/service-worker.js?1', { scope: '/skd/' }).then(function(reg) {
+		navigator.serviceWorker.register('/skd/service-worker.js?2', { scope: '/skd/' }).then(function(reg) {
 			// регистрация сработала
 			console.log('Registration succeeded. Scope is ' + reg.scope);
 		}).catch(function(error) {

@@ -83,7 +83,7 @@ export default {
     window.addEventListener("scroll", e => {
       if (
         window.scrollY + window.innerHeight >=
-        window.document.body.scrollHeight
+        window.document.body.scrollHeight-180
       ) {
         this.loadMore();
       }
