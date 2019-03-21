@@ -59,4 +59,5 @@ export default {
 	loaded: state=> state.loaded,
 	getTimeLastLoad:state=>state.timeLastLoad,
 	getOnlineStatus:state=>state.onlineStatus,
+	getItemsOffset:state=>state.itemsOffset,
 };
