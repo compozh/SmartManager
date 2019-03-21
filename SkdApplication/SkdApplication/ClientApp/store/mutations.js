@@ -65,6 +65,13 @@ const mutations = {
 	},
 	setOnlineStatus(state, payload){
 		state.onlineStatus=payload;
+	},
+	setNextItem(state, count){
+		state.nextItem+=count;
+	},
+	resetNextItem(state){
+		state.nextItem=20;
+		window.scrollTo(0,0) 
 	}
 };
 

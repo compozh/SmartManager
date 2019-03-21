@@ -8,6 +8,7 @@ Vue.use(Vuex);//расширяем функциональность всего v
 
 // все сосстояния имеет ли смысл разбивать по файлам?
 const state = {
+	nextItem:20,
 	onlineStatus:false,
 	timeLastLoad:'',
 	users_list: [],//состояние юзеров
