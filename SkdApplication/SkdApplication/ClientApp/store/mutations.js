@@ -47,6 +47,8 @@ const mutations = {
 		state.loaded = true;
 	},
 	setFilter (state, filter){
+		filter=filter||""
+		localStorage.setItem("filter",filter)
 		state.filter = filter
 	},
 	setAuthorized(state, value){
