@@ -26,7 +26,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td class="text-xs">{{ item.EntryPoint }}</td>
+              <td class="text-xs"><a :href="item.Link" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
               <td class="text-xs-left">{{ item.AverageTime }}</td>
             </template>
@@ -54,34 +54,55 @@ export default {
           this.SetHeaders();
           this.LongSqlQueryToday=[]
           for(var key in this.longSqlQueriesForToday){
-              this.LongSqlQueryToday.push(this.longSqlQueriesForToday[key])
+                let obj={
+                  CallChain:this.longSqlQueriesForToday[key].CallChain,
+                  EntryPoint:this.longSqlQueriesForToday[key].EntryPoint,
+                  Count:this.longSqlQueriesForToday[key].Count,
+                  AverageTime:this.longSqlQueriesForToday[key].AverageTime,
+                  Link:"https://m.it.ua/skd"
+                }
+                this.LongSqlQueryToday.push(obj)
+              // this.LongSqlQueryToday.push(this.longSqlQueriesForToday[key])
           }
         },
         SetCurentlongSqlQueries(){
           this.LongSqlQueryToday=[]
           this.headTitle=this.curentlongSqlQueries.Title
             for(var key in this.curentlongSqlQueries.DetailInfoAboutTest){
-                this.LongSqlQueryToday.push(this.curentlongSqlQueries.DetailInfoAboutTest[key])
+                let obj={
+                  CallChain:this.curentlongSqlQueries.DetailInfoAboutTest[key].CallChain,
+                  EntryPoint:this.curentlongSqlQueries.DetailInfoAboutTest[key].EntryPoint,
+                  Count:this.curentlongSqlQueries.DetailInfoAboutTest[key].Count,
+                  AverageTime:this.curentlongSqlQueries.DetailInfoAboutTest[key].AverageTime,
+                  Link:"http://google.com"
+                }
+                this.LongSqlQueryToday.push(obj)
+                // this.LongSqlQueryToday.push(this.curentlongSqlQueries.DetailInfoAboutTest[key])
             }
         },
         SetHeaders(){
             this.headers.splice(0,this.headers.length);
-            var obj=[{
-                          sortable: false,
-                          text: this.entryPoint,
-                          value: 'name',
-                          align: 'left'
-                      },{
-                          sortable: false,
-                          text: this.count,
-                          value: 'count',
-                          align: 'left'
-                      },{
-                          sortable: false,
-                          text: this.avgtTime,
-                          value: 'avrgTime',
-                          align: 'left'
-                    }]
+            var obj=[
+                      {
+                        text: this.entryPoint,
+                        align: 'left',
+                        sortable: false,
+                        value: 'ErrorMessage',
+                      },
+                      {
+                        text: this.count,
+                        sortable: true,
+                        value: 'Count',
+                        align: 'left'
+                      },
+                      {
+                        text: this.avgtTime,
+                        sortable: true,
+                        value: 'AverageTime',
+                        align: 'left'
+                      }
+                    ]
+
             this.headers=obj
 
         }

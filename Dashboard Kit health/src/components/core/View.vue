@@ -5,7 +5,7 @@
         <!-- <v-btn icon @click="Back" v-if="back !=0" title="Назад">
           <v-icon >keyboard_backspace</v-icon>
         </v-btn> -->
-       <div @click="ShowDatePicker()" class="title"> {{header}} <i v-if="loginStatus" class="material-icons calendar" @click="Callcalendar" title="Сменить дату">
+       <div @click="ShowDatePicker()" class="title"> {{header}} {{$store.getters.getCurentDate}} <i v-if="loginStatus" class="material-icons calendar" @click="Callcalendar" title="Сменить дату">
         date_range
       </i></div>
         <!-- <i class="material-icons" >exit_to_app</i> -->

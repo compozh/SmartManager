@@ -29,7 +29,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td>{{ item.EntryPoint  }}</td>
+              <td><a :href="item.Link" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
             </template>
           </v-data-table>
@@ -41,7 +41,7 @@ export default {
     data(){
         return{
             headTitle:'',
-            dataErrorForToday: [],
+            dataErrorForToday: [],//на самом деле еще будет свойство для перехода по ссылке поэтому нужда в goToLink отпадет
             headersError: [],
             emptyData:"Нет данных за " + moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY"),
         }
@@ -52,34 +52,52 @@ export default {
             this.SetHeaders();
             this.dataErrorForToday=[];
             for(var key in this.errorsForToday){
-               this.dataErrorForToday.push(this.errorsForToday[key]);
+              //симуляция ссылки
+              let obj={
+                CallChain:this.errorsForToday[key].CallChain,
+                Count:this.errorsForToday[key].Count,
+                EntryPoint:this.errorsForToday[key].EntryPoint,
+                ErrorMessage:this.errorsForToday[key].ErrorMessage,
+                Link:"https://m.it.ua/skd"
+              } 
+               this.dataErrorForToday.push(obj);
+              //  this.dataErrorForToday.push(this.errorsForToday[key]);
             }
+
         },
+        //загружаем данные при запросе из столбца
         SetCurentErrors(){
             this.dataErrorForToday=[];
             this.headTitle=this.curentError.Title
             for(var key in this.curentError.DetailInfoAboutTest){
-               this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
+              //симуляция ссылки
+              let obj={
+                CallChain:this.curentError.DetailInfoAboutTest[key].CallChain,
+                Count:this.curentError.DetailInfoAboutTest[key].Count,
+                EntryPoint:this.curentError.DetailInfoAboutTest[key].EntryPoint,
+                ErrorMessage:this.curentError.DetailInfoAboutTest[key].ErrorMessage,
+                Link:"http://google.com"
+              } 
+               this.dataErrorForToday.push(obj);
+              //  this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
             }
         },
         SetHeaders(){
             this.headersError.splice(0,this.headersError.length);
-            var obj=[
+             var obj=[
                       {
-                        sortable: false,
                         text: this.entryPoint,
+                        align: 'left',
+                        sortable: false,
                         value: 'ErrorMessage',
-                        align: 'left'
                       },
                       {
-                        sortable: false,
                         text: this.count,
                         value: 'Count',
-                        align: 'left'
+                        align: 'left',
                       }
                     ]
             this.headersError=obj
-
         }
     },
     computed: {
@@ -97,7 +115,8 @@ export default {
         },
         count(){
             return this.$store.getters.getInfoList.TitleOfErrorsCountColumn
-        }
+        },
+        
     },
     watch:{
         errorsForToday:function () {

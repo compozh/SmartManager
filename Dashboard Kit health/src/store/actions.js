@@ -27,7 +27,7 @@ const actions = ({
     context.commit('setShowiframe', false);
   },
   SetCurentDate(context,state){
-    context.commit('setCurentDate', stat);
+    context.commit('setCurentDate', state);
   },
   SetUserName(context,name){
     context.commit('setUserName', name);
@@ -134,6 +134,7 @@ const actions = ({
             detailSchedulerFails.date=date,
             detailSchedulerFails.parameters="null",
             context.dispatch('GetDetailsInformationForTable',detailSchedulerFails);
+            context.dispatch('SetCurentDate',date)
           }
         },10)
         
