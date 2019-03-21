@@ -83,11 +83,11 @@
 			},
 			changeSort () {
 				this.$store.commit("changeSort")
-				this.$store.commit("resetNextItem")
+				this.$store.commit("resetItemsOffset")
 			},
 			changeGrouping (value) {
 				this.$store.commit("changeGrouping", value)
-				this.$store.commit("resetNextItem")
+				this.$store.commit("resetItemsOffset")
 				if(this.$vuetify.breakpoint.mdAndDown){
 					this.drawer=false;
 				}

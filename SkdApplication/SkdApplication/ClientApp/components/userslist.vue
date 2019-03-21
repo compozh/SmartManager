@@ -12,7 +12,7 @@
       </div>
     </transition>
     <v-flex offset-lg2 lg8 v-if="loaded" id="infinite-list">
-      <template v-for="user_group in newUsers">
+      <template v-for="user_group in SlicedItems">
         <h3>{{user_group.group}}</h3>
         <v-layout
           :key="userCom.USERID+userCom.EMAIL+userCom.P_FIO"
@@ -42,19 +42,16 @@ export default {
     loaded() {
       return this.$store.getters.loaded;
     },
-    sliced() {
-      return this.users_list.slice(0, this.display);
-    },
     users_list() {
       return this.$store.getters.getGroupedUserList; //getters из vuex папка (store/index.js)
     },
     user() {
       return this.$store.getters.getUser; //getters из vuex папка (store/index.js)
     },
-    nextItem() {
-      return this.$store.getters.getNextItem;
+    ItemsOffset () {
+      return this.$store.getters.getItemsOffset;
     },
-    newUsers() {
+    SlicedItems() {
       this.loading = true;
       let grouped;
       let itemsenp = [];
@@ -63,14 +60,14 @@ export default {
         let listUsers = [];
         for (var j = 0; j < this.users_list[i].users.length; j++) {
           listUsers.push(this.users_list[i].users[j]);
-          if (insideCounter == this.nextItem) {
+          if (insideCounter == this.ItemsOffset ) {
             break;
           }
           insideCounter++;
         }
         grouped = { group: this.users_list[i].group, users: listUsers };
         itemsenp.push(grouped);
-        if (insideCounter == this.nextItem) {
+        if (insideCounter == this.ItemsOffset ) {
           break;
         }
       }
@@ -83,7 +80,6 @@ export default {
     this.$store.dispatch("loadUsersList");
   },
   mounted() {
-    const listElm = document.querySelector("#infinite-list");
     window.addEventListener("scroll", e => {
       if (
         window.scrollY + window.innerHeight >=
@@ -95,7 +91,7 @@ export default {
   },
   methods: {
     loadMore() {
-      this.$store.dispatch("setNextItem", 20);
+      this.$store.dispatch("setItemsOffset", 20);
     }
   }
 };
@@ -106,13 +102,6 @@ export default {
   background: #a5d6a7;
 }
 
-.list-group-wrapper {
-  position: relative;
-}
-.list-group {
-  overflow: auto;
-  height: 100vh;
-}
 .loading {
   text-align: center;
   position: absolute;

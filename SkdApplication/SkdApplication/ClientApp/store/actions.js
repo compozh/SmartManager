@@ -60,11 +60,11 @@ const actions = ({
 			});
 	},
 	setFilter (context, filter){
-		context.commit('resetNextItem')
+		context.commit('resetItemsOffset')
 		context.commit('setFilter', filter)
 	},
-	setNextItem(context, count){
-		context.commit('setNextItem',count)
+	setItemsOffset(context, count){
+		context.commit('setItemsOffset',count)
 	}
 });
 export default actions
