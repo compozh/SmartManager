@@ -10,11 +10,11 @@ var path = window.location.pathname.split('/').filter(r => r)[0] || "";
 path = path ? `/${path}`:'';
 
 function graphQLFetcher (graphQLParams) {
-	graphQLParams.SchemaName = localStorage.getItem("schema") || "";
+	graphQLParams.SchemaName = localStorage.getItem("schema") || "SkdSchema";
 	return axios({
 		method: 'POST',
 		url: window.location.origin +path+ '/api/graphql',
-		headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},
+		headers: {'Authorization': 'Bearer ' + localStorage.getItem('authTokenGraphQl')},
 		data: graphQLParams
 	}).then(resp => resp.data);
 }
@@ -30,7 +30,7 @@ document.getElementById("loginbutton").addEventListener("click", function (ev) {
 		data: {login: document.getElementById("lgn").value, password: document.getElementById("psw").value}
 	}).then(resp => {
 			if (resp.data.access_token) {
-				localStorage.setItem("authToken", resp.data.access_token);
+				localStorage.setItem("authTokenGraphQl", resp.data.access_token);
 				location.reload();
 			}
 		}
@@ -38,7 +38,7 @@ document.getElementById("loginbutton").addEventListener("click", function (ev) {
 })
 
 document.getElementById("logoutbutton").addEventListener("click", function (ev) {
-	localStorage.removeItem("authToken");
+	localStorage.removeItem("authTokenGraphQl");
 	setLoginState();
 })
 
@@ -50,7 +50,7 @@ document.getElementById("schema").addEventListener("change", function (ev) {
 
 function setLoginState () {
 	document.getElementById("schema").value = localStorage.getItem("schema") || "SkdSchema";
-	if (localStorage.getItem("authToken")) {
+	if (localStorage.getItem("authTokenGraphQl")) {
 		document.getElementsByClassName("login-panel")[0].style.display = "none";
 		document.getElementsByClassName("logout-panel")[0].style.display = "flex";
 	} else {
