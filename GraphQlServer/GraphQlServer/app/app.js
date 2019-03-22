@@ -5,11 +5,15 @@ import axios from 'axios';
 import 'graphiql/graphiql.css';
 import './app.css';
 
+var path = window.location.pathname.split('/').filter(r => r)[0] || "";
+
+path = path ? `/${path}`:'';
+
 function graphQLFetcher (graphQLParams) {
 	graphQLParams.SchemaName = localStorage.getItem("schema") || "";
 	return axios({
 		method: 'POST',
-		url: window.location.origin + '/api/graphql',
+		url: window.location.origin +path+ '/api/graphql',
 		headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},
 		data: graphQLParams
 	}).then(resp => resp.data);
@@ -22,7 +26,7 @@ document.getElementById("loginbutton").addEventListener("click", function (ev) {
 	
 	return axios({
 		method: 'POST',
-		url: window.location.origin + '/api/authentication/login',
+		url: window.location.origin +path+ '/api/authentication/login',
 		data: {login: document.getElementById("lgn").value, password: document.getElementById("psw").value}
 	}).then(resp => {
 			if (resp.data.access_token) {
