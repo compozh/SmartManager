@@ -1,0 +1,23 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+#app {
+	height: calc(100vh - 40px);
+}
+.top-panel{
+	height: 40px;
+	display: flex;
+	align-items: center;
+}
+.schema-selector, .login-panel,.logout-panel {
+	display: flex;
+	align-items: center;
+}
+
+.logout-panel{
+	display: none;
+}
