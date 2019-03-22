@@ -8,15 +8,11 @@
     <ItemGroup>
       <PackageReference Include="GraphQL" Version="2.4.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
       <PackageReference Include="Web.Authentication" Version="1.0.10" />
       <PackageReference Include="Web.Tools" Version="1.0.4" />
       <PackageReference Include="Web.WebRequests" Version="1.0.9" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+    
 
 </Project>
