@@ -1,6 +1,6 @@
 <template>
     <material-card
-          color="#48a420"
+          color="#008ffb"
           :title="title"
         >
           <v-data-table
@@ -9,6 +9,7 @@
             hide-actions
             style="height:506px; overflow:auto"
             class="container-v-data-table"
+            sort-icon=""
           >
           <template slot="no-data">
             <p class="empty-data-in-table">{{emptyData}}</p>
@@ -17,6 +18,7 @@
               slot="headerCell"
               slot-scope="{ header }"
             >
+            <v-icon small>arrow_drop_down</v-icon>
               <span
                 class="font-weight-light  text--darken-3"
                 v-text="header.text"
@@ -29,7 +31,7 @@
             >
               <tr @click="RequestDetailInformation(item.item.TaskCode)" :class="item.selected ? 'select-row':''">
               <td class="other-class-td">{{ item.item.TaskCode }}</td>
-              <td class="text-xs-left">{{ item.item.TaskName }}</td>
+              <td class="text-xs-left"><a class="table-link" href="" target="_blank"> {{ item.item.TaskName }}</a></td>
               <td class="text-xs-left">{{ item.item.Result }}</td>
               <td class="text-xs-left">{{ ConvertData(item.item.DateStart) }}</td>
               <td class="text-xs-left">{{ ConvertData(item.item.DateEnd) }}</td>
@@ -119,35 +121,30 @@ export default {
         SetHeaders(){
           this.headers.splice(0,this.headers.length);
           var obj=[{
-                sortable: false,
                 text: this.Unypz,
-                value: 'taskCode',
+                value: 'item.TaskCode',
                 align: 'left',
                 width: '80px',
             },{
-                sortable: false,
                 text: this.Name,
-                value: 'taskName',
+                value: 'item.TaskName',
                 align: 'left',
                 width: '80px'
             },{
-                sortable: false,
                 text: this.Flag,
-                value: 'result',
+                value: 'item.Result',
                 align: 'left',
                 width: '80px'
 
             },{
-                sortable: false,
                 text: this.StartDate,
-                value: 'dateStart',
+                value: 'item.DateStart',
                 align: 'left',
                 width: '80px'
 
             },{
-                sortable: false,
                 text: this.EndDate,
-                value: 'dateEnd',
+                value: 'item.DateEnd',
                 align: 'left',
                 width: '80px'
             }]
@@ -194,4 +191,9 @@ export default {
 text-overflow: ellipsis !important;
     overflow: hidden !important;
 }
+/* действует на все ссылки */
+.table-link:hover{
+  text-decoration:underline;
+}
+
 </style>

@@ -1,6 +1,6 @@
 <template>
     <material-card
-          color="#48a420"
+          color="#008ffb"
           :title="headTitle"
         >
           <v-data-table
@@ -9,6 +9,7 @@
             hide-actions
             color=''
             style="height:506px; overflow:auto"
+            sort-icon=""
           >
           <template slot="no-data">
             <p class="empty-data-in-table">{{emptyData}}</p>
@@ -19,8 +20,9 @@
               slot-scope="{ header }"
               class="table-header"
             >
+            <v-icon small>arrow_drop_down</v-icon>
               <span
-                class="font-weight-light text-warning text--darken-3"
+                class="font-weight-light text--darken-3"
                 v-text="header.text"
                 :title="header.text"
               />
@@ -29,7 +31,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td>{{ item.EntryPoint  }}</td>
+              <td><a class="table-link" href="" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
             </template>
           </v-data-table>
@@ -41,7 +43,7 @@ export default {
     data(){
         return{
             headTitle:'',
-            dataErrorForToday: [],
+            dataErrorForToday: [],//на самом деле еще будет свойство для перехода по ссылке поэтому нужда в goToLink отпадет
             headersError: [],
             emptyData:"Нет данных за " + moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY"),
         }
@@ -52,34 +54,35 @@ export default {
             this.SetHeaders();
             this.dataErrorForToday=[];
             for(var key in this.errorsForToday){
-               this.dataErrorForToday.push(this.errorsForToday[key]);
+              //симуляция ссылки
+              this.dataErrorForToday.push(this.errorsForToday[key]);
             }
+
         },
+        //загружаем данные при запросе из столбца
         SetCurentErrors(){
             this.dataErrorForToday=[];
             this.headTitle=this.curentError.Title
             for(var key in this.curentError.DetailInfoAboutTest){
-               this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
+              //симуляция ссылки
+              this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
             }
         },
         SetHeaders(){
             this.headersError.splice(0,this.headersError.length);
-            var obj=[
+             var obj=[
                       {
-                        sortable: false,
                         text: this.entryPoint,
-                        value: 'ErrorMessage',
-                        align: 'left'
+                        align: 'left',
+                        value: 'EntryPoint',
                       },
                       {
-                        sortable: false,
                         text: this.count,
                         value: 'Count',
-                        align: 'left'
+                        align: 'left',
                       }
                     ]
             this.headersError=obj
-
         }
     },
     computed: {
@@ -97,7 +100,8 @@ export default {
         },
         count(){
             return this.$store.getters.getInfoList.TitleOfErrorsCountColumn
-        }
+        },
+        
     },
     watch:{
         errorsForToday:function () {
@@ -109,7 +113,7 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style>
 .table{
   max-height: 600px !important;
 }
@@ -117,4 +121,7 @@ export default {
   color:#48a420  !important;
 }
 
+.v-datatable thead th.column.sortable i{
+  vertical-align: bottom !important;
+}
 </style>

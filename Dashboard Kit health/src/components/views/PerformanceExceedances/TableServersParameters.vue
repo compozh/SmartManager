@@ -1,5 +1,5 @@
 <template>
-  <material-card color="#48a420" icon>
+  <material-card color="#008ffb" icon>
     
     <template slot="header" ><h4 class="server-header">{{headTitle}}<i class="material-icons icon-info" :title="info">info</i> </h4></template>
     <v-data-table
@@ -8,12 +8,14 @@
       hide-actions
       style="height:506px; overflow:auto;"
       class="container-v-data-table"
+      sort-icon=""
     >
       <template slot="no-data">
         <p class="empty-data-in-table">{{emptyData}}</p>
       </template>
 
       <template slot="headerCell" slot-scope="{ header }">
+        <v-icon small>arrow_drop_down</v-icon>
         <span
           class="font-weight-light text-warning text--darken-3 text-head-color"
           v-text="header.text"
@@ -58,72 +60,7 @@ export default {
         "Нет данных за " +
         moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY"),
       commonArray: [],
-      headersError: [
-        {
-          sortable: false,
-          text: "Сервер",
-          value: "ServerName",
-          align: "left",
-          width: "80px"
-        },
-        {
-          sortable: false,
-          text: "Время",
-          value: "Date",
-          align: "left",
-          width: "80px"
-        },
-        {
-          sortable: false,
-          text: "Порт",
-          value: "Port",
-          align: "left",
-          width: "50px"
-        },
-        {
-          sortable: false,
-          text: "% Использования процессора",
-          value: "CPU_USED",
-          align: "left",
-          width: "50px",
-          class: "classColumnHeader"
-        },
-        {
-          sortable: false,
-          text: "Очередь диска",
-          value: "HDD_QUEUE",
-          align: "left",
-          width: "50px"
-        },
-        {
-          sortable: false,
-          text: "Время чтения с жесткого диска (мс)",
-          value: "HDD_SECRD",
-          align: "left",
-          width: "50px"
-        },
-        {
-          sortable: false,
-          text: "Время записи на жесткий диск (мс)",
-          value: "HDD_SECWR",
-          align: "left",
-          width: "50px"
-        },
-        {
-          sortable: false,
-          text: "Свободно ОЗУ (Гб)",
-          value: "RAM_FREE",
-          align: "left",
-          width: "50px"
-        },
-        {
-          sortable: false,
-          text: "Обмен памяти с диском (страниц/сек)",
-          value: "RAM_PGSEC",
-          align: "left",
-          width: "80px"
-        }
-      ]
+      headersError: [],
     };
   },
   computed: {
@@ -144,7 +81,7 @@ export default {
       );
     },
     info() {
-      return this.$store.getters.getInfoList.TitleOfPerfExcForDate;
+      return this.$store.getters.getInfoList.TitleOfPerfExcForDateLong;
     }
   },
   methods: {
@@ -163,6 +100,7 @@ export default {
           break;
       }
     },
+   
     ConvertData(str) {
       var number = parseInt(str.replace(/\D+/g, ""));
       var formattedDate = moment(number).format("HH:mm:ss");
@@ -171,6 +109,7 @@ export default {
     GetPerfExceedances(PerfExceedanseParams, serverParams) {
       this.commonArray = [];
       this.headTitle = this.title;
+      this.SetHeaders();
       var data = UnionServer(PerfExceedanseParams, serverParams);
       for (var k in data) {
         this.commonArray.push(data[k]);
@@ -183,6 +122,79 @@ export default {
       for (var k in data) {
         this.commonArray.push(data[k]);
       }
+    },
+    SetHeaders(){
+      this.headersError.splice(0,this.headersError.length);
+
+      var obj=[
+        {
+          sortable: true,
+          text: "Сервер",
+          value: "ServerName",
+          align: "left",
+          width: "80px"
+        },
+        {
+          sortable: true,
+          text: "Время",
+          value: "Date",
+          align: "left",
+          width: "80px"
+        },
+        {
+          sortable: true,
+          text: "Порт",
+          value: "Port",
+          align: "left",
+          width: "50px"
+        },
+        {
+          sortable: true,
+          text: "% Использования процессора",
+          value: "CPU_USED.v",
+          align: "left",
+          width: "50px",
+          class: "classColumnHeader",
+        },
+        {
+          sortable: true,
+          text: "Очередь диска",
+          value: "HDD_QUEUE.v",
+          align: "left",
+          width: "50px",
+        },
+        {
+          sortable: true,
+          text: "Время чтения с жесткого диска (мс)",
+          value: "HDD_SECRD.v",
+          align: "left",
+          width: "50px",
+        },
+        {
+          sortable: true,
+          text: "Время записи на жесткий диск (мс)",
+          value: "HDD_SECWR.v",
+          align: "left",
+          width: "50px",
+        },
+        {
+          sortable: true,
+          text: "Свободно ОЗУ (Гб)",
+          value: "RAM_FREE.v",
+          align: "left",
+          width: "50px",
+        },
+        {
+          sortable: true,
+          text: "Обмен памяти с диском (страниц/сек)",
+          value: "RAM_PGSEC.v",
+          align: "left",
+          width: "80px",
+        }
+      ]
+
+      this.headersError=obj
+
     }
   },
   watch: {

@@ -1,6 +1,6 @@
 <template>
           <material-card
-          color="#48a420"
+          color="#008ffb"
           :title="headTitle"
         >
           <v-data-table
@@ -8,6 +8,7 @@
             :items="LongSqlQueryToday"
             hide-actions
             style="height:506px; overflow:auto"
+            sort-icon=""
           >
            <template slot="no-data">
             <p class="empty-data-in-table">{{emptyData}}</p>
@@ -16,6 +17,7 @@
               slot="headerCell"
               slot-scope="{ header }"
             >
+            <v-icon small>arrow_drop_down</v-icon>
               <span
                 class="font-weight-light text-warning text--darken-3"
                 v-text="header.text"
@@ -26,7 +28,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td class="text-xs">{{ item.EntryPoint }}</td>
+              <td class="text-xs"><a class="table-link" href="" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
               <td class="text-xs-left">{{ item.AverageTime }}</td>
             </template>
@@ -66,22 +68,27 @@ export default {
         },
         SetHeaders(){
             this.headers.splice(0,this.headers.length);
-            var obj=[{
-                          sortable: false,
-                          text: this.entryPoint,
-                          value: 'name',
-                          align: 'left'
-                      },{
-                          sortable: false,
-                          text: this.count,
-                          value: 'count',
-                          align: 'left'
-                      },{
-                          sortable: false,
-                          text: this.avgtTime,
-                          value: 'avrgTime',
-                          align: 'left'
-                    }]
+            var obj=[
+                      {
+                        text: this.entryPoint,
+                        align: 'left',
+                        sortable: true,
+                        value: 'EntryPoint',
+                      },
+                      {
+                        text: this.count,
+                        sortable: true,
+                        value: 'Count',
+                        align: 'left'
+                      },
+                      {
+                        text: this.avgtTime,
+                        sortable: true,
+                        value: 'AverageTime',
+                        align: 'left'
+                      }
+                    ]
+
             this.headers=obj
 
         }
@@ -134,5 +141,5 @@ export default {
   color:#48a420  !important;
 }
 
-  
+
 </style>
