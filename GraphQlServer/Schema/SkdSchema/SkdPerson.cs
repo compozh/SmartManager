@@ -13,6 +13,7 @@ namespace SkdSchema
 		public string Skype { get; set; }
 		public string MobileTel { get; set; }
 		public string WorkTel { get; set; }
-		public string PhotoUrl { get; set; }
+		public string SensorName { get; set; }
+		public bool IsCurrent { get; set; }
 	}
 }

@@ -36,27 +36,27 @@ namespace GraphQlServer
 
 		public async Task Invoke(HttpContext context)
 		{
-			if (!IsGraphQLRequest(context))
+			if (!isGraphQlRequest(context))
 			{
 				await _next(context);
 				return;
 			}
 
-			await ExecuteAsync(context);
+			await executeAsync(context);
 		}
 
-		private bool IsGraphQLRequest(HttpContext context)
+		private bool isGraphQlRequest(HttpContext context)
 		{
-			return context.Request.Path.StartsWithSegments(_settings.Path)
+			return context.User.Identity.IsAuthenticated && context.Request.Path.StartsWithSegments(_settings.Path)
 					&& string.Equals(context.Request.Method, "POST", StringComparison.OrdinalIgnoreCase);
 		}
 
-		private async Task ExecuteAsync(HttpContext context)
+		private async Task executeAsync(HttpContext context)
 		{
-			var request = Deserialize<GraphQLRequest>(context.Request.Body);
+			var request = deserialize<GraphQLRequest>(context.Request.Body);
 
 			var result = await _executer.ExecuteAsync(_ => {
-				 _.Schema = _schemaSelector.GetMatchSchema(request.SchemaName);
+				_.Schema = _schemaSelector.GetMatchSchema(request.SchemaName);
 				_.Query = request.Query;
 				_.OperationName = request.OperationName;
 				_.Inputs = request.Variables.ToInputs();
@@ -64,10 +64,10 @@ namespace GraphQlServer
 				_.ValidationRules = DocumentValidator.CoreRules();
 			});
 
-			await WriteResponseAsync(context, result);
+			await writeResponseAsync(context, result);
 		}
 
-		private async Task WriteResponseAsync(HttpContext context, ExecutionResult result)
+		private async Task writeResponseAsync(HttpContext context, ExecutionResult result)
 		{
 			var json = _writer.Write(result);
 
@@ -77,7 +77,7 @@ namespace GraphQlServer
 			await context.Response.WriteAsync(json);
 		}
 
-		public static T Deserialize<T>(Stream s)
+		private T deserialize<T>(Stream s)
 		{
 			using (var reader = new StreamReader(s))
 			using (var jsonReader = new JsonTextReader(reader))
