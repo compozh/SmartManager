@@ -1,6 +1,6 @@
 <template>
     <material-card
-          color="#48a420"
+          color="#008ffb"
           :title="headTitle"
         >
           <v-data-table
@@ -9,6 +9,7 @@
             hide-actions
             color=''
             style="height:506px; overflow:auto"
+            sort-icon=""
           >
           <template slot="no-data">
             <p class="empty-data-in-table">{{emptyData}}</p>
@@ -19,8 +20,9 @@
               slot-scope="{ header }"
               class="table-header"
             >
+            <v-icon small>arrow_drop_down</v-icon>
               <span
-                class="font-weight-light text-warning text--darken-3"
+                class="font-weight-light text--darken-3"
                 v-text="header.text"
                 :title="header.text"
               />
@@ -29,7 +31,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td><a :href="item.Link" target="_blank">{{ item.EntryPoint  }}</a> </td>
+              <td><a class="table-link" href="" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
             </template>
           </v-data-table>
@@ -53,15 +55,7 @@ export default {
             this.dataErrorForToday=[];
             for(var key in this.errorsForToday){
               //симуляция ссылки
-              let obj={
-                CallChain:this.errorsForToday[key].CallChain,
-                Count:this.errorsForToday[key].Count,
-                EntryPoint:this.errorsForToday[key].EntryPoint,
-                ErrorMessage:this.errorsForToday[key].ErrorMessage,
-                Link:"https://m.it.ua/skd"
-              } 
-               this.dataErrorForToday.push(obj);
-              //  this.dataErrorForToday.push(this.errorsForToday[key]);
+              this.dataErrorForToday.push(this.errorsForToday[key]);
             }
 
         },
@@ -71,15 +65,7 @@ export default {
             this.headTitle=this.curentError.Title
             for(var key in this.curentError.DetailInfoAboutTest){
               //симуляция ссылки
-              let obj={
-                CallChain:this.curentError.DetailInfoAboutTest[key].CallChain,
-                Count:this.curentError.DetailInfoAboutTest[key].Count,
-                EntryPoint:this.curentError.DetailInfoAboutTest[key].EntryPoint,
-                ErrorMessage:this.curentError.DetailInfoAboutTest[key].ErrorMessage,
-                Link:"http://google.com"
-              } 
-               this.dataErrorForToday.push(obj);
-              //  this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
+              this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
             }
         },
         SetHeaders(){
@@ -88,8 +74,7 @@ export default {
                       {
                         text: this.entryPoint,
                         align: 'left',
-                        sortable: false,
-                        value: 'ErrorMessage',
+                        value: 'EntryPoint',
                       },
                       {
                         text: this.count,
@@ -128,7 +113,7 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style>
 .table{
   max-height: 600px !important;
 }
@@ -136,4 +121,7 @@ export default {
   color:#48a420  !important;
 }
 
+.v-datatable thead th.column.sortable i{
+  vertical-align: bottom !important;
+}
 </style>

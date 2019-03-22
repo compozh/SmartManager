@@ -1,5 +1,5 @@
 <template>
-  <material-card color="#48a420" icon>
+  <material-card color="#008ffb" icon>
     
     <template slot="header" ><h4 class="server-header">{{headTitle}}<i class="material-icons icon-info" :title="info">info</i> </h4></template>
     <v-data-table
@@ -8,12 +8,14 @@
       hide-actions
       style="height:506px; overflow:auto;"
       class="container-v-data-table"
+      sort-icon=""
     >
       <template slot="no-data">
         <p class="empty-data-in-table">{{emptyData}}</p>
       </template>
 
       <template slot="headerCell" slot-scope="{ header }">
+        <v-icon small>arrow_drop_down</v-icon>
         <span
           class="font-weight-light text-warning text--darken-3 text-head-color"
           v-text="header.text"

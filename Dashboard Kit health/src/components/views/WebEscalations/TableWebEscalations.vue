@@ -1,12 +1,14 @@
 <template>
-    <material-card color="#48a420" :title="headTitle?headTitle:emptyHeader" >
+    <material-card color="#008ffb" :title="headTitle?headTitle:emptyHeader" >
           <v-data-table :headers="headersWebEscalation" :items="dataWebEscalation" hide-actions color='' 
           style="height:506px; overflow:auto"
+          sort-icon=""
           >
            <template slot="no-data">
             <p class="empty-data-in-table">{{emptyData}}</p>
           </template>
             <template slot="headerCell" slot-scope="{ header }" class="table-header">
+              <v-icon small>arrow_drop_down</v-icon>
               <span class="font-weight-light text--darken-3" 
               v-text="header.text"
               :title="header.text"/>
@@ -29,7 +31,7 @@ export default {
     data(){
         return{
             headTitle:'',
-            emptyHeader:'Web-эскалации за1 ' + moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY"),
+            emptyHeader:'Web-эскалации за ' + moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY"),
             emptyData:'',
             dataWebEscalation: [],
             headersWebEscalation: [],
@@ -51,24 +53,20 @@ export default {
         SetHeader(){
           this.headersWebEscalation.splice(0,this.headersWebEscalation.length);
            var obj=[{
-                sortable: false,
                 text: this.requestId,
-                value: this.requestId,
+                value: 'RequestId',
                 align: 'left'
             },{
-                sortable: false,
                 text: this.calcId,
-                value: this.calcId,
+                value: 'CalcId',
                 align: 'left'
             },{
-                sortable: false,
                 text: this.unypz,
-                value: this.unypz,
+                value: 'Unypz',
                 align: 'left'
             },{
-                sortable: false,
                 text: this.date,
-                value: this.date,
+                value: 'Date',
                 align: 'left'
             }
             ]
