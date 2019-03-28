@@ -18,11 +18,27 @@ namespace Web.WebRequests
 			_identityProvider = identityProvider;
 		}
 
-		//метод на достать другие данные
+		/// <summary>
+		/// Вызов веб расчета (неанонимный)
+		/// </summary>
+		/// <param name="calcId"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public async Task<WebRequestResult> CallWebRequestAsync(string calcId, string args)
 		{
+			return await CallWebRequestAsync(calcId, args, false);
+		}
+		
+		/// <summary>
+		/// Вызов веб расчета
+		/// </summary>
+		/// <param name="calcId"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		public async Task<WebRequestResult> CallWebRequestAsync(string calcId, string args, bool anonymously)
+		{
 			var result = new WebRequestResult();
-			var content = await callWebRequestInternalAsync(calcId, args);
+			var content = await callWebRequestInternalAsync(calcId, args, anonymously);
 			switch (content)
 			{
 				case WRONG_TICKET:
