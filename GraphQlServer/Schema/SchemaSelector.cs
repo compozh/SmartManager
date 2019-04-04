@@ -18,8 +18,10 @@ namespace SkdScheme
 			{
 				return _resolver.Resolve<SkdSchema.SkdSchema>();
 			}
-
-			return null;
+			else
+			{
+				return new CommonSchema.CommonSchema(_resolver, schemaName);
+			}
 		}
 	}
 }
