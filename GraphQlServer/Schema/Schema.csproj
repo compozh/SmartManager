@@ -10,8 +10,18 @@
       <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.1" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
       <PackageReference Include="Web.Authentication" Version="1.0.10" />
+      <PackageReference Include="Web.Data" Version="1.0.1" />
       <PackageReference Include="Web.Tools" Version="1.0.4" />
       <PackageReference Include="Web.WebRequests" Version="1.0.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+        <HintPath>..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration.abstractions\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Data.SqlClient">
+        <HintPath>..\..\..\..\Users\baharev\.nuget\packages\system.data.sqlclient\4.4.0\lib\netstandard2.0\System.Data.SqlClient.dll</HintPath>
+      </Reference>
     </ItemGroup>
     
 
