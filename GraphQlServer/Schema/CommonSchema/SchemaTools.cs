@@ -13,28 +13,37 @@ namespace SkdScheme.CommonSchema
 			_client = client;
 		}
 
-		public SchemaObject GetShemaTools(string name)
+		/// <summary>
+		/// подробное описание схемы
+		/// </summary>
+		/// <param name="name">имя схемы в базе</param>
+		/// <returns></returns>
+		public SchemaDescription GetSchemaDescription(string name)
 		{
-			SchemaObject shcema;
+			SchemaDescription shcema;
 			int headerIndex = 0;
 			int conditionIndex = 1;
 			int schemaNameIndex = 2;
-			int krepIndex = 3;
-			int dbIndex = 4;
-			var a = _client.CreateCommand("select GQSCHEM.ID, GQSCHEM.CONDITION, GQSCHEM.NAME, GQSCHEM.KREP, GQSCHEM.DB from GQSCHEM where GQSCHEM.ID = @gqshemid");
-			a.Parameters.Add(new SqlParameter("@gqshemid", name));
-			a.Connection.Open();
+			int browseIndex = 3;
+			int tableIndex = 4;
+			var command = _client.CreateCommand("select GQSCHEM.ID, GQSCHEM.CONDITION, GQSCHEM.NAME, GQSCHEM.KREP, GQSCHEM.DB from GQSCHEM where GQSCHEM.ID = @gqshemid");
+			command.Parameters.Add(new SqlParameter("@gqshemid", name));
+			command.Connection.Open();
 
-			using (var reader = a.ExecuteReader())
+			using (var reader = command.ExecuteReader())
 			{
-				reader.Read();
-				shcema = new SchemaObject
+				if (!reader.HasRows)
 				{
-					Id = reader.GetString(headerIndex),
+					return null;
+				}
+				reader.Read();
+				shcema = new SchemaDescription
+				{
+					Id = reader.GetString(headerIndex).Trim(),
 					Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex).Trim(),
 					Name = reader.GetString(schemaNameIndex).Trim(),
-					Krep = reader.GetString(krepIndex).Trim(),
-					Db = reader.GetString(dbIndex).Trim(),
+					BrowseId = reader.GetString(browseIndex).Trim(),
+					TableName = reader.GetString(tableIndex).Trim(),
 					Columns = new List<SchemaColumn>()
 				};
 			}
@@ -42,15 +51,19 @@ namespace SkdScheme.CommonSchema
 			var expressionIndex = 0;
 			var descriptionIndex = 1;
 			var nameIndex = 2;
-			a = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
-			a.Parameters.Add(new SqlParameter("@repskrep", shcema.Krep));
-			a.Parameters.Add(new SqlParameter("@repsdb", shcema.Db));
-			a.Connection.Open();
+			command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
+			command.Parameters.Add(new SqlParameter("@repskrep", shcema.BrowseId));
+			command.Parameters.Add(new SqlParameter("@repsdb", shcema.TableName));
+			command.Connection.Open();
 
-			using (var reader = a.ExecuteReader())
+			using (var reader = command.ExecuteReader())
 			{
 				while (reader.Read())
 				{
+					if (!reader.HasRows)
+					{
+						return null;
+					}
 					shcema.Columns.Add(new SchemaColumn
 					{
 						Expression = reader.GetString(expressionIndex).Trim(),
@@ -59,46 +72,56 @@ namespace SkdScheme.CommonSchema
 					});
 				}
 			}
-			a.Connection.Close();
+			command.Connection.Close();
 			return shcema;
 		}
 
-		public List<Dictionary<string, object>> GetListData(SchemaObject schema, ICollection<string> names)
+		/// <summary>
+		/// метод для получение колонок схемы
+		/// </summary>
+		/// <param name="schema"> схема</param>
+		/// <param name="names"> поля, который запрашиваем </param>
+		/// <returns></returns>
+		public List<Dictionary<string, object>> GetDataForQueriedColumns(SchemaDescription schema, List<string> names)
 		{
-			List<string> containerQuery = new List<string>();
-			List<string> fields = new List<string>();
+			var expressions = new List<string>();
+
 			foreach (var el in schema.Columns)
 			{
 				foreach (var name in names)
 				{
 					if (el.Name.ToLower() == name)
 					{
-						containerQuery.Add(el.Expression);
-						fields.Add(name);
+						expressions.Add(el.Expression);
 					}
 				}
 			}
-			string selectQuery = string.Join(", ", containerQuery);
+			//select к базе
+			string selectQuery = string.Join(", ", expressions);
 
-			List<Dictionary<string, object>> test = new List<Dictionary<string, object>>();
-			var a =_client.CreateCommand(String.Format("select {0} from {1}", selectQuery, schema.Db));
-			a.Connection.Open();
+			var resultData = new List<Dictionary<string, object>>();
+			var command = _client.CreateCommand(String.Format("select {0} from {1}", selectQuery, schema.TableName));
+			command.Connection.Open();
 
-			using (var reader = a.ExecuteReader())
+			using (var reader = command.ExecuteReader())
 			{
 				while (reader.Read())
 				{
+					if (!reader.HasRows)
+					{
+						return null;
+					}
 					Dictionary<string, object> dictionary = new Dictionary<string, object>();
 					dictionary.Clear();
-					for (int i = 0; i < containerQuery.Count; i++)
+					for (int i = 0; i < expressions.Count; i++)
 					{
-						dictionary.Add(fields[i], reader.GetString(i).Trim());
+						dictionary.Add(names[i], reader.GetString(i).Trim());
 					}
-					test.Add(dictionary);
+					resultData.Add(dictionary);
 				}
 			}
-			a.Connection.Close();
-			return test;
+			command.Connection.Close();
+			return resultData;
 		}
 	}
 }

@@ -5,6 +5,7 @@ using GraphQL.Resolvers;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Web.Data;
+using System.Linq;
 
 namespace SkdScheme.CommonSchema
 {
@@ -12,9 +13,8 @@ namespace SkdScheme.CommonSchema
 	{
 		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName) : base(dependencyResolver)
 		{
-			var client = dependencyResolver.Resolve<SqlClient>();
-			var schemaDescription = (new SchemaTools(client)).GetShemaTools(schemaName);
-			
+			var schemaDescription = dependencyResolver.Resolve<SchemaTools>().GetSchemaDescription(schemaName);
+
 			var commonSchema = new ObjectGraphType
 			{
 				Name = schemaDescription.Id
@@ -30,8 +30,8 @@ namespace SkdScheme.CommonSchema
 				Name = "QueryRoot"
 			};
 
-			root.Field("commonSchema", new ListGraphType(commonSchema), resolve: ctx => {
-					return new SchemaTools(client).GetListData(schemaDescription, ctx.SubFields.Keys);
+			root.Field(schemaDescription.Id, new ListGraphType(commonSchema), resolve: ctx => {
+					return dependencyResolver.Resolve<SchemaTools>().GetDataForQueriedColumns(schemaDescription, ctx.SubFields.Keys.ToList());
 				}
 			);
 
@@ -42,64 +42,6 @@ namespace SkdScheme.CommonSchema
 		public static void Config(IServiceCollection services)
 		{
 			services.AddSingleton<SchemaTools>();
-		}
-	}
-
-	public static class ObjectGraphTypeExtensions
-	{
-		public static void Field(
-			this IObjectGraphType obj,
-			string name,
-			IGraphType type,
-			string description = null,
-			QueryArguments arguments = null,
-			Func<ResolveFieldContext, object> resolve = null)
-		{
-			var field = new FieldType();
-			field.Name = name;
-			field.Description = description;
-			field.Arguments = arguments;
-			field.ResolvedType = type;
-			field.Resolver = resolve != null ? new FuncFieldResolver<object>(resolve) : null;
-			obj.AddField(field);
-		}
-
-		public static void DictionaryField(
-			this IObjectGraphType obj,
-			IGraphType type,
-			string name,
-			string description = null,
-			QueryArguments arguments = null,
-			Func<ResolveFieldContext, object> resolve = null)
-		{
-			var field = new FieldType();
-			field.Name = name;
-			field.Description = description;
-			field.Arguments = arguments;
-			field.ResolvedType = type;
-			field.Resolver = new DictionaryFieldResolver();
-			obj.AddField(field);
-		}
-	}
-
-	public class DictionaryFieldResolver : IFieldResolver
-	{
-		public object Resolve(ResolveFieldContext context)
-		{
-			var source = context.Source;
-
-			if (!(source is Dictionary<string, object> dict))
-			{
-				return null;
-			}
-			// add this lines to support dictionary
-			dict = new Dictionary<string, object>(dict, StringComparer.InvariantCultureIgnoreCase);
-
-			if (!dict.ContainsKey(context.FieldAst.Name))
-			{
-				throw new InvalidOperationException($"Expected to find key {context.FieldAst.Name} on dictionary but it does not exist.");
-			}
-			return dict[context.FieldAst.Name];
 		}
 	}
 }
