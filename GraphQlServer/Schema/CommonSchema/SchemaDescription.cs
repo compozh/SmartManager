@@ -2,13 +2,13 @@
 
 namespace SkdScheme.CommonSchema
 {
-	public	class SchemaObject
+	public	class SchemaDescription
 	{
 		public string Name { get; set; }
 		public string Id { get; set; }
 		public string Condition { get; set; }
-		public string Krep { get; set; }
-		public string Db { get; set; }
+		public string BrowseId { get; set; }
+		public string TableName { get; set; }
 		public List<SchemaColumn> Columns { get; set; }
 	}
 
