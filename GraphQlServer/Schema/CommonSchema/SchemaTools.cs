@@ -14,9 +14,9 @@ namespace SkdScheme.CommonSchema
 		}
 
 		/// <summary>
-		/// подробное описание схемы
+		/// Подробное описание схемы
 		/// </summary>
-		/// <param name="name">имя схемы в базе</param>
+		/// <param name="name">Имя схемы в базе</param>
 		/// <returns></returns>
 		public SchemaDescription GetSchemaDescription(string name)
 		{
@@ -58,12 +58,12 @@ namespace SkdScheme.CommonSchema
 
 			using (var reader = command.ExecuteReader())
 			{
+				if (!reader.HasRows)
+				{
+					return null;
+				}
 				while (reader.Read())
 				{
-					if (!reader.HasRows)
-					{
-						return null;
-					}
 					shcema.Columns.Add(new SchemaColumn
 					{
 						Expression = reader.GetString(expressionIndex).Trim(),
@@ -77,10 +77,10 @@ namespace SkdScheme.CommonSchema
 		}
 
 		/// <summary>
-		/// метод для получение колонок схемы
+		/// Метод для получение колонок схемы
 		/// </summary>
-		/// <param name="schema"> схема</param>
-		/// <param name="names"> поля, который запрашиваем </param>
+		/// <param name="schema"> Схема</param>
+		/// <param name="names"> Поля, который запрашиваем </param>
 		/// <returns></returns>
 		public List<Dictionary<string, object>> GetDataForQueriedColumns(SchemaDescription schema, List<string> names)
 		{
@@ -96,7 +96,7 @@ namespace SkdScheme.CommonSchema
 					}
 				}
 			}
-			//select к базе
+			//Select к базе
 			string selectQuery = string.Join(", ", expressions);
 
 			var resultData = new List<Dictionary<string, object>>();
@@ -105,12 +105,12 @@ namespace SkdScheme.CommonSchema
 
 			using (var reader = command.ExecuteReader())
 			{
+				if (!reader.HasRows)
+				{
+					return null;
+				}
 				while (reader.Read())
 				{
-					if (!reader.HasRows)
-					{
-						return null;
-					}
 					Dictionary<string, object> dictionary = new Dictionary<string, object>();
 					dictionary.Clear();
 					for (int i = 0; i < expressions.Count; i++)
