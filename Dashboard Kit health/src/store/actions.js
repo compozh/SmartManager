@@ -1,6 +1,6 @@
 // https://vuex.vuejs.org/en/actions.html
 import Axios from "axios";
-import myJson from "../../AppSettings.json"
+import myJson from "../../public/AppSettings.json"
 import moment from 'moment'
 import { stat } from "fs";
 import getters from "./getters.js";
