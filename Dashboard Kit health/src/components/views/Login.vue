@@ -6,7 +6,6 @@
                     label="Логин"
                     required
                     color="#008FFB"
-                    @keyup.enter="Login()"
                 ></v-text-field>
 
                 <v-text-field
@@ -15,7 +14,6 @@
                     required
                     type="password"
                     color="#008FFB"
-                    @keyup.enter="Login()"
                 ></v-text-field>
                 <div class="btn-and-checkbox">
                     <v-checkbox
