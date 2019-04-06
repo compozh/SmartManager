@@ -1,17 +1,14 @@
 <template>
     <v-container>
         <v-layout wrap>
-            <!-- <v-flex sm6  xs12 md6  lg2 class="card">
-                <health-card sm6  xs12 md6  lg2 ></health-card>
-            </v-flex> -->
-            <!-- offset-md3 offset-lg2 делает пустоту во  v-flex-->
-            <v-flex sm6  xs12 md6  lg6 class="diagramPerformance">
+           
+            <v-flex sm6  xs12 md6  lg6 class="diagramPerformance left-component">
                 <div class="wrapDiagram" >
                 <health-diagram ></health-diagram>
                 </div>
             </v-flex>
 
-            <v-flex sm6  xs12 md6  lg6 style="height:600px;">
+            <v-flex sm6  xs12 md6  lg6 class="right-component">
                 <health-table ></health-table>
             </v-flex>
         </v-layout>
@@ -19,12 +16,10 @@
 </template>
 
 <script>
-// import Card from "./CardTotalCountErrorsToday";
 import Diagram from "./DiagramPerfExceedancesForWeek";
 import Table from "./TableServersParameters";
 export default {
     components: {
-        // 'health-card':Card,
         'health-diagram':Diagram,
         'health-table':Table,
 

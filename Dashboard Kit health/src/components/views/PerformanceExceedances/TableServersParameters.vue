@@ -75,14 +75,49 @@ export default {
       return this.$store.getters.getDetailPerfExece;
     },
     title() {
-      return (
-        "Превышения показателей производительности за " +
-        moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY")
-      );
+      return  this.$store.getters.getInfoList.TitleOfPerfExcForDateShort;
     },
     info() {
       return this.$store.getters.getInfoList.TitleOfPerfExcForDateLong;
+    },
+    HddQueueColumn()
+    {
+      return this.$store.getters.getInfoList.HddQueueColumn;
+    },
+    HddSecrdColumn()
+    {
+      return this.$store.getters.getInfoList.HddSecrdColumn;
+    },
+    HddSecwrColumn()
+    {
+      return this.$store.getters.getInfoList.HddSecwrColumn;
+    },
+    CpuUsedColumn()
+    {
+      return this.$store.getters.getInfoList.CpuUsedColumn;
+    },
+    RamFreeColumn()
+    {
+      return this.$store.getters.getInfoList.RamFreeColumn;
+    },
+    RamPgSecColumn()
+    {
+      return this.$store.getters.getInfoList.RamPgSecColumn;
+    },
+    TitleOfPerfPort()
+    {
+      return this.$store.getters.getInfoList.TitleOfPerfPort;
+    },
+    TitleOfPerfServer()
+    {
+      return this.$store.getters.getInfoList.TitleOfPerfPort;
+    },
+    TitleOfPerfTime()
+    {
+      return this.$store.getters.getInfoList.TitleOfPerfTime;
     }
+
+    
   },
   methods: {
     SetBackgraundColor(val) {
@@ -129,28 +164,28 @@ export default {
       var obj=[
         {
           sortable: true,
-          text: "Сервер",
+          text: this.TitleOfPerfServer,
           value: "ServerName",
           align: "left",
           width: "80px"
         },
         {
           sortable: true,
-          text: "Время",
+          text: this.TitleOfPerfTime,
           value: "Date",
           align: "left",
           width: "80px"
         },
         {
           sortable: true,
-          text: "Порт",
+          text: this.TitleOfPerfPort,
           value: "Port",
           align: "left",
           width: "50px"
         },
         {
           sortable: true,
-          text: "% Использования процессора",
+          text: this.CpuUsedColumn,
           value: "CPU_USED.v",
           align: "left",
           width: "50px",
@@ -158,35 +193,35 @@ export default {
         },
         {
           sortable: true,
-          text: "Очередь диска",
+          text: this.HddQueueColumn,
           value: "HDD_QUEUE.v",
           align: "left",
           width: "50px",
         },
         {
           sortable: true,
-          text: "Время чтения с жесткого диска (мс)",
+          text: this.HddSecrdColumn,
           value: "HDD_SECRD.v",
           align: "left",
           width: "50px",
         },
         {
           sortable: true,
-          text: "Время записи на жесткий диск (мс)",
+          text: this.HddSecwrColumn,
           value: "HDD_SECWR.v",
           align: "left",
           width: "50px",
         },
         {
           sortable: true,
-          text: "Свободно ОЗУ (Гб)",
+          text: this.RamFreeColumn,
           value: "RAM_FREE.v",
           align: "left",
           width: "50px",
         },
         {
           sortable: true,
-          text: "Обмен памяти с диском (страниц/сек)",
+          text: this.RamPgSecColumn,
           value: "RAM_PGSEC.v",
           align: "left",
           width: "80px",
@@ -213,9 +248,7 @@ export default {
 </script>
 
 <style scoped>
-/* .v-card>>>.title{
-  line-height: 1em !important
-} */
+
 .icon-info {
   cursor: help;
   padding-left: 10px;

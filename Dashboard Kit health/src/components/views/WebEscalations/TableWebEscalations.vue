@@ -93,6 +93,7 @@ export default {
         bodyDate(){
           return this.$store.getters.getDate;
         }
+        
        
     },
     watch:{

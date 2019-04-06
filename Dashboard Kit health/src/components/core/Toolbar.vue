@@ -23,9 +23,6 @@ export default {
   }),
 
   watch: {
-    // '$route' (val) {
-    //   this.title = val.name
-    // }
   },
 
   mounted () {
@@ -40,9 +37,6 @@ export default {
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     onClickBtn () {
       this.setDrawer(!this.$store.state.app.drawer)
-    },
-    onClick () {
-      //
     },
     onResponsiveInverted () {
       if (window.innerWidth < 991) {

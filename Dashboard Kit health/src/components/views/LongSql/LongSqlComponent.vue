@@ -1,17 +1,13 @@
 <template>
     <v-container>
         <v-layout>
-            <!-- <v-flex sm6  xs12 md6  lg2 class="card">
-                <health-card sm6  xs12 md6  lg2 ></health-card>
-            </v-flex> -->
-
-            <v-flex sm6  xs12 md6  lg6 >
+            <v-flex sm6  xs12 md6  lg6 class="left-component">
                 <div class="wrapDiagram">
                 <health-diagram  ></health-diagram>
                 </div>
             </v-flex>
 
-            <v-flex sm6  xs12 md6  lg6 style="height:600px;">
+            <v-flex sm6  xs12 md6  lg6 class="right-component">
                 <health-table ></health-table>
             </v-flex>
         </v-layout>
@@ -19,12 +15,10 @@
 </template>
 
 <script>
-// import Card from "./CardTotalCountErrorsToday";
 import Diagram from "./DiagramLongSqlQueriesForWeek";
 import Table from "./TableLongSqlQueriesForToday";
 export default {
     components: {
-        // 'health-card':Card,
         'health-diagram':Diagram,
         'health-table':Table,
 
@@ -43,4 +37,15 @@ export default {
     border-radius: 3px;
     height: 576px;
   } 
+  .left-component{
+      position: absolute; 
+      left: 0; 
+      width: 100%;
+  }
+  .right-component{
+    height:600px; 
+    position: absolute; 
+    right: 0; 
+    width: 100%;
+  }
 </style>

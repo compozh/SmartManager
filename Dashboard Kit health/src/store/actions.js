@@ -4,7 +4,6 @@ import myJson from "../../AppSettings.json"
 import moment from 'moment'
 import { stat } from "fs";
 import getters from "./getters.js";
-// import myJson from "../../public/AppSettings.json"
 //Действия
 const actions = ({
   ClearAllState(context){
@@ -39,10 +38,10 @@ const actions = ({
     context.commit('setIsDetail', blocked);
   },
   GetDetailsInformationForTable(context, args){
-    //детальная инфа
+    //Детальная инфа
     context.dispatch('StartPreloader',true,false)
     var table= args.criterion;
-    return Axios.post('https://m.it.ua/health_summary_api/api/values/GetDetailInformation?criterion='+args.criterion+'&date='+args.date +'&parameters='+args.parameters,undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
+    return Axios.post(myJson.healthSummaryUrl+'api/values/GetDetailInformation?criterion='+args.criterion+'&date='+args.date +'&parameters='+args.parameters,undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
     .then((response) =>{
       switch (table) {
         case 'TopErrorsForDate':
@@ -68,7 +67,7 @@ const actions = ({
     })
   },
   Login(context,loginParam){
-    //логин
+    //Логин
     context.dispatch('StartPreloader',true,true)
     var postdata = {
       login:loginParam.login,
@@ -76,9 +75,8 @@ const actions = ({
       rememberMe: loginParam.rememberMe
   };
   
-  // appstorage or applicationstorage
   localStorage.clear();
-  return Axios.post('https://m.it.ua/health_summary_api/api/values/Login',{Login: postdata.login, Password: postdata.password, RememberMe: postdata.rememberMe}, {withCredentials:true})
+  return Axios.post(myJson.healthSummaryUrl+'api/values/Login',{Login: postdata.login, Password: postdata.password, RememberMe: postdata.rememberMe}, {withCredentials:true})
     .then((response) => {
       var token=JSON.parse(response.data.message);
       var username=response.data.user
@@ -90,12 +88,16 @@ const actions = ({
           context.dispatch('getInfoFromServer');
         }
       }
-    }),error=>{
-      context.dispatch('StartPreloader',false,false)
-  };
+    }).catch(function (error) {
+      //Если ввели не подходящий логин или пароль
+      if(error.response.status==400)
+      {
+        context.dispatch('StartPreloader',false,false)
+      }
+    });
   },
   getInfoFromServer(context, calendarDate){
-    //общая инфа
+    //Общая инфа
    
     var postdata = {
       calcId: 'GET_PROJECT_HEALTH_SUMMARY ',
@@ -115,14 +117,14 @@ const actions = ({
         date=context.getters.getCurentDate
       }
     }
-    return Axios.post('https://m.it.ua/health_summary_api/api/values/GetInfoAboutServer?date='+date, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
+    return Axios.post(myJson.healthSummaryUrl+'api/values/GetInfoAboutServer?date='+date, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
     .then((response=>{
       console.log(response.data)
       if(response.data != 'WRONG_TICKET' && response.data !=""){
         context.commit('setLoginStatus',true)
         setTimeout(function(){
           context.commit('setInformationFromServer',response.data);
-          //вызываю первую строку по планировщику
+          //Вызываю первую строку по планировщику
           if(response.data.SchedulerFails){
             var detailSchedulerFails={
               criterion:"SchedFails",

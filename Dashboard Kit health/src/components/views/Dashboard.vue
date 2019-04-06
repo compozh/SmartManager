@@ -4,7 +4,6 @@
       <v-layout align-center justify-center row fill-height v-if="!loginStatus">
         <login></login>
       </v-layout>
-      <!-- !blockedWindow -->
       <v-layout wrap v-show="loginStatus " :class="blockedWindow && !blocked?'blocked':blocked=true">
         <v-flex sm6 xs12 md6 lg2 class="card" @click="WhoCardBeShowNow(whoShowNow.errors)">
           <card-total-count-errors-today
@@ -114,7 +113,7 @@ export default {
     "performance-component": CPerformanceComponent,
     "scheduler-component": CSchedulerFailComponent,
     "webescalation-component": CWebEscalationComponent,
-    login: Login // объявляю  компонент логина
+    login: Login // Объявляю  компонент логина
   },
   data() {
     return {
@@ -156,7 +155,6 @@ export default {
   created: function() {
     if (localStorage.getItem("authToken")) {
       this.$store.dispatch("IsLogin", true);
-      // this.$store.dispatch('getInfoFromServer');
     } else {
       this.$store.dispatch("IsLogin", false);
     }

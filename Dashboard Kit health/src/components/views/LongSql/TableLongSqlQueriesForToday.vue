@@ -28,7 +28,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td class="text-xs"><a class="table-link" href="" target="_blank">{{ item.EntryPoint  }}</a> </td>
+              <td class="text-xs"><a class="table-link" :href="item.Link" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
               <td class="text-xs-left">{{ item.AverageTime }}</td>
             </template>

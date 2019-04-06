@@ -68,8 +68,6 @@ data(){
             title: {
               text: 'Количество '
             },
-            // max: this.max
-            // max: max+100,
           },
         },
         series: [{
@@ -90,7 +88,6 @@ computed: {
 
 methods:{
     GetErrorWeek(){
-        // this.series[0].data.splice(0,this.series[0].data.length);
         this.moreMinCount=false;
         this.series[0].data=[]
         this.chartOptions.colors=[]
