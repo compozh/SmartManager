@@ -13,7 +13,8 @@ namespace SkdScheme.CommonSchema
 	{
 		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName) : base(dependencyResolver)
 		{
-			var schemaDescription = dependencyResolver.Resolve<SchemaTools>().GetSchemaDescription(schemaName);
+			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
+			var schemaDescription = schemaTools.GetSchemaDescription(schemaName);
 
 			var commonSchema = new ObjectGraphType
 			{
@@ -31,7 +32,7 @@ namespace SkdScheme.CommonSchema
 			};
 
 			root.Field(schemaDescription.Id, new ListGraphType(commonSchema), resolve: ctx => {
-					return dependencyResolver.Resolve<SchemaTools>().GetDataForQueriedColumns(schemaDescription, ctx.SubFields.Keys.ToList());
+					return schemaTools.GetDataForQueriedColumns(schemaDescription, ctx.SubFields.Keys.ToList());
 				}
 			);
 
