@@ -2,10 +2,10 @@
     <v-container>
         <v-layout>
 
-            <v-flex sm6  xs12 md6  lg6 style="height:600px;">
+            <v-flex sm6  xs12 md6  lg6 style="height:600px;" class="left-component"> 
                 <health-table ></health-table>
             </v-flex>
-            <v-flex sm6  xs12 md6  lg6 v-if="showIframe" >
+            <v-flex sm6  xs12 md6  lg6 v-if="showIframe" class="right-component">
                 <div >
                 <health-iframe style="height:576px;"></health-iframe>
                 </div>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-// import Card from "./CardTotalCountErrorsToday";
 import IframeScheduler from "./IframeDetailSchedulerFails";
 import Table from "./TableSchedulerFails";
 export default {

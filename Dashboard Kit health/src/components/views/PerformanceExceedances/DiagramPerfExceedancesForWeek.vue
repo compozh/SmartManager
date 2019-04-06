@@ -44,11 +44,9 @@ export default {
                 },
             },
             colors: [],
-            // colors: this.colors,
             plotOptions: {
             bar: {
               columnWidth: '45%',
-              // distributed: true, //для радуги
               dataLabels: {
                   position: 'top',
                 }

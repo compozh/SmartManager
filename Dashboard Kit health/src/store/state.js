@@ -1,17 +1,17 @@
 import moment from "moment";
 
 // https://vuex.vuejs.org/en/state.html
-//состояние
+//Состояние
 const state = {
-    //состояние инфы пришедшей с сервера
-    userName:localStorage.getItem('userName'),//имя пользователя
-    curentDate:moment().format("DD.MM.YYYY"),//текущая дата
-    preLoading:false,//прелодер
-    blockedWindow:false,//блокируем окно при прелодере
-    information_from_server_list: [],//полная информация
-    loginStatus:false,//залогинен ли
-    errorToday:false,//красить шапку отпадает без надобности
-    cardIsShow:1,//какая карта будет показана
+    //Состояние инфы пришедшей с сервера
+    userName:localStorage.getItem('userName'),//Имя пользователя
+    curentDate:moment().format("DD.MM.YYYY"),//Текущая дата
+    preLoading:false,//Прелодер
+    blockedWindow:false,//Блокируем окно при прелодере
+    information_from_server_list: [],//Полная информация
+    loginStatus:false,//Залогинен ли
+    errorToday:false,//Красить шапку отпадает без надобности
+    cardIsShow:1,//Какая карта будет показана
     isDetail:false,
     detailsErrorsTable:[],
     detailsSQLLongTable:[],

@@ -9,18 +9,6 @@
     offset-x
     transition="slide-y-transition"
   >
-    <!-- <v-btn
-      slot="activator"
-      class="elevation-0"
-      color="grey"
-      dark
-      fab
-      fixed
-      style="top: 96px;"
-      top
-    >
-      <v-icon>mdi-settings</v-icon>
-    </v-btn> -->
     <v-card>
       <v-container grid-list-xl>
         <v-layout wrap>
@@ -114,7 +102,6 @@
 </template>
 
 <script>
-// Utilities
 import {
   mapMutations,
   mapState

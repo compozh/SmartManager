@@ -31,7 +31,7 @@
             >
               <tr @click="RequestDetailInformation(item.item.TaskCode)" :class="item.selected ? 'select-row':''">
               <td class="other-class-td">{{ item.item.TaskCode }}</td>
-              <td class="text-xs-left"><a class="table-link" href="" target="_blank"> {{ item.item.TaskName }}</a></td>
+              <td class="text-xs-left"><a class="table-link" :href="item.item.Link" target="_blank"> {{ item.item.TaskName }}</a></td>
               <td class="text-xs-left">{{ item.item.Result }}</td>
               <td class="text-xs-left">{{ ConvertData(item.item.DateStart) }}</td>
               <td class="text-xs-left">{{ ConvertData(item.item.DateEnd) }}</td>
@@ -85,7 +85,6 @@ export default {
     },
     methods:{
         GetSchedulerFails(){
-          // console.log(1)
             this.dataSchedulerFails=[];
             this.SetHeaders();
             setTimeout(function(){

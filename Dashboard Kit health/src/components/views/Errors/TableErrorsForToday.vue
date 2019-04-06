@@ -31,7 +31,7 @@
               slot="items"
               slot-scope="{ item }"
             >
-              <td><a class="table-link" href="" target="_blank">{{ item.EntryPoint  }}</a> </td>
+              <td><a class="table-link" :href="item.Link" target="_blank">{{ item.EntryPoint  }}</a> </td>
               <td class="text-xs-left">{{ item.Count }}</td>
             </template>
           </v-data-table>
@@ -43,7 +43,7 @@ export default {
     data(){
         return{
             headTitle:'',
-            dataErrorForToday: [],//на самом деле еще будет свойство для перехода по ссылке поэтому нужда в goToLink отпадет
+            dataErrorForToday: [],
             headersError: [],
             emptyData:"Нет данных за " + moment(this.$store.getters.getInfoList.Date).format("DD.MM.YYYY"),
         }
@@ -54,17 +54,17 @@ export default {
             this.SetHeaders();
             this.dataErrorForToday=[];
             for(var key in this.errorsForToday){
-              //симуляция ссылки
+              //Симуляция ссылки
               this.dataErrorForToday.push(this.errorsForToday[key]);
             }
 
         },
-        //загружаем данные при запросе из столбца
+        //Загружаем данные при запросе из столбца
         SetCurentErrors(){
             this.dataErrorForToday=[];
             this.headTitle=this.curentError.Title
             for(var key in this.curentError.DetailInfoAboutTest){
-              //симуляция ссылки
+              //Симуляция ссылки
               this.dataErrorForToday.push(this.curentError.DetailInfoAboutTest[key]);
             }
         },

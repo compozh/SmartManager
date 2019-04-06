@@ -100,7 +100,7 @@ export default {
       width: 200px;
       color: #f55a4e;
       position: absolute;
-      left: 50%;
+      left: calc(50% - 100px);
       top: 50%;
   }
 </style>

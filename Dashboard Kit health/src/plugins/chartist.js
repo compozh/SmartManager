@@ -33,4 +33,3 @@ Vue.use(require('vue-chartist'));
       };
     };
   }(window, document, require('chartist')));
-// Vue.use(require('chartist-plugin-targetline'))

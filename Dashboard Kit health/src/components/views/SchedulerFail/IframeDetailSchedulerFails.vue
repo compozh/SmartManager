@@ -1,11 +1,6 @@
 <template>
  <div class="v-offset header-diagram" :class="isFullScreen ? '.full-screen' : ''" style="height:100%; ">
         <div class="v-card--material__header v-card v-sheet theme--dark elevation-10 name-diagram none-error marginIframe" ><h4>{{detailscheduler.Title}}</h4> 
-            <!-- <div class="btn-full-screen">
-                <i class="material-icons " @click="SetFullScree()">
-                    fullscreen
-                </i>
-            </div> -->
         </div>
     <iframe  class="frame" width="100%" height="576px"  frameborder="0" allowfullscreen></iframe>
  </div>
@@ -39,7 +34,8 @@ export default {
             }else{
                 var  ifrm = this.$el.getElementsByTagName('iframe')[0].contentWindow || this.$el.getElementsByTagName('iframe')[0].contentDocument.document || this.$el.getElementsByTagName('iframe')[0].contentDocument;
                 ifrm.document.open();
-                ifrm.document.write("<style>body{ margin-top: 40px} .empty-data-in-iframe{text-align: center;font-size: 24px;}</style>")
+                ifrm.document.write('<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,300italic,400italic|Material+Icons" rel="stylesheet" type="text/css">')
+                ifrm.document.write("<style>body{ margin-top: 40px} .empty-data-in-iframe{text-align: center;font-size: 24px; padding-top: 40px; font-family: Roboto,sans-serif; color: rgba(0,0,0,.87); font-weight: 300;}</style>")
                 ifrm.document.write('<p class="empty-data-in-iframe">Данные отсутствуют</p>');
                 ifrm.document.close();
             }

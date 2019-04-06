@@ -50,30 +50,16 @@ export default {
     Dashboard: Dashboard,
     datetime: Datetime
   },
-  data(){
-    return{
-      userLoginPassword:{
-                    login:'baharev@it-enterprise.com',
-                    password:'tacek3121412',
-                    rememberMe:false
-                },
-    }
-  },
   methods: {
     Exit() {
       this.$store.dispatch("IsLogin", false);
       this.$store.dispatch("ErrorToday", false);
       this.$store.dispatch("SetUserName", "");
       this.$store.dispatch("ClearAllState");
-      
-      
       localStorage.clear();
     },
-    // Back(){
-    //   this.$store.dispatch('WhoCardShowNow',0);
-    // },
     ShowDatePicker(){
-      this.$store.dispatch('ShowDatePicker',!this.showDateP)
+      this.$store.dispatch('ShowDatePicker', !this.showDateP)
     },
     Callcalendar(){
       this.$refs.datepicker._data.isOpen=true
