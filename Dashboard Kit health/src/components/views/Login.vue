@@ -51,14 +51,15 @@ export default {
     methods: {
         Login(){
             if(this.userLoginPassword.login && this.userLoginPassword.password){
-                this.$store.dispatch('Login',this.userLoginPassword);
             }else if(!this.userLoginPassword.login){
                 this.message='Вы не ввели логин'
+                return;
             }else if(!this.userLoginPassword.password){
                 this.message='Вы не ввели пароль'
+                return;
             }
+            this.$store.dispatch('Login',this.userLoginPassword);
         }
-        
    },
    computed:{
         preLoading(){
