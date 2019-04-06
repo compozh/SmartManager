@@ -159,7 +159,6 @@ namespace SkdSchema
 			
 			return allUserList;
 		}
-		
 		public async Task<IEnumerable<SkdPerson>> GetPersons(string userId)
 		{
 			return await getPersonsAsync(userId);  	

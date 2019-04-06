@@ -7,6 +7,7 @@ namespace SkdScheme
 		public static void ConfigSchemas(this IServiceCollection services)
 		{
 			SkdSchema.SkdSchema.Config(services);
+			CommonSchema.CommonSchema.Config(services);
 		}
 	}
 }
