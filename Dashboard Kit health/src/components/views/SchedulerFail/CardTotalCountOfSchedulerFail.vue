@@ -1,5 +1,5 @@
 <template>
-    <div class="card-info">
+    <div class="card-info" :title="title">
         <div class="description">
             {{title}}
         </div>
@@ -57,6 +57,8 @@ export default {
         position: relative;
         top: 10%;
         color: #363d3f;
+        max-height: 71px;
+        overflow: hidden;
     }
     .card-info{
         position: relative;

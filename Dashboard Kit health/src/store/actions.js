@@ -98,16 +98,6 @@ const actions = ({
   },
   getInfoFromServer(context, calendarDate){
     //Общая инфа
-   
-    var postdata = {
-      calcId: 'GET_PROJECT_HEALTH_SUMMARY ',
-      args: null,
-      ticket: localStorage.getItem('authToken')
-  };
-  var headers = {
-    'Content-Type': 'application/json',
-    'Data-Type': 'json'
-  };
   var date = ''
     if(localStorage.getItem('authToken')){
       if(calendarDate){
@@ -152,6 +142,7 @@ const actions = ({
       {
         context.commit('setLoginStatus',false)
         context.dispatch('ClearAllState');
+        context.dispatch('StartPreloader',false,false)
         localStorage.clear();
       }
   })

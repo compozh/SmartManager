@@ -1,12 +1,12 @@
 <template>
     <v-container>
-        <v-layout>
-            <v-flex sm6  xs12 md6  lg6 class="left-component">
+        <v-layout wrap>
+            <v-flex sm12 xs12 md12  lg6 class="left-component">
                 <div class="wrapDiagram">
                 <health-diagram ></health-diagram>
                 </div>
             </v-flex>
-            <v-flex sm6  xs12 md6  lg6 class="table right-component">
+            <v-flex sm12  xs12 md12  lg6 class="table right-component">
                 <health-table></health-table>
             </v-flex>
         </v-layout>
@@ -24,7 +24,7 @@ export default {
 }
 </script>
 
-<style >
+<style>
     .table{
         max-height: 600px;
     }
@@ -39,4 +39,5 @@ export default {
   .v-card{
   margin: 0px !important;
 }
+
 </style>

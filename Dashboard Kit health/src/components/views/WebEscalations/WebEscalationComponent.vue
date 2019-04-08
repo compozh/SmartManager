@@ -1,12 +1,12 @@
 <template>
     <v-container>
         <v-layout wrap>
-            <v-flex sm6  xs12 md6  lg6 class="left-component">
+            <v-flex sm12  xs12 md12  lg6 class="left-component">
                 <div class="wrapDiagram">
                     <health-diagram ></health-diagram>
                 </div>
             </v-flex>
-            <v-flex sm6  xs12 md6  lg6  class="right-component">
+            <v-flex sm12  xs12 md12  lg6  class="right-component">
                 <health-table ></health-table>
             </v-flex>
         </v-layout>
