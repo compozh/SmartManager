@@ -1,5 +1,5 @@
 <template>
-    <div class="card-info">
+    <div class="card-info" :title="title">
         <div class="description">
             {{title}}
         </div>
@@ -11,15 +11,7 @@
         </div>
         
     </div>
-    <!-- <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Общее количество длинных запросов на сегодня"
-          :value=dataTotalCountOfLongQueriesForToday
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-          :class="textColor"
-        /> -->
+
 </template>
 
 <script>
@@ -85,6 +77,8 @@ export default {
         position: relative;
         top: 10%;
         color: #363d3f;
+        max-height: 71px;
+        overflow: hidden;
     }
     .card-info{
         position: relative;

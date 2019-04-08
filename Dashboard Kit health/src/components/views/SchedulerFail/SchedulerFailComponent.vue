@@ -1,13 +1,12 @@
 <template>
     <v-container>
-        <v-layout>
-
-            <v-flex sm6  xs12 md6  lg6 style="height:600px;" class="left-component"> 
+        <v-layout wrap>
+            <v-flex sm12  xs12 md12  lg6 style="height:600px;" class="left-component"> 
                 <health-table ></health-table>
             </v-flex>
-            <v-flex sm6  xs12 md6  lg6 v-if="showIframe" class="right-component">
+            <v-flex sm12  xs12 md12  lg6 v-if="showIframe" class="right-component">
                 <div >
-                <health-iframe style="height:576px;"></health-iframe>
+                <health-iframe style="height:576px; max-width: 100%;"></health-iframe>
                 </div>
             </v-flex>
         </v-layout>
@@ -31,6 +30,4 @@ export default {
 </script>
 
 <style>
-
- 
 </style>

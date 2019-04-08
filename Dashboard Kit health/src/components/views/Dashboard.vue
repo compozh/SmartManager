@@ -52,26 +52,26 @@
           lg12
           :class="showCard==whoShowNow.perfomanceExceedances ?'':'diagram-none'"
         >
-          <performance-component></performance-component>
+          <performance-component class="container-component"></performance-component>
         </v-flex>
         <v-flex md12 sm12 lg12 :class="showCard==whoShowNow.webRequest ?'':'diagram-none'">
-          <webescalation-component></webescalation-component>
+          <webescalation-component class="container-component"></webescalation-component>
         </v-flex>
 
         <v-flex md12 sm12 lg12 :class="showCard==whoShowNow.errors ?'':'diagram-none'">
           <div>
-            <errors-component></errors-component>
+            <errors-component class="container-component"></errors-component>
           </div>
         </v-flex>
 
         <v-flex md12 sm12 lg12 :class="showCard==whoShowNow.queries ?'':'diagram-none'">
           <div>
-            <longsql-component></longsql-component>
+            <longsql-component class="container-component"></longsql-component>
           </div>
         </v-flex>
 
         <v-flex md12 lg12 :class="showCard==whoShowNow.scheduler ?'':'table-none'">
-          <scheduler-component></scheduler-component>
+          <scheduler-component class="container-component"></scheduler-component>
         </v-flex>
       </v-layout>
       <Spinner
@@ -218,5 +218,13 @@ g {
   bottom: 0;
   background: rgba(52, 144, 254, 0.1);
 }
+.container-component{
+  padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+}
+
 </style>
 
