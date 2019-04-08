@@ -1,5 +1,10 @@
-﻿using GraphQL;
+﻿using System;
+using System.Collections.Generic;
+using GraphQL;
 using GraphQL.Types;
+using GraphQL.Resolvers;
+using GraphQL.Types;
+using GraphQL.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SkdSchema
@@ -8,7 +13,9 @@ namespace SkdSchema
 	{
 		public SkdSchema(IDependencyResolver dependencyResolver) : base(dependencyResolver)
 		{
-			Query = dependencyResolver.Resolve<SkdQuery>();
+		
+			Query = dependencyResolver.Resolve<SkdQuery>();			
+			
 		}
 
 		public static void Config(IServiceCollection services)
@@ -16,9 +23,14 @@ namespace SkdSchema
 			services.AddSingleton<ISkdPersonProvider, SkdPersonProvider>();
 			services.AddSingleton<SkdSchema>();
 			services.AddSingleton<SkdQuery>();
+			
 			services.AddSingleton<SkdPersonType>();
 			services.AddSingleton<SkdPersonPhotoType>();
+			services.AddSingleton<SkdPersonTableType>();
+			services.AddSingleton<SkdPersonColumnType>();
 		}
 	}
+	
+	
 	
 }

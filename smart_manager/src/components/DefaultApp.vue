@@ -1,14 +1,16 @@
 <template>
-  <v-app>
-    <v-navigation-drawer fixed app v-model="drawer"></v-navigation-drawer>
-    <v-toolbar app>
+  <v-app  id="inspire">
+    <v-navigation-drawer fixed app v-model="drawer" >
+      <router-view name="navigation-drawer"/>
+    </v-navigation-drawer>
+    <v-toolbar app color="cyan" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title><slot name="toolbarTitle">{{toolbarTitle}}</slot></v-toolbar-title>
-      <slot name="toolbar"></slot>
+      <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
+      <router-view name="toolbar"/>
     </v-toolbar>
     <v-content>
       <v-container fluid >
-        <slot></slot>
+        <router-view/>
       </v-container>
     </v-content>
     <v-footer app inset>

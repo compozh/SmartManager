@@ -1,8 +1,12 @@
 const getters = ({
-    getAppData: state=> state.appData,
-    getAppLayout: state=> state.appLayout,
-    getLoginStatus: state=> state.loginStatus,
-    getToolbar: state=> state.toolbar,
+    getAppData (state) {
+        return key=>state.appData[key]
+    },
+    
+    
+    getCurrentUser(state){
+        return state.currentuser
+    }
     
 });
 export default getters

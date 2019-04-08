@@ -1,0 +1,160 @@
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T050416.200.txt
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T050337.200.txt
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T050309.200.txt
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T050105.200.txt
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T044510.500.html
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T044354.500.html
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+###
+
+POST http://localhost:5000/api/webapp/get
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+###
+
+POST http://localhost:5000/api/authentication/login
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+Cookie: WebAppBuilder=CfDJ8EXNwskW%2FzpAhhFXoG8ltmWI8NYfRk2lkfcq1H9WBHBlp%2F%2FjLoo4h7OEYqNUD%2FXO2JoMz3s%2F6SgkNyMWhm4GAvNE%2BalV%2Bl1LidJy%2Fky35oZIVF3hK%2Fzq0hg9VGYTwqyRbKXwe5EZW%2FDokCAqTQMud3RPncovXAFyLvhDb8jqrvFi; path=/; samesite=lax; httponly
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUVMRU5UWUVWQElULlVBIiwiTG9naW5SZXN1bHQiOiJ7XCJTdWNjZXNzXCI6dHJ1ZSxcIlVzZXJMb2dpblwiOm51bGwsXCJVc2VySWRcIjpcIk1FTEVOVFlFVlwiLFwiVXNlck5hbWVcIjpcItCc0LXQu9C10L3RgtGM0LXQsiDQldCy0LPQtdC90LjQuVwiLFwiVGlja2V0XCI6XCI2QzU2RkZFNS1CNDMxLTQ1OEMtODc0QS00MjU1RUNBQjIxRTNcIixcIkZhaWxSZWFzb25cIjpudWxsLFwiTmVlZENoYW5nZVBhc3N3b3JkXCI6ZmFsc2UsXCJUZW1wUGFzc3dvcmRSZXF1aXJlZFwiOmZhbHNlLFwiVGVtcFBhc3N3b3JkTWVzc2FnZVwiOm51bGx9IiwibmJmIjoxNTUzNjk3NTQ3LCJleHAiOjE1NTQyOTc1NDcsImlzcyI6Ikl0LUVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjE1MTk0LyJ9.lboOW4yCSxgu8BCBZWFdC4l-yvL-AukdJvhWvADtYiE
+
+{ "ApplicationId":"SKD" }
+
+<> 2019-03-27T044016.400.txt
+
+###
+
+POST http://localhost:5000/api/authentication/login
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+
+{ "Login":"MELENTYEV@IT.UA", "Password": "vbkkth" }
+
+<> 2019-03-27T043907.200.json
+
+###
+
+POST http://localhost:5000/api/authentication/login
+Accept: Accept: application/json, text/plain, */*
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+
+{ "Login":"MELENTYEV@IT.UA", "Password": "Melentyev@it.ua" }
+
+<> 2019-03-27T043854.400.txt
+
+###
+
+POST http://localhost:5000/api/authentication/login
+Accept: */*
+Cache-Control: no-cache
+
+<> 2019-03-27T043706.500.html
+
+###
+
+GET http://localhost:5000/api/authentication/login
+Accept: */*
+Cache-Control: no-cache
+
+###
+

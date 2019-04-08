@@ -1,0 +1,107 @@
+using System;
+using System.Dynamic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Web.Authentication;
+
+namespace WebAppBuilderApi.Authentication
+{
+	public class AuthenticationMiddleware
+	{
+		private readonly RequestDelegate _next;
+		private readonly AuthenticationSettings _settings;
+		private readonly AuthenticationTools _auth;
+
+		private string _loginSegment => new PathString(_settings.Path).Add("/login");
+		private string _logoutSegment => new PathString(_settings.Path).Add("/logout");
+		private string _currentUserSegment => new PathString(_settings.Path).Add("/user");
+
+		
+		public AuthenticationMiddleware(RequestDelegate next, AuthenticationSettings settings, AuthenticationTools auth)
+		{
+			_next = next;
+			_settings = settings;
+			_auth = auth;
+		}
+		
+		public async Task Invoke(HttpContext context)
+		{
+			
+			// ѕропускаем не POST запросы
+			if (!string.Equals(context.Request.Method, "POST", StringComparison.OrdinalIgnoreCase))
+			{
+				await _next(context);
+				return;
+			}
+
+			// Login 
+			if (context.Request.Path.StartsWithSegments(_loginSegment))
+			{
+				await loginAsync(context);
+				return;
+			}
+			
+			// Logout
+			if (context.Request.Path.StartsWithSegments(_logoutSegment))
+			{
+				logout(context);
+				return;
+			}
+			// Get Curren tUser
+			if (context.Request.Path.StartsWithSegments(_currentUserSegment))
+			{
+				await getCurrentUser(context);
+				return;
+			}
+			await _next(context);
+			
+		}
+
+		private async Task getCurrentUser(HttpContext context)
+		{
+			if (context.User.Identity.IsAuthenticated)
+			{
+				var name = context.User.Identity.Name??string.Empty;
+				await context.Response.WriteAsync(name);
+				return;
+			}
+		}
+
+		private void logout(HttpContext context)
+		{
+			// TODO: LOGOUT
+			//_auth.Login()
+		}
+		
+		private async Task loginAsync(HttpContext context)
+		{
+			var user = deserialize<AuthData>(context.Request.Body);
+			var response = _auth.Login(user);
+			if (!response.Result)
+			{
+				context.Response.StatusCode = 400;
+				await context.Response.WriteAsync(response.Message);
+				return;
+			}
+
+			// сериализаци€ ответа
+			context.Response.ContentType = "application/json";
+			await context.Response.WriteAsync(response.Message);
+		
+			
+		}
+		
+		private T deserialize<T>(Stream s)
+		{
+			using (var reader = new StreamReader(s))
+			using (var jsonReader = new JsonTextReader(reader))
+			{
+				var ser = new JsonSerializer();
+				return ser.Deserialize<T>(jsonReader);
+			}
+		}
+	}
+}

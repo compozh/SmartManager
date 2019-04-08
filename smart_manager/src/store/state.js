@@ -1,6 +1,8 @@
 const state = {
+  applicationDescription:{},
   appData: {},
-  appLayout: {},
-  loginStatus: false,
+  // Текущий пользователь
+  currentuser: localStorage.getItem('userName')
+
 };
 export default state

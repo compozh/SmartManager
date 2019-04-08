@@ -5,7 +5,7 @@
         v-model="userLoginPassword.login"
         label="Логин"
         required
-        color="#008FFB"
+        color="cyan"
         @keyup.enter="Login()"
       ></v-text-field>
       <v-text-field
@@ -13,16 +13,16 @@
         label="Пароль"
         required
         type="password"
-        color="#008FFB"
+        color="cyan"
         @keyup.enter="Login()"
       ></v-text-field>
       <div class="btn-and-checkbox">
         <v-checkbox
           v-model="userLoginPassword.rememberMe"
           :label="'Запомнить меня'"
-          color="#008FFB"
+          color="cyan"
         ></v-checkbox>
-        <v-btn @click="Login()" color="#008FFB">Войти</v-btn>
+        <v-btn @click="Login()" color="cyan" dark>Войти</v-btn>
       </div>
       <div class="message">{{message}}</div>
     </div>
@@ -30,20 +30,32 @@
 </template>
 <script>
 export default {
+  name: "login",
   data() {
     return {
       userLoginPassword: {
-        login: "baharev@it-enterprise.com",
-        password: "tacek3121412",
+        login: "",
+        password: "",
         rememberMe: false
       },
       message: ""
     };
   },
+  computed: {
+    routeToBack() {
+      return this.$route.params.routeToBack  ;
+    }
+  },
   methods: {
     Login() {
       if (this.userLoginPassword.login && this.userLoginPassword.password) {
-        this.$store.dispatch("Login", this.userLoginPassword);
+        this.$store.dispatch("Login", this.userLoginPassword).then(result => {
+          // Если авторизация прошла успешно, уходим со страницы логина
+          if (result) {
+            
+            this.$router.replace({ path: this.routeToBack });
+          }
+        });
       } else if (!this.userLoginPassword.login) {
         this.message = "Вы не ввели логин";
       } else if (!this.userLoginPassword.password) {

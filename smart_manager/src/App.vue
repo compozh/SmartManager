@@ -2,17 +2,7 @@
             TEMPLATE
 =========================================================-->
 <template>
-  <div id="app">
-    <div class="one">
-      <ul>
-        <li>
-          <router-link to="/one">one</router-link>
-        </li>
-        <li>
-          <router-link to="/two">two</router-link>
-        </li>
-      </ul>
-    </div>
+  <div id="app">    
     <router-view></router-view>
   </div>
 </template>
@@ -23,6 +13,10 @@
 <script>
 export default {
   created() {
+
+    // загрузка приложения
+  //  this.$store.dispatch("GetApplication");
+    
     // this.$store.dispatch("GetAppLayout");
     //this.$store.dispatch("GetAppData");
   }
