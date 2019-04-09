@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="v-offset header-diagram">
-        <div class="v-card--material__header v-card v-sheet theme--dark elevation-10 name-diagram" :class="moreMinCount ? 'error' : 'none-error'"><h4>{{title}}</h4></div>
+        <div class="v-card--material__header v-card v-sheet theme--dark elevation-10 name-diagram none-error"><h4>{{title}}</h4></div>
        </div>
      <apexchart ref="chart" type=bar height=500 :options="chartOptions" :series="series" />
      
@@ -12,12 +12,10 @@
 import converToDate from '../../../utils/ConverToDateToWeekMethod.js'
 import FindMaxValue from "../../../utils/FindMaxValue.js"
 import moment from 'moment'
-import IfMoreMinCount from '../../../utils/IfMoreMinCount.js'
 
 export default {
 data(){
     return{
-        moreMinCount:false,
         detailLongSQLQueriesForDay:{
             criterion:"LongSqlQueries",
             date:"",
@@ -85,7 +83,6 @@ data(){
     },
     methods:{
         GetLongSqlQueriesForWeek(){
-            this.moreMinCount=false;
             this.series[0].data=[];
             this.chartOptions.colors=[];
             this.chartOptions.xaxis.categories.splice(0,this.chartOptions.xaxis.categories.length);
@@ -93,16 +90,10 @@ data(){
                 this.series[0].data.push(this.longSqlQueriesForWeek[i].value)
                 this.chartOptions.xaxis.categories.push(converToDate(this.longSqlQueriesForWeek[i].key) + " - "+ moment(this.longSqlQueriesForWeek[i].key).format('DD.MM.YYYY'));
                 this.chartOptions.colors.push(FindMaxValue(this.longSqlQueriesForWeek[i].value,this.$store.getters.getInfoList.MinCountOfLogs))
-                this.SetColorHeader(this.longSqlQueriesForWeek[i].value,this.$store.getters.getInfoList.MinCountOfLogs)
             }
             
              this.$refs.chart.refresh()
         },
-        SetColorHeader(count, minTrueCount){
-            if(IfMoreMinCount(count,minTrueCount)){
-                this.moreMinCount=true;
-            }
-        }
     },
     watch:{
         longSqlQueriesForWeek:function(){
