@@ -1,7 +1,7 @@
 <template>
     <div>
       <div class="v-offset header-diagram">
-        <div class="v-card--material__header v-card v-sheet theme--dark elevation-10 name-diagram" :class="moreMinCount ? 'error' : 'none-error'"><h4> {{title}}</h4></div>
+        <div class="v-card--material__header v-card v-sheet theme--dark elevation-10 name-diagram none-error"><h4> {{title}}</h4></div>
        </div>
      <apexchart ref="chart" type=bar height=500 :options="chartOptions" :series="series" />
      
@@ -12,12 +12,10 @@
 import converToDate from '../../../utils/ConverToDateToWeekMethod.js'
 import FindMaxValue from "../../../utils/FindMaxValue.js"
 import moment from 'moment'
-import IfMoreMinCount from '../../../utils/IfMoreMinCount.js'
 
 export default {
     data(){
         return{
-        moreMinCount:false,
         detailWebEscalationsForDay:{
             criterion:"WebEscalations",
             date:"",
@@ -83,7 +81,6 @@ export default {
     },
     methods:{
         GetDataWebRequestEscalationsForWeek(){
-          this.moreMinCount=false;
           this.series[0].data=[];
           this.chartOptions.colors=[];
           this.chartOptions.xaxis.categories.splice(0,this.chartOptions.xaxis.categories.length);
@@ -91,16 +88,10 @@ export default {
             this.series[0].data.push(this.webRequestEscalationsForWeek[i].value)
             this.chartOptions.xaxis.categories.push(converToDate(this.webRequestEscalationsForWeek[i].key) + " - "+ moment(this.webRequestEscalationsForWeek[i].key).format('DD.MM.YYYY'));
             this.chartOptions.colors.push(FindMaxValue(this.webRequestEscalationsForWeek[i].value,this.$store.getters.getInfoList.MinCountOfWebEscalations))
-            this.SetColorHeader(this.webRequestEscalationsForWeek[i].value,this.$store.getters.getInfoList.MinCountOfWebEscalations)
           }
           this.$refs.chart.refresh()
         },
-      SetColorHeader(count, minTrueCount){
-        if(IfMoreMinCount(count,minTrueCount)){
-          this.moreMinCount=true;
-        }
-        
-      }
+      
     },
     watch:{
         webRequestEscalationsForWeek:function(){
