@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using Web.Data;
 namespace SkdScheme.CommonSchema
 {
@@ -22,11 +23,9 @@ namespace SkdScheme.CommonSchema
 		{
 			SchemaDescription shcema;
 			int headerIndex = 0;
-			int conditionIndex = 1;
-			int schemaNameIndex = 2;
-			int browseIndex = 3;
-			int tableIndex = 4;
-			var command = _client.CreateCommand("select GQSCHEM.ID, GQSCHEM.CONDITION, GQSCHEM.NAME, GQSCHEM.KREP, GQSCHEM.DB from GQSCHEM where GQSCHEM.ID = @gqshemid");
+			int schemaNameIndex = 1;
+			int anonymusIndex = 2;
+			var command = _client.CreateCommand("select GQSCHEMA.ID, GQSCHEMA.NAME, GQSCHEMA.ALLOWANON from GQSCHEMA where GQSCHEMA.ID = @gqshemid");
 			command.Parameters.Add(new SqlParameter("@gqshemid", name));
 			command.Connection.Open();
 
@@ -40,55 +39,88 @@ namespace SkdScheme.CommonSchema
 				shcema = new SchemaDescription
 				{
 					Id = reader.GetString(headerIndex).Trim(),
-					Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex).Trim(),
 					Name = reader.GetString(schemaNameIndex).Trim(),
-					BrowseId = reader.GetString(browseIndex).Trim(),
-					TableName = reader.GetString(tableIndex).Trim(),
-					Columns = new List<SchemaColumn>()
+					Types = new List<SchemaType>()
 				};
 			}
 
-			var expressionIndex = 0;
-			var descriptionIndex = 1;
-			var nameIndex = 2;
-			command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
-			command.Parameters.Add(new SqlParameter("@repskrep", shcema.BrowseId));
-			command.Parameters.Add(new SqlParameter("@repsdb", shcema.TableName));
-			command.Connection.Open();
+			var typeIndex = 0;
+			var nameIndex = 1;
+			var dbIndex = 2;
+			var krepIndex = 3;
+			anonymusIndex = 4;
+			var conditionIndex = 5;
 
+			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
+			command.Parameters.Add(new SqlParameter("@schemaid", shcema.Id));
+			command.Connection.Open();
 			using (var reader = command.ExecuteReader())
 			{
-				if (!reader.HasRows)
+				if (reader.HasRows)
 				{
-					return null;
-				}
-				while (reader.Read())
-				{
-					shcema.Columns.Add(new SchemaColumn
+					while (reader.Read())
 					{
-						Expression = reader.GetString(expressionIndex).Trim(),
-						Name = reader.IsDBNull(nameIndex) ? null : reader.GetString(nameIndex).Trim(),
-						Description =  reader.GetString(descriptionIndex).Trim(),
-					});
+						shcema.Types.Add(new SchemaType
+						{
+							Id = reader.GetString(typeIndex).Trim(),
+							Name = reader.GetString(nameIndex).Trim(),
+							TableName=reader.GetString(dbIndex).Trim(),
+							BrowseId = reader.GetString(krepIndex).Trim(),
+							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
+							Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex),
+							Columns = new List<SchemaColumn>()
+						});
+					}
 				}
 			}
 			command.Connection.Close();
+
+			var expressionIndex = 0;
+			var descriptionIndex = 1;
+			var columnNameIndex = 2;
+			for (int i = 0; i < shcema.Types.Count; i++)
+			{
+				command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
+				command.Parameters.Add(new SqlParameter("@repskrep", shcema.Types[i].BrowseId));
+				command.Parameters.Add(new SqlParameter("@repsdb", shcema.Types[i].TableName));
+				command.Connection.Open();
+				using (var reader = command.ExecuteReader())
+				{
+					if (reader.HasRows)
+					{
+						while (reader.Read())
+						{
+							var tempColumn = new SchemaColumn {
+								Expression = reader.IsDBNull(expressionIndex) ? null : reader.GetString(expressionIndex).Trim(),
+								Description = reader.IsDBNull(nameIndex) ? null : reader.GetString(nameIndex).Trim(),
+								Name = reader.GetString(columnNameIndex).Trim(),
+							};
+							if (string.IsNullOrEmpty(tempColumn.Name))
+							{
+								tempColumn.Name = getNewColumnName(shcema.Types[i]);
+							}
+							shcema.Types[i].Columns.Add(tempColumn);
+						}
+					}
+				}
+				command.Connection.Close();
+			}
 			return shcema;
 		}
 
 		/// <summary>
-		/// Метод для получение колонок схемы
+		/// Метод для получения данных для типа
 		/// </summary>
-		/// <param name="schema"> Схема</param>
-		/// <param name="names"> Поля, который запрашиваем </param>
+		/// <param name="type"> тип</param>
+		/// <param name="columns"> Поля, которыe запрашиваем </param>
 		/// <returns></returns>
-		public List<Dictionary<string, object>> GetDataForQueriedColumns(SchemaDescription schema, List<string> names)
+		public List<Dictionary<string, object>> GetDataForType(SchemaType type, List<string> columns)
 		{
 			var expressions = new List<string>();
 
-			foreach (var el in schema.Columns)
+			foreach (var el in type.Columns)
 			{
-				foreach (var name in names)
+				foreach (var name in columns)
 				{
 					if (el.Name.ToLower() == name)
 					{
@@ -100,28 +132,59 @@ namespace SkdScheme.CommonSchema
 			string selectQuery = string.Join(", ", expressions);
 
 			var resultData = new List<Dictionary<string, object>>();
-			var command = _client.CreateCommand(String.Format("select {0} from {1}", selectQuery, schema.TableName));
-			command.Connection.Open();
 
-			using (var reader = command.ExecuteReader())
-			{
-				if (!reader.HasRows)
+				string condition = "";
+				if (!string.IsNullOrEmpty(type.Condition))
 				{
-					return null;
+					condition = String.Format("where {0}", type.Condition);
 				}
-				while (reader.Read())
+
+				var command = _client.CreateCommand(String.Format("select {0} from {1} {2}", selectQuery, type.TableName, condition));
+
+				command.Connection.Open();
+
+				using (var reader = command.ExecuteReader())
 				{
-					Dictionary<string, object> dictionary = new Dictionary<string, object>();
-					dictionary.Clear();
-					for (int i = 0; i < expressions.Count; i++)
+					if (!reader.HasRows)
 					{
-						dictionary.Add(names[i], reader.GetString(i).Trim());
+						return null;
 					}
-					resultData.Add(dictionary);
+					while (reader.Read())
+					{
+						Dictionary<string, object> dictionary = new Dictionary<string, object>();
+						dictionary.Clear();
+						for (int i = 0; i < expressions.Count; i++)
+						{
+							dictionary.Add(columns[i], reader.GetString(i).Trim());
+						}
+						resultData.Add(dictionary);
+					}
+				}
+				command.Connection.Close();
+
+			return resultData;
+		}
+		/// <summary>
+		/// Метод, который возвращает новое уникальное имя для колонки
+		/// </summary>
+		/// <param name="type">Тип, от него нам нужны только колонки</param>
+		/// <returns>Уникальное имя для колонки</returns>
+		private string getNewColumnName(SchemaType type)
+		{
+			var tempColumnNumber = 0;
+			while (tempColumnNumber < 99999)
+			{
+				tempColumnNumber++;
+				var columnName = "cell" + tempColumnNumber;
+
+				var isNewName = type.Columns.All(c => !string.Equals(c.Name, columnName, StringComparison.InvariantCultureIgnoreCase));
+
+				if (isNewName)
+				{
+					return columnName;
 				}
 			}
-			command.Connection.Close();
-			return resultData;
+			return null;
 		}
 	}
 }
