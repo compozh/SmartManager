@@ -3,7 +3,7 @@
     <v-list class="pt-0" dense>
         <v-divider></v-divider>
 
-        <v-list-tile @click="" v-for="route in links" :key="route.Id"  :to="route.Path" active-class="active">
+        <v-list-tile @click="" v-for="route in links" :key="route.Id"  :to="{name:route.Id}" active-class="active">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -28,6 +28,8 @@ export default {
             }
             //console.log(this.$router)
             var links = this.$store.state.applicationDescription.Routes;
+            links = [...links, ...links[1].Children]
+            console.log(links)
             return links.filter(l => l.Name)
 
         }
