@@ -32,7 +32,7 @@ namespace SkdScheme.CommonSchema
 
 				foreach (var col in type.Columns)
 				{
-					commonType.DictionaryField(new StringGraphType(), col.Name.ToLower(), col.Description);
+					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 				}
 
 				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
@@ -47,6 +47,33 @@ namespace SkdScheme.CommonSchema
 		public static void Config(IServiceCollection services)
 		{
 			services.AddSingleton<SchemaTools>();
+		}
+		private IGraphType typeSelection(SlvColumnType type)
+		{
+			switch (type)
+			{
+				case SlvColumnType.Char:
+					return new StringGraphType();
+					break;
+				case SlvColumnType.Date:
+					return new DateGraphType();
+					break;
+				case SlvColumnType.Guid:
+					return new GuidGraphType();
+					break;
+				case SlvColumnType.Memo:
+					return new StringGraphType();
+					break;
+				case SlvColumnType.Numeric:
+					return new IntGraphType();
+					break;
+				case SlvColumnType.DateTime:
+					return new DateTimeGraphType();
+					break;
+				default:
+					return new StringGraphType();
+					break;
+			}
 		}
 	}
 }
