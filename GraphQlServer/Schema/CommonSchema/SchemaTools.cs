@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using Web.Data;
 namespace SkdScheme.CommonSchema
 {
@@ -170,22 +171,14 @@ namespace SkdScheme.CommonSchema
 		/// <returns>Уникальное имя для колонки</returns>
 		private string getNewColumnName(SchemaType type)
 		{
-			var columnName = "cell";
 			var tempColumnNumber = 0;
-			var isNewName = true;
+			var columnName = "";
 			while (tempColumnNumber < 99999)
 			{
 				tempColumnNumber++;
-				isNewName = true;
-				for (var j = 0; j < type.Columns.Count; j++)
-				{
-					columnName = "cell" + tempColumnNumber;
-					if (columnName == type.Columns[j].Name.ToLower())
-					{
-						isNewName = false;
-						break;
-					}
-				}
+				columnName = "cell" + tempColumnNumber;
+
+				var isNewName = type.Columns.All(c => !string.Equals(c.Name, columnName, StringComparison.InvariantCultureIgnoreCase));
 
 				if (isNewName)
 				{
