@@ -2,91 +2,111 @@ import Axios from "axios";
 import * as jsonpatch from '../patching'
 
 const actions = ({
-  SetLoginStatus(context, status) {
-    context.commit("setLoginStatus", status)
+ 
+  GetCurrentUser(context){
+    Axios({
+      method: 'POST',
+      url: 'http://localhost:5000/api/authentication/user',
+      withCredentials:true,
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
+    }).then(resp => {
+      context.commit("setCurrentUser", resp.data )
+      //console.log(resp.data)
+    });
+  },
+
+
+  LogOut(context){
+    localStorage.removeItem("ItUniTocken");
+    localStorage.removeItem('userName');
+    context.commit("setCurrentUser", "");
+
   },
   Login(context, loginParam) {
-    //логин
-    var postdata = {
-      login: loginParam.login,
-      password: loginParam.password,
-      rememberMe: loginParam.rememberMe
-    };
-    // appstorage or applicationstorage
-    localStorage.clear();
-    return Axios.post('https://localhost:5001/api/values/Login', {
-        Login: postdata.login,
-        Password: postdata.password,
-        RememberMe: postdata.rememberMe
-      }, {
-        withCredentials: true
-      })
-      .then((response) => {
-        var token = JSON.parse(response.data.message);
-        var username = response.data.user
-        if (token.access_token) {
-          localStorage.setItem('authToken', token.access_token);
+
+    localStorage.removeItem("ItUniTocken");
+    localStorage.removeItem('userName');
+    context.commit("setCurrentUser", "");
+
+    return Axios.post('http://localhost:5000/api/authentication/login', {
+        Login: loginParam.login,
+        Password: loginParam.password,
+        RememberMe: loginParam.rememberMe
+      },{
+        withCredentials:true
+      }).then(
+        // всё Ок
+      (response) => {
+        debugger
+        var token = response.data.access_token;
+        var username = response.data.username
+        if (token) {
+          context.commit("setCurrentUser",  username );
+          localStorage.setItem('ItUniTocken', token);
           localStorage.setItem('userName', username);
-          if (localStorage.getItem('authToken')) {
-            context.dispatch('GetControls');
-            context.dispatch('SetLoginStatus', true);
-          }
+          return true;
         }
+        
       })
   },
-  GetAppLayout(context, componentName) {
-    return Axios.post('http://localhost:5000/api/Core/GetAppLayout?componentName=' +
-        componentName, undefined, {
-          // headers: {
-          //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-          // },
-          // withCredentials: true
-        })
-      .then((response => {
-        if (response.data != 'WRONG_TICKET' && response.data != "") {
-          var myObject = {
-            data: response.data,
-            key: componentName
-          }
-          context.commit('setAppLayout', myObject)
-        } else {
-          localStorage.clear();
-        }
-      }))
-  },
-  GetAppData(context, componentSourceId) {
-    return Axios.post('http://localhost:5000/api/Core/GetAppData?componentSourceId=' +
-        componentSourceId, undefined, {
-          // headers: {
-          //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-          // },
-          // withCredentials: true
-        })
-      .then((response => {
-        if (response.data != 'WRONG_TICKET' && response.data != "") {
-          var myObject = {
-            data: response.data,
-            key: componentSourceId
-          }
-          context.commit('setAppData', myObject)
-        } else {
-          localStorage.clear();
-        }
-      }))
-  },
-  GetApplication(context) {
+  // GetAppLayout(context, componentName) {
+  //   return Axios.post('http://localhost:5000/api/Core/GetAppLayout?componentName=' +
+  //       componentName, undefined, {
+  //         // headers: {
+  //         //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+  //         // },
+  //         // withCredentials: true
+  //       })
+  //     .then((response => {
+  //       if (response.data != 'WRONG_TICKET' && response.data != "") {
+  //         var myObject = {
+  //           data: response.data,
+  //           key: componentName
+  //         }
+  //         context.commit('setAppLayout', myObject)
+  //       } else {
+  //         localStorage.clear();
+  //       }
+  //     }))
+  // },
 
+  /** Загрузить данные для компонента */
+  LoadDataForComponent(context, {datasource,key}){
+    Axios({
+      method: 'POST',
+      url: 'http://localhost:5002/api/graphql',
+      withCredentials:true,
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+      data: { SchemaName:"SkdSchema", query: datasource}
+    }).then(resp => {
+      context.commit("setAppData", { key, data:resp.data })
+      //console.log(resp.data)
+    });
   },
 
-  CallAction(context, data) {
-    return Axios.post('http://localhost:5000/api/Core/CallAction', {
-      source: data.source,
-      event: data.event,
-      arguments: data.arguments
-    }).then((response => {
-      console.log(response.data)
+  /** Загрузить описание приложения */
+  GetAppDescription(context, appId) {
+    return Axios.post('http://localhost:5000/api/webapp/get', {
+      ApplicationId: appId
+    }, {
+      withCredentials: true
+    }).then(response => {
+      if (response.status == 200) {
+        return context.commit("SetAppDescription", response.data)
+      }
+      return new Promise();
+    })
+  },
 
-    }))
-  }
+  // CallAction(context, data) {
+  //   return Axios.post('http://localhost:5000/api/Core/CallAction', {
+  //     source: data.source,
+  //     event: data.event,
+  //     arguments: data.arguments
+  //   }).then((response => {
+  //     console.log(response.data)
+
+  //   }))
+  // }
 });
 export default actions

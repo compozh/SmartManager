@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,7 +139,7 @@ namespace SkdSchema
 				return null;
 			}
 			var user = SessionHandler.Current.GetCurrentUser();
-			var allUserList = users.Where(u=>string.IsNullOrEmpty(userId) || u.UserID == userId).Select(u => new SkdPerson
+			var allUserList = users.Where(u=>string.IsNullOrEmpty(userId) || string.Equals(u.UserID, userId, StringComparison.InvariantCultureIgnoreCase)).Select(u => new SkdPerson
 			{
 				UserId = string.IsNullOrEmpty(u.UserID) ? "-" : u.UserID,
 				FullName= u.FIO,
@@ -147,7 +148,7 @@ namespace SkdSchema
 				PlaceName = u.Place,
 				SensorName = u.SensorName,
 				HasKey = u.HASKEY == "+",
-				MovementDate = u.Time,
+				MovementDate = getDateTime(u.Time),
 				MobileTel = u.MobileTel,
 				WorkTel= u.Tel,
 				Email = u.Email,
@@ -159,6 +160,14 @@ namespace SkdSchema
 			
 			return allUserList;
 		}
+
+		private DateTime getDateTime(string argTime)
+		{
+			var t = new DateTime(1970, 1, 1).AddMilliseconds((long)Convert.ToDouble(argTime.Substring(argTime.IndexOf("(") + 1, argTime.IndexOf(")") - argTime.IndexOf("(") - 1)));
+			return DateTime.SpecifyKind(t, DateTimeKind.Local);
+			//return t;
+		}
+
 		public async Task<IEnumerable<SkdPerson>> GetPersons(string userId)
 		{
 			return await getPersonsAsync(userId);  	

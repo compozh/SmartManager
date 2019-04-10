@@ -9,6 +9,7 @@ using GraphQL.Validation;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SkdScheme;
+using Web.Data;
 
 namespace GraphQlServer
 {

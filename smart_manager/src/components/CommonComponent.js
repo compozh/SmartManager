@@ -1,8 +1,5 @@
 import _ from "lodash";
 import * as jsonpatcher from '../patching';
-import {
-  create
-} from "domain";
 
 export default {
   name: "common-component",
@@ -13,11 +10,11 @@ export default {
     /** Получить значение из хранилища по ссылке для использования в свойствах */
     getStoreValue(path) {
       var path = this.getStorePath(path);
-      var object = this.$store.getters.getAppData[this.internalDataSourceId];
+      var object = this.$store.getters.getAppData(this.internalComponent.id);
       if (!object) {
         return undefined
       }
-      return jsonpatcher.get(this.$store.getters.getAppData[this.internalDataSourceId], path)
+      return jsonpatcher.get(object, path)
     },
 
     /** Обновить значение в хранилище (используется в модели) */
@@ -50,31 +47,33 @@ export default {
           result[key] = this.getStoreValue(value.source)
           return
         }
+        if(typeof value == "string" && value.startsWith("@ds/")){
+          value = value.replace("@ds/","");
+          result[key] = this.getStoreValue(value)
+          return
+        }
         result[key] = value
       }, {})
     },
 
     /** Отрисока компонента */
-    createCommonComponentInternal(component, scope, createElement) {
-      switch (component.type) {
-        case "component":
-          return createElement('common-component', {
-            props: {
-              component: component.value,
-              storeScope: scope,
-              dataSourceId: this.internalDataSourceId
-            }
-          })
-        case "raw":
-          return component.value;
-      }
+    createCommonComponentInternal(component, scope, h) {
+
+        return h('common-component', {
+          props: {
+            component: component,
+            storeScope: scope,
+            dataSourceId: this.internalDataSourceId
+          }
+        })
+        
     },
 
     /** Отрисовка компонента в зависимости от типа */
-    createCommonComponent(component, storeScope, createElement) {
+    createCommonComponent(component, storeScope, h) {
       // Единичный компонент
       if (!component.loop) {
-        return this.createCommonComponentInternal(component, storeScope, createElement)
+        return this.createCommonComponentInternal(component, storeScope, h)
       }
 
       // Обработка отрисовки списков
@@ -82,7 +81,7 @@ export default {
       return _.map(val, (value, key) => {
         var scope = storeScope || {};
         scope[component.loop.itemName] = `${component.loop.source}/${key}`;
-        return this.createCommonComponentInternal(component, scope, createElement)
+        return this.createCommonComponentInternal(component, scope, h)
       })
 
     },
@@ -97,14 +96,13 @@ export default {
     }
   },
 
-
   //////////////////////////////////////////////////
   //////            COMPUTED PROPERTIES
   /////////////////////////////////////////////////
   computed: {
     // компоненты в именованых слотах
     slotGroups() {
-      var groups = _.groupBy(this.internalComponent.content, el => {
+      var groups = _.groupBy(this.internalComponent.children, el => {
         return el.slot == "default" || !el.slot ? "" : el.slot;
       });
       var a = _.keys(groups).map(el => ({
@@ -115,14 +113,14 @@ export default {
     },
     // компоненты в слотах по умолчанию
     defaultSlotGroup() {
-      return _.filter(this.internalComponent.content, el => !el.slot || el.slot == "default")
+      return _.filter(this.internalComponent.children, el => !el.slot || el.slot == "default")
     },
     internalComponent() {
-      if (this.componentName) {
-        return this.$store.getters.getAppLayout[this.componentName]
-      } else {
+      // if (this.componentName) {
+      //   return this.$store.getters.getAppLayout[this.componentName]
+      // } else {
         return this.component
-      }
+      //}
     },
     internalDataSourceId() {
       return this.internalComponent.dataSourceId || this.dataSourceId
@@ -130,16 +128,11 @@ export default {
 
   },
 
-
   //////////////////////////////////////////////////
   ////              STATIC PROPERTIES
   //////////////////////////////////////////////////
 
   props: {
-    componentName: {
-      type: String,
-      required: false
-    },
     dataSourceId: {
       type: String,
       required: false
@@ -153,25 +146,38 @@ export default {
       required: false
     }
   },
+  beforeMount() {
+    // получение данных для компонента
+    if (this.internalComponent.datasource) {
+      var datasource = this.internalComponent.datasource;
+
+      let reg = new RegExp('\\$route\\.params\\.([a-zA-Z0-9_]*)', 'gi');
+      let matches = reg.exec(datasource)
+      if(matches != null){
+        // получаем значение параметра из роутера
+        let paramName = matches[1]
+        let paramValue = this.$route.params[paramName]
+        datasource = datasource.replace(reg, `"${paramValue}"`) 
+      }
+
+      this.$store.dispatch("LoadDataForComponent", {
+        datasource: datasource,
+        key: this.internalComponent.id
+      });
+    }
+  },
 
   // default: function(){return this.imperialComponent}
 
   //////////////////////////////////////////////////
   /////             RENDER FUNCTION
   //////////////////////////////////////////////////
-  render(createElement) {
-
-    if (this.componentName && !this.$store.state.appLayout[this.componentName]) {
-      this.$store.dispatch("GetAppLayout", this.componentName);
-    }
-
+  render(h) {
     if (!this.internalComponent) {
       return undefined;
     }
-
-    if (this.internalDataSourceId && !this.$store.state.appData[this.internalDataSourceId]) {
-      this.$store.dispatch('GetAppData', this.internalDataSourceId);
-    }
+   
+   
     // модель компонента:
     let model;
     if (this.internalComponent.model) {
@@ -183,19 +189,18 @@ export default {
       }
     }
 
-
     // Вложенные компоненты
     // Компоненты в именованных слотах
     let componentsInNamedSlots = this.slotGroups.map(slotGroup => {
-      return createElement('template', {
+      return h('template', {
           slot: slotGroup.key
         },
         slotGroup.components.map(subComponent => this.createCommonComponent(subComponent,
-          this.storeScope, createElement)))
+          this.storeScope, h)))
     })
     // Компоненты в слоте по умолчанию
     let componentsInDefaultSlot = this.defaultSlotGroup.map(defSlotComp => this.createCommonComponent(
-      defSlotComp, this.storeScope, createElement))
+      defSlotComp, this.storeScope, h))
 
     // Формирование обработчиков событий
 
@@ -208,7 +213,7 @@ export default {
 
 
     // Создание корневого компонента
-    return createElement(this.internalComponent.name, {
+    return h(this.internalComponent.name, {
         attrs: {
           ...this.transfotmProps(this.internalComponent.attrs)
         },

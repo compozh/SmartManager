@@ -6,13 +6,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
-using SmartManagerApi.Authentification;
 using Web.Authentication;
 using Web.WebRequests;
 using Web.Tools;
 using Web.Data;
-namespace SmartManagerApi
+using WebAppBuilderApi.Authentication;
+using WebAppBuilderApi.WebAppBuilderMiddleware;
+
+namespace WebAppBuilderApi
 {
 	public class Startup
 	{
@@ -26,9 +29,12 @@ namespace SmartManagerApi
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-			{
-				builder.WithOrigins("http://localhost:8080", "https://localhost:8080")
+			services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
+
+				var allowedOrigins = Configuration.GetSection("AppSettings")["AllowedOrigins"] ?? string.Empty;
+				var origins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries);
+				
+				builder.WithOrigins(origins)
 					.AllowAnyMethod()
 					.AllowCredentials()
 					.WithHeaders("Authorization", "Accept")
@@ -57,22 +63,26 @@ namespace SmartManagerApi
 						ValidateIssuerSigningKey = true,
 					};
 				});
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-			services.AddDistributedMemoryCache();
-			services.AddSession(options => {
-				options.Cookie.Name = "SmartManager";
-				options.IdleTimeout = TimeSpan.FromSeconds(3600);
-			});
-
-			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-			services.AddSingleton<AuthenticationTools>();
+			
+			// Веб расчеты и аутентификация
 			services.AddSingleton<IAuthOptions, AuthOptions>();
 			services.AddSingleton<IIdentityProvider, WebRequestsIdentityProvider>();
+			services.AddSingleton<AuthenticationTools>();
 			services.AddSingleton<WebRequestsTools>();
-			services.AddHttpClient();
-
 			services.AddSqlClientInstance(Configuration);
 			services.AddSingleton<PureWebCalculations>();
+			// Сессия
+			services.AddDistributedMemoryCache();
+			services.AddSession(options => {
+				options.Cookie.Name = "WebAppBuilder";
+				options.IdleTimeout = TimeSpan.FromSeconds(3600);
+			});
+			
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			
+			
+			// Обработка запросов конструктора
+			services.AddSingleton<WebAppBuilderSettings>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,20 +91,16 @@ namespace SmartManagerApi
 
 			app.UseCors("MyPolicy");
 
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-			}
-			else
-			{
-				app.UseHsts();
-			}
-
+			
+			app.UseDeveloperExceptionPage();
+			
 			app.UseSession();
 			app.UseStaticFiles();
+
 			app.UseAuthentication();
-			app.UseHttpsRedirection();
-			app.UseMvc();
+			app.UseMiddleware<AuthenticationMiddleware>(new AuthenticationSettings());
+			app.UseMiddleware<WebAppBuilderMiddleware.WebAppBuilderMiddleware>();
+			//app.UseHttpsRedirection();
 			HttpContextAccessorHandler.Configure(contextAccessor);
 		}
 	}

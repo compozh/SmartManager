@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace SmartManagerApi
+namespace WebAppBuilderApi
 {
 	public class Program
 	{
@@ -20,6 +20,6 @@ namespace SmartManagerApi
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
 				.UseStartup<Startup>()
-				.UseKestrel();
+				.UseKestrel().UseIISIntegration();
 	}
 }

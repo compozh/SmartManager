@@ -1,3 +1,5 @@
+using System;
+
 namespace SkdSchema
 {
 	public class SkdPerson
@@ -9,7 +11,7 @@ namespace SkdSchema
 		public bool HasKey { get; set; }		
 		public string PlaceName { get; set; }
 		public string FullName { get; set; }
-		public string MovementDate { get; set; }
+		public DateTime MovementDate { get; set; }
 		public string Skype { get; set; }
 		public string MobileTel { get; set; }
 		public string WorkTel { get; set; }

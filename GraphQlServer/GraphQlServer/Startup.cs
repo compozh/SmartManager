@@ -31,6 +31,18 @@ namespace GraphQlServer
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
+
+				var allowedOrigins = Configuration.GetSection("AppSettings")["AllowedOrigins"] ?? string.Empty;
+				var origins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries);
+				
+				builder.WithOrigins(origins)
+					.AllowAnyMethod()
+					.AllowCredentials()
+					.WithHeaders("Authorization", "Accept")
+					.AllowAnyHeader();
+			}));
+		
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				.AddJwtBearer(options => {
 					var localOptions = new AuthOptions();
@@ -82,6 +94,8 @@ namespace GraphQlServer
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IHttpContextAccessor contextAccessor)
 		{
+			app.UseCors("MyPolicy");
+
 			loggerFactory.AddConsole();
 
 			app.UseDeveloperExceptionPage();
