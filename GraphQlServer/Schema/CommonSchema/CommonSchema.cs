@@ -16,28 +16,31 @@ namespace SkdScheme.CommonSchema
 			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
 			var schemaDescription = schemaTools.GetSchemaDescription(schemaName);
 
-			var commonSchema = new ObjectGraphType
+			foreach (var type in schemaDescription.Types)
 			{
-				Name = schemaDescription.Id
-			};
-			
-			foreach (var el in schemaDescription.Columns)
-			{
-				commonSchema.DictionaryField(new StringGraphType(), el.Name.ToLower(), el.Description);
-			}
+				var commonType = new ObjectGraphType
+				{
+					Name = schemaDescription.Id
+				};
 
-			var root = new ObjectGraphType
-			{
-				Name = "QueryRoot"
-			};
+				foreach (var col in type.Columns)
+				{
+					commonType.DictionaryField(new StringGraphType(), col.Name.ToLower(), col.Description);
 
-			root.Field(schemaDescription.Id, new ListGraphType(commonSchema), resolve: ctx => {
-					return schemaTools.GetDataForQueriedColumns(schemaDescription, ctx.SubFields.Keys.ToList());
 				}
-			);
 
-			Query = root;
-			RegisterTypes(commonSchema);
+				var root = new ObjectGraphType
+				{
+					Name = "QueryRoot"
+				};
+
+				root.Field(schemaDescription.Id, new ListGraphType(commonType), resolve: ctx => {
+						return schemaTools.GetDataForQueriedColumns(schemaDescription, ctx.SubFields.Keys.ToList());
+					}
+				);
+				Query = root;
+				RegisterTypes(commonType);
+			}
 		}
 
 		public static void Config(IServiceCollection services)

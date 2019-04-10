@@ -6,9 +6,17 @@ namespace SkdScheme.CommonSchema
 	{
 		public string Name { get; set; }
 		public string Id { get; set; }
-		public string Condition { get; set; }
-		public string BrowseId { get; set; }
+		public List<SchemaType> Types { get; set; }
+	}
+
+	public class SchemaType
+	{
+		public string Id { get; set; }
+		public string Anonymously { get; set; }
 		public string TableName { get; set; }
+		public string BrowseId { get; set; }
+		public string Name { get; set; }
+		public string Condition { get; set; }
 		public List<SchemaColumn> Columns { get; set; }
 	}
 
