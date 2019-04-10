@@ -53,27 +53,23 @@ namespace SkdScheme.CommonSchema
 			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
 			command.Parameters.Add(new SqlParameter("@schemaid", shcema.Id));
 			command.Connection.Open();
-			var one = "";
-			var two = "";
-			var three = "";
 			using (var reader = command.ExecuteReader())
 			{
-				if (!reader.HasRows)
+				if (reader.HasRows)
 				{
-					return null;
-				}
-				while (reader.Read())
-				{
-					shcema.Types.Add(new SchemaType
+					while (reader.Read())
 					{
-						Id = reader.GetString(typeIndex).Trim(),
-						Name = reader.GetString(nameIndex).Trim(),
-						TableName=reader.GetString(dbIndex).Trim(),
-						BrowseId = reader.GetString(krepIndex).Trim(),
-						Anonymously = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
-						Condition = reader.GetString(conditionIndex),
-						Columns = new List<SchemaColumn>()
-					});
+						shcema.Types.Add(new SchemaType
+						{
+							Id = reader.GetString(typeIndex).Trim(),
+							Name = reader.GetString(nameIndex).Trim(),
+							TableName=reader.GetString(dbIndex).Trim(),
+							BrowseId = reader.GetString(krepIndex).Trim(),
+							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
+							Condition = reader.GetString(conditionIndex),
+							Columns = new List<SchemaColumn>()
+						});
+					}
 				}
 			}
 			command.Connection.Close();
@@ -89,54 +85,45 @@ namespace SkdScheme.CommonSchema
 				command.Connection.Open();
 				using (var reader = command.ExecuteReader())
 				{
-					if (!reader.HasRows)
+					if (reader.HasRows)
 					{
-						return null;
-					}
-
-					int increment = 0;
-					while (reader.Read())
-					{
-						var tempColumn = new SchemaColumn
+						while (reader.Read())
 						{
-							Expression = reader.IsDBNull(expressionIndex) ? null : reader.GetString(expressionIndex).Trim(),
-							Description = reader.IsDBNull(nameIndex) ? null : reader.GetString(nameIndex).Trim(),
-							Name = reader.GetString(columnNameIndex).Trim(),
-						};
-						if (tempColumn.Name == "")
-						{
-							tempColumn.Name = "cell" + increment++;
+							var tempColumn = new SchemaColumn {
+								Expression = reader.IsDBNull(expressionIndex) ? null : reader.GetString(expressionIndex).Trim(),
+								Description = reader.IsDBNull(nameIndex) ? null : reader.GetString(nameIndex).Trim(),
+								Name = reader.GetString(columnNameIndex).Trim(),
+							};
+							if (string.IsNullOrEmpty(tempColumn.Name))
+							{
+								tempColumn.Name = getNewColumnName(shcema.Types[i]);
+							}
+							shcema.Types[i].Columns.Add(tempColumn);
 						}
-
-						shcema.Types[i].Columns.Add(tempColumn);
 					}
 				}
 				command.Connection.Close();
 			}
-
 			return shcema;
 		}
 
 		/// <summary>
-		/// Метод для получение колонок схемы
+		/// Метод для получения данных для типа
 		/// </summary>
-		/// <param name="schema"> Схема</param>
-		/// <param name="names"> Поля, который запрашиваем </param>
+		/// <param name="type"> тип</param>
+		/// <param name="columns"> Поля, которыe запрашиваем </param>
 		/// <returns></returns>
-		public List<Dictionary<string, object>> GetDataForQueriedColumns(SchemaDescription schema, List<string> names)
+		public List<Dictionary<string, object>> GetDataForType(SchemaType type, List<string> columns)
 		{
 			var expressions = new List<string>();
 
-			foreach (var type in schema.Types)
+			foreach (var el in type.Columns)
 			{
-				foreach (var el in type.Columns)
+				foreach (var name in columns)
 				{
-					foreach (var name in names)
+					if (el.Name.ToLower() == name)
 					{
-						if (el.Name.ToLower() == name)
-						{
-							expressions.Add(el.Expression);
-						}
+						expressions.Add(el.Expression);
 					}
 				}
 			}
@@ -145,10 +132,8 @@ namespace SkdScheme.CommonSchema
 
 			var resultData = new List<Dictionary<string, object>>();
 
-			foreach (var type in schema.Types)
-			{
 				string condition = "";
-				if (type.Condition != "")
+				if (!string.IsNullOrEmpty(type.Condition))
 				{
 					condition = String.Format("where {0}", type.Condition);
 				}
@@ -169,14 +154,45 @@ namespace SkdScheme.CommonSchema
 						dictionary.Clear();
 						for (int i = 0; i < expressions.Count; i++)
 						{
-							dictionary.Add(names[i], reader.GetString(i).Trim());
+							dictionary.Add(columns[i], reader.GetString(i).Trim());
 						}
 						resultData.Add(dictionary);
 					}
 				}
 				command.Connection.Close();
-			}
+
 			return resultData;
+		}
+		/// <summary>
+		/// Метод, который возвращает новое уникальное имя для колонки
+		/// </summary>
+		/// <param name="type">Тип, от него нам нужны только колонки</param>
+		/// <returns>Уникальное имя для колонки</returns>
+		private string getNewColumnName(SchemaType type)
+		{
+			var columnName = "cell";
+			var tempColumnNumber = 0;
+			var isNewName = true;
+			while (tempColumnNumber < 99999)
+			{
+				tempColumnNumber++;
+				isNewName = true;
+				for (var j = 0; j < type.Columns.Count; j++)
+				{
+					columnName = "cell" + tempColumnNumber;
+					if (columnName == type.Columns[j].Name.ToLower())
+					{
+						isNewName = false;
+						break;
+					}
+				}
+
+				if (isNewName)
+				{
+					break;
+				}
+			}
+			return columnName;
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace SkdScheme.CommonSchema
 	public class SchemaType
 	{
 		public string Id { get; set; }
-		public string Anonymously { get; set; }
+		public string AllowAnonymosly { get; set; }
 		public string TableName { get; set; }
 		public string BrowseId { get; set; }
 		public string Name { get; set; }
