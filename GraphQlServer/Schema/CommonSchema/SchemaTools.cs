@@ -67,7 +67,7 @@ namespace SkdScheme.CommonSchema
 							TableName=reader.GetString(dbIndex).Trim(),
 							BrowseId = reader.GetString(krepIndex).Trim(),
 							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
-							Condition = reader.GetString(conditionIndex),
+							Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex),
 							Columns = new List<SchemaColumn>()
 						});
 					}
@@ -172,20 +172,19 @@ namespace SkdScheme.CommonSchema
 		private string getNewColumnName(SchemaType type)
 		{
 			var tempColumnNumber = 0;
-			var columnName = "";
 			while (tempColumnNumber < 99999)
 			{
 				tempColumnNumber++;
-				columnName = "cell" + tempColumnNumber;
+				var columnName = "cell" + tempColumnNumber;
 
 				var isNewName = type.Columns.All(c => !string.Equals(c.Name, columnName, StringComparison.InvariantCultureIgnoreCase));
 
 				if (isNewName)
 				{
-					break;
+					return columnName;
 				}
 			}
-			return columnName;
+			return null;
 		}
 	}
 }
