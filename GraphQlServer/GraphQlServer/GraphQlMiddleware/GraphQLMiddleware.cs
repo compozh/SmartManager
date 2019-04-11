@@ -48,16 +48,17 @@ namespace GraphQlServer
 
 		private bool isGraphQlRequest(HttpContext context)
 		{
-			return context.User.Identity.IsAuthenticated && context.Request.Path.StartsWithSegments(_settings.Path)
+			return context.Request.Path.StartsWithSegments(_settings.Path)
 					&& string.Equals(context.Request.Method, "POST", StringComparison.OrdinalIgnoreCase);
 		}
 
 		private async Task executeAsync(HttpContext context)
 		{
+			var anonymousСall = !context.User.Identity.IsAuthenticated;
 			var request = deserialize<GraphQLRequest>(context.Request.Body);
 
 			var result = await _executer.ExecuteAsync(_ => {
-				_.Schema = _schemaSelector.GetMatchSchema(request.SchemaName);
+				_.Schema = _schemaSelector.GetMatchSchema(request.SchemaName, anonymousСall);
 				_.Query = request.Query;
 				_.ExposeExceptions = true;
 				_.OperationName = request.OperationName;

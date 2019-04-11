@@ -12,7 +12,7 @@ namespace SkdScheme
 			_resolver = resolver;
 		}
 
-		public ISchema GetMatchSchema(string schemaName)
+		public ISchema GetMatchSchema(string schemaName, bool anonymous—all)
 		{
 			if (typeof(SkdSchema.SkdSchema).Name == schemaName)
 			{
@@ -20,7 +20,7 @@ namespace SkdScheme
 			}
 			else
 			{
-				return new CommonSchema.CommonSchema(_resolver, schemaName);
+				return new CommonSchema.CommonSchema(_resolver, schemaName, anonymous—all);
 			}
 		}
 	}

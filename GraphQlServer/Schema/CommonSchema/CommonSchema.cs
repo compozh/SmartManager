@@ -11,23 +11,26 @@ namespace SkdScheme.CommonSchema
 {
 	public class CommonSchema : Schema
 	{
-		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName) : base(dependencyResolver)
+		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName, bool anonymousСall) : base(dependencyResolver)
 		{
 			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
-			var schemaDescription = schemaTools.GetSchemaDescription(schemaName);
-
+			var schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
+			if (schemaDescription == null)
+			{
+				return;
+			}
 			var root = new ObjectGraphType
 			{
 				Name = "QueryRoot"
 			};
 			Query = root;
+			
 			foreach (var type in schemaDescription.Types)
 			{
 				var commonType = new ObjectGraphType
 				{
 					Name = type.Id,
-					Description = type.Name
-					
+					Description = type.Name,
 				};
 
 				foreach (var col in type.Columns)

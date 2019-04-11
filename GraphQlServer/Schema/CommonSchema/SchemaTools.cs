@@ -20,13 +20,19 @@ namespace SkdScheme.CommonSchema
 		/// </summary>
 		/// <param name="name">Имя схемы в базе</param>
 		/// <returns></returns>
-		public SchemaDescription GetSchemaDescription(string name)
+		public SchemaDescription GetSchemaDescription(string name, bool anonymousСall)
 		{
 			SchemaDescription shcema;
-			int headerIndex = 0;
-			int schemaNameIndex = 1;
-			int anonymusIndex = 2;
-			var command = _client.CreateCommand("select GQSCHEMA.ID, GQSCHEMA.NAME, GQSCHEMA.ALLOWANON from GQSCHEMA where GQSCHEMA.ID = @gqshemid");
+			var headerIndex = 0;
+			var schemaNameIndex = 1;
+			var anonymusIndex = 2;
+
+			var anonymSchemaCall = "where GQSCHEMA.ID = @gqshemid ";
+			if (anonymousСall)
+			{
+				anonymSchemaCall += "AND GQSCHEMA.ALLOWANON = '+'";
+			}
+			var command = _client.CreateCommand($"select GQSCHEMA.ID, GQSCHEMA.NAME, GQSCHEMA.ALLOWANON from GQSCHEMA {anonymSchemaCall}");
 			command.Parameters.Add(new SqlParameter("@gqshemid", name));
 			command.Connection.Open();
 
@@ -41,6 +47,7 @@ namespace SkdScheme.CommonSchema
 				{
 					Id = reader.GetString(headerIndex).Trim(),
 					Name = reader.GetString(schemaNameIndex).Trim(),
+					AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null : reader.GetString(anonymusIndex),
 					Types = new List<SchemaType>()
 				};
 			}
@@ -51,8 +58,12 @@ namespace SkdScheme.CommonSchema
 			var krepIndex = 3;
 			anonymusIndex = 4;
 			var conditionIndex = 5;
-
-			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
+			var anonymTypeCall = "";
+			if (anonymousСall)
+			{
+				anonymTypeCall += "AND GQTYPE.ALLOWANON = '+'";
+			}
+			command = _client.CreateCommand(String.Format(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid {0}", anonymTypeCall));
 			command.Parameters.Add(new SqlParameter("@schemaid", shcema.Id));
 			command.Connection.Open();
 			using (var reader = command.ExecuteReader())

@@ -6,6 +6,7 @@ namespace SkdScheme.CommonSchema
 	{
 		public string Name { get; set; }
 		public string Id { get; set; }
+		public string AllowAnonymosly { get; set; }
 		public List<SchemaType> Types { get; set; }
 	}
 
