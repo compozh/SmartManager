@@ -22,7 +22,7 @@ namespace SkdScheme.CommonSchema
 		/// <returns></returns>
 		public SchemaDescription GetSchemaDescription(string name, bool anonymousСall)
 		{
-			SchemaDescription shcema;
+			SchemaDescription schema;
 			var headerIndex = 0;
 			var schemaNameIndex = 1;
 			var anonymusIndex = 2;
@@ -43,7 +43,7 @@ namespace SkdScheme.CommonSchema
 					return null;
 				}
 				reader.Read();
-				shcema = new SchemaDescription
+				schema = new SchemaDescription
 				{
 					Id = reader.GetString(headerIndex).Trim(),
 					Name = reader.GetString(schemaNameIndex).Trim(),
@@ -64,7 +64,7 @@ namespace SkdScheme.CommonSchema
 				anonymTypeCall += "AND GQTYPE.ALLOWANON = '+'";
 			}
 			command = _client.CreateCommand(String.Format(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid {0}", anonymTypeCall));
-			command.Parameters.Add(new SqlParameter("@schemaid", shcema.Id));
+			command.Parameters.Add(new SqlParameter("@schemaid", schema.Id));
 			command.Connection.Open();
 			using (var reader = command.ExecuteReader())
 			{
@@ -72,7 +72,7 @@ namespace SkdScheme.CommonSchema
 				{
 					while (reader.Read())
 					{
-						shcema.Types.Add(new SchemaType
+						schema.Types.Add(new SchemaType
 						{
 							Id = reader.GetString(typeIndex).Trim(),
 							Name = reader.GetString(nameIndex).Trim(),
@@ -92,11 +92,11 @@ namespace SkdScheme.CommonSchema
 			var columnNameIndex = 2;
 			var fieldTypeIndex = 3;
 			var decIndex = 4;
-			for (var i = 0; i < shcema.Types.Count; i++)
+			for (var i = 0; i < schema.Types.Count; i++)
 			{
 				command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM, REPS.TYPE, REPS.DEC from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
-				command.Parameters.Add(new SqlParameter("@repskrep", shcema.Types[i].BrowseId));
-				command.Parameters.Add(new SqlParameter("@repsdb", shcema.Types[i].TableName));
+				command.Parameters.Add(new SqlParameter("@repskrep", schema.Types[i].BrowseId));
+				command.Parameters.Add(new SqlParameter("@repsdb", schema.Types[i].TableName));
 				command.Connection.Open();
 				using (var reader = command.ExecuteReader())
 				{
@@ -112,15 +112,15 @@ namespace SkdScheme.CommonSchema
 							};
 							if (string.IsNullOrEmpty(tempColumn.Name))
 							{
-								tempColumn.Name = getNewColumnName(shcema.Types[i]);
+								tempColumn.Name = getNewColumnName(schema.Types[i]);
 							}
-							shcema.Types[i].Columns.Add(tempColumn);
+							schema.Types[i].Columns.Add(tempColumn);
 						}
 					}
 				}
 				command.Connection.Close();
 			}
-			return shcema;
+			return schema;
 		}
 
 		/// <summary>
@@ -211,25 +211,7 @@ namespace SkdScheme.CommonSchema
 		/// <returns></returns>
 		private object getValueColumnType(DbDataReader reader, SchemaColumn column, int columnNumber)
 		{
-			switch (column.Type)
-			{
-				case SlvColumnType.Char:
-					return reader.IsDBNull(columnNumber) ? null : reader.GetString(columnNumber);
-				case SlvColumnType.Date:
-					return reader.IsDBNull(columnNumber) ? null : (DateTime?)reader.GetDateTime(columnNumber);
-				case SlvColumnType.DateTime:
-					return reader.IsDBNull(columnNumber) ? null : (DateTime?)reader.GetDateTime(columnNumber);
-				case SlvColumnType.Guid:
-					return reader.IsDBNull(columnNumber) ? null : (Guid?)reader.GetGuid(columnNumber);
-				case SlvColumnType.Memo:
-					return reader.IsDBNull(columnNumber) ? null : reader.GetString(columnNumber);
-				case SlvColumnType.Numeric:
-					return reader.IsDBNull(columnNumber) ? null :  (Int16?)reader.GetInt16(columnNumber);
-				case SlvColumnType.Decimal:
-					return reader.IsDBNull(columnNumber) ? null : (Decimal?)reader.GetDecimal(columnNumber);
-				default:
-					return reader.IsDBNull(columnNumber) ? null : reader.GetString(columnNumber);
-			}
+			return reader.IsDBNull(columnNumber) ? null : reader.GetValue(columnNumber);
 		}
 
 		/// <summary>
