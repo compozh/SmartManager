@@ -6,6 +6,7 @@ using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Web.Data;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SkdScheme.CommonSchema
 {
@@ -13,37 +14,83 @@ namespace SkdScheme.CommonSchema
 	{
 		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName, bool anonymousСall) : base(dependencyResolver)
 		{
-			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
-			var schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
-			if (schemaDescription == null)
-			{
-				return;
-			}
 			var root = new ObjectGraphType
 			{
 				Name = "QueryRoot"
 			};
 			Query = root;
-			
-			foreach (var type in schemaDescription.Types)
-			{
-				var commonType = new ObjectGraphType
-				{
-					Name = type.Id,
-					Description = type.Name,
-				};
 
-				foreach (var col in type.Columns)
+
+			var cache = dependencyResolver.Resolve<IMemoryCache>();
+			//Выбираем из Local Storage схему
+			var schemaFromCache = cache.Get<SchemaDescription>(schemaName);
+			//Проверяем, схему, если нашли в хранилище, то ок
+			if (schemaFromCache != null)
+			{
+				//ПРоверка на то, что запрашиваем схему анонимно, но она не доступна для анонимного вызова.
+				if (anonymousСall && schemaFromCache.AllowAnonymosly != "+")
 				{
-					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
+					return;
+				}
+				foreach (var type in schemaFromCache.Types)
+				{
+					var commonType = new ObjectGraphType
+					{
+						Name = type.Id,
+						Description = type.Name,
+					};
+					foreach (var col in type.Columns)
+					{
+						commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
+					}
+					//Выборка доступных типов для анонимного запроса
+					if (anonymousСall && type.AllowAnonymosly == "+")
+					{
+						root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
+								return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+							}
+						);
+					}
+					//Выборка для тех, кто залогинен
+					if (!anonymousСall)
+					{
+						root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
+								return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+							}
+						);
+					}
+					RegisterTypes(commonType);
+				}
+			}
+			else { //если не нашли схему в Local Storage
+				var schemaTools = dependencyResolver.Resolve<SchemaTools>();
+				var schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
+				if (schemaDescription == null)
+				{
+					return;
 				}
 
-				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-						return schemaTools.GetDataForType(type, ctx.SubFields.Keys.ToList());
+				foreach (var type in schemaDescription.Types)
+				{	
+					var commonType = new ObjectGraphType
+					{
+						Name = type.Id,
+						Description = type.Name,
+					};
+
+					foreach (var col in type.Columns)
+					{
+						commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 					}
-				);
-				
-				RegisterTypes(commonType);
+
+					root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx =>
+					{
+						return schemaTools.GetDataForType(type, ctx.SubFields.Keys.ToList());
+					});
+
+					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
+					RegisterTypes(commonType);
+				}
 			}
 		}
 
@@ -62,28 +109,20 @@ namespace SkdScheme.CommonSchema
 			{
 				case SlvColumnType.Char:
 					return new StringGraphType();
-					break;
 				case SlvColumnType.Date:
 					return new DateGraphType();
-					break;
 				case SlvColumnType.Guid:
 					return new GuidGraphType();
-					break;
 				case SlvColumnType.Memo:
 					return new StringGraphType();
-					break;
 				case SlvColumnType.Numeric:
 					return new IntGraphType();
-					break;
 				case SlvColumnType.DateTime:
 					return new DateTimeGraphType();
-					break;
 				case SlvColumnType.Decimal:
 					return new DecimalGraphType();
-					break;
 				default:
 					return new StringGraphType();
-					break;
 			}
 		}
 	}
