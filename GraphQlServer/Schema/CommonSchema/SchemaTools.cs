@@ -27,13 +27,13 @@ namespace SkdScheme.CommonSchema
 			var schemaNameIndex = 1;
 			var anonymusIndex = 2;
 
-			var anonymSchemaCall = $"where GQSCHEMA.ID = '{name}' ";
+			var anonymSchemaCall = "where GQSCHEMA.ID = @gqshemid ";
 			if (anonymousСall)
 			{
 				anonymSchemaCall += "AND GQSCHEMA.ALLOWANON = '+'";
 			}
 			var command = _client.CreateCommand($"select GQSCHEMA.ID, GQSCHEMA.NAME, GQSCHEMA.ALLOWANON from GQSCHEMA {anonymSchemaCall}");
-			//command.Parameters.Add(new SqlParameter("@gqshemid", ));
+			command.Parameters.Add(new SqlParameter("@gqshemid", name));
 			command.Connection.Open();
 
 			using (var reader = command.ExecuteReader())
