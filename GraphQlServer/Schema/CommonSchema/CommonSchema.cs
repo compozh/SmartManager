@@ -48,6 +48,11 @@ namespace SkdScheme.CommonSchema
 		{
 			services.AddSingleton<SchemaTools>();
 		}
+		/// <summary>
+		/// Преобразование типа колонки к типу данных GraphQl
+		/// </summary>
+		/// <param name="type">Тип колонки</param>
+		/// <returns></returns>
 		private IGraphType typeSelection(SlvColumnType type)
 		{
 			switch (type)
@@ -69,6 +74,9 @@ namespace SkdScheme.CommonSchema
 					break;
 				case SlvColumnType.DateTime:
 					return new DateTimeGraphType();
+					break;
+				case SlvColumnType.Decimal:
+					return new DecimalGraphType();
 					break;
 				default:
 					return new StringGraphType();

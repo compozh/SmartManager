@@ -35,9 +35,15 @@ namespace SkdScheme.CommonSchema
 		/// Guid GuidType
 		/// </summary>
 		Guid,
+
+		/// <summary>
+		/// Decimal DecimalType
+		/// </summary>
+		Decimal,
 		/// <summary>
 		/// Любые другие типы, в результате будут StringGraphType()
 		/// </summary>
-		ANY
+		Other
+
 	}
 }
