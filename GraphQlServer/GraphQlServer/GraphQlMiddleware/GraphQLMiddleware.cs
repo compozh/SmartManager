@@ -59,6 +59,7 @@ namespace GraphQlServer
 			var result = await _executer.ExecuteAsync(_ => {
 				_.Schema = _schemaSelector.GetMatchSchema(request.SchemaName);
 				_.Query = request.Query;
+				_.ExposeExceptions = true;
 				_.OperationName = request.OperationName;
 				_.Inputs = request.Variables.ToInputs();
 				_.UserContext = _settings.BuildUserContext?.Invoke(context);

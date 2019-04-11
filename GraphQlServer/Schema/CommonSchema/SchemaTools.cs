@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using Web.Data;
@@ -78,9 +79,11 @@ namespace SkdScheme.CommonSchema
 			var expressionIndex = 0;
 			var descriptionIndex = 1;
 			var columnNameIndex = 2;
-			for (int i = 0; i < shcema.Types.Count; i++)
+			var fieldTypeIndex = 3;
+			var decIndex = 4;
+			for (var i = 0; i < shcema.Types.Count; i++)
 			{
-				command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
+				command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM, REPS.TYPE, REPS.DEC from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
 				command.Parameters.Add(new SqlParameter("@repskrep", shcema.Types[i].BrowseId));
 				command.Parameters.Add(new SqlParameter("@repsdb", shcema.Types[i].TableName));
 				command.Connection.Open();
@@ -92,8 +95,9 @@ namespace SkdScheme.CommonSchema
 						{
 							var tempColumn = new SchemaColumn {
 								Expression = reader.IsDBNull(expressionIndex) ? null : reader.GetString(expressionIndex).Trim(),
-								Description = reader.IsDBNull(nameIndex) ? null : reader.GetString(nameIndex).Trim(),
+								Description = reader.IsDBNull(descriptionIndex) ? null : reader.GetString(descriptionIndex).Trim(),
 								Name = reader.GetString(columnNameIndex).Trim(),
+								Type = reader.IsDBNull(fieldTypeIndex) ? 0 : convertToEnum(reader.GetString(fieldTypeIndex).Trim(), reader.GetInt16(decIndex)),
 							};
 							if (string.IsNullOrEmpty(tempColumn.Name))
 							{
@@ -116,54 +120,54 @@ namespace SkdScheme.CommonSchema
 		/// <returns></returns>
 		public List<Dictionary<string, object>> GetDataForType(SchemaType type, List<string> columns)
 		{
-			var expressions = new List<string>();
+			var schemaColumns = new List<SchemaColumn>();
 
-			foreach (var el in type.Columns)
+			foreach (var name in columns)
 			{
-				foreach (var name in columns)
+				 foreach (var el in type.Columns)
 				{
-					if (el.Name.ToLower() == name)
+					if (String.Equals(el.Name, name, StringComparison.InvariantCultureIgnoreCase))
 					{
-						expressions.Add(el.Expression);
+						schemaColumns.Add(el);
 					}
 				}
 			}
 			//Select к базе
-			string selectQuery = string.Join(", ", expressions);
+			var selectQuery = string.Join(", ", schemaColumns.Select(e=> $"{e.Expression} as {e.Name}"));
 
 			var resultData = new List<Dictionary<string, object>>();
 
-				string condition = "";
-				if (!string.IsNullOrEmpty(type.Condition))
+			var condition = "";
+			if (!string.IsNullOrEmpty(type.Condition))
+			{
+				condition = $"where {type.Condition}";
+			}
+			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {condition}");
+
+			command.Connection.Open();
+
+			using (var reader = command.ExecuteReader())
+			{
+				if (!reader.HasRows)
 				{
-					condition = String.Format("where {0}", type.Condition);
+					return null;
 				}
-
-				var command = _client.CreateCommand(String.Format("select {0} from {1} {2}", selectQuery, type.TableName, condition));
-
-				command.Connection.Open();
-
-				using (var reader = command.ExecuteReader())
+				while (reader.Read())
 				{
-					if (!reader.HasRows)
+					Dictionary<string, object> dictionary = new Dictionary<string, object>();
+					dictionary.Clear();
+					for (var i = 0; i < schemaColumns.Count; i++)
 					{
-						return null;
+						dictionary.Add(columns[i], getValueColumnType(reader, schemaColumns[i], i));
 					}
-					while (reader.Read())
-					{
-						Dictionary<string, object> dictionary = new Dictionary<string, object>();
-						dictionary.Clear();
-						for (int i = 0; i < expressions.Count; i++)
-						{
-							dictionary.Add(columns[i], reader.GetString(i).Trim());
-						}
-						resultData.Add(dictionary);
-					}
+					resultData.Add(dictionary);
 				}
-				command.Connection.Close();
+			}
+			command.Connection.Close();
 
 			return resultData;
 		}
+
 		/// <summary>
 		/// Метод, который возвращает новое уникальное имя для колонки
 		/// </summary>
@@ -185,6 +189,66 @@ namespace SkdScheme.CommonSchema
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Определение типа колонки 
+		/// </summary>
+		/// <param name="reader">  reader </param>
+		/// <param name="column">  тип поля</param>
+		/// <param name="columnNumber"> номер колонки, чтобы считать </param>
+		/// <returns></returns>
+		private object getValueColumnType(DbDataReader reader, SchemaColumn column, int columnNumber)
+		{
+			switch (column.Type)
+			{
+				case SlvColumnType.Char:
+					return reader.IsDBNull(columnNumber) ? null : reader.GetString(columnNumber);
+				case SlvColumnType.Date:
+					return reader.IsDBNull(columnNumber) ? null : (DateTime?)reader.GetDateTime(columnNumber);
+				case SlvColumnType.DateTime:
+					return reader.IsDBNull(columnNumber) ? null : (DateTime?)reader.GetDateTime(columnNumber);
+				case SlvColumnType.Guid:
+					return reader.IsDBNull(columnNumber) ? null : (Guid?)reader.GetGuid(columnNumber);
+				case SlvColumnType.Memo:
+					return reader.IsDBNull(columnNumber) ? null : reader.GetString(columnNumber);
+				case SlvColumnType.Numeric:
+					return reader.IsDBNull(columnNumber) ? null :  (Int16?)reader.GetInt16(columnNumber);
+				case SlvColumnType.Decimal:
+					return reader.IsDBNull(columnNumber) ? null : (Decimal?)reader.GetDecimal(columnNumber);
+				default:
+					return reader.IsDBNull(columnNumber) ? null : reader.GetString(columnNumber);
+			}
+		}
+
+		/// <summary>
+		/// Определение типа колонки по коду типа, преобразование типа колонки в enum
+		/// </summary>
+		/// <param name="fieldType"></param>
+		/// <returns></returns>
+		private SlvColumnType convertToEnum(string fieldType, Int16 dec)
+		{
+			switch (fieldType)
+			{
+				case "C":
+					return SlvColumnType.Char;
+				case "N":
+					if (dec.Equals(0))
+					{
+						return SlvColumnType.Numeric;
+					}
+					return SlvColumnType.Decimal;
+				case "D":
+					return SlvColumnType.Date;
+				case "T":
+					return SlvColumnType.DateTime;
+				case "M":
+					return SlvColumnType.Memo;
+				case "G":
+					return SlvColumnType.Guid;
+				default:
+					return SlvColumnType.Other;
+			}
 		}
 	}
 }
