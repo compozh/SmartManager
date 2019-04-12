@@ -20,77 +20,47 @@ namespace SkdScheme.CommonSchema
 			};
 			Query = root;
 
-
+			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
 			var cache = dependencyResolver.Resolve<IMemoryCache>();
 			//Выбираем из Local Storage схему
-			var schemaFromCache = cache.Get<SchemaDescription>(schemaName);
+			var schemaDescription = cache.Get<SchemaDescription>(schemaName);
 			//Проверяем, схему, если нашли в хранилище, то ок
-			if (schemaFromCache != null)
+			if (schemaDescription == null)
 			{
-				//ПРоверка на то, что запрашиваем схему анонимно, но она не доступна для анонимного вызова.
-				if (anonymousСall && schemaFromCache.AllowAnonymosly != "+")
+				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
+				if (schemaDescription != null)
 				{
-					return;
-				}
-				foreach (var type in schemaFromCache.Types)
-				{
-					var commonType = new ObjectGraphType
-					{
-						Name = type.Id,
-						Description = type.Name,
-					};
-					foreach (var col in type.Columns)
-					{
-						commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
-					}
-					//Выборка доступных типов для анонимного запроса
-					if (anonymousСall && type.AllowAnonymosly == "+")
-					{
-						root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-								return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
-							}
-						);
-					}
-					//Выборка для тех, кто залогинен
-					if (!anonymousСall)
-					{
-						root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-								return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
-							}
-						);
-					}
-					RegisterTypes(commonType);
+					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
 				}
 			}
-			else { //если не нашли схему в Local Storage
-				var schemaTools = dependencyResolver.Resolve<SchemaTools>();
-				var schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
-				if (schemaDescription == null)
+			//Проверка на то, что запрашиваем схему анонимно, но она не доступна для анонимного вызова.
+			if (anonymousСall && schemaDescription.AllowAnonymosly != "+")
+			{
+				return;
+			}
+
+			foreach (var type in schemaDescription.Types)
+			{
+				var commonType = new ObjectGraphType
 				{
-					return;
+					Name = type.Id,
+					Description = type.Name,
+				};
+				foreach (var col in type.Columns)
+				{
+					//Наполнение типа полями
+					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 				}
-
-				foreach (var type in schemaDescription.Types)
-				{	
-					var commonType = new ObjectGraphType
-					{
-						Name = type.Id,
-						Description = type.Name,
-					};
-
-					foreach (var col in type.Columns)
-					{
-						commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
-					}
-
-					root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx =>
-					{
-						return schemaTools.GetDataForType(type, ctx.SubFields.Keys.ToList());
-					});
-
-					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
-					RegisterTypes(commonType);
+				//Выборка доступных типов для анонимного запроса
+				if (type.AllowAnonymosly == "+" || !anonymousСall)
+				{
+					//Наполнение схемы типами
+					root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
+							return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+						}
+					);
 				}
+				RegisterTypes(commonType);
 			}
 		}
 
