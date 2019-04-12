@@ -32,6 +32,10 @@ namespace SkdScheme.CommonSchema
 				{
 					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
 				}
+				else
+				{
+					return;
+				}
 			}
 			//Проверка на то, что запрашиваем схему анонимно, но она не доступна для анонимного вызова.
 			if (anonymousСall && schemaDescription.AllowAnonymosly != "+")
@@ -41,6 +45,11 @@ namespace SkdScheme.CommonSchema
 
 			foreach (var type in schemaDescription.Types)
 			{
+				//Проверка типа на анонимность
+				if (type.AllowAnonymosly != "+"  && anonymousСall)
+				{
+					continue;
+				}
 				var commonType = new ObjectGraphType
 				{
 					Name = type.Id,
@@ -51,15 +60,13 @@ namespace SkdScheme.CommonSchema
 					//Наполнение типа полями
 					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 				}
-				//Выборка доступных типов для анонимного запроса
-				if (type.AllowAnonymosly == "+" || !anonymousСall)
-				{
-					//Наполнение схемы типами
-					root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-							return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
-						}
-					);
-				}
+				
+				//Наполнение схемы типами
+				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
+						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+					}
+				);
+				
 				RegisterTypes(commonType);
 			}
 		}
