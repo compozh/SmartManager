@@ -5,7 +5,7 @@
         <template v-for="col in skdlist.columns" >
           <td :key="col.value">
             
-            <router-link v-if="props.item.userId && col.value == 'fullName'" :to="props.item.userId"> {{ props.item[col.value] }}</router-link>
+            <router-link v-if="props.item.userId && col.value == 'fullName'" :to="{ name:'SKDUSER', params:{userid:props.item.userId}}"> {{ props.item[col.value] }}</router-link>
             <span v-else>{{ props.item[col.value] }}</span>
             </td>
         </template>

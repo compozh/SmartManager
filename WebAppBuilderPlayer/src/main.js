@@ -6,10 +6,8 @@ import store from './store/index';
 import './registerServiceWorker';
 import 'vuetify/dist/vuetify.min.css';
 import _ from 'lodash';
-import {
-  resetRouter
-} from './router';
-import Axios from 'axios';
+import {  resetRouter } from './router';
+
 
 
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
@@ -30,7 +28,7 @@ new Vue({
 store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).then(() => {
   var app = store.state.applicationDescription;
   // Формируем роуты
-  var routes = app.Routes.map(generateRouteFromDescription)
+  var routes =  _.orderBy(app.Routes||[], ["Sort"]).map(generateRouteFromDescription)
   // Сбрасываем старый роутер
   resetRouter([])
 
@@ -44,9 +42,7 @@ store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).th
   // формируем новый роутер
   router.addRoutes([{
     path: `/${app.Id}`,
-    component: getInternalComponentDescription(
-      app.RootComponent
-    ),
+    component: getInternalComponentDescription(app.RootComponent),
     children: routes
   }])
 
@@ -71,10 +67,14 @@ function createComponentObject(com){
   let innerComp = {
     id: com.Id,
     name: com.Name,
-    datasource: com.DataSource,
+    // источник данных для компонента
+    datasource: com.DataSource ? {
+      query: com.DataSource,
+      schema: com.DataSourceSchema
+    } : undefined,
     attrs: {},
     slot:com.Slot,
-    children: com.ChildComponents.map(subCom => createComponentObject(subCom))
+    children: _.orderBy(com.ChildComponents, "Sort").map(subCom => createComponentObject(subCom))
   }; 
    // конвертируем свойства к нужному виду:
    (com.Properties || []).forEach(property => {
@@ -103,9 +103,6 @@ function getInternalComponentDescription(com) {
   })
 
 }
-
-
-
 /** Валидация доступа пользователя к определенным маршрутам */
 let routerBeforeEachFunction = (to,from, next, loginRouteExists)=>{
     // Если переходим на логин, запоминаем путь, для возвращения
@@ -123,8 +120,6 @@ let routerBeforeEachFunction = (to,from, next, loginRouteExists)=>{
       } 
       return;
     }
-
-   
     next();
 }
 
@@ -134,9 +129,9 @@ let generateRouteFromDescription = (route) =>
     name: route.Id,
     path: route.Path,
     // Компоненты в маршруте
-    components: createComponentsForRoute(route.Components),
+    components: createComponentsForRoute(_.orderBy(route.Components, "Sort")),
     // Вложенные маршруты
-    children: (route.Children||[]).map(generateRouteFromDescription),
+    children: _.orderBy(route.Children||[], ["Sort"]).map(generateRouteFromDescription),
     meta: {
       AllowAnonymous: route.AllowAnonymous
     }

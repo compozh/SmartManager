@@ -49,26 +49,7 @@ const actions = ({
         
       })
   },
-  // GetAppLayout(context, componentName) {
-  //   return Axios.post('http://localhost:5000/api/Core/GetAppLayout?componentName=' +
-  //       componentName, undefined, {
-  //         // headers: {
-  //         //   'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-  //         // },
-  //         // withCredentials: true
-  //       })
-  //     .then((response => {
-  //       if (response.data != 'WRONG_TICKET' && response.data != "") {
-  //         var myObject = {
-  //           data: response.data,
-  //           key: componentName
-  //         }
-  //         context.commit('setAppLayout', myObject)
-  //       } else {
-  //         localStorage.clear();
-  //       }
-  //     }))
-  // },
+
 
   /** Загрузить данные для компонента */
   LoadDataForComponent(context, {datasource,key}){
@@ -77,7 +58,7 @@ const actions = ({
       url: 'http://localhost:5002/api/graphql',
       withCredentials:true,
       headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
-      data: { SchemaName:"SkdSchema", query: datasource}
+      data: { SchemaName:datasource.schema, query: datasource.query}
     }).then(resp => {
       context.commit("setAppData", { key, data:resp.data })
       //console.log(resp.data)

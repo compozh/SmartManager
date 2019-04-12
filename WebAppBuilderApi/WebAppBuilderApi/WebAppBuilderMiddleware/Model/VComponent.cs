@@ -9,7 +9,9 @@ namespace WebAppBuilderApi.Model
 		public string NameInRoute { get;set;}
 		public List<VComponentProperty> Properties { get; set; }
 		public string DataSource { get; set; }
+		public string DataSourceSchema { get; set; }
 		public string Slot { get; set; }
+		public string Sort { get; set; }
 		public List<VComponent> ChildComponents { get; set; }
 	}
 }
