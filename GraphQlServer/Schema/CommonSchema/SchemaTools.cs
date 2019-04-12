@@ -58,12 +58,8 @@ namespace SkdScheme.CommonSchema
 			var krepIndex = 3;
 			anonymusIndex = 4;
 			var conditionIndex = 5;
-			var anonymTypeCall = "";
-			if (anonymousСall)
-			{
-				anonymTypeCall += "AND GQTYPE.ALLOWANON = '+'";
-			}
-			command = _client.CreateCommand(String.Format(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid {0}", anonymTypeCall));
+
+			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
 			command.Parameters.Add(new SqlParameter("@schemaid", schema.Id));
 			command.Connection.Open();
 			using (var reader = command.ExecuteReader())
@@ -205,9 +201,9 @@ namespace SkdScheme.CommonSchema
 		/// <summary>
 		/// Определение типа колонки 
 		/// </summary>
-		/// <param name="reader">  reader </param>
-		/// <param name="column">  тип поля</param>
-		/// <param name="columnNumber"> номер колонки, чтобы считать </param>
+		/// <param name="reader">Reader </param>
+		/// <param name="column">Тип поля</param>
+		/// <param name="columnNumber">Номер колонки, чтобы считать </param>
 		/// <returns></returns>
 		private object getValueColumnType(DbDataReader reader, SchemaColumn column, int columnNumber)
 		{
