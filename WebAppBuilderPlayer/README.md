@@ -1,4 +1,4 @@
-# smart_manager
+# web_app_player
 
 ## Project setup
 ```

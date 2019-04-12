@@ -28,7 +28,7 @@ export default {
             }
             //console.log(this.$router)
             var links = this.$store.state.applicationDescription.Routes;
-            links = [...links, ...links[1].Children]
+            links = [...links, ...links[1].Children, ...links[0].Children]
             console.log(links)
             return links.filter(l => l.Name)
 

@@ -152,12 +152,12 @@ export default {
       var datasource = this.internalComponent.datasource;
 
       let reg = new RegExp('\\$route\\.params\\.([a-zA-Z0-9_]*)', 'gi');
-      let matches = reg.exec(datasource)
+      let matches = reg.exec(datasource.query)
       if(matches != null){
         // получаем значение параметра из роутера
         let paramName = matches[1]
         let paramValue = this.$route.params[paramName]
-        datasource = datasource.replace(reg, `"${paramValue}"`) 
+        datasource.query = datasource.query.replace(reg, `"${paramValue}"`) 
       }
 
       this.$store.dispatch("LoadDataForComponent", {

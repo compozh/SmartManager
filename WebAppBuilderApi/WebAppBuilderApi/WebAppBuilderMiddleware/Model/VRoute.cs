@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace WebAppBuilderApi.Model
 {
@@ -8,7 +9,7 @@ namespace WebAppBuilderApi.Model
 		public string Path { get; set; }
 		public bool AllowAnonymous { get; set; }
 		public string Name { get; set; }
-		
+		public string Sort { get; set; }
 		public List<VComponent> Components { get;set;}
 		public List<VRoute> Children { get;set;}
 	}
