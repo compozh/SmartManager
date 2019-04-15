@@ -2,8 +2,6 @@ import Axios from "axios";
 import * as jsonpatch from '../patching'
 
 
-
-
 let myConfig = {
   GrapgQlUrl:undefined,
   WebAppBuilderUrl:undefined,
@@ -15,7 +13,7 @@ let LoadConfig = new Promise((resolve,reject ) => {
     resolve();
     return;
   }
-  Axios.get('/appsettings.json').then(response=>{
+  Axios.get('./appsettings.json').then(response=>{
     if(response.status == 200){
 
         myConfig.GrapgQlUrl = response.data.GrapgQlUrl
