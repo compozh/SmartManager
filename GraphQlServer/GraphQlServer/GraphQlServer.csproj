@@ -11,7 +11,7 @@
     <PackageReference Include="Web.Authentication" Version="1.0.10" />
     <PackageReference Include="Web.Data" Version="1.0.1" />
     <PackageReference Include="Web.Tools" Version="1.0.4" />
-    <PackageReference Include="Web.WebRequests" Version="1.0.9" />
+    <PackageReference Include="Web.WebRequests" Version="1.0.11" />
   </ItemGroup>
 
   <ItemGroup>

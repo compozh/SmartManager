@@ -6,7 +6,10 @@ using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Web.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using Web.WebRequests;
 
 namespace SkdScheme.CommonSchema
 {
@@ -60,10 +63,12 @@ namespace SkdScheme.CommonSchema
 					//Наполнение типа полями
 					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 				}
+				//Запрос на сервер, для получение Join'ов
+				var joins = GetJoins(dependencyResolver.Resolve<WebRequestsTools>(), "REPS", type.BrowseId, type.TableName).Result as Dictionary<string, string>;
 				
 				//Наполнение схемы типами
 				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList(), joins);
 					}
 				);
 				
@@ -101,6 +106,16 @@ namespace SkdScheme.CommonSchema
 				default:
 					return new StringGraphType();
 			}
+		}
+
+		private async Task<object> GetJoins(WebRequestsTools webRequest, string type, string browseId, string tableName)
+		{
+			var args = "{\"TYPEID\":\""+type+"\", \"BROWSEID\":\""+ browseId + "\", \"TABLENAME\":\""+ tableName + "\"}";
+			
+			var temp = await webRequest.CallWebRequestAsync("GETGQJOINS", args);
+			var t = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp.Content.ToString());
+
+			return t;
 		}
 	}
 }
