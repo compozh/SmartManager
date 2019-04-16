@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppBuilderApi", "WebAppBuilderApi\WebAppBuilderApi.csproj", "{B9295753-56FA-44AC-9A5A-D7374CD69196}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppBuilderMiddleware", "WebAppBuilderMiddleware\WebAppBuilderMiddleware.csproj", "{765CC0DB-548B-4B3E-AC7E-7296E745C577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationMiddleware", "AuthenticationMiddleware\AuthenticationMiddleware.csproj", "{4AC52275-4979-45A4-B49B-1800EAC54396}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +19,21 @@ Global
 		{B9295753-56FA-44AC-9A5A-D7374CD69196}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9295753-56FA-44AC-9A5A-D7374CD69196}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9295753-56FA-44AC-9A5A-D7374CD69196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{765CC0DB-548B-4B3E-AC7E-7296E745C577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{765CC0DB-548B-4B3E-AC7E-7296E745C577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{765CC0DB-548B-4B3E-AC7E-7296E745C577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{765CC0DB-548B-4B3E-AC7E-7296E745C577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AC52275-4979-45A4-B49B-1800EAC54396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AC52275-4979-45A4-B49B-1800EAC54396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AC52275-4979-45A4-B49B-1800EAC54396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AC52275-4979-45A4-B49B-1800EAC54396}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C78E8B46-1758-4880-8AC9-5E1151519989}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

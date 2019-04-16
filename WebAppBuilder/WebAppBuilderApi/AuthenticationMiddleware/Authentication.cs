@@ -1,15 +1,13 @@
 using System;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Web.Authentication;
 
-namespace WebAppBuilderApi.Authentication
+namespace AuthenticationMiddleware
 {
-	public class AuthenticationMiddleware
+	public class Authentication
 	{
 		private readonly RequestDelegate _next;
 		private readonly AuthenticationSettings _settings;
@@ -20,7 +18,7 @@ namespace WebAppBuilderApi.Authentication
 		private string _currentUserSegment => new PathString(_settings.Path).Add("/user");
 
 		
-		public AuthenticationMiddleware(RequestDelegate next, AuthenticationSettings settings, AuthenticationTools auth)
+		public Authentication(RequestDelegate next, AuthenticationSettings settings, AuthenticationTools auth)
 		{
 			_next = next;
 			_settings = settings;

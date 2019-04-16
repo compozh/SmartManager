@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WebAppBuilderApi.Model
+namespace WebAppBuilderMiddleware.Model
 {
 	public class VComponent
 	{

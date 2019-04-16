@@ -1,8 +1,4 @@
-using System;
-using System.IO;
-using Microsoft.AspNetCore.Http;
-
-namespace WebAppBuilderApi.Authentication
+namespace AuthenticationMiddleware
 {
 	public class AuthenticationSettings
 	{

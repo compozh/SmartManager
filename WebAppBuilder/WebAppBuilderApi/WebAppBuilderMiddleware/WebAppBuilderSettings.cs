@@ -1,4 +1,4 @@
-namespace WebAppBuilderApi.WebAppBuilderMiddleware
+namespace WebAppBuilderMiddleware
 {
 	public class WebAppBuilderSettings
 	{

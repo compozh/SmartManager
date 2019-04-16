@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Reflection.Metadata;
+using System.IO;
+using AuthenticationMiddleware;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Web.Authentication;
 using Web.WebRequests;
 using Web.Tools;
 using Web.Data;
-using WebAppBuilderApi.Authentication;
-using WebAppBuilderApi.WebAppBuilderMiddleware;
+using WebAppBuilderMiddleware;
 
 namespace WebAppBuilderApi
 {
@@ -91,17 +91,30 @@ namespace WebAppBuilderApi
 
 			app.UseCors("MyPolicy");
 
-			
+			if (env.IsDevelopment())
+			{
+				// Webpack initialization with hot-reload.
+				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+					HotModuleReplacement = true,
+				});
+			}
 			app.UseDeveloperExceptionPage();
 			
 			app.UseSession();
 			app.UseStaticFiles();
 
 			app.UseAuthentication();
-			app.UseMiddleware<AuthenticationMiddleware>(new AuthenticationSettings());
-			app.UseMiddleware<WebAppBuilderMiddleware.WebAppBuilderMiddleware>();
+			app.UseMiddleware<Authentication>(new AuthenticationSettings());
+			app.UseMiddleware<WebAppBuilderMiddleware.WebAppBuilder>();
 			//app.UseHttpsRedirection();
 			HttpContextAccessorHandler.Configure(contextAccessor);
+			
+			//handle client side routes
+			app.Run( async (context) =>
+			{
+				context.Response.ContentType = "text/html";
+				await context.Response.SendFileAsync(Path.Combine(env.WebRootPath,"index.html"));
+			});
 		}
 	}
 }

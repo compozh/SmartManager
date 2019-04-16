@@ -1,4 +1,4 @@
-namespace WebAppBuilderApi.Model
+namespace WebAppBuilderMiddleware.Model
 {
 	public class VApplicationDescription
 	{

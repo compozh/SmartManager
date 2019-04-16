@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Web.WebRequests;
 
-namespace WebAppBuilderApi.WebAppBuilderMiddleware
+namespace WebAppBuilderMiddleware
 {
-	public class WebAppBuilderMiddleware
+	public class WebAppBuilder
 	{
 		private readonly RequestDelegate _next;
 		private readonly WebAppBuilderSettings _settings;
 		private readonly WebRequestsTools _webRequestsTools;
 
-		public WebAppBuilderMiddleware(RequestDelegate next, WebAppBuilderSettings settings,WebRequestsTools webRequestsTools )
+		public WebAppBuilder(RequestDelegate next, WebAppBuilderSettings settings,WebRequestsTools webRequestsTools )
 		{
 			_next = next;
 			_settings = settings;

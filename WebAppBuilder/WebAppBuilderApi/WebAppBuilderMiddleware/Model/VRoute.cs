@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
-namespace WebAppBuilderApi.Model
+namespace WebAppBuilderMiddleware.Model
 {
 	public class VRoute
 	{
