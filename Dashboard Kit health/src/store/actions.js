@@ -50,7 +50,6 @@ const actions = ({
   SetUserName(context,name){
     context.commit('setUserName', name);
   },
-
   StartPreloader(context,load,blocked){
     context.commit('setPreLoading', load);
     context.commit('setBlockedWindow',load)
@@ -124,7 +123,6 @@ const actions = ({
   getInfoFromServer(context, calendarDate){
     //Общая инфа
     _lc(()=>{
-
       var date = ''
       if(localStorage.getItem('authToken')){
         if(calendarDate){
