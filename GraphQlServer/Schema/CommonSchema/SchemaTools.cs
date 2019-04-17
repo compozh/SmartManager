@@ -13,10 +13,12 @@ namespace SkdScheme.CommonSchema
 	public class SchemaTools
 	{
 		private readonly SqlClient _client;
-
-		public SchemaTools(SqlClient client)
+		private readonly WebRequestsTools _webRequest;
+		 
+		public SchemaTools(SqlClient client, WebRequestsTools webRequest)
 		{
 			_client = client;
+			_webRequest = webRequest;
 		}
 
 		/// <summary>
@@ -24,7 +26,7 @@ namespace SkdScheme.CommonSchema
 		/// </summary>
 		/// <param name="name">Имя схемы в базе</param>
 		/// <returns></returns>
-		public SchemaDescription GetSchemaDescription(WebRequestsTools webRequest, string name, bool anonymousСall)
+		public SchemaDescription GetSchemaDescription(string name, bool anonymousСall)
 		{
 			SchemaDescription schema;
 			var headerIndex = 0;
@@ -63,7 +65,7 @@ namespace SkdScheme.CommonSchema
 			anonymusIndex = 4;
 			var conditionIndex = 5;
 			////Запрос на сервер, для получение Join'ов
-			var joins = GetJoins(webRequest, schema.Id, anonymousСall).Result;
+			var joins = GetJoins(schema.Id, anonymousСall).Result;
 
 			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
 			command.Parameters.Add(new SqlParameter("@schemaid", schema.Id));
@@ -74,17 +76,22 @@ namespace SkdScheme.CommonSchema
 				{
 					while (reader.Read())
 					{
-						schema.Types.Add(new SchemaType
-						{
+
+						var newType = new SchemaType() {
 							Id = reader.GetString(typeIndex).Trim(),
 							Name = reader.GetString(nameIndex).Trim(),
-							TableName=reader.GetString(dbIndex).Trim(),
+							TableName = reader.GetString(dbIndex).Trim(),
 							BrowseId = reader.GetString(krepIndex).Trim(),
-							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
+							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null : reader.GetString(anonymusIndex).Trim(),
 							Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex),
 							Columns = new List<SchemaColumn>(),
-							Joins = joins[reader.GetString(typeIndex).Trim()]
-						});
+							Joins = new Dictionary<string, string>()
+						};
+						if (joins.ContainsKey(newType.Id))
+						{
+							newType.Joins = joins[newType.Id];
+						}
+						schema.Types.Add(newType);
 					}
 				}
 			}
@@ -259,10 +266,10 @@ namespace SkdScheme.CommonSchema
 		/// <param name="SchemaId">Id схемы</param>
 		/// <param name="anonymousСall">Анонимный вызов или нет</param>
 		/// <returns></returns>
-		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(WebRequestsTools webRequest, string SchemaId, bool anonymousСall)
+		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(string SchemaId, bool anonymousСall)
 		{
 			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
-			var result = await webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+			var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
 			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(result.Content);
 		}
 	}

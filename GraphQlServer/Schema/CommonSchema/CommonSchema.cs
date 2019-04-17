@@ -23,7 +23,7 @@ namespace SkdScheme.CommonSchema
 			//Проверяем, схему, если нашли в хранилище, то ок
 			if (schemaDescription == null)
 			{
-				schemaDescription = schemaTools.GetSchemaDescription(dependencyResolver.Resolve<WebRequestsTools>(), schemaName, anonymousСall);
+				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
 				if (schemaDescription != null)
 				{
 					//Кешируем данные
