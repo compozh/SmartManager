@@ -19,7 +19,7 @@ namespace SkdScheme.CommonSchema
 		public string Name { get; set; }
 		public string Condition { get; set; }
 		public List<SchemaColumn> Columns { get; set; }
-		public Dictionary<string, string> Joins { get; set; }
+		public Dictionary<string, IEnumerable<string>> Joins { get; set; }
 	}
 
 	public class SchemaColumn

@@ -85,7 +85,7 @@ namespace SkdScheme.CommonSchema
 							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null : reader.GetString(anonymusIndex).Trim(),
 							Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex),
 							Columns = new List<SchemaColumn>(),
-							Joins = new Dictionary<string, string>()
+							Joins = new Dictionary<string,  IEnumerable<string>>()
 						};
 						if (joins.ContainsKey(newType.Id))
 						{
@@ -150,14 +150,27 @@ namespace SkdScheme.CommonSchema
 				{
 					if (String.Equals(el.Name, name, StringComparison.InvariantCultureIgnoreCase))
 					{
-						if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != type.Joins[el.Name]))
+						foreach (var join in type.Joins[el.Name])
 						{
-							joinsInRequest.Add(type.Joins[el.Name]);
+							if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != join))
+							{
+								joinsInRequest.Add(join);
+							}
 						}
 						schemaColumns.Add(el);
 					}
 				}
 			}
+
+			//Проверяем, есть ли такой join, если нет, то добавляем
+			foreach (var join in type.Joins["#condition#"])
+			{
+				if (!joinsInRequest.Contains(join))
+				{
+					joinsInRequest.Add(join);
+				}
+			}
+
 			//Select к базе
 			var selectQuery = string.Join(", ", schemaColumns.Select(e=> $"{e.Expression} as {e.Name}"));
 
@@ -180,8 +193,7 @@ namespace SkdScheme.CommonSchema
 				}
 				while (reader.Read())
 				{
-					Dictionary<string, object> dictionary = new Dictionary<string, object>();
-					dictionary.Clear();
+					var dictionary = new Dictionary<string, object>();
 					for (var i = 0; i < schemaColumns.Count; i++)
 					{
 						dictionary.Add(columns[i], getValueColumnType(reader, schemaColumns[i], i));
@@ -266,11 +278,11 @@ namespace SkdScheme.CommonSchema
 		/// <param name="SchemaId">Id схемы</param>
 		/// <param name="anonymousСall">Анонимный вызов или нет</param>
 		/// <returns></returns>
-		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(string SchemaId, bool anonymousСall)
+		private async Task<Dictionary<string, Dictionary<string,  IEnumerable<string>>>> GetJoins(string SchemaId, bool anonymousСall)
 		{
 			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
 			var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
-			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(result.Content);
+			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(result.Content); 
 		}
 	}
 }
