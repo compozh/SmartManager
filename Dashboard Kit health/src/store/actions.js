@@ -1,11 +1,6 @@
 // https://vuex.vuejs.org/en/actions.html
 import Axios from "axios";
-// import myJson from "../../public/AppSettings.json"
 import moment from 'moment'
-// import { stat } from "fs";
-// import getters from "./getters.js";
-//Действия
-
 var myConfig = {
   myUrl : "",
   loaded : false
@@ -60,33 +55,33 @@ const actions = ({
   GetDetailsInformationForTable(context, args){
     //Детальная инфа
     _lc(()=>{
-    context.dispatch('StartPreloader',true,false)
-    var table= args.criterion;
-    return Axios.post(myConfig.myUrl+'api/values/GetDetailInformation?criterion='+args.criterion+'&date='+args.date +'&parameters='+args.parameters,undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
-    .then((response) =>{
-      switch (table) {
-        case 'TopErrorsForDate':
-          context.commit('setDetailsErrorsTable', response.data);
-          break;
-        case 'LongSqlQueries':
-          context.commit('setDetailsSQLLongTable', response.data);
-          break;
-        case "PerfExceedances":
-          context.commit('setDetailPerfExec', response.data);
-          break;
-        case "WebEscalations":
-          context.commit('setDetailWebRequestExec', response.data);
-          break;
-        case "SchedFails":
-          context.commit('setDetailSchedulerFails', response.data);
-          context.commit('setShowiframe', true);
-          break;
-        default:
-          break;
-      }
-      context.dispatch('StartPreloader',false,false)
+      context.dispatch('StartPreloader',true,false)
+      var table= args.criterion;
+      return Axios.post(myConfig.myUrl+'api/values/GetDetailInformation?criterion='+args.criterion+'&date='+args.date +'&parameters='+args.parameters,undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
+      .then((response) =>{
+        switch (table) {
+          case 'TopErrorsForDate':
+            context.commit('setDetailsErrorsTable', response.data);
+            break;
+          case 'LongSqlQueries':
+            context.commit('setDetailsSQLLongTable', response.data);
+            break;
+          case "PerfExceedances":
+            context.commit('setDetailPerfExec', response.data);
+            break;
+          case "WebEscalations":
+            context.commit('setDetailWebRequestExec', response.data);
+            break;
+          case "SchedFails":
+            context.commit('setDetailSchedulerFails', response.data);
+            context.commit('setShowiframe', true);
+            break;
+          default:
+            break;
+        }
+        context.dispatch('StartPreloader',false,false)
+      })
     })
-  })
   },
 
   Login(context,loginParam){
@@ -137,7 +132,6 @@ const actions = ({
       }
       return Axios.post(myConfig.myUrl+'api/values/GetInfoAboutServer?date='+date, undefined, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('authToken')},withCredentials: true})
       .then((response=>{
-        console.log(response.data)
         if(response.data != 'WRONG_TICKET' && response.data !=""){
           context.commit('setLoginStatus',true)
           setTimeout(function(){
