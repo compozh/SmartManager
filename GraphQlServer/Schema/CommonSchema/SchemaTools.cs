@@ -126,23 +126,10 @@ namespace SkdScheme.CommonSchema
 		/// <param name="type"> тип</param>
 		/// <param name="columns"> Поля, которыe запрашиваем </param>
 		/// <returns></returns>
-		public List<Dictionary<string, object>> GetDataForType(SchemaType type, List<string> columns, Dictionary<string, string> jsons)
+		public List<Dictionary<string, object>> GetDataForType(SchemaType type, List<string> columns)
 		{
-
-			//Выбираю только уникальные join'ы 
-			HashSet<string> knownValues = new HashSet<string>();
-			Dictionary<string, string> uniqueJsons = new Dictionary<string, string>();
-
-			foreach (var pair in jsons)
-			{
-				if (knownValues.Add(pair.Value))
-				{
-					uniqueJsons.Add(pair.Key, pair.Value);
-				}
-			}
-
 			var schemaColumns = new List<SchemaColumn>();
-			var joinsInRequest = "";
+			var joinsInRequest = new List<string>();
 
 			foreach (var name in columns)
 			{
@@ -150,9 +137,9 @@ namespace SkdScheme.CommonSchema
 				{
 					if (String.Equals(el.Name, name, StringComparison.InvariantCultureIgnoreCase))
 					{
-						if (uniqueJsons.ContainsKey(el.Name))
+						if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != type.Joins[el.Name]))
 						{
-							joinsInRequest += uniqueJsons[el.Name];
+							joinsInRequest.Add(type.Joins[el.Name]);
 						}
 						schemaColumns.Add(el);
 					}
@@ -168,7 +155,7 @@ namespace SkdScheme.CommonSchema
 			{
 				condition = $"where {type.Condition}";
 			}
-			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {joinsInRequest} {condition}");
+			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {string.Join("", joinsInRequest)} {condition}");
 
 			command.Connection.Open();
 

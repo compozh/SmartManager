@@ -22,7 +22,6 @@ namespace SkdScheme.CommonSchema
 				Name = "QueryRoot"
 			};
 			Query = root;
-
 			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
 			var cache = dependencyResolver.Resolve<IMemoryCache>();
 			//Выбираем из Local Storage схему
@@ -33,6 +32,14 @@ namespace SkdScheme.CommonSchema
 				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
 				if (schemaDescription != null)
 				{
+					//Запрос на сервер, для получение Join'ов
+					var joins = GetJoins(dependencyResolver.Resolve<WebRequestsTools>(), schemaDescription.Id, anonymousСall).Result;
+					//Присваиваем каждому типу свой join
+					foreach (var type in schemaDescription.Types)
+					{
+						type.Joins = joins[type.Id];
+					}
+					//Кешируем данные
 					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
 				}
 				else
@@ -53,22 +60,22 @@ namespace SkdScheme.CommonSchema
 				{
 					continue;
 				}
+
 				var commonType = new ObjectGraphType
 				{
 					Name = type.Id,
 					Description = type.Name,
 				};
+
+				//Наполнение типа полями
 				foreach (var col in type.Columns)
 				{
-					//Наполнение типа полями
 					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 				}
-				//Запрос на сервер, для получение Join'ов
-				var joins = GetJoins(dependencyResolver.Resolve<WebRequestsTools>(), "REPS", type.BrowseId, type.TableName).Result as Dictionary<string, string>;
-				
+
 				//Наполнение схемы типами
 				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList(), joins);
+						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
 					}
 				);
 				
@@ -108,14 +115,18 @@ namespace SkdScheme.CommonSchema
 			}
 		}
 
-		private async Task<object> GetJoins(WebRequestsTools webRequest, string type, string browseId, string tableName)
+		/// <summary>
+		///	Получение Join'ов для каждого типа
+		/// </summary>
+		/// <param name="webRequest">Запрос к веб расчетам</param>
+		/// <param name="SchemaId">Id схемы</param>
+		/// <param name="anonymousСall">Анонимный вызов или нет</param>
+		/// <returns></returns>
+		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(WebRequestsTools webRequest, string SchemaId, bool anonymousСall)
 		{
-			var args = "{\"TYPEID\":\""+type+"\", \"BROWSEID\":\""+ browseId + "\", \"TABLENAME\":\""+ tableName + "\"}";
-			
-			var temp = await webRequest.CallWebRequestAsync("GETGQJOINS", args);
-			var t = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp.Content.ToString());
-
-			return t;
+			var args = "{\"SCHEMAID\":\""+ SchemaId + "\"}";
+			var result = await webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(result.Content);
 		}
 	}
 }
