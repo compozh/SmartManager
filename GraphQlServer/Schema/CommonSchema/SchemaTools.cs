@@ -163,7 +163,7 @@ namespace SkdScheme.CommonSchema
 			}
 
 			//Проверяем, есть ли такой join, если нет, то добавляем
-			foreach (var join in type.Joins[type.ConditionKey])
+			foreach (var join in type.Joins["#condition#"])
 			{
 				if (!joinsInRequest.Contains(join))
 				{
@@ -193,7 +193,7 @@ namespace SkdScheme.CommonSchema
 				}
 				while (reader.Read())
 				{
-					Dictionary<string, object> dictionary = new Dictionary<string, object>();
+					var dictionary = new Dictionary<string, object>();
 					for (var i = 0; i < schemaColumns.Count; i++)
 					{
 						dictionary.Add(columns[i], getValueColumnType(reader, schemaColumns[i], i));
