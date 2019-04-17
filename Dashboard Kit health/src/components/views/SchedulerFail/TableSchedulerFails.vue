@@ -97,6 +97,7 @@ export default {
             }
             if(this.dataSchedulerFails[0]){
                 this.dataSchedulerFails[0].selected=true
+                this.RequestDetailInformation(this.dataSchedulerFails[0].item.TaskCode)
               }
               }.bind(this),10)
         },
