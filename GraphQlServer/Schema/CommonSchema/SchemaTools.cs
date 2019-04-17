@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Web.Data;
+using Web.WebRequests;
+
 namespace SkdScheme.CommonSchema
 {
 	public class SchemaTools
@@ -21,7 +24,7 @@ namespace SkdScheme.CommonSchema
 		/// </summary>
 		/// <param name="name">Имя схемы в базе</param>
 		/// <returns></returns>
-		public SchemaDescription GetSchemaDescription(string name, bool anonymousСall)
+		public SchemaDescription GetSchemaDescription(WebRequestsTools webRequest, string name, bool anonymousСall)
 		{
 			SchemaDescription schema;
 			var headerIndex = 0;
@@ -59,6 +62,8 @@ namespace SkdScheme.CommonSchema
 			var krepIndex = 3;
 			anonymusIndex = 4;
 			var conditionIndex = 5;
+			////Запрос на сервер, для получение Join'ов
+			var joins = GetJoins(webRequest, schema.Id, anonymousСall).Result;
 
 			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
 			command.Parameters.Add(new SqlParameter("@schemaid", schema.Id));
@@ -77,7 +82,8 @@ namespace SkdScheme.CommonSchema
 							BrowseId = reader.GetString(krepIndex).Trim(),
 							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
 							Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex),
-							Columns = new List<SchemaColumn>()
+							Columns = new List<SchemaColumn>(),
+							Joins = joins[reader.GetString(typeIndex).Trim()]
 						});
 					}
 				}
@@ -150,12 +156,12 @@ namespace SkdScheme.CommonSchema
 
 			var resultData = new List<Dictionary<string, object>>();
 
-			var condition = "";
+			var condition = string.Empty;
 			if (!string.IsNullOrEmpty(type.Condition))
 			{
 				condition = $"where {type.Condition}";
 			}
-			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {string.Join("", joinsInRequest)} {condition}");
+			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {string.Join(string.Empty, joinsInRequest)} {condition}");
 
 			command.Connection.Open();
 
@@ -244,6 +250,20 @@ namespace SkdScheme.CommonSchema
 				default:
 					return SlvColumnType.Other;
 			}
+		}
+
+		/// <summary>
+		///	Получение Join'ов для каждого типа
+		/// </summary>
+		/// <param name="webRequest">Запрос к веб расчетам</param>
+		/// <param name="SchemaId">Id схемы</param>
+		/// <param name="anonymousСall">Анонимный вызов или нет</param>
+		/// <returns></returns>
+		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(WebRequestsTools webRequest, string SchemaId, bool anonymousСall)
+		{
+			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
+			var result = await webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(result.Content);
 		}
 	}
 }

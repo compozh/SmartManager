@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using GraphQL;
-using GraphQL.Resolvers;
+﻿using GraphQL;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
-using Web.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
 using Web.WebRequests;
 
 namespace SkdScheme.CommonSchema
@@ -29,16 +23,9 @@ namespace SkdScheme.CommonSchema
 			//Проверяем, схему, если нашли в хранилище, то ок
 			if (schemaDescription == null)
 			{
-				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
+				schemaDescription = schemaTools.GetSchemaDescription(dependencyResolver.Resolve<WebRequestsTools>(), schemaName, anonymousСall);
 				if (schemaDescription != null)
 				{
-					//Запрос на сервер, для получение Join'ов
-					var joins = GetJoins(dependencyResolver.Resolve<WebRequestsTools>(), schemaDescription.Id, anonymousСall).Result;
-					//Присваиваем каждому типу свой join
-					foreach (var type in schemaDescription.Types)
-					{
-						type.Joins = joins[type.Id];
-					}
 					//Кешируем данные
 					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
 				}
@@ -113,20 +100,6 @@ namespace SkdScheme.CommonSchema
 				default:
 					return new StringGraphType();
 			}
-		}
-
-		/// <summary>
-		///	Получение Join'ов для каждого типа
-		/// </summary>
-		/// <param name="webRequest">Запрос к веб расчетам</param>
-		/// <param name="SchemaId">Id схемы</param>
-		/// <param name="anonymousСall">Анонимный вызов или нет</param>
-		/// <returns></returns>
-		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(WebRequestsTools webRequest, string SchemaId, bool anonymousСall)
-		{
-			var args = "{\"SCHEMAID\":\""+ SchemaId + "\"}";
-			var result = await webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
-			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(result.Content);
 		}
 	}
 }
