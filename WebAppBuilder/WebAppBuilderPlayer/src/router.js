@@ -9,7 +9,7 @@ Vue.use(Router);
 const createRouter = (routes) => {
   return new Router({
     mode: 'history',
-    base: process.env.BASE_URL,
+    base: myConfig.BASE_URL,
     routes: routes
   })
 }
@@ -19,7 +19,7 @@ const createRouter = (routes) => {
 export function resetRouter() {
   const newRouter = createRouter([])
   router.matcher = newRouter.matcher
-  
+
   router.history.current.matched.splice(0, router.history.current.matched.length)
   //router.options = newRouter.options
 
@@ -35,5 +35,5 @@ const router = createRouter(
     }]
   }])
 
-  
+
 export default router

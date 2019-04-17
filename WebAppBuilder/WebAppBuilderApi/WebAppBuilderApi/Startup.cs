@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using AuthenticationMiddleware;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Web.Authentication;
 using Web.WebRequests;
@@ -71,6 +72,8 @@ namespace WebAppBuilderApi
 			services.AddSingleton<WebRequestsTools>();
 			services.AddSqlClientInstance(Configuration);
 			services.AddSingleton<PureWebCalculations>();
+			services.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			// Сессия
 			services.AddDistributedMemoryCache();
 			services.AddSession(options => {
@@ -88,16 +91,8 @@ namespace WebAppBuilderApi
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IHttpContextAccessor contextAccessor)
 		{
-
 			app.UseCors("MyPolicy");
 
-			if (env.IsDevelopment())
-			{
-				// Webpack initialization with hot-reload.
-				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
-					HotModuleReplacement = true,
-				});
-			}
 			app.UseDeveloperExceptionPage();
 			
 			app.UseSession();
@@ -108,12 +103,9 @@ namespace WebAppBuilderApi
 			app.UseMiddleware<WebAppBuilderMiddleware.WebAppBuilder>();
 			//app.UseHttpsRedirection();
 			HttpContextAccessorHandler.Configure(contextAccessor);
-			
-			//handle client side routes
-			app.Run( async (context) =>
-			{
-				context.Response.ContentType = "text/html";
-				await context.Response.SendFileAsync(Path.Combine(env.WebRootPath,"index.html"));
+			app.UseMvc(routes => {
+				routes.MapRoute(name: "default",template: "{controller=Home}/{action=Index}/{id?}");
+				routes.MapSpaFallbackRoute(name: "spa-fallback",defaults: new { controller = "Home", action = "Index" });
 			});
 		}
 	}

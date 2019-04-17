@@ -44,7 +44,7 @@ store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).th
     path: `/${app.Id}`,
     component: getInternalComponentDescription(app.RootComponent),
     children: routes
-  }])
+  }, {path:'*', redirect:`/${app.Id}`}])
 
 
 })
@@ -75,7 +75,7 @@ function createComponentObject(com){
     attrs: {},
     slot:com.Slot,
     children: _.orderBy(com.ChildComponents, "Sort").map(subCom => createComponentObject(subCom))
-  }; 
+  };
    // конвертируем свойства к нужному виду:
    (com.Properties || []).forEach(property => {
     innerComp.attrs[property.Name] = property.Value;
@@ -117,14 +117,14 @@ let routerBeforeEachFunction = (to,from, next, loginRouteExists)=>{
     if (!to.meta.AllowAnonymous && !store.getters.getCurrentUser) {
       if(loginRouteExists){
         next({name: "LOGIN"});
-      } 
+      }
       return;
     }
     next();
 }
 
 
-let generateRouteFromDescription = (route) => 
+let generateRouteFromDescription = (route) =>
   ({
     name: route.Id,
     path: route.Path,

@@ -2,27 +2,10 @@ import Axios from "axios";
 import * as jsonpatch from '../patching'
 
 
-let myConfig = {
-  GrapgQlUrl:undefined,
-  WebAppBuilderUrl:undefined,
-  loaded:false
-}
+
 // Загрузка конфигурации приложения
 let LoadConfig = new Promise((resolve,reject ) => {
-  if(myConfig.loaded){
     resolve();
-    return;
-  }
-  Axios.get('./appsettings.json').then(response=>{
-    if(response.status == 200){
-
-        myConfig.GrapgQlUrl = response.data.GrapgQlUrl
-        myConfig.WebAppBuilderUrl = response.data.WebAppBuilderUrl
-        myConfig.loaded = true
-        resolve()
-
-    }
-  })
 });
 
 function _lc(resolve){
@@ -35,7 +18,7 @@ const actions = ({
     _lc(()=>{
       Axios({
         method: 'POST',
-        url: `${myConfig.WebAppBuilderUrl}api/authentication/user`,
+        url: `${myConfig.BASE_URL}api/authentication/user`,
         withCredentials:true,
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
       }).then(resp => {
@@ -59,7 +42,7 @@ const actions = ({
     localStorage.removeItem('userName');
     context.commit("setCurrentUser", "");
     return _lc(()=>{
-      return Axios.post(`${myConfig.WebAppBuilderUrl}api/authentication/login`, {
+      return Axios.post(`${myConfig.BASE_URL}api/authentication/login`, {
           Login: loginParam.login,
           Password: loginParam.password,
           RememberMe: loginParam.rememberMe
@@ -105,7 +88,7 @@ const actions = ({
   GetAppDescription(context, appId) {
     return _lc(()=>{
 
-      return Axios.post(`${myConfig.WebAppBuilderUrl}api/webapp/get`, {
+      return Axios.post(`${myConfig.BASE_URL}api/webapp/get`, {
         ApplicationId: appId
       }, {
         withCredentials: true
