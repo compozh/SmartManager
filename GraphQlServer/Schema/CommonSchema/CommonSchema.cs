@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using GraphQL;
-using GraphQL.Resolvers;
+﻿using GraphQL;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
-using Web.Data;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
+using Web.WebRequests;
 
 namespace SkdScheme.CommonSchema
 {
@@ -19,7 +16,6 @@ namespace SkdScheme.CommonSchema
 				Name = "QueryRoot"
 			};
 			Query = root;
-
 			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
 			var cache = dependencyResolver.Resolve<IMemoryCache>();
 			//Выбираем из Local Storage схему
@@ -30,6 +26,7 @@ namespace SkdScheme.CommonSchema
 				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
 				if (schemaDescription != null)
 				{
+					//Кешируем данные
 					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
 				}
 				else
@@ -50,17 +47,19 @@ namespace SkdScheme.CommonSchema
 				{
 					continue;
 				}
+
 				var commonType = new ObjectGraphType
 				{
 					Name = type.Id,
 					Description = type.Name,
 				};
+
+				//Наполнение типа полями
 				foreach (var col in type.Columns)
 				{
-					//Наполнение типа полями
 					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 				}
-				
+
 				//Наполнение схемы типами
 				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
 						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());

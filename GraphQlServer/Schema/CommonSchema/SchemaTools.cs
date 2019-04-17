@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Web.Data;
+using Web.WebRequests;
+
 namespace SkdScheme.CommonSchema
 {
 	public class SchemaTools
 	{
 		private readonly SqlClient _client;
-
-		public SchemaTools(SqlClient client)
+		private readonly WebRequestsTools _webRequest;
+		 
+		public SchemaTools(SqlClient client, WebRequestsTools webRequest)
 		{
 			_client = client;
+			_webRequest = webRequest;
 		}
 
 		/// <summary>
@@ -58,6 +64,8 @@ namespace SkdScheme.CommonSchema
 			var krepIndex = 3;
 			anonymusIndex = 4;
 			var conditionIndex = 5;
+			////Запрос на сервер, для получение Join'ов
+			var joins = GetJoins(schema.Id, anonymousСall).Result;
 
 			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
 			command.Parameters.Add(new SqlParameter("@schemaid", schema.Id));
@@ -68,16 +76,22 @@ namespace SkdScheme.CommonSchema
 				{
 					while (reader.Read())
 					{
-						schema.Types.Add(new SchemaType
-						{
+
+						var newType = new SchemaType() {
 							Id = reader.GetString(typeIndex).Trim(),
 							Name = reader.GetString(nameIndex).Trim(),
-							TableName=reader.GetString(dbIndex).Trim(),
+							TableName = reader.GetString(dbIndex).Trim(),
 							BrowseId = reader.GetString(krepIndex).Trim(),
-							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null :  reader.GetString(anonymusIndex).Trim(),
+							AllowAnonymosly = reader.IsDBNull(anonymusIndex) ? null : reader.GetString(anonymusIndex).Trim(),
 							Condition = reader.IsDBNull(conditionIndex) ? null : reader.GetString(conditionIndex),
-							Columns = new List<SchemaColumn>()
-						});
+							Columns = new List<SchemaColumn>(),
+							Joins = new Dictionary<string, string>()
+						};
+						if (joins.ContainsKey(newType.Id))
+						{
+							newType.Joins = joins[newType.Id];
+						}
+						schema.Types.Add(newType);
 					}
 				}
 			}
@@ -128,6 +142,7 @@ namespace SkdScheme.CommonSchema
 		public List<Dictionary<string, object>> GetDataForType(SchemaType type, List<string> columns)
 		{
 			var schemaColumns = new List<SchemaColumn>();
+			var joinsInRequest = new List<string>();
 
 			foreach (var name in columns)
 			{
@@ -135,6 +150,10 @@ namespace SkdScheme.CommonSchema
 				{
 					if (String.Equals(el.Name, name, StringComparison.InvariantCultureIgnoreCase))
 					{
+						if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != type.Joins[el.Name]))
+						{
+							joinsInRequest.Add(type.Joins[el.Name]);
+						}
 						schemaColumns.Add(el);
 					}
 				}
@@ -144,12 +163,12 @@ namespace SkdScheme.CommonSchema
 
 			var resultData = new List<Dictionary<string, object>>();
 
-			var condition = "";
+			var condition = string.Empty;
 			if (!string.IsNullOrEmpty(type.Condition))
 			{
 				condition = $"where {type.Condition}";
 			}
-			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {condition}");
+			var command = _client.CreateCommand($"select {selectQuery} from {type.TableName} {string.Join(string.Empty, joinsInRequest)} {condition}");
 
 			command.Connection.Open();
 
@@ -238,6 +257,20 @@ namespace SkdScheme.CommonSchema
 				default:
 					return SlvColumnType.Other;
 			}
+		}
+
+		/// <summary>
+		///	Получение Join'ов для каждого типа
+		/// </summary>
+		/// <param name="webRequest">Запрос к веб расчетам</param>
+		/// <param name="SchemaId">Id схемы</param>
+		/// <param name="anonymousСall">Анонимный вызов или нет</param>
+		/// <returns></returns>
+		private async Task<Dictionary<string, Dictionary<string, string>>> GetJoins(string SchemaId, bool anonymousСall)
+		{
+			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
+			var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(result.Content);
 		}
 	}
 }
