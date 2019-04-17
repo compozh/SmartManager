@@ -22,7 +22,7 @@ namespace SkdScheme.CommonSchema
 		public Dictionary<string, IEnumerable<string>> Joins { get; set; }
 		public string ConditionKey
 		{
-			get { return "condition"; }
+			get { return "#condition#"; }
 		}
 	}
 
