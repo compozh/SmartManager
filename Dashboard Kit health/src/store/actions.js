@@ -12,7 +12,11 @@ let LoadConfig = new Promise((resolve) => {
     return;
   }
   Axios.get("AppSettings.json").then(res => {
-    myConfig.myUrl = res.data.healthSummaryUrl;
+    var url = res.data.healthSummaryUrl
+    if(url.substr(url.length-1)!='/'){
+      url+="/"
+    }
+    myConfig.myUrl = url;
     myConfig.loaded = true;
     resolve();
   });
