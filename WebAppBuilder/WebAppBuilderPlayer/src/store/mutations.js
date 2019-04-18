@@ -16,10 +16,6 @@ const mutations = {
   setCurrentUser(state, userInfo){
     state.currentuser = userInfo;
   },
-  //** Установка локализации **/
-  setCurentLanguage(state, language){
-    state.curentLanguage = language;
-  }
   // /** Загрузка Layout приложения */
   // setAppLayout(state, payload) {
   //   Vue.set(state.appLayout, payload.key, payload.data)

@@ -13,7 +13,7 @@
           </template>
           <v-list>
             <v-list-tile
-              v-for="(item, index) in arrayCountryAndFlag"
+              v-for="(item, index) in dictionaryLanguage"
               :key="index"
               @click="SetLocale(index)"
             >
@@ -27,6 +27,8 @@
 
 <script>
 import CountryFlag from 'vue-country-flag'
+import _ from "lodash"
+import { debug } from 'util';
 export default {
     name :"language-component",
     components:{
@@ -35,60 +37,57 @@ export default {
     data(){
         return{
             arrayCountryAndFlag:[],
+            dictionaryLanguage :[
+                { name: "Беларуская", flag: "be", key: "BE" },
+                { name: "Čeština", flag: "cz", key: "CS" },
+                { name: "English", flag: "gb", key: "EN" },
+                { name: "Eesti", flag: "ee", key: "ET" },
+                { name: "Iran", flag: "ir", key: "FA" },
+                { name: "Magyar", flag: "hu", key: "HU" },
+                { name: "Polski", flag: "pl", key: "PL" },
+                { name: "Русский", flag: "ru", key: "RU" },
+                { name: "Українська", flag: "ua", key: "UK" },
+                { name: "Chinese", flag: "cn", key: "ZH" },
+            ],
+            curlanguage : localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : "Русский"
         }
     },
     computed:{
-        dictionaryLanguage(){
-        return this.$store.getters.getDictionarylanguage;
-        },
         curentLanguage(){
-        return this.$store.getters.getCurentLanguage;
+            return this.curlanguage;
         }
     },
     mounted(){
-
-        this.ConverDictionaryToArray();
         //Если есть параметр в url
         if(this.$route.query.language){
             this.SetUpLanguageFromURLParameter();
         //Иначе берем из sessionStorage
-        }else if(sessionStorage.getItem('language')){
-            var language = sessionStorage.getItem('language')
+        }else if(localStorage.getItem('language')){
+            var language = localStorage.getItem('language')
             this.Setlocalization(language)
         }
     },
     methods:{
     //Изменяем локализацию через выбор элемента в списке
         SetLocale(index){
-            var language = this.arrayCountryAndFlag[index].key.toLowerCase();
-            this.$store.dispatch('SetCurentLanguage',this.arrayCountryAndFlag[index].name)
-            this.$store.dispatch('SetLocalization', language)
+            var language = this.dictionaryLanguage[index].key.toLowerCase();
+            this.curlanguage =this.dictionaryLanguage[index].name
+            localStorage.setItem('curentLanguage', this.curlanguage)
+            localStorage.setItem('language', language);
+
             this.Setlocalization(language)
         },
-    //Переобразовываю объекта в массив
-    ConverDictionaryToArray(){
-         for (var key in this.dictionaryLanguage){
-            let obj = {
-                name: this.dictionaryLanguage[key].name,
-                flag: this.dictionaryLanguage[key].flag,
-                key: key
-            }
-            this.arrayCountryAndFlag.push(obj)
-        }
-    },
     //Установка локализации из параметра в строке url
     SetUpLanguageFromURLParameter(){
         var language = this.$route.query.language.toUpperCase()
-        this.$store.dispatch('SetCurentLanguage', this.dictionaryLanguage[language].name)
-        this.$store.dispatch('SetLocalization', language.toLowerCase())
+        this.curlanguage = _.find(this.dictionaryLanguage, function(o){return o.key == language}).name
+        localStorage.setItem('curentLanguage', this.curlanguage)
+        localStorage.setItem('language', language.toLowerCase())
         this.Setlocalization(language.toLowerCase());
     },
     //Установка локализации
     Setlocalization(language){
-        import(`../plugins/resources/${language}.json`).then((msg) =>{
-            this.$i18n.setLocaleMessage(language, msg);
-            this.$i18n.locale = language;
-        })
+       this.$i18n.Setlocalization(language);
     }
   },
 }

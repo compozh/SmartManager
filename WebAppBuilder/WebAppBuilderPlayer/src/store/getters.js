@@ -7,12 +7,5 @@ const getters = ({
     getCurrentUser(state){
         return state.currentuser
     },
-    getDictionarylanguage(state){
-        return state.dictionaryLanguage;
-    },
-    getCurentLanguage(state){
-        return state.curentLanguage;
-    }
-    
 });
 export default getters

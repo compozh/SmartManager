@@ -63,7 +63,7 @@ export default {
         this.message = "1";
       } else if (!this.userLoginPassword.password) {
         this.message = "2";
-      }emptyPassword
+      }
     }
   }
 };
