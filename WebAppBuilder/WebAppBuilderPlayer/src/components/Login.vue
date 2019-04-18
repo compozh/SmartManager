@@ -3,14 +3,14 @@
     <div class="login">
       <v-text-field
         v-model="userLoginPassword.login"
-        label="Логин"
+        :label="$t('login')"
         required
         color="cyan"
         @keyup.enter="Login()"
       ></v-text-field>
       <v-text-field
         v-model="userLoginPassword.password"
-        label="Пароль"
+        :label="$t('password')"
         required
         type="password"
         color="cyan"
@@ -19,12 +19,15 @@
       <div class="btn-and-checkbox">
         <v-checkbox
           v-model="userLoginPassword.rememberMe"
-          :label="'Запомнить меня'"
+          :label="$t('rememberMe')"
           color="cyan"
         ></v-checkbox>
-        <v-btn @click="Login()" color="cyan" dark>Войти</v-btn>
+        <v-btn @click="Login()" color="cyan" dark v-text="$t('signIn')"/>
       </div>
-      <div class="message">{{message}}</div>
+      <div class="message">
+        <p v-if="message == '1'">{{$t('emptyLogin')}}</p>
+        <p v-if="message == '2'">{{$t('emptyPassword')}}</p>
+      </div>
     </div>
   </v-flex>
 </template>
@@ -38,7 +41,7 @@ export default {
         password: "",
         rememberMe: false
       },
-      message: ""
+      message: "0"
     };
   },
   computed: {
@@ -57,10 +60,10 @@ export default {
           }
         });
       } else if (!this.userLoginPassword.login) {
-        this.message = "Вы не ввели логин";
+        this.message = "1";
       } else if (!this.userLoginPassword.password) {
-        this.message = "Вы не ввели пароль";
-      }
+        this.message = "2";
+      }emptyPassword
     }
   }
 };

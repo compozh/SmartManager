@@ -13,7 +13,13 @@ function _lc(resolve){
 }
 
 const actions = ({
-
+  SetLocalization(context, language){
+    sessionStorage.setItem('language', language);
+  },
+  SetCurentLanguage(context, language){
+    sessionStorage.setItem('curentLanguage', language);
+    context.commit("setCurentLanguage", language )
+  },
   GetCurrentUser(context){
     _lc(()=>{
       Axios({

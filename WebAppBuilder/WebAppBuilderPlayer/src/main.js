@@ -7,8 +7,7 @@ import './registerServiceWorker';
 import 'vuetify/dist/vuetify.min.css';
 import _ from 'lodash';
 import {  resetRouter } from './router';
-
-
+import {i18n} from './plugins/i18n';
 
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
 req.keys().map(key => {
@@ -19,6 +18,7 @@ req.keys().map(key => {
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 new Vue({
+  i18n,
   router,
   store,
   render: h => h(App),
