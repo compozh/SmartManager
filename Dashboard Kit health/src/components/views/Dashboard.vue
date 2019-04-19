@@ -12,7 +12,7 @@
           ></card-total-count-errors-today>
         </v-flex>
 
-        <v-flex sm6 xs12 md6 lg3 class="card" @click="WhoCardBeShowNow(whoShowNow.queries)">
+        <v-flex sm6 xs12 md6 lg2 class="card" @click="WhoCardBeShowNow(whoShowNow.queries)">
           <card-total-count-queries-for-today
             class="card-component"
             :class="showCard==whoShowNow.queries ?'elevation-10':'elevation-0'"
@@ -26,7 +26,7 @@
           ></card-total-count-of-web-request-escalations-for-today>
         </v-flex>
 
-        <v-flex sm6 xs6 md6 lg2 class="card" @click="WhoCardBeShowNow(whoShowNow.scheduler)">
+        <v-flex sm6 xs6 md6 lg3 class="card" @click="WhoCardBeShowNow(whoShowNow.scheduler)">
           <card-total-count-of-scheduler-fail
             class="card-component"
             :class="showCard==whoShowNow.scheduler ?'elevation-10':'elevation-0' "
