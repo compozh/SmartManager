@@ -59,6 +59,7 @@ export default {
         color: #363d3f;
         max-height: 71px;
         overflow: hidden;
+        margin: 0 5px;
     }
     .card-info{
         position: relative;
