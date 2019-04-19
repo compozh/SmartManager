@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using GraphQL.Types;
 using Newtonsoft.Json;
+using SkdScheme.Properties;
 using Web.Authentication;
 using Web.Tools;
 using Web.WebRequests;
@@ -153,7 +155,7 @@ namespace SkdSchema
 				WorkTel= u.Tel,
 				Email = u.Email,
 				Skype = u.Skype,
-		
+				HasKeyTitle = u.HASKEY == "+" ?  Resources.HaveKey : Resources.DontHaveKey,
 				IsCurrent = user?.UserId == u.UserID
 			});
 			

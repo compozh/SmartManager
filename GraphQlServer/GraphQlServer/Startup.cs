@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using GraphQlServer.Authentication;
 using GraphQL;
 using GraphQL.Http;
@@ -17,6 +19,8 @@ using Web.Data;
 using Web.Tools;
 using Web.WebRequests;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Localization;
+using GraphQlServer.CultureMiddleware;
 
 namespace GraphQlServer
 {
@@ -32,6 +36,23 @@ namespace GraphQlServer
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromSeconds(10);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
+			var locs = new List<CultureInfo> { new CultureInfo("ru"), new CultureInfo("en") };
+			services.Configure<RequestLocalizationOptions>(options => {
+				options.DefaultRequestCulture = new RequestCulture("ru");
+				options.SupportedCultures = locs;
+				options.SupportedUICultures = locs;
+				options.RequestCultureProviders.Clear();
+				options.RequestCultureProviders.Add(new CustomerCultureProvider());
+			});
+
+
+			services.AddLocalization(options => options.ResourcesPath = "Properties");
 			services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
 
 				var allowedOrigins = Configuration.GetSection("AppSettings")["AllowedOrigins"] ?? string.Empty;
@@ -102,6 +123,7 @@ namespace GraphQlServer
 
 			app.UseDeveloperExceptionPage();
 			app.UseSession();
+			app.UseRequestLocalization();
 
 			app.UseMiddleware<AuthenticationMiddleware>(new AuthenticationSettings());
 			app.UseAuthentication();
@@ -111,7 +133,7 @@ namespace GraphQlServer
 					User = ctx.User
 				}
 			});
-			
+
 			HttpContextAccessorHandler.Configure(contextAccessor);
 			app.UseDefaultFiles();
 			app.UseStaticFiles();

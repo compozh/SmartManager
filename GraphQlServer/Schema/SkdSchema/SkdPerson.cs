@@ -8,7 +8,8 @@ namespace SkdSchema
 		public string Birthday { get; set; }
 		public string Department { get; set; }
 		public string Email { get; set; }
-		public bool HasKey { get; set; }		
+		public bool HasKey { get; set; }
+		public string HasKeyTitle { get; set; }
 		public string PlaceName { get; set; }
 		public string FullName { get; set; }
 		public DateTime MovementDate { get; set; }

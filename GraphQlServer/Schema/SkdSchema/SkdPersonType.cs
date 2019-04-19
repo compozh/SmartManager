@@ -23,6 +23,7 @@ namespace SkdSchema
 			Field(p => p.FullName).Description("Фамилия Имя");
 			Field(p => p.MobileTel).Description("Мобильный телефон");
 			Field(p => p.PlaceName).Description("Место нахождения");
+			Field(p => p.HasKeyTitle).Description("Определение строки от признака наличия ключа от офиса");
 			Field<DateTimeGraphType>("MovementDate","Дата и время последнего движения");
 
 			Field<SkdPersonPhotoType>("PhotoProperty",
