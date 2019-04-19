@@ -6,7 +6,6 @@ const getters = ({
     
     getCurrentUser(state){
         return state.currentuser
-    }
-    
+    },
 });
 export default getters

@@ -7,6 +7,8 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
       <router-view name="toolbar"/>
+      <v-spacer></v-spacer>
+      <language-component/>
     </v-toolbar>
     <v-content>
       <v-container fluid >

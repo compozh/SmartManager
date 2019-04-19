@@ -13,7 +13,6 @@ function _lc(resolve){
 }
 
 const actions = ({
-
   GetCurrentUser(context){
     _lc(()=>{
       Axios({
