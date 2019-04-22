@@ -32227,36 +32227,40 @@ __webpack_require__(324);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var path = window.location.pathname.split('/').filter(function (r) {
+	return r;
+})[0] || "";
+
+path = path ? '/' + path : '';
 function graphQLFetcher(graphQLParams) {
-	graphQLParams.SchemaName = localStorage.getItem("schema") || "";
+	graphQLParams.SchemaName = localStorage.getItem("schema") || "SkdSchema";
 	return (0, _axios2.default)({
 		method: 'POST',
-		url: window.location.origin + '/api/graphql',
-		headers: { 'Authorization': 'Bearer ' + localStorage.getItem('authToken') },
+		url: window.location.origin + path + '/api/graphql' + window.location.search,
+		headers: { 'Authorization': 'Bearer ' + localStorage.getItem('authTokenGraphQl') },
 		data: graphQLParams
 	}).then(function (resp) {
 		return resp.data;
 	});
 }
-
 _reactDom2.default.render(_react2.default.createElement(_graphiql2.default, { fetcher: graphQLFetcher }), document.getElementById('app'));
 
 document.getElementById("loginbutton").addEventListener("click", function (ev) {
 
 	return (0, _axios2.default)({
 		method: 'POST',
-		url: window.location.origin + '/api/authentication/login',
+		url: window.location.origin + path + '/api/authentication/login',
 		data: { login: document.getElementById("lgn").value, password: document.getElementById("psw").value }
 	}).then(function (resp) {
 		if (resp.data.access_token) {
-			localStorage.setItem("authToken", resp.data.access_token);
+			localStorage.setItem("authTokenGraphQl", resp.data.access_token);
 			location.reload();
 		}
 	});
 });
 
 document.getElementById("logoutbutton").addEventListener("click", function (ev) {
-	localStorage.removeItem("authToken");
+	localStorage.removeItem("authTokenGraphQl");
 	setLoginState();
 });
 
@@ -32267,7 +32271,7 @@ document.getElementById("schema").addEventListener("change", function (ev) {
 
 function setLoginState() {
 	document.getElementById("schema").value = localStorage.getItem("schema") || "SkdSchema";
-	if (localStorage.getItem("authToken")) {
+	if (localStorage.getItem("authTokenGraphQl")) {
 		document.getElementsByClassName("login-panel")[0].style.display = "none";
 		document.getElementsByClassName("logout-panel")[0].style.display = "flex";
 	} else {
@@ -32275,6 +32279,7 @@ function setLoginState() {
 		document.getElementsByClassName("logout-panel")[0].style.display = "none";
 	}
 }
+
 setLoginState();
 
 /***/ }),

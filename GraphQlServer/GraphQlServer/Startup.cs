@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using GraphQlServer.Authentication;
 using GraphQL;
 using GraphQL.Http;
@@ -17,6 +19,8 @@ using Web.Data;
 using Web.Tools;
 using Web.WebRequests;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Localization;
+using GraphQlServer.CultureMiddleware;
 
 namespace GraphQlServer
 {
@@ -32,6 +36,18 @@ namespace GraphQlServer
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			var languages = Configuration.GetSection("AppSettings")["SupportedCultures"] ?? "ru";
+			var lang = languages.Split(",", StringSplitOptions.RemoveEmptyEntries);
+			//Добавление локализации
+			services.Configure<RequestLocalizationOptions>(options => {
+				options.AddSupportedCultures(lang);
+				options.AddSupportedUICultures(lang);
+				options.RequestCultureProviders.Clear();
+				options.RequestCultureProviders.Add(new ItCultureProvider());
+			});
+			services.AddLocalization(options => options.ResourcesPath = "Properties");
+
+			//Настройка cors
 			services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
 
 				var allowedOrigins = Configuration.GetSection("AppSettings")["AllowedOrigins"] ?? string.Empty;
@@ -79,8 +95,8 @@ namespace GraphQlServer
 				options.Cookie.Name = "GraphQlSessionID";
 				options.IdleTimeout = TimeSpan.FromSeconds(3600);
 			});
-			
-			
+
+
 			services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
 			// Утилиты GraphQl
 			services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
@@ -102,7 +118,8 @@ namespace GraphQlServer
 
 			app.UseDeveloperExceptionPage();
 			app.UseSession();
-
+			app.UseRequestLocalization();
+			
 			app.UseMiddleware<AuthenticationMiddleware>(new AuthenticationSettings());
 			app.UseAuthentication();
 
@@ -111,7 +128,7 @@ namespace GraphQlServer
 					User = ctx.User
 				}
 			});
-			
+
 			HttpContextAccessorHandler.Configure(contextAccessor);
 			app.UseDefaultFiles();
 			app.UseStaticFiles();

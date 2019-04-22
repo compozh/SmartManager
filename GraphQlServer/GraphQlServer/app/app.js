@@ -13,7 +13,7 @@ function graphQLFetcher (graphQLParams) {
 	graphQLParams.SchemaName = localStorage.getItem("schema") || "SkdSchema";
 	return axios({
 		method: 'POST',
-		url: window.location.origin +path+ '/api/graphql',
+		url: window.location.origin +path+ '/api/graphql' + window.location.search,
 		headers: {'Authorization': 'Bearer ' + localStorage.getItem('authTokenGraphQl')},
 		data: graphQLParams
 	}).then(resp => resp.data);
