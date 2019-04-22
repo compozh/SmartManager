@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using SkdScheme;
+using SkdSchema;
 using Web.Authentication;
 using Web.Data;
 using Web.Tools;

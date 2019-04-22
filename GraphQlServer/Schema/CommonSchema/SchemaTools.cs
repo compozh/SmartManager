@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Web.Data;
 using Web.WebRequests;
 
-namespace SkdScheme.CommonSchema
+namespace SkdSchema.CommonSchema
 {
 	public class SchemaTools
 	{
@@ -78,7 +78,7 @@ namespace SkdScheme.CommonSchema
 					{
 
 						var newType = new SchemaType() {
-							Id = reader.GetString(typeIndex).Trim(),
+							Id = reader.GetString(typeIndex).Trim().ToLower(),
 							Name = reader.GetString(nameIndex).Trim(),
 							TableName = reader.GetString(dbIndex).Trim(),
 							BrowseId = reader.GetString(krepIndex).Trim(),
@@ -281,8 +281,15 @@ namespace SkdScheme.CommonSchema
 		private async Task<Dictionary<string, Dictionary<string,  IEnumerable<string>>>> GetJoins(string SchemaId, bool anonymousСall)
 		{
 			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
-			var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
-			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(result.Content); 
+			try
+			{
+				var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+				return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(result.Content);
+			}
+			catch (Exception e)
+			{
+				return new Dictionary<string, Dictionary<string, IEnumerable<string>>>();
+			}
 		}
 	}
 }

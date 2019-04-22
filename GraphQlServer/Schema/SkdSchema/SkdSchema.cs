@@ -6,6 +6,7 @@ using GraphQL.Resolvers;
 using GraphQL.Types;
 using GraphQL.Utilities;
 using Microsoft.Extensions.DependencyInjection;
+using SkdSchema.Types;
 
 namespace SkdSchema
 {

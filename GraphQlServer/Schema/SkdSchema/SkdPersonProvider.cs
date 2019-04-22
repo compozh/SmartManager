@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GraphQL.Types;
 using Newtonsoft.Json;
-using SkdScheme.Properties;
+using SkdSchema.Properties;
 using Web.Authentication;
 using Web.Tools;
 using Web.WebRequests;

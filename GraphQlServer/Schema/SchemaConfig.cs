@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SkdScheme
+namespace SkdSchema
 {
 	public static class SchemaConfig
 	{
 		public static void ConfigSchemas(this IServiceCollection services)
 		{
-			SkdSchema.SkdSchema.Config(services);
+			SkdSchema.Config(services);
 			CommonSchema.CommonSchema.Config(services);
 		}
 	}

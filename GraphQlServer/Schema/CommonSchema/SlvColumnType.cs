@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SkdScheme.CommonSchema
+namespace SkdSchema.CommonSchema
 {
 	public enum SlvColumnType
 	{

@@ -2,7 +2,7 @@
 using GraphQL.Resolvers;
 using GraphQL.Types;
 
-namespace SkdScheme.CommonSchema
+namespace SkdSchema.CommonSchema
 {
 	/// <summary>
 	/// Расширение для Field

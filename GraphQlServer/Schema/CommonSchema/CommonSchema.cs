@@ -1,11 +1,12 @@
-﻿using GraphQL;
+﻿using System;
+using GraphQL;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using Web.WebRequests;
 
-namespace SkdScheme.CommonSchema
+namespace SkdSchema.CommonSchema
 {
 	public class CommonSchema : Schema
 	{
@@ -54,18 +55,26 @@ namespace SkdScheme.CommonSchema
 					Description = type.Name,
 				};
 
-				//Наполнение типа полями
-				foreach (var col in type.Columns)
-				{
-					commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
+				var assemblyType = Type.GetType("SkdSchema.Types." + type.Name);
+				//Если такой тип уже есть 
+				if (assemblyType != null) {
+					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => new object());
 				}
-
-				//Наполнение схемы типами
-				root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-						return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+				else
+				{
+					//Наполнение типа полями
+					foreach (var col in type.Columns)
+					{
+						commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 					}
-				);
-				
+
+					//Наполнение схемы типами
+					root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
+							return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+						}
+					);
+
+				}
 				RegisterTypes(commonType);
 			}
 		}
