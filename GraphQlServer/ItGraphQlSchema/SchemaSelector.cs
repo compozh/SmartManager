@@ -1,7 +1,7 @@
 using GraphQL;
 using GraphQL.Types;
 
-namespace SkdSchema
+namespace ItGraphQlSchema
 {
 	public class SchemaSelector
 	{

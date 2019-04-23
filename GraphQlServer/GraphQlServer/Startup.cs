@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using GraphQlServer.Authentication;
 using GraphQL;
 using GraphQL.Http;
-using GraphQL.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,13 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using SkdSchema;
+using ItGraphQlSchema;
 using Web.Authentication;
 using Web.Data;
 using Web.Tools;
 using Web.WebRequests;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.AspNetCore.Localization;
 using GraphQlServer.CultureMiddleware;
 
 namespace GraphQlServer

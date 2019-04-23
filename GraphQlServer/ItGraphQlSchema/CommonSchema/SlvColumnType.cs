@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SkdSchema.CommonSchema
+namespace ItGraphQlSchema.CommonSchema
 {
 	public enum SlvColumnType
 	{

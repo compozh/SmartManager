@@ -4,21 +4,22 @@ using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
-using Web.WebRequests;
 
-namespace SkdSchema.CommonSchema
+namespace ItGraphQlSchema.CommonSchema
 {
 	public class CommonSchema : Schema
 	{
+		private IDependencyResolver _dependencyResolver;
 		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName, bool anonymousСall) : base(dependencyResolver)
 		{
-			var root = new ObjectGraphType
+			_dependencyResolver = dependencyResolver;
+		   var root = new ObjectGraphType
 			{
 				Name = "QueryRoot"
 			};
 			Query = root;
-			var schemaTools = dependencyResolver.Resolve<SchemaTools>();
-			var cache = dependencyResolver.Resolve<IMemoryCache>();
+			var schemaTools = _dependencyResolver.Resolve<SchemaTools>();
+			var cache = _dependencyResolver.Resolve<IMemoryCache>();
 			//Выбираем из Local Storage схему
 			var schemaDescription = cache.Get<SchemaDescription>(schemaName);
 			//Проверяем, схему, если нашли в хранилище, то ок
@@ -55,28 +56,35 @@ namespace SkdSchema.CommonSchema
 					Description = type.Name,
 				};
 
-				var assemblyType = Type.GetType("SkdSchema.Types." + type.Name);
-				//Если такой тип уже есть 
-				if (assemblyType != null) {
-					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => new object());
-				}
-				else
-				{
-					//Наполнение типа полями
-					foreach (var col in type.Columns)
-					{
-						commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
-					}
+				getSchemaType(type, root, commonType);
 
-					//Наполнение схемы типами
-					root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
-							return dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
-						}
-					);
-
-				}
 				RegisterTypes(commonType);
 			}
+		}
+
+		private void getSchemaType(SchemaType type, ObjectGraphType root, ObjectGraphType commonType)
+		{
+			//Если такой тип уже есть 
+			if (type.BrowseId == string.Empty && type.TableName == string.Empty)
+			{
+				var assemblyType = Type.GetType("ItGraphQlSchema.Types." + type.Name);
+				if (assemblyType != null)
+				{
+					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => new object());
+				}
+				return;
+			}
+			//Наполнение типа полями
+			foreach (var col in type.Columns)
+			{
+				commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
+			}
+
+			//Наполнение схемы типами
+			root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
+					return _dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
+				}
+			);
 		}
 
 		public static void Config(IServiceCollection services)

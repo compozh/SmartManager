@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28711.60
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQlServer", "GraphQlServer\GraphQlServer.csproj", "{D9A5E89C-4B26-4AC3-8941-FEA5D516598B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphQlServer", "GraphQlServer\GraphQlServer.csproj", "{D9A5E89C-4B26-4AC3-8941-FEA5D516598B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schema", "Schema\Schema.csproj", "{902659CB-E2AF-4264-B450-52DF14807C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItGraphQlSchema", "ItGraphQlSchema\ItGraphQlSchema.csproj", "{902659CB-E2AF-4264-B450-52DF14807C0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

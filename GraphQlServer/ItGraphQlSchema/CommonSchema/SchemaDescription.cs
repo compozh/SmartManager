@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SkdSchema.CommonSchema
+namespace ItGraphQlSchema.CommonSchema
 {
 	public	class SchemaDescription
 	{

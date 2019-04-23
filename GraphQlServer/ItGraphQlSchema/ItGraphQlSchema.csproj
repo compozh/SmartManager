@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
-        <RootNamespace>SkdSchema</RootNamespace>
+        <RootNamespace>ItGraphQlSchema</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

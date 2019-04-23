@@ -1,17 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using GraphQL.Types;
 using Newtonsoft.Json;
-using SkdSchema.Properties;
+using ItGraphQlSchema.Properties;
 using Web.Authentication;
 using Web.Tools;
 using Web.WebRequests;
 
-namespace SkdSchema
+namespace ItGraphQlSchema
 {
 	public interface ISkdPersonProvider
 	{

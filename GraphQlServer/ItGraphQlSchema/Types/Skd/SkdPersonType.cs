@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GraphQL.Types;
-using SkdSchema;
+﻿using GraphQL.Types;
 
-namespace SkdSchema.Types
+namespace ItGraphQlSchema.Types
 {
 	public class SkdPersonType : ObjectGraphType<SkdPerson>
 	{

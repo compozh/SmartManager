@@ -1,7 +1,6 @@
 ﻿using GraphQL.Types;
-using SkdSchema;
 
-namespace SkdSchema.Types
+namespace ItGraphQlSchema.Types
 {
 	public class SkdPersonTableType : ObjectGraphType
 	{

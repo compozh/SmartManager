@@ -10,7 +10,7 @@ var path = window.location.pathname.split('/').filter(r => r)[0] || "";
 path = path ? `/${path}`:'';
 
 function graphQLFetcher (graphQLParams) {
-	graphQLParams.SchemaName = localStorage.getItem("schema") || "SkdSchema";
+	graphQLParams.SchemaName = localStorage.getItem("schema") || "Schema";
 	return axios({
 		method: 'POST',
 		url: window.location.origin +path+ '/api/graphql' + window.location.search,
@@ -49,7 +49,7 @@ document.getElementById("schema").addEventListener("change", function (ev) {
 
 
 function setLoginState () {
-	document.getElementById("schema").value = localStorage.getItem("schema") || "SkdSchema";
+	document.getElementById("schema").value = localStorage.getItem("schema") || "Schema";
 	if (localStorage.getItem("authTokenGraphQl")) {
 		document.getElementsByClassName("login-panel")[0].style.display = "none";
 		document.getElementsByClassName("logout-panel")[0].style.display = "flex";

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SkdSchema
+namespace ItGraphQlSchema
 {
 	public static class SchemaConfig
 	{
