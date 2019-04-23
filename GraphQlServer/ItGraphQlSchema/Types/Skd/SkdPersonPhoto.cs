@@ -1,4 +1,4 @@
-namespace ItGraphQlSchema
+namespace ItGraphQlSchema.Types
 {
 	public class SkdPersonPhoto
 	{

@@ -2,9 +2,9 @@
 
 namespace ItGraphQlSchema.Types
 {
-	public class SkdPersonType : ObjectGraphType<SkdPerson>
+	public class SkdPersonType : ObjectGraphType<SkdPerson>, IItAddInSingleton
 	{
-		public SkdPersonType(ISkdPersonProvider provider)
+		public SkdPersonType(SkdPersonProvider provider)
 		{
 			Name = "Person";
 

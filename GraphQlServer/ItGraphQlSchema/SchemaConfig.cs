@@ -1,3 +1,4 @@
+using ItGraphQlSchema.Types;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema
@@ -6,7 +7,7 @@ namespace ItGraphQlSchema
 	{
 		public static void ConfigSchemas(this IServiceCollection services)
 		{
-			SkdSchema.Config(services);
+			ForAllSchemas.Config(services);
 			CommonSchema.CommonSchema.Config(services);
 		}
 	}
