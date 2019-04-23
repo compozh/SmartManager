@@ -50,20 +50,14 @@ namespace ItGraphQlSchema.CommonSchema
 					continue;
 				}
 
-				var commonType = getSchemaType(type, root);
+				registerSchemaType(type, root);
 
-				RegisterTypes(commonType);
 			}
 		}
 
-		private ObjectGraphType getSchemaType(SchemaType type, ObjectGraphType root)
+		private void registerSchemaType(SchemaType type, ObjectGraphType root)
 		{
-			var commonType = new ObjectGraphType
-			{
-				Name = type.Id,
-				Description = type.Name,
-			};
-			//Если такой тип уже есть 
+			//Если такой тип в проекте уже уже есть 
 			if (string.IsNullOrEmpty(type.BrowseId) && string.IsNullOrEmpty(type.TableName))
 			{
 				var assemblyType = Type.GetType("ItGraphQlSchema.Types." + type.Name);
@@ -72,20 +66,24 @@ namespace ItGraphQlSchema.CommonSchema
 					var resolver = new object();
 					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => resolver);
 				}
-				return null;
+				return;
 			}
+			var commonType = new ObjectGraphType
+			{
+				Name = type.Id,
+				Description = type.Name,
+			};
 			//Наполнение типа полями
 			foreach (var col in type.Columns)
 			{
 				commonType.DictionaryField(typeSelection(col.Type), col.Name.ToLower(), col.Description);
 			}
-
 			//Наполнение схемы типами
 			root.Field(type.Id, new ListGraphType(commonType), type.Name, resolve: ctx => {
 					return _dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
 				}
 			);
-			return commonType;
+			RegisterTypes(commonType);
 		}
 
 		public static void Config(IServiceCollection services)
