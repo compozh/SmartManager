@@ -33,20 +33,15 @@ namespace ItGraphQlSchema.Types
 					var order = new Order(){
 						Id = reader.GetInt32(indexId),
 						Name = reader.IsDBNull(indexName) ? null : reader.GetString(indexName).Trim(),
-						items = new List<Item>()
 					};
 					orders.Add(order);
 				}
 			}
 			command.Connection.Close();
-			foreach (var order in orders)
-			{
-				order.items = await getItems(order);
-			}
 
 			return orders;
 		}
-		private async Task<List<Item>> getItems(Order order)
+		public async Task<List<Item>> GetItemsForOrder(Order order)
 		{
 			var items = new List<Item>();
 			var indexId = 0;
