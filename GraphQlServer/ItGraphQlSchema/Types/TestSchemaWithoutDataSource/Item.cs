@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ItGraphQlSchema.Types
 {
-	public class Order
+	public class Item
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public List<Item> items { get; set; }
 	}
 }

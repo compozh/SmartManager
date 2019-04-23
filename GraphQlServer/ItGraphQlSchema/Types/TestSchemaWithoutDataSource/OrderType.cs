@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GraphQL.Types;
+﻿using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
@@ -13,7 +10,7 @@ namespace ItGraphQlSchema.Types
 
 			Field(p => p.Id).Description("Id  заказа");
 			Field(p => p.Name).Description("Заказчик");
-			Field(p => p.IdOrderItem).Description("Заказанный товар ");
+			Field<ListGraphType<ItemType>>("Items", description: "айтемы");
 		}
 	}
 }
