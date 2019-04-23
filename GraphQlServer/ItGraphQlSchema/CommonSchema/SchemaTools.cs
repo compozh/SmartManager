@@ -86,9 +86,9 @@ namespace ItGraphQlSchema.CommonSchema
 							Columns = new List<SchemaColumn>(),
 							Joins = new Dictionary<string,  IEnumerable<string>>()
 						};
-						if (joins.ContainsKey(newType.Id.ToUpper()))
+						if (joins.ContainsKey(newType.Id))
 						{
-							newType.Joins = joins[newType.Id.ToUpper()];
+							newType.Joins = joins[newType.Id];
 						}
 						schema.Types.Add(newType);
 					}
@@ -156,11 +156,11 @@ namespace ItGraphQlSchema.CommonSchema
 					{
 						continue;
 					}
-					foreach (var join in type.Joins[el.Name])
+					foreach (var joinItem in type.Joins[el.Name])
 					{
-						if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != @join))
+						if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != joinItem))
 						{
-							joinsInRequest.Add(join);
+							joinsInRequest.Add(joinItem);
 						}
 					}
 				}
@@ -168,11 +168,11 @@ namespace ItGraphQlSchema.CommonSchema
 
 			//Проверяем, есть ли такой join, если нет, то добавляем
 			if (type.Joins.Count > 0) { 
-				foreach (var join in type.Joins["#condition#"])
+				foreach (var joinItem in type.Joins["#condition#"])
 				{
-					if (!joinsInRequest.Contains(join))
+					if (!joinsInRequest.Contains(joinItem))
 					{
-						joinsInRequest.Add(join);
+						joinsInRequest.Add(joinItem);
 					}
 				}
 			}
@@ -289,8 +289,9 @@ namespace ItGraphQlSchema.CommonSchema
 			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
 			try
 			{
-				var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
-				return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(result.Content);
+				var responseFromWeb = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+				var dict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(responseFromWeb.Content);
+				return new Dictionary<string, Dictionary<string, IEnumerable<string>>>(dict, StringComparer.InvariantCultureIgnoreCase);
 			}
 			catch (Exception e)
 			{

@@ -50,29 +50,29 @@ namespace ItGraphQlSchema.CommonSchema
 					continue;
 				}
 
-				var commonType = new ObjectGraphType
-				{
-					Name = type.Id,
-					Description = type.Name,
-				};
-
-				getSchemaType(type, root, commonType);
+				var commonType = getSchemaType(type, root);
 
 				RegisterTypes(commonType);
 			}
 		}
 
-		private void getSchemaType(SchemaType type, ObjectGraphType root, ObjectGraphType commonType)
+		private ObjectGraphType getSchemaType(SchemaType type, ObjectGraphType root)
 		{
+			var commonType = new ObjectGraphType
+			{
+				Name = type.Id,
+				Description = type.Name,
+			};
 			//Если такой тип уже есть 
-			if (type.BrowseId == string.Empty && type.TableName == string.Empty)
+			if (string.IsNullOrEmpty(type.BrowseId) && string.IsNullOrEmpty(type.TableName))
 			{
 				var assemblyType = Type.GetType("ItGraphQlSchema.Types." + type.Name);
 				if (assemblyType != null)
 				{
-					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => new object());
+					var resolver = new object();
+					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => resolver);
 				}
-				return;
+				return null;
 			}
 			//Наполнение типа полями
 			foreach (var col in type.Columns)
@@ -85,6 +85,7 @@ namespace ItGraphQlSchema.CommonSchema
 					return _dependencyResolver.Resolve<SchemaTools>().GetDataForType(type, ctx.SubFields.Keys.ToList());
 				}
 			);
+			return commonType;
 		}
 
 		public static void Config(IServiceCollection services)
