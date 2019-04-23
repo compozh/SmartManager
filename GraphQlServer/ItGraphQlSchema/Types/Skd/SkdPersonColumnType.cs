@@ -2,7 +2,7 @@
 
 namespace ItGraphQlSchema.Types
 {
-	public class SkdPersonColumnType : ObjectGraphType
+	public class SkdPersonColumnType : ObjectGraphType, IItAddInSingleton
 	{
 		public SkdPersonColumnType()
 		{
@@ -10,6 +10,5 @@ namespace ItGraphQlSchema.Types
 			Field<StringGraphType>("key", "Ключ колонки");
 			Field<StringGraphType>("caption", "Заголовок колонки");
 		}
-
 	}
 }

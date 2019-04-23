@@ -8,7 +8,7 @@ using Web.Authentication;
 using Web.Tools;
 using Web.WebRequests;
 
-namespace ItGraphQlSchema
+namespace ItGraphQlSchema.Types
 {
 	public interface ISkdPersonProvider
 	{
@@ -16,7 +16,6 @@ namespace ItGraphQlSchema
 		Task<IEnumerable<SkdPersonPhoto>> GetPersonsPhotos(IEnumerable<string> userIds);
 		Task<SkdPersonPhoto> GetPersonPhoto(string userId);
 	}
-
 	
 	public class SkdUserInfo
 	{
@@ -70,7 +69,7 @@ namespace ItGraphQlSchema
 		public string HASKEY { get; set; }
 	}
 	
-	public class SkdPersonProvider : ISkdPersonProvider
+	public class SkdPersonProvider : ISkdPersonProvider, IItAddInSingleton
 	{
 		private readonly WebRequestsTools _webRequestsTools;
 
@@ -188,7 +187,5 @@ namespace ItGraphQlSchema
 		{
 			return await getPersonsPhotoAsync(userIds); 
 		}
-
-		
 	}
 }

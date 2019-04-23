@@ -1,6 +1,6 @@
 using System;
 
-namespace ItGraphQlSchema
+namespace ItGraphQlSchema.Types
 {
 	public class SkdPerson
 	{
