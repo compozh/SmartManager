@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Validation;
+using ItGraphQlSchema;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using SkdScheme;
-using Web.Data;
 
 namespace GraphQlServer
 {

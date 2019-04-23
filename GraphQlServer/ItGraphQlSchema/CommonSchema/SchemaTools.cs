@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Web.Data;
 using Web.WebRequests;
 
-namespace SkdScheme.CommonSchema
+namespace ItGraphQlSchema.CommonSchema
 {
 	public class SchemaTools
 	{
@@ -76,9 +76,8 @@ namespace SkdScheme.CommonSchema
 				{
 					while (reader.Read())
 					{
-
 						var newType = new SchemaType() {
-							Id = reader.GetString(typeIndex).Trim(),
+							Id = reader.GetString(typeIndex).Trim().ToLower(),
 							Name = reader.GetString(nameIndex).Trim(),
 							TableName = reader.GetString(dbIndex).Trim(),
 							BrowseId = reader.GetString(krepIndex).Trim(),
@@ -148,26 +147,33 @@ namespace SkdScheme.CommonSchema
 			{
 				 foreach (var el in type.Columns)
 				{
-					if (String.Equals(el.Name, name, StringComparison.InvariantCultureIgnoreCase))
+					if (!String.Equals(el.Name, name, StringComparison.InvariantCultureIgnoreCase))
 					{
-						foreach (var join in type.Joins[el.Name])
+						continue;
+					}
+					schemaColumns.Add(el);
+					if (type.Joins.Count==0)
+					{
+						continue;
+					}
+					foreach (var joinItem in type.Joins[el.Name])
+					{
+						if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != joinItem))
 						{
-							if (type.Joins.ContainsKey(el.Name) && joinsInRequest.All(el1 => el1 != join))
-							{
-								joinsInRequest.Add(join);
-							}
+							joinsInRequest.Add(joinItem);
 						}
-						schemaColumns.Add(el);
 					}
 				}
 			}
 
 			//Проверяем, есть ли такой join, если нет, то добавляем
-			foreach (var join in type.Joins["#condition#"])
-			{
-				if (!joinsInRequest.Contains(join))
+			if (type.Joins.Count > 0) { 
+				foreach (var joinItem in type.Joins["#condition#"])
 				{
-					joinsInRequest.Add(join);
+					if (!joinsInRequest.Contains(joinItem))
+					{
+						joinsInRequest.Add(joinItem);
+					}
 				}
 			}
 
@@ -281,8 +287,16 @@ namespace SkdScheme.CommonSchema
 		private async Task<Dictionary<string, Dictionary<string,  IEnumerable<string>>>> GetJoins(string SchemaId, bool anonymousСall)
 		{
 			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
-			var result = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
-			return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(result.Content); 
+			try
+			{
+				var responseFromWeb = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);
+				var dict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, IEnumerable<string>>>>(responseFromWeb.Content);
+				return new Dictionary<string, Dictionary<string, IEnumerable<string>>>(dict, StringComparer.InvariantCultureIgnoreCase);
+			}
+			catch (Exception e)
+			{
+				return new Dictionary<string, Dictionary<string, IEnumerable<string>>>();
+			}
 		}
 	}
 }

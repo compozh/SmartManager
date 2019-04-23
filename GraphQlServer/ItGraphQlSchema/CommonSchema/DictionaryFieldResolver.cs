@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GraphQL.Resolvers;
 using GraphQL.Types;
 
-namespace SkdScheme.CommonSchema
+namespace ItGraphQlSchema.CommonSchema
 {
 	/// <summary>
 	/// Расширение для Field

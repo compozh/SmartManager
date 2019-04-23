@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using GraphQL;
+﻿using GraphQL;
 using GraphQL.Types;
-using GraphQL.Resolvers;
-using GraphQL.Types;
-using GraphQL.Utilities;
 using Microsoft.Extensions.DependencyInjection;
+using ItGraphQlSchema.Types;
 
-namespace SkdSchema
+namespace ItGraphQlSchema
 {
 	public class SkdSchema:Schema
 	{

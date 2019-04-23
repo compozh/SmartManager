@@ -32233,7 +32233,7 @@ var path = window.location.pathname.split('/').filter(function (r) {
 
 path = path ? '/' + path : '';
 function graphQLFetcher(graphQLParams) {
-	graphQLParams.SchemaName = localStorage.getItem("schema") || "SkdSchema";
+	graphQLParams.SchemaName = localStorage.getItem("schema") || "Schema";
 	return (0, _axios2.default)({
 		method: 'POST',
 		url: window.location.origin + path + '/api/graphql' + window.location.search,
@@ -32270,7 +32270,7 @@ document.getElementById("schema").addEventListener("change", function (ev) {
 });
 
 function setLoginState() {
-	document.getElementById("schema").value = localStorage.getItem("schema") || "SkdSchema";
+	document.getElementById("schema").value = localStorage.getItem("schema") || "Schema";
 	if (localStorage.getItem("authTokenGraphQl")) {
 		document.getElementsByClassName("login-panel")[0].style.display = "none";
 		document.getElementsByClassName("logout-panel")[0].style.display = "flex";

@@ -1,6 +1,6 @@
 using System;
 
-namespace SkdSchema
+namespace ItGraphQlSchema
 {
 	public class SkdPerson
 	{

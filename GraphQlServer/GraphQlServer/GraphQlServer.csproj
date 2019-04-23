@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Schema\Schema.csproj" />
+    <Folder Include="public" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="public" />
+    <ProjectReference Include="..\ItGraphQlSchema\ItGraphQlSchema.csproj" />
   </ItemGroup>
 
 </Project>

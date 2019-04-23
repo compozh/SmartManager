@@ -1,7 +1,7 @@
 using GraphQL;
 using GraphQL.Types;
 
-namespace SkdScheme
+namespace ItGraphQlSchema
 {
 	public class SchemaSelector
 	{
@@ -14,14 +14,7 @@ namespace SkdScheme
 
 		public ISchema GetMatchSchema(string schemaName, bool anonymous—all)
 		{
-			if (typeof(SkdSchema.SkdSchema).Name == schemaName)
-			{
-				return _resolver.Resolve<SkdSchema.SkdSchema>();
-			}
-			else
-			{
-				return new CommonSchema.CommonSchema(_resolver, schemaName, anonymous—all);
-			}
+			return new CommonSchema.CommonSchema(_resolver, schemaName, anonymous—all);
 		}
 	}
 }
