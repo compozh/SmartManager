@@ -6,13 +6,14 @@ var myConfig = {
 	loaded: false
 }
 // Загрузка конфигурации приложения
+var url = "";
 let LoadConfig = new Promise((resolve) => {
 	if (myConfig.loaded) {
 		resolve();
 		return;
 	}
+	
 	Axios.get("AppSettings.json").then(res => {
-		var url = "";
 	if (typeof res.data === 'object' && res.data.hasOwnProperty("healthSummaryUrl") && res.data.healthSummaryUrl !== "" && res.data.healthSummaryUrl !== '/') {
 			url = res.data.healthSummaryUrl
 			if (url.substr(url.length - 1) != '/') {
@@ -22,17 +23,19 @@ let LoadConfig = new Promise((resolve) => {
 			genaerateApiUrl();
 		}
 		assignMyUrl();
-
+		resolve();
 	}, res => {
+
 		// Если ошибка загрузки 404, 500..
 		genaerateApiUrl();
+		resolve();
 	});
 })
 
 function assignMyUrl() {
 	myConfig.myUrl = url;
 	myConfig.loaded = true;
-	resolve();
+	
 }
 
 //Promise.rej 
