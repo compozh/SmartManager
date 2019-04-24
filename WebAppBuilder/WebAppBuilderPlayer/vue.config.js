@@ -1,4 +1,4 @@
 module.exports = {
-  publicPath: "/webapps_api/",
+  publicPath: "/",
   outputDir: "../WebAppBuilderApi/WebAppBuilderApi/dist"
 }

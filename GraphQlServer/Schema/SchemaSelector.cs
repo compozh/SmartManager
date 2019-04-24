@@ -18,6 +18,10 @@ namespace SkdScheme
 			{
 				return _resolver.Resolve<SkdSchema.SkdSchema>();
 			}
+			if (typeof(PurchasesSchema.PurchasesSchema).Name == schemaName)
+			{
+				return _resolver.Resolve<PurchasesSchema.PurchasesSchema>();
+			}
 			else
 			{
 				return new CommonSchema.CommonSchema(_resolver, schemaName, anonymous—all);

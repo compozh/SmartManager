@@ -32232,6 +32232,7 @@ var path = window.location.pathname.split('/').filter(function (r) {
 })[0] || "";
 
 path = path ? '/' + path : '';
+
 function graphQLFetcher(graphQLParams) {
 	graphQLParams.SchemaName = localStorage.getItem("schema") || "SkdSchema";
 	return (0, _axios2.default)({
@@ -32243,6 +32244,7 @@ function graphQLFetcher(graphQLParams) {
 		return resp.data;
 	});
 }
+
 _reactDom2.default.render(_react2.default.createElement(_graphiql2.default, { fetcher: graphQLFetcher }), document.getElementById('app'));
 
 document.getElementById("loginbutton").addEventListener("click", function (ev) {
