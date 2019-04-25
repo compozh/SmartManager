@@ -33,10 +33,10 @@ store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).th
   resetRouter([])
 
 
-  var loginRouteExists = routes.some(el=>(el.name||"").toLowerCase() == "login")
+  //var loginRouteExists = routes.some(el=>(el.name||"").toLowerCase() == "login")
 
   // Обработка доступа к роутам
-  router.beforeEach((to, from, next) => { routerBeforeEachFunction(to, from, next, loginRouteExists) })
+  router.beforeEach((to, from, next) => { routerBeforeEachFunction(to, from, next) })
 
 
   // формируем новый роутер
@@ -104,9 +104,9 @@ function getInternalComponentDescription(com) {
 
 }
 /** Валидация доступа пользователя к определенным маршрутам */
-let routerBeforeEachFunction = (to,from, next, loginRouteExists)=>{
+let routerBeforeEachFunction = (to,from, next)=>{
     // Если переходим на логин, запоминаем путь, для возвращения
-    if ((to.name || "").toLowerCase() == "login") {
+    if ((to.path || "").endsWith("login")) {
       var backPath = from.path;
       if (to.path == from.path) {
         backPath = `/${store.state.applicationDescription.Id}`
@@ -115,9 +115,9 @@ let routerBeforeEachFunction = (to,from, next, loginRouteExists)=>{
     }
     // Если запрещен анонимный доступ, и отсутствует текущий пользователь, перенаправляем на логин
     if (!to.meta.AllowAnonymous && !store.getters.getCurrentUser) {
-      if(loginRouteExists){
-        next({name: "LOGIN"});
-      }
+
+      next({path: "login"});
+
       return;
     }
     next();
