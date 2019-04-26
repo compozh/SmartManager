@@ -5,7 +5,8 @@ using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
-	public class ItemType : ObjectGraphType<Item>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class ItemType : ObjectGraphType<Item>
 	{
 		public ItemType()
 		{

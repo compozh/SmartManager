@@ -17,10 +17,10 @@ namespace ItGraphQlSchema
 		}
 		public static void Config(IServiceCollection services)
 		{
-			//Добавляем все типы в DI, которые ест ьв сборке и наследуются от IItAddInSingleton
+			//Добавляем все типы в DI, которые помечены атрибутом [AtributeAddInDI]
 			foreach (Type type in Assembly.GetCallingAssembly().GetTypes())
 			{
-				if (type.GetInterface("IItAddInSingleton") != null)
+				if (type.GetCustomAttribute<AtributeAddInDI>() != null)
 				{
 					services.AddSingleton(type);
 				}

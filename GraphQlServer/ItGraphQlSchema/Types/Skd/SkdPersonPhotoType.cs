@@ -2,7 +2,8 @@
 
 namespace ItGraphQlSchema.Types
 {
-	public class SkdPersonPhotoType : ObjectGraphType<SkdPersonPhoto>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class SkdPersonPhotoType : ObjectGraphType<SkdPersonPhoto>
 	{
 		public SkdPersonPhotoType()
 		{
