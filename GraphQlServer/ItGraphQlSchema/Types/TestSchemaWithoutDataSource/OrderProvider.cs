@@ -5,7 +5,8 @@ using Web.Data;
 
 namespace ItGraphQlSchema.Types
 {
-	 public class OrderProvider : IItAddInSingleton
+	[AtributeAddInDI]
+	public class OrderProvider
 	{
 		private readonly SqlClient _client;
 

@@ -2,7 +2,8 @@
 
 namespace ItGraphQlSchema.Types
 {
-	public class OrderQuery : ObjectGraphType<object>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class OrderQuery : ObjectGraphType<object>
 	{
 		public OrderQuery(OrderProvider provider)
 		{

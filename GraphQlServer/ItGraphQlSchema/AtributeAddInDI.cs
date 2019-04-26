@@ -4,7 +4,5 @@ using System.Text;
 
 namespace ItGraphQlSchema
 {
-	interface IItAddInSingleton
-	{
-	}
+	public class AtributeAddInDI : System.Attribute { }
 }

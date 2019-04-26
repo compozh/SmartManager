@@ -2,7 +2,8 @@
 
 namespace ItGraphQlSchema.Types
 {
-	public class SkdPersonColumnType : ObjectGraphType, IItAddInSingleton
+	[AtributeAddInDI]
+	public class SkdPersonColumnType : ObjectGraphType
 	{
 		public SkdPersonColumnType()
 		{

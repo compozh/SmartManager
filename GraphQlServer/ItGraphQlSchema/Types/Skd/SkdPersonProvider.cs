@@ -68,8 +68,9 @@ namespace ItGraphQlSchema.Types
 		[JsonProperty("HASKEY")]
 		public string HASKEY { get; set; }
 	}
-	
-	public class SkdPersonProvider : ISkdPersonProvider, IItAddInSingleton
+
+	[AtributeAddInDI]
+	public class SkdPersonProvider : ISkdPersonProvider
 	{
 		private readonly WebRequestsTools _webRequestsTools;
 
