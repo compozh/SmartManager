@@ -15,7 +15,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 	public class SmFoldersProvider: IItAddInSingleton
 	{
 		private readonly WebRequestsTools _webRequestsTools;
-
+		// получение задач не закачено
 		public SmFoldersProvider(WebRequestsTools webRequestsTools)
 		{
 			_webRequestsTools = webRequestsTools;
