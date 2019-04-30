@@ -6,7 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types
 {
-	public class EamQuery : QueryGraphType, IItAddInSingleton
+	[AtributeAddInDI]
+	public class EamQuery : QueryGraphType
 	{
 		public EamQuery(IEfGraphQLService efGraphQlService) :
 			base(efGraphQlService)

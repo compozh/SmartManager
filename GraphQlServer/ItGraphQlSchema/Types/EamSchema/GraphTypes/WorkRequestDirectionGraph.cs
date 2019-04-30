@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class WorkRequestDirectionGraph: EfObjectGraphType<WorkRequestDirection>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class WorkRequestDirectionGraph: EfObjectGraphType<WorkRequestDirection>
 	{
 		public WorkRequestDirectionGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

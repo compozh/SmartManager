@@ -9,7 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	class EamSchema : Schema, IItAddInSingleton
+	[AtributeAddInDI]
+	class EamSchema : Schema
 	{
 		public EamSchema(IDependencyResolver resolver) :
 		base(resolver)

@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class DepartmentGraph: EfObjectGraphType<Department>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class DepartmentGraph: EfObjectGraphType<Department>
 	{
 		public DepartmentGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

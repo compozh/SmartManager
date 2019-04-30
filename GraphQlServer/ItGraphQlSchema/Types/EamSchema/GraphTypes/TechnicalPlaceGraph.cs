@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class TechnicalPlaceGraph: EfObjectGraphType<TechnicalPlace>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class TechnicalPlaceGraph: EfObjectGraphType<TechnicalPlace>
 	{
 		public TechnicalPlaceGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

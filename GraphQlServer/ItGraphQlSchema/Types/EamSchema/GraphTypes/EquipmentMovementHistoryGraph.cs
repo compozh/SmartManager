@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class EquipmentMovementHistoryGraph: EfObjectGraphType<EquipmentMovementHistory>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class EquipmentMovementHistoryGraph: EfObjectGraphType<EquipmentMovementHistory>
 	{
 		public EquipmentMovementHistoryGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

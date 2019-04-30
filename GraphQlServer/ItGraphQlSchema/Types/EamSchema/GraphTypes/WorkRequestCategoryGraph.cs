@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class WorkRequestCategoryGraph : EfObjectGraphType<WorkRequestCategory>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class WorkRequestCategoryGraph : EfObjectGraphType<WorkRequestCategory>
 	{
 		public WorkRequestCategoryGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

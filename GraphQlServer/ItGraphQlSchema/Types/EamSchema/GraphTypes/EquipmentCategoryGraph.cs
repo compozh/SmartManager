@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class EquipmentCategoryGraph: EfObjectGraphType<EquipmentCategory>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class EquipmentCategoryGraph: EfObjectGraphType<EquipmentCategory>
 	{
 		public EquipmentCategoryGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

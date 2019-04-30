@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema.ApiModel
 {
-	public class SimpleDictionaryRecordGraph: EfObjectGraphType<SimpleDictionaryRecord>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class SimpleDictionaryRecordGraph: EfObjectGraphType<SimpleDictionaryRecord>
 	{
 		public SimpleDictionaryRecordGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

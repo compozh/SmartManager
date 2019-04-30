@@ -2,7 +2,8 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class ItObjectGraph: EfObjectGraphType<ItObject>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class ItObjectGraph: EfObjectGraphType<ItObject>
 	{
 		public ItObjectGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)

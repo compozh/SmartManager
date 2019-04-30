@@ -2,7 +2,8 @@
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class WorkRequestGraph : EfObjectGraphType<WorkRequest>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class WorkRequestGraph : EfObjectGraphType<WorkRequest>
 	{
 		public WorkRequestGraph(IEfGraphQLService graphQlService) :
 			base(graphQlService)
