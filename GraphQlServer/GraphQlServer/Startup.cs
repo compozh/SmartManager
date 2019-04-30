@@ -17,6 +17,8 @@ using Web.Tools;
 using Web.WebRequests;
 using Microsoft.Extensions.Caching.Memory;
 using GraphQlServer.CultureMiddleware;
+using ItGraphQlSchema.Types.EamSchema;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQlServer
 {
@@ -103,6 +105,9 @@ namespace GraphQlServer
 			services.ConfigSchemas();
 			services.AddSingleton<SchemaSelector>();
 			services.AddSingleton<IMemoryCache, MemoryCache>();
+
+			services.AddDbContext<EamContext>(options =>
+				options.UseSqlServer(Configuration["ConnectionStrings:Connection:ConnectionString"]));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,9 +125,10 @@ namespace GraphQlServer
 			app.UseAuthentication();
 
 			app.UseMiddleware<GraphQLMiddleware>(new GraphQLSettings {
-				BuildUserContext = ctx => new GraphQLUserContext {
-					User = ctx.User
-				}
+//				BuildUserContext = ctx => new GraphQLUserContext {
+//					User = ctx.User
+//				}
+				BuildUserContext = ctx => ctx
 			});
 
 			HttpContextAccessorHandler.Configure(contextAccessor);

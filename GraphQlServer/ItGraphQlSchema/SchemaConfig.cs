@@ -1,4 +1,3 @@
-using ItGraphQlSchema.Types;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema
@@ -9,6 +8,7 @@ namespace ItGraphQlSchema
 		{
 			ForAllSchemas.Config(services);
 			CommonSchema.CommonSchema.Config(services);
+			Types.EamSchema.EamSchema.Config(services);
 		}
 	}
 }

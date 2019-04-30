@@ -1,0 +1,25 @@
+using GraphQL.EntityFramework;
+
+namespace ItGraphQlSchema.Types.EamSchema
+{
+	public class EquipmentMovementHistoryGraph: EfObjectGraphType<EquipmentMovementHistory>, IItAddInSingleton
+	{
+		public EquipmentMovementHistoryGraph(IEfGraphQLService graphQlService) :
+			base(graphQlService)
+		{
+			Field(x => x.Id).Description("Id"); 
+			Field(x => x.StartDate, true);
+			Field(x => x.EndDate, true);
+			Field(x => x.EquipmentId, nullable:true);
+			Field(x => x.TechnicalPlaceId, true);
+			AddNavigationField(
+				name: "equipment",
+				resolve: context => context.Source.Equipment,
+				typeof(EquipmentGraph));
+			AddNavigationField(
+				name: "technicalPlace",
+				resolve: context => context.Source.TechnicalPlace,
+				typeof(TechnicalPlaceGraph));
+		}
+	}
+}
