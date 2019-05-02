@@ -20,9 +20,14 @@ namespace ItGraphQlSchema.CommonSchema
 			Query = root;
 			var schemaTools = _dependencyResolver.Resolve<SchemaTools>();
 			var cache = _dependencyResolver.Resolve<IMemoryCache>();
+			
 			//Выбираем из Local Storage схему
 			var schemaDescription = cache.Get<SchemaDescription>(schemaName);
+
+			// ВРЕМЕННО
+			schemaDescription = null;
 			//Проверяем, схему, если нашли в хранилище, то ок
+
 			if (schemaDescription == null)
 			{
 				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
