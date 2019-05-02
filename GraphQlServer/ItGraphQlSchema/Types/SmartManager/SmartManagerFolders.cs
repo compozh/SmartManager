@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-	
-	public class SmartManagerFolders : ObjectGraphType<SmFolders>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class SmartManagerFolders : ObjectGraphType<SmFolders>
 	{
 		public SmartManagerFolders(SmFoldersProvider provider)
 		{

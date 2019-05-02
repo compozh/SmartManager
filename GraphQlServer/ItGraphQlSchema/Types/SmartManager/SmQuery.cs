@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-   public class SmartManagerFoldersQuery : ObjectGraphType<object>, IItAddInSingleton
+	[AtributeAddInDI]
+	public class SmartManagerFoldersQuery : ObjectGraphType<object>
    {
 	  public SmartManagerFoldersQuery(SmFoldersProvider provider)
 		{
 			Name = "Query";
+			//получение папок
 			Field<ListGraphType<SmartManagerFolders>>("Folders",
 				resolve: (context => provider.getFoldersAsync()),
 				description: "Папки");

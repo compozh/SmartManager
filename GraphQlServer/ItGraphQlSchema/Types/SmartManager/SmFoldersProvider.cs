@@ -9,10 +9,11 @@ using Web.Authentication;
 using Web.Tools;
 using Web.WebRequests;
 
+
 namespace ItGraphQlSchema.Types.SmartManager
 {
-
-	public class SmFoldersProvider: IItAddInSingleton
+	[AtributeAddInDI]
+	public class SmFoldersProvider
 	{
 		private readonly WebRequestsTools _webRequestsTools;
 		// получение задач не закачено
@@ -38,6 +39,8 @@ namespace ItGraphQlSchema.Types.SmartManager
 					return JsonConvert.DeserializeObject<List<SmFolders>>(requestResult.Content);
 			}
 		}
+
+
 
 	}
 }
