@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace ItGraphQlSchema.Types.SmartManager
 {
 	[AtributeAddInDI]
-	public class SmartManagerFolders : ObjectGraphType<SmFolders>
+	public class SmartManagerFoldersGQ : ObjectGraphType<SmartManagerFolder>
 	{
-		public SmartManagerFolders(SmFoldersProvider provider)
+		public SmartManagerFoldersGQ(SmartManagerProvider provider)
 		{
 			Name = "Folders";
 
@@ -18,7 +18,5 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field(p => p.count).Description("Количество задач в папке");
 
 		}
-
-
 	}
 }
