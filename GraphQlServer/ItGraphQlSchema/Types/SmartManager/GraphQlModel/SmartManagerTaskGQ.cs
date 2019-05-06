@@ -20,6 +20,7 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.childdonecount).Description("Количество");
 			Field(p => p.dateadd).Description("Дата добавления");
 			Field(p => p.caseid).Description("Количество");
+
 		}
 	}
 }

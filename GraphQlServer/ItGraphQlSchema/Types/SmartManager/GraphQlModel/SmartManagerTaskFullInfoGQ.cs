@@ -47,7 +47,6 @@ namespace ItGraphQlSchema.Types.SmartManager
 	[AtributeAddInDI]
 	public class SmartManagerTaskCommentsGQ : ObjectGraphType<SmartManagerTaskComments>
 	{
-
 		public SmartManagerTaskCommentsGQ()
 		{
 			Name = "Comments";
@@ -55,9 +54,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field(p => p.Text);
 			Field(p => p.Date);
 		}
-
 	}
-
 
 	[AtributeAddInDI]
 	public class SmartManagerTaskFullInfoGQ : ObjectGraphType<SmartManagerTaskGetinfo>
@@ -115,11 +112,6 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field<ListGraphType<SmartManagerTaskOriginalGQ>>("Originals", resolve: context => context.Source.Originals);
 			Field<ListGraphType<SmartManagerTaskParticipantsGQ>>("Participants", resolve: context => context.Source.Participants);
 			Field<ListGraphType<SmartManagerTaskCommentsGQ>>("Comments", resolve: context => context.Source.Comments);
-
-
-
 		}
-
-
 	}
 }

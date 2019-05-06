@@ -11,3 +11,4 @@ namespace ItGraphQlSchema.Types.SmartManager
 		public int count { get; set; }
 	}
 }
+

@@ -11,8 +11,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 	{
 		public SmartManagerQuery(SmartManagerProvider provider)
 		{
-		
-			Name = "Query";
+		Name = "Query";
 			//получение папок
 			Field<ListGraphType<SmartManagerTaskGQ>>("Tasks",
 				arguments: new QueryArguments(new QueryArgument<StringGraphType> {Name = "folderId", Description = "Уникальный идентификатор задачи" }),

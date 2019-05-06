@@ -8,7 +8,6 @@ using Web.WebRequests;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-
 	[AtributeAddInDI]
 	public class SmartManagerProvider
 	{

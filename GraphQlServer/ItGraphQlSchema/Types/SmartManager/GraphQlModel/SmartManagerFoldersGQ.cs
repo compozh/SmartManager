@@ -18,7 +18,5 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field(p => p.count).Description("Количество задач в папке");
 
 		}
-
-
 	}
 }

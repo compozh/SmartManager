@@ -60,8 +60,5 @@ namespace ItGraphQlSchema.Types.SmartManager
 		public string nextbuttontext { get; set; }
 		public string previousbuttontext { get; set; }
 		public string role { get; set; }
-
-
-
 	}
 }

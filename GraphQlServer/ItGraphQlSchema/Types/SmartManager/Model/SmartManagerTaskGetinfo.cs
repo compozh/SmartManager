@@ -86,7 +86,6 @@ namespace ItGraphQlSchema.Types.SmartManager
 		public List<SmartManagerTaskComments> Comments { get; set; }
 		//[JsonProperty("tasks")]
 		//public string Tasks { get; set; }
-
 	}
 
 	public class SmartManagerTaskParticipants
