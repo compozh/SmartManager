@@ -18,7 +18,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 
 		}
 		//метод получения всех папок
-		public async Task<List<SmartManagerFolders>> getFoldersAsync()
+		public async Task<List<SmartManagerFolder>> GetFoldersAsync()
 		{
 			var calcId = "SM.GETFOLDERS";
 			var args = "{\"STATUS\":\",*\",\"INCONTROL\":0,\"HELPEREXEC\":false,}";
@@ -31,45 +31,24 @@ namespace ItGraphQlSchema.Types.SmartManager
 				case WebRequestsResponseFlags.NotAuthorised:
 					return null;
 				default:
-					return JsonConvert.DeserializeObject<List<SmartManagerFolders>>(requestResult.Content);
+					return JsonConvert.DeserializeObject<List<SmartManagerFolder>>(requestResult.Content);
 			}
 		}
 		public async Task<List<SmartManagerTask>> GetTasksAsync(string folderId)
 		{
-			if (String.IsNullOrEmpty(folderId))
-			{
-				var calcId = "SM.GETTASKS";
-
-				var args = "{\"STATUS\":\",*,?\", \"INCONTROL\":0, \"FOLDER\":\"\", \"HELPEREXEC\":false,}";
-				var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
-				var requestResult = await task;
-
-				switch (requestResult.ResultFlag)
-				{
-					case WebRequestsResponseFlags.WrongTicket:
-					case WebRequestsResponseFlags.NotAuthorised:
-						return null;
-					default:
-						return JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
-				}
-
-			}
-			else
-			{
 				var calcId = "SM.GETTASKS";
 				var temp = folderId.Select(x => new { FolderId = x });
-				var args = JsonConvert.SerializeObject(new { STATUS = ",*,?", INCONTROL = 0, FOLDER = folderId, HELPEREXEC = false });//(new { Users = temp, ByLogin = false, SaveInContent = true });
-				var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
-				var requestResult = await task;
-				switch (requestResult.ResultFlag)
-				{
-					case WebRequestsResponseFlags.WrongTicket:
-					case WebRequestsResponseFlags.NotAuthorised:
-						return null;
-					default:
-						return JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
-
-				}
+				var args = JsonConvert.SerializeObject(new { STATUS = ",*,?", INCONTROL = 0, FOLDER = folderId??"", HELPEREXEC = false });//(new { Users = temp, ByLogin = false, SaveInContent = true });
+			
+			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
+			var requestResult = await task;
+			switch (requestResult.ResultFlag)
+			{
+				case WebRequestsResponseFlags.WrongTicket:
+				case WebRequestsResponseFlags.NotAuthorised:
+					return null;
+				default:
+					return JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
 			}
 
 		}
@@ -77,7 +56,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 		{
 			var calcId = "SM.TASK.GETINFO";
 			//	var temp = taskId.Select(x => new { taskId = x });
-			var args = JsonConvert.SerializeObject(new { ID = taskId });//(new { Users = temp, ByLogin = false, SaveInContent = true });
+			var args = JsonConvert.SerializeObject(new { ID = taskId });
 			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
 			var requestResult = await task;
 			switch (requestResult.ResultFlag)

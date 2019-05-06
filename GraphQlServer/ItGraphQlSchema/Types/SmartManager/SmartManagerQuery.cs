@@ -25,7 +25,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 
 			//получение папок
 			Field<ListGraphType<SmartManagerFoldersGQ>>("Folders",
-				resolve: (context => provider.getFoldersAsync()),
+				resolve: (context => provider.GetFoldersAsync()),
 				description: "Папки");
 		}
 	}

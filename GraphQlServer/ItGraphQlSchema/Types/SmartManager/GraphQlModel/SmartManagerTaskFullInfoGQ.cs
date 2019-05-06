@@ -3,59 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ItGraphQlSchema.Types.SmartManager.Model;
+using ItGraphQlSchema.Types.SmartManager.GraphQlModel;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-	[AtributeAddInDI]
-	public class SmartManagerTaskOriginalGQ : ObjectGraphType<SmartManagerTaskOriginals>
-	{
-		public SmartManagerTaskOriginalGQ()
-		{
-			Name = "Originals";
-			Field(p => p.FileName);
-			Field(p => p.Id);
-			Field(p => p.Comm);
-			Field(p => p.Fileext);
-			Field(p => p.IsMy);
-			Field(p => p.IsSign);
-			Field(p => p.Filesize);
-			Field(p => p.Ndor);
-			Field(p => p.Type);
-			Field(p => p.TypeDescription);
-			Field(p => p.TypeName);
-			Field(p => p.User);
-			Field(p => p.date);
-
-		}
-
-	}
-
-	[AtributeAddInDI]
-	public class SmartManagerTaskParticipantsGQ : ObjectGraphType<SmartManagerTaskParticipants>
-	{
-
-		public SmartManagerTaskParticipantsGQ()
-		{
-			Name = "Participants";
-			Field(p => p.UserId);
-			Field(p => p.UserFio);
-			Field(p => p.Role);
-		}
-
-	}
-
-	[AtributeAddInDI]
-	public class SmartManagerTaskCommentsGQ : ObjectGraphType<SmartManagerTaskComments>
-	{
-		public SmartManagerTaskCommentsGQ()
-		{
-			Name = "Comments";
-			Field(p => p.User);
-			Field(p => p.Text);
-			Field(p => p.Date);
-		}
-	}
-
+	
 	[AtributeAddInDI]
 	public class SmartManagerTaskFullInfoGQ : ObjectGraphType<SmartManagerTaskGetinfo>
 	{
@@ -106,9 +59,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field(p => p.Role);
 			Field(p => p.Priority);
 			Field(p => p.PreviousButtonText);
-
-				//SmartManagerTaskGetinfoNestedOriginals a = new SmartManagerTaskGetinfoNestedOriginals();
-				// вложенные объекты 
+			// вложенные объекты 
 			Field<ListGraphType<SmartManagerTaskOriginalGQ>>("Originals", resolve: context => context.Source.Originals);
 			Field<ListGraphType<SmartManagerTaskParticipantsGQ>>("Participants", resolve: context => context.Source.Participants);
 			Field<ListGraphType<SmartManagerTaskCommentsGQ>>("Comments", resolve: context => context.Source.Comments);

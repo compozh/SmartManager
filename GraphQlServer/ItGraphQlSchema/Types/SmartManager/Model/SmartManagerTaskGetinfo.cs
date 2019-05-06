@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
@@ -83,55 +84,14 @@ namespace ItGraphQlSchema.Types.SmartManager
 		[JsonProperty("Originals")]
 		public List <SmartManagerTaskOriginals> Originals { get; set; }
 		[JsonProperty("comments")]
-		public List<SmartManagerTaskComments> Comments { get; set; }
+		public List<SmartManagerTaskComment> Comments { get; set; }
 		//[JsonProperty("tasks")]
 		//public string Tasks { get; set; }
 	}
 
-	public class SmartManagerTaskParticipants
-	{
-		//[JsonProperty("userid")]
-		//public int? UserId { get; set; }
-		[JsonProperty("userid")]
-		public string UserId { get; set; }
-		[JsonProperty("userfio")]
-		public string UserFio { get; set; }
-		[JsonProperty("ROLE")]
-		public string Role { get; set; }
-	}
 
-	public class SmartManagerTaskOriginals
-	{
-		[JsonProperty("Id")]
-		public int  Id { get; set; }
-		[JsonProperty("ndor")]
-		public int Ndor { get; set; }
-		[JsonProperty("filename")]
-		public string FileName { get; set; }
-		[JsonProperty("user")]
-		public string User { get; set; }
-		[JsonProperty("date")]
-		public DateTime date { get; set; }
-		[JsonProperty("ismy")]
-		public bool IsMy { get; set; }
-		[JsonProperty("fileext")]
-		public string Fileext { get; set; }
-		public string Comm { get; set; }
-		public int Filesize { get; set; }
-		public string Type { get; set; }
-		[JsonProperty("typename")]
-		public string TypeName { get; set; }
-		[JsonProperty("typedescription")]
-		public string TypeDescription { get; set; }
-		[JsonProperty("issign")]
-		public bool IsSign { get; set; }
 
-	}
 
-	public class SmartManagerTaskComments
-	{
-		public string User { get; set; }
-		public DateTime Date { get; set; }
-		public string Text { get; set; }
-	}
+
+	
 }
