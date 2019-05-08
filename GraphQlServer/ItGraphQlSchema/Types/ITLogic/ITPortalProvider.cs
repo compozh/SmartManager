@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ItGraphQlSchema.Types.ITLogic.Model;
 using Newtonsoft.Json;
 using Web.WebRequests;
 
@@ -20,41 +21,26 @@ namespace ItGraphQlSchema.Types.ITLogic
 		/// </summary>
 		/// <param name="anonymousСall"> Анонимность вызова</param>
 		/// <returns></returns>
-		public async Task<Dictionary<string, object>> GetFavoriteMenu(bool anonymousСall)
+		public async Task<ITMenuItems> GetMenu()
 		{
 			var args = "";
 
-			try
-			{
-				var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL", args, false);
-				return JsonConvert.DeserializeObject<Dictionary<string, object>>(responseFromWeb.Content);
-			}
-			catch (Exception e)
-			{
-				return new Dictionary<string, object>();
-			}
+			var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL.MENU", args);
+			return JsonConvert.DeserializeObject<ITMenuItems>(responseFromWeb.Content);
 		}
 
 		/// <summary>
 		/// Получение всех разделов по выбранному пункту меню
 		/// </summary>
-		/// <param name="folderCode"> Код папки</param>
-		/// <param name="anonymousСall"> Анонимность вызова</param>
+		/// <param name="folderCode"> Код модуля</param>
 		/// <returns></returns>
-		public async Task<Dictionary<string, object>> GetFavoriteForFolder(string folderCode,bool anonymousСall)
+		public async Task<MenuModule> GetModuleContent(string moduleCode)
 		{
-			folderCode = "MP.NORM";
-			var args = "{\"FOLDERCODE\":\"" + folderCode + "\"}";
+			moduleCode = "MP.NORM";
+			var args = "{\"MODULECODE\":\"" + moduleCode + "\"}";
 
-			try
-			{
-				var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTALFOLDER", args, false);
-				return JsonConvert.DeserializeObject<Dictionary<string, object>>(responseFromWeb.Content);
-			}
-			catch (Exception e)
-			{
-				return new Dictionary<string, object>();
-			}
+			var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL.MENUMODULE", args);
+			return JsonConvert.DeserializeObject<MenuModule>(responseFromWeb.Content);
 		}
 	}
 }

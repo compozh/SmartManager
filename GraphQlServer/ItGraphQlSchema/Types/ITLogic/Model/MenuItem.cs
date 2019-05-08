@@ -1,8 +1,11 @@
 using GraphQL.Types;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace ItGraphQlSchema.Types.ITLogic.Model
 {
+
+
 	[AtributeAddInDI]
 	public class MenuItem : ObjectGraphType<MenuItem>
 	{
@@ -14,13 +17,19 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 			Field(p => p.IsFolder);
 			Field(p => p.Image);
 			Field<ListGraphType<MenuItem>>("Nodes",
-				resolve: ctx=> ctx.Source.Nodes);
+				resolve: ctx=> ctx.Source.Items);
 		}
 
 		public string Text { get; set; }
+		[JsonProperty("CodeMenu")]
 		public string CodeMenu { get; set; }
+		[JsonProperty("Key")]
+		private string Key { set { CodeMenu = value; } }
 		public bool IsFolder { get; set; }
 		public string Image { get; set; }
-		public List<MenuItem> Nodes { get; set; }
+		[JsonProperty("ITEMS")]
+		public List<MenuItem> Items { get; set; }
+		[JsonProperty("Nodes")]
+		private List<MenuItem> Nodes { set { Items = value; } }
 	}
 }
