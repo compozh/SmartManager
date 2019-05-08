@@ -1,6 +1,6 @@
 using GraphQL.EntityFramework;
 
-namespace ItGraphQlSchema.Types.EamSchema
+namespace ItGraphQlSchema.Types.Common
 {
 	[AtributeAddInDI]
 	public class ItObjectGraph: EfObjectGraphType<ItObject>

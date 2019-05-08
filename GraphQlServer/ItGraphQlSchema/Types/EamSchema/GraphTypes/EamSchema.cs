@@ -1,10 +1,10 @@
 ﻿using GraphQL;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using GraphQL.Utilities;
+using ItGraphQlSchema.Types.Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types.EamSchema
@@ -18,9 +18,12 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Query = resolver.Resolve<EamQuery>();
 		}
 		
-		public static void Config(IServiceCollection services)
+		public static void Config(IServiceCollection services, IConfiguration configuration)
 		{
-			EfGraphQLConventions.RegisterInContainer(services, EamContext.DataModel);
+			services.AddDbContext<EamDbContext>(options =>
+				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
+			
+			EfGraphQLConventions.RegisterInContainer(services, EamDbContext.DataModel);
 			GraphTypeTypeRegistry.Register<WorkRequest, WorkRequestGraph>();
 			GraphTypeTypeRegistry.Register<WorkRequestCategory, WorkRequestCategoryGraph>();
 			GraphTypeTypeRegistry.Register<WorkRequestDirection, WorkRequestDirectionGraph>();
@@ -39,6 +42,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 			GraphTypeTypeRegistry.Register<TechnicalPlace, TechnicalPlaceGraph>();
 			GraphTypeTypeRegistry.Register<TechnicalPlaceLevel, TechnicalPlaceLevelGraph>();
 			GraphTypeTypeRegistry.Register<EquipmentMovementHistory, EquipmentMovementHistoryGraph>();
+
+			services.AddSingleton<IEamUserSettingsProvider, EamUserSettingsProvider>();
+			services.AddSingleton<IEamDataProvider, EamDataProvider>();
 		}
 	}
 }

@@ -1,17 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ItGraphQlSchema.Types.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	public class EamContext : DbContext
+	public class EamDbContext : CommonDbContext
 	{
 		public DbSet<WorkRequest> WorkRequests { get; set; }
 		public DbSet<WorkRequestCategory> WorkRequestCategories { get; set; }
 		public DbSet<WorkRequestRepairType> WorkRequestRepairTypes { get; set; }
 		public DbSet<WorkRequestDirection> WorkRequestDirections { get; set; }
-		public DbSet<Employee> Employees { get; set; }
-		public DbSet<Department> Departments { get; set; }
-		public DbSet<ItObject> ItObjects { get; set; }
 		public DbSet<Equipment> Equipments { get; set; }
 		public DbSet<TechnicalPlace> TechnicalPlaces { get; set; }
 		public DbSet<EquipmentType> EquipmentTypes { get; set; }
@@ -24,11 +22,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
+			
 			modelBuilder.Entity<SimpleDictionaryRecord>()
-				.Property(w => w.Id)
-				.HasConversion(v => v.TrimEnd(), v => v.TrimEnd());
-
-			modelBuilder.Entity<SimpleDictionaryRecord>().ToTable("SP2")
 				.HasDiscriminator<string>("Code")
 				.HasValue<WorkRequestCategory>("RZCAT")
 				.HasValue<WorkRequestDirection>("RZNPR")
@@ -36,8 +32,6 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasValue<TechnicalPlaceLevel>("RFSL")
 				.HasValue<EquipmentStatus>("ROS")
 				.HasValue<EquipmentCategory>("ROV");
-			modelBuilder.Entity<SimpleDictionaryRecord>()
-				.HasKey(s => new {s.Id, s.NumericId, s.Code});
 
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(p => p.Category)
@@ -77,15 +71,18 @@ namespace ItGraphQlSchema.Types.EamSchema
 
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.DeclarerEmployee)
-				.WithMany(e => e.DeclarerWorkRequests)
+				.WithMany()
+//				.WithMany(e => e.DeclarerWorkRequests)
 				.HasForeignKey(w => w.DeclarerEmployeeId);
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.ResponsibleEmployee)
-				.WithMany(e => e.ResponcibleWorkRequests)
+				.WithMany()
+//				.WithMany(e => e.ResponcibleWorkRequests)
 				.HasForeignKey(w => w.ResponsibleEmployeeId);
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.PerformerEmployee)
-				.WithMany(e => e.PerformerWorkRequests)
+				.WithMany()
+//				.WithMany(e => e.PerformerWorkRequests)
 				.HasForeignKey(w => w.PerformerEmployeeId);
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.Equipment)
@@ -101,11 +98,13 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasForeignKey(w => w.EquipmentModelId);
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.ItObject)
-				.WithMany(e => e.WorkRequests)
-				.HasForeignKey(w => w.EquipmentId);
+				.WithMany()
+//				.WithMany(e => e.WorkRequests)
+				.HasForeignKey(w => w.ItObjectId);
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.Department)
-				.WithMany(e => e.WorkRequests)
+				.WithMany()
+//				.WithMany(e => e.WorkRequests)
 				.HasForeignKey(w => w.DepartmentId);
 
 			modelBuilder.Entity<TechnicalPlace>()
@@ -129,7 +128,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasPrincipalKey(p => p.Id);
 			modelBuilder.Entity<TechnicalPlace>()
 				.HasOne(c => c.ItObject)
-				.WithMany(e => e.TechnicalPlaces)
+				.WithMany()
+//				.WithMany(e => e.TechnicalPlaces)
 				.HasForeignKey(w => w.ItObjectId);
 			modelBuilder.Entity<TechnicalPlace>()
 				.Property(w => w.IsProductionLosses)
@@ -158,7 +158,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasForeignKey(w => w.TypeId);
 			modelBuilder.Entity<Equipment>()
 				.HasOne(c => c.ItObject)
-				.WithMany(e => e.Equipments)
+				.WithMany()
+//				.WithMany(e => e.Equipments)
 				.HasForeignKey(w => w.ItObjectId);
 
 			modelBuilder.Entity<EquipmentMovementHistory>()
@@ -193,22 +194,22 @@ namespace ItGraphQlSchema.Types.EamSchema
 //		}
 
 		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md
-		static EamContext()
+		static EamDbContext()
 		{
 			var builder = new DbContextOptionsBuilder();
 			builder.UseSqlServer(@"fake");
 
-			using (var context = new EamContext(builder.Options))
+			using (var context = new EamDbContext(builder.Options))
 			{
 				DataModel = context.Model;
 			}
 		}
 
-		public EamContext(DbContextOptions options) :
+		public EamDbContext(DbContextOptions options) :
 			base(options)
 		{
 		}
 
-		public static readonly IModel DataModel;
+		public static IModel DataModel { get; }
 	}
 }

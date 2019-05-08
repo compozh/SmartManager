@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {

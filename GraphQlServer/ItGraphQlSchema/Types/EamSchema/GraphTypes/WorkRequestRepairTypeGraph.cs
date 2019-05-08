@@ -11,6 +11,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.Id).Description("Id"); 
 			Field(x => x.Name);
 			Field(x => x.ShortName);
+			Field(x => x.IsValid);
 			AddNavigationListField(
 				name: "workRequests",
 				resolve: context => context.Source.WorkRequests);

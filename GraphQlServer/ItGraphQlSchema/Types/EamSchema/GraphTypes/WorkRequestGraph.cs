@@ -1,4 +1,5 @@
 ﻿using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
@@ -24,6 +25,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.DeclarerEmployeeId, true);
 			Field(x => x.ResponsibleEmployeeId, true);
 			Field(x => x.PerformerEmployeeId, true);
+			Field(x => x.ItObjectId, true);
 			Field(x => x.IsValid);
 			AddNavigationField(
 				name: "department",

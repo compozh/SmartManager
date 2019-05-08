@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ItGraphQlSchema.Types.EamSchema
+namespace ItGraphQlSchema.Types.Common
 {
 	public class IsValidConverter : ValueConverter<bool, string>
 	{

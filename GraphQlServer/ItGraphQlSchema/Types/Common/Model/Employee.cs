@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ItGraphQlSchema.Types.EamSchema
+namespace ItGraphQlSchema.Types.Common
 {
 	[Table("KDK")]
 	public class Employee
@@ -32,10 +32,10 @@ namespace ItGraphQlSchema.Types.EamSchema
 
 		public ItObject ItObject { get; set; }
 
-		public List<WorkRequest> DeclarerWorkRequests { get; set; }
-
-		public List<WorkRequest> ResponcibleWorkRequests { get; set; }
-
-		public List<WorkRequest> PerformerWorkRequests { get; set; }
+//		public List<WorkRequest> DeclarerWorkRequests { get; set; }
+//
+//		public List<WorkRequest> ResponcibleWorkRequests { get; set; }
+//
+//		public List<WorkRequest> PerformerWorkRequests { get; set; }
 	}
 }

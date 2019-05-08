@@ -1,6 +1,6 @@
 using GraphQL.EntityFramework;
 
-namespace ItGraphQlSchema.Types.EamSchema.ApiModel
+namespace ItGraphQlSchema.Types.Common
 {
 	[AtributeAddInDI]
 	public class SimpleDictionaryRecordGraph: EfObjectGraphType<SimpleDictionaryRecord>
@@ -11,6 +11,7 @@ namespace ItGraphQlSchema.Types.EamSchema.ApiModel
 			Field(x => x.Id).Description("Id"); 
 			Field(x => x.Name);
 			Field(x => x.ShortName);
+			Field(x => x.IsValid);
 		}
 	}
 }

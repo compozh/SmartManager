@@ -9,187 +9,94 @@ namespace ItGraphQlSchema.Types
 	[AtributeAddInDI]
 	public class EamQuery : QueryGraphType
 	{
-		public EamQuery(IEfGraphQLService efGraphQlService) :
+		private readonly IEamDataProvider _dataProvider;
+
+		public EamQuery(IEfGraphQLService efGraphQlService, IEamDataProvider dataProvider) :
 			base(efGraphQlService)
 		{
+			_dataProvider = dataProvider;
 			Name = "EamQuery";
 
 			AddQueryField(
 				name: "workRequests",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.WorkRequests;
-				});
+				resolve: context => _dataProvider.WorkRequests);
 
 			AddQueryField(
 				name: "workRequestCategories",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.WorkRequestCategories;
-				});
+				resolve: context => _dataProvider.WorkRequestCategories);
 
 			AddQueryField(
 				name: "workRequestDirections",
 				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.WorkRequestDirections;
-				});
+					_dataProvider.WorkRequestDirections);
 
 			AddQueryField(
 				name: "workRequestRepairTypes",
 				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.WorkRequestRepairTypes;
-				});
+					_dataProvider.WorkRequestRepairTypes);
 
 			AddQueryField(
 				name: "equipmentCategories",
 				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentCategories;
-				});
+					_dataProvider.EquipmentCategories);
 
 			AddQueryField(
 				name: "equipmentStatuses",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentStatuses;
-				});
+				resolve: context => _dataProvider.EquipmentStatuses);
 
 			AddQueryField(
 				name: "equipmentTypes",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentTypes;
-				});
+				resolve: context => _dataProvider.EquipmentTypes);
 
 			AddQueryField(
 				name: "technicalPlaceLevels",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.TechnicalPlaceLevels;
-				});
+				resolve: context =>_dataProvider.TechnicalPlaceLevels);
 
 			AddQueryField(
 				name: "equipmentModels",
 				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentModels;
-				});
+					_dataProvider.EquipmentModels);
 
 			AddQueryField(
 				name: "equipmentModelGroups",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentModelGroups;
-				});
+				resolve: context =>_dataProvider.EquipmentModelGroups);
 
 			AddQueryField(
 				name: "technicalPlaces",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.TechnicalPlaces;
-				});
+				resolve: context =>_dataProvider.TechnicalPlaces);
 
 			AddQueryField(
 				name: "equipments",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.Equipments;
-				});
+				resolve: context =>_dataProvider.Equipments);
 
 			AddQueryField(
 				name: "equipmentMovementHistories",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentMovementHistories.Where(m => m.EndDate == null);
-				});
+				resolve: context =>_dataProvider.EquipmentMovementHistories.Where(m => m.EndDate == null));
 
 			AddQueryField(
 				name: "employees",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.Employees;
-				});
+				resolve: context => _dataProvider.Employees);
 
 			AddQueryField(
 				name: "itObjects",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.ItObjects;
-				});
+				resolve: context =>_dataProvider.ItObjects);
 
 			AddQueryField(
 				name: "departments",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.Departments;
-				});
+				resolve: context =>_dataProvider.Departments);
 
 			AddQueryConnectionField(
 				name: "departmentConnection",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.Departments;
-				});
+				resolve: context =>_dataProvider.Departments);
 			AddQueryConnectionField(
 				name: "equipmentModelsConnection",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.EquipmentModels;
-				});
+				resolve: context =>_dataProvider.EquipmentModels);
 			AddQueryConnectionField(
 				name: "workRequestConnection",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.WorkRequests;
-				});
+				resolve: context =>_dataProvider.WorkRequests);
 			AddQueryConnectionField(
 				name: "employeesConnection",
-				resolve: context =>
-				{
-					var dbContext = ((HttpContext) context.UserContext).RequestServices
-						.GetRequiredService<EamContext>();
-					return dbContext.Employees;
-				});
+				resolve: context =>_dataProvider.Employees);
 		}
 	}
 }

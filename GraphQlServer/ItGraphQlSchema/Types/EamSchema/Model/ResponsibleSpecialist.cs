@@ -1,4 +1,6 @@
-﻿namespace ItGraphQlSchema.Types.EamSchema
+﻿using ItGraphQlSchema.Types.Common;
+
+namespace ItGraphQlSchema.Types.EamSchema
 {
 	class Specialist
 	{
