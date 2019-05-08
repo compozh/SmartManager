@@ -87,8 +87,7 @@ namespace WebAppBuilderApi
 			
 			// Обработка запросов конструктора
 			services.AddSingleton<WebAppBuilderSettings>();
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-			// In production, the React files will be served from this directory
+		// In production, the Vue files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
 				configuration.RootPath = "ClientApp/dist";
@@ -121,7 +120,7 @@ namespace WebAppBuilderApi
 					spa.UseVueCli(npmScript: "serve", port: 5002, regex: "Compiled");
 					// если прокси-запросы от клиентского приложения, вместо этого использовать прокси-сервер для SPA-сервера:
 					// приложение должно быть запущено до запуска клиента .NET
-					spa.UseProxyToSpaDevelopmentServer("http://localhost:5002"); // your Vue app port
+						//spa.UseProxyToSpaDevelopmentServer("http://localhost:5002"); // your Vue app port
 				}
 			});
 		}
