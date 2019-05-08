@@ -17,11 +17,9 @@ namespace WebAppBuilderApi
 
 			CreateWebHostBuilder(args).Build().Run();
 		}
-
+		// все приложение и компоненты переведено на фрэймворк 2.2.0 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
-				.UseStartup<Startup>()
-				.UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "dist"))
-				.UseKestrel().UseIISIntegration();
+				.UseStartup<Startup>();
 	}
 }

@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-
+using System.IO;
 namespace WebAppBuilderApi
 {
-    public class HomeController : Controller
+	public class HomeController : Controller
 	{
 		private readonly IConfiguration _configuration;
 
@@ -16,8 +16,9 @@ namespace WebAppBuilderApi
 		public static readonly string Lock = "lock";
         public void Index()
 		{			
-				var text = System.IO.File.ReadAllText("./dist/index.html");
-				var baseUrl = Url.Content("~");
+			var text = System.IO.File.ReadAllText("./ClientApp/public/index.html");
+
+			 var baseUrl = Url.Content("~");
 
 				if (!baseUrl.EndsWith("/"))
 				{
@@ -34,8 +35,6 @@ namespace WebAppBuilderApi
 				text = text.Replace("/#BASE#/", baseUrl);
 				HttpContext.Response.ContentType = "text/html";
 				HttpContext.Response.WriteAsync(text);
-
-			
         }
     }
 }
