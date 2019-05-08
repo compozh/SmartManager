@@ -15,6 +15,7 @@ using Web.WebRequests;
 using Web.Tools;
 using Web.Data;
 using WebAppBuilderMiddleware;
+using VueCliMiddleware;
 
 namespace WebAppBuilderApi
 {
@@ -86,26 +87,41 @@ namespace WebAppBuilderApi
 			
 			// Обработка запросов конструктора
 			services.AddSingleton<WebAppBuilderSettings>();
+		// In production, the Vue files will be served from this directory
+			services.AddSpaStaticFiles(configuration =>
+			{
+				configuration.RootPath = "ClientApp/dist";
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IHttpContextAccessor contextAccessor)
 		{
 			app.UseCors("MyPolicy");
-
+			
 			app.UseDeveloperExceptionPage();
 			
 			app.UseSession();
 			app.UseStaticFiles();
+			app.UseSpaStaticFiles();
 
 			app.UseAuthentication();
 			app.UseMiddleware<Authentication>(new AuthenticationSettings());
 			app.UseMiddleware<WebAppBuilderMiddleware.WebAppBuilder>();
-			//app.UseHttpsRedirection();
 			HttpContextAccessorHandler.Configure(contextAccessor);
-			app.UseMvc(routes => {
-				routes.MapRoute(name: "default",template: "{controller=Home}/{action=Index}/{id?}");
-				routes.MapSpaFallbackRoute(name: "spa-fallback",defaults: new { controller = "Home", action = "Index" });
+			
+			app.UseSpa(spa =>
+			{
+				spa.Options.SourcePath = "ClientApp";
+
+				if (env.IsDevelopment())
+				{
+					// run npm process with client app
+					spa.UseVueCli(npmScript: "serve", port: 5002, regex: "Compiled");
+					// если прокси-запросы от клиентского приложения, вместо этого использовать прокси-сервер для SPA-сервера:
+					// приложение должно быть запущено до запуска клиента .NET
+						//spa.UseProxyToSpaDevelopmentServer("http://localhost:5002"); // your Vue app port
+				}
 			});
 		}
 	}
