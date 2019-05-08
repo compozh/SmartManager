@@ -6,6 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Types\SmartManager\SmartManagerFoldersQuery.cs" />
+      <Compile Remove="Types\SmartManager\SmartManagerTasks.cs" />
+      <Compile Remove="Types\SmartManager\SmFoldersProvider.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="GraphQL" Version="2.4.0" />
       <PackageReference Include="GraphQL.EntityFramework" Version="5.0.0-beta.1" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

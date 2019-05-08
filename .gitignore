@@ -10,3 +10,4 @@
 **/Web.Release.config
 **/.idea/.idea.*
 **/*.nupkg
+/Dashboard Kit health/public/AppSettings_1.json
