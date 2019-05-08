@@ -1,4 +1,5 @@
 using GraphQL.Types;
+using System.Collections.Generic;
 
 namespace ItGraphQlSchema.Types.ITLogic.Model
 {
@@ -8,13 +9,18 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 		public MenuItem()
 		{
 			Name = "MenuItem";
-			Field(p => p.Code);
-			Field(p => p.Name);
-			Field(p => p.ImageCode);
+			Field(p => p.Text);
+			Field(p => p.CodeMenu);
+			Field(p => p.IsFolder);
+			Field(p => p.Image);
+			Field<ListGraphType<MenuItem>>("Nodes",
+				resolve: ctx=> ctx.Source.Nodes);
 		}
 
-		public string Code { get; set; }
-		public string Name { get; set; }
-		public string ImageCode { get; set; }
+		public string Text { get; set; }
+		public string CodeMenu { get; set; }
+		public bool IsFolder { get; set; }
+		public string Image { get; set; }
+		public List<MenuItem> Nodes { get; set; }
 	}
 }
