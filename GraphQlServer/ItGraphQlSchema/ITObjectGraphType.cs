@@ -4,7 +4,7 @@ using ItGraphQlSchema.CommonSchema;
 
 namespace ItGraphQlSchema
 {
-	public class ITObjectGraphType<T>: GraphQL.Annotations.Types.ObjectGraphType<T> where T : class
+	public class ITObjectGraphType<T>: ObjectGraphType<T>
 	{
 		public ITObjectGraphType()
 		{
