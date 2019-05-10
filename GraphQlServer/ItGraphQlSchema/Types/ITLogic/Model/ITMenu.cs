@@ -6,9 +6,9 @@ using System.Text;
 namespace ItGraphQlSchema.Types.ITLogic.Model
 {
 	[AtributeAddInDI]
-	public class ITMenuItems : ObjectGraphType<ITMenuItems>
+	public class ITMenu : ObjectGraphType<ITMenu>
 	{
-		public ITMenuItems()
+		public ITMenu()
 		{
 			Name = "ParagraphItem";
 			Field<ListGraphType<MenuItem>>("Items",

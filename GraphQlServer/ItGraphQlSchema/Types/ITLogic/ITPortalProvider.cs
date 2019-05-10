@@ -19,25 +19,23 @@ namespace ItGraphQlSchema.Types.ITLogic
 		/// <summary>
 		/// Получение меню, и раздела первого по списку меню
 		/// </summary>
-		/// <param name="anonymousСall"> Анонимность вызова</param>
 		/// <returns></returns>
-		public async Task<ITMenuItems> GetMenu()
+		public async Task<ITMenu> GetMenu()
 		{
-			var args = "";
-
-			var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL.MENU", args);
-			return JsonConvert.DeserializeObject<ITMenuItems>(responseFromWeb.Content);
+			var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL.MENU", string.Empty);
+			return JsonConvert.DeserializeObject<ITMenu>(responseFromWeb.Content);
 		}
 
 		/// <summary>
 		/// Получение всех разделов по выбранному пункту меню
 		/// </summary>
-		/// <param name="folderCode"> Код модуля</param>
+		/// <param name="moduleCode"> Код модуля</param>
 		/// <returns></returns>
 		public async Task<MenuModule> GetModuleContent(string moduleCode)
 		{
+			// Временно, для теста
 			moduleCode = "MP.NORM";
-			var args = "{\"MODULECODE\":\"" + moduleCode + "\"}";
+			var args = $"{{\"MODULECODE\":\"{moduleCode}\"}}";
 
 			var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL.MENUMODULE", args);
 			return JsonConvert.DeserializeObject<MenuModule>(responseFromWeb.Content);

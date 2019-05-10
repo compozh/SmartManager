@@ -13,14 +13,12 @@ namespace ItGraphQlSchema.Types.ITLogic
 		{
 			_provider = provider;
 			Name = "Query";
-			Field<ITMenuItems>("Menu", resolve: getFavoriteItems);
+			Field<ITMenu>("Menu", resolve: getMenu);
 		}
 
-		private ITMenuItems getFavoriteItems(ResolveFieldContext<object> context)
+		private ITMenu getMenu(ResolveFieldContext<object> context)
 		{
-			var t = _provider.GetModuleContent("").Result;
-			var data = _provider.GetMenu().Result;
-			return data;
+			return _provider.GetMenu().Result;
 		}
 	}
 }
