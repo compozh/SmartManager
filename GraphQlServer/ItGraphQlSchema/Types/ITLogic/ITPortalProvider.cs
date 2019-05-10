@@ -33,8 +33,6 @@ namespace ItGraphQlSchema.Types.ITLogic
 		/// <returns></returns>
 		public async Task<MenuModule> GetModuleContent(string moduleCode)
 		{
-			// Временно, для теста
-			moduleCode = "MP.NORM";
 			var args = $"{{\"MODULECODE\":\"{moduleCode}\"}}";
 
 			var responseFromWeb = await _webRequest.CallWebRequestAsync("ITPORTAL.MENUMODULE", args);
