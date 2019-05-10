@@ -1,4 +1,5 @@
 module.exports = {
-  publicPath: "/",
- // outputDir: "../WebAppBuilderApi/WebAppBuilderApi/dist"
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/webapps/'
+  : '/'
 }
