@@ -10,7 +10,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 {
 	
 	[AtributeAddInDI]
-	public class SmartManagerTaskFullInfoGQ : ObjectGraphType<SmartManagerTaskGetinfo>
+	public class SmartManagerTaskFullInfoGQ : ObjectGraphType<SmartManagerTaskFullInfo>
 	{
 		public SmartManagerTaskFullInfoGQ(SmartManagerProvider provider)
 		{
