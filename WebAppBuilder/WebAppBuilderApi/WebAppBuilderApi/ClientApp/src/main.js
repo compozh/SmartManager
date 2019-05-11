@@ -83,10 +83,26 @@ function createComponentObject(com){
   return innerComp;
 }
 
+var a = function(childComponents,to,from) { 
+  for(var cur of  childComponents){
+    a(cur.$children);
+    if(cur.beforeRouteUpdate){
+      cur.beforeRouteUpdate(to,from);
+    } 
+  }
+}
 
 // Генерируем компонент по его описанию
 function getInternalComponentDescription(com) {
   return ({
+    beforeRouteUpdate (to, from, next) {
+      next();
+      for(var cur of  this.$children){
+        if(cur.beforeRouteUpdate){
+          cur.beforeRouteUpdate(to,from);
+        } 
+      }
+    },
     name: com.NameInRoute || "default",
     render(h) {
       // приводим компонент к нужному формату:
