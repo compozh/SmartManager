@@ -11,5 +11,6 @@ namespace WebAppBuilderMiddleware.Model
 		public string Sort { get; set; }
 		public List<VComponent> Components { get;set;}
 		public List<VRoute> Children { get;set;}
+		public bool HideAfterLogin { get; set; }
 	}
 }
