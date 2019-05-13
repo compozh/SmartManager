@@ -1,18 +1,23 @@
 <template>
     
-    <div>
-        <div class="menu-content">
-            <v-treeview
-                :items="Items"
-                item-key="name"
+    <div v-if="menu">
+        <div class="menu-content" >
+            <v-treeview 
+                :items="ItemsMenu"
+                item-key="codeMenu"
                 open-on-click
                 hoverable
                 indeterminate-icon
                 transition
                 class="menu"
             >
-            <template slot="label" slot-scope="{ item }">
-                <router-link  :to="{ name:'MODULECONTENT', params:{module:item.codeMenu}}"> <a>{{ item.name }}</a></router-link>
+            <template slot="label" slot-scope="{ item }" >
+                <span v-if="!item.isFolder">
+                    <router-link class="none-link" :to="{ name : 'MODULECONTENT', params : LoadModuleContent(item) }"> {{ item.name }} </router-link>
+                </span>
+                <span v-if="item.isFolder">
+                    {{ item.name }}
+                </span>
             </template>
             </v-treeview>
         </div>
@@ -21,7 +26,6 @@
            </router-view>
         </div>
     </div>
-    
 
 </template>
 
@@ -30,13 +34,26 @@ export default {
     name:"it-menu",
     props: ["menu"],
     computed:{
-        Items(){
-            return this.menu.items;
-        },
-        MenuModuleContent(){
-            return this.menu.favoriteModuleContent.paragraphItem;
+        ItemsMenu(){
+            if(this.menu){
+                var test=[{}]
+                for(var i of this.menu.items){
+                    var object = i;
+                    if(!object.children){
+                        object.children = [];
+                    }
+                    test.push(object);
+                }
+                return test;
+            }
+            return [];
         }
     },
+    methods:{
+        LoadModuleContent(item){
+            return { module : item.codeMenu }
+        }
+    }
 }
 </script>
 
@@ -48,5 +65,9 @@ export default {
         display: block;
         float: left;
         width: 50%;
+    }
+    .none-link{
+        color: black;
+        text-decoration: none !important;
     }
 </style>
