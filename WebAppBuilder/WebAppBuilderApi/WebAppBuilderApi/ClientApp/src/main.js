@@ -91,10 +91,18 @@ function createComponentObject(com){
   return innerComp;
 }
 
-
 // Генерируем компонент по его описанию
 function getInternalComponentDescription(com) {
   return ({
+    //  Для динамического обновления данных при смене роутинга и обновлении компонента
+    beforeRouteUpdate (to, from, next) {
+      next();
+      for(var cur of  this.$children){
+        if(cur.beforeRouteUpdate){
+          cur.beforeRouteUpdate(to,from);
+        } 
+      }
+    },
     name: com.NameInRoute || "default",
     render(h) {
       // приводим компонент к нужному формату:
