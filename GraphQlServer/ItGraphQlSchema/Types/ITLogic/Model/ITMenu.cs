@@ -1,7 +1,6 @@
 ﻿using GraphQL.Types;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ItGraphQlSchema.Types.ITLogic.Model
 {
@@ -15,8 +14,11 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 				resolve: ctx => ctx.Source.Items);
 			Field<MenuModule>("moduleContent",
 				resolve: ctx => ctx.Source.FavoriteModuleContent);
+			Field(p => p.BaseUrl);
 		}
 
+		[JsonProperty("baseUrl")]
+		public string BaseUrl { get; set; }
 		public List<MenuItem> Items { get; set; }
 		public MenuModule FavoriteModuleContent { get; set; }
 	}
