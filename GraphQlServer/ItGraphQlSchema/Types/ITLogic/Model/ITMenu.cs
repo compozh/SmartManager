@@ -13,7 +13,7 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 			Name = "ParagraphItem";
 			Field<ListGraphType<MenuItem>>("Items",
 				resolve: ctx => ctx.Source.Items);
-			Field<MenuModule>("FavoriteModuleContent",
+			Field<MenuModule>("moduleContent",
 				resolve: ctx => ctx.Source.FavoriteModuleContent);
 		}
 
