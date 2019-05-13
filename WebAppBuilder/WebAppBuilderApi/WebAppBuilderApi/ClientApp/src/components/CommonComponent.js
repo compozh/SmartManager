@@ -15,6 +15,12 @@ export default {
     beforeRouteUpdate (to, from, next) {
       // получение данных для компонента
       this.loadDataForComponents(false);
+      next();
+      for(var cur of  this.$children){
+        if(cur.beforeRouteUpdate){
+          cur.beforeRouteUpdate(to,from);
+        } 
+      }
     },
     // Функция для получения данных компонента, принимает boolean тип, 
     // который указывает является это первой загрузкий или обновление даных по роутингу на одной странице
