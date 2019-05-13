@@ -99,7 +99,7 @@ function getInternalComponentDescription(com) {
       next();
       for(var cur of  this.$children){
         if(cur.beforeRouteUpdate){
-          cur.beforeRouteUpdate(to,from, next);
+          cur.beforeRouteUpdate(to,from);
         } 
       }
     },
