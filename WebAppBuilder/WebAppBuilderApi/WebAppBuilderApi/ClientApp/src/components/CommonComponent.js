@@ -16,6 +16,8 @@ export default {
       // получение данных для компонента
       this.loadDataForComponents(false);
     },
+    // Функция для получения данных компонента, принимает boolean тип, 
+    // который указывает является это первой загрузкий или обновление даных по роутингу на одной странице
     loadDataForComponents(firstLoad){
       if (this.internalComponent.datasource) {
         var datasource = JSON.parse(JSON.stringify(this.internalComponent.datasource));
