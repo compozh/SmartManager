@@ -83,21 +83,10 @@ function createComponentObject(com){
   return innerComp;
 }
 
-// Рекурсивно проходим по детям компонента "SIMPLELAYOUT", и вызываем функцию beforeRouteUpdate,
-// для динамического обновления данных при смене роутинга и обновлении компонента
-var a = function(childComponents,to,from) { 
-  for(var cur of  childComponents){
-    a(cur.$children);
-    if(cur.beforeRouteUpdate){
-      cur.beforeRouteUpdate(to,from);
-    } 
-  }
-}
-
 // Генерируем компонент по его описанию
 function getInternalComponentDescription(com) {
   return ({
-    // перечитка компонента при смени роутинга
+    //  Для динамического обновления данных при смене роутинга и обновлении компонента
     beforeRouteUpdate (to, from, next) {
       next();
       for(var cur of  this.$children){
