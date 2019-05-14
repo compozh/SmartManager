@@ -1,8 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Axios from 'axios'
-import Login from './components/Login'
-import common from "./components/CommonComponent"
 Vue.use(Router);
 
 // Создание роутера
