@@ -30,7 +30,11 @@ export default {
     name:"it-module",
     computed:{
         Module: function () {
+            
             if( this.$store.getters.getAppData("ITMODULE")){
+                if(!this.SvgCollection.length){
+                    return []
+                }
                 var list = this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
 
                 for(var object of list.paragraphItem){

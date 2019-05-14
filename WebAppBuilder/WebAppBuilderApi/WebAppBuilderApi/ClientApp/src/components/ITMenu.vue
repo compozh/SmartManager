@@ -53,6 +53,9 @@ export default {
     },
     computed:{
         ItemsMenu(){
+            if(!this.SvgCollection.length){
+                return []
+            }
             for(var object of this.menu.items){
                 if(!object.children){
                     object.children = [];
@@ -68,12 +71,8 @@ export default {
                     {
                         break;
                     }
-                    child.image = getImae(child.image, this.SvgCollection)
-                    // if(child.image && this.SvgCollection.some(r=>r == child.image.toUpperCase()) && this.SvgCollection.length){
-                    //     child.image = child.image.toUpperCase();
-                    // }else if(this.SvgCollection.length){
-                    //     child.image = "IT";
-                    // }
+                    
+                    child.image = getImae(child.image,this.SvgCollection)
                 }
             }
             return this.menu.items;
