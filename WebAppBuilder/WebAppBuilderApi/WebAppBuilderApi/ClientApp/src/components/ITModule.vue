@@ -27,10 +27,10 @@ export default {
     name:"it-module",
     computed:{
         Module: function () {
-                if( this.$store.getters.getAppData("ITMODULE")){
-                    return this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
-                } 
-                return { paragraphItem : [] }
+            if( this.$store.getters.getAppData("ITMODULE")){
+                return this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
+            } 
+            return { paragraphItem : [] }
         },
         BaseUrl(){
             return this.$store.getters.getAppData("ITMENU").data.itmenu.menu.baseUrl + "/?par3=;ITCALL,"

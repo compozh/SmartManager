@@ -35,18 +35,12 @@ export default {
     props: ["menu"],
     computed:{
         ItemsMenu(){
-            if(this.menu){
-                var test=[{}]
-                for(var i of this.menu.items){
-                    var object = i;
-                    if(!object.children){
-                        object.children = [];
-                    }
-                    test.push(object);
+            for(var object of this.menu.items){
+                if(!object.children){
+                    object.children = [];
                 }
-                return test;
             }
-            return [];
+            return this.menu.items;
         }
     },
     methods:{

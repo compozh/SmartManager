@@ -15,7 +15,6 @@ export default {
     beforeRouteUpdate (to, from, next) {
       // получение данных для компонента
       this.loadDataForComponents(false);
-      next();
       for(var cur of  this.$children){
         if(cur.beforeRouteUpdate){
           cur.beforeRouteUpdate(to,from);
