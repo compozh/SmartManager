@@ -12,7 +12,9 @@
     >
         <template slot="label" slot-scope="{ item }" >
             <span v-if="item.webClientStartParams">
-                <a target="_blank" :href="BaseUrl+item.webClientStartParams"> {{ item.name }} </a>
+                <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
+                <a  target="_blank" :href="BaseUrl+item.webClientStartParams"> {{ item.name }} </a>
+                <!-- <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.webClientStartParams} }"> {{ item.name }} </router-link> -->
             </span>
             <span v-if="!item.webClientStartParams">
                 {{ item.name }}
@@ -23,17 +25,34 @@
 </template>
 
 <script>
+import getImae from "./Functions/ITMenuFunctions/ConvetImage.js"
 export default {
     name:"it-module",
     computed:{
         Module: function () {
             if( this.$store.getters.getAppData("ITMODULE")){
-                return this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
+                var list = this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
+
+                for(var object of list.paragraphItem){
+                    var inspaction="";
+                    object.children = object.children.filter(item => item.webClientStartParams)
+                    for( var child of object.children){
+                        if(!child)
+                        {
+                            break;
+                        }
+                        child.image = getImae(child.image,this.SvgCollection)
+                    }
+                }
+                return list;
             } 
             return { paragraphItem : [] }
         },
         BaseUrl(){
             return this.$store.getters.getAppData("ITMENU").data.itmenu.menu.baseUrl + "/?par3=;ITCALL,"
+        },
+        SvgCollection(){
+            return this.$store.getters.getExistedIcons
         }
     },
     methods:{
@@ -58,7 +77,6 @@ export default {
                          }
                      }
                  })
-                 
             }
         },
         // Функция для обновления данных при изменении роутинга
@@ -77,5 +95,9 @@ export default {
 <style scoped>
     .menu{
         text-align: left;
+    }
+    .svg{
+        width: 20px;
+        height: 20px;
     }
 </style>
