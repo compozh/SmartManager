@@ -52,7 +52,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 
 		}
-		public async Task<SmartManagerTaskGetinfo> GetTasksInfoAsync(int taskId)
+		public async Task<SmartManagerTaskFullInfo> GetTasksInfoAsync(int taskId)
 		{
 			var calcId = "SM.TASK.GETINFO";
 			//	var temp = taskId.Select(x => new { taskId = x });
@@ -65,7 +65,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 				case WebRequestsResponseFlags.NotAuthorised:
 					return null;
 				default:
-					return JsonConvert.DeserializeObject<SmartManagerTaskGetinfo>(requestResult.Content);
+					return JsonConvert.DeserializeObject<SmartManagerTaskFullInfo>(requestResult.Content);
 
 			}
 		}

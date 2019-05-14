@@ -1,5 +1,5 @@
 <template>
- 
+
     <v-list class="pt-0" dense>
         <v-divider></v-divider>
 
@@ -26,10 +26,17 @@ export default {
             if(!this.$store.state.applicationDescription){
                 return []
             }
-            //console.log(this.$router)
-            var links = this.$store.state.applicationDescription.Routes;
+            var app = this.$store.state.applicationDescription;
+            var sections = app.Sections||[];
+
+            // Достаем роуты из разделов
+            var links = [];
+            for (let index = 0; index < sections.length; index++) {
+              const section = sections[index];
+              links = links.concat((section.Routes||[]).map(r=> (r.section = section)&& r))
+            }
+
             links = [...links, ...links[1].Children, ...links[0].Children]
-            console.log(links)
             return links.filter(l => l.Name)
 
         }

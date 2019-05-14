@@ -49,13 +49,16 @@ export default {
       return this.$route.params.routeToBack  ;
     }
   },
+  beforeMount(){
+    console.log(this.$route.meta.Section.Properties.Allow)
+  },
   methods: {
     Login() {
       if (this.userLoginPassword.login && this.userLoginPassword.password) {
         this.$store.dispatch("Login", this.userLoginPassword).then(result => {
           // Если авторизация прошла успешно, уходим со страницы логина
           if (result) {
-            
+
             this.$router.replace({ path: this.routeToBack });
           }
         });

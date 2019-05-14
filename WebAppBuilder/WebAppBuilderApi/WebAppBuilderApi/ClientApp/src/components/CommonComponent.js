@@ -3,10 +3,52 @@ import * as jsonpatcher from '../patching';
 
 export default {
   name: "common-component",
+  data(){
+    return{
+      routerParam:{}
+    }
+  },
   //////////////////////////////////////////////////
   //////              METHODS
   /////////////////////////////////////////////////
   methods: {
+    beforeRouteUpdate (to, from, next) {
+      // получение данных для компонента
+      this.loadDataForComponents(false);
+      for(var cur of  this.$children){
+        if(cur.beforeRouteUpdate){
+          cur.beforeRouteUpdate(to,from);
+        } 
+      }
+    },
+    // Функция для получения данных компонента, принимает boolean тип, 
+    // который указывает является это первой загрузкий или обновление даных по роутингу на одной странице
+    loadDataForComponents(firstLoad){
+      if (this.internalComponent.datasource) {
+        var datasource = JSON.parse(JSON.stringify(this.internalComponent.datasource));
+        let reg = new RegExp('\\$route\\.params\\.([a-zA-Z0-9_]*)', 'gi');
+        let matches = reg.exec(datasource.query)
+        if(matches != null){
+          // получаем значение параметра из роутера
+          let paramName = matches[1]
+          let paramValue = this.$route.params[paramName]
+          
+          if(this.routerParam[paramName] == paramValue){
+            return
+          }
+          datasource.query = datasource.query.replace(reg, `"${paramValue}"`) 
+          this.routerParam[paramName] = paramValue ;
+          
+        }else if(!firstLoad){
+          return
+        }
+        
+        this.$store.dispatch("LoadDataForComponent", {
+          datasource: datasource,
+          key: this.internalComponent.id
+        });
+      }
+    },
     /** Получить значение из хранилища по ссылке для использования в свойствах */
     getStoreValue(path) {
       var path = this.getStorePath(path);
@@ -148,23 +190,7 @@ export default {
   },
   beforeMount() {
     // получение данных для компонента
-    if (this.internalComponent.datasource) {
-      var datasource = this.internalComponent.datasource;
-
-      let reg = new RegExp('\\$route\\.params\\.([a-zA-Z0-9_]*)', 'gi');
-      let matches = reg.exec(datasource.query)
-      if(matches != null){
-        // получаем значение параметра из роутера
-        let paramName = matches[1]
-        let paramValue = this.$route.params[paramName]
-        datasource.query = datasource.query.replace(reg, `"${paramValue}"`) 
-      }
-
-      this.$store.dispatch("LoadDataForComponent", {
-        datasource: datasource,
-        key: this.internalComponent.id
-      });
-    }
+    this.loadDataForComponents(true);
   },
 
   // default: function(){return this.imperialComponent}

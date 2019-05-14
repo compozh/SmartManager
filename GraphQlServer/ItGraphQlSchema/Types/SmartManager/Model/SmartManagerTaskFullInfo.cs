@@ -7,7 +7,7 @@ using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-	public class SmartManagerTaskGetinfo
+	public class SmartManagerTaskFullInfo
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
