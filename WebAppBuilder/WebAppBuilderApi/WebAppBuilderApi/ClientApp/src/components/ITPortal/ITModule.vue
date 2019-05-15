@@ -11,10 +11,12 @@
         class="menu"
     >
         <template slot="label" slot-scope="{ item }" >
-            <span v-if="item.webClientStartParams">
-                <a target="_blank" :href="BaseUrl+item.webClientStartParams"> {{ item.name }} </a>
+            <span v-if="item.linkToRMD">
+                <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
+                <a  target="_blank" :href="BaseUrl+item.linkToRMD"> {{ item.name }} </a>
+                <!-- <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.linkToRMD} }"> {{ item.name }} </router-link> -->
             </span>
-            <span v-if="!item.webClientStartParams">
+            <span v-if="!item.linkToRMD">
                 {{ item.name }}
             </span>
         </template>
@@ -23,17 +25,38 @@
 </template>
 
 <script>
+import getImae from "./Functions/ITMenuFunctions/ConvetImage.js"
 export default {
     name:"it-module",
     computed:{
         Module: function () {
+            
             if( this.$store.getters.getAppData("ITMODULE")){
-                return this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
+                if(!this.SvgCollection.length){
+                    return []
+                }
+                var list = this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
+
+                for(var object of list.paragraphItem){
+                    var inspaction="";
+                    object.children = object.children.filter(item => item.linkToRMD)
+                    for( var child of object.children){
+                        if(!child)
+                        {
+                            break;
+                        }
+                        child.image = getImae(child.image,this.SvgCollection)
+                    }
+                }
+                return list;
             } 
             return { paragraphItem : [] }
         },
         BaseUrl(){
             return this.$store.getters.getAppData("ITMENU").data.itmenu.menu.baseUrl + "/?par3=;ITCALL,"
+        },
+        SvgCollection(){
+            return this.$store.getters.getExistedIcons
         }
     },
     methods:{
@@ -41,7 +64,7 @@ export default {
             
             if(this.$route.params.module != "FAVORITE_MODULE" && this.$route.params.module){
                 var datasource = {
-                    query:' { itmenu { moduleContent(codeMenu:"' + this.$route.params.module + '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ webClientStartParams name: text image codeMenu isFolder } } } } } ',
+                    query:' { itmenu { moduleContent(codeMenu:"' + this.$route.params.module + '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ linkToRMD name: text image codeMenu isFolder } } } } } ',
                     schema:"ITPORTAL"
                 }
                 var key = "ITMODULE";
@@ -58,7 +81,6 @@ export default {
                          }
                      }
                  })
-                 
             }
         },
         // Функция для обновления данных при изменении роутинга
@@ -77,5 +99,9 @@ export default {
 <style scoped>
     .menu{
         text-align: left;
+    }
+    .svg{
+        width: 20px;
+        height: 20px;
     }
 </style>

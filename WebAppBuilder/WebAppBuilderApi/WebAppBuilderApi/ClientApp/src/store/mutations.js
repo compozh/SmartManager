@@ -16,6 +16,10 @@ const mutations = {
   setCurrentUser(state, userInfo){
     state.currentuser = userInfo;
   },
+  /** Установка массива с svg */
+  setExistedIcons(state, payload){
+    state.existedIcons = payload;
+  }
   // /** Загрузка Layout приложения */
   // setAppLayout(state, payload) {
   //   Vue.set(state.appLayout, payload.key, payload.data)

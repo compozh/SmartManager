@@ -83,7 +83,7 @@ namespace ItGraphQlSchema.Types
 			var calcId = "GETUSERSINFO";
 			var temp = userIds.Select(x => new { USERID = x, HASH = "" });
 			var args = JsonConvert.SerializeObject(new { Users = temp, ByLogin = false, SaveInContent = true });
-			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
+			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//РґРѕСЃС‚Р°СЋ РѕР±СЉРµРєС‚ РёР· IServiceProvider
 			var requestResult = await task;
 			switch (requestResult.ResultFlag)
 			{
@@ -96,7 +96,7 @@ namespace ItGraphQlSchema.Types
 			}
 		}
 
-		//метод получения фото для всех пользователей
+		//РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ С„РѕС‚Рѕ РґР»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 		private async Task<List<SkdAllUserInfo>> getUsersAsync()
 		{
 			var calcId = "_SKD_STATE";
@@ -117,7 +117,7 @@ namespace ItGraphQlSchema.Types
 		
 		private async Task<IEnumerable<SkdPersonPhoto>> getPersonsPhotoAsync(IEnumerable<string> userIds )
 		{
-			var userInfo = await getUserInfoAsync(userIds);//при логине отправляю тикет на получение информации пользователей
+			var userInfo = await getUserInfoAsync(userIds);//РїСЂРё Р»РѕРіРёРЅРµ РѕС‚РїСЂР°РІР»СЏСЋ С‚РёРєРµС‚ РЅР° РїРѕР»СѓС‡РµРЅРёРµ РёРЅС„РѕСЂРјР°С†РёРё РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 
 			return userInfo?.Select(user => new SkdPersonPhoto() {
 				UserId = user.UserID,
@@ -126,13 +126,13 @@ namespace ItGraphQlSchema.Types
 		}
 
 		/// <summary>
-		/// Получение готового списка пользователей
+		/// РџРѕР»СѓС‡РµРЅРёРµ РіРѕС‚РѕРІРѕРіРѕ СЃРїРёСЃРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns></returns>
 		private async Task<IEnumerable<SkdPerson>> getPersonsAsync(string userId)
 		{
-			var users = await getUsersAsync();//при логине отправляю тикет на получение всех пользователей
+			var users = await getUsersAsync();//РїСЂРё Р»РѕРіРёРЅРµ РѕС‚РїСЂР°РІР»СЏСЋ С‚РёРєРµС‚ РЅР° РїРѕР»СѓС‡РµРЅРёРµ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 			if (users == null)
 			{
 				return null;
