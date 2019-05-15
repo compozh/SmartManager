@@ -38,6 +38,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 				name: "workRequestsConnection",
 				resolve: context => context.Source.WorkRequests,
 				includeNames: new[] {"WorkRequests"});
+			AddNavigationListField(
+				name: "conditionParameterLinks",
+				resolve: context => context.Source.ConditionParameterLinks);
 			
 		}
 	}

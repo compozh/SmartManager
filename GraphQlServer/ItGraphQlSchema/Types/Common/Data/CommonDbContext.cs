@@ -9,6 +9,7 @@ namespace ItGraphQlSchema.Types.Common
 		public DbSet<Department> Departments { get; set; }
 		public DbSet<ItObject> ItObjects { get; set; }
 		public DbSet<SimpleDictionaryRecord> SimpleDictionaryRecords { get; set; }
+		public DbSet<MeasurementUnit> MeasurementUnits { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -21,6 +22,15 @@ namespace ItGraphQlSchema.Types.Common
 			modelBuilder.Entity<SimpleDictionaryRecord>()
 				.HasKey(s => new {s.Id, s.NumericId, s.Code});
 
+			modelBuilder.Entity<Employee>()
+				.HasOne(c => c.ItObject)
+				.WithMany(o => o.Employees)
+				.HasForeignKey(c => c.ItObjectId);
+			
+			modelBuilder.Entity<MeasurementUnit>()
+				.Property(w => w.IsValid)
+				.HasConversion(new IsValidConverter());
+			
 			modelBuilder.Entity<Employee>()
 				.HasOne(c => c.ItObject)
 				.WithMany(o => o.Employees)

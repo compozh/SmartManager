@@ -9,6 +9,7 @@ namespace ItGraphQlSchema.Types.Common
 		IQueryable<Employee> Employees { get; }
 		IQueryable<Department> Departments { get; }
 		IQueryable<ItObject> ItObjects { get; }
+		IQueryable<MeasurementUnit> MeasurementUnits { get; }
 	}
 	
 	[AtributeAddInDI]
@@ -26,6 +27,6 @@ namespace ItGraphQlSchema.Types.Common
 		public virtual IQueryable<Employee> Employees => DbContext.Employees;
 		public virtual IQueryable<Department> Departments  => DbContext.Departments;
 		public virtual IQueryable<ItObject> ItObjects  => DbContext.ItObjects;
-
+		public virtual IQueryable<MeasurementUnit> MeasurementUnits  => DbContext.MeasurementUnits;
 	}
 }

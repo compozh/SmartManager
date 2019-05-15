@@ -19,6 +19,24 @@ namespace ItGraphQlSchema.Types.EamSchema
 		public DbSet<EquipmentCategory> EquipmentCategories { get; set; }
 		public DbSet<TechnicalPlaceLevel> TechnicalPlaceLevels { get; set; }
 		public DbSet<EquipmentMovementHistory> EquipmentMovementHistories { get; set; }
+		
+		public DbSet<ConditionParameterType> ConditionParameterTypes { get; set; }
+		
+		public DbSet<ConditionParameter> ConditionParameters { get; set; }
+		
+		public DbSet<ConditionParameterValue> ConditionParameterValues { get; set; }
+		
+		public DbSet<ConditionParameterValueRange> ConditionParameterValueRanges { get; set; }
+		
+		public DbSet<EquipmentFailureReason> EquipmentFailureReasons { get; set; }
+		
+		public DbSet<EquipmentFailureType> EquipmentFailureTypes { get; set; }
+		
+		public DbSet<ConditionParameterToModelLink> ConditionParameterToModelLinks { get; set; }
+		
+		public DbSet<ConditionParameterAdditionalData> ConditionParameterAdditionalData { get; set; }
+		
+		//public DbSet<DownTime> DownTimes { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -31,7 +49,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasValue<WorkRequestRepairType>("RVR")
 				.HasValue<TechnicalPlaceLevel>("RFSL")
 				.HasValue<EquipmentStatus>("ROS")
-				.HasValue<EquipmentCategory>("ROV");
+				.HasValue<EquipmentCategory>("ROV")
+				.HasValue<EquipmentFailureReason>("RFP")
+				.HasValue<EquipmentFailureType>("RPD");
 
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(p => p.Category)
@@ -180,10 +200,112 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasOne(c => c.ModelGroup)
 				.WithOne(e => e.EquipmentType);
 
-			modelBuilder.Entity<Employee>()
-				.HasOne(c => c.ItObject)
-				.WithMany(o => o.Employees)
-				.HasForeignKey(c => c.ItObjectId);
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.AdditionalData)
+				.WithOne(a => a.ConditionParameterValue)
+				.HasForeignKey<ConditionParameterAdditionalData>(c => c.Id);
+
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.Equipment)
+				.WithMany()
+				.HasForeignKey(c => c.EquipmentId);
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.TechnicalPlace)
+				.WithMany()
+				.HasForeignKey(c => c.TechnicalPlaceId);
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.EquipmentModel)
+				.WithMany()
+				.HasForeignKey(c => c.EquipmentModelId);
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.Department)
+				.WithMany()
+				.HasForeignKey(c => c.DepartmentId);
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.ConditionParameter)
+				.WithMany()
+				.HasForeignKey(c => c.ConditionParameterId);
+			modelBuilder.Entity<ConditionParameterValue>()
+				.HasOne(c => c.MeasurementUnit)
+				.WithMany()
+				.HasForeignKey(c => c.MeasurementUnitId);
+			
+			modelBuilder.Entity<ConditionParameter>()
+				.HasOne(c => c.ConditionParameterType)
+				.WithMany(t => t.ConditionParameters)
+				.HasForeignKey(c => c.ConditionParameterTypeId);
+			modelBuilder.Entity<ConditionParameter>()
+				.HasOne(c => c.MeasurementUnit)
+				.WithMany()
+				.HasForeignKey(c => c.MeasurementUnitId);
+			modelBuilder.Entity<ConditionParameterToModelLink>()
+				.HasOne(c => c.ConditionParameter)
+				.WithMany(c => c.ModelLinks)
+				.HasForeignKey(c => c.ConditionParameterId);
+			modelBuilder.Entity<ConditionParameterToModelLink>()
+				.HasOne(c => c.EquipmentModel)
+				.WithMany(c => c.ConditionParameterLinks)
+				.HasForeignKey(c => c.EquipmentModelId);
+			modelBuilder.Entity<ConditionParameter>()
+				.HasMany(c => c.ValueRanges)
+				.WithOne(t => t.ConditionParameter)
+				.HasForeignKey(c => c.ConditionParameterId);
+			modelBuilder.Entity<ConditionParameter>()
+				.Property(w => w.IsValid)
+				.HasConversion(new IsValidConverter());
+			
+			modelBuilder.Entity<ConditionParameterType>()
+				.HasOne(c => c.WorkRequestDirection)
+				.WithMany(t => t.ConditionParameterTypes)
+				.HasForeignKey(c => c.WorkRequestDirectionId)
+				.HasPrincipalKey(w => w.Id);
+			modelBuilder.Entity<ConditionParameterType>()
+				.Property(w => w.ParameterGroup)
+				.HasConversion(new ConditionParameterGroupConverter());
+			
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.Property(w => w.IsEmergency)
+				.HasConversion(new DownTimeIsEmergencyConverter());
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.Property(w => w.IsPlanned)
+				.HasConversion(new DownTimeIsPlannedConverter());
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.Property(w => w.IsValid)
+				.HasConversion(new IsValidConverter());
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.HasOne(c => c.FailureReason)
+				.WithMany(t => t.ConditionParameterAdditionalData)
+				.HasForeignKey(c => c.FailureReasonId)
+				.HasPrincipalKey(w => w.Id);
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.HasOne(c => c.FailureType)
+				.WithMany(t => t.ConditionParameterAdditionalData)
+				.HasForeignKey(c => c.FailureTypeId)
+				.HasPrincipalKey(w => w.Id);
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.HasOne(c => c.Direction)
+				.WithMany(t => t.ConditionParameterAdditionalData)
+				.HasForeignKey(c => c.DirectionId)
+				.HasPrincipalKey(w => w.Id);
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.HasOne(c => c.SourceTechPlace)
+				.WithMany()
+				.HasForeignKey(c => c.SourceTechPlaceId);
+			modelBuilder.Entity<ConditionParameterAdditionalData>()
+				.HasOne(c => c.Responsible)
+				.WithMany()
+				.HasForeignKey(c => c.ResponsibleId);
+			
+			modelBuilder.Entity<ConditionParameterToModelLink>()
+				.HasKey(c => new {c.ConditionParameterId, c.EquipmentModelId});
+			
+			modelBuilder.Entity<ConditionParameterValueRange>()
+				.HasKey(c => new {c.ConditionParameterId, c.Id});
+			modelBuilder.Entity<ConditionParameterValueRange>()
+				.HasOne(c => c.Category)
+				.WithMany()
+				.HasForeignKey(c => c.WorkRequestCategoryId)
+				.HasPrincipalKey(w => w.Id);
 		}
 
 //		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -84,6 +84,27 @@ namespace ItGraphQlSchema.Types
 			AddQueryField(
 				name: "departments",
 				resolve: context =>_dataProvider.Departments);
+			AddQueryField(
+				name: "conditionParameterTypes",
+				resolve: context =>_dataProvider.ConditionParameterTypes);
+			AddQueryField(
+				name: "conditionParameters",
+				resolve: context =>_dataProvider.ConditionParameters);
+			AddQueryField(
+				name: "conditionParameterValues",
+				resolve: context =>_dataProvider.ConditionParameterValues);
+			AddQueryField(
+				name: "equipmentFailureReasons",
+				resolve: context =>_dataProvider.EquipmentFailureReasons);
+			AddQueryField(
+				name: "equipmentFailureTypes",
+				resolve: context =>_dataProvider.EquipmentFailureTypes);
+			AddQueryField(
+				name: "downTimes",
+				resolve: context =>_dataProvider.DownTimes);
+			AddQueryField(
+				name: "measurementUnits",
+				resolve: context =>_dataProvider.MeasurementUnits);
 
 			AddQueryConnectionField(
 				name: "departmentConnection",
@@ -97,6 +118,12 @@ namespace ItGraphQlSchema.Types
 			AddQueryConnectionField(
 				name: "employeesConnection",
 				resolve: context =>_dataProvider.Employees);
+			AddQueryConnectionField(
+				name: "conditionParameterValuesConnection",
+				resolve: context =>_dataProvider.ConditionParameterValues);
+			AddQueryConnectionField(
+				name: "downTimesConnection",
+				resolve: context =>_dataProvider.DownTimes);
 		}
 	}
 }

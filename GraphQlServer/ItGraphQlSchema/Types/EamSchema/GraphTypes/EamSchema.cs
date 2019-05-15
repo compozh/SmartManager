@@ -3,6 +3,7 @@ using GraphQL.EntityFramework;
 using GraphQL.Types;
 using GraphQL.Utilities;
 using ItGraphQlSchema.Types.Common;
+using ItGraphQlSchema.Types.EamSchema.GraphTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,8 +21,12 @@ namespace ItGraphQlSchema.Types.EamSchema
 		
 		public static void Config(IServiceCollection services, IConfiguration configuration)
 		{
+//			services.AddDbContext<EamDbContext>(options =>
+//				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
+			
 			services.AddDbContext<EamDbContext>(options =>
-				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
+				options.UseSqlServer(@"Data Source=sql2016\SQL2016EE;Initial Catalog=SmartEAM;User ID=sa; Password=lkmo")
+					.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 			
 			EfGraphQLConventions.RegisterInContainer(services, EamDbContext.DataModel);
 			GraphTypeTypeRegistry.Register<WorkRequest, WorkRequestGraph>();
@@ -42,6 +47,17 @@ namespace ItGraphQlSchema.Types.EamSchema
 			GraphTypeTypeRegistry.Register<TechnicalPlace, TechnicalPlaceGraph>();
 			GraphTypeTypeRegistry.Register<TechnicalPlaceLevel, TechnicalPlaceLevelGraph>();
 			GraphTypeTypeRegistry.Register<EquipmentMovementHistory, EquipmentMovementHistoryGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameterType, ConditionParameterTypeGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameter, ConditionParameterGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameterValue, ConditionParameterValueGraph>();
+			GraphTypeTypeRegistry.Register<EquipmentFailureReason, EquipmentFailureReasonGraph>();
+			GraphTypeTypeRegistry.Register<EquipmentFailureType, EquipmentFailureTypeGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameterToModelLink, ConditionParameterToModelLinkGraph>();
+			//GraphTypeTypeRegistry.Register<DownTime, DownTimeGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameterGroup, ConditionParameterGroupGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameterValueRange, ConditionParameterValueRangeGraph>();
+			GraphTypeTypeRegistry.Register<ConditionParameterAdditionalData, ConditionParameterAdditionalDataGraph>();
+			GraphTypeTypeRegistry.Register<MeasurementUnit, MeasurementUnitGraph>();
 
 			services.AddSingleton<IEamUserSettingsProvider, EamUserSettingsProvider>();
 			services.AddSingleton<IEamDataProvider, EamDataProvider>();

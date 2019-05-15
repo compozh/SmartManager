@@ -20,6 +20,22 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<EquipmentCategory> EquipmentCategories { get; }
 		IQueryable<TechnicalPlaceLevel> TechnicalPlaceLevels { get; }
 		IQueryable<EquipmentMovementHistory> EquipmentMovementHistories { get; }
+		
+		IQueryable<ConditionParameterType> ConditionParameterTypes { get; }
+		
+		IQueryable<ConditionParameter> ConditionParameters { get;  }
+		
+		IQueryable<ConditionParameterValue> ConditionParameterValues { get; }
+
+		IQueryable<EquipmentFailureReason> EquipmentFailureReasons { get;  }
+		
+		IQueryable<EquipmentFailureType> EquipmentFailureTypes { get;  }
+		
+		IQueryable<ConditionParameterToModelLink> ConditionParameterToModelLinks { get;  }
+		
+		IQueryable<ConditionParameterValue> DownTimes { get; }
+		
+		IQueryable<MeasurementUnit> MeasurementUnits { get; }
 	}
 	
 	internal class EamDataProvider : CommonDataProvider<EamDbContext>, IEamDataProvider
@@ -103,6 +119,24 @@ namespace ItGraphQlSchema.Types.EamSchema
 					UserSettings.TechnicalPlacesAccess != RegAccess.Deny);
 			}
 		}
+
+		public IQueryable<ConditionParameterType> ConditionParameterTypes => DbContext.ConditionParameterTypes;
+		public IQueryable<ConditionParameter> ConditionParameters => DbContext.ConditionParameters;
+
+		public IQueryable<ConditionParameterValue> ConditionParameterValues => DbContext.ConditionParameterValues.Where(
+			c => c.ConditionParameter != null && c.ConditionParameter.ConditionParameterType != null &&
+				(c.ConditionParameter.ConditionParameterType.ParameterGroup ==
+				ConditionParameterGroup.OperatingStatistics ||
+				c.ConditionParameter.ConditionParameterType.ParameterGroup ==
+				ConditionParameterGroup.IntegrationAsuTp));
+		
+		public IQueryable<EquipmentFailureReason> EquipmentFailureReasons => DbContext.EquipmentFailureReasons;
+		public IQueryable<EquipmentFailureType> EquipmentFailureTypes => DbContext.EquipmentFailureTypes;
+		public IQueryable<ConditionParameterToModelLink> ConditionParameterToModelLinks => DbContext.ConditionParameterToModelLinks;
+		public IQueryable<ConditionParameterValue> DownTimes => DbContext.ConditionParameterValues.Where(
+			c => c.ConditionParameter != null && c.ConditionParameter.ConditionParameterType != null &&
+				(c.ConditionParameter.ConditionParameterType.ParameterGroup ==
+				ConditionParameterGroup.DowntimeEquipment ));
 
 		public override IQueryable<ItObject> ItObjects =>
 			base.ItObjects.Where(ito => UserSettings.AvailableItObjects.Contains(ito.Id));

@@ -35,5 +35,6 @@ namespace ItGraphQlSchema.Types.EamSchema
 		public List<WorkRequest> WorkRequests { get; set; }
 		public List<TechnicalPlace> TechnicalPlaces { get; set; }
 		public List<Equipment> Equipments { get; set; }
+		public List<ConditionParameterToModelLink> ConditionParameterLinks { get; set; }
 	}
 }
