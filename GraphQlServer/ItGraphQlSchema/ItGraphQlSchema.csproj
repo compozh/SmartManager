@@ -4,7 +4,9 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <RootNamespace>ItGraphQlSchema</RootNamespace>
     </PropertyGroup>
-
+    <PropertyGroup>
+      <LangVersion>latest</LangVersion>
+    </PropertyGroup>
     <ItemGroup>
       <Compile Remove="Types\SmartManager\SmartManagerFoldersQuery.cs" />
       <Compile Remove="Types\SmartManager\SmartManagerTasks.cs" />
