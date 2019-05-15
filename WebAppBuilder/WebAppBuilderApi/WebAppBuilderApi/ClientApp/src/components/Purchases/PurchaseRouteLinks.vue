@@ -1,5 +1,5 @@
 <template>
- 
+
     <v-list class="pt-0" dense>
         <v-divider></v-divider>
 
@@ -33,8 +33,8 @@ export default {
             //console.log(this.$router)
             var links = this.$store.state.applicationDescription.Routes;
             links = [...links, ...links[1].Children, ...links[0].Children]
-            links.forEach(l=> 
-            { 
+            links.forEach(l=>
+            {
               l.Properties = {
                   BadgeColor: "red",
                   BadgeValue: (l.Path === '' && this.$store.state.CartItems) ? this.$store.state.CartItems.len() : 0,
