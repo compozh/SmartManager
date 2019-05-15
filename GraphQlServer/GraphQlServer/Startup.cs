@@ -100,7 +100,7 @@ namespace GraphQlServer
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-			services.ConfigSchemas();
+			services.ConfigSchemas(Configuration);
 			services.AddSingleton<SchemaSelector>();
 			services.AddSingleton<IMemoryCache, MemoryCache>();
 		}

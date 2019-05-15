@@ -72,10 +72,15 @@ namespace GraphQlServer
 		private async Task writeResponseAsync(HttpContext context, ExecutionResult result)
 		{
 			var json = _writer.Write(result);
-
-			context.Response.ContentType = "application/json";
-			context.Response.StatusCode = result.Errors?.Any() == true ? (int)HttpStatusCode.BadRequest : (int)HttpStatusCode.OK;
-
+			
+			// В случае ошибок оны выводятся в читаемом формате
+			//context.Response.ContentType = "application/json";
+//			if (result.Errors != null && result.Errors.Any())
+//			{
+//				//context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+//				await context.Response.WriteAsync(JsonConvert.SerializeObject(new {Result = result.Errors.Select(e => new {e.Code, e.Message})}));
+//			}
+			//context.Response.StatusCode = (int)HttpStatusCode.OK;
 			await context.Response.WriteAsync(json);
 		}
 

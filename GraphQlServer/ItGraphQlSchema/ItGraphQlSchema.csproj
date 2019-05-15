@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
         <RootNamespace>ItGraphQlSchema</RootNamespace>
     </PropertyGroup>
 
@@ -13,9 +13,13 @@
 
     <ItemGroup>
       <PackageReference Include="GraphQL" Version="2.4.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
+      <PackageReference Include="GraphQL.EntityFramework" Version="5.0.0-beta.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
       <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
       <PackageReference Include="Web.Authentication" Version="1.0.10" />
       <PackageReference Include="Web.Data" Version="1.0.1" />
@@ -36,9 +40,5 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="PurchasesSchema\Material\" />
     </ItemGroup>
 </Project>
