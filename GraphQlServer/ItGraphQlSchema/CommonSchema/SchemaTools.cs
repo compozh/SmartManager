@@ -64,9 +64,9 @@ namespace ItGraphQlSchema.CommonSchema
 			var krepIndex = 3;
 			anonymusIndex = 4;
 			var conditionIndex = 5;
-			////Запрос на сервер, для получение Join'ов
-			var joins = GetJoins(schema.Id, anonymousСall).Result;
 
+			//Id типов, которым нужны joins
+			var typesNeedJoin = new List<string>();
 			command = _client.CreateCommand(@"select GQTYPE.ID, GQTYPE.NAME, GQTYPE.DB, GQTYPE.KREP, GQTYPE.ALLOWANON, GQTYINSC.CONDITION from GQTYPE join GQTYINSC on GQTYINSC.IDTYPE = GQTYPE.ID and GQTYINSC.IDSCHEMA = @schemaid");
 			command.Parameters.Add(new SqlParameter("@schemaid", schema.Id));
 			command.Connection.Open();
@@ -86,15 +86,31 @@ namespace ItGraphQlSchema.CommonSchema
 							Columns = new List<SchemaColumn>(),
 							Joins = new Dictionary<string,  IEnumerable<string>>()
 						};
-						if (joins.ContainsKey(newType.Id))
+						if (!string.IsNullOrEmpty(newType.TableName) || !string.IsNullOrEmpty(newType.BrowseId))
 						{
-							newType.Joins = joins[newType.Id];
+							typesNeedJoin.Add(newType.Id);
 						}
 						schema.Types.Add(newType);
 					}
 				}
 			}
 			command.Connection.Close();
+
+			var shemaAndTypes = schema.Id+",";
+			shemaAndTypes += string.Join(",", typesNeedJoin);
+			//Если хоть один тип нуждается в join
+			if (typesNeedJoin.Count > 0)
+			{
+				//Запрос на сервер, для получение Join'ов
+				var joins = GetJoins(shemaAndTypes, anonymousСall).Result;
+				foreach (var type in schema.Types)
+				{
+					if (joins.ContainsKey(type.Id))
+					{
+						type.Joins = joins[type.Id];
+					}
+				}
+			}
 
 			var expressionIndex = 0;
 			var descriptionIndex = 1;
@@ -103,6 +119,11 @@ namespace ItGraphQlSchema.CommonSchema
 			var decIndex = 4;
 			for (var i = 0; i < schema.Types.Count; i++)
 			{
+				//Если тип обЪявлен классом, то пропускаем шаг по добавлению колонок
+				if (string.IsNullOrEmpty(schema.Types[i].BrowseId) || string.IsNullOrEmpty(schema.Types[i].TableName))
+				{
+					continue;
+				}
 				command = _client.CreateCommand("select REPS.FL, REPS.FLR, REPS.BROWNAIM, REPS.TYPE, REPS.DEC from REPS where REPS.KREP = @repskrep AND REPS.DB = @repsdb ");
 				command.Parameters.Add(new SqlParameter("@repskrep", schema.Types[i].BrowseId));
 				command.Parameters.Add(new SqlParameter("@repsdb", schema.Types[i].TableName));
@@ -284,9 +305,9 @@ namespace ItGraphQlSchema.CommonSchema
 		/// <param name="SchemaId">Id схемы</param>
 		/// <param name="anonymousСall">Анонимный вызов или нет</param>
 		/// <returns></returns>
-		private async Task<Dictionary<string, Dictionary<string,  IEnumerable<string>>>> GetJoins(string SchemaId, bool anonymousСall)
+		private async Task<Dictionary<string, Dictionary<string,  IEnumerable<string>>>> GetJoins(string shemaAndTypes, bool anonymousСall)
 		{
-			var args = "{\"SCHEMAID\":\"" + SchemaId + "\"}";
+			var args = "{\"SCHEMAID\":\"" + shemaAndTypes + "\"}";
 			try
 			{
 				var responseFromWeb = await _webRequest.CallWebRequestAsync("GETGQJOINS", args, anonymousСall);

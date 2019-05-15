@@ -27,13 +27,21 @@ new Vue({
 // Загружаем приложение
 store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).then(() => {
   var app = store.state.applicationDescription;
-  // Формируем роуты
-  var routes =  _.orderBy(app.Routes||[], ["Sort"]).map(generateRouteFromDescription)
+
+  // Разделы приложения
+  var sections = app.Sections||[];
+
+  // Достаем роуты из разделов
+  var routes = [];
+  for (let index = 0; index < sections.length; index++) {
+    const section = sections[index];
+    routes = routes.concat((section.Routes||[]).map(r=> (r.section = section)&& r))
+  }
+  // Формируем роуты в нужном формате
+  routes = _.orderBy(routes, ["Sort"]).map(r => generateRouteFromDescription(r, r.section))
+
   // Сбрасываем старый роутер
   resetRouter([])
-
-
-  //var loginRouteExists = routes.some(el=>(el.name||"").toLowerCase() == "login")
 
   // Обработка доступа к роутам
   router.beforeEach((to, from, next) => { routerBeforeEachFunction(to, from, next) })
@@ -83,10 +91,18 @@ function createComponentObject(com){
   return innerComp;
 }
 
-
 // Генерируем компонент по его описанию
 function getInternalComponentDescription(com) {
   return ({
+    //  Для динамического обновления данных при смене роутинга и обновлении компонента
+    beforeRouteUpdate (to, from, next) {
+      next();
+      for(var cur of  this.$children){
+        if(cur.beforeRouteUpdate){
+          cur.beforeRouteUpdate(to,from);
+        } 
+      }
+    },
     name: com.NameInRoute || "default",
     render(h) {
       // приводим компонент к нужному формату:
@@ -101,39 +117,55 @@ function getInternalComponentDescription(com) {
       })
     }
   })
-
 }
+
+// Обработка пути в маршруте для корректного сравнения
+function normalizePath(path){
+  var result = (path || "").toLowerCase();
+  if(!result.endsWith("/")){
+    result += "/"
+  }
+  return result;
+}
+
 /** Валидация доступа пользователя к определенным маршрутам */
 let routerBeforeEachFunction = (to,from, next)=>{
     // Если переходим на логин, запоминаем путь, для возвращения
-    if ((to.path || "").endsWith("login")) {
+
+    if (normalizePath(to.path).endsWith("/login/")) {
       var backPath = from.path;
-      if (to.path == from.path) {
-        backPath = `/${store.state.applicationDescription.Id}`
+      if (normalizePath(to.path) == normalizePath(from.path)) {
+        backPath = `/${store.state.applicationDescription.Id}/`
       }
       to.params["routeToBack"] = backPath
     }
     // Если запрещен анонимный доступ, и отсутствует текущий пользователь, перенаправляем на логин
     if (!to.meta.AllowAnonymous && !store.getters.getCurrentUser) {
 
-      next({path: "login"});
+      next({path: `/${store.state.applicationDescription.Id}/LOGIN`});
 
+      return;
+    }
+    if(to.meta.HideAfterLogin && store.getters.getCurrentUser){
+      next({path: `/${store.state.applicationDescription.Id}/`});
       return;
     }
     next();
 }
 
 
-let generateRouteFromDescription = (route) =>
+let generateRouteFromDescription = (route, section) =>
   ({
     name: route.Id,
     path: route.Path,
     // Компоненты в маршруте
     components: createComponentsForRoute(_.orderBy(route.Components, "Sort")),
     // Вложенные маршруты
-    children: _.orderBy(route.Children||[], ["Sort"]).map(generateRouteFromDescription),
+    children: _.orderBy(route.Children||[], ["Sort"]).map(r=>generateRouteFromDescription(r,section)),
     meta: {
-      AllowAnonymous: route.AllowAnonymous
+      AllowAnonymous: route.AllowAnonymous,
+      HideAfterLogin: route.HideAfterLogin,
+      Section:{ Id: section.Id, Properties: JSON.parse(section.Properties ||"{}")}
     }
   })
 

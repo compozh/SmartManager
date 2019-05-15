@@ -6,9 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="PurchasesSchema\**" />
-      <EmbeddedResource Remove="PurchasesSchema\**" />
-      <None Remove="PurchasesSchema\**" />
+      <Compile Remove="Types\SmartManager\SmartManagerFoldersQuery.cs" />
+      <Compile Remove="Types\SmartManager\SmartManagerTasks.cs" />
+      <Compile Remove="Types\SmartManager\SmFoldersProvider.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,6 +39,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Types\Purchases\Material\" />
+      <Folder Include="PurchasesSchema\Material\" />
     </ItemGroup>
 </Project>
