@@ -7,5 +7,9 @@ const getters = ({
     getCurrentUser(state){
         return state.currentuser
     },
+    
+    getExistedIcons(state){
+        return state.existedIcons;
+    }
 });
 export default getters
