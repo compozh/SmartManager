@@ -21,12 +21,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 		
 		public static void Config(IServiceCollection services, IConfiguration configuration)
 		{
-//			services.AddDbContext<EamDbContext>(options =>
-//				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
-			
 			services.AddDbContext<EamDbContext>(options =>
-				options.UseSqlServer(@"Data Source=sql2016\SQL2016EE;Initial Catalog=SmartEAM;User ID=sa; Password=lkmo")
-					.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
 			
 			EfGraphQLConventions.RegisterInContainer(services, EamDbContext.DataModel);
 			GraphTypeTypeRegistry.Register<WorkRequest, WorkRequestGraph>();
@@ -53,7 +49,6 @@ namespace ItGraphQlSchema.Types.EamSchema
 			GraphTypeTypeRegistry.Register<EquipmentFailureReason, EquipmentFailureReasonGraph>();
 			GraphTypeTypeRegistry.Register<EquipmentFailureType, EquipmentFailureTypeGraph>();
 			GraphTypeTypeRegistry.Register<ConditionParameterToModelLink, ConditionParameterToModelLinkGraph>();
-			//GraphTypeTypeRegistry.Register<DownTime, DownTimeGraph>();
 			GraphTypeTypeRegistry.Register<ConditionParameterGroup, ConditionParameterGroupGraph>();
 			GraphTypeTypeRegistry.Register<ConditionParameterValueRange, ConditionParameterValueRangeGraph>();
 			GraphTypeTypeRegistry.Register<ConditionParameterAdditionalData, ConditionParameterAdditionalDataGraph>();
