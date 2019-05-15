@@ -11,12 +11,12 @@
         class="menu"
     >
         <template slot="label" slot-scope="{ item }" >
-            <span v-if="item.webClientStartParams">
+            <span v-if="item.linkToRMD">
                 <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
-                <a  target="_blank" :href="BaseUrl+item.webClientStartParams"> {{ item.name }} </a>
-                <!-- <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.webClientStartParams} }"> {{ item.name }} </router-link> -->
+                <a  target="_blank" :href="BaseUrl+item.linkToRMD"> {{ item.name }} </a>
+                <!-- <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.linkToRMD} }"> {{ item.name }} </router-link> -->
             </span>
-            <span v-if="!item.webClientStartParams">
+            <span v-if="!item.linkToRMD">
                 {{ item.name }}
             </span>
         </template>
@@ -39,7 +39,7 @@ export default {
 
                 for(var object of list.paragraphItem){
                     var inspaction="";
-                    object.children = object.children.filter(item => item.webClientStartParams)
+                    object.children = object.children.filter(item => item.linkToRMD)
                     for( var child of object.children){
                         if(!child)
                         {
@@ -64,7 +64,7 @@ export default {
             
             if(this.$route.params.module != "FAVORITE_MODULE" && this.$route.params.module){
                 var datasource = {
-                    query:' { itmenu { moduleContent(codeMenu:"' + this.$route.params.module + '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ webClientStartParams name: text image codeMenu isFolder } } } } } ',
+                    query:' { itmenu { moduleContent(codeMenu:"' + this.$route.params.module + '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ linkToRMD name: text image codeMenu isFolder } } } } } ',
                     schema:"ITPORTAL"
                 }
                 var key = "ITMODULE";

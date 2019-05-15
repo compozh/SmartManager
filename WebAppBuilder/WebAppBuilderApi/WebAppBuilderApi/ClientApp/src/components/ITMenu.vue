@@ -14,29 +14,31 @@
                 class="menu"
             >
             <template slot="label" slot-scope="{ item }" >
-                <span v-if="!item.isFolder">
+                <span v-if="!item.isFolder" :title="item.name">
                     <router-link class="none-link" :to="{ name : 'MODULECONTENT', params : LoadModuleContent(item) }">
-                        <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#'+item.image"></use></svg>
+                        <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
                         {{ item.name }} 
                     </router-link>
                 </span>
-                <span v-if="item.isFolder">
-                    <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#'+item.image"></use></svg>
+                <span v-if="item.isFolder" :title="item.name">
+                    <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
                     {{ item.name }} 
                 </span>
             </template>
             </v-treeview>
         </div>
         <div  class="menu-content">
-           <router-view name="module">
-           </router-view>
+            <!-- Костыль -->
+            <router-view name="module" v-if="this.$route.params.module">
+            </router-view>
+            <Module v-if="!this.$route.params.module"/>
         </div>
     </div>
 
 </template>
 
 <script>
-import axios from "axios";  
+import Module from "./ITModule";  
 import VueLogo from '../svgfiles/ItIcons.svg';
 import getImae from "./Functions/ITMenuFunctions/ConvetImage.js"
 
@@ -44,13 +46,9 @@ export default {
     name:"it-menu",
     components: {
     VueLogo,
+    Module
   },
     props: ["menu"],
-    data(){
-        return{
-            icons:VueLogo
-        }
-    },
     computed:{
         ItemsMenu(){
             if(!this.SvgCollection.length){
@@ -79,7 +77,7 @@ export default {
         },
         SvgCollection(){
             return this.$store.getters.getExistedIcons
-        }
+        },
     },
     methods:{
         LoadModuleContent(item){
@@ -95,6 +93,8 @@ export default {
             var arr = Array.from(document.getElementsByClassName("all-svg")[0].children).map(r=>r.id);
             this.$store.commit("setExistedIcons", arr)
         }
+    },
+    created(){
     }
 }
 </script>
@@ -108,16 +108,20 @@ export default {
         text-align: left;
     }
     .menu-list{
-        width: 45%;
+        width: 500px;
+        overflow: hidden;
     }
     .menu-content{
         display: block;
         float: left;
-        width: 45%;
+        width: 100%;
     }
     .none-link{
         color: black;
         text-decoration: none !important;
+        width: 100%;
+        height: 100%;
+        display: block;
     }
     .svg{
         width: 20px;

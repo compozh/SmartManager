@@ -9,7 +9,6 @@ export default {
 name:"it-client",
 created(){
     // window.parent.location.href= this.$route.params.client;
-    console.log(12)
 },
 }
 </script>
