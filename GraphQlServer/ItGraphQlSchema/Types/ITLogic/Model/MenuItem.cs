@@ -16,7 +16,7 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 			Field(p => p.CodeMenu);
 			Field(p => p.IsFolder);
 			Field(p => p.Image);
-			Field(p => p.WebClientStartParams);
+			Field(p => p.LinkToRMD);
 			Field<ListGraphType<MenuItem>>("Nodes",
 				resolve: ctx=> ctx.Source.Items);
 		}
@@ -32,6 +32,21 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 		public List<MenuItem> Items { get; set; }
 		[JsonProperty("Nodes")]
 		private List<MenuItem> Nodes { set { Items = value; } }
-		public string WebClientStartParams { get; set; }
+
+		public string LinkToRMD { get; set; }
+
+		[JsonProperty("WebClientStartParams")]
+		private string link { 
+			set {
+				if (!string.IsNullOrEmpty(value))
+				{
+					LinkToRMD = value;
+				}
+				else
+				{
+					LinkToRMD = "";
+				}
+			}
+		}
 	}
 }
