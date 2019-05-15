@@ -1,9 +1,9 @@
 <template>
-    
+
     <div v-if="menu" class="menu-container">
         <VueLogo class="all-svg"/>
         <div class="menu-list" >
-            <v-treeview 
+            <v-treeview
                 :items="ItemsMenu"
                 item-key="codeMenu"
                 activatable
@@ -17,12 +17,12 @@
                 <span v-if="!item.isFolder" :title="item.name">
                     <router-link class="none-link" :to="{ name : 'MODULECONTENT', params : LoadModuleContent(item) }">
                         <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
-                        {{ item.name }} 
+                        {{ item.name }}
                     </router-link>
                 </span>
                 <span v-if="item.isFolder" :title="item.name">
                     <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
-                    {{ item.name }} 
+                    {{ item.name }}
                 </span>
             </template>
             </v-treeview>
@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import Module from "./ITModule";  
-import VueLogo from '../svgfiles/ItIcons.svg';
-import getImae from "./Functions/ITMenuFunctions/ConvetImage.js"
+import Module from "./ITModule";
+import VueLogo from '../../svgfiles/ItIcons.svg';
+import getImae from "./ConvetImage.js"
 
 export default {
     name:"it-menu",
@@ -69,7 +69,7 @@ export default {
                     {
                         break;
                     }
-                    
+
                     child.image = getImae(child.image,this.SvgCollection)
                 }
             }
