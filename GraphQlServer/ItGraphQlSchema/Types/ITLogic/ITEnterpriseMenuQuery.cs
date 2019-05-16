@@ -9,10 +9,10 @@ namespace ItGraphQlSchema.Types.ITLogic
 	public class ITEnterpriseMenuQuery:ObjectGraphType<object>
 	{
 		ITPortalProvider _provider;
-		private IDependencyResolver _dependencyResolver;
-		public ITEnterpriseMenuQuery(ITPortalProvider provider, IDependencyResolver dependencyResolver)
+		private IHttpContextAccessor _httpContext;
+		public ITEnterpriseMenuQuery(ITPortalProvider provider, IHttpContextAccessor httpContext)
 		{
-			_dependencyResolver = dependencyResolver;
+			_httpContext = httpContext;
 			_provider = provider;
 			Name = "Query";
 			Field<ITMenu>("Menu", resolve: getMenu);
@@ -30,8 +30,7 @@ namespace ItGraphQlSchema.Types.ITLogic
 		}
 		private UserAccount getUser(ResolveFieldContext<object> context)
 		{
-			var httpContext = _dependencyResolver.Resolve<IHttpContextAccessor>();
-			var userLogin = httpContext.HttpContext.User.Identity.GetValue().GetPropertyValue("Name");
+			var userLogin = _httpContext.HttpContext.User.Identity.GetValue().GetPropertyValue("Name");
 			return _provider.GetUserAccount(userLogin.ToString()).Result;
 		}
 	}

@@ -13,7 +13,6 @@ namespace ItGraphQlSchema.Types.ITLogic
 	{
 		private readonly WebRequestsTools _webRequest;
 		private readonly SqlClient _client;
-		private UserAccount _user;
 		public ITPortalProvider(SqlClient client, WebRequestsTools webRequest)
 		{
 			_webRequest = webRequest;
@@ -49,26 +48,14 @@ namespace ItGraphQlSchema.Types.ITLogic
 		/// <returns></returns>
 		public async Task<UserAccount> GetUserAccount(string userLogin)
 		{
-			_user = new UserAccount();
-			var userId = string.Empty;
-			var userKdk = string.Empty;
-			var condition = "SIMPLE";
-
-			var selectString = @"select userid from ittbn2 where userlogin = @sqlParameter";
-			userId = commonSendToSQL(selectString, userLogin, condition).ToString();
+			var selectString = @"declare @sqlParameter varchar(200) = @arg
+								select K.EMAIL, K.FAM2, K.NAM2, K.OTCH2, K.D_ROZD, D.MDOR from ittbn2 I
+								JOIN TBNKDK T ON T.USERID = I.USERID 
+								JOIN KDK K ON K.n_kdk = T.n_kdk
+								LEFT JOIN DOR D ON D.ALIAS = 'KDK' AND D.KDOR = K.N_KDK
+								where userlogin = @sqlParameter";
 			
-			selectString = @"select N_KDK from TBNKDK where USERID = @sqlParameter";
-			userKdk = commonSendToSQL(selectString, userId, condition).ToString();
-
-			condition = "USER";
-			selectString = @"select EMAIL, FAM2, NAM2, OTCH2, D_ROZD from kdk where n_kdk = @sqlParameter";
-			_user = commonSendToSQL(selectString, userKdk, condition) as UserAccount;
-
-			condition = "PHOTO";
-			selectString = @"select MDOR from DOR where alias = 'KDK' and DOR.KDOR  = @sqlParameter";
-			_user.LinkToPhoto = commonSendToSQL(selectString, userKdk, condition).ToString();
-			
-			return _user;
+			return commonSendToSQL(selectString, userLogin);;
 		}
 		
 		/// <summary>
@@ -78,38 +65,38 @@ namespace ItGraphQlSchema.Types.ITLogic
 		/// <param name="arg"> SqlParameter</param>
 		/// <param name="condition"> Условие для возращения результата</param>
 		/// <returns></returns>
-		private object commonSendToSQL(string select, string sqlParameter, string condition)
+		private UserAccount commonSendToSQL(string select, string sqlParameter)
 		{
-			var zero = 0;
-			var one = 1;
-			var two = 2;
-			var trhee = 3;
-			var four = 4;
-			
-			object result = null;
+			UserAccount result = null;
+
 			var command = _client.CreateCommand(select);
-			command.Parameters.Add(new SqlParameter("@sqlParameter", sqlParameter));
+			command.Parameters.Add(new SqlParameter("@arg", sqlParameter));
 			command.Connection.Open();
-			using (var reader = command.ExecuteReader())
-			{
-				if (reader.HasRows)
+			
+				using (var reader = command.ExecuteReader())
 				{
-					while (reader.Read())
+					if (reader.HasRows)
 					{
-						if(condition.Equals("SIMPLE")){
-							result = reader.GetString(zero);
-						}else if (condition.Equals("USER"))
+						while (reader.Read())
+					{
+						var len = reader.IsDBNull(5) ? 0 : reader.GetBytes(5, 0, null, 0, 0);
+						var photo = string.Empty;
+						if (!len.Equals(0))
 						{
-							result = new UserAccount()
-							{
-								Email = reader.GetString(zero).Trim(),
-								FullName = reader.GetString(one).Trim() + " " + reader.GetString(two).Trim() + " " + reader.GetString(trhee).Trim(),
-								DateBirthday = reader.GetDateTime(four).ToShortDateString()
-							};
-						}else if (condition.Equals("PHOTO"))
-						{
-							result = Convert.ToBase64String(reader.GetValue(zero) as byte[]);
+							var buffer = new Byte[len];
+							reader.GetBytes(5, 0, buffer, 0, (int) len) ;
+							photo = Convert.ToBase64String(buffer);
 						}
+						
+						result = new UserAccount()
+						{
+							Email = reader.GetString(0).Trim(),
+							LastName = reader.GetString(1).Trim(),
+							FirstName = reader.GetString(2).Trim(),
+							Patronymic = reader.GetString(3).Trim(),
+							DateBirthday = reader.GetDateTime(4).ToShortDateString(),
+							Photo = photo
+						};
 					}
 				}
 			}

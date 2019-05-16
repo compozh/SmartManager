@@ -8,15 +8,25 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
         public UserAccount()
         {
             Name = "User";
-            Field(p => p.FullName);
-            Field(p => p.LinkToPhoto);
+            Field(p => p.LastName);
+            Field(p => p.FirstName);
+            Field(p => p.Patronymic);
+            Field(p => p.Photo);
             Field(p => p.Email);
             Field(p => p.DateBirthday);
         }
 
-        public string FullName { get; set; }
-        public string LinkToPhoto { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string Patronymic { get; set; }
         public string Email { get; set; }
         public string DateBirthday { get; set; }
+
+        public string Photo
+        {
+            get;
+            set;
+        }
+
     }
 }
