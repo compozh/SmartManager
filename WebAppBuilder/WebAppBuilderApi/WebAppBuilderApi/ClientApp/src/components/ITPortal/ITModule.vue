@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import getImae from "./Functions/ITMenuFunctions/ConvetImage.js"
+import getImae from "./ConvetImage.js"
 export default {
     name:"it-module",
     computed:{
         Module: function () {
-            
+
             if( this.$store.getters.getAppData("ITMODULE")){
                 if(!this.SvgCollection.length){
                     return []
@@ -49,7 +49,7 @@ export default {
                     }
                 }
                 return list;
-            } 
+            }
             return { paragraphItem : [] }
         },
         BaseUrl(){
@@ -61,7 +61,7 @@ export default {
     },
     methods:{
         loadDataForComponents(){
-            
+
             if(this.$route.params.module != "FAVORITE_MODULE" && this.$route.params.module){
                 var datasource = {
                     query:' { itmenu { moduleContent(codeMenu:"' + this.$route.params.module + '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ linkToRMD name: text image codeMenu isFolder } } } } } ',
@@ -73,11 +73,11 @@ export default {
                     key
                 });
             }else {
-                 this.$store.commit("setAppData", { key: "ITMODULE", data: 
+                 this.$store.commit("setAppData", { key: "ITMODULE", data:
                  {
                      data:{
                          itmenu:{
-                             moduleContent:  this.$store.getters.getAppData("ITMENU").data.itmenu.menu.moduleContent} 
+                             moduleContent:  this.$store.getters.getAppData("ITMENU").data.itmenu.menu.moduleContent}
                          }
                      }
                  })
@@ -91,8 +91,8 @@ export default {
     beforeMount(){
         this.loadDataForComponents();
     },
-    
-    
+
+
 }
 </script>
 
