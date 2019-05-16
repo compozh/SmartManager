@@ -13,7 +13,14 @@
         class="menu"
       >
         <template slot="label" slot-scope="{ item }">
+          <div v-if="item.isFolder">
+            <svg class="svg">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>
+            </svg>
+            <span class="menu-item-text" :title="item.name">{{ item.name }}</span>
+          </div>
           <router-link
+            v-else
             class="none-link"
             :to="{ name : 'MODULECONTENT', params : LoadModuleContent(item) }"
           >
@@ -31,7 +38,6 @@
       <router-view name="module" v-if="this.$route.params.module"></router-view>
       <Module v-if="!this.$route.params.module"/>
     </div>
-
   </div>
 </template>
 
