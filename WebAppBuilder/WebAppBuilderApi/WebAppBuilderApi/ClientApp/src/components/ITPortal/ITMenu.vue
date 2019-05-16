@@ -83,10 +83,6 @@ export default {
         LoadModuleContent(item){
             return { module : item.codeMenu }
         },
-        LoadIcons(){
-            var icon;
-            return icon
-        }
     },
     updated(){
         if(this.$store.getters.getExistedIcons.length==0){
