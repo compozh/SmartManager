@@ -18,9 +18,9 @@ namespace ItGraphQlSchema.Types.ITLogic
 			Field<ITMenu>("Menu", resolve: getMenu);
 
 			Field<MenuModule>("ModuleContent",
-				arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "codeMenu", Description = "��� ������" }),
+				arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "codeMenu", Description = "Код модуля" }),
 				resolve: (context => _provider.GetModuleContent(context.GetArgument<string>("codeMenu")).Result),
-				description: "������ ��������� ������");
+				description: "Список каталогов модуля");
 			Field<UserAccount>("User", resolve: getUser);
 		}
 
