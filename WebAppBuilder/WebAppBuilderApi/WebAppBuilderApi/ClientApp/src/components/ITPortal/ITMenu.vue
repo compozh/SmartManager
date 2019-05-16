@@ -20,16 +20,18 @@
             <svg class="svg">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>
             </svg>
-            <span class="menu-item" :title="item.name">{{ item.name }}</span>
+            <span class="menu-item-text" :title="item.name">{{ item.name }}</span>
           </router-link>
         </template>
       </v-treeview>
     </div>
+
     <div class="menu-content">
       <!-- Костыль -->
       <router-view name="module" v-if="this.$route.params.module"></router-view>
       <Module v-if="!this.$route.params.module"/>
     </div>
+
   </div>
 </template>
 
@@ -94,7 +96,6 @@ export default {
 <style scoped>
 .menu-container {
   display: flex;
-  width: 100%;
 }
 .menu {
   text-align: left;
@@ -102,9 +103,13 @@ export default {
 .menu-list {
   width: 500px;
   overflow: hidden;
+  margin-right: 50px;
 }
-.menu-item {
-  
+.menu-item-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 300px;
 }
 .menu-content {
   display: block;
