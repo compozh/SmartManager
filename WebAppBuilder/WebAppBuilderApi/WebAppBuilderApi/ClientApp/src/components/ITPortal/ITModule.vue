@@ -1,107 +1,115 @@
 <template>
-<div>
-<span>{{Module.title}}</span>
+  <div>
+    <h3>{{Module.title}}</h3>
     <v-treeview
-        :items="Module.paragraphItem"
-        item-key="codeMenu"
-        open-on-click
-        hoverable
-        indeterminate-icon
-        transition
-        class="menu"
+      :items="Module.paragraphItem"
+      item-key="codeMenu"
+      open-on-click
+      hoverable
+      indeterminate-icon
+      transition
+      class="menu"
     >
-        <template slot="label" slot-scope="{ item }" >
-            <span v-if="item.linkToRMD">
-                <svg class="svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use></svg>
-                <a  target="_blank" :href="BaseUrl+item.linkToRMD"> {{ item.name }} </a>
-                <!-- <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.linkToRMD} }"> {{ item.name }} </router-link> -->
-            </span>
-            <span v-if="!item.linkToRMD">
-                {{ item.name }}
-            </span>
-        </template>
+      <template slot="label" slot-scope="{ item }">
+        <span v-if="item.linkToRMD">
+          <svg class="svg">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>
+          </svg>
+          <a target="_blank" :href="BaseUrl+item.linkToRMD">{{ item.name }}</a>
+          <!-- <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.linkToRMD} }"> {{ item.name }} </router-link> -->
+        </span>
+        <span v-if="!item.linkToRMD">{{ item.name }}</span>
+      </template>
     </v-treeview>
-    </div>
+  </div>
 </template>
 
 <script>
-import getImae from "./ConvetImage.js"
+import getImae from "./ConvetImage.js";
 export default {
-    name:"it-module",
-    computed:{
-        Module: function () {
-
-            if( this.$store.getters.getAppData("ITMODULE")){
-                if(!this.SvgCollection.length){
-                    return []
-                }
-                var list = this.$store.getters.getAppData("ITMODULE").data.itmenu.moduleContent
-
-                for(var object of list.paragraphItem){
-                    var inspaction="";
-                    object.children = object.children.filter(item => item.linkToRMD)
-                    for( var child of object.children){
-                        if(!child)
-                        {
-                            break;
-                        }
-                        child.image = getImae(child.image,this.SvgCollection)
-                    }
-                }
-                return list;
-            }
-            return { paragraphItem : [] }
-        },
-        BaseUrl(){
-            return this.$store.getters.getAppData("ITMENU").data.itmenu.menu.baseUrl + "/?par3=;ITCALL,"
-        },
-        SvgCollection(){
-            return this.$store.getters.getExistedIcons
+  name: "it-module",
+  computed: {
+    Module: function() {
+      if (this.$store.getters.getAppData("ITMODULE")) {
+        if (!this.SvgCollection.length) {
+          return [];
         }
-    },
-    methods:{
-        loadDataForComponents(){
+        var list = this.$store.getters.getAppData("ITMODULE").data.itmenu
+          .moduleContent;
 
-            if(this.$route.params.module != "FAVORITE_MODULE" && this.$route.params.module){
-                var datasource = {
-                    query:' { itmenu { moduleContent(codeMenu:"' + this.$route.params.module + '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ linkToRMD name: text image codeMenu isFolder } } } } } ',
-                    schema:"ITPORTAL"
-                }
-                var key = "ITMODULE";
-                this.$store.dispatch("LoadDataForComponent", {
-                    datasource,
-                    key
-                });
-            }else {
-                 this.$store.commit("setAppData", { key: "ITMODULE", data:
-                 {
-                     data:{
-                         itmenu:{
-                             moduleContent:  this.$store.getters.getAppData("ITMENU").data.itmenu.menu.moduleContent}
-                         }
-                     }
-                 })
+        for (var object of list.paragraphItem) {
+          var inspaction = "";
+          object.children = object.children.filter(item => item.linkToRMD);
+          for (var child of object.children) {
+            if (!child) {
+              break;
             }
-        },
-        // Функция для обновления данных при изменении роутинга
-        beforeRouteUpdate (to, from, next){
-            this.loadDataForComponents();
+            child.image = getImae(child.image, this.SvgCollection);
+          }
         }
+        return list;
+      }
+      return { paragraphItem: [] };
     },
-    beforeMount(){
-        this.loadDataForComponents();
+    BaseUrl() {
+      return (
+        this.$store.getters.getAppData("ITMENU").data.itmenu.menu.baseUrl +
+        "/?par3=;ITCALL,"
+      );
     },
-
-
-}
+    SvgCollection() {
+      return this.$store.getters.getExistedIcons;
+    }
+  },
+  methods: {
+    loadDataForComponents() {
+      if (
+        this.$route.params.module != "FAVORITE_MODULE" &&
+        this.$route.params.module
+      ) {
+        var datasource = {
+          query:
+            ' { itmenu { moduleContent(codeMenu:"' +
+            this.$route.params.module +
+            '"){  title tooltip  paragraphItem{ name: text  image codeMenu  isFolder children: nodes{ linkToRMD name: text image codeMenu isFolder } } } } } ',
+          schema: "ITPORTAL"
+        };
+        var key = "ITMODULE";
+        this.$store.dispatch("LoadDataForComponent", {
+          datasource,
+          key
+        });
+      } else {
+        this.$store.commit("setAppData", {
+          key: "ITMODULE",
+          data: {
+            data: {
+              itmenu: {
+                moduleContent: this.$store.getters.getAppData("ITMENU").data
+                  .itmenu.menu.moduleContent
+              }
+            }
+          }
+        });
+      }
+    },
+    // Функция для обновления данных при изменении роутинга
+    beforeRouteUpdate(to, from, next) {
+      this.loadDataForComponents();
+    }
+  },
+  beforeMount() {
+    this.loadDataForComponents();
+  }
+};
 </script>
 
 <style scoped>
-    .menu{
-        text-align: left;
-    }
-    .svg{
-        width: 20px;
-        height: 20px;
-    }
+.menu {
+  text-align: left;
+}
+.svg {
+  width: 20px;
+  height: 20px;
+}
 </style>
