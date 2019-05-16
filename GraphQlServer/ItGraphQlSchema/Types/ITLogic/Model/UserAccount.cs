@@ -21,12 +21,7 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
         public string Patronymic { get; set; }
         public string Email { get; set; }
         public string DateBirthday { get; set; }
-
-        public string Photo
-        {
-            get;
-            set;
-        }
+        public string Photo { get; set; }
 
     }
 }
