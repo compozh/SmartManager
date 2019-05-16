@@ -1,7 +1,14 @@
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using GraphQL;
 using GraphQL.Types;
+using ItGraphQlSchema.Types.ITLogic.GraphTypes;
 using ItGraphQlSchema.Types.ITLogic.Model;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Web.Tools;
 
 namespace ItGraphQlSchema.Types.ITLogic
 {
@@ -21,7 +28,7 @@ namespace ItGraphQlSchema.Types.ITLogic
 				arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "codeMenu", Description = "Код модуля" }),
 				resolve: (context => _provider.GetModuleContent(context.GetArgument<string>("codeMenu")).Result),
 				description: "Список каталогов модуля");
-			Field<UserAccount>("User", resolve: getUser);
+			Field<UserAccountType>("User", resolve: getUser);
 		}
 
 		private ITMenu getMenu(ResolveFieldContext<object> context)
@@ -31,7 +38,17 @@ namespace ItGraphQlSchema.Types.ITLogic
 		private UserAccount getUser(ResolveFieldContext<object> context)
 		{
 			var userLogin = _httpContext.HttpContext.User.Identity.GetValue().GetPropertyValue("Name");
-			return _provider.GetUserAccount(userLogin.ToString()).Result;
+//			var userSession = _httpContext.HttpContext.Session.Get<UserAccount>("ITPortalUserAccount");
+//			var te = "Привет мир";
+//			if (userSession != null)
+//			{
+//				return userSession;
+//			}
+			var user = _provider.GetUserAccount(userLogin.ToString()).Result;
+
+//			_httpContext.HttpContext.Session.Set<UserAccount>("ITPortalUserAccount",user);
+
+			return user;
 		}
 	}
 }
