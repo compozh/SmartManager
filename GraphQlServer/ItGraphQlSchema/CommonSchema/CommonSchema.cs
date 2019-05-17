@@ -18,6 +18,10 @@ namespace ItGraphQlSchema.CommonSchema
 				Name = "QueryRoot"
 			};
 			Query = root;
+			Mutation = new ObjectGraphType {
+				Name = "MutationRoot"
+			};
+			
 			var schemaTools = _dependencyResolver.Resolve<SchemaTools>();
 			var cache = _dependencyResolver.Resolve<IMemoryCache>();
 			
@@ -55,12 +59,12 @@ namespace ItGraphQlSchema.CommonSchema
 					continue;
 				}
 
-				registerSchemaType(type, root);
+				registerSchemaType(type, root, Mutation as ObjectGraphType);
 
 			}
 		}
 
-		private void registerSchemaType(SchemaType type, ObjectGraphType root)
+		private void registerSchemaType(SchemaType type, ObjectGraphType root, ObjectGraphType mutation)
 		{
 			//Если такой тип в проекте уже уже есть 
 			if (string.IsNullOrEmpty(type.BrowseId) && string.IsNullOrEmpty(type.TableName))
@@ -71,6 +75,13 @@ namespace ItGraphQlSchema.CommonSchema
 					var resolver = new object();
 					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => resolver);
 				}
+				assemblyType = Type.GetType("ItGraphQlSchema.Types." + type.Name+"Mutation");
+				if (assemblyType != null)
+				{
+					var resolver = new object();
+					mutation.Field(assemblyType, type.Id+"Mutation", type.Name+"Mutation", resolve: ctx => resolver);
+				}
+				
 				return;
 			}
 			var commonType = new ObjectGraphType

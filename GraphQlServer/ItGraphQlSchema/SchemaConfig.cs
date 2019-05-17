@@ -10,6 +10,7 @@ namespace ItGraphQlSchema
 			ForAllSchemas.Config(services);
 			CommonSchema.CommonSchema.Config(services);
 			Types.EamSchema.EamSchema.Config(services, configuration);
+			Types.OrderQuery.Config(services, configuration);
 		}
 	}
 }
