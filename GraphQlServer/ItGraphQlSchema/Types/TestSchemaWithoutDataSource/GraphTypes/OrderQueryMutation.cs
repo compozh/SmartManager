@@ -39,7 +39,7 @@ namespace ItGraphQlSchema.Types
 					return provider.MutateOrder(operation, order);
 				});
 			Field<OrderItemType>("OrderItem", 
-				arguments: new QueryArguments(new QueryArgument<MutationTypesEnum>{ Name = "operation"}, new QueryArgument<ItemInput>{ Name = "orderItem"}), 
+				arguments: new QueryArguments(new QueryArgument<MutationTypesEnum>{ Name = "operation"}, new QueryArgument<OrderItemInput>{ Name = "orderItem"}), 
 				resolve: context => {
 					var operation = context.GetArgument<MutationTypes>("operation");
 					var orderItem = context.GetArgument<OrderItem>("orderItem");
