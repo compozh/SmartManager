@@ -1,7 +1,4 @@
 ﻿using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ItGraphQlSchema.Types.SmartManager.GraphQlModel;
 
 namespace ItGraphQlSchema.Types.SmartManager
@@ -12,18 +9,20 @@ namespace ItGraphQlSchema.Types.SmartManager
 		public SmartManagerQuery(SmartManagerProvider provider)
 		{
 		Name = "Query";
-			//получение папок
+		
+			// Получение папок
 			Field<ListGraphType<SmartManagerTaskGQ>>("Tasks",
 				arguments: new QueryArguments(new QueryArgument<StringGraphType> {Name = "folderId", Description = "Уникальный идентификатор задачи" }),
 				resolve: (context => provider.GetTasksAsync(context.GetArgument<string>("folderId"))),
 				description: "Задачи");
-
+			
+			// Получение Подробной информации задачи
 			Field<SmartManagerTaskFullInfoGQ>("TasksGetInfo",
 				arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "taskId", Description = "Уникальный идентификатор задачи" }),
 				resolve: (context => provider.GetTasksInfoAsync(context.GetArgument<int>("taskId"))),
 				description: "Задачи");
-
-			//получение папок
+			
+			// Получение папок
 			Field<ListGraphType<SmartManagerFoldersGQ>>("Folders",
 				resolve: (context => provider.GetFoldersAsync()),
 				description: "Папки");

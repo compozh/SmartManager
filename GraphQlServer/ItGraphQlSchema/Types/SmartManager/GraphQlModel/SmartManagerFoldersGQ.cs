@@ -1,8 +1,5 @@
 ﻿using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
@@ -16,7 +13,6 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field(p => p.code).Description("Код папки");
 			Field(p => p.name).Description("Наименование");
 			Field(p => p.count).Description("Количество задач в папке");
-
 		}
 	}
 }
