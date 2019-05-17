@@ -72,11 +72,10 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 			
 			// Получение ссылки на файл 
-			var appUrl = _config.GetSection("BaseUrl");
-			var baseUrl =appUrl.Get<string>()+"/GetFile.ashx?file=";
-
+			var baseUrl = _config.GetSection("BaseUrl").Get<string>()+"/GetFile.ashx?file=";
 			calcId = "WFA1ORIG";
 			var listFile = new List<object>();
+			
 			foreach (var orig in smFullINfo.Originals)
 			{
 				args = JsonConvert.SerializeObject(new { ARSO = smFullINfo.Arso, KEYVALUE = smFullINfo.KeyValue, NDOR = orig.Ndor });
