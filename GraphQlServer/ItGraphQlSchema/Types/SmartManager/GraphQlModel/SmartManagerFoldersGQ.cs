@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
@@ -13,12 +14,5 @@ namespace ItGraphQlSchema.Types.SmartManager
 			Field(p => p.name).Description("Наименование");
 			Field(p => p.count).Description("Количество задач в папке");
 		}
-	}
-	
-	public class SmartManagerFolder
-	{
-		public string code { get; set; }
-		public string name { get; set; }
-		public int count { get; set; }
 	}
 }

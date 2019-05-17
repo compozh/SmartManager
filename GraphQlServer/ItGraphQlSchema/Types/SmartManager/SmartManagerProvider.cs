@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ItGraphQlSchema.Types.SmartManager.GraphQlModel;
 using ItGraphQlSchema.Types.SmartManager.Model;
+using Microsoft.Extensions.Configuration;
 using Web.WebRequests;
 
 namespace ItGraphQlSchema.Types.SmartManager
@@ -11,9 +11,12 @@ namespace ItGraphQlSchema.Types.SmartManager
 	public class SmartManagerProvider
 	{
 		private readonly WebRequestsTools _webRequestsTools;
-		public SmartManagerProvider(WebRequestsTools webRequestsTools)
+		private readonly IConfiguration _config;
+		 
+		public SmartManagerProvider(WebRequestsTools webRequestsTools, IConfiguration config)
 		{
 			_webRequestsTools = webRequestsTools;
+			_config = config;
 		}
 		
 		// Метод получения всех папок
@@ -69,7 +72,9 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 			
 			// Получение ссылки на файл 
-			var baseUrl = "https://m.it.ua/ws/GetFile.ashx?file=";
+			var appUrl = _config.GetSection("BaseUrl");
+			var baseUrl =appUrl.Get<string>()+"/GetFile.ashx?file=";
+
 			calcId = "WFA1ORIG";
 			var listFile = new List<object>();
 			foreach (var orig in smFullINfo.Originals)

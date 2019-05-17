@@ -1,5 +1,5 @@
 ﻿using GraphQL.Types;
-using System;
+using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 {
@@ -16,15 +16,5 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.dateadd).Description("Дата добавления");
 			Field(p => p.caseid).Description("Количество");
 		}
-	}
-	
-	public class SmartManagerTask
-	{
-		public int Id { get; set; }
-		public string name { get; set; }
-		public string addedFio { get; set; }
-		public string addedPhoto { get; set; }
-		public DateTime dateadd { get; set; }
-		public int caseid { get; set; }
 	}
 }

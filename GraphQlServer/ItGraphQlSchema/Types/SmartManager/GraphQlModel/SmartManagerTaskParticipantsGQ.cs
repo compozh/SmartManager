@@ -1,4 +1,5 @@
 ﻿using GraphQL.Types;
+using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 {
@@ -12,12 +13,5 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.UserFio);
 			Field(p => p.Role);
 		}
-	}
-	
-	public class SmartManagerTaskParticipants
-	{
-		public string UserId { get; set; }
-		public string UserFio { get; set; }
-		public string Role { get; set; }
 	}
 }
