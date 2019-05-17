@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ItGraphQlSchema.Types.SmartManager.GraphQlModel;
+using ItGraphQlSchema.Types.SmartManager.Model;
 using Web.WebRequests;
 
 namespace ItGraphQlSchema.Types.SmartManager
@@ -15,9 +14,9 @@ namespace ItGraphQlSchema.Types.SmartManager
 		public SmartManagerProvider(WebRequestsTools webRequestsTools)
 		{
 			_webRequestsTools = webRequestsTools;
-
 		}
-		//метод получения всех папок
+		
+		// Метод получения всех папок
 		public async Task<List<SmartManagerFolder>> GetFoldersAsync()
 		{
 			var calcId = "SM.GETFOLDERS";
@@ -34,11 +33,11 @@ namespace ItGraphQlSchema.Types.SmartManager
 					return JsonConvert.DeserializeObject<List<SmartManagerFolder>>(requestResult.Content);
 			}
 		}
+		
 		public async Task<List<SmartManagerTask>> GetTasksAsync(string folderId)
 		{
-				var calcId = "SM.GETTASKS";
-				var temp = folderId.Select(x => new { FolderId = x });
-				var args = JsonConvert.SerializeObject(new { STATUS = ",*,?", INCONTROL = 0, FOLDER = folderId??"", HELPEREXEC = false });//(new { Users = temp, ByLogin = false, SaveInContent = true });
+			var calcId = "SM.GETTASKS";
+			var args = JsonConvert.SerializeObject(new { STATUS = ",*,?", INCONTROL = 0, FOLDER = folderId??"", HELPEREXEC = false });
 			
 			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
 			var requestResult = await task;
@@ -50,12 +49,12 @@ namespace ItGraphQlSchema.Types.SmartManager
 				default:
 					return JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
 			}
-
 		}
+		
 		public async Task<SmartManagerTaskFullInfo> GetTasksInfoAsync(int taskId)
 		{
 			var calcId = "SM.TASK.GETINFO";
-			//	var temp = taskId.Select(x => new { taskId = x });
+			var smFullINfo = new SmartManagerTaskFullInfo();
 			var args = JsonConvert.SerializeObject(new { ID = taskId });
 			var task = _webRequestsTools.CallWebRequestAsync(calcId, args);//достаю объект из IServiceProvider
 			var requestResult = await task;
@@ -65,9 +64,27 @@ namespace ItGraphQlSchema.Types.SmartManager
 				case WebRequestsResponseFlags.NotAuthorised:
 					return null;
 				default:
-					return JsonConvert.DeserializeObject<SmartManagerTaskFullInfo>(requestResult.Content);
-
+					smFullINfo = JsonConvert.DeserializeObject<SmartManagerTaskFullInfo>(requestResult.Content);
+				break;
 			}
+			
+			// Получение ссылки на файл 
+			var baseUrl = "https://m.it.ua/ws/GetFile.ashx?file=";
+			calcId = "WFA1ORIG";
+			var listFile = new List<object>();
+			foreach (var orig in smFullINfo.Originals)
+			{
+				args = JsonConvert.SerializeObject(new { ARSO = smFullINfo.Arso, KEYVALUE = smFullINfo.KeyValue, NDOR = orig.Ndor });
+				var result = await _webRequestsTools.CallWebRequestAsync(calcId, args);
+				var smFile = JsonConvert.DeserializeObject<SmFile>(result.Content);
+				orig.File = baseUrl+smFile.FileName;
+				listFile.Add(result);
+			}
+			
+			return smFullINfo;
 		}
 	}
+
+	
 }
+

@@ -1,7 +1,5 @@
 ﻿using GraphQL.Types;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 {
@@ -13,14 +11,20 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Name = "Tasks";
 			Field(p => p.name).Description("Название задачи");
 			Field(p => p.addedFio).Description("Имя");
-			//Field(p => p.HtmlDescription).Description("Html код");
 			Field(p => p.addedPhoto).Description("Фото");
 			Field(p => p.Id).Description("Идентификатор");
-			Field(p => p.childcount).Description("Количество");
-			Field(p => p.childdonecount).Description("Количество");
 			Field(p => p.dateadd).Description("Дата добавления");
 			Field(p => p.caseid).Description("Количество");
-
 		}
+	}
+	
+	public class SmartManagerTask
+	{
+		public int Id { get; set; }
+		public string name { get; set; }
+		public string addedFio { get; set; }
+		public string addedPhoto { get; set; }
+		public DateTime dateadd { get; set; }
+		public int caseid { get; set; }
 	}
 }

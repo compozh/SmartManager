@@ -1,8 +1,5 @@
 ﻿using GraphQL.Types;
-using ItGraphQlSchema.Types.SmartManager.Model;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 {
@@ -16,5 +13,12 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.Text);
 			Field(p => p.Date);
 		}
+	}
+	
+	public class SmartManagerTaskComment
+	{
+		public string User { get; set; }
+		public DateTime Date { get; set; }
+		public string Text { get; set; }
 	}
 }
