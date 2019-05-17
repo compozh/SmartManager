@@ -72,7 +72,18 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 			
 			// Получение ссылки на файл 
-			var baseUrl = _config.GetSection("BaseUrl").Get<string>()+"/GetFile.ashx?file=";
+			const char slash = '/';
+			const string strFile = "GetFile.ashx?file=";
+			var baseUrl = _config.GetSection("AppSettings").GetValue<string>("WebServiceUrl");
+			if (Equals(baseUrl[baseUrl.Length - 1], slash))
+			{
+				baseUrl += strFile;
+			}
+			else
+			{
+				baseUrl += slash+strFile;
+			}
+			
 			calcId = "WFA1ORIG";
 			var listFile = new List<object>();
 			
@@ -88,7 +99,5 @@ namespace ItGraphQlSchema.Types.SmartManager
 			return smFullINfo;
 		}
 	}
-
-	
 }
 
