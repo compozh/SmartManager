@@ -8,7 +8,6 @@
         <v-layout row class="sub-menu">
           <v-flex
             xs4
-            class="columns column-1"
             v-for="(column, colIndex) in columnsCount"
             :key="colIndex"
           >

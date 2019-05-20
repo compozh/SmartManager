@@ -5,14 +5,12 @@
     <v-layout row class="layout">
       <v-flex v-if="menu" xs3 class="menu-list">
         <v-treeview
-          class="treeview"
           :items="menuItems"
           item-key="codeMenu"
           hoverable
           open-on-click
           indeterminate-icon
         >
-
           <template slot="label" slot-scope="{ item }">
             <div v-if="item.isFolder" class="menu-item">
               <svg class="svg">
