@@ -6,12 +6,17 @@
       </v-flex>
       <v-flex>
         <v-layout row class="sub-menu">
-          <v-flex xs4 class="columns column-1">
+          <v-flex
+            xs4
+            class="columns column-1"
+            v-for="(column, colIndex) in columnsCount"
+            :key="colIndex"
+          >
             <v-layout column>
               <v-flex
                 class="pa-3"
-                v-for="(node, index) in getModule.paragraphItem"
-                v-if="(index + 3) % 3 === 0"
+                v-for="(node, nodeIndex) in getModule.paragraphItem"
+                v-if="colIndex === (nodeIndex + columnsCount) % columnsCount"
                 :key="node.codeMenu"
               >
                 <v-layout column>
@@ -23,73 +28,21 @@
                     class="node-item"
                     v-for="item in node.children"
                   >
+
                     <div class="icon">
                       <svg class="svg">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>
                       </svg>
                     </div>
 
-                    <div>{{ item.name }}</div>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-
-          <v-flex xs4 class="columns column-2">
-            <v-layout column>
-              <v-flex
-                class="pa-3"
-                v-for="(node, index) in getModule.paragraphItem"
-                v-if="(index + 3) % 3 === 1"
-                :key="node.codeMenu"
-              >
-                <v-layout column>
-                  <v-flex>
-                    <h2 class="body-2 font-weight-bold text-uppercase ml-4 pb-1">{{ node.name }}</h2>
-                  </v-flex>
-                  <v-flex
-                    d-flex
-                    class="node-item"
-                    v-for="item in node.children"
-                  >
-                    <div class="icon">
-                      <svg class="svg">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>
-                      </svg>
+                    <div>
+                      <a
+                        v-if="item.linkToRMD"
+                        target="_blank"
+                        :href="BaseUrl+item.linkToRMD"
+                      >{{ item.name }}</a>
+                      <span v-else>{{ item.name }}</span>
                     </div>
-
-                    <div>{{ item.name }}</div>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-
-          <v-flex xs4 class="columns column-3">
-            <v-layout column>
-              <v-flex
-                class="pa-3"
-                v-for="(node, index) in getModule.paragraphItem"
-                v-if="(index + 3) % 3 === 2"
-                :key="node.codeMenu"
-              >
-                <v-layout column>
-                  <v-flex>
-                    <h2 class="body-2 font-weight-bold text-uppercase ml-4 pb-1">{{ node.name }}</h2>
-                  </v-flex>
-                  <v-flex
-                    d-flex
-                    class="node-item"
-                    v-for="item in node.children"
-                  >
-                    <div class="icon">
-                      <svg class="svg">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>
-                      </svg>
-                    </div>
-
-                    <div>{{ item.name }}</div>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -100,15 +53,6 @@
     </v-layout>
   </v-container>
 
-  <!--        <span v-if="item.linkToRMD">-->
-  <!--          <svg class="svg">-->
-  <!--            <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="'#' + item.image"></use>-->
-  <!--          </svg>-->
-  <!--          <a target="_blank" :href="BaseUrl+item.linkToRMD">{{ item.name }}</a>-->
-  <!--          &lt;!&ndash; <router-link class="none-link" :to="{name: 'ITCLIENT', query:{licnk : BaseUrl + item.linkToRMD} }"> {{ item.name }} </router-link> &ndash;&gt;-->
-  <!--        </span>-->
-  <!--        <span v-if="!item.linkToRMD">{{ item.name }}</span>-->
-
 </template>
 
 <script>
@@ -116,6 +60,11 @@
 
   export default {
     name: "it-module",
+    data() {
+      return {
+        columnsCount: 3
+      }
+    },
     computed: {
       getModule() {
         if (this.$store.getters.getAppData("ITMODULE")) {
@@ -148,6 +97,7 @@
     },
     methods: {
       loadDataForComponents() {
+
         if (
           this.$route.params.module !== "FAVORITE_MODULE" && this.$route.params.module
         ) {
@@ -164,6 +114,9 @@
             key
           });
         } else {
+          if (!this.$store.getters.getAppData("ITMENU")) {
+            return;
+          }
           this.$store.commit("setAppData", {
             key: "ITMODULE",
             data: {
@@ -208,16 +161,16 @@
     fill: #757575;
   }
 
-  ::-webkit-scrollbar {
-    width: 8px;
+  .node-item:hover {
+    background: rgba(0, 0, 0, .12);
   }
 
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #000;
   }
 
 </style>

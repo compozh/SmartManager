@@ -1,9 +1,9 @@
 <template>
 
-  <v-container ma-0 pa-0 text-xs-left>
+  <v-container fluid ma-0 pa-0 text-xs-left>
     <it-icons class="all-svg"/>
     <v-layout row class="layout">
-      <v-flex v-if="menu" xs12 md4 lg3 class="menu-list">
+      <v-flex v-if="menu" xs3 class="menu-list">
         <v-treeview
           class="treeview"
           :items="menuItems"
@@ -34,7 +34,7 @@
           </template>
         </v-treeview>
       </v-flex>
-      <v-flex xs102 md8 lg9>
+      <v-flex xs9>
         <v-layout>
           <v-flex xs12>
             <div class="menu-content">
@@ -50,15 +50,13 @@
 </template>
 
 <script>
-  import ItModule from "./ITModule";
   import ItIcons from "../../svgfiles/ItIcons.svg";
   import getImage from "./ConvetImage.js";
 
   export default {
     name: "it-menu",
     components: {
-      ItIcons,
-      ItModule
+      ItIcons
     },
     props: ["menu"],
     computed: {
@@ -80,7 +78,6 @@
             if (!child) {
               break;
             }
-
             child.image = getImage(child.image, this.SvgCollection);
           }
         }
@@ -96,21 +93,20 @@
       }
     },
     updated() {
-      if (this.$store.getters.getExistedIcons.length == 0) {
+      if (this.$store.getters.getExistedIcons.length === 0) {
         let arr = Array.from(
           document.getElementsByClassName("all-svg")[0].children
         ).map(r => r.id);
         this.$store.commit("setExistedIcons", arr);
       }
-    },
-    created() {
     }
   };
 </script>
 
 <style scoped>
+
   .layout {
-    height: 87vh;
+    height: 86vh;
   }
 
   .menu-list {
@@ -118,14 +114,6 @@
     overflow: hidden;
     overflow-y: auto;
     margin-right: 50px;
-  }
-
-  .menu-list::-webkit-scrollbar-track-piece {
-    width: 30px;
-  }
-
-  .treeview {
-    overflow: hidden;
   }
 
   .menu-item {
@@ -137,7 +125,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 250px;
+    width: 300px;
   }
 
   .menu-content {
@@ -160,18 +148,6 @@
     height: 20px;
     margin-right: 5px;
     fill: #757575;
-  }
-
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   }
 
 </style>
