@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ItGraphQlSchema.Types.SmartManager
+namespace ItGraphQlSchema.Types.SmartManager.Model
 {
-	public class SmartManagerFolder
-	{
-		public string code { get; set; }
-		public string name { get; set; }
-		public int count { get; set; }
-	}
+    public class SmartManagerFolder
+    {
+        public string code { get; set; }
+        public string name { get; set; }
+        public int count { get; set; }
+    }
 }
-

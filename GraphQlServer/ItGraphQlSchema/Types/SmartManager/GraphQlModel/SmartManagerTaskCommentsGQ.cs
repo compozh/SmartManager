@@ -1,8 +1,5 @@
 ﻿using GraphQL.Types;
 using ItGraphQlSchema.Types.SmartManager.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 {

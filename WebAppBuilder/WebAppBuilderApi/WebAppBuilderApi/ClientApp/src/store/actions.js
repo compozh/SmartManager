@@ -3,18 +3,10 @@ import * as jsonpatch from '../patching'
 
 
 
-// Загрузка конфигурации приложения
-let LoadConfig = new Promise((resolve,reject ) => {
-    resolve();
-});
-
-function _lc(resolve){
-  return LoadConfig.then(resolve);
-}
 
 const actions = ({
   GetCurrentUser(context){
-    _lc(()=>{
+
       Axios({
         method: 'POST',
         url: `${myConfig.BASE_URL}api/authentication/user`,
@@ -24,7 +16,7 @@ const actions = ({
         context.commit("setCurrentUser", resp.data )
         //console.log(resp.data)
       });
-    })
+
 
   },
 
@@ -40,54 +32,48 @@ const actions = ({
     localStorage.removeItem("ItUniTocken");
     localStorage.removeItem('userName');
     context.commit("setCurrentUser", "");
-    return _lc(()=>{
-      return Axios.post(`${myConfig.BASE_URL}api/authentication/login`, {
-          Login: loginParam.login,
-          Password: loginParam.password,
-          RememberMe: loginParam.rememberMe
-        },{
-          withCredentials:true
-        }).then(
-          // всё Ок
-        (response) => {
-          debugger
-          var token = response.data.access_token;
-          var username = response.data.username
-          if (token) {
-            context.commit("setCurrentUser",  username );
-            localStorage.setItem('ItUniTocken', token);
-            localStorage.setItem('userName', username);
-            return true;
-          }
 
-        })
-    });
+    return Axios.post(`${myConfig.BASE_URL}api/authentication/login`, {
+        Login: loginParam.login,
+        Password: loginParam.password,
+        RememberMe: loginParam.rememberMe
+      },{
+        withCredentials:true
+      }).then(
+        // всё Ок
+      (response) => {
+        debugger
+        var token = response.data.access_token;
+        var username = response.data.username
+        if (token) {
+          context.commit("setCurrentUser",  username );
+          localStorage.setItem('ItUniTocken', token);
+          localStorage.setItem('userName', username);
+          return true;
+        }
+
+      })
   },
 
 
   /** Загрузить данные для компонента */
   LoadDataForComponent(context, {datasource,key}){
 
-    return _lc(()=>{
-      Axios({
+    return Axios({
         method: 'POST',
         url: myConfig.GrapgQlUrl+'api/graphql',
         withCredentials:true,
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
         data: { SchemaName:datasource.schema, query: datasource.query}
       }).then(resp => {
-        context.commit("setAppData", { key, data:resp.data })
+        return context.commit("setAppData", { key, data:resp.data })
         //console.log(resp.data)
       });
-    });
-
   },
 
   /** Загрузить описание приложения */
   GetAppDescription(context, appId) {
-    return _lc(()=>{
-
-      return Axios.post(`${myConfig.BASE_URL}api/webapp/get`, {
+    return Axios.post(`${myConfig.BASE_URL}api/webapp/get`, {
         ApplicationId: appId
       }, {
         withCredentials: true
@@ -97,7 +83,6 @@ const actions = ({
         }
         return new Promise();
       })
-  });
   },
 
   // CallAction(context, data) {
