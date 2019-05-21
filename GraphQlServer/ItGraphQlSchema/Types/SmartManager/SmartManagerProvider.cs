@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ItGraphQlSchema.Types.SmartManager.Model;
@@ -50,7 +51,17 @@ namespace ItGraphQlSchema.Types.SmartManager
 				case WebRequestsResponseFlags.NotAuthorised:
 					return null;
 				default:
-					return JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
+					
+					// Получение ссылки на файл 
+					var baseUrl = getBaseUrl();
+					
+					var tasks = JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
+					foreach (var tas in tasks)
+					{
+						tas.addedPhoto = baseUrl + tas.addedPhoto + "&folder=content&nodownload=1";
+					}
+
+					return tasks;
 			}
 		}
 		
@@ -72,17 +83,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 			
 			// Получение ссылки на файл 
-			const char slash = '/';
-			const string strFile = "GetFile.ashx?file=";
-			var baseUrl = _config.GetSection("AppSettings").GetValue<string>("WebServiceUrl");
-			if (Equals(baseUrl[baseUrl.Length - 1], slash))
-			{
-				baseUrl += strFile;
-			}
-			else
-			{
-				baseUrl += slash+strFile;
-			}
+			var baseUrl = getBaseUrl();
 			
 			calcId = "WFA1ORIG";
 			var listFile = new List<object>();
@@ -95,8 +96,27 @@ namespace ItGraphQlSchema.Types.SmartManager
 				orig.File = baseUrl+smFile.FileName;
 				listFile.Add(result);
 			}
+
+			var filePhoto = smFullINfo.AddedPhoto;
+			smFullINfo.AddedPhoto = baseUrl + filePhoto + "&folder=content&nodownload=1";
 			
 			return smFullINfo;
+		}
+		private string getBaseUrl(){
+			
+			const char slash = '/';
+			const string strFile = "GetFile.ashx?file=";
+			var baseUrl = _config.GetSection("AppSettings").GetValue<string>("WebServiceUrl");
+			if (Equals(baseUrl[baseUrl.Length - 1], slash))
+			{
+				baseUrl += strFile;
+			}
+			else
+			{
+				baseUrl += slash+strFile;
+			}
+
+			return baseUrl;
 		}
 	}
 }
