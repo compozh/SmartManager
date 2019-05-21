@@ -14,6 +14,7 @@
     "vue": "^2.6.6",
     "vue-country-flag": "^1.1.1",
     "vue-i18n": "^8.10.0",
+    "vue-pdf": "^4.0.6",
     "vue-router": "^3.0.1",
     "vue-svg-loader": "^0.12.0",
     "vuetify": "^1.5.14",
