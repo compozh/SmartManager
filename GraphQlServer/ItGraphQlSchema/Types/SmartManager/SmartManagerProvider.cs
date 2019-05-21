@@ -7,7 +7,7 @@ using Web.WebRequests;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class SmartManagerProvider
 	{
 		private readonly WebRequestsTools _webRequestsTools;

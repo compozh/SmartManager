@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(EquipmentCategory))]
 	public class EquipmentCategoryGraph: EfObjectGraphType<EquipmentCategory>
 	{
 		public EquipmentCategoryGraph(IEfGraphQLService graphQlService) :

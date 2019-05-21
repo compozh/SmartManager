@@ -4,7 +4,7 @@ using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderItemType : EfObjectGraphType<OrderItem>
 	{
 		public OrderItemType(IEfGraphQLService service):base(service)
@@ -20,7 +20,7 @@ namespace ItGraphQlSchema.Types
 		}
 	}
 	
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderItemInput : InputObjectGraphType<OrderItem>
 	{
 		public OrderItemInput()

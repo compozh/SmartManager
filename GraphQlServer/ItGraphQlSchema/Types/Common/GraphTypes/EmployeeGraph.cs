@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.Common
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute, GraphType(typeof(Employee))]
 	public class EmployeeGraph: EfObjectGraphType<Employee>
 	{
 		public EmployeeGraph(IEfGraphQLService graphQlService) :

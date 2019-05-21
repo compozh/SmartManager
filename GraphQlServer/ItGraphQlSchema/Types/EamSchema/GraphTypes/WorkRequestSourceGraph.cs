@@ -2,7 +2,7 @@ using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(WorkRequestSource))]
 	public class WorkRequestSourceGraph : EnumerationGraphType<WorkRequestSource>
 	{
 	}

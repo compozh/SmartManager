@@ -3,7 +3,7 @@ using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(WorkRequest))]
 	public class WorkRequestGraph : EfObjectGraphType<WorkRequest>
 	{
 		public WorkRequestGraph(IEfGraphQLService graphQlService) :
@@ -70,7 +70,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			AddNavigationField(
 				name: "equipmentModel",
 				resolve: context => context.Source.EquipmentModel,
-				typeof(EquipmentModelGraph));
+				typeof(ResourceGraph));
 		}
 	}
 }

@@ -1,40 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ItGraphQlSchema.Types.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Reflection;
 
-namespace ItGraphQlSchema.Types.Common
+namespace ItGraphQlSchema.Types
 {
-	public class CommonDbContext : DbContext
+	public sealed partial class CommonDbContext : DbContext
 	{
 		public DbSet<Employee> Employees { get; set; }
 		public DbSet<Department> Departments { get; set; }
 		public DbSet<ItObject> ItObjects { get; set; }
 		public DbSet<SimpleDictionaryRecord> SimpleDictionaryRecords { get; set; }
 		public DbSet<MeasurementUnit> MeasurementUnits { get; set; }
+		public DbSet<Resource> Resources { get; set; }
+		public DbSet<ResourceGroup> ResourcesGroups { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<SimpleDictionaryRecord>()
-				.Property(w => w.Id)
-				.HasConversion(v => v.TrimEnd(), v => v.TrimEnd());
-			modelBuilder.Entity<SimpleDictionaryRecord>()
-				.Property(w => w.IsValid)
-				.HasConversion(new IsValidConverter());
-			modelBuilder.Entity<SimpleDictionaryRecord>()
-				.HasKey(s => new {s.Id, s.NumericId, s.Code});
+			//Добавляем всех правил/связей и т.д. по атрибуту [EFRule] (интерфейс IEFRulesBase)
+			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) //GetCallingAssembly
+			{
+				if (type.GetCustomAttribute<EFRuleAttribute>(true) != null)
+				{
+					IEFRulesBase ruleInstance = (IEFRulesBase)Activator.CreateInstance(type);
+					ruleInstance.AddRulesToModel(modelBuilder);
+				}
+			}
 
-			modelBuilder.Entity<Employee>()
-				.HasOne(c => c.ItObject)
-				.WithMany(o => o.Employees)
-				.HasForeignKey(c => c.ItObjectId);
-			
-			modelBuilder.Entity<MeasurementUnit>()
-				.Property(w => w.IsValid)
-				.HasConversion(new IsValidConverter());
-			
-			modelBuilder.Entity<Employee>()
-				.HasOne(c => c.ItObject)
-				.WithMany(o => o.Employees)
-				.HasForeignKey(c => c.ItObjectId);
+			//todo  Убрать после переноса логика EAM
+			onModelCreating(modelBuilder);
 		}
 
 		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md
@@ -43,6 +39,7 @@ namespace ItGraphQlSchema.Types.Common
 			var builder = new DbContextOptionsBuilder();
 			builder.UseSqlServer(@"fake");
 
+			//using (var context = new CommonDbContext(builder.Options))
 			using (var context = new CommonDbContext(builder.Options))
 			{
 				DataModel = context.Model;
@@ -53,7 +50,7 @@ namespace ItGraphQlSchema.Types.Common
 			base(options)
 		{
 		}
-
 		public static IModel DataModel { get; }
 	}
 }
+

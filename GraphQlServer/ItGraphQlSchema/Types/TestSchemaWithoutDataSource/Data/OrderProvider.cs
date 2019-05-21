@@ -11,7 +11,7 @@ using Web.Data;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderProvider
 	{
 		private IHttpContextAccessor _httpContextAccessor;
@@ -74,7 +74,7 @@ namespace ItGraphQlSchema.Types
 		Update,
 		Delete
 	}
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class MutationTypesEnum : EnumerationGraphType<MutationTypes>
 	{
 	}

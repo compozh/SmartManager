@@ -1,5 +1,8 @@
+using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace ItGraphQlSchema
 {
@@ -7,10 +10,12 @@ namespace ItGraphQlSchema
 	{
 		public static void ConfigSchemas(this IServiceCollection services, IConfiguration configuration)
 		{
+			EfGraphQLConventions.RegisterInContainer(services, CommonDbContext.DataModel);
+
 			ForAllSchemas.Config(services);
 			CommonSchema.CommonSchema.Config(services);
-			Types.EamSchema.EamSchema.Config(services, configuration);
-			Types.OrderQuery.Config(services, configuration);
+			services.AddDbContext<CommonDbContext>(options =>
+				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
 		}
 	}
 }

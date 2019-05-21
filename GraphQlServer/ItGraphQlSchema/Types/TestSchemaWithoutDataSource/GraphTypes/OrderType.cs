@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderType : EfObjectGraphType<Order>
 	{
 		public OrderType(IEfGraphQLService service):base(service)
@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types
 		
 	}
 	
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderInput : InputObjectGraphType<Order>
 	{
 		public OrderInput()

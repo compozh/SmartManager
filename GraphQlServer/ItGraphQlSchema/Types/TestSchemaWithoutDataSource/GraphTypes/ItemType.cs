@@ -6,7 +6,7 @@ using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class ItemType : EfObjectGraphType<Item>
 	{
 		public ItemType(IEfGraphQLService service):base(service)
@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types
 			
 		}
 	}
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 
 	public class ItemInput : InputObjectGraphType<Item>
 	{

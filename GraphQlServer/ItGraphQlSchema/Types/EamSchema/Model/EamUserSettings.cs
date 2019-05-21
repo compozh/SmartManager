@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class EamUserSettings
 	{
 		public List<string> AvailableItObjects { get; set; }

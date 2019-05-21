@@ -69,7 +69,7 @@ namespace ItGraphQlSchema.Types
 		public string HASKEY { get; set; }
 	}
 
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class SkdPersonProvider : ISkdPersonProvider
 	{
 		private readonly WebRequestsTools _webRequestsTools;

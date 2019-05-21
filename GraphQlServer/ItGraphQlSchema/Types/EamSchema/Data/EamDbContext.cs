@@ -1,20 +1,21 @@
 ﻿using ItGraphQlSchema.Types.Common;
+using ItGraphQlSchema.Types.EamSchema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ItGraphQlSchema.Types.EamSchema
+namespace ItGraphQlSchema.Types
 {
-	public class EamDbContext : CommonDbContext
+	public sealed partial class CommonDbContext : DbContext
 	{
 		public DbSet<WorkRequest> WorkRequests { get; set; }
 		public DbSet<WorkRequestCategory> WorkRequestCategories { get; set; }
 		public DbSet<WorkRequestRepairType> WorkRequestRepairTypes { get; set; }
-		public DbSet<WorkRequestDirection> WorkRequestDirections { get; set; }
+		public DbSet<WorkRequestDirection> WorkRequestDirections { get; set; } 
 		public DbSet<Equipment> Equipments { get; set; }
 		public DbSet<TechnicalPlace> TechnicalPlaces { get; set; }
 		public DbSet<EquipmentType> EquipmentTypes { get; set; }
-		public DbSet<EquipmentModel> EquipmentModels { get; set; }
-		public DbSet<EquipmentModelGroup> EquipmentModelGroups { get; set; }
+		//public DbSet<EquipmentModel> EquipmentModels { get; set; }
+		//public DbSet<EquipmentModelGroup> EquipmentModelGroups { get; set; }
 		public DbSet<EquipmentStatus> EquipmentStatuses { get; set; }
 		public DbSet<EquipmentCategory> EquipmentCategories { get; set; }
 		public DbSet<TechnicalPlaceLevel> TechnicalPlaceLevels { get; set; }
@@ -35,13 +36,14 @@ namespace ItGraphQlSchema.Types.EamSchema
 		public DbSet<ConditionParameterToModelLink> ConditionParameterToModelLinks { get; set; }
 		
 		public DbSet<ConditionParameterAdditionalData> ConditionParameterAdditionalData { get; set; }
-		
+
 		//public DbSet<DownTime> DownTimes { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+		//protected override void OnModelCreating(ModelBuilder modelBuilder)
+		// Todo заменить на отдельные правила
+		private void onModelCreating(ModelBuilder modelBuilder)
 		{
-			base.OnModelCreating(modelBuilder);
-			
 			modelBuilder.Entity<SimpleDictionaryRecord>()
 				.HasDiscriminator<string>("Code")
 				.HasValue<WorkRequestCategory>("RZCAT")
@@ -112,10 +114,10 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasOne(c => c.TechnicalPlace)
 				.WithMany(e => e.WorkRequests)
 				.HasForeignKey(w => w.TechnicalPlaceId);
-			modelBuilder.Entity<WorkRequest>()
-				.HasOne(c => c.EquipmentModel)
-				.WithMany(e => e.WorkRequests)
-				.HasForeignKey(w => w.EquipmentModelId);
+			//modelBuilder.Entity<WorkRequest>()
+			//	.HasOne(c => c.EquipmentModel)
+			//	.WithMany(e => e.WorkRequests)
+			//	.HasForeignKey(w => w.EquipmentModelId);
 			modelBuilder.Entity<WorkRequest>()
 				.HasOne(c => c.ItObject)
 				.WithMany()
@@ -127,10 +129,10 @@ namespace ItGraphQlSchema.Types.EamSchema
 //				.WithMany(e => e.WorkRequests)
 				.HasForeignKey(w => w.DepartmentId);
 
-			modelBuilder.Entity<TechnicalPlace>()
-				.HasOne(c => c.Model)
-				.WithMany(e => e.TechnicalPlaces)
-				.HasForeignKey(w => w.ModelId);
+			//modelBuilder.Entity<TechnicalPlace>()
+			//	.HasOne(c => c.Model)
+			//	.WithMany(e => e.TechnicalPlaces)
+			//	.HasForeignKey(w => w.ModelId);
 			modelBuilder.Entity<TechnicalPlace>()
 				.HasOne(c => c.Status)
 				.WithMany(e => e.TechnicalPlaces)
@@ -158,10 +160,10 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.Property(w => w.IsValid)
 				.HasConversion(new IsValidConverter());
 
-			modelBuilder.Entity<Equipment>()
-				.HasOne(c => c.Model)
-				.WithMany(e => e.Equipments)
-				.HasForeignKey(w => w.ModelId);
+			//modelBuilder.Entity<Equipment>()
+			//	.HasOne(c => c.Model)
+			//	.WithMany(e => e.Equipments)
+			//	.HasForeignKey(w => w.ModelId);
 			modelBuilder.Entity<Equipment>()
 				.HasOne(c => c.Status)
 				.WithMany(e => e.Equipments)
@@ -191,14 +193,14 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.WithMany(e => e.MovementHistories)
 				.HasForeignKey(w => w.TechnicalPlaceId);
 
-			modelBuilder.Entity<EquipmentModel>()
-				.HasOne(c => c.ModelGroup)
-				.WithMany(e => e.EquipmentModels)
-				.HasForeignKey(w => w.ModelGroupId);
+			//modelBuilder.Entity<EquipmentModel>()
+			//	.HasOne(c => c.ResourceGroup)
+			//	.WithMany()
+			//	.HasForeignKey(w => w.ResourceGroupId);
 
-			modelBuilder.Entity<EquipmentType>()
-				.HasOne(c => c.ModelGroup)
-				.WithOne(e => e.EquipmentType);
+			//modelBuilder.Entity<EquipmentType>()
+			//	.HasOne(c => c.ModelGroup)
+			//	.WithOne(e => e.EquipmentType);
 
 			modelBuilder.Entity<ConditionParameterValue>()
 				.HasOne(c => c.AdditionalData)
@@ -242,10 +244,10 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasOne(c => c.ConditionParameter)
 				.WithMany(c => c.ModelLinks)
 				.HasForeignKey(c => c.ConditionParameterId);
-			modelBuilder.Entity<ConditionParameterToModelLink>()
-				.HasOne(c => c.EquipmentModel)
-				.WithMany(c => c.ConditionParameterLinks)
-				.HasForeignKey(c => c.EquipmentModelId);
+			//modelBuilder.Entity<ConditionParameterToModelLink>()
+			//	.HasOne(c => c.EquipmentModel)
+			//	.WithMany(c => c.ConditionParameterLinks)
+			//	.HasForeignKey(c => c.EquipmentModelId);
 			modelBuilder.Entity<ConditionParameter>()
 				.HasMany(c => c.ValueRanges)
 				.WithOne(t => t.ConditionParameter)
@@ -307,7 +309,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 				.HasForeignKey(c => c.WorkRequestCategoryId)
 				.HasPrincipalKey(w => w.Id);
 		}
-
+		
 //		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //		{
 //			base.OnConfiguring(optionsBuilder);
@@ -316,22 +318,12 @@ namespace ItGraphQlSchema.Types.EamSchema
 //		}
 
 		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md
-		static EamDbContext()
-		{
-			var builder = new DbContextOptionsBuilder();
-			builder.UseSqlServer(@"fake");
 
-			using (var context = new EamDbContext(builder.Options))
-			{
-				DataModel = context.Model;
-			}
-		}
-
-		public EamDbContext(DbContextOptions options) :
+/*
+		public EamDbContext(DbContextOptions<EamDbContext> options) :
 			base(options)
 		{
 		}
-
-		public static IModel DataModel { get; }
+		*/
 	}
 }

@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(ConditionParameterType))]
 	public class ConditionParameterTypeGraph: EfObjectGraphType<ConditionParameterType>
 	{
 		public ConditionParameterTypeGraph(IEfGraphQLService graphQlService) :

@@ -3,7 +3,7 @@ using ItGraphQlSchema.Types.SmartManager.Model;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class SmartManagerFoldersGQ : ObjectGraphType<SmartManagerFolder>
 	{
 		public SmartManagerFoldersGQ(SmartManagerProvider provider)

@@ -2,7 +2,7 @@
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class SkdPersonTableType : ObjectGraphType
 	{
 		public SkdPersonTableType()

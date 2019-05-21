@@ -10,7 +10,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 	{
 		Task<EamUserSettings> GetCurrentSettings();
 	}
-	
+
+	[AddInDI(typeof(IEamUserSettingsProvider))]
 	internal class EamUserSettingsProvider : IEamUserSettingsProvider
 	{
 		private readonly WebRequestsTools _webRequestsTools;

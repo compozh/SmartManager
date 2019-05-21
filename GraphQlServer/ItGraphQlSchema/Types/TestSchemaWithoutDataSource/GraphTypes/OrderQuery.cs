@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderQuery : QueryGraphType
 	{
 		public OrderQuery(IEfGraphQLService efGraphQlService, OrderProvider provider):base(efGraphQlService)

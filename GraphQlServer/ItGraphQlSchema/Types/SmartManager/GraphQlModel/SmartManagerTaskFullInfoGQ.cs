@@ -5,7 +5,7 @@ using ItGraphQlSchema.Types.SmartManager.Model;
 namespace ItGraphQlSchema.Types.SmartManager
 {
 	
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class SmartManagerTaskFullInfoGQ : ObjectGraphType<SmartManagerTaskFullInfo>
 	{
 		public SmartManagerTaskFullInfoGQ(SmartManagerProvider provider)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ItGraphQlSchema.Types.ITLogic.Model
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class MenuModule : ObjectGraphType<MenuModule>
 	{
 		public MenuModule()

@@ -6,7 +6,7 @@ namespace ItGraphQlSchema.Types.ITLogic.Model
 {
 
 
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class MenuItem : ObjectGraphType<MenuItem>
 	{
 		public MenuItem()

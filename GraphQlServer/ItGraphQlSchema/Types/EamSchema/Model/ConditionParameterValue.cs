@@ -22,7 +22,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		
 		[Column("KMAT")]
 		public  string EquipmentModelId { get; set; }
-		public EquipmentModel EquipmentModel { get; set; }
+		public Resource EquipmentModel { get; set; }
 
 		[Column("KROK")]
 		public  string EquipmentId { get; set; }

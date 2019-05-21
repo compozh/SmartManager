@@ -6,7 +6,7 @@ using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class SkdQuery : ObjectGraphType<object>
 	{
 		public SkdQuery(SkdPersonProvider provider)
