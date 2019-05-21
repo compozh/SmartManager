@@ -52,7 +52,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 				default:
 					
 					// Получение ссылки на файл 
-					var baseUrl = getBaseUrl();
+					var baseUrl = getWebServiceUrl();
 					
 					var tasks = JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
 					foreach (var tas in tasks)
@@ -82,7 +82,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 			
 			// Получение ссылки на файл 
-			var baseUrl = getBaseUrl();
+			var baseUrl = getWebServiceUrl();
 			
 			calcId = "WFA1ORIG";
 			var listFile = new List<object>();
@@ -101,7 +101,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			
 			return smFullINfo;
 		}
-		private string getBaseUrl(){
+		private string getWebServiceUrl(){
 			
 			const char slash = '/';
 			const string strFile = "GetFile.ashx?file=";
