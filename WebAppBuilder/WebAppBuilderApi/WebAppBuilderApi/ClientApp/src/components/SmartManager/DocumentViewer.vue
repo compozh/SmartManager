@@ -1,15 +1,30 @@
 <template>
-    <div v-if="Doc">
-        <textarea class="text" v-model="formatText"  v-if="whichFormat === 0"></textarea>
-        <pdf :src="formatPdf" v-if="whichFormat === 1">
-        </pdf>
-        <img :src="formatImage" v-if="whichFormat === 2"/>
+    <div>
+        <div v-if="whichFormat === 0">
+            <textarea class="text" v-model="sorceText"></textarea>
+        </div>
+        <div v-if="whichFormat === 1">
+            <pdf 
+                v-for="i in numPages"
+                :key="i"
+                :src="fileUrl"
+                :page="i"
+                style="display: inline-block; width:100%"
+            >
+            </pdf>
+        </div>
+        <div v-if="whichFormat === 2">
+            <img :src="fileUrl" class="document-image"/>
+        </div>
     </div>
 </template>
 
 <script>
+//https://github.com/FranckFreiburger/vue-pdf
 import pdf from 'vue-pdf'
 import axios from 'axios'
+// arrayImageFormat : коллекция форматов картинок
+const arrayImageFormat = ['bzg','png','jpg'];
 export default {
     name:"documentViewer",
     components: {
@@ -17,56 +32,65 @@ export default {
     },
     data(){
         return{
-            // whichFormat : 
-            // 0 отображение текста в textarea,
-            // 1 отображение pdf
-            // 2 отображение картинок
-            whichFormat: -1,
-            formatText: '',
-            formatPdf: '',
-            formatImage: '',
-            // arrayImageFormat : коллекция форматов картинок
-            arrayImageFormat:['bzg','png','jpg']
+            //Страницы в файле pdf
+            numPages: undefined,
+            sorceText: '',
         }
     },
     computed:{
-        Doc(){
-            if(!this.document){
+        // Определение формата файла
+        fileFormat(){
+            var splitFileName = this.fileName.split('.')
+            return splitFileName[splitFileName.length-1]
+        },
+        
+        // 0 отображение текста в textarea,
+        // 1 отображение pdf
+        // 2 отображение картинок
+        whichFormat(){            
+            if(!this.fileName || !this.fileUrl){
                 return;
             }
-            var format = this.document.fileName.split('.')[1]; 
-            this.setFormat(format);
-            
-            return this.document;
-        }
-    },
-    methods:{
-        setFormat(format){
-            // Проход по колллекции форматов картинок, поиск на совпадение
-            var img = this.arrayImageFormat.filter(x=>x===format)
+            var whichFormat = -1
+            var img = arrayImageFormat.filter(x=>x===this.fileFormat)
+            var format = this.fileFormat
             if(img.length){
                 format = 'img';
             }
             switch(format){
                 case 'txt':
-                    // Получение текста из текстового формата
-                    axios.get(this.document.file).then(res => {
-                        this.formatText = res.data;
-                    });
-                    this.whichFormat = 0;
+                    whichFormat = 0;
+                    // Получение текста из текстового файла 
+                    this.setTextFromFile();
                     break;
                 case 'pdf':
-                    this.formatPdf = this.document.file
-                    this.whichFormat = 1;
+                    whichFormat = 1;
+                    // Загрузка всех страниц
+                    var loadingTask = pdf.createLoadingTask(this.fileUrl);
+                    loadingTask.then(pdf => {
+                        this.numPages = pdf.numPages;
+                    });
                     break;
                 case 'img':
-                    this.formatImage = this.document.file
-                    this.whichFormat = 2;
+                    whichFormat = 2;
                     break;
             }
+            return whichFormat;
+           
+        }      
+    },
+    methods:{
+        // Получение текста из файла с форматом txt
+        setTextFromFile(){
+            axios.get(this.fileUrl).then(res => {
+                this.sorceText = res.data;
+            });
         }
     },
-    props:['document']
+
+    // props:['fileName, fileUrl']
+    // Имя файла Url файла
+    props:['fileUrl', 'fileName']
 }
 </script>
 
@@ -74,5 +98,8 @@ export default {
 .text{
     width: 500px;
     height: 300px;
+}
+.document-image{
+    max-width: 100%;
 }
 </style>

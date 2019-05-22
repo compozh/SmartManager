@@ -1,68 +1,51 @@
 
 <template>
 	<v-container grid-list-md text-xs-center>
-    	<v-flex xs12>
-  			<renderless v-model="TaskDetail">
-				<div slot-scope="{ task, curentDocument, transferToDocument }">
-					<v-layout>
-						<v-flex xs2 >
-							<div>
-        						<img class="img"  :src="task.addedPhoto" alt="">
-      						</div>
-							{{task.addedFio}}<br/>
-							{{task.dateAdd}}
-							{{task.dateplan}}
-						</v-flex>  
-						<v-flex xs7>
-							{{task.name}}
-							<documentViewer :document="curentDocument"/>
-						</v-flex>
-						<v-flex xs3>
-							<div v-for="doc in task.originals" :key="doc.id">
-								<span  class="transfer" @click="transferToDocument({file: doc.file, fileName: doc.fileName})">{{ doc.fileName }}</span>
-							</div>
-						</v-flex>  
-					</v-layout>
+		<v-layout wrap="12">
+			<v-flex xs2 >
+				<div>
+					<img class="img"  :src="TaskDetail.addedPhoto" alt="">
 				</div>
-  			</renderless>
-    	</v-flex>
+				{{TaskDetail.addedFio}}<br/>
+				{{TaskDetail.dateAdd}}
+				{{TaskDetail.dateplan}}
+				{{TaskDetail.name}}
+			</v-flex> 
+			<v-flex xs10>
+				<originals-viewer :originals="TaskDetail.originals">
+					<div slot-scope="{ originals, fileName, fileUrl, fileId, selectDocument }">
+						<v-layout>
+							<v-flex xs7>
+								<documentViewer  v-bind:fileName="fileName" v-bind:fileUrl="fileUrl"/>
+							</v-flex>
+							<v-flex xs3>
+								<div v-for="doc in originals" :key="doc.id">
+									<span :class="fileId == doc.id ? 'selected' : ''" class="transfer" @click="selectDocument(doc.fileName, doc.file, doc.id)">{{ doc.fileName }}</span>
+								</div>
+							</v-flex>  
+						</v-layout>
+					</div>
+				</originals-viewer>
+			</v-flex>
+		</v-layout>
   	</v-container>
 </template>
 
 <script>
 export default {
 	name: 'sm-task-info',
-	data(){
-		return{
-			detailTask: undefined
-		}
-	},
 	computed:{
-		TaskDetail: {
-			get: function(){
-				if(this.$store.getters.getAppData("SMTASKINFO")){
-					return this.$store.getters.getAppData("SMTASKINFO").data.smtasks.tasksGetInfo;
-				}
-					return {};
-			},
-			set:function(newValue){
-				this.detailTask = newValue;
+		TaskDetail(){
+			if(this.$store.getters.getAppData("SMTASKINFO")){
+				return this.$store.getters.getAppData("SMTASKINFO").data.smtasks.tasksGetInfo;
 			}
+			return {};
 		},
-		CurentDocument(){
-			if(!this.TaskDetail){
-				return {}
-			}
-			if(!this.TaskDetail.originals){
-				return {}
-			}
-			return this.TaskDetail.originals[0];
-		}
 	},
 	methods:{
 		loadDataForComponents(){
 			var datasource = {
-				query:'{ smtasks { tasksGetInfo(taskId:'+this.$route.query.task_code+'){ id  arso name status addedId dateAdd isAgree  addedFio comments{ date  text user } dateFact  dateplan  descript  keyValue priority originals{ id comm date  file ndor user fileName typeName typeDescription  } addedPhoto dateRemind docPlandate}}} ',
+				query:`{ smtasks { tasksGetInfo(taskId:${this.$route.query.task_code}){ id  arso name status addedId dateAdd isAgree  addedFio comments{ date  text user } dateFact  dateplan  descript  keyValue priority originals{ id comm date  file ndor user fileName typeName typeDescription  } addedPhoto dateRemind docPlandate}}} `,
 				schema:"SMARTMANAGER"
 			}
 			var key = "SMTASKINFO";
@@ -75,9 +58,6 @@ export default {
     	beforeRouteUpdate (to, from, next){
     		this.loadDataForComponents();
 		},
-		PdfUrl(file){
-			return { url : file, scale : 2};
-		}
 	},
 	beforeMount(){
     	this.loadDataForComponents();
@@ -96,5 +76,8 @@ export default {
 }
 .transfer{
 	cursor: pointer;
+}
+.selected{
+	background-color:yellowgreen;
 }
 </style>
