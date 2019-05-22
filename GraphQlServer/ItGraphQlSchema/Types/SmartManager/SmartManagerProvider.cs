@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ItGraphQlSchema.Types.SmartManager.Model;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Web.WebRequests;
 
@@ -12,7 +13,8 @@ namespace ItGraphQlSchema.Types.SmartManager
 	{
 		private readonly WebRequestsTools _webRequestsTools;
 		private readonly IConfiguration _config;
-		 
+		private  string _cache;
+
 		public SmartManagerProvider(WebRequestsTools webRequestsTools, IConfiguration config)
 		{
 			_webRequestsTools = webRequestsTools;
@@ -50,7 +52,17 @@ namespace ItGraphQlSchema.Types.SmartManager
 				case WebRequestsResponseFlags.NotAuthorised:
 					return null;
 				default:
-					return JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
+					
+					// Получение ссылки на файл 
+					var webServiceUrl = getWebServiceUrl();
+					
+					var tasks = JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
+					foreach (var tas in tasks)
+					{
+						tas.addedPhoto = webServiceUrl + tas.addedPhoto + "&folder=content&nodownload=1";
+					}
+
+					return tasks;
 			}
 		}
 		
@@ -72,17 +84,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			}
 			
 			// Получение ссылки на файл 
-			const char slash = '/';
-			const string strFile = "GetFile.ashx?file=";
-			var baseUrl = _config.GetSection("AppSettings").GetValue<string>("WebServiceUrl");
-			if (Equals(baseUrl[baseUrl.Length - 1], slash))
-			{
-				baseUrl += strFile;
-			}
-			else
-			{
-				baseUrl += slash+strFile;
-			}
+			var webServiceUrl = getWebServiceUrl();
 			
 			calcId = "WFA1ORIG";
 			var listFile = new List<object>();
@@ -92,11 +94,33 @@ namespace ItGraphQlSchema.Types.SmartManager
 				args = JsonConvert.SerializeObject(new { ARSO = smFullINfo.Arso, KEYVALUE = smFullINfo.KeyValue, NDOR = orig.Ndor });
 				var result = await _webRequestsTools.CallWebRequestAsync(calcId, args);
 				var smFile = JsonConvert.DeserializeObject<SmFile>(result.Content);
-				orig.File = baseUrl+smFile.FileName;
+				orig.File = webServiceUrl+smFile.FileName;
 				listFile.Add(result);
 			}
+
+			var filePhoto = smFullINfo.AddedPhoto;
+			smFullINfo.AddedPhoto = webServiceUrl + filePhoto + "&folder=content&nodownload=1";
 			
 			return smFullINfo;
+		}
+		private string getWebServiceUrl(){
+			if (!string.IsNullOrEmpty(_cache))
+			{
+				return _cache;
+			}
+			const char slash = '/';
+			const string strFile = "GetFile.ashx?file=";
+			var webServiceUrl = _config.GetSection("AppSettings").GetValue<string>("WebServiceUrl");
+			if (Equals(webServiceUrl[webServiceUrl.Length - 1], slash))
+			{
+				webServiceUrl += strFile;
+			}
+			else
+			{
+				webServiceUrl += slash+strFile;
+			}
+			_cache = webServiceUrl;
+			return webServiceUrl;
 		}
 	}
 }
