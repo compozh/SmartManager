@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using GraphQL.EntityFramework;
 using ItGraphQlSchema.Types.EamSchema;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDI]
 	public class EamQuery : QueryGraphType
 	{
 		private readonly IEamDataProvider _dataProvider;
@@ -52,14 +50,14 @@ namespace ItGraphQlSchema.Types
 				name: "technicalPlaceLevels",
 				resolve: context =>_dataProvider.TechnicalPlaceLevels);
 
-			AddQueryField(
-				name: "equipmentModels",
-				resolve: context =>
-					_dataProvider.EquipmentModels);
-
-			AddQueryField(
-				name: "equipmentModelGroups",
-				resolve: context =>_dataProvider.EquipmentModelGroups);
+			//AddQueryField(
+			//	name: "equipmentModels",
+			//	resolve: context =>
+			//		_dataProvider.EquipmentModels);
+			//
+			//AddQueryField(
+			//	name: "equipmentModelGroups",
+			//	resolve: context =>_dataProvider.EquipmentModelGroups);
 
 			AddQueryField(
 				name: "technicalPlaces",
@@ -79,11 +77,11 @@ namespace ItGraphQlSchema.Types
 
 			AddQueryField(
 				name: "itObjects",
-				resolve: context =>_dataProvider.ItObjects);
+				resolve: context => _dataProvider.ItObjects);
 
 			AddQueryField(
 				name: "departments",
-				resolve: context =>_dataProvider.Departments);
+				resolve: context => _dataProvider.Departments);
 			AddQueryField(
 				name: "conditionParameterTypes",
 				resolve: context =>_dataProvider.ConditionParameterTypes);
@@ -104,20 +102,20 @@ namespace ItGraphQlSchema.Types
 				resolve: context =>_dataProvider.DownTimes);
 			AddQueryField(
 				name: "measurementUnits",
-				resolve: context =>_dataProvider.MeasurementUnits);
+				resolve: context => _dataProvider.MeasurementUnits);
 
 			AddQueryConnectionField(
 				name: "departmentConnection",
-				resolve: context =>_dataProvider.Departments);
-			AddQueryConnectionField(
-				name: "equipmentModelsConnection",
-				resolve: context =>_dataProvider.EquipmentModels);
+				resolve: context => _dataProvider.Departments);
+			//AddQueryConnectionField(
+			//	name: "equipmentModelsConnection",
+			//	resolve: context =>_dataProvider.EquipmentModels);
 			AddQueryConnectionField(
 				name: "workRequestConnection",
 				resolve: context =>_dataProvider.WorkRequests);
 			AddQueryConnectionField(
 				name: "employeesConnection",
-				resolve: context =>_dataProvider.Employees);
+				resolve: context => _dataProvider.Employees);
 			AddQueryConnectionField(
 				name: "conditionParameterValuesConnection",
 				resolve: context =>_dataProvider.ConditionParameterValues);

@@ -1,5 +1,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types.Common
@@ -10,23 +11,27 @@ namespace ItGraphQlSchema.Types.Common
 		IQueryable<Department> Departments { get; }
 		IQueryable<ItObject> ItObjects { get; }
 		IQueryable<MeasurementUnit> MeasurementUnits { get; }
+		IQueryable<Resource> Resources { get; }
+		IQueryable<ResourceGroup> ResourcesGroups { get; }
 	}
-	
-	[AtributeAddInDI]
-	internal class CommonDataProvider<T> : ICommonDataProvider where T : CommonDbContext 
+
+	[AddInDI(typeof(ICommonDataProvider))]
+	internal class CommonDataProvider : ICommonDataProvider
 	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
+		protected readonly IHttpContextAccessor _httpContextAccessor;
 
 		public CommonDataProvider(IHttpContextAccessor httpContextAccessor)
 		{
 			_httpContextAccessor = httpContextAccessor;
 		}
 		
-		private T DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<T>();
+		protected CommonDbContext DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<CommonDbContext>();
 
 		public virtual IQueryable<Employee> Employees => DbContext.Employees;
 		public virtual IQueryable<Department> Departments  => DbContext.Departments;
 		public virtual IQueryable<ItObject> ItObjects  => DbContext.ItObjects;
 		public virtual IQueryable<MeasurementUnit> MeasurementUnits  => DbContext.MeasurementUnits;
+		public virtual IQueryable<Resource> Resources  => DbContext.Resources;
+		public virtual IQueryable<ResourceGroup> ResourcesGroups => DbContext.ResourcesGroups;
 	}
 }

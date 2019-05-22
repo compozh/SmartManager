@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		/// </summary>
 		[Column("KMAT_ROK")]
 		public string ModelId { get; set; }
-		public EquipmentModel Model { get; set; }	
+		public Resource Model { get; set; }	
 
 		/// <summary>
 		/// Уровень технического места

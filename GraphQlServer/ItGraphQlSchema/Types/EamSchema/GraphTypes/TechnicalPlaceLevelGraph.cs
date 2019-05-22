@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(TechnicalPlaceLevel))]
 	public class TechnicalPlaceLevelGraph : EfObjectGraphType<TechnicalPlaceLevel>
 	{
 		public TechnicalPlaceLevelGraph(IEfGraphQLService graphQlService) :

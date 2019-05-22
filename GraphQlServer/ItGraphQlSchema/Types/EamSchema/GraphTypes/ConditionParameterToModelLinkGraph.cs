@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(ConditionParameterToModelLink))]
 	public class ConditionParameterToModelLinkGraph: EfObjectGraphType<ConditionParameterToModelLink>
 	{
 		public ConditionParameterToModelLinkGraph(IEfGraphQLService graphQlService) :

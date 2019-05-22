@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ItGraphQlSchema.Types.ITLogic.Model
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class ITMenu : ObjectGraphType<ITMenu>
 	{
 		public ITMenu()

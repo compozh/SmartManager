@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.Common
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute, GraphType(typeof(SimpleDictionaryRecord))]
 	public class SimpleDictionaryRecordGraph: EfObjectGraphType<SimpleDictionaryRecord>
 	{
 		public SimpleDictionaryRecordGraph(IEfGraphQLService graphQlService) :

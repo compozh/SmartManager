@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class OrderQueryMutation : ObjectGraphType
 	{
 		public OrderQueryMutation(OrderProvider provider)

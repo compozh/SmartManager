@@ -3,7 +3,7 @@ using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(TechnicalPlace))]
 	public class TechnicalPlaceGraph: EfObjectGraphType<TechnicalPlace>
 	{
 		public TechnicalPlaceGraph(IEfGraphQLService graphQlService) :
@@ -42,7 +42,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			AddNavigationField(
 				name: "model",
 				resolve: context => context.Source.Model,
-				typeof(EquipmentModelGraph));
+				typeof(ResourceGraph));
 //			Field("equipment",
 //				x => x.MovementHistories.Where(m => m.EndDate == null).Select(m => m.Equipment).FirstOrDefault(),
 //				nullable: true, typeof(EquipmentGraph));

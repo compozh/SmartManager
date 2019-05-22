@@ -12,7 +12,7 @@ using Web.Tools;
 
 namespace ItGraphQlSchema.Types.ITLogic
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class ITEnterpriseMenuQuery:ObjectGraphType<object>
 	{
 		ITPortalProvider _provider;

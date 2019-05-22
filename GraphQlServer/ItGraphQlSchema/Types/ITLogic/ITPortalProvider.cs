@@ -8,7 +8,7 @@ using Web.WebRequests;
 
 namespace ItGraphQlSchema.Types.ITLogic
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	public class ITPortalProvider
 	{
 		private readonly WebRequestsTools _webRequest;

@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.Common
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute, GraphType(typeof(MeasurementUnit))]
 	public class MeasurementUnitGraph: EfObjectGraphType<MeasurementUnit>
 	{
 		public MeasurementUnitGraph(IEfGraphQLService graphQlService) :

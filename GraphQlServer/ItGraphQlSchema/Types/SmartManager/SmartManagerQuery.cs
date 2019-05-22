@@ -3,7 +3,7 @@ using ItGraphQlSchema.Types.SmartManager.GraphQlModel;
 
 namespace ItGraphQlSchema.Types.SmartManager
 {
-	[AtributeAddInDI]
+	[AddInDIAttribute]
 	class SmartManagerQuery : ObjectGraphType<object>
 	{
 		public SmartManagerQuery(SmartManagerProvider provider)

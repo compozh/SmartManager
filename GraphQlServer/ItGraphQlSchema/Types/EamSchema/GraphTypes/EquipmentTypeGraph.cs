@@ -1,8 +1,9 @@
 using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(EquipmentType))]
 	public class EquipmentTypeGraph: EfObjectGraphType<EquipmentType>
 	{
 		public EquipmentTypeGraph(IEfGraphQLService graphQlService) :
@@ -14,7 +15,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			AddNavigationField(
 				name: "modelGroup",
 				resolve: context => context.Source.ModelGroup,
-				typeof(EquipmentModelGroupGraph));
+				typeof(ResourceGroupGraph));
 			AddNavigationListField(
 				name: "equipments",
 				resolve: context => context.Source.Equipments);

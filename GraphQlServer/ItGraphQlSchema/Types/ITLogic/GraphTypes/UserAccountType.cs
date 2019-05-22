@@ -3,7 +3,7 @@ using ItGraphQlSchema.Types.ITLogic.Model;
 
 namespace ItGraphQlSchema.Types.ITLogic.GraphTypes
 {
-    [AtributeAddInDI]
+    [AddInDIAttribute]
     public class UserAccountType: ObjectGraphType<UserAccount>
     {
         public UserAccountType()

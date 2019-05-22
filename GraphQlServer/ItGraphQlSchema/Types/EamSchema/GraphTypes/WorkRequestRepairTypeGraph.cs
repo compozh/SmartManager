@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(WorkRequestRepairType))]
 	public class WorkRequestRepairTypeGraph: EfObjectGraphType<WorkRequestRepairType>
 	{
 		public WorkRequestRepairTypeGraph(IEfGraphQLService graphQlService) :

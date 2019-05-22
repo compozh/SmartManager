@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using GraphQL;
 using GraphQL.Types;
+using GraphQL.Utilities;
 using ItGraphQlSchema.Types;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,12 +18,28 @@ namespace ItGraphQlSchema
 		}
 		public static void Config(IServiceCollection services)
 		{
+			//foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) //GetCallingAssembly
+			//{
+			//}
 			//Добавляем все типы в DI, которые помечены атрибутом [AtributeAddInDI]
 			foreach (Type type in Assembly.GetCallingAssembly().GetTypes())
 			{
-				if (type.GetCustomAttribute<AtributeAddInDI>() != null)
+				AddInDIAttribute addInDIAtribute;
+				if ((addInDIAtribute = type.GetCustomAttribute<AddInDIAttribute>()) != null)
 				{
-					services.AddSingleton(type);
+					if (addInDIAtribute.ImplementedType == null)
+					{
+						services.AddSingleton(type);
+					}
+					else
+					{
+						services.AddSingleton(addInDIAtribute.ImplementedType, type);
+					}
+				}
+				GraphTypeAttribute graphTypeAttribute;
+				if ((graphTypeAttribute = type.GetCustomAttribute<GraphTypeAttribute>()) != null)
+				{
+					GraphTypeTypeRegistry.Register(graphTypeAttribute.ImplementedType, type);
 				}
 			}
 		}

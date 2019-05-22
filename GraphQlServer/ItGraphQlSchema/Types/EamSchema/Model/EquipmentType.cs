@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ItGraphQlSchema.Types.Common;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,7 +22,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		
 		[Column("SKM_OBJ")]
 		public string ModelGroupId { get; set; }
-		public EquipmentModelGroup ModelGroup { get; set; }
+		public ResourceGroup ModelGroup { get; set; }
 		
 		public List<Equipment> Equipments { get; set; }
 	}

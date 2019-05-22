@@ -2,7 +2,7 @@ using GraphQL.EntityFramework;
 
 namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 {
-	[AtributeAddInDI]
+	[AddInDI, GraphType(typeof(EquipmentFailureReason))]
 	public class EquipmentFailureReasonGraph: EfObjectGraphType<EquipmentFailureReason>
 	{
 		public EquipmentFailureReasonGraph(IEfGraphQLService graphQlService) :

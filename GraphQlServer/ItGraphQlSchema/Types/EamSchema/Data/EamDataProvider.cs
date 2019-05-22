@@ -14,8 +14,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<Equipment> Equipments { get; }
 		IQueryable<TechnicalPlace> TechnicalPlaces { get; }
 		IQueryable<EquipmentType> EquipmentTypes { get; }
-		IQueryable<EquipmentModel> EquipmentModels { get; }
-		IQueryable<EquipmentModelGroup> EquipmentModelGroups { get; }
+		//IQueryable<EquipmentModel> EquipmentModels { get; }
+		//IQueryable<EquipmentModelGroup> EquipmentModelGroups { get; }
 		IQueryable<EquipmentStatus> EquipmentStatuses { get; }
 		IQueryable<EquipmentCategory> EquipmentCategories { get; }
 		IQueryable<TechnicalPlaceLevel> TechnicalPlaceLevels { get; }
@@ -38,19 +38,16 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<MeasurementUnit> MeasurementUnits { get; }
 	}
 	
-	internal class EamDataProvider : CommonDataProvider<EamDbContext>, IEamDataProvider
+	[AddInDI(typeof(IEamDataProvider))]
+	internal class EamDataProvider : CommonDataProvider, IEamDataProvider
 	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IEamUserSettingsProvider _userSettingsProvider;
 
 		public EamDataProvider(IHttpContextAccessor httpContextAccessor, IEamUserSettingsProvider userSettingsProvider) 
 			: base(httpContextAccessor)
 		{
-			_httpContextAccessor = httpContextAccessor;
 			_userSettingsProvider = userSettingsProvider;
 		}
-		
-		private EamDbContext DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<EamDbContext>();
 
 		private EamUserSettings UserSettings => _userSettingsProvider.GetCurrentSettings().Result;
 
@@ -101,12 +98,12 @@ namespace ItGraphQlSchema.Types.EamSchema
 			get { return DbContext.EquipmentTypes.Where(et => UserSettings.EquipmentTypesAccess != RegAccess.Deny); }
 		}
 
-		public IQueryable<EquipmentModel> EquipmentModels
-		{
-			get { return DbContext.EquipmentModels.Where(em => UserSettings.EquipmentModelsAccess != RegAccess.Deny); }
-		}
-
-		public IQueryable<EquipmentModelGroup> EquipmentModelGroups => DbContext.EquipmentModelGroups;
+		//public IQueryable<EquipmentModel> EquipmentModels
+		//{
+		//	get { return DbContext.EquipmentModels.Where(em => UserSettings.EquipmentModelsAccess != RegAccess.Deny); }
+		//}
+		//
+		//public IQueryable<EquipmentModelGroup> EquipmentModelGroups => DbContext.EquipmentModelGroups;
 		public IQueryable<EquipmentStatus> EquipmentStatuses => DbContext.EquipmentStatuses;
 		public IQueryable<EquipmentCategory> EquipmentCategories => DbContext.EquipmentCategories;
 		public IQueryable<TechnicalPlaceLevel> TechnicalPlaceLevels => DbContext.TechnicalPlaceLevels;
