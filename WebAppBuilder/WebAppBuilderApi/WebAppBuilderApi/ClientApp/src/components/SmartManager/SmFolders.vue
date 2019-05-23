@@ -9,25 +9,38 @@
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
-            :style="{'order': folder.name === 'Все' ? -1 : 0}"
+            :style="{ 'order': folder.name === 'Все' ? -1 : 0 }"
           >
             <v-list-tile-action>
-              <v-badge color="red darken-2">
-                <template v-slot:badge>
-                  {{ folder.count }}
+              <v-tooltip
+                right
+                :disabled=!menuMiniMode
+              >
+                <template v-slot:activator="{ on }">
+                  <div v-on="on">
+                    <v-badge color="red darken-2">
+                      <template
+                        v-if="folder.count && menuMiniMode"
+                        v-slot:badge
+                      >
+                        {{ folder.count }}
+                      </template>
+                      <v-icon>folder</v-icon>
+                    </v-badge>
+                  </div>
                 </template>
-                <v-icon>folder</v-icon>
-              </v-badge>
+                <span>{{ folder.name }}</span>
+              </v-tooltip>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
                 <span
-                  :style="{'font-weight': folder.count ? 700 : ''}"
+                  :style="{ 'font-weight': folder.count ? 500 : '' }"
                 >{{ folder.name }}</span>
               </v-list-tile-title>
             </v-list-tile-content>
             <v-spacer></v-spacer>
-            <v-list-tile-action>
+            <v-list-tile-action v-if="folder.count">
               <v-list-tile-action-text>
                 {{ folder.count }}
               </v-list-tile-action-text>
@@ -40,9 +53,24 @@
 </template>
 
 <script>
+  import {eventBus} from "../../main";
+
   export default {
     name: "sm-folders",
-    props: ["folders"]
+    props: ["folders"],
+    data() {
+      return {
+        menuMiniMode: false
+      }
+    },
+    created() {
+      eventBus.$on('updateMenuMode', menuMiniMode => {
+        this.menuMiniMode = menuMiniMode;
+      })
+    },
+    beforeDestroy() {
+      eventBus.$off('updateMenuMode')
+    }
   }
 </script>
 
@@ -51,7 +79,6 @@
   .menu {
     display: flex;
     flex-direction: column;
-    font-family: 'Roboto', sans-serif;
   }
 
   .menu-item a {
@@ -61,6 +88,7 @@
     margin-right: 10px;
     max-height: 30px;
     padding-left: 25px;
+    font-size: 14px !important;
   }
 
   .menu-item a .v-list__tile__action {
@@ -75,14 +103,11 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     background: #ededed;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   /* Стили для активного пункта, когда меню в свернутом виде */
-  .v-navigation-drawer--mini-variant .menu-item .sm_active-folder {
-    background: none;
-  }
-
+  .v-navigation-drawer--mini-variant .menu-item .sm_active-folder,
   .v-navigation-drawer--mini-variant .menu-item .v-list__tile--link:hover {
     background: none;
   }
@@ -99,7 +124,7 @@
 
   /* Стили для иконок с количеством элементов */
   .v-badge__badge {
-    visibility: hidden;
+    /*visibility: hidden;*/
     top: -2px;
     right: -8px;
     height: 17px;
@@ -109,7 +134,15 @@
     align-content: center;
   }
 
-  .v-navigation-drawer--mini-variant .menu-item .v-badge__badge {
-    visibility: visible;
+  /*.v-navigation-drawer--mini-variant .menu-item .v-badge__badge {*/
+  /*  visibility: visible;*/
+  /*}*/
+
+  /* Медиазапрос для подражания поведению тулбара на xs экранах */
+  @media only screen and (max-width: 959px) {
+    .menu-item a {
+      padding-left: 16px;
+    }
   }
+
 </style>

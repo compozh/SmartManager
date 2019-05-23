@@ -9,6 +9,8 @@ import _ from 'lodash';
 import {  resetRouter } from './router';
 import {i18n} from './plugins/i18n';
 
+export const eventBus = new Vue(); // Шина событий
+
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
 req.keys().map(key => {
 

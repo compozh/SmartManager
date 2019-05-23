@@ -3,7 +3,7 @@
         <v-list class="pa-0">
           <v-list-tile avatar>
             <v-list-tile-avatar>
-              <v-icon>account_circle</v-icon>
+              <v-icon x-large>account_circle</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>{{currentUser}}</v-list-tile-title>

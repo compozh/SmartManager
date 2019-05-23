@@ -20,8 +20,8 @@
       clipped
       floating
       v-model="drawer"
-      :mini-variant="mini"
-      mini-variant-width="64"
+      :mini-variant="menuMiniMode"
+      mini-variant-width="56"
       width="250"
       class="transparent"
       stateless
@@ -39,8 +39,11 @@
 </template>
 
 <script>
+  import {eventBus} from "../../main";
+
   export default {
     name: "material-2-layout",
+    props: ["toolbarTitle", "menuButtonMode"],
     data() {
       return {
         drawer: true,
@@ -57,7 +60,12 @@
           : this.drawer = !this.drawer;
       }
     },
-    props: ["toolbarTitle", "menuButtonMode"]
+    computed: {
+      menuMiniMode() {
+        eventBus.$emit('updateMenuMode', this.mini);
+        return this.mini;
+      }
+    }
   }
 </script>
 
