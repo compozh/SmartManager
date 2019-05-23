@@ -30,7 +30,8 @@ namespace ItGraphQlSchema.Types
 			}
 
 			//todo  Убрать после переноса логика EAM
-			onModelCreating(modelBuilder);
+			eamOnModelCreating(modelBuilder);
+			testOnModelCreating(modelBuilder);
 		}
 
 		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md

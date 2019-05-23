@@ -5,13 +5,13 @@ namespace ItGraphQlSchema.Types
 {
 	
 
-	public class OrderDbContext : DbContext
+	public sealed partial class CommonDbContext : DbContext
 	{
 		public DbSet<Item> Items { get; set; }
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<OrderItem> OrderItems { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected void testOnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
@@ -30,24 +30,6 @@ namespace ItGraphQlSchema.Types
 			
 				
 		}
-		
-		static OrderDbContext()
-		{
-			var builder = new DbContextOptionsBuilder();
-			builder.UseSqlServer(@"fake");
-
-			using (var context = new OrderDbContext(builder.Options))
-			{
-				DataModel = context.Model;
-			}
-		}
-		
-		public OrderDbContext(DbContextOptions options) :
-			base(options)
-		{
-		}
-		
-		public static IModel DataModel { get; }
 
 	}
 

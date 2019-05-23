@@ -16,7 +16,7 @@ namespace ItGraphQlSchema.Types
 	{
 		private IHttpContextAccessor _httpContextAccessor;
 		
-		private OrderDbContext _dbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<OrderDbContext>();
+		private CommonDbContext _dbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<CommonDbContext>();
 
 		public OrderProvider(SqlClient client, IHttpContextAccessor httpContextAccessor)
 		{
