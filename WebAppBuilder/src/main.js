@@ -17,7 +17,6 @@ req.keys().map(key => {
   return Vue.component(req(key).default.name, req(key).default)
 });
 
-Vue.config.productionTip = false;
 Vue.use(Vuetify);
 new Vue({
   i18n,
@@ -28,8 +27,11 @@ new Vue({
 
 // Загружаем приложение
 store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).then(() => {
-  var app = store.state.applicationDescription;
 
+  var app = store.state.applicationDescription;
+  if(!app.Id){
+    return;
+  }
   // Разделы приложения
   var sections = app.Sections||[];
 
@@ -102,7 +104,7 @@ function getInternalComponentDescription(com) {
       for(var cur of  this.$children){
         if(cur.beforeRouteUpdate){
           cur.beforeRouteUpdate(to,from);
-        } 
+        }
       }
     },
     name: com.NameInRoute || "default",
