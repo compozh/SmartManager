@@ -9,14 +9,13 @@ const actions = ({
 
       Axios({
         method: 'POST',
-        url: `${myConfig.BASE_URL}api/authentication/user`,
+        url: `${myConfig.GrapgQlUrl}api/authentication/user`,
         withCredentials:true,
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
       }).then(resp => {
         context.commit("setCurrentUser", resp.data )
         //console.log(resp.data)
       });
-
 
   },
 
@@ -33,9 +32,9 @@ const actions = ({
     localStorage.removeItem('userName');
     context.commit("setCurrentUser", "");
 
-    return Axios.post(`${myConfig.BASE_URL}api/authentication/login`, {
-        Login: loginParam.login,
-        Password: loginParam.password,
+    return Axios.post(`${myConfig.GrapgQlUrl}api/authentication/login`, {
+        login: loginParam.login,
+        password: loginParam.password,
         RememberMe: loginParam.rememberMe
       },{
         withCredentials:true
@@ -73,16 +72,25 @@ const actions = ({
 
   /** Загрузить описание приложения */
   GetAppDescription(context, appId) {
-    return Axios.post(`${myConfig.BASE_URL}api/webapp/get`, {
-        ApplicationId: appId
-      }, {
-        withCredentials: true
-      }).then(response => {
-        if (response.status == 200) {
-          return context.commit("SetAppDescription", response.data)
-        }
-        return new Promise();
-      })
+    return Axios({
+      method: 'POST',
+      url: myConfig.GrapgQlUrl+'api/graphql',
+      withCredentials:true,
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+      data: {
+        query:"query q($appId : String) {\n  webapps{\n    application(applicationId:$appId)\n  }\n}",
+        variables:
+          { appId},
+        operationName:"q",
+        SchemaName:"WEBAPPS"
+      }
+    }).then(resp => {
+      if(!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application1){
+        throw Error("TEST MESSAGE")
+      }
+      var data = JSON.parse(resp.data.data.webapps.application)
+      return context.commit("SetAppDescription", data)
+    });
   },
 
   // CallAction(context, data) {
