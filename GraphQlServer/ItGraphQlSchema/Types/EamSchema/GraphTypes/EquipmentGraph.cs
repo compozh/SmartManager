@@ -25,41 +25,17 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.StatusId);
 			Field(x => x.DepartmentId, nullable:true);
 			Field(x => x.ModelId);
-			AddNavigationField(
-				name: "department",
-				resolve: context => context.Source.Department,
-				typeof(DepartmentGraph));
-			AddNavigationField(
-				name: "category",
-				resolve: context => context.Source.Category,
-				typeof(EquipmentCategoryGraph));
-			AddNavigationField(
-				name: "status",
-				resolve: context => context.Source.Status,
-				typeof(EquipmentStatusGraph));
-			AddNavigationField(
-				name: "responsibleEmployee",
-				resolve: context => context.Source.ResponsibleEmployee,
-				typeof(EmployeeGraph));
-			AddNavigationField(
-				name: "type",
-				resolve: context => context.Source.Type,
-				typeof(EquipmentTypeGraph));
-			AddNavigationField(
-				name: "model",
-				resolve: context => context.Source.Model,
-				typeof(ResourceGraph));
-			AddNavigationListField(
-				name: "workRequests",
-				resolve: context => context.Source.WorkRequests);
-			AddNavigationConnectionField(
-				name: "workRequestsConnection",
-				resolve: context => context.Source.WorkRequests,
-				includeNames: new[] {"WorkRequests"});
-			AddNavigationField(
-				name: "itObject",
-				resolve: context => context.Source.ItObject,
-				typeof(ItObjectGraph));
+			
+			AddNavigationField(name: "department", resolve: context => context.Source.Department);
+			AddNavigationField(name: "category", resolve: context => context.Source.Category);
+			AddNavigationField(name: "status", resolve: context => context.Source.Status);
+			AddNavigationField(name: "responsibleEmployee", resolve: context => context.Source.ResponsibleEmployee);
+			AddNavigationField(name: "type", resolve: context => context.Source.Type);
+			AddNavigationField(name: "model", resolve: context => context.Source.Model);
+			AddNavigationListField(name: "workRequests", resolve: context => context.Source.WorkRequests);
+			AddNavigationConnectionField(name: "workRequestsConnection",
+				resolve: context => context.Source.WorkRequests, includeNames: new[] {"WorkRequests"});
+			AddNavigationField(name: "itObject",resolve: context => context.Source.ItObject);
 		}
 	}
 }

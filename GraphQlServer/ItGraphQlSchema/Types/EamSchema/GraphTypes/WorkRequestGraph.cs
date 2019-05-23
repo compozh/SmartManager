@@ -1,5 +1,4 @@
 ﻿using GraphQL.EntityFramework;
-using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
@@ -27,50 +26,19 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.PerformerEmployeeId, true);
 			Field(x => x.ItObjectId, true);
 			Field(x => x.IsValid);
-			AddNavigationField(
-				name: "department",
-				resolve: context => context.Source.Department,
-				typeof(DepartmentGraph));
-			AddNavigationField(
-				name: "responsibleDepartment",
-				resolve: context => context.Source.ResponsibleDepartment,
-				typeof(DepartmentGraph));
-			AddNavigationField(
-				name: "category",
-				resolve: context => context.Source.Category,
-				typeof(WorkRequestCategoryGraph));
-			AddNavigationField(
-				name: "direction",
-				resolve: context => context.Source.Direction,
-				typeof(WorkRequestDirectionGraph));
-			AddNavigationField(
-				name: "repairType",
-				resolve: context => context.Source.RepairType,
-				typeof(WorkRequestRepairTypeGraph));
-			AddNavigationField(
-				name: "declarerEmployee",
-				resolve: context => context.Source.DeclarerEmployee,
-				typeof(EmployeeGraph));
-			AddNavigationField(
-				name: "responsibleEmployee",
-				resolve: context => context.Source.ResponsibleEmployee,
-				typeof(EmployeeGraph));
-			AddNavigationField(
-				name: "performerEmployee",
-				resolve: context => context.Source.PerformerEmployee,
-				typeof(EmployeeGraph));
-			AddNavigationField(
-				name: "itObject",
-				resolve: context => context.Source.ItObject,
-				typeof(ItObjectGraph));
-			AddNavigationField(
-				name: "equipment",
-				resolve: context => context.Source.Equipment,
-				typeof(EquipmentGraph));
-			AddNavigationField(
-				name: "equipmentModel",
-				resolve: context => context.Source.EquipmentModel,
-				typeof(ResourceGraph));
+			
+			AddNavigationField(name: "department", resolve: context => context.Source.Department);
+			AddNavigationField(name: "responsibleDepartment", resolve: context => context.Source.ResponsibleDepartment);
+			AddNavigationField(name: "category", resolve: context => context.Source.Category);
+			AddNavigationField(name: "direction", resolve: context => context.Source.Direction);
+			AddNavigationField(name: "repairType", resolve: context => context.Source.RepairType);
+			AddNavigationField(name: "declarerEmployee", resolve: context => context.Source.DeclarerEmployee);
+			AddNavigationField(name: "responsibleEmployee", resolve: context => context.Source.ResponsibleEmployee);
+			AddNavigationField(name: "performerEmployee", resolve: context => context.Source.PerformerEmployee);
+			AddNavigationField(name: "itObject", resolve: context => context.Source.ItObject);
+			AddNavigationField(name: "equipment", resolve: context => context.Source.Equipment);
+			AddNavigationField(name: "equipmentModel", resolve: context => context.Source.EquipmentModel);
+			AddNavigationField(name: "technicalPlace",resolve: context => context.Source.TechnicalPlace);
 		}
 	}
 }

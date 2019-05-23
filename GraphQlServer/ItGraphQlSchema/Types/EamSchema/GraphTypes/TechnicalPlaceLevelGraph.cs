@@ -12,13 +12,10 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.Name);
 			Field(x => x.ShortName);
 			Field(x => x.IsValid);
-			AddNavigationListField(
-				name: "technicalPlaces",
-				resolve: context => context.Source.TechnicalPlaces);
-			AddNavigationConnectionField(
-				name: "technicalPlacesConnection",
-				resolve: context => context.Source.TechnicalPlaces,
-				includeNames: new[] {"TechnicalPlaces"});
+			
+			AddNavigationListField(name: "technicalPlaces", resolve: context => context.Source.TechnicalPlaces);
+			AddNavigationConnectionField(name: "technicalPlacesConnection",
+				resolve: context => context.Source.TechnicalPlaces, includeNames: new[] {"TechnicalPlaces"});
 		}
 	}
 }

@@ -14,5 +14,12 @@ namespace ItGraphQlSchema.Types.Common
 
 		[Column("NAIM_P")]
 		public string Name { get; set; }
+		
+		[Column("KOBJ")]
+		public string ItObjectId { get; set; }
+		public ItObject ItObject { get; set; }
+		
+		[Column("PR_DO")]
+		public bool IsValid { get; set; }
 	}
 }

@@ -16,12 +16,8 @@ namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 			Field(x => x.WorkRequestCategoryId);
 			Field(x => x.ConditionParameterId);
 			
-			AddNavigationField(
-				name: "category",
-				resolve: context => context.Source.Category);
-			AddNavigationField(
-				name: "conditionParameter",
-				resolve: context => context.Source.ConditionParameter);
+			AddNavigationField(name: "category",resolve: context => context.Source.Category);
+			AddNavigationField(name: "conditionParameter",resolve: context => context.Source.ConditionParameter);
 		}
 	}
 }

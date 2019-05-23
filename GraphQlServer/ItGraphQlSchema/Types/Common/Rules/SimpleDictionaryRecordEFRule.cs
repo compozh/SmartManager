@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using ItGraphQlSchema.Types.EamSchema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ItGraphQlSchema.Types.Common
 {
@@ -7,6 +9,17 @@ namespace ItGraphQlSchema.Types.Common
 	{
 		public override void AddRuleToModel(EntityTypeBuilder<SimpleDictionaryRecord> entity)
 		{
+			entity
+				.HasDiscriminator<string>("Code")
+				.HasValue<WorkRequestCategory>("RZCAT")
+				.HasValue<WorkRequestDirection>("RZNPR")
+				.HasValue<WorkRequestRepairType>("RVR")
+				.HasValue<TechnicalPlaceLevel>("RFSL")
+				.HasValue<EquipmentStatus>("ROS")
+				.HasValue<EquipmentCategory>("ROV")
+				.HasValue<EquipmentFailureReason>("RFP")
+				.HasValue<EquipmentFailureType>("RPD");
+			
 			entity.Property(w => w.Id)
 				.HasConversion(v => v.TrimEnd(), v => v.TrimEnd());
 

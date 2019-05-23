@@ -10,12 +10,8 @@ namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 		{
 			Field(x => x.ConditionParameterId); 
 			Field(x => x.EquipmentModelId);
-			AddNavigationField(
-				name: "conditionParameter",
-				resolve: context => context.Source.ConditionParameter);
-			AddNavigationField(
-				name: "equipmentModel",
-				resolve: context => context.Source.EquipmentModel);
+			AddNavigationField(name: "conditionParameter",resolve: context => context.Source.ConditionParameter);
+			AddNavigationField(name: "equipmentModel",resolve: context => context.Source.EquipmentModel);
 		}
 	}
 }

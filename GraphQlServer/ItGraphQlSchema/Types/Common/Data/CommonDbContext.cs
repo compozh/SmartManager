@@ -29,8 +29,7 @@ namespace ItGraphQlSchema.Types
 				}
 			}
 
-			//todo  Убрать после переноса логика EAM
-			onModelCreating(modelBuilder);
+			//todo  Убрать после переноса логики
 			testOnModelCreating(modelBuilder);
 		}
 
