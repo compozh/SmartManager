@@ -85,8 +85,19 @@ const actions = ({
         SchemaName:"WEBAPPS"
       }
     }).then(resp => {
-      if(!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application1){
-        throw Error("TEST MESSAGE")
+      // Ошибка загрузки
+      if(!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application){
+        const spacing = '5px';
+        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
+        console.log(`%cОшибка загрузки приложения "${appId}"`, styles);
+        return;
+      }
+      // Нет приложения
+      if(resp.data.data.webapps.application == "null"){
+        const spacing = '5px';
+        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
+        console.log(`%cОтсутствует описание приложения "${appId}"`, styles);
+        return;
       }
       var data = JSON.parse(resp.data.data.webapps.application)
       return context.commit("SetAppDescription", data)
