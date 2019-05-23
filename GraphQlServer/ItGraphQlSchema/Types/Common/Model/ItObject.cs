@@ -14,8 +14,7 @@ namespace ItGraphQlSchema.Types.Common
 		public string Name { get; set; }
 		
 		public List<Employee> Employees { get; set; }
-//		public List<WorkRequest> WorkRequests { get; set; }
-//		public List<TechnicalPlace> TechnicalPlaces { get; set; }
-//		public List<Equipment> Equipments { get; set; }
+		
+		public List<Department> Departments { get; set; }
 	}
 }

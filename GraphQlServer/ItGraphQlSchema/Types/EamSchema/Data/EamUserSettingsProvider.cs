@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,6 +19,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 		private readonly IMemoryCache _cache;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 
+		private static readonly TimeSpan CacheExpiration = new TimeSpan(0, 15, 0);
+
 		public EamUserSettingsProvider(WebRequestsTools webRequestsTools, IMemoryCache cache, IHttpContextAccessor httpContextAccessor)
 		{
 			_webRequestsTools = webRequestsTools;
@@ -36,7 +39,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			}
 
 			userSettings = await getSettings();
-			_cache.Set(userId, userSettings);
+			_cache.Set(userId, userSettings, CacheExpiration);
 			return userSettings;
 		}
 		

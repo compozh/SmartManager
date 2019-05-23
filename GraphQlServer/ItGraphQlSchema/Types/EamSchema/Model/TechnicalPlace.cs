@@ -74,5 +74,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		
 		public List<WorkRequest> WorkRequests { get; set; }
 		public List<EquipmentMovementHistory> MovementHistories { get; set; }
+		
+		public List<ResponsibleSpecialist> ResponsibleSpecialists { get; set; }
 	}
 }

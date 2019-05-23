@@ -13,14 +13,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.EndDate, true);
 			Field(x => x.EquipmentId, nullable:true);
 			Field(x => x.TechnicalPlaceId, true);
-			AddNavigationField(
-				name: "equipment",
-				resolve: context => context.Source.Equipment,
-				typeof(EquipmentGraph));
-			AddNavigationField(
-				name: "technicalPlace",
-				resolve: context => context.Source.TechnicalPlace,
-				typeof(TechnicalPlaceGraph));
+			
+			AddNavigationField(name: "equipment", resolve: context => context.Source.Equipment);
+			AddNavigationField(name: "technicalPlace",resolve: context => context.Source.TechnicalPlace);
 		}
 	}
 }

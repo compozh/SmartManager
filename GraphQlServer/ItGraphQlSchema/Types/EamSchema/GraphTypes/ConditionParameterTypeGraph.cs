@@ -14,15 +14,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.ShortName);
 			Field(x => x.WorkRequestDirectionId);
 			
-			AddNavigationField(
-				name: "workRequestDirection",
-				resolve: context => context.Source.WorkRequestDirection);
-			AddNavigationListField(
-				name: "conditionParameters",
-				resolve: context => context.Source.ConditionParameters);
-			AddNavigationConnectionField(
-				name: "conditionParametersConnection",
-				resolve: context => context.Source.ConditionParameters);
+			AddNavigationField(name: "workRequestDirection",resolve: context => context.Source.WorkRequestDirection);
+			AddNavigationListField(name: "conditionParameters",resolve: context => context.Source.ConditionParameters);
+			AddNavigationConnectionField(name: "conditionParametersConnection",resolve: context => context.Source.ConditionParameters);
 		}
 	}
 }

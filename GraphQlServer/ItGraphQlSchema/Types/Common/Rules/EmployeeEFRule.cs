@@ -10,10 +10,6 @@ namespace ItGraphQlSchema.Types.Common
 			entity.HasOne(c => c.ItObject)
 				.WithMany(o => o.Employees)
 				.HasForeignKey(c => c.ItObjectId);
-
-			entity.HasOne(c => c.ItObject)
-				.WithMany(o => o.Employees)
-				.HasForeignKey(c => c.ItObjectId);
 		}
 	}
 }

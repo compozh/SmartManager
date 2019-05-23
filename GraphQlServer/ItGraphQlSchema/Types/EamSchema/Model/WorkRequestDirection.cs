@@ -9,5 +9,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		public List<ConditionParameterType> ConditionParameterTypes { get; set; }
 		
 		public List<ConditionParameterAdditionalData> ConditionParameterAdditionalData { get; set; }
+		
+		public List<ResponsibleSpecialist> ResponsibleSpecialists { get; set; }
 	}
 }

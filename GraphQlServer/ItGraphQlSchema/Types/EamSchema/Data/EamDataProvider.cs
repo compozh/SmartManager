@@ -14,8 +14,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<Equipment> Equipments { get; }
 		IQueryable<TechnicalPlace> TechnicalPlaces { get; }
 		IQueryable<EquipmentType> EquipmentTypes { get; }
-		//IQueryable<EquipmentModel> EquipmentModels { get; }
-		//IQueryable<EquipmentModelGroup> EquipmentModelGroups { get; }
+		IQueryable<Resource> EquipmentModels { get; }
 		IQueryable<EquipmentStatus> EquipmentStatuses { get; }
 		IQueryable<EquipmentCategory> EquipmentCategories { get; }
 		IQueryable<TechnicalPlaceLevel> TechnicalPlaceLevels { get; }
@@ -34,8 +33,6 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<ConditionParameterToModelLink> ConditionParameterToModelLinks { get;  }
 		
 		IQueryable<ConditionParameterValue> DownTimes { get; }
-		
-		IQueryable<MeasurementUnit> MeasurementUnits { get; }
 	}
 	
 	[AddInDI(typeof(IEamDataProvider))]
@@ -57,7 +54,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			{
 				return DbContext.WorkRequests.Where(wr => UserSettings.WorkRequestsAccess != RegAccess.Deny
 														&& UserSettings.AvailableItObjects.Contains(wr.ItObjectId)
-														&& (wr.DepartmentId == null ||
+														&& (wr.DepartmentId == null || UserSettings.AvailableDepartments == null ||
 															UserSettings.AvailableDepartments.Contains(
 																(int) wr.DepartmentId)));
 			}
@@ -74,7 +71,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 				return DbContext.Equipments.Where(eq => UserSettings.EquipmentsAccess != RegAccess.Deny
 														&& (string.IsNullOrEmpty(eq.ItObjectId) ||
 															UserSettings.AvailableItObjects.Contains(eq.ItObjectId))
-														&& (eq.DepartmentId == null ||
+														&& (eq.DepartmentId == null || UserSettings.AvailableDepartments == null ||
 															UserSettings.AvailableDepartments.Contains(
 																(int) eq.DepartmentId)));
 			}
@@ -87,7 +84,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 				return DbContext.TechnicalPlaces.Where(tp => UserSettings.TechnicalPlacesAccess != RegAccess.Deny
 															&& string.IsNullOrEmpty(tp.ItObjectId) ||
 															UserSettings.AvailableItObjects.Contains(tp.ItObjectId) &&
-															(tp.DepartmentId == null ||
+															(tp.DepartmentId == null || UserSettings.AvailableDepartments == null ||
 															UserSettings.AvailableDepartments.Contains(
 																(int) tp.DepartmentId)));
 			}
@@ -98,12 +95,11 @@ namespace ItGraphQlSchema.Types.EamSchema
 			get { return DbContext.EquipmentTypes.Where(et => UserSettings.EquipmentTypesAccess != RegAccess.Deny); }
 		}
 
-		//public IQueryable<EquipmentModel> EquipmentModels
-		//{
-		//	get { return DbContext.EquipmentModels.Where(em => UserSettings.EquipmentModelsAccess != RegAccess.Deny); }
-		//}
-		//
-		//public IQueryable<EquipmentModelGroup> EquipmentModelGroups => DbContext.EquipmentModelGroups;
+		public IQueryable<Resource> EquipmentModels
+		{
+			get { return DbContext.Resources.Where(em => UserSettings.EquipmentModelsAccess != RegAccess.Deny); }
+		}
+		
 		public IQueryable<EquipmentStatus> EquipmentStatuses => DbContext.EquipmentStatuses;
 		public IQueryable<EquipmentCategory> EquipmentCategories => DbContext.EquipmentCategories;
 		public IQueryable<TechnicalPlaceLevel> TechnicalPlaceLevels => DbContext.TechnicalPlaceLevels;
@@ -139,5 +135,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 			base.ItObjects.Where(ito => UserSettings.AvailableItObjects.Contains(ito.Id));
 		public override IQueryable<Employee> Employees =>
 			base.Employees.Where(emp => UserSettings.AvailableItObjects.Contains(emp.ItObjectId));
+		public override IQueryable<Department> Departments =>
+			base.Departments.Where(emp => UserSettings.AvailableItObjects.Contains(emp.ItObjectId));
 	}
 }

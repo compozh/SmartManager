@@ -17,18 +17,10 @@ namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 			Field(x => x.MeasurementUnitId, true);
 			Field(x => x.ConditionParameterTypeId);
 			
-			AddNavigationField(
-				name: "measurementUnit",
-				resolve: context => context.Source.MeasurementUnit);
-			AddNavigationField(
-				name: "conditionParameterType",
-				resolve: context => context.Source.ConditionParameterType);
-			AddNavigationListField(
-				name: "valueRanges",
-				resolve: context => context.Source.ValueRanges);
-			AddNavigationListField(
-				name: "modelLinks",
-				resolve: context => context.Source.ModelLinks);
+			AddNavigationField(name: "measurementUnit", resolve: context => context.Source.MeasurementUnit);
+			AddNavigationField(name: "conditionParameterType", resolve: context => context.Source.ConditionParameterType);
+			AddNavigationListField(name: "valueRanges", resolve: context => context.Source.ValueRanges);
+			AddNavigationListField(name: "modelLinks",resolve: context => context.Source.ModelLinks);
 		}
 	}
 }

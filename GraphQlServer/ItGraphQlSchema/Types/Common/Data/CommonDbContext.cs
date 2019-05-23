@@ -28,9 +28,6 @@ namespace ItGraphQlSchema.Types
 					ruleInstance.AddRulesToModel(modelBuilder);
 				}
 			}
-
-			//todo  Убрать после переноса логика EAM
-			onModelCreating(modelBuilder);
 		}
 
 		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md
