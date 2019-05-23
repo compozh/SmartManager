@@ -20,19 +20,6 @@ namespace ItGraphQlSchema.Types
 			AddQueryField("Items", resolve: context => provider.Items);
 			
 		}
-		
 
-		public static void Config(IServiceCollection services, IConfiguration configuration)
-		{
-			
-			services.AddDbContext<OrderDbContext>(options =>
-				options.UseSqlServer(configuration["ConnectionStrings:Connection:ConnectionString"]));
-			
-			EfGraphQLConventions.RegisterInContainer(services, OrderDbContext.DataModel);
-			GraphTypeTypeRegistry.Register<ItGraphQlSchema.Types.Order, OrderType>();
-			GraphTypeTypeRegistry.Register<ItGraphQlSchema.Types.Item, ItemType>();
-			GraphTypeTypeRegistry.Register<ItGraphQlSchema.Types.OrderItem, OrderItemType>();
-
-		}
 	}
 }

@@ -6,7 +6,7 @@ using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
-	[AddInDIAttribute]
+	[AddInDIAttribute, GraphType(typeof(Item))]
 	public class ItemType : EfObjectGraphType<Item>
 	{
 		public ItemType(IEfGraphQLService service):base(service)

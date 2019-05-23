@@ -18,33 +18,19 @@ namespace ItGraphQlSchema.CommonSchema
 				Name = "QueryRoot"
 			};
 			Query = root;
-			Mutation = new ObjectGraphType {
+			var mutation = new ObjectGraphType {
 				Name = "MutationRoot"
 			};
-			
+
 			var schemaTools = _dependencyResolver.Resolve<SchemaTools>();
-			var cache = _dependencyResolver.Resolve<IMemoryCache>();
-			
-			//Выбираем из Local Storage схему
-			var schemaDescription = cache.Get<SchemaDescription>(schemaName);
 
-			// ВРЕМЕННО
-			schemaDescription = null;
-			//Проверяем, схему, если нашли в хранилище, то ок
-
+			//Проверяем, схему, если нашли, то ок
+			var schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
 			if (schemaDescription == null)
 			{
-				schemaDescription = schemaTools.GetSchemaDescription(schemaName, anonymousСall);
-				if (schemaDescription != null)
-				{
-					//Кешируем данные
-					cache.Set<SchemaDescription>(schemaName, (SchemaDescription)schemaDescription);
-				}
-				else
-				{
-					return;
-				}
+				return;
 			}
+			
 			//Проверка на то, что запрашиваем схему анонимно, но она не доступна для анонимного вызова.
 			if (anonymousСall && schemaDescription.AllowAnonymosly != "+")
 			{
@@ -59,8 +45,13 @@ namespace ItGraphQlSchema.CommonSchema
 					continue;
 				}
 
-				registerSchemaType(type, root, Mutation as ObjectGraphType);
+				registerSchemaType(type, root, mutation);
+			}
 
+			// Создаём объект мутаций, только если были найдены походящие классы
+			if (mutation.Fields.Any())
+			{
+				Mutation = mutation;
 			}
 		}
 
@@ -75,6 +66,7 @@ namespace ItGraphQlSchema.CommonSchema
 					var resolver = new object();
 					root.Field(assemblyType, type.Id, type.Name, resolve: ctx => resolver);
 				}
+				// Пытаемся определить класс для мутаций
 				assemblyType = Type.GetType("ItGraphQlSchema.Types." + type.Name+"Mutation");
 				if (assemblyType != null)
 				{

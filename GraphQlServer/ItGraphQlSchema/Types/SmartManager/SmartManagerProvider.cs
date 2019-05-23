@@ -59,6 +59,10 @@ namespace ItGraphQlSchema.Types.SmartManager
 					var tasks = JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
 					foreach (var tas in tasks)
 					{
+						if (string.IsNullOrEmpty(tas.addedPhoto))
+						{
+							continue;
+						}
 						tas.addedPhoto = webServiceUrl + tas.addedPhoto + "&folder=content&nodownload=1";
 					}
 
@@ -98,6 +102,10 @@ namespace ItGraphQlSchema.Types.SmartManager
 				listFile.Add(result);
 			}
 
+			if (string.IsNullOrEmpty(smFullINfo.AddedPhoto))
+			{
+				return smFullINfo;
+			}
 			var filePhoto = smFullINfo.AddedPhoto;
 			smFullINfo.AddedPhoto = webServiceUrl + filePhoto + "&folder=content&nodownload=1";
 			

@@ -1,5 +1,5 @@
 ﻿using System;
-using GraphQlServer.Authentication;
+using AuthenticationMiddleware;
 using GraphQL;
 using GraphQL.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -116,9 +116,8 @@ namespace GraphQlServer
 			app.UseSession();
 			app.UseRequestLocalization();
 			
-			app.UseMiddleware<AuthenticationMiddleware>(new AuthenticationSettings());
 			app.UseAuthentication();
-
+			app.UseMiddleware<Authentication>(new AuthenticationSettings());
 			app.UseMiddleware<GraphQLMiddleware>(new GraphQLSettings {
 				BuildUserContext = ctx => new GraphQLUserContext {
 					User = ctx.User

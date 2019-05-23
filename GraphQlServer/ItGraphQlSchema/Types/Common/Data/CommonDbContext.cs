@@ -28,6 +28,9 @@ namespace ItGraphQlSchema.Types
 					ruleInstance.AddRulesToModel(modelBuilder);
 				}
 			}
+
+			//todo  Убрать после переноса логики
+			testOnModelCreating(modelBuilder);
 		}
 
 		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md
