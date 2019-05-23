@@ -42,7 +42,7 @@ namespace ItGraphQlSchema.Types
 
 		//protected override void OnModelCreating(ModelBuilder modelBuilder)
 		// Todo заменить на отдельные правила
-		private void eamOnModelCreating(ModelBuilder modelBuilder)
+		private void onModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<SimpleDictionaryRecord>()
 				.HasDiscriminator<string>("Code")

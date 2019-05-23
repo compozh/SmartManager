@@ -30,7 +30,7 @@ namespace ItGraphQlSchema.Types
 			}
 
 			//todo  Убрать после переноса логика EAM
-			eamOnModelCreating(modelBuilder);
+			onModelCreating(modelBuilder);
 			testOnModelCreating(modelBuilder);
 		}
 
