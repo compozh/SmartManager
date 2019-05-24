@@ -1,6 +1,6 @@
 <template>
     <v-layout>
-        <user-panel><v-layout>
+        <user-panel></user-panel>
         <purchase-route-links></purchase-route-links>
     </v-layout>
 </template>
