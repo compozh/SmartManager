@@ -1,7 +1,7 @@
 ﻿using GraphQL.EntityFramework;
 using GraphQL.Types;
 
-namespace ItGraphQlSchema.Types
+namespace ItGraphQlSchema.Types.Purchases
 {
 	[AddInDI, GraphType(typeof(CartItem))]
 	public class CartItemGraph : EfObjectGraphType<CartItem>

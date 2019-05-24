@@ -10,10 +10,6 @@ namespace ItGraphQlSchema.Types.Common
 			entity.HasOne(resourceGroup => resourceGroup.Parent)
 				.WithMany()
 				.HasForeignKey(resourceGroup => resourceGroup.ParentId);
-
-			//entity.HasMany(c => c.Resources)
-			//	.WithOne()
-			//	.HasForeignKey(w => w.ResourceGroupId);
 		}
 	}
 }

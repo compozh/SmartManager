@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace ItGraphQlSchema.Types
+namespace ItGraphQlSchema.Types.Purchases
 {
 	public interface IPurchasesDataProvider : ICommonDataProvider
 	{
 		IQueryable<CartItem> CartItems { get; }
-		IQueryable<Application> Applications { get; }
+		IQueryable<Document> Applications { get; }
 	}
 
 	[AddInDI(typeof(IPurchasesDataProvider))]
@@ -25,6 +25,6 @@ namespace ItGraphQlSchema.Types
 
 		public IQueryable<CartItem> CartItems => DbContext.CartItems.Where(i => i.UserId == UserSettings.UserId);
 
-		public IQueryable<Application> Applications => DbContext.Applications;
+		public IQueryable<Document> Applications => DbContext.Documents.Where(i => UserSettings.ApplicationDocumentTypes.Contains(i.DocumentTypeId));
 	}
 }

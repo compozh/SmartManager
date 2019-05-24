@@ -1,6 +1,6 @@
 ﻿using GraphQL.EntityFramework;
 
-namespace ItGraphQlSchema.Types
+namespace ItGraphQlSchema.Types.Purchases
 {
 	[AddInDI]
 	class PurchasesQuery : QueryGraphType
@@ -12,6 +12,10 @@ namespace ItGraphQlSchema.Types
 		{
 			_dataProvider = dataProvider;
 			Name = "PurchasesQuery";
+
+			AddQueryField(
+				name: "applications",
+				resolve: context => _dataProvider.Applications);
 
 			AddQueryField(
 				name: "employees",
@@ -55,9 +59,6 @@ namespace ItGraphQlSchema.Types
 
 			AddQueryField("cartItems", c => _dataProvider.CartItems);
 			AddQueryConnectionField("cartItemsConnection", c => _dataProvider.CartItems);
-
-			AddQueryField("applications", c => _dataProvider.Applications);
-			AddQueryConnectionField("applicationsConnection", c => _dataProvider.Applications);
 		}
 	}
 }
