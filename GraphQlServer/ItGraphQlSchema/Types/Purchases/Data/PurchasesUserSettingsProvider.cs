@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Web.WebRequests;
 
-namespace ItGraphQlSchema.Types
+namespace ItGraphQlSchema.Types.Purchases
 {
 	public interface IPurchasesUserSettingsProvider
 	{

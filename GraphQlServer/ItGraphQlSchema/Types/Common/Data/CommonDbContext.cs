@@ -16,6 +16,8 @@ namespace ItGraphQlSchema.Types
 		public DbSet<MeasurementUnit> MeasurementUnits { get; set; }
 		public DbSet<Resource> Resources { get; set; }
 		public DbSet<ResourceGroup> ResourcesGroups { get; set; }
+		public DbSet<Document> Documents { get; set; }
+		public DbSet<DocumentRow> DocumentRows { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

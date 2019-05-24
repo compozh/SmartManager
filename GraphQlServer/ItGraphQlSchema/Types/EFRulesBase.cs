@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Linq;
 
 namespace ItGraphQlSchema.Types
 {
@@ -12,10 +13,45 @@ namespace ItGraphQlSchema.Types
 	{
 		public void AddRulesToModel(ModelBuilder modelBuilder)
 		{
-			AddRuleToModel(modelBuilder.Entity<T>());
+			var type = typeof(T);
+			GraphTypeFKAttribute graphTypeAttribute;
+			var entityBuilder = modelBuilder.Entity<T>();
+			foreach (var prop in type.GetProperties())
+			{
+				var attr = prop.GetCustomAttributes(typeof(GraphTypeFKAttribute), true);
+				if (!attr.Any())
+				{
+					continue;
+				}
+				graphTypeAttribute = attr.Cast<GraphTypeFKAttribute>().First();
+				switch (graphTypeAttribute.RelationType)
+				{
+					case RelationType.OneToMany:
+						var referenceCollectionBuilder = entityBuilder
+													.HasOne(prop.PropertyType, prop.Name)
+													.WithMany()
+													.HasForeignKey(graphTypeAttribute.ForignKeyNames);
+						if (graphTypeAttribute.PrincipalKeyNames != null && graphTypeAttribute.PrincipalKeyNames.Any())
+						{
+							referenceCollectionBuilder.HasPrincipalKey(graphTypeAttribute.PrincipalKeyNames);
+						}
+						break;
+					case RelationType.ManyToOne:
+						referenceCollectionBuilder = entityBuilder
+							.HasMany(graphTypeAttribute.RelatedType, prop.Name)
+							.WithOne(graphTypeAttribute.NavigationFromName)
+							.HasForeignKey(graphTypeAttribute.ForignKeyNames);
+						if (graphTypeAttribute.PrincipalKeyNames != null && graphTypeAttribute.PrincipalKeyNames.Any())
+						{
+							referenceCollectionBuilder.HasPrincipalKey(graphTypeAttribute.PrincipalKeyNames);
+						}
+						break;
+				}
+			}
+			AddRuleToModel(entityBuilder);
 		}
 
-		public abstract void AddRuleToModel(EntityTypeBuilder<T> entity);
+		public virtual void AddRuleToModel(EntityTypeBuilder<T> entity) { }
 
 	}
 }

@@ -34,8 +34,6 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<ConditionParameterToModelLink> ConditionParameterToModelLinks { get;  }
 		
 		IQueryable<ConditionParameterValue> DownTimes { get; }
-		
-		IQueryable<MeasurementUnit> MeasurementUnits { get; }
 	}
 	
 	[AddInDI(typeof(IEamDataProvider))]
