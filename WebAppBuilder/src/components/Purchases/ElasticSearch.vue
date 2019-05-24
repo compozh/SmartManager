@@ -80,7 +80,7 @@ import Axios from "axios";
     }
 </script>
 
-<style>
+<style scoped>
     .elastic-search-autocomplete input{
         align-self: center;
         justify-self: center;
