@@ -86,7 +86,6 @@ function createComponentObject(com){
     } : undefined,
     attrs: {},
     slot:com.Slot,
-    children: _.orderBy(com.ChildComponents, "Sort").map(subCom => createComponentObject(subCom))
   };
    // конвертируем свойства к нужному виду:
    (com.Properties || []).forEach(property => {
