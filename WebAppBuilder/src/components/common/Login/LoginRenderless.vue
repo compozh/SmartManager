@@ -1,75 +1,99 @@
-<template>
-  <v-flex sm6 xs12 md6 lg4>
-    <div class="login">
-      <v-text-field
-        v-model="userLoginPassword.login"
-        :label="$t('login')"
-        required
-        color="cyan"
-        @keyup.enter="Login()"
-      ></v-text-field>
-      <v-text-field
-        v-model="userLoginPassword.password"
-        :label="$t('password')"
-        required
-        type="password"
-        color="cyan"
-        @keyup.enter="Login()"
-      ></v-text-field>
-      <div class="btn-and-checkbox">
-        <v-checkbox
-          v-model="userLoginPassword.rememberMe"
-          :label="$t('rememberMe')"
-          color="cyan"
-        ></v-checkbox>
-        <v-btn @click="Login()" color="cyan" dark v-text="$t('signIn')"/>
-      </div>
-      <div class="message">
-        <p v-if="message == '1'">{{$t('emptyLogin')}}</p>
-        <p v-if="message == '2'">{{$t('emptyPassword')}}</p>
-      </div>
-    </div>
-  </v-flex>
-</template>
 <script>
-export default {
-  name: "login",
-  data() {
-    return {
-      userLoginPassword: {
-        login: "",
-        password: "",
-        rememberMe: false
+  export default {
+    name: 'loginRenderless',
+    data: () => ({
+      userData: {
+        login: '',
+        password: '',
+        remember: false
       },
-      message: "0"
-    };
-  },
-  computed: {
-    routeToBack() {
-      return this.$route.params.routeToBack  ;
-    }
-  },
-  beforeMount(){
-    console.log(this.$route.meta.Section.Properties.Allow)
-  },
-  methods: {
-    Login() {
-      if (this.userLoginPassword.login && this.userLoginPassword.password) {
-        this.$store.dispatch("Login", this.userLoginPassword).then(result => {
-          // Если авторизация прошла успешно, уходим со страницы логина
-          if (result) {
-
-            this.$router.replace({ path: this.routeToBack });
-          }
-        });
-      } else if (!this.userLoginPassword.login) {
-        this.message = "1";
-      } else if (!this.userLoginPassword.password) {
-        this.message = "2";
+      message: ''
+    }),
+    computed: {
+      routeToBack() {
+        return this.$route.params.routeToBack
       }
+    },
+    methods: {
+      login() {
+        const login = this.userData.login
+        const password = this.userData.password
+        if (login && password) {
+          this.$store.dispatch("Login", this.userData)
+            .then(result => {
+              // Если авторизация прошла успешно, уходим со страницы логина-->
+              if (result) {
+               this.$router.replace({path: this.routeToBack})
+              }
+            });
+        } else if (!login) {
+          //this.message = this.$t('emptyLogin')
+        } else if (!password) {
+          //this.message = this.$t('emptyPassword')
+        }
+      }
+    },
+    render() {
+      return this.$scopedSlots.default({
+        userData: this.userData,
+        message: this.message,
+        params: {
+          loginAttrs: {
+            value: this.userData.login,
+            label: 'Логин',
+            placeholder: 'Введите логин...',
+            title: 'Поле для ввода логина',
+            required: true
+          },
+          loginEvents: {
+            input: value => this.userData.login = value,
+            keydown: e => {
+              if (e.key === 'Enter') {
+                this.userData.login = e.target.value
+                e.preventDefault()
+                this.login()
+              }
+            }
+          },
+          passwordAttrs: {
+            type: 'password',
+            value: this.userData.password,
+            label: 'Пароль',
+            placeholder: 'Введите пароль...',
+            title: 'Поле для ввода пароля',
+            required: true
+          },
+          passwordEvents: {
+            input: value => this.userData.password = value,
+            keydown: e => {
+              if (e.key === 'Enter') {
+                this.userData.password = e.target.value
+                e.preventDefault()
+                this.login()
+              }
+            }
+          },
+          rememberAttrs: {
+            value: this.userData.remember,
+            label: 'Оставаться в системе',
+            title: '',
+          },
+          rememberEvents: {
+            change: () => this.userData.remember = !this.userData.remember
+          },
+          buttonAttrs: {
+            value: this.userData.remember
+          },
+          buttonEvents: {
+            click: () => this.login()
+          },
+          messageAttrs: {
+            style: [
+              { display: this.message ? 'block' : 'none' }
+            ]
+          }
+        }
+      })
     }
   }
-};
 </script>
-<style>
-</style>
