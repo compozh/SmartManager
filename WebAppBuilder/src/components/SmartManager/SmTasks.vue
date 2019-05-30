@@ -83,7 +83,15 @@
       checkTasks() {
         return this.tasks ? this.tasks.length : 0;
       }
+    },
+    methods:{
+      beforeRouteUpdate (to, from, next){
+        if(this.$store.getters.getAppData("SMTASKS")){
+				 this.tasks = this.$store.getters.getAppData("SMTASKS").data.smtasks.tasks;
+			  }
+		  },
     }
+    
   }
 </script>
 

@@ -163,7 +163,8 @@ let generateRouteFromDescription = (route, section) =>
     name: route.Id,
     path: route.Path,
     // Компоненты в маршруте
-    components: createComponentsForRoute(_.orderBy(route.Components, "Sort")),
+    components:    createComponentsForRoute( route.RootComponent ? [concatRootCompAndComponents(route.RootComponent, route.Components)] : _.orderBy(route.Components, "Sort")),
+    // components: createComponentsForRoute(_.orderBy(route.Components, "Sort")),
     // Вложенные маршруты
     children: _.orderBy(route.Children||[], ["Sort"]).map(r=>generateRouteFromDescription(r,section)),
     meta: {
@@ -173,4 +174,12 @@ let generateRouteFromDescription = (route, section) =>
     }
   })
 
-
+let concatRootCompAndComponents = (rootComponent, components)=>({
+  Id: rootComponent.Id,
+  Name: rootComponent.Name,
+  Properties: rootComponent.Properties,
+  Slot: rootComponent.Slot, 
+  Sort: rootComponent.Sort,
+  DataSource: rootComponent.DataSource,
+  ChildComponents : _.orderBy(components, "Sort")
+})
