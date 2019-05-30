@@ -19,6 +19,13 @@ export default {
         if(cur.beforeRouteUpdate){
           cur.beforeRouteUpdate(to,from);
         }
+        if(cur.$children){
+          for(var chilCur of cur.$children){
+            if(chilCur.beforeRouteUpdate){
+              chilCur.beforeRouteUpdate(to,from);
+            }
+          }
+        }
       }
     },
     // Функция для получения данных компонента, принимает boolean тип, 
@@ -142,6 +149,17 @@ export default {
   //////            COMPUTED PROPERTIES
   /////////////////////////////////////////////////
   computed: {
+    // компоненты в именованых слотах
+    slotGroups() {
+      var groups = _.groupBy(this.internalComponent.children, el => {
+        return el.slot == "default" || !el.slot ? "" : el.slot;
+      });
+      var a = _.keys(groups).map(el => ({
+        key: el,
+        components: groups[el]
+      }));
+      return _.filter(a, el => !!el.key);
+    },
     // компоненты в слотах по умолчанию
     defaultSlotGroup() {
       return _.filter(this.internalComponent.children, el => !el.slot || el.slot == "default")
@@ -204,6 +222,15 @@ export default {
       }
     }
 
+    // Вложенные компоненты
+    // Компоненты в именованных слотах
+    let componentsInNamedSlots = this.slotGroups.map(slotGroup => {
+      return h('template', {
+          slot: slotGroup.key
+        },
+        slotGroup.components.map(subComponent => this.createCommonComponent(subComponent,
+          this.storeScope, h)))
+    })
     // Компоненты в слоте по умолчанию
     let componentsInDefaultSlot = this.defaultSlotGroup.map(defSlotComp => this.createCommonComponent(
       defSlotComp, this.storeScope, h))
@@ -226,8 +253,8 @@ export default {
         model,
         on
       },
-      // Наполнение корневого
-      [componentsInDefaultSlot])
+      // Наполнение корневого компонента дочерними
+      [componentsInNamedSlots, componentsInDefaultSlot])
   },
 
 };
