@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<!-- <sm-tasks :tasks = tasks ></sm-tasks> -->
 		<slot ></slot>
 	</div>
 </template>
@@ -16,16 +15,6 @@ export default {
 			}
 			return {};
 		}
-	},
-	methods:{
-		// beforeRouteUpdate (to, from, next) {
-		// 	// получение данных для дочернего компонента
-		// 	for(var cur of  this.$children){
-		// 		if(cur.beforeRouteUpdate){
-		// 			cur.beforeRouteUpdate(to,from);
-		// 		} 
-		// 	}
-		// }
 	},
 }
 </script>
