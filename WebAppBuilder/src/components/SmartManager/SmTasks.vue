@@ -14,7 +14,10 @@
               v-for="task in tasks"
               :key="task.id"
       >
-        <v-card class="task-item">
+        <v-card
+          class="task-item"
+          @click="goToTaskInfo(task.id)"
+        >
           <v-layout row wrap align-center>
             <v-flex xs2 sm1 d-flex justify-center>
               <v-img class="user-icon"
@@ -61,7 +64,6 @@
         <span class="title grey--text font-weight-thin pa-2">Нет задач в папке</span>
       </v-flex>
     </v-layout>
-
   </v-container>
 </template>
 
@@ -84,14 +86,17 @@
         return this.tasks ? this.tasks.length : 0;
       }
     },
-    methods:{
-      beforeRouteUpdate (to, from, next){
-        if(this.$store.getters.getAppData("SMTASKS")){
-				 this.tasks = this.$store.getters.getAppData("SMTASKS").data.smtasks.tasks;
-			  }
-		  },
+    methods: {
+      beforeRouteUpdate(to, from, next) {
+        if (this.$store.getters.getAppData("SMTASKS")) {
+          this.tasks = this.$store.getters.getAppData("SMTASKS").data.smtasks.tasks;
+        }
+      },
+      goToTaskInfo(taskId) {
+        this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
+      }
     }
-    
+
   }
 </script>
 
