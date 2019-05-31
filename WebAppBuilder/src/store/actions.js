@@ -2,25 +2,23 @@ import Axios from "axios";
 import * as jsonpatch from '../patching'
 
 
-
-
 const actions = ({
-  GetCurrentUser(context){
+  GetCurrentUser(context) {
 
-      Axios({
-        method: 'POST',
-        url: `${myConfig.GrapgQlUrl}api/authentication/user`,
-        withCredentials:true,
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
-      }).then(resp => {
-        context.commit("setCurrentUser", resp.data )
-        //console.log(resp.data)
-      });
+    Axios({
+      method: 'POST',
+      url: `${myConfig.GrapgQlUrl}api/authentication/user`,
+      withCredentials: true,
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
+    }).then(resp => {
+      context.commit("setCurrentUser", resp.data)
+      //console.log(resp.data)
+    });
 
   },
 
 
-  LogOut(context){
+  LogOut(context) {
     localStorage.removeItem("ItUniTocken");
     localStorage.removeItem('userName');
     context.commit("setCurrentUser", "");
@@ -33,19 +31,18 @@ const actions = ({
     context.commit("setCurrentUser", "");
 
     return Axios.post(`${myConfig.GrapgQlUrl}api/authentication/login`, {
-        login: loginParam.login,
-        password: loginParam.password,
-        RememberMe: loginParam.rememberMe
-      },{
-        withCredentials:true
-      }).then(
-        // всё Ок
+      login: loginParam.login,
+      password: loginParam.password,
+      RememberMe: loginParam.rememberMe
+    }, {
+      withCredentials: true
+    }).then(
+      // всё Ок
       (response) => {
-        debugger
         var token = response.data.access_token;
         var username = response.data.username
         if (token) {
-          context.commit("setCurrentUser",  username );
+          context.commit("setCurrentUser", username);
           localStorage.setItem('ItUniTocken', token);
           localStorage.setItem('userName', username);
           return true;
@@ -56,44 +53,43 @@ const actions = ({
 
 
   /** Загрузить данные для компонента */
-  LoadDataForComponent(context, {datasource,key}){
-
+  LoadDataForComponent({commit}, {datasource, key}) {
     return Axios({
-        method: 'POST',
-        url: myConfig.GrapgQlUrl+'api/graphql',
-        withCredentials:true,
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
-        data: { SchemaName:datasource.schema, query: datasource.query}
-      }).then(resp => {
-        return context.commit("setAppData", { key, data:resp.data })
-        //console.log(resp.data)
-      });
+      method: 'POST',
+      url: myConfig.GrapgQlUrl + 'api/graphql',
+      withCredentials: true,
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+      data: {SchemaName: datasource.schema, query: datasource.query}
+    }).then(resp => {
+      return commit("setAppData", {key, data: resp.data})
+      //console.log(resp.data)
+    });
   },
 
   /** Загрузить описание приложения */
   GetAppDescription(context, appId) {
     return Axios({
       method: 'POST',
-      url: myConfig.GrapgQlUrl+'api/graphql',
-      withCredentials:true,
-      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+      url: myConfig.GrapgQlUrl + 'api/graphql',
+      withCredentials: true,
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
       data: {
-        query:"query q($appId : String) {\n  webapps{\n    application(applicationId:$appId)\n  }\n}",
+        query: "query q($appId : String) {\n  webapps{\n    application(applicationId:$appId)\n  }\n}",
         variables:
-          { appId},
-        operationName:"q",
-        SchemaName:"WEBAPPS"
+          {appId},
+        operationName: "q",
+        SchemaName: "WEBAPPS"
       }
     }).then(resp => {
       // Ошибка загрузки
-      if(!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application){
+      if (!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application) {
         const spacing = '5px';
         const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
         console.log(`%cОшибка загрузки приложения "${appId}"`, styles);
         return;
       }
       // Нет приложения
-      if(resp.data.data.webapps.application == "null"){
+      if (resp.data.data.webapps.application == "null") {
         const spacing = '5px';
         const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
         console.log(`%cОтсутствует описание приложения "${appId}"`, styles);
