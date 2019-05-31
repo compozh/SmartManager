@@ -134,10 +134,6 @@
     align-content: center;
   }
 
-  /*.v-navigation-drawer--mini-variant .menu-item .v-badge__badge {*/
-  /*  visibility: visible;*/
-  /*}*/
-
   /* Медиазапрос для подражания поведению тулбара на xs экранах */
   @media only screen and (max-width: 959px) {
     .menu-item a {
