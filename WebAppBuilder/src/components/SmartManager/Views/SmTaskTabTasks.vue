@@ -1,11 +1,12 @@
 <template>
   <v-container pa-0>
     <v-layout row wrap>
-      <v-flex xs4 sm3 md2 lg1 d-flex justify-center align-center>
-        <v-img class="user-icon"
-               v-if="task.addedPhoto"
-               :src="task.addedPhoto"
-               contain
+      <v-flex xs5 sm4 md3 lg2 xl1 d-flex justify-center align-center>
+        <v-img
+          class="user-icon"
+          v-if="task.addedPhoto"
+          :src="task.addedPhoto"
+          contain
         ></v-img>
         <v-icon
           v-else
@@ -14,7 +15,7 @@
         >account_circle
         </v-icon>
       </v-flex>
-      <v-flex xs8 sm9 md10 lg11 py-1 pr-2>
+      <v-flex xs7 sm8 md9 lg10 xl11 py-1 pr-2>
         <v-layout column text-xs-left>
           <v-flex>
             <span
@@ -35,12 +36,13 @@
         </v-layout>
       </v-flex>
     </v-layout>
+    <v-divider></v-divider>
   </v-container>
 </template>
 
 <script>
   export default {
-    name: "sm-task-details",
+    name: "smTaskTabTasks",
     props: ['task']
   }
 </script>
@@ -51,5 +53,4 @@
     max-width: 50px;
     border-radius: 50%;
   }
-
 </style>
