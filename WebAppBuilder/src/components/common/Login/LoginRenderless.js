@@ -1,5 +1,5 @@
 export default {
-  name: 'loginRenderless',
+  name: 'loginRl',
   data: () => ({
     userData: {
       login: '',
