@@ -1,4 +1,6 @@
 ﻿using GraphQL.EntityFramework;
+using GraphQL.Types;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.Purchases
 {
@@ -33,9 +35,16 @@ namespace ItGraphQlSchema.Types.Purchases
 				name: "measurementUnits",
 				resolve: context => _dataProvider.MeasurementUnits);
 
+			//Field<ListGraphType<ResourceGraph>>(
+			//	name: "",
+			//	arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "folderId", Description = "Уникальный идентификатор задачи" }),
+			//	resolve: (context => provider.GetTasksAsync(context.GetArgument<string>("folderId"))),
+			//	description: "Задачи");
+
 			AddQueryField(
 				name: "resources",
-				resolve: context => _dataProvider.Resources);
+				arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "name", Description = "Имя ресурса" }),
+				resolve: context => _dataProvider.GetResorces(context.GetArgument<string>("name")));
 
 			AddQueryField(
 				name: "resourcesGrops",

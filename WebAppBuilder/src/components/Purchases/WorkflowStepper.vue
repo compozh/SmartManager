@@ -3,12 +3,12 @@
         <v-stepper>
             <v-stepper-header>
                 <template v-for="(stage, n) in stages">
-                    <v-stepper-step :key="n" :step="stage.id" :complete="stage.isCurrent">
+                    <v-stepper-step :key="`step-${n}`" :step="stage.id" :complete="stage.isCurrent">
                         {{stage.name}}
                     </v-stepper-step>
                     <v-divider
                         v-if="n !== stages.length - 1"
-                        :key="n"
+                        :key="`div-${n}`"
                     />
                 </template>
             </v-stepper-header>

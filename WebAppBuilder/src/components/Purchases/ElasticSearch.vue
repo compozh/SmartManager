@@ -13,7 +13,15 @@
             cache-items
             hide-no-data
             hide-details
-        />
+            :value-comparator="textCompare"
+        >
+            <template slot = "item" slot-scope="data">
+                <v-btn icon @click.stop="alert(data.item.fullName)">
+                    <v-icon>add_shopping_cart</v-icon> 
+                </v-btn>
+                <span v-text="data.item.fullName"></span>
+            </template>
+        </v-autocomplete>
         <v-icon v-show="!showSearch" @click="toogleSearchPanel">
             search
         </v-icon>
@@ -37,7 +45,7 @@ import Axios from "axios";
         }),
         watch: {
             search (val) {
-                console.log(val);
+                //console.log(val);
                 val && val.length > 3 && val !== this.select && this.querySelections(val)
             }
         },
@@ -61,7 +69,7 @@ import Axios from "axios";
                     headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
                     data: { 
                         SchemaName:'PurchasesSchema', 
-                        query: `{ purchases { resources (where:{path:"name" comparison:like  value:"%${v}%"}){fullName,id}}}`
+                        query: `{ purchases { resources (name:"%${v}%"){fullName,id}}}`
                     } 
                 }).then(resp => {
             // тут обработка результата
@@ -76,6 +84,11 @@ import Axios from "axios";
                 this.loading = false
                 }, 0)
             },
+            textCompare(a1,a2){
+                debugger;
+
+                return true;
+            }
         }
     }
 </script>

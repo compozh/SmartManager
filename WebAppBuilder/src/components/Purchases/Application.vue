@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card>
+        <v-card v-if="application">
             <v-card-title class="headline">
                 <v-layout column>
                     <workflow-stepper object="" keyvalue=""/>
@@ -14,11 +14,11 @@
                     <v-card :key="row.id">
                         <v-layout row-card>
                             <v-flex>
-                                <v-autocomplete 
+                                <v-autocomplete :key="`resource-component-${row.id}`"
                                     v-model="row.resource"
                                     :loading="resourceComp[row.id].loading"
                                     :items="resourceItemsComp"
-                                    :search-input.sync="searchComp.resources[row.id]"
+                                    :search-input.sync="searchResourcesComp[row.id]"
                                     cache-items
                                     hide-no-data
                                     hide-details
@@ -28,12 +28,12 @@
                                     clearable  
                                 />
                             </v-flex>
-                            <v-flex>
-                                <v-autocomplete
+                            <!--v-flex>
+                                <v-autocomplete :key="`measurement-component-${row.id}`"
                                     v-model="row.measurementUnit"
                                     :loading="measurementComp[row.id].loading"
                                     :items="measurementItemsComp"
-                                    :search-input.sync="searchComp.measurementUnits[row.id]"
+                                    :search-input.sync="searchMeasurements[row.id]"
                                     cache-items
                                     hide-no-data
                                     hide-details
@@ -42,12 +42,12 @@
                                     item-text="name"
                                     clearable  
                                 />
-                            </v-flex>
-                            <v-btn icon>
+                            </v-flex-->
+                            <v-btn :key="`delete-button-${row.id}`" icon>
                                 <v-icon color="error">delete</v-icon>
                             </v-btn>
                             <v-btn icon>
-                                <v-icon color="primary" @click="editRecord()">edit</v-icon>
+                                <v-icon :key="`edit-button-${row.id}`" color="primary" @click="editRecord()">edit</v-icon>
                             </v-btn>
                         </v-layout>
                     </v-card>
@@ -72,12 +72,9 @@ import _ from 'lodash';
           resourceItems: [],
           measurementItems: [],
           searchOld: undefined,
-          search: undefined,
-          COMPONENT_TYPES: {
-              RESOURCES: "resources",
-              MEASUREMENTS: "measurementUnits",
-
-          }
+          //search: undefined,
+          searchResourcesOld: undefined,
+          searchResources: undefined,
         }),
         filters:{
             formatDate: (value) => {
@@ -87,25 +84,68 @@ import _ from 'lodash';
             }
         },
         watch: {
-            search: {
+            // search: {
+            //     handler(val, oldVal) {
+            //         if (!val || !this.searchOld || JSON.stringify(val) == JSON.stringify(this.searchOld)){
+            //             return;
+            //         }
+
+            //         var name = "";
+            //         var items = [];
+            //         var object = null;
+            //         var query = "";
+
+            //         for (const key in this.COMPONENT_TYPES) {
+            //             if (this.COMPONENT_TYPES.hasOwnProperty(key)) {
+            //                 const element = this.COMPONENT_TYPES[key];
+            //                 if (!val[element] || !this.searchOld[element] || 
+            //                     JSON.stringify(val[element]) != JSON.stringify(this.searchOld[element])){
+            //                     name = element;
+            //                 }
+            //             }
+            //         }
+
+            //         var id = 0;
+            //         var v = "";
+            //         for (const key in val) {
+            //             if (val.hasOwnProperty(key)) 
+            //             {
+            //                 const el1 = val[key];
+            //                 const el2 = this.resourceSearchOld[key];
+            //                 if (el1 != el2){
+            //                     id = key;
+            //                     v = el1;
+            //                     break;
+            //                 }
+            //             }
+            //         }
+
+            //         switch (name) {
+            //             case this.COMPONENT_TYPES.RESOURCES:
+            //                 name = element;
+            //                 items = this.resourceItems;
+            //                 object = this.resource[id];
+            //                 query = `{ purchases { resources (where:{path:"name" comparison:like  value:"%${v}%"}){fullName,id}}}`;
+            //                 break;
+                    
+            //             case this.COMPONENT_TYPES.MEASUREMENTS:
+            //                 name = element;
+            //                 items = this.measurementItems;
+            //                 object = this.measurement[id];
+            //                 query = `{purchases{measurementUnits(where:[{path:"isValid",comparison:equal,value:"true"},{path:"name",comparison:like,value:"%${v}%"}]){id,name}}}`;
+            //                 break;
+            //         }
+
+            //         this.resourceSearchOld = val.slice();
+            //         debugger;
+            //         this.querySelections(query,object,items,name)
+            //     },
+            //     deep: true
+            // },
+            searchResources: {
                 handler(val, oldVal) {
-                    if (!val || !this.searchOld || JSON.stringify(val) == JSON.stringify(this.searchOld)){
+                    if (!val || !this.searchResourcesOld || JSON.stringify(val) == JSON.stringify(this.searchResourcesOld)){
                         return;
-                    }
-
-                    var name = "";
-                    var items = [];
-                    var object = null;
-                    var query = "";
-
-                    for (const key in this.COMPONENT_TYPES) {
-                        if (this.COMPONENT_TYPES.hasOwnProperty(key)) {
-                            const element = this.COMPONENT_TYPES[key];
-                            if (!val[element] || !this.searchOld[element] || 
-                                JSON.stringify(val[element]) != JSON.stringify(this.searchOld[element])){
-                                name = element;
-                            }
-                        }
                     }
 
                     var id = 0;
@@ -114,7 +154,7 @@ import _ from 'lodash';
                         if (val.hasOwnProperty(key)) 
                         {
                             const el1 = val[key];
-                            const el2 = this.resourceSearchOld[key];
+                            const el2 = this.searchResourcesOld[key];
                             if (el1 != el2){
                                 id = key;
                                 v = el1;
@@ -122,29 +162,19 @@ import _ from 'lodash';
                             }
                         }
                     }
-
-                    switch (name) {
-                        case this.COMPONENT_TYPES.RESOURCES:
-                            name = element;
-                            items = this.resourceItems;
-                            object = this.resource[id];
-                            query = `{ purchases { resources (where:{path:"name" comparison:like  value:"%${v}%"}){fullName,id}}}`;
-                            break;
+                    // var valueParts = _.split(v," ")
+                    // var whereCondition = "";
+                    // for (let index = 0; index < valueParts.length; index++) {
+                    //     const element = valueParts[index];
+                    //     whereCondition += (whereCondition.length == 0 ? "" : ",") + `{path:"name" comparison:like  value:"%${element.replace('"','\\"')}%"}`
+                    // }
                     
-                        case this.COMPONENT_TYPES.MEASUREMENTS:
-                            name = element;
-                            items = this.measurementItems;
-                            object = this.measurement[id];
-                            query = `{purchases{measurementUnits(where:[{path:"isValid",comparison:equal,value:"true"},{path:"name",comparison:like,value:"%${v}%"}]){id,name}}}`;
-                            break;
-                    }
-
-                    this.resourceSearchOld = val.slice();
-                    debugger;
-                    this.querySelections(query,object,items,name)
+                    const query = `{ purchases { resources (name: "${v.replace(/"/g,'')}"){fullName,id}}}`;
+                    this.searchResourcesOld = val.slice();
+                    this.querySelections(query,this.resource[id],this.resourceItems,"resources")
                 },
                 deep: true
-            },
+            }
         },
         methods:{
             async querySelections (query, obj, items, name) {
@@ -163,7 +193,9 @@ import _ from 'lodash';
                         } 
                     }).then(resp => {
                         console.log( resp.data );
-                        if (resp.data.data.purchases[name].length > 0)
+                        if (resp.data.data.purchases != null && 
+                            resp.data.data.purchases[name] &&
+                            resp.data.data.purchases[name].length > 0)
                         {
                             items = _.uniqBy([...items, ...resp.data.data.purchases[name]], "id");
                         }
@@ -197,27 +229,44 @@ import _ from 'lodash';
                 this.measurementItems = this.measurementItems.length > 0 ? this.measurementItems : _.uniqBy(this._props.application.rows.map(r=>r.measurementUnit), "id");
                 return this.measurementItems;
             },
-            searchComp() {
-                for (const key in this.COMPONENT_TYPES) {
-                    if (this.COMPONENT_TYPES.hasOwnProperty(key)) {
-                        const element = this.COMPONENT_TYPES[key];
-                        if (!this.search){
-                            this.search = {};
-                        }
-                        if (!this.search[element]){
-                            this.search[element] = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
-                                accu[val.id] = "";
-                            }, []);
-                            if (!this.searchOld)
-                            {
-                                this.searchOld = {}
-                            }
-                            this.searchOld[element] = this.search[element].slice();
+            // searchComp() {
+            //     if (this.search){
+            //         return this.search;
+            //     }
+            //     for (const key in this.COMPONENT_TYPES) {
+            //         if (this.COMPONENT_TYPES.hasOwnProperty(key)) {
+            //             const element = this.COMPONENT_TYPES[key];
+            //             if (!this.search){
+            //                 this.search = {};
+            //             }
+            //             if (!this.search[element]){
+            //                 this.search[element] = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
+            //                     accu[val.id] = "";
+            //                 }, []);
+            //                 if (!this.searchOld)
+            //                 {
+            //                     this.searchOld = {}
+            //                 }
+            //                 this.searchOld[element] = this.search[element].slice();
                             
-                        }
-                    }
+            //             }
+            //         }
+            //     }
+            //     return this.search;
+            // },
+            searchResourcesComp(){
+                if (!this.searchResources){
+                    this.searchResources = {};
                 }
-                return this.search;
+                this.searchResources = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
+                    accu[val.id] = val.resource.name;
+                }, []);
+                if (!this.searchResourcesOld)
+                    {
+                        this.searchResourcesOld = {}
+                    }
+                this.searchResourcesOld = this.searchResources.slice();
+                return this.searchResources;
             }
         }
     }
