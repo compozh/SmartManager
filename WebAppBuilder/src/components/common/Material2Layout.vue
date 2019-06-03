@@ -29,7 +29,7 @@
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
 
-    <v-content>
+    <v-content class="white">
       <v-container fluid pa-0>
         <router-view></router-view>
       </v-container>

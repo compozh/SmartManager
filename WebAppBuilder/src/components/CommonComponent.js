@@ -18,7 +18,14 @@ export default {
       for(var cur of  this.$children){
         if(cur.beforeRouteUpdate){
           cur.beforeRouteUpdate(to,from);
-        } 
+        }
+        if(cur.$children){
+          for(var chilCur of cur.$children){
+            if(chilCur.beforeRouteUpdate){
+              chilCur.beforeRouteUpdate(to,from);
+            }
+          }
+        }
       }
     },
     // Функция для получения данных компонента, принимает boolean тип, 
