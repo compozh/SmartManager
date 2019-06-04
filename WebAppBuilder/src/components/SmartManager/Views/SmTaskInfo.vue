@@ -17,7 +17,7 @@
                       <v-tab
                         v-for="(item, index) in menu.tabs"
                         :key="index"
-                      >{{ item.name }}
+                      >{{ item.name }}({{ item.count }})
                       </v-tab>
                     </v-tabs>
                     <v-divider></v-divider>
