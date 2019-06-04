@@ -30,6 +30,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 			// Вложенные объекты 
 			Field<ListGraphType<SmartManagerTaskOriginalGQ>>("Originals", resolve: context => context.Source.Originals);
 			Field<ListGraphType<SmartManagerTaskCommentsGQ>>("Comments", resolve: context => context.Source.Comments); 
+			Field<ListGraphType<SmartManagerTaskFullInfoGQ>>("Tasks", resolve: context => context.Source.Tasks); 
 		}
 	}
 }

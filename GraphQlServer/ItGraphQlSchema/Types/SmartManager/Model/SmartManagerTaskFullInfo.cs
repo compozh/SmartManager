@@ -23,5 +23,6 @@ namespace ItGraphQlSchema.Types.SmartManager.Model
         public DateTime DocPlandate { get; set; }
         public List <SmartManagerTaskOriginals> Originals { get; set; }
         public List<SmartManagerTaskComment> Comments { get; set; }
+        public  List<SmartManagerTaskFullInfo> Tasks { get; set; }
     }
 }
