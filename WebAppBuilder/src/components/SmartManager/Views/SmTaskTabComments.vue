@@ -3,8 +3,7 @@
     <v-layout
       class="comment-item text-xs-left"
       row wrap
-      v-for="(comment, index) in task.comments"
-      :key="index"
+      v-for="comment in task.comments"
     >
       <v-flex
         xs1
@@ -39,6 +38,14 @@
         <p class="pt-3 grey--text subheading">Коментарии отсутствуют</p>
       </v-flex>
       <v-divider></v-divider>
+    </v-layout>
+    <v-layout row wrap>
+      <v-flex xs8 sm6 md3>
+        <v-text-field
+          label="Добавить коментарий"
+          placeholder="Текст коментария..."
+        ></v-text-field>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
