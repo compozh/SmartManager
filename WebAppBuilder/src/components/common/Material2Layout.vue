@@ -65,6 +65,14 @@
         eventBus.$emit('updateMenuMode', this.mini);
         return this.mini;
       }
+    },
+    created() {
+      eventBus.$on('setMenuMiniMode', value => {
+        this.mini = value
+      })
+    },
+    beforeDestroy() {
+      eventBus.$off('setMenuMiniMode')
     }
   }
 </script>

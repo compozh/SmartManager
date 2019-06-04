@@ -2,12 +2,12 @@
   <v-container fluid pa-0>
     <v-layout row align-center>
       <v-flex>
-        <h1 class="blue--text text--darken-2 font-weight-thin">
-          <router-link
-            to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: 'ALL' }}"
-          ></router-link>
-          Smart Manager
-        </h1>
+        <router-link
+          tag="h1"
+          class="blue--text text--darken-2 font-weight-thin"
+          :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: 'ALL' }}"
+        ><a>Smart Manager</a>
+        </router-link>
       </v-flex>
       <v-spacer>{{ getCurrentPath }}</v-spacer>
       <v-flex xs4>
@@ -34,5 +34,9 @@
     font-size: 30px;
     text-align: left;
     white-space: nowrap;
+  }
+
+  a {
+    text-decoration: none;
   }
 </style>

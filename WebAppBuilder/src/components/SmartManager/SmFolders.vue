@@ -4,8 +4,8 @@
       <v-flex xs12 row>
         <v-list dense class="menu">
           <v-list-tile
-            v-for="folder in folders"
-            :key="folder.code"
+            v-for="(folder, index) in folders"
+            :key="index"
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
