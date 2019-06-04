@@ -7,10 +7,10 @@ export default {
   data: () => ({
     menu: {
       tabs: [
-        { name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks' },
-        { name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments' },
-        { name: 'Связанные документы', value: 'docs', component: 'sm-task-tab-docs' },
-        { name: 'История', value: 'history', component: 'sm-task-tab-history' }
+        { name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks', count: 0 },
+        { name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments', count: 0 },
+        { name: 'Связанные документы', value: 'docs', component: 'sm-task-tab-docs', count: 0 },
+        { name: 'История', value: 'history', component: 'sm-task-tab-history', count: 0 }
       ],
       activeTab: null
     }
@@ -19,10 +19,12 @@ export default {
     taskDetail() {
       const smTasksInfo = this.$store.getters.getAppData("SMTASKINFO")
       if (smTasksInfo && smTasksInfo.data) {
-        return smTasksInfo.data.smtasks.tasksGetInfo;
+        let taskInfo = smTasksInfo.data.smtasks.tasksGetInfo;
+        this.getCommentsCount(taskInfo)
+        return taskInfo
       }
       return {}
-    }
+    },
   },
   methods: {
     loadDataForComponents() {
@@ -35,6 +37,14 @@ export default {
         datasource,
         key
       });
+    },
+    getCommentsCount(taskInfo) {
+      for (let obj in this.menu.tabs) {
+        if (this.menu.tabs[obj].value === 'comments') {
+          this.menu.tabs[obj].count = taskInfo.comments.length
+        }
+      }
+      console.log('', )
     },
     // Функция для обновления данных при изменении роутинга
     beforeRouteUpdate(to, from, next) {
