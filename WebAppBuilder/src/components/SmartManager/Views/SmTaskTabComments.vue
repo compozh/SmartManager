@@ -34,20 +34,31 @@
         </v-layout>
       </v-flex>
     </v-layout>
+    <v-layout row wrap>
+      <v-flex xs12 v-if="!getCommentsLength">
+        <p class="pt-3 grey--text subheading">Коментарии отсутствуют</p>
+      </v-flex>
+      <v-divider></v-divider>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
   export default {
     name: "smTaskTabComments",
-    props: ['task']
+    props: ['task'],
+    computed: {
+      getCommentsLength() {
+        return this.task.comments ? this.task.comments.length : ''
+      }
+    }
   }
 </script>
 
 <style scoped>
 
-.comment-item {
-  border-bottom: 1px solid rgba(0,0,0,.12);
-}
+  .comment-item {
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+  }
 
 </style>
