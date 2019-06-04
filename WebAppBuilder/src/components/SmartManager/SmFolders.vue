@@ -4,12 +4,14 @@
       <v-flex xs12 row>
         <v-list dense class="menu">
           <v-list-tile
-            v-for="(folder, index) in folders"
-            :key="index"
+            v-for="folder in folders"
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
-            :style="{ 'order': folder.name === 'Все' ? -1 : 0 }"
+            :style="{
+              'order': isMainFolder(folder) ? -1 : 0,
+              'margin-left': isMainFolder(folder) ? 0 : '15px',
+              }"
           >
             <v-list-tile-action>
               <v-tooltip
@@ -25,18 +27,20 @@
                       >
                         {{ folder.count }}
                       </template>
-                      <v-icon>folder</v-icon>
+                      <v-icon>{{ isMainFolder(folder) ? 'folder' : 'folder_open' }}</v-icon>
                     </v-badge>
                   </div>
                 </template>
-                <span>{{ folder.name }}</span>
+                <span>{{ setMainFolderName(folder) }}</span>
               </v-tooltip>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
                 <span
                   :style="{ 'font-weight': folder.count ? 500 : '' }"
-                >{{ folder.name }}</span>
+                >
+                  {{ setMainFolderName(folder) }}
+                </span>
               </v-list-tile-title>
             </v-list-tile-content>
             <v-spacer></v-spacer>
@@ -60,7 +64,19 @@
     props: ["folders"],
     data() {
       return {
-        menuMiniMode: false
+        menuMiniMode: false,
+        styleObject: {
+          order: -1,
+          marginLeft: '20px'
+        }
+      }
+    },
+    methods: {
+      isMainFolder(folder) {
+        return folder.name === 'Все'
+      },
+      setMainFolderName(folder) {
+        return this.isMainFolder(folder) ? 'Активные' : folder.name
       }
     },
     created() {
@@ -110,6 +126,10 @@
   .v-navigation-drawer--mini-variant .menu-item .sm_active-folder,
   .v-navigation-drawer--mini-variant .menu-item .v-list__tile--link:hover {
     background: none;
+  }
+
+  .v-navigation-drawer--mini-variant .menu-item  {
+    margin-left: 0 !important;
   }
 
   .v-navigation-drawer--mini-variant .menu-item .sm_active-folder i {
