@@ -2,29 +2,46 @@ import {eventBus} from "../../../main";
 
 export default {
   name: 'smTaskInfoRl',
-  props: ['taskinfo'],
-
   data: () => ({
-    menu: {
-      tabs: [
-        { name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks', count: 0 },
-        { name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments', count: 0 },
-        { name: 'Связанные документы', value: 'docs', component: 'sm-task-tab-docs', count: 0 },
-        { name: 'История', value: 'history', component: 'sm-task-tab-history', count: 0 }
-      ],
-      activeTab: null
+    tabs: [
+      {name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks'},
+      {name: 'Связанные документы', value: 'originals', component: 'sm-task-tab-docs'},
+      {name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments'},
+      {name: 'Согласования', value: 'agreement', component: 'sm-task-tab-agree'}
+    ],
+    activeTab: {
+      value: null
     }
   }),
   computed: {
     taskDetail() {
       const smTasksInfo = this.$store.getters.getAppData("SMTASKINFO")
       if (smTasksInfo && smTasksInfo.data) {
-        let taskInfo = smTasksInfo.data.smtasks.tasksGetInfo;
-        this.getCommentsCount(taskInfo)
-        return taskInfo
+        return smTasksInfo.data.smtasks.tasksGetInfo
       }
       return {}
     },
+    getNotEmptyTabs() {
+      const taskObj = this.taskDetail
+      if (taskObj.id) {
+        return this.tabs.filter(i => {
+          // вкладка с комментариями отображается всегда
+          if (i.value === 'comments') {
+            return true
+          }
+          // остальные вкладки кроме "согласования" отображаются если есть данные
+          if (taskObj[i.value]
+            && taskObj[i.value].length
+            && taskObj[i.value] !== 'agreement') {
+            return true
+          }
+          // вкладка "согласования" отображается если есть хоть один согласующий коментарий
+          if (i.value === 'agreement') {
+            return taskObj.comments.some(i => i === 'isAgree' && i === '+')
+          }
+        })
+      }
+    }
   },
   methods: {
     loadDataForComponents() {
@@ -38,14 +55,6 @@ export default {
         key
       });
     },
-    getCommentsCount(taskInfo) {
-      for (let obj in this.menu.tabs) {
-        if (this.menu.tabs[obj].value === 'comments') {
-          this.menu.tabs[obj].count = taskInfo.comments.length
-        }
-      }
-      console.log('', )
-    },
     // Функция для обновления данных при изменении роутинга
     beforeRouteUpdate(to, from, next) {
       this.loadDataForComponents();
@@ -55,15 +64,14 @@ export default {
     this.loadDataForComponents();
   },
   updated() {
-    eventBus.$emit('setMenuMiniMode', true);
+    //eventBus.$emit('setMenuMiniMode', true);
   },
   render() {
     return this.$scopedSlots.default({
-      menu: this.menu,
+      activeTab: this.activeTab,
+      tabs: this.getNotEmptyTabs,
       task: this.taskDetail,
-      props: {
-
-      }
+      props: {}
     })
   }
 }
