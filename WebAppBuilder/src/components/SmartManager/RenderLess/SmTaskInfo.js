@@ -5,7 +5,7 @@ export default {
   data: () => ({
       tabs: [
         {name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks'},
-        {name: 'Связанные документы', value: 'originals', component: 'sm-task-tab-docs'},
+        {name: 'Документы', value: 'originals', component: 'sm-task-tab-docs'},
         {name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments'},
         {name: 'Согласования', value: 'agreement', component: 'sm-task-tab-agree'}
       ],

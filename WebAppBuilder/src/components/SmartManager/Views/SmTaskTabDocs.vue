@@ -58,7 +58,7 @@
 <style scoped>
 
   .viewer-layout {
-    box-shadow: 0 1px 0 rgba(100, 121, 143, 0.122);
+
   }
 
   .file-icon-container {
@@ -73,7 +73,6 @@
   }
 
   .file-title {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
