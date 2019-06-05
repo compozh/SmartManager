@@ -19,7 +19,6 @@ export default {
     },
   },
   beforeUpdate() {
-    
     // Сразу отображаем документ первого original
     if (!this.originals || !this.originals.length || this.fileName || this.fileUrl) {
       return
@@ -31,10 +30,14 @@ export default {
   render() {
     return this.$scopedSlots.default({
       originals: this.originals,
-      fileName: this.fileName,
-      fileUrl: this.fileUrl,
-      fileId: this.fileId,
-      selectDocument: this.selectDocument,
+      file: {
+        name: this.fileName,
+        url: this.fileUrl,
+        id: this.fileId,
+      },
+      params: {
+        selectDocument: this.selectDocument
+      }
     })
   }
 }

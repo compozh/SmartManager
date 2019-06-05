@@ -22,6 +22,7 @@ namespace ItGraphQlSchema.CommonSchema
 				Name = "MutationRoot"
 			};
 
+			
 			var schemaTools = _dependencyResolver.Resolve<SchemaTools>();
 
 			//Проверяем, схему, если нашли, то ок

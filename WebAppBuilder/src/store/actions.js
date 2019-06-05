@@ -65,7 +65,7 @@ const actions = ({
       //console.log(resp.data)
     });
   },
-
+  
   /** Загрузить описание приложения */
   GetAppDescription(context, appId) {
     return Axios({

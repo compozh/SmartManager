@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid mx-4 pa-0>
+  <v-container fluid pa-0 pl-3>
     <v-layout justify-center>
       <v-flex xs12>
         <sm-task-info-rl
@@ -11,6 +11,7 @@
                 <v-layout>
                   <v-flex xs12>
                     <v-tabs
+                      class="tabs"
                       show-arrows
                       v-model="activeTab.value"
                     >
@@ -20,7 +21,6 @@
                       >{{ item.name }}
                       </v-tab>
                     </v-tabs>
-                    <v-divider></v-divider>
                     <v-tabs-items
                       v-model="activeTab.value"
                     >
@@ -53,8 +53,8 @@
 </script>
 
 <style scoped>
-  .transfer {
-    cursor: pointer;
+  .tabs >>> .v-tabs__container {
+    box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
 
   .selected {

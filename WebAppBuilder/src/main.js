@@ -8,7 +8,10 @@ import 'vuetify/dist/vuetify.min.css';
 import _ from 'lodash';
 import {  resetRouter } from './router';
 import {i18n} from './plugins/i18n';
-
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import VueApollo from 'vue-apollo';
 export const eventBus = new Vue(); // Шина событий
 
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
@@ -18,10 +21,25 @@ req.keys().map(key => {
 });
 
 Vue.use(Vuetify);
+Vue.use(VueApollo);
+
+// Cache implementation
+const cache = new InMemoryCache()
+const apolloClient = new ApolloClient({
+  link:  new HttpLink({}),
+  cache,
+  connectToDevTools: true,
+})
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
 new Vue({
   i18n,
   router,
   store,
+  apolloProvider,
   render: h => h(App),
 }).$mount('#app');
 

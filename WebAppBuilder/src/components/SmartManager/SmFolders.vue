@@ -8,10 +8,7 @@
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
-            :style="{
-              'order': isMainFolder(folder) ? -1 : 0,
-              'margin-left': isMainFolder(folder) ? 0 : '15px',
-              }"
+            :class="{ 'main-folder': isMainFolder(folder) }"
           >
             <v-list-tile-action>
               <v-tooltip
@@ -27,7 +24,7 @@
                       >
                         {{ folder.count }}
                       </template>
-                      <v-icon>{{ isMainFolder(folder) ? 'folder' : 'folder_open' }}</v-icon>
+                      <v-icon>{{ setFolderIcon(folder) }}</v-icon>
                     </v-badge>
                   </div>
                 </template>
@@ -36,9 +33,7 @@
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
-                <span
-                  :style="{ 'font-weight': folder.count ? 500 : '' }"
-                >
+                <span :style="{ 'font-weight': folder.count ? 500 : '' }">
                   {{ setMainFolderName(folder) }}
                 </span>
               </v-list-tile-title>
@@ -64,11 +59,7 @@
     props: ["folders"],
     data() {
       return {
-        menuMiniMode: false,
-        styleObject: {
-          order: -1,
-          marginLeft: '20px'
-        }
+        menuMiniMode: false
       }
     },
     methods: {
@@ -77,6 +68,9 @@
       },
       setMainFolderName(folder) {
         return this.isMainFolder(folder) ? 'Активные' : folder.name
+      },
+      setFolderIcon(folder) {
+        return this.isMainFolder(folder) ? 'folder' : 'folder_open'
       }
     },
     created() {
@@ -97,14 +91,22 @@
     flex-direction: column;
   }
 
+  .menu-item.main-folder {
+    order: -1;
+  }
+
   .menu-item a {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     box-sizing: border-box;
     margin-right: 10px;
+    padding-left: 40px;
     max-height: 30px;
-    padding-left: 25px;
     font-size: 14px !important;
+  }
+
+  .menu-item.main-folder a {
+    padding-left: 25px;
   }
 
   .menu-item a .v-list__tile__action {
@@ -128,8 +130,8 @@
     background: none;
   }
 
-  .v-navigation-drawer--mini-variant .menu-item  {
-    margin-left: 0 !important;
+  .v-navigation-drawer--mini-variant .menu-item a {
+    padding-left: 25px !important;
   }
 
   .v-navigation-drawer--mini-variant .menu-item .sm_active-folder i {
@@ -156,8 +158,14 @@
 
   /* Медиазапрос для подражания поведению тулбара на xs экранах */
   @media only screen and (max-width: 959px) {
-    .menu-item a {
+    .menu-item.main-folder a {
       padding-left: 16px;
+    }
+    .menu-item a {
+      padding-left: 31px;
+    }
+    .v-navigation-drawer--mini-variant .menu-item a {
+      padding-left: 16px !important;
     }
   }
 

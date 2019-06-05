@@ -1,23 +1,45 @@
 import {eventBus} from "../../../main";
-
+import gql from 'graphql-tag'
 export default {
   name: 'smTaskInfoRl',
   data: () => ({
-    tabs: [
-      {name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks'},
-      {name: 'Связанные документы', value: 'originals', component: 'sm-task-tab-docs'},
-      {name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments'},
-      {name: 'Согласования', value: 'agreement', component: 'sm-task-tab-agree'}
-    ],
-    activeTab: {
-      value: null
-    }
+      tabs: [
+        {name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks'},
+        {name: 'Связанные документы', value: 'originals', component: 'sm-task-tab-docs'},
+        {name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments'},
+        {name: 'Согласования', value: 'agreement', component: 'sm-task-tab-agree'}
+      ],
+      activeTab: {
+          value: null
+      },
+    infoAboutTask:null
   }),
+  apollo : {
+    infoAboutTask:{
+      query : gql`
+      query taskInfoQUery($taskId: Int!){
+        smtasks{
+          tasksGetInfo(taskId: $taskId){
+            id arso name status addedId dateAdd isAgree addedFio comments { date text user } dateFact dateplan  descript keyValue priority originals { id comm date file ndor user fileName typeName typeDescription } addedPhoto dateRemind docPlandate
+          }
+        }
+      }`,
+      // Параметр
+      variables() {
+        return{
+          taskId : this.$route.params.taskId
+        }
+      },
+       update(data){
+        return data
+      }
+    },
+  },
   computed: {
     taskDetail() {
-      const smTasksInfo = this.$store.getters.getAppData("SMTASKINFO")
-      if (smTasksInfo && smTasksInfo.data) {
-        return smTasksInfo.data.smtasks.tasksGetInfo
+      const smTasksInfo = this.infoAboutTask
+      if (smTasksInfo) {
+        return smTasksInfo.smtasks.tasksGetInfo;
       }
       return {}
     },
@@ -44,24 +66,7 @@ export default {
     }
   },
   methods: {
-    loadDataForComponents() {
-      const datasource = {
-        query: `{ smtasks { tasksGetInfo(taskId:${this.$route.params.taskId}) { id arso name status addedId dateAdd isAgree addedFio comments { date text user } dateFact dateplan  descript keyValue priority originals { id comm date file ndor user fileName typeName typeDescription } addedPhoto dateRemind docPlandate }}} `,
-        schema: "SMARTMANAGER"
-      }
-      const key = "SMTASKINFO"
-      this.$store.dispatch("LoadDataForComponent", {
-        datasource,
-        key
-      });
-    },
-    // Функция для обновления данных при изменении роутинга
-    beforeRouteUpdate(to, from, next) {
-      this.loadDataForComponents();
-    },
-  },
-  beforeMount() {
-    this.loadDataForComponents();
+   
   },
   updated() {
     //eventBus.$emit('setMenuMiniMode', true);
