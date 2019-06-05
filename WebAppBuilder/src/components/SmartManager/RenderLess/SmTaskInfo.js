@@ -1,5 +1,5 @@
 import {eventBus} from "../../../main";
-
+import gql from 'graphql-tag'
 export default {
   name: 'smTaskInfoRl',
   props: ['taskinfo'],
@@ -13,31 +13,40 @@ export default {
         { name: 'История', value: 'history', component: 'sm-task-tab-history', count: 0 }
       ],
       activeTab: null
-    }
+    },
+    infoAboutTask:null
   }),
-  computed: {
-    taskDetail() {
-      const smTasksInfo = this.$store.getters.getAppData("SMTASKINFO")
-      if (smTasksInfo && smTasksInfo.data) {
-        let taskInfo = smTasksInfo.data.smtasks.tasksGetInfo;
-        this.getCommentsCount(taskInfo)
-        return taskInfo
+  apollo : {
+    infoAboutTask:{
+      query : gql`
+      query taskInfoQUery($taskId: Int!){
+        smtasks{
+          tasksGetInfo(taskId: $taskId){
+            id arso name status addedId dateAdd isAgree addedFio comments { date text user } dateFact dateplan  descript keyValue priority originals { id comm date file ndor user fileName typeName typeDescription } addedPhoto dateRemind docPlandate
+          }
+        }
+      }`,
+      // Параметр
+      variables() {
+        return{
+          taskId : this.$route.params.taskId
+        }
+      },
+       update(data){
+        return data
       }
-      return {}
     },
   },
-  methods: {
-    loadDataForComponents() {
-      const datasource = {
-        query: `{ smtasks { tasksGetInfo(taskId:${this.$route.params.taskId}) { id arso name status addedId dateAdd isAgree addedFio comments { date text user } dateFact dateplan  descript keyValue priority originals { id comm date file ndor user fileName typeName typeDescription } addedPhoto dateRemind docPlandate }}} `,
-        schema: "SMARTMANAGER"
+  computed: {
+    taskDetail() {
+      const smTasksInfo = this.infoAboutTask
+      if (smTasksInfo) {
+        return smTasksInfo.smtasks.tasksGetInfo;
       }
-      const key = "SMTASKINFO"
-      this.$store.dispatch("LoadDataForComponent", {
-        datasource,
-        key
-      });
-    },
+      return {}
+    }
+  },
+  methods: {
     getCommentsCount(taskInfo) {
       for (let obj in this.menu.tabs) {
         if (this.menu.tabs[obj].value === 'comments') {
@@ -46,13 +55,6 @@ export default {
       }
       console.log('', )
     },
-    // Функция для обновления данных при изменении роутинга
-    beforeRouteUpdate(to, from, next) {
-      this.loadDataForComponents();
-    },
-  },
-  beforeMount() {
-    this.loadDataForComponents();
   },
   updated() {
     eventBus.$emit('setMenuMiniMode', true);
