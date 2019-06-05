@@ -4,36 +4,51 @@
       <v-flex class="toolbar py-1">
         DOCUMENT VIEWER TOOLBAR
       </v-flex>
-      <v-flex>
-        <v-layout column class="viewer-container">
-
+      <v-flex class="viewer-container">
+        <v-layout ma-3 column>
           <v-flex
-            v-if="whichFormat === 0"
-            class="text"
-            v-model="sourceText"
-          >
-          </v-flex>
-
-          <v-flex ma-3 elevation-5
-                  v-if="whichFormat === 1"
+            elevation-3
+            class="pdf-viewer"
+            v-if="fileType === 'pdf'"
           >
             <pdf
-              v-for="i in numPages"
-              :key="i"
+              v-for="page in pdfPages"
               :src="fileUrl"
-              :page="i"
-              style="display: inline-block; width:100%"
+              :page="page"
+            ></pdf>
+          </v-flex>
+          <v-flex
+            v-else-if="fileType === 'txt'"
+            class="text-viewer pa-4"
+            v-model="sourceText"
+          >{{ sourceText }}
+          </v-flex>
+          <v-flex
+            v-else-if="fileType === 'img'"
+            class="image-viewer"
+          >
+            <v-img :src="fileUrl"></v-img>
+          </v-flex>
+          <v-flex v-else>
+            <v-layout
+              row wrap
+              align-content-center
             >
-            </pdf>
+              <v-flex xs12>
+                <v-icon
+                  color="grey lighten-2"
+                  size="200"
+                >error_outline
+                </v-icon>
+              </v-flex>
+              <v-flex xs12 class="file-title">
+                <span
+                  class="headline grey--text text--lighten-2"
+                >ФАЙЛЫ <b>{{ getFileExtension.toUpperCase() }}</b> НЕ ПОДДЕРЖИВАЮТСЯ
+                </span>
+              </v-flex>
+            </v-layout>
           </v-flex>
-
-          <v-flex v-if="whichFormat === 2">
-            <img
-              :src="fileUrl"
-              class="document-image"
-            />
-          </v-flex>
-
         </v-layout>
       </v-flex>
     </v-layout>
@@ -54,44 +69,36 @@
     },
     data: () => ({
       //Страницы в файле pdf
-      numPages: null,
+      pdfPages: null,
       sourceText: '',
     }),
     computed: {
       // Определение формата файла
-      fileType() {
+      getFileExtension() {
         return this.fileName.split('.').pop()
       },
-      // 0 отображение текста в textarea,
-      // 1 отображение pdf
-      // 2 отображение картинок
-      whichFormat() {
-        console.log(this.fileName, this.fileUrl)
+      fileType() {
         if (!this.fileName || !this.fileUrl) {
           return
         }
-        let whichFormat = -1
-        let type = imageTypes.some(i => i === this.fileType)
+        const fileExtension = this.getFileExtension
+        const fileType = imageTypes
+          .some(i => i === fileExtension)
           ? 'img'
-          : this.fileType
-        switch (type) {
+          : fileExtension
+
+        switch (fileType) {
           case 'txt':
-            whichFormat = 0
-            // Получение текста из текстового файла
             this.setTextFromFile()
             break
           case 'pdf':
-            whichFormat = 1
-            // Загрузка всех страниц
-            let loadingTask = pdf.createLoadingTask(this.fileUrl)
-            loadingTask
-              .then(pdf => this.numPages = pdf.numPages)
+            pdf.createLoadingTask(this.fileUrl)
+              .then(pdf => this.pdfPages = pdf.numPages)
             break
           case 'img':
-            whichFormat = 2
             break;
         }
-        return whichFormat
+        return fileType
       }
     },
     methods: {
@@ -106,20 +113,22 @@
 
 <style scoped>
   .toolbar {
-    box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
+
   }
 
   .viewer-container {
+    box-shadow: 0 0 0 1px rgba(100, 121, 143, 0.122);
     height: 86vh;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
-  .text {
-    width: 500px;
-    height: 300px;
+  .text-viewer {
+    text-align: justify;
+    line-height: 2;
   }
 
-  .document-image {
+  .image-viewer {
     max-width: 100%;
   }
 </style>
