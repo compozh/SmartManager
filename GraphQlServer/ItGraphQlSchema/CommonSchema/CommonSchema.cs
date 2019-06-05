@@ -10,7 +10,7 @@ namespace ItGraphQlSchema.CommonSchema
 	public class CommonSchema : Schema
 	{
 		private IDependencyResolver _dependencyResolver;
-		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName, bool anonymousСall, string schema) : base(dependencyResolver)
+		public CommonSchema(IDependencyResolver dependencyResolver, string schemaName, bool anonymousСall) : base(dependencyResolver)
 		{
 			_dependencyResolver = dependencyResolver;
 		   var root = new ObjectGraphType
@@ -22,10 +22,7 @@ namespace ItGraphQlSchema.CommonSchema
 				Name = "MutationRoot"
 			};
 
-			if (!string.IsNullOrEmpty(schema))
-			{
-				schemaName = schema;
-			}
+			
 			var schemaTools = _dependencyResolver.Resolve<SchemaTools>();
 
 			//Проверяем, схему, если нашли, то ок

@@ -1,3 +1,4 @@
+import {eventBus} from "../../../main";
 import gql from 'graphql-tag'
 export default {
   name: 'smTaskInfoRl',
@@ -44,6 +45,19 @@ export default {
       }
       return {}
     }
+  },
+  methods: {
+    getCommentsCount(taskInfo) {
+      for (let obj in this.menu.tabs) {
+        if (this.menu.tabs[obj].value === 'comments') {
+          this.menu.tabs[obj].count = taskInfo.comments.length
+        }
+      }
+      console.log('', )
+    },
+  },
+  updated() {
+    eventBus.$emit('setMenuMiniMode', true);
   },
   render() {
     return this.$scopedSlots.default({

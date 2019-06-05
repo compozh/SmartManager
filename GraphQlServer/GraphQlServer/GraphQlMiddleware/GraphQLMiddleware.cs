@@ -56,8 +56,14 @@ namespace GraphQlServer
 			var anonymousСall = !context.User.Identity.IsAuthenticated;
 			var request = deserialize<GraphQLRequest>(context.Request.Body);
 			var schema = context.Request.Headers["schema"];
+			
+			if (!string.IsNullOrEmpty(schema))
+			{
+				request.SchemaName = schema;
+			}
+			
 			var result = await _executer.ExecuteAsync(_ => {
-				_.Schema = _schemaSelector.GetMatchSchema(request.SchemaName, anonymousСall, schema);
+				_.Schema = _schemaSelector.GetMatchSchema(request.SchemaName, anonymousСall);
 				_.Query = request.Query;
 				_.ExposeExceptions = true;
 				_.OperationName = request.OperationName;

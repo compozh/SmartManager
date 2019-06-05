@@ -23,22 +23,18 @@ req.keys().map(key => {
 Vue.use(Vuetify);
 Vue.use(VueApollo);
 
-
-
-const httpLink = new HttpLink({
-  // You should use an absolute URL here
-  
-})
 // Cache implementation
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
-  link: httpLink,
+  link:  new HttpLink({}),
   cache,
   connectToDevTools: true,
 })
+
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
 })
+
 new Vue({
   i18n,
   router,

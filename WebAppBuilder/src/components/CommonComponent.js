@@ -52,7 +52,7 @@ export default {
         }
         // Переопределяем HttpLink в заголовке под нужную схему
         this.$apolloProvider.defaultClient.link.constructor({
-          uri: myConfig.GQUri,
+          uri: myConfig.GrapgQlUrl + "api/graphql",
           headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
           'schema' : datasource.schema
         }})
@@ -61,10 +61,8 @@ export default {
           query: gql` query ${datasource.query} `,
           manual: true,
           result (data) {
-            this.$store.dispatch("LoadDataForComponent", {
-              key: this.internalComponent.id,
-              data: data
-            });
+            var key = this.internalComponent.id
+            this.$store.commit("setAppData", {key, data})
           },
         })
       }
