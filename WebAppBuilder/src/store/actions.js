@@ -53,17 +53,8 @@ const actions = ({
 
 
   /** Загрузить данные для компонента */
-  LoadDataForComponent({commit}, {datasource, key}) {
-    return Axios({
-      method: 'POST',
-      url: myConfig.GrapgQlUrl + 'api/graphql',
-      withCredentials: true,
-      headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
-      data: {SchemaName: datasource.schema, query: datasource.query}
-    }).then(resp => {
-      return commit("setAppData", {key, data: resp.data})
-      //console.log(resp.data)
-    });
+  LoadDataForComponent({commit}, {key, data}) {
+    commit("setAppData", {key, data: data})
   },
 
   /** Загрузить описание приложения */

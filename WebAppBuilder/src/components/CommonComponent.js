@@ -1,5 +1,6 @@
 import _ from "lodash";
 import * as jsonpatcher from '../patching';
+import gql from 'graphql-tag'
 
 export default {
   name: "common-component",
@@ -49,11 +50,23 @@ export default {
         }else if(!firstLoad){
           return
         }
-        
-        this.$store.dispatch("LoadDataForComponent", {
-          datasource: datasource,
-          key: this.internalComponent.id
-        });
+        // Переопределяем HttpLink в заголовке под нужную схему
+        this.$apolloProvider.defaultClient.link.constructor({
+          uri: myConfig.GQUri,
+          headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
+          'schema' : datasource.schema
+        }})
+
+        this.$apollo.addSmartQuery('myData', {
+          query: gql` query ${datasource.query} `,
+          manual: true,
+          result (data) {
+            this.$store.dispatch("LoadDataForComponent", {
+              key: this.internalComponent.id,
+              data: data
+            });
+          },
+        })
       }
     },
     /** Получить значение из хранилища по ссылке для использования в свойствах */

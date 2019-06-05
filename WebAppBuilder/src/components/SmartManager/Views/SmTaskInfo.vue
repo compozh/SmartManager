@@ -112,7 +112,6 @@
             </v-layout>
           </v-container>
         </sm-task-info-rl>
-
       </v-flex>
     </v-layout>
   </v-container>
@@ -123,26 +122,6 @@
   export default {
     name: 'sm-task-info',
     props: ['taskinfo'],
-    methods: {
-      loadDataForComponents() {
-        const datasource = {
-          query: `{ smtasks { tasksGetInfo(taskId:${this.$route.params.taskId}) { id arso name status addedId dateAdd isAgree addedFio comments { date text user } dateFact dateplan  descript keyValue priority originals { id comm date file ndor user fileName typeName typeDescription } addedPhoto dateRemind docPlandate }}} `,
-          schema: "SMARTMANAGER"
-        }
-        const key = "SMTASKINFO"
-        this.$store.dispatch("LoadDataForComponent", {
-          datasource,
-          key
-        });
-      },
-      // Функция для обновления данных при изменении роутинга
-      beforeRouteUpdate(to, from, next) {
-        this.loadDataForComponents();
-      },
-    },
-    beforeMount() {
-      this.loadDataForComponents();
-    }
   }
 </script>
 
