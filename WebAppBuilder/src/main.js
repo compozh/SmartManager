@@ -99,7 +99,7 @@ function createComponentsForRoute(components) {
 
 function createComponentObject(com){
   let innerComp = {
-    id: com.Id,
+    id: com.Name,
     name: com.Name,
     // источник данных для компонента
     datasource: com.DataSource ? {

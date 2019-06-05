@@ -6,7 +6,10 @@ export default {
   data: () => ({
     menu: {
       tabs: [
-        'Задачи', 'Обсуждения', 'Связанные документы', 'История'
+        { name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks', count: 0 },
+        { name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments', count: 0 },
+        { name: 'Связанные документы', value: 'docs', component: 'sm-task-tab-docs', count: 0 },
+        { name: 'История', value: 'history', component: 'sm-task-tab-history', count: 0 }
       ],
       activeTab: null
     },

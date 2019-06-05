@@ -34,7 +34,7 @@
             </v-flex>
             <v-flex xs10 sm11 py-1 pr-2>
               <v-layout column text-xs-left>
-                <v-flex>
+                <v-flex class="text-ellipsis">
                   <span
                     class="body-2 font-weight-light blue--text text--darken-2"
                   >{{ task.name }}</span>
@@ -135,5 +135,11 @@
   .task-item:hover {
     cursor: pointer;
     background: rgb(250, 250, 250);
+  }
+
+  .text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
