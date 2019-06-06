@@ -1,106 +1,134 @@
 <template>
-  <div>
-    <div v-if="whichFormat === 0">
-      <textarea
-        class="text"
-        v-model="sorceText"
-      ></textarea>
-    </div>
-    <div v-if="whichFormat === 1">
-      <pdf
-        v-for="i in numPages"
-        :key="i"
-        :src="fileUrl"
-        :page="i"
-        style="display: inline-block; width:100%"
-      >
-      </pdf>
-    </div>
-    <div v-if="whichFormat === 2">
-      <img
-        :src="fileUrl"
-        class="document-image"
-      />
-    </div>
-  </div>
+  <v-container pa-0>
+    <v-layout column>
+      <v-flex class="toolbar py-1">
+        DOCUMENT VIEWER TOOLBAR
+      </v-flex>
+      <v-flex class="viewer-container">
+        <v-layout ma-3 column>
+          <v-flex
+            elevation-3
+            class="pdf-viewer"
+            v-if="fileType === 'pdf'"
+          >
+            <pdf
+              v-for="page in pdfPages"
+              :src="fileUrl"
+              :page="page"
+            ></pdf>
+          </v-flex>
+          <v-flex
+            v-else-if="fileType === 'txt'"
+            class="text-viewer pa-4"
+            v-model="sourceText"
+          >{{ sourceText }}
+          </v-flex>
+          <v-flex
+            v-else-if="fileType === 'img'"
+            class="image-viewer"
+          >
+            <v-img :src="fileUrl"></v-img>
+          </v-flex>
+          <v-flex v-else>
+            <v-layout
+              row wrap
+              align-content-center
+            >
+              <v-flex xs12>
+                <v-icon
+                  color="grey lighten-2"
+                  size="200"
+                >error_outline
+                </v-icon>
+              </v-flex>
+              <v-flex xs12 class="file-title">
+                <span
+                  class="headline grey--text text--lighten-2"
+                >ФАЙЛЫ <b>{{ getFileExtension.toUpperCase() }}</b> НЕ ПОДДЕРЖИВАЮТСЯ
+                </span>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-  //https://github.com/FranckFreiburger/vue-pdf
   import pdf from 'vue-pdf'
   import axios from 'axios'
   // arrayImageFormat : коллекция форматов картинок
-  const arrayImageFormat = ['bzg', 'png', 'jpg']
+  const imageTypes = ['bzg', 'png', 'jpg']
+
   export default {
     name: "documentViewer",
     props: ['fileUrl', 'fileName'],
     components: {
       pdf
     },
-    data() {
-      return {
-        //Страницы в файле pdf
-        numPages: undefined,
-        sorceText: '',
-      }
-    },
+    data: () => ({
+      //Страницы в файле pdf
+      pdfPages: null,
+      sourceText: '',
+    }),
     computed: {
       // Определение формата файла
-      fileFormat() {
-        const splitFileName = this.fileName.split('.')
-        return splitFileName[splitFileName.length - 1]
+      getFileExtension() {
+        return this.fileName.split('.').pop()
       },
-
-      // 0 отображение текста в textarea,
-      // 1 отображение pdf
-      // 2 отображение картинок
-      whichFormat() {
+      fileType() {
         if (!this.fileName || !this.fileUrl) {
           return
         }
-        let whichFormat = -1
-        let img = arrayImageFormat.filter(x => x === this.fileFormat)
-        let format = this.fileFormat
-        if (img.length) {
-          format = 'img'
-        }
-        switch (format) {
+        const fileExtension = this.getFileExtension
+        const fileType = imageTypes
+          .some(i => i === fileExtension)
+          ? 'img'
+          : fileExtension
+
+        switch (fileType) {
           case 'txt':
-            whichFormat = 0
-            // Получение текста из текстового файла
             this.setTextFromFile()
             break
           case 'pdf':
-            whichFormat = 1
-            // Загрузка всех страниц
-            let loadingTask = pdf.createLoadingTask(this.fileUrl)
-            loadingTask
-              .then(pdf => this.numPages = pdf.numPages)
+            pdf.createLoadingTask(this.fileUrl)
+              .then(pdf => this.pdfPages = pdf.numPages)
             break
           case 'img':
-            whichFormat = 2
             break;
         }
-        return whichFormat
+        return fileType
       }
     },
     methods: {
       // Получение текста из файла с форматом txt
       setTextFromFile() {
         axios.get(this.fileUrl)
-          .then(res => this.sorceText = res.data)
+          .then(res => this.sourceText = res.data)
       }
     }
   }
 </script>
 
 <style scoped>
-  .text {
-    width: 500px;
-    height: 300px;
+  .toolbar {
+
   }
 
-  .document-image {
+  .viewer-container {
+    box-shadow: 0 0 0 1px rgba(100, 121, 143, 0.122);
+    height: 86vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .text-viewer {
+    text-align: justify;
+    line-height: 2;
+  }
+
+  .image-viewer {
     max-width: 100%;
   }
 </style>

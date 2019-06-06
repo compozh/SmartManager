@@ -4,12 +4,11 @@
       <v-flex xs12 row>
         <v-list dense class="menu">
           <v-list-tile
-            v-for="(folder, index) in folders"
-            :key="index"
+            v-for="folder in folders"
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
-            :style="{ 'order': folder.name === 'Все' ? -1 : 0 }"
+            :class="{ 'main-folder': isMainFolder(folder) }"
           >
             <v-list-tile-action>
               <v-tooltip
@@ -25,18 +24,18 @@
                       >
                         {{ folder.count }}
                       </template>
-                      <v-icon>folder</v-icon>
+                      <v-icon>{{ setFolderIcon(folder) }}</v-icon>
                     </v-badge>
                   </div>
                 </template>
-                <span>{{ folder.name }}</span>
+                <span>{{ setMainFolderName(folder) }}</span>
               </v-tooltip>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
-                <span
-                  :style="{ 'font-weight': folder.count ? 500 : '' }"
-                >{{ folder.name }}</span>
+                <span :style="{ 'font-weight': folder.count ? 500 : '' }">
+                  {{ setMainFolderName(folder) }}
+                </span>
               </v-list-tile-title>
             </v-list-tile-content>
             <v-spacer></v-spacer>
@@ -63,6 +62,17 @@
         menuMiniMode: false
       }
     },
+    methods: {
+      isMainFolder(folder) {
+        return folder.name === 'Все'
+      },
+      setMainFolderName(folder) {
+        return this.isMainFolder(folder) ? 'Активные' : folder.name
+      },
+      setFolderIcon(folder) {
+        return this.isMainFolder(folder) ? 'folder' : 'folder_open'
+      }
+    },
     created() {
       eventBus.$on('updateMenuMode', menuMiniMode => {
         this.menuMiniMode = menuMiniMode;
@@ -81,14 +91,22 @@
     flex-direction: column;
   }
 
+  .menu-item.main-folder {
+    order: -1;
+  }
+
   .menu-item a {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     box-sizing: border-box;
     margin-right: 10px;
+    padding-left: 40px;
     max-height: 30px;
-    padding-left: 25px;
     font-size: 14px !important;
+  }
+
+  .menu-item.main-folder a {
+    padding-left: 25px;
   }
 
   .menu-item a .v-list__tile__action {
@@ -110,6 +128,10 @@
   .v-navigation-drawer--mini-variant .menu-item .sm_active-folder,
   .v-navigation-drawer--mini-variant .menu-item .v-list__tile--link:hover {
     background: none;
+  }
+
+  .v-navigation-drawer--mini-variant .menu-item a {
+    padding-left: 25px !important;
   }
 
   .v-navigation-drawer--mini-variant .menu-item .sm_active-folder i {
@@ -136,8 +158,14 @@
 
   /* Медиазапрос для подражания поведению тулбара на xs экранах */
   @media only screen and (max-width: 959px) {
-    .menu-item a {
+    .menu-item.main-folder a {
       padding-left: 16px;
+    }
+    .menu-item a {
+      padding-left: 31px;
+    }
+    .v-navigation-drawer--mini-variant .menu-item a {
+      padding-left: 16px !important;
     }
   }
 
