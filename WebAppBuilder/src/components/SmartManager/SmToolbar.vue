@@ -9,7 +9,7 @@
         ><a>Smart Manager</a>
         </router-link>
       </v-flex>
-      <v-spacer>{{ getCurrentPath }}</v-spacer>
+      <v-spacer></v-spacer>
       <v-flex xs4>
         <user-panel></user-panel>
       </v-flex>

@@ -1,16 +1,16 @@
 <template>
   <v-container pa-0>
     <v-layout column>
-      <v-flex class="toolbar py-1">
-        <a v-for="i in pdfPages" :href="'#' + i">{{ i }}  </a>
-        <v-btn small @click="width-=10">Zoom -</v-btn>
+      <v-flex class="toolbar">
+        <a v-show="false" v-for="i in pdfPages" :href="'#' + i">{{ i }} </a>
+        <v-btn depressed small @click="width-=10">-</v-btn>
         {{ width }} %
-        <v-btn small @click="width+=10"> Zoom +</v-btn>
-        <v-btn small @click="rotate += 90">&#x27F3;</v-btn>
-        <v-btn small @click="rotate -= 90">&#x27F2;</v-btn>
+        <v-btn depressed small @click="width+=10"> +</v-btn>
+        <v-btn depressed small @click="rotate += 90">&#x27F3;</v-btn>
+        <v-btn depressed small @click="rotate -= 90">&#x27F2;</v-btn>
       </v-flex>
       <v-flex class="viewer-container">
-        <v-layout ma-3 column >
+        <v-layout ma-3 column>
           <v-flex
             class="pdf-viewer"
             v-if="fileType === 'pdf'"
@@ -25,11 +25,7 @@
                   :id="i"
                   :src="fileUrl"
                   :page="i"
-                  :rotate="rotate"
-                  :style="{ width: width + '%'}"
-                  @num-pages="log($event)"
-                  @link-clicked="log($event)"
-                  @page-loaded="log($event)"
+                  :rotate="rotate" :style="{ width: width + '%'}"
                 ></pdf>
               </v-flex>
             </v-layout>
@@ -114,9 +110,7 @@
             break
           case 'pdf':
             pdf.createLoadingTask(this.fileUrl)
-              .then(pdf => {
-                console.log('', this.fileUrl)
-                this.pdfPages = pdf.numPages})
+              .then(pdf => this.pdfPages = pdf.numPages)
             break
           case 'img':
             break;
@@ -129,24 +123,17 @@
       setTextFromFile() {
         axios.get(this.fileUrl)
           .then(res => this.sourceText = res.data)
-      },
-      log(event) {
-        //console.log('', event)
       }
     }
   }
 </script>
 
 <style scoped>
-  .toolbar {
-
-  }
 
   .viewer-container {
     box-shadow: 0 0 0 1px rgba(100, 121, 143, 0.122);
-    height: 86vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 85vh;
+    overflow: auto;
   }
 
   .text-viewer {
