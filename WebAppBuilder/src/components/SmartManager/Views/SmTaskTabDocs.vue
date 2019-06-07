@@ -22,15 +22,15 @@
                     class="icons-container"
                   >
                     <v-flex
+                      xs10
                       v-for="doc in originals"
                       :key="doc.id"
-                      class="transfer"
                       :class="file.id === doc.id ? 'selected' : ''"
                       @click="params.selectDocument(doc.fileName, doc.file, doc.id)"
                     >
                       <v-layout my-2 pa-2 column class="file-icon-container">
                         <v-flex>
-                          <v-icon size="50">file_copy</v-icon>
+                          <v-icon x-large>file_copy</v-icon>
                         </v-flex>
                         <v-flex class="file-title">
                           <span class="caption">{{ doc.fileName }}</span>
@@ -66,6 +66,11 @@
     justify-content: center;
     overflow: hidden;
   }
+
+  .selected .file-icon-container {
+    background: #efefef;
+  }
+
   .file-icon-container:hover {
     cursor: pointer;
     background: #efefef;
@@ -75,6 +80,7 @@
   .file-title {
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 10px;
   }
 
   .icons-container {

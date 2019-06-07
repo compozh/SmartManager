@@ -2,20 +2,37 @@
   <v-container pa-0>
     <v-layout column>
       <v-flex class="toolbar py-1">
-        DOCUMENT VIEWER TOOLBAR
+        <a v-for="i in pdfPages" :href="'#' + i">{{ i }}  </a>
+        <v-btn small @click="width-=10">Zoom -</v-btn>
+        {{ width }} %
+        <v-btn small @click="width+=10"> Zoom +</v-btn>
+        <v-btn small @click="rotate += 90">&#x27F3;</v-btn>
+        <v-btn small @click="rotate -= 90">&#x27F2;</v-btn>
       </v-flex>
       <v-flex class="viewer-container">
-        <v-layout ma-3 column>
+        <v-layout ma-3 column >
           <v-flex
-            elevation-3
             class="pdf-viewer"
             v-if="fileType === 'pdf'"
           >
-            <pdf
-              v-for="page in pdfPages"
-              :src="fileUrl"
-              :page="page"
-            ></pdf>
+            <v-layout column>
+              <v-flex
+                my-2
+                elevation-3
+                v-for="i in pdfPages"
+              >
+                <pdf
+                  :id="i"
+                  :src="fileUrl"
+                  :page="i"
+                  :rotate="rotate"
+                  :style="{ width: width + '%'}"
+                  @num-pages="log($event)"
+                  @link-clicked="log($event)"
+                  @page-loaded="log($event)"
+                ></pdf>
+              </v-flex>
+            </v-layout>
           </v-flex>
           <v-flex
             v-else-if="fileType === 'txt'"
@@ -58,7 +75,7 @@
 <script>
   import pdf from 'vue-pdf'
   import axios from 'axios'
-  // arrayImageFormat : коллекция форматов картинок
+
   const imageTypes = ['bzg', 'png', 'jpg']
 
   export default {
@@ -68,9 +85,13 @@
       pdf
     },
     data: () => ({
-      //Страницы в файле pdf
-      pdfPages: null,
+      page: 1,
+      pdfPages: 0,
+      rotate: 0,
+      currentPage: 0,
+      pageCount: 0,
       sourceText: '',
+      width: 100
     }),
     computed: {
       // Определение формата файла
@@ -93,7 +114,9 @@
             break
           case 'pdf':
             pdf.createLoadingTask(this.fileUrl)
-              .then(pdf => this.pdfPages = pdf.numPages)
+              .then(pdf => {
+                console.log('', this.fileUrl)
+                this.pdfPages = pdf.numPages})
             break
           case 'img':
             break;
@@ -106,6 +129,9 @@
       setTextFromFile() {
         axios.get(this.fileUrl)
           .then(res => this.sourceText = res.data)
+      },
+      log(event) {
+        //console.log('', event)
       }
     }
   }
