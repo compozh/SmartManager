@@ -2,7 +2,8 @@ const state = {
   applicationDescription:{},
   appData: {},
   // Текущий пользователь
-  currentuser: localStorage.getItem('userName'),
+  currentUser: localStorage.getItem('userName'),
+  userData: {},
   // Массив с названием иконок
   existedIcons:[]
 

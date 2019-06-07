@@ -4,7 +4,7 @@ import Vue from 'vue'
 const mutations = {
 
   /** Описание приложения */
-  SetAppDescription(state, application){
+  SetAppDescription(state, application) {
     state.applicationDescription = application;
   },
 
@@ -13,11 +13,15 @@ const mutations = {
     Vue.set(state.appData, payload.key, payload.data)
   },
   /** Установка текущего пользователя */
-  setCurrentUser(state, userInfo){
-    state.currentuser = userInfo;
+  setCurrentUser(state, userInfo) {
+    state.currentUser = userInfo;
+  },
+  /** Установка данных пользователя */
+  setUserData(state, userInfo) {
+    state.userData = userInfo;
   },
   /** Установка массива с svg */
-  setExistedIcons(state, payload){
+  setExistedIcons(state, payload) {
     state.existedIcons = payload;
   }
   // /** Загрузка Layout приложения */
