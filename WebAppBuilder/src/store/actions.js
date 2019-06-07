@@ -3,7 +3,7 @@ import * as jsonpatch from '../patching'
 
 
 const actions = ({
-  GetCurrentUser(context) {
+  GetCurrentUser({commit}) {
 
     Axios({
       method: 'POST',
@@ -11,24 +11,25 @@ const actions = ({
       withCredentials: true,
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
     }).then(resp => {
-      context.commit("setCurrentUser", resp.data)
-      //console.log(resp.data)
+      commit("setCurrentUser", resp.data.Name)
+      commit("setUserData", resp.data)
+      console.log(resp.data)
     });
 
   },
 
 
-  LogOut(context) {
+  LogOut({commit}) {
     localStorage.removeItem("ItUniTocken");
     localStorage.removeItem('userName');
-    context.commit("setCurrentUser", "");
+    commit("setCurrentUser", "");
 
   },
-  Login(context, loginParam) {
+  Login({commit}, loginParam) {
 
     localStorage.removeItem("ItUniTocken");
     localStorage.removeItem('userName');
-    context.commit("setCurrentUser", "");
+    commit("setCurrentUser", "");
 
     return Axios.post(`${myConfig.GrapgQlUrl}api/authentication/login`, {
       login: loginParam.login,
@@ -37,12 +38,11 @@ const actions = ({
     }, {
       withCredentials: true
     }).then(
-      // всё Ок
-      (response) => {
-        var token = response.data.access_token;
-        var username = response.data.username
+      response => {
+        const token = response.data.access_token;
+        const username = response.data.username
         if (token) {
-          context.commit("setCurrentUser", username);
+          commit("setCurrentUser", username);
           localStorage.setItem('ItUniTocken', token);
           localStorage.setItem('userName', username);
           return true;
@@ -65,7 +65,7 @@ const actions = ({
       //console.log(resp.data)
     });
   },
-  
+
   /** Загрузить описание приложения */
   GetAppDescription(context, appId) {
     return Axios({
