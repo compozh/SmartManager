@@ -1,6 +1,6 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center>
+    <v-layout row align-center justify-space-beetwen>
       <v-flex>
         <router-link
           tag="h1"
@@ -10,7 +10,7 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
-      <v-flex xs4>
+      <v-flex class="grow-0">
         <user-panel></user-panel>
       </v-flex>
     </v-layout>
@@ -38,5 +38,9 @@
 
   a {
     text-decoration: none;
+  }
+
+  .grow-0 {
+    flex-grow: 0 !important;
   }
 </style>
