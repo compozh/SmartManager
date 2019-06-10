@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,7 @@ namespace AuthenticationMiddleware
 		public async Task Invoke(HttpContext context)
 		{
 			
-			// Пропускаем не POST запросы
+			// РџСЂРѕРїСѓСЃРєР°РµРј РЅРµ POST Р·Р°РїСЂРѕСЃС‹
 			if (!string.Equals(context.Request.Method, "POST", StringComparison.OrdinalIgnoreCase))
 			{
 				await _next(context);
@@ -63,7 +64,14 @@ namespace AuthenticationMiddleware
 			if (context.User.Identity.IsAuthenticated)
 			{
 				var name = context.User.Identity.Name??string.Empty;
-				await context.Response.WriteAsync(name);
+				var userData = new UserData();
+
+				userData.Name = name;
+				userData.Login = name;
+				userData.DelegatedRights = new List<DelegatedRights>();
+				var userInJson = JsonConvert.SerializeObject(userData);
+			
+				await context.Response.WriteAsync(userInJson);
 				return;
 			}
 		}
@@ -85,7 +93,7 @@ namespace AuthenticationMiddleware
 				return;
 			}
 
-			// сериализация ответа
+			// РЎРµСЂРёР°Р»РёР·Р°С†РёСЏ РѕС‚РІРµС‚Р°
 			context.Response.ContentType = "application/json";
 			await context.Response.WriteAsync(response.Message);
 		

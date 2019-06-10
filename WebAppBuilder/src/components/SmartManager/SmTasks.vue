@@ -20,17 +20,7 @@
         >
           <v-layout row wrap align-center>
             <v-flex xs2 sm1 d-flex justify-center>
-              <v-img class="user-icon"
-                     v-if="task.addedPhoto"
-                     :src="task.addedPhoto"
-                     contain
-              ></v-img>
-              <v-icon
-                v-else
-                size="50"
-                color="#b3b3b3"
-              >account_circle
-              </v-icon>
+              <user-icon :src="task.addedPhoto" size="50"></user-icon>
             </v-flex>
             <v-flex xs10 sm11 py-1 pr-2>
               <v-layout column text-xs-left>
