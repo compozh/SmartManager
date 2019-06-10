@@ -1,27 +1,17 @@
 <template>
-  <user-panel-rl v-slot="{ menu, userData, params }">
+  <user-panel-rl v-slot="{ userData, params }">
     <v-layout align-center>
       <v-flex>
-        <user-icon :src="userData.Image" size="50"></user-icon>
-      </v-flex>
-      <v-flex class="hidden-and-up user-name">
-        <p class="ma-0 pl-2 subheading">{{ userData.Name }}</p>
-      </v-flex>
-      <v-flex>
-        <v-menu
-          v-model="menu.show"
-          :close-on-content-click="false"
-          :nudge-width="300"
-          :nudge-top="300"
-          :position-y="165"
-          bottom
-
-        >
-          <template v-slot:activator="{ on }">
-            <v-icon large v-on="on"
-            >
-              {{ menu.show ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-            </v-icon>
+        <v-menu :close-on-content-click="false">
+          <template v-slot:activator="{on}">
+            <v-layout class="user-panel" v-on="on" align-center>
+              <v-flex id="user-icon">
+                <user-icon :src="userData.Image" size="50"></user-icon>
+              </v-flex>
+              <v-flex v-if="!mini" class="hidden-xs-only">
+                <p class="ma-0 pl-2 subheading">{{ userData.Name }}</p>
+              </v-flex>
+            </v-layout>
           </template>
           <v-layout column>
             <v-flex>
@@ -34,6 +24,7 @@
                   ></user-icon>
                 </v-flex>
                 <v-flex ml-3 class="text-xs-left">
+                  <p v-if="mini" class="mb-1">{{ userData.Name }}</p>
                   <p class="mb-1">{{ userData.Login }}</p>
                   <a @click="params.changePassword"
                   >Сменить пароль</a>
@@ -42,20 +33,59 @@
             </v-flex>
             <v-divider></v-divider>
             <v-flex>
-              <v-layout justify-space-between grey lighten-4 pa-2 class="#f5f5f5">
+              <v-layout
+                pa-2
+                grey
+                lighten-4
+                class="#f5f5f5"
+                justify-space-between
+              >
                 <v-flex class="grow-0">
-                  <v-btn
-                    outline small
-                    v-bind="params.delegatRigthBtnAttr"
-                    v-on="params.delegatRigthBtnAEvents"
-                  >Делегированные права</v-btn>
+                  <v-menu auto>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        outline small
+                        v-bind="params.delegatedRightsBtnAttr"
+                        v-on="on"
+                      >Делегированные права
+                      </v-btn>
+                    </template>
+                    <v-layout
+                      py-1
+                      column
+                      class="text-xs-left caption"
+                    >
+                      <v-flex
+                        d-flex
+                        py-1 px-2
+                        class="delegated-menu-item"
+                        v-for="(item, index) in userData.DelegatedRights"
+                        :key="index"
+                      >
+                        <div class="icon-container grow-0">
+                          <v-icon v-show="item.IsActive">done</v-icon>
+                        </div>
+                        <span>{{ item.UserName }}</span>
+                      </v-flex>
+                      <v-divider></v-divider>
+                      <v-flex
+                        d-flex
+                        py-1 px-2
+                        class="delegated-menu-item"
+                      >
+                        <div class="icon-container grow-0"></div>
+                        <span>Делегировать права</span>
+                      </v-flex>
+                    </v-layout>
+                  </v-menu>
                 </v-flex>
                 <v-flex class="grow-0">
                   <v-btn
                     outline small
                     v-bind="params.logOutBtnAttr"
                     v-on="params.logOutBtnAEvents"
-                  >Выход</v-btn>
+                  >Выход
+                  </v-btn>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -68,7 +98,8 @@
 
 <script>
   export default {
-    name: 'user-panel'
+    name: 'user-panel',
+    props: ['mini']
   }
 </script>
 
@@ -79,12 +110,28 @@
     top: 65px !important;
   }
 
-  .user-name {
-    white-space: nowrap;
-    width: 100%;
+  .v-menu__content.v-menu__content--auto {
+    top: 208px !important;
   }
 
+  .user-panel {
+    cursor: pointer;
+  }
 
+  .delegated-menu-item {
+    padding-bottom: 5px;
+    align-items: center;
+    color: rgb(102, 102, 102)
+  }
+
+  .delegated-menu-item:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+
+  .icon-container {
+    width: 30px;
+  }
 
   .grow-0 {
     flex-grow: 0 !important;
@@ -94,4 +141,3 @@
     text-decoration: underline #67A4E1;
   }
 </style>
-

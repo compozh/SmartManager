@@ -1,12 +1,6 @@
 export default {
   name: 'userPanelRl',
   data: () => ({
-    menu: {
-      fav: true,
-      show: false,
-      message: false,
-      hints: true,
-    },
     menuBtnStyle: [
       { 'textTransform': 'none' },
       { 'font-weight': 300 },
@@ -33,15 +27,13 @@ export default {
   },
   render() {
     return this.$scopedSlots.default({
-      menu: this.menu,
       userData: this.getUserData,
       params: {
         changePassword: this.changePassword,
-        delegatRigthBtnAttr: {
-          items: ['user1', 'user2'],
+        delegatedRightsBtnAttr: {
           style: this.menuBtnStyle
         },
-        delegatRigthBtnAEvents: {
+        delegatedRightsBtnAEvents: {
 
         },
         logOutBtnAttr: {
