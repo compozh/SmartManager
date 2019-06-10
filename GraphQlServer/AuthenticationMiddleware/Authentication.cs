@@ -29,7 +29,7 @@ namespace AuthenticationMiddleware
 		public async Task Invoke(HttpContext context)
 		{
 			
-			// ���������� �� POST �������
+			// Пропускаем не POST запросы
 			if (!string.Equals(context.Request.Method, "POST", StringComparison.OrdinalIgnoreCase))
 			{
 				await _next(context);
@@ -68,23 +68,9 @@ namespace AuthenticationMiddleware
 
 				userData.Name = name;
 				userData.Login = name;
-				userData.Id = "U20810";
-				userData.Image = "";
 				userData.DelegatedRights = new List<DelegatedRights>();
-				userData.DelegatedRights.Add(new DelegatedRights()
-				{
-					Name = "Делегированные права пользователя 1",
-					Id = "U20811",
-					isActive = false
-				});
-				userData.DelegatedRights.Add(new DelegatedRights()
-				{
-					Name = "Делегированные права пользователя 2",
-					Id = "U20812",
-					isActive = true
-				});
 				var userInJson = JsonConvert.SerializeObject(userData);
-				
+			
 				await context.Response.WriteAsync(userInJson);
 				return;
 			}
@@ -107,7 +93,7 @@ namespace AuthenticationMiddleware
 				return;
 			}
 
-			// ������������ ������
+			// Сериализация ответа
 			context.Response.ContentType = "application/json";
 			await context.Response.WriteAsync(response.Message);
 		
