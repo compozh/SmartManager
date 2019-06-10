@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid pa-2>
+  <v-container fluid pa-0 px-2>
     <v-layout v-if="loading">
       <v-flex xs12>
         <v-progress-circular
@@ -10,35 +10,41 @@
       </v-flex>
     </v-layout>
     <v-layout v-else row wrap justify-center>
-      <v-flex xs12 md9 lg7 mb-2
-              v-for="task in tasks"
-              :key="task.id"
+      <v-flex
+        xs12
+        class="task-container"
+        v-for="task in tasks"
+        :key="task.id"
       >
         <v-card
+          flat
           class="task-item"
           @click="goToTaskInfo(task.id)"
         >
-          <v-layout row wrap align-center>
-            <v-flex xs2 sm1 d-flex justify-center>
+          <v-layout row align-center>
+            <v-flex d-flex justify-center shrink px-3>
               <user-icon :src="task.addedPhoto" size="50"></user-icon>
             </v-flex>
-            <v-flex xs10 sm11 py-1 pr-2>
+            <v-flex py-1 pr-2 class="text-ellipsis">
               <v-layout column text-xs-left>
                 <v-flex class="text-ellipsis">
                   <span
                     class="body-2 font-weight-light blue--text text--darken-2"
                   >{{ task.name }}</span>
                 </v-flex>
-                <v-flex class="caption">
-                  <span>Исполнитель: {{ task.addedFio }}</span>
+                <v-flex class="caption text-ellipsis">
+                  <span class="hidden-xs-only"
+                  >Исполнитель: </span>{{ task.addedFio }}
                 </v-flex>
-                <v-flex
-                  d-flex
-                  justify-space-between
-                  class="caption grey--text"
-                >
-                  <span class="text-xs-left">Дата добавления: {{ task.dateadd }}</span>
-                  <span class="text-xs-right">Идентификатор: {{ task.id }}</span>
+                <v-flex d-flex class="caption grey--text">
+                  <v-flex class="text-xs-left">
+                    <span class="hidden-xs-only"
+                    >Дата добавления: </span>{{ task.dateadd }}
+                  </v-flex>
+                  <v-flex class="text-xs-right">
+                    <span class="hidden-xs-only"
+                    >Идентификатор: </span>{{ task.id }}
+                  </v-flex>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -86,7 +92,6 @@
         this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
       }
     }
-
   }
 </script>
 
@@ -120,6 +125,14 @@
 
   .empty-state-image .e {
     fill: #efefef;
+  }
+
+  .task-container {
+    overflow: hidden;
+  }
+
+  .task-item {
+    box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
 
   .task-item:hover {
