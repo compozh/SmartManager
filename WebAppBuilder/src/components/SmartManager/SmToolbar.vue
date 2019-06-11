@@ -20,12 +20,7 @@
 
 <script>
   export default {
-    name: "sm-toolbar",
-    computed: {
-      getCurrentPath() {
-        return this.$route.path
-      }
-    }
+    name: "sm-toolbar"
   }
 </script>
 

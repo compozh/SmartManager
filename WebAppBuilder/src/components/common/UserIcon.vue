@@ -9,7 +9,6 @@
     ></v-img>
     <v-icon
       v-else
-      class="user-icon"
       :size="size"
       color="#b3b3b3"
     >account_circle
@@ -32,9 +31,5 @@
   .border {
     border: 2px solid #b3b3b3;
     border-radius: 50%;
-  }
-
-  .user-icon {
-    margin: -10%;
   }
 </style>
