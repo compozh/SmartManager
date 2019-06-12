@@ -1,0 +1,23 @@
+{
+  "name": "@it-enterprise/authentication",
+  "version": "1.0.0",
+  "private": false,
+  "description": "library for authentication",
+  "author": "it-enterprise",
+  "main1": "./dist/authentication.common.js",
+  "main": "./src/index.js",
+  "files": [
+    "dist/*"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "build-bundle": "vue-cli-service build --target lib --name authentication ./src/index.js"
+  },
+  "devDependencies": {
+    "vue": "^2.5.16",
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-pwa": "^3.4.0",
+    "@vue/cli-service": "^3.4.0"
+  },
+  "dependencies": {}
+}

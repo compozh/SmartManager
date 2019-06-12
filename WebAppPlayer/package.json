@@ -1,0 +1,54 @@
+{
+  "name": "webappplayer",
+  "version": "1.0.0",
+  "description": "Player for apps described in \"Web applications builder\"",
+  "author": "it-enterprise",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "lint-fix": "vue-cli-service lint --fix",
+    "dev": "vue-cli-service build --mode development",
+    "inspect": "vue-cli-service inspect --mode development --verbose",
+    "links": "npm link @it-enterprise/authentication @it-enterprise/graphql @it-enterprise/modules-manager"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "register-service-worker": "^1.5.2",
+    "vue": "^2.6.6",
+    "vue-country-flag": "^1.1.1",
+    "vue-i18n": "^8.10.0",
+    "vue-pdf": "^4.0.7",
+    "vue-router": "^3.0.1",
+    "vuetify": "^1.5.14",
+    "vuex": "^3.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-plugin-pwa": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
+    "@vue/eslint-config-airbnb": "^4.0.0",
+    "axios": "^0.18.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "vue-cli-plugin-webpack-bundle-analyzer": "^1.3.0",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "keywords": [
+    "webapp"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "http://tfs2017:8080/tfs/DefaultCollection/_git/WebApplications"
+  }
+}
