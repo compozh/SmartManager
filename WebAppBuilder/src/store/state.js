@@ -2,10 +2,9 @@ const state = {
   applicationDescription:{},
   appData: {},
   // Текущий пользователь
-  currentUser: localStorage.getItem('userName'),
-  userData: {},
+  currentUser: {},
   // Массив с названием иконок
   existedIcons:[]
+}
 
-};
 export default state

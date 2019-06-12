@@ -1,15 +1,15 @@
 <template>
-  <user-panel-rl v-slot="{ userData, params }">
+  <user-panel-rl v-slot="{ user, params }">
     <v-layout align-center>
       <v-flex>
         <v-menu :close-on-content-click="false">
           <template v-slot:activator="{on}">
             <v-layout class="user-panel" v-on="on" align-center>
               <v-flex id="user-icon">
-                <user-icon :src="userData.Image" size="50"></user-icon>
+                <user-icon :src="user.photo" size="50"></user-icon>
               </v-flex>
               <v-flex v-if="!mini" class="hidden-xs-only">
-                <p class="ma-0 pl-2 subheading">{{ userData.Name }}</p>
+                <p class="ma-0 pl-2 subheading">{{ user.name }}</p>
               </v-flex>
             </v-layout>
           </template>
@@ -19,13 +19,13 @@
                 <v-flex class="grow-0">
                   <user-icon
                     class="user-big-image"
-                    :src="userData.Image"
+                    :src="user.photo"
                     size="80"
                   ></user-icon>
                 </v-flex>
                 <v-flex ml-3 class="text-xs-left">
-                  <p v-if="mini" class="mb-1">{{ userData.Name }}</p>
-                  <p class="mb-1">{{ userData.Login }}</p>
+                  <p v-if="mini" class="mb-1">{{ user.name }}</p>
+                  <p class="mb-1">{{ user.login }}</p>
                   <a @click="params.changePassword"
                   >Сменить пароль</a>
                 </v-flex>
@@ -45,13 +45,12 @@
                     <template v-slot:activator="{ on }">
                       <v-btn
                         outline small
-                        v-bind="params.delegatedRightsBtnAttr"
+                        :style="userMenuBtnStyle"
                         v-on="on"
                       >Делегированные права
                       </v-btn>
                     </template>
                     <v-layout
-                      py-1
                       column
                       class="text-xs-left caption"
                     >
@@ -59,19 +58,23 @@
                         d-flex
                         py-1 px-2
                         class="delegated-menu-item"
-                        v-for="(item, index) in userData.DelegatedRights"
+                        v-bind="params.delegatedRightsBtnAttr"
+                        v-on="params.delegatedRightsBtnAEvents"
+                        v-for="(item, index) in user.rights"
                         :key="index"
                       >
                         <div class="icon-container grow-0">
-                          <v-icon v-show="item.IsActive">done</v-icon>
+                          <v-icon v-show="item.isActive">done</v-icon>
                         </div>
-                        <span>{{ item.UserName }}</span>
+                        <span>{{ item.USERNAME }}</span>
                       </v-flex>
                       <v-divider></v-divider>
                       <v-flex
                         d-flex
                         py-1 px-2
                         class="delegated-menu-item"
+                        v-bind="params.setDelegationBtnAttr"
+                        v-on="params.setDelegationBtnEvents"
                       >
                         <div class="icon-container grow-0"></div>
                         <span>Делегировать права</span>
@@ -82,6 +85,7 @@
                 <v-flex class="grow-0">
                   <v-btn
                     outline small
+                    :style="userMenuBtnStyle"
                     v-bind="params.logOutBtnAttr"
                     v-on="params.logOutBtnAEvents"
                   >Выход
@@ -99,7 +103,15 @@
 <script>
   export default {
     name: 'user-panel',
-    props: ['mini']
+    props: ['mini'],
+    data: () => ({
+      userMenuBtnStyle: [
+        { 'textTransform': 'none' },
+        { 'font-weight': 300 },
+        { color: 'rgb(102, 102, 102)' },
+        { 'border-color': '#c6c6c6' }
+      ]
+    })
   }
 </script>
 
@@ -130,7 +142,9 @@
   }
 
   .icon-container {
+    display: flex;
     width: 30px;
+    height: 18px;
   }
 
   .grow-0 {

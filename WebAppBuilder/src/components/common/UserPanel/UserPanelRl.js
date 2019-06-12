@@ -8,17 +8,15 @@ export default {
       { 'border-color': '#c6c6c6' }
     ]
   }),
-  computed: {
-    getUserData() {
-      return this.$store.state.userData
-    },
-    getDelegatedRights() {
-      return this.$store.state.userData.DelegatedRights
-    }
-  },
   methods: {
     changePassword() {
       console.log('Запрос изменения пароля')
+    },
+    setDelegation() {
+      console.log('Делегировать права')
+    },
+    useDelegatedRights(name) {
+      console.log('Использовать права для', name)
     },
     logOut() {
       this.$store.dispatch("LogOut");
@@ -27,17 +25,29 @@ export default {
   },
   render() {
     return this.$scopedSlots.default({
-      userData: this.getUserData,
+      user: {
+        name: this.$store.getters.getCurrentUserLoginData.UserName,
+        login: this.$store.getters.getCurrentUserLoginData.UserLogin,
+        id: this.$store.getters.getCurrentUserLoginData.UserId,
+        rights: this.$store.getters.getCurrentUserRights,
+        photo: this.$store.getters.getCurrentUserPhoto
+      },
       params: {
         changePassword: this.changePassword,
         delegatedRightsBtnAttr: {
-          style: this.menuBtnStyle
-        },
-        delegatedRightsBtnAEvents: {
 
         },
+        delegatedRightsBtnAEvents: {
+          click: e => this.useDelegatedRights(e.target.innerHTML)
+        },
+        setDelegationBtnAttr: {
+
+        },
+        setDelegationBtnEvents: {
+          click: () => this.setDelegation()
+        },
         logOutBtnAttr: {
-          style: this.menuBtnStyle
+
         },
         logOutBtnAEvents: {
           click: () => this.logOut()
