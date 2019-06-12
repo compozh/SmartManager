@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Web.Authentication;
+using Web.Tools;
+using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace AuthenticationMiddleware
 {
@@ -13,17 +16,19 @@ namespace AuthenticationMiddleware
 		private readonly RequestDelegate _next;
 		private readonly AuthenticationSettings _settings;
 		private readonly AuthenticationTools _auth;
+		private readonly IConfiguration _config;
 
 		private string _loginSegment => new PathString(_settings.Path).Add("/login");
 		private string _logoutSegment => new PathString(_settings.Path).Add("/logout");
 		private string _currentUserSegment => new PathString(_settings.Path).Add("/user");
 
 		
-		public Authentication(RequestDelegate next, AuthenticationSettings settings, AuthenticationTools auth)
+		public Authentication(RequestDelegate next, AuthenticationSettings settings, AuthenticationTools auth, IConfiguration config)
 		{
 			_next = next;
 			_settings = settings;
 			_auth = auth;
+			_config = config;
 		}
 		
 		public async Task Invoke(HttpContext context)
@@ -63,12 +68,17 @@ namespace AuthenticationMiddleware
 		{
 			if (context.User.Identity.IsAuthenticated)
 			{
-				var name = context.User.Identity.Name??string.Empty;
-				var userData = new UserData();
+				var userData = _auth.CurrentUser;
 
-				userData.Name = name;
-				userData.Login = name;
-				userData.DelegatedRights = new List<DelegatedRights>();
+				if (!string.IsNullOrEmpty(userData.UserPhoto))
+				{
+					var webServiceUrl = _config.GetSection("AppSettings").GetValue<string>("WebServiceUrl");
+					var requestUrl = "/GetFile.ashx?file=";
+					var hash = userData.UserPhoto;
+					var additionalUrlParams = "&folder=content&nodownload=1";
+					userData.UserPhoto = webServiceUrl + requestUrl + hash + additionalUrlParams;
+				}
+				
 				var userInJson = JsonConvert.SerializeObject(userData);
 			
 				await context.Response.WriteAsync(userInJson);
