@@ -22,7 +22,7 @@
       v-model="drawer"
       :mini-variant="menuMiniMode"
       mini-variant-width="56"
-      width="250"
+      width="270"
       class="transparent"
       stateless
     >
@@ -65,6 +65,14 @@
         eventBus.$emit('updateMenuMode', this.mini);
         return this.mini;
       }
+    },
+    created() {
+      eventBus.$on('setMenuMiniMode', value => {
+        this.mini = value
+      })
+    },
+    beforeDestroy() {
+      eventBus.$off('setMenuMiniMode')
     }
   }
 </script>

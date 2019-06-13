@@ -6,8 +6,12 @@ import store from './store/index';
 import './registerServiceWorker';
 import 'vuetify/dist/vuetify.min.css';
 import _ from 'lodash';
-import {  resetRouter } from './router';
+import {resetRouter} from './router';
 import {i18n} from './plugins/i18n';
+import {ApolloClient} from 'apollo-client';
+import {HttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import VueApollo from 'vue-apollo';
 
 export const eventBus = new Vue(); // Шина событий
 
@@ -18,10 +22,25 @@ req.keys().map(key => {
 });
 
 Vue.use(Vuetify);
+Vue.use(VueApollo);
+
+// Cache implementation
+const cache = new InMemoryCache()
+const apolloClient = new ApolloClient({
+  link: new HttpLink({}),
+  cache,
+  connectToDevTools: true,
+})
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
 new Vue({
   i18n,
   router,
   store,
+  apolloProvider,
   render: h => h(App),
 }).$mount('#app');
 
@@ -29,17 +48,17 @@ new Vue({
 store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).then(() => {
 
   var app = store.state.applicationDescription;
-  if(!app.Id){
+  if (!app.Id) {
     return;
   }
   // Разделы приложения
-  var sections = app.Sections||[];
+  var sections = app.Sections || [];
 
   // Достаем роуты из разделов
   var routes = [];
   for (let index = 0; index < sections.length; index++) {
     const section = sections[index];
-    routes = routes.concat((section.Routes||[]).map(r=> (r.section = section)&& r))
+    routes = routes.concat((section.Routes || []).map(r => (r.section = section) && r))
   }
   // Формируем роуты в нужном формате
   routes = _.orderBy(routes, ["Sort"]).map(r => generateRouteFromDescription(r, r.section))
@@ -48,7 +67,9 @@ store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).th
   resetRouter([])
 
   // Обработка доступа к роутам
-  router.beforeEach((to, from, next) => { routerBeforeEachFunction(to, from, next) })
+  router.beforeEach((to, from, next) => {
+    routerBeforeEachFunction(to, from, next)
+  })
 
 
   // формируем новый роутер
@@ -56,7 +77,7 @@ store.dispatch("GetAppDescription", router.currentRoute.params.ApplicationId).th
     path: `/${app.Id}`,
     component: getInternalComponentDescription(app.RootComponent),
     children: routes
-  }, {path:'*', redirect:`/${app.Id}`}])
+  }, {path: '*', redirect: `/${app.Id}`}])
 
 
 })
@@ -75,9 +96,9 @@ function createComponentsForRoute(components) {
   return arrayToObject(components.map(com => getInternalComponentDescription(com)), "name")
 }
 
-function createComponentObject(com){
+function createComponentObject(com) {
   let innerComp = {
-    id: com.Id,
+    id: com.Name,
     name: com.Name,
     // источник данных для компонента
     datasource: com.DataSource ? {
@@ -85,11 +106,11 @@ function createComponentObject(com){
       schema: com.DataSourceSchema
     } : undefined,
     attrs: {},
-    slot:com.Slot,
+    slot: com.Slot,
     children: _.orderBy(com.ChildComponents, "Sort").map(subCom => createComponentObject(subCom))
   };
-   // конвертируем свойства к нужному виду:
-   (com.Properties || []).forEach(property => {
+  // конвертируем свойства к нужному виду:
+  (com.Properties || []).forEach(property => {
     innerComp.attrs[property.Name] = property.Value;
   });
   return innerComp;
@@ -99,11 +120,11 @@ function createComponentObject(com){
 function getInternalComponentDescription(com) {
   return ({
     //  Для динамического обновления данных при смене роутинга и обновлении компонента
-    beforeRouteUpdate (to, from, next) {
+    beforeRouteUpdate(to, from, next) {
       next();
-      for(var cur of  this.$children){
-        if(cur.beforeRouteUpdate){
-          cur.beforeRouteUpdate(to,from);
+      for (var cur of  this.$children) {
+        if (cur.beforeRouteUpdate) {
+          cur.beforeRouteUpdate(to, from);
         }
       }
     },
@@ -124,37 +145,37 @@ function getInternalComponentDescription(com) {
 }
 
 // Обработка пути в маршруте для корректного сравнения
-function normalizePath(path){
+function normalizePath(path) {
   var result = (path || "").toLowerCase();
-  if(!result.endsWith("/")){
+  if (!result.endsWith("/")) {
     result += "/"
   }
   return result;
 }
 
 /** Валидация доступа пользователя к определенным маршрутам */
-let routerBeforeEachFunction = (to,from, next)=>{
-    // Если переходим на логин, запоминаем путь, для возвращения
+let routerBeforeEachFunction = (to, from, next) => {
+  // Если переходим на логин, запоминаем путь, для возвращения
 
-    if (normalizePath(to.path).endsWith("/login/")) {
-      var backPath = from.path;
-      if (normalizePath(to.path) == normalizePath(from.path)) {
-        backPath = `/${store.state.applicationDescription.Id}/`
-      }
-      to.params["routeToBack"] = backPath
+  if (normalizePath(to.path).endsWith("/login/")) {
+    var backPath = from.path;
+    if (normalizePath(to.path) == normalizePath(from.path)) {
+      backPath = `/${store.state.applicationDescription.Id}/`
     }
-    // Если запрещен анонимный доступ, и отсутствует текущий пользователь, перенаправляем на логин
-    if (!to.meta.AllowAnonymous && !store.getters.getCurrentUser) {
+    to.params["routeToBack"] = backPath
+  }
+  // Если запрещен анонимный доступ, и отсутствует текущий пользователь, перенаправляем на логин
+  if (!to.meta.AllowAnonymous && !store.getters.getCurrentUser) {
 
-      next({path: `/${store.state.applicationDescription.Id}/LOGIN`});
+    next({path: `/${store.state.applicationDescription.Id}/LOGIN`});
 
-      return;
-    }
-    if(to.meta.HideAfterLogin && store.getters.getCurrentUser){
-      next({path: `/${store.state.applicationDescription.Id}/`});
-      return;
-    }
-    next();
+    return;
+  }
+  if (to.meta.HideAfterLogin && store.getters.getCurrentUser) {
+    next({path: `/${store.state.applicationDescription.Id}/`});
+    return;
+  }
+  next();
 }
 
 
@@ -163,22 +184,22 @@ let generateRouteFromDescription = (route, section) =>
     name: route.Id,
     path: route.Path,
     // Компоненты в маршруте
-    components:    createComponentsForRoute( route.RootComponent ? [concatRootCompAndComponents(route.RootComponent, route.Components)] : _.orderBy(route.Components, "Sort")),
+    components: createComponentsForRoute(route.RootComponent ? [concatRootCompAndComponents(route.RootComponent, route.Components)] : _.orderBy(route.Components, "Sort")),
     // Вложенные маршруты
-    children: _.orderBy(route.Children||[], ["Sort"]).map(r=>generateRouteFromDescription(r,section)),
+    children: _.orderBy(route.Children || [], ["Sort"]).map(r => generateRouteFromDescription(r, section)),
     meta: {
       AllowAnonymous: route.AllowAnonymous,
       HideAfterLogin: route.HideAfterLogin,
-      Section:{ Id: section.Id, Properties: JSON.parse(section.Properties ||"{}")}
+      Section: {Id: section.Id, Properties: JSON.parse(section.Properties || "{}")}
     }
   })
 
-let concatRootCompAndComponents = (rootComponent, components)=>({
+let concatRootCompAndComponents = (rootComponent, components) => ({
   Id: rootComponent.Id,
   Name: rootComponent.Name,
   Properties: rootComponent.Properties,
-  Slot: rootComponent.Slot, 
+  Slot: rootComponent.Slot,
   Sort: rootComponent.Sort,
   DataSource: rootComponent.DataSource,
-  ChildComponents : _.orderBy(components, "Sort")
+  ChildComponents: _.orderBy(components, "Sort")
 })

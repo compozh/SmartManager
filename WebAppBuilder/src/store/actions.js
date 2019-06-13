@@ -1,34 +1,23 @@
 import Axios from "axios";
-import * as jsonpatch from '../patching'
-
 
 const actions = ({
-  GetCurrentUser(context) {
-
-    Axios({
+  GetCurrentUser({commit}) {
+    return Axios({
       method: 'POST',
       url: `${myConfig.GrapgQlUrl}api/authentication/user`,
       withCredentials: true,
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
     }).then(resp => {
-      context.commit("setCurrentUser", resp.data)
-      //console.log(resp.data)
-    });
-
+      return commit("setCurrentUser", resp.data)
+    })
   },
-
-
-  LogOut(context) {
-    localStorage.removeItem("ItUniTocken");
-    localStorage.removeItem('userName');
-    context.commit("setCurrentUser", "");
-
+  LogOut({commit}) {
+    localStorage.removeItem("ItUniTocken")
+    commit("setCurrentUser",null)
   },
-  Login(context, loginParam) {
-
-    localStorage.removeItem("ItUniTocken");
-    localStorage.removeItem('userName');
-    context.commit("setCurrentUser", "");
+  Login({commit, dispatch}, loginParam) {
+    localStorage.removeItem("ItUniTocken")
+    commit("setCurrentUser", null)
 
     return Axios.post(`${myConfig.GrapgQlUrl}api/authentication/login`, {
       login: loginParam.login,
@@ -37,21 +26,16 @@ const actions = ({
     }, {
       withCredentials: true
     }).then(
-      // всё Ок
-      (response) => {
-        var token = response.data.access_token;
-        var username = response.data.username
+      response => {
+        const token = response.data.access_token
         if (token) {
-          context.commit("setCurrentUser", username);
-          localStorage.setItem('ItUniTocken', token);
-          localStorage.setItem('userName', username);
-          return true;
+          localStorage.setItem('ItUniTocken', token)
+          return dispatch('GetCurrentUser')
+            .then(() => true
+          )
         }
-
       })
   },
-
-
   /** Загрузить данные для компонента */
   LoadDataForComponent({commit}, {datasource, key}) {
     return Axios({
@@ -62,12 +46,10 @@ const actions = ({
       data: {SchemaName: datasource.schema, query: datasource.query}
     }).then(resp => {
       return commit("setAppData", {key, data: resp.data})
-      //console.log(resp.data)
-    });
+    })
   },
-
   /** Загрузить описание приложения */
-  GetAppDescription(context, appId) {
+  GetAppDescription({commit}, appId) {
     return Axios({
       method: 'POST',
       url: myConfig.GrapgQlUrl + 'api/graphql',
@@ -83,32 +65,22 @@ const actions = ({
     }).then(resp => {
       // Ошибка загрузки
       if (!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application) {
-        const spacing = '5px';
-        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
-        console.log(`%cОшибка загрузки приложения "${appId}"`, styles);
-        return;
+        const spacing = '5px'
+        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`
+        console.log(`%cОшибка загрузки приложения "${appId}"`, styles)
+        return
       }
       // Нет приложения
       if (resp.data.data.webapps.application == "null") {
-        const spacing = '5px';
-        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
-        console.log(`%cОтсутствует описание приложения "${appId}"`, styles);
-        return;
+        const spacing = '5px'
+        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`
+        console.log(`%cОтсутствует описание приложения "${appId}"`, styles)
+        return
       }
       var data = JSON.parse(resp.data.data.webapps.application)
-      return context.commit("SetAppDescription", data)
-    });
+      return commit("SetAppDescription", data)
+    })
   },
+})
 
-  // CallAction(context, data) {
-  //   return Axios.post('http://localhost:5000/api/Core/CallAction', {
-  //     source: data.source,
-  //     event: data.event,
-  //     arguments: data.arguments
-  //   }).then((response => {
-  //     console.log(response.data)
-
-  //   }))
-  // }
-});
 export default actions

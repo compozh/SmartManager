@@ -153,7 +153,7 @@ namespace ItGraphQlSchema.Types
 				Email = u.Email,
 				Skype = u.Skype,
 				HasKeyTitle = u.HASKEY == "+" ?  Resources.HaveKey : Resources.DontHaveKey,
-				IsCurrent = user?.UserId == u.UserID
+				//IsCurrent = user?.UserId == u.UserID
 			});
 			
 			
