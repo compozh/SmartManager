@@ -17,7 +17,9 @@ export const eventBus = new Vue(); // Шина событий
 
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
 req.keys().map(key => {
-
+  if ( !req(key).default || !req(key).default.name ) {
+    return
+  }
   return Vue.component(req(key).default.name, req(key).default)
 });
 
