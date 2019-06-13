@@ -1,10 +1,5 @@
 const state = {
-  applicationDescription:{},
-  appData: {},
-  // Текущий пользователь
-  currentUser: {},
-  // Массив с названием иконок
-  existedIcons:[]
+  testingStoreProperty: 'Hello from Smart Manager Store!'
 }
 
 export default state
