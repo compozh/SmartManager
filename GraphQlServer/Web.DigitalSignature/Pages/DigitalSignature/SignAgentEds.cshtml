@@ -1,0 +1,122 @@
+@using Web.DigitalSignature
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<script src="@Url.Content("~/Scripts/euAgentHelper.js?v=20181220",true)" type="text/javascript"></script>
+	<script>
+		var initialized = false;
+
+		EU_MODULE_INITIALIZE_ON_LOAD = true;
+		window.EUSignCPModuleInitialized = onload;
+
+		function onload() {
+			initialized = true;
+		}
+
+		function initialize(params, success, error) {
+			if (initialized) {
+				euAgentHelper.initialize(params, success, error);
+			} else {
+				initializeWithInterval(params, success, error);
+			}
+		}
+
+		function initializeWithInterval(params, success, error) {
+			setTimeout(function() {
+					initialize(params, success, error);
+				},
+				50);
+		}
+
+		function verifyFile(fileUrl, signFileUrl, hash) {
+			euAgentHelper.verifyFile(fileUrl, signFileUrl, hash);
+		}
+
+		function verifyData(signedData, data, internal, dateTime) {
+			euAgentHelper.verifyData(signedData, data, false, internal, dateTime);
+		}
+
+		function needProvideKey() {
+			return !euAgentHelper.isKeyReaded();
+		}
+
+		function readStoredPrivateKey(callback) {
+			euAgentHelper.readStoredPrivateKey(callback);
+		}
+
+		function signData(data, internal, keyFiles, password) {
+			euAgentHelper.signData(data, internal, keyFiles, password);
+		}
+
+		function getKeyInfo(convertFunction) {
+			euAgentHelper.getKeyInfo(convertFunction);
+		}
+
+		function signDataArray(data, internal, keyFiles, password) {
+			euAgentHelper.signDataArray(data, internal, keyFiles, password);
+		}
+
+		function signFile(fileUrl, hash) {
+			euAgentHelper.signFile(fileUrl, hash);
+		}
+
+		function readPrivateKey(callback) {
+			euAgentHelper.readPrivateKey(callback);
+		}
+
+		function setCa(index) {
+			return euAgentHelper.setCA(index);
+		}
+
+		function envelopFile(data) {
+			euAgentHelper.envelopFile(data);
+		}
+
+		function developFile(data) {
+			euAgentHelper.developFile(data);
+		}
+
+		function needPrivateKeyCertificates() {
+			return euAgentHelper.loadPKCertsFromFile;
+		}
+
+		function clearKey() {
+			euAgentHelper.clearKey();
+		}
+
+		function getDeviceTypes(preferedTypes) {
+			return euAgentHelper.getDeviceTypes(preferedTypes);
+		}
+
+		function getAllAvailableDevices(preferedTypes) {
+			return euAgentHelper.getAllAvailableDevices(preferedTypes);
+		}
+
+		function getDevicesByTypes(types, allowCache) {
+			return euAgentHelper.getDevicesByTypes(types, allowCache);
+		}
+
+		function getDevices(typeIndex) {
+			return euAgentHelper.getDevices(typeIndex);
+		}
+
+		function readHardwarePrivateKey(deviceType, device, password, certificates, callback) {
+			euAgentHelper.readHardwarePrivateKey(deviceType, device, password, certificates, callback);
+		}
+
+	</script>
+	<script src="@Url.Content("~/Scripts/euutils.js",true)" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/eusw.js?v=20180112",true)" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/euswll.js?v=20180112",true)" type="text/javascript"></script>
+</head>
+<body onload="onload();">
+	<div>
+
+	</div>
+</body>
+</html>

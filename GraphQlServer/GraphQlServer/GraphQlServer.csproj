@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AuthenticationMiddleware\AuthenticationMiddleware.csproj" />
     <ProjectReference Include="..\ItGraphQlSchema\ItGraphQlSchema.csproj" />
+    <ProjectReference Include="..\Web.DigitalSignature\Web.DigitalSignature.csproj" />
   </ItemGroup>
 
 </Project>
