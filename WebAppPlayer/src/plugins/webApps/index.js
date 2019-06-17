@@ -2,12 +2,16 @@
  * Модуль работы с конструктором веб приложений
  */
 
-import { WebApps } from './webApps'
+import path from 'path'
+import { WebApps } from './api/webApps'
 import Authentication from '@it-enterprise/authentication'
 import GrapgQlCore from '@it-enterprise/graphql'
 import ModulesManager from '@it-enterprise/modules-manager'
-import Router from '../router/index'
+import Router from '@it-enterprise/routerCore'
 import storeModule from './store/index'
+
+const loadModule = () => import('./interface')
+
 
 import axios from 'axios'
 
@@ -21,6 +25,7 @@ export default {
       throw new Error('Зависимости должны быть переданы')
     }
 
+    // добавляем в зависимости axios, если он не передан
     if (!dependencies.axios) {
       dependencies.axios = axios
     }
@@ -33,13 +38,27 @@ export default {
     store.registerModule(_namespace, storeModule)
 
 
+    // регистрируем компоненты
+
+    /** Регистрация асинхронных компонент без импорта */
+    const registerComponents = function (context, set, prefix) {
+      context.keys().forEach(function (key) {
+
+        var name = path.basename(key)
+        name = name.substring(0,name.lastIndexOf('.'))
+        Vue.component(`${_namespace}-${prefix}-${name}`, () => loadModule().then(r => r.__private.components[set][key]))
+      })
+    }
+    registerComponents(require.context('./components', false, /\.vue$|.js$/, 'weak'), 'renderless', 'rs')
+
+
     // подключаем основные системные плагины
     Vue.use(ModulesManager, { dependencies })
+    Vue.use(Router, { options, dependencies })
     Vue.use(GrapgQlCore, { options, dependencies })
     Vue.use(Authentication, { options, dependencies })
-    Vue.use(Router, { options, dependencies })
 
-    const core = new WebApps(dependencies)
+    const core = new WebApps(Vue, options, dependencies)
     dependencies.modulesManager.register(_namespace, () => Promise.resolve(core))
     Vue.prototype.$WebApps = core
   }

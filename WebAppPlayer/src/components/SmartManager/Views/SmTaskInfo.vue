@@ -108,7 +108,7 @@ export default {
         schema: 'SMARTMANAGER'
       }
       const key = 'SMTASKINFO'
-      this.$store.dispatch('LoadDataForComponent', {
+      this.$store.dispatch('WebApps/LoadDataForComponent', {
         datasource,
         key
       })

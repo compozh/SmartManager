@@ -8,7 +8,7 @@ export default {
   name: 'test-toolbar',
   computed: {
     currentPage() {
-      return this.$store.state.appData.currentPage
+      return this.$store.state.WebApps.appData.currentPage
     }
   }
 }

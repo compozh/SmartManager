@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import * as jsonpatcher from './patching'
+import * as jsonpatcher from '../api/patching'
 
 export default {
   name: 'common-component',
@@ -8,26 +8,33 @@ export default {
       routerParam: {}
     }
   },
+
+
+  beforeRouteUpdate(to, from, next){
+    next()
+
+    // получение данных для компонента
+    this.loadDataForComponents(false)
+    for (var cur of this.$children) {
+      if (cur.beforeRouteUpdate) {
+        cur.beforeRouteUpdate(to, from)
+      }
+      if (cur.$children) {
+        for (var chilCur of cur.$children) {
+          if (chilCur.beforeRouteUpdate) {
+            chilCur.beforeRouteUpdate(to, from)
+          }
+        }
+      }
+    }
+  },
+
+
   //////////////////////////////////////////////////
   //////              METHODS
   /////////////////////////////////////////////////
   methods: {
-    beforeRouteUpdate(to, from, next) {
-      // получение данных для компонента
-      this.loadDataForComponents(false)
-      for (var cur of this.$children) {
-        if (cur.beforeRouteUpdate) {
-          cur.beforeRouteUpdate(to, from)
-        }
-        if (cur.$children) {
-          for (var chilCur of cur.$children) {
-            if (chilCur.beforeRouteUpdate) {
-              chilCur.beforeRouteUpdate(to, from)
-            }
-          }
-        }
-      }
-    },
+
     // Функция для получения данных компонента, принимает boolean тип,
     // который указывает является это первой загрузкий или обновление даных по роутингу на одной странице
     loadDataForComponents(firstLoad) {
@@ -49,7 +56,8 @@ export default {
           return
         }
 
-        this.$store.dispatch('LoadDataForComponent', {
+
+        this.$store.dispatch('WebApps/LoadDataForComponent', {
           datasource: datasource,
           key: this.internalComponent.id
         })
@@ -57,8 +65,8 @@ export default {
     },
     /** Получить значение из хранилища по ссылке для использования в свойствах */
     getStoreValue(path) {
-      var path = this.getStorePath(path)
-      var object = this.$store.getters.getAppData(this.internalComponent.id)
+      path = this.getStorePath(path)
+      var object = this.$store.getters['WebApps/getAppData'](this.internalComponent.id)
       if (!object) {
         return undefined
       }
@@ -67,8 +75,8 @@ export default {
 
     /** Обновить значение в хранилище (используется в модели) */
     updateStoreValue(path, value) {
-      var path = this.getStorePath(path)
-      this.$store.commit('updateData', {
+      path = this.getStorePath(path)
+      this.$store.commit('WebApps/updateData', {
         key: this.internalDataSourceId,
         patchlist: [
           {
@@ -115,7 +123,7 @@ export default {
 
     /** Отрисока компонента */
     createCommonComponentInternal(component, scope, h) {
-      return h('common-component', {
+      return h('WebApps-rs-CommonComponent', {
         props: {
           component: component,
           storeScope: scope,
@@ -142,7 +150,7 @@ export default {
     /** Вызов события из компонента по имени */
     callAction(eventName) {
       var actionInfo = this.internalComponent.actions[eventName]
-      this.$store.dispatch('CallAction', {
+      this.$store.dispatch('WebApps/CallAction', {
         source: this.internalComponent.Id,
         event: eventName,
         arguments: this.transfotmProps(actionInfo.arguments)
@@ -248,7 +256,7 @@ export default {
     let on = _.transform(
       this.internalComponent.actions || {},
       (result, value, key) => {
-        result[key] = event => {
+        result[key] = () => {
           this.callAction(key)
         }
       },

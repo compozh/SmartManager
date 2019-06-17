@@ -97,7 +97,7 @@ export default {
           schema: 'ITPORTAL'
         }
         let key = 'ITMODULE'
-        this.$store.dispatch('LoadDataForComponent', {
+        this.$store.dispatch('WebApps/LoadDataForComponent', {
           datasource,
           key
         })
@@ -105,7 +105,7 @@ export default {
         if (!this.$store.getters.getAppData('ITMENU')) {
           return
         }
-        this.$store.commit('setAppData', {
+        this.$store.commit('WebApps/setAppData', {
           key: 'ITMODULE',
           data: {
             data: {

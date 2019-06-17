@@ -33,7 +33,8 @@ module.exports = {
     'quotes':['error', 'single'],
     'curly':"error",
     "key-spacing": ["error", { "beforeColon": false, "afterColon": true, "mode": "strict"  }],
-    'block-spacing': "error"
+    'block-spacing': "error",
+    "space-infix-ops": ["error", {"int32Hint": false}]
 
   },
 

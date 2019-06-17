@@ -29,14 +29,16 @@ export default {
   },
   computed: {
     orders: function() {
-      return this.loaded ? this.$store.state.appData['test-orders'].data._orders.orders : []
+
+      let data = this.$store.state.WebApps.appData['test-orders']
+      return this.loaded  && data ? data.data._orders.orders : []
     }
   },
   beforeMount: function() {
-    this.$store.commit('setAppData', { key: 'currentPage', data: 'Список заказов' })
+    this.$store.commit('WebApps/setAppData', { key: 'currentPage', data: 'Список заказов' })
 
     this.$store
-      .dispatch('LoadDataForComponent', {
+      .dispatch('WebApps/LoadDataForComponent', {
         datasource: {
           schema: '_test',
           query: `

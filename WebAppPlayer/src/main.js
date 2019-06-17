@@ -4,7 +4,13 @@ import WebApps from './plugins/webApps/index'
 import { i18n } from './plugins.1/i18n'
 import 'vuetify/dist/vuetify.min.css'
 import Vuex from 'vuex'
+import VueRouter from 'vue-router'
 
+export const eventBus = new Vue() // Шина событий
+
+
+
+Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Vuex)
 
@@ -12,9 +18,17 @@ Vue.use(Vuex)
 const store = new Vuex.Store({})
 
 
+let router = new VueRouter({
+  mode: 'history',
+  base: window.myConfig.BASE_URL,
+  routes: [{path: '/:ApplicationId',children: [{path: '*'}]}
+  ]
+})
+
 // объект с зависимостями
 let d = {
-  store
+  store,
+  router
 }
 
 Vue.use(WebApps, {
@@ -31,39 +45,19 @@ req.keys().map(key => {
   Vue.component(req(key).default.name, req(key).default)
 })
 
+start()
+
 async function start()   {
   // Загрузка приложения
   let webAppsCore = await d.modulesManager.getWebApps()
 
   let appComponent = await webAppsCore.GetApplicationComponent({
-    appId: 'SKD',
+
     properties: {
       i18n,
-      router: d.router,
       store
     }
   })
 
   new Vue(appComponent).$mount('#app')
 }
-
-start()
-
-// .then(res => res.LoadAppDescription("SKD"))
-//   .then(res => {
-//     new Vue({
-//       i18n,
-//       router:d.router,
-//       render: h => h(res.RootComponent.Name)
-//     }).$mount("#app")
-//   })
-
-// setTimeout(() => {
-//   resolve({
-//     created(){
-
-//       this.$modulesManager.getAuthentication().then(res => res.logIn("melentyev@it.ua", "vbkkth", true))
-//     },
-//     render: h => h("H6", ["TEST2"])
-//   })
-// }, 5000);

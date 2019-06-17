@@ -10,7 +10,7 @@
     "lint-fix": "vue-cli-service lint --fix",
     "dev": "vue-cli-service build --mode development",
     "inspect": "vue-cli-service inspect --mode development --verbose",
-    "links": "npm link @it-enterprise/authentication @it-enterprise/graphql @it-enterprise/modules-manager"
+    "links": "npm link @it-enterprise/authentication @it-enterprise/graphql @it-enterprise/modules-manager @it-enterprise/routerCore"
   },
   "dependencies": {
     "lodash": "^4.17.11",

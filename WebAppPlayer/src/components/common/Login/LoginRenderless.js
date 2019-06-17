@@ -21,11 +21,11 @@ export default {
       if (!this.userData.password) {
         return (this.message = this.$t('emptyPassword'))
       }
-
-      this.$store
-        .dispatch('Login', this.userData)
-        .then(result => (result ? this.$router.replace({ path: this.routeToBack }) : ''))
-        .catch(() => (this.message = 'Ошибка авторизации'))
+      this.$authentication.logIn(this.userData.login, this.userData.password, this.userData.rememberMe).then(res=>{
+        if(res) {
+          this.$router.replace({ path: this.routeToBack })
+        }
+      }).catch(() => (this.message = 'Ошибка авторизации'))
     }
   },
   render() {

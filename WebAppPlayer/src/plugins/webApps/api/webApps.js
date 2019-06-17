@@ -1,26 +1,51 @@
+console.log('WebAppsCore is loaded!')
+
 import Vue from 'vue'
+
 import _ from 'lodash'
 export class WebApps {
 
+  // Импортируемые зависимости
   __modulesManager;
+  __vm;
+  __router;
+
+  // Внутренние свойства
   __application;
+  __routes;
 
   /**
    * Конструктор
    * @param {object} dependencies Зависимости
    */
-  constructor(dependencies) {
+  constructor(Vue, options, dependencies) {
 
     this.__modulesManager = dependencies.modulesManager
+    this.__router = dependencies.router
+    this.__options = options
+    this.__axios = dependencies.axios
+    this.__vm = new Vue({
+      router: dependencies.router
+    })
+
 
     // this.__store = dependencies.store
 
     // if(!this.__store){
     //   throw new Error('Хранилище должно быть передано в виде зависимости .store')
     // }
-    // if(!this.__coreRouter){
-    //   throw new Error('Router должен быть передан в виде зависимости!')
-    // }
+
+    if(!this.__axios){
+      throw new Error('Axios должен быть передан в виде зависимости .axios')
+    }
+
+
+    // проверка и инициализация роутера
+    if(!this.__router){
+      throw new Error('router должен быть передан в виде зависимости .router')
+
+    }
+
     if(!this.__modulesManager){
       throw new Error('Менеджер пакетов должен быть передан в виде зависимости!')
     }
@@ -32,7 +57,7 @@ export class WebApps {
     return this.__modulesManager.getGraphQlCore()
   }
 
-  /**  */
+  /** Плагин работы с router */
   __coreRouter(){
     return this.__modulesManager.getCoreRouter()
   }
@@ -65,6 +90,10 @@ export class WebApps {
     // конвертация приложения в формат Vue + VueRouter
     this.__application = app
     this.__convertApplicationToInternalFormat(app)
+
+    // загружаем в роутер маршруты приложения
+    this.__setUpApplicationRouting()
+
   }
 
   /**
@@ -78,13 +107,20 @@ export class WebApps {
     var routes = []
     for (let index = 0; index < sections.length; index++) {
       const section = sections[index]
-      routes = routes.concat((section.Routes||[]).map(r=> (r.section = section)&& r))
+      routes = routes.concat((section.Routes || []).map(r=> (r.section = section) && r))
+    }
+
+    // Корневой маршрут со всеми вложенными маршрутами
+    let r = {
+      Components: [app.RootComponent],
+      Id: '',
+      Path: `/${app.Id}`,
+      Children: routes
     }
 
     // Формируем роуты в нужном формате
-    this.__routes = _.orderBy(routes, ['Sort']).map(r => this.__generateRouteFromDescription(r, r.section))
+    this.__routes = [this.__generateRouteFromDescription(r, {})]
 
-    console.log(routes)
   }
 
 
@@ -95,6 +131,7 @@ export class WebApps {
    */
   __generateRouteFromDescription(route, section) {
 
+    section = section || {}
     let components = _.orderBy(route.Components, 'Sort')
     // Если есть корневой компонент маршрута - помещаем все компоненты маршрута в корневой компонент
     if(route.RootComponent){
@@ -107,8 +144,12 @@ export class WebApps {
 
     for (let index = 0; index < components.length; index++) {
       const component = components[index]
+
       // компонент - обёртка
-      componentsObject[component.NameInRoute || 'default'] = Vue.component('common-component',Vue.extend(Vue.component('common-component')))
+      let comp = () => Vue.component('WebApps-rs-CommonComponent')().then(r =>Vue.component('r', Vue.extend(r)))
+
+
+      componentsObject[component.NameInRoute || 'default'] = comp
 
       // конвертируем компоненты из внутренного формата в стандартный формат vue
       let innerComp = this.__createComponentObject(component)
@@ -127,12 +168,12 @@ export class WebApps {
       props: componentsProperties,
 
       // Вложенные маршруты
-      children: _.orderBy(route.Children||[], ['Sort']).map(r=>this.__generateRouteFromDescription(r,section)),
+      children: _.orderBy(route.Children || [], ['Sort']).map(r=>this.__generateRouteFromDescription(r,r.section)),
       // Метаинформация об уровне доступа и разделе приложения
       meta: {
         AllowAnonymous: route.AllowAnonymous,
         HideAfterLogin: route.HideAfterLogin,
-        Section: { Id: section.Id, Properties: JSON.parse(section.Properties ||'{}')}
+        Section: { Id: section.Id, Properties: JSON.parse(section.Properties || '{}')}
       }
     }
   }
@@ -144,7 +185,7 @@ export class WebApps {
    */
   __createComponentObject(component){
     let innerComp = {
-      id: component.Id,
+      id: component.Name,
       name: component.Name,
       // источник данных для компонента
       datasource: component.DataSource ? {
@@ -152,9 +193,12 @@ export class WebApps {
         schema: component.DataSourceSchema
       } : undefined,
       attrs: {},
+
       slot: component.Slot,
       children: _.orderBy(component.ChildComponents, 'Sort').map(subCom => this.__createComponentObject(subCom))
     };
+
+
     // конвертируем свойства к нужному виду:
     (component.Properties || []).forEach(property => {
       innerComp.attrs[property.Name] = property.Value
@@ -167,18 +211,50 @@ export class WebApps {
    * Получить компонент - представляющий загруженное приложение
    * @param {object} properties Параметры приложения
    */
-  async GetApplicationComponent({ appId, properties }) {
-    await this.LoadAppDescription(appId)
+  async GetApplicationComponent({ properties }) {
 
-    let coreRouter = await this.__coreRouter()
+    // ID приложения получаем из параметров
+    this.__appId = this.__vm.$route.params.ApplicationId
+    await this.LoadAppDescription(this.__appId)
 
-    coreRouter.AddRoutes(this.__routes)
+
+    // Подмешиваем в зависимости роутер
+    properties = {
+      router: this.__router,
+      ...properties
+    }
+
 
     let appComponent = {
       ...properties,
-      render: h => h(this.__application.RootComponent.Name)
+      render: h => h('router-view')
     }
 
     return appComponent
   }
+
+
+  /**
+   * Инициализация Vue router с маршрутами, описанными в конструкторе приложений
+   */
+  async __setUpApplicationRouting(){
+    let coreRouter = await this.__coreRouter()
+
+    coreRouter.SetRoutes(this.__routes)
+  }
+
+
+
+  async LoadDataForComponent({datasource}){
+    return this.__axios({
+      method: 'POST',
+      url: this.__options.GrapgQlUrl + 'api/graphql',
+      withCredentials: true,
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+      data: {SchemaName: datasource.schema, query: datasource.query}
+    })
+  }
+
+
 }
+

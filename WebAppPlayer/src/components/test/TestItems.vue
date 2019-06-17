@@ -2,8 +2,8 @@
   <v-container>
     <v-layout>
       <v-flex xs6 offset-xs3>
-        <v-card class="item-card" v-for="i of items">
-          <v-card-title>
+        <v-card class="item-card" v-for="(i, ind) of items">
+          <v-card-title v-bind:key="ind">
             <div class="subtext">
               <span class="grey--text">id: {{ i.id }}</span>
               <div class="headline">{{ i.name }}</div>
@@ -33,14 +33,14 @@ export default {
   },
   computed: {
     items: function() {
-      return this.loaded ? this.$store.state.appData['test-items'].data._orders.items : []
+      return this.loaded ? this.$store.state.WebApps.appData['test-items'].data._orders.items : []
     }
   },
 
   beforeMount: function() {
-    this.$store.commit('setAppData', { key: 'currentPage', data: 'Список товаров' })
+    this.$store.commit('WebApps/setAppData', { key: 'currentPage', data: 'Список товаров' })
     this.$store
-      .dispatch('LoadDataForComponent', {
+      .dispatch('WebApps/LoadDataForComponent', {
         datasource: {
           schema: '_test',
           query: `

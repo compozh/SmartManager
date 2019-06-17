@@ -95,11 +95,13 @@ export default {
   },
   computed: {
     order: function() {
-      return this.loaded ? this.$store.state.appData['test-order'].data._orders.orders[0] : []
+
+      let data =  this.$store.state.WebApps.appData['test-order']
+      return this.loaded && data ? data.data._orders.orders[0] : []
     },
     items: function() {
-      return this.$store.state.appData['test-items']
-        ? this.$store.state.appData['test-items'].data._orders.items
+      return this.$store.state.WebApps.appData['test-items']
+        ? this.$store.state.WebApps.appData['test-items'].data._orders.items
         : []
     }
   },
@@ -107,7 +109,7 @@ export default {
   methods: {
     // Изменение пункта заказа
     itemChange(ev) {
-      this.$store.dispatch('LoadDataForComponent', {
+      this.$store.dispatch('WebApps/LoadDataForComponent', {
         datasource: {
           schema: '_test',
           query: `
@@ -132,7 +134,7 @@ export default {
       }
       this.showItemToAdd = false
       this.$store
-        .dispatch('LoadDataForComponent', {
+        .dispatch('WebApps/LoadDataForComponent', {
           datasource: {
             schema: '_test',
             query: `
@@ -176,7 +178,7 @@ export default {
     // Удаление заказа
     deleteItem(item) {
       this.$store
-        .dispatch('LoadDataForComponent', {
+        .dispatch('WebApps/LoadDataForComponent', {
           datasource: {
             schema: '_test',
             query: `
@@ -202,7 +204,7 @@ export default {
     loadData() {
       this.loaded = false
       this.$store
-        .dispatch('LoadDataForComponent', {
+        .dispatch('WebApps/LoadDataForComponent', {
           datasource: {
             schema: '_test',
             query: `{
@@ -231,15 +233,15 @@ export default {
 
   // действие при загрузке страницы
   beforeMount: function() {
-    this.$store.commit('setAppData', {
+    this.$store.commit('WebApps/setAppData', {
       key: 'currentPage',
       data: 'Заказ #' + this.$route.params.orderid
     })
 
     // товары
-    if (!this.$store.state.appData['test-items']) {
+    if (!this.$store.state.WebApps.appData['test-items']) {
       this.$store
-        .dispatch('LoadDataForComponent', {
+        .dispatch('WebApps/LoadDataForComponent', {
           datasource: {
             schema: '_test',
             query: `
