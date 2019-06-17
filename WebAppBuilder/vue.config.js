@@ -9,7 +9,7 @@ module.exports = {
       .loader('vue-svg-loader');
   },
   publicPath: process.env.NODE_ENV === 'production'
-  ? '/webapps/'
-  : '/'
-  
+    ? '/webapps/'
+    : '/'
+
 }
