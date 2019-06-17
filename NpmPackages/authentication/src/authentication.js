@@ -26,7 +26,6 @@ const currentUser = {
  */
 export default class Authentication {
   __modulesManager
-  __currentUser = currentUser.get()
   __dependencies
 
   /**
@@ -71,12 +70,12 @@ export default class Authentication {
     this.__axios.interceptors.request.use(
       (config) => {
         // Если нет текущего пользователя - ничего не делаем
-        if(!this.__currentUser){
+        if(!this.currentUser){
           return config
         }
 
         // Получаем токен и добавляем его в заголовки
-        let token = this.__currentUser.access_token
+        let token = this.currentUser.access_token
         if (token) {
           config.headers['Authorization'] = `Bearer ${ token }`
         }
@@ -108,8 +107,8 @@ export default class Authentication {
       var token = response.access_token
       // сохранение токена
       if (token) {
-        this.__currentUser = currentUser.set(response)
-        return this.__currentUser
+        currentUser.set(response)
+        return this.currentUser
       }
       // если токен не пришел
       throw new Error(`Ошибка входа. \r\b ${response}`)
@@ -123,12 +122,12 @@ export default class Authentication {
    */
   async logOff() {
     try {
-      if(!this.__currentUser){
+      if(!this.currentUser){
          // Получаем провайдер
         let provider = await this.__provider()
 
         await provider.LogOff()
-        this.__currentUser = currentUser.reset()
+        currentUser.reset()
       }
     } catch (res) {
       throw new Error(`Ошибка при попытке выйти из системы. \r\n ${res}`)
@@ -140,11 +139,15 @@ export default class Authentication {
    * Получить токен для авторизации на веб сервере
    */
   getAuthHeader(){
-    if(!this.__currentUser){
+    if(!this.currentUser){
       return undefined
     }
-    let token = this.__currentUser.access_token
+    let token = this.currentUser.access_token
     return {'Authorization':`Bearer ${token}`}
   }
 
+
+  get currentUser(){
+    return currentUser.get()
+  }
 }
