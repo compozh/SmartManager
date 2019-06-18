@@ -6,20 +6,15 @@ import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 import state from './state'
-// Modules
-import SmartManagerStore from '../components/SmartManager/api/store/store'
 
 Vue.use(Vuex)
 
 // Create a new store
 const store = new Vuex.Store({
-  modules: {
-    sm: SmartManagerStore
-  },
   actions,
   getters,
   mutations,
-  state
+  state,
 })
 
 export default store

@@ -17,6 +17,8 @@ using Web.Tools;
 using Web.WebRequests;
 using Microsoft.Extensions.Caching.Memory;
 using GraphQlServer.CultureMiddleware;
+using Microsoft.AspNetCore.Mvc;
+using Web.DigitalSignature;
 
 namespace GraphQlServer
 {
@@ -103,6 +105,9 @@ namespace GraphQlServer
 			services.ConfigSchemas(Configuration);
 			services.AddSingleton<SchemaSelector>();
 			services.AddSingleton<IMemoryCache, MemoryCache>();
+			services.AddDigitalSignature();
+
+			
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,6 +129,9 @@ namespace GraphQlServer
 				}
 			});
 
+
+			app.UseDigitalSignature();
+			
 			HttpContextAccessorHandler.Configure(contextAccessor);
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
