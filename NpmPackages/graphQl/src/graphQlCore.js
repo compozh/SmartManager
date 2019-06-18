@@ -67,6 +67,14 @@ export default class GraphQlCore {
   }
 
   /**
+   * Получение полной информации о текущем пользователе
+   */
+  async GetCurrentUser(){
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`)
+    return response.data
+  }
+
+  /**
    * Разлогиниться
    */
   async LogOff(){
@@ -74,5 +82,8 @@ export default class GraphQlCore {
       withCredentials: true
     })
   }
+
+
+
 
 };

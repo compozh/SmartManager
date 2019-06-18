@@ -108,7 +108,10 @@ export default class Authentication {
       // сохранение токена
       if (token) {
         currentUser.set(response)
-        return this.currentUser
+        let userData = await provider.GetCurrentUser()
+        response.UserData = userData
+        currentUser.set(response)
+        return response
       }
       // если токен не пришел
       throw new Error(`Ошибка входа. \r\b ${response}`)
