@@ -1,43 +1,61 @@
 <template>
-  <v-container fluid pa-2>
+  <v-container fluid pa-0 px-2>
     <v-layout v-if="loading">
       <v-flex xs12>
-        <v-progress-circular :size="100" color="blue darken-2" indeterminate></v-progress-circular>
+        <v-progress-circular
+          :size="100"
+          color="blue darken-2"
+          indeterminate
+        ></v-progress-circular>
       </v-flex>
     </v-layout>
     <v-layout v-else row wrap justify-center>
-      <v-flex xs12 md9 lg7 mb-2 v-for="task in tasks" :key="task.id">
-        <v-card class="task-item" @click="goToTaskInfo(task.id)">
-          <v-layout row wrap align-center>
-            <v-flex xs2 sm1 d-flex justify-center>
-              <v-img
-                class="user-icon"
-                v-if="task.addedPhoto"
-                :src="task.addedPhoto"
-                contain
-              ></v-img>
-              <v-icon v-else size="50" color="#b3b3b3">account_circle </v-icon>
+      <v-flex
+        xs12
+        class="task-container"
+        v-for="task in tasks"
+        :key="task.id"
+      >
+        <v-card
+          flat
+          class="task-item"
+          @click="goToTaskInfo(task.id)"
+        >
+          <v-layout row align-center>
+            <v-flex d-flex justify-center shrink px-3>
+              <user-icon :src="task.addedPhoto" size="50"></user-icon>
             </v-flex>
-            <v-flex xs10 sm11 py-1 pr-2>
+            <v-flex py-1 pr-2 class="text-ellipsis">
               <v-layout column text-xs-left>
-                <v-flex>
-                  <span class="body-2 font-weight-light blue--text text--darken-2">{{
-                    task.name
-                  }}</span>
+                <v-flex class="text-ellipsis">
+                  <span
+                    class="body-2 font-weight-light blue--text text--darken-2"
+                  >{{ task.name }}</span>
                 </v-flex>
-                <v-flex class="caption">
-                  <span>Исполнитель: {{ task.addedFio }}</span>
+                <v-flex class="caption text-ellipsis">
+                  <span class="hidden-xs-only"
+                  >Исполнитель: </span>{{ task.addedFio }}
                 </v-flex>
-                <v-flex d-flex justify-space-between class="caption grey--text">
-                  <span class="text-xs-left">Дата добавления: {{ task.dateadd }}</span>
-                  <span class="text-xs-right">Идентификатор: {{ task.id }}</span>
+                <v-flex d-flex class="caption grey--text">
+                  <v-flex class="text-xs-left">
+                    <span class="hidden-xs-only"
+                    >Дата добавления: </span>{{ task.dateadd }}
+                  </v-flex>
+                  <v-flex class="text-xs-right">
+                    <span class="hidden-xs-only"
+                    >Идентификатор: </span>{{ task.id }}
+                  </v-flex>
                 </v-flex>
               </v-layout>
             </v-flex>
           </v-layout>
         </v-card>
       </v-flex>
-      <v-flex class="empty-state-block" v-if="!checkTasks" xs12>
+      <v-flex
+        class="empty-state-block"
+        v-if="!checkTasks"
+        xs12
+      >
         <empty-state-img class="empty-state-image"></empty-state-img>
         <span class="title grey--text font-weight-thin pa-2">Нет задач в папке</span>
       </v-flex>
@@ -66,51 +84,65 @@ export default {
   },
   methods: {
     beforeRouteUpdate(to, from, next) {
-      if (this.$store.getters.getAppData('SMTASKS')) {
-        this.tasks = this.$store.getters.getAppData('SMTASKS').data.smtasks.tasks
-      }
+      // if (this.$store.getters['WebApps/getAppData']('sm-tasks')) {
+      //   this.tasks = this.$store.getters['WebApps/getAppData']('sm-tasks').data.smtasks.tasks
+      // }
     },
     goToTaskInfo(taskId) {
-      this.$router.push({ name: 'SMARTMANAGERTASKDETAIL', params: { taskId } })
+      this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
     }
   }
 }
 </script>
 
 <style scoped>
-.user-icon {
-  max-height: 50px;
-  max-width: 50px;
-  border-radius: 50%;
-}
+  .user-icon {
+    max-height: 50px;
+    max-width: 50px;
+    border-radius: 50%;
+  }
 
-.empty-state-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-}
+  .empty-state-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+  }
 
-.empty-state-image {
-  width: 200px;
-}
+  .empty-state-image {
+    width: 200px;
+  }
 
-/* SVG image colors */
-.empty-state-image .c {
-  fill: #f1f1f1;
-}
+  /* SVG image colors */
+  .empty-state-image .c {
+    fill: #f1f1f1;
+  }
 
-.empty-state-image .d {
-  fill: #c5c5c5;
-}
+  .empty-state-image .d {
+    fill: #c5c5c5;
+  }
 
-.empty-state-image .e {
-  fill: #efefef;
-}
+  .empty-state-image .e {
+    fill: #efefef;
+  }
 
-.task-item:hover {
-  cursor: pointer;
-  background: rgb(250, 250, 250);
-}
+  .task-container {
+    overflow: hidden;
+  }
+
+  .task-item {
+    box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
+  }
+
+  .task-item:hover {
+    cursor: pointer;
+    background: rgb(250, 250, 250);
+  }
+
+  .text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>

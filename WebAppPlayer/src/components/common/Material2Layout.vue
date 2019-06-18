@@ -1,10 +1,17 @@
 <template>
   <v-app>
-    <v-toolbar app clipped-left class="toolbar">
-      <v-toolbar-side-icon @click.stop="setMenuButtonMode" class="blue--text text--darken-2">
+    <v-toolbar
+      app
+      clipped-left
+      class="toolbar"
+    >
+      <v-toolbar-side-icon
+        @click.stop="setMenuButtonMode"
+        class="blue--text text--darken-2"
+      >
       </v-toolbar-side-icon>
       <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-      <router-view name="toolbar" />
+      <router-view name="toolbar"/>
       <v-spacer></v-spacer>
     </v-toolbar>
 
@@ -15,11 +22,11 @@
       v-model="drawer"
       :mini-variant="menuMiniMode"
       mini-variant-width="56"
-      width="250"
+      width="270"
       class="transparent"
       stateless
     >
-      <router-view name="navigation-drawer" />
+      <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
 
     <v-content class="white">
@@ -27,11 +34,12 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+
   </v-app>
 </template>
 
 <script>
-import { eventBus } from '../../main'
+import {eventBus} from '../../main'
 
 export default {
   name: 'material-2-layout',
@@ -39,7 +47,7 @@ export default {
   data() {
     return {
       drawer: true,
-      mini: false
+      mini: false,
     }
   },
   methods: {
@@ -47,7 +55,9 @@ export default {
     // 0 - показывать и скрывать
     // 1 - показывать и минимизировать
     setMenuButtonMode() {
-      return this.menuButtonMode ? (this.mini = !this.mini) : (this.drawer = !this.drawer)
+      return this.menuButtonMode
+        ? this.mini = !this.mini
+        : this.drawer = !this.drawer
     }
   },
   computed: {
@@ -55,13 +65,21 @@ export default {
       eventBus.$emit('updateMenuMode', this.mini)
       return this.mini
     }
+  },
+  created() {
+    eventBus.$on('setMenuMiniMode', value => {
+      this.mini = value
+    })
+  },
+  beforeDestroy() {
+    eventBus.$off('setMenuMiniMode')
   }
 }
 </script>
 
 <style scoped>
-.toolbar {
-  background: #fff;
-  box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
-}
+  .toolbar {
+    background: #fff;
+    box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
+  }
 </style>

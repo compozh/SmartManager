@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import WebApps from './plugins/webApps/index'
+import WebApps from '@it-enterprise/webAppsCore'
 import { i18n } from './plugins.1/i18n'
 import 'vuetify/dist/vuetify.min.css'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import {ApolloClient} from 'apollo-client'
+import {HttpLink} from 'apollo-link-http'
+import {InMemoryCache} from 'apollo-cache-inmemory'
+import VueApollo from 'vue-apollo'
+
 
 export const eventBus = new Vue() // Шина событий
 
@@ -13,6 +18,21 @@ export const eventBus = new Vue() // Шина событий
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Vuex)
+
+Vue.use(VueApollo)
+
+// Cache implementation
+const cache = new InMemoryCache()
+const apolloClient = new ApolloClient({
+  link: new HttpLink({}),
+  cache,
+  connectToDevTools: true,
+})
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
 
 // Create a new store
 const store = new Vuex.Store({})
@@ -55,7 +75,8 @@ async function start()   {
 
     properties: {
       i18n,
-      store
+      store,
+      apolloProvider
     }
   })
 
