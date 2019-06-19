@@ -5,6 +5,7 @@
         <v-list dense class="menu">
           <v-list-tile
             v-for="folder in folders"
+            :key="folder.code"
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
@@ -52,17 +53,28 @@
 </template>
 
 <script>
-  import {eventBus} from "../../main";
+  import {eventBus} from "../../../main"
 
   export default {
     name: "sm-folders",
-    props: ["folders"],
+    //props: ["folders"],
     data() {
       return {
         menuMiniMode: false
       }
     },
+    computed: {
+      loading() {
+        return this.$store.getters.loading
+      },
+      folders() {
+        return this.$store.getters.folders
+      }
+    },
     methods: {
+      getFolders() {
+        this.$store.dispatch('getFolders')
+      },
       isMainFolder(folder) {
         return folder.name === 'Все'
       },
@@ -74,6 +86,7 @@
       }
     },
     created() {
+      this.getFolders()
       eventBus.$on('updateMenuMode', menuMiniMode => {
         this.menuMiniMode = menuMiniMode;
       })
@@ -161,9 +174,11 @@
     .menu-item.main-folder a {
       padding-left: 16px;
     }
+
     .menu-item a {
       padding-left: 31px;
     }
+
     .v-navigation-drawer--mini-variant .menu-item a {
       padding-left: 16px !important;
     }

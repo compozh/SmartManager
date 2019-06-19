@@ -7,6 +7,9 @@ import getters from './getters'
 import mutations from './mutations'
 import state from './state'
 
+// Modules
+import smartManagerStore from '../components/SmartManager/store/store'
+
 Vue.use(Vuex)
 
 // Create a new store
@@ -15,6 +18,9 @@ const store = new Vuex.Store({
   getters,
   mutations,
   state,
+  modules: {
+    sm: smartManagerStore
+  }
 })
 
 export default store
