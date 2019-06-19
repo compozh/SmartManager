@@ -9,6 +9,11 @@
 
     "eds": {
 		"CA": "ЦСК",
+		"MinfinLogo" : "Министерство финансов Украины",
+		"LocalBudgets" : "местные бюджеты",
+		"SigIn" : "Вход",
+		"BudgetCode" : "Код бюджета",
+		"TreasuryCode" : "Код казначейства",
 		"PrivateKey": "Приватный ключ",
 		"Password": "Пароль защиты ключа",
 		"Certificates": "Сертификаты",

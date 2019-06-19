@@ -18,6 +18,8 @@ export default {
     svgLogo
   },
   created(){
+   // По умолчанию украинская локализация
+   this.$i18n.Setlocalization('uk')
    let script = document.createElement("script")
    script.async = true
    script.src = myConfig.GrapgQlUrl+'Scripts/edswrapper.js'

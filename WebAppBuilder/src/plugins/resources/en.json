@@ -8,6 +8,11 @@
     "NoDevices": "No devices",
     "eds": {
       "CA": "CA",
+      "MinfinLogo" : "Ministry of Finance of Ukraine",
+      "LocalBudgets" : "local budgets",
+      "SigIn" : "Login",
+      "BudgetCode" : "Budget code",
+      "TreasuryCode" : "Treasury code",
       "PrivateKey": "Private key",
       "Password": "Password",
       "Certificates": "Certificates",
