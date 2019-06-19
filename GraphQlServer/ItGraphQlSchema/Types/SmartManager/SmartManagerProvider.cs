@@ -59,11 +59,11 @@ namespace ItGraphQlSchema.Types.SmartManager
 					var tasks = JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
 					foreach (var tas in tasks)
 					{
-						if (string.IsNullOrEmpty(tas.addedPhoto))
+						if (string.IsNullOrEmpty(tas.AddedPhoto))
 						{
 							continue;
 						}
-						tas.addedPhoto = webServiceUrl + tas.addedPhoto + "&folder=content&nodownload=1";
+						tas.AddedPhoto = webServiceUrl + tas.AddedPhoto + "&folder=content&nodownload=1";
 					}
 
 					return tasks;
