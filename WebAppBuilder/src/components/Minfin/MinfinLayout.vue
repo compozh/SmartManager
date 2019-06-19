@@ -1,5 +1,6 @@
 <template>
   <v-app class="root">
+    <vue-title :title="this.$t('eds.LocalBudgets')"></vue-title>
     <v-content>
       <v-container fluid >
         <router-view/>

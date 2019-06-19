@@ -2,7 +2,7 @@ const state = {
   applicationDescription:{},
   appData: {},
   // Текущий пользователь
-  currentUser: {},
+  currentUser: null,
   // Массив с названием иконок
   existedIcons:[]
 }
