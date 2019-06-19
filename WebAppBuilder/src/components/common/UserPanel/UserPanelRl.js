@@ -1,13 +1,7 @@
+import {mapGetters} from "vuex"
+
 export default {
   name: 'userPanelRl',
-  data: () => ({
-    menuBtnStyle: [
-      { 'textTransform': 'none' },
-      { 'font-weight': 300 },
-      { color: 'rgb(102, 102, 102)' },
-      { 'border-color': '#c6c6c6' }
-    ]
-  }),
   methods: {
     changePassword() {
       console.log('Запрос изменения пароля')
@@ -23,32 +17,33 @@ export default {
       this.$router.push({name: 'login'});
     }
   },
+  computed: {
+    ...mapGetters({
+      login: 'getCurrentUserLoginData',
+      rights: 'getCurrentUserRights',
+      photo: 'getCurrentUserPhoto'
+    })
+  },
   render() {
     return this.$scopedSlots.default({
       user: {
-        name: this.$store.getters.getCurrentUserLoginData.UserName,
-        login: this.$store.getters.getCurrentUserLoginData.UserLogin,
-        id: this.$store.getters.getCurrentUserLoginData.UserId,
-        rights: this.$store.getters.getCurrentUserRights,
-        photo: this.$store.getters.getCurrentUserPhoto
+        name: this.login ? this.login.UserName : '',
+        login: this.login ? this.login.UserLogin : '',
+        id: this.login ? this.login.UserId : '',
+        rights: this.rights || {},
+        photo: this.photo || '',
       },
       params: {
         changePassword: this.changePassword,
-        delegatedRightsBtnAttr: {
-
-        },
+        delegatedRightsBtnAttr: {},
         delegatedRightsBtnAEvents: {
           click: e => this.useDelegatedRights(e.target.innerHTML)
         },
-        setDelegationBtnAttr: {
-
-        },
+        setDelegationBtnAttr: {},
         setDelegationBtnEvents: {
           click: () => this.setDelegation()
         },
-        logOutBtnAttr: {
-
-        },
+        logOutBtnAttr: {},
         logOutBtnAEvents: {
           click: () => this.logOut()
         }
