@@ -1,0 +1,38 @@
+{
+  smtasks {
+    tasksGetInfo(taskId: $taskId) {
+      id
+      arso
+      name
+      status
+      addedId
+      dateAdd
+      isAgree
+      addedFio
+      comments {
+        date
+        text
+        user
+      }
+      dateFact
+      dateplan
+      descript
+      keyValue
+      priority
+      originals {
+        id
+        comm
+        date
+        file
+        ndor
+        user
+        fileName
+        typeName
+        typeDescription
+      }
+      addedPhoto
+      dateRemind
+      docPlandate
+    }
+  }
+}

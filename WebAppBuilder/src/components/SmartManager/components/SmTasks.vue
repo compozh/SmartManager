@@ -1,15 +1,6 @@
 <template>
   <v-container fluid pa-0 px-2>
-    <v-layout v-if="loading">
-      <v-flex xs12>
-        <v-progress-circular
-          :size="100"
-          color="blue darken-2"
-          indeterminate
-        ></v-progress-circular>
-      </v-flex>
-    </v-layout>
-    <v-layout v-else row wrap justify-center>
+    <v-layout row wrap justify-center>
       <v-flex
         xs12
         class="task-container"
@@ -68,7 +59,7 @@
 
   export default {
     name: "sm-tasks",
-    props: ["tasks"],
+    //props: ["tasks"],
     data() {
       return {
         loading: false
@@ -77,17 +68,35 @@
     components: {
       emptyStateImg
     },
+    created() {
+      if (this.tasks === null) {
+        this.$store.dispatch('getTasks', this.$route.params.foldercode)
+      }
+    },
+    watch: {
+      '$route'(to, from) {
+        const currentFolderId = from.params.foldercode
+        const targetFolderId = to.params.foldercode
+
+        if (currentFolderId !== targetFolderId) {
+          this.$store.dispatch('getTasks', targetFolderId)
+        }
+      }
+    },
     computed: {
+      tasks() {
+        return this.$store.getters.tasks
+      },
       checkTasks() {
         return this.tasks ? this.tasks.length : 0;
       }
     },
     methods: {
-      beforeRouteUpdate(to, from, next) {
-        if (this.$store.getters.getAppData("SMTASKS")) {
-          this.tasks = this.$store.getters.getAppData("SMTASKS").data.smtasks.tasks;
-        }
-      },
+      // beforeRouteUpdate(to, from, next) {
+      //   if (this.$store.getters.getAppData("SMTASKS")) {
+      //     this.tasks = this.$store.getters.getAppData("SMTASKS").data.smtasks.tasks;
+      //   }
+      // },
       goToTaskInfo(taskId) {
         this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
       }
