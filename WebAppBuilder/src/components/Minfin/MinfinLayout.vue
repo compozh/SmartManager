@@ -1,13 +1,13 @@
 <template>
   <v-app class="root">
-    <vue-title :title="this.$t('eds.LocalBudgets')"></vue-title>
+    <vue-title :title="this.$t('eds.LocalBudgets').toUpperCase()"></vue-title>
     <v-content>
-      <v-container fluid >
+      <v-container fluid fill-height pa-0>
         <router-view/>
       </v-container>
     </v-content>
     <v-footer>
-      <span class="pwb">POWERED BY</span> <svgLogo class="svg-logo"></svgLogo>
+      <svgLogo class="svg-logo"></svgLogo><span class="pwb">2019</span>
     </v-footer>
   </v-app>
 </template>
@@ -46,7 +46,8 @@ export default {
   }
   .pwb{
     padding: 0px 10px;
-    font-size: 0.85em;
+    font-size: 1em;
+    color: #00498F
   }
 </style>
 
