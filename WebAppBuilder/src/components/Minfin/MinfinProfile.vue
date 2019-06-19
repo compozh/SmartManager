@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name:"minfin-portal"
+  name:"minfin-profile"
 }
 </script>
 <style>
