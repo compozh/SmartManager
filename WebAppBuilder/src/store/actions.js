@@ -3,7 +3,8 @@ import Axios from "axios";
 const actions = ({
   GetCurrentUser({commit, state}) {
 
-    if(state.applicationDescription.Id.toLowerCase() == "minfin"){
+    //
+    if(state.applicationDescription.Id && state.applicationDescription.Id.toLowerCase() == "minfin"){
       return;
     }
 

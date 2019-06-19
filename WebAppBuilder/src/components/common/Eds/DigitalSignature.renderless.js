@@ -99,7 +99,11 @@ export default {
 		disabled: {
 			type: Boolean,
 			default: false,
-		},
+    },
+    internal:{
+      type: Boolean,
+      default: false
+    }
   },
 
 
@@ -356,14 +360,14 @@ export default {
 					console.log("signFile:", data);
 					this.edsWrapper.exec({
 						action: "signFile",
-						actionParams: {	fileUrl: data }
+						actionParams: {	fileUrl: data, internal: this.internal }
 					});
 				}
 				else if (this.dataType === "data") {
 					console.log("signData:", data);
 					this.edsWrapper.exec({
 						action: "signData",
-						actionParams: { data: data }
+						actionParams: { data: data, internal: this.internal }
 					});
 				}
 			};

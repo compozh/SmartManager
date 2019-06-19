@@ -1,6 +1,6 @@
 <template>
   <!-- EDS -->
-  <DigitalSignatureRl @processed="processed" :sign-data="stringToSign" :dataType="'data'">
+  <DigitalSignatureRl v-if="!hidden" @processed="processed" :internal="true" :sign-data="stringToSign" :dataType="'data'">
     <v-container slot-scope="props">
       <!-- Сообщения -->
 
@@ -127,6 +127,7 @@ export default {
   name: "minfin-login",
   data() {
     return {
+      hidden:true,
       image,
       requestId: null,
       stringToSign: null,
@@ -150,11 +151,48 @@ export default {
         this.localLoading = false
         if(!ret.success){
           this.localWarning = ret.errorReason;
+          api.getIdForSign().then(resp => {
+            this.requestId = resp.requestId;
+            this.stringToSign = resp.stringToSign;
+          });
+          return;
         }
+
+        this.$store.commit("setCurrentUser", ret )
+        this.$router.replace({path: this.routeToBack})
+
+        this.$store.dispatch("minfin/setUserData", ret)
       })
     }
   },
+  computed: {
+    routeToBack() {
+      return this.$route.params.routeToBack
+    }
+  },
   created() {
+
+    let user = sessionStorage.getItem("minfinUser")
+    if(user){
+      user = JSON.parse(user)
+
+      if(user.ticket){
+        api.pingTiket(user.ticket).then(resp=>{
+
+          if(resp == "WRONG_TICKET"){
+            this.hidden = false
+            sessionStorage.removeItem("minfinUser")
+            return;
+          }
+          this.$store.commit("setCurrentUser", user )
+          this.$router.replace({path: this.routeToBack})
+
+          this.$store.dispatch("minfin/setUserData", user)
+        })
+      }
+    } else {
+      this.hidden = false
+    }
     api.getIdForSign().then(resp => {
       this.requestId = resp.requestId;
       this.stringToSign = resp.stringToSign;
@@ -176,7 +214,7 @@ export default {
   flex-direction: column;
 }
 .rignt-panel {
-  background: linear-gradient(#2984b3, #42409d);
+  background: linear-gradient(153deg, #2984b3, #42409d);
   align-items: stretch;
   padding-right: 20px;
   padding-left: 20px;
@@ -198,6 +236,7 @@ export default {
 }
 .it-label {
   color: #16146e;
+  padding: 10px;
 }
 .eds-allert {
   position: fixed;

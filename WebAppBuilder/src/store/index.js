@@ -9,6 +9,7 @@ import state from './state'
 
 // Modules
 import smartManagerStore from '../components/SmartManager/store/store'
+import minfinStore from '../components/Minfin/store/index'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
   mutations,
   state,
   modules: {
+    [minfinStore.namespace]:minfinStore,
     sm: smartManagerStore
   }
 })
