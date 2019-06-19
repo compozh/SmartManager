@@ -22,13 +22,13 @@
                 xs6
                 :style="'--login-logo-img:url(\''+image+'\')'"
               >
-                <h4 class="it-label pb-3 display-1 font-weight-light">Министерство финансов Украины</h4>
-                <h4 class="title font-weight-light">местные бюджеты</h4>
+                <h4 class="it-label pb-3 display-1 font-weight-light">{{$t('eds.MinfinLogo')}}</h4>
+                <h4 class="title font-weight-light">{{$t('eds.LocalBudgets')}}</h4>
               </v-flex>
 
               <!-- Форма входа -->
               <v-flex class="rignt-panel content-panel" xs6>
-                <h5 class="pb-5 display-1 font-weight-thin header">Вход</h5>
+                <h5 class="pb-5 display-1 font-weight-thin header">{{$t('eds.SigIn')}}</h5>
 
                 <form v-on="props.formEvents">
                   <!-- Аппаратный ключ -->
@@ -93,8 +93,8 @@
                     placeholder
                   />
 
-                  <v-text-field v-model="budgetId" dark class="pt-0" pt-1 label="Код бюджета" required color="white"></v-text-field>
-                  <v-text-field v-model="exchequerId" class="pt-0" dark label="Код казначейства" required color="white"></v-text-field>
+                  <v-text-field v-model="budgetId" dark class="pt-0" pt-1 :label="$t('eds.BudgetCode')" required color="white"></v-text-field>
+                  <v-text-field v-model="exchequerId" class="pt-0" dark :label="$t('eds.TreasuryCode')" required color="white"></v-text-field>
 
                   <!-- Кнопка Подписать -->
 
@@ -109,7 +109,7 @@
                     <template v-if="props.loading || localLoading">
                       <v-progress-circular indeterminate color="white"></v-progress-circular>
                     </template>
-                    <span>Вход</span>
+                    <span>{{$t('eds.SigIn')}}</span>
                   </v-btn>
                 </form>
               </v-flex>

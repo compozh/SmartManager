@@ -1,7 +1,19 @@
 {
-    
+    "login": "Логін",
+    "password": "Пароль",
+    "rememberMe": "Запам'ятати мене",
+    "signIn": "УВІЙТИ",
+    "emptyLogin": "Ви не ввели логін",
+    "emptyPassword": "Ви не ввели пароль",
+	"NoDevices": "немає пристроїв",
+	
     "eds": {
 		"CA": "ЦСК",
+		"MinfinLogo" : "Міністерство фінансів України",
+		"LocalBudgets" : "місцеві бюджети",
+		"SigIn" : "Вхід",
+		"BudgetCode" : "Код бюджету",
+		"TreasuryCode" : "Код казначейства",
 		"PrivateKey": "Приватний ключ",
 		"Password": "Пароль захисту ключа",
 		"Certificates": "Сертифікати",
@@ -46,7 +58,8 @@
 			"SignInfo": "Інформація про підпис",
 			"IssuerOfCertificate": "ВИДАВЕЦЬ СЕРТИФІКАТУ",
 			"OwnerOfCertificate": "ВЛАСНИК СЕРТИФІКАТУ",
-			"DownloadCertificate": "Завантажити сертифікат"
+			"DownloadCertificate": "Завантажити сертифікат",
+			"Details": "Подробиці"
 		},
 		"error": {
 			"fileKey11": "Файл Key-11.dat не є файлом приватного ключа, вкажіть файл Кey-6.dat"
