@@ -1,0 +1,12 @@
+{
+  smtasks {
+    tasks(folderId: $folderId) {
+      id
+      name
+      caseid
+      dateadd
+      addedFio
+      addedPhoto
+    }
+  }
+}
