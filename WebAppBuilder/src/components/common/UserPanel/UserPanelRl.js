@@ -2,14 +2,6 @@ import {mapGetters} from "vuex"
 
 export default {
   name: 'userPanelRl',
-  data: () => ({
-    menuBtnStyle: [
-      {'textTransform': 'none'},
-      {'font-weight': 300},
-      {color: 'rgb(102, 102, 102)'},
-      {'border-color': '#c6c6c6'}
-    ]
-  }),
   methods: {
     changePassword() {
       console.log('Запрос изменения пароля')
