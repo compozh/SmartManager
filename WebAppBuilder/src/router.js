@@ -4,11 +4,26 @@ Vue.use(Router);
 
 // Создание роутера
 const createRouter = (routes) => {
-  return new Router({
+  let router = new Router({
     mode: 'history',
     base: myConfig.BASE_URL,
     routes: routes
   })
+
+  // Route case-sensitivity hotfix
+  if (router.mode === 'history') {
+    router.history.getCurrentLocation = function() {
+      let path = window.location.pathname
+      let base = router.history.base
+
+      // Removes base from path (case-insensitive)
+      if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
+        path = path.slice(base.length)
+      }
+      return (path || '/') + window.location.search + window.location.hash
+    }
+  }
+  return router
 }
 
 
