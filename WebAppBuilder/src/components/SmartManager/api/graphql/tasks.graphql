@@ -3,10 +3,46 @@
     tasks(folderId: $folderId) {
       id
       name
-      caseid
-      dateadd
+      descript
+      declarerId
+      declarer
+      performerId
+      performer
+      dateplan
+      dateAdd
+      status
+      type
+      isMy
+      myControl
+      isGenerate
+      needApprov
+      needComm
+      arso
+      keyValue
+      kidCopy
+      sourceGuid
+      hasOrig
+      hasComm
+      isAgree
+      isResponsible
+      childCount
+      childDoneCount
+      priority
+      dateRemind
+      addedId
       addedFio
       addedPhoto
+      dateFact
+      isRead
+      caseId
+      docCaption
+      docText
+      docPlanDate
+      docImportant
+      isDocTextHtml
+      docType
+      docOrg
+      role
     }
   }
 }

@@ -67,11 +67,11 @@
 </template>
 
 <script>
-  import {eventBus} from "../../main";
+  import {eventBus} from '../../../main';
 
   export default {
-    name: "material-2-layout",
-    props: ["toolbarTitle", "menuButtonMode"],
+    name: 'material-2-layout',
+    props: ['toolbarTitle', 'menuButtonMode'],
     data() {
       return {
         drawer: true,
@@ -88,18 +88,18 @@
           : this.drawer = !this.drawer;
       },
       closeError() {
-        this.$store.dispatch('clearError');
+        this.$store.dispatch('sm/clearError');
       }
     },
     computed: {
       error() {
-        return this.$store.getters.error
+        return this.$store.getters['sm/error']
       },
       loading() {
-        return this.$store.getters.loading
+        return this.$store.getters['sm/loading']
       },
       menuMiniMode() {
-        eventBus.$emit('updateMenuMode', this.mini);
+        eventBus.$emit('setMenuMode', this.mini);
         return this.mini;
       }
     },
@@ -115,6 +115,7 @@
 </script>
 
 <style scoped>
+
   .toolbar {
     background: #fff;
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);

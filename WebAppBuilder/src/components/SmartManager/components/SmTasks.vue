@@ -25,14 +25,14 @@
   import emptyStateImg from './empty-grid-state.svg'
 
   export default {
-    name: "sm-tasks",
+    name: 'sm-tasks',
     //props: ["tasks"],
     components: {
       emptyStateImg
     },
     created() {
       if (this.tasks === null) {
-        this.$store.dispatch('getTasks', this.$route.params.foldercode)
+        this.$store.dispatch('sm/getTasks', this.$route.params.foldercode)
       }
     },
     watch: {
@@ -41,16 +41,16 @@
         const targetFolderId = to.params.foldercode
 
         if (currentFolderId !== targetFolderId) {
-          this.$store.dispatch('getTasks', targetFolderId)
+          this.$store.dispatch('sm/getTasks', targetFolderId)
         }
       }
     },
     computed: {
       tasks() {
-        return this.$store.getters.tasks
+        return this.$store.getters['sm/tasks']
       },
       checkTasks() {
-        return this.tasks ? this.tasks.length : 0;
+        return this.tasks ? this.tasks.length : 0
       }
     }
   }

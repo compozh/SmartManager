@@ -1,14 +1,5 @@
 export default {
   name: 'smTasksItemRl',
-  data: () => ({
-
-  }),
-  created() {
-
-  },
-  computed: {
-
-  },
   methods: {
     goToTaskInfo(taskId) {
       this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
@@ -16,10 +7,7 @@ export default {
   },
   render() {
     return this.$scopedSlots.default({
-      taskDetailLink: this.goToTaskInfo,
-      props: {
-
-      }
+      taskLink: this.goToTaskInfo
     })
   }
 }
