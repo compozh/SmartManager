@@ -21,7 +21,7 @@ const store = new Vuex.Store({
   state,
   modules: {
     [minfinStore.namespace]:minfinStore,
-    sm: smartManagerStore
+    [smartManagerStore.namespace]:smartManagerStore,
   }
 })
 

@@ -15,12 +15,12 @@ export default {
     const taskId = +this.$route.params.taskId
     const taskInfo = this.taskDetail
     if (taskInfo === null || taskInfo.id !== taskId) {
-      this.$store.dispatch('getTaskInfo', taskId)
+      this.$store.dispatch('sm/getTaskInfo', taskId)
     }
   },
   computed: {
     taskDetail() {
-      return this.$store.getters.taskInfo
+      return this.$store.getters['sm/taskInfo']
     },
     getNotEmptyTabs() {
       const taskObj = this.taskDetail

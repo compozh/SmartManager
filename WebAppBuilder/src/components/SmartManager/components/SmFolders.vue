@@ -53,10 +53,11 @@
 </template>
 
 <script>
-  import {eventBus} from "../../../main"
+  import {eventBus} from '../../../main'
+  import {mapGetters} from 'vuex'
 
   export default {
-    name: "sm-folders",
+    name: 'sm-folders',
     //props: ["folders"],
     data() {
       return {
@@ -64,16 +65,14 @@
       }
     },
     computed: {
-      loading() {
-        return this.$store.getters.loading
-      },
-      folders() {
-        return this.$store.getters.folders
-      }
+      ...mapGetters({
+        loading: 'sm/loading',
+        folders: 'sm/folders'
+      })
     },
     methods: {
       getFolders() {
-        this.$store.dispatch('getFolders')
+        this.$store.dispatch('sm/getFolders')
       },
       isMainFolder(folder) {
         return folder.name === 'Все'
@@ -87,7 +86,7 @@
     },
     created() {
       this.getFolders()
-      eventBus.$on('updateMenuMode', menuMiniMode => {
+      eventBus.$on('setMenuMode', menuMiniMode => {
         this.menuMiniMode = menuMiniMode;
       })
     },

@@ -8,6 +8,9 @@ export default {
   clearError(state) {
     state.error = null
   },
+  setMenuMode(state, payload) {
+    state.menuMode = payload
+  },
   setFolders(state, payload) {
     state.folders = payload
   },
