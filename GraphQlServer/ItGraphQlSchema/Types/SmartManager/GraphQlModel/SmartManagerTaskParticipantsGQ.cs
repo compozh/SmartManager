@@ -9,9 +9,10 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 		public SmartManagerTaskParticipantsGQ()
 		{
 			Name = "Participants";
-			Field(p => p.UserId);
-			Field(p => p.UserFio);
-			Field(p => p.Role);
+			Field(p => p.UserId).Description("Идентификатор соучасника");
+			Field(p => p.UserFio).Description("ФИО соучасника");
+			Field(p => p.Name).Description("Имя");
+			Field(p => p.Role).Description("Роль");
 		}
 	}
 }
