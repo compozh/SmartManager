@@ -1,13 +1,13 @@
 <template>
-  <v-container fluid pa-0 px-2>
+  <v-container fluid pa-0>
     <v-layout row wrap justify-center>
       <v-flex>
-        <sm-task-details-item :task="task"></sm-task-details-item>
+        <sm-task-details-item :task="taskDetail"></sm-task-details-item>
       </v-flex>
       <v-flex
         xs12
         class="task-container"
-        v-for="subTask in taskDetail.tasks"
+        v-for="subTask in subTasks"
         :key="subTask.id"
       >
         <sm-task-details-item :task="subTask"></sm-task-details-item>
@@ -19,7 +19,12 @@
 <script>
   export default {
     name: "smTaskTabTasks",
-    props: ['taskDetail']
+    props: ['taskDetail'],
+    computed: {
+      subTasks() {
+        return this.taskDetail ? this.taskDetail.tasks : []
+      }
+    }
   }
 </script>
 

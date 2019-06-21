@@ -2,8 +2,8 @@ export default {
   name: 'smTaskInfoRl',
   data: () => ({
     tabs: [
-      {name: 'Задачи', value: 'tasks', component: 'sm-task-tab-tasks'},
-      {name: 'Документы', value: 'originals', component: 'sm-task-tab-docs'},
+      {name: 'Детально', value: 'tasks', component: 'sm-task-tab-tasks'},
+      {name: 'Вложения', value: 'originals', component: 'sm-task-tab-docs'},
       {name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments'},
       {name: 'Согласования', value: 'agreement', component: 'sm-task-tab-agree'}
     ],
@@ -20,25 +20,26 @@ export default {
   },
   computed: {
     taskDetail() {
+      console.log('', this.$store.getters['sm/taskInfo'])
       return this.$store.getters['sm/taskInfo']
     },
-    getNotEmptyTabs() {
-      const taskObj = this.taskDetail
-      if (taskObj) {
+    getTabs() {
+      const task = this.taskDetail
+      if (task) {
         return this.tabs.filter(i => {
           // вкладка с комментариями отображается всегда
-          if (i.value === 'comments') {
+          if (i.value === 'tasks' || i.value === 'comments') {
             return true
           }
           // остальные вкладки кроме "согласования" отображаются если есть данные
-          if (taskObj[i.value]
-            && taskObj[i.value].length
-            && taskObj[i.value] !== 'agreement') {
+          if (task[i.value]
+            && task[i.value].length
+            && task[i.value] !== 'agreement') {
             return true
           }
           // вкладка "согласования" отображается если есть хоть один согласующий коментарий
           if (i.value === 'agreement') {
-            return taskObj.comments.some(i => i === 'isAgree' && i === '+')
+            return task.comments.some(i => i === 'isAgree' && i === '+')
           }
         })
       }
@@ -47,8 +48,8 @@ export default {
   render() {
     return this.$scopedSlots.default({
       activeTab: this.activeTab,
-      tabs: this.getNotEmptyTabs,
-      task: this.taskDetail,
+      tabs: this.getTabs,
+      taskDetail: this.taskDetail,
       props: {}
     })
   }

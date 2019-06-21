@@ -3,7 +3,7 @@
     <v-layout justify-center>
       <v-flex xs12>
         <sm-task-info-rl
-          v-slot="{ activeTab, tabs, task, props }"
+          v-slot="{ activeTab, tabs, taskDetail, props }"
         >
           <v-container fluid pa-0 ma-0>
             <v-layout>
@@ -31,7 +31,7 @@
                       >
                         <component
                           :is="item.component"
-                          :task="task"
+                          :task-detail="taskDetail"
                         ></component>
                       </v-tab-item>
                     </v-tabs-items>

@@ -1,7 +1,7 @@
 <template>
   <originals-viewer
     v-slot="{ originals, file, params }"
-    :originals="task.originals"
+    :originals="taskDetail.originals"
   >
     <v-container fluid pa-0>
       <v-layout class="viewer-layout" row wrap>
@@ -51,7 +51,7 @@
 <script>
   export default {
     name: "smTaskTabDocs",
-    props: ['task']
+    props: ['taskDetail']
   }
 </script>
 

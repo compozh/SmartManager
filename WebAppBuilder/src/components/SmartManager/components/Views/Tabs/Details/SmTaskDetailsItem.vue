@@ -4,14 +4,10 @@
   >
     <v-card
       flat
-      class="task-item pl-3"
-      :class="{ unread: !task.isRead }"
+      class="task-item"
       @click="taskLink(task.id)"
     >
       <v-layout row align-center>
-        <v-flex d-flex justify-center shrink pr-3>
-          <user-icon :src="task.addedPhoto" size="50"></user-icon>
-        </v-flex>
         <v-flex py-1 pr-2 class="text-ellipsis">
           <v-layout column text-xs-left>
             <v-flex>
@@ -138,7 +134,6 @@
 <style scoped>
   .task-item {
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
-    border-left: 5px solid transparent;
     border-radius: 0;
   }
 
