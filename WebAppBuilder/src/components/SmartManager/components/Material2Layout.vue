@@ -122,7 +122,7 @@
   }
 
   .loader {
-    background-color: rgba(117, 117, 117, .5);
+    background-color: rgba(255, 255, 255, .5);
     z-index: 10;
   }
 </style>
