@@ -6,11 +6,17 @@
       </v-flex>
       <v-flex
         xs12
+        v-if=subTasks.length
+        class="sub-task-headline blue-grey--text pa-1 ml-5"
+      >СВЯЗАННЫЕ ЗАДАЧИ:</v-flex>
+      <v-flex
+        xs12
+        ml-5
         class="task-container"
         v-for="subTask in subTasks"
         :key="subTask.id"
       >
-        <sm-task-details-item :task="subTask"></sm-task-details-item>
+        <sm-task-sub-task-item :sub-task="subTask"></sm-task-sub-task-item>
       </v-flex>
     </v-layout>
   </v-container>
@@ -18,16 +24,19 @@
 
 <script>
   export default {
-    name: "smTaskTabTasks",
+    name: 'sm-task-tab-tasks',
     props: ['taskDetail'],
     computed: {
       subTasks() {
-        return this.taskDetail ? this.taskDetail.tasks : []
+        return this.taskDetail ? this.taskDetail.childTasks : []
       }
     }
   }
 </script>
 
 <style scoped>
-
+  .sub-task-headline {
+    font-size: 11px;
+    border-bottom: 3px double #b4d2f0;
+  }
 </style>

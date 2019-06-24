@@ -1,7 +1,7 @@
 <template>
   <originals-viewer
     v-slot="{ originals, file, params }"
-    :originals="taskDetail.originals"
+    :originals="taskDetail ? taskDetail.originals : []"
   >
     <v-container fluid pa-0>
       <v-layout class="viewer-layout" row wrap>

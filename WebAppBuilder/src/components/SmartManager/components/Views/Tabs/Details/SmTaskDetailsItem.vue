@@ -1,13 +1,10 @@
 <template>
-  <sm-tasks-item-rl
-    v-slot="{ taskLink }"
-  >
-    <v-card
-      flat
-      class="task-item"
-      @click="taskLink(task.id)"
-    >
+  <sm-tasks-item-rl v-slot="{}">
+    <v-card flat class="task-item">
       <v-layout row align-center>
+        <v-flex d-flex justify-center shrink pr-3>
+          <user-icon :src="task.addedPhoto" size="50"></user-icon>
+        </v-flex>
         <v-flex py-1 pr-2 class="text-ellipsis">
           <v-layout column text-xs-left>
             <v-flex>
@@ -90,15 +87,60 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      <v-layout
+        column
+        class="description-container"
+        :style="{ height: descriptionHeight }"
+      >
+        <v-flex xs12>
+          <iframe
+            seamless
+            scrolling="no"
+            width="100%"
+            :height="iFrameHeight"
+            frameborder="0"
+            :srcdoc="task.htmlDescript"
+            @load="iFrameOnLoad"
+          ></iframe>
+        </v-flex>
+        <v-flex>
+          <v-btn
+            v-if="compareDescriptionContent"
+            outline
+            small
+            block
+            class="btn-more"
+          ><<< Показать больше >>></v-btn>
+        </v-flex>
+      </v-layout>
     </v-card>
   </sm-tasks-item-rl>
 </template>
 
 <script>
   export default {
-    name: 'SmTaskDetailsItem',
+    name: 'sm-task-details-item',
     props: ['task'],
+    data: () => ({
+      defaultDescriptionHeight: 300,
+      iFrameHeight: ''
+    }),
+    methods: {
+      iFrameOnLoad(event) {
+        const iFrameScrollHeight = event.path[0].contentDocument.body.scrollHeight
+        this.iFrameHeight = `${iFrameScrollHeight + 5}px`
+      }
+    },
     computed: {
+      compareDescriptionContent() {
+        const height = parseInt(this.iFrameHeight)
+        return height > this.defaultDescriptionHeight
+      },
+      descriptionHeight() {
+        return this.compareDescriptionContent
+          ? `${this.defaultDescriptionHeight + 25}px`
+          : `${this.iFrameHeight}px`
+      },
       taskStatus() {
         switch (this.task.status) {
           case '':
@@ -137,11 +179,6 @@
     border-radius: 0;
   }
 
-  .task-item:hover {
-    cursor: pointer;
-    background: rgb(250, 250, 250);
-  }
-
   .text-ellipsis {
     white-space: nowrap;
     overflow: hidden;
@@ -164,4 +201,21 @@
   .unread {
     border-left-color: #1976D2;
   }
+
+  .description-container {
+    overflow: hidden;
+  }
+
+  .btn-more {
+    position: absolute;
+    bottom: -2px;
+    text-transform: none;
+    font-weight: 300;
+    color: rgb(102, 102, 102);
+    background-color: #f5f5f5 !important;
+    border-color: #c6c6c6;
+    border-radius: 0;
+    height: 21px;
+  }
+
 </style>

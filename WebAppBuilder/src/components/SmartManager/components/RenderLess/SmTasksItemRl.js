@@ -1,5 +1,8 @@
 export default {
   name: 'smTasksItemRl',
+  data: () => ({
+    iFrameHeight: ''
+  }),
   methods: {
     goToTaskInfo(taskId) {
       this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
@@ -7,7 +10,8 @@ export default {
   },
   render() {
     return this.$scopedSlots.default({
-      taskLink: this.goToTaskInfo
+      taskLink: this.goToTaskInfo,
+      params: {}
     })
   }
 }
