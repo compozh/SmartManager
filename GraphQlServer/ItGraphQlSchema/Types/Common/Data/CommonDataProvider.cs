@@ -15,6 +15,7 @@ namespace ItGraphQlSchema.Types.Common
 		IQueryable<ResourceGroup> ResourcesGroups { get; }
 		IQueryable<Document> Documents { get; }
 		IQueryable<DocumentRow> DocumentRows { get; }
+		IQueryable<Image> Images { get; }
 	}
 
 	[AddInDI(typeof(ICommonDataProvider))]
@@ -37,5 +38,6 @@ namespace ItGraphQlSchema.Types.Common
 		public virtual IQueryable<ResourceGroup> ResourcesGroups => DbContext.ResourcesGroups;
 		public virtual IQueryable<Document> Documents => DbContext.Documents;
 		public virtual IQueryable<DocumentRow> DocumentRows => DbContext.DocumentRows;
+		public virtual IQueryable<Image> Images => DbContext.Images;
 	}
 }
