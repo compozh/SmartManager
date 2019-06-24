@@ -3,11 +3,11 @@
     <v-layout justify-center>
       <v-flex xs12>
         <sm-task-info-rl
-          v-slot="{ activeTab, tabs, taskDetail, props }"
+          v-slot="{ activeTab, tabs, taskDetail }"
         >
           <v-container fluid pa-0 ma-0>
             <v-layout>
-              <v-flex xs12>
+              <v-flex lg6>
                 <v-layout>
                   <v-flex xs12>
                     <v-tabs
@@ -18,6 +18,7 @@
                       <v-tab
                         v-for="item in tabs"
                         :key="item.value"
+                        :class="{ 'hidden-lg-and-up': item.value === 'originals' }"
                       >{{ item.name }}
                       </v-tab>
                     </v-tabs>
@@ -31,10 +32,25 @@
                       >
                         <component
                           :is="item.component"
+                          :class="{ 'hidden-lg-and-up': item.value === 'originals' }"
                           :task-detail="taskDetail"
                         ></component>
                       </v-tab-item>
                     </v-tabs-items>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+              <v-flex
+                xs6
+                ml-2
+                hidden-md-and-down
+              >
+                <v-layout column>
+                  <v-flex document-viewer-container >
+                    DOCUMENT VIEWER
+                  </v-flex>
+                  <v-flex>
+                    <sm-task-tab-docs :task-detail="taskDetail"></sm-task-tab-docs>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -59,6 +75,15 @@
 
   .selected {
     background-color: yellowgreen;
+  }
+
+  .document-viewer-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: cadetblue;
+    background: aliceblue;
   }
 
 </style>
