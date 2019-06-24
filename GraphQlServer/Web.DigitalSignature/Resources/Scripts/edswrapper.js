@@ -501,6 +501,10 @@
 			
 			document.body.appendChild(frame);
 			frame.contentDocument.open();
+			
+			var protocol = window.location.href.split("/")[0];
+			stringPage = stringPage.replace(/http:/gi, protocol);
+			
 			frame.contentDocument.write(stringPage);
 			frame.contentDocument.close();
 		});
