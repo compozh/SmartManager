@@ -12,7 +12,7 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.Id).Description("Уникальный номер задачи");
 			Field(p => p.Name).Description("Название задачи");
 			Field(p => p.Descript).Description("Описание в текстовом формате");
-			Field(p => p.HtmlDescript).Description("Описание (html)");
+			Field(p => p.HtmlDescript, nullable: true).Description("Описание (html)");
 			Field(p => p.DeclarerId).Description("Идентификатор заявителя");
 			Field(p => p.Declarer).Description("ФИО заявителя");
 			Field(p => p.DeclarerPhoto).Description("Хеш-ссылка на фото заявителя");
