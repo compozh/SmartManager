@@ -45,7 +45,7 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(name:"DateFact",p => p.DateFact.ToString("dd.MM.yyyy HH:mm")).Description("Дата фактического выполнения");
 			Field(p => p.IsRead).Description("Признак о прочтении");
 			Field(p => p.CaseId).Description("Идентификатор кейса");
-			Field(p => p.DocCaption).Description("Номер и дата документа или название кейса");
+			Field(p => p.DocCaption, nullable: true).Description("Номер и дата документа или название кейса");
 			Field(p => p.DocText).Description("Текст документа");
 			Field(name:"DocPlanDate",p => p.DocPlanDate.ToString("dd.MM.yyyy HH:mm")).Description("Плановая дата документа");
 			Field(p => p.DocImportant).Description("Признак важности");
