@@ -18,6 +18,7 @@ namespace ItGraphQlSchema.Types
 		public DbSet<ResourceGroup> ResourcesGroups { get; set; }
 		public DbSet<Document> Documents { get; set; }
 		public DbSet<DocumentRow> DocumentRows { get; set; }
+		public DbSet<Image> Images { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -30,7 +31,6 @@ namespace ItGraphQlSchema.Types
 					ruleInstance.AddRulesToModel(modelBuilder);
 				}
 			}
-
 			//todo  Убрать после переноса логики
 			testOnModelCreating(modelBuilder);
 		}
