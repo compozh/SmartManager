@@ -27,4 +27,12 @@
     <ProjectReference Include="..\Web.DigitalSignature\Web.DigitalSignature.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="public\Data\CACertificates.p7b" />
+    <EmbeddedResource Include="public\Data\CACertificates.Test.p7b" />
+    <EmbeddedResource Include="public\Data\CAs.json" />
+    <EmbeddedResource Include="public\Data\CAs.Test.json" />
+    <EmbeddedResource Include="public\Data\version.txt" />
+  </ItemGroup>
+
 </Project>

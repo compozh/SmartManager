@@ -35,13 +35,9 @@
       dateFact
       isRead
       caseId
-      docCaption
-      docText
       docPlanDate
       docImportant
       isDocTextHtml
-      docType
-      docOrg
       role
     }
   }
