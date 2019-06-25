@@ -247,7 +247,9 @@ export default {
 		},
 		initialize() {
       const that = this;
-      	var params = {
+
+      let debugMode = (location.href.split("?")[1]||"").split("&").some(r=>r.toUpperCase() == "DBG=1")
+      var params = {
 				siteRoot: myConfig.GrapgQlUrl.substring(0, myConfig.GrapgQlUrl.length-1) ,
 				//lang: window.locale,
 				lang: this.$i18n.locale,
@@ -255,7 +257,7 @@ export default {
 				allowStoreLocal: false,
 				windowMode: false,
 				customUI: true,
-				debugMode: true,
+				debugMode,
 				// handlers
 				loadingFunc(show) {
 					that.loading = show;
