@@ -1,11 +1,11 @@
 <template>
   <sm-tasks-item-rl v-slot="{}">
-    <v-card flat class="task-item">
+    <v-card flat class="task-item mr-2">
       <v-layout row align-center>
         <v-flex d-flex justify-center shrink pr-3>
           <user-icon :src="task.addedPhoto" size="50"></user-icon>
         </v-flex>
-        <v-flex py-1 pr-2 class="text-ellipsis">
+        <v-flex py-1 class="text-ellipsis">
           <v-layout column text-xs-left>
             <v-flex>
               <v-layout>
@@ -89,28 +89,40 @@
       </v-layout>
       <v-layout
         column
+        id="desc"
         class="description-container"
-        :style="{ height: descriptionHeight }"
       >
-        <v-flex xs12>
+        <v-flex
+          xs12
+          class="iframe-container"
+          :class="{'show-after': !showHiddenDesc && compareDescHeight}"
+        >
           <iframe
             seamless
             scrolling="no"
             width="100%"
-            :height="iFrameHeight"
+            :height="setDescriptionHeight"
             frameborder="0"
             :srcdoc="task.htmlDescript"
             @load="iFrameOnLoad"
           ></iframe>
         </v-flex>
-        <v-flex>
+        <v-flex
+          v-if="compareDescHeight"
+          class="btn-more-container"
+        >
           <v-btn
-            v-if="compareDescriptionContent"
-            outline
-            small
-            block
+            outline small
+            @click="btnToggle"
+            :fab="showHiddenDesc"
             class="btn-more"
-          ><<< Показать больше >>></v-btn>
+            :class="{'btn-no-fab': !showHiddenDesc}"
+            :style="{ right: showHiddenDesc ? setBtnPosition : 'auto' }"
+          >
+            {{ showHiddenDesc ? '' : 'Показать больше' }}
+            <v-icon v-if="!showHiddenDesc" size="18">keyboard_arrow_down</v-icon>
+            <v-icon v-if="showHiddenDesc">keyboard_arrow_up</v-icon>
+          </v-btn>
         </v-flex>
       </v-layout>
     </v-card>
@@ -122,24 +134,32 @@
     name: 'sm-task-details-item',
     props: ['task'],
     data: () => ({
-      defaultDescriptionHeight: 300,
-      iFrameHeight: ''
+      defaultDescHeight: 250,
+      iFrameHeight: '',
+      showHiddenDesc: false,
     }),
     methods: {
       iFrameOnLoad(event) {
-        const iFrameScrollHeight = event.path[0].contentDocument.body.scrollHeight
-        this.iFrameHeight = `${iFrameScrollHeight + 5}px`
-      }
+        this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight
+      },
+      btnToggle() {
+        this.showHiddenDesc = !this.showHiddenDesc
+      },
     },
     computed: {
-      compareDescriptionContent() {
-        const height = parseInt(this.iFrameHeight)
-        return height > this.defaultDescriptionHeight
+      compareDescHeight() {
+        return this.iFrameHeight > this.defaultDescHeight
       },
-      descriptionHeight() {
-        return this.compareDescriptionContent
-          ? `${this.defaultDescriptionHeight + 25}px`
-          : `${this.iFrameHeight}px`
+      setDescriptionHeight() {
+        return this.showHiddenDesc || !this.compareDescHeight
+          ? this.iFrameHeight + 5
+          : this.defaultDescHeight
+      },
+      setBtnPosition() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'lg': return '42%'
+          case 'xl': return '45%'
+        }
       },
       taskStatus() {
         switch (this.task.status) {
@@ -206,16 +226,44 @@
     overflow: hidden;
   }
 
-  .btn-more {
+  .iframe-container {
+    position: relative;
+  }
+
+  .show-after.iframe-container:after {
+    content: '';
     position: absolute;
-    bottom: -2px;
+    left: 0;
+    bottom: 0;
+    height: 25px;
+    width: 100%;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 20%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  iframe {
+    transition: height linear .2s;
+  }
+
+  .btn-more {
+    margin: 3px 0;
+    padding: 0;
     text-transform: none;
     font-weight: 300;
-    color: rgb(102, 102, 102);
+    color: #666;
     background-color: #f5f5f5 !important;
     border-color: #c6c6c6;
-    border-radius: 0;
+  }
+
+  .btn-more.v-btn--floating {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .btn-no-fab {
+    border-radius: 2px;
     height: 21px;
+    width: 100%;
   }
 
 </style>

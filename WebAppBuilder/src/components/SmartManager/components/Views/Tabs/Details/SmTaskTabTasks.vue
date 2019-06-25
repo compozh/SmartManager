@@ -5,13 +5,12 @@
         <sm-task-details-item :task="taskDetail"></sm-task-details-item>
       </v-flex>
       <v-flex
-        xs12
+        xs12 mr-2
         v-if=subTasks.length
         class="sub-task-headline blue-grey--text pa-1 ml-5"
       >СВЯЗАННЫЕ ЗАДАЧИ:</v-flex>
       <v-flex
-        xs12
-        ml-5
+        xs12 ml-5 mr-2
         class="task-container"
         v-for="subTask in subTasks"
         :key="subTask.id"

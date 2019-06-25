@@ -42,7 +42,6 @@
               </v-flex>
               <v-flex
                 xs6
-                ml-2
                 hidden-md-and-down
               >
                 <v-layout column>
