@@ -29,12 +29,13 @@
                             right: () => swipeRight(application),
                         }"
                 >
-                <router-link :to="{ name:'APPLICATION', params:{applicationId:application.id}}">
+                <router-link :to="{ name:'APPLICATION', params: {applicationId: application.id}}">
                     <v-card tile height="150px" >
-                        <v-progress-linear class="application-execution"
+                        <!--v-progress-linear class="application-execution"
                             :value="35" height="10"
                             color="blue-grey"
-                            />
+                            /-->
+                        <esecute-stepper />
                         <v-card-title>
                             Номер: {{ application.number }} Дата: {{ application.date | formatDate }}
                         </v-card-title>
@@ -43,9 +44,8 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout justify-end>
-                                <v-btn icon flat :color="blinkColor" class="application-chat" v-on:click.prevent="chatClick(application)">
-                                    <v-icon>chat</v-icon>
-                                </v-btn>
+                                <favorite-btn :favKey="application.id" favType="application" />
+                                <chat-btn :chatKey="application.id" chatType="application" />
                             </v-layout>
                         </v-card-actions>
                     </v-card>
@@ -67,6 +67,7 @@ import moment from 'moment';
         name: "applications",
         props: ["applications"],
         data: () => ({
+            //applications : [],
             viewItems: [
                 { value: "row",    text: "Плитки" },
                 { value: "column", text: "Таблица" }
@@ -79,8 +80,7 @@ import moment from 'moment';
             currentSize: null,
             pagination: {
                 page: 1
-            },
-            blinkColor: "blue"
+            }
         }),
         filters:{
             formatDate: (value) => {
@@ -141,9 +141,6 @@ import moment from 'moment';
             sizeItemsFltr(){
                 return this.sizeItems.filter(i=> this.$vuetify.breakpoint.mdAndUp || i.value != 3);
             },
-            chatClick(appl){
-                console.log(`TODO: chat for application #${appl.number}`)
-            },
             swipeLeft(appl){
                 console.log(`TODO: swipe left for application #${appl.number}`)
             },
@@ -179,20 +176,5 @@ import moment from 'moment';
 .application-execution{
     margin: 0px 0px 5px 0px;
 }
-@keyframes blink {
-    from {
-        opacity: 1; 
-    }               
-    50%{
-        opacity: 0; 
-    }
-    to {
-        opacity: 1; 
-    }               
-}
-.application-chat{
-    animation: blink 1s infinite;
-    color: chocolate !important;
-    
-}
+
 </style>

@@ -1,6 +1,8 @@
 ﻿using GraphQL.EntityFramework;
 using GraphQL.Types;
 using ItGraphQlSchema.Types.Common;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ItGraphQlSchema.Types.Purchases
 {
@@ -35,20 +37,36 @@ namespace ItGraphQlSchema.Types.Purchases
 				name: "measurementUnits",
 				resolve: context => _dataProvider.MeasurementUnits);
 
-			//Field<ListGraphType<ResourceGraph>>(
-			//	name: "",
-			//	arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "folderId", Description = "Уникальный идентификатор задачи" }),
-			//	resolve: (context => provider.GetTasksAsync(context.GetArgument<string>("folderId"))),
-			//	description: "Задачи");
+			Field<StringGraphType>(
+				name: "ElasticResourceNameSearch",
+				arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "name", Description = "Имя ресурса" }),
+				resolve: context => _dataProvider.GetResorces(context.GetArgument<string>("name")),
+				description: "Задачи");
 
 			AddQueryField(
 				name: "resources",
-				arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "name", Description = "Имя ресурса" }),
-				resolve: context => _dataProvider.GetResorces(context.GetArgument<string>("name")));
+				arguments: new QueryArguments(
+					new QueryArgument<StringGraphType> { Name = "group", Description = "Код Группы" },
+					new QueryArgument<BooleanGraphType> {
+						Name = "allIncludedGroups",
+						Description = "Все входящиее в группу (по умолчанию не загружать)"}
+					),
+				resolve: resolveRosources);
 
 			AddQueryField(
 				name: "resourcesGrops",
-				resolve: context => _dataProvider.ResourcesGroups);
+				arguments: new QueryArguments(
+					new QueryArgument<StringGraphType> { Name = "group", Description = "Код предка группы" }
+					),
+				resolve: context => {
+					var ret = _dataProvider.ResourcesGroups;
+					if (context.HasArgument("group"))
+					{
+						var parent = context.GetArgument<string>("group");
+						ret = ret.Where(g => g.ParentId == parent);
+					}
+					return ret;
+				});
 
 			AddQueryConnectionField(
 				name: "departmentConnection",
@@ -60,7 +78,15 @@ namespace ItGraphQlSchema.Types.Purchases
 
 			AddQueryConnectionField(
 				name: "resourcesConnection",
-				resolve: context => _dataProvider.Resources);
+				arguments: new QueryArguments(
+					new QueryArgument<StringGraphType> { Name = "group", Description = "Код Группы" },
+					new QueryArgument<BooleanGraphType>
+					{
+						Name = "allIncludedGroups",
+						Description = "Все входящиее в группу (по умолчанию не загружать)"
+					}
+				),
+				resolve: resolveRosources);
 
 			AddQueryConnectionField(
 				name: "resourcesGropsConnection",
@@ -68,6 +94,25 @@ namespace ItGraphQlSchema.Types.Purchases
 
 			AddQueryField("cartItems", c => _dataProvider.CartItems);
 			AddQueryConnectionField("cartItemsConnection", c => _dataProvider.CartItems);
+		}
+
+		private IQueryable<Resource> resolveRosources(ResolveFieldContext<object> context)
+		{
+			var ret = _dataProvider.Resources;
+			if (context.HasArgument("group"))
+			{
+				var group = context.GetArgument<string>("group");
+				if (context.HasArgument("allIncludedGroups") && context.GetArgument<bool>("allIncludedGroups"))
+				{
+					ret = ret.Where(g => 
+						EF.Functions.Like(g.Id, string.Format("{0}%", group.TrimEnd())));
+				}
+				else
+				{
+					ret = ret.Where(g => g.ResourceGroupId.Equals(group));
+				}
+			}
+			return ret;
 		}
 	}
 }

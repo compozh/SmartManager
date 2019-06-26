@@ -7,9 +7,10 @@ namespace ItGraphQlSchema.Types.Common
 	{
 		public override void AddRuleToModel(EntityTypeBuilder<ResourceGroup> entity)
 		{
-			entity.HasOne(resourceGroup => resourceGroup.Parent)
-				.WithMany()
-				.HasForeignKey(resourceGroup => resourceGroup.ParentId);
+			entity
+				.HasOne(r => r.Parent)
+				.WithMany(r => r.Children)
+				.HasForeignKey(r => r.ParentId);
 		}
 	}
 }

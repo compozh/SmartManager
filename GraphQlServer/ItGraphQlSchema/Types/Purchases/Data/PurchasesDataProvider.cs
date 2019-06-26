@@ -1,5 +1,6 @@
 ﻿using ItGraphQlSchema.Types.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace ItGraphQlSchema.Types.Purchases
@@ -8,6 +9,7 @@ namespace ItGraphQlSchema.Types.Purchases
 	{
 		IQueryable<CartItem> CartItems { get; }
 		IQueryable<Document> Applications { get; }
+		PurchasesUserSettings UserSettings { get; }
 	}
 
 	[AddInDI(typeof(IPurchasesDataProvider))]
@@ -21,10 +23,13 @@ namespace ItGraphQlSchema.Types.Purchases
 			_userSettingsProvider = userSettingsProvider;
 		}
 
-		private PurchasesUserSettings UserSettings => _userSettingsProvider.GetCurrentSettings().Result;
-
 		public IQueryable<CartItem> CartItems => DbContext.CartItems.Where(i => i.UserId == UserSettings.UserId);
 
 		public IQueryable<Document> Applications => DbContext.Documents.Where(i => UserSettings.ApplicationDocumentTypes.Contains(i.DocumentTypeId));
+
+		public PurchasesUserSettings UserSettings => _userSettingsProvider.GetCurrentSettings().Result;
+
+		public override IQueryable<ResourceGroup> ResourcesGroups => DbContext.ResourcesGroups.FromSql(
+			new RawSqlString($"select * from skm where {UserSettings.ResourceCondition}"));
 	}
 }

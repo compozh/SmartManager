@@ -10,44 +10,42 @@
             <v-card-text>
                 
                 <!-- Строки документа -->
-                <template v-for="row in application.rows">
+                <template v-for="row in compRows">
                     <v-card :key="row.id">
                         <v-layout row-card>
-                            <v-flex>
-                                <v-autocomplete :key="`resource-component-${row.id}`"
-                                    v-model="row.resource"
-                                    :loading="resourceComp[row.id].loading"
-                                    :items="resourceItemsComp"
-                                    :search-input.sync="searchResourcesComp[row.id]"
-                                    cache-items
-                                    hide-no-data
-                                    hide-details
-                                    label="Ресурс"
-                                    return-object
-                                    item-text="fullName"
-                                    clearable  
+                            <v-flex class="element-margin">
+                                <resource-autocomplete 
+                                    :editable="row.isEdit" 
+                                    :resource="row.resource"
                                 />
                             </v-flex>
-                            <!--v-flex>
-                                <v-autocomplete :key="`measurement-component-${row.id}`"
-                                    v-model="row.measurementUnit"
-                                    :loading="measurementComp[row.id].loading"
-                                    :items="measurementItemsComp"
-                                    :search-input.sync="searchMeasurements[row.id]"
-                                    cache-items
-                                    hide-no-data
-                                    hide-details
-                                    label="Единица измерения"
-                                    return-object
-                                    item-text="name"
-                                    clearable  
+                            <v-flex class="element-margin" md2 lg1>
+                                <quantity-text-field 
+                                    :editable="row.isEdit" 
+                                    :quantityType="row" 
+                                    fieldName="planQuantity" 
                                 />
-                            </v-flex-->
-                            <v-btn :key="`delete-button-${row.id}`" icon>
+                            </v-flex>
+                            <v-flex class="element-margin" md1>
+                                <measurement-autocomplete 
+                                    :editable="row.isEdit" 
+                                    :measurement="row.measurementUnit"
+                                />
+                            </v-flex>
+                            <v-flex class="element-margin" md2>
+                                <date-text-field 
+                                    :editable="row.isEdit" 
+                                    :dateType="row" 
+                                    fieldName="orderDate"
+                                />
+                            </v-flex>
+                            <v-btn class="button-margin" v-if="row.isEdit" icon>
                                 <v-icon color="error">delete</v-icon>
                             </v-btn>
-                            <v-btn icon>
-                                <v-icon :key="`edit-button-${row.id}`" color="primary" @click="editRecord()">edit</v-icon>
+                            <v-btn class="button-margin" icon @click="editClick(row)">
+                                <v-icon color="primary" >
+                                    {{row.isEdit ? 'save' : 'edit'}}
+                                </v-icon>
                             </v-btn>
                         </v-layout>
                     </v-card>
@@ -59,23 +57,15 @@
 </template>
 
 <script>
-import axios from "axios";
 import moment from 'moment';
 import _ from 'lodash';
 
     export default {
         name: "application",
-        props: ["applicationId","application"],
-        data:()=>({
-          resource: undefined,
-          measurement: undefined,
-          resourceItems: [],
-          measurementItems: [],
-          searchOld: undefined,
-          //search: undefined,
-          searchResourcesOld: undefined,
-          searchResources: undefined,
-        }),
+        props: { 
+            applicationId: 0,
+            application: {}
+        },
         filters:{
             formatDate: (value) => {
                 if (value) {
@@ -83,200 +73,33 @@ import _ from 'lodash';
                 }
             }
         },
-        watch: {
-            // search: {
-            //     handler(val, oldVal) {
-            //         if (!val || !this.searchOld || JSON.stringify(val) == JSON.stringify(this.searchOld)){
-            //             return;
-            //         }
-
-            //         var name = "";
-            //         var items = [];
-            //         var object = null;
-            //         var query = "";
-
-            //         for (const key in this.COMPONENT_TYPES) {
-            //             if (this.COMPONENT_TYPES.hasOwnProperty(key)) {
-            //                 const element = this.COMPONENT_TYPES[key];
-            //                 if (!val[element] || !this.searchOld[element] || 
-            //                     JSON.stringify(val[element]) != JSON.stringify(this.searchOld[element])){
-            //                     name = element;
-            //                 }
-            //             }
-            //         }
-
-            //         var id = 0;
-            //         var v = "";
-            //         for (const key in val) {
-            //             if (val.hasOwnProperty(key)) 
-            //             {
-            //                 const el1 = val[key];
-            //                 const el2 = this.resourceSearchOld[key];
-            //                 if (el1 != el2){
-            //                     id = key;
-            //                     v = el1;
-            //                     break;
-            //                 }
-            //             }
-            //         }
-
-            //         switch (name) {
-            //             case this.COMPONENT_TYPES.RESOURCES:
-            //                 name = element;
-            //                 items = this.resourceItems;
-            //                 object = this.resource[id];
-            //                 query = `{ purchases { resources (where:{path:"name" comparison:like  value:"%${v}%"}){fullName,id}}}`;
-            //                 break;
-                    
-            //             case this.COMPONENT_TYPES.MEASUREMENTS:
-            //                 name = element;
-            //                 items = this.measurementItems;
-            //                 object = this.measurement[id];
-            //                 query = `{purchases{measurementUnits(where:[{path:"isValid",comparison:equal,value:"true"},{path:"name",comparison:like,value:"%${v}%"}]){id,name}}}`;
-            //                 break;
-            //         }
-
-            //         this.resourceSearchOld = val.slice();
-            //         debugger;
-            //         this.querySelections(query,object,items,name)
-            //     },
-            //     deep: true
-            // },
-            searchResources: {
-                handler(val, oldVal) {
-                    if (!val || !this.searchResourcesOld || JSON.stringify(val) == JSON.stringify(this.searchResourcesOld)){
-                        return;
-                    }
-
-                    var id = 0;
-                    var v = "";
-                    for (const key in val) {
-                        if (val.hasOwnProperty(key)) 
+        computed:{
+            compRows() {
+                for (const key in this.application.rows) {
+                    if (this.application.rows.hasOwnProperty(key)) {
+                        if (this.application.rows[key].isEdit == undefined)
                         {
-                            const el1 = val[key];
-                            const el2 = this.searchResourcesOld[key];
-                            if (el1 != el2){
-                                id = key;
-                                v = el1;
-                                break;
-                            }
+                            this.$set(this.application.rows[key], 'isEdit', false)
                         }
                     }
-                    // var valueParts = _.split(v," ")
-                    // var whereCondition = "";
-                    // for (let index = 0; index < valueParts.length; index++) {
-                    //     const element = valueParts[index];
-                    //     whereCondition += (whereCondition.length == 0 ? "" : ",") + `{path:"name" comparison:like  value:"%${element.replace('"','\\"')}%"}`
-                    // }
-                    
-                    const query = `{ purchases { resources (name: "${v.replace(/"/g,'')}"){fullName,id}}}`;
-                    this.searchResourcesOld = val.slice();
-                    this.querySelections(query,this.resource[id],this.resourceItems,"resources")
-                },
-                deep: true
+                }
+                return this.application.rows;
             }
         },
         methods:{
-            async querySelections (query, obj, items, name) {
-                //debugger;
-                obj.loading = true
-                clearTimeout(obj.timeout);
-                this.timeout = setTimeout(() => {
-                    axios({
-                        method: 'POST',
-                        url: myConfig.GrapgQlUrl+'api/graphql',
-                        withCredentials:true,
-                        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
-                        data: { 
-                            SchemaName:'PurchasesSchema', 
-                            query: query
-                        } 
-                    }).then(resp => {
-                        console.log( resp.data );
-                        if (resp.data.data.purchases != null && 
-                            resp.data.data.purchases[name] &&
-                            resp.data.data.purchases[name].length > 0)
-                        {
-                            items = _.uniqBy([...items, ...resp.data.data.purchases[name]], "id");
-                        }
-                    });
-                }, 0)
-                obj.loading = false;
-            },
-        },
-        computed: {
-            resourceComp() {
-                if (!this.resource){
-                   this.resource = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
-                        accu[val.id] = { timeout: 0, loading: false };
-                    }, [])
-                }
-                return this.resource;
-            },
-            measurementComp() {
-                if (!this.measurement){
-                    this.measurement = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
-                        accu[val.id] = { timeout: 0, loading: false };
-                    }, [])
-                }
-                return this.resource;
-            },
-            resourceItemsComp() {
-                this.resourceItems = this.resourceItems.length > 0 ? this.resourceItems : _.uniqBy(this._props.application.rows.map(r=>r.resource), "id");
-                return this.resourceItems;
-            },
-            measurementItemsComp() {
-                this.measurementItems = this.measurementItems.length > 0 ? this.measurementItems : _.uniqBy(this._props.application.rows.map(r=>r.measurementUnit), "id");
-                return this.measurementItems;
-            },
-            // searchComp() {
-            //     if (this.search){
-            //         return this.search;
-            //     }
-            //     for (const key in this.COMPONENT_TYPES) {
-            //         if (this.COMPONENT_TYPES.hasOwnProperty(key)) {
-            //             const element = this.COMPONENT_TYPES[key];
-            //             if (!this.search){
-            //                 this.search = {};
-            //             }
-            //             if (!this.search[element]){
-            //                 this.search[element] = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
-            //                     accu[val.id] = "";
-            //                 }, []);
-            //                 if (!this.searchOld)
-            //                 {
-            //                     this.searchOld = {}
-            //                 }
-            //                 this.searchOld[element] = this.search[element].slice();
-                            
-            //             }
-            //         }
-            //     }
-            //     return this.search;
-            // },
-            searchResourcesComp(){
-                if (!this.searchResources){
-                    this.searchResources = {};
-                }
-                this.searchResources = _.transform(_.orderBy(this._props.application.rows,"id"), function (accu, val) {
-                    accu[val.id] = val.resource.name;
-                }, []);
-                if (!this.searchResourcesOld)
-                    {
-                        this.searchResourcesOld = {}
-                    }
-                this.searchResourcesOld = this.searchResources.slice();
-                return this.searchResources;
+            editClick(row){
+                console.log(row);
+                row.isEdit = !!!row.isEdit;
             }
         }
     }
 </script>
 
 <style>
-.row-button-delete{
-    width: 20px;
-}
-.row-card{
+.element-margin{
     margin: 2px;
+}
+.button-margin{
+    margin-top: 15px;
 }
 </style>
