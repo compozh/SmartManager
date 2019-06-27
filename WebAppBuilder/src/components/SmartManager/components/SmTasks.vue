@@ -26,22 +26,21 @@
 
   export default {
     name: 'sm-tasks',
-    //props: ["tasks"],
     components: {
       emptyStateImg
     },
     created() {
+      const folder = this.$route.params.foldercode
       if (this.tasks === null) {
-        this.$store.dispatch('sm/getTasks', this.$route.params.foldercode)
+        this.getTasks(folder)
       }
     },
     watch: {
       '$route'(to, from) {
-        const currentFolderId = from.params.foldercode
-        const targetFolderId = to.params.foldercode
-
-        if (currentFolderId !== targetFolderId) {
-          this.$store.dispatch('sm/getTasks', targetFolderId)
+        const currentFolder = from.params.foldercode
+        const targetFolder = to.params.foldercode
+        if (currentFolder !== targetFolder) {
+          this.getTasks(targetFolder)
         }
       }
     },
@@ -52,6 +51,14 @@
       checkTasks() {
         return this.tasks ? this.tasks.length : 0
       }
+    },
+    methods: {
+      getTasks(folder) {
+        this.$store.dispatch('sm/getTasks', folder)
+      }
+    },
+    destroyed() {
+      this.$store.commit('sm/setTasks', null)
     }
   }
 </script>
