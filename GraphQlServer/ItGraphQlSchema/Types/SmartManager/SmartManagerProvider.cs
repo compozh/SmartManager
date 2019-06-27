@@ -98,7 +98,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 				args = JsonConvert.SerializeObject(new { ARSO = smFullINfo.Arso, KEYVALUE = smFullINfo.KeyValue, NDOR = orig.Ndor });
 				var result = await _webRequestsTools.CallWebRequestAsync(calcId, args);
 				var smFile = JsonConvert.DeserializeObject<SmFile>(result.Content);
-				orig.File = webServiceUrl+smFile.FileName;
+				orig.FileUrl = webServiceUrl+smFile.FileName;
 				listFile.Add(result);
 			}
 

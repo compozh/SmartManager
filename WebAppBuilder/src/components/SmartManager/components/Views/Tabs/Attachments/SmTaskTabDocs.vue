@@ -1,7 +1,7 @@
 <template>
   <originals-viewer
     v-slot="{ originals, file, params }"
-    :originals="task.originals"
+    :originals="taskDetail ? taskDetail.originals : []"
   >
     <v-container fluid pa-0>
       <v-layout class="viewer-layout" row wrap>
@@ -26,7 +26,7 @@
                       v-for="doc in originals"
                       :key="doc.id"
                       :class="file.id === doc.id ? 'selected' : ''"
-                      @click="params.selectDocument(doc.fileName, doc.file, doc.id)"
+                      @click="params.selectDocument(doc.fileName, doc.fileUrl, doc.id)"
                     >
                       <v-layout my-2 pa-2 column class="file-icon-container">
                         <v-flex>
@@ -51,7 +51,7 @@
 <script>
   export default {
     name: "smTaskTabDocs",
-    props: ['task']
+    props: ['taskDetail']
   }
 </script>
 

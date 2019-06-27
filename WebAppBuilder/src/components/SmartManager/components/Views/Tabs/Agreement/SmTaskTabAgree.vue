@@ -11,8 +11,8 @@
 
 <script>
   export default {
-    name: "smTaskTabHistory",
-    props: ['task']
+    name: "smTaskTabAgree",
+    props: ['taskDetail']
   }
 </script>
 

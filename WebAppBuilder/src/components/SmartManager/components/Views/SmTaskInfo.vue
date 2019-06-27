@@ -3,11 +3,11 @@
     <v-layout justify-center>
       <v-flex xs12>
         <sm-task-info-rl
-          v-slot="{ activeTab, tabs, task, props }"
+          v-slot="{ activeTab, tabs, taskDetail }"
         >
           <v-container fluid pa-0 ma-0>
             <v-layout>
-              <v-flex xs12>
+              <v-flex lg6>
                 <v-layout>
                   <v-flex xs12>
                     <v-tabs
@@ -18,6 +18,11 @@
                       <v-tab
                         v-for="item in tabs"
                         :key="item.value"
+                        :class="{
+                          'hidden-lg-and-up': item.value === 'originals',
+                          'marker': item.value === 'originals' && taskDetail.hasOrig
+                         }"
+
                       >{{ item.name }}
                       </v-tab>
                     </v-tabs>
@@ -31,10 +36,21 @@
                       >
                         <component
                           :is="item.component"
-                          :task="task"
+                          :class="{ 'hidden-lg-and-up': item.value === 'originals' }"
+                          :task-detail="taskDetail"
                         ></component>
                       </v-tab-item>
                     </v-tabs-items>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+              <v-flex
+                xs6
+                hidden-md-and-down
+              >
+                <v-layout column>
+                  <v-flex>
+                    <sm-task-tab-docs :task-detail="taskDetail"></sm-task-tab-docs>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -57,8 +73,15 @@
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
 
-  .selected {
-    background-color: yellowgreen;
+  .marker:after {
+    content: '';
+    position: relative;
+    top: -15px;
+    right: 10px;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: #B71C1C;
   }
 
 </style>
