@@ -6,6 +6,11 @@
       class="description-container"
     >
       <v-flex
+        xs12 mr-2
+        class="text-xs-left description-headline blue-grey--text pa-1"
+      >ОПИСАНИЕ:</v-flex>
+
+      <v-flex
         xs12
         class="iframe-container"
         :class="{'show-after': !showHiddenDesc && compareDescHeight}"
@@ -16,7 +21,7 @@
           width="100%"
           :height="setDescriptionHeight"
           frameborder="0"
-          :srcdoc="task.htmlDescript"
+          :srcdoc="description"
           @load="iFrameOnLoad"
         ></iframe>
       </v-flex>
@@ -44,7 +49,7 @@
 <script>
   export default {
     name: "sm-task-description",
-    props: ['task'],
+    props: ['description'],
     data: () => ({
       defaultDescHeight: 250,
       iFrameHeight: '',
@@ -77,8 +82,14 @@
 </script>
 
 <style scoped>
+  .description-headline {
+    font-size: 11px;
+    border-bottom: 3px double #b4d2f0;
+  }
+
   .description-container {
     overflow: hidden;
+    box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
 
   .iframe-container {
@@ -96,7 +107,7 @@
   }
 
   iframe {
-    transition: height linear .2s;
+    transition: height linear .3s;
   }
 
   .btn-more {

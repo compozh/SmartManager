@@ -22,7 +22,7 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.TypeName).Description("Название типа");
 			Field(p => p.TypeDescription).Description("Описание типа");
 			Field(p => p.IsSign).Description("Признак назначения");
-			Field(p => p.File);
+			Field(p => p.FileUrl).Description("Ccылка на файл");
 		}
 	}
 }

@@ -20,29 +20,12 @@ export default {
   },
   computed: {
     taskDetail() {
-      console.log('', this.$store.getters['sm/taskInfo'])
       return this.$store.getters['sm/taskInfo']
     },
     getTabs() {
       const task = this.taskDetail
       if (task) {
         return this.tabs
-        //   .filter(i => {
-        //   // вкладка с комментариями отображается всегда
-        //   if (i.value === 'tasks' || i.value === 'comments') {
-        //     return true
-        //   }
-        //   // остальные вкладки кроме "согласования" отображаются если есть данные
-        //   if (task[i.value]
-        //     && task[i.value].length
-        //     && task[i.value] !== 'agreement') {
-        //     return true
-        //   }
-        //   // вкладка "согласования" отображается если есть хоть один согласующий коментарий
-        //   if (i.value === 'agreement') {
-        //     return task.comments.some(i => i === 'isAgree' && i === '+')
-        //   }
-        // })
       }
     }
   },

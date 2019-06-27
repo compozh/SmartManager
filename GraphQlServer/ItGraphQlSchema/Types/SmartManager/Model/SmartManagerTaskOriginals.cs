@@ -44,6 +44,6 @@ namespace ItGraphQlSchema.Types.SmartManager.Model
 		[JsonProperty("ISSIGN")]
 		public bool IsSign { get; set; }
 
-		public string File { get; set; }
+		public string FileUrl { get; set; }
 	}
 }

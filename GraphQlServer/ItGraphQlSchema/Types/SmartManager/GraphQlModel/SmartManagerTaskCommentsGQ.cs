@@ -13,7 +13,7 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.User).Description("Имя пользователя");
 			Field(name:"Date",p => p.Date.ToString("dd.MM.yyyy HH:mm")).Description("Дата и время коментария");
 			Field(p => p.Text).Description("Текст коментария");
-			Field(p => p.IsAgree).Description("Назначен");
+			Field(p => p.IsAgree, nullable:true).Description("Назначен");
 		}
 	}
 }

@@ -22,7 +22,7 @@
       v-model="drawer"
       :mini-variant="menuMiniMode"
       mini-variant-width="56"
-      width="270"
+      width="220"
       class="transparent"
       stateless
     >

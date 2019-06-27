@@ -15,7 +15,7 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 			Field(p => p.HtmlDescript, nullable: true).Description("Описание (html)");
 			Field(p => p.DeclarerId).Description("Идентификатор заявителя");
 			Field(p => p.Declarer).Description("ФИО заявителя");
-			Field(p => p.DeclarerPhoto).Description("Хеш-ссылка на фото заявителя");
+			Field(p => p.DeclarerPhoto, nullable:true).Description("Хеш-ссылка на фото заявителя");
 			Field(p => p.PerformerId).Description("Идентификатор исполнителя");
 			Field(p => p.Performer).Description("ФИО исполнителя");
 			Field(name:"Dateplan",p => p.Dateplan.ToString("dd.MM.yyyy HH:mm")).Description("Плановая дата");

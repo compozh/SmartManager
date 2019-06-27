@@ -59,7 +59,7 @@ fragment taskFields on TasksGetInfo {
     typeName
     typeDescription
     isSign
-    file
+    fileUrl
   }
   comments {
     userId

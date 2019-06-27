@@ -26,7 +26,7 @@
                       v-for="doc in originals"
                       :key="doc.id"
                       :class="file.id === doc.id ? 'selected' : ''"
-                      @click="params.selectDocument(doc.fileName, doc.file, doc.id)"
+                      @click="params.selectDocument(doc.fileName, doc.fileUrl, doc.id)"
                     >
                       <v-layout my-2 pa-2 column class="file-icon-container">
                         <v-flex>

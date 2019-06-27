@@ -18,7 +18,11 @@
                       <v-tab
                         v-for="item in tabs"
                         :key="item.value"
-                        :class="{ 'hidden-lg-and-up': item.value === 'originals' }"
+                        :class="{
+                          'hidden-lg-and-up': item.value === 'originals',
+                          'marker': item.value === 'originals' && taskDetail.hasOrig
+                         }"
+
                       >{{ item.name }}
                       </v-tab>
                     </v-tabs>
@@ -45,9 +49,6 @@
                 hidden-md-and-down
               >
                 <v-layout column>
-                  <v-flex document-viewer-container >
-                    DOCUMENT VIEWER
-                  </v-flex>
                   <v-flex>
                     <sm-task-tab-docs :task-detail="taskDetail"></sm-task-tab-docs>
                   </v-flex>
@@ -72,17 +73,15 @@
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
 
-  .selected {
-    background-color: yellowgreen;
-  }
-
-  .document-viewer-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    color: cadetblue;
-    background: aliceblue;
+  .marker:after {
+    content: '';
+    position: relative;
+    top: -15px;
+    right: 10px;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: #B71C1C;
   }
 
 </style>

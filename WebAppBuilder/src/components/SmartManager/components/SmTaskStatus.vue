@@ -1,17 +1,22 @@
 <template>
   <v-container fluid pa-0>
+
     <v-tooltip top>
       <template v-slot:activator="{ on }">
         <v-icon
           v-on="on"
           :color="taskStatus.color"
-          class="hidden-sm-and-up ml-1"
+          class="ml-1"
+          :size="18"
+          :class="{'hidden-sm-and-up': chip}"
         >{{ taskStatus.icon }}
         </v-icon>
       </template>
       <span>{{ taskStatus.text }}</span>
     </v-tooltip>
+
     <v-chip
+      v-if="chip"
       disabled
       small outline
       class="hidden-xs-only ma-0 ml-1"
@@ -22,13 +27,14 @@
       </v-avatar>
       {{ taskStatus.text }}
     </v-chip>
+
   </v-container>
 </template>
 
 <script>
   export default {
     name: "sm-task-status",
-    props: ['task'],
+    props: ['task', 'chip'],
     computed: {
       taskStatus() {
         switch (this.task.status) {
@@ -66,10 +72,6 @@
   .v-chip {
     height: 22px !important;
     font-size: 12px
-  }
-
-  .v-chip:focus {
-    background-color: red;
   }
 
   .v-chip >>> .v-chip__content {

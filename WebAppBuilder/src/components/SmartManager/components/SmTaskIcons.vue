@@ -1,8 +1,8 @@
 <template>
-  <span class="icon-group d-flex align-center">
+  <v-container fluid pa-0>
     <v-tooltip top>
       <template v-slot:activator="{ on }">
-        <v-icon v-if="task.priority" v-on="on">priority_high</v-icon>
+        <v-icon v-if="task.priority" v-on="on" color="red darken-4">priority_high</v-icon>
       </template>
       <span>Высокий приоритет</span>
     </v-tooltip>
@@ -30,8 +30,7 @@
       </template>
       <span>Задача от меня</span>
     </v-tooltip>
-    <sm-task-status :task="task"></sm-task-status>
-  </span>
+  </v-container>
 </template>
 
 <script>

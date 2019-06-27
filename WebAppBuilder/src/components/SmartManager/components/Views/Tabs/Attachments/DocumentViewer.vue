@@ -1,21 +1,20 @@
 <template>
   <v-container pa-0>
     <v-layout column>
-      <v-flex class="toolbar">
-        <a v-show="false" v-for="i in pdfPages" :href="'#' + i">{{ i }} </a>
-        <v-btn depressed small @click="width-=10">-</v-btn>
-        {{ width }} %
-        <v-btn depressed small @click="width+=10"> +</v-btn>
-        <v-btn depressed small @click="rotate += 90">&#x27F3;</v-btn>
-        <v-btn depressed small @click="rotate -= 90">&#x27F2;</v-btn>
-      </v-flex>
-      <v-flex class="viewer-container">
-        <v-layout ma-3 column>
+      <v-flex class="ml-1 viewer-container">
+        <v-layout my-1 mx-3 column>
           <v-flex
             class="pdf-viewer"
             v-if="fileType === 'pdf'"
           >
             <v-layout column>
+              <v-flex class="toolbar">
+                <v-btn outline small class="viewer-btn" @click="rotate += 90">&#x27F3;</v-btn>
+                <v-btn outline small class="viewer-btn" @click="width-=10">-</v-btn>
+                {{ width }} %
+                <v-btn outline small class="viewer-btn" @click="width+=10"> +</v-btn>
+                <v-btn outline small class="viewer-btn" @click="rotate -= 90">&#x27F2;</v-btn>
+              </v-flex>
               <v-flex
                 my-2
                 elevation-3
@@ -111,6 +110,7 @@
           case 'pdf':
             pdf.createLoadingTask(this.fileUrl)
               .then(pdf => this.pdfPages = pdf.numPages)
+              .catch(e => this.$store.commit('sm/setError', e.message))
             break
           case 'img':
             break;
@@ -132,7 +132,7 @@
 
   .viewer-container {
     box-shadow: 0 0 0 1px rgba(100, 121, 143, 0.122);
-    height: 85vh;
+    height: 93vh;
     overflow: auto;
   }
 
@@ -143,5 +143,16 @@
 
   .image-viewer {
     max-width: 100%;
+  }
+
+  .v-btn.viewer-btn {
+    padding: 0;
+    text-transform: none;
+    font-weight: 300;
+    color: #666;
+    background-color: #f5f5f5 !important;
+    border-color: #c6c6c6;
+    height: 20px;
+    min-width: 30px;
   }
 </style>
