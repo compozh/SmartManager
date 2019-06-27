@@ -11,8 +11,9 @@ namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 			Field(x => x.Id).Description("Id"); 
 			Field(x => x.Value,true);
 			Field(x => x.Date,true);
+			Field(x => x.EndDate,true);
 			Field(x => x.Description);
-			Field(x => x.Comment);
+			Field(x => x.Comment, true);
 			Field(x => x.MeasurementUnitId, true);
 			Field(x => x.ConditionParameterId, true);
 			Field(x => x.EquipmentId);
