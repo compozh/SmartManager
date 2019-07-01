@@ -30,8 +30,8 @@
       emptyStateImg
     },
     created() {
-      const folder = this.$route.params.foldercode
-      this.getTasks(folder)
+      const folderId = this.$route.params.foldercode
+      this.getTasks(folderId)
     },
     watch: {
       '$route'(to, from) {
@@ -47,17 +47,14 @@
         return this.$store.getters['sm/tasks']
       },
       checkTasks() {
-        return this.tasks
-          ? this.tasks.length
-          : 0
+        return this.tasks ? this.tasks.length : 0
       }
     },
     methods: {
-      getTasks(folder) {
-        this.$store.commit('sm/setCurrentFolder', folder)
-        this.tasks
-          ? this.$store.dispatch('sm/updateTasks', folder)
-          : this.$store.dispatch('sm/getTasks', folder)
+      getTasks(folderId) {
+        this.$store.commit('sm/setCurrentFolder', folderId)
+        const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
+          this.$store.dispatch('sm/getTasks', {folderId, loader})
       }
     }
   }

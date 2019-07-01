@@ -1,6 +1,6 @@
 export default {
-  loading: false, // Circular progress component
-  linear: false, // Linear progress component
+  circularLoader: false, // Circular progress component
+  linearLoader: false, // Linear progress component
   error: null, // Snackbar for errors
   menuMode: 'open', // Main menu state: open, mini, close
   folders: null,

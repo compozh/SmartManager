@@ -6,7 +6,7 @@
       class="description-container"
     >
       <v-flex
-        xs12 mr-2
+        xs12
         class="text-xs-left description-headline blue-grey--text pa-1"
       >ОПИСАНИЕ:</v-flex>
 

@@ -1,15 +1,12 @@
 export default {
-  setLoading(state, payload) {
-    state.loading = payload
+  setCircularLoader(state, payload) {
+    state.circularLoader = payload
   },
-  setLinear(state, payload) {
-    state.linear = payload
+  setLinearLoader(state, payload) {
+    state.linearLoader = payload
   },
   setError(state, payload) {
     state.error = payload
-  },
-  clearError(state) {
-    state.error = null
   },
   setMenuMode(state, payload) {
     state.menuMode = payload

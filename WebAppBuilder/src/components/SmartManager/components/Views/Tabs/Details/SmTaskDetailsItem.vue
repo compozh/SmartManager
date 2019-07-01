@@ -1,5 +1,12 @@
 <template>
-  <sm-tasks-item-rl v-slot="{}">
+  <sm-task-details-item-ext
+    v-slot="{
+      task,
+      options,
+      members,
+      dateStatus
+    }"
+  >
     <v-container fluid pa-0 pr-2>
       <v-layout row wrap text-xs-left>
         <v-flex xs12 pt-2>
@@ -83,7 +90,7 @@
         :description="task.htmlDescript"
       ></sm-task-description>
     </v-container>
-  </sm-tasks-item-rl>
+  </sm-task-details-item-ext>
 </template>
 
 <script>
@@ -91,110 +98,7 @@
   import moment from 'moment'
 
   export default {
-    name: 'sm-task-details-item',
-    props: ['task'],
-    components: {
-      moment
-    },
-    computed: {
-      options() {
-        const options = []
-        const myControl = this.task.myControl
-        const needApprov = this.task.needApprov
-        const priority = this.task.priority
-
-        if (myControl) {
-          options.push({
-            title: 'На контроле',
-            color: 'red darken-4',
-            icon: 'remove_red_eye'
-          })
-        }
-        if (needApprov) {
-          options.push({
-            title: 'Требует утверждения',
-            color: 'blue-grey darken-2',
-            icon: 'check_circle_outline'
-          })
-        }
-        if (priority) {
-          switch (priority) {
-            case 1:
-              options.push({
-                title: 'Высокий приоритет',
-                color: 'green darken-2',
-                icon: 'error_outline'
-              })
-              break
-            case -1:
-              options.push({
-                title: 'Не срочно',
-                color: 'grey darken-2',
-                icon: 'low_priority'
-              })
-              break
-          }
-        }
-        return options
-      },
-      participants() {
-        const participants = this.task.participants
-        participants.push({
-          name: this.task.addedFio,
-          role: "addedFio"
-        })
-        return participants
-      },
-      members() {
-        const result = {}
-        const members = this.participants
-        members.forEach(member => {
-          const name = member.name
-          const role = member.role
-          result[role]
-            ? result[role].members.push(name)
-            : result[role] = Object.assign({members: [name]}, this.defineRole(role))
-        })
-        return result
-      },
-      dateStatus() {
-        const planDate = this.task.dateplan
-        const isExpired = moment(planDate, 'DD.MM.YYYY HH:mm').isBefore()
-        if (isExpired) {
-          return 'red--text text--darken-4'
-        }
-      }
-    },
-    methods: {
-      defineRole(role) {
-        switch (role) {
-          case '':
-            return {
-              title: 'Ответственный',
-              color: 'blue darken-2',
-              icon: 'account_circle'
-            }
-          case 'COEXECUTOR':
-            return {
-              title: 'Соисполнители',
-              color: 'blue darken-2',
-              icon: 'supervised_user_circle'
-            }
-          case 'OBSERVER':
-            return {
-              title: 'Уведомить',
-              color: 'orange darken-4',
-              icon: 'error_outline'
-            }
-          case 'addedFio':
-            return {
-              title: 'Задача от',
-              color: 'blue-grey darken-4',
-              icon: 'loupe'
-            }
-        }
-      }
-    }
+    name: 'sm-task-details-item'
   }
 </script>
 

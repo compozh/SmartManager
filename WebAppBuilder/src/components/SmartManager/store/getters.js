@@ -1,9 +1,9 @@
 export default {
-  loading(state) {
-    return state.loading
+  circularLoader(state) {
+    return state.circularLoader
   },
-  linear(state) {
-    return state.linear
+  linearLoader(state) {
+    return state.linearLoader
   },
   error(state) {
     return state.error

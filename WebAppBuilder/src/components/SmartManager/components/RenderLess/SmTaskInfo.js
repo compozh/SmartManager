@@ -1,5 +1,5 @@
 export default {
-  name: 'smTaskInfoRl',
+  name: 'sm-task-info-rl',
   data: () => ({
     tabs: [
       {name: 'Детально', value: 'tasks', component: 'sm-task-tab-tasks'},
@@ -13,18 +13,17 @@ export default {
   }),
   created() {
     const taskId = +this.$route.params.taskId
-    const taskInfo = this.taskDetail
-    if (taskInfo === null || taskInfo.id !== taskId) {
+    const task = this.task
+    if (task === null || task.id !== taskId) {
       this.$store.dispatch('sm/getTaskInfo', taskId)
     }
   },
   computed: {
-    taskDetail() {
+    task() {
       return this.$store.getters['sm/taskInfo']
     },
     getTabs() {
-      const task = this.taskDetail
-      if (task) {
+      if (this.task) {
         return this.tabs
       }
     }
@@ -33,8 +32,10 @@ export default {
     return this.$scopedSlots.default({
       activeTab: this.activeTab,
       tabs: this.getTabs,
-      taskDetail: this.taskDetail,
-      props: {}
+      params: {
+        hasOrig: this.task ? this.task.originals.length : 0,
+        hasComm: this.task ? this.task.comments.length : 0
+      }
     })
   }
 }
