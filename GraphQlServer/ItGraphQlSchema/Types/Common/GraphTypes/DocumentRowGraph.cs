@@ -6,9 +6,9 @@ using System.Text;
 namespace ItGraphQlSchema.Types.Common.GraphTypes
 {
 	[AddInDI, GraphType(typeof(DocumentRow))]
-	class DocumentRowGraph : EfObjectGraphType<DocumentRow>
+	class DocumentRowGraph : EfObjectGraphType<CommonDbContext, DocumentRow>
 	{
-		public DocumentRowGraph(IEfGraphQLService graphQlService) : base(graphQlService)
+		public DocumentRowGraph(IEfGraphQLService<CommonDbContext> graphQlService) : base(graphQlService)
 		{
 			Name = "docuemtRow";
 			Field(x => x.DocumentId).Description("Идентификатор документа");

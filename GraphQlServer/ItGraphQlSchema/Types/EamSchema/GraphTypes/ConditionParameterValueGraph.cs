@@ -1,17 +1,18 @@
 using GraphQL.EntityFramework;
+using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 {
 	[AddInDI, GraphType(typeof(ConditionParameterValue))]
-	public class ConditionParameterValueGraph: EfObjectGraphType<ConditionParameterValue>
+	public class ConditionParameterValueGraph: EfObjectGraphType<CommonDbContext, ConditionParameterValue>
 	{
-		public ConditionParameterValueGraph(IEfGraphQLService graphQlService) :
+		public ConditionParameterValueGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 
 			Field(x => x.Value,true);
-			Field(x => x.Date,true);
-			Field(x => x.EndDate,true);
+			Field(x => x.Date,true, type:typeof(DateTimeGraphType));
+			Field(x => x.EndDate,true, type:typeof(DateTimeGraphType));
 			Field(x => x.Description);
 			Field(x => x.Comment, true);
 			Field(x => x.MeasurementUnitId, true);

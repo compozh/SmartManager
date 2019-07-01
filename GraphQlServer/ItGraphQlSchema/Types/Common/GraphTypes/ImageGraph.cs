@@ -3,9 +3,9 @@
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDI, GraphType(typeof(Image))]
-	public class ImageGraph : EfObjectGraphType<Image>
+	public class ImageGraph : EfObjectGraphType<CommonDbContext, Image>
 	{
-		public ImageGraph(IEfGraphQLService graphQLService) : base(graphQLService)
+		public ImageGraph(IEfGraphQLService<CommonDbContext> graphQLService) : base(graphQLService)
 		{
 			Name = "Image";
 			Field(x => x.Id).Description("Id");

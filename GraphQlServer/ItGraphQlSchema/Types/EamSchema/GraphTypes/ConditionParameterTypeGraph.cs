@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(ConditionParameterType))]
-	public class ConditionParameterTypeGraph: EfObjectGraphType<ConditionParameterType>
+	public class ConditionParameterTypeGraph: EfObjectGraphType<CommonDbContext, ConditionParameterType>
 	{
-		public ConditionParameterTypeGraph(IEfGraphQLService graphQlService) :
+		public ConditionParameterTypeGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 

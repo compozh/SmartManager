@@ -5,11 +5,11 @@ using ItGraphQlSchema.Types.EamSchema;
 namespace ItGraphQlSchema.Types
 {
 	[AddInDI]
-	public class EamQuery : QueryGraphType
+	public class EamQuery : QueryGraphType<CommonDbContext>
 	{
 		private readonly IEamDataProvider _dataProvider;
 
-		public EamQuery(IEfGraphQLService efGraphQlService, IEamDataProvider dataProvider) :
+		public EamQuery(IEfGraphQLService<CommonDbContext> efGraphQlService, IEamDataProvider dataProvider) :
 			base(efGraphQlService)
 		{
 			_dataProvider = dataProvider;
@@ -24,6 +24,7 @@ namespace ItGraphQlSchema.Types
 			AddQueryField(name: "equipmentTypes",resolve: context => _dataProvider.EquipmentTypes);
 			AddQueryField(name: "equipments",resolve: context =>_dataProvider.Equipments);
 			AddQueryConnectionField(name: "equipmentsConnection",resolve: context =>_dataProvider.Equipments);
+			AddSingleField(name: "equipment", resolve: context =>_dataProvider.Equipments);
 			AddQueryField(name: "equipmentMovementHistories",resolve: context =>_dataProvider.EquipmentMovementHistories.Where(m => m.EndDate == null));
 			
 			AddQueryField(name: "equipmentModelGroups",resolve: context =>_dataProvider.ResourcesGroups);

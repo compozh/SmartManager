@@ -1,12 +1,13 @@
+using System.Linq;
 using GraphQL.EntityFramework;
 using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(Equipment))]
-	public class EquipmentGraph: EfObjectGraphType<Equipment>
+	public class EquipmentGraph: EfObjectGraphType<CommonDbContext, Equipment>
 	{
-		public EquipmentGraph(IEfGraphQLService graphQlService) :
+		public EquipmentGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 
@@ -32,10 +33,14 @@ namespace ItGraphQlSchema.Types.EamSchema
 			AddNavigationField(name: "responsibleEmployee", resolve: context => context.Source.ResponsibleEmployee);
 			AddNavigationField(name: "type", resolve: context => context.Source.Type);
 			AddNavigationField(name: "model", resolve: context => context.Source.Model);
+			AddNavigationField(name: "itObject",resolve: context => context.Source.ItObject);
+			AddNavigationField(name: "currentMovementRecord",
+				resolve: context => context.Source.MovementHistories.FirstOrDefault(mh => mh.EndDate == null),
+				includeNames: new[] {"MovementHistories"});
+			
 			AddNavigationListField(name: "workRequests", resolve: context => context.Source.WorkRequests);
 			AddNavigationConnectionField(name: "workRequestsConnection",
 				resolve: context => context.Source.WorkRequests, includeNames: new[] {"WorkRequests"});
-			AddNavigationField(name: "itObject",resolve: context => context.Source.ItObject);
 		}
 	}
 }

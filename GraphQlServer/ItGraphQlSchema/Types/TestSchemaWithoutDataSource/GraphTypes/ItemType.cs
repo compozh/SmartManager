@@ -7,9 +7,9 @@ using GraphQL.Types;
 namespace ItGraphQlSchema.Types
 {
 	[AddInDIAttribute, GraphType(typeof(Item))]
-	public class ItemType : EfObjectGraphType<Item>
+	public class ItemType : EfObjectGraphType<CommonDbContext, Item>
 	{
-		public ItemType(IEfGraphQLService service):base(service)
+		public ItemType(IEfGraphQLService<CommonDbContext> service):base(service)
 		{
 			Name = "Item";
 

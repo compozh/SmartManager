@@ -1,11 +1,13 @@
-﻿using GraphQL.EntityFramework;
+﻿using System;
+using GraphQL.EntityFramework;
+using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(WorkRequest))]
-	public class WorkRequestGraph : EfObjectGraphType<WorkRequest>
+	public class WorkRequestGraph : EfObjectGraphType<CommonDbContext, WorkRequest>
 	{
-		public WorkRequestGraph(IEfGraphQLService graphQlService) :
+		public WorkRequestGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id");
@@ -13,12 +15,13 @@ namespace ItGraphQlSchema.Types.EamSchema
 			Field(x => x.WorkRequestCategoryId, true);
 			Field(x => x.WorkRequestDirectionId, true);
 			Field(x => x.WorkRequestRepairTypeId, true);
-			Field<WorkRequestSourceGraph>("Source");
-			Field<WorkRequestStatusGraph>("Status");
-			Field(x => x.CreationDate, nullable: true);
-			Field(x => x.StartDate, nullable: true);
-			Field(x => x.EndDate, nullable: true);
-			Field(x => x.FactDate, nullable: true);
+			Field(x => x.Source, nullable:true, typeof(WorkRequestSourceGraph));
+			Field(x => x.Status, nullable:true, typeof(WorkRequestStatusGraph));
+			Field(x => x.StatusCode);
+			Field(x => x.CreationDate, nullable:true, type:typeof(DateTimeGraphType));
+			Field(x => x.StartDate, nullable: true, type:typeof(DateTimeGraphType));
+			Field(x => x.EndDate, nullable: true, type:typeof(DateTimeGraphType));
+			Field(x => x.FactDate, nullable: true, type:typeof(DateTimeGraphType));
 			Field(x => x.DepartmentId, nullable: true);
 			Field(x => x.ResponsibleDepartmentId, nullable: true);
 			Field(x => x.DeclarerEmployeeId, true);
