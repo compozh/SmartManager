@@ -28,7 +28,7 @@ namespace ItGraphQlSchema.Types.Common
 	}
 
 	[AddInDI(typeof(ICommonDataProvider))]
-	internal class CommonDataProvider : ICommonDataProvider
+	public class CommonDataProvider : ICommonDataProvider
 	{
 		protected readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -37,7 +37,7 @@ namespace ItGraphQlSchema.Types.Common
 			_httpContextAccessor = httpContextAccessor;
 		}
 		
-		protected CommonDbContext DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<CommonDbContext>();
+		public CommonDbContext DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<CommonDbContext>();
 
 		public virtual IQueryable<Employee> Employees => DbContext.Employees;
 		public virtual IQueryable<Department> Departments  => DbContext.Departments;

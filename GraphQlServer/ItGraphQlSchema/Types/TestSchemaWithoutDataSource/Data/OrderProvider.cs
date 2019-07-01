@@ -61,10 +61,7 @@ namespace ItGraphQlSchema.Types
 			return mutate(mutation, orderItem, _dbContext.OrderItems);
 		}
 		
-		
 		public IQueryable<OrderItem> OrderItems => _dbContext.OrderItems;
-
-
 	}
 	
 	

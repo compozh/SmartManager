@@ -1,0 +1,4 @@
+.vscode
+GraphQlServer/bin
+GraphQlServer/obj
+Schema
