@@ -13,6 +13,13 @@
       <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
+      <v-progress-linear
+        v-if="linear"
+        height="2"
+        class="linear-loader"
+        color="blue darken-2"
+        :indeterminate="true"
+      ></v-progress-linear>
     </v-toolbar>
 
     <v-navigation-drawer
@@ -98,6 +105,9 @@
       loading() {
         return this.$store.getters['sm/loading']
       },
+      linear() {
+        return this.$store.getters['sm/linear']
+      },
       menuMiniMode() {
         eventBus.$emit('setMenuMode', this.mini);
         return this.mini;
@@ -124,5 +134,12 @@
   .loader {
     background-color: rgba(255, 255, 255, .5);
     z-index: 10;
+  }
+
+  .linear-loader {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 0;
   }
 </style>

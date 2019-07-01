@@ -2,6 +2,9 @@ export default {
   loading(state) {
     return state.loading
   },
+  linear(state) {
+    return state.linear
+  },
   error(state) {
     return state.error
   },
@@ -9,7 +12,8 @@ export default {
     return state.folders
   },
   tasks(state) {
-    return state.tasks
+    const folderId = state.currentFolder
+    return state.tasks[folderId]
   },
   taskInfo(state) {
     return state.taskInfo

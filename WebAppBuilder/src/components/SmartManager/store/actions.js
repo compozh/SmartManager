@@ -33,12 +33,29 @@ export default {
 
     try {
       const result = await api.getTasksFromGql(payload)
-      const tasks = result.data.smtasks.tasks
+      const tasks = {
+        [payload]: result.data.smtasks.tasks
+      }
 
       commit('setTasks', tasks)
       commit('setLoading', false)
     } catch (e) {
       commit('setLoading', false)
+      commit('setError', e.message)
+    }
+  },
+  async updateTasks({commit}, payload) {
+    commit('clearError');
+    commit('setLinear', true)
+    
+    try {
+      const result = await api.getTasksFromGql(payload)
+      const tasks = {
+        [payload]: result.data.smtasks.tasks
+      }
+      commit('setTasks', tasks)
+      commit('setLinear', false)
+    } catch (e) {
       commit('setError', e.message)
     }
   },

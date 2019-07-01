@@ -31,9 +31,7 @@
     },
     created() {
       const folder = this.$route.params.foldercode
-      if (this.tasks === null) {
-        this.getTasks(folder)
-      }
+      this.getTasks(folder)
     },
     watch: {
       '$route'(to, from) {
@@ -49,16 +47,18 @@
         return this.$store.getters['sm/tasks']
       },
       checkTasks() {
-        return this.tasks ? this.tasks.length : 0
+        return this.tasks
+          ? this.tasks.length
+          : 0
       }
     },
     methods: {
       getTasks(folder) {
-        this.$store.dispatch('sm/getTasks', folder)
+        this.$store.commit('sm/setCurrentFolder', folder)
+        this.tasks
+          ? this.$store.dispatch('sm/updateTasks', folder)
+          : this.$store.dispatch('sm/getTasks', folder)
       }
-    },
-    destroyed() {
-      this.$store.commit('sm/setTasks', null)
     }
   }
 </script>
