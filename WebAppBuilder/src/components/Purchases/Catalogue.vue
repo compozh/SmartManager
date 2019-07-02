@@ -1,48 +1,55 @@
 <template>
-  <div v-if="!isCard">
-    <v-navigation-drawer fixed right app v-model="filterDrawer" >
-      <v-layout class="filter-panel">
-        <v-flex>
-          <label v-text="'Быстрые фильтры:'" />
-          <v-text-field
-            v-model="search"
-            label="Наименование"
-            clearable
-            prepend-icon="search"
-          />
-        </v-flex>
-      </v-layout>
-    </v-navigation-drawer>
-      <v-flex>
-        <v-layout justify-end>
-          <v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>
-          <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
-        </v-layout>
-      </v-flex>
-      <v-flex>
-      <v-layout wrap justify-center>
-        <template v-for="(item, i) in itemsComp">
-          <v-flex :key="i" xs12 sm6 md4 lg3 catalogue-card>
-            <router-link :to="{ name:`${ entityType === 'resourcesGrops' ? 'CATALOGUEIN' : 'CATALOGUEITEM'}`, params: {catalogueId: item.id}}">
-              <v-card class="item-card">
-                <item-picture :entityName="entityType" :id="item.id" />
-                <span>
-                  {{item.name}}
-                </span>
-              </v-card>
-            </router-link>
+    <div v-if="!isCard">
+      <v-navigation-drawer fixed right app v-model="filterDrawer" >
+        <v-layout class="filter-panel">
+          <v-flex>
+            <label v-text="'Быстрые фильтры:'" />
+            <v-text-field
+              v-model="search"
+              label="Наименование"
+              clearable
+              prepend-icon="search"
+            />
           </v-flex>
-        </template>
-      </v-layout>
-      </v-flex>
-  </div>
-  <div v-else>
-    <v-card>
-      <v-card-title>
-        {{catalogueId}}
-      </v-card-title>
-    </v-card>
-  </div>
+        </v-layout>
+      </v-navigation-drawer>
+        <v-layout row>
+          <catalogue-route-breadcrumbs :code="routeParamCode" />
+          <v-layout justify-end>
+            <v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>
+            <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
+          </v-layout>
+        </v-layout>
+        <div v-if="loading" class="text-xs-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          />
+        </div>
+        <div v-else>
+        <v-layout wrap justify-center>
+          <template v-for="(item, i) in itemsComp">
+            <v-flex :key="i" xs12 sm6 md4 lg3 catalogue-card>
+              <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
+                <v-card class="item-card">
+                  <item-picture :entityName="entityType" :id="item.id" height="200px" width="200px"/>
+                  <span>
+                    {{item.name}}
+                  </span>
+                </v-card>
+              </router-link>
+            </v-flex>
+          </template>
+        </v-layout>
+        </div>
+    </div>
+    <div v-else>
+      <v-card>
+        <v-card-title>
+          <catalogue-item :catalogueId="routeParamCode" />
+        </v-card-title>
+      </v-card>
+    </div>
 </template>
 
 <script>
@@ -57,27 +64,29 @@
           entityType: "",
           filterDrawer: false,
           rowViewType: false,
-          search: ""
+          search: "",
       }),
       props:{
         catalogueId: undefined
       },
       methods:{
-        getResourcesGroups(group){
-          this.entityType = "resourcesGrops";
-          this.callAxiosQuery(group ? group : "")
-        },
-        getResources(group){
-          this.entityType = "resources";
-          this.callAxiosQuery(group,"fullName");
-        },
-        callAxiosQuery(group, nameField) {
+        getItems(id){
+          var fieldname = "name";
+          if (id !== null && id.trim().length != 15)
+          { 
+            this.entityType = "resourcesGrops";
+          }
+          else 
+          {
+            this.entityType = "resources"; 
+            fieldname = "fullName";
+          }
           const query = `
           {
             purchases{
-              items: ${this.entityType} (group: "${group}") {
+              items: ${this.entityType} (group: "${id}") {
                 id,
-                name: ${nameField ? nameField : "name"}
+                name: ${fieldname}
               }
             }
           }
@@ -86,32 +95,39 @@
         },
         respCallback (resp) {
             this.items = resp.data.data.purchases.items;
+        },
+        searchCallback (item) { 
+          //debugger;
+          var itemToSearch = _.lowerCase(item.name);
+          var searchedText = _.lowerCase(_.trim(this.search));
+          var ret = itemToSearch.indexOf(searchedText);
+          return ret >= 0;
         }
       },
       created: function () {
-        this.getResourcesGroups(this.$route.params.catalogueId);
+        var id = this.routeParamCode;
+        this.items = [];
+        this.getItems(id);
       },
       computed:{
         itemsComp(){
           if (this.search === ""){
             return this.items;
           }
-          return _.filter(this.items, function(item){ return _.lowerCase(item.Name).indexOf(this.search) > 0 });
+          return _.filter(this.items, this.searchCallback);
+        },
+        routeParamCode(){
+          return this.$route.params.catalogueId ? this.$route.params.catalogueId : "";
         },
         isCard(){
-          return _.trim(this.$route.params.catalogueId).length === 15
+          var isCard = _.trim(this.routeParamCode).length === 15;
+          return isCard;
         }
       },
       watch: {
         '$route' (to, from) {
-          debugger;
-          var groupItem = _.find(this.items,["id",to.params.catalogueId]);
-          this.getResourcesGroups(to.params.catalogueId);
-        },
-        items (to, prev) {
-          if (to.length === 0 && this.entityType != "resources"){
-            this.getResources(this.$route.params.catalogueId);
-          }
+          var id = to.params.catalogueId;
+          this.getItems(id);
         }
       }
   }
@@ -125,6 +141,7 @@
   }
   .catalogue-card a{
     text-decoration: none;
+
   }
   .filter-panel{
     margin: 10px;
