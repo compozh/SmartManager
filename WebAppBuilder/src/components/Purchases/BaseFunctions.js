@@ -18,8 +18,8 @@ export default function purchasesSchemaAxios (f, q, props) {
                               props: props
                             } 
                           })
-        .then(res=> resolve(res));
-        f.loading = false
-      }, 500)
+        .then(res=> { f.loading = false; resolve(res) });
+        
+      }, 0)
     });
   }
