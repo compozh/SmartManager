@@ -134,5 +134,35 @@ namespace ItGraphQlSchema.Types.Services
                 return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-    }
+
+		public CustomResult DeleteAllCarts()
+        {
+            try
+            {
+                var result = new CustomResult { Successed = true, Message=new List<string>() };
+                var items = _dbContext.CartItems.FirstOrDefault(x => x.UserId == UserSettings.UserId);
+                if (items == null)
+                {
+                    result.Message.Add("Id not found.");
+                    result.Successed = false;
+                }
+
+                if (result.Successed)
+                {
+                    _dbContext.RemoveRange(items);
+                    _dbContext.SaveChanges();
+
+                    result.Message.Add("Cart item was added.");
+					result.ReturnValue = items;
+                }
+
+                return result;
+            }
+            catch (System.Exception ex)
+            {
+                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+            }
+        }
+
+	}
 }

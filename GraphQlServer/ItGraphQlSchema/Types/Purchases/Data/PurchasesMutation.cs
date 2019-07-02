@@ -55,7 +55,7 @@ namespace ItGraphQlSchema.Types.Purchases
                     
                     return null;
                 }
-            );
+            );            
 
             Field<CartItemGraph>(
                 "deleteCart",
@@ -67,6 +67,19 @@ namespace ItGraphQlSchema.Types.Purchases
                 resolve: c => {
                     var cardId = c.GetArgument<Guid>("cartId");
                     var result = _service.DeleteCart(cardId);
+                    if(result.Successed){
+                        return result.ReturnValue;
+                    }                    
+                    ErrorSender(c,result);
+                    
+                    return null;
+                }
+            );
+            
+            Field<CartItemGraph>(
+                "deleteAllCarts",
+                resolve: c => {
+                    var result = _service.DeleteAllCarts();
                     if(result.Successed){
                         return result.ReturnValue;
                     }                    

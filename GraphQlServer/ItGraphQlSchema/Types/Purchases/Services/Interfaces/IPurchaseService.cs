@@ -8,5 +8,6 @@ namespace ItGraphQlSchema.Types.Services.Interfaces{
         CustomResult CreateCart(CartItem item);
         CustomResult EditCart(CartItem item);
         CustomResult DeleteCart(Guid id);
+        CustomResult DeleteAllCarts();
     }
 }
