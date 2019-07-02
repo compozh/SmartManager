@@ -1,3 +1,4 @@
+using System;
 using ItGraphQlSchema.Custom;
 using ItGraphQlSchema.Types.Purchases;
 
@@ -6,6 +7,6 @@ namespace ItGraphQlSchema.Types.Services.Interfaces{
     {
         CustomResult CreateCart(CartItem item);
         CustomResult EditCart(CartItem item);
-        CustomResult DeleteCart(int id);
+        CustomResult DeleteCart(Guid id);
     }
 }

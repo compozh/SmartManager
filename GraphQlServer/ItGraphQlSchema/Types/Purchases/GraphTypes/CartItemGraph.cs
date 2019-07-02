@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types.Purchases
 			AddNavigationField(
 				name: "resource",
 				resolve: context => context.Source.Resource);
-			Field(p => p.DateDelivery).Description("Плановая дата поставки");
+			Field(p => p.DateDelivery, nullable:true).Description("Плановая дата поставки");
 		}
 	}
 }
