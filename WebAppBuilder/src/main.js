@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import VueTouch from 'vue-touch';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -24,6 +25,7 @@ req.keys().map(key => {
 });
 
 Vue.use(Vuetify);
+Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(VueApollo);
 
 // Cache implementation

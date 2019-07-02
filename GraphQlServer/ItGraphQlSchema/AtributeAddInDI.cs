@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace ItGraphQlSchema
 {
-	public class AddInDIAttribute : Attribute
+    public class AddInDIAttribute : Attribute
 	{
 		public Type ImplementedType { get; }
 

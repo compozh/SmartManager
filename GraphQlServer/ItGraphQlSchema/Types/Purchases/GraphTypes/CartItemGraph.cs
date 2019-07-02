@@ -10,7 +10,7 @@ namespace ItGraphQlSchema.Types.Purchases
 		{
 			Name = "CartItem";
 			Field(p => p.Id).Description("Идентификатор элемента");
-			Field(p => p.ResourceId).Description("Идентификатор ресурса");
+			Field(p => p.ResourceId, nullable: true).Description("Идентификатор ресурса");
 			Field(p => p.ResourceName).Description("Наименование ресурса");
 			Field(p => p.Quantity).Description("Количество");
 			AddNavigationField(
@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types.Purchases
 			AddNavigationField(
 				name: "resource",
 				resolve: context => context.Source.Resource);
-			Field(p => p.DateDelivery).Description("Плановая дата поставки");
+			Field(p => p.DateDelivery, nullable:true).Description("Плановая дата поставки");
 		}
 	}
 }

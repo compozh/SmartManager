@@ -26,6 +26,7 @@
     "vue-pdf": "^4.0.6",
     "vue-router": "^3.0.1",
     "vue-svg-loader": "^0.12.0",
+    "vue-touch": "^2.0.0-beta.4",
     "vuetify": "^1.5.14",
     "vuex": "^3.1.0"
   },

@@ -21,7 +21,9 @@ namespace ItGraphQlSchema.Types.Common
 		public ResourceGroup Parent { get; set; }
 
 		public List<Resource> Resources { get; set; }
-		
+
+		public List<ResourceGroup> Children { get; set; }
+
 		/// <summary>
 		/// Иконка
 		/// </summary>

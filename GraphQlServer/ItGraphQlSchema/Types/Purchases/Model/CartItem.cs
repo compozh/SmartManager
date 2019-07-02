@@ -9,7 +9,8 @@ namespace ItGraphQlSchema.Types.Purchases
 	public class CartItem
 	{
 		[Key, Column("ID")]
-		public int Id { get; set; }
+		//[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public Guid Id { get; set; }
 
 		[Column("USERID")]
 		public string UserId { get; set; }
@@ -31,6 +32,12 @@ namespace ItGraphQlSchema.Types.Purchases
 		public MeasurementUnit MeasurementUnit { get; set; }
 
 		[Column("DTDELIV")]
-		public DateTime DateDelivery { get; set; }
+		public DateTime? DateDelivery { get; set; }
+
+		[Column("FIO_D")]
+		public string SignatureUserId { get; set; }
+
+		[Column("DATE_D")]
+		public DateTime? SignatureDate { get; set; }
 	}
 }
