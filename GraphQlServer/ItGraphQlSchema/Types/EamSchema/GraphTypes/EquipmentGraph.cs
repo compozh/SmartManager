@@ -7,7 +7,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 	[AddInDI, GraphType(typeof(Equipment))]
 	public class EquipmentGraph: EfObjectGraphType<CommonDbContext, Equipment>
 	{
-		public EquipmentGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
+		public EquipmentGraph(IEfGraphQLService<CommonDbContext> graphQlService, IEamDataProvider dataProvider) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 
@@ -37,6 +37,30 @@ namespace ItGraphQlSchema.Types.EamSchema
 			AddNavigationField(name: "currentMovementRecord",
 				resolve: context => context.Source.MovementHistories.FirstOrDefault(mh => mh.EndDate == null),
 				includeNames: new[] {"MovementHistories"});
+
+			AddNavigationListField(name: "attachments",
+				resolve: context =>
+					dataProvider.Attachments.Where(a => a.Alias == "ROK" && a.Key == context.Source.Id.PadRight(254)),
+				includeNames: new[] {"Model"});
+
+			AddNavigationListField(name: "images",
+				resolve: context =>
+				{
+					var equipmentAttachments = dataProvider.AttachmentImages.Where(a =>
+						a.Alias == "ROK" && a.Key == context.Source.Id.PadRight(254));
+					if (equipmentAttachments.Any())
+					{
+						return equipmentAttachments;
+					}
+
+					if (context.Source.Model != null)
+					{
+						return dataProvider.AttachmentImages.Where(a =>
+							a.Alias == "KSM" && a.Key == context.Source.Model.Id.PadRight(254));
+					}
+
+					return null;
+				}, includeNames: new[] {"Model"});
 			
 			AddNavigationListField(name: "workRequests", resolve: context => context.Source.WorkRequests);
 			AddNavigationConnectionField(name: "workRequestsConnection",

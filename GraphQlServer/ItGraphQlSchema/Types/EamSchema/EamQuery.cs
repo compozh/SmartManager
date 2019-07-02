@@ -57,6 +57,19 @@ namespace ItGraphQlSchema.Types
 			AddQueryConnectionField(name: "departmentConnection",resolve: context => _dataProvider.Departments);
 			AddQueryField(name: "measurementUnits",resolve: context => _dataProvider.MeasurementUnits);
 			AddQueryConnectionField(name: "measurementUnitsConnection",resolve: context => _dataProvider.MeasurementUnits);
+			
+			AddQueryField(name: "attachments", resolve:
+				context => context.Arguments.ContainsKey("id")
+							|| context.Arguments.ContainsKey("ids")
+							|| context.Arguments.ContainsKey("where")
+					? _dataProvider.Attachments
+					: _dataProvider.Attachments.Take(30));
+			AddQueryConnectionField(name: "attachmentsConnection", resolve:
+				context => context.Arguments.ContainsKey("first")
+							|| context.Arguments.ContainsKey("ids")
+							|| context.Arguments.ContainsKey("where")
+					? _dataProvider.Attachments
+					: _dataProvider.Attachments.Take(30));
 		}
 	}
 }

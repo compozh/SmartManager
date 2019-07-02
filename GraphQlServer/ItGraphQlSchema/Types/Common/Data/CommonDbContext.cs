@@ -19,6 +19,7 @@ namespace ItGraphQlSchema.Types
 		public DbSet<Document> Documents { get; set; }
 		public DbSet<DocumentRow> DocumentRows { get; set; }
 		public DbSet<Image> Images { get; set; }
+		public DbSet<Attachment> Attachments { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

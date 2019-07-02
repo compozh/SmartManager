@@ -24,6 +24,7 @@ namespace ItGraphQlSchema.Types.Common
 		IQueryable<Document> Documents { get; }
 		IQueryable<DocumentRow> DocumentRows { get; }
 		IQueryable<Image> Images { get; }
+		IQueryable<Attachment> Attachments { get; }
 
 		string GetResorces(string vals);
 	}
@@ -51,6 +52,8 @@ namespace ItGraphQlSchema.Types.Common
 		public virtual IQueryable<Document> Documents => DbContext.Documents;
 		public virtual IQueryable<DocumentRow> DocumentRows => DbContext.DocumentRows;
 		public virtual IQueryable<Image> Images => DbContext.Images;
+		
+		public virtual IQueryable<Attachment> Attachments => DbContext.Attachments;
 
 		public string GetResorces(string nameValue)
 		{

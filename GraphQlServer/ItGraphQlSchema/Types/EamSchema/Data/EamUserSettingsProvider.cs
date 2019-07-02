@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		private readonly IMemoryCache _cache;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		private static readonly TimeSpan CacheExpiration = new TimeSpan(0, 15, 0);
+		private static readonly TimeSpan CacheExpiration = new TimeSpan(1, 0, 0);
 
 		public EamUserSettingsProvider(WebRequestsTools webRequestsTools, IMemoryCache cache, IHttpContextAccessor httpContextAccessor)
 		{
