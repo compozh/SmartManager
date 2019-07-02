@@ -91,6 +91,7 @@ namespace ItGraphQlSchema.Types.Services
                     _dbContext.SaveChanges();
 
                     result.Message.Add("Cart item was modified.");
+					result.ReturnValue = _dbContext.CartItems.FirstOrDefault(x => x.Id == item.Id);
                 }
 
                 return result;
@@ -105,7 +106,7 @@ namespace ItGraphQlSchema.Types.Services
         {
             try
             {
-                var result = new CustomResult { Successed = true };
+                var result = new CustomResult { Successed = true, Message=new List<string>() };
                 var item = _dbContext.CartItems.FirstOrDefault(x => x.Id == id);
                 if (item == null)
                 {
@@ -123,6 +124,7 @@ namespace ItGraphQlSchema.Types.Services
                     _dbContext.SaveChanges();
 
                     result.Message.Add("Cart item was added.");
+					result.ReturnValue = item;
                 }
 
                 return result;
