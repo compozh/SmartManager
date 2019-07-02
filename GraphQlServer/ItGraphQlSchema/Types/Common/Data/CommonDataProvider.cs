@@ -50,6 +50,7 @@ namespace ItGraphQlSchema.Types.Common
 																		//.Where(w=>w.Children.Any(c=>c.ParentId == w.Id));
 		public virtual IQueryable<Document> Documents => DbContext.Documents;
 		public virtual IQueryable<DocumentRow> DocumentRows => DbContext.DocumentRows;
+		public virtual IQueryable<Image> Images => DbContext.Images;
 
 		public string GetResorces(string nameValue)
 		{
