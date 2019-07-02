@@ -2,9 +2,12 @@
 <html lang="en">
   <head>
     <script>
+      var devMode = '<%= NODE_ENV %>' == "development"
+      devMode = false
       window.myConfig = {
-      GrapgQlUrl:"http://localhost:4002/", //
-        BASE_URL:"<%= BASE_URL %>"
+        GrapgQlUrl: devMode ? "http://localhost:5002/" : "/GraphQlServer/",
+        BASE_URL:"<%= BASE_URL %>",
+        WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/"
       }
     </script>
     <meta charset="utf-8">

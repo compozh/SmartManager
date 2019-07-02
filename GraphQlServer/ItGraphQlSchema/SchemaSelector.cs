@@ -12,9 +12,9 @@ namespace ItGraphQlSchema
 			_resolver = resolver;
 		}
 
-		public ISchema GetMatchSchema(string schemaName, bool anonymouscall)
+		public ISchema GetMatchSchema(string schemaName, bool anonymousCall)
 		{
-			return new CommonSchema.CommonSchema(_resolver, schemaName, anonymouscall);
+			return new CommonSchema.CommonSchema(_resolver, schemaName, anonymousCall);
 		}
 	}
 }

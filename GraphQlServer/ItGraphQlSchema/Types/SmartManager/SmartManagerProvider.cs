@@ -59,11 +59,11 @@ namespace ItGraphQlSchema.Types.SmartManager
 					var tasks = JsonConvert.DeserializeObject<List<SmartManagerTask>>(requestResult.Content);
 					foreach (var tas in tasks)
 					{
-						if (string.IsNullOrEmpty(tas.addedPhoto))
+						if (string.IsNullOrEmpty(tas.AddedPhoto))
 						{
 							continue;
 						}
-						tas.addedPhoto = webServiceUrl + tas.addedPhoto + "&folder=content&nodownload=1";
+						tas.AddedPhoto = webServiceUrl + tas.AddedPhoto + "&folder=content&nodownload=1";
 					}
 
 					return tasks;
@@ -98,7 +98,7 @@ namespace ItGraphQlSchema.Types.SmartManager
 				args = JsonConvert.SerializeObject(new { ARSO = smFullINfo.Arso, KEYVALUE = smFullINfo.KeyValue, NDOR = orig.Ndor });
 				var result = await _webRequestsTools.CallWebRequestAsync(calcId, args);
 				var smFile = JsonConvert.DeserializeObject<SmFile>(result.Content);
-				orig.File = webServiceUrl+smFile.FileName;
+				orig.FileUrl = webServiceUrl+smFile.FileName;
 				listFile.Add(result);
 			}
 

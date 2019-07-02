@@ -9,9 +9,11 @@ namespace ItGraphQlSchema.Types.SmartManager.GraphQlModel
 		public SmartManagerTaskCommentsGQ()
 		{
 			Name = "Comments";
-			Field(p => p.User);
-			Field(p => p.Text);
-			Field(p => p.Date);
+			Field(p => p.UserId).Description("Идентификатор пользователя");
+			Field(p => p.User).Description("Имя пользователя");
+			Field(name:"Date",p => p.Date.ToString("dd.MM.yyyy HH:mm")).Description("Дата и время коментария");
+			Field(p => p.Text).Description("Текст коментария");
+			Field(p => p.IsAgree, nullable:true).Description("Назначен");
 		}
 	}
 }

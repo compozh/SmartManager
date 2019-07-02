@@ -1,34 +1,29 @@
 import Axios from "axios";
-import * as jsonpatch from '../patching'
-
 
 const actions = ({
-  GetCurrentUser(context) {
+  GetCurrentUser({commit, state}) {
 
-    Axios({
+    //
+    if(state.applicationDescription.Id && state.applicationDescription.Id.toLowerCase() == "minfin"){
+      return;
+    }
+
+    return Axios({
       method: 'POST',
       url: `${myConfig.GrapgQlUrl}api/authentication/user`,
       withCredentials: true,
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')}
     }).then(resp => {
-      context.commit("setCurrentUser", resp.data)
-      //console.log(resp.data)
-    });
-
+      return commit("setCurrentUser", resp.data)
+    })
   },
-
-
-  LogOut(context) {
-    localStorage.removeItem("ItUniTocken");
-    localStorage.removeItem('userName');
-    context.commit("setCurrentUser", "");
-
+  LogOut({commit}) {
+    localStorage.removeItem("ItUniTocken")
+    commit("setCurrentUser",null)
   },
-  Login(context, loginParam) {
-
-    localStorage.removeItem("ItUniTocken");
-    localStorage.removeItem('userName');
-    context.commit("setCurrentUser", "");
+  Login({commit, dispatch}, loginParam) {
+    localStorage.removeItem("ItUniTocken")
+    commit("setCurrentUser", null)
 
     return Axios.post(`${myConfig.GrapgQlUrl}api/authentication/login`, {
       login: loginParam.login,
@@ -37,21 +32,16 @@ const actions = ({
     }, {
       withCredentials: true
     }).then(
-      // всё Ок
-      (response) => {
-        var token = response.data.access_token;
-        var username = response.data.username
+      response => {
+        const token = response.data.access_token
         if (token) {
-          context.commit("setCurrentUser", username);
-          localStorage.setItem('ItUniTocken', token);
-          localStorage.setItem('userName', username);
-          return true;
+          localStorage.setItem('ItUniTocken', token)
+          return dispatch('GetCurrentUser')
+            .then(() => true
+          )
         }
-
       })
   },
-
-
   /** Загрузить данные для компонента */
   LoadDataForComponent({commit}, {datasource, key}) {
     return Axios({
@@ -62,12 +52,19 @@ const actions = ({
       data: {SchemaName: datasource.schema, query: datasource.query}
     }).then(resp => {
       return commit("setAppData", {key, data: resp.data})
-      //console.log(resp.data)
-    });
+    })
   },
-
   /** Загрузить описание приложения */
-  GetAppDescription(context, appId) {
+  GetAppDescription({commit}, appId) {
+
+    // TODO: временно для minfin:
+    if(appId.toLowerCase()=="minfin"){
+      let minfinApp = {"Id":"MINFIN","Name":"МинФин. Портал","UniqId":"a5623a29-c194-41c6-b1b7-98cb71b7fc8d","RootComponent":{"Name":"minfin-layout","NameInRoute":null,"DataSource":"","DataSourceSchema":"","LinkUniqId":"a5623a29-c194-41c6-b1b7-98cb71b7fc8d","UniqId":"caa78cd0-2961-4ee1-ae0b-a8905a5d152c","Slot":null,"Sort":"0","Properties":[],"SectionProperties":null},"Sections":[{"Id":"","Name":null,"Routes":[{"Id":"MINFINLOGIN","Path":"login","RootComponent":null,"Components":[{"Name":"minfin-login","NameInRoute":"","DataSource":"","DataSourceSchema":"","LinkUniqId":"da93968c-09b5-46bc-88f9-a4d4b32e7fcf","UniqId":"41a1f3a2-451c-467c-a9a0-28cf5c5e625b","Slot":null,"Sort":"","Properties":[],"SectionProperties":null}],"AllowAnonymous":true,"UniqId":"87c53df7-574f-43ab-832e-1f78740ba460","Name":"","Children":[],"Sort":"","Image":"","Badge":"","HideAfterLogin":true},{"Id":"MINFINPROFILE","Path":"","RootComponent":null,"Components":[{"Name":"minfin-profile","NameInRoute":"","DataSource":"","DataSourceSchema":"","LinkUniqId":"e2ef851e-4a88-4d0a-93ff-2aad935358c7","UniqId":"2451a094-23b1-4113-b7e3-d53995ad10f1","Slot":null,"Sort":"","Properties":[],"SectionProperties":null}],"AllowAnonymous":false,"UniqId":"f1988fad-c22c-4ff3-8153-353479b5f429","Name":"","Children":[],"Sort":"","Image":"","Badge":"","HideAfterLogin":false}],"Properties":null}]}
+
+      return commit("SetAppDescription", minfinApp)
+    }
+
+
     return Axios({
       method: 'POST',
       url: myConfig.GrapgQlUrl + 'api/graphql',
@@ -83,32 +80,22 @@ const actions = ({
     }).then(resp => {
       // Ошибка загрузки
       if (!resp.data.data || !resp.data.data.webapps || !resp.data.data.webapps.application) {
-        const spacing = '5px';
-        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
-        console.log(`%cОшибка загрузки приложения "${appId}"`, styles);
-        return;
+        const spacing = '5px'
+        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`
+        console.log(`%cОшибка загрузки приложения "${appId}"`, styles)
+        return
       }
       // Нет приложения
       if (resp.data.data.webapps.application == "null") {
-        const spacing = '5px';
-        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`;
-        console.log(`%cОтсутствует описание приложения "${appId}"`, styles);
-        return;
+        const spacing = '5px'
+        const styles = `padding: ${spacing}; background-color: crimson; color: white; font-size: 2em;`
+        console.log(`%cОтсутствует описание приложения "${appId}"`, styles)
+        return
       }
       var data = JSON.parse(resp.data.data.webapps.application)
-      return context.commit("SetAppDescription", data)
-    });
+      return commit("SetAppDescription", data)
+    })
   },
+})
 
-  // CallAction(context, data) {
-  //   return Axios.post('http://localhost:5000/api/Core/CallAction', {
-  //     source: data.source,
-  //     event: data.event,
-  //     arguments: data.arguments
-  //   }).then((response => {
-  //     console.log(response.data)
-
-  //   }))
-  // }
-});
 export default actions

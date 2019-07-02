@@ -23,6 +23,7 @@ namespace ItGraphQlSchema.Types.Common
 		IQueryable<ResourceGroup> ResourcesGroups { get; }
 		IQueryable<Document> Documents { get; }
 		IQueryable<DocumentRow> DocumentRows { get; }
+		IQueryable<Image> Images { get; }
 
 		string GetResorces(string vals);
 	}
