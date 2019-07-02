@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
-export const ALL_EQUIPMENT = gql`
-query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID] ) {
+export const ALL_EQUIPMENT = gql `
+query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
   eam {
-    equipmentsConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids)  {
+    equipmentsConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
       edges {
         node {
           id
@@ -20,6 +20,10 @@ query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $or
           fullName
           description
           factoryNumber
+          model {
+            id
+            name
+          }
           itObject {
             id
             name
@@ -27,6 +31,13 @@ query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $or
           department {
             id
             name
+          }
+          currentMovementRecord {
+            id
+            technicalPlace {
+              id
+              name
+            }
           }
         }
       }
@@ -42,7 +53,90 @@ query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $or
 }
 `
 
-export const ALL_DOWNTIME = gql`
+export const SINGLE_EQUIPMENT_INFO = gql `
+query equipment($id: ID) {
+  eam {
+    equipment(id: $id) {
+      id
+      type {
+        id
+        name
+      }
+      responsibleEmployee {
+        id
+        fullName
+      }
+      name
+      designation
+      fullName
+      description
+      factoryNumber
+      installDate
+      model {
+        id
+        name
+      }
+      itObject {
+        id
+        name
+      }
+      department {
+        id
+        name
+      }
+      status {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      currentMovementRecord {
+        id
+        technicalPlace {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+`
+
+export const EQUIPMENT_ATTACHMENTS = gql `
+query equipment($id: ID) {
+  eam {
+    equipment(id: $id) {
+      id
+      attachments {
+        id
+        fileName
+        fileSize
+        url
+      }
+    }
+  }
+}
+`
+
+export const EQUIPMENT_IMAGES = gql `
+query equipment($id: ID) {
+  eam {
+    equipment(id: $id) {
+      id
+      images {
+        id
+        fileName
+        fileSize
+        url
+      }
+    }
+  }
+}
+`
+
+export const ALL_DOWNTIME = gql `
 query downtime($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID] ) {
   eam {
     downTimesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
@@ -90,7 +184,7 @@ query downtime($after: String, $first: Int, $where: [WhereExpressionGraph], $ord
 }
 `
 
-export const ALL_WORK_REQUESTS = gql`
+export const ALL_WORK_REQUESTS = gql `
 query workRequest($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
   eam {
     workRequestConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
@@ -142,7 +236,7 @@ query workRequest($after: String, $first: Int, $where: [WhereExpressionGraph], $
 }
 `
 
-export const ALL_INSPECTIONS = gql`
+export const ALL_INSPECTIONS = gql `
 query conditionParameterValues($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID] ) {
   eam {
     conditionParameterValuesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {

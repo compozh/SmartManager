@@ -1,6 +1,7 @@
 <template>
-  <eam-base-list-page :query="query" :queryName="queryName" searchPath="content">
-    <eam-work-request-card slot="card" slot-scope="props" :item="props.item.node"/>
+  <eam-base-list-page :query="query" :queryName="queryName" searchPath="content" groupingPath="technicalPlace">
+    <eam-work-request-card slot="card" slot-scope="props" :item="props.item"/>
+    <eam-techplace-simple-card slot="groupcard" slot-scope="props" :item="props.item"/>
   </eam-base-list-page>
 </template>
 

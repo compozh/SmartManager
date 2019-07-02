@@ -1,6 +1,6 @@
 <template>
   <eam-base-list-page :query="query" queryName="downTimesConnection" searchPath="description">
-    <eam-downtime-card slot="card" slot-scope="props" :item="props.item.node"/>
+    <eam-downtime-card slot="card" slot-scope="props" :item="props.item"/>
   </eam-base-list-page>
 </template>
 

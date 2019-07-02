@@ -1,6 +1,6 @@
 <template>
   <eam-base-list-page :query="query" queryName="equipmentsConnection">
-    <eam-equipment-card slot="card" slot-scope="props" :equipment="props.item.node"/>
+    <eam-equipment-card slot="card" slot-scope="props" :equipment="props.item"/>
   </eam-base-list-page>
 </template>
 

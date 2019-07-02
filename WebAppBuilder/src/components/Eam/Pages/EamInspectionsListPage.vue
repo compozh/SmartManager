@@ -4,8 +4,10 @@
     queryName="conditionParameterValuesConnection"
     searchPath="description"
     :constantOrderBy="constantOrderBy"
+    groupingPath="technicalPlace"
   >
-    <eam-inspection-card slot="card" slot-scope="props" :item="props.item.node"/>
+    <eam-inspection-card slot="card" slot-scope="props" :item="props.item"/>
+    <eam-techplace-simple-card slot="groupcard" slot-scope="props" :item="props.item"/>
   </eam-base-list-page>
 </template>
 

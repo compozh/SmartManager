@@ -1,25 +1,27 @@
 <template>
-  <v-layout v-if="itemsCon">
-    <v-layout v-if="!groupingPath">
-      <v-layout column v-for="item in items" :key="item.id">
-        <slot name="card" slot="item" slot-scope="props" :item="props.item"></slot>
+  <v-layout v-if="itemsCon" column>
+    <v-layout v-if="!groupingPath" wrap>
+      <slot v-for="item in items" name="card" :item="item"></slot>
+    </v-layout>
+    <v-layout v-else column>
+      <v-layout v-for="groupedItem in groupedItems" :key="groupedItem.id" column>
+        <slot name="groupcard" :item="groupedItem"></slot>
+        <v-layout wrap>
+          <slot
+            v-for="item in items.filter(i => i[groupingPath] && i[groupingPath].id == groupedItem.id)"
+            name="card"
+            :item="item"
+          ></slot>
+        </v-layout>
       </v-layout>
     </v-layout>
-    <v-data-iterator
-      v-if="groupingPath"
-      :items="groupedItems"
-      :pagination="pagination"
-      total-items="-1"
-      content-tag="v-layout"
-      hide-actions
-      wrap
-    >
-      <slot name="card" slot="groupedItem" slot-scope="props" :item="props.item"></slot>
-    </v-data-iterator>
   </v-layout>
 </template>
 
 <script>
+
+const initialRowsPerFetch = 25;
+
 export default {
   name: "eam-base-list-page",
   props: {
@@ -37,8 +39,8 @@ export default {
       },
       variables() {
         return {
-          after: this.itemsAfter,
-          first: this.rowsPerPage,
+          after: null,
+          first: initialRowsPerFetch,
           where: this.where,
           orderBy: this.orderBy
         };
@@ -51,13 +53,11 @@ export default {
   data() {
     return {
       itemsCon: {},
-      rowsPerPage: 30
+      rowsPerFetch: initialRowsPerFetch,
+      orderById: [{ path: "id" }]
     };
   },
   computed: {
-    pagination() {
-      return { rowsPerPage: -1, page: 1 };
-    },
     where() {
       const filters = this.constantFilter ? this.constantFilter : [];
       if (this.search) {
@@ -70,18 +70,29 @@ export default {
       return filters;
     },
     orderBy() {
-      return this.constantOrderBy ? this.constantOrderBy : [];
+      return this.constantOrderBy ? this.constantOrderBy : this.orderById;
     },
     search() {
       return this.$store.getters["eam/search"];
     },
     items() {
-      return this.itemsCon.edges;
+      return this.itemsCon && this.itemsCon.edges
+        ? this.itemsCon.edges.map(i => i.node)
+        : [];
+    },
+    itemsAfter() {
+      return this.itemsCon && this.itemsCon.pageInfo
+        ? this.itemsCon.pageInfo.endCursor
+        : null;
     },
     groupedItems() {
+      if (!this.items) {
+        return [];
+      }
+      const groupingPath = this.groupingPath;
       return this.items
         .map(item => {
-          return item[this.groupingPath];
+          return item[groupingPath] ? item[groupingPath] : { id: "none" };
         })
         .filter(function(value, index, self) {
           return (
@@ -90,6 +101,11 @@ export default {
             }) === index
           );
         });
+    }
+  },
+  watch: {
+    "$apollo.loading"(value) {
+      this.$store.commit("eam/setLoading", value);
     }
   },
   methods: {
@@ -102,7 +118,7 @@ export default {
         this.$apollo.queries.itemsCon.fetchMore({
           variables: {
             after: this.itemsAfter,
-            first: this.rowsPerPage,
+            first: this.rowsPerFetch,
             where: this.where,
             orderBy: this.orderBy
           },
@@ -125,6 +141,9 @@ export default {
             };
           }
         });
+        if (this.rowsPerFetch < 500) {
+          this.rowsPerFetch *= 2;
+        }
       }
     }
   },
@@ -132,10 +151,10 @@ export default {
     const that = this;
     window.onscroll = () => {
       let bottomOfWindow =
-        document.documentElement.scrollTop + window.innerHeight ===
-        document.documentElement.offsetHeight;
+        document.documentElement.scrollTop + window.innerHeight >
+        0.8 * document.documentElement.offsetHeight;
 
-      if (bottomOfWindow) {
+      if (bottomOfWindow && !this.$apollo.loading) {
         that.fetchOnScroll();
       }
     };

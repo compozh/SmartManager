@@ -5,7 +5,9 @@
         <v-card-title>
           <eam-equipment-type-simple-card :item="equipment.type"/>
           <v-spacer></v-spacer>
-          <span>{{equipment.id}}</span>
+          <router-link :to="{ name: 'EAMEQUIPMENTINFO', params: { id: equipment.id }}">
+            <a>{{equipment.id}}</a>
+          </router-link>
         </v-card-title>
         <v-card-text>
           <v-layout row style="height: 100%">
@@ -14,7 +16,7 @@
                 <v-flex>
                   Полное наим.:
                   <span class="subheading font-weight-bold">{{equipment.fullName}}</span>
-                </v-flex>                
+                </v-flex>
                 <v-flex>
                   Наименование:
                   <span class="font-weight-bold">{{equipment.name}}</span>
@@ -27,7 +29,12 @@
             </v-flex>
             <v-flex xs12 md6>
               <v-layout column>
+                <eam-model-simple-card :item="equipment.model"/>
                 <eam-employee-simple-card :item="equipment.responsibleEmployee"/>
+                <eam-techplace-simple-card
+                  v-if="equipment.currentMovementRecord"
+                  :item="equipment.currentMovementRecord.technicalPlace"
+                />
                 <eam-department-simple-card :item="equipment.department"/>
                 <eam-itobject-simple-card :item="equipment.itObject"/>
               </v-layout>
@@ -47,9 +54,8 @@
 </template>
 
 <script>
-
 export default {
-  name: "eam-equipment-card",  
+  name: "eam-equipment-card",
   props: {
     equipment: Object
   }

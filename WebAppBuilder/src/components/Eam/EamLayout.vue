@@ -3,14 +3,14 @@
     <v-navigation-drawer app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp" v-model="drawer">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
-    <v-toolbar app fixed clipped-left extended :extension-height="7">
+    <v-toolbar app fixed clipped-left extended :extension-height="3">
       <v-toolbar-side-icon @click.stop="toggleMenuMode"></v-toolbar-side-icon>      
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
-      <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0></v-progress-linear>
+      <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0 height="3"></v-progress-linear>
     </v-toolbar>
-    <v-content v-if="!loading">
+    <v-content>
       <v-container fluid>
         <router-view/>
       </v-container>
