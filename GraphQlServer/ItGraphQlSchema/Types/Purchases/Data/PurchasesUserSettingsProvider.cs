@@ -29,14 +29,15 @@ namespace ItGraphQlSchema.Types.Purchases
 		{
 			var context = _httpContextAccessor.HttpContext;
 			var userId = context.User.Identity.Name;
-			var userSettings = _cache.Get<PurchasesUserSettings>(userId);
+			var cacheKey = $"purchases-settings:{userId}";
+			var userSettings = _cache.Get<PurchasesUserSettings>(cacheKey);
 			if (userSettings != null)
 			{
 				return userSettings;
 			}
 
 			userSettings = await getSettings();
-			_cache.Set(userId, userSettings);
+			_cache.Set(cacheKey, userSettings);
 			return userSettings;
 		}
 
