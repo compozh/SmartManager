@@ -1,6 +1,9 @@
 export default {
-  loading(state) {
-    return state.loading
+  circularLoader(state) {
+    return state.circularLoader
+  },
+  linearLoader(state) {
+    return state.linearLoader
   },
   error(state) {
     return state.error
@@ -9,7 +12,8 @@ export default {
     return state.folders
   },
   tasks(state) {
-    return state.tasks
+    const folderId = state.currentFolder
+    return state.tasks[folderId]
   },
   taskInfo(state) {
     return state.taskInfo

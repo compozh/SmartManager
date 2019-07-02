@@ -13,6 +13,13 @@
       <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
+      <v-progress-linear
+        v-if="linearLoader"
+        height="2"
+        class="linear-loader"
+        color="blue darken-2"
+        :indeterminate="true"
+      ></v-progress-linear>
     </v-toolbar>
 
     <v-navigation-drawer
@@ -29,13 +36,17 @@
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
 
-    <v-content v-if="!loading" class="white">
+    <v-content v-if="!circularLoader" class="white">
       <v-container fluid pa-0>
         <router-view></router-view>
       </v-container>
     </v-content>
 
-    <v-container v-else loader fill-height fluid>
+    <v-container
+      v-else
+      class="circular-loader"
+      fill-height fluid
+    >
       <v-layout row align-center>
         <v-flex xs12>
           <v-progress-circular
@@ -88,15 +99,18 @@
           : this.drawer = !this.drawer;
       },
       closeError() {
-        this.$store.dispatch('sm/clearError');
+        this.$store.dispatch('sm/setError', null);
       }
     },
     computed: {
       error() {
         return this.$store.getters['sm/error']
       },
-      loading() {
-        return this.$store.getters['sm/loading']
+      circularLoader() {
+        return this.$store.getters['sm/circularLoader']
+      },
+      linearLoader() {
+        return this.$store.getters['sm/linearLoader']
       },
       menuMiniMode() {
         eventBus.$emit('setMenuMode', this.mini);
@@ -121,8 +135,15 @@
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
 
-  .loader {
+  .circular-loader {
     background-color: rgba(255, 255, 255, .5);
     z-index: 10;
+  }
+
+  .linear-loader {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 0;
   }
 </style>

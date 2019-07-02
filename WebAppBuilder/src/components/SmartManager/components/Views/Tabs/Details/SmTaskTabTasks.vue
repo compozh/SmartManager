@@ -2,7 +2,7 @@
   <v-container fluid pa-0>
     <v-layout row wrap justify-center>
       <v-flex>
-        <sm-task-details-item :task="taskDetail"></sm-task-details-item>
+        <sm-task-details-item></sm-task-details-item>
       </v-flex>
       <v-flex
         xs12 mr-2
@@ -24,10 +24,12 @@
 <script>
   export default {
     name: 'sm-task-tab-tasks',
-    props: ['taskDetail'],
     computed: {
+      task() {
+        return this.$store.getters['sm/taskInfo']
+      },
       subTasks() {
-        return this.taskDetail ? this.taskDetail.childTasks : []
+        return this.task ? this.task.childTasks : []
       }
     }
   }

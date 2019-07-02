@@ -3,7 +3,7 @@
     <v-layout
       class="comment-item text-xs-left"
       row wrap
-      v-for="comment in taskDetail.comments"
+      v-for="comment in task.comments"
     >
       <v-flex
         xs1
@@ -53,10 +53,12 @@
 <script>
   export default {
     name: "smTaskTabComments",
-    props: ['taskDetail'],
     computed: {
+      task() {
+        return this.$store.getters['sm/taskInfo']
+      },
       getCommentsLength() {
-        return this.taskDetail.comments ? this.taskDetail.comments.length : ''
+        return this.task.comments ? this.task.comments.length : ''
       }
     }
   }

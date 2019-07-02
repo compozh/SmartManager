@@ -3,7 +3,7 @@
     <v-layout justify-center>
       <v-flex xs12>
         <sm-task-info-rl
-          v-slot="{ activeTab, tabs, taskDetail }"
+          v-slot="{ activeTab, tabs, params }"
         >
           <v-container fluid pa-0 ma-0>
             <v-layout>
@@ -20,9 +20,9 @@
                         :key="item.value"
                         :class="{
                           'hidden-lg-and-up': item.value === 'originals',
-                          'marker': item.value === 'originals' && taskDetail.hasOrig
+                          'marker': item.value === 'originals' && params.hasOrig
+                                 || item.value === 'comments' && params.hasComm,
                          }"
-
                       >{{ item.name }}
                       </v-tab>
                     </v-tabs>
@@ -37,7 +37,6 @@
                         <component
                           :is="item.component"
                           :class="{ 'hidden-lg-and-up': item.value === 'originals' }"
-                          :task-detail="taskDetail"
                         ></component>
                       </v-tab-item>
                     </v-tabs-items>
@@ -50,7 +49,7 @@
               >
                 <v-layout column>
                   <v-flex>
-                    <sm-task-tab-docs :task-detail="taskDetail"></sm-task-tab-docs>
+                    <sm-task-tab-docs></sm-task-tab-docs>
                   </v-flex>
                 </v-layout>
               </v-flex>

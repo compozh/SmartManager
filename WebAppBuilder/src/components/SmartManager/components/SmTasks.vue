@@ -30,10 +30,8 @@
       emptyStateImg
     },
     created() {
-      const folder = this.$route.params.foldercode
-      if (this.tasks === null) {
-        this.getTasks(folder)
-      }
+      const folderId = this.$route.params.foldercode
+      this.getTasks(folderId)
     },
     watch: {
       '$route'(to, from) {
@@ -53,12 +51,11 @@
       }
     },
     methods: {
-      getTasks(folder) {
-        this.$store.dispatch('sm/getTasks', folder)
+      getTasks(folderId) {
+        this.$store.commit('sm/setCurrentFolder', folderId)
+        const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
+          this.$store.dispatch('sm/getTasks', {folderId, loader})
       }
-    },
-    destroyed() {
-      this.$store.commit('sm/setTasks', null)
     }
   }
 </script>
