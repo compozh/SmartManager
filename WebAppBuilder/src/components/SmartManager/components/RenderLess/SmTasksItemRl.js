@@ -1,3 +1,5 @@
+// Renderless component for SmartManager \ components \ Views \ Tabs \ Details
+
 export default {
   name: 'sm-tasks-item-rl',
   computed: {

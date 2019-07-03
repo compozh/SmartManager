@@ -42,7 +42,7 @@
                     {{ role.title }}:
                   </span>
                 </v-flex>
-                <v-flex>
+                <v-flex pl-2>
                   <v-chip
                     v-for="member in role.members"
                     small outline disabled
@@ -84,7 +84,6 @@
           </v-layout>
         </v-flex>
       </v-layout>
-
       <sm-task-description
         v-if=task.htmlDescript
         :description="task.htmlDescript"
@@ -94,9 +93,6 @@
 </template>
 
 <script>
-
-  import moment from 'moment'
-
   export default {
     name: 'sm-task-details-item'
   }
@@ -115,7 +111,8 @@
 
   .v-chip {
     height: 20px !important;
-    font-size: 11px
+    font-size: 11px;
+    margin: 4px 4px 0 0;
   }
 
   .title-field {
