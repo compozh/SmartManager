@@ -71,7 +71,7 @@ namespace ItGraphQlSchema.Types.Purchases
                 }
             );
             
-            Field<CartItemGraph>(
+            Field<ListGraphType<CartItemGraph>>(
                 "deleteAllCarts",
                 resolve: c => {
                     var result = _service.DeleteAllCarts();

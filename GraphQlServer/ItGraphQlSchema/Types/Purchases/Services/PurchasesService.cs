@@ -68,10 +68,9 @@ namespace ItGraphQlSchema.Types.Services
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string>{ex.Message}, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
         public CustomResult EditCart(CartItem item)
         {
             try
@@ -82,6 +81,7 @@ namespace ItGraphQlSchema.Types.Services
                 {
                     result.Message.Add("Id not found.");
                     result.Successed = false;
+                    return result;
                 }
                 else{
                     item = _mapper.Map<CartItem, CartItem>(item,cart);
@@ -108,7 +108,7 @@ namespace ItGraphQlSchema.Types.Services
                     _dbContext.SaveChanges();
 
                     result.Message.Add("Cart item was modified.");
-					result.ReturnValue = _dbContext.CartItems.FirstOrDefault(x => x.Id == item.Id);
+					result.ReturnValue = item;
                 }
 
                 return result;
@@ -116,7 +116,7 @@ namespace ItGraphQlSchema.Types.Services
             catch (System.Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
         public CustomResult DeleteCart(Guid id)
@@ -129,6 +129,7 @@ namespace ItGraphQlSchema.Types.Services
                 {
                     result.Message.Add("Id not found.");
                     result.Successed = false;
+                    return result;
                 }
                 if (item.UserId != UserSettings.UserId)
                 {
@@ -148,19 +149,18 @@ namespace ItGraphQlSchema.Types.Services
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
 		public CustomResult DeleteAllCarts()
         {
             try
             {
                 var result =  new CustomResult();
-                var items = _dbContext.CartItems.FirstOrDefault(x => x.UserId == UserSettings.UserId);
+                var items = _dbContext.CartItems.Where(x => x.UserId == UserSettings.UserId).ToList();
                 if (items == null)
                 {
-                    result.Message.Add("Id not found.");
+                    result.Message.Add("You have no cart items.");
                     result.Successed = false;
                 }
 
@@ -169,7 +169,7 @@ namespace ItGraphQlSchema.Types.Services
                     _dbContext.RemoveRange(items);
                     _dbContext.SaveChanges();
 
-                    result.Message.Add("Cart item was added.");
+                    result.Message.Add("Cart items ware deleted.");
 					result.ReturnValue = items;
                 }
 
@@ -177,9 +177,8 @@ namespace ItGraphQlSchema.Types.Services
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
 	}
 }
