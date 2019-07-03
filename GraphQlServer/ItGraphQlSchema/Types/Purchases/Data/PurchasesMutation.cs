@@ -1,17 +1,12 @@
 using GraphQL;
-using GraphQL.EntityFramework;
 using GraphQL.Types;
-using ItGraphQlSchema.Custom;
-using ItGraphQlSchema.Types.Common;
+using ItGraphQlSchema.Helpers;
 using ItGraphQlSchema.Types.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ItGraphQlSchema.Types.Purchases
 {
-	[AddInDI]
+    [AddInDI]
 	class PurchasesQueryMutation : ObjectGraphType
 	{        
         private readonly IPurchasesService _service;

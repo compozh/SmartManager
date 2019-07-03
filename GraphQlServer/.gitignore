@@ -2,3 +2,6 @@
 GraphQlServer/bin
 GraphQlServer/obj
 Schema
+appsettings.json
+GraphQlServer/appsettings.json
+GraphQlServer/GraphQlServer/appsettings.json

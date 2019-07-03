@@ -19,6 +19,8 @@ using Microsoft.Extensions.Caching.Memory;
 using GraphQlServer.CultureMiddleware;
 using Microsoft.AspNetCore.Mvc;
 using Web.DigitalSignature;
+using AutoMapper;
+using ItGraphQlSchema.Helpers;
 
 namespace GraphQlServer
 {
@@ -80,6 +82,8 @@ namespace GraphQlServer
 					};
 				});
 			
+			// Подключение автомапера
+			services.AddAutoMapper(x => x.AddProfile<MappingProfile>());
 			// Веб расчеты и аутентификация
 			services.AddSingleton<IAuthOptions, AuthOptions>();
 			services.AddSingleton<IIdentityProvider, WebRequestsIdentityProvider>();
