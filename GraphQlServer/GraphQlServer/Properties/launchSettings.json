@@ -17,7 +17,7 @@
     },
     "GraphQlServer": {
       "commandName": "Project",
-      "applicationUrl": "http://localhost:5002",
+      "applicationUrl": "http://localhost:4002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

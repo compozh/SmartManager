@@ -13,6 +13,7 @@ namespace ItGraphQlSchema.Types.Purchases.Rules
 			entity.HasOne(p => p.Resource)
 				.WithMany()
 				.HasForeignKey(p => p.ResourceId);
+			entity.Property(e=>e.UserId).HasConversion(p=>p.TrimEnd(),p=>p.TrimEnd());
 		}
 	}
 }

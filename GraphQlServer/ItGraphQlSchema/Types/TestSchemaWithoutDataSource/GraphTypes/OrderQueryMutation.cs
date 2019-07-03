@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GraphQL.EntityFramework;
-using GraphQL.Types;
-using GraphQL.Utilities;
-using ItGraphQlSchema.Types.Common;
-using ItGraphQlSchema.Types.EamSchema;
-using ItGraphQlSchema.Types.EamSchema.GraphTypes;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types
 {
-	[AddInDIAttribute]
+    [AddInDIAttribute]
 	public class OrderQueryMutation : ObjectGraphType
 	{
 		public OrderQueryMutation(OrderProvider provider)

@@ -69,10 +69,16 @@ namespace ItGraphQlSchema.Types.EamSchema
 		public Employee PerformerEmployee { get; set; }
 
 		[Column("RZIST")]
-		public WorkRequestSource Source { get; set; }
+		public WorkRequestSource? Source { get; set; }
+		
+		[Column("RZIST")]
+		public string SourceCode { get; set; }
 
 		[Column("STATUS")]
-		public WorkRequestStatus Status { get; set; }
+		public WorkRequestStatus? Status { get; set; }
+		
+		[Column("STATUS")]
+		public string StatusCode { get; set; }
 
 		[Column("PR_DO")]
 		public bool IsValid { get; set; }

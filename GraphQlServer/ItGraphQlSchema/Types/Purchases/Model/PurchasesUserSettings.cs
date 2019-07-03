@@ -9,5 +9,7 @@ namespace ItGraphQlSchema.Types.Purchases
 		public string EmployeeNumber { get; set; }
 
 		public List<string> ApplicationDocumentTypes { get; set; }
+
+		public string ResourceCondition { get; set; }
 	}
 }

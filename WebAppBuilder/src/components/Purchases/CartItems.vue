@@ -36,48 +36,15 @@
 
                 <!-- Количество и ЕИ -->
                 <v-layout align-start>
-                    <v-text-field
-                      :value="cartItem.quantity" 
-                      prepend-inner-icon="add" 
-                      @click:prepend-inner="mutationChangeQuantity(cartItem, MUTATION_TYPE.PLUS)"
-                      append-icon="remove" 
-                      @click:append="mutationChangeQuantity(cartItem, MUTATION_TYPE.MINUS)"
-                      label="Количество"
-                      />
-                    &nbsp;
-                    &nbsp;
-                    &nbsp;
-                    <v-autocomplete
-                        v-model="cartItem.measurementUnit"
-                        :loading="loading"
-                        :items="[...items, cartItem.measurementUnit]"
-                        :search-input.sync="search"
-                        cache-items
-                        hide-no-data
-                        hide-details
-                        label="Единица измерения"
-                        return-object
-                        item-text="name"
-                      />
-<!--                        item-value="id"  
-                        item-text="name"  
-                        :items="items"
--->
+                    <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeQuantity(cartItem, qt)" />
+                    &nbsp;&nbsp;&nbsp;
+                    <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeMeasurement(cartItem, m)" />
                 </v-layout>
 
                 <!-- Дата поставки -->
                 <v-layout align-start>
                   <v-flex>
-                    <v-text-field label="Дата поставки" readonly 
-                    prepend-inner-icon="event"
-                    append-icon="edit"  @click:append="dialog = true"
-                    :value="cartItem.dateDelivery"/>
-                    <v-dialog v-model="dialog" persistent max-width="290">
-                        <v-date-picker v-model="cartItem.dateDelivery" no-title scrollable>
-                          <v-spacer></v-spacer>
-                          <v-btn flat color="primary" @click="dialog = false;">OK</v-btn>
-                        </v-date-picker>
-                    </v-dialog>
+                      <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" label="Дата поставки"  @onChangeValue="(d)=> mutationChangeDate(cartItem, d)"/>
                   </v-flex>
                 </v-layout>
 
@@ -96,18 +63,6 @@ import Axios from "axios";
 export default {
     name: "cart-list",
     props: ["cartlist"],
-    data:()=> ({
-          dialog: false,
-          loading: false,
-          items: [],
-          search: null,
-          select: null,
-          timeout: 0,
-          MUTATION_TYPE: { 
-            PLUS: 1, 
-            MINUS:-1 
-          }
-    }),
     computed:{
       cardBinding() { 
         const binding = {}
@@ -146,35 +101,17 @@ export default {
         }
         return f;
       },
-      querySelections (v) {
-        this.loading = true
-        // Simulated ajax query
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-        Axios({
-                              method: 'POST',
-                              url: myConfig.GrapgQlUrl+'api/graphql',
-                              withCredentials:true,
-                              headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
-                              data: { 
-                                SchemaName:'PurchasesSchema', 
-                                query: `{purchases{measurementUnits(where:[{path:"isValid",comparison:equal,value:"true"},{path:"name",comparison:like,value:"%${v}%"}]){id,name}}}`
-                              } 
-                            }).then(resp => {
-                      // тут обработка результата
-                              //debugger;
-                              //console.log( resp.data.data.purchases.measurementUnits );
-                              this.items = resp.data.data.purchases.measurementUnits;
-                              //console.log(resp.data) 
-                            });
-          this.loading = false
-        }, 500)
+      mutationChangeQuantity(item, qt){
+        //TODO call mutations
+        console.log(`${item.id} - ${qt}`)
       },
-      mutationChangeQuantity(item, arg){
-        //debugger;
-        item.quantity += arg;
-
-        //TODO call Axios for mutation
+      mutationChangeMeasurement(item, m){
+        //TODO call mutations
+        console.log(m)
+      },
+      mutationChangeDate(item, d){
+        //TODO call mutations
+        console.log(`${item.id} - ${d}`)
       },
       mutationClearCart(){
 
@@ -203,9 +140,6 @@ export default {
 }
 .card-actions-elements{
   inline-size: 20em
-}
-.card-actions-elements input{
-  text-align: center;
 }
 .rounded-card{
     border-radius:20px;

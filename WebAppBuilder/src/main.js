@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import VueTouch from 'vue-touch';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -12,6 +13,8 @@ import {ApolloClient} from 'apollo-client';
 import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import VueApollo from 'vue-apollo';
+import 'viewerjs/dist/viewer.css';
+import Viewer from 'v-viewer';
 
 export const eventBus = new Vue(); // Шина событий
 
@@ -24,7 +27,9 @@ req.keys().map(key => {
 });
 
 Vue.use(Vuetify);
+Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(VueApollo);
+Vue.use(Viewer)
 
 // Cache implementation
 const cache = new InMemoryCache()

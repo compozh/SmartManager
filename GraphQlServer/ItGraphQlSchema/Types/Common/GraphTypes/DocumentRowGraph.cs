@@ -6,9 +6,9 @@ using System.Text;
 namespace ItGraphQlSchema.Types.Common.GraphTypes
 {
 	[AddInDI, GraphType(typeof(DocumentRow))]
-	class DocumentRowGraph : EfObjectGraphType<DocumentRow>
+	class DocumentRowGraph : EfObjectGraphType<CommonDbContext, DocumentRow>
 	{
-		public DocumentRowGraph(IEfGraphQLService graphQlService) : base(graphQlService)
+		public DocumentRowGraph(IEfGraphQLService<CommonDbContext> graphQlService) : base(graphQlService)
 		{
 			Name = "docuemtRow";
 			Field(x => x.DocumentId).Description("Идентификатор документа");
@@ -24,6 +24,11 @@ namespace ItGraphQlSchema.Types.Common.GraphTypes
 			AddNavigationField(
 				name: "measurementUnit",
 				resolve: context => context.Source.MeasurementUnit);
+			Field(x => x.OrderDate, nullable: true).Description("Дата заказа");
+			Field(x => x.AdditionalDate2, nullable: true).Description("Дополнительная дата");
+			Field(x => x.PlanQuantity, nullable: true).Description("Плановое количество");
+			Field(x => x.Quantity, nullable: true).Description("Утвержденное количество");
+
 		}
 	}
 }

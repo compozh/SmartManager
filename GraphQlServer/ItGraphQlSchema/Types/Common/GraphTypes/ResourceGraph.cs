@@ -1,11 +1,12 @@
 ﻿using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common.Data;
 
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDIAttribute, GraphType(typeof(Resource))]
-	public class ResourceGraph : EfObjectGraphType<Resource>
+	public class ResourceGraph : EfObjectGraphType<CommonDbContext, Resource>
 	{
-		public ResourceGraph(IEfGraphQLService graphQlService) : base(graphQlService)
+		public ResourceGraph(IEfGraphQLService<CommonDbContext> graphQlService, IContentManagerProvider contentManagerProvider) : base(graphQlService)
 		{
 			Name = "Resouce";
 			Field(x => x.Id).Description("Идентификатор");
@@ -23,6 +24,11 @@ namespace ItGraphQlSchema.Types.Common
 				name: "measurementUnit",
 				resolve: context => context.Source.MeasurementUnit)
 				.Description = "Единица измерения";
+
+			AddNavigationListField(
+				name: "content",
+				resolve: context => contentManagerProvider.GetContentFiles("KSM", context.Source.Id).Result
+				);
 		}
 	}
 }

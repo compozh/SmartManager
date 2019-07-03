@@ -1,5 +1,6 @@
 ﻿using ItGraphQlSchema.Types.Common;
 using ItGraphQlSchema.Types.EamSchema;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
