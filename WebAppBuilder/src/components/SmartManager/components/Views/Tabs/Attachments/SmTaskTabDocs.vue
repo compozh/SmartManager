@@ -5,10 +5,21 @@
     <v-container fluid pa-0>
       <v-layout
         class="viewer-layout">
-        <v-flex xs12 mt-2>
+        <v-flex xs12 mt-2 class="view-container">
           <component :is="component" :url="file.url"></component>
+          <sm-empty-state v-if="!component">Нет файлов для просмотра</sm-empty-state>
         </v-flex>
         <v-flex mt-2 class="icons-container">
+          <v-layout>
+            <v-flex
+              xs12
+              @click=""
+              class="file-icon-container file-add px-2"
+            >
+              <v-icon size="50">note_add</v-icon>
+              <span>Добавить</span>
+            </v-flex>
+          </v-layout>
           <v-layout column>
             <v-flex
               class="file-icon-container px-2"
@@ -55,7 +66,11 @@
     box-shadow: inset 0 1px 0 0 rgba(100, 121, 143, 0.122);
   }
 
-  .viewer-container, .icons-container {
+  .view-container {
+    height: inherit;
+  }
+
+  .icons-container {
     overflow-y: auto;
   }
 
@@ -84,6 +99,10 @@
     background: #efefef;
     box-shadow: inset 1px 1px 0 0 rgba(100, 121, 143, 0.122),
     inset -1px -1px 0 0 rgba(100, 121, 143, 0.122);
+  }
+
+  .file-add {
+    position: sticky;
   }
 
   .file-icon {

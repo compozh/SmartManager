@@ -7,7 +7,7 @@
       <v-btn outline small class="viewer-btn" @click="width+=10"> +</v-btn>
       <v-btn outline small class="viewer-btn" @click="rotate -= 90">&#x27F2;</v-btn>
     </v-flex>
-    <v-flex class="viewer-container">
+    <v-flex class="view-container">
       <v-layout column>
         <v-flex v-for="i in pages">
           <pdf
@@ -53,11 +53,11 @@
 
 <style scoped>
 
-  .pdf-viewer, .viewer-container {
+  .pdf-viewer, .view-container {
     height: inherit;
   }
 
-  .viewer-container {
+  .view-container {
     overflow: auto;
   }
 

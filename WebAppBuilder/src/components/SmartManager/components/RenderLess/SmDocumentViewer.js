@@ -21,6 +21,7 @@ export default {
     component() {
       const ext = this.file.url.split('.').pop()
       switch (true) {
+        case ext === '': return
         case ext === 'pdf': return 'sm-pdf-viewer'
         case this.isText(ext): return 'sm-txt-viewer'
         case this.isImage(ext): return 'sm-image-viewer'

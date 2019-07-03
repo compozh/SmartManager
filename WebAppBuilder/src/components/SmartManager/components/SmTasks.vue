@@ -9,26 +9,14 @@
       >
         <sm-task-list-item :task="task"></sm-task-list-item>
       </v-flex>
-      <v-flex
-        xs12
-        v-if="!checkTasks"
-        class="empty-state-block"
-      >
-        <empty-state-img class="empty-state-image"></empty-state-img>
-        <span class="title grey--text font-weight-thin pa-2">Нет задач в папке</span>
-      </v-flex>
+      <sm-empty-state v-if="!checkTasks">Нет задач в папке</sm-empty-state>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-  import emptyStateImg from './empty-grid-state.svg'
-
   export default {
     name: 'sm-tasks',
-    components: {
-      emptyStateImg
-    },
     created() {
       const folderId = this.$route.params.foldercode
       this.getTasks(folderId)
@@ -63,30 +51,5 @@
 <style scoped>
   .task-container {
     overflow: hidden;
-  }
-
-  .empty-state-block {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 50vh;
-  }
-
-  .empty-state-image {
-    width: 200px;
-  }
-
-  /* SVG image colors */
-  .empty-state-image .c {
-    fill: #f1f1f1;
-  }
-
-  .empty-state-image .d {
-    fill: #c5c5c5;
-  }
-
-  .empty-state-image .e {
-    fill: #efefef;
   }
 </style>
