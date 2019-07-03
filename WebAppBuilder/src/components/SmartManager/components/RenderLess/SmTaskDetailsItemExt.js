@@ -1,3 +1,6 @@
+// Renderless component for SmTaskDetailsItem.vue (SmartManager \ components \ Views \ Tabs \ Details )
+// Inherits from SmTasksItemRl.js
+
 import moment from 'moment'
 import smTasksItemRl from './SmTasksItemRl'
 
@@ -46,11 +49,15 @@ export default {
       return options
     },
     participants() {
+      // Добавляем поле "Задача от" если такого еще нет
       const participants = this.task.participants
-      participants.push({
+      const newParticipant = {
         name: this.task.addedFio,
-        role: "addedFio"
-      })
+        role: 'addedFio'
+      }
+      if (!participants.some(i => i.role === 'addedFio')) {
+        participants.push(newParticipant)
+      }
       return participants
     },
     members() {
