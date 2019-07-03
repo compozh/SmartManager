@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 {
 	[AddInDI, GraphType(typeof(ResponsibleSpecialist))]
-	public class ResponsibleSpecialistGraph: EfObjectGraphType<ResponsibleSpecialist>
+	public class ResponsibleSpecialistGraph: EfObjectGraphType<CommonDbContext, ResponsibleSpecialist>
 	{
-		public ResponsibleSpecialistGraph(IEfGraphQLService graphQlService) :
+		public ResponsibleSpecialistGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id");

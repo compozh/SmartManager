@@ -5,9 +5,9 @@ using ItGraphQlSchema.Types.LMS.Model;
 namespace ItGraphQlSchema.Types.LMS.GraphTypes
 {
 	[AddInDI, GraphType(typeof(Course))]
-	public class CourseGraph : EfObjectGraphType<Course>
+	public class CourseGraph : EfObjectGraphType<CommonDbContext, Course>
 	{
-		public CourseGraph(IEfGraphQLService graphQLService) : base(graphQLService)
+		public CourseGraph(IEfGraphQLService<CommonDbContext> graphQLService) : base(graphQLService)
 		{
 			Name = "Course";
 

@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDIAttribute, GraphType(typeof(Employee))]
-	public class EmployeeGraph: EfObjectGraphType<Employee>
+	public class EmployeeGraph: EfObjectGraphType<CommonDbContext, Employee>
 	{
-		public EmployeeGraph(IEfGraphQLService graphQlService) :
+		public EmployeeGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 

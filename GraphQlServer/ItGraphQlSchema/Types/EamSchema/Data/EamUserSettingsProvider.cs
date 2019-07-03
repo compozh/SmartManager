@@ -19,7 +19,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		private readonly IMemoryCache _cache;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		private static readonly TimeSpan CacheExpiration = new TimeSpan(0, 15, 0);
+		private static readonly TimeSpan CacheExpiration = new TimeSpan(1, 0, 0);
 
 		public EamUserSettingsProvider(WebRequestsTools webRequestsTools, IMemoryCache cache, IHttpContextAccessor httpContextAccessor)
 		{
@@ -32,14 +32,15 @@ namespace ItGraphQlSchema.Types.EamSchema
 		{
 			var context = _httpContextAccessor.HttpContext;
 			var userId = context.User.Identity.Name;
-			var userSettings = _cache.Get<EamUserSettings>(userId);
+			var cacheKey = $"eam-settings:{userId}";
+			var userSettings = _cache.Get<EamUserSettings>(cacheKey);
 			if (userSettings != null)
 			{
 				return userSettings;
 			}
 
 			userSettings = await getSettings();
-			_cache.Set(userId, userSettings, CacheExpiration);
+			_cache.Set(cacheKey, userSettings, CacheExpiration);
 			return userSettings;
 		}
 		

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ItGraphQlSchema.Types.Common;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,8 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<ConditionParameterToModelLink> ConditionParameterToModelLinks { get;  }
 		
 		IQueryable<ConditionParameterValue> DownTimes { get; }
+		
+		IQueryable<Attachment> AttachmentImages { get; }
 	}
 	
 	[AddInDI(typeof(IEamDataProvider))]
@@ -130,6 +133,12 @@ namespace ItGraphQlSchema.Types.EamSchema
 			c => c.ConditionParameter != null && c.ConditionParameter.ConditionParameterType != null &&
 				(c.ConditionParameter.ConditionParameterType.ParameterGroup ==
 				ConditionParameterGroup.DowntimeEquipment ));
+
+		private static readonly List<string> _supportedImageTypes = new List<string>
+			{"jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF"};
+
+		public IQueryable<Attachment> AttachmentImages =>
+			Attachments.Where(a => a.IsValid && _supportedImageTypes.Contains(a.FileExtension));
 
 		public override IQueryable<ItObject> ItObjects =>
 			base.ItObjects.Where(ito => UserSettings.AvailableItObjects.Contains(ito.Id));

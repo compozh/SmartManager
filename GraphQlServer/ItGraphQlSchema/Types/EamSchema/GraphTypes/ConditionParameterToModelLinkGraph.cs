@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 {
 	[AddInDI, GraphType(typeof(ConditionParameterToModelLink))]
-	public class ConditionParameterToModelLinkGraph: EfObjectGraphType<ConditionParameterToModelLink>
+	public class ConditionParameterToModelLinkGraph: EfObjectGraphType<CommonDbContext, ConditionParameterToModelLink>
 	{
-		public ConditionParameterToModelLinkGraph(IEfGraphQLService graphQlService) :
+		public ConditionParameterToModelLinkGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.ConditionParameterId); 

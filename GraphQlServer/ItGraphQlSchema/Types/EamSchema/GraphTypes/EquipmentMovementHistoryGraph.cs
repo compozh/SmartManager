@@ -1,16 +1,17 @@
 using GraphQL.EntityFramework;
+using GraphQL.Types;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(EquipmentMovementHistory))]
-	public class EquipmentMovementHistoryGraph: EfObjectGraphType<EquipmentMovementHistory>
+	public class EquipmentMovementHistoryGraph: EfObjectGraphType<CommonDbContext, EquipmentMovementHistory>
 	{
-		public EquipmentMovementHistoryGraph(IEfGraphQLService graphQlService) :
+		public EquipmentMovementHistoryGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 
-			Field(x => x.StartDate, true);
-			Field(x => x.EndDate, true);
+			Field(x => x.StartDate, true, type:typeof(DateTimeGraphType));
+			Field(x => x.EndDate, true, type:typeof(DateTimeGraphType));
 			Field(x => x.EquipmentId, nullable:true);
 			Field(x => x.TechnicalPlaceId, true);
 			

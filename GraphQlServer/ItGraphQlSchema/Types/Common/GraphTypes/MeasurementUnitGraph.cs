@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDIAttribute, GraphType(typeof(MeasurementUnit))]
-	public class MeasurementUnitGraph: EfObjectGraphType<MeasurementUnit>
+	public class MeasurementUnitGraph: EfObjectGraphType<CommonDbContext, MeasurementUnit>
 	{
-		public MeasurementUnitGraph(IEfGraphQLService graphQlService) :
+		public MeasurementUnitGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 

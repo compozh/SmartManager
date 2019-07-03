@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(WorkRequestRepairType))]
-	public class WorkRequestRepairTypeGraph: EfObjectGraphType<WorkRequestRepairType>
+	public class WorkRequestRepairTypeGraph: EfObjectGraphType<CommonDbContext, WorkRequestRepairType>
 	{
-		public WorkRequestRepairTypeGraph(IEfGraphQLService graphQlService) :
+		public WorkRequestRepairTypeGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 

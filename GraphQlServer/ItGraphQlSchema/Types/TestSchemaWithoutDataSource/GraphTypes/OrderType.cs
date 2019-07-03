@@ -5,9 +5,9 @@ using GraphQL.Types;
 namespace ItGraphQlSchema.Types
 {
 	[AddInDIAttribute, GraphType(typeof(Order))]
-	public class OrderType : EfObjectGraphType<Order>
+	public class OrderType : EfObjectGraphType<CommonDbContext, Order>
 	{
-		public OrderType(IEfGraphQLService service):base(service)
+		public OrderType(IEfGraphQLService<CommonDbContext> service):base(service)
 		{
 			Name = "Order";
 

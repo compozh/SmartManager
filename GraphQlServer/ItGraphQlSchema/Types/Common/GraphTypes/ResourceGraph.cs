@@ -4,9 +4,9 @@ using ItGraphQlSchema.Types.Common.Data;
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDIAttribute, GraphType(typeof(Resource))]
-	public class ResourceGraph : EfObjectGraphType<Resource>
+	public class ResourceGraph : EfObjectGraphType<CommonDbContext, Resource>
 	{
-		public ResourceGraph(IEfGraphQLService graphQlService, IContentManagerProvider contentManagerProvider) : base(graphQlService)
+		public ResourceGraph(IEfGraphQLService<CommonDbContext> graphQlService, IContentManagerProvider contentManagerProvider) : base(graphQlService)
 		{
 			Name = "Resouce";
 			Field(x => x.Id).Description("Идентификатор");

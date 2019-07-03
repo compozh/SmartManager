@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(TechnicalPlaceLevel))]
-	public class TechnicalPlaceLevelGraph : EfObjectGraphType<TechnicalPlaceLevel>
+	public class TechnicalPlaceLevelGraph : EfObjectGraphType<CommonDbContext, TechnicalPlaceLevel>
 	{
-		public TechnicalPlaceLevelGraph(IEfGraphQLService graphQlService) :
+		public TechnicalPlaceLevelGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id");

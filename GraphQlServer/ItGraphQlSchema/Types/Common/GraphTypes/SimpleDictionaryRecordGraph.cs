@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDIAttribute, GraphType(typeof(SimpleDictionaryRecord))]
-	public class SimpleDictionaryRecordGraph: EfObjectGraphType<SimpleDictionaryRecord>
+	public class SimpleDictionaryRecordGraph: EfObjectGraphType<CommonDbContext, SimpleDictionaryRecord>
 	{
-		public SimpleDictionaryRecordGraph(IEfGraphQLService graphQlService) :
+		public SimpleDictionaryRecordGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 
