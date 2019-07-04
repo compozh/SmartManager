@@ -10,7 +10,3 @@ export default {
 name: 'purchase-menu'
 }
 </script>
-
-<style>
-
-</style>

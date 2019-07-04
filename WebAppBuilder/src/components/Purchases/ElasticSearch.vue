@@ -100,62 +100,21 @@ import Axios from "axios";
                 this.loading = false
                 }, 0)
             }
-            // :filter="textCompare"
-            // textCompare(item, queryString, itemText){
-            //     const charsCount = 66;
-            //     const enMap = [ 
-            //         '`', '~',
-            //         'q', 'Q', 'w', 'W', 'e', 'E', 'r', 'R', 't', 'T', 'y', 'Y', 'u', 'U', 'i', 'I', 'o', 'O', 'p', 'P', '[', '{', ']', '}',
-            //         'a', 'A', 's', 'S', 'd', 'D', 'f', 'F', 'g', 'G', 'h', 'H', 'j', 'J', 'k', 'K', 'l', 'L', ';', ':', '\'', '"', 
-            //         'z', 'Z', 'x', 'X', 'c', 'C', 'v', 'V', 'b', 'B', 'n', 'N', 'm', 'M', ',', '>', '.', '<' ];
-            //     const ruMap = [ 
-            //         'ё', 'Ё',
-            //         'й', 'Й', 'ц', 'Ц', 'у', 'У', 'к', 'К', 'е', 'Е', 'н', 'Н', 'г', 'Г', 'ш', 'Ш', 'щ', 'Щ', 'з', 'З', 'х', 'Х', 'ъ', 'Ъ',
-            //         'ф', 'Ф', 'ы', 'Ы', 'в', 'В', 'а', 'А', 'п', 'П', 'р', 'Р', 'о', 'О', 'л', 'Л', 'д', 'Д', 'ж', 'Ж', 'э', 'Э',
-            //         'я', 'Я', 'ч', 'ч', 'с', 'С', 'м', 'М', 'и', 'И', 'т', 'Т', 'ь', 'Ь', 'б', 'Б', 'ю', 'Ю' ];
-            //     const ukMap = [ 
-            //         '\'', '₴',
-            //         'й', 'Й', 'ц', 'Ц', 'у', 'У', 'к', 'К', 'е', 'Е', 'н', 'Н', 'г', 'Г', 'ш', 'Ш', 'щ', 'Щ', 'з', 'З', 'х', 'Х', 'ї', 'Ї',
-            //         'ф', 'Ф', 'і', 'І', 'в', 'В', 'а', 'А', 'п', 'П', 'р', 'Р', 'о', 'О', 'л', 'Л', 'д', 'Д', 'ж', 'Ж', 'є', 'Є',
-            //         'я', 'Я', 'ч', 'ч', 'с', 'С', 'м', 'М', 'и', 'И', 'т', 'Т', 'ь', 'Ь', 'б', 'Б', 'ю', 'Ю' ];
-                
-            //     var queryChars = queryString.split('');
-            //     var queryText = { En = "", Ru = "", Uk = "" };
-
-            //     for (let char = 0; char < charsCount; char++) {
-            //         const element = queryChars[char];
-            //         var elNum = Math.max(_.findIndex(enMap, element), _.findIndex(ruMap, element), _.findIndex(ukMap, element));
-            //         queryText.En += enMap[elNum];
-            //         queryText.Ru += ruMap[elNum];
-            //         queryText.Uk += ukMap[elNum];
-            //     }
-                
-            //     return  itemText.toLowerCase().includes(queryText.En.toLowerCase()) || 
-            //             itemText.toLowerCase().includes(queryText.Ru.toLowerCase()) || 
-            //             itemText.toLowerCase().includes(queryText.Uk.toLowerCase());
-            // }
         }
     }
-</script>
+</script> 
 
-<style scoped>
-    .elastic-search-autocomplete input{
-        align-self: center;
-        justify-self: center;
-    }
-    .v-toolbar__content>:nth-last-child(3){
-        justify-content: flex-end;
-        margin-left: 100px;
-    }
-    .v-toolbar__content>:nth-last-child(2){
-        max-width: 10px;
-    }
+
+<style>
     .highlit-elastic {
         display: inline-flex;
         background-color: antiquewhite;
         font-weight: 500;
         padding: 0px 3px 0px 3px;
     }
+</style>
+
+<style scoped>
     .subcaption {
         font-size: small;
         color: darkgray;

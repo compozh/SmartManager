@@ -95,7 +95,7 @@ import _ from 'lodash';
     }
 </script>
 
-<style>
+<style scoped>
 .element-margin{
     margin: 2px;
 }

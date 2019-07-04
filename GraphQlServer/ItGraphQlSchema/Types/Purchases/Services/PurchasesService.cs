@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ItGraphQlSchema.Custom;
+using AutoMapper;
+using ItGraphQlSchema.Helpers;
 using ItGraphQlSchema.Types.Purchases;
 using ItGraphQlSchema.Types.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types.Services
@@ -16,17 +18,28 @@ namespace ItGraphQlSchema.Types.Services
         private IHttpContextAccessor _httpContextAccessor;
         public PurchasesUserSettings UserSettings;
         private CommonDbContext _dbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<CommonDbContext>();//(CommonDbContext)_httpContextAccessor.HttpContext.RequestServices.GetService(typeof(CommonDbContext));
-
+        private readonly IMapper _mapper;
+        
         public PurchasesService(IPurchasesUserSettingsProvider userSettingsProvider, IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
-            UserSettings = userSettingsProvider.GetCurrentSettings().Result;
+            try
+            {
+                _mapper = httpContextAccessor.HttpContext.RequestServices.GetRequiredService<IMapper>();
+                _httpContextAccessor = httpContextAccessor;
+                var temp = userSettingsProvider.GetCurrentSettings();
+                UserSettings = userSettingsProvider.GetCurrentSettings().Result;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
         public CustomResult CreateCart(CartItem item)
         {
             try
             {
-                var result = new CustomResult { Successed = true };
+                var result = new CustomResult();
                 if (item.DateDelivery < System.DateTime.Now)
                 {
                     result.Message.Add("Date is lesser than now.");
@@ -55,21 +68,25 @@ namespace ItGraphQlSchema.Types.Services
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string>{ex.Message}, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
         public CustomResult EditCart(CartItem item)
         {
             try
-            {
-                var result = new CustomResult { Successed = true };
+            {                
+                var result =  new CustomResult();
                 var cart = _dbContext.CartItems.FirstOrDefault(x => x.Id == item.Id);
                 if (cart == null)
                 {
                     result.Message.Add("Id not found.");
                     result.Successed = false;
+                    return result;
                 }
+                else{
+                    item = _mapper.Map<CartItem, CartItem>(item,cart);
+                }
+
                 if (item.UserId != UserSettings.UserId)
                 {
                     result.Message.Add("You have no permission to modify this item.");
@@ -86,32 +103,33 @@ namespace ItGraphQlSchema.Types.Services
                     result.Successed = false;
                 }
                 if (result.Successed)
-                {
-                    _dbContext.CartItems.Update(item);
+                {              
+                    _dbContext.Entry(cart).CurrentValues.SetValues(item);
                     _dbContext.SaveChanges();
 
                     result.Message.Add("Cart item was modified.");
-					result.ReturnValue = _dbContext.CartItems.FirstOrDefault(x => x.Id == item.Id);
+					result.ReturnValue = item;
                 }
 
                 return result;
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+                Console.WriteLine(ex.Message);
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
         public CustomResult DeleteCart(Guid id)
         {
             try
             {
-                var result = new CustomResult { Successed = true, Message=new List<string>() };
+                var result =  new CustomResult();
                 var item = _dbContext.CartItems.FirstOrDefault(x => x.Id == id);
                 if (item == null)
                 {
                     result.Message.Add("Id not found.");
                     result.Successed = false;
+                    return result;
                 }
                 if (item.UserId != UserSettings.UserId)
                 {
@@ -131,19 +149,18 @@ namespace ItGraphQlSchema.Types.Services
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
 		public CustomResult DeleteAllCarts()
         {
             try
             {
-                var result = new CustomResult { Successed = true, Message=new List<string>() };
-                var items = _dbContext.CartItems.FirstOrDefault(x => x.UserId == UserSettings.UserId);
+                var result =  new CustomResult();
+                var items = _dbContext.CartItems.Where(x => x.UserId == UserSettings.UserId).ToList();
                 if (items == null)
                 {
-                    result.Message.Add("Id not found.");
+                    result.Message.Add("You have no cart items.");
                     result.Successed = false;
                 }
 
@@ -152,7 +169,7 @@ namespace ItGraphQlSchema.Types.Services
                     _dbContext.RemoveRange(items);
                     _dbContext.SaveChanges();
 
-                    result.Message.Add("Cart item was added.");
+                    result.Message.Add("Cart items ware deleted.");
 					result.ReturnValue = items;
                 }
 
@@ -160,9 +177,8 @@ namespace ItGraphQlSchema.Types.Services
             }
             catch (System.Exception ex)
             {
-                return new CustomResult { Message = new List<string> { ex.Message }, ReturnValue = null, Successed = false };
+                return new CustomResult { Message = { ex.Message }, ReturnValue = null, Successed = false };
             }
         }
-
 	}
 }

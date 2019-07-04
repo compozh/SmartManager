@@ -133,7 +133,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .item-card{
     text-align: -webkit-center;
     height: 250px;

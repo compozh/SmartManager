@@ -52,8 +52,8 @@
     }
 </script>
 
-<style>
-.date-input input{
+<style scoped>
+.date-input >>> input{
   text-align: center;
 }
 </style>

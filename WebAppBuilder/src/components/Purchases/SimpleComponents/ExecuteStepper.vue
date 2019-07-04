@@ -21,7 +21,7 @@
     }
 </script>
 
-<style>
+<style scoped>
 .execute-breadcrumbs { 
     font-size: .85em; 
     color: #ccc; 

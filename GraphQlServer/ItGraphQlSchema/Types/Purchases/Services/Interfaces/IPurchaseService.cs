@@ -1,5 +1,5 @@
 using System;
-using ItGraphQlSchema.Custom;
+using ItGraphQlSchema.Helpers;
 using ItGraphQlSchema.Types.Purchases;
 
 namespace ItGraphQlSchema.Types.Services.Interfaces{

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
-using ItGraphQlSchema.Custom;
+using ItGraphQlSchema.Helpers;
 
 namespace ItGraphQlSchema.Types.Purchases
 {

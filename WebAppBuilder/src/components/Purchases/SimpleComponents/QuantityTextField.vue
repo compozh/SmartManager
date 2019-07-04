@@ -41,8 +41,8 @@
     }
 </script>
 
-<style>
-.quantity-input input{
+<style scoped>
+.quantity-input >>> input{
   text-align: center;
 }
 </style>

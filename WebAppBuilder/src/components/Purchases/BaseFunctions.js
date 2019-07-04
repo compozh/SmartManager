@@ -11,11 +11,11 @@ export default function purchasesSchemaAxios (f, q, props) {
                             method: 'POST',
                             url: myConfig.GrapgQlUrl+'api/graphql',
                             withCredentials:true,
-                            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+                            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'), 'Content-Type': 'application/json'},
                             data: { 
                               SchemaName:'PurchasesSchema', 
                               query: q,
-                              props: props
+                              variables: props
                             } 
                           })
         .then(res=> { f.loading = false; resolve(res) });
