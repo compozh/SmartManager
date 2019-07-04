@@ -99,7 +99,7 @@
           : this.drawer = !this.drawer;
       },
       closeError() {
-        this.$store.dispatch('sm/setError', null);
+        this.$store.commit('sm/setError', null);
       }
     },
     computed: {
@@ -146,4 +146,5 @@
     left: 0;
     margin: 0;
   }
+
 </style>

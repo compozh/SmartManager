@@ -1,0 +1,144 @@
+<template>
+  <v-container ma-0 pa-0  pt-3>
+    <v-toolbar color="cyan" dark :dense="$vuetify.breakpoint.smAndDown">
+      <v-toolbar-title>Заявки ТО</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-if="$vuetify.breakpoint.mdAndUp"
+        v-model="search"
+        append-icon="search"
+        label="Поиск"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-toolbar>
+    <v-tabs color="cyan" dark slider-color="yellow" icons-and-text lang>
+      <v-tab key="active">
+        Активные
+        <v-icon>build</v-icon>
+      </v-tab>
+      <v-tab key="archive">
+        Архивные
+        <v-icon>list</v-icon>
+      </v-tab>
+      <v-tabs-items touchless>
+        <v-tab-item key="active" lazy>
+          <eam-base-table
+            :query="query"
+            :queryName="queryName"
+            searchPath="content"
+            :headers="headers"
+            :search="search"
+            :constantFilter="activeFilter"
+            :constantOrderBy="[{ path: 'id', descending: true }]"
+          >
+            <template slot="row" slot-scope="props">
+              <td>
+                <v-icon
+                  :color="props.item.category ? 'red' : 'green'"
+                >{{ sourceIcon(props.item.source) }}</v-icon>
+              </td>
+              <td>{{ props.item.id }}</td>
+              <td>{{ statusCaption(props.item.status) }}</td>
+              <td>{{ timeElapsed(props.item.creationDate) }}</td>
+              <td>{{ props.item.content }}</td>
+              <td>
+                <eam-employee-simple-card :item="props.item.declarerEmployee"/>
+              </td>
+            </template>
+          </eam-base-table>
+        </v-tab-item>
+        <v-tab-item key="archive" lazy>
+          <eam-base-table
+            :query="query"
+            :queryName="queryName"
+            searchPath="content"
+            :headers="headers"
+            :search="search"
+            :constantFilter="archiveFilter"
+            :constantOrderBy="[{ path: 'id', descending: true }]"
+          >
+            <template slot="row" slot-scope="props">
+              <td>
+                <v-icon
+                  :color="props.item.category ? 'red' : 'green'"
+                >{{ sourceIcon(props.item.source) }}</v-icon>
+              </td>
+              <td>{{ props.item.id }}</td>
+              <td>{{ statusCaption(props.item.status) }}</td>
+              <td>{{ timeElapsed(props.item.creationDate) }}</td>
+              <td>{{ props.item.content }}</td>
+              <td>
+                <eam-employee-simple-card :item="props.item.declarerEmployee"/>
+              </td>
+            </template>
+          </eam-base-table>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-tabs>
+  </v-container>
+</template>
+
+<script>
+import { ALL_WORK_REQUESTS } from "../api/eam-queries";
+import * as moment from "moment";
+import * as workRequestHelper from "../helpers/work-requests";
+
+const archiveStatusCodes = ["A", "C"];
+
+export default {
+  name: "eam-work-requests-table",
+  props: {
+    constantFilter: Array,
+    constantOrderBy: Array
+  },
+  data() {
+    return {
+      query: ALL_WORK_REQUESTS,
+      queryName: "workRequestConnection",
+      baseActiveFilter: [
+        { path: "statusCode", comparison: "notIn", value: archiveStatusCodes }
+      ],
+      baseArchiveFilter: [
+        { path: "statusCode", comparison: "in", value: archiveStatusCodes }
+      ],
+      headers: [
+        { text: "", value: "source" },
+        { text: "№", value: "id", align: "rigth" },
+        { text: "Статус", value: "status", align: "left" },
+        { text: "От подачи", value: "creationDate", align: "rigth" },
+        { text: "Содержание", value: "content", align: "left" },
+        { text: "Заявитель", value: "declarerEmployee.fullName", align: "left" }
+      ],
+      search: ""
+    };
+  },
+  computed: {
+    activeFilter() {
+      return this.constantFilter ? this.baseActiveFilter.concat(this.constantFilter) : this.baseActiveFilter
+    },
+    archiveFilter() {
+      return this.constantFilter ? this.baseArchiveFilter.concat(this.constantFilter) : this.baseArchiveFilter
+    }
+  },
+  methods: {
+    timeElapsed(date) {
+      const minuteElapsed = Math.floor(
+        moment.duration(moment().diff(moment(date))).asMinutes()
+      );
+      return `${Math.floor(minuteElapsed / 1440)} д ${Math.floor(
+        minuteElapsed / 60
+      ) % 24} ч ${minuteElapsed % 60} м`;
+    },
+    sourceIcon(source) {
+      return workRequestHelper.sourceIcon(source);
+    },
+    statusCaption(status) {
+      return workRequestHelper.statusCaption(status);
+    }
+  }
+};
+</script>
+
+<style>
+</style>

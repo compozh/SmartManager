@@ -3,9 +3,9 @@ using GraphQL.EntityFramework;
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(EquipmentCategory))]
-	public class EquipmentCategoryGraph: EfObjectGraphType<EquipmentCategory>
+	public class EquipmentCategoryGraph: EfObjectGraphType<CommonDbContext, EquipmentCategory>
 	{
-		public EquipmentCategoryGraph(IEfGraphQLService graphQlService) :
+		public EquipmentCategoryGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
 			base(graphQlService)
 		{
 			Field(x => x.Id).Description("Id"); 

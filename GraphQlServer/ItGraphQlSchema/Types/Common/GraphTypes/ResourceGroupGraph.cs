@@ -8,9 +8,9 @@ using System.Text;
 namespace ItGraphQlSchema.Types.Common
 {
 	[AddInDI, GraphType(typeof(ResourceGroup))]
-	public class ResourceGroupGraph : EfObjectGraphType<ResourceGroup>
+	public class ResourceGroupGraph : EfObjectGraphType<CommonDbContext, ResourceGroup>
 	{
-		public ResourceGroupGraph(IEfGraphQLService graphQlService, IContentManagerProvider contentManagerProvider) : base(graphQlService)
+		public ResourceGroupGraph(IEfGraphQLService<CommonDbContext> graphQlService, IContentManagerProvider contentManagerProvider) : base(graphQlService)
 		{
 			Name = "ResouceGroup";
 			Field(x => x.Id).Description("Идентификатор");

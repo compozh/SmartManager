@@ -1,89 +1,135 @@
 <template>
-  <originals-viewer
-    v-slot="{ originals, file, params }"
-    :originals="taskDetail ? taskDetail.originals : []"
+  <sm-document-viewer-rl
+    v-slot="{ originals, file, select, component, params }"
   >
     <v-container fluid pa-0>
-      <v-layout class="viewer-layout" row wrap>
-        <v-flex>
-          <v-layout row wrap>
-            <v-flex xs12>
-              <v-layout row>
-                <v-flex xs10 lg11>
-                  <document-viewer
-                    :fileUrl="file.url"
-                    :fileName="file.name"
-                  ></document-viewer>
-                </v-flex>
-                <v-flex xs2 lg1>
-                  <v-layout
-                    column
-                    align-center
-                    class="icons-container"
-                  >
-                    <v-flex
-                      xs10
-                      v-for="doc in originals"
-                      :key="doc.id"
-                      :class="file.id === doc.id ? 'selected' : ''"
-                      @click="params.selectDocument(doc.fileName, doc.fileUrl, doc.id)"
-                    >
-                      <v-layout my-2 pa-2 column class="file-icon-container">
-                        <v-flex>
-                          <v-icon x-large>file_copy</v-icon>
-                        </v-flex>
-                        <v-flex class="file-title">
-                          <span class="caption">{{ doc.fileName }}</span>
-                        </v-flex>
-                      </v-layout>
-                    </v-flex>
-                  </v-layout>
-                </v-flex>
-              </v-layout>
+      <v-layout
+        class="viewer-layout">
+        <v-flex xs12 mt-2 class="view-container">
+          <component :is="component" :url="file.url"></component>
+          <sm-empty-state v-if="!component">Нет файлов для просмотра</sm-empty-state>
+        </v-flex>
+        <v-flex mt-2 class="icons-container">
+          <v-layout>
+            <v-flex
+              xs12
+              @click=""
+              class="file-icon-container file-add px-2"
+            >
+              <v-icon size="50">note_add</v-icon>
+              <span>Добавить</span>
+            </v-flex>
+          </v-layout>
+          <v-layout column>
+            <v-flex
+              class="file-icon-container px-2"
+              xs12
+              v-for="doc in originals"
+              :key="doc.id"
+              :class="file.id === doc.id ? 'selected' : ''"
+              @click="select(doc)"
+            >
+              <div class="file-icon">
+                <v-icon
+                  :color="params.iconColor(doc.fileExt)"
+                  size="50">insert_drive_file
+                </v-icon>
+                <span
+                  class="icon-extension"
+                  :style="{color: params.iconColor(doc.fileExt)}"
+                >{{ doc.fileExt }}</span>
+              </div>
+              <v-tooltip left>
+                <template v-slot:activator="{ on }">
+                  <span v-on="on" class="caption file-title">{{ doc.fileName }}</span>
+                </template>
+                <span>{{ doc.fileName }}</span>
+              </v-tooltip>
             </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
     </v-container>
-  </originals-viewer>
+  </sm-document-viewer-rl>
 </template>
 
 <script>
   export default {
-    name: "smTaskTabDocs",
-    props: ['taskDetail']
+    name: "sm-task-tab-docs"
   }
 </script>
 
 <style scoped>
 
   .viewer-layout {
-
+    height: 89vh;
+    box-shadow: inset 0 1px 0 0 rgba(100, 121, 143, 0.122);
   }
 
-  .file-icon-container {
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .selected .file-icon-container {
-    background: #efefef;
-  }
-
-  .file-icon-container:hover {
-    cursor: pointer;
-    background: #efefef;
-    color: #1976d2;
-  }
-
-  .file-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 10px;
+  .view-container {
+    height: inherit;
   }
 
   .icons-container {
     overflow-y: auto;
   }
+
+  .file-icon-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+    width: 100px;
+    transition: background-color 0.2s;
+  }
+
+  .file-icon-container:hover {
+    cursor: pointer;
+    background: #efefef;
+    box-shadow: inset 1px 1px 0 0 rgba(100, 121, 143, 0.122),
+    inset -1px -1px 0 0 rgba(100, 121, 143, 0.122);
+  }
+
+  .file-icon-container:hover .file-title {
+    color: #1976d2;
+  }
+
+  .file-icon-container.selected {
+    background: #efefef;
+    box-shadow: inset 1px 1px 0 0 rgba(100, 121, 143, 0.122),
+    inset -1px -1px 0 0 rgba(100, 121, 143, 0.122);
+  }
+
+  .file-add {
+    position: sticky;
+  }
+
+  .file-icon {
+    position: relative;
+    width: min-content;
+  }
+
+  .icon-extension {
+    position: absolute;
+    bottom: 1px;
+    right: 5px;
+    font-size: 15px;
+    text-shadow: 1px 1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+    -1px -1px 0 #fff;
+  }
+
+  .file-title {
+    width: 100%;
+    max-height: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
 </style>

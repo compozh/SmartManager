@@ -6,11 +6,11 @@ using ItGraphQlSchema.Types.LMS.Model;
 namespace ItGraphQlSchema.Types
 {
 	[AddInDI]
-	class LmsQuery : QueryGraphType
+	class LmsQuery : QueryGraphType<CommonDbContext>
 	{
 		private readonly ILmsDataProvider _dataProvider;
 
-		public LmsQuery(IEfGraphQLService efGraphQLService, ILmsDataProvider dataProvider) : base(efGraphQLService)
+		public LmsQuery(IEfGraphQLService<CommonDbContext> efGraphQLService, ILmsDataProvider dataProvider) : base(efGraphQLService)
 		{
 			_dataProvider = dataProvider;
 

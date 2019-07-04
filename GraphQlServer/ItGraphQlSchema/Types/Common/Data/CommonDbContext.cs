@@ -19,6 +19,7 @@ namespace ItGraphQlSchema.Types
 		public DbSet<Document> Documents { get; set; }
 		public DbSet<DocumentRow> DocumentRows { get; set; }
 		public DbSet<Image> Images { get; set; }
+		public DbSet<Attachment> Attachments { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -35,24 +36,10 @@ namespace ItGraphQlSchema.Types
 			testOnModelCreating(modelBuilder);
 		}
 
-		// https://github.com/SimonCropp/GraphQL.EntityFramework/blob/master/doco/configuration.md
-		static CommonDbContext()
-		{
-			var builder = new DbContextOptionsBuilder();
-			builder.UseSqlServer(@"fake");
-
-			//using (var context = new CommonDbContext(builder.Options))
-			using (var context = new CommonDbContext(builder.Options))
-			{
-				DataModel = context.Model;
-			}
-		}
-
 		public CommonDbContext(DbContextOptions options) :
 			base(options)
 		{
 		}
-		public static IModel DataModel { get; }
 	}
 }
 

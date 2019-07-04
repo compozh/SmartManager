@@ -11,9 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ItGraphQlSchema.Types
 {
 	[AddInDIAttribute]
-	public class OrderQuery : QueryGraphType
+	public class OrderQuery : QueryGraphType<CommonDbContext>
 	{
-		public OrderQuery(IEfGraphQLService efGraphQlService, OrderProvider provider):base(efGraphQlService)
+		public OrderQuery(IEfGraphQLService<CommonDbContext> efGraphQlService, OrderProvider provider):base(efGraphQlService)
 		{
 			Name = "OrderQuery";
 			AddQueryField("Orders", resolve: context => provider.Orders);

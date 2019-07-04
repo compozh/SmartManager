@@ -10,7 +10,15 @@ namespace ItGraphQlSchema
 	{
 		public static void ConfigSchemas(this IServiceCollection services, IConfiguration configuration)
 		{
-			EfGraphQLConventions.RegisterInContainer(services, CommonDbContext.DataModel);
+			var builder = new DbContextOptionsBuilder();
+			builder.UseSqlServer("fake");
+			using (var context = new CommonDbContext(builder.Options))
+			{
+				EfGraphQLConventions.RegisterInContainer(
+					services,
+					dbContext: context,
+					dbContextFromUserContext: userContext => null);
+			}
 
 			ForAllSchemas.Config(services);
 			CommonSchema.CommonSchema.Config(services);

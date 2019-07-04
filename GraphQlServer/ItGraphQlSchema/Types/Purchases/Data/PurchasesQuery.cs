@@ -7,11 +7,11 @@ using System.Linq;
 namespace ItGraphQlSchema.Types.Purchases
 {
 	[AddInDI]
-	class PurchasesQuery : QueryGraphType
+	class PurchasesQuery : QueryGraphType<CommonDbContext>
 	{
 		IPurchasesDataProvider _dataProvider;
 
-		public PurchasesQuery(IEfGraphQLService efGraphQlService, IPurchasesDataProvider dataProvider) :
+		public PurchasesQuery(IEfGraphQLService<CommonDbContext> efGraphQlService, IPurchasesDataProvider dataProvider) :
 			base(efGraphQlService)
 		{
 			_dataProvider = dataProvider;

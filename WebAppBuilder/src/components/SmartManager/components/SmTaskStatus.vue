@@ -7,7 +7,7 @@
           v-on="on"
           :color="taskStatus.color"
           class="ml-1"
-          :size="18"
+          :size="22"
           :class="{'hidden-sm-and-up': chip}"
         >{{ taskStatus.icon }}
         </v-icon>
@@ -23,7 +23,7 @@
       :color="taskStatus.color"
     >
       <v-avatar>
-        <v-icon size="18px">{{ taskStatus.icon }}</v-icon>
+        <v-icon size="18">{{ taskStatus.icon }}</v-icon>
       </v-avatar>
       {{ taskStatus.text }}
     </v-chip>

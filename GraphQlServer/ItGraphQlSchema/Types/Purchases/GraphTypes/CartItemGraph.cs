@@ -4,9 +4,9 @@ using GraphQL.Types;
 namespace ItGraphQlSchema.Types.Purchases
 {
 	[AddInDI, GraphType(typeof(CartItem))]
-	public class CartItemGraph : EfObjectGraphType<CartItem>
+	public class CartItemGraph : EfObjectGraphType<CommonDbContext, CartItem>
 	{
-		public CartItemGraph(IEfGraphQLService graphQlService) : base(graphQlService)
+		public CartItemGraph(IEfGraphQLService<CommonDbContext> graphQlService) : base(graphQlService)
 		{
 			Name = "CartItem";
 			Field(p => p.Id).Description("Идентификатор элемента");
