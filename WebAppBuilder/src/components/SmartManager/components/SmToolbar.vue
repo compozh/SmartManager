@@ -1,7 +1,7 @@
 <template>
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-beetwen>
-      <v-flex>
+      <v-flex shrink>
         <router-link
           tag="h1"
           class="blue--text text--darken-2 font-weight-thin"
@@ -10,7 +10,17 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
-      <v-flex class="grow-0">
+      <v-text-field
+        v-if="showSearch"
+        flat
+        solo
+        clearable
+        label="Поиск"
+        prepend-inner-icon="search"
+        v-model.trim="search"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-flex shrink>
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-layout>
@@ -20,7 +30,20 @@
 
 <script>
   export default {
-    name: "sm-toolbar"
+    name: "sm-toolbar",
+    computed: {
+      showSearch() {
+        return this.$route.params.hasOwnProperty('foldercode')
+      },
+      search: {
+        get() {
+          return this.$store.state.sm.search
+        },
+        set(search) {
+          this.$store.commit('sm/setSearch', search)
+        }
+      }
+    }
   }
 </script>
 
@@ -35,7 +58,15 @@
     text-decoration: none;
   }
 
-  .grow-0 {
-    flex-grow: 0 !important;
+  .v-input >>> .v-input__control {
+    min-height: 40px;
   }
+
+  .v-input >>> .v-input__slot {
+    box-shadow: inset 1px 1px 0 0 rgba(100, 121, 143, 0.122),
+    inset -1px -1px 0 0 rgba(100, 121, 143, 0.122);
+    margin: 0;
+    min-height: 40px;
+  }
+
 </style>

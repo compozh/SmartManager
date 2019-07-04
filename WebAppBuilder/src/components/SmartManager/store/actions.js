@@ -24,6 +24,7 @@ export default {
     const loader = payload.loader
 
     commit('setError', null)
+    commit('setSearch', null)
     commit(loader, true)
 
     try {

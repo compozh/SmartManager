@@ -4,7 +4,8 @@ export default {
   error: null, // Snackbar for errors
   menuMode: 'open', // Main menu state: open, mini, close
   folders: null,
-  currentFolder: '',
+  currentFolder: null,
+  search: null,
   tasks: {},
   taskInfo: null
 }
