@@ -26,7 +26,7 @@ export default {
         show: false
     }),
     methods:{
-        getRoutePath(code){
+        getRoutePath(code) {
             const query = `{purchases{items: resourcesGrops(id: "${code}"){id,name,parent{id}}}}`;
             purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
         },
@@ -65,7 +65,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

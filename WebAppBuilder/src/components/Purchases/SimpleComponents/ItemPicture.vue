@@ -1,15 +1,15 @@
 <template>
-    <v-layout justify-center>
-    <div v-if="!items" class="icon-frame justify-center">
+    <v-layout justify-center :style="`width: ${width}; height: ${height};`" >
+    <div v-if="items.length == 0" class="icon-frame justify-center">
         <v-icon v-text="'photo_camera'" :size="height"/>
     </div>
-    <div v-if="items" class="icon-frame" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
-       <v-carousel hide-controls hide-delimiters  interval="2000" :height="height" :cycle="hover">
+    <div v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
+       <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover">
             <v-carousel-item
                 v-for="(item, i) in items"
                 :key="i"
                 :src="item"
-                :style="`width: ${width}; height:auto;`"
+                :style="`width: ${width}; height: ${height};`"
                 transition="fade-transition"
                 reverse-transition="fade-transition"
             />
@@ -41,7 +41,7 @@
             }
         },        
         data:()=>({
-            items:undefined,
+            items: [],
             hover: false
         }),
         methods:{
@@ -51,7 +51,7 @@
                     var item = resp.data.data.purchases.items[0];
                     if (item.content && item.content.length > 0)
                     {
-                        this.items =  item.content;
+                        this.items.push(item.content);
                     }
                }
            },
@@ -60,7 +60,7 @@
            }
         },
         created: function () {
-            debugger;
+            //debugger;
             var query = `{
                 purchases{
                     items: ${this.entityName} (id:"${this.id}"){
@@ -75,15 +75,13 @@
     }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .icon-frame {
     border: 0px none;
-    width: 100%;
-    height: 80%;
     display: flex;
     justify-self: center;
 }
-.icon-frame .v-carousel{
+.icon-frame >>> .v-carousel{
     box-shadow: none;
 }
 </style>

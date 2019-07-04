@@ -32,7 +32,7 @@
     }
 </script>
 
-<style>
+<style scoped>
 @keyframes blink {
     from {
         opacity: 1; 

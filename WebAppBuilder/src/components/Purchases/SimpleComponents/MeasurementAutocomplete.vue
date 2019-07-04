@@ -64,8 +64,8 @@
     }
 </script>
 
-<style>
-.measurement-input input{
+<style scoped>
+.measurement-input >>> input{
   text-align: center;
 }
 </style>

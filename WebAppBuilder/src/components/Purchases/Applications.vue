@@ -153,7 +153,7 @@ import moment from 'moment';
     }
 </script>
 
-<style>
+<style scoped>
 .application-card{
     padding: 5px;
     margin: 5px;

@@ -99,7 +99,7 @@
 }
 </script>
 
-<style>
+<style scoped>
 /*.non-overflowed{
     overflow:hidden
 }*/

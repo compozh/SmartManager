@@ -8,27 +8,41 @@
     <div v-if="cartlist" >
       <v-card v-for="cartItem in cartlist" :key="cartItem.id" class="rounded-card" >
         <v-layout v-bind="cardBinding">
-            <!-- Картинка ресурса -->
-          <v-flex align-center justify-center hidden-xs-only resource-card-pic>
-              <img src="https://baxov.net/sites/default/files/2018-03/ima23ge_2.png" width="100px" />
-          </v-flex>
-            <!-- Заголовок, имя ресурса -->
-          <v-flex xl9 lg9 md8 sm7 xs6 align-center justify-start resource-cartion>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <span v-on="on">
-                  <h3>
-                    <span class="resource-group-text">[{{cartItem.resource.resourceGroup.name | truncate(getTextLength(20,20,40,40,40), '...')}}]</span>
-                    {{cartItem.resource.name | truncate(getTextLength(100,80,200,500,500), '...')}}
-                  </h3>
+          <v-flex v-if="cartItem.resource" xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
+              <!-- Удалить -->
+            <remove-button-icon @click="removeCartItem(cartItem)"/>
+              <!-- Картинка ресурса -->
+            <item-picture  entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+              <!-- Заголовок, имя ресурса -->
+            <v-flex xl11>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <span v-on="on">
+                    <h3>
+                      <span class="resource-group-text">[{{cartItem.resource.resourceGroup.name | truncate(getTextLength(20,20,40,40,40), '...')}}]</span>
+                      {{cartItem.resource.name | truncate(getTextLength(100,80,200,500,500), '...')}}
+                    </h3>
+                  </span>
+                </template>
+                <span class="hidden-lg-and-up">
+                  <span>{{cartItem.resource.name}}</span><br/>
+                  <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
                 </span>
-              </template>
-              <span class="hidden-lg-and-up">
-                <span>{{cartItem.resource.name}}</span><br/>
-                <img class="hidden-sm-and-up" src="https://baxov.net/sites/default/files/2018-03/ima23ge_2.png" width="100px" />
-              </span>
-            </v-tooltip>
+              </v-tooltip>
+            </v-flex>
           </v-flex>
+
+          <v-flex v-else  xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
+              <!-- Удалить -->
+            <remove-button-icon @click="removeCartItem(cartItem)" />
+              <!-- Картинка ресурса -->
+            <item-picture  entityName="resources" id="" height="100px" width="100px"/>
+              <!-- Заголовок, имя ресурса -->
+            <v-flex xl11>
+              <text-area-with-lock-edit :item="cartItem" fieldName="resourceName" labelName="Наименование" disabled="true" />
+            </v-flex>
+          </v-flex>
+
           <v-flex xl3 lg3 md4 sm5 xs6>
             <!-- Основные параметры заказа -->
             <v-card-actions>
@@ -60,9 +74,14 @@
 
 <script>
 import Axios from "axios";
+import purchasesSchemaAxios from "./BaseFunctions";
+import RemoveButton from "./SimpleComponents/RemoveButton.vue"
 export default {
     name: "cart-list",
     props: ["cartlist"],
+    components:{
+      RemoveButton
+    },
     computed:{
       cardBinding() { 
         const binding = {}
@@ -101,9 +120,41 @@ export default {
         }
         return f;
       },
+      getCartInputTypeParam(cartItem){
+        return {
+          item:	{
+            id:                 cartItem.id,
+            resourceId:         cartItem.resource.id,
+            measurementUnitId:  cartItem.measurementUnit.id,
+            resourceName:       cartItem.resourceName,
+            quantity:           cartItem.quantity,
+            dateDelivery:       cartItem.dateDelivery
+          }
+        }
+      },
       mutationChangeQuantity(item, qt){
         //TODO call mutations
-        console.log(`${item.id} - ${qt}`)
+
+        const q = `
+        mutation($item: CartInput!){
+          purchasesMutation{
+            updateCart(cart:$item){
+              id,
+              measurementUnit{
+                id,
+                name
+              },
+              quantity,
+              resourceId,
+              resourceName,
+              dateDelivery
+            }
+          }
+        }`
+        var par = this.getCartInputTypeParam(item);//JSON.stringify();
+        console.log(par);
+        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
+        
       },
       mutationChangeMeasurement(item, m){
         //TODO call mutations
@@ -123,14 +174,8 @@ export default {
 };
 </script>
 
-<style>
-.resource-card-pic{
-  flex-basis: 100px !important; 
-  flex-shrink: 0;
-  display: flex;
-  padding: 10px;
-}
-.resource-cartion {
+<style lang="scss" scoped>
+.resource-caption {
     display: flex;
     text-align: left;
     padding: 10px;
@@ -143,5 +188,6 @@ export default {
 }
 .rounded-card{
     border-radius:20px;
+    margin: 5px;
 }
 </style>
