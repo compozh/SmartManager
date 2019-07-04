@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.Linq;
 using ItGraphQlSchema.Types.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
@@ -20,26 +18,20 @@ namespace ItGraphQlSchema.Types.EamSchema
 		IQueryable<EquipmentCategory> EquipmentCategories { get; }
 		IQueryable<TechnicalPlaceLevel> TechnicalPlaceLevels { get; }
 		IQueryable<EquipmentMovementHistory> EquipmentMovementHistories { get; }
-		
 		IQueryable<ConditionParameterType> ConditionParameterTypes { get; }
-		
 		IQueryable<ConditionParameter> ConditionParameters { get;  }
-		
 		IQueryable<ConditionParameterValue> ConditionParameterValues { get; }
-
 		IQueryable<EquipmentFailureReason> EquipmentFailureReasons { get;  }
-		
 		IQueryable<EquipmentFailureType> EquipmentFailureTypes { get;  }
-		
 		IQueryable<ConditionParameterToModelLink> ConditionParameterToModelLinks { get;  }
-		
 		IQueryable<ConditionParameterValue> DownTimes { get; }
-		
-		IQueryable<Attachment> AttachmentImages { get; }
+		IQueryable<EquipmentAttachment> EquipmentAttachments { get; }
+		IQueryable<WorkRequestAttachment> WorkRequestAttachments { get; }
+		IQueryable<ResourceAttachment> ResourceAttachments { get; }
 	}
 	
 	[AddInDI(typeof(IEamDataProvider))]
-	internal class EamDataProvider : CommonDataProvider, IEamDataProvider
+	internal class EamDataProvider : CommonDataProvider<EamDbContext>, IEamDataProvider
 	{
 		private readonly IEamUserSettingsProvider _userSettingsProvider;
 
@@ -134,11 +126,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 				(c.ConditionParameter.ConditionParameterType.ParameterGroup ==
 				ConditionParameterGroup.DowntimeEquipment ));
 
-		private static readonly List<string> _supportedImageTypes = new List<string>
-			{"jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF"};
-
-		public IQueryable<Attachment> AttachmentImages =>
-			Attachments.Where(a => a.IsValid && _supportedImageTypes.Contains(a.FileExtension));
+		public IQueryable<EquipmentAttachment> EquipmentAttachments =>  DbContext.EquipmentAttachments;
+		public IQueryable<WorkRequestAttachment> WorkRequestAttachments =>  DbContext.WorkRequestAttachments;
+		public IQueryable<ResourceAttachment> ResourceAttachments =>  DbContext.ResourceAttachments;
 
 		public override IQueryable<ItObject> ItObjects =>
 			base.ItObjects.Where(ito => UserSettings.AvailableItObjects.Contains(ito.Id));

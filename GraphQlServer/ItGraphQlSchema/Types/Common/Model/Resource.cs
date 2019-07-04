@@ -37,5 +37,7 @@ namespace ItGraphQlSchema.Types.Common
 
 		[Column("KKST")]
 		public string ResourceTypeId { get; set; }
+		
+		public virtual List<ResourceAttachment> Attachments { get; set; }
 	}
 }

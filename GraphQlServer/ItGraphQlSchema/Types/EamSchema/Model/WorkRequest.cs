@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ItGraphQlSchema.Types.Common;
@@ -105,5 +106,7 @@ namespace ItGraphQlSchema.Types.EamSchema
 		[Column("KOBJ")]
 		public string ItObjectId { get; set; }
 		public ItObject ItObject { get; set; }
+		
+		public virtual List<WorkRequestAttachment> Attachments { get; set; }
 	}
 }

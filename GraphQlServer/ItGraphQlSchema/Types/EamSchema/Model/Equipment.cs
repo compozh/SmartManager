@@ -119,7 +119,9 @@ namespace ItGraphQlSchema.Types.EamSchema
 		[Column("KOEF")]
 		public decimal UtilizationRate { get; set; }
 
-		public List<WorkRequest> WorkRequests { get; set; }
-		public List<EquipmentMovementHistory> MovementHistories { get; set; }
+		public virtual List<WorkRequest> WorkRequests { get; set; }
+		public virtual List<EquipmentMovementHistory> MovementHistories { get; set; }
+		
+		public virtual List<EquipmentAttachment> Attachments { get; set; }
 	}
 }

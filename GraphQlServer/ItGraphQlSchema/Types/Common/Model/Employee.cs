@@ -25,17 +25,11 @@ namespace ItGraphQlSchema.Types.Common
 		[Column("CEH")]
 		public int? DepartmentId { get; set; }
 
-		public Department Department { get; set; }
+		public virtual Department Department { get; set; }
 
 		[Column("KOBJ")]
-		public string ItObjectId { get; set; }
+		public virtual string ItObjectId { get; set; }
 
-		public ItObject ItObject { get; set; }
-
-//		public List<WorkRequest> DeclarerWorkRequests { get; set; }
-//
-//		public List<WorkRequest> ResponcibleWorkRequests { get; set; }
-//
-//		public List<WorkRequest> PerformerWorkRequests { get; set; }
+		public virtual ItObject ItObject { get; set; }
 	}
 }

@@ -1,19 +1,15 @@
 using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(WorkRequestDirection))]
-	public class WorkRequestDirectionGraph: EfObjectGraphType<CommonDbContext, WorkRequestDirection>
+	public class WorkRequestDirectionGraph : SimpleDictionaryRecordGraph<EamDbContext, WorkRequestDirection>
 	{
-		public WorkRequestDirectionGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
+		public WorkRequestDirectionGraph(IEfGraphQLService<EamDbContext> graphQlService) :
 			base(graphQlService)
 		{
-			Field(x => x.Id).Description("Id"); 
-			Field(x => x.Name);
-			Field(x => x.ShortName);
-			Field(x => x.IsValid);
-			
-			AddNavigationListField(name: "workRequests", resolve: context => context.Source.WorkRequests);
+			AddNavigationListField(name: "workRequests",resolve: context => context.Source.WorkRequests);
 			AddNavigationConnectionField(name: "workRequestsConnection",
 				resolve: context => context.Source.WorkRequests, includeNames: new[] {"WorkRequests"});
 		}

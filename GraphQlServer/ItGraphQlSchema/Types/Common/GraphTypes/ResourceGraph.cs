@@ -1,4 +1,5 @@
-﻿using GraphQL.EntityFramework;
+﻿using System.Linq;
+using GraphQL.EntityFramework;
 using ItGraphQlSchema.Types.Common.Data;
 
 namespace ItGraphQlSchema.Types.Common
@@ -24,6 +25,12 @@ namespace ItGraphQlSchema.Types.Common
 				name: "measurementUnit",
 				resolve: context => context.Source.MeasurementUnit)
 				.Description = "Единица измерения";
+
+			AddNavigationListField(name: "attachments", resolve: context => context.Source.Attachments);
+			AddNavigationListField(name: "images",
+				resolve: context =>
+					context.Source.Attachments.Where(a => EamQuery.SupportedImageTypes.Contains(a.FileExtension)),
+				includeNames: new[] {"Attachments"});
 
 			AddNavigationListField(
 				name: "content",

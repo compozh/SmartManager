@@ -22,5 +22,8 @@ export default {
   },
   setTaskInfo(state, payload) {
     state.taskInfo = payload
+  },
+  setSearch(state, payload) {
+    state.search = payload
   }
 }

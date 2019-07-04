@@ -9,11 +9,11 @@
 
 <script>
 export default {
-  name: "eam-model-simple-card",
+  name: 'eam-model-simple-card',
   props: {
     item: Object
   }
-};
+}
 </script>
 
 <style>

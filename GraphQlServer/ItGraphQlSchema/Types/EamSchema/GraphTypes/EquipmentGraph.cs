@@ -38,29 +38,12 @@ namespace ItGraphQlSchema.Types.EamSchema
 				resolve: context => context.Source.MovementHistories.FirstOrDefault(mh => mh.EndDate == null),
 				includeNames: new[] {"MovementHistories"});
 
-			AddNavigationListField(name: "attachments",
-				resolve: context =>
-					dataProvider.Attachments.Where(a => a.Alias == "ROK" && a.Key == context.Source.Id.PadRight(254)),
-				includeNames: new[] {"Model"});
-
+			AddNavigationListField(name: "attachments",resolve: context => context.Source.Attachments);
 			AddNavigationListField(name: "images",
 				resolve: context =>
-				{
-					var equipmentAttachments = dataProvider.AttachmentImages.Where(a =>
-						a.Alias == "ROK" && a.Key == context.Source.Id.PadRight(254));
-					if (equipmentAttachments.Any())
-					{
-						return equipmentAttachments;
-					}
-
-					if (context.Source.Model != null)
-					{
-						return dataProvider.AttachmentImages.Where(a =>
-							a.Alias == "KSM" && a.Key == context.Source.Model.Id.PadRight(254));
-					}
-
-					return null;
-				}, includeNames: new[] {"Model"});
+					context.Source.Attachments.Where(a => EamQuery.SupportedImageTypes.Contains(a.FileExtension)),
+				includeNames: new[] {"Attachments"});
+			Field("imagesCount", x => x.Attachments != null ? x.Attachments.Count(a => EamQuery.SupportedImageTypes.Contains(a.FileExtension)) : 0);
 			
 			AddNavigationListField(name: "workRequests", resolve: context => context.Source.WorkRequests);
 			AddNavigationConnectionField(name: "workRequestsConnection",

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ItGraphQlSchema.Types
 {
-	public sealed partial class CommonDbContext : DbContext
+	public partial class CommonDbContext
 	{
 		public DbSet<Course> Courses { get; set; }
 		public DbSet<Module> Modules { get; set; }
