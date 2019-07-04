@@ -34,7 +34,12 @@ Vue.use(Viewer)
 // Cache implementation
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
-  link: new HttpLink({}),
+  link: new HttpLink({
+    uri: myConfig.GrapgQlUrl + 'api/graphql',
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
+      'schema': 'eamschema'
+    }}),
   cache,
   connectToDevTools: true,
 })

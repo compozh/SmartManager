@@ -1,11 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ItGraphQlSchema.Types
 {
-	
-
-	public sealed partial class CommonDbContext : DbContext
+	public partial class CommonDbContext
 	{
 		public DbSet<Item> Items { get; set; }
 		public DbSet<Order> Orders { get; set; }
@@ -13,8 +10,6 @@ namespace ItGraphQlSchema.Types
 
 		protected void testOnModelCreating(ModelBuilder modelBuilder)
 		{
-			base.OnModelCreating(modelBuilder);
-
 			modelBuilder.Entity<OrderItem>()
 				.HasKey(i => new {  i.ItemId, i.OrderId });
 
@@ -26,12 +21,6 @@ namespace ItGraphQlSchema.Types
 				.HasOne(oi => oi.Item)
 				.WithMany(i => i.OrdersLink)
 				.HasForeignKey(oi => oi.ItemId);
-
-			
-				
 		}
-
 	}
-
-
 }

@@ -1,17 +1,14 @@
 using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema.GraphTypes
 {
 	[AddInDI, GraphType(typeof(EquipmentFailureReason))]
-	public class EquipmentFailureReasonGraph: EfObjectGraphType<CommonDbContext, EquipmentFailureReason>
+	public class EquipmentFailureReasonGraph : SimpleDictionaryRecordGraph<EamDbContext, EquipmentFailureReason>
 	{
-		public EquipmentFailureReasonGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
+		public EquipmentFailureReasonGraph(IEfGraphQLService<EamDbContext> graphQlService) :
 			base(graphQlService)
 		{
-			Field(x => x.Id).Description("Id"); 
-			Field(x => x.Name);
-			Field(x => x.ShortName);
-			Field(x => x.IsValid);
 		}
 	}
 }

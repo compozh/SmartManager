@@ -19,11 +19,10 @@
 </template>
 
 <script>
-
-const initialRowsPerFetch = 25;
+const initialRowsPerFetch = 25
 
 export default {
-  name: "eam-base-list-page",
+  name: 'eam-base-list-page',
   props: {
     constantFilter: Array,
     query: Object,
@@ -35,7 +34,7 @@ export default {
   apollo: {
     itemsCon: {
       query() {
-        return this.query;
+        return this.query
       },
       variables() {
         return {
@@ -43,10 +42,10 @@ export default {
           first: initialRowsPerFetch,
           where: this.where,
           orderBy: this.orderBy
-        };
+        }
       },
       update(data) {
-        return data.eam[this.queryName];
+        return data.eam[this.queryName]
       }
     }
   },
@@ -54,58 +53,58 @@ export default {
     return {
       itemsCon: {},
       rowsPerFetch: initialRowsPerFetch,
-      orderById: [{ path: "id" }]
-    };
+      orderById: [{ path: 'id' }]
+    }
   },
   computed: {
     where() {
-      const filters = this.constantFilter ? this.constantFilter : [];
+      const filters = this.constantFilter ? this.constantFilter : []
       if (this.search) {
         filters.push({
-          path: this.searchPath ? this.searchPath : "name",
-          comparison: "like",
+          path: this.searchPath ? this.searchPath : 'name',
+          comparison: 'like',
           value: `%${this.search}%`
-        });
+        })
       }
-      return filters;
+      return filters
     },
     orderBy() {
-      return this.constantOrderBy ? this.constantOrderBy : this.orderById;
+      return this.constantOrderBy ? this.constantOrderBy : this.orderById
     },
     search() {
-      return this.$store.getters["eam/search"];
+      return this.$store.getters['eam/search']
     },
     items() {
       return this.itemsCon && this.itemsCon.edges
         ? this.itemsCon.edges.map(i => i.node)
-        : [];
+        : []
     },
     itemsAfter() {
       return this.itemsCon && this.itemsCon.pageInfo
         ? this.itemsCon.pageInfo.endCursor
-        : null;
+        : null
     },
     groupedItems() {
       if (!this.items) {
-        return [];
+        return []
       }
-      const groupingPath = this.groupingPath;
+      const groupingPath = this.groupingPath
       return this.items
         .map(item => {
-          return item[groupingPath] ? item[groupingPath] : { id: "none" };
+          return item[groupingPath] ? item[groupingPath] : { id: 'none' }
         })
         .filter(function(value, index, self) {
           return (
             self.findIndex(val => {
-              return val.id == value.id;
+              return val.id == value.id
             }) === index
-          );
-        });
+          )
+        })
     }
   },
   watch: {
-    "$apollo.loading"(value) {
-      this.$store.commit("eam/setLoading", value);
+    '$apollo.loading'(value) {
+      this.$store.commit('eam/setLoading', value)
     }
   },
   methods: {
@@ -123,43 +122,46 @@ export default {
             orderBy: this.orderBy
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            const newEdges = fetchMoreResult.eam[this.queryName].edges;
-            const pageInfo = fetchMoreResult.eam[this.queryName].pageInfo;
-            const totalCount = fetchMoreResult.eam[this.queryName].totalCount;
+            const newEdges = fetchMoreResult.eam[this.queryName].edges
+            const pageInfo = fetchMoreResult.eam[this.queryName].pageInfo
+            const totalCount = fetchMoreResult.eam[this.queryName].totalCount
 
             const res = {
               __typename: previousResult.eam.__typename
-            };
+            }
             res[this.queryName] = {
               __typename: previousResult.eam[this.queryName].__typename,
               edges: [...previousResult.eam[this.queryName].edges, ...newEdges],
               totalCount,
               pageInfo
-            };
+            }
             return {
               eam: res
-            };
+            }
           }
-        });
+        })
         if (this.rowsPerFetch < 500) {
-          this.rowsPerFetch *= 2;
+          this.rowsPerFetch *= 2
         }
+      }
+    },
+    onScroll() {      
+      let bottomOfWindow =
+        document.documentElement.scrollTop + window.innerHeight >
+        0.8 * document.documentElement.offsetHeight
+
+      if (bottomOfWindow && !this.$apollo.loading) {
+        this.fetchOnScroll()
       }
     }
   },
-  mounted() {
-    const that = this;
-    window.onscroll = () => {
-      let bottomOfWindow =
-        document.documentElement.scrollTop + window.innerHeight >
-        0.8 * document.documentElement.offsetHeight;
-
-      if (bottomOfWindow && !this.$apollo.loading) {
-        that.fetchOnScroll();
-      }
-    };
+  mounted() {    
+    window.addEventListener('scroll', this.onScroll, false)
+  },
+  destroyed() {    
+    window.removeEventListener('scroll', this.onScroll, false)
   }
-};
+}
 </script>
 
 <style>

@@ -1,4 +1,5 @@
-using ItGraphQlSchema.Types.Common.Data;
+using ItGraphQlSchema.Types.EamSchema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ItGraphQlSchema.Types.Common
@@ -17,6 +18,11 @@ namespace ItGraphQlSchema.Types.Common
 			entity
 				.Property(w => w.IsActive)
 				.HasConversion(v => v ? 1 : 0, v => v == 1);
+			entity
+				.HasDiscriminator<string>("Alias")
+				.HasValue<EquipmentAttachment>("ROK")
+				.HasValue<WorkRequestAttachment>("RZA")
+				.HasValue<ResourceAttachment>("KSM");
 		}
 	}
 }

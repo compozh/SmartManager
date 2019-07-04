@@ -1,15 +1,8 @@
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ItGraphQlSchema.Types.Common
 {
@@ -24,13 +17,18 @@ namespace ItGraphQlSchema.Types.Common
 		IQueryable<Document> Documents { get; }
 		IQueryable<DocumentRow> DocumentRows { get; }
 		IQueryable<Image> Images { get; }
-		IQueryable<Attachment> Attachments { get; }
-
 		string GetResorces(string vals);
 	}
 
 	[AddInDI(typeof(ICommonDataProvider))]
-	public class CommonDataProvider : ICommonDataProvider
+	public class CommonDataProvider : CommonDataProvider<CommonDbContext>
+	{
+		public CommonDataProvider(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+		{
+		}
+	}
+	
+	public class CommonDataProvider<TDbContext> : ICommonDataProvider where TDbContext : CommonDbContext
 	{
 		protected readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -39,7 +37,7 @@ namespace ItGraphQlSchema.Types.Common
 			_httpContextAccessor = httpContextAccessor;
 		}
 		
-		public CommonDbContext DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<CommonDbContext>();
+		public TDbContext DbContext => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<TDbContext>();
 
 		public virtual IQueryable<Employee> Employees => DbContext.Employees;
 		public virtual IQueryable<Department> Departments  => DbContext.Departments;
@@ -53,8 +51,6 @@ namespace ItGraphQlSchema.Types.Common
 		public virtual IQueryable<DocumentRow> DocumentRows => DbContext.DocumentRows;
 		public virtual IQueryable<Image> Images => DbContext.Images;
 		
-		public virtual IQueryable<Attachment> Attachments => DbContext.Attachments;
-
 		public string GetResorces(string nameValue)
 		{
 			var settings = new ConnectionSettings(new System.Uri("http://192.168.1.74:9200/"))

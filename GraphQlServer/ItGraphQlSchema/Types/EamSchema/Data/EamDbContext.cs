@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ItGraphQlSchema.Types
 {
-	public sealed partial class CommonDbContext
+	public class EamDbContext : CommonDbContext
 	{
 		public DbSet<WorkRequest> WorkRequests { get; set; }
 		public DbSet<WorkRequestCategory> WorkRequestCategories { get; set; }
@@ -25,5 +25,12 @@ namespace ItGraphQlSchema.Types
 		public DbSet<ConditionParameterToModelLink> ConditionParameterToModelLinks { get; set; }
 		public DbSet<ConditionParameterAdditionalData> ConditionParameterAdditionalData { get; set; }
 		public DbSet<ResponsibleSpecialist> ResponsibleSpecialists { get; set; }
+		public DbSet<EquipmentAttachment> EquipmentAttachments { get; set; }
+		public DbSet<WorkRequestAttachment> WorkRequestAttachments { get; set; }
+
+		public EamDbContext(DbContextOptions<EamDbContext> options) :
+			base(options)
+		{
+		}
 	}
 }
