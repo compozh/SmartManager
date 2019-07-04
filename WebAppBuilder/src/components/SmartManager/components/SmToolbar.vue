@@ -15,7 +15,7 @@
         flat
         solo
         clearable
-        label="Search"
+        label="Поиск"
         prepend-inner-icon="search"
         v-model.trim="search"
       ></v-text-field>
