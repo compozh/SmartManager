@@ -1,18 +1,14 @@
 using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common;
 
 namespace ItGraphQlSchema.Types.EamSchema
 {
 	[AddInDI, GraphType(typeof(WorkRequestRepairType))]
-	public class WorkRequestRepairTypeGraph: EfObjectGraphType<CommonDbContext, WorkRequestRepairType>
+	public class WorkRequestRepairTypeGraph: SimpleDictionaryRecordGraph<EamDbContext, WorkRequestRepairType>
 	{
-		public WorkRequestRepairTypeGraph(IEfGraphQLService<CommonDbContext> graphQlService) :
+		public WorkRequestRepairTypeGraph(IEfGraphQLService<EamDbContext> graphQlService) :
 			base(graphQlService)
 		{
-			Field(x => x.Id).Description("Id"); 
-			Field(x => x.Name);
-			Field(x => x.ShortName);
-			Field(x => x.IsValid);
-			
 			AddNavigationListField(name: "workRequests",resolve: context => context.Source.WorkRequests);
 			AddNavigationConnectionField(name: "workRequestsConnection",
 				resolve: context => context.Source.WorkRequests, includeNames: new[] {"WorkRequests"});

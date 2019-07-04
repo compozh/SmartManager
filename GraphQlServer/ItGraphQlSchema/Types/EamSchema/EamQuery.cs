@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GraphQL.EntityFramework;
+using ItGraphQlSchema.Types.Common;
 using ItGraphQlSchema.Types.EamSchema;
 
 namespace ItGraphQlSchema.Types
@@ -7,9 +9,12 @@ namespace ItGraphQlSchema.Types
 	[AddInDI]
 	public class EamQuery : QueryGraphType<CommonDbContext>
 	{
+		public static readonly List<string> SupportedImageTypes = new List<string>
+			{"jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF"};
+		
 		private readonly IEamDataProvider _dataProvider;
 
-		public EamQuery(IEfGraphQLService<CommonDbContext> efGraphQlService, IEamDataProvider dataProvider) :
+		public EamQuery(IEfGraphQLService<CommonDbContext> efGraphQlService, IEamDataProvider dataProvider, ICommonDataProvider commonDataProvider) :
 			base(efGraphQlService)
 		{
 			_dataProvider = dataProvider;
@@ -58,18 +63,12 @@ namespace ItGraphQlSchema.Types
 			AddQueryField(name: "measurementUnits",resolve: context => _dataProvider.MeasurementUnits);
 			AddQueryConnectionField(name: "measurementUnitsConnection",resolve: context => _dataProvider.MeasurementUnits);
 			
-			AddQueryField(name: "attachments", resolve:
-				context => context.Arguments.ContainsKey("id")
-							|| context.Arguments.ContainsKey("ids")
-							|| context.Arguments.ContainsKey("where")
-					? _dataProvider.Attachments
-					: _dataProvider.Attachments.Take(30));
-			AddQueryConnectionField(name: "attachmentsConnection", resolve:
-				context => context.Arguments.ContainsKey("first")
-							|| context.Arguments.ContainsKey("ids")
-							|| context.Arguments.ContainsKey("where")
-					? _dataProvider.Attachments
-					: _dataProvider.Attachments.Take(30));
+			AddQueryField(name: "equipmentAttachments", resolve:
+				context =>  _dataProvider.EquipmentAttachments);
+			AddQueryField(name: "resourceAttachments", resolve:
+				context =>  _dataProvider.ResourceAttachments);
+			AddQueryField(name: "workRequestAttachments", resolve:
+				context =>  _dataProvider.WorkRequestAttachments.Where(a => !string.IsNullOrEmpty(a.Key)));
 		}
 	}
 }

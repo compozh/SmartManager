@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 
@@ -42,6 +42,14 @@ namespace ItGraphQlSchema.Types.EamSchema
 			AddNavigationField(name: "equipment", resolve: context => context.Source.Equipment);
 			AddNavigationField(name: "equipmentModel", resolve: context => context.Source.EquipmentModel);
 			AddNavigationField(name: "technicalPlace",resolve: context => context.Source.TechnicalPlace);
+			
+			AddNavigationListField(name: "attachments",resolve: context => context.Source.Attachments);
+			AddNavigationListField(name: "images",
+				resolve: context =>
+					context.Source.Attachments.Where(a => EamQuery.SupportedImageTypes.Contains(a.FileExtension)),
+				includeNames: new[] {"Attachments"});
+			
+			Field("imagesCount", x => x.Attachments.Count(a => EamQuery.SupportedImageTypes.Contains(a.FileExtension)));
 		}
 	}
 }

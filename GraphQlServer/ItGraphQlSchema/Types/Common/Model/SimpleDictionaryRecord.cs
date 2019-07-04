@@ -3,7 +3,7 @@
 namespace ItGraphQlSchema.Types.Common
 {
 	[Table("SP2")]
-	public class SimpleDictionaryRecord
+	public abstract class SimpleDictionaryRecord
 	{
 		[Column("KOD_C")]
 		public string Id { get; set; }
