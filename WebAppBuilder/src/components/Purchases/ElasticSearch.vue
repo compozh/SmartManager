@@ -102,7 +102,8 @@ import Axios from "axios";
             }
         }
     }
-</script>
+</script> 
+
 
 <style>
     .highlit-elastic {
@@ -113,7 +114,7 @@ import Axios from "axios";
     }
 </style>
 
-<style lang="scss" scoped>
+<style scoped>
     .subcaption {
         font-size: small;
         color: darkgray;
