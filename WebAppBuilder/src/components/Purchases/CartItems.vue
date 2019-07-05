@@ -39,7 +39,7 @@
             <item-picture  entityName="resources" id="" height="100px" width="100px"/>
               <!-- Заголовок, имя ресурса -->
             <v-flex xl11>
-              <text-area-with-lock-edit :item="cartItem" fieldName="resourceName" labelName="Наименование" disabled="true" />
+              <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" disabled="true" />
             </v-flex>
           </v-flex>
 
@@ -50,15 +50,15 @@
 
                 <!-- Количество и ЕИ -->
                 <v-layout align-start>
-                    <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeQuantity(cartItem, qt)" />
+                    <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
                     &nbsp;&nbsp;&nbsp;
-                    <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeMeasurement(cartItem, m)" />
+                    <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeCartItem(cartItem, m)" />
                 </v-layout>
 
                 <!-- Дата поставки -->
                 <v-layout align-start>
                   <v-flex>
-                      <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" label="Дата поставки"  @onChangeValue="(d)=> mutationChangeDate(cartItem, d)"/>
+                      <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" label="Дата поставки"  @onChangeValue="(d)=> mutationChangeCartItem(cartItem, d)"/>
                   </v-flex>
                 </v-layout>
 
@@ -77,6 +77,7 @@ import Axios from "axios";
 import purchasesSchemaAxios from "./BaseFunctions";
 import RemoveButton from "./SimpleComponents/RemoveButton.vue"
 import ModalWindowOrderCreation from "./SimpleComponents/ModalWindowOrderCreation.vue"
+import { debug } from 'util';
 export default {
     name: "cart-list",
     props: ["cartlist"],
@@ -136,7 +137,7 @@ export default {
         }
       },
       
-      mutationChangeQuantity(item, qt){
+      mutationChangeCartItem(item, qt){
         const q = `
         mutation($item: CartInput!){
           purchasesMutation{
@@ -154,52 +155,21 @@ export default {
           }
         }`
         var par = this.getCartInputTypeParam(item);//JSON.stringify();
+        debugger;
         console.log(par);
         purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
+      },            
+
+      _deleteCartView(id){
+        this.cartlist = _.remove(this.cartlist, function(n){
+          return n.id != id;
+        });
       },
 
-      mutationChangeMeasurement(item, m){
-        const q = `
-        mutation($item: CartInput!){
-          purchasesMutation{
-            updateCart(cart:$item){
-              id,
-              measurementUnit{
-                id,
-                name
-              },
-              quantity,
-              resourceId,
-              resourceName,
-              dateDelivery
-            }
-          }
-        }`
-        var par = this.getCartInputTypeParam(item);//JSON.stringify();
-        console.log(par);
-        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
-      },
-      
-      mutationChangeDate(item, d){
-        const q = `
-        mutation($item: CartInput!){
-          purchasesMutation{
-            updateCart(cart:$item){
-              id,
-              measurementUnit{
-                id,
-                name
-              },
-              quantity,
-              resourceId,
-              resourceName,
-              dateDelivery
-            }
-          }
-        }`
-        var par = this.getCartInputTypeParam(item);//JSON.stringify();
-        console.log(par);
-        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
+      _deleteAllView(ids){
+        debugger;
+        this.cartlist = [];
+        debugger;
       },
 
       mutationClearCarts(){
@@ -211,8 +181,11 @@ export default {
             }
           }
         }
-        `        
-        purchasesSchemaAxios(this, query, null).then(function(r){ console.log(r); })
+        `
+        let func = this._deleteAllView;  
+        purchasesSchemaAxios(this, query, null).then(function(r){
+          func();
+        })
 
       },
       
@@ -221,10 +194,14 @@ export default {
         mutation{
   	    purchasesMutation{
         deleteCart(cartId: "`+item.id+`"){
-        id,quantity,resourceName}}}` 
-
-        purchasesSchemaAxios(this, query, null).then(function(r){ console.log(r); })
-      },
+        id}}}`         
+        
+        let func = this._deleteCartView;
+        purchasesSchemaAxios(this, query, null).then(function(r){
+          let id = r.data.data.purchasesMutation.deleteCart.id;
+          func(id);
+          console.log(r);}
+        )},
 
       mutationSubmit(){
 

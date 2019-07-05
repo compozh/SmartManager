@@ -26,6 +26,7 @@
             callBack(){
                 debugger;
                 this.disable = !this.disable;
+                this.$emit('click');
                 
             }
         }
