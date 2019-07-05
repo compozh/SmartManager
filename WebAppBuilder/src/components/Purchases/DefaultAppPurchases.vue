@@ -1,9 +1,9 @@
 <template>
   <v-app  id="inspire">
     <v-navigation-drawer fixed app v-model="drawer" :mini-variant.sync="mini">
-      <v-button @click.stop="mini = !mini" icon flat>
+      <v-btn @click.stop="mini = !mini" icon flat>
         <v-icon v-text="mini ? 'chevron_right' : 'chevron_left'" />
-      </v-button>
+      </v-btn>
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app color="white">
