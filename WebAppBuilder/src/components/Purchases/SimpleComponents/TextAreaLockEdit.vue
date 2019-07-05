@@ -24,6 +24,7 @@
         },
         methods:{
             callBack(){
+                debugger;
                 this.disable = !this.disable;
                 
             }

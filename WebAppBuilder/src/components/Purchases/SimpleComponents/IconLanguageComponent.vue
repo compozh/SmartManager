@@ -2,7 +2,7 @@
     <div >
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" flat icon>
+            <v-btn class="flag_button" v-on="on" flat icon>
                 <country-flag :country='curentLanguage' size='normal'/>
             </v-btn>
           </template>
@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .v-btn__content{
+    .flag_button{
         height: inherit;
     }
     /* Отступ от флагов */
