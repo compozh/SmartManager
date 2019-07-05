@@ -4,21 +4,22 @@
       <div v-if="isOpen">
         <div class="overlay" @click.self="isOpen = false;">
           <div class="modal">
-            <h1>Modal heading</h1>
-            <p>This my first modal using vue.js</p>
+            <v-layout column>
+              <v-layout row>
+                <input type="text"/>
+              </v-layout>
+            </v-layout>
           </div>
         </div>
       </div>
     </transition>
-    <button @click="isOpen = !isOpen;">
-      {{ isOpen ? "Close" : "Open" }} modal
-    </button>
+    <v-btn block outline round large color="success" @click="isOpen = !isOpen;"> Сформировать заказ</v-btn>
   </div>
 </template>
 
 <script>
 export default {
-  name: "modalWindowOrderCreation",
+  name: "btn-modal-window-order-creation",
   data: function() {
     return {
       isOpen: false
@@ -51,13 +52,6 @@ export default {
 .fadeIn-leave-active.modal {
   transform: scale(1.1);
 }
-button {
-  padding: 7px;
-  margin-top: 10px;
-  background-color: green;
-  color: white;
-  font-size: 1.1rem;
-}
 
 .overlay {
   position: fixed;
@@ -71,5 +65,21 @@ button {
   background: #00000094;
   z-index: 999;
   transition: opacity 0.2s ease;
+}
+
+.resource-caption {
+    display: flex;
+    text-align: left;
+    padding: 10px;
+}
+.resource-group-text{
+  background-color: blanchedalmond
+}
+.card-actions-elements{
+  inline-size: 20em
+}
+.rounded-card{
+    border-radius:20px;
+    margin: 5px;
 }
 </style>

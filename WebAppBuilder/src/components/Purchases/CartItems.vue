@@ -1,9 +1,13 @@
 <template>
   <v-layout column>
     <v-layout row>
-      <v-btn block outline round large color="success" :disabled="!cartlist" @click="mutationSubmit" >Сформировать заказ</v-btn>
-      &nbsp;
-      <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
+      <v-flex sm6>
+        <btn-modal-window-order-creation/>
+      </v-flex>
+      <!--<v-btn block outline round large color="success" :disabled="!cartlist" @click="mutationSubmit" >Сформировать заказ</v-btn>-->
+      <v-flex sm6>
+        <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
+      </v-flex>
     </v-layout>
     <div v-if="cartlist" >
       <v-card v-for="cartItem in cartlist" :key="cartItem.id" class="rounded-card" >
@@ -199,9 +203,8 @@ export default {
         let func = this._deleteCartView;
         purchasesSchemaAxios(this, query, null).then(function(r){
           let id = r.data.data.purchasesMutation.deleteCart.id;
-          func(id);
-          console.log(r);}
-        )},
+          func(id);})
+      },
 
       mutationSubmit(){
 
