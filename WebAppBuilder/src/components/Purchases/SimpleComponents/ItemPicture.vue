@@ -4,12 +4,13 @@
         <v-icon v-text="'photo_camera'" :size="height"/>
     </div>
     <div v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
-       <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover">
+       <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover" :height="height" :width="width">
             <v-carousel-item
                 v-for="(item, i) in items"
                 :key="i"
-                :src="item"
-                :style="`width: ${width}; height: ${height};`"
+                :src="item" 
+                :height="height" 
+                :width="width"
                 transition="fade-transition"
                 reverse-transition="fade-transition"
             />
@@ -79,7 +80,7 @@
     display: flex;
     justify-self: center;
 }
-.icon-frame >>> .v-carousel{
+.v-carousel{
     box-shadow: none;
 }
 </style>

@@ -35,7 +35,10 @@
 </template>
 
 <script>
-import Axios from "axios";
+    import {PurchasesApi} from "./api/purchasesApi";
+    
+    const api = new PurchasesApi();
+
 
     export default {
         name:"elastic-search",
@@ -69,21 +72,12 @@ import Axios from "axios";
                 // Simulated ajax query
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
-                Axios({
-                    method: 'POST',
-                    url: myConfig.GrapgQlUrl+'api/graphql',
-                    withCredentials:true,
-                    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
-                    data: { 
-                        SchemaName:'PurchasesSchema', 
-                        query: ` {purchases{elasticResourceNameSearch(name:"${v}")}}`
-                        //query: `{ purchases { resources (name:"${v}"){fullName,id}}}`
-                    } 
-                }).then(resp => {
-            // тут обработка результата
-                    //debugger;
-                    //console.log( resp.data );
-                    this.items = _.map(JSON.parse(resp.data.data.purchases.elasticResourceNameSearch), function (item) 
+                   api.elasticSearch(v).then(this.elasticCallback);
+                this.loading = false
+                }, 0)
+            },
+            elasticCallback(resp){
+                    this.items = _.map(JSON.parse(resp.data.purchases.elasticResourceNameSearch), function (item) 
                     { 
                         var ret = { id : item.Id };
                         var h = item.Highlights;
@@ -93,13 +87,7 @@ import Axios from "axios";
                         return ret;
                     });
                     console.log(this.items);
-                },
-                resp=> {
-                    debugger;
-                });
-                this.loading = false
-                }, 0)
-            }
+                }
         }
     }
 </script> 
@@ -114,7 +102,13 @@ import Axios from "axios";
     }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
+    >>>.highlit-elastic {
+        display: inline-flex;
+        background-color: antiquewhite;
+        font-weight: 500;
+        padding: 0px 3px 0px 3px;
+    }
     .subcaption {
         font-size: small;
         color: darkgray;

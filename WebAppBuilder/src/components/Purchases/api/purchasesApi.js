@@ -3,8 +3,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag'
 // Queries
-import resourcesGropsContents from './graphql/resourcesGropsContents.gql'
-import resourcesItemsContents from './graphql/resourcesItemsContents.gql'
+import resourcesGrops from './graphql/resourcesGrops.gql'
+import resources from './graphql/resources.gql'
+import elasticSearch from './graphql/elasticSearch.gql'
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
@@ -22,8 +23,13 @@ export class PurchasesApi {
   constructor() {}
 
   getImagesForCatalogueGroup(id) {
+    const FIELDS = gql`
+    fragment resourcesGroupsFields on ResourceGroup {
+      content
+    }
+  `;
     return client.query({
-      query: gql`query ($id: ID) ${resourcesGropsContents}`,
+      query: gql`query ($id: ID) ${resourcesGrops} ${FIELDS}`,
       variables: { id: id }
     })
     .then(result => result)
@@ -31,9 +37,23 @@ export class PurchasesApi {
   }
 
   getImagesForCatalogueItem(id){
+    const FIELDS = gql`
+    fragment resourcesFields on Resource {
+      content
+    }
+  `;
     return client.query({
-      query: gql`query ($id: ID) ${resourcesItemsContents}`,
+      query: gql`query ($id: ID) ${resources} ${FIELDS}`,
       variables: { id: id }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  elasticSearch(text){
+    return client.query({
+      query: gql`query ($name: String) ${elasticSearch}`,
+      variables: { name: text }
     })
     .then(result => result)
     .catch(error => console.log(error.message))

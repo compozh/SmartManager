@@ -1,8 +1,7 @@
 {
     purchases{
         items: resources(id:$id){
-        id,
-        content
+            ...resourcesFields
         }
     }
 }

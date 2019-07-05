@@ -1,8 +1,7 @@
 {
     purchases{
         items: resourcesGrops(id:$id){
-        id,
-        content
+            ...resourcesGroupsFields
         }
     }
 }
