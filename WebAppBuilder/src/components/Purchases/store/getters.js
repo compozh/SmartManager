@@ -1,17 +1,8 @@
 export default {
-  loading(state) {
-    return state.loading
+  getCartItems(state) {
+    return state.cartitems
   },
-  error(state) {
-    return state.error
-  },
-  menuMiniMode(state, commit) {
-    if (state.menuMiniMode === null) {
-      state.menuMiniMode = localStorage.getItem("purchasesMenuMiniMode") === 'true';
-    }
-    return state.menuMiniMode;
-  },
-  search(state) {
-    return state.search
+  getCartItemsLength(state) {
+    return state.cartitems.length > 0 ? state.cartitems.length.toString() : null;
   },
 }

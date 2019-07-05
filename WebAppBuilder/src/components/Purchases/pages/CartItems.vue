@@ -9,14 +9,14 @@
         <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
       </v-flex>
     </v-layout>
-    <div v-if="cartlist" >
-      <v-card v-for="cartItem in cartlist" :key="cartItem.id" class="rounded-card" >
+    <v-layout v-if="cartlist" column class>
+      <div v-for="cartItem in cartlist" :key="cartItem.id">
         <v-layout v-bind="cardBinding">
           <v-flex v-if="cartItem.resource" xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <remove-button-icon @click="mutationDeleteCart(cartItem)"/>
+            <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)"/>
               <!-- Картинка ресурса -->
-            <item-picture  entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+            <item-picture class="hidden-sm-and-down" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
               <!-- Заголовок, имя ресурса -->
             <v-flex xl11>
               <v-tooltip bottom>
@@ -38,9 +38,9 @@
 
           <v-flex v-else  xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <remove-button-icon @click="mutationDeleteCart(cartItem)" />
+            <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)" />
               <!-- Картинка ресурса -->
-            <item-picture  entityName="resources" id="" height="100px" width="100px"/>
+            <item-picture class="hidden-sm-and-down" entityName="resources" id="" height="100px" width="100px"/>
               <!-- Заголовок, имя ресурса -->
             <v-flex xl11>
               <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" disabled="true" />
@@ -49,29 +49,28 @@
 
           <v-flex xl3 lg3 md4 sm5 xs6>
             <!-- Основные параметры заказа -->
-            <v-card-actions>
-              <v-layout column card-actions-elements>
+            <v-layout column>
 
-                <!-- Количество и ЕИ -->
-                <v-layout align-start>
-                    <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
-                    &nbsp;&nbsp;&nbsp;
-                    <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeCartItem(cartItem, m)" />
-                </v-layout>
-
-                <!-- Дата поставки -->
-                <v-layout align-start>
-                  <v-flex>
-                      <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" label="Дата поставки"  @onChangeValue="(d)=> mutationChangeCartItem(cartItem, d)"/>
-                  </v-flex>
-                </v-layout>
-
+              <!-- Количество и ЕИ -->
+              <v-layout align-start>
+                  <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
+                  &nbsp;&nbsp;&nbsp;
+                  <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeCartItem(cartItem, m)" />
               </v-layout>
-            </v-card-actions>
+
+              <!-- Дата поставки -->
+              <v-layout align-start>
+                <v-flex>
+                    <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" label="Дата поставки"  @onChangeValue="(d)=> mutationChangeCartItem(cartItem, d)"/>
+                </v-flex>
+              </v-layout>
+
+            </v-layout>
           </v-flex>
         </v-layout>
-      </v-card>
-    </div>
+        <v-divider />
+      </div>
+    </v-layout>
   </v-layout>
 
 </template>
@@ -88,9 +87,6 @@ const api = new PurchasesApi();
 
 export default {
     name: "cart-list",
-    data:()=>({
-      cartlist: []
-    }),
     components:{
       RemoveButton,
       ModalWindowOrderCreation
@@ -101,6 +97,14 @@ export default {
         binding.column = !this.$vuetify.breakpoint.smAndUp
         return binding
       },
+      cartlist: {
+        get: function() {
+          return this.$store.getters["purchases/getCartItems"]
+        },
+        set: function(newVal){
+          this.$store.commit('purchases/setCartItems', newVal)
+        }
+      }
     },
     filters:{
       truncate: (text, length, clamp) => {
