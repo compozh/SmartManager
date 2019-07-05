@@ -1,9 +1,12 @@
 <template>
   <v-app  id="inspire">
-    <v-navigation-drawer fixed app v-model="drawer" >
+    <v-navigation-drawer fixed app v-model="drawer" :mini-variant.sync="mini">
+      <v-button @click.stop="mini = !mini" icon flat>
+        <v-icon v-text="mini ? 'chevron_right' : 'chevron_left'" />
+      </v-button>
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
-    <v-toolbar app color="cyan" dark>
+    <v-toolbar app color="white">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
       <router-view name="toolbar"/>
@@ -29,7 +32,8 @@ export default {
   name: "default-app-purchases",
   data() {
     return {
-      drawer: false
+      drawer: false,
+      mini: false,
     };
   },
   components:{
@@ -37,6 +41,23 @@ export default {
   },
   computed:{
   },
-  props: ["toolbarTitle"]
+  props: ["toolbarTitle"],
+  methods:{
+    changeDrawer(){
+      if (this.drawer && !this.mini)
+      {
+        this.mini = true;
+      } 
+      else  if (this.drawer && this.mini)
+      {
+        this.drawer = false;
+      } 
+      else if(!this.drawer)
+      {
+        this.mini = true;
+        this.drawer = true;
+      }
+    }
+  }
 };
 </script>
