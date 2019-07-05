@@ -33,16 +33,9 @@ export default {
         return{
             arrayCountryAndFlag:[],
             dictionaryLanguage :[
-                { name: "Беларуская", flag: "be", key: "BE" },
-                { name: "Čeština", flag: "cz", key: "CS" },
                 { name: "English", flag: "gb", key: "EN" },
-                { name: "Eesti", flag: "ee", key: "ET" },
-                { name: "Iran", flag: "ir", key: "FA" },
-                { name: "Magyar", flag: "hu", key: "HU" },
-                { name: "Polski", flag: "pl", key: "PL" },
                 { name: "Русский", flag: "ru", key: "RU" },
                 { name: "Українська", flag: "ua", key: "UK" },
-                { name: "Chinese", flag: "cn", key: "ZH" },
             ],
             curlanguage : localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : "Русский"
         }

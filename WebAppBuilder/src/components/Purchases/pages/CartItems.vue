@@ -14,11 +14,17 @@
         <v-layout v-bind="cardBinding">
           <v-flex v-if="cartItem.resource" xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)"/>
-              <!-- Картинка ресурса -->
-            <item-picture class="hidden-sm-and-down" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+            <v-layout>
+              <v-flex>
+                <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)"/>
+              </v-flex>
+                <!-- Картинка ресурса -->
+              <v-flex>
+                <item-picture class="hidden-sm-and-down" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+              </v-flex>
+            </v-layout>
               <!-- Заголовок, имя ресурса -->
-            <v-flex xl11>
+            <v-flex xs11>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <span v-on="on">
@@ -38,11 +44,17 @@
 
           <v-flex v-else  xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)" />
-              <!-- Картинка ресурса -->
-            <item-picture class="hidden-sm-and-down" entityName="resources" id="" height="100px" width="100px"/>
+            <v-layout>
+              <v-flex>
+                <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)" />
+              </v-flex>
+                <!-- Картинка ресурса -->
+              <v-flex>
+                <item-picture class="hidden-sm-and-down" entityName="resources" id="" height="100px" width="100px"/>
+              </v-flex>
+            </v-layout>
               <!-- Заголовок, имя ресурса -->
-            <v-flex xl11>
+            <v-flex xs11>
               <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" disabled="true" />
             </v-flex>
           </v-flex>

@@ -4,7 +4,7 @@
       <v-btn @click.stop="mini = !mini" icon flat>
         <v-icon v-text="mini ? 'chevron_right' : 'chevron_left'" />
       </v-btn>
-      <router-view name="navigation-drawer"/>
+      <purchase-menu :mini="mini" name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app color="white">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -26,7 +26,7 @@
 
 <script>
 // @ is an alias to /src
-import IconLanguageComponent from "./SimpleComponents/IconLanguageComponent.vue"
+import IconLanguageComponent from "./components/IconLanguageComponent.vue"
 
 export default {
   name: "default-app-purchases",
