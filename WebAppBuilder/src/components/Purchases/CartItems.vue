@@ -3,14 +3,14 @@
     <v-layout row>
       <v-btn block outline round large color="success" :disabled="!cartlist" @click="mutationSubmit" >Сформировать заказ</v-btn>
       &nbsp;
-      <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCart" >Очистить корзину</v-btn>
+      <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
     </v-layout>
     <div v-if="cartlist" >
       <v-card v-for="cartItem in cartlist" :key="cartItem.id" class="rounded-card" >
         <v-layout v-bind="cardBinding">
           <v-flex v-if="cartItem.resource" xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <remove-button-icon @click="removeCartItem(cartItem)"/>
+            <remove-button-icon @click="mutationDeleteCart(cartItem)"/>
               <!-- Картинка ресурса -->
             <item-picture  entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
               <!-- Заголовок, имя ресурса -->
@@ -34,7 +34,7 @@
 
           <v-flex v-else  xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <remove-button-icon @click="removeCartItem(cartItem)" />
+            <remove-button-icon @click="mutationDeleteCart(cartItem)" />
               <!-- Картинка ресурса -->
             <item-picture  entityName="resources" id="" height="100px" width="100px"/>
               <!-- Заголовок, имя ресурса -->
@@ -76,11 +76,13 @@
 import Axios from "axios";
 import purchasesSchemaAxios from "./BaseFunctions";
 import RemoveButton from "./SimpleComponents/RemoveButton.vue"
+import ModalWindowOrderCreation from "./SimpleComponents/ModalWindowOrderCreation.vue"
 export default {
     name: "cart-list",
     props: ["cartlist"],
     components:{
-      RemoveButton
+      RemoveButton,
+      ModalWindowOrderCreation
     },
     computed:{
       cardBinding() { 
@@ -120,11 +122,12 @@ export default {
         }
         return f;
       },
+
       getCartInputTypeParam(cartItem){
         return {
           item:	{
             id:                 cartItem.id,
-            resourceId:         cartItem.resource.id,
+            resourceId:         cartItem.resource===null ? null : cartItem.resource.id,
             measurementUnitId:  cartItem.measurementUnit.id,
             resourceName:       cartItem.resourceName,
             quantity:           cartItem.quantity,
@@ -132,9 +135,8 @@ export default {
           }
         }
       },
+      
       mutationChangeQuantity(item, qt){
-        //TODO call mutations
-
         const q = `
         mutation($item: CartInput!){
           purchasesMutation{
@@ -154,19 +156,76 @@ export default {
         var par = this.getCartInputTypeParam(item);//JSON.stringify();
         console.log(par);
         purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
-        
       },
+
       mutationChangeMeasurement(item, m){
-        //TODO call mutations
-        console.log(m)
+        const q = `
+        mutation($item: CartInput!){
+          purchasesMutation{
+            updateCart(cart:$item){
+              id,
+              measurementUnit{
+                id,
+                name
+              },
+              quantity,
+              resourceId,
+              resourceName,
+              dateDelivery
+            }
+          }
+        }`
+        var par = this.getCartInputTypeParam(item);//JSON.stringify();
+        console.log(par);
+        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
       },
+      
       mutationChangeDate(item, d){
-        //TODO call mutations
-        console.log(`${item.id} - ${d}`)
+        const q = `
+        mutation($item: CartInput!){
+          purchasesMutation{
+            updateCart(cart:$item){
+              id,
+              measurementUnit{
+                id,
+                name
+              },
+              quantity,
+              resourceId,
+              resourceName,
+              dateDelivery
+            }
+          }
+        }`
+        var par = this.getCartInputTypeParam(item);//JSON.stringify();
+        console.log(par);
+        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
       },
-      mutationClearCart(){
+
+      mutationClearCarts(){
+        const query = `
+          mutation{
+          purchasesMutation{
+          deleteAllCarts{
+          id,quantity,resourceName
+            }
+          }
+        }
+        `        
+        purchasesSchemaAxios(this, query, null).then(function(r){ console.log(r); })
 
       },
+      
+      mutationDeleteCart(item){
+        const query = `
+        mutation{
+  	    purchasesMutation{
+        deleteCart(cartId: "`+item.id+`"){
+        id,quantity,resourceName}}}` 
+
+        purchasesSchemaAxios(this, query, null).then(function(r){ console.log(r); })
+      },
+
       mutationSubmit(){
 
       }
