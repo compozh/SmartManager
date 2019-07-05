@@ -78,13 +78,19 @@
 
 <script>
 import Axios from "axios";
-import purchasesSchemaAxios from "./BaseFunctions";
-import RemoveButton from "./SimpleComponents/RemoveButton.vue"
-import ModalWindowOrderCreation from "./SimpleComponents/ModalWindowOrderCreation.vue"
+import purchasesSchemaAxios from "../api/BaseFunctions";
+import {PurchasesApi} from "../api/purchasesApi";
+import RemoveButton from "../components/RemoveButton.vue"
+import ModalWindowOrderCreation from "../components/ModalWindowOrderCreation.vue"
 import { debug } from 'util';
+
+const api = new PurchasesApi();
+
 export default {
     name: "cart-list",
-    props: ["cartlist"],
+    data:()=>({
+      cartlist: []
+    }),
     components:{
       RemoveButton,
       ModalWindowOrderCreation
@@ -127,7 +133,6 @@ export default {
         }
         return f;
       },
-
       getCartInputTypeParam(cartItem){
         return {
           item:	{
@@ -140,7 +145,6 @@ export default {
           }
         }
       },
-      
       mutationChangeCartItem(item, qt){
         const q = `
         mutation($item: CartInput!){
@@ -163,19 +167,16 @@ export default {
         console.log(par);
         purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
       },            
-
       _deleteCartView(id){
         this.cartlist = _.remove(this.cartlist, function(n){
           return n.id != id;
         });
       },
-
       _deleteAllView(ids){
         debugger;
         this.cartlist = [];
         debugger;
       },
-
       mutationClearCarts(){
         const query = `
           mutation{
@@ -192,7 +193,6 @@ export default {
         })
 
       },
-      
       mutationDeleteCart(item){
         const query = `
         mutation{
@@ -205,10 +205,15 @@ export default {
           let id = r.data.data.purchasesMutation.deleteCart.id;
           func(id);})
       },
-
       mutationSubmit(){
 
+      },
+      getCartItemsResponseCallback(resp){
+        this.cartlist = resp.data.purchases.cartItems;
       }
+    },
+    created(){
+      api.getCartItems().then(this.getCartItemsResponseCallback)
     }
 };
 </script>

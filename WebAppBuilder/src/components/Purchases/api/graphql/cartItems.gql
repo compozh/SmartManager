@@ -1,0 +1,23 @@
+{
+  purchases {
+    cartItems {
+      id
+      resource {
+        id,
+        name
+        resourceGroup {
+          id,
+          name
+        }
+      },
+      resourceId,
+      resourceName,
+      quantity,
+      measurementUnit {
+        id,
+        name
+      },
+      dateDelivery
+    }
+  }
+}

@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 // Queries
 import resourcesGrops from './graphql/resourcesGrops.gql'
 import resources from './graphql/resources.gql'
+import cartItems from './graphql/cartItems.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -50,6 +51,15 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
+  getCartItems(){
+    return client.query({
+      query: gql`query ${cartItems}`,
+      variables: { }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
   elasticSearch(text){
     return client.query({
       query: gql`query ($name: String) ${elasticSearch}`,
@@ -58,4 +68,6 @@ export class PurchasesApi {
     .then(result => result)
     .catch(error => console.log(error.message))
   }
+
+
 }

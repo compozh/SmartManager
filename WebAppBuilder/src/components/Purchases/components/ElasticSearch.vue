@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import {PurchasesApi} from "./api/purchasesApi";
+    import {PurchasesApi} from "../api/purchasesApi";
     
     const api = new PurchasesApi();
 

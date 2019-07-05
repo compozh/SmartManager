@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import purchasesSchemaAxios from "../BaseFunctions"
+    import purchasesSchemaAxios from "../api/BaseFunctions"
     export default {
         name: "measurement-autocomplete",
         props:{
