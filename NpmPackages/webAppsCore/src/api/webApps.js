@@ -1,6 +1,6 @@
 console.log('WebAppsCore is loaded!')
 
-let Vue = undefined;
+let Vue = undefined
 
 import _ from 'lodash'
 export class WebApps {
@@ -134,22 +134,11 @@ export class WebApps {
     }
 
     let componentsObject = {}
-    let componentsProperties = {}
 
     for (let index = 0; index < components.length; index++) {
       const component = components[index]
 
-      // компонент - обёртка
-      let comp = () => Vue.component('WebApps-rs-CommonComponent')().then(r => Vue.component('r', Vue.extend(r)))
-
-
-      componentsObject[component.NameInRoute || 'default'] = comp
-
-      // конвертируем компоненты из внутренного формата в стандартный формат vue
-      let innerComp = this.__createComponentObject(component)
-
-      // свойства компонента
-      componentsProperties[component.NameInRoute || 'default'] = { component: innerComp }
+      componentsObject[component.NameInRoute || 'default'] = this.__getInternalComponentDescription(component)
     }
 
     // Объект маршрута
@@ -158,9 +147,6 @@ export class WebApps {
       path: route.Path,
       // Компоненты в маршруте
       components: componentsObject,
-      // Свойства компонентов
-      props: componentsProperties,
-
       // Вложенные маршруты
       children: _.orderBy(route.Children || [], ['Sort']).map(r=>this.__generateRouteFromDescription(r,r.section)),
       // Метаинформация об уровне доступа и разделе приложения
@@ -200,6 +186,34 @@ export class WebApps {
     return innerComp
   }
 
+  // Генерируем компонент по его описанию
+  __getInternalComponentDescription(com) {
+
+    let t = this
+    return ({
+    //  Для динамического обновления данных при смене роутинга и обновлении компонента
+      beforeRouteUpdate(to, from, next) {
+        next()
+        for (var cur of  this.$children) {
+          if (cur.beforeRouteUpdate) {
+            cur.beforeRouteUpdate(to, from)
+          }
+        }
+      },
+      render(h) {
+      // приводим компонент к нужному формату:
+
+        let innerComp = t.__createComponentObject(com)
+
+        // отрисовка компонента
+        return h('WebApps-rs-CommonComponent', {
+          props: {
+            component: innerComp
+          }
+        })
+      }
+    })
+  }
 
   /**
    * Получить компонент - представляющий загруженное приложение

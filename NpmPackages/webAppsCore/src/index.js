@@ -43,10 +43,8 @@ export default {
     /** Регистрация асинхронных компонент без импорта */
     const registerComponents = function (context, set, prefix) {
       context.keys().forEach(function (key) {
-
         var name = path.basename(key)
         name = name.substring(0,name.lastIndexOf('.'))
-        console.log(`${_namespace}-${prefix}-${name}`);
         Vue.component(`${_namespace}-${prefix}-${name}`, () => loadModule().then(r => r.__private.components[set][key]))
       })
     }

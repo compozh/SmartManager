@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 const mutations = {
 
   /** Описание приложения */
@@ -9,7 +7,7 @@ const mutations = {
 
   /** Загрузка хранилища */
   setAppData(state, payload) {
-    Vue.set(state.appData, payload.key, payload.data)
+    state.appData = {...state.appData, [payload.key]: payload.data}
   }
 }
 
