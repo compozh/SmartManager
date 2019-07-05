@@ -1,5 +1,5 @@
 <template>
-    <pre>{{ sourceText }}</pre>
+    <span>{{ sourceText }}</span>
 </template>
 
 <script>
