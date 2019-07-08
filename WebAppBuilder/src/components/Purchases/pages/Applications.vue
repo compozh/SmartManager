@@ -1,28 +1,15 @@
 <template>
     <div v-if="applications">
-        <v-layout>
-            <v-flex />
-            <v-flex md2 xs3>
-                <v-layout row>
-                    <v-select 
-                        v-show="this.$vuetify.breakpoint.mdAndUp && currentViewComp.value=='row'" 
-                        :items="sizeItemsFltr()" 
-                        v-model="currentSizeComp" 
-                        return-object />
-                    &nbsp;
-                    <v-select 
-                        v-show="this.$vuetify.breakpoint.smAndUp" 
-                        :items="viewItems" 
-                        v-model="currentViewComp"
-                        return-object />
-                </v-layout>
-            </v-flex>
+        <v-layout row justify-end>
+            <v-btn icon v-show="this.$vuetify.breakpoint.smAndUp">
+                <v-icon v-text="rowView ? 'view_stream' : 'view_column'" @click="rowView = !rowView"/>
+            </v-btn>
         </v-layout>
-        <!-- Карточки v-bind="{ [`${viewType}`]: true }"-->
-        <v-layout v-bind="{ [`${currentViewComp.value}`]: true }" wrap justify-center>
+        <!-- Карточки -->
+        <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" wrap justify-center>
             <v-flex class="application-card"
                 v-for="application in getItemsOnPage()" :key="application.id" 
-                v-bind="{ [`xs${currentSizeComp.value}`]: true }" 
+                v-bind="{ [`xs${smallSize ? '5' : '3'}`]: true }" 
                 v-bind:pagination.sync="pagination"
                 v-touch="{
                             left: () => swipeLeft(application),
@@ -31,10 +18,6 @@
                 >
                 <router-link :to="{ name:'APPLICATION', params: {applicationId: application.id}}">
                     <v-card tile height="150px" >
-                        <!--v-progress-linear class="application-execution"
-                            :value="35" height="10"
-                            color="blue-grey"
-                            /-->
                         <esecute-stepper />
                         <v-card-title>
                             Номер: {{ application.number }} Дата: {{ application.date | formatDate }}
@@ -44,7 +27,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout justify-end>
-                                <favorite-btn :favKey="application.id" favType="application" />
+                                <favorite-btn :v-model="application" value="a"/>
                                 <chat-btn :chatKey="application.id" chatType="application" />
                             </v-layout>
                         </v-card-actions>
@@ -67,17 +50,8 @@ import moment from 'moment';
         name: "applications",
         props: ["applications"],
         data: () => ({
-            //applications : [],
-            viewItems: [
-                { value: "row",    text: "Плитки" },
-                { value: "column", text: "Таблица" }
-            ],
-            sizeItems: [
-                { value: "3", text: "Маленькие", itemsPerPage: 24, },
-                { value: "5", text: "Большие",   itemsPerPage: 14, }
-            ],
-            currentView: null,
-            currentSize: null,
+            rowView: true,
+            smallSize: true,
             pagination: {
                 page: 1
             }
@@ -95,39 +69,9 @@ import moment from 'moment';
                     return Math.ceil(this._props.applications.length / this.rowsPerPage);
                 }
             },
-            currentSizeComp:{
-                get() {
-                    if (this.currentSize== null)
-                    {
-                        this.currentSize = this.sizeItems[0];
-                    }
-                    if (this.$vuetify.breakpoint.smAndDown && this.currentSize != this.sizeItems[1]){
-                        this.currentSize = this.sizeItems[1];
-                    }
-                    return this.currentSize;
-                },
-                set(newVal) {
-                    this.currentSize = newVal; 
-                }
-            },
-            currentViewComp:{
-                get() {
-                    if (this.currentView == null)
-                    {
-                        this.currentView = this.viewItems[0];
-                    }
-                    if (this.$vuetify.breakpoint.xsOnly && this.currentView != this.viewItems[1]){
-                        this.currentView = this.viewItems[1];
-                    }
-                    return this.currentView;
-                },
-                set(newVal) {
-                    this.currentView = newVal; 
-                }
-            },
             rowsPerPage: {
                 get() {
-                    return this.currentView.value == "row" ? this.currentSizeComp.itemsPerPage : 18;
+                    return this.rowView ? 24 : 18;
                 }
             }
         },
