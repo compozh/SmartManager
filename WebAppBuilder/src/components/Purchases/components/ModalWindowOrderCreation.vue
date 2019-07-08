@@ -18,8 +18,29 @@
                   <v-text-field v-model="order.NDM" label="Номер документа" placeholder="NDM"/>
                 </v-flex>
                 <v-flex sm12 xs12>
+                  <v-dialog/>
+                </v-flex>
+                     <!--        
+                <v-flex sm12 xs12>
                   <v-text-field v-model="order.DDM" label="Дата документа" placeholder="DDM"/>
                 </v-flex>
+-->
+                <v-flex sm12 xs12>
+                  <div>
+                  <v-text-field label="Дата документа" readonly  class="date-input"
+                  append-icon="event"  @click:append="dialog = true"
+                  :value="order.DDM | formatDate"/>
+                  <v-dialog v-model="dialog" persistent>
+                    <v-date-picker v-model="order.DDM" no-title scrollable>
+                      <v-spacer></v-spacer>
+                    <v-btn flat color="primary" @click="dialog = false; callBack()">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+        
+                </div>
+                </v-flex>
+                
+                
                 <v-flex sm12 xs12>
                   <v-select v-model="order.DM1" label="Код" placeholder="DM1"></v-select>
                 </v-flex>
@@ -44,14 +65,16 @@
 </template>
 
 <script>
+import DateTextField from "../components/DateTextField.vue"
 export default {
   name: "btn-modal-window-order-creation",
   data: function() {
     return {
+      dialog: false,
       isOpen: false,
       order:{
         NDM:"",
-        DDM:"",
+        DDM: new Date().toISOString().substr(0, 10),
         DM1:"",
         DM2:"",
         Description:""
@@ -71,6 +94,9 @@ export default {
           }
         }
     },
+    callBack(){
+      this.$emit('onChangeValue', this.order.DDM)
+            },
     submitOrder(){
       debugger;
       let test = this.order;
@@ -81,6 +107,10 @@ export default {
 </script>
 
 <style>
+
+.v-dialog{
+  box-shadow: none;
+}
 .v-toolbar__content{
   padding-left: 0;
 }
