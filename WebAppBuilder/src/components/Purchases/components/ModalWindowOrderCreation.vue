@@ -4,11 +4,37 @@
       <div v-if="isOpen">
         <div class="overlay" @click.self="isOpen = false;">
           <div class="modal">
-            <v-layout column>
-              <v-layout row>
-                <input type="text"/>
+            <v-container>
+              <v-form title="Формирование заказа">
+              <v-layout row wrap>                
+                <v-flex sm12 xs12>
+                <v-toolbar color="white" flat>
+                  <v-btn class="test" @click.self="isOpen = false;" icon light>
+                    <v-icon class="test" @click.self="isOpen = false;" color="grey darken-2">arrow_back</v-icon>
+                    </v-btn>
+                </v-toolbar>
+                </v-flex>
+                <v-flex sm12 xs12>
+                  <v-text-field v-model="order.NDM" label="Номер документа" placeholder="NDM"/>
+                </v-flex>
+                <v-flex sm12 xs12>
+                  <v-text-field v-model="order.DDM" label="Дата документа" placeholder="DDM"/>
+                </v-flex>
+                <v-flex sm12 xs12>
+                  <v-select v-model="order.DM1" label="Код" placeholder="DM1"></v-select>
+                </v-flex>
+                <v-flex sm12 xs12>
+                  <v-select v-model="order.DM2"  label="Код" placeholder="DM2"></v-select>
+                </v-flex>
+                <v-flex sm12 xs12>
+                  <v-textarea v-model="order.Description" label="Описание"></v-textarea>
+                </v-flex>
+                <v-flex sm12 xs12>
+                  <v-btn @click="submitOrder()" block outline round color="success">Сформировать Заказ</v-btn>
+                </v-flex>
               </v-layout>
-            </v-layout>
+              </v-form>
+            </v-container>
           </div>
         </div>
       </div>
@@ -22,15 +48,45 @@ export default {
   name: "btn-modal-window-order-creation",
   data: function() {
     return {
-      isOpen: false
+      isOpen: false,
+      order:{
+        NDM:"",
+        DDM:"",
+        DM1:"",
+        DM2:"",
+        Description:""
+      }      
     };
-  }
+  },  
+
+  methods: {
+    getOrderInputObject(orderInput){
+      return {
+          order:	{
+            NDM: "",//cartItem.id,
+            DDM: "",
+            DM1: "",
+            DM2: "",
+            Description: ""
+          }
+        }
+    },
+    submitOrder(){
+      debugger;
+      let test = this.order;
+      //todo
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style>
+.v-toolbar__content{
+  padding-left: 0;
+}
+
 .modal {
-  width: 500px;
+  
   margin: 0px auto;
   padding: 20px;
   background-color: #fff;

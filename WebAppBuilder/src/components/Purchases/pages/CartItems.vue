@@ -61,7 +61,7 @@
 
           <v-flex xl3 lg3 md4 sm5 xs6>
             <!-- Основные параметры заказа -->
-            <v-layout column>
+            <v-layout class="layout_params" column>
 
               <!-- Количество и ЕИ -->
               <v-layout align-start>
@@ -82,6 +82,13 @@
         </v-layout>
         <v-divider />
       </div>
+    </v-layout>
+    <v-layout row>
+      <v-flex xs12 sm12 md6>          
+        <v-btn @click="mutationCreateCart" color="green" dark large fixed bottom right fab>
+          <v-icon>add</v-icon>
+        </v-btn>
+        </v-flex>
     </v-layout>
   </v-layout>
 
@@ -150,15 +157,25 @@ export default {
         return f;
       },
       getCartInputTypeParam(cartItem){
+        debugger;
         return {
           item:	{
             id:                 cartItem.id,
             resourceId:         cartItem.resource===null ? null : cartItem.resource.id,
             measurementUnitId:  cartItem.measurementUnit.id,
             resourceName:       cartItem.resourceName,
-            quantity:           cartItem.quantity,
+            quantity:           cartItem.quantity<1 ? 1 : cartItem.quantity,
             dateDelivery:       cartItem.dateDelivery
           }
+        }
+      },
+      // TODO
+      changeQuantity(cartItem, qt){
+        debugger;
+        if(qt <= 0){
+          alert("<1")
+        }else{
+          mutationChangeCartItem(cartItem)
         }
       },
       mutationChangeCartItem(item, qt){
@@ -222,7 +239,30 @@ export default {
           func(id);})
       },
       mutationSubmit(){
-
+      },
+      mutationCreateCart(){
+        const q = `
+        mutation{
+          purchasesMutation{
+            createCart{
+              id,resourceId,measurementUnit{id},resourceName,quantity,dateDelivery
+            }
+          }
+        }`
+        let cardlist_collection = this.cartlist;
+        purchasesSchemaAxios(this, q, null).then(function(r){
+          let response_data = r.data.data.purchasesMutation.createCart;
+          var cartItem = {
+            id:                 response_data.id,
+            resourceId:         response_data.resourceId,
+            measurementUnitId:  response_data.measurementUnit.id,
+            resourceName:       response_data.resourceName,
+            quantity:           response_data.quantity,
+            dateDelivery:       response_data.dateDelivery
+          }
+                    
+          cardlist_collection.push(cartItem);
+        })
       },
       getCartItemsResponseCallback(resp){
         this.cartlist = resp.data.purchases.cartItems;
@@ -235,6 +275,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.layout_params{
+  min-height: 160px;
+}
 .resource-caption {
     display: flex;
     text-align: left;
