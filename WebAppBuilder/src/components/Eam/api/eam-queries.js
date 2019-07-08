@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const ALL_EQUIPMENT = gql `
-query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+query equipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID], $search: String) {
   eam {
-    equipmentsConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
+    equipmentsConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
       edges {
         node {
           id
@@ -137,9 +137,9 @@ query equipment($id: ID) {
 `
 
 export const ALL_DOWNTIME = gql `
-query downtime($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID] ) {
+query downtime($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID], $search: String ) {
   eam {
-    downTimesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
+    downTimesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
       edges {
         node {
           id
@@ -185,9 +185,9 @@ query downtime($after: String, $first: Int, $where: [WhereExpressionGraph], $ord
 `
 
 export const ALL_WORK_REQUESTS = gql `
-query workRequest($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+query workRequest($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID], $search: String) {
   eam {
-    workRequestConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
+    workRequestConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
       edges {
         node {
           id
@@ -237,9 +237,9 @@ query workRequest($after: String, $first: Int, $where: [WhereExpressionGraph], $
 `
 
 export const ALL_INSPECTIONS = gql `
-query conditionParameterValues($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID] ) {
+query conditionParameterValues($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID], $search: String ) {
   eam {
-    conditionParameterValuesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
+    conditionParameterValuesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
       edges {
         node {
           id
@@ -291,6 +291,41 @@ query conditionParameterValues($after: String, $first: Int, $where: [WhereExpres
         startCursor
         endCursor
       }
+    }
+  }
+}
+`
+
+export const DIRECTIONS = gql`
+query directions($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    workRequestDirections(where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
+      isValid
+    }
+  }
+}
+`
+
+export const CATEGORIES = gql`
+query categories($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    workRequestCategories(where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
+      isValid
+    }
+  }
+}
+`
+
+export const EQUIPMENT_TYPES_SELECT = gql`
+query equipmentTypes($take:Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    equipmentTypes(take:$take, where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
     }
   }
 }

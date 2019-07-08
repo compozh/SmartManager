@@ -29,7 +29,8 @@ export default {
     queryName: String,
     searchPath: String,
     constantOrderBy: Array,
-    groupingPath: String
+    groupingPath: String,
+    isElasticSearch: Boolean
   },
   apollo: {
     itemsCon: {
@@ -41,7 +42,8 @@ export default {
           after: null,
           first: initialRowsPerFetch,
           where: this.where,
-          orderBy: this.orderBy
+          orderBy: this.orderBy,
+          search: this.isElasticSearch ? this.search : null
         }
       },
       update(data) {
@@ -59,7 +61,7 @@ export default {
   computed: {
     where() {
       const filters = this.constantFilter ? this.constantFilter : []
-      if (this.search) {
+      if (this.search && !this.isElasticSearch) {
         filters.push({
           path: this.searchPath ? this.searchPath : 'name',
           comparison: 'like',
@@ -119,7 +121,8 @@ export default {
             after: this.itemsAfter,
             first: this.rowsPerFetch,
             where: this.where,
-            orderBy: this.orderBy
+            orderBy: this.orderBy,
+            search: this.isElasticSearch ? this.search : null
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const newEdges = fetchMoreResult.eam[this.queryName].edges
