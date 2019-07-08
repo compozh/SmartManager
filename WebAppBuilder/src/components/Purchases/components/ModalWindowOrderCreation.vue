@@ -20,11 +20,6 @@
                 <v-flex sm12 xs12>
                   <v-dialog/>
                 </v-flex>
-                     <!--        
-                <v-flex sm12 xs12>
-                  <v-text-field v-model="order.DDM" label="Дата документа" placeholder="DDM"/>
-                </v-flex>
--->
                 <v-flex sm12 xs12>
                   <div>
                   <v-text-field label="Дата документа" readonly  class="date-input"
@@ -39,8 +34,6 @@
         
                 </div>
                 </v-flex>
-                
-                
                 <v-flex sm12 xs12>
                   <v-select v-model="order.DM1" label="Код" placeholder="DM1"></v-select>
                 </v-flex>
@@ -106,7 +99,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 
 .v-dialog{
   box-shadow: none;
