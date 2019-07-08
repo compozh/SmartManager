@@ -10,7 +10,7 @@ export const i18n = new VueI18n({
   }
 })
 i18n.Setlocalization = function(language) {
-  import(`../plugins.1/resources/${language}.json`).then(msg => {
+  import(`../plugins/resources/${language}.json`).then(msg => {
     i18n.setLocaleMessage(language, msg)
     i18n.locale = language
   })

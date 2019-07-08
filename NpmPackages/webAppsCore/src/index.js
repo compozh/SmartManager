@@ -10,6 +10,24 @@ import ModulesManager from '@it-enterprise/modules-manager'
 import Router from '@it-enterprise/routerCore'
 import storeModule from './store/index'
 
+import {ApolloClient} from 'apollo-client'
+import {HttpLink} from 'apollo-link-http'
+import {InMemoryCache} from 'apollo-cache-inmemory'
+import VueApollo from 'vue-apollo'
+
+//Cache implementation
+const cache = new InMemoryCache()
+const apolloClient = new ApolloClient({
+  link: new HttpLink({}),
+  cache,
+  connectToDevTools: true,
+})
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
+
 const loadModule = () => import('./interface')
 
 
@@ -20,6 +38,7 @@ const _namespace = 'WebApps'
 export default {
   install(Vue, params) {
     let { options, dependencies } = params || {}
+    Vue.use(VueApollo)
 
     if (!dependencies) {
       throw new Error('Зависимости должны быть переданы')
@@ -61,6 +80,7 @@ export default {
     const core = new WebApps(Vue, options, dependencies)
     dependencies.modulesManager.register(_namespace, () => Promise.resolve(core))
     Vue.prototype.$WebApps = core
+    Vue.prototype.$apolloProvider = apolloProvider
   }
 }
 

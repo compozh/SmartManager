@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import * as jsonpatcher from '../api/patching'
-import gql from 'graphql-tag'
 
 
 export default {
@@ -10,8 +9,6 @@ export default {
       routerParam: {}
     }
   },
-
-
 
 
   //////////////////////////////////////////////////
