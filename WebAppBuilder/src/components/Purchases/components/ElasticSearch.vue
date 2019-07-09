@@ -17,7 +17,8 @@
         >
             <template slot = "item" slot-scope="data">
                 <v-layout>
-                    <v-btn icon @click.stop="alert(data.item.caption)">
+                    <!--<v-btn icon @click.stop="alert(data.item.caption)">-->
+                        <v-btn icon @click="addToCartCall(data.item)">
                         <v-icon>add_shopping_cart</v-icon> 
                     </v-btn>
                     <v-layout column justify-start>
@@ -38,7 +39,6 @@
     import {PurchasesApi} from "../api/purchasesApi";
     
     const api = new PurchasesApi();
-
 
     export default {
         name:"elastic-search",
@@ -77,17 +77,21 @@
                 }, 0)
             },
             elasticCallback(resp){
-                    this.items = _.map(JSON.parse(resp.data.purchases.elasticResourceNameSearch), function (item) 
-                    { 
-                        var ret = { id : item.Id };
-                        var h = item.Highlights;
-                        ret.caption = h.n_res ? h.n_res.Highlights[0] : item.Source.FullName;
-                        ret.additionalCaption = h.nmat ? h.nmat.Highlights[0] : h.naimkm_s ? h.naimkm_s.Highlights[0] : h.n_res ? h.naimkm_s.Highlights[0] : "";
+                this.items = _.map(JSON.parse(resp.data.purchases.elasticResourceNameSearch), function (item) 
+                { 
+                    var ret = { id : item.Id };
+                    var h = item.Highlights;
+                    ret.caption = h.n_res ? h.n_res.Highlights[0] : item.Source.FullName;
+                    ret.additionalCaption = h.nmat ? h.nmat.Highlights[0] : h.naimkm_s ? h.naimkm_s.Highlights[0] : h.n_res ? h.naimkm_s.Highlights[0] : "";
                         
-                        return ret;
-                    });
-                    console.log(this.items);
-                }
+                    return ret;
+                });
+                console.log(this.items);
+            },
+            addToCartCall(item){
+                api.addToCartMutation(item);
+            }
+        
         }
     }
 </script> 

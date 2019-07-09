@@ -9,6 +9,9 @@ import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
 import masurementSearch from './graphql/masurementSearch.gql'
+import addToCart from './graphql/addToCart.gql'
+import store from '../../../store/index'
+
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
@@ -90,6 +93,27 @@ export class PurchasesApi {
     .then(result => result)
     .catch(error => console.log(error.message))
   }
+  
+  addToCartMutationCallback(result){
+    let response_data = result.data.purchasesMutation.addToCart;
+        var cartItem = {
+          id:                 response_data.id,
+          resourceId:         response_data.resourceId,
+          measurementUnitId:  response_data.measurementUnit.id,
+          resourceName:       response_data.resourceName,
+          quantity:           response_data.quantity,
+          dateDelivery:       response_data.dateDelivery
+        }
+        debugger;
+        store.commit('purchases/addCartItem', cartItem)
+  }
 
-
+  addToCartMutation(item){
+    return client.mutate({
+      mutation: gql`${addToCart}`,
+      variables: {resourceId: item.id}
+    })
+      .then(this.addToCartMutationCallback)
+      .catch(error => console.log(error.message))
+    }
 }
