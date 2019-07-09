@@ -18,11 +18,11 @@
     <div>
         <v-textarea 
             v-model="item[fieldName]" 
-            :disabled="disable" 
+            :disabled="disabled" 
         >
             <template v-slot:append>
                 <v-btn icon @click="callBack">
-                    <v-icon v-text="disable ? 'edit' : 'save'" />
+                    <v-icon v-text="disabled ? 'edit' : 'save'" />
                 </v-btn>
             </template>
         </v-textarea>

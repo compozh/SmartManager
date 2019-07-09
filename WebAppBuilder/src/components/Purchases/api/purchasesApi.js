@@ -7,6 +7,7 @@ import resourcesGrops from './graphql/resourcesGrops.gql'
 import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
+import masurementSearch from './graphql/masurementSearch.gql'
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
@@ -55,6 +56,22 @@ export class PurchasesApi {
     return client.query({
       query: gql`query ${cartItems}`,
       variables: { }
+    })
+    .then(result => 
+      result)
+    .catch(error => console.log(error.message))
+  }
+
+  getMeasurementUnits(txt){
+    const FIELDS = gql`
+    fragment measurementUnitFields on MeasurementUnitGraph {
+      id, name, fullName
+    }
+  `;
+    var v = { name: `%${txt}%` };
+    return client.query({
+      query: gql`query ($name: [String]) ${masurementSearch} ${FIELDS}`,
+      variables: v
     })
     .then(result => result)
     .catch(error => console.log(error.message))
