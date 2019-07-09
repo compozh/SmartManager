@@ -6,14 +6,10 @@
           <div class="modal">
             <v-container>
               <v-form title="Формирование заказа">
-              <v-layout row wrap>                
-                <v-flex sm12 xs12>
-                <v-toolbar color="white" flat>
-                  <v-btn class="test" @click.self="isOpen = false;" icon light>
-                    <v-icon class="test" @click.self="isOpen = false;" color="grey darken-2">arrow_back</v-icon>
-                    </v-btn>
-                </v-toolbar>
-                </v-flex>
+              <v-layout row wrap>        
+                  <v-btn  @click.self="isOpen = false;" icon light>
+                    <v-icon  @click.self="isOpen = false;" color="grey darken-2">arrow_back</v-icon>
+                  </v-btn>
                 <v-flex sm12 xs12>
                   <v-text-field v-model="order.NDM" label="Номер документа" placeholder="NDM"/>
                 </v-flex>
@@ -25,8 +21,8 @@
                   <v-text-field label="Дата документа" readonly  class="date-input"
                   append-icon="event"  @click:append="dialog = true"
                   :value="order.DDM | formatDate"/>
-                  <v-dialog v-model="dialog" persistent>
-                    <v-date-picker v-model="order.DDM" no-title scrollable>
+                  <v-dialog class="date-dialog" v-model="dialog" persistent>
+                    <v-date-picker class="date-dialog" v-model="order.DDM" no-title scrollable>
                       <v-spacer></v-spacer>
                     <v-btn flat color="primary" @click="dialog = false; callBack()">OK</v-btn>
                     </v-date-picker>
@@ -99,17 +95,15 @@ export default {
 };
 </script>
 
-<style scoped>
-
-.v-dialog{
+<style lang="scss">
+  .v-dialog{
   box-shadow: none;
-}
-.v-toolbar__content{
-  padding-left: 0;
-}
+  }
+</style>
 
-.modal {
-  
+<style lang="scss" scoped>
+
+.modal {  
   margin: 0px auto;
   padding: 20px;
   background-color: #fff;

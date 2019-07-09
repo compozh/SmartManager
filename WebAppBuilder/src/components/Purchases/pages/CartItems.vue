@@ -1,14 +1,14 @@
 <template>
-  <v-layout column>
+  <v-container fluid>
     <v-layout row>
       <v-flex sm6>
         <btn-modal-window-order-creation/>
-      </v-flex>
-      <!--<v-btn block outline round large color="success" :disabled="!cartlist" @click="mutationSubmit" >Сформировать заказ</v-btn>-->
+      </v-flex>     
       <v-flex sm6>
         <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
       </v-flex>
     </v-layout>
+    
     <v-layout v-if="cartlist" column class>
       <div v-for="cartItem in cartlist" :key="cartItem.id">
         <v-layout v-bind="cardBinding">
@@ -90,7 +90,7 @@
         </v-btn>
         </v-flex>
     </v-layout>
-  </v-layout>
+  </v-container>
 
 </template>
 
@@ -276,13 +276,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.v-dialog{
+  box-shadow: none !important;
+}
+
 .layout_params{
   min-height: 160px;
 }
 .resource-caption {
     display: flex;
     text-align: left;
-    padding: 10px;
+    //padding: 10px;
 }
 .resource-group-text{
   background-color: blanchedalmond
