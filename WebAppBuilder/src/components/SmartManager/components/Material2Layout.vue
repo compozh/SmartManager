@@ -121,6 +121,7 @@
       eventBus.$on('setMenuMiniMode', value => {
         this.mini = value
       })
+      this.$router.push({name:'SMARTMANAGERTASKS', params:{ foldercode: 'ALL' }})
     },
     beforeDestroy() {
       eventBus.$off('setMenuMiniMode')
