@@ -54,21 +54,16 @@
 
 <script>
   import {eventBus} from '../../../main'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'sm-folders',
-    //props: ["folders"],
-    data() {
-      return {
-        menuMiniMode: false
-      }
-    },
+    data: () => ({
+      menuMiniMode: false
+    }),
     computed: {
-      ...mapGetters({
-        loading: 'sm/loading',
-        folders: 'sm/folders'
-      })
+      folders() {
+        return this.$store.getters['sm/folders']
+      }
     },
     methods: {
       getFolders() {
