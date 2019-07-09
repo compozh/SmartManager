@@ -1,19 +1,17 @@
 <template>
     <v-layout row execute-breadcrumbs>
         <template v-for="(item, i) in items">
-            <v-flex :key="i" :class="`item ${i < current ? 'executed' : i === current ? 'current' : ''}`" >
-                <v-layout>
-                    <v-flex before grow>
-                        <v-divider />
-                    </v-flex>
-                    <v-flex curr shrink>
-                        <v-icon v-text="item !== current ? 'panorama_fish_eye' : 'local_shipping'" />
-                    </v-flex>
-                    <v-flex after grow>
-                        <v-divider />
-                    </v-flex>
-                </v-layout>
-            </v-flex>
+            <v-layout :key="i" :class="`item ${i < current ? 'executed' : i === current ? 'current' : ''}`" >
+                <v-flex before grow>
+                    <v-divider />
+                </v-flex>
+                <v-flex curr shrink>
+                    <v-icon v-text="item !== current ? 'panorama_fish_eye' : 'local_shipping'" />
+                </v-flex>
+                <v-flex after grow>
+                    <v-divider />
+                </v-flex>
+            </v-layout>
         </template>
     </v-layout>
 </template>
@@ -47,6 +45,7 @@ $color-complete: #87D37C !default;
         }
         hr{
             width: 100% !important;
+            margin-top: 12px;
         }
     }
 
