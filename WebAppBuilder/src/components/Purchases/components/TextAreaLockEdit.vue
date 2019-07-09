@@ -1,5 +1,4 @@
 <template>
-<v-container fluid> 
     <v-layout row>
         <v-flex sm11 xs11>
             <v-textarea
@@ -13,20 +12,6 @@
                 </v-btn>
         </v-flex>
     </v-layout>
-</v-container>
-<!--
-    <div>
-        <v-textarea 
-            v-model="item[fieldName]" 
-            :disabled="disabled" 
-        >
-            <template v-slot:append>
-                <v-btn icon @click="callBack">
-                    <v-icon v-text="disabled ? 'edit' : 'save'" />
-                </v-btn>
-            </template>
-        </v-textarea>
-    </div>-->
 </template>
 
 <script>
@@ -40,9 +25,10 @@
         },
         methods:{
             callBack(){
-                debugger;
-                this.disable = !this.disable;
-                this.$emit('click');
+                this.disabled = !this.disabled;
+                if(!this.disabled){
+                    this.$emit('click');
+                }
                 
             }
         }
