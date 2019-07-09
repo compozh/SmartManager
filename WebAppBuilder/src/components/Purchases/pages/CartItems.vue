@@ -12,19 +12,18 @@
     <v-layout v-if="cartlist" column class>
       <div v-for="cartItem in cartlist" :key="cartItem.id">
         <v-layout v-bind="cardBinding">
-          <v-flex v-if="cartItem.resource" xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
+          <v-flex xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
               <!-- Удалить -->
-            <v-layout>
-              <v-flex>
-                <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)"/>
+              <v-flex hidden-sm-and-down>
+                <remove-button-icon  @click="mutationDeleteCart(cartItem)"/>
               </v-flex>
-                <!-- Картинка ресурса -->
-              <v-flex>
-                <item-picture class="hidden-sm-and-down" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+              <!-- Картинка ресурса -->
+              <v-flex hidden-sm-and-down>
+                <item-picture entityName="resources" :id="cartItem.resource ? cartItem.resource.id : cartItem.id" height="100px" width="100px"/>
               </v-flex>
-            </v-layout>
               <!-- Заголовок, имя ресурса -->
-            <v-flex xs11>
+            <v-flex v-if="cartItem.resource" xs12>
+              <v-flex xs11>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <span v-on="on">
@@ -36,26 +35,14 @@
                 </template>
                 <span class="hidden-lg-and-up">
                   <span>{{cartItem.resource.name}}</span><br/>
-                  <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+                  <!-- <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/> -->
                 </span>
               </v-tooltip>
+              </v-flex>
+              <v-flex xs1 />
             </v-flex>
-          </v-flex>
-
-          <v-flex v-else  xl9 lg9 md8 sm7 xs6 align-center justify-start resource-caption>
-              <!-- Удалить -->
-            <v-layout>
-              <v-flex>
-                <remove-button-icon class="hidden-sm-and-down" @click="mutationDeleteCart(cartItem)" />
-              </v-flex>
-                <!-- Картинка ресурса -->
-              <v-flex>
-                <item-picture class="hidden-sm-and-down" entityName="resources" id="" height="100px" width="100px"/>
-              </v-flex>
-            </v-layout>
-              <!-- Заголовок, имя ресурса -->
-            <v-flex xs11>
-              <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" disabled="true" />
+            <v-flex v-else xs12>
+              <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" :disabled="true" />
             </v-flex>
           </v-flex>
 
@@ -65,9 +52,13 @@
 
               <!-- Количество и ЕИ -->
               <v-layout align-start>
-                  <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
-                  &nbsp;&nbsp;&nbsp;
-                  <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeCartItem(cartItem, m)" />
+                  <v-flex>
+                    <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
+                  </v-flex>
+                  &nbsp;&nbsp;
+                  <v-flex>
+                    <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeCartItem(cartItem, m)" />
+                  </v-flex>
               </v-layout>
 
               <!-- Дата поставки -->

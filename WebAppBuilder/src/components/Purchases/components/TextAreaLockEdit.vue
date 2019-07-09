@@ -1,12 +1,16 @@
 <template>
     <v-layout row>
-        <v-flex sm11 xs11>
+        <v-flex grow>
+            <h3 v-if="disabled">
+                <span class="resource-group-text">{{item[fieldName]}}</span>
+            </h3>
             <v-textarea
-            no-resize
-            v-model="item[fieldName]" 
-            :disabled="disabled"/>
+                v-else
+                no-resize
+                v-model="item[fieldName]" 
+                />
         </v-flex>
-        <v-flex sm1 xs1>
+        <v-flex shrink>
             <v-btn icon @click="callBack">
                     <v-icon v-text="disabled ? 'edit' : 'save'" />
                 </v-btn>

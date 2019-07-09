@@ -27,11 +27,11 @@
           />
         </div>
         <div v-else>
-        <v-layout wrap justify-center>
-          <template v-for="(item, i) in itemsComp">
-            <v-flex :key="i" xs12 sm6 md4 lg3 catalogue-card>
+        <v-layout wrap justify-center :class="`${rowViewType ? 'row' : 'column'}`">
+          <template v-for="item in itemsComp">
+            <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                <v-card class="item-card">
+                <v-card>
                   <item-picture :entityName="entityType" :id="item.id" height="200px" width="200px"/>
                   <span>
                     {{item.name}}
@@ -72,7 +72,10 @@
       methods:{
         getItems(id){
           var fieldname = "name";
-          if (id !== null && id.trim().length != 15)
+          if (!id || id === null){
+            id = "";
+          }
+          if (id.trim().length != 15)
           { 
             this.entityType = "resourcesGrops";
           }
@@ -133,15 +136,15 @@
   }
 </script>
 
-<style scoped>
-  .item-card{
+<style lang="scss" scoped>
+  .v-card {
     text-align: -webkit-center;
     height: 250px;
     margin: 5px !important;
+    box-shadow: none;
   }
-  .catalogue-card a{
+  a{
     text-decoration: none;
-
   }
   .filter-panel{
     margin: 10px;

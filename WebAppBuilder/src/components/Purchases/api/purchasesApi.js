@@ -1,7 +1,8 @@
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
+import _ from 'lodash';
 // Queries
 import resourcesGrops from './graphql/resourcesGrops.gql'
 import resources from './graphql/resources.gql'
@@ -24,10 +25,10 @@ const client = new ApolloClient({
 export class PurchasesApi {
   constructor() {}
 
-  getImagesForCatalogueGroup(id) {
-    const FIELDS = gql`
+  getResourcesGroups(id, flds){
+    var FIELDS = gql`
     fragment resourcesGroupsFields on ResourceGroup {
-      content
+      ${flds}
     }
   `;
     return client.query({
@@ -36,6 +37,10 @@ export class PurchasesApi {
     })
     .then(result => result)
     .catch(error => console.log(error.message))
+  }
+
+  getImagesForCatalogueGroup(id) {
+    return this.getResourcesGroups(id, "content");
   }
 
   getImagesForCatalogueItem(id){
