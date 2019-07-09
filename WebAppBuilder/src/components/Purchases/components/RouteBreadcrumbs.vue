@@ -12,9 +12,7 @@
 
 <script>
 import {PurchasesApi} from "../api/purchasesApi";
-
 const api = new PurchasesApi();
-
 export default {
     name: "catalogue-route-breadcrumbs",
     props:{
@@ -30,7 +28,7 @@ export default {
     }),
     methods:{
         getRoutePath(code) {
-            api.getResourcesGroups(code, "id,name,parent{id}").then(this.getParendCodeCallback);
+            api.getResourcesGroups(code, "id,name").then(this.getParendCodeCallback);
             //const query = `{purchases{items: resourcesGrops(id: "${code}"){}}}`;
             //purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
         },
