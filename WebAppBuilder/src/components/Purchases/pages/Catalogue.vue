@@ -53,7 +53,8 @@
 </template>
 
 <script>
-  import purchasesSchemaAxios from "../api/BaseFunctions"
+  import {PurchasesApi} from "../api/purchasesApi";
+  const api = new PurchasesApi();
   export default {
       name: "catalogue",
       data:()=>({
@@ -72,10 +73,13 @@
       methods:{
         getItems(id){
           var fieldname = "name";
-          if (!id || id === null){
-            id = "";
+          if (!id){
+            id = null;
           }
-          if (id.trim().length != 15)
+          if (!id){
+            id = null;
+          }
+          if (id === null && id.trim().length != 15)
           { 
             this.entityType = "resourcesGrops";
           }
@@ -84,20 +88,10 @@
             this.entityType = "resources"; 
             fieldname = "fullName";
           }
-          const query = `
-          {
-            purchases{
-              items: ${this.entityType} (group: "${id}") {
-                id,
-                name: ${fieldname}
-              }
-            }
-          }
-          `;
-          purchasesSchemaAxios(this, query).then(this.respCallback);
+          api.getResourcesGroups(id, `id,name: ${fieldname}`).then(this.respCallback);
         },
         respCallback (resp) {
-            this.items = resp.data.data.purchases.items;
+            this.items = resp.data.purchases.items;
         },
         searchCallback (item) { 
           //debugger;
