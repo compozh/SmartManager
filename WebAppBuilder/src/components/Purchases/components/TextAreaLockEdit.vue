@@ -1,7 +1,7 @@
 <template>
     <v-layout row>
         <v-flex grow>
-            <h3 v-if="disabled">
+            <h3 v-if="d">
                 <span class="resource-group-text">{{item[fieldName]}}</span>
             </h3>
             <v-textarea
@@ -12,7 +12,7 @@
         </v-flex>
         <v-flex shrink>
             <v-btn icon @click="callBack">
-                    <v-icon v-text="disabled ? 'edit' : 'save'" />
+                    <v-icon v-text="d ? 'edit' : 'save'" />
                 </v-btn>
         </v-flex>
     </v-layout>
@@ -27,14 +27,19 @@
             labelName: { type: String },
             disabled: { type: Boolean }
         },
+        data:()=>({
+            d: false
+        }),
         methods:{
             callBack(){
-                this.disabled = !this.disabled;
-                if(!this.disabled){
+                this.d = !this.d;
+                if(this.d){
                     this.$emit('click');
                 }
-                
             }
+        },
+        created(){
+            this.d = this.disabled;
         }
     }
 </script>
