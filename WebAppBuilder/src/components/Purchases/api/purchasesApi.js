@@ -4,7 +4,8 @@ import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 import _ from 'lodash';
 // Queries
-import resourcesGrops from './graphql/resourcesGrops.gql'
+import resourcesGropsById from './graphql/resourcesGropsById.gql'
+import resourcesGropsByGoup from './graphql/resourcesGropsByGoup.gql'
 import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
@@ -32,12 +33,27 @@ export class PurchasesApi {
     }
   `;
     return client.query({
-      query: gql`query ($id: ID) ${resourcesGrops} ${FIELDS}`,
+      query: gql`query ($id: ID) ${resourcesGropsById} ${FIELDS}`,
       variables: { id: id }
     })
     .then(result => result)
     .catch(error => console.log(error.message))
   }
+
+  getResourcesGroupsByGroup(group, flds){
+    var FIELDS = gql`
+    fragment resourcesGroupsFields on ResourceGroup {
+      ${flds}
+    }
+  `;
+    return client.query({
+      query: gql`query ($group: String) ${resourcesGropsByGoup} ${FIELDS}`,
+      variables: { group: group }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
 
   getImagesForCatalogueGroup(id) {
     return this.getResourcesGroups(id, "content");

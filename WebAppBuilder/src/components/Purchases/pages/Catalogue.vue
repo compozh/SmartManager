@@ -74,12 +74,9 @@
         getItems(id){
           var fieldname = "name";
           if (!id){
-            id = null;
+            id = "";
           }
-          if (!id){
-            id = null;
-          }
-          if (id === null && id.trim().length != 15)
+          if (id.trim().length != 15)
           { 
             this.entityType = "resourcesGrops";
           }
@@ -88,7 +85,7 @@
             this.entityType = "resources"; 
             fieldname = "fullName";
           }
-          api.getResourcesGroups(id, `id,name: ${fieldname}`).then(this.respCallback);
+          api.getResourcesGroupsByGroup(id, `id,name: ${fieldname}`).then(this.respCallback);
         },
         respCallback (resp) {
             this.items = resp.data.purchases.items;

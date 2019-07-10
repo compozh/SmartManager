@@ -1,10 +1,10 @@
 <template>
   <v-container fluid>
-    <v-layout row>
-      <v-flex sm6>
+    <v-layout :class="`${btnClass}`">
+      <v-flex>
         <btn-modal-window-order-creation/>
       </v-flex>     
-      <v-flex sm6>
+      <v-flex>
         <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
       </v-flex>
     </v-layout>
@@ -114,6 +114,13 @@ export default {
         set: function(newVal){
           this.$store.commit('purchases/setCartItems', newVal)
         }
+      },
+      btnClass(){
+        var b = this.$vuetify.breakpoint.name;
+        if (b==='xs'){
+          return "column";
+        }
+        return "row";
       }
     },
     filters:{
