@@ -156,7 +156,6 @@ export default {
         return f;
       },
       getCartInputTypeParam(cartItem){
-        debugger;
         return {
           item:	{
             id:                 cartItem.id,
@@ -178,91 +177,18 @@ export default {
         }
       },
       mutationChangeCartItem(item, qt){
-        const q = `
-        mutation($item: CartInput!){
-          purchasesMutation{
-            updateCart(cart:$item){
-              id,
-              measurementUnit{
-                id,
-                name
-              },
-              quantity,
-              resourceId,
-              resourceName,
-              dateDelivery
-            }
-          }
-        }`
-        var par = this.getCartInputTypeParam(item);//JSON.stringify();
-        debugger;
-        console.log(par);
-        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
-      },            
-      _deleteCartView(id){
-        this.cartlist = _.remove(this.cartlist, function(n){
-          return n.id != id;
-        });
-      },
-      _deleteAllView(ids){
-        debugger;
-        this.cartlist = [];
-        debugger;
+        api.updateCartMutation(item);
       },
       mutationClearCarts(){
-        const query = `
-          mutation{
-          purchasesMutation{
-          deleteAllCarts{
-          id,quantity,resourceName
-            }
-          }
-        }
-        `
-        let func = this._deleteAllView;  
-        purchasesSchemaAxios(this, query, null).then(function(r){
-          func();
-        })
-
+        api.deleteAllCartsMutation();
       },
       mutationDeleteCart(item){
-        const query = `
-        mutation{
-  	    purchasesMutation{
-        deleteCart(cartId: "`+item.id+`"){
-        id}}}`         
-        
-        let func = this._deleteCartView;
-        purchasesSchemaAxios(this, query, null).then(function(r){
-          let id = r.data.data.purchasesMutation.deleteCart.id;
-          func(id);})
+        api.deleteCartMutation(item.id);
       },
       mutationSubmit(){
       },
       mutationCreateCart(){
-        const q = `
-        mutation{
-          purchasesMutation{
-            createCart{
-              id,resourceId,measurementUnit{id},resourceName,quantity,dateDelivery
-            }
-          }
-        }`
-        debugger;
-        let cardlist_collection = this.cartlist;
-        purchasesSchemaAxios(this, q, null).then(function(r){
-          let response_data = r.data.data.purchasesMutation.createCart;
-          var cartItem = {
-            id:                 response_data.id,
-            resourceId:         response_data.resourceId,
-            measurementUnitId:  response_data.measurementUnit.id,
-            resourceName:       response_data.resourceName,
-            quantity:           response_data.quantity,
-            dateDelivery:       response_data.dateDelivery
-          }
-                    
-          cardlist_collection.push(cartItem);
-        })
+        api.createCartMutation();
       },
       getCartItemsResponseCallback(resp){
         this.cartlist = resp.data.purchases.cartItems;
