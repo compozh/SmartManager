@@ -23,8 +23,10 @@
               </v-flex>
               <!-- Заголовок, имя ресурса -->
             <v-flex v-if="cartItem.resource" xs12>
+              <tooltip-with-resource :cartItem="cartItem"/>
+              <!--TODO 
               <v-flex xs11>
-                <!-- TODO -->
+                
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <span v-on="on">
@@ -40,7 +42,7 @@
                 </span>
               </v-tooltip>
               </v-flex>
-              <v-flex xs1 />
+              <v-flex xs1 />-->
             </v-flex>
             <v-flex v-else xs12>
               <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" :disabled="true" />
@@ -92,6 +94,8 @@ import purchasesSchemaAxios from "../api/BaseFunctions";
 import {PurchasesApi} from "../api/purchasesApi";
 import RemoveButton from "../components/RemoveButton.vue"
 import ModalWindowOrderCreation from "../components/ModalWindowOrderCreation.vue"
+import TooltipCartItemWithResource from "../components/TooltipCartItemWithResource.vue"
+import TextAreaWithLockEdit from "../components/TextAreaLockEdit.vue"
 import { debug } from 'util';
 
 const api = new PurchasesApi();
@@ -100,7 +104,8 @@ export default {
     name: "cart-list",
     components:{
       RemoveButton,
-      ModalWindowOrderCreation
+      ModalWindowOrderCreation,
+      TooltipCartItemWithResource
     },
     computed:{
       cardBinding() { 
