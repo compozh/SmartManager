@@ -24,6 +24,7 @@
               <!-- Заголовок, имя ресурса -->
             <v-flex v-if="cartItem.resource" xs12>
               <v-flex xs11>
+                <!-- TODO -->
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <span v-on="on">
@@ -35,7 +36,7 @@
                 </template>
                 <span class="hidden-lg-and-up">
                   <span>{{cartItem.resource.name}}</span><br/>
-                  <!-- <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/> -->
+                  <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
                 </span>
               </v-tooltip>
               </v-flex>
