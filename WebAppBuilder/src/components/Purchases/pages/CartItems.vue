@@ -24,25 +24,6 @@
               <!-- Заголовок, имя ресурса -->
             <v-flex v-if="cartItem.resource" xs12>
               <tooltip-with-resource :cartItem="cartItem"/>
-              <!--TODO 
-              <v-flex xs11>
-                
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <span v-on="on">
-                    <h3>
-                      <span class="resource-group-text">[{{cartItem.resource.resourceGroup.name | truncate(getTextLength(20,20,40,40,40), '...')}}]</span>
-                      {{cartItem.resource.name | truncate(getTextLength(100,80,200,500,500), '...')}}
-                    </h3>
-                  </span>
-                </template>
-                <span class="hidden-lg-and-up">
-                  <span>{{cartItem.resource.name}}</span><br/>
-                  <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
-                </span>
-              </v-tooltip>
-              </v-flex>
-              <v-flex xs1 />-->
             </v-flex>
             <v-flex v-else xs12>
               <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" :disabled="true" />
@@ -196,13 +177,14 @@ export default {
         api.createCartMutation();
       },
       getCartItemsResponseCallback(resp){
+        debugger;
         this.cartlist = resp.data.purchases.cartItems;
       }
     },
     created(){
-      api.getCartItems().then(this.getCartItemsResponseCallback)
+      api.getCartItems().then(this.getCartItemsResponseCallback);
     }
-};
+}
 </script>
 
 <style lang="scss" scoped>

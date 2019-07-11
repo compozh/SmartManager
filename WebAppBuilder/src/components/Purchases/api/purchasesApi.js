@@ -15,6 +15,7 @@ import updateCart from './graphql/updateCart.gql'
 import deleteAllCarts from './graphql/deleteAllCarts.gql'
 import deleteCart from './graphql/deleteCart.gql'
 import createCart from './graphql/createCart.gql'
+import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 
 const options = {
@@ -61,7 +62,6 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-
   getImagesForCatalogueGroup(id) {
     return this.getResourcesGroups(id, "content");
   }
@@ -80,13 +80,17 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
+  getCartItemsCallback(responce){
+    let test = responce;
+    debugger;
+  }
+
   getCartItems(){
     return client.query({
       query: gql`query ${cartItems}`,
       variables: { }
     })
-    .then(result => 
-      result)
+    .then(r=>r)
     .catch(error => console.log(error.message))
   }
 
@@ -173,6 +177,21 @@ export class PurchasesApi {
     return test;
   }
 
+  getOrderInputTypeParam(order){
+    debugger;
+    let test =  {
+        number:         order.NDM,
+        date:           order.DDM,
+        kDM1:           order.DM1,
+        kDM2:           order.DM2,
+        title:          order.Description
+    }
+    debugger;
+
+    return test;
+  }
+
+  // TODO fix
   updateCartMutation(cartInput){
     let item = this.getCartInputTypeParam(cartInput);
     return client.mutate({
@@ -208,6 +227,21 @@ export class PurchasesApi {
       mutation: gql`${createCart}`
     })
       .then(this.createCartMutationCallback)
+      .catch(error => console.log(error.message))
+  }
+
+  createOrderMutationCallback(result){
+    
+    let test = result;
+  }
+  createOrderMutation(order){
+    let orderInput = this.getOrderInputTypeParam(order);
+    debugger;
+    return client.mutate({
+      mutation: gql`${createOrder}`,
+      variables: {orderInput:orderInput}
+    })
+      .then(this.deleteAllCartsMutationCallback)
       .catch(error => console.log(error.message))
   }
 }
