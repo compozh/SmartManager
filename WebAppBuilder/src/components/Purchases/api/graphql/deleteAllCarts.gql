@@ -1,0 +1,7 @@
+mutation{
+    purchasesMutation{
+        deleteAllCarts{
+          id,quantity,resourceName
+        }
+    }
+}
