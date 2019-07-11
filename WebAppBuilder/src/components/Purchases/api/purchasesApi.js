@@ -112,16 +112,9 @@ export class PurchasesApi {
   
   addToCartMutationCallback(result){
     let response_data = result.data.purchasesMutation.addToCart;
-        var cartItem = {
-          id:                 response_data.id,
-          resourceId:         response_data.resourceId,
-          measurementUnitId:  response_data.measurementUnit.id,
-          resourceName:       response_data.resourceName,
-          quantity:           response_data.quantity,
-          dateDelivery:       response_data.dateDelivery
-        }
-        debugger;
-        store.commit('purchases/addCartItem', cartItem)
+        var cartItem = response_data;
+        store.commit('purchases/addCartItem', cartItem);
+        store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
 
   addToCartMutation(item){

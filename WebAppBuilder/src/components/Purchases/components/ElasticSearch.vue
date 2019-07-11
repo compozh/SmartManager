@@ -18,7 +18,7 @@
             <template slot = "item" slot-scope="data">
                 <v-layout>
                     <!--<v-btn icon @click.stop="alert(data.item.caption)">-->
-                        <v-btn icon @click="addToCartCall(data.item)">
+                        <v-btn icon @click.stop="addToCartCall(data.item)">
                         <v-icon>add_shopping_cart</v-icon> 
                     </v-btn>
                     <v-layout column justify-start>
@@ -44,7 +44,6 @@
         name:"elastic-search",
         data:()=> ({
             showSearch: false,
-
             loading: false,
             items: [],
             search: null,
@@ -91,7 +90,6 @@
             addToCartCall(item){
                 api.addToCartMutation(item);
             }
-        
         }
     }
 </script> 

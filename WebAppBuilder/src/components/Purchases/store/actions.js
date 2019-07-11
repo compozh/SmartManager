@@ -4,5 +4,8 @@ export default {
     },
     addCartItem({commit},payload){
         commit('addCartItem',payload)
+    },
+    setMessage({commit},payload){
+        commit('setMessage',payload)
     }
 }

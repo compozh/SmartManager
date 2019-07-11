@@ -5,5 +5,9 @@ export default {
 
   addCartItem(state, payload){
     state.cartitems.push(payload);
+  },
+
+  setMessage(state, payload){
+    state.snackbarMessage = payload;
   }
 }

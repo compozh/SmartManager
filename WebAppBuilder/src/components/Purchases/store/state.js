@@ -1,3 +1,4 @@
 export default {
-  cartitems : []
+  cartitems : [],
+  snackbarMessage: ""
 }
