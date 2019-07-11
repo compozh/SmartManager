@@ -5,5 +5,23 @@ export default {
 
   addCartItem(state, payload){
     state.cartitems.push(payload);
+  },
+
+  setMessage(state, payload){
+    state.snackbarMessage = payload
+  },
+  
+  deleteCartItem(state, payload){
+    state.cartitems = _.remove(state.cartitems, function(n){
+      return n.id != payload;
+    });
+  },
+
+  deleteAllCarts(state){
+    state.cartitems = [];
+  },
+
+  createCartItem(state, payload){
+    state.cartitems.push(payload);
   }
 }

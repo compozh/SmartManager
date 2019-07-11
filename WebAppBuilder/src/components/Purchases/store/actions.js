@@ -4,5 +4,17 @@ export default {
     },
     addCartItem({commit},payload){
         commit('addCartItem',payload)
+    },
+    setMessage({commit},payload){
+        commit('setMessage',payload)
+    },
+    deleteCartItem({commit}, payload){
+        commit('deleteCartItem', payload)
+    },
+    deleteAllCarts({commit}){
+        commit('deleteAllCarts')
+    },
+    createCartItem({commit}, payload){
+        commit('createCartItem', payload);
     }
 }

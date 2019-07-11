@@ -1,10 +1,10 @@
 <template>
   <v-container fluid>
-    <v-layout row>
-      <v-flex sm6>
+    <v-layout :class="`${btnClass}`">
+      <v-flex>
         <btn-modal-window-order-creation/>
       </v-flex>     
-      <v-flex sm6>
+      <v-flex>
         <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
       </v-flex>
     </v-layout>
@@ -23,24 +23,7 @@
               </v-flex>
               <!-- Заголовок, имя ресурса -->
             <v-flex v-if="cartItem.resource" xs12>
-              <v-flex xs11>
-                <!-- TODO -->
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <span v-on="on">
-                    <h3>
-                      <span class="resource-group-text">[{{cartItem.resource.resourceGroup.name | truncate(getTextLength(20,20,40,40,40), '...')}}]</span>
-                      {{cartItem.resource.name | truncate(getTextLength(100,80,200,500,500), '...')}}
-                    </h3>
-                  </span>
-                </template>
-                <span class="hidden-lg-and-up">
-                  <span>{{cartItem.resource.name}}</span><br/>
-                  <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
-                </span>
-              </v-tooltip>
-              </v-flex>
-              <v-flex xs1 />
+              <tooltip-with-resource :cartItem="cartItem"/>
             </v-flex>
             <v-flex v-else xs12>
               <text-area-with-lock-edit :item="cartItem" @click="mutationChangeCartItem(cartItem)" fieldName="resourceName" labelName="Наименование" :disabled="true" />
@@ -92,6 +75,8 @@ import purchasesSchemaAxios from "../api/BaseFunctions";
 import {PurchasesApi} from "../api/purchasesApi";
 import RemoveButton from "../components/RemoveButton.vue"
 import ModalWindowOrderCreation from "../components/ModalWindowOrderCreation.vue"
+import TooltipCartItemWithResource from "../components/TooltipCartItemWithResource.vue"
+import TextAreaWithLockEdit from "../components/TextAreaLockEdit.vue"
 import { debug } from 'util';
 
 const api = new PurchasesApi();
@@ -100,7 +85,8 @@ export default {
     name: "cart-list",
     components:{
       RemoveButton,
-      ModalWindowOrderCreation
+      ModalWindowOrderCreation,
+      TooltipCartItemWithResource
     },
     computed:{
       cardBinding() { 
@@ -115,6 +101,13 @@ export default {
         set: function(newVal){
           this.$store.commit('purchases/setCartItems', newVal)
         }
+      },
+      btnClass(){
+        var b = this.$vuetify.breakpoint.name;
+        if (b==='xs'){
+          return "column";
+        }
+        return "row";
       }
     },
     filters:{
@@ -149,7 +142,6 @@ export default {
         return f;
       },
       getCartInputTypeParam(cartItem){
-        debugger;
         return {
           item:	{
             id:                 cartItem.id,
@@ -171,100 +163,28 @@ export default {
         }
       },
       mutationChangeCartItem(item, qt){
-        const q = `
-        mutation($item: CartInput!){
-          purchasesMutation{
-            updateCart(cart:$item){
-              id,
-              measurementUnit{
-                id,
-                name
-              },
-              quantity,
-              resourceId,
-              resourceName,
-              dateDelivery
-            }
-          }
-        }`
-        var par = this.getCartInputTypeParam(item);//JSON.stringify();
-        debugger;
-        console.log(par);
-        purchasesSchemaAxios(this, q, par).then(function(r){ console.log(r); })
-      },            
-      _deleteCartView(id){
-        this.cartlist = _.remove(this.cartlist, function(n){
-          return n.id != id;
-        });
-      },
-      _deleteAllView(ids){
-        debugger;
-        this.cartlist = [];
-        debugger;
+        api.updateCartMutation(item);
       },
       mutationClearCarts(){
-        const query = `
-          mutation{
-          purchasesMutation{
-          deleteAllCarts{
-          id,quantity,resourceName
-            }
-          }
-        }
-        `
-        let func = this._deleteAllView;  
-        purchasesSchemaAxios(this, query, null).then(function(r){
-          func();
-        })
-
+        api.deleteAllCartsMutation();
       },
       mutationDeleteCart(item){
-        const query = `
-        mutation{
-  	    purchasesMutation{
-        deleteCart(cartId: "`+item.id+`"){
-        id}}}`         
-        
-        let func = this._deleteCartView;
-        purchasesSchemaAxios(this, query, null).then(function(r){
-          let id = r.data.data.purchasesMutation.deleteCart.id;
-          func(id);})
+        api.deleteCartMutation(item.id);
       },
       mutationSubmit(){
       },
       mutationCreateCart(){
-        const q = `
-        mutation{
-          purchasesMutation{
-            createCart{
-              id,resourceId,measurementUnit{id},resourceName,quantity,dateDelivery
-            }
-          }
-        }`
-        debugger;
-        let cardlist_collection = this.cartlist;
-        purchasesSchemaAxios(this, q, null).then(function(r){
-          let response_data = r.data.data.purchasesMutation.createCart;
-          var cartItem = {
-            id:                 response_data.id,
-            resourceId:         response_data.resourceId,
-            measurementUnitId:  response_data.measurementUnit.id,
-            resourceName:       response_data.resourceName,
-            quantity:           response_data.quantity,
-            dateDelivery:       response_data.dateDelivery
-          }
-                    
-          cardlist_collection.push(cartItem);
-        })
+        api.createCartMutation();
       },
       getCartItemsResponseCallback(resp){
+        debugger;
         this.cartlist = resp.data.purchases.cartItems;
       }
     },
     created(){
-      api.getCartItems().then(this.getCartItemsResponseCallback)
+      api.getCartItems().then(this.getCartItemsResponseCallback);
     }
-};
+}
 </script>
 
 <style lang="scss" scoped>
