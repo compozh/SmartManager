@@ -34,6 +34,7 @@
     computed: {
       showSearch() {
         return this.$route.params.hasOwnProperty('foldercode')
+          && this.$store.state.sm.taskAddForm === 'close'
       },
       search: {
         get() {
