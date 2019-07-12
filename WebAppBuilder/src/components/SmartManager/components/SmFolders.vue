@@ -6,7 +6,8 @@
           <v-list-tile
             v-for="folder in folders"
             :key="folder.code"
-            :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
+            tag="a"
+            :to="taskAddForm ? '' : getLink(folder.code)"
             active-class="sm_active-folder"
             class="menu-item"
             :class="{ 'main-folder': isMainFolder(folder) }"
@@ -62,12 +63,18 @@
     }),
     computed: {
       folders() {
-        return this.$store.getters['sm/folders']
+        return this.$store.state.sm.folders
+      },
+      taskAddForm() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
     },
     methods: {
       getFolders() {
         this.$store.dispatch('sm/getFolders')
+      },
+      getLink(folder) {
+        return { name:'SMARTMANAGERTASKS', params:{ foldercode: (folder ||'ALL') }}
       },
       isMainFolder(folder) {
         return folder.name === 'Все'
