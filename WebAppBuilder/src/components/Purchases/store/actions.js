@@ -1,18 +1,21 @@
 export default {
     setCartItems({commit}, payload) {
-        commit('setCartItems', payload)
+        commit('setCartItems', payload);
     },
     addCartItem({commit},payload){
-        commit('addCartItem',payload)
+        commit('addCartItem',payload);
+    },
+    updateCartItem({commit},payload){
+        commit('updateCartItem',payload);
     },
     setMessage({commit},payload){
-        commit('setMessage',payload)
+        commit('setMessage',payload);
     },
     deleteCartItem({commit}, payload){
-        commit('deleteCartItem', payload)
+        commit('deleteCartItem', payload);
     },
     deleteAllCarts({commit}){
-        commit('deleteAllCarts')
+        commit('deleteAllCarts');
     },
     createCartItem({commit}, payload){
         commit('createCartItem', payload);

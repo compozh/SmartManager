@@ -25,6 +25,9 @@
             editable: true
         },
         methods: {
+            forceRerender(){
+                quantityType[fieldNameComp];
+            },
             mutationChangeQuantity(arg){
                 this.quantityType.quantity += arg;
                 this.$emit('onChangeValue', this.quantityType.quantity);

@@ -80,9 +80,9 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getCartItemsCallback(responce){
-    let test = responce;
-    debugger;
+  getCartItemsCallback(result){
+    let cartItems = result.data.purchases.cartItems;
+    store.commit('purchases/setCartItems', cartItems);
   }
 
   getCartItems(){
@@ -90,7 +90,7 @@ export class PurchasesApi {
       query: gql`query ${cartItems}`,
       variables: { }
     })
-    .then(r=>r)
+    .then(this.getCartItemsCallback)
     .catch(error => console.log(error.message))
   }
 
@@ -144,9 +144,9 @@ export class PurchasesApi {
 
   addToCartMutationCallback(result){
     let response_data = result.data.purchasesMutation.addToCart;
-        var cartItem = response_data;
-        store.commit('purchases/addCartItem', cartItem);
-        store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
+    var cartItem = response_data;
+    store.commit('purchases/addCartItem', cartItem);
+    store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
 
   addToCartMutation(item){
@@ -161,7 +161,7 @@ export class PurchasesApi {
   getCartInputTypeParam(cartItem){
     let test =  {
         id:                 cartItem.id,
-        resourceId:         cartItem.resource===null ? null : cartItem.resource.id,
+        resourceId:         cartItem.resourceId,
         measurementUnitId:  cartItem.measurementUnit.id,
         resourceName:       cartItem.resourceName,
         quantity:           cartItem.quantity<1 ? 1 : cartItem.quantity,
@@ -172,7 +172,6 @@ export class PurchasesApi {
   }
 
   getOrderInputTypeParam(order){
-    debugger;
     let test =  {
         number:         order.NDM,
         date:           order.DDM,
@@ -180,19 +179,23 @@ export class PurchasesApi {
         kDM2:           order.DM2,
         title:          order.Description
     }
-    debugger;
 
     return test;
   }
 
-  // TODO fix
+  
+  updateCartMutationCallback(result){
+    let response_data = result.data.purchasesMutation.updateCart;
+    store.commit('purchases/updateCartItem', response_data);
+  }
+
   updateCartMutation(cartInput){
     let item = this.getCartInputTypeParam(cartInput);
     return client.mutate({
       mutation: gql`${updateCart}`,
       variables: {cart: item}
     })
-      .then(this.addToCartMutationCallback)
+      .then(this.updateCartMutationCallback)
       .catch(error => console.log(error.message))
   }
   
@@ -230,7 +233,6 @@ export class PurchasesApi {
   }
   createOrderMutation(order){
     let orderInput = this.getOrderInputTypeParam(order);
-    debugger;
     return client.mutate({
       mutation: gql`${createOrder}`,
       variables: {orderInput:orderInput}

@@ -175,14 +175,10 @@ export default {
       },
       mutationCreateCart(){
         api.createCartMutation();
-      },
-      getCartItemsResponseCallback(resp){
-        debugger;
-        this.cartlist = resp.data.purchases.cartItems;
       }
     },
     created(){
-      api.getCartItems().then(this.getCartItemsResponseCallback);
+      api.getCartItems();
     }
 }
 </script>
