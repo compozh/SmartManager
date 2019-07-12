@@ -143,8 +143,8 @@ export class PurchasesApi {
   }
 
   addToCartMutationCallback(result){
-    let response_data = result.data.purchasesMutation.addToCart;
-    var cartItem = response_data;
+    let cartItem = result.data.purchasesMutation.addToCart;
+    debugger;
     store.commit('purchases/addCartItem', cartItem);
     store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
@@ -183,16 +183,13 @@ export class PurchasesApi {
     return test;
   }
 
-  
   updateCartMutationCallback(result){
     let response_data = result.data.purchasesMutation.updateCart;
     store.commit('purchases/updateCartItem', response_data);
   }
 
   updateCartMutation(cartInput){
-    debugger;
     let item = this.getCartInputTypeParam(cartInput);
-    debugger;
     return client.mutate({
       mutation: gql`${updateCart}`,
       variables: {cart: item}

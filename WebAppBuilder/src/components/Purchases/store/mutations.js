@@ -49,7 +49,6 @@ export default {
   },
 
   updateCartItem(state, payload){
-    debugger;
     let result = _returnIndexById(state.cartitems, payload.id);
     state.cartitems[result.returned]  = payload;
   }

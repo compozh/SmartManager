@@ -166,17 +166,20 @@ export default {
       },
       
       mutationChangeCartItem(item, qt){
-        debugger;
         api.updateCartMutation(item);
       },
+
       mutationClearCarts(){
         api.deleteAllCartsMutation();
       },
+
       mutationDeleteCart(item){
         api.deleteCartMutation(item.id);
       },
+
       mutationSubmit(){
       },
+      
       mutationCreateCart(){
         api.createCartMutation();
       }
