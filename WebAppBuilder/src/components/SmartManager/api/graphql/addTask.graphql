@@ -1,0 +1,11 @@
+ {
+  smtasksMutation {
+    addTask(task: $newTask) {
+      id
+      success
+      successMessage
+      errorCode
+      errorMessage
+    }
+  }
+}

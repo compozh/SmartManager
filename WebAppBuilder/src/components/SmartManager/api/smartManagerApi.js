@@ -6,6 +6,8 @@ import gql from 'graphql-tag'
 import folders from './graphql/folders.graphql'
 import tasks from './graphql/tasks.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
+import users from './graphql/users.graphql'
+import addTask from './graphql/addTask.graphql'
 
 const getClient = () => {
   const token = localStorage.getItem('ItUniTocken')
@@ -46,6 +48,23 @@ export class SmartManagerApi {
     return getClient().query({
       query: gql`query ($taskId: Int) ${taskInfo}`,
       variables: {taskId}
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getUsersFromGql() {
+    return getClient().query({
+      query: gql` ${users}`,
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  addNewTaskToGql(newTask) {
+    return getClient().mutate({
+      mutation: gql`mutation ($newTask: AddTask!) ${addTask}`,
+      variables: {newTask}
     })
     .then(result => result)
     .catch(error => console.log(error.message))
