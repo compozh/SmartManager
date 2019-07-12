@@ -37,7 +37,7 @@
               <!-- Количество и ЕИ -->
               <v-layout align-start>
                   <v-flex>
-                    <quantity-text-field editable="true" :quantityType="cartItem" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
+                    <quantity-text-field editable="true" :key="cartItem.id" :quantity="cartItem.quantity" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
                   </v-flex>
                   &nbsp;&nbsp;
                   <v-flex>
@@ -166,6 +166,8 @@ export default {
       },
       
       mutationChangeCartItem(item, qt){
+        debugger;
+        item.quantity = qt;
         api.updateCartMutation(item);
       },
 
@@ -179,7 +181,7 @@ export default {
 
       mutationSubmit(){
       },
-      
+
       mutationCreateCart(){
         api.createCartMutation();
       }

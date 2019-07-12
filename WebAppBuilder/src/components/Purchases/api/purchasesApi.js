@@ -129,6 +129,7 @@ export class PurchasesApi {
       dateDelivery:       response_data.dateDelivery
     }
     store.commit('purchases/createCartItem', cartItem);
+    store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
   
   deleteAllCartsMutationCallback(){

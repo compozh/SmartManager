@@ -23,7 +23,7 @@ export default {
   addCartItem(state, payload){
     let result = _returnIndexById(state.cartitems, payload.id);
     if(result.success){
-      state.cartitems[result.returned]  = payload;
+      state.cartitems.splice(result.returned,1,payload);
     }
     else{
       state.cartitems.push(payload);
