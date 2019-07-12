@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn icon>
+        <v-btn icon @click.stop="">
             <v-icon v-text="inFavourite ? 'favorite' : 'favorite_border'" />
         </v-btn>
     </div>
@@ -9,19 +9,23 @@
 <script>
     export default {
         name: "favorite-btn",
-        data:()=>({
-            inFavourite: false
-        }),
+        // data:()=>({
+        //     inFavourite: false
+        // }),
         props:{
-            favKey: {
+            value: {
                 type: undefined,
                 required: true
             },
-            favType: {
+            valueName: {
                 type: String,
-                required: true
+                required: false
+            }
+        },
+        computed:{
+            inFavourite(){
+                return false;
             }
         }
-        
     }
 </script>

@@ -27,11 +27,11 @@
           />
         </div>
         <div v-else>
-        <v-layout wrap justify-center>
-          <template v-for="(item, i) in itemsComp">
-            <v-flex :key="i" xs12 sm6 md4 lg3 catalogue-card>
+        <v-layout wrap justify-center :class="`${rowViewType ? 'row' : 'column'}`">
+          <template v-for="item in itemsComp">
+            <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                <v-card class="item-card">
+                <v-card>
                   <item-picture :entityName="entityType" :id="item.id" height="200px" width="200px"/>
                   <span>
                     {{item.name}}
@@ -53,7 +53,8 @@
 </template>
 
 <script>
-  import purchasesSchemaAxios from "./BaseFunctions"
+  import {PurchasesApi} from "../api/purchasesApi";
+  const api = new PurchasesApi();
   export default {
       name: "catalogue",
       data:()=>({
@@ -72,7 +73,10 @@
       methods:{
         getItems(id){
           var fieldname = "name";
-          if (id !== null && id.trim().length != 15)
+          if (!id){
+            id = "";
+          }
+          if (id.trim().length != 15)
           { 
             this.entityType = "resourcesGrops";
           }
@@ -81,20 +85,10 @@
             this.entityType = "resources"; 
             fieldname = "fullName";
           }
-          const query = `
-          {
-            purchases{
-              items: ${this.entityType} (group: "${id}") {
-                id,
-                name: ${fieldname}
-              }
-            }
-          }
-          `;
-          purchasesSchemaAxios(this, query).then(this.respCallback);
+          api.getResourcesGroupsByGroup(id, `id,name: ${fieldname}`).then(this.respCallback);
         },
         respCallback (resp) {
-            this.items = resp.data.data.purchases.items;
+            this.items = resp.data.purchases.items;
         },
         searchCallback (item) { 
           //debugger;
@@ -133,15 +127,15 @@
   }
 </script>
 
-<style scoped>
-  .item-card{
+<style lang="scss" scoped>
+  .v-card {
     text-align: -webkit-center;
     height: 250px;
     margin: 5px !important;
+    box-shadow: none;
   }
-  .catalogue-card a{
+  a{
     text-decoration: none;
-
   }
   .filter-panel{
     margin: 10px;

@@ -2,7 +2,7 @@
     <div >
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
-            <v-btn class="flag_button" v-on="on" flat icon>
+            <v-btn  v-on="on" flat icon>
                 <country-flag :country='curentLanguage' size='normal'/>
             </v-btn>
           </template>
@@ -33,16 +33,9 @@ export default {
         return{
             arrayCountryAndFlag:[],
             dictionaryLanguage :[
-                { name: "Беларуская", flag: "be", key: "BE" },
-                { name: "Čeština", flag: "cz", key: "CS" },
                 { name: "English", flag: "gb", key: "EN" },
-                { name: "Eesti", flag: "ee", key: "ET" },
-                { name: "Iran", flag: "ir", key: "FA" },
-                { name: "Magyar", flag: "hu", key: "HU" },
-                { name: "Polski", flag: "pl", key: "PL" },
                 { name: "Русский", flag: "ru", key: "RU" },
                 { name: "Українська", flag: "ua", key: "UK" },
-                { name: "Chinese", flag: "cn", key: "ZH" },
             ],
             curlanguage : localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : "Русский"
         }
@@ -88,7 +81,19 @@ export default {
 }
 </script>
 
+<style lang="scss" >
+    .v-btn__content{
+        height: inherit;
+    }
+
+    
+</style>
+
 <style lang="scss" scoped>
+
+    .v-btn__content{
+        height: inherit;
+    }
     .flag_button{
         height: inherit;
     }
