@@ -4,26 +4,23 @@ const api = new SmartManagerApi()
 
 export default {
   async getFolders({commit}) {
-    commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
       const result = await api.getFoldersFromGql()
       const folders = result.data.smtasks.folders
-
       commit('setFolders', folders)
       commit('setCircularLoader', false)
 
     } catch (e) {
       commit('setCircularLoader', false)
-      commit('setError', e.message)
+      commit('setMessage', {type: 'error', text: e.message})
     }
   },
   async getTasks({commit}, payload) {
     const folderId = payload.folderId
     const loader = payload.loader
 
-    commit('setError', null)
     commit('setSearch', null)
     commit(loader, true)
 
@@ -37,22 +34,54 @@ export default {
 
     } catch (e) {
       commit(loader, false)
-      commit('setError', e.message)
+      commit('setMessage', {type: 'error', text: e.message})
     }
   },
   async getTaskInfo({commit}, payload) {
-    commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
       const result = await api.getTaskInfoFromGql(payload)
       const taskInfo = result.data.smtasks.tasksGetInfo
-
       commit('setTaskInfo', taskInfo)
       commit('setCircularLoader', false)
+
     } catch (e) {
       commit('setCircularLoader', false)
-      commit('setError', e.message)
+      commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async getUsers({commit}) {
+    commit('setLinearLoader', true)
+
+    try {
+      const result = await api.getUsersFromGql()
+      const users = result.data.smtasks.users
+      commit('setLinearLoader', false)
+      commit('setUsers', users)
+
+    } catch (e) {
+      commit('setLinearLoader', false)
+      commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async addNewTask({commit}, payload) {
+    commit('setCircularLoader', true)
+
+    try {
+      const result = await api.addNewTaskToGql(payload)
+      const success = result.data.smtasksMutation.addTask.success
+
+      const message = success
+      ? {type: 'success', text: `Задача успешно добавлена`}
+      : {type: 'error', text: `Ошибка при добавлении задачи`}
+
+      commit('setMessage', message)
+      commit('setCircularLoader', false)
+      commit('setTaskAddForm', 'close')
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setMessage', {type: 'error', text: e.message})
     }
   }
 }

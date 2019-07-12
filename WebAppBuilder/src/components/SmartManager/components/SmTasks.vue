@@ -1,6 +1,7 @@
 <template>
   <v-container fluid pa-0 px-2>
-    <v-layout row wrap justify-center>
+    <sm-task-add-form v-if="taskAddForm"></sm-task-add-form>
+    <v-layout v-else row wrap justify-center pb-5 mb-4>
       <v-flex
         xs12
         class="task-container"
@@ -10,6 +11,19 @@
         <sm-task-list-item :task="task"></sm-task-list-item>
       </v-flex>
       <sm-empty-state v-if="!checkTasks">Нет задач в папке</sm-empty-state>
+      <v-flex>
+        <v-btn
+          fixed
+          dark
+          fab
+          bottom
+          right
+          color="blue darken-2"
+          @click="openTaskAddForm"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -17,6 +31,9 @@
 <script>
   export default {
     name: 'sm-tasks',
+    data: () => ({
+      showAddForm: false
+    }),
     created() {
       const folderId = this.$route.params.foldercode
       this.getTasks(folderId)
@@ -36,6 +53,9 @@
       },
       checkTasks() {
         return this.tasks ? this.tasks.length : 0
+      },
+      taskAddForm() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
     },
     methods: {
@@ -43,6 +63,12 @@
         this.$store.commit('sm/setCurrentFolder', folderId)
         const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
           this.$store.dispatch('sm/getTasks', {folderId, loader})
+      },
+      openTaskAddForm() {
+        this.$store.commit('sm/setTaskAddForm', 'open')
+      },
+      closeTaskAddForm() {
+        this.$store.commit('sm/setTaskAddForm', 'close')
       }
     }
   }

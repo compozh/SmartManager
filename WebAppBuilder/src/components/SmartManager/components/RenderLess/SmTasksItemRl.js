@@ -4,7 +4,7 @@ export default {
   name: 'sm-tasks-item-rl',
   computed: {
     task() {
-      return this.$store.getters['sm/taskInfo']
+      return this.$store.state.sm.taskInfo
     }
   },
   methods: {
