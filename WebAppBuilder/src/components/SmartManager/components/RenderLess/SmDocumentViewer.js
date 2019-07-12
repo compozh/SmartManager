@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     originals() {
-      const task = this.$store.getters['sm/taskInfo']
+      const task = this.$store.state.sm.taskInfo
       return task ? task.originals : []
     },
     component() {

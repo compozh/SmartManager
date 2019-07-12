@@ -6,7 +6,7 @@
         outline small
         class="viewer-btn"
         @click="back"
-        :disabled="page === 1"
+        :disabled="+page === 1"
       >
         <v-icon size="18">arrow_drop_up</v-icon>
       </v-btn>
@@ -15,7 +15,7 @@
         outline small
         class="viewer-btn"
         @click="forward"
-        :disabled="page === numPages"
+        :disabled="+page === numPages"
       >
         <v-icon size="18">arrow_drop_down</v-icon>
       </v-btn>
@@ -150,7 +150,9 @@
       this.src = pdf.createLoadingTask(this.url);
       this.src
         .then(pdf => this.numPages = pdf.numPages)
-        .catch(e => this.$store.commit('sm/setError', e.message))
+        .catch(e => {
+          this.$store.commit('sm/setMessage', { type: 'error', text: e.message })
+        })
     },
     methods: {
       observePages(event) {

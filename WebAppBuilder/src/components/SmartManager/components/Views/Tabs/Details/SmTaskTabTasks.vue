@@ -26,7 +26,7 @@
     name: 'sm-task-tab-tasks',
     computed: {
       task() {
-        return this.$store.getters['sm/taskInfo']
+        return this.$store.state.sm.taskInfo
       },
       subTasks() {
         return this.task ? this.task.childTasks : []

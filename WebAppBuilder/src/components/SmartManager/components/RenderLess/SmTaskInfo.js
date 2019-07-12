@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     task() {
-      return this.$store.getters['sm/taskInfo']
+      return this.$store.state.sm.taskInfo
     },
     getTabs() {
       if (this.task) {
