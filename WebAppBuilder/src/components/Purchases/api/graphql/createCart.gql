@@ -1,7 +1,7 @@
 mutation{
     purchasesMutation{
         createCart{
-            id,resourceId,measurementUnit{id},resourceName,quantity,dateDelivery
+            id,resourceId,measurementUnit{id,name},resourceName,quantity,dateDelivery
         }
     }
 }

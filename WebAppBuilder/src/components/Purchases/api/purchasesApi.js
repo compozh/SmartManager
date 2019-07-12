@@ -123,7 +123,7 @@ export class PurchasesApi {
     var cartItem = {
       id:                 response_data.id,
       resourceId:         response_data.resourceId,
-      measurementUnitId:  response_data.measurementUnit.id,
+      measurementUnit:    {id:response_data.measurementUnit.id,name:response_data.measurementUnit.name},
       resourceName:       response_data.resourceName,
       quantity:           response_data.quantity,
       dateDelivery:       response_data.dateDelivery
@@ -162,7 +162,7 @@ export class PurchasesApi {
     let test =  {
         id:                 cartItem.id,
         resourceId:         cartItem.resourceId,
-        measurementUnitId:  cartItem.measurementUnit.id,
+        measurementUnitId:  cartItem.measurementUnit===null ? cartItem.measurementUnitId : cartItem.measurementUnit.id,
         resourceName:       cartItem.resourceName,
         quantity:           cartItem.quantity<1 ? 1 : cartItem.quantity,
         dateDelivery:       cartItem.dateDelivery
@@ -190,7 +190,9 @@ export class PurchasesApi {
   }
 
   updateCartMutation(cartInput){
+    debugger;
     let item = this.getCartInputTypeParam(cartInput);
+    debugger;
     return client.mutate({
       mutation: gql`${updateCart}`,
       variables: {cart: item}
@@ -227,6 +229,7 @@ export class PurchasesApi {
       .catch(error => console.log(error.message))
   }
 
+  //TODO
   createOrderMutationCallback(result){
     
     let test = result;

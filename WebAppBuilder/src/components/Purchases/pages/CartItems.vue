@@ -133,7 +133,8 @@ export default {
             case 'lg': return p4
             case 'xl': return p5
           }
-        },
+      },
+      
       breakpointIif(bp, t, f){
         if (this.$vuetify.breakpoint.name==bp)
         {
@@ -141,6 +142,7 @@ export default {
         }
         return f;
       },
+      
       getCartInputTypeParam(cartItem){
         return {
           item:	{
@@ -162,7 +164,9 @@ export default {
           mutationChangeCartItem(cartItem)
         }
       },
+      
       mutationChangeCartItem(item, qt){
+        debugger;
         api.updateCartMutation(item);
       },
       mutationClearCarts(){

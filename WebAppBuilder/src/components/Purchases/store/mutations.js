@@ -1,11 +1,11 @@
-function _returnIndexByResourceId(cartitems,resourceId){
+function _returnIndexById(cartitems,id){
   let result = {
     success: false,
     returned: Number
   };
 
   for(var i=0;i<cartitems.length;i++){
-    if(cartitems[i].resourceId === resourceId){
+    if(cartitems[i].id === id){
         result.success = true;
         result.returned = i;
         break;
@@ -21,7 +21,7 @@ export default {
   },
   
   addCartItem(state, payload){
-    let result = _returnIndexByResourceId(state.cartitems, payload.resourceId);
+    let result = _returnIndexById(state.cartitems, payload.id);
     if(result.success){
       state.cartitems[result.returned]  = payload;
     }
@@ -49,7 +49,8 @@ export default {
   },
 
   updateCartItem(state, payload){
-    let result = _returnIndexByResourceId(state.cartitems, payload.resourceId);
+    debugger;
+    let result = _returnIndexById(state.cartitems, payload.id);
     state.cartitems[result.returned]  = payload;
   }
 }
