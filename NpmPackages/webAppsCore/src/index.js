@@ -10,35 +10,18 @@ import ModulesManager from '@it-enterprise/modules-manager'
 import Router from '@it-enterprise/routerCore'
 import storeModule from './store/index'
 
-import {ApolloClient} from 'apollo-client'
-import {HttpLink} from 'apollo-link-http'
-import {InMemoryCache} from 'apollo-cache-inmemory'
-import VueApollo from 'vue-apollo'
-
-//Cache implementation
-const cache = new InMemoryCache()
-const apolloClient = new ApolloClient({
-  link: new HttpLink({}),
-  cache,
-  connectToDevTools: true,
-})
-
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
-})
-
+import VueRouter from 'vue-router'
+import axios from 'axios'
 
 const loadModule = () => import('./interface')
 
 
-import axios from 'axios'
 
 const _namespace = 'WebApps'
 
 export default {
   install(Vue, params) {
     let { options, dependencies } = params || {}
-    Vue.use(VueApollo)
 
     if (!dependencies) {
       throw new Error('Зависимости должны быть переданы')
@@ -48,6 +31,8 @@ export default {
     if (!dependencies.axios) {
       dependencies.axios = axios
     }
+    // добавляем в зависимости роутер
+    dependencies.router = router
 
     // регистрируем модуль хранилища
     let store = dependencies.store
@@ -55,7 +40,6 @@ export default {
       throw new Error('Хранилище должно быть передано в виде зависимости .store')
     }
     store.registerModule(_namespace, storeModule)
-
 
     // регистрируем компоненты
 
@@ -75,13 +59,20 @@ export default {
     Vue.use(Router, { options, dependencies })
     Vue.use(Authentication, { options, dependencies })
 
+    Vue.use(VueRouter)
+
     Vue.use(GrapgQlCore, { options, dependencies })
 
     const core = new WebApps(Vue, options, dependencies)
     dependencies.modulesManager.register(_namespace, () => Promise.resolve(core))
     Vue.prototype.$WebApps = core
-    Vue.prototype.$apolloProvider = apolloProvider
   }
 }
 
-
+// Роутер по умолчанию
+const router = new VueRouter({
+  mode: 'history',
+  base: window.myConfig.BASE_URL,
+  routes: [{path: '/:ApplicationId',children: [{path: '*'}]}
+  ]
+})
