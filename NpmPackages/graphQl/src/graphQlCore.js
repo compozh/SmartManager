@@ -1,4 +1,4 @@
-console.log("GraphQl Loaded!")
+console.log('GraphQl Loaded!')
 
 export default class GraphQlCore {
   __config
@@ -9,13 +9,13 @@ export default class GraphQlCore {
     this.__axios = axios
 
     if (!this.__config) {
-      throw new Error("Параметры GrapgQl должны быть заданы!")
+      throw new Error('Параметры GrapgQl должны быть заданы!')
     }
     if(!this.__config.GrapgQlUrl){
-      throw new Error("Адрес GraphQl сервера должен быть задан!")
+      throw new Error('Адрес GraphQl сервера должен быть задан!')
     }
     if (!this.__axios) {
-      throw new Error("axios должен быть передан как зависимость!")
+      throw new Error('axios должен быть передан как зависимость!')
     }
   }
 
@@ -43,7 +43,7 @@ export default class GraphQlCore {
       return response
     }
     catch(error){
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
   }
 
@@ -86,4 +86,4 @@ export default class GraphQlCore {
 
 
 
-};
+}
