@@ -1,39 +1,39 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import WebApps from '@it-enterprise/webAppsCore'
+import Localization from '@it-enterprise/localization'
+import Eds from '@it-enterprise/eds'
+
 import { i18n } from './plugins/i18n'
+import VueI18n from 'vue-i18n'
 import 'vuetify/dist/vuetify.min.css'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
-
+import store from './store/index'
 export const eventBus = new Vue() // Шина событий
 
-
-
-Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Vuex)
+Vue.use(VueI18n)
 
 // Create a new store
-const store = new Vuex.Store({})
+//const store = new Vuex.Store({})
 
-
-let router = new VueRouter({
-  mode: 'history',
-  base: window.myConfig.BASE_URL,
-  routes: [{path: '/:ApplicationId',children: [{path: '*'}]}
-  ]
-})
 
 // объект с зависимостями
-let d = {
+let dependencies = {
   store,
-  router
+  i18n
 }
+Vue.use(Eds, {dependencies})
 
 Vue.use(WebApps, {
-  dependencies: d,
+  dependencies,
   options: window.myConfig
+})
+Vue.use(Localization, { dependencies })
+
+dependencies.modulesManager.getLocalization().then(resp=>{
+  resp.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
 })
 
 // временный импорт компонентов
@@ -49,7 +49,7 @@ start()
 
 async function start()   {
   // Загрузка приложения
-  let webAppsCore = await d.modulesManager.getWebApps()
+  let webAppsCore = await dependencies.modulesManager.getWebApps()
 
   let appComponent = await webAppsCore.GetApplicationComponent({
 

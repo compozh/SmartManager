@@ -27,9 +27,4 @@ export default {
   .user-image {
     border-radius: 50%;
   }
-
-  .border {
-    border: 2px solid #b3b3b3;
-    border-radius: 50%;
-  }
 </style>

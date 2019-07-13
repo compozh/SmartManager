@@ -8,7 +8,7 @@
       <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
       <router-view name="toolbar" />
       <v-spacer></v-spacer>
-      <language-component />
+      <Localization-view-ChangeLanguage current-language="" />
     </v-toolbar>
     <v-content>
       <v-container fluid>
