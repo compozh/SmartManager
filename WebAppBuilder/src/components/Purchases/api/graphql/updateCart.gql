@@ -1,0 +1,15 @@
+mutation($cart: CartInput!){
+          purchasesMutation{
+            updateCart(cart:$cart){
+              id,
+              measurementUnit{
+                id,
+                name
+              },
+              quantity,
+              resourceId,
+              resourceName,
+              dateDelivery
+            }
+          }
+        }

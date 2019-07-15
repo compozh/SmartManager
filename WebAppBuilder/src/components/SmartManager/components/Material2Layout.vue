@@ -59,17 +59,17 @@
       </v-layout>
     </v-container>
 
-    <template v-if="error">
+    <template v-if="message.type">
       <v-snackbar
         :multi-line="true"
         :timeout="5000"
-        color="error"
-        @input="closeError"
+        :color="message.type"
         :value="true"
+        @input="closeMessage"
       >
-        {{ error }}
-        <v-btn flat dark @click.native="closeError"
-        >Close
+        {{ message.text }}
+        <v-btn icon @click.native="closeMessage">
+          <v-icon>close</v-icon>
         </v-btn>
       </v-snackbar>
     </template>
@@ -98,19 +98,23 @@
           ? this.mini = !this.mini
           : this.drawer = !this.drawer;
       },
-      closeError() {
-        this.$store.commit('sm/setError', null);
+      closeMessage() {
+        this.$store.commit('sm/setMessage', null);
       }
     },
     computed: {
-      error() {
-        return this.$store.getters['sm/error']
+      message() {
+        const message = this.$store.state.sm.message
+        return message.type ? message : {
+          type: '',
+          text: `Нет сообщений для отображения`
+        }
       },
       circularLoader() {
-        return this.$store.getters['sm/circularLoader']
+        return this.$store.state.sm.circularLoader
       },
       linearLoader() {
-        return this.$store.getters['sm/linearLoader']
+        return this.$store.state.sm.linearLoader
       },
       menuMiniMode() {
         eventBus.$emit('setMenuMode', this.mini);
@@ -121,6 +125,7 @@
       eventBus.$on('setMenuMiniMode', value => {
         this.mini = value
       })
+      this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
     },
     beforeDestroy() {
       eventBus.$off('setMenuMiniMode')

@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import purchasesSchemaAxios from "../BaseFunctions";
+import {PurchasesApi} from "../api/purchasesApi";
+const api = new PurchasesApi();
 export default {
     name: "catalogue-route-breadcrumbs",
     props:{
@@ -27,11 +28,12 @@ export default {
     }),
     methods:{
         getRoutePath(code) {
-            const query = `{purchases{items: resourcesGrops(id: "${code}"){id,name,parent{id}}}}`;
-            purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
+            api.getResourcesGroups(code, "id,name").then(this.getParendCodeCallback);
+            //const query = `{purchases{items: resourcesGrops(id: "${code}"){}}}`;
+            //purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
         },
         getParendCodeCallback(r) { 
-            var item = _.first(r.data.data.purchases.items);
+            var item = _.first(r.data.purchases.items);
             if (item)
             {
                 if (!item.parent || item.parent === null){

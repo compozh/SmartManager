@@ -4,12 +4,13 @@
         <v-icon v-text="'photo_camera'" :size="height"/>
     </div>
     <div v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
-       <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover">
+       <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover" :height="height" :width="width">
             <v-carousel-item
                 v-for="(item, i) in items"
                 :key="i"
-                :src="item"
-                :style="`width: ${width}; height: ${height};`"
+                :src="item" 
+                :height="height" 
+                :width="width"
                 transition="fade-transition"
                 reverse-transition="fade-transition"
             />
@@ -19,9 +20,10 @@
 </template>
 
 <script>
-    import purchasesSchemaAxios from "../BaseFunctions"
-    // import { isUndefined } from 'util';
-    // import { async } from 'q';
+    import {PurchasesApi} from "../api/purchasesApi";
+    
+    const api = new PurchasesApi();
+
     export default {
         name: "item-picture",
         props:{
@@ -46,12 +48,13 @@
         }),
         methods:{
            respCallback(resp){
-               if (resp.data.data.purchases.items.length > 0)
+           // debugger;
+               if (resp.data.purchases.items.length > 0)
                {
-                    var item = resp.data.data.purchases.items[0];
-                    if (item.content && item.content.length > 0)
+                    var item = resp.data.purchases.items[0];
+                    if (item.content)
                     {
-                        this.items.push(item.content);
+                        this.items = this.items.concat(item.content);
                     }
                }
            },
@@ -60,15 +63,11 @@
            }
         },
         created: function () {
-            //debugger;
-            var query = `{
-                purchases{
-                    items: ${this.entityName} (id:"${this.id}"){
-                        content
-                    }
-                }
-            } `;
-            purchasesSchemaAxios(this, query).then(this.respCallback);
+            var promise = 
+                this.id.trim().length == 15 
+                    ? api.getImagesForCatalogueItem(this.id)
+                    : api.getImagesForCatalogueGroup(this.id); 
+            promise.then(this.respCallback);
         },
         
 
@@ -81,7 +80,7 @@
     display: flex;
     justify-self: center;
 }
-.icon-frame >>> .v-carousel{
+.v-carousel{
     box-shadow: none;
 }
 </style>

@@ -55,7 +55,7 @@
     name: "smTaskTabComments",
     computed: {
       task() {
-        return this.$store.getters['sm/taskInfo']
+        return this.$store.state.sm.taskInfo
       },
       getCommentsLength() {
         return this.task.comments ? this.task.comments.length : ''

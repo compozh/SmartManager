@@ -1,5 +1,5 @@
 <template>
-    <pre>{{ sourceText }}</pre>
+    <span>{{ sourceText }}</span>
 </template>
 
 <script>
@@ -13,7 +13,9 @@
       fetch(this.url)
         .then(res => res.text())
         .then(text => this.sourceText = text)
-        .catch(e => this.$store.commit('sm/setError', e.message))
+        .catch(e => {
+          this.$store.commit('sm/setMessage', {type: 'error', text: e.message})
+        })
     }
   }
 </script>
