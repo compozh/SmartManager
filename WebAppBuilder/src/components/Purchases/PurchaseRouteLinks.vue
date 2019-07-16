@@ -5,7 +5,7 @@
       <v-list-tile @click="" v-for="route in links" :key="route.Id"  :to="{name:route.Id}" active-class="active">
         <v-list-tile-action>
           <v-badge right overlap color="red">
-            <span v-if="route.Badge"  slot="badge">{{route.Badge}}</span>
+            <span v-if="$eval(route.Badge)"  slot="badge" v-text="$eval(route.Badge)" />
             <v-icon>{{ route.Image }}</v-icon>
           </v-badge>
         </v-list-tile-action>
@@ -39,9 +39,14 @@ export default {
             }
             //console.log(this.$router)
             links = [...links, ...links[1].Children, ...links[0].Children]
-            //console.log(links)
-            return  _.orderBy(links.filter(l => !l.HideAfterLogin), 'Sort');
+            console.log(links)
+            return  _.orderBy(links.filter(l => !l.HideAfterLogin && l.Name), 'Sort');
         }
+    },
+    methods: {
+    	'$eval'(expr) {
+        return eval(expr)
+      }
     }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <v-app  id="inspire">
     <v-navigation-drawer fixed app v-model="drawer" :mini-variant.sync="mini">
-      <v-button @click.stop="mini = !mini" icon flat>
+      <v-btn @click.stop="mini = !mini" icon flat>
         <v-icon v-text="mini ? 'chevron_right' : 'chevron_left'" />
-      </v-button>
-      <router-view name="navigation-drawer"/>
+      </v-btn>
+      <purchase-menu :mini="mini" name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app color="white">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -21,12 +21,13 @@
     <v-footer app inset>
       <slot name="footer"></slot>
     </v-footer>
+    <message-snackbar />
   </v-app>
 </template>
 
 <script>
 // @ is an alias to /src
-import IconLanguageComponent from "./SimpleComponents/IconLanguageComponent.vue"
+import IconLanguageComponent from "./components/IconLanguageComponent.vue"
 
 export default {
   name: "default-app-purchases",
