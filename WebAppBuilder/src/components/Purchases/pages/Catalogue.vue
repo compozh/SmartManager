@@ -36,18 +36,17 @@
                   <div class="cat_header title mb-1">{{item.name}}</div>                  
                 </router-link>
               <v-list>
-                <template  v-for="(child,index) in item.children">
+                <template  v-for="child in item.children.slice(0,5)">
                   <router-link :key="child.id" :to="{ name:'CATALOGUE', params: {catalogueId: child.id.trim() }}">              
-                  <v-list-tile class="list_content" >                        
-                    <v-list-tile-content>
-                      <v-list-tile-title v-text="child.name.slice(0,20)"></v-list-tile-title>                      
-                    </v-list-tile-content>
-                    <v-list-tile-action>
-                      <v-icon>keyboard_arrow_right</v-icon>
-                    </v-list-tile-action>                    
-                  </v-list-tile>
-                    <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
-                    </router-link>
+                    <v-list-tile class="list_content" >                        
+                      <v-list-tile-content>
+                        <v-list-tile-title v-text="child.name"></v-list-tile-title>                      
+                      </v-list-tile-content>
+                      <v-list-tile-action>
+                        <v-icon>keyboard_arrow_right</v-icon>
+                      </v-list-tile-action>                    
+                    </v-list-tile>
+                  </router-link>
                 </template>
               </v-list>
               </v-card>
@@ -85,7 +84,6 @@
       },
       methods:{
         getTop10(response, counter){
-          debugger;
           let resp_children = response.data.purchases.items.splice(0, 5);
           this.$set(this.items[counter], "children", []);
           for(let i=0;i<resp_children.length;i++){
@@ -99,7 +97,7 @@
             id = "";
           }
           if (id.trim().length != 15)
-          { 
+          {
             this.entityType = "resourcesGrops";
           }
           else 
@@ -107,14 +105,16 @@
             this.entityType = "resources"; 
             fieldname = "fullName";
           }
-          api.getResourcesGroupsByGroup(id, `id,name: ${fieldname}`).then(this.respCallback);
+          api.getResourcesGroupsByGroupNew(id).then(this.respCallback);
+          //api.getResourcesGroupsByGroup(id, `id,name: ${fieldname}`).then(this.respCallback);
         },
 
         respCallback (resp) {
+            debugger;
             this.items = resp.data.purchases.items;
-            for(let i=0;i<this.items.length;i++){
+            /*for(let i=0;i<this.items.length;i++){
               api.getResourcesGroupsByGroup(this.items[i].id, `id,name: name`).then(r=> this.getTop10(r,i));
-            }
+            }*/
         },
         
         searchCallback (item) {
@@ -126,10 +126,9 @@
       },
 
       created: function () {
-        debugger;
         var id = this.routeParamCode;
         this.items = [];
-        this.getItems(id);        
+        this.getItems(id);      
       },
       computed:{
         itemsComp(){
@@ -140,7 +139,6 @@
           
           return _.filter(this.items, this.searchCallback);
         },
-        
         routeParamCode(){
           return this.$route.params.catalogueId ? this.$route.params.catalogueId : "";
         },
@@ -153,7 +151,6 @@
         '$route' (to, from) {
           var id = to.params.catalogueId;
           this.getItems(id);
-          
         }
       }
   }
@@ -168,6 +165,7 @@
   background: lightgrey;
 }
 .list_content{
+  border-bottom: 1px solid lightgray;
   color: dimgray;
 }
   .child{

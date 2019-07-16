@@ -18,6 +18,7 @@ import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
+import resourcesGropsByGoupNew from './graphql/resourcesGropsByGoupNew.gql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -57,6 +58,15 @@ export class PurchasesApi {
   `;
     return client.query({
       query: gql`query ($group: String) ${resourcesGropsByGoup} ${FIELDS}`,
+      variables: { group: group }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getResourcesGroupsByGroupNew(group){
+    return client.query({
+      query: gql`query ($group: String) ${resourcesGropsByGoupNew}`,
       variables: { group: group }
     })
     .then(result => result)

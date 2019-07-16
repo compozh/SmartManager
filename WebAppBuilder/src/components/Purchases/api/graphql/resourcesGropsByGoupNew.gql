@@ -1,0 +1,9 @@
+{
+purchases{
+  items: resourcesGrops(group:$group){
+    id, name,children{
+      id,name
+      }
+    }
+  }
+}
