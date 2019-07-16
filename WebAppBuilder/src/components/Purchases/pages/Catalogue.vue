@@ -16,7 +16,7 @@
         <v-layout row>
           <catalogue-route-breadcrumbs :code="routeParamCode" />
           <v-layout justify-end>
-            <v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>
+            <!--<v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>-->
             <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
           </v-layout>
         </v-layout>
@@ -31,22 +31,24 @@
           <template v-for="item in itemsComp">
             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <v-card>
-              <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                  <item-picture :entityName="entityType" :id="item.id" height="200px" width="365px"/>
-                  <div class="title mb-1">{{item.name}}</div>                  
-              </router-link>
+                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
+                  <item-picture :entityName="entityType" :id="item.id" height="200px" max-width="100%" width="350px" />
+                  <div class="cat_header title mb-1">{{item.name}}</div>                  
+                </router-link>
               <v-list>
-              <template  v-for="(child,index) in item.children">              
-                <v-list-tile class="list_content" :key="child.id">                
-                  <v-list-tile-content>
-                    <v-list-tile-title v-text="child.name.slice(0,20)"></v-list-tile-title>
-                  </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-icon>keyboard_arrow_right</v-icon>
-                  </v-list-tile-action>
-                </v-list-tile>
-                  <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
-              </template>
+                <template  v-for="(child,index) in item.children">
+                  <router-link :key="child.id" :to="{ name:'CATALOGUE', params: {catalogueId: child.id.trim() }}">              
+                  <v-list-tile class="list_content" >                        
+                    <v-list-tile-content>
+                      <v-list-tile-title v-text="child.name.slice(0,20)"></v-list-tile-title>                      
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-icon>keyboard_arrow_right</v-icon>
+                    </v-list-tile-action>                    
+                  </v-list-tile>
+                    <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
+                    </router-link>
+                </template>
               </v-list>
               </v-card>
             </v-flex>
@@ -75,7 +77,7 @@
           timeout: 0,
           entityType: "",
           filterDrawer: false,
-          rowViewType: false,
+          rowViewType: true,
           search: "",
       }),
       props:{
@@ -83,7 +85,8 @@
       },
       methods:{
         getTop10(response, counter){
-          let resp_children = response.data.purchases.items.splice(0, 10);
+          debugger;
+          let resp_children = response.data.purchases.items.splice(0, 5);
           this.$set(this.items[counter], "children", []);
           for(let i=0;i<resp_children.length;i++){
             this.items[counter].children.push(resp_children[i]);
@@ -123,6 +126,7 @@
       },
 
       created: function () {
+        debugger;
         var id = this.routeParamCode;
         this.items = [];
         this.getItems(id);        
@@ -156,8 +160,15 @@
 </script>
 
 <style lang="scss" scoped>
+
+.cat_header{
+  color: darkslategray;
+}
 .list_content:hover{
   background: lightgrey;
+}
+.list_content{
+  color: dimgray;
 }
   .child{
     float: left;
@@ -171,6 +182,11 @@
   a{
     text-decoration: none;
   }
+  
+  .item-picture{
+    max-width: 100%;
+  }
+
   .filter-panel{
     margin: 10px;
   }
