@@ -3,17 +3,18 @@ import {SmartManagerApi} from '../api/smartManagerApi'
 const api = new SmartManagerApi()
 
 export default {
-  async getFolders({commit}) {
-    commit('setCircularLoader', true)
+  async getFolders({commit}, payload) {
+    const loader = payload.loader
+    commit(loader, true)
 
     try {
       const result = await api.getFoldersFromGql()
       const folders = result.data.smtasks.folders
       commit('setFolders', folders)
-      commit('setCircularLoader', false)
+      commit(loader, false)
 
     } catch (e) {
-      commit('setCircularLoader', false)
+      commit(loader, false)
       commit('setMessage', {type: 'error', text: e.message})
     }
   },
@@ -25,7 +26,10 @@ export default {
     commit(loader, true)
 
     try {
-      const result = await api.getTasksFromGql(folderId)
+      const result = await api.getTasksFromGql(
+        // Изменения в веб-расчете: для получения всех задач необходимо передать пустую строку
+        folderId === 'ALL' ? '' : folderId
+      )
       const tasks = {
         [folderId]: result.data.smtasks.tasks
       }
@@ -65,7 +69,7 @@ export default {
       commit('setMessage', {type: 'error', text: e.message})
     }
   },
-  async addNewTask({commit}, payload) {
+  async addNewTask({commit, dispatch}, payload) {
     commit('setCircularLoader', true)
 
     try {
@@ -79,6 +83,7 @@ export default {
       commit('setMessage', message)
       commit('setCircularLoader', false)
       commit('setTaskAddForm', 'close')
+      dispatch('getFolders', {loader: 'setLinearLoader'})
     } catch (e) {
       commit('setCircularLoader', false)
       commit('setMessage', {type: 'error', text: e.message})

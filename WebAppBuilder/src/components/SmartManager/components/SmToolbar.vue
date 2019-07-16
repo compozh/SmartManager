@@ -10,6 +10,15 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
+      <v-flex
+        v-if="showTaskAddFormTitle"
+        class="text-xs-left hidden-xs-only"
+      >
+        <h2
+          class="blue--text text--darken-2 font-weight-thin"
+        >Новая задача
+        </h2>
+      </v-flex>
       <v-text-field
         v-if="showSearch"
         flat
@@ -43,6 +52,9 @@
         set(search) {
           this.$store.commit('sm/setSearch', search)
         }
+      },
+      showTaskAddFormTitle() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
     }
   }

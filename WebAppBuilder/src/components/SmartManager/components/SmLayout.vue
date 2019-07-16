@@ -30,7 +30,6 @@
       :mini-variant="menuMode === 'mini'"
       mini-variant-width="56"
       width="270"
-      class="transparent"
       stateless
     >
       <router-view name="navigation-drawer"/>
@@ -65,10 +64,10 @@
         :timeout="5000"
         :color="message.type"
         :value="true"
-        @input="closeMessage"
+        @input="setMessage(null)"
       >
         {{ message.text }}
-        <v-btn icon @click.native="closeMessage">
+        <v-btn icon @click.native="setMessage(null)">
           <v-icon>close</v-icon>
         </v-btn>
       </v-snackbar>
@@ -89,6 +88,12 @@
     },
     methods: {
       menuBtn() {
+        if (this.taskAddForm) {
+          return this.setMessage({
+            type: 'warning',
+            text: 'Для перехода в меню закройте форму'
+          })
+        }
         switch (this.menuMode) {
           case 'close':
             this.setMenuMode('open')
@@ -100,8 +105,8 @@
             this.setMenuMode('close')
         }
       },
-      closeMessage() {
-        this.$store.commit('sm/setMessage', null);
+      setMessage(message) {
+        this.$store.commit('sm/setMessage', message);
       },
       goToAll() {
         this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
@@ -129,6 +134,9 @@
       },
       breakpoint() {
         return this.$vuetify.breakpoint.name
+      },
+      taskAddForm() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
     },
     created() {
@@ -144,7 +152,7 @@
         }
       },
       breakpoint: function (val) {
-        if (val === 'sm') {
+        if (val === 'sm' && !this.taskAddForm) {
           this.setMenuMode('mini')
         }
       }
