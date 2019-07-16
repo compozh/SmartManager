@@ -6,7 +6,7 @@
       class="toolbar"
     >
       <v-toolbar-side-icon
-        @click.stop="setMenuButtonMode"
+        @click.stop="menuBtn"
         class="blue--text text--darken-2"
       >
       </v-toolbar-side-icon>
@@ -26,8 +26,8 @@
       app
       clipped
       floating
-      v-model="drawer"
-      :mini-variant="menuMiniMode"
+      :value="menuMode !== 'close'"
+      :mini-variant="menuMode === 'mini'"
       mini-variant-width="56"
       width="270"
       class="transparent"
@@ -78,11 +78,9 @@
 </template>
 
 <script>
-  import {eventBus} from '../../../main';
-
   export default {
     name: 'material-2-layout',
-    props: ['toolbarTitle', 'menuButtonMode'],
+    props: ['toolbarTitle'],
     data() {
       return {
         drawer: true,
@@ -90,16 +88,26 @@
       };
     },
     methods: {
-      // определение режима работы кнопки меню:
-      // 0 - показывать и скрывать
-      // 1 - показывать и минимизировать
-      setMenuButtonMode() {
-        return this.menuButtonMode
-          ? this.mini = !this.mini
-          : this.drawer = !this.drawer;
+      menuBtn() {
+        switch (this.menuMode) {
+          case 'close':
+            this.setMenuMode('open')
+            break
+          case 'open':
+            this.setMenuMode('mini')
+            break
+          case 'mini':
+            this.setMenuMode('close')
+        }
       },
       closeMessage() {
         this.$store.commit('sm/setMessage', null);
+      },
+      goToAll() {
+        this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
+      },
+      setMenuMode(mode) {
+        this.$store.commit('sm/setMenuMode', mode)
       }
     },
     computed: {
@@ -116,19 +124,30 @@
       linearLoader() {
         return this.$store.state.sm.linearLoader
       },
-      menuMiniMode() {
-        eventBus.$emit('setMenuMode', this.mini);
-        return this.mini;
+      menuMode() {
+        return this.$store.state.sm.menuMode
+      },
+      breakpoint() {
+        return this.$vuetify.breakpoint.name
       }
     },
     created() {
-      eventBus.$on('setMenuMiniMode', value => {
-        this.mini = value
-      })
-      this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
+      this.goToAll()
     },
-    beforeDestroy() {
-      eventBus.$off('setMenuMiniMode')
+    watch: {
+      '$route'(to, from) {
+        if (to.name === 'SMARTMANAGERLOGIN') {
+          this.setMenuMode('close')
+        }
+        if (from.name === 'SMARTMANAGERLOGIN') {
+          this.goToAll()
+        }
+      },
+      breakpoint: function (val) {
+        if (val === 'sm') {
+          this.setMenuMode('mini')
+        }
+      }
     }
   }
 </script>
