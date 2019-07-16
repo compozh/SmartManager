@@ -27,8 +27,8 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout justify-end>
-                                <favorite-btn :v-model="application" value="a"/>
-                                <chat-btn :chatKey="application.id" chatType="application" />
+                                <favorite-btn :v-model="application" value="a" alias="KSM" :keyValue="application.id"  />
+                                <chat-btn :chatKey="application.id" chatType="application"/>
                             </v-layout>
                         </v-card-actions>
                     </v-card>

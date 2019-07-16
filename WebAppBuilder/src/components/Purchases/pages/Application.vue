@@ -59,40 +59,44 @@
 <script>
 import moment from 'moment';
 import _ from 'lodash';
+import {PurchasesApi} from "../api/purchasesApi";
 
-    export default {
-        name: "application",
-        props: { 
-            applicationId: 0,
-            application: {}
-        },
-        filters:{
-            formatDate: (value) => {
-                if (value) {
-                    return moment(String(value)).format('DD.MM.YYYY')
-                }
-            }
-        },
-        computed:{
-            compRows() {
-                for (const key in this.application.rows) {
-                    if (this.application.rows.hasOwnProperty(key)) {
-                        if (this.application.rows[key].isEdit == undefined)
-                        {
-                            this.$set(this.application.rows[key], 'isEdit', false)
-                        }
-                    }
-                }
-                return this.application.rows;
-            }
-        },
-        methods:{
-            editClick(row){
-                console.log(row);
-                row.isEdit = !!!row.isEdit;
+const api = new PurchasesApi();
+
+
+export default {
+    name: "application",
+    props: { 
+        applicationId: 0,
+        application: {}
+    },
+    filters:{
+        formatDate: (value) => {
+            if (value) {
+                return moment(String(value)).format('DD.MM.YYYY')
             }
         }
+    },
+    computed:{
+        compRows() {
+            for (const key in this.application.rows) {
+                if (this.application.rows.hasOwnProperty(key)) {
+                    if (this.application.rows[key].isEdit == undefined)
+                    {
+                        this.$set(this.application.rows[key], 'isEdit', false)
+                    }
+                }
+            }
+            return this.application.rows;
+        }
+    },
+    methods:{
+        editClick(row){
+            console.log(row);
+            row.isEdit = !!!row.isEdit;
+        }
     }
+}
 </script>
 
 <style scoped>

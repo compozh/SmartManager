@@ -17,6 +17,7 @@ import deleteCart from './graphql/deleteCart.gql'
 import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
+import addToFavorites from './graphql/addToFavorites.gql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -184,6 +185,17 @@ export class PurchasesApi {
     return test;
   }
 
+  getAddToFavoritesInputTypeParam(item){
+    let test =  {
+        number:         item.NDM,
+        date:           item.DDM,
+        kDM1:           item.DM1,
+        kDM2:           item.DM2,
+        title:          item.Description
+    }
+
+    return test;
+  }
   updateCartMutationCallback(result){
     let response_data = result.data.purchasesMutation.updateCart;
     store.commit('purchases/updateCartItem', response_data);
@@ -226,7 +238,6 @@ export class PurchasesApi {
       .then(this.createCartMutationCallback)
       .catch(error => console.log(error.message))
   }
-
   //TODO
   createOrderMutationCallback(result){
     
@@ -239,6 +250,20 @@ export class PurchasesApi {
       variables: {orderInput:orderInput}
     })
       .then(this.deleteAllCartsMutationCallback)
+      .catch(error => console.log(error.message))
+  }
+  addToCartMutationCallback(result){
+    
+    let test = result;
+  }
+ 
+  addToFavoritesMutation(alias, keyValue){
+    debugger;
+    return client.mutate({
+      mutation: gql`${addToFavorites}`,
+      variables: {alias: alias, keyValue: keyValue}     
+    })
+      .then(this.addToCartMutationCallback)
       .catch(error => console.log(error.message))
   }
 }

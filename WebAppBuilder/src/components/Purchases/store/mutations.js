@@ -40,6 +40,12 @@ export default {
     });
   },
 
+  // addToFavorites(state, payload){
+  //   state.cartitems = _.remove(state.cartitems, function(n){
+  //     return n.id != payload;
+  //   });
+  // },
+
   deleteAllCarts(state){
     state.cartitems = [];
   },
