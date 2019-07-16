@@ -12,17 +12,25 @@
       </v-flex>
       <sm-empty-state v-if="!checkTasks">Нет задач в папке</sm-empty-state>
       <v-flex>
-        <v-btn
-          fixed
-          dark
-          fab
-          bottom
-          right
-          color="blue darken-2"
-          @click="openTaskAddForm"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              fixed
+              dark
+              fab
+              bottom
+              right
+              v-on="on"
+              color="blue darken-2"
+              @click="openTaskAddForm"
+            >
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+          <span>Добавить задачу</span>
+        </v-tooltip>
+
       </v-flex>
     </v-layout>
   </v-container>
@@ -62,7 +70,7 @@
       getTasks(folderId) {
         this.$store.commit('sm/setCurrentFolder', folderId)
         const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
-          this.$store.dispatch('sm/getTasks', {folderId, loader})
+        this.$store.dispatch('sm/getTasks', {folderId, loader})
       },
       openTaskAddForm() {
         this.$store.commit('sm/setTaskAddForm', 'open')
