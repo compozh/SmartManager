@@ -106,15 +106,10 @@
             fieldname = "fullName";
           }
           api.getResourcesGroupsByGroupNew(id).then(this.respCallback);
-          //api.getResourcesGroupsByGroup(id, `id,name: ${fieldname}`).then(this.respCallback);
         },
 
         respCallback (resp) {
-            debugger;
             this.items = resp.data.purchases.items;
-            /*for(let i=0;i<this.items.length;i++){
-              api.getResourcesGroupsByGroup(this.items[i].id, `id,name: name`).then(r=> this.getTop10(r,i));
-            }*/
         },
         
         searchCallback (item) {

@@ -35,11 +35,10 @@
                 return this.fieldName ? this.fieldName : "quantity";
             },
             labelNameComp(){
-                return this.labelName ? this.labelName : "Количество";
+                return this.labelName ? this.labelName : $t('purchases.CartItems.Quantity');;
             }
         },
         created(){
-            debugger;
             let test = this.quantity;
         }
     }

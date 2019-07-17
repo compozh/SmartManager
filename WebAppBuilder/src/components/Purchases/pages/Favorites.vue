@@ -82,7 +82,7 @@ import { debug } from 'util';
 const api = new PurchasesApi();
 
 export default {
-    name: "cart-list",
+    name: "mylist",
     components:{
       RemoveButton,
       ModalWindowOrderCreation,

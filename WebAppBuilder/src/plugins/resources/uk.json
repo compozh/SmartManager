@@ -6,7 +6,22 @@
     "emptyLogin": "Ви не ввели логін",
     "emptyPassword": "Ви не ввели пароль",
 	"NoDevices": "немає пристроїв",
-	
+	"purchases":{
+		"CreateOrderWindow":{
+		  "DocumentNumber": "Номер документа",
+		  "DocumentDate": "Дата документа",
+		  "Code": "Код",
+		  "Description": "Опис"
+		},
+		"CartItems":{
+		  "Resource": "Ресурс",
+		  "Quantity":"Кількість",
+		  "Unit": "Oдиниці вимірювання",
+		  "Date": "Дата"
+		},
+		"CreateOrder": "Зробити замовлення",
+		"CleanCart": "Очистити корзину"
+	},
     "eds": {
 		"CA": "ЦСК",
 		"MinfinLogo" : "Міністерство фінансів України",

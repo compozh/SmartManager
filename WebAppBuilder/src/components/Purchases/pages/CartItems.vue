@@ -5,7 +5,7 @@
         <btn-modal-window-order-creation/>
       </v-flex>     
       <v-flex>
-        <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >Очистить корзину</v-btn>
+        <v-btn block outline round large color="error" :disabled="!cartlist" @click="mutationClearCarts" >{{ $t('purchases.CleanCart')}}</v-btn>
       </v-flex>
     </v-layout>
     
@@ -37,18 +37,18 @@
               <!-- Количество и ЕИ -->
               <v-layout align-start>
                   <v-flex>
-                    <quantity-text-field editable="true" :key="cartItem.id" :quantity="cartItem.quantity" @onChangeValue="(qt)=> mutationChangeCartItem(cartItem, qt)" />
+                    <quantity-text-field editable="true" :labelName="$t('purchases.CartItems.Quantity')" :key="cartItem.id" :quantity="cartItem.quantity" @onChangeValue="(qt)=> changeQuantity(cartItem, qt)" />
                   </v-flex>
                   &nbsp;&nbsp;
                   <v-flex>
-                    <measurement-autocomplete editable="true" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> mutationChangeCartItem(cartItem, m)" />
+                    <measurement-autocomplete editable="true" :labelName="$t('purchases.CartItems.Unit')" :measurement="cartItem.measurementUnit" @onChangeValue="(m)=> changeUnit(cartItem, m)" />
                   </v-flex>
               </v-layout>
 
               <!-- Дата поставки -->
               <v-layout align-start>
                 <v-flex>
-                    <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" label="Дата поставки"  @onChangeValue="(d)=> mutationChangeCartItem(cartItem, d)"/>
+                    <date-text-field editable="true" :dateType="cartItem" fieldName="dateDelivery" :labelName="$t('purchases.CartItems.Date')" label="Дата поставки"  @onChangeValue="(d)=> changeDDate(cartItem, d)"/>
                 </v-flex>
               </v-layout>
 
@@ -156,18 +156,20 @@ export default {
         }
       },
       // TODO
-      changeQuantity(cartItem, qt){
+      changeQuantity(item, qt){
+       item.quantity = qt;
+        api.updateCartMutation(item);
+      },
+
+      changeUnit(item,m){
         debugger;
-        if(qt <= 0){
-          alert("<1")
-        }else{
-          mutationChangeCartItem(cartItem)
-        }
+        item.measurementUnit = m;
+        api.updateCartMutation(item);
       },
       
-      mutationChangeCartItem(item, qt){
+      changeDDate(item, d){
         debugger;
-        item.quantity = qt;
+        item.dateDelivery = d;
         api.updateCartMutation(item);
       },
 

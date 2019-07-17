@@ -14,28 +14,32 @@
                     <v-card :key="row.id">
                         <v-layout row-card>
                             <v-flex class="element-margin">
-                                <resource-autocomplete 
+                                <resource-autocomplete
+                                    :labelName="$t('purchases.CartItems.Resource')"
                                     :editable="row.isEdit" 
                                     :resource="row.resource"
                                 />
                             </v-flex>
                             <v-flex class="element-margin" md2 lg1>
                                 <quantity-text-field 
+                                    :labelName="$t('purchases.CartItems.Quantity')"
                                     :editable="row.isEdit" 
                                     :quantityType="row" 
                                     fieldName="planQuantity" 
                                 />
                             </v-flex>
                             <v-flex class="element-margin" md1>
-                                <measurement-autocomplete 
+                                <measurement-autocomplete
+                                    :labelName="$t('purchases.CartItems.Unit')"
                                     :editable="row.isEdit" 
                                     :measurement="row.measurementUnit"
                                 />
                             </v-flex>
                             <v-flex class="element-margin" md2>
                                 <date-text-field 
+                                    :labelName="$t('purchases.CartItems.Date')"
                                     :editable="row.isEdit" 
-                                    :dateType="row" 
+                                    :dateType="row"
                                     fieldName="orderDate"
                                 />
                             </v-flex>
