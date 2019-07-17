@@ -4,8 +4,8 @@
   "private": false,
   "description": "library for authentication",
   "author": "it-enterprise",
-  "main1": "./dist/authentication.common.js",
-  "main": "./src/index.js",
+  "main": "./dist/authentication.common.js",
+  "main1": "./src/index.js",
   "files": [
     "dist/*"
   ],
