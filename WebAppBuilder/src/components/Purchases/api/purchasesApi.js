@@ -262,18 +262,51 @@ export class PurchasesApi {
       .then(this.deleteAllCartsMutationCallback)
       .catch(error => console.log(error.message))
   }
-  addToCartMutationCallback(result){
-    
-    let test = result;
+
+  getCartItemsCallback(result){
+    let cartItems = result.data.purchases.cartItems;
+    store.commit('purchases/setCartItems', cartItems);
   }
- 
+  addToFavoritesMutationCallbackFirst(result){
+    
+    let res = result.data.purchasesMutation.addToFavorites;
+    debugger;
+    //store.commit("purchases/setMessage",  `добавлен в избраное.`);
+    if(res.ShouldCallList)
+    {
+      store.commit("purchases/setChose", {
+        list : res.ListToChoose , 
+        caption:"Выбор из списка",
+        method: function(key) 
+        {
+          let test = key;
+          debugger;
+          client.mutate({
+            mutation: gql`${addToFavorites}`,
+            variables: {alias: "SKM", keyValue: "fdsfs"}     
+          });
+          debugger;
+        }
+      });
+    }
+   
+  }
+  
+  addToFavoritesMutationCallbackSecond(result){
+    //let test = store.getters.getChoseList();
+   
+    //let test = store.getters["eam/loading"];
+    debugger;
+  }
+
   addToFavoritesMutation(alias, keyValue){
     debugger;
     return client.mutate({
       mutation: gql`${addToFavorites}`,
       variables: {alias: alias, keyValue: keyValue}     
     })
-      .then(this.addToCartMutationCallback)
+      .then(this.addToFavoritesMutationCallbackFirst)
+      //.then(this.addToFavoritesMutationCallbackSecond)
       .catch(error => console.log(error.message))
   }
 }
