@@ -96,6 +96,39 @@ const actions = ({
       return commit("SetAppDescription", data)
     })
   },
+  async applyDelegatedRights({commit, dispatch}, userId) {
+    try {
+      const result = await Axios({
+        method: 'POST',
+        url: myConfig.GrapgQlUrl + 'api/authentication/delegated',
+        withCredentials: true,
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+        data: userId
+      })
+      if (result.data) {
+        dispatch('GetCurrentUser')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async setDelegationRights({commit}, {userId, dateFrom, dateTo}) {
+    try {
+      debugger
+      const result = await Axios({
+        method: 'POST',
+        url: myConfig.GrapgQlUrl + 'api/authentication/delegation',
+        withCredentials: true,
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+        data: {userId, dateFrom, dateTo}
+      })
+
+      console.log(result)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 })
 
 export default actions

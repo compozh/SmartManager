@@ -20,12 +20,11 @@
                   <user-icon
                     class="user-big-image"
                     :src="user.photo"
-                    size="80"
+                    size="60"
                   ></user-icon>
                 </v-flex>
                 <v-flex ml-3 class="text-xs-left">
                   <p v-if="mini" class="mb-1">{{ user.name }}</p>
-                  <p class="mb-1">{{ user.login }}</p>
                   <a @click="params.changePassword"
                   >Сменить пароль</a>
                 </v-flex>
@@ -64,9 +63,9 @@
                         :key="index"
                       >
                         <div class="icon-container grow-0">
-                          <v-icon v-show="item.isActive">done</v-icon>
+                          <v-icon v-show="item.IsActive">done</v-icon>
                         </div>
-                        <span>{{ item.USERNAME }}</span>
+                        <span :id="item.USERID">{{ item.USERNAME }}</span>
                       </v-flex>
                       <v-divider></v-divider>
                       <v-flex

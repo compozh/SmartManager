@@ -7,10 +7,10 @@ export default {
       console.log('Запрос изменения пароля')
     },
     setDelegation() {
-      console.log('Делегировать права')
+      this.$store.dispatch('setDelegationRights', {userId: '*U20810', dateFrom: null, dateTo: null})
     },
-    useDelegatedRights(name) {
-      console.log('Использовать права для', name)
+    useDelegatedRights(userId) {
+      this.$store.dispatch('applyDelegatedRights', userId)
     },
     logOut() {
       this.$store.dispatch("LogOut");
@@ -37,7 +37,7 @@ export default {
         changePassword: this.changePassword,
         delegatedRightsBtnAttr: {},
         delegatedRightsBtnAEvents: {
-          click: e => this.useDelegatedRights(e.target.innerHTML)
+          click: e => this.useDelegatedRights(e.target.id)
         },
         setDelegationBtnAttr: {},
         setDelegationBtnEvents: {
