@@ -3,10 +3,10 @@
       <v-navigation-drawer fixed right app v-model="filterDrawer" >
         <v-layout class="filter-panel">
           <v-flex>
-            <label v-text="'Быстрые фильтры:'" />
+            <label v-text="$t('purchases.Catalog.FastFilter')" />
             <v-text-field
               v-model="search"
-              label="Наименование"
+              :label="$t('purchases.Catalog.Name')"
               clearable
               prepend-icon="search"
             />
@@ -83,14 +83,6 @@
         catalogueId: undefined
       },
       methods:{
-        getTop10(response, counter){
-          let resp_children = response.data.purchases.items.splice(0, 5);
-          this.$set(this.items[counter], "children", []);
-          for(let i=0;i<resp_children.length;i++){
-            this.items[counter].children.push(resp_children[i]);
-          }
-        },
-
         getItems(id){
           var fieldname = "name";
           if (!id){

@@ -13,11 +13,19 @@
 		  "Code": "Код",
 		  "Description": "Опис"
 		},
+		"Catalog":{
+			"FastFilter":"Биcтрий фільтр",
+			"Name":"Назва"
+		  },
 		"CartItems":{
+		  "Application":"Заявка",
 		  "Resource": "Ресурс",
 		  "Quantity":"Кількість",
 		  "Unit": "Oдиниці вимірювання",
-		  "Date": "Дата"
+		  "Date": "Дата",
+		  "Number": "Номер",  
+		  "Stage": "Стадiя"
+		  
 		},
 		"CreateOrder": "Зробити замовлення",
 		"CleanCart": "Очистити корзину"

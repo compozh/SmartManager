@@ -20,7 +20,7 @@
                     <v-card tile height="150px" >
                         <esecute-stepper />
                         <v-card-title>
-                            Номер: {{ application.number }} Дата: {{ application.date | formatDate }}
+                            {{$t('purchases.CartItems.Number')}}: {{ application.number }} {{$t('purchases.CartItems.Date')}}: {{ application.date | formatDate }}
                         </v-card-title>
                         <v-card-text>
                             {{ application.title }}

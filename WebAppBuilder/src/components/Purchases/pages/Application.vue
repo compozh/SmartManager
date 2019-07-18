@@ -3,8 +3,8 @@
         <v-card v-if="application">
             <v-card-title class="headline">
                 <v-layout column>
-                    <workflow-stepper object="" keyvalue=""/>
-                    Заявка № {{application.number}} от {{application.date | formatDate}}
+                    <workflow-stepper :stageName="$t('purchases.CartItems.Stage')"/>
+                    {{$t('purchases.CartItems.Application')}} № {{application.number}} от {{application.date | formatDate}}
                 </v-layout>
             </v-card-title>
             <v-card-text>

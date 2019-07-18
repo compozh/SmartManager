@@ -13,11 +13,18 @@
         "Code": "Code",
         "Description": "Description"
       },
+      "Catalog":{
+        "FastFilter":"Fast filter",
+        "Name":"Name"
+      },
       "CartItems":{
+        "Application":"Application",
         "Resource": "Resource",
         "Quantity":"Quantity",
         "Unit": "Mesurement units",
-        "Date": "Date"
+        "Date": "Date",
+        "Number": "Number",       
+			  "Stage": "Stage"
       },
       "CreateOrder":"Make order",
       "CleanCart":"Clean cart"

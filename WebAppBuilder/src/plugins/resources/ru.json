@@ -8,19 +8,26 @@
     "NoDevices": "Нет устройств",
 	"purchases":{
 		"CreateOrderWindow":{
-			"DocumentNumber": "Номер документа1",
-			"DocumentDate": "Дата документа1",
-			"Code": "Код1",
-			"Description": "Описание1"
+			"DocumentNumber": "Номер документа",
+			"DocumentDate": "Дата документа",
+			"Code": "Код",
+			"Description": "Описание"
 		},
+		"Catalog":{
+			"FastFilter":"Быстрый фильтр",
+			"Name":"Наименование"
+		  },
 		"CartItems":{
+			"Application":"Заявка",
 			"Resource": "Ресурс",
-			"Quantity":"Количество1",
-			"Unit": "Единица измерения1",
-			"Date": "Дата1"
+			"Quantity":"Количество",
+			"Unit": "Единица измерения",
+			"Date": "Дата",
+			"Number": "Номер",
+			"Stage": "Стадия"
 		},
-		"CreateOrder":"Сформировать заказ1",
-		"CleanCart":"Очистить корзину1"
+		"CreateOrder":"Сформировать заказ",
+		"CleanCart":"Очистить корзину"
 	},
     "eds": {
 		"CA": "ЦСК",

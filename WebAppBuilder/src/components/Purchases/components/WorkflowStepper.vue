@@ -3,8 +3,8 @@
         <v-stepper>
             <v-stepper-header>
                 <template v-for="(stage, n) in stages">
-                    <v-stepper-step :key="`step-${n}`" :step="stage.id" :complete="stage.isCurrent">
-                        {{stage.name}}
+                    <v-stepper-step :key="n" :step="stage.id" :complete="stage.isCurrent">
+                        {{stageNameComp.concat(String(n))}}
                     </v-stepper-step>
                     <v-divider
                         v-if="n !== stages.length - 1"
@@ -23,27 +23,34 @@
 <script>
     export default {
         name: "workflow-stepper",
-        props: ["object", "keyvalue"],
+        props: {
+            stageName: ""
+        },
         data:()=>({
             stages: [
-                {
+                {                    
                     id: "_1",
-                    name: "Стадия 1",
                     isCurrent: false
                 },
                 {
                     id: "2",
-                    name: "Стадия 2",
                     isCurrent: true
                 },
                 {
                     id: "34",
-                    name: "Стадия 3",
                     isCurrent: false
                 }
 
 
             ]
-        })
+        }),
+        computed:{
+            stageNameComp(){
+                debugger;
+                if (this.stageName)
+                    return this.stageName;
+                return $t('purchases.CartItems.Stage');
+            }
+        }
     }
 </script>
