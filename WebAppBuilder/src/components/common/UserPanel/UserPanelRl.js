@@ -9,6 +9,9 @@ export default {
     applyDelegatedRights(userId) {
       this.$store.dispatch('applyDelegatedRights', userId)
     },
+    setDelegation() {
+      console.log('Делегировать права', )
+    },
     logOut() {
       this.$store.dispatch("LogOut")
       const sections = this.$store.state.applicationDescription.Sections
