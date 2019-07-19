@@ -117,16 +117,6 @@
       },
       menuMode() {
         return this.$store.state.sm.menuMode
-      },
-      breakpoint() {
-        return this.$vuetify.breakpoint.smAndDown
-      }
-    },
-    watch: {
-      breakpoint(val) {
-        if (val) {
-          this.setMenuMode('mini')
-        }
       }
     }
   }
