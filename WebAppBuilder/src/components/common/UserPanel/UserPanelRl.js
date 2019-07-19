@@ -9,12 +9,12 @@ export default {
     setDelegation() {
       this.$store.dispatch('setDelegationRights', {userId: '*U20810', dateFrom: null, dateTo: null})
     },
-    useDelegatedRights(userId) {
+    applyDelegatedRights(userId) {
       this.$store.dispatch('applyDelegatedRights', userId)
     },
     logOut() {
       this.$store.dispatch("LogOut");
-      this.$router.push({name: 'login'});
+      this.$router.push({name: 'SMARTMANAGERLOGIN'})
     }
   },
   computed: {
@@ -35,16 +35,13 @@ export default {
       },
       params: {
         changePassword: this.changePassword,
-        delegatedRightsBtnAttr: {},
-        delegatedRightsBtnAEvents: {
-          click: e => this.useDelegatedRights(e.target.id)
+        delegatedRights: {
+          click: e => this.applyDelegatedRights(e.target.id)
         },
-        setDelegationBtnAttr: {},
-        setDelegationBtnEvents: {
+        setDelegation: {
           click: () => this.setDelegation()
         },
-        logOutBtnAttr: {},
-        logOutBtnAEvents: {
+        logOut: {
           click: () => this.logOut()
         }
       }

@@ -2,7 +2,10 @@
   <user-panel-rl v-slot="{ user, params }">
     <v-layout align-center>
       <v-flex>
-        <v-menu :close-on-content-click="false">
+        <v-menu
+          :close-on-content-click="false"
+          v-model="menu"
+        >
           <template v-slot:activator="{on}">
             <v-layout class="user-panel" v-on="on" align-center>
               <v-flex id="user-icon">
@@ -18,15 +21,16 @@
               <v-layout pa-2>
                 <v-flex class="grow-0">
                   <user-icon
-                    class="user-big-image"
                     :src="user.photo"
                     size="60"
                   ></user-icon>
                 </v-flex>
                 <v-flex ml-3 class="text-xs-left">
                   <p v-if="mini" class="mb-1">{{ user.name }}</p>
-                  <a @click="params.changePassword"
-                  >Сменить пароль</a>
+                    <a
+                      v-on:click="params.changePassword"
+                      @click="menu = !menu"
+                    >Сменить пароль</a>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -57,8 +61,8 @@
                         d-flex
                         py-1 px-2
                         class="delegated-menu-item"
-                        v-bind="params.delegatedRightsBtnAttr"
-                        v-on="params.delegatedRightsBtnAEvents"
+                        v-on="params.delegatedRights"
+                        @click="menu = !menu"
                         v-for="(item, index) in user.rights"
                         :key="index"
                       >
@@ -72,8 +76,8 @@
                         d-flex
                         py-1 px-2
                         class="delegated-menu-item"
-                        v-bind="params.setDelegationBtnAttr"
-                        v-on="params.setDelegationBtnEvents"
+                        v-on="params.setDelegation"
+                        @click="menu = !menu"
                       >
                         <div class="icon-container grow-0"></div>
                         <span>Делегировать права</span>
@@ -85,8 +89,7 @@
                   <v-btn
                     outline small
                     :style="userMenuBtnStyle"
-                    v-bind="params.logOutBtnAttr"
-                    v-on="params.logOutBtnAEvents"
+                    v-on="params.logOut"
                   >Выход
                   </v-btn>
                 </v-flex>
@@ -104,6 +107,7 @@
     name: 'user-panel',
     props: ['mini'],
     data: () => ({
+      menu: false,
       userMenuBtnStyle: [
         { 'textTransform': 'none' },
         { 'font-weight': 300 },
