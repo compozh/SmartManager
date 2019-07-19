@@ -79,7 +79,7 @@
 
 <script>
   export default {
-    name: 'sm-layout',
+    name: 'material2layout',
     props: ['toolbarTitle'],
     data: () => ({
       menuMode: 'close',

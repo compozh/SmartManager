@@ -30,6 +30,7 @@
       :mini-variant="menuMode === 'mini'"
       mini-variant-width="56"
       width="270"
+      class="transparent"
       stateless
     >
       <router-view name="navigation-drawer"/>
@@ -80,12 +81,6 @@
   export default {
     name: 'sm-layout',
     props: ['toolbarTitle'],
-    data() {
-      return {
-        drawer: true,
-        mini: false,
-      };
-    },
     methods: {
       menuBtn() {
         if (this.taskAddForm) {
