@@ -59,15 +59,15 @@
       </v-layout>
     </v-container>
 
-    <template v-if="message.type">
+    <template v-if="getMessage.type">
       <v-snackbar
         :multi-line="true"
         :timeout="5000"
-        :color="message.type"
+        :color="getMessage.type"
         :value="true"
         @input="setMessage(null)"
       >
-        {{ message.text }}
+        {{ getMessage.text }}
         <v-btn icon @click.native="setMessage(null)">
           <v-icon>close</v-icon>
         </v-btn>
@@ -81,6 +81,12 @@
   export default {
     name: 'sm-layout',
     props: ['toolbarTitle'],
+    data: () => ({
+      menuMode: 'close',
+      circularLoader: false,
+      linearLoader: false,
+      message: {}
+    }),
     methods: {
       menuBtn() {
         switch (this.menuMode) {
@@ -95,28 +101,18 @@
         }
       },
       setMessage(message) {
-        this.$store.commit('sm/setMessage', message);
+        this.message(message);
       },
       setMenuMode(mode) {
-        this.$store.commit('sm/setMenuMode', mode)
+        this.menuMode(mode)
       },
     },
     computed: {
-      message() {
-        const message = this.$store.state.sm.message
-        return message.type ? message : {
+      getMessage() {
+        return this.message.type ? this.message : {
           type: '',
           text: `Нет сообщений для отображения`
         }
-      },
-      circularLoader() {
-        return this.$store.state.sm.circularLoader
-      },
-      linearLoader() {
-        return this.$store.state.sm.linearLoader
-      },
-      menuMode() {
-        return this.$store.state.sm.menuMode
       }
     }
   }
