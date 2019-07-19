@@ -13,6 +13,7 @@ const getClient = () => {
   const token = localStorage.getItem('ItUniTocken')
   const options = {
     uri: myConfig.GrapgQlUrl + 'api/graphql',
+    credentials: 'include',
     headers: {
       'Authorization': 'Bearer ' + token,
       'schema': 'smartmanager'
