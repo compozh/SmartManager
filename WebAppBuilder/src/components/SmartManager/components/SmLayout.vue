@@ -148,20 +148,18 @@
         }
       }
     },
-    created() {
-      this.goToAll()
-    },
     watch: {
       '$route'(to, from) {
+        if (from.name === 'SMARTMANAGER') {
+          this.goToAll()
+        }
         if (to.name === 'SMARTMANAGERLOGIN') {
           this.setMenuMode('close')
         }
-        if (from.name === 'SMARTMANAGERLOGIN') {
-          this.goToAll()
-        }
       },
       breakpoint(val) {
-        if (val === 'sm' && !this.taskAddForm) {
+        if (val === 'sm' && !this.taskAddForm
+          || val === 'xs' && !this.taskAddForm) {
           this.setMenuMode('mini')
         }
       },

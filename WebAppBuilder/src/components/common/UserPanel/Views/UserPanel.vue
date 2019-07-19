@@ -126,7 +126,7 @@
   }
 
   .v-menu__content.v-menu__content--auto {
-    top: 208px !important;
+    top: 184px !important;
   }
 
   .user-panel {

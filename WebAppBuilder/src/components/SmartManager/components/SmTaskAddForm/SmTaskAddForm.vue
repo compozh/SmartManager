@@ -1,7 +1,7 @@
 <template>
   <v-form v-model="valid">
     <v-container>
-      <v-layout>
+      <v-layout justify-center>
         <v-flex xs12 lg8 xl6>
           <v-layout row wrap>
             <v-flex class="text-xs-left hidden-sm-and-up">
