@@ -7,8 +7,12 @@
         class="task-container"
         v-for="task in tasks"
         :key="task.id"
+        :id="'id' + task.id"
       >
-        <sm-task-list-item :task="task"></sm-task-list-item>
+        <sm-task-list-item
+          v-if="intersection(task.id)"
+          :task="task"
+        ></sm-task-list-item>
       </v-flex>
       <sm-empty-state v-if="!checkTasks">Нет задач в папке</sm-empty-state>
       <v-flex>
@@ -30,7 +34,6 @@
           </template>
           <span>Добавить задачу</span>
         </v-tooltip>
-
       </v-flex>
     </v-layout>
   </v-container>
@@ -40,7 +43,8 @@
   export default {
     name: 'sm-tasks',
     data: () => ({
-      showAddForm: false
+      showAddForm: false,
+      lazyTasks: []
     }),
     created() {
       const folderId = this.$route.params.foldercode
@@ -59,6 +63,24 @@
       tasks() {
         return this.$store.getters['sm/tasks']
       },
+      lazy() {
+        const tasks = this.tasks
+        if (tasks) {
+          const observer = new IntersectionObserver(
+            entries => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  this.lazyTasks.push(entry.target.id)
+                }
+              })
+            }
+          )
+          for (let i = 0; i < tasks.length; i++) {
+            let elem = document.getElementById('id' + tasks[i].id)
+            observer.observe(elem);
+          }
+        }
+      },
       checkTasks() {
         return this.tasks ? this.tasks.length : 0
       },
@@ -67,16 +89,23 @@
       }
     },
     methods: {
+      getFolders() {
+        this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
+      },
       getTasks(folderId) {
         this.$store.commit('sm/setCurrentFolder', folderId)
         const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
         this.$store.dispatch('sm/getTasks', {folderId, loader})
+          .then(result => this.lazy)
       },
       openTaskAddForm() {
         this.$store.commit('sm/setTaskAddForm', 'open')
       },
       closeTaskAddForm() {
         this.$store.commit('sm/setTaskAddForm', 'close')
+      },
+      intersection(id) {
+        return this.lazyTasks.find(i => i === 'id' + id)
       }
     }
   }
@@ -85,5 +114,6 @@
 <style scoped>
   .task-container {
     overflow: hidden;
+    min-height: 70px;
   }
 </style>
