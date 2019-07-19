@@ -105,16 +105,16 @@ const actions = ({
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
         data: userId
       })
-      if (result.data) {
-        dispatch('GetCurrentUser')
-      }
+      result.data
+        ? dispatch('GetCurrentUser')
+        : console.log('Не возможно применить делегированные права') // TODO: отобразить отказ в блоке сообщений лейаута
     } catch (error) {
-      console.log(error)
+      // TODO: дополнительно отобразить ошибку в блоке сообщений лейаута
+      console.log(error.message)
     }
   },
   async setDelegationRights({commit}, {userId, dateFrom, dateTo}) {
     try {
-      debugger
       const result = await Axios({
         method: 'POST',
         url: myConfig.GrapgQlUrl + 'api/authentication/delegation',
@@ -126,7 +126,7 @@ const actions = ({
       console.log(result)
 
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 })
