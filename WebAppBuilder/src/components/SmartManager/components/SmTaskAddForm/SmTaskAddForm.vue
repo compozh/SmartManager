@@ -4,9 +4,9 @@
       <v-layout>
         <v-flex xs12 lg8 xl6>
           <v-layout row wrap>
-            <v-flex xs12>
+            <v-flex class="text-xs-left hidden-sm-and-up">
               <h2
-                class="blue--text text--darken-2 font-weight-thin text-xs-left"
+                class="blue--text text--darken-2 font-weight-thin"
               >Новая задача
               </h2>
             </v-flex>
@@ -51,9 +51,8 @@
                     :value="dateFormatted"
                     label="Дата"
                     prepend-icon="event"
-                    readonly
                     v-on="on"
-                    :rules="required"
+                    :rules="dateRules"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -69,13 +68,13 @@
                     flat
                     color="primary"
                     @click="datePicker = false"
-                  >Cancel
+                  >Отмена
                   </v-btn>
                   <v-btn
                     flat
                     color="primary"
                     @click="$refs.datePicker.save(newTask.planDate)"
-                  >OK
+                  >Выбрать
                   </v-btn>
                 </v-date-picker>
               </v-menu>
@@ -98,8 +97,8 @@
                     v-model="newTask.planTime"
                     label="Время"
                     prepend-icon="access_time"
-                    readonly
                     v-on="on"
+                    :rules="timeRules"
                   ></v-text-field>
                 </template>
                 <v-time-picker
@@ -115,13 +114,13 @@
                     flat
                     color="primary"
                     @click="timePicker = false"
-                  >Cancel
+                  >Отмена
                   </v-btn>
                   <v-btn
                     flat
                     color="primary"
                     @click="$refs.timePicker.save(newTask.planTime)"
-                  >OK
+                  >Выбрать
                   </v-btn>
                 </v-time-picker>
               </v-menu>
@@ -188,11 +187,21 @@
       minDate: moment(new Date()).format('YYYY-MM-DD'),
       valid: false,
       required: [
-        v => !!v || 'Поле обязательно для заполнения',
+        v => !!v || 'Поле обязательно для заполнения'
+      ],
+      dateRules: [
+        v => !!v || 'Необходимо указать дату дату в формате ДД.ММ.ГГГГ',
+        v => moment(v, 'DD.MM.YYYY', true).isValid() || 'Введите дату в формате ДД.ММ.ГГГГ',
+        v => moment(v, 'DD.MM.YYYY', true).add(1, 'days').isSameOrAfter() || 'Прошедшая дата',
+      ],
+      timeRules: [
+        v => !!v || 'Необходимо указать время в формате HH:mm',
+        v => moment(v, 'HH:mm', true).isValid() || 'Введите время в формате ЧЧ:ММ',
       ]
     }),
     created() {
       this.getUsers()
+      this.setMenuMode('close')
     },
     computed: {
       dateFormatted() {
@@ -204,6 +213,7 @@
     methods: {
       closeTaskAddForm() {
         this.$store.commit('sm/setTaskAddForm', 'close')
+        this.setMenuMode('open')
       },
       createTask() {
         // Формирование объекта согласно класса "AddTask"
@@ -216,7 +226,13 @@
         this.$store.dispatch('sm/addNewTask', newTask)
       },
       getUsers() {
-        this.$store.dispatch('sm/getUsers')
+        const users = this.$store.state.sm.users
+        if (users.length === 0) {
+          this.$store.dispatch('sm/getUsers')
+        }
+      },
+      setMenuMode(mode) {
+        this.$store.commit('sm/setMenuMode', mode)
       }
     }
   }

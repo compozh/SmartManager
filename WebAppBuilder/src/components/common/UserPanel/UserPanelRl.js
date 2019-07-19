@@ -6,15 +6,19 @@ export default {
     changePassword() {
       console.log('Запрос изменения пароля')
     },
-    setDelegation() {
-      console.log('Делегировать права')
-    },
-    useDelegatedRights(name) {
-      console.log('Использовать права для', name)
+    applyDelegatedRights(userId) {
+      this.$store.dispatch('applyDelegatedRights', userId)
     },
     logOut() {
-      this.$store.dispatch("LogOut");
-      this.$router.push({name: 'login'});
+      this.$store.dispatch("LogOut")
+      const sections = this.$store.state.applicationDescription.Sections
+      sections.forEach(section => {
+        section.Routes.forEach(route => {
+          if (route.Id.toLowerCase().includes('login')) {
+            return this.$router.push({name: route.Id})
+          }
+        })
+      })
     }
   },
   computed: {
@@ -35,16 +39,13 @@ export default {
       },
       params: {
         changePassword: this.changePassword,
-        delegatedRightsBtnAttr: {},
-        delegatedRightsBtnAEvents: {
-          click: e => this.useDelegatedRights(e.target.innerHTML)
+        delegatedRights: {
+          click: e => this.applyDelegatedRights(e.target.id)
         },
-        setDelegationBtnAttr: {},
-        setDelegationBtnEvents: {
+        setDelegation: {
           click: () => this.setDelegation()
         },
-        logOutBtnAttr: {},
-        logOutBtnAEvents: {
+        logOut: {
           click: () => this.logOut()
         }
       }
