@@ -113,6 +113,15 @@
       },
       setMenuMode(mode) {
         this.$store.commit('sm/setMenuMode', mode)
+      },
+      getFolders() {
+        this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
+      },
+      getTasks() {
+        this.$store.dispatch('sm/getTasks', {
+          folderId: 'ALL',
+          loader: 'setCircularLoader'
+        })
       }
     },
     computed: {
@@ -137,6 +146,11 @@
       },
       taskAddForm() {
         return this.$store.state.sm.taskAddForm === 'open'
+      },
+      currentUser() {
+        if (this.$store.state.currentUser) {
+          return this.$store.state.currentUser.CurrentUserData.UserName
+        }
       }
     },
     created() {
@@ -151,9 +165,16 @@
           this.goToAll()
         }
       },
-      breakpoint: function (val) {
+      breakpoint(val) {
         if (val === 'sm' && !this.taskAddForm) {
           this.setMenuMode('mini')
+        }
+      },
+      currentUser(value, oldValue) {
+        if (value && oldValue && value !== oldValue) {
+          this.getFolders()
+          this.goToAll()
+          this.getTasks()
         }
       }
     }
