@@ -65,10 +65,10 @@
         :timeout="5000"
         :color="message.type"
         :value="true"
-        @input="closeMessage"
+        @input="setMessage(null)"
       >
         {{ message.text }}
-        <v-btn icon @click.native="closeMessage">
+        <v-btn icon @click.native="setMessage(null)">
           <v-icon>close</v-icon>
         </v-btn>
       </v-snackbar>
@@ -79,14 +79,8 @@
 
 <script>
   export default {
-    name: 'material-2-layout',
+    name: 'sm-layout',
     props: ['toolbarTitle'],
-    data() {
-      return {
-        drawer: true,
-        mini: false,
-      };
-    },
     methods: {
       menuBtn() {
         switch (this.menuMode) {
@@ -100,15 +94,12 @@
             this.setMenuMode('close')
         }
       },
-      closeMessage() {
-        this.$store.commit('sm/setMessage', null);
-      },
-      goToAll() {
-        this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
+      setMessage(message) {
+        this.$store.commit('sm/setMessage', message);
       },
       setMenuMode(mode) {
         this.$store.commit('sm/setMenuMode', mode)
-      }
+      },
     },
     computed: {
       message() {
@@ -128,23 +119,12 @@
         return this.$store.state.sm.menuMode
       },
       breakpoint() {
-        return this.$vuetify.breakpoint.name
+        return this.$vuetify.breakpoint.smAndDown
       }
     },
-    created() {
-      this.goToAll()
-    },
     watch: {
-      '$route'(to, from) {
-        if (to.name === 'SMARTMANAGERLOGIN') {
-          this.setMenuMode('close')
-        }
-        if (from.name === 'SMARTMANAGERLOGIN') {
-          this.goToAll()
-        }
-      },
-      breakpoint: function (val) {
-        if (val === 'sm') {
+      breakpoint(val) {
+        if (val) {
           this.setMenuMode('mini')
         }
       }
