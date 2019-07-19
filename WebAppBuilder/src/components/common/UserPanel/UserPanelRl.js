@@ -6,9 +6,6 @@ export default {
     changePassword() {
       console.log('Запрос изменения пароля')
     },
-    setDelegation() {
-      this.$store.dispatch('setDelegationRights', {userId: '*U20810', dateFrom: null, dateTo: null})
-    },
     applyDelegatedRights(userId) {
       this.$store.dispatch('applyDelegatedRights', userId)
     },
