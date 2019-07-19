@@ -10,8 +10,15 @@ export default {
       this.$store.dispatch('applyDelegatedRights', userId)
     },
     logOut() {
-      this.$store.dispatch("LogOut");
-      this.$router.push({name: 'SMARTMANAGERLOGIN'})
+      this.$store.dispatch("LogOut")
+      const sections = this.$store.state.applicationDescription.Sections
+      sections.forEach(section => {
+        section.Routes.forEach(route => {
+          if (route.Id.toLowerCase().includes('login')) {
+            return this.$router.push({name: route.Id})
+          }
+        })
+      })
     }
   },
   computed: {
