@@ -26,7 +26,7 @@ export default {
 
         var name = path.basename(key)
         name = name.substring(0, name.lastIndexOf('.'))
-        Vue.component(`${_namespace}-${prefix}-${name}`, _interface.__private.components[set][key])
+        Vue.component(`${_namespace}-${prefix}-${name}`, _interface.components[set][key])
       })
     }
 
