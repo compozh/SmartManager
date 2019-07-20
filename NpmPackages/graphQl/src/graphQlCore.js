@@ -1,8 +1,5 @@
-console.log('GraphQl Loaded!')
 
 export default class GraphQlCore {
-  __config
-  __axios
 
   constructor(config, { axios }) {
     this.__config = config
@@ -11,7 +8,7 @@ export default class GraphQlCore {
     if (!this.__config) {
       throw new Error('Параметры GrapgQl должны быть заданы!')
     }
-    if(!this.__config.GrapgQlUrl){
+    if (!this.__config.GrapgQlUrl) {
       throw new Error('Адрес GraphQl сервера должен быть задан!')
     }
     if (!this.__axios) {
@@ -27,8 +24,7 @@ export default class GraphQlCore {
    * @param {string} operationName Код операции, которую необходимо выполнить
    */
   async GrapgQlQuery({schema, query, variables, operationName}) {
-    try
-    {
+    try {
       let response = await this.__axios({
         method: 'POST',
         url: `${ this.__config.GrapgQlUrl }api/graphql`,
@@ -41,11 +37,11 @@ export default class GraphQlCore {
         }
       })
       return response
-    }
-    catch(error){
+    } catch (error) {
       return Promise.reject(error)
     }
   }
+
 
   /**
    * Вход пользователя
@@ -53,7 +49,7 @@ export default class GraphQlCore {
    * @param {String} password Пароль пользователя
    * @param {Bool} rememberMe Признак "Запомнить меня"
    */
-  async LogIn(login, password, rememberMe){
+  async LogIn(login, password, rememberMe) {
     const response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/login`, {
       login: login,
       password: password,
@@ -69,7 +65,7 @@ export default class GraphQlCore {
   /**
    * Получение полной информации о текущем пользователе
    */
-  async GetCurrentUser(){
+  async GetCurrentUser() {
     let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`)
     return response.data
   }
@@ -77,7 +73,7 @@ export default class GraphQlCore {
   /**
    * Разлогиниться
    */
-  async LogOff(){
+  async LogOff() {
     await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/logout`, undefined, {
       withCredentials: true
     })

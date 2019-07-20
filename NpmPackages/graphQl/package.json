@@ -1,11 +1,11 @@
 {
   "name": "@it-enterprise/graphql",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "private": false,
   "description": "library for access to graphQl",
   "author": "it-enterprise",
-  "main1": "./dist/graphql.common.js",
-  "main": "./src/index.js",
+  "main": "./dist/graphql.common.js",
+  "main1": "./src/index.js",
   "files": [
     "dist/*"
   ],
@@ -19,17 +19,8 @@
     "@vue/cli-plugin-pwa": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
     "vue-template-compiler": "^2.5.21",
-    "apollo-cache-inmemory": "^1.6.0",
-    "apollo-client": "^2.6.0",
-    "apollo-link": "^1.2.11",
-    "apollo-link-context": "^1.0.17",
-    "apollo-link-http": "^1.5.14",
-    "graphql": "^14.3.1",
-    "graphql-tag": "^2.10.1",
-    "vue-apollo": "^3.0.0-beta.30",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0"
-  },
-  "dependencies": {}
+  }
 }
