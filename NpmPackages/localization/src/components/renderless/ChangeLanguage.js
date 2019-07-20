@@ -32,15 +32,10 @@ export default {
   },
   data(){
     return {
-      internalCurrentLanguage: undefined,
-      nm: '',
+      internalCurrentLanguage: undefined
     }
   } ,
   mounted() {
-    let t=this
-    setInterval(()=>{
-      t.nm+='1'
-    }, 1000)
     this.internalCurrentLanguage = this.currentLanguage
     //Если есть параметр в url
     if (this.$route.query.language) {

@@ -1,6 +1,6 @@
 import path from 'path'
 import Localization from './localization.js'
-const loadModule = () => import('./interface')
+import { _interface } from './interface'
 
 const _namespace = 'Localization'
 
@@ -8,9 +8,8 @@ const _namespace = 'Localization'
 export default {
 
   /**
-   *
+   * Локализация IT-Enterprise
    * @param {*} Vue
-   * @param {*} params.dependencies.modulesManager
    */
   install(Vue, params) {
 
@@ -26,18 +25,17 @@ export default {
       context.keys().forEach(function (key) {
 
         var name = path.basename(key)
-        name = name.substring(0,name.lastIndexOf('.'))
-        Vue.component(`${_namespace}-${prefix}-${name}`, () => loadModule().then(r => r.__private.components[set][key] ))
+        name = name.substring(0, name.lastIndexOf('.'))
+        Vue.component(`${_namespace}-${prefix}-${name}`, _interface.__private.components[set][key])
       })
     }
+
     registerComponents(require.context('./components/renderless', false, /\.vue$|.js$/, 'weak'), 'renderless', 'rs')
     registerComponents(require.context('./components/views', false, /\.vue$|.js$/, 'weak'), 'views', 'view')
 
 
     // регистрация модуля
     const localization = new Localization(dependencies)
-    dependencies.modulesManager.register(_namespace, () => Promise.resolve(localization))
-
 
     Object.defineProperty(Vue.prototype, '$localization', {
       get(){

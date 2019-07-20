@@ -1,13 +1,13 @@
 {
   "name": "@it-enterprise/localization",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "library for localization",
   "author": "it-enterprise",
-  "main1": "./dist/localization.common.js",
-  "main": "./src/index.js",
+  "main": "./dist/localization.common.js",
+  "main1": "./src/index.js",
   "files": [
-    "dist/*"
+    "src/*"
   ],
   "license": "ISC",
   "scripts": {
@@ -24,7 +24,6 @@
     "eslint-plugin-vue": "^5.0.0"
   },
   "dependencies": {
-    "vue-i18n": "^8.10.0",
     "vue-country-flag": "^1.1.1"
   }
 }

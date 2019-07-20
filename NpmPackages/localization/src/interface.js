@@ -1,6 +1,6 @@
 
 
-export const __private = { components: {} }
+export const _interface = { components: {} }
 
 const registerComponents = function (context, set) {
   const componentSet = {}
@@ -8,7 +8,7 @@ const registerComponents = function (context, set) {
 
     componentSet[key] = context(key).default
   })
-  __private.components[set] = componentSet
+  _interface.components[set] = componentSet
 }
 registerComponents(require.context('./components/renderless', false, /\.vue$|.js$/), 'renderless')
 registerComponents(require.context('./components/views', false, /\.vue$|.js$/), 'views')
