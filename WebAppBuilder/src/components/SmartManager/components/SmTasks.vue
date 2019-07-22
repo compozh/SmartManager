@@ -65,7 +65,7 @@
       },
       lazy() {
         const tasks = this.tasks
-        if (tasks && !this.taskAddForm) {
+        if (tasks) {
           const observer = new IntersectionObserver(
             entries => {
               entries.forEach(entry => {

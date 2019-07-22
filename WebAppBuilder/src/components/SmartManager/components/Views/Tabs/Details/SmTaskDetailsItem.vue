@@ -7,7 +7,7 @@
       dateStatus
     }"
   >
-    <v-container fluid pa-0 pr-2>
+    <v-container fluid pa-0>
       <v-layout row wrap text-xs-left>
         <v-flex xs12 pt-2>
           <v-chip
