@@ -1,6 +1,6 @@
  {
   smtasksMutation {
-    addTask(task: $newTask) {
+    addTask(newTask: $newTask) {
       id
       success
       successMessage
