@@ -12,6 +12,7 @@ import smartManagerStore from '../components/SmartManager/store/store'
 import minfinStore from '../components/Minfin/store/index'
 import eamStore from '../components/Eam/store/store'
 import mesStore from '../components/MES/store/store'
+import purchasesStore from '../components/Purchases/store/store'
 
 Vue.use(Vuex)
 
@@ -26,6 +27,7 @@ const store = new Vuex.Store({
     [smartManagerStore.namespace]:smartManagerStore,
     [eamStore.namespace]:eamStore,
     [mesStore.namespace]:mesStore,
+    [purchasesStore.namespace]:purchasesStore,
   }
 })
 

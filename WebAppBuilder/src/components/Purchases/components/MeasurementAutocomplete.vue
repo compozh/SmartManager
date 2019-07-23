@@ -15,7 +15,8 @@
 </template>
 
 <script>
-    import purchasesSchemaAxios from "../BaseFunctions"
+    import {PurchasesApi} from "../api/purchasesApi";
+    const api = new PurchasesApi();
     export default {
         name: "measurement-autocomplete",
         props:{
@@ -48,23 +49,25 @@
         },
         watch: {
             search (val) {
-                val && 
-                val !== this.measurement.name && 
-                this.querySelections(val)
+                if (val && val !== this.measurement.name)
+                {
+                    this.querySelections(val)
+                }
             }
         },
         methods:{
             querySelections(val){
-                const q = `{purchases{measurementUnits(where:[{path:"isValid",comparison:equal,value:"true"},{path:"name",comparison:like,value:"%${val}%"}]){id,name}}}`
-                purchasesSchemaAxios(this, q, resp => {
-                    this.items = resp.data.data.purchases.measurementUnits;
-                })
+                api.getMeasurementUnits(val).then(this.callback)
+            },
+            callback(resp)
+            {
+                this.items = resp.data.purchases.measurementUnits;
             }
         }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .measurement-input >>> input{
   text-align: center;
 }

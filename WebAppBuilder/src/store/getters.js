@@ -7,7 +7,7 @@ const getters = ({
   },
   getCurrentUserLoginData(state) {
     return state.currentUser
-          ? state.currentUser.LoginData
+          ? state.currentUser.CurrentUserData
           : {}
   },
   getCurrentUserRights(state) {
@@ -17,7 +17,7 @@ const getters = ({
   },
   getCurrentUserPhoto(state) {
     return state.currentUser
-      ? state.currentUser.UserPhoto
+      ? state.currentUser.CurrentUserData.UserPhoto
       : ""
   },
   getExistedIcons(state) {

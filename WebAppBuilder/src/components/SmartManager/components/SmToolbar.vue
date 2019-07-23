@@ -1,6 +1,6 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center justify-space-beetwen>
+    <v-layout row align-center justify-space-between>
       <v-flex shrink>
         <router-link
           tag="h1"
@@ -9,7 +9,16 @@
         ><a>Smart Manager</a>
         </router-link>
       </v-flex>
-      <v-spacer></v-spacer>
+      <v-flex
+        shrink
+        v-if="showTaskAddFormTitle"
+        class="hidden-xs-only"
+      >
+        <h2
+          class="blue--text text--darken-2 font-weight-thin"
+        >Новая задача
+        </h2>
+      </v-flex>
       <v-text-field
         v-if="showSearch"
         flat
@@ -19,7 +28,6 @@
         prepend-inner-icon="search"
         v-model.trim="search"
       ></v-text-field>
-      <v-spacer></v-spacer>
       <v-flex shrink>
         <user-panel mini="true"></user-panel>
       </v-flex>
@@ -34,6 +42,7 @@
     computed: {
       showSearch() {
         return this.$route.params.hasOwnProperty('foldercode')
+          && this.$store.state.sm.taskAddForm === 'close'
       },
       search: {
         get() {
@@ -42,6 +51,9 @@
         set(search) {
           this.$store.commit('sm/setSearch', search)
         }
+      },
+      showTaskAddFormTitle() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
     }
   }

@@ -1,0 +1,10 @@
+{
+    purchases{
+        items: resourcesGrops(id:$id){
+            ...resourcesGroupsFields
+            parent{
+                ...resourcesGroupsFields
+            }
+        }
+    }
+}
