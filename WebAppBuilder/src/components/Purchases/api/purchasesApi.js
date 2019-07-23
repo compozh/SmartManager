@@ -8,6 +8,7 @@ import resourcesGropsById from './graphql/resourcesGropsById.gql'
 import resourcesGropsByGoup from './graphql/resourcesGropsByGoup.gql'
 import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
+import favLists from './graphql/favLists.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
 import masurementSearch from './graphql/masurementSearch.gql'
 import addToCart from './graphql/addToCart.gql'
@@ -18,9 +19,14 @@ import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
+<<<<<<< HEAD
 import changeLocalization from './graphql/changeLocalization.gql'
+=======
+import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
+>>>>>>> dc7b3236838970b9233b1249ab639c200135ae7f
 import resourcesGropsByGoupNew from './graphql/resourcesGropsByGoupNew.gql'
-
+import mutationEditFavList from './graphql/mutationEditFavList.gql'
+import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
@@ -97,11 +103,13 @@ export class PurchasesApi {
   }
 
   getCartItemsCallback(result){
+    debugger;
     let cartItems = result.data.purchases.cartItems;
     store.commit('purchases/setCartItems', cartItems);
   }
 
   getCartItems(){
+    //debugger;
     return client.query({
       query: gql`query ${cartItems}`,
       variables: { }
@@ -109,6 +117,8 @@ export class PurchasesApi {
     .then(this.getCartItemsCallback)
     .catch(error => console.log(error.message))
   }
+
+
 
   getMeasurementUnits(txt){
     const FIELDS = gql`
@@ -200,17 +210,6 @@ export class PurchasesApi {
     return test;
   }
 
-  getAddToFavoritesInputTypeParam(item){
-    let test =  {
-        number:         item.NDM,
-        date:           item.DDM,
-        kDM1:           item.DM1,
-        kDM2:           item.DM2,
-        title:          item.Description
-    }
-
-    return test;
-  }
   updateCartMutationCallback(result){
     let response_data = result.data.purchasesMutation.updateCart;
     store.commit('purchases/updateCartItem', response_data);
@@ -268,49 +267,60 @@ export class PurchasesApi {
       .catch(error => console.log(error.message))
   }
 
-  getCartItemsCallback(result){
-    let cartItems = result.data.purchases.cartItems;
-    store.commit('purchases/setCartItems', cartItems);
+  getFavListsCallback(result){
+    //debugger;
+    let favLists = result.data.purchases.favLists;
+    store.commit('purchases/setFavLists', favLists);
   }
+  getFavLists(){
+    //debugger;
+    return client.query({
+      query: gql`query ${favLists}`,
+      variables: { }
+    })
+    .then(this.getFavListsCallback)
+    .catch(error => console.log(error.message))
+  }
+
   addToFavoritesMutationCallbackFirst(result){
-    
-    let res = result.data.purchasesMutation.addToFavorites;
     debugger;
-    //store.commit("purchases/setMessage",  `добавлен в избраное.`);
-    if(res.ShouldCallList)
+    let res = result.data.purchasesMutation.addToFavorites;
+    //this.getFavLists();
+    if( res.ReturnValue != null && res.ReturnValue.ShouldCallList)
     {
+     
       store.commit("purchases/setChose", {
-        list : res.ListToChoose , 
+        list : res.ReturnValue.ListToChoose , 
         caption:"Выбор из списка",
-        method: function(key) 
-        {
-          let test = key;
+        method: (key) => {
           debugger;
           client.mutate({
-            mutation: gql`${addToFavorites}`,
-            variables: {alias: "SKM", keyValue: "fdsfs"}     
+            mutation: gql`${addToFavoritesSecond}`,
+            variables: {listKey: key, keyValue: res.ReturnValue.KeyValue}     
           });
+          
+
+          store.commit("purchases/setMessage",  `Добавлено в избраное`);
+          
           debugger;
         }
       });
     }
-   
-  }
-  
-  addToFavoritesMutationCallbackSecond(result){
-    //let test = store.getters.getChoseList();
-   
-    //let test = store.getters["eam/loading"];
-    debugger;
+    else if (res.Successed)
+    {
+      store.commit("purchases/setMessage",  `Добавлено в избраное`);
+      getFavLists();
+      debugger;
+    }
   }
 
   addToFavoritesMutation(alias, keyValue){
-    debugger;
     return client.mutate({
       mutation: gql`${addToFavorites}`,
       variables: {alias: alias, keyValue: keyValue}     
     })
       .then(this.addToFavoritesMutationCallbackFirst)
+<<<<<<< HEAD
       //.then(this.addToFavoritesMutationCallbackSecond)
       .catch(error => console.log(error.message))
   }  
@@ -322,5 +332,45 @@ export class PurchasesApi {
     })
       .then()
       .catch(error => console.log(error.message))
+=======
+      .catch(error => {this.getFavLists(); console.log(error.message)});;
+  }
+
+  getFavListInputTypeParam(favList)
+  {
+    debugger;
+    let test =  {
+        id:                 favList.id,
+        alias:              favList.alias,
+        caption:            favList.caption,
+        comment:            "",
+        isDefaultList:      favList.isDefaultList,
+        iconKey:            "",
+        keyValues:          favList.keyValues
+    }
+
+  return test;
+  }
+
+  mutationEditFavList(favList){
+    debugger;
+    let favListInput = this.getFavListInputTypeParam(favList);
+    debugger;
+    return client.mutate({
+      mutation: gql`${mutationEditFavList}`,
+      variables: {favList: favListInput}     
+    })
+      .catch(error => {this.getFavLists(); console.log(error.message)});;
+  }
+  mutationDeleteFavList(favList){
+    
+    let favListInput = this.getFavListInputTypeParam(favList);
+    
+    return client.mutate({
+      mutation: gql`${mutationDeleteFavList}`,
+      variables: {favList: favListInput}     
+    })
+      .catch(error => {this.getFavLists(); console.log(error.message)});
+>>>>>>> dc7b3236838970b9233b1249ab639c200135ae7f
   }
 }

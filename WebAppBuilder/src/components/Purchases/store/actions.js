@@ -23,8 +23,15 @@ export default {
     setResourceGroups({commit}, payload){
         commit('createCartItem', payload);
     },
-    // addToFavorites({commit}, payload){
-    //     debugger;
-    //     commit('addToFavorites', payload);
-    // }
+    setChoseList({commit},payload){
+        commit('setChoseList',payload);
+    },
+    addToFavorites({commit}, payload){
+        debugger;
+        commit('addToFavorites', payload);
+    },
+    addToFavoritesSecond({commit}, payload){
+        debugger;
+        commit('addToFavoritesSecond', payload);
+    }
 }

@@ -22,6 +22,7 @@
       <slot name="footer"></slot>
     </v-footer>
     <message-snackbar />
+    <options-selector />
   </v-app>
 </template>
 
