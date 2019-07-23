@@ -76,7 +76,10 @@ export default {
   },
 
   setResourceGroups(state, payload){
-    debugger;
-    state.resourceGroups.splice(0, payload.length, payload);
+    state.resourceGroups = payload;
+  },
+
+  clearResourceGroups(state){
+    state.resourceGroups = [];
   }
 }

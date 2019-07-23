@@ -19,11 +19,8 @@ import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
-<<<<<<< HEAD
 import changeLocalization from './graphql/changeLocalization.gql'
-=======
 import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
->>>>>>> dc7b3236838970b9233b1249ab639c200135ae7f
 import resourcesGropsByGoupNew from './graphql/resourcesGropsByGoupNew.gql'
 import mutationEditFavList from './graphql/mutationEditFavList.gql'
 import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
@@ -39,6 +36,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink(options)
 })
+
 
 export class PurchasesApi {
   constructor() {}
@@ -72,6 +70,7 @@ export class PurchasesApi {
   }
 
   getResourcesGroupsByGroupNewCallback(result){
+    debugger;
     let t = result.data.purchases.items;
     store.commit('purchases/setResourceGroups', t);
   }
@@ -117,8 +116,6 @@ export class PurchasesApi {
     .then(this.getCartItemsCallback)
     .catch(error => console.log(error.message))
   }
-
-
 
   getMeasurementUnits(txt){
     const FIELDS = gql`
@@ -320,20 +317,19 @@ export class PurchasesApi {
       variables: {alias: alias, keyValue: keyValue}     
     })
       .then(this.addToFavoritesMutationCallbackFirst)
-<<<<<<< HEAD
       //.then(this.addToFavoritesMutationCallbackSecond)
       .catch(error => console.log(error.message))
-  }  
+  }
 
   changeLocalization(language){
+    debugger;
+    store.commit('purchases/clearResourceGroups');
     return client.mutate({
       mutation: gql`${changeLocalization}`,
       variables: {language: language}     
     })
-      .then()
+      .then(r=>r)
       .catch(error => console.log(error.message))
-=======
-      .catch(error => {this.getFavLists(); console.log(error.message)});;
   }
 
   getFavListInputTypeParam(favList)
@@ -371,6 +367,5 @@ export class PurchasesApi {
       variables: {favList: favListInput}     
     })
       .catch(error => {this.getFavLists(); console.log(error.message)});
->>>>>>> dc7b3236838970b9233b1249ab639c200135ae7f
   }
 }
