@@ -4,7 +4,7 @@
     <v-navigation-drawer fixed app v-model="drawer" >
       <mes-menu/>
     </v-navigation-drawer>
-    <v-toolbar app color="cyan" dark>
+    <v-toolbar app color="#326DA8" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
       <router-view name="toolbar"/>
