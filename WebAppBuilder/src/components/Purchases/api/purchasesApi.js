@@ -18,6 +18,7 @@ import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
+import changeLocalization from './graphql/changeLocalization.gql'
 import resourcesGropsByGoupNew from './graphql/resourcesGropsByGoupNew.gql'
 
 const options = {
@@ -64,12 +65,16 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
+  getResourcesGroupsByGroupNewCallback(result){
+    let t = result.data.purchases.items;
+    store.commit('purchases/setResourceGroups', t);
+  }
   getResourcesGroupsByGroupNew(group){
     return client.query({
       query: gql`query ($group: String) ${resourcesGropsByGoupNew}`,
       variables: { group: group }
     })
-    .then(result => result)
+    .then(this.getResourcesGroupsByGroupNewCallback)
     .catch(error => console.log(error.message))
   }
 
@@ -307,6 +312,15 @@ export class PurchasesApi {
     })
       .then(this.addToFavoritesMutationCallbackFirst)
       //.then(this.addToFavoritesMutationCallbackSecond)
+      .catch(error => console.log(error.message))
+  }  
+
+  changeLocalization(language){
+    return client.mutate({
+      mutation: gql`${changeLocalization}`,
+      variables: {language: language}     
+    })
+      .then()
       .catch(error => console.log(error.message))
   }
 }

@@ -71,7 +71,7 @@
       name: "catalogue",
       data:()=>({
           loading: false,
-          items: [],
+          //items: this.$store.state.purchases.resourceGroups,
           search: null,
           timeout: 0,
           entityType: "",
@@ -97,7 +97,7 @@
             this.entityType = "resources"; 
             fieldname = "fullName";
           }
-          api.getResourcesGroupsByGroupNew(id).then(this.respCallback);
+          api.getResourcesGroupsByGroupNew(id);//.then(this.respCallback);
         },
 
         respCallback (resp) {
@@ -109,22 +109,29 @@
           var searchedText = _.lowerCase(_.trim(this.search));
           var ret = itemToSearch.indexOf(searchedText);
           return ret >= 0;
+        },
+
+        create(){
+          this.items = this.$store.state.purchases.resourceGroups;
+          //for(let i=0;i<this.$store.state.purchases.resourceGroups.length; i++){
+          //  this.items.push(this.$store.state.purchases.resourceGroups[i]);
+          //}
+          debugger;
         }
       },
 
       created: function () {
         var id = this.routeParamCode;
-        this.items = [];
-        this.getItems(id);      
+        this.$store.watch(state => state.purchases.resourceGroups, this.create);
+        this.getItems(id);
       },
       computed:{
         itemsComp(){
           if (this.search === ""){
             
-            return this.items;
+            return this.$store.state.purchases.resourceGroups;
           }
-          
-          return _.filter(this.items, this.searchCallback);
+          return _.filter(this.$store.state.purchases.resourceGroups, this.searchCallback);
         },
         routeParamCode(){
           return this.$route.params.catalogueId ? this.$route.params.catalogueId : "";

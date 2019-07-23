@@ -57,5 +57,10 @@ export default {
   updateCartItem(state, payload){
     let result = _returnIndexById(state.cartitems, payload.id);
     state.cartitems[result.returned]  = payload;
+  },
+
+  setResourceGroups(state, payload){
+    debugger;
+    state.resourceGroups.splice(0, payload.length, payload);
   }
 }

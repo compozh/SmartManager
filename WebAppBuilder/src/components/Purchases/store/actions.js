@@ -20,6 +20,9 @@ export default {
     createCartItem({commit}, payload){
         commit('createCartItem', payload);
     },
+    setResourceGroups({commit}, payload){
+        commit('createCartItem', payload);
+    },
     // addToFavorites({commit}, payload){
     //     debugger;
     //     commit('addToFavorites', payload);
