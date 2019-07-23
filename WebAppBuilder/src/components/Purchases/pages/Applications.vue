@@ -27,7 +27,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout justify-end>
-                                <favorite-btn :v-model="application" value="a" alias="KSM" :keyValue="application.id"  />
+                                <favorite-btn :v-model="application" value="a" alias="DOC" :keyValue="application.id.toString()"  />
                                 <chat-btn :chatKey="application.id" chatType="application"/>
                             </v-layout>
                         </v-card-actions>
@@ -45,6 +45,8 @@
 
 <script>
 import moment from 'moment';
+import {PurchasesApi} from "../api/purchasesApi";
+const api = new PurchasesApi();
 
     export default {
         name: "applications",
@@ -93,7 +95,10 @@ import moment from 'moment';
             }
         },
         mounted() {
-        }
+        },
+        created() {
+            api.getFavLists();
+        },
     }
 </script>
 

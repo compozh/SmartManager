@@ -33,19 +33,35 @@ export default {
   setMessage(state, payload){
     state.snackbarMessage = payload
   },
-  
+  setFavLists(state, payload){
+    
+    state.favLists = payload;
+    //debugger;
+    //favlists: [{ alias : "", listiD: "", keyValues: [] }]
+  },
+  setChose(state, payload){
+    //state.chose.list = payload.list;
+    //state.chose.method = payload.method;
+    //state.chose.caption = payload.caption;
+    state.chose = payload;
+  },
+
   deleteCartItem(state, payload){
     state.cartitems = _.remove(state.cartitems, function(n){
       return n.id != payload;
     });
   },
 
-  // addToFavorites(state, payload){
-  //   state.cartitems = _.remove(state.cartitems, function(n){
-  //     return n.id != payload;
-  //   });
-  // },
-
+  addToFavorites(state, payload){
+    state.cartitems = _.remove(state.cartitems, function(n){
+      return n.id != payload;
+    });
+  },
+  addToFavoritesSecond(state, payload){
+    state.cartitems = _.remove(state.cartitems, function(n){
+      return n.id != payload;
+    });
+  },
   deleteAllCarts(state){
     state.cartitems = [];
   },
