@@ -4,7 +4,7 @@
   >
     <v-container fluid pa-0 ma-0>
       <v-layout>
-        <v-flex lg6>
+        <v-flex lg6 px-2>
           <v-layout>
             <v-flex xs12>
               <v-tabs

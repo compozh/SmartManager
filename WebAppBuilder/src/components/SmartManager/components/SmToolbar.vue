@@ -1,7 +1,7 @@
 <template>
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-between>
-      <v-flex shrink>
+      <v-flex>
         <router-link
           tag="h1"
           class="blue--text text--darken-2 font-weight-thin"
@@ -9,25 +9,27 @@
         ><a>Smart Manager</a>
         </router-link>
       </v-flex>
+      <v-spacer></v-spacer>
       <v-flex
-        shrink
         v-if="showTaskAddFormTitle"
-        class="hidden-xs-only"
+        class="hidden-sm-and-down task-add-form-title"
       >
         <h2
           class="blue--text text--darken-2 font-weight-thin"
         >Новая задача
         </h2>
       </v-flex>
-      <v-text-field
-        v-if="showSearch"
-        flat
-        solo
-        clearable
-        label="Поиск"
-        prepend-inner-icon="search"
-        v-model.trim="search"
-      ></v-text-field>
+      <v-flex v-if="showSearch">
+        <v-text-field
+          flat
+          solo
+          clearable
+          label="Поиск"
+          prepend-inner-icon="search"
+          v-model.trim="search"
+        ></v-text-field>
+      </v-flex>
+      <v-spacer></v-spacer>
       <v-flex shrink>
         <user-panel mini="true"></user-panel>
       </v-flex>
@@ -81,4 +83,9 @@
     min-height: 40px;
   }
 
+  .task-add-form-title {
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 65px);
+  }
 </style>

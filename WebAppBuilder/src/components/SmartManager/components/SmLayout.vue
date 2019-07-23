@@ -150,7 +150,8 @@
     },
     watch: {
       '$route'(to, from) {
-        if (from.name === 'SMARTMANAGER') {
+        if (from.name === 'SMARTMANAGER'
+          || from.name === 'SMARTMANAGERLOGIN') {
           this.goToAll()
         }
         if (to.name === 'SMARTMANAGERLOGIN') {

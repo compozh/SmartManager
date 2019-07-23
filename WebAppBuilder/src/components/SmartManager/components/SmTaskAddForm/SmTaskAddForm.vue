@@ -4,7 +4,7 @@
       <v-layout justify-center>
         <v-flex xs12 lg8 xl6>
           <v-layout row wrap>
-            <v-flex class="text-xs-left hidden-sm-and-up">
+            <v-flex class="text-xs-left hidden-md-and-up">
               <h2
                 class="blue--text text--darken-2 font-weight-thin"
               >Новая задача
@@ -137,8 +137,8 @@
             <v-flex xs12>
               <sm-task-add-form-select
                 label="Соисполнители"
-                :value="newTask.coperformers"
-                @input="newTask.coperformers = $event"
+                :value="newTask.coexecutors"
+                @input="newTask.coexecutors = $event"
                 multiple
               ></sm-task-add-form-select>
             </v-flex>
@@ -178,8 +178,7 @@
         planDate: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
         planTime: '12:00',
         description: '',
-        participants: [],
-        coperformers: [],
+        coexecutors: [],
         notify: [],
       },
       datePicker: false,
@@ -216,12 +215,12 @@
         this.setMenuMode('open')
       },
       createTask() {
-        // Формирование объекта согласно класса "AddTask"
         const newTask = {
           name: this.newTask.title,
           performerId: this.newTask.performerId,
           descript: this.newTask.description,
-          dateplan: `${this.newTask.planDate} ${this.newTask.planTime}`
+          dateplan: `${this.newTask.planDate} ${this.newTask.planTime}`,
+          participants: this.getParticipants()
         }
         this.$store.dispatch('sm/addNewTask', newTask)
       },
@@ -233,6 +232,20 @@
       },
       setMenuMode(mode) {
         this.$store.commit('sm/setMenuMode', mode)
+      },
+      getParticipants() {
+        const executor = [{userId: this.newTask.performerId, role: ''}]
+        const coexecutors = this.newTask.coexecutors.map(i => {
+          return {userId: i, role: 'COEXECUTOR'}
+        })
+        const observers = this.newTask.notify.map(i => {
+          return {userId: i, role: 'OBSERVER'}
+        })
+        return [
+          ...executor,
+          ...coexecutors,
+          ...observers
+        ]
       }
     }
   }

@@ -64,8 +64,10 @@ export class SmartManagerApi {
 
   addNewTaskToGql(newTask) {
     return getClient().mutate({
-      mutation: gql`mutation ($newTask: AddTask!) ${addTask}`,
-      variables: {newTask}
+      mutation: gql`mutation ($newTask: String!) ${addTask}`,
+      variables: {
+        newTask: JSON.stringify(newTask)
+      }
     })
     .then(result => result)
     .catch(error => console.log(error.message))
