@@ -33,5 +33,8 @@ export default {
     addToFavoritesSecond({commit}, payload){
         debugger;
         commit('addToFavoritesSecond', payload);
+    },
+    clearResourceGroups({commit}){
+        commit('clearResourceGroups', payload);
     }
 }

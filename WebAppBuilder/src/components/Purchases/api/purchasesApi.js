@@ -75,9 +75,11 @@ export class PurchasesApi {
     store.commit('purchases/setResourceGroups', t);
   }
   getResourcesGroupsByGroupNew(group){
+    debugger;
     return client.query({
       query: gql`query ($group: String) ${resourcesGropsByGoupNew}`,
-      variables: { group: group }
+      variables: { group: group },
+      fetchPolicy: 'no-cache'
     })
     .then(this.getResourcesGroupsByGroupNewCallback)
     .catch(error => console.log(error.message))
@@ -321,15 +323,14 @@ export class PurchasesApi {
       .catch(error => console.log(error.message))
   }
 
-  changeLocalization(language){
-    debugger;
+  async changeLocalization(language){
     store.commit('purchases/clearResourceGroups');
-    return client.mutate({
+    debugger;
+    await client.mutate({
       mutation: gql`${changeLocalization}`,
       variables: {language: language}     
     })
-      .then(r=>r)
-      .catch(error => console.log(error.message))
+    debugger;
   }
 
   getFavListInputTypeParam(favList)

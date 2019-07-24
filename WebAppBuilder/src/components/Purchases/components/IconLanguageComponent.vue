@@ -81,7 +81,10 @@ export default {
        this.$i18n.Setlocalization(language);
        debugger;
        //api.getResourcesGroupsByGroupNew("")
-       api.changeLocalization(language);
+       api.changeLocalization(language).then(()=>{
+           debugger;
+           api.getResourcesGroupsByGroupNew("");
+       });
     }
 
   },
