@@ -16,11 +16,9 @@
         methods:{
             callBack(){
                     const data = this.$store.state.purchases.resourceGroups;
-                    debugger;
                     if (data.length == 0) {
                         this.show = true;
                     }else{
-                        debugger;
                         this.show = false;
                     }
                 }

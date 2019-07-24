@@ -79,10 +79,8 @@ export default {
     //Установка локализации
     Setlocalization(language){
        this.$i18n.Setlocalization(language);
-       debugger;
        //api.getResourcesGroupsByGroupNew("")
        api.changeLocalization(language).then(()=>{
-           debugger;
            api.getResourcesGroupsByGroupNew("");
        });
     }

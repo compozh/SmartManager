@@ -48,7 +48,7 @@
         }),
         methods:{
            respCallback(resp){
-           // debugger;
+            debugger;
                if (resp.data.purchases.items.length > 0)
                {
                     var item = resp.data.purchases.items[0];
@@ -66,7 +66,9 @@
             var promise = 
                 this.id.trim().length == 15 
                     ? api.getImagesForCatalogueItem(this.id)
-                    : api.getImagesForCatalogueGroup(this.id); 
+                    : api.getImagesForCatalogueGroup(this.id);
+            
+            //api.getImagesForCatalogueGroup(this.id);
             promise.then(this.respCallback);
         },
         

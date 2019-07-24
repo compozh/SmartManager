@@ -4,7 +4,8 @@ import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 import _ from 'lodash';
 // Queries
-import resourcesGropsById from './graphql/resourcesGropsById.gql'
+
+import resourceGroupImage from './graphql/resourceGroupImage.gql'
 import resourcesGropsByGoup from './graphql/resourcesGropsByGoup.gql'
 import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
@@ -41,6 +42,12 @@ const client = new ApolloClient({
 export class PurchasesApi {
   constructor() {}
 
+  getResourcesGroups(result){
+    let test = result;
+    debugger;
+  }
+
+  /*
   getResourcesGroups(id, flds){
     var FIELDS = gql`
     fragment resourcesGroupsFields on ResourceGroup {
@@ -53,7 +60,7 @@ export class PurchasesApi {
     })
     .then(result => result)
     .catch(error => console.log(error.message))
-  }
+  }*/
 
   getResourcesGroupsByGroup(group, flds){
     var FIELDS = gql`
@@ -70,12 +77,10 @@ export class PurchasesApi {
   }
 
   getResourcesGroupsByGroupNewCallback(result){
-    debugger;
     let t = result.data.purchases.items;
     store.commit('purchases/setResourceGroups', t);
   }
   getResourcesGroupsByGroupNew(group){
-    debugger;
     return client.query({
       query: gql`query ($group: String) ${resourcesGropsByGoupNew}`,
       variables: { group: group },
@@ -85,8 +90,17 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getImagesForCatalogueGroup(id) {
-    return this.getResourcesGroups(id, "content");
+  testt(response){
+    let test = response;
+    debugger;
+  }
+
+  async getImagesForCatalogueGroup(group) {
+    await client.query({
+      query: gql`${resourceGroupImage}`,
+      variables: { group: group },
+      fetchPolicy: 'no-cache'
+    })
   }
 
   getImagesForCatalogueItem(id){
@@ -104,13 +118,11 @@ export class PurchasesApi {
   }
 
   getCartItemsCallback(result){
-    debugger;
     let cartItems = result.data.purchases.cartItems;
     store.commit('purchases/setCartItems', cartItems);
   }
 
   getCartItems(){
-    //debugger;
     return client.query({
       query: gql`query ${cartItems}`,
       variables: { }
@@ -170,7 +182,6 @@ export class PurchasesApi {
 
   addToCartMutationCallback(result){
     let cartItem = result.data.purchasesMutation.addToCart;
-    debugger;
     store.commit('purchases/addCartItem', cartItem);
     store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
@@ -325,12 +336,10 @@ export class PurchasesApi {
 
   async changeLocalization(language){
     store.commit('purchases/clearResourceGroups');
-    debugger;
     await client.mutate({
       mutation: gql`${changeLocalization}`,
       variables: {language: language}     
     })
-    debugger;
   }
 
   getFavListInputTypeParam(favList)

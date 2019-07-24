@@ -162,13 +162,11 @@ export default {
       },
 
       changeUnit(item,m){
-        debugger;
         item.measurementUnit = m;
         api.updateCartMutation(item);
       },
       
       changeDDate(item, d){
-        debugger;
         item.dateDelivery = d;
         api.updateCartMutation(item);
       },
