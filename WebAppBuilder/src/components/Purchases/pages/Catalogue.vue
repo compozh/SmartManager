@@ -14,7 +14,7 @@
         </v-layout>
       </v-navigation-drawer>
         <v-layout row>
-          <catalogue-route-breadcrumbs :code="routeParamCode" />
+          <!--<catalogue-route-breadcrumbs :code="routeParamCode" />-->
           <v-layout justify-end>
             <!--<v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>-->
             <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>

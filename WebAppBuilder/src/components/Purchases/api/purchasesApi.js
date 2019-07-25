@@ -95,8 +95,9 @@ export class PurchasesApi {
     debugger;
   }
 
-  async getImagesForCatalogueGroup(group) {
-    await client.query({
+  getImagesForCatalogueGroup(group) {
+    debugger;
+    return client.query({
       query: gql`${resourceGroupImage}`,
       variables: { group: group },
       fetchPolicy: 'no-cache'

@@ -49,12 +49,12 @@
         methods:{
            respCallback(resp){
             debugger;
-               if (resp.data.purchases.items.length > 0)
+               if (resp.data.purchases.resourcesGroup.content.length > 0)
                {
-                    var item = resp.data.purchases.items[0];
-                    if (item.content)
+                    //var item = resp.data.purchases.resourcesGroup[0];
+                    if (resp.data.purchases.resourcesGroup.content)
                     {
-                        this.items = this.items.concat(item.content);
+                        this.items = this.items.concat(resp.data.purchases.resourcesGroup.content);
                     }
                }
            },
