@@ -79,8 +79,8 @@
 import ds from '../renderless/DigitalSignature'
 
 export default {
-  components:{
-    DigitalSignatureRl:ds
+  components: {
+    DigitalSignatureRl: ds
   },
   methods: {
     pickFile() {

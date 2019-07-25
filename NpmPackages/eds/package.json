@@ -1,11 +1,11 @@
 {
   "name": "@it-enterprise/eds",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "manager of modules",
   "author": "it-enterprise",
-  "main1": "./dist/eds.common.js",
-  "main": "./src/index.js",
+  "main": "./dist/eds.common.js",
+  "main1": "./src/index.js",
   "files": [
     "dist/*"
   ],
