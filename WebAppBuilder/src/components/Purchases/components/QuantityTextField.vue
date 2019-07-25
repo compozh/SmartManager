@@ -1,6 +1,7 @@
 <template>
     <v-text-field class ="quantity-input" :disabled="!editable"
-        :value="this.quantity" 
+        :value="this.quantity"
+        placeholder="0"
         append-icon="add" 
         @click:append="mutationChangeQuantity(MUTATION_TYPE.PLUS)"
         prepend-inner-icon="remove" 

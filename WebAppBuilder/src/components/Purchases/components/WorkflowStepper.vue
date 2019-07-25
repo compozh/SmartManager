@@ -11,6 +11,7 @@
                         :key="`div-${n}`"
                     />
                 </template>
+                
             </v-stepper-header>
 
             <v-stepper-items>
@@ -54,3 +55,8 @@
         }
     }
 </script>
+<style scope>
+    .v-stepper{
+        box-shadow: none;
+    }
+</style>
