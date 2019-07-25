@@ -159,9 +159,14 @@
         }
       },
       breakpoint(val) {
-        if (val === 'sm' && !this.taskAddForm
-          || val === 'xs' && !this.taskAddForm) {
-          this.setMenuMode('mini')
+        if (!this.taskAddForm) {
+          switch (val) {
+            case 'xs': this.setMenuMode('close')
+              break
+            case 'sm': this.setMenuMode('mini')
+              break
+            case 'md': this.setMenuMode('open')
+          }
         }
       },
       currentUser(value, oldValue) {

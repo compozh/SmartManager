@@ -9,7 +9,7 @@
       @click="taskLink(task.id)"
     >
       <v-layout row align-center>
-        <v-flex d-flex justify-center shrink pr-3>
+        <v-flex d-flex justify-center shrink pr-3 class="icon-container">
           <user-icon :src="task.addedPhoto" size="50"></user-icon>
         </v-flex>
         <v-flex py-1 class="text-ellipsis">
@@ -75,5 +75,9 @@
 
   .unread {
     border-left-color: #1976D2;
+  }
+
+  .icon-container {
+    max-width: 50px;
   }
 </style>
