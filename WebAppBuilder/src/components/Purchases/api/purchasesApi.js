@@ -90,13 +90,7 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  testt(response){
-    let test = response;
-    debugger;
-  }
-
   getImagesForCatalogueGroup(group) {
-    debugger;
     return client.query({
       query: gql`${resourceGroupImage}`,
       variables: { group: group },
@@ -126,7 +120,8 @@ export class PurchasesApi {
   getCartItems(){
     return client.query({
       query: gql`query ${cartItems}`,
-      variables: { }
+      variables: { },
+      fetchPolicy: 'no-cache'
     })
     .then(this.getCartItemsCallback)
     .catch(error => console.log(error.message))

@@ -1,15 +1,14 @@
 <template>
-    <div v-if="applications">
+    <v-container fluid v-if="applications">
         <v-layout row justify-end>
             <v-btn icon v-show="this.$vuetify.breakpoint.smAndUp">
                 <v-icon v-text="rowView ? 'view_stream' : 'view_column'" @click="rowView = !rowView"/>
             </v-btn>
         </v-layout>
         <!-- Карточки -->
-        <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" wrap justify-center>
-            <v-flex class="application-card"
+        <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" justify-center  wrap>
+            <v-flex xs12 sm5 md5 lg5 xl5 class="application-card"
                 v-for="application in getItemsOnPage()" :key="application.id" 
-                v-bind="{ [`xs${smallSize ? '5' : '3'}`]: true }" 
                 v-bind:pagination.sync="pagination"
                 v-touch="{
                             left: () => swipeLeft(application),
@@ -17,13 +16,13 @@
                         }"
                 >
                 <router-link :to="{ name:'APPLICATION', params: {applicationId: application.id}}">
-                    <v-card tile height="150px" >
+                    <v-card min-height="180px" >
                         <esecute-stepper />
                         <v-card-title>
                             {{$t('purchases.CartItems.Number')}}: {{ application.number }} {{$t('purchases.CartItems.Date')}}: {{ application.date | formatDate }}
                         </v-card-title>
                         <v-card-text>
-                            {{ application.title }}
+                            {{ application.title }}                       
                         </v-card-text>
                         <v-card-actions>
                             <v-layout justify-end>
@@ -40,7 +39,7 @@
             v-model="pagination.page" :length="pages"
             :total-visible="7"
             />
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -103,6 +102,8 @@ const api = new PurchasesApi();
 </script>
 
 <style scoped>
+
+
 .application-card{
     padding: 5px;
     margin: 5px;
@@ -115,7 +116,10 @@ const api = new PurchasesApi();
     font-weight: 600;
     padding: 5px 15px;
 }
+
 .application-card .v-card__text {
+    text-align: left;
+    margin-left: 10px;
     padding: 5px;
     height: 40px;
 }

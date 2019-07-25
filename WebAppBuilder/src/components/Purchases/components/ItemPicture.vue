@@ -48,10 +48,8 @@
         }),
         methods:{
            respCallback(resp){
-            debugger;
                if (resp.data.purchases.resourcesGroup.content.length > 0)
                {
-                    //var item = resp.data.purchases.resourcesGroup[0];
                     if (resp.data.purchases.resourcesGroup.content)
                     {
                         this.items = this.items.concat(resp.data.purchases.resourcesGroup.content);
@@ -68,7 +66,6 @@
                     ? api.getImagesForCatalogueItem(this.id)
                     : api.getImagesForCatalogueGroup(this.id);
             
-            //api.getImagesForCatalogueGroup(this.id);
             promise.then(this.respCallback);
         },
         
