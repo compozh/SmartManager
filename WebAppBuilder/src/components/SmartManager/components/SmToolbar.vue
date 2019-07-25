@@ -1,7 +1,7 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center justify-space-beetwen>
-      <v-flex shrink>
+    <v-layout row align-center justify-space-between>
+      <v-flex>
         <router-link
           tag="h1"
           class="blue--text text--darken-2 font-weight-thin"
@@ -10,15 +10,25 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
-      <v-text-field
-        v-if="showSearch"
-        flat
-        solo
-        clearable
-        label="Поиск"
-        prepend-inner-icon="search"
-        v-model.trim="search"
-      ></v-text-field>
+      <v-flex
+        v-if="showTaskAddFormTitle"
+        class="hidden-sm-and-down task-add-form-title"
+      >
+        <h2
+          class="blue--text text--darken-2 font-weight-thin"
+        >Новая задача
+        </h2>
+      </v-flex>
+      <v-flex v-if="showSearch">
+        <v-text-field
+          flat
+          solo
+          clearable
+          label="Поиск"
+          prepend-inner-icon="search"
+          v-model.trim="search"
+        ></v-text-field>
+      </v-flex>
       <v-spacer></v-spacer>
       <v-flex shrink>
         <user-panel mini="true"></user-panel>
@@ -43,6 +53,9 @@
         set(search) {
           this.$store.commit('sm/setSearch', search)
         }
+      },
+      showTaskAddFormTitle() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
     }
   }
@@ -70,4 +83,9 @@
     min-height: 40px;
   }
 
+  .task-add-form-title {
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 65px);
+  }
 </style>

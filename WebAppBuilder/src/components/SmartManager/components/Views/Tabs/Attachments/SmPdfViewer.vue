@@ -1,6 +1,6 @@
 <template>
   <v-layout column class="pdf-viewer">
-    <v-flex class="viewer-toolbar">
+    <v-flex d-flex class="viewer-toolbar justify-center">
       <!-- Кнопка на страницу назад-->
       <v-btn
         outline small
@@ -147,17 +147,21 @@
       maxWidth: 160
     }),
     created() {
-      this.src = pdf.createLoadingTask(this.url);
-      this.src
-        .then(pdf => this.numPages = pdf.numPages)
-        .catch(e => {
-          this.$store.commit('sm/setMessage', { type: 'error', text: e.message })
-        })
+      this.readDocument()
     },
     methods: {
+      readDocument() {
+        this.src = pdf.createLoadingTask(this.url);
+        this.src
+          .then(pdf => this.numPages = pdf.numPages)
+          .catch(e => this.$store.commit('sm/setMessage', {
+            type: 'error',
+            text: e.message
+          }))
+      },
       observePages(event) {
         if (this.numPages === event) {
-          const callback = (entries, observer) => {
+          const callback = entries => {
             entries.forEach(entry => {
               if (entry.isIntersecting && this.page !== entry.target.id) {
                 this.page = entry.target.id
@@ -200,9 +204,14 @@
       },
       setWidth(step) {
         if (step < 0 && this.width > this.minWidth
-            || step > 0 && this.width < this.maxWidth) {
+          || step > 0 && this.width < this.maxWidth) {
           this.width += step
         }
+      }
+    },
+    watch: {
+      url() {
+        this.readDocument()
       }
     }
   }
@@ -223,6 +232,8 @@
   .viewer-toolbar {
     background: #efefef;
     border-bottom: 1px solid #c6c6c6;
+    padding: 4px;
+    overflow-x: auto;
   }
 
   .viewer-page-item {
@@ -234,7 +245,7 @@
     border-radius: 2px;
     text-align: center;
     text-align-last: center;
-    outline:none;
+    outline: none;
     font-size: 12px;
     width: 30px;
   }
@@ -248,11 +259,12 @@
     color: rgb(102, 102, 102);
     font-size: 14px;
     font-weight: 300;
+    flex: 0 1 auto !important;
   }
 
   .v-btn.viewer-btn, input[type=number], .zoom-options {
     padding: 0;
-    margin: 4px 7px;
+    margin: 0 4px;
     text-transform: none;
     font-weight: 300;
     color: #666;
@@ -260,22 +272,23 @@
     border-color: #c6c6c6;
     height: 20px;
     min-width: 30px;
+    flex: 0 1 auto !important;
   }
 
   .viewer-wrapper {
     overflow: auto;
   }
 
-  .viewer-wrapper::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
 
-  .viewer-wrapper::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   }
 
-  .viewer-wrapper::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     outline: 1px solid slategrey;
   }

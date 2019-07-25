@@ -63,7 +63,6 @@
 
   .viewer-layout {
     height: 88vh;
-    box-shadow: inset 0 1px 0 0 rgba(100, 121, 143, 0.122);
   }
 
   .hidden-md-and-down .viewer-layout {

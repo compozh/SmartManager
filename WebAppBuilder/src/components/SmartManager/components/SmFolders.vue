@@ -6,8 +6,7 @@
           <v-list-tile
             v-for="folder in folders"
             :key="folder.code"
-            tag="a"
-            :to="taskAddForm ? '' : getLink(folder.code)"
+            :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
             :class="{ 'main-folder': isMainFolder(folder) }"
@@ -15,13 +14,13 @@
             <v-list-tile-action>
               <v-tooltip
                 right
-                :disabled=!menuMiniMode
+                :disabled="menuMode !== 'mini'"
               >
                 <template v-slot:activator="{ on }">
                   <div v-on="on">
                     <v-badge color="red darken-2">
                       <template
-                        v-if="folder.count && menuMiniMode"
+                        v-if="folder.count && menuMode === 'mini'"
                         v-slot:badge
                       >
                         {{ folder.count }}
@@ -54,27 +53,22 @@
 </template>
 
 <script>
-  import {eventBus} from '../../../main'
-
   export default {
     name: 'sm-folders',
-    data: () => ({
-      menuMiniMode: false
-    }),
     computed: {
       folders() {
         return this.$store.state.sm.folders
       },
       taskAddForm() {
         return this.$store.state.sm.taskAddForm === 'open'
+      },
+      menuMode() {
+        return this.$store.state.sm.menuMode
       }
     },
     methods: {
       getFolders() {
-        this.$store.dispatch('sm/getFolders')
-      },
-      getLink(folder) {
-        return { name:'SMARTMANAGERTASKS', params:{ foldercode: (folder ||'ALL') }}
+        this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
       },
       isMainFolder(folder) {
         return folder.name === 'Все'
@@ -84,16 +78,14 @@
       },
       setFolderIcon(folder) {
         return this.isMainFolder(folder) ? 'folder' : 'folder_open'
+      },
+      setMenuMode(mode) {
+        this.$store.commit('sm/setMenuMode', mode)
       }
     },
     created() {
       this.getFolders()
-      eventBus.$on('setMenuMode', menuMiniMode => {
-        this.menuMiniMode = menuMiniMode;
-      })
-    },
-    beforeDestroy() {
-      eventBus.$off('updateMenuMode')
+      this.setMenuMode('open')
     }
   }
 </script>

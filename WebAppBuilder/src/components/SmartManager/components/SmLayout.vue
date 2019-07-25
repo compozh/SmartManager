@@ -6,7 +6,7 @@
       class="toolbar"
     >
       <v-toolbar-side-icon
-        @click.stop="setMenuButtonMode"
+        @click.stop="menuBtn"
         class="blue--text text--darken-2"
       >
       </v-toolbar-side-icon>
@@ -26,8 +26,8 @@
       app
       clipped
       floating
-      v-model="drawer"
-      :mini-variant="menuMiniMode"
+      :value="menuMode !== 'close'"
+      :mini-variant="menuMode === 'mini'"
       mini-variant-width="56"
       width="270"
       class="transparent"
@@ -65,10 +65,10 @@
         :timeout="5000"
         :color="message.type"
         :value="true"
-        @input="closeMessage"
+        @input="setMessage(null)"
       >
         {{ message.text }}
-        <v-btn icon @click.native="closeMessage">
+        <v-btn icon @click.native="setMessage(null)">
           <v-icon>close</v-icon>
         </v-btn>
       </v-snackbar>
@@ -78,28 +78,45 @@
 </template>
 
 <script>
-  import {eventBus} from '../../../main';
-
   export default {
-    name: 'material-2-layout',
-    props: ['toolbarTitle', 'menuButtonMode'],
-    data() {
-      return {
-        drawer: true,
-        mini: false,
-      };
-    },
+    name: 'sm-layout',
+    props: ['toolbarTitle'],
     methods: {
-      // определение режима работы кнопки меню:
-      // 0 - показывать и скрывать
-      // 1 - показывать и минимизировать
-      setMenuButtonMode() {
-        return this.menuButtonMode
-          ? this.mini = !this.mini
-          : this.drawer = !this.drawer;
+      menuBtn() {
+        if (this.taskAddForm) {
+          return this.setMessage({
+            type: 'warning',
+            text: 'Для перехода в меню закройте форму'
+          })
+        }
+        switch (this.menuMode) {
+          case 'close':
+            this.setMenuMode('open')
+            break
+          case 'open':
+            this.setMenuMode('mini')
+            break
+          case 'mini':
+            this.setMenuMode('close')
+        }
       },
-      closeMessage() {
-        this.$store.commit('sm/setMessage', null);
+      setMessage(message) {
+        this.$store.commit('sm/setMessage', message);
+      },
+      goToAll() {
+        this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
+      },
+      setMenuMode(mode) {
+        this.$store.commit('sm/setMenuMode', mode)
+      },
+      getFolders() {
+        this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
+      },
+      getTasks() {
+        this.$store.dispatch('sm/getTasks', {
+          folderId: 'ALL',
+          loader: 'setCircularLoader'
+        })
       }
     },
     computed: {
@@ -116,19 +133,44 @@
       linearLoader() {
         return this.$store.state.sm.linearLoader
       },
-      menuMiniMode() {
-        eventBus.$emit('setMenuMode', this.mini);
-        return this.mini;
+      menuMode() {
+        return this.$store.state.sm.menuMode
+      },
+      breakpoint() {
+        return this.$vuetify.breakpoint.name
+      },
+      taskAddForm() {
+        return this.$store.state.sm.taskAddForm === 'open'
+      },
+      currentUser() {
+        if (this.$store.state.currentUser) {
+          return this.$store.state.currentUser.CurrentUserData.UserName
+        }
       }
     },
-    created() {
-      eventBus.$on('setMenuMiniMode', value => {
-        this.mini = value
-      })
-      this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
-    },
-    beforeDestroy() {
-      eventBus.$off('setMenuMiniMode')
+    watch: {
+      '$route'(to, from) {
+        if (from.name === 'SMARTMANAGER'
+          || from.name === 'SMARTMANAGERLOGIN') {
+          this.goToAll()
+        }
+        if (to.name === 'SMARTMANAGERLOGIN') {
+          this.setMenuMode('close')
+        }
+      },
+      breakpoint(val) {
+        if (val === 'sm' && !this.taskAddForm
+          || val === 'xs' && !this.taskAddForm) {
+          this.setMenuMode('mini')
+        }
+      },
+      currentUser(value, oldValue) {
+        if (value && oldValue && value !== oldValue) {
+          this.getFolders()
+          this.goToAll()
+          this.getTasks()
+        }
+      }
     }
   }
 </script>
