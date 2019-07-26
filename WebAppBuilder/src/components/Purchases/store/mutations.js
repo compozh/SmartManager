@@ -34,16 +34,26 @@ export default {
     state.snackbarMessage = payload
   },
   setFavLists(state, payload){
-    
-    state.favLists = payload;
-    //debugger;
-    //favlists: [{ alias : "", listiD: "", keyValues: [] }]
+    state.favlists = payload;
+  },
+  addToFavLists(state, payload){
+    let favListItem = { 
+      alias : payload.Alias,  
+      listiD : payload.Id.toString(), 
+      keyValues : payload.KeyValues, 
+      caption : payload.Caption, 
+      isDefaultList: payload.IsDefaultList
+    };
+    /*state.favlists = */state.favlists.push(favListItem);
   },
   setChose(state, payload){
     //state.chose.list = payload.list;
     //state.chose.method = payload.method;
     //state.chose.caption = payload.caption;
     state.chose = payload;
+  },
+  setApplications(state, payload){
+    state.applications = payload;
   },
 
   deleteCartItem(state, payload){

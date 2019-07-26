@@ -25,6 +25,12 @@ import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
 import resourcesGropsByGoupNew from './graphql/resourcesGropsByGoupNew.gql'
 import mutationEditFavList from './graphql/mutationEditFavList.gql'
 import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
+
+import deleteItemFromFavorites from './graphql/deleteItemFromFavorites.gql'
+import mutationCreateFavList from './graphql/mutationCreateFavList.gql'
+import applications from './graphql/applications.gql'
+
+
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
@@ -44,7 +50,6 @@ export class PurchasesApi {
 
   getResourcesGroups(result){
     let test = result;
-    debugger;
   }
 
   /*
@@ -274,22 +279,21 @@ export class PurchasesApi {
   }
 
   getFavListsCallback(result){
-    //debugger;
     let favLists = result.data.purchases.favLists;
     store.commit('purchases/setFavLists', favLists);
   }
   getFavLists(){
-    //debugger;
+    
     return client.query({
       query: gql`query ${favLists}`,
-      variables: { }
+      variables: { },
+      fetchPolicy: 'no-cache'
     })
     .then(this.getFavListsCallback)
     .catch(error => console.log(error.message))
   }
 
-  addToFavoritesMutationCallbackFirst(result){
-    debugger;
+addToFavoritesMutationCallbackFirst(result){
     let res = result.data.purchasesMutation.addToFavorites;
     //this.getFavLists();
     if( res.ReturnValue != null && res.ReturnValue.ShouldCallList)
@@ -299,24 +303,35 @@ export class PurchasesApi {
         list : res.ReturnValue.ListToChoose , 
         caption:"Выбор из списка",
         method: (key) => {
-          debugger;
           client.mutate({
             mutation: gql`${addToFavoritesSecond}`,
+            
             variables: {listKey: key, keyValue: res.ReturnValue.KeyValue}     
+          }).then(res => {
+            client.query({
+              query: gql`query ${favLists}`,
+              fetchPolicy: 'no-cache',
+              variables: { }
+            }).then(res => {
+              store.commit('purchases/setFavLists', res.data.purchases.favLists);
+              store.commit("purchases/setMessage",  `Добавлено в избраное`);}
+              ).catch(error => console.log(error.message));
           });
-          
-
-          store.commit("purchases/setMessage",  `Добавлено в избраное`);
-          
-          debugger;
         }
       });
     }
     else if (res.Successed)
     {
-      store.commit("purchases/setMessage",  `Добавлено в избраное`);
-      getFavLists();
-      debugger;
+      client.query({
+            query: gql`query ${favLists}`,
+            fetchPolicy: 'no-cache',
+            variables: { }
+          }).then(res => {
+            store.commit('purchases/setFavLists', res.data.purchases.favLists);
+            store.commit("purchases/setMessage",  `Добавлено в избраное`);
+          }
+            ).catch(error => console.log(error.message));
+    
     }
   }
 
@@ -340,9 +355,8 @@ export class PurchasesApi {
 
   getFavListInputTypeParam(favList)
   {
-    debugger;
     let test =  {
-        id:                 favList.id,
+        id:                 favList.id != null ? favList.id: favList.listiD,
         alias:              favList.alias,
         caption:            favList.caption,
         comment:            "",
@@ -355,14 +369,12 @@ export class PurchasesApi {
   }
 
   mutationEditFavList(favList){
-    debugger;
     let favListInput = this.getFavListInputTypeParam(favList);
-    debugger;
     return client.mutate({
       mutation: gql`${mutationEditFavList}`,
       variables: {favList: favListInput}     
     })
-      .catch(error => {this.getFavLists(); console.log(error.message)});;
+      .catch(error => {console.log(error.message)});
   }
   mutationDeleteFavList(favList){
     
@@ -372,6 +384,57 @@ export class PurchasesApi {
       mutation: gql`${mutationDeleteFavList}`,
       variables: {favList: favListInput}     
     })
-      .catch(error => {this.getFavLists(); console.log(error.message)});
+      .catch(error => {console.log(error.message)});
+  }
+  
+  deleteItemFromFavorites(alias, keyValue){
+    return client.mutate({
+      mutation: gql`${deleteItemFromFavorites}`,
+      variables: {alias: alias, keyValue: keyValue},     
+    }).then(res => {
+      client.query({
+        query: gql`query ${favLists}`,
+        fetchPolicy: 'no-cache',
+        variables: { }
+      }).then(res => {
+        store.commit('purchases/setFavLists', res.data.purchases.favLists);
+        store.commit("purchases/setMessage",  `Удалено с избраного`);}
+        ).catch(error => console.log(error.message));
+    })
+      .catch(error => {console.log(error.message)});
+  }
+  
+  mutationCreateFavList(){
+
+    store.commit("purchases/setChose", {
+      list : [{Title:"Заявки", Key:"DOC"}, {Title:"Ресурсы", Key:"KSM"},] , 
+      caption:"Тип списока?",
+      method: (key) => {
+          return client.mutate({
+            mutation: gql`${mutationCreateFavList}`,
+            variables: {alias: key},     
+            fetchPolicy: 'no-cache'
+          })
+          .then(result => {
+              let newFavList = result.data.purchasesMutation.mutationCreateFavList;
+              
+              store.commit('purchases/addToFavLists', newFavList);
+              store.commit("purchases/setMessage",  `Добавлен список`);
+            })
+          .catch(error => {console.log(error.message)});
+      }
+    });
+  }
+  getApplicationsCallback(result){
+    let applications = result.data.purchases.applications;
+    store.commit('purchases/setApplications', applications);
+  }
+  getApplications(){
+    return client.mutate({
+      mutation: gql`${applications}`,
+      variables: { }     
+    })
+      .then(this.getApplicationsCallback)
+      .catch(error => console.log(error.message));
   }
 }

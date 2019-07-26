@@ -27,14 +27,18 @@ export default {
         commit('setChoseList',payload);
     },
     addToFavorites({commit}, payload){
-        debugger;
         commit('addToFavorites', payload);
     },
     addToFavoritesSecond({commit}, payload){
-        debugger;
         commit('addToFavoritesSecond', payload);
     },
     clearResourceGroups({commit}){
         commit('clearResourceGroups', payload);
+    },
+    setFavLists({commit}, payload){
+        commit('setFavLists', payload);
+    },
+    setApplications({commit}, payload){
+        commit('setApplications', payload);
     }
 }

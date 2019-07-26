@@ -46,16 +46,13 @@ export default {
         },
     methods:{
         onChose(key){
-                debugger;
                 this.show = false;
                 this.$store.state.purchases.chose.method(key);
         },
         create(){
-            debugger;
             const list = this.$store.state.purchases.chose.list;
             if (list.length  > 0) 
             {
-                debugger;
                 this.items = list;
                 this.caption = this.$store.state.purchases.chose.caption;
                 this.show = true;

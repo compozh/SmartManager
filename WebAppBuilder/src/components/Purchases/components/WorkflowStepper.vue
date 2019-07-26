@@ -47,7 +47,6 @@
         }),
         computed:{
             stageNameComp(){
-                debugger;
                 if (this.stageName)
                     return this.stageName;
                 return $t('purchases.CartItems.Stage');

@@ -1,0 +1,20 @@
+{
+  purchases{
+    applications(take:100){
+      id,
+      number,
+      date,
+      title
+      rows{
+        id,
+        resource{
+          id,
+          fullName
+        },
+        measurementUnit{
+          name
+        }
+      }
+    }
+  }
+}

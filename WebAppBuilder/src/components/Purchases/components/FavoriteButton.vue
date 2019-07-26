@@ -14,7 +14,7 @@ import RemoveButton from "../components/RemoveButton.vue"
 import ModalWindowOrderCreation from "../components/ModalWindowOrderCreation.vue"
 import TooltipCartItemWithResource from "../components/TooltipCartItemWithResource.vue"
 import TextAreaWithLockEdit from "../components/TextAreaLockEdit.vue"
-import { debug } from 'util';
+import { debug, debuglog } from 'util';
 
 const api = new PurchasesApi();
 
@@ -47,34 +47,24 @@ export default {
         },
     methods:{
         favClick(){
-            var test = api.addToFavoritesMutation(this.alias, this.keyValue.toString());
-            //setTimeout()
-            this.inFavourite = true;
+            this.inFavourite = !this.inFavourite;
+            if(this.inFavourite){
+                api.addToFavoritesMutation(this.alias, this.keyValue.toString());
+            }else{
+                api.deleteItemFromFavorites(this.alias, this.keyValue.toString());
+            }
+            
         },
         checkInFavourite(){
             
             this.inFavourite = false;
-            const favlists = this.$store.state.purchases.favLists;
-          
-            //this.inFavourite = favlists.where(w=>w.alias = this.alias).selectmany(w=>w.keyValues).any(w=>w == this.keyValue)
+            const favlists = this.$store.state.purchases.favlists;
            
             if(favlists != null)
             {
+                //this.inFavourite = favlists.where(w=>w.alias = this.alias).selectmany(w=>w.keyValues).any(w=>w == this.keyValue)
                  this.inFavourite = favlists.filter((w)=>w.alias == this.alias).map((w) => w.keyValues).
-                        reduce((prev, next) => { return prev.concat(next); }, []).some( w =>w == this.keyValue);
-                /*
-                var i;
-                var j;
-                for (i = 0; i < favlists.length; i++) { 
-                    if( favlists[i].alias == this.alias)
-                    {
-                        debugger;
-                        if(favlists[i].keyValues.includes(this.keyValue))
-                        {
-                            this.inFavourite = true;
-                        }
-                    }
-                }*/
+                        reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
             }
            
         }

@@ -10,5 +10,11 @@ export default {
   },
   getMessage(state){
     return state.snackbarMessage;
-  }
+  },
+  getFavLists(state) {
+    return state.favlists;
+  },
+  getApplications(state) {
+    return state.applications;
+  },
 }

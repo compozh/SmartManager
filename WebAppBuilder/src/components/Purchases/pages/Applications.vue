@@ -94,9 +94,9 @@ const api = new PurchasesApi();
             }
         },
         mounted() {
+            api.getFavLists();
         },
         created() {
-            api.getFavLists();
         },
     }
 </script>

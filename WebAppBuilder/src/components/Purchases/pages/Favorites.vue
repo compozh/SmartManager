@@ -1,123 +1,58 @@
 <template>
-<div v-if="favLists">
-  <v-card
-    flat
-    tile
-  >
-
-
-
+<div v-if="favlists">
+  
     <v-container
-      v-for="favList in favLists"
-      :key="favList.id"
+      v-for="favList in favlists"
+      :key="favList.listId"
       fluid
       grid-list-md
       grey
       lighten-4
     >
-      <v-layout>
- 
-      <v-flex xs12 sm6 md3>
-          <v-text-field 
-            :label="favList.caption"
-            v-model="favList.caption"
-            solo
-            @input="mutationEditFavList(favList)"
-          ></v-text-field>
-        </v-flex>
-
-        <v-flex>
-            <v-switch 
-            v-model="favList.isDefaultList"
-            label="По умолчанию"             
-            @change="mutationEditFavList(favList)"
-
-          ></v-switch>
-        </v-flex >
-        <v-flex>
-          <v-btn flat small color="error" @click="mutationDeleteFavList(favList)">Delete List</v-btn>
-        </v-flex >
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex
-          v-for="card in favList.keyValues"
-          :key="card"
-          xs12
-          sm6
-          md4
-        >
-          <v-card @drag="ondrag()">
-            <v-flex  xl4 lg9 md8 sm7 xs6>
-              <v-subheader>{{ card }}</v-subheader>
-            </v-flex >
-            <v-flex>
-              <remove-button-icon  @click="mutationDeleteItemFromFav(favList, card)"/>
-            </v-flex >
-            <v-img
-              :src="`https://picsum.photos/200/300?image=${getImage()}`"
-              height="300px"
-            >
-              <span
-                class="headline white--text pl-3 pt-3"
-                v-text="card.title"
-              ></span>
-            </v-img>
-
-            <v-card-actions class="white justify-center">
-              <v-btn
-                v-for="(social, i) in socials"
-                :key="i"
-                :color="social.color"
-                class="white--text"
-                fab
-                icon
-                small
-              >
-                <v-icon>{{ social.icon }}</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
+      <onefavlist :listId= "favList.id" :isEditable="true" :printCount="4"/>
     </v-container>
-  </v-card>
+    <div>
+      <v-btn @click="mutationCreateFavList" color="green" dark large fixed bottom right fab>
+          <v-icon>add</v-icon>
+        </v-btn>
+    </div>
     </div>
 </template>
 
 <script>
 
 import {PurchasesApi} from "../api/purchasesApi";
+
 const api = new PurchasesApi();
+
 
   export default {
      name: "mylist",
-     props: ["favLists"],
     data: () => ({
-      
-      //favLists: [],
-      socials: [
-        {
-          icon: 'fab fa-facebook',
-          color: 'indigo'
-        },
-        {
-          icon: 'fab fa-linkedin',
-          color: 'cyan darken-1'
-        },
-        {
-          icon: 'fab fa-instagram',
-          color: 'red lighten-3'
-        }
-      ]
     }),
-    beforeCreate() {
-      api.getFavLists();
-    },
     created() {
-      
-        this.$store.watch(state => state.purchases.favlists.keyValues, this.checkInFavourite);
-        this.checkInFavourite();
-        //this.types = ['Places to Be', 'Places to See2'];
+      api.getFavLists();
+      api.getApplications();
+    },
+    mounted(){
+    },
+    computed:{
+      applications:{
+         get: function() {
+          return this.$store.getters["purchases/getApplications"];
+        },
+        set: function(newVal){
+          this.$store.commit('purchases/setApplications', newVal);
+        }
+      },
+      favlists: {
+        get: function() {
+          return this.$store.getters["purchases/getFavLists"];
+        },
+        set: function(newVal){
+          this.$store.commit('purchases/setFavLists', newVal);
+        }
+      },
     },
     methods: {
       getImage () {
@@ -126,39 +61,38 @@ const api = new PurchasesApi();
 
         return Math.floor(Math.random() * (max - min + 1)) + min
       },
-      favClick(){
-          var test = api.addToFavoritesMutation(this.alias, this.keyValue.toString());
-          //setTimeout()
-          this.inFavourite = true;
-      },
-      ondrag(){debugger;},
+      ondrag(){},
       mutationDeleteFavList(favList){
-        debugger;
+        
         api.mutationDeleteFavList(favList);
+        this.favlists = this.favlists.filter(w=>w.id != favList.id);
       },
       mutationDeleteItemFromFav(favList, keyValue){
-
-      },
-      mutationEditFavList(favList){
+        favList.keyValues = favList.keyValues.filter(w=>w != keyValue);
         api.mutationEditFavList(favList);
       },
-      checkInFavourite(){
-          const favlists = this.$store.state.purchases.favLists;
-          debugger;
-          if(favlists != null)
-          {
-            
-            this._props.favLists = [];
-            favlists.forEach(w=>this._props.favLists.push(w));
-            /*
-            var i;
-            for (i = 0; i < favlists.length; i++) { 
-                this._props.favLists.push(favlists[i]);
-            }
-            */
-          }
-          
+      mutationEditFavList(favList){
+        
+        if(favList.isDefaultList)
+        {
+          let newList = this.favlists;
+          newList.filter(w=>w.alias == favList.alias && w.id != favList.id).forEach(w => w.isDefaultList = false);
+          this.favlists = newList;
         }
+
+        api.mutationEditFavList(favList);
+      },
+      mutationCreateFavList(){
+        api.mutationCreateFavList()
+      },
+      getAplicationByKeyValue(keyValue){
+        //this._props.applications = [];
+        let apls = this.applications;
+        if(apls!= null){
+           return apls.find(w => w.id.toString() == keyValue);
+        }
+       return {};
+      },
     }
   }
 </script>
