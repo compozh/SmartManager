@@ -1,7 +1,14 @@
 <template>
-  <v-card>
+<v-component>
+  <v-layout>
+  <v-flex>
     <v-card-text>Parapapapfsa</v-card-text>
-  </v-card>
+  </v-flex>
+  <v-flex>
+    <v-card-text>Parapapapfsa</v-card-text>
+  </v-flex>
+  </v-layout>
+<v-component>
 </template>
 <script>
 import {mapGetters} from 'vuex'
