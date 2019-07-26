@@ -1,16 +1,17 @@
 <template>
   <div>
-    <div>Рабочие центры</div>
     <v-container fluid pa-0>
       <v-layout column>
         <v-flex xs12 row>
-          <v-list>
-            <v-list-tile
-              v-for="workCenter in workCenters"
-              :key="workCenter.code">
-              <span>{{workCenter.name}}</span>
-            </v-list-tile>
-          </v-list>
+         <v-select
+          :items="workCenters"
+          item-text="name"
+          item-value="name"
+          label="Work Centers"
+          persistent-hint
+          return-object
+          single-line
+        ></v-select>
         </v-flex>
       </v-layout>
     </v-container>
@@ -20,7 +21,7 @@
 import {mapGetters} from 'vuex'
 
 export default {
-  name:"mes-menu",
+  name:"mes-list",
   created(){
     this.getWorkCenters("","")
   },
@@ -37,6 +38,9 @@ export default {
       }
   },
   methods: {
+    // applyWorkCenter(){
+    //   debugger;
+    // },
     getWorkCenters(uuid, login) {
       const loader = this.shiftTasks ? 'setLinearLoader' : 'setCircularLoader'
       this.$store.dispatch('mes/getWorkCenters', {uuid, loader})

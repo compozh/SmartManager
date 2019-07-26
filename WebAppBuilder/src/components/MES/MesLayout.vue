@@ -11,11 +11,11 @@
       <v-spacer></v-spacer>
       <language-component/>
     </v-toolbar>
-    <v-content>
-      <v-container fluid >
+      <v-content>
+        <mes-list/>
+        <mes-container/>
         <router-view/>
-      </v-container>
-    </v-content>
+      </v-content>
     <v-footer app inset>
       <slot name="footer"></slot>
     </v-footer>
