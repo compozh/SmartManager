@@ -1,5 +1,5 @@
 <template>
-  <div>{{helloString}} <div @click="onLoadClick">LOAD more!</div></div>
+  <div v-on:click="onLoadClick">LOAD more!</div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
@@ -15,6 +15,9 @@ export default {
       }),
   },
     methods: {
+    onLoadClick(){
+      console.log('LOAD more')
+    },
     getProperties() {
       const loader = this.properties ? 'setLinearLoader' : 'setCircularLoader'
       this.$store.dispatch('mes/getProperties')
@@ -22,4 +25,3 @@ export default {
   }
 }
 </script>
-

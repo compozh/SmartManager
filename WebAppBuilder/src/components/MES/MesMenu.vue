@@ -1,14 +1,15 @@
 <template>
   <div>
-    <div>Рабочие центры</div>
     <v-container fluid pa-0>
       <v-layout column>
         <v-flex xs12 row>
-          <v-list>
+            <v-list>
             <v-list-tile
-              v-for="workCenter in workCenters"
-              :key="workCenter.code">
-              <span>{{workCenter.name}}</span>
+              v-ripple
+              v-for="item in menu"
+              :key="item.id"
+               @click="applyMenuItem(item.id)">
+              <span>{{item.name}}</span>
             </v-list-tile>
           </v-list>
         </v-flex>
@@ -21,25 +22,21 @@ import {mapGetters} from 'vuex'
 
 export default {
   name:"mes-menu",
+  data () {
+    var items = [
+      {name: 'Tasks', id:'taskMenu'},
+      {name: 'Downtimes', id:'downtimesMenu'},
+      {name: 'Productions', id:'productionsMenu'}]
+    return {menu: items}
+  },
   created(){
-    this.getWorkCenters("","")
   },
   computed: {
-    ...mapGetters({
-        loading: 'mes/loading',
-        workCenters: 'mes/workCenters'
-      }),
-      workCenters() {
-        return this.$store.getters['mes/getWorkCenters']
-      },
-      checkWorkCenters() {
-        return this.workCenters ? this.workCenters.length : 0
-      }
   },
   methods: {
-    getWorkCenters(uuid, login) {
-      const loader = this.shiftTasks ? 'setLinearLoader' : 'setCircularLoader'
-      this.$store.dispatch('mes/getWorkCenters', {uuid, loader})
+    applyMenuItem(code){
+      debugger;
+      console.log(code)
     }
   }
 }
