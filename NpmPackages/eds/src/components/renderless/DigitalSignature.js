@@ -1,6 +1,6 @@
 export default {
   name: 'DigitalSignature',
-  render(){
+  render() {
     return this.$scopedSlots.default({
 
       fileKey: this.fileKey,
@@ -48,7 +48,7 @@ export default {
 
       },
       hardwareDeviceEvents: {
-        change: (e) =>{ this.hardwareDevice = e }
+        change: (e) => { this.hardwareDevice = e }
       },
       refreshDevicesEvents: {
         click: this.refreshDevices
@@ -70,10 +70,10 @@ export default {
 
       /** Ошибки и предупреждения */
 
-      clearWarning: ()=>{
+      clearWarning: () => {
         this.warning = null
       },
-      clearError(){
+      clearError() {
         this.error = null
       }
     })
@@ -136,14 +136,12 @@ export default {
           }
           if (that.dataList && that.dataList.length > 0) {
             that.execSigning()
-          }
-          else {
+          } else {
             if (that.signedData && that.signedData.length > 0) {
               that.$emit('sign', that.signedData)
               that.signedData = []
               that.dataList = null
-            }
-            else {
+            } else {
               that.$emit('sign', ret)
             }
           }
@@ -175,7 +173,7 @@ export default {
       return !this.loading
     },
 
-    fileKeyName(){
+    fileKeyName() {
       return (this.fileKey || {}).name
     }
 
@@ -186,15 +184,14 @@ export default {
   mounted() {
     let self = this
     if (!window.initEdsWrapper) {
-      let interval = setInterval(function(){
+      let interval = setInterval(function() {
         if (window.initEdsWrapper) {
           clearInterval(interval)
           self.initialize()
         }
         console.log('Try init EDS api...')
       }, 500)
-    }
-    else {
+    } else {
       this.initialize()
     }
   },
@@ -233,7 +230,7 @@ export default {
 
     onFilePicked (e) {
       const files = e.target.files
-      if(files[0] !== undefined) {
+      if (files[0] !== undefined) {
         this.fileKey = files[0]
       } else {
         this.fileKey = null
@@ -264,7 +261,7 @@ export default {
           that.userCa = that.edsWrapper.CAServerIndex
           console.log('EDS api initialized')
         },
-        onWarning(e){
+        onWarning(e) {
           if (e) {
             that.warning = e
           }
@@ -285,8 +282,7 @@ export default {
       evt.preventDefault()
       if (this.$listeners && this.$listeners.submit) {
         this.$emit('submit', this.handleClick, this.canSign)
-      }
-      else {
+      } else {
         this.handleClick()
       }
     },
@@ -297,11 +293,11 @@ export default {
     handleClick() {
 
       this.warning = null
-      if(!this.signData){
+      if (!this.signData) {
         this.warning = 'Не заданы данные для подписи!'
         return
       }
-      if(!this.fileKey && !this.hardwareKey){
+      if (!this.fileKey && !this.hardwareKey) {
         this.warning = 'Не выбран файл ключа!'
         return
       }
@@ -322,8 +318,7 @@ export default {
           this.signingFunction,
           this.callbacks
         )
-      }
-      else {
+      } else {
         this.edsWrapper.readPrivateKey(
           [this.fileKey],
           this.keyPassword,
@@ -338,13 +333,11 @@ export default {
         if (Array.isArray(this.signData)) {
           console.log('signDataArray', this.signData)
           this.edsWrapper.signDataArray(this.signData, true, this.callbacks)
-        }
-        else {
+        } else {
           console.log('signData', this.signData)
           this.edsWrapper.signData(this.signData, true, this.callbacks)
         }
-      }
-      else {
+      } else {
         let data = this.signData
         if (this.dataList && this.dataList.length > 0) {
           data = this.dataList[0].link
@@ -356,8 +349,7 @@ export default {
             action: 'signFile',
             actionParams: {	fileUrl: data }
           })
-        }
-        else if (this.dataType === 'data') {
+        } else if (this.dataType === 'data') {
           console.log('signData:', data)
           this.edsWrapper.exec({
             action: 'signData',

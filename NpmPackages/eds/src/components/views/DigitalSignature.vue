@@ -86,7 +86,7 @@ export default {
     pickFile() {
       this.$refs.hardwareKeyInput.click()
     },
-    processed(ret){
+    processed(ret) {
       console.log(ret)
     }
   },
