@@ -66,7 +66,7 @@ export default class GraphQlCore {
    * Получение полной информации о текущем пользователе
    */
   async GetCurrentUser() {
-    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`)
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`, undefined, { withCredentials: true})
     return response.data
   }
 
@@ -79,7 +79,31 @@ export default class GraphQlCore {
     })
   }
 
+  /**
+   * Применить права указанного пользователя
+   * @param {string} userId ID пользователя, чьи права нужно применить
+   */
+  async ApplyDelegatedRights(userId) {
+    return await  this.__axios({
+      method: 'POST',
+      url: `${ this.__config.GrapgQlUrl }api/authentication/delegated`,
+      withCredentials: true,
+      data: userId
+    })
+  }
 
+  /**
+  * Делегировать права указанному пользователю
+  * @param {object} param0 пользователь и дата
+   */
+  async SetDelegationRights({userId, dateFrom, dateTo}) {
+    return await  this.__axios({
+      method: 'POST',
+      url: `${ this.__config.GrapgQlUrl }api/authentication/delegation`,
+      withCredentials: true,
+      data: {userId, dateFrom, dateTo}
+    })
+  }
 
 
 }
