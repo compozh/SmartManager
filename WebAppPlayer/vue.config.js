@@ -18,5 +18,10 @@ module.exports = {
   },
   publicPath: process.env.NODE_ENV === 'production'
     ? '/webapps/'
-    : '/'
+    : '/',
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: false
+    }
+  }
 }

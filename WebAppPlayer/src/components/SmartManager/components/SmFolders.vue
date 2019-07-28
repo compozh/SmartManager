@@ -14,13 +14,13 @@
             <v-list-tile-action>
               <v-tooltip
                 right
-                :disabled=!menuMiniMode
+                :disabled="menuMode !== 'mini'"
               >
                 <template v-slot:activator="{ on }">
                   <div v-on="on">
                     <v-badge color="red darken-2">
                       <template
-                        v-if="folder.count && menuMiniMode"
+                        v-if="folder.count && menuMode === 'mini'"
                         v-slot:badge
                       >
                         {{ folder.count }}
@@ -53,47 +53,41 @@
 </template>
 
 <script>
-  import {eventBus} from '../../../main'
-  import {mapGetters} from 'vuex'
-
-  export default {
-    name: 'sm-folders',
-    //props: ["folders"],
-    data() {
-      return {
-        menuMiniMode: false
-      }
+export default {
+  name: 'sm-folders',
+  computed: {
+    folders() {
+      return this.$store.state.sm.folders
     },
-    computed: {
-      ...mapGetters({
-        loading: 'sm/loading',
-        folders: 'sm/folders'
-      })
+    taskAddForm() {
+      return this.$store.state.sm.taskAddForm === 'open'
     },
-    methods: {
-      getFolders() {
-        this.$store.dispatch('sm/getFolders')
-      },
-      isMainFolder(folder) {
-        return folder.name === 'Все'
-      },
-      setMainFolderName(folder) {
-        return this.isMainFolder(folder) ? 'Активные' : folder.name
-      },
-      setFolderIcon(folder) {
-        return this.isMainFolder(folder) ? 'folder' : 'folder_open'
-      }
-    },
-    created() {
-      this.getFolders()
-      eventBus.$on('setMenuMode', menuMiniMode => {
-        this.menuMiniMode = menuMiniMode;
-      })
-    },
-    beforeDestroy() {
-      eventBus.$off('updateMenuMode')
+    menuMode() {
+      return this.$store.state.sm.menuMode
     }
+  },
+  methods: {
+    getFolders() {
+      this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
+    },
+    isMainFolder(folder) {
+      return folder.name === 'Все'
+    },
+    setMainFolderName(folder) {
+      return this.isMainFolder(folder) ? 'Активные' : folder.name
+    },
+    setFolderIcon(folder) {
+      return this.isMainFolder(folder) ? 'folder' : 'folder_open'
+    },
+    setMenuMode(mode) {
+      this.$store.commit('sm/setMenuMode', mode)
+    }
+  },
+  created() {
+    this.getFolders()
+    this.setMenuMode('open')
   }
+}
 </script>
 
 <style>

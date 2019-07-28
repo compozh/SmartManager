@@ -5,7 +5,7 @@
       var devMode = '<%= NODE_ENV %>' == "development"
       devMode = false
       window.myConfig = {
-        GrapgQlUrl: "https://m.it.ua/GraphQlServer/", // devMode ? "http://localhost:5002/" : "/GraphQlServer/",
+        GrapgQlUrl: "http://localhost:5002/", // devMode ? "http://localhost:5002/" : "/GraphQlServer/",
         BASE_URL:"<%= BASE_URL %>",
         WsUrl: devMode ? "http://localhost:64137/ws/api/" : "https://m.it.ua/mfudev/ws/api/"
       }
@@ -22,6 +22,20 @@
       <strong>We're sorry but webApp doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+    <style>
+      #app {
+  font-family: "Roboto";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+}
+.one {
+  position: fixed;
+  right: 20px;
+  top: 10px;
+  z-index: 999;
+}
+    </style>
     <!-- built files will be auto injected -->
   </body>
 </html>
