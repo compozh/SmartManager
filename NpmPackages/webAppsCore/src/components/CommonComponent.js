@@ -15,7 +15,7 @@ export default {
   //////              METHODS
   /////////////////////////////////////////////////
   methods: {
-    beforeRouteUpdate(to){
+    beforeRouteUpdate(to) {
       // получение данных для компонента
       this.loadDataForComponents(false, to)
     },

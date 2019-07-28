@@ -4,23 +4,19 @@ let Vue = undefined
 
 import _ from 'lodash'
 export class WebApps {
-
-  // Импортируемые зависимости
-  __modulesManager;
-  __vm;
-  __router;
-  _vue;
-  // Внутренние свойства
-  __application;
-  __routes;
-
   /**
    * Конструктор
    * @param {object} dependencies Зависимости
    */
   constructor(vue, options, dependencies) {
+    // Импортируемые зависимости
+    this.__vm = undefined
+    this.__router = undefined
+    this._vue = undefined
+    // Внутренние свойства
+    this.__application = undefined
+    this.__routes = undefined
 
-    this.__modulesManager = dependencies.modulesManager
     this.__router = dependencies.router
     this.__options = options
     this.__axios = dependencies.axios
@@ -29,31 +25,27 @@ export class WebApps {
       router: dependencies.router
     })
 
-    if(!this.__axios){
+    if (!this.__axios) {
       throw new Error('Axios должен быть передан в виде зависимости .axios')
     }
 
 
     // проверка и инициализация роутера
-    if(!this.__router){
+    if (!this.__router) {
       throw new Error('router должен быть передан в виде зависимости .router')
 
-    }
-
-    if(!this.__modulesManager){
-      throw new Error('Менеджер пакетов должен быть передан в виде зависимости!')
     }
 
   }
 
   /** GraphQl провайдер */
-  __provider() {
-    return this.__modulesManager.getGraphQlCore()
+  get __provider() {
+    return this.__vm.$graphQlCore
   }
 
   /** Плагин работы с router */
-  __coreRouter(){
-    return this.__modulesManager.getCoreRouter()
+  get __coreRouter() {
+    return this.__vm.$CoreRouter
   }
 
   /**
@@ -61,7 +53,7 @@ export class WebApps {
    * @param {string} appId Идентификатор приложения
    */
   async LoadAppDescription(appId) {
-    let provider = await this.__provider()
+
     let args = {
       query:
         'query q($appId : String) {\n  webapps{\n    application(applicationId:$appId)\n  }\n}',
@@ -69,7 +61,7 @@ export class WebApps {
       variables: { appId },
       operationName: 'q'
     }
-    let result = await provider.GrapgQlQuery(args)
+    let result = await this.__provider.GrapgQlQuery(args)
 
     // Ошибка загрузки
     if (!result.data.data || !result.data.data.webapps || !result.data.data.webapps.application) {
@@ -101,7 +93,7 @@ export class WebApps {
     var routes = []
     for (let index = 0; index < sections.length; index++) {
       const section = sections[index]
-      routes = routes.concat((section.Routes || []).map(r=> (r.section = section) && r))
+      routes = routes.concat((section.Routes || []).map(r => (r.section = section) && r))
     }
 
     // Корневой маршрут со всеми вложенными маршрутами
@@ -128,7 +120,7 @@ export class WebApps {
     section = section || {}
     let components = _.orderBy(route.Components, 'Sort')
     // Если есть корневой компонент маршрута - помещаем все компоненты маршрута в корневой компонент
-    if(route.RootComponent){
+    if (route.RootComponent) {
       route.RootComponent.ChildComponents = components
       components = [route.RootComponent]
     }
@@ -148,7 +140,7 @@ export class WebApps {
       // Компоненты в маршруте
       components: componentsObject,
       // Вложенные маршруты
-      children: _.orderBy(route.Children || [], ['Sort']).map(r=>this.__generateRouteFromDescription(r,r.section)),
+      children: _.orderBy(route.Children || [], ['Sort']).map(r => this.__generateRouteFromDescription(r,r.section)),
       // Метаинформация об уровне доступа и разделе приложения
       meta: {
         AllowAnonymous: route.AllowAnonymous,
@@ -163,7 +155,7 @@ export class WebApps {
    * Преобразование компонента из внутреннего формата в стандартный формат Vue
    * @param {*} component Описание компонента
    */
-  __createComponentObject(component){
+  __createComponentObject(component) {
     let innerComp = {
       id: component.Name,
       name: component.Name,
@@ -245,15 +237,13 @@ export class WebApps {
   /**
    * Инициализация Vue router с маршрутами, описанными в конструкторе приложений
    */
-  async __setUpApplicationRouting(){
-    let coreRouter = await this.__coreRouter()
-
-    coreRouter.SetRoutes(this.__routes)
+  async __setUpApplicationRouting() {
+    this.__coreRouter.SetRoutes(this.__routes)
   }
 
 
 
-  async LoadDataForComponent({datasource}){
+  async LoadDataForComponent({datasource}) {
     return this.__axios({
       method: 'POST',
       url: this.__options.GrapgQlUrl + 'api/graphql',

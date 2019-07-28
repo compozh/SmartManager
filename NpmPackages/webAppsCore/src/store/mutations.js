@@ -1,7 +1,7 @@
 const mutations = {
 
   /** Описание приложения */
-  SetAppDescription(state, application){
+  SetAppDescription(state, application) {
     state.applicationDescription = application
   },
 

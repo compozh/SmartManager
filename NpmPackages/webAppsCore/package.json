@@ -1,21 +1,20 @@
 {
-  "name": "@it-enterprise/webAppsCore",
-  "version": "1.0.0",
+  "name": "@it-enterprise/webappscore",
+  "version": "1.0.12",
   "private": false,
   "description": "library for web apps",
   "author": "it-enterprise",
-  "main1": "./dist/webAppsCore.common.js",
-  "main": "./src/index.js",
+  "main": "./dist/webAppsCore.common.js",
+  "main1": "./src/index.js",
   "files": [
     "dist/*"
   ],
   "license": "ISC",
   "scripts": {
     "build-bundle": "vue-cli-service build --target lib --name webAppsCore ./src/index.js",
-    "links": "npm link @it-enterprise/authentication @it-enterprise/graphql @it-enterprise/routerCore"
+    "links": "npm link @it-enterprise/graphql"
   },
   "devDependencies": {
-    "axios": "^0.18.0",
     "vue": "^2.5.16",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
@@ -24,9 +23,5 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0"
-  },
-  "dependencies": {
-    "vue-router": "^3.0.1",
-    "@it-enterprise/modules-manager": "1.0.0"
   }
 }
