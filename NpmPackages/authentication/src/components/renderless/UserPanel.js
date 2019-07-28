@@ -14,7 +14,7 @@ export default {
       console.log('Делегировать права', )
     },
     logOut() {
-      this.$authentication.LogOut()
+      this.$authentication.logOff()
 
       const sections = this.$store.state.applicationDescription.Sections
       sections.forEach(section => {
