@@ -48,7 +48,6 @@
         }),
         methods:{
            respCallback(resp){
-               debugger;
                if (resp.data.purchases.resourcesGroup.content.length > 0)
                {
                     if (resp.data.purchases.resourcesGroup.content)

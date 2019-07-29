@@ -52,13 +52,11 @@
               </v-card>
             </v-flex>
           </template>
-          <v-layout v-if="resource_items">
             <template v-for="item in resource_items">
               <v-flex :key="item.id" >
                 {{item.id}}
               </v-flex>
             </template>
-          </v-layout>
         </v-layout>
         </div>
     </div>          
@@ -115,24 +113,35 @@
         groups_items: {
           get: function() {
             if (this.search === ""){                        
-              
+              debugger;
               return this.$store.getters["purchases/getResourceGroups"];
             }
-          
+          debugger;
           return _.filter(this.$store.getters["purchases/getResourceGroups"], this.searchCallback);
+          }
         },
         resource_items: {
           get: function() {
-            if (this.search === ""){
-              debugger;       
+            if (this.search === ""){                     
               let test = this.$store.getters["purchases/getResources"];
+
               return this.$store.getters["purchases/getResources"];
             }
-          
+
           return this.$store.getters["purchases/getResources"];//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
           }
         },
-      },
+        test_items:{
+          get: function() {
+            if (this.search === ""){
+              return this.$store.getters["purchases/getTestItems"];
+            }
+          
+          let tt = this.$store.getters["purchases/getTestItems"];
+          return _.filter(this.$store.getters["purchases/getTestItems"], this.searchCallback);
+          }
+        },
+
         routeParamCode(){
           return this.$route.params.catalogueId ? this.$route.params.catalogueId : "";
         },
@@ -147,7 +156,7 @@
           this.getItems(id);
         }
       }
-  }
+    }
 </script>
 
 <style lang="scss" scoped>

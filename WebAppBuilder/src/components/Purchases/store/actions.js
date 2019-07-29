@@ -21,7 +21,7 @@ export default {
         commit('createCartItem', payload);
     },
     setResourceGroups({commit}, payload){
-        commit('createCartItem', payload);
+        commit('setResourceGroups', payload);
     },
     setChoseList({commit},payload){
         commit('setChoseList',payload);

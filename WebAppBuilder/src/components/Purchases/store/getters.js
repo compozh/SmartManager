@@ -11,6 +11,11 @@ export default {
   getResources(state) {
     return state.resources;
   },
+  getTestItems(state) {
+    
+    debugger;
+    return state.testItems;
+  },
   getMessage(state){
     return state.snackbarMessage;
   },
