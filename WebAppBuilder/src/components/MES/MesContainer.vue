@@ -1,15 +1,21 @@
 <template>
   <v-container>
-    <v-layout row wrap xs4>
-      <v-flex>
+    <v-layout row wrap >
+      <v-flex xs4>
         <v-card>
           <mes-spans/>
         </v-card>
       </v-flex>
       <v-flex xs8>
-        <v-card class="button-toolbar">
-          <mes-toolbar/>
-          <mes-content/>
+        <v-card>
+          <v-layout column wrap>
+            <v-flex class="button-toolbar">
+              <mes-toolbar/>
+            </v-flex>
+            <v-flex>
+              <mes-content/>
+            </v-flex>
+          </v-layout>
         </v-card>
       </v-flex>
     </v-layout>
