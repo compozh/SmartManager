@@ -9,10 +9,10 @@
       <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
-      <language-component/>
+      <div class='userName'>Hello User</div>
+      <v-btn large>Exit</v-btn>
     </v-toolbar>
       <v-content>
-        <mes-list/>
         <mes-container/>
         <router-view/>
       </v-content>
@@ -32,11 +32,18 @@ export default {
   },
   computed:{
   },
+  methods:{
+    // helloMsg(){
+    //   debugger;
+    // }
+  },
   props: ["toolbarTitle"]
 }
 </script>
 
-<style>
-
+<style type="text/css" scoped>
+  /* .userName {
+    color: white
+  } */
 </style>
 

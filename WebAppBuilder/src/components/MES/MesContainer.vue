@@ -1,13 +1,16 @@
 <template>
   <v-container>
-    <v-layout column wrap>
-      <v-flex class="button-toolbar">
-        <mes-toolbar/>
+    <v-layout row wrap xs4>
+      <v-flex>
+        <v-card>
+          <mes-spans/>
+        </v-card>
       </v-flex>
-      <v-flex style="max-height: 400px"
-      class="scroll-y"
-      >
-        <mes-element/>
+      <v-flex xs8>
+        <v-card class="button-toolbar">
+          <mes-toolbar/>
+          <mes-content/>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -17,7 +20,6 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-container",
-
   methods: {
 
       // onScroll (e) {

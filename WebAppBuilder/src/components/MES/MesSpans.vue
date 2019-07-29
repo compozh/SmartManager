@@ -1,6 +1,8 @@
 <template>
     <v-layout>
-    <v-flex class="list-block">
+    <v-flex
+      class="scroll-y list-block"
+      >
       <v-card class="card"
       v-for="task in tasks"
       :key="task.id"
@@ -13,10 +15,6 @@
       </v-card>
 
 
-      <v-card-text>Parapapapfsa</v-card-text>
-    </v-flex>
-    <v-flex>
-      <v-card-text>Parapapapfsa</v-card-text>
     </v-flex>
     </v-layout>
 </template>
@@ -38,7 +36,7 @@ export default {
     ]
     return {tasks: items}
   },
-  name: "mes-element",
+  name: "mes-spans",
 
   computed:{
 
@@ -53,14 +51,14 @@ export default {
 </script>
 <style type="text/css" scoped>
   .list-block {
-    width: 500px;
-    max-width: 500px;
+    /* width: 500px;
+    max-width: 500px; */
 
   }
   .list-block .card {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    /* width: 400px; */
     margin: 20px;
     border-radius: 20px;
   }
