@@ -23,7 +23,7 @@ import {mapGetters} from 'vuex'
 
 export default {
   data () {
-    var items = [
+    var tasks = [
       {name: 'tasks-1', id:'task-1', data:{ startTime:'12 May 2019', endTime: '30 July 2019', status: 'closed' }},
       {name: 'tasks-2', id:'task-2', data:{ startTime:'12 May 2019', endTime: '28 September 2019', status: 'In Progress' }},
       {name: 'tasks-3', id:'task-3', data:{ startTime:'12 May 2019', endTime: '12 July 2019', status: 'closed' }},
@@ -34,9 +34,9 @@ export default {
       {name: 'tasks-8', id:'task-8', data:{ startTime:'12 May 2019', endTime: '05 July 2019', status: 'closed' }},
       {name: 'tasks-9', id:'task-9', data:{ startTime:'12 May 2019', endTime: '11 September 2019', status: 'In Progress' }},
     ]
-    return {tasks: items}
+    return { tasks: tasks };
   },
-  name: "mes-spans",
+  name: "tasks",
 
   computed:{
 
