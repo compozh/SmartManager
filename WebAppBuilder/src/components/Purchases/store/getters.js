@@ -8,6 +8,9 @@ export default {
   getResourceGroups(state) {
     return state.resourceGroups;
   },
+  getResources(state) {
+    return state.resources;
+  },
   getMessage(state){
     return state.snackbarMessage;
   },

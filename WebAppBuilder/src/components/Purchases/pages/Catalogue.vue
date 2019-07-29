@@ -38,7 +38,7 @@
               <v-list>
                 <template  v-for="child in item.children.slice(0,5)">
                   <router-link :key="child.id" :to="{ name:'CATALOGUE', params: {catalogueId: child.id.trim() }}">              
-                    <v-list-tile class="list_content" >                        
+                    <v-list-tile class="list_content">                        
                       <v-list-tile-content>
                         <v-list-tile-title v-text="child.name"></v-list-tile-title>                      
                       </v-list-tile-content>
@@ -52,6 +52,13 @@
               </v-card>
             </v-flex>
           </template>
+          <v-layout v-if="resource_items">
+            <template v-for="item in resource_items">
+              <v-flex :key="item.id" >
+                {{item.id}}
+              </v-flex>
+            </template>
+          </v-layout>
         </v-layout>
         </div>
     </div>          
@@ -86,17 +93,11 @@
           var fieldname = "name";
           if (!id){
             id = "";
+            api.getResourcesGroupsByParentGroup(id);
           }
-          if (id.trim().length != 15)
-          {
-            this.entityType = "resourcesGrops";
+          else{
+            api.getResourcesGroupById(id);
           }
-          else 
-          {
-            this.entityType = "resources"; 
-            fieldname = "fullName";
-          }
-          api.getResourcesGroupsByGroupNew(id);
         },
         
         searchCallback (item) {
@@ -119,7 +120,18 @@
             }
           
           return _.filter(this.$store.getters["purchases/getResourceGroups"], this.searchCallback);
-        }
+        },
+        resource_items: {
+          get: function() {
+            if (this.search === ""){
+              debugger;       
+              let test = this.$store.getters["purchases/getResources"];
+              return this.$store.getters["purchases/getResources"];
+            }
+          
+          return this.$store.getters["purchases/getResources"];//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
+          }
+        },
       },
         routeParamCode(){
           return this.$route.params.catalogueId ? this.$route.params.catalogueId : "";

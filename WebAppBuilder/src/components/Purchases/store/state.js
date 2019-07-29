@@ -1,5 +1,6 @@
 export default {
   resourceGroups : [],
+  resources: [],
   cartitems : [],
   snackbarMessage: "",
   chose: { list:[], /*key:undefined,*/ method : function(){}, caption:undefined },

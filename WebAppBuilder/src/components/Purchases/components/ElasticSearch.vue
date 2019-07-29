@@ -1,5 +1,5 @@
 <template>
-    <v-layout justify-end>
+    <v-layout wrap justify-end>
         <v-autocomplete 
             v-show="showSearch" 
             @blur="hideSearch"

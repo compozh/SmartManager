@@ -12,11 +12,13 @@
         },
         created: function () {
             this.$store.watch(state => state.purchases.resourceGroups, this.callBack);
+            this.$store.watch(state => state.purchases.resources, this.callBack);
         },
         methods:{
             callBack(){
-                    const data = this.$store.state.purchases.resourceGroups;
-                    if (data.length == 0) {
+                    const data0 = this.$store.state.purchases.resourceGroups;
+                    const data1 = this.$store.state.purchases.resources;
+                    if (data0.length == 0 && data1.length == 0) {
                         this.show = true;
                     }else{
                         this.show = false;

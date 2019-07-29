@@ -6,7 +6,7 @@ import _ from 'lodash';
 // Queries
 
 import resourceGroupImage from './graphql/resourceGroupImage.gql'
-import resourcesGropsByGoup from './graphql/resourcesGropsByGoup.gql'
+import resourcesGroupById from './graphql/resourcesGroupById.gql'
 import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
 import favLists from './graphql/favLists.gql'
@@ -22,7 +22,7 @@ import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
 import changeLocalization from './graphql/changeLocalization.gql'
 import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
-import resourcesGropsByGoupNew from './graphql/resourcesGropsByGoupNew.gql'
+import resourcesGropsByParentGroup from './graphql/resourcesGropsByParentGroup.gql'
 import mutationEditFavList from './graphql/mutationEditFavList.gql'
 import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
 
@@ -81,18 +81,35 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getResourcesGroupsByGroupNewCallback(result){
+  getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.items;
     store.commit('purchases/setResourceGroups', t);
   }
-  getResourcesGroupsByGroupNew(group){
+
+  getResourcesGroupsByParentGroup(group){
     return client.query({
-      query: gql`query ($group: String) ${resourcesGropsByGoupNew}`,
+      query: gql`query ($group: String) ${resourcesGropsByParentGroup}`,
       variables: { group: group },
       fetchPolicy: 'no-cache'
     })
-    .then(this.getResourcesGroupsByGroupNewCallback)
+    .then(this.getResourcesGroupsByParentGroupCallback)
     .catch(error => console.log(error.message))
+  }
+
+  getResourcesGroupById(group){
+    return client.query({
+      query: gql`${resourcesGroupById}`,
+      variables: { group: group }//,
+      //fetchPolicy: 'no-cache'
+    })
+    .then(this.getResourcesGroupByIdCallback)
+    .catch(error => console.log(error.message))
+  }
+
+  getResourcesGroupByIdCallback(result){
+    debugger;
+    let t = result.data.purchases.items;
+    store.commit('purchases/setResourceGroup', t);
   }
 
   getImagesForCatalogueGroup(group) {

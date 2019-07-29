@@ -89,6 +89,13 @@ export default {
     state.resourceGroups = payload;
   },
 
+  setResourceGroup(state, payload){
+    debugger;
+    state.resourceGroups = payload.children;
+    state.resources = payload.resources;
+    debugger;
+  },
+
   clearResourceGroups(state){
     state.resourceGroups = [];
   }
