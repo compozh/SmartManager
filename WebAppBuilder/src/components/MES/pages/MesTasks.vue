@@ -1,10 +1,9 @@
 <template>
-<v-container>
+<v-container  class="main-block">
     <v-layout row wrap >
       <v-flex xs4>
         <v-card>
           <v-layout column>
-            <v-flex>
               <v-flex>
                 <v-tabs fixed-tabs>
                   <v-tab
@@ -15,10 +14,7 @@
                   </v-tab>
                 </v-tabs>
               </v-flex>
-            </v-flex>
-            <v-flex
-              class="scroll-y list-block"
-              >
+            <v-flex class="scroll-y list-block">
               <v-card class="card"
               v-for="task in tasks"
               :key="task.id"
@@ -29,7 +25,6 @@
                 <v-card-text>End time: {{task.data.endTime}}</v-card-text>
                 <v-card-text>Status: {{task.data.status}}</v-card-text>
               </v-card>
-
 
             </v-flex>
           </v-layout>
@@ -109,7 +104,6 @@ export default {
   name: "mes-tasks",
 
   computed:{
-
   },
     methods: {
       onCardClick(data){
@@ -138,5 +132,10 @@ export default {
   }
   .grid-element {
     background-color: cornflowerblue;
+  }
+  .main-block {
+    height: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 </style>

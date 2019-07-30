@@ -11,7 +11,7 @@
       <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0 height="3"></v-progress-linear>
     </v-toolbar>
     <v-content>
-      <v-container fluid>
+      <v-container class="main-block">
         <router-view/>
       </v-container>
     </v-content>
@@ -69,3 +69,10 @@ export default {
     },
 };
 </script>
+<style type="text/css" scoped>
+.main-block {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+</style>
+
