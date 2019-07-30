@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 import resourceGroupImage from './graphql/resourceGroupImage.gql'
 import resourcesGroupById from './graphql/resourcesGroupById.gql'
-import resources from './graphql/resources.gql'
+import resourceById from './graphql/resourceById.gql'
 import cartItems from './graphql/cartItems.gql'
 import favLists from './graphql/favLists.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
@@ -52,6 +52,15 @@ export class PurchasesApi {
     let test = result;
   }
 
+  getResourceById(id){
+    return client.query({
+      query: gql`${resourceById}`,
+      variables: { id: id },
+      fetchPolicy: 'no-cache'
+    })
+    .catch(error => console.log(error.message))
+  }
+
   /*
   getResourcesGroups(id, flds){
     var FIELDS = gql`
@@ -66,20 +75,6 @@ export class PurchasesApi {
     .then(result => result)
     .catch(error => console.log(error.message))
   }*/
-
-  getResourcesGroupsByGroup(group, flds){
-    var FIELDS = gql`
-    fragment resourcesGroupsFields on ResourceGroup {
-      ${flds}
-    }
-  `;
-    return client.query({
-      query: gql`query ($group: String) ${resourcesGropsByGoup} ${FIELDS}`,
-      variables: { group: group }
-    })
-    .then(result => result)
-    .catch(error => console.log(error.message))
-  }
 
   getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.items;
@@ -107,7 +102,6 @@ export class PurchasesApi {
   }
 
   getResourcesGroupByIdCallback(result){
-    debugger;
     let t = result.data.purchases.items;
     store.commit('purchases/setResourceGroup', t);
   }
@@ -118,20 +112,6 @@ export class PurchasesApi {
       variables: { group: group },
       fetchPolicy: 'no-cache'
     })
-  }
-
-  getImagesForCatalogueItem(id){
-    const FIELDS = gql`
-    fragment resourcesFields on Resource {
-      content
-    }
-  `;
-    return client.query({
-      query: gql`query ($id: ID) ${resources} ${FIELDS}`,
-      variables: { id: id }
-    })
-    .then(result => result)
-    .catch(error => console.log(error.message))
   }
 
   getCartItemsCallback(result){

@@ -50,7 +50,10 @@
 </template>
 
 <script>
-    import purchasesSchemaAxios from "../api/BaseFunctions"
+    import purchasesSchemaAxios from "../api/BaseFunctions";
+    import {PurchasesApi} from "../api/purchasesApi";
+    const api = new PurchasesApi();
+
     export default {
         name: "catalogue-item",
         data:() => ({
@@ -61,28 +64,12 @@
                 required: true
             }
         },
-        created: async function () {
-            const query = `{
-                purchases {
-                        resources (id: "${this.catalogueId}"){
-                        id,
-                        fullName,
-                        name,
-                        designation,
-                        measurementUnit{shortName,fullName}
-                        resourceGroup{
-                                id,
-                                name
-                            }
-                        }
-                    }
-                }
-            `;
-            await purchasesSchemaAxios(this, query).then(this.respCallback);
+        created: function(){
+            api.getResourceById(this.catalogueId).then(this.respCallback);
         },
         methods:{
             respCallback (resp) {
-                this.item = _.first(resp.data.data.purchases.resources);
+                this.item = _.first(resp.data.purchases.resources);
             }
         }
     }

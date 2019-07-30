@@ -66,6 +66,8 @@
           </template>
         </v-layout>
         </div>
+      
+      <loader-element/>
     </div>          
     <div v-else>
       <catalogue-item :catalogueId="routeParamCode" />
@@ -75,7 +77,6 @@
         </v-card-title>
       </v-card>-->
     </div>
-    <loader-element/>
   </div>
 </template>
 
