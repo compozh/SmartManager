@@ -56,5 +56,8 @@ export default {
       commit('setCircularLoader', false)
       commit('setError', e.message)
     }
-  }
+  },
+  toggleMenuMiniMode({getters, commit}) {
+    commit('setMenuMiniMode', !getters.menuMiniMode);
+  },
 }

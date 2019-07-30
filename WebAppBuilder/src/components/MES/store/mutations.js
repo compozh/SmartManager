@@ -17,4 +17,8 @@ export default {
   setShiftTasks(state, payload) {
     state.shiftTasks = payload
   },
+  setMenuMiniMode(state, payload) {
+    state.menuMiniMode = payload
+    localStorage.setItem("mesMenuMiniMode", payload.toString());
+  }
 }
