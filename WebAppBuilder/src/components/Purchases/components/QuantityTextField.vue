@@ -1,6 +1,7 @@
 <template>
     <v-text-field class ="quantity-input" :disabled="!editable"
-        :value="quantityType[fieldNameComp]" 
+        :value="this.quantity"
+        placeholder="0"
         append-icon="add" 
         @click:append="mutationChangeQuantity(MUTATION_TYPE.PLUS)"
         prepend-inner-icon="remove" 
@@ -19,15 +20,15 @@
             }
         }),
         props: {
-            quantityType: {},
+            quantity: Number,
             fieldName: "",
             labelName: "",
             editable: true
         },
         methods: {
             mutationChangeQuantity(arg){
-                this.quantityType.quantity += arg;
-                this.$emit('onChangeValue', this.quantityType.quantity);
+                this.quantity += arg;
+                this.$emit('onChangeValue', this.quantity);
             }
         },
         computed:{
@@ -35,8 +36,11 @@
                 return this.fieldName ? this.fieldName : "quantity";
             },
             labelNameComp(){
-                return this.labelName ? this.labelName : "Количество";
+                return this.labelName ? this.labelName : $t('purchases.CartItems.Quantity');;
             }
+        },
+        created(){
+            let test = this.quantity;
         }
     }
 </script>

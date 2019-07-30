@@ -4,10 +4,12 @@ import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 import _ from 'lodash';
 // Queries
-import resourcesGropsById from './graphql/resourcesGropsById.gql'
-import resourcesGropsByGoup from './graphql/resourcesGropsByGoup.gql'
+
+import resourceGroupImage from './graphql/resourceGroupImage.gql'
+import resourcesGroupById from './graphql/resourcesGroupById.gql'
 import resources from './graphql/resources.gql'
 import cartItems from './graphql/cartItems.gql'
+import favLists from './graphql/favLists.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
 import masurementSearch from './graphql/masurementSearch.gql'
 import addToCart from './graphql/addToCart.gql'
@@ -17,6 +19,17 @@ import deleteCart from './graphql/deleteCart.gql'
 import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
+import addToFavorites from './graphql/addToFavorites.gql'
+import changeLocalization from './graphql/changeLocalization.gql'
+import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
+import resourcesGropsByParentGroup from './graphql/resourcesGropsByParentGroup.gql'
+import mutationEditFavList from './graphql/mutationEditFavList.gql'
+import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
+
+import deleteItemFromFavorites from './graphql/deleteItemFromFavorites.gql'
+import mutationCreateFavList from './graphql/mutationCreateFavList.gql'
+import applications from './graphql/applications.gql'
+import docStatus from '../api/graphql/docStatus.gql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -31,9 +44,15 @@ const client = new ApolloClient({
   link: new HttpLink(options)
 })
 
+
 export class PurchasesApi {
   constructor() {}
 
+  getResourcesGroups(result){
+    let test = result;
+  }
+
+  /*
   getResourcesGroups(id, flds){
     var FIELDS = gql`
     fragment resourcesGroupsFields on ResourceGroup {
@@ -46,7 +65,7 @@ export class PurchasesApi {
     })
     .then(result => result)
     .catch(error => console.log(error.message))
-  }
+  }*/
 
   getResourcesGroupsByGroup(group, flds){
     var FIELDS = gql`
@@ -62,8 +81,43 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getImagesForCatalogueGroup(id) {
-    return this.getResourcesGroups(id, "content");
+  getResourcesGroupsByParentGroupCallback(result){
+    let t = result.data.purchases.items;
+    store.commit('purchases/setResourceGroups', t);
+  }
+
+  getResourcesGroupsByParentGroup(group){
+    return client.query({
+      query: gql`query ($group: String) ${resourcesGropsByParentGroup}`,
+      variables: { group: group },
+      fetchPolicy: 'no-cache'
+    })
+    .then(this.getResourcesGroupsByParentGroupCallback)
+    .catch(error => console.log(error.message))
+  }
+
+  getResourcesGroupById(group){
+    return client.query({
+      query: gql`${resourcesGroupById}`,
+      variables: { group: group }//,
+      //fetchPolicy: 'no-cache'
+    })
+    .then(this.getResourcesGroupByIdCallback)
+    .catch(error => console.log(error.message))
+  }
+
+  getResourcesGroupByIdCallback(result){
+    debugger;
+    let t = result.data.purchases.items;
+    store.commit('purchases/setResourceGroup', t);
+  }
+
+  getImagesForCatalogueGroup(group) {
+    return client.query({
+      query: gql`${resourceGroupImage}`,
+      variables: { group: group },
+      fetchPolicy: 'no-cache'
+    })
   }
 
   getImagesForCatalogueItem(id){
@@ -80,17 +134,18 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getCartItemsCallback(responce){
-    let test = responce;
-    debugger;
+  getCartItemsCallback(result){
+    let cartItems = result.data.purchases.cartItems;
+    store.commit('purchases/setCartItems', cartItems);
   }
 
   getCartItems(){
     return client.query({
       query: gql`query ${cartItems}`,
-      variables: { }
+      variables: { },
+      fetchPolicy: 'no-cache'
     })
-    .then(r=>r)
+    .then(this.getCartItemsCallback)
     .catch(error => console.log(error.message))
   }
 
@@ -123,12 +178,13 @@ export class PurchasesApi {
     var cartItem = {
       id:                 response_data.id,
       resourceId:         response_data.resourceId,
-      measurementUnitId:  response_data.measurementUnit.id,
+      measurementUnit:    {id:response_data.measurementUnit.id,name:response_data.measurementUnit.name},
       resourceName:       response_data.resourceName,
       quantity:           response_data.quantity,
       dateDelivery:       response_data.dateDelivery
     }
     store.commit('purchases/createCartItem', cartItem);
+    store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
   
   deleteAllCartsMutationCallback(){
@@ -143,10 +199,9 @@ export class PurchasesApi {
   }
 
   addToCartMutationCallback(result){
-    let response_data = result.data.purchasesMutation.addToCart;
-        var cartItem = response_data;
-        store.commit('purchases/addCartItem', cartItem);
-        store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
+    let cartItem = result.data.purchasesMutation.addToCart;
+    store.commit('purchases/addCartItem', cartItem);
+    store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
 
   addToCartMutation(item){
@@ -161,8 +216,8 @@ export class PurchasesApi {
   getCartInputTypeParam(cartItem){
     let test =  {
         id:                 cartItem.id,
-        resourceId:         cartItem.resource===null ? null : cartItem.resource.id,
-        measurementUnitId:  cartItem.measurementUnit.id,
+        resourceId:         cartItem.resourceId,
+        measurementUnitId:  cartItem.measurementUnit===null ? cartItem.measurementUnitId : cartItem.measurementUnit.id,
         resourceName:       cartItem.resourceName,
         quantity:           cartItem.quantity<1 ? 1 : cartItem.quantity,
         dateDelivery:       cartItem.dateDelivery
@@ -172,7 +227,6 @@ export class PurchasesApi {
   }
 
   getOrderInputTypeParam(order){
-    debugger;
     let test =  {
         number:         order.NDM,
         date:           order.DDM,
@@ -180,19 +234,22 @@ export class PurchasesApi {
         kDM2:           order.DM2,
         title:          order.Description
     }
-    debugger;
 
     return test;
   }
 
-  // TODO fix
+  updateCartMutationCallback(result){
+    let response_data = result.data.purchasesMutation.updateCart;
+    store.commit('purchases/updateCartItem', response_data);
+  }
+
   updateCartMutation(cartInput){
     let item = this.getCartInputTypeParam(cartInput);
     return client.mutate({
       mutation: gql`${updateCart}`,
       variables: {cart: item}
     })
-      .then(this.addToCartMutationCallback)
+      .then(this.updateCartMutationCallback)
       .catch(error => console.log(error.message))
   }
   
@@ -223,19 +280,195 @@ export class PurchasesApi {
       .then(this.createCartMutationCallback)
       .catch(error => console.log(error.message))
   }
-
+  //TODO
   createOrderMutationCallback(result){
     
     let test = result;
   }
   createOrderMutation(order){
     let orderInput = this.getOrderInputTypeParam(order);
-    debugger;
     return client.mutate({
       mutation: gql`${createOrder}`,
       variables: {orderInput:orderInput}
     })
       .then(this.deleteAllCartsMutationCallback)
       .catch(error => console.log(error.message))
+  }
+
+  getFavListsCallback(result){
+    let favLists = result.data.purchases.favLists;
+    store.commit('purchases/setFavLists', favLists);
+  }
+  getFavLists(){
+    
+    return client.query({
+      query: gql`query ${favLists}`,
+      variables: { },
+      fetchPolicy: 'no-cache'
+    })
+    .then(this.getFavListsCallback)
+    .catch(error => console.log(error.message))
+  }
+
+addToFavoritesMutationCallbackFirst(result){
+    let res = result.data.purchasesMutation.addToFavorites;
+    //this.getFavLists();
+    if( res.ReturnValue != null && res.ReturnValue.ShouldCallList)
+    {
+     
+      store.commit("purchases/setChose", {
+        list : res.ReturnValue.ListToChoose , 
+        caption:"Выбор из списка",
+        method: (key) => {
+          client.mutate({
+            mutation: gql`${addToFavoritesSecond}`,
+            
+            variables: {listKey: key, keyValue: res.ReturnValue.KeyValue}     
+          }).then(res => {
+            client.query({
+              query: gql`query ${favLists}`,
+              fetchPolicy: 'no-cache',
+              variables: { }
+            }).then(res => {
+              store.commit('purchases/setFavLists', res.data.purchases.favLists);
+              store.commit("purchases/setMessage",  `Добавлено в избраное`);}
+              ).catch(error => console.log(error.message));
+          });
+        }
+      });
+    }
+    else if (res.Successed)
+    {
+      client.query({
+            query: gql`query ${favLists}`,
+            fetchPolicy: 'no-cache',
+            variables: { }
+          }).then(res => {
+            store.commit('purchases/setFavLists', res.data.purchases.favLists);
+            store.commit("purchases/setMessage",  `Добавлено в избраное`);
+          }
+            ).catch(error => console.log(error.message));
+    
+    }
+  }
+
+  addToFavoritesMutation(alias, keyValue){
+    return client.mutate({
+      mutation: gql`${addToFavorites}`,
+      variables: {alias: alias, keyValue: keyValue}     
+    })
+      .then(this.addToFavoritesMutationCallbackFirst)
+      //.then(this.addToFavoritesMutationCallbackSecond)
+      .catch(error => console.log(error.message))
+  }
+
+  async changeLocalization(language){
+    store.commit('purchases/clearResourceGroups');
+    await client.mutate({
+      mutation: gql`${changeLocalization}`,
+      variables: {language: language}     
+    })
+  }
+
+  getFavListInputTypeParam(favList)
+  {
+    let test =  {
+        id:                 favList.id != null ? favList.id: favList.listiD,
+        alias:              favList.alias,
+        caption:            favList.caption,
+        comment:            "",
+        isDefaultList:      favList.isDefaultList,
+        iconKey:            "",
+        keyValues:          favList.keyValues
+    }
+
+  return test;
+  }
+
+  mutationEditFavList(favList){
+    let favListInput = this.getFavListInputTypeParam(favList);
+    return client.mutate({
+      mutation: gql`${mutationEditFavList}`,
+      variables: {favList: favListInput}     
+    })
+      .catch(error => {console.log(error.message)});
+  }
+  mutationDeleteFavList(favList){
+    
+    let favListInput = this.getFavListInputTypeParam(favList);
+    
+    return client.mutate({
+      mutation: gql`${mutationDeleteFavList}`,
+      variables: {favList: favListInput}     
+    })
+      .catch(error => {console.log(error.message)});
+  }
+  
+  deleteItemFromFavorites(alias, keyValue){
+    return client.mutate({
+      mutation: gql`${deleteItemFromFavorites}`,
+      variables: {alias: alias, keyValue: keyValue},     
+    }).then(res => {
+      client.query({
+        query: gql`query ${favLists}`,
+        fetchPolicy: 'no-cache',
+        variables: { }
+      }).then(res => {
+        store.commit('purchases/setFavLists', res.data.purchases.favLists);
+        store.commit("purchases/setMessage",  `Удалено с избраного`);}
+        ).catch(error => console.log(error.message));
+    })
+      .catch(error => {console.log(error.message)});
+  }
+  
+  mutationCreateFavList(){
+
+    store.commit("purchases/setChose", {
+      list : [{Title:"Заявки", Key:"DOC"}, {Title:"Ресурсы", Key:"KSM"},] , 
+      caption:"Тип списока?",
+      method: (key) => {
+          return client.mutate({
+            mutation: gql`${mutationCreateFavList}`,
+            variables: {alias: key},     
+            fetchPolicy: 'no-cache'
+          })
+          .then(result => {
+              let newFavList = result.data.purchasesMutation.mutationCreateFavList;
+              
+              store.commit('purchases/addToFavLists', newFavList);
+              store.commit("purchases/setMessage",  `Добавлен список`);
+            })
+          .catch(error => {console.log(error.message)});
+      }
+    });
+  }
+  getApplicationsCallback(result){
+    let applications = result.data.purchases.applications;
+    store.commit('purchases/setApplications', applications);
+  }
+  getApplications(){
+    return client.mutate({
+      mutation: gql`${applications}`,
+      variables: { }     
+    })
+      .then(this.getApplicationsCallback)
+      .catch(error => console.log(error.message));
+  }
+  
+  getClient(){
+    return client;
+  }
+
+  getDocStatus(){
+    return client.query({
+      query: gql`${docStatus}`,
+      variables: { }     
+    })
+      .then(this.getDocStatusCallback)
+      .catch(error => console.log(error.message));
+  }
+  getDocStatusCallback(result){
+    let docStatus = result.data.purchases.docStatus;
+    store.commit('purchases/setDocStatus', docStatus);
   }
 }

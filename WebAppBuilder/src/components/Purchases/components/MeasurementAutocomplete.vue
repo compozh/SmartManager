@@ -34,7 +34,7 @@
             labelNameComp(){
                 if (this.labelName)
                     return this.labelName;
-                return "Единица измерения";
+                return $t('purchases.CartItems.Unit');
             },
             measurementComp:{
                 get: function() {
