@@ -2,7 +2,6 @@
   <div class="qr-scanner">
     <QrLoginRl v-slot="props">
       <div class="qr-container">
-        </v-text-field>
         <div v-if="props.state" class="qr-state">
           {{props.state}}
         </div>
@@ -12,7 +11,7 @@
         </div>
         <div v-else-if="props.error">
           <div class="qr-error-text">{{props.error}}</div>
-          <v-btn color="primary"
+          <v-btn class="cyan white--text text-xs-right"
           @click="props.readerEvents.tryAgain"
           >{{$t("qrlogin.tryAgain")}}</v-btn>
         </div>
