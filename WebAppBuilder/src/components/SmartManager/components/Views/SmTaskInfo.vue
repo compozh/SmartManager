@@ -4,7 +4,7 @@
   >
     <v-container fluid pa-0 ma-0>
       <v-layout>
-        <v-flex lg6>
+        <v-flex lg6 px-2>
           <v-layout>
             <v-flex xs12>
               <v-tabs
@@ -16,10 +16,9 @@
                   v-for="item in tabs"
                   :key="item.value"
                   :class="{
-                          'hidden-lg-and-up': item.value === 'originals',
-                          'marker': item.value === 'originals' && params.hasOrig
-                                 || item.value === 'comments' && params.hasComm,
-                         }"
+                    'marker': item.value === 'originals' && params.hasOrig
+                           || item.value === 'comments' && params.hasComm,
+                   }"
                 >{{ item.name }}
                 </v-tab>
               </v-tabs>
@@ -31,10 +30,7 @@
                   v-for="item in tabs"
                   :key="item.value"
                 >
-                  <component
-                    :is="item.component"
-                    :class="{ 'hidden-lg-and-up': item.value === 'originals' }"
-                  ></component>
+                  <component :is="item.component"></component>
                 </v-tab-item>
               </v-tabs-items>
             </v-flex>
@@ -46,7 +42,7 @@
         >
           <v-layout column>
             <v-flex>
-              <sm-task-tab-docs></sm-task-tab-docs>
+              <sm-task-tab-docs v-if="params.hiddenLgAndUp"></sm-task-tab-docs>
             </v-flex>
           </v-layout>
         </v-flex>

@@ -62,8 +62,11 @@
 <style scoped>
 
   .viewer-layout {
-    height: 89vh;
-    box-shadow: inset 0 1px 0 0 rgba(100, 121, 143, 0.122);
+    height: 88vh;
+  }
+
+  .hidden-md-and-down .viewer-layout {
+    height: 92vh;
   }
 
   .view-container {

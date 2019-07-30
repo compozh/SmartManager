@@ -1,0 +1,23 @@
+{
+  mes {
+    tasks(workCenterCode: $workCenter) {
+		shiftTaskId
+		barcode
+		startDateTime
+		workCenter
+		description
+		detailedDescription
+		state
+		inProgress
+		priorityColor
+		resource
+		isPersonnelRegistration
+		isWriteOffRegistration
+		isWasteRegistration
+		orderWasteRegistration
+		isOneBatch
+		manualBeginRegistration
+		productionRegistrationType
+    }
+  }
+}

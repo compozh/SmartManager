@@ -96,6 +96,39 @@ const actions = ({
       return commit("SetAppDescription", data)
     })
   },
+  async applyDelegatedRights({commit, dispatch}, userId) {
+    try {
+      const result = await Axios({
+        method: 'POST',
+        url: myConfig.GrapgQlUrl + 'api/authentication/delegated',
+        withCredentials: true,
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+        data: userId
+      })
+      result.data
+        ? dispatch('GetCurrentUser')
+        : console.log('Не возможно применить делегированные права') // TODO: отобразить отказ в блоке сообщений лейаута
+    } catch (error) {
+      // TODO: дополнительно отобразить ошибку в блоке сообщений лейаута
+      console.log(error.message)
+    }
+  },
+  async setDelegationRights({commit}, {userId, dateFrom, dateTo}) {
+    try {
+      const result = await Axios({
+        method: 'POST',
+        url: myConfig.GrapgQlUrl + 'api/authentication/delegation',
+        withCredentials: true,
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken')},
+        data: {userId, dateFrom, dateTo}
+      })
+
+      console.log(result)
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 })
 
 export default actions
