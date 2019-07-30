@@ -36,7 +36,7 @@ export default {
     ]
     return { tasks: tasks };
   },
-  name: "tasks",
+  name: "mes-tasks",
 
   computed:{
 

@@ -8,7 +8,7 @@
       :key="task.id"
       @click="onCardClick(task.id)"
       >
-        <v-card-text>Task name: {{task.name}}</v-card-text>
+        <v-card-text>Downtime name: {{task.name}}</v-card-text>
         <v-card-text>Start time: {{task.data.startTime}}</v-card-text>
         <v-card-text>End time: {{task.data.endTime}}</v-card-text>
         <v-card-text>Status: {{task.data.status}}</v-card-text>
@@ -36,7 +36,7 @@ export default {
     ]
     return { downtime: downtime };
   },
-  name: "downtimes",
+  name: "mes-downtimes",
 
   computed:{
 

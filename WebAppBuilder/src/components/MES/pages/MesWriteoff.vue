@@ -10,7 +10,7 @@ export default {
   data () {
     return {};
   },
-  name: "stuff",
+  name: "mes-writeoff",
 
   computed:{
 

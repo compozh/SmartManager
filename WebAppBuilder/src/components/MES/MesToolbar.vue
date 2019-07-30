@@ -1,64 +1,38 @@
 <template>
-  <v-card>
-    <v-bottom-nav
-      :active.sync="bottomNav"
-      absolute
-      color="transparent"
-    >
-      <v-btn
-        color="teal"
-        flat
-        value="recent"
-      >
-        <span>Recent</span>
-        <v-icon>history</v-icon>
-      </v-btn>
-
-      <v-btn
-        color="teal"
-        flat
-        value="favorites"
-      >
-        <span>Favorites</span>
-        <v-icon>favorite</v-icon>
-      </v-btn>
-
-      <v-btn
-        color="teal"
-        flat
-        value="nearby"
-      >
-        <span>Nearby</span>
-        <v-icon>place</v-icon>
-      </v-btn>
-    </v-bottom-nav>
-
-  </v-card>
+  <v-container fluid pa-0>
+    <v-layout row align-center justify-space-beetwen>
+      <v-flex>
+        <router-link tag="h1" :to="{ name:'MESROOT'}">
+          <a>MES</a>
+        </router-link>
+      </v-flex>
+      <v-spacer></v-spacer>        
+      <v-flex class="grow-0">
+        <user-panel mini="true"></user-panel>
+      </v-flex>
+    </v-layout>
+    
+  </v-container>
 </template>
+
 <script>
-import {mapGetters} from 'vuex'
-
 export default {
-  data () {
-    return {
-      bottomNav: 'recent'
-    }
-  },
-  name: "mes-toolbar",
-  created(){
-    this.getProperties()
-  },
-  computed:{
-    ...mapGetters({
-        loading: 'mes/properties',
-      }),
-  },
-    methods: {
-
-    getProperties() {
-      const loader = this.properties ? 'setLinearLoader' : 'setCircularLoader'
-      this.$store.dispatch('mes/getProperties')
-    }
-  }
-}
+  name: "mes-toolbar"
+};
 </script>
+
+<style scoped>
+h1 {
+  font-size: 30px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+a {
+  text-decoration: none;
+}
+
+.grow-0 {
+  flex-grow: 0 !important;
+}
+</style>

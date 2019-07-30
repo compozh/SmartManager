@@ -1,49 +1,71 @@
-
 <template>
-  <v-app  id="inspire">
-    <v-navigation-drawer fixed app v-model="drawer" >
-      <mes-menu/>
+  <v-app id="mes-app">
+    <v-navigation-drawer app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp" v-model="drawer">
+      <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
-    <v-toolbar app color="#326DA8" dark>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
+    <v-toolbar app fixed clipped-left extended :extension-height="3">
+      <v-toolbar-side-icon @click.stop="toggleMenuMode"></v-toolbar-side-icon>      
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
-      <div class='userName'>Hello User</div>
-      <v-btn large>Exit</v-btn>
+      <!-- <language-component/> -->
+      <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0 height="3"></v-progress-linear>
     </v-toolbar>
-      <v-content>
-        <mes-container/>
+    <v-content>
+      <v-container fluid>
         <router-view/>
-      </v-content>
+      </v-container>
+    </v-content>
     <v-footer app inset>
       <slot name="footer"></slot>
     </v-footer>
+    <template v-if="error">
+      <v-snackbar
+        :multi-line="true"
+        :timeout="5000"
+        color="error"
+        @input="closeError"
+        :value="true"
+      >
+        {{ error }}
+        <v-btn flat dark @click.native="closeError"
+        >Close
+        </v-btn>
+      </v-snackbar>
+    </template>
   </v-app>
 </template>
-
 <script>
 export default {
-  name:"mes-layout",
-  data() {
+  name: "mes-layout",
+  data(vm) {
     return {
-      drawer: false
+      drawer: vm.$vuetify.breakpoint.mdAndUp,
+      mini: false
     };
   },
-  computed:{
+  computed: {
+    error() {
+      return this.$store.getters["eam/error"];
+    },
+    loading() {
+      return this.$store.getters["eam/loading"];
+    },
+    menuMiniMode() {
+      return this.$store.getters["mes/menuMiniMode"];
+    }
   },
-  methods:{
-    // helloMsg(){
-    //   debugger;
-    // }
-  },
-  props: ["toolbarTitle"]
-}
+  methods: {      
+      toggleMenuMode() {
+        if (this.$vuetify.breakpoint.mdAndUp) {
+          this.$store.dispatch("mes/toggleMenuMiniMode")
+        }
+        else {
+          this.drawer = !this.drawer;
+        }
+      },
+      closeError() {
+        this.$store.dispatch('sm/clearError');
+      }
+    },
+};
 </script>
-
-<style type="text/css" scoped>
-  /* .userName {
-    color: white
-  } */
-</style>
-

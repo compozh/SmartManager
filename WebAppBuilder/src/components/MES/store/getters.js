@@ -38,5 +38,11 @@ export default {
         }
       }
     })
-  }
+  },
+  menuMiniMode(state, commit) {
+    if (state.menuMiniMode === null) {
+      state.menuMiniMode = localStorage.getItem("mesMenuMiniMode") === 'true';
+    }
+    return state.menuMiniMode;
+  },
 }
