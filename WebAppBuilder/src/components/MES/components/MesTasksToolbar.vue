@@ -16,8 +16,6 @@
 import {mapGetters} from 'vuex'
 
 export default {
-  data: {
-  },
   name: "mes-tasks-toolbar",
   methods:{
     onclickSetupMaterial: function(event) {
