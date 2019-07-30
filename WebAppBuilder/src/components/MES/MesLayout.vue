@@ -15,9 +15,6 @@
         <router-view/>
       </v-container>
     </v-content>
-    <v-footer app inset>
-      <slot name="footer"></slot>
-    </v-footer>
     <template v-if="error">
       <v-snackbar
         :multi-line="true"
