@@ -48,11 +48,7 @@ const client = new ApolloClient({
 export class PurchasesApi {
   constructor() {}
 
-  getResourcesGroups(result){
-    let test = result;
-  }
-
-  getResourceById(id){
+    getResourceById(id){
     return client.query({
       query: gql`${resourceById}`,
       variables: { id: id },
@@ -61,20 +57,17 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  /*
-  getResourcesGroups(id, flds){
-    var FIELDS = gql`
-    fragment resourcesGroupsFields on ResourceGroup {
-      ${flds}
-    }
-  `;
+  getResourcesGroupsCallback(r){
+    let test = r;
+  }
+  getResourcesGroups(group){
     return client.query({
-      query: gql`query ($id: ID) ${resourcesGropsById} ${FIELDS}`,
-      variables: { id: id }
+      query: gql`${resourcesGroupById} ${FIELDS}`,
+      variables: { group: group }
     })
-    .then(result => result)
+    .then(this.getResourcesGroupsCallback)
     .catch(error => console.log(error.message))
-  }*/
+  }
 
   getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.items;

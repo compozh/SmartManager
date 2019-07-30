@@ -28,7 +28,7 @@ export default {
     }),
     methods:{
         getRoutePath(code) {
-            api.getResourcesGroups(code, "id,name").then(this.getParendCodeCallback);
+            api.getResourcesGroups(code).then(this.getParendCodeCallback);
             //const query = `{purchases{items: resourcesGrops(id: "${code}"){}}}`;
             //purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
         },

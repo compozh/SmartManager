@@ -124,10 +124,10 @@
         groups_items: {
           get: function() {
             if (this.search === ""){                        
-              debugger;
+              
               return this.$store.getters["purchases/getResourceGroups"];
             }
-          debugger;
+          
           return _.filter(this.$store.getters["purchases/getResourceGroups"], this.searchCallback);
           }
         },
