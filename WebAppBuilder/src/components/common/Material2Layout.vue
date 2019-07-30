@@ -6,7 +6,7 @@
       class="toolbar"
     >
       <v-toolbar-side-icon
-        @click.stop="setMenuButtonMode"
+        @click.stop="menuBtn"
         class="blue--text text--darken-2"
       >
       </v-toolbar-side-icon>
@@ -26,8 +26,8 @@
       app
       clipped
       floating
-      v-model="drawer"
-      :mini-variant="menuMiniMode"
+      :value="menuMode !== 'close'"
+      :mini-variant="menuMode === 'mini'"
       mini-variant-width="56"
       width="270"
       class="transparent"
@@ -59,17 +59,17 @@
       </v-layout>
     </v-container>
 
-    <template v-if="error">
+    <template v-if="getMessage.type">
       <v-snackbar
         :multi-line="true"
         :timeout="5000"
-        color="error"
-        @input="closeError"
+        :color="getMessage.type"
         :value="true"
+        @input="setMessage(null)"
       >
-        {{ error }}
-        <v-btn flat dark @click.native="closeError"
-        >Close
+        {{ getMessage.text }}
+        <v-btn icon @click.native="setMessage(null)">
+          <v-icon>close</v-icon>
         </v-btn>
       </v-snackbar>
     </template>
@@ -78,52 +78,42 @@
 </template>
 
 <script>
-  import {eventBus} from '../../../main';
-
   export default {
-    name: 'material-2-layout',
-    props: ['toolbarTitle', 'menuButtonMode'],
-    data() {
-      return {
-        drawer: true,
-        mini: false,
-      };
-    },
+    name: 'material2layout',
+    props: ['toolbarTitle'],
+    data: () => ({
+      menuMode: 'close',
+      circularLoader: false,
+      linearLoader: false,
+      message: {}
+    }),
     methods: {
-      // определение режима работы кнопки меню:
-      // 0 - показывать и скрывать
-      // 1 - показывать и минимизировать
-      setMenuButtonMode() {
-        return this.menuButtonMode
-          ? this.mini = !this.mini
-          : this.drawer = !this.drawer;
+      menuBtn() {
+        switch (this.menuMode) {
+          case 'close':
+            this.setMenuMode('open')
+            break
+          case 'open':
+            this.setMenuMode('mini')
+            break
+          case 'mini':
+            this.setMenuMode('close')
+        }
       },
-      closeError() {
-        this.$store.commit('sm/setError', null);
-      }
+      setMessage(message) {
+        this.message(message);
+      },
+      setMenuMode(mode) {
+        this.menuMode(mode)
+      },
     },
     computed: {
-      error() {
-        return this.$store.getters['sm/error']
-      },
-      circularLoader() {
-        return this.$store.getters['sm/circularLoader']
-      },
-      linearLoader() {
-        return this.$store.getters['sm/linearLoader']
-      },
-      menuMiniMode() {
-        eventBus.$emit('setMenuMode', this.mini);
-        return this.mini;
+      getMessage() {
+        return this.message.type ? this.message : {
+          type: '',
+          text: `Нет сообщений для отображения`
+        }
       }
-    },
-    created() {
-      eventBus.$on('setMenuMiniMode', value => {
-        this.mini = value
-      })
-    },
-    beforeDestroy() {
-      eventBus.$off('setMenuMiniMode')
     }
   }
 </script>
