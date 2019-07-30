@@ -3,7 +3,8 @@
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn  v-on="on" flat icon>
-                <country-flag :country='curentLanguage' size='normal'/>
+                {{curentLanguageText}}
+                <!-- <country-flag :country='curentLanguageFlag' size='normal'/> -->
             </v-btn>
           </template>
           <v-list>
@@ -36,16 +37,19 @@ export default {
         return{
             arrayCountryAndFlag:[],
             dictionaryLanguage :[
-                { name: "English", flag: "gb", key: "EN" },
-                { name: "Русский", flag: "ru", key: "RU" },
-                { name: "Українська", flag: "ua", key: "UK" },
+                { name: "English",    flag: "gb", key: "EN", label:"Eng" },
+                { name: "Русский",    flag: "ru", key: "RU", label:"Рус" },
+                { name: "Українська", flag: "ua", key: "UK", label:"Укр" },
             ],
             curlanguage : localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : "Русский"
         }
     },
     computed:{
-        curentLanguage(){
+        curentLanguageFlag(){
             return _.find(this.dictionaryLanguage,["name", this.curlanguage]).flag;
+        },
+        curentLanguageText(){
+            return _.find(this.dictionaryLanguage,["name", this.curlanguage]).label;
         }
     },
     mounted(){
