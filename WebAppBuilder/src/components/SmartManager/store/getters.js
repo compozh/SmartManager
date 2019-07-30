@@ -1,16 +1,4 @@
 export default {
-  circularLoader(state) {
-    return state.circularLoader
-  },
-  linearLoader(state) {
-    return state.linearLoader
-  },
-  error(state) {
-    return state.error
-  },
-  folders(state) {
-    return state.folders
-  },
   tasks(state) {
     const folderId = state.currentFolder
     const tasks = state.tasks[folderId]
@@ -49,8 +37,5 @@ export default {
         }
       }
     })
-  },
-  taskInfo(state) {
-    return state.taskInfo
   }
 }

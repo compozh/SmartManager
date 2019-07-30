@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid pa-0>
+  <v-container fluid pa-0 class="task-wrapper">
     <v-layout row wrap justify-center>
       <v-flex>
         <sm-task-details-item></sm-task-details-item>
@@ -26,7 +26,7 @@
     name: 'sm-task-tab-tasks',
     computed: {
       task() {
-        return this.$store.getters['sm/taskInfo']
+        return this.$store.state.sm.taskInfo
       },
       subTasks() {
         return this.task ? this.task.childTasks : []
@@ -36,8 +36,17 @@
 </script>
 
 <style scoped>
+  .task-wrapper {
+    overflow: auto;
+    height: 88vh;
+  }
+
   .sub-task-headline {
     font-size: 11px;
     border-bottom: 3px double #b4d2f0;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
   }
 </style>
