@@ -7,7 +7,7 @@
         </v-layout>
         <!-- Карточки -->
         <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" justify-center  wrap>
-            <v-flex xs12 sm5 md5 lg5 xl5 class="application-card"
+            <v-flex xs12 sm5 md5 lg5 xl5
                 v-for="application in getItemsOnPage()" :key="application.id" 
                 v-bind:pagination.sync="pagination"
                 v-touch="{
@@ -15,23 +15,7 @@
                             right: () => swipeRight(application),
                         }"
                 >
-                <router-link :to="{ name:'APPLICATION', params: {applicationId: application.id}}">
-                    <v-card min-height="180px" >
-                        <esecute-stepper />
-                        <v-card-title>
-                            {{$t('purchases.CartItems.Number')}}: {{ application.number }} {{$t('purchases.CartItems.Date')}}: {{ application.date | formatDate }}
-                        </v-card-title>
-                        <v-card-text>
-                            {{ application.title }}                       
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-layout justify-end>
-                                <favorite-btn :v-model="application" value="a" alias="DOC" :keyValue="application.id.toString()"  />
-                                <chat-btn :chatKey="application.id" chatType="application"/>
-                            </v-layout>
-                        </v-card-actions>
-                    </v-card>
-                </router-link>
+                   <applicationCard :application="application" />
             </v-flex>
         </v-layout>
         <!-- Пагинатор -->
@@ -49,7 +33,7 @@ const api = new PurchasesApi();
 
     export default {
         name: "applications",
-        props: ["applications"],
+        //props: ["applications"],
         data: () => ({
             rowView: true,
             smallSize: true,
@@ -67,19 +51,28 @@ const api = new PurchasesApi();
         computed: {
             pages: {
                 get() { 
-                    return Math.ceil(this._props.applications.length / this.rowsPerPage);
+                    debugger;
+                    return Math.ceil(this.applications.length / this.rowsPerPage);
                 }
             },
             rowsPerPage: {
                 get() {
                     return this.rowView ? 24 : 18;
                 }
-            }
+            },
+            applications:{
+                get: function() {
+                    return this.$store.getters["purchases/getApplications"];
+                },
+                set: function(newVal){
+                    this.$store.commit('purchases/setApplications', newVal);
+                }
+            },
         },
         methods:{
             getItemsOnPage(){
-                //debugger;
-                return this._props.applications.slice(
+                debugger;
+                return this.applications.slice(
                     (this.pagination.page - 1) * this.rowsPerPage, 
                     this.pagination.page * this.rowsPerPage)
             },
@@ -95,8 +88,9 @@ const api = new PurchasesApi();
         },
         mounted() {
             api.getFavLists();
+            api.getApplications();
         },
-        created() {
+        created() {   
         },
     }
 </script>

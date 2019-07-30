@@ -20,13 +20,18 @@ export default {
   },
   computed: {
     task() {
-      return this.$store.getters['sm/taskInfo']
+      return this.$store.state.sm.taskInfo
     },
     getTabs() {
       if (this.task) {
-        return this.tabs
+        return this.hiddenLgAndUp
+          ? this.tabs.filter(tab => tab.value !== 'originals')
+          : this.tabs
       }
-    }
+    },
+    hiddenLgAndUp() {
+      return this.$vuetify.breakpoint.lgAndUp
+    },
   },
   render() {
     return this.$scopedSlots.default({
@@ -34,7 +39,8 @@ export default {
       tabs: this.getTabs,
       params: {
         hasOrig: this.task ? this.task.originals.length : 0,
-        hasComm: this.task ? this.task.comments.length : 0
+        hasComm: this.task ? this.task.comments.length : 0,
+        hiddenLgAndUp: this.hiddenLgAndUp
       }
     })
   }

@@ -29,7 +29,7 @@ import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
 import deleteItemFromFavorites from './graphql/deleteItemFromFavorites.gql'
 import mutationCreateFavList from './graphql/mutationCreateFavList.gql'
 import applications from './graphql/applications.gql'
-
+import docStatus from '../api/graphql/docStatus.gql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -426,5 +426,22 @@ addToFavoritesMutationCallbackFirst(result){
     })
       .then(this.getApplicationsCallback)
       .catch(error => console.log(error.message));
+  }
+  
+  getClient(){
+    return client;
+  }
+
+  getDocStatus(){
+    return client.query({
+      query: gql`${docStatus}`,
+      variables: { }     
+    })
+      .then(this.getDocStatusCallback)
+      .catch(error => console.log(error.message));
+  }
+  getDocStatusCallback(result){
+    let docStatus = result.data.purchases.docStatus;
+    store.commit('purchases/setDocStatus', docStatus);
   }
 }

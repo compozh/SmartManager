@@ -55,7 +55,9 @@ export default {
   setApplications(state, payload){
     state.applications = payload;
   },
-
+  setDocStatus(state, payload){
+    state.docStatus = payload;
+  },
   deleteCartItem(state, payload){
     state.cartitems = _.remove(state.cartitems, function(n){
       return n.id != payload;
@@ -106,5 +108,9 @@ export default {
 
   clearResourceGroups(state){
     state.resourceGroups = [];
+  },
+
+  setTitleState(state, payload){
+    state.showTitle = payload;
   }
 }

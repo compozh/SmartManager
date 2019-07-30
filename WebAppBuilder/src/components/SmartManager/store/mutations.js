@@ -5,11 +5,14 @@ export default {
   setLinearLoader(state, payload) {
     state.linearLoader = payload
   },
-  setError(state, payload) {
-    state.error = payload
+  setMessage(state, payload) {
+    state.message = payload ? payload : {}
   },
   setMenuMode(state, payload) {
     state.menuMode = payload
+  },
+  setTaskAddForm(state, payload) {
+    state.taskAddForm = payload
   },
   setFolders(state, payload) {
     state.folders = payload
@@ -25,5 +28,8 @@ export default {
   },
   setSearch(state, payload) {
     state.search = payload
+  },
+  setUsers(state, payload) {
+    state.users = payload
   }
 }

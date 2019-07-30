@@ -35,7 +35,6 @@
           :fab="showHiddenDesc"
           @click="showHiddenDesc = !showHiddenDesc"
           :class="{'btn-no-fab': !showHiddenDesc}"
-          :style="{ right: showHiddenDesc ? setBtnPosition : 'auto' }"
         >
           {{ showHiddenDesc ? '' : 'Показать больше' }}
           <v-icon v-if="!showHiddenDesc" size="18">keyboard_arrow_down</v-icon>
@@ -68,14 +67,6 @@
         return this.showHiddenDesc || !this.compareDescHeight
           ? this.iFrameHeight + 5
           : this.defaultDescHeight
-      },
-      setBtnPosition() {
-        switch (this.$vuetify.breakpoint.name) {
-          case 'lg':
-            return '42%'
-          case 'xl':
-            return '45%'
-        }
       }
     }
   }
@@ -121,9 +112,9 @@
   }
 
   .btn-more.v-btn--floating {
-    position: fixed;
-    right: 15px;
-    bottom: 15px;
+    position: absolute;
+    right: 5px;
+    bottom: -5px;
   }
 
   .btn-no-fab {

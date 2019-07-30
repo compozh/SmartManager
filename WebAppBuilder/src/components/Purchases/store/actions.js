@@ -40,5 +40,8 @@ export default {
     },
     setApplications({commit}, payload){
         commit('setApplications', payload);
-    }
+    },
+    setTitleState({commit}, payload){
+        commit('setTitleState', payload);
+    },
 }

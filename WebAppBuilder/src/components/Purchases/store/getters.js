@@ -23,4 +23,10 @@ export default {
   getApplications(state) {
     return state.applications;
   },
+  showTitle(state){
+    return state.showTitle;
+  },
+  getDocStatus(state) {
+    return state.docStatus;
+  },
 }
