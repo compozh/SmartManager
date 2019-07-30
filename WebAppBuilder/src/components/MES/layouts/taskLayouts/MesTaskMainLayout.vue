@@ -41,15 +41,10 @@ export default {
     return {layout};
   },  
   name: "mes-task-main-layout",
-
-  computed:{
-
-  },
-    methods: {
+  methods: {
       onCardClick(data){
         console.log(data)
-      },
-
+      }
   }
 }
 </script>
