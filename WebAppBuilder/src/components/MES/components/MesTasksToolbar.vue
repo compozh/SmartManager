@@ -46,7 +46,7 @@ export default {
       bottomNav: 'recent'
     }
   },
-  name: "mes-toolbar",
+  name: "mes-tasks-toolbar",
   created(){
     this.getProperties()
   },
