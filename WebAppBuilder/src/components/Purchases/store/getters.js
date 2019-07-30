@@ -25,4 +25,7 @@ export default {
   getApplications(state) {
     return state.applications;
   },
+  showTitle(state){
+    return state.showTitle;
+  }
 }

@@ -18,12 +18,12 @@
             <template slot = "item" slot-scope="data">
                 <v-layout>
                     <!--<v-btn icon @click.stop="alert(data.item.caption)">-->
-                        <v-btn icon @click.stop="addToCartCall(data.item)">
+                    <v-btn icon @click.stop="addToCartCall(data.item)">
                         <v-icon>add_shopping_cart</v-icon> 
                     </v-btn>
-                    <v-layout column justify-start>
-                        <v-layout v-html="data.item.caption" />
-                        <v-layout class="subcaption" v-html="data.item.additionalCaption" />
+                    <v-layout column justify-center align-start>
+                        <span :class="`elastic-caption ${wrapFilter}`" v-html="data.item.caption"/>
+                        <span class="elastic-subcaption hidden-sm-and-down text-truncate" v-html="data.item.additionalCaption" />
                     </v-layout>
                 </v-layout>
                 <!-- <span>{{ data.item.caption }}</span> -->
@@ -57,14 +57,23 @@
                 val && val.length > 4 && val !== this.select && this.querySelections(val)
             }
         },
+        computed:{
+            wrapFilter(){
+                return this.$vuetify.breakpoint.smAndDown ? 'elastic-caption-trim' : '';
+            }
+        },
         methods:{
             toogleSearchPanel(){
+                // debugger;
                 this.showSearch = true;
                 this.$refs.elastic_search_input.$el.focus();
                 this.items = [];
+                this.$store.dispatch("purchases/setTitleState", !this.showSearch)
+
             },
             hideSearch(){
                 this.showSearch = false;
+                this.$store.dispatch("purchases/setTitleState", !this.showSearch)
             },
             querySelections (v) {
                 this.loading = true
@@ -111,7 +120,21 @@
         font-weight: 500;
         padding: 0px 3px 0px 3px;
     }
-    .subcaption {
+    .elastic-caption{
+        text-align: -webkit-left;
+    }
+    .elastic-caption-trim{
+        font-size: 12px;
+        line-height: 12px;
+        max-height: 36px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+    .elastic-subcaption {
+        text-align: -webkit-left;
         font-size: small;
         color: darkgray;
     }

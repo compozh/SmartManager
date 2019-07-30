@@ -8,7 +8,7 @@
     </v-navigation-drawer>
     <v-toolbar app color="white">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>{{toolbarTitle}}</v-toolbar-title>
+      <v-toolbar-title v-show="showTitle">{{toolbarTitle}}</v-toolbar-title>
       <router-view name="toolbar"/>
       <elastic-search style="margin: 10px"/>
       <icon-language-component/>
@@ -43,6 +43,9 @@ export default {
     IconLanguageComponent
   },
   computed:{
+    showTitle(){
+       return this.$store.getters["purchases/showTitle"]
+    }
   },
   props: ["toolbarTitle"],
   methods:{

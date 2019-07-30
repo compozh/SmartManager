@@ -106,5 +106,9 @@ export default {
 
   clearResourceGroups(state){
     state.resourceGroups = [];
+  },
+
+  setTitleState(state, payload){
+    state.showTitle = payload;
   }
 }
