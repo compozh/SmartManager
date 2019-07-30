@@ -21,7 +21,6 @@
     <v-footer app inset>
       <slot name="footer"></slot>
     </v-footer>
-    <loader-element/>
     <message-snackbar />
     <options-selector />
   </v-app>

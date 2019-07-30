@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div v-if="!isCard">
       <v-navigation-drawer fixed right app v-model="filterDrawer" >
         <v-layout class="filter-panel">
@@ -52,21 +53,30 @@
               </v-card>
             </v-flex>
           </template>
-            <template v-for="item in resource_items">
-              <v-flex :key="item.id" >
-                {{item.id}}
-              </v-flex>
-            </template>
+          <template v-for="item in resource_items">
+            <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
+              <!--<resource-card-item :key="item.id" :resourse="item" />-->
+              <v-card>
+                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
+                  <item-picture entityName="resources" :id="item.id" height="200px" width="350px" />
+                  <div class="cat_header title mb-1">{{item.name}}</div>
+                </router-link>
+              </v-card>
+            </v-flex>
+          </template>
         </v-layout>
         </div>
     </div>          
     <div v-else>
-      <v-card>
+      <catalogue-item :catalogueId="routeParamCode" />
+      <!--<v-card>
         <v-card-title>
           <catalogue-item :catalogueId="routeParamCode" />
         </v-card-title>
-      </v-card>
+      </v-card>-->
     </div>
+    <loader-element/>
+  </div>
 </template>
 
 <script>
