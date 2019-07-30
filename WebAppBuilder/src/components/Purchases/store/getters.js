@@ -27,5 +27,8 @@ export default {
   },
   showTitle(state){
     return state.showTitle;
-  }
+  },
+  getDocStatus(state) {
+    return state.docStatus;
+  },
 }

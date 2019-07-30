@@ -1,28 +1,71 @@
 <template>
     <v-layout row execute-breadcrumbs>
-        <template v-for="(item, i) in items">
-            <v-layout :key="i" :class="`item ${i < current ? 'executed' : i === current ? 'current' : ''}`" >
-                <v-flex before grow>
+        <template v-for="(item, i) in stages">
+            <v-layout :key="i" :class="`item ${i < curStage ? 'executed' : i === curStage ? 'current' : ''}`" >
+                <v-flex  before grow>
                     <v-divider />
                 </v-flex>
                 <v-flex curr shrink>
-                    <v-icon v-text="item !== current ? 'panorama_fish_eye' : 'local_shipping'" />
+                    <v-tooltip  bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon v-on="on" v-text="item.sortOrder-1 !== curStage ? 'panorama_fish_eye' : 'local_shipping'" />
+                        </template>
+                        <span v-if="minimalistStyle">{{item.name}}</span>
+                    </v-tooltip >
+                    <div v-if="!minimalistStyle" > {{item.name}} </div>
                 </v-flex>
-                <v-flex after grow>
+                <v-flex   after grow>
                     <v-divider />
                 </v-flex>
+                
             </v-layout>
         </template>
     </v-layout>
 </template>
 
 <script>
+import {PurchasesApi} from "../api/purchasesApi";
+
+const api = new PurchasesApi();
     export default {
         name: "esecute-stepper",
-        data:()=>({
-            items: [0,1,2,3],
-            current: 2
-        })
+        props:{
+            minimalistStyle:{
+                type: Boolean,
+                required: false
+            },
+            currentStage: {
+                type: Number,
+                required: false
+                }
+
+        },
+        computed:{
+            stages:{
+                 get: function() {
+                return this.$store.getters["purchases/getDocStatus"];
+                }
+             },
+             curStage:{
+                 get: function() {
+                     debugger;
+                return this._props.currentStage - 1;
+                }
+             },
+            //  minimalistStyle:{
+            //      get: function() {
+            //     return this._props.minimalistStyle;
+            //     }
+            //  },
+
+        },
+        methods:{
+            //isCurrentStage(curr){ return curr == this._props.currentStage;}
+        },
+        beforeCreate(){
+            api.getDocStatus();
+        },
+        
     }
 </script>
 

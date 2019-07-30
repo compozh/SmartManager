@@ -8,4 +8,5 @@ export default {
   favlists: [{ alias : "", listiD: "", keyValues: [], caption: "" , isDefaultList:false}],
   applications : [],
   showTitle: true,
+  docStatus:[],
 }

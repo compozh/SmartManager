@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="app1">
         <v-container
             v-for="favList in favlists"
             :key="favList.id"
@@ -140,3 +140,34 @@ const api = new PurchasesApi();
     }
   }
 </script>
+
+<style scoped>
+
+
+.app1{
+    padding: 5px;
+    margin: 5px;
+}
+.app1 a{
+    text-decoration: none;
+}
+.app1 .v-card__title {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 5px 15px;
+}
+
+.app1 .v-card__text {
+    text-align: left;
+    margin-left: 10px;
+    padding: 5px;
+    height: 40px;
+}
+.app1 .v-card__actions {
+    padding: 5px;
+}
+.app1{
+    margin: 0px 0px 5px 0px;
+}
+
+</style>

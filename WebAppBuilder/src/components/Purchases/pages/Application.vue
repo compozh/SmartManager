@@ -3,9 +3,9 @@
         <v-layout wrap>
             <v-flex xs12 sm12 md12 lg12 xl12>
                 <v-card v-if="application">
+                    <esecute-stepper :currentStage="application.docStatus.sortOrder" :minimalistStyle ="false"/>
                     <v-card-title class="headline">
                         <v-layout column>
-                            <workflow-stepper :stageName="$t('purchases.CartItems.Stage')"/>
                             {{$t('purchases.CartItems.Application')}} № {{application.number}} от {{application.date | formatDate}}
                         </v-layout>
                     </v-card-title>
@@ -72,10 +72,11 @@ const api = new PurchasesApi();
 
 
 export default {
+    
     name: "application",
     props: { 
-        applicationId: 0,
-        application: {}
+        applicationId: undefined,
+        //applicationItemId: undefined
     },
     filters:{
         formatDate: (value) => {
@@ -85,6 +86,17 @@ export default {
         }
     },
     computed:{
+        application:{
+            get: function() {
+                debugger;
+                let test = this.$store.getters["purchases/getApplications"];
+                return test.find(w=>w.id == this.$route.params.applicationId);
+            },
+            set: function(newVal){
+                debugger;
+                //this.$store.commit('purchases/setApplications', newVal);
+            }
+        },
         compRows() {
             for (const key in this.application.rows) {
                 if (this.application.rows.hasOwnProperty(key)) {
@@ -97,12 +109,25 @@ export default {
             return this.application.rows;
         }
     },
+    created(){
+        debugger;
+    },
+    mounted(){
+        api.getApplications();
+    },
     methods:{
         editClick(row){
             console.log(row);
             row.isEdit = !!!row.isEdit;
         }
-    }
+    },
+    watch: {
+        '$route' (to, from) {
+          debugger;
+          var id = to.params.applicationItemId;
+          this.application = id ;
+        }
+      }
 }
 </script>
 

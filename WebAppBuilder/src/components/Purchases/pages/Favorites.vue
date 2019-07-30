@@ -1,16 +1,17 @@
 <template>
-<div v-if="favlists">
-  
+<div>
     <v-container
       v-for="favList in favlists"
       :key="favList.listId"
-      fluid
+      
       grid-list-md
       grey
       lighten-4
     >
-      <onefavlist :listId= "favList.id" :isEditable="true" :printCount="4"/>
+      <onefavlist :listId="favList.id" :isEditable="true" :printCount="$4"/>
+      
     </v-container>
+    
     <div>
       <v-btn @click="mutationCreateFavList" color="green" dark large fixed bottom right fab>
           <v-icon>add</v-icon>
@@ -86,7 +87,7 @@ const api = new PurchasesApi();
         api.mutationCreateFavList()
       },
       getAplicationByKeyValue(keyValue){
-        //this._props.applications = [];
+        
         let apls = this.applications;
         if(apls!= null){
            return apls.find(w => w.id.toString() == keyValue);

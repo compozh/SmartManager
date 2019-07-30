@@ -4,7 +4,11 @@
       id,
       number,
       date,
-      title
+      title,
+      docStatus{
+        id,
+        sortOrder
+      },
       rows{
         id,
         resource{
