@@ -38,7 +38,6 @@ export class MesApi {
 
   async getWorkCentersFromGql(uuid, login) {
     try {
-      uuid = 'QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=';
         const result = await client.query({
         query: gql` query ($uuid: String, $login: String) ${workCenters}`,
         variables: { uuid, login }
