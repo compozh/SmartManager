@@ -28,12 +28,7 @@ export default {
     methods:{
         responceCallback(response){
             this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
-
-            debugger;
-            
             this.breadCrumbs.splice(0,0,{text:"...", id:" ", disabled:false});
-
-            debugger;
         }
     },
     created(){
@@ -42,7 +37,6 @@ export default {
     },
     watch: {
         '$route' (to, from) {
-            debugger;
             api.getBreadcrumbsByGroup(this.code).then(this.responceCallback);
         }
     }

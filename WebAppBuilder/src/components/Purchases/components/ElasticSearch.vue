@@ -64,7 +64,6 @@
         },
         methods:{
             toogleSearchPanel(){
-                // debugger;
                 this.showSearch = true;
                 this.$refs.elastic_search_input.$el.focus();
                 this.items = [];

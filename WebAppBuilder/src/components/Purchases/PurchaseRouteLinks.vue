@@ -39,7 +39,6 @@ export default {
             }
             //console.log(this.$router)
             links = [...links, ...links[1].Children, ...links[0].Children]
-            console.log(links)
             return  _.orderBy(links.filter(l => !l.HideAfterLogin && l.Name), 'Sort');
         }
     },

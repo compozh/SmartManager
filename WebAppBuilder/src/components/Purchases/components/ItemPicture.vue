@@ -49,7 +49,7 @@
         methods:{
            respCallback(resp){
                var contents = resp.data.purchases[this.entityName];
-               if (contents.content.length > 0)
+               if (contents != null && contents.content.length > 0)
                {
                     if (contents.content)
                     {

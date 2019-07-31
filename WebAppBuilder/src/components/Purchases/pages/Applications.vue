@@ -51,7 +51,6 @@ const api = new PurchasesApi();
         computed: {
             pages: {
                 get() { 
-                    debugger;
                     return Math.ceil(this.applications.length / this.rowsPerPage);
                 }
             },
@@ -71,7 +70,6 @@ const api = new PurchasesApi();
         },
         methods:{
             getItemsOnPage(){
-                debugger;
                 return this.applications.slice(
                     (this.pagination.page - 1) * this.rowsPerPage, 
                     this.pagination.page * this.rowsPerPage)
