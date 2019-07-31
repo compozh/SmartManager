@@ -1,22 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <v-layout row>
-    <v-flex class="setup-material-button">
-      <v-btn v-if="layout !== 'mes-task-setup-materials-layout'" outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
-   </v-flex>
-   <v-flex class="accept-button">
-      <v-btn v-if="layout !== 'mes-task-setup-materials-layout'" outlined @click="onclickAccept($event)">Взять в работу</v-btn>
-   </v-flex>
-   <v-flex class="downtime-button">
-      <v-btn v-if="layout !== 'mes-task-setup-materials-layout'" outlined @click="onclickDowntime($event)">Простой</v-btn>
-   </v-flex>
-   <v-flex class="downtime-button">
-      <v-btn v-if="layout === 'mes-task-setup-materials-layout'" outlined @click="onclickDowntime($event)">Снять все партии</v-btn>
-   </v-flex>
-   <v-flex xs12 md4>
-      <v-text-field v-if="layout === 'mes-task-setup-materials-layout'"
-        v-model="qrCode"
-=======
   <v-layout row xs12>
     <v-flex
       class="toolbar-basebuttons"
@@ -35,7 +17,6 @@
         v-model="firstname"
         :rules="nameRules"
         :counter="10"
->>>>>>> 45906722e33af1c07c381b4a0d2bce27a6aab4a0
         label="Укажите QR-партии материала для установки"
         required
       ></v-text-field>
@@ -56,7 +37,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex' 
+import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-tasks-toolbar",
