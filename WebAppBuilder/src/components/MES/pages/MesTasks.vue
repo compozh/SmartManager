@@ -12,7 +12,7 @@
         <v-card>
           <v-layout column wrap>
             <v-flex class="button-toolbar">
-              <mes-tasks-toolbar :layout=layout />
+              <mes-tasks-toolbar :layout=layout @layout="changeLayout" />
             </v-flex>
             <mes-task-main-layout v-if="layout === 'mes-task-main-layout'" />
             <mes-accept-task-layout v-if="layout == 'mes-accept-task-layout'" />
@@ -39,8 +39,12 @@ export default {
   methods: {
       onCardClick(data){
         console.log(data)
+      },
+       changeLayout(newLayout){
+         this.layout = newLayout;
       }
-  }
+  },
+ 
 }
 </script>
 <style type="text/css" scoped>

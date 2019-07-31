@@ -17,7 +17,7 @@
         v-model="firstname"
         :rules="nameRules"
         :counter="10"
-        label="First name"
+        label="Укажите QR-партии материала для установки"
         required
       ></v-text-field>
     </v-flex>
@@ -34,8 +34,7 @@ export default {
   },
   methods:{
     onclickSetupMaterial: function(event) {
-
-
+      this.$emit('layout', 'mes-task-setup-materials-layout');
     },
     onclickAccept: function(event, state) {
         let target = event.target;
@@ -49,7 +48,6 @@ export default {
         }
     },
     onclickDowntime: function(event) {
-      this.parararra = !this.parararra;
 
     }
   } 
