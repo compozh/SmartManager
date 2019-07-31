@@ -4,7 +4,7 @@
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left extended :extension-height="3">
-      <v-toolbar-side-icon @click.stop="toggleMenuMode"></v-toolbar-side-icon>      
+      <v-toolbar-side-icon @click.stop="toggleMenuMode"></v-toolbar-side-icon>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
@@ -51,7 +51,7 @@ export default {
       return this.$store.getters["mes/menuMiniMode"];
     }
   },
-  methods: {      
+  methods: {
       toggleMenuMode() {
         if (this.$vuetify.breakpoint.mdAndUp) {
           this.$store.dispatch("mes/toggleMenuMiniMode")
@@ -70,6 +70,7 @@ export default {
 .main-block {
     padding: 0 !important;
     margin: 0 !important;
+    max-width: 100%;
   }
 </style>
 
