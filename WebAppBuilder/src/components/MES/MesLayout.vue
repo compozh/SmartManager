@@ -66,7 +66,10 @@ export default {
     },
 };
 </script>
-<style type="text/css" scoped>
+<style type="text/css">
+html{
+  overflow-y: hidden;
+}
 .main-block {
     padding: 0 !important;
     margin: 0 !important;

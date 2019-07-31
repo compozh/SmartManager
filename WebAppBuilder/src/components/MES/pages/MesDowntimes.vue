@@ -1,7 +1,6 @@
 <template>
-    <v-layout>
+    <v-layout class="list-block">
     <v-flex
-      class="scroll-y list-block"
       >
       <v-card class="card"
       v-for="task in downtime"
@@ -51,9 +50,8 @@ export default {
 </script>
 <style type="text/css" scoped>
   .list-block {
-    /* width: 500px;
-    max-width: 500px; */
-
+    height: 94vh;
+    overflow-y: auto;
   }
   .list-block .card {
     display: flex;

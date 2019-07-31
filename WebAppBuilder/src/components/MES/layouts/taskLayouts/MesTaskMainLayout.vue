@@ -2,6 +2,7 @@
      <v-layout>
         <v-flex>
             <grid-layout
+                class="main-layout"
                 :layout="layout"
                 :col-num="12"
                 :row-height="30"
@@ -9,7 +10,7 @@
                 :is-resizable="true"
                 :is-mirrored="false"
                 :vertical-compact="true"
-                :margin="[10, 10]"
+                :margin="[20, 20]"
                 :use-css-transforms="true"
                 >
                 <grid-item v-for="item in layout" :key="item.i"
@@ -39,7 +40,7 @@ export default {
         {'x':8, 'y':4, 'w':4, 'h':4, 'i':'5'},
       ];
     return {layout};
-  },  
+  },
   name: "mes-task-main-layout",
   methods: {
       onCardClick(data){
@@ -49,6 +50,11 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
+  .main-layout {
+    overflow-y: auto;
+    height: 89vh !important;
+    padding: 0 10px !important;
+  }
   .grid-element {
     background-color: cornflowerblue;
   }

@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-layout column >
+    <v-layout column>
         <v-flex fill-height class="progress-toolbar">
           <v-tabs fixed-tabs>
             <v-tab
@@ -70,6 +70,10 @@ export default {
 </script>
 
 <style type="text/css" scoped>
+  .list-block {
+    overflow: auto;
+    height: 89vh;
+  }
   .list-block .card{
     margin: 10px;
     border-radius: 50px;

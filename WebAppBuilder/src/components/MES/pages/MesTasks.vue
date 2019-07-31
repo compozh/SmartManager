@@ -1,15 +1,11 @@
 <template>
 <v-container  class="main-block">
-    <v-layout row wrap >
-      <v-flex xs4>
-        <v-card>
-          <v-layout column>
-              <mes-tasks-component/>
-          </v-layout>
-        </v-card>
+  <v-card>
+    <v-layout row>
+      <v-flex xs4 class="tasks-list">
+        <mes-tasks-component/>
       </v-flex>
-      <v-flex xs8>
-        <v-card class="task-description">
+      <v-flex xs8 class="task-description">
           <v-layout column wrap>
             <v-flex class="button-toolbar">
               <mes-tasks-toolbar :layout=layout @layout="changeLayout" />
@@ -19,9 +15,9 @@
             <mes-task-defect-layout v-if="layout == 'mes-task-defect-layout'" />
             <mes-task-setup-materials-layout v-if="layout == 'mes-task-setup-materials-layout'" />
           </v-layout>
-        </v-card>
       </v-flex>
     </v-layout>
+    </v-card>
   </v-container>
 
 </template>
@@ -49,12 +45,13 @@ export default {
 </script>
 <style type="text/css" scoped>
   .main-block {
-    height: 100%;
     padding: 0 !important;
     margin: 0 !important;
-    max-width: 100%;
   }
-  .task-description{
-    height: 100%;
-  }
+  /* .tasks-list{
+overflow-y: scroll;
+  } */
+  /* .task-description{
+    overflow-y: scroll;
+  } */
 </style>
