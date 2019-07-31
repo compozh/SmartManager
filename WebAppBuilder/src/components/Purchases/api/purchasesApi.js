@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import _ from 'lodash';
 // Queries
 
+import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
 import resourceGroupImage from './graphql/resourceGroupImage.gql'
 import resourcesGroupById from './graphql/resourcesGroupById.gql'
 import resourceById from './graphql/resourceById.gql'
@@ -48,7 +49,7 @@ const client = new ApolloClient({
 export class PurchasesApi {
   constructor() {}
 
-    getResourceById(id){
+  getResourceById(id){
     return client.query({
       query: gql`${resourceById}`,
       variables: { id: id },
@@ -57,9 +58,14 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getResourcesGroupsCallback(r){
-    let test = r;
+  getBreadcrumbsByGroup(group){
+    return client.query({
+      query: gql`${breadcrumbsByGroup}`,
+      variables: { group: group }
+    })
+    .catch(error => console.log(error.message))
   }
+
   getResourcesGroups(group){
     return client.query({
       query: gql`${resourcesGroupById} ${FIELDS}`,
