@@ -19,7 +19,7 @@
         <v-card class="card"
         v-for="task in tasks"
         :key="task.id"
-        @click="onCardClick(task.id)"
+        @click="onCardClick(task)"
         >
           <div v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
             <v-card-text>{{task.description}}</v-card-text>
