@@ -14,9 +14,7 @@
    </v-flex>
    <v-flex xs12 md4>
       <v-text-field v-if="layout === 'mes-task-setup-materials-layout'"
-        v-model="firstname"
-        :rules="nameRules"
-        :counter="10"
+        v-model="qrCode"
         label="Укажите QR-партии материала для установки"
         required
       ></v-text-field>
@@ -25,7 +23,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters} from 'vuex' 
 
 export default {
   name: "mes-tasks-toolbar",

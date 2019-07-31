@@ -30,9 +30,6 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-tasks",
-  /*props: {
-    layout: String
-  },*/
   data: function() {
     return { layout: 'mes-task-main-layout'};
   },
@@ -43,8 +40,7 @@ export default {
        changeLayout(newLayout){
          this.layout = newLayout;
       }
-  },
- 
+  }
 }
 </script>
 <style type="text/css" scoped>

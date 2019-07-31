@@ -4,9 +4,9 @@ export default {
   error: null, // Snackbar for errors
   menuMode: 'open', // Main menu state: open, mini, close
   properties: null,
-  workCenters: null,
+  workCenters: [],
   currentTaskId: null,
   search: null,
-  shiftTasks: null,
-  menuMiniMode: null,
+  tasks: [],
+  menuMiniMode: true,
 }
