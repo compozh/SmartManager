@@ -1,3 +1,4 @@
+
 export default {
   setCircularLoader(state, payload) {
     state.circularLoader = payload
@@ -14,8 +15,8 @@ export default {
   setWorkCenters(state, payload) {
     state.workCenters = payload
   },
-  setShiftTasks(state, payload) {
-    state.shiftTasks = payload
+  setTasks(state, payload) {
+    state.tasks = payload
   },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload

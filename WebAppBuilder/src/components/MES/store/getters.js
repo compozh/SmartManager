@@ -11,17 +11,17 @@ export default {
   getProperties(state) {
     return state.properties
   },
-  getWorkCenters(state) {
+  workCenters(state) {
     return state.workCenters
   },
-  shiftTasks(state) {
+  tasks(state) {
     const search = state.search ? state.search.trim() : ''
 
     // Список полей, по которым осуществляется поиск
     const searchFields = [
       'workCenter'
     ]
-    return state.shifTasks.filter(task => {
+    return state.tasks.filter(task => {
       // Цикл for по ключам задачи для возможности использовать continue
       for (let i = 0; i < searchFields.length; i++) {
         let searchField = searchFields[i]

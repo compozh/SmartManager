@@ -20,7 +20,7 @@ export default {
       commit('setError', e.message)
     }
   },
-  async getWorkCenters({commit}, payload) {
+  async setupWorkCenters({commit}, payload) {
     const uuid = payload.uuid
     const login = payload.login
 
@@ -39,7 +39,7 @@ export default {
       commit('setError', e.message)
     }
   },
-  async getShiftTasks({commit}, payload) {
+  async setupTasks({commit}, payload) {
     const workCenter = payload.workCenter
 
     commit('setError', null)
@@ -47,9 +47,9 @@ export default {
 
     try {
       const result = await api.getTasksFromGql(workCenter)
-      const shiftTasks = result.data.shiftTasks
+      const tasks = result.data.mes.tasks
 
-      commit('setShiftTasks', shiftTasks)
+      commit('setTasks', tasks)
       commit('setCircularLoader', false)
 
     } catch (e) {

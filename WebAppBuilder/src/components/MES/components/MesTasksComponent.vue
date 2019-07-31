@@ -3,27 +3,26 @@
     <v-layout column>
         <v-flex fill-height class="progress-toolbar">
           <v-tabs fixed-tabs>
-            <v-tab
-            v-for="status in taskStatus"
-            :key="status.id"
-            @click="changeStatus(inProgressStatus)"
+              <v-tab :key=taskStatus.inPlan.id
+            @click="changeStatus(taskStatus.inPlan.id)"
             >
-              {{status.name}}
+              {{taskStatus.inPlan.name}}
+          </v-tab>
+              <v-tab :key=taskStatus.done.id
+            @click="changeStatus(taskStatus.done.id)"
+            >
+              {{taskStatus.done.name}}
           </v-tab>
         </v-tabs>
       </v-flex>
-      <v-flex class="list-block"
-        >
+      <v-flex class="list-block">
         <v-card class="card"
         v-for="task in tasks"
         :key="task.id"
         @click="onCardClick(task.id)"
         >
-          <div v-if="inProgressStatus == task.data.status">
-            <v-card-text>Task name: {{task.name}}</v-card-text>
-            <v-card-text>Start time: {{task.data.startTime}}</v-card-text>
-            <v-card-text>End time: {{task.data.endTime}}</v-card-text>
-            <v-card-text>Status: {{task.data.status}}</v-card-text>
+          <div v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
+            <v-card-text>{{task.description}}</v-card-text>
           </div>
         </v-card>
       </v-flex>
@@ -36,36 +35,44 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-tasks-component",
-  data(){
-    return {inProgressStatus: 'In Progress'}
+  data: function() {
+    return { currentStatus: 'IN_PLAN' };
   },
-  computed: {
-    tasks(){
-      return [
-      {name: 'tasks-1', id:'task-1', data:{ startTime:'12 May 2019', endTime: '30 July 2019', status: 'closed' }},
-      {name: 'tasks-2', id:'task-2', data:{ startTime:'12 May 2019', endTime: '28 September 2019', status: 'In Progress' }},
-      {name: 'tasks-3', id:'task-3', data:{ startTime:'12 May 2019', endTime: '12 July 2019', status: 'closed' }},
-      {name: 'tasks-4', id:'task-4', data:{ startTime:'12 May 2019', endTime: '15 September 2019', status: 'In Progress' }},
-      {name: 'tasks-5', id:'task-5', data:{ startTime:'12 May 2019', endTime: '12 July 2019', status: 'closed' }},
-      {name: 'tasks-6', id:'task-6', data:{ startTime:'12 May 2019', endTime: '23 July 2019', status: 'closed' }},
-      {name: 'tasks-7', id:'task-7', data:{ startTime:'12 May 2019', endTime: '06 September 2019', status: 'In Progress' }},
-      {name: 'tasks-8', id:'task-8', data:{ startTime:'12 May 2019', endTime: '05 July 2019', status: 'closed' }},
-      {name: 'tasks-9', id:'task-9', data:{ startTime:'12 May 2019', endTime: '11 September 2019', status: 'In Progress' }},
-    ]
+    created(){
+        this.initializeTasks();
     },
-    taskStatus(){
-      return [
-      {name:'In plan', id:'inPlanStatus'},
-      {name:'Done', id:'doneStatus'}
-    ]
+    computed: {
+        tasks() {
+            console.log(this.$store.getters['mes/tasks']);
+            return this.$store.getters['mes/tasks'];  
+        },
+        workCenter(){
+            return this.$store.getters['mes/workCenters'];
+        },
+        taskStatus() {
+            return {
+            inPlan: {name:'В плане', id: 'IN_PLAN'},
+            inWork: {name: 'В работе', id: 'IN_WORK'},
+            done: {name:'Выполнено', id: 'DONE'}
+            };
+        }
     },
-
-  },
-  methods:{
-    changeStatus(status){
-      this.inProgressStatus = status == 'In Progress' ? 'closed' : 'In Progress';
-    },
-  },
+    methods:{
+        async initializeTasks(){
+            await this.setupWorkCenters("QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=", "");
+            this.setupTasksByWorkCenter(this.workCenter[0].code);
+        },
+        async setupWorkCenters(uuid, login) {
+            const loader = 'setCircularLoader';
+            await this.$store.dispatch('mes/setupWorkCenters', {uuid, loader});
+        },
+        setupTasksByWorkCenter(workCenter) {
+        this.$store.dispatch('mes/setupTasks', {workCenter});
+        },
+        changeStatus(status) {
+            this.currentStatus = status;
+        }
+    }
 }
 </script>
 

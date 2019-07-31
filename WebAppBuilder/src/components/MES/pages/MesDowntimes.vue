@@ -43,8 +43,7 @@ export default {
     methods: {
       onCardClick(data){
         console.log(data)
-      },
-
+      }
   }
 }
 </script>
