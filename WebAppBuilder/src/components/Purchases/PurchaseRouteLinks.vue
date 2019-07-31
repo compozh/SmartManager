@@ -24,7 +24,6 @@ export default {
     name:"purchase-route-links",
     computed:{
         links(){
-          //debugger
             if(!this.$store.state.applicationDescription){
                 return []
             }
