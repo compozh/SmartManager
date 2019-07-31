@@ -103,7 +103,7 @@ export class PurchasesApi {
     return client.query({
       query: gql`${resourceGroupImage}`,
       variables: { group: group },
-      fetchPolicy: 'no-cache'
+      //fetchPolicy: 'no-cache'
     })
   }
 
@@ -421,8 +421,8 @@ addToFavoritesMutationCallbackFirst(result){
   }
   getApplications(){
     return client.mutate({
-      mutation: gql`${applications}`,
-      variables: { }     
+      mutation: gql`query($curr: Boolean) ${applications}`,
+      variables: { curr: true }     
     })
       .then(this.getApplicationsCallback)
       .catch(error => console.log(error.message));
