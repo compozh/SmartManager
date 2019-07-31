@@ -107,7 +107,7 @@ export class PurchasesApi {
   }
 
   getResourcesGroupsByParentGroupCallback(result){
-    let t = result.data.purchases.resourcesGroup;
+    let t = result.data.purchases.resourcesGroups;
     store.commit('purchases/setResourceGroups', t);
   }
 
@@ -150,7 +150,7 @@ export class PurchasesApi {
   }
 
   getResourcesGroupByIdCallback(result){
-    let t = result.data.purchases.items;
+    let t = result.data.purchases.resourcesGroup;
     store.commit('purchases/setResourceGroup', t);
   }
 
