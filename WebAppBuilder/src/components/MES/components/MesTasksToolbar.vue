@@ -53,9 +53,7 @@ export default {
     },
     onclickAccept: function(event, state) {
         let target = event.target;
-        debugger;
         if(!target.state || target.state === "accept") {
-          debugger;
           this.applyWorkColor = 'error';
           target.textContent = "Остановить";
           target.state = "suspend";

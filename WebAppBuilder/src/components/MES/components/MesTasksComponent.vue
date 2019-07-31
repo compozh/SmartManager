@@ -70,10 +70,6 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-  .main-block {
-  }
-  .progress-toolbar{
-  }
   .list-block .card{
     margin: 10px;
     border-radius: 50px;

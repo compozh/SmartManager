@@ -1,7 +1,7 @@
 <template>
 <v-container  class="main-block">
     <v-layout row wrap >
-      <v-flex xs4 class="tasks-component">
+      <v-flex xs4>
         <v-card>
           <v-layout column>
               <mes-tasks-component/>
@@ -9,7 +9,7 @@
         </v-card>
       </v-flex>
       <v-flex xs8>
-        <v-card>
+        <v-card class="task-description">
           <v-layout column wrap>
             <v-flex class="button-toolbar">
               <mes-tasks-toolbar :layout=layout @layout="changeLayout" />
@@ -44,21 +44,17 @@ export default {
          this.layout = newLayout;
       }
   },
- 
+
 }
 </script>
 <style type="text/css" scoped>
-  .list-block .card {
-    display: flex;
-    flex-direction: column;
-    /* width: 400px; */
-    margin: 20px;
-    border-radius: 20px;
-  }
-
   .main-block {
     height: 100%;
     padding: 0 !important;
     margin: 0 !important;
+    max-width: 100%;
+  }
+  .task-description{
+    height: 100%;
   }
 </style>
