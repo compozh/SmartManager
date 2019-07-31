@@ -95,7 +95,39 @@ export default {
     //state.testItems.resources = [];
     //debugger;
   },
-
+  addResources(state, payload){
+    let oldRes = state.resources;
+    payload.forEach(w=> {
+      if( !oldRes.map(x => x.id).some(y => y==w.id))
+      {
+        state.resources.push(w);
+      }/*else{
+        state.resources =  state.resources.filter(x=>x.id != w.id);
+        state.resources.push(w);
+      }*/
+    });
+    let test = state.resources.concat(payload);
+    //state.resources = payload;
+    
+    state.resources = state.resources;
+/*
+    let test = state.resources.concat(payload);
+    
+    state.resources= test;*/
+  },
+  addApplications(state, payload){
+    let oldAppl = state.applications;
+    payload.forEach(w=> {
+      if( !oldAppl.map(x => x.id).some(y => y==w.id))
+      {
+        state.applications.push(w);
+      }
+    });
+    let test = state.applications.concat(payload);
+    //state.resources = payload;
+    
+    state.applications= state.applications;
+  },
   setResourceGroup(state, payload){
     state.resourceGroups = payload.children;
     state.resources = payload.resources;

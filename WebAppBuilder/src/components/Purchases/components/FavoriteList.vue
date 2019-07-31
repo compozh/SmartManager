@@ -30,16 +30,28 @@
                 </v-flex >
             </v-layout>
             <v-layout row wrap>
-                <v-flex
-                v-for="card in favList.keyValues.slice(0,countToPrint)"
-                :key="card"
-                xs12
-                sm6
-                md4
-                >
-                <applicationCard :application="getAplicationByKeyValue(card)" />
-                </v-flex>
-                
+                <!-- <draggable :v-model="favList" :options="{group:'people'}" @change="log" fluid style="min-height: 50px"> -->
+                  <v-layout row wrap>
+                  <v-flex
+                  v-for="card in favList.keyValues.slice(0,printCount)"
+                  :key="card"
+                  xs12
+                  sm6
+                  md4
+                  >
+                    <div v-if="favList.alias === 'DOC'">
+                       <draggable :v-model="favList" :options="{group:'people'}" @change="log" fluid style="min-height: 50px">
+                      <applicationCard :application="getAplicationByKeyValue(card)" />
+                       </draggable>
+                    </div>
+                    <div v-else>
+                      <!-- <draggable :v-model="favList" :options="{group:'people1'}" style="min-height: 10px"> -->
+                        <catalogueItemCard :catalogueItem="getСatalogueItemByKeyValue(card)" />
+                        <!-- </draggable> -->
+                    </div>
+                  </v-flex>
+                  </v-layout>
+                 <!-- </draggable> -->
             </v-layout>
         </v-container>
     </div>
@@ -49,12 +61,17 @@
 <script>
 
 import {PurchasesApi} from "../api/purchasesApi";
+import _ from 'lodash';
+import draggable from 'vuedraggable';
 
 const api = new PurchasesApi();
 
 
   export default {
      name: "onefavlist",
+     components: {
+      draggable,
+     },
      props:{
         listId: {
             type: String,
@@ -68,14 +85,15 @@ const api = new PurchasesApi();
             type: Boolean,
             required: false
         },
+        catalogueItem:{}
     },
     data: () => ({
     }),
-    created() {
-      api.getFavLists();
-      api.getApplications();
+    destroyed(){
+      this.$store.state.resources = [];
     },
-    mounted(){
+    beforeDestroy(){
+      this.$store.state.resources = [];
     },
     computed:{
       applications:{
@@ -86,12 +104,14 @@ const api = new PurchasesApi();
           this.$store.commit('purchases/setApplications', newVal);
         }
       },
+      resource_items: {
+          get: function() {
+          return this.$store.getters["purchases/getResources"];
+          }
+        },
       favlists: {
         get: function() {
             return this.allFavLists.filter(w => w.id == this.listId);
-        },
-        set: function(newVal){
-          this.$store.commit('purchases/setFavLists', newVal);
         }
       },
       allFavLists: {
@@ -100,11 +120,6 @@ const api = new PurchasesApi();
         },
         set: function(newVal){
           this.$store.commit('purchases/setFavLists', newVal);
-        }
-      },
-      countToPrint:{
-          get: function() {
-            return this.printCount;
         }
       }
     },
@@ -128,7 +143,7 @@ const api = new PurchasesApi();
         api.mutationEditFavList(favList);
       },
       mutationCreateFavList(){
-        api.mutationCreateFavList()
+        api.mutationCreateFavList();
       },
       getAplicationByKeyValue(keyValue){
         let apls = this.applications;
@@ -137,6 +152,13 @@ const api = new PurchasesApi();
         }
        return {};
       },
+      getСatalogueItemByKeyValue(keyValue){
+        let test2 = 2;
+        test2 =  this.resource_items.find(w=>w.id == keyValue);
+        //if(test2 === undefined){debugger;}
+        return test2;
+      },
+
     }
   }
 </script>

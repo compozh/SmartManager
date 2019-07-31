@@ -54,14 +54,9 @@
             </v-flex>
           </template>
           <template v-for="item in resource_items">
-            <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
+             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <!--<resource-card-item :key="item.id" :resourse="item" />-->
-              <v-card>
-                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                  <item-picture entityName="resource" :id="item.id" height="200px" width="350px" />
-                  <div class="cat_header title mb-1">{{item.name}}</div>
-                </router-link>
-              </v-card>
+                <catalogueItemCard :catalogueItem="item" />
             </v-flex>
           </template>
         </v-layout>

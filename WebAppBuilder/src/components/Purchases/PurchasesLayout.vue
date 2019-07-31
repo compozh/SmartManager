@@ -21,6 +21,7 @@
     <v-footer app inset>
       <slot name="footer"></slot>
     </v-footer>
+    <!-- <draggable-first  :sort="true"/> -->
     <message-snackbar />
     <options-selector />
   </v-app>
