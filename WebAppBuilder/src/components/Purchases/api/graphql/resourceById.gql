@@ -1,15 +1,7 @@
-query($id:ID!){
+query ($id: ID) {
 	purchases {
-    resources (id: $id){
-    id,
-    fullName,
-    name,
-    designation,
-    measurementUnit{shortName,fullName}
-    resourceGroup{
-            id,
-            name
+        resource (id: $id){
+            ...resourcesFields
         }
     }
-}
 }

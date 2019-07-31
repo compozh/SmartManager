@@ -6,7 +6,6 @@ import _ from 'lodash';
 // Queries
 
 import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
-import resourceGroupImage from './graphql/resourceGroupImage.gql'
 import resourcesGroupById from './graphql/resourcesGroupById.gql'
 import resourceById from './graphql/resourceById.gql'
 import cartItems from './graphql/cartItems.gql'
@@ -49,9 +48,23 @@ const client = new ApolloClient({
 export class PurchasesApi {
   constructor() {}
 
-  getResourceById(id){
+    getResourceById(id){
+    const FIELDS = gql`
+      fragment resourcesFields on Resource {
+        id,
+        fullName,
+        name,
+        designation,
+        measurementUnit{shortName,fullName}
+        resourceGroup{
+                id,
+                name
+            }
+        }
+      }
+    `;
     return client.query({
-      query: gql`${resourceById}`,
+      query: gql`query($id:ID!) ${resourceById} ${FIELDS}`,
       variables: { id: id },
       fetchPolicy: 'no-cache'
     })
@@ -91,8 +104,26 @@ export class PurchasesApi {
   }
 
   getResourcesGroupById(group){
+    const FIELDS = gql`
+    fragment resourcesGroupsFields on ResourceGroup {
+      id, 
+      name,
+      children{
+        id,
+        name, 
+        children{
+          id,
+          name
+        }
+      }, 
+      resources{
+        id,
+        name,
+        designation
+      }
+    }`;
     return client.query({
-      query: gql`${resourcesGroupById}`,
+      query: gql`${resourcesGroupById} ${FIELDS}`,
       variables: { group: group }//,
       //fetchPolicy: 'no-cache'
     })
@@ -106,11 +137,29 @@ export class PurchasesApi {
   }
 
   getImagesForCatalogueGroup(group) {
+    const FIELDS = gql`
+      fragment resourcesGroupsFields on ResourceGroup {
+        content
+      }
+    `;
     return client.query({
-      query: gql`${resourceGroupImage}`,
+      query: gql`${resourcesGroupById} ${FIELDS}`,
       variables: { group: group },
-      fetchPolicy: 'no-cache'
+      //fetchPolicy: 'no-cache'
     })
+  }
+  getImagesForCatalogueItem(id){
+    const FIELDS = gql`
+      fragment resourcesFields on Resource {
+        content
+      }
+    `;
+    return client.query({
+      query: gql`${resourceById} ${FIELDS}`,
+      variables: { id: id }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
   }
 
   getCartItemsCallback(result){
@@ -427,8 +476,8 @@ addToFavoritesMutationCallbackFirst(result){
   }
   getApplications(){
     return client.mutate({
-      mutation: gql`${applications}`,
-      variables: { }     
+      mutation: gql`query($curr: Boolean) ${applications}`,
+      variables: { curr: true }     
     })
       .then(this.getApplicationsCallback)
       .catch(error => console.log(error.message));

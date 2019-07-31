@@ -48,11 +48,13 @@
         }),
         methods:{
            respCallback(resp){
-               if (resp.data.purchases.resourcesGroup.content.length > 0)
+               debugger
+               var contents = resp.data.purchases[this.entityName];
+               if (contents.content.length > 0)
                {
-                    if (resp.data.purchases.resourcesGroup.content)
+                    if (contents.content)
                     {
-                        this.items = this.items.concat(resp.data.purchases.resourcesGroup.content);
+                        this.items = this.items.concat(contents.content);
                     }
                }
            },
@@ -60,9 +62,14 @@
                this.hover = val;
            }
         },
+        computed: {
+            isResourceItem(){
+                return this.id.trim().length == 15;
+            }
+        },
         created: function () {
             var promise = 
-                this.id.trim().length == 15 
+                this.isResourceItem 
                     ? api.getImagesForCatalogueItem(this.id)
                     : api.getImagesForCatalogueGroup(this.id);
             

@@ -1,6 +1,6 @@
 {
   purchases{
-    applications(take:100){
+    applications(currentUser: $curr){
       id,
       number,
       date,

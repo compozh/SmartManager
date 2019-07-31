@@ -4,7 +4,7 @@
             <v-card v-if="item">
                 <v-layout wrap>
                     <v-flex justify-start>
-                        <item-picture height="400px" entityName="resources" :id="item.id"/>
+                        <item-picture height="400px" entityName="resource" :id="item.id"/>
                     </v-flex>
                     <v-flex>
                         <v-card class="card-info">

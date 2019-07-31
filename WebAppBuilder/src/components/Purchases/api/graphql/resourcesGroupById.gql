@@ -1,8 +1,7 @@
 query($group: String){
 	purchases{
-        items:resourcesGroup(group:$group){
-            id, name,children{id,name, children{id,name} }, 
-            resources{id,name,designation}
+        resourcesGroup(group:$group){
+            ...resourcesGroupsFields
         }
     }
 }
