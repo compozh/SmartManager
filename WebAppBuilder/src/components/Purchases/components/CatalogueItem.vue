@@ -57,7 +57,7 @@
     export default {
         name: "catalogue-item",
         data:() => ({
-            item: {}
+            item: undefined
         }),
         props:{
             catalogueId: {
@@ -69,7 +69,7 @@
         },
         methods:{
             respCallback (resp) {
-                this.item = _.first(resp.data.purchases.resources);
+                this.item = resp.data.purchases.resource;
             }
         }
     }

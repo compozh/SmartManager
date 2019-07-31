@@ -49,22 +49,25 @@ export class PurchasesApi {
   constructor() {}
 
     getResourceById(id){
+      debugger;
     const FIELDS = gql`
       fragment resourcesFields on Resource {
         id,
         fullName,
         name,
         designation,
-        measurementUnit{shortName,fullName}
+        measurementUnit{
+          shortName,
+          fullName
+        }
         resourceGroup{
-                id,
-                name
-            }
+          id,
+          name
         }
       }
     `;
     return client.query({
-      query: gql`query($id:ID!) ${resourceById} ${FIELDS}`,
+      query: gql`${resourceById} ${FIELDS}`,
       variables: { id: id },
       fetchPolicy: 'no-cache'
     })
@@ -113,7 +116,7 @@ export class PurchasesApi {
 
   getResourcesGroupsByParentGroup(group){
     return client.query({
-      query: gql`query ($group: String) ${resourcesGropsByParentGroup}`,
+      query: gql`${resourcesGropsByParentGroup}`,
       variables: { group: group },
       fetchPolicy: 'no-cache'
     })
@@ -187,7 +190,7 @@ export class PurchasesApi {
 
   getCartItems(){
     return client.query({
-      query: gql`query ${cartItems}`,
+      query: gql`${cartItems}`,
       variables: { },
       fetchPolicy: 'no-cache'
     })
@@ -203,7 +206,7 @@ export class PurchasesApi {
   `;
     var v = { name: `%${txt}%` };
     return client.query({
-      query: gql`query ($name: [String]) ${masurementSearch} ${FIELDS}`,
+      query: gql`${masurementSearch} ${FIELDS}`,
       variables: v
     })
     .then(result => result)
@@ -212,7 +215,7 @@ export class PurchasesApi {
 
   elasticSearch(text){
     return client.query({
-      query: gql`query ($name: String) ${elasticSearch}`,
+      query: gql`${elasticSearch}`,
       variables: { name: text }
     })
     .then(result => result)

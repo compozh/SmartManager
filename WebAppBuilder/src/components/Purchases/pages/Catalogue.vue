@@ -118,7 +118,10 @@
       },
       created: function () {
         var id = this.routeParamCode;
-        this.getItems(id);
+        if (id && id.trim().length < 15)
+        { 
+          this.getItems(id);
+        }
       },
       computed:{
         groups_items: {
@@ -164,7 +167,10 @@
       watch: {
         '$route' (to, from) {
           var id = to.params.catalogueId;
-          this.getItems(id);
+          if (id && id.trim().length < 15)
+          { 
+            this.getItems(id);
+          }
         }
       }
     }
