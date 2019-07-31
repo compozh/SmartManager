@@ -12,8 +12,7 @@
           </v-tab>
         </v-tabs>
       </v-flex>
-      <v-flex class="scroll-y list-block"
-      :style="'height:'+ parentHeight + 'px'"
+      <v-flex class="list-block"
         >
         <v-card class="card"
         v-for="task in tasks"
@@ -38,7 +37,7 @@ import {mapGetters} from 'vuex'
 export default {
   name: "mes-tasks-component",
   data(){
-    return {inProgressStatus: 'In Progress',  parentHeight: 0}
+    return {inProgressStatus: 'In Progress'}
   },
   computed: {
     tasks(){
@@ -67,11 +66,6 @@ export default {
       this.inProgressStatus = status == 'In Progress' ? 'closed' : 'In Progress';
     },
   },
-  mounted() {
-      var toolbarContainerHeight = this.$el.getElementsByClassName('progress-toolbar')[0].offsetHeight,
-          windowheight = this.$parent.$el.offsetParent.offsetHeight;
-      this.parentHeight = windowheight - toolbarContainerHeight - 1;
-    }
 }
 </script>
 
@@ -79,9 +73,6 @@ export default {
   .main-block {
   }
   .progress-toolbar{
-  }
-  .list-block{
-    overflow-y: scroll;
   }
   .list-block .card{
     margin: 10px;
