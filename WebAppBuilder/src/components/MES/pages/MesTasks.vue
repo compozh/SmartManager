@@ -12,10 +12,12 @@
         <v-card>
           <v-layout column wrap>
             <v-flex class="button-toolbar">
-              <mes-tasks-toolbar/>
+              <mes-tasks-toolbar :layout=layout @layout="changeLayout" />
             </v-flex>
-            {{layout}}
-            <mes-task-main-layout/>
+            <mes-task-main-layout v-if="layout === 'mes-task-main-layout'" />
+            <mes-accept-task-layout v-if="layout == 'mes-accept-task-layout'" />
+            <mes-task-defect-layout v-if="layout == 'mes-task-defect-layout'" />
+            <mes-task-setup-materials-layout v-if="layout == 'mes-task-setup-materials-layout'" />
           </v-layout>
         </v-card>
       </v-flex>
@@ -28,14 +30,21 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-tasks",
-  props: {
-    layout: String,
+  /*props: {
+    layout: String
+  },*/
+  data: function() {
+    return { layout: 'mes-task-main-layout'};
   },
   methods: {
       onCardClick(data){
         console.log(data)
+      },
+       changeLayout(newLayout){
+         this.layout = newLayout;
       }
-  }
+  },
+ 
 }
 </script>
 <style type="text/css" scoped>
