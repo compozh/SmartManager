@@ -80,6 +80,24 @@ export class PurchasesApi {
   }
 
   getResourcesGroups(group){
+    const FIELDS = gql`
+    fragment resourcesGroupFields on ResourceGroup {
+      id, 
+      name,
+      children{
+        id,
+        name, 
+        children{
+          id,
+          name
+        }
+      }, 
+      resources{
+        id,
+        name,
+        designation
+      }
+    }`;
     return client.query({
       query: gql`${resourcesGroupById} ${FIELDS}`,
       variables: { group: group }
@@ -89,7 +107,7 @@ export class PurchasesApi {
   }
 
   getResourcesGroupsByParentGroupCallback(result){
-    let t = result.data.purchases.items;
+    let t = result.data.purchases.resourcesGroup;
     store.commit('purchases/setResourceGroups', t);
   }
 
@@ -105,7 +123,7 @@ export class PurchasesApi {
 
   getResourcesGroupById(group){
     const FIELDS = gql`
-    fragment resourcesGroupsFields on ResourceGroup {
+    fragment resourcesGroupFields on ResourceGroup {
       id, 
       name,
       children{
@@ -138,7 +156,7 @@ export class PurchasesApi {
 
   getImagesForCatalogueGroup(group) {
     const FIELDS = gql`
-      fragment resourcesGroupsFields on ResourceGroup {
+      fragment resourcesGroupFields on ResourceGroup {
         content
       }
     `;

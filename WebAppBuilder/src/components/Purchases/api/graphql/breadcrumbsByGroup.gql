@@ -1,6 +1,6 @@
 query($group:String){
 	purchases{
-    resourcesGropsBreadcrumbs(group:$group){
+    resourcesGroupsBreadcrumbs(group:$group){
       id,text,disabled
   	}
   }

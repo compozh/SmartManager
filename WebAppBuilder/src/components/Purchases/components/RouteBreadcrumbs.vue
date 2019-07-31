@@ -27,7 +27,7 @@ export default {
     }),
     methods:{
         responceCallback(response){
-            this.breadCrumbs = response.data.purchases.resourcesGropsBreadcrumbs;
+            this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
 
             debugger;
             
