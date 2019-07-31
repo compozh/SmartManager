@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-breadcrumbs  v-if="show" :items="cataloguePath">
+        <v-breadcrumbs v-if="show" :items="breadCrumbs" divider=">">
             <template v-slot:item="props">
-                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id }}">
-                {{ props.item.text }}
+                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim() }}">
+                    {{ props.item.text }}
                 </router-link>
-        </template>
+            </template>
         </v-breadcrumbs>
     </div>
 </template>
@@ -22,47 +22,28 @@ export default {
         }
     },
     data:() =>({
-        loading: false,
-        cataloguePath: [],
-        show: false
+        breadCrumbs: [],
+        show: true
     }),
     methods:{
-        getRoutePath(code) {
-            api.getResourcesGroups(code).then(this.getParendCodeCallback);
-            //const query = `{purchases{items: resourcesGrops(id: "${code}"){}}}`;
-            //purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
-        },
-        getParendCodeCallback(r) { 
-            var item = _.first(r.data.purchases.items);
-            if (item)
-            {
-                if (!item.parent || item.parent === null){
-                    var id = _.trim(item.id);
-                    this.cataloguePath.unshift({ text: item.name, disable: false, id: id, href: `${this.getBaseURL(id)}` });
-                    this.cataloguePath.unshift({ text: "..."    , disable: false, id: null   , href: `${this.getBaseURL()}` });
-                    this.show = true;
-                }
-                else{
-                    var id = _.trim(item.id);
-                    this.cataloguePath.unshift({ text: `${item.name}`, disable: id === this.code, id: id, href: `${this.getBaseURL()}\\${id}` });
-                    this.getRoutePath(item.parent.id);
-                }
-            }
-        },
-        getBaseURL() {
-            var the_arr = this.$route.fullPath.split('/');
-            the_arr.pop();
-            return( the_arr.join('/') );
+        responceCallback(response){
+            this.breadCrumbs = response.data.purchases.resourcesGropsBreadcrumbs;
+
+            debugger;
+            
+            this.breadCrumbs.splice(0,0,{text:"...", id:" ", disabled:false});
+
+            debugger;
         }
     },
     created(){
-        this.getRoutePath(this.code)
+        let currentGroup = this.$route.params.catalogueId;
+        api.getBreadcrumbsByGroup(currentGroup).then(this.responceCallback);
     },
     watch: {
         '$route' (to, from) {
-            this.cataloguePath = [];
-            this.show = false;
-            this.getRoutePath(this.code)
+            debugger;
+            api.getBreadcrumbsByGroup(this.code).then(this.responceCallback);
         }
     }
 }
