@@ -1,7 +1,7 @@
 <template>
 <v-container  class="main-block">
     <v-layout row wrap >
-      <v-flex xs4>
+      <v-flex xs4 class="tasks-component">
         <v-card>
           <v-layout column>
               <mes-tasks-component/>
@@ -39,11 +39,6 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-  .list-block {
-    /* width: 500px;
-    max-width: 500px; */
-
-  }
   .list-block .card {
     display: flex;
     flex-direction: column;
@@ -51,7 +46,7 @@ export default {
     margin: 20px;
     border-radius: 20px;
   }
- 
+
   .main-block {
     height: 100%;
     padding: 0 !important;
