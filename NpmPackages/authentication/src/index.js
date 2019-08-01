@@ -40,7 +40,7 @@ function loadLocalizations() {
   context.keys().forEach(function (key) {
     var name = path.basename(key)
     name = name.substring(0,name.lastIndexOf('.'))
-    Vue.prototype.$localization.RegisterLanguage('eds', name, () => Promise.resolve(context(key)))
+    Vue.prototype.$localization.RegisterLanguage('authentication', name, () => Promise.resolve(context(key)))
   })
 
 }

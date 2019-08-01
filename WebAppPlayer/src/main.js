@@ -6,7 +6,7 @@ import GrapgQlCore from '@it-enterprise/graphql'
 import Authentication from '@it-enterprise/authentication'
 import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
-import ModulesManager from '@it-enterprise/modules-manager'
+
 
 // vue пакеты
 import Vue from 'vue'
@@ -52,7 +52,6 @@ Vue.use(VueI18n)
 Vue.use(VueApollo)
 
 // Плагины it-enterprise
-//Vue.use(ModulesManager, { dependencies })
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.myConfig, dependencies })

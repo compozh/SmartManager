@@ -16,10 +16,10 @@ export default {
   methods: {
     login() {
       if (!this.userData.login) {
-        return (this.message = this.$t('emptyLogin'))
+        return (this.message = this.$t('authentication.emptyLogin'))
       }
       if (!this.userData.password) {
-        return (this.message = this.$t('emptyPassword'))
+        return (this.message = this.$t('authentication.emptyPassword'))
       }
       this.$authentication.logIn(this.userData.login, this.userData.password, this.userData.rememberMe).then(res => {
         if (res) {

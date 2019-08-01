@@ -97,10 +97,6 @@ export default class Authentication {
   async logIn(login, password, rememberMe) {
 
     try {
-
-      // Получаем провайдер
-
-
       // Логинемся
       const response = await this.__provider.LogIn(login, password, rememberMe)
 
