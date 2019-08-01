@@ -14,14 +14,12 @@ export default {
   register(name, promise) {
     this.all.push(name)
 
-    name = name[0].toUpperCase() + name.substring(1)
+    let moduleName = name[0].toUpperCase() + name.substring(1)
 
-    let funcName = `get${name}`
+    let funcName = `get${moduleName}`
 
     if (!this[funcName]) {
-      this[funcName] = () => {
-        return promise()
-      }
+      this[funcName] = () => promise()
     }
 
   }

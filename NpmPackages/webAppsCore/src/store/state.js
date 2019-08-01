@@ -1,5 +1,5 @@
 const state = {
   applicationDescription: {},
-  appData: {},
+  appData: {}
 }
 export default state

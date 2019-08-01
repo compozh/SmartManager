@@ -1,21 +1,19 @@
-console.log("Authentication module loaded!")
-
-const currentUserKey = "currentUser"
+const currentUserKey = 'currentUser'
 
 /** хранение текущего пользователя в localStorage */
 const currentUser = {
-  get(){
+  get() {
     try {
       return JSON.parse(localStorage.getItem(currentUserKey))
     } catch (error) {
       this.reset()
     }
   },
-  set(val){
+  set(val) {
     localStorage.setItem(currentUserKey, JSON.stringify(val))
     return val
   },
-  reset(){
+  reset() {
     localStorage.removeItem(currentUserKey)
   }
 }
@@ -25,7 +23,7 @@ const currentUser = {
  * Класс для работы с аутентификацией
  */
 export default class Authentication {
-  __modulesManager
+
   __dependencies
 
   /**
@@ -33,19 +31,21 @@ export default class Authentication {
    * @param {} modulesManager менеджер модулей
    * @param {} dependencies Зависимости
    */
-  constructor(dependencies) {
-    if(!dependencies){
-      throw Error("Зависимости должны быть переданы!")
+  constructor(vue, dependencies) {
+    this.__vue = vue
+
+    if (!dependencies) {
+      throw Error('Зависимости должны быть переданы!')
     }
+
     this.__dependencies = dependencies
-    if(!this.__dependencies.axios){
-      throw Error("axios должен быть передан через зависимости!")
+    if (!this.__dependencies.axios) {
+      throw Error('axios должен быть передан через зависимости!')
     }
 
-    this.__modulesManager = dependencies.modulesManager
 
-    if(!this.__modulesManager){
-      throw Error("Менеджер модулей должен быть внедрен в зависимости!")
+    if (!this.__vue.prototype.$graphQlCore) {
+      throw Error('Плагин GraphQlCore должен быть использован до испоьлзования даннго планина!')
     }
 
 
@@ -55,22 +55,22 @@ export default class Authentication {
   }
 
   /** Провайдер аутентификации */
-  __provider (){
-    return this.__modulesManager.getGraphQlCore()
+  get __provider () {
+    return this.__vue.prototype.$graphQlCore
   }
 
-  get __axios(){
+  get __axios() {
     return this.__dependencies.axios
   }
 
   /**
    * Добавляем в axios стандартный заголовок авторизации
    */
-  setUpAxios(){
+  setUpAxios() {
     this.__axios.interceptors.request.use(
       (config) => {
         // Если нет текущего пользователя - ничего не делаем
-        if(!this.currentUser){
+        if (!this.currentUser) {
           return config
         }
 
@@ -97,18 +97,14 @@ export default class Authentication {
   async logIn(login, password, rememberMe) {
 
     try {
-
-      // Получаем провайдер
-      let provider = await this.__provider()
-
       // Логинемся
-      const response = await provider.LogIn(login, password, rememberMe)
+      const response = await this.__provider.LogIn(login, password, rememberMe)
 
       var token = response.access_token
       // сохранение токена
       if (token) {
         currentUser.set(response)
-        let userData = await provider.GetCurrentUser()
+        let userData = await this.__provider.GetCurrentUser()
         response.UserData = userData
         currentUser.set(response)
         return response
@@ -120,16 +116,21 @@ export default class Authentication {
     }
   }
 
+  async setCurrentUser() {
+    var user = this.currentUser
+    let userData = await this.__provider.GetCurrentUser()
+    user.UserData = userData
+    currentUser.set(user)
+  }
+
   /**
    * Выход - разлогиниться на веб сервере
    */
   async logOff() {
     try {
-      if(!this.currentUser){
-         // Получаем провайдер
-        let provider = await this.__provider()
+      if (!this.currentUser) {
 
-        await provider.LogOff()
+        await this.__provider.LogOff()
         currentUser.reset()
       }
     } catch (res) {
@@ -138,19 +139,32 @@ export default class Authentication {
   }
 
 
+  async applyDelegatedRights(userId) {
+    let result = await this.__provider.ApplyDelegatedRights(userId)
+    if (!result.data) {
+      throw new Error('Ошибка смены делегированных прав!')
+    }
+    await this.setCurrentUser()
+  }
+
+  async setDelegationRights({userId, dateFrom, dateTo}) {
+    return await this.__provider.SetDelegationRights({userId, dateFrom, dateTo})
+
+  }
+
   /**
    * Получить токен для авторизации на веб сервере
    */
-  getAuthHeader(){
-    if(!this.currentUser){
+  getAuthHeader() {
+    if (!this.currentUser) {
       return undefined
     }
     let token = this.currentUser.access_token
-    return {'Authorization':`Bearer ${token}`}
+    return {'Authorization': `Bearer ${token}`}
   }
 
 
-  get currentUser(){
+  get currentUser() {
     return currentUser.get()
   }
 }
