@@ -1,14 +1,14 @@
 <template>
     <v-layout row wrap="">
             <v-breadcrumbs v-if="show">
-                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
+                <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
                       <p>...</p>
                 </router-link>
             </v-breadcrumbs>
         <v-flex>
             <v-breadcrumbs :items="breadCrumbs" divider=">">
                 <template v-slot:item="props">
-                    <router-link :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim(), }}">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim(), }}">
                       {{ props.item.text.toUpperCase() }}
                     </router-link>
                 </template>
@@ -30,20 +30,9 @@ export default {
         show: true
     }),
     methods:{
-        responceCallback(response){
-            debugger;
+        responceCallback(response){            
+            this.show = true;
             this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
-        },
-        getBaseURL() {
-            var the_arr = this.$route.fullPath.split('/');
-            the_arr.pop();
-            return( the_arr.join('/') );
-        },
-        sethrefs(){
-            debugger;
-            this.breadCrumbs.forEach(element => {
-                element.href = this.getBaseURL()+"/"+element.id;
-            });
         }
     },
     created(){
@@ -53,10 +42,8 @@ export default {
             }
     },
     watch: {
-        '$route' (to, from) {
-            debugger;
+        '$route' (to, from){
             if(to.params.catalogueId != null){
-                this.show = true;
                 api.getBreadcrumbsByGroup(to.params.catalogueId).then(this.responceCallback);
             }
             else{            
@@ -71,5 +58,9 @@ export default {
 <style scoped>
     .first{
         font-size: larger;
+    }
+
+    .crumbs{
+        color: grey;
     }
 </style>
