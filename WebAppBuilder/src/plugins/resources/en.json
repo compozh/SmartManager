@@ -6,6 +6,29 @@
     "emptyLogin": "You have not entered a login",
     "emptyPassword": "You have not entered a password",
     "NoDevices": "No devices",
+    "purchases":{
+      "CreateOrderWindow":{
+        "DocumentNumber": "Document number",
+        "DocumentDate": "Document date",
+        "Code": "Code",
+        "Description": "Description"
+      },
+      "Catalog":{
+        "FastFilter":"Fast filter",
+        "Name":"Name"
+      },
+      "CartItems":{
+        "Application":"Application",
+        "Resource": "Resource",
+        "Quantity":"Quantity",
+        "Unit": "Mesurement units",
+        "Date": "Date",
+        "Number": "Number",       
+			  "Stage": "Stage"
+      },
+      "CreateOrder":"Make order",
+      "CleanCart":"Clean cart"
+    },
     "eds": {
       "CA": "CA",
       "MinfinLogo" : "Ministry of Finance of Ukraine",

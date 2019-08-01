@@ -1,46 +1,38 @@
 <template>
-  <div>
-    <div>Рабочие центры</div>
-    <v-container fluid pa-0>
-      <v-layout column>
-        <v-flex xs12 row>
-          <v-list>
-            <v-list-tile
-              v-for="workCenter in workCenters"
-              :key="workCenter.code">
-              <span>{{workCenter.name}}</span>
-            </v-list-tile>
-          </v-list>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+  <v-list>
+    <v-list-tile v-for="route in links" :key="route.Id" :to="{name:route.Id}">
+      <v-list-tile-action>
+        <v-icon>{{route.Image}}</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>{{ route.Name }}</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+  </v-list>
 </template>
 <script>
-import {mapGetters} from 'vuex'
-
 export default {
-  name:"mes-menu",
-  created(){
-    this.getWorkCenters("","")
-  },
+  name: "mes-menu",
   computed: {
-    ...mapGetters({
-        loading: 'mes/loading',
-        workCenters: 'mes/workCenters'
-      }),
-      workCenters() {
-        return this.$store.getters['mes/getWorkCenters']
-      },
-      checkWorkCenters() {
-        return this.workCenters ? this.workCenters.length : 0
+    links() {
+      if (!this.$store.state.applicationDescription) {
+        return [];
       }
-  },
-  methods: {
-    getWorkCenters(uuid, login) {
-      const loader = this.shiftTasks ? 'setLinearLoader' : 'setCircularLoader'
-      this.$store.dispatch('mes/getWorkCenters', {uuid, loader})
+      const app = this.$store.state.applicationDescription;
+      const sections = app.Sections || [];
+
+      let links = [];
+      for (let index = 0; index < sections.length; index++) {
+        const section = sections[index];
+        links = links.concat(
+          (section.Routes || []).map(r => (r.section = section) && r)
+        );
+      }
+
+      links = [...links, ...links[1].Children, ...links[0].Children];
+      return links.filter(l => l.Name && l.Path);
     }
   }
-}
+};
 </script>
+

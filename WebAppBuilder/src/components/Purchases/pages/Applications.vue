@@ -1,38 +1,21 @@
 <template>
-    <div v-if="applications">
+    <v-container fluid v-if="applications">
         <v-layout row justify-end>
             <v-btn icon v-show="this.$vuetify.breakpoint.smAndUp">
                 <v-icon v-text="rowView ? 'view_stream' : 'view_column'" @click="rowView = !rowView"/>
             </v-btn>
         </v-layout>
         <!-- Карточки -->
-        <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" wrap justify-center>
-            <v-flex class="application-card"
+        <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" justify-center  wrap>
+            <v-flex xs12 sm5 md5 lg5 xl5
                 v-for="application in getItemsOnPage()" :key="application.id" 
-                v-bind="{ [`xs${smallSize ? '5' : '3'}`]: true }" 
                 v-bind:pagination.sync="pagination"
                 v-touch="{
                             left: () => swipeLeft(application),
                             right: () => swipeRight(application),
                         }"
                 >
-                <router-link :to="{ name:'APPLICATION', params: {applicationId: application.id}}">
-                    <v-card tile height="150px" >
-                        <esecute-stepper />
-                        <v-card-title>
-                            Номер: {{ application.number }} Дата: {{ application.date | formatDate }}
-                        </v-card-title>
-                        <v-card-text>
-                            {{ application.title }}
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-layout justify-end>
-                                <favorite-btn :v-model="application" value="a"/>
-                                <chat-btn :chatKey="application.id" chatType="application" />
-                            </v-layout>
-                        </v-card-actions>
-                    </v-card>
-                </router-link>
+                   <applicationCard :application="application" />
             </v-flex>
         </v-layout>
         <!-- Пагинатор -->
@@ -40,15 +23,17 @@
             v-model="pagination.page" :length="pages"
             :total-visible="7"
             />
-    </div>
+    </v-container>
 </template>
 
 <script>
 import moment from 'moment';
+import {PurchasesApi} from "../api/purchasesApi";
+const api = new PurchasesApi();
 
     export default {
         name: "applications",
-        props: ["applications"],
+        //props: ["applications"],
         data: () => ({
             rowView: true,
             smallSize: true,
@@ -66,19 +51,28 @@ import moment from 'moment';
         computed: {
             pages: {
                 get() { 
-                    return Math.ceil(this._props.applications.length / this.rowsPerPage);
+                    debugger;
+                    return Math.ceil(this.applications.length / this.rowsPerPage);
                 }
             },
             rowsPerPage: {
                 get() {
                     return this.rowView ? 24 : 18;
                 }
-            }
+            },
+            applications:{
+                get: function() {
+                    return this.$store.getters["purchases/getApplications"];
+                },
+                set: function(newVal){
+                    this.$store.commit('purchases/setApplications', newVal);
+                }
+            },
         },
         methods:{
             getItemsOnPage(){
-                //debugger;
-                return this._props.applications.slice(
+                debugger;
+                return this.applications.slice(
                     (this.pagination.page - 1) * this.rowsPerPage, 
                     this.pagination.page * this.rowsPerPage)
             },
@@ -93,11 +87,17 @@ import moment from 'moment';
             }
         },
         mounted() {
-        }
+            api.getFavLists();
+            api.getApplications();
+        },
+        created() {   
+        },
     }
 </script>
 
 <style scoped>
+
+
 .application-card{
     padding: 5px;
     margin: 5px;
@@ -110,7 +110,10 @@ import moment from 'moment';
     font-weight: 600;
     padding: 5px 15px;
 }
+
 .application-card .v-card__text {
+    text-align: left;
+    margin-left: 10px;
     padding: 5px;
     height: 40px;
 }

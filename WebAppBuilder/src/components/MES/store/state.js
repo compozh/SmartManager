@@ -7,5 +7,6 @@ export default {
   workCenters: null,
   currentTaskId: null,
   search: null,
-  shiftTasks: null
+  shiftTasks: null,
+  menuMiniMode: null,
 }
