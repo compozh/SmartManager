@@ -162,7 +162,10 @@
       watch: {
         '$route' (to, from) {
           var id = to.params.catalogueId;
-          if (id && id.trim().length < 15)
+          if (!id){
+            id = "";
+          }
+          if (id.trim().length < 15)
           { 
             this.getItems(id);
           }
