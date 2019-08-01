@@ -38,7 +38,17 @@ export default {
       },
       changeCurrentTask(newTask){
         this.selectedTask = newTask;
-        this.layout = 'mes-task-main-layout';
+        switch(newTask.state) {
+          case 'IN_PLAN':
+            this.layout = 'mes-task-main-layout';
+            break;
+          case 'IN_WORK':
+            this.layout = 'mes-accept-task-layout';
+            break;
+          case 'DONE':
+            this.layout = '';
+            break;
+        }
       }
   }
 }
