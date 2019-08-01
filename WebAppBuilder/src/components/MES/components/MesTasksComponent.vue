@@ -16,7 +16,7 @@
         </v-tabs>
       </v-flex>
       <v-flex class="list-block">
-        <div v-if="initializeInProcess">
+        <div v-if="!initializeTasks" class="wait-for-data-block">
           <ContentLoader>
             <rect x="0" y="0" rx="3" ry="3" width="250" height="10" />
             <rect x="20" y="20" rx="3" ry="3" width="220" height="10" />
@@ -35,6 +35,7 @@
           <v-card-text><span v-html="task.description"></span></v-card-text>
           </div>
         </v-card>
+        <span v-if="initializeTasks && !tasks.length" class="lack-of-tasks-str">Задания отсутствуют</span>
       </v-flex>
     </v-layout>
   </v-card>
@@ -50,17 +51,17 @@ export default {
     ContentLoader
   },
   data: function() {
-    return { currentStatus: 'IN_PLAN', initializeInProcess: true};
+    return { currentStatus: 'IN_PLAN', initializeTasks: false};
   },
   props: {
     selectedTask: Object
   },
     created(){
-        this.initializeTasks();
+        this.initTasks();
     },
     computed: {
         tasks() {
-            return this.$store.getters['mes/tasks'];  
+            return this.$store.getters['mes/tasks'];
         },
         workCenter(){
             return this.$store.getters['mes/workCenters'];
@@ -74,12 +75,15 @@ export default {
         }
     },
     methods:{
-        async initializeTasks(){
+        async initTasks(){
             await this.setupWorkCenters("QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=", "");
             await this.setupTasksByWorkCenter(this.workCenter[0].code);
             var tasks = this.tasks;
+            this.initializeTasks = true;
+
             if(this.tasks && this.tasks.length){
               this.changeCurrentTask(this.tasks[0]);
+              this.initializeInProcess = false;
             }
         },
         async setupWorkCenters(uuid, login) {
@@ -108,5 +112,13 @@ export default {
   .list-block .card{
     margin: 10px;
     border-radius: 50px;
+  }
+  .lack-of-tasks-str {
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #3d83f7;
+  }
+  .wait-for-data-block {
+    padding: 20px;
   }
 </style>
