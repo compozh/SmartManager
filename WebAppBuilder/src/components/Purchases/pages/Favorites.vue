@@ -1,14 +1,15 @@
 <template>
 <div>
+ 
     <v-container
       v-for="favList in favlists"
-      :key="favList.listId"
+      :key="favList.id"
       
       grid-list-md
       grey
       lighten-4
     >
-      <onefavlist :listId="favList.id" :isEditable="true" :printCount="$4"/>
+      <onefavlist :listId="favList.id" :isEditable="true" />
       
     </v-container>
     
@@ -25,27 +26,28 @@
 import {PurchasesApi} from "../api/purchasesApi";
 
 const api = new PurchasesApi();
-
+import draggable from 'vuedraggable';
 
   export default {
      name: "mylist",
+     components: {
+      draggable,
+     },
     data: () => ({
     }),
     created() {
-      api.getFavLists();
-      api.getApplications();
+      
     },
-    mounted(){
+    async mounted(){
+      await api.getFavLists();
+      let favres =  this.favlists.filter(w => w.alias == 'KSM').map(w => w.keyValues).
+        reduce((prev, next) => { return prev.concat(next); }, []);
+      api.getResourcesByIds(favres);
+      let favapps =  this.favlists.filter(w => w.alias == 'DOC').map(w => w.keyValues).
+        reduce((prev, next) => { return prev.concat(next); }, []);
+       api.getApplicationsByIds(favapps);
     },
     computed:{
-      applications:{
-         get: function() {
-          return this.$store.getters["purchases/getApplications"];
-        },
-        set: function(newVal){
-          this.$store.commit('purchases/setApplications', newVal);
-        }
-      },
       favlists: {
         get: function() {
           return this.$store.getters["purchases/getFavLists"];
@@ -56,43 +58,11 @@ const api = new PurchasesApi();
       },
     },
     methods: {
-      getImage () {
-        const min = 530
-        const max = 560
-
-        return Math.floor(Math.random() * (max - min + 1)) + min
-      },
       ondrag(){},
-      mutationDeleteFavList(favList){
-        
-        api.mutationDeleteFavList(favList);
-        this.favlists = this.favlists.filter(w=>w.id != favList.id);
-      },
-      mutationDeleteItemFromFav(favList, keyValue){
-        favList.keyValues = favList.keyValues.filter(w=>w != keyValue);
-        api.mutationEditFavList(favList);
-      },
-      mutationEditFavList(favList){
-        
-        if(favList.isDefaultList)
-        {
-          let newList = this.favlists;
-          newList.filter(w=>w.alias == favList.alias && w.id != favList.id).forEach(w => w.isDefaultList = false);
-          this.favlists = newList;
-        }
 
-        api.mutationEditFavList(favList);
-      },
-      mutationCreateFavList(){
+      mutationCreateFavList()
+      {
         api.mutationCreateFavList()
-      },
-      getAplicationByKeyValue(keyValue){
-        
-        let apls = this.applications;
-        if(apls!= null){
-           return apls.find(w => w.id.toString() == keyValue);
-        }
-       return {};
       },
     }
   }

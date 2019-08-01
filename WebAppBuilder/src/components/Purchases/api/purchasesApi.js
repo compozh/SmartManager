@@ -36,6 +36,8 @@ import deleteItemFromFavorites from './graphql/deleteItemFromFavorites.gql'
 import mutationCreateFavList from './graphql/mutationCreateFavList.gql'
 import applications from './graphql/applications.gql'
 import docStatus from '../api/graphql/docStatus.gql'
+import recoursesByIds from '../api/graphql/recoursesByIds.gql' 
+import applicationsByIds from '../api/graphql/applicationsByIds.gql' 
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -55,7 +57,6 @@ export class PurchasesApi {
   constructor() {}
 
     getResourceById(id){
-      debugger;
     const FIELDS = gql`
       fragment resourcesFields on Resource {
         id,
@@ -466,7 +467,7 @@ addToFavoritesMutationCallbackFirst(result){
 
     store.commit("purchases/setChose", {
       list : [{Title:"Заявки", Key:"DOC"}, {Title:"Ресурсы", Key:"KSM"},] , 
-      caption:"Тип списока?",
+      caption:"Тип списка?",
       method: (key) => {
           return client.mutate({
             mutation: gql`${mutationCreateFavList}`,
@@ -485,7 +486,7 @@ addToFavoritesMutationCallbackFirst(result){
   }
   getApplicationsCallback(result){
     let applications = result.data.purchases.applications;
-    store.commit('purchases/setApplications', applications);
+    store.commit('purchases/addApplications', applications);
   }
   getApplications(){
     return client.mutate({
@@ -511,5 +512,32 @@ addToFavoritesMutationCallbackFirst(result){
   getDocStatusCallback(result){
     let docStatus = result.data.purchases.docStatus;
     store.commit('purchases/setDocStatus', docStatus);
+  }
+
+  getApplicationsByIds(ids){
+    return client.mutate({
+      mutation: gql`${applicationsByIds}`,
+      variables: { ids:ids}     
+    })
+      .then(this.getApplicationsCallback)
+      .catch(error => console.log(error.message));
+  }
+  
+  getResourcesByIds(ids){
+    //debugger;
+    return client.query({
+      query: gql`${recoursesByIds}`,
+      variables: { ids: ids }//,
+      //fetchPolicy: 'no-cache'
+    })
+    .then(this.getResourcesByIdsCallback)
+    .catch(error => console.log(error.message))
+    
+  }
+
+  getResourcesByIdsCallback(result){
+    let t = result.data.purchases.resources;
+    //debugger;
+    store.commit('purchases/addResources', t);
   }
 }

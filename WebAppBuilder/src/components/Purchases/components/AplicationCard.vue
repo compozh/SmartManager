@@ -1,5 +1,5 @@
 <template>
-    <div class="application-card">
+    <div class="application-card" v-if="application">
             <router-link :to="{ name:'APPLICATION', params: {applicationId: application.id}}">
                 <v-card min-height="150px">
                     
@@ -40,25 +40,6 @@ export default {
             if (value) {
                 return moment(String(value)).format('DD.MM.YYYY')
             }
-        }
-    },
-    computed:{
-        compRows() {
-            for (const key in this.application.rows) {
-                if (this.application.rows.hasOwnProperty(key)) {
-                    if (this.application.rows[key].isEdit == undefined)
-                    {
-                        this.$set(this.application.rows[key], 'isEdit', false)
-                    }
-                }
-            }
-            return this.application.rows;
-        }
-    },
-    methods:{
-        editClick(row){
-            console.log(row);
-            row.isEdit = !!!row.isEdit;
         }
     }
 }

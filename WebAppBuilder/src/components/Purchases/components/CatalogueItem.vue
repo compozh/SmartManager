@@ -34,7 +34,7 @@
                             <v-card-actions>
                                 <v-layout row>
                                     <v-flex lg1 xl1 justify-start>
-                                        <favorite-btn :v-model="item" value="a" alias="DOC" :keyValue="item.id.toString()"/>
+                                        <favorite-btn :v-model="item" value="a" alias="KSM" :keyValue="item.id.toString()"/>
                                     </v-flex>     
                                     <v-flex lg1 xl1>
                                         <add2cart-btn :keyValue="item.id.toString()"/>

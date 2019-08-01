@@ -52,8 +52,13 @@
 </template>
 
 <<script>
+import draggable from 'vuedraggable';
+
 export default {
      name: "draggable-first",
+     components: {
+      draggable,
+     },
     data() {
     return {
       items: [
