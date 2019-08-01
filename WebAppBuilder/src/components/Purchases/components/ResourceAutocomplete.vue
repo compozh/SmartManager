@@ -32,7 +32,7 @@
         }),
         computed:{
             labelNameComp(){
-                return this.labelName ? this.labelName : "Количество";
+                return this.labelName ? this.labelName : $t('purchases.CartItems.Resource');
             },
             resourceComp:{
                 get: function() {

@@ -1,0 +1,24 @@
+{
+  purchases{
+    applications(take:100){
+      id,
+      number,
+      date,
+      title,
+      docStatus{
+        id,
+        sortOrder
+      },
+      rows{
+        id,
+        resource{
+          id,
+          fullName
+        },
+        measurementUnit{
+          name
+        }
+      }
+    }
+  }
+}

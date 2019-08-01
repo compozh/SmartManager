@@ -3,15 +3,15 @@
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn  v-on="on" flat icon>
-                <country-flag :country='curentLanguage' size='normal'/>
+                {{curentLanguageText}}
+                <!-- <country-flag :country='curentLanguageFlag' size='normal'/> -->
             </v-btn>
           </template>
           <v-list>
             <v-list-tile
               v-for="(item, index) in dictionaryLanguage"
               :key="index"
-              @click="SetLocale(index)"
-            >
+              @click="SetLocale(index)">
               <country-flag :country='item.flag' size='small'/>
               <v-list-tile-title class="country">   {{ item.name }}</v-list-tile-title>
             </v-list-tile>
@@ -24,6 +24,10 @@
 import CountryFlag from 'vue-country-flag'
 import _ from "lodash"
 import { debug } from 'util';
+import {PurchasesApi} from "../api/purchasesApi";
+    
+const api = new PurchasesApi();
+
 export default {
     name :"icon-language-component",
     components:{
@@ -33,16 +37,19 @@ export default {
         return{
             arrayCountryAndFlag:[],
             dictionaryLanguage :[
-                { name: "English", flag: "gb", key: "EN" },
-                { name: "Русский", flag: "ru", key: "RU" },
-                { name: "Українська", flag: "ua", key: "UK" },
+                { name: "English",    flag: "gb", key: "EN", label:"Eng" },
+                { name: "Русский",    flag: "ru", key: "RU", label:"Рус" },
+                { name: "Українська", flag: "ua", key: "UK", label:"Укр" },
             ],
             curlanguage : localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : "Русский"
         }
     },
     computed:{
-        curentLanguage(){
+        curentLanguageFlag(){
             return _.find(this.dictionaryLanguage,["name", this.curlanguage]).flag;
+        },
+        curentLanguageText(){
+            return _.find(this.dictionaryLanguage,["name", this.curlanguage]).label;
         }
     },
     mounted(){
@@ -59,7 +66,7 @@ export default {
     //Изменяем локализацию через выбор элемента в списке
         SetLocale(index){
             var language = this.dictionaryLanguage[index].key.toLowerCase();
-            this.curlanguage =this.dictionaryLanguage[index].name
+            this.curlanguage = this.dictionaryLanguage[index].name
             localStorage.setItem('curentLanguage', this.curlanguage)
             localStorage.setItem('language', language);
 
@@ -76,7 +83,19 @@ export default {
     //Установка локализации
     Setlocalization(language){
        this.$i18n.Setlocalization(language);
+       
+       let currentGroup = this.$route.params.catalogueId;
+       api.changeLocalization(language).then(()=>{
+           if(currentGroup != undefined){
+            api.getResourcesGroupById(currentGroup);
+           }
+           else{
+            api.getResourcesGroupsByParentGroup("");
+           }
+           
+       });
     }
+
   },
 }
 </script>

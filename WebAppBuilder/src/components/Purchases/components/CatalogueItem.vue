@@ -44,7 +44,6 @@
         },
         methods:{
             respCallback (resp) {
-                debugger;
                 this.item = _.first(resp.data.data.purchases.resources);
             }
         }

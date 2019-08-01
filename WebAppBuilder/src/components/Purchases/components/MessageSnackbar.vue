@@ -31,7 +31,6 @@
             callBack(){
                     const msg = this.$store.state.purchases.snackbarMessage;
                     if (msg !== '') {
-                        //debugger;
                         this.message = msg;
                         this.show = true;
                         this.$store.commit("purchases/setMessage", "");

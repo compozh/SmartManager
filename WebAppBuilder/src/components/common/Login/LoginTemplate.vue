@@ -4,7 +4,8 @@
       <v-flex xs12 sm8 md6 lg4>
         <login-rl v-slot="{ userData, message, params }">
           <v-container>
-            <v-layout column>
+            <!-- Логин/пароль режим -->
+            <v-layout column v-if="!qrMode">
               <v-flex>
                 <v-text-field
                   color="cyan"
@@ -48,6 +49,31 @@
                    v-bind="params.messageAttrs"
                 >{{ message }}</p>
               </v-flex>
+              <v-flex>
+                <p class="red--text text--darken-4"
+                   v-bind="params.messageAttrs"
+                >{{ message }}</p>
+              </v-flex>
+              <v-flex>
+                <v-btn v-if="allowQrMode"
+                  @click="qrMode = true"
+                  class="cyan white--text text-xs-right">
+                  Войти с помощью QR
+                </v-btn>
+              </v-flex>
+
+            </v-layout>
+              <!-- QR режим -->
+
+            <v-layout v-if="qrMode">
+              <v-flex>
+                <qr-login></qr-login>
+                <v-btn
+                  @click="qrMode = false"
+                  class="cyan white--text text-xs-right">
+                  Ввести логин и пароль
+                </v-btn>
+              </v-flex>
             </v-layout>
           </v-container>
         </login-rl>
@@ -59,5 +85,12 @@
 <script>
   export default {
     name: 'login',
+    props:['allowQrMode'],
+
+    data(){
+      return {
+        qrMode:false
+      }
+    }
   }
 </script>

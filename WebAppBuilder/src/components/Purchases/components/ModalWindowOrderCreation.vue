@@ -11,14 +11,14 @@
                     <v-icon  @click.self="isOpen = false;" color="grey darken-2">arrow_back</v-icon>
                   </v-btn>
                 <v-flex sm12 xs12>
-                  <v-text-field v-model="order.NDM" label="Номер документа" placeholder="NDM"/>
+                  <v-text-field v-model="order.NDM" :label="$t('purchases.CreateOrderWindow.DocumentNumber')" placeholder="NDM"/>
                 </v-flex>
                 <v-flex sm12 xs12>
                   <v-dialog/>
                 </v-flex>
                 <v-flex sm12 xs12>
                   <div>
-                  <v-text-field label="Дата документа" readonly  class="date-input"
+                  <v-text-field :label="$t('purchases.CreateOrderWindow.DocumentDate')" readonly  class="date-input"
                   append-icon="event"  @click:append="dialog = true"
                   :value="order.DDM | formatDate"/>
                   <v-dialog class="date-dialog" v-model="dialog" persistent>
@@ -31,16 +31,16 @@
                 </div>
                 </v-flex>
                 <v-flex sm12 xs12>
-                  <v-select v-model="order.DM1" label="Код" placeholder="DM1"></v-select>
+                  <v-select v-model="order.DM1" :label="$t('purchases.CreateOrderWindow.Code')" placeholder="DM1"></v-select>
                 </v-flex>
                 <v-flex sm12 xs12>
-                  <v-select v-model="order.DM2"  label="Код" placeholder="DM2"></v-select>
+                  <v-select v-model="order.DM2" :label="$t('purchases.CreateOrderWindow.Code')" placeholder="DM2"></v-select>
                 </v-flex>
                 <v-flex sm12 xs12>
-                  <v-textarea v-model="order.Description" label="Описание"></v-textarea>
+                  <v-textarea v-model="order.Description" :label="$t('purchases.CreateOrderWindow.Description')"></v-textarea>
                 </v-flex>
                 <v-flex sm12 xs12>
-                  <v-btn @click="submitOrder()" block outline round color="success">Сформировать Заказ</v-btn>
+                  <v-btn @click="submitOrder()" block outline round color="success">{{ $t('purchases.CreateOrder')}}</v-btn>
                 </v-flex>
               </v-layout>
               </v-form>
@@ -49,7 +49,7 @@
         </div>
       </div>
     </transition>
-    <v-btn block outline round large color="success" @click="isOpen = !isOpen;"> Сформировать заказ</v-btn>
+    <v-btn block outline round large color="success" @click="isOpen = !isOpen;">{{ $t('purchases.CreateOrder')}}</v-btn>
   </div>
 </template>
 

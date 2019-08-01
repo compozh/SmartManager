@@ -6,7 +6,29 @@
     "emptyLogin": "Вы не ввели логин",
     "emptyPassword": "Вы не ввели пароль",
     "NoDevices": "Нет устройств",
-
+	"purchases":{
+		"CreateOrderWindow":{
+			"DocumentNumber": "Номер документа",
+			"DocumentDate": "Дата документа",
+			"Code": "Код",
+			"Description": "Описание"
+		},
+		"Catalog":{
+			"FastFilter":"Быстрый фильтр",
+			"Name":"Наименование"
+		  },
+		"CartItems":{
+			"Application":"Заявка",
+			"Resource": "Ресурс",
+			"Quantity":"Количество",
+			"Unit": "Единица измерения",
+			"Date": "Дата",
+			"Number": "Номер",
+			"Stage": "Стадия"
+		},
+		"CreateOrder":"Сформировать заказ",
+		"CleanCart":"Очистить корзину"
+	},
     "eds": {
 		"CA": "ЦСК",
 		"MinfinLogo" : "Министерство финансов Украины",

@@ -42,6 +42,26 @@ const actions = ({
         }
       })
   },
+
+  LoginByQr({commit, dispatch}, id) {
+    localStorage.removeItem("ItUniTocken")
+    commit("setCurrentUser", null)
+
+    return Axios.post(`${myConfig.GrapgQlUrl}api/authentication/alternativelogin`, {code:id, type:2}, {
+      withCredentials: true
+    }).then(
+      response => {
+        const token = response.data.access_token
+        if (token) {
+          localStorage.setItem('ItUniTocken', token)
+          return dispatch('GetCurrentUser')
+            .then(() => true
+          )
+        }
+      })
+  },
+
+
   /** Загрузить данные для компонента */
   LoadDataForComponent({commit}, {datasource, key}) {
     return Axios({
