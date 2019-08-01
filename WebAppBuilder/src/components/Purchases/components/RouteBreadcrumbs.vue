@@ -28,16 +28,31 @@ export default {
     methods:{
         responceCallback(response){
             this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
-            this.breadCrumbs.splice(0,0,{text:"...", id:" ", disabled:false});
+            this.breadCrumbs.splice(0,0,{text:"...", id:"", disabled:false});
+        },
+        getBaseURL() {
+            var the_arr = this.$route.fullPath.split('/');
+            the_arr.pop();
+            return( the_arr.join('/') );
         }
     },
     created(){
         let currentGroup = this.$route.params.catalogueId;
-        api.getBreadcrumbsByGroup(currentGroup).then(this.responceCallback);
+        this.breadCrumbs = []
+        if(currentGroup != undefined){
+                api.getBreadcrumbsByGroup(this.code).then(this.responceCallback);
+            }
+
+        
     },
     watch: {
         '$route' (to, from) {
-            api.getBreadcrumbsByGroup(this.code).then(this.responceCallback);
+            if(this.code != ""){
+                this.breadCrumbs.shift();
+                api.getBreadcrumbsByGroup(this.code).then(this.responceCallback);
+            }
+
+            this.breadCrumbs = []
         }
     }
 }
