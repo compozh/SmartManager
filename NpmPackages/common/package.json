@@ -1,6 +1,6 @@
 {
-  "name": "common-components",
-  "version": "1.0.0",
+  "name": "@it-enterprise/common",
+  "version": "1.0.1",
   "description": "Общие базовые компоненты",
   "author": "it-enterprise",
   "private": false,
