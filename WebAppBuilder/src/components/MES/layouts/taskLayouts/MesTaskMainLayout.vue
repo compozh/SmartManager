@@ -59,6 +59,7 @@ export default {
     padding: 0 10px !important;
   }
   .grid-element {
-    background-color: cornflowerblue;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
   }
 </style>

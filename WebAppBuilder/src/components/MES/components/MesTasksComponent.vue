@@ -32,7 +32,7 @@
         @click="changeCurrentTask(task)"
         >
           <div v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
-          <v-card-text>{{task.description}}</v-card-text>
+          <v-card-text><span v-html="task.description"></span></v-card-text>
           </div>
         </v-card>
       </v-flex>

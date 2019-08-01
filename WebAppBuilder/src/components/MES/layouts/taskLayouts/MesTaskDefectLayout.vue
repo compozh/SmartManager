@@ -20,6 +20,7 @@
                         :h="item.h"
                         :i="item.i"
                         class="grid-element">
+                       <span v-html="item.data"></span>
                </grid-item>
             </grid-layout>
         </v-flex>
@@ -36,7 +37,7 @@ export default {
   data: function(){
      let blocks = [
         {'x':0, 'y':0, 'w':4, 'h':6, 'i':'0'},
-        {'x':0, 'y':6, 'w':4, 'h':4, 'i':'1'},
+        {'x':0, 'y':6, 'w':4, 'h':4, 'i':'1', data: this.selectedTask.detailedDescription},
         {'x':4, 'y':6, 'w':4, 'h':4, 'i':'2'}
       ];
     return {blocks};
@@ -54,6 +55,7 @@ export default {
     padding: 0 10px !important;
   }
  .grid-element {
-    background-color: cornflowerblue;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
   }
 </style>
