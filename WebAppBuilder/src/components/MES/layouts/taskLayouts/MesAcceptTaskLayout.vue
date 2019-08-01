@@ -36,7 +36,7 @@ export default {
   },
   data: function(){
      let blocks = [
-        {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0'},
+        {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0'}, 
         {'x':0, 'y':6, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
     return {blocks};

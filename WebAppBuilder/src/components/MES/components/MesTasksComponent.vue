@@ -1,29 +1,35 @@
 <template>
   <v-card>
-    <v-layout column>
-        <v-flex fill-height class="progress-toolbar">
-          <v-tabs fixed-tabs>
+    <v-layout column xs12 md12 sm12 lg12>
+        <v-flex fill-height class="progress-toolbar" xs12 md12 sm12 lg12>
+          <v-tabs >
+            <v-layout xs12 md12 sm12 lg12>
+              <v-flex xs6 md6 sm6 lg6 align-self-center>
               <v-tab :key=taskStatus.inPlan.id
             @click="changeStatus(taskStatus.inPlan.id)"
             >
               {{taskStatus.inPlan.name}}
-          </v-tab>
+              </v-tab>
+              </v-flex>
+              <v-flex xs6 md6 sm6 lg6 align-self-center>
               <v-tab :key=taskStatus.done.id
             @click="changeStatus(taskStatus.done.id)"
             >
               {{taskStatus.done.name}}
           </v-tab>
+                            </v-flex>
+          </v-layout>
         </v-tabs>
       </v-flex>
       <v-flex class="list-block">
         <div v-if="!initializeTasks" class="wait-for-data-block">
           <ContentLoader>
-            <rect x="0" y="0" rx="3" ry="3" width="250" height="10" />
+            <rect x="0" y="0" rx="3" ry="3" width="400" height="10" />
             <rect x="20" y="20" rx="3" ry="3" width="220" height="10" />
             <rect x="20" y="40" rx="3" ry="3" width="170" height="10" />
-            <rect x="0" y="60" rx="3" ry="3" width="250" height="10" />
+            <rect x="0" y="60" rx="3" ry="3" width="400" height="10" />
             <rect x="20" y="80" rx="3" ry="3" width="200" height="10" />
-            <rect x="20" y="100" rx="3" ry="3" width="80" height="10" />
+            <rect x="20" y="100" rx="3" ry="3" width="350" height="10" />
           </ContentLoader>
         </div>
         <v-card class="card"
