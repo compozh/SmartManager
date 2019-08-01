@@ -20,6 +20,7 @@
                         :h="item.h"
                         :i="item.i"
                         class="grid-element">
+                        <span v-html="item.data"></span>
                 </grid-item>
             </grid-layout>
         </v-flex>
@@ -35,12 +36,7 @@ export default {
   },
  data: function() {
     let blocks = [
-        {'x':0, 'y':0, 'w':4, 'h':4, 'i':'0'},
-        {'x':4, 'y':0, 'w':4, 'h':4, 'i':'1'},
-        {'x':8, 'y':0, 'w':4, 'h':4, 'i':'2'},
-        {'x':0, 'y':4, 'w':4, 'h':4, 'i':'3'},
-        {'x':4, 'y':4, 'w':4, 'h':4, 'i':'4'},
-        {'x':8, 'y':4, 'w':4, 'h':4, 'i':'5'},
+        {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription}
       ];
     return {blocks};
   },
