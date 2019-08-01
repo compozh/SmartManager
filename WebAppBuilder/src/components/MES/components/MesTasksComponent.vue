@@ -19,10 +19,10 @@
         <v-card class="card"
         v-for="task in tasks"
         :key="task.id"
-        @click="onCardClick(task)"
+        @click="changeCurrentTask(task)"
         >
           <div v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
-            <v-card-text>{{task.description}}</v-card-text>
+          <v-card-text>{{task.description}}</v-card-text>
           </div>
         </v-card>
       </v-flex>
@@ -38,12 +38,14 @@ export default {
   data: function() {
     return { currentStatus: 'IN_PLAN' };
   },
+  props: {
+    selectedTask: Object
+  },
     created(){
         this.initializeTasks();
     },
     computed: {
         tasks() {
-            console.log(this.$store.getters['mes/tasks']);
             return this.$store.getters['mes/tasks'];  
         },
         workCenter(){
@@ -60,17 +62,24 @@ export default {
     methods:{
         async initializeTasks(){
             await this.setupWorkCenters("QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=", "");
-            this.setupTasksByWorkCenter(this.workCenter[0].code);
+            await this.setupTasksByWorkCenter(this.workCenter[0].code);
+            var tasks = this.tasks;
+            if(this.tasks && this.tasks.length){
+              this.changeCurrentTask(this.tasks[0]);
+            }
         },
         async setupWorkCenters(uuid, login) {
             const loader = 'setCircularLoader';
             await this.$store.dispatch('mes/setupWorkCenters', {uuid, loader});
         },
-        setupTasksByWorkCenter(workCenter) {
-        this.$store.dispatch('mes/setupTasks', {workCenter});
+        async setupTasksByWorkCenter(workCenter) {
+          await this.$store.dispatch('mes/setupTasks', {workCenter});
         },
         changeStatus(status) {
             this.currentStatus = status;
+        },
+        changeCurrentTask(newTask) {
+          this.$emit('changeCurrentTask', newTask);
         }
     }
 }

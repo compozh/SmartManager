@@ -7,6 +7,9 @@
 import {mapGetters} from 'vuex'
 
 export default {
+   props: {
+    selectedTask: Object
+  },
   data () {
     return {};
   },

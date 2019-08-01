@@ -59,4 +59,4 @@ export default {
     margin: 20px;
     border-radius: 20px;
   }
-</style>
+</style> 

@@ -3,55 +3,52 @@
     <v-flex
       class="toolbar-basebuttons"
       grow
-      v-if="layout !== 'mes-task-setup-materials-layout'">
+      v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
+      <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn
-      outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
+      outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
+      :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'" @click="onclickAccept">Взять в работу</v-btn>
       <v-btn
-      outlined :color="this.applyWorkColor" @click="onclickAccept($event)">Взять в работу</v-btn>
+      outlined v-if="selectedTask.state == 'IN_WORK'"
+      @click="onclickDefect">Брак</v-btn>
     </v-flex>
     <v-flex
     grow
     v-if="layout === 'mes-task-setup-materials-layout'">
       <v-text-field
         class="qr-input"
-        v-model="firstname"
-        :rules="nameRules"
-        :counter="10"
         label="Укажите QR-партии материала для установки"
         required
       ></v-text-field>
     </v-flex>
-   <v-flex
+    <v-flex
    xs2
-   v-if="layout !== 'mes-task-setup-materials-layout'">
+   v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
       <v-btn
       outlined color="error" @click="onclickDowntime($event)">Простой</v-btn>
    </v-flex>
    <v-flex
    xs2
    v-if="layout === 'mes-task-setup-materials-layout'">
-     <v-btn
-     outlined @click="onclickDowntime($event)">Снять все партии</v-btn>
+     <v-btn outlined @click="onclickDowntime($event)">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters} from 'vuex' 
 
 export default {
   name: "mes-tasks-toolbar",
-  data(){
-    return {applyWorkColor: 'success'}
-  },
  props: {
-    layout: String
+    layout: String,
+    selectedTask: Object
   },
   methods:{
     onclickSetupMaterial: function(event) {
       this.$emit('layout', 'mes-task-setup-materials-layout');
     },
-    onclickAccept: function(event, state) {
+    onclickAccept: function(event) {
         let target = event.target;
         if(!target.state || target.state === "accept") {
           this.applyWorkColor = 'error';
@@ -65,7 +62,10 @@ export default {
     },
     onclickDowntime: function(event) {
 
-    }
+    },
+    onclickDefect: function(event) {
+        this.$emit('layout', 'mes-task-defect-layout');
+    } 
   }
 }
 </script>
