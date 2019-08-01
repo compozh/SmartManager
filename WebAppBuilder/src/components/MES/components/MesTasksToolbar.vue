@@ -27,10 +27,8 @@
       <v-btn
       outlined color="error" @click="onclickDowntime($event)">Простой</v-btn>
    </v-flex>
-   <v-flex
-   xs2
-   v-if="layout === 'mes-task-setup-materials-layout'">
-     <v-btn outlined @click="onclickDowntime($event)">Снять все партии</v-btn>
+   <v-flex xs2 v-if="layout === 'mes-task-setup-materials-layout'">
+     <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
 </template>
@@ -64,8 +62,11 @@ export default {
 
     },
     onclickDefect: function(event) {
-        this.$emit('layout', 'mes-task-defect-layout');
-    } 
+      this.$emit('layout', 'mes-task-defect-layout');
+    },
+    onclickRemoveAllInstallations() {
+      this.$emit('removeAllInstallations');
+    }
   }
 }
 </script>

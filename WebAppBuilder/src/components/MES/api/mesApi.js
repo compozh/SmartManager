@@ -4,7 +4,9 @@ import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag'
 // Queries
 import workCenters from './graphql/workCenters.graphql'
-import tasks from './graphql/tasks.graphql'
+import tasks from './graphql/tasks/tasks.graphql'
+import installations from './graphql/installations/installations.graphql'
+import removeInstallation from './graphql/installations/removeInstallation.graphql' 
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -54,6 +56,34 @@ export class MesApi {
       const result = await client.query({
         query: gql`query ($workCenter: String) ${tasks}`,
         variables: { workCenter }
+      });
+      return result;
+    }
+    catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async getInstallationsFromGql(workCenter) {
+    //try {
+      debugger;
+      const result = await client.query({
+        query: gql`query ($workCenter: String) ${installations}`,
+        variables: { workCenter }
+      });
+      debugger;
+      return result;
+    /*}
+    catch (error) {
+      return console.log(error.message);
+    }*/
+  }
+
+  async removeInstallation(installationId) {
+    try {
+      const result = await client.query({
+        mutation: gql`query ($installationId: String) ${removeInstallation}`,
+        variables: { installationId }
       });
       return result;
     }

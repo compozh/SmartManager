@@ -63,7 +63,7 @@ export default {
         tasks() {
             return this.$store.getters['mes/tasks'];
         },
-        workCenter(){
+        workCenters(){
             return this.$store.getters['mes/workCenters'];
         },
         taskStatus() {
@@ -77,7 +77,7 @@ export default {
     methods:{
         async initTasks(){
             await this.setupWorkCenters("QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=", "");
-            await this.setupTasksByWorkCenter(this.workCenter[0].code);
+            await this.setupTasksByWorkCenters(this.workCenters);
             var tasks = this.tasks;
             this.initializeTasks = true;
 
@@ -89,10 +89,9 @@ export default {
         async setupWorkCenters(uuid, login) {
             const loader = 'setCircularLoader';
             await this.$store.dispatch('mes/setupWorkCenters', {uuid, loader});
-
         },
-        async setupTasksByWorkCenter(workCenter) {
-          await this.$store.dispatch('mes/setupTasks', {workCenter});
+        async setupTasksByWorkCenters(workCenters) {
+          await this.$store.dispatch('mes/setupTasks', {workCenters});
         },
         changeStatus(status) {
             this.currentStatus = status;

@@ -1,0 +1,7 @@
+mutation{
+  mesmutation {
+    removeInstallation(intallationId: $intallationId) {
+		result
+    }
+  }
+}

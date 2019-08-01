@@ -18,6 +18,9 @@ export default {
   setTasks(state, payload) {
     state.tasks = payload
   },
+  setInstallations(state, payload) {
+    state.installations = payload
+  },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
     localStorage.setItem("mesMenuMiniMode", payload.toString());

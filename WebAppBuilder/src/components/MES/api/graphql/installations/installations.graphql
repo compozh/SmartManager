@@ -1,0 +1,7 @@
+{
+  mes {
+    installations(workCenterCode: $workCenter) {
+		installations
+    }
+  }
+}

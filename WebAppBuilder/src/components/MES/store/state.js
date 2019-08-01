@@ -5,8 +5,8 @@ export default {
   menuMode: 'open', // Main menu state: open, mini, close
   properties: null,
   workCenters: [],
-  currentTaskId: null,
   search: null,
   tasks: [],
-  menuMiniMode: true,
+  installations: [],
+  menuMiniMode: true
 }

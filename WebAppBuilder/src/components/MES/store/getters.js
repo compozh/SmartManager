@@ -15,29 +15,10 @@ export default {
     return state.workCenters
   },
   tasks(state) {
-    const search = state.search ? state.search.trim() : ''
-
-    // Список полей, по которым осуществляется поиск
-    const searchFields = [
-      'workCenter'
-    ]
-    return state.tasks.filter(task => {
-      // Цикл for по ключам задачи для возможности использовать continue
-      for (let i = 0; i < searchFields.length; i++) {
-        let searchField = searchFields[i]
-        let taskField = task[searchField]
-        // Если такого поля нет - пропуск без проверки
-        if (!taskField) {
-          continue
-        }
-        let taskFieldValue = String(taskField).toLowerCase()
-        let isMatching = taskFieldValue.includes(search.toLowerCase())
-        // При первом же совпадении отбор и переход к следующей задаче
-        if (isMatching) {
-          return true
-        }
-      }
-    })
+    return state.tasks;
+  },
+  installations(state) {
+    return state.installations;
   },
   menuMiniMode(state, commit) {
     if (state.menuMiniMode === null) {
