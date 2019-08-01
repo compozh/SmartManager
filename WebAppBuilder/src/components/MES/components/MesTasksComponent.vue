@@ -1,18 +1,24 @@
 <template>
   <v-card>
-    <v-layout column>
-        <v-flex fill-height class="progress-toolbar">
-          <v-tabs fixed-tabs>
+    <v-layout column xs12 md12 sm12 lg12>
+        <v-flex fill-height class="progress-toolbar" xs12 md12 sm12 lg12>
+          <v-tabs >
+            <v-layout xs12 md12 sm12 lg12>
+              <v-flex xs6 md6 sm6 lg6 align-self-center>
               <v-tab :key=taskStatus.inPlan.id
             @click="changeStatus(taskStatus.inPlan.id)"
             >
               {{taskStatus.inPlan.name}}
-          </v-tab>
+              </v-tab>
+              </v-flex>
+              <v-flex xs6 md6 sm6 lg6 align-self-center>
               <v-tab :key=taskStatus.done.id
             @click="changeStatus(taskStatus.done.id)"
             >
               {{taskStatus.done.name}}
           </v-tab>
+                            </v-flex>
+          </v-layout>
         </v-tabs>
       </v-flex>
       <v-flex class="list-block">

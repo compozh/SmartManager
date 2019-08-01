@@ -1,5 +1,5 @@
 <template>
-  <v-layout row xs12>
+  <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
     <v-flex
       class="toolbar-basebuttons"
       grow
@@ -12,31 +12,31 @@
       outlined v-if="selectedTask.state == 'IN_WORK'"
       @click="onclickDefect">Брак</v-btn>
     </v-flex>
-    <v-flex
-    grow
-    v-if="layout === 'mes-task-setup-materials-layout'">
-      <v-text-field
-        class="qr-input"
-        label="Укажите QR-партии материала для установки"
-        required
-      ></v-text-field>
+      <v-flex
+      grow
+      v-if="layout === 'mes-task-setup-materials-layout'">
+        <v-text-field
+          class="qr-input"
+          label="Укажите QR-партии материала для установки"
+          required
+        ></v-text-field>
+      </v-flex>
+      <v-flex class="downtime-btn"
+        v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
+        <v-btn
+        outlined color="error" @click="onclickDowntime($event)">Простой</v-btn>
     </v-flex>
     <v-flex
-   xs2
-   v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
+    class="setup-material-btn"
+    v-if="layout === 'mes-task-setup-materials-layout'">
       <v-btn
-      outlined color="error" @click="onclickDowntime($event)">Простой</v-btn>
-   </v-flex>
-   <v-flex
-   xs2
-   v-if="layout === 'mes-task-setup-materials-layout'">
-     <v-btn outlined @click="onclickDowntime($event)">Снять все партии</v-btn>
-   </v-flex>
+      outlined @click="onclickDowntime($event)">Снять все партии</v-btn>
+    </v-flex>
   </v-layout>
 </template>
 
 <script>
-import {mapGetters} from 'vuex' 
+import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-tasks-toolbar",
@@ -65,19 +65,32 @@ export default {
     },
     onclickDefect: function(event) {
         this.$emit('layout', 'mes-task-defect-layout');
-    } 
+    }
   }
 }
 </script>
 
 <style type="text/css" scoped>
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+  }
   .toolbar-basebuttons{
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    padding-left: 25px;
   }
   .qr-input{
-    padding-left: 25px;
     width: 500px;
+  }
+  .downtime-btn {
+    width: 120px;
+    max-width: 120px;
+  }
+  .setup-material-btn {
+    width: 200px;
+    max-width: 200px;
   }
 </style>

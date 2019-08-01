@@ -6,12 +6,12 @@
           <a>MES</a>
         </router-link>
       </v-flex>
-      <v-spacer></v-spacer>        
+      <v-spacer></v-spacer>
       <v-flex class="grow-0">
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-layout>
-    
+
   </v-container>
 </template>
 

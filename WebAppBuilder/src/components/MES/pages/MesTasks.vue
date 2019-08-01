@@ -1,13 +1,13 @@
 <template>
 <v-container  class="main-block">
   <v-card>
-    <v-layout row>
-      <v-flex xs4 class="tasks-list">
+    <v-layout row xs12 md12 sm12 lg12>
+      <v-flex xs4 md4 sm4 lg4 class="tasks-list">
         <mes-tasks-component :selectedTask=selectedTask @changeCurrentTask="changeCurrentTask" />
       </v-flex>
-      <v-flex xs8 class="task-description">
-          <v-layout column wrap>
-            <v-flex class="button-toolbar">
+      <v-flex xs8 md8 sm8 lg8 class="task-description">
+          <v-layout column wrap xs12 md12 sm12 lg12>
+            <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
               <mes-tasks-toolbar :layout=layout :selectedTask=selectedTask @layout="changeLayout" />
             </v-flex>
             <mes-task-main-layout :selectedTask=selectedTask v-if="layout === 'mes-task-main-layout'" />
@@ -27,7 +27,7 @@ import {mapGetters} from 'vuex'
 export default {
   name: "mes-tasks",
   data: function() {
-    return { 
+    return {
         layout: '',
         selectedTask: {}
       };
