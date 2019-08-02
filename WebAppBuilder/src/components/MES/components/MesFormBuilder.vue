@@ -1,11 +1,12 @@
 <template>
-    <v-layout class="container">
+    <v-layout class="formio-container">
         <formio id="formio" :form='myform' v-on:submit="onSubmit()"></formio>
     </v-layout>
 </template>
 <script>
 import {mapGetters} from 'vuex'
 import { Form } from '../../../../node_modules/vue-formio';
+
 
 export default {
     data(){
@@ -1788,9 +1789,9 @@ export default {
   }
 }
 </script>
-<style type="text/css" scoped>
-.container{
-  display: flex;
-  flex-direction: column;
+
+<style scoped lang="scss">
+.formio-container /deep/ {
+  @import "~bootstrap/dist/css/bootstrap.min";
 }
 </style>

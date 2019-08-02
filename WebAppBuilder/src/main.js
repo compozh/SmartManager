@@ -16,9 +16,6 @@ import VueApollo from 'vue-apollo';
 import VueGridLayout from 'vue-grid-layout';
 import 'viewerjs/dist/viewer.css';
 import Viewer from 'v-viewer';
-import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 export const eventBus = new Vue(); // Шина событий
 
