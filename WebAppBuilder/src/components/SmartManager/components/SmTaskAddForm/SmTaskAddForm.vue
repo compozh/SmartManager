@@ -18,7 +18,6 @@
                 clearable
               ></v-text-field>
             </v-flex>
-
             <v-flex xs12>
               <sm-task-add-form-select
                 label="Ответственный"
@@ -168,7 +167,6 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-
           </v-layout>
         </v-flex>
       </v-layout>
@@ -178,11 +176,9 @@
 
 <script>
   import moment from 'moment'
-  import FileUploadTaskForm from "../../../common/FileUpload/Views/FileUploadTaskForm"
 
   export default {
     name: "sm-task-add-form",
-    components: {FileUploadTaskForm},
     data: () => ({
       newTask: {
         title: '',

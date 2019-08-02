@@ -5,32 +5,31 @@ export default {
       value: []
     },
     options: {
-      action: 'http://localhost:3000/upload',
+      action: myConfig.GrapgQlUrl + 'upload',
       multiple: true,
-      mimeTypes: 'image/png, image/gif, image/jpeg, image/webp, application/pdf',
-      extensions: "gif, jpg, jpeg, png, webp, pdf, exe",
-      size: 1048576,
-      chunk: false,
-      chunkMinSize: 0,
-      chunkMaxActive: 3,
-      chunkMaxRetries: 5
+      mimeTypes: 'image/*, application/pdf, application/msword, application/excel, text/*',
+      extensions: "gif, jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, txt, log",
+      size: 1048576 * 100, // 100 Mb
+      chunk: true,
+      chunkMinSize: 512000,
+      chunkMaxActive: 1,
+      chunkMaxRetries: 10,
+      headers: {'Upload-Type': 'single'}
     }
   }),
   methods: {
     inputFile(newFile, oldFile) {
       if (newFile && oldFile && !newFile.active && oldFile.active) {
-        // Get response data
-        console.log('response', newFile.response)
         if (newFile.xhr) {
           //  Get the response status code
-          console.log('status', newFile.xhr.status)
+          // console.log('status', newFile.xhr.status)
         }
       }
     },
     inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
-        // Filter non-image file
-        if (!/\.(jpeg|jpe|jpg|gif|png|pdf)$/i.test(newFile.name)) {
+        // Filter
+        if (!/\.(jpeg|jpe|jpg|gif|png|pdf|doc|docx|xls|xlsx|txt|log)$/i.test(newFile.name)) {
           return prevent()
         }
       }

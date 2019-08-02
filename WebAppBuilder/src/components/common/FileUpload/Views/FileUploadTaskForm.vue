@@ -17,17 +17,20 @@
                   :class="{'red--text text--darken-2' : props.item.size >= options.size}"
               >{{ (props.item.size / 1024 / 1024).toFixed(2) }} Mb
               </td>
-              <td class="text-xs-center">{{ props.item.progress }} %</td>
-              <td>
-                <v-btn v-if="props.item.size >= options.size" icon>
-                  <v-icon size="20" class="red--text text--darken-2">warning</v-icon>
-                </v-btn>
-                <v-btn v-else icon @click.prevent="$refs.upload.active = true">
+              <td class="text-xs-center">{{ parseFloat(props.item.progress).toFixed(2) }} %</td>
+              <td class="d-flex">
+                <span v-if="parseFloat(props.item.progress) < 100">
+                  <v-btn v-if="props.item.size >= options.size" icon>
+                    <v-icon size="20" class="red--text text--darken-2">warning</v-icon>
+                  </v-btn>
+                  <v-btn v-else icon @click.prevent="$refs.upload.active = true">
                   <v-icon size="20" class="grey--text text--darken-1">cloud_upload</v-icon>
                 </v-btn>
                 <v-btn icon @click="events.remove(props.item.id)">
                   <v-icon size="20" class="grey--text text--darken-1">close</v-icon>
                 </v-btn>
+                </span>
+                <v-icon style="min-width: 105px" v-else size="20" class="green--text text--darken-2">done</v-icon>
               </td>
             </template>
           </v-data-table>
@@ -40,14 +43,15 @@
             :extensions="options.extensions"
             :accept="options.mimeTypes"
             :multiple="options.multiple"
+            :headers="options.headers"
             :size="options.size"
             :chunk-enabled="options.chunk"
             :chunk="{
-            action: options.actions,
-            minSize: options.chunkMinSize,
-            maxActive: options.chunkMaxActive,
-            maxRetries: options.chunkMaxRetries,
-          }"
+              action: options.action,
+              minSize: options.chunkMinSize,
+              maxActive: options.chunkMaxActive,
+              maxRetries: options.chunkMaxRetries,
+            }"
             :post-action="options.action"
             @input-file="events.inputFile"
             @input-filter="events.inputFilter"
@@ -65,7 +69,7 @@
 </template>
 
 <script>
-  import fileUpload from 'vue-upload-component'
+  import fileUpload from 'vue-upload-with-credential'
 
   export default {
     name: "file-upload-task-form",
