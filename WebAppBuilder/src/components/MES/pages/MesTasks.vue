@@ -43,7 +43,7 @@ export default {
          this.layout = newLayout;
       },
       changeCurrentTask(newSelectedTask) {
-        let workCenter = this.selectedTask.workCenter;        
+        let workCenter = this.selectedTask.workCenter;
         this.selectedTask = newSelectedTask;
 
         if(workCenter != newSelectedTask.workCenter)
@@ -81,5 +81,8 @@ export default {
   .main-block {
     padding: 0 !important;
     margin: 0 !important;
+  }
+  .button-toolbar.row {
+    margin: 0;
   }
 </style>

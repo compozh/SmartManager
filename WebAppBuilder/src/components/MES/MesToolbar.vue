@@ -1,6 +1,6 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center justify-space-beetwen>
+    <v-layout row align-center justify-space-beetwen class="main-toolbar">
       <v-flex>
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a>MES</a>
@@ -34,5 +34,9 @@ a {
 
 .grow-0 {
   flex-grow: 0 !important;
+}
+
+.main-toolbar.row {
+  margin: 0;
 }
 </style>
