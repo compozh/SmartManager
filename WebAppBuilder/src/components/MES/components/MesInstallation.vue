@@ -1,6 +1,6 @@
 <template>
     <v-card-text>
-        {{installation.description}} <v-btn outlined @click="removeInstallation">X</v-btn>
+        <span v-html="installation.description"></span><v-btn outlined @click="removeInstallation">X</v-btn>
     </v-card-text>
 </template>
 
@@ -14,7 +14,7 @@ export default {
     name: "mes-installation",
     methods: {
         removeInstallation(){
-            this.$emit('removeInstallation', installation);
+            this.$emit('removeInstallation', this.installation);
         }
     }
 }

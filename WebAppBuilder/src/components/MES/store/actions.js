@@ -65,8 +65,7 @@ export default {
 
     try {
       let result = await api.getInstallationsFromGql(workCenterCode);
-      debugger;
-      commit('setInstallations', result.data.mes.installations)
+      commit('setInstallations', result.data.mes.installations.installations)
       commit('setCircularLoader', false)
     } catch (e) {
       commit('setCircularLoader', false)
@@ -78,16 +77,17 @@ export default {
     commit('setCircularLoader', true)
 
     try {
-      let result = await api.removeInstallation(installation.id);
-
+      let result = await api.removeInstallationGql(installation.id);
+      if(result.success == true) {
+        commit('removeInstallationById', installation.id);
+      } else {
+        commit('setError', result.errorMessage);
+      }
       commit('setCircularLoader', false)
-
-      return result.data.mes.result;
     } catch (e) {
       commit('setCircularLoader', false)
       commit('setError', e.message)
     }
-    return false;
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode);

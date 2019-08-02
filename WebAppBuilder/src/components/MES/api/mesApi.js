@@ -6,7 +6,9 @@ import gql from 'graphql-tag'
 import workCenters from './graphql/workCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import installations from './graphql/installations/installations.graphql'
-import removeInstallation from './graphql/installations/removeInstallation.graphql' 
+import removeInstallation from './graphql/installations/removeInstallation.graphql'
+
+import store from '../../../store/index'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -65,29 +67,26 @@ export class MesApi {
   }
 
   async getInstallationsFromGql(workCenter) {
-    //try {
-      debugger;
+    try {
       const result = await client.query({
         query: gql`query ($workCenter: String) ${installations}`,
         variables: { workCenter }
       });
-      debugger;
-      return result;
-    /*}
-    catch (error) {
-      return console.log(error.message);
-    }*/
-  }
-
-  async removeInstallation(installationId) {
-    try {
-      const result = await client.query({
-        mutation: gql`query ($installationId: String) ${removeInstallation}`,
-        variables: { installationId }
-      });
       return result;
     }
     catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async removeInstallationGql(installationId) {
+    try {
+      let result = await client.mutate({
+        mutation: gql`${removeInstallation}`,
+        variables: { installationId }
+      });
+      return result.data.mesMutation.removeInstallation;
+    } catch (error) {
       return console.log(error.message);
     }
   }

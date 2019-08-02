@@ -25,5 +25,5 @@ export default {
       state.menuMiniMode = localStorage.getItem("mesMenuMiniMode") === 'true';
     }
     return state.menuMiniMode;
-  },
+  }
 }
