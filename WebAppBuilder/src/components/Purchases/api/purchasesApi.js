@@ -3,6 +3,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 import _ from 'lodash';
+
+// ResourceGroups query
+import mainQuery from './graphql/base/queryWithGroupStringParams.graphql';
+import catalogueQueryFragment from './graphql/fragments/catalogueQuery.graphql';
+import resourcesMinimalFieldsFragment from './graphql/fragments/resources/minimalFields.graphql';
+import resourcesGroupsMinimalFieldsFragment from './graphql/fragments/resourcesGroups/minimalFields.graphql';
 // Queries
 
 import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
@@ -83,32 +89,32 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getResourcesGroups(group){
-    const FIELDS = gql`
-    fragment resourcesGroupFields on ResourceGroup {
-      id, 
-      name,
-      children{
-        id,
-        name, 
-        children{
-          id,
-          name
-        }
-      }, 
-      resources{
-        id,
-        name,
-        designation
-      }
-    }`;
-    return client.query({
-      query: gql`${resourcesGroupById} ${FIELDS}`,
-      variables: { group: group }
-    })
-    .then(this.getResourcesGroupsCallback)
-    .catch(error => console.log(error.message))
-  }
+  // getResourcesGroups(group){
+  //   const FIELDS = gql`
+  //   fragment resourcesGroupFields on ResourceGroup {
+  //     id, 
+  //     name,
+  //     children{
+  //       id,
+  //       name, 
+  //       children{
+  //         id,
+  //         name
+  //       }
+  //     }, 
+  //     resources{
+  //       id,
+  //       name,
+  //       designation
+  //     }
+  //   }`;
+  //   return client.query({
+  //     query: gql`${resourcesGroupById} ${FIELDS}`,
+  //     variables: { group: group }
+  //   })
+  //   .then(this.getResourcesGroupsCallback)
+  //   .catch(error => console.log(error.message))
+  // }
 
   getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.resourcesGroups;
@@ -126,26 +132,12 @@ export class PurchasesApi {
   }
 
   getResourcesGroupById(group){
-    const FIELDS = gql`
-    fragment resourcesGroupFields on ResourceGroup {
-      id, 
-      name,
-      children{
-        id,
-        name, 
-        children{
-          id,
-          name
-        }
-      }, 
-      resources{
-        id,
-        name,
-        designation
-      }
-    }`;
     return client.query({
-      query: gql`${resourcesGroupById} ${FIELDS}`,
+      query: gql`
+        ${mainQuery} 
+        ${catalogueQueryFragment} 
+        ${resourcesMinimalFieldsFragment} 
+        ${resourcesGroupsMinimalFieldsFragment}`,
       variables: { group: group }//,
       //fetchPolicy: 'no-cache'
     })
