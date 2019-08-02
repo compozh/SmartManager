@@ -6,6 +6,9 @@ import GrapgQlCore from '@it-enterprise/graphql'
 import Authentication from '@it-enterprise/authentication'
 import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
+import ItCommon from '@it-enterprise/common'
+import '@it-enterprise/common/dist/common-components.css'
+import SignalR from '@it-enterprise/signalr'
 
 
 // vue пакеты
@@ -52,13 +55,14 @@ Vue.use(VueI18n)
 Vue.use(VueApollo)
 
 // Плагины it-enterprise
+Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.myConfig, dependencies })
 Vue.use(Router, { options: window.myConfig, dependencies })
 Vue.use(Eds, { dependencies })
 Vue.use(WebApps, { dependencies, options: window.myConfig })
-
+Vue.use(SignalR)
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
 
