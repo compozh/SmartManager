@@ -13,7 +13,6 @@
             </v-flex>
             <mes-task-main-layout :selectedTask=selectedTask v-if="layout === 'mes-task-main-layout'" />
             <mes-accept-task-layout :selectedTask=selectedTask v-if="layout == 'mes-accept-task-layout'" />
-            <mes-task-defect-layout :selectedTask=selectedTask v-if="layout == 'mes-task-defect-layout'" />
             <mes-task-setup-materials-layout :selectedTask=selectedTask :installations=installations @removeInstallation=removeInstallation v-if="layout == 'mes-task-setup-materials-layout'" />
           </v-layout>
       </v-flex>
