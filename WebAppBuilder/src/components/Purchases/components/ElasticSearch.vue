@@ -96,7 +96,7 @@
                 console.log(this.items);
             },
             addToCartCall(item){
-                api.addToCartMutation(item);
+                api.addToCartMutation(item.id);
             }
         }
     }

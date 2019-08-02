@@ -254,10 +254,10 @@ export class PurchasesApi {
     store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
 
-  addToCartMutation(item){
+  addToCartMutation(itemId){
     return client.mutate({
       mutation: gql`${addToCart}`,
-      variables: {resourceId: item.id}
+      variables: {resourceId: itemId}
     })
       .then(this.addToCartMutationCallback)
       .catch(error => console.log(error.message))

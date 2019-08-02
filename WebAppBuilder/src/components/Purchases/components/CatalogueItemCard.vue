@@ -5,6 +5,7 @@
             <item-picture entityName="resources" :id="catalogueItem.id" height="200px" width="350px" />
             <div class="cat_header title mb-1">{{catalogueItem.name}}</div>
             <v-layout justify-end>
+            <add2cart-btn :keyValue="catalogueItem.id.toString()"/>
             <favorite-btn :v-model="catalogueItem" value="a" alias="KSM" :keyValue="catalogueItem.id.toString()"/>  
             </v-layout>
         </router-link>

@@ -30,22 +30,30 @@ export default {
         }
     },
     created: function () {
-            //this.$store.watch(state => state.purchases.favlists, this.checkInFavourite);
-            //this.checkInFavourite();
+            this.$store.watch(state => state.purchases.cartitems, this.checkInFavourite);
+            this.checkInFavourite();
         },
     methods:{
-        /*
-        favClick(){
-            this.inFavourite = !this.inFavourite;
-            if(this.inFavourite){
-                api.addToFavoritesMutation(this.alias, this.keyValue.toString());
-            }else{
-                api.deleteItemFromFavorites(this.alias, this.keyValue.toString());
-            }
-            
-        }*/
+        
         addToCart(){
             this.inCart = !this.inCart;
+            if(this.inFavourite){
+                api.addToCartMutation(this.keyValue.toString());
+            }else{
+                api.deleteCartMutation(this.keyValue.toString());
+            }
+        },
+
+        checkInCart(){            
+            this.inCart = false;
+            const cartlist = this.$store.getters["purchases/getCartItems"];
+           
+            if(cartlist != null)
+            {                
+                this.inCart = cartlist.map((w) => w.keyValues).
+                    reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
+            }
+           
         }
     }
 }
