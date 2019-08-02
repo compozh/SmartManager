@@ -115,6 +115,33 @@ export default class Authentication {
       throw new Error(`Ошибка входа. \r\n ${res}`)
     }
   }
+  
+  /**
+   * Логин по QR коду
+   * @param {string} id Логин
+   */
+  async loginByQr(id) {
+    try {
+      // Получаем провайдер
+      const response = await this.__provider.LoginByQr(id)
+
+      var token = response.access_token
+      // сохранение токена
+
+      if (token) {
+        currentUser.set(response)
+        let userData = await this.__provider.GetCurrentUser()
+        response.UserData = userData
+        currentUser.set(response)
+        return response
+      }
+      // если токен не пришел
+      throw new Error(`Ошибка входа. \r\b ${response}`)
+    } catch (res) {
+      throw new Error(`Ошибка входа. \r\n ${res}`)
+    }
+
+  }
 
   async setCurrentUser() {
     var user = this.currentUser
