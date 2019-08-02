@@ -21,6 +21,11 @@ export default {
   setInstallations(state, payload) {
     state.installations = payload
   },
+  removeInstallationById(state, installationId) {
+    debugger;
+    var index = state.installations.indexOf(installationId);
+    state.installations.splice(index, 0);
+  },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
     localStorage.setItem("mesMenuMiniMode", payload.toString());

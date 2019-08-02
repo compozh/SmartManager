@@ -11,26 +11,13 @@ import {mapGetters} from 'vuex'
 
 export default {
   props: {
-    selectedTask: Object
-  },
-  data () {
-    return {installations: []};
+    selectedTask: Object,
+    installations: Array
   },
   name: "mes-task-setup-materials-layout",
     methods: {
       removeInstallation(installation) {
-        var result = this.$store.dispatch('mes/removeInstallation', installation);
-        debugger;
-        if(result == true) {
-          var index = this.installations.indexOf(installations);
-          this.installations.splice(index, 0);
-        } else {
-          
-        }
-      },
-      updateInstallations() {
-        debugger;
-        this.installations = this.$store.dispatch('mes/getInstallationsByWorkCenter', this.selectedTask.workCenter);
+        this.$emit('removeInstallation', installation);
       }
     }
 }

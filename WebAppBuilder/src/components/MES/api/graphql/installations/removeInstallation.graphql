@@ -1,7 +1,10 @@
-mutation{
-  mesmutation {
-    removeInstallation(intallationId: $intallationId) {
-		result
+mutation($installationId:Int!){
+  mesMutation{
+    removeInstallation(installationId: $installationId) {
+		  success
+      errorMessage
+      successMessage
+      errorCode
     }
   }
 }

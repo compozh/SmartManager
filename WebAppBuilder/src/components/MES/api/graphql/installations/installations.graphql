@@ -1,7 +1,12 @@
 {
   mes {
     installations(workCenterCode: $workCenter) {
-		installations
+      installations{
+        id
+        description
+        batchCode
+        batchBarcode
+      }
     }
   }
 }

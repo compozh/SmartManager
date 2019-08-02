@@ -8,13 +8,13 @@
       <v-flex xs8 md8 sm8 lg8 class="task-description">
           <v-layout column wrap xs12 md12 sm12 lg12>
             <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
-              <mes-tasks-toolbar :layout=layout :selectedTask=selectedTask :installations=installations
-              @layout="changeLayout" @removeAllIntallations="removeAllIntallations" />
+              <mes-tasks-toolbar :layout=layout :selectedTask=selectedTask
+              @layout="changeLayout" @removeAllIntallations=removeAllIntallations />
             </v-flex>
             <mes-task-main-layout :selectedTask=selectedTask v-if="layout === 'mes-task-main-layout'" />
             <mes-accept-task-layout :selectedTask=selectedTask v-if="layout == 'mes-accept-task-layout'" />
             <mes-task-defect-layout :selectedTask=selectedTask v-if="layout == 'mes-task-defect-layout'" />
-            <mes-task-setup-materials-layout :selectedTask=selectedTask @removeIntallation="removeIntallation" v-if="layout == 'mes-task-setup-materials-layout'" />
+            <mes-task-setup-materials-layout :selectedTask=selectedTask :installations=installations @removeInstallation=removeInstallation v-if="layout == 'mes-task-setup-materials-layout'" />
           </v-layout>
       </v-flex>
     </v-layout>
@@ -30,9 +30,13 @@ export default {
   data: function() {
     return {
         layout: '',
-        selectedTask: {},
-        installations: []
+        selectedTask: {}
       };
+  },
+  computed: {
+        installations() {
+            return this.$store.getters['mes/installations'];
+        }
   },
   methods: {
        changeLayout(newLayout) {
@@ -58,25 +62,17 @@ export default {
             break;
         }
       },
-      removeAllIntallations(){
+      removeAllIntallations() {
         var me = this;
-        me.installations.forEach(installation =>{
+        me.installations.forEach(installation => {
           me.removeInstallation(installation);
         });
       },
       removeInstallation(installation) {
-        var result = this.$store.dispatch('mes/removeInstallation', installation);
-        debugger;
-        if(result == true) {
-          var index = this.installations.indexOf(installations);
-          this.installations.splice(index, 0);
-        } else {
-
-        }
+        this.$store.dispatch('mes/removeInstallation', installation);
       },
-      async updateInstallations() {
-        await this.$store.dispatch('mes/setupInstallationsByWorkCenter', this.selectedTask.workCenter);
-        this.installations = this.$store.getters['mes/installations'];
+      updateInstallations() {
+        this.$store.dispatch('mes/setupInstallationsByWorkCenter', this.selectedTask.workCenter);
       }
   }
 }

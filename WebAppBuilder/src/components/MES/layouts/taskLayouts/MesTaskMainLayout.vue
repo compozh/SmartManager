@@ -41,11 +41,6 @@ export default {
     return {blocks};
   },
   name: "mes-task-main-layout",
-  methods: {
-      onCardClick(data){
-        console.log(data)
-      }
-  }
 }
 </script>
 <style type="text/css" scoped>

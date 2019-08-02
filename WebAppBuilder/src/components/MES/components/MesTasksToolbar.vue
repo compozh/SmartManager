@@ -64,7 +64,7 @@ export default {
       this.$emit('layout', 'mes-task-defect-layout');
     },
     onclickRemoveAllInstallations() {
-      this.$emit('removeAllInstallations');
+      this.$emit('removeAllIntallations');
     }
   }
 }
