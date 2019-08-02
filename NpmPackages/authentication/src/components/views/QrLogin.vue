@@ -26,23 +26,21 @@
 </template>
 
 <script>
-import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import { QrcodeStream } from 'vue-qrcode-reader'
 // Добавил импорт на компонент без отрисовки
 import QrLoginRl from '../renderless/QrLogin'
 export default {
   components: {
     QrcodeStream,
-    QrcodeDropZone,
-    QrcodeCapture,
     QrLoginRl
   },
-  name:"QrLogin",
-  i18n:{
-    messages:{
+  name: 'QrLogin',
+  i18n: {
+    messages: {
       ru: {
         qrlogin: {
-          infoMessage:"Для входа в систему отсканируйте QR код",
-          tryAgain:"Повторить попытку"
+          infoMessage: 'Для входа в систему отсканируйте QR код',
+          tryAgain: 'Повторить попытку'
         }
       }
     }

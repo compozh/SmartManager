@@ -13,7 +13,7 @@
     "links": "npm link @it-enterprise/webAppsCore"
   },
   "dependencies": {
-    "@it-enterprise/authentication": "^1.0.6",
+    "@it-enterprise/authentication": "^1.0.7",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/eds": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.9",

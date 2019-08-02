@@ -87,14 +87,14 @@ import loginRl from '../renderless/Login'
 import qrLogin from './QrLogin'
 export default {
   name: 'login',
-  props:['allowQrMode'],
-  data(){
+  props: ['allowQrMode'],
+  data() {
     return {
-      qrMode:false
+      qrMode: false
     }
   },
   components: {
-    "login-rl": loginRl,
+    'login-rl': loginRl,
     'qr-login': qrLogin
   }
 }
