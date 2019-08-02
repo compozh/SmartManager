@@ -1,8 +1,13 @@
 <template>
     <div>
-        <v-btn v-bind:class="{checked:inCart}" class="add_button" @click.stop="" v-on:click.prevent="addToCart()" icon>
-            <v-icon v-text="inCart ? 'remove_shopping_cart' : 'add_shopping_cart'" />
+        <v-btn v-if="!inCart" v-bind:class="{checked:inCart}" class="add_button" @click.stop="" v-on:click.prevent="addToCart()" icon>
+            <v-icon v-text="'add_shopping_cart'" />
         </v-btn>
+        <router-link v-else :to="{ name:'CART', params: {cartItemId: keyValue.trim(), }}">
+            <v-btn v-bind:class="{checked:inCart}" class="add_button" icon>
+                <v-icon v-text="'shopping_cart'" />
+            </v-btn>
+        </router-link>
     </div>
 </template>
 
@@ -30,28 +35,31 @@ export default {
         }
     },
     created: function () {
-            this.$store.watch(state => state.purchases.cartitems, this.checkInFavourite);
-            this.checkInFavourite();
+        debugger;
+            this.$store.watch(state => state.purchases.cartitems, this.checkInCart);
+            this.checkInCart();
         },
     methods:{
         
         addToCart(){
             this.inCart = !this.inCart;
-            if(this.inFavourite){
+            if(this.inCart){
                 api.addToCartMutation(this.keyValue.toString());
-            }else{
-                api.deleteCartMutation(this.keyValue.toString());
             }
         },
 
-        checkInCart(){            
-            this.inCart = false;
+        checkInCart(){
             const cartlist = this.$store.getters["purchases/getCartItems"];
-           
             if(cartlist != null)
-            {                
-                this.inCart = cartlist.map((w) => w.keyValues).
-                    reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
+            {
+                for(let i=0;i<cartlist.length;i++){
+                    if(cartlist[i].resource.id == this.keyValue){
+                        this.inCart = true;
+                        break;
+                    }
+                }             
+                //this.inCart = cartlist.map((w) => w.keyValues).
+                //    reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
             }
            
         }
@@ -68,5 +76,11 @@ export default {
         color:green;
     }
 
+    a{
+        text-decoration: none;
+    }
+
 </style>
+
+
 
