@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <vue-title title="SmartManager"></vue-title>
     <v-toolbar
       app
       clipped-left

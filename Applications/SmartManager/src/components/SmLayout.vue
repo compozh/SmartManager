@@ -81,6 +81,11 @@
 export default {
   name: 'sm-layout',
   props: ['toolbarTitle'],
+  created() {
+    this.$signalR.connect('TEST', 'HTTPS://m.it.ua/ws/signalr/hubs', (mes) => {
+      console.log(mes)
+    })
+  },
   methods: {
     menuBtn() {
       if (this.taskAddForm) {
