@@ -35,8 +35,8 @@ export default {
       internalCurrentLanguage: undefined
     }
   } ,
-  mounted() {
-    this.internalCurrentLanguage = this.currentLanguage
+  created() {
+    this.internalCurrentLanguage = this.currentLanguage || 'ru'
     //Если есть параметр в url
     if (this.$route.query.language) {
       this.SetUpLanguageFromURLParameter()
