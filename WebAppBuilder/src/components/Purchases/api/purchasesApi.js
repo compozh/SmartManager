@@ -19,6 +19,7 @@ import favLists from './graphql/favLists.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
 import masurementSearch from './graphql/masurementSearch.gql'
 import addToCart from './graphql/addToCart.gql'
+import addToCartByApplicationId from './graphql/base/mutations/addToCartByApplicationId.gql'
 import updateCart from './graphql/updateCart.gql'
 import deleteAllCarts from './graphql/deleteAllCarts.gql'
 import deleteCart from './graphql/deleteCart.gql'
@@ -130,7 +131,7 @@ export class PurchasesApi {
     .then(this.getResourcesGroupsByParentGroupCallback)
     .catch(error => console.log(error.message))
   }
-
+  
   getResourcesGroupById(group){
     return client.query({
       query: gql`
@@ -252,6 +253,25 @@ export class PurchasesApi {
       variables: {resourceId: itemId}
     })
       .then(this.addToCartMutationCallback)
+      .catch(error => console.log(error.message))
+    }
+  
+  addToCartByApplicationIdCallback(response){
+    debugger;
+    let items = response.data.purchasesMutation.addToCartByApplicationId;
+    for(let i=0;i<items.length;i++){
+      store.commit('purchases/addCartItem', items[i]);
+    }
+    store.commit("purchases/setMessage", "Ресурсы добавлены в корзину.");
+  }
+
+  addToCartByApplicationId(applicationId){
+    debugger;
+    return client.mutate({
+      mutation: gql`${addToCartByApplicationId}`,
+      variables: {applicationId: applicationId}
+    })
+      .then(this.addToCartByApplicationIdCallback)
       .catch(error => console.log(error.message))
     }
   
@@ -524,7 +544,6 @@ addToFavoritesMutationCallbackFirst(result){
   }
   
   getResourcesByIds(ids){
-    //debugger;
     return client.query({
       query: gql`${recoursesByIds}`,
       variables: { ids: ids }//,

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.entityType==='resource'">
         <v-btn v-if="!inCart" v-bind:class="{checked:inCart}" class="add_button" @click.stop="" v-on:click.prevent="addToCart()" icon>
             <v-icon v-text="'add_shopping_cart'" />
         </v-btn>
@@ -8,6 +8,11 @@
                 <v-icon v-text="'shopping_cart'" />
             </v-btn>
         </router-link>
+    </div>
+    <div v-else>
+        <v-btn v-if="!inCart" class="add_button" @click.stop="" v-on:click.prevent="addToCart()" icon>
+            <v-icon v-text="'add_shopping_cart'" />
+        </v-btn>
     </div>
 </template>
 
@@ -32,6 +37,10 @@ export default {
         keyValue:{
             type: String,
             required: true
+        },
+        entityType:{
+            type: String,
+            required: true
         }
     },
     created: function () {
@@ -42,9 +51,14 @@ export default {
     methods:{
         
         addToCart(){
-            this.inCart = !this.inCart;
-            if(this.inCart){
-                api.addToCartMutation(this.keyValue.toString());
+            if(this.entityType === "resource"){
+                this.inCart = !this.inCart;
+                if(this.inCart){
+                    api.addToCartMutation(this.keyValue.toString());
+                }
+            }else{
+                api.addToCartByApplicationId(this.keyValue.toString());
+                
             }
         },
 
