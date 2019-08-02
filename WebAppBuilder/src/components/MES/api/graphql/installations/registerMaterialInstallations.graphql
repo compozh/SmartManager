@@ -1,0 +1,10 @@
+mutation($workCenterCode:String!){
+  mesMutation{
+    removeInstallation(installationId: $installationId) {
+		  success
+      errorMessage
+      successMessage
+      errorCode
+    }
+  }
+}

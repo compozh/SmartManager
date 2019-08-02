@@ -3,26 +3,24 @@
     <v-flex
       class="toolbar-basebuttons"
 
-      v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
+      v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-main-layout'">
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
       :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'" @click="onclickAccept">Взять в работу</v-btn>
-      <v-btn
-      outlined v-if="selectedTask.state == 'IN_WORK'"
-      @click="onclickDefect">Брак</v-btn>
     </v-flex>
       <v-flex
       grow
       v-if="layout === 'mes-task-setup-materials-layout'">
-        <v-text-field
+        <v-text-field 
           class="qr-input"
           label="Укажите QR-партии материала для установки"
           required
         ></v-text-field>
+        <v-btn outlined @click="onclickScan"><v-icon dark>remove</v-icon></v-btn>
       </v-flex>
       <v-flex class="downtime-btn"
-        v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
+        v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-main-layout'">
         <v-btn
         outlined color="error" @click="onclickDowntime($event)">Простой</v-btn>
     </v-flex>
@@ -42,10 +40,10 @@ export default {
     selectedTask: Object
   },
   methods:{
-    onclickSetupMaterial: function(event) {
+    onclickSetupMaterial(event) {
       this.$emit('layout', 'mes-task-setup-materials-layout');
     },
-    onclickAccept: function(event) {
+    onclickAccept(event) {
         let target = event.target;
         if(!target.state || target.state === "accept") {
           this.applyWorkColor = 'error';
@@ -57,14 +55,14 @@ export default {
            target.textContent = "Взять в работу";
         }
     },
-    onclickDowntime: function(event) {
+    onclickDowntime(event) {
 
-    },
-    onclickDefect: function(event) {
-      this.$emit('layout', 'mes-task-defect-layout');
     },
     onclickRemoveAllInstallations() {
       this.$emit('removeAllIntallations');
+    },
+    onclickScan(){
+      
     }
   }
 }
