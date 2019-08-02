@@ -5,9 +5,10 @@
       var devMode = '<%= NODE_ENV %>' == "development"
       devMode = false
       window.myConfig = {
-        GrapgQlUrl: "http://localhost:5002/", // devMode ? "http://localhost:5002/" : "/GraphQlServer/",
+        GrapgQlUrl: devMode ? "http://localhost:5002/" : "https://m.it.ua/GraphQlServer/",
         BASE_URL:"<%= BASE_URL %>",
-        WsUrl: devMode ? "http://localhost:64137/ws/api/" : "https://m.it.ua/mfudev/ws/api/"
+        WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
+        SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
       }
     </script>
     <meta charset="utf-8">
