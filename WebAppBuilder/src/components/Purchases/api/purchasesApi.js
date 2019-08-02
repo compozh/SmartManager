@@ -39,6 +39,8 @@ import applications from './graphql/applications.gql'
 import docStatus from '../api/graphql/docStatus.gql'
 import recoursesByIds from '../api/graphql/recoursesByIds.gql' 
 import applicationsByIds from '../api/graphql/applicationsByIds.gql' 
+import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.gql'
+
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -257,7 +259,6 @@ export class PurchasesApi {
     }
   
   addToCartByApplicationIdCallback(response){
-    debugger;
     let items = response.data.purchasesMutation.addToCartByApplicationId;
     for(let i=0;i<items.length;i++){
       store.commit('purchases/addCartItem', items[i]);
@@ -266,7 +267,6 @@ export class PurchasesApi {
   }
 
   addToCartByApplicationId(applicationId){
-    debugger;
     return client.mutate({
       mutation: gql`${addToCartByApplicationId}`,
       variables: {applicationId: applicationId}
@@ -435,7 +435,7 @@ addToFavoritesMutationCallbackFirst(result){
   getFavListInputTypeParam(favList)
   {
     let test =  {
-        id:                 favList.id != null ? favList.id: favList.listiD,
+        id:                 favList.id,//favList.id != null ? favList.id: favList.listiD,
         alias:              favList.alias,
         caption:            favList.caption,
         comment:            "",
@@ -445,6 +445,15 @@ addToFavoritesMutationCallbackFirst(result){
     }
 
   return test;
+  }
+
+  mutationChangeListForItem(keyValue, newFavListId, oldFavListId)
+  {
+    return client.mutate({
+      mutation: gql`${mutationChangeListForItem}`,
+      variables: { keyValue: keyValue, newFavListId: newFavListId, oldFavListId : oldFavListId}     
+    })
+      .catch(error => {console.log(error.message)});
   }
 
   mutationEditFavList(favList){

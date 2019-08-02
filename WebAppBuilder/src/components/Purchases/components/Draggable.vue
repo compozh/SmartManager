@@ -9,7 +9,7 @@
               <v-subheader>
                 FIRST LIST
               </v-subheader>
-              <draggable v-model="items" :options="{group:'people'}" style="min-height: 10px">
+              <draggable v-model="items" :move="onmove" :options="{group:'people'}" style="min-height: 10px">
                 <template v-for="item in items">
               <v-list-tile :key="item.id" avatar>
                 <v-list-tile-avatar>
@@ -58,6 +58,11 @@ export default {
      name: "draggable-first",
      components: {
       draggable,
+     },
+     methods: {
+       onmove(){
+         console.log("4343");
+       },
      },
     data() {
     return {

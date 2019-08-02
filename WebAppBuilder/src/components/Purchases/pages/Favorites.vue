@@ -9,8 +9,9 @@
       grey
       lighten-4
     >
-      <onefavlist :listId="favList.id" :isEditable="true" />
-      
+    <div v-if="favList">
+      <onefavlist :listId="favList.id" :isEditable="true" > </onefavlist>
+    </div>
     </v-container>
     
     <div>
@@ -26,17 +27,14 @@
 import {PurchasesApi} from "../api/purchasesApi";
 
 const api = new PurchasesApi();
-import draggable from 'vuedraggable';
 
   export default {
      name: "mylist",
-     components: {
-      draggable,
-     },
+     
     data: () => ({
+    
     }),
     created() {
-      
     },
     async mounted(){
       await api.getFavLists();
@@ -58,11 +56,9 @@ import draggable from 'vuedraggable';
       },
     },
     methods: {
-      ondrag(){},
-
       mutationCreateFavList()
       {
-        api.mutationCreateFavList()
+        api.mutationCreateFavList();
       },
     }
   }

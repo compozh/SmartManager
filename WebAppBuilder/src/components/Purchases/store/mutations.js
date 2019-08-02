@@ -39,7 +39,7 @@ export default {
   addToFavLists(state, payload){
     let favListItem = { 
       alias : payload.Alias,  
-      listiD : payload.Id.toString(), 
+      id : payload.Id.toString(), 
       keyValues : payload.KeyValues, 
       caption : payload.Caption, 
       isDefaultList: payload.IsDefaultList
@@ -96,24 +96,20 @@ export default {
     //debugger;
   },
   addResources(state, payload){
+    
+    state.favResources = payload;
+    /*
     let oldRes = state.resources;
     payload.forEach(w=> {
-      if( !oldRes.map(x => x.id).some(y => y==w.id))
+      if(!oldRes.map(x => x.id).some(y => y==w.id))
       {
         state.resources.push(w);
-      }/*else{
-        state.resources =  state.resources.filter(x=>x.id != w.id);
-        state.resources.push(w);
-      }*/
+      }
     });
     let test = state.resources.concat(payload);
-    //state.resources = payload;
     
     state.resources = state.resources;
-/*
-    let test = state.resources.concat(payload);
-    
-    state.resources= test;*/
+  */
   },
   addApplications(state, payload){
     let oldAppl = state.applications;

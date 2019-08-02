@@ -44,7 +44,7 @@ export default {
         }
     },
     created: function () {
-        debugger;
+        //debugger;
             this.$store.watch(state => state.purchases.cartitems, this.checkInCart);
             this.checkInCart();
         },
