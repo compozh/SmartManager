@@ -10,4 +10,5 @@
 **/Web.Release.config
 **/.idea/.idea.*
 **/*.nupkg
+**/package-lock.json
 /Dashboard Kit health/public/AppSettings_1.json
