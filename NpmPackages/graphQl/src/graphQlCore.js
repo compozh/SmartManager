@@ -61,6 +61,13 @@ export default class GraphQlCore {
     return response.data
 
   }
+  // Вход пользователя по QR коду
+  async LoginByQr(id) {
+    const response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/alternativelogin`, {code: id, type: 2}, {
+      withCredentials: true
+    })
+    return response.data
+  }
 
   /**
    * Получение полной информации о текущем пользователе
