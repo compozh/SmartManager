@@ -39,7 +39,7 @@ export default {
          this.layout = newLayout;
       },
       changeCurrentTask(newSelectedTask) {
-        let workCenter = this.selectedTask.workCenter;        
+        let workCenter = this.selectedTask.workCenter;
         this.selectedTask = newSelectedTask;
 
         if(workCenter != newSelectedTask.workCenter)
@@ -71,7 +71,7 @@ export default {
           var index = this.installations.indexOf(installations);
           this.installations.splice(index, 0);
         } else {
-          
+
         }
       },
       async updateInstallations() {
@@ -86,10 +86,7 @@ export default {
     padding: 0 !important;
     margin: 0 !important;
   }
-  /* .tasks-list{
-overflow-y: scroll;
-  } */
-  /* .task-description{
-    overflow-y: scroll;
-  } */
+  .button-toolbar.row {
+    margin: 0;
+  }
 </style>

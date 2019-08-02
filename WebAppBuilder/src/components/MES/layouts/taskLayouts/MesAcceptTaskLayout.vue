@@ -13,6 +13,16 @@
                 :margin="[20, 20]"
                 :use-css-transforms="true"
                 >
+                <grid-item
+                        :x="0"
+                        :y="0"
+                        :w="12"
+                        :h="50"
+                        :i="'0'"
+                        :isDraggable=false
+                        class="grid-element">
+                       <mes-form-builder/>
+               </grid-item>
                <grid-item v-for="item in blocks" :key="item.i"
                         :x="item.x"
                         :y="item.y"
@@ -36,8 +46,7 @@ export default {
   },
   data: function(){
      let blocks = [
-        {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0'}, 
-        {'x':0, 'y':6, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
+        {'x':0, 'y':50, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
     return {blocks};
   },

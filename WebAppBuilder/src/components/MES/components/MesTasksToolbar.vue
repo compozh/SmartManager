@@ -2,7 +2,7 @@
   <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
     <v-flex
       class="toolbar-basebuttons"
-      grow
+
       v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-defect-layout' || layout == 'mes-task-main-layout'">
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn
@@ -82,12 +82,15 @@ export default {
     flex-wrap: wrap;
     justify-content: flex-start;
   }
+  .toolbar.row {
+    margin: 0;
+  }
   .qr-input{
     width: 500px;
   }
   .downtime-btn {
-    width: 120px;
-    max-width: 120px;
+    width: 150px;
+    max-width: 150px;
   }
   .setup-material-btn {
     width: 200px;
