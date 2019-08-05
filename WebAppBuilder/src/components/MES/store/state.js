@@ -7,10 +7,10 @@ export default {
   workCenters: [],
   tasks: {},
   installations: {},
-  usersProductionEvents: {},
+  productions: [],
   menuMiniMode: true,
   initializeWorkCenters: false,
   initializeInstallations: false,
   initializeTasks: false,
-  initializeUsersProductionEvents: false
+  initializeProductions: false
 }

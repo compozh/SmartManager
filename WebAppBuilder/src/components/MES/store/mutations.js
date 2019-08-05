@@ -6,20 +6,17 @@ export default {
   setError(state, payload) {
     state.error = payload
   },
-  setProperties(state, payload) {
-    state.properties = payload
+  setProperties(state, properties) {
+    state.properties = properties
   },
-  setCurrentWorkCenter(state, payload) {
-    state.currentWorkCenter = payload
+  setWorkCenters(state, workCenters) {
+    state.workCenters = workCenters;
   },
-  setWorkCenters(state, payload) {
-    state.workCenters = payload
+  setTasks(state, tasks) {
+    state.tasks = tasks;
   },
-  setTasks(state, payload) {
-    state.tasks = payload
-  },
-  setInstallations(state, payload) {
-    state.installations = payload
+  setInstallations(state, installations) {
+    state.installations = installations;
   },
   setInitializeWorkCenters(state, initializeWorkCenters) {
     state.initializeWorkCenters = initializeWorkCenters;
@@ -40,11 +37,15 @@ export default {
       installationsByWorkCenter.splice(index, 1);
     }
   },
-  setUsersProductionEvents(state, usersProductionEvents) {
-    state.usersProductionEvents = usersProductionEvents;
+  setProductions(state, productions) {
+    state.productions = productions;
   },
-  setInitializeUsersProductionEvents(state, initializeUsersProductionEvents) {
-    state.initializeUsersProductionEvents = initializeUsersProductionEvents;
+  setInitializeProductions(state, initializeProductions) {
+    state.initializeProductions = initializeProductions;
+  },
+  removeProduction(state, production) {
+      let index = state.productions.indexOf(production);
+      state.productions.splice(index, 1);
   },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload

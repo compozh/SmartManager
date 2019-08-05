@@ -1,6 +1,6 @@
 {
   mes {
-    usersProductionEvents(workCenterCode: $workCenter) {
+    usersProductionEvents(workerCode: $workerCode) {
         factId
         workBarcode
         workCenterCode
@@ -8,13 +8,13 @@
         description
         color
         isPersonnelRegistration
-        isWriteoffRegistration
+        isWriteOffRegistration
         isWasteRegistration
         orderWasteRegistration
         isOneBatch
         savedProgress
-        isSpBatch
-        canEditReg
+        spentBatchesRegistration
+        canEditRegistration
     }
   }
 }

@@ -3,16 +3,14 @@ import {MesApi} from '../api/mesApi'
 const api = new MesApi()
 
 export default {
-  async getProperties({commit}) {
+  async initializeProperties({commit}) {
 
     commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
-      const result = await api.getPropertiesFromGql()
-      const workCenters = result.data.mes.properties
-
-      commit('setProperties', properties)
+      const result = await api.getPropertiesFromGql();
+      commit('setProperties', result.data.mes.properties)
       commit('setCircularLoader', false)
 
     } catch (e) {
@@ -183,22 +181,33 @@ export default {
       commit('setError', e.message)
     }
   },
-  async initializeUsersProductionEvents({ getters, commit }, workCenters) {
-    if(getters.initializeUsersProductionEvents) {
+  async initializeProductions({ getters, commit }, workerCode) {
+    if(getters.initializeProductions) {
       return;
     }
     commit('setError', null)
     commit('setCircularLoader', true)
-    commit('setInitializeUsersProductionEvents', true)
+    commit('setInitializeProductions', true)
 
     try {
-      var usersProductionEvents = {};
-      for(var i = 0; i < workCenters.length; i++) {
-        let workCenter = workCenters[i],
-          result = await api.usersProductionEventsGql(workCenter.code);
-        usersProductionEvents[workCenter.code] = result.data.mes.usersProductionEvents;
+      let result = await api.getProductionsFromGql(workerCode);
+      commit('setProductions', result.data.mes.usersProductionEvents);
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async deleteProduction({ commit }, production) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      let result = await api.deleteProductionGql(production.factId);
+      debugger;
+      if(true) {
+        commit('deleteProduction', production);
       }
-      commit('setUsersProductionEvents', usersProductionEvents);
       commit('setCircularLoader', false)
     } catch (e) {
       commit('setCircularLoader', false)
