@@ -1812,6 +1812,9 @@ export default {
     background-color: #007bff;
     color: white;
   }
+  .btn.btn-default.btn-sm.editRow:hover{
+    background-color: #015bbb;
+  }
   .table.datagrid-table.table-bordered thead {
     font-size: 16px;
   }

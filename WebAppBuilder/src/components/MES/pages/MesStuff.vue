@@ -81,4 +81,7 @@ export default {
   max-width: 400px;
   margin: 10px;
 }
+.wait-for-data-block {
+  padding: 20px;
+}
 </style>

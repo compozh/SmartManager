@@ -82,7 +82,8 @@ export default {
     margin: 0;
   }
   .qr-input{
-    width: 500px;
+    width: 400px;
+    max-width: 400px;
     height: 55px;
   }
   .downtime-btn {

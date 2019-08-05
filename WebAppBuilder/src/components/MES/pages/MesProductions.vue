@@ -62,4 +62,7 @@ export default {
   margin: 10px;
   max-width: 400px;
 }
+.wait-for-data-block {
+  padding: 20px;
+}
 </style>
