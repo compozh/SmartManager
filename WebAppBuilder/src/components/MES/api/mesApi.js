@@ -88,7 +88,8 @@ export class MesApi {
     try {
       const result = await client.query({
         query: gql`query ($workCenter: String) ${installations}`,
-        variables: { workCenter }
+        variables: { workCenter },
+        fetchPolicy: 'network-only'
       });
       return result;
     }

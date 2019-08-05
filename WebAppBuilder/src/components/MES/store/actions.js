@@ -16,7 +16,7 @@ export default {
     }
     commit('setLinearLoader', false)
   },
-  async initializeWorkCenters({ getters, commit }, { uuid, login }) {
+  async initializeWorkCenters({ commit }, { uuid, login }) {
     commit('setError', null)
     commit('setLinearLoader', true)
     try {
@@ -27,7 +27,7 @@ export default {
     }
     commit('setLinearLoader', false)
   },
-  async initializeTasks({ getters, commit}, workCenters) {
+  async initializeTasks({ commit}, workCenters) {
     commit('setError', null)
     commit('setLinearLoader', true)
     try {
@@ -48,7 +48,7 @@ export default {
     }
     commit('setLinearLoader', false);
   },
-  async initializeInstallations({ getters, commit}, workCenters) {
+  async initializeInstallations({ commit}, workCenters) {
     commit('setError', null)
     commit('setLinearLoader', true)
 
@@ -150,7 +150,7 @@ export default {
     }
     commit('setLinearLoader', false)
   },
-  async initializeProductions({ getters, commit }, workerCode) {
+  async initializeProductions({ commit }, workerCode) {
     commit('setError', null)
     commit('setLinearLoader', true)
 
