@@ -7,6 +7,7 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
+      <span>{{workCenters && workCenters.length ? workCenters[0].name : ''}}</span>
       <v-flex class="grow-0">
         <user-panel mini="true"></user-panel>
       </v-flex>
@@ -17,7 +18,20 @@
 
 <script>
 export default {
-  name: "mes-toolbar"
+  name: "mes-toolbar",
+  created() {
+    this.initialize();
+  },
+  computed: {
+    workCenters() {
+        return this.$store.getters['mes/workCenters'];
+    }
+  },
+  methods: {
+    async initialize() {
+      await this.$store.dispatch('mes/initializeWorkCenters', { uuid: "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=" });
+    }
+  }
 };
 </script>
 

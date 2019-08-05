@@ -3,6 +3,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag'
 // Queries
+import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import installations from './graphql/installations/installations.graphql'
@@ -129,7 +130,7 @@ export class MesApi {
       return console.log(error.message);
     }
   }
-  async productionsGql(workerCode) {
+  async getProductionsFromGql(workerCode) {
     try {
       const result = await client.query({
         query: gql`query ($workerCode: String) ${productions}`,

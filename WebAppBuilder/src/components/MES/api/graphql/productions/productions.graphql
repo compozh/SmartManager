@@ -8,13 +8,13 @@
         description
         color
         isPersonnelRegistration
-        isWriteoffRegistration
+        isWriteOffRegistration
         isWasteRegistration
         orderWasteRegistration
         isOneBatch
         savedProgress
-        isSpBatch
-        canEditReg
+        spentBatchesRegistration
+        canEditRegistration
     }
   }
 }

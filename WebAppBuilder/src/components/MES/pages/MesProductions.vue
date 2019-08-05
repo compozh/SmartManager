@@ -42,7 +42,8 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeProductions', this.properties);
+      await this.$store.dispatch('mes/initializeProperties');
+      await this.$store.dispatch('mes/initializeProductions', this.properties.workerCode);
       this.initializeProductions = true;
     },
     deleteProduction(production) {

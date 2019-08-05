@@ -1,18 +1,18 @@
 export default {
   circularLoader(state) {
-    return state.circularLoader
+    return state.circularLoader;
   },
   linearLoader(state) {
-    return state.linearLoader
+    return state.linearLoader;
   },
   error(state) {
-    return state.error
+    return state.error;
   },
-  getProperties(state) {
-    return state.properties
+  properties(state) {
+    return state.properties;
   },
   workCenters(state) {
-    return state.workCenters
+    return state.workCenters;
   },
   tasks(state) {
     return state.tasks;

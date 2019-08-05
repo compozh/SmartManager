@@ -3,16 +3,14 @@ import {MesApi} from '../api/mesApi'
 const api = new MesApi()
 
 export default {
-  async getProperties({commit}) {
+  async initializeProperties({commit}) {
 
     commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
-      const result = await api.getPropertiesFromGql()
-      const workCenters = result.data.mes.properties
-
-      commit('setProperties', properties)
+      const result = await api.getPropertiesFromGql();
+      commit('setProperties', result.data.mes.properties)
       commit('setCircularLoader', false)
 
     } catch (e) {
@@ -192,7 +190,7 @@ export default {
     commit('setInitializeProductions', true)
 
     try {
-      let result = await api.productionsGql(workerCode);
+      let result = await api.getProductionsFromGql(workerCode);
       commit('setProductions', result.data.mes.usersProductionEvents);
       commit('setCircularLoader', false)
     } catch (e) {
