@@ -84,6 +84,19 @@ export class MesApi {
     }
   }
 
+  async updateInstallationsFromGql(workCenter) {
+    try {
+      const result = await client.query({
+        query: gql`query ($workCenter: String) ${installations}`,
+        variables: { workCenter }
+      });
+      return result;
+    }
+    catch (error) {
+      return console.log(error.message);
+    }
+  }
+
   async removeInstallationGql(installationId) {
     try {
       let result = await client.mutate({

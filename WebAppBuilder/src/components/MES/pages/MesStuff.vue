@@ -1,6 +1,6 @@
 <template>
     <v-layout class="mes-stuff">
-      <mes-stuff-toolbar class="mes-stuff-toolbar" @removeAllInstallations=removeAllInstallations @submitQrCode=submitQrCode />
+      <mes-stuff-toolbar class="mes-stuff-toolbar" :installations=installations @removeAllInstallations=removeAllInstallations @submitQrCode=submitQrCode />
       <div v-if="!initializeInstallations" class="wait-for-data-block">
             <ContentLoader>
               <rect x="0" y="0" rx="3" ry="3" width="400" height="10" />

@@ -6,10 +6,10 @@
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode">
     </v-text-field>
-    <v-btn outlined @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
+    <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
   </v-flex>
   <v-flex class="setup-material-btn" xs2>
-    <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
+    <v-btn outlined v-if="installationsAny" @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
   </v-flex>
 </v-layout>
 </template>
@@ -19,6 +19,22 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-stuff-toolbar",
+  props: {
+    installations: Object
+  },
+  computed: {
+    installationsAny() {
+      var me = this,
+        any = false;
+      Object.keys(me.installations).forEach(workCenter => {
+        var installations = me.installations[workCenter];
+        if(!any) {
+          any = installations.length;
+        }
+      });
+      return any;
+    }
+  },
   methods: {
     onclickRemoveAllInstallations() {
       this.$emit('removeAllInstallations');
@@ -31,7 +47,6 @@ export default {
   }
 }
 </script>
-
 
 <style type="text/css" scoped>
   .toolbar {
@@ -66,5 +81,8 @@ export default {
   .mes-stuff-toolbar-qr {
     display: flex;
     align-items: center;
+  }
+  .mes-scan {
+    min-width: auto;
   }
 </style>

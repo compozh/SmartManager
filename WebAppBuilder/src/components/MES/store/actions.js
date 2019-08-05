@@ -97,7 +97,6 @@ export default {
     try {
       let result = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId);
       if(result.success == true) {
-        debugger;
         await this.dispatch('mes/updateInstallationsByWorkCenter', workCenterCode);
       } else {
         commit('setError', result.errorMessage);
@@ -156,7 +155,7 @@ export default {
     commit('setCircularLoader', true)
 
     try {
-      let result = await api.getInstallationsFromGql(workCenterCode);
+      let result = await api.updateInstallationsFromGql(workCenterCode);
       commit('setInstallationsByWorkCenter', { installations: result.data.mes.installations.installations, workCenterCode });
       commit('setCircularLoader', false)
     } catch (e) {
