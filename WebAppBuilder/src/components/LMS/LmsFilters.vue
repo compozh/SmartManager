@@ -16,7 +16,7 @@
 							<!-- Если нет доступного фильтра - скрыть кнопку -->
 							<v-layout v-for="(filter, index) in filters" :key="index">
 								<v-btn
-											v-if="filter.items.length > 0"
+                      v-if="filter.items.length > 0"
 											:value="index + 1"
 											@click="setFilter(index)"
 											flat
@@ -70,6 +70,9 @@
 <script>
 export default {
 	name: 'Filters',
+  props: {
+		filters: Array
+	},
 	data() {
 		return {
 			// текущий активный фильтр
@@ -78,9 +81,6 @@ export default {
 			currentFilters: [],
 			filtersLoaded: false
 		}
-	},
-	props: {
-		filters: Array
 	},
 	methods: {
 		applyFilter() {

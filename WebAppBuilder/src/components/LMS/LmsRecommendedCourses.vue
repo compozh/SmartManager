@@ -1,11 +1,11 @@
 <template>
 	<v-container fluid>
-		<!-- <v-layout wrap row align-center justify-center>
+		<v-layout wrap row align-center justify-center>
 			<v-flex v-for='course in recommendedCourses' :key='course.courseId' lg4 md4 sm6 xs122>
 				<v-card class='mx-2 my-2' hover height='265px'>
 					<v-layout v-bind:style="{'background-color': course.backgroundColor}">
 						<v-flex ml-2 xs4 mt-2 mb-2>
-							<v-card-media
+							<v-img
 								v-show="course.imageLink"
 								v-bind:src='course.imageLink'
 								height='80px'
@@ -43,11 +43,8 @@
 					</v-layout>
 				</v-card>
 			</v-flex>
-		</v-layout> -->
-    <div v-for='(course, index) in recommendedCourses' :key="index">
-      <p>{{course.name}}</p>
-      <p>{{course.courseGuid}}</p>
-    </div>
+		</v-layout>
+
 	</v-container>
 </template>
 
@@ -60,6 +57,9 @@ export default {
   data: () => ({
     favIconColor: "grey"
   }),
+  created () {
+
+  },
   methods: {
     changeFavoriteState: function(course){
       course.isFavorite = !course.isFavorite;

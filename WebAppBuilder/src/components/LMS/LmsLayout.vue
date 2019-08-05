@@ -70,8 +70,6 @@
 			<span>IT-Enterprise 2018</span>
 		</v-footer>
 
-
-
 	</v-app>
 </template>
 

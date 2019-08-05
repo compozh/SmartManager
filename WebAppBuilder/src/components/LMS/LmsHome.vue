@@ -28,7 +28,7 @@
 
 <script>
 
-import image from "./Assets/home.jpg"
+import image from "./assets/home.jpg"
 
 export default {
   name: "lms-home",

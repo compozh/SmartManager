@@ -13,7 +13,7 @@
 		</v-layout>
 		<h5 class='title font-weight-regular text-xs-left mx-2 mt-3 mb-4'>{{searchResult.resultsQt}} Результатов</h5>
 		<v-layout wrap row>
-			<v-flex v-for='moduleData in moduleCards' :key='moduleData.courseId' xs12>
+			<v-flex v-for='moduleData in modules' :key='moduleData.courseId' xs12>
 				<v-card class='mx-2 my-2' hover>
 					<v-layout>
 						<v-flex xs2 sm1 ml-2 mt-3 mb-2>
@@ -62,17 +62,25 @@ var searchTimeoutId = 0;
 var searchParamsData = { phrase: "" };
 export default {
   name: "lms-search",
-  beforeCreate() {},
-  created() {},
+  props: ['modules'],
+  created() {
+
+  },
   mounted() {
+
   },
   beforeUpdate() {},
-  data: () => ({
-    favIconColor: "grey",
-		searchParams: searchParamsData,
-    searchResult: searchResultData,
-    moduleCards: moduleCardsData
-  }),
+  data() {
+    return {
+      favIconColor: "grey",
+		  searchParams: searchParamsData,
+      searchResult: searchResultData,
+      searchResultData: {
+        resultsQt: 10,
+        results: []
+      }
+    }
+  },
   methods: {
     searchPhraseChanged: function() {
       //при вводе поискового запроса, запустить поиск в случае, если уже три секунды ничего не вводят
