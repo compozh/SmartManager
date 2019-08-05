@@ -11,8 +11,8 @@
               <rect x="20" y="100" rx="3" ry="3" width="350" height="10" />
             </ContentLoader>
           </div>
-    <div v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
-    <v-card class="card" v-for="installation in installationsByWorkCenter" :key="installation.id">
+    <div class="installations-block" v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
+    <v-card class="installation-card" v-for="installation in installationsByWorkCenter" :key="installation.id">
       <mes-installation :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
     </v-card>
     </div>
@@ -52,12 +52,12 @@ export default {
       Object.keys(me.installations).forEach(workCenterCode => {
         var installationsByWorkCenters = me.installations[workCenterCode];
         installationsByWorkCenters.forEach(installation => {
-          me.removeInstallation({ installation, workCenterCode });
+          me.removeInstallation(installation, workCenterCode);
         });
       });
     },
-    removeInstallation({ installation, workCenterCode }) {
-        this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
+    removeInstallation(installation, workCenterCode) {
+      this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
     },
     submitQrCode(code) {
       let workCenters = this.workCenters;
@@ -72,4 +72,13 @@ export default {
   .mes-stuff{
     display: block;
   }
+  .installations-block {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.installation-card{
+  max-width: 400px;
+  margin: 10px;
+}
 </style>
