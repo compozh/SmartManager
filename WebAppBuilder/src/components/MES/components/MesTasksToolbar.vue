@@ -13,7 +13,7 @@
       <v-flex grow class="mes-tasks-toolbar-qr"
       v-if="layout === 'mes-task-stuff-layout'">
       <v-btn outlined class="mes-arrow-back" @click="backToMainLayout"><v-icon dark>arrow_back</v-icon></v-btn>
-        <v-text-field 
+        <v-text-field
           class="qr-input"
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode"
@@ -75,12 +75,15 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    height: 60px;
+    align-items: center;
   }
   .toolbar.row {
     margin: 0;
   }
   .qr-input{
     width: 500px;
+    height: 55px;
   }
   .downtime-btn {
     width: 150px;
@@ -92,6 +95,7 @@ export default {
   }
   .mes-tasks-toolbar-qr {
     display: flex;
+    align-items: center;
   }
   .mes-scan {
     min-width: auto;

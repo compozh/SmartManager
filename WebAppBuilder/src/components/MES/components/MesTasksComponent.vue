@@ -29,8 +29,8 @@
             </ContentLoader>
           </div>
           <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
-          <v-card class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
-            <div v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
+          <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
+            <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'" v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
               <v-card-text>
                 <span v-html="task.description"></span>
               </v-card-text>
@@ -87,6 +87,9 @@ export default {
   }
   .change-tasks-status-toolbar {
     padding-left: 5px;
+  }
+  .active-task-item {
+    background-color: #d5e5ff;
   }
   .lack-of-tasks-str {
     font-size: 1.5em;
