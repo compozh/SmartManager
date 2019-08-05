@@ -17,7 +17,7 @@
                         :x="0"
                         :y="0"
                         :w="12"
-                        :h="50"
+                        :h="12"
                         :i="'0'"
                         :isDraggable=false
                         class="grid-element">
@@ -46,7 +46,7 @@ export default {
   },
   data: function(){
      let blocks = [
-        {'x':0, 'y':50, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
+        {'x':0, 'y':12, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
     return {blocks};
   },

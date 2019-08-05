@@ -1,7 +1,5 @@
 <template>
-    <v-layout class="formio-container">
-        <formio id="formio" :form='myform' v-on:submit="onSubmit()"></formio>
-    </v-layout>
+  <formio id="formio" class="formio-container" :form='myform' v-on:submit="onSubmit()"></formio>
 </template>
 <script>
 import {mapGetters} from 'vuex'
