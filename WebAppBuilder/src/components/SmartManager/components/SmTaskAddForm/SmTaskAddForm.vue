@@ -18,7 +18,6 @@
                 clearable
               ></v-text-field>
             </v-flex>
-
             <v-flex xs12>
               <sm-task-add-form-select
                 label="Ответственный"
@@ -150,14 +149,23 @@
                 multiple
               ></sm-task-add-form-select>
             </v-flex>
-            <v-flex text-xs-right>
-              <v-btn @click="closeTaskAddForm">Отмена</v-btn>
-              <v-btn
-                :disabled="!valid"
-                color="blue darken-2 white--text"
-                @click="createTask"
-              >Создать
-              </v-btn>
+            <v-flex xs12>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <file-upload-add-task-form></file-upload-add-task-form>
+                </v-flex>
+                <v-flex xs12 class="button-container">
+                  <v-spacer></v-spacer>
+                  <v-btn @click="closeTaskAddForm">Отмена</v-btn>
+                  <v-btn
+                    class="mr-0"
+                    :disabled="!valid"
+                    color="blue darken-2 white--text"
+                    @click="createTask"
+                  >Создать
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -212,7 +220,6 @@
     methods: {
       closeTaskAddForm() {
         this.$store.commit('sm/setTaskAddForm', 'close')
-        this.setMenuMode('open')
       },
       createTask() {
         const newTask = {
@@ -252,5 +259,13 @@
 </script>
 
 <style scoped>
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
+  .upload-btn {
+    display: flex;
+    align-items: center;
+  }
 </style>

@@ -3,7 +3,8 @@
     <v-layout
       class="comment-item text-xs-left"
       row wrap
-      v-for="comment in task.comments"
+      v-for="(comment, index) in task.comments"
+      :key="index"
     >
       <v-flex
         xs1
