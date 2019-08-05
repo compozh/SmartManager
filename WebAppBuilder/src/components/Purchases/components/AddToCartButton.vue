@@ -44,7 +44,6 @@ export default {
         }
     },
     created: function () {
-        //debugger;
             this.$store.watch(state => state.purchases.cartitems, this.checkInCart);
             this.checkInCart();
         },
@@ -64,18 +63,16 @@ export default {
 
         checkInCart(){
             const cartlist = this.$store.getters["purchases/getCartItems"];
-            if(cartlist != null)
+            let onlyWithResources = cartlist.filter(x=>x.resource != null)
+            if(onlyWithResources != null)
             {
-                for(let i=0;i<cartlist.length;i++){
-                    if(cartlist[i].resource.id == this.keyValue){
+                for(let i=0;i<onlyWithResources.length;i++){
+                    if(onlyWithResources[i].resource.id == this.keyValue){
                         this.inCart = true;
                         break;
                     }
-                }             
-                //this.inCart = cartlist.map((w) => w.keyValues).
-                //    reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
-            }
-           
+                }
+            }           
         }
     }
 }

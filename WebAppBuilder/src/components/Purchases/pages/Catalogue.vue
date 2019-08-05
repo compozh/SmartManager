@@ -113,10 +113,7 @@
       },
       created: function () {
         var id = this.routeParamCode;
-        if (id && id.trim().length < 15)
-        { 
-          this.getItems(id);
-        }
+        this.getItems(id);
       },
       computed:{
         groups_items: {
