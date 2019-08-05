@@ -13,6 +13,7 @@ import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
 import productions from './graphql/productions/productions.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
+import productionFormIo from './graphql/productionFormIo.graphql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -46,7 +47,7 @@ export class MesApi {
 
   async getWorkCentersFromGql(uuid, login) {
     try {
-        const result = await client.query({
+      const result = await client.query({
         query: gql` query ($uuid: String, $login: String) ${workCenters}`,
         variables: { uuid, login }
       });
@@ -150,6 +151,18 @@ export class MesApi {
       });
       return result.data.mesMutation.deleteProduction;
     } catch (error) {
+      return console.log(error.message);
+    }
+  }
+  async getProductionFormioFromGql(workCenterCode) {
+    try {
+      const result = await client.query({
+        query: gql`query ($workCenterCode: String) ${productionFormIo}`,
+        variables: { workCenterCode }
+      });
+      return result;
+    }
+    catch (error) {
       return console.log(error.message);
     }
   }

@@ -1,0 +1,8 @@
+{
+    mes{
+        productionFormIo(workCenterCode: $workCenterCode) {
+            form
+            data
+        }
+    }
+}

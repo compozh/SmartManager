@@ -20,20 +20,11 @@ export default {
   installations(state) {
     return state.installations;
   },
-  initializeWorkCenters(state) {
-    return state.initializeWorkCenters;
-  },
-  initializeTasks(state) {
-    return state.initializeTasks;
-  },
-  initializeInstallations(state) {
-    return state.initializeInstallations;
-  },
-  initializeProductions(state) {
-    return state.initializeProductions;
-  },
   productions(state) {
     return state.productions;
+  },
+  productionFormio(state) {
+    return state.productionFormio;
   },
   menuMiniMode(state, commit) {
     if (state.menuMiniMode === null) {

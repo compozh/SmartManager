@@ -1,25 +1,25 @@
 <template>
-<v-container  class="main-block">
-  <v-card>
-    <v-layout row xs12 md12 sm12 lg12>
-      <v-flex xs4 md4 sm4 lg4 class="tasks-list">
-        <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks @changeCurrentTask="changeCurrentTask" />
-      </v-flex>
-      <v-flex xs8 md8 sm8 lg8 class="task-description">
-          <v-layout column wrap xs12 md12 sm12 lg12>
-            <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
-              <mes-tasks-toolbar :layout=layout :selectedTask=selectedTask
-              @layout="changeLayout" @removeAllInstallations=removeAllInstallations />
-            </v-flex>
-            <mes-task-main-layout :selectedTask=selectedTask
-            v-if="(layout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN') || (layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN')" />
-            <mes-accept-task-layout :selectedTask=selectedTask 
-            v-if="(layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK') ||(layout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK')" />
-            <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
-              @removeInstallation=removeInstallation v-if="layout == 'mes-task-stuff-layout'" />
-          </v-layout>
-      </v-flex>
-    </v-layout>
+  <v-container  class="main-block">
+    <v-card>
+      <v-layout row xs12 md12 sm12 lg12>
+        <v-flex xs4 md4 sm4 lg4 class="tasks-list">
+          <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks @changeCurrentTask="changeCurrentTask" />
+        </v-flex>
+        <v-flex xs8 md8 sm8 lg8 class="task-description">
+            <v-layout column wrap xs12 md12 sm12 lg12>
+              <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
+                <mes-tasks-toolbar v-if="Object.keys(selectedTask).length" :layout=layout :selectedTask=selectedTask
+                @layout="changeLayout" @removeAllInstallations=removeAllInstallations />
+              </v-flex>
+              <mes-task-main-layout :selectedTask=selectedTask
+              v-if="(layout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN') || (layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN')" />
+              <mes-accept-task-layout :selectedTask=selectedTask :formioData=productionFormio[selectedTask.workCenterCode]
+              v-if="(layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK') ||(layout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK')" />
+              <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
+                @removeInstallation=removeInstallation v-if="layout == 'mes-task-stuff-layout'" />
+            </v-layout>
+        </v-flex>
+      </v-layout>
     </v-card>
   </v-container>
 </template>
@@ -31,10 +31,10 @@ export default {
   name: "mes-tasks",
   data: function() {
     return {
-        layout: '',
-        selectedTask: {},
-        initializeTasks: false
-      };
+      layout: 'mes-task-main-layout',
+      selectedTask: {},
+      initializeTasks: false
+    };
   },
   created() {
     this.initialize();
@@ -48,12 +48,15 @@ export default {
     },
     workCenters() {
       return this.$store.getters['mes/workCenters'];
+    },
+    productionFormio() {
+      return this.$store.getters['mes/productionFormio'];
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenters', { uuid: "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=" });
-      await this.$store.dispatch('mes/initializeTasks', { workCenters: this.workCenters });
+      await this.$store.dispatch('mes/initializeTasks', this.workCenters);
       this.initializeTasks = true;
       this.initializeInstallations();
       var tasks = this.tasks;
@@ -73,15 +76,12 @@ export default {
       this.layout = newLayout;
     },
     changeCurrentTask(newSelectedTask) {
+      if(newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
+        return;
+      }
       this.selectedTask = newSelectedTask;
-
+      this.$store.dispatch('mes/createProductionFormio', newSelectedTask.workCenterCode);
       switch(newSelectedTask.state) {
-        case 'IN_PLAN':
-          this.layout = 'mes-task-main-layout';
-          break;
-        case 'IN_WORK':
-          this.layout = 'mes-accept-task-layout';
-          break;
         case 'DONE':
           this.layout = '';
           break;

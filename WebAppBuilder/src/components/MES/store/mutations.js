@@ -18,17 +18,8 @@ export default {
   setInstallations(state, installations) {
     state.installations = installations;
   },
-  setInitializeWorkCenters(state, initializeWorkCenters) {
-    state.initializeWorkCenters = initializeWorkCenters;
-  },
   setInstallationsByWorkCenter(state, { installations, workCenterCode}) {
     state.installations[workCenterCode] = installations;
-  },
-  setInitializeTasks(state, initializeTasks) {
-    state.initializeTasks = initializeTasks;    
-  },
-  setInitializeInstallations(state, initializeInstallations) {
-    state.initializeInstalltions = initializeInstallations;
   },
   removeInstallation(state, { installation, workCenterCode }) {
     var installationsByWorkCenter = state.installations[workCenterCode];
@@ -40,8 +31,8 @@ export default {
   setProductions(state, productions) {
     state.productions = productions;
   },
-  setInitializeProductions(state, initializeProductions) {
-    state.initializeProductions = initializeProductions;
+  setProductionFormio(state, {formio, workCenterCode}) {
+    state.productionFormio[workCenterCode] = formio;
   },
   removeProduction(state, production) {
       let index = state.productions.indexOf(production);

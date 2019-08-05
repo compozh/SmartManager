@@ -21,7 +21,7 @@
                         :i="'0'"
                         :isDraggable=false
                         class="grid-element">
-                       <mes-form-builder/>
+                       <mes-form-builder :formioData=formioData />
                </grid-item>
                <grid-item v-for="item in blocks" :key="item.i"
                         :x="item.x"
@@ -42,7 +42,8 @@ import {mapGetters} from 'vuex'
 
 export default {
    props: {
-    selectedTask: Object
+    selectedTask: Object,
+    formioData: Object
   },
   data: function(){
      let blocks = [
