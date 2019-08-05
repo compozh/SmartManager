@@ -1,5 +1,5 @@
 <template>
-    <formio id="formio" class="formio-container" :form=formioComponents @submit=onSubmit></formio>
+    <formio id="formio" class="formio-container" :form=formioComponents :submission=formioSubmission @submit=onSubmit></formio>
 </template>
 
 <script>
@@ -14,7 +14,14 @@ export default {
 	},
 	computed: {
 		formioComponents() {
-			return { components: (this.formioData ? JSON.parse(this.formioData.form) : []) };
+			return {
+				components: this.formioData ? JSON.parse(this.formioData.form) : []
+			};
+		},
+		formioSubmission() {
+			return {
+				data: this.formioData ? JSON.parse(this.formioData.data) : []
+			};
 		}
 	},
 	methods: {
