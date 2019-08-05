@@ -1,7 +1,7 @@
 
 export default {
-  setCircularLoader(state, payload) {
-    state.circularLoader = payload
+  setLinearLoader(state, payload) {
+    state.linearLoader = payload
   },
   setError(state, payload) {
     state.error = payload

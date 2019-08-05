@@ -8,7 +8,7 @@
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
-      <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0 height="3"></v-progress-linear>
+      <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="2"></v-progress-linear>
     </v-toolbar>
     <v-content>
       <v-container class="main-block">
@@ -44,8 +44,8 @@ export default {
     error() {
       return this.$store.getters["mes/error"];
     },
-    loading() {
-      return this.$store.getters["mes/loading"];
+    linearLoader() {
+      return this.$store.getters["mes/linearLoader"];
     },
     menuMiniMode() {
       return this.$store.getters["mes/menuMiniMode"];
