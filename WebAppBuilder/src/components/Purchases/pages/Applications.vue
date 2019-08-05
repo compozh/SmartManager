@@ -1,9 +1,23 @@
 <template>
     <v-container fluid v-if="applications">
+        <v-navigation-drawer fixed right app v-model="filterDrawer" >
+        <v-layout class="filter-panel">
+          <v-flex>
+            <label v-text="$t('purchases.Catalog.FastFilter')" />
+            <v-text-field
+              v-model="search"
+              :label="$t('purchases.Catalog.Name')"
+              clearable
+              prepend-icon="search"
+            />
+          </v-flex>
+        </v-layout>
+      </v-navigation-drawer>
         <v-layout row justify-end>
             <v-btn icon v-show="this.$vuetify.breakpoint.smAndUp">
                 <v-icon v-text="rowView ? 'view_stream' : 'view_column'" @click="rowView = !rowView"/>
             </v-btn>
+            <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
         </v-layout>
         <!-- Карточки -->
         <v-layout v-bind="{ [`${rowView ? 'row' : 'column'}`]: true }" justify-center  wrap>
@@ -35,7 +49,8 @@ const api = new PurchasesApi();
         name: "applications",
         //props: ["applications"],
         data: () => ({
-            rowView: true,
+            rowView: true,            
+            filterDrawer: false,
             smallSize: true,
             pagination: {
                 page: 1
