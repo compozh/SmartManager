@@ -8,9 +8,6 @@ export default {
   tasks: {},
   installations: {},
   productions: [],
-  menuMiniMode: true,
-  initializeWorkCenters: false,
-  initializeInstallations: false,
-  initializeTasks: false,
-  initializeProductions: false
+  productionFormio: {},
+  menuMiniMode: true
 }

@@ -18,16 +18,9 @@ export default {
       commit('setError', e.message)
     }
   },
-  async initializeWorkCenters({ getters, commit }, payload) {
-    if(getters.initializeWorkCenters) {
-      return;
-    }
-    const uuid = payload.uuid
-    const login = payload.login
-    
+  async initializeWorkCenters({ getters, commit }, { uuid, login }) {
     commit('setError', null)
     commit('setCircularLoader', true)
-    commit('setInitializeWorkCenters', true)
     try {
       const result = await api.getWorkCentersFromGql(uuid, login)
       const workCenters = result.data.mes.workCenters
@@ -40,16 +33,9 @@ export default {
       commit('setError', e.message)
     }
   },
-  async initializeTasks({ getters, commit}, payload) {
-    if(getters.initializeTasks) {
-      return;
-    }
-
-    const workCenters = payload.workCenters
-
+  async initializeTasks({ getters, commit}, workCenters) {
     commit('setError', null)
     commit('setCircularLoader', true)
-    commit('setInitializeTasks', true);
     try {
       var tasks = {};
       for(var i = 0; i < workCenters.length; i++) {
@@ -70,12 +56,8 @@ export default {
     }
   },
   async initializeInstallations({ getters, commit}, workCenters) {
-    if(getters.initializeInstallations) {
-      return;
-    }
     commit('setError', null)
     commit('setCircularLoader', true)
-    commit('setInitializeInstallations', true)
 
     try {
       var installations = {};
@@ -182,12 +164,8 @@ export default {
     }
   },
   async initializeProductions({ getters, commit }, workerCode) {
-    if(getters.initializeProductions) {
-      return;
-    }
     commit('setError', null)
     commit('setCircularLoader', true)
-    commit('setInitializeProductions', true)
 
     try {
       let result = await api.getProductionsFromGql(workerCode);
@@ -204,10 +182,27 @@ export default {
 
     try {
       let result = await api.deleteProductionGql(production.factId);
-      debugger;
-      if(true) {
+      if(result.success) {
         commit('deleteProduction', production);
+      } else {
+        commit('setError', result.errorMessage)
       }
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async createProductionFormio({ getters, commit }, workCenterCode) {
+    if(getters.productionFormio[workCenterCode]) {
+      return;
+    }
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      let result = await api.getProductionFormioFromGql(workCenterCode);
+      commit('setProductionFormio', { formio: result.data.mes.productionFormIo, workCenterCode });
       commit('setCircularLoader', false)
     } catch (e) {
       commit('setCircularLoader', false)

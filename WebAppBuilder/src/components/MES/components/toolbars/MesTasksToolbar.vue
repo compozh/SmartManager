@@ -33,7 +33,8 @@ export default {
   name: "mes-tasks-toolbar",
   props: {
     layout: String,
-    selectedTask: Object
+    selectedTask: Object,
+    installations: Array
   },
   methods: {
     onclickSetupMaterial(event) {
