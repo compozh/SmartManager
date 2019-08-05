@@ -11,7 +11,7 @@
               <rect x="20" y="100" rx="3" ry="3" width="350" height="10" />
             </ContentLoader>
           </div>
-    <v-card class="card" v-for="production in productions" :key="production.factId">
+    <v-card class="productions-card" v-for="production in productions" :key="production.factId">
       <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
     </v-card>
     </v-layout>
@@ -53,5 +53,13 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-
+.mes-productions {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.productions-card {
+  margin: 10px;
+  max-width: 400px;
+}
 </style>
