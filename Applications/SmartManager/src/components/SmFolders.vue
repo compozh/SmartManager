@@ -53,41 +53,41 @@
 </template>
 
 <script>
-export default {
-  name: 'sm-folders',
-  computed: {
-    folders() {
-      return this.$store.state.sm.folders
+  export default {
+    name: 'sm-folders',
+    computed: {
+      folders() {
+        return this.$store.state.sm.folders
+      },
+      taskAddForm() {
+        return this.$store.state.sm.taskAddForm === 'open'
+      },
+      menuMode() {
+        return this.$store.state.sm.menuMode
+      }
     },
-    taskAddForm() {
-      return this.$store.state.sm.taskAddForm === 'open'
+    methods: {
+      getFolders() {
+        this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
+      },
+      isMainFolder(folder) {
+        return folder.name === 'Все'
+      },
+      setMainFolderName(folder) {
+        return this.isMainFolder(folder) ? 'Активные' : folder.name
+      },
+      setFolderIcon(folder) {
+        return this.isMainFolder(folder) ? 'folder' : 'folder_open'
+      },
+      setMenuMode(mode) {
+        this.$store.commit('sm/setMenuMode', mode)
+      }
     },
-    menuMode() {
-      return this.$store.state.sm.menuMode
+    created() {
+      this.getFolders()
+      this.setMenuMode('open')
     }
-  },
-  methods: {
-    getFolders() {
-      this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
-    },
-    isMainFolder(folder) {
-      return folder.name === 'Все'
-    },
-    setMainFolderName(folder) {
-      return this.isMainFolder(folder) ? 'Активные' : folder.name
-    },
-    setFolderIcon(folder) {
-      return this.isMainFolder(folder) ? 'folder' : 'folder_open'
-    },
-    setMenuMode(mode) {
-      this.$store.commit('sm/setMenuMode', mode)
-    }
-  },
-  created() {
-    this.getFolders()
-    this.setMenuMode('open')
   }
-}
 </script>
 
 <style>
