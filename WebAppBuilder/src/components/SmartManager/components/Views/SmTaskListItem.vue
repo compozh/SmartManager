@@ -23,7 +23,7 @@
                 </v-flex>
                 <v-flex d-flex shrink>
                   <sm-task-icons :task="task"></sm-task-icons>
-                  <sm-task-status :task="task" chip="true"></sm-task-status>
+                  <sm-task-status :status="task.status" chip="true"></sm-task-status>
                 </v-flex>
               </v-layout>
             </v-flex>
