@@ -1,0 +1,20 @@
+{
+  mes {
+    usersProductionEvents(workCenterCode: $workCenter) {
+        factId
+        workBarcode
+        workCenterCode
+        mode
+        description
+        color
+        isPersonnelRegistration
+        isWriteoffRegistration
+        isWasteRegistration
+        orderWasteRegistration
+        isOneBatch
+        savedProgress
+        isSpBatch
+        canEditReg
+    }
+  }
+}

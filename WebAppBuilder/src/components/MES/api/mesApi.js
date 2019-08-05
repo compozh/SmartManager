@@ -10,6 +10,8 @@ import removeInstallation from './graphql/installations/removeInstallation.graph
 import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
 import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
+import usersProductionEvents from './graphql/productions/usersProductionEvents.graphql'
+import deleteProduction from './graphql/productions/deleteProduction.graphql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -124,6 +126,18 @@ export class MesApi {
       });
       return result.data.mesMutation.cancelBeginRegistration;
     } catch (error) {
+      return console.log(error.message);
+    }
+  }
+  async usersProductionEventsGql(workCenterCode) {
+    try {
+      const result = await client.query({
+        query: gql`query ($workCenter: String) ${usersProductionEvents}`,
+        variables: { workCenterCode }
+      });
+      return result;
+    }
+    catch (error) {
       return console.log(error.message);
     }
   }

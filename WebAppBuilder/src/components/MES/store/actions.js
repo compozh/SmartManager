@@ -135,7 +135,7 @@ export default {
       let productionRegistrationParam = {
         workCenterCode: task.workCenter,
         workBarcode: task.barcode,
-        mode: 'Start', // Start
+        mode: 'Start',
         success: true
       };
       
@@ -177,6 +177,28 @@ export default {
     try {
       let result = await api.getInstallationsFromGql(workCenterCode);
       commit('setInstallationsByWorkCenter', { installations: result.data.mes.installations.installations, workCenterCode });
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async initializeUsersProductionEvents({ getters, commit }, workCenters) {
+    if(getters.initializeUsersProductionEvents) {
+      return;
+    }
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    commit('setInitializeUsersProductionEvents', true)
+
+    try {
+      var usersProductionEvents = {};
+      for(var i = 0; i < workCenters.length; i++) {
+        let workCenter = workCenters[i],
+          result = await api.usersProductionEventsGql(workCenter.code);
+        usersProductionEvents[workCenter.code] = result.data.mes.usersProductionEvents;
+      }
+      commit('setUsersProductionEvents', usersProductionEvents);
       commit('setCircularLoader', false)
     } catch (e) {
       commit('setCircularLoader', false)
