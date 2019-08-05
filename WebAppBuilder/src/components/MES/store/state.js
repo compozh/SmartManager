@@ -5,8 +5,10 @@ export default {
   menuMode: 'open', // Main menu state: open, mini, close
   properties: null,
   workCenters: [],
-  search: null,
-  tasks: [],
-  installations: [],
-  menuMiniMode: true
+  tasks: {},
+  installations: {},
+  menuMiniMode: true,
+  initializeWorkCenters: false,
+  initializeInstallations: false,
+  initializeTasks: false
 }

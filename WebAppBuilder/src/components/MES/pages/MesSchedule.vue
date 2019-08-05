@@ -3,6 +3,7 @@
     
     </v-layout>
 </template>
+
 <script>
 import {mapGetters} from 'vuex'
 
@@ -16,10 +17,6 @@ export default {
 
   },
     methods: {
-      onCardClick(data){
-        console.log(data)
-      },
-
   }
 }
 </script>

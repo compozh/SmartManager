@@ -21,10 +21,24 @@ export default {
   setInstallations(state, payload) {
     state.installations = payload
   },
-  removeInstallationById(state, installationId) {
-    debugger;
-    var index = state.installations.indexOf(installationId);
-    state.installations.splice(index, 0);
+  setInitializeWorkCenters(state, initializeWorkCenters) {
+    state.initializeWorkCenters = initializeWorkCenters;
+  },
+  setInstallationsByWorkCenter(state, { installations, workCenterCode}) {
+    state.installations[workCenterCode] = installations;
+  },
+  setInitializeTasks(state, initializeTasks) {
+    state.initializeTasks = initializeTasks;    
+  },
+  setInitializeInstallations(state, initializeInstallations) {
+    state.initializeInstalltions = initializeInstallations;
+  },
+  removeInstallation(state, { installation, workCenterCode }) {
+    var installationsByWorkCenter = state.installations[workCenterCode];
+    if(installationsByWorkCenter && installationsByWorkCenter.length) {
+      var index = installationsByWorkCenter.indexOf(installation);
+      installationsByWorkCenter.splice(index, 1);
+    }
   },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload

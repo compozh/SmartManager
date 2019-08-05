@@ -20,13 +20,16 @@ export default {
       commit('setError', e.message)
     }
   },
-  async setupWorkCenters({commit}, payload) {
+  async initializeWorkCenters({ getters, commit }, payload) {
+    if(getters.initializeWorkCenters) {
+      return;
+    }
     const uuid = payload.uuid
     const login = payload.login
-
+    
     commit('setError', null)
     commit('setCircularLoader', true)
-
+    commit('setInitializeWorkCenters', true)
     try {
       const result = await api.getWorkCentersFromGql(uuid, login)
       const workCenters = result.data.mes.workCenters
@@ -39,18 +42,27 @@ export default {
       commit('setError', e.message)
     }
   },
-  async setupTasks({commit}, payload) {
+  async initializeTasks({ getters, commit}, payload) {
+    if(getters.initializeTasks) {
+      return;
+    }
+
     const workCenters = payload.workCenters
 
     commit('setError', null)
     commit('setCircularLoader', true)
+    commit('setInitializeTasks', true);
     try {
-      var tasks = [];
+      var tasks = {};
       for(var i = 0; i < workCenters.length; i++) {
         let workCenter = workCenters[i];
         let result = await api.getTasksFromGql(workCenter.code);
         let tasksByWorkCenter = result.data.mes.tasks;
-        tasks = tasks.concat(tasksByWorkCenter);
+        //todo
+        tasksByWorkCenter.forEach(task => {
+          task.workCenterCode = workCenter.code;
+        });
+        tasks[workCenter.code] = tasksByWorkCenter;
       }
       commit('setTasks', tasks)
       commit('setCircularLoader', false)
@@ -59,30 +71,112 @@ export default {
       commit('setError', e.message)
     }
   },
-  async setupInstallationsByWorkCenter({commit}, workCenterCode) {
+  async initializeInstallations({ getters, commit}, workCenters) {
+    if(getters.initializeInstallations) {
+      return;
+    }
     commit('setError', null)
     commit('setCircularLoader', true)
+    commit('setInitializeInstallations', true)
 
     try {
-      let result = await api.getInstallationsFromGql(workCenterCode);
-      commit('setInstallations', result.data.mes.installations.installations)
+      var installations = {};
+      for(var i = 0; i < workCenters.length; i++) {
+        let workCenter = workCenters[i];
+        let result = await api.getInstallationsFromGql(workCenter.code);
+        installations[workCenter.code] = result.data.mes.installations.installations;
+      }
+      commit('setInstallations', installations)
       commit('setCircularLoader', false)
     } catch (e) {
       commit('setCircularLoader', false)
       commit('setError', e.message)
     }
   },
-  async removeInstallation({commit}, installation) {
+  async removeInstallation({commit}, { installation, workCenterCode }) {
     commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
       let result = await api.removeInstallationGql(installation.id);
       if(result.success == true) {
-        commit('removeInstallationById', installation.id);
+        commit('removeInstallation', { installation, workCenterCode });
       } else {
         commit('setError', result.errorMessage);
       }
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async registerMaterialInstallation({commit}, { workCenterCode, batchBarcode, factId }) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      let result = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId);
+      if(result.success == true) {
+        this.dispatch('mes/updateInstallationsByWorkCenter', workCenterCode);
+      } else {
+        commit('setError', result.errorMessage);
+      }
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async registerProduction({commit}, task) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      let productionRegistrationParam = {
+        workCenterCode: task.workCenter,
+        workBarcode: task.barcode,
+        mode: 'Start', // Start
+        success: true
+      };
+      
+      let result = await api.registerProductionGql(productionRegistrationParam);
+
+      if(result.success == true) {
+        task.state = 'IN_WORK';
+      } else {
+        commit('setError', result.errorMessage);
+      }
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async cancelBeginRegistration({commit}, task) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      let result = await api.cancelBeginRegistrationGql(task.shiftTaskId);
+
+      if(result.success == true) {
+        task.state = 'IN_PLAN';
+      } else {
+        commit('setError', result.errorMessage);
+      }
+      commit('setCircularLoader', false)
+    } catch (e) {
+      commit('setCircularLoader', false)
+      commit('setError', e.message)
+    }
+  },
+  async updateInstallationsByWorkCenter({ commit }, workCenterCode) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      let result = await api.getInstallationsFromGql(workCenterCode);
+      commit('setInstallationsByWorkCenter', { installations: result.data.mes.installations.installations, workCenterCode });
       commit('setCircularLoader', false)
     } catch (e) {
       commit('setCircularLoader', false)

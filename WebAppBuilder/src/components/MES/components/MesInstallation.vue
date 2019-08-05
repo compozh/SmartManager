@@ -1,6 +1,6 @@
 <template>
-    <v-card-text>
-        <span v-html="installation.description"></span><v-btn outlined @click="removeInstallation">X</v-btn>
+    <v-card-text class="mes-installation-card">
+        <span v-html="installation.description"></span><v-btn outlined class="mes-delete-installation" @click="removeInstallation"><v-icon dark>delete_forever</v-icon></v-btn>
     </v-card-text>
 </template>
 
@@ -13,11 +13,17 @@ export default {
     },
     name: "mes-installation",
     methods: {
-        removeInstallation(){
-            this.$emit('removeInstallation', this.installation);
+        removeInstallation() {
+            this.$emit('removeInstallation');
         }
     }
 }
 </script>
 <style type="text/css" scoped>
+    .mes-delete-installation {
+        min-width: auto;
+    }
+    .mes-installation-card {
+        display: flex;
+    }
 </style>

@@ -1,9 +1,15 @@
 <template>
   <v-card>
     <v-layout column xs12 md12 sm12 lg12>
+<<<<<<< HEAD
+      <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
+          <v-tabs>
+            <v-layout align-start>
+=======
       <v-flex fill-height class="progress-toolbar" xs12 md12 sm12 lg12>
           <v-tabs >
             <v-layout align-start class="change-tasks-status-toolbar">
+>>>>>>> 24493d9b875b8f68581e13765d53f0051153e782
               <v-flex align-self-center shrink>
                 <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)">
                   {{taskStatus.inPlan.name}}
@@ -28,14 +34,16 @@
               <rect x="20" y="100" rx="3" ry="3" width="350" height="10" />
             </ContentLoader>
           </div>
-          <v-card class="task-item" v-for="task in tasks" :key="task.id" @click="changeCurrentTask(task)">
+          <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
+          <v-card class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
             <div v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
               <v-card-text>
                 <span v-html="task.description"></span>
               </v-card-text>
             </div>
           </v-card>
-          <span v-if="initializeTasks && !tasks.length" class="lack-of-tasks-str">Задания отсутствуют</span>
+          </div>
+          <span v-if="initializeTasks && Object.keys(tasks).length == 0" class="lack-of-tasks-str">Задания отсутствуют</span>
       </v-flex>
     </v-layout>
   </v-card>
@@ -51,56 +59,25 @@ export default {
     ContentLoader
   },
   data: function() {
-    return { currentStatus: 'IN_PLAN', initializeTasks: false};
+    let taskStatus = {
+        inPlan: {name:'В плане', id: 'IN_PLAN'},
+        inWork: {name: 'В работе', id: 'IN_WORK'},
+        done: {name:'Выполнено', id: 'DONE'} };
+    return { taskStatus, currentStatus: 'IN_PLAN' };
   },
   props: {
-    selectedTask: Object
+    selectedTask: Object,
+    tasks: Object,
+    initializeTasks: Boolean
   },
-    created(){
-        this.initTasks();
+  methods: {
+    changeStatus(status) {
+      this.currentStatus = status;
     },
-    computed: {
-        tasks() {
-            return this.$store.getters['mes/tasks'];
-        },
-        workCenters(){
-            return this.$store.getters['mes/workCenters'];
-        },
-        taskStatus() {
-            return {
-            inPlan: {name:'В плане', id: 'IN_PLAN'},
-            inWork: {name: 'В работе', id: 'IN_WORK'},
-            done: {name:'Выполнено', id: 'DONE'}
-            };
-        }
-    },
-    methods:{
-        async initTasks(){
-            await this.setupWorkCenters("QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=", "");
-            await this.setupTasksByWorkCenters(this.workCenters);
-            var tasks = this.tasks;
-            this.initializeTasks = true;
-
-            if(this.tasks && this.tasks.length){
-              this.changeCurrentTask(this.tasks[0]);
-              this.initializeInProcess = false;
-            }
-        },
-        async setupWorkCenters(uuid, login) {
-            const loader = 'setCircularLoader';
-            await this.$store.dispatch('mes/setupWorkCenters', {uuid, loader});
-        },
-        async setupTasksByWorkCenters(workCenters) {
-          await this.$store.dispatch('mes/setupTasks', {workCenters});
-        },
-        changeStatus(status) {
-          debugger;
-            this.currentStatus = status;
-        },
-        changeCurrentTask(newTask) {
-          this.$emit('changeCurrentTask', newTask);
-        }
+    changeCurrentTask(newTask) {
+      this.$emit('changeCurrentTask', newTask);
     }
+  }
 }
 </script>
 
@@ -111,7 +88,8 @@ export default {
   }
   .tasks-list-block .task-item{
     margin: 10px;
-    border-radius: 50px;
+    border-radius: 10px;
+    cursor: pointer;
   }
   .change-tasks-status-toolbar {
     padding-left: 5px;
@@ -123,5 +101,8 @@ export default {
   }
   .wait-for-data-block {
     padding: 20px;
+  }
+  .grid-tabs {
+    padding-left: 10px;
   }
 </style>
