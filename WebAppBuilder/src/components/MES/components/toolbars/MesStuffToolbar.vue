@@ -1,7 +1,7 @@
 <template>
 <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
   <v-flex grow class="mes-stuff-toolbar-qr">
-    <v-text-field 
+    <v-text-field
           class="qr-input"
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode">
@@ -50,16 +50,20 @@ export default {
   }
   .qr-input{
     width: 500px;
+    height: 55px;
   }
   .downtime-btn {
     width: 150px;
     max-width: 150px;
   }
   .setup-material-btn {
+    display: flex;
+    align-items: center;
     width: 200px;
     max-width: 200px;
   }
   .mes-stuff-toolbar-qr {
     display: flex;
+    align-items: center;
   }
 </style>

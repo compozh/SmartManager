@@ -90,6 +90,8 @@ export default {
     max-width: 150px;
   }
   .setup-material-btn {
+    display: flex;
+    align-items: center;
     width: 200px;
     max-width: 200px;
   }
