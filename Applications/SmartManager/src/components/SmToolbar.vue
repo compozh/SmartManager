@@ -31,7 +31,7 @@
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex shrink>
-         <user-panel mini="true"></user-panel>
+        <user-panel mini="true"></user-panel>
       </v-flex>
     </v-layout>
   </v-container>
@@ -39,26 +39,26 @@
 </template>
 
 <script>
-export default {
-  name: 'sm-toolbar',
-  computed: {
-    showSearch() {
-      return this.$route.params.hasOwnProperty('foldercode')
+  export default {
+    name: "sm-toolbar",
+    computed: {
+      showSearch() {
+        return this.$route.params.hasOwnProperty('foldercode')
           && this.$store.state.sm.taskAddForm === 'close'
-    },
-    search: {
-      get() {
-        return this.$store.state.sm.search
       },
-      set(search) {
-        this.$store.commit('sm/setSearch', search)
+      search: {
+        get() {
+          return this.$store.state.sm.search
+        },
+        set(search) {
+          this.$store.commit('sm/setSearch', search)
+        }
+      },
+      showTaskAddFormTitle() {
+        return this.$store.state.sm.taskAddForm === 'open'
       }
-    },
-    showTaskAddFormTitle() {
-      return this.$store.state.sm.taskAddForm === 'open'
     }
   }
-}
 </script>
 
 <style scoped>

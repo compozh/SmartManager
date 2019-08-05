@@ -6,7 +6,10 @@ import GrapgQlCore from '@it-enterprise/graphql'
 import Authentication from '@it-enterprise/authentication'
 import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
-import ModulesManager from '@it-enterprise/modules-manager'
+import ItCommon from '@it-enterprise/common'
+import '@it-enterprise/common/dist/common-components.css'
+import SignalR from '@it-enterprise/signalr'
+
 
 // vue пакеты
 import Vue from 'vue'
@@ -52,21 +55,21 @@ Vue.use(VueI18n)
 Vue.use(VueApollo)
 
 // Плагины it-enterprise
-//Vue.use(ModulesManager, { dependencies })
+Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.myConfig, dependencies })
 Vue.use(Router, { options: window.myConfig, dependencies })
 Vue.use(Eds, { dependencies })
 Vue.use(WebApps, { dependencies, options: window.myConfig })
-
+Vue.use(SignalR)
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
 
 // Шина событий
 export const eventBus = new Vue()
 
-// временный импорт компонентов
+// импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
 req.keys().map(key => {
   if (!(req(key).default || {}).name) {
