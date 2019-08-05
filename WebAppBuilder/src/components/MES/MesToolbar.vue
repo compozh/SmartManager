@@ -7,7 +7,7 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
-      <span>{{workCenters && workCenters.length ? workCenters[0].name : ''}}</span>
+      <span>{{workCenters && workCenters.length ? 'Рабочий центр: ' + workCenters[0].name : ''}}</span>
       <v-flex class="grow-0">
         <user-panel mini="true"></user-panel>
       </v-flex>
