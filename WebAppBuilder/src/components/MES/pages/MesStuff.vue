@@ -1,22 +1,12 @@
 <template>
-    <v-layout class="mes-stuff">
-      <mes-stuff-toolbar class="mes-stuff-toolbar" :installations=installations @removeAllInstallations=removeAllInstallations @submitQrCode=submitQrCode />
-      <div v-if="!initializeInstallations" class="wait-for-data-block">
-            <ContentLoader>
-              <rect x="0" y="0" rx="3" ry="3" width="400" height="10" />
-              <rect x="20" y="20" rx="3" ry="3" width="220" height="10" />
-              <rect x="20" y="40" rx="3" ry="3" width="170" height="10" />
-              <rect x="0" y="60" rx="3" ry="3" width="400" height="10" />
-              <rect x="20" y="80" rx="3" ry="3" width="200" height="10" />
-              <rect x="20" y="100" rx="3" ry="3" width="350" height="10" />
-            </ContentLoader>
-          </div>
+  <v-layout class="mes-stuff">
+    <mes-stuff-toolbar class="mes-stuff-toolbar" :installations=installations @removeAllInstallations=removeAllInstallations @submitQrCode=submitQrCode />
     <div class="installations-block" v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
-    <v-card class="installation-card" v-for="installation in installationsByWorkCenter" :key="installation.id">
-      <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
-    </v-card>
+      <v-card class="installation-card" v-for="installation in installationsByWorkCenter" :key="installation.id">
+        <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
+      </v-card>
     </div>
-    </v-layout>
+  </v-layout>
 </template>
 <script>
 import {mapGetters} from 'vuex'

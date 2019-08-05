@@ -75,5 +75,8 @@ html{
     margin: 0 !important;
     max-width: 100%;
   }
+.v-toolbar__extension {
+  padding: 0;
+}
 </style>
 
