@@ -40,11 +40,15 @@ export default {
       installationsByWorkCenter.splice(index, 1);
     }
   },
-  setUsersProductionEvents(state, usersProductionEvents) {
-    state.usersProductionEvents = usersProductionEvents;
+  setProductions(state, productions) {
+    state.productions = productions;
   },
-  setInitializeUsersProductionEvents(state, initializeUsersProductionEvents) {
-    state.initializeUsersProductionEvents = initializeUsersProductionEvents;
+  setInitializeProductions(state, initializeProductions) {
+    state.initializeProductions = initializeProductions;
+  },
+  removeProduction(state, production) {
+      let index = state.productions.indexOf(production);
+      state.productions.splice(index, 1);
   },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload

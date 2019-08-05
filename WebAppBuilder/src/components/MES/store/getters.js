@@ -29,8 +29,11 @@ export default {
   initializeInstallations(state) {
     return state.initializeInstallations;
   },
-  usersProductionEvents(state) {
-    return state.usersProductionEvents;
+  initializeProductions(state) {
+    return state.initializeProductions;
+  },
+  productions(state) {
+    return state.productions;
   },
   menuMiniMode(state, commit) {
     if (state.menuMiniMode === null) {

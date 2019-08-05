@@ -1,6 +1,7 @@
 <template>
     <v-card-text class="mes-installation-card">
-        <span v-html="installation.description"></span><v-btn icon outlined color="error" flat class="mes-delete-installation" @click="removeInstallation"><v-icon dark>delete_forever</v-icon></v-btn>
+        <span v-html="installation.description"></span>
+        <v-btn icon outlined color="error" flat class="mes-delete-installation" @click="removeInstallation"><v-icon dark>delete_forever</v-icon></v-btn>
     </v-card-text>
 </template>
 
