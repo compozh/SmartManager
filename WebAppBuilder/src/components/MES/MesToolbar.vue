@@ -7,7 +7,10 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
-      <span>{{workCenters && workCenters.length ? 'Рабочий центр: ' + workCenters[0].name : ''}}</span>
+      <div class="work-centers-caption" v-if="workCenters && workCenters.length">
+        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-name'>{{workCenters[0].name}}</span>
+      </div>
       <v-flex class="grow-0">
         <user-panel mini="true"></user-panel>
       </v-flex>
@@ -52,5 +55,18 @@ a {
 
 .main-toolbar.row {
   margin: 0;
+}
+.work-centers-caption {
+  padding: 0 10px;
+}
+.work-centers-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1976d2;
+}
+.work-centers-name {
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: break-word;
 }
 </style>
