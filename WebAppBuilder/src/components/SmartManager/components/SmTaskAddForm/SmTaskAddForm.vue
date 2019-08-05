@@ -152,7 +152,7 @@
             <v-flex xs12>
               <v-layout wrap>
                 <v-flex xs12>
-                  <file-upload-task-form></file-upload-task-form>
+                  <file-upload-add-task-form></file-upload-add-task-form>
                 </v-flex>
                 <v-flex xs12 class="button-container">
                   <v-spacer></v-spacer>
@@ -262,5 +262,10 @@
   .button-container {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .upload-btn {
+    display: flex;
+    align-items: center;
   }
 </style>

@@ -58,7 +58,6 @@
 </script>
 
 <style scoped>
-
   .viewer-layout {
     height: 88vh;
   }
@@ -133,5 +132,4 @@
   ::-webkit-scrollbar {
     display: none;
   }
-
 </style>
