@@ -4,12 +4,26 @@
         <v-layout class="filter-panel">
           <v-flex>
             <label v-text="$t('purchases.Catalog.FastFilter')" />
-            <v-text-field
-              v-model="search"
-              :label="$t('purchases.Catalog.Name')"
-              clearable
-              prepend-icon="search"
-            />
+            <v-card elevation="0">
+                <v-card-text>
+                    <v-text-field v-model="search.title" label="Титл" clearable />
+                    <v-text-field v-model="search.number" label="Номер" clearable/>
+                    <date-text-field editable="true" :dateType="this.search" fieldName="date_from"
+                    labelName="С"/>
+                    <date-text-field editable="true" :dateType="this.search" fieldName="date_to"
+                    labelName="По"/>
+                </v-card-text>
+            </v-card>
+            <v-card elevation="0">
+                <v-card-title>
+                    Статус
+                </v-card-title>
+                <v-card-text>
+                    <template v-for="(item, index) in this.statuses">
+                        <v-checkbox v-model="search.statuses" :label="item.name" :value="item.id" :key="index"/>
+                    </template>
+                </v-card-text>
+            </v-card>
           </v-flex>
         </v-layout>
       </v-navigation-drawer>
@@ -51,7 +65,13 @@ const api = new PurchasesApi();
         data: () => ({
             rowView: true,            
             filterDrawer: false,
-            search: "",
+            search: {
+                title: "",
+                date_from: "",
+                date_to: "",
+                number: "",
+                statuses: []
+            },
             smallSize: true,
             pagination: {
                 page: 1
@@ -87,14 +107,66 @@ const api = new PurchasesApi();
                     this.$store.commit('purchases/setApplications', newVal);
                 }
             },
+            statuses:{
+                get: function() {
+                    return this.$store.getters["purchases/getDocStatus"];
+                },
+            }
         },
         methods:{
             searchCallback (item) {
-                debugger;
                 var itemToSearch = _.lowerCase(item.title);
-                var searchedText = _.lowerCase(_.trim(this.search));
-                var ret = itemToSearch.indexOf(searchedText);
-                return ret >= 0;
+                var searchedTitle = _.lowerCase(_.trim(this.search.title));
+                var searchedNumber = _.lowerCase(_.trim(this.search.number));               
+                
+                var temp = itemToSearch.indexOf(searchedTitle);
+                var titleResult = temp >= 0;
+                
+                var numberResult = true;
+                if(searchedNumber != ""){
+                    numberResult = item.number === searchedNumber;
+                }
+                
+                let dateResult = this.checkDates(item);
+                let statusResult = this.checkStatus(item);
+                
+                
+                //return numberResult && titleResult && dateResult && statusResult;
+                return true;
+            },
+            checkStatus(item){
+                let result = false;
+                let docId = item.docStatus.id;
+                for(let i=0;i<this.search.statuses.length;i++){
+                    if(docId === this.search.statuses[i].id){
+                        result = true;
+                        break;
+                    }
+                }
+
+                return result;
+            },
+            checkDates(item){
+                var result = true;
+
+                var itemDate = Date.parse(item.date);
+                var dTo = Date.now();
+                var dFrom = Date.now();
+
+                if(this.search.date_from != ""){
+                    dFrom =  Date.parse(this.search.date_from);
+                    if(itemDate < dFrom){
+                        result = false;
+                    }
+                }
+                if(this.search.date_to != ""){
+                    dTo =  Date.parse(this.search.date_to);
+                    if(itemDate > dTo){
+                        result = false;
+                    }
+                }
+                
+                return result;
             },
             getItemsOnPage(){
                 return this.applications.slice(
@@ -111,10 +183,9 @@ const api = new PurchasesApi();
                 console.log(`TODO: swipe right for application #${appl.number}`)
             }
         },
-        mounted() {
+        created() {
             api.getApplications();
-        },
-        created() {   
+            api.getDocStatus();
         },
     }
 </script>
