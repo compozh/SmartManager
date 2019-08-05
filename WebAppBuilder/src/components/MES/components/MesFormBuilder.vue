@@ -1791,5 +1791,6 @@ export default {
 <style scoped lang="scss">
 .formio-container /deep/ {
   @import "~bootstrap/dist/css/bootstrap.min";
+  @import "~choices.js/public/assets/styles/choices.css";
 }
 </style>
