@@ -11,7 +11,7 @@ export default {
     props: {
         installation: Object
     },
-    name: "mes-installation",
+    name: "mes-installation-card",
     methods: {
         removeInstallation() {
             this.$emit('removeInstallation');

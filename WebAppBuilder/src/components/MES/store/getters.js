@@ -29,6 +29,9 @@ export default {
   initializeInstallations(state) {
     return state.initializeInstallations;
   },
+  usersProductionEvents(state) {
+    return state.usersProductionEvents;
+  },
   menuMiniMode(state, commit) {
     if (state.menuMiniMode === null) {
       state.menuMiniMode = localStorage.getItem("mesMenuMiniMode") === 'true';

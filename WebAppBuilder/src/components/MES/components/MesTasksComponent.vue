@@ -1,15 +1,9 @@
 <template>
   <v-card>
     <v-layout column xs12 md12 sm12 lg12>
-<<<<<<< HEAD
       <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
           <v-tabs>
             <v-layout align-start>
-=======
-      <v-flex fill-height class="progress-toolbar" xs12 md12 sm12 lg12>
-          <v-tabs >
-            <v-layout align-start class="change-tasks-status-toolbar">
->>>>>>> 24493d9b875b8f68581e13765d53f0051153e782
               <v-flex align-self-center shrink>
                 <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)">
                   {{taskStatus.inPlan.name}}

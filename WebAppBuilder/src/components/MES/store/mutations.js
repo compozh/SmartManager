@@ -40,6 +40,12 @@ export default {
       installationsByWorkCenter.splice(index, 1);
     }
   },
+  setUsersProductionEvents(state, usersProductionEvents) {
+    state.usersProductionEvents = usersProductionEvents;
+  },
+  setInitializeUsersProductionEvents(state, initializeUsersProductionEvents) {
+    state.initializeUsersProductionEvents = initializeUsersProductionEvents;
+  },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
     localStorage.setItem("mesMenuMiniMode", payload.toString());

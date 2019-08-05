@@ -13,7 +13,7 @@
           </div>
     <div v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
     <v-card class="card" v-for="installation in installationsByWorkCenter" :key="installation.id">
-      <mes-installation :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
+      <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
     </v-card>
     </div>
     </v-layout>
