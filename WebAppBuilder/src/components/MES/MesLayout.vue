@@ -42,10 +42,10 @@ export default {
   },
   computed: {
     error() {
-      return this.$store.getters["eam/error"];
+      return this.$store.getters["mes/error"];
     },
     loading() {
-      return this.$store.getters["eam/loading"];
+      return this.$store.getters["mes/loading"];
     },
     menuMiniMode() {
       return this.$store.getters["mes/menuMiniMode"];

@@ -11,15 +11,10 @@ export default {
     return {};
   },
   name: "mes-writeoff",
-
   computed:{
 
   },
     methods: {
-      onCardClick(data){
-        console.log(data)
-      },
-
   }
 }
 </script>

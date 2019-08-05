@@ -7,24 +7,20 @@
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
-      :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'" @click="onclickAccept">Взять в работу</v-btn>
+      :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'"
+      @click="onclickAccept">{{selectedTask.state == 'IN_PLAN' ? 'Взять в работу' : 'Приостановить'}}</v-btn>
     </v-flex>
-      <v-flex
-      grow
-      v-if="layout === 'mes-task-setup-materials-layout'">
+      <v-flex grow class="mes-tasks-toolbar-qr"
+      v-if="layout === 'mes-task-stuff-layout'">
+      <v-btn outlined class="mes-arrow-back" @click="backToMainLayout"><v-icon dark>arrow_back</v-icon></v-btn>
         <v-text-field 
           class="qr-input"
           label="Укажите QR-партии материала для установки"
-          required
+          required @keyup.enter="submitQrCode"
         ></v-text-field>
-        <v-btn outlined @click="onclickScan"><v-icon dark>remove</v-icon></v-btn>
+        <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
       </v-flex>
-      <v-flex class="downtime-btn"
-        v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-main-layout'">
-        <v-btn
-        outlined color="error" @click="onclickDowntime($event)">Простой</v-btn>
-    </v-flex>
-   <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-setup-materials-layout'">
+   <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-stuff-layout'">
      <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
@@ -35,34 +31,34 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-tasks-toolbar",
- props: {
+  props: {
     layout: String,
     selectedTask: Object
   },
-  methods:{
+  methods: {
     onclickSetupMaterial(event) {
-      this.$emit('layout', 'mes-task-setup-materials-layout');
+      this.$emit('layout', 'mes-task-stuff-layout');
     },
     onclickAccept(event) {
-        let target = event.target;
-        if(!target.state || target.state === "accept") {
-          this.applyWorkColor = 'error';
-          target.textContent = "Остановить";
-          target.state = "suspend";
-        } else {
-          this.applyWorkColor = 'success';
-          target.state = "accept";
-           target.textContent = "Взять в работу";
+        switch(this.selectedTask.state) {
+          case "IN_PLAN":
+            this.$store.dispatch('mes/registerProduction', this.selectedTask);
+            break;
+          case "IN_WORK":
+            this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask);
+            break;
         }
     },
-    onclickDowntime(event) {
-
-    },
     onclickRemoveAllInstallations() {
-      this.$emit('removeAllIntallations');
+      this.$emit('removeAllInstallations');
     },
-    onclickScan(){
-      
+    submitQrCode(event) {
+      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: event.target.value, factId: 0 });
+    },
+    backToMainLayout() {
+      this.$emit('layout', 'mes-task-main-layout');
+    },
+    onclickScan(event) {
     }
   }
 }
@@ -93,5 +89,14 @@ export default {
   .setup-material-btn {
     width: 200px;
     max-width: 200px;
+  }
+  .mes-tasks-toolbar-qr {
+    display: flex;
+  }
+  .mes-scan {
+    min-width: auto;
+  }
+  .mes-arrow-back {
+    min-width: auto;
   }
 </style>

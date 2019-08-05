@@ -7,8 +7,9 @@ import workCenters from './graphql/workCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
-
-import store from '../../../store/index'
+import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
+import registerProduction from './graphql/tasks/registerProduction.graphql'
+import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -86,6 +87,42 @@ export class MesApi {
         variables: { installationId }
       });
       return result.data.mesMutation.removeInstallation;
+    } catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async registerMaterialInstallationGql(workCenterCode, batchBarcode, factId) {
+    try {
+      let result = await client.mutate({
+        mutation: gql`${registerMaterialInstallation}`,
+        variables: { workCenterCode, batchBarcode, factId }
+      });
+      return result.data.mesMutation.registerMaterialInstallation;
+    } catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async registerProductionGql(productionRegistrationParam){
+    try {
+      let result = await client.mutate({
+        mutation: gql`${registerProduction}`,
+        variables: { productionRegistrationParam }
+      });
+      
+      return result.data.mesMutation.registerProduction;
+    } catch (error) {
+      return console.log(error.message);
+    }
+  }
+  async cancelBeginRegistrationGql(taskId){
+    try {
+      let result = await client.mutate({
+        mutation: gql`${cancelBeginRegistration}`,
+        variables: { taskId }
+      });
+      return result.data.mesMutation.cancelBeginRegistration;
     } catch (error) {
       return console.log(error.message);
     }

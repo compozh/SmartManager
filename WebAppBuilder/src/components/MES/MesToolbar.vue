@@ -2,7 +2,7 @@
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-beetwen class="main-toolbar">
       <v-flex>
-        <router-link tag="h1" :to="{ name:'MESROOT'}">
+        <router-link tag="h1" :to="{ name:'TASKS'}">
           <a>MES</a>
         </router-link>
       </v-flex>

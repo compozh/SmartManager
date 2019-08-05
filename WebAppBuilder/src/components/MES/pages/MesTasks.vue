@@ -3,17 +3,20 @@
   <v-card>
     <v-layout row xs12 md12 sm12 lg12>
       <v-flex xs4 md4 sm4 lg4 class="tasks-list">
-        <mes-tasks-component :selectedTask=selectedTask @changeCurrentTask="changeCurrentTask" />
+        <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks @changeCurrentTask="changeCurrentTask" />
       </v-flex>
       <v-flex xs8 md8 sm8 lg8 class="task-description">
           <v-layout column wrap xs12 md12 sm12 lg12>
             <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
               <mes-tasks-toolbar :layout=layout :selectedTask=selectedTask
-              @layout="changeLayout" @removeAllIntallations=removeAllIntallations />
+              @layout="changeLayout" @removeAllInstallations=removeAllInstallations />
             </v-flex>
-            <mes-task-main-layout :selectedTask=selectedTask v-if="layout === 'mes-task-main-layout'" />
-            <mes-accept-task-layout :selectedTask=selectedTask v-if="layout == 'mes-accept-task-layout'" />
-            <mes-task-setup-materials-layout :selectedTask=selectedTask :installations=installations @removeInstallation=removeInstallation v-if="layout == 'mes-task-setup-materials-layout'" />
+            <mes-task-main-layout :selectedTask=selectedTask
+            v-if="(layout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN') || (layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN')" />
+            <mes-accept-task-layout :selectedTask=selectedTask 
+            v-if="(layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK') ||(layout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK')" />
+            <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
+              @removeInstallation=removeInstallation v-if="layout == 'mes-task-stuff-layout'" />
           </v-layout>
       </v-flex>
     </v-layout>
@@ -29,50 +32,76 @@ export default {
   data: function() {
     return {
         layout: '',
-        selectedTask: {}
+        selectedTask: {},
+        initializeTasks: false
       };
   },
+  created() {
+    this.initialize();
+  },
   computed: {
-        installations() {
-            return this.$store.getters['mes/installations'];
-        }
+    installations() {
+      return this.$store.getters['mes/installations'];
+    },
+    tasks() {
+      return this.$store.getters['mes/tasks'];
+    },
+    workCenters() {
+      return this.$store.getters['mes/workCenters'];
+    }
   },
   methods: {
-       changeLayout(newLayout) {
-         this.layout = newLayout;
-      },
-      changeCurrentTask(newSelectedTask) {
-        let workCenter = this.selectedTask.workCenter;
-        this.selectedTask = newSelectedTask;
+    async initialize() {
+      await this.$store.dispatch('mes/initializeWorkCenters', { uuid: "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=" });
+      await this.$store.dispatch('mes/initializeTasks', { workCenters: this.workCenters });
+      this.initializeTasks = true;
+      this.initializeInstallations();
+      var tasks = this.tasks;
 
-        if(workCenter != newSelectedTask.workCenter)
-        {
-          this.updateInstallations();
+      if(this.workCenters.length) {
+        let workCenter = this.workCenters[0],
+          tasksByWorkCenter = this.tasks[workCenter.code];
+        if(tasksByWorkCenter && tasksByWorkCenter.length) {
+          this.changeCurrentTask(tasksByWorkCenter[0]);
         }
-        switch(newSelectedTask.state) {
-          case 'IN_PLAN':
-            this.layout = 'mes-task-main-layout';
-            break;
-          case 'IN_WORK':
-            this.layout = 'mes-accept-task-layout';
-            break;
-          case 'DONE':
-            this.layout = '';
-            break;
-        }
-      },
-      removeAllIntallations() {
-        var me = this;
-        me.installations.forEach(installation => {
-          me.removeInstallation(installation);
-        });
-      },
-      removeInstallation(installation) {
-        this.$store.dispatch('mes/removeInstallation', installation);
-      },
-      updateInstallations() {
-        this.$store.dispatch('mes/setupInstallationsByWorkCenter', this.selectedTask.workCenter);
       }
+    },
+    async initializeWorkCenters(uuid, login) {
+      await this.$store.dispatch('mes/initializeWorkCenters', {uuid});
+    },
+    changeLayout(newLayout) {
+      this.layout = newLayout;
+    },
+    changeCurrentTask(newSelectedTask) {
+      this.selectedTask = newSelectedTask;
+
+      switch(newSelectedTask.state) {
+        case 'IN_PLAN':
+          this.layout = 'mes-task-main-layout';
+          break;
+        case 'IN_WORK':
+          this.layout = 'mes-accept-task-layout';
+          break;
+        case 'DONE':
+          this.layout = '';
+          break;
+      }
+    },
+    removeAllInstallations() {
+      var me = this;
+      Object.keys(me.installations).forEach(workCenterCode => {
+        var installationsByWorkCenters = me.installations[workCenterCode];
+        installationsByWorkCenters.forEach(installation => {
+          me.removeInstallation({ installation, workCenterCode });
+        });
+      });
+    },
+    removeInstallation({ installation, workCenterCode }) {
+      this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
+    },
+    initializeInstallations() {
+      this.$store.dispatch('mes/initializeInstallations', this.workCenters);
+    }
   }
 }
 </script>

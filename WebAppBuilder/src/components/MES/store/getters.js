@@ -20,6 +20,15 @@ export default {
   installations(state) {
     return state.installations;
   },
+  initializeWorkCenters(state) {
+    return state.initializeWorkCenters;
+  },
+  initializeTasks(state) {
+    return state.initializeTasks;
+  },
+  initializeInstallations(state) {
+    return state.initializeInstallations;
+  },
   menuMiniMode(state, commit) {
     if (state.menuMiniMode === null) {
       state.menuMiniMode = localStorage.getItem("mesMenuMiniMode") === 'true';
