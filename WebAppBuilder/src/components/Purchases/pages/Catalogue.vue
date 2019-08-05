@@ -137,6 +137,7 @@
           return this.$store.getters["purchases/getResources"];//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
           }
         },
+        //todo
         test_items:{
           get: function() {
             if (this.search === ""){

@@ -51,6 +51,7 @@ const api = new PurchasesApi();
         data: () => ({
             rowView: true,            
             filterDrawer: false,
+            search: "",
             smallSize: true,
             pagination: {
                 page: 1
@@ -76,7 +77,11 @@ const api = new PurchasesApi();
             },
             applications:{
                 get: function() {
-                    return this.$store.getters["purchases/getApplications"];
+                    if(this.search === ""){                        
+                        return this.$store.getters["purchases/getApplications"];
+                    }
+
+                    return _.filter(this.$store.getters["purchases/getApplications"], this.searchCallback);
                 },
                 set: function(newVal){
                     this.$store.commit('purchases/setApplications', newVal);
@@ -84,6 +89,13 @@ const api = new PurchasesApi();
             },
         },
         methods:{
+            searchCallback (item) {
+                debugger;
+                var itemToSearch = _.lowerCase(item.title);
+                var searchedText = _.lowerCase(_.trim(this.search));
+                var ret = itemToSearch.indexOf(searchedText);
+                return ret >= 0;
+            },
             getItemsOnPage(){
                 return this.applications.slice(
                     (this.pagination.page - 1) * this.rowsPerPage, 
