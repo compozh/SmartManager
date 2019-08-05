@@ -97,7 +97,8 @@ export default {
     try {
       let result = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId);
       if(result.success == true) {
-        this.dispatch('mes/updateInstallationsByWorkCenter', workCenterCode);
+        debugger;
+        await this.dispatch('mes/updateInstallationsByWorkCenter', workCenterCode);
       } else {
         commit('setError', result.errorMessage);
       }

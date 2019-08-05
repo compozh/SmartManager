@@ -3,12 +3,15 @@
     <v-card>
       <v-layout row xs12 md12 sm12 lg12>
         <v-flex xs4 md4 sm4 lg4 class="tasks-list">
-          <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks @changeCurrentTask="changeCurrentTask" />
+          <mes-tasks-component 
+            :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks
+            @changeCurrentTask="changeCurrentTask" />
         </v-flex>
         <v-flex xs8 md8 sm8 lg8 class="task-description">
             <v-layout column wrap xs12 md12 sm12 lg12>
               <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
-                <mes-tasks-toolbar v-if="Object.keys(selectedTask).length" :layout=layout :selectedTask=selectedTask
+                <mes-tasks-toolbar v-if="Object.keys(selectedTask).length" 
+                :layout=layout :selectedTask=selectedTask :installations=installations[selectedTask.workCenterCode]
                 @layout="changeLayout" @removeAllInstallations=removeAllInstallations />
               </v-flex>
               <mes-task-main-layout :selectedTask=selectedTask

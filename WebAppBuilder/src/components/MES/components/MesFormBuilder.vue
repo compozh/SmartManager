@@ -1,5 +1,5 @@
 <template>
-  <div>{{formioData}}</div>
+    <formio id="formio" class="formio-container" :form=formioComponents @submit=onSubmit></formio>
 </template>
 
 <script>
@@ -12,7 +12,11 @@ export default {
 	props: {
     	formioData: Object
 	},
-	created() {console.log(this.formioData)},
+	computed: {
+		formioComponents() {
+			return { components: (this.formioData ? JSON.parse(this.formioData.form) : []) };
+		}
+	},
 	methods: {
 		onSubmit(params) {
 			debugger;

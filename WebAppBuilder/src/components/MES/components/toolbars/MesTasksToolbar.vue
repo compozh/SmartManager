@@ -20,7 +20,7 @@
         ></v-text-field>
         <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
       </v-flex>
-   <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-stuff-layout'">
+   <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
      <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
