@@ -27,7 +27,7 @@ export default {
     data:() =>({
         first: {},
         breadCrumbs: [],
-        show: true
+        show: false
     }),
     methods:{
         responceCallback(response){            
