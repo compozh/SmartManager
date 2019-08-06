@@ -9,14 +9,16 @@ import taskInfo from './graphql/taskInfo.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
+import Vue from 'vue'
 
 const getClient = () => {
-  const token = localStorage.getItem('ItUniTocken')
+  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
   const options = {
-    uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+    // eslint-disable-next-line no-undef
+    uri: myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
-      'Authorization': 'Bearer ' + token,
+      ...authHeader,
       'schema': 'smartmanager'
     }
   }
