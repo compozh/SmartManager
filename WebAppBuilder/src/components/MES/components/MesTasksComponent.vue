@@ -2,8 +2,8 @@
   <v-card>
     <v-layout column xs12 md12 sm12 lg12>
       <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
-          <v-tabs show-arrows >
-                <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.id)" class="toolbar-item">
+          <v-tabs show-arrows v-model="selectedTab">
+                <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
                   <v-badge color="#1976d2" overlap>
                     <template v-slot:badge>
                       <span>{{countTasks(tab.id).length}}</span>
@@ -17,9 +17,9 @@
         <mes-content-loader :initialize=initializeTasks />
         <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
           <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
-            <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'" 
-              v-if="(selectedTasksTab == 'PLAN' && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
-              || (selectedTasksTab == 'DONE' && task.state == 'DONE')">
+            <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'"
+              v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
+              || (selectedTasksTab == 1 && task.state == 'DONE')">
               <v-card-text>
                 <span v-html="task.description"></span>
               </v-card-text>
@@ -42,21 +42,17 @@ export default {
     ContentLoader
   },
   data() {
-    return {
-      tabs: [
-        {id: "PLAN", name: "В плане"}, 
-        {id: "DONE", name: "Выполненные"}
-      ]};
+    return {tabs: [{index: 0, id: "PLAN", name: "В плане"}, { index: 1, id: "DONE", name: "Выполненные"}], selectedTab: this.selectedTasksTab}
   },
   props: {
     selectedTask: Object,
     tasks: Object,
     initializeTasks: Boolean,
-    selectedTasksTab: String
+    selectedTasksTab: Number
   },
   methods: {
-    changeSelectTasksTab(tabId) {
-      this.$emit('changeSelectTasksTab', tabId);
+    changeSelectTasksTab(tabIndex) {
+      this.$emit('changeSelectTasksTab', tabIndex);
     },
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask);
@@ -99,7 +95,7 @@ export default {
   }
   .v-badge__badge {
     position: absolute !important;
-    right: -20px !important; 
+    right: -20px !important;
     top: -10 !important;
   }
   .active-task-item {

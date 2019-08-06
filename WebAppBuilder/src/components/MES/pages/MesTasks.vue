@@ -9,12 +9,12 @@
         <v-flex xs8 md8 sm8 lg8 class="task-description">
             <v-layout column wrap xs12 md12 sm12 lg12>
               <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
-                <mes-tasks-toolbar v-if="selectedTask" 
+                <mes-tasks-toolbar v-if="selectedTask"
                 :currentLayout=currentLayout :selectedTask=selectedTask :installations=installations[selectedTask.workCenterCode]
                 @changeCurrentLayout="changeCurrentLayout" @removeAllInstallations=removeAllInstallations />
               </v-flex>
               <mes-task-main-layout :selectedTask=selectedTask
-                v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN') 
+                v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN')
                   || (currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN'))" />
               <mes-accept-task-layout :selectedTask=selectedTask :formioData=productionFormio[selectedTask.workCenterCode]
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK')
@@ -62,8 +62,8 @@ export default {
       get() {
         return this.tasksPageState.selectedTasksTab;
       },
-      set(tabId) {
-        this.$store.commit('mes/setSelectedTasksTab', tabId);
+      set(tabIndex) {
+        this.$store.commit('mes/setSelectedTasksTab', tabIndex);
       }
     },
     tasksPageState() {
@@ -92,7 +92,7 @@ export default {
     },
     selectFirstTask() {
       var tasks = this.tasks;
-      
+
       if(this.workCenters.length) {
         let workCenter = this.workCenters[0],
           tasksByWorkCenter = this.tasks[workCenter.code];
@@ -119,8 +119,8 @@ export default {
           break;
       }
     },
-    changeSelectTasksTab(tabId) {
-      this.selectedTasksTab = tabId;
+    changeSelectTasksTab(tabIndex) {
+      this.selectedTasksTab = tabIndex;
     },
     removeAllInstallations() {
       var me = this;
