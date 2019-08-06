@@ -1,7 +1,4 @@
 export default {
-  circularLoader(state) {
-    return state.circularLoader;
-  },
   linearLoader(state) {
     return state.linearLoader;
   },

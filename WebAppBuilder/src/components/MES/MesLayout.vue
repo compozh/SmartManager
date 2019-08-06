@@ -1,10 +1,10 @@
 <template>
   <v-app id="mes-app">
-    <v-navigation-drawer app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp" v-model="drawer">
+    <v-navigation-drawer v-if="currentUser" app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp" v-model="drawer">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left extended :extension-height="3">
-      <v-toolbar-side-icon @click.stop="toggleMenuMode"></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="currentUser" @click.stop="toggleMenuMode"></v-toolbar-side-icon>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
@@ -41,6 +41,9 @@ export default {
     };
   },
   computed: {
+    currentUser() {
+      return this.$store.getters.getCurrentUser;
+    },
     error() {
       return this.$store.getters["mes/error"];
     },

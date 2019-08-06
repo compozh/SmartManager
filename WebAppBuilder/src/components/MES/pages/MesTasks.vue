@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenters', { uuid: "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=" });
+      await this.$store.dispatch('mes/initializeWorkCenters');
       this.initializeInstallations();
       await this.$store.dispatch('mes/initializeTasks', this.workCenters);
       this.initializeTasks = true;
