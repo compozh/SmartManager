@@ -1,13 +1,20 @@
 <template>
-    <div>
-        <v-breadcrumbs  v-if="show" :items="cataloguePath">
-            <template v-slot:item="props">
-                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id }}">
-                {{ props.item.text }}
+    <v-layout row wrap="">
+            <v-breadcrumbs v-if="show">
+                <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
+                      <p>...</p>
                 </router-link>
-        </template>
-        </v-breadcrumbs>
-    </div>
+            </v-breadcrumbs>
+        <v-flex>
+            <v-breadcrumbs :items="breadCrumbs" divider=">">
+                <template v-slot:item="props">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim(), }}">
+                      {{ props.item.text.toUpperCase() }}
+                    </router-link>
+                </template>
+            </v-breadcrumbs>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -16,54 +23,44 @@ const api = new PurchasesApi();
 export default {
     name: "catalogue-route-breadcrumbs",
     props:{
-        code:{
-            type: String,
-            required: true
-        }
     },
     data:() =>({
-        loading: false,
-        cataloguePath: [],
+        first: {},
+        breadCrumbs: [],
         show: false
     }),
     methods:{
-        getRoutePath(code) {
-            api.getResourcesGroups(code, "id,name").then(this.getParendCodeCallback);
-            //const query = `{purchases{items: resourcesGrops(id: "${code}"){}}}`;
-            //purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
-        },
-        getParendCodeCallback(r) { 
-            var item = _.first(r.data.purchases.items);
-            if (item)
-            {
-                if (!item.parent || item.parent === null){
-                    var id = _.trim(item.id);
-                    this.cataloguePath.unshift({ text: item.name, disable: false, id: id, href: `${this.getBaseURL(id)}` });
-                    this.cataloguePath.unshift({ text: "..."    , disable: false, id: null   , href: `${this.getBaseURL()}` });
-                    this.show = true;
-                }
-                else{
-                    var id = _.trim(item.id);
-                    this.cataloguePath.unshift({ text: `${item.name}`, disable: id === this.code, id: id, href: `${this.getBaseURL()}\\${id}` });
-                    this.getRoutePath(item.parent.id);
-                }
-            }
-        },
-        getBaseURL() {
-            var the_arr = this.$route.fullPath.split('/');
-            the_arr.pop();
-            return( the_arr.join('/') );
+        responceCallback(response){            
+            this.show = true;
+            this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
         }
     },
     created(){
-        this.getRoutePath(this.code)
+        let currentGroup = this.$route.params.catalogueId;
+        if(currentGroup != undefined){
+                api.getBreadcrumbsByGroup(currentGroup).then(this.responceCallback);
+            }
     },
     watch: {
-        '$route' (to, from) {
-            this.cataloguePath = [];
-            this.show = false;
-            this.getRoutePath(this.code)
+        '$route' (to, from){
+            if(to.params.catalogueId != null){
+                api.getBreadcrumbsByGroup(to.params.catalogueId).then(this.responceCallback);
+            }
+            else{            
+                this.show = false;
+                this.breadCrumbs = [];
+            }
         }
     }
 }
 </script>
+
+<style scoped>
+    .first{
+        font-size: larger;
+    }
+
+    .crumbs{
+        color: grey;
+    }
+</style>

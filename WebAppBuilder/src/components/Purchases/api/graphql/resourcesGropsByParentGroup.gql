@@ -1,6 +1,6 @@
-{
+query ($group: String) {
 purchases{
-  items: resourcesGrops(group:$group){
+  resourcesGroups(group:$group){
     id, name,children{id,name},resources{id,name}
     }
   }

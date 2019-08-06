@@ -39,7 +39,7 @@ export default {
   addToFavLists(state, payload){
     let favListItem = { 
       alias : payload.Alias,  
-      listiD : payload.Id.toString(), 
+      id : payload.Id.toString(), 
       keyValues : payload.KeyValues, 
       caption : payload.Caption, 
       isDefaultList: payload.IsDefaultList
@@ -95,7 +95,35 @@ export default {
     //state.testItems.resources = [];
     //debugger;
   },
-
+  addResources(state, payload){
+    
+    state.favResources = payload;
+    /*
+    let oldRes = state.resources;
+    payload.forEach(w=> {
+      if(!oldRes.map(x => x.id).some(y => y==w.id))
+      {
+        state.resources.push(w);
+      }
+    });
+    let test = state.resources.concat(payload);
+    
+    state.resources = state.resources;
+  */
+  },
+  addApplications(state, payload){
+    let oldAppl = state.applications;
+    payload.forEach(w=> {
+      if( !oldAppl.map(x => x.id).some(y => y==w.id))
+      {
+        state.applications.push(w);
+      }
+    });
+    let test = state.applications.concat(payload);
+    //state.resources = payload;
+    
+    state.applications= state.applications;
+  },
   setResourceGroup(state, payload){
     state.resourceGroups = payload.children;
     state.resources = payload.resources;

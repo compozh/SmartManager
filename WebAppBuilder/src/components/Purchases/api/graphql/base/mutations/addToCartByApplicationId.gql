@@ -1,0 +1,7 @@
+mutation($applicationId:Int!){
+  purchasesMutation{
+    addToCartByApplicationId(applicationId:$applicationId){
+     id,resource{id,name,resourceGroup{id,name}},measurementUnit{id,name},resourceName,quantity,dateDelivery
+    }
+  }
+}

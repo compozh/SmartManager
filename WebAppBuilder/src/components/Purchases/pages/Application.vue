@@ -88,12 +88,10 @@ export default {
     computed:{
         application:{
             get: function() {
-                debugger;
                 let test = this.$store.getters["purchases/getApplications"];
                 return test.find(w=>w.id == this.$route.params.applicationId);
             },
             set: function(newVal){
-                debugger;
                 //this.$store.commit('purchases/setApplications', newVal);
             }
         },
@@ -110,7 +108,6 @@ export default {
         }
     },
     created(){
-        debugger;
     },
     mounted(){
         api.getApplications();
@@ -123,7 +120,6 @@ export default {
     },
     watch: {
         '$route' (to, from) {
-          debugger;
           var id = to.params.applicationItemId;
           this.application = id ;
         }

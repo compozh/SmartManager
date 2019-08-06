@@ -64,7 +64,6 @@
         },
         methods:{
             toogleSearchPanel(){
-                // debugger;
                 this.showSearch = true;
                 this.$refs.elastic_search_input.$el.focus();
                 this.items = [];
@@ -97,7 +96,7 @@
                 console.log(this.items);
             },
             addToCartCall(item){
-                api.addToCartMutation(item);
+                api.addToCartMutation(item.id);
             }
         }
     }

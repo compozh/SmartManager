@@ -3,16 +3,23 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag';
 import _ from 'lodash';
+
+// ResourceGroups query
+import mainQuery from './graphql/base/queryWithGroupStringParams.graphql';
+import catalogueQueryFragment from './graphql/fragments/catalogueQuery.graphql';
+import resourcesMinimalFieldsFragment from './graphql/fragments/resources/minimalFields.graphql';
+import resourcesGroupsMinimalFieldsFragment from './graphql/fragments/resourcesGroups/minimalFields.graphql';
 // Queries
 
-import resourceGroupImage from './graphql/resourceGroupImage.gql'
+import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
 import resourcesGroupById from './graphql/resourcesGroupById.gql'
-import resources from './graphql/resources.gql'
+import resourceById from './graphql/resourceById.gql'
 import cartItems from './graphql/cartItems.gql'
 import favLists from './graphql/favLists.gql'
 import elasticSearch from './graphql/elasticSearch.gql'
 import masurementSearch from './graphql/masurementSearch.gql'
 import addToCart from './graphql/addToCart.gql'
+import addToCartByApplicationId from './graphql/base/mutations/addToCartByApplicationId.gql'
 import updateCart from './graphql/updateCart.gql'
 import deleteAllCarts from './graphql/deleteAllCarts.gql'
 import deleteCart from './graphql/deleteCart.gql'
@@ -30,6 +37,10 @@ import deleteItemFromFavorites from './graphql/deleteItemFromFavorites.gql'
 import mutationCreateFavList from './graphql/mutationCreateFavList.gql'
 import applications from './graphql/applications.gql'
 import docStatus from '../api/graphql/docStatus.gql'
+import recoursesByIds from '../api/graphql/recoursesByIds.gql' 
+import applicationsByIds from '../api/graphql/applicationsByIds.gql' 
+import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.gql'
+
 
 const options = {
   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -48,57 +59,88 @@ const client = new ApolloClient({
 export class PurchasesApi {
   constructor() {}
 
-  getResourcesGroups(result){
-    let test = result;
+    getResourceById(id){
+    const FIELDS = gql`
+      fragment resourcesFields on Resource {
+        id,
+        fullName,
+        name,
+        designation,
+        measurementUnit{
+          shortName,
+          fullName
+        }
+        resourceGroup{
+          id,
+          name
+        }
+      }
+    `;
+    return client.query({
+      query: gql`${resourceById} ${FIELDS}`,
+      variables: { id: id },
+      fetchPolicy: 'no-cache'
+    })
+    .catch(error => console.log(error.message))
   }
 
-  /*
-  getResourcesGroups(id, flds){
-    var FIELDS = gql`
-    fragment resourcesGroupsFields on ResourceGroup {
-      ${flds}
-    }
-  `;
+  getBreadcrumbsByGroup(group){
     return client.query({
-      query: gql`query ($id: ID) ${resourcesGropsById} ${FIELDS}`,
-      variables: { id: id }
-    })
-    .then(result => result)
-    .catch(error => console.log(error.message))
-  }*/
-
-  getResourcesGroupsByGroup(group, flds){
-    var FIELDS = gql`
-    fragment resourcesGroupsFields on ResourceGroup {
-      ${flds}
-    }
-  `;
-    return client.query({
-      query: gql`query ($group: String) ${resourcesGropsByGoup} ${FIELDS}`,
+      query: gql`${breadcrumbsByGroup}`,
       variables: { group: group }
     })
-    .then(result => result)
     .catch(error => console.log(error.message))
   }
 
+  // getResourcesGroups(group){
+  //   const FIELDS = gql`
+  //   fragment resourcesGroupFields on ResourceGroup {
+  //     id, 
+  //     name,
+  //     children{
+  //       id,
+  //       name, 
+  //       children{
+  //         id,
+  //         name
+  //       }
+  //     }, 
+  //     resources{
+  //       id,
+  //       name,
+  //       designation
+  //     }
+  //   }`;
+  //   return client.query({
+  //     query: gql`${resourcesGroupById} ${FIELDS}`,
+  //     variables: { group: group }
+  //   })
+  //   .then(this.getResourcesGroupsCallback)
+  //   .catch(error => console.log(error.message))
+  // }
+
   getResourcesGroupsByParentGroupCallback(result){
-    let t = result.data.purchases.items;
+    let t = result.data.purchases.resourcesGroups;
     store.commit('purchases/setResourceGroups', t);
   }
 
   getResourcesGroupsByParentGroup(group){
     return client.query({
-      query: gql`query ($group: String) ${resourcesGropsByParentGroup}`,
+      query: gql`${resourcesGropsByParentGroup}`,
       variables: { group: group },
       fetchPolicy: 'no-cache'
     })
     .then(this.getResourcesGroupsByParentGroupCallback)
     .catch(error => console.log(error.message))
   }
-
+  
   getResourcesGroupById(group){
     return client.query({
-      query: gql`${resourcesGroupById}`,
+      query: gql`
+        ${mainQuery} 
+        ${catalogueQueryFragment} 
+        ${resourcesMinimalFieldsFragment} 
+        ${resourcesGroupsMinimalFieldsFragment}`,
       variables: { group: group }//,
       //fetchPolicy: 'no-cache'
     })
@@ -107,27 +149,30 @@ export class PurchasesApi {
   }
 
   getResourcesGroupByIdCallback(result){
-    debugger;
-    let t = result.data.purchases.items;
+    let t = result.data.purchases.resourcesGroup;
     store.commit('purchases/setResourceGroup', t);
   }
 
   getImagesForCatalogueGroup(group) {
+    const FIELDS = gql`
+      fragment resourcesGroupFields on ResourceGroup {
+        content
+      }
+    `;
     return client.query({
-      query: gql`${resourceGroupImage}`,
+      query: gql`${resourcesGroupById} ${FIELDS}`,
       variables: { group: group },
-      fetchPolicy: 'no-cache'
+      //fetchPolicy: 'no-cache'
     })
   }
-
   getImagesForCatalogueItem(id){
     const FIELDS = gql`
-    fragment resourcesFields on Resource {
-      content
-    }
-  `;
+      fragment resourcesFields on Resource {
+        content
+      }
+    `;
     return client.query({
-      query: gql`query ($id: ID) ${resources} ${FIELDS}`,
+      query: gql`${resourceById} ${FIELDS}`,
       variables: { id: id }
     })
     .then(result => result)
@@ -141,7 +186,7 @@ export class PurchasesApi {
 
   getCartItems(){
     return client.query({
-      query: gql`query ${cartItems}`,
+      query: gql`${cartItems}`,
       variables: { },
       fetchPolicy: 'no-cache'
     })
@@ -157,7 +202,7 @@ export class PurchasesApi {
   `;
     var v = { name: `%${txt}%` };
     return client.query({
-      query: gql`query ($name: [String]) ${masurementSearch} ${FIELDS}`,
+      query: gql`${masurementSearch} ${FIELDS}`,
       variables: v
     })
     .then(result => result)
@@ -166,7 +211,7 @@ export class PurchasesApi {
 
   elasticSearch(text){
     return client.query({
-      query: gql`query ($name: String) ${elasticSearch}`,
+      query: gql`${elasticSearch}`,
       variables: { name: text }
     })
     .then(result => result)
@@ -204,12 +249,29 @@ export class PurchasesApi {
     store.commit("purchases/setMessage", `\"${cartItem.resourceName}\" добавлен в корзину.`);
   }
 
-  addToCartMutation(item){
+  addToCartMutation(itemId){
     return client.mutate({
       mutation: gql`${addToCart}`,
-      variables: {resourceId: item.id}
+      variables: {resourceId: itemId}
     })
       .then(this.addToCartMutationCallback)
+      .catch(error => console.log(error.message))
+    }
+  
+  addToCartByApplicationIdCallback(response){
+    let items = response.data.purchasesMutation.addToCartByApplicationId;
+    for(let i=0;i<items.length;i++){
+      store.commit('purchases/addCartItem', items[i]);
+    }
+    store.commit("purchases/setMessage", "Ресурсы добавлены в корзину.");
+  }
+
+  addToCartByApplicationId(applicationId){
+    return client.mutate({
+      mutation: gql`${addToCartByApplicationId}`,
+      variables: {applicationId: applicationId}
+    })
+      .then(this.addToCartByApplicationIdCallback)
       .catch(error => console.log(error.message))
     }
   
@@ -373,7 +435,7 @@ addToFavoritesMutationCallbackFirst(result){
   getFavListInputTypeParam(favList)
   {
     let test =  {
-        id:                 favList.id != null ? favList.id: favList.listiD,
+        id:                 favList.id,//favList.id != null ? favList.id: favList.listiD,
         alias:              favList.alias,
         caption:            favList.caption,
         comment:            "",
@@ -383,6 +445,15 @@ addToFavoritesMutationCallbackFirst(result){
     }
 
   return test;
+  }
+
+  mutationChangeListForItem(keyValue, newFavListId, oldFavListId)
+  {
+    return client.mutate({
+      mutation: gql`${mutationChangeListForItem}`,
+      variables: { keyValue: keyValue, newFavListId: newFavListId, oldFavListId : oldFavListId}     
+    })
+      .catch(error => {console.log(error.message)});
   }
 
   mutationEditFavList(favList){
@@ -425,7 +496,7 @@ addToFavoritesMutationCallbackFirst(result){
 
     store.commit("purchases/setChose", {
       list : [{Title:"Заявки", Key:"DOC"}, {Title:"Ресурсы", Key:"KSM"},] , 
-      caption:"Тип списока?",
+      caption:"Тип списка?",
       method: (key) => {
           return client.mutate({
             mutation: gql`${mutationCreateFavList}`,
@@ -444,12 +515,12 @@ addToFavoritesMutationCallbackFirst(result){
   }
   getApplicationsCallback(result){
     let applications = result.data.purchases.applications;
-    store.commit('purchases/setApplications', applications);
+    store.commit('purchases/addApplications', applications);
   }
   getApplications(){
     return client.mutate({
-      mutation: gql`${applications}`,
-      variables: { }     
+      mutation: gql`query($curr: Boolean) ${applications}`,
+      variables: { curr: true }     
     })
       .then(this.getApplicationsCallback)
       .catch(error => console.log(error.message));
@@ -470,5 +541,31 @@ addToFavoritesMutationCallbackFirst(result){
   getDocStatusCallback(result){
     let docStatus = result.data.purchases.docStatus;
     store.commit('purchases/setDocStatus', docStatus);
+  }
+
+  getApplicationsByIds(ids){
+    return client.mutate({
+      mutation: gql`${applicationsByIds}`,
+      variables: { ids:ids}     
+    })
+      .then(this.getApplicationsCallback)
+      .catch(error => console.log(error.message));
+  }
+  
+  getResourcesByIds(ids){
+    return client.query({
+      query: gql`${recoursesByIds}`,
+      variables: { ids: ids }//,
+      //fetchPolicy: 'no-cache'
+    })
+    .then(this.getResourcesByIdsCallback)
+    .catch(error => console.log(error.message))
+    
+  }
+
+  getResourcesByIdsCallback(result){
+    let t = result.data.purchases.resources;
+    //debugger;
+    store.commit('purchases/addResources', t);
   }
 }

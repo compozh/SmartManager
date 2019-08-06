@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn icon @click.stop="" v-on:click.prevent="favClick()">
+        <v-btn v-bind:class="{checked:inFavourite}" class="like_button" icon @click.stop="" v-on:click.prevent="favClick()">
             <v-icon v-text="inFavourite ? 'favorite' : 'favorite_border'" />
         </v-btn>
     </div>
@@ -39,7 +39,7 @@ export default {
         alias:{
             type: String,
             required: true
-        },
+        }
     },
     created: function () {
             this.$store.watch(state => state.purchases.favlists, this.checkInFavourite);
@@ -71,3 +71,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .like_button:hover{
+        color:red;
+    }
+
+    .checked{
+        color:red;
+    }
+
+</style>
+

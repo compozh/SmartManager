@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div v-if="!isCard">
       <v-navigation-drawer fixed right app v-model="filterDrawer" >
         <v-layout class="filter-panel">
@@ -14,7 +15,7 @@
         </v-layout>
       </v-navigation-drawer>
         <v-layout row>
-          <!--<catalogue-route-breadcrumbs :code="routeParamCode" />-->
+          <catalogue-route-breadcrumbs :code="routeParamCode" />
           <v-layout justify-end>
             <!--<v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>-->
             <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
@@ -32,7 +33,7 @@
             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <v-card>
                 <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                  <item-picture :entityName="entityType" :id="item.id" height="200px" width="350px" />
+                  <item-picture entityName="resourcesGroup" :id="item.id" height="200px" width="350px" />
                   <div class="cat_header title mb-1">{{item.name}}</div>                  
                 </router-link>
               <v-list>
@@ -52,21 +53,26 @@
               </v-card>
             </v-flex>
           </template>
-            <template v-for="item in resource_items">
-              <v-flex :key="item.id" >
-                {{item.id}}
-              </v-flex>
-            </template>
+          <template v-for="item in resource_items">
+             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
+              <!--<resource-card-item :key="item.id" :resourse="item" />-->
+                <catalogueItemCard :catalogueItem="item" />
+            </v-flex>
+          </template>
         </v-layout>
         </div>
+      
+      <loader-element/>
     </div>          
     <div v-else>
-      <v-card>
+      <catalogue-item :catalogueId="routeParamCode" />
+      <!--<v-card>
         <v-card-title>
           <catalogue-item :catalogueId="routeParamCode" />
         </v-card-title>
-      </v-card>
+      </v-card>-->
     </div>
+  </div>
 </template>
 
 <script>
@@ -113,10 +119,10 @@
         groups_items: {
           get: function() {
             if (this.search === ""){                        
-              debugger;
+              
               return this.$store.getters["purchases/getResourceGroups"];
             }
-          debugger;
+          
           return _.filter(this.$store.getters["purchases/getResourceGroups"], this.searchCallback);
           }
         },
@@ -131,6 +137,7 @@
           return this.$store.getters["purchases/getResources"];//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
           }
         },
+        //todo
         test_items:{
           get: function() {
             if (this.search === ""){
@@ -153,7 +160,13 @@
       watch: {
         '$route' (to, from) {
           var id = to.params.catalogueId;
-          this.getItems(id);
+          if (!id){
+            id = "";
+          }
+          if (id.trim().length < 15)
+          { 
+            this.getItems(id);
+          }
         }
       }
     }

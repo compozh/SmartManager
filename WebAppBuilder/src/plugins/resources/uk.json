@@ -14,7 +14,7 @@
 		  "Description": "Опис"
 		},
 		"Catalog":{
-			"FastFilter":"Биcтрий фільтр",
+			"FastFilter":"Швидкий фільтр",
 			"Name":"Назва"
 		  },
 		"CartItems":{
@@ -28,7 +28,7 @@
 		  
 		},
 		"CreateOrder": "Зробити замовлення",
-		"CleanCart": "Очистити корзину"
+		"CleanCart": "Очистити кошик"
 	},
     "eds": {
 		"CA": "ЦСК",
