@@ -6,7 +6,7 @@
                 <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
                   <v-badge color="#1976d2" overlap>
                     <template v-slot:badge>
-                      <span>{{countTasks(tab.id).length}}</span>
+                      <span class="span-count-tasks">{{countTasks(tab.id).length}}</span>
                     </template>
                     {{tab.name}}
                   </v-badge>
@@ -111,5 +111,9 @@ export default {
   }
   .grid-tabs {
     padding-left: 10px;
+  }
+  .span-count-tasks {
+    font-size: 10px;
+    font-weight: 400;
   }
 </style>
