@@ -115,32 +115,47 @@ const api = new PurchasesApi();
         },
         methods:{
             searchCallback (item) {
-                var itemToSearch = _.lowerCase(item.title);
-                var searchedTitle = _.lowerCase(_.trim(this.search.title));
-                var searchedNumber = _.lowerCase(_.trim(this.search.number));               
-                
-                var temp = itemToSearch.indexOf(searchedTitle);
-                var titleResult = temp >= 0;
-                
-                var numberResult = true;
-                if(searchedNumber != ""){
-                    numberResult = item.number === searchedNumber;
-                }
-                
+                let titleResult = this.checkTitle(item);
+                let numberResult = this.checkNumber(item);
                 let dateResult = this.checkDates(item);
-                let statusResult = this.checkStatus(item);
+                let statusResult = this.checkStatus(item);                
                 
-                
-                //return numberResult && titleResult && dateResult && statusResult;
-                return true;
+                debugger;
+                return numberResult && titleResult && dateResult && statusResult;                
+            },
+            checkTitle(item){
+                var titleResult = true;
+                if(this.search.title != ""){
+                    var itemToSearch = _.lowerCase(_.trim(item.title));
+                    var searchedTitle = _.lowerCase(_.trim(this.search.title));
+                    var temp = itemToSearch.indexOf(searchedTitle);
+                    titleResult = temp >= 0;
+                }
+
+                return titleResult;
+            },
+            checkNumber(item){
+                var numberResult = true;
+                if(this.search.number != ""){           
+                    var searchedNumber = _.lowerCase(_.trim(this.search.number));
+                    var temp = item.number.indexOf(searchedNumber);
+                    numberResult = temp >= 0;
+                }
+
+                return numberResult;
             },
             checkStatus(item){
-                let result = false;
-                let docId = item.docStatus.id;
-                for(let i=0;i<this.search.statuses.length;i++){
-                    if(docId === this.search.statuses[i].id){
-                        result = true;
-                        break;
+                let result = true;
+                if(this.search.statuses.length >0){
+                    let docId = item.docStatus.id;
+                    for(let i=0;i<this.search.statuses.length;i++){
+                        if(docId === this.search.statuses[i]){
+                            result = true;
+                            break;
+                        }else{
+                            result = false;
+                        }
+                        
                     }
                 }
 
@@ -183,9 +198,9 @@ const api = new PurchasesApi();
                 console.log(`TODO: swipe right for application #${appl.number}`)
             }
         },
-        created() {
-            api.getApplications();
+        created() {            
             api.getDocStatus();
+            api.getApplications();
         },
     }
 </script>
