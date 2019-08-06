@@ -4,7 +4,7 @@ export default {
   menuMode: 'open', // Main menu state: open, mini, close
   tasksPageState: {
     selectedTask: null,
-    selectedTasksTab: 'PLAN',
+    selectedTasksTab: 0,
     currentLayout: 'mes-task-main-layout',
   },
   stuffPageState: {
