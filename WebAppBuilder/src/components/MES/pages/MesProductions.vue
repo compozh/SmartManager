@@ -55,6 +55,8 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow-y: auto;
+  height: 94vh !important;
 }
 .productions-card {
   margin: 10px;

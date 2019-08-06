@@ -67,6 +67,8 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  height: 88vh;
+  overflow-y: auto;
 }
 .installation-card{
   max-width: 400px;
