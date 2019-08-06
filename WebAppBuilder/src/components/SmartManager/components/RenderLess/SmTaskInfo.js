@@ -15,7 +15,10 @@ export default {
     const taskId = +this.$route.params.taskId
     const task = this.task
     if (task === null || task.id !== taskId) {
-      this.$store.dispatch('sm/getTaskInfo', taskId)
+      this.$store.dispatch('sm/getTaskInfo', {
+        taskId,
+        loader: 'setCircularLoader'
+      })
     }
   },
   computed: {
@@ -33,15 +36,26 @@ export default {
       return this.$vuetify.breakpoint.lgAndUp
     },
   },
+  methods: {
+    changeTaskStatus(status) {
+      this.$store.dispatch('sm/changeTaskStatus', {
+        id: this.task.id,
+        status: status,
+        comment: ''
+      })
+    }
+  },
   render() {
     return this.$scopedSlots.default({
       activeTab: this.activeTab,
       tabs: this.getTabs,
       params: {
+        status: this.task ? this.task.status : '',
         hasOrig: this.task ? this.task.originals.length : 0,
         hasComm: this.task ? this.task.comments.length : 0,
         hiddenLgAndUp: this.hiddenLgAndUp
-      }
+      },
+      changeStatus: this.changeTaskStatus
     })
   }
 }

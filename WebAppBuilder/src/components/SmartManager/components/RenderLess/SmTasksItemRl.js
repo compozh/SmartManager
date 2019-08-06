@@ -9,7 +9,10 @@ export default {
   },
   methods: {
     goToTaskInfo(taskId) {
-      this.$store.dispatch('sm/getTaskInfo', taskId)
+      this.$store.dispatch('sm/getTaskInfo', {
+        taskId,
+        loader: 'setCircularLoader'
+      })
       this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
     }
   },

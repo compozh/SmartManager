@@ -53,7 +53,7 @@
 
 <script>
   export default {
-    name: "smTaskTabComments",
+    name: "sm-task-tab-comments",
     computed: {
       task() {
         return this.$store.state.sm.taskInfo

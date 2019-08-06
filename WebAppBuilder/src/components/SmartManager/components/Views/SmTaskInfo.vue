@@ -1,11 +1,43 @@
 <template>
   <sm-task-info-rl
-    v-slot="{ activeTab, tabs, params }"
+    v-slot="{ activeTab, tabs, params, changeStatus }"
   >
     <v-container fluid pa-0 ma-0>
       <v-layout>
         <v-flex lg6 px-2>
-          <v-layout>
+          <v-layout wrap>
+            <v-flex xs9 text-xs-left>
+              <v-btn
+                v-if="params.status === '*'"
+                class="success ml-0"
+                small depressed
+                @click="changeStatus('+')"
+              >
+                <v-icon size="18">done</v-icon>
+                <span class="caption pl-1">Выполнить</span>
+              </v-btn>
+              <v-btn
+                v-if="params.status === '' || params.status === '+'"
+                class="info ml-0"
+                small depressed
+                @click="changeStatus('*')"
+              >
+                <v-icon size="18">settings_backup_restore</v-icon>
+                <span class="caption pl-1">В работу</span>
+              </v-btn>
+              <v-btn
+                v-if="params.status === '' || params.status === '*'"
+                color="error"
+                small depressed
+                @click="changeStatus('-')"
+              >
+                <v-icon size="18">close</v-icon>
+                <span class="caption pl-1">Отменить</span>
+              </v-btn>
+            </v-flex>
+            <v-flex xs3 d-flex text-xs-right>
+              <sm-task-status class="py-2" :status="params.status" chip="true"></sm-task-status>
+            </v-flex>
             <v-flex xs12>
               <v-tabs
                 class="tabs"
@@ -62,12 +94,16 @@
   .marker:after {
     content: '';
     position: relative;
-    top: -15px;
+    top: -13px;
     right: 10px;
     height: 10px;
     width: 10px;
     border-radius: 50%;
     background: #B71C1C;
+  }
+
+  .tabs >>> .v-tabs__container {
+    height: 35px;
   }
 
 </style>

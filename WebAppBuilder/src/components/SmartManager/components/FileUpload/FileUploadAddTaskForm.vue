@@ -70,7 +70,6 @@
         </file-upload>
       </v-flex>
     </v-layout>
-    <span v-for="file in files">{{ file.name }}<br></span>
   </v-container>
 </template>
 
