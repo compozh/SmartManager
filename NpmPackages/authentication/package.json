@@ -1,6 +1,6 @@
 {
   "name": "@it-enterprise/authentication",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": false,
   "description": "library for authentication",
   "author": "it-enterprise",
@@ -11,6 +11,7 @@
   ],
   "license": "ISC",
   "scripts": {
+    "build-publish": "npm run build-bundle && npm publish",
     "build-bundle": "vue-cli-service build --target lib --name authentication ./src/index.js"
   },
   "devDependencies": {
