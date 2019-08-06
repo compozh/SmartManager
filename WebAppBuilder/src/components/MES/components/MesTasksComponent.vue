@@ -2,14 +2,15 @@
   <v-card>
     <v-layout column xs12 md12 sm12 lg12>
       <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
-          <v-tabs>
-            <v-layout align-start>
-              <v-flex v-for="tab in tabs" align-self-center shrink :key=tab.id>
-                <v-tab :key=tab.id @click="changeSelectTasksTab(tab.id)">
-                  {{tab.name}}
+          <v-tabs show-arrows >
+                <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.id)" class="toolbar-item">
+                  <v-badge color="#1976d2" overlap>
+                    <template v-slot:badge>
+                      <span>!</span>
+                    </template>
+                    {{tab.name}}
+                  </v-badge>
                 </v-tab>
-              </v-flex>
-            </v-layout>
           </v-tabs>
       </v-flex>
       <v-flex class="tasks-list-block">
@@ -41,7 +42,6 @@ export default {
     ContentLoader
   },
   data() {
-    debugger;
     return {tabs: [{id: "PLAN", name: "В плане"}, {id: "DONE", name: "Выполненные"}]}
   },
   props: {
@@ -62,6 +62,9 @@ export default {
 </script>
 
 <style type="text/css" scoped>
+.grid-tabs .v-badge {
+  padding-right: 10px;
+}
   .tasks-list-block {
     overflow: auto;
     height: 89vh;
@@ -73,6 +76,14 @@ export default {
   }
   .change-tasks-status-toolbar {
     padding-left: 5px;
+  }
+  .toolbar-item {
+    margin: 0 10px;
+  }
+  .v-badge__badge {
+    position: absolute !important;
+    right: -20px !important; 
+    top: -10 !important;
   }
   .active-task-item {
     background-color: #d5e5ff;

@@ -49,9 +49,15 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
 }
+.mes-productions-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .productions-card {
   margin: 10px;
   max-width: 400px;
+  width: 360px;
 }
 .wait-for-data-block {
   padding: 20px;

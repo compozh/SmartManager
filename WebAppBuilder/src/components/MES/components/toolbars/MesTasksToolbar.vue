@@ -1,5 +1,5 @@
 <template>
-  <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
+  <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
     <v-flex
       class="toolbar-basebuttons"
       v-if="currentLayout == 'mes-accept-task-layout' || currentLayout == 'mes-task-main-layout'">

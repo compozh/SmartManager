@@ -1,5 +1,5 @@
 <template>
-     <v-layout>
+     <v-layout class="mes-task-main-layout">
         <v-flex>
             <grid-layout
                 class="main-layout"
@@ -44,6 +44,9 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
+  .mes-task-main-layout {
+    height: 88vh;
+  }
   .main-layout {
     overflow-y: auto;
     height: 89vh !important;

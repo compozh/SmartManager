@@ -1,5 +1,5 @@
 <template>
-    <v-layout>
+    <v-layout class="mes-task-stuff-layout">
       <div class="installations-block" v-for="(installationsByWorkCenters, workCenter) in installations" :key="workCenter">
       <v-card class="installation-card" v-for="installation in installationsByWorkCenters" :key="installation.id">
          <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
@@ -34,5 +34,6 @@ export default {
 .installation-card{
   max-width: 400px;
   margin: 10px;
+  width: 360px;
 }
 </style>
