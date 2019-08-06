@@ -145,8 +145,8 @@ export default {
     },
     // eslint-disable-next-line vue/return-in-computed-property
     currentUser() {
-      if (this.$store.state.currentUser) {
-        return this.$store.state.currentUser.CurrentUserData.UserName
+      if (this.$store.state.authentication.currentUser) {
+        return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName
       }
     }
   },
