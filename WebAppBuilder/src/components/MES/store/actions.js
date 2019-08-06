@@ -1,12 +1,12 @@
 import {MesApi} from '../api/mesApi'
+import {DeviceUUID} from '../../../../node_modules/device-uuid'
 
 const api = new MesApi()
+const deviceUUID = new DeviceUUID()
 
 export default {
   async initializeProperties({commit}) {
-
     commit('setError', null)
-    commit('setLinearLoader', true)
 
     try {
       const result = await api.getPropertiesFromGql();
@@ -14,22 +14,19 @@ export default {
     } catch (e) {
       commit('setError', e.message)
     }
-    commit('setLinearLoader', false)
   },
-  async initializeWorkCenters({ commit }, { uuid, login }) {
+  async initializeWorkCenters({ commit }) {
     commit('setError', null)
-    commit('setLinearLoader', true)
     try {
-      let result = await api.getWorkCentersFromGql(uuid, login);
+      let uuid = deviceUUID.get();
+      let result = await api.getWorkCentersFromGql(uuid);
       commit('setWorkCenters', result.data.mes.workCenters)
     } catch (e) {
       commit('setError', e.message)
     }
-    commit('setLinearLoader', false)
   },
   async initializeTasks({ commit}, workCenters) {
     commit('setError', null)
-    commit('setLinearLoader', true)
     try {
       var tasks = {};
       for(var i = 0; i < workCenters.length; i++) {
@@ -46,11 +43,9 @@ export default {
     } catch (e) {
       commit('setError', e.message)
     }
-    commit('setLinearLoader', false);
   },
   async initializeInstallations({ commit}, workCenters) {
     commit('setError', null)
-    commit('setLinearLoader', true)
 
     try {
       var installations = {};
@@ -63,7 +58,6 @@ export default {
     } catch (e) {
       commit('setError', e.message)
     }
-    commit('setLinearLoader', false)
   },
   async removeInstallation({commit}, { installation, workCenterCode }) {
     commit('setError', null)
@@ -152,7 +146,6 @@ export default {
   },
   async initializeProductions({ commit }, workerCode) {
     commit('setError', null)
-    commit('setLinearLoader', true)
 
     try {
       let result = await api.getProductionsFromGql(workerCode);
