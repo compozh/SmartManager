@@ -3,11 +3,24 @@
     <v-layout column xs12 md12 sm12 lg12>
       <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
           <v-tabs show-arrows >
-            <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)">
-              {{taskStatus.inPlan.name}}
+            <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)" class="toolbar-item">
+              <v-badge color="#1976d2" overlap>
+                  
+                <template v-slot:badge>
+                  <span>!</span>
+                </template>
+                              {{taskStatus.inPlan.name}}
+
+              </v-badge>
             </v-tab>
-            <v-tab :key=taskStatus.done.id @click="changeStatus(taskStatus.done.id)">
-              {{taskStatus.done.name}}
+            <v-tab :key=taskStatus.done.id @click="changeStatus(taskStatus.done.id)" class="toolbar-item">
+              <v-badge color="#1976d2" overlap>
+                <template v-slot:badge>
+                  <span>!</span>
+                </template>
+                              {{taskStatus.done.name}}
+
+              </v-badge>
             </v-tab>
           </v-tabs>
       </v-flex>
@@ -70,6 +83,9 @@ export default {
 </script>
 
 <style type="text/css" scoped>
+.grid-tabs .v-badge {
+  padding-right: 10px;
+}
   .tasks-list-block {
     overflow: auto;
     height: 89vh;
@@ -81,6 +97,14 @@ export default {
   }
   .change-tasks-status-toolbar {
     padding-left: 5px;
+  }
+  .toolbar-item {
+    margin: 0 10px;
+  }
+  .v-badge__badge {
+    position: absolute !important;
+    right: -20px !important; 
+    top: -10 !important;
   }
   .active-task-item {
     background-color: #d5e5ff;

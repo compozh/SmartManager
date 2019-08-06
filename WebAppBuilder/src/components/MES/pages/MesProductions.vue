@@ -1,9 +1,11 @@
 <template>
     <v-layout class="mes-productions">
       <mes-production-toolbar class="mes-production-toolbar" />
-      <v-card class="productions-card" v-for="production in productions" :key="production.factId">
-        <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
-      </v-card>
+      <v-flex class="mes-productions-content">
+        <v-card class="productions-card" v-for="production in productions" :key="production.factId">
+          <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
+        </v-card>
+      </v-flex>
     </v-layout>
 </template>
 
@@ -48,9 +50,15 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
 }
+.mes-productions-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .productions-card {
   margin: 10px;
   max-width: 400px;
+  width: 360px;
 }
 .wait-for-data-block {
   padding: 20px;

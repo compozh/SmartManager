@@ -29,5 +29,6 @@ export default {
     }
     .mes-installation-card {
         display: flex;
+        justify-content: center;
     }
 </style>

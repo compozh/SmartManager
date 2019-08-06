@@ -70,6 +70,7 @@ export default {
 .installation-card{
   max-width: 400px;
   margin: 10px;
+  width: 360px;
 }
 .wait-for-data-block {
   padding: 20px;
