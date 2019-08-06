@@ -79,101 +79,107 @@
 </template>
 
 <script>
-  export default {
-    name: 'sm-layout',
-    props: ['toolbarTitle'],
-    methods: {
-      menuBtn() {
-        if (this.taskAddForm) {
-          return this.setMessage({
-            type: 'warning',
-            text: 'Для перехода в меню закройте форму'
-          })
-        }
-        switch (this.menuMode) {
-          case 'close':
-            this.setMenuMode('open')
-            break
-          case 'open':
-            this.setMenuMode('mini')
-            break
-          case 'mini':
-            this.setMenuMode('close')
-        }
-      },
-      setMessage(message) {
-        this.$store.commit('sm/setMessage', message);
-      },
-      goToAll() {
-        this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
-      },
-      setMenuMode(mode) {
-        this.$store.commit('sm/setMenuMode', mode)
-      },
-      getFolders() {
-        this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
-      },
-      getTasks() {
-        this.$store.dispatch('sm/getTasks', {
-          folderId: 'ALL',
-          loader: 'setCircularLoader'
+export default {
+  name: 'sm-layout',
+  props: ['toolbarTitle'],
+  methods: {
+    menuBtn() {
+      if (this.taskAddForm) {
+        return this.setMessage({
+          type: 'warning',
+          text: 'Для перехода в меню закройте форму'
         })
       }
+      switch (this.menuMode) {
+      case 'close':
+        this.setMenuMode('open')
+        break
+      case 'open':
+        this.setMenuMode('mini')
+        break
+      case 'mini':
+        this.setMenuMode('close')
+      }
     },
-    computed: {
-      message() {
-        const message = this.$store.state.sm.message
-        return message.type ? message : {
-          type: '',
-          text: `Нет сообщений для отображения`
-        }
-      },
-      circularLoader() {
-        return this.$store.state.sm.circularLoader
-      },
-      linearLoader() {
-        return this.$store.state.sm.linearLoader
-      },
-      menuMode() {
-        return this.$store.state.sm.menuMode
-      },
-      breakpoint() {
-        return this.$vuetify.breakpoint.name
-      },
-      taskAddForm() {
-        return this.$store.state.sm.taskAddForm === 'open'
-      },
-      currentUser() {
-        if (this.$store.state.currentUser) {
-          return this.$store.state.currentUser.CurrentUserData.UserName
+    setMessage(message) {
+      this.$store.commit('sm/setMessage', message)
+    },
+    goToAll() {
+      this.$router.push({name: 'SMARTMANAGERTASKS', params: {foldercode: 'ALL'}})
+    },
+    setMenuMode(mode) {
+      this.$store.commit('sm/setMenuMode', mode)
+    },
+    getFolders() {
+      this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
+    },
+    getTasks() {
+      this.$store.dispatch('sm/getTasks', {
+        folderId: 'ALL',
+        loader: 'setCircularLoader'
+      })
+    }
+  },
+  computed: {
+    message() {
+      const message = this.$store.state.sm.message
+      return message.type ? message : {
+        type: '',
+        text: 'Нет сообщений для отображения'
+      }
+    },
+    circularLoader() {
+      return this.$store.state.sm.circularLoader
+    },
+    linearLoader() {
+      return this.$store.state.sm.linearLoader
+    },
+    menuMode() {
+      return this.$store.state.sm.menuMode
+    },
+    breakpoint() {
+      return this.$vuetify.breakpoint.name
+    },
+    taskAddForm() {
+      return this.$store.state.sm.taskAddForm === 'open'
+    },
+    // eslint-disable-next-line vue/return-in-computed-property
+    currentUser() {
+      if (this.$store.state.authentication.currentUser) {
+        return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName
+      }
+    }
+  },
+  watch: {
+    '$route'(to, from) {
+      if (from.name === 'SMARTMANAGER'
+          || from.name === 'SMARTMANAGERLOGIN') {
+        this.goToAll()
+      }
+      if (to.name === 'SMARTMANAGERLOGIN') {
+        this.setMenuMode('close')
+      }
+    },
+    breakpoint(val) {
+      if (!this.taskAddForm) {
+        switch (val) {
+        case 'xs': this.setMenuMode('close')
+          break
+        case 'sm': this.setMenuMode('mini')
+          break
+        case 'md': this.setMenuMode('open')
         }
       }
     },
-    watch: {
-      '$route'(to, from) {
-        if (from.name === 'SMARTMANAGER'
-          || from.name === 'SMARTMANAGERLOGIN') {
-          this.goToAll()
-        }
-        if (to.name === 'SMARTMANAGERLOGIN') {
-          this.setMenuMode('close')
-        }
-      },
-      breakpoint(val) {
-        if (val === 'sm' && !this.taskAddForm
-          || val === 'xs' && !this.taskAddForm) {
-          this.setMenuMode('mini')
-        }
-      },
-      currentUser(value, oldValue) {
-        if (value && oldValue && value !== oldValue) {
-          this.getFolders()
-          this.goToAll()
-          this.getTasks()
-        }
+    currentUser(value, oldValue) {
+      if (value && oldValue && value !== oldValue) {
+        this.getFolders()
+        this.goToAll()
+        this.getTasks()
       }
     }
   }
+}
 </script>
 
 <style scoped>

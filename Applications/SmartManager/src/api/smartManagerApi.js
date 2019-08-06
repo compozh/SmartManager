@@ -8,16 +8,17 @@ import tasks from './graphql/tasks.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
-
+import changeStatus from './graphql/changeStatus.graphql'
 import Vue from 'vue'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
   const options = {
+    // eslint-disable-next-line no-undef
     uri: myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
-      ... authHeader,
+      ...authHeader,
       'schema': 'smartmanager'
     }
   }
@@ -69,6 +70,23 @@ export class SmartManagerApi {
       mutation: gql`mutation ($newTask: String!) ${addTask}`,
       variables: {
         newTask: JSON.stringify(newTask)
+      }
+    })
+      .then(result => result)
+      .catch(error => console.log(error.message))
+  }
+
+  changeTaskStatusInGql(params) {
+    return getClient().mutate({
+      mutation: gql`mutation (
+        $id: Int!,
+        $status: String!,
+        $comment: String!
+      ) ${changeStatus}`,
+      variables: {
+        id: params.id,
+        status: params.status,
+        comment: params.comment
       }
     })
       .then(result => result)

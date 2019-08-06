@@ -21,15 +21,15 @@
 </template>
 
 <script>
-  export default {
-    name: "SmNotSupport",
-    props: ['url'],
-    computed: {
-      ext() {
-        return this.url.split('.').pop().toUpperCase()
-      }
+export default {
+  name: 'sm-not-support',
+  props: ['url'],
+  computed: {
+    ext() {
+      return this.url.split('.').pop().toUpperCase()
     }
   }
+}
 </script>
 
 <style scoped>

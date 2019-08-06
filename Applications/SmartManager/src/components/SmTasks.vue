@@ -40,75 +40,77 @@
 </template>
 
 <script>
-  export default {
-    name: 'sm-tasks',
-    data: () => ({
-      showAddForm: false,
-      lazyTasks: []
-    }),
-    created() {
-      const folderId = this.$route.params.foldercode
-      this.getTasks(folderId)
-    },
-    watch: {
-      '$route'(to, from) {
-        const currentFolder = from.params.foldercode
-        const targetFolder = to.params.foldercode
-        if (currentFolder !== targetFolder) {
-          this.getTasks(targetFolder)
-        }
-      }
-    },
-    computed: {
-      tasks() {
-        return this.$store.getters['sm/tasks']
-      },
-      lazy() {
-        const tasks = this.tasks
-        if (tasks) {
-          const observer = new IntersectionObserver(
-            entries => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  this.lazyTasks.push(entry.target.id)
-                }
-              })
-            }
-          )
-          for (let i = 0; i < tasks.length; i++) {
-            let elem = document.getElementById('id' + tasks[i].id)
-            observer.observe(elem);
-          }
-        }
-      },
-      checkTasks() {
-        return this.tasks ? this.tasks.length : 0
-      },
-      taskAddForm() {
-        return this.$store.state.sm.taskAddForm === 'open'
-      }
-    },
-    methods: {
-      getFolders() {
-        this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
-      },
-      getTasks(folderId) {
-        this.$store.commit('sm/setCurrentFolder', folderId)
-        const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
-        this.$store.dispatch('sm/getTasks', {folderId, loader})
-          .then(result => this.lazy)
-      },
-      openTaskAddForm() {
-        this.$store.commit('sm/setTaskAddForm', 'open')
-      },
-      closeTaskAddForm() {
-        this.$store.commit('sm/setTaskAddForm', 'close')
-      },
-      intersection(id) {
-        return this.lazyTasks.find(i => i === 'id' + id)
+export default {
+  name: 'sm-tasks',
+  data: () => ({
+    showAddForm: false,
+    lazyTasks: []
+  }),
+  created() {
+    const folderId = this.$route.params.foldercode
+    this.getTasks(folderId)
+  },
+  watch: {
+    '$route'(to, from) {
+      const currentFolder = from.params.foldercode
+      const targetFolder = to.params.foldercode
+      if (currentFolder !== targetFolder) {
+        this.getTasks(targetFolder)
       }
     }
+  },
+  computed: {
+    tasks() {
+      return this.$store.getters['sm/tasks']
+    },
+    // eslint-disable-next-line vue/return-in-computed-property
+    lazy() {
+      const tasks = this.tasks
+      if (tasks) {
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                this.lazyTasks.push(entry.target.id)
+              }
+            })
+          }
+        )
+        for (let i = 0; i < tasks.length; i++) {
+          let elem = document.getElementById('id' + tasks[i].id)
+          observer.observe(elem)
+        }
+      }
+    },
+    checkTasks() {
+      return this.tasks ? this.tasks.length : 0
+    },
+    taskAddForm() {
+      return this.$store.state.sm.taskAddForm === 'open'
+    }
+  },
+  methods: {
+    getFolders() {
+      this.$store.dispatch('sm/getFolders', {loader: 'setLinearLoader'})
+    },
+    getTasks(folderId) {
+      this.$store.commit('sm/setCurrentFolder', folderId)
+      const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
+      this.$store.dispatch('sm/getTasks', {folderId, loader})
+        .then(() => this.lazy)
+    },
+    openTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'open')
+    },
+    closeTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'close')
+    },
+    intersection(id) {
+      return this.lazyTasks.find(i => i === 'id' + id)
+    }
   }
+}
 </script>
 
 <style scoped>
