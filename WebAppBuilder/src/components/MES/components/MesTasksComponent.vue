@@ -6,7 +6,7 @@
                 <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.id)" class="toolbar-item">
                   <v-badge color="#1976d2" overlap>
                     <template v-slot:badge>
-                      <span>!</span>
+                      <span>{{countTasks(tab.id).length}}</span>
                     </template>
                     {{tab.name}}
                   </v-badge>
@@ -42,7 +42,11 @@ export default {
     ContentLoader
   },
   data() {
-    return {tabs: [{id: "PLAN", name: "В плане"}, {id: "DONE", name: "Выполненные"}]}
+    return {
+      tabs: [
+        {id: "PLAN", name: "В плане"}, 
+        {id: "DONE", name: "Выполненные"}
+      ]};
   },
   props: {
     selectedTask: Object,
@@ -56,6 +60,19 @@ export default {
     },
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask);
+    },
+    countTasks(tabId) {
+      var me = this,
+        tasks = [];
+      Object.keys(me.tasks).forEach(workCenterCode => {
+        var tasksByWorkCenter = me.tasks[workCenterCode];
+        tasksByWorkCenter.forEach(task => {
+          if((tabId == "PLAN" && (task.state == "IN_PLAN" || task.state == "IN_WORK")) || tabId == "DONE" && task.state == "DONE") {
+            tasks.push(task);
+          }
+        });
+      });
+      return tasks;
     }
   }
 }
