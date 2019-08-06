@@ -1,5 +1,5 @@
 <template>
-  <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
+  <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
     <v-flex
       class="toolbar-basebuttons"
 
@@ -10,19 +10,19 @@
       :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'"
       @click="onclickAccept">{{selectedTask.state == 'IN_PLAN' ? 'Взять в работу' : 'Приостановить'}}</v-btn>
     </v-flex>
-      <v-flex grow class="mes-tasks-toolbar-qr"
-      v-if="layout === 'mes-task-stuff-layout'">
-      <v-btn outlined class="mes-arrow-back" @click="backToMainLayout"><v-icon dark>arrow_back</v-icon></v-btn>
-        <v-text-field
-          class="qr-input"
-          label="Укажите QR-партии материала для установки"
-          required @keyup.enter="submitQrCode"
-        ></v-text-field>
-        <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
-      </v-flex>
-   <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
-     <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
-   </v-flex>
+    <v-flex grow class="mes-tasks-toolbar-qr"
+    v-if="layout === 'mes-task-stuff-layout'">
+    <v-btn outlined class="mes-arrow-back" @click="backToMainLayout"><v-icon dark>arrow_back</v-icon></v-btn>
+      <v-text-field
+        class="qr-input"
+        label="Укажите QR-партии материала для установки"
+        required @keyup.enter="submitQrCode"
+      ></v-text-field>
+      <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
+    </v-flex>
+    <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
+      <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
+    </v-flex>
   </v-layout>
 </template>
 

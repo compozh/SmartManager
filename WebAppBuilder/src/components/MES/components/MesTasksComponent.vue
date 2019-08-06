@@ -2,19 +2,13 @@
   <v-card>
     <v-layout column xs12 md12 sm12 lg12>
       <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
-          <v-tabs>
-            <v-layout align-start>
-              <v-flex align-self-center shrink>
-                <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)">
-                  {{taskStatus.inPlan.name}}
-                </v-tab>
-              </v-flex>
-              <v-flex align-self-center shrink>
-                <v-tab :key=taskStatus.done.id @click="changeStatus(taskStatus.done.id)">
-                  {{taskStatus.done.name}}
-                </v-tab>
-              </v-flex>
-            </v-layout>
+          <v-tabs show-arrows >
+            <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)">
+              {{taskStatus.inPlan.name}}
+            </v-tab>
+            <v-tab :key=taskStatus.done.id @click="changeStatus(taskStatus.done.id)">
+              {{taskStatus.done.name}}
+            </v-tab>
           </v-tabs>
       </v-flex>
       <v-flex class="tasks-list-block">
@@ -57,7 +51,7 @@ export default {
         inPlan: {name:'В плане', id: 'IN_PLAN'},
         inWork: {name: 'В работе', id: 'IN_WORK'},
         done: {name:'Выполнено', id: 'DONE'} };
-    return { taskStatus, currentStatus: 'IN_PLAN' };
+    return { taskStatus, currentStatus: 'IN_PLAN'};
   },
   props: {
     selectedTask: Object,
