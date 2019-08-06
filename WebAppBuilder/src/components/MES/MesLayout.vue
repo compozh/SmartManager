@@ -64,7 +64,7 @@ export default {
         }
       },
       closeError() {
-        this.$store.dispatch('sm/clearError');
+        this.$store.dispatch('mes/setError');
       }
     },
 };

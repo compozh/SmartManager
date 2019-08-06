@@ -41,5 +41,14 @@ export default {
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
     localStorage.setItem("mesMenuMiniMode", payload.toString());
+  },
+  setSelectedTasksTab(state, tabId) {
+    state.tasksPageState.selectedTasksTab = tabId;
+  },
+  setCurrentLayout(state, currentLayout) {
+    state.tasksPageState.currentLayout = currentLayout;
+  },
+  setSelectedTask(state, selectedTask) {
+    state.tasksPageState.selectedTask = selectedTask;
   }
 }

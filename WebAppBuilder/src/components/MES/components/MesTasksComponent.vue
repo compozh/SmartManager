@@ -4,33 +4,21 @@
       <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
           <v-tabs>
             <v-layout align-start>
-              <v-flex align-self-center shrink>
-                <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)">
-                  {{taskStatus.inPlan.name}}
-                </v-tab>
-              </v-flex>
-              <v-flex align-self-center shrink>
-                <v-tab :key=taskStatus.done.id @click="changeStatus(taskStatus.done.id)">
-                  {{taskStatus.done.name}}
+              <v-flex v-for="tab in tabs" align-self-center shrink :key=tab.id>
+                <v-tab :key=tab.id @click="changeSelectTasksTab(tab.id)">
+                  {{tab.name}}
                 </v-tab>
               </v-flex>
             </v-layout>
           </v-tabs>
       </v-flex>
       <v-flex class="tasks-list-block">
-          <div v-if="!initializeTasks" class="wait-for-data-block">
-            <ContentLoader>
-              <rect x="0" y="0" rx="3" ry="3" width="400" height="10" />
-              <rect x="20" y="20" rx="3" ry="3" width="220" height="10" />
-              <rect x="20" y="40" rx="3" ry="3" width="170" height="10" />
-              <rect x="0" y="60" rx="3" ry="3" width="400" height="10" />
-              <rect x="20" y="80" rx="3" ry="3" width="200" height="10" />
-              <rect x="20" y="100" rx="3" ry="3" width="350" height="10" />
-            </ContentLoader>
-          </div>
-          <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
+        <mes-content-loader :initialize=initializeTasks />
+        <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
           <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
-            <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'" v-if="(currentStatus == taskStatus.inPlan.id && task.state == taskStatus.inWork.id) || currentStatus == task.state">
+            <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'" 
+              v-if="(selectedTasksTab == 'PLAN' && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
+              || (selectedTasksTab == 'DONE' && task.state == 'DONE')">
               <v-card-text>
                 <span v-html="task.description"></span>
               </v-card-text>
@@ -52,21 +40,19 @@ export default {
   components: {
     ContentLoader
   },
-  data: function() {
-    let taskStatus = {
-        inPlan: {name:'В плане', id: 'IN_PLAN'},
-        inWork: {name: 'В работе', id: 'IN_WORK'},
-        done: {name:'Выполнено', id: 'DONE'} };
-    return { taskStatus, currentStatus: 'IN_PLAN' };
+  data() {
+    debugger;
+    return {tabs: [{id: "PLAN", name: "В плане"}, {id: "DONE", name: "Выполненные"}]}
   },
   props: {
     selectedTask: Object,
     tasks: Object,
-    initializeTasks: Boolean
+    initializeTasks: Boolean,
+    selectedTasksTab: String
   },
   methods: {
-    changeStatus(status) {
-      this.currentStatus = status;
+    changeSelectTasksTab(tabId) {
+      this.$emit('changeSelectTasksTab', tabId);
     },
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask);

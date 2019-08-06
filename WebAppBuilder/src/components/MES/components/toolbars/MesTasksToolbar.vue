@@ -2,16 +2,17 @@
   <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
     <v-flex
       class="toolbar-basebuttons"
+      v-if="currentLayout == 'mes-accept-task-layout' || currentLayout == 'mes-task-main-layout'">
 
-      v-if="layout == 'mes-accept-task-layout' || layout == 'mes-task-main-layout'">
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
       :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'"
       @click="onclickAccept">{{selectedTask.state == 'IN_PLAN' ? 'Взять в работу' : 'Приостановить'}}</v-btn>
+      
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
-      v-if="layout === 'mes-task-stuff-layout'">
+      v-if="currentLayout === 'mes-task-stuff-layout'">
       <v-btn outlined class="mes-arrow-back" @click="backToMainLayout"><v-icon dark>arrow_back</v-icon></v-btn>
         <v-text-field
           class="qr-input"
@@ -20,7 +21,7 @@
         ></v-text-field>
         <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
       </v-flex>
-   <v-flex class="setup-material-btn" xs2 v-if="layout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
+   <v-flex class="setup-material-btn" xs2 v-if="currentLayout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
      <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
@@ -32,13 +33,13 @@ import {mapGetters} from 'vuex'
 export default {
   name: "mes-tasks-toolbar",
   props: {
-    layout: String,
+    currentLayout: String,
     selectedTask: Object,
     installations: Array
   },
   methods: {
     onclickSetupMaterial(event) {
-      this.$emit('layout', 'mes-task-stuff-layout');
+      this.$emit('changeCurrentLayout', 'mes-task-stuff-layout');
     },
     onclickAccept(event) {
         switch(this.selectedTask.state) {
@@ -57,7 +58,7 @@ export default {
       this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: event.target.value, factId: 0 });
     },
     backToMainLayout() {
-      this.$emit('layout', 'mes-task-main-layout');
+      this.$emit('changeCurrentLayout', 'mes-task-main-layout');
     },
     onclickScan(event) {
     }

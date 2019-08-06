@@ -1,6 +1,7 @@
 <template>
     <v-layout class="mes-productions">
       <mes-production-toolbar class="mes-production-toolbar" />
+      <mes-content-loader :initialize=initializeProductions />
       <v-card class="productions-card" v-for="production in productions" :key="production.factId">
         <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
       </v-card>

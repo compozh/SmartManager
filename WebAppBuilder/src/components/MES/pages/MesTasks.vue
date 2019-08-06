@@ -3,23 +3,24 @@
     <v-card>
       <v-layout row xs12 md12 sm12 lg12>
         <v-flex xs4 md4 sm4 lg4 class="tasks-list">
-          <mes-tasks-component 
-            :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks
-            @changeCurrentTask="changeCurrentTask" />
+          <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks :selectedTasksTab=selectedTasksTab
+            @changeCurrentTask=changeCurrentTask @changeSelectTasksTab=changeSelectTasksTab />
         </v-flex>
         <v-flex xs8 md8 sm8 lg8 class="task-description">
             <v-layout column wrap xs12 md12 sm12 lg12>
               <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
-                <mes-tasks-toolbar v-if="Object.keys(selectedTask).length" 
-                :layout=layout :selectedTask=selectedTask :installations=installations[selectedTask.workCenterCode]
-                @layout="changeLayout" @removeAllInstallations=removeAllInstallations />
+                <mes-tasks-toolbar v-if="selectedTask" 
+                :currentLayout=currentLayout :selectedTask=selectedTask :installations=installations[selectedTask.workCenterCode]
+                @changeCurrentLayout="changeCurrentLayout" @removeAllInstallations=removeAllInstallations />
               </v-flex>
               <mes-task-main-layout :selectedTask=selectedTask
-              v-if="(layout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN') || (layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN')" />
+                v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN') 
+                  || (currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN'))" />
               <mes-accept-task-layout :selectedTask=selectedTask :formioData=productionFormio[selectedTask.workCenterCode]
-              v-if="(layout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK') ||(layout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK')" />
+                v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK')
+                  ||(currentLayout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK'))" />
               <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
-                @removeInstallation=removeInstallation v-if="layout == 'mes-task-stuff-layout'" />
+                @removeInstallation=removeInstallation v-if="selectedTask && currentLayout == 'mes-task-stuff-layout'" />
             </v-layout>
         </v-flex>
       </v-layout>
@@ -32,10 +33,8 @@ import {mapGetters, install} from 'vuex'
 
 export default {
   name: "mes-tasks",
-  data: function() {
+  data() {
     return {
-      layout: 'mes-task-main-layout',
-      selectedTask: {},
       initializeTasks: false
     };
   },
@@ -43,6 +42,33 @@ export default {
     this.initialize();
   },
   computed: {
+    selectedTask: {
+      get() {
+        return this.tasksPageState.selectedTask;
+      },
+      set(selectedTask) {
+        this.$store.commit('mes/setSelectedTask', selectedTask);
+      }
+    },
+    currentLayout: {
+      get() {
+        return this.tasksPageState.currentLayout;
+      },
+      set(currentLayout) {
+        this.$store.commit('mes/setCurrentLayout', currentLayout);
+      }
+    },
+    selectedTasksTab: {
+      get() {
+        return this.tasksPageState.selectedTasksTab;
+      },
+      set(tabId) {
+        this.$store.commit('mes/setSelectedTasksTab', tabId);
+      }
+    },
+    tasksPageState() {
+      return this.$store.getters['mes/tasksPageState'];
+    },
     installations() {
       return this.$store.getters['mes/installations'];
     },
@@ -62,8 +88,11 @@ export default {
       this.initializeInstallations();
       await this.$store.dispatch('mes/initializeTasks', this.workCenters);
       this.initializeTasks = true;
+      this.selectFirstTask();
+    },
+    selectFirstTask() {
       var tasks = this.tasks;
-
+      
       if(this.workCenters.length) {
         let workCenter = this.workCenters[0],
           tasksByWorkCenter = this.tasks[workCenter.code];
@@ -75,20 +104,23 @@ export default {
     async initializeWorkCenters(uuid, login) {
       await this.$store.dispatch('mes/initializeWorkCenters', {uuid});
     },
-    changeLayout(newLayout) {
-      this.layout = newLayout;
+    changeCurrentLayout(currentLayout) {
+      this.currentLayout = currentLayout;
     },
     changeCurrentTask(newSelectedTask) {
-      if(newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
+      if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return;
       }
       this.selectedTask = newSelectedTask;
       this.$store.dispatch('mes/createProductionFormio', newSelectedTask.workCenterCode);
       switch(newSelectedTask.state) {
         case 'DONE':
-          this.layout = '';
+          this.currentLayout = '';
           break;
       }
+    },
+    changeSelectTasksTab(tabId) {
+      this.selectedTasksTab = tabId;
     },
     removeAllInstallations() {
       var me = this;

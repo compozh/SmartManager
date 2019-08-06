@@ -1,6 +1,7 @@
 <template>
   <v-layout class="mes-stuff">
     <mes-stuff-toolbar class="mes-stuff-toolbar" :installations=installations @removeAllInstallations=removeAllInstallations @submitQrCode=submitQrCode />
+    <mes-content-loader :initialize=initializeInstallations />
     <div class="installations-block" v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
       <v-card class="installation-card" v-for="installation in installationsByWorkCenter" :key="installation.id">
         <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>

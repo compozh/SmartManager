@@ -23,10 +23,13 @@ export default {
   productionFormio(state) {
     return state.productionFormio;
   },
-  menuMiniMode(state, commit) {
+  menuMiniMode(state) {
     if (state.menuMiniMode === null) {
       state.menuMiniMode = localStorage.getItem("mesMenuMiniMode") === 'true';
     }
     return state.menuMiniMode;
+  },
+  tasksPageState(state) {
+    return state.tasksPageState;
   }
 }

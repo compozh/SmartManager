@@ -187,5 +187,8 @@ export default {
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode);
+  },
+  setError({commit}) {
+    commit('setError');
   }
 }
