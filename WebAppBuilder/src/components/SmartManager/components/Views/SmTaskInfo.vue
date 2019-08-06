@@ -17,7 +17,7 @@
                 <span class="caption pl-1">Выполнить</span>
               </v-btn>
               <v-btn
-                v-if="params.status === ''"
+                v-if="params.status === '' || params.status === '+'"
                 class="info ml-0"
                 small depressed
                 @click="changeStatus('*')"
