@@ -5,12 +5,10 @@
           <v-tabs show-arrows >
             <v-tab :key=taskStatus.inPlan.id @click="changeStatus(taskStatus.inPlan.id)" class="toolbar-item">
               <v-badge color="#1976d2" overlap>
-                  
                 <template v-slot:badge>
                   <span>!</span>
                 </template>
-                              {{taskStatus.inPlan.name}}
-
+                {{taskStatus.inPlan.name}}
               </v-badge>
             </v-tab>
             <v-tab :key=taskStatus.done.id @click="changeStatus(taskStatus.done.id)" class="toolbar-item">
@@ -18,8 +16,7 @@
                 <template v-slot:badge>
                   <span>!</span>
                 </template>
-                              {{taskStatus.done.name}}
-
+                {{taskStatus.done.name}}
               </v-badge>
             </v-tab>
           </v-tabs>
