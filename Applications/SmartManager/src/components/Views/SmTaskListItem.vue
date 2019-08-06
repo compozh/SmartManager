@@ -9,7 +9,7 @@
       @click="taskLink(task.id)"
     >
       <v-layout row align-center>
-        <v-flex d-flex justify-center shrink pr-3>
+        <v-flex d-flex justify-center shrink pr-3 class="icon-container">
           <user-icon :src="task.addedPhoto" size="50"></user-icon>
         </v-flex>
         <v-flex py-1 class="text-ellipsis">
@@ -23,7 +23,7 @@
                 </v-flex>
                 <v-flex d-flex shrink>
                   <sm-task-icons :task="task"></sm-task-icons>
-                  <sm-task-status :task="task" chip="true"></sm-task-status>
+                  <sm-task-status :status="task.status" chip="true"></sm-task-status>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -49,10 +49,10 @@
 </template>
 
 <script>
-  export default {
-    name: 'SmTaskListItem',
-    props: ['task']
-  }
+export default {
+  name: 'SmTaskListItem',
+  props: ['task']
+}
 </script>
 
 <style scoped>
@@ -75,5 +75,9 @@
 
   .unread {
     border-left-color: #1976D2;
+  }
+
+  .icon-container {
+    max-width: 50px;
   }
 </style>

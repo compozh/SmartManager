@@ -18,7 +18,6 @@
                 clearable
               ></v-text-field>
             </v-flex>
-
             <v-flex xs12>
               <sm-task-add-form-select
                 label="Ответственный"
@@ -150,14 +149,23 @@
                 multiple
               ></sm-task-add-form-select>
             </v-flex>
-            <v-flex text-xs-right>
-              <v-btn @click="closeTaskAddForm">Отмена</v-btn>
-              <v-btn
-                :disabled="!valid"
-                color="blue darken-2 white--text"
-                @click="createTask"
-              >Создать
-              </v-btn>
+            <v-flex xs12>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <file-upload-add-task-form></file-upload-add-task-form>
+                </v-flex>
+                <v-flex xs12 class="button-container">
+                  <v-spacer></v-spacer>
+                  <v-btn @click="closeTaskAddForm">Отмена</v-btn>
+                  <v-btn
+                    class="mr-0"
+                    :disabled="!valid"
+                    color="blue darken-2 white--text"
+                    @click="createTask"
+                  >Создать
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -167,90 +175,97 @@
 </template>
 
 <script>
-  import moment from 'moment'
+import moment from 'moment'
 
-  export default {
-    name: "sm-task-add-form",
-    data: () => ({
-      newTask: {
-        title: '',
-        performerId: '',
-        planDate: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
-        planTime: '12:00',
-        description: '',
-        coexecutors: [],
-        notify: [],
-      },
-      datePicker: false,
-      timePicker: false,
-      minDate: moment(new Date()).format('YYYY-MM-DD'),
-      valid: false,
-      required: [
-        v => !!v || 'Поле обязательно для заполнения'
-      ],
-      dateRules: [
-        v => !!v || 'Необходимо указать дату дату в формате ДД.ММ.ГГГГ',
-        v => moment(v, 'DD.MM.YYYY', true).isValid() || 'Введите дату в формате ДД.ММ.ГГГГ',
-        v => moment(v, 'DD.MM.YYYY', true).add(1, 'days').isSameOrAfter() || 'Прошедшая дата',
-      ],
-      timeRules: [
-        v => !!v || 'Необходимо указать время в формате HH:mm',
-        v => moment(v, 'HH:mm', true).isValid() || 'Введите время в формате ЧЧ:ММ',
+export default {
+  name: 'sm-task-add-form',
+  data: () => ({
+    newTask: {
+      title: '',
+      performerId: '',
+      planDate: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
+      planTime: '12:00',
+      description: '',
+      coexecutors: [],
+      notify: [],
+    },
+    datePicker: false,
+    timePicker: false,
+    minDate: moment(new Date()).format('YYYY-MM-DD'),
+    valid: false,
+    required: [
+      v => !!v || 'Поле обязательно для заполнения'
+    ],
+    dateRules: [
+      v => !!v || 'Необходимо указать дату дату в формате ДД.ММ.ГГГГ',
+      v => moment(v, 'DD.MM.YYYY', true).isValid() || 'Введите дату в формате ДД.ММ.ГГГГ',
+      v => moment(v, 'DD.MM.YYYY', true).add(1, 'days').isSameOrAfter() || 'Прошедшая дата',
+    ],
+    timeRules: [
+      v => !!v || 'Необходимо указать время в формате HH:mm',
+      v => moment(v, 'HH:mm', true).isValid() || 'Введите время в формате ЧЧ:ММ',
+    ]
+  }),
+  created() {
+    this.getUsers()
+    this.setMenuMode('close')
+  },
+  computed: {
+    dateFormatted() {
+      return this.newTask.planDate
+        ? moment(this.newTask.planDate).format('DD.MM.YYYY')
+        : ''
+    }
+  },
+  methods: {
+    closeTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'close')
+    },
+    createTask() {
+      const newTask = {
+        name: this.newTask.title,
+        performerId: this.newTask.performerId,
+        descript: this.newTask.description,
+        dateplan: `${this.newTask.planDate} ${this.newTask.planTime}`,
+        participants: this.getParticipants()
+      }
+      this.$store.dispatch('sm/addNewTask', newTask)
+    },
+    getUsers() {
+      const users = this.$store.state.sm.users
+      if (users.length === 0) {
+        this.$store.dispatch('sm/getUsers')
+      }
+    },
+    setMenuMode(mode) {
+      this.$store.commit('sm/setMenuMode', mode)
+    },
+    getParticipants() {
+      const executor = [{userId: this.newTask.performerId, role: ''}]
+      const coexecutors = this.newTask.coexecutors.map(i => {
+        return {userId: i, role: 'COEXECUTOR'}
+      })
+      const observers = this.newTask.notify.map(i => {
+        return {userId: i, role: 'OBSERVER'}
+      })
+      return [
+        ...executor,
+        ...coexecutors,
+        ...observers
       ]
-    }),
-    created() {
-      this.getUsers()
-      this.setMenuMode('close')
-    },
-    computed: {
-      dateFormatted() {
-        return this.newTask.planDate
-          ? moment(this.newTask.planDate).format('DD.MM.YYYY')
-          : ''
-      }
-    },
-    methods: {
-      closeTaskAddForm() {
-        this.$store.commit('sm/setTaskAddForm', 'close')
-        this.setMenuMode('open')
-      },
-      createTask() {
-        const newTask = {
-          name: this.newTask.title,
-          performerId: this.newTask.performerId,
-          descript: this.newTask.description,
-          dateplan: `${this.newTask.planDate} ${this.newTask.planTime}`,
-          participants: this.getParticipants()
-        }
-        this.$store.dispatch('sm/addNewTask', newTask)
-      },
-      getUsers() {
-        const users = this.$store.state.sm.users
-        if (users.length === 0) {
-          this.$store.dispatch('sm/getUsers')
-        }
-      },
-      setMenuMode(mode) {
-        this.$store.commit('sm/setMenuMode', mode)
-      },
-      getParticipants() {
-        const executor = [{userId: this.newTask.performerId, role: ''}]
-        const coexecutors = this.newTask.coexecutors.map(i => {
-          return {userId: i, role: 'COEXECUTOR'}
-        })
-        const observers = this.newTask.notify.map(i => {
-          return {userId: i, role: 'OBSERVER'}
-        })
-        return [
-          ...executor,
-          ...coexecutors,
-          ...observers
-        ]
-      }
     }
   }
+}
 </script>
 
 <style scoped>
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
+  .upload-btn {
+    display: flex;
+    align-items: center;
+  }
 </style>

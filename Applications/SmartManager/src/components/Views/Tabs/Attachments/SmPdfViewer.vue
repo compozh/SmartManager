@@ -65,6 +65,7 @@
       >
         <option
           v-for="(i, index) in (maxWidth - minWidth) / 10 + 1"
+          :key="index"
         >
           {{ minWidth + index * 10 }}
         </option>
@@ -90,7 +91,6 @@
       <v-btn
         outline small
         class="viewer-btn"
-        @click=""
       >
         <v-icon size="18">panorama_vertical</v-icon>
       </v-btn>
@@ -129,92 +129,92 @@
 </template>
 
 <script>
-  import pdf from 'vue-pdf'
+import pdf from 'vue-pdf'
 
-  export default {
-    name: "sm-pdf-viewer",
-    props: ['url'],
-    components: {
-      pdf
+export default {
+  name: 'sm-pdf-viewer',
+  props: ['url'],
+  components: {
+    pdf
+  },
+  data: () => ({
+    scr: '',
+    page: 1,
+    numPages: 0,
+    rotate: 0,
+    width: 100,
+    minWidth: 60,
+    maxWidth: 160
+  }),
+  created() {
+    this.readDocument()
+  },
+  methods: {
+    readDocument() {
+      this.src = pdf.createLoadingTask(this.url)
+      this.src
+        .then(pdf => this.numPages = pdf.numPages)
+        .catch(e => this.$store.commit('sm/setMessage', {
+          type: 'error',
+          text: e.message
+        }))
     },
-    data: () => ({
-      scr: '',
-      page: 1,
-      numPages: 0,
-      rotate: 0,
-      width: 100,
-      minWidth: 60,
-      maxWidth: 160
-    }),
-    created() {
-      this.readDocument()
-    },
-    methods: {
-      readDocument() {
-        this.src = pdf.createLoadingTask(this.url);
-        this.src
-          .then(pdf => this.numPages = pdf.numPages)
-          .catch(e => this.$store.commit('sm/setMessage', {
-            type: 'error',
-            text: e.message
-          }))
-      },
-      observePages(event) {
-        if (this.numPages === event) {
-          const callback = entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting && this.page !== entry.target.id) {
-                this.page = entry.target.id
-              }
-            })
-          }
-          const observer = new IntersectionObserver(callback, {threshold: 0.3})
-          for (let i = 1; i <= this.numPages; i++) {
-            let elem = document.getElementById(i)
-            observer.observe(elem);
-          }
+    observePages(event) {
+      if (this.numPages === event) {
+        const callback = entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && this.page !== entry.target.id) {
+              this.page = entry.target.id
+            }
+          })
         }
-      },
-      toggleFullScreen() {
-        const elem = document.querySelector('.pdf-viewer')
-        if (!document.fullscreenElement) {
-          elem.requestFullscreen()
-        } else {
-          document.exitFullscreen()
-        }
-      },
-      switchPage(id) {
-        document.getElementById(id).scrollIntoView()
-      },
-      back() {
-        if (this.page > 1) {
-          this.switchPage(--this.page)
-        }
-      },
-      forward() {
-        if (this.page < this.numPages) {
-          this.switchPage(++this.page)
-        }
-      },
-      input(event) {
-        const inputPage = event.target.value
-        if (inputPage >= 1 && inputPage <= this.numPages) {
-          this.switchPage(inputPage)
-        }
-      },
-      setWidth(step) {
-        if (step < 0 && this.width > this.minWidth
-          || step > 0 && this.width < this.maxWidth) {
-          this.width += step
+        const observer = new IntersectionObserver(callback, {threshold: 0.3})
+        for (let i = 1; i <= this.numPages; i++) {
+          let elem = document.getElementById(i)
+          observer.observe(elem)
         }
       }
     },
-    watch: {
-      url() {
-        this.readDocument()
+    toggleFullScreen() {
+      const elem = document.querySelector('.pdf-viewer')
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen()
+      } else {
+        document.exitFullscreen()
+      }
+    },
+    switchPage(id) {
+      document.getElementById(id).scrollIntoView()
+    },
+    back() {
+      if (this.page > 1) {
+        this.switchPage(--this.page)
+      }
+    },
+    forward() {
+      if (this.page < this.numPages) {
+        this.switchPage(++this.page)
+      }
+    },
+    input(event) {
+      const inputPage = event.target.value
+      if (inputPage >= 1 && inputPage <= this.numPages) {
+        this.switchPage(inputPage)
+      }
+    },
+    setWidth(step) {
+      if (step < 0 && this.width > this.minWidth
+          || step > 0 && this.width < this.maxWidth) {
+        this.width += step
       }
     }
+  },
+  watch: {
+    url() {
+      this.readDocument()
+    }
   }
+}
 </script>
 
 <style scoped>

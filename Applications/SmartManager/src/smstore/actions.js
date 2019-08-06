@@ -42,16 +42,19 @@ export default {
     }
   },
   async getTaskInfo({commit}, payload) {
-    commit('setCircularLoader', true)
+    const taskId = payload.taskId
+    const loader = payload.loader
+
+    commit(loader, true)
 
     try {
-      const result = await api.getTaskInfoFromGql(payload)
+      const result = await api.getTaskInfoFromGql(taskId)
       const taskInfo = result.data.smtasks.tasksGetInfo
       commit('setTaskInfo', taskInfo)
-      commit('setCircularLoader', false)
+      commit(loader, false)
 
     } catch (e) {
-      commit('setCircularLoader', false)
+      commit(loader, false)
       commit('setMessage', {type: 'error', text: e.message})
     }
   },
@@ -73,19 +76,35 @@ export default {
     commit('setCircularLoader', true)
 
     try {
-      const result = await api.addNewTaskToGql(payload)
-      const success = result.data.smtasksMutation.addTask.success
+      const response = await api.addNewTaskToGql(payload)
+      const result = response.data.smtasksMutation.addTask
 
-      const message = success
-      ? {type: 'success', text: `Задача успешно добавлена`}
-      : {type: 'error', text: `Ошибка при добавлении задачи`}
-
+      const message = !result.success
+        ? {type: 'error', text: 'Не удалось добавить задачу'}
+        : {type: 'success', text: 'Задача успешно добавлена'}
+      // дополнительно можно вывести result.errorMessage
       commit('setMessage', message)
       commit('setCircularLoader', false)
       commit('setTaskAddForm', 'close')
       dispatch('getFolders', {loader: 'setLinearLoader'})
     } catch (e) {
       commit('setCircularLoader', false)
+      commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async changeTaskStatus({commit, dispatch}, payload) {
+    commit('setLinearLoader', true)
+
+    try {
+      await api.changeTaskStatusInGql(payload)
+      commit('setLinearLoader', false)
+
+      dispatch('getTaskInfo', {
+        taskId: payload.id,
+        loader: 'setLinearLoader'
+      })
+    } catch (e) {
+      commit('setLinearLoader', false)
       commit('setMessage', {type: 'error', text: e.message})
     }
   }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+// eslint-disable-next-line no-unused-vars
 import ru from './resources/ru.json'
 
 Vue.use(VueI18n)
