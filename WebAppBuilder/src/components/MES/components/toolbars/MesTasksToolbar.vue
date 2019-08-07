@@ -9,7 +9,7 @@
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
       :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'"
       @click="onclickAccept">{{selectedTask.state == 'IN_PLAN' ? 'Взять в работу' : 'Приостановить'}}</v-btn>
-      
+
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
       v-if="currentLayout === 'mes-task-stuff-layout'">
@@ -77,7 +77,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    height: 60px;
+    height: 6vh;
     align-items: center;
   }
   .toolbar.row {

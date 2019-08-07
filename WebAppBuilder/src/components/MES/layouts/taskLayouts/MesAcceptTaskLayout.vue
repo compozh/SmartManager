@@ -13,16 +13,6 @@
                 :margin="[20, 20]"
                 :use-css-transforms="true"
                 >
-                <grid-item
-                        :x="0"
-                        :y="0"
-                        :w="12"
-                        :h="12"
-                        :i="'0'"
-                        :isDraggable=false
-                        class="grid-element">
-                       <mes-form-builder :formioData=formioData @formioSubmit=formioSubmit />
-               </grid-item>
                <grid-item v-for="item in blocks" :key="item.i"
                         :x="item.x"
                         :y="item.y"
@@ -30,7 +20,8 @@
                         :h="item.h"
                         :i="item.i"
                         class="grid-element">
-                       <span v-html="item.data"></span>
+                        <mes-form-builder v-if="item.i == '0'" :formioData=formioData @formioSubmit=formioSubmit />
+                       <span  v-if="item.i != '0'" v-html="item.data"></span>
                </grid-item>
             </grid-layout>
         </v-flex>
@@ -46,10 +37,11 @@ export default {
     formioData: Object
   },
   data: function(){
-     let blocks = [
+    let blocks = [
+        {'x':0, 'y':0, 'w':11, 'h':11, 'i':'0'},
         {'x':0, 'y':12, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
-    return {blocks};
+    return {blocks: blocks};
   },
   name: "mes-accept-task-layout",
   methods: {
@@ -63,7 +55,7 @@ export default {
 <style type="text/css" scoped>
 .main-layout {
     overflow-y: auto;
-    height: 89vh !important;
+    height: 88vh !important;
     padding: 0 10px !important;
   }
  .grid-element {
