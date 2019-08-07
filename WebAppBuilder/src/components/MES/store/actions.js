@@ -18,7 +18,7 @@ export default {
   async initializeWorkCenters({ commit }) {
     commit('setError', null)
     try {
-      let uuid = deviceUUID.get();
+      let uuid = "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=";//deviceUUID.get();
       let result = await api.getWorkCentersFromGql(uuid);
       commit('setWorkCenters', result.data.mes.workCenters)
     } catch (e) {
@@ -170,16 +170,16 @@ export default {
     }
     commit('setLinearLoader', false)
   },
-  async createProductionFormio({ getters, commit }, workCenterCode) {
-    if(getters.productionFormio[workCenterCode]) {
+  async createProductionFormio({ getters, commit }, formCode) {
+    if(getters.productionFormio[formCode]) {
       return;
     }
     commit('setError', null)
     commit('setLinearLoader', true)
 
     try {
-      let result = await api.getProductionFormioFromGql(workCenterCode);
-      commit('setProductionFormio', { formio: result.data.mes.productionFormIo, workCenterCode });
+      let result = await api.getProductionFormioFromGql(formCode);
+      commit('setProductionFormio', { formio: result.data.mes.productionFormIo, formCode });
     } catch (e) {
       commit('setError', e.message)
     }
@@ -190,5 +190,21 @@ export default {
   },
   setError({commit}) {
     commit('setError');
+  },
+  async productionFormIoSubmit({ commit }, params) {
+    commit('setError', null)
+    commit('setLinearLoader', true)
+
+    try {
+      let result = await api.productionFormIoSubmitGql(params);
+      if(result.success == true) {
+
+      } else {
+        commit('setError', result.errorMessage);
+      }
+    } catch (e) {
+      commit('setError', e.message)
+    }
+    commit('setLinearLoader', false)
   }
 }

@@ -97,9 +97,22 @@ export default {
         let workCenter = this.workCenters[0],
           tasksByWorkCenter = this.tasks[workCenter.code];
         if(tasksByWorkCenter && tasksByWorkCenter.length) {
-          this.changeCurrentTask(tasksByWorkCenter[0]);
+          this.changeCurrentTask(this.getFirstTaskInPlan(tasksByWorkCenter));
         }
       }
+    },
+    getFirstTaskInPlan(tasks) {
+      var firstDoneTask = null;
+      for(var i = 0; i < tasks.length; i++) {
+        var task = tasks[i];
+        if(task.state == "IN_PLAN" || task.state == "IN_WORK") {
+          return task;
+        }
+        if(!firstDoneTask && task.state == "DONE") {
+          firstDoneTask = task;
+        }
+      }
+      return firstDoneTask;
     },
     async initializeWorkCenters(uuid, login) {
       await this.$store.dispatch('mes/initializeWorkCenters', {uuid});
@@ -112,12 +125,26 @@ export default {
         return;
       }
       this.selectedTask = newSelectedTask;
-      this.$store.dispatch('mes/createProductionFormio', newSelectedTask.workCenterCode);
+      let workCenter = this.getWorkCenterByCode(newSelectedTask.workCenterCode);
+      this.$store.dispatch('mes/createProductionFormio', workCenter.productionRegistrationFormCode);
       switch(newSelectedTask.state) {
         case 'DONE':
           this.currentLayout = '';
           break;
+        default:
+          this.currentLayout = 'mes-task-main-layout';
+          break;
       }
+    },
+    getWorkCenterByCode(workCenterCode) {
+      var workCenters = this.workCenters;
+      for(var i = 0; i < workCenters.length; i++) {
+        let workCenter = workCenters[i];
+        if(workCenter.code == workCenterCode) {
+          return workCenter;
+        }
+      }
+      return {};
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex;
