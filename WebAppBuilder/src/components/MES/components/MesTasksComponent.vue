@@ -1,7 +1,7 @@
 <template>
-  <v-card>
-    <v-layout column xs12 md12 sm12 lg12>
-      <v-flex fill-height class="grid-tabs" xs12 md12 sm12 lg12>
+  <v-card class="mes-tasks-component">
+    <v-layout column class="mes-tasks-component-layout" scrollable>
+      <v-flex fill-height class="grid-tabs">
           <v-tabs show-arrows v-model="selectedTab">
                 <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
                   <v-badge :color=tab.countColor overlap>
@@ -15,7 +15,7 @@
       </v-flex>
       <v-flex class="tasks-list-block">
         <mes-content-loader :initialize=initializeTasks :loaderType=loaderType />
-        <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
+        <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter" class="tasks-list-block-content">
           <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
             <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'"
               v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
@@ -82,17 +82,28 @@ export default {
 </script>
 
 <style type="text/css" scoped>
+.mes-tasks-component {
+  height: 100%;
+  width: 30%;
+}
+.mes-tasks-component-layout {
+  height: 100%;
+}
+.grid-tabs{
+  flex: 0 0
+}
 .grid-tabs .v-badge {
   padding-right: 10px;
+
 }
-  .tasks-list-block {
-    overflow: auto;
-    height: 89vh;
-  }
   .tasks-list-block .task-item{
     margin: 10px;
     border-radius: 10px;
     cursor: pointer;
+  }
+  .tasks-list-block-content {
+    height: 100%;
+    overflow-y: auto;
   }
   .change-tasks-status-toolbar {
     padding-left: 5px;

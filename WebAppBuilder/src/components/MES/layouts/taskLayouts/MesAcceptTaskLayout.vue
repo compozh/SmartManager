@@ -54,8 +54,8 @@ export default {
 </script>
 <style type="text/css" scoped>
 .main-layout {
-    overflow-y: auto;
-    height: 88vh !important;
+    /* overflow-y: auto;
+    height: 88vh !important; */
     padding: 0 10px !important;
   }
  .grid-element {

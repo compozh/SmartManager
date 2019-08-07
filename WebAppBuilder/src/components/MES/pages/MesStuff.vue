@@ -67,8 +67,8 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 88vh;
-  overflow-y: auto;
+  /* height: 88vh;
+  overflow-y: auto; */
 }
 .installation-card{
   display: flex;
