@@ -18,9 +18,13 @@ export default {
   async initializeWorkCenters({ commit }) {
     commit('setError', null)
     try {
-      let uuid = "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=";//deviceUUID.get();
-      let result = await api.getWorkCentersFromGql(uuid);
-      commit('setWorkCenters', result.data.mes.workCenters)
+      let uuid = "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=",//deviceUUID.get(),
+        result = await api.getWorkCentersFromGql(uuid);
+      var workCenters = {};
+      result.data.mes.workCenters.forEach(workCenter => {
+        workCenters[workCenter.code] = workCenter;
+      });
+      commit('setWorkCenters', workCenters)
     } catch (e) {
       commit('setError', e.message)
     }
@@ -28,16 +32,17 @@ export default {
   async initializeTasks({ commit}, workCenters) {
     commit('setError', null)
     try {
-      var tasks = {};
-      for(var i = 0; i < workCenters.length; i++) {
-        let workCenter = workCenters[i];
-        let result = await api.getTasksFromGql(workCenter.code);
-        let tasksByWorkCenter = result.data.mes.tasks;
+      var tasks = {},
+        workCenterCodes = Object.keys(workCenters);
+      for(var i = 0; i < workCenterCodes.length; i++) {
+        let workCenterCode = workCenterCodes[i],
+          result = await api.getTasksFromGql(workCenterCode),
+          tasksByWorkCenter = result.data.mes.tasks;
         //todo
         tasksByWorkCenter.forEach(task => {
-          task.workCenterCode = workCenter.code;
+          task.workCenterCode = workCenterCode;
         });
-        tasks[workCenter.code] = tasksByWorkCenter;
+        tasks[workCenterCode] = tasksByWorkCenter;
       }
       commit('setTasks', tasks)
     } catch (e) {
@@ -48,11 +53,12 @@ export default {
     commit('setError', null)
 
     try {
-      var installations = {};
-      for(var i = 0; i < workCenters.length; i++) {
-        let workCenter = workCenters[i];
-        let result = await api.getInstallationsFromGql(workCenter.code);
-        installations[workCenter.code] = result.data.mes.installations.installations;
+      var installations = {},
+        workCenterCodes = Object.keys(workCenters);
+      for(var i = 0; i < workCenterCodes.length; i++) {
+        let workCenterCode = workCenterCodes[i],
+          result = await api.getInstallationsFromGql(workCenterCode);
+        installations[workCenterCode] = result.data.mes.installations.installations;
       }
       commit('setInstallations', installations)
     } catch (e) {

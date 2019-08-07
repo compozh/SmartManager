@@ -14,7 +14,7 @@
               <mes-task-main-layout :selectedTask=selectedTask
                 v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN')
                   || (currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN'))" />
-              <mes-accept-task-layout :selectedTask=selectedTask :formioData=productionFormio[getWorkCenterByCode(selectedTask.workCenterCode).productionRegistrationFormCode]
+              <mes-accept-task-layout :selectedTask=selectedTask :workCenters=workCenters :productionFormio=productionFormio
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK')
                   ||(currentLayout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK'))" />
               <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
@@ -91,11 +91,12 @@ export default {
       this.selectFirstTask();
     },
     selectFirstTask() {
-      var tasks = this.tasks;
+      var tasks = this.tasks,
+        workCenterCodes = Object.keys(this.workCenters);
 
-      if(this.workCenters.length) {
-        let workCenter = this.workCenters[0],
-          tasksByWorkCenter = this.tasks[workCenter.code];
+      if(workCenterCodes.length) {
+        let workCenterCode = workCenterCodes[0],
+          tasksByWorkCenter = this.tasks[workCenterCode];
         if(tasksByWorkCenter && tasksByWorkCenter.length) {
           this.changeCurrentTask(this.getFirstTaskInPlan(tasksByWorkCenter));
         }
@@ -125,7 +126,7 @@ export default {
         return;
       }
       this.selectedTask = newSelectedTask;
-      let workCenter = this.getWorkCenterByCode(newSelectedTask.workCenterCode);
+      let workCenter = this.workCenters[newSelectedTask.workCenterCode];
       this.$store.dispatch('mes/createProductionFormio', workCenter.productionRegistrationFormCode);
       switch(newSelectedTask.state) {
         case 'DONE':
@@ -135,16 +136,6 @@ export default {
           this.currentLayout = 'mes-task-main-layout';
           break;
       }
-    },
-    getWorkCenterByCode(workCenterCode) {
-      var workCenters = this.workCenters;
-      for(var i = 0; i < workCenters.length; i++) {
-        let workCenter = workCenters[i];
-        if(workCenter.code == workCenterCode) {
-          return workCenter;
-        }
-      }
-      return {};
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex;
