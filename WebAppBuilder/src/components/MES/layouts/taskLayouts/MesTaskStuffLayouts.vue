@@ -32,6 +32,8 @@ export default {
   flex-wrap: wrap;
 }
 .installation-card{
+  display: flex;
+  align-items: center;
   max-width: 400px;
   margin: 10px;
   width: 360px;

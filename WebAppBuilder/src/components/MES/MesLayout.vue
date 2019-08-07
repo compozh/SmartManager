@@ -81,5 +81,11 @@ html{
 .v-toolbar__extension {
   padding: 0;
 }
+.v-list__tile.v-list__tile--link.theme--light {
+  padding-left: 28px;
+}
+.v-navigation-drawer--mini-variant .v-list__tile__action, .v-navigation-drawer--mini-variant .v-list__tile__avatar {
+  justify-content: start !important;
+}
 </style>
 

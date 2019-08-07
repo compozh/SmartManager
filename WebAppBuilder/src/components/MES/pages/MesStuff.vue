@@ -71,9 +71,12 @@ export default {
   overflow-y: auto;
 }
 .installation-card{
+  display: flex;
+  align-items: center;
   max-width: 400px;
   margin: 10px;
   width: 360px;
+  max-height: 300px;
 }
 .wait-for-data-block {
   padding: 20px;

@@ -21,13 +21,15 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-    .mes-delete-production {
-        min-width: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-    .mes-production-card {
-        display: flex;
-    }
+.mes-delete-production {
+  min-width: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.mes-production-card {
+  display: flex;
+  align-items: center;
+  max-height: 300px;
+}
 </style>

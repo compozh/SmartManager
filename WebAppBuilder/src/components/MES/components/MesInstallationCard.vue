@@ -30,5 +30,7 @@ export default {
     .mes-installation-card {
         display: flex;
         justify-content: center;
+        max-height: 300px;
+
     }
 </style>

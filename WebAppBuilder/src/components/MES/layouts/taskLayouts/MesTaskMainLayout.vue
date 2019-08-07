@@ -46,6 +46,7 @@ export default {
 <style type="text/css" scoped>
   .mes-task-main-layout {
     height: 88vh;
+    overflow-y: auto;
   }
   .main-layout {
     overflow-y: auto;

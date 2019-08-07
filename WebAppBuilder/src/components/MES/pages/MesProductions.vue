@@ -59,6 +59,8 @@ export default {
   height: 94vh !important;
 }
 .productions-card {
+  display: flex;
+  align-items: center;
   margin: 10px;
   max-width: 400px;
   width: 360px;
