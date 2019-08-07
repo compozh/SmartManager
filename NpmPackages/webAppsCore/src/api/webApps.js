@@ -21,6 +21,7 @@ export class WebApps {
     this.__router = dependencies.router
     this.__options = options
     this.__axios = dependencies.axios
+    this.__store = dependencies.store
     Vue = vue
     this.__vm = new Vue({
       router: dependencies.router
@@ -79,10 +80,8 @@ export class WebApps {
 
     // загружаем в роутер маршруты приложения
     this.__setUpApplicationRouting()
-    // this.$store.dispatch('WebApps/SetAppDescription', app)
-    console.log(123)
-    // store.mutations.SetAppDescription(app)
-    store.state.applicationDescription = app
+    // записываем в store описание приложения
+    this.__store.commit('WebApps/SetAppDescription', app)
   }
 
   /**
