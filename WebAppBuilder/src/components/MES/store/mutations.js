@@ -31,8 +31,8 @@ export default {
   setProductions(state, productions) {
     state.productions = productions;
   },
-  setProductionFormio(state, {formio, workCenterCode}) {
-    state.productionFormio[workCenterCode] = formio;
+  setProductionFormio(state, {formio, formCode}) {
+    state.productionFormio[formCode] = formio;
   },
   removeProduction(state, production) {
       let index = state.productions.indexOf(production);

@@ -16,7 +16,7 @@
               <mes-task-main-layout :selectedTask=selectedTask
                 v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && selectedTask.state == 'IN_PLAN')
                   || (currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_PLAN'))" />
-              <mes-accept-task-layout :selectedTask=selectedTask :formioData=productionFormio[selectedTask.workCenterCode]
+              <mes-accept-task-layout :selectedTask=selectedTask :formioData=productionFormio[getWorkCenterByCode(selectedTask.workCenterCode).productionRegistrationFormCode]
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.state == 'IN_WORK')
                   ||(currentLayout == 'mes-task-main-layout' && selectedTask.state == 'IN_WORK'))" />
               <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
