@@ -1,10 +1,10 @@
 <template>
-  <div></div>
+  <div>It Portal Menu</div>
 </template>
 <script>
 export default {
-  name:"skd-toolbar" 
-};
+  name: 'it-menu-toolbar',
+}
 </script>
 <style>
 </style>
