@@ -1,0 +1,10 @@
+mutation($formCode:String, $data: String, $productionRegistrationParam: ProductionRegistrationParam) {
+    mesMutation {
+        productionFormIoSubmit(formCode: $formCode, data: $data, productionRegistrationParam: $productionRegistrationParam) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

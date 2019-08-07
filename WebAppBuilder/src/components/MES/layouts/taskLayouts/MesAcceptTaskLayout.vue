@@ -21,7 +21,7 @@
                         :i="'0'"
                         :isDraggable=false
                         class="grid-element">
-                       <mes-form-builder :formioData=formioData />
+                       <mes-form-builder :formioData=formioData @formioSubmit=formioSubmit />
                </grid-item>
                <grid-item v-for="item in blocks" :key="item.i"
                         :x="item.x"
@@ -52,11 +52,11 @@ export default {
     return {blocks};
   },
   name: "mes-accept-task-layout",
-
-  computed:{
-
-  },
   methods: {
+    formioSubmit(params) {
+      debugger;
+      //this.$store.dispatch('mes/productionFormIoSubmit', workCenter.productionRegistrationFormCode);
+    }
   }
 }
 </script>

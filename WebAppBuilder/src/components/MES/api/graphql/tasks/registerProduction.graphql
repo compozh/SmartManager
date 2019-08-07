@@ -1,4 +1,4 @@
-mutation($productionRegistrationParam:ProductionRegistrationParamsInput!) {
+mutation($productionRegistrationParam:ProductionRegistrationParamsInput) {
     mesMutation {
         registerProduction(productionRegistrationParam: $productionRegistrationParam) {
             success

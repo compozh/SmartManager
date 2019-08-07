@@ -1,6 +1,6 @@
 {
     mes{
-        productionFormIo(workCenterCode: $workCenterCode) {
+        productionFormIo(formCode: $formCode) {
             form
             data
         }

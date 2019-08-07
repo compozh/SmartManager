@@ -27,7 +27,7 @@ export default {
 	methods: {
 		onSubmit(params) {
 			debugger;
-			this.$emit('formio-submit', params);
+			this.$emit('formioSubmit', params);
 		}
 	}
 }
