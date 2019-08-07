@@ -14,7 +14,7 @@
     "build-bundle": "vue-cli-service build --target lib --name smartManager ./src/main.js"
   },
   "dependencies": {
-    "@it-enterprise/authentication": "^1.0.3",
+    "@it-enterprise/authentication": "^1.0.8",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/eds": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
