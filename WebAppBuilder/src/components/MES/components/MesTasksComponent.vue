@@ -14,7 +14,7 @@
           </v-tabs>
       </v-flex>
       <v-flex class="tasks-list-block">
-        <mes-content-loader :initialize=initializeTasks />
+        <mes-content-loader :initialize=initializeTasks :loaderType=loaderType />
         <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter">
           <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
             <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'"
@@ -47,6 +47,7 @@ export default {
         { index: 0, id: "PLAN", name: "В плане", countColor: "#58b368" },
         { index: 1, id: "DONE", name: "Выполненные", countColor: "#a23131" }
       ],
+      loaderType: "list",
       selectedTab: this.selectedTasksTab
     };
   },
