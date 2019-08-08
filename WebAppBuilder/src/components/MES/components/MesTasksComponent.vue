@@ -4,7 +4,7 @@
       <v-flex fill-height class="grid-tabs">
           <v-tabs show-arrows v-model="selectedTab">
                 <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
-                  <v-badge :color=tab.countColor overlap>
+                  <v-badge color="#1976d2" overlap>
                     <template v-slot:badge>
                       <span class="span-count-tasks">{{countTasks(tab.id).length}}</span>
                     </template>
@@ -44,8 +44,8 @@ export default {
   data() {
     return {
       tabs: [
-        { index: 0, id: "PLAN", name: "В плане", countColor: "#58b368" },
-        { index: 1, id: "DONE", name: "Выполненные", countColor: "#a23131" }
+        { index: 0, id: "PLAN", name: "В плане"},
+        { index: 1, id: "DONE", name: "Выполненные"}
       ],
       loaderType: "list",
       selectedTab: this.selectedTasksTab

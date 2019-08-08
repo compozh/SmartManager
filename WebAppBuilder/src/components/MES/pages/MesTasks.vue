@@ -189,6 +189,9 @@ export default {
     pointer-events: none;
     cursor: default;
   }
+  .button-toolbar {
+    max-height: 60px;
+  }
   .button-toolbar.row {
     margin: 0;
   }
