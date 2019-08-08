@@ -82,18 +82,14 @@ export default {
     },
     //Установка локализации
     Setlocalization(language){
-       this.$i18n.Setlocalization(language);
-       
+       this.$i18n.Setlocalization(language);       
        let currentGroup = this.$route.params.catalogueId;
-       api.changeLocalization(language).then(()=>{
-           if(currentGroup != undefined){
-            api.getResourcesGroupById(currentGroup);
-           }
-           else{
+       if(currentGroup != undefined){
+        api.getResourcesGroupById(currentGroup);
+        }
+        else{
             api.getResourcesGroupsByParentGroup("");
-           }
-           
-       });
+        }
     }
 
   },

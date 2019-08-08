@@ -118,9 +118,8 @@ const api = new PurchasesApi();
                 let titleResult = this.checkTitle(item);
                 let numberResult = this.checkNumber(item);
                 let dateResult = this.checkDates(item);
-                let statusResult = this.checkStatus(item);                
+                let statusResult = this.checkStatus(item);
                 
-                debugger;
                 return numberResult && titleResult && dateResult && statusResult;                
             },
             checkTitle(item){

@@ -60,24 +60,8 @@ export class PurchasesApi {
   constructor() {}
 
     getResourceById(id){
-    const FIELDS = gql`
-      fragment resourcesFields on Resource {
-        id,
-        fullName,
-        name,
-        designation,
-        measurementUnit{
-          shortName,
-          fullName
-        }
-        resourceGroup{
-          id,
-          name
-        }
-      }
-    `;
     return client.query({
-      query: gql`${resourceById} ${FIELDS}`,
+      query: gql`${resourceById}`,
       variables: { id: id },
       fetchPolicy: 'no-cache'
     })
@@ -91,33 +75,6 @@ export class PurchasesApi {
     })
     .catch(error => console.log(error.message))
   }
-
-  // getResourcesGroups(group){
-  //   const FIELDS = gql`
-  //   fragment resourcesGroupFields on ResourceGroup {
-  //     id, 
-  //     name,
-  //     children{
-  //       id,
-  //       name, 
-  //       children{
-  //         id,
-  //         name
-  //       }
-  //     }, 
-  //     resources{
-  //       id,
-  //       name,
-  //       designation
-  //     }
-  //   }`;
-  //   return client.query({
-  //     query: gql`${resourcesGroupById} ${FIELDS}`,
-  //     variables: { group: group }
-  //   })
-  //   .then(this.getResourcesGroupsCallback)
-  //   .catch(error => console.log(error.message))
-  // }
 
   getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.resourcesGroups;
@@ -219,6 +176,7 @@ export class PurchasesApi {
   }
   
   createCartMutationCallback(result){
+    debugger;
     let response_data = result.data.purchasesMutation.createCart;
     var cartItem = {
       id:                 response_data.id,
@@ -423,15 +381,7 @@ addToFavoritesMutationCallbackFirst(result){
       //.then(this.addToFavoritesMutationCallbackSecond)
       .catch(error => console.log(error.message))
   }
-
-  async changeLocalization(language){
-    store.commit('purchases/clearResourceGroups');
-    await client.mutate({
-      mutation: gql`${changeLocalization}`,
-      variables: {language: language}     
-    })
-  }
-
+  
   getFavListInputTypeParam(favList)
   {
     let test =  {
