@@ -7,8 +7,8 @@
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn class="status-task-btn"
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
-      :color="selectedTask.state == 'IN_PLAN' ? 'rgba(7, 109, 0, 0.81)' : 'rgba(179, 2, 2, 0.81)'"
-      @click="onclickAccept">{{selectedTask.state == 'IN_PLAN' ? 'Взять в работу' : 'Приостановить'}}</v-btn>
+      :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
+      @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}</v-btn>
 
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
