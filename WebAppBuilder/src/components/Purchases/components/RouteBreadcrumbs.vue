@@ -26,29 +26,38 @@ export default {
     },
     data:() =>({
         first: {},
-        breadCrumbs: [],
-        show: false
+        //show: false
     }),
-    methods:{
-        responceCallback(response){            
-            this.show = true;
-            this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
-        }
-    },
     created(){
         let currentGroup = this.$route.params.catalogueId;
         if(currentGroup != undefined){
-                api.getBreadcrumbsByGroup(currentGroup).then(this.responceCallback);
+                api.getBreadcrumbsByGroup(currentGroup,false);//.then(this.responceCallback);
             }
+    },
+    computed:{
+        show:{
+            get: function() {
+                if(this.$store.getters["purchases/getBreadCrumbs"].length === 0){
+                    return false;
+                }
+                
+                return true;
+            },
+        },
+        breadCrumbs:{
+            get: function() {
+                return this.$store.getters["purchases/getBreadCrumbs"];
+            },
+        }
     },
     watch: {
         '$route' (to, from){
             if(to.params.catalogueId != null){
-                api.getBreadcrumbsByGroup(to.params.catalogueId).then(this.responceCallback);
+                api.getBreadcrumbsByGroup(to.params.catalogueId,false);//.then(this.responceCallback);
             }
-            else{            
-                this.show = false;
-                this.breadCrumbs = [];
+            else{
+                debugger;
+                this.$store.state.purchases.breadcrumbs = [];
             }
         }
     }

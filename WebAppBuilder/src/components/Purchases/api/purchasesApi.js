@@ -27,7 +27,6 @@ import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
-import changeLocalization from './graphql/changeLocalization.gql'
 import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
 import resourcesGropsByParentGroup from './graphql/resourcesGropsByParentGroup.gql'
 import mutationEditFavList from './graphql/mutationEditFavList.gql'
@@ -43,6 +42,7 @@ import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.
 
 
 const options = {
+  credentials: 'include',
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
@@ -68,12 +68,23 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-  getBreadcrumbsByGroup(group){
-    return client.query({
+  getBreadcrumbsByGroupCallback(response){
+    let data = response.data.purchases.resourcesGroupsBreadcrumbs;
+    store.commit('purchases/setBreadCrumbs', data);
+  }
+  getBreadcrumbsByGroup(group, reload){
+    let q = {
       query: gql`${breadcrumbsByGroup}`,
-      variables: { group: group }
-    })
-    .catch(error => console.log(error.message))
+      variables: { group: group },
+    };
+    if(reload){
+      q.fetchPolicy = 'no-cache';
+    }
+
+    client.query(q)
+      .then(this.getBreadcrumbsByGroupCallback)
+      .catch(error => console.log(error.message))
+    
   }
 
   getResourcesGroupsByParentGroupCallback(result){
@@ -381,7 +392,7 @@ addToFavoritesMutationCallbackFirst(result){
       //.then(this.addToFavoritesMutationCallbackSecond)
       .catch(error => console.log(error.message))
   }
-  
+
   getFavListInputTypeParam(favList)
   {
     let test =  {

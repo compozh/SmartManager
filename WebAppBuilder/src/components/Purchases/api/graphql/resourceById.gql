@@ -1,7 +1,18 @@
 query ($id: ID) {
 	purchases {
         resource (id: $id){
-            ...resourcesFields
+            id,
+            fullName,
+            name,
+            designation,
+            measurementUnit{
+                shortName,
+                fullName
+            }
+            resourceGroup{
+                id,
+                name
+            }
         }
     }
 }

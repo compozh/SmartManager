@@ -44,4 +44,7 @@ export default {
     setTitleState({commit}, payload){
         commit('setTitleState', payload);
     },
+    setBreadCrumbs({commit}, payload){
+        commit('setBreadCrumbs', payload);
+    },
 }
