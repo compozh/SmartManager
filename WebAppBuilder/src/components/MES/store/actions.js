@@ -18,7 +18,7 @@ export default {
   async initializeWorkCenters({ commit }) {
     commit('setError', null)
     try {
-      let uuid = "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=",//deviceUUID.get(),
+      let uuid = deviceUUID.get(),
         result = await api.getWorkCentersFromGql(uuid);
       var workCenters = {};
       result.data.mes.workCenters.forEach(workCenter => {
@@ -112,7 +112,7 @@ export default {
       let result = await api.registerProductionGql(productionRegistrationParam);
 
       if(result.success == true) {
-        task.state = 'IN_WORK';
+        task.inProgress = true;
       } else {
         commit('setError', result.errorMessage);
       }
@@ -129,7 +129,7 @@ export default {
       let result = await api.cancelBeginRegistrationGql(task.shiftTaskId);
 
       if(result.success == true) {
-        task.state = 'IN_PLAN';
+        task.inProgress = false;
       } else {
         commit('setError', result.errorMessage);
       }

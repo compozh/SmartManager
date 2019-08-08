@@ -6,7 +6,7 @@
 
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
       <v-btn class="status-task-btn"
-      outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
+      outlined
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
       @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}</v-btn>
 
@@ -42,15 +42,11 @@ export default {
       this.$emit('changeCurrentLayout', 'mes-task-stuff-layout');
     },
     onclickAccept(event) {
-      debugger;
-        switch(this.selectedTask.state) {
-          case "IN_PLAN":
-            this.$store.dispatch('mes/registerProduction', this.selectedTask);
-            break;
-          case "IN_WORK":
-            this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask);
-            break;
-        }
+      if(this.selectedTask.inProgress) {
+        this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask);
+      } else {
+        this.$store.dispatch('mes/registerProduction', this.selectedTask);
+      }
     },
     onclickRemoveAllInstallations() {
       this.$emit('removeAllInstallations');
