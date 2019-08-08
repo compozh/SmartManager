@@ -5,9 +5,9 @@
       v-if="currentLayout == 'mes-accept-task-layout' || currentLayout == 'mes-task-main-layout'">
 
       <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
-      <v-btn
+      <v-btn class="status-task-btn"
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
-      :color="selectedTask.state == 'IN_PLAN' ? 'success' : 'error'"
+      :color="selectedTask.state == 'IN_PLAN' ? 'rgba(7, 109, 0, 0.81)' : 'rgba(179, 2, 2, 0.81)'"
       @click="onclickAccept">{{selectedTask.state == 'IN_PLAN' ? 'Взять в работу' : 'Приостановить'}}</v-btn>
 
     </v-flex>
@@ -42,6 +42,7 @@ export default {
       this.$emit('changeCurrentLayout', 'mes-task-stuff-layout');
     },
     onclickAccept(event) {
+      debugger;
         switch(this.selectedTask.state) {
           case "IN_PLAN":
             this.$store.dispatch('mes/registerProduction', this.selectedTask);
@@ -77,8 +78,10 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    height: 6vh;
     align-items: center;
+  }
+  .status-task-btn {
+    color: white;
   }
   .toolbar.row {
     margin: 0;

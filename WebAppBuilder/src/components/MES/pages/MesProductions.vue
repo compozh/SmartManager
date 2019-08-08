@@ -30,6 +30,7 @@ export default {
         return this.$store.getters['mes/properties'];
     },
     productions() {
+      debugger;
       return this.$store.getters['mes/productions'];
     }
   },
@@ -55,8 +56,8 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  overflow-y: auto;
-  height: 94vh !important;
+  /* overflow-y: auto;
+  height: 94vh !important; */
 }
 .productions-card {
   display: flex;
@@ -64,6 +65,7 @@ export default {
   margin: 10px;
   max-width: 400px;
   width: 360px;
+  border-radius: 10px;
 }
 .wait-for-data-block {
   padding: 20px;

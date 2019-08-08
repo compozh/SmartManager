@@ -1,14 +1,12 @@
 <template>
   <v-container  class="main-block">
     <v-card>
-      <v-layout row xs12 md12 sm12 lg12>
-        <v-flex xs4 md4 sm4 lg4 class="tasks-list">
+      <multipane class="main-block-layout">
           <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=changeCurrentTask @changeSelectTasksTab=changeSelectTasksTab />
-        </v-flex>
-        <v-flex xs8 md8 sm8 lg8 class="task-description">
-            <v-layout column wrap xs12 md12 sm12 lg12>
-              <v-flex class="button-toolbar" row wrap xs12 md12 sm12 lg12>
+        <multipane-resizer><v-icon class="resizer-icon">drag_handle</v-icon></multipane-resizer>
+            <v-layout column class="task-description-layout">
+              <v-flex class="button-toolbar" row wrap >
                 <mes-tasks-toolbar v-if="selectedTask"
                 :currentLayout=currentLayout :selectedTask=selectedTask :installations=installations[selectedTask.workCenterCode]
                 @changeCurrentLayout="changeCurrentLayout" @removeAllInstallations=removeAllInstallations />
@@ -22,22 +20,24 @@
               <mes-task-stuff-layout :selectedTask=selectedTask :installations=installations
                 @removeInstallation=removeInstallation v-if="selectedTask && currentLayout == 'mes-task-stuff-layout'" />
             </v-layout>
-        </v-flex>
-      </v-layout>
+      </multipane>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import {mapGetters, install} from 'vuex'
+import { Multipane, MultipaneResizer  } from '../../../../node_modules/vue-multipane'
 
 export default {
   name: "mes-tasks",
+  components: { Multipane, MultipaneResizer },
   data() {
     return {
       initializeTasks: false
     };
   },
+
   created() {
     this.initialize();
   },
@@ -168,8 +168,31 @@ export default {
   .main-block {
     padding: 0 !important;
     margin: 0 !important;
+    height: 100%;
+  }
+  .main-block .v-card {
+    height: 100%;
+  }
+  .main-block-layout {
+    height: 100%;
+  }
+  .multipane-resizer {
+    display: flex;
+    margin: 0 5px 0 -4px;
+    user-select: none;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  }
+  .resizer-icon {
+    user-select: none;
+    transform: rotate(90deg);
+    width: 10px;
+    pointer-events: none;
+    cursor: default;
   }
   .button-toolbar.row {
     margin: 0;
+  }
+  .task-description-layout {
+    height: 100%;
   }
 </style>

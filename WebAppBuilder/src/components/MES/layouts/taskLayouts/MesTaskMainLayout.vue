@@ -44,13 +44,11 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-  .mes-task-main-layout {
+  /* .mes-task-main-layout {
     height: 88vh;
     overflow-y: auto;
-  }
+  } */
   .main-layout {
-    overflow-y: auto;
-    height: 89vh !important;
     padding: 0 10px !important;
   }
   .grid-element {
