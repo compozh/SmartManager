@@ -176,7 +176,7 @@ export default {
     }
     commit('setLinearLoader', false)
   },
-  async createProductionFormio({ getters, commit }, formCode) {
+  async createProductionFormio({ getters, commit }, { formCode, properties }) {
     if(getters.productionFormio[formCode]) {
       return;
     }
@@ -184,7 +184,7 @@ export default {
     commit('setLinearLoader', true)
 
     try {
-      let result = await api.getProductionFormioFromGql(formCode);
+      let result = await api.getProductionFormioFromGql(formCode, properties);
       commit('setProductionFormio', { formio: result.data.mes.productionFormIo, formCode });
     } catch (e) {
       commit('setError', e.message)

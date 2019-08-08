@@ -127,7 +127,7 @@ export default {
       }
       this.selectedTask = newSelectedTask;
       let workCenter = this.workCenters[newSelectedTask.workCenterCode];
-      this.$store.dispatch('mes/createProductionFormio', workCenter.productionRegistrationFormCode);
+      this.initializeFormioByWorkCenter(workCenter);
       switch(newSelectedTask.state) {
         case 'DONE':
           this.currentLayout = '';
@@ -136,6 +136,12 @@ export default {
           this.currentLayout = 'mes-task-main-layout';
           break;
       }
+    },
+    initializeFormioByWorkCenter(workCenter) {
+      let properties = {
+        workCenterCode: workCenter.code
+      };
+      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties });
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex;

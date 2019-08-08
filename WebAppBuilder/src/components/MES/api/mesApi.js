@@ -169,8 +169,9 @@ export class MesApi {
       return console.log(error.message);
     }
   }
-  async getProductionFormioFromGql(formCode) {
+  async getProductionFormioFromGql(formCode, properties) {
     try {
+      debugger;
       const result = await client.query({
         query: gql`query ($formCode: String) ${productionFormIo}`,
         variables: { formCode }
