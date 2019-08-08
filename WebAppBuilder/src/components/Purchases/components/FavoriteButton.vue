@@ -39,7 +39,13 @@ export default {
         alias:{
             type: String,
             required: true
-        }
+        },
+        isInFavorite:{
+            type: Boolean,
+            required: false,
+            default: undefined
+        },
+        
     },
     created: function () {
             this.$store.watch(state => state.purchases.favlists, this.checkInFavourite);
@@ -56,17 +62,21 @@ export default {
             
         },
         checkInFavourite(){
-            
+
             this.inFavourite = false;
             const favlists = this.$store.state.purchases.favlists;
-           
-            if(favlists != null)
+        
+            if(favlists != null && favlists.some(w => 1==1))
             {
-                //this.inFavourite = favlists.where(w=>w.alias = this.alias).selectmany(w=>w.keyValues).any(w=>w == this.keyValue)
-                 this.inFavourite = favlists.filter((w)=>w.alias == this.alias).map((w) => w.keyValues).
-                        reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
+               
+                this.inFavourite = favlists.filter((w)=>w.alias == this.alias).map((w) => w.keyValues).
+                    reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
             }
-           
+            else
+            {
+                this.inFavourite = this.isInFavorite;
+            }
+            
         }
     }
 }

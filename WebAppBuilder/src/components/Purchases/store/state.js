@@ -5,7 +5,7 @@ export default {
   cartitems : [],
   snackbarMessage: "",
   chose: { list:[], /*key:undefined,*/ method : function(){}, caption:undefined },
-  favlists: [{ alias : "", id: "", keyValues: [], caption: "" , isDefaultList:false}],
+  favlists: [],
   applications : [],
   showTitle: true,
   docStatus:[],

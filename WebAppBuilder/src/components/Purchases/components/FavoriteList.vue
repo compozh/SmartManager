@@ -1,6 +1,5 @@
 <template>
     <div v-if="favList">
-      <draggable  v-model="favLists"  v-bind="{group: favList.alias, sort:false}">
         <v-container
             :key="favList.id"
             fluid
@@ -16,7 +15,7 @@
                     v-model="favList.caption"
                     solo
                     @input="mutationEditFavList(favList)"
-                ></v-text-field>  
+                ></v-text-field> 
                 </v-flex>
 
                 <v-flex>
@@ -29,8 +28,9 @@
                 <v-btn flat small color="error" @click="mutationDeleteFavList(favList)">Delete List</v-btn>
                 </v-flex >
             </v-layout>
+             <draggable  v-model="favLists"  v-bind="{group: favList.alias, sort:false, disabled: false}">
             <v-layout row wrap>
-             
+
               <v-flex
                   v-for="card in favList.items"
                   :key="card.id"
@@ -38,7 +38,7 @@
                   sm6
                   md4
                   >
-                   <draggable v-model="card.itSelfArray"  :move="onmove" @end="end" v-bind="{group: favList.alias, sort:false}"  style="min-height: 50px">
+                   <draggable v-model="card.itSelfArray"  :move="onmove" @end="end" v-bind="{group: favList.alias, sort:false}"  style="min-height: 10px">
                     <div :key="card.id" v-if="favList.alias === 'DOC'" >
                       <applicationCard  :index="card.id" :application="card" />
                     </div>
@@ -47,10 +47,13 @@
                     </div>
                     
               </draggable>
-                </v-flex>
+            </v-flex>
+            <div v-if="!favList.items.some(w => 1==1)" class="emptyBlock" >
+            </div>
             </v-layout>
-        </v-container>
-      </draggable >
+          </draggable >
+      </v-container>
+      
     </div>
     
 </template>
@@ -93,7 +96,7 @@ const api = new PurchasesApi();
         itemToMove : undefined
     }),
     created: function () {
-       
+       api.getFavLists();
       },
     destroyed(){
       this.$store.state.resources = [];
@@ -223,8 +226,8 @@ const api = new PurchasesApi();
       },
       getСatalogueItemByKeyValue(keyValue){
         let test2 = 2;
-        test2 =  this.resource_items.find(w => w.id == keyValue);
         
+        test2 =  this.resource_items.find(w => w.id == keyValue);
         return test2;
       },
     }
@@ -233,6 +236,9 @@ const api = new PurchasesApi();
 
 <style scoped>
 
+.emptyBlock{
+  min-height: 50px;
+}
 
 .app1{
     padding: 5px;
