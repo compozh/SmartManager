@@ -1,0 +1,5 @@
+{
+    purchases{
+        elasticResourceNameSearch(name: $name)
+    }
+}
