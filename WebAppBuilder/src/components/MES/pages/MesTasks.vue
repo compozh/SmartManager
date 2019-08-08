@@ -4,7 +4,7 @@
       <multipane class="main-block-layout">
           <mes-tasks-component :selectedTask=selectedTask :tasks=tasks :initializeTasks=initializeTasks :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=changeCurrentTask @changeSelectTasksTab=changeSelectTasksTab />
-        <multipane-resizer></multipane-resizer>
+        <multipane-resizer><v-icon class="resizer-icon">drag_handle</v-icon></multipane-resizer>
             <v-layout column class="task-description-layout">
               <v-flex class="button-toolbar" row wrap >
                 <mes-tasks-toolbar v-if="selectedTask"
@@ -169,6 +169,19 @@ export default {
   }
   .main-block-layout {
     height: 100%;
+  }
+  .multipane-resizer {
+    display: flex;
+    margin: 0 5px 0 -4px;
+    user-select: none;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  }
+  .resizer-icon {
+    user-select: none;
+    transform: rotate(90deg);
+    width: 10px;
+    pointer-events: none;
+    cursor: default;
   }
   .button-toolbar.row {
     margin: 0;
