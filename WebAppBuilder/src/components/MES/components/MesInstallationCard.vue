@@ -21,16 +21,16 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-    .mes-delete-installation {
-        min-width: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-    .mes-installation-card {
-        display: flex;
-        justify-content: center;
-        max-height: 300px;
-
-    }
+.mes-delete-installation {
+  min-width: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.mes-installation-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 300px;
+}
 </style>
