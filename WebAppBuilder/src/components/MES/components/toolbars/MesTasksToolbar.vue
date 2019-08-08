@@ -8,7 +8,8 @@
       <v-btn class="status-task-btn"
       outlined
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
-      @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}</v-btn>
+      @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}
+      </v-btn>
 
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
@@ -39,6 +40,7 @@ export default {
   },
   methods: {
     onclickSetupMaterial(event) {
+      this.$emit('initializeInstallations');
       this.$emit('changeCurrentLayout', 'mes-task-stuff-layout');
     },
     onclickAccept(event) {

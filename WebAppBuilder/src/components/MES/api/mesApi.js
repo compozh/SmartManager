@@ -59,11 +59,12 @@ export class MesApi {
     }
   }
 
-  async getTasksFromGql(workCenter) {
+  async getTasksFromGql(workCenter, fetchPolicy) {
     try {
       const result = await client.query({
         query: gql`query ($workCenter: String) ${tasks}`,
-        variables: { workCenter }
+        variables: { workCenter },
+        fetchPolicy: fetchPolicy || 'cache-first'
       });
       return result;
     }
@@ -72,25 +73,12 @@ export class MesApi {
     }
   }
 
-  async getInstallationsFromGql(workCenter) {
-    try {
-      const result = await client.query({
-        query: gql`query ($workCenter: String) ${installations}`,
-        variables: { workCenter }
-      });
-      return result;
-    }
-    catch (error) {
-      return console.log(error.message);
-    }
-  }
-
-  async updateInstallationsFromGql(workCenter) {
+  async getInstallationsFromGql(workCenter, fetchPolicy) {
     try {
       const result = await client.query({
         query: gql`query ($workCenter: String) ${installations}`,
         variables: { workCenter },
-        fetchPolicy: 'network-only'
+        fetchPolicy: fetchPolicy || 'cache-first'
       });
       return result;
     }
@@ -146,11 +134,12 @@ export class MesApi {
       return console.log(error.message);
     }
   }
-  async getProductionsFromGql(workerCode) {
+  async getProductionsFromGql(workerCode, fetchPolicy) {
     try {
       const result = await client.query({
         query: gql`query ($workerCode: String) ${productions}`,
-        variables: { workerCode }
+        variables: { workerCode },
+        fetchPolicy: fetchPolicy || 'cache-first'
       });
       return result;
     }
@@ -171,7 +160,6 @@ export class MesApi {
   }
   async getProductionFormioFromGql(formCode, properties) {
     try {
-      debugger;
       const result = await client.query({
         query: gql`query ($formCode: String) ${productionFormIo}`,
         variables: { formCode }

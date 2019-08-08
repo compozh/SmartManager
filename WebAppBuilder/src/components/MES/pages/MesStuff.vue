@@ -35,7 +35,7 @@ export default {
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenters');
-      await this.$store.dispatch('mes/initializeInstallations', this.workCenters);
+      await this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
       this.initializeInstallations = true;
     },
    removeAllInstallations() {

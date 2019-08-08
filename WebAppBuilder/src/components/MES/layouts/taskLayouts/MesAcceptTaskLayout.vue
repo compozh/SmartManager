@@ -58,16 +58,7 @@ export default {
 		},
     formioSubmit(data) {
       let workCenter = this.workCenters[this.selectedTask.workCenterCode];
-
-      this.$store.dispatch('mes/productionFormIoSubmit', {
-        formCode: workCenter.productionRegistrationFormCode,
-        data: data,
-        productionRegistrationParam : {
-          workCenterCode: workCenter.code,
-          workBarcode: this.selectedTask.barcode,
-          mode: "FINISH"
-        }
-      });
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter, data, selectedTask: this.selectedTask });
     }
   }
 }
