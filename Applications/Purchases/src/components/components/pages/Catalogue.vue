@@ -70,93 +70,92 @@
 </template>
 
 <script>
-  import {PurchasesApi} from "../api/purchasesApi";
-  const api = new PurchasesApi();
-  export default {
-      name: "catalogue",
-      data:()=>({
-          loading: false,
-          search: null,
-          timeout: 0,
-          entityType: "",
-          filterDrawer: false,
-          rowViewType: true,
-          search: "",
-      }),
-      props:{
-        catalogueId: undefined
-      },
-      methods:{
-        getItems(id){
-          var fieldname = "name";
-          if (!id){
-            id = "";
-            api.getResourcesGroupsByParentGroup(id);
-          }
-          else{
-            api.getResourcesGroupById(id);
-          }
-        },
-        
-        searchCallback (item) {
-          var itemToSearch = _.lowerCase(item.name);
-          var searchedText = _.lowerCase(_.trim(this.search));
-          var ret = itemToSearch.indexOf(searchedText);
-          return ret >= 0;
-        },
-      },
-      created: function () {
-        var id = this.routeParamCode;
-        this.getItems(id);
-      },
-      computed:{
-        groups_items: {
-          get: function() {
-            if (this.search === ""){                        
-              debugger;
-              return this.$store.getters["purchases/getResourceGroups"];
-            }
-          debugger;
-          return _.filter(this.$store.getters["purchases/getResourceGroups"], this.searchCallback);
-          }
-        },
-        resource_items: {
-          get: function() {
-            if (this.search === ""){                     
-              let test = this.$store.getters["purchases/getResources"];
-
-              return this.$store.getters["purchases/getResources"];
-            }
-
-          return this.$store.getters["purchases/getResources"];//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
-          }
-        },
-        test_items:{
-          get: function() {
-            if (this.search === ""){
-              return this.$store.getters["purchases/getTestItems"];
-            }
-          
-          let tt = this.$store.getters["purchases/getTestItems"];
-          return _.filter(this.$store.getters["purchases/getTestItems"], this.searchCallback);
-          }
-        },
-
-        routeParamCode(){
-          return this.$route.params.catalogueId ? this.$route.params.catalogueId : "";
-        },
-        isCard(){
-          var isCard = _.trim(this.routeParamCode).length === 15;
-          return isCard;
-        }
-      },
-      watch: {
-        '$route' (to, from) {
-          var id = to.params.catalogueId;
-          this.getItems(id);
-        }
+import {PurchasesApi} from '../../../api/purchasesApi'
+const api = new PurchasesApi()
+export default {
+  name: 'catalogue',
+  data: () => ({
+    loading: false,
+    search: null,
+    timeout: 0,
+    entityType: '',
+    filterDrawer: false,
+    rowViewType: true,
+    search: '',
+  }),
+  props: {
+    catalogueId: undefined
+  },
+  methods: {
+    getItems(id) {
+      var fieldname = 'name'
+      if (!id) {
+        id = ''
+        api.getResourcesGroupsByParentGroup(id)
+      } else {
+        api.getResourcesGroupById(id)
       }
+    },
+        
+    searchCallback (item) {
+      var itemToSearch = _.lowerCase(item.name)
+      var searchedText = _.lowerCase(_.trim(this.search))
+      var ret = itemToSearch.indexOf(searchedText)
+      return ret >= 0
+    },
+  },
+  created: function () {
+    var id = this.routeParamCode
+    this.getItems(id)
+  },
+  computed: {
+    groups_items: {
+      get: function() {
+        if (this.search === '') {                        
+          debugger
+          return this.$store.getters['purchases/getResourceGroups']
+        }
+        debugger
+        return _.filter(this.$store.getters['purchases/getResourceGroups'], this.searchCallback)
+      }
+    },
+    resource_items: {
+      get: function() {
+        if (this.search === '') {                     
+          let test = this.$store.getters['purchases/getResources']
+
+          return this.$store.getters['purchases/getResources']
+        }
+
+        return this.$store.getters['purchases/getResources']//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
+      }
+    },
+    test_items: {
+      get: function() {
+        if (this.search === '') {
+          return this.$store.getters['purchases/getTestItems']
+        }
+          
+        let tt = this.$store.getters['purchases/getTestItems']
+        return _.filter(this.$store.getters['purchases/getTestItems'], this.searchCallback)
+      }
+    },
+
+    routeParamCode() {
+      return this.$route.params.catalogueId ? this.$route.params.catalogueId : ''
+    },
+    isCard() {
+      var isCard = _.trim(this.routeParamCode).length === 15
+      return isCard
     }
+  },
+  watch: {
+    '$route' (to, from) {
+      var id = to.params.catalogueId
+      this.getItems(id)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

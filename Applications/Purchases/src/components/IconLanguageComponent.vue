@@ -22,78 +22,76 @@
 
 <script>
 import CountryFlag from 'vue-country-flag'
-import _ from "lodash"
-import { debug } from 'util';
-import {PurchasesApi} from "../api/purchasesApi";
+import _ from 'lodash'
+import {PurchasesApi} from '../api/purchasesApi'
     
-const api = new PurchasesApi();
+const api = new PurchasesApi()
 
 export default {
-    name :"icon-language-component",
-    components:{
-        CountryFlag
+  name: 'icon-language-component',
+  components: {
+    CountryFlag
+  },
+  data() {
+    return {
+      arrayCountryAndFlag: [],
+      dictionaryLanguage: [
+        { name: 'English',    flag: 'gb', key: 'EN', label: 'Eng' },
+        { name: 'Русский',    flag: 'ru', key: 'RU', label: 'Рус' },
+        { name: 'Українська', flag: 'ua', key: 'UK', label: 'Укр' },
+      ],
+      curlanguage: localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : 'Русский'
+    }
+  },
+  computed: {
+    curentLanguageFlag() {
+      return _.find(this.dictionaryLanguage,['name', this.curlanguage]).flag
     },
-    data(){
-        return{
-            arrayCountryAndFlag:[],
-            dictionaryLanguage :[
-                { name: "English",    flag: "gb", key: "EN", label:"Eng" },
-                { name: "Русский",    flag: "ru", key: "RU", label:"Рус" },
-                { name: "Українська", flag: "ua", key: "UK", label:"Укр" },
-            ],
-            curlanguage : localStorage.getItem('curentLanguage') ? localStorage.getItem('curentLanguage') : "Русский"
-        }
-    },
-    computed:{
-        curentLanguageFlag(){
-            return _.find(this.dictionaryLanguage,["name", this.curlanguage]).flag;
-        },
-        curentLanguageText(){
-            return _.find(this.dictionaryLanguage,["name", this.curlanguage]).label;
-        }
-    },
-    mounted(){
-        //Если есть параметр в url
-        if(this.$route.query.language){
-            this.SetUpLanguageFromURLParameter();
-        //Иначе берем из sessionStorage
-        }else if(localStorage.getItem('language')){
-            var language = localStorage.getItem('language')
-            this.Setlocalization(language)
-        }
-    },
-    methods:{
+    curentLanguageText() {
+      return _.find(this.dictionaryLanguage,['name', this.curlanguage]).label
+    }
+  },
+  mounted() {
+    //Если есть параметр в url
+    if (this.$route.query.language) {
+      this.SetUpLanguageFromURLParameter()
+      //Иначе берем из sessionStorage
+    } else if (localStorage.getItem('language')) {
+      var language = localStorage.getItem('language')
+      this.Setlocalization(language)
+    }
+  },
+  methods: {
     //Изменяем локализацию через выбор элемента в списке
-        SetLocale(index){
-            var language = this.dictionaryLanguage[index].key.toLowerCase();
-            this.curlanguage = this.dictionaryLanguage[index].name
-            localStorage.setItem('curentLanguage', this.curlanguage)
-            localStorage.setItem('language', language);
+    SetLocale(index) {
+      var language = this.dictionaryLanguage[index].key.toLowerCase()
+      this.curlanguage = this.dictionaryLanguage[index].name
+      localStorage.setItem('curentLanguage', this.curlanguage)
+      localStorage.setItem('language', language)
 
-            this.Setlocalization(language)
-        },
+      this.Setlocalization(language)
+    },
     //Установка локализации из параметра в строке url
-    SetUpLanguageFromURLParameter(){
-        var language = this.$route.query.language.toUpperCase()
-        this.curlanguage = _.find(this.dictionaryLanguage, function(o){return o.key == language}).name
-        localStorage.setItem('curentLanguage', this.curlanguage)
-        localStorage.setItem('language', language.toLowerCase())
-        this.Setlocalization(language.toLowerCase());
+    SetUpLanguageFromURLParameter() {
+      var language = this.$route.query.language.toUpperCase()
+      this.curlanguage = _.find(this.dictionaryLanguage, function(o) { return o.key == language }).name
+      localStorage.setItem('curentLanguage', this.curlanguage)
+      localStorage.setItem('language', language.toLowerCase())
+      this.Setlocalization(language.toLowerCase())
     },
     //Установка локализации
-    Setlocalization(language){
-       this.$i18n.Setlocalization(language);
+    Setlocalization(language) {
+      this.$i18n.Setlocalization(language)
        
-       let currentGroup = this.$route.params.catalogueId;
-       api.changeLocalization(language).then(()=>{
-           if(currentGroup != undefined){
-            api.getResourcesGroupById(currentGroup);
-           }
-           else{
-            api.getResourcesGroupsByParentGroup("");
-           }
+      let currentGroup = this.$route.params.catalogueId
+      api.changeLocalization(language).then(() => {
+        if (currentGroup != undefined) {
+          api.getResourcesGroupById(currentGroup)
+        } else {
+          api.getResourcesGroupsByParentGroup('')
+        }
            
-       });
+      })
     }
 
   },

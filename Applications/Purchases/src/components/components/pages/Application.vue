@@ -64,70 +64,69 @@
 </template>
 
 <script>
-import moment from 'moment';
-import _ from 'lodash';
-import {PurchasesApi} from "../api/purchasesApi";
+import moment from 'moment'
+import _ from 'lodash'
+import {PurchasesApi} from '../../../api/purchasesApi'
 
-const api = new PurchasesApi();
+const api = new PurchasesApi()
 
 
 export default {
     
-    name: "application",
-    props: { 
-        applicationId: undefined,
-        //applicationItemId: undefined
-    },
-    filters:{
-        formatDate: (value) => {
-            if (value) {
-                return moment(String(value)).format('DD.MM.YYYY')
-            }
-        }
-    },
-    computed:{
-        application:{
-            get: function() {
-                debugger;
-                let test = this.$store.getters["purchases/getApplications"];
-                return test.find(w=>w.id == this.$route.params.applicationId);
+  name: 'application',
+  props: { 
+    applicationId: undefined,
+    //applicationItemId: undefined
+  },
+  filters: {
+    formatDate: (value) => {
+      if (value) {
+        return moment(String(value)).format('DD.MM.YYYY')
+      }
+    }
+  },
+  computed: {
+    application: {
+      get: function() {
+        debugger
+                let test = this.$store.getters['purchases/getApplications']
+                return test.find(w => w.id == this.$route.params.applicationId)
             },
-            set: function(newVal){
-                debugger;
+      set: function(newVal) {
+        debugger
                 //this.$store.commit('purchases/setApplications', newVal);
             }
-        },
-        compRows() {
-            for (const key in this.application.rows) {
-                if (this.application.rows.hasOwnProperty(key)) {
-                    if (this.application.rows[key].isEdit == undefined)
-                    {
-                        this.$set(this.application.rows[key], 'isEdit', false)
-                    }
-                }
-            }
-            return this.application.rows;
-        }
     },
-    created(){
-        debugger;
-    },
-    mounted(){
-        api.getApplications();
-    },
-    methods:{
-        editClick(row){
-            console.log(row);
-            row.isEdit = !!!row.isEdit;
-        }
-    },
-    watch: {
-        '$route' (to, from) {
-          debugger;
-          var id = to.params.applicationItemId;
-          this.application = id ;
+    compRows() {
+      for (const key in this.application.rows) {
+        if (this.application.rows.hasOwnProperty(key)) {
+          if (this.application.rows[key].isEdit == undefined) {
+            this.$set(this.application.rows[key], 'isEdit', false)
+          }
         }
       }
+      return this.application.rows
+        }
+  },
+  created() {
+    debugger
+    },
+  mounted() {
+    api.getApplications()
+    },
+  methods: {
+    editClick(row) {
+      console.log(row)
+            row.isEdit = !row.isEdit;
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      debugger
+          var id = to.params.applicationItemId
+          this.application = id 
+        }
+  }
 }
 </script>
 

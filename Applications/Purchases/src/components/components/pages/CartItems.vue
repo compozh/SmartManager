@@ -70,125 +70,124 @@
 </template>
 
 <script>
-import Axios from "axios";
-import purchasesSchemaAxios from "../api/BaseFunctions";
-import {PurchasesApi} from "../api/purchasesApi";
-import RemoveButton from "../components/RemoveButton.vue"
-import ModalWindowOrderCreation from "../components/ModalWindowOrderCreation.vue"
-import TooltipCartItemWithResource from "../components/TooltipCartItemWithResource.vue"
-import TextAreaWithLockEdit from "../components/TextAreaLockEdit.vue"
-import { debug } from 'util';
+import Axios from 'axios'
+import purchasesSchemaAxios from '../../../api/BaseFunctions'
+import {PurchasesApi} from '../../../api/purchasesApi'
+import RemoveButton from  '../../RemoveButton.vue' 
+import ModalWindowOrderCreation from '../../ModalWindowOrderCreation.vue'
+import TooltipCartItemWithResource from '../../TooltipCartItemWithResource.vue'
+import TextAreaWithLockEdit from '../../TextAreaLockEdit.vue'
+import { debug } from 'util'
 
-const api = new PurchasesApi();
+const api = new PurchasesApi()
 
 export default {
-    name: "cart-list",
-    components:{
-      RemoveButton,
-      ModalWindowOrderCreation,
-      TooltipCartItemWithResource
+  name: 'cart-list',
+  components: {
+    RemoveButton,
+    ModalWindowOrderCreation,
+    TooltipCartItemWithResource
+  },
+  computed: {
+    cardBinding() { 
+      const binding = {}
+      binding.column = !this.$vuetify.breakpoint.smAndUp
+      return binding
     },
-    computed:{
-      cardBinding() { 
-        const binding = {}
-        binding.column = !this.$vuetify.breakpoint.smAndUp
-        return binding
+    cartlist: {
+      get: function() {
+        return this.$store.getters['purchases/getCartItems']
       },
-      cartlist: {
-        get: function() {
-          return this.$store.getters["purchases/getCartItems"]
-        },
-        set: function(newVal){
-          this.$store.commit('purchases/setCartItems', newVal)
-        }
-      },
-      btnClass(){
-        var b = this.$vuetify.breakpoint.name;
-        if (b==='xs'){
-          return "column";
-        }
-        return "row";
+      set: function(newVal) {
+        this.$store.commit('purchases/setCartItems', newVal)
       }
     },
-    filters:{
-      truncate: (text, length, clamp) => {
-        clamp = clamp || '...';
-        var node = document.createElement('div');
-        node.innerHTML = text;
-        var content = node.textContent;
-        return content.length > length ? content.slice(0, length) + clamp : content;
+    btnClass() {
+      var b = this.$vuetify.breakpoint.name
+      if (b === 'xs') {
+        return 'column'
       }
-    },
-    watch: {
-      search (val) {
-        val && val !== this.select && this.querySelections(val)
-      }
-    },
-    methods:{
-      getTextLength (p1, p2, p3, p4, p5) {
-          switch (this.$vuetify.breakpoint.name) {
-            case 'xs': return p1
-            case 'sm': return p2
-            case 'md': return p3
-            case 'lg': return p4
-            case 'xl': return p5
-          }
-      },
-      
-      breakpointIif(bp, t, f){
-        if (this.$vuetify.breakpoint.name==bp)
-        {
-          return t;
-        }
-        return f;
-      },
-      
-      getCartInputTypeParam(cartItem){
-        return {
-          item:	{
-            id:                 cartItem.id,
-            resourceId:         cartItem.resource===null ? null : cartItem.resource.id,
-            measurementUnitId:  cartItem.measurementUnit.id,
-            resourceName:       cartItem.resourceName,
-            quantity:           cartItem.quantity<1 ? 1 : cartItem.quantity,
-            dateDelivery:       cartItem.dateDelivery
-          }
-        }
-      },
-      // TODO
-      changeQuantity(item, qt){
-       item.quantity = qt;
-        api.updateCartMutation(item);
-      },
-
-      changeUnit(item,m){
-        item.measurementUnit = m;
-        api.updateCartMutation(item);
-      },
-      
-      changeDDate(item, d){
-        item.dateDelivery = d;
-        api.updateCartMutation(item);
-      },
-
-      mutationClearCarts(){
-        api.deleteAllCartsMutation();
-      },
-
-      mutationDeleteCart(item){
-        api.deleteCartMutation(item.id);
-      },
-
-      mutationSubmit(){
-      },
-
-      mutationCreateCart(){
-        api.createCartMutation();
-      }
-    },
-    created(){
-      api.getCartItems();
+      return 'row'
     }
+  },
+  filters: {
+    truncate: (text, length, clamp) => {
+      clamp = clamp || '...'
+      var node = document.createElement('div')
+      node.innerHTML = text
+      var content = node.textContent
+      return content.length > length ? content.slice(0, length) + clamp : content
+    }
+  },
+  watch: {
+    search (val) {
+      val && val !== this.select && this.querySelections(val)
+    }
+  },
+  methods: {
+    getTextLength (p1, p2, p3, p4, p5) {
+      switch (this.$vuetify.breakpoint.name) {
+      case 'xs': return p1
+      case 'sm': return p2
+      case 'md': return p3
+      case 'lg': return p4
+      case 'xl': return p5
+      }
+    },
+      
+    breakpointIif(bp, t, f) {
+      if (this.$vuetify.breakpoint.name == bp) {
+        return t
+      }
+      return f
+    },
+      
+    getCartInputTypeParam(cartItem) {
+      return {
+        item:	{
+          id: cartItem.id,
+          resourceId: cartItem.resource === null ? null : cartItem.resource.id,
+          measurementUnitId: cartItem.measurementUnit.id,
+          resourceName: cartItem.resourceName,
+          quantity: cartItem.quantity < 1 ? 1 : cartItem.quantity,
+          dateDelivery: cartItem.dateDelivery
+        }
+      }
+    },
+    // TODO
+    changeQuantity(item, qt) {
+      item.quantity = qt
+      api.updateCartMutation(item)
+    },
+
+    changeUnit(item,m) {
+      item.measurementUnit = m
+      api.updateCartMutation(item)
+    },
+      
+    changeDDate(item, d) {
+      item.dateDelivery = d
+      api.updateCartMutation(item)
+    },
+
+    mutationClearCarts() {
+      api.deleteAllCartsMutation()
+    },
+
+    mutationDeleteCart(item) {
+      api.deleteCartMutation(item.id)
+    },
+
+    mutationSubmit() {
+    },
+
+    mutationCreateCart() {
+      api.createCartMutation()
+    }
+  },
+  created() {
+    api.getCartItems()
+  }
 }
 </script>
 

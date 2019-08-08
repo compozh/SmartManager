@@ -29,41 +29,36 @@
 
 <script>
 // @ is an alias to /src
-import IconLanguageComponent from "./components/IconLanguageComponent.vue"
+import IconLanguageComponent from '../IconLanguageComponent.vue'
 
 export default {
-  name: "default-app-purchases",
+  name: 'default-app-purchases',
   data() {
     return {
       drawer: false,
       mini: false,
-    };
-  },
-  components:{
-    IconLanguageComponent
-  },
-  computed:{
-    showTitle(){
-       return this.$store.getters["purchases/showTitle"]
     }
   },
-  props: ["toolbarTitle"],
-  methods:{
-    changeDrawer(){
-      if (this.drawer && !this.mini)
-      {
-        this.mini = true;
-      } 
-      else  if (this.drawer && this.mini)
-      {
-        this.drawer = false;
-      } 
-      else if(!this.drawer)
-      {
-        this.mini = true;
-        this.drawer = true;
+  components: {
+    IconLanguageComponent
+  },
+  computed: {
+    showTitle() {
+      return this.$store.getters['purchases/showTitle']
+    }
+  },
+  props: ['toolbarTitle'],
+  methods: {
+    changeDrawer() {
+      if (this.drawer && !this.mini) {
+        this.mini = true
+      } else  if (this.drawer && this.mini) {
+        this.drawer = false
+      } else if (!this.drawer) {
+        this.mini = true
+        this.drawer = true
       }
     }
   }
-};
+}
 </script>

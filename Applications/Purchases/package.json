@@ -1,5 +1,5 @@
 {
-  "name": "webappplayer",
+  "name": "purchases",
   "version": "1.0.0",
   "description": "Player for apps described in \"Web applications builder\"",
   "author": "it-enterprise",
@@ -14,7 +14,7 @@
     "build-bundle": "vue-cli-service build --target lib --name smartManager ./src/main.js"
   },
   "dependencies": {
-    "@it-enterprise/authentication": "^1.0.3",
+    "@it-enterprise/authentication": "^1.0.10",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/eds": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
@@ -22,7 +22,7 @@
     "@it-enterprise/modules-manager": "1.0.0",
     "@it-enterprise/routercore": "^1.0.6",
     "@it-enterprise/signalr": "^1.0.0",
-    "@it-enterprise/webappscore": "^1.0.12",
+    "@it-enterprise/webappscore": "^1.0.14",
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",

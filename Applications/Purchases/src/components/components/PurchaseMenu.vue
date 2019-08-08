@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: 'purchase-menu',
-    props: ["mini"]
+  name: 'purchase-menu',
+  props: ['mini']
 }
 </script>
