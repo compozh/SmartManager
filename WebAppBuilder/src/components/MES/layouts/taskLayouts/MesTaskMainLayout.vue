@@ -34,7 +34,7 @@ export default {
   props: {
     selectedTask: Object
   },
- data: function() {
+ data() {
     let blocks = [
         {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription}
       ];
@@ -44,10 +44,13 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-  /* .mes-task-main-layout {
-    height: 88vh;
+   /*.mes-task-main-layout {
+     padding-top: 30px;
+    height: 100%;
+    width: 100%;
     overflow-y: auto;
-  } */
+    position: absolute;
+  }*/
   .main-layout {
     padding: 0 10px !important;
   }

@@ -10,18 +10,20 @@ export default {
 	name: "mes-form-builder",
 	components: { formio: Form },
 	props: {
-    	formioData: Object
+    	workCenter: Object
 	},
 	computed: {
 		formioComponents() {
-			return {
-				components: this.formioData ? JSON.parse(this.formioData.form) : []
-			};
+			return { components: this.formioData ? JSON.parse(this.formioData.form) : [] };
 		},
 		formioSubmission() {
-			return {
-				data: this.formioData ? JSON.parse(this.formioData.data) : []
-			};
+			return { data: this.formioData ? JSON.parse(this.formioData.data) : [] };
+		},
+		formioData() {
+     		return this.productionFormio[this.workCenter.productionRegistrationFormCode];
+		},
+		productionFormio() {
+			return this.$store.getters['mes/productionFormio'];
 		}
 	},
 	methods: {

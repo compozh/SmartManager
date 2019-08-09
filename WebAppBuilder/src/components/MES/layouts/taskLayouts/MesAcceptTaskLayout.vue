@@ -20,7 +20,7 @@
                         :h="item.h"
                         :i="item.i"
                         class="grid-element">
-                        <mes-form-builder v-if="item.i == '0'" :formioData=getFormioData() @formioSubmit=formioSubmit />
+                        <mes-form-builder v-if="item.i == '0'" :workCenter=workCenters[selectedTask.workCenterCode] @formioSubmit=formioSubmit />
                        <span  v-if="item.i != '0'" v-html="item.data"></span>
                </grid-item>
             </grid-layout>
@@ -32,33 +32,22 @@
 import {mapGetters} from 'vuex'
 
 export default {
+   name: "mes-accept-task-layout",
    props: {
     selectedTask: Object,
-    productionFormio: Object,
     workCenters: Object
   },
-  data(){
+  data() {
     let blocks = [
         {'x':0, 'y':0, 'w':11, 'h':11, 'i':'0'},
         {'x':0, 'y':12, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
     return {blocks: blocks};
   },
-  name: "mes-accept-task-layout",
   methods: {
-    getFormioData() {
-      let workCenter = this.workCenters[this.selectedTask.workCenterCode],
-        formioEmptyData = { form: "[]", data: "[]" };
-        
-      if(!workCenter) {
-        return formioEmptyData;
-      }
-      let formioData = this.productionFormio[workCenter.productionRegistrationFormCode];
-      return formioData || formioEmptyData;
-		},
     formioSubmit(data) {
       let workCenter = this.workCenters[this.selectedTask.workCenterCode];
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter, data, selectedTask: this.selectedTask });
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter, data, task: this.selectedTask });
     }
   }
 }

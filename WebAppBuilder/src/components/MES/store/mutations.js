@@ -37,8 +37,10 @@ export default {
   setProductions(state, productions) {
     state.productions = productions;
   },
-  setProductionFormio(state, {formio, formCode}) {
-    state.productionFormio[formCode] = formio;
+  setProductionFormio(state, { formio, formCode }) {
+    let productionFormio = {[formCode]: formio};
+    let tempProductionFormio = Object.assign({}, state.productionFormio);
+    state.productionFormio = Object.assign(tempProductionFormio, productionFormio);
   },
   removeProduction(state, production) {
       let index = state.productions.indexOf(production);

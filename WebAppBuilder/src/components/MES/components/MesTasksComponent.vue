@@ -14,18 +14,30 @@
           </v-tabs>
       </v-flex>
       <v-flex class="tasks-list-block">
-        <mes-content-loader :initialize=initializeTasks :loaderType=loaderType />
-        <div v-for="(tasksByWorkCenter, workCenter) in tasks" :key="workCenter" class="tasks-list-block-content">
-          <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" :key="task.id" @click="changeCurrentTask(task)">
+        <mes-content-loader
+          :initialize=initializeTasks
+          :loaderType=loaderType />
+        
+        <div v-for="(tasksByWorkCenter, workCenter) in tasks" 
+          :key="workCenter"
+          class="tasks-list-block-content">
+          
+          <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" 
+            :key="task.id"
+            @click="changeCurrentTask(task)">
+            
             <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'"
               v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
-              || (selectedTasksTab == 1 && task.state == 'DONE')">
+                || (selectedTasksTab == 1 && task.state == 'DONE')">
+
               <v-card-text>
                 <span v-html="task.description"></span>
               </v-card-text>
+
             </div>
           </v-card>
           </div>
+
           <span v-if="initializeTasks && Object.keys(tasks).length == 0" class="lack-of-tasks-str">Задания отсутствуют</span>
       </v-flex>
     </v-layout>
@@ -53,9 +65,13 @@ export default {
   },
   props: {
     selectedTask: Object,
-    tasks: Object,
     initializeTasks: Boolean,
     selectedTasksTab: Number
+  },
+  computed: {
+     tasks() {
+      return this.$store.getters['mes/tasks'];
+    }
   },
   methods: {
     changeSelectTasksTab(tabIndex) {
@@ -82,20 +98,20 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-.mes-tasks-component {
-  height: 100%;
-  width: 30%;
-}
-.mes-tasks-component-layout {
-  height: 100%;
-}
-.grid-tabs{
-  flex: 0 0
-}
-.grid-tabs .v-badge {
-  padding-right: 10px;
+  .mes-tasks-component {
+    height: 100%;
+    width: 30%;
+  }
+  .mes-tasks-component-layout {
+    height: 100%;
+  }
+  .grid-tabs{
+    flex: 0 0
+  }
+  .grid-tabs .v-badge {
+    padding-right: 10px;
 
-}
+  }
   .tasks-list-block .task-item{
     margin: 10px;
     border-radius: 10px;

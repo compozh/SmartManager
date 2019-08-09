@@ -11,7 +11,7 @@ export default {
     stuffInputText: ''
   },
   properties: null,
-  workCenters: [],
+  workCenters: {},
   tasks: {},
   installations: {},
   productions: [],

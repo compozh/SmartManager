@@ -191,7 +191,7 @@ export default {
   setError({commit}) {
     commit('setError');
   },
-  async productionFormIoSubmit({ commit }, { workCenterCode, data, selectedTask }) {
+  async productionFormIoSubmit({ commit }, { workCenter, data, task }) {
     commit('setError', null)
     commit('setLinearLoader', true);
 
@@ -200,15 +200,15 @@ export default {
         formCode: workCenter.productionRegistrationFormCode,
         data: data,
         productionRegistrationParam : {
-          workCenterCode: workCenterCode,
-          workBarcode: selectedTask.barcode,
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode,
           mode: "FINISH"
         }
       };
 
       let result = await api.productionFormIoSubmitGql(params);
       if(result.success == true) {
-        await this.dispatch('mes/initializeTasks', { workCenterCodes: [workCenterCode], fetchPolicy: 'network-only' });
+        await this.dispatch('mes/initializeTasks', { workCenterCodes: [workCenter.code], fetchPolicy: 'network-only' });
       } else {
         commit('setError', result.errorMessage);
       }

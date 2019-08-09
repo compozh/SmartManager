@@ -4,7 +4,6 @@
       <multipane class="main-block-layout">
           <mes-tasks-component
             :selectedTask=selectedTask
-            :tasks=tasks
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=changeCurrentTask
@@ -32,7 +31,6 @@
               <mes-accept-task-layout 
                 :selectedTask=selectedTask 
                 :workCenters=workCenters
-                :productionFormio=productionFormio
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.inProgress)
                   ||(currentLayout == 'mes-task-main-layout' && selectedTask.inProgress))" />
 
@@ -100,9 +98,6 @@ export default {
     },
     workCenters() {
       return this.$store.getters['mes/workCenters'];
-    },
-    productionFormio() {
-      return this.$store.getters['mes/productionFormio'];
     }
   },
   methods: {
@@ -203,6 +198,8 @@ export default {
   }
   .button-toolbar {
     max-height: 60px;
+    display: flex;
+    align-items: center;
   }
   .button-toolbar.row {
     margin: 0;
