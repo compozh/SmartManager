@@ -55,22 +55,15 @@
           </template>
           <template v-for="item in resource_items">
              <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
-              <!--<resource-card-item :key="item.id" :resourse="item" />-->
                 <catalogueItemCard :catalogueItem="item" />
             </v-flex>
           </template>
         </v-layout>
-        </div>
-      
+        </div>      
       <loader-element/>
     </div>          
     <div v-else>
       <catalogue-item :catalogueId="routeParamCode" />
-      <!--<v-card>
-        <v-card-title>
-          <catalogue-item :catalogueId="routeParamCode" />
-        </v-card-title>
-      </v-card>-->
     </div>
   </div>
 </template>
@@ -173,6 +166,7 @@
 </script>
 
 <style lang="scss" scoped>
+
 
 .cat_header{
   font-size:1.5em !important;
