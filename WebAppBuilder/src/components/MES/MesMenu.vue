@@ -30,7 +30,7 @@ export default {
 
       var pages = links[1].Children;
       pages = pages.sort((a,b) => {
-        return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1); 
+        return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1);
       });
       links = links.concat(pages);
       links = links.concat(links[0].Children);
@@ -39,4 +39,3 @@ export default {
   }
 };
 </script>
-

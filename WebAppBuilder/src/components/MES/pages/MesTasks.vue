@@ -208,6 +208,7 @@ export default {
   }
   .button-toolbar.row {
     margin: 0;
+    padding: 0 10px;
   }
   .task-description-layout {
     height: 100%;

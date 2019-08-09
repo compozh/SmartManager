@@ -3,7 +3,7 @@
     <v-layout row align-center justify-space-beetwen class="main-toolbar">
       <v-flex>
         <router-link tag="h1" :to="{ name:'MESROOT'}">
-          <a>MES</a>
+          <a class="mes-title-link">MES</a>
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
@@ -59,7 +59,9 @@ a {
 .grow-0 {
   flex-grow: 0 !important;
 }
-
+.mes-title-link {
+  color: #326DA8;
+}
 .main-toolbar.row {
   margin: 0;
 }
@@ -69,7 +71,7 @@ a {
 .work-centers-title {
   font-size: 16px;
   font-weight: 500;
-  color: #1976d2;
+  color: #326DA8;
 }
 .work-centers-name {
   font-size: 14px;
