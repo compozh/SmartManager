@@ -7,6 +7,7 @@
       <v-btn outlined @click="onclickSetupMaterial($event)" outline color="rgb(25, 118, 210)">Установить материалы</v-btn>
       <v-btn class="status-task-btn"
       outlined
+      outline
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
       @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}
       </v-btn>
@@ -77,6 +78,7 @@ export default {
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
+    height: 60px;
   }
   .status-task-btn {
     color: white;
