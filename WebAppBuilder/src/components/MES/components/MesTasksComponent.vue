@@ -131,7 +131,7 @@ export default {
     padding-left: 10px;
   }
   .span-count-tasks {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 400;
   }
 </style>

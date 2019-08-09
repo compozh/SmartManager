@@ -6,10 +6,10 @@
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode">
     </v-text-field>
-    <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
+    <v-btn outlined class="mes-scan" @click="onclickScan" outline ><v-icon dark>view_week</v-icon></v-btn>
   </v-flex>
   <v-flex class="setup-material-btn" xs2>
-    <v-btn outlined v-if="installationsAny" @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
+    <v-btn outlined v-if="installationsAny" @click="onclickRemoveAllInstallations" outline>Снять все партии</v-btn>
   </v-flex>
 </v-layout>
 </template>

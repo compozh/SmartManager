@@ -190,6 +190,8 @@ export default {
     cursor: default;
   }
   .button-toolbar {
+    display: flex;
+    align-items: center;
     max-height: 60px;
   }
   .button-toolbar.row {

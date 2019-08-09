@@ -4,8 +4,8 @@
       class="toolbar-basebuttons"
       v-if="currentLayout == 'mes-accept-task-layout' || currentLayout == 'mes-task-main-layout'">
 
-      <v-btn outlined @click="onclickSetupMaterial($event)">Установить материалы</v-btn>
-      <v-btn class="status-task-btn"
+      <v-btn outlined @click="onclickSetupMaterial($event)" outline color="rgb(25, 118, 210)">Установить материалы</v-btn>
+      <v-btn class="status-task-btn" outline
       outlined v-if="selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK'"
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
       @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}</v-btn>
@@ -13,16 +13,16 @@
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
       v-if="currentLayout === 'mes-task-stuff-layout'">
-      <v-btn outlined class="mes-arrow-back" @click="backToMainLayout"><v-icon dark>arrow_back</v-icon></v-btn>
+      <v-btn outlined class="mes-arrow-back" @click="backToMainLayout" outline color="rgb(25, 118, 210)"><v-icon dark>arrow_back</v-icon></v-btn>
         <v-text-field
           class="qr-input"
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode"
         ></v-text-field>
-        <v-btn outlined class="mes-scan" @click="onclickScan"><v-icon dark>view_week</v-icon></v-btn>
+        <v-btn outlined class="mes-scan" @click="onclickScan" outline color="rgb(25, 118, 210)"><v-icon dark>view_week</v-icon></v-btn>
       </v-flex>
    <v-flex class="setup-material-btn" xs2 v-if="currentLayout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
-     <v-btn outlined @click="onclickRemoveAllInstallations">Снять все партии</v-btn>
+     <v-btn outlined @click="onclickRemoveAllInstallations" outline color="rgb(25, 118, 210)">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
 </template>
