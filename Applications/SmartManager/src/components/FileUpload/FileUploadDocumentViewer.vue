@@ -24,7 +24,6 @@
       <v-icon size="50">note_add</v-icon>
       <span>Добавить</span>
     </file-upload>
-
     <v-dialog
       v-model="dialog"
       persistent
@@ -44,7 +43,9 @@
               :class="{'red--text text--darken-2' : props.item.size >= size}"
           >{{ (props.item.size / 1024 / 1024).toFixed(2) }} Mb
           </td>
-          <td class="progress-cell text-xs-center">
+          <td class="text-xs-center"
+              :class="{'progress-cell': !loading}"
+          >
             <v-icon v-if="props.item.size >= size" size="20" class="red--text text--darken-2">warning</v-icon>
             <span v-else-if="!props.item.success" class="pl-2">{{ parseFloat(props.item.progress).toFixed(2) }} %</span>
             <v-icon
@@ -111,14 +112,6 @@
           >
             <span class="caption">Отменить</span>
           </v-btn>
-          <v-btn
-            v-if="$refs.upload && $refs.upload.uploaded"
-            class="info ml-0"
-            small depressed
-            @click="attach"
-          >
-            <span class="caption">Ок</span>
-          </v-btn>
         </v-flex>
       </v-layout>
     </v-dialog>
@@ -167,6 +160,11 @@ export default {
       }
     }
   },
+  computed: {
+    task() {
+      return this.$store.state.sm.taskInfo
+    }
+  },
   methods: {
     addFile(event) {
       this.$refs.upload.addInputFile(event.target)
@@ -176,10 +174,10 @@ export default {
       this.loading = true
     },
     attach() {
-      console.log('', this.attachments)
-      this.dialog = false
       this.loading = false
-      //this.attachments.length = 0
+      this.dialog = false
+      this.$store.dispatch('sm/addAttachments', this.attachments)
+      this.attachments.length = 0
     },
     getFiles(files) {
       if (files.length) {
@@ -188,8 +186,12 @@ export default {
     },
     inputFile(newFile, oldFile) {
       if (newFile && oldFile && newFile.success !== oldFile.success) {
-        const fileName = newFile.response.fileName
-        this.attachments.push(fileName)
+        const fileName = newFile.file.name
+        const filePath = newFile.response.fileName
+        this.attachments.push({fileName, filePath})
+      }
+      if (this.$refs.upload && this.$refs.upload.uploaded) {
+        this.attach()
       }
     },
     inputFilter(newFile, oldFile, prevent) {

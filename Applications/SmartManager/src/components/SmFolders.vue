@@ -63,7 +63,7 @@ export default {
       return this.$store.state.sm.taskAddForm === 'open'
     },
     menuMode() {
-      return this.$store.state.sm.menuMode
+      return this.$store.state.sm.menuMode.currentState
     }
   },
   methods: {

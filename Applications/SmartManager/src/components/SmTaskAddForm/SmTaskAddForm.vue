@@ -13,6 +13,7 @@
             <v-flex xs12>
               <v-text-field
                 v-model="newTask.title"
+                :disabled="uploading"
                 label="Название задачи..."
                 :rules="required"
                 clearable
@@ -24,6 +25,7 @@
                 :value="newTask.performerId"
                 @input="newTask.performerId = $event"
                 :rules="required"
+                :uploading="uploading"
               ></sm-task-add-form-select>
             </v-flex>
             <v-flex xs12>
@@ -48,6 +50,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     :value="dateFormatted"
+                    :disabled="uploading"
                     label="Дата"
                     prepend-icon="event"
                     v-on="on"
@@ -94,6 +97,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="newTask.planTime"
+                    :disabled="uploading"
                     label="Время"
                     prepend-icon="access_time"
                     v-on="on"
@@ -128,6 +132,7 @@
               <v-textarea
                 label="Описание задачи..."
                 v-model="newTask.description"
+                :disabled="uploading"
                 rows="1"
                 auto-grow
                 clearable
@@ -138,6 +143,7 @@
                 label="Соисполнители"
                 :value="newTask.coexecutors"
                 @input="newTask.coexecutors = $event"
+                :uploading="uploading"
                 multiple
               ></sm-task-add-form-select>
             </v-flex>
@@ -146,22 +152,27 @@
                 label="Уведомить"
                 :value="newTask.notify"
                 @input="newTask.notify = $event"
+                :uploading="uploading"
                 multiple
               ></sm-task-add-form-select>
             </v-flex>
             <v-flex xs12>
               <v-layout wrap>
                 <v-flex xs12>
-                  <file-upload-add-task-form></file-upload-add-task-form>
+                  <file-upload-add-task-form
+                    v-on:attach="getAttachment($event)"
+                    :uploading="uploading"
+                  >
+                  </file-upload-add-task-form>
                 </v-flex>
                 <v-flex xs12 class="button-container">
                   <v-spacer></v-spacer>
                   <v-btn @click="closeTaskAddForm">Отмена</v-btn>
                   <v-btn
                     class="mr-0"
-                    :disabled="!valid"
+                    :disabled="!valid || uploading"
                     color="blue darken-2 white--text"
-                    @click="createTask"
+                    @click="upload"
                   >Создать
                   </v-btn>
                 </v-flex>
@@ -180,6 +191,7 @@ import moment from 'moment'
 export default {
   name: 'sm-task-add-form',
   data: () => ({
+    uploading: false,
     newTask: {
       title: '',
       performerId: '',
@@ -188,6 +200,7 @@ export default {
       description: '',
       coexecutors: [],
       notify: [],
+      attachments: []
     },
     datePicker: false,
     timePicker: false,
@@ -218,7 +231,15 @@ export default {
     }
   },
   methods: {
+    upload() {
+      this.uploading = true
+    },
+    getAttachment(event) {
+      this.newTask.attachments = event
+      this.createTask()
+    },
     closeTaskAddForm() {
+      this.uploading = false
       this.$store.commit('sm/setTaskAddForm', 'close')
     },
     createTask() {
@@ -227,7 +248,8 @@ export default {
         performerId: this.newTask.performerId,
         descript: this.newTask.description,
         dateplan: `${this.newTask.planDate} ${this.newTask.planTime}`,
-        participants: this.getParticipants()
+        participants: this.getParticipants(),
+        attachments: this.newTask.attachments
       }
       this.$store.dispatch('sm/addNewTask', newTask)
     },
