@@ -15,8 +15,14 @@ export default {
   setTasks(state, tasks) {
     state.tasks = tasks;
   },
+  setTasksByWorkCentrer(state, {workCenterCode, tasks }) {
+    state.tasks[workCenterCode] = tasks;
+  },
   setInstallations(state, installations) {
     state.installations = installations;
+  },
+  setInstallationsByWorkCenter(state, { workCenterCode, installations }) {
+    state.installations[workCenterCode] = installations;
   },
   setInstallationsByWorkCenter(state, { installations, workCenterCode}) {
     state.installations[workCenterCode] = installations;

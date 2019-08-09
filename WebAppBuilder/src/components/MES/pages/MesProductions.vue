@@ -2,7 +2,7 @@
     <v-layout class="mes-productions">
       <mes-production-toolbar class="mes-production-toolbar" />
       <mes-content-loader :initialize=initializeProductions />
-      <v-flex class="mes-productions-content">
+      <v-flex v-if="initializeProductions" class="mes-productions-content">
         <v-card class="productions-card" v-for="production in productions" :key="production.factId">
           <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
         </v-card>
@@ -30,14 +30,13 @@ export default {
         return this.$store.getters['mes/properties'];
     },
     productions() {
-      debugger;
       return this.$store.getters['mes/productions'];
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeProperties');
-      await this.$store.dispatch('mes/initializeProductions', this.properties.workerCode);
+      await this.$store.dispatch('mes/initializeProductions', { workerCode: this.properties.workerCode, fetchPolicy: "network-only" });
       this.initializeProductions = true;
     },
     deleteProduction(production) {

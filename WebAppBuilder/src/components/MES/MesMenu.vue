@@ -20,7 +20,6 @@ export default {
       }
       const app = this.$store.state.applicationDescription;
       const sections = app.Sections || [];
-      debugger;
       var links = [];
       for (let index = 0; index < sections.length; index++) {
         const section = sections[index];

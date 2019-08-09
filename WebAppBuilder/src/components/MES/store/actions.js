@@ -18,7 +18,7 @@ export default {
   async initializeWorkCenters({ commit }) {
     commit('setError', null)
     try {
-      let uuid = "QU9V0+AJ26LAGNLFGXLKIK6NM322NQSQ82EQ8PINQJ4=",//deviceUUID.get(),
+      let uuid = deviceUUID.get(),
         result = await api.getWorkCentersFromGql(uuid);
       var workCenters = {};
       result.data.mes.workCenters.forEach(workCenter => {
@@ -29,38 +29,32 @@ export default {
       commit('setError', e.message)
     }
   },
-  async initializeTasks({ commit}, workCenters) {
+  async initializeTasks({ commit}, { workCenterCodes, fetchPolicy }) {
     commit('setError', null)
     try {
-      var tasks = {},
-        workCenterCodes = Object.keys(workCenters);
       for(var i = 0; i < workCenterCodes.length; i++) {
         let workCenterCode = workCenterCodes[i],
-          result = await api.getTasksFromGql(workCenterCode),
-          tasksByWorkCenter = result.data.mes.tasks;
+          result = await api.getTasksFromGql(workCenterCode, fetchPolicy),
+          tasks = result.data.mes.tasks;
         //todo
-        tasksByWorkCenter.forEach(task => {
+        tasks.forEach(task => {
           task.workCenterCode = workCenterCode;
         });
-        tasks[workCenterCode] = tasksByWorkCenter;
+        commit('setTasksByWorkCentrer', { workCenterCode, tasks })
       }
-      commit('setTasks', tasks)
     } catch (e) {
       commit('setError', e.message)
     }
   },
-  async initializeInstallations({ commit}, workCenters) {
+  async initializeInstallations({ commit}, { workCenterCodes, fetchPolicy }) {
     commit('setError', null)
 
     try {
-      var installations = {},
-        workCenterCodes = Object.keys(workCenters);
       for(var i = 0; i < workCenterCodes.length; i++) {
         let workCenterCode = workCenterCodes[i],
-          result = await api.getInstallationsFromGql(workCenterCode);
-        installations[workCenterCode] = result.data.mes.installations.installations;
+          result = await api.getInstallationsFromGql(workCenterCode, fetchPolicy);
+        commit('setInstallationsByWorkCenter', { workCenterCode, installations: result.data.mes.installations.installations });
       }
-      commit('setInstallations', installations)
     } catch (e) {
       commit('setError', e.message)
     }
@@ -88,7 +82,7 @@ export default {
     try {
       let result = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId);
       if(result.success == true) {
-        await this.dispatch('mes/updateInstallationsByWorkCenter', workCenterCode);
+        await this.dispatch('mes/initializeInstallations', { workCenterCodes: [workCenterCode], fetchPolicy: "network-only" });
       } else {
         commit('setError', result.errorMessage);
       }
@@ -103,7 +97,7 @@ export default {
 
     try {
       let productionRegistrationParam = {
-        workCenterCode: task.workCenter,
+        workCenterCode: task.workCenterCode,
         workBarcode: task.barcode,
         mode: 'Start',
         success: true
@@ -112,7 +106,7 @@ export default {
       let result = await api.registerProductionGql(productionRegistrationParam);
 
       if(result.success == true) {
-        task.state = 'IN_WORK';
+        task.inProgress = true;
       } else {
         commit('setError', result.errorMessage);
       }
@@ -129,7 +123,7 @@ export default {
       let result = await api.cancelBeginRegistrationGql(task.shiftTaskId);
 
       if(result.success == true) {
-        task.state = 'IN_PLAN';
+        task.inProgress = false;
       } else {
         commit('setError', result.errorMessage);
       }
@@ -143,18 +137,18 @@ export default {
     commit('setLinearLoader', true)
 
     try {
-      let result = await api.updateInstallationsFromGql(workCenterCode);
+      let result = await api.getInstallationsFromGql(workCenterCode, "network-only");
       commit('setInstallationsByWorkCenter', { installations: result.data.mes.installations.installations, workCenterCode });
     } catch (e) {
       commit('setError', e.message)
     }
     commit('setLinearLoader', false)
   },
-  async initializeProductions({ commit }, workerCode) {
+  async initializeProductions({ commit }, { workerCode, fetchPolicy }) {
     commit('setError', null)
 
     try {
-      let result = await api.getProductionsFromGql(workerCode);
+      let result = await api.getProductionsFromGql(workerCode, fetchPolicy);
       commit('setProductions', result.data.mes.usersProductionEvents);
     } catch (e) {
       commit('setError', e.message)
@@ -197,14 +191,24 @@ export default {
   setError({commit}) {
     commit('setError');
   },
-  async productionFormIoSubmit({ commit }, params) {
+  async productionFormIoSubmit({ commit }, { workCenterCode, data, selectedTask }) {
     commit('setError', null)
-    commit('setLinearLoader', true)
+    commit('setLinearLoader', true);
 
     try {
+      let params = {
+        formCode: workCenter.productionRegistrationFormCode,
+        data: data,
+        productionRegistrationParam : {
+          workCenterCode: workCenterCode,
+          workBarcode: selectedTask.barcode,
+          mode: "FINISH"
+        }
+      };
+
       let result = await api.productionFormIoSubmitGql(params);
       if(result.success == true) {
-
+        await this.dispatch('mes/initializeTasks', { workCenterCodes: [workCenterCode], fetchPolicy: 'network-only' });
       } else {
         commit('setError', result.errorMessage);
       }

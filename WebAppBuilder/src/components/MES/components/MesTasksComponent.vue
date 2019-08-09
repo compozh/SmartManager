@@ -104,7 +104,36 @@ export default {
   .tasks-list-block-content {
     height: 100%;
     overflow-y: auto;
+    position: absolute;
   }
+
+  .tasks-list-block-content::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px
+  }
+
+  /* background of the scrollbar except button or resizer */
+  .tasks-list-block-content::-webkit-scrollbar-track {
+      background-color:#fff
+  }
+  .tasks-list-block-content::-webkit-scrollbar-track:hover {
+      background-color:#f4f4f4
+  }
+
+  /* scrollbar itself */
+  .tasks-list-block-content::-webkit-scrollbar-thumb {
+      background-color:#babac0;
+      border-radius:16px;
+      border:5px solid #fff
+  }
+  .tasks-list-block-content::-webkit-scrollbar-thumb:hover {
+      background-color:#a0a0a5;
+      border:4px solid #f4f4f4
+  }
+
+  /* set button(top and bottom of the scrollbar) */
+  .tasks-list-block-content::-webkit-scrollbar-button {display:none}
+
   .change-tasks-status-toolbar {
     padding-left: 5px;
   }
