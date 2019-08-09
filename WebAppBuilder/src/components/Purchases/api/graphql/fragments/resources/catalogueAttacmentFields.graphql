@@ -1,0 +1,3 @@
+fragment resourcesFields on Resource {
+    content
+}

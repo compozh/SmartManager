@@ -1,0 +1,5 @@
+fragment main on PurchasesQuery{
+    resource(id: $id) {
+        ...resourcesFields
+    }
+}

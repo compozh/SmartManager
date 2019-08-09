@@ -6,9 +6,12 @@ import _ from 'lodash';
 
 // ResourceGroups query
 import mainQuery from './graphql/base/queryWithGroupStringParams.graphql';
+import queryWithGroupIdParam from './graphql/base/queryWithGroupIdParam.graphql';
 import catalogueQueryFragment from './graphql/fragments/catalogueQuery.graphql';
 import resourcesMinimalFieldsFragment from './graphql/fragments/resources/minimalFields.graphql';
 import resourcesGroupsMinimalFieldsFragment from './graphql/fragments/resourcesGroups/minimalFields.graphql';
+import onlyСatalogueItemFieldsQuery from './graphql/fragments/onlyСatalogueItemFieldsQuery.graphql';
+import catalogueAttacmentFields from './graphql/fragments/resources/catalogueAttacmentFields.graphql'
 // Queries
 
 import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
@@ -137,13 +140,10 @@ export class PurchasesApi {
     })
   }
   getImagesForCatalogueItem(id){
-    const FIELDS = gql`
-      fragment resourcesFields on Resource {
-        content
-      }
-    `;
+
+    const query = gql`${queryWithGroupIdParam} ${onlyСatalogueItemFieldsQuery} ${catalogueAttacmentFields}`
     return client.query({
-      query: gql`${resourceById} ${FIELDS}`,
+      query: query,
       variables: { id: id }
     })
     .then(result => result)
