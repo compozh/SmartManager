@@ -78,14 +78,13 @@ export class PurchasesApi {
       variables: { group: group },
     };
     if(reload){
-      q.fetchPolicy = 'no-cache';
+      client.cache.reset();
     }
 
     client.query(q)
       .then(this.getBreadcrumbsByGroupCallback)
       .catch(error => console.log(error.message))
-    
-  }
+    }
 
   getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.resourcesGroups;
@@ -187,7 +186,6 @@ export class PurchasesApi {
   }
   
   createCartMutationCallback(result){
-    debugger;
     let response_data = result.data.purchasesMutation.createCart;
     var cartItem = {
       id:                 response_data.id,
