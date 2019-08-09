@@ -11,7 +11,7 @@
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
       @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}
       </v-btn>
-
+      <v-btn flat icon class="drag-resize-button" color="#326DA8" @click="changeDragResizeMode"><v-icon>open_with</v-icon></v-btn>
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
       v-if="currentLayout === 'mes-task-stuff-layout'">
@@ -28,7 +28,6 @@
    </v-flex>
   </v-layout>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 
@@ -37,7 +36,8 @@ export default {
   props: {
     currentLayout: String,
     selectedTask: Object,
-    installations: Array
+    installations: Array,
+    dragResizeMode: Boolean
   },
   methods: {
     onclickSetupMaterial(event) {
@@ -61,6 +61,9 @@ export default {
       this.$emit('changeCurrentLayout', 'mes-task-main-layout');
     },
     onclickScan(event) {
+    },
+    changeDragResizeMode (){
+      this.$emit('changeDragResizeMode');
     }
   }
 }
@@ -110,5 +113,8 @@ export default {
   }
   .mes-arrow-back {
     min-width: auto;
+  }
+  .drag-resize-button {
+    right: 0;
   }
 </style>

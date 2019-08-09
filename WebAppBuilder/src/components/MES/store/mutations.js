@@ -58,5 +58,8 @@ export default {
   },
   setSelectedTask(state, selectedTask) {
     state.tasksPageState.selectedTask = selectedTask;
+  },
+  changeDragResizeMode(state) {
+    state.dragResizeMode = !state.dragResizeMode;
   }
 }
