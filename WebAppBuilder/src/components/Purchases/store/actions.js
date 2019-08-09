@@ -29,9 +29,6 @@ export default {
     addToFavorites({commit}, payload){
         commit('addToFavorites', payload);
     },
-    addToFavoritesSecond({commit}, payload){
-        commit('addToFavoritesSecond', payload);
-    },
     clearResourceGroups({commit}){
         commit('clearResourceGroups', payload);
     },

@@ -6,7 +6,7 @@ export default {
   breadcrumbs: [],
   snackbarMessage: "",
   chose: { list:[], /*key:undefined,*/ method : function(){}, caption:undefined },
-  favlists: [],
+  favlists: undefined,
   applications : [],
   showTitle: true,
   docStatus:[],

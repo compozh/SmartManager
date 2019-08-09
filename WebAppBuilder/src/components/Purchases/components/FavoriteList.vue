@@ -14,7 +14,7 @@
                     :label="favList.caption"
                     v-model="favList.caption"
                     solo
-                    @input="mutationEditFavList(favList)"
+                    @change="mutationEditFavList(favList)"
                 ></v-text-field> 
                 </v-flex>
 
@@ -132,15 +132,17 @@ const api = new PurchasesApi();
            if(this.listId){
             let list = this.allFavLists.filter(w => w.id == this.listId)[0];
             list.items = [];
+            
             list.keyValues.forEach(w => {
+              
               let test = list.alias =='DOC' ? this.getAplicationByKeyValue(w) : this.getСatalogueItemByKeyValue(w);
-              if(test !== undefined)
+              if(test)
               {
                 test.itSelfArray = [test];
                 list.items.push(test);
               }
             });
-            
+            debugger;
             return list;
           }
           return undefined;
@@ -228,6 +230,7 @@ const api = new PurchasesApi();
         let test2 = 2;
         
         test2 =  this.resource_items.find(w => w.id == keyValue);
+        debugger;
         return test2;
       },
     }
