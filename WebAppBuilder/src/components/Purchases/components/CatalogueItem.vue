@@ -76,7 +76,9 @@
 </script>
 
 <style lang="scss" scoped>
-    
+    .v-card {        
+        margin-top:45px;
+    }
     .card-info{
         box-shadow: none;
         margin: 10px;

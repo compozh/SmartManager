@@ -13,7 +13,7 @@
                     <v-card-actions>
                         <v-layout justify-end>
                             <add2cart-btn entityType="application" :keyValue="application.id.toString()"/>
-                            <favorite-btn :v-model="application" value="a" alias="DOC" :keyValue="application.id.toString()"  :isInFavorite="inFavorites(application)"/>
+                            <favorite-btn :v-model="application" alias="DOC" :keyValue="application.id.toString()" :isInFavorite="inFavorites(application)"/>
                             <chat-btn :chatKey="application.id" chatType="application"/>
                         </v-layout>
                     </v-card-actions>

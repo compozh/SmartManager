@@ -30,7 +30,7 @@ import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
-import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
+import changeLocalization from './graphql/changeLocalization.gql'
 import resourcesGropsByParentGroup from './graphql/resourcesGropsByParentGroup.gql'
 import mutationEditFavList from './graphql/mutationEditFavList.gql'
 import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
@@ -332,8 +332,8 @@ export class PurchasesApi {
     let favLists = result.data.purchases.favLists;
     store.commit('purchases/setFavLists', favLists);
   }
-  getFavLists(){
-    return client.query({
+  async getFavLists(){
+    await client.query({
       query: gql`query ${favLists}`,
       variables: { },
       fetchPolicy: 'no-cache'
@@ -342,56 +342,63 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-addToFavoritesMutationCallbackFirst(result){
-    let res = result.data.purchasesMutation.addToFavorites;
-    //this.getFavLists();
-    if( res.ReturnValue != null && res.ReturnValue.ShouldCallList)
-    {
-     
-      store.commit("purchases/setChose", {
-        list : res.ReturnValue.ListToChoose , 
+
+  async addToFavoritesOneMutation(alias, keyValue, content){
+ 
+    let aliasFavLists = undefined;
+    if(content.$store.state.purchases.favlists){
+      aliasFavLists = content.$store.state.purchases.favlists.filter(w => w.alias == alias);
+    }else{
+      await this.getFavLists();
+      aliasFavLists = content.$store.state.purchases.favlists.filter(w => w.alias == alias);
+    }
+
+    let defFavLists = aliasFavLists ? aliasFavLists.filter(w => w.isDefaultList)[0]: undefined;
+
+    if(!defFavLists){
+      defFavLists = aliasFavLists.length == 1 ? aliasFavLists[0] : undefined;
+    }
+    if(defFavLists || !aliasFavLists.some(w=> 1==1)){
+      await client.mutate({
+        mutation: gql`${addToFavorites}`,
+        variables: {alias: alias, keyValue: keyValue, listId: defFavLists ? defFavLists.id: ""}
+      }).then(result => {
+        let res = result.data.purchasesMutation.addToFavoritesOne;
+        
+        if(defFavLists && defFavLists.id == res.list.id){
+          let oldFavList = content.$store.state.purchases.favlists;
+          oldFavList.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
+          content.$store.state.purchases.favlists = oldFavList;
+        }else{
+          let oldFavList = content.$store.state.purchases.favlists;
+          oldFavList.push(res.list);
+          content.$store.state.purchases.favlists = oldFavList;
+        }
+      });
+
+    }else{
+      await store.commit("purchases/setChose", {
+        list : aliasFavLists.map(w=> {return {Title : w.caption, Key: w.id };}) , 
         caption:"Выбор из списка",
         method: (key) => {
           client.mutate({
-            mutation: gql`${addToFavoritesSecond}`,
-            variables: {listKey: key, keyValue: res.ReturnValue.KeyValue} 
-          }).then(res => {
-            client.query({
-              query: gql`query ${favLists}`,
-              fetchPolicy: 'no-cache',
-              variables: { }
-            }).then(res => {
-              store.commit('purchases/setFavLists', res.data.purchases.favLists);
-              store.commit("purchases/setMessage",  `Добавлено в избраное`);}
-              ).catch(error => console.log(error.message));
+            mutation: gql`${addToFavorites}`,
+            variables: {alias: alias, keyValue: keyValue, listId: key}
+          }).then(result => {
+            let res = result.data.purchasesMutation.addToFavoritesOne;
+            
+            if(defFavLists && defFavLists.id == res.list.id){
+              content.$store.state.purchases.favlists.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
+            }else{
+              content.$store.state.purchases.favlists.push(res.list);
+            }
           });
         }
       });
     }
-    else if (res.Successed)
-    {
-      client.query({
-            query: gql`query ${favLists}`,
-            fetchPolicy: 'no-cache',
-            variables: { }
-          }).then(res => {
-            store.commit('purchases/setFavLists', res.data.purchases.favLists);
-            store.commit("purchases/setMessage",  `Добавлено в избраное`);
-          }
-            ).catch(error => console.log(error.message));
-    
-    }
   }
 
-  addToFavoritesMutation(alias, keyValue){
-    return client.mutate({
-      mutation: gql`${addToFavorites}`,
-      variables: {alias: alias, keyValue: keyValue}
-    })
-      .then(this.addToFavoritesMutationCallbackFirst)
-      .catch(error => console.log(error.message))
-  }
-
+  
   getFavListInputTypeParam(favList)
   {
     let test =  {
@@ -435,8 +442,8 @@ addToFavoritesMutationCallbackFirst(result){
       .catch(error => {console.log(error.message)});
   }
   
-  deleteItemFromFavorites(alias, keyValue){
-    return client.mutate({
+  async deleteItemFromFavorites(alias, keyValue){
+    await client.mutate({
       mutation: gql`${deleteItemFromFavorites}`,
       variables: {alias: alias, keyValue: keyValue},     
     }).then(res => {

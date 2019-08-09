@@ -24,14 +24,6 @@ export default {
         inFavourite: false
     }),
     props:{
-        value: {
-            type: undefined,
-            required: true
-        },
-        valueName: {
-            type: String,
-            required: false
-        },
         keyValue:{
             type: String,
             required: true
@@ -52,23 +44,21 @@ export default {
             this.checkInFavourite();
         },
     methods:{
-        favClick(){
-            this.inFavourite = !this.inFavourite;
-            if(this.inFavourite){
-                api.addToFavoritesMutation(this.alias, this.keyValue.toString());
+        async favClick(){
+            if(!this.inFavourite){
+                debugger;
+                 await api.addToFavoritesOneMutation(this.alias, this.keyValue.toString(), this);
             }else{
-                api.deleteItemFromFavorites(this.alias, this.keyValue.toString());
+                 api.deleteItemFromFavorites(this.alias, this.keyValue.toString());
             }
             
+            this.checkInFavourite();
         },
         checkInFavourite(){
-
-            this.inFavourite = false;
+            //this.inFavourite = false;
             const favlists = this.$store.state.purchases.favlists;
-        
-            if(favlists != null && favlists.some(w => 1==1))
+            if(favlists)
             {
-               
                 this.inFavourite = favlists.filter((w)=>w.alias == this.alias).map((w) => w.keyValues).
                     reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
             }
