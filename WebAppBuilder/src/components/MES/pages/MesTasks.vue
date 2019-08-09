@@ -8,14 +8,14 @@
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=changeCurrentTask
             @changeSelectTasksTab=changeSelectTasksTab />
-            
+
             <multipane-resizer><v-icon class="resizer-icon">drag_handle</v-icon></multipane-resizer>
             <v-layout column class="task-description-layout">
               <v-flex class="button-toolbar" row wrap >
 
                 <mes-tasks-toolbar v-if="selectedTask"
-                  :currentLayout=currentLayout 
-                  :selectedTask=selectedTask 
+                  :currentLayout=currentLayout
+                  :selectedTask=selectedTask
                   :installations=installations[selectedTask.workCenterCode]
                   @changeCurrentLayout="changeCurrentLayout"
                   @removeAllInstallations=removeAllInstallations
@@ -23,13 +23,13 @@
 
               </v-flex>
 
-              <mes-task-main-layout 
+              <mes-task-main-layout
                 :selectedTask=selectedTask
                 v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && !selectedTask.inProgress)
                   || (currentLayout == 'mes-accept-task-layout' && !selectedTask.inProgress))" />
 
-              <mes-accept-task-layout 
-                :selectedTask=selectedTask 
+              <mes-accept-task-layout
+                :selectedTask=selectedTask
                 :workCenters=workCenters
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.inProgress)
                   ||(currentLayout == 'mes-task-main-layout' && selectedTask.inProgress))" />
@@ -197,12 +197,15 @@ export default {
     cursor: default;
   }
   .button-toolbar {
+    display: flex;
+    align-items: center;
     max-height: 60px;
     display: flex;
     align-items: center;
   }
   .button-toolbar.row {
     margin: 0;
+    padding: 0 10px;
   }
   .task-description-layout {
     height: 100%;

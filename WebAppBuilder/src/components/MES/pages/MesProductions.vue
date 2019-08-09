@@ -50,6 +50,7 @@ export default {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  padding: 0 10px;
 }
 .mes-productions-content {
   display: flex;

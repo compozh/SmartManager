@@ -31,6 +31,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 300px;
+  width: 360px;
+  height: max-content;
 }
 </style>

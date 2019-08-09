@@ -26,6 +26,9 @@ export default {
 </script>
 
 <style type="text/css" scoped>
+.mes-task-stuff-layout {
+  padding: 0 10px;
+}
 .installations-block {
   display: flex;
   flex-direction: row;
@@ -37,5 +40,6 @@ export default {
   max-width: 400px;
   margin: 10px;
   width: 360px;
+  height: max-content;
 }
 </style>

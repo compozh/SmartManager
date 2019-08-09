@@ -4,7 +4,7 @@
       <v-flex fill-height class="grid-tabs">
           <v-tabs show-arrows v-model="selectedTab">
                 <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
-                  <v-badge color="#1976d2" overlap>
+                  <v-badge color="#326DA8" overlap>
                     <template v-slot:badge>
                       <span class="span-count-tasks">{{countTasks(tab.id).length}}</span>
                     </template>
@@ -176,7 +176,7 @@ export default {
     padding-left: 10px;
   }
   .span-count-tasks {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 400;
   }
 </style>

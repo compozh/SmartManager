@@ -62,21 +62,21 @@ export default {
 <style type="text/css" scoped>
   .mes-stuff{
     display: block;
+    height: 100%;
+    padding: 0 10px;
   }
   .installations-block {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  /* height: 88vh;
-  overflow-y: auto; */
+  height: 100%;
 }
 .installation-card{
   display: flex;
   align-items: center;
-  max-width: 400px;
-  margin: 10px;
   width: 360px;
-  max-height: 300px;
+  margin: 10px;
+  height: max-content;
 }
 .wait-for-data-block {
   padding: 20px;
