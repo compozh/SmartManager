@@ -102,7 +102,7 @@ export default {
         mode: 'Start',
         success: true
       };
-      
+
       let result = await api.registerProductionGql(productionRegistrationParam);
 
       if(result.success == true) {
@@ -216,5 +216,8 @@ export default {
       commit('setError', e.message)
     }
     commit('setLinearLoader', false)
-  }
+  },
+  changeDragResizeMode({commit}) {
+    commit('changeDragResizeMode');
+  },
 }

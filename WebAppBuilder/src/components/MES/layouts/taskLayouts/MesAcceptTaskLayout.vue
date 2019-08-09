@@ -6,8 +6,8 @@
                 :layout="blocks"
                 :col-num="12"
                 :row-height="30"
-                :is-draggable="true"
-                :is-resizable="true"
+                :is-draggable="this.dragResizeMode"
+                :is-resizable="this.dragResizeMode"
                 :is-mirrored="false"
                 :vertical-compact="false"
                 :margin="[20, 20]"
@@ -35,7 +35,8 @@ export default {
    name: "mes-accept-task-layout",
    props: {
     selectedTask: Object,
-    workCenters: Object
+    workCenters: Object,
+    dragResizeMode: Boolean
   },
   data() {
     let blocks = [

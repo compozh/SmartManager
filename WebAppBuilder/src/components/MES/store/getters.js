@@ -11,6 +11,9 @@ export default {
   workCenters(state) {
     return state.workCenters;
   },
+  dragResizeMode(state) {
+    return state.dragResizeMode;
+  },
   tasks(state) {
     return state.tasks;
   },

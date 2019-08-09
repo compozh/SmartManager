@@ -6,8 +6,8 @@
                 :layout="blocks"
                 :col-num="12"
                 :row-height="30"
-                :is-draggable="true"
-                :is-resizable="true"
+                :is-draggable="this.dragResizeMode"
+                :is-resizable="this.dragResizeMode"
                 :is-mirrored="false"
                 :vertical-compact="true"
                 :margin="[20, 20]"
@@ -32,12 +32,14 @@ import {mapGetters} from 'vuex'
 
 export default {
   props: {
-    selectedTask: Object
+    selectedTask: Object,
+    dragResizeMode: Boolean
   },
  data() {
     let blocks = [
         {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription}
       ];
+
     return {blocks};
   },
   name: "mes-task-main-layout",

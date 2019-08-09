@@ -16,5 +16,6 @@ export default {
   installations: {},
   productions: [],
   productionFormio: {},
+  dragResizeMode: false,
   menuMiniMode: true
 }

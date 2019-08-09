@@ -15,8 +15,10 @@
 
                 <mes-tasks-toolbar v-if="selectedTask"
                   :currentLayout=currentLayout
+                  :dragResizeMode=dragResizeMode
                   :selectedTask=selectedTask
                   :installations=installations[selectedTask.workCenterCode]
+                  @changeDragResizeMode="changeDragResizeMode"
                   @changeCurrentLayout="changeCurrentLayout"
                   @removeAllInstallations=removeAllInstallations
                   @initializeInstallations=initializeInstallations />
@@ -25,12 +27,14 @@
 
               <mes-task-main-layout
                 :selectedTask=selectedTask
+                :dragResizeMode=dragResizeMode
                 v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && !selectedTask.inProgress)
                   || (currentLayout == 'mes-accept-task-layout' && !selectedTask.inProgress))" />
 
               <mes-accept-task-layout
                 :selectedTask=selectedTask
                 :workCenters=workCenters
+                :dragResizeMode=dragResizeMode
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.inProgress)
                   ||(currentLayout == 'mes-task-main-layout' && selectedTask.inProgress))" />
 
@@ -98,6 +102,9 @@ export default {
     },
     workCenters() {
       return this.$store.getters['mes/workCenters'];
+    },
+    dragResizeMode() {
+      return this.$store.getters['mes/dragResizeMode'];
     }
   },
   methods: {
@@ -167,6 +174,9 @@ export default {
     },
     initializeInstallations() {
       this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
+    },
+    changeDragResizeMode() {
+      this.$store.dispatch('mes/changeDragResizeMode');
     }
   }
 }
