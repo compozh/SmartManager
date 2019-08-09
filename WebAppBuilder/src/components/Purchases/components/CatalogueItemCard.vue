@@ -6,7 +6,7 @@
             <div class="cat_header title mb-1">{{catalogueItem.name}}</div>
             <v-layout justify-end>
               <add2cart-btn entityType="resource" :keyValue="catalogueItem.id.toString()"/>
-              <favorite-btn :v-model="catalogueItem" value="a" alias="KSM" :keyValue="catalogueItem.id.toString()"/>  
+              <favorite-btn :v-model="catalogueItem" value="a" alias="KSM" :keyValue="catalogueItem.id.toString()" :isInFavorite="inFavorites(catalogueItem)" />  
             </v-layout>
         </router-link>
     </v-card>
@@ -20,14 +20,19 @@ import {PurchasesApi} from "../api/purchasesApi";
 
 const api = new PurchasesApi();
 
-
 export default {
     name: "catalogueItemCard",
     props: { 
         //applicationId: 0,
         catalogueItem: {}
     },
-    
+      methods:{
+        inFavorites: (catalogueItem) => {
+             if (catalogueItem) {
+                return catalogueItem.favListId != null;
+            }
+        }
+    },
     created(){
         //debugger;
 

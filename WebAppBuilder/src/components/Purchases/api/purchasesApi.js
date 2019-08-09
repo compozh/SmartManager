@@ -333,7 +333,6 @@ export class PurchasesApi {
     store.commit('purchases/setFavLists', favLists);
   }
   getFavLists(){
-    
     return client.query({
       query: gql`query ${favLists}`,
       variables: { },
@@ -355,8 +354,7 @@ addToFavoritesMutationCallbackFirst(result){
         method: (key) => {
           client.mutate({
             mutation: gql`${addToFavoritesSecond}`,
-            
-            variables: {listKey: key, keyValue: res.ReturnValue.KeyValue}     
+            variables: {listKey: key, keyValue: res.ReturnValue.KeyValue} 
           }).then(res => {
             client.query({
               query: gql`query ${favLists}`,
@@ -388,10 +386,9 @@ addToFavoritesMutationCallbackFirst(result){
   addToFavoritesMutation(alias, keyValue){
     return client.mutate({
       mutation: gql`${addToFavorites}`,
-      variables: {alias: alias, keyValue: keyValue}     
+      variables: {alias: alias, keyValue: keyValue}
     })
       .then(this.addToFavoritesMutationCallbackFirst)
-      //.then(this.addToFavoritesMutationCallbackSecond)
       .catch(error => console.log(error.message))
   }
 

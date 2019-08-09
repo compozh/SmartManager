@@ -1,5 +1,6 @@
 fragment resourcesFields on Resource {
   id
   name
-  designation
+  designation,
+  favListId
 }
