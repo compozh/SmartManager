@@ -16,16 +16,17 @@ export default {
     state.tasks = tasks;
   },
   setTasksByWorkCentrer(state, {workCenterCode, tasks }) {
-    state.tasks[workCenterCode] = tasks;
+    let tasksByWorkCenter = {[workCenterCode]: tasks};
+    let tempTasks = Object.assign({}, state.tasks);
+    state.tasks = Object.assign(tempTasks, tasksByWorkCenter);
   },
   setInstallations(state, installations) {
     state.installations = installations;
   },
-  setInstallationsByWorkCenter(state, { workCenterCode, installations }) {
-    state.installations[workCenterCode] = installations;
-  },
   setInstallationsByWorkCenter(state, { installations, workCenterCode}) {
-    state.installations[workCenterCode] = installations;
+    let installationsByWorkCenter = {[workCenterCode]: installations};
+    let tempinstallations = Object.assign({}, state.installations);
+    state.installations = Object.assign(tempinstallations, installationsByWorkCenter);
   },
   removeInstallation(state, { installation, workCenterCode }) {
     var installationsByWorkCenter = state.installations[workCenterCode];
