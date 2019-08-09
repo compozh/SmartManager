@@ -57,7 +57,7 @@ export default {
     text-decoration: none;
 }
 .application-card .v-card__title {
-    font-size: 15px;
+    font-size: 1.2em;
     font-weight: 600;
     padding: 5px 15px;
 }

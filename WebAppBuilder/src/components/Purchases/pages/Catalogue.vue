@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div>    
+    <catalogue-route-breadcrumbs :code="routeParamCode" />
     <div v-if="!isCard">
       <v-navigation-drawer fixed right app v-model="filterDrawer" >
         <v-layout class="filter-panel">
@@ -15,7 +16,6 @@
         </v-layout>
       </v-navigation-drawer>
         <v-layout row>
-          <catalogue-route-breadcrumbs :code="routeParamCode" />
           <v-layout justify-end>
             <!--<v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>-->
             <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
@@ -175,17 +175,22 @@
 <style lang="scss" scoped>
 
 .cat_header{
+  font-size:1.5em !important;
   min-height: 40px;
   color: darkslategray;
 }
 .list_content:hover{
   background: lightgrey;
 }
+.v-list__tile__title{
+  font-size:0.85em;
+}
 .list_content{
   border-bottom: 1px solid lightgray;
   color: dimgray;
 }
-  .child{
+  .child{    
+    font-size:0.1em !important;
     float: left;
   }
   .v-card {

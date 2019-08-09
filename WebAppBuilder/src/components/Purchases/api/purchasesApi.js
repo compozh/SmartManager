@@ -72,13 +72,17 @@ export class PurchasesApi {
     let data = response.data.purchases.resourcesGroupsBreadcrumbs;
     store.commit('purchases/setBreadCrumbs', data);
   }
+
+  restoreGraphCache(){    
+    client.cache.reset();
+  }
   getBreadcrumbsByGroup(group, reload){
     let q = {
       query: gql`${breadcrumbsByGroup}`,
       variables: { group: group },
     };
     if(reload){
-      client.cache.reset();
+      this.restoreGraphCache();
     }
 
     client.query(q)

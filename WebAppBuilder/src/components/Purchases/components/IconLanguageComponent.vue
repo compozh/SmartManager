@@ -90,6 +90,7 @@ export default {
            api.getResourcesGroupById(currentGroup);
         }
        else{
+            api.restoreGraphCache();
             api.getResourcesGroupsByParentGroup("");
        }
     }

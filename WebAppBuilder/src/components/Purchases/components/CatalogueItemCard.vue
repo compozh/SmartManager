@@ -1,5 +1,5 @@
 <template>
-<v-flex :key="catalogueItem.id" v-if="catalogueItem" catalogue-card>
+<v-flex class="test" :key="catalogueItem.id" v-if="catalogueItem" catalogue-card>
     <v-card>
         <router-link :to="{ name:'CATALOGUE', params: {catalogueId: catalogueItem.id.trim() }}">
             <item-picture entityName="resources" :id="catalogueItem.id" height="200px" width="350px" />
@@ -38,7 +38,11 @@ export default {
 
 <style lang="scss" scoped>
 
+.test{
+  margin-top: 48px;
+}
 .cat_header{
+  font-size:1.5em !important;
   min-height: 40px;
   color: darkslategray;
 }
