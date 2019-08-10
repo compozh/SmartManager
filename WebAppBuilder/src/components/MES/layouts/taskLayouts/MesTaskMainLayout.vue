@@ -35,12 +35,12 @@ export default {
     selectedTask: Object,
     dragResizeMode: Boolean
   },
- data() {
-    let blocks = [
+  computed: {
+    blocks() { 
+      return [
         {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription}
       ];
-
-    return {blocks};
+    }
   },
   name: "mes-task-main-layout",
 }

@@ -62,7 +62,6 @@ export default {
       initializeTasks: false
     };
   },
-
   created() {
     this.initialize();
   },

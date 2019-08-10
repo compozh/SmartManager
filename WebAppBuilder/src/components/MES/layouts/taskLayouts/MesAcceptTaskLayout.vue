@@ -38,12 +38,13 @@ export default {
     workCenters: Object,
     dragResizeMode: Boolean
   },
-  data() {
-    let blocks = [
+  computed: {
+    blocks() {
+      return [
         {'x':0, 'y':0, 'w':11, 'h':11, 'i':'0'},
         {'x':0, 'y':12, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
-    return {blocks: blocks};
+    }
   },
   methods: {
     formioSubmit(data) {
