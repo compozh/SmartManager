@@ -15,20 +15,41 @@
         <router-view/>
       </v-container>
     </v-content>
-    <template v-if="error">
+    <template v-if="snackbar.visible">
       <v-snackbar
+        :top="true"
         :multi-line="true"
         :timeout="5000"
-        color="error"
-        @input="closeError"
+        :color=snackbar.type
+        @input="closeSnackbar"
         :value="true"
       >
-        {{ error }}
-        <v-btn flat dark @click.native="closeError"
-        >Close
+        {{ snackbar.message }}
+        <v-btn flat dark @click.native="closeSnackbar">
+          Закрыть
         </v-btn>
       </v-snackbar>
     </template>
+    <v-dialog
+      v-model="dialogLinearLoader.visible"
+      :hide-overlay="false"
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          {{dialogLinearLoader.message}}
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 <script>
@@ -36,16 +57,18 @@ export default {
   name: "mes-layout",
   data(vm) {
     return {
-      drawer: vm.$vuetify.breakpoint.mdAndUp,
-      mini: false
+      drawer: vm.$vuetify.breakpoint.mdAndUp
     };
   },
   computed: {
     currentUser() {
       return this.$store.getters.getCurrentUser;
     },
-    error() {
-      return this.$store.getters["mes/error"];
+    snackbar() {
+      return this.$store.getters["mes/snackbar"];
+    },
+    dialogLinearLoader() {
+      return this.$store.getters["mes/dialogLinearLoader"];
     },
     linearLoader() {
       return this.$store.getters["mes/linearLoader"];
@@ -63,8 +86,8 @@ export default {
           this.drawer = !this.drawer;
         }
       },
-      closeError() {
-        this.$store.dispatch('mes/setError');
+      closeSnackbar() {
+        this.$store.dispatch('mes/closeSnackbar');
       }
     },
 };
