@@ -3,7 +3,7 @@
 
       <mes-production-toolbar class="mes-production-toolbar" />
 
-      <mes-content-loader v-if="!initializeProductions && !Object.keys(productions).legth" />
+      <mes-content-loader class="mes-content-loader" v-if="!initializeProductions && !Object.keys(productions).legth" />
 
       <v-flex v-if="initializeProductions" class="mes-productions-content">
         <v-card class="productions-card" v-for="production in productions" :key="production.factId">
@@ -56,13 +56,43 @@ export default {
     flex-direction: column;
     flex-wrap: wrap;
     padding: 0 10px;
+    position: absolute;
+    height: 100%;
+    overflow-y: auto;
+    width: 100%;
   }
+.mes-productions::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px
+  }
+  .mes-productions::-webkit-scrollbar-track {
+      background-color:#fff
+  }
+  .mes-productions::-webkit-scrollbar-track:hover {
+      background-color:#f4f4f4
+  }
+
+  /* scrollbar itself */
+ .mes-productions::-webkit-scrollbar-thumb {
+      background-color:#babac0;
+      border-radius:16px;
+      border:5px solid #fff
+  }
+  .mes-productions::-webkit-scrollbar-thumb:hover {
+      background-color:#a0a0a5;
+      border:4px solid #f4f4f4
+  }
+
+  /* set button(top and bottom of the scrollbar) */
+  .mes-productions::-webkit-scrollbar-button {display:none}
   .mes-productions-content {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    /* overflow-y: auto;
-    height: 94vh !important; */
+  }
+  .mes-content-loader {
+    position: absolute;
+    z-index: 100;
   }
   .productions-card {
     display: flex;

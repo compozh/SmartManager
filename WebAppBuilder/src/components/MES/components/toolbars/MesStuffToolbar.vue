@@ -63,6 +63,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .toolbar.row {
     margin: 0;
@@ -81,10 +82,12 @@ export default {
     align-items: center;
     width: 200px;
     max-width: 200px;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .mes-stuff-toolbar-qr {
     display: flex;
     align-items: center;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .mes-scan {
     min-width: auto;

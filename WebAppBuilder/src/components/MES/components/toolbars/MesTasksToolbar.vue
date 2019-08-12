@@ -90,6 +90,7 @@ export default {
     justify-content: flex-start;
     align-items: center;
     height: 60px;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .status-task-btn {
     color: white;
@@ -115,6 +116,7 @@ export default {
   .mes-tasks-toolbar-qr {
     display: flex;
     align-items: center;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .mes-scan {
     min-width: auto;
