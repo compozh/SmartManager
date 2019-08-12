@@ -161,8 +161,8 @@ export class MesApi {
   async getProductionFormioFromGql(formCode, properties) {
     try {
       const result = await client.query({
-        query: gql`query ($formCode: String) ${productionFormIo}`,
-        variables: { formCode }
+        query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
+        variables: { formCode, properties }
       });
       return result;
     }

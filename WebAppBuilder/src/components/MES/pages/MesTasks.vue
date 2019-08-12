@@ -186,7 +186,7 @@ export default {
     initializeFormioByWorkCenter(workCenter) {
       let properties = {
         workCenterCode: workCenter.code,
-        barcode: this.selectedTask.barcode
+        workBarcode: this.selectedTask.barcode
       };
       this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties });
     },
