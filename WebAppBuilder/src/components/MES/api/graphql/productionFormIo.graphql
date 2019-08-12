@@ -1,6 +1,6 @@
 {
     mes{
-        productionFormIo(formCode: $formCode) {
+        productionFormIo(formCode: $formCode, properties: $properties) {
             form
             data
             success
