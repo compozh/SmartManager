@@ -2,8 +2,8 @@ export default {
   linearLoader(state) {
     return state.linearLoader;
   },
-  error(state) {
-    return state.error;
+  snackbar(state) {
+    return state.snackbar;
   },
   properties(state) {
     return state.properties;
@@ -34,5 +34,8 @@ export default {
   },
   tasksPageState(state) {
     return state.tasksPageState;
+  },
+  dialogLinearLoader(state) {
+    return state.dialogLinearLoader;
   }
 }

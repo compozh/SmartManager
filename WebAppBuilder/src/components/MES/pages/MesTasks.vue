@@ -8,6 +8,7 @@
           :agreeMessage=dialogProperties.agreeMessage
           :disagreeMessage=dialogProperties.disagreeMessage
           :visible=dialogProperties.visible
+          @dialogInput=dialogInput
           @agreeClick=dialogAgreeClick
           @disagreeClick=dialogDisagreeClick />
 
@@ -15,7 +16,7 @@
             :selectedTask=selectedTask
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
-            @changeCurrentTask=changeCurrentTask
+            @changeCurrentTask=onChangeCurrentTask
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <multipane-resizer><v-icon class="resizer-icon">drag_handle</v-icon></multipane-resizer>
@@ -145,13 +146,13 @@ export default {
           switch(tabIndex) {
             case 0:
               if(task.state == "IN_PLAN" || task.state == "IN_WORK") {
-                me.changeCurrentTask(task);
+                me.onChangeCurrentTask(task);
                 return;
               }
               break;
             case 1:
               if(task.state == "DONE") {
-                me.changeCurrentTask(task);
+                me.onChangeCurrentTask(task);
                 return;
               }
               break;
@@ -162,7 +163,7 @@ export default {
     changeCurrentLayout(currentLayout) {
       this.currentLayout = currentLayout;
     },
-    changeCurrentTask(newSelectedTask) {
+    onChangeCurrentTask(newSelectedTask) {
       if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return;
       }
@@ -177,7 +178,9 @@ export default {
           return;
         }
       }
-
+      this.changeCurrentTask(newSelectedTask);
+    },
+    changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask;
       let workCenter = this.workCenters[newSelectedTask.workCenterCode];
       this.initializeFormioByWorkCenter(workCenter);
@@ -215,9 +218,15 @@ export default {
     dialogAgreeClick() {
       this.dialogProperties.visible = false;
       this.changeCurrentTask(this.dialogProperties.task);
+      this.dialogProperties.task = null;
     },
     dialogDisagreeClick() {
       this.dialogProperties.visible = false;
+      this.dialogProperties.task = null;
+    },
+    dialogInput() {
+      this.dialogProperties.visible = false;
+      this.dialogProperties.task = null;
     },
     getFormioData() {
       return this.$refs.acceptTaskLayout.getFormioData();

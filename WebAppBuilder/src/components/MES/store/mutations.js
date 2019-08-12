@@ -1,10 +1,26 @@
-
 export default {
   setLinearLoader(state, payload) {
     state.linearLoader = payload
   },
-  setError(state, payload) {
-    state.error = payload
+  closeDialogLinearLoader(state) {
+    state.dialogLinearLoader.visible = false;
+  },
+  closeSnackbar(state) {
+    state.snackbar.visible = false;
+  },
+  setDialogLinearLoaderMessage(state, message) {
+    state.dialogLinearLoader.message = message;
+    state.dialogLinearLoader.visible = true;
+  },
+  setSnackbarErrorMessage(state, message) {
+    state.snackbar.message = message;
+    state.snackbar.type = 'error';
+    state.snackbar.visible = true;
+  },
+  setSnackbarSuccessMessage(state, message) {
+    state.snackbar.message = message;
+    state.snackbar.type = 'success';
+    state.snackbar.visible = true;
   },
   setProperties(state, properties) {
     state.properties = properties

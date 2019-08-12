@@ -164,7 +164,7 @@ export class MesApi {
         query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
         variables: { formCode, properties }
       });
-      return result;
+      return result.data.mes.productionFormIo;
     }
     catch (error) {
       return console.log(error.message);

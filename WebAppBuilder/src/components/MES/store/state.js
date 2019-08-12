@@ -1,11 +1,19 @@
 export default {
   linearLoader: false, // Linear progress component
-  error: null, // Snackbar for errors
+  snackbar: {
+    type: 'error', // error / success
+    message: '',
+    visible: false
+  },
   menuMode: 'open', // Main menu state: open, mini, close
   tasksPageState: {
     selectedTask: null,
     selectedTasksTab: 0,
     currentLayout: 'mes-task-main-layout',
+  },
+  dialogLinearLoader: {
+    visible: false,
+    message: ''
   },
   stuffPageState: {
     stuffInputText: ''
