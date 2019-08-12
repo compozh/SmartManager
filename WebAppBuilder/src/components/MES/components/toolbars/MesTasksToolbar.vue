@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     onclickSetupMaterial(event) {
-      this.$emit('initializeInstallations');
+      this.$emit('initInstallations');
       this.$emit('changeCurrentLayout', 'mes-task-stuff-layout');
     },
     onclickAccept(event) {

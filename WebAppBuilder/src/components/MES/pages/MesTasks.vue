@@ -31,7 +31,7 @@
                   @changeDragResizeMode="changeDragResizeMode"
                   @changeCurrentLayout="changeCurrentLayout"
                   @removeAllInstallations=removeAllInstallations
-                  @initializeInstallations=initializeInstallations />
+                  @initInstallations=initInstallations />
 
               </v-flex>
 
@@ -52,6 +52,7 @@
               <mes-task-stuff-layout
                 :selectedTask=selectedTask
                 :installations=installations
+                :initializeInstallations=initializeInstallations
                 @removeInstallation=removeInstallation
                 v-if="selectedTask && currentLayout == 'mes-task-stuff-layout'" />
 
@@ -70,6 +71,7 @@ export default {
   components: { Multipane, MultipaneResizer },
   data() {
     return {
+      initializeInstallations: false,
       initializeTasks: false,
       dialogProperties: {
         title: "",
@@ -206,8 +208,9 @@ export default {
     removeInstallation({ installation, workCenterCode }) {
       this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
     },
-    initializeInstallations() {
-      this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
+    async initInstallations() {
+      await this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
+      this.initializeInstallations = true;
     },
     changeDragResizeMode() {
       this.$store.dispatch('mes/changeDragResizeMode');
