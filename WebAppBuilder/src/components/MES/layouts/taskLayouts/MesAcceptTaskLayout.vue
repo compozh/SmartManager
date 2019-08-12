@@ -1,8 +1,8 @@
 <template>
-     <v-layout>
+     <v-layout id="mainLayout">
         <v-flex>
             <grid-layout
-                class="main-layout"
+                class="grid-layout"
                 :layout="blocks"
                 :col-num="12"
                 :row-height="30"
@@ -45,7 +45,7 @@ export default {
     blocks() {
       return [
         {'x':0, 'y':0, 'w':11, 'h':11, 'i':'0'},
-        {'x':0, 'y':12, 'w':6, 'h':6, 'i':'1', data: this.selectedTask.detailedDescription},
+        {'x':0, 'y':12, 'w':7, 'h':7, 'i':'1', data: this.selectedTask.detailedDescription},
       ];
     }
   },
@@ -64,9 +64,7 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-.main-layout {
-    /* overflow-y: auto;
-    height: 88vh !important; */
+.grid-layout {
     padding: 0 10px !important;
   }
  .grid-element {

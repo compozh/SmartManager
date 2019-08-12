@@ -17,15 +17,15 @@
         <mes-content-loader
           v-if="!initializeTasks"
           :loaderType=loaderType />
-        
-        <div v-for="(tasksByWorkCenter, workCenter) in tasks" 
+
+        <div v-for="(tasksByWorkCenter, workCenter) in tasks"
           :key="workCenter"
           class="tasks-list-block-content">
-          
-          <v-card ripple class="task-item" v-for="task in tasksByWorkCenter" 
+
+          <v-card ripple class="task-item" v-for="task in tasksByWorkCenter"
             :key="task.id"
             @click="changeCurrentTask(task)">
-            
+
             <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'"
               v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
                 || (selectedTasksTab == 1 && task.state == 'DONE')">
@@ -118,7 +118,7 @@ export default {
     cursor: pointer;
   }
   .tasks-list-block-content {
-    height: 100%;
+    height:calc(100% - 48px);
     overflow-y: auto;
     position: absolute;
   }

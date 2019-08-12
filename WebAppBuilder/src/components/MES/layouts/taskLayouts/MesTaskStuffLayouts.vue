@@ -27,7 +27,7 @@ export default {
 
 <style type="text/css" scoped>
 .mes-task-stuff-layout {
-  padding: 0 10px;
+  padding: 10px;
 }
 .installations-block {
   display: flex;

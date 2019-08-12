@@ -38,19 +38,12 @@ export default {
   },
   computed: {
     blocks() {
-      return [ {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription } ];
+      return [ {'x':0, 'y':0, 'w':7, 'h':7, 'i':'0', data: this.selectedTask.detailedDescription } ];
     }
   }
 }
 </script>
 <style type="text/css" scoped>
-   /*.mes-task-main-layout {
-     padding-top: 30px;
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-    position: absolute;
-  }*/
   .main-layout {
     padding: 0 10px !important;
   }
