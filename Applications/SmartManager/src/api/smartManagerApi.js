@@ -9,6 +9,7 @@ import taskInfo from './graphql/taskInfo.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
+import addAttachments from './graphql/addAttachments.graphql'
 import Vue from 'vue'
 
 const getClient = () => {
@@ -67,7 +68,7 @@ export class SmartManagerApi {
 
   addNewTaskToGql(newTask) {
     return getClient().mutate({
-      mutation: gql`mutation ($newTask: String!) ${addTask}`,
+      mutation: gql`mutation ($newTask: String) ${addTask}`,
       variables: {
         newTask: JSON.stringify(newTask)
       }
@@ -76,17 +77,23 @@ export class SmartManagerApi {
       .catch(error => console.log(error.message))
   }
 
-  changeTaskStatusInGql(params) {
+  changeTaskStatusInGql(status) {
     return getClient().mutate({
-      mutation: gql`mutation (
-        $id: Int!,
-        $status: String!,
-        $comment: String!
-      ) ${changeStatus}`,
+      mutation: gql`mutation ($status: String) ${changeStatus}`,
       variables: {
-        id: params.id,
-        status: params.status,
-        comment: params.comment
+        status: JSON.stringify(status)
+      }
+    })
+      .then(result => result)
+      .catch(error => console.log(error.message))
+  }
+
+  addAttachmentsInGql(taskId, attachments) {
+    return getClient().mutate({
+      mutation: gql`mutation ($taskId: Int, $attachments: String) ${addAttachments}`,
+      variables: {
+        taskId,
+        attachments: JSON.stringify(attachments)
       }
     })
       .then(result => result)

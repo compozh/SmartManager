@@ -135,7 +135,7 @@ export default {
       return this.$store.state.sm.linearLoader
     },
     menuMode() {
-      return this.$store.state.sm.menuMode
+      return this.$store.state.sm.menuMode.currentState
     },
     breakpoint() {
       return this.$vuetify.breakpoint.name

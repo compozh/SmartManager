@@ -3,43 +3,40 @@
     <v-layout class="upload-container wrap">
       <v-flex v-if="files.length" xs12 pb-3>
         <v-data-table
-            class="file-list elevation-1"
-            disable-initial-sort
-            :items="files"
-            :headers="tableHeaders"
-            hide-actions
-            sort-icon=""
-          >
-            <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.name }}</td>
-              <td class="text-xs-center"
-                  :class="{'red--text text--darken-2' : props.item.size >= size}"
-              >{{ (props.item.size / 1024 / 1024).toFixed(2) }} Mb
-              </td>
-              <td class="text-xs-center">
-                {{ parseFloat(props.item.progress).toFixed(2) }} %
-              </td>
-              <td class="d-flex">
-                <span v-if="parseFloat(props.item.progress) < 100">
-                  <v-btn v-if="props.item.size >= size" icon>
-                    <v-icon size="20" class="red--text text--darken-2">warning</v-icon>
-                  </v-btn>
-                  <v-btn v-else icon @click.prevent="$refs.upload.active = true">
-                    <v-icon size="20" class="grey--text text--darken-1">cloud_upload</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="remove(props.item.id)">
-                    <v-icon size="20" class="grey--text text--darken-1">close</v-icon>
-                  </v-btn>
-                </span>
-                <v-icon
-                  style="min-width: 105px"
-                  v-else size="20"
-                  class="green--text text--darken-2"
-                >done
-                </v-icon>
-              </td>
-            </template>
-          </v-data-table>
+          class="file-list elevation-1"
+          disable-initial-sort
+          :items="files"
+          :headers="tableHeaders"
+          hide-actions
+          sort-icon=""
+        >
+          <template v-slot:items="props">
+            <td class="text-xs-left">{{ props.item.name }}</td>
+            <td class="text-xs-center"
+                :class="{'red--text text--darken-2' : props.item.size >= size}"
+            >{{ (props.item.size / 1024 / 1024).toFixed(2) }} Mb
+            </td>
+            <td class="text-xs-center"
+                :class="{'progress-cell': !loading}"
+            >
+              <v-icon v-if="props.item.size >= size" size="20" class="red--text text--darken-2">warning</v-icon>
+              <span v-else-if="!props.item.success" class="pl-2">{{ parseFloat(props.item.progress).toFixed(2) }} %</span>
+              <v-icon
+                v-else
+                size="20"
+                class="green--text text--darken-2"
+              >done</v-icon>
+            </td>
+            <td
+              class="remove-btn"
+              v-if="$refs.upload && !$refs.upload.uploaded && !loading"
+            >
+              <v-btn icon small @click="remove(props.item.id)">
+                <v-icon size="20" class="grey--text text--darken-1">close</v-icon>
+              </v-btn>
+            </td>
+          </template>
+        </v-data-table>
       </v-flex>
       <v-flex>
         <file-upload
@@ -63,6 +60,7 @@
           @input-filter="inputFilter"
         >
           <span
+            v-if="!loading"
             class="upload-btn grey--text text--darken-1 subheading font-weight-light">
             <v-icon size="30">attach_file</v-icon>
             <span class="hidden-xs-only">Добавить вложение</span>
@@ -78,36 +76,55 @@ import fileUpload from 'vue-upload-with-credential'
 
 export default {
   name: 'file-upload-add-task-form',
+  props: ['uploading'],
   components: {
     fileUpload
   },
   data: () => ({
-    dialog: true,
     files: [],
-    action: window.myConfig.GrapgQlUrl + 'upload',
+    attachments: [],
+    loading: false,
+    // eslint-disable-next-line no-undef
+    action: myConfig.GrapgQlUrl + 'upload',
     multiple: true,
     mimeTypes: 'image/*, application/pdf, application/msword, application/excel, text/*',
     extensions: 'gif, jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, txt, log',
     size: 1048576 * 100, // 100 Mb
     chunk: true,
-    minSize: 512000, // byte
+    minSize: 512000,
     maxActive: 1,
     maxRetries: 10,
     headers: {'Upload-Type': 'single'},
     tableHeaders: [
       {text: 'Название файла', value: 'name'},
       {text: 'Размер', value: 'size', align: 'center'},
-      {text: 'Загружено', value: 'upload', align: 'center'},
-      {text: 'Действия', value: 'actions', align: 'center'}
+      {text: 'Загружено', value: 'upload', align: 'center'}
     ]
   }),
+  computed: {
+    active() {
+      return this.$refs.upload ? this.$refs.upload.active : ''
+    }
+  },
+  watch: {
+    uploading(val) {
+      if (this.files.length) {
+        this.$refs.upload.active = val
+        this.loading = true
+      } else {
+        this.$emit('attach', [])
+      }
+    }
+  },
   methods: {
     inputFile(newFile, oldFile) {
-      if (newFile && oldFile && !newFile.active && oldFile.active) {
-        if (newFile.xhr) {
-          //  Get the response status code
-          // console.log('status', newFile.xhr.status)
-        }
+      if (newFile && oldFile && newFile.success !== oldFile.success) {
+        const fileName = newFile.file.name
+        const filePath = newFile.response.fileName
+        this.attachments.push({fileName, filePath})
+      }
+      if (this.$refs.upload && this.$refs.upload.uploaded) {
+        this.$emit('attach', this.attachments)
       }
     },
     inputFilter(newFile, oldFile, prevent) {
@@ -150,5 +167,17 @@ export default {
   .upload-btn {
     display: flex;
     align-items: center;
+  }
+
+  .file-list >>> tr:hover .progress-cell {
+    display: none;
+  }
+
+  .remove-btn {
+    display: none;
+  }
+
+  .file-list >>> tr:hover .remove-btn {
+    display: table-cell;
   }
 </style>

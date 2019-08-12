@@ -9,6 +9,7 @@
     item-value="userId"
     :multiple="multiple"
     :rules="rules"
+    :disabled="uploading"
   >
     <template v-slot:selection="data">
       <v-chip
@@ -43,7 +44,7 @@
 <script>
 export default {
   name: 'sm-task-add-form-select',
-  props: ['label', 'value', 'multiple', 'rules'],
+  props: ['label', 'value', 'multiple', 'rules', 'uploading'],
   computed: {
     users() {
       return this.$store.state.sm.users
