@@ -1,12 +1,16 @@
 <template>
     <v-layout class="mes-productions">
+
       <mes-production-toolbar class="mes-production-toolbar" />
-      <mes-content-loader :initialize=initializeProductions />
+
+      <mes-content-loader v-if="!initializeProductions && !Object.keys(productions).legth" />
+
       <v-flex v-if="initializeProductions" class="mes-productions-content">
         <v-card class="productions-card" v-for="production in productions" :key="production.factId">
           <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
         </v-card>
       </v-flex>
+
     </v-layout>
 </template>
 
@@ -45,29 +49,30 @@ export default {
   }
 }
 </script>
+
 <style type="text/css" scoped>
-.mes-productions {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  padding: 0 10px;
-}
-.mes-productions-content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  /* overflow-y: auto;
-  height: 94vh !important; */
-}
-.productions-card {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-  max-width: 400px;
-  width: 360px;
-  border-radius: 10px;
-}
-.wait-for-data-block {
-  padding: 20px;
-}
+  .mes-productions {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0 10px;
+  }
+  .mes-productions-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* overflow-y: auto;
+    height: 94vh !important; */
+  }
+  .productions-card {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    max-width: 400px;
+    width: 360px;
+    border-radius: 10px;
+  }
+  .wait-for-data-block {
+    padding: 20px;
+  }
 </style>

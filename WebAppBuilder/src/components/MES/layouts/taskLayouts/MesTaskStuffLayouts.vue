@@ -12,16 +12,16 @@
 import {mapGetters} from 'vuex'
 
 export default {
+  name: "mes-task-stuff-layout",
   props: {
     selectedTask: Object,
     installations: Object
   },
-  name: "mes-task-stuff-layout",
-    methods: {
-      removeInstallation(installation, workCenterCode) {
-        this.$emit('removeInstallation', { installation, workCenterCode });
-      }
+  methods: {
+    removeInstallation(installation, workCenterCode) {
+      this.$emit('removeInstallation', { installation, workCenterCode });
     }
+  }
 }
 </script>
 

@@ -1,5 +1,10 @@
 <template>
-    <formio id="formio" class="formio-container" :form=formioComponents :submission=formioSubmission @submit=onSubmit></formio>
+    <formio id="formio" class="formio-container" 
+		:form=formioComponents 
+		:submission=formioSubmission 
+		:options="options" 
+		@submit=onSubmit
+		@change=onChange />
 </template>
 
 <script>
@@ -11,6 +16,9 @@ export default {
 	components: { formio: Form },
 	props: {
     	workCenter: Object
+	},
+	data() {
+		return { options: { noAlerts: true }, currentData: '' };
 	},
 	computed: {
 		formioComponents() {
@@ -29,6 +37,12 @@ export default {
 	methods: {
 		onSubmit(params) {
 			this.$emit('formioSubmit', JSON.stringify(params.data));
+		},
+		onChange(params) {
+			this.currentData = params.data;
+		},
+		getFormioData() {
+			return JSON.stringify(this.currentData)
 		}
 	}
 }

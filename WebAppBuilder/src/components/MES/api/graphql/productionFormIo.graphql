@@ -3,6 +3,10 @@
         productionFormIo(formCode: $formCode) {
             form
             data
+            success
+            errorMessage
+            successMessage
+            errorCode
         }
     }
 }

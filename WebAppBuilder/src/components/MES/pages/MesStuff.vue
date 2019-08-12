@@ -1,12 +1,20 @@
 <template>
   <v-layout class="mes-stuff">
-    <mes-stuff-toolbar class="mes-stuff-toolbar" :installations=installations @removeAllInstallations=removeAllInstallations @submitQrCode=submitQrCode />
-    <mes-content-loader :initialize=initializeInstallations />
+
+    <mes-stuff-toolbar 
+      class="mes-stuff-toolbar"
+      :installations=installations
+      @removeAllInstallations=removeAllInstallations
+      @submitQrCode=submitQrCode />
+
+    <mes-content-loader v-if="!initializeInstallations" />
+
     <div class="installations-block" v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
       <v-card class="installation-card" v-for="installation in installationsByWorkCenter" :key="installation.id">
         <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
       </v-card>
     </div>
+
   </v-layout>
 </template>
 <script>
@@ -70,15 +78,15 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   height: 100%;
-}
-.installation-card{
-  display: flex;
-  align-items: center;
-  width: 360px;
-  margin: 10px;
-  height: max-content;
-}
-.wait-for-data-block {
-  padding: 20px;
-}
+  }
+  .installation-card{
+    display: flex;
+    align-items: center;
+    width: 360px;
+    margin: 10px;
+    height: max-content;
+  }
+  .wait-for-data-block {
+    padding: 20px;
+  }
 </style>

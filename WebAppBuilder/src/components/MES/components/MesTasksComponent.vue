@@ -15,7 +15,7 @@
       </v-flex>
       <v-flex class="tasks-list-block">
         <mes-content-loader
-          :initialize=initializeTasks
+          v-if="!initializeTasks"
           :loaderType=loaderType />
         
         <div v-for="(tasksByWorkCenter, workCenter) in tasks" 

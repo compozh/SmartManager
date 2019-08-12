@@ -31,18 +31,16 @@
 import {mapGetters} from 'vuex'
 
 export default {
+  name: "mes-task-main-layout",
   props: {
     selectedTask: Object,
     dragResizeMode: Boolean
   },
   computed: {
     blocks() { 
-      return [
-        {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription}
-      ];
+      return [ {'x':0, 'y':0, 'w':6, 'h':6, 'i':'0', data: this.selectedTask.detailedDescription } ];
     }
-  },
-  name: "mes-task-main-layout",
+  }
 }
 </script>
 <style type="text/css" scoped>

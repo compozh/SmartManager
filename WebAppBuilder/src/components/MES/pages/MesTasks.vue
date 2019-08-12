@@ -2,6 +2,15 @@
   <v-container  class="main-block">
     <v-card>
       <multipane class="main-block-layout">
+        <mes-dialog-component
+          :title=dialogProperties.title
+          :message=dialogProperties.message
+          :agreeMessage=dialogProperties.agreeMessage
+          :disagreeMessage=dialogProperties.disagreeMessage
+          :visible=dialogProperties.visible
+          @agreeClick=dialogAgreeClick
+          @disagreeClick=dialogDisagreeClick />
+
           <mes-tasks-component
             :selectedTask=selectedTask
             :initializeTasks=initializeTasks
@@ -10,6 +19,7 @@
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <multipane-resizer><v-icon class="resizer-icon">drag_handle</v-icon></multipane-resizer>
+
             <v-layout column class="task-description-layout">
               <v-flex class="button-toolbar" row wrap >
 
@@ -31,7 +41,8 @@
                 v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && !selectedTask.inProgress)
                   || (currentLayout == 'mes-accept-task-layout' && !selectedTask.inProgress))" />
 
-              <mes-accept-task-layout
+              <mes-accept-task-layout              
+                ref="acceptTaskLayout"
                 :selectedTask=selectedTask
                 :workCenters=workCenters
                 :dragResizeMode=dragResizeMode
@@ -59,7 +70,15 @@ export default {
   components: { Multipane, MultipaneResizer },
   data() {
     return {
-      initializeTasks: false
+      initializeTasks: false,
+      dialogProperties: {
+        title: "",
+        message: "Вы действительно хотите перейти на другое задание?",
+        agreeMessage: "Да",
+        disagreeMessage: "Нет",
+        visible: false,
+        task: null
+      }
     };
   },
   created() {
@@ -111,32 +130,34 @@ export default {
       await this.$store.dispatch('mes/initializeWorkCenters');
       await this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters) });
       this.initializeTasks = true;
-      this.selectFirstTask();
+      if(!this.selectedTask) {
+        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab);
+      }
     },
-    selectFirstTask() {
-      var tasks = this.tasks,
-        workCenterCodes = Object.keys(this.workCenters);
+    selectFirstTaskByTabIndex(tabIndex) {
+      var me = this,
+        tasks = me.tasks,
+        workCenterCodes = Object.keys(this.tasks);
 
-      if(workCenterCodes.length) {
-        let workCenterCode = workCenterCodes[0],
-          tasksByWorkCenter = this.tasks[workCenterCode];
-        if(tasksByWorkCenter && tasksByWorkCenter.length) {
-          this.changeCurrentTask(this.getFirstTaskInPlan(tasksByWorkCenter));
+      for(let workCenterCode of workCenterCodes) {
+        let tasksByWorkCenter = tasks[workCenterCode];
+        for(let task of tasksByWorkCenter) {
+          switch(tabIndex) {
+            case 0:
+              if(task.state == "IN_PLAN" || task.state == "IN_WORK") {
+                me.changeCurrentTask(task);
+                return;
+              }
+              break;
+            case 1:
+              if(task.state == "DONE") {
+                me.changeCurrentTask(task);
+                return;
+              }
+              break;
+          }
         }
       }
-    },
-    getFirstTaskInPlan(tasks) {
-      var firstDoneTask = null;
-      for(var i = 0; i < tasks.length; i++) {
-        var task = tasks[i];
-        if(task.state == "IN_PLAN" || task.state == "IN_WORK") {
-          return task;
-        }
-        if(!firstDoneTask && task.state == "DONE") {
-          firstDoneTask = task;
-        }
-      }
-      return firstDoneTask;
     },
     changeCurrentLayout(currentLayout) {
       this.currentLayout = currentLayout;
@@ -145,6 +166,18 @@ export default {
       if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return;
       }
+      
+      if(this.$refs.acceptTaskLayout && !this.dialogProperties.task) {
+        let formioInitialData = this.$refs.acceptTaskLayout.getInitialFormioData(),
+          currentFormioData = this.$refs.acceptTaskLayout.getFormioData();
+          
+        if(formioInitialData.data != currentFormioData) {
+          this.dialogProperties.visible = true;
+          this.dialogProperties.task = newSelectedTask;
+          return;
+        }
+      }
+
       this.selectedTask = newSelectedTask;
       let workCenter = this.workCenters[newSelectedTask.workCenterCode];
       this.initializeFormioByWorkCenter(workCenter);
@@ -152,12 +185,14 @@ export default {
     },
     initializeFormioByWorkCenter(workCenter) {
       let properties = {
-        workCenterCode: workCenter.code
+        workCenterCode: workCenter.code,
+        barcode: this.selectedTask.barcode
       };
       this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties });
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex;
+      this.selectFirstTaskByTabIndex(tabIndex);
     },
     removeAllInstallations() {
       var me = this;
@@ -176,6 +211,16 @@ export default {
     },
     changeDragResizeMode() {
       this.$store.dispatch('mes/changeDragResizeMode');
+    },
+    dialogAgreeClick() {
+      this.dialogProperties.visible = false;
+      this.changeCurrentTask(this.dialogProperties.task);
+    },
+    dialogDisagreeClick() {
+      this.dialogProperties.visible = false;
+    },
+    getFormioData() {
+      return this.$refs.acceptTaskLayout.getFormioData();
     }
   }
 }
