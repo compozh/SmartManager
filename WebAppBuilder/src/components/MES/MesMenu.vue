@@ -39,3 +39,9 @@ export default {
   }
 };
 </script>
+<style>
+  .v-list.theme--light a.v-list__tile--active{
+    color: #326DA8 !important;
+    caret-color: #326DA8 !important;
+  }
+</style>

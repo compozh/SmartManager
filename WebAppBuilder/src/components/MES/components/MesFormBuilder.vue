@@ -1,8 +1,8 @@
 <template>
-    <formio id="formio" class="formio-container" 
-		:form=formioComponents 
-		:submission=formioSubmission 
-		:options="options" 
+    <formio id="formio" class="formio-container"
+		:form=formioComponents
+		:submission=formioSubmission
+		:options="options"
 		@submit=onSubmit
 		@change=onChange />
 </template>
@@ -80,6 +80,29 @@ export default {
   }
   .list-group-item.list-group-header.formio-edit-grid-header {
     font-size: 16px;
+  }
+  .nav-link {
+    color: #326DA8;
+  }
+  .btn.btn-primary.btn-md {
+    background-color: white;
+    border-color: #326DA8;
+    color: #326DA8;
+  }
+  .btn.btn-primary {
+    background-color: white;
+    border-color: #326DA8;
+    color: #326DA8;
+  }
+  .btn {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding-top: 6px;
+    outline: none !important;
+  }
+  .btn.btn-primary.btn-md:hover {
+    background-color: rgba(50, 109, 168, .12)
   }
 }
 </style>
