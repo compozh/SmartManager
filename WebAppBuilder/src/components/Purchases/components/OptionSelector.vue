@@ -56,7 +56,6 @@ export default {
                 this.items = list;
                 this.caption = this.$store.state.purchases.chose.caption;
                 this.show = true;
-               // this.$store.commit("purchases/setChoseList", []);
             }
         }
     }

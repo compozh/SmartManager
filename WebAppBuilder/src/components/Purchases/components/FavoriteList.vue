@@ -10,18 +10,12 @@
             <v-layout v-if="isEditable">
                 
                 <v-flex xs12 sm6 md3>
-                <v-text-field 
-                    :label="favList.caption"
-                    v-model="favList.caption"
-                    solo
-                    @change="mutationEditFavList(favList)"
-                ></v-text-field> 
+                <textbox :item="favList" field="caption" :change="mutationEditFavList"/>
                 </v-flex>
-
                 <v-flex>
                 <v-switch 
                 v-model="favList.isDefaultList"
-                label="По умолчанию"             
+                label="По умолчанию" 
                 @change="mutationEditFavList(favList)"/>
                 </v-flex >
                 <v-flex>
@@ -72,6 +66,7 @@ const api = new PurchasesApi();
      name: "onefavlist",
      components: {
       draggable,
+      
      },
      props:{
         listId: {
@@ -93,7 +88,8 @@ const api = new PurchasesApi();
         favListt:undefined,
         listToAdd:undefined,
         listToRemove:undefined,
-        itemToMove : undefined
+        itemToMove : undefined,
+        saveVisible:false
     }),
     created: function () {
        api.getFavLists();
@@ -142,7 +138,6 @@ const api = new PurchasesApi();
                 list.items.push(test);
               }
             });
-            debugger;
             return list;
           }
           return undefined;
@@ -230,7 +225,6 @@ const api = new PurchasesApi();
         let test2 = 2;
         
         test2 =  this.resource_items.find(w => w.id == keyValue);
-        debugger;
         return test2;
       },
     }

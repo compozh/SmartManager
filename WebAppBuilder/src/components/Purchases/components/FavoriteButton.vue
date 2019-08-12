@@ -46,7 +46,6 @@ export default {
     methods:{
         async favClick(){
             if(!this.inFavourite){
-                debugger;
                  await api.addToFavoritesOneMutation(this.alias, this.keyValue.toString(), this);
             }else{
                  api.deleteItemFromFavorites(this.alias, this.keyValue.toString());
