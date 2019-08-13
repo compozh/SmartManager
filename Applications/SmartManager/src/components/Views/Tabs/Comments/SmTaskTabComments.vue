@@ -3,7 +3,8 @@
     <v-layout
       class="comment-item text-xs-left"
       row wrap
-      v-for="comment in task.comments"
+      v-for="(comment, index) in task.comments"
+      :key="index"
     >
       <v-flex
         xs1
@@ -51,17 +52,17 @@
 </template>
 
 <script>
-  export default {
-    name: "smTaskTabComments",
-    computed: {
-      task() {
-        return this.$store.state.sm.taskInfo
-      },
-      getCommentsLength() {
-        return this.task.comments ? this.task.comments.length : ''
-      }
+export default {
+  name: 'smTaskTabComments',
+  computed: {
+    task() {
+      return this.$store.state.sm.taskInfo
+    },
+    getCommentsLength() {
+      return this.task.comments ? this.task.comments.length : ''
     }
   }
+}
 </script>
 
 <style scoped>

@@ -22,23 +22,23 @@
 </template>
 
 <script>
-  export default {
-    name: 'sm-task-tab-tasks',
-    computed: {
-      task() {
-        return this.$store.state.sm.taskInfo
-      },
-      subTasks() {
-        return this.task ? this.task.childTasks : []
-      }
+export default {
+  name: 'sm-task-tab-tasks',
+  computed: {
+    task() {
+      return this.$store.state.sm.taskInfo
+    },
+    subTasks() {
+      return this.task ? this.task.childTasks : []
     }
   }
+}
 </script>
 
 <style scoped>
   .task-wrapper {
     overflow: auto;
-    height: 88vh;
+    height: 86vh;
   }
 
   .sub-task-headline {

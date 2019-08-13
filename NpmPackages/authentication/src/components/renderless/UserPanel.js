@@ -32,11 +32,10 @@ export default {
   render() {
     return this.$scopedSlots.default({
       user: {
-        name: this.$store.state.authentication.currentUser.UserData.LoginData.UserName,
-        login: this.$store.state.authentication.currentUser.UserData.LoginData.UserLogin,
-        id: this.$store.state.authentication.currentUser.UserData.LoginData.UserId,
-        rights: this.$store.state.authentication.currentUser.UserData.DelegatedRights,
-        photo: this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserPhoto
+        id: this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserId,
+        name: this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName,
+        photo: this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserPhoto,
+        rights: this.$store.state.authentication.currentUser.UserData.DelegatedRights
       },
       params: {
         changePassword: this.changePassword,

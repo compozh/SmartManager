@@ -30,20 +30,20 @@ export default {
       }
       if (priority) {
         switch (priority) {
-          case 1:
-            options.push({
-              title: 'Высокий приоритет',
-              color: 'green darken-2',
-              icon: 'error_outline'
-            })
-            break
-          case -1:
-            options.push({
-              title: 'Не срочно',
-              color: 'grey darken-2',
-              icon: 'low_priority'
-            })
-            break
+        case 1:
+          options.push({
+            title: 'Высокий приоритет',
+            color: 'green darken-2',
+            icon: 'error_outline'
+          })
+          break
+        case -1:
+          options.push({
+            title: 'Не срочно',
+            color: 'grey darken-2',
+            icon: 'low_priority'
+          })
+          break
         }
       }
       return options
@@ -83,30 +83,30 @@ export default {
   methods: {
     defineRole(role) {
       switch (role) {
-        case '':
-          return {
-            title: 'Ответственный',
-            color: 'blue darken-2',
-            icon: 'account_circle'
-          }
-        case 'COEXECUTOR':
-          return {
-            title: 'Соисполнители',
-            color: 'blue darken-2',
-            icon: 'supervised_user_circle'
-          }
-        case 'OBSERVER':
-          return {
-            title: 'Уведомить',
-            color: 'orange darken-4',
-            icon: 'error_outline'
-          }
-        case 'addedFio':
-          return {
-            title: 'Задача от',
-            color: 'blue-grey darken-4',
-            icon: 'loupe'
-          }
+      case '':
+        return {
+          title: 'Ответственный',
+          color: 'blue darken-2',
+          icon: 'account_circle'
+        }
+      case 'COEXECUTOR':
+        return {
+          title: 'Соисполнители',
+          color: 'blue darken-2',
+          icon: 'supervised_user_circle'
+        }
+      case 'OBSERVER':
+        return {
+          title: 'Уведомить',
+          color: 'orange darken-4',
+          icon: 'error_outline'
+        }
+      case 'addedFio':
+        return {
+          title: 'Задача от',
+          color: 'blue-grey darken-4',
+          icon: 'loupe'
+        }
       }
     }
   },

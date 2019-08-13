@@ -30,7 +30,7 @@
         ></v-text-field>
       </v-flex>
       <v-spacer></v-spacer>
-      <v-flex shrink>
+      <v-flex shrink class="icon-container">
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-layout>
@@ -87,5 +87,9 @@
     position: absolute;
     top: calc(50% - 15px);
     left: calc(50% - 65px);
+  }
+
+  .icon-container {
+    max-width: 50px;
   }
 </style>

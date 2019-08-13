@@ -3,10 +3,10 @@
 </template>
 
 <script>
-  export default {
-    name: "sm-image-viewer",
-    props: ['url']
-  }
+export default {
+  name: 'sm-image-viewer',
+  props: ['url']
+}
 </script>
 
 <style scoped>

@@ -1,0 +1,10 @@
+mutation($factId:Int!) {
+    mesMutation {
+        deleteProduction(factId: $factId) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

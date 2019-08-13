@@ -1,12 +1,12 @@
 export default {
   name: 'sm-document-viewer-rl',
   data: () => ({
-      file: {
-        name: '',
-        url: '',
-        ext: '',
-        id: ''
-      }
+    file: {
+      name: '',
+      url: '',
+      ext: '',
+      id: ''
+    }
   }),
   created() {
     if (this.originals.length) {
@@ -21,11 +21,11 @@ export default {
     component() {
       const ext = this.file.url.split('.').pop()
       switch (true) {
-        case ext === '': return
-        case ext === 'pdf': return 'sm-pdf-viewer'
-        case this.isText(ext): return 'sm-txt-viewer'
-        case this.isImage(ext): return 'sm-image-viewer'
-        default: return 'sm-not-support'
+      case ext === '': return
+      case ext === 'pdf': return 'sm-pdf-viewer'
+      case this.isText(ext): return 'sm-txt-viewer'
+      case this.isImage(ext): return 'sm-image-viewer'
+      default: return 'sm-not-support'
       }
     }
   },
@@ -54,11 +54,11 @@ export default {
     },
     getIconColor(ext) {
       switch (true) {
-        case ext === 'pdf': return '#BF360C'
-        case this.isImage(ext): return '#7B1FA2'
-        case this.isText(ext): return '#455A64'
-        case this.isWord(ext): return '#1976D2'
-        case this.isExcel(ext): return '#1B5E20'
+      case ext === 'pdf': return '#BF360C'
+      case this.isImage(ext): return '#7B1FA2'
+      case this.isText(ext): return '#455A64'
+      case this.isWord(ext): return '#1976D2'
+      case this.isExcel(ext): return '#1B5E20'
       }
     }
   },

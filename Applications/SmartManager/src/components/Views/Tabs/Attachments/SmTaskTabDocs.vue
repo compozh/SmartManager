@@ -13,11 +13,9 @@
           <v-layout>
             <v-flex
               xs12
-              @click=""
               class="file-icon-container file-add px-2"
             >
-              <v-icon size="50">note_add</v-icon>
-              <span>Добавить</span>
+              <file-upload-document-viewer></file-upload-document-viewer>
             </v-flex>
           </v-layout>
           <v-layout column>
@@ -54,15 +52,14 @@
 </template>
 
 <script>
-  export default {
-    name: "sm-task-tab-docs"
-  }
+export default {
+  name: 'sm-task-tab-docs'
+}
 </script>
 
 <style scoped>
-
   .viewer-layout {
-    height: 88vh;
+    height: 86vh;
   }
 
   .hidden-md-and-down .viewer-layout {
@@ -106,6 +103,7 @@
 
   .file-add {
     position: sticky;
+    padding: 0 !important;
   }
 
   .file-icon {
@@ -134,5 +132,4 @@
   ::-webkit-scrollbar {
     display: none;
   }
-
 </style>

@@ -46,30 +46,30 @@
 </template>
 
 <script>
-  export default {
-    name: "sm-task-description",
-    props: ['description'],
-    data: () => ({
-      defaultDescHeight: 250,
-      iFrameHeight: '',
-      showHiddenDesc: false,
-    }),
-    methods: {
-      iFrameOnLoad(event) {
-        this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight
-      }
+export default {
+  name: 'sm-task-description',
+  props: ['description'],
+  data: () => ({
+    defaultDescHeight: 250,
+    iFrameHeight: '',
+    showHiddenDesc: false,
+  }),
+  methods: {
+    iFrameOnLoad(event) {
+      this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight
+    }
+  },
+  computed: {
+    compareDescHeight() {
+      return this.iFrameHeight > this.defaultDescHeight
     },
-    computed: {
-      compareDescHeight() {
-        return this.iFrameHeight > this.defaultDescHeight
-      },
-      setDescriptionHeight() {
-        return this.showHiddenDesc || !this.compareDescHeight
-          ? this.iFrameHeight + 5
-          : this.defaultDescHeight
-      }
+    setDescriptionHeight() {
+      return this.showHiddenDesc || !this.compareDescHeight
+        ? this.iFrameHeight + 5
+        : this.defaultDescHeight
     }
   }
+}
 </script>
 
 <style scoped>

@@ -1,0 +1,12 @@
+{
+  mes {
+    installations(workCenterCode: $workCenter) {
+      installations{
+        id
+        description
+        batchCode
+        batchBarcode
+      }
+    }
+  }
+}

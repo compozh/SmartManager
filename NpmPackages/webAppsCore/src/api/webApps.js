@@ -3,6 +3,7 @@ console.log('WebAppsCore is loaded!')
 let Vue = undefined
 
 import _ from 'lodash'
+import store from '../store/index'
 export class WebApps {
   /**
    * Конструктор
@@ -20,6 +21,7 @@ export class WebApps {
     this.__router = dependencies.router
     this.__options = options
     this.__axios = dependencies.axios
+    this.__store = dependencies.store
     Vue = vue
     this.__vm = new Vue({
       router: dependencies.router
@@ -62,7 +64,6 @@ export class WebApps {
       operationName: 'q'
     }
     let result = await this.__provider.GrapgQlQuery(args)
-
     // Ошибка загрузки
     if (!result.data.data || !result.data.data.webapps || !result.data.data.webapps.application) {
       throw new Error(`Ошибка загрузки приложения "${appId}"`)
@@ -79,7 +80,8 @@ export class WebApps {
 
     // загружаем в роутер маршруты приложения
     this.__setUpApplicationRouting()
-
+    // записываем в store описание приложения
+    this.__store.commit('WebApps/SetAppDescription', app)
   }
 
   /**

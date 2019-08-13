@@ -1,0 +1,8 @@
+{
+  smtasksMutation {
+    changeStatus(status: $status) {
+      success,
+      errorMessage
+    }
+  }
+}
