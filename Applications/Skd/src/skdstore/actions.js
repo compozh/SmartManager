@@ -1,5 +1,4 @@
 import {SkdApi} from '../api/skdApi'
-import _ from 'lodash'
 const api = new SkdApi()
 
 
