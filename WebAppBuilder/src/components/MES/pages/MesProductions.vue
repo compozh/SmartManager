@@ -1,7 +1,7 @@
 <template>
     <v-layout class="mes-productions">
 
-      <mes-content-loader class="mes-content-loader" v-if="!initializeProductions && !Object.keys(productions).legth" />
+      <mes-content-loader v-if="!initializeProductions && !Object.keys(productions).legth" />
 
       <v-flex v-if="initializeProductions" class="mes-productions-content">
         <v-card class="productions-card" v-for="production in productions" :key="production.factId">
@@ -90,7 +90,7 @@ export default {
   }
   .mes-content-loader {
     position: absolute;
-    z-index: 100;
+    z-index: 1;
     width: 100%;
   }
   .productions-card {

@@ -85,7 +85,7 @@ export default {
 }
   .mes-stuff .installations-block{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     padding: 0 10px;
     position: absolute;
@@ -132,5 +132,8 @@ export default {
   }
   .wait-for-data-block {
     padding: 20px;
+  }
+  .mes-content-loader {
+    z-index: 1;
   }
 </style>
