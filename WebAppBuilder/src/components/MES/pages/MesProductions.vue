@@ -93,6 +93,7 @@ export default {
   .mes-content-loader {
     position: absolute;
     z-index: 100;
+    width: 100%;
   }
   .productions-card {
     display: flex;

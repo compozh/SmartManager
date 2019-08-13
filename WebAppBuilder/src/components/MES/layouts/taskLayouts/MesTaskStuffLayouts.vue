@@ -1,5 +1,6 @@
 <template>
     <v-layout class="mes-task-stuff-layout">
+      <mes-content-loader class="mes-content-loader" v-if="!initializeInstallations" />
       <div class="installations-block" v-for="(installationsByWorkCenters, workCenter) in installations" :key="workCenter">
       <v-card class="installation-card" v-for="installation in installationsByWorkCenters" :key="installation.id">
          <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
@@ -15,7 +16,8 @@ export default {
   name: "mes-task-stuff-layout",
   props: {
     selectedTask: Object,
-    installations: Object
+    installations: Object,
+    initializeInstallations: Boolean
   },
   methods: {
     removeInstallation(installation, workCenterCode) {
@@ -62,6 +64,9 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+.mes-content-loader {
+  width: 100%;
 }
 .installation-card{
   display: flex;
