@@ -5,7 +5,7 @@ export default {
     message: '',
     visible: false
   },
-  menuMode: 'open', // Main menu state: open, mini, close
+  menuMode: 'close', // Main menu state: open, mini, close
   tasksPageState: {
     selectedTask: null,
     selectedTasksTab: 0,

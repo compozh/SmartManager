@@ -1,6 +1,6 @@
 <template>
   <v-app id="mes-app">
-    <v-navigation-drawer v-if="currentUser" app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp" v-model="drawer">
+    <v-navigation-drawer v-if="currentUser" app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndDown" v-model="drawer">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left extended :extension-height="3">
@@ -79,12 +79,7 @@ export default {
   },
   methods: {
       toggleMenuMode() {
-        if (this.$vuetify.breakpoint.mdAndUp) {
-          this.$store.dispatch("mes/toggleMenuMiniMode")
-        }
-        else {
-          this.drawer = !this.drawer;
-        }
+        this.drawer = !this.drawer;
       },
       closeSnackbar() {
         this.$store.dispatch('mes/closeSnackbar');
