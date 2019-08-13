@@ -9,7 +9,7 @@
                 :is-draggable="this.dragResizeMode"
                 :is-resizable="this.dragResizeMode"
                 :is-mirrored="false"
-                :vertical-compact="true"
+                :vertical-compact="false"
                 :margin="[20, 20]"
                 :use-css-transforms="true"
                 >

@@ -42,10 +42,11 @@ export default {
   color: rgba(179, 2, 2, 0.81) !important;
 }
 .mes-production-card {
+  height: 100%;
   display: flex;
   align-items: center;
-  max-height: 300px;
   border-left: 18px solid rgba(179, 2, 2, 0.81);
   flex-direction: column;
+  justify-content: center;
 }
 </style>
