@@ -1,9 +1,9 @@
 <template>
     <v-layout justify-center :style="`width: ${width}; height: ${height};`" >
-    <div v-if="items.length == 0" class="icon-frame justify-center">
+    <div :style="`width: ${width};`" v-if="items.length == 0" class="icon-frame justify-center">
         <v-icon v-text="'photo_camera'" :size="height"/>
     </div>
-    <div v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
+    <div :style="`width: ${width};`" v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
        <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover" :height="height" :width="width">
             <v-carousel-item
                 v-for="(item, i) in items"
