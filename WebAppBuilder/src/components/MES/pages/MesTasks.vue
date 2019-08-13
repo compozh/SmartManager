@@ -1,5 +1,11 @@
 <template>
   <v-container  class="main-block">
+    <mes-qr-scaner
+      v-if="qrScanerVisible" 
+      @changeQrScanerVisible=changeQrScanerVisible
+      @submitQrCode=submitQrCode
+    />
+
     <v-card>
       <multipane class="main-block-layout">
         <mes-dialog-component
@@ -32,7 +38,9 @@
                   @changeDragResizeMode="changeDragResizeMode"
                   @changeCurrentLayout="changeCurrentLayout"
                   @removeAllInstallations=removeAllInstallations
-                  @initInstallations=initInstallations />
+                  @initInstallations=initInstallations
+                  @changeQrScanerVisible=changeQrScanerVisible
+                  />
 
               </v-flex>
 
@@ -72,6 +80,7 @@ export default {
   components: { Multipane, MultipaneResizer },
   data() {
     return {
+      qrScanerVisible: false,
       initializeInstallations: false,
       initializeTasks: false,
       dialogProperties: {
@@ -233,10 +242,17 @@ export default {
     },
     getFormioData() {
       return this.$refs.acceptTaskLayout.getFormioData();
+    },
+    changeQrScanerVisible(visible) {
+      this.qrScanerVisible = visible;
+    },
+    submitQrCode(code) {
+      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: code, factId: 0 });
     }
   }
 }
 </script>
+
 <style type="text/css" scoped>
   .main-block {
     padding: 0 !important;
