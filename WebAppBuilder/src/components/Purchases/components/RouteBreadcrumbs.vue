@@ -1,18 +1,13 @@
 <template>
-    <v-layout class="wrap" v-if="show" row wrap="">
-            <v-breadcrumbs divider=">">
-                <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
-                    ...
-                </router-link>
-            </v-breadcrumbs>
+    <v-layout  class="wrap" v-if="show" row wrap>
         <v-flex>
-            <v-breadcrumbs :items="breadCrumbs" divider=">">
+            <v-breadcrumbs :items="$vuetify.breakpoint.mdAndUp ? this.simpleRoute(breadCrumbs):this.mobileRoute(breadCrumbs)" divider=">">
                 <template v-slot:item="props">
-                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim(), }}">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id != undefined ? props.item.id.trim():null }}">
                       {{ props.item.text }}
                     </router-link>
                 </template>
-            </v-breadcrumbs>
+            </v-breadcrumbs>       
         </v-flex>
     </v-layout>
 </template>
@@ -25,13 +20,36 @@ export default {
     props:{
     },
     data:() =>({
-        first: {}
+        currentId: new String(),
+        mobileRoute: function(data){
+            let result = [];
+            if(this.currentId.length == 15){
+                result.push(data[data.length-1]);
+            }else{
+                result.push(data[data.length-2]);
+            }
+
+            if(result.length == 1 && result[0]==undefined){
+                result.splice(0,1,{id:null,text:"..."});
+            }
+
+            return result;
+        },
+        simpleRoute: function(data){
+            let result = [];
+            for(let i=0;i<data.length;i++){
+                result.push(data[i]);
+            }
+            result.unshift({id:null, text:"..."});
+
+            return result;
+        }
     }),
     created(){
         this.$store.state.purchases.breadcrumbs = [];
-        let currentGroup = this.$route.params.catalogueId;
-        if(currentGroup != undefined){
-            api.getBreadcrumbsByGroup(currentGroup,false);
+        this.currentId = this.$route.params.catalogueId;
+        if(this.currentId != undefined){
+            api.getBreadcrumbsByGroup(this.currentId,false);
         }
     },
     computed:{
@@ -53,9 +71,11 @@ export default {
     watch: {
         '$route' (to, from){
             if(to.params.catalogueId != null){
-                api.getBreadcrumbsByGroup(to.params.catalogueId,false);
+                this.currentId = to.params.catalogueId;
+                api.getBreadcrumbsByGroup(this.currentId,false);
             }
             else{
+                this.currentId = undefined;
                 this.$store.state.purchases.breadcrumbs = [];
             }
         }
@@ -64,9 +84,6 @@ export default {
 </script>
 
 <style scoped>
-    .first{
-        font-size: 10.2em;
-    }
 
     .crumbs{
         font-size: 1em;

@@ -7,6 +7,13 @@
     "emptyPassword": "Ви не ввели пароль",
 	"NoDevices": "немає пристроїв",
 	"purchases":{
+		"Applications":{
+			"Title": "Титул",
+			"Number": "Номер",
+			"From": "З",
+			"To": "До",
+			"Statuses": "Статуси"
+		  },
 		"CreateOrderWindow":{
 		  "DocumentNumber": "Номер документа",
 		  "DocumentDate": "Дата документа",
@@ -14,6 +21,12 @@
 		  "Description": "Опис"
 		},
 		"Catalog":{
+			"CatalogItem":{
+				"Group":"Група",
+				"Designation":"Позначення",
+				"ResourceName": "Назва ресурсу",
+				"MesurementUnit": "Одиниця виміру"
+			},
 			"FastFilter":"Швидкий фільтр",
 			"Name":"Назва"
 		  },

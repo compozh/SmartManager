@@ -6,17 +6,17 @@
             <label v-text="$t('purchases.Catalog.FastFilter')" />
             <v-card elevation="0">
                 <v-card-text>
-                    <v-text-field v-model="search.title" label="Титл" clearable />
-                    <v-text-field v-model="search.number" label="Номер" clearable/>
+                    <v-text-field v-model="search.title" :label="$t('purchases.Applications.Title')" clearable />
+                    <v-text-field v-model="search.number" :label="$t('purchases.Applications.Number')" clearable/>
                     <date-text-field editable="true" :dateType="this.search" fieldName="date_from"
-                    labelName="С"/>
+                    :labelName="$t('purchases.Applications.From')"/>
                     <date-text-field editable="true" :dateType="this.search" fieldName="date_to"
-                    labelName="По"/>
+                    :labelName="$t('purchases.Applications.To')"/>
                 </v-card-text>
             </v-card>
             <v-card elevation="0">
                 <v-card-title>
-                    Статус
+                    {{$t('purchases.Applications.Statuses')}}
                 </v-card-title>
                 <v-card-text>
                     <template v-for="(item, index) in this.statuses">
