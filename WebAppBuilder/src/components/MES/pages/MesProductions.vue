@@ -1,8 +1,6 @@
 <template>
     <v-layout class="mes-productions">
 
-      <mes-production-toolbar class="mes-production-toolbar" />
-
       <mes-content-loader class="mes-content-loader" v-if="!initializeProductions && !Object.keys(productions).legth" />
 
       <v-flex v-if="initializeProductions" class="mes-productions-content">
@@ -102,6 +100,7 @@ export default {
     max-width: 400px;
     width: 360px;
     border-radius: 10px;
+    max-height: 300px;
   }
   .wait-for-data-block {
     padding: 20px;

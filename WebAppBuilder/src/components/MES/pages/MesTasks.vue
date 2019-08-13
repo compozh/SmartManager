@@ -19,7 +19,7 @@
             @changeCurrentTask=onChangeCurrentTask
             @changeSelectTasksTab=changeSelectTasksTab />
 
-            <multipane-resizer><v-icon class="resizer-icon">drag_handle</v-icon></multipane-resizer>
+            <multipane-resizer><v-icon class="multipane-resizer-icon">drag_handle</v-icon></multipane-resizer>
 
             <v-layout column class="task-description-layout">
               <v-flex class="button-toolbar" row wrap >
@@ -255,7 +255,7 @@ export default {
     user-select: none;
     box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
   }
-  .resizer-icon {
+  .multipane-resizer-icon {
     user-select: none;
     transform: rotate(90deg);
     width: 10px;
