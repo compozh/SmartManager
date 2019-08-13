@@ -18,7 +18,7 @@ module.exports = {
 
   },
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/webapps2/' + path.basename(process.cwd(), path.extname(process.cwd())) 
+    ? process.env.VUE_APP_BASE_PATH + path.basename(process.cwd(), path.extname(process.cwd())) 
     : '/',
   pluginOptions: {
     webpackBundleAnalyzer: {
