@@ -3,10 +3,11 @@
   <head>
     <script>
       var devMode = '<%= NODE_ENV %>' == "development"
+      var paths = "<%= BASE_URL %>".split('/')
       devMode = false
       window.myConfig = {
         GrapgQlUrl: devMode ? "http://localhost:5002/" : "https://m.it.ua/GraphQlServer/",
-        BASE_URL:"<%= BASE_URL %>",
+        BASE_URL: paths[1]?'/'+paths[1]+'/':'/',
         WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
         SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
       }
