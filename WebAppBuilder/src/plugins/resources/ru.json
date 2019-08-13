@@ -8,8 +8,7 @@
     "NoDevices": "Нет устройств",
 	"purchases":{
 		"Applications":{
-			"Title": "Титл",
-			"Number": "Номер",
+			"Search": "Поиск",
 			"From": "С",
 			"To": "По",
 			"Statuses": "Статусы"

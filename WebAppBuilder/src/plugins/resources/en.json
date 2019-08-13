@@ -8,8 +8,7 @@
     "NoDevices": "No devices",
     "purchases":{
       "Applications":{
-        "Title": "Title",
-        "Number": "Number",
+        "Search": "Search",
         "From": "From",
         "To": "To",
         "Statuses": "Statuses"

@@ -8,8 +8,7 @@
 	"NoDevices": "немає пристроїв",
 	"purchases":{
 		"Applications":{
-			"Title": "Титул",
-			"Number": "Номер",
+			"Search": "Пошук",
 			"From": "З",
 			"To": "До",
 			"Statuses": "Статуси"
