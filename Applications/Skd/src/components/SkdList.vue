@@ -45,10 +45,6 @@ export default {
         return null
       }
       return this.$store.getters['skd/getGroupedUserList']
-      // if (!this.$store.getters['skd/getUsers']) {
-      //   return null
-      // }
-      // return this.$store.getters['skd/getUsers']
     },
     ItemsOffset () {
       return this.$store.getters['skd/getItemsOffset']
@@ -74,15 +70,10 @@ export default {
           break
         }
       }
-      // this.loading = false
-      // return itemsenp[0].users
       return itemsenp
     }
   },
   methods: {
-    // getUsers() {
-    //   this.$store.dispatch('skd/getUsers', {loader: ''})
-    // },
     loadMore() {
       this.$store.dispatch('skd/setItemsOffset', 20)
     }
@@ -91,7 +82,7 @@ export default {
     this.users
   },
   created: function() {
-    this.$store.dispatch('skd/getUsers',{loader: ''})
+    this.$store.dispatch('skd/getUsers')
   },
   mounted() {
     window.addEventListener('scroll', e => {
