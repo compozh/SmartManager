@@ -2,7 +2,7 @@
   <v-card class="mes-tasks-component">
     <v-layout column class="mes-tasks-component-layout" scrollable>
       <v-flex fill-height class="grid-tabs">
-          <v-tabs show-arrows v-model="selectedTab">
+          <v-tabs v-model="selectedTab">
             <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
               <v-badge color="#326DA8" overlap>
                 <template v-slot:badge>

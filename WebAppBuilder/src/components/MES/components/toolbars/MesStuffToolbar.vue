@@ -54,14 +54,14 @@ export default {
 
 <style type="text/css" scoped>
   .toolbar {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
     padding-left: 10px;
   }
   .toolbar-basebuttons{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
@@ -69,7 +69,6 @@ export default {
     margin: 0;
   }
   .qr-input{
-    width: 400px;
     height: 55px;
     max-width: 400px;
   }

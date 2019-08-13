@@ -80,13 +80,13 @@ export default {
 <style type="text/css" scoped>
   .toolbar {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
   }
   .toolbar-basebuttons{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
     height: 60px;
@@ -99,7 +99,6 @@ export default {
     margin: 0;
   }
   .qr-input{
-    width: 400px;
     max-width: 400px;
     height: 55px;
   }

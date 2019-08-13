@@ -13,7 +13,7 @@ export default {
 
 <style type="text/css" scoped>
   .toolbar {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
     padding-left: 10px;
