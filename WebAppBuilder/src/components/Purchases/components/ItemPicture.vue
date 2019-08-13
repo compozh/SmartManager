@@ -47,15 +47,22 @@
             hover: false
         }),
         methods:{
-           respCallback(resp){
-               var contents = resp.data.purchases[this.entityName];
-               if (contents != null && contents.content.length > 0)
-               {
-                    if (contents.content)
-                    {
+            respCallback(resp){
+                // debugger;
+                var contents = resp.data.purchases[this.entityName];
+                if (contents != null) {
+                    if (contents.content && contents.content.length > 0) {
                         this.items = this.items.concat(contents.content);
                     }
-               }
+                    if(contents.attachments && contents.attachments.length > 0) {
+                        for (const key in contents.attachments) {
+                            if (contents.attachments.hasOwnProperty(key)) {
+                                const element = contents.attachments[key];
+                                this.items.push(element.url+"&nodownload=1&cache=0")
+                            }
+                        }
+                    }
+                }
            },
            mouceMove(val){
                this.hover = val;
