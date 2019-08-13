@@ -1,8 +1,6 @@
 import {MesApi} from '../api/mesApi'
-import {DeviceUUID} from '../../../../node_modules/device-uuid'
 
 const api = new MesApi()
-const deviceUUID = new DeviceUUID()
 
 export default {
   async initializeProperties({commit}) {
@@ -18,7 +16,7 @@ export default {
   async initializeWorkCenters({ commit }) {
     commit('closeSnackbar');
     try {
-      let uuid = deviceUUID.get(),
+      let uuid = "d520c7a8-421b-4563-b955-f5abc56b97ec",
         result = await api.getWorkCentersFromGql(uuid);
       var workCenters = {};
       result.data.mes.workCenters.forEach(workCenter => {
