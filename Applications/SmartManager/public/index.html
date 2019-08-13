@@ -5,8 +5,13 @@
       var devMode = '<%= NODE_ENV %>' == "development"
       devMode = false
       window.myConfig = {
-        GrapgQlUrl: devMode ? "http://localhost:5002/" : "https://m.it.ua/GraphQlServer/",
+<<<<<<< HEAD
+        GrapgQlUrl: devMode ? "http://localhost:5002/" : "/GraphQlServer/",
         BASE_URL: "<%= VUE_APP_BASE_PATH %>",
+=======
+        GrapgQlUrl: devMode ? "http://localhost:5002/" : "/GraphQlServer/",
+        BASE_URL:"<%= BASE_URL %>",
+>>>>>>> 48e6d164b093dba09c8ce31b2a72b95b85c8ea69
         WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
         SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
       }
