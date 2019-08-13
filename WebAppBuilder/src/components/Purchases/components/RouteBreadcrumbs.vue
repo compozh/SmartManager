@@ -23,13 +23,10 @@ export default {
         currentId: new String(),
         mobileRoute: function(data){
             let result = [];
-            let item = {};
             if(this.currentId.length == 15){
-                item = data[data.length-1];
-                result.push(item);
+                result.push(data[data.length-1]);
             }else{
-                item = data[data.length-2];
-                result.push(item);
+                result.push(data[data.length-2]);
             }
 
             if(result.length == 1 && result[0]==undefined){
@@ -39,7 +36,6 @@ export default {
             return result;
         },
         simpleRoute: function(data){
-            debugger;
             let result = [];
             for(let i=0;i<data.length;i++){
                 result.push(data[i]);
