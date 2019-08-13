@@ -14,19 +14,27 @@
                             <v-card-text>
                                 <v-layout column>
                                     <v-flex>
-                                        <p class="card-property">Группа:</p>
+                                        <p class="card-property">
+                                            {{$t('purchases.Catalog.CatalogItem.Group')+":"}}
+                                        </p>
                                         <p class="card-property-value">{{ item.resourceGroup.name}} </p>
                                     </v-flex>
                                     <v-flex>
-                                        <p class="card-property">Обозначение:</p>
+                                        <p class="card-property">
+                                            {{$t('purchases.Catalog.CatalogItem.Designation')+":"}}
+                                        </p>
                                         <p class="card-property-value">{{ item.id}} </p>
                                     </v-flex>
                                     <v-flex>
-                                        <p class="card-property">Название ресурса:</p>
+                                        <p class="card-property">
+                                            {{$t('purchases.Catalog.CatalogItem.ResourceName')+":"}}
+                                        </p>
                                         <p class="card-property-value">{{ item.name}} </p>
                                     </v-flex>                                    
                                     <v-flex>
-                                        <p class="card-property">Единица измерения:</p>
+                                        <p class="card-property">
+                                            {{$t('purchases.Catalog.CatalogItem.MesurementUnit')+":"}}
+                                        </p>
                                         <p class="card-property-value">{{item.measurementUnit.fullName}} </p>
                                     </v-flex>
                                 </v-layout>
