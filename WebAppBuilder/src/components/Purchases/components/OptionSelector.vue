@@ -11,7 +11,7 @@
                                 <header> {{caption}} </header>
                                 <template v-for="(item) in items">
                                     <v-list-tile
-                                    :key="item.Title"
+                                    :key="item.Key"
                                     >
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="item.Title" @click="onChose(item.Key)"></v-list-tile-title>
@@ -53,7 +53,14 @@ export default {
             const list = this.$store.state.purchases.chose.list;
             if (list.length  > 0) 
             {
-                this.items = list;
+                this.items = [];
+                list.forEach(element => {
+                    if(!(this.items && this.items.some(w=>w.Key == element.Key)))
+                    {
+                        this.items.push(element);
+                    }
+                });
+                //this.items = list;
                 this.caption = this.$store.state.purchases.chose.caption;
                 this.show = true;
             }
