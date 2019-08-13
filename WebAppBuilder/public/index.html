@@ -3,7 +3,7 @@
   <head>
     <script>
       var devMode = '<%= NODE_ENV %>' == "development"
-      devMode = false
+      //devMode = false
       window.myConfig = {
         GrapgQlUrl: devMode ? "http://localhost:5002/" : "/GraphQlServer/",
         BASE_URL:"<%= BASE_URL %>",
