@@ -30,7 +30,6 @@
     </v-dialog>
 </template>
 
-
 <script>
 export default {
     name: "mes-dialog-component",

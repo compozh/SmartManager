@@ -183,13 +183,13 @@ export default {
     changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask;
       let workCenter = this.workCenters[newSelectedTask.workCenterCode];
-      this.initializeFormioByWorkCenter(workCenter);
+      this.initializeFormioByWorkCenter(workCenter, newSelectedTask);
       this.changeCurrentLayout('mes-task-main-layout');
     },
-    initializeFormioByWorkCenter(workCenter) {
+    initializeFormioByWorkCenter(workCenter, task) {
       let properties = {
         workCenterCode: workCenter.code,
-        workBarcode: this.selectedTask.barcode
+        workBarcode: task.barcode
       };
       this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties });
     },
