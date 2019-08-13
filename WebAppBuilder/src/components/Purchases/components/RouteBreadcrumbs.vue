@@ -1,18 +1,25 @@
 <template>
-    <v-layout class="wrap" v-if="show" row wrap="">
-            <v-breadcrumbs divider=">">
-                <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
-                    ...
-                </router-link>
-            </v-breadcrumbs>
+    <v-layout  class="wrap" v-if="show" row wrap>
+        <v-breadcrumbs v-if="$vuetify.breakpoint.mdAndUp || breadCrumbs.length==1" divider=">">
+            <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
+                ...
+            </router-link>
+        </v-breadcrumbs>
         <v-flex>
-            <v-breadcrumbs :items="breadCrumbs" divider=">">
+            <v-breadcrumbs v-if="$vuetify.breakpoint.mdAndUp" :items="breadCrumbs" divider=">">
                 <template v-slot:item="props">
-                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim(), }}">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim() }}">
                       {{ props.item.text }}
                     </router-link>
                 </template>
-            </v-breadcrumbs>
+            </v-breadcrumbs>     
+            <v-breadcrumbs v-else :items="this.currentId.length==15 ? [breadCrumbs[breadCrumbs.length-1]]: [breadCrumbs[breadCrumbs.length-2]]">
+                <template v-slot:item="props">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim() }}">
+                      {{ props.item.text }}
+                    </router-link>
+                </template>
+            </v-breadcrumbs>           
         </v-flex>
     </v-layout>
 </template>
@@ -25,6 +32,20 @@ export default {
     props:{
     },
     data:() =>({
+        currentId: new String(),
+        mobileRoute: function(){
+            let result = [];
+            let item = {};
+            if(currentId.length == 15){
+                item = breadCrumbs[breadCrumbs.length-1];
+                result.push(item);
+            }else{
+                item = breadCrumbs[breadCrumbs.length-2];
+                result.push(item);
+            }
+
+            return result;
+        },
         first: {}
     }),
     created(){
@@ -53,9 +74,11 @@ export default {
     watch: {
         '$route' (to, from){
             if(to.params.catalogueId != null){
+                this.currentId = to.params.catalogueId;
                 api.getBreadcrumbsByGroup(to.params.catalogueId,false);
             }
             else{
+                this.currentId = new String();
                 this.$store.state.purchases.breadcrumbs = [];
             }
         }

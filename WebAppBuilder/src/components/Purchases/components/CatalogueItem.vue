@@ -24,13 +24,7 @@
                                             {{$t('purchases.Catalog.CatalogItem.Designation')+":"}}
                                         </p>
                                         <p class="card-property-value">{{ item.id}} </p>
-                                    </v-flex>
-                                    <v-flex>
-                                        <p class="card-property">
-                                            {{$t('purchases.Catalog.CatalogItem.ResourceName')+":"}}
-                                        </p>
-                                        <p class="card-property-value">{{ item.name}} </p>
-                                    </v-flex>                                    
+                                    </v-flex>                                  
                                     <v-flex>
                                         <p class="card-property">
                                             {{$t('purchases.Catalog.CatalogItem.MesurementUnit')+":"}}
@@ -41,10 +35,10 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-layout row>
-                                    <v-flex lg1 xl1 justify-start>
+                                    <v-flex lg1 xl1 md12 sm12 xs12 justify-start>
                                         <favorite-btn :v-model="item" value="a" alias="KSM" :keyValue="item.id.toString()"/>
                                     </v-flex>     
-                                    <v-flex lg1 xl1>
+                                    <v-flex lg1 xl1 md12 sm12 xs12>
                                         <add2cart-btn entityType="resource" :keyValue="item.id.toString()"/>
                                     </v-flex>                  
                                 </v-layout>
