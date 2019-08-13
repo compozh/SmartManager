@@ -29,6 +29,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import VueGridLayout from '../../../../../node_modules/vue-grid-layout';
 
 export default {
   name: "mes-task-main-layout",
