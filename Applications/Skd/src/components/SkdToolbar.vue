@@ -29,7 +29,7 @@ export default {
   computed: {
     filter: {
       get () {
-        return this.$store.state.skd.filter.value
+        return this.$store.state.skd.filter
       },
       set (value) {
         this.$store.dispatch('skd/setFilter', value)
