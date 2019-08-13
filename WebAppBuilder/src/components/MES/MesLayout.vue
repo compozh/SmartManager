@@ -79,7 +79,12 @@ export default {
   },
   methods: {
       toggleMenuMode() {
-        this.drawer = !this.drawer;
+        if (this.$vuetify.breakpoint.mdAndUp) {
+          this.$store.dispatch("mes/toggleMenuMiniMode")
+        }
+        else {
+          this.drawer = !this.drawer;
+        }
       },
       closeSnackbar() {
         this.$store.dispatch('mes/closeSnackbar');
