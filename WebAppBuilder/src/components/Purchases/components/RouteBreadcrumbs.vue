@@ -1,25 +1,13 @@
 <template>
     <v-layout  class="wrap" v-if="show" row wrap>
-        <v-breadcrumbs v-if="$vuetify.breakpoint.mdAndUp || breadCrumbs.length==1" divider=">">
-            <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
-                ...
-            </router-link>
-        </v-breadcrumbs>
         <v-flex>
-            <v-breadcrumbs v-if="$vuetify.breakpoint.mdAndUp" :items="breadCrumbs" divider=">">
+            <v-breadcrumbs :items="$vuetify.breakpoint.mdAndUp ? this.simpleRoute(breadCrumbs):this.mobileRoute(breadCrumbs)" divider=">">
                 <template v-slot:item="props">
-                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim() }}">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id != undefined ? props.item.id.trim():null }}">
                       {{ props.item.text }}
                     </router-link>
                 </template>
-            </v-breadcrumbs>     
-            <v-breadcrumbs v-else :items="this.currentId.length==15 ? [breadCrumbs[breadCrumbs.length-1]]: [breadCrumbs[breadCrumbs.length-2]]">
-                <template v-slot:item="props">
-                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim() }}">
-                      {{ props.item.text }}
-                    </router-link>
-                </template>
-            </v-breadcrumbs>           
+            </v-breadcrumbs>       
         </v-flex>
     </v-layout>
 </template>
@@ -33,26 +21,39 @@ export default {
     },
     data:() =>({
         currentId: new String(),
-        mobileRoute: function(){
+        mobileRoute: function(data){
             let result = [];
             let item = {};
-            if(currentId.length == 15){
-                item = breadCrumbs[breadCrumbs.length-1];
+            if(this.currentId.length == 15){
+                item = data[data.length-1];
                 result.push(item);
             }else{
-                item = breadCrumbs[breadCrumbs.length-2];
+                item = data[data.length-2];
                 result.push(item);
+            }
+
+            if(result.length == 1 && result[0]==undefined){
+                result.splice(0,1,{id:null,text:"..."});
             }
 
             return result;
         },
-        first: {}
+        simpleRoute: function(data){
+            debugger;
+            let result = [];
+            for(let i=0;i<data.length;i++){
+                result.push(data[i]);
+            }
+            result.unshift({id:null, text:"..."});
+
+            return result;
+        }
     }),
     created(){
         this.$store.state.purchases.breadcrumbs = [];
-        let currentGroup = this.$route.params.catalogueId;
-        if(currentGroup != undefined){
-            api.getBreadcrumbsByGroup(currentGroup,false);
+        this.currentId = this.$route.params.catalogueId;
+        if(this.currentId != undefined){
+            api.getBreadcrumbsByGroup(this.currentId,false);
         }
     },
     computed:{
@@ -75,10 +76,10 @@ export default {
         '$route' (to, from){
             if(to.params.catalogueId != null){
                 this.currentId = to.params.catalogueId;
-                api.getBreadcrumbsByGroup(to.params.catalogueId,false);
+                api.getBreadcrumbsByGroup(this.currentId,false);
             }
             else{
-                this.currentId = new String();
+                this.currentId = undefined;
                 this.$store.state.purchases.breadcrumbs = [];
             }
         }
@@ -87,9 +88,6 @@ export default {
 </script>
 
 <style scoped>
-    .first{
-        font-size: 10.2em;
-    }
 
     .crumbs{
         font-size: 1em;
