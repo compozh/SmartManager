@@ -2,16 +2,10 @@
 <div class='group-container'>
  <v-list class="pa-0">
   <v-list-tile avatar>
-    <v-list-tile-avatar>
-      <img :src="curentUser.UserPhoto">
-    </v-list-tile-avatar>
-
+        <user-panel mini="true"></user-panel>
     <v-list-tile-content>
       <v-list-tile-title class="textname">{{curentUser.UserName}}</v-list-tile-title>
     </v-list-tile-content>
-    <v-btn flat icon v-on:click="logOut">
-      <v-icon >exit_to_app</v-icon>
-    </v-btn>
   </v-list-tile>
 	</v-list>
 

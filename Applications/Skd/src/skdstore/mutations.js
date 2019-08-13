@@ -1,6 +1,15 @@
 var moment = require('moment')
 import 'moment/locale/ru'
 export default {
+  changeSort (state) {
+    if (state.sort === 0) {
+      state.sort = 1
+      localStorage.setItem('sorting',1)
+      return
+    }
+    state.sort = 0
+    localStorage.setItem('sorting',0)
+  },
   setUsers(state, payload) {
     state.users = payload.skd
   },

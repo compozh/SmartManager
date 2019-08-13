@@ -27,7 +27,6 @@ var userFilterFunction = state => {
 export default {
   getUsersListFiltered: state => userFilterFunction(state),
   getGroupedUserList: state => {
-    console.log(123)
     if (!state.users.personsTable) {
       return 
     }
@@ -91,34 +90,7 @@ export default {
       }
     })
   },
-  // getUsers: state => {
-  //   if (!state.users.personsTable) {
-  //     return null
-  //   }
-  //   let filter = state.filter
-  //   if (!filter && !state.users.personsTable) {
-  //     return null
-  //   }
 
-
-  //   if (filter.name == 'search') {
-  //     var users = _.filter(
-  //       state.users.personsTable.data, 
-  //       function(u) {
-  //         return u.fullName.toLowerCase().indexOf(filter.value.toLowerCase()) > -1 ||
-  //         u.mobileTel.toLowerCase().indexOf(filter.value.toLowerCase()) > -1 ||
-  //         u.email.toLowerCase().indexOf(filter.value.toLowerCase()) > -1
-  //       })
-  //     state.users.personsTable.test = true
-  //     return users
-  //   }
-  //   if (filter.name == 'search') {}
-
-      
-
-  //   state.users.personsTable.test = false
-  //   return state.users.personsTable.data
-  // },
   getItemsOffset: state => state.itemsOffset,
   getFilter: state => state.filter,
 }
