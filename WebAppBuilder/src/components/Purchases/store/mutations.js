@@ -39,12 +39,12 @@ export default {
   addToFavLists(state, payload){
     let favListItem = { 
       alias : payload.Alias,  
-      listiD : payload.Id.toString(), 
+      id : payload.Id.toString(), 
       keyValues : payload.KeyValues, 
       caption : payload.Caption, 
       isDefaultList: payload.IsDefaultList
     };
-    /*state.favlists = */state.favlists.push(favListItem);
+    state.favlists.push(favListItem);
   },
   setChose(state, payload){
     //state.chose.list = payload.list;

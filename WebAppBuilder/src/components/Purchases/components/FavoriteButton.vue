@@ -21,7 +21,7 @@ const api = new PurchasesApi();
 export default {
     name: "favorite-btn",
     data:()=>({
-        inFavourite: false
+        //inFavourite: false
     }),
     props:{
         keyValue:{
@@ -40,32 +40,35 @@ export default {
         
     },
     created: function () {
-            this.$store.watch(state => state.purchases.favlists, this.checkInFavourite);
-            this.checkInFavourite();
+        },
+        computed:{
+            favlists:{
+            get: function() {
+                return this.$store.state.purchases.favlists;
+                //return this.$store.getters["purchases/getFavLists"];
+                }
+            },
+            inFavourite:{
+                get: function() {
+                    if(this.favlists)
+                    {
+                        return this.favlists.filter((w)=>w.alias == this.alias).map((w) => w.keyValues).
+                            reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
+                    }
+                    else
+                    {
+                        return this.isInFavorite;
+                    }
+                }
+            }
         },
     methods:{
         async favClick(){
             if(!this.inFavourite){
                  await api.addToFavoritesOneMutation(this.alias, this.keyValue.toString(), this);
             }else{
-                 api.deleteItemFromFavorites(this.alias, this.keyValue.toString());
+                 await api.deleteItemFromFavorites(this.alias, this.keyValue.toString(), this);
             }
-            
-            this.checkInFavourite();
-        },
-        checkInFavourite(){
-            //this.inFavourite = false;
-            const favlists = this.$store.state.purchases.favlists;
-            if(favlists)
-            {
-                this.inFavourite = favlists.filter((w)=>w.alias == this.alias).map((w) => w.keyValues).
-                    reduce((prev, next) => { return prev.concat(next); }, []).some( w => w == this.keyValue);
-            }
-            else
-            {
-                this.inFavourite = this.isInFavorite;
-            }
-            
         }
     }
 }

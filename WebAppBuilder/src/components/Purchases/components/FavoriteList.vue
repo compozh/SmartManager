@@ -58,6 +58,7 @@
 import {PurchasesApi} from "../api/purchasesApi";
 import _ from 'lodash';
 import draggable from 'vuedraggable';
+import { debuglog } from 'util';
 
 const api = new PurchasesApi();
 
@@ -92,7 +93,7 @@ const api = new PurchasesApi();
         saveVisible:false
     }),
     created: function () {
-       api.getFavLists();
+       //api.getFavLists();
       },
     destroyed(){
       this.$store.state.resources = [];
@@ -101,15 +102,6 @@ const api = new PurchasesApi();
       this.$store.state.resources = [];
     },
     computed:{
-      dragOptions(){
-          return {
-         animation: 1,
-        group: 'fd',
-        ghostClass: "2",
-        disabled: false,
-        sort: false
-        };
-      },
       applications:{
          get: function() {
           return this.$store.getters["purchases/getApplications"];
@@ -152,8 +144,7 @@ const api = new PurchasesApi();
       },
       allFavLists: {
         get: function() {
-          let test = this.$store.getters["purchases/getFavLists"];
-            return test;
+            return this.$store.getters["purchases/getFavLists"];
         },
         set: function(newVal){
           this.$store.commit('purchases/setFavLists', newVal);
@@ -183,12 +174,15 @@ const api = new PurchasesApi();
       return false;
       },
       end(){
-        api.mutationChangeListForItem(this.itemToMove.id.toString(), this.listToAdd.id.toString(), this.listToRemove.id.toString());
         let listToRemove = this.allFavLists.find(w=>w.id.toString() == this.listToRemove.id.toString());
         let listToAdd = this.allFavLists.find(w=>w.id.toString() == this.listToAdd.id.toString());
+        if(listToRemove.id.toString() != listToAdd.id.toString()){
+          api.mutationChangeListForItem(this.itemToMove.id.toString(), this.listToAdd.id.toString(), this.listToRemove.id.toString());
+         
+          listToRemove.keyValues = listToRemove.keyValues.filter(w => w != this.itemToMove.id.toString());
+          listToAdd.keyValues.push(this.itemToMove.id.toString());
+        }
         
-        listToRemove.keyValues = listToRemove.keyValues.filter(w => w != this.itemToMove.id.toString());
-        listToAdd.keyValues.push(this.itemToMove.id.toString());
 
         this.listToRemove = undefined;
         this.listToAdd = undefined;
