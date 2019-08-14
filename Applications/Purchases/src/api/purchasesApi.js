@@ -38,14 +38,14 @@ import deleteItemFromFavorites from './graphql/deleteItemFromFavorites.gql'
 import mutationCreateFavList from './graphql/mutationCreateFavList.gql'
 import applications from './graphql/applications.gql'
 import docStatus from '../api/graphql/docStatus.gql'
-// import recoursesByIds from '../api/graphql/recoursesByIds.gql' 
-// import applicationsByIds from '../api/graphql/applicationsByIds.gql' 
-// import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.gql'
+import recoursesByIds from '../api/graphql/recoursesByIds.gql' 
+import applicationsByIds from '../api/graphql/applicationsByIds.gql' 
+import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.gql'
 
 
 const options = {
   credentials: 'include',
-  uri: myConfig.GrapgQlUrl + 'api/graphql',
+  uri: window.myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
     'schema': 'PurchasesSchema'

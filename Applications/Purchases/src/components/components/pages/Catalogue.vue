@@ -70,7 +70,7 @@
 
 <script>
 import {PurchasesApi} from '../../../api/purchasesApi'
-
+import _ from 'lodash'
 const api = new PurchasesApi()
 export default {
   name: 'catalogue',
@@ -122,8 +122,6 @@ export default {
     resource_items: {
       get: function() {
         if (this.search === '') {                     
-          let test = this.$store.getters['purchases/getResources']
-
           return this.$store.getters['purchases/getResources']
         }
 
@@ -137,7 +135,6 @@ export default {
           return this.$store.getters['purchases/getTestItems']
         }
           
-        let tt = this.$store.getters['purchases/getTestItems']
         return _.filter(this.$store.getters['purchases/getTestItems'], this.searchCallback)
       }
     },

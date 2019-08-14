@@ -29,9 +29,6 @@ export default {
   addToFavorites({commit}, payload) {
     commit('addToFavorites', payload)
   },
-  addToFavoritesSecond({commit}, payload) {
-    commit('addToFavoritesSecond', payload)
-  },
   clearResourceGroups({commit}) {
     commit('clearResourceGroups', payload)
   },
@@ -43,5 +40,8 @@ export default {
   },
   setTitleState({commit}, payload) {
     commit('setTitleState', payload)
+  },
+  setBreadCrumbs({commit}, payload) {
+    commit('setBreadCrumbs', payload)
   },
 }

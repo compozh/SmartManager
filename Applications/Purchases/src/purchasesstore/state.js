@@ -3,10 +3,12 @@ export default {
   resources: [],
   testItems: [],
   cartitems: [],
+  breadcrumbs: [],
   snackbarMessage: '',
   chose: { list: [], /*key:undefined,*/ method: function() {}, caption: undefined },
-  favlists: [{ alias: '', listiD: '', keyValues: [], caption: '' , isDefaultList: false}],
+  favlists: undefined,
   applications: [],
   showTitle: true,
   docStatus: [],
+  favResources: [],
 }

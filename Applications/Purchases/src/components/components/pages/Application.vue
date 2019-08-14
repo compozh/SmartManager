@@ -65,7 +65,7 @@
 
 <script>
 import moment from 'moment'
-import {PurchasesApi} from '../api/purchasesApi'
+import {PurchasesApi} from '../../../api/purchasesApi'
 
 const api = new PurchasesApi()
 

@@ -71,23 +71,13 @@
 
 <script>
 
-import Axios from 'axios'
-import purchasesSchemaAxios from '../../../api/BaseFunctions'
 import {PurchasesApi} from '../../../api/purchasesApi'
-import RemoveButton from  '../../RemoveButton.vue' 
-import ModalWindowOrderCreation from '../../ModalWindowOrderCreation.vue'
-import TooltipCartItemWithResource from '../../TooltipCartItemWithResource.vue'
-import TextAreaWithLockEdit from '../../TextAreaLockEdit.vue'
-import { debug } from 'util'
 
 const api = new PurchasesApi()
 
 export default {
   name: 'cart-list',
   components: {
-    RemoveButton,
-    ModalWindowOrderCreation,
-    TooltipCartItemWithResource
   },
   computed: {
     cardBinding() { 

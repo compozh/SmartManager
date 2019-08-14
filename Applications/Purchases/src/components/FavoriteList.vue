@@ -56,7 +56,7 @@
 <script>
 
 import {PurchasesApi} from '../api/purchasesApi'
-import draggable from 'vuedraggable'
+import draggable from  './Draggable'// 'vuedraggable'
 
 const api = new PurchasesApi()
 
