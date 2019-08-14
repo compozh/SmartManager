@@ -10,10 +10,10 @@
 </template>
 
 <script>
-  export default {
-    name: "smTaskTabAgree",
-    props: ['taskDetail']
-  }
+export default {
+  name: 'smTaskTabAgree',
+  props: ['taskDetail']
+}
 </script>
 
 <style scoped>

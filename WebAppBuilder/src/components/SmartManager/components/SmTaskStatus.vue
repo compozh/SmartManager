@@ -34,10 +34,10 @@
 <script>
   export default {
     name: "sm-task-status",
-    props: ['task', 'chip'],
+    props: ['status', 'chip'],
     computed: {
       taskStatus() {
-        switch (this.task.status) {
+        switch (this.status) {
           case '':
             return {
               color: 'orange darken-2',

@@ -19,7 +19,7 @@
                 </v-flex>
                 <v-flex d-flex shrink>
                   <sm-task-icons :task="subTask"></sm-task-icons>
-                  <sm-task-status :task="subTask"></sm-task-status>
+                  <sm-task-status :status="subTask.status"></sm-task-status>
                 </v-flex>
               </v-layout>
             </v-flex>

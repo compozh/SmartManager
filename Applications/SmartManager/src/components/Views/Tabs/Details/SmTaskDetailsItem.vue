@@ -11,7 +11,8 @@
       <v-layout row wrap text-xs-left>
         <v-flex xs12 pt-2>
           <v-chip
-            v-for="option in options"
+            v-for="(option, index) in options"
+            :key="index"
             small outline disabled
             :color="option.color"
           >
@@ -32,7 +33,8 @@
           <v-layout row wrap>
             <v-flex xs12>
               <v-layout
-                v-for="role in members"
+                v-for="(role, index) in members"
+                :key="index"
               >
                 <v-flex
                   xs4 sm3 md2
@@ -44,7 +46,8 @@
                 </v-flex>
                 <v-flex pl-2>
                   <v-chip
-                    v-for="member in role.members"
+                    v-for="(member, index) in role.members"
+                    :key="index"
                     small outline disabled
                     :color="role.color"
                   >
@@ -93,9 +96,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'sm-task-details-item'
-  }
+export default {
+  name: 'sm-task-details-item'
+}
 </script>
 
 <style scoped>

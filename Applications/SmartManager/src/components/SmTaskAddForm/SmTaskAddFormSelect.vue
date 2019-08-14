@@ -9,11 +9,13 @@
     item-value="userId"
     :multiple="multiple"
     :rules="rules"
+    :disabled="uploading"
   >
     <template v-slot:selection="data">
       <v-chip
         :selected="data.selected"
         close
+        color="grey lighten-3"
         class="chip--select-multi"
         @input="remove(data.item)"
       >
@@ -40,26 +42,28 @@
 </template>
 
 <script>
-  export default {
-    name: "sm-task-add-form-select",
-    props: ['label', 'value', 'multiple', 'rules'],
-    computed: {
-      users() {
-        return this.$store.state.sm.users
+export default {
+  name: 'sm-task-add-form-select',
+  props: ['label', 'value', 'multiple', 'rules', 'uploading'],
+  computed: {
+    users() {
+      return this.$store.state.sm.users
+    }
+  },
+  methods: {
+    remove(item) {
+      if (typeof this.value === 'string') {
+        return this.$emit('input', '')
       }
-    },
-    methods: {
-      remove(item) {
-        if (typeof this.value === 'string') {
-          return this.$emit('input', '')
-        }
-        const index = this.value.indexOf(item.userId)
-        if (index >= 0) this.value.splice(index, 1)
-      }
+      const index = this.value.indexOf(item.userId)
+      if (index >= 0) { this.value.splice(index, 1) }
     }
   }
+}
 </script>
 
 <style scoped>
-
+  .v-avatar div {
+    height: 30px;
+  }
 </style>

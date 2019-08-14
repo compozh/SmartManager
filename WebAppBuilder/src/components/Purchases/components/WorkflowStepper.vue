@@ -59,7 +59,7 @@ const api = new PurchasesApi();
                 return resp.data.purchases.docStatus ;
             },
         
-            isCurrentStage(curr){ debugger; return curr == this._props.currentStage;},
+            isCurrentStage(curr){ return curr == this._props.currentStage;},
          
         },
         beforeCreate(){

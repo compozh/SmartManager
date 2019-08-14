@@ -1,0 +1,10 @@
+mutation($productionRegistrationParam:ProductionRegistrationParamsInput!) {
+    mesMutation {
+        registerProduction(productionRegistrationParam: $productionRegistrationParam) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

@@ -8,14 +8,14 @@
 </template>
 
 <script>
-  import emptyStateImg from './empty-grid-state.svg'
+import emptyStateImg from './empty-grid-state.svg'
 
-  export default {
-    name: "sm-empty-state",
-    components: {
-      emptyStateImg
-    }
+export default {
+  name: 'sm-empty-state',
+  components: {
+    emptyStateImg
   }
+}
 </script>
 
 <style scoped>

@@ -1,9 +1,9 @@
 <template>
     <v-layout justify-center :style="`width: ${width}; height: ${height};`" >
-    <div v-if="items.length == 0" class="icon-frame justify-center">
+    <div :style="`width: ${width};`" v-if="items.length == 0" class="icon-frame justify-center">
         <v-icon v-text="'photo_camera'" :size="height"/>
     </div>
-    <div v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
+    <div :style="`width: ${width};`" v-else class="icon-frame justify-center" @mouseover="mouceMove(true)" @mouseleave="mouceMove(false)">
        <v-carousel hide-controls hide-delimiters  interval="2000" :cycle="hover" :height="height" :width="width">
             <v-carousel-item
                 v-for="(item, i) in items"
@@ -47,22 +47,35 @@
             hover: false
         }),
         methods:{
-           respCallback(resp){
-               if (resp.data.purchases.resourcesGroup.content.length > 0)
-               {
-                    if (resp.data.purchases.resourcesGroup.content)
-                    {
-                        this.items = this.items.concat(resp.data.purchases.resourcesGroup.content);
+            respCallback(resp){
+                // debugger;
+                var contents = resp.data.purchases[this.entityName];
+                if (contents != null) {
+                    if (contents.content && contents.content.length > 0) {
+                        this.items = this.items.concat(contents.content);
                     }
-               }
+                    if(contents.attachments && contents.attachments.length > 0) {
+                        for (const key in contents.attachments) {
+                            if (contents.attachments.hasOwnProperty(key)) {
+                                const element = contents.attachments[key];
+                                this.items.push(element.url+"&nodownload=1&cache=0")
+                            }
+                        }
+                    }
+                }
            },
            mouceMove(val){
                this.hover = val;
            }
         },
+        computed: {
+            isResourceItem(){
+                return this.id.trim().length == 15;
+            }
+        },
         created: function () {
             var promise = 
-                this.id.trim().length == 15 
+                this.isResourceItem 
                     ? api.getImagesForCatalogueItem(this.id)
                     : api.getImagesForCatalogueGroup(this.id);
             

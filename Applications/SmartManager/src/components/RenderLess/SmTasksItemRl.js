@@ -1,5 +1,3 @@
-// Renderless component for SmartManager \ components \ Views \ Tabs \ Details
-
 export default {
   name: 'sm-tasks-item-rl',
   computed: {
@@ -9,7 +7,10 @@ export default {
   },
   methods: {
     goToTaskInfo(taskId) {
-      this.$store.dispatch('sm/getTaskInfo', taskId)
+      this.$store.dispatch('sm/getTaskInfo', {
+        taskId,
+        loader: 'setCircularLoader'
+      })
       this.$router.push({name: 'SMARTMANAGERTASKDETAIL', params: {taskId}})
     }
   },

@@ -50,11 +50,6 @@
                 >{{ message }}</p>
               </v-flex>
               <v-flex>
-                <p class="red--text text--darken-4"
-                   v-bind="params.messageAttrs"
-                >{{ message }}</p>
-              </v-flex>
-              <v-flex>
                 <v-btn v-if="allowQrMode"
                   @click="qrMode = true"
                   class="cyan white--text text-xs-right">

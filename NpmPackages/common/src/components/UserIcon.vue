@@ -9,6 +9,7 @@
     ></v-img>
     <v-icon
       v-else
+      class="user-icon"
       :size="size"
       color="#b3b3b3"
     >account_circle
@@ -17,14 +18,23 @@
 </template>
 
 <script>
-export default {
-  name: 'userIcon',
-  props: ['src', 'size'],
-}
+  export default {
+    name: "userIcon",
+    props: ['src', 'size'],
+  }
 </script>
 
 <style scoped>
-  .user-image {
+  .user-image, .user-icon {
+    display: flex;
     border-radius: 50%;
+  }
+
+  .user-icon {
+    box-shadow:
+      inset 1px 1px 0 0 #b3b3b3,
+      inset -1px -1px 0 0 #b3b3b3,
+      inset 1px -1px 0 0 #b3b3b3,
+      inset -1px 1px 0 0 #b3b3b3;
   }
 </style>

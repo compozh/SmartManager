@@ -34,10 +34,10 @@
 </template>
 
 <script>
-  export default {
-    name: "SmTaskIcons",
-    props: ['task']
-  }
+export default {
+  name: 'SmTaskIcons',
+  props: ['task']
+}
 </script>
 
 <style scoped>

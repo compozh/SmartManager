@@ -40,10 +40,10 @@
 </template>
 
 <script>
-  export default {
-    name: 'sm-task-sub-task-item',
-    props: ['subTask']
-  }
+export default {
+  name: 'sm-task-sub-task-item',
+  props: ['subTask']
+}
 </script>
 
 <style scoped>

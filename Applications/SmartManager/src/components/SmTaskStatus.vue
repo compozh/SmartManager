@@ -32,40 +32,41 @@
 </template>
 
 <script>
-  export default {
-    name: "sm-task-status",
-    props: ['task', 'chip'],
-    computed: {
-      taskStatus() {
-        switch (this.task.status) {
-          case '':
-            return {
-              color: 'orange darken-2',
-              icon: 'access_time',
-              text: 'ожидает'
-            }
-          case '*':
-            return {
-              color: 'blue-grey darken-1',
-              icon: 'loop',
-              text: 'в работе'
-            }
-          case '-':
-            return {
-              color: 'red darken-2',
-              icon: 'highlight_off',
-              text: 'отклонена'
-            }
-          case '+':
-            return {
-              color: 'green darken-2',
-              icon: 'check_circle_outline',
-              text: 'выполнена'
-            }
+export default {
+  name: 'sm-task-status',
+  props: ['status', 'chip'],
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    taskStatus() {
+      switch (this.status) {
+      case '':
+        return {
+          color: 'orange darken-2',
+          icon: 'access_time',
+          text: 'ожидает'
+        }
+      case '*':
+        return {
+          color: 'blue-grey darken-1',
+          icon: 'loop',
+          text: 'в работе'
+        }
+      case '-':
+        return {
+          color: 'red darken-2',
+          icon: 'highlight_off',
+          text: 'отклонена'
+        }
+      case '+':
+        return {
+          color: 'green darken-2',
+          icon: 'check_circle_outline',
+          text: 'выполнена'
         }
       }
     }
   }
+}
 </script>
 
 <style scoped>

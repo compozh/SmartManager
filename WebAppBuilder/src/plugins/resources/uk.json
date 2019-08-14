@@ -7,6 +7,12 @@
     "emptyPassword": "Ви не ввели пароль",
 	"NoDevices": "немає пристроїв",
 	"purchases":{
+		"Applications":{
+			"Search": "Пошук",
+			"From": "З",
+			"To": "До",
+			"Statuses": "Статуси"
+		  },
 		"CreateOrderWindow":{
 		  "DocumentNumber": "Номер документа",
 		  "DocumentDate": "Дата документа",
@@ -14,7 +20,13 @@
 		  "Description": "Опис"
 		},
 		"Catalog":{
-			"FastFilter":"Биcтрий фільтр",
+			"CatalogItem":{
+				"Group":"Група",
+				"Designation":"Позначення",
+				"ResourceName": "Назва ресурсу",
+				"MesurementUnit": "Одиниця виміру"
+			},
+			"FastFilter":"Швидкий фільтр",
 			"Name":"Назва"
 		  },
 		"CartItems":{
@@ -28,7 +40,7 @@
 		  
 		},
 		"CreateOrder": "Зробити замовлення",
-		"CleanCart": "Очистити корзину"
+		"CleanCart": "Очистити кошик"
 	},
     "eds": {
 		"CA": "ЦСК",

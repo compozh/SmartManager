@@ -82,18 +82,17 @@ export default {
     },
     //Установка локализации
     Setlocalization(language){
-       this.$i18n.Setlocalization(language);
-       
+       this.$i18n.Setlocalization(language);       
+       this.$cookies.set("c", language.toUpperCase()); 
        let currentGroup = this.$route.params.catalogueId;
-       api.changeLocalization(language).then(()=>{
-           if(currentGroup != undefined){
-            api.getResourcesGroupById(currentGroup);
-           }
-           else{
+       if(currentGroup != undefined){
+           api.getBreadcrumbsByGroup(currentGroup,true);
+           api.getResourcesGroupById(currentGroup);
+        }
+       else{
+            api.restoreGraphCache();
             api.getResourcesGroupsByParentGroup("");
-           }
-           
-       });
+       }
     }
 
   },
@@ -104,12 +103,9 @@ export default {
     .v-btn__content{
         height: inherit;
     }
-
-    
 </style>
 
 <style lang="scss" scoped>
-
     .v-btn__content{
         height: inherit;
     }
