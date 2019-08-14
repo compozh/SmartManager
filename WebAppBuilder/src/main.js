@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import VueCookies from 'vue-cookies'
 import VueTouch from 'vue-touch';
 import App from './App.vue';
 import router from './router';
@@ -30,22 +31,23 @@ Vue.use(Vuetify);
 Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(VueApollo);
 Vue.use(Viewer)
+Vue.use(VueCookies)
 
 // Cache implementation
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
   link: new HttpLink({
-    uri: myConfig.GrapgQlUrl + 'api/graphql',
+    uri: myConfig.GrapgQlUrl + 'api/graphql',    
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
       'schema': 'eamschema'
     }}),
   cache,
-  connectToDevTools: true,
+  connectToDevTools: true
 })
 
 const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
+  defaultClient: apolloClient
 })
 
 new Vue({

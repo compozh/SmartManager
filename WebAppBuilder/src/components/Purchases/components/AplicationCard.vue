@@ -13,7 +13,7 @@
                     <v-card-actions>
                         <v-layout justify-end>
                             <add2cart-btn entityType="application" :keyValue="application.id.toString()"/>
-                            <favorite-btn :v-model="application" value="a" alias="DOC" :keyValue="application.id.toString()"  />
+                            <favorite-btn :v-model="application" alias="DOC" :keyValue="application.id.toString()" :isInFavorite="inFavorites(application)"/>
                             <chat-btn :chatKey="application.id" chatType="application"/>
                         </v-layout>
                     </v-card-actions>
@@ -42,6 +42,13 @@ export default {
                 return moment(String(value)).format('DD.MM.YYYY')
             }
         }
+    },
+    methods:{
+        inFavorites: (application) => {
+             if (application) {
+                return application.favListId != null;
+            }
+        }
     }
 }
 </script>
@@ -57,7 +64,7 @@ export default {
     text-decoration: none;
 }
 .application-card .v-card__title {
-    font-size: 15px;
+    font-size: 1.2em;
     font-weight: 600;
     padding: 5px 15px;
 }

@@ -1,5 +1,11 @@
-mutation($alias:String!,$keyValue:String!){
-  purchasesMutation{
-    addToFavorites(alias:$alias, keyValue:$keyValue )
-  }
-}
+mutation($alias:String!,$keyValue:String! , $listId:String!){
+          purchasesMutation{
+            addToFavoritesOne(alias:$alias, keyValue:$keyValue, listId:$listId){
+              id,
+              keyValue,
+              list{
+                id, alias, keyValues, caption, isDefaultList
+              }
+            }
+          }
+        }

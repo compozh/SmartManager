@@ -5,6 +5,7 @@
       number,
       date,
       title,
+      favListId,
       docStatus{
         id,
         sortOrder

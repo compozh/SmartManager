@@ -1,6 +1,5 @@
 <template>
     <div v-if="favList">
-      <draggable  v-model="favLists"  v-bind="{group: favList.alias, sort:false}">
         <v-container
             :key="favList.id"
             fluid
@@ -11,26 +10,21 @@
             <v-layout v-if="isEditable">
                 
                 <v-flex xs12 sm6 md3>
-                <v-text-field 
-                    :label="favList.caption"
-                    v-model="favList.caption"
-                    solo
-                    @input="mutationEditFavList(favList)"
-                ></v-text-field>  
+                <textbox :item="favList" field="caption" :change="mutationEditFavList"/>
                 </v-flex>
-
                 <v-flex>
                 <v-switch 
                 v-model="favList.isDefaultList"
-                label="По умолчанию"             
+                label="По умолчанию" 
                 @change="mutationEditFavList(favList)"/>
                 </v-flex >
                 <v-flex>
                 <v-btn flat small color="error" @click="mutationDeleteFavList(favList)">Delete List</v-btn>
                 </v-flex >
             </v-layout>
+             <draggable  v-model="favLists"  v-bind="{group: favList.alias, sort:false, disabled: false}">
             <v-layout row wrap>
-             
+
               <v-flex
                   v-for="card in favList.items"
                   :key="card.id"
@@ -38,7 +32,7 @@
                   sm6
                   md4
                   >
-                   <draggable v-model="card.itSelfArray"  :move="onmove" @end="end" v-bind="{group: favList.alias, sort:false}"  style="min-height: 50px">
+                   <draggable v-model="card.itSelfArray"  :move="onmove" @end="end" v-bind="{group: favList.alias, sort:false}"  style="min-height: 10px">
                     <div :key="card.id" v-if="favList.alias === 'DOC'" >
                       <applicationCard  :index="card.id" :application="card" />
                     </div>
@@ -47,10 +41,13 @@
                     </div>
                     
               </draggable>
-                </v-flex>
+            </v-flex>
+            <div v-if="!favList.items.some(w => 1==1)" class="emptyBlock" >
+            </div>
             </v-layout>
-        </v-container>
-      </draggable >
+          </draggable >
+      </v-container>
+      
     </div>
     
 </template>
@@ -61,6 +58,7 @@
 import {PurchasesApi} from "../api/purchasesApi";
 import _ from 'lodash';
 import draggable from 'vuedraggable';
+import { debuglog } from 'util';
 
 const api = new PurchasesApi();
 
@@ -69,6 +67,7 @@ const api = new PurchasesApi();
      name: "onefavlist",
      components: {
       draggable,
+      
      },
      props:{
         listId: {
@@ -90,10 +89,11 @@ const api = new PurchasesApi();
         favListt:undefined,
         listToAdd:undefined,
         listToRemove:undefined,
-        itemToMove : undefined
+        itemToMove : undefined,
+        saveVisible:false
     }),
     created: function () {
-       
+       //api.getFavLists();
       },
     destroyed(){
       this.$store.state.resources = [];
@@ -102,15 +102,6 @@ const api = new PurchasesApi();
       this.$store.state.resources = [];
     },
     computed:{
-      dragOptions(){
-          return {
-         animation: 1,
-        group: 'fd',
-        ghostClass: "2",
-        disabled: false,
-        sort: false
-        };
-      },
       applications:{
          get: function() {
           return this.$store.getters["purchases/getApplications"];
@@ -129,15 +120,16 @@ const api = new PurchasesApi();
            if(this.listId){
             let list = this.allFavLists.filter(w => w.id == this.listId)[0];
             list.items = [];
+            
             list.keyValues.forEach(w => {
+              
               let test = list.alias =='DOC' ? this.getAplicationByKeyValue(w) : this.getСatalogueItemByKeyValue(w);
-              if(test !== undefined)
+              if(test)
               {
                 test.itSelfArray = [test];
                 list.items.push(test);
               }
             });
-            
             return list;
           }
           return undefined;
@@ -152,8 +144,7 @@ const api = new PurchasesApi();
       },
       allFavLists: {
         get: function() {
-          let test = this.$store.getters["purchases/getFavLists"];
-            return test;
+            return this.$store.getters["purchases/getFavLists"];
         },
         set: function(newVal){
           this.$store.commit('purchases/setFavLists', newVal);
@@ -183,12 +174,15 @@ const api = new PurchasesApi();
       return false;
       },
       end(){
-        api.mutationChangeListForItem(this.itemToMove.id.toString(), this.listToAdd.id.toString(), this.listToRemove.id.toString());
         let listToRemove = this.allFavLists.find(w=>w.id.toString() == this.listToRemove.id.toString());
         let listToAdd = this.allFavLists.find(w=>w.id.toString() == this.listToAdd.id.toString());
+        if(listToRemove.id.toString() != listToAdd.id.toString()){
+          api.mutationChangeListForItem(this.itemToMove.id.toString(), this.listToAdd.id.toString(), this.listToRemove.id.toString());
+         
+          listToRemove.keyValues = listToRemove.keyValues.filter(w => w != this.itemToMove.id.toString());
+          listToAdd.keyValues.push(this.itemToMove.id.toString());
+        }
         
-        listToRemove.keyValues = listToRemove.keyValues.filter(w => w != this.itemToMove.id.toString());
-        listToAdd.keyValues.push(this.itemToMove.id.toString());
 
         this.listToRemove = undefined;
         this.listToAdd = undefined;
@@ -223,8 +217,8 @@ const api = new PurchasesApi();
       },
       getСatalogueItemByKeyValue(keyValue){
         let test2 = 2;
-        test2 =  this.resource_items.find(w => w.id == keyValue);
         
+        test2 =  this.resource_items.find(w => w.id == keyValue);
         return test2;
       },
     }
@@ -233,6 +227,9 @@ const api = new PurchasesApi();
 
 <style scoped>
 
+.emptyBlock{
+  min-height: 50px;
+}
 
 .app1{
     padding: 5px;

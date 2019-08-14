@@ -1,18 +1,13 @@
 <template>
-    <v-layout row wrap="">
-            <v-breadcrumbs v-if="show">
-                <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: null }}">
-                      <p>...</p>
-                </router-link>
-            </v-breadcrumbs>
+    <v-layout  class="wrap" v-if="show" row wrap>
         <v-flex>
-            <v-breadcrumbs :items="breadCrumbs" divider=">">
+            <v-breadcrumbs :items="$vuetify.breakpoint.mdAndUp ? this.simpleRoute(breadCrumbs):this.mobileRoute(breadCrumbs)" divider=">">
                 <template v-slot:item="props">
-                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id.trim(), }}">
-                      {{ props.item.text.toUpperCase() }}
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id != undefined ? props.item.id.trim():null }}">
+                      {{ props.item.text }}
                     </router-link>
                 </template>
-            </v-breadcrumbs>
+            </v-breadcrumbs>       
         </v-flex>
     </v-layout>
 </template>
@@ -25,30 +20,63 @@ export default {
     props:{
     },
     data:() =>({
-        first: {},
-        breadCrumbs: [],
-        show: false
+        currentId: new String(),
+        mobileRoute: function(data){
+            let result = [];
+            if(this.currentId.length == 15){
+                result.push(data[data.length-1]);
+            }else{
+                result.push(data[data.length-2]);
+            }
+
+            if(result.length == 1 && result[0]==undefined){
+                result.splice(0,1,{id:null,text:"..."});
+            }
+
+            return result;
+        },
+        simpleRoute: function(data){
+            let result = [];
+            for(let i=0;i<data.length;i++){
+                result.push(data[i]);
+            }
+            result.unshift({id:null, text:"..."});
+
+            return result;
+        }
     }),
-    methods:{
-        responceCallback(response){            
-            this.show = true;
-            this.breadCrumbs = response.data.purchases.resourcesGroupsBreadcrumbs;
+    created(){
+        this.$store.state.purchases.breadcrumbs = [];
+        this.currentId = this.$route.params.catalogueId;
+        if(this.currentId != undefined){
+            api.getBreadcrumbsByGroup(this.currentId,false);
         }
     },
-    created(){
-        let currentGroup = this.$route.params.catalogueId;
-        if(currentGroup != undefined){
-                api.getBreadcrumbsByGroup(currentGroup).then(this.responceCallback);
-            }
+    computed:{
+        show:{
+            get: function() {
+                if(this.$store.getters["purchases/getBreadCrumbs"].length === 0){
+                    return false;
+                }
+                
+                return true;
+            },
+        },
+        breadCrumbs:{
+            get: function() {
+                return this.$store.getters["purchases/getBreadCrumbs"];
+            },
+        }
     },
     watch: {
         '$route' (to, from){
             if(to.params.catalogueId != null){
-                api.getBreadcrumbsByGroup(to.params.catalogueId).then(this.responceCallback);
+                this.currentId = to.params.catalogueId;
+                api.getBreadcrumbsByGroup(this.currentId,false);
             }
-            else{            
-                this.show = false;
-                this.breadCrumbs = [];
+            else{
+                this.currentId = undefined;
+                this.$store.state.purchases.breadcrumbs = [];
             }
         }
     }
@@ -56,11 +84,12 @@ export default {
 </script>
 
 <style scoped>
-    .first{
-        font-size: larger;
-    }
 
     .crumbs{
+        font-size: 1em;
         color: grey;
+    }
+    .wrap{
+        position: absolute;
     }
 </style>

@@ -6,9 +6,11 @@ import _ from 'lodash';
 
 // ResourceGroups query
 import mainQuery from './graphql/base/queryWithGroupStringParams.graphql';
+import queryWithGroupIdParam from './graphql/base/queryWithGroupIdParam.graphql';
 import catalogueQueryFragment from './graphql/fragments/catalogueQuery.graphql';
 import resourcesMinimalFieldsFragment from './graphql/fragments/resources/minimalFields.graphql';
 import resourcesGroupsMinimalFieldsFragment from './graphql/fragments/resourcesGroups/minimalFields.graphql';
+import catalogueItemAttachmentsFields from './graphql/fragments/catalogueItemAttachmentsFields.graphql'
 // Queries
 
 import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
@@ -28,7 +30,6 @@ import createOrder from './graphql/createOrder.gql'
 import store from '../../../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
 import changeLocalization from './graphql/changeLocalization.gql'
-import addToFavoritesSecond from './graphql/addToFavoritesSecond.gql'
 import resourcesGropsByParentGroup from './graphql/resourcesGropsByParentGroup.gql'
 import mutationEditFavList from './graphql/mutationEditFavList.gql'
 import mutationDeleteFavList from './graphql/mutationDeleteFavList.gql'
@@ -43,6 +44,7 @@ import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.
 
 
 const options = {
+  credentials: 'include',
   uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
@@ -60,64 +62,35 @@ export class PurchasesApi {
   constructor() {}
 
     getResourceById(id){
-    const FIELDS = gql`
-      fragment resourcesFields on Resource {
-        id,
-        fullName,
-        name,
-        designation,
-        measurementUnit{
-          shortName,
-          fullName
-        }
-        resourceGroup{
-          id,
-          name
-        }
-      }
-    `;
     return client.query({
-      query: gql`${resourceById} ${FIELDS}`,
+      query: gql`${resourceById}`,
       variables: { id: id },
       fetchPolicy: 'no-cache'
     })
     .catch(error => console.log(error.message))
   }
 
-  getBreadcrumbsByGroup(group){
-    return client.query({
-      query: gql`${breadcrumbsByGroup}`,
-      variables: { group: group }
-    })
-    .catch(error => console.log(error.message))
+  getBreadcrumbsByGroupCallback(response){
+    let data = response.data.purchases.resourcesGroupsBreadcrumbs;
+    store.commit('purchases/setBreadCrumbs', data);
   }
 
-  // getResourcesGroups(group){
-  //   const FIELDS = gql`
-  //   fragment resourcesGroupFields on ResourceGroup {
-  //     id, 
-  //     name,
-  //     children{
-  //       id,
-  //       name, 
-  //       children{
-  //         id,
-  //         name
-  //       }
-  //     }, 
-  //     resources{
-  //       id,
-  //       name,
-  //       designation
-  //     }
-  //   }`;
-  //   return client.query({
-  //     query: gql`${resourcesGroupById} ${FIELDS}`,
-  //     variables: { group: group }
-  //   })
-  //   .then(this.getResourcesGroupsCallback)
-  //   .catch(error => console.log(error.message))
-  // }
+  restoreGraphCache(){    
+    client.cache.reset();
+  }
+  getBreadcrumbsByGroup(group, reload){
+    let q = {
+      query: gql`${breadcrumbsByGroup}`,
+      variables: { group: group },
+    };
+    if(reload){
+      this.restoreGraphCache();
+    }
+
+    client.query(q)
+      .then(this.getBreadcrumbsByGroupCallback)
+      .catch(error => console.log(error.message))
+    }
 
   getResourcesGroupsByParentGroupCallback(result){
     let t = result.data.purchases.resourcesGroups;
@@ -166,13 +139,10 @@ export class PurchasesApi {
     })
   }
   getImagesForCatalogueItem(id){
-    const FIELDS = gql`
-      fragment resourcesFields on Resource {
-        content
-      }
-    `;
+
+    const query = gql`${queryWithGroupIdParam} ${catalogueItemAttachmentsFields}`
     return client.query({
-      query: gql`${resourceById} ${FIELDS}`,
+      query: query,
       variables: { id: id }
     })
     .then(result => result)
@@ -361,9 +331,8 @@ export class PurchasesApi {
     let favLists = result.data.purchases.favLists;
     store.commit('purchases/setFavLists', favLists);
   }
-  getFavLists(){
-    
-    return client.query({
+  async getFavLists(){
+    await client.query({
       query: gql`query ${favLists}`,
       variables: { },
       fetchPolicy: 'no-cache'
@@ -372,66 +341,61 @@ export class PurchasesApi {
     .catch(error => console.log(error.message))
   }
 
-addToFavoritesMutationCallbackFirst(result){
-    let res = result.data.purchasesMutation.addToFavorites;
-    //this.getFavLists();
-    if( res.ReturnValue != null && res.ReturnValue.ShouldCallList)
-    {
-     
-      store.commit("purchases/setChose", {
-        list : res.ReturnValue.ListToChoose , 
+
+  async addToFavoritesOneMutation(alias, keyValue, content){
+    let aliasFavLists = undefined;
+    if(content.$store.state.purchases.favlists){
+      aliasFavLists = content.$store.state.purchases.favlists.filter(w => w.alias == alias);
+    }else{
+      await this.getFavLists();
+      aliasFavLists = content.$store.state.purchases.favlists.filter(w => w.alias == alias);
+    }
+
+    let defFavLists = aliasFavLists ? aliasFavLists.filter(w => w.isDefaultList)[0]: undefined;
+
+    if(!defFavLists){
+      defFavLists = aliasFavLists.length == 1 ? aliasFavLists[0] : undefined;
+    }
+    if(defFavLists || !aliasFavLists.some(w=> 1==1)){
+      await client.mutate({
+        mutation: gql`${addToFavorites}`,
+        variables: {alias: alias, keyValue: keyValue, listId: defFavLists ? defFavLists.id: ""}
+      }).then(result => {
+        let res = result.data.purchasesMutation.addToFavoritesOne;
+        let oldFavList = content.$store.state.purchases.favlists;
+        if(oldFavList && oldFavList.some(w=>w.id == res.list.id)){
+          oldFavList.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
+          //content.$store.state.purchases.favlists = oldFavList;
+        }else{
+          oldFavList.push(res.list);
+        }
+      });
+
+    }else{
+      await store.commit("purchases/setChose", {
+        list : aliasFavLists.map(w=> {return {Title : w.caption, Key: w.id };}) , 
         caption:"Выбор из списка",
-        method: (key) => {
-          client.mutate({
-            mutation: gql`${addToFavoritesSecond}`,
-            
-            variables: {listKey: key, keyValue: res.ReturnValue.KeyValue}     
-          }).then(res => {
-            client.query({
-              query: gql`query ${favLists}`,
-              fetchPolicy: 'no-cache',
-              variables: { }
-            }).then(res => {
-              store.commit('purchases/setFavLists', res.data.purchases.favLists);
-              store.commit("purchases/setMessage",  `Добавлено в избраное`);}
-              ).catch(error => console.log(error.message));
+        method: async (key) => {
+          await client.mutate({
+            mutation: gql`${addToFavorites}`,
+            variables: {alias: alias, keyValue: keyValue, listId: key}
+          }).then( async result => {
+            let res = result.data.purchasesMutation.addToFavoritesOne;
+            let oldFavList = content.$store.state.purchases.favlists;
+            if(oldFavList && oldFavList.some(w=>w.id == res.list.id)){
+              oldFavList.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
+              //content.$store.state.purchases.favlists = oldFavList;
+            }else{
+              oldFavList.push(res.list);
+            }
           });
         }
       });
     }
-    else if (res.Successed)
-    {
-      client.query({
-            query: gql`query ${favLists}`,
-            fetchPolicy: 'no-cache',
-            variables: { }
-          }).then(res => {
-            store.commit('purchases/setFavLists', res.data.purchases.favLists);
-            store.commit("purchases/setMessage",  `Добавлено в избраное`);
-          }
-            ).catch(error => console.log(error.message));
     
-    }
   }
 
-  addToFavoritesMutation(alias, keyValue){
-    return client.mutate({
-      mutation: gql`${addToFavorites}`,
-      variables: {alias: alias, keyValue: keyValue}     
-    })
-      .then(this.addToFavoritesMutationCallbackFirst)
-      //.then(this.addToFavoritesMutationCallbackSecond)
-      .catch(error => console.log(error.message))
-  }
-
-  async changeLocalization(language){
-    store.commit('purchases/clearResourceGroups');
-    await client.mutate({
-      mutation: gql`${changeLocalization}`,
-      variables: {language: language}     
-    })
-  }
-
+  
   getFavListInputTypeParam(favList)
   {
     let test =  {
@@ -475,19 +439,27 @@ addToFavoritesMutationCallbackFirst(result){
       .catch(error => {console.log(error.message)});
   }
   
-  deleteItemFromFavorites(alias, keyValue){
-    return client.mutate({
+  async deleteItemFromFavorites(alias, keyValue, context){
+    if(!store.state.purchases.favlists){
+      await this.getFavLists();
+    }
+    await client.mutate({
       mutation: gql`${deleteItemFromFavorites}`,
       variables: {alias: alias, keyValue: keyValue},     
-    }).then(res => {
-      client.query({
-        query: gql`query ${favLists}`,
-        fetchPolicy: 'no-cache',
-        variables: { }
-      }).then(res => {
-        store.commit('purchases/setFavLists', res.data.purchases.favLists);
-        store.commit("purchases/setMessage",  `Удалено с избраного`);}
-        ).catch(error => console.log(error.message));
+    }).then( res => {
+     
+      let listId = res.data.purchasesMutation.deleteItemFromFavorites.id;
+      
+      let oldFavlist = context.$store.state.purchases.favlists;
+      let keyValuess = oldFavlist.find(w=>w.id == listId).keyValues;
+      let itemsToAdd = keyValuess.filter(w=>w != keyValue);
+      // var test1 = _.remove(keyValuess, function(n) {
+      //   return n != keyValue;
+      // });
+      
+      oldFavlist.find(w=>w.id == listId).keyValues = [];
+      itemsToAdd.forEach(w=>{ oldFavlist.find(w=>w.id == listId).keyValues.push(w) } );
+      
     })
       .catch(error => {console.log(error.message)});
   }

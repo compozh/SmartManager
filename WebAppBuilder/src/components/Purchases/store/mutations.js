@@ -44,7 +44,7 @@ export default {
       caption : payload.Caption, 
       isDefaultList: payload.IsDefaultList
     };
-    /*state.favlists = */state.favlists.push(favListItem);
+    state.favlists.push(favListItem);
   },
   setChose(state, payload){
     //state.chose.list = payload.list;
@@ -65,11 +65,6 @@ export default {
   },
 
   addToFavorites(state, payload){
-    state.cartitems = _.remove(state.cartitems, function(n){
-      return n.id != payload;
-    });
-  },
-  addToFavoritesSecond(state, payload){
     state.cartitems = _.remove(state.cartitems, function(n){
       return n.id != payload;
     });
@@ -96,20 +91,24 @@ export default {
     //debugger;
   },
   addResources(state, payload){
-    
-    state.favResources = payload;
-    /*
-    let oldRes = state.resources;
+    let oldRes = state.favResources;
     payload.forEach(w=> {
-      if(!oldRes.map(x => x.id).some(y => y==w.id))
+      if( !oldRes.map(x => x.id).some(y => y==w.id))
       {
+        state.favResources.push(w);
+      }/*else{
+        state.resources =  state.resources.filter(x=>x.id != w.id);
         state.resources.push(w);
-      }
+      }*/
     });
+    let test = state.favResources.concat(payload);
+    //state.resources = payload;
+    
+    state.resources = state.favResources;
+/*
     let test = state.resources.concat(payload);
     
-    state.resources = state.resources;
-  */
+    state.resources= test;*/
   },
   addApplications(state, payload){
     let oldAppl = state.applications;
@@ -140,5 +139,9 @@ export default {
 
   setTitleState(state, payload){
     state.showTitle = payload;
+  },
+
+  setBreadCrumbs(state, payload){
+    state.breadcrumbs = payload;
   }
 }

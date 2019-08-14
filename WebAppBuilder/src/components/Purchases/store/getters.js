@@ -29,4 +29,7 @@ export default {
   getDocStatus(state) {
     return state.docStatus;
   },
+  getBreadCrumbs(state) {
+    return state.breadcrumbs;
+  },
 }

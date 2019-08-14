@@ -1,5 +1,0 @@
-mutation($listKey:String!,$keyValue:String!){
-  purchasesMutation{
-    addToFavoritesSecond(listKey:$listKey, keyValue:$keyValue )
-  }
-}
