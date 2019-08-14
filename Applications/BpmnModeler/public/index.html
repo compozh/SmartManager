@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script>
+		var devMode = '<%= NODE_ENV %>' == "development"
+		devMode = false
+		window.myConfig = {
+			GrapgQlUrl: devMode ? "http://localhost:15504/" : "http://localhost:15504/",
+			BASE_URL: "<%= BASE_URL %>",
+			WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
+			SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
+		}
+	</script>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="icon" href="<%= BASE_URL %>favicon.ico">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="bpmn-js/dist/assets/diagram-js.css" />
+	<link rel="stylesheet" href="bpmn-js/dist/assets/bpmn-font/css/bpmn-.css" />
+	<title>WebAppsPlayer</title>
+</head>
+<body>
+	<noscript>
+		<strong>We're sorry but webApp doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+	</noscript>
+	<div id="app"></div>
+	<style>
+		#app {
+			font-family: "Roboto";
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			text-align: center;
+		}
+
+		.one {
+			position: fixed;
+			right: 20px;
+			top: 10px;
+			z-index: 999;
+		}
+	</style>
+	<!-- built files will be auto injected -->
+</body>
+</html>

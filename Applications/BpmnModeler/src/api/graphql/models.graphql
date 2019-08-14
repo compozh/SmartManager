@@ -1,0 +1,8 @@
+{
+  bpmnquery {
+    modelXml(id: $id) {
+      id
+      name
+    }
+  }
+}
