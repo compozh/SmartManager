@@ -82,7 +82,7 @@ export default {
     //Установка локализации
     Setlocalization(language) {
       this.$localization.Setlocalization(language)    
-      this.$cookies.set('c', language.toUpperCase()) 
+      // this.$cookies.set('c', language.toUpperCase()) 
       let currentGroup = this.$route.params.catalogueId
       if (currentGroup != undefined) {
         api.getBreadcrumbsByGroup(currentGroup,true)

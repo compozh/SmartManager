@@ -27,7 +27,7 @@ import deleteAllCarts from './graphql/deleteAllCarts.gql'
 import deleteCart from './graphql/deleteCart.gql'
 import createCart from './graphql/createCart.gql'
 import createOrder from './graphql/createOrder.gql'
-import store from  '../store/index'
+import store from '../store/index'
 import addToFavorites from './graphql/addToFavorites.gql'
 import changeLocalization from './graphql/changeLocalization.gql'
 import resourcesGropsByParentGroup from './graphql/resourcesGropsByParentGroup.gql'
@@ -523,6 +523,8 @@ export class PurchasesApi {
   }
   
   getResourcesByIds(ids) {
+    console.log(123)
+    debugger
     return client.query({
       query: gql`${recoursesByIds}`,
       variables: { ids: ids }//,

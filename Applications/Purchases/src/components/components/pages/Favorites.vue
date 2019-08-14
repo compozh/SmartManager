@@ -42,6 +42,7 @@ export default {
     }
       
     let ress = this.$store.state.purchases.favResources
+    debugger
     if (!(ress && ress.some(w => 1 == 1))) {
       let favres =  this.favlists.filter(w => w.alias == 'KSM').map(w => w.keyValues).
         reduce((prev, next) => { return prev.concat(next) }, [])

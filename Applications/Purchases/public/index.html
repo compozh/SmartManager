@@ -5,7 +5,7 @@
       var devMode = '<%= NODE_ENV %>' == "development"
       devMode = false
       window.myConfig = {
-        GrapgQlUrl: devMode ? "http://localhost:5002/" : "/purchGraphQlServer/",
+        GrapgQlUrl: devMode ? "http://localhost:5002/" : "https://m.it.ua/purchGraphQlServer/",
         BASE_URL:"<%= VUE_APP_BASE_PATH %>",
         WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
         SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
-    <title>WebAppsPlayer</title>
+    <title>Purchases</title>
   </head>
   <body>
     <noscript>

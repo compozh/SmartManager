@@ -65,6 +65,7 @@
 
 <script>
 import moment from 'moment'
+import _ from 'lodash'
 import {PurchasesApi} from '../../../api/purchasesApi'
 
 const api = new PurchasesApi()
