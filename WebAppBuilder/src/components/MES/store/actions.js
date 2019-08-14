@@ -121,7 +121,7 @@ export default {
   async deleteProduction({ commit }, production) {
     await this.dispatch('mes/graphqlQueryWraper', { 
       queryAction: async () =>  await api.deleteProductionGql(production.factId), 
-      successAction: async result => { commit('deleteProduction', production); },
+      successAction: async result => { commit('removeProduction', production); },
       linearLoader: true
     });
   },
