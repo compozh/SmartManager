@@ -51,46 +51,46 @@
 </div>
 </template>
 
-<<script>
+<script>
 export default {
-     name: "draggable-first",
-    data() {
+  name: 'draggable-first',
+  data() {
     return {
       items: [
         {
           id: 1,
-          avatar: "https://s3.amazonaws.com/vuetify-docs/images/lists/1.jpg",
-          title: "Brunch this life?",
-          subtitle: "Subtitle 1"
+          avatar: 'https://s3.amazonaws.com/vuetify-docs/images/lists/1.jpg',
+          title: 'Brunch this life?',
+          subtitle: 'Subtitle 1'
         },
         {
           id: 2,
-          avatar: "https://s3.amazonaws.com/vuetify-docs/images/lists/2.jpg",
-          title: "Winter Lunch",
-          subtitle: "Subtitle 2"
+          avatar: 'https://s3.amazonaws.com/vuetify-docs/images/lists/2.jpg',
+          title: 'Winter Lunch',
+          subtitle: 'Subtitle 2'
         },
         {
           id: 3,
-          avatar: "https://s3.amazonaws.com/vuetify-docs/images/lists/3.jpg",
-          title: "Oui oui",
-          subtitle: "Subtitle 3"
+          avatar: 'https://s3.amazonaws.com/vuetify-docs/images/lists/3.jpg',
+          title: 'Oui oui',
+          subtitle: 'Subtitle 3'
         }
       ],
       items2: [
         {
           id: 4,
-          avatar: "https://s3.amazonaws.com/vuetify-docs/images/lists/4.jpg",
-          title: "Brunch this weekend?",
-          subtitle: "Subtitle 4"
+          avatar: 'https://s3.amazonaws.com/vuetify-docs/images/lists/4.jpg',
+          title: 'Brunch this weekend?',
+          subtitle: 'Subtitle 4'
         },
         {
           id: 5,
-          avatar: "https://s3.amazonaws.com/vuetify-docs/images/lists/5.jpg",
+          avatar: 'https://s3.amazonaws.com/vuetify-docs/images/lists/5.jpg',
           title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-          subtitle: "Subtitle 5"
+          subtitle: 'Subtitle 5'
         }
       ]
-    };
+    }
   }
 }
 </script>>

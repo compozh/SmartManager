@@ -33,33 +33,32 @@
 <script>
 
 export default {
-    name: "options-selector",
-    data () {
-        return {
-            show: false,
-            items: this.$store.state.purchases.chose.list,
-            caption: ""
-        }
-    },
-    created: function () {
-            this.$store.watch(state => state.purchases.chose, this.create);
-        },
-    methods:{
-        onChose(key){
-                this.show = false;
-                this.$store.state.purchases.chose.method(key);
-        },
-        create(){
-            const list = this.$store.state.purchases.chose.list;
-            if (list.length  > 0) 
-            {
-                this.items = list;
-                this.caption = this.$store.state.purchases.chose.caption;
-                this.show = true;
-               // this.$store.commit("purchases/setChoseList", []);
-            }
-        }
+  name: 'options-selector',
+  data () {
+    return {
+      show: false,
+      items: this.$store.state.purchases.chose.list,
+      caption: ''
     }
+  },
+  created: function () {
+    this.$store.watch(state => state.purchases.chose, this.create)
+  },
+  methods: {
+    onChose(key) {
+      this.show = false
+      this.$store.state.purchases.chose.method(key)
+    },
+    create() {
+      const list = this.$store.state.purchases.chose.list
+      if (list.length  > 0) {
+        this.items = list
+        this.caption = this.$store.state.purchases.chose.caption
+        this.show = true
+        // this.$store.commit("purchases/setChoseList", []);
+      }
+    }
+  }
 }
 </script>
 

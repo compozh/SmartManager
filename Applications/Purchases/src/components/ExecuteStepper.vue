@@ -24,49 +24,49 @@
 </template>
 
 <script>
-import {PurchasesApi} from "../api/purchasesApi";
+import {PurchasesApi} from '../api/purchasesApi'
 
-const api = new PurchasesApi();
-    export default {
-        name: "esecute-stepper",
-        props:{
-            minimalistStyle:{
-                type: Boolean,
-                required: false
-            },
-            currentStage: {
-                type: Number,
-                required: false
-                }
-
-        },
-        computed:{
-            stages:{
-                 get: function() {
-                return this.$store.getters["purchases/getDocStatus"];
-                }
-             },
-             curStage:{
-                 get: function() {
-                     debugger;
-                return this._props.currentStage - 1;
-                }
-             },
-            //  minimalistStyle:{
-            //      get: function() {
-            //     return this._props.minimalistStyle;
-            //     }
-            //  },
-
-        },
-        methods:{
-            //isCurrentStage(curr){ return curr == this._props.currentStage;}
-        },
-        beforeCreate(){
-            api.getDocStatus();
-        },
-        
+const api = new PurchasesApi()
+export default {
+  name: 'esecute-stepper',
+  props: {
+    minimalistStyle: {
+      type: Boolean,
+      required: false
+    },
+    currentStage: {
+      type: Number,
+      required: false
     }
+
+  },
+  computed: {
+    stages: {
+      get: function() {
+        return this.$store.getters['purchases/getDocStatus']
+      }
+    },
+    curStage: {
+      get: function() {
+        debugger
+        return this._props.currentStage - 1
+      }
+    },
+    //  minimalistStyle:{
+    //      get: function() {
+    //     return this._props.minimalistStyle;
+    //     }
+    //  },
+
+  },
+  methods: {
+    //isCurrentStage(curr){ return curr == this._props.currentStage;}
+  },
+  beforeCreate() {
+    api.getDocStatus()
+  },
+        
+}
 </script>
 
 <style lang="scss" scoped>

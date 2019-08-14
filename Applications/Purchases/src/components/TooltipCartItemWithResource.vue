@@ -23,22 +23,22 @@
 </template>
 
 <script>
-    export default {
-        name: "tooltip-with-resource",
-        props: {
-            cartItem: {}
-        },
+export default {
+  name: 'tooltip-with-resource',
+  props: {
+    cartItem: {}
+  },
         
-        methods:{
-            getTextLength (p1, p2, p3, p4, p5) {
-                switch (this.$vuetify.breakpoint.name) {
-                    case 'xs': return p1
-                    case 'sm': return p2
-                    case 'md': return p3
-                    case 'lg': return p4
-                    case 'xl': return p5
-          }
-        },
-        }
-    }
+  methods: {
+    getTextLength (p1, p2, p3, p4, p5) {
+      switch (this.$vuetify.breakpoint.name) {
+      case 'xs': return p1
+      case 'sm': return p2
+      case 'md': return p3
+      case 'lg': return p4
+      case 'xl': return p5
+      }
+    },
+  }
+}
 </script>

@@ -19,29 +19,29 @@
 </template>
 
 <script>
-    export default {
-        name: "text-area-with-lock-edit",
-        props: {
-            item: {},
-            fieldName: { type: String },
-            labelName: { type: String },
-            disabled: { type: Boolean }
-        },
-        data:()=>({
-            d: false
-        }),
-        methods:{
-            callBack(){
-                this.d = !this.d;
-                if(this.d){
-                    this.$emit('click');
-                }
-            }
-        },
-        created(){
-            this.d = this.disabled;
-        }
+export default {
+  name: 'text-area-with-lock-edit',
+  props: {
+    item: {},
+    fieldName: { type: String },
+    labelName: { type: String },
+    disabled: { type: Boolean }
+  },
+  data: () => ({
+    d: false
+  }),
+  methods: {
+    callBack() {
+      this.d = !this.d
+      if (this.d) {
+        this.$emit('click')
+      }
     }
+  },
+  created() {
+    this.d = this.disabled
+  }
+}
 </script>
 
 <style scoped>

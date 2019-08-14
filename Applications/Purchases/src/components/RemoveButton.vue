@@ -9,14 +9,14 @@
 </template>
 
 <script>
-    export default {
-        name: "remove-button-icon",
-        methods:{
-            click(){
-                this.$emit('click')
-            }
-        }
+export default {
+  name: 'remove-button-icon',
+  methods: {
+    click() {
+      this.$emit('click')
     }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

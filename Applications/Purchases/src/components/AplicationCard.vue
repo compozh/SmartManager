@@ -22,45 +22,44 @@
 </template>
 
 <script>
-import moment from 'moment';
-import _ from 'lodash';
-import {PurchasesApi} from "../api/purchasesApi";
+import moment from 'moment'
+import _ from 'lodash'
+import {PurchasesApi} from '../api/purchasesApi'
 
-const api = new PurchasesApi();
+const api = new PurchasesApi()
 
 
 export default {
-    name: "applicationCard",
-    props: { 
-        //applicationId: 0,
-        application: {}
-    },
-    filters:{
-        formatDate: (value) => {
-            if (value) {
-                return moment(String(value)).format('DD.MM.YYYY')
-            }
-        }
-    },
-    computed:{
-        compRows() {
-            for (const key in this.application.rows) {
-                if (this.application.rows.hasOwnProperty(key)) {
-                    if (this.application.rows[key].isEdit == undefined)
-                    {
-                        this.$set(this.application.rows[key], 'isEdit', false)
-                    }
-                }
-            }
-            return this.application.rows;
-        }
-    },
-    methods:{
-        editClick(row){
-            console.log(row);
-            row.isEdit = !!!row.isEdit;
-        }
+  name: 'applicationCard',
+  props: { 
+    //applicationId: 0,
+    application: {}
+  },
+  filters: {
+    formatDate: (value) => {
+      if (value) {
+        return moment(String(value)).format('DD.MM.YYYY')
+      }
     }
+  },
+  computed: {
+    compRows() {
+      for (const key in this.application.rows) {
+        if (this.application.rows.hasOwnProperty(key)) {
+          if (this.application.rows[key].isEdit == undefined) {
+            this.$set(this.application.rows[key], 'isEdit', false)
+          }
+        }
+      }
+      return this.application.rows
+    }
+  },
+  methods: {
+    editClick(row) {
+      console.log(row)
+      row.isEdit = !row.isEdit
+    }
+  }
 }
 </script>
 

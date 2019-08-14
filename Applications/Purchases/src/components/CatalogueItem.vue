@@ -8,24 +8,25 @@
 </template>
 
 <script>
-    import purchasesSchemaAxios from "../api/BaseFunctions"
-    export default {
-        name: "catalogue-item",
-        data:() => ({
-            item: {}
-        }),
-        props:{
-            catalogueId: {
-                required: true
-            }
-        },
-        // computed:{
-        //     itemCode(){
-        //         return this.$route.params.catalogueId
-        //     }
-        // },
-        created: async function () {
-            const query = `{
+import purchasesSchemaAxios from '../api/BaseFunctions'
+import _ from 'lodash'
+export default {
+  name: 'catalogue-item',
+  data: () => ({
+    item: {}
+  }),
+  props: {
+    catalogueId: {
+      required: true
+    }
+  },
+  // computed:{
+  //     itemCode(){
+  //         return this.$route.params.catalogueId
+  //     }
+  // },
+  created: async function () {
+    const query = `{
                 purchases {
                         resources (id: "${this.catalogueId}"){
                         id,
@@ -39,13 +40,13 @@
                         }
                     }
                 }
-            `;
-            await purchasesSchemaAxios(this, query).then(this.respCallback);
-        },
-        methods:{
-            respCallback (resp) {
-                this.item = _.first(resp.data.data.purchases.resources);
-            }
-        }
+            `
+    await purchasesSchemaAxios(this, query).then(this.respCallback)
+  },
+  methods: {
+    respCallback (resp) {
+      this.item = _.first(resp.data.data.purchases.resources)
     }
+  }
+}
 </script>

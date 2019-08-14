@@ -48,97 +48,96 @@
 
 <script>
 
-import {PurchasesApi} from "../api/purchasesApi";
+import {PurchasesApi} from '../api/purchasesApi'
 
-const api = new PurchasesApi();
+const api = new PurchasesApi()
 
 
-  export default {
-     name: "onefavlist",
-     props:{
-        listId: {
-            type: String,
-            required: true
-        },
-        printCount: {
-            type: Number,
-            required: false
-        },
-        isEditable: {
-            type: Boolean,
-            required: false
-        },
+export default {
+  name: 'onefavlist',
+  props: {
+    listId: {
+      type: String,
+      required: true
     },
-    data: () => ({
-    }),
-    created() {
-      api.getFavLists();
-      api.getApplications();
+    printCount: {
+      type: Number,
+      required: false
     },
-    mounted(){
+    isEditable: {
+      type: Boolean,
+      required: false
     },
-    computed:{
-      applications:{
-         get: function() {
-          return this.$store.getters["purchases/getApplications"];
-        },
-        set: function(newVal){
-          this.$store.commit('purchases/setApplications', newVal);
-        }
+  },
+  data: () => ({
+  }),
+  created() {
+    api.getFavLists()
+    api.getApplications()
+  },
+  mounted() {
+  },
+  computed: {
+    applications: {
+      get: function() {
+        return this.$store.getters['purchases/getApplications']
       },
-      favlists: {
-        get: function() {
-            return this.allFavLists.filter(w => w.id == this.listId);
-        },
-        set: function(newVal){
-          this.$store.commit('purchases/setFavLists', newVal);
-        }
-      },
-      allFavLists: {
-        get: function() {
-            return this.$store.getters["purchases/getFavLists"];
-        },
-        set: function(newVal){
-          this.$store.commit('purchases/setFavLists', newVal);
-        }
-      },
-      countToPrint:{
-          get: function() {
-            return this.printCount;
-        }
+      set: function(newVal) {
+        this.$store.commit('purchases/setApplications', newVal)
       }
     },
-    methods: {
-      ondrag(){},
-      mutationDeleteFavList(favList){
-        api.mutationDeleteFavList(favList);
-        this.allFavLists = this.allFavLists.filter(w=>w.id != favList.id);
+    favlists: {
+      get: function() {
+        return this.allFavLists.filter(w => w.id == this.listId)
       },
-      mutationDeleteItemFromFav(favList, keyValue){
-        favList.keyValues = favList.keyValues.filter(w=>w != keyValue);
-        api.mutationEditFavList(favList);
+      set: function(newVal) {
+        this.$store.commit('purchases/setFavLists', newVal)
+      }
+    },
+    allFavLists: {
+      get: function() {
+        return this.$store.getters['purchases/getFavLists']
       },
-      mutationEditFavList(favList){
-        if(favList.isDefaultList)
-        {
-          let newLists = this.allFavLists;
-          newLists.filter(w=>w.alias == favList.alias && w.id != favList.id).forEach(w => w.isDefaultList = false);
-          this.allFavLists = newLists;
-        }
-        api.mutationEditFavList(favList);
-      },
-      mutationCreateFavList(){
-        api.mutationCreateFavList()
-      },
-      getAplicationByKeyValue(keyValue){
-        let apls = this.applications;
-        if(apls!= null){
-           return apls.find(w => w.id.toString() == keyValue);
-        }
-       return {};
-      },
+      set: function(newVal) {
+        this.$store.commit('purchases/setFavLists', newVal)
+      }
+    },
+    countToPrint: {
+      get: function() {
+        return this.printCount
+      }
     }
+  },
+  methods: {
+    ondrag() {},
+    mutationDeleteFavList(favList) {
+      api.mutationDeleteFavList(favList)
+      this.allFavLists = this.allFavLists.filter(w => w.id != favList.id)
+    },
+    mutationDeleteItemFromFav(favList, keyValue) {
+      favList.keyValues = favList.keyValues.filter(w => w != keyValue)
+      api.mutationEditFavList(favList)
+    },
+    mutationEditFavList(favList) {
+      if (favList.isDefaultList) {
+        let newLists = this.allFavLists
+        newLists.filter(w => w.alias == favList.alias && w.id != favList.id).forEach(w => w.isDefaultList = false)
+        this.allFavLists = newLists
+      }
+      api.mutationEditFavList(favList)
+    },
+    mutationCreateFavList() {
+      api.mutationCreateFavList()
+    },
+    getAplicationByKeyValue(keyValue) {
+      let apls = this.applications
+      if (apls != null) {
+        return apls.find(w => w.id.toString() == keyValue)
+      }
+      return {}
+    },
   }
+}
 </script>
 
 <style scoped>

@@ -7,29 +7,29 @@
 </template>
 
 <script>
-    export default {
-        name: "chat-btn",
-        props:{
-            chatKey: {
-                type: undefined,
-                required: true
-            },
-            chatType: {
-                type: String,
-                required: true
-            }
-        },
-        computed:{
-            hasMessage(){
-                return false;
-            }
-        },
-        methods:{
-            chatClick(appl){
-                console.log(`TODO: chat for application #${this.key}`)
-            }
-        }
+export default {
+  name: 'chat-btn',
+  props: {
+    chatKey: {
+      type: undefined,
+      required: true
+    },
+    chatType: {
+      type: String,
+      required: true
     }
+  },
+  computed: {
+    hasMessage() {
+      return false
+    }
+  },
+  methods: {
+    chatClick(appl) {
+      console.log(`TODO: chat for application #${this.key}`)
+    }
+  }
+}
 </script>
 
 <style scoped>

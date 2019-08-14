@@ -35,23 +35,23 @@
 </template>
 
 <script>
-    import purchasesSchemaAxios from "../api/BaseFunctions"
-    export default {
-        name: "resource-groups-treeview",
-        data:()=>({
-            active: [],
-            open: [],
-            items: [],
-            search: "",
-            caseSensitive: false
-        }),
-        methods:{
-            async axiosGroups(parenGroup, item){
-                //debugger;
-                const query = `
+import purchasesSchemaAxios from '../api/BaseFunctions'
+export default {
+  name: 'resource-groups-treeview',
+  data: () => ({
+    active: [],
+    open: [],
+    items: [],
+    search: '',
+    caseSensitive: false
+  }),
+  methods: {
+    async axiosGroups(parenGroup, item) {
+      //debugger;
+      const query = `
                 {
                     purchases{
-                        resourcesGrops(parent:"${ parenGroup ? parenGroup : "               " }"){
+                        resourcesGrops(parent:"${ parenGroup ? parenGroup : '               ' }"){
                             id,
                             name,
                             parentId,
@@ -65,37 +65,36 @@
                             }
                         }
                     }
-                }`;
-                var ret = await purchasesSchemaAxios(this, query);
-                return ret;
-            },
-            async fetchGroups (item) {
-                //debugger;
-                await this.axiosGroups(item.id).then(i=> {
-                   item.children = i.data.data.purchases.resourcesGrops;
-                });
-            }
-        },
-        created: function () {
-          this.axiosGroups(undefined).then(i=> {
-              this.items = i.data.data.purchases.resourcesGrops;
-          });
-        },
-        computed: {
-            filter () {
-                return this.caseSensitive
-                    ? (item, search, textKey) => item[textKey].indexOf(search) > -1
-                    : undefined
-            }
-        },
-        watch:{
-            active(item){
-                if (item.length > 0)
-                {
-                    this.$emit('onSelect', item[item.length - 1])
-                }
-            }
-        }
+                }`
+      var ret = await purchasesSchemaAxios(this, query)
+      return ret
+    },
+    async fetchGroups (item) {
+      //debugger;
+      await this.axiosGroups(item.id).then(i => {
+        item.children = i.data.data.purchases.resourcesGrops
+      })
+    }
+  },
+  created: function () {
+    this.axiosGroups(undefined).then(i => {
+      this.items = i.data.data.purchases.resourcesGrops
+    })
+  },
+  computed: {
+    filter () {
+      return this.caseSensitive
+        ? (item, search, textKey) => item[textKey].indexOf(search) > -1
+        : undefined
+    }
+  },
+  watch: {
+    active(item) {
+      if (item.length > 0) {
+        this.$emit('onSelect', item[item.length - 1])
+      }
+    }
+  }
 }
 </script>
 

@@ -20,57 +20,55 @@
 </template>
 
 <script>
-    import {PurchasesApi} from "../api/purchasesApi";
+import {PurchasesApi} from '../api/purchasesApi'
     
-    const api = new PurchasesApi();
+const api = new PurchasesApi()
 
-    export default {
-        name: "item-picture",
-        props:{
-            entityName: {
-                type: String,
-                required: true
-            },
-            id: {
-                type: undefined,
-                required: true
-            },
-            width: {
-                type: String
-            },
-            height: {
-                type: String
-            }
-        },        
-        data:()=>({
-            items: [],
-            hover: false
-        }),
-        methods:{
-           respCallback(resp){
-               if (resp.data.purchases.resourcesGroup.content.length > 0)
-               {
-                    if (resp.data.purchases.resourcesGroup.content)
-                    {
-                        this.items = this.items.concat(resp.data.purchases.resourcesGroup.content);
-                    }
-               }
-           },
-           mouceMove(val){
-               this.hover = val;
-           }
-        },
-        created: function () {
-            var promise = 
+export default {
+  name: 'item-picture',
+  props: {
+    entityName: {
+      type: String,
+      required: true
+    },
+    id: {
+      type: undefined,
+      required: true
+    },
+    width: {
+      type: String
+    },
+    height: {
+      type: String
+    }
+  },        
+  data: () => ({
+    items: [],
+    hover: false
+  }),
+  methods: {
+    respCallback(resp) {
+      if (resp.data.purchases.resourcesGroup.content.length > 0) {
+        if (resp.data.purchases.resourcesGroup.content) {
+          this.items = this.items.concat(resp.data.purchases.resourcesGroup.content)
+        }
+      }
+    },
+    mouceMove(val) {
+      this.hover = val
+    }
+  },
+  created: function () {
+    var promise = 
                 this.id.trim().length == 15 
-                    ? api.getImagesForCatalogueItem(this.id)
-                    : api.getImagesForCatalogueGroup(this.id);
+                  ? api.getImagesForCatalogueItem(this.id)
+                  : api.getImagesForCatalogueGroup(this.id)
             
-            promise.then(this.respCallback);
-        },
+    promise.then(this.respCallback)
+  },
         
 
-    }
+}
 </script>
 
 <style lang="scss" scoped>

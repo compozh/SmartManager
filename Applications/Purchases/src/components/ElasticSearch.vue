@@ -36,71 +36,71 @@
 </template>
 
 <script>
-    import {PurchasesApi} from "../api/purchasesApi";
+import {PurchasesApi} from '../api/purchasesApi'
+import _ from 'lodash'
     
-    const api = new PurchasesApi();
+const api = new PurchasesApi()
 
-    export default {
-        name:"elastic-search",
-        data:()=> ({
-            showSearch: false,
-            loading: false,
-            items: [],
-            search: null,
-            model: null,
-            select: null,
-            timeout: 0
-        }),
-        watch: {
-            search (val) {
-                //console.log(val);
-                val && val.length > 4 && val !== this.select && this.querySelections(val)
-            }
-        },
-        computed:{
-            wrapFilter(){
-                return this.$vuetify.breakpoint.smAndDown ? 'elastic-caption-trim' : '';
-            }
-        },
-        methods:{
-            toogleSearchPanel(){
-                // debugger;
-                this.showSearch = true;
-                this.$refs.elastic_search_input.$el.focus();
-                this.items = [];
-                this.$store.dispatch("purchases/setTitleState", !this.showSearch)
-
-            },
-            hideSearch(){
-                this.showSearch = false;
-                this.$store.dispatch("purchases/setTitleState", !this.showSearch)
-            },
-            querySelections (v) {
-                this.loading = true
-                // Simulated ajax query
-                clearTimeout(this.timeout);
-                this.timeout = setTimeout(() => {
-                   api.elasticSearch(v).then(this.elasticCallback);
-                this.loading = false
-                }, 0)
-            },
-            elasticCallback(resp){
-                this.items = _.map(JSON.parse(resp.data.purchases.elasticResourceNameSearch), function (item) 
-                { 
-                    var ret = { id : item.Id };
-                    var h = item.Highlights;
-                    ret.caption = h.n_res ? h.n_res.Highlights[0] : item.Source.FullName;
-                    ret.additionalCaption = h.nmat ? h.nmat.Highlights[0] : h.naimkm_s ? h.naimkm_s.Highlights[0] : h.n_res ? h.naimkm_s.Highlights[0] : "";
-                        
-                    return ret;
-                });
-                console.log(this.items);
-            },
-            addToCartCall(item){
-                api.addToCartMutation(item);
-            }
-        }
+export default {
+  name: 'elastic-search',
+  data: () => ({
+    showSearch: false,
+    loading: false,
+    items: [],
+    search: null,
+    model: null,
+    select: null,
+    timeout: 0
+  }),
+  watch: {
+    search (val) {
+      //console.log(val);
+      val && val.length > 4 && val !== this.select && this.querySelections(val)
     }
+  },
+  computed: {
+    wrapFilter() {
+      return this.$vuetify.breakpoint.smAndDown ? 'elastic-caption-trim' : ''
+    }
+  },
+  methods: {
+    toogleSearchPanel() {
+      // debugger;
+      this.showSearch = true
+      this.$refs.elastic_search_input.$el.focus()
+      this.items = []
+      this.$store.dispatch('purchases/setTitleState', !this.showSearch)
+
+    },
+    hideSearch() {
+      this.showSearch = false
+      this.$store.dispatch('purchases/setTitleState', !this.showSearch)
+    },
+    querySelections (v) {
+      this.loading = true
+      // Simulated ajax query
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        api.elasticSearch(v).then(this.elasticCallback)
+        this.loading = false
+      }, 0)
+    },
+    elasticCallback(resp) {
+      this.items = _.map(JSON.parse(resp.data.purchases.elasticResourceNameSearch), function (item) { 
+        var ret = { id: item.Id }
+        var h = item.Highlights
+        ret.caption = h.n_res ? h.n_res.Highlights[0] : item.Source.FullName
+        ret.additionalCaption = h.nmat ? h.nmat.Highlights[0] : h.naimkm_s ? h.naimkm_s.Highlights[0] : h.n_res ? h.naimkm_s.Highlights[0] : ''
+                        
+        return ret
+      })
+      console.log(this.items)
+    },
+    addToCartCall(item) {
+      api.addToCartMutation(item)
+    }
+  }
+}
 </script> 
 
 
