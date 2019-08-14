@@ -60,6 +60,9 @@ export default {
       drawer: vm.$vuetify.breakpoint.mdAndUp
     };
   },
+  created() {
+    this.$signalR.connect("TaskStateChanged", window.myConfig.SignalRUrl, this.taskStateChanged)
+  },
   computed: {
     currentUser() {
       return this.$store.getters.getCurrentUser;
@@ -78,18 +81,22 @@ export default {
     }
   },
   methods: {
-      toggleMenuMode() {
-        if (this.$vuetify.breakpoint.mdAndUp) {
-          this.$store.dispatch("mes/toggleMenuMiniMode")
-        }
-        else {
-          this.drawer = !this.drawer;
-        }
-      },
-      closeSnackbar() {
-        this.$store.dispatch('mes/closeSnackbar');
+    toggleMenuMode() {
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        this.$store.dispatch("mes/toggleMenuMiniMode")
+      } else {
+        this.drawer = !this.drawer;
       }
     },
+    closeSnackbar() {
+      this.$store.dispatch('mes/closeSnackbar');
+    },
+    taskStateChanged(msg) {
+      var workCenters = JSON.parse(msg);
+      debugger;
+      this.$store.dispatch('mes/setObsoluteDataTask', true);
+    }
+  }
 };
 </script>
 <style type="text/css">

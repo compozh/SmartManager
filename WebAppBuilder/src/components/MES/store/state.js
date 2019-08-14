@@ -18,6 +18,9 @@ export default {
   stuffPageState: {
     stuffInputText: ''
   },
+  obsoleteData: {
+    tasks: false
+  },
   properties: null,
   workCenters: {},
   tasks: {},

@@ -12,15 +12,15 @@
               </v-badge>
             </v-tab>
           </v-tabs>
-        <v-btn flat icon @click="applyReloadBtn()" @mousedown.stop>
+        <v-btn flat icon @click="refreshTasks" @mousedown.stop>
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path fill="#326DA8" d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
+            <path :fill='obsoleteData.tasks ? "#009975" : "#326DA8"' d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
           </svg>
         </v-btn>
       </v-flex>
       <v-flex class="tasks-list-block">
         <mes-content-loader
-          v-if="!initializeTasks"
+          v-if="!initializeTasks && !Object.keys(tasks).length"
           :loaderType=loaderType />
 
         <div v-for="(tasksByWorkCenter, workCenter) in tasks"
@@ -76,6 +76,12 @@ export default {
   computed: {
      tasks() {
       return this.$store.getters['mes/tasks'];
+    },
+    obsoleteData() {
+      return this.$store.getters['mes/obsoleteData'];
+    },
+    workCenters() {
+      return this.$store.getters['mes/workCenters'];
     }
   },
   methods: {
@@ -98,8 +104,8 @@ export default {
       });
       return tasks;
     },
-    applyReloadBtn(){
-      return console.log('apply signalar')
+    refreshTasks() {
+      this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters), fetchPolicy: 'network-only' });
     }
   }
 }

@@ -78,5 +78,8 @@ export default {
   },
   changeDragResizeMode(state) {
     state.dragResizeMode = !state.dragResizeMode;
+  },
+  setObsoluteDataTask(state, obsoluteData) {
+    state.obsoleteData.tasks = obsoluteData;
   }
 }

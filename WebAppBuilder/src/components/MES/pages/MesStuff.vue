@@ -85,7 +85,7 @@ export default {
   display:block;
   height: 100%;
 }
-  .mes-stuff .installations-block{
+  .mes-stuff .installations-block {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

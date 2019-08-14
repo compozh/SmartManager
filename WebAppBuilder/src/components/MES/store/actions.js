@@ -40,6 +40,9 @@ export default {
         });
         commit('setTasksByWorkCentrer', { workCenterCode, tasks })
       }
+      if(fetchPolicy == 'network-only') {
+        this.dispatch('mes/selectTaskAfterRefresh');
+      }
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message);
     }
@@ -184,6 +187,24 @@ export default {
     }
     if(linearLoader) {
       commit('setLinearLoader', false);
+    }
+  },
+  setObsoluteDataTask({ commit }, obsoluteData) {
+    commit('setObsoluteDataTask', obsoluteData);
+  },
+  selectTaskAfterRefresh({ getters, commit }) {
+    let me = this,
+      selectedTask = getters.tasksPageState.selectedTask,
+      tasks = getters.tasks,
+      workCenterCodes = Object.keys(tasks);
+
+    for(let workCenterCode of workCenterCodes) {
+      let tasksByWorkCenter = tasks[workCenterCode];
+      for(let task of tasksByWorkCenter) {
+        if(selectedTask.shiftTaskId == task.shiftTaskId) {
+          commit('setSelectedTask', task);
+        }
+      }
     }
   }
 }

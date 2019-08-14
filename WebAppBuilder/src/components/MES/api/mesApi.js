@@ -16,18 +16,23 @@ import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 
+var client = null;
+
 const getClient = () => {
-  const options = {
-    uri: myConfig.GrapgQlUrl + 'api/graphql',
-    headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
-      'schema': 'mes'
+  if(client == null) {
+    const options = {
+      uri: myConfig.GrapgQlUrl + 'api/graphql',
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
+        'schema': 'mes'
+      }
     }
+    client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: new HttpLink(options)
+    });
   }
-  return new ApolloClient({
-    cache: new InMemoryCache(),
-    link: new HttpLink(options)
-  })
+  return client;
 }
 
 export class MesApi {

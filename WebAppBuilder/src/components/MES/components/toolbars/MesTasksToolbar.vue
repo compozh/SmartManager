@@ -112,6 +112,7 @@ export default {
     align-items: center;
     width: 200px;
     max-width: 200px;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .mes-tasks-toolbar-qr {
     display: flex;
