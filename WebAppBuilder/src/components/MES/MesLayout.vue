@@ -60,9 +60,6 @@ export default {
       drawer: vm.$vuetify.breakpoint.mdAndUp
     };
   },
-  created() {
-    this.$signalR.connect("TaskStateChanged", window.myConfig.SignalRUrl, this.taskStateChanged)
-  },
   computed: {
     currentUser() {
       return this.$store.getters.getCurrentUser;
@@ -91,11 +88,6 @@ export default {
     },
     closeSnackbar() {
       this.$store.dispatch('mes/closeSnackbar');
-    },
-    taskStateChanged(msg) {
-      var workCenters = JSON.parse(msg);
-      debugger;
-      this.$store.dispatch('mes/setObsoluteDataTask', true);
     }
   }
 };

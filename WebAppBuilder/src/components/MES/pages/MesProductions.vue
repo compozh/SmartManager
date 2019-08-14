@@ -87,6 +87,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-content: start;
   }
   .mes-content-loader {
     position: absolute;
@@ -100,7 +101,6 @@ export default {
     max-width: 400px;
     width: 360px;
     border-radius: 10px;
-    max-height: 300px;
   }
   .wait-for-data-block {
     padding: 20px;

@@ -94,6 +94,7 @@ export default {
     };
   },
   created() {
+    this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged)
     this.initialize();
   },
   computed: {
@@ -138,6 +139,12 @@ export default {
     }
   },
   methods: {
+    taskStateChanged(msg) {
+      console.log(msg)
+     // var workCenters = JSON.parse(msg);
+      //debugger;
+      //this.$store.dispatch('mes/setObsoluteDataTask', true);
+    },
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenters');
       await this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters) });
