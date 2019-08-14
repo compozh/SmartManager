@@ -7,6 +7,12 @@
     "emptyPassword": "Вы не ввели пароль",
     "NoDevices": "Нет устройств",
 	"purchases":{
+		"Applications":{
+			"Search": "Поиск",
+			"From": "С",
+			"To": "По",
+			"Statuses": "Статусы"
+		  },
 		"CreateOrderWindow":{
 			"DocumentNumber": "Номер документа",
 			"DocumentDate": "Дата документа",
@@ -14,6 +20,12 @@
 			"Description": "Описание"
 		},
 		"Catalog":{
+			"CatalogItem":{
+				"Group":"Группа",
+				"Designation":"Обозначение",
+				"ResourceName": "Название ресурса",
+				"MesurementUnit": "Единица измерения"
+			},
 			"FastFilter":"Быстрый фильтр",
 			"Name":"Наименование"
 		  },

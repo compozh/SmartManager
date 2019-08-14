@@ -1,6 +1,6 @@
-{
+query($ids:[ID]){
   purchases{
-    applications(currentUser: $curr){
+    applications(ids: $ids){
       id,
       number,
       date,

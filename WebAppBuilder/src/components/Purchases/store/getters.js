@@ -12,8 +12,6 @@ export default {
     return state.resources;
   },
   getTestItems(state) {
-    
-    debugger;
     return state.testItems;
   },
   getMessage(state){
@@ -30,5 +28,8 @@ export default {
   },
   getDocStatus(state) {
     return state.docStatus;
+  },
+  getBreadCrumbs(state) {
+    return state.breadcrumbs;
   },
 }

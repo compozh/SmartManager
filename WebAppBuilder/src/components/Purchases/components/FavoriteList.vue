@@ -1,7 +1,6 @@
 <template>
-    <div class="app1">
+    <div v-if="favList">
         <v-container
-            v-for="favList in favlists"
             :key="favList.id"
             fluid
             grid-list-md
@@ -11,54 +10,69 @@
             <v-layout v-if="isEditable">
                 
                 <v-flex xs12 sm6 md3>
-                <v-text-field 
-                    :label="favList.caption"
-                    v-model="favList.caption"
-                    solo
-                    @input="mutationEditFavList(favList)"
-                ></v-text-field>  
+                <textbox :item="favList" field="caption" :change="mutationEditFavList"/>
                 </v-flex>
-
                 <v-flex>
                 <v-switch 
                 v-model="favList.isDefaultList"
-                label="По умолчанию"             
+                label="По умолчанию" 
                 @change="mutationEditFavList(favList)"/>
                 </v-flex >
                 <v-flex>
                 <v-btn flat small color="error" @click="mutationDeleteFavList(favList)">Delete List</v-btn>
                 </v-flex >
             </v-layout>
+             <draggable  v-model="favLists"  v-bind="{group: favList.alias, sort:false, disabled: false}">
             <v-layout row wrap>
-                <v-flex
-                v-for="card in favList.keyValues.slice(0,countToPrint)"
-                :key="card"
-                xs12
-                sm6
-                md4
-                >
-                <applicationCard :application="getAplicationByKeyValue(card)" />
-                </v-flex>
-                
+
+              <v-flex
+                  v-for="card in favList.items"
+                  :key="card.id"
+                  xs12
+                  sm6
+                  md4
+                  >
+                   <draggable v-model="card.itSelfArray"  :move="onmove" @end="end" v-bind="{group: favList.alias, sort:false}"  style="min-height: 10px">
+                    <div :key="card.id" v-if="favList.alias === 'DOC'" >
+                      <applicationCard  :index="card.id" :application="card" />
+                    </div>
+                    <div :key="card.id.toString()" v-else>
+                      <catalogueItemCard :catalogueItem="card" />
+                    </div>
+                    
+              </draggable>
+            </v-flex>
+            <div v-if="!favList.items.some(w => 1==1)" class="emptyBlock" >
+            </div>
             </v-layout>
-        </v-container>
+          </draggable >
+      </v-container>
+      
     </div>
+    
 </template>
 
 
 <script>
 
 import {PurchasesApi} from "../api/purchasesApi";
+import _ from 'lodash';
+import draggable from 'vuedraggable';
+import { debuglog } from 'util';
 
 const api = new PurchasesApi();
 
 
   export default {
      name: "onefavlist",
+     components: {
+      draggable,
+      
+     },
      props:{
         listId: {
             type: String,
-            required: true
+            required: false
         },
         printCount: {
             type: Number,
@@ -68,14 +82,24 @@ const api = new PurchasesApi();
             type: Boolean,
             required: false
         },
+        catalogueItem:{},
+        
     },
     data: () => ({
+        favListt:undefined,
+        listToAdd:undefined,
+        listToRemove:undefined,
+        itemToMove : undefined,
+        saveVisible:false
     }),
-    created() {
-      api.getFavLists();
-      api.getApplications();
+    created: function () {
+       //api.getFavLists();
+      },
+    destroyed(){
+      this.$store.state.resources = [];
     },
-    mounted(){
+    beforeDestroy(){
+      this.$store.state.resources = [];
     },
     computed:{
       applications:{
@@ -86,13 +110,37 @@ const api = new PurchasesApi();
           this.$store.commit('purchases/setApplications', newVal);
         }
       },
-      favlists: {
-        get: function() {
-            return this.allFavLists.filter(w => w.id == this.listId);
+      resource_items: {
+          get: function() {
+            return this.$store.state.purchases.favResources;
+          }
         },
-        set: function(newVal){
-          this.$store.commit('purchases/setFavLists', newVal);
+      favList: {
+        get: function() {
+           if(this.listId){
+            let list = this.allFavLists.filter(w => w.id == this.listId)[0];
+            list.items = [];
+            
+            list.keyValues.forEach(w => {
+              
+              let test = list.alias =='DOC' ? this.getAplicationByKeyValue(w) : this.getСatalogueItemByKeyValue(w);
+              if(test)
+              {
+                test.itSelfArray = [test];
+                list.items.push(test);
+              }
+            });
+            return list;
+          }
+          return undefined;
+        },
+        set:function() {
         }
+      },
+      favLists: {
+        get: function() {
+             return [this.favList]
+             }
       },
       allFavLists: {
         get: function() {
@@ -101,15 +149,45 @@ const api = new PurchasesApi();
         set: function(newVal){
           this.$store.commit('purchases/setFavLists', newVal);
         }
-      },
-      countToPrint:{
-          get: function() {
-            return this.printCount;
-        }
       }
     },
     methods: {
-      ondrag(){},
+    getFavListsById(id){
+        let test = this.allFavLists.filter(w=>w.id == id);
+        if(test == undefined){
+        }
+        return test;
+    },  
+    onmove({ relatedContext, draggedContext }){
+     
+      let listToAdd = relatedContext.element;
+      let itemToMove2 = draggedContext.element;
+
+      if(itemToMove2 != undefined && listToAdd != undefined)
+      {
+        let listToRemove = this.allFavLists.find(w => w.keyValues.some(x => x == itemToMove2.id.toString()));
+        
+        this.listToAdd = listToAdd;
+        this.listToRemove = listToRemove;
+        this.itemToMove = itemToMove2;  
+      }
+      return false;
+      },
+      end(){
+        let listToRemove = this.allFavLists.find(w=>w.id.toString() == this.listToRemove.id.toString());
+        let listToAdd = this.allFavLists.find(w=>w.id.toString() == this.listToAdd.id.toString());
+        if(listToRemove.id.toString() != listToAdd.id.toString()){
+          api.mutationChangeListForItem(this.itemToMove.id.toString(), this.listToAdd.id.toString(), this.listToRemove.id.toString());
+         
+          listToRemove.keyValues = listToRemove.keyValues.filter(w => w != this.itemToMove.id.toString());
+          listToAdd.keyValues.push(this.itemToMove.id.toString());
+        }
+        
+
+        this.listToRemove = undefined;
+        this.listToAdd = undefined;
+        this.itemToMove = undefined;
+      },
       mutationDeleteFavList(favList){
         api.mutationDeleteFavList(favList);
         this.allFavLists = this.allFavLists.filter(w=>w.id != favList.id);
@@ -122,13 +200,13 @@ const api = new PurchasesApi();
         if(favList.isDefaultList)
         {
           let newLists = this.allFavLists;
-          newLists.filter(w=>w.alias == favList.alias && w.id != favList.id).forEach(w => w.isDefaultList = false);
+          newLists.filter(w => w.alias == favList.alias && w.id != favList.id).forEach(w => w.isDefaultList = false);
           this.allFavLists = newLists;
         }
         api.mutationEditFavList(favList);
       },
       mutationCreateFavList(){
-        api.mutationCreateFavList()
+        api.mutationCreateFavList();
       },
       getAplicationByKeyValue(keyValue){
         let apls = this.applications;
@@ -137,12 +215,21 @@ const api = new PurchasesApi();
         }
        return {};
       },
+      getСatalogueItemByKeyValue(keyValue){
+        let test2 = 2;
+        
+        test2 =  this.resource_items.find(w => w.id == keyValue);
+        return test2;
+      },
     }
   }
 </script>
 
 <style scoped>
 
+.emptyBlock{
+  min-height: 50px;
+}
 
 .app1{
     padding: 5px;
