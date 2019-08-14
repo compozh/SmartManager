@@ -37,18 +37,30 @@ const api = new PurchasesApi();
     created() {
     },
     async mounted(){
-      await api.getFavLists();
-      let favres =  this.favlists.filter(w => w.alias == 'KSM').map(w => w.keyValues).
+      if(!this.favlists ){
+        await api.getFavLists();
+      }
+      
+      let ress = this.$store.state.purchases.favResources;
+      if(!(ress && ress.some(w=>1==1))){
+          let favres =  this.favlists.filter(w => w.alias == 'KSM').map(w => w.keyValues).
+          reduce((prev, next) => { return prev.concat(next); }, []);
+          api.getResourcesByIds(favres);
+      }
+      let apps = this.$store.getters["purchases/getApplications"];
+      
+      if(!(apps && apps.some(w=>1==1))){
+        let favapps =  this.favlists.filter(w => w.alias == 'DOC').map(w => w.keyValues).
         reduce((prev, next) => { return prev.concat(next); }, []);
-      api.getResourcesByIds(favres);
-      let favapps =  this.favlists.filter(w => w.alias == 'DOC').map(w => w.keyValues).
-        reduce((prev, next) => { return prev.concat(next); }, []);
-       api.getApplicationsByIds(favapps);
+        api.getApplicationsByIds(favapps);
+      }
+     
     },
     computed:{
       favlists: {
         get: function() {
           return this.$store.getters["purchases/getFavLists"];
+          
         },
         set: function(newVal){
           this.$store.commit('purchases/setFavLists', newVal);

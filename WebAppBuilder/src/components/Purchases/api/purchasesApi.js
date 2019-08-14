@@ -344,7 +344,6 @@ export class PurchasesApi {
 
 
   async addToFavoritesOneMutation(alias, keyValue, content){
- 
     let aliasFavLists = undefined;
     if(content.$store.state.purchases.favlists){
       aliasFavLists = content.$store.state.purchases.favlists.filter(w => w.alias == alias);
@@ -364,15 +363,12 @@ export class PurchasesApi {
         variables: {alias: alias, keyValue: keyValue, listId: defFavLists ? defFavLists.id: ""}
       }).then(result => {
         let res = result.data.purchasesMutation.addToFavoritesOne;
-        
-        if(defFavLists && defFavLists.id == res.list.id){
-          let oldFavList = content.$store.state.purchases.favlists;
+        let oldFavList = content.$store.state.purchases.favlists;
+        if(oldFavList && oldFavList.some(w=>w.id == res.list.id)){
           oldFavList.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
-          content.$store.state.purchases.favlists = oldFavList;
+          //content.$store.state.purchases.favlists = oldFavList;
         }else{
-          let oldFavList = content.$store.state.purchases.favlists;
           oldFavList.push(res.list);
-          content.$store.state.purchases.favlists = oldFavList;
         }
       });
 
@@ -380,22 +376,24 @@ export class PurchasesApi {
       await store.commit("purchases/setChose", {
         list : aliasFavLists.map(w=> {return {Title : w.caption, Key: w.id };}) , 
         caption:"Выбор из списка",
-        method: (key) => {
-          client.mutate({
+        method: async (key) => {
+          await client.mutate({
             mutation: gql`${addToFavorites}`,
             variables: {alias: alias, keyValue: keyValue, listId: key}
-          }).then(result => {
+          }).then( async result => {
             let res = result.data.purchasesMutation.addToFavoritesOne;
-            
-            if(defFavLists && defFavLists.id == res.list.id){
-              content.$store.state.purchases.favlists.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
+            let oldFavList = content.$store.state.purchases.favlists;
+            if(oldFavList && oldFavList.some(w=>w.id == res.list.id)){
+              oldFavList.filter(w=>w.id == res.list.id)[0].keyValues.push(res.keyValue);
+              //content.$store.state.purchases.favlists = oldFavList;
             }else{
-              content.$store.state.purchases.favlists.push(res.list);
+              oldFavList.push(res.list);
             }
           });
         }
       });
     }
+    
   }
 
   
@@ -442,19 +440,27 @@ export class PurchasesApi {
       .catch(error => {console.log(error.message)});
   }
   
-  async deleteItemFromFavorites(alias, keyValue){
+  async deleteItemFromFavorites(alias, keyValue, context){
+    if(!store.state.purchases.favlists){
+      await this.getFavLists();
+    }
     await client.mutate({
       mutation: gql`${deleteItemFromFavorites}`,
       variables: {alias: alias, keyValue: keyValue},     
-    }).then(res => {
-      client.query({
-        query: gql`query ${favLists}`,
-        fetchPolicy: 'no-cache',
-        variables: { }
-      }).then(res => {
-        store.commit('purchases/setFavLists', res.data.purchases.favLists);
-        store.commit("purchases/setMessage",  `Удалено с избраного`);}
-        ).catch(error => console.log(error.message));
+    }).then( res => {
+     
+      let listId = res.data.purchasesMutation.deleteItemFromFavorites.id;
+      
+      let oldFavlist = context.$store.state.purchases.favlists;
+      let keyValuess = oldFavlist.find(w=>w.id == listId).keyValues;
+      let itemsToAdd = keyValuess.filter(w=>w != keyValue);
+      // var test1 = _.remove(keyValuess, function(n) {
+      //   return n != keyValue;
+      // });
+      
+      oldFavlist.find(w=>w.id == listId).keyValues = [];
+      itemsToAdd.forEach(w=>{ oldFavlist.find(w=>w.id == listId).keyValues.push(w) } );
+      
     })
       .catch(error => {console.log(error.message)});
   }
