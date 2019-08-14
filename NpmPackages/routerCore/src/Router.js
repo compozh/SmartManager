@@ -1,5 +1,5 @@
-console.log('RouterCore is loaded!');
-import VueRouter from 'vue-router'
+
+let GlobalVueRouter = undefined
 
 export default class Router {
   __router;
@@ -8,11 +8,16 @@ export default class Router {
    * Конструктор
    * @param {VueRouter} router Vue router
    */
-  constructor(router) {
+  constructor(router, { VueRouter }) {
     this.__router = router
     if (!this.__router) {
-      throw new Error('VueRouter должен быть передан!')
+      throw new Error('экземпляр VueRouter должен быть передан!')
     }
+    if (!VueRouter) {
+      throw new Error('VueRouter должен быть передан в зависимостях!')
+    }
+
+    GlobalVueRouter = VueRouter
   }
 
 
@@ -32,7 +37,7 @@ export default class Router {
    * Создание нового роутера
    */
   _createRouter() {
-    return new VueRouter({
+    return new GlobalVueRouter({
       mode: this.__router.options.mode,
       base: this.__router.options.base
     })
@@ -76,12 +81,6 @@ export default class Router {
     }
     next()
   }
-
-
-
-
-
-
 }
 
 

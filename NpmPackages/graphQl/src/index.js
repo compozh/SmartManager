@@ -1,23 +1,27 @@
-const promise = () => import('./graphQlCore')
 
-const _namespace = 'GraphQlCore'
+import GraphQlCore from './graphQlCore'
 
 export default {
 
   /**
-   *
+   * Плагин для работы с GrapgQl
    * @param {*} Vue
-   * @param {*} params.dependencies.modulesManager
    */
   install(Vue, params) {
-    let { options, dependencies } = params || {}
+    let {
+      options,
+      dependencies
+    } = params || {}
 
     if (!dependencies) {
-      throw new Error("Зависимости должны быть переданы")
+      throw new Error('Зависимости должны быть переданы')
     }
 
-    dependencies.modulesManager.register(_namespace, ()=> promise().then(module => new module.default(options, dependencies)))
+    let { apolloProvider } = dependencies
 
+    Vue.prototype.$apolloProvider = apolloProvider
+
+    Vue.prototype.$graphQlCore = new GraphQlCore(options, dependencies)
 
   }
 }

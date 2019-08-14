@@ -1,21 +1,18 @@
-console.log("GraphQl Loaded!")
 
 export default class GraphQlCore {
-  __config
-  __axios
 
   constructor(config, { axios }) {
     this.__config = config
     this.__axios = axios
 
     if (!this.__config) {
-      throw new Error("Параметры GrapgQl должны быть заданы!")
+      throw new Error('Параметры GrapgQl должны быть заданы!')
     }
-    if(!this.__config.GrapgQlUrl){
-      throw new Error("Адрес GraphQl сервера должен быть задан!")
+    if (!this.__config.GrapgQlUrl) {
+      throw new Error('Адрес GraphQl сервера должен быть задан!')
     }
     if (!this.__axios) {
-      throw new Error("axios должен быть передан как зависимость!")
+      throw new Error('axios должен быть передан как зависимость!')
     }
   }
 
@@ -27,8 +24,7 @@ export default class GraphQlCore {
    * @param {string} operationName Код операции, которую необходимо выполнить
    */
   async GrapgQlQuery({schema, query, variables, operationName}) {
-    try
-    {
+    try {
       let response = await this.__axios({
         method: 'POST',
         url: `${ this.__config.GrapgQlUrl }api/graphql`,
@@ -41,11 +37,11 @@ export default class GraphQlCore {
         }
       })
       return response
-    }
-    catch(error){
-      return Promise.reject(error);
+    } catch (error) {
+      return Promise.reject(error)
     }
   }
+
 
   /**
    * Вход пользователя
@@ -53,7 +49,7 @@ export default class GraphQlCore {
    * @param {String} password Пароль пользователя
    * @param {Bool} rememberMe Признак "Запомнить меня"
    */
-  async LogIn(login, password, rememberMe){
+  async LogIn(login, password, rememberMe) {
     const response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/login`, {
       login: login,
       password: password,
@@ -65,25 +61,56 @@ export default class GraphQlCore {
     return response.data
 
   }
+  // Вход пользователя по QR коду
+  async LoginByQr(id) {
+    const response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/alternativelogin`, {code: id, type: 2}, {
+      withCredentials: true
+    })
+    return response.data
+  }
 
   /**
    * Получение полной информации о текущем пользователе
    */
-  async GetCurrentUser(){
-    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`)
+  async GetCurrentUser() {
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`, undefined, { withCredentials: true})
     return response.data
   }
 
   /**
    * Разлогиниться
    */
-  async LogOff(){
+  async LogOff() {
     await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/logout`, undefined, {
       withCredentials: true
     })
   }
 
+  /**
+   * Применить права указанного пользователя
+   * @param {string} userId ID пользователя, чьи права нужно применить
+   */
+  async ApplyDelegatedRights(userId) {
+    return await  this.__axios({
+      method: 'POST',
+      url: `${ this.__config.GrapgQlUrl }api/authentication/delegated`,
+      withCredentials: true,
+      data: userId
+    })
+  }
+
+  /**
+  * Делегировать права указанному пользователю
+  * @param {object} param0 пользователь и дата
+   */
+  async SetDelegationRights({userId, dateFrom, dateTo}) {
+    return await  this.__axios({
+      method: 'POST',
+      url: `${ this.__config.GrapgQlUrl }api/authentication/delegation`,
+      withCredentials: true,
+      data: {userId, dateFrom, dateTo}
+    })
+  }
 
 
-
-};
+}

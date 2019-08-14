@@ -4,8 +4,8 @@
   "private": false,
   "description": "manager of modules",
   "author": "it-enterprise",
-  "main1": "./dist/modules-manager.common.js",
-  "main": "./src/index.js",
+  "main": "./dist/modules-manager.common.js",
+  "main1": "./src/index.js",
   "files": [
     "dist/*"
   ],
@@ -18,7 +18,10 @@
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0"
   },
   "dependencies": {}
 }

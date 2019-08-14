@@ -1,0 +1,77 @@
+{
+  smtasks {
+    tasksGetInfo(taskId: $taskId) {
+      ...taskFields
+      childTasks {
+        ...taskFields
+      }
+    }
+  }
+}
+
+fragment taskFields on TasksGetInfo {
+  id
+  name
+  descript
+  htmlDescript
+  declarerId
+  declarer
+  declarerPhoto
+  performerId
+  performer
+  dateplan
+  dateAdd
+  status
+  isMy
+  myControl
+  isGenerate
+  needApprov
+  needComm
+  arso
+  keyValue
+  kidCopy
+  hasOrig
+  hasComm
+  isAgree
+  isResponsible
+  childCount
+  childDoneCount
+  priority
+  dateRemind
+  addedId
+  addedFio
+  addedPhoto
+  dateFact
+  isRead
+  caseId
+  docCaption
+  originals {
+    id
+    ndor
+    fileName
+    user
+    date
+    isMy
+    fileExt
+    comm
+    fileSize
+    type
+    typeName
+    typeDescription
+    isSign
+    fileUrl
+  }
+  comments {
+    userId
+    user
+    date
+    text
+    isAgree
+  }
+  participants {
+    userId
+    userFio
+    name
+    role
+  }
+}

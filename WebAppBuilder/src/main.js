@@ -17,6 +17,10 @@ import VueApollo from 'vue-apollo';
 import 'viewerjs/dist/viewer.css';
 import Viewer from 'v-viewer';
 
+import signalR from './signalR'
+
+Vue.use(signalR)
+
 export const eventBus = new Vue(); // Шина событий
 
 const req = require.context('@/components/', true, /\.(js|vue)$/i);

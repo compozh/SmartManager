@@ -34,7 +34,11 @@ module.exports = {
     'curly':"error",
     "key-spacing": ["error", { "beforeColon": false, "afterColon": true, "mode": "strict"  }],
     'block-spacing': "error",
-    "space-infix-ops": ["error", {"int32Hint": false}]
+    "space-infix-ops": ["error", {"int32Hint": false}],
+    "space-before-blocks":["error"],
+    "keyword-spacing":["error"],
+    "brace-style":["error","1tbs", { "allowSingleLine": true }],
+    "arrow-spacing":["error"]
 
   },
 
