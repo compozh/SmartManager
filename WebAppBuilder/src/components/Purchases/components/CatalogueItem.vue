@@ -2,9 +2,9 @@
     <v-layout>
         <v-flex justify-start>
             <v-card v-if="item">
-                <v-layout wrap>
+                <v-layout v-bind="{ [`${$vuetify.breakpoint.mdAndUp ? 'row' : 'column'}`]: true }" wrap>
                     <v-flex justify-start>
-                        <item-picture height="400px" entityName="resource" :id="item.id"/>
+                        <item-picture height="400px" width="100%" entityName="resource" :id="item.id"/>
                     </v-flex>
                     <v-flex>
                         <v-card class="card-info">
