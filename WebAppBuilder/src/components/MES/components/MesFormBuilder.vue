@@ -69,17 +69,43 @@ export default {
   }
   .btn.btn-default.btn-sm.editRow {
     width: 50px;
-    background-color: #007bff;
-    color: white;
+    border: 1px solid #326DA8;
+    color: #326DA8;
   }
   .btn.btn-default.btn-sm.editRow:hover{
-    background-color: #015bbb;
+    background-color: rgba(50, 109, 168, .12);
+  }
+  .btn.btn-danger {
+    background: white;
+    border: 1px solid rgba(179, 2, 2, 0.81);
+    color: rgba(179, 2, 2, 0.81);
+  }
+  .btn.btn-danger:hover {
+    background-color: rgba(179, 2, 2, 0.12);
   }
   .table.datagrid-table.table-bordered thead {
     font-size: 16px;
   }
   .list-group-item.list-group-header.formio-edit-grid-header {
     font-size: 16px;
+  }
+  .form-group.has-feedback.formio-component.formio-component-radio {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  .form-group.has-feedback.formio-component.formio-component-radio .form-group {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group.has-feedback.formio-component.formio-component-select {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  } 
+  .form-group.has-feedback.formio-component.formio-component-select .choices.form-group.formio-choices {
+    width: 45%;
   }
   .nav-link {
     color: #326DA8;
@@ -93,6 +119,9 @@ export default {
     background-color: white;
     border-color: #326DA8;
     color: #326DA8;
+  }
+  .btn.btn-primary:hover {
+    background-color:  rgba(50, 109, 168, .12);
   }
   .btn {
     font-size: 14px;
