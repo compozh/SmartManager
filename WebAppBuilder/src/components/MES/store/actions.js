@@ -22,6 +22,7 @@ export default {
       result.data.mes.workCenters.forEach(workCenter => {
         workCenters[workCenter.code] = workCenter;
       });
+      
       commit('setWorkCenters', workCenters)
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message);
