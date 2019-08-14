@@ -1,25 +1,25 @@
-import Axios from "axios";
+import Axios from 'axios'
 
 export default function purchasesSchemaAxios (f, q, props) {
-    f.loading = true
-    // Simulated ajax query
-    clearTimeout(f.timeout);
-    return new Promise((resolve) => {
+  f.loading = true
+  // Simulated ajax query
+  clearTimeout(f.timeout)
+  return new Promise((resolve) => {
         
-      f.timeout = setTimeout(() => {
-        Axios({
-                            method: 'POST',
-                            url: myConfig.GrapgQlUrl+'api/graphql',
-                            withCredentials:true,
-                            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'), 'Content-Type': 'application/json'},
-                            data: { 
-                              SchemaName:'PurchasesSchema', 
-                              query: q,
-                              variables: props
-                            } 
-                          })
-        .then(res=> { f.loading = false; resolve(res) });
+    f.timeout = setTimeout(() => {
+      Axios({
+        method: 'POST',
+        url: window.myConfig.GrapgQlUrl + 'api/graphql',
+        withCredentials: true,
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'), 'Content-Type': 'application/json'},
+        data: { 
+          SchemaName: 'PurchasesSchema', 
+          query: q,
+          variables: props
+        } 
+      })
+        .then(res => { f.loading = false; resolve(res) })
         
-      }, 0)
-    });
-  }
+    }, 0)
+  })
+}

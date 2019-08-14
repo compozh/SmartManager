@@ -38,7 +38,6 @@
 <script>
 import {PurchasesApi} from '../api/purchasesApi'
 import _ from 'lodash'
-    
 const api = new PurchasesApi()
 
 export default {
@@ -65,7 +64,6 @@ export default {
   },
   methods: {
     toogleSearchPanel() {
-      // debugger;
       this.showSearch = true
       this.$refs.elastic_search_input.$el.focus()
       this.items = []
@@ -97,7 +95,7 @@ export default {
       console.log(this.items)
     },
     addToCartCall(item) {
-      api.addToCartMutation(item)
+      api.addToCartMutation(item.id)
     }
   }
 }

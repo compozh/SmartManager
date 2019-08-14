@@ -17,7 +17,7 @@
                   <v-dialog/>
                 </v-flex>
                 <v-flex sm12 xs12>
-                  <div>
+                  <!-- <div>
                   <v-text-field :label="$t('purchases.CreateOrderWindow.DocumentDate')" readonly  class="date-input"
                   append-icon="event"  @click:append="dialog = true"
                   :value="order.DDM | formatDate"/>
@@ -28,7 +28,8 @@
                     </v-date-picker>
                   </v-dialog>
         
-                </div>
+                </div> -->
+                <date-text-field :dateType="order" fieldName="DDM" :labelName="$t('purchases.CreateOrderWindow.DocumentDate')" editable="true"/>
                 </v-flex>
                 <v-flex sm12 xs12>
                   <v-select v-model="order.DM1" :label="$t('purchases.CreateOrderWindow.Code')" placeholder="DM1"></v-select>
@@ -54,7 +55,6 @@
 </template>
 
 <script>
-import DateTextField from '../components/DateTextField.vue'
 import {PurchasesApi} from '../api/purchasesApi'
 
 const api = new PurchasesApi()
@@ -75,10 +75,6 @@ export default {
       }      
     }
   },  
-  created() {
-    console.log(12)
-  },
-
   methods: {    
     callBack() {
       this.$emit('onChangeValue', this.order.DDM)

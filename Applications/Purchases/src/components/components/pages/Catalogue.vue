@@ -1,4 +1,6 @@
 <template>
+  <div>    
+    <catalogue-route-breadcrumbs :code="routeParamCode" />
     <div v-if="!isCard">
       <v-navigation-drawer fixed right app v-model="filterDrawer" >
         <v-layout class="filter-panel">
@@ -14,7 +16,6 @@
         </v-layout>
       </v-navigation-drawer>
         <v-layout row>
-          <!--<catalogue-route-breadcrumbs :code="routeParamCode" />-->
           <v-layout justify-end>
             <!--<v-btn icon @click="rowViewType = !rowViewType"><v-icon>{{rowViewType ? 'view_agenda' : 'view_column'}}</v-icon></v-btn>-->
             <v-btn icon @click="filterDrawer = !filterDrawer"><v-icon>filter_list</v-icon></v-btn>
@@ -32,7 +33,7 @@
             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <v-card>
                 <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                  <item-picture :entityName="entityType" :id="item.id" height="200px" width="350px" />
+                  <item-picture entityName="resourcesGroup" :id="item.id" height="200px" width="100%" />
                   <div class="cat_header title mb-1">{{item.name}}</div>                  
                 </router-link>
               <v-list>
@@ -52,21 +53,19 @@
               </v-card>
             </v-flex>
           </template>
-            <template v-for="item in resource_items">
-              <v-flex :key="item.id" >
-                {{item.id}}
-              </v-flex>
-            </template>
+          <template v-for="item in resource_items">
+             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
+                <catalogueItemCard :catalogueItem="item" />
+            </v-flex>
+          </template>
         </v-layout>
-        </div>
+        </div>      
+      <loader-element/>
     </div>          
     <div v-else>
-      <v-card>
-        <v-card-title>
-          <catalogue-item :catalogueId="routeParamCode" />
-        </v-card-title>
-      </v-card>
+      <catalogue-item :catalogueId="routeParamCode" />
     </div>
+  </div>
 </template>
 
 <script>
@@ -113,10 +112,10 @@ export default {
     groups_items: {
       get: function() {
         if (this.search === '') {                        
-          debugger
+              
           return this.$store.getters['purchases/getResourceGroups']
         }
-        debugger
+          
         return _.filter(this.$store.getters['purchases/getResourceGroups'], this.searchCallback)
       }
     },
@@ -131,6 +130,7 @@ export default {
         return this.$store.getters['purchases/getResources']//_.filter(this.$store.getters["purchases/getResources"], this.searchCallback);
       }
     },
+    //todo
     test_items: {
       get: function() {
         if (this.search === '') {
@@ -153,7 +153,12 @@ export default {
   watch: {
     '$route' (to, from) {
       var id = to.params.catalogueId
-      this.getItems(id)
+      if (!id) {
+        id = ''
+      }
+      if (id.trim().length < 15) { 
+        this.getItems(id)
+      }
     }
   }
 }
@@ -161,18 +166,24 @@ export default {
 
 <style lang="scss" scoped>
 
+
 .cat_header{
+  font-size:1.5em !important;
   min-height: 40px;
   color: darkslategray;
 }
 .list_content:hover{
   background: lightgrey;
 }
+.v-list__tile__title{
+  font-size:0.85em;
+}
 .list_content{
   border-bottom: 1px solid lightgray;
   color: dimgray;
 }
-  .child{
+  .child{    
+    font-size:0.1em !important;
     float: left;
   }
   .v-card {

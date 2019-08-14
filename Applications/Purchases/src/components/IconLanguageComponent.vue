@@ -23,7 +23,6 @@
 <script>
 import CountryFlag from 'vue-country-flag'
 import _ from 'lodash'
-import { debug } from 'util'
 import {PurchasesApi} from '../api/purchasesApi'
     
 const api = new PurchasesApi()
@@ -58,7 +57,6 @@ export default {
       this.SetUpLanguageFromURLParameter()
       //Иначе берем из sessionStorage
     } else if (localStorage.getItem('language')) {
-      console.log('localization')
       var language = localStorage.getItem('language')
       this.Setlocalization(language)
     }
@@ -83,17 +81,16 @@ export default {
     },
     //Установка локализации
     Setlocalization(language) {
-      this.$localization.Setlocalization(language)
-
+      this.$localization.Setlocalization(language)    
+      this.$cookies.set('c', language.toUpperCase()) 
       let currentGroup = this.$route.params.catalogueId
-      api.changeLocalization(language).then(() => {
-        if (currentGroup != undefined) {
-          api.getResourcesGroupById(currentGroup)
-        } else {
-          api.getResourcesGroupsByParentGroup('')
-        }
-           
-      })
+      if (currentGroup != undefined) {
+        api.getBreadcrumbsByGroup(currentGroup,true)
+        api.getResourcesGroupById(currentGroup)
+      } else {
+        api.restoreGraphCache()
+        api.getResourcesGroupsByParentGroup('')
+      }
     }
 
   },
@@ -104,12 +101,9 @@ export default {
     .v-btn__content{
         height: inherit;
     }
-
-    
 </style>
 
 <style lang="scss" scoped>
-
     .v-btn__content{
         height: inherit;
     }

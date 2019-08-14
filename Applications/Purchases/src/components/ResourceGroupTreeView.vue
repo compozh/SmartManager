@@ -47,7 +47,6 @@ export default {
   }),
   methods: {
     async axiosGroups(parenGroup, item) {
-      //debugger;
       const query = `
                 {
                     purchases{
@@ -70,7 +69,6 @@ export default {
       return ret
     },
     async fetchGroups (item) {
-      //debugger;
       await this.axiosGroups(item.id).then(i => {
         item.children = i.data.data.purchases.resourcesGrops
       })

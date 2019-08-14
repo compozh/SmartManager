@@ -35,7 +35,7 @@ const api = new PurchasesApi()
 export default {
   name: 'workflow-stepper',
   props: {
-    // stageName: ,
+    stageName: null,
     currentStage: {
       type: String,
       required: false
@@ -58,7 +58,7 @@ export default {
       return resp.data.purchases.docStatus 
     },
         
-    isCurrentStage(curr) { debugger; return curr == this._props.currentStage },
+    isCurrentStage(curr) { return curr == this._props.currentStage },
          
   },
   beforeCreate() {

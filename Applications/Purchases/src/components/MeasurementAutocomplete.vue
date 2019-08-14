@@ -15,56 +15,55 @@
 </template>
 
 <script>
-    import {PurchasesApi} from "../api/purchasesApi";
-    const api = new PurchasesApi();
-    export default {
-        name: "measurement-autocomplete",
-        props:{
-            measurement: {},
-            labelName: "",
-            editable: true
-        },
-        data:()=>({
-            loading: false,
-            items: [],
-            search: null,
-            timeout: 0
-        }),
-        computed:{
-            labelNameComp(){
-                if (this.labelName)
-                    return this.labelName;
-                return $t('purchases.CartItems.Unit');
-            },
-            measurementComp:{
-                get: function() {
-                    return this.measurement;
-                },
-                set: function(value){
-                    this.measurement.id = value.id;
-                    this.measurement.name = value.name;
-                    this.$emit('onChangeValue', this.measurement)
-                }
-            }
-        },
-        watch: {
-            search (val) {
-                if (val && val !== this.measurement.name)
-                {
-                    this.querySelections(val)
-                }
-            }
-        },
-        methods:{
-            querySelections(val){
-                api.getMeasurementUnits(val).then(this.callback)
-            },
-            callback(resp)
-            {
-                this.items = resp.data.purchases.measurementUnits;
-            }
-        }
+import {PurchasesApi} from '../api/purchasesApi'
+const api = new PurchasesApi()
+export default {
+  name: 'measurement-autocomplete',
+  props: {
+    measurement: {},
+    // eslint-disable-next-line vue/require-prop-type-constructor
+    labelName: '',
+    // eslint-disable-next-line vue/require-prop-type-constructor
+    editable: true
+  },
+  data: () => ({
+    loading: false,
+    items: [],
+    search: null,
+    timeout: 0
+  }),
+  computed: {
+    labelNameComp() {
+      if (this.labelName) { return this.labelName }
+      return this.$t('purchases.CartItems.Unit')
+    },
+    measurementComp: {
+      get: function() {
+        return this.measurement
+      },
+      set: function(value) {
+        this.measurement.id = value.id
+        this.measurement.name = value.name
+        this.$emit('onChangeValue', this.measurement)
+      }
     }
+  },
+  watch: {
+    search (val) {
+      if (val && val !== this.measurement.name) {
+        this.querySelections(val)
+      }
+    }
+  },
+  methods: {
+    querySelections(val) {
+      api.getMeasurementUnits(val).then(this.callback)
+    },
+    callback(resp) {
+      this.items = resp.data.purchases.measurementUnits
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

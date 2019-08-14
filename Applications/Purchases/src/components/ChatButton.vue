@@ -26,7 +26,8 @@ export default {
   },
   methods: {
     chatClick(appl) {
-      console.log(`TODO: chat for application #${this.key}`)
+      console.log(`TODO: chat for application #${this.key} `)
+      console.log(`TODO: chat for application #${appl} `)
     }
   }
 }

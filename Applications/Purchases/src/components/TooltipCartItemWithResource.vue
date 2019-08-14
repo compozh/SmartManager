@@ -12,7 +12,7 @@
             </template>
                 <span class="hidden-lg-and-up">
                     <span>{{cartItem.resource.name}}</span><br/>
-                    <item-picture class="hidden-sm-and-up" entityName="resources" :id="cartItem.resource.id" height="100px" width="100px"/>
+                    <item-picture class="hidden-sm-and-up" entityName="resource" :id="cartItem.resource.id" height="100px" width="100px"/>
                 </span>
         </v-tooltip>
         </v-flex>
@@ -28,7 +28,15 @@ export default {
   props: {
     cartItem: {}
   },
-        
+  filters: {
+    truncate: (text, length, clamp) => {
+      clamp = clamp || '...'
+      var node = document.createElement('div')
+      node.innerHTML = text
+      var content = node.textContent
+      return content.length > length ? content.slice(0, length) + clamp : content
+    }
+  },
   methods: {
     getTextLength (p1, p2, p3, p4, p5) {
       switch (this.$vuetify.breakpoint.name) {

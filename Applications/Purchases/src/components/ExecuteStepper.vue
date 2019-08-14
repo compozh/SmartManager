@@ -48,7 +48,6 @@ export default {
     },
     curStage: {
       get: function() {
-        debugger
         return this._props.currentStage - 1
       }
     },
