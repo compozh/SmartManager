@@ -54,38 +54,41 @@
 </template>
 
 <script>
-import DateTextField from "../components/DateTextField.vue";
-import {PurchasesApi} from "../api/purchasesApi";
+import DateTextField from '../components/DateTextField.vue'
+import {PurchasesApi} from '../api/purchasesApi'
 
-const api = new PurchasesApi();
+const api = new PurchasesApi()
 
 export default {
   
-  name: "btn-modal-window-order-creation",
+  name: 'btn-modal-window-order-creation',
   data: function() {
     return {
       dialog: false,
       isOpen: false,
-      order:{
-        NDM:              new String(),
-        DDM:              new Date().toISOString().substr(0, 10),
-        DM1:              new String(),
-        DM2:              new String(),
-        Description:      new String()
+      order: {
+        NDM: new String(),
+        DDM: new Date().toISOString().substr(0, 10),
+        DM1: new String(),
+        DM2: new String(),
+        Description: new String()
       }      
-    };
+    }
   },  
+  created() {
+    console.log(12)
+  },
 
   methods: {    
-    callBack(){
-      this.$emit('onChangeValue', this.order.DDM);
+    callBack() {
+      this.$emit('onChangeValue', this.order.DDM)
     },
-    submitOrder(){
-      api.createOrderMutation(this.order);
-      this.isOpen = false;
+    submitOrder() {
+      api.createOrderMutation(this.order)
+      this.isOpen = false
     },
   },
-};
+}
 </script>
 
 <style lang="scss">

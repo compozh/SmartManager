@@ -1,3 +1,4 @@
+const path = require('path')
 module.exports = {
   chainWebpack: config => {
     const svgRule = config.module.rule('svg')
@@ -17,7 +18,7 @@ module.exports = {
 
   },
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/webapps/'
+    ? process.env.VUE_APP_BASE_PATH + path.basename(process.cwd(), path.extname(process.cwd()))
     : '/',
   pluginOptions: {
     webpackBundleAnalyzer: {

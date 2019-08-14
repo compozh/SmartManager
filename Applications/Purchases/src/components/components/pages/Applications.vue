@@ -29,9 +29,10 @@
 <script>
 import moment from 'moment'
 import {PurchasesApi} from '../../../api/purchasesApi'
+
 const api = new PurchasesApi()
 
-    export default {
+export default {
   name: 'applications',
   //props: ["applications"],
   data: () => ({
@@ -52,33 +53,33 @@ const api = new PurchasesApi()
     pages: {
       get() { 
         debugger
-                    return Math.ceil(this.applications.length / this.rowsPerPage)
-                }
+        return Math.ceil(this.applications.length / this.rowsPerPage)
+      }
     },
     rowsPerPage: {
       get() {
         return this.rowView ? 24 : 18
-                }
+      }
     },
     applications: {
       get: function() {
         return this.$store.getters['purchases/getApplications']
-                },
+      },
       set: function(newVal) {
         this.$store.commit('purchases/setApplications', newVal)
-                }
+      }
     },
   },
   methods: {
     getItemsOnPage() {
       debugger
-                return this.applications.slice(
+      return this.applications.slice(
         (this.pagination.page - 1) * this.rowsPerPage, 
         this.pagination.page * this.rowsPerPage)
     },
     sizeItemsFltr() {
       return this.sizeItems.filter(i => this.$vuetify.breakpoint.mdAndUp || i.value != 3)
-            },
+    },
     swipeLeft(appl) {
       console.log(`TODO: swipe left for application #${appl.number}`)
     },
@@ -88,8 +89,8 @@ const api = new PurchasesApi()
   },
   mounted() {
     api.getFavLists()
-            api.getApplications()
-        },
+    api.getApplications()
+  },
   created() {   
   },
 }

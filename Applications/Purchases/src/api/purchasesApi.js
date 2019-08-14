@@ -32,7 +32,7 @@ import applications from './graphql/applications.gql'
 import docStatus from '../api/graphql/docStatus.gql'
 
 const options = {
-  uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+  uri: myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
     'schema': 'PurchasesSchema'
@@ -331,7 +331,7 @@ export class PurchasesApi {
             }).then(res => {
               store.commit('purchases/setFavLists', res.data.purchases.favLists)
               store.commit('purchases/setMessage',  'Добавлено в избраное')
- }
+            }
             ).catch(error => console.log(error.message))
           })
         }
@@ -413,7 +413,7 @@ export class PurchasesApi {
       }).then(res => {
         store.commit('purchases/setFavLists', res.data.purchases.favLists)
         store.commit('purchases/setMessage',  'Удалено с избраного')
- }
+      }
       ).catch(error => console.log(error.message))
     })
       .catch(error => { console.log(error.message) })

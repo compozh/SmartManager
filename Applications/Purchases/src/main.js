@@ -64,7 +64,9 @@ Vue.use(Eds, { dependencies })
 Vue.use(WebApps, { dependencies, options: window.myConfig })
 Vue.use(SignalR)
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('purchases', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('purchases', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('purchases', 'uk', () => import('./plugins/resources/uk.json'))
 
 // Шина событий
 export const eventBus = new Vue()

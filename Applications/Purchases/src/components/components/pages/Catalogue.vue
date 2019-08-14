@@ -71,6 +71,7 @@
 
 <script>
 import {PurchasesApi} from '../../../api/purchasesApi'
+
 const api = new PurchasesApi()
 export default {
   name: 'catalogue',

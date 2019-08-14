@@ -89,13 +89,13 @@ export default {
     application: {
       get: function() {
         debugger
-                let test = this.$store.getters['purchases/getApplications']
-                return test.find(w => w.id == this.$route.params.applicationId)
-            },
+        let test = this.$store.getters['purchases/getApplications']
+        return test.find(w => w.id == this.$route.params.applicationId)
+      },
       set: function(newVal) {
         debugger
-                //this.$store.commit('purchases/setApplications', newVal);
-            }
+        //this.$store.commit('purchases/setApplications', newVal);
+      }
     },
     compRows() {
       for (const key in this.application.rows) {
@@ -106,26 +106,26 @@ export default {
         }
       }
       return this.application.rows
-        }
+    }
   },
   created() {
     debugger
-    },
+  },
   mounted() {
     api.getApplications()
-    },
+  },
   methods: {
     editClick(row) {
       console.log(row)
-            row.isEdit = !row.isEdit;
+      row.isEdit = !row.isEdit
     }
   },
   watch: {
     '$route' (to, from) {
       debugger
-          var id = to.params.applicationItemId
-          this.application = id 
-        }
+      var id = to.params.applicationItemId
+      this.application = id 
+    }
   }
 }
 </script>

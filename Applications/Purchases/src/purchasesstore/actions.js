@@ -1,51 +1,47 @@
-// import {SmartManagerApi} from '../api/smartManagerApi'
-
-// const api = new SmartManagerApi()
-
 export default {
-  async setCartItems({commit}, payload) {
+  setCartItems({commit}, payload) {
     commit('setCartItems', payload)
   },
-  async addCartItem({commit},payload) {
+  addCartItem({commit},payload) {
     commit('addCartItem',payload)
   },
-  async updateCartItem({commit},payload) {
+  updateCartItem({commit},payload) {
     commit('updateCartItem',payload)
   },
-  async setMessage({commit},payload) {
+  setMessage({commit},payload) {
     commit('setMessage',payload)
   },
-  asyncdeleteCartItem({commit}, payload) {
+  deleteCartItem({commit}, payload) {
     commit('deleteCartItem', payload)
   },
-  async deleteAllCarts({commit}) {
+  deleteAllCarts({commit}) {
     commit('deleteAllCarts')
   },
-  async createCartItem({commit}, payload) {
+  createCartItem({commit}, payload) {
     commit('createCartItem', payload)
   },
-  async setResourceGroups({commit}, payload) {
+  setResourceGroups({commit}, payload) {
     commit('setResourceGroups', payload)
   },
-  asyncsetChoseList({commit},payload) {
+  setChoseList({commit},payload) {
     commit('setChoseList',payload)
   },
-  async addToFavorites({commit}, payload) {
+  addToFavorites({commit}, payload) {
     commit('addToFavorites', payload)
   },
-  async addToFavoritesSecond({commit}, payload) {
+  addToFavoritesSecond({commit}, payload) {
     commit('addToFavoritesSecond', payload)
   },
-  async clearResourceGroups({commit}) {
-    commit('clearResourceGroups')
+  clearResourceGroups({commit}) {
+    commit('clearResourceGroups', payload)
   },
-  async setFavLists({commit}, payload) {
+  setFavLists({commit}, payload) {
     commit('setFavLists', payload)
   },
-  async setApplications({commit}, payload) {
+  setApplications({commit}, payload) {
     commit('setApplications', payload)
   },
-  async setTitleState({commit}, payload) {
+  setTitleState({commit}, payload) {
     commit('setTitleState', payload)
   },
 }
