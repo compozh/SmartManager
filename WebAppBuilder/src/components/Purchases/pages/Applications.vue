@@ -6,21 +6,20 @@
             <label v-text="$t('purchases.Catalog.FastFilter')" />
             <v-card elevation="0">
                 <v-card-text>
-                    <v-text-field v-model="search.title" label="Титл" clearable />
-                    <v-text-field v-model="search.number" label="Номер" clearable/>
+                    <v-text-field v-model="search.searchText" :label="$t('purchases.Applications.Search')" clearable/>
                     <date-text-field editable="true" :dateType="this.search" fieldName="date_from"
-                    labelName="С"/>
+                    :labelName="$t('purchases.Applications.From')"/>
                     <date-text-field editable="true" :dateType="this.search" fieldName="date_to"
-                    labelName="По"/>
+                    :labelName="$t('purchases.Applications.To')"/>
                 </v-card-text>
             </v-card>
             <v-card elevation="0">
                 <v-card-title>
-                    Статус
+                    {{$t('purchases.Applications.Statuses')}}
                 </v-card-title>
                 <v-card-text>
                     <template v-for="(item, index) in this.statuses">
-                        <v-checkbox v-model="search.statuses" :label="item.name" :value="item.id" :key="index"/>
+                        <v-checkbox class="statuses" v-model="search.statuses" :label="item.name" :value="item.id" :key="index"/>
                     </template>
                 </v-card-text>
             </v-card>
@@ -61,16 +60,14 @@ const api = new PurchasesApi();
 
     export default {
         name: "applications",
-        //props: ["applications"],
         data: () => ({
             rowView: true,            
             filterDrawer: false,
             search: {
-                title: "",
-                date_from: "",
-                date_to: "",
-                number: "",
-                statuses: []
+                searchText:      new String(),
+                date_from:       "",
+                date_to:         "",
+                statuses:        []
             },
             smallSize: true,
             pagination: {
@@ -119,14 +116,14 @@ const api = new PurchasesApi();
                 let numberResult = this.checkNumber(item);
                 let dateResult = this.checkDates(item);
                 let statusResult = this.checkStatus(item);
-                
-                return numberResult && titleResult && dateResult && statusResult;                
+                                
+                return (numberResult || titleResult) && dateResult && statusResult;                
             },
             checkTitle(item){
                 var titleResult = true;
-                if(this.search.title != ""){
+                if(this.search.searchText != ""){
                     var itemToSearch = _.lowerCase(_.trim(item.title));
-                    var searchedTitle = _.lowerCase(_.trim(this.search.title));
+                    var searchedTitle = _.lowerCase(_.trim(this.search.searchText));
                     var temp = itemToSearch.indexOf(searchedTitle);
                     titleResult = temp >= 0;
                 }
@@ -135,8 +132,8 @@ const api = new PurchasesApi();
             },
             checkNumber(item){
                 var numberResult = true;
-                if(this.search.number != ""){           
-                    var searchedNumber = _.lowerCase(_.trim(this.search.number));
+                if(this.search.searchText != ""){           
+                    var searchedNumber = _.lowerCase(_.trim(this.search.searchText));
                     var temp = item.number.indexOf(searchedNumber);
                     numberResult = temp >= 0;
                 }
@@ -231,6 +228,12 @@ const api = new PurchasesApi();
 }
 .application-execution{
     margin: 0px 0px 5px 0px;
+}
+
+.statuses{
+    margin: 0;
+    padding:0;
+    color: blue;
 }
 
 </style>

@@ -33,7 +33,7 @@
             <v-flex :key="item.id" xs12 sm6 md4 lg3 catalogue-card>
               <v-card>
                 <router-link :to="{ name:'CATALOGUE', params: {catalogueId: item.id.trim() }}">
-                  <item-picture entityName="resourcesGroup" :id="item.id" height="200px" width="350px" />
+                  <item-picture entityName="resourcesGroup" :id="item.id" height="200px" width="100%" />
                   <div class="cat_header title mb-1">{{item.name}}</div>                  
                 </router-link>
               <v-list>

@@ -10,8 +10,7 @@ import queryWithGroupIdParam from './graphql/base/queryWithGroupIdParam.graphql'
 import catalogueQueryFragment from './graphql/fragments/catalogueQuery.graphql';
 import resourcesMinimalFieldsFragment from './graphql/fragments/resources/minimalFields.graphql';
 import resourcesGroupsMinimalFieldsFragment from './graphql/fragments/resourcesGroups/minimalFields.graphql';
-import onlyСatalogueItemFieldsQuery from './graphql/fragments/onlyСatalogueItemFieldsQuery.graphql';
-import catalogueAttacmentFields from './graphql/fragments/resources/catalogueAttacmentFields.graphql'
+import catalogueItemAttachmentsFields from './graphql/fragments/catalogueItemAttachmentsFields.graphql'
 // Queries
 
 import breadcrumbsByGroup from './graphql/breadcrumbsByGroup.gql'
@@ -141,7 +140,7 @@ export class PurchasesApi {
   }
   getImagesForCatalogueItem(id){
 
-    const query = gql`${queryWithGroupIdParam} ${onlyСatalogueItemFieldsQuery} ${catalogueAttacmentFields}`
+    const query = gql`${queryWithGroupIdParam} ${catalogueItemAttachmentsFields}`
     return client.query({
       query: query,
       variables: { id: id }

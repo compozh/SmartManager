@@ -5,7 +5,7 @@
         append-icon="event"  @click:append="dialog = true"
         :value="dateType[fieldNameComp] | formatDate" 
         />
-        <v-dialog v-model="dialog" persistent max-width="290">
+        <v-dialog v-model="dialog" max-width="290">
             <v-date-picker v-model="dateType[fieldNameComp]" no-title scrollable>
                 <v-spacer></v-spacer>
                 <v-btn flat color="primary" @click="dialog = false; callBack()">OK</v-btn>
