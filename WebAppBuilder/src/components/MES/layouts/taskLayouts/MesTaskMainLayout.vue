@@ -9,7 +9,6 @@
                 :is-draggable="this.dragResizeMode"
                 :is-resizable="this.dragResizeMode"
                 :is-mirrored="false"
-                :vertical-compact="false"
                 :margin="[20, 20]"
                 :use-css-transforms="true"
                 >
@@ -39,7 +38,7 @@ export default {
   },
   computed: {
     blocks() {
-      return [ {'x':0, 'y':0, 'w':7, 'h':7, 'i':'0', data: this.selectedTask.detailedDescription } ];
+      return [ {'x':0, 'y':0, 'w':12, 'h':3, 'i':'0', data: this.selectedTask.detailedDescription } ];
     }
   }
 }

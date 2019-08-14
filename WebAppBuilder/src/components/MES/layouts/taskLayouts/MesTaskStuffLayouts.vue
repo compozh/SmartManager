@@ -64,6 +64,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-content: start;
 }
 .mes-content-loader {
   width: 100%;

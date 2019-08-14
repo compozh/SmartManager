@@ -1,11 +1,17 @@
 <template>
   <v-layout class="mes-stuff">
+    <mes-qr-scaner
+      v-if="qrScanerVisible" 
+      @changeQrScanerVisible=changeQrScanerVisible
+      @submitQrCode=submitQrCode
+    />
 
     <mes-stuff-toolbar 
       class="mes-stuff-toolbar"
       :installations=installations
       @removeAllInstallations=removeAllInstallations
-      @submitQrCode=submitQrCode />
+      @submitQrCode=submitQrCode
+      @changeQrScanerVisible=changeQrScanerVisible />
 
     <mes-content-loader v-if="!initializeInstallations" />
 
@@ -27,7 +33,10 @@ export default {
     ContentLoader
   },
   data() {
-    return { initializeInstallations: false };
+    return { 
+      qrScanerVisible: false,
+      initializeInstallations: false
+    };
   },
   created() {
     this.initialize();
@@ -59,10 +68,14 @@ export default {
       this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
     },
     submitQrCode(code) {
-      let workCenters = this.workCenters;
-      if(workCenters && workCenters.length) {
-        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: workCenters[0].code, batchBarcode: code, factId: 0 });
+      let workCenters = this.workCenters,
+        workCenterCodes = Object.keys(workCenters);
+      if(workCenterCodes.length) {
+        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: workCenters[workCenterCodes[0]].code, batchBarcode: code, factId: 0 });
       }
+    },
+    changeQrScanerVisible(visible) {
+      this.qrScanerVisible = visible;
     }
   }
 }
@@ -72,9 +85,9 @@ export default {
   display:block;
   height: 100%;
 }
-  .mes-stuff .installations-block{
+  .mes-stuff .installations-block {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     padding: 0 10px;
     position: absolute;
@@ -121,5 +134,8 @@ export default {
   }
   .wait-for-data-block {
     padding: 20px;
+  }
+  .mes-content-loader {
+    z-index: 1;
   }
 </style>

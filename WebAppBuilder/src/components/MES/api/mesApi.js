@@ -16,25 +16,31 @@ import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 
-const options = {
-  uri: myConfig.GrapgQlUrl + 'api/graphql',
-  headers: {
-    'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
-    'schema': 'mes'
-  }
-}
+var client = null;
 
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink(options)
-})
+const getClient = () => {
+  if(client == null) {
+    const options = {
+      uri: myConfig.GrapgQlUrl + 'api/graphql',
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
+        'schema': 'mes'
+      }
+    }
+    client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: new HttpLink(options)
+    });
+  }
+  return client;
+}
 
 export class MesApi {
   constructor() {}
 
   async getPropertiesFromGql() {
     try {
-        return await client.query({
+        return await getClient().query({
         query: gql` ${properties}`
         }
       )
@@ -48,7 +54,7 @@ export class MesApi {
 
   async getWorkCentersFromGql(uuid, login) {
     try {
-      const result = await client.query({
+      const result = await getClient().query({
         query: gql` query ($uuid: String, $login: String) ${workCenters}`,
         variables: { uuid, login }
       });
@@ -61,7 +67,7 @@ export class MesApi {
 
   async getTasksFromGql(workCenter, fetchPolicy) {
     try {
-      const result = await client.query({
+      const result = await getClient().query({
         query: gql`query ($workCenter: String) ${tasks}`,
         variables: { workCenter },
         fetchPolicy: fetchPolicy || 'cache-first'
@@ -75,7 +81,7 @@ export class MesApi {
 
   async getInstallationsFromGql(workCenter, fetchPolicy) {
     try {
-      const result = await client.query({
+      const result = await getClient().query({
         query: gql`query ($workCenter: String) ${installations}`,
         variables: { workCenter },
         fetchPolicy: fetchPolicy || 'cache-first'
@@ -89,7 +95,7 @@ export class MesApi {
 
   async removeInstallationGql(installationId) {
     try {
-      let result = await client.mutate({
+      let result = await getClient().mutate({
         mutation: gql`${removeInstallation}`,
         variables: { installationId }
       });
@@ -101,7 +107,7 @@ export class MesApi {
 
   async registerMaterialInstallationGql(workCenterCode, batchBarcode, factId) {
     try {
-      let result = await client.mutate({
+      let result = await getClient().mutate({
         mutation: gql`${registerMaterialInstallation}`,
         variables: { workCenterCode, batchBarcode, factId }
       });
@@ -113,7 +119,7 @@ export class MesApi {
 
   async registerProductionGql(productionRegistrationParam){
     try {
-      let result = await client.mutate({
+      let result = await getClient().mutate({
         mutation: gql`${registerProduction}`,
         variables: { productionRegistrationParam }
       });
@@ -125,7 +131,7 @@ export class MesApi {
   }
   async cancelBeginRegistrationGql(taskId){
     try {
-      let result = await client.mutate({
+      let result = await getClient().mutate({
         mutation: gql`${cancelBeginRegistration}`,
         variables: { taskId }
       });
@@ -136,7 +142,7 @@ export class MesApi {
   }
   async getProductionsFromGql(workerCode, fetchPolicy) {
     try {
-      const result = await client.query({
+      const result = await getClient().query({
         query: gql`query ($workerCode: String) ${productions}`,
         variables: { workerCode },
         fetchPolicy: fetchPolicy || 'cache-first'
@@ -149,7 +155,7 @@ export class MesApi {
   }
   async deleteProductionGql(factId) {
     try {
-      let result = await client.mutate({
+      let result = await getClient().mutate({
         mutation: gql`${deleteProduction}`,
         variables: { factId }
       });
@@ -160,7 +166,7 @@ export class MesApi {
   }
   async getProductionFormioFromGql(formCode, properties) {
     try {
-      const result = await client.query({
+      const result = await getClient().query({
         query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
         variables: { formCode, properties }
       });
@@ -172,7 +178,7 @@ export class MesApi {
   }
   async productionFormIoSubmitGql({ formCode, data, productionRegistrationParam}) {
     try {
-      let result = await client.mutate({
+      let result = await getClient().mutate({
         mutation: gql`${productionFormIoSubmit}`,
         variables: { formCode, data, productionRegistrationParam}
       });

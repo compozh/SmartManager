@@ -37,5 +37,8 @@ export default {
   },
   dialogLinearLoader(state) {
     return state.dialogLinearLoader;
+  },
+  obsoleteData(state) {
+    return state.obsoleteData;
   }
 }

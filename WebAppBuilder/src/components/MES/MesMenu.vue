@@ -18,6 +18,7 @@ export default {
       if (!this.$store.state.applicationDescription) {
         return [];
       }
+      
       const app = this.$store.state.applicationDescription;
       const sections = app.Sections || [];
       var links = [];
@@ -28,17 +29,20 @@ export default {
         );
       }
 
-      var pages = links[1].Children;
+      var pages = [];
+      for(let page of links[1].Children) {
+        pages.push(page);
+      }
       pages = pages.sort((a,b) => {
         return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1);
       });
       links = links.concat(pages);
-      links = links.concat(links[0].Children);
       return links.filter(l => l.Name && l.Path);
     }
   }
 };
 </script>
+
 <style>
   .v-list.theme--light a.v-list__tile--active{
     color: #326DA8 !important;

@@ -1,8 +1,8 @@
 <template>
-  <v-card class="mes-tasks-component">
+  <div class="mes-tasks-component">
     <v-layout column class="mes-tasks-component-layout" scrollable>
       <v-flex fill-height class="grid-tabs">
-          <v-tabs show-arrows v-model="selectedTab">
+          <v-tabs v-model="selectedTab">
             <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
               <v-badge color="#326DA8" overlap>
                 <template v-slot:badge>
@@ -12,41 +12,42 @@
               </v-badge>
             </v-tab>
           </v-tabs>
-        <v-btn flat icon @click="applyReloadBtn()" @mousedown.stop>
+        <v-btn flat icon @click="refreshTasks" @mousedown.stop  :loading="refreshingTasks">
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path fill="#326DA8" d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
+            <path :fill='obsoleteData.tasks ? "#009975" : "#326DA8"' d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
           </svg>
         </v-btn>
       </v-flex>
-      <v-flex class="tasks-list-block">
+      <v-flex class="tasks-list-blocks">
         <mes-content-loader
-          v-if="!initializeTasks"
+          v-if="!initializeTasks && !Object.keys(tasks).length"
           :loaderType=loaderType />
+        <div class="tasks-list-block-content">
 
-        <div v-for="(tasksByWorkCenter, workCenter) in tasks"
+          <div v-for="(tasksByWorkCenter, workCenter) in tasks"
           :key="workCenter"
-          class="tasks-list-block-content">
+          class="tasks-list-block">
+          
+          <div v-for="task in tasksByWorkCenter" :key="task.id">
 
-          <v-card ripple class="task-item" v-for="task in tasksByWorkCenter"
-            :key="task.id"
-            @click="changeCurrentTask(task)">
-
-            <div :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'"
+            <div 
               v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
                 || (selectedTasksTab == 1 && task.state == 'DONE')">
 
-              <v-card-text>
+            <v-card ripple class="task-item"
+              @click="changeCurrentTask(task)">
+              <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
                 <span v-html="task.description"></span>
               </v-card-text>
-
+            </v-card>
             </div>
-          </v-card>
           </div>
-
-          <span v-if="initializeTasks && Object.keys(tasks).length == 0" class="lack-of-tasks-str">Задания отсутствуют</span>
+          </div>
+        </div>
+          <span v-if="initializeTasks && !Object.keys(tasks).length" class="lack-of-tasks-str">Задания отсутствуют</span>
       </v-flex>
     </v-layout>
-  </v-card>
+    </div>
 </template>
 
 <script>
@@ -65,7 +66,8 @@ export default {
         { index: 1, id: "DONE", name: "Выполненные"}
       ],
       loaderType: "list",
-      selectedTab: this.selectedTasksTab
+      selectedTab: this.selectedTasksTab,
+      refreshingTasks: false
     };
   },
   props: {
@@ -76,6 +78,12 @@ export default {
   computed: {
      tasks() {
       return this.$store.getters['mes/tasks'];
+    },
+    obsoleteData() {
+      return this.$store.getters['mes/obsoleteData'];
+    },
+    workCenters() {
+      return this.$store.getters['mes/workCenters'];
     }
   },
   methods: {
@@ -98,8 +106,14 @@ export default {
       });
       return tasks;
     },
-    applyReloadBtn(){
-      return console.log('apply signalar')
+    refreshTasks() {
+      this.refreshingTaskMethod();
+    },
+    async refreshingTaskMethod() {
+      this.refreshingTasks = true;
+      await this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters), fetchPolicy: 'network-only' });
+      this.$store.dispatch('mes/setObsoluteDataTask', false);
+      this.refreshingTasks = false;
     }
   }
 }
@@ -123,8 +137,8 @@ export default {
   .grid-tabs .v-badge {
     padding-right: 10px;
   }
-  .tasks-list-block .task-item{
-    margin: 10px;
+  .tasks-list-blocks .task-item{
+    margin: 5px 10px;
     border-radius: 10px;
     cursor: pointer;
   }
@@ -156,6 +170,11 @@ export default {
   .tasks-list-block-content::-webkit-scrollbar-thumb:hover {
       background-color:#a0a0a5;
       border:4px solid #f4f4f4
+  }
+  .tasks-list-block {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
   }
 
   /* set button(top and bottom of the scrollbar) */

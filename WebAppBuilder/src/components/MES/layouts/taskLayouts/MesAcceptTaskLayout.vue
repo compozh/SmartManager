@@ -9,22 +9,26 @@
                 :is-draggable="this.dragResizeMode"
                 :is-resizable="this.dragResizeMode"
                 :is-mirrored="false"
-                :vertical-compact="false"
                 :margin="[20, 20]"
+                :vertical-compact="false"
                 :use-css-transforms="true"
                 >
-               <grid-item v-for="item in blocks" :key="item.i"
+               <grid-item v-for="item in blocks"
+                        :ref="item.ref"
+                        :key="item.i"
                         :x="item.x"
                         :y="item.y"
                         :w="item.w"
                         :h="item.h"
                         :i="item.i"
                         class="grid-element">
+                        <div class="grid-item-data">
                         <mes-form-builder v-if="item.i == '0'"
-                        ref="formioBuilder"
-                        :workCenter=workCenters[selectedTask.workCenterCode]
-                        @formioSubmit=formioSubmit />
+                          ref="formioBuilder"
+                          :workCenter=workCenters[selectedTask.workCenterCode]
+                          @formioSubmit=formioSubmit />
                        <span  v-if="item.i != '0'" v-html="item.data"></span>
+                       </div>
                </grid-item>
             </grid-layout>
         </v-flex>
@@ -42,11 +46,14 @@ export default {
     workCenters: Object,
     dragResizeMode: Boolean
   },
+  components: {GridLayout: VueGridLayout.GridLayout,
+           GridItem: VueGridLayout.GridItem
+           },
   computed: {
     blocks() {
       return [
-        {'x':0, 'y':0, 'w':11, 'h':11, 'i':'0'},
-        {'x':0, 'y':12, 'w':7, 'h':7, 'i':'1', data: this.selectedTask.detailedDescription},
+        {'x':0, 'y':0, 'w':12, 'h':3, 'i':'1', data: this.selectedTask.detailedDescription},
+        {'x':0, 'y':3, 'w':12, 'h':14, 'i':'0', ref: 'formio'}
       ];
     }
   },
@@ -65,12 +72,12 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-.mes-accept-task-layout .mes-accept-task-flex {
-  position: absolute;
-  height: calc(100% - 60px);
-  overflow-y: auto;
-  width: 100%;
-}
+  .mes-accept-task-layout .mes-accept-task-flex {
+    position: absolute;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    width: 100%;
+  }
 .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar {
     background-color:#fff;
     width:16px
@@ -96,11 +103,17 @@ export default {
   /* set button(top and bottom of the scrollbar) */
   .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-button {display:none}
 
-.grid-layout {
+  .grid-layout {
     padding: 0 10px !important;
   }
  .grid-element {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
+  }
+  .grid-item-data{
+    overflow-y: auto;
+    overflow-x: auto;
+    height: inherit;
+    padding: 15px;
   }
 </style>

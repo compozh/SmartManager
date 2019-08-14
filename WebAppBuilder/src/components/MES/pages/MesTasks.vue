@@ -1,5 +1,11 @@
 <template>
   <v-container  class="main-block">
+    <mes-qr-scaner
+      v-if="qrScanerVisible" 
+      @changeQrScanerVisible=changeQrScanerVisible
+      @submitQrCode=submitQrCode
+    />
+
     <v-card>
       <multipane class="main-block-layout">
         <mes-dialog-component
@@ -32,7 +38,9 @@
                   @changeDragResizeMode="changeDragResizeMode"
                   @changeCurrentLayout="changeCurrentLayout"
                   @removeAllInstallations=removeAllInstallations
-                  @initInstallations=initInstallations />
+                  @initInstallations=initInstallations
+                  @changeQrScanerVisible=changeQrScanerVisible
+                  />
 
               </v-flex>
 
@@ -72,6 +80,7 @@ export default {
   components: { Multipane, MultipaneResizer },
   data() {
     return {
+      qrScanerVisible: false,
       initializeInstallations: false,
       initializeTasks: false,
       dialogProperties: {
@@ -85,6 +94,7 @@ export default {
     };
   },
   created() {
+    this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged, "6A0FB985-3317-4D64-A870-C689EF69506A")
     this.initialize();
   },
   computed: {
@@ -129,6 +139,37 @@ export default {
     }
   },
   methods: {
+    taskStateChanged(msg) {
+      let data = JSON.parse(msg);
+      if(!data) {
+        return;
+      }
+      
+      switch(data.Payload.Action) {
+        case "TaskStateChanged":
+          let workCenters = data.Payload.Payload["WORKCENTERCODES"];
+          if(!workCenters) {
+            return;
+          }
+          
+          workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters];
+          let workCenterCodes = Object.keys(this.workCenters);
+          let instersection = false;
+          for(let workCenterCode of workCenterCodes) {
+            if(workCenters.indexOf(workCenterCode) != -1){
+              instersection = true;
+            }
+          }
+          if(instersection) {
+            this.$store.dispatch('mes/setObsoluteDataTask', true);
+          }
+        break;
+      }
+
+     // var workCenters = JSON.parse(msg);
+      //debugger;
+      //this.$store.dispatch('mes/setObsoluteDataTask', true);
+    },
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenters');
       await this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters) });
@@ -174,7 +215,7 @@ export default {
         let formioInitialData = this.$refs.acceptTaskLayout.getInitialFormioData(),
           currentFormioData = this.$refs.acceptTaskLayout.getFormioData();
           
-        if(formioInitialData.data != currentFormioData) {
+        if(formioInitialData && formioInitialData.data != currentFormioData) {
           this.dialogProperties.visible = true;
           this.dialogProperties.task = newSelectedTask;
           return;
@@ -233,10 +274,17 @@ export default {
     },
     getFormioData() {
       return this.$refs.acceptTaskLayout.getFormioData();
+    },
+    changeQrScanerVisible(visible) {
+      this.qrScanerVisible = visible;
+    },
+    submitQrCode(code) {
+      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: code, factId: 0 });
     }
   }
 }
 </script>
+
 <style type="text/css" scoped>
   .main-block {
     padding: 0 !important;
