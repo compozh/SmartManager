@@ -183,7 +183,7 @@ export default {
         let formioInitialData = this.$refs.acceptTaskLayout.getInitialFormioData(),
           currentFormioData = this.$refs.acceptTaskLayout.getFormioData();
           
-        if(formioInitialData.data != currentFormioData) {
+        if(formioInitialData && formioInitialData.data != currentFormioData) {
           this.dialogProperties.visible = true;
           this.dialogProperties.task = newSelectedTask;
           return;
