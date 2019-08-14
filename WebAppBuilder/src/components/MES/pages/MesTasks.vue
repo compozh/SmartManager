@@ -94,7 +94,7 @@ export default {
     };
   },
   created() {
-    this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged)
+    this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged, "6A0FB985-3317-4D64-A870-C689EF69506A")
     this.initialize();
   },
   computed: {
@@ -140,7 +140,32 @@ export default {
   },
   methods: {
     taskStateChanged(msg) {
-      console.log(msg)
+      let data = JSON.parse(msg);
+      if(!data) {
+        return;
+      }
+      
+      switch(data.Payload.Action) {
+        case "TaskStateChanged":
+          let workCenters = data.Payload.Payload["WORKCENTERCODES"];
+          if(!workCenters) {
+            return;
+          }
+          
+          workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters];
+          let workCenterCodes = Object.keys(this.workCenters);
+          let instersection = false;
+          for(let workCenterCode of workCenterCodes) {
+            if(workCenters.indexOf(workCenterCode) != -1){
+              instersection = true;
+            }
+          }
+          if(instersection) {
+            this.$store.dispatch('mes/setObsoluteDataTask', true);
+          }
+        break;
+      }
+
      // var workCenters = JSON.parse(msg);
       //debugger;
       //this.$store.dispatch('mes/setObsoluteDataTask', true);
