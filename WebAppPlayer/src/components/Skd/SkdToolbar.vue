@@ -3,7 +3,8 @@
 </template>
 <script>
 export default {
-  name: 'skd-toolbar'
-}
+  name:"skd-toolbar" 
+};
 </script>
-<style></style>
+<style>
+</style>

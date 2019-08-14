@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import * as jsonpatcher from '../api/patching'
-import gql from 'graphql-tag'
 
 
 export default {
@@ -12,34 +11,19 @@ export default {
   },
 
 
-  beforeRouteUpdate(to, from, next){
-    next()
-
-    // получение данных для компонента
-    this.loadDataForComponents(false)
-    for (var cur of this.$children) {
-      if (cur.beforeRouteUpdate) {
-        cur.beforeRouteUpdate(to, from)
-      }
-      if (cur.$children) {
-        for (var chilCur of cur.$children) {
-          if (chilCur.beforeRouteUpdate) {
-            chilCur.beforeRouteUpdate(to, from)
-          }
-        }
-      }
-    }
-  },
-
-
   //////////////////////////////////////////////////
   //////              METHODS
   /////////////////////////////////////////////////
   methods: {
+    beforeRouteUpdate(to) {
+      // получение данных для компонента
+      this.loadDataForComponents(false, to)
+    },
 
     // Функция для получения данных компонента, принимает boolean тип,
     // который указывает является это первой загрузкий или обновление даных по роутингу на одной странице
-    loadDataForComponents(firstLoad) {
+    loadDataForComponents(firstLoad, route) {
+      route = route || this.$route
       if (this.internalComponent.datasource) {
         var datasource = JSON.parse(JSON.stringify(this.internalComponent.datasource))
         let reg = new RegExp('\\$route\\.params\\.([a-zA-Z0-9_]*)', 'gi')
@@ -47,7 +31,7 @@ export default {
         if (matches != null) {
           // получаем значение параметра из роутера
           let paramName = matches[1]
-          let paramValue = this.$route.params[paramName]
+          let paramValue = route.params[paramName]
 
           if (this.routerParam[paramName] == paramValue) {
             return
@@ -56,17 +40,16 @@ export default {
           this.routerParam[paramName] = paramValue
         } else if (!firstLoad) {
           return
+
         }
 
 
         // Переопределяем HttpLink в заголовке под нужную схему
         this.$apolloProvider.defaultClient.link.constructor({
-          uri: myConfig.GrapgQlUrl + "api/graphql",
-          headers: {...this.$authentication.getAuthHeader(),
-          'schema' : datasource.schema
-        }})
+          uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+          headers: {...this.$authentication.getAuthHeader(), 'schema': datasource.schema }})
 
-        this.$store.dispatch("WebApps/LoadDataForComponent", {key:this.internalComponent.id, datasource})
+        return this.$store.dispatch('WebApps/LoadDataForComponent', { key: this.internalComponent.id, datasource })
         // this.$apollo.addSmartQuery('myData', {
         //   query: gql` query ${datasource.query} `,
         //   manual: true,
@@ -76,11 +59,11 @@ export default {
         //   },
         // })
       }
+      return
     },
     /** Получить значение из хранилища по ссылке для использования в свойствах */
     getStoreValue(path) {
       path = this.getStorePath(path)
-      console.log(path);
       var object = this.$store.getters['WebApps/getAppData'](this.internalComponent.id)
       if (!object) {
         return undefined

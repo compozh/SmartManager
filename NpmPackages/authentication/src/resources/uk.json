@@ -1,0 +1,8 @@
+{
+    "login": "Логін",
+    "password": "Пароль",
+    "rememberMe": "Запам'ятати мене",
+    "signIn": "УВІЙТИ",
+    "emptyLogin": "Ви не ввели логін",
+    "emptyPassword": "Ви не ввели пароль"
+}

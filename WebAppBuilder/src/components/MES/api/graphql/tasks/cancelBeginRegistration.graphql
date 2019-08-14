@@ -1,0 +1,10 @@
+mutation($taskId:Int!) {
+    mesMutation {
+        cancelBeginRegistration(taskId: $taskId) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

@@ -1,15 +1,13 @@
-import Vue from 'vue'
-
 const mutations = {
 
   /** Описание приложения */
-  SetAppDescription(state, application){
+  SetAppDescription(state, application) {
     state.applicationDescription = application
   },
 
   /** Загрузка хранилища */
   setAppData(state, payload) {
-    Vue.set(state.appData, payload.key, payload.data)
+    state.appData = {...state.appData, [payload.key]: payload.data}
   }
 }
 

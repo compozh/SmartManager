@@ -2,16 +2,12 @@
   <div v-if="skdlist">
     <v-data-table :headers="skdlist.columns" :items="skdlist.data" :pagination.sync="pagSync">
       <template v-slot:items="props">
-        <template v-for="col in skdlist.columns">
+        <template v-for="col in skdlist.columns" >
           <td :key="col.value">
-            <router-link
-              v-if="props.item.userId && col.value == 'fullName'"
-              :to="{ name: 'SKDUSER', params: { userid: props.item.userId } }"
-            >
-              {{ props.item[col.value] }}</router-link
-            >
+            
+            <router-link v-if="props.item.userId && col.value == 'fullName'" :to="{ name:'SKDUSER', params:{userid:props.item.userId}}"> {{ props.item[col.value] }}</router-link>
             <span v-else>{{ props.item[col.value] }}</span>
-          </td>
+            </td>
         </template>
       </template>
     </v-data-table>
@@ -19,13 +15,14 @@
 </template>
 <script>
 export default {
-  name: 'skd-list',
-  data: () => ({
-    pagSync: {
-      rowsPerPage: -1
+  name: "skd-list",
+  data:()=> ({
+    pagSync:{
+        rowsPerPage:-1
     }
   }),
-  props: ['skdlist']
-}
+  props: ["skdlist"]
+};
 </script>
-<style></style>
+<style>
+</style>
