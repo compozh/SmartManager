@@ -48,9 +48,6 @@ export default {
     onclickRemoveAllInstallations() {
       this.$emit('removeAllInstallations');
     },
-    // submitQrCode(event) {
-    //   this.$emit('submitQrCode', event.target.value);
-    // },
     submitQrCode(event) {
       var qrCodeValue = event.target.value;
       var me = this;
