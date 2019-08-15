@@ -19,8 +19,7 @@
 
 import {PurchasesApi} from '../api/purchasesApi'
 import _ from 'lodash'
-// import draggable from 'vuedraggable'
-import draggable from  './Draggable'// 'vuedraggable'
+import draggable from 'vuedraggable'
 
 const api = new PurchasesApi()
 
