@@ -37,6 +37,17 @@ export default {
     },
   },
   methods: {
+    changeTaskStage(moveMode, comment) {
+      this.$store.dispatch('sm/changeTaskStage', {
+        id: this.task.id,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy,
+        moveMode,
+        comment,
+        processParams: null
+      })
+    },
     changeTaskStatus(status) {
       this.$store.dispatch('sm/changeTaskStatus', {
         id: this.task.id,
@@ -49,13 +60,14 @@ export default {
     return this.$scopedSlots.default({
       activeTab: this.activeTab,
       tabs: this.getTabs,
+      task: this.task ? this.task : {},
       params: {
-        status: this.task ? this.task.status : '',
-        hasOrig: this.task ? this.task.originals.length : 0,
-        hasComm: this.task ? this.task.comments.length : 0,
-        hiddenLgAndUp: this.hiddenLgAndUp
+        hiddenLgAndUp: this.hiddenLgAndUp,
       },
-      changeStatus: this.changeTaskStatus
+      events: {
+        changeStage: this.changeTaskStage,
+        changeStatus: this.changeTaskStatus
+      }
     })
   }
 }

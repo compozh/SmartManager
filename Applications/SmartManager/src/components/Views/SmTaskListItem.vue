@@ -57,6 +57,8 @@ export default {
 
 <style scoped>
   .task-item {
+    display: flex;
+    height: 100%;
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
     border-left: 5px solid transparent;
     border-radius: 0;

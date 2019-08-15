@@ -2,6 +2,12 @@ import {SmartManagerApi} from '../api/smartManagerApi'
 
 const api = new SmartManagerApi()
 
+function trimHtmlTags(stringWithHtmlTags) {
+  const elem = document.createElement('div')
+  elem.innerHTML = stringWithHtmlTags
+  return elem.innerText
+}
+
 export default {
   async getFolders({commit}, payload) {
     const loader = payload.loader
@@ -48,7 +54,9 @@ export default {
 
     try {
       const result = await api.getTaskInfoFromGql(taskId)
-      const taskInfo = result.data.smtasks.tasksGetInfo
+      const taskInfo = result.data.smtasks.taskDetails
+
+      taskInfo.name = trimHtmlTags(taskInfo.name)
       commit('setTaskInfo', taskInfo)
       commit(loader, false)
 
@@ -135,6 +143,50 @@ export default {
     } catch (e) {
       commit('setLinearLoader', false)
       commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async changeTaskStage({commit, dispatch}, payload) {
+    commit('setLinearLoader', true)
+
+    try {
+      const response = await api.changeTaskStageInGql(payload)
+      const result = response.data.smtasksMutation.changeStage
+
+      const text = trimHtmlTags(result.log)
+      commit('setLinearLoader', false)
+
+      if (result.success) {
+        await dispatch('getTaskInfo', {
+          taskId: payload.id,
+          loader: 'setLinearLoader'
+        })
+        commit('setMessage', {type: 'success', text})
+      } else {
+        commit('setMessage', {type: 'error', text})
+      }
+    } catch (e) {
+      commit('setLinearLoader', false)
+      commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async addTaskComment({commit}, payload) {
+    const comment = payload.comment
+    const params = payload.params
+    commit('setLinearLoader', true)
+    try {
+      const response = await api.addTaskCommentToGql(comment, params)
+      const result = response.data.smtasksMutation.addComment
+      commit('setLinearLoader', false)
+
+      if (result.success) {
+        commit('addComment', comment)
+      } else {
+        commit('setMessage', {type: 'error', text: 'Не удалось добавить коментарий'})
+      }
+    } catch (e) {
+      commit('setLinearLoader', false)
+      commit('setMessage', {type: 'error', text: 'Ошибка при добавлении коментария'})
+      console.log('', e.message)
     }
   }
 }

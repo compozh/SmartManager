@@ -1,6 +1,5 @@
 <template>
   <v-container fluid pa-0>
-
     <v-tooltip top>
       <template v-slot:activator="{ on }">
         <v-icon
@@ -14,7 +13,6 @@
       </template>
       <span>{{ taskStatus.text }}</span>
     </v-tooltip>
-
     <v-chip
       v-if="chip"
       disabled
@@ -27,7 +25,6 @@
       </v-avatar>
       {{ taskStatus.text }}
     </v-chip>
-
   </v-container>
 </template>
 
@@ -41,9 +38,9 @@ export default {
       switch (this.status) {
       case '':
         return {
-          color: 'orange darken-2',
-          icon: 'access_time',
-          text: 'ожидает'
+          color: 'blue-grey darken-1',
+          icon: 'loop',
+          text: 'в работе'
         }
       case '*':
         return {
@@ -62,6 +59,12 @@ export default {
           color: 'green darken-2',
           icon: 'check_circle_outline',
           text: 'выполнена'
+        }
+      default:
+        return {
+          color: '',
+          icon: '',
+          text: ''
         }
       }
     }

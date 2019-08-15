@@ -1,42 +1,103 @@
 <template>
   <sm-task-info-rl
-    v-slot="{ activeTab, tabs, params, changeStatus }"
+    v-slot="{ activeTab, tabs, task, params, events }"
   >
     <v-container fluid pa-0 ma-0>
       <v-layout>
         <v-flex lg6 px-2>
           <v-layout wrap>
-            <v-flex xs9 text-xs-left>
-              <v-btn
-                v-if="params.status === '*'"
-                class="success ml-0"
-                small depressed
-                @click="changeStatus('+')"
-              >
-                <v-icon size="18">done</v-icon>
-                <span class="caption pl-1">Выполнить</span>
-              </v-btn>
-              <v-btn
-                v-if="params.status === '' || params.status === '+'"
-                class="info ml-0"
-                small depressed
-                @click="changeStatus('*')"
-              >
-                <v-icon size="18">settings_backup_restore</v-icon>
-                <span class="caption pl-1">В работу</span>
-              </v-btn>
-              <v-btn
-                v-if="params.status === '' || params.status === '*'"
-                color="error"
-                small depressed
-                @click="changeStatus('-')"
-              >
-                <v-icon size="18">close</v-icon>
-                <span class="caption pl-1">Отменить</span>
-              </v-btn>
+            <v-flex>
+              <v-layout v-if="task.isGenerate">
+                <v-flex text-xs-left shrink mr-2>
+                  <v-menu open-on-hover offset-y>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        class="main-btn mx-0"
+                        color="error"
+                        small depressed
+                        @click="events.changeStage(0)"
+                      >
+                        <v-icon size="18">close</v-icon>
+                        <span class="caption pl-1">Отклонить</span>
+                      </v-btn>
+                      <v-btn
+                        class="menu-btn mx-0"
+                        color="error"
+                        small depressed
+                        dark
+                        v-on="on"
+                      >
+                        <v-icon>arrow_drop_down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list pa-0>
+                      <v-list-tile
+                        @click.stop="dialog = true"
+                        @click="stage = 0"
+                      >
+                        <v-list-tile-title>Отклонить с коментарием</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                </v-flex>
+                <v-flex text-xs-left shrink>
+                  <v-menu  open-on-hover offset-y>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        class="main-btn mx-0"
+                        color="success"
+                        small depressed
+                        @click="events.changeStage(1)"
+                      >
+                        <v-icon size="18">done</v-icon>
+                        <span class="caption pl-1">Согласовать</span>
+                      </v-btn>
+                      <v-btn
+                        class="menu-btn mx-0"
+                        color="success"
+                        small depressed
+                        dark
+                        v-on="on"
+                      >
+                        <v-icon>arrow_drop_down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile
+                        @click.stop="dialog = true"
+                        @click="stage = 1"
+                      >
+                        <v-list-tile-title>Согласовать с коментарием</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                </v-flex>
+              </v-layout>
+              <v-layout v-else>
+                <v-flex xs9 text-xs-left>
+                  <v-btn
+                    v-if="task.status === '' || task.status === '*'"
+                    class="success ml-0"
+                    small depressed
+                    @click="events.changeStatus('+')"
+                  >
+                    <v-icon size="18">done</v-icon>
+                    <span class="caption pl-1">Выполнить</span>
+                  </v-btn>
+                  <v-btn
+                    v-if="task.status === '+'"
+                    class="info ml-0"
+                    small depressed
+                    @click="events.changeStatus('*')"
+                  >
+                    <v-icon size="18">settings_backup_restore</v-icon>
+                    <span class="caption pl-1">Вернуть в работу</span>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-flex>
             <v-flex xs3 d-flex text-xs-right>
-              <sm-task-status class="py-2" :status="params.status" chip="true"></sm-task-status>
+              <sm-task-status class="py-2" :status="task.status" chip="true"></sm-task-status>
             </v-flex>
             <v-flex xs12>
               <v-tabs
@@ -48,8 +109,9 @@
                   v-for="item in tabs"
                   :key="item.value"
                   :class="{
-                    'marker': item.value === 'originals' && params.hasOrig
-                           || item.value === 'comments' && params.hasComm,
+                    'marker'
+                      : item.value === 'originals' && task.originals.length
+                      || item.value === 'comments' && task.comments.length
                    }"
                 >{{ item.name }}
                 </v-tab>
@@ -79,13 +141,38 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      <v-dialog
+        v-model="dialog"
+        max-width="600"
+      >
+        <v-card class="px-5 pt-4 pb-3">
+          <v-layout row wrap>
+            <v-flex>
+              <v-text-field
+                label="Добавить коментарий"
+                placeholder="Текст коментария..."
+                clearable
+                @click:clear.stop
+                prepend-icon="edit"
+                append-outer-icon="send"
+                v-on:change="events.changeStage(stage, $event)"
+                @change="dialog = false"
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-dialog>
     </v-container>
   </sm-task-info-rl>
 </template>
 
 <script>
 export default {
-  name: 'sm-task-info'
+  name: 'sm-task-info',
+  data: () => ({
+    dialog: false,
+    stage: 0
+  })
 }
 </script>
 
@@ -104,6 +191,28 @@ export default {
 
   .tabs >>> .v-tabs__container {
     height: 35px;
+  }
+
+  .main-btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .menu-btn {
+    min-width: 10px;
+    margin: 0;
+    padding: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .v-list {
+    padding: 0;
+  }
+
+  .v-list >>> .v-list__tile {
+    height: 40px;
+    font-size: 14px;
   }
 
 </style>

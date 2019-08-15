@@ -35,5 +35,14 @@ export default {
   },
   setUsers(state, payload) {
     state.users = payload
+  },
+  addComment(state, payload) {
+    const user = JSON.parse(localStorage.currentUser)
+    const comment = {
+      date: new Date().toLocaleString('ru-RU'),
+      text: payload,
+      user: user.UserData.CurrentUserData.UserName
+    }
+    state.taskInfo.comments.push(comment)
   }
 }
