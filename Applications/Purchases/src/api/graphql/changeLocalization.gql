@@ -1,0 +1,5 @@
+mutation($language: String!){
+  purchasesMutation{
+    changeLocalization(language:$language)
+  }
+}

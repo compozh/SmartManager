@@ -3,61 +3,223 @@ import {MesApi} from '../api/mesApi'
 const api = new MesApi()
 
 export default {
-  async getProperties({commit}) {
-
-    commit('setError', null)
-    commit('setCircularLoader', true)
+  async initializeProperties({commit}) {
+    commit('closeSnackbar');
 
     try {
-      const result = await api.getPropertiesFromGql()
-      const workCenters = result.data.mes.properties
-
-      commit('setProperties', properties)
-      commit('setCircularLoader', false)
-
+      const result = await api.getPropertiesFromGql();
+      commit('setProperties', result.data.mes.properties)
     } catch (e) {
-      commit('setCircularLoader', false)
-      commit('setError', e.message)
+      commit('setSnackbarErrorMessage', e.message);
     }
   },
-  async getWorkCenters({commit}, payload) {
-    const uuid = payload.uuid
-    const login = payload.login
-
-    commit('setError', null)
-    commit('setCircularLoader', true)
-
+  async initializeTicket({commit}) {
     try {
-      const result = await api.getWorkCentersFromGql(uuid, login)
-      const workCenters = result.data.mes.workCenters
-
+      const result = await api.getTicketFromGql();
+      commit('setTicket', result.data.mes.tiket)
+    } catch (e) {
+      commit('setSnackbarErrorMessage', e.message);
+    }
+  },
+  async initializeWorkCenters({ commit }) {
+    commit('closeSnackbar');
+    try {
+      let uuid = "d520c7a8-421b-4563-b955-f5abc56b97ec",
+        result = await api.getWorkCentersFromGql(uuid);
+      var workCenters = {};
+      result.data.mes.workCenters.forEach(workCenter => {
+        workCenters[workCenter.code] = workCenter;
+      });
+      
       commit('setWorkCenters', workCenters)
-      commit('setCircularLoader', false)
-
     } catch (e) {
-      commit('setCircularLoader', false)
-      commit('setError', e.message)
+      commit('setSnackbarErrorMessage', e.message);
     }
   },
-  async getShiftTasks({commit}, payload) {
-    const workCenter = payload.workCenter
-
-    commit('setError', null)
-    commit('setCircularLoader', true)
+  async initializeTasks({ commit}, { workCenterCodes, fetchPolicy }) {
+    commit('closeSnackbar');
+    try {
+      for(var i = 0; i < workCenterCodes.length; i++) {
+        let workCenterCode = workCenterCodes[i],
+          result = await api.getTasksFromGql(workCenterCode, fetchPolicy),
+          tasks = result.data.mes.tasks;
+        //todo
+        tasks.forEach(task => {
+          task.workCenterCode = workCenterCode;
+        });
+        commit('setTasksByWorkCentrer', { workCenterCode, tasks })
+      }
+      if(fetchPolicy == 'network-only') {
+        this.dispatch('mes/selectTaskAfterRefresh');
+      }
+    } catch (e) {
+      commit('setSnackbarErrorMessage', e.message);
+    }
+  },
+  async initializeInstallations({ commit}, { workCenterCodes, fetchPolicy }) {
+    commit('closeSnackbar');
 
     try {
-      const result = await api.getTasksFromGql(workCenter)
-      const shiftTasks = result.data.shiftTasks
-
-      commit('setShiftTasks', shiftTasks)
-      commit('setCircularLoader', false)
-
+      for(var i = 0; i < workCenterCodes.length; i++) {
+        let workCenterCode = workCenterCodes[i],
+          result = await api.getInstallationsFromGql(workCenterCode, fetchPolicy);
+        commit('setInstallationsByWorkCenter', { workCenterCode, installations: result.data.mes.installations.installations });
+      }
     } catch (e) {
-      commit('setCircularLoader', false)
-      commit('setError', e.message)
+      commit('setSnackbarErrorMessage', e.message);
     }
+  },
+  async removeInstallation({commit}, { installation, workCenterCode }) {
+    await this.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.removeInstallationGql(installation.id), 
+      successAction: async result => { commit('removeInstallation', { installation, workCenterCode }) },
+      linearLoader: true
+    });
+  },
+  async registerMaterialInstallation({commit}, { workCenterCode, batchBarcode, factId }) {
+    var me = this;
+    await me.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId), 
+      successAction: async result => { await me.dispatch('mes/initializeInstallations', { workCenterCodes: [workCenterCode], fetchPolicy: "network-only" }) },
+      linearLoader: true
+    });
+  },
+  async registerProduction({ getters, commit }, task) {
+    var me = this,
+      productionRegistrationParam = {
+        workCenterCode: task.workCenterCode,
+        workBarcode: task.barcode,
+        mode: 'Start',
+        success: true
+      };
+    await this.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.registerProductionGql(productionRegistrationParam), 
+      successAction: async result => {
+        //todo
+        commit('resetProductionFormio');
+        let workCenter = getters.workCenters[task.workCenterCode];
+        task.inProgress = true;
+        let properties = {
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode
+        };
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties }); },
+      linearLoader: true
+    });
+  },
+  async cancelBeginRegistration({commit}, task) {
+    await this.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.cancelBeginRegistrationGql(task.shiftTaskId), 
+      successAction: async result => { task.inProgress = false; },
+      linearLoader: true
+    });
+  },
+  async updateInstallationsByWorkCenter({ commit }, workCenterCode) {
+    commit('closeSnackbar');
+    commit('setLinearLoader', true)
+
+    try {
+      let result = await api.getInstallationsFromGql(workCenterCode, "network-only");
+      commit('setInstallationsByWorkCenter', { installations: result.data.mes.installations.installations, workCenterCode });
+    } catch (e) {
+      commit('setSnackbarErrorMessage', e.message);
+    }
+    commit('setLinearLoader', false)
+  },
+  async initializeProductions({ commit }, { workerCode, fetchPolicy }) {
+    commit('closeSnackbar');
+
+    try {
+      let result = await api.getProductionsFromGql(workerCode, fetchPolicy);
+      commit('setProductions', result.data.mes.usersProductionEvents);
+    } catch (e) {
+      commit('setSnackbarErrorMessage', e.message);
+    }
+  },
+  async deleteProduction({ commit }, production) {
+    await this.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.deleteProductionGql(production.factId), 
+      successAction: async result => { commit('removeProduction', production); },
+      linearLoader: true
+    });
+  },
+  async createProductionFormio({ getters, commit }, { formCode, properties }) {
+    await this.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.getProductionFormioFromGql(formCode, properties), 
+      successAction: async result => { commit('setProductionFormio', { formio: result, formCode }) },
+      linearLoader: true
+    });
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode);
   },
+  closeSnackbar({commit}) {
+    commit('closeSnackbar');
+  },
+  async productionFormIoSubmit({ commit }, { workCenter, data, task }) {
+    var me = this,
+      params = {
+        formCode: workCenter.productionRegistrationFormCode,
+        data: data,
+        productionRegistrationParam : {
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode,
+          mode: "FINISH"
+        }
+      };
+    commit('setDialogLinearLoaderMessage', 'Регистрация выработки');
+    await me.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.productionFormIoSubmitGql(params), 
+      successAction: async result => { me.dispatch('mes/initializeTasks', { workCenterCodes: [workCenter.code], fetchPolicy: 'network-only' }); },
+      linearLoader: false
+    });
+    commit('closeDialogLinearLoader');
+  },
+  changeDragResizeMode({commit}) {
+    commit('changeDragResizeMode');
+  },
+  async graphqlQueryWraper({ commit }, { queryAction, successAction, linearLoader }) {
+    commit('closeSnackbar');
+
+    if(linearLoader) {
+      commit('setLinearLoader', true);
+    }
+    
+    try {
+      let result = await queryAction();
+      if(result.success == true) {
+        if(successAction) {
+          await successAction(result);
+        }
+        if(result.successMessage) {
+          commit('setSnackbarSuccessMessage', result.successMessage);
+        }
+      } else {
+        commit('setSnackbarErrorMessage', result.errorMessage);
+      }
+    } catch(e) {
+      commit('setSnackbarErrorMessage', e.message);
+    }
+    if(linearLoader) {
+      commit('setLinearLoader', false);
+    }
+  },
+  setObsoluteDataTask({ commit }, obsoluteData) {
+    commit('setObsoluteDataTask', obsoluteData);
+  },
+  selectTaskAfterRefresh({ getters, commit }) {
+    let me = this,
+      selectedTask = getters.tasksPageState.selectedTask,
+      tasks = getters.tasks,
+      workCenterCodes = Object.keys(tasks);
+
+    for(let workCenterCode of workCenterCodes) {
+      let tasksByWorkCenter = tasks[workCenterCode];
+      for(let task of tasksByWorkCenter) {
+        if(selectedTask.shiftTaskId == task.shiftTaskId) {
+          commit('setSelectedTask', task);
+        }
+      }
+    }
+  }
 }

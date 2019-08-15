@@ -1,7 +1,0 @@
-{
-    purchases{
-        items: resources(id:$id){
-            ...resourcesFields
-        }
-    }
-}

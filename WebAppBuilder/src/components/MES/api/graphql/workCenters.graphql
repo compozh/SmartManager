@@ -11,6 +11,8 @@
 			isAccountNumberOfBatchesForConsumption
 			orderWasteRegistration
 			productionRegistrationType
+			productionRegistrationFormCode
+			accessPages
         }
     }
 }

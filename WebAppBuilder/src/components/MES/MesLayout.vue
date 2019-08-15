@@ -1,37 +1,55 @@
 <template>
   <v-app id="mes-app">
-    <v-navigation-drawer app clipped hide-overlay :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp" v-model="drawer">
+    <v-navigation-drawer v-if="currentUser" app clipped hide-overlay :mini-variant="menuMiniMode" v-model="drawer">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left extended :extension-height="3">
-      <v-toolbar-side-icon @click.stop="toggleMenuMode"></v-toolbar-side-icon>      
+      <v-toolbar-side-icon v-if="currentUser" @click.stop="toggleMenuMode"></v-toolbar-side-icon>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
-      <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0 height="3"></v-progress-linear>
+      <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="2"></v-progress-linear>
     </v-toolbar>
     <v-content>
-      <v-container fluid>
+      <v-container class="main-block">
         <router-view/>
       </v-container>
     </v-content>
-    <v-footer app inset>
-      <slot name="footer"></slot>
-    </v-footer>
-    <template v-if="error">
+    <template v-if="snackbar.visible">
       <v-snackbar
+        :top="true"
         :multi-line="true"
         :timeout="5000"
-        color="error"
-        @input="closeError"
+        :color=snackbar.type
+        @input="closeSnackbar"
         :value="true"
       >
-        {{ error }}
-        <v-btn flat dark @click.native="closeError"
-        >Close
+        {{ snackbar.message }}
+        <v-btn flat dark @click.native="closeSnackbar">
+          Закрыть
         </v-btn>
       </v-snackbar>
     </template>
+    <v-dialog
+      v-model="dialogLinearLoader.visible"
+      :hide-overlay="false"
+      persistent
+      width="300"
+    >
+      <v-card
+        color="#326DA8"
+        dark
+      >
+        <v-card-text>
+          {{dialogLinearLoader.message}}
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 <script>
@@ -39,33 +57,59 @@ export default {
   name: "mes-layout",
   data(vm) {
     return {
-      drawer: vm.$vuetify.breakpoint.mdAndUp,
-      mini: false
+      drawer: vm.$vuetify.breakpoint.mdAndUp
     };
   },
   computed: {
-    error() {
-      return this.$store.getters["eam/error"];
+    currentUser() {
+      return this.$store.getters.getCurrentUser;
     },
-    loading() {
-      return this.$store.getters["eam/loading"];
+    snackbar() {
+      return this.$store.getters["mes/snackbar"];
+    },
+    dialogLinearLoader() {
+      return this.$store.getters["mes/dialogLinearLoader"];
+    },
+    linearLoader() {
+      return this.$store.getters["mes/linearLoader"];
     },
     menuMiniMode() {
       return this.$store.getters["mes/menuMiniMode"];
     }
   },
-  methods: {      
-      toggleMenuMode() {
-        if (this.$vuetify.breakpoint.mdAndUp) {
-          this.$store.dispatch("mes/toggleMenuMiniMode")
-        }
-        else {
-          this.drawer = !this.drawer;
-        }
-      },
-      closeError() {
-        this.$store.dispatch('sm/clearError');
+  methods: {
+    toggleMenuMode() {
+      if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
+        this.$store.dispatch("mes/toggleMenuMiniMode")
+      }
+      else {
+        this.drawer = !this.drawer;
       }
     },
+    closeSnackbar() {
+      this.$store.dispatch('mes/closeSnackbar');
+    }
+  }
 };
 </script>
+<style type="text/css">
+html{
+  overflow-y: hidden;
+}
+.main-block {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100%;
+    height: 100%;
+  }
+.v-toolbar__extension {
+  padding: 0;
+}
+.v-list__tile.v-list__tile--link.theme--light {
+  padding-left: 28px;
+}
+.v-navigation-drawer--mini-variant .v-list__tile__action, .v-navigation-drawer--mini-variant .v-list__tile__avatar {
+  justify-content: start !important;
+}
+</style>
+

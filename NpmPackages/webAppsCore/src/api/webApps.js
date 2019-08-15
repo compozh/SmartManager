@@ -3,7 +3,6 @@ console.log('WebAppsCore is loaded!')
 let Vue = undefined
 
 import _ from 'lodash'
-import store from '../store/index'
 export class WebApps {
   /**
    * Конструктор

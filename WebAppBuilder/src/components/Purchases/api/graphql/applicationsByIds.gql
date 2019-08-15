@@ -1,0 +1,25 @@
+query($ids:[ID]){
+  purchases{
+    applications(ids: $ids){
+      id,
+      number,
+      date,
+      title,
+      favListId,
+      docStatus{
+        id,
+        sortOrder
+      },
+      rows{
+        id,
+        resource{
+          id,
+          fullName
+        },
+        measurementUnit{
+          name
+        }
+      }
+    }
+  }
+}

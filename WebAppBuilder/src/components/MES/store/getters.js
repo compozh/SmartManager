@@ -1,48 +1,47 @@
 export default {
-  circularLoader(state) {
-    return state.circularLoader
-  },
   linearLoader(state) {
-    return state.linearLoader
+    return state.linearLoader;
   },
-  error(state) {
-    return state.error
+  snackbar(state) {
+    return state.snackbar;
   },
-  getProperties(state) {
-    return state.properties
+  properties(state) {
+    return state.properties;
   },
-  getWorkCenters(state) {
-    return state.workCenters
+  workCenters(state) {
+    return state.workCenters;
   },
-  shiftTasks(state) {
-    const search = state.search ? state.search.trim() : ''
-
-    // Список полей, по которым осуществляется поиск
-    const searchFields = [
-      'workCenter'
-    ]
-    return state.shifTasks.filter(task => {
-      // Цикл for по ключам задачи для возможности использовать continue
-      for (let i = 0; i < searchFields.length; i++) {
-        let searchField = searchFields[i]
-        let taskField = task[searchField]
-        // Если такого поля нет - пропуск без проверки
-        if (!taskField) {
-          continue
-        }
-        let taskFieldValue = String(taskField).toLowerCase()
-        let isMatching = taskFieldValue.includes(search.toLowerCase())
-        // При первом же совпадении отбор и переход к следующей задаче
-        if (isMatching) {
-          return true
-        }
-      }
-    })
+  dragResizeMode(state) {
+    return state.dragResizeMode;
   },
-  menuMiniMode(state, commit) {
+  tasks(state) {
+    return state.tasks;
+  },
+  installations(state) {
+    return state.installations;
+  },
+  productions(state) {
+    return state.productions;
+  },
+  productionFormio(state) {
+    return state.productionFormio;
+  },
+  menuMiniMode(state) {
     if (state.menuMiniMode === null) {
       state.menuMiniMode = localStorage.getItem("mesMenuMiniMode") === 'true';
     }
     return state.menuMiniMode;
   },
+  tasksPageState(state) {
+    return state.tasksPageState;
+  },
+  dialogLinearLoader(state) {
+    return state.dialogLinearLoader;
+  },
+  obsoleteData(state) {
+    return state.obsoleteData;
+  },
+  ticket(state) {
+    return state.ticket;
+  }
 }

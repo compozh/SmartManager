@@ -7,6 +7,12 @@
     "emptyPassword": "You have not entered a password",
     "NoDevices": "No devices",
     "purchases":{
+      "Applications":{
+        "Search": "Search",
+        "From": "From",
+        "To": "To",
+        "Statuses": "Statuses"
+      },
       "CreateOrderWindow":{
         "DocumentNumber": "Document number",
         "DocumentDate": "Document date",
@@ -14,6 +20,12 @@
         "Description": "Description"
       },
       "Catalog":{
+        "CatalogItem":{
+          "Group":"Group",
+          "Designation":"Designation",
+          "ResourceName": "Resource name",
+          "MesurementUnit": "Mesurement unit"
+        },
         "FastFilter":"Fast filter",
         "Name":"Name"
       },

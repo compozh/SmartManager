@@ -1,65 +1,334 @@
 <template>
-    <v-layout>
-    <v-flex
-      class="scroll-y list-block"
-      >
-      <v-card class="card"
-      v-for="task in tasks"
-      :key="task.id"
-      @click="onCardClick(task.id)"
-      >
-        <v-card-text>Task name: {{task.name}}</v-card-text>
-        <v-card-text>Start time: {{task.data.startTime}}</v-card-text>
-        <v-card-text>End time: {{task.data.endTime}}</v-card-text>
-        <v-card-text>Status: {{task.data.status}}</v-card-text>
-      </v-card>
+  <v-container  class="main-block">
+    <mes-qr-scaner
+      v-if="qrScanerVisible" 
+      @changeQrScanerVisible=changeQrScanerVisible
+      @submitQrCode=submitQrCode
+    />
 
+    <v-card>
+      <multipane class="main-block-layout">
+        <mes-dialog-component
+          :title=dialogProperties.title
+          :message=dialogProperties.message
+          :agreeMessage=dialogProperties.agreeMessage
+          :disagreeMessage=dialogProperties.disagreeMessage
+          :visible=dialogProperties.visible
+          @dialogInput=dialogInput
+          @agreeClick=dialogAgreeClick
+          @disagreeClick=dialogDisagreeClick />
 
-    </v-flex>
-    </v-layout>
+          <mes-tasks-component
+            :selectedTask=selectedTask
+            :initializeTasks=initializeTasks
+            :selectedTasksTab=selectedTasksTab
+            @changeCurrentTask=onChangeCurrentTask
+            @changeSelectTasksTab=changeSelectTasksTab />
+
+            <multipane-resizer><v-icon class="multipane-resizer-icon">drag_handle</v-icon></multipane-resizer>
+
+            <v-layout column class="task-description-layout">
+              <v-flex class="button-toolbar" row wrap >
+
+                <mes-tasks-toolbar v-if="selectedTask"
+                  :currentLayout=currentLayout
+                  :dragResizeMode=dragResizeMode
+                  :selectedTask=selectedTask
+                  :installations=installations[selectedTask.workCenterCode]
+                  @changeDragResizeMode="changeDragResizeMode"
+                  @changeCurrentLayout="changeCurrentLayout"
+                  @removeAllInstallations=removeAllInstallations
+                  @initInstallations=initInstallations
+                  @changeQrScanerVisible=changeQrScanerVisible
+                  />
+
+              </v-flex>
+
+              <mes-task-main-layout
+                :selectedTask=selectedTask
+                :dragResizeMode=dragResizeMode
+                v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && !selectedTask.inProgress)
+                  || (currentLayout == 'mes-accept-task-layout' && !selectedTask.inProgress))" />
+
+              <mes-accept-task-layout              
+                ref="acceptTaskLayout"
+                :selectedTask=selectedTask
+                :workCenters=workCenters
+                :dragResizeMode=dragResizeMode
+                v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.inProgress)
+                  ||(currentLayout == 'mes-task-main-layout' && selectedTask.inProgress))" />
+
+              <mes-task-stuff-layout
+                :selectedTask=selectedTask
+                :installations=installations
+                :initializeInstallations=initializeInstallations
+                @removeInstallation=removeInstallation
+                v-if="selectedTask && currentLayout == 'mes-task-stuff-layout'" />
+
+            </v-layout>
+      </multipane>
+    </v-card>
+  </v-container>
 </template>
+
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, install} from 'vuex'
+import { Multipane, MultipaneResizer  } from '../../../../node_modules/vue-multipane'
 
 export default {
-  data () {
-    var tasks = [
-      {name: 'tasks-1', id:'task-1', data:{ startTime:'12 May 2019', endTime: '30 July 2019', status: 'closed' }},
-      {name: 'tasks-2', id:'task-2', data:{ startTime:'12 May 2019', endTime: '28 September 2019', status: 'In Progress' }},
-      {name: 'tasks-3', id:'task-3', data:{ startTime:'12 May 2019', endTime: '12 July 2019', status: 'closed' }},
-      {name: 'tasks-4', id:'task-4', data:{ startTime:'12 May 2019', endTime: '15 September 2019', status: 'In Progress' }},
-      {name: 'tasks-5', id:'task-5', data:{ startTime:'12 May 2019', endTime: '12 July 2019', status: 'closed' }},
-      {name: 'tasks-6', id:'task-6', data:{ startTime:'12 May 2019', endTime: '23 July 2019', status: 'closed' }},
-      {name: 'tasks-7', id:'task-7', data:{ startTime:'12 May 2019', endTime: '06 September 2019', status: 'In Progress' }},
-      {name: 'tasks-8', id:'task-8', data:{ startTime:'12 May 2019', endTime: '05 July 2019', status: 'closed' }},
-      {name: 'tasks-9', id:'task-9', data:{ startTime:'12 May 2019', endTime: '11 September 2019', status: 'In Progress' }},
-    ]
-    return { tasks: tasks };
-  },
   name: "mes-tasks",
-
-  computed:{
-
+  components: { Multipane, MultipaneResizer },
+  data() {
+    return {
+      qrScanerVisible: false,
+      initializeInstallations: false,
+      initializeTasks: false,
+      dialogProperties: {
+        title: "",
+        message: "Вы действительно хотите перейти на другое задание?",
+        agreeMessage: "Да",
+        disagreeMessage: "Нет",
+        visible: false,
+        task: null
+      }
+    };
   },
-    methods: {
-      onCardClick(data){
-        console.log(data)
+  created() {
+    this.initializeSignalR();
+    this.initialize();
+  },
+  computed: {
+    selectedTask: {
+      get() {
+        return this.tasksPageState.selectedTask;
       },
+      set(selectedTask) {
+        this.$store.commit('mes/setSelectedTask', selectedTask);
+      }
+    },
+    currentLayout: {
+      get() {
+        return this.tasksPageState.currentLayout;
+      },
+      set(currentLayout) {
+        this.$store.commit('mes/setCurrentLayout', currentLayout);
+      }
+    },
+    selectedTasksTab: {
+      get() {
+        return this.tasksPageState.selectedTasksTab;
+      },
+      set(tabIndex) {
+        this.$store.commit('mes/setSelectedTasksTab', tabIndex);
+      }
+    },
+    tasksPageState() {
+      return this.$store.getters['mes/tasksPageState'];
+    },
+    installations() {
+      return this.$store.getters['mes/installations'];
+    },
+    tasks() {
+      return this.$store.getters['mes/tasks'];
+    },
+    workCenters() {
+      return this.$store.getters['mes/workCenters'];
+    },
+    dragResizeMode() {
+      return this.$store.getters['mes/dragResizeMode'];
+    },
+    ticket() {
+      return this.$store.getters['mes/ticket'];
+    }
+  },
+  methods: {
+    async initializeSignalR() {
+      await this.$store.dispatch('mes/initializeTicket');
+      this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket);
+    },
+    taskStateChanged(msg) {
+      let data = JSON.parse(msg);
+      if(!data) {
+        return;
+      }
+      
+      switch(data.Payload.Action) {
+        case "TaskStateChanged":
+          let workCenters = data.Payload.Payload["WORKCENTERCODES"];
+          if(!workCenters) {
+            return;
+          }
+          
+          workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters];
+          let workCenterCodes = Object.keys(this.workCenters);
+          let instersection = false;
+          for(let workCenterCode of workCenterCodes) {
+            if(workCenters.indexOf(workCenterCode) != -1){
+              instersection = true;
+            }
+          }
+          if(instersection) {
+            this.$store.dispatch('mes/setObsoluteDataTask', true);
+          }
+        break;
+      }
+    },
+    async initialize() {
+      await this.$store.dispatch('mes/initializeWorkCenters');
+      await this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters) });
+      this.initializeTasks = true;
+      if(!this.selectedTask) {
+        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab);
+      }
+    },
+    selectFirstTaskByTabIndex(tabIndex) {
+      var me = this,
+        tasks = me.tasks,
+        workCenterCodes = Object.keys(this.tasks);
 
+      for(let workCenterCode of workCenterCodes) {
+        let tasksByWorkCenter = tasks[workCenterCode];
+        for(let task of tasksByWorkCenter) {
+          switch(tabIndex) {
+            case 0:
+              if(task.state == "IN_PLAN" || task.state == "IN_WORK") {
+                me.onChangeCurrentTask(task);
+                return;
+              }
+              break;
+            case 1:
+              if(task.state == "DONE") {
+                me.onChangeCurrentTask(task);
+                return;
+              }
+              break;
+          }
+        }
+      }
+    },
+    changeCurrentLayout(currentLayout) {
+      this.currentLayout = currentLayout;
+    },
+    onChangeCurrentTask(newSelectedTask) {
+      if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
+        return;
+      }
+      
+      if(this.$refs.acceptTaskLayout && !this.dialogProperties.task) {
+        let formioInitialData = this.$refs.acceptTaskLayout.getInitialFormioData(),
+          currentFormioData = this.$refs.acceptTaskLayout.getFormioData();
+          
+        if(formioInitialData && formioInitialData.data != currentFormioData) {
+          this.dialogProperties.visible = true;
+          this.dialogProperties.task = newSelectedTask;
+          return;
+        }
+      }
+      this.changeCurrentTask(newSelectedTask);
+    },
+    changeCurrentTask(newSelectedTask) {
+      this.selectedTask = newSelectedTask;
+      let workCenter = this.workCenters[newSelectedTask.workCenterCode];
+
+      this.$store.commit('mes/resetProductionFormio');
+      if(newSelectedTask.inProgress) {
+        this.initializeFormioByWorkCenter(workCenter, newSelectedTask);
+      }
+      this.changeCurrentLayout('mes-task-main-layout');
+    },
+    initializeFormioByWorkCenter(workCenter, task) {
+      let properties = {
+        workCenterCode: workCenter.code,
+        workBarcode: task.barcode
+      };
+      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties });
+    },
+    changeSelectTasksTab(tabIndex) {
+      this.selectedTasksTab = tabIndex;
+      this.selectFirstTaskByTabIndex(tabIndex);
+    },
+    removeAllInstallations() {
+      var me = this;
+      Object.keys(me.installations).forEach(workCenterCode => {
+        var installationsByWorkCenters = me.installations[workCenterCode];
+        installationsByWorkCenters.forEach(installation => {
+          me.removeInstallation({ installation, workCenterCode });
+        });
+      });
+    },
+    removeInstallation({ installation, workCenterCode }) {
+      this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
+    },
+    async initInstallations() {
+      await this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
+      this.initializeInstallations = true;
+    },
+    changeDragResizeMode() {
+      this.$store.dispatch('mes/changeDragResizeMode');
+    },
+    dialogAgreeClick() {
+      this.dialogProperties.visible = false;
+      this.changeCurrentTask(this.dialogProperties.task);
+      this.dialogProperties.task = null;
+    },
+    dialogDisagreeClick() {
+      this.dialogProperties.visible = false;
+      this.dialogProperties.task = null;
+    },
+    dialogInput() {
+      this.dialogProperties.visible = false;
+      this.dialogProperties.task = null;
+    },
+    getFormioData() {
+      return this.$refs.acceptTaskLayout.getFormioData();
+    },
+    changeQrScanerVisible(visible) {
+      this.qrScanerVisible = visible;
+    },
+    submitQrCode(code) {
+      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: code, factId: 0 });
+    }
   }
 }
 </script>
-<style type="text/css" scoped>
-  .list-block {
-    /* width: 500px;
-    max-width: 500px; */
 
+<style type="text/css" scoped>
+  .main-block {
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100%;
   }
-  .list-block .card {
+  .main-block .v-card {
+    height: 100%;
+  }
+  .main-block-layout {
+    height: 100%;
+  }
+  .multipane-resizer {
     display: flex;
-    flex-direction: column;
-    /* width: 400px; */
-    margin: 20px;
-    border-radius: 20px;
+    margin: 0 5px 0 -4px;
+    user-select: none;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  }
+  .multipane-resizer-icon {
+    user-select: none;
+    transform: rotate(90deg);
+    width: 10px;
+    pointer-events: none;
+    cursor: default;
+  }
+  .button-toolbar {
+    display: flex;
+    align-items: center;
+    max-height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  .button-toolbar.row {
+    margin: 0;
+    padding: 0 10px;
+  }
+  .task-description-layout {
+    height: 100%;
   }
 </style>

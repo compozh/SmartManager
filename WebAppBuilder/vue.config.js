@@ -15,6 +15,14 @@ module.exports = {
       .loader('graphql-tag/loader')
       .end()
 
+      // GraphQL Loader
+    config.module
+    .rule('ejs-loader')
+    .test(/\.ejs$/)
+    .use('ejs-loader')
+    .loader('ejs-loader')
+    .end();
+
   },
   publicPath: process.env.NODE_ENV === 'production'
     ? '/webapps/'
