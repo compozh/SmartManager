@@ -20,6 +20,8 @@
           class="qr-input"
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode"
+          v-model="inputQrCode"
+          :disabled="this.disableQrInput"
         ></v-text-field>
         <v-btn outlined class="mes-scan" @click="onClickQrScan" outline color="#326DA8" @mousedown.stop>
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -37,7 +39,7 @@ import {mapGetters} from 'vuex'
 
 export default {
   data(){
-    return {activeChangeDragResizeMode: false}
+    return {activeChangeDragResizeMode: false, inputQrCode: '', disableQrInput: false}
   },
   name: "mes-tasks-toolbar",
   props: {
@@ -62,7 +64,14 @@ export default {
       this.$emit('removeAllInstallations');
     },
     submitQrCode(event) {
-      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: event.target.value, factId: 0 });
+      var qrCodeValue = event.target.value;
+      this.asyncSubmitQrCode(qrCodeValue);
+    },
+    async asyncSubmitQrCode(qrCodeValue) {
+      this.disableQrInput = true;
+      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: qrCodeValue, factId: 0 });
+      this.disableQrInput = false;
+      this.inputQrCode = ''
     },
     backToMainLayout() {
       this.$emit('changeCurrentLayout', 'mes-task-main-layout');

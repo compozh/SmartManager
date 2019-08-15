@@ -1,12 +1,12 @@
 <template>
   <v-layout class="mes-stuff">
     <mes-qr-scaner
-      v-if="qrScanerVisible" 
+      v-if="qrScanerVisible"
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
     />
 
-    <mes-stuff-toolbar 
+    <mes-stuff-toolbar
       class="mes-stuff-toolbar"
       :installations=installations
       @removeAllInstallations=removeAllInstallations
@@ -33,7 +33,7 @@ export default {
     ContentLoader
   },
   data() {
-    return { 
+    return {
       qrScanerVisible: false,
       initializeInstallations: false
     };
@@ -67,11 +67,14 @@ export default {
     removeInstallation(installation, workCenterCode) {
       this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
     },
-    submitQrCode(code) {
+    async submitQrCode({ qrCodeValue, callback}) {
       let workCenters = this.workCenters,
         workCenterCodes = Object.keys(workCenters);
       if(workCenterCodes.length) {
-        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: workCenters[workCenterCodes[0]].code, batchBarcode: code, factId: 0 });
+        await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: workCenters[workCenterCodes[0]].code, batchBarcode: qrCodeValue, factId: 0 });
+      }
+      if(callback) {
+        callback();
       }
     },
     changeQrScanerVisible(visible) {

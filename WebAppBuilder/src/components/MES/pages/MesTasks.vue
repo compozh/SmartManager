@@ -1,7 +1,7 @@
 <template>
   <v-container  class="main-block">
     <mes-qr-scaner
-      v-if="qrScanerVisible" 
+      v-if="qrScanerVisible"
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
     />
@@ -50,7 +50,7 @@
                 v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && !selectedTask.inProgress)
                   || (currentLayout == 'mes-accept-task-layout' && !selectedTask.inProgress))" />
 
-              <mes-accept-task-layout              
+              <mes-accept-task-layout
                 ref="acceptTaskLayout"
                 :selectedTask=selectedTask
                 :workCenters=workCenters
@@ -151,14 +151,14 @@ export default {
       if(!data) {
         return;
       }
-      
+
       switch(data.Payload.Action) {
         case "TaskStateChanged":
           let workCenters = data.Payload.Payload["WORKCENTERCODES"];
           if(!workCenters) {
             return;
           }
-          
+
           workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters];
           let workCenterCodes = Object.keys(this.workCenters);
           let instersection = false;
@@ -213,11 +213,11 @@ export default {
       if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return;
       }
-      
+
       if(this.$refs.acceptTaskLayout && !this.dialogProperties.task) {
         let formioInitialData = this.$refs.acceptTaskLayout.getInitialFormioData(),
           currentFormioData = this.$refs.acceptTaskLayout.getFormioData();
-          
+
         if(formioInitialData && formioInitialData.data != currentFormioData) {
           this.dialogProperties.visible = true;
           this.dialogProperties.task = newSelectedTask;
@@ -285,8 +285,8 @@ export default {
     changeQrScanerVisible(visible) {
       this.qrScanerVisible = visible;
     },
-    submitQrCode(code) {
-      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: code, factId: 0 });
+    async submitQrCode(code) {
+      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: code, factId: 0 });
     }
   }
 }
