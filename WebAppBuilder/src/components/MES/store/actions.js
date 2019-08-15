@@ -39,9 +39,8 @@ export default {
   async initializeTasks({ commit}, { workCenterCodes, fetchPolicy }) {
     commit('closeSnackbar');
     try {
-      for(var i = 0; i < workCenterCodes.length; i++) {
-        let workCenterCode = workCenterCodes[i],
-          result = await api.getTasksFromGql(workCenterCode, fetchPolicy),
+      for(let workCenterCode of workCenterCodes) {
+        let result = await api.getTasksFromGql(workCenterCode, fetchPolicy),
           tasks = result.data.mes.tasks;
         //todo
         tasks.forEach(task => {
@@ -60,9 +59,8 @@ export default {
     commit('closeSnackbar');
 
     try {
-      for(var i = 0; i < workCenterCodes.length; i++) {
-        let workCenterCode = workCenterCodes[i],
-          result = await api.getInstallationsFromGql(workCenterCode, fetchPolicy);
+      for(let workCenterCode of workCenterCodes) {
+        let result = await api.getInstallationsFromGql(workCenterCode, fetchPolicy);
         commit('setInstallationsByWorkCenter', { workCenterCode, installations: result.data.mes.installations.installations });
       }
     } catch (e) {

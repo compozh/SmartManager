@@ -1,6 +1,6 @@
 <template>
 <v-layout row lg12 xs12 md12 sm12 wrap class="toolbar">
-  <v-flex grow class="mes-stuff-toolbar-qr">
+  <v-flex grow class="mes-installations-toolbar-qr">
     <v-text-field
           class="qr-input"
           label="Укажите QR-партии материала для установки"
@@ -22,7 +22,7 @@
 import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-stuff-toolbar",
+  name: "mes-installations-toolbar",
   props: {
     installations: Object
   },
@@ -84,7 +84,7 @@ export default {
     max-width: 200px;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
-  .mes-stuff-toolbar-qr {
+  .mes-installations-toolbar-qr {
     display: flex;
     align-items: center;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);

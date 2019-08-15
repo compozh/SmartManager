@@ -9,7 +9,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import { Form } from '../../../../node_modules/vue-formio';
+import { Form } from 'vue-formio';
 
 export default {
 	name: "mes-form-builder",

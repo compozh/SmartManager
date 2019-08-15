@@ -37,7 +37,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import VueGridLayout from '../../../../../node_modules/vue-grid-layout';
+import VueGridLayout from 'vue-grid-layout';
 
 export default {
    name: "mes-accept-task-layout",
@@ -46,9 +46,7 @@ export default {
     workCenters: Object,
     dragResizeMode: Boolean
   },
-  components: {GridLayout: VueGridLayout.GridLayout,
-           GridItem: VueGridLayout.GridItem
-           },
+  components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
   computed: {
     blocks() {
       return [
@@ -78,7 +76,7 @@ export default {
     overflow-y: auto;
     width: 100%;
   }
-.mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar {
+  .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar {
     background-color:#fff;
     width:16px
   }
@@ -90,7 +88,7 @@ export default {
   }
 
   /* scrollbar itself */
- .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-thumb {
+  .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-thumb {
       background-color:#babac0;
       border-radius:16px;
       border:5px solid #fff

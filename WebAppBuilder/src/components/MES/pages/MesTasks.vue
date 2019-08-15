@@ -73,7 +73,7 @@
 
 <script>
 import {mapGetters, install} from 'vuex'
-import { Multipane, MultipaneResizer  } from '../../../../node_modules/vue-multipane'
+import { Multipane, MultipaneResizer  } from 'vue-multipane'
 
 export default {
   name: "mes-tasks",

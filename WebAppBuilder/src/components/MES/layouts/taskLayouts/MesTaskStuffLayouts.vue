@@ -60,21 +60,21 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .mes-task-stuff-layout::-webkit-scrollbar-button {display:none}
-.installations-block {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: start;
-}
-.mes-content-loader {
-  width: 100%;
-}
-.installation-card{
-  display: flex;
-  align-items: center;
-  max-width: 400px;
-  margin: 10px;
-  width: 360px;
-  height: max-content;
-}
+  .installations-block {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: start;
+  }
+  .mes-content-loader {
+    width: 100%;
+  }
+  .installation-card{
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+    margin: 10px;
+    width: 360px;
+    height: max-content;
+  }
 </style>

@@ -14,7 +14,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import {ContentLoader} from '../../../../node_modules/vue-content-loader'
+import {ContentLoader} from 'vue-content-loader'
 
 export default {
   name: "mes-productions",

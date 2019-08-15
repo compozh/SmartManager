@@ -1,13 +1,13 @@
 <template>
-  <v-layout class="mes-stuff">
+  <v-layout class="mes-installations">
     <mes-qr-scaner
       v-if="qrScanerVisible" 
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
     />
 
-    <mes-stuff-toolbar 
-      class="mes-stuff-toolbar"
+    <mes-installations-toolbar 
+      class="mes-installations-toolbar"
       :installations=installations
       @removeAllInstallations=removeAllInstallations
       @submitQrCode=submitQrCode
@@ -15,9 +15,9 @@
 
     <mes-content-loader v-if="!initializeInstallations" />
 
-    <div class="installations-block" v-for="(installationsByWorkCenter, workCenter) in installations" :key="workCenter">
-      <v-card class="installation-card" v-for="installation in installationsByWorkCenter" :key="installation.id">
-        <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
+    <div class="installations-block">
+      <v-card class="installation-card" v-for="installation in sortedInstallations" :key="installation.id">
+        <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, installation.workCenterCode)"/>
       </v-card>
     </div>
 
@@ -25,7 +25,7 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
-import {ContentLoader} from '../../../../node_modules/vue-content-loader'
+import {ContentLoader} from 'vue-content-loader'
 
 export default {
   name: "mes-stuff",
@@ -47,6 +47,22 @@ export default {
     },
     installations() {
       return this.$store.getters['mes/installations'];
+    },
+    sortedInstallations() {
+      let installations = [],
+        workCenterCodes = Object.keys(this.installations);
+      for(let workCenterCode of workCenterCodes) {
+        let installationsByWorkCenter = this.installations[workCenterCode];
+        for(let installation of installationsByWorkCenter) {
+          installation.workCenterCode = workCenterCode;
+          installations.push(installation);
+        }
+      }
+
+      installations.sort((a,b) => {
+        return a.id < b.id ? 1 : (a.id == b.id ? 0 : -1);
+      });
+      return installations;
     }
   },
   methods: {
@@ -55,7 +71,7 @@ export default {
       await this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
       this.initializeInstallations = true;
     },
-   removeAllInstallations() {
+    removeAllInstallations() {
       var me = this;
       Object.keys(me.installations).forEach(workCenterCode => {
         var installationsByWorkCenters = me.installations[workCenterCode];
@@ -81,11 +97,11 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-.mes-stuff{
-  display:block;
-  height: 100%;
-}
-  .mes-stuff .installations-block {
+  .mes-installations {
+    display:block;
+    height: 100%;
+  }
+  .mes-installations .installations-block {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -95,35 +111,35 @@ export default {
     overflow-y: auto;
     width: 100%;
   }
-.mes-stuff .installations-block::-webkit-scrollbar {
+  .mes-installations .installations-block::-webkit-scrollbar {
     background-color:#fff;
     width:16px
   }
-  .mes-stuff .installations-block::-webkit-scrollbar-track {
+  .mes-installations .installations-block::-webkit-scrollbar-track {
       background-color:#fff
   }
-  .mes-stuff .installations-block::-webkit-scrollbar-track:hover {
+  .mes-installations .installations-block::-webkit-scrollbar-track:hover {
       background-color:#f4f4f4
   }
 
   /* scrollbar itself */
- .mes-stuff .installations-block::-webkit-scrollbar-thumb {
+ .mes-installations .installations-block::-webkit-scrollbar-thumb {
       background-color:#babac0;
       border-radius:16px;
       border:5px solid #fff
   }
-  .mes-stuff .installations-block::-webkit-scrollbar-thumb:hover {
+  .mes-installations .installations-block::-webkit-scrollbar-thumb:hover {
       background-color:#a0a0a5;
       border:4px solid #f4f4f4
   }
 
   /* set button(top and bottom of the scrollbar) */
-  .mes-stuff::-webkit-scrollbar-button {display:none}
+  .mes-installations::-webkit-scrollbar-button {display:none}
   .installations-block {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
   }
   .installation-card{
     display: flex;
