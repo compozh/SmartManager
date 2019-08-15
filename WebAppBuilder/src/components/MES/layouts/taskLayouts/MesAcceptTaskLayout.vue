@@ -108,12 +108,12 @@ export default {
   }
  .grid-element {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+    border-radius: 5px;
   }
   .grid-item-data{
     overflow-y: auto;
     overflow-x: auto;
     height: inherit;
-    padding: 15px;
+    padding: 0 15px;
   }
 </style>

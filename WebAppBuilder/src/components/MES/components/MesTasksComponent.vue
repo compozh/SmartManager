@@ -139,7 +139,7 @@ export default {
   }
   .tasks-list-blocks .task-item{
     margin: 5px 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
   }
   .tasks-list-block-content {

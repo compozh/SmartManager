@@ -44,13 +44,13 @@ export default {
 }
 </script>
 <style type="text/css" scoped>
-.mes-task-main-layout  .mes-task-main-flex{
-  position: absolute;
-  height: calc(100% - 60px);
-  overflow-y: auto;
-  width: 100%;
-}
-.mes-task-main-layout  .mes-task-main-flex::-webkit-scrollbar {
+  .mes-task-main-layout  .mes-task-main-flex{
+    position: absolute;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    width: 100%;
+  }
+  .mes-task-main-layout  .mes-task-main-flex::-webkit-scrollbar {
     background-color:#fff;
     width:16px
   }
@@ -79,6 +79,6 @@ export default {
   }
   .grid-element  {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+    border-radius: 5px;
   }
 </style>
