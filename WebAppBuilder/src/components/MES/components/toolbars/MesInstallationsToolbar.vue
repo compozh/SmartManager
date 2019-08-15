@@ -4,6 +4,8 @@
     <v-text-field
           class="qr-input"
           label="Укажите QR-партии материала для установки"
+          v-model="inputQrCode"
+          :disabled="this.disableQrInput"
           required @keyup.enter="submitQrCode">
     </v-text-field>
     <v-btn outlined class="mes-scan" @click="onClickQrScan" outline color="#326DA8" @mousedown.stop>
@@ -22,6 +24,9 @@
 import {mapGetters} from 'vuex'
 
 export default {
+  data(){
+    return { inputQrCode: '', disableQrInput: false }
+  },
   name: "mes-installations-toolbar",
   props: {
     installations: Object
@@ -43,8 +48,17 @@ export default {
     onclickRemoveAllInstallations() {
       this.$emit('removeAllInstallations');
     },
+    // submitQrCode(event) {
+    //   this.$emit('submitQrCode', event.target.value);
+    // },
     submitQrCode(event) {
-      this.$emit('submitQrCode', event.target.value);
+      var qrCodeValue = event.target.value;
+      var me = this;
+      me.disableQrInput = true;
+      me.$emit('submitQrCode', { qrCodeValue, callback:  () => {
+        me.disableQrInput = false;
+        me.inputQrCode = ''
+      }});
     },
     onClickQrScan(event) {
       this.$emit('changeQrScanerVisible', true);

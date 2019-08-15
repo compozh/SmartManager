@@ -96,7 +96,7 @@ export default {
   }
   .productions-card {
     display: flex;
-    align-items: center;
+    align-items: start;
     margin: 10px;
     max-width: 400px;
     width: 360px;

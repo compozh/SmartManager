@@ -1,13 +1,18 @@
 <template>
   <v-layout class="mes-installations">
     <mes-qr-scaner
-      v-if="qrScanerVisible" 
+      v-if="qrScanerVisible"
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
     />
 
+<<<<<<< HEAD:WebAppBuilder/src/components/MES/pages/MesInstallations.vue
     <mes-installations-toolbar 
       class="mes-installations-toolbar"
+=======
+    <mes-stuff-toolbar
+      class="mes-stuff-toolbar"
+>>>>>>> df7b46726bfbaf22b3135e56c501cc01e90902cb:WebAppBuilder/src/components/MES/pages/MesStuff.vue
       :installations=installations
       @removeAllInstallations=removeAllInstallations
       @submitQrCode=submitQrCode
@@ -33,7 +38,7 @@ export default {
     ContentLoader
   },
   data() {
-    return { 
+    return {
       qrScanerVisible: false,
       initializeInstallations: false
     };
@@ -83,11 +88,14 @@ export default {
     removeInstallation(installation, workCenterCode) {
       this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
     },
-    submitQrCode(code) {
+    async submitQrCode({ qrCodeValue, callback}) {
       let workCenters = this.workCenters,
         workCenterCodes = Object.keys(workCenters);
       if(workCenterCodes.length) {
-        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: workCenters[workCenterCodes[0]].code, batchBarcode: code, factId: 0 });
+        await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: workCenters[workCenterCodes[0]].code, batchBarcode: qrCodeValue, factId: 0 });
+      }
+      if(callback) {
+        callback();
       }
     },
     changeQrScanerVisible(visible) {

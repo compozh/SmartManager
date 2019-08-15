@@ -2,7 +2,7 @@
     <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
         <span v-html="production.description"></span>
         <v-btn icon outlined color="error" flat class="mes-delete-production" @click="deleteProduction"><v-icon dark>delete_forever</v-icon></v-btn>
-        <span v-if="production.mode != 'START'"><b>{{production.savedProgress}}</b>% списания</span>
+        <span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
     </v-card-text>
 </template>
 
@@ -44,9 +44,12 @@ export default {
 .mes-production-card {
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: start;
   border-left: 18px solid rgba(179, 2, 2, 0.81);
   flex-direction: column;
   justify-content: center;
+}
+.mes-production-card span {
+  text-align: start;
 }
 </style>

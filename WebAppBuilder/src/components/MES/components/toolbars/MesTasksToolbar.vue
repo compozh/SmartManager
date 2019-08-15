@@ -11,7 +11,7 @@
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
       @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}
       </v-btn>
-      <v-btn flat icon :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode"><v-icon>open_with</v-icon></v-btn>
+      <v-btn flat icon :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode"><v-icon>aspect_ratio</v-icon></v-btn>
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
       v-if="currentLayout === 'mes-task-stuff-layout'">
@@ -20,6 +20,8 @@
           class="qr-input"
           label="Укажите QR-партии материала для установки"
           required @keyup.enter="submitQrCode"
+          v-model="inputQrCode"
+          :disabled="this.disableQrInput"
         ></v-text-field>
         <v-btn outlined class="mes-scan" @click="onClickQrScan" outline color="#326DA8" @mousedown.stop>
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -37,7 +39,7 @@ import {mapGetters} from 'vuex'
 
 export default {
   data(){
-    return {activeChangeDragResizeMode: false}
+    return {activeChangeDragResizeMode: false, inputQrCode: '', disableQrInput: false}
   },
   name: "mes-tasks-toolbar",
   props: {
@@ -62,7 +64,14 @@ export default {
       this.$emit('removeAllInstallations');
     },
     submitQrCode(event) {
-      this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: event.target.value, factId: 0 });
+      var qrCodeValue = event.target.value;
+      this.asyncSubmitQrCode(qrCodeValue);
+    },
+    async asyncSubmitQrCode(qrCodeValue) {
+      this.disableQrInput = true;
+      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: qrCodeValue, factId: 0 });
+      this.disableQrInput = false;
+      this.inputQrCode = ''
     },
     backToMainLayout() {
       this.$emit('changeCurrentLayout', 'mes-task-main-layout');

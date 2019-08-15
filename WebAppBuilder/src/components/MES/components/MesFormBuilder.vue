@@ -103,9 +103,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: start;
-  } 
+  }
   .form-group.has-feedback.formio-component.formio-component-select .choices.form-group.formio-choices {
-    width: 45%;
+    min-width: 350px;
+  }
+  .list-group-item .btn-group.pull-right {
+    width: 300px;
   }
   .nav-link {
     color: #326DA8;
