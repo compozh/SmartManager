@@ -5,7 +5,7 @@
       max-width="290"
     >
         <v-card>
-        <v-card-title class="headline">{{title}}</v-card-title>
+        <!-- <v-card-title class="headline">{{title}}</v-card-title> -->
         <v-card-text>{{message}}</v-card-text>
 
         <v-card-actions>
