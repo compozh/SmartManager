@@ -91,14 +91,7 @@ export default {
     overflow-y: auto;
     overflow-x: auto;
     height: inherit;
-    padding: 15px;
-  }
-  .grid-item-data span {
-    display: inline-flex;
-    height: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
+    padding: 0 15px;
   }
   .grid-item-data::-webkit-scrollbar {
     background-color:#fff;
