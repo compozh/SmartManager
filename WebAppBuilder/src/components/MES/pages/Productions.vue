@@ -1,13 +1,9 @@
 <template>
     <v-layout class="mes-productions">
 
-      <mes-content-loader v-if="!initializeProductions && !Object.keys(productions).legth" />
+      <mes-content-loader v-if="!initializeProductions && !Object.keys(productions).length" />
 
-      <v-flex v-if="initializeProductions" class="mes-productions-content">
-        <v-card class="productions-card" v-for="production in productions" :key="production.factId">
-          <mes-production-card :production=production @deleteProduction=deleteProduction(production) />
-        </v-card>
-      </v-flex>
+      <mes-productions-component/>
 
     </v-layout>
 </template>
@@ -40,9 +36,6 @@ export default {
       await this.$store.dispatch('mes/initializeProperties');
       await this.$store.dispatch('mes/initializeProductions', { workerCode: this.properties.workerCode, fetchPolicy: "network-only" });
       this.initializeProductions = true;
-    },
-    deleteProduction(production) {
-      this.$store.dispatch('mes/deleteProduction', production);
     }
   }
 }
@@ -57,6 +50,7 @@ export default {
     position: absolute;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
   }
 .mes-productions::-webkit-scrollbar {
@@ -71,7 +65,7 @@ export default {
   }
 
   /* scrollbar itself */
- .mes-productions::-webkit-scrollbar-thumb {
+  .mes-productions::-webkit-scrollbar-thumb {
       background-color:#babac0;
       border-radius:16px;
       border:5px solid #fff
@@ -83,24 +77,10 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .mes-productions::-webkit-scrollbar-button {display:none}
-  .mes-productions-content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: start;
-  }
   .mes-content-loader {
     position: absolute;
     z-index: 1;
     width: 100%;
-  }
-  .productions-card {
-    display: flex;
-    align-items: start;
-    margin: 10px;
-    max-width: 400px;
-    width: 360px;
-    border-radius: 5px;
   }
   .wait-for-data-block {
     padding: 20px;

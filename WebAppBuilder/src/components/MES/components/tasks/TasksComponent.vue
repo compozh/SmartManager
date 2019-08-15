@@ -172,12 +172,6 @@ export default {
       background-color:#a0a0a5;
       border:4px solid #f4f4f4
   }
-  .tasks-list-block {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-  }
-
   /* set button(top and bottom of the scrollbar) */
   .tasks-list-block-content::-webkit-scrollbar-button {display:none}
 
@@ -186,10 +180,6 @@ export default {
   }
   .toolbar-item {
     margin: 0 10px;
-  }
-
-  .active-task-item {
-    background-color: #d5e5ff;
   }
   .lack-of-tasks-str {
     font-size: 1.5em;

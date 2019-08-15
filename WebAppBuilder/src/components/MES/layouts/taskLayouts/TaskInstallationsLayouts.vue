@@ -1,11 +1,12 @@
 <template>
     <v-layout class="mes-task-installations-layout">
       <mes-content-loader class="mes-content-loader" v-if="!initializeInstallations && !Object.keys(installations).length" />
-      <div class="installations-block" v-for="(installationsByWorkCenters, workCenter) in installations" :key="workCenter">
-      <v-card class="installation-card" v-for="installation in installationsByWorkCenters" :key="installation.id">
-         <mes-installation-card :installation=installation @removeInstallation="removeInstallation(installation, workCenter)"/>
-      </v-card>
-      </div>
+      
+      <mes-installations-component 
+        :workCenterCodes=[selectedTask.workCenterCode]
+        ref="installationCards"
+      />
+      
     </v-layout>
 </template>
 
@@ -16,13 +17,8 @@ export default {
   name: "mes-task-installations-layout",
   props: {
     selectedTask: Object,
-    installations: Object,
-    initializeInstallations: Boolean
-  },
-  methods: {
-    removeInstallation(installation, workCenterCode) {
-      this.$emit('removeInstallation', { installation, workCenterCode });
-    }
+    initializeInstallations: Boolean,
+    installations: Object
   }
 }
 </script>
@@ -60,21 +56,8 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .mes-task-installations-layout::-webkit-scrollbar-button {display:none}
-  .installations-block {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: start;
-  }
+
   .mes-content-loader {
     width: 100%;
-  }
-  .installation-card{
-    display: flex;
-    align-items: center;
-    max-width: 400px;
-    margin: 10px;
-    width: 360px;
-    height: max-content;
   }
 </style>
