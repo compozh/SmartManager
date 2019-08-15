@@ -1,0 +1,5 @@
+query ($name: String) {
+    purchases{
+        elasticResourceNameSearch(name: $name)
+    }
+}

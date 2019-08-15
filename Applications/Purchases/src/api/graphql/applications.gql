@@ -1,0 +1,25 @@
+{
+  purchases{
+    applications(currentUser: $curr){
+      id,
+      number,
+      date,
+      title,
+      favListId,
+      docStatus{
+        id,
+        sortOrder
+      },
+      rows{
+        id,
+        resource{
+          id,
+          fullName
+        },
+        measurementUnit{
+          name
+        }
+      }
+    }
+  }
+}

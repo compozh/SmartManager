@@ -1,0 +1,7 @@
+{
+  purchases {
+    favLists {
+      id, alias, keyValues, caption, isDefaultList
+    }
+  }
+}
