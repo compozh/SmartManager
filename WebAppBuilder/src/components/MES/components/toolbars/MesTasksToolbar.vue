@@ -11,7 +11,7 @@
       :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' : 'rgba(7, 109, 0, 0.81)'"
       @click="onclickAccept">{{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}
       </v-btn>
-      <v-btn flat icon :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode"><v-icon>open_with</v-icon></v-btn>
+      <v-btn flat icon :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode"><v-icon>aspect_ratio</v-icon></v-btn>
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
       v-if="currentLayout === 'mes-task-stuff-layout'">
