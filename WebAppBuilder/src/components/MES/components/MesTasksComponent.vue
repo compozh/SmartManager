@@ -146,6 +146,7 @@ export default {
     height:calc(100% - 48px);
     overflow-y: auto;
     position: absolute;
+    width: 100%;
   }
 
   .tasks-list-block-content::-webkit-scrollbar {
