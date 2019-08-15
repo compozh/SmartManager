@@ -89,6 +89,9 @@ export default {
       openMoreInformation: false
     }
   },
+  created() {
+    console.log(this.user)
+  },
   props: ['user']
 }
 </script>

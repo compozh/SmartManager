@@ -19,7 +19,7 @@
               </v-flex>
               <!-- Картинка ресурса -->
               <v-flex hidden-sm-and-down>
-                <item-picture entityName="resources" :id="cartItem.resource ? cartItem.resource.id : cartItem.id" height="100px" width="100px"/>
+                <item-picture entityName="resource" :id="cartItem.resource ? cartItem.resource.id : cartItem.id" height="100px" width="100px"/>
               </v-flex>
               <!-- Заголовок, имя ресурса -->
             <v-flex v-if="cartItem.resource" xs12>
@@ -108,15 +108,6 @@ export default {
           return "column";
         }
         return "row";
-      }
-    },
-    filters:{
-      truncate: (text, length, clamp) => {
-        clamp = clamp || '...';
-        var node = document.createElement('div');
-        node.innerHTML = text;
-        var content = node.textContent;
-        return content.length > length ? content.slice(0, length) + clamp : content;
       }
     },
     watch: {

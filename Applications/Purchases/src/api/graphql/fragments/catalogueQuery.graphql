@@ -1,0 +1,14 @@
+fragment main on PurchasesQuery{
+    resourcesGroup(group: $group) {
+      ...resourcesGroupFields
+      children {
+        ...resourcesGroupFields
+          children {
+          ...resourcesGroupFields
+        }
+      }
+      resources{
+        ...resourcesFields
+      }
+   }
+}

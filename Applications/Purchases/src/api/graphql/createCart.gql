@@ -1,0 +1,7 @@
+mutation{
+    purchasesMutation{
+        createCart{
+            id,resourceId,measurementUnit{id,name},resourceName,quantity,dateDelivery
+        }
+    }
+}
