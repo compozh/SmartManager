@@ -14,7 +14,7 @@
       <v-btn flat icon :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode"><v-icon>aspect_ratio</v-icon></v-btn>
     </v-flex>
       <v-flex grow class="mes-tasks-toolbar-qr"
-      v-if="currentLayout === 'mes-task-stuff-layout'">
+      v-if="currentLayout === 'mes-task-installations-layout'">
       <v-btn outlined class="mes-arrow-back" @click="backToMainLayout" outline color="#326DA8"><v-icon dark>arrow_back</v-icon></v-btn>
         <v-text-field
           class="qr-input"
@@ -29,7 +29,7 @@
           </svg>
           </v-btn>
       </v-flex>
-   <v-flex class="setup-material-btn" xs2 v-if="currentLayout === 'mes-task-stuff-layout' && installations && Object.keys(installations).length">
+   <v-flex class="setup-material-btn" xs2 v-if="currentLayout === 'mes-task-installations-layout' && installations && Object.keys(installations).length">
      <v-btn outlined @click="onclickRemoveAllInstallations" outline color="#326DA8">Снять все партии</v-btn>
    </v-flex>
   </v-layout>
@@ -51,7 +51,7 @@ export default {
   methods: {
     onclickSetupMaterial(event) {
       this.$emit('initInstallations');
-      this.$emit('changeCurrentLayout', 'mes-task-stuff-layout');
+      this.$emit('changeCurrentLayout', 'mes-task-installations-layout');
     },
     onclickAccept(event) {
       if(this.selectedTask.inProgress) {

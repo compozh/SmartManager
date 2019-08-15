@@ -6,13 +6,8 @@
       @submitQrCode=submitQrCode
     />
 
-<<<<<<< HEAD:WebAppBuilder/src/components/MES/pages/MesInstallations.vue
     <mes-installations-toolbar 
       class="mes-installations-toolbar"
-=======
-    <mes-stuff-toolbar
-      class="mes-stuff-toolbar"
->>>>>>> df7b46726bfbaf22b3135e56c501cc01e90902cb:WebAppBuilder/src/components/MES/pages/MesStuff.vue
       :installations=installations
       @removeAllInstallations=removeAllInstallations
       @submitQrCode=submitQrCode

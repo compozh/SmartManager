@@ -28,5 +28,6 @@ export default {
   productions: [],
   productionFormio: {},
   dragResizeMode: false,
-  menuMiniMode: true
+  menuMiniMode: true,
+  ticket: ''
 }

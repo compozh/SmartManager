@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="mes-task-stuff-layout">
+    <v-layout class="mes-task-installations-layout">
       <mes-content-loader class="mes-content-loader" v-if="!initializeInstallations && !Object.keys(installations).length" />
       <div class="installations-block" v-for="(installationsByWorkCenters, workCenter) in installations" :key="workCenter">
       <v-card class="installation-card" v-for="installation in installationsByWorkCenters" :key="installation.id">
@@ -13,7 +13,7 @@
 import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-task-stuff-layout",
+  name: "mes-task-installations-layout",
   props: {
     selectedTask: Object,
     installations: Object,
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-  .mes-task-stuff-layout {
+  .mes-task-installations-layout {
     padding: 10px;
     margin-top: 60px;
     position: absolute;
@@ -36,30 +36,30 @@ export default {
     overflow-y: auto;
     width: 100%;
   }
-  .mes-task-stuff-layout::-webkit-scrollbar {
+  .mes-task-installations-layout::-webkit-scrollbar {
     background-color:#fff;
     width:16px
   }
-  .mes-task-stuff-layout::-webkit-scrollbar-track {
+  .mes-task-installations-layout::-webkit-scrollbar-track {
       background-color:#fff
   }
-  .mes-task-stuff-layout::-webkit-scrollbar-track:hover {
+  .mes-task-installations-layout::-webkit-scrollbar-track:hover {
       background-color:#f4f4f4
   }
 
   /* scrollbar itself */
- .mes-task-stuff-layout::-webkit-scrollbar-thumb {
+ .mes-task-installations-layout::-webkit-scrollbar-thumb {
       background-color:#babac0;
       border-radius:16px;
       border:5px solid #fff
   }
-  .mes-task-stuff-layout::-webkit-scrollbar-thumb:hover {
+  .mes-task-installations-layout::-webkit-scrollbar-thumb:hover {
       background-color:#a0a0a5;
       border:4px solid #f4f4f4
   }
 
   /* set button(top and bottom of the scrollbar) */
-  .mes-task-stuff-layout::-webkit-scrollbar-button {display:none}
+  .mes-task-installations-layout::-webkit-scrollbar-button {display:none}
   .installations-block {
     display: flex;
     flex-direction: row;

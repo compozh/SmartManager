@@ -58,12 +58,12 @@
                 v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.inProgress)
                   ||(currentLayout == 'mes-task-main-layout' && selectedTask.inProgress))" />
 
-              <mes-task-stuff-layout
+              <mes-task-installations-layout
                 :selectedTask=selectedTask
                 :installations=installations
                 :initializeInstallations=initializeInstallations
                 @removeInstallation=removeInstallation
-                v-if="selectedTask && currentLayout == 'mes-task-stuff-layout'" />
+                v-if="selectedTask && currentLayout == 'mes-task-installations-layout'" />
 
             </v-layout>
       </multipane>
