@@ -14,6 +14,9 @@
 export default {
   name: "mes-menu",
   computed: {
+    workCenters() {
+        return this.$store.getters['mes/workCenters'];
+    },
     links() {
       if (!this.$store.state.applicationDescription) {
         return [];
@@ -28,11 +31,19 @@ export default {
           (section.Routes || []).map(r => (r.section = section) && r)
         );
       }
-
+      let workCenter,
+        workCenterCodes = Object.keys(this.workCenters);
+      if(workCenterCodes.length) {
+        workCenter = this.workCenters[workCenterCodes[0]];
+      }
+      
       var pages = [];
       for(let page of links[1].Children) {
-        pages.push(page);
+        if(workCenter && (workCenter.accessPages == 'ALL_PAGES' || page.Id == "STUFF")) {
+          pages.push(page);
+        }
       }
+
       pages = pages.sort((a,b) => {
         return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1);
       });

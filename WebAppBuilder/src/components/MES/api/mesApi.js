@@ -15,9 +15,9 @@ import productions from './graphql/productions/productions.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
+import ticket from './graphql/ticket.graphql'
 
 var client = null;
-
 const getClient = () => {
   if(client == null) {
     const options = {
@@ -46,6 +46,17 @@ export class MesApi {
       )
       .then(result => result)
       .catch(error => console.log(error.message));
+    }
+    catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async getTicketFromGql() {
+    try {
+      return await getClient().query({
+        query: gql` ${ticket}`
+      });
     }
     catch (error) {
       return console.log(error.message);
@@ -168,7 +179,8 @@ export class MesApi {
     try {
       const result = await getClient().query({
         query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
-        variables: { formCode, properties }
+        variables: { formCode, properties },
+        fetchPolicy: 'network-only'
       });
       return result.data.mes.productionFormIo;
     }

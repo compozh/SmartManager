@@ -28,15 +28,15 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-.mes-task-stuff-layout {
-  padding: 10px;
-  margin-top: 60px;
-  position: absolute;
-  height: calc(100% - 60px);
-  overflow-y: auto;
-  width: 100%;
-}
-.mes-task-stuff-layout::-webkit-scrollbar {
+  .mes-task-stuff-layout {
+    padding: 10px;
+    margin-top: 60px;
+    position: absolute;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    width: 100%;
+  }
+  .mes-task-stuff-layout::-webkit-scrollbar {
     background-color:#fff;
     width:16px
   }

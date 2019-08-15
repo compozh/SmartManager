@@ -59,6 +59,9 @@ export default {
     let tempProductionFormio = Object.assign({}, state.productionFormio);
     state.productionFormio = Object.assign(tempProductionFormio, productionFormio);
   },
+  resetProductionFormio(state) {
+    state.productionFormio = {};
+  },
   removeProduction(state, production) {
       let index = state.productions.indexOf(production);
       state.productions.splice(index, 1);
@@ -81,5 +84,8 @@ export default {
   },
   setObsoluteDataTask(state, obsoluteData) {
     state.obsoleteData.tasks = obsoluteData;
+  },
+  setTicket(state, ticket) {
+    state.ticket = ticket;
   }
 }

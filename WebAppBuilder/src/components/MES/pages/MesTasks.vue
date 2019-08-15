@@ -94,7 +94,7 @@ export default {
     };
   },
   created() {
-    this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged, "6A0FB985-3317-4D64-A870-C689EF69506A")
+    this.initializeSignalR();
     this.initialize();
   },
   computed: {
@@ -136,9 +136,16 @@ export default {
     },
     dragResizeMode() {
       return this.$store.getters['mes/dragResizeMode'];
+    },
+    ticket() {
+      return this.$store.getters['mes/ticket'];
     }
   },
   methods: {
+    async initializeSignalR() {
+      await this.$store.dispatch('mes/initializeTicket');
+      this.$signalR.connect("HUBBER", window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket);
+    },
     taskStateChanged(msg) {
       let data = JSON.parse(msg);
       if(!data) {
@@ -165,10 +172,6 @@ export default {
           }
         break;
       }
-
-     // var workCenters = JSON.parse(msg);
-      //debugger;
-      //this.$store.dispatch('mes/setObsoluteDataTask', true);
     },
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenters');
@@ -226,7 +229,11 @@ export default {
     changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask;
       let workCenter = this.workCenters[newSelectedTask.workCenterCode];
-      this.initializeFormioByWorkCenter(workCenter, newSelectedTask);
+
+      this.$store.commit('mes/resetProductionFormio');
+      if(newSelectedTask.inProgress) {
+        this.initializeFormioByWorkCenter(workCenter, newSelectedTask);
+      }
       this.changeCurrentLayout('mes-task-main-layout');
     },
     initializeFormioByWorkCenter(workCenter, task) {

@@ -40,5 +40,8 @@ export default {
   },
   obsoleteData(state) {
     return state.obsoleteData;
+  },
+  ticket(state) {
+    return state.ticket;
   }
 }

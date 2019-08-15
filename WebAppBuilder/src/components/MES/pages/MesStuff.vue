@@ -131,6 +131,7 @@ export default {
     width: 360px;
     margin: 10px;
     height: max-content;
+    border-radius: 5px;
   }
   .wait-for-data-block {
     padding: 20px;

@@ -133,5 +133,25 @@ export default {
   .btn.btn-primary.btn-md:hover {
     background-color: rgba(50, 109, 168, .12)
   }
+  .btn.btn-success.btn-lg {
+    background-color: white;
+    border-color: rgba(40, 165, 69, 1);
+    color: rgba(40, 165, 69, 1);
+  }
+  .btn.btn-success.btn-lg:hover {
+    background-color:  rgba(40, 165, 69, .12);
+  }
+  .form-group.has-feedback.formio-component {
+    text-align: start;
+  }
+  .form-group.has-feedback.formio-component.formio-component-button.formio-component-submit.form-group {
+    text-align: center;
+  }
+  .editgrid-add {
+    text-align: center;
+  }
+  .editgrid-actions{
+    text-align: center;
+  }
 }
 </style>

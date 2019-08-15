@@ -100,7 +100,7 @@ export default {
     margin: 10px;
     max-width: 400px;
     width: 360px;
-    border-radius: 10px;
+    border-radius: 5px;
   }
   .wait-for-data-block {
     padding: 20px;

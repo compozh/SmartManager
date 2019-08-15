@@ -13,6 +13,14 @@ export default {
       commit('setSnackbarErrorMessage', e.message);
     }
   },
+  async initializeTicket({commit}) {
+    try {
+      const result = await api.getTicketFromGql();
+      commit('setTicket', result.data.mes.tiket)
+    } catch (e) {
+      commit('setSnackbarErrorMessage', e.message);
+    }
+  },
   async initializeWorkCenters({ commit }) {
     commit('closeSnackbar');
     try {
@@ -76,16 +84,26 @@ export default {
       linearLoader: true
     });
   },
-  async registerProduction({commit}, task) {
-    var productionRegistrationParam = {
-      workCenterCode: task.workCenterCode,
-      workBarcode: task.barcode,
-      mode: 'Start',
-      success: true
-    };
+  async registerProduction({ getters, commit }, task) {
+    var me = this,
+      productionRegistrationParam = {
+        workCenterCode: task.workCenterCode,
+        workBarcode: task.barcode,
+        mode: 'Start',
+        success: true
+      };
     await this.dispatch('mes/graphqlQueryWraper', { 
       queryAction: async () =>  await api.registerProductionGql(productionRegistrationParam), 
-      successAction: async result => { task.inProgress = true; },
+      successAction: async result => {
+        //todo
+        commit('resetProductionFormio');
+        let workCenter = getters.workCenters[task.workCenterCode];
+        task.inProgress = true;
+        let properties = {
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode
+        };
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties }); },
       linearLoader: true
     });
   },
@@ -126,10 +144,6 @@ export default {
     });
   },
   async createProductionFormio({ getters, commit }, { formCode, properties }) {
-    if(getters.productionFormio[formCode]) {
-      return;
-    }
-
     await this.dispatch('mes/graphqlQueryWraper', { 
       queryAction: async () =>  await api.getProductionFormioFromGql(formCode, properties), 
       successAction: async result => { commit('setProductionFormio', { formio: result, formCode }) },
