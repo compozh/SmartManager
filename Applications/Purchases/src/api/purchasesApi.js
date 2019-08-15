@@ -41,13 +41,15 @@ import docStatus from '../api/graphql/docStatus.gql'
 import recoursesByIds from '../api/graphql/recoursesByIds.gql' 
 import applicationsByIds from '../api/graphql/applicationsByIds.gql' 
 import mutationChangeListForItem from '../api/graphql/mutationChangeListForItem.gql'
+import Vue from 'vue'
 
-
+const authHeader =  Vue.prototype.$authentication.getAuthHeader()
 const options = {
   credentials: 'include',
   uri: window.myConfig.GrapgQlUrl + 'api/graphql',
   headers: {
-    'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
+    ...authHeader,
+    // 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
     'schema': 'PurchasesSchema'
   }
 }
