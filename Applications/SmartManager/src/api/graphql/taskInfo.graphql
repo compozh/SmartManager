@@ -1,15 +1,21 @@
 {
   smtasks {
-    tasksGetInfo(taskId: $taskId) {
+    taskDetails(taskId: $taskId) {
       ...taskFields
+      parentTasks {
+        ...taskFields
+      }
       childTasks {
+        ...taskFields
+      }
+      parentTask {
         ...taskFields
       }
     }
   }
 }
 
-fragment taskFields on TasksGetInfo {
+fragment taskFields on Task {
   id
   name
   descript
@@ -45,6 +51,26 @@ fragment taskFields on TasksGetInfo {
   isRead
   caseId
   docCaption
+  docText
+  docPlanDate
+  docImportant
+  isDocTextHtml
+  docType
+  docOrg
+  nextButtonText
+  previousButtonText
+  role
+  participants {
+    userId
+    userFio
+    name
+    role
+  }
+  relArso
+  relKeyValue
+  relKidCopy
+  relType
+  relName
   originals {
     id
     ndor
@@ -68,10 +94,5 @@ fragment taskFields on TasksGetInfo {
     text
     isAgree
   }
-  participants {
-    userId
-    userFio
-    name
-    role
-  }
+  hasNewComment
 }

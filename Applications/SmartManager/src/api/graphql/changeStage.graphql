@@ -1,0 +1,11 @@
+{
+  smtasksMutation {
+    changeStage(stageParams: $stageParams) {
+      success,
+      log,
+      hideDoc,
+      dateK,
+      params
+    }
+  }
+}

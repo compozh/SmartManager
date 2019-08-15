@@ -26,7 +26,7 @@
     </v-tooltip>
     <v-tooltip top>
       <template v-slot:activator="{ on }">
-        <v-icon v-if="task.isMy" class="ml-1" v-on="on">face</v-icon>
+        <v-icon v-if="isTaskFromMe" class="ml-1" v-on="on">face</v-icon>
       </template>
       <span>Задача от меня</span>
     </v-tooltip>
@@ -36,7 +36,15 @@
 <script>
 export default {
   name: 'SmTaskIcons',
-  props: ['task']
+  props: ['task'],
+  computed: {
+    isTaskFromMe() {
+      return this.task.declarerId === this.currentUserId
+    },
+    currentUserId() {
+      return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserId
+    }
+  }
 }
 </script>
 
