@@ -37,7 +37,7 @@
       width="300"
     >
       <v-card
-        color="primary"
+        color="#326DA8"
         dark
       >
         <v-card-text>
