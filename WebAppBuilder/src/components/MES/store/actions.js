@@ -1,4 +1,4 @@
-import {MesApi} from '../api/MesApi'
+import {MesApi} from '../api/mesApi'
 
 const api = new MesApi()
 
