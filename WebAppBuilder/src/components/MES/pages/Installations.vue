@@ -28,7 +28,7 @@ import {mapGetters} from 'vuex'
 import {ContentLoader} from 'vue-content-loader'
 
 export default {
-  name: "mes-stuff",
+  name: "mes-installations",
   components: {
     ContentLoader
   },
