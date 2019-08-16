@@ -1,5 +1,5 @@
 <template>
-    <v-card class="installations-block" ref="installationsBlock">
+    <div class="installations-block" ref="installationsBlock">
       <v-card
         class="installation-card"
         v-for="installation in sortedInstallations"
@@ -12,7 +12,7 @@
         />
 
       </v-card>
-    </v-card>
+    </div>
 </template>
 
 <script>
