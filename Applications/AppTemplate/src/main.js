@@ -1,23 +1,83 @@
 // @it-enterprise пакеты
-import WebApps from '@it-enterprise/webappscore'
+
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 import Authentication from '@it-enterprise/authentication'
-import '@it-enterprise/authentication/dist/authentication.css'
+//import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
-import '@it-enterprise/common/dist/common-components.css'
+//import '@it-enterprise/common/dist/common-components.css'
 
 
 // vue пакеты
 import Vue from 'vue'
+import App from './App.vue'
+
+// Vuesax Component Framework
+import Vuesax from 'vuesax'
+import 'material-icons/iconfont/material-icons.css' //Material Icons
+import 'vuesax/dist/vuesax.css' // Vuesax
+
+Vue.use(Vuesax)
+
 import Vuex from 'vuex'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+
+// axios
 import axios from 'axios'
-import { i18n } from './plugins/i18n'
-import VueI18n from 'vue-i18n'
+Vue.prototype.$http = axios
+
+// Theme Configurations
+import '../themeConfig.js'
+
+
+// ACL
+//import acl from './acl/acl'
+
+
+// Globally Registered Components
+import './globalComponents.js'
+
+// Styles: SCSS
+import './assets/scss/main.scss'
+
+// Tailwind
+import '@/assets/css/main.css'
+
+// Vue Router
+import router from './router'
+
+// Vuex Store
 import store from './store/index'
+
+// i18n
+import { i18n } from './i18n/i18n'
+
+// Vuesax Admin Filters
+import './filters/filters'
+
+// Clipboard
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
+// Tour
+import VueTour from 'vue-tour'
+Vue.use(VueTour)
+require('vue-tour/dist/vue-tour.css')
+
+// VeeValidate
+import VeeValidate from 'vee-validate'
+Vue.use(VeeValidate)
+
+// Vuejs - Vue wrapper for hammerjs
+import { VueHammer } from 'vue2-hammer'
+Vue.use(VueHammer)
+
+
+
+// Feather font icon
+require('./assets/css/iconfont.css')
+Vue.config.productionTip = false
+
 
 // apollo
 import { ApolloClient } from 'apollo-client'
@@ -25,7 +85,8 @@ import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
-import { routerDependencies } from './router'
+
+
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -41,13 +102,11 @@ let dependencies = {
   i18n,
   apolloProvider,
   axios,
-  ...routerDependencies
+  ...router
 }
 
 // Плагины стандартные
-Vue.use(Vuetify)
 Vue.use(Vuex)
-Vue.use(VueI18n)
 Vue.use(VueApollo)
 
 // Плагины it-enterprise
@@ -56,22 +115,25 @@ Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.myConfig, dependencies })
 Vue.use(Router, { options: window.myConfig, dependencies })
-Vue.use(WebApps, { dependencies, options: window.myConfig })
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./i18n/resources/en.json'))
 
-// Шина событий
-export const eventBus = new Vue()
 
-// импорт компонентов
-const req = require.context('@/components/', true, /\.(js|vue)$/i)
-req.keys().map(key => {
-  if (!(req(key).default || {}).name) {
-    return
-  }
-  Vue.component(req(key).default.name, req(key).default)
-})
 
+new Vue({
+  router: router.router,
+  store,
+  i18n,
+  //acl,
+  render: h => h(App)
+}).$mount('#app')
+
+
+
+
+
+
+/* Использование ядра для загрузки приложения, описанного в системе
 start()
 
 async function start()   {
@@ -91,3 +153,4 @@ async function start()   {
 
 
 
+*/

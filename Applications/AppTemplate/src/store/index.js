@@ -8,7 +8,7 @@ import mutations from './mutations'
 import state from './state'
 
 // Modules
-import skdStore from '../skdstore/store'
+import appModule from './app/index'
 
 Vue.use(Vuex)
 
@@ -19,8 +19,10 @@ const store = new Vuex.Store({
   mutations,
   state,
   modules: {
-    [skdStore.namespace]: skdStore,
-  }
+    [appModule.namespace]: appModule,
+  },
+  strict: process.env.NODE_ENV !== 'production'
+
 })
 
 export default store
