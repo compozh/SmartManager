@@ -6,7 +6,7 @@
       @submitQrCode=submitQrCode
     />
 
-    <mes-installations-toolbar 
+    <mes-installations-toolbar
       class="mes-installations-toolbar"
       :installations=installations
       @removeAllInstallations=removeAllInstallations
@@ -69,6 +69,19 @@ export default {
       this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
     },
     async submitQrCode({ qrCodeValue, callback}) {
+      let installationCards = this.$refs.installationCards,
+          installationCard = installationCards.$refs[qrCodeValue],
+          installationsBlock = installationCards.$refs.installationsBlock;
+
+      if(installationCard) {
+        installationsBlock.$el.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
+        installationCard[0].$el.classList.add('activeInstallation')
+        setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 500);
+        if(callback) {
+          callback();
+        }
+        return;
+      }
       let workCenters = this.workCenters,
         workCenterCodes = Object.keys(workCenters);
       if(workCenterCodes.length) {

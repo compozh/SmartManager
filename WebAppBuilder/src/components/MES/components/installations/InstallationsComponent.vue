@@ -1,19 +1,18 @@
 <template>
-    <div class="installations-block">
+    <v-card class="installations-block" ref="installationsBlock">
       <v-card
         class="installation-card"
-        v-for="installation in sortedInstallations" 
+        v-for="installation in sortedInstallations"
         :key="installation.id"
         :ref="installation.batchBarcode"
       >
-
-        <mes-installation-card 
+        <mes-installation-card
           :installation=installation
           @removeInstallation="removeInstallation(installation)"
         />
 
       </v-card>
-    </div>
+    </v-card>
 </template>
 
 <script>
@@ -104,5 +103,11 @@ export default {
     margin: 10px;
     height: max-content;
     border-radius: 5px;
+    background-color: white;
+    transition: background-color .5s ease-in-out;
+  }
+  .activeInstallation {
+    background-color: rgba(50, 109, 168, .3);
+    transition: background-color .5s ease-in-out;
   }
 </style>
