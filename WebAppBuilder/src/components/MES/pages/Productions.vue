@@ -1,7 +1,7 @@
 <template>
     <v-layout class="mes-productions">
 
-      <mes-content-loader v-if="!initializeProductions && !Object.keys(productions).length" />
+      <mes-content-loader v-if="!initializeProductions && !productions.length" />
 
       <mes-productions-component/>
 

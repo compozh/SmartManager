@@ -1,10 +1,11 @@
 <template>
     <formio id="formio" class="formio-container"
-		:form=formioComponents
-		:submission=formioSubmission
-		:options="options"
-		@submit=onSubmit
-		@change=onChange />
+      :form=formioComponents
+      :submission=formioSubmission
+      :options="options"
+      @submit=onSubmit
+      @change=onChange
+    />
 </template>
 
 <script>

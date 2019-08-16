@@ -43,9 +43,10 @@ export default {
           tasks.push(task);
         }
       }
-      debugger;
+      
       tasks.sort((a,b) => {
-        return a.factId < b.factId ? 1 : (a.factId == b.factId ? 0 : -1);
+        return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ? 
+                  1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1);
       });
 
       return tasks;
@@ -68,5 +69,10 @@ export default {
   }
   .active-task-item {
     background-color: #d5e5ff;
+  }
+  .tasks-list-blocks .task-item{
+    margin: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
   }
 </style>

@@ -1,4 +1,4 @@
-import {MesApi} from '../api/mesApi'
+import {MesApi} from '../api/MesApi'
 
 const api = new MesApi()
 
@@ -129,7 +129,7 @@ export default {
 
     try {
       let result = await api.getProductionsFromGql(workerCode, fetchPolicy);
-      commit('setProductions', result.data.mes.usersProductionEvents);
+      commit('setProductions', result.data.mes.usersProductionEvents || []);
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message);
     }

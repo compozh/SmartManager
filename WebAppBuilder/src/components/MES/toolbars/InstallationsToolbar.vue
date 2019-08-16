@@ -14,8 +14,17 @@
       </svg>
     </v-btn>
   </v-flex>
-  <v-flex class="setup-material-btn" xs2>
-    <v-btn outlined v-if="installationsAny" @click="onclickRemoveAllInstallations" outline color="#326DA8">Снять все партии</v-btn>
+  <v-flex class="setup-material-layout" xs2>
+
+    <v-btn outlined
+      class="remove-installations-button"
+      v-if="installationsAny"
+      @click="onclickRemoveAllInstallations"
+      outline color="#326DA8"
+    >
+      Снять все партии
+    </v-btn>
+
   </v-flex>
 </v-layout>
 </template>
@@ -33,14 +42,13 @@ export default {
   },
   computed: {
     installationsAny() {
-      var me = this,
-        any = false;
-      Object.keys(me.installations).forEach(workCenter => {
-        var installations = me.installations[workCenter];
+      let any = false;
+      for(let workCenterCode of Object.keys(this.installations)) {
+        var installations = this.installations[workCenterCode];
         if(!any) {
           any = installations.length;
         }
-      });
+      }
       return any;
     }
   },
@@ -88,12 +96,15 @@ export default {
     width: 150px;
     max-width: 150px;
   }
-  .setup-material-btn {
+  .setup-material-layout {
     display: flex;
     align-items: center;
     width: 200px;
     max-width: 200px;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
+  }
+  .remove-installations-button {
+    border-radius:5px;
   }
   .mes-installations-toolbar-qr {
     display: flex;
@@ -102,5 +113,6 @@ export default {
   }
   .mes-scan {
     min-width: auto;
+    border-radius:5px;
   }
 </style>

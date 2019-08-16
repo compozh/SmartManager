@@ -24,25 +24,12 @@
           :loaderType=loaderType />
         <div class="tasks-list-block-content">
 
-          <div v-for="(tasksByWorkCenter, workCenter) in tasks"
-          :key="workCenter"
-          class="tasks-list-block">
-          
-          <div v-for="task in tasksByWorkCenter" :key="task.id">
+          <mes-task-cards
+            :selectedTask=selectedTask
+            :selectedTasksTab=selectedTasksTab
+            @changeCurrentTask=changeCurrentTask
+          />
 
-            <div 
-              v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
-                || (selectedTasksTab == 1 && task.state == 'DONE')">
-
-            <v-card ripple class="task-item"
-              @click="changeCurrentTask(task)">
-              <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
-                <span v-html="task.description"></span>
-              </v-card-text>
-            </v-card>
-            </div>
-          </div>
-          </div>
         </div>
           <span v-if="initializeTasks && !Object.keys(tasks).length" class="lack-of-tasks-str">Задания отсутствуют</span>
       </v-flex>
@@ -137,11 +124,6 @@ export default {
   .grid-tabs .v-badge {
     padding-right: 10px;
   }
-  .tasks-list-blocks .task-item{
-    margin: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
   .tasks-list-block-content {
     height:calc(100% - 48px);
     overflow-y: auto;
@@ -156,21 +138,21 @@ export default {
 
   /* background of the scrollbar except button or resizer */
   .tasks-list-block-content::-webkit-scrollbar-track {
-      background-color:#fff
+    background-color:#fff
   }
   .tasks-list-block-content::-webkit-scrollbar-track:hover {
-      background-color:#f4f4f4
+    background-color:#f4f4f4
   }
 
   /* scrollbar itself */
   .tasks-list-block-content::-webkit-scrollbar-thumb {
-      background-color:#babac0;
-      border-radius:16px;
-      border:5px solid #fff
+    background-color:#babac0;
+    border-radius:16px;
+    border:5px solid #fff
   }
   .tasks-list-block-content::-webkit-scrollbar-thumb:hover {
-      background-color:#a0a0a5;
-      border:4px solid #f4f4f4
+    background-color:#a0a0a5;
+    border:4px solid #f4f4f4
   }
   /* set button(top and bottom of the scrollbar) */
   .tasks-list-block-content::-webkit-scrollbar-button {display:none}
