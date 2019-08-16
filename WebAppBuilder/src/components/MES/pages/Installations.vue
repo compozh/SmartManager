@@ -73,7 +73,7 @@ export default {
           installationCard = installationCards.$refs[qrCodeValue],
           installationsBlock = installationCards.$refs.installationsBlock;
 
-      if(installationCard) {
+      if(installationCard[0]) {
         installationsBlock.$el.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
         installationCard[0].$el.classList.add('activeInstallation')
         setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 500);
