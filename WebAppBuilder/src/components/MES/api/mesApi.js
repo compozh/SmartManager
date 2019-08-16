@@ -134,7 +134,7 @@ export class MesApi {
         mutation: gql`${registerProduction}`,
         variables: { productionRegistrationParam }
       });
-      
+
       return result.data.mesMutation.registerProduction;
     } catch (error) {
       return console.log(error.message);
