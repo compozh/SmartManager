@@ -68,9 +68,6 @@ export default {
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormioData();
-    },
-    getInitialFormioData() {
-      return this.$refs.formioBuilder[0].formioData;
     }
   }
 }

@@ -17,6 +17,7 @@ import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
+import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 
 var client = null;
 const getClient = () => {
@@ -60,6 +61,19 @@ export class MesApi {
       });
     }
     catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${fixWorkCenterForWorker}`,
+        variables: { workCenterCode, workerCode }
+      });
+
+      return result.data.mesMutation.fixWorkCenterForWorker;
+    } catch (error) {
       return console.log(error.message);
     }
   }

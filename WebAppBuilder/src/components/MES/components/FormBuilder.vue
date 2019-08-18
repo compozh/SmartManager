@@ -37,7 +37,7 @@ export default {
 			this.currentData = params.data;
 		},
 		getFormioData() {
-			return JSON.stringify(this.currentData)
+			return JSON.stringify(this.currentData);
 		}
 	}
 }

@@ -3,6 +3,7 @@
 
     <mes-task-installations-layout-toolbar 
       @removeAllInstallations=removeAllInstallations
+      @submitQrCode=submitQrCode
     />
     <v-layout class="mes-task-installations-layout">
       <mes-content-loader class="mes-content-loader" v-if="!initializeInstallations && !installations.length" />

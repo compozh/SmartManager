@@ -26,6 +26,7 @@
                   || (currentLayout == 'inProgress' && !selectedTask.inProgress))" />
 
               <mes-task-in-progress-layout
+                ref="taskInProgressLayout"
                 v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
                   ||(currentLayout == 'main' && selectedTask.inProgress))" />
 
@@ -99,7 +100,10 @@ export default {
     },
     ticket() {
       return this.$store.getters['mes/ticket'];
-    }
+    },
+    productionFormio() {
+			return this.$store.getters['mes/productionFormio'];
+		}
   },
   methods: {
     async initializeSignalR() {
@@ -159,18 +163,34 @@ export default {
       if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return;
       }
+      
+      if(this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
+        let currentFormioData = this.$refs.taskInProgressLayout.getFormioData();
 
-      if(this.$refs.acceptTaskLayout && !this.dialogProperties.task) {
-        let formioInitialData = this.$refs.acceptTaskLayout.getInitialFormioData(),
-          currentFormioData = this.$refs.acceptTaskLayout.getFormioData();
-
-        if(formioInitialData && formioInitialData.data != currentFormioData) {
+        if(this.productionFormio && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
           this.dialogProperties.visible = true;
           this.dialogProperties.task = newSelectedTask;
           return;
         }
       }
       this.changeCurrentTask(newSelectedTask);
+    },
+    checkChangeFormioData(initialDataJson, currentDataJson) {
+      let initialData = JSON.parse(initialDataJson),
+        currentData = JSON.parse(currentDataJson);
+
+        for(let key of Object.keys(currentData)) {
+          let initialValue = initialData[key];
+          let value = currentData[key];
+          if(initialValue) {
+            if(initialValue != value) {
+              return true;
+            }
+          } else if(!Array.isArray(value) && typeof(value) != "object" && value) {
+            return true;
+          }
+        }
+      return false;
     },
     changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask;

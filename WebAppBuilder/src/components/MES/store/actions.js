@@ -94,6 +94,13 @@ export default {
       linearLoader: true
     });
   },
+  async fixWorkCenterForWorker({ commit }, { workCenterCode, workerCode }) {
+    await this.dispatch('mes/graphqlQueryWraper', { 
+      queryAction: async () =>  await api.fixWorkCenterForWorkerGql(workCenterCode, workerCode), 
+      successAction: async result => { this.dispatch('mes/initializeWorkCenter', 'network-only') },
+      linearLoader: true
+    });
+  },
   async cancelBeginRegistration({ commit }, task) {
     await this.dispatch('mes/graphqlQueryWraper', { 
       queryAction: async () =>  await api.cancelBeginRegistrationGql(task.shiftTaskId), 
