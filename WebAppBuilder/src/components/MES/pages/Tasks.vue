@@ -1,11 +1,5 @@
 <template>
   <v-container  class="main-block">
-    <mes-qr-scaner
-      v-if="qrScanerVisible"
-      @changeQrScanerVisible=changeQrScanerVisible
-      @submitQrCode=submitQrCode
-    />
-
     <v-card>
       <multipane class="main-block-layout">
         <mes-dialog-component
@@ -19,7 +13,6 @@
           @disagreeClick=dialogDisagreeClick />
 
           <mes-tasks-component
-            :selectedTask=selectedTask
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=onChangeCurrentTask
@@ -28,42 +21,16 @@
             <multipane-resizer><v-icon class="multipane-resizer-icon">drag_handle</v-icon></multipane-resizer>
 
             <v-layout column class="task-description-layout">
-              <v-flex class="button-toolbar" row wrap >
-
-                <mes-tasks-toolbar v-if="selectedTask"
-                  :currentLayout=currentLayout
-                  :dragResizeMode=dragResizeMode
-                  :selectedTask=selectedTask
-                  :installations=installations[selectedTask.workCenterCode]
-                  @changeDragResizeMode="changeDragResizeMode"
-                  @changeCurrentLayout="changeCurrentLayout"
-                  @removeAllInstallations=removeAllInstallations
-                  @initInstallations=initInstallations
-                  @changeQrScanerVisible=changeQrScanerVisible
-                  />
-
-              </v-flex>
-
               <mes-task-main-layout
-                :selectedTask=selectedTask
-                :dragResizeMode=dragResizeMode
-                v-if="selectedTask && ((currentLayout === 'mes-task-main-layout' && !selectedTask.inProgress)
-                  || (currentLayout == 'mes-accept-task-layout' && !selectedTask.inProgress))" />
+                v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
+                  || (currentLayout == 'inProgress' && !selectedTask.inProgress))" />
 
-              <mes-accept-task-layout
-                ref="acceptTaskLayout"
-                :selectedTask=selectedTask
-                :workCenters=workCenters
-                :dragResizeMode=dragResizeMode
-                v-if="selectedTask && ((currentLayout == 'mes-accept-task-layout' && selectedTask.inProgress)
-                  ||(currentLayout == 'mes-task-main-layout' && selectedTask.inProgress))" />
+              <mes-task-in-progress-layout
+                v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
+                  ||(currentLayout == 'main' && selectedTask.inProgress))" />
 
               <mes-task-installations-layout
-                :selectedTask=selectedTask
-                :installations=installations
-                :initializeInstallations=initializeInstallations
-                @removeInstallation=removeInstallation
-                v-if="selectedTask && currentLayout == 'mes-task-installations-layout'" />
+                v-if="selectedTask && currentLayout == 'installations'" />
 
             </v-layout>
       </multipane>
@@ -81,7 +48,6 @@ export default {
   data() {
     return {
       qrScanerVisible: false,
-      initializeInstallations: false,
       initializeTasks: false,
       dialogProperties: {
         title: "",
@@ -125,17 +91,11 @@ export default {
     tasksPageState() {
       return this.$store.getters['mes/tasksPageState'];
     },
-    installations() {
-      return this.$store.getters['mes/installations'];
-    },
     tasks() {
       return this.$store.getters['mes/tasks'];
     },
-    workCenters() {
-      return this.$store.getters['mes/workCenters'];
-    },
-    dragResizeMode() {
-      return this.$store.getters['mes/dragResizeMode'];
+    workCenter() {
+      return this.$store.getters['mes/workCenter'];
     },
     ticket() {
       return this.$store.getters['mes/ticket'];
@@ -160,51 +120,37 @@ export default {
           }
 
           workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters];
-          let workCenterCodes = Object.keys(this.workCenters);
-          let instersection = false;
-          for(let workCenterCode of workCenterCodes) {
-            if(workCenters.indexOf(workCenterCode) != -1){
-              instersection = true;
-            }
-          }
-          if(instersection) {
+          if(workCenters.indexOf(this.workCenter.code)) {
             this.$store.dispatch('mes/setObsoluteDataTask', true);
           }
         break;
       }
     },
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenters');
-      await this.$store.dispatch('mes/initializeTasks', { workCenterCodes: Object.keys(this.workCenters) });
+      await this.$store.dispatch('mes/initializeWorkCenter');
+      await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code });
       this.initializeTasks = true;
       if(!this.selectedTask) {
         this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab);
       }
     },
     selectFirstTaskByTabIndex(tabIndex) {
-      var me = this,
-        tasks = me.tasks,
-        workCenterCodes = Object.keys(this.tasks);
-
-      for(let workCenterCode of workCenterCodes) {
-        let tasksByWorkCenter = tasks[workCenterCode];
-        for(let task of tasksByWorkCenter) {
+        for(let task of this.tasks) {
           switch(tabIndex) {
             case 0:
               if(task.state == "IN_PLAN" || task.state == "IN_WORK") {
-                me.onChangeCurrentTask(task);
+                this.onChangeCurrentTask(task);
                 return;
               }
               break;
             case 1:
               if(task.state == "DONE") {
-                me.onChangeCurrentTask(task);
+                this.onChangeCurrentTask(task);
                 return;
               }
               break;
           }
         }
-      }
     },
     changeCurrentLayout(currentLayout) {
       this.currentLayout = currentLayout;
@@ -228,43 +174,24 @@ export default {
     },
     changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask;
-      let workCenter = this.workCenters[newSelectedTask.workCenterCode];
 
       this.$store.commit('mes/resetProductionFormio');
       if(newSelectedTask.inProgress) {
-        this.initializeFormioByWorkCenter(workCenter, newSelectedTask);
+        this.initializeFormio(newSelectedTask);
       }
-      this.changeCurrentLayout('mes-task-main-layout');
+      this.changeCurrentLayout('main');
     },
-    initializeFormioByWorkCenter(workCenter, task) {
-      let properties = {
-        workCenterCode: workCenter.code,
-        workBarcode: task.barcode
-      };
+    initializeFormio(task) {
+      let workCenter = this.workCenter,
+        properties = {
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode
+        };
       this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties });
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex;
       this.selectFirstTaskByTabIndex(tabIndex);
-    },
-    removeAllInstallations() {
-      var me = this;
-      Object.keys(me.installations).forEach(workCenterCode => {
-        var installationsByWorkCenters = me.installations[workCenterCode];
-        installationsByWorkCenters.forEach(installation => {
-          me.removeInstallation({ installation, workCenterCode });
-        });
-      });
-    },
-    removeInstallation({ installation, workCenterCode }) {
-      this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode });
-    },
-    async initInstallations() {
-      await this.$store.dispatch('mes/initializeInstallations', { workCenterCodes: Object.keys(this.workCenters) });
-      this.initializeInstallations = true;
-    },
-    changeDragResizeMode() {
-      this.$store.dispatch('mes/changeDragResizeMode');
     },
     dialogAgreeClick() {
       this.dialogProperties.visible = false;
@@ -286,7 +213,7 @@ export default {
       this.qrScanerVisible = visible;
     },
     async submitQrCode(code) {
-      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.selectedTask.workCenterCode, batchBarcode: code, factId: 0 });
+      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: code, factId: 0 });
     }
   }
 }

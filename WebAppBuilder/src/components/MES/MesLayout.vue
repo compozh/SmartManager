@@ -52,6 +52,7 @@
     </v-dialog>
   </v-app>
 </template>
+
 <script>
 export default {
   name: "mes-layout",
@@ -59,6 +60,13 @@ export default {
     return {
       drawer: vm.$vuetify.breakpoint.mdAndUp
     };
+  },
+  created() {
+   /* debugger;
+    this.$router.addRoutes([{
+    path: '/tasks',
+    component: getInternalComponentDescription(app.RootComponent),
+  }, {path: '*', redirect: '/tasks'}])*/
   },
   computed: {
     currentUser() {
@@ -87,7 +95,7 @@ export default {
       }
     },
     closeSnackbar() {
-      this.$store.dispatch('mes/closeSnackbar');
+      this.$store.commit('mes/closeSnackbar');
     }
   }
 };

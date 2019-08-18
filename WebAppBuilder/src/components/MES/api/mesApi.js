@@ -2,6 +2,7 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag'
+
 // Queries
 import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
@@ -63,13 +64,14 @@ export class MesApi {
     }
   }
 
-  async getWorkCentersFromGql(uuid, login) {
+  async getWorkCentersFromGql(uuid, login, fetchPolicy) {
     try {
       const result = await getClient().query({
         query: gql` query ($uuid: String, $login: String) ${workCenters}`,
-        variables: { uuid, login }
+        variables: { uuid, login },
+        fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.workCenters;
     }
     catch (error) {
       return console.log(error.message);
@@ -83,7 +85,7 @@ export class MesApi {
         variables: { workCenter },
         fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.tasks;
     }
     catch (error) {
       return console.log(error.message);
@@ -97,7 +99,7 @@ export class MesApi {
         variables: { workCenter },
         fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.installations.installations;
     }
     catch (error) {
       return console.log(error.message);
@@ -158,7 +160,7 @@ export class MesApi {
         variables: { workerCode },
         fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.usersProductionEvents;
     }
     catch (error) {
       return console.log(error.message);

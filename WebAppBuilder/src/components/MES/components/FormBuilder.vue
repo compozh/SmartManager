@@ -15,21 +15,15 @@ import { Form } from 'vue-formio';
 export default {
 	name: "mes-form-builder",
 	components: { formio: Form },
-	props: {
-    	workCenter: Object
-	},
 	data() {
 		return { options: { noAlerts: true }, currentData: '' };
 	},
 	computed: {
 		formioComponents() {
-			return { components: this.formioData ? JSON.parse(this.formioData.form) : [] };
+			return { components: this.productionFormio ? JSON.parse(this.productionFormio.form) : [] };
 		},
 		formioSubmission() {
-			return { data: this.formioData ? JSON.parse(this.formioData.data) : [] };
-		},
-		formioData() {
-     		return this.productionFormio[this.workCenter.productionRegistrationFormCode];
+			return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] };
 		},
 		productionFormio() {
 			return this.$store.getters['mes/productionFormio'];

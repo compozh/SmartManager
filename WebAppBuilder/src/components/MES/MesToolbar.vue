@@ -7,9 +7,9 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
-      <div class="work-centers-caption" v-if="workCenters && Object.keys(workCenters).length">
+      <div class="work-centers-caption" v-if="workCenter">
         <span class='work-centers-title'>Рабочий центр: </span>
-        <span class='work-centers-name'>{{getWorkCenterName()}}</span>
+        <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
       <v-flex class="grow-0">
         <user-panel mini="true"></user-panel>
@@ -26,20 +26,13 @@ export default {
     this.initialize();
   },
   computed: {
-    workCenters() {
-        return this.$store.getters['mes/workCenters'];
+    workCenter() {
+        return this.$store.getters['mes/workCenter'];
     }
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenters');
-    },
-    getWorkCenterName() {
-      let workCenterCodes = Object.keys(this.workCenters);
-      if(!workCenterCodes || !workCenterCodes.length) {
-        return '';
-      }
-      return this.workCenters[workCenterCodes[0]].name;
+      await this.$store.dispatch('mes/initializeWorkCenter');
     }
   }
 };
