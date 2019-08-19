@@ -1,13 +1,13 @@
 <template>
     <div class="mes-content-loader">
-        <ContentLoader v-if="this.loaderType == 'list'" height=700>
+        <ContentLoader v-if="this.loaderType == 'list'" :height="this.listLoaderHeight">
             <rect x="0" y="0" rx="3" ry="3" width="400" height="130" />
             <rect x="0" y="140" rx="3" ry="3" width="400" height="130" />
             <rect x="0" y="280" rx="3" ry="3" width="400" height="130" />
             <rect x="0" y="420" rx="3" ry="3" width="400" height="130" />
             <rect x="0" y="560" rx="3" ry="3" width="400" height="130" />
         </ContentLoader>
-        <ContentLoader v-if="this.loaderType != 'list'" height=300>
+        <ContentLoader v-if="this.loaderType != 'list'" :height="this.blockLoaderHeight">
             <rect x="0" y="0" rx="3" ry="3" width="75" height="40" />
             <rect x="80" y="0" rx="3" ry="3" width="75" height="40" />
             <rect x="160" y="0" rx="3" ry="3" width="75" height="40" />
@@ -54,7 +54,7 @@ import {ContentLoader} from 'vue-content-loader'
 
 export default {
   data(){
-    return { loaderHeight: 200 }
+    return { listLoaderHeight: 700, blockLoaderHeight:300 }
   },
   name: "mes-content-loader",
   components: {
