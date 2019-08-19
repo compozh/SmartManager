@@ -70,16 +70,21 @@ export default {
   .status-task-btn {
     border-radius: 5px;
   }
+  .v-btn.v-btn--outline {
+    height: 50px;
+  }
   .drag-resize-button {
     min-width: auto;
-    width: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 5px;
     margin-left: auto;
     border: 1px solid rgb(50, 109, 168);
   }
   .active-drag-resize-button {
     min-width: auto;
-    width: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 5px;
     margin-left: auto;
     border: 1px solid rgb(50, 109, 168);

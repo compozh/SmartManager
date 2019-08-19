@@ -95,6 +95,9 @@ export default {
     width: 150px;
     max-width: 150px;
   }
+  .v-btn.v-btn--outline {
+    height: 50px;
+  }
   .setup-material-layout {
     display: flex;
     align-items: center;

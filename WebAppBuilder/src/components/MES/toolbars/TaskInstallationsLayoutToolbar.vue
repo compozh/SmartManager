@@ -87,6 +87,12 @@ export default {
         max-width: 400px;
         height: 55px;
     }
+    .v-btn.v-btn--outline {
+      height: 50px;
+    }
+    .v-input.qr-input.v-text-field {
+      margin-bottom: -10px;
+    }
     .remove-installations-layout {
         display: flex;
         align-items: center;
