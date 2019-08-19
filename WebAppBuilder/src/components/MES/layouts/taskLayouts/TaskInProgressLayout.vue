@@ -1,8 +1,8 @@
 <template>
-<v-layout class="task-in-progress-layout-block" :style="!this.dragResizeMode ? 'padding-left:11px;' : ''">
+<v-layout class="task-in-progress-layout-block">
   <mes-task-in-progress-layout-toolbar />
 
-     <v-layout class="mes-accept-task-layout">
+     <v-layout class="mes-accept-task-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
         <v-flex class="mes-accept-task-flex">
             <grid-layout
                 class="grid-layout"

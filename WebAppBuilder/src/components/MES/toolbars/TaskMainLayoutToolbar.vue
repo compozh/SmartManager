@@ -1,5 +1,5 @@
 <template>
-    <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
+    <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar" :style="!dragResizeMode ? 'margin-left: 11px;' : ''">
         <v-flex
             class="toolbar-basebuttons"
         >

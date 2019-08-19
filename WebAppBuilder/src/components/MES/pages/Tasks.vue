@@ -279,6 +279,7 @@ export default {
     padding: 0 10px;
   }
   .task-description-layout {
+    border-left: 1px solid rgba(2, 2, 2, 0.08) !important;
     height: 100%;
   }
 </style>

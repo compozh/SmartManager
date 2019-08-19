@@ -1,8 +1,8 @@
 <template>
-<v-layout class="task-main-layout-block" :style="!this.dragResizeMode ? 'padding-left:10px;' : ''">
+<v-layout class="task-main-layout-block">
   <mes-task-main-layout-toolbar />
 
-     <v-layout class="mes-task-main-layout">
+     <v-layout class="mes-task-main-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
         <v-flex class="mes-task-main-flex">
             <grid-layout
                 class="main-layout"
