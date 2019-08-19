@@ -72,5 +72,11 @@ export default {
   },
   setTicket(state, ticket) {
     state.ticket = ticket;
+  },
+  setInitialWorkCenter(state, value) {
+    state.initialWorkCenter = value;
+  },
+  setWorkCentersForWorker(state, workCenters) {
+    state.workCentersForWorker = workCenters;
   }
 }

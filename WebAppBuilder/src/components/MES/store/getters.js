@@ -46,5 +46,11 @@ export default {
   },
   selectedTask(state) {
     return state.tasksPageState.selectedTask;
+  },
+  initialWorkCenter(state) {
+    return state.initialWorkCenter;
+  },
+  workCentersForWorker(state) {
+    return state.workCentersForWorker;
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-container  class="main-block">
+  <v-container class="main-block">
     <v-card>
       <multipane class="main-block-layout">
         <mes-dialog-component
@@ -48,7 +48,6 @@ export default {
   components: { Multipane, MultipaneResizer },
   data() {
     return {
-      qrScanerVisible: false,
       initializeTasks: false,
       dialogProperties: {
         title: "",
@@ -64,7 +63,16 @@ export default {
     this.initializeSignalR();
     this.initialize();
   },
+  mounted() {
+    if(this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
+      this.$router.replace({path: '/MES/installations'});
+      return;
+    }
+  },
   computed: {
+    initialWorkCenter() {
+      return this.$store.getters["mes/initialWorkCenter"];
+    },
     selectedTask: {
       get() {
         return this.tasksPageState.selectedTask;
@@ -228,9 +236,6 @@ export default {
     },
     getFormioData() {
       return this.$refs.acceptTaskLayout.getFormioData();
-    },
-    changeQrScanerVisible(visible) {
-      this.qrScanerVisible = visible;
     },
     async submitQrCode(code) {
       await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: code, factId: 0 });

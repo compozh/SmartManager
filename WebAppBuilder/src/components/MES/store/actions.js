@@ -26,9 +26,11 @@ export default {
     try {
       let uuid = "d520c7a8-421b-4563-b955-f5abc56b97ec",
         workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy);
-
+        commit('setInitialWorkCenter', true);
       if(workCenters.length == 1) {
         commit('setWorkCenter', workCenters[0]);
+      } else {
+        commit('setWorkCentersForWorker', workCenters);
       }
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message);

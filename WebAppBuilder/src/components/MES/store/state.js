@@ -24,6 +24,8 @@ export default {
   },
   properties: null,
   workCenter: null,
+  initialWorkCenter: false,
+  workCentersForWorker: [],
   tasks: [],
   installations: [],
   productions: [],
