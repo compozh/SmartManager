@@ -138,7 +138,7 @@ export default {
     padding-right: 10px;
   }
   .tasks-list-block-content {
-    height:calc(100% - 48px);
+    height:calc(100% - 60px);
     overflow-y: auto;
     position: absolute;
     width: 100%;
