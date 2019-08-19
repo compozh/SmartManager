@@ -6,7 +6,7 @@
             @changeQrScanerVisible=changeQrScanerVisible
             @submitQrCode=submitQrCode
         />
-        
+
         <v-flex grow
             class="mes-tasks-toolbar-qr"
         >

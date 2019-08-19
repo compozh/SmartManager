@@ -1,18 +1,16 @@
 <template>
   <v-layout class="task-installations-layout-block">
 
-    <mes-task-installations-layout-toolbar 
+    <mes-task-installations-layout-toolbar
       @removeAllInstallations=removeAllInstallations
       @submitQrCode=submitQrCode
     />
-    <v-layout class="mes-task-installations-layout">
       <mes-content-loader class="mes-content-loader" v-if="!initializeInstallations && !installations.length" />
-      
+
       <mes-installations-component
         ref="installationCards"
       />
-      
-    </v-layout>
+
   </v-layout>
 </template>
 
@@ -75,12 +73,9 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-  .mes-task-installations-layout {
-    padding: 10px;
-    position: absolute;
-    height: calc(100% - 60px);
-    overflow-y: auto;
-    width: 100%;
+  .task-installations-layout-block {
+    display: block;
+    height: 100%;
   }
   .mes-task-installations-layout::-webkit-scrollbar {
     background-color:#fff;
@@ -111,8 +106,5 @@ export default {
     width: 100%;
   }
 
-  .task-installations-layout-block {
-    display: block;
-    width: 100%;
-  }
+
 </style>
