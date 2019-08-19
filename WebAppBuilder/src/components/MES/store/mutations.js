@@ -25,46 +25,31 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
-  setWorkCenters(state, workCenters) {
-    state.workCenters = workCenters;
+  setWorkCenter(state, workCenter) {
+    state.workCenter = workCenter;
   },
   setTasks(state, tasks) {
     state.tasks = tasks;
   },
-  setTasksByWorkCentrer(state, {workCenterCode, tasks }) {
-    let tasksByWorkCenter = {[workCenterCode]: tasks};
-    let tempTasks = Object.assign({}, state.tasks);
-    state.tasks = Object.assign(tempTasks, tasksByWorkCenter);
-  },
   setInstallations(state, installations) {
     state.installations = installations;
   },
-  setInstallationsByWorkCenter(state, { installations, workCenterCode}) {
-    let installationsByWorkCenter = {[workCenterCode]: installations};
-    let tempinstallations = Object.assign({}, state.installations);
-    state.installations = Object.assign(tempinstallations, installationsByWorkCenter);
-  },
-  removeInstallation(state, { installation, workCenterCode }) {
-    var installationsByWorkCenter = state.installations[workCenterCode];
-    if(installationsByWorkCenter && installationsByWorkCenter.length) {
-      var index = installationsByWorkCenter.indexOf(installation);
-      installationsByWorkCenter.splice(index, 1);
-    }
+  removeInstallation(state, installation) {
+    var index = state.installations.indexOf(installation);
+    state.installations.splice(index, 1);
   },
   setProductions(state, productions) {
     state.productions = productions;
   },
-  setProductionFormio(state, { formio, formCode }) {
-    let productionFormio = {[formCode]: formio};
-    let tempProductionFormio = Object.assign({}, state.productionFormio);
-    state.productionFormio = Object.assign(tempProductionFormio, productionFormio);
+  setProductionFormio(state, formio) {
+    state.productionFormio = formio;
   },
   resetProductionFormio(state) {
-    state.productionFormio = {};
+    state.productionFormio = null;
   },
   removeProduction(state, production) {
-      let index = state.productions.indexOf(production);
-      state.productions.splice(index, 1);
+    let index = state.productions.indexOf(production);
+     state.productions.splice(index, 1);
   },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
@@ -80,7 +65,7 @@ export default {
     state.tasksPageState.selectedTask = selectedTask;
   },
   changeDragResizeMode(state) {
-    state.dragResizeMode = !state.dragResizeMode;
+    state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode;
   },
   setObsoluteDataTask(state, obsoluteData) {
     state.obsoleteData.tasks = obsoluteData;

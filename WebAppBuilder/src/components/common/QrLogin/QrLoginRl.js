@@ -11,6 +11,7 @@ export default {
 
 
   render(){
+    debugger;
     return this.$scopedSlots.default({
       readerEvents:{
         onDecode : this.onDecode,

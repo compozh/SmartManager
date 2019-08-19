@@ -1,4 +1,7 @@
 <template>
+<v-layout class="task-main-layout-block">
+  <mes-task-main-layout-toolbar />
+
      <v-layout class="mes-task-main-layout">
         <v-flex class="mes-task-main-flex">
             <grid-layout
@@ -26,6 +29,7 @@
             </grid-layout>
         </v-flex>
     </v-layout>
+  </v-layout>
 </template>
 
 <script>
@@ -34,11 +38,13 @@ import VueGridLayout from 'vue-grid-layout';
 
 export default {
   name: "mes-task-main-layout",
-  props: {
-    selectedTask: Object,
-    dragResizeMode: Boolean
-  },
   computed: {
+    dragResizeMode() {
+      return this.$store.getters['mes/dragResizeMode'];
+    },
+    selectedTask() {
+      return this.$store.getters['mes/selectedTask'];
+    },
     blocks() {
       return [ {'x':0, 'y':0, 'w':12, 'h':3, 'i':'0', data: this.selectedTask.detailedDescription } ];
     }
@@ -117,4 +123,9 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .grid-item-data::-webkit-scrollbar-button {display:none}
+
+  .task-main-layout-block {
+    display: block;
+    width: 100%;
+  }
 </style>

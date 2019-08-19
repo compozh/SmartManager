@@ -35,15 +35,7 @@ export default {
       return this.$store.getters['mes/tasks'];
     },
     sortedTasks() {
-      let tasks = [],
-        workCenterCodes = Object.keys(this.tasks);
-      for(let workCenterCode of workCenterCodes) {
-        let tasksByWorkCenter = this.tasks[workCenterCode];
-        for(let task of tasksByWorkCenter) {
-          tasks.push(task);
-        }
-      }
-      
+      let tasks = this.tasks;   
       tasks.sort((a,b) => {
         return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ? 
                   1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1);

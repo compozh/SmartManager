@@ -9,7 +9,8 @@ export default {
   tasksPageState: {
     selectedTask: null,
     selectedTasksTab: 0,
-    currentLayout: 'mes-task-main-layout',
+    currentLayout: 'main',
+    dragResizeMode: false
   },
   dialogLinearLoader: {
     visible: false,
@@ -22,12 +23,11 @@ export default {
     tasks: false
   },
   properties: null,
-  workCenters: {},
-  tasks: {},
-  installations: {},
+  workCenter: null,
+  tasks: [],
+  installations: [],
   productions: [],
-  productionFormio: {},
-  dragResizeMode: false,
+  productionFormio: null,
   menuMiniMode: true,
   ticket: ''
 }

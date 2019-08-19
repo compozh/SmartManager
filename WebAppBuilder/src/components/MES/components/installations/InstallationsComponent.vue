@@ -20,26 +20,12 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: "mes-installations-component",
-  props: {
-    workCenterCodes: Array
-  },
   computed: {
     installations() {
       return this.$store.getters['mes/installations'];
     },
     sortedInstallations() {
-      let installations = [];
-      for(let workCenterCode of this.workCenterCodes) {
-        let installationsByWorkCenter = this.installations[workCenterCode];
-        if(!installationsByWorkCenter) {
-          continue;
-        }
-        for(let installation of installationsByWorkCenter) {
-          installation.workCenterCode = workCenterCode;
-          installations.push(installation);
-        }
-      }
-
+      let installations = this.installations;
       installations.sort((a,b) => {
         return a.id < b.id ? 1 : (a.id == b.id ? 0 : -1);
       });
@@ -48,7 +34,7 @@ export default {
   },
   methods: {
     removeInstallation(installation) {
-      this.$store.dispatch('mes/removeInstallation', { installation, workCenterCode: installation.workCenterCode });
+      this.$store.dispatch('mes/removeInstallation', installation);
     }
   }
 }

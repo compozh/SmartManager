@@ -8,11 +8,11 @@ export default {
   properties(state) {
     return state.properties;
   },
-  workCenters(state) {
-    return state.workCenters;
+  workCenter(state) {
+    return state.workCenter;
   },
   dragResizeMode(state) {
-    return state.dragResizeMode;
+    return state.tasksPageState.dragResizeMode;
   },
   tasks(state) {
     return state.tasks;
@@ -43,5 +43,8 @@ export default {
   },
   ticket(state) {
     return state.ticket;
+  },
+  selectedTask(state) {
+    return state.tasksPageState.selectedTask;
   }
 }

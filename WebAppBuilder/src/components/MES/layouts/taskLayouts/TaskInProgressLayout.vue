@@ -1,4 +1,7 @@
 <template>
+<v-layout class="task-in-progress-layout-block">
+  <mes-task-in-progress-layout-toolbar />
+
      <v-layout class="mes-accept-task-layout">
         <v-flex class="mes-accept-task-flex">
             <grid-layout
@@ -25,7 +28,6 @@
                         <div class="grid-item-data">
                         <mes-form-builder v-if="item.i == '0'"
                           ref="formioBuilder"
-                          :workCenter=workCenters[selectedTask.workCenterCode]
                           @formioSubmit=formioSubmit />
                        <span  v-if="item.i != '0'" v-html="item.data"></span>
                        </div>
@@ -33,6 +35,7 @@
             </grid-layout>
         </v-flex>
     </v-layout>
+</v-layout>
 </template>
 
 <script>
@@ -40,12 +43,7 @@ import {mapGetters} from 'vuex'
 import VueGridLayout from 'vue-grid-layout';
 
 export default {
-   name: "mes-accept-task-layout",
-   props: {
-    selectedTask: Object,
-    workCenters: Object,
-    dragResizeMode: Boolean
-  },
+  name: "mes-task-in-progress-layout",
   components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
   computed: {
     blocks() {
@@ -53,18 +51,23 @@ export default {
         {'x':0, 'y':0, 'w':12, 'h':3, 'i':'1', data: this.selectedTask.detailedDescription},
         {'x':0, 'y':3, 'w':12, 'h':14, 'i':'0', ref: 'formio'}
       ];
+    },
+    dragResizeMode() {
+      return this.$store.getters['mes/dragResizeMode'];
+    },
+    selectedTask() {
+      return this.$store.getters['mes/selectedTask'];
+    },
+    workCenter() {
+      return this.$store.getters['mes/workCenter'];
     }
   },
   methods: {
     formioSubmit(data) {
-      let workCenter = this.workCenters[this.selectedTask.workCenterCode];
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter, data, task: this.selectedTask });
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, data, task: this.selectedTask });
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormioData();
-    },
-    getInitialFormioData() {
-      return this.$refs.formioBuilder[0].formioData;
     }
   }
 }
@@ -138,4 +141,9 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .grid-item-data::-webkit-scrollbar-button {display:none}
+
+  .task-in-progress-layout-block {
+    display: block;
+    width: 100%;
+  }
 </style>

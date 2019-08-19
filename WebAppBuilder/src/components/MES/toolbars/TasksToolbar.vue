@@ -16,8 +16,8 @@
         {{selectedTask.inProgress ? 'Приостановить' : 'Взять в работу'}}
       </v-btn>
 
-      <v-btn outline outlined :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
-        <v-icon>control_camera</v-icon>
+      <v-btn flat icon :class=" this.activeChangeDragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
+        <v-icon>aspect_ratio</v-icon>
       </v-btn>
 
     </v-flex>
@@ -153,17 +153,11 @@ export default {
     border-radius: 5px;
   }
   .drag-resize-button {
-    width: 40px;
-    min-width: auto;
-    border-radius:5px;
     margin-left: auto;
   }
   .active-drag-resize-button {
-    width: 40px;
-    min-width: auto;
-    border-radius:5px;
     margin-left: auto;
-    background-color: rgba(50, 109, 168, 0.2) !important;
+    background-color: rgba(50, 109, 168, 0.2);
   }
   .setup-installations-button {
     border-radius: 5px;
