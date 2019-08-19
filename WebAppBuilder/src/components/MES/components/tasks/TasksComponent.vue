@@ -130,6 +130,9 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    min-height: 60px;
+    align-items: center;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .grid-tabs .v-badge {
     padding-right: 10px;
