@@ -66,6 +66,7 @@ export default {
     width: 50px;
     border: 1px solid #326DA8;
     color: #326DA8;
+    height: 50px;
   }
   .btn.btn-default.btn-sm.editRow:hover{
     background-color: rgba(50, 109, 168, .12);
@@ -106,17 +107,25 @@ export default {
     width: 300px;
   }
   .nav-link {
+    display: flex;
     color: #326DA8;
+    height: 50px;
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
   }
   .btn.btn-primary.btn-md {
     background-color: white;
     border-color: #326DA8;
     color: #326DA8;
+    height: 50px;
+    padding-top: 8px;
   }
   .btn.btn-primary {
     background-color: white;
     border-color: #326DA8;
     color: #326DA8;
+    height: 50px;
   }
   .btn.btn-primary:hover {
     background-color:  rgba(50, 109, 168, .12);
@@ -135,6 +144,8 @@ export default {
     background-color: white;
     border-color: rgba(40, 165, 69, 1);
     color: rgba(40, 165, 69, 1);
+    height: 50px;
+    width: 55px;
   }
   .btn.btn-success.btn-lg:hover {
     background-color:  rgba(40, 165, 69, .12);

@@ -2,7 +2,7 @@
   <div class="mes-tasks-component">
     <v-layout column class="mes-tasks-component-layout" scrollable>
       <v-flex fill-height class="grid-tabs">
-        
+
           <v-tabs v-model="selectedTab">
             <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
               <v-badge color="#326DA8" overlap>
@@ -21,14 +21,14 @@
         </v-btn>
 
       </v-flex>
-      
+
       <v-flex class="tasks-list-blocks">
 
         <mes-content-loader
           v-if="!initializeTasks && !tasks.length"
-          :loaderType=loaderType 
+          :loaderType=loaderType
         />
-        
+
         <div class="tasks-list-block-content">
 
           <mes-task-cards
@@ -130,12 +130,15 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    min-height: 60px;
+    align-items: center;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .grid-tabs .v-badge {
     padding-right: 10px;
   }
   .tasks-list-block-content {
-    height:calc(100% - 48px);
+    height:calc(100% - 60px);
     overflow-y: auto;
     position: absolute;
     width: 100%;
@@ -177,6 +180,7 @@ export default {
     font-size: 1.5em;
     font-weight: 300;
     color: #3d83f7;
+    opacity: 0.5;
   }
   .wait-for-data-block {
     padding: 20px;

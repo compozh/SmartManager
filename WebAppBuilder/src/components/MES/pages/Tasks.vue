@@ -18,7 +18,7 @@
             @changeCurrentTask=onChangeCurrentTask
             @changeSelectTasksTab=changeSelectTasksTab />
 
-            <multipane-resizer><v-icon class="multipane-resizer-icon">drag_handle</v-icon></multipane-resizer>
+            <multipane-resizer v-if="this.applyMultipane"><v-icon class="multipane-resizer-icon">drag_handle</v-icon></multipane-resizer>
 
             <v-layout column class="task-description-layout">
               <mes-task-main-layout
@@ -56,7 +56,7 @@ export default {
         disagreeMessage: "Нет",
         visible: false,
         task: null
-      }
+      },
     };
   },
   created() {
@@ -70,6 +70,9 @@ export default {
     }
   },
   computed: {
+    applyMultipane() {
+      return this.$store.getters['mes/dragResizeMode'];
+    },
     initialWorkCenter() {
       return this.$store.getters["mes/initialWorkCenter"];
     },
@@ -171,7 +174,7 @@ export default {
       if(this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return;
       }
-      
+
       if(this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
         let currentFormioData = this.$refs.taskInProgressLayout.getFormioData();
 
@@ -281,6 +284,7 @@ export default {
     padding: 0 10px;
   }
   .task-description-layout {
+    border-left: 1px solid rgba(2, 2, 2, 0.08) !important;
     height: 100%;
   }
 </style>

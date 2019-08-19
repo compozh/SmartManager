@@ -2,7 +2,7 @@
 <v-layout class="task-main-layout-block">
   <mes-task-main-layout-toolbar />
 
-     <v-layout class="mes-task-main-layout">
+     <v-layout class="mes-task-main-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
         <v-flex class="mes-task-main-flex">
             <grid-layout
                 class="main-layout"
@@ -21,6 +21,7 @@
                         :w="item.w"
                         :h="item.h"
                         :i="item.i"
+                        :style="!dragResizeMode ? 'box-shadow: none;' : ''"
                         class="grid-element">
                         <div class="grid-item-data">
                           <span v-html="item.data"></span>

@@ -104,11 +104,15 @@ export default {
   html{
     overflow-y: hidden;
   }
+  body{
+    overflow-y: hidden;
+  }
   .main-block {
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100%;
     height: 100%;
+    overflow: hidden;
   }
   .v-toolbar__extension {
     padding: 0;
