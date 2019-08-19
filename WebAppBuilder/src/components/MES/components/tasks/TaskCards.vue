@@ -1,8 +1,8 @@
 <template>
-  <v-flex class="tasks-list-block">          
+  <v-flex class="tasks-list-block">
     <div v-for="task in sortedTasks" :key="task.shiftTaskId">
 
-      <div 
+      <div
         v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
         || (selectedTasksTab == 1 && task.state == 'DONE')"
       >
@@ -10,6 +10,7 @@
         <v-card ripple
           class="task-item"
           @click="changeCurrentTask(task)"
+          :style="task.inProgress ? 'border-left: 5px solid #326da8;' : 'border-left: 5px solid transparent;'"
         >
           <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
@@ -35,9 +36,9 @@ export default {
       return this.$store.getters['mes/tasks'];
     },
     sortedTasks() {
-      let tasks = this.tasks;   
+      let tasks = this.tasks;
       tasks.sort((a,b) => {
-        return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ? 
+        return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
                   1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1);
       });
 
