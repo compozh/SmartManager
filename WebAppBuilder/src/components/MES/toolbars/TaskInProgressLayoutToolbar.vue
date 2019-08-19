@@ -13,8 +13,8 @@
                 Приостановить
             </v-btn>
 
-            <v-btn flat icon :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
-                <v-icon>aspect_ratio</v-icon>
+            <v-btn flat outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
+                <v-icon>control_camera</v-icon>
             </v-btn>
         </v-flex>
     </v-layout>
@@ -53,32 +53,39 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-    .toolbar {
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .toolbar-basebuttons {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        align-items: center;
-        height: 60px;
-        border-bottom: 1px solid rgba(2, 2, 2, 0.08);
-    }
-    .status-task-btn {
-        color: white;
-        border-radius: 5px;
-    }
-    .drag-resize-button {
-        margin-left: auto;
-    }
-    .active-drag-resize-button {
-        margin-left: auto;
-        background-color: rgba(50, 109, 168, 0.2);
-    }
-    .setup-installations-button {
-        border-radius: 5px;
-    }
+  .toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .toolbar-basebuttons {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    height: 60px;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
+  }
+  .status-task-btn {
+    border-radius: 5px;
+  }
+  .drag-resize-button {
+    min-width: auto;
+    width: 40px;
+    border-radius: 5px;
+    margin-left: auto;
+    border: 1px solid rgb(50, 109, 168);
+  }
+  .active-drag-resize-button {
+    min-width: auto;
+    width: 40px;
+    border-radius: 5px;
+    margin-left: auto;
+    border: 1px solid rgb(50, 109, 168);
+    background-color: rgba(50, 109, 168, 0.2) !important;
+  }
+  .setup-installations-button {
+    border-radius: 5px;
+  }
 </style>
