@@ -142,6 +142,7 @@ export default {
     overflow-y: auto;
     position: absolute;
     width: 100%;
+    border-right: 1px solid rgba(2, 2, 2, 0.08);
   }
 
   .tasks-list-block-content::-webkit-scrollbar {
