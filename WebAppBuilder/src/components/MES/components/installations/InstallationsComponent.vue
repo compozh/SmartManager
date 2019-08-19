@@ -50,6 +50,7 @@ export default {
     height: calc(100% - 60px) !important;
     overflow-y: auto;
     width: 100%;
+    align-content: start;
   }
   .installations-block::-webkit-scrollbar {
     background-color:#fff;

@@ -11,6 +11,8 @@
         ref="installationCards"
       />
 
+      <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">Нет установленных партий</span>
+
   </v-layout>
 </template>
 
@@ -105,6 +107,13 @@ export default {
   .mes-content-loader {
     width: 100%;
   }
-
-
+  .no-data-text {
+    position: absolute;
+    left: 20px;
+    top: 70px;
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #3d83f7;
+    opacity: 0.5;
+  }
 </style>

@@ -5,6 +5,8 @@
 
       <mes-productions-component/>
 
+      <span class="no-data-text" v-if="initializeProductions && productions.length == 0">Нет факта регистрации выработки за смену</span>
+
     </v-layout>
 </template>
 
@@ -84,5 +86,14 @@ export default {
   }
   .wait-for-data-block {
     padding: 20px;
+  }
+  .no-data-text {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #3d83f7;
+    opacity: 0.5;
   }
 </style>
