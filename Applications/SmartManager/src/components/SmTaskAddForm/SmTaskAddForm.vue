@@ -190,6 +190,9 @@ import moment from 'moment'
 
 export default {
   name: 'sm-task-add-form',
+  props: {
+    parent: Number
+  },
   data: () => ({
     uploading: false,
     newTask: {
@@ -249,9 +252,21 @@ export default {
         descript: this.newTask.description,
         dateplan: `${this.newTask.planDate} ${this.newTask.planTime}`,
         participants: this.getParticipants(),
-        attachments: this.newTask.attachments
+        attachments: this.newTask.attachments,
+        needApprove: false,
+        needComm: false,
+        priority: 0,
+        parentTaskId: this.parent ? this.parent : ''
       }
       this.$store.dispatch('sm/addNewTask', newTask)
+        .then(() => {
+          if (this.parent) {
+            this.$store.dispatch('sm/getTaskInfo', {
+              taskId: this.parent,
+              loader: 'setLinearLoader'
+            })
+          }
+        })
     },
     getUsers() {
       const users = this.$store.state.sm.users

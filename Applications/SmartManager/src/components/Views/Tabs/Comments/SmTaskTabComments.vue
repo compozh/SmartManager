@@ -7,10 +7,11 @@
       :key="index"
     >
       <v-flex
-        xs1
+        d-flex
+        shrink
         class="text-xs-center"
       >
-        <user-icon :src="task.addedPhoto" size="30"></user-icon>
+        <user-icon :src="comment.userPhoto" size="30"></user-icon>
       </v-flex>
       <v-flex px-2 class="text-xs-left">
         <v-layout column text-xs-left>

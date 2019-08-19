@@ -6,9 +6,22 @@
       </v-flex>
       <v-flex
         xs12 mr-2
-        v-if=subTasks.length
+        v-if=parentTasks.length
         class="sub-task-headline blue-grey--text pa-1 ml-5"
       >СВЯЗАННЫЕ ЗАДАЧИ:</v-flex>
+      <v-flex
+        xs12 ml-5 mr-2
+        class="task-container"
+        v-for="parentTask in parentTasks"
+        :key="parentTask.id"
+      >
+        <sm-task-sub-task-item :sub-task="parentTask"></sm-task-sub-task-item>
+      </v-flex>
+      <v-flex
+        xs12 mr-2
+        v-if=subTasks.length
+        class="sub-task-headline blue-grey--text pa-1 ml-5"
+      >ПОДЧИНЕННЫЕ ЗАДАЧИ:</v-flex>
       <v-flex
         xs12 ml-5 mr-2
         class="task-container"
@@ -27,6 +40,9 @@ export default {
   computed: {
     task() {
       return this.$store.state.sm.taskInfo
+    },
+    parentTasks() {
+      return this.task ? this.task.parentTasks : []
     },
     subTasks() {
       return this.task ? this.task.childTasks : []

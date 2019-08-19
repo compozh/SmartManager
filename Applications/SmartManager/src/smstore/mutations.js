@@ -38,10 +38,17 @@ export default {
   },
   addComment(state, payload) {
     const user = JSON.parse(localStorage.currentUser)
+    const date = new Date().toLocaleString('ru', {
+      year: 'numeric', month: 'numeric', day: 'numeric'
+    })
+    const time = new Date().toLocaleString('ru', {
+      hour: 'numeric', minute: 'numeric'
+    })
     const comment = {
-      date: new Date().toLocaleString('ru-RU'),
+      date: `${date} ${time}`,
       text: payload,
-      user: user.UserData.CurrentUserData.UserName
+      user: user.UserData.CurrentUserData.UserName,
+      userPhoto: user.UserData.CurrentUserData.UserPhoto
     }
     state.taskInfo.comments.push(comment)
   }

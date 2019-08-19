@@ -8,6 +8,7 @@
       declarer
       performerId
       performer
+      performerPhoto
       dateplan
       dateAdd
       status
