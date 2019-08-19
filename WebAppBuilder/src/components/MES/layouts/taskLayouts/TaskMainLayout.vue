@@ -1,5 +1,5 @@
 <template>
-<v-layout class="task-main-layout-block">
+<v-layout class="task-main-layout-block" :style="!this.dragResizeMode ? 'padding-left:10px;' : ''">
   <mes-task-main-layout-toolbar />
 
      <v-layout class="mes-task-main-layout">
@@ -21,6 +21,7 @@
                         :w="item.w"
                         :h="item.h"
                         :i="item.i"
+                        :style="!dragResizeMode ? 'box-shadow: none;' : ''"
                         class="grid-element">
                         <div class="grid-item-data">
                           <span v-html="item.data"></span>

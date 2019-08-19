@@ -1,5 +1,5 @@
 <template>
-<v-layout class="task-in-progress-layout-block">
+<v-layout class="task-in-progress-layout-block" :style="!this.dragResizeMode ? 'padding-left:11px;' : ''">
   <mes-task-in-progress-layout-toolbar />
 
      <v-layout class="mes-accept-task-layout">
@@ -24,6 +24,7 @@
                         :w="item.w"
                         :h="item.h"
                         :i="item.i"
+                        :style="!dragResizeMode ? 'box-shadow: none;' : ''"
                         class="grid-element">
                         <div class="grid-item-data">
                         <mes-form-builder v-if="item.i == '0'"
@@ -49,7 +50,7 @@ export default {
     blocks() {
       return [
         {'x':0, 'y':0, 'w':12, 'h':3, 'i':'1', data: this.selectedTask.detailedDescription},
-        {'x':0, 'y':3, 'w':12, 'h':14, 'i':'0', ref: 'formio'}
+        {'x':0, 'y':3, 'w':12, 'h':12, 'i':'0', ref: 'formio'}
       ];
     },
     dragResizeMode() {
