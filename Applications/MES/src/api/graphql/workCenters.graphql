@@ -1,0 +1,18 @@
+{
+    mes{
+        workCenters(uuid: $uuid, login: $login){
+            code
+			name
+			description
+			barcode
+			departmentCode
+			isWorkerFixed
+			isDowntimeRegistrationFromIIot
+			isAccountNumberOfBatchesForConsumption
+			orderWasteRegistration
+			productionRegistrationType
+			productionRegistrationFormCode
+			accessPages
+        }
+    }
+}
