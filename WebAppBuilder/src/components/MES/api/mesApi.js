@@ -2,9 +2,6 @@ import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import gql from 'graphql-tag'
-import Vue from 'vue';
-import VueCookie from 'vue-cookie';
-
 // Queries
 import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
@@ -20,8 +17,6 @@ import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
-
-Vue.use(VueCookie)
 
 var client = null;
 const getClient = () => {

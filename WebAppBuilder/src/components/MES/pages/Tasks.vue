@@ -1,7 +1,18 @@
 <template>
   <v-container class="main-block">
     <v-card>
-      <multipane class="main-block-layout">
+      <vue-split
+      class="main-block-layout"
+    :elements="[
+      '#slotOne',
+      '#slotTwo'
+    ]"
+    direction="horizontal"
+    :min-size="100"
+    :gutter-size="gutterSize"
+    :snap-offset="50"
+    :sizes="[35, 65]"
+  >
         <mes-dialog-component
           :title=dialogProperties.title
           :message=dialogProperties.message
@@ -13,14 +24,13 @@
           @disagreeClick=dialogDisagreeClick />
 
           <mes-tasks-component
+          id="slotOne"
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=onChangeCurrentTask
             @changeSelectTasksTab=changeSelectTasksTab />
 
-            <multipane-resizer v-if="this.applyMultipane"><v-icon class="multipane-resizer-icon">drag_handle</v-icon></multipane-resizer>
-
-            <v-layout column class="task-description-layout">
+            <v-layout column class="task-description-layout" id="slotTwo">
               <mes-task-main-layout
                 v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
                   || (currentLayout == 'inProgress' && !selectedTask.inProgress))" />
@@ -34,7 +44,7 @@
                 v-if="selectedTask && currentLayout == 'installations'" />
 
             </v-layout>
-      </multipane>
+      </vue-split>
     </v-card>
   </v-container>
 </template>
@@ -42,10 +52,11 @@
 <script>
 import {mapGetters, install} from 'vuex'
 import { Multipane, MultipaneResizer  } from 'vue-multipane'
+import VueSplit from 'vue-splitjs'
 
 export default {
   name: "mes-tasks",
-  components: { Multipane, MultipaneResizer },
+  components: { Multipane, MultipaneResizer, VueSplit },
   data() {
     return {
       initializeTasks: false,
@@ -57,6 +68,7 @@ export default {
         visible: false,
         task: null
       },
+      gutterSize: 5
     };
   },
   created() {

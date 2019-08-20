@@ -38,6 +38,7 @@
     "vue-pdf": "^4.0.6",
     "vue-qrcode-reader": "^2.0.2",
     "vue-router": "^3.0.1",
+    "vue-splitjs": "0.0.4",
     "vue-svg-loader": "^0.12.0",
     "vue-touch": "^2.0.0-beta.4",
     "vue-upload-with-credential": "^2.8.21",

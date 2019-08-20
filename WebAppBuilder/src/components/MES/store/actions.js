@@ -29,7 +29,6 @@ export default {
         uuid = api.generateUUID();
         $cookies.set('mesUuid', uuid);
       }
-      // let uuid = "d520c7a8-421b-4563-b955-f5abc56b97ec";
       let workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy);
         commit('setInitialWorkCenter', true);
       if(workCenters.length == 1) {
@@ -156,7 +155,7 @@ export default {
     commit('setDialogLinearLoaderMessage', 'Регистрация выработки');
     await me.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () =>  await api.productionFormIoSubmitGql(params),
-      successAction: async result => { me.dispatch('mes/initializeTasks', { workCenter, fetchPolicy: 'network-only' }); },
+      successAction: async result => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }); },
       linearLoader: false
     });
     commit('closeDialogLinearLoader');

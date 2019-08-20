@@ -108,7 +108,7 @@ export default {
     },
     async refreshingTaskMethod() {
       this.refreshingTasks = true;
-      await this.$store.dispatch('mes/initializeTasks', { workCenter: this.workCenter, fetchPolicy: 'network-only' });
+      await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' });
       this.$store.dispatch('mes/setObsoluteDataTask', false);
       this.refreshingTasks = false;
     }
@@ -130,7 +130,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    min-height: 60px;
+    min-height: 63px;
     align-items: center;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
