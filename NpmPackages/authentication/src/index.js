@@ -6,7 +6,7 @@ let Vue = undefined
 
 export default {
   install(vue, params) {
-    let { dependencies } = params || {}
+    let { dependencies, options } = params || {}
     Vue = vue
 
     if (!dependencies) {
@@ -26,7 +26,7 @@ export default {
 
     loadLocalizations()
 
-    let authentication = new Authentication(Vue, dependencies)
+    let authentication = new Authentication(Vue, dependencies, options)
     Vue.prototype.$authentication = authentication
   }
 }
