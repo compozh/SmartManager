@@ -51,12 +51,11 @@
 
 <script>
 import {mapGetters, install} from 'vuex'
-import { Multipane, MultipaneResizer  } from 'vue-multipane'
 import VueSplit from 'vue-splitjs'
 
 export default {
   name: "mes-tasks",
-  components: { Multipane, MultipaneResizer, VueSplit },
+  components: { VueSplit },
   data() {
     return {
       initializeTasks: false,
