@@ -1,5 +1,8 @@
 <template>
-     <v-layout class="mes-task-main-layout">
+<v-layout class="task-main-layout-block">
+  <mes-task-main-layout-toolbar />
+
+     <v-layout class="mes-task-main-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
         <v-flex class="mes-task-main-flex">
             <grid-layout
                 class="main-layout"
@@ -18,6 +21,7 @@
                         :w="item.w"
                         :h="item.h"
                         :i="item.i"
+                        :style="!dragResizeMode ? 'box-shadow: none;' : ''"
                         class="grid-element">
                         <div class="grid-item-data">
                           <span v-html="item.data"></span>
@@ -26,19 +30,22 @@
             </grid-layout>
         </v-flex>
     </v-layout>
+  </v-layout>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import VueGridLayout from '../../../../../node_modules/vue-grid-layout';
+import VueGridLayout from 'vue-grid-layout';
 
 export default {
   name: "mes-task-main-layout",
-  props: {
-    selectedTask: Object,
-    dragResizeMode: Boolean
-  },
   computed: {
+    dragResizeMode() {
+      return this.$store.getters['mes/dragResizeMode'];
+    },
+    selectedTask() {
+      return this.$store.getters['mes/selectedTask'];
+    },
     blocks() {
       return [ {'x':0, 'y':0, 'w':12, 'h':3, 'i':'0', data: this.selectedTask.detailedDescription } ];
     }
@@ -117,4 +124,9 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .grid-item-data::-webkit-scrollbar-button {display:none}
+
+  .task-main-layout-block {
+    display: block;
+    width: 100%;
+  }
 </style>

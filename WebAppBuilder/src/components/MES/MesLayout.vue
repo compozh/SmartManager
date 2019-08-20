@@ -1,10 +1,10 @@
 <template>
   <v-app id="mes-app">
-    <v-navigation-drawer v-if="currentUser" app clipped hide-overlay :mini-variant="menuMiniMode" v-model="drawer">
+    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped hide-overlay :mini-variant="menuMiniMode" v-model="drawer">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left extended :extension-height="3">
-      <v-toolbar-side-icon v-if="currentUser" @click.stop="toggleMenuMode"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter"></v-toolbar-side-icon>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
@@ -12,7 +12,8 @@
     </v-toolbar>
     <v-content>
       <v-container class="main-block">
-        <router-view/>
+        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
+        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Устройство не зафиксировано за Рабочим центром</span>
       </v-container>
     </v-content>
     <template v-if="snackbar.visible">
@@ -52,6 +53,7 @@
     </v-dialog>
   </v-app>
 </template>
+
 <script>
 export default {
   name: "mes-layout",
@@ -75,6 +77,12 @@ export default {
     },
     menuMiniMode() {
       return this.$store.getters["mes/menuMiniMode"];
+    },
+    workCenter() {
+      return this.$store.getters["mes/workCenter"];
+    },
+    initialWorkCenter() {
+      return this.$store.getters["mes/initialWorkCenter"];
     }
   },
   methods: {
@@ -87,29 +95,44 @@ export default {
       }
     },
     closeSnackbar() {
-      this.$store.dispatch('mes/closeSnackbar');
+      this.$store.commit('mes/closeSnackbar');
     }
   }
 };
 </script>
 <style type="text/css">
-html{
-  overflow-y: hidden;
-}
-.main-block {
+  html{
+    overflow-y: hidden;
+  }
+  body{
+    overflow-y: hidden;
+  }
+  .main-block {
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100%;
     height: 100%;
+    overflow: hidden;
   }
-.v-toolbar__extension {
-  padding: 0;
-}
-.v-list__tile.v-list__tile--link.theme--light {
-  padding-left: 28px;
-}
-.v-navigation-drawer--mini-variant .v-list__tile__action, .v-navigation-drawer--mini-variant .v-list__tile__avatar {
-  justify-content: start !important;
-}
+  .v-toolbar__extension {
+    padding: 0;
+  }
+  .v-list__tile.v-list__tile--link.theme--light {
+    padding-left: 28px;
+  }
+  .v-navigation-drawer--mini-variant .v-list__tile__action, .v-navigation-drawer--mini-variant .v-list__tile__avatar {
+    justify-content: start !important;
+  }
+  .mes-device-not-fixed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: 300;
+    color: red;
+    opacity: 0.5;
+    vertical-align: middle;
+    height: 100%;
+  }
 </style>
 

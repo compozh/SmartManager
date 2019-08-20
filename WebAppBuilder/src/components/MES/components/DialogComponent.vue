@@ -46,7 +46,7 @@ export default {
                 return this.visible;
             },
             set(value) {
-                
+
             }
         }
     },
@@ -67,5 +67,10 @@ export default {
 <style scoped>
   .v-card__actions {
     justify-content: flex-end;
+  }
+  .v-btn.v-btn--flat.theme--light.green--text {
+    height: 50px;
+    border: 1px solid #43a047;
+    border-radius: 5px;
   }
 </style>

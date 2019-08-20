@@ -1,5 +1,8 @@
 <template>
-     <v-layout class="mes-accept-task-layout">
+<v-layout class="task-in-progress-layout-block">
+  <mes-task-in-progress-layout-toolbar />
+
+     <v-layout class="mes-accept-task-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
         <v-flex class="mes-accept-task-flex">
             <grid-layout
                 class="grid-layout"
@@ -21,11 +24,11 @@
                         :w="item.w"
                         :h="item.h"
                         :i="item.i"
+                        :style="!dragResizeMode ? 'box-shadow: none;' : ''"
                         class="grid-element">
                         <div class="grid-item-data">
                         <mes-form-builder v-if="item.i == '0'"
                           ref="formioBuilder"
-                          :workCenter=workCenters[selectedTask.workCenterCode]
                           @formioSubmit=formioSubmit />
                        <span  v-if="item.i != '0'" v-html="item.data"></span>
                        </div>
@@ -33,40 +36,39 @@
             </grid-layout>
         </v-flex>
     </v-layout>
+</v-layout>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import VueGridLayout from '../../../../../node_modules/vue-grid-layout';
+import VueGridLayout from 'vue-grid-layout';
 
 export default {
-   name: "mes-accept-task-layout",
-   props: {
-    selectedTask: Object,
-    workCenters: Object,
-    dragResizeMode: Boolean
-  },
-  components: {GridLayout: VueGridLayout.GridLayout,
-           GridItem: VueGridLayout.GridItem
-           },
+  name: "mes-task-in-progress-layout",
+  components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
   computed: {
     blocks() {
       return [
         {'x':0, 'y':0, 'w':12, 'h':3, 'i':'1', data: this.selectedTask.detailedDescription},
-        {'x':0, 'y':3, 'w':12, 'h':14, 'i':'0', ref: 'formio'}
+        {'x':0, 'y':3, 'w':12, 'h':12, 'i':'0', ref: 'formio'}
       ];
+    },
+    dragResizeMode() {
+      return this.$store.getters['mes/dragResizeMode'];
+    },
+    selectedTask() {
+      return this.$store.getters['mes/selectedTask'];
+    },
+    workCenter() {
+      return this.$store.getters['mes/workCenter'];
     }
   },
   methods: {
     formioSubmit(data) {
-      let workCenter = this.workCenters[this.selectedTask.workCenterCode];
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter, data, task: this.selectedTask });
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, data, task: this.selectedTask });
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormioData();
-    },
-    getInitialFormioData() {
-      return this.$refs.formioBuilder[0].formioData;
     }
   }
 }
@@ -78,7 +80,7 @@ export default {
     overflow-y: auto;
     width: 100%;
   }
-.mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar {
+  .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar {
     background-color:#fff;
     width:16px
   }
@@ -90,7 +92,7 @@ export default {
   }
 
   /* scrollbar itself */
- .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-thumb {
+  .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-thumb {
       background-color:#babac0;
       border-radius:16px;
       border:5px solid #fff
@@ -140,4 +142,9 @@ export default {
 
   /* set button(top and bottom of the scrollbar) */
   .grid-item-data::-webkit-scrollbar-button {display:none}
+
+  .task-in-progress-layout-block {
+    display: block;
+    width: 100%;
+  }
 </style>

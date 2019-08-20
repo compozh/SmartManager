@@ -1,0 +1,10 @@
+mutation($workerCode:String!, $workCenterCode: String!) {
+    mesMutation {
+        fixWorkCenterForWorker(workerCode: $workerCode, workCenterCode: $workCenterCode) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

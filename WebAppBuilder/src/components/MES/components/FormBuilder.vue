@@ -1,34 +1,29 @@
 <template>
     <formio id="formio" class="formio-container"
-		:form=formioComponents
-		:submission=formioSubmission
-		:options="options"
-		@submit=onSubmit
-		@change=onChange />
+      :form=formioComponents
+      :submission=formioSubmission
+      :options="options"
+      @submit=onSubmit
+      @change=onChange
+    />
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import { Form } from '../../../../node_modules/vue-formio';
+import { Form } from 'vue-formio';
 
 export default {
 	name: "mes-form-builder",
 	components: { formio: Form },
-	props: {
-    	workCenter: Object
-	},
 	data() {
 		return { options: { noAlerts: true }, currentData: '' };
 	},
 	computed: {
 		formioComponents() {
-			return { components: this.formioData ? JSON.parse(this.formioData.form) : [] };
+			return { components: this.productionFormio ? JSON.parse(this.productionFormio.form) : [] };
 		},
 		formioSubmission() {
-			return { data: this.formioData ? JSON.parse(this.formioData.data) : [] };
-		},
-		formioData() {
-     		return this.productionFormio[this.workCenter.productionRegistrationFormCode];
+			return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] };
 		},
 		productionFormio() {
 			return this.$store.getters['mes/productionFormio'];
@@ -42,7 +37,7 @@ export default {
 			this.currentData = params.data;
 		},
 		getFormioData() {
-			return JSON.stringify(this.currentData)
+			return JSON.stringify(this.currentData);
 		}
 	}
 }
@@ -71,6 +66,7 @@ export default {
     width: 50px;
     border: 1px solid #326DA8;
     color: #326DA8;
+    height: 50px;
   }
   .btn.btn-default.btn-sm.editRow:hover{
     background-color: rgba(50, 109, 168, .12);
@@ -103,22 +99,33 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: start;
-  } 
+  }
   .form-group.has-feedback.formio-component.formio-component-select .choices.form-group.formio-choices {
-    width: 45%;
+    min-width: 350px;
+  }
+  .list-group-item .btn-group.pull-right {
+    width: 300px;
   }
   .nav-link {
+    display: flex;
     color: #326DA8;
+    height: 50px;
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
   }
   .btn.btn-primary.btn-md {
     background-color: white;
     border-color: #326DA8;
     color: #326DA8;
+    height: 50px;
+    padding-top: 8px;
   }
   .btn.btn-primary {
     background-color: white;
     border-color: #326DA8;
     color: #326DA8;
+    height: 50px;
   }
   .btn.btn-primary:hover {
     background-color:  rgba(50, 109, 168, .12);
@@ -137,6 +144,8 @@ export default {
     background-color: white;
     border-color: rgba(40, 165, 69, 1);
     color: rgba(40, 165, 69, 1);
+    height: 50px;
+    width: 55px;
   }
   .btn.btn-success.btn-lg:hover {
     background-color:  rgba(40, 165, 69, .12);

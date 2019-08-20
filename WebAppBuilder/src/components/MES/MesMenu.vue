@@ -14,8 +14,8 @@
 export default {
   name: "mes-menu",
   computed: {
-    workCenters() {
-        return this.$store.getters['mes/workCenters'];
+    workCenter() {
+      return this.$store.getters['mes/workCenter'];
     },
     links() {
       if (!this.$store.state.applicationDescription) {
@@ -30,16 +30,10 @@ export default {
         links = links.concat(
           (section.Routes || []).map(r => (r.section = section) && r)
         );
-      }
-      let workCenter,
-        workCenterCodes = Object.keys(this.workCenters);
-      if(workCenterCodes.length) {
-        workCenter = this.workCenters[workCenterCodes[0]];
-      }
-      
+      }      
       var pages = [];
       for(let page of links[1].Children) {
-        if(workCenter && (workCenter.accessPages == 'ALL_PAGES' || page.Id == "STUFF")) {
+        if(this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES' || page.Id == "INSTALLATIONS")) {
           pages.push(page);
         }
       }
