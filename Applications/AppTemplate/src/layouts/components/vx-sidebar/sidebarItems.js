@@ -20,5 +20,32 @@
 
 
 export default [
+  {
+    url: '/page2',
+    name: 'Страница 1',
+    icon: 'database',
+    tag: '3',
+    tagColor: 'warning',
 
+    slug: 'page-2'
+
+  },{
+    url: '/',
+    name: 'home',
+    icon: 'database',
+    tag: '3',
+    slug: 'home',
+    tagColor: 'primary',
+
+
+
+  },
+  {
+    url: '/page3',
+    name: 'Страница 2',
+    icon: 'database',
+    tag: '3',
+    slug: 'page-3'
+
+  }
 ]

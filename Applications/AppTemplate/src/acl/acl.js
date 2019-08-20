@@ -1,20 +1,17 @@
 import Vue from 'vue'
 import { AclInstaller, AclCreate, AclRule } from 'vue-acl'
 import router from '@/router'
-
 Vue.use(AclInstaller)
 
-let initialRole = 'admin'
-if (localStorage.getItem('userRole')) { initialRole = localStorage.getItem('userRole') }
+let initialRole = 'anonimous'
 
 export default new AclCreate({
   initial: initialRole,
-  notfound: '/pages/not-authorized',
-  router: router.router,
+  notfound: '/login',
+  router: router,
   acceptLocalRules: true,
   globalRules: {
-    admin: new AclRule('admin').generate(),
-    editor: new AclRule('editor').or('admin').generate(),
-    // public: new AclRule('public').or('admin').or('editor').generate(),
+    public: new AclRule('anonimous').generate(),
+    //authorized: new AclRule('authorized').generate(),
   }
 })

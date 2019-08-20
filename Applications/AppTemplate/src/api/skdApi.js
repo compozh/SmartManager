@@ -10,7 +10,7 @@ import Vue from 'vue'
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
   const options = {
-    uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+    uri: window.appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
       ... authHeader,
@@ -25,7 +25,7 @@ const getClient = () => {
 
 export class SkdApi {
   constructor() {}
-  
+
   getUsersFromGql() {
     return getClient().query({
       query: gql` ${usersQuery}`

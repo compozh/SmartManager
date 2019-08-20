@@ -2,12 +2,14 @@
 
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-import Authentication from '@it-enterprise/authentication'
+//import Authentication from '@it-enterprise/authentication'
 //import '@it-enterprise/authentication/dist/authentication.css'
-import Router from '@it-enterprise/routercore'
+//import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
 //import '@it-enterprise/common/dist/common-components.css'
 
+import auth from './api/auth/auth'
+auth.Init()
 
 // vue пакеты
 import Vue from 'vue'
@@ -31,7 +33,7 @@ import '../themeConfig.js'
 
 
 // ACL
-//import acl from './acl/acl'
+import acl from './acl/acl'
 
 
 // Globally Registered Components
@@ -73,6 +75,9 @@ import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
 
 
+// PrismJS
+import 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css'
 
 // Feather font icon
 require('./assets/css/iconfont.css')
@@ -111,20 +116,18 @@ Vue.use(VueApollo)
 
 // Плагины it-enterprise
 Vue.use(ItCommon)
-Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
+Vue.use(GrapgQlCore, { options: window.appConfig, dependencies })
 Vue.use(Localization, { dependencies })
-Vue.use(Authentication, { options: window.myConfig, dependencies })
-Vue.use(Router, { options: window.myConfig, dependencies })
+//Vue.use(Authentication, { options: window.appConfig, dependencies })
+//Vue.use(Router, { options: window.appConfig, dependencies })
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./i18n/resources/en.json'))
 
-
-
 new Vue({
-  router: router.router,
+  router,
   store,
   i18n,
-  //acl,
+  acl,
   render: h => h(App)
 }).$mount('#app')
 

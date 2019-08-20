@@ -9,6 +9,7 @@ import state from './state'
 
 // Modules
 import appModule from './app/index'
+import authModeule from './auth/moduleAuth'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
   state,
   modules: {
     [appModule.namespace]: appModule,
+    ['auth']: authModeule,
   },
   strict: process.env.NODE_ENV !== 'production'
 

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import auth from '@/api/auth/auth'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
@@ -9,7 +10,7 @@ let router = new VueRouter({
   scrollBehavior () {
     return { x: 0, y: 0 }
   },
-  base: window.myConfig.BASE_URL,
+  base: window.appConfig.BASE_URL,
   routes: [
     {
       // =============================================================================
@@ -24,7 +25,10 @@ let router = new VueRouter({
         {
           path: '/',
           name: 'home',
-          component: () => import('./views/Home.vue')
+          component: () => import('./views/Home.vue'),
+          meta: {
+            rule: 'public'
+          }
         },
         {
           path: '/page2',
@@ -36,13 +40,20 @@ let router = new VueRouter({
               {title: 'b'},
               {title: 'c'},
 
-            ]
+            ],
+
+            rule: 'public'
+
           }
         },
         {
           path: '/page3',
           name: 'page-3',
-          component: () => import('./views/Page2.vue')
+          component: () => import('./views/Page2.vue'),
+          meta: {
+            rule: 'public'
+
+          }
         },
       ],
     },
@@ -57,24 +68,64 @@ let router = new VueRouter({
         // PAGES
         // =============================================================================
         {
-          path: '/pages/login',
+          path: '/login',
           name: 'page-login',
-          component: () => import('@/views/pages/Login.vue')
+          component: () => import('@/views/pages/Login.vue'),
+          meta: {
+            rule: 'public'
+          }
         },
         {
-          path: '/pages/error-404',
+          path: '/error-404',
           name: 'page-error-404',
-          component: () => import('@/views/pages/Error404.vue')
+          component: () => import('@/views/pages/Error404.vue'),
+          meta: {
+            rule: 'public'
+          }
+        },
+        {
+          path: '/error-500',
+          name: 'page-error-500',
+          component: () => import('@/views/pages/Error500.vue'),
+          meta: {
+            rule: 'public'
+          }
         },
       ]
     },
     // Redirect to 404 page, if no match found
     {
       path: '*',
-      redirect: '/pages/error-404'
+      redirect: '/error-404'
     }
   ]
 })
+
+
+// protection of paths from an unauthenticated access
+router.beforeEach((to, from, next) => {
+
+  // get firebase current user
+  const currentUSer = auth.getCurrentUser()
+  if (
+    to.path === '/login' ||
+        to.path === '/forgot-password' ||
+        to.path === '/error-404' ||
+        to.path === '/error-500' ||
+        to.path === '/register' ||
+        to.path === '/callback' ||
+
+        !!currentUSer
+  ) {
+    return next()
+  }
+
+  router.push({ path: '/login', query: { to: to.path } })
+  // Specify the current path as the customState parameter, meaning it
+  // will be returned to the application after auth
+  // auth.login({ target: to.path });
+})
+
 
 router.afterEach(() => {
   // Remove initial loading
@@ -86,7 +137,4 @@ router.afterEach(() => {
 
 
 // Роутер по умолчанию
-export default {
-  router,
-  VueRouter
-}
+export default router
