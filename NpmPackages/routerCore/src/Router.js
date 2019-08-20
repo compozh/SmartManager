@@ -13,6 +13,8 @@ export default class Router {
     if (!this.__router) {
       throw new Error('экземпляр VueRouter должен быть передан!')
     }
+    this.__router.beforeEach((to, from, next) => this.resolveAccess(to, from, next))
+
     if (!VueRouter) {
       throw new Error('VueRouter должен быть передан в зависимостях!')
     }
@@ -28,7 +30,7 @@ export default class Router {
   SetRoutes(routes) {
     this._resetRouter()
     this.__rootPath = routes[0].path
-    this.__router.beforeEach((to, from, next) => this.resolveAccess(to, from, next))
+    //  this.__router.beforeEach((to, from, next) => this.resolveAccess(to, from, next))
     this.__router.addRoutes(routes)
 
   }
