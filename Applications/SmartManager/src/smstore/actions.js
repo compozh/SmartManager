@@ -35,9 +35,10 @@ export default {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
       )
-      const tasks = {
-        [folderId]: result.data.smtasks.tasks
-      }
+      const taskList = result.data.smtasks.tasks
+      taskList.forEach(task => task.name = trimHtmlTags(task.name))
+
+      const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
       commit(loader, false)
 
@@ -90,14 +91,25 @@ export default {
       if (result.success) {
         commit('setTaskAddForm', 'close')
 
-        await dispatch('getFolders', {loader: 'setLinearLoader'})
-        commit('setMessage', {type: 'success', text: 'Задача успешно добавлена'})
+        await dispatch('getFolders', {
+          loader: 'setLinearLoader'
+        })
+        commit('setMessage', {
+          type: 'success',
+          text: 'Задача успешно добавлена'
+        })
       } else {
-        commit('setMessage', {type: 'error', text: 'Не удалось добавить задачу'})
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось добавить задачу'
+        })
       }
     } catch (e) {
       commit('setCircularLoader', false)
-      commit('setMessage', {type: 'error', text: 'Ошибка при добавлении задачи'})
+      commit('setMessage', {
+        type: 'error',
+        text: 'Ошибка при добавлении задачи'
+      })
       console.log('', e.message)
     }
   },
@@ -114,9 +126,15 @@ export default {
           taskId: payload.id,
           loader: 'setLinearLoader'
         })
-        commit('setMessage', {type: 'success', text: 'Статус задачи успешно изменен'})
+        commit('setMessage', {
+          type: 'success',
+          text: 'Статус задачи успешно изменен'
+        })
       } else {
-        commit('setMessage', {type: 'error', text: 'Не удалось изменить статус задачи'})
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось изменить статус задачи'
+        })
       }
     } catch (e) {
       commit('setLinearLoader', false)
@@ -136,9 +154,15 @@ export default {
           taskId,
           loader: 'setLinearLoader'
         })
-        commit('setMessage', {type: 'success', text: 'Вложение успешно добавлено'})
+        commit('setMessage', {
+          type: 'success',
+          text: 'Вложение успешно добавлено'
+        })
       } else {
-        commit('setMessage', {type: 'error', text: 'Не удалось добавить вложение'})
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось добавить вложение'
+        })
       }
     } catch (e) {
       commit('setLinearLoader', false)
@@ -181,11 +205,17 @@ export default {
       if (result.success) {
         commit('addComment', comment)
       } else {
-        commit('setMessage', {type: 'error', text: 'Не удалось добавить коментарий'})
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось добавить коментарий'
+        })
       }
     } catch (e) {
       commit('setLinearLoader', false)
-      commit('setMessage', {type: 'error', text: 'Ошибка при добавлении коментария'})
+      commit('setMessage', {
+        type: 'error',
+        text: 'Ошибка при добавлении коментария'
+      })
       console.log('', e.message)
     }
   }

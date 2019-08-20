@@ -64,6 +64,6 @@ export default {
 
 <style scoped>
   .v-avatar div {
-    height: 30px;
+    display: flex;
   }
 </style>
