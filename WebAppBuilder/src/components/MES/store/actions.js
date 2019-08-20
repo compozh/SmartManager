@@ -24,8 +24,13 @@ export default {
   async initializeWorkCenter({ commit }, fetchPolicy) {
     commit('closeSnackbar');
     try {
-      let uuid = "d520c7a8-421b-4563-b955-f5abc56b97ec",
-        workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy);
+      var uuid = $cookies.get('mesUuid');
+      if (!uuid) {
+        uuid = api.generateUUID();
+        $cookies.set('mesUuid', uuid);
+      }
+      // let uuid = "d520c7a8-421b-4563-b955-f5abc56b97ec";
+      let workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy);
         commit('setInitialWorkCenter', true);
       if(workCenters.length == 1) {
         commit('setWorkCenter', workCenters[0]);
@@ -60,16 +65,16 @@ export default {
     }
   },
   async removeInstallation({ commit }, installation) {
-    await this.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.removeInstallationGql(installation.id), 
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.removeInstallationGql(installation.id),
       successAction: async result => { commit('removeInstallation', installation) },
       linearLoader: true
     });
   },
   async registerMaterialInstallation({ commit }, { workCenterCode, batchBarcode, factId }) {
     var me = this;
-    await me.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId), 
+    await me.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId),
       successAction: async result => { await me.dispatch('mes/initializeInstallations', { workCenterCode, fetchPolicy: "network-only" }) },
       linearLoader: true
     });
@@ -82,8 +87,8 @@ export default {
         mode: 'Start',
         success: true
       };
-    await this.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.registerProductionGql(productionRegistrationParam), 
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.registerProductionGql(productionRegistrationParam),
       successAction: async result => {
         //todo
         commit('resetProductionFormio');
@@ -97,15 +102,15 @@ export default {
     });
   },
   async fixWorkCenterForWorker({ commit }, { workCenterCode, workerCode }) {
-    await this.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.fixWorkCenterForWorkerGql(workCenterCode, workerCode), 
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.fixWorkCenterForWorkerGql(workCenterCode, workerCode),
       successAction: async result => { this.dispatch('mes/initializeWorkCenter', 'network-only') },
       linearLoader: true
     });
   },
   async cancelBeginRegistration({ commit }, task) {
-    await this.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.cancelBeginRegistrationGql(task.shiftTaskId), 
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.cancelBeginRegistrationGql(task.shiftTaskId),
       successAction: async result => { task.inProgress = false; },
       linearLoader: true
     });
@@ -121,15 +126,15 @@ export default {
     }
   },
   async deleteProduction({ commit }, production) {
-    await this.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.deleteProductionGql(production.factId), 
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.deleteProductionGql(production.factId),
       successAction: async result => { commit('removeProduction', production); },
       linearLoader: true
     });
   },
   async createProductionFormio({ commit }, { formCode, properties }) {
-    await this.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.getProductionFormioFromGql(formCode, properties), 
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.getProductionFormioFromGql(formCode, properties),
       successAction: async result => { commit('setProductionFormio', result) },
       linearLoader: true
     });
@@ -149,8 +154,8 @@ export default {
         }
       };
     commit('setDialogLinearLoaderMessage', 'Регистрация выработки');
-    await me.dispatch('mes/graphqlQueryWraper', { 
-      queryAction: async () =>  await api.productionFormIoSubmitGql(params), 
+    await me.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () =>  await api.productionFormIoSubmitGql(params),
       successAction: async result => { me.dispatch('mes/initializeTasks', { workCenter, fetchPolicy: 'network-only' }); },
       linearLoader: false
     });
@@ -165,7 +170,7 @@ export default {
     if(linearLoader) {
       commit('setLinearLoader', true);
     }
-    
+
     try {
       let result = await queryAction();
       if(result.success == true) {

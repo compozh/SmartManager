@@ -124,11 +124,15 @@ export default {
     justify-content: start !important;
   }
   .mes-device-not-fixed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 1.5em;
     font-weight: 300;
     color: red;
     opacity: 0.5;
     vertical-align: middle;
+    height: 100%;
   }
 </style>
 
