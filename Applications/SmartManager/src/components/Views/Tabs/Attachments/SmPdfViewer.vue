@@ -240,6 +240,10 @@ export default {
     max-width: none !important;
   }
 
+  .viewer-page-item span {
+    display: flex !important;
+  }
+
   input[type=number], .zoom-options {
     border: 1px solid #c6c6c6;
     border-radius: 2px;

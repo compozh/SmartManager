@@ -3,12 +3,30 @@
     v-slot="{ activeTab, tabs, task, params, events }"
   >
     <v-container fluid pa-0 ma-0>
-      <v-layout>
+      <sm-task-add-form
+        v-if="params.taskAddForm"
+        :parent="task.id"
+      ></sm-task-add-form>
+      <v-layout v-else>
         <v-flex lg6 px-2>
           <v-layout wrap>
             <v-flex>
-              <v-layout v-if="task.isGenerate">
-                <v-flex text-xs-left shrink mr-2>
+              <v-layout>
+                <v-flex shrink>
+                  <v-btn
+                    class="info ml-0"
+                    small depressed
+                    @click="events.openTaskAddForm"
+                  >
+                    <v-icon size="18">add_to_photos</v-icon>
+                    <span class="caption pl-1">Добавить подзадачу</span>
+                  </v-btn>
+                </v-flex>
+                <v-flex
+                  v-if="task.isGenerate"
+                  d-flex shrink
+                  align-center
+                >
                   <v-menu open-on-hover offset-y>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -39,12 +57,10 @@
                       </v-list-tile>
                     </v-list>
                   </v-menu>
-                </v-flex>
-                <v-flex text-xs-left shrink>
-                  <v-menu  open-on-hover offset-y>
+                  <v-menu open-on-hover offset-y>
                     <template v-slot:activator="{ on }">
                       <v-btn
-                        class="main-btn mx-0"
+                        class="main-btn mr-0"
                         color="success"
                         small depressed
                         @click="events.changeStage(1)"
@@ -72,9 +88,7 @@
                     </v-list>
                   </v-menu>
                 </v-flex>
-              </v-layout>
-              <v-layout v-else>
-                <v-flex xs9 text-xs-left>
+                <v-flex v-else shrink>
                   <v-btn
                     v-if="task.status === '' || task.status === '*'"
                     class="success ml-0"
@@ -86,7 +100,7 @@
                   </v-btn>
                   <v-btn
                     v-if="task.status === '+'"
-                    class="info ml-0"
+                    class="warning ml-0"
                     small depressed
                     @click="events.changeStatus('*')"
                   >
@@ -96,7 +110,7 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-            <v-flex xs3 d-flex text-xs-right>
+            <v-flex d-flex text-xs-right>
               <sm-task-status class="py-2" :status="task.status" chip="true"></sm-task-status>
             </v-flex>
             <v-flex xs12>
@@ -129,11 +143,6 @@
               </v-tabs-items>
             </v-flex>
           </v-layout>
-        </v-flex>
-        <v-flex
-          xs6
-          hidden-md-and-down
-        >
           <v-layout column>
             <v-flex>
               <sm-task-tab-docs v-if="params.hiddenLgAndUp"></sm-task-tab-docs>

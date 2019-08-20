@@ -35,6 +35,9 @@ export default {
     hiddenLgAndUp() {
       return this.$vuetify.breakpoint.lgAndUp
     },
+    taskAddForm() {
+      return this.$store.state.sm.taskAddForm === 'open'
+    }
   },
   methods: {
     changeTaskStage(moveMode, comment) {
@@ -54,6 +57,12 @@ export default {
         status: status,
         comment: ''
       })
+    },
+    openTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'open')
+    },
+    closeTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'close')
     }
   },
   render() {
@@ -63,10 +72,13 @@ export default {
       task: this.task ? this.task : {},
       params: {
         hiddenLgAndUp: this.hiddenLgAndUp,
+        taskAddForm: this.taskAddForm
       },
       events: {
         changeStage: this.changeTaskStage,
-        changeStatus: this.changeTaskStatus
+        changeStatus: this.changeTaskStatus,
+        openTaskAddForm: this.openTaskAddForm,
+        closeTaskAddForm: this.closeTaskAddForm
       }
     })
   }
