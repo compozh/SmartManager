@@ -8,7 +8,8 @@ import mutations from './mutations'
 import state from './state'
 
 // Modules
-// import smartManagerStore from '../smstore/store'
+import itportalStore from '../itportalstore/store'
+
 
 Vue.use(Vuex)
 
@@ -19,7 +20,7 @@ const store = new Vuex.Store({
   mutations,
   state,
   modules: {
-    // [smartManagerStore.namespace]: smartManagerStore,
+    [itportalStore.namespace]: itportalStore,
   }
 })
 
