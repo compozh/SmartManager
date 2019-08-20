@@ -30,10 +30,12 @@
     "graphql-tag": "^2.10.1",
     "lodash": "^4.17.11",
     "moment": "2.24.0",
+    "node-gyp": "^5.0.3",
     "register-service-worker": "^1.5.2",
     "vue": "^2.6.6",
     "vue-apollo": "^3.0.0-beta.30",
     "vue-content-loader": "^0.2.2",
+    "vue-cookies": "^1.5.13",
     "vue-country-flag": "^1.1.1",
     "vue-formio": "^3.0.2",
     "vue-grid-layout": "^2.3.4",
@@ -45,8 +47,7 @@
     "vue-svg-loader": "^0.12.0",
     "vue-touch": "^2.0.0-beta.4",
     "vuetify": "^1.5.14",
-    "vuex": "^3.1.0",
-    "vue-cookies": "^1.5.13"
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
