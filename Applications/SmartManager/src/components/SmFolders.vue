@@ -9,7 +9,7 @@
             :to="{ name:'SMARTMANAGERTASKS', params:{ foldercode: (folder.code ||'ALL') }}"
             active-class="sm_active-folder"
             class="menu-item"
-            :class="{ 'main-folder': isMainFolder(folder) }"
+            :class="{ 'main-folder': isMainFolder(folder), 'filter': isFilter(folder) }"
           >
             <v-list-tile-action>
               <v-tooltip
@@ -57,6 +57,8 @@ export default {
   name: 'sm-folders',
   computed: {
     folders() {
+
+
       return this.$store.state.sm.folders
     },
     taskAddForm() {
@@ -73,11 +75,20 @@ export default {
     isMainFolder(folder) {
       return folder.name === 'Все'
     },
+    isFilter(folder) {
+      return folder.code.includes('filter')
+    },
     setMainFolderName(folder) {
       return this.isMainFolder(folder) ? 'Активные' : folder.name
     },
     setFolderIcon(folder) {
-      return this.isMainFolder(folder) ? 'folder' : 'folder_open'
+      switch (folder.name) {
+      case 'Все': return 'folder'
+      case 'Выполненные': return 'done_outline'
+      case 'От меня': return 'face'
+      case 'Избранные': return 'star'
+      default: return 'folder_open'
+      }
     },
     setMenuMode(mode) {
       this.$store.commit('sm/setMenuMode', mode)
@@ -101,6 +112,10 @@ export default {
     order: -1;
   }
 
+  .menu-item.filter {
+
+  }
+
   .menu-item a {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -111,7 +126,8 @@ export default {
     font-size: 14px !important;
   }
 
-  .menu-item.main-folder a {
+  .menu-item.main-folder a,
+  .menu-item.filter a {
     padding-left: 25px;
   }
 
@@ -164,7 +180,8 @@ export default {
 
   /* Медиазапрос для подражания поведению тулбара на xs экранах */
   @media only screen and (max-width: 959px) {
-    .menu-item.main-folder a {
+    .menu-item.main-folder a,
+    .menu-item.filter a {
       padding-left: 16px;
     }
 

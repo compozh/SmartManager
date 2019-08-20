@@ -10,7 +10,7 @@
     >
       <v-layout row align-center>
         <v-flex d-flex justify-center shrink pr-3 class="icon-container">
-          <user-icon :src="task.addedPhoto" size="50"></user-icon>
+          <user-icon :src="task.performerPhoto" size="50"></user-icon>
         </v-flex>
         <v-flex py-1 class="text-ellipsis">
           <v-layout column text-xs-left>
@@ -29,7 +29,7 @@
             </v-flex>
             <v-flex class="caption text-ellipsis">
               <span class="hidden-xs-only"
-              >Исполнитель: </span>{{ task.addedFio }}
+              >Исполнитель: </span>{{ task.performer }}
             </v-flex>
             <v-flex d-flex class="caption grey--text">
               <v-flex class="text-xs-left">

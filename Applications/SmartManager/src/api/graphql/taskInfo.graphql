@@ -90,6 +90,7 @@ fragment taskFields on Task {
   comments {
     userId
     user
+    userPhoto
     date
     text
     isAgree

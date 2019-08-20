@@ -1,0 +1,33 @@
+{
+  itmenu {
+    menu {
+      baseUrl
+      items {
+        name: text
+        image
+        codeMenu
+        isFolder
+        children: nodes {
+          name: text
+          image
+          codeMenu
+        }
+      }
+      moduleContent{
+        title
+        tooltip
+        paragraphItem {
+          name: text
+          image
+          codeMenu
+          children: nodes {
+            linkToRMD
+            name: text
+            image
+            codeMenu
+          }
+        }
+      }
+    }
+  }
+}
