@@ -8,7 +8,7 @@
       >
         <mes-installation-card
           :installation=installation
-          @removeInstallation="removeInstallation(installation)"
+          @removeInstallation="removeInstallation"
         />
 
       </v-card>
@@ -32,8 +32,11 @@ export default {
     }
   },
   methods: {
-    removeInstallation(installation) {
-      this.$store.dispatch('mes/removeInstallation', installation)
+    async removeInstallation({ installation, callback }) {
+      await this.$store.dispatch('mes/removeInstallation', installation)
+      if (callback) {
+        callback()
+      }
     }
   }
 }

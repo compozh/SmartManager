@@ -4,7 +4,7 @@
 
             <mes-production-card
                 :production=production
-                @deleteProduction=deleteProduction(production)
+                @deleteProduction=deleteProduction
             />
 
         </v-card>
@@ -26,8 +26,11 @@ export default {
     }
   },
   methods: {
-    deleteProduction(production) {
-      this.$store.dispatch('mes/deleteProduction', production)
+    async deleteProduction({ production, callback }) {
+      await this.$store.dispatch('mes/deleteProduction', production)
+      if (callback) {
+          callback()
+        }
     }
   }
 }

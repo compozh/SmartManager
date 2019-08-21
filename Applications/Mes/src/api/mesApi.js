@@ -135,6 +135,7 @@ export class MesApi {
         mutation: gql`${registerMaterialInstallation}`,
         variables: { workCenterCode, batchBarcode, factId }
       })
+
       return result.data.mesMutation.registerMaterialInstallation
     } catch (error) {
       return console.log(error.message)

@@ -2,8 +2,7 @@
     <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
 
         <span v-html="production.description"></span>
-
-        <v-btn icon outlined color="error" flat class="mes-delete-production" @click="deleteProduction">
+        <v-btn icon outlined color="error" flat class="mes-delete-production" @click="deleteProduction"  :loading="delateInProgress">
           <v-icon dark>delete_forever</v-icon>
         </v-btn>
 
@@ -26,12 +25,16 @@ export default {
         1: 'border-left: 18px solid rgba(7, 109, 0, 0.81);',
         2: 'border-left: 18px solid rgba(255, 192, 0, 0.81);',
         3: 'border-left: 18px solid rgba(179, 2, 2, 0.81);'
-      }
+      },
+      delateInProgress: false
     }
   },
   methods: {
     deleteProduction() {
-      this.$emit('deleteProduction')
+      this.delateInProgress = true
+      this.$emit('deleteProduction', {production: this.production, callback: () => {
+        this.delateInProgress = false
+      }})
     }
   }
 }

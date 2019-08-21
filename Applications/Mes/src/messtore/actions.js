@@ -66,11 +66,10 @@ export default {
   async removeInstallation({ commit }, installation) {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () =>  await api.removeInstallationGql(installation.id),
-      successAction: async () => { commit('removeInstallation', installation) },
-      linearLoader: true
+      successAction: async () => { commit('removeInstallation', installation) }
     })
   },
-  async registerMaterialInstallation({ workCenterCode, batchBarcode, factId }) {
+  async registerMaterialInstallation({ commit }, { workCenterCode, batchBarcode, factId }) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () =>  await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId),
@@ -101,7 +100,7 @@ export default {
       linearLoader: true
     })
   },
-  async fixWorkCenterForWorker({ workCenterCode, workerCode }) {
+  async fixWorkCenterForWorker({ commit }, { workCenterCode, workerCode }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () =>  await api.fixWorkCenterForWorkerGql(workCenterCode, workerCode),
       successAction: async () => { this.dispatch('mes/initializeWorkCenter', 'network-only') },
@@ -129,7 +128,6 @@ export default {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () =>  await api.deleteProductionGql(production.factId),
       successAction: async () => { commit('removeProduction', production) },
-      linearLoader: true
     })
   },
   async createProductionFormio({ commit }, { formCode, properties }) {

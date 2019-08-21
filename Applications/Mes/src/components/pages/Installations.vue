@@ -52,7 +52,7 @@ export default {
     removeInstallation(installation) {
       this.$store.dispatch('mes/removeInstallation', installation)
     },
-    async submitQrCode({ qrCodeValue, callback}) {
+    async submitQrCode({ qrCodeValue, callback }) {
       let installationCards = this.$refs.installationCards,
         installationCard = installationCards.$refs[qrCodeValue],
         installationsBlock = installationCards.$refs.installationsBlock
