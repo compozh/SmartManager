@@ -10,7 +10,8 @@ export default {
     selectedTask: null,
     selectedTasksTab: 0,
     currentLayout: 'main',
-    dragResizeMode: false
+    dragResizeMode: false,
+    aspectRatioLayout: [35, 65]
   },
   dialogLinearLoader: {
     visible: false,

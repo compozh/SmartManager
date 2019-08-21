@@ -40,7 +40,6 @@ export default {
         flex-direction: row;
         flex-wrap: wrap;
         align-content: start;
-        justify-content: center;
     }
     .productions-card {
         display: flex;

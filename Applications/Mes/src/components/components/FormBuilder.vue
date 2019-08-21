@@ -45,8 +45,8 @@ export default {
 
 <style scoped lang="scss">
 .formio-container /deep/ {
-  // @import "~bootstrap/dist/css/bootstrap.min";
-  // @import "~choices.js/public/assets/styles/choices.css";
+  @import "~bootstrap/dist/css/bootstrap.min";
+  @import "~choices.js/public/assets/styles/choices.css";
   font-size: 14px;
   font-weight: 500;
   label {
@@ -75,9 +75,11 @@ export default {
     background: white;
     border: 1px solid rgba(179, 2, 2, 0.81);
     color: rgba(179, 2, 2, 0.81);
+    height:50px;
   }
   .btn.btn-danger:hover {
     background-color: rgba(179, 2, 2, 0.12);
+    height:50px;
   }
   .table.datagrid-table.table-bordered thead {
     font-size: 16px;
