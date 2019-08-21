@@ -140,5 +140,14 @@ export default {
   .v-dialog {
     box-shadow: none;
   }
+  .v-tabs__wrapper {
+    margin: 0 !important;
+  }
+  .v-icon.v-tabs__icon.v-tabs__icon--next {
+    display: none;
+  }
+  .v-icon.v-tabs__icon.v-tabs__icon--prev {
+    display: none;
+  }
 </style>
 
