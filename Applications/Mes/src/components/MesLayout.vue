@@ -59,7 +59,7 @@ export default {
   name: 'mes-layout',
   data(vm) {
     return {
-      drawer: vm.$vuetify.breakpoint.mdAndUp
+      drawer: vm.$vuetify.breakpoint.xlAndUp,
     }
   },
   computed: {
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     toggleMenuMode() {
-      if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
+      if (this.$vuetify.breakpoint.xl) {
         this.$store.dispatch('mes/toggleMenuMiniMode')
       } else {
         this.drawer = !this.drawer

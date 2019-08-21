@@ -169,5 +169,9 @@ export default {
   .editgrid-actions{
     text-align: center;
   }
+  .row.formio-component.formio-component-columns.formio-component-columns {
+    display: flex;
+    justify-content: space-around;
+  }
 }
 </style>
