@@ -28,6 +28,8 @@ import VueCookies from 'vue-cookies'
 
 import { routerDependencies } from './router'
 
+import signalR from './signalR'
+
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
     link: new HttpLink({}),
@@ -51,6 +53,7 @@ Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueApollo)
 Vue.use(VueCookies)
+Vue.use(signalR)
 
 // Плагины it-enterprise
 Vue.use(ItCommon)
