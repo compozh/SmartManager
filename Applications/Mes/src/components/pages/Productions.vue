@@ -98,8 +98,8 @@ export default {
     position: absolute;
     left: 20px;
     top: 20px;
-    font-size: 1.5em;
-    font-weight: 300;
+    font-size: 2em;
+    font-weight: 500;
     color: #3d83f7;
     opacity: 0.5;
   }
