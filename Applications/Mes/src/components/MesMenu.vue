@@ -21,7 +21,7 @@ export default {
       if (!this.$store.state.WebApps.applicationDescription) {
         return []
       }
-      
+
       const app = this.$store.state.WebApps.applicationDescription
       const sections = app.Sections || []
       var links = []
@@ -30,7 +30,7 @@ export default {
         links = links.concat(
           (section.Routes || []).map(r => (r.section = section) && r)
         )
-      }      
+      }
       var pages = []
       for (let page of links[1].Children) {
         if (this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES' || page.Id == 'INSTALLATIONS')) {

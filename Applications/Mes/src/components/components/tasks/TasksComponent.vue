@@ -46,24 +46,19 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import {ContentLoader} from 'vue-content-loader'
 
 export default {
-  name: "mes-tasks-component",
-  components: {
-    ContentLoader
-  },
+  name: 'mes-tasks-component',
   data() {
     return {
       tabs: [
-        { index: 0, id: "PLAN", name: "В плане"},
-        { index: 1, id: "DONE", name: "Выполненные"}
+        { index: 0, id: 'PLAN', name: 'В плане'},
+        { index: 1, id: 'DONE', name: 'Выполненные'}
       ],
-      loaderType: "list",
+      loaderType: 'list',
       selectedTab: this.selectedTasksTab,
       refreshingTasks: false
-    };
+    }
   },
   props: {
     initializeTasks: Boolean,
@@ -71,46 +66,46 @@ export default {
   },
   computed: {
     tasks() {
-      return this.$store.getters['mes/tasks'];
+      return this.$store.getters['mes/tasks']
     },
     obsoleteData() {
-      return this.$store.getters['mes/obsoleteData'];
+      return this.$store.getters['mes/obsoleteData']
     },
     workCenter() {
-      return this.$store.getters['mes/workCenter'];
+      return this.$store.getters['mes/workCenter']
     },
     selectedTask: {
       get() {
-        return this.$store.getters['mes/selectedTask'];
+        return this.$store.getters['mes/selectedTask']
       }
     }
   },
   methods: {
     changeSelectTasksTab(tabIndex) {
-      this.$emit('changeSelectTasksTab', tabIndex);
+      this.$emit('changeSelectTasksTab', tabIndex)
     },
     changeCurrentTask(newTask) {
-      this.$emit('changeCurrentTask', newTask);
+      this.$emit('changeCurrentTask', newTask)
     },
     countTasks(tabIndex) {
       var me = this,
-        tasks = [];
+        tasks = []
 
-      for(let task of me.tasks) {
-        if((tabIndex == 0 && (task.state == "IN_PLAN" || task.state == "IN_WORK")) || tabIndex == 1 && task.state == "DONE") {
-          tasks.push(task);
+      for (let task of me.tasks) {
+        if ((tabIndex == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK')) || tabIndex == 1 && task.state == 'DONE') {
+          tasks.push(task)
         }
       }
-      return tasks.length;
+      return tasks.length
     },
     refreshTasks() {
-      this.refreshingTaskMethod();
+      this.refreshingTaskMethod()
     },
     async refreshingTaskMethod() {
-      this.refreshingTasks = true;
-      await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' });
-      this.$store.dispatch('mes/setObsoluteDataTask', false);
-      this.refreshingTasks = false;
+      this.refreshingTasks = true
+      await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' })
+      this.$store.dispatch('mes/setObsoluteDataTask', false)
+      this.refreshingTasks = false
     }
   }
 }
@@ -132,11 +127,13 @@ export default {
     justify-content: space-between;
     min-height: 63px;
     align-items: center;
+    padding-left: 10px;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .grid-tabs .v-badge {
     padding-right: 10px;
   }
+
   .tasks-list-block-content {
     height:calc(100% - 60px);
     overflow-y: auto;
@@ -184,9 +181,6 @@ export default {
   }
   .wait-for-data-block {
     padding: 20px;
-  }
-  .grid-tabs {
-    padding-left: 10px;
   }
   .span-count-tasks {
     font-size: 13px;

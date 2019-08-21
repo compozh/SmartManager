@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 import { Form } from 'vue-formio'
 
 export default {
@@ -110,11 +109,17 @@ export default {
   }
   .nav-link {
     display: flex;
-    color: #326DA8;
+    color: #495057;
     height: 50px;
     font-size: 16px;
     justify-content: center;
     align-items: center;
+  }
+  .nav-link.active {
+    color: #326DA8 !important;
+  }
+  .nav-item.active {
+    color: #326DA8;
   }
   .btn.btn-primary.btn-md {
     background-color: white;

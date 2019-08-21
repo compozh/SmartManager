@@ -21,21 +21,21 @@
 
 <script>
 export default {
-  name: "mes-toolbar",
+  name: 'mes-toolbar',
   created() {
-    this.initialize();
+    this.initialize()
   },
   computed: {
     workCenter() {
-        return this.$store.getters['mes/workCenter'];
+      return this.$store.getters['mes/workCenter']
     }
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter');
+      await this.$store.dispatch('mes/initializeWorkCenter')
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -32,35 +32,35 @@
 
 <script>
 export default {
-    name: "mes-dialog-component",
-	props: {
-        title: String,
-        message: String,
-        agreeMessage: String,
-        disagreeMessage: String,
-        visible: Boolean
-    },
-    computed: {
-        dialogVisible: {
-            get() {
-                return this.visible;
-            },
-            set(value) {
+  name: 'mes-dialog-component',
+  props: {
+    title: String,
+    message: String,
+    agreeMessage: String,
+    disagreeMessage: String,
+    visible: Boolean
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        return this.visible
+      },
+      set() {
 
-            }
-        }
+      }
+    }
+  },
+  methods: {
+    agreeClick() {
+      this.$emit('agreeClick')
     },
-	methods: {
-		agreeClick() {
-			this.$emit('agreeClick');
-        },
-        disagreeClick() {
-            this.$emit('disagreeClick');
-        },
-        dialogInput() {
-            this.$emit('dialogInput');
-        }
-	}
+    disagreeClick() {
+      this.$emit('disagreeClick')
+    },
+    dialogInput() {
+      this.$emit('dialogInput')
+    }
+  }
 }
 </script>
 

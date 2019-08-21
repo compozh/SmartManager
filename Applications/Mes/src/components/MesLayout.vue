@@ -56,49 +56,48 @@
 
 <script>
 export default {
-  name: "mes-layout",
+  name: 'mes-layout',
   data(vm) {
     return {
       drawer: vm.$vuetify.breakpoint.mdAndUp
-    };
+    }
   },
   computed: {
     currentUser() {
-      return this.$store.getters.getCurrentUser;
+      return this.$store.getters.getCurrentUser
     },
     snackbar() {
-      return this.$store.getters["mes/snackbar"];
+      return this.$store.getters['mes/snackbar']
     },
     dialogLinearLoader() {
-      return this.$store.getters["mes/dialogLinearLoader"];
+      return this.$store.getters['mes/dialogLinearLoader']
     },
     linearLoader() {
-      return this.$store.getters["mes/linearLoader"];
+      return this.$store.getters['mes/linearLoader']
     },
     menuMiniMode() {
-      return this.$store.getters["mes/menuMiniMode"];
+      return this.$store.getters['mes/menuMiniMode']
     },
     workCenter() {
-      return this.$store.getters["mes/workCenter"];
+      return this.$store.getters['mes/workCenter']
     },
     initialWorkCenter() {
-      return this.$store.getters["mes/initialWorkCenter"];
+      return this.$store.getters['mes/initialWorkCenter']
     }
   },
   methods: {
     toggleMenuMode() {
       if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
-        this.$store.dispatch("mes/toggleMenuMiniMode")
-      }
-      else {
-        this.drawer = !this.drawer;
+        this.$store.dispatch('mes/toggleMenuMiniMode')
+      } else {
+        this.drawer = !this.drawer
       }
     },
     closeSnackbar() {
-      this.$store.commit('mes/closeSnackbar');
+      this.$store.commit('mes/closeSnackbar')
     }
   }
-};
+}
 </script>
 <style type="text/css">
   html{
@@ -120,6 +119,10 @@ export default {
   .v-list__tile.v-list__tile--link.theme--light {
     padding-left: 28px;
   }
+  .v-badge--overlap .v-badge__badge {
+    height: 17px !important;
+    width: 17px !important;
+  }
   .v-navigation-drawer--mini-variant .v-list__tile__action, .v-navigation-drawer--mini-variant .v-list__tile__avatar {
     justify-content: start !important;
   }
@@ -133,6 +136,9 @@ export default {
     opacity: 0.5;
     vertical-align: middle;
     height: 100%;
+  }
+  .v-dialog {
+    box-shadow: none;
   }
 </style>
 

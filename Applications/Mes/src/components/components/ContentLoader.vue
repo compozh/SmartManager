@@ -49,14 +49,13 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 import {ContentLoader} from 'vue-content-loader'
 
 export default {
-  data(){
-    return { listLoaderHeight: 700, blockLoaderHeight:300 }
+  data() {
+    return { listLoaderHeight: 700, blockLoaderHeight: 300 }
   },
-  name: "mes-content-loader",
+  name: 'mes-content-loader',
   components: {
     ContentLoader
   },

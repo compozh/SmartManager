@@ -17,58 +17,57 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-task-installations-layout",
+  name: 'mes-task-installations-layout',
   created() {
-    this.initialize();
+    this.initialize()
   },
   data() {
     return { initializeInstallations: false }
   },
   computed: {
     workCenter() {
-      return this.$store.getters['mes/workCenter'];
+      return this.$store.getters['mes/workCenter']
     },
     installations() {
-      return this.$store.getters['mes/installations'];
+      return this.$store.getters['mes/installations']
     },
     selectedTask() {
-      return this.$store.getters['mes/selectedTask'];
+      return this.$store.getters['mes/selectedTask']
     }
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code });
-      this.initializeInstallations = true;
+      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code })
+      this.initializeInstallations = true
     },
     async submitQrCode({ qrCodeValue, callback}) {
       let installationCards = this.$refs.installationCards,
-          installationCard = installationCards.$refs[qrCodeValue],
-          installationsBlock = installationCards.$refs.installationsBlock;
+        installationCard = installationCards.$refs[qrCodeValue],
+        installationsBlock = installationCards.$refs.installationsBlock
 
-      if(installationCard && installationCard.length) {
+      if (installationCard && installationCard.length) {
         installationsBlock.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
         installationCard[0].$el.classList.add('activeInstallation')
-        setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 2000);
-        if(callback) {
-          callback();
+        setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 2000)
+        if (callback) {
+          callback()
         }
-        return;
+        return
       }
-      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: qrCodeValue, factId: 0 });
-      if(callback) {
-        callback();
+      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: qrCodeValue, factId: 0 })
+      if (callback) {
+        callback()
       }
     },
     removeAllInstallations() {
-      for(let installation of this.installations) {
-        this.removeInstallation(installation);
+      for (let installation of this.installations) {
+        this.removeInstallation(installation)
       }
     },
     removeInstallation(installation) {
-      this.$store.dispatch('mes/removeInstallation', installation);
+      this.$store.dispatch('mes/removeInstallation', installation)
     }
   }
 }

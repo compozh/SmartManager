@@ -16,25 +16,24 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-installations-component",
+  name: 'mes-installations-component',
   computed: {
     installations() {
-      return this.$store.getters['mes/installations'];
+      return this.$store.getters['mes/installations']
     },
     sortedInstallations() {
-      let installations = this.installations;
+      let installations = this.installations
       installations.sort((a,b) => {
-        return a.id < b.id ? 1 : (a.id == b.id ? 0 : -1);
-      });
-      return installations;
+        return a.id < b.id ? 1 : (a.id == b.id ? 0 : -1)
+      })
+      return installations
     }
   },
   methods: {
     removeInstallation(installation) {
-      this.$store.dispatch('mes/removeInstallation', installation);
+      this.$store.dispatch('mes/removeInstallation', installation)
     }
   }
 }

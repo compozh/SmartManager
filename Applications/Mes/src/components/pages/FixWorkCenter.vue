@@ -12,50 +12,49 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-fix-workCenter",
+  name: 'mes-fix-workCenter',
   data() {
-      return { workCenterToFix: null };
+    return { workCenterToFix: null }
   },
   created() {
-    this.initialize();
+    this.initialize()
   },
   computed: {
     workCentersForWorker() {
-        return this.$store.getters["mes/workCentersForWorker"];
+      return this.$store.getters['mes/workCentersForWorker']
     },
     initialWorkCenter() {
-        return this.$store.getters["mes/initialWorkCenter"];
+      return this.$store.getters['mes/initialWorkCenter']
     },
     properties() {
-        return this.$store.getters["mes/properties"];
+      return this.$store.getters['mes/properties']
     }
   },
   methods: {
     workCenterItems() {
-        let workCenterItems = [];
-        for(let workCenter of this.workCentersForWorker) {
-            workCenterItems.push(workCenter.name + ' (' + workCenter.code + ')');
-        }
-        return workCenterItems;
+      let workCenterItems = []
+      for (let workCenter of this.workCentersForWorker) {
+        workCenterItems.push(workCenter.name + ' (' + workCenter.code + ')')
+      }
+      return workCenterItems
     },
     onClickFixWorkCenter() {
-        this.fixWorkCenter('');
+      this.fixWorkCenter('')
     },
     async initialize() {
-        await this.$store.dispatch('mes/initializeProperties');
-        if(this.workCenterToFix != null) {
-            this.fixWorkCenter(this.workCenterToFix);
-        }
+      await this.$store.dispatch('mes/initializeProperties')
+      if (this.workCenterToFix != null) {
+        this.fixWorkCenter(this.workCenterToFix)
+      }
     },
     fixWorkCenter(workCenter) {
-        if(this.properties) {
-            this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter, workerCode: this.properties.workerCode });
-        } else {
-            this.workCenterToFix = workCenter;
-        }
+      if (this.properties) {
+        this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter, workerCode: this.properties.workerCode })
+      } else {
+        this.workCenterToFix = workCenter
+      }
     }
   }
 }

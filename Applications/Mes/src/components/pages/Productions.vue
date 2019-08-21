@@ -11,45 +11,40 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import {ContentLoader} from 'vue-content-loader'
 
 export default {
-  name: "mes-productions",
-  components: {
-    ContentLoader
-  },
+  name: 'mes-productions',
   data() {
-    return { initializeProductions: false };
+    return { initializeProductions: false }
   },
   created() {
-    this.initialize();
+    this.initialize()
   },
   mounted() {
-    if(this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'});
-      return;
+    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
+      this.$router.replace({path: '/MES/installations'})
+      return
     }
   },
   computed: {
     initialWorkCenter() {
-      return this.$store.getters["mes/initialWorkCenter"];
+      return this.$store.getters['mes/initialWorkCenter']
     },
     workCenter() {
-      return this.$store.getters['mes/workCenter'];
+      return this.$store.getters['mes/workCenter']
     },
     properties() {
-        return this.$store.getters['mes/properties'];
+      return this.$store.getters['mes/properties']
     },
     productions() {
-      return this.$store.getters['mes/productions'];
+      return this.$store.getters['mes/productions']
     }
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeProperties');
-      await this.$store.dispatch('mes/initializeProductions', { workerCode: this.properties.workerCode, fetchPolicy: "network-only" });
-      this.initializeProductions = true;
+      await this.$store.dispatch('mes/initializeProperties')
+      await this.$store.dispatch('mes/initializeProductions', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
+      this.initializeProductions = true
     }
   }
 }

@@ -8,31 +8,30 @@
         </v-btn>
 
         <span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
-        
+
     </v-card-text>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-production-card",
+  name: 'mes-production-card',
   props: {
     production: Object
   },
   data() {
     return {
-      borderColors : {
-        0: "border-left: 18px solid transparent;",
-        1: "border-left: 18px solid rgba(7, 109, 0, 0.81);",
-        2: "border-left: 18px solid rgba(255, 192, 0, 0.81);",
-        3: "border-left: 18px solid rgba(179, 2, 2, 0.81);"
+      borderColors: {
+        0: 'border-left: 18px solid transparent;',
+        1: 'border-left: 18px solid rgba(7, 109, 0, 0.81);',
+        2: 'border-left: 18px solid rgba(255, 192, 0, 0.81);',
+        3: 'border-left: 18px solid rgba(179, 2, 2, 0.81);'
       }
     }
   },
   methods: {
     deleteProduction() {
-      this.$emit('deleteProduction');
+      this.$emit('deleteProduction')
     }
   }
 }

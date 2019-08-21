@@ -6,18 +6,17 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-    props: {
-        installation: Object
-    },
-    name: "mes-installation-card",
-    methods: {
-        removeInstallation() {
-            this.$emit('removeInstallation');
-        }
+  props: {
+    installation: Object
+  },
+  name: 'mes-installation-card',
+  methods: {
+    removeInstallation() {
+      this.$emit('removeInstallation')
     }
+  }
 }
 </script>
 <style type="text/css" scoped>

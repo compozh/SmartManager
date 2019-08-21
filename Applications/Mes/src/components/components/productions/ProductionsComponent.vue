@@ -1,36 +1,35 @@
 <template>
     <v-flex class="mes-productions-content">
-        <v-card class="productions-card" v-for="production in productions" :key="production.factId">
+        <v-card class="productions-card" v-for="production in sortedProductions" :key="production.factId">
 
-            <mes-production-card 
+            <mes-production-card
                 :production=production
                 @deleteProduction=deleteProduction(production)
             />
-          
+
         </v-card>
     </v-flex>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-
+/* eslint-disable */
 export default {
-    name: "mes-productions-component",
-    computed: {
-        productions() {
-            return this.$store.getters['mes/productions'];
-        },
-        sortedProductions() {
-            return productions.sort((a,b) => {
-                return a.factId < b.factId ? 1 : (a.factId == b.factId ? 0 : -1);
-            });
-        }
+  name: 'mes-productions-component',
+  computed: {
+    productions() {
+      return this.$store.getters['mes/productions']
     },
-    methods: {
-        deleteProduction(production) {
-            this.$store.dispatch('mes/deleteProduction', production);
-        }
+    sortedProductions() {
+      return this.productions.sort((a,b) => {
+        return a.factId < b.factId ? 1 : (a.factId == b.factId ? 0 : -1)
+      })
     }
+  },
+  methods: {
+    deleteProduction(production) {
+      this.$store.dispatch('mes/deleteProduction', production)
+    }
+  }
 }
 </script>
 

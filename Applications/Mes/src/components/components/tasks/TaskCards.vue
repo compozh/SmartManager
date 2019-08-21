@@ -10,7 +10,7 @@
         <v-card ripple
           class="task-item"
           @click="changeCurrentTask(task)"
-          :style="task.inProgress ? 'border-left: 5px solid #326da8;' : 'border-left: 5px solid transparent;'"
+          :style="task.inProgress ? 'border-left: 5px solid #326da8;' : ''"
         >
           <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
@@ -23,31 +23,30 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-task-cards",
+  name: 'mes-task-cards',
   props: {
     selectedTask: Object,
     selectedTasksTab: Number
   },
   computed: {
     tasks() {
-      return this.$store.getters['mes/tasks'];
+      return this.$store.getters['mes/tasks']
     },
     sortedTasks() {
-      let tasks = this.tasks;
+      let tasks = this.tasks
       tasks.sort((a,b) => {
         return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
-                  1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1);
-      });
+          1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1)
+      })
 
-      return tasks;
+      return tasks
     }
   },
   methods: {
     changeCurrentTask(newTask) {
-      this.$emit('changeCurrentTask', newTask);
+      this.$emit('changeCurrentTask', newTask)
     },
 
   }
@@ -67,5 +66,6 @@ export default {
     margin: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    text-align: center;
   }
 </style>

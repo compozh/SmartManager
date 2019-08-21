@@ -39,33 +39,32 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  data(){
+  data() {
     return { qrScanerVisible: false, inputQrCode: '', disableQrInput: false }
   },
-  name: "mes-installations-toolbar",
+  name: 'mes-installations-toolbar',
   computed: {
     installations() {
-      return this.$store.getters['mes/installations'];
+      return this.$store.getters['mes/installations']
     }
   },
   methods: {
     onclickRemoveAllInstallations() {
-      this.$emit('removeAllInstallations');
+      this.$emit('removeAllInstallations')
     },
     submitQrCode(event) {
-      var qrCodeValue = event.target.value;
-      var me = this;
-      me.disableQrInput = true;
-      me.$emit('submitQrCode', { qrCodeValue, callback:  () => {
-        me.disableQrInput = false;
+      var qrCodeValue = event.target.value
+      var me = this
+      me.disableQrInput = true
+      me.$emit('submitQrCode', { qrCodeValue, callback: () => {
+        me.disableQrInput = false
         me.inputQrCode = ''
-      }});
+      }})
     },
     changeQrScanerVisible(state) {
-      this.qrScanerVisible = state;
+      this.qrScanerVisible = state
     }
   }
 }

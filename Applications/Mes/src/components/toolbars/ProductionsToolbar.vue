@@ -4,10 +4,9 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
-  name: "mes-production-toolbar"
+  name: 'mes-production-toolbar'
 }
 </script>
 

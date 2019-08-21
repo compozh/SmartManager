@@ -2,7 +2,7 @@
 <v-layout class="task-in-progress-layout-block">
   <mes-task-in-progress-layout-toolbar />
 
-     <v-layout class="mes-accept-task-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
+     <v-layout class="mes-accept-task-layout">
         <v-flex class="mes-accept-task-flex">
             <grid-layout
                 class="grid-layout"
@@ -40,35 +40,34 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import VueGridLayout from 'vue-grid-layout';
+import VueGridLayout from 'vue-grid-layout'
 
 export default {
-  name: "mes-task-in-progress-layout",
+  name: 'mes-task-in-progress-layout',
   components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
   computed: {
     blocks() {
       return [
-        {'x':0, 'y':0, 'w':12, 'h':3, 'i':'1', data: this.selectedTask.detailedDescription},
-        {'x':0, 'y':3, 'w':12, 'h':12, 'i':'0', ref: 'formio'}
-      ];
+        {'x': 0, 'y': 0, 'w': 12, 'h': 3, 'i': '1', data: this.selectedTask.detailedDescription},
+        {'x': 0, 'y': 3, 'w': 12, 'h': 12, 'i': '0', ref: 'formio'}
+      ]
     },
     dragResizeMode() {
-      return this.$store.getters['mes/dragResizeMode'];
+      return this.$store.getters['mes/dragResizeMode']
     },
     selectedTask() {
-      return this.$store.getters['mes/selectedTask'];
+      return this.$store.getters['mes/selectedTask']
     },
     workCenter() {
-      return this.$store.getters['mes/workCenter'];
+      return this.$store.getters['mes/workCenter']
     }
   },
   methods: {
     formioSubmit(data) {
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, data, task: this.selectedTask });
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, data, task: this.selectedTask })
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormioData();
+      return this.$refs.formioBuilder[0].getFormioData()
     }
   }
 }
@@ -117,6 +116,7 @@ export default {
     overflow-x: auto;
     height: inherit;
     padding: 0 15px;
+    text-align: center;
   }
   .grid-item-data::-webkit-scrollbar {
     background-color:#fff;

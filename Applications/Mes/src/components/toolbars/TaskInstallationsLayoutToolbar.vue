@@ -35,42 +35,41 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
   data() {
     return { qrScanerVisible: false, inputQrCode: '', disableQrInput: false }
   },
-  name: "mes-task-installations-layout-toolbar",
+  name: 'mes-task-installations-layout-toolbar',
   computed: {
     selectedTask() {
-      return this.$store.getters['mes/selectedTask'];
+      return this.$store.getters['mes/selectedTask']
     },
     installations() {
-      return this.$store.getters['mes/installations'];
+      return this.$store.getters['mes/installations']
     },
     workCenter() {
-      return this.$store.getters['mes/workCenter'];
+      return this.$store.getters['mes/workCenter']
     }
   },
   methods: {
     onclickRemoveAllInstallations() {
-      this.$emit('removeAllInstallations');
+      this.$emit('removeAllInstallations')
     },
     submitQrCode(event) {
-      var qrCodeValue = event.target.value;
-      var me = this;
-      me.disableQrInput = true;
-      me.$emit('submitQrCode', { qrCodeValue, callback:  () => {
-        me.disableQrInput = false;
+      var qrCodeValue = event.target.value
+      var me = this
+      me.disableQrInput = true
+      me.$emit('submitQrCode', { qrCodeValue, callback: () => {
+        me.disableQrInput = false
         me.inputQrCode = ''
-      }});
+      }})
     },
     backToMainLayout() {
-        this.$store.commit('mes/setCurrentLayout', 'main');
+      this.$store.commit('mes/setCurrentLayout', 'main')
     },
     changeQrScanerVisible(state) {
-        this.qrScanerVisible = state;
+      this.qrScanerVisible = state
     }
   }
 }

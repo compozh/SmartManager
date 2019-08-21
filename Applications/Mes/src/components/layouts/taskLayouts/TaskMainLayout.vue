@@ -2,7 +2,7 @@
 <v-layout class="task-main-layout-block">
   <mes-task-main-layout-toolbar />
 
-     <v-layout class="mes-task-main-layout" :style="!dragResizeMode ? 'margin-left: 5px;' : ''">
+     <v-layout class="mes-task-main-layout">
         <v-flex class="mes-task-main-flex">
             <grid-layout
                 class="main-layout"
@@ -34,20 +34,20 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import VueGridLayout from 'vue-grid-layout';
+import VueGridLayout from 'vue-grid-layout'
 
 export default {
-  name: "mes-task-main-layout",
+  name: 'mes-task-main-layout',
+  components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
   computed: {
     dragResizeMode() {
-      return this.$store.getters['mes/dragResizeMode'];
+      return this.$store.getters['mes/dragResizeMode']
     },
     selectedTask() {
-      return this.$store.getters['mes/selectedTask'];
+      return this.$store.getters['mes/selectedTask']
     },
     blocks() {
-      return [ {'x':0, 'y':0, 'w':12, 'h':3, 'i':'0', data: this.selectedTask.detailedDescription } ];
+      return [ {'x': 0, 'y': 0, 'w': 12, 'h': 3, 'i': '0', data: this.selectedTask.detailedDescription } ]
     }
   }
 }
@@ -99,6 +99,7 @@ export default {
     overflow-x: auto;
     height: inherit;
     padding: 0 15px;
+    text-align: center;
   }
   .grid-item-data::-webkit-scrollbar {
     background-color:#fff;

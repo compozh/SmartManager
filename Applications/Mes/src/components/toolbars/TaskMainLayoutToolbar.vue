@@ -1,5 +1,5 @@
 <template>
-    <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar" :style="!dragResizeMode ? 'margin-left: 11px;' : ''">
+    <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
         <v-flex
             class="toolbar-basebuttons"
         >
@@ -21,37 +21,43 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+// import {mapGetters} from 'vuex'
 
 export default {
-    name: "mes-task-main-layout-toolbar",
-    computed: {
-        selectedTask() {
-            return this.$store.getters['mes/selectedTask'];
-        },
-        workCenter() {
-            return this.$store.getters['mes/workCenter'];
-        },
-        dragResizeMode: {
-            get() {
-                return this.$store.getters['mes/dragResizeMode'];
-            },
-            set(value) {
-                this.$store.dispatch('mes/changeDragResizeMode');
-            }
-        }
+  name: 'mes-task-main-layout-toolbar',
+  computed: {
+    selectedTask() {
+      return this.$store.getters['mes/selectedTask']
     },
-    methods: {
-        onclickSetupMaterial() {
-            this.$store.commit('mes/setCurrentLayout', 'installations');
-        },
-        onclickRegisterProduction() {
-            this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask });
-        },
-        changeDragResizeMode () {
-            this.dragResizeMode = !this.dragResizeMode;
-        }
+    workCenter() {
+      return this.$store.getters['mes/workCenter']
+    },
+    dragResizeMode: {
+      get() {
+        return this.$store.getters['mes/dragResizeMode']
+      },
+      set() {
+        this.$store.dispatch('mes/changeDragResizeMode')
+      }
     }
+  },
+  methods: {
+    onclickSetupMaterial() {
+      this.$store.commit('mes/setCurrentLayout', 'installations')
+    },
+    onclickRegisterProduction() {
+      this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask })
+    },
+    changeDragResizeMode () {
+      this.dragResizeMode = !this.dragResizeMode
+      var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
+      if (!this.dragResizeMode) {
+        splitter.style.cssText = 'width:0'
+      } else {
+        splitter.style.cssText = 'width: 5px'
+      }
+    }
+  }
 }
 </script>
 
@@ -67,7 +73,7 @@ export default {
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    height: 60px;
+    height: 63px;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .status-task-btn {
