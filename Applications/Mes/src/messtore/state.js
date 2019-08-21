@@ -1,5 +1,5 @@
 export default {
-  linearLoader: true, // Linear progress component
+  linearLoader: false, // Linear progress component
   snackbar: {
     type: 'error', // error / success
     message: '',

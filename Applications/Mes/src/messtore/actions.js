@@ -39,7 +39,6 @@ export default {
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message)
     }
-    commit('setLinearLoader', false)
   },
   async initializeTasks({ commit }, { workCenterCode, fetchPolicy }) {
     commit('closeSnackbar')
