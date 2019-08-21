@@ -29,16 +29,16 @@
             </v-flex>
             <v-flex class="caption text-ellipsis">
               <span class="hidden-xs-only"
-              >Исполнитель: </span>{{ task.performer }}
+              >{{ $t('sm.tasks.performer') }}: </span>{{ task.performer }}
             </v-flex>
             <v-flex d-flex class="caption grey--text">
               <v-flex class="text-xs-left">
                 <span class="hidden-xs-only"
-                >Добавлено: </span>{{ task.dateAdd }}
+                >{{ $t('sm.tasks.addedDate') }}: </span>{{ task.dateAdd }}
               </v-flex>
               <v-flex class="text-xs-right">
                 <span class="hidden-xs-only"
-                >Идентификатор: </span>{{ task.id }}
+                >{{ $t('sm.tasks.id') }}: </span>{{ task.id }}
               </v-flex>
             </v-flex>
           </v-layout>

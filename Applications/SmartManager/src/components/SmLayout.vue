@@ -87,7 +87,7 @@ export default {
       if (this.taskAddForm) {
         return this.setMessage({
           type: 'warning',
-          text: 'Для перехода в меню закройте форму'
+          text: this.$t('sm.messages.closeForm')
         })
       }
       switch (this.menuMode) {
@@ -125,7 +125,7 @@ export default {
       const message = this.$store.state.sm.message
       return message.type ? message : {
         type: '',
-        text: 'Нет сообщений для отображения'
+        text: this.$t('sm.messages.noMessages')
       }
     },
     circularLoader() {

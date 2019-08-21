@@ -8,7 +8,7 @@
       <v-flex
         xs12
         class="text-xs-left description-headline blue-grey--text pa-1"
-      >ОПИСАНИЕ:</v-flex>
+      >{{ $t('sm.tasks.description').toUpperCase() }}:</v-flex>
 
       <v-flex
         xs12
@@ -36,7 +36,7 @@
           @click="showHiddenDesc = !showHiddenDesc"
           :class="{'btn-no-fab': !showHiddenDesc}"
         >
-          {{ showHiddenDesc ? '' : 'Показать больше' }}
+          {{ showHiddenDesc ? '' : $t('sm.buttons.viewMore') }}
           <v-icon v-if="!showHiddenDesc" size="18">keyboard_arrow_down</v-icon>
           <v-icon v-if="showHiddenDesc">keyboard_arrow_up</v-icon>
         </v-btn>
