@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters.getCurrentUser;
+      return this.$store.state.authentication.currentUser;
     },
     snackbar() {
       return this.$store.getters["mes/snackbar"];
