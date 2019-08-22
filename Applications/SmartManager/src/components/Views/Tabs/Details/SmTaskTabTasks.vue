@@ -8,7 +8,7 @@
         xs12 mr-2
         v-if=parentTasks.length
         class="sub-task-headline blue-grey--text pa-1 ml-5"
-      >СВЯЗАННЫЕ ЗАДАЧИ:</v-flex>
+      >{{ $t('sm.tasks.related').toUpperCase() }}:</v-flex>
       <v-flex
         xs12 ml-5 mr-2
         class="task-container"
@@ -21,7 +21,7 @@
         xs12 mr-2
         v-if=subTasks.length
         class="sub-task-headline blue-grey--text pa-1 ml-5"
-      >ПОДЧИНЕННЫЕ ЗАДАЧИ:</v-flex>
+      >{{ $t('sm.tasks.subTasks').toUpperCase() }}:</v-flex>
       <v-flex
         xs12 ml-5 mr-2
         class="task-container"

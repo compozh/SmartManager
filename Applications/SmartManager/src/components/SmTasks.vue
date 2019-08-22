@@ -14,7 +14,7 @@
           :task="task"
         ></sm-task-list-item>
       </v-flex>
-      <sm-empty-state v-if="!checkTasks">Нет задач в папке</sm-empty-state>
+      <sm-empty-state v-if="!checkTasks">{{ $t('sm.tasks.noTasks') }}</sm-empty-state>
       <v-flex>
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -31,7 +31,7 @@
               <v-icon>add</v-icon>
             </v-btn>
           </template>
-          <span>Добавить задачу</span>
+          <span>{{ $t('sm.buttons.addTask') }}</span>
         </v-tooltip>
       </v-flex>
     </v-layout>

@@ -2,7 +2,7 @@
   <v-container pa-0>
     <v-layout row wrap >
       <v-flex xs12>
-        <p class="pt-3 grey--text subheading" >История отсутствует</p>
+        <p class="pt-3 grey--text subheading">{{ $t('sm.messages.noApprovals') }}</p>
       </v-flex>
     </v-layout>
     <v-divider></v-divider>

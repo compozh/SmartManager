@@ -7,21 +7,21 @@
             <v-flex class="text-xs-left hidden-md-and-up">
               <h2
                 class="blue--text text--darken-2 font-weight-thin"
-              >Новая задача
+              >{{ $t('sm.tasks.newTask') }}
               </h2>
             </v-flex>
             <v-flex xs12>
               <v-text-field
                 v-model="newTask.title"
                 :disabled="uploading"
-                label="Название задачи..."
+                :label="$t('sm.tasks.taskName')"
                 :rules="required"
                 clearable
               ></v-text-field>
             </v-flex>
             <v-flex xs12>
               <sm-task-add-form-select
-                label="Ответственный"
+                :label="$t('sm.tasks.performer')"
                 :value="newTask.performerId"
                 @input="newTask.performerId = $event"
                 :rules="required"
@@ -31,7 +31,7 @@
             <v-flex xs12>
               <h3
                 class="grey--text text--darken-1 font-weight-light text-xs-left"
-              >Выполнить до:
+              >{{ $t('sm.tasks.deadline') }}:
               </h3>
             </v-flex>
             <v-flex xs6>
@@ -51,7 +51,7 @@
                   <v-text-field
                     :value="dateFormatted"
                     :disabled="uploading"
-                    label="Дата"
+                    :label="$t('sm.pickers.date')"
                     prepend-icon="event"
                     v-on="on"
                     :rules="dateRules"
@@ -60,7 +60,7 @@
                 <v-date-picker
                   v-model="newTask.planDate"
                   :first-day-of-week="1"
-                  locale="ru"
+                  :locale="$t('sm.pickers.locale')"
                   :min="minDate"
                   header-color="blue darken-2"
                   scrollable
@@ -70,13 +70,13 @@
                     flat
                     color="primary"
                     @click="datePicker = false"
-                  >Отмена
+                  >{{ $t('sm.buttons.cancel') }}
                   </v-btn>
                   <v-btn
                     flat
                     color="primary"
                     @click="$refs.datePicker.save(newTask.planDate)"
-                  >Выбрать
+                  >{{ $t('sm.buttons.ok') }}
                   </v-btn>
                 </v-date-picker>
               </v-menu>
@@ -98,7 +98,7 @@
                   <v-text-field
                     v-model="newTask.planTime"
                     :disabled="uploading"
-                    label="Время"
+                    :label="$t('sm.pickers.time')"
                     prepend-icon="access_time"
                     v-on="on"
                     :rules="timeRules"
@@ -107,7 +107,7 @@
                 <v-time-picker
                   v-if="timePicker"
                   v-model="newTask.planTime"
-                  format="24hr"
+                  :format="$t('sm.pickers.timeFormat')"
                   full-width
                   header-color="blue darken-2"
                   scrollable
@@ -117,20 +117,20 @@
                     flat
                     color="primary"
                     @click="timePicker = false"
-                  >Отмена
+                  >{{ $t('sm.buttons.cancel') }}
                   </v-btn>
                   <v-btn
                     flat
                     color="primary"
                     @click="$refs.timePicker.save(newTask.planTime)"
-                  >Выбрать
+                  >{{ $t('sm.buttons.ok') }}
                   </v-btn>
                 </v-time-picker>
               </v-menu>
             </v-flex>
             <v-flex xs12>
               <v-textarea
-                label="Описание задачи..."
+                :label="$t('sm.tasks.description') + '...'"
                 v-model="newTask.description"
                 :disabled="uploading"
                 rows="1"
@@ -140,7 +140,7 @@
             </v-flex>
             <v-flex xs12>
               <sm-task-add-form-select
-                label="Соисполнители"
+                :label="$t('sm.roles.coExecutors')"
                 :value="newTask.coexecutors"
                 @input="newTask.coexecutors = $event"
                 :uploading="uploading"
@@ -149,7 +149,7 @@
             </v-flex>
             <v-flex xs12>
               <sm-task-add-form-select
-                label="Уведомить"
+                :label="$t('sm.roles.notify')"
                 :value="newTask.notify"
                 @input="newTask.notify = $event"
                 :uploading="uploading"
@@ -167,13 +167,13 @@
                 </v-flex>
                 <v-flex xs12 class="button-container">
                   <v-spacer></v-spacer>
-                  <v-btn @click="closeTaskAddForm">Отмена</v-btn>
+                  <v-btn @click="closeTaskAddForm">{{ $t('sm.buttons.cancel') }}</v-btn>
                   <v-btn
                     class="mr-0"
                     :disabled="!valid || uploading"
                     color="blue darken-2 white--text"
                     @click="upload"
-                  >Создать
+                  >{{ $t('sm.buttons.create') }}
                   </v-btn>
                 </v-flex>
               </v-layout>
@@ -193,35 +193,37 @@ export default {
   props: {
     parent: Number
   },
-  data: () => ({
-    uploading: false,
-    newTask: {
-      title: '',
-      performerId: '',
-      planDate: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
-      planTime: '12:00',
-      description: '',
-      coexecutors: [],
-      notify: [],
-      attachments: []
-    },
-    datePicker: false,
-    timePicker: false,
-    minDate: moment(new Date()).format('YYYY-MM-DD'),
-    valid: false,
-    required: [
-      v => !!v || 'Поле обязательно для заполнения'
-    ],
-    dateRules: [
-      v => !!v || 'Необходимо указать дату дату в формате ДД.ММ.ГГГГ',
-      v => moment(v, 'DD.MM.YYYY', true).isValid() || 'Введите дату в формате ДД.ММ.ГГГГ',
-      v => moment(v, 'DD.MM.YYYY', true).add(1, 'days').isSameOrAfter() || 'Прошедшая дата',
-    ],
-    timeRules: [
-      v => !!v || 'Необходимо указать время в формате HH:mm',
-      v => moment(v, 'HH:mm', true).isValid() || 'Введите время в формате ЧЧ:ММ',
-    ]
-  }),
+  data() {
+    return {
+      uploading: false,
+      newTask: {
+        title: '',
+        performerId: '',
+        planDate: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
+        planTime: '12:00',
+        description: '',
+        coexecutors: [],
+        notify: [],
+        attachments: []
+      },
+      datePicker: false,
+      timePicker: false,
+      minDate: moment(new Date()).format('YYYY-MM-DD'),
+      valid: false,
+      required: [
+        v => !!v || this.$t('sm.validate.required'),
+      ],
+      dateRules: [
+        v => !!v || this.$t('sm.validate.needDate'),
+        v => moment(v, 'DD.MM.YYYY', true).isValid() || this.$t('sm.validate.dateFormat'),
+        v => moment(v, 'DD.MM.YYYY', true).add(1, 'days').isSameOrAfter() || this.$t('sm.validate.pastDate'),
+      ],
+      timeRules: [
+        v => !!v || this.$t('sm.validate.needTime'),
+        v => moment(v, 'HH:mm', true).isValid() || this.$t('sm.validate.timeFormat'),
+      ]
+    }
+  },
   created() {
     this.getUsers()
     this.setMenuMode('close')

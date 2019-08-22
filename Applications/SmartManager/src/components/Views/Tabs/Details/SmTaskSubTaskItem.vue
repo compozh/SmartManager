@@ -29,7 +29,7 @@
               </v-flex>
               <v-flex class="green--text text--darken-2 text-xs-right">
                 <span class="hidden-xs-only"
-                >Дата завершения: </span>{{ subTask.dateplan }}
+                >{{ $t('sm.tasks.deadline') }}: </span>{{ subTask.dateplan }}
               </v-flex>
             </v-flex>
           </v-layout>

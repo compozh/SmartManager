@@ -16,14 +16,14 @@ export default {
 
       if (myControl) {
         options.push({
-          title: 'На контроле',
+          title: this.$t('sm.icons.control'),
           color: 'red darken-4',
           icon: 'remove_red_eye'
         })
       }
       if (needApprov) {
         options.push({
-          title: 'Требует утверждения',
+          title: this.$t('sm.icons.approve'),
           color: 'blue-grey darken-2',
           icon: 'check_circle_outline'
         })
@@ -32,14 +32,14 @@ export default {
         switch (priority) {
         case 1:
           options.push({
-            title: 'Высокий приоритет',
+            title: this.$t('sm.icons.priority'),
             color: 'green darken-2',
             icon: 'error_outline'
           })
           break
         case -1:
           options.push({
-            title: 'Не срочно',
+            title: this.$t('sm.icons.notRush'),
             color: 'grey darken-2',
             icon: 'low_priority'
           })
@@ -85,25 +85,25 @@ export default {
       switch (role) {
       case '':
         return {
-          title: 'Ответственный',
+          title: this.$t('sm.roles.responsible'),
           color: 'blue darken-2',
           icon: 'account_circle'
         }
       case 'COEXECUTOR':
         return {
-          title: 'Соисполнители',
+          title: this.$t('sm.roles.coExecutors'),
           color: 'blue darken-2',
           icon: 'supervised_user_circle'
         }
       case 'OBSERVER':
         return {
-          title: 'Уведомить',
+          title: this.$t('sm.roles.notify'),
           color: 'orange darken-4',
           icon: 'error_outline'
         }
       case 'addedFio':
         return {
-          title: 'Задача от',
+          title: this.$t('sm.roles.taskFrom'),
           color: 'blue-grey darken-4',
           icon: 'loupe'
         }

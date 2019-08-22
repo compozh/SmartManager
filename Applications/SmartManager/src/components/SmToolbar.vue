@@ -16,7 +16,7 @@
       >
         <h2
           class="blue--text text--darken-2 font-weight-thin"
-        >Новая задача
+        >{{ $t('sm.tasks.newTask') }}
         </h2>
       </v-flex>
       <v-flex v-if="showSearch">
@@ -24,23 +24,27 @@
           flat
           solo
           clearable
-          label="Поиск"
+          :label="$t('sm.search')"
           prepend-inner-icon="search"
           v-model.trim="search"
         ></v-text-field>
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex shrink class="icon-container">
+        <language-menu></language-menu>
+      </v-flex>
+      <v-flex shrink class="icon-container">
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-layout>
   </v-container>
-
 </template>
 
 <script>
+import LanguageMenu from './Language/LanguageMenu'
 export default {
   name: 'sm-toolbar',
+  components: {LanguageMenu},
   computed: {
     showSearch() {
       return this.$route.params.hasOwnProperty('foldercode')
