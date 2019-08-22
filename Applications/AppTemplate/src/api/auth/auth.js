@@ -41,7 +41,7 @@ export default  class Authentication {
         this._setCurrentUser(response)
 
         await this._setCurrentUserInfo()
-        return response
+        return this.getCurrentUser()
       }
       // если токен не пришел
       throw new Error(`Ошибка входа. \r\b ${response}`)
@@ -67,7 +67,7 @@ export default  class Authentication {
       if (token) {
         this._setCurrentUser(response)
         this._setCurrentUserInfo()
-        return response
+        return this.getCurrentUser()
       }
       // если токен не пришел
       throw new Error(`Ошибка входа. \r\b ${response}`)

@@ -59,12 +59,14 @@
 
       <!-- I18N -->
       <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-        <span class="cursor-pointer flex i18n-locale"><img class="h-4 w-5" :src="require(`@/assets/images/flags/${$i18n.locale}.png`)" :alt="$i18n.locale" /><span class="hidden sm:block ml-2">{{ getCurrentLocaleData.lang }}</span></span>
+        <span class="cursor-pointer flex i18n-locale">
+            <flag class="h-4 w-5" size='small' :iso="getCurrentLocaleData.flag" />
+
+          <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
+        </span>
         <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-          <vs-dropdown-item @click="updateLocale('en')"><img class="h-4 w-5 mr-1" src="@/assets/images/flags/en.png" alt="en" /> &nbsp;English</vs-dropdown-item>
-          <vs-dropdown-item @click="updateLocale('fr')"><img class="h-4 w-5 mr-1" src="@/assets/images/flags/fr.png" alt="fr" /> &nbsp;French</vs-dropdown-item>
-          <vs-dropdown-item @click="updateLocale('de')"><img class="h-4 w-5 mr-1" src="@/assets/images/flags/de.png" alt="de" /> &nbsp;German</vs-dropdown-item>
-          <vs-dropdown-item @click="updateLocale('pt')"><img class="h-4 w-5 mr-1" src="@/assets/images/flags/pt.png" alt="pt" /> &nbsp;Portuguese</vs-dropdown-item>
+
+          <vs-dropdown-item v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
         </vs-dropdown-menu>
       </vs-dropdown>
 
@@ -221,6 +223,13 @@ import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import draggable from 'vuedraggable'
 
+const localizations = [
+  { code: 'uk', name: 'Український',  flag: 'ua' },
+  { code: 'ru', name: 'Русский',  flag: 'ru' },
+  { code: 'en', name: 'English',  flag: 'us' },
+
+]
+
 export default {
   name: 'the-navbar',
   props: {
@@ -229,8 +238,10 @@ export default {
       default: '#fff',
     },
   },
+
   data() {
     return {
+      localizations,
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
       showFullSearch: false,
@@ -278,16 +289,7 @@ export default {
     // I18N
     getCurrentLocaleData() {
       const locale = this.$i18n.locale
-      if (locale == 'en') {
-        return { flag: 'us', lang: 'English' }
-      } else if (locale == 'pt') {
-        return { flag: 'br', lang: 'Portuguese' }
-      } else if (locale == 'fr') {
-        return { flag: 'fr', lang: 'French' }
-      } else if (locale == 'de') {
-        return { flag: 'de', lang: 'German' }
-      }
-      return ''
+      return this.localizations.find(r => r.code == locale)
     },
 
     // BOOKMARK & SEARCH
@@ -321,10 +323,10 @@ export default {
 
     // PROFILE
     user_displayName() {
-      return JSON.parse(localStorage.getItem('userInfo')).displayName
+      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
     },
     activeUserImg() {
-      return JSON.parse(localStorage.getItem('userInfo')).photoURL || this.$store.state.AppActiveUser.img
+      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
     }
   },
   methods: {

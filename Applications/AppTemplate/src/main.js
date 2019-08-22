@@ -24,6 +24,10 @@ Vue.use(Vuesax)
 
 import Vuex from 'vuex'
 
+// Flag icons
+import FlagIcon from 'vue-flag-icon'
+Vue.use(FlagIcon)
+
 // axios
 import axios from 'axios'
 Vue.prototype.$http = axios

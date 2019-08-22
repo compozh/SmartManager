@@ -38,7 +38,7 @@ export default {
     // Try to sigin
     auth.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
       .then((result) => {
-
+        debugger
         // Close animation if passed as payload
         if (payload.closeAnimation) { payload.closeAnimation() }
         commit('UPDATE_AUTHENTICATED_USER', result)
