@@ -1,3 +1,4 @@
+import cookies from 'vue-cookies'
 export default class Localization {
 
   __i18n = undefined
@@ -76,6 +77,7 @@ export default class Localization {
 
   SetLanguage(lang) {
     this.__i18n.locale = lang
+    cookies.set('c', lang)
     localStorage.setItem('language', lang)
     document.querySelector('html').setAttribute('lang', lang)
     return lang

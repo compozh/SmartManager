@@ -69,7 +69,7 @@ export default {
     },
     //Установка локализации
     Setlocalization() {
-      this.$localization.Setlocalization(this.internalCurrentLanguage)
+      this.$localization.SetLocalization(this.internalCurrentLanguage)
     }
   }
 }
