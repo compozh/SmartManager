@@ -107,7 +107,7 @@ export default {
       linearLoader: true
     })
   },
-  async cancelBeginRegistration(task) {
+  async cancelBeginRegistration({ commit }, task) {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () =>  await api.cancelBeginRegistrationGql(task.shiftTaskId),
       successAction: async () => { task.inProgress = false },
