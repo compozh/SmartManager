@@ -60,13 +60,11 @@
       <!-- I18N -->
       <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
         <span class="cursor-pointer flex i18n-locale">
-            <flag class="h-4 w-5" size='small' :iso="getCurrentLocaleData.flag" />
-
+          <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag" />
           <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
         </span>
         <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-
-          <vs-dropdown-item v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
+          <vs-dropdown-item :key="lang.code" v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :squared="false" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
         </vs-dropdown-menu>
       </vs-dropdown>
 
@@ -331,7 +329,7 @@ export default {
   },
   methods: {
     updateLocale(locale) {
-      this.$i18n.locale = locale
+      this.$localization.SetLocalization(locale)
     },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
@@ -385,13 +383,8 @@ export default {
       return 'Just Now'
     },
     logout() {
-      // if user is logged in via auth0
-      if (this.$auth.profile) { this.$auth.logOut() }
+      this.$store.dispatch('auth/logout')
 
-
-      // Change role on logout. Same value as initialRole of acj.js
-      this.$acl.change('admin')
-      localStorage.removeItem('userRole')
     },
     outside: function() {
       this.showBookmarkPagesDropdown = false

@@ -13,6 +13,8 @@ export default class Localization {
       throw new Error('i18n должен быть передан в виде зависимости!')
     }
 
+    this.__i18n.locale = localStorage.getItem('language') ? localStorage.getItem('language') : 'ru', //дефолтный
+
     this.__loadedLanguages[(this.__i18n.fallbackLocale || this.__i18n.locale)] = true
 
   }
@@ -37,7 +39,7 @@ export default class Localization {
 
   }
 
-  Setlocalization(lang){
+  SetLocalization(lang){
     if (this.__i18n.locale == lang) {
       return Promise.resolve(lang)
 
@@ -65,7 +67,6 @@ export default class Localization {
         summaryMessages[v.namespace] = v.messages
       })
 
-      console.log(summaryMessages)
       this.__i18n.setLocaleMessage(lang, summaryMessages)
       this.__loadedLanguages[lang] = true
       return this.SetLanguage(lang)
@@ -75,6 +76,7 @@ export default class Localization {
 
   SetLanguage(lang) {
     this.__i18n.locale = lang
+    localStorage.setItem('language', lang)
     document.querySelector('html').setAttribute('lang', lang)
     return lang
   }

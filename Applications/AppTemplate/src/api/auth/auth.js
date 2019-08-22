@@ -83,7 +83,7 @@ export default  class Authentication {
    */
   static async logOff() {
     try {
-      if (!this.getCurrentUser()) {
+      if (this.getCurrentUser()) {
 
         await axios.post(`${window.appConfig.GrapgQlUrl}api/authentication/logout`, undefined, {
           withCredentials: true
