@@ -2,7 +2,7 @@
   <v-flex xs12 class="empty-state-block">
     <empty-state-img class="empty-state-image"></empty-state-img>
     <span class="title grey--text font-weight-thin pa-2">
-      <slot>Нет данных для отображения</slot>
+      <slot>{{ $t('sm.messages.noData') }}</slot>
     </span>
   </v-flex>
 </template>

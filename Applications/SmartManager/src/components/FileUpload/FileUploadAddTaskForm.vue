@@ -63,7 +63,7 @@
             v-if="!loading"
             class="upload-btn grey--text text--darken-1 subheading font-weight-light">
             <v-icon size="30">attach_file</v-icon>
-            <span class="hidden-xs-only">Добавить вложение</span>
+            <span class="hidden-xs-only">{{ $t('sm.buttons.addAttachment') }}</span>
           </span>
         </file-upload>
       </v-flex>
@@ -94,14 +94,16 @@ export default {
     minSize: 512000,
     maxActive: 1,
     maxRetries: 10,
-    headers: {'Upload-Type': 'single'},
-    tableHeaders: [
-      {text: 'Название файла', value: 'name'},
-      {text: 'Размер', value: 'size', align: 'center'},
-      {text: 'Загружено', value: 'upload', align: 'center'}
-    ]
+    headers: {'Upload-Type': 'single'}
   }),
   computed: {
+    tableHeaders() {
+      return [
+        {text: this.$t('sm.table.name'), value: 'name'},
+        {text: this.$t('sm.table.size'), value: 'size', align: 'center'},
+        {text: this.$t('sm.table.uploaded'), value: 'upload', align: 'center'}
+      ]
+    },
     active() {
       return this.$refs.upload ? this.$refs.upload.active : ''
     }

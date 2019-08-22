@@ -57,8 +57,6 @@ export default {
   name: 'sm-folders',
   computed: {
     folders() {
-
-
       return this.$store.state.sm.folders
     },
     taskAddForm() {
@@ -73,20 +71,20 @@ export default {
       this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
     },
     isMainFolder(folder) {
-      return folder.name === 'Все'
+      return folder.code === ''
     },
     isFilter(folder) {
       return folder.code.includes('filter')
     },
     setMainFolderName(folder) {
-      return this.isMainFolder(folder) ? 'Активные' : folder.name
+      return this.isMainFolder(folder) ? this.$t('sm.folders.main') : folder.name
     },
     setFolderIcon(folder) {
-      switch (folder.name) {
-      case 'Все': return 'folder'
-      case 'Выполненные': return 'done_outline'
-      case 'От меня': return 'face'
-      case 'Избранные': return 'star'
+      switch (folder.code) {
+      case '': return 'folder'
+      case 'filter_done': return 'done_outline'
+      case 'filter_from_me': return 'face'
+      case 'filter_favorite': return 'star'
       default: return 'folder_open'
       }
     },
@@ -110,10 +108,6 @@ export default {
 
   .menu-item.main-folder {
     order: -1;
-  }
-
-  .menu-item.filter {
-
   }
 
   .menu-item a {
@@ -193,5 +187,4 @@ export default {
       padding-left: 16px !important;
     }
   }
-
 </style>

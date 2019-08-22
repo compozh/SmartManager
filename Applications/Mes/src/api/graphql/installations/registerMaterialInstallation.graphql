@@ -1,0 +1,10 @@
+mutation($workCenterCode:String!, $batchBarcode:String!, $factId:Int!){
+  mesMutation{
+    registerMaterialInstallation(workCenterCode: $workCenterCode, batchBarcode: $batchBarcode, factId: $factId) {
+		  success
+      errorMessage
+      successMessage
+      errorCode
+    }
+  }
+}

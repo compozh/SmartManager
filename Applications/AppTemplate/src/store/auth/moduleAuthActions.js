@@ -12,6 +12,21 @@ import router from '@/router'
 import Vue from 'vue'
 export default {
 
+
+  logout({commit, state}) {
+    // If user is already logged in notify and exit
+    if (!state.isUserLoggedIn()) {
+      // Close animation if passed as payload
+      return
+    }
+
+    auth.logOff().then(() => {
+      commit('UPDATE_AUTHENTICATED_USER', undefined)
+      router.push('/login')
+    })
+
+  },
+
   login({ commit, state }, payload) {
 
     // If user is already logged in notify and exit
@@ -38,7 +53,6 @@ export default {
     // Try to sigin
     auth.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
       .then((result) => {
-        debugger
         // Close animation if passed as payload
         if (payload.closeAnimation) { payload.closeAnimation() }
         commit('UPDATE_AUTHENTICATED_USER', result)

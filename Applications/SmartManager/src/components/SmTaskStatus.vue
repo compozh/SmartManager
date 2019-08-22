@@ -40,25 +40,25 @@ export default {
         return {
           color: 'blue-grey darken-1',
           icon: 'loop',
-          text: 'в работе'
+          text: this.$t('sm.statuses.inWork')
         }
       case '*':
         return {
           color: 'blue-grey darken-1',
           icon: 'loop',
-          text: 'в работе'
+          text: this.$t('sm.statuses.inWork')
         }
       case '-':
         return {
           color: 'red darken-2',
           icon: 'highlight_off',
-          text: 'отклонена'
+          text: this.$t('sm.statuses.rejected')
         }
       case '+':
         return {
           color: 'green darken-2',
           icon: 'check_circle_outline',
-          text: 'выполнена'
+          text: this.$t('sm.statuses.completed')
         }
       default:
         return {

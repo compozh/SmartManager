@@ -13,7 +13,10 @@
       <v-flex xs12 class="file-title">
         <span
           class="headline grey--text text--lighten-2"
-        >ФАЙЛЫ <b>{{ ext }}</b> НЕ ПОДДЕРЖИВАЮТСЯ
+        >
+          <i18n path="sm.messages.noSupport">
+            <b place="ext">{{ ext }}</b>
+          </i18n>
         </span>
       </v-flex>
     </v-layout>

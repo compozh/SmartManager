@@ -16,6 +16,7 @@ import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
+import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 
 var client = null;
 const getClient = () => {
@@ -63,13 +64,27 @@ export class MesApi {
     }
   }
 
-  async getWorkCentersFromGql(uuid, login) {
+  async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${fixWorkCenterForWorker}`,
+        variables: { workCenterCode, workerCode }
+      });
+
+      return result.data.mesMutation.fixWorkCenterForWorker;
+    } catch (error) {
+      return console.log(error.message);
+    }
+  }
+
+  async getWorkCentersFromGql(uuid, login, fetchPolicy) {
     try {
       const result = await getClient().query({
         query: gql` query ($uuid: String, $login: String) ${workCenters}`,
-        variables: { uuid, login }
+        variables: { uuid, login },
+        fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.workCenters;
     }
     catch (error) {
       return console.log(error.message);
@@ -83,7 +98,7 @@ export class MesApi {
         variables: { workCenter },
         fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.tasks;
     }
     catch (error) {
       return console.log(error.message);
@@ -97,7 +112,7 @@ export class MesApi {
         variables: { workCenter },
         fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.installations.installations;
     }
     catch (error) {
       return console.log(error.message);
@@ -134,7 +149,7 @@ export class MesApi {
         mutation: gql`${registerProduction}`,
         variables: { productionRegistrationParam }
       });
-      
+
       return result.data.mesMutation.registerProduction;
     } catch (error) {
       return console.log(error.message);
@@ -158,7 +173,7 @@ export class MesApi {
         variables: { workerCode },
         fetchPolicy: fetchPolicy || 'cache-first'
       });
-      return result;
+      return result.data.mes.usersProductionEvents;
     }
     catch (error) {
       return console.log(error.message);
@@ -198,5 +213,18 @@ export class MesApi {
     } catch (error) {
       return console.log(error.message);
     }
+  }
+  generateUUID() { // Public Domain/MIT
+    var d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+        d += performance.now(); //use high-precision timer if available
+    }
+    var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+
+    return newGuid;
   }
 }

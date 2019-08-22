@@ -1,0 +1,64 @@
+<template>
+    <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
+
+        <span v-html="production.description"></span>
+        <v-btn icon outlined color="error" flat class="mes-delete-production" @click="deleteProduction"  :loading="delateInProgress">
+          <v-icon dark>delete_forever</v-icon>
+        </v-btn>
+
+        <span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
+
+    </v-card-text>
+</template>
+
+<script>
+
+export default {
+  name: 'mes-production-card',
+  props: {
+    production: Object
+  },
+  data() {
+    return {
+      borderColors: {
+        0: 'border-left: 18px solid transparent;',
+        1: 'border-left: 18px solid rgba(7, 109, 0, 0.81);',
+        2: 'border-left: 18px solid rgba(255, 192, 0, 0.81);',
+        3: 'border-left: 18px solid rgba(179, 2, 2, 0.81);'
+      },
+      delateInProgress: false
+    }
+  },
+  methods: {
+    deleteProduction() {
+      this.delateInProgress = true
+      this.$emit('deleteProduction', {production: this.production, callback: () => {
+        this.delateInProgress = false
+      }})
+    }
+  }
+}
+</script>
+
+<style type="text/css" scoped>
+  .mes-delete-production {
+    min-width: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .mes-delete-production.error--text {
+    color: rgba(179, 2, 2, 0.81) !important;
+  }
+  .mes-production-card {
+    height: 100%;
+    display: flex;
+    align-items: start;
+    border-left: 18px solid rgba(179, 2, 2, 0.81);
+    flex-direction: column;
+    justify-content: center;
+  }
+  .mes-production-card span {
+    text-align: start;
+  }
+</style>

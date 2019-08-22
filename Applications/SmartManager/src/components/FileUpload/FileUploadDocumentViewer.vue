@@ -22,7 +22,7 @@
       @input-filter="inputFilter"
     >
       <v-icon size="50">note_add</v-icon>
-      <span>Добавить</span>
+      <span>{{ $t('sm.buttons.add') }}</span>
     </file-upload>
     <v-dialog
       v-model="dialog"
@@ -58,7 +58,7 @@
             class="remove-btn"
             v-if="$refs.upload && !$refs.upload.uploaded && !loading"
           >
-            <v-btn icon small @click="remove(props.item.id)">
+            <v-btn icon small @click.prevent="remove(props.item.id)">
               <v-icon size="20" class="grey--text text--darken-1">close</v-icon>
             </v-btn>
           </td>
@@ -101,7 +101,7 @@
             @click="upload"
           >
             <v-icon mr-2 size="20" dark>cloud_upload</v-icon>
-            <span class="caption pl-2">Загрузить</span>
+            <span class="caption pl-2">{{ $t('sm.buttons.upload') }}</span>
           </v-btn>
           <v-btn
             v-if="$refs.upload && !$refs.upload.uploaded"
@@ -110,7 +110,7 @@
             small depressed
             @click="dialog = false"
           >
-            <span class="caption">Отменить</span>
+            <span class="caption">{{ $t('sm.buttons.cancel') }}</span>
           </v-btn>
         </v-flex>
       </v-layout>
@@ -142,11 +142,6 @@ export default {
     maxActive: 1,
     maxRetries: 10,
     headers: {'Upload-Type': 'single'},
-    tableHeaders: [
-      {text: 'Название файла', value: 'name'},
-      {text: 'Размер', value: 'size', align: 'center'},
-      {text: 'Загружено', value: 'upload', align: 'center'}
-    ]
   }),
   watch: {
     dialog(newValue) {
@@ -161,6 +156,13 @@ export default {
     }
   },
   computed: {
+    tableHeaders() {
+      return [
+        {text: this.$t('sm.table.name'), value: 'name'},
+        {text: this.$t('sm.table.size'), value: 'size', align: 'center'},
+        {text: this.$t('sm.table.uploaded'), value: 'upload', align: 'center'}
+      ]
+    },
     task() {
       return this.$store.state.sm.taskInfo
     }
