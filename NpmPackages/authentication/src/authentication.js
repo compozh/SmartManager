@@ -31,8 +31,7 @@ export default class Authentication {
    * @param {} modulesManager менеджер модулей
    * @param {} dependencies Зависимости
    */
-  constructor(vue, dependencies) {
-    this.__vue = vue
+  constructor(vue, dependencies, options) {
 
     if (!dependencies) {
       throw Error('Зависимости должны быть переданы!')
@@ -43,20 +42,13 @@ export default class Authentication {
       throw Error('axios должен быть передан через зависимости!')
     }
 
+    this.__config = options
 
-    if (!this.__vue.prototype.$graphQlCore) {
-      throw Error('Плагин GraphQlCore должен быть использован до испоьлзования даннго планина!')
-    }
-
+    this.__store = dependencies.store
 
     // Конфигурируем axios
     this.setUpAxios()
-
-  }
-
-  /** Провайдер аутентификации */
-  get __provider () {
-    return this.__vue.prototype.$graphQlCore
+    this.setCurrentUser()
   }
 
   get __axios() {
@@ -98,15 +90,22 @@ export default class Authentication {
 
     try {
       // Логинемся
-      const response = await this.__provider.LogIn(login, password, rememberMe)
+      let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/login`, {
+        login: login,
+        password: password,
+        RememberMe: rememberMe
+      }, {
+        withCredentials: true
+      })
+
+      response = response.data
 
       var token = response.access_token
       // сохранение токена
       if (token) {
         currentUser.set(response)
-        let userData = await this.__provider.GetCurrentUser()
-        response.UserData = userData
-        currentUser.set(response)
+
+        this.setCurrentUser()
         return response
       }
       // если токен не пришел
@@ -115,24 +114,24 @@ export default class Authentication {
       throw new Error(`Ошибка входа. \r\n ${res}`)
     }
   }
-  
+
   /**
    * Логин по QR коду
    * @param {string} id Логин
    */
   async loginByQr(id) {
     try {
-      // Получаем провайдер
-      const response = await this.__provider.LoginByQr(id)
 
+      let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/alternativelogin`, {code: id, type: 2}, {
+        withCredentials: true
+      })
+      response = response.data
       var token = response.access_token
       // сохранение токена
 
       if (token) {
         currentUser.set(response)
-        let userData = await this.__provider.GetCurrentUser()
-        response.UserData = userData
-        currentUser.set(response)
+        this.setCurrentUser()
         return response
       }
       // если токен не пришел
@@ -145,9 +144,18 @@ export default class Authentication {
 
   async setCurrentUser() {
     var user = this.currentUser
-    let userData = await this.__provider.GetCurrentUser()
+    if (!user) {
+      return
+    }
+    let userData = await this.getCurrentUser()
     user.UserData = userData
     currentUser.set(user)
+    this.__store.dispatch('authentication/setCurrentUser', user)
+  }
+
+  async getCurrentUser() {
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`, undefined, { withCredentials: true})
+    return response.data
   }
 
   /**
@@ -157,7 +165,9 @@ export default class Authentication {
     try {
       if (!this.currentUser) {
 
-        await this.__provider.LogOff()
+        await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/logout`, undefined, {
+          withCredentials: true
+        })
         currentUser.reset()
       }
     } catch (res) {
@@ -167,7 +177,13 @@ export default class Authentication {
 
 
   async applyDelegatedRights(userId) {
-    let result = await this.__provider.ApplyDelegatedRights(userId)
+    let result =  await  this.__axios({
+      method: 'POST',
+      url: `${ this.__config.GrapgQlUrl }api/authentication/delegated`,
+      withCredentials: true,
+      data: userId
+    })
+
     if (!result.data) {
       throw new Error('Ошибка смены делегированных прав!')
     }
@@ -175,8 +191,12 @@ export default class Authentication {
   }
 
   async setDelegationRights({userId, dateFrom, dateTo}) {
-    return await this.__provider.SetDelegationRights({userId, dateFrom, dateTo})
-
+    return await  this.__axios({
+      method: 'POST',
+      url: `${ this.__config.GrapgQlUrl }api/authentication/delegation`,
+      withCredentials: true,
+      data: {userId, dateFrom, dateTo}
+    })
   }
 
   /**
