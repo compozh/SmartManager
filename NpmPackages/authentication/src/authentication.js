@@ -163,12 +163,11 @@ export default class Authentication {
    */
   async logOff() {
     try {
-      if (!this.currentUser) {
-
+      if (this.currentUser) {
+        currentUser.reset()
         await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/logout`, undefined, {
           withCredentials: true
         })
-        currentUser.reset()
       }
     } catch (res) {
       throw new Error(`Ошибка при попытке выйти из системы. \r\n ${res}`)
