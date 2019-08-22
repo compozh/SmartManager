@@ -1,0 +1,5 @@
+ {
+  bpmnmutation {
+    setName(model: $model)
+  }
+}

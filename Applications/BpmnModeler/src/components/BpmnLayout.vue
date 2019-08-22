@@ -1,13 +1,12 @@
 <template>
   <v-app>
     <vue-title title="Bpmn"></vue-title>
-    <v-toolbar
-               app
+    <v-toolbar app
                clipped-left
                class="toolbar">
       <v-toolbar-side-icon 
         class="blue--text text--darken-2"
-        @click.stop="appBar = !appBar">
+        @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
       <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
       <router-view name="toolbar" />
@@ -26,6 +25,34 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+
+    <v-dialog v-model="loading"
+              full-width
+              persistent>
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        indeterminate>
+      </v-progress-circular>
+    </v-dialog>
+
+    <v-snackbar
+      v-model="showError"
+      color="error"
+      :timeout="errorTimeout"
+      multi-line
+      top
+      right
+    >
+      {{ error }}
+      <v-btn
+        dark
+        flat
+        @click="showError = false"
+      >
+        {{ $tc('Close') }}
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -35,24 +62,72 @@ export default {
   props: ['toolbarTitle'],
   data () {
     return {
-      appBar: null
-    }
+      showAppBar: true,
+      loading: false,
+      showError: false,
+      error: false,
+      errorTimeout: 10000
+    };
+  },
+  created() {
+    this.loadModels(this.$router.route);
+  },
+  mounted() {
   },
   methods: {
+    async loadModels() {
+      if (!await this.$store.dispatch('bpmn/loadModels')) {
+        this.error = this.$tc('Models not loaded');
+        this.showError = true;
+      }
+    },
+    async onRouteChanged() {
+      if (!this.$store.state.bpmn.models.length) {
+        this.loading = true;
+        await this.loadModels();
+        this.loading = false;
+      }
+      if (this.$store.state.bpmn.models.length) {
+        const modelId = this.$route.params.id;
+        if (modelId && modelId !== '') {
+          this.$store.dispatch('bpmn/setActiveModel', modelId);
+        }
+      }
+    }
   },
   computed: {
     currentUser() {
       if (this.$store.state.authentication.currentUser) {
-        return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName
+        return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName;
+      }
+      return null;
+    },
+    appBar: {
+      get() {
+        return this.showAppBar && this.currentUser !== null;
+      },
+      set(value) {
+        this.showAppBar = value;
       }
     }
   },
   watch: {
+    '$route': 'onRouteChanged'
+  },
+  beforeRouteEnter(to, from, next) {
+    window.alert('beforeRouteEnter');
+    console.log('beforeRouteEnter');
+    next(vm => vm.loadModels());
+  },
+  beforeRouteUpdate(to, from, next) {
+    window.alert('beforeRouteUpdate');
+    console.log('beforeRouteUpdate');
+    this.loadModels().then(success => next(success));
   }
-}
+};
 </script>
 
-<style scoped>
+<style>
 
   .toolbar {
     background: #fff;
@@ -69,5 +144,10 @@ export default {
     bottom: 0;
     left: 0;
     margin: 0;
+  }
+
+  .v-dialog {
+    box-shadow: none;
+    overflow: visible;
   }
 </style>

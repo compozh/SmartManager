@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'bpmn-empty'
-}
+};
 </script>
 <style>
 </style>

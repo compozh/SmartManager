@@ -1,6 +1,6 @@
- {
+{
   bpmnmutation {
-    createModel(model: $model) {
+    create {
       id
       name
     }

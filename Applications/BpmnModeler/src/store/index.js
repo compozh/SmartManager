@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 // Modules
-import bpmnStore from '../bpmnstore/store'
+import bpmnStore from '../bpmnstore/store';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 // Create a new store
 const store = new Vuex.Store({
@@ -12,6 +12,6 @@ const store = new Vuex.Store({
   modules: {
     [bpmnStore.namespace]: bpmnStore,
   }
-})
+});
 
-export default store
+export default store;

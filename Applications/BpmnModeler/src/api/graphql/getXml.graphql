@@ -1,5 +1,5 @@
 {
   bpmnquery {
-    modelXml(id: $id)
+    getXml(id: $id)
   }
 }

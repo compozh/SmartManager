@@ -1,6 +1,6 @@
 {
   bpmnquery {
-    modelXml(id: $id) {
+    models {
       id
       name
     }
