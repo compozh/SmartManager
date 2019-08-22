@@ -9,9 +9,13 @@ export default {
     state.message = payload ? payload : {}
   },
   setMenuMode(state, payload) {
-    state.menuMode = payload
+    state.menuMode.lastState = state.menuMode.currentState
+    state.menuMode.currentState = payload
   },
   setTaskAddForm(state, payload) {
+    if (payload === 'close') {
+      state.menuMode.currentState = state.menuMode.lastState
+    }
     state.taskAddForm = payload
   },
   setFolders(state, payload) {
@@ -31,5 +35,21 @@ export default {
   },
   setUsers(state, payload) {
     state.users = payload
+  },
+  addComment(state, payload) {
+    const user = JSON.parse(localStorage.currentUser)
+    const date = new Date().toLocaleString('ru', {
+      year: 'numeric', month: 'numeric', day: 'numeric'
+    })
+    const time = new Date().toLocaleString('ru', {
+      hour: 'numeric', minute: 'numeric'
+    })
+    const comment = {
+      date: `${date} ${time}`,
+      text: payload,
+      user: user.UserData.CurrentUserData.UserName,
+      userPhoto: user.UserData.CurrentUserData.UserPhoto
+    }
+    state.taskInfo.comments.push(comment)
   }
 }

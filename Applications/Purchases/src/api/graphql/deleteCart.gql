@@ -1,0 +1,7 @@
+mutation($cartId:ID!){
+  	purchasesMutation{
+        deleteCart(cartId: $cartId){
+            id
+        }
+    }
+}

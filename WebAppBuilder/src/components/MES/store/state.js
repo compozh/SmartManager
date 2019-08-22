@@ -1,12 +1,35 @@
 export default {
-  circularLoader: false, // Circular progress component
   linearLoader: false, // Linear progress component
-  error: null, // Snackbar for errors
+  snackbar: {
+    type: 'error', // error / success
+    message: '',
+    visible: false
+  },
   menuMode: 'open', // Main menu state: open, mini, close
+  tasksPageState: {
+    selectedTask: null,
+    selectedTasksTab: 0,
+    currentLayout: 'main',
+    dragResizeMode: false
+  },
+  dialogLinearLoader: {
+    visible: false,
+    message: ''
+  },
+  stuffPageState: {
+    stuffInputText: ''
+  },
+  obsoleteData: {
+    tasks: false
+  },
   properties: null,
-  workCenters: null,
-  currentTaskId: null,
-  search: null,
-  shiftTasks: null,
-  menuMiniMode: null,
+  workCenter: null,
+  initialWorkCenter: false,
+  workCentersForWorker: [],
+  tasks: [],
+  installations: [],
+  productions: [],
+  productionFormio: null,
+  menuMiniMode: true,
+  ticket: ''
 }

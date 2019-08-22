@@ -1,0 +1,7 @@
+
+
+mutation($keyValue:String!, $newFavListId: String!, $oldFavListId : String!){
+  purchasesMutation{
+    mutationChangeListForItem(keyValue:$keyValue, newFavListId:$newFavListId, oldFavListId:$oldFavListId)
+  }
+}

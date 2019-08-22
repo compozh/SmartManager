@@ -35,27 +35,51 @@ export default {
     hiddenLgAndUp() {
       return this.$vuetify.breakpoint.lgAndUp
     },
+    taskAddForm() {
+      return this.$store.state.sm.taskAddForm === 'open'
+    }
   },
   methods: {
+    changeTaskStage(moveMode, comment) {
+      this.$store.dispatch('sm/changeTaskStage', {
+        id: this.task.id,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy,
+        moveMode,
+        comment,
+        processParams: null
+      })
+    },
     changeTaskStatus(status) {
       this.$store.dispatch('sm/changeTaskStatus', {
         id: this.task.id,
         status: status,
         comment: ''
       })
+    },
+    openTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'open')
+    },
+    closeTaskAddForm() {
+      this.$store.commit('sm/setTaskAddForm', 'close')
     }
   },
   render() {
     return this.$scopedSlots.default({
       activeTab: this.activeTab,
       tabs: this.getTabs,
+      task: this.task ? this.task : {},
       params: {
-        status: this.task ? this.task.status : '',
-        hasOrig: this.task ? this.task.originals.length : 0,
-        hasComm: this.task ? this.task.comments.length : 0,
-        hiddenLgAndUp: this.hiddenLgAndUp
+        hiddenLgAndUp: this.hiddenLgAndUp,
+        taskAddForm: this.taskAddForm
       },
-      changeStatus: this.changeTaskStatus
+      events: {
+        changeStage: this.changeTaskStage,
+        changeStatus: this.changeTaskStatus,
+        openTaskAddForm: this.openTaskAddForm,
+        closeTaskAddForm: this.closeTaskAddForm
+      }
     })
   }
 }

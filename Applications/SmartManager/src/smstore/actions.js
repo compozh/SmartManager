@@ -2,6 +2,12 @@ import {SmartManagerApi} from '../api/smartManagerApi'
 
 const api = new SmartManagerApi()
 
+function trimHtmlTags(stringWithHtmlTags) {
+  const elem = document.createElement('div')
+  elem.innerHTML = stringWithHtmlTags
+  return elem.innerText
+}
+
 export default {
   async getFolders({commit}, payload) {
     const loader = payload.loader
@@ -27,12 +33,12 @@ export default {
 
     try {
       const result = await api.getTasksFromGql(
-        // Изменения в веб-расчете: для получения всех задач необходимо передать пустую строку
         folderId === 'ALL' ? '' : folderId
       )
-      const tasks = {
-        [folderId]: result.data.smtasks.tasks
-      }
+      const taskList = result.data.smtasks.tasks
+      taskList.forEach(task => task.name = trimHtmlTags(task.name))
+
+      const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
       commit(loader, false)
 
@@ -49,7 +55,9 @@ export default {
 
     try {
       const result = await api.getTaskInfoFromGql(taskId)
-      const taskInfo = result.data.smtasks.tasksGetInfo
+      const taskInfo = result.data.smtasks.taskDetails
+
+      taskInfo.name = trimHtmlTags(taskInfo.name)
       commit('setTaskInfo', taskInfo)
       commit(loader, false)
 
@@ -78,34 +86,137 @@ export default {
     try {
       const response = await api.addNewTaskToGql(payload)
       const result = response.data.smtasksMutation.addTask
-
-      const message = !result.success
-        ? {type: 'error', text: 'Не удалось добавить задачу'}
-        : {type: 'success', text: 'Задача успешно добавлена'}
-      // дополнительно можно вывести result.errorMessage
-      commit('setMessage', message)
       commit('setCircularLoader', false)
-      commit('setTaskAddForm', 'close')
-      dispatch('getFolders', {loader: 'setLinearLoader'})
+
+      if (result.success) {
+        commit('setTaskAddForm', 'close')
+
+        await dispatch('getFolders', {
+          loader: 'setLinearLoader'
+        })
+        commit('setMessage', {
+          type: 'success',
+          text: 'Задача успешно добавлена'
+        })
+      } else {
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось добавить задачу'
+        })
+      }
     } catch (e) {
       commit('setCircularLoader', false)
-      commit('setMessage', {type: 'error', text: e.message})
+      commit('setMessage', {
+        type: 'error',
+        text: 'Ошибка при добавлении задачи'
+      })
+      console.log('', e.message)
     }
   },
   async changeTaskStatus({commit, dispatch}, payload) {
     commit('setLinearLoader', true)
 
     try {
-      await api.changeTaskStatusInGql(payload)
+      const response = await api.changeTaskStatusInGql(payload)
+      const result = response.data.smtasksMutation.changeStatus
       commit('setLinearLoader', false)
 
-      dispatch('getTaskInfo', {
-        taskId: payload.id,
-        loader: 'setLinearLoader'
-      })
+      if (result.success) {
+        await dispatch('getTaskInfo', {
+          taskId: payload.id,
+          loader: 'setLinearLoader'
+        })
+        commit('setMessage', {
+          type: 'success',
+          text: 'Статус задачи успешно изменен'
+        })
+      } else {
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось изменить статус задачи'
+        })
+      }
     } catch (e) {
       commit('setLinearLoader', false)
       commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async addAttachments({commit, dispatch, state}, payload) {
+    commit('setLinearLoader', true)
+    const taskId = state.taskInfo.id
+    try {
+      const response = await api.addAttachmentsInGql(taskId, payload)
+      const result = response.data.smtasksMutation.addAttachments
+      commit('setLinearLoader', false)
+
+      if (result.success) {
+        await dispatch('getTaskInfo', {
+          taskId,
+          loader: 'setLinearLoader'
+        })
+        commit('setMessage', {
+          type: 'success',
+          text: 'Вложение успешно добавлено'
+        })
+      } else {
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось добавить вложение'
+        })
+      }
+    } catch (e) {
+      commit('setLinearLoader', false)
+      commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async changeTaskStage({commit, dispatch}, payload) {
+    commit('setLinearLoader', true)
+
+    try {
+      const response = await api.changeTaskStageInGql(payload)
+      const result = response.data.smtasksMutation.changeStage
+
+      const text = trimHtmlTags(result.log)
+      commit('setLinearLoader', false)
+
+      if (result.success) {
+        await dispatch('getTaskInfo', {
+          taskId: payload.id,
+          loader: 'setLinearLoader'
+        })
+        commit('setMessage', {type: 'success', text})
+      } else {
+        commit('setMessage', {type: 'error', text})
+      }
+    } catch (e) {
+      commit('setLinearLoader', false)
+      commit('setMessage', {type: 'error', text: e.message})
+    }
+  },
+  async addTaskComment({commit}, payload) {
+    const comment = payload.comment
+    const params = payload.params
+    commit('setLinearLoader', true)
+    try {
+      const response = await api.addTaskCommentToGql(comment, params)
+      const result = response.data.smtasksMutation.addComment
+      commit('setLinearLoader', false)
+
+      if (result.success) {
+        commit('addComment', comment)
+      } else {
+        commit('setMessage', {
+          type: 'error',
+          text: 'Не удалось добавить коментарий'
+        })
+      }
+    } catch (e) {
+      commit('setLinearLoader', false)
+      commit('setMessage', {
+        type: 'error',
+        text: 'Ошибка при добавлении коментария'
+      })
+      console.log('', e.message)
     }
   }
 }

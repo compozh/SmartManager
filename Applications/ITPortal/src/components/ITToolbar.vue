@@ -1,10 +1,11 @@
 <template>
-  <div>It Portal Menu</div>
+  <div>It Portal</div>
 </template>
 <script>
 export default {
-  name: 'it-menu-toolbar',
+  name: 'it-toolbar',
 }
 </script>
-<style>
+<style scoped>
+
 </style>

@@ -1,0 +1,9 @@
+{
+  smtasksMutation {
+    addAttachments(taskId: $taskId, attachments: $attachments) {
+      id,
+      success,
+      errorMessage
+    }
+  }
+}

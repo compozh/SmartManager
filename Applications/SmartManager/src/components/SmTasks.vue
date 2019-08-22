@@ -16,7 +16,6 @@
       </v-flex>
       <sm-empty-state v-if="!checkTasks">Нет задач в папке</sm-empty-state>
       <v-flex>
-
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn

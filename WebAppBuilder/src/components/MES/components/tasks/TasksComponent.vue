@@ -1,0 +1,195 @@
+<template>
+  <div class="mes-tasks-component">
+    <v-layout column class="mes-tasks-component-layout" scrollable>
+      <v-flex fill-height class="grid-tabs">
+
+          <v-tabs v-model="selectedTab">
+            <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
+              <v-badge color="#326DA8" overlap>
+                <template v-slot:badge>
+                  <span class="span-count-tasks">{{countTasks(tab.index)}}</span>
+                </template>
+                {{tab.name}}
+              </v-badge>
+            </v-tab>
+          </v-tabs>
+
+        <v-btn flat icon @click="refreshTasks" @mousedown.stop  :loading="refreshingTasks">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path :fill='obsoleteData.tasks ? "#009975" : "#326DA8"' d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
+          </svg>
+        </v-btn>
+
+      </v-flex>
+
+      <v-flex class="tasks-list-blocks">
+
+        <mes-content-loader
+          v-if="!initializeTasks && !tasks.length"
+          :loaderType=loaderType
+        />
+
+        <div class="tasks-list-block-content">
+
+          <mes-task-cards
+            :selectedTask=selectedTask
+            :selectedTasksTab=selectedTasksTab
+            @changeCurrentTask=changeCurrentTask
+          />
+
+        </div>
+        <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">Задания отсутствуют</span>
+      </v-flex>
+
+    </v-layout>
+    </div>
+</template>
+
+<script>
+import {mapGetters} from 'vuex'
+import {ContentLoader} from 'vue-content-loader'
+
+export default {
+  name: "mes-tasks-component",
+  components: {
+    ContentLoader
+  },
+  data() {
+    return {
+      tabs: [
+        { index: 0, id: "PLAN", name: "В плане"},
+        { index: 1, id: "DONE", name: "Выполненные"}
+      ],
+      loaderType: "list",
+      selectedTab: this.selectedTasksTab,
+      refreshingTasks: false
+    };
+  },
+  props: {
+    initializeTasks: Boolean,
+    selectedTasksTab: Number
+  },
+  computed: {
+    tasks() {
+      return this.$store.getters['mes/tasks'];
+    },
+    obsoleteData() {
+      return this.$store.getters['mes/obsoleteData'];
+    },
+    workCenter() {
+      return this.$store.getters['mes/workCenter'];
+    },
+    selectedTask: {
+      get() {
+        return this.$store.getters['mes/selectedTask'];
+      }
+    }
+  },
+  methods: {
+    changeSelectTasksTab(tabIndex) {
+      this.$emit('changeSelectTasksTab', tabIndex);
+    },
+    changeCurrentTask(newTask) {
+      this.$emit('changeCurrentTask', newTask);
+    },
+    countTasks(tabIndex) {
+      var me = this,
+        tasks = [];
+
+      for(let task of me.tasks) {
+        if((tabIndex == 0 && (task.state == "IN_PLAN" || task.state == "IN_WORK")) || tabIndex == 1 && task.state == "DONE") {
+          tasks.push(task);
+        }
+      }
+      return tasks.length;
+    },
+    refreshTasks() {
+      this.refreshingTaskMethod();
+    },
+    async refreshingTaskMethod() {
+      this.refreshingTasks = true;
+      await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' });
+      this.$store.dispatch('mes/setObsoluteDataTask', false);
+      this.refreshingTasks = false;
+    }
+  }
+}
+</script>
+
+<style type="text/css" scoped>
+  .mes-tasks-component {
+    height: 100%;
+    width: 30%;
+    min-width: 330px
+  }
+  .mes-tasks-component-layout {
+    height: 100%;
+  }
+  .grid-tabs{
+    flex: 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 63px;
+    align-items: center;
+    border-bottom: 1px solid rgba(2, 2, 2, 0.08);
+  }
+  .grid-tabs .v-badge {
+    padding-right: 10px;
+  }
+  .tasks-list-block-content {
+    height:calc(100% - 60px);
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+  }
+
+  .tasks-list-block-content::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px
+  }
+
+  /* background of the scrollbar except button or resizer */
+  .tasks-list-block-content::-webkit-scrollbar-track {
+    background-color:#fff
+  }
+  .tasks-list-block-content::-webkit-scrollbar-track:hover {
+    background-color:#f4f4f4
+  }
+
+  /* scrollbar itself */
+  .tasks-list-block-content::-webkit-scrollbar-thumb {
+    background-color:#babac0;
+    border-radius:16px;
+    border:5px solid #fff
+  }
+  .tasks-list-block-content::-webkit-scrollbar-thumb:hover {
+    background-color:#a0a0a5;
+    border:4px solid #f4f4f4
+  }
+  /* set button(top and bottom of the scrollbar) */
+  .tasks-list-block-content::-webkit-scrollbar-button {display:none}
+
+  .change-tasks-status-toolbar {
+    padding-left: 5px;
+  }
+  .toolbar-item {
+    margin: 0 10px;
+  }
+  .lack-of-tasks-str {
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #3d83f7;
+    opacity: 0.5;
+  }
+  .wait-for-data-block {
+    padding: 20px;
+  }
+  .grid-tabs {
+    padding-left: 10px;
+  }
+  .span-count-tasks {
+    font-size: 13px;
+    font-weight: 400;
+  }
+</style>

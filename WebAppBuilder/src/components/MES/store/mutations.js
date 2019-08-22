@@ -1,24 +1,82 @@
 export default {
-  setCircularLoader(state, payload) {
-    state.circularLoader = payload
+  setLinearLoader(state, payload) {
+    state.linearLoader = payload
   },
-  setError(state, payload) {
-    state.error = payload
+  closeDialogLinearLoader(state) {
+    state.dialogLinearLoader.visible = false;
   },
-  setProperties(state, payload) {
-    state.properties = payload
+  closeSnackbar(state) {
+    state.snackbar.visible = false;
   },
-  setCurrentWorkCenter(state, payload) {
-    state.currentWorkCenter = payload
+  setDialogLinearLoaderMessage(state, message) {
+    state.dialogLinearLoader.message = message;
+    state.dialogLinearLoader.visible = true;
   },
-  setWorkCenters(state, payload) {
-    state.workCenters = payload
+  setSnackbarErrorMessage(state, message) {
+    state.snackbar.message = message;
+    state.snackbar.type = 'error';
+    state.snackbar.visible = true;
   },
-  setShiftTasks(state, payload) {
-    state.shiftTasks = payload
+  setSnackbarSuccessMessage(state, message) {
+    state.snackbar.message = message;
+    state.snackbar.type = 'success';
+    state.snackbar.visible = true;
+  },
+  setProperties(state, properties) {
+    state.properties = properties
+  },
+  setWorkCenter(state, workCenter) {
+    state.workCenter = workCenter;
+  },
+  setTasks(state, tasks) {
+    state.tasks = tasks;
+  },
+  setInstallations(state, installations) {
+    state.installations = installations;
+  },
+  removeInstallation(state, installation) {
+    var index = state.installations.indexOf(installation);
+    state.installations.splice(index, 1);
+  },
+  setProductions(state, productions) {
+    state.productions = productions;
+  },
+  setProductionFormio(state, formio) {
+    state.productionFormio = formio;
+  },
+  resetProductionFormio(state) {
+    state.productionFormio = null;
+  },
+  removeProduction(state, production) {
+    let index = state.productions.indexOf(production);
+     state.productions.splice(index, 1);
   },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
     localStorage.setItem("mesMenuMiniMode", payload.toString());
+  },
+  setSelectedTasksTab(state, tabId) {
+    state.tasksPageState.selectedTasksTab = tabId;
+  },
+  setCurrentLayout(state, currentLayout) {
+    state.tasksPageState.currentLayout = currentLayout;
+  },
+  setSelectedTask(state, selectedTask) {
+    state.tasksPageState.selectedTask = selectedTask;
+  },
+  changeDragResizeMode(state) {
+    state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode;
+  },
+  setObsoluteDataTask(state, obsoluteData) {
+    state.obsoleteData.tasks = obsoluteData;
+  },
+  setTicket(state, ticket) {
+    state.ticket = ticket;
+  },
+  setInitialWorkCenter(state, value) {
+    state.initialWorkCenter = value;
+  },
+  setWorkCentersForWorker(state, workCenters) {
+    state.workCentersForWorker = workCenters;
   }
 }

@@ -6,7 +6,7 @@ let Vue = undefined
 
 export default {
   install(vue, params) {
-    let { dependencies } = params || {}
+    let { dependencies, options } = params || {}
     Vue = vue
 
     if (!dependencies) {
@@ -26,7 +26,7 @@ export default {
 
     loadLocalizations()
 
-    let authentication = new Authentication(Vue, dependencies)
+    let authentication = new Authentication(Vue, dependencies, options)
     Vue.prototype.$authentication = authentication
   }
 }
@@ -49,10 +49,10 @@ function loadLocalizations() {
 /**
  *  Регистрация компонентов
  */
-function registerComponents(context) {
+function registerComponents(context, sufix) {
   context.keys().forEach(function (key) {
     var name = path.basename(key)
     name = name.substring(0,name.lastIndexOf('.'))
-    Vue.component(`${name}`, context(key).default)
+    Vue.component(`${name}${sufix}`, context(key).default)
   })
 }

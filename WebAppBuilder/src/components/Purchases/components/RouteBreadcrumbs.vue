@@ -1,13 +1,15 @@
 <template>
-    <div>
-        <v-breadcrumbs  v-if="show" :items="cataloguePath">
-            <template v-slot:item="props">
-                <router-link :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id }}">
-                {{ props.item.text }}
-                </router-link>
-        </template>
-        </v-breadcrumbs>
-    </div>
+    <v-layout  class="wrap" v-if="show" row wrap>
+        <v-flex>
+            <v-breadcrumbs :items="$vuetify.breakpoint.mdAndUp ? this.simpleRoute(breadCrumbs):this.mobileRoute(breadCrumbs)" divider=">">
+                <template v-slot:item="props">
+                    <router-link class="crumbs" :to="{ name:'CATALOGUE', params: {catalogueId: props.item.id != undefined ? props.item.id.trim():null }}">
+                      {{ props.item.text }}
+                    </router-link>
+                </template>
+            </v-breadcrumbs>       
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -16,54 +18,78 @@ const api = new PurchasesApi();
 export default {
     name: "catalogue-route-breadcrumbs",
     props:{
-        code:{
-            type: String,
-            required: true
-        }
     },
     data:() =>({
-        loading: false,
-        cataloguePath: [],
-        show: false
-    }),
-    methods:{
-        getRoutePath(code) {
-            api.getResourcesGroups(code, "id,name").then(this.getParendCodeCallback);
-            //const query = `{purchases{items: resourcesGrops(id: "${code}"){}}}`;
-            //purchasesSchemaAxios(this, query).then((r) => this.getParendCodeCallback(r));
-        },
-        getParendCodeCallback(r) { 
-            var item = _.first(r.data.purchases.items);
-            if (item)
-            {
-                if (!item.parent || item.parent === null){
-                    var id = _.trim(item.id);
-                    this.cataloguePath.unshift({ text: item.name, disable: false, id: id, href: `${this.getBaseURL(id)}` });
-                    this.cataloguePath.unshift({ text: "..."    , disable: false, id: null   , href: `${this.getBaseURL()}` });
-                    this.show = true;
-                }
-                else{
-                    var id = _.trim(item.id);
-                    this.cataloguePath.unshift({ text: `${item.name}`, disable: id === this.code, id: id, href: `${this.getBaseURL()}\\${id}` });
-                    this.getRoutePath(item.parent.id);
-                }
+        currentId: new String(),
+        mobileRoute: function(data){
+            let result = [];
+            if(this.currentId.length == 15){
+                result.push(data[data.length-1]);
+            }else{
+                result.push(data[data.length-2]);
             }
+
+            if(result.length == 1 && result[0]==undefined){
+                result.splice(0,1,{id:null,text:"..."});
+            }
+
+            return result;
         },
-        getBaseURL() {
-            var the_arr = this.$route.fullPath.split('/');
-            the_arr.pop();
-            return( the_arr.join('/') );
+        simpleRoute: function(data){
+            let result = [];
+            for(let i=0;i<data.length;i++){
+                result.push(data[i]);
+            }
+            result.unshift({id:null, text:"..."});
+
+            return result;
+        }
+    }),
+    created(){
+        this.$store.state.purchases.breadcrumbs = [];
+        this.currentId = this.$route.params.catalogueId;
+        if(this.currentId != undefined){
+            api.getBreadcrumbsByGroup(this.currentId,false);
         }
     },
-    created(){
-        this.getRoutePath(this.code)
+    computed:{
+        show:{
+            get: function() {
+                if(this.$store.getters["purchases/getBreadCrumbs"].length === 0){
+                    return false;
+                }
+                
+                return true;
+            },
+        },
+        breadCrumbs:{
+            get: function() {
+                return this.$store.getters["purchases/getBreadCrumbs"];
+            },
+        }
     },
     watch: {
-        '$route' (to, from) {
-            this.cataloguePath = [];
-            this.show = false;
-            this.getRoutePath(this.code)
+        '$route' (to, from){
+            if(to.params.catalogueId != null){
+                this.currentId = to.params.catalogueId;
+                api.getBreadcrumbsByGroup(this.currentId,false);
+            }
+            else{
+                this.currentId = undefined;
+                this.$store.state.purchases.breadcrumbs = [];
+            }
         }
     }
 }
 </script>
+
+<style scoped>
+
+    .crumbs{
+        font-size: 1em;
+        color: grey;
+    }
+    .wrap{
+        position: absolute;
+    }
+</style>

@@ -1,0 +1,5 @@
+query ($group: String) {
+  purchases {
+  	...main 
+  }
+}
