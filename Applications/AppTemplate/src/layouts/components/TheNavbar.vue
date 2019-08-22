@@ -60,13 +60,11 @@
       <!-- I18N -->
       <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
         <span class="cursor-pointer flex i18n-locale">
-            <flag class="h-4 w-5" size='small' :iso="getCurrentLocaleData.flag" />
-
+          <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag" />
           <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
         </span>
         <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-
-          <vs-dropdown-item v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
+          <vs-dropdown-item v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :squared="false" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
         </vs-dropdown-menu>
       </vs-dropdown>
 
