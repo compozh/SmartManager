@@ -194,7 +194,10 @@ export default {
   selectTaskAfterRefresh({ getters, commit }) {
     let selectedTask = getters.selectedTask,
       tasks = getters.tasks
-
+    if(!selectedTask)
+    {
+      return
+    }
     for (let task of tasks) {
       if (selectedTask.shiftTaskId == task.shiftTaskId) {
         commit('setSelectedTask', task)
