@@ -2,7 +2,7 @@
     <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
 
         <span v-html="production.description"></span>
-        <v-btn icon outlined color="error" flat class="mes-delete-production" @click="deleteProduction"  :loading="delateInProgress">
+        <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction"  :loading="delateInProgress">
           <v-icon dark>delete_forever</v-icon>
         </v-btn>
 

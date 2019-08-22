@@ -153,6 +153,7 @@ export default {
     color: rgba(40, 165, 69, 1);
     height: 50px;
     width: 55px;
+    padding: 0;
   }
   .btn.btn-success.btn-lg:hover {
     background-color:  rgba(40, 165, 69, .12);
