@@ -10,8 +10,8 @@
         <v-card ripple
           class="task-item"
           @click="changeCurrentTask(task)"
-          :style="task.inProgress ? 'border-left: 5px solid #326da8;' : ''"
         >
+        <span v-if="task.inProgress" class="inprogress-icon">В работе</span>
           <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>
@@ -66,5 +66,14 @@ export default {
     margin: 5px 10px;
     cursor: pointer;
     text-align: center;
+  }
+  .inprogress-icon {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(7, 109, 0, 0.81);
   }
 </style>
