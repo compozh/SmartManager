@@ -183,9 +183,9 @@ export default {
   .theme--dark.v-progress-linear {
     margin-top: 14px !important;
   }
-  /* .v-snack__wrapper .v-btn {
-    background-color: inherit !important;
-    box-shadow: none;
-  } */
+  .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
+  .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
+    margin: 0;
+  }
 </style>
 
