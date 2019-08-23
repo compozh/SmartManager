@@ -11,7 +11,6 @@
         <v-card-actions>
         <v-btn
             color="green darken-1"
-            flat="flat"
             text
             @click="agreeClick"
         >
@@ -19,7 +18,6 @@
           </v-btn>
         <v-btn
             color="green darken-1"
-            flat="flat"
             text
             @click="disagreeClick"
         >
