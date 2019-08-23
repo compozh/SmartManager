@@ -10,6 +10,7 @@ import '@it-enterprise/common/dist/common-components.css'
 
 
 // vue пакеты
+import '@mdi/font/css/materialdesignicons.css' //mdi icons
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
@@ -82,14 +83,32 @@ start()
 async function start()   {
   // Загрузка приложения
   let webAppsCore = await Vue.prototype.$WebApps
-
+  const opts = {
+    theme: {
+      light: true,
+      breakpoint: {
+        thresholds: {
+          xs: 340,
+          sm: 540,
+          md: 800,
+          lg: 1280,
+          xl: 1920,
+        },
+        scrollBarWidth: 24,
+      },
+      iconfont: 'mdi',
+    }
+  }
   let appComponent = await webAppsCore.GetApplicationComponent({
 
     properties: {
       i18n,
-      store
+      store,
+      vuetify: new Vuetify(opts),
     }
   })
+
+
 
   new Vue(appComponent).$mount('#app')
 }
