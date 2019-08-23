@@ -77,6 +77,13 @@ export default {
     color: rgba(179, 2, 2, 0.81);
     height:50px;
   }
+  .btn.btn-danger:active, .btn.btn-danger:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
+  .btn.btn-danger::-moz-focus-inner {
+    border: 0;
+  }
   .btn.btn-danger:hover {
     background-color: rgba(179, 2, 2, 0.12);
     height:50px;
@@ -135,8 +142,13 @@ export default {
     color: #326DA8;
     height: 50px;
   }
+  .btn.btn-primary:active, .btn.btn-primary:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
   .btn.btn-primary:hover {
     background-color:  rgba(50, 109, 168, .12);
+    color: #326DA8;
   }
   .btn {
     font-size: 14px;
@@ -156,8 +168,13 @@ export default {
     width: 55px;
     padding: 0;
   }
+  .btn.btn-success:active, .btn.btn-success:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
   .btn.btn-success.btn-lg:hover {
     background-color:  rgba(40, 165, 69, .12);
+    color:rgba(40, 165, 69, 1);
   }
   .form-group.has-feedback.formio-component {
     text-align: start;
