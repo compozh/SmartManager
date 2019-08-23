@@ -7,7 +7,7 @@
           label="Рабочий центр"
         ></v-select>
       </v-flex>
-      <v-btn class="setup-installations-button" outlined @click="onClickFixWorkCenter" outline color="#326DA8">Зафиксировать</v-btn>
+      <v-btn class="setup-installations-button" outlined @click="onClickFixWorkCenter" text color="#326DA8">Зафиксировать</v-btn>
   </v-layout>
 </template>
 
