@@ -61,7 +61,4 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-    .mes-fix-workcenter-layout {
-
-    }
 </style>
