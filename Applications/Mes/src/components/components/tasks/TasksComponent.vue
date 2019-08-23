@@ -145,7 +145,10 @@ export default {
     background-color:#fff;
     width:16px
   }
-
+  .v-card__text.active-task-item {
+    border-top-left-radius: none !important;
+    border-top-right-radius: none !important;
+  }
   /* background of the scrollbar except button or resizer */
   .tasks-list-block-content::-webkit-scrollbar-track {
     background-color:#fff
