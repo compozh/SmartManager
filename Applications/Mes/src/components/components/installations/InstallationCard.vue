@@ -1,7 +1,7 @@
 <template>
     <v-card-text class="mes-installation-card">
         <span v-html="installation.description"></span>
-        <v-btn icon outlined color="error" flat class="mes-delete-installation" @click="removeInstallation" :loading="delateInProgress"><v-icon dark>delete_forever</v-icon></v-btn>
+        <v-btn icon color="error" class="mes-delete-installation" @click="removeInstallation" :loading="delateInProgress"><v-icon dark>delete_forever</v-icon></v-btn>
     </v-card-text>
 </template>
 
@@ -40,6 +40,5 @@ export default {
   align-items: center;
   justify-content: center;
   width: 360px;
-  height: max-content;
 }
 </style>

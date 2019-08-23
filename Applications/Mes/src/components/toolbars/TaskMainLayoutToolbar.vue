@@ -3,17 +3,17 @@
         <v-flex
             class="toolbar-basebuttons"
         >
-            <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" outline color="#326DA8">Установить материалы</v-btn>
+            <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" color="#326DA8">Установить материалы</v-btn>
 
             <v-btn class="status-task-btn"
-                outlined outline
+                outlined
                 color="rgba(7, 109, 0, 0.81)"
                 @click="onclickRegisterProduction"
             >
                 Взять в работу
             </v-btn>
 
-            <v-btn flat outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
+            <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
                 <v-icon>control_camera</v-icon>
             </v-btn>
         </v-flex>
@@ -67,6 +67,8 @@ export default {
     flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
+    width: 100%;
+    margin: 0;
   }
   .toolbar-basebuttons {
     display: flex;
@@ -79,7 +81,7 @@ export default {
   .status-task-btn {
     border-radius: 5px;
   }
-  .v-btn.v-btn--outline {
+  .v-btn.v-btn--outlined {
     height: 50px;
   }
   .toolbar.row {

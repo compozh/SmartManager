@@ -3,13 +3,13 @@
     <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped hide-overlay :mini-variant="menuMiniMode" v-model="drawer">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
-    <v-toolbar app fixed clipped-left extended :extension-height="3">
-      <v-toolbar-side-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter"></v-toolbar-side-icon>
+    <v-app-bar app fixed clipped-left extended :extension-height="3">
+      <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter" color="black"></v-app-bar-nav-icon>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="2"></v-progress-linear>
-    </v-toolbar>
+    </v-app-bar>
     <v-content>
       <v-container class="main-block">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
@@ -26,7 +26,7 @@
         :value="true"
       >
         {{ snackbar.message }}
-        <v-btn flat dark @click.native="closeSnackbar">
+        <v-btn @click.native="closeSnackbar" text color="white">
           Закрыть
         </v-btn>
       </v-snackbar>
@@ -59,7 +59,7 @@ export default {
   name: 'mes-layout',
   data(vm) {
     return {
-      drawer: vm.$vuetify.breakpoint.xlAndUp,
+      drawer: vm.$vuetify.breakpoint.xl
     }
   },
   computed: {
@@ -116,14 +116,15 @@ export default {
   .v-toolbar__extension {
     padding: 0;
   }
-  .v-list__tile.v-list__tile--link.theme--light {
+  .v-list-item.v-list-item--link.theme--light {
     padding-left: 28px;
   }
   .v-badge--overlap .v-badge__badge {
     height: 17px !important;
     width: 17px !important;
+    min-width: 17px;
   }
-  .v-navigation-drawer--mini-variant .v-list__tile__action, .v-navigation-drawer--mini-variant .v-list__tile__avatar {
+  .v-navigation-drawer--mini-variant .v-list-item__action, .v-navigation-drawer--mini-variant .v-list-item__avatar {
     justify-content: start !important;
   }
   .mes-device-not-fixed {
@@ -148,6 +149,43 @@ export default {
   }
   .v-icon.v-tabs__icon.v-tabs__icon--prev {
     display: none;
+  }
+  /* vuetify2.0 */
+  .grow-0 .flex {
+    display: flex;
+  }
+  .theme--light.v-card>.v-card__text {
+    color: rgba(0,0,0,.87);
+  }
+  .v-btn {
+    letter-spacing: 0;
+    margin: 6px 8px;
+  }
+  .v-tab {
+    padding: 0;
+  }
+  .grid-item-data {
+    font-size: 14px;
+  }
+  .v-toolbar__content {
+    padding: 0 24px;
+  }
+  .v-toolbar__content .v-btn.v-btn--icon.v-size--default, .v-toolbar__extension .v-btn.v-btn--icon.v-size--default {
+    height: 36px;
+    width: 36px;
+  }
+  .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
+    margin-left: -6px;
+  }
+  .v-dialog>.v-card>.v-card__text {
+    padding: 16px;
+  }
+  .theme--dark.v-progress-linear {
+    margin-top: 14px !important;
+  }
+  .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
+  .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
+    margin: 0;
   }
 </style>
 
