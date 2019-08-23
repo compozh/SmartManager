@@ -174,5 +174,23 @@ export default {
     display: flex;
     justify-content: space-around;
   }
+  /*input MD*/
+  .form-control {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+    border-radius: 0;
+    outline: none;
+    transition: 0.5s ease all;
+    -moz-transition: 0.5s ease all;
+    -webkit-transition: 0.5s ease all;
+  }
+  .form-control:focus {
+    outline: none;
+    box-shadow: none;
+    border-bottom: 2px solid #326da8;
+    transition: 0.5s ease all;
+    -moz-transition: 0.5s ease all;
+    -webkit-transition: 0.5s ease all;
+  }
 }
 </style>
