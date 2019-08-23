@@ -44,8 +44,9 @@ export default {
 
 <style scoped lang="scss">
 .formio-container /deep/ {
-  @import "~bootstrap/dist/css/bootstrap.min";
+  @import "~bootstrap/scss/bootstrap.scss";
   @import "~choices.js/public/assets/styles/choices.css";
+
   font-size: 14px;
   font-weight: 500;
   label {
@@ -191,6 +192,72 @@ export default {
     transition: 0.5s ease all;
     -moz-transition: 0.5s ease all;
     -webkit-transition: 0.5s ease all;
+  }
+  /*checkbox MD*/
+  .control-label.form-check-label {
+    margin: 16px 0;
+    display: block;
+    cursor: pointer;
+    input {
+        display: none;
+        & + span {
+            line-height: 20px;
+            height: 20px;
+            padding-left: 20px;
+            display: block;
+            position: relative;
+            &:not(:empty) {
+                padding-left: 20px + 8;
+            }
+            &:before,
+            &:after {
+                content: '';
+                width: 20px;
+                height: 20px;
+                display: block;
+                border-radius: 50%;
+                left: 0;
+                top: 0;
+                position: absolute;
+            }
+            &:before {
+                background: #D1D7E3;
+                transition: background .2s ease, transform .4s cubic-bezier(.175, .885, .32, 2);
+            }
+            &:after {
+                background: #fff;
+                transform: scale(.78);
+                transition: transform .6s cubic-bezier(.175, .885, .32, 1.4);
+            }
+        }
+        &:checked + span {
+            &:before {
+                transform: scale(1.04);
+                background: #326da8;
+            }
+            &:after {
+                transform: scale(.4);
+                transition: transform .3s ease;
+            }
+        }
+    }
+    &:hover {
+        input {
+            & + span {
+                &:before {
+                    transform: scale(.92);
+                }
+                &:after {
+                    transform: scale(.74);
+                }
+            }
+            &:checked + span {
+                &:after {
+                    transform: scale(.4);
+                }
+            }
+        }
+    }
   }
 }
 </style>
