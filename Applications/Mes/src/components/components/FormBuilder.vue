@@ -193,6 +193,9 @@ export default {
     -moz-transition: 0.5s ease all;
     -webkit-transition: 0.5s ease all;
   }
+  .form-control[disabled="disabled"] {
+    border: none;
+  }
   /*checkbox MD*/
   .control-label.form-check-label {
     margin: 16px 0;
