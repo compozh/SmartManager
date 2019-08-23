@@ -83,7 +83,6 @@ export default {
     align-items: center;
     width: 360px;
     margin: 10px;
-    height: max-content;
     border-radius: 5px;
     background-color: white;
     transition: background-color .5s ease-in-out;

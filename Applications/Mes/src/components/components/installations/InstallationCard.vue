@@ -40,6 +40,5 @@ export default {
   align-items: center;
   justify-content: center;
   width: 360px;
-  height: max-content;
 }
 </style>
