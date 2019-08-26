@@ -16,7 +16,7 @@ export default class Localization {
 
     this.__i18n.locale = localStorage.getItem('language') ? localStorage.getItem('language') : 'ru', //дефолтный
 
-    this.__loadedLanguages[(this.__i18n.fallbackLocale || this.__i18n.locale)] = true
+    this.__loadedLanguages[(this.__i18n.locale  || this.__i18n.fallbackLocale)] = true
 
   }
 
@@ -65,6 +65,10 @@ export default class Localization {
 
       let summaryMessages = {}
       responses.forEach( v => {
+        if(!v.namespace){
+          summaryMessages = { ...v.messages, ...summaryMessages }
+          return
+        }
         summaryMessages[v.namespace] = v.messages
       })
 
