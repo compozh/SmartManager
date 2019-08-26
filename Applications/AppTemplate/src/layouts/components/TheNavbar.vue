@@ -2,10 +2,6 @@
   File Name: TheNavbar.vue
   Description: Navbar component
   Component Name: TheNavbar
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->
 
 
@@ -56,8 +52,8 @@
         <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
           <div class="notification-top text-center p-5 bg-primary text-white">
-            <h3 class="text-white">{{ unreadNotifications.length }} новых</h3>
-            <p class="opacity-75">Уведомлений</p>
+            <h3 class="text-white">Уведомления</h3>
+            <p class="opacity-75">{{ unreadNotifications.length }} новых</p>
           </div>
 
           <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings">
