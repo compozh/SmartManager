@@ -12,7 +12,42 @@
 
       <!-- SM - OPEN SIDEBAR BUTTON -->
       <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
+<template v-if="breakpoint != 'md'">
+        <!-- STARRED PAGES - FIRST 10 -->
+        <ul class="vx-navbar__starred-pages">
+          <draggable v-model="starredPagesLimited" :group="{name: 'pinList'}" class="flex cursor-move">
+            <li class="starred-page" v-for="page in starredPagesLimited" :key="page.url">
+              <vx-tooltip :text="page.label" position="bottom" delay=".3s">
+                <feather-icon svgClasses="h-6 w-6" class="p-2 cursor-pointer" :icon="page.labelIcon" @click="$router.push(page.url)"></feather-icon>
+              </vx-tooltip>
+            </li>
+          </draggable>
+        </ul>
 
+        <!-- STARRED PAGES MORE -->
+        <div class="vx-navbar__starred-pages--more-dropdown" v-if="starredPagesMore.length">
+          <vs-dropdown vs-custom-content vs-trigger-click>
+            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="cursor-pointer p-2"></feather-icon>
+            <vs-dropdown-menu>
+              <ul class="vx-navbar__starred-pages-more--list">
+                <draggable v-model="starredPagesMore" :group="{name: 'pinList'}" class="cursor-move">
+                  <li class="starred-page--more flex items-center cursor-pointer" v-for="page in starredPagesMore" :key="page.url" @click="$router.push(page.url)">
+                    <feather-icon svgClasses="h-5 w-5" class="ml-2 mr-1" :icon="page.labelIcon"></feather-icon>
+                    <span class="px-2 pt-2 pb-1">{{ page.label }}</span>
+                  </li>
+                </draggable>
+              </ul>
+            </vs-dropdown-menu>
+          </vs-dropdown>
+        </div>
+
+        <div class="bookmark-container">
+          <feather-icon icon="StarIcon" :svgClasses="['stoke-current text-warning', {'text-white': navbarColor != '#fff'}]" class="cursor-pointer p-2" @click.stop="showBookmarkPagesDropdown = !showBookmarkPagesDropdown" />
+                    <div v-click-outside="outside" class="absolute bookmark-list w-1/3 xl:w-1/4 mt-4" v-if="showBookmarkPagesDropdown">
+          <vx-auto-suggest :autoFocus="true" :data="navbarSearchAndPinList" @selected="selected" @actionClicked="actionClicked" inputClassses="w-full" show-action show-pinned background-overlay></vx-auto-suggest>
+          </div>
+        </div>
+      </template>
       <vs-spacer></vs-spacer>
 
       <!-- I18N -->
@@ -149,6 +184,7 @@
 
 import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import draggable from 'vuedraggable'
 
 import templateConfig from '@/templateConfig'
 
@@ -255,7 +291,10 @@ export default {
       this.$router.push(item.url)
       this.showFullSearch = false
     },
-
+    actionClicked(item) {
+      // e.stopPropogation();
+      alert('star clicked')
+    },
     showNavbarSearch() {
       this.showFullSearch = true
     },
@@ -325,7 +364,10 @@ export default {
   },
   components: {
     VxAutoSuggest,
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
+    draggable
+
+
   },
 }
 </script>
