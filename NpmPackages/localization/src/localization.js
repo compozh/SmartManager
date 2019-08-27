@@ -52,6 +52,8 @@ export default class Localization {
     if (this.__loadedLanguages[lang] || !this.__registeredLanguages[lang]) {
       return Promise.resolve(this.SetLanguage(lang))
     }
+    this.__loadedLanguages[lang] = true
+
     let promises = []
 
     for (const key in this.__registeredLanguages[lang]) {
@@ -73,7 +75,6 @@ export default class Localization {
       })
 
       this.__i18n.setLocaleMessage(lang, summaryMessages)
-      this.__loadedLanguages[lang] = true
       return this.SetLanguage(lang)
     })
   }
