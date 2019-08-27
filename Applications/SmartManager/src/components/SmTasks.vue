@@ -4,6 +4,7 @@
     <v-layout v-else row wrap justify-center pb-5 mb-4>
       <v-flex
         xs12
+        ref="tasks"
         class="task-container"
         v-for="task in tasks"
         :key="task.id"
@@ -56,6 +57,11 @@ export default {
       if (currentFolder !== targetFolder) {
         this.getTasks(targetFolder)
       }
+    },
+    tasks(tasks) {
+      if (tasks.length === this.$refs.tasks.length) {
+        this.lazyLoad()
+      }
     }
   },
   computed: {
@@ -63,25 +69,6 @@ export default {
       return this.$store.getters['sm/tasks']
     },
     // eslint-disable-next-line vue/return-in-computed-property
-    lazy() {
-      const tasks = this.tasks
-      if (tasks) {
-        const observer = new IntersectionObserver(
-          entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                this.lazyTasks.push(entry.target.id)
-              }
-            })
-          }
-        )
-        for (let i = 0; i < tasks.length; i++) {
-          let elem = document.getElementById('id' + tasks[i].id)
-          observer.observe(elem)
-        }
-      }
-    },
     checkTasks() {
       return this.tasks ? this.tasks.length : 0
     },
@@ -97,7 +84,7 @@ export default {
       this.$store.commit('sm/setCurrentFolder', folderId)
       const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
       this.$store.dispatch('sm/getTasks', {folderId, loader})
-        .then(() => this.lazy)
+        .then(() => this.lazyLoad())
     },
     openTaskAddForm() {
       this.$store.commit('sm/setTaskAddForm', 'open')
@@ -105,8 +92,20 @@ export default {
     closeTaskAddForm() {
       this.$store.commit('sm/setTaskAddForm', 'close')
     },
+    lazyLoad() {
+      this.lazyTasks.length = 0
+      const callback = entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.lazyTasks.push(entry.target.id)
+        }
+      })
+      const observer = new IntersectionObserver(callback)
+      const elements = document.querySelectorAll('.task-container')
+      elements.forEach(element => observer.observe(element))
+    },
     intersection(id) {
-      return this.lazyTasks.find(i => i === 'id' + id)
+      return this.lazyTasks.includes(String(id))
     }
   }
 }
