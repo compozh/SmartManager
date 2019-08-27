@@ -1,6 +1,6 @@
 {
   "name": "@it-enterprise/localization",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "private": false,
   "description": "library for localization",
   "author": "it-enterprise",
@@ -24,6 +24,7 @@
     "eslint-plugin-vue": "^5.0.0"
   },
   "dependencies": {
+    "vue-cookies": "^1.5.13",
     "vue-country-flag": "^1.1.1"
   }
 }

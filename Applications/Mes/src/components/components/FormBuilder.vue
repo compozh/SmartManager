@@ -44,8 +44,9 @@ export default {
 
 <style scoped lang="scss">
 .formio-container /deep/ {
-  @import "~bootstrap/dist/css/bootstrap.min";
+  @import "~bootstrap/scss/bootstrap.scss";
   @import "~choices.js/public/assets/styles/choices.css";
+
   font-size: 14px;
   font-weight: 500;
   label {
@@ -75,6 +76,13 @@ export default {
     border: 1px solid rgba(179, 2, 2, 0.81);
     color: rgba(179, 2, 2, 0.81);
     height:50px;
+  }
+  .btn.btn-danger:active, .btn.btn-danger:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
+  .btn.btn-danger::-moz-focus-inner {
+    border: 0;
   }
   .btn.btn-danger:hover {
     background-color: rgba(179, 2, 2, 0.12);
@@ -134,8 +142,13 @@ export default {
     color: #326DA8;
     height: 50px;
   }
+  .btn.btn-primary:active, .btn.btn-primary:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
   .btn.btn-primary:hover {
     background-color:  rgba(50, 109, 168, .12);
+    color: #326DA8;
   }
   .btn {
     font-size: 14px;
@@ -153,9 +166,15 @@ export default {
     color: rgba(40, 165, 69, 1);
     height: 50px;
     width: 55px;
+    padding: 0;
+  }
+  .btn.btn-success:active, .btn.btn-success:focus {
+    outline: none !important;
+    box-shadow: none;
   }
   .btn.btn-success.btn-lg:hover {
     background-color:  rgba(40, 165, 69, .12);
+    color:rgba(40, 165, 69, 1);
   }
   .form-group.has-feedback.formio-component {
     text-align: start;
@@ -172,6 +191,93 @@ export default {
   .row.formio-component.formio-component-columns.formio-component-columns {
     display: flex;
     justify-content: space-around;
+  }
+  /*input MD*/
+  .form-control {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+    border-radius: 0;
+    outline: none;
+    transition: 0.5s ease all;
+    -moz-transition: 0.5s ease all;
+    -webkit-transition: 0.5s ease all;
+  }
+  .form-control:focus {
+    outline: none;
+    box-shadow: none;
+    border-bottom: 2px solid #326da8;
+    transition: 0.5s ease all;
+    -moz-transition: 0.5s ease all;
+    -webkit-transition: 0.5s ease all;
+  }
+  .form-control[disabled="disabled"] {
+    border: none;
+  }
+  /*checkbox MD*/
+  .control-label.form-check-label {
+    margin: 16px 0;
+    display: block;
+    cursor: pointer;
+    input {
+        display: none;
+        & + span {
+            line-height: 20px;
+            height: 20px;
+            padding-left: 20px;
+            display: block;
+            position: relative;
+            &:not(:empty) {
+                padding-left: 20px + 8;
+            }
+            &:before,
+            &:after {
+                content: '';
+                width: 20px;
+                height: 20px;
+                display: block;
+                border-radius: 50%;
+                left: 0;
+                top: 0;
+                position: absolute;
+            }
+            &:before {
+                background: #D1D7E3;
+                transition: background .2s ease, transform .4s cubic-bezier(.175, .885, .32, 2);
+            }
+            &:after {
+                background: #fff;
+                transform: scale(.78);
+                transition: transform .6s cubic-bezier(.175, .885, .32, 1.4);
+            }
+        }
+        &:checked + span {
+            &:before {
+                transform: scale(1.04);
+                background: #326da8;
+            }
+            &:after {
+                transform: scale(.4);
+                transition: transform .3s ease;
+            }
+        }
+    }
+    &:hover {
+        input {
+            & + span {
+                &:before {
+                    transform: scale(.92);
+                }
+                &:after {
+                    transform: scale(.74);
+                }
+            }
+            &:checked + span {
+                &:after {
+                    transform: scale(.4);
+                }
+            }
+        }
+    }
   }
 }
 </style>
