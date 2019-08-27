@@ -69,8 +69,8 @@ export default {
   }
   .inprogress-icon {
     position: absolute;
-    left: 8px;
-    top: 8px;
+    left: 5px;
+    top: 0;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 600;
