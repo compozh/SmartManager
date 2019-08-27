@@ -187,5 +187,8 @@ export default {
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
     margin: 0;
   }
+  .work-centers-select-input .v-text-field__details {
+    display: none;
+  }
 </style>
 

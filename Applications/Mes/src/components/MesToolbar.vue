@@ -7,6 +7,17 @@
         </router-link>
       </v-flex>
       <v-spacer></v-spacer>
+      <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
+        <span class='work-centers-title'>Рабочий центр: </span>
+        <v-select
+          :items="workCentersForWorker"
+          :value="workCenter ? workCenter : ''"
+          item-text="name"
+          return-object
+          @change="changeWorkCenter"
+          class="work-centers-select-input"
+        ></v-select>
+      </v-col>
       <div class="work-centers-caption" v-if="workCenter">
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
@@ -28,11 +39,17 @@ export default {
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
+    },
+    workCentersForWorker() {
+      return this.$store.getters['mes/workCentersForWorker']
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenter')
+    },
+    changeWorkCenter(newWorkCenter) {
+      console.log(newWorkCenter)
     }
   }
 }
@@ -70,5 +87,16 @@ a {
   font-size: 14px;
   font-weight: 500;
   overflow-wrap: break-word;
+}
+.work-centers-select {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+.work-centers-select-input {
+  max-width: 300px;
+  margin: 0 5px;
 }
 </style>
