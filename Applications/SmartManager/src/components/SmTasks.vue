@@ -8,7 +8,7 @@
         class="task-container"
         v-for="task in tasks"
         :key="task.id"
-        :id="'id' + task.id"
+        :id="String(task.id)"
       >
         <sm-task-list-item
           v-if="intersection(task.id)"
