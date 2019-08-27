@@ -18,7 +18,7 @@
           class="work-centers-select-input"
         ></v-select>
       </v-col>
-      <div class="work-centers-caption" v-if="workCenter">
+      <div class="work-centers-caption" v-if="workCenter && !workCentersForWorker.length">
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
