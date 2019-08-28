@@ -18,7 +18,7 @@
     "@it-enterprise/authentication": "^1.0.3",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
-    "@it-enterprise/localization": "^1.0.6",
+    "@it-enterprise/localization": "^1.0.9",
     "@it-enterprise/modules-manager": "1.0.0",
     "@it-enterprise/routercore": "^1.0.6",
     "@it-enterprise/webappscore": "^1.0.12",
@@ -86,7 +86,6 @@
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-plugin-pwa": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
@@ -98,11 +97,6 @@
     "vue-cli-plugin-webpack-bundle-analyzer": "^1.3.0",
     "vue-template-compiler": "^2.5.21"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
   "keywords": [
     "webapp"
   ],
