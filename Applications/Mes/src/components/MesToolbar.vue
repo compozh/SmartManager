@@ -49,7 +49,11 @@ export default {
       await this.$store.dispatch('mes/initializeWorkCenter')
     },
     changeWorkCenter(newWorkCenter) {
-      console.log(newWorkCenter)
+      this.changeWorkCenterMethod(newWorkCenter)
+    },
+    async changeWorkCenterMethod(newWorkCenter) {
+      await this.$store.dispatch('mes/initializeProperties')
+      await this.$store.dispatch('mes/initializeWorkCenterBySelection', newWorkCenter )
     }
   }
 }

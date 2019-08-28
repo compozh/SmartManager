@@ -81,5 +81,10 @@ export default {
   },
   setWorkCentersForWorker(state, workCenters) {
     state.workCentersForWorker = workCenters
+  },
+  resetState(state) {
+    state.tasks = []
+    state.installations = []
+    state.tasksPageState.selectedTask = null
   }
 }

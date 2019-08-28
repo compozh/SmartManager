@@ -204,5 +204,13 @@ export default {
         commit('setSelectedTask', task)
       }
     }
+  },
+  async initializeWorkCenterBySelection({ commit }, workCenter){
+    commit('setDialogLinearLoaderMessage', 'Смена рабочего центра')
+    await commit('resetState')
+    await commit('setWorkCenter', workCenter)
+    await this.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+    await this.dispatch('mes/initializeInstallations', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+    commit('closeDialogLinearLoader')
   }
 }
