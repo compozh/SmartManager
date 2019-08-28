@@ -3,7 +3,7 @@ import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
 import gql from 'graphql-tag'
 // Queries
-import usersQuery from './graphql/users.graphql'
+import documentsQuery from './graphql/documents.graphql'
 
 import Vue from 'vue'
 
@@ -14,7 +14,7 @@ const getClient = () => {
     credentials: 'include',
     headers: {
       ... authHeader,
-      'schema': 'SKDSCHEMA'
+      'schema': 'DOCUMENTS_KEYS'
     }
   }
   return new ApolloClient({
@@ -23,14 +23,15 @@ const getClient = () => {
   })
 }
 
-export class SkdApi {
+export class KeysApi {
   constructor() {}
 
-  getUsersFromGql() {
+  getDocuments(dateFrom, dateTo) {
     return getClient().query({
-      query: gql` ${usersQuery}`
+      query: gql` ${documentsQuery}`,
+      variables: {
+        dateFrom, dateTo
+      }
     })
-      .then(result => result)
-      .catch(error => console.log(error.message))
   }
 }
