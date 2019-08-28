@@ -1,10 +1,11 @@
 <template>
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-beetwen class="main-toolbar">
-      <v-flex>
+      <v-flex row>
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a class="mes-title-link">MES</a>
         </router-link>
+        <span v-if="brandName" class="brand-name">{{brandName}}</span>
       </v-flex>
       <v-spacer></v-spacer>
       <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
@@ -42,6 +43,10 @@ export default {
     },
     workCentersForWorker() {
       return this.$store.getters['mes/workCentersForWorker']
+    },
+    brandName() {
+      let props = this.$store.dispatch('mes/initializeProperties')
+      return props.brandName
     }
   },
   methods: {
@@ -52,7 +57,6 @@ export default {
       this.changeWorkCenterMethod(newWorkCenter)
     },
     async changeWorkCenterMethod(newWorkCenter) {
-      await this.$store.dispatch('mes/initializeProperties')
       await this.$store.dispatch('mes/initializeWorkCenterBySelection', newWorkCenter )
     }
   }
@@ -102,5 +106,12 @@ a {
 .work-centers-select-input {
   max-width: 300px;
   margin: 0 5px;
+}
+.brand-name {
+  align-self: center;
+  padding: 0 20px;
+  color: #a00101de;
+  font-size: 30px;
+  font-weight: 500;
 }
 </style>

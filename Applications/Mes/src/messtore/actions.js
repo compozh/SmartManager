@@ -205,12 +205,25 @@ export default {
       }
     }
   },
+  async unfixWorkCenterForWorker({ commit }, fixationId) {
+    return await api.unfixWorkCenterForWorkerGql(fixationId)
+  },
   async initializeWorkCenterBySelection({ commit }, workCenter){
+    var props = this.getters['mes/properties']
+    var workerCode = props.workerCode
+    let workCentersFixed = await api.getWorkCentersFixedFromGql(workerCode, 'network-only')
+    workCentersFixed.forEach(fixation => {
+      if (fixation.code == workCenter.code) {
+        var fixationId = fixation.fixationId
+        this.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixationId })
+      }
+    });
     commit('setDialogLinearLoaderMessage', 'Смена рабочего центра')
     await commit('resetState')
     await commit('setWorkCenter', workCenter)
     await this.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
     await this.dispatch('mes/initializeInstallations', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+    await this.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter.code, workerCode: props.workerCode })
     commit('closeDialogLinearLoader')
   }
 }

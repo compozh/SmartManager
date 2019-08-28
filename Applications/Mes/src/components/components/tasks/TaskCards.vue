@@ -11,11 +11,18 @@
           class="task-item"
           @click="changeCurrentTask(task)"
         >
-        <span v-if="task.inProgress" class="inprogress-icon">В работе</span>
+        <v-icon v-if="task.inProgress" class="inprogress-icon">mdi-progress-wrench</v-icon>
           <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>
-
+          <v-progress-linear
+            color="#326DA8"
+            height="25"
+            :value="value"
+            reactive
+          >
+          {{value}}%
+          </v-progress-linear>
         </v-card>
       </div>
     </div>
@@ -26,6 +33,9 @@
 
 export default {
   name: 'mes-task-cards',
+  data() {
+    return {value: 0}
+  },
   props: {
     selectedTask: Object,
     selectedTasksTab: Number
@@ -69,11 +79,8 @@ export default {
   }
   .inprogress-icon {
     position: absolute;
-    left: 5px;
+    left: 0;
     top: 0;
-    font-size: 14px;
-    text-transform: uppercase;
-    font-weight: 600;
     color: rgba(7, 109, 0, 0.81);
   }
 </style>
