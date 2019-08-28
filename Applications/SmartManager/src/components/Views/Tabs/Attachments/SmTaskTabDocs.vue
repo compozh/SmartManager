@@ -1,7 +1,7 @@
 <template>
   <sm-document-viewer-rl
     v-slot="{ originals, file, select, component, params }"
-  >
+    >
     <v-container fluid pa-0>
       <v-layout
         class="viewer-layout">

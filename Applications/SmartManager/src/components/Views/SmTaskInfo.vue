@@ -143,9 +143,11 @@
               </v-tabs-items>
             </v-flex>
           </v-layout>
+        </v-flex>
+        <v-flex lg6 v-show="params.hiddenLgAndUp">
           <v-layout column>
             <v-flex>
-              <sm-task-tab-docs v-if="params.hiddenLgAndUp"></sm-task-tab-docs>
+              <sm-task-tab-docs class="hidden-md-and-down"></sm-task-tab-docs>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -186,7 +188,6 @@ export default {
 </script>
 
 <style scoped>
-
   .marker:after {
     content: '';
     position: relative;
