@@ -27,7 +27,7 @@
             @toggleHideScrollToTop="toggleHideScrollToTop"
             />
         <!-- БОКОВОЕ МЕНЮ -->
-        <vx-sidebar :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="templateConfig.applicationTitle" parent=".layout--main" />
+        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="templateConfig.applicationTitle" parent=".layout--main" />
 
         <!-- ЗОНА КОНТЕНТА -->
         <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
