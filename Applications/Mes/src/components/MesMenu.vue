@@ -37,10 +37,10 @@ export default {
           pages.push(page)
         }
       }
-      if (this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES')) {
+      if (this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES') && (this.$route.fullPath == '/MES' || this.$route.fullPath == '/MES/')) {
         this.$router.replace({path: '/MES/tasks'})
       }
-      if (this.workCenter && (this.workCenter.accessPages == 'INSTALLATIONS')) {
+      if (this.workCenter && (this.workCenter.accessPages == 'INSTALLATIONS')  && (this.$route.fullPath == '/MES' || this.$route.fullPath == '/MES/')) {
         this.$router.replace({path: '/MES/installations'})
       }
       pages = pages.sort((a,b) => {
