@@ -37,7 +37,12 @@ export default {
           pages.push(page)
         }
       }
-
+      if (this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES')) {
+        this.$router.replace({path: '/MES/tasks'})
+      }
+      if (this.workCenter && (this.workCenter.accessPages == 'INSTALLATIONS')) {
+        this.$router.replace({path: '/MES/installations'})
+      }
       pages = pages.sort((a,b) => {
         return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1)
       })
