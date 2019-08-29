@@ -13,7 +13,7 @@
     <v-content>
       <v-container class="main-block">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
-        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Устройство не зафиксировано за Рабочим центром</span>
+        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
     </v-content>
     <template v-if="snackbar.visible">

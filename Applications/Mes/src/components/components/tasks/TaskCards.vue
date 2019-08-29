@@ -11,17 +11,17 @@
           class="task-item"
           @click="changeCurrentTask(task)"
         >
-        <v-icon v-if="task.inProgress" class="inprogress-icon">mdi-progress-wrench</v-icon>
+        <v-icon v-if="task.inProgress" large class="inprogress-icon">mdi-progress-wrench</v-icon>
           <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>
-          <v-progress-linear
+          <v-progress-linear v-if="task.completionPercentage"
             color="#326DA8"
             height="25"
-            :value="value"
+            :value="Math.round(task.completionPercentage)"
             reactive
           >
-          {{value}}%
+          {{Math.round(task.completionPercentage)}}%
           </v-progress-linear>
         </v-card>
       </div>
@@ -33,9 +33,6 @@
 
 export default {
   name: 'mes-task-cards',
-  data() {
-    return {value: 0}
-  },
   props: {
     selectedTask: Object,
     selectedTasksTab: Number
@@ -45,13 +42,26 @@ export default {
       return this.$store.getters['mes/tasks']
     },
     sortedTasks() {
-      let tasks = this.tasks
+      var tasks = this.tasks
+      var tasksInProgress = []
+      var tasksIsNotInProgress = []
+      var completeSortedTasks = []
       tasks.sort((a,b) => {
         return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
           1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1)
       })
-
-      return tasks
+      if (tasks.length) {
+        for (var i = tasks.length - 1; i >= 0; i--) {
+          var task = tasks[i]
+          if (task.inProgress) {
+            tasksInProgress.push(task)
+          } else {
+            tasksIsNotInProgress.push(task)
+          }
+        }
+        completeSortedTasks = tasksInProgress.concat(tasksIsNotInProgress)
+      }
+      return completeSortedTasks
     }
   },
   methods: {
