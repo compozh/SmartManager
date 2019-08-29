@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 // Queries
 import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
+import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
@@ -17,6 +18,7 @@ import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
+import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 import Vue from 'vue'
 
 var client = null
@@ -78,6 +80,19 @@ export class MesApi {
     }
   }
 
+  async unfixWorkCenterForWorkerGql(fixationIds) {
+    var fixationId = fixationIds.fixationId
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${unfixWorkCenterForWorker}`,
+        variables: { fixationId }
+      })
+      return result.data.mesMutation.unfixWorkCenterForWorker
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
   async getWorkCentersFromGql(uuid, login, fetchPolicy) {
     try {
       const result = await getClient().query({
@@ -86,6 +101,19 @@ export class MesApi {
         fetchPolicy: fetchPolicy || 'cache-first'
       })
       return result.data.mes.workCenters
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async getWorkCentersFixedFromGql(workerCode, fetchPolicy) {
+    try {
+      const result = await getClient().query({
+        query: gql` query ($workerCode: String) ${workCentersFixed}`,
+        variables: { workerCode },
+        fetchPolicy: fetchPolicy || 'cache-first'
+      })
+      return result.data.mes.workCentersFixed
     } catch (error) {
       return console.log(error.message)
     }

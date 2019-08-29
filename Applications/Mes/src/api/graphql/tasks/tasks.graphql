@@ -18,6 +18,7 @@
 		isOneBatch
 		manualBeginRegistration
 		productionRegistrationType
+		completionPercentage
     }
   }
 }

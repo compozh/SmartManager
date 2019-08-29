@@ -2,7 +2,7 @@
   <v-list>
     <v-list-item v-for="route in links" :key="route.Id" :to="{name:route.Id}">
       <v-list-item-action>
-        <v-icon>{{route.Image}}</v-icon>
+        <v-icon large >{{route.Image}}</v-icon>
       </v-list-item-action>
       <v-list-item-content>
         <v-list-item-title>{{ route.Name }}</v-list-item-title>
