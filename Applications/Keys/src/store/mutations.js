@@ -32,9 +32,7 @@ const mutations = {
     state.userRole = val
     localStorage.setItem('userRole', val)
   },
-  // UPDATE_STATUS_CHAT(state, value) {
-  //     state.AppActiveUser.status = value;
-  // },
+
   UPDATE_WINDOW_WIDTH(state, width) {
     state.windowWidth = width
   },
@@ -43,24 +41,6 @@ const mutations = {
   // ////////////////////////////////////////////
   // COMPONENT
   // ////////////////////////////////////////////
-
-  // VxAutoSuggest
-  UPDATE_STARRED_PAGE(state, payload) {
-    // find item index in search list state
-    const index = state.navbarSearchAndPinList.data.findIndex((item) => item.index == payload.index)
-    // update the main list
-    state.navbarSearchAndPinList.data[index].highlightAction = payload.val
-
-    // if val is true add it to starred else remove
-    if (payload.val) {
-      state.starredPages.push(state.navbarSearchAndPinList.data[index])
-    } else {
-      // find item index from starred pages
-      const index = state.starredPages.findIndex((item) => item.index == payload.index)
-      // remove item using index
-      state.starredPages.splice(index, 1)
-    }
-  },
 
   // The Navbar
   ARRANGE_STARRED_PAGES_LIMITED(state, list) {

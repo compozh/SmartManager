@@ -12,118 +12,17 @@
 
       <!-- SM - OPEN SIDEBAR BUTTON -->
       <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
-<template v-if="breakpoint != 'md'">
-        <!-- STARRED PAGES - FIRST 10 -->
-        <ul class="vx-navbar__starred-pages">
-          <draggable v-model="starredPagesLimited" :group="{name: 'pinList'}" class="flex cursor-move">
-            <li class="starred-page" v-for="page in starredPagesLimited" :key="page.url">
-              <vx-tooltip :text="page.label" position="bottom" delay=".3s">
-                <feather-icon svgClasses="h-6 w-6" class="p-2 cursor-pointer" :icon="page.labelIcon" @click="$router.push(page.url)"></feather-icon>
-              </vx-tooltip>
-            </li>
-          </draggable>
-        </ul>
 
-        <!-- STARRED PAGES MORE -->
-        <div class="vx-navbar__starred-pages--more-dropdown" v-if="starredPagesMore.length">
-          <vs-dropdown vs-custom-content vs-trigger-click>
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="cursor-pointer p-2"></feather-icon>
-            <vs-dropdown-menu>
-              <ul class="vx-navbar__starred-pages-more--list">
-                <draggable v-model="starredPagesMore" :group="{name: 'pinList'}" class="cursor-move">
-                  <li class="starred-page--more flex items-center cursor-pointer" v-for="page in starredPagesMore" :key="page.url" @click="$router.push(page.url)">
-                    <feather-icon svgClasses="h-5 w-5" class="ml-2 mr-1" :icon="page.labelIcon"></feather-icon>
-                    <span class="px-2 pt-2 pb-1">{{ page.label }}</span>
-                  </li>
-                </draggable>
-              </ul>
-            </vs-dropdown-menu>
-          </vs-dropdown>
-        </div>
-
-        <div class="bookmark-container">
-          <feather-icon icon="StarIcon" :svgClasses="['stoke-current text-warning', {'text-white': navbarColor != '#fff'}]" class="cursor-pointer p-2" @click.stop="showBookmarkPagesDropdown = !showBookmarkPagesDropdown" />
-                    <div v-click-outside="outside" class="absolute bookmark-list w-1/3 xl:w-1/4 mt-4" v-if="showBookmarkPagesDropdown">
-          <vx-auto-suggest :autoFocus="true" :data="navbarSearchAndPinList" @selected="selected" @actionClicked="actionClicked" inputClassses="w-full" show-action show-pinned background-overlay></vx-auto-suggest>
-          </div>
-        </div>
-      </template>
       <vs-spacer></vs-spacer>
 
       <!-- I18N -->
-      <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+      <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer pr-5">
         <span class="cursor-pointer flex i18n-locale">
           <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag" />
           <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
         </span>
         <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
           <vs-dropdown-item :key="lang.code" v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :squared="false" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
-        </vs-dropdown-menu>
-      </vs-dropdown>
-
-            <!-- SEARCHBAR -->
-            <div class="search-full-container w-full h-full absolute left-0 rounded-lg" :class="{'flex': showFullSearch}" v-show="showFullSearch">
-                <vx-auto-suggest
-                  class="w-full"
-                  inputClassses="w-full vs-input-no-border vs-input-no-shdow-focus no-icon-border"
-                  :autoFocus="showFullSearch"
-                  :data="navbarSearchAndPinList"
-                  icon="SearchIcon"
-                  placeholder="Search..."
-                  ref="navbarSearch"
-                  @closeSearchbar="showFullSearch = false"
-                  @selected="selected"
-                  background-overlay />
-                <div class="absolute right-0 h-full z-50">
-                    <feather-icon icon="XIcon" class="px-4 cursor-pointer h-full close-search-icon" @click="showFullSearch = false"></feather-icon>
-                </div>
-            </div>
-            <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4 mr-4"></feather-icon>
-
-
-      <!-- NOTIFICATIONS -->
-      <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-        <feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadNotifications.length"></feather-icon>
-        <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
-
-          <div class="notification-top text-center p-5 bg-primary text-white">
-            <h3 class="text-white">Уведомления</h3>
-            <p class="opacity-75">{{ unreadNotifications.length }} новых</p>
-          </div>
-
-          <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings">
-          <ul class="bordered-items">
-            <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
-              <div class="flex items-start">
-                <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
-                <div class="mx-2">
-                  <span class="font-medium block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
-                  <small>{{ ntf.msg }}</small>
-                </div>
-              </div>
-              <small class="mt-1 whitespace-no-wrap">{{ elapsedTime(ntf.time) }}</small>
-            </li>
-          </ul>
-          </VuePerfectScrollbar>
-                    <div class="
-                        checkout-footer
-                        fixed
-                        bottom-0
-                        rounded-b-lg
-                        text-primary
-                        w-full
-                        p-2
-                        font-semibold
-                        text-center
-                        border
-                        border-b-0
-                        border-l-0
-                        border-r-0
-                        border-solid
-                        d-theme-border-grey-light
-                        cursor-pointer">
-                        <span>View All Notifications</span>
-                    </div>
         </vs-dropdown-menu>
       </vs-dropdown>
 
@@ -182,10 +81,6 @@
 
 <script>
 
-import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import draggable from 'vuedraggable'
-
 import templateConfig from '@/templateConfig'
 
 
@@ -201,7 +96,6 @@ export default {
   data() {
     return {
       localizations: templateConfig.localizations,
-      navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
       showFullSearch: false,
       settings: { // perfectscrollbar settings
@@ -232,14 +126,7 @@ export default {
 
     // NAVBAR STYLE
     classObj() {
-      if (this.sidebarWidth == 'default') {
-        return 'navbar-default'
-      } else if (this.sidebarWidth == 'reduced') {
-        return 'navbar-reduced'
-      } else if (this.sidebarWidth) {
-        return 'navbar-full'
-      }
-      return ''
+      return 'navbar-full'
     },
 
     // I18N
@@ -248,13 +135,6 @@ export default {
       return this.localizations.find(r => r.code == locale)
     },
 
-    // BOOKMARK & SEARCH
-    data() {
-      return this.$store.state.navbarSearchAndPinList
-    },
-    starredPages() {
-      return this.$store.state.starredPages
-    },
     starredPagesLimited: {
       get() {
         return this.starredPages.slice(0, 10)
@@ -277,7 +157,7 @@ export default {
       return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
     },
     activeUserImg() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
+      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || 'avatar-s-11.png'
     }
   },
   methods: {
@@ -291,10 +171,7 @@ export default {
       this.$router.push(item.url)
       this.showFullSearch = false
     },
-    actionClicked(item) {
-      // e.stopPropogation();
-      alert('star clicked')
-    },
+
     showNavbarSearch() {
       this.showFullSearch = true
     },
@@ -361,13 +238,15 @@ export default {
 
       }
     }
-  },
-  components: {
-    VxAutoSuggest,
-    VuePerfectScrollbar,
-    draggable
-
-
-  },
+  }
 }
 </script>
+<style lang="scss">
+.navbar-sticky {
+    .vx-navbar-wrapper {
+         .vx-navbar {
+            width: 100%;
+        }
+    }
+}
+</style>

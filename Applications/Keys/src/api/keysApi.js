@@ -4,11 +4,10 @@ import {HttpLink} from 'apollo-link-http'
 import gql from 'graphql-tag'
 // Queries
 import documentsQuery from './graphql/documents.graphql'
-
-import Vue from 'vue'
+import auth from './auth/auth'
 
 const getClient = () => {
-  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
+  const authHeader =  auth.getAuthHeader()
   const options = {
     uri: window.appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
@@ -26,7 +25,7 @@ const getClient = () => {
 export class KeysApi {
   constructor() {}
 
-  getDocuments(dateFrom, dateTo) {
+  static getDocuments(dateFrom, dateTo) {
     return getClient().query({
       query: gql` ${documentsQuery}`,
       variables: {

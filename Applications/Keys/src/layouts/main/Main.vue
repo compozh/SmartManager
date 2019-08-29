@@ -26,8 +26,6 @@
             :hideScrollToTop="hideScrollToTop"
             @toggleHideScrollToTop="toggleHideScrollToTop"
             />
-        <!-- БОКОВОЕ МЕНЮ -->
-        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="templateConfig.applicationTitle" parent=".layout--main" />
 
         <!-- ЗОНА КОНТЕНТА -->
         <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
@@ -98,13 +96,11 @@
 </template>
 
 <script>
-import VxSidebar from '@/layouts/components/vx-sidebar/VxSidebar.vue'
 import TheCustomizer from '../components/customizer/TheCustomizer.vue'
 import TheNavbar from '../components/TheNavbar.vue'
 import TheFooter from '../components/TheFooter.vue'
 import themeConfig from '@/../themeConfig.js'
 import sidebarItems from '@/sidebarItems.js'
-import steps from '@/vtourSteps.js'
 import templateConfig from '@/templateConfig.js'
 import BackToTop from 'vue-backtotop'
 const VxTour = () => import('@/components/VxTour.vue')
@@ -123,7 +119,7 @@ export default {
       windowWidth: window.innerWidth, //width of windows
       hideScrollToTop: themeConfig.hideScrollToTop,
       disableThemeTour: themeConfig.disableThemeTour,
-      steps,
+      steps: [],
       templateConfig
     }
   },
@@ -151,14 +147,7 @@ export default {
       return this.$store.state.bodyOverlay
     },
     contentAreaClass() {
-      if (this.sidebarWidth == 'default') {
-        return 'content-area-default'
-      } else if (this.sidebarWidth == 'reduced') {
-        return 'content-area-reduced'
-      } else if (this.sidebarWidth) {
-        return 'content-area-full'
-      }
-      return ''
+      return 'content-area-full'
     },
     navbarClasses() {
       return {
@@ -199,6 +188,7 @@ export default {
       this.setSidebarWidth()
     },
     setSidebarWidth() {
+
       if (this.windowWidth < 1200) {
         this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', false)
         this.$store.dispatch('updateSidebarWidth', 'no-sidebar')
@@ -214,7 +204,6 @@ export default {
     }
   },
   components: {
-    VxSidebar,
     TheNavbar,
     TheFooter,
     TheCustomizer,
@@ -222,6 +211,7 @@ export default {
     VxTour
   },
   created() {
+
     this.setSidebarWidth()
     if (this.navbarColor == '#fff' && this.isThemeDark) {
       this.updateNavbarColor('#10163a')

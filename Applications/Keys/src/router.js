@@ -24,37 +24,19 @@ let router = new VueRouter({
         // =============================================================================
         {
           path: '/',
-          name: 'home',
-          component: () => import('./views/Home.vue'),
-          meta: {
-            rule: 'public'
-          }
-        },
-        {
-          path: '/page2',
-          name: 'page-2',
-          component: () => import('./views/Page2.vue'),
+          name: 'documents',
+          component: () => import('./views/Documents/Documents.vue'),
           meta: {
             breadcrumb: [
-              {title: 'a'},
-              {title: 'b'},
-              {title: 'c'},
-
+              { title: 'Home', url: '/' },
+              { title: 'Документы'},
+              { title: 'Ключи', active: true },
             ],
-
-            rule: 'public'
-
+            pageTitle: 'Документы',
+            rule: 'editor'
           }
-        },
-        {
-          path: '/page3',
-          name: 'page-3',
-          component: () => import('./views/Page2.vue'),
-          meta: {
-            rule: 'public'
+        }
 
-          }
-        },
       ],
     },
     // =============================================================================
@@ -72,7 +54,7 @@ let router = new VueRouter({
           name: 'page-login',
           component: () => import('@/views/pages/Login.vue'),
           meta: {
-            rule: 'public'
+            rule: 'editor'
           }
         },
         {
@@ -80,7 +62,7 @@ let router = new VueRouter({
           name: 'page-error-404',
           component: () => import('@/views/pages/Error404.vue'),
           meta: {
-            rule: 'public'
+            rule: 'editor'
           }
         },
         {
@@ -88,7 +70,7 @@ let router = new VueRouter({
           name: 'page-error-500',
           component: () => import('@/views/pages/Error500.vue'),
           meta: {
-            rule: 'public'
+            rule: 'editor'
           }
         },
       ]
