@@ -1,25 +1,48 @@
-<!-- =========================================================================================
-    File Name: VxSidebarItem.vue
-    Description: Sidebar item component. Extends vuesax framework's 'vs-sidebar-item' component
-    Component Name: VxSidebarItem
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
-    <div :class="[{'vs-sidebar-item-active':activeLink}, {'disabled-item pointer-events-none': isDisabled}]" class="vs-sidebar--item" v-if="canSee">
-        <router-link v-if="to" :to="to" :class="[{'router-link-active': activeLink}]" :target="target" exact>
-            <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon">
+    <div
+      class="vs-sidebar--item" v-if="canSee"
+      :class="[
+        {'vs-sidebar-item-active':activeLink},
+        {'disabled-item pointer-events-none': isDisabled}
+      ]"
+    >
+        <router-link
+          v-if="to"
+          :to="to"
+          :class="[{'router-link-active': activeLink}]"
+          :target="target"
+          exact
+        >
+            <vs-icon
+              v-if="!featherIcon"
+              :icon-pack="iconPack"
+              :icon="icon"
+            >
             </vs-icon>
-            <feather-icon :icon="icon" :class="{'w-3 h-3': iconSmall}" v-else></feather-icon>
+            <feather-icon
+              :icon="icon"
+              :class="{'w-3 h-3': iconSmall}"
+              v-else>
+            </feather-icon>
             <slot></slot>
         </router-link>
-        <a v-else :target="target" :href="href">
-            <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon">
+
+        <a
+          v-else
+          :target="target"
+          :href="href"
+        >
+            <vs-icon
+              v-if="!featherIcon"
+              :icon-pack="iconPack"
+              :icon="icon"
+            >
             </vs-icon>
-            <feather-icon :icon="icon" :class="{'w-3 h-3': iconSmall}" v-else></feather-icon>
+            <feather-icon
+              :icon="icon"
+              :class="{'w-3 h-3': iconSmall}"
+              v-else
+            ></feather-icon>
             <slot></slot>
         </a>
     </div>
@@ -83,9 +106,8 @@ export default {
   methods: {
     CheckIsActive() {
       if (this.to) {
-        if ((this.to == this.$router.path && this.to) || (this.$route.meta.parent == this.slug)) { this.activeLink = true } else { this.activeLink = false }
-        // if (this.$route.path.slice(1).includes(this.to.slice(1)) && this.to.slice(1)) this.activeLink = true
-        // else this.activeLink = false
+        this.activeLink = !!((this.to === this.$router.path && this.to)
+          || (this.$route.meta.parent === this.slug))
       }
     }
   },

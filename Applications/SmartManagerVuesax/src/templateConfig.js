@@ -1,5 +1,5 @@
 export default {
-  applicationTitle: 'Учёт ключей',
+  applicationTitle: 'Smart Manager',
   // доступные локализации
   localizations: [
     { code: 'uk', name: 'Українська',  flag: 'ua' },

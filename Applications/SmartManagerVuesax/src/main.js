@@ -127,6 +127,7 @@ Vue.use(Localization, { dependencies })
 
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
 
 new Vue({
   router,

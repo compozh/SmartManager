@@ -1,26 +1,9 @@
 {
-    skd{
-        personsTable{
-            data{
-                photoProperty{
-                    photoUrl
-                }
-		        userId
-                fullName
-		        placeName
-                hasKey
-                mobileTel
-                email
-                department
-                birthday
-                movementDate
-                skype
-                workTel
-            },
-            columns{
-                value: key,
-                text:caption
-            }
-        }
+  smtasks {
+    users {
+      userId
+      fio
+      photo
     }
+  }
 }

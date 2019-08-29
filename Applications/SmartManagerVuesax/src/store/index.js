@@ -8,7 +8,7 @@ import mutations from './mutations'
 import state from './state'
 
 // Modules
-import appModule from './app/index'
+import appModule from './app/smStore'
 import authModule from './auth/moduleAuth'
 import notificationsModule from './notifications/moduleNotifications'
 import moduleTodo from './todo/moduleTodo.js'
@@ -36,7 +36,6 @@ const store = new Vuex.Store({
     eCommerce: moduleECommerce,
   },
   strict: process.env.NODE_ENV !== 'production'
-
 })
 
 export default store

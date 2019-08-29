@@ -1,100 +1,108 @@
-<!-- =========================================================================================
-    File Name: Main.vue
-    Description: Main layout
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-    Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
-    <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
-        <vx-tour :steps="steps" v-if="!disableThemeTour" />
+  <div
+    class="layout--main"
+    :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]"
+  >
+    <vx-tour
+      :steps="steps"
+      v-if="!disableThemeTour"/>
 
-        <!-- НАСТРОЙЩИК ТЕМЫ -->
-        <the-customizer
-            @updateNavbar="updateNavbar"
-            @updateNavbarColor="updateNavbarColor"
-            :navbarType="navbarType"
-            :navbarColor="navbarColor"
-            :footerType="footerType"
-            @updateFooter="updateFooter"
-            :routerTransition="routerTransition"
-            @updateRouterTransition="updateRouterTransition"
-            v-if="!disableCustomizer"
-            :hideScrollToTop="hideScrollToTop"
-            @toggleHideScrollToTop="toggleHideScrollToTop"
-            />
-        <!-- БОКОВОЕ МЕНЮ -->
-        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="templateConfig.applicationTitle" parent=".layout--main" />
+    <!-- НАСТРОЙЩИК ТЕМЫ -->
+    <the-customizer
+      @updateNavbar="updateNavbar"
+      @updateNavbarColor="updateNavbarColor"
+      :navbarType="navbarType"
+      :navbarColor="navbarColor"
+      :footerType="footerType"
+      @updateFooter="updateFooter"
+      :routerTransition="routerTransition"
+      @updateRouterTransition="updateRouterTransition"
+      v-if="!disableCustomizer"
+      :hideScrollToTop="hideScrollToTop"
+      @toggleHideScrollToTop="toggleHideScrollToTop"
+    />
+    <!-- БОКОВОЕ МЕНЮ -->
+    <vx-sidebar
+      :sidebarItems="sidebarItems"
+      :title="templateConfig.applicationTitle"
+      parent=".layout--main"/>
 
-        <!-- ЗОНА КОНТЕНТА -->
-        <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
+    <!-- ЗОНА КОНТЕНТА -->
+    <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
 
-            <div id="content-overlay"></div>
+      <div id="content-overlay"></div>
 
-            <div class="content-wrapper">
+      <div class="content-wrapper">
 
-                <the-navbar :navbarColor="navbarColor" :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]" />
+        <the-navbar
+          :navbarColor="navbarColor"
+          :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]"/>
 
-                <div class="router-view">
-                    <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
-                        <transition :name="routerTransition">
-                        <div class="router-header flex flex-wrap items-center mb-6" v-if="$route.meta.breadcrumb || $route.meta.pageTitle">
-                            <div class="content-area__heading" :class="{'pr-4 border-0 md:border-r border-t-0 border-b-0 border-l-0 border-solid border-grey-light' : $route.meta.breadcrumb}">
-                                <h2 class="mb-1">{{ routeTitle }}</h2>
-                            </div>
-
-                            <!-- BREADCRUMB -->
-                            <vx-breadcrumb class="ml-4 md:block hidden" v-if="$route.meta.breadcrumb" :route="$route" />
-
-                            <!-- DROPDOWN -->
-                            <vs-dropdown class="ml-auto md:block hidden cursor-pointer" vs-trigger-click>
-                                <vs-button radius icon="icon-settings" icon-pack="feather"></vs-button>
-
-                                <vs-dropdown-menu class="w-32">
-
-                                    <vs-dropdown-item>
-                                      <div @click="$router.push('/pages/profile')" class="flex items-center">
-                                        <feather-icon icon="UserIcon" class="inline-block mr-2" svgClasses="w-4 h-4" />
-                                        <span>Profile</span>
-                                      </div>
-                                    </vs-dropdown-item>
-
-                                    <vs-dropdown-item>
-                                      <div @click="$router.push('/apps/todo')" class="flex items-center">
-                                        <feather-icon icon="CheckSquareIcon" class="inline-block mr-2" svgClasses="w-4 h-4" />
-                                        <span>Tasks</span>
-                                      </div>
-                                    </vs-dropdown-item>
-
-                                    <vs-dropdown-item>
-                                      <div @click="$router.push('/apps/email')" class="flex items-center">
-                                        <feather-icon icon="MailIcon" class="inline-block mr-2" svgClasses="w-4 h-4" />
-                                        <span>Inbox</span>
-                                      </div>
-                                    </vs-dropdown-item>
-                                </vs-dropdown-menu>
-                            </vs-dropdown>
-                        </div>
-                        </transition>
-                        <div class="content-area__content">
-                            <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
-                                <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg" />
-                            </back-to-top>
-                            <transition :name="routerTransition" mode="out-in">
-                                <router-view @changeRouteTitle="changeRouteTitle"></router-view>
-                            </transition>
-                        </div>
-                    </div>
+        <div class="router-view">
+          <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
+            <transition :name="routerTransition">
+              <div class="router-header flex flex-wrap items-center mb-6"
+                   v-if="$route.meta.breadcrumb || $route.meta.pageTitle">
+                <div class="content-area__heading"
+                     :class="{'pr-4 border-0 md:border-r border-t-0 border-b-0 border-l-0 border-solid border-grey-light' : $route.meta.breadcrumb}">
+                  <h2 class="mb-1">{{ routeTitle }}</h2>
                 </div>
 
-            </div>
+                <!-- BREADCRUMB -->
+                <vx-breadcrumb
+                  class="ml-4 md:block hidden"
+                  v-if="$route.meta.breadcrumb"
+                  :route="$route"/>
 
-            <the-footer></the-footer>
+                <!-- DROPDOWN -->
+                <vs-dropdown class="ml-auto md:block hidden cursor-pointer" vs-trigger-click>
+                  <vs-button radius icon="icon-settings" icon-pack="feather"></vs-button>
+
+                  <vs-dropdown-menu class="w-32">
+
+                    <vs-dropdown-item>
+                      <div @click="$router.push('/pages/profile')" class="flex items-center">
+                        <feather-icon icon="UserIcon" class="inline-block mr-2"
+                                      svgClasses="w-4 h-4"/>
+                        <span>Profile</span>
+                      </div>
+                    </vs-dropdown-item>
+
+                    <vs-dropdown-item>
+                      <div @click="$router.push('/apps/todo')" class="flex items-center">
+                        <feather-icon icon="CheckSquareIcon" class="inline-block mr-2"
+                                      svgClasses="w-4 h-4"/>
+                        <span>Tasks</span>
+                      </div>
+                    </vs-dropdown-item>
+
+                    <vs-dropdown-item>
+                      <div @click="$router.push('/apps/email')" class="flex items-center">
+                        <feather-icon icon="MailIcon" class="inline-block mr-2"
+                                      svgClasses="w-4 h-4"/>
+                        <span>Inbox</span>
+                      </div>
+                    </vs-dropdown-item>
+                  </vs-dropdown-menu>
+                </vs-dropdown>
+              </div>
+            </transition>
+            <div class="content-area__content">
+              <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
+                <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg"/>
+              </back-to-top>
+              <transition :name="routerTransition" mode="out-in">
+                <router-view @changeRouteTitle="changeRouteTitle"></router-view>
+              </transition>
+            </div>
+          </div>
         </div>
+
+      </div>
+
+      <the-footer></the-footer>
     </div>
+  </div>
 </template>
 
 <script>
@@ -103,10 +111,10 @@ import TheCustomizer from '../components/customizer/TheCustomizer.vue'
 import TheNavbar from '../components/TheNavbar.vue'
 import TheFooter from '../components/TheFooter.vue'
 import themeConfig from '@/../themeConfig.js'
-import sidebarItems from '@/sidebarItems.js'
 import steps from '@/vtourSteps.js'
 import templateConfig from '@/templateConfig.js'
 import BackToTop from 'vue-backtotop'
+
 const VxTour = () => import('@/components/VxTour.vue')
 
 export default {
@@ -118,13 +126,12 @@ export default {
       routerTransition: themeConfig.routerTransition || 'none',
       isNavbarDark: false,
       routeTitle: this.$route.meta.pageTitle,
-      sidebarItems: sidebarItems,
       disableCustomizer: themeConfig.disableCustomizer,
       windowWidth: window.innerWidth, //width of windows
       hideScrollToTop: themeConfig.hideScrollToTop,
       disableThemeTour: themeConfig.disableThemeTour,
       steps,
-      templateConfig
+      templateConfig,
     }
   },
   watch: {
@@ -132,7 +139,7 @@ export default {
       this.routeTitle = this.$route.meta.pageTitle
     },
     isThemeDark(val) {
-      if (this.navbarColor == '#fff' && val) {
+      if (this.navbarColor === '#fff' && val) {
         this.updateNavbarColor('#10163a')
       } else {
         this.updateNavbarColor('#fff')
@@ -140,10 +147,29 @@ export default {
     },
   },
   computed: {
-    isAppPage() {
-      if (this.$route.path.includes('/apps/')) { return true } else { return false }
+    sidebarItems() {
+      const items = this.$store.state.sm.folders
+      if (items) {
+        return items.map(i => {
+          return {
+            url: '/' + i.code,
+            name: i.name,
+            slug: i.name,
+            tag: i.count,
+            tagColor: 'primary',
+            icon: 'FolderIcon',
+            code: i.code
+          }
+        })
+      }
+      return []
     },
-    isThemeDark() { return this.$store.state.theme == 'dark' },
+    isAppPage() {
+      return !!this.$route.path.includes('/apps/')
+    },
+    isThemeDark() {
+      return this.$store.state.theme === 'dark'
+    },
     sidebarWidth() {
       return this.$store.state.sidebarWidth
     },
@@ -151,9 +177,9 @@ export default {
       return this.$store.state.bodyOverlay
     },
     contentAreaClass() {
-      if (this.sidebarWidth == 'default') {
+      if (this.sidebarWidth === 'default') {
         return 'content-area-default'
-      } else if (this.sidebarWidth == 'reduced') {
+      } else if (this.sidebarWidth === 'reduced') {
         return 'content-area-reduced'
       } else if (this.sidebarWidth) {
         return 'content-area-full'
@@ -162,31 +188,40 @@ export default {
     },
     navbarClasses() {
       return {
-        'navbar-hidden': this.navbarType == 'hidden',
-        'navbar-sticky': this.navbarType == 'sticky',
-        'navbar-static': this.navbarType == 'static',
-        'navbar-floating': this.navbarType == 'floating',
+        'navbar-hidden': this.navbarType === 'hidden',
+        'navbar-sticky': this.navbarType === 'sticky',
+        'navbar-static': this.navbarType === 'static',
+        'navbar-floating': this.navbarType === 'floating',
       }
     },
     footerClasses() {
       return {
-        'footer-hidden': this.footerType == 'hidden',
-        'footer-sticky': this.footerType == 'sticky',
-        'footer-static': this.footerType == 'static',
+        'footer-hidden': this.footerType === 'hidden',
+        'footer-sticky': this.footerType === 'sticky',
+        'footer-static': this.footerType === 'static',
       }
     },
   },
   methods: {
+    getFolders() {
+      this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
+    },
     changeRouteTitle(title) {
       this.routeTitle = title
     },
     updateNavbar(val) {
-      if (val == 'static') { this.updateNavbarColor('#fff') }
+      if (val === 'static') {
+        this.updateNavbarColor('#fff')
+      }
       this.navbarType = val
     },
     updateNavbarColor(val) {
       this.navbarColor = val
-      if (val == '#fff') { this.isNavbarDark = false } else { this.isNavbarDark = true }
+      if (val === '#fff') {
+        this.isNavbarDark = false
+      } else {
+        this.isNavbarDark = true
+      }
     },
     updateFooter(val) {
       this.footerType = val
@@ -222,8 +257,9 @@ export default {
     VxTour
   },
   created() {
+    this.getFolders()
     this.setSidebarWidth()
-    if (this.navbarColor == '#fff' && this.isThemeDark) {
+    if (this.navbarColor === '#fff' && this.isThemeDark) {
       this.updateNavbarColor('#10163a')
     } else {
       this.updateNavbarColor(this.navbarColor)
