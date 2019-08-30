@@ -1,11 +1,18 @@
 <template>
-  <v-container fluid fill-height>
+  <v-container fluid fill-height >
+
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6 lg4>
-        <login-rl v-slot="{ userData, message, params }">
+        <login-rl v-slot="{ userData, message, params, needConfirmPassword}">
+          
           <v-container>
             <!-- Логин/пароль режим -->
-            <v-layout column v-if="!qrMode">
+            <v-layout v-if="needConfirmPassword">
+              <v-flex>
+                <confirm-password> </confirm-password>
+              </v-flex>
+            </v-layout>
+            <v-layout column v-if="!qrMode && !needConfirmPassword">
               <v-flex>
                 <v-text-field
                   color="cyan"
@@ -35,6 +42,7 @@
                     ></v-checkbox>
                   </v-flex>
                   <v-flex class="text-xs-right">
+                    <a v-on="params.buttonEventRecover">Забыли пароль?</a>
                     <v-btn
                       class="cyan white--text text-xs-right"
                       v-bind="params.buttonAttrs"
@@ -80,6 +88,7 @@
 <script>
 import loginRl from '../renderless/Login'
 import qrLogin from './QrLogin'
+import confirmPassword from './ConfirmPassword'
 export default {
   name: 'login',
   props: ['allowQrMode'],
@@ -90,7 +99,8 @@ export default {
   },
   components: {
     'login-rl': loginRl,
-    'qr-login': qrLogin
+    'qr-login': qrLogin,
+    'confirm-password': confirmPassword
   }
 }
 </script>

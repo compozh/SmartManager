@@ -1,5 +1,4 @@
 const currentUserKey = 'currentUser'
-
 /** хранение текущего пользователя в localStorage */
 const currentUser = {
   get() {
@@ -25,7 +24,7 @@ const currentUser = {
 export default class Authentication {
 
   __dependencies
-
+  __tempResponce
   /**
    * Конструктор
    * @param {} modulesManager менеджер модулей
@@ -101,6 +100,14 @@ export default class Authentication {
       response = response.data
 
       var token = response.access_token
+
+      if (response.tempPasword) {
+        if (token) {
+          this.__tempResponce = response
+        }
+        this.__store.dispatch('authentication/setTempPassword', true)
+        return
+      }
       // сохранение токена
       if (token) {
         currentUser.set(response)
@@ -113,6 +120,35 @@ export default class Authentication {
     } catch (res) {
       throw new Error(`Ошибка входа. \r\n ${res}`)
     }
+  }
+  /**
+   * Подтверждение входа с помощью временного кода
+   * @param {string} tempPassword Временный код
+   */
+  async ConfirmPassword(tempPassword) {
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/confirm`, {
+      TempPassword: tempPassword
+    },{
+      withCredentials: true
+    })
+    if (response.data) {
+      currentUser.set(this.__tempResponce)
+      this.__tempResponce = undefined
+      await this.setCurrentUser()
+      this.__store.dispatch('authentication/setTempPassword', false)
+      return response.data
+    }
+    return response.data
+  }
+
+  /**
+   * Получение ссылки на виджет востановления паролей
+   */
+  async Recover() {
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/recovery`, {
+      withCredentials: true
+    })
+    return response.data
   }
 
   /**
