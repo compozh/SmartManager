@@ -94,7 +94,8 @@ import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
-
+// moment
+Vue.use(require('vue-moment'))
 
 
 const apolloProvider = new VueApollo({

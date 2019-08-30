@@ -33,26 +33,29 @@
               :highlighted="highlightedDates"
             ></datepicker>
           </li>
-          <li class="flex items-center cursor-pointer py-1"></li>
+        </ul>
+        <vs-divider></vs-divider>
+        <h6 class="font-bold mb-3">Номер документа</h6>
+        <ul>
+          <li class="flex items-center cursor-pointer py-1">
+            <vs-input></vs-input>
+          </li>
         </ul>
       </div>
     </vs-sidebar>
     <!-- CONTENT -->
     <div :class="{'sidebar-spacer-with-margin': clickNotClose}">
-      <h6>Всего документов: {{totalDocuments.length}}</h6>
-      <div :key="doc.id" v-for="doc in documents">
-        <documents-item :item="doc"></documents-item>
-      </div>
+      <h6 class="py-3">Всего документов: {{totalDocuments.length}}</h6>
 
+      <div :key="doc.id" v-for="doc in documents">
+        <documents-item @click="onDocumentClick" :item="doc"></documents-item>
+      </div>
       <vs-pagination :total="totalPages" v-model="currentPage"></vs-pagination>
     </div>
-
   </div>
 </template>
 
 <script>
-
-
 import Datepicker from 'vuejs-datepicker'
 import { en, ru, uk } from 'vuejs-datepicker/dist/locale'
 let localiztions = {
@@ -73,8 +76,7 @@ export default {
       filterIsActive: true,
       clickNotClose: true,
       currentPage: 1,
-      documentsOnPage: 5,
-
+      documentsOnPage: 15
     }
   },
   computed: {
@@ -85,7 +87,6 @@ export default {
       }
     },
     datelocale() {
-      console.log(this.$i18n.locale)
       return localiztions[this.$i18n.locale]
     },
     dateFrom: {
@@ -95,7 +96,7 @@ export default {
       set(v) {
         this.currentPage = 1
         this.$store.dispatch('app/setFilter', {
-          dateFrom: v,
+          dateFrom: v
         })
       }
     },
@@ -114,13 +115,22 @@ export default {
       return this.$store.state.app.documents
     },
     totalPages() {
-      return Math.ceil(this.$store.state.app.documents.length / this.documentsOnPage)
+      return Math.ceil(
+        this.$store.state.app.documents.length / this.documentsOnPage
+      )
     },
     documents() {
-      return this.$store.state.app.documents.slice(this.documentsOnPage * (this.currentPage - 1), this.documentsOnPage * this.currentPage )
+      return this.$store.state.app.documents.slice(
+        this.documentsOnPage * (this.currentPage - 1),
+        this.documentsOnPage * this.currentPage
+      )
     }
   },
-  methods: {},
+  methods: {
+    onDocumentClick(item) {
+      this.$router.push({path: `/${item.id}`})
+    }
+  },
   created() {
     const thisIns = this
     this.$store.dispatch('app/loadDocuments').catch(function(error) {
