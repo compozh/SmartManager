@@ -1,5 +1,5 @@
 export default {
-  name: 'confirm',
+  name: 'ConfirmTempPassword',
   data: () => ({
     code: ''
   }),
@@ -9,10 +9,10 @@ export default {
     },
   },
   methods: {
-    SendConfirmCode() {
-      console.log('SendConfirm')
-      this.$authentication.ConfirmPassword(this.code).then(res => {
+    SendTempPassword() {
+      this.$authentication.СonfirmTempPassword(this.code).then(res => {
         if (res) {
+          this.$store.commit('authentication/setCurrentUser', this.$authentication.currentUser)
           this.$router.replace({path: this.routeToBack})
         }
       })
@@ -20,23 +20,26 @@ export default {
   },
   render() {
     return this.$scopedSlots.default({
-      confirm: {
-        confirmAttrs: {
-          label: 'Введите временный код',
+      properties: {
+        buttonSendName: this.$t('authentication.send'),
+        tempPasswordFieldAttrs: {
+          label: this.$t('authentication.enterTempCode'),
+          placeholder: this.$t('authentication.enterTempCodeDot'),
+          title: this.$t('authentication.enterTempCodeTitle'),
           value: this.code,
         },
-        SetCode: {
+        tempPasswordFieldEvents: {
           input: value => (this.code = value),
           keydown: e => {
             if (e.key === 'Enter') {
               this.code = e.target.value
               e.preventDefault()
-              this.SendConfirmCode()
+              this.SendTempPassword()
             }
           }
         },
-        SendConfirmCode: {
-          click: () => this.SendConfirmCode()
+        sendTempPasswordFieldEvents: {
+          click: () => this.SendTempPassword()
         }
       }
     })

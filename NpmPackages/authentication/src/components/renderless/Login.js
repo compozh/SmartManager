@@ -14,7 +14,7 @@ export default {
     routeToBack() {
       return this.$route.params.routeToBack
     },
-    needConfirmPassword() {
+    needEnterTempPassword() {
       return this.$store.state.authentication.needEnterTempPassword
     }
   },
@@ -29,7 +29,7 @@ export default {
       this.loading = true
       this.$authentication.logIn(this.userData.login, this.userData.password, this.userData.rememberMe).then(res => {
         this.loading = false
-        if (res) {
+        if (res && !res.tempPasword) {
           this.$store.commit('authentication/setCurrentUser', this.$authentication.currentUser)
           this.$router.replace({ path: this.routeToBack })
         }
@@ -38,8 +38,8 @@ export default {
         return (this.message = e || 'Ошибка авторизации')
       })
     },
-    recover() {
-      this.$authentication.Recover().then(res => {
+    GetRecoveryPasswordUrl() {
+      this.$authentication.GetRecoveryPasswordUrl().then(res => {
         if (res.ALLOWED) {
           window.open(res.LINK, '_blank')
         }
@@ -53,7 +53,7 @@ export default {
     return this.$scopedSlots.default({
       userData: this.userData,
       message: this.message,
-      needConfirmPassword: this.needConfirmPassword,
+      needEnterTempPassword: this.needEnterTempPassword,
       loading: this.loading,
       params: {
         loginAttrs: {
@@ -105,8 +105,8 @@ export default {
         buttonEvents: {
           click: () => this.login()
         },
-        buttonEventRecover: {
-          click: () => this.recover()
+        buttonEventRecoverPasswordUrl: {
+          click: () => this.GetRecoveryPasswordUrl()
         },
         messageAttrs: {
           style: [{ display: this.message ? 'block' : 'none' }]

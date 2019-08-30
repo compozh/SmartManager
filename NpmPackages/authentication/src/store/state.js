@@ -1,7 +1,5 @@
 const state = {
   currentUser: null,
-  needEnterTempPassword: false,
-  userData: undefined,
-  token: ''
+  needEnterTempPassword: false
 }
 export default state

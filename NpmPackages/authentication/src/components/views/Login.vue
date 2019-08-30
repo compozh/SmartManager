@@ -3,16 +3,16 @@
 
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6 lg4>
-        <login-rl v-slot="{ userData, message, params, loading, needConfirmPassword}">
+        <login-rl v-slot="{ userData, message, params, loading, needEnterTempPassword}">
           
           <v-container>
             <!-- Логин/пароль режим -->
-            <v-layout v-if="needConfirmPassword">
+            <v-layout v-if="needEnterTempPassword">
               <v-flex>
                 <confirm-password> </confirm-password>
               </v-flex>
             </v-layout>
-            <v-layout column v-if="!qrMode && !needConfirmPassword">
+            <v-layout column v-if="!qrMode && !needEnterTempPassword">
               <v-flex>
                 <v-text-field
                   color="cyan"
@@ -42,7 +42,7 @@
                     ></v-checkbox>
                   </v-flex>
                   <v-flex class="text-xs-right">
-                    <a v-on="params.buttonEventRecover">Забыли пароль?</a>
+                    <a v-on="params.buttonEventRecoverPasswordUrl">Забыли пароль?</a>
                     <v-btn
                       class="cyan white--text text-xs-right"
                       v-bind="params.buttonAttrs"
