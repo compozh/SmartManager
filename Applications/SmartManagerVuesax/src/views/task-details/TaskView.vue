@@ -1,10 +1,12 @@
 <template>
-  <div id="task-app"
-       class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden">
-
+  <div
+    id="task-app"
+    class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
+  >
     <vs-sidebar
       class="items-no-padding"
       parent="#task-app"
+
       :click-not-close="clickNotClose"
       :hidden-background="clickNotClose"
       v-model="isEmailSidebarActive"
@@ -17,27 +19,28 @@
       class="app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
     >
 
-    <!-- TASK DETAILS  -->
-      <task-details v-if="currentTab === 'details'"></task-details>
+      <!-- TASK DETAILS  -->
+      <task-details v-if="currentTab === 'details'" :task="task"></task-details>
 
-    <!-- TASK COMMENTS  -->
-      <task-attachments v-if="currentTab === 'attachments'"></task-attachments>
+      <!-- TASK ATTACHMENTS  -->
+      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments"></task-attachments>
 
-    <!-- TASK DETAILS  -->
-      <task-comments v-if="currentTab === 'comments'"></task-comments>
+      <!-- TASK DETAILS  -->
+      <task-comments v-if="currentTab === 'comments'" :comments="comments"></task-comments>
 
-    <!-- TASK COMMENTS  -->
+      <!-- TASK COMMENTS  -->
       <task-approvals v-if="currentTab === 'approvals'"></task-approvals>
+
     </div>
   </div>
 </template>
 
 <script>
 import TaskSidebar from './TaskSidebar.vue'
-import TaskDetails from './TaskDetails.vue'
-import TaskAttachments from './TaskAttachments.vue'
-import TaskComments from './TaskComments.vue'
-import TaskApprovals from './TaskApprovals.vue'
+import TaskDetails from './task-details/TaskDetails.vue'
+import TaskAttachments from './task-attachments/TaskAttachments.vue'
+import TaskComments from './task-comments/TaskComments.vue'
+import TaskApprovals from './task-approvals/TaskApprovals.vue'
 
 export default {
   components: {
@@ -48,6 +51,7 @@ export default {
     TaskApprovals
   },
   data: () => ({
+    loding: true,
     currentTab: 'details',
     clickNotClose: true,
     isEmailSidebarActive: true,
@@ -57,15 +61,34 @@ export default {
       wheelSpeed: 0.30,
     }
   }),
+  created() {
+    const id = +this.$route.params.id
+    const task = this.task
+    if (task === null || task.id !== id) {
+      this.$store.dispatch('sm/getTaskInfo', {
+        taskId: id,
+        loader: 'setCircularLoader'
+      })
+    }
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.handleWindowResize)
+    })
+  },
+  computed: {
+    task() {
+      return this.$store.state.sm.taskInfo
+    },
+    attachments() {
+      return this.task ? this.task.originals : []
+    },
+    comments() {
+      return this.task ? this.task.comments : []
+    }
+  },
   methods: {
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     }
-  },
-  created() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.handleWindowResize)
-    })
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleWindowResize)

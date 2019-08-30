@@ -3,18 +3,18 @@
     <div class="px-6 py-6 flex flex-col">
 
       <!-- details -->
-      <div class="flex justify-between items-center cursor-pointer" @click="$emit('changeTab', 'details')">
-        <div class="flex items-center mb-2">
-          <feather-icon icon="AlertCircleIcon"></feather-icon>
-          <span class="text-lg ml-3">{{ $t('tabs.details') }}</span>
-        </div>
-        <vs-chip class="number" color="primary">1</vs-chip>
+      <div class="flex items-center mt-4 mb-2 cursor-pointer" @click="$emit('changeTab', 'details')">
+        <feather-icon icon="AlertCircleIcon"></feather-icon>
+        <span class="text-lg ml-3">{{ $t('tabs.details') }}</span>
       </div>
 
       <!-- attachments -->
-      <div class="flex items-center mt-4 mb-2 cursor-pointer" @click="$emit('changeTab', 'attachments')">
-        <feather-icon icon="PaperclipIcon"></feather-icon>
-        <span class="text-lg ml-3">{{ $t('tabs.attachments') }}</span>
+      <div class="flex justify-between items-center mt-4 cursor-pointer" @click="$emit('changeTab', 'attachments')">
+        <div class="flex items-center mb-2">
+          <feather-icon icon="PaperclipIcon"></feather-icon>
+          <span class="text-lg ml-3">{{ $t('tabs.attachments') }}</span>
+        </div>
+        <vs-chip class="number" color="primary">3</vs-chip>
       </div>
 
       <!-- comments -->
@@ -23,7 +23,7 @@
           <feather-icon icon="MessageSquareIcon"></feather-icon>
           <span class="text-lg ml-3">{{ $t('tabs.comments') }}</span>
         </div>
-        <vs-chip class="number" color="warning">2</vs-chip>
+        <vs-chip class="number" color="warning">5</vs-chip>
       </div>
 
       <!-- approvals -->
@@ -39,6 +39,14 @@
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
+  props: {
+    attachments: {
+      type: Array
+    },
+    comments: {
+      type: Array
+    }
+  },
   components: {
     VuePerfectScrollbar
   },
@@ -47,11 +55,6 @@ export default {
       maxScrollbarLength: 60,
       wheelSpeed: 0.30,
     }
-  }),
-  methods: {
-    changeTab(tabName) {
-      this.$emit('closeSidebar', false)
-    },
-  }
+  })
 }
 </script>

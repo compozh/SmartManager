@@ -45,10 +45,6 @@ export default {
   },
   methods: {
     taskLink(id) {
-      this.$store.dispatch('sm/getTaskInfo', {
-        taskId: id,
-        loader: 'setCircularLoader'
-      })
       this.$router.push({name: 'task-details', params: {id}})
     }
   }

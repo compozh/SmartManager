@@ -1,7 +1,5 @@
 <template>
   <VuePerfectScrollbar class="chat-scroll-area pt-4" :settings="settings">
-
-    <!-- RIGHT COLUMN -->
     <div
       class="chat__bg app-fixed-height chat-content-area border border-solid d-theme-border-grey-light border-t-0 border-r-0 border-b-0"
       :class="{'sidebar-spacer--wide': clickNotClose, 'flex items-center justify-center': activeChatUser === null}"
@@ -13,7 +11,7 @@
           ref="chatLogPS"
         >
           <div class="chat__log" ref="chatLog">
-            <chat-log :userId="activeChatUser" v-if="activeChatUser"></chat-log>
+<!--            <chat-log :userId="activeChatUser" v-if="activeChatUser"></chat-log>-->
           </div>
         </VuePerfectScrollbar>
 

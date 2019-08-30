@@ -25,6 +25,7 @@ fragment taskFields on Task {
   declarerPhoto
   performerId
   performer
+  performerPhoto
   dateplan
   dateAdd
   status
