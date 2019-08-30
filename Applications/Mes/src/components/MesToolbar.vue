@@ -7,17 +7,16 @@
         </router-link>
         <span v-if="brandName" class="brand-name">{{brandName}}</span>
       </v-flex>
-      <v-spacer></v-spacer>
       <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
-        <v-select
+        <v-autocomplete
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
           return-object
           @change="changeWorkCenter"
           class="work-centers-select-input"
-        ></v-select>
+        ></v-autocomplete>
       </v-col>
       <div class="work-centers-caption" v-if="workCenter && !workCentersForWorker.length">
         <span class='work-centers-title'>Рабочий центр: </span>
@@ -90,6 +89,7 @@ a {
   font-size: 16px;
   font-weight: 500;
   color: #326DA8;
+  width: 120px;
 }
 .work-centers-name {
   font-size: 14px;
@@ -102,10 +102,14 @@ a {
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+  /* flex-grow: 10; */
 }
 .work-centers-select-input {
-  max-width: 300px;
   margin: 0 5px;
+  max-width: 330px;
+}
+.work-centers-select-input .v-input__control {
+  width: inherit;
 }
 .brand-name {
   align-self: center;
