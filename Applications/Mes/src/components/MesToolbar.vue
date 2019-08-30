@@ -103,7 +103,7 @@ a {
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
-  /* flex-grow: 10; */
+  flex-grow: 10;
 }
 .work-centers-select-input {
   margin: 0 5px;
