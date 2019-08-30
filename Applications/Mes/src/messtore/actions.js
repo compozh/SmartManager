@@ -31,8 +31,8 @@ export default {
       } else if (!uuid && !sessionStorageUuid) {
         uuid = api.generateUUID()
         $cookies.set('mesUuid', uuid, '-1')
-        window.sessionStorage.setItem('mesUuid', uuid)
       }
+      window.sessionStorage.setItem('mesUuid', uuid)
       console.log(uuid)
       let workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
       commit('setInitialWorkCenter', true)
