@@ -7,7 +7,6 @@
       <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter" color="black"></v-app-bar-nav-icon>
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
-      <!-- <language-component/> -->
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
     <v-content>
