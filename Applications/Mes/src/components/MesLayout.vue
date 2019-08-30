@@ -1,6 +1,6 @@
 <template>
   <v-app id="mes-app">
-    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped hide-overlay :mini-variant="menuMiniMode" v-model="drawer">
+    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" hide-overlay :mini-variant="menuMiniMode">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
@@ -57,11 +57,6 @@
 <script>
 export default {
   name: 'mes-layout',
-  data(vm) {
-    return {
-      drawer: vm.$vuetify.breakpoint.smAndUp
-    }
-  },
   computed: {
     currentUser() {
       return this.$store.state.authentication.currentUser
@@ -87,11 +82,7 @@ export default {
   },
   methods: {
     toggleMenuMode() {
-      if (this.$vuetify.breakpoint.xl || this.$vuetify.breakpoint.lg) {
-        this.$store.dispatch('mes/toggleMenuMiniMode')
-      } else {
-        this.drawer = !this.drawer
-      }
+      this.$store.dispatch('mes/toggleMenuMiniMode')
     },
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')

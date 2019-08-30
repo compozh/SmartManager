@@ -83,6 +83,13 @@ start()
 async function start()   {
   // Загрузка приложения
   let webAppsCore = await Vue.prototype.$WebApps
+  // Редирект индексной страницы напрямую к приложению
+  //ToDo Поискать другой способ
+  if ((webAppsCore.__router.app._route.fullPath == '/index.html')
+      || (webAppsCore.__router.app._route.fullPath == '/MES/index.html')
+      || (webAppsCore.__router.app._route.fullPath == '/meswebapps/MES/index.html')) {
+    webAppsCore.__router.replace({path: '/MES/'})
+  }
   const opts = {
     theme: {
       light: true,
