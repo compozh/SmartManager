@@ -30,7 +30,6 @@ export default {
       this.$authentication.logIn(this.userData.login, this.userData.password, this.userData.rememberMe).then(res => {
         this.loading = false
         if (res && !res.tempPasword) {
-          this.$store.commit('authentication/setCurrentUser', this.$authentication.currentUser)
           this.$router.replace({ path: this.routeToBack })
         }
       }).catch((e) => {

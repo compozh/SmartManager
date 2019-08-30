@@ -12,7 +12,6 @@ export default {
     SendTempPassword() {
       this.$authentication.СonfirmTempPassword(this.code).then(res => {
         if (res) {
-          this.$store.commit('authentication/setCurrentUser', this.$authentication.currentUser)
           this.$router.replace({path: this.routeToBack})
         }
       })

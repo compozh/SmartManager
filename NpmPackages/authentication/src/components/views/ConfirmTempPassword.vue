@@ -15,7 +15,7 @@
     </div>
 </template>
 <script>
-import confirmTempPassword from '../renderless/ConfirmPassword'
+import confirmTempPassword from '../renderless/ConfirmTempPassword'
 
 export default {
   components: {
