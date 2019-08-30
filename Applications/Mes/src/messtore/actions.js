@@ -25,9 +25,13 @@ export default {
     commit('closeSnackbar')
     try {
       var uuid = $cookies.get('mesUuid')
-      if (!uuid) {
+      var sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
+      if (!uuid && sessionStorageUuid) {
+        uuid = sessionStorageUuid
+      } else if (!uuid && !sessionStorageUuid) {
         uuid = api.generateUUID()
         $cookies.set('mesUuid', uuid, '-1')
+        window.sessionStorage.setItem('mesUuid', uuid)
       }
       console.log(uuid)
       let workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
