@@ -34,7 +34,7 @@
         isIncomingTechnicalTareRegistrationEnabled
         blockOverallInput
         blockInputNowQuantity
-        isPreparationalResourcesLimited
+        isPreparationResourcesLimited
         inputTareByDirectory
         inputGrossWeight
         isRegistrationUnsuitable

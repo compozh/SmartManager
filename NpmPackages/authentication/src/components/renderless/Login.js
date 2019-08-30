@@ -6,7 +6,9 @@ export default {
       password: '',
       remember: false
     },
-    message: ''
+    message: '',
+    loading: false
+
   }),
   computed: {
     routeToBack() {
@@ -24,12 +26,17 @@ export default {
       if (!this.userData.password) {
         return (this.message = this.$t('authentication.emptyPassword'))
       }
+      this.loading = true
       this.$authentication.logIn(this.userData.login, this.userData.password, this.userData.rememberMe).then(res => {
+        this.loading = false
         if (res) {
           this.$store.commit('authentication/setCurrentUser', this.$authentication.currentUser)
           this.$router.replace({ path: this.routeToBack })
         }
-      }).catch((e) => (this.message = e || 'Ошибка авторизации'))
+      }).catch((e) => {
+        this.loading = false
+        return (this.message = e || 'Ошибка авторизации')
+      })
     },
     recover() {
       this.$authentication.Recover().then(res => {
@@ -47,6 +54,7 @@ export default {
       userData: this.userData,
       message: this.message,
       needConfirmPassword: this.needConfirmPassword,
+      loading: this.loading,
       params: {
         loginAttrs: {
           value: this.userData.login,

@@ -1,13 +1,25 @@
 <template>
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-beetwen class="main-toolbar">
-      <v-flex>
+      <v-flex row>
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a class="mes-title-link">MES</a>
         </router-link>
+        <span v-if="brandName" class="brand-name">{{brandName}}</span>
       </v-flex>
       <v-spacer></v-spacer>
-      <div class="work-centers-caption" v-if="workCenter">
+      <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
+        <span class='work-centers-title'>Рабочий центр: </span>
+        <v-select
+          :items="workCentersForWorker"
+          :value="workCenter ? workCenter : ''"
+          item-text="name"
+          return-object
+          @change="changeWorkCenter"
+          class="work-centers-select-input"
+        ></v-select>
+      </v-col>
+      <div class="work-centers-caption" v-if="workCenter && !workCentersForWorker.length">
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
@@ -28,11 +40,24 @@ export default {
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
+    },
+    workCentersForWorker() {
+      return this.$store.getters['mes/workCentersForWorker']
+    },
+    brandName() {
+      let props = this.$store.dispatch('mes/initializeProperties')
+      return props.brandName
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenter')
+    },
+    changeWorkCenter(newWorkCenter) {
+      this.changeWorkCenterMethod(newWorkCenter)
+    },
+    async changeWorkCenterMethod(newWorkCenter) {
+      await this.$store.dispatch('mes/initializeWorkCenterBySelection', newWorkCenter )
     }
   }
 }
@@ -70,5 +95,23 @@ a {
   font-size: 14px;
   font-weight: 500;
   overflow-wrap: break-word;
+}
+.work-centers-select {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+.work-centers-select-input {
+  max-width: 300px;
+  margin: 0 5px;
+}
+.brand-name {
+  align-self: center;
+  padding: 0 20px;
+  color: #a00101de;
+  font-size: 30px;
+  font-weight: 500;
 }
 </style>

@@ -3,7 +3,7 @@
 
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6 lg4>
-        <login-rl v-slot="{ userData, message, params, needConfirmPassword}">
+        <login-rl v-slot="{ userData, message, params, loading, needConfirmPassword}">
           
           <v-container>
             <!-- Логин/пароль режим -->

@@ -1,0 +1,12 @@
+{
+    mes{
+        workCentersFixed(workerCode: $workerCode){
+            fixationId
+			code
+            name
+			description
+			iiotLink
+			timePoint
+        }
+    }
+}

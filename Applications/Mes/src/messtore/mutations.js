@@ -79,7 +79,20 @@ export default {
   setInitialWorkCenter(state, value) {
     state.initialWorkCenter = value
   },
-  setWorkCentersForWorker(state, workCenters) {
-    state.workCentersForWorker = workCenters
+  setWorkCentersForWorker(state, data) {
+    state.workCentersForWorker = data.workCenters
+    if (!state.workCenter) {
+      var firstWorkCenterCodeByFixation = data.firstWorkCenter.code
+      data.workCenters.forEach(workCenter => {
+        if (workCenter.code == firstWorkCenterCodeByFixation) {
+          return state.workCenter = workCenter
+        }
+      })
+    }
+  },
+  resetState(state) {
+    state.tasks = []
+    state.installations = []
+    state.tasksPageState.selectedTask = null
   }
 }

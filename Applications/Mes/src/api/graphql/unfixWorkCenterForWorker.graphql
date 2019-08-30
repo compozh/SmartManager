@@ -1,0 +1,10 @@
+mutation($fixationId:Int!) {
+    mesMutation {
+        unfixWorkCenterForWorker(fixationId: $fixationId) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

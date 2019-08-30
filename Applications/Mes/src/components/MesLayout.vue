@@ -1,6 +1,6 @@
 <template>
   <v-app id="mes-app">
-    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped hide-overlay :mini-variant="menuMiniMode" v-model="drawer">
+    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" hide-overlay :mini-variant="menuMiniMode">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
@@ -8,12 +8,12 @@
       <router-view name="toolbar"/>
       <v-spacer></v-spacer>
       <!-- <language-component/> -->
-      <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="2"></v-progress-linear>
+      <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
     <v-content>
       <v-container class="main-block">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
-        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Устройство не зафиксировано за Рабочим центром</span>
+        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
     </v-content>
     <template v-if="snackbar.visible">
@@ -57,11 +57,6 @@
 <script>
 export default {
   name: 'mes-layout',
-  data(vm) {
-    return {
-      drawer: vm.$vuetify.breakpoint.xl
-    }
-  },
   computed: {
     currentUser() {
       return this.$store.state.authentication.currentUser
@@ -87,11 +82,7 @@ export default {
   },
   methods: {
     toggleMenuMode() {
-      if (this.$vuetify.breakpoint.xl) {
-        this.$store.dispatch('mes/toggleMenuMiniMode')
-      } else {
-        this.drawer = !this.drawer
-      }
+      this.$store.dispatch('mes/toggleMenuMiniMode')
     },
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')
@@ -120,9 +111,11 @@ export default {
     padding-left: 28px;
   }
   .v-badge--overlap .v-badge__badge {
-    height: 17px !important;
-    width: 17px !important;
-    min-width: 17px;
+    height: 19px !important;
+    width: 19px !important;
+    min-width: 19px;
+    top: -10px;
+    right: -10px;
   }
   .v-navigation-drawer--mini-variant .v-list-item__action, .v-navigation-drawer--mini-variant .v-list-item__avatar {
     justify-content: start !important;
@@ -186,6 +179,12 @@ export default {
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
     margin: 0;
+  }
+  .work-centers-select-input .v-text-field__details {
+    display: none;
+  }
+  .v-list-item.v-list-item--link.theme--light {
+    padding-left: 22px;
   }
 </style>
 
