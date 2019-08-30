@@ -14,6 +14,7 @@
           :value="workCenter ? workCenter : ''"
           item-text="name"
           return-object
+          no-data-text="--- Рабочий центр отсутствует ---"
           @change="changeWorkCenter"
           class="work-centers-select-input"
         ></v-autocomplete>
