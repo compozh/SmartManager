@@ -40,53 +40,7 @@
 
         <div class="router-view">
           <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
-            <transition :name="routerTransition">
-              <div class="router-header flex flex-wrap items-center mb-6"
-                   v-if="$route.meta.breadcrumb || $route.meta.pageTitle">
-                <div class="content-area__heading"
-                     :class="{'pr-4 border-0 md:border-r border-t-0 border-b-0 border-l-0 border-solid border-grey-light' : $route.meta.breadcrumb}">
-                  <h2 class="mb-1">{{ routeTitle }}</h2>
-                </div>
 
-                <!-- BREADCRUMB -->
-                <vx-breadcrumb
-                  class="ml-4 md:block hidden"
-                  v-if="$route.meta.breadcrumb"
-                  :route="$route"/>
-
-                <!-- DROPDOWN -->
-                <vs-dropdown class="ml-auto md:block hidden cursor-pointer" vs-trigger-click>
-                  <vs-button radius icon="icon-settings" icon-pack="feather"></vs-button>
-
-                  <vs-dropdown-menu class="w-32">
-
-                    <vs-dropdown-item>
-                      <div @click="$router.push('/pages/profile')" class="flex items-center">
-                        <feather-icon icon="UserIcon" class="inline-block mr-2"
-                                      svgClasses="w-4 h-4"/>
-                        <span>Profile</span>
-                      </div>
-                    </vs-dropdown-item>
-
-                    <vs-dropdown-item>
-                      <div @click="$router.push('/apps/todo')" class="flex items-center">
-                        <feather-icon icon="CheckSquareIcon" class="inline-block mr-2"
-                                      svgClasses="w-4 h-4"/>
-                        <span>Tasks</span>
-                      </div>
-                    </vs-dropdown-item>
-
-                    <vs-dropdown-item>
-                      <div @click="$router.push('/apps/email')" class="flex items-center">
-                        <feather-icon icon="MailIcon" class="inline-block mr-2"
-                                      svgClasses="w-4 h-4"/>
-                        <span>Inbox</span>
-                      </div>
-                    </vs-dropdown-item>
-                  </vs-dropdown-menu>
-                </vs-dropdown>
-              </div>
-            </transition>
             <div class="content-area__content">
               <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
                 <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg"/>
@@ -135,9 +89,6 @@ export default {
     }
   },
   watch: {
-    '$route'() {
-      this.routeTitle = this.$route.meta.pageTitle
-    },
     isThemeDark(val) {
       if (this.navbarColor === '#fff' && val) {
         this.updateNavbarColor('#10163a')
@@ -152,7 +103,7 @@ export default {
       if (items) {
         return items.map(i => {
           return {
-            url: '/' + i.code,
+            url: this.createUrl(i.code),
             name: i.name,
             slug: i.name,
             tag: i.count,
@@ -205,6 +156,9 @@ export default {
   methods: {
     getFolders() {
       this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
+    },
+    createUrl(code) {
+      return '/tasks/' + (code === '' ? 'ALL' : code)
     },
     changeRouteTitle(title) {
       this.routeTitle = title

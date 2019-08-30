@@ -96,7 +96,7 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: i18n.$t('sm.messages.taskAddSuccess')
+          text: i18n.t('sm.messages.taskAddSuccess')
         })
       } else {
         commit('setMessage', {

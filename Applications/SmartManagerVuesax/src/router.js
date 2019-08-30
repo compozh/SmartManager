@@ -41,14 +41,25 @@ let router = new VueRouter({
         // =============================================================================
         {
           path: '/',
-          redirect: '/dashboard/analytics'
+          redirect: '/tasks/ALL',
+          meta: {
+            rule: 'admin'
+          }
         },
         {
-          path: '/dashboard/analytics',
-          name: 'dashboard-analytics',
-          component: () => import('./views/DashboardAnalytics.vue'),
+          path: '/tasks/:code',
+          name: 'task-list',
+          component: () => import('./views/task-list/TaskList.vue'),
           meta: {
-            rule: 'editor'
+            rule: 'admin'
+          }
+        },
+        {
+          path: '/task/:id',
+          name: 'task-details',
+          component: () => import('./views/task-details/TaskView.vue'),
+          meta: {
+            rule: 'admin'
           }
         },
         {
@@ -76,14 +87,6 @@ let router = new VueRouter({
           path: '/apps/chat',
           name: 'chat',
           component: () => import('./views/apps/chat/Chat.vue'),
-          meta: {
-            rule: 'editor'
-          }
-        },
-        {
-          path: '/apps/email',
-          name: 'email',
-          component: () => import('./views/apps/email/Email.vue'),
           meta: {
             rule: 'editor'
           }

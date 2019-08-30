@@ -9,7 +9,6 @@ export default {
     // APPS
     {index: 2, label: 'Todo', url: '/apps/todo', labelIcon: 'CheckSquareIcon', highlightAction: true},
     {index: 3, label: 'Chat', url: '/apps/chat', labelIcon: 'MessageSquareIcon', highlightAction: true},
-    {index: 4, label: 'Email', url: '/apps/email', labelIcon: 'MailIcon', highlightAction: true},
     {index: 5, label: 'Calendar', url: '/apps/calendar/vue-simple-calendar', labelIcon: 'CalendarIcon', highlightAction: true},
     {index: 6, label: 'E-Commerce Shop', url: '/apps/eCommerce/shop', labelIcon: 'ShoppingCartIcon', highlightAction: true},
     {index: 7, label: 'E-Commerce Wish List', url: '/apps/eCommerce/wish-list', labelIcon: 'HeartIcon', highlightAction: false},

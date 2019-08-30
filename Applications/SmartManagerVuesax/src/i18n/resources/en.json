@@ -10,12 +10,6 @@
     "header": "Folders",
     "main": "Active"
   },
-  "filters": {
-    "header": "Filters",
-    "done": "Completed",
-    "fromMe": "From me",
-    "favorite": "Favorite"
-  },
   "validate": {
     "required": "Required field",
     "needDate": "Date must be specified date in format DD.MM.YYYY",
