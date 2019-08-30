@@ -16,7 +16,7 @@ export default {
   async initializeTicket({commit}) {
     try {
       const result = await api.getTicketFromGql()
-      commit('setTicket', result.data.mes.tiket)
+      commit('setTicket', result.data.mes.ticket)
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message)
     }
@@ -35,7 +35,12 @@ export default {
       if (workCenters.length == 1) {
         commit('setWorkCenter', workCenters[0])
       } else {
-        commit('setWorkCentersForWorker', workCenters)
+        await this.dispatch('mes/initializeProperties')
+        var props = this.getters['mes/properties']
+        var workerCode = props.workerCode
+        var fixations = await api.getWorkCentersFixedFromGql(workerCode, 'network-only')
+        var firstWorkCenter = fixations.length ? fixations[0] : ''
+        commit('setWorkCentersForWorker', { workCenters, firstWorkCenter })
       }
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message)
@@ -204,5 +209,29 @@ export default {
         commit('setSelectedTask', task)
       }
     }
+  },
+  async unfixWorkCenterForWorker({ commit }, fixationId) {
+    return await api.unfixWorkCenterForWorkerGql(fixationId)
+  },
+  async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
+    return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
+  },
+  async initializeWorkCenterBySelection({ commit }, workCenter){
+    commit('setDialogLinearLoaderMessage', 'Смена рабочего центра')
+    var props = this.getters['mes/properties']
+    var workerCode = props.workerCode
+    let workCentersFixed =  await this.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: workerCode, fetchPolicy: 'network-only' })
+    workCentersFixed.forEach(fixation => {
+      if (fixation.code == workCenter.code) {
+        var fixationId = fixation.fixationId
+        this.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixationId })
+      }
+    });
+    await commit('resetState')
+    await commit('setWorkCenter', workCenter)
+    await this.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+    await this.dispatch('mes/initializeInstallations', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+    await this.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter.code, workerCode: props.workerCode })
+    commit('closeDialogLinearLoader')
   }
 }

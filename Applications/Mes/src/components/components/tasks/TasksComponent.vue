@@ -181,6 +181,7 @@ export default {
     font-weight: 500;
     color: #3d83f7;
     opacity: 0.5;
+    padding-left: 10px;
   }
   .wait-for-data-block {
     padding: 20px;
