@@ -6,6 +6,7 @@
             <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" color="#326DA8">Установить материалы</v-btn>
 
             <v-btn class="status-task-btn"
+                :disabled="selectedTask.state == 'DONE'"
                 outlined
                 color="rgba(179, 2, 2, 0.81)"
                 @click="onclickCancelRegistration"
