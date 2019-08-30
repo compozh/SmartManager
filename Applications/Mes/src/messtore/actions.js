@@ -22,7 +22,6 @@ export default {
     }
   },
   async initializeWorkCenter({ commit }, fetchPolicy) {
-    commit('setDialogLinearLoaderMessage', 'Инициализация рабочего центра')
     commit('closeSnackbar')
     try {
       var uuid = $cookies.get('mesUuid')
@@ -46,7 +45,6 @@ export default {
     } catch (e) {
       commit('setSnackbarErrorMessage', e.message)
     }
-    commit('closeDialogLinearLoader')
   },
   async initializeTasks({ commit }, { workCenterCode, fetchPolicy }) {
     commit('closeSnackbar')
