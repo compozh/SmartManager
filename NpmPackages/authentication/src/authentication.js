@@ -164,7 +164,7 @@ export default class Authentication {
       response = response.data
       var token = response.access_token
       // сохранение токена
-
+      
       if (token) {
         currentUser.set(response)
         await this.setCurrentUser()
@@ -184,14 +184,25 @@ export default class Authentication {
       return
     }
     let userData = await this.getCurrentUser()
+
+    if (!userData) {
+      return
+    }
     user.UserData = userData
     currentUser.set(user)
     this.__store.dispatch('authentication/setCurrentUser', user)
   }
 
   async getCurrentUser() {
-    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`, undefined, { withCredentials: true})
-    return response.data
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/user`, undefined, { withCredentials: true })
+      .catch(function(e) {
+        if (e.response.status == 401) {
+          currentUser.reset()
+        }
+      })
+    if (response) {
+      return response.data
+    }
   }
 
   /**
@@ -248,5 +259,9 @@ export default class Authentication {
 
   get currentUser() {
     return currentUser.get()
+  }
+
+  resetCurentUser() {
+    currentUser.reset()
   }
 }
