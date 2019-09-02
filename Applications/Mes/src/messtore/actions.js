@@ -30,7 +30,7 @@ export default {
         uuid = sessionStorageUuid
       } else if (!uuid && !sessionStorageUuid) {
         uuid = api.generateUUID()
-        $cookies.set('mesUuid', uuid, '-1')
+        $cookies.set('mesUuid', uuid, '1y')
       }
       window.sessionStorage.setItem('mesUuid', uuid)
       console.log(uuid)
