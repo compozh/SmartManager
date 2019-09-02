@@ -242,6 +242,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.vx-navbar-wrapper{
+  width: 100%;
+}
 .navbar-sticky {
     .vx-navbar-wrapper {
          .vx-navbar {

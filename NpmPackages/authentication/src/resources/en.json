@@ -4,5 +4,9 @@
     "rememberMe": "Remember me",
     "signIn": "SIGN IN",
     "emptyLogin": "You have not entered a login",
-    "emptyPassword": "You have not entered a password"
+    "emptyPassword": "You have not entered a password",
+    "enterTempCode": "Enter the time code",
+    "enterTempCodeDot": "Enter the time code...",
+    "enterTempCodeTitle": "Time code input field",
+    "send": "Send"
 }

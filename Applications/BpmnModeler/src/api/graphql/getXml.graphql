@@ -1,0 +1,5 @@
+{
+  bpmnquery {
+    getXml(id: $id)
+  }
+}

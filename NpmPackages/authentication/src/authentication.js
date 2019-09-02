@@ -1,5 +1,4 @@
 const currentUserKey = 'currentUser'
-
 /** хранение текущего пользователя в localStorage */
 const currentUser = {
   get() {
@@ -25,7 +24,7 @@ const currentUser = {
 export default class Authentication {
 
   __dependencies
-
+  __tempResponce
   /**
    * Конструктор
    * @param {} modulesManager менеджер модулей
@@ -101,11 +100,19 @@ export default class Authentication {
       response = response.data
 
       var token = response.access_token
+
+      if (response.tempPasword) {
+        if (token) {
+          this.__tempResponce = response
+        }
+        this.__store.dispatch('authentication/setNeedEnterTempPassword', true)
+        return response
+      }
       // сохранение токена
       if (token) {
         currentUser.set(response)
 
-        this.setCurrentUser()
+        await this.setCurrentUser()
         return response
       }
       // если токен не пришел
@@ -113,6 +120,35 @@ export default class Authentication {
     } catch (res) {
       throw new Error(`Ошибка входа. \r\n ${res}`)
     }
+  }
+  /**
+   * Подтверждение входа с помощью временного кода
+   * @param {string} tempPassword Временный код
+   */
+  async СonfirmTempPassword(tempPassword) {
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/confirmtemppasword`, {
+      TempPassword: tempPassword
+    },{
+      withCredentials: true
+    })
+
+    if (response.data) {
+      currentUser.set(this.__tempResponce)
+      this.__tempResponce = undefined
+      await this.setCurrentUser()
+      this.__store.dispatch('authentication/setNeedEnterTempPassword', false)
+    }
+    return response.data
+  }
+
+  /**
+   * Получение ссылки на виджет востановления паролей
+   */
+  async GetRecoveryPasswordUrl() {
+    let response = await this.__axios.post(`${this.__config.GrapgQlUrl}api/authentication/recoverypasswordurl`, {
+      withCredentials: true
+    })
+    return response.data
   }
 
   /**
@@ -131,7 +167,7 @@ export default class Authentication {
 
       if (token) {
         currentUser.set(response)
-        this.setCurrentUser()
+        await this.setCurrentUser()
         return response
       }
       // если токен не пришел

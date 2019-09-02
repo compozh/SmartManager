@@ -1,0 +1,8 @@
+{
+  bpmnquery {
+    models {
+      id
+      name
+    }
+  }
+}
