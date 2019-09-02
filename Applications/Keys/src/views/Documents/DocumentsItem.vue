@@ -2,7 +2,10 @@
   <vx-card  class="cursor-pointer list-view-item mb-5 overflow-hidden">
     <div @click="onClick" class="p-3" slot="no-body">
       <div class="flex items-center ">
-        <h5 class="pr-3 w-48">{{item.number}}</h5>
+        <vx-tooltip :text="item.number">
+          <h5 :title="item.number" class="pr-3 w-48 truncate">{{item.number}}</h5>
+        </vx-tooltip>
+
         <div class="text-grey pr-3">от {{item.date | moment("DD.MM.YYYY")}}</div>
         <vs-chip v-if="item.isPosted" color="primary">Разнесен</vs-chip>
         <div class="flex-grow"></div>
@@ -32,27 +35,7 @@ export default {
 
 <style lang="scss" scoped>
 .list-view-item {
-  .item-name,
-  .item-description {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
 
-  .item-name {
-    -webkit-line-clamp: 2;
-  }
-
-  .item-description {
-    -webkit-line-clamp: 5;
-  }
-
-  .grid-view-img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    transition: 0.35s;
-  }
 
   &:hover {
     transform: translateY(-5px);

@@ -11,10 +11,11 @@
       <vs-divider />
 
       <ag-grid-vue
-        class="ag-theme-material w-100 my-4 ag-grid-table"
+      class="ag-theme-material my-4 "
         :columnDefs="columnDefs"
-        :rowData="document.rows"
         :defaultColDef="defaultColDef"
+        :rowData="document.rows"
+        domLayout = "autoHeight"
       ></ag-grid-vue>
     </div>
   </vx-card>
@@ -31,34 +32,29 @@ export default {
   },
   data() {
     return {
-      defaultColDef: [
-        {
-          sortable: true,
-          editable: true,
-          resizable: true,
-          suppressMenu: true
-        }
-      ],
+      defaultColDef:
+        { resizable: true }
+      ,
       columnDefs: [
         { headerName: 'ID', field: 'id', width: 70 },
         { headerName: 'Ключ', field: 'resource', width: 250 },
         { headerName: 'Лицензий', field: 'count', width: 130 },
-        // {
-        //   headerName: 'Откуда',
-        //   children: [
-        //     { headerName: 'Объект', field: 'creditObject', width: 120 },
-        //     { headerName: '', field: 'credit' },
-        //     { headerName: 'Счет', field: 'creditAccount', width: 120 }
-        //   ]
-        // },
-        // {
-        //   headerName: 'Куда',
-        //   children: [
-        //     { headerName: 'Объект', field: 'debitObject', width: 120 },
-        //     { headerName: '', field: 'debit' },
-        //     { headerName: 'Счет', field: 'debitAccount', width: 120 }
-        //   ]
-        // }
+        {
+          headerName: 'Откуда',
+          children: [
+            { headerName: 'Объект', field: 'creditObject', width: 120 },
+            { headerName: 'Наименование', field: 'credit', tooltipField: 'credit' },
+            { headerName: 'Счет', field: 'creditAccount', width: 120 }
+          ]
+        },
+        {
+          headerName: 'Куда',
+          children: [
+            { headerName: 'Объект', field: 'debitObject', width: 120 },
+            { headerName: 'Наименование', field: 'debit', tooltipField: 'debit' },
+            { headerName: 'Счет', field: 'debitAccount', width: 120 }
+          ]
+        }
       ]
     }
   },
@@ -84,28 +80,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.list-view-item {
-  .item-name,
-  .item-description {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .item-name {
-    -webkit-line-clamp: 2;
-  }
-
-  .item-description {
-    -webkit-line-clamp: 5;
-  }
-
-  .grid-view-img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    transition: 0.35s;
-  }
+<style lang="scss">
+.ag-theme-material .ag-tooltip{
+  background-color: #fff !important;
 }
 </style>

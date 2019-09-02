@@ -21,6 +21,7 @@
               :language="datelocale"
               format="dd.MM.yyyy"
               placeholder="с"
+              :monday-first="true"
               v-model="dateFrom"
               :highlighted="highlightedDates"
             ></datepicker>
@@ -28,6 +29,7 @@
             <datepicker
               :language="datelocale"
               format="dd.MM.yyyy"
+              :monday-first="true"
               placeholder="по"
               v-model="dateTo"
               :highlighted="highlightedDates"
@@ -128,7 +130,7 @@ export default {
   },
   methods: {
     onDocumentClick(item) {
-      this.$router.push({path: `/${item.id}`})
+      this.$router.push({name: 'document', params: {id: item.id }})
     }
   },
   created() {

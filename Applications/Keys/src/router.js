@@ -37,7 +37,7 @@ let router = new VueRouter({
           }
         },
         {
-          path: '/:id',
+          path: '/documents/:id',
           name: 'document',
           component: () => import('./views/DocumentDetails/DocumentDetails.vue'),
           meta: {
