@@ -35,6 +35,21 @@ let router = new VueRouter({
             pageTitle: 'Документы',
             rule: 'editor'
           }
+        },
+        {
+          path: '/documents/:id',
+          name: 'document',
+          component: () => import('./views/DocumentDetails/DocumentDetails.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Home', url: '/' },
+              { title: 'Документы'},
+              { title: 'Ключи', url: '/' },
+              { title: 'Ключ', active: true },
+            ],
+            pageTitle: 'Документ',
+            rule: 'editor'
+          }
         }
 
       ],

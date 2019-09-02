@@ -3,6 +3,6 @@ export default {
     dateFrom: new Date((new Date()).setMonth(new Date().getMonth() - 1)),
     dateTo: new Date()
   },
-  documents: []
-
+  documents: [],
+  documentDetails: undefined
 }
