@@ -9,6 +9,6 @@ export default {
         return { model, index }
       }
     }
-    return null;
-  }
+    return { model: null, index: -1 };
+  },
 };

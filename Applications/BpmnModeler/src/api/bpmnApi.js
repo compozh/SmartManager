@@ -33,76 +33,50 @@ export class BpmnModelerApi {
   constructor() {}
 
   async get() {
-    try {
-      const result = await getClient().query({
-        query: gql`query ${models}`
-      });
-      return result.data.bpmnquery.models;
-    } catch (error) {
-      console.error(error.message);
-      return false;
-    }
+    const result = await getClient().query({
+      query: gql`query ${models}`
+    });
+    return result.data.bpmnquery.models;
   }
 
-  async create() {
-    try {
-      const result = await getClient().query({
-        query: gql`query ${create}`,
-      });
-      return result;
-    } catch (error) {
-      console.log(error.message);
-      return false;
-    }
+  async create(model) {
+    const result = await getClient().query({
+      query: gql`query ($model: ModelInput!) ${create}`,
+      variables: { model }
+    });
+    console.log(result);
+    return result.data.bpmnmutation.create;
   }
 
   async getXml(id) {
-    try {
-      const result = await getClient().query({
-        query: gql`query ($id: ID!) ${getXml}`,
-        variables: { id }
-      });
-      return result.data.bpmnquery.getXml;
-    } catch (error) {
-      console.log(error.message);
-      return false;
-    }
+    const result = await getClient().query({
+      query: gql`query ($id: ID!) ${getXml}`,
+      variables: { id }
+    });
+    return result.data.bpmnquery.getXml;
   }
 
   async setXml(id, xml) {
-    try {
-      const result = await getClient().query({
-        query: gql`query ($id: ID!, $xml: String!) ${setXml}`,
-        variables: { id, xml }
-      });
-      return result;
-    } catch (error) {
-      console.log(error.message);
-      return false;
-    }
+    const result = await getClient().query({
+      query: gql`query ($id: ID!, $xml: String!) ${setXml}`,
+      variables: { id, xml }
+    });
+    return result;
   }
 
   async setName(id, name) {
-    try {
-      return await getClient().query({
-        query: gql`query ($id: ID!, name : String!) ${setName}`,
-        variables: { id, name }
-      })
-    } catch (error) {
-      console.log(error.message);
-      return false;
-    }
+    const result = await getClient().query({
+      query: gql`query ($id: ID!, $name : String!) ${setName}`,
+      variables: { id, name }
+    });
+    return result.data.bpmnmutation.setName;
   }
 
   async deleteModel(id) {
-    try {
-      return await getClient().query({
-        query: gql`query ($id: ID!) ${remove}`,
-        variables: { id }
-      })
-    } catch (error) {
-      console.log(error.message);
-      return false;
-    }
+    const result = await getClient().query({
+      query: gql`query ($id: ID!) ${remove}`,
+      variables: { id }
+    });
+    return result.data.bpmnmutation.delete;
   }
 }

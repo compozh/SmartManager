@@ -1,7 +1,7 @@
 export class SavingContext {
-  constructor(modeler, model, callback) {
+  constructor(modeler, diagramId, callback) {
     this.modeler = modeler;
-    this.model = model;
+    this.diagramId = diagramId;
     this.callback = callback;
   }
 
@@ -11,7 +11,8 @@ export class SavingContext {
         console.error(err);
         return;
       }
-      this.callback(this.model.id, xml);
+      console.log(xml);
+      this.callback(this.diagramId, xml);
     });
   }
 }

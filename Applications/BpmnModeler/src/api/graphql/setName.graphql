@@ -1,5 +1,5 @@
  {
   bpmnmutation {
-    setName(model: $model)
+    setName(id: $id, name: $name)
   }
 }

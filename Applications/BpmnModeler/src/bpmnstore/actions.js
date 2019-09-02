@@ -23,12 +23,12 @@ export default {
     context.commit('setModels', models);
     return true;
   },
-  async createModel(context) {
-    let model;
+  async createModel(context, model) {
     try {
-      model = await api.create();
+      model = await api.create(model);
     } catch (error) {
       console.error(error);
+      return false;
     }
 
     if (!model) {
@@ -46,9 +46,6 @@ export default {
       xml = await api.getXml(id);
     } catch (error) {
       console.error(error);
-    }
-
-    if (!xml) {
       return false;
     }
 
@@ -94,10 +91,10 @@ export default {
     }
     return success;
   },
-  async deleteModel(context, id) {
+  async deleteModel(context, { id }) {
     const { model, index } = context.getters.getModelById(id);
     if (!model) {
-      return;
+      return false;
     }
 
     context.state.models = context.state.models.filter(e => e !== model);
