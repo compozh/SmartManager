@@ -89,7 +89,6 @@ export default {
         if (cancellationToken.isCancelled) {
           return;
         }
-        console.log(xml);
         if (xml === false) {
           this.loading = false;
           // TODO: display exception

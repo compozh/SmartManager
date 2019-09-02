@@ -35,7 +35,6 @@ export default {
       return false;
     }
 
-    model.isEditing = true;
     context.state.models.push(model);
     context.dispatch('setActiveModel', model)
     return true;
