@@ -88,7 +88,7 @@
 <script>
 import loginRl from '../renderless/Login'
 import qrLogin from './QrLogin'
-import confirmPassword from './ConfirmPassword'
+import confirmPassword from './ConfirmTempPassword'
 export default {
   name: 'login',
   props: ['allowQrMode'],
