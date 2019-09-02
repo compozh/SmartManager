@@ -30,6 +30,7 @@ export default {
         uuid = sessionStorageUuid
       } else if (!uuid && !sessionStorageUuid) {
         uuid = api.generateUUID()
+        // Кеширование до 3х лет
         $cookies.set('mesUuid', uuid, '3y')
       }
       window.sessionStorage.setItem('mesUuid', uuid)
