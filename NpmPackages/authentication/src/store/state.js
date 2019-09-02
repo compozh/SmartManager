@@ -1,4 +1,5 @@
 const state = {
-  currentUser: null
+  currentUser: null,
+  needEnterTempPassword: false
 }
 export default state
