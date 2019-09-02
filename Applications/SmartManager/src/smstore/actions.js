@@ -1,6 +1,7 @@
 import {i18n} from '../plugins/i18n'
 import {SmartManagerApi} from '../api/smartManagerApi'
-
+import Vue from 'vue'
+import  { routerDependencies } from '../router'
 const api = new SmartManagerApi()
 
 function trimHtmlTags(stringWithHtmlTags) {
@@ -55,7 +56,16 @@ export default {
     commit(loader, true)
 
     try {
-      const result = await api.getTaskInfoFromGql(taskId)
+      const result = await api.getTaskInfoFromGql(taskId).catch(e => {
+        if (e.networkError.statusCode == 401) {
+          Vue.prototype.$authentication.resetCurentUser()
+          routerDependencies.router.push({name: 'LOGIN'})
+        }
+      })
+      if (!result) {
+        commit(loader, false)
+        return
+      }
       const taskInfo = result.data.smtasks.taskDetails
 
       taskInfo.name = trimHtmlTags(taskInfo.name)
