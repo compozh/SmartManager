@@ -1,0 +1,22 @@
+query{
+  lms{
+    availableFilters{
+      roles{
+        code
+        name
+      }
+      levels{
+        code
+        name
+      }
+      products{
+        code
+        name
+      }
+      tags{
+        code
+        name
+      }
+    }
+  }
+}
