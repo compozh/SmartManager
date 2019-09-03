@@ -1,0 +1,40 @@
+{
+  lms{
+    courseDetails(courseGuid: $courseid){
+      modules{
+        moduleGuid
+        moduleId
+        type
+        name
+        backgroundColor
+        imageLink
+        lessonsQtLabel
+        durationMinutesLabel
+        description
+        showLessonsTitle
+        roles{
+          code
+          name
+        }
+        levels{
+          code
+          name
+        }
+        products{
+          code
+          name
+        }
+        tags{
+          code
+          name
+        }
+        units{
+          lessonGuid
+          name
+          durationMinutesLabel
+          unitId
+        }
+      }
+    }
+  }
+}

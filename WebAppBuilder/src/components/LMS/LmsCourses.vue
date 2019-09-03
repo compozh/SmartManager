@@ -40,7 +40,7 @@
 				</v-card>
 			</v-flex>
 		</v-layout>
-    <Filters :filters="filtersData"></Filters>
+    <Filters :filters="availableFilters"></Filters>
 		<v-layout wrap row>
 			<v-flex mx-2 mt-4 mb-3>
 			<h5 class='title font-weight-regular text-xs-left'>Курсы</h5>
@@ -96,39 +96,46 @@
 </template>
 
 
-
 <script>
 export default {
 	name:"lms-courses",
   props:["courses"],
-  data(){
-    return{
-      filtersData: [
-        {
-          name: 'Роль',
-          items: [{code: 'А', name: 'Администратор', selected: false}]
-        },
-        {
-          name: 'Уровень',
-          items: [{code: 'B', name: 'Начальный', selected: false}]
-        },
-        {
-          name: 'Продукт',
-          items: [{code: 'BUH', name: 'Бухгалтерия', selected: false}]
-        },
-        {
-          name: 'Тэг',
-          items: []
-        }
-      ]
+  computed: {
+    availableFilters() {
+      return this.$store.getters['availableFilters']
     }
   },
-  mounted () {
-
+  // data(){
+  //   return{
+  //     filtersData: [
+  //       {
+  //         name: 'Роль',
+  //         items: [{code: 'А', name: 'Администратор', selected: false}]
+  //       },
+  //       {
+  //         name: 'Уровень',
+  //         items: [{code: 'B', name: 'Начальный', selected: false}]
+  //       },
+  //       {
+  //         name: 'Продукт',
+  //         items: [{code: 'BUH', name: 'Бухгалтерия', selected: false}]
+  //       },
+  //       {
+  //         name: 'Тэг',
+  //         items: []
+  //       }
+  //     ]
+  //   }
+  // },
+  created () {
+    this.getAvailableFilters()
   },
   methods: {
     goToCourseDetails ( courseId, course ) {
       this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}});
+    },
+    getAvailableFilters() {
+      this.$store.dispatch('lms/getAvailableFilters')
     }
   }
 }
