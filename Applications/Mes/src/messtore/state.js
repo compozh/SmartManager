@@ -11,6 +11,7 @@ export default {
     selectedTasksTab: 0,
     currentLayout: 'main',
     dragResizeMode: false,
+    downtimesOverlay: false,
     aspectRatioLayout: [35, 65]
   },
   dialogLinearLoader: {
@@ -31,6 +32,7 @@ export default {
   installations: [],
   productions: [],
   productionFormio: null,
+  downtimeFormio: null,
   menuMiniMode: true,
   ticket: ''
 }
