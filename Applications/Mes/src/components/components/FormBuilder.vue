@@ -19,18 +19,33 @@ export default {
   },
   computed: {
     formioComponents() {
-      return { components: this.productionFormio ? JSON.parse(this.productionFormio.form) : [] }
+      if (this.$attrs.type == 'downtimesForm') {
+        return { components: this.downtimeFormio ? JSON.parse(this.downtimeFormio.form) : [] }
+      } else {
+        return { components: this.productionFormio ? JSON.parse(this.productionFormio.form) : [] }
+      }
     },
     formioSubmission() {
-      return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] }
+      if (this.$attrs.type == 'downtimesForm') {
+        return { data: this.downtimeFormio ? JSON.parse(this.downtimeFormio.data) : [] }
+      } else {
+        return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] }
+      }
     },
     productionFormio() {
       return this.$store.getters['mes/productionFormio']
+    },
+    downtimeFormio() {
+      return this.$store.getters['mes/downtimeFormio']
     }
   },
   methods: {
     onSubmit(params) {
-      this.$emit('formioSubmit', JSON.stringify(params.data))
+      if (this.$attrs.type == 'downtimesForm') {
+        return console.log('submit')
+      } else {
+        this.$emit('formioSubmit', JSON.stringify(params.data))
+      }
     },
     onChange(params) {
       this.currentData = params.data

@@ -29,6 +29,7 @@
                         <div class="grid-item-data formio-block" v-if="item.i == '0'">
                           <mes-form-builder
                             ref="formioBuilder"
+                            type="taskForm"
                             @formioSubmit=formioSubmit />
                         </div>
                         <div class="grid-item-data" v-if="item.i != '0'">

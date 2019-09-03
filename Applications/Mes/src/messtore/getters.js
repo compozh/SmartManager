@@ -14,6 +14,9 @@ export default {
   dragResizeMode(state) {
     return state.tasksPageState.dragResizeMode
   },
+  downtimesOverlay(state) {
+    return state.tasksPageState.downtimesOverlay
+  },
   tasks(state) {
     return state.tasks
   },
@@ -25,6 +28,9 @@ export default {
   },
   productionFormio(state) {
     return state.productionFormio
+  },
+  downtimeFormio(state) {
+    return state.downtimeFormio
   },
   menuMiniMode(state) {
     if (state.menuMiniMode === null) {
