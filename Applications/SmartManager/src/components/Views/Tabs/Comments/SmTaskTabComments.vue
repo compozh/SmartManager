@@ -33,7 +33,7 @@
     </v-layout>
     <v-layout row wrap>
       <v-flex xs12 v-if="!getCommentsLength">
-        <p class="pt-3 grey--text subheading">Коментарии отсутствуют</p>
+        <p class="pt-3 grey--text subheading">{{ $t('sm.messages.noComments') }}</p>
         <v-divider></v-divider>
       </v-flex>
     </v-layout>
@@ -41,8 +41,8 @@
       <v-flex>
         <v-text-field
           v-model="comment"
-          label="Добавить коментарий"
-          placeholder="Текст коментария..."
+          :label="$t('sm.comments.addComment')"
+          :placeholder="$t('sm.comments.commentText')"
           clearable
           @click:clear.stop
           prepend-icon="edit"

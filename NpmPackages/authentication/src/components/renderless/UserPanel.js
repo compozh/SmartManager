@@ -16,7 +16,7 @@ export default {
     logOut() {
       this.$authentication.logOff()
 
-      const sections = this.$store.state.applicationDescription.Sections
+      const sections = this.$store.state.WebApps.applicationDescription.Sections
       sections.forEach(section => {
         section.Routes.forEach(route => {
           if (route.Id.toLowerCase().includes('login')) {

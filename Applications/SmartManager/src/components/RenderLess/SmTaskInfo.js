@@ -1,12 +1,6 @@
 export default {
   name: 'sm-task-info-rl',
   data: () => ({
-    tabs: [
-      {name: 'Детально', value: 'tasks', component: 'sm-task-tab-tasks'},
-      {name: 'Вложения', value: 'originals', component: 'sm-task-tab-docs'},
-      {name: 'Обсуждения', value: 'comments', component: 'sm-task-tab-comments'},
-      {name: 'Согласования', value: 'agreement', component: 'sm-task-tab-agree'}
-    ],
     activeTab: {
       value: 0
     }
@@ -22,6 +16,14 @@ export default {
     }
   },
   computed: {
+    tabs() {
+      return [
+        {name: this.$t('sm.tabs.details'), value: 'tasks', component: 'sm-task-tab-tasks'},
+        {name: this.$t('sm.tabs.attachments'), value: 'originals', component: 'sm-task-tab-docs'},
+        {name: this.$t('sm.tabs.comments'), value: 'comments', component: 'sm-task-tab-comments'},
+        {name: this.$t('sm.tabs.approvals'), value: 'agreement', component: 'sm-task-tab-agree'}
+      ]
+    },
     task() {
       return this.$store.state.sm.taskInfo
     },

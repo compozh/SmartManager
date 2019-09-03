@@ -1,0 +1,255 @@
+import { ApolloClient } from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { HttpLink } from 'apollo-link-http'
+import gql from 'graphql-tag'
+// Queries
+import properties from './graphql/properties.graphql'
+import workCenters from './graphql/workCenters.graphql'
+import workCentersFixed from './graphql/fixedWorkCenters.graphql'
+import tasks from './graphql/tasks/tasks.graphql'
+import installations from './graphql/installations/installations.graphql'
+import removeInstallation from './graphql/installations/removeInstallation.graphql'
+import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
+import registerProduction from './graphql/tasks/registerProduction.graphql'
+import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
+import productions from './graphql/productions/productions.graphql'
+import deleteProduction from './graphql/productions/deleteProduction.graphql'
+import productionFormIo from './graphql/productionFormIo.graphql'
+import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
+import ticket from './graphql/ticket.graphql'
+import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
+import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
+import Vue from 'vue'
+
+var client = null
+const getClient = () => {
+  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
+  if (client == null) {
+    const options = {
+      uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+      headers: {
+        // 'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
+        ...authHeader,
+        'schema': 'mes'
+      }
+    }
+    client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: new HttpLink(options)
+    })
+  }
+  return client
+}
+
+export class MesApi {
+  constructor() {}
+
+  async getPropertiesFromGql() {
+    try {
+      return await getClient().query({
+        query: gql` ${properties}`
+      }
+      )
+        .then(result => result)
+        .catch(error => console.log(error.message))
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async getTicketFromGql() {
+    try {
+      return await getClient().query({
+        query: gql` ${ticket}`
+      })
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${fixWorkCenterForWorker}`,
+        variables: { workCenterCode, workerCode }
+      })
+
+      return result.data.mesMutation.fixWorkCenterForWorker
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async unfixWorkCenterForWorkerGql(fixationIds) {
+    var fixationId = fixationIds.fixationId
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${unfixWorkCenterForWorker}`,
+        variables: { fixationId }
+      })
+      return result.data.mesMutation.unfixWorkCenterForWorker
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async getWorkCentersFromGql(uuid, login, fetchPolicy) {
+    try {
+      const result = await getClient().query({
+        query: gql` query ($uuid: String, $login: String) ${workCenters}`,
+        variables: { uuid, login },
+        fetchPolicy: fetchPolicy || 'cache-first'
+      })
+      return result.data.mes.workCenters
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async getWorkCentersFixedFromGql(workerCode, fetchPolicy) {
+    try {
+      const result = await getClient().query({
+        query: gql` query ($workerCode: String) ${workCentersFixed}`,
+        variables: { workerCode },
+        fetchPolicy: fetchPolicy || 'cache-first'
+      })
+      return result.data.mes.workCentersFixed
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async getTasksFromGql(workCenter, fetchPolicy) {
+    try {
+      const result = await getClient().query({
+        query: gql`query ($workCenter: String) ${tasks}`,
+        variables: { workCenter },
+        fetchPolicy: fetchPolicy || 'cache-first'
+      })
+      return result.data.mes.tasks
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async getInstallationsFromGql(workCenter, fetchPolicy) {
+    try {
+      const result = await getClient().query({
+        query: gql`query ($workCenter: String) ${installations}`,
+        variables: { workCenter },
+        fetchPolicy: fetchPolicy || 'cache-first'
+      })
+      return result.data.mes.installations.installations
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async removeInstallationGql(installationId) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${removeInstallation}`,
+        variables: { installationId }
+      })
+      return result.data.mesMutation.removeInstallation
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async registerMaterialInstallationGql(workCenterCode, batchBarcode, factId) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${registerMaterialInstallation}`,
+        variables: { workCenterCode, batchBarcode, factId }
+      })
+
+      return result.data.mesMutation.registerMaterialInstallation
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+
+  async registerProductionGql(productionRegistrationParam) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${registerProduction}`,
+        variables: { productionRegistrationParam }
+      })
+
+      return result.data.mesMutation.registerProduction
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+  async cancelBeginRegistrationGql(taskId) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${cancelBeginRegistration}`,
+        variables: { taskId }
+      })
+      return result.data.mesMutation.cancelBeginRegistration
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+  async getProductionsFromGql(workerCode, fetchPolicy) {
+    try {
+      const result = await getClient().query({
+        query: gql`query ($workerCode: String) ${productions}`,
+        variables: { workerCode },
+        fetchPolicy: fetchPolicy || 'cache-first'
+      })
+      return result.data.mes.usersProductionEvents
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+  async deleteProductionGql(factId) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${deleteProduction}`,
+        variables: { factId }
+      })
+      return result.data.mesMutation.deleteProduction
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+  async getProductionFormioFromGql(formCode, properties) {
+    try {
+      const result = await getClient().query({
+        query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
+        variables: { formCode, properties },
+        fetchPolicy: 'network-only'
+      })
+      return result.data.mes.productionFormIo
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+  async productionFormIoSubmitGql({ formCode, data, productionRegistrationParam}) {
+    try {
+      let result = await getClient().mutate({
+        mutation: gql`${productionFormIoSubmit}`,
+        variables: { formCode, data, productionRegistrationParam}
+      })
+      return result.data.mesMutation.productionFormIoSubmit
+    } catch (error) {
+      return console.log(error.message)
+    }
+  }
+  generateUUID() { // Public Domain/MIT
+    var d = new Date().getTime()
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+      d += performance.now() //use high-precision timer if available
+    }
+    var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0
+      d = Math.floor(d / 16)
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    })
+
+    return newGuid
+  }
+}

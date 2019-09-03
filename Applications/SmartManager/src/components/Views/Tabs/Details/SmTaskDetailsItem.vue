@@ -66,7 +66,7 @@
                 <v-flex xs6 class="date-field">
                   <v-icon size="22">date_range</v-icon>
                   <span class="pl-1 pt-1 title-field">
-                    Создано: <b class="subheading">{{ task.dateAdd }}</b>
+                    {{ $t('sm.tasks.created') }}: <b class="subheading">{{ task.dateAdd }}</b>
                   </span>
                 </v-flex>
                 <v-flex xs6 class="date-field" justify-end>
@@ -79,7 +79,7 @@
                     class="pl-1 pt-1 title-field"
                     :class="dateStatus"
                   >
-                    Срок до: <b class="subheading">{{ task.dateplan }}</b>
+                    {{ $t('sm.tasks.deadline') }}: <b class="subheading">{{ task.dateplan }}</b>
                   </span>
                 </v-flex>
               </v-layout>
@@ -135,5 +135,4 @@ export default {
     display: flex;
     align-items: center;
   }
-
 </style>

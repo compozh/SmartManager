@@ -2,10 +2,6 @@
   File Name: TheNavbar.vue
   Description: Navbar component
   Component Name: TheNavbar
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->
 
 
@@ -16,8 +12,7 @@
 
       <!-- SM - OPEN SIDEBAR BUTTON -->
       <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
-
-      <template v-if="breakpoint != 'md'">
+<template v-if="breakpoint != 'md'">
         <!-- STARRED PAGES - FIRST 10 -->
         <ul class="vx-navbar__starred-pages">
           <draggable v-model="starredPagesLimited" :group="{name: 'pinList'}" class="flex cursor-move">
@@ -53,20 +48,16 @@
           </div>
         </div>
       </template>
-
-
       <vs-spacer></vs-spacer>
 
       <!-- I18N -->
       <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
         <span class="cursor-pointer flex i18n-locale">
-            <flag class="h-4 w-5" size='small' :iso="getCurrentLocaleData.flag" />
-
+          <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag" />
           <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
         </span>
         <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-
-          <vs-dropdown-item v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
+          <vs-dropdown-item :key="lang.code" v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :squared="false" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
         </vs-dropdown-menu>
       </vs-dropdown>
 
@@ -87,7 +78,7 @@
                     <feather-icon icon="XIcon" class="px-4 cursor-pointer h-full close-search-icon" @click="showFullSearch = false"></feather-icon>
                 </div>
             </div>
-            <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4"></feather-icon>
+            <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4 mr-4"></feather-icon>
 
 
       <!-- NOTIFICATIONS -->
@@ -96,8 +87,8 @@
         <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
           <div class="notification-top text-center p-5 bg-primary text-white">
-            <h3 class="text-white">{{ unreadNotifications.length }} New</h3>
-            <p class="opacity-75">App Notifications</p>
+            <h3 class="text-white">Уведомления</h3>
+            <p class="opacity-75">{{ unreadNotifications.length }} новых</p>
           </div>
 
           <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings">
@@ -170,34 +161,6 @@
                 <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
                 <span class="ml-2">Profile</span>
               </li>
-              <li
-                class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                @click="$router.push('/apps/email')">
-
-                <feather-icon icon="MailIcon" svgClasses="w-4 h-4" />
-                <span class="ml-2">Inbox</span>
-              </li>
-              <li
-                class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                @click="$router.push('/apps/todo')">
-
-                <feather-icon icon="CheckSquareIcon" svgClasses="w-4 h-4" />
-                <span class="ml-2">Tasks</span>
-              </li>
-              <li
-                class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                @click="$router.push('/apps/chat')">
-
-                <feather-icon icon="MessageSquareIcon" svgClasses="w-4 h-4" />
-                <span class="ml-2">Chat</span>
-              </li>
-              <li
-                class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                @click="$router.push('/apps/eCommerce/wish-list')">
-
-                <feather-icon icon="HeartIcon" svgClasses="w-4 h-4" />
-                <span class="ml-2">Wish List</span>
-              </li>
 
               <vs-divider class="m-1"></vs-divider>
 
@@ -205,7 +168,7 @@
                 class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                 @click="logout">
                 <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
-                <span class="ml-2">Logout</span>
+                <span class="ml-2">Выход</span>
               </li>
             </ul>
           </vs-dropdown-menu>
@@ -223,12 +186,8 @@ import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import draggable from 'vuedraggable'
 
-const localizations = [
-  { code: 'uk', name: 'Український',  flag: 'ua' },
-  { code: 'ru', name: 'Русский',  flag: 'ru' },
-  { code: 'en', name: 'English',  flag: 'us' },
+import templateConfig from '@/templateConfig'
 
-]
 
 export default {
   name: 'the-navbar',
@@ -241,17 +200,10 @@ export default {
 
   data() {
     return {
-      localizations,
+      localizations: templateConfig.localizations,
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
       showFullSearch: false,
-      unreadNotifications: [
-        { index: 0, title: 'New Message', msg: 'Are your going to meet me tonight?', icon: 'MessageSquareIcon', time: this.randomDate({sec: 10}), category: 'primary' },
-        { index: 1, title: 'New Order Recieved', msg: 'You got new order of goods.', icon: 'PackageIcon', time: this.randomDate({sec: 40}), category: 'success' },
-        { index: 2, title: 'Server Limit Reached!', msg: 'Server have 99% CPU usage.', icon: 'AlertOctagonIcon', time: this.randomDate({min: 1}), category: 'danger' },
-        { index: 3, title: 'New Mail From Peter', msg: 'Cake sesame snaps cupcake', icon: 'MailIcon', time: this.randomDate({min: 6}), category: 'primary' },
-        { index: 4, title: 'Bruce\'s Party', msg: 'Chocolate cake oat cake tiramisu', icon: 'CalendarIcon', time: this.randomDate({hr: 2}), category: 'warning' },
-      ],
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
         wheelSpeed: .60,
@@ -266,6 +218,10 @@ export default {
     }
   },
   computed: {
+
+    unreadNotifications() {
+      return this.$store.state.notifications.unreadNotifications
+    },
     // HELPER
     sidebarWidth() {
       return this.$store.state.sidebarWidth
@@ -316,11 +272,6 @@ export default {
       }
     },
 
-    // CART DROPDOWN
-    cartItems() {
-      return this.$store.state.eCommerce.cartItems.slice().reverse()
-    },
-
     // PROFILE
     user_displayName() {
       return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
@@ -331,7 +282,7 @@ export default {
   },
   methods: {
     updateLocale(locale) {
-      this.$i18n.locale = locale
+      this.$localization.SetLocalization(locale)
     },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
@@ -342,14 +293,12 @@ export default {
     },
     actionClicked(item) {
       // e.stopPropogation();
-      this.$store.dispatch('updateStarredPage', { index: item.index, val: !item.highlightAction })
+      alert('star clicked')
     },
     showNavbarSearch() {
       this.showFullSearch = true
     },
-    showSearchbar() {
-      this.showFullSearch = true
-    },
+
     elapsedTime(startTime) {
       let x = new Date(startTime)
       let now = new Date()
@@ -385,33 +334,13 @@ export default {
       return 'Just Now'
     },
     logout() {
-      // if user is logged in via auth0
-      if (this.$auth.profile) { this.$auth.logOut() }
+      this.$store.dispatch('auth/logout')
 
-
-      // Change role on logout. Same value as initialRole of acj.js
-      this.$acl.change('admin')
-      localStorage.removeItem('userRole')
     },
     outside: function() {
       this.showBookmarkPagesDropdown = false
     },
 
-    // CART DROPDOWN
-    removeItemFromCart(item) {
-      this.$store.dispatch('eCommerce/toggleItemInCart', item)
-    },
-
-    // Method for creating dummy notification time
-    randomDate({hr, min, sec}) {
-      let date = new Date()
-
-      if (hr) { date.setHours(date.getHours() - hr) }
-      if (min) { date.setMinutes(date.getMinutes() - min) }
-      if (sec) { date.setSeconds(date.getSeconds() - sec) }
-
-      return date
-    }
   },
   directives: {
     'click-outside': {
@@ -437,6 +366,8 @@ export default {
     VxAutoSuggest,
     VuePerfectScrollbar,
     draggable
+
+
   },
 }
 </script>

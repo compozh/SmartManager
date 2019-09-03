@@ -125,7 +125,8 @@ Vue.use(Localization, { dependencies })
 //Vue.use(Authentication, { options: window.appConfig, dependencies })
 //Vue.use(Router, { options: window.appConfig, dependencies })
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./i18n/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 
 new Vue({
   router,

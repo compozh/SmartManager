@@ -1,5 +1,7 @@
+import {i18n} from '../plugins/i18n'
 import {SmartManagerApi} from '../api/smartManagerApi'
-
+import Vue from 'vue'
+import  { routerDependencies } from '../router'
 const api = new SmartManagerApi()
 
 function trimHtmlTags(stringWithHtmlTags) {
@@ -54,7 +56,16 @@ export default {
     commit(loader, true)
 
     try {
-      const result = await api.getTaskInfoFromGql(taskId)
+      const result = await api.getTaskInfoFromGql(taskId).catch(e => {
+        if (e.networkError.statusCode == 401) {
+          Vue.prototype.$authentication.resetCurentUser()
+          routerDependencies.router.push({name: 'LOGIN'})
+        }
+      })
+      if (!result) {
+        commit(loader, false)
+        return
+      }
       const taskInfo = result.data.smtasks.taskDetails
 
       taskInfo.name = trimHtmlTags(taskInfo.name)
@@ -96,19 +107,19 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: 'Задача успешно добавлена'
+          text: i18n.$t('sm.messages.taskAddSuccess')
         })
       } else {
         commit('setMessage', {
           type: 'error',
-          text: 'Не удалось добавить задачу'
+          text: i18n.t('sm.messages.taskAddFail')
         })
       }
     } catch (e) {
       commit('setCircularLoader', false)
       commit('setMessage', {
         type: 'error',
-        text: 'Ошибка при добавлении задачи'
+        text: i18n.t('sm.messages.taskAddError')
       })
       console.log('', e.message)
     }
@@ -128,12 +139,12 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: 'Статус задачи успешно изменен'
+          text: i18n.t('sm.messages.statChangeSuccess')
         })
       } else {
         commit('setMessage', {
           type: 'error',
-          text: 'Не удалось изменить статус задачи'
+          text: i18n.t('sm.messages.statChangeFail')
         })
       }
     } catch (e) {
@@ -156,12 +167,12 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: 'Вложение успешно добавлено'
+          text: i18n.t('sm.messages.attachAddSuccess')
         })
       } else {
         commit('setMessage', {
           type: 'error',
-          text: 'Не удалось добавить вложение'
+          text: i18n.t('sm.messages.attachAddFail')
         })
       }
     } catch (e) {
@@ -207,14 +218,14 @@ export default {
       } else {
         commit('setMessage', {
           type: 'error',
-          text: 'Не удалось добавить коментарий'
+          text: i18n.t('sm.messages.commentAddSuccess')
         })
       }
     } catch (e) {
       commit('setLinearLoader', false)
       commit('setMessage', {
         type: 'error',
-        text: 'Ошибка при добавлении коментария'
+        text: i18n.t('sm.messages.commentAddFail')
       })
       console.log('', e.message)
     }

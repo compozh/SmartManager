@@ -1,13 +1,13 @@
 <template>
   <sm-document-viewer-rl
     v-slot="{ originals, file, select, component, params }"
-  >
+    >
     <v-container fluid pa-0>
       <v-layout
         class="viewer-layout">
         <v-flex xs12 mt-2 class="view-container">
           <component :is="component" :url="file.url"></component>
-          <sm-empty-state v-if="!component">Нет файлов для просмотра</sm-empty-state>
+          <sm-empty-state v-if="!component">{{ $t('sm.messages.noFiles') }}</sm-empty-state>
         </v-flex>
         <v-flex mt-2 class="icons-container">
           <v-layout>

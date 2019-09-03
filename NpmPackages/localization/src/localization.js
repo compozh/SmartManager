@@ -1,3 +1,4 @@
+import cookies from 'vue-cookies'
 export default class Localization {
 
   __i18n = undefined
@@ -13,7 +14,9 @@ export default class Localization {
       throw new Error('i18n должен быть передан в виде зависимости!')
     }
 
-    this.__loadedLanguages[(this.__i18n.fallbackLocale || this.__i18n.locale)] = true
+    this.__i18n.locale = localStorage.getItem('language') ? localStorage.getItem('language') : 'ru', //дефолтный
+
+    this.__loadedLanguages[(this.__i18n.locale  || this.__i18n.fallbackLocale)] = true
 
   }
 
@@ -37,7 +40,7 @@ export default class Localization {
 
   }
 
-  Setlocalization(lang){
+  SetLocalization(lang){
     if (this.__i18n.locale == lang) {
       return Promise.resolve(lang)
 
@@ -49,6 +52,8 @@ export default class Localization {
     if (this.__loadedLanguages[lang] || !this.__registeredLanguages[lang]) {
       return Promise.resolve(this.SetLanguage(lang))
     }
+    this.__loadedLanguages[lang] = true
+
     let promises = []
 
     for (const key in this.__registeredLanguages[lang]) {
@@ -62,12 +67,14 @@ export default class Localization {
 
       let summaryMessages = {}
       responses.forEach( v => {
+        if(!v.namespace){
+          summaryMessages = { ...v.messages, ...summaryMessages }
+          return
+        }
         summaryMessages[v.namespace] = v.messages
       })
 
-      console.log(summaryMessages)
       this.__i18n.setLocaleMessage(lang, summaryMessages)
-      this.__loadedLanguages[lang] = true
       return this.SetLanguage(lang)
     })
   }
@@ -75,6 +82,8 @@ export default class Localization {
 
   SetLanguage(lang) {
     this.__i18n.locale = lang
+    cookies.set('c', lang)
+    localStorage.setItem('language', lang)
     document.querySelector('html').setAttribute('lang', lang)
     return lang
   }

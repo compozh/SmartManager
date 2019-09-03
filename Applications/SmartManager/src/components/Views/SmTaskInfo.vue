@@ -12,14 +12,14 @@
           <v-layout wrap>
             <v-flex>
               <v-layout>
-                <v-flex shrink>
+                <v-flex v-if="task.status === '' || task.status === '*'" shrink>
                   <v-btn
                     class="info ml-0"
                     small depressed
                     @click="events.openTaskAddForm"
                   >
                     <v-icon size="18">add_to_photos</v-icon>
-                    <span class="caption pl-1">Добавить подзадачу</span>
+                    <span class="caption pl-1">{{ $t('sm.buttons.addSubTask') }}</span>
                   </v-btn>
                 </v-flex>
                 <v-flex
@@ -36,7 +36,7 @@
                         @click="events.changeStage(0)"
                       >
                         <v-icon size="18">close</v-icon>
-                        <span class="caption pl-1">Отклонить</span>
+                        <span class="caption pl-1">{{ $t('sm.buttons.reject') }}</span>
                       </v-btn>
                       <v-btn
                         class="menu-btn mx-0"
@@ -53,7 +53,7 @@
                         @click.stop="dialog = true"
                         @click="stage = 0"
                       >
-                        <v-list-tile-title>Отклонить с коментарием</v-list-tile-title>
+                        <v-list-tile-title>{{ $t('sm.buttons.rejectWithComment') }}</v-list-tile-title>
                       </v-list-tile>
                     </v-list>
                   </v-menu>
@@ -66,7 +66,7 @@
                         @click="events.changeStage(1)"
                       >
                         <v-icon size="18">done</v-icon>
-                        <span class="caption pl-1">Согласовать</span>
+                        <span class="caption pl-1">{{ $t('sm.buttons.approve') }}</span>
                       </v-btn>
                       <v-btn
                         class="menu-btn mx-0"
@@ -83,7 +83,7 @@
                         @click.stop="dialog = true"
                         @click="stage = 1"
                       >
-                        <v-list-tile-title>Согласовать с коментарием</v-list-tile-title>
+                        <v-list-tile-title>{{ $t('sm.buttons.approveWithComment') }}</v-list-tile-title>
                       </v-list-tile>
                     </v-list>
                   </v-menu>
@@ -96,7 +96,7 @@
                     @click="events.changeStatus('+')"
                   >
                     <v-icon size="18">done</v-icon>
-                    <span class="caption pl-1">Выполнить</span>
+                    <span class="caption pl-1">{{ $t('sm.buttons.execute') }}</span>
                   </v-btn>
                   <v-btn
                     v-if="task.status === '+'"
@@ -105,7 +105,7 @@
                     @click="events.changeStatus('*')"
                   >
                     <v-icon size="18">settings_backup_restore</v-icon>
-                    <span class="caption pl-1">Вернуть в работу</span>
+                    <span class="caption pl-1">{{ $t('sm.buttons.returnToWork') }}</span>
                   </v-btn>
                 </v-flex>
               </v-layout>
@@ -143,9 +143,11 @@
               </v-tabs-items>
             </v-flex>
           </v-layout>
+        </v-flex>
+        <v-flex lg6 v-show="params.hiddenLgAndUp">
           <v-layout column>
             <v-flex>
-              <sm-task-tab-docs v-if="params.hiddenLgAndUp"></sm-task-tab-docs>
+              <sm-task-tab-docs class="hidden-md-and-down"></sm-task-tab-docs>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -158,8 +160,8 @@
           <v-layout row wrap>
             <v-flex>
               <v-text-field
-                label="Добавить коментарий"
-                placeholder="Текст коментария..."
+                :label="$t('sm.comments.addComment')"
+                :placeholder="$t('sm.comments.commentText')"
                 clearable
                 @click:clear.stop
                 prepend-icon="edit"
@@ -186,7 +188,6 @@ export default {
 </script>
 
 <style scoped>
-
   .marker:after {
     content: '';
     position: relative;

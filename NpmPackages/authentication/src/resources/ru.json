@@ -4,5 +4,10 @@
     "rememberMe": "Запомнить меня",
     "signIn": "ВОЙТИ",
     "emptyLogin": "Вы не ввели логин",
-    "emptyPassword": "Вы не ввели пароль"
+    "emptyPassword": "Вы не ввели пароль",
+    "enterTempCode": "Введите временный код",
+    "enterTempCodeDot": "Введите временный код...",
+    "enterTempCodeTitle": "Поле для ввода временного кода",
+    "send": "Отправить"
+
 }
