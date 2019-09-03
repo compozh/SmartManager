@@ -26,7 +26,7 @@
 						<v-flex ml-2 mt-3>
 							<h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{moduleData.type}}</h4>
 							<h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-								@click='$router.push({name: "moduleDetails", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
+								@click='$router.push({name: "LMSMODULEDETAILS", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
 							</h3>
 						</v-flex>
 					</v-layout>
@@ -43,8 +43,8 @@
 							@click='moduleData.isFavorite = !moduleData.isFavorite'
 							>{{moduleData.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 						<v-spacer/>
-						<v-chip small v-show="moduleData.roles[0]" @click="cardsRoleSearch(moduleData.roles[0])">{{moduleData.roles[0] ? moduleData.roles[0].name: null}}</v-chip>
-						<v-chip small v-show="moduleData.levels[0]" @click="cardsLevelSearch(moduleData.levels[0])">{{moduleData.levels[0] ? moduleData.levels[0].name : null}}</v-chip>
+						<v-chip small v-show="moduleData.roles[0]" @click="roleSearch(moduleData.roles[0])">{{moduleData.roles[0] ? moduleData.roles[0].name: null}}</v-chip>
+						<v-chip small v-show="moduleData.levels[0]" @click="levelSearch(moduleData.levels[0])">{{moduleData.levels[0] ? moduleData.levels[0].name : null}}</v-chip>
 					</v-layout>
 				</v-card>
 			</v-flex>
@@ -112,10 +112,10 @@ export default {
       // });
     },
     roleSearch: function(data) {
-      //this.$router.push({ name: "modules", params: { role: data.code } });
+      this.$router.push({ name: "LMSMODULES", params: { role: data.code } });
     },
     levelSearch: function(data) {
-      //this.$router.push({ name: "modules", params: { level: data.code } });
+      this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
     }
   }
 };
