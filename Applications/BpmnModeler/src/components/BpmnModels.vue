@@ -9,7 +9,7 @@
     ></v-text-field>
     <v-treeview :open.sync="open"
             :items="models"
-            :active.sync="activeModel"
+            :active.sync="active"
             :search="search"
             activatable
             hoverable
@@ -52,18 +52,15 @@
 <script>
 export default {
   name: 'bpmn-models',
+  props: {
+    models: Array,
+    activeModel: String
+  },
   data() {
     return {
       open: [],
-      active: [ this.$store.state.bpmn.activeModel.id ],
       search: ''
     };
-  },
-  created() {
-    const id = this.$route.params.id;
-    if (id) {
-      this.setActiveItem(id);
-    }
   },
   methods: {
     setActiveItem(id) {
@@ -80,26 +77,24 @@ export default {
     }
   },
   computed: {
-    models() {
-      return this.$store.state.bpmn.models;
-    },
-    activeModel: {
+    active: {
       get() {
-        return this.active;
+        if (this.activeModel) {
+          return [ this.activeModel ];
+        } else {
+          return [];
+        }
       },
       set(value) {
-        if (value.length === 0) {
-          this.setActiveItem(this.active[0]);
+        const model = value.length ? value[0] : '';
+        console.log(model);
+        console.log(this.activeModel);
+        if (model === this.activeModel) {
           return;
         }
-
-        if (value[0] === this.active[0]) {
-          return;
-        }
-        this.active = value;
-        this.$router.push({ path: `/bpmnmodeler/model/${value}` });
+        this.$emit('update:activeModel', model);
       }
-    },
+    }
   }
 };
 </script>

@@ -23,7 +23,7 @@
             <v-icon left>add</v-icon> {{ $tc('AddElement') }}
           </v-btn>
           <v-divider></v-divider>
-          <bpmn-models @rename="renameModel" @remove="removeModel"></bpmn-models>
+          <bpmn-models :models="models" :activeModel.sync="activeModel" @rename="renameModel" @remove="removeModel"></bpmn-models>
           <v-divider></v-divider>
           <v-btn flat large class="tree-btn" @click="onRouteChanged(true)">
             <v-icon left>refresh</v-icon> {{ $tc('Refresh') }}
@@ -94,11 +94,8 @@ export default {
       formLoading: false
     };
   },
-  created() {
-    this.onRouteChanged(false);
-  },
   mounted() {
-    
+    this.onRouteChanged(false);
   },
   methods: {
     async loadModels() {
@@ -163,7 +160,7 @@ export default {
     },
     renameModel(model) {
       this.formMode = 'edit';
-      this.formModel = model;
+      this.formModel = Object.assign({}, model);
       this.showForm = true;
     },
     removeModel(model) {
@@ -174,7 +171,6 @@ export default {
   },
   computed: {
     currentUser() {
-      console.log(this.$store.state.authentication);
       if (this.$store.state.authentication.currentUser) {
         return this.$store.state.authentication.currentUser;
       }
@@ -187,20 +183,38 @@ export default {
       set(value) {
         this.showAppBar = value;
       }
+    },
+    models() {
+      return this.$store.state.bpmn.models;
+    },
+    activeModel: {
+      get() {
+        if (this.$store.state.bpmn.activeModel) {
+          return this.$store.state.bpmn.activeModel.id;
+        } else {
+          return null;
+        }
+      },
+      set(value) {
+        if (value === this.activeModel) {
+          return;
+        }
+        this.$store.dispatch('bpmn/setActiveModel', value);
+        if (value) {
+          this.$router.push({ path: `/bpmnmodeler/model/${value}` });
+        } else {
+          this.$router.push({ path: '/bpmnmodeler/' });
+        }
+      }
     }
   },
   watch: {
-    //'$route': 'onRouteChanged'
-  },
-  beforeRouteEnter(to, from, next) {
-    window.alert('beforeRouteEnter');
-    console.log('beforeRouteEnter');
-    next(vm => vm.loadModels());
-  },
-  beforeRouteUpdate(to, from, next) {
-    window.alert('beforeRouteUpdate');
-    console.log('beforeRouteUpdate');
-    this.loadModels().then(success => next(success));
+    '$route'(to, from) {
+      if (from.name === 'BPMNLOGIN') {
+        this.appBar = true;
+        this.onRouteChanged(true);
+      }
+    }
   }
 };
 </script>
