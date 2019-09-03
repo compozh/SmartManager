@@ -36,8 +36,16 @@ export default {
     gradient: "to top, rgba(0,0,0,.8),rgba(0,0,0,.3), rgba(0,0,0,0)",
     image
   }),
-  props: ['recommended']
-};
+  props: ['recommended'],
+  methods: {
+    getAvailableFilters() {
+      this.$store.dispatch('lms/getAvailableFilters')
+    },
+  },
+  created () {
+    this.getAvailableFilters()
+  }
+}
 </script>
 
 <style scoped>

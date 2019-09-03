@@ -98,51 +98,24 @@
 
 <script>
 export default {
-	name:"lms-courses",
-  props:["courses"],
+	name: 'lms-courses',
+  props: ['courses'],
   computed: {
     availableFilters() {
-      return this.$store.getters['availableFilters']
+      return this.$store.getters['lms/availableFilters']
     }
   },
-  // data(){
-  //   return{
-  //     filtersData: [
-  //       {
-  //         name: 'Роль',
-  //         items: [{code: 'А', name: 'Администратор', selected: false}]
-  //       },
-  //       {
-  //         name: 'Уровень',
-  //         items: [{code: 'B', name: 'Начальный', selected: false}]
-  //       },
-  //       {
-  //         name: 'Продукт',
-  //         items: [{code: 'BUH', name: 'Бухгалтерия', selected: false}]
-  //       },
-  //       {
-  //         name: 'Тэг',
-  //         items: []
-  //       }
-  //     ]
-  //   }
-  // },
-  created () {
-    this.getAvailableFilters()
-  },
+
   methods: {
     goToCourseDetails ( courseId, course ) {
-      this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}});
-    },
-    getAvailableFilters() {
-      this.$store.dispatch('lms/getAvailableFilters')
+      this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
     },
 
     roleSearch: function(data) {
-      this.$router.push({ name: "LMSCOURSES", params: { role: data.code } });
+      this.$router.push({ name: 'LMSCOURSES', params: { role: data.code } })
     },
     levelSearch: function(data) {
-      this.$router.push({ name: "LMSCOURSES", params: { level: data.code } });
+      this.$router.push({ name: "LMSCOURSES", params: { level: data.code } })
     }
   }
 }

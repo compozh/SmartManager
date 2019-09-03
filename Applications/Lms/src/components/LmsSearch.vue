@@ -53,15 +53,16 @@
 </template>
 
 <script>
-var moduleCardsData = [];
+var moduleCardsData = []
 var searchResultData = {
   resultsQt: 10,
   results: []
-};
-var searchTimeoutId = 0;
-var searchParamsData = { phrase: "" };
+}
+
+var searchTimeoutId = 0
+var searchParamsData = { phrase: '' }
 export default {
-  name: "lms-search",
+  name: 'lms-search',
   props: ['modules'],
   created() {
 
@@ -72,7 +73,7 @@ export default {
   beforeUpdate() {},
   data() {
     return {
-      favIconColor: "grey",
+      favIconColor: 'grey',
 		  searchParams: searchParamsData,
       searchResult: searchResultData,
       searchResultData: {
@@ -85,9 +86,9 @@ export default {
     searchPhraseChanged: function() {
       //при вводе поискового запроса, запустить поиск в случае, если уже три секунды ничего не вводят
       if (searchTimeoutId > 0) {
-        clearTimeout(searchTimeoutId);
+        clearTimeout(searchTimeoutId)
       }
-      if (this.searchPhrase != "") {
+      if (this.searchPhrase != '') {
         // searchTimeoutId = setTimeout(
         //   () => this.$router.push("/search/" + this.searchParams.phrase),
         //   3000
@@ -97,12 +98,12 @@ export default {
     searchPhraseChangedForce: function() {
       //при вводе поискового запроса, запустить поиск в случае, если уже три секунды ничего не вводят
       if (searchTimeoutId > 0) {
-        clearTimeout(searchTimeoutId);
+        clearTimeout(searchTimeoutId)
       }
       //this.$router.push("/search/" + this.searchParams.phrase);
 		},
     changeFavoriteState: function(moduleData) {
-      moduleData.isFavorite = !moduleData.isFavorite;
+      moduleData.isFavorite = !moduleData.isFavorite
       // this.runCalculation({
       //   serviceName: "LMS.MODULES.SETFAVORITE",
       //   parameters: {
@@ -112,10 +113,10 @@ export default {
       // });
     },
     roleSearch: function(data) {
-      this.$router.push({ name: "LMSMODULES", params: { role: data.code } });
+      this.$router.push({ name: 'LMSMODULES', params: { role: data.code } })
     },
     levelSearch: function(data) {
-      this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
+      this.$router.push({ name: 'LMSMODULES', params: { level: data.code } })
     }
   }
 };

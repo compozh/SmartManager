@@ -90,7 +90,11 @@ export default {
       dialogState: false,
       links: []
     }
-	},
+  },
+  created() {
+        // Перейти к home
+    this.$router.push({name: 'LMSREALHOME'})
+  },
   beforeMount: function () {
     // Маршруты из конструктора
     if (!this.$store.state.WebApps.applicationDescription) {
@@ -114,9 +118,6 @@ export default {
       for (let index = 0; index < this.links.length; index++) {
       this.links[index].class = 'hidden-sm-and-down';
     }
-
-    // Перейти к home
-    this.$router.push({name: 'LMSREALHOME'})
 	},
   methods: {
 

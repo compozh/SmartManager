@@ -6,7 +6,7 @@ export default {
     return state.error
   },
 
-  getAvailableFilters (state) {
+  availableFilters (state) {
     return state.availableFilters
   },
 

@@ -41,7 +41,7 @@
 			</v-flex>
 		</v-layout>
     <!-- Filters -->
-    <Filters :filters="filtersData" ></Filters>
+    <Filters :filters="availableFilters" ></Filters>
 		<v-layout wrap row>
 			<v-flex mx-2 mt-4 mb-3>
 				<h5 class='title font-weight-regular text-xs-left'>Модули</h5>
@@ -128,6 +128,11 @@ export default {
     },
     levelSearch: function(data) {
       this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
+    }
+  },
+  computed: {
+    availableFilters() {
+      return this.$store.getters['lms/availableFilters']
     }
   }
 }

@@ -1,16 +1,16 @@
-import state from "./state";
 
 export default {
-  setCircularLoader ( payload ) {
+
+  setCircularLoader (state, payload ) {
     state.loading = payload
   },
-  setError ( payload ) {
+  setError (state, payload ) {
     state.error = payload
   },
-  clearError () {
+  clearError (state) {
     state.error = null
   },
-  setAvailableFilters ( payload ) {
+  setAvailableFilters (state, payload ) {
     state.availableFilters = payload
   }
 }

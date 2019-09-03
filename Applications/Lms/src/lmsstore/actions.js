@@ -9,8 +9,26 @@ export default {
 
     try {
       const result = await api.getAvailableFiltersFromGql()
-      debugger
-      const availableFilters = result.data.lms.availableFilters
+      const filters = result.data.lms.availableFilters
+
+      var availableFilters = [
+        {
+          name: 'Роль',
+          items: filters.roles
+        },
+        {
+          name: 'Уровень',
+          items: filters.levels
+        },
+        {
+          name: 'Продукт',
+          items: filters.products
+        },
+        {
+          name: 'Тэг',
+          items: filters.tags
+        }
+      ]
 
       commit('setAvailableFilters', availableFilters)
       commit('setCircularLoader', false)

@@ -50,4 +50,12 @@ export class LmsApi {
       .then(result => result)
       .catch(error => console.log(error.message))
   }
+
+  getRecommendedFromGql() {
+    return getClient().query({
+      query: gql` ${recommended}`
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
 }

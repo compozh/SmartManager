@@ -52,14 +52,14 @@
 var moduleCardsData = [];
 
 export default {
-  name: "lms-recommended-modules",
+  name: 'lms-recommended-modules',
   props: ['recommendedModules'],
   data: () => ({
-    favIconColor: "grey"
+    favIconColor: 'grey'
   }),
   methods: {
     changeFavoriteState: function(moduleData) {
-      moduleData.isFavorite = !moduleData.isFavorite;
+      moduleData.isFavorite = !moduleData.isFavorite
 
     },
     roleSearch: function(data) {
@@ -69,7 +69,7 @@ export default {
       //this.$router.push({ name: "modules", params: { level: data.code } });
     }
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
