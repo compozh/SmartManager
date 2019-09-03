@@ -96,19 +96,19 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: i18n.t('sm.messages.taskAddSuccess')
+          text: i18n.t('messages.taskAddSuccess')
         })
       } else {
         commit('setMessage', {
           type: 'error',
-          text: i18n.t('sm.messages.taskAddFail')
+          text: i18n.t('messages.taskAddFail')
         })
       }
     } catch (e) {
       commit('setCircularLoader', false)
       commit('setMessage', {
         type: 'error',
-        text: i18n.t('sm.messages.taskAddError')
+        text: i18n.t('messages.taskAddError')
       })
       console.log('', e.message)
     }
@@ -129,12 +129,12 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: i18n.t('sm.messages.statChangeSuccess')
+          text: i18n.t('messages.statChangeSuccess')
         })
       } else {
         commit('setMessage', {
           type: 'error',
-          text: i18n.t('sm.messages.statChangeFail')
+          text: i18n.t('messages.statChangeFail')
         })
       }
     } catch (e) {
@@ -158,12 +158,12 @@ export default {
         })
         commit('setMessage', {
           type: 'success',
-          text: i18n.t('sm.messages.attachAddSuccess')
+          text: i18n.t('messages.attachAddSuccess')
         })
       } else {
         commit('setMessage', {
           type: 'error',
-          text: i18n.t('sm.messages.attachAddFail')
+          text: i18n.t('messages.attachAddFail')
         })
       }
     } catch (e) {
@@ -210,14 +210,14 @@ export default {
       } else {
         commit('setMessage', {
           type: 'error',
-          text: i18n.t('sm.messages.commentAddSuccess')
+          text: i18n.t('messages.commentAddSuccess')
         })
       }
     } catch (e) {
       commit('setLinearLoader', false)
       commit('setMessage', {
         type: 'error',
-        text: i18n.t('sm.messages.commentAddFail')
+        text: i18n.t('messages.commentAddFail')
       })
       console.log('', e.message)
     }
