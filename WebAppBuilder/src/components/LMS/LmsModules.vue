@@ -84,8 +84,8 @@
 							@click='moduleData.isFavorite = !moduleData.isFavorite'
 							>{{moduleData.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 						<v-spacer/>
-						<v-chip small v-show="moduleData.roles[0]" @click="cardsRoleSearch(moduleData.roles[0])">{{moduleData.roles[0] ? moduleData.roles[0].name: null}}</v-chip>
-						<v-chip small v-show="moduleData.levels[0]" @click="cardsLevelSearch(moduleData.levels[0])">{{moduleData.levels[0] ? moduleData.levels[0].name : null}}</v-chip>
+						<v-chip small v-show="moduleData.roles[0]" @click="roleSearch(moduleData.roles[0])">{{moduleData.roles[0] ? moduleData.roles[0].name: null}}</v-chip>
+						<v-chip small v-show="moduleData.levels[0]" @click="levelSearch(moduleData.levels[0])">{{moduleData.levels[0] ? moduleData.levels[0].name : null}}</v-chip>
 					</v-layout>
 				</v-card>
 			</v-flex>
@@ -121,6 +121,14 @@ export default {
     }
   },
   mounted() {
+  },
+  methods: {
+    roleSearch: function(data) {
+      this.$router.push({ name: "LMSMODULES", params: { role: data.code } });
+    },
+    levelSearch: function(data) {
+      this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
+    }
   }
 }
 </script>

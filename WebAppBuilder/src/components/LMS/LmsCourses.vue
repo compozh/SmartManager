@@ -86,8 +86,8 @@
 								@click='changeFavoriteState(course)'
 								>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 							<v-spacer/>
-							<v-chip small v-show="course.roles[0]" @click="cardRoleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
-							<v-chip small v-show="course.levels[0]" @click="cardLevelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
+							<v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
+							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
 						</v-layout>
 					</v-card>
 				</v-flex>
@@ -136,6 +136,13 @@ export default {
     },
     getAvailableFilters() {
       this.$store.dispatch('lms/getAvailableFilters')
+    },
+
+    roleSearch: function(data) {
+      this.$router.push({ name: "LMSCOURSES", params: { role: data.code } });
+    },
+    levelSearch: function(data) {
+      this.$router.push({ name: "LMSCOURSES", params: { level: data.code } });
     }
   }
 }
