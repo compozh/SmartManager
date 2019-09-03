@@ -1,0 +1,9 @@
+{
+  smtasks {
+    folders {
+      code
+      count
+      name
+    }
+  }
+}
