@@ -1,0 +1,106 @@
+{
+  "search": "Пошук",
+  "pickers": {
+    "date": "Дата",
+    "time": "Час",
+    "locale": "uk",
+    "timeFormat": "24hr"
+  },
+  "folders": {
+    "header": "Папки",
+    "main": "Активні"
+  },
+  "validate": {
+    "required": "Поле обов'язкове для заповнення",
+    "needDate": "Необхідно вказати дату у форматі ДД.ММ.РРРР",
+    "dateFormat": "Введіть дату у форматі ДД.ММ.РРРР",
+    "pastDate": "Минула дата",
+    "needTime": "Необхідно вказати час у форматі ГГ:ХХ",
+    "timeFormat": "Введіть час у форматі ГГ:ХХ"
+  },
+  "tasks": {
+    "newTask": "Нова задача",
+    "taskName": "Назва задачі...",
+    "noTasks": "Не має задач у папці",
+    "description": "Опис задачі",
+    "id": "ID",
+    "performer": "Виконавець",
+    "addedDate": "Додано",
+    "planDate": "Планова дата",
+    "created": "Створено",
+    "deadline": "Строк до",
+    "related": "Зв'язані задачі",
+    "subTasks": "Підзадачі"
+  },
+  "buttons": {
+    "addTask": "Додати задачу",
+    "addSubTask": "Додати підзадачу",
+    "reject": "Відхилити",
+    "rejectWithComment": "Відхилити з коментарем",
+    "approve": "Погодити",
+    "approveWithComment": "Погодити з коментарем",
+    "execute": "Виконати",
+    "returnToWork": "Повернути в роботу",
+    "create": "Створити",
+    "cancel": "Скасувати",
+    "ok": "Вибрати",
+    "upload": "Завантажити",
+    "viewMore": "Показати більше",
+    "addAttachment": "Додати вкладення",
+    "add": "Додати",
+    "send": "Надіслати"
+  },
+  "icons": {
+    "priority": "Високий пріоритет",
+    "attachments": "Має вкладення",
+    "approve": "Потребує погодження",
+    "comment": "Має коментарі",
+    "fromMe": "Задача від мене",
+    "control": "На контролі",
+    "notRush": "Не терміново"
+  },
+  "tabs": {
+    "details": "Детально",
+    "attachments": "Вкладення",
+    "comments": "Коментарі",
+    "approvals": "Погодження"
+  },
+  "statuses": {
+    "inWork": "В роботі",
+    "rejected": "Відхилена",
+    "completed": "Виконана"
+  },
+  "roles": {
+    "responsible": "Відповідальний",
+    "coExecutors": "Співвиконавець",
+    "notify": "До відома",
+    "taskFrom": "Задача від"
+  },
+  "table": {
+    "name": "Назва",
+    "size": "Розмір",
+    "uploaded": "Завантажено"
+  },
+  "comments": {
+    "addComment": "Додати коментар",
+    "placeholder": "Введіть коментар"
+  },
+  "messages": {
+    "noMessages": "Повідомлення відсутні",
+    "noData": "Не має даних для відображення",
+    "noFiles": "Не має файлів для відображення",
+    "noComments": "Коментарі відсутні",
+    "closeForm": "Для переходу в меню закрийте форму",
+    "noApprovals": "Не має даних про погодження",
+    "noSupport": "ФАЙЛИ {ext} НЕ ПІДТРИМУЮТЬСЯ",
+    "taskAddSuccess": "Задачу додано вдало",
+    "taskAddFail": "Не вдалося додати задачу",
+    "taskAddError": "Помилка при додаванні задачі",
+    "statChangeSuccess": "Статус задачі змінено вдало",
+    "statChangeFail": "Не вдалося змінити статус задачі",
+    "attachAddSuccess": "Вкладення додано вдало",
+    "attachAddFail": "Не вдалося додати вкладення",
+    "commentAddSuccess": "Не вдалося додати коментар",
+    "commentAddFail": "Помилка при додаванні коментаря"
+  }
+}
