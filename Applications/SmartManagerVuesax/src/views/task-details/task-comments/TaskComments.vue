@@ -1,65 +1,96 @@
 <template>
-  <VuePerfectScrollbar class="chat-scroll-area pt-4" :settings="settings">
+  <div id="chat-app" class="rounded relative overflow-hidden">
+
+    <!-- RIGHT COLUMN -->
     <div
-      class="chat__bg app-fixed-height chat-content-area border border-solid d-theme-border-grey-light border-t-0 border-r-0 border-b-0"
-      :class="{'sidebar-spacer--wide': clickNotClose, 'flex items-center justify-center': activeChatUser === null}"
+      class="chat__bg app-fixed-height chat-content-area"
     >
       <template>
         <VuePerfectScrollbar
-          class="chat-content-scroll-area border border-solid d-theme-border-grey-light"
+          class="comments-container chat-content-scroll-area"
           :settings="settings"
           ref="chatLogPS"
         >
-          <div class="chat__log" ref="chatLog">
-<!--            <chat-log :userId="activeChatUser" v-if="activeChatUser"></chat-log>-->
+          <div
+            v-if="comments.length"
+            class="chat__log"
+            ref="chatLog"
+          >
+            <task-comments-log :comments="comments"></task-comments-log>
+          </div>
+          <div v-else class="no-comments flex flex-col items-center">
+            <feather-icon icon="MessageSquareIcon" class="mb-4 bg-white p-8 shadow-md rounded-full" svgClasses="w-16 h-16"></feather-icon>
+            <h4 class="py-2 px-4 bg-white shadow-md rounded-full">{{ $t('messages.noComments') }}</h4>
           </div>
         </VuePerfectScrollbar>
-
         <div class="chat__input flex p-4 bg-white">
           <vs-input
             class="flex-1"
-            :placeholder="$t('comments.commentText')"
-            v-model="typedMessage"
-            @keyup.enter="sendMsg"/>
+            :placeholder="$t('comments.placeholder')"
+            v-model="comment"
+            @keyup.enter="sendMsg"
+          />
           <vs-button
             class="bg-primary-gradient ml-4"
             type="filled"
             @click="sendMsg"
-          >Send
+          >{{ $t('buttons.send') }}
           </vs-button>
         </div>
       </template>
     </div>
-  </VuePerfectScrollbar>
+  </div>
 </template>
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import ChatLog from './ChatLog.vue'
+import TaskCommentsLog from './TaskCommentsLog.vue'
 
 export default {
-  name: 'vx-sidebar',
+  props: ['task'],
   components: {
     VuePerfectScrollbar,
-    ChatLog
+    TaskCommentsLog,
   },
   data: () => ({
+    active: true,
+    isHidden: false,
+    searchContact: '',
+    activeProfileSidebar: false,
     activeChatUser: null,
-    typedMessage: '',
+    userProfileId: -1,
+
+    comment: '',
+
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.70,
     },
-    clickNotClose: true,
-    windowWidth: window.innerWidth
+    windowWidth: window.innerWidth,
   }),
+  computed: {
+    comments() {
+      return this.task.comments
+        ? this.task.comments
+        : []
+    },
+    type() {
+      return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+    }
+  },
   methods: {
     sendMsg() {
-      if (!this.typedMessage) {
-        return
-      }
-      this.typedMessage = ''
-      this.$refs.chatLogPS.$el.scrollTop = this.$refs.chatLog.scrollHeight
+      this.$store.dispatch('sm/addTaskComment', {
+        comment: this.comment,
+        params: {
+          type: this.type,
+          id: this.task.id,
+          arso: this.task.arso,
+          keyValue: this.task.keyValue,
+          kidCopy: this.task.kidCopy
+        }
+      })
+      this.comment = ''
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
@@ -78,4 +109,23 @@ export default {
 
 <style lang="scss">
   @import "@/assets/scss/vuesax/apps/chat.scss";
+
+  #chat-app {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+
+  .comments-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .chat__log {
+    flex-grow: 1;
+  }
+
+  .no-comments {
+    align-self: center;
+    margin: 0 auto;
+  }
 </style>

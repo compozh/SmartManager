@@ -47,7 +47,8 @@
     "upload": "Upload",
     "viewMore": "More",
     "addAttachment": "Add attachment",
-    "add": "Add"
+    "add": "Add",
+    "send": "Send"
   },
   "icons": {
     "priority": "High priority",
@@ -82,7 +83,7 @@
   },
   "comments": {
     "addComment": "Add comment",
-    "commentText": "Type your comment"
+    "placeholder": "Type your comment"
   },
   "messages": {
     "noMessages": "No messages",

@@ -6,12 +6,16 @@
     <vs-sidebar
       class="items-no-padding"
       parent="#task-app"
-
       :click-not-close="clickNotClose"
       :hidden-background="clickNotClose"
       v-model="isEmailSidebarActive"
     >
-      <task-sidebar @changeTab="currentTab = $event"></task-sidebar>
+      <task-sidebar
+        :task="task"
+        @changeTab="currentTab = $event"
+        :attachments="attachments"
+        :comments="comments"
+      ></task-sidebar>
     </vs-sidebar>
 
     <div
@@ -26,7 +30,7 @@
       <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments"></task-attachments>
 
       <!-- TASK DETAILS  -->
-      <task-comments v-if="currentTab === 'comments'" :comments="comments"></task-comments>
+      <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
 
       <!-- TASK COMMENTS  -->
       <task-approvals v-if="currentTab === 'approvals'"></task-approvals>
@@ -51,7 +55,7 @@ export default {
     TaskApprovals
   },
   data: () => ({
-    loding: true,
+    loading: true,
     currentTab: 'details',
     clickNotClose: true,
     isEmailSidebarActive: true,
@@ -79,10 +83,14 @@ export default {
       return this.$store.state.sm.taskInfo
     },
     attachments() {
-      return this.task ? this.task.originals : []
+      return this.task.originals
+        ? this.task.originals
+        : []
     },
     comments() {
-      return this.task ? this.task.comments : []
+      return this.task.comments
+        ? this.task.comments
+        : []
     }
   },
   methods: {

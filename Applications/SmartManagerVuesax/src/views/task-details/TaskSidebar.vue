@@ -14,7 +14,7 @@
           <feather-icon icon="PaperclipIcon"></feather-icon>
           <span class="text-lg ml-3">{{ $t('tabs.attachments') }}</span>
         </div>
-        <vs-chip class="number" color="primary">3</vs-chip>
+        <vs-chip v-if="attachments.length" class="number" color="primary">{{ attachments.length }}</vs-chip>
       </div>
 
       <!-- comments -->
@@ -23,7 +23,7 @@
           <feather-icon icon="MessageSquareIcon"></feather-icon>
           <span class="text-lg ml-3">{{ $t('tabs.comments') }}</span>
         </div>
-        <vs-chip class="number" color="warning">5</vs-chip>
+        <vs-chip v-if="comments.length" class="number" color="warning">{{ comments.length }}</vs-chip>
       </div>
 
       <!-- approvals -->
@@ -39,14 +39,7 @@
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
-  props: {
-    attachments: {
-      type: Array
-    },
-    comments: {
-      type: Array
-    }
-  },
+  props: ['attachments', 'comments'],
   components: {
     VuePerfectScrollbar
   },

@@ -8,14 +8,14 @@
     <div class="flex w-full">
       <vs-avatar
         class="sender__avatar flex-shrink-0 mr-3 border-2 border-solid border-white"
-         :src="task.performerPhoto"
-         size="40px"
+        :src="task.performerPhoto"
+        size="40px"
       ></vs-avatar>
 
       <div class="flex w-full justify-between items-start">
         <div class="task__details truncate">
           <h5 class="mb-1" :class="{'font-semibold': !task.isRead}"
-          >{{ task.performer | filter_tags }}
+          >{{ task.performer }}
           </h5>
           <span>{{ task.descript }}</span>
         </div>
@@ -30,6 +30,7 @@
     <div class="flex w-full">
       <div class="task__message truncate ml-3">
         <span>{{ task.name | filter_tags }}</span>
+        <span>{{ comments }}</span>
       </div>
     </div>
   </div>
@@ -41,6 +42,11 @@ export default {
     task: {
       type: Object,
       required: true,
+    }
+  },
+  computed: {
+    comments() {
+      return this.task.comments ? this.task.comments.length : 0
     }
   },
   methods: {
