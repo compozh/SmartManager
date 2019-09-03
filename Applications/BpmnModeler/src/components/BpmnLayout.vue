@@ -199,11 +199,7 @@ export default {
     },
     activeModel: {
       get() {
-        if (this.$store.state.bpmn.activeModel) {
-          return this.$store.state.bpmn.activeModel.id;
-        } else {
-          return null;
-        }
+        return this.$store.getters['bpmn/getActiveModelId']
       },
       set(value) {
         if (value === this.activeModel) {

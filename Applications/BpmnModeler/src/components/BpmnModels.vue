@@ -87,8 +87,6 @@ export default {
       },
       set(value) {
         const model = value.length ? value[0] : '';
-        console.log(model);
-        console.log(this.activeModel);
         if (model === this.activeModel) {
           return;
         }
