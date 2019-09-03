@@ -1,5 +1,6 @@
 <template>
   <v-container class="main-block">
+    <mes-downtimes-overlay v-if="downtimesOverlay" />
     <v-card ref="card">
       <vue-split
         class="main-block-layout"
@@ -114,6 +115,14 @@ export default {
       },
       set(tabIndex) {
         this.$store.commit('mes/setSelectedTasksTab', tabIndex)
+      }
+    },
+    downtimesOverlay: {
+      get() {
+        return this.$store.getters['mes/downtimesOverlay']
+      },
+      set() {
+        this.$store.dispatch('mes/changeDowntimesOverlay')
       }
     },
     tasksPageState() {

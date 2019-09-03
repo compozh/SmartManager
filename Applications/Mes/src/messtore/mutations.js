@@ -47,6 +47,12 @@ export default {
   resetProductionFormio(state) {
     state.productionFormio = null
   },
+  setDowntimeFormio(state, formio) {
+    state.downtimeFormio = formio
+  },
+  resetDowntimeFormio(state) {
+    state.downtimeFormio = null
+  },
   removeProduction(state, production) {
     let index = state.productions.indexOf(production)
     state.productions.splice(index, 1)
@@ -70,6 +76,9 @@ export default {
   changeDragResizeMode(state) {
     state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode
   },
+  changeDowntimesOverlay(state) {
+    state.tasksPageState.downtimesOverlay = !state.tasksPageState.downtimesOverlay
+  },
   setObsoluteDataTask(state, obsoluteData) {
     state.obsoleteData.tasks = obsoluteData
   },
@@ -83,6 +92,9 @@ export default {
     state.workCentersForWorker = data.workCenters
     if (!state.workCenter) {
       var firstWorkCenterCodeByFixation = data.firstWorkCenter.code
+      if (!data.workCenters) {
+        return
+      }
       data.workCenters.forEach(workCenter => {
         if (workCenter.code == firstWorkCenterCodeByFixation) {
           return state.workCenter = workCenter
