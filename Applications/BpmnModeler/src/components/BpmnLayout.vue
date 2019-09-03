@@ -167,6 +167,16 @@ export default {
       this.formMode = 'delete';
       this.formModel = model;
       this.showForm = true;
+    },
+    navigateToModel(modelId) {
+      const { model, index } = this.$store.getters['bpmn/getModelById'](modelId);
+      if (index < 0) {
+        this.$router.push({ name: 'BPMNEMPTY' });
+      } else if (model.isFolder) {
+        this.$router.push({ name: 'BPMNFOLDER', params: { id: modelId } });
+      } else {
+        this.$router.push({ name: 'BPMNMODELER', params: { id: modelId } });
+      }
     }
   },
   computed: {
@@ -200,11 +210,7 @@ export default {
           return;
         }
         this.$store.dispatch('bpmn/setActiveModel', value);
-        if (value) {
-          this.$router.push({ path: `/bpmnmodeler/model/${value}` });
-        } else {
-          this.$router.push({ path: '/bpmnmodeler/' });
-        }
+        this.navigateToModel(value);
       }
     }
   },
