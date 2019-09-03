@@ -26,7 +26,7 @@ let router = new VueRouter({
   scrollBehavior () {
     return { x: 0, y: 0 }
   },
-  base: window.appConfig.BASE_URL,
+  base: window.appConfig.BASE_URL + 'SmartManagerVuesax/',
   routes: [
 
     {

@@ -187,5 +187,18 @@ export default {
   .work-centers-select .v-select__slot input {
     padding-bottom: 0;
   }
+  .downtimes-overlay .v-overlay__content {
+    width: 100%;
+    height: 100%;
+    padding: 2% 4%;
+  }
+  /* !!!!! */
+  .downtime-registration-button {
+    display: none
+  }
+  .drag-resize-button {
+    margin-left: auto;
+  }
+  /* !!!!! */
 </style>
 
