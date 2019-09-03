@@ -13,7 +13,7 @@
             >
                 Взять в работу
             </v-btn>
-
+            <v-btn class="downtime-registration-button" outlined @click="changeDowntimeOverlayMode" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
             <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
                 <v-icon>control_camera</v-icon>
             </v-btn>
@@ -40,6 +40,14 @@ export default {
       set() {
         this.$store.dispatch('mes/changeDragResizeMode')
       }
+    },
+    downtimesOverlay: {
+      get() {
+        return this.$store.getters['mes/downtimesOverlay']
+      },
+      set() {
+        this.$store.dispatch('mes/changeDowntimesOverlay')
+      }
     }
   },
   methods: {
@@ -57,6 +65,9 @@ export default {
       } else {
         splitter.style.cssText = 'width: 5px'
       }
+    },
+    changeDowntimeOverlayMode () {
+      this.downtimesOverlay = !this.downtimesOverlay
     }
   }
 }
@@ -93,7 +104,6 @@ export default {
     width: 50px;
     height: 50px;
     border-radius: 5px;
-    margin-left: auto;
     border: 1px solid rgb(50, 109, 168);
   }
   .active-drag-resize-button {
@@ -101,11 +111,14 @@ export default {
     width: 50px;
     height: 50px;
     border-radius: 5px;
-    margin-left: auto;
     border: 1px solid rgb(50, 109, 168);
     background-color: rgba(50, 109, 168, 0.2) !important;
   }
   .setup-installations-button {
     border-radius: 5px;
+  }
+  .downtime-registration-button {
+    border-radius: 5px;
+    margin-left: auto;
   }
 </style>
