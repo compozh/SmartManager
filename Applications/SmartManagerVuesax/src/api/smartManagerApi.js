@@ -142,7 +142,6 @@ export class SmartManagerApi {
           mutation: gql `${addComment}`,
           variables: {comment, params}
         })
-      console.log('comment: ', result)
       return await result
     } catch (e) {
       return console.log(e.message)
