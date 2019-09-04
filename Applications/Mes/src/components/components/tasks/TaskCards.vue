@@ -11,7 +11,7 @@
           class="task-item"
           @click="changeCurrentTask(task)"
         >
-        <v-icon v-if="task.inProgress" large class="inprogress-icon">mdi-progress-wrench</v-icon>
+        <v-icon v-if="task.inProgress" large class="inprogress-icon">rotate_right</v-icon>
           <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>

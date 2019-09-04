@@ -10,7 +10,7 @@ import '@it-enterprise/common/dist/common-components.css'
 
 
 // vue пакеты
-import '@mdi/font/css/materialdesignicons.css' //mdi icons
+import 'material-design-icons-iconfont/dist/material-design-icons.css' // mdi icons
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
@@ -19,6 +19,7 @@ import axios from 'axios'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
 
 // apollo
 import { ApolloClient } from 'apollo-client'
@@ -102,8 +103,10 @@ async function start()   {
           xl: 1920,
         },
         scrollBarWidth: 24,
-      },
-      iconfont: 'mdi',
+      }
+    },
+    icons: {
+      iconfont: 'md',
     }
   }
   let appComponent = await webAppsCore.GetApplicationComponent({
