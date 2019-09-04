@@ -1,6 +1,7 @@
 import {ApolloClient} from 'apollo-client'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
 import gql from 'graphql-tag'
 // Queries
 import folders from './graphql/folders.graphql'
@@ -13,6 +14,14 @@ import addAttachments from './graphql/addAttachments.graphql'
 import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
 import auth from './auth/auth'
+import router from '@/router'
+
+const errorLink = onError(({ networkError }) => {
+  if (networkError.statusCode === 401) {
+    auth.logOff()
+    router.push('/login')
+  }
+})
 
 const getClient = () => {
   const authHeader = auth.getAuthHeader()
@@ -25,9 +34,10 @@ const getClient = () => {
       'schema': 'smartmanager'
     }
   }
+  const httpLink = new HttpLink(options)
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink(options)
+    link: errorLink.concat(httpLink)
   })
 }
 

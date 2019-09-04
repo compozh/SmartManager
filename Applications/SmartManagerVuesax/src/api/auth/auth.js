@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/router'
 
 const currentUserKey = 'currentUser'
 
@@ -12,8 +13,6 @@ export default  class Authentication {
     this._setUpAxios()
     this._setCurrentUserInfo()
   }
-
-
 
   /**
    * Логин
@@ -74,9 +73,7 @@ export default  class Authentication {
     } catch (res) {
       throw new Error(`Ошибка входа. \r\n ${res}`)
     }
-
   }
-
 
   /**
    * Выход - разлогиниться на веб сервере
@@ -84,7 +81,6 @@ export default  class Authentication {
   static async logOff() {
     try {
       if (this.getCurrentUser()) {
-
         await axios.post(`${window.appConfig.GrapgQlUrl}api/authentication/logout`, undefined, {
           withCredentials: true
         })
@@ -116,9 +112,9 @@ export default  class Authentication {
    * Делегировать свои права
    */
   static async setDelegationRights({userId, dateFrom, dateTo}) {
-    return await  axios({
+    return axios({
       method: 'POST',
-      url: `${ window.appConfig.GrapgQlUrl }api/authentication/delegation`,
+      url: `${window.appConfig.GrapgQlUrl}api/authentication/delegation`,
       withCredentials: true,
       data: {userId, dateFrom, dateTo}
     })
@@ -129,13 +125,11 @@ export default  class Authentication {
    */
   static getAuthHeader() {
     if (!this.getCurrentUser()) {
-      return undefined
+      return
     }
     let token = this.getCurrentUser().access_token
     return {'Authorization': `Bearer ${token}`}
   }
-
-
 
   /**
    * Проверка что пользователь вошел в систему
@@ -144,8 +138,6 @@ export default  class Authentication {
     return !!localStorage.getItem(currentUserKey)
   }
 
-
-
   /**
    * Получить текущего пользователя
    */
@@ -153,11 +145,9 @@ export default  class Authentication {
     try {
       return JSON.parse(localStorage.getItem(currentUserKey))
     } catch (error) {
-      this.reset()
-      return undefined
+      this._resetCurrentUser()
     }
   }
-
 
   static _setCurrentUser(val) {
     localStorage.setItem(currentUserKey, JSON.stringify(val))
@@ -169,18 +159,27 @@ export default  class Authentication {
   }
 
   static async _setCurrentUserInfo() {
-    var user = this.getCurrentUser()
+    const user = this.getCurrentUser()
     if (!user) {
       return
     }
-    let userData = await this._getCurrentUserInfo()
-    user.UserData = userData
+    user.UserData = await this._getCurrentUserInfo()
     this._setCurrentUser(user)
   }
 
   static async _getCurrentUserInfo() {
-    let response = await axios.post(`${window.appConfig.GrapgQlUrl}api/authentication/user`, undefined, { withCredentials: true})
-    return response.data
+    try {
+      const result = await axios
+        .post(`${window.appConfig.GrapgQlUrl}api/authentication/user`, undefined, {
+          withCredentials: true
+        })
+      return result.data
+    } catch (e) {
+      if (e.response.status === 401) {
+        this.logOff()
+        router.push('/login')
+      }
+    }
   }
 
   /**
