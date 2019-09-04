@@ -11,19 +11,19 @@
 	     description
 	     modulesQtLabel
 	     durationMinutesLabel
-	     roles{
+	     rolesList{
 	       code
 	       name
 	     }
-	     levels{
+	     levelsList{
 	       code
 	       name
 	     }
-	     products{
+	     productsList{
 	       code
 	       name
 	     }
-	     tags{
+	     tagsList{
 	       code
 	       name
 	     }
@@ -36,26 +36,26 @@
 	     imageLink
 	     backgroundColor
 	     description
-	     durationMinutesLabel
+	     durationLabel
 	     lessonsQtLabel
 	     showLessonsTitle
-	     roles{
+	     rolesList{
 	       code
 	       name
 	     }
-	     levels{
+	     levelsList{
 	       code
 	       name
 	     }
-	     products{
+	     productsList{
 	       code
 	       name
 	     }
-	     tags{
+	     tagsList{
 	       code
 	       name
 	     }
-	     units{
+	     lessons{
 	       unitId
 	       lessonGuid
 	       name
