@@ -20,13 +20,13 @@
       <v-container fluid pa-0 fill-height>
         <v-layout column>
           <v-btn flat large class="tree-btn" @click="createDiagram()">
-            <v-icon left>add</v-icon> {{ $tc('AddElement') }}
+            <v-icon left>add</v-icon> {{ $tc('bpmn.buttons.AddElement') }}
           </v-btn>
           <v-divider></v-divider>
           <bpmn-models :models="models" :activeModel.sync="activeModel" @rename="renameModel" @remove="removeModel"></bpmn-models>
           <v-divider></v-divider>
           <v-btn flat large class="tree-btn" @click="onRouteChanged(true)">
-            <v-icon left>refresh</v-icon> {{ $tc('Refresh') }}
+            <v-icon left>refresh</v-icon> {{ $tc('bpmn.buttons.Refresh') }}
           </v-btn>
         </v-layout>
       </v-container>
@@ -66,7 +66,7 @@
         flat
         @click="showError = false"
       >
-        {{ $tc('Close') }}
+        {{ $tc('bpmn.buttons.Close') }}
       </v-btn>
     </v-snackbar>
   </v-app>
@@ -101,7 +101,7 @@ export default {
     async loadModels() {
       this.loading = true;
       if (!await this.$store.dispatch('bpmn/loadModels')) {
-        this.error = this.$tc('Models not loaded');
+        this.error = this.$tc('bpmn.errors.ProcessesNotLoaded');
         this.showError = true;
       }
       this.loading = false;
@@ -122,7 +122,7 @@ export default {
     },
     createDiagram() {
       this.formMode = 'create';
-      this.formModel = { name: this.$tc('NewDiagram'), xmlView: '' };
+      this.formModel = { name: this.$tc('bpmn.labels.NewProcess'), xmlView: '' };
       this.showForm = true;
     },
     async formSave(model) {
@@ -132,7 +132,7 @@ export default {
         if (await this.$store.dispatch('bpmn/createModel', model)) {
           this.showForm = false;
         } else {
-          this.error = this.$tc('ModelNotCreated');
+          this.error = this.$tc('bpmn.errors.ProcessNotCreated');
           this.showError = true;
         }
         break;
@@ -140,7 +140,7 @@ export default {
         if (await this.$store.dispatch('bpmn/setModelName', model)) {
           this.showForm = false;
         } else {
-          this.error = this.$tc('ModelNotEdited');
+          this.error = this.$tc('bpmn.errors.ProcessNotEdited');
           this.showError = true;
         }
         break;
@@ -148,7 +148,7 @@ export default {
         if (await this.$store.dispatch('bpmn/deleteModel', model)) {
           this.showForm = false;
         } else {
-          this.error = this.$tc('ModelNotDeleted');
+          this.error = this.$tc('bpmn.errors.ProcessNotDeleted');
           this.showError = true;
         }
         break;

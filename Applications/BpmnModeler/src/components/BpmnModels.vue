@@ -2,7 +2,7 @@
   <v-layout column>
     <v-text-field
       v-model="search"
-      :label="$tc('Search')"
+      :label="$tc('bpmn.labels.Search')"
       class="tree-search"
       hide-details
       clearable
@@ -35,13 +35,13 @@
               <v-list-tile-avatar>
                 <v-icon>edit</v-icon>
               </v-list-tile-avatar>
-              <v-list-tile-title>{{ $tc('Rename') }}</v-list-tile-title>
+              <v-list-tile-title>{{ $tc('bpmn.buttons.Rename') }}</v-list-tile-title>
             </v-list-tile>
             <v-list-tile @click="remove(item)">
               <v-list-tile-avatar>
                 <v-icon>delete</v-icon>
               </v-list-tile-avatar>
-              <v-list-tile-title>{{ $tc('Delete') }}</v-list-tile-title>
+              <v-list-tile-title>{{ $tc('bpmn.buttons.Delete') }}</v-list-tile-title>
             </v-list-tile>
           </v-list>
         </v-menu>
