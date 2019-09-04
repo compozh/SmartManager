@@ -2,14 +2,14 @@
   <v-layout column>
     <v-text-field
       v-model="search"
-      :label="$tc('Search')"
+      :label="$tc('bpmn.labels.Search')"
       class="tree-search"
       hide-details
       clearable
     ></v-text-field>
     <v-treeview :open.sync="open"
             :items="models"
-            :active.sync="activeModel"
+            :active.sync="active"
             :search="search"
             activatable
             hoverable
@@ -35,13 +35,13 @@
               <v-list-tile-avatar>
                 <v-icon>edit</v-icon>
               </v-list-tile-avatar>
-              <v-list-tile-title>{{ $tc('Rename') }}</v-list-tile-title>
+              <v-list-tile-title>{{ $tc('bpmn.buttons.Rename') }}</v-list-tile-title>
             </v-list-tile>
             <v-list-tile @click="remove(item)">
               <v-list-tile-avatar>
                 <v-icon>delete</v-icon>
               </v-list-tile-avatar>
-              <v-list-tile-title>{{ $tc('Delete') }}</v-list-tile-title>
+              <v-list-tile-title>{{ $tc('bpmn.buttons.Delete') }}</v-list-tile-title>
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -52,18 +52,15 @@
 <script>
 export default {
   name: 'bpmn-models',
+  props: {
+    models: Array,
+    activeModel: String
+  },
   data() {
     return {
       open: [],
-      active: [ this.$store.state.bpmn.activeModel.id ],
       search: ''
     };
-  },
-  created() {
-    const id = this.$route.params.id;
-    if (id) {
-      this.setActiveItem(id);
-    }
   },
   methods: {
     setActiveItem(id) {
@@ -80,26 +77,22 @@ export default {
     }
   },
   computed: {
-    models() {
-      return this.$store.state.bpmn.models;
-    },
-    activeModel: {
+    active: {
       get() {
-        return this.active;
+        if (this.activeModel) {
+          return [ this.activeModel ];
+        } else {
+          return [];
+        }
       },
       set(value) {
-        if (value.length === 0) {
-          this.setActiveItem(this.active[0]);
+        const model = value.length ? value[0] : '';
+        if (model === this.activeModel) {
           return;
         }
-
-        if (value[0] === this.active[0]) {
-          return;
-        }
-        this.active = value;
-        this.$router.push({ path: `/bpmnmodeler/model/${value}` });
+        this.$emit('update:activeModel', model);
       }
-    },
+    }
   }
 };
 </script>

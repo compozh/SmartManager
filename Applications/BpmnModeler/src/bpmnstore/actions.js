@@ -4,7 +4,10 @@ const api = new BpmnModelerApi();
 
 export default {
   async setActiveModel(context, id) {
-    const { model } = context.getters.getModelById(id);
+    let { model } = context.getters.getModelById(id);
+    if (!model) {
+      model = { id: '', name: '', xmlView: '', isFolder: false }
+    }
     context.state.activeModel = model;
   },
   async loadModels(context) {

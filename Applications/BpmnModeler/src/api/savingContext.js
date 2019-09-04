@@ -11,7 +11,6 @@ export class SavingContext {
         console.error(err);
         return;
       }
-      console.log(xml);
       this.callback(this.diagramId, xml);
     });
   }

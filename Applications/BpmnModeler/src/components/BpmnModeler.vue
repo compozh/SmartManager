@@ -14,7 +14,7 @@
         <div class="properties-panel-parent" ref="propertiesPanel"></div>
       </div>
       <v-tooltip v-model="saved" activator=".bpmn-diagram-container" bottom>
-        <span>{{ $tc('ProcessSaved') }}</span>
+        <span>{{ $tc('bpmn.labels.ProcessSaved') }}</span>
       </v-tooltip>
     </v-layout>
   </v-layout>
@@ -40,6 +40,10 @@ export default {
     };
   },
   mounted() {
+    const customTranslateModule = {
+      translate: [ 'value', (t, r) => this.translate(t, r) ]
+    };
+
     this.modeler = new BpmnModeler({ 
       container: this.$refs.container,
       propertiesPanel: {
@@ -47,7 +51,8 @@ export default {
       },
       additionalModules: [
         propertiesPanelModule,
-        propertiesProviderModule
+        propertiesProviderModule,
+        customTranslateModule
       ],
     });
     const canvas = this.modeler.get('canvas');
@@ -127,6 +132,31 @@ export default {
       });
       this.modeler.on('element.changed', this.onElementChanged, new SavingContext(this.modeler, this.diagramId, (id, xml) => this.setXML(id, xml)));
       this.loadXml();
+    },
+    translate(template, replacements) {
+      const translationPrefix = 'bpmn.modeler.';
+      replacements = replacements || {};
+
+      for (let replacement in replacements) {
+        // Попробовать перевести замены
+        const translationKey = translationPrefix + replacements[replacement];
+        const translation = this.$t(translationKey);
+        if (translation != translationKey) {
+          replacements[replacement] = translation;
+        }
+      }
+
+      // Перевести шаблон
+      const translationKey = translationPrefix + template;
+      const translation = this.$t(translationKey, replacements);
+
+      if (translation !== translationKey) {
+        return translation;
+      } else {
+        return template.replace(/{([^}]+)}/g, function(_, key) {
+          return replacements[key] || '{' + key + '}';
+        });
+      }
     }
   }
 };

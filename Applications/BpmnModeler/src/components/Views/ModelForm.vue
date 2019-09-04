@@ -7,14 +7,14 @@
       <v-container grid-list-md>
         <v-layout wrap>
           <v-flex xs12>
-            <v-text-field :label="$tc('DiagramName')" v-model="model.name" :disabled="loading || mode === 'delete'" required></v-text-field>
+            <v-text-field :label="$tc('bpmn.labels.ProcessName')" v-model="model.name" :disabled="loading || mode === 'delete'" required></v-text-field>
           </v-flex>
         </v-layout>
       </v-container>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn :disabled="loading" flat @click="cancel()">{{ $tc('Cancel') }}</v-btn>
+      <v-btn :disabled="loading" flat @click="cancel()">{{ $tc('bpmn.buttons.Cancel') }}</v-btn>
       <v-btn :loading="loading" flat @click="save()" color="primary">{{ actions[mode] }}</v-btn>
     </v-card-actions>
   </v-card>
@@ -45,14 +45,14 @@ export default {
   data() {
     return {
       titles: {
-        'create': this.$tc('CreateModel'),
-        'edit': this.$tc('EditModel'),
-        'delete': this.$tc('DeleteModel')
+        'create': this.$tc('bpmn.labels.CreateProcess'),
+        'edit': this.$tc('bpmn.labels.EditProcess'),
+        'delete': this.$tc('bpmn.labels.DeleteProcess')
       },
       actions: {
-        'create': this.$tc('Save'),
-        'edit': this.$tc('Save'),
-        'delete': this.$tc('Delete')
+        'create': this.$tc('bpmn.buttons.Save'),
+        'edit': this.$tc('bpmn.buttons.Save'),
+        'delete': this.$tc('bpmn.buttons.Delete')
       }
     }
   },
