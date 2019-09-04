@@ -30,7 +30,6 @@
     <div class="flex w-full">
       <div class="task__message truncate ml-3">
         <span>{{ task.name | filter_tags }}</span>
-        <span>{{ comments }}</span>
       </div>
     </div>
   </div>

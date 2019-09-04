@@ -98,8 +98,8 @@ import templateConfig from '@/templateConfig'
 export default {
   data() {
     return {
-      login: 'melentyev@it.ua',
-      password: 'vbkkth',
+      login: '',
+      password: '',
       checkbox_remember_me: false,
       config: templateConfig.login
     }
