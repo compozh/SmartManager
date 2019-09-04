@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
-    "@it-enterprise/authentication": "^1.0.3",
+    "@it-enterprise/authentication": "^1.0.19",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/localization": "^1.0.9",
