@@ -134,10 +134,29 @@ export default {
       this.loadXml();
     },
     translate(template, replacements) {
+      const translationPrefix = 'bpmn.modeler.';
       replacements = replacements || {};
 
-      // Translate
-      return this.$t('bpmn.modeler.' + template, replacements);
+      for (let replacement in replacements) {
+        // Попробовать перевести замены
+        const translationKey = translationPrefix + replacements[replacement];
+        const translation = this.$t(translationKey);
+        if (translation != translationKey) {
+          replacements[replacement] = translation;
+        }
+      }
+
+      // Перевести шаблон
+      const translationKey = translationPrefix + template;
+      const translation = this.$t(translationKey, replacements);
+
+      if (translation !== translationKey) {
+        return translation;
+      } else {
+        return template.replace(/{([^}]+)}/g, function(_, key) {
+          return replacements[key] || '{' + key + '}';
+        });
+      }
     }
   }
 };
