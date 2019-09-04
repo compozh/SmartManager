@@ -97,16 +97,19 @@
 
 
 <script>
+// import { threadId } from 'worker_threads'
+
 export default {
 	name: 'lms-courses',
-  props: ['courses'],
-  computed: {
-    availableFilters() {
-      return this.$store.getters['lms/availableFilters']
-    }
+  created() {
+    this.getCourses()
   },
 
   methods: {
+    getCourses () {
+      this.$store.dispatch('lms/getCourses')
+    },
+
     goToCourseDetails ( courseId, course ) {
       this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
     },
@@ -117,6 +120,14 @@ export default {
     levelSearch: function(data) {
       this.$router.push({ name: "LMSCOURSES", params: { level: data.code } })
     }
-  }
+  },
+  computed: {
+    availableFilters() {
+      return this.$store.getters['lms/availableFilters']
+    },
+    courses () {
+      return this.$store.getters['lms/courses']
+    }
+  },
 }
 </script>

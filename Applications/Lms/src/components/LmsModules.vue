@@ -97,32 +97,14 @@
 
 export default {
   name: "lms-modules",
-  props: ["modules"],
-  data() {
-    return {
-      filtersData: [
-        {
-          name: 'Роль',
-          items: [{code: 'А', name: 'Администратор', selected: false}]
-        },
-        {
-          name: 'Уровень',
-          items: [{code: 'B', name: 'Начальный', selected: false}]
-        },
-        {
-          name: 'Продукт',
-          items: [{code: 'BUH', name: 'Бухгалтерия', selected: false}]
-        },
-        {
-          name: 'Тэг',
-          items: []
-        }
-      ]
-    }
-  },
-  mounted() {
+  created() {
+    this.getModules()
   },
   methods: {
+    getModules () {
+      this.$store.dispatch('lms/getModules')
+    },
+
     roleSearch: function(data) {
       this.$router.push({ name: "LMSMODULES", params: { role: data.code } });
     },
@@ -133,6 +115,10 @@ export default {
   computed: {
     availableFilters() {
       return this.$store.getters['lms/availableFilters']
+    },
+
+    modules () {
+      return this.$store.getters['lms/modules']
     }
   }
 }

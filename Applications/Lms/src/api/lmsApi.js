@@ -9,6 +9,7 @@ import availableFilters from './graphql/availableFilters.graphql'
 import courseDetails from './graphql/courseDetails.graphql'
 import lessonContent from './graphql/lessonContent.graphql'
 import Vue from 'vue'
+import { get } from 'https';
 
 // const options = {
 //   uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -54,6 +55,40 @@ export class LmsApi {
   getRecommendedFromGql() {
     return getClient().query({
       query: gql` ${recommended}`
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getCoursesFromGql() {
+    return getClient().query({
+      query: gql` ${courses}`
+    })
+    .then(result => result)
+    .cache(error => console.log(error.message))
+  }
+
+  getModulesFromGql() {
+    return getClient().query({
+      query: gql` ${modules}`
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getCourseDetailFromGql(courseid) {
+    return getClient().query({
+      query: gql`query ($courseid: ID) ${courseDetails}`,
+      variables: courseid
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getLessonContentFromGql(lessonId) {
+    return getClient().query({
+      query: gql`query ($lessonId: ID) ${lessonContent}`,
+      variables: lessonId
     })
     .then(result => result)
     .catch(error => console.log(error.message))

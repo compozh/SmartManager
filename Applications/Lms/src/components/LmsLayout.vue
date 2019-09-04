@@ -57,7 +57,7 @@
 
 		</v-toolbar>
 
-		<v-content
+		<v-content v-if="!circularLoader"
 			fill-height
 			style='background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/light_noise_diagonal.png);background-repeat: repeat;'
 			class="mx-0 my-0 px-0 py-0">
@@ -65,6 +65,23 @@
 				<router-view></router-view>
 			</v-container>
 		</v-content>
+
+    <v-container
+      v-else
+      class="circular-loader"
+      fill-height fluid
+    >
+      <v-layout row align-center>
+        <v-flex xs12>
+          <v-progress-circular
+            :size="100"
+            :width="4"
+            color="blue darken-2"
+            indeterminate
+          ></v-progress-circular>
+        </v-flex>
+      </v-layout>
+    </v-container>
 
 		<v-footer absolute class="pa-3" :fixed='fixed' app>
 			<span>IT-Enterprise 2018</span>
@@ -92,7 +109,10 @@ export default {
     }
   },
   created() {
-        // Перейти к home
+    // Перейти к home
+    if (this.$router.history.current.name == 'LMSREALHOME') {
+      return
+    }
     this.$router.push({name: 'LMSREALHOME'})
   },
   beforeMount: function () {
@@ -123,9 +143,13 @@ export default {
 
   },
   computed: {
+    circularLoader() {
+      return this.$store.state.lms.circularLoader
+    }
   }
 }
 </script>
+
 <style>
 @import url("https://fonts.googleapis.com/css?family=Candal|Lalezar");
 

@@ -10,13 +10,13 @@ export default {
     return state.availableFilters
   },
 
-  // recommended (state) {
-  //   return state.recommended
-  // },
-  // courses (state) {
-  //   return state.courses
-  // },
-  // modules (state) {
-  //   return state.modules
-  // },
+  recommended (state) {
+    return state.recommended
+  },
+  courses (state) {
+    return state.courses
+  },
+  modules (state) {
+    return state.modules
+  },
 }
