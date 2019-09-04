@@ -114,9 +114,9 @@ export default {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
   }
-  .formio-block {
+  /* .formio-block {
     background-color: #326da80d;
-   }
+   } */
   .grid-item-data{
     overflow-y: auto;
     overflow-x: auto;

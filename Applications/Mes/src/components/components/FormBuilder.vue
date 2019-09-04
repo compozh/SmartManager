@@ -305,6 +305,9 @@ export default {
 
     text-align: center !important;
   }
+  .input-group-addon.input-group-append {
+    display: none;
+  }
 }
 
 </style>

@@ -79,7 +79,9 @@ export default {
           routerDependencies.router.push({name: 'LOGIN'})
         }
       })
-      commit('setTasks', tasks)
+      debugger;
+      var sortedTasks = await this.dispatch('mes/sortingTaskFn', { tasks: tasks })
+      commit('setTasks', sortedTasks)
 
       if (fetchPolicy == 'network-only') {
         this.dispatch('mes/selectTaskAfterRefresh')
@@ -463,5 +465,26 @@ export default {
     await this.dispatch('mes/initializeInstallations', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
     await this.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter.code, workerCode: props.workerCode })
     commit('closeDialogLinearLoader')
+  },
+  async sortingTaskFn({commit}, {tasks}) {
+    var tasksInProgress = []
+    var tasksIsNotInProgress = []
+    var completeSortedTasks = []
+    tasks.sort((a,b) => {
+      return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
+        1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1)
+    })
+    if (tasks.length) {
+      for (var i = tasks.length - 1; i >= 0; i--) {
+        var task = tasks[i]
+        if (task.inProgress) {
+          tasksInProgress.push(task)
+        } else {
+          tasksIsNotInProgress.push(task)
+        }
+      }
+      completeSortedTasks = tasksInProgress.concat(tasksIsNotInProgress)
+    }
+    return completeSortedTasks
   }
 }

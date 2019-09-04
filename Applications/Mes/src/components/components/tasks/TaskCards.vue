@@ -1,6 +1,6 @@
 <template>
   <v-flex class="tasks-list-block">
-    <div v-for="task in sortedTasks" :key="task.shiftTaskId">
+    <div v-for="task in this.tasks" :key="task.shiftTaskId">
 
       <div
         v-if="(selectedTasksTab == 0 && (task.state == 'IN_PLAN' || task.state == 'IN_WORK'))
@@ -41,28 +41,6 @@ export default {
     tasks() {
       return this.$store.getters['mes/tasks']
     },
-    sortedTasks() {
-      var tasks = this.tasks
-      var tasksInProgress = []
-      var tasksIsNotInProgress = []
-      var completeSortedTasks = []
-      tasks.sort((a,b) => {
-        return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
-          1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1)
-      })
-      if (tasks.length) {
-        for (var i = tasks.length - 1; i >= 0; i--) {
-          var task = tasks[i]
-          if (task.inProgress) {
-            tasksInProgress.push(task)
-          } else {
-            tasksIsNotInProgress.push(task)
-          }
-        }
-        completeSortedTasks = tasksInProgress.concat(tasksIsNotInProgress)
-      }
-      return completeSortedTasks
-    }
   },
   methods: {
     changeCurrentTask(newTask) {

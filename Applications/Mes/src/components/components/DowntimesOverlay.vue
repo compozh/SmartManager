@@ -8,6 +8,12 @@
       Фиксация простоя
     </v-card-title>
       <div class="downtimes-block">
+        <v-progress-circular
+          class='downtime-progress-circular'
+          v-if="!initializing"
+          indeterminate
+          color="primary"
+      ></v-progress-circular>
       <mes-form-builder
         ref="formioBuilder"
         type="downtimesForm"
@@ -26,6 +32,9 @@
 
 <script>
 export default {
+  data () {
+    return { initializing: false }
+  },
   name: 'mes-downtimes-overlay',
   created() {
     this.initializeDowntimeFormio()
@@ -46,6 +55,7 @@ export default {
           eventStart: new Date()
         }
       await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.downtimeRegistrationFormCode, properties })
+      this.initializing = true
     },
   }
 }
@@ -68,7 +78,7 @@ export default {
     overflow-y: auto;
     width: 100%;
     padding: 30px;
-    background-color: #326da80d;
+    /* background-color: #326da80d; */
   }
   .downtimes-block::-webkit-scrollbar {
     background-color:#fff;
@@ -93,4 +103,9 @@ export default {
   }
   /* set button(top and bottom of the scrollbar) */
   .downtimes-block::-webkit-scrollbar-button {display:none}
+  .downtime-progress-circular {
+    position: absolute;
+    left: 130px;
+    top: 70px;
+  }
 </style>
