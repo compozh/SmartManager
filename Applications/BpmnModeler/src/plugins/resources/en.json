@@ -152,6 +152,27 @@
 		"Process Name": "Process Name",
 		"Executable": "Executable",
 		"Process Documentation": "Process Documentation",
-		"Category Value": "Category Value"
+		"Category Value": "Category Value",
+		"Message": "Message",
+		"Message Name": "Message Name",
+		"Signal": "Signal",
+		"Signal Name": "Signal Name",
+		"Escalation": "Escalation",
+		"Escalation Name": "Escalation Name",
+		"Escalation Code": "Escalation Code",
+		"Error": "Error",
+		"Error Name": "Error Name",
+		"Error Code": "Error Code",
+		"Link Name": "Link Name",
+		"Variable Name": "Variable Name",
+		"Variable Event": "Variable Event",
+		"Wait for Completion": "Wait for Completion",
+		"Activity Ref": "Activity Ref",
+		"Timer Definition Type": "Timer Definition Type",
+		"Timer Definition": "Timer Definition",
+		"Date": "Date",
+		"Duration": "Duration",
+		"Cycle": "Cycle",
+		"Must provide a value": "Must provide a value"
 	}
 }
