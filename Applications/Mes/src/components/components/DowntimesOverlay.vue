@@ -1,6 +1,12 @@
 <template>
 <v-overlay class="downtimes-overlay">
-  <v-card height="100%" width="100%" class="overlay-block" light>
+  <v-card class="overlay-block" light>
+    <v-card-title
+      class="headline grey lighten-2"
+      primary-title
+    >
+      Фиксация простоя
+    </v-card-title>
       <div class="downtimes-block">
       <mes-form-builder
         ref="formioBuilder"
@@ -24,8 +30,6 @@ export default {
   created() {
     this.initializeDowntimeFormio()
   },
-  computed: {
-  },
   methods: {
     closeOverlay () {
       this.$store.dispatch('mes/changeDowntimesOverlay')
@@ -37,22 +41,25 @@ export default {
       let workCenter = this.$parent.workCenter,
         properties = {
           workCenterCode: workCenter.code,
-          workBarcode: '040000004620',
+          id: 0,
+          eventCode: '',
+          eventStart: new Date()
         }
-      await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+      await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.downtimeRegistrationFormCode, properties })
     },
   }
 }
 </script>
 
 <style type="text/css" scoped>
-  .overlay-content {
+  .overlay-block {
     height: 100%;
     width: 100%;
+    min-width: 300px;
   }
   .close-overlay-btn {
     position: absolute;
-    top: 0;
+    top: 4px;
     right: 0;
   }
   .downtimes-block {
@@ -60,6 +67,7 @@ export default {
     height: 100%;
     overflow-y: auto;
     width: 100%;
+    padding: 30px;
     background-color: #326da80d;
   }
   .downtimes-block::-webkit-scrollbar {

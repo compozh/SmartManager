@@ -12,6 +12,7 @@
 			orderWasteRegistration
 			productionRegistrationType
 			productionRegistrationFormCode
+			downtimeRegistrationFormCode
 			accessPages
         }
     }

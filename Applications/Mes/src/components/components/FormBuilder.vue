@@ -27,7 +27,7 @@ export default {
     },
     formioSubmission() {
       if (this.$attrs.type == 'downtimesForm') {
-        return { data: this.downtimeFormio ? JSON.parse(this.downtimeFormio.data) : [] }
+        return {}
       } else {
         return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] }
       }
@@ -61,6 +61,7 @@ export default {
 .formio-container /deep/ {
   @import "~bootstrap/scss/bootstrap.scss";
   @import "~choices.js/public/assets/styles/choices.css";
+  @import "~flatpickr/dist/flatpickr.min.css";
 
   font-size: 14px;
   font-weight: 500;
@@ -295,4 +296,15 @@ export default {
     }
   }
 }
+.formio-container[type~="downtimesForm"] /deep/ {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .form-group.has-feedback.formio-component {
+    align-items: center;
+
+    text-align: center !important;
+  }
+}
+
 </style>

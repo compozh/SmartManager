@@ -16,6 +16,8 @@ import productions from './graphql/productions/productions.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
+import downtimeFormIo from './graphql/downtimeFormIo.graphql'
+import downtimeFormIoSubmit from './graphql/downtimeFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
@@ -186,17 +188,16 @@ export class MesApi {
   }
   async getDowntimeFormioFromGql(formCode, properties) {
     const result = await getClient().query({
-      query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
-      variables: { formCode, properties },
-      fetchPolicy: 'network-only'
+      query: gql`query ($formCode: String, $properties: DowntimeParamsInput!) ${downtimeFormIo}`,
+      variables: { formCode, properties }
     })
       .then(result => result)
     return result.data.mes.downtimeFormIo
   }
-  async downtimeFormIoSubmitGql({ formCode, data, productionRegistrationParam}) {
+  async downtimeFormIoSubmitGql({ formCode, data, downtimeParams}) {
     const result = await getClient().mutate({
-      mutation: gql`${productionFormIoSubmit}`,
-      variables: { formCode, data, productionRegistrationParam}
+      mutation: gql`${downtimeFormIoSubmit}`,
+      variables: { formCode, data, downtimeParams}
     })
       .then(result => result)
     return result.data.mesMutation.downtimeFormIoSubmit

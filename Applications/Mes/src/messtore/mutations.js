@@ -78,6 +78,9 @@ export default {
   },
   changeDowntimesOverlay(state) {
     state.tasksPageState.downtimesOverlay = !state.tasksPageState.downtimesOverlay
+    if (!state.tasksPageState.downtimesOverlay) {
+      state.downtimeFormio = null
+    }
   },
   setObsoluteDataTask(state, obsoluteData) {
     state.obsoleteData.tasks = obsoluteData

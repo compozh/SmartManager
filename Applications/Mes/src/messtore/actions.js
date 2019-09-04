@@ -278,24 +278,24 @@ export default {
     })
   },
   async createDowntimeFormio({ commit }, { formCode, properties }) {
-    // await this.dispatch('mes/graphqlQueryWraper', {
-    //   queryAction: async () => {
-    //     try {
-    //       const res = await api.getDowntimeFormioFromGql(formCode, properties)
-    //       return res
-    //     }
-    //     catch (e) {
-    //       if (e.networkError && e.networkError.statusCode == 401) {
-    //         Vue.prototype.$authentication.resetCurentUser()
-    //         routerDependencies.router.push({name: 'LOGIN'})
-    //       }
-    //       else {
-    //         commit('setSnackbarErrorMessage', e.message)
-    //       }
-    //     }
-    //   },
-    //   successAction: async result => { commit('setDowntimeFormio', result) },
-    // })
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () => {
+        try {
+          const res = await api.getDowntimeFormioFromGql(formCode, properties)
+          return res
+        }
+        catch (e) {
+          if (e.networkError && e.networkError.statusCode == 401) {
+            Vue.prototype.$authentication.resetCurentUser()
+            routerDependencies.router.push({name: 'LOGIN'})
+          }
+          else {
+            commit('setSnackbarErrorMessage', e.message)
+          }
+        }
+      },
+      successAction: async result => { commit('setDowntimeFormio', result) },
+    })
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
