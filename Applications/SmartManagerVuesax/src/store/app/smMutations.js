@@ -48,6 +48,7 @@ export default {
       date: `${date} ${time}`,
       text: payload,
       user: user.UserData.CurrentUserData.UserName,
+      userId: user.UserData.CurrentUserData.UserId,
       userPhoto: user.UserData.CurrentUserData.UserPhoto
     }
     state.taskInfo.comments.push(comment)
