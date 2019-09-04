@@ -11,4 +11,10 @@ export default {
     }
     return { model: null, index: -1 };
   },
+  getActiveModelId(state) {
+    if (!state.activeModel) {
+      return '';
+    }
+    return state.activeModel.id;
+  }
 };

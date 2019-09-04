@@ -20,13 +20,13 @@
       <v-container fluid pa-0 fill-height>
         <v-layout column>
           <v-btn flat large class="tree-btn" @click="createDiagram()">
-            <v-icon left>add</v-icon> {{ $tc('AddElement') }}
+            <v-icon left>add</v-icon> {{ $tc('bpmn.buttons.AddElement') }}
           </v-btn>
           <v-divider></v-divider>
-          <bpmn-models @rename="renameModel" @remove="removeModel"></bpmn-models>
+          <bpmn-models :models="models" :activeModel.sync="activeModel" @rename="renameModel" @remove="removeModel"></bpmn-models>
           <v-divider></v-divider>
           <v-btn flat large class="tree-btn" @click="onRouteChanged(true)">
-            <v-icon left>refresh</v-icon> {{ $tc('Refresh') }}
+            <v-icon left>refresh</v-icon> {{ $tc('bpmn.buttons.Refresh') }}
           </v-btn>
         </v-layout>
       </v-container>
@@ -66,7 +66,7 @@
         flat
         @click="showError = false"
       >
-        {{ $tc('Close') }}
+        {{ $tc('bpmn.buttons.Close') }}
       </v-btn>
     </v-snackbar>
   </v-app>
@@ -94,17 +94,14 @@ export default {
       formLoading: false
     };
   },
-  created() {
-    this.onRouteChanged(false);
-  },
   mounted() {
-    
+    this.onRouteChanged(false);
   },
   methods: {
     async loadModels() {
       this.loading = true;
       if (!await this.$store.dispatch('bpmn/loadModels')) {
-        this.error = this.$tc('Models not loaded');
+        this.error = this.$tc('bpmn.errors.ProcessesNotLoaded');
         this.showError = true;
       }
       this.loading = false;
@@ -125,7 +122,7 @@ export default {
     },
     createDiagram() {
       this.formMode = 'create';
-      this.formModel = { name: this.$tc('NewDiagram'), xmlView: '' };
+      this.formModel = { name: this.$tc('bpmn.labels.NewProcess'), xmlView: '' };
       this.showForm = true;
     },
     async formSave(model) {
@@ -135,7 +132,7 @@ export default {
         if (await this.$store.dispatch('bpmn/createModel', model)) {
           this.showForm = false;
         } else {
-          this.error = this.$tc('ModelNotCreated');
+          this.error = this.$tc('bpmn.errors.ProcessNotCreated');
           this.showError = true;
         }
         break;
@@ -143,7 +140,7 @@ export default {
         if (await this.$store.dispatch('bpmn/setModelName', model)) {
           this.showForm = false;
         } else {
-          this.error = this.$tc('ModelNotEdited');
+          this.error = this.$tc('bpmn.errors.ProcessNotEdited');
           this.showError = true;
         }
         break;
@@ -151,7 +148,7 @@ export default {
         if (await this.$store.dispatch('bpmn/deleteModel', model)) {
           this.showForm = false;
         } else {
-          this.error = this.$tc('ModelNotDeleted');
+          this.error = this.$tc('bpmn.errors.ProcessNotDeleted');
           this.showError = true;
         }
         break;
@@ -163,18 +160,27 @@ export default {
     },
     renameModel(model) {
       this.formMode = 'edit';
-      this.formModel = model;
+      this.formModel = Object.assign({}, model);
       this.showForm = true;
     },
     removeModel(model) {
       this.formMode = 'delete';
       this.formModel = model;
       this.showForm = true;
+    },
+    navigateToModel(modelId) {
+      const { model, index } = this.$store.getters['bpmn/getModelById'](modelId);
+      if (index < 0) {
+        this.$router.push({ name: 'BPMNEMPTY' });
+      } else if (model.isFolder) {
+        this.$router.push({ name: 'BPMNFOLDER', params: { id: modelId } });
+      } else {
+        this.$router.push({ name: 'BPMNMODELER', params: { id: modelId } });
+      }
     }
   },
   computed: {
     currentUser() {
-      console.log(this.$store.state.authentication);
       if (this.$store.state.authentication.currentUser) {
         return this.$store.state.authentication.currentUser;
       }
@@ -187,20 +193,30 @@ export default {
       set(value) {
         this.showAppBar = value;
       }
+    },
+    models() {
+      return this.$store.state.bpmn.models;
+    },
+    activeModel: {
+      get() {
+        return this.$store.getters['bpmn/getActiveModelId']
+      },
+      set(value) {
+        if (value === this.activeModel) {
+          return;
+        }
+        this.$store.dispatch('bpmn/setActiveModel', value);
+        this.navigateToModel(value);
+      }
     }
   },
   watch: {
-    //'$route': 'onRouteChanged'
-  },
-  beforeRouteEnter(to, from, next) {
-    window.alert('beforeRouteEnter');
-    console.log('beforeRouteEnter');
-    next(vm => vm.loadModels());
-  },
-  beforeRouteUpdate(to, from, next) {
-    window.alert('beforeRouteUpdate');
-    console.log('beforeRouteUpdate');
-    this.loadModels().then(success => next(success));
+    '$route'(to, from) {
+      if (from.name === 'BPMNLOGIN') {
+        this.appBar = true;
+        this.onRouteChanged(true);
+      }
+    }
   }
 };
 </script>
