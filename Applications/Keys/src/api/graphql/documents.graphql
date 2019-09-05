@@ -1,0 +1,11 @@
+query documents($dateFrom:Date, $dateTo:Date){
+  keysQuery{
+    documents(dateFrom:$dateFrom, dateTo:$dateTo){
+      date
+      id
+      isPosted
+      number,
+      comment
+    }
+  }  
+}

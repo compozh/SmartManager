@@ -33,7 +33,7 @@ const getClient = () => {
 
 export class SmartManagerApi {
   constructor() {}
-
+  
   getFoldersFromGql() {
     return getClient().query({
       query: gql` ${folders}`
@@ -57,7 +57,6 @@ export class SmartManagerApi {
       variables: {taskId}
     })
       .then(result => result)
-      .catch(error => console.log(error.message))
   }
 
   getUsersFromGql() {

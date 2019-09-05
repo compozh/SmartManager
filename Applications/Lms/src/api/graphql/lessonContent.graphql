@@ -1,0 +1,11 @@
+{
+  lms{
+    lessonContent(lessonGuid: $lessonId){
+      lessonGuid
+      name
+      durationMinutesLabel
+      content
+      unitId
+    }
+  }
+}

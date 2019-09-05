@@ -6,11 +6,16 @@ export default {
       password: '',
       remember: false
     },
-    message: ''
+    message: '',
+    loading: false
+
   }),
   computed: {
     routeToBack() {
       return this.$route.params.routeToBack
+    },
+    needEnterTempPassword() {
+      return this.$store.state.authentication.needEnterTempPassword
     }
   },
   methods: {
@@ -21,13 +26,23 @@ export default {
       if (!this.userData.password) {
         return (this.message = this.$t('authentication.emptyPassword'))
       }
+      this.loading = true
       this.$authentication.logIn(this.userData.login, this.userData.password, this.userData.rememberMe).then(res => {
-        if (res) {
-          this.$store.commit('authentication/setCurrentUser', this.$authentication.currentUser)
+        this.loading = false
+        if (res && !res.tempPasword) {
           this.$router.replace({ path: this.routeToBack })
-
         }
-      }).catch((e) => (this.message = e || 'Ошибка авторизации'))
+      }).catch((e) => {
+        this.loading = false
+        return (this.message = e || 'Ошибка авторизации')
+      })
+    },
+    GetRecoveryPasswordUrl() {
+      this.$authentication.GetRecoveryPasswordUrl().then(res => {
+        if (res.ALLOWED) {
+          window.open(res.LINK, '_blank')
+        }
+      })
     }
   },
   created() {
@@ -37,6 +52,8 @@ export default {
     return this.$scopedSlots.default({
       userData: this.userData,
       message: this.message,
+      needEnterTempPassword: this.needEnterTempPassword,
+      loading: this.loading,
       params: {
         loginAttrs: {
           value: this.userData.login,
@@ -86,6 +103,9 @@ export default {
         },
         buttonEvents: {
           click: () => this.login()
+        },
+        buttonEventRecoverPasswordUrl: {
+          click: () => this.GetRecoveryPasswordUrl()
         },
         messageAttrs: {
           style: [{ display: this.message ? 'block' : 'none' }]

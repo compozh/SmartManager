@@ -1,0 +1,107 @@
+<template>
+  <v-layout column>
+    <v-text-field
+      v-model="search"
+      :label="$tc('bpmn.labels.Search')"
+      class="tree-search"
+      hide-details
+      clearable
+    ></v-text-field>
+    <v-treeview :open.sync="open"
+            :items="models"
+            :active.sync="active"
+            :search="search"
+            activatable
+            hoverable
+            class="models-tree-view">
+      <template v-slot:prepend="{ item, open }">
+        <v-icon v-if="item.isFolder">
+          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+        </v-icon>
+        <v-icon v-else>mdi-file-tree</v-icon>
+      </template>
+      <template v-slot:append="{ item }">
+        <v-menu close-on-click
+                close-on-content-click
+                offset-x
+                offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn flat icon v-on="on">
+              <v-icon>list</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-tile @click="rename(item)">
+              <v-list-tile-avatar>
+                <v-icon>edit</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-title>{{ $tc('bpmn.buttons.Rename') }}</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="remove(item)">
+              <v-list-tile-avatar>
+                <v-icon>delete</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-title>{{ $tc('bpmn.buttons.Delete') }}</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </template>
+    </v-treeview>
+  </v-layout>
+</template>
+<script>
+export default {
+  name: 'bpmn-models',
+  props: {
+    models: Array,
+    activeModel: String
+  },
+  data() {
+    return {
+      open: [],
+      search: ''
+    };
+  },
+  methods: {
+    setActiveItem(id) {
+      if (id) {
+        this.active.length = 0;
+        this.active.push(id);
+      }
+    },
+    rename(item) {
+      this.$emit('rename', item);
+    },
+    remove(item) {
+      this.$emit('remove', item);
+    }
+  },
+  computed: {
+    active: {
+      get() {
+        if (this.activeModel) {
+          return [ this.activeModel ];
+        } else {
+          return [];
+        }
+      },
+      set(value) {
+        const model = value.length ? value[0] : '';
+        if (model === this.activeModel) {
+          return;
+        }
+        this.$emit('update:activeModel', model);
+      }
+    }
+  }
+};
+</script>
+<style>
+.models-tree-view {
+  text-align: left;
+  height: 100%;
+}
+.tree-search {
+  margin: 0px 15px 6px 25px;
+}
+</style>

@@ -85,14 +85,7 @@
         class="viewer-btn"
         @click="width = 100"
       >
-        <v-icon size="18">panorama_horizontal</v-icon>
-      </v-btn>
-      <!-- Кнопка маштабирования по высоте страницы !!!НЕ РЕАЛИЗОВАНО -->
-      <v-btn
-        outline small
-        class="viewer-btn"
-      >
-        <v-icon size="18">panorama_vertical</v-icon>
+        <v-icon size="18" style="transform: rotate(90deg)">height</v-icon>
       </v-btn>
       <!-- Кнопка включения/выключения полноэкранного режима -->
       <v-btn
@@ -103,24 +96,25 @@
         <v-icon size="18">open_with</v-icon>
       </v-btn>
     </v-flex>
-    <v-flex class="viewer-wrapper">
+    <v-flex class="viewer-wrapper" id="scroll-target">
       <v-layout
         column
-        class="mx-2 align-center viewer-page-container"
+        class="mx-2 viewer-page-container"
+        :class="{ 'align-center': width < 100 }"
+        v-scroll:#scroll-target="onScroll"
       >
         <v-flex
+          ref="pages"
           class="my-2 elevation-3 viewer-page-item"
           :style="{ width: width + '% !important'}"
           v-for="i in numPages"
           :key="i"
-          :id="'page' + i"
+          :id="String(i)"
         >
           <pdf
             :src="src"
-            :page="i"
-            :id="i"
+            :page="viewed.includes(i) ? i : 0"
             :rotate="rotate"
-            @page-loaded="observePages($event)"
           ></pdf>
         </v-flex>
       </v-layout>
@@ -144,7 +138,8 @@ export default {
     rotate: 0,
     width: 100,
     minWidth: 60,
-    maxWidth: 160
+    maxWidth: 160,
+    viewed: [1, 2, 3]
   }),
   created() {
     this.readDocument()
@@ -159,21 +154,23 @@ export default {
           text: e.message
         }))
     },
-    observePages(event) {
-      if (this.numPages === event) {
-        const callback = entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && this.page !== entry.target.id) {
-              this.page = entry.target.id
-            }
-          })
+    onScroll(event) {
+      const pages = this.$refs.pages ? this.$refs.pages : []
+      // Defining the space that was scrolled and height containers
+      const offsetTop = event.target.scrollTop
+      const offsetHeight = pages[0].offsetHeight
+      // Sets all containers height same as in first without first
+      pages.forEach((page, index) => {
+        if (index) {
+          page.style.cssText += `height: ${offsetHeight}px !important;`
         }
-        const observer = new IntersectionObserver(callback, {threshold: 0.3})
-        for (let i = 1; i <= this.numPages; i++) {
-          let elem = document.getElementById(i)
-          observer.observe(elem)
-        }
-      }
+      })
+      // Computing current page (offset / (height + margin) + round off)
+      const page = Math.round(offsetTop / (offsetHeight + 16) + 1)
+      this.page = isNaN(page) ? 1 : page
+      // Adding current page and two next for rendering
+      const showPages = [this.page - 1, this.page, this.page + 1]
+      this.viewed.push(...showPages)
     },
     toggleFullScreen() {
       const elem = document.querySelector('.pdf-viewer')
@@ -218,7 +215,6 @@ export default {
 </script>
 
 <style scoped>
-
   .pdf-viewer {
     background: #f5f5f5;
     border: 1px solid #c6c6c6;
@@ -296,5 +292,4 @@ export default {
     background-color: darkgrey;
     outline: 1px solid slategrey;
   }
-
 </style>
