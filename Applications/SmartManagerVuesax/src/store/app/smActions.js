@@ -1,15 +1,9 @@
 import {i18n} from '../../i18n/i18n'
 import {SmartManagerApi as api} from '../../api/smartManagerApi'
 
-function trimHtmlTags(stringWithHtmlTags) {
-  const elem = document.createElement('div')
-  elem.innerHTML = stringWithHtmlTags
-  return elem.innerText
-}
-
 export default {
   async getFolders({commit}, payload) {
-    const loader = payload.loader
+    const loader = payload.loader || 'setCircularLoader'
     commit(loader, true)
 
     try {
@@ -25,7 +19,7 @@ export default {
   },
   async getTasks({commit}, payload) {
     const folderId = payload.folderId
-    const loader = payload.loader
+    const loader = payload.loader || 'setCircularLoader'
 
     commit('setSearch', null)
     commit(loader, true)
@@ -35,7 +29,6 @@ export default {
         folderId === 'ALL' ? '' : folderId
       )
       const taskList = result.data.smtasks.tasks
-      taskList.forEach(task => task.name = trimHtmlTags(task.name))
 
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
@@ -48,7 +41,7 @@ export default {
   },
   async getTaskInfo({commit}, payload) {
     const taskId = payload.taskId
-    const loader = payload.loader
+    const loader = payload.loader || 'setCircularLoader'
 
     commit(loader, true)
 
@@ -56,7 +49,6 @@ export default {
       const result = await api.getTaskInfoFromGql(taskId)
       const taskInfo = result.data.smtasks.taskDetails
 
-      taskInfo.name = trimHtmlTags(taskInfo.name)
       commit('setTaskInfo', taskInfo)
       commit(loader, false)
 

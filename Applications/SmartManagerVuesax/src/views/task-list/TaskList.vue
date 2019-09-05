@@ -15,14 +15,21 @@
           v-model="searchQuery"
           class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
       </div>
-
-      <!-- EMAILS LIST -->
+      <!-- TASK LIST -->
       <VuePerfectScrollbar
         class="task-content-scroll-area"
         :settings="settings"
         ref="taskListPS"
       >
+        <div
+          v-show="loading"
+          ref="loader"
+          id="task-list-loading"
+          class="vs-con-loading__container h-full"
+        ></div>
         <transition-group
+          v-if="!loading"
+          id="task-list"
           name="list-enter-up"
           class="task__tasks"
           tag="ul"
@@ -31,12 +38,13 @@
           <li
             class="cursor-pointer task__task-item"
             v-for="(task, index) in tasks"
-            :key="String(mailFilter) + String(task.id)"
+            :key="String(task.id)"
             :style="{transitionDelay: (index * 0.1) + 's'}"
           >
             <task-list-item :task="task"></task-list-item>
           </li>
         </transition-group>
+        <div v-if="!hasTasks" class="h-full flex justify-center items-center text-4xl">{{ $t('messages.noData') }}</div>
       </VuePerfectScrollbar>
     </div>
 
@@ -50,9 +58,11 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
   components: {
     TaskListItem,
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
   },
   data: () => ({
+    loading: false,
+    searchQuery: '',
     windowWidth: window.innerWidth,
     settings: {
       maxScrollbarLength: 60,
@@ -61,44 +71,51 @@ export default {
   }),
   watch: {
     '$route'(to, from) {
-      const current = from.params.code
-      const target = to.params.code
-      if (current !== target) {
-        this.getTasks(target)
+      const currentFolder = from.params.code
+      const targetFolder = to.params.code
+      if (currentFolder !== targetFolder) {
+        this.getTasks(targetFolder)
       }
-    },
-    mailFilter() {
-      this.selectedMails = []
-      this.$refs.taskListPS.$el.scrollTop = 0
     }
   },
   computed: {
     tasks() {
       return this.$store.getters['sm/tasks']
     },
-    mailFilter() {
-      //return this.$store.state.email.mail_filter
+    hasTasks() {
+      return this.tasks ? this.tasks.length : 0
     },
-    searchQuery: {
-      get() {
-        //return this.$store.state.email.mailSearchQuery
-      },
-      set(val) {
-        this.$store.dispatch('email/setMailSearchQuery', val)
-      }
-    }
   },
   methods: {
-    getTasks(folderId) {
+    startLoading() {
+      this.loading = true
+      this.$vs.loading({
+        container: this.$refs.loader,
+        clickEffect: true
+      })
+    },
+    stopLoading() {
+      this.loading = false
+      this.$vs.loading.close(this.$refs.loader)
+    },
+    async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)
-      const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
-      this.$store.dispatch('sm/getTasks', {folderId, loader})
+      if (!this.tasks) {
+        this.startLoading()
+      }
+      try {
+        await this.$store.dispatch('sm/getTasks', {folderId})
+        this.stopLoading()
+      } catch (e) {
+        this.stopLoading()
+        console.log(e.message)
+      }
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     }
   },
-  created() {
+  mounted() {
     this.getTasks(this.$route.params.code)
     this.$nextTick(() => {
       window.addEventListener('resize', this.handleWindowResize)
