@@ -1,7 +1,7 @@
 import {ApolloClient} from 'apollo-client'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
+import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
 // Queries
 import folders from './graphql/folders.graphql'
@@ -16,7 +16,7 @@ import addComment from './graphql/addComment.graphql'
 import auth from './auth/auth'
 import router from '@/router'
 
-const errorLink = onError(({ networkError }) => {
+const errorLink = onError(({networkError}) => {
   if (networkError.statusCode === 401) {
     auth.logOff()
     router.push('/login')
@@ -45,116 +45,107 @@ export class SmartManagerApi {
 
   static async getFoldersFromGql() {
     try {
-      let result = await getClient()
+      return await getClient()
         .query({
-          query: gql `${folders}`
+          query: gql`${folders}`
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async getTasksFromGql(folderId) {
     try {
-      let result = await getClient()
+      return await getClient()
         .query({
-          query: gql `${tasks}`,
+          query: gql`${tasks}`,
           variables: {folderId}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async getTaskInfoFromGql(taskId) {
     try {
-      let result = await getClient()
+      return await getClient()
         .query({
           query: gql`${taskInfo}`,
           variables: {taskId}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async getUsersFromGql() {
     try {
-      let result = await getClient()
+      return await getClient()
         .query({
-          query: gql `${users}`,
+          query: gql`${users}`,
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async addNewTaskToGql(newTask) {
     try {
-      let result = await getClient()
+      return await getClient()
         .mutate({
-          mutation: gql `${addTask}`,
+          mutation: gql`${addTask}`,
           variables: {newTask}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async changeTaskStatusInGql(status) {
     try {
-      let result = await getClient()
+      return await getClient()
         .mutate({
-          mutation: gql `${changeStatus}`,
+          mutation: gql`${changeStatus}`,
           variables: {status}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async addAttachmentsInGql(taskId, attachments) {
     try {
-      let result = await getClient()
+      return await getClient()
         .mutate({
-          mutation: gql `${addAttachments}`,
+          mutation: gql`${addAttachments}`,
           variables: {taskId, attachments}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async changeTaskStageInGql(stageParams) {
     try {
-      let result = await getClient()
+      return await getClient()
         .mutate({
-          mutation: gql `${changeStage}`,
+          mutation: gql`${changeStage}`,
           variables: {stageParams}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 
   static async addTaskCommentToGql(comment, params) {
     try {
-      let result = await getClient()
+      return await getClient()
         .mutate({
-          mutation: gql `${addComment}`,
+          mutation: gql`${addComment}`,
           variables: {comment, params}
         })
-      return await result
     } catch (e) {
-      return console.log(e.message)
+      throw new Error(e.message)
     }
   }
 }

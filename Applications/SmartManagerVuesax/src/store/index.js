@@ -11,10 +11,6 @@ import state from './state'
 import appModule from './app/smStore'
 import authModule from './auth/moduleAuth'
 import notificationsModule from './notifications/moduleNotifications'
-import moduleTodo from './todo/moduleTodo.js'
-import moduleCalendar from './calendar/moduleCalendar.js'
-import moduleChat from './chat/moduleChat.js'
-import moduleECommerce from './eCommerce/moduleECommerce.js'
 
 Vue.use(Vuex)
 
@@ -28,10 +24,6 @@ const store = new Vuex.Store({
     [appModule.namespace]: appModule,
     notifications: notificationsModule,
     auth: authModule,
-    todo: moduleTodo,
-    calendar: moduleCalendar,
-    chat: moduleChat,
-    eCommerce: moduleECommerce,
   },
   strict: process.env.NODE_ENV !== 'production'
 })
