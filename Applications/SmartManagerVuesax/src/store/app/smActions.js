@@ -172,7 +172,6 @@ export default {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
 
-      const text = trimHtmlTags(result.log)
       commit('setLinearLoader', false)
 
       if (result.success) {
@@ -199,7 +198,10 @@ export default {
       commit('setLinearLoader', false)
 
       if (result.success) {
-        commit('addComment', comment)
+        commit('addComment', {
+          id: payload.params.id,
+          text: comment
+        })
       } else {
         commit('setMessage', {
           type: 'error',
