@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     taskLink(id) {
-      this.$router.push({name: 'task-details', params: {id}})
+      this.$router.push({name: 'task-view', params: {id}})
     }
   }
 }

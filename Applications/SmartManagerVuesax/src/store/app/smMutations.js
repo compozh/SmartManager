@@ -28,7 +28,7 @@ export default {
     state.tasks = Object.assign({}, state.tasks, payload)
   },
   setTaskInfo(state, payload) {
-    state.taskInfo = payload
+    state.taskInfo = Object.assign({}, state.taskInfo, payload)
   },
   setSearch(state, payload) {
     state.search = payload

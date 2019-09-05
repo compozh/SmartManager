@@ -1,7 +1,7 @@
 <template>
   <div
     id="task-app"
-    class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
+    class=" h-full border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
   >
     <vs-sidebar
       class="items-no-padding"
@@ -11,7 +11,6 @@
       v-model="isEmailSidebarActive"
     >
       <task-sidebar
-        :task="task"
         @changeTab="currentTab = $event"
         :attachments="attachments"
         :comments="comments"
@@ -19,10 +18,15 @@
     </vs-sidebar>
 
     <div
+
       :class="{'sidebar-spacer': clickNotClose}"
       class="app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
     >
-
+      <div
+        v-show="loading"
+        ref="taskViewLoader"
+        class="vs-con-loading__container h-full"
+      ></div>
       <!-- TASK DETAILS  -->
       <task-details v-if="currentTab === 'details'" :task="task"></task-details>
 
@@ -55,7 +59,7 @@ export default {
     TaskApprovals
   },
   data: () => ({
-    loading: true,
+    loading: false,
     currentTab: 'details',
     clickNotClose: true,
     isEmailSidebarActive: true,
@@ -65,14 +69,10 @@ export default {
       wheelSpeed: 0.30,
     }
   }),
-  created() {
+  mounted() {
     const id = +this.$route.params.id
-    const task = this.task
-    if (task === null || task.id !== id) {
-      this.$store.dispatch('sm/getTaskInfo', {
-        taskId: id,
-        loader: 'setCircularLoader'
-      })
+    if (!this.task.id) {
+      this.getTask(id)
     }
     this.$nextTick(() => {
       window.addEventListener('resize', this.handleWindowResize)
@@ -80,7 +80,9 @@ export default {
   },
   computed: {
     task() {
-      return this.$store.state.sm.taskInfo
+      const id = +this.$route.params.id
+      const task = this.$store.state.sm.taskInfo[id]
+      return task ? task : {}
     },
     attachments() {
       return this.task.originals
@@ -94,6 +96,27 @@ export default {
     }
   },
   methods: {
+    startLoading() {
+      this.loading = true
+      this.$vs.loading({
+        container: this.$refs.taskViewLoader,
+        clickEffect: true
+      })
+    },
+    stopLoading() {
+      this.loading = false
+      this.$vs.loading.close(this.$refs.taskViewLoader)
+    },
+    async getTask(id) {
+      this.startLoading()
+      try {
+        await this.$store.dispatch('sm/getTaskInfo', {id})
+        this.stopLoading()
+      } catch (e) {
+        this.stopLoading()
+        console.log(e.message)
+      }
+    },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     }

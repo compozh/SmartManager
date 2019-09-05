@@ -39,7 +39,10 @@
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
-  props: ['attachments', 'comments'],
+  props: {
+    attachments: Array,
+    comments: Array,
+  },
   components: {
     VuePerfectScrollbar
   },

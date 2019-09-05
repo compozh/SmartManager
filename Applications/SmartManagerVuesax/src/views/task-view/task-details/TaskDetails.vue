@@ -104,7 +104,9 @@
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
-  props: ['task'],
+  props: {
+    task: Object
+  },
   components: {
     VuePerfectScrollbar
   },
