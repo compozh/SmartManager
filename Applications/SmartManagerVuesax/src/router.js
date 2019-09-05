@@ -52,8 +52,8 @@ let router = new VueRouter({
         },
         {
           path: '/task/:id',
-          name: 'task-details',
-          component: () => import('./views/task-details/TaskView.vue'),
+          name: 'task-view',
+          component: () => import('./views/task-view/TaskView.vue'),
           meta: {
             rule: 'admin'
           },

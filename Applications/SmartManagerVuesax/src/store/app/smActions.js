@@ -40,7 +40,7 @@ export default {
     }
   },
   async getTaskInfo({commit}, payload) {
-    const taskId = payload.taskId
+    const taskId = payload.id
     const loader = payload.loader || 'setCircularLoader'
 
     commit(loader, true)
@@ -49,7 +49,8 @@ export default {
       const result = await api.getTaskInfoFromGql(taskId)
       const taskInfo = result.data.smtasks.taskDetails
 
-      commit('setTaskInfo', taskInfo)
+      const task = {[taskId]: taskInfo}
+      commit('setTaskInfo', task)
       commit(loader, false)
 
     } catch (e) {

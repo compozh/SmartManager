@@ -23,8 +23,7 @@
       >
         <div
           v-show="loading"
-          ref="loader"
-          id="task-list-loading"
+          ref="taskListLoader"
           class="vs-con-loading__container h-full"
         ></div>
         <transition-group
@@ -90,13 +89,13 @@ export default {
     startLoading() {
       this.loading = true
       this.$vs.loading({
-        container: this.$refs.loader,
+        container: this.$refs.taskListLoader,
         clickEffect: true
       })
     },
     stopLoading() {
       this.loading = false
-      this.$vs.loading.close(this.$refs.loader)
+      this.$vs.loading.close(this.$refs.taskListLoader)
     },
     async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)
