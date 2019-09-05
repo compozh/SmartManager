@@ -17,6 +17,7 @@ import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import downtimeFormIo from './graphql/downtimeFormIo.graphql'
+import downtimeGetTypes from './graphql/downtimeGetTypes.graphql'
 import downtimeFormIoSubmit from './graphql/downtimeFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
@@ -193,6 +194,13 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mes.downtimeFormIo
+  }
+  async getDowntimeTypesFromGql() {
+    const result = await getClient().query({
+      query: gql` ${downtimeGetTypes}`
+    })
+      .then(result => result)
+    return result.data.mes.downtimeTypes
   }
   async downtimeFormIoSubmitGql({ formCode, data, downtimeParams}) {
     const result = await getClient().mutate({

@@ -33,6 +33,7 @@ export default {
   productions: [],
   productionFormio: null,
   downtimeFormio: null,
+  downtimeTypes: null,
   menuMiniMode: true,
   ticket: ''
 }

@@ -27,7 +27,8 @@ export default {
     },
     formioSubmission() {
       if (this.$attrs.type == 'downtimesForm') {
-        return {}
+        let downtimeTypes = this.$store.getters['mes/downtimeTypes']
+        return { data: this.downtimeFormio ? '' : [] }
       } else {
         return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] }
       }

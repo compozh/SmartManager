@@ -29,6 +29,9 @@ export default {
   productionFormio(state) {
     return state.productionFormio
   },
+  downtimeTypes(state) {
+    return state.downtimeTypes
+  },
   downtimeFormio(state) {
     return state.downtimeFormio
   },

@@ -44,6 +44,9 @@ export default {
   setProductionFormio(state, formio) {
     state.productionFormio = formio
   },
+  setDowntimeTypes(state, downtimeTypes) {
+    state.downtimeTypes = downtimeTypes
+  },
   resetProductionFormio(state) {
     state.productionFormio = null
   },

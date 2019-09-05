@@ -24,7 +24,7 @@
       icon
       @click="closeOverlay"
     >
-      <v-icon color="rgba(179, 2, 2, 0.81)">mdi-close</v-icon>
+      <v-icon color="rgba(179, 2, 2, 0.81)">close</v-icon>
     </v-btn>
   </v-card>
   </v-overlay>
@@ -37,6 +37,7 @@ export default {
   },
   name: 'mes-downtimes-overlay',
   created() {
+    this.initializeDowntimeTypes()
     this.initializeDowntimeFormio()
   },
   methods: {
@@ -57,6 +58,9 @@ export default {
       await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.downtimeRegistrationFormCode, properties })
       this.initializing = true
     },
+    async initializeDowntimeTypes() {
+      var downtimeTypes = await this.$store.dispatch('mes/createDowntimeTypes')
+    }
   }
 }
 </script>

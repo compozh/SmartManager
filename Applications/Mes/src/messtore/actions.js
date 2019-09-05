@@ -79,7 +79,6 @@ export default {
           routerDependencies.router.push({name: 'LOGIN'})
         }
       })
-      debugger;
       var sortedTasks = await this.dispatch('mes/sortingTaskFn', { tasks: tasks })
       commit('setTasks', sortedTasks)
 
@@ -334,6 +333,20 @@ export default {
       linearLoader: false
     })
     commit('closeDialogLinearLoader')
+  },
+  async createDowntimeTypes({commit}) {
+    commit('closeSnackbar')
+    try {
+      const result = await api.getDowntimeTypesFromGql()
+      commit('setDowntimeTypes', result)
+    } catch (e) {
+      if (e.networkError && e.networkError.statusCode == 401) {
+        Vue.prototype.$authentication.resetCurentUser()
+        routerDependencies.router.push({name: 'LOGIN'})
+      } else {
+        commit('setSnackbarErrorMessage', e.message)
+      }
+    }
   },
   async downtimeFormIoSubmit({ commit }, { workCenter, data }) {
     // var me = this,
