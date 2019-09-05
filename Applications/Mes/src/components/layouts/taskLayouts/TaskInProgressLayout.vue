@@ -1,6 +1,8 @@
 <template>
 <v-layout class="task-in-progress-layout-block">
-  <mes-task-in-progress-layout-toolbar />
+  <mes-task-in-progress-layout-toolbar
+    @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+  />
 
      <v-layout class="mes-accept-task-layout">
         <v-flex class="mes-accept-task-flex">
@@ -29,9 +31,8 @@
                         <div class="grid-item-data formio-block" v-if="item.i == '0'">
                           <mes-form-builder
                             ref="formioBuilder"
-                            type="taskForm"
                             @formioSubmit=formioSubmit
-                            @formioData=formioData
+                            :formioData=productionFormio
                             />
                         </div>
                         <div class="grid-item-data" v-if="item.i != '0'">
@@ -50,10 +51,6 @@ import VueGridLayout from 'vue-grid-layout'
 export default {
   name: 'mes-task-in-progress-layout',
   components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
-  data() {
-    debugger;
-    return { formioData: { form: this.productionFormio.form, data: this.productionFormio.data } }
-  },
   computed: {
     blocks() {
       return [
@@ -80,6 +77,9 @@ export default {
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormioData()
+    },
+    changeDowntimesOverlayVisible() {
+      this.$emit('changeDowntimesOverlayVisible')
     }
   }
 }

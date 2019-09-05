@@ -10,15 +10,14 @@
       <div class="downtimes-block">
         <v-progress-circular
           class='downtime-progress-circular'
-          v-if="!initializing"
+          v-if="!Object.keys(this.downtimeFormio).length"
           indeterminate
           color="primary"
       ></v-progress-circular>
       <mes-form-builder
         ref="formioBuilder"
-        type="downtimesForm"
         @formioSubmit=formioSubmit
-        @formioData=downtimeFormio
+        :formioData=downtimeFormio
         />
       </div>
     <v-btn
@@ -34,9 +33,6 @@
 
 <script>
 export default {
-  data () {
-    return { initializing: false }
-  },
   name: 'mes-downtimes-overlay',
   created() {
     this.initializeDowntimeTypes()
@@ -49,21 +45,20 @@ export default {
   },
   methods: {
     closeOverlay () {
-      this.$store.dispatch('mes/changeDowntimesOverlay')
+      this.$emit('changeDowntimesOverlayVisible')
     },
     formioSubmit(data) {
       this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data })
     },
     async initializeDowntimeFormio() {
+      if(Object.keys(this.downtimeFormio).length) {
+        return;
+      }
       let workCenter = this.$parent.workCenter,
         properties = {
-          workCenterCode: workCenter.code,
-          id: 0,
-          eventCode: '',
-          eventStart: new Date()
+          workCenterCode: workCenter.code
         }
       await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.downtimeRegistrationFormCode, properties })
-      this.initializing = true
     },
     async initializeDowntimeTypes() {
       var downtimeTypes = await this.$store.dispatch('mes/createDowntimeTypes')

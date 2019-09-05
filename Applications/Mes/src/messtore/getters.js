@@ -14,9 +14,6 @@ export default {
   dragResizeMode(state) {
     return state.tasksPageState.dragResizeMode
   },
-  downtimesOverlay(state) {
-    return state.tasksPageState.downtimesOverlay
-  },
   tasks(state) {
     return state.tasks
   },

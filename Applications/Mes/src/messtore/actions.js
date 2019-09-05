@@ -383,9 +383,6 @@ export default {
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },
-  changeDowntimesOverlay({commit}) {
-    commit('changeDowntimesOverlay')
-  },
   async graphqlQueryWraper({ commit }, { queryAction, successAction, linearLoader }) {
     commit('closeSnackbar')
 
@@ -447,7 +444,7 @@ export default {
       const res = await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       return res
     }
-    catch (e){
+    catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
         routerDependencies.router.push({name: 'LOGIN'})
@@ -479,7 +476,7 @@ export default {
     await this.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter.code, workerCode: props.workerCode })
     commit('closeDialogLinearLoader')
   },
-  async sortingTaskFn({commit}, {tasks}) {
+  async sortingTaskFn({ commit }, {tasks}) {
     var tasksInProgress = []
     var tasksIsNotInProgress = []
     var completeSortedTasks = []

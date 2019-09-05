@@ -1,6 +1,8 @@
 <template>
 <v-layout class="task-main-layout-block">
-  <mes-task-main-layout-toolbar />
+  <mes-task-main-layout-toolbar
+    @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+  />
 
      <v-layout class="mes-task-main-layout">
         <v-flex class="mes-task-main-flex">
@@ -48,6 +50,11 @@ export default {
     },
     blocks() {
       return [ {'x': 0, 'y': 0, 'w': 12, 'h': 3, 'i': '0', data: this.selectedTask.detailedDescription } ]
+    }
+  },
+  methods: {
+    changeDowntimesOverlayVisible() {
+      this.$emit('changeDowntimesOverlayVisible')
     }
   }
 }

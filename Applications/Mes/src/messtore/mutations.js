@@ -79,12 +79,6 @@ export default {
   changeDragResizeMode(state) {
     state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode
   },
-  changeDowntimesOverlay(state) {
-    state.tasksPageState.downtimesOverlay = !state.tasksPageState.downtimesOverlay
-    if (!state.tasksPageState.downtimesOverlay) {
-      state.downtimeFormio = null
-    }
-  },
   setObsoluteDataTask(state, obsoluteData) {
     state.obsoleteData.tasks = obsoluteData
   },
