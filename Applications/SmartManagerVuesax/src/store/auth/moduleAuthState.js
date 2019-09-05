@@ -12,7 +12,5 @@ import auth from '@/api/auth/auth'
 
 export default {
   currentUser: auth.getCurrentUser(),
-  isUserLoggedIn: () => {
-    return auth.isAuthenticated()
-  },
+  isUserLoggedIn: () => auth.isAuthenticated()
 }

@@ -13,13 +13,10 @@
                     }
 ==========================================================================================*/
 
-
 import Vue from 'vue'
 import auth from '@/api/auth/auth'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
-
-
 
 let router = new VueRouter({
   mode: 'history',
@@ -33,7 +30,7 @@ let router = new VueRouter({
       // =============================================================================
       // MAIN LAYOUT ROUTES
       // =============================================================================
-      path: '/SmartManagerVuesax',
+      path: '',
       component: () => import('./layouts/main/Main.vue'),
       children: [
         // =============================================================================
@@ -44,7 +41,8 @@ let router = new VueRouter({
           redirect: '/tasks/ALL',
           meta: {
             rule: 'admin'
-          }
+          },
+          caseSensitive: false
         },
         {
           path: '/tasks/:code',
@@ -52,7 +50,8 @@ let router = new VueRouter({
           component: () => import('./views/task-list/TaskList.vue'),
           meta: {
             rule: 'admin'
-          }
+          },
+          caseSensitive: false
         },
         {
           path: '/task/:id',
@@ -60,7 +59,8 @@ let router = new VueRouter({
           component: () => import('./views/task-details/TaskView.vue'),
           meta: {
             rule: 'admin'
-          }
+          },
+          caseSensitive: false
         },
         {
           path: '/dashboard/ecommerce',
@@ -1263,6 +1263,17 @@ let router = new VueRouter({
   ],
 })
 
+router.history.getCurrentLocation = function() {
+  let path = window.location.pathname
+  let base = router.history.base
+
+  // Removes base from path (case-insensitive)
+  if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
+    path = path.slice(base.length)
+  }
+
+  return (path || '/') + window.location.search + window.location.hash
+}
 
 // protection of paths from an unauthenticated access
 router.beforeEach((to, from, next) => {

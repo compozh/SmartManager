@@ -56,7 +56,7 @@ export default {
         // Close animation if passed as payload
         if (payload.closeAnimation) { payload.closeAnimation() }
         commit('UPDATE_AUTHENTICATED_USER', result)
-        router.push(router.currentRoute.query.to || '/SmartManagerVuesax')
+        router.push(router.currentRoute.query.to || '/')
 
       }, (err) => {
 
