@@ -199,6 +199,9 @@ export default {
   .drag-resize-button {
     margin-left: auto;
   }
+  .active-drag-resize-button {
+    margin-left: auto;
+  }
   /* !!!!! */
 </style>
 
