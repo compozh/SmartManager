@@ -89,6 +89,21 @@ export default {
       commit('setSnackbarErrorMessage', e.message)
     }
   },
+  async downloadDowntimes({ commit }, { workCenterCode, dateTime }) {
+    commit('closeSnackbar')
+    try {
+      let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
+      .catch( e => {
+        if (e.networkError && e.networkError && e.networkError.statusCode == 401) {
+          Vue.prototype.$authentication.resetCurentUser()
+          routerDependencies.router.push({name: 'LOGIN'})
+        }
+      })
+      commit('setDowntimes', downtimes)
+    } catch (e) {
+      commit('setSnackbarErrorMessage', e.message)
+    }
+  },
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     commit('closeSnackbar')
 
@@ -458,6 +473,7 @@ export default {
     commit('setDialogLinearLoaderMessage', 'Смена рабочего центра')
     var props = this.getters['mes/properties']
     var workerCode = props.workerCode
+    var dateTime = new Date().toJSON()
     const workCentersFixed =  await this.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: workerCode, fetchPolicy: 'network-only' })
     if (!workCentersFixed) {
       commit('closeDialogLinearLoader')
@@ -472,6 +488,7 @@ export default {
     await commit('resetState')
     await commit('setWorkCenter', workCenter)
     await this.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+    await this.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: dateTime })
     await this.dispatch('mes/initializeInstallations', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
     await this.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter.code, workerCode: props.workerCode })
     commit('closeDialogLinearLoader')

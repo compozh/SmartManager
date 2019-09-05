@@ -17,6 +17,9 @@ export default {
   tasks(state) {
     return state.tasks
   },
+  downtimes(state) {
+    return state.downtimes
+  },
   installations(state) {
     return state.installations
   },
@@ -52,6 +55,9 @@ export default {
   },
   selectedTask(state) {
     return state.tasksPageState.selectedTask
+  },
+  selectedDowntime(state) {
+    return state.tasksPageState.selectedDowntime
   },
   initialWorkCenter(state) {
     return state.initialWorkCenter

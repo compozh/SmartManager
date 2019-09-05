@@ -51,8 +51,8 @@ export default {
       this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data })
     },
     async initializeDowntimeFormio() {
-      if(Object.keys(this.downtimeFormio).length) {
-        return;
+      if (Object.keys(this.downtimeFormio).length) {
+        return
       }
       let workCenter = this.$parent.workCenter,
         properties = {
@@ -61,7 +61,7 @@ export default {
       await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.downtimeRegistrationFormCode, properties })
     },
     async initializeDowntimeTypes() {
-      var downtimeTypes = await this.$store.dispatch('mes/createDowntimeTypes')
+      await this.$store.dispatch('mes/createDowntimeTypes')
     }
   }
 }

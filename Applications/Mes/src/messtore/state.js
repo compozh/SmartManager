@@ -8,6 +8,7 @@ export default {
   menuMode: 'open', // Main menu state: open, mini, close
   tasksPageState: {
     selectedTask: null,
+    selectedDowntime: null,
     selectedTasksTab: 0,
     currentLayout: 'main',
     dragResizeMode: false,
@@ -28,6 +29,7 @@ export default {
   initialWorkCenter: false,
   workCentersForWorker: [],
   tasks: [],
+  downtimes: [],
   installations: [],
   productions: [],
   productionFormio: {},

@@ -31,6 +31,9 @@ export default {
   setTasks(state, tasks) {
     state.tasks = tasks
   },
+  setDowntimes(state, downtimes) {
+    state.downtimes = downtimes
+  },
   setInstallations(state, installations) {
     state.installations = installations
   },
@@ -73,6 +76,9 @@ export default {
   setSelectedTask(state, selectedTask) {
     state.tasksPageState.selectedTask = selectedTask
   },
+  setSelectedDowntime(state, selectedDowntime) {
+    state.tasksPageState.selectedDowntime = selectedDowntime
+  },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
   },
@@ -104,7 +110,9 @@ export default {
   },
   resetState(state) {
     state.tasks = []
+    state.downtimes = []
     state.installations = []
     state.tasksPageState.selectedTask = null
+    state.tasksPageState.selectedDowntime = null
   }
 }

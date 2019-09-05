@@ -46,7 +46,6 @@ export default {
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask)
     },
-
   }
 }
 </script>

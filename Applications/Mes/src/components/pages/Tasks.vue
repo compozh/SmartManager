@@ -1,6 +1,6 @@
 <template>
   <v-container class="main-block">
-    
+
     <mes-downtimes-overlay v-if="downtimesOverlayVisible"
       @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
     />
@@ -279,7 +279,7 @@ export default {
       this.aspectRatioLayout = sizes
     },
     changeDowntimesOverlayVisible() {
-      this.downtimesOverlayVisible = !this.downtimesOverlayVisible;
+      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
     }
   }
 }

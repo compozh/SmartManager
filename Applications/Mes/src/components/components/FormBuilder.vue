@@ -283,13 +283,12 @@ export default {
     }
   }
 }
-.formio-container[type~="downtimesForm"] /deep/ {
+.downtimes-block .formio-container /deep/ {
   width: 100%;
   display: flex;
   justify-content: center;
   .form-group.has-feedback.formio-component {
     align-items: center;
-
     text-align: center !important;
   }
   .input-group-addon.input-group-append {

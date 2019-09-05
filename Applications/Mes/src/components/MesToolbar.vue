@@ -24,7 +24,7 @@
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
       <v-flex class="grow-0">
-        <user-panel mini="true"></user-panel>
+        <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
       </v-flex>
     </v-layout>
 

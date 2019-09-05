@@ -7,6 +7,7 @@ import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
 import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
+import downtimesPrevious from './graphql/downtimes/downtimesPrevious.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
 import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
@@ -107,6 +108,15 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mes.tasks
+  }
+
+  async getDowntimesPreviousFromGql(workCenterCode, dateTime) {
+    const result = await getClient().query({
+      query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
+      variables: { workCenterCode, dateTime },
+    })
+      .then(result => result)
+    return result.data.mes.downtimePrevious.downtimeList
   }
 
   async getInstallationsFromGql(workCenter, fetchPolicy) {
