@@ -5,7 +5,7 @@
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="brandName" class="brand-name">{{brandName}}</span>
+        <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
       </v-flex>
       <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
@@ -44,14 +44,14 @@ export default {
     workCentersForWorker() {
       return this.$store.getters['mes/workCentersForWorker']
     },
-    brandName() {
-      let props = this.$store.dispatch('mes/initializeProperties')
-      return props.brandName
+    properties() {
+      return this.$store.getters['mes/properties']
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenter')
+      await this.$store.dispatch('mes/initializeProperties')
     },
     changeWorkCenter(newWorkCenter) {
       this.changeWorkCenterMethod(newWorkCenter)
@@ -114,9 +114,9 @@ a {
 }
 .brand-name {
   align-self: center;
-  padding: 0 20px;
-  color: #a00101de;
+  padding: 0 10px;
+  color: #326da8;
   font-size: 30px;
-  font-weight: 500;
+  font-weight: 700;
 }
 </style>
