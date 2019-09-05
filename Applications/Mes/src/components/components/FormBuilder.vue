@@ -15,44 +15,30 @@ export default {
   name: 'mes-form-builder',
   components: { formio: Form },
   data() {
-    return { options: { noAlerts: true }, currentData: '' }
-  },
-  computed: {
-    formioComponents() {
-      if (this.$attrs.type == 'downtimesForm') {
-        return { components: this.downtimeFormio ? JSON.parse(this.downtimeFormio.form) : [] }
-      } else {
-        return { components: this.productionFormio ? JSON.parse(this.productionFormio.form) : [] }
-      }
-    },
-    formioSubmission() {
-      if (this.$attrs.type == 'downtimesForm') {
-        let downtimeTypes = this.$store.getters['mes/downtimeTypes']
-        return { data: this.downtimeFormio ? '' : [] }
-      } else {
-        return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] }
-      }
-    },
-    productionFormio() {
-      return this.$store.getters['mes/productionFormio']
-    },
-    downtimeFormio() {
-      return this.$store.getters['mes/downtimeFormio']
+    return {
+      options: { noAlerts: true }, currentData: ''
     }
+  },
+  props: {
+    formioData: Object
   },
   methods: {
     onSubmit(params) {
-      if (this.$attrs.type == 'downtimesForm') {
-        return console.log('submit')
-      } else {
-        this.$emit('formioSubmit', JSON.stringify(params.data))
-      }
+      this.$emit('formioSubmit', JSON.stringify(params.data))
     },
     onChange(params) {
       this.currentData = params.data
     },
     getFormioData() {
       return JSON.stringify(this.currentData)
+    }
+  },
+  computed: {
+    formioComponents() {
+      return { components: this.formioData.form ? JSON.parse(this.formioData.form) : [] }
+    },
+    formioSubmission() {
+      return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
     }
   }
 }

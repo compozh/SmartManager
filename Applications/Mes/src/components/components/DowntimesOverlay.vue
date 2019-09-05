@@ -17,7 +17,9 @@
       <mes-form-builder
         ref="formioBuilder"
         type="downtimesForm"
-        @formioSubmit=formioSubmit />
+        @formioSubmit=formioSubmit
+        @formioData=downtimeFormio
+        />
       </div>
     <v-btn
       class="close-overlay-btn"
@@ -39,6 +41,11 @@ export default {
   created() {
     this.initializeDowntimeTypes()
     this.initializeDowntimeFormio()
+  },
+  computed: {
+    downtimeFormio() {
+      return this.$store.getters['mes/downtimeFormio']
+    }
   },
   methods: {
     closeOverlay () {

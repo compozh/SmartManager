@@ -48,13 +48,13 @@ export default {
     state.downtimeTypes = downtimeTypes
   },
   resetProductionFormio(state) {
-    state.productionFormio = null
+    state.productionFormio = {}
   },
   setDowntimeFormio(state, formio) {
     state.downtimeFormio = formio
   },
   resetDowntimeFormio(state) {
-    state.downtimeFormio = null
+    state.downtimeFormio = {}
   },
   removeProduction(state, production) {
     let index = state.productions.indexOf(production)

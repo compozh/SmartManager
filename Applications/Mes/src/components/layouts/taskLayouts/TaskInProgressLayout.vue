@@ -30,7 +30,9 @@
                           <mes-form-builder
                             ref="formioBuilder"
                             type="taskForm"
-                            @formioSubmit=formioSubmit />
+                            @formioSubmit=formioSubmit
+                            @formioData=formioData
+                            />
                         </div>
                         <div class="grid-item-data" v-if="item.i != '0'">
                           <span v-html="item.data"></span>
@@ -48,6 +50,10 @@ import VueGridLayout from 'vue-grid-layout'
 export default {
   name: 'mes-task-in-progress-layout',
   components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
+  data() {
+    debugger;
+    return { formioData: { form: this.productionFormio.form, data: this.productionFormio.data } }
+  },
   computed: {
     blocks() {
       return [
@@ -63,6 +69,9 @@ export default {
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
+    },
+    productionFormio() {
+      return this.$store.getters['mes/productionFormio']
     }
   },
   methods: {

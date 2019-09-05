@@ -31,8 +31,8 @@ export default {
   tasks: [],
   installations: [],
   productions: [],
-  productionFormio: null,
-  downtimeFormio: null,
+  productionFormio: {},
+  downtimeFormio: {},
   downtimeTypes: null,
   menuMiniMode: true,
   ticket: ''
