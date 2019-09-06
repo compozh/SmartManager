@@ -1,13 +1,15 @@
 <template>
   <div
     id="task-app"
-    class=" h-full border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
+    class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
   >
     <vs-sidebar
       class="items-no-padding"
       parent="#task-app"
+      :reduce="mdAndDown"
       :click-not-close="clickNotClose"
       :hidden-background="clickNotClose"
+      reduce-not-rebound
       v-model="isTaskSidebarActive"
     >
       <task-sidebar
@@ -19,8 +21,8 @@
     </vs-sidebar>
 
     <div
-      :class="{'sidebar-spacer': clickNotClose}"
-      class="app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
+      :class="{'sidebar-spacer': clickNotClose, 'md-sidebar-spacer': mdAndDown}"
+      class="md:md-sidebar-spacer app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
     >
       <div
         v-show="loading"
@@ -60,6 +62,7 @@ export default {
   data: () => ({
     loading: false,
     currentTab: 'details',
+    reduce: true,
     clickNotClose: true,
     isTaskSidebarActive: true,
     windowWidth: window.innerWidth,
@@ -95,6 +98,9 @@ export default {
       return this.task.comments
         ? this.task.comments
         : []
+    },
+    mdAndDown() {
+      return this.windowWidth < 992
     }
   },
   methods: {
@@ -132,4 +138,12 @@ export default {
 
 <style lang="scss">
   @import "@/assets/scss/vuesax/apps/task.scss";
+  .vs-sidebar-reduce {
+    max-width: 64px;
+  }
+
+  .md-sidebar-spacer {
+    width: calc(100% - 64px);
+    margin-left: 64px;
+  }
 </style>
