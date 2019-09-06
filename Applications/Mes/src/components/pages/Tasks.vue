@@ -265,9 +265,6 @@ export default {
     getFormioData() {
       return this.$refs.acceptTaskLayout.getFormioData()
     },
-    async submitQrCode(code) {
-      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: code, factId: 0 })
-    },
     changeAspectRatioLayout() {
       var taskListElementWidth =  this.$refs.taskList.$el.style.width
       var sizes = []

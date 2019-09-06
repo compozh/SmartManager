@@ -54,8 +54,7 @@ export default {
     onclickRemoveAllInstallations() {
       this.$emit('removeAllInstallations')
     },
-    submitQrCode(event) {
-      var qrCodeValue = event.target.value
+    submitQrCode(qrCodeValue) {
       var me = this
       me.disableQrInput = true
       me.$emit('submitQrCode', { qrCodeValue, callback: () => {
