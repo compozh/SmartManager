@@ -4,5 +4,7 @@ export default {
     dateTo: new Date()
   },
   documents: [],
-  documentDetails: undefined
+  documentDetails: undefined,
+  showAddDocumentForm: false,
+  showAddDocumentRowForm: false
 }

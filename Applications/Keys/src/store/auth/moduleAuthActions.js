@@ -7,7 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-import auth from '@/api/auth/auth'
+//import auth from '@/api/auth/auth'
 import router from '@/router'
 import Vue from 'vue'
 export default {
@@ -19,18 +19,17 @@ export default {
       // Close animation if passed as payload
       return
     }
-
-    auth.logOff().then(() => {
-      commit('UPDATE_AUTHENTICATED_USER', undefined)
+    Vue.prototype.$authentication.logOff().then(() => {
       router.push('/login')
+      commit('UPDATE_AUTHENTICATED_USER', undefined)
     })
 
   },
 
-  login({ commit, state }, payload) {
+  login(context, payload) {
 
     // If user is already logged in notify and exit
-    if (state.isUserLoggedIn()) {
+    if (context.state.isUserLoggedIn()) {
       // Close animation if passed as payload
 
       if (payload.closeAnimation) {
@@ -51,15 +50,24 @@ export default {
     }
 
     // Try to sigin
-    auth.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
-      .then((result) => {
+    Vue.prototype.$authentication.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
+      .then(() => {
+
+        var user = context.rootState.authentication.currentUser
         // Close animation if passed as payload
         if (payload.closeAnimation) { payload.closeAnimation() }
-        commit('UPDATE_AUTHENTICATED_USER', result)
+        context.commit('UPDATE_AUTHENTICATED_USER', user)
         router.push(router.currentRoute.query.to || '/')
+
+
 
       }, (err) => {
 
+        if (err.code == 401) {
+          router.push({name: 'page-login'})
+          return
+
+        }
         // Close animation if passed as payload
         if (payload.closeAnimation) { payload.closeAnimation() }
 
