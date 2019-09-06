@@ -5,10 +5,13 @@ import gql from 'graphql-tag'
 // Queries
 import documentsQuery from './graphql/documents.graphql'
 import documentQuery from './graphql/document.graphql'
-import auth from './auth/auth'
+import createDocumentMutation from './graphql/createDocument.graphql'
+import deleteDocumentMutation from './graphql/deleteDocument.graphql'
+
+import Vue from 'vue'
 
 const getClient = () => {
-  const authHeader =  auth.getAuthHeader()
+  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
   const options = {
     uri: window.appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
@@ -38,6 +41,20 @@ export class KeysApi {
   static getDocument(id) {
     return getClient().query({
       query: gql` ${documentQuery}`,
+      variables: { id }
+    })
+  }
+
+  static createDocument({number, date, comment}) {
+    return getClient().mutate({
+      mutation: gql` ${createDocumentMutation}`,
+      variables: { date, number, comment }
+    })
+  }
+
+  static deleteDocument(id) {
+    return getClient().mutate({
+      mutation: gql` ${deleteDocumentMutation}`,
       variables: { id }
     })
   }
