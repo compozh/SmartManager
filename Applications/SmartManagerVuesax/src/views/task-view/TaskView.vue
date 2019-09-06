@@ -138,7 +138,8 @@ export default {
 
 <style lang="scss">
   @import "@/assets/scss/vuesax/apps/task.scss";
-  .vs-sidebar-reduce {
+
+  .vs-sidebar.vs-sidebar-reduce {
     max-width: 64px;
   }
 
