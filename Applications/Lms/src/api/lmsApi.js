@@ -2,6 +2,7 @@ import {ApolloClient} from 'apollo-client'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
 import gql from 'graphql-tag'
+// Queries
 import recommended from './graphql/recommended.graphql'
 import courses from './graphql/courses.graphql'
 import modules from './graphql/modules.graphql'
@@ -9,21 +10,7 @@ import availableFilters from './graphql/availableFilters.graphql'
 import courseDetails from './graphql/courseDetails.graphql'
 import lessonContent from './graphql/lessonContent.graphql'
 import Vue from 'vue'
-import { get } from 'https';
 
-// const options = {
-//   uri: myConfig.GrapgQlUrl + 'api/graphql',
-//   credentials: 'include',
-//   headers: {
-//     'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
-//     'schema': 'lms'
-//   }
-// }
-
-// const client = new ApolloClient ({
-//   cache: new InMemoryCache(),
-//   link: new HttpLink(options)
-// })
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
 
@@ -65,7 +52,7 @@ export class LmsApi {
       query: gql` ${courses}`
     })
     .then(result => result)
-    .cache(error => console.log(error.message))
+    .catch(error => console.log(error.message))
   }
 
   getModulesFromGql() {

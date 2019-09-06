@@ -43,7 +43,6 @@ export default {
   async getRecommended({commit}) {
     commit('setError', null)
     commit('setCircularLoader', true)
-
     try {
       const result = await api.getRecommendedFromGql()
       const recommended = result.data.lms.recommended

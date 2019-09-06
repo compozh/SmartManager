@@ -86,8 +86,8 @@
 								@click='changeFavoriteState(course)'
 								>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 							<v-spacer/>
-							<v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
-							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
+							<!-- <v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
+							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip> -->
 						</v-layout>
 					</v-card>
 				</v-flex>
@@ -102,7 +102,9 @@
 export default {
 	name: 'lms-courses',
   created() {
-    this.getCourses()
+    if (this.$store.getters['lms/courses'] === null) {
+      this.getCourses()
+    }
   },
 
   methods: {

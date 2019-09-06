@@ -1,11 +1,23 @@
-{
+query($lessonId: ID){
   lms{
     lessonContent(lessonGuid: $lessonId){
-      lessonGuid
-      name
-      durationMinutesLabel
       content
-      unitId
+      course{
+        name
+        courseGuid
+      }
+      module{
+        name
+        moduleGuid
+      }
+      lesson{
+        unitId
+        name
+        lessonGuid
+        durationMunute
+        durationMinutesLabel
+        surveyId
+      }
     }
   }
 }
