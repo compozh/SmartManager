@@ -6,131 +6,81 @@
 
 
 <template>
-<div class="relative">
-  <div class="vx-navbar-wrapper">
-    <vs-navbar class="vx-navbar navbar-custom" :color="navbarColor" :class="classObj">
+  <div class="relative">
+    <div class="vx-navbar-wrapper">
+      <vs-navbar class="vx-navbar navbar-custom" :color="navbarColor" :class="classObj">
 
-      <!-- SM - OPEN SIDEBAR BUTTON -->
-      <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
-<template v-if="breakpoint != 'md'">
-        <!-- STARRED PAGES - FIRST 10 -->
-        <ul class="vx-navbar__starred-pages">
-          <draggable v-model="starredPagesLimited" :group="{name: 'pinList'}" class="flex cursor-move">
-            <li class="starred-page" v-for="page in starredPagesLimited" :key="page.url">
-              <vx-tooltip :text="page.label" position="bottom" delay=".3s">
-                <feather-icon svgClasses="h-6 w-6" class="p-2 cursor-pointer" :icon="page.labelIcon" @click="$router.push(page.url)"></feather-icon>
-              </vx-tooltip>
-            </li>
-          </draggable>
-        </ul>
+        <!-- SM - OPEN SIDEBAR BUTTON -->
+        <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon"
+                      @click.stop="showSidebar"></feather-icon>
 
-        <!-- STARRED PAGES MORE -->
-        <div class="vx-navbar__starred-pages--more-dropdown" v-if="starredPagesMore.length">
-          <vs-dropdown vs-custom-content vs-trigger-click>
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="cursor-pointer p-2"></feather-icon>
-            <vs-dropdown-menu>
-              <ul class="vx-navbar__starred-pages-more--list">
-                <draggable v-model="starredPagesMore" :group="{name: 'pinList'}" class="cursor-move">
-                  <li class="starred-page--more flex items-center cursor-pointer" v-for="page in starredPagesMore" :key="page.url" @click="$router.push(page.url)">
-                    <feather-icon svgClasses="h-5 w-5" class="ml-2 mr-1" :icon="page.labelIcon"></feather-icon>
-                    <span class="px-2 pt-2 pb-1">{{ page.label }}</span>
-                  </li>
-                </draggable>
+        <!-- I18N -->
+        <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+        <span class="cursor-pointer flex i18n-locale">
+          <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag"/>
+          <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
+        </span>
+          <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
+            <vs-dropdown-item :key="lang.code" v-for="lang in localizations"
+                              @click="updateLocale(lang.code)">
+              <flag class="h-4 w-5" :squared="false" :iso="lang.flag"/> &nbsp;{{lang.name}}
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+
+        <vs-spacer></vs-spacer>
+
+        <!-- USER META -->
+        <div class="the-navbar__user-meta flex items-center">
+          <div class="text-right leading-tight hidden sm:block">
+            <p class="font-semibold">{{ user_displayName }}</p>
+            <small>Available</small>
+          </div>
+          <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+            <div class="con-img ml-3">
+              <img
+                v-if="activeUserImg.startsWith('http')"
+                key="onlineImg"
+                :src="activeUserImg"
+                alt="user-img"
+                width="40"
+                height="40"
+                class="rounded-full shadow-md cursor-pointer block"/>
+              <img
+                v-else
+                key="localImg"
+                :src="require(`@/assets/images/portrait/small/${activeUserImg}`)"
+                alt="user-img"
+                width="40"
+                height="40"
+                class="rounded-full shadow-md cursor-pointer block"/>
+            </div>
+            <vs-dropdown-menu class="vx-navbar-dropdown">
+              <ul style="min-width: 9rem">
+                <li
+                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                  @click="$router.push('/pages/profile')">
+
+                  <feather-icon icon="UserIcon" svgClasses="w-4 h-4"/>
+                  <span class="ml-2">Profile</span>
+                </li>
+
+                <vs-divider class="m-1"></vs-divider>
+
+                <li
+                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                  @click="logout">
+                  <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
+                  <span class="ml-2">Выход</span>
+                </li>
               </ul>
             </vs-dropdown-menu>
           </vs-dropdown>
         </div>
 
-        <div class="bookmark-container">
-          <feather-icon icon="StarIcon" :svgClasses="['stoke-current text-warning', {'text-white': navbarColor != '#fff'}]" class="cursor-pointer p-2" @click.stop="showBookmarkPagesDropdown = !showBookmarkPagesDropdown" />
-                    <div v-click-outside="outside" class="absolute bookmark-list w-1/3 xl:w-1/4 mt-4" v-if="showBookmarkPagesDropdown">
-          <vx-auto-suggest :autoFocus="true" :data="navbarSearchAndPinList" @selected="selected" @actionClicked="actionClicked" inputClassses="w-full" show-action show-pinned background-overlay></vx-auto-suggest>
-          </div>
-        </div>
-      </template>
-      <vs-spacer></vs-spacer>
-
-      <!-- I18N -->
-      <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-        <span class="cursor-pointer flex i18n-locale">
-          <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag" />
-          <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
-        </span>
-        <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-          <vs-dropdown-item :key="lang.code" v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :squared="false" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
-        </vs-dropdown-menu>
-      </vs-dropdown>
-
-            <!-- SEARCHBAR -->
-            <div class="search-full-container w-full h-full absolute left-0 rounded-lg" :class="{'flex': showFullSearch}" v-show="showFullSearch">
-                <vx-auto-suggest
-                  class="w-full"
-                  inputClassses="w-full vs-input-no-border vs-input-no-shdow-focus no-icon-border"
-                  :autoFocus="showFullSearch"
-                  :data="navbarSearchAndPinList"
-                  icon="SearchIcon"
-                  placeholder="Search..."
-                  ref="navbarSearch"
-                  @closeSearchbar="showFullSearch = false"
-                  @selected="selected"
-                  background-overlay />
-                <div class="absolute right-0 h-full z-50">
-                    <feather-icon icon="XIcon" class="px-4 cursor-pointer h-full close-search-icon" @click="showFullSearch = false"></feather-icon>
-                </div>
-            </div>
-            <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4 mr-4"></feather-icon>
-
-      <!-- USER META -->
-      <div class="the-navbar__user-meta flex items-center">
-        <div class="text-right leading-tight hidden sm:block">
-          <p class="font-semibold">{{ user_displayName }}</p>
-          <small>Available</small>
-        </div>
-        <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-          <div class="con-img ml-3">
-            <img
-              v-if="activeUserImg.startsWith('http')"
-              key="onlineImg"
-              :src="activeUserImg"
-              alt="user-img"
-              width="40"
-              height="40"
-              class="rounded-full shadow-md cursor-pointer block" />
-            <img
-              v-else
-              key="localImg"
-              :src="require(`@/assets/images/portrait/small/${activeUserImg}`)"
-              alt="user-img"
-              width="40"
-              height="40"
-              class="rounded-full shadow-md cursor-pointer block" />
-          </div>
-          <vs-dropdown-menu class="vx-navbar-dropdown">
-            <ul style="min-width: 9rem">
-              <li
-                class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                @click="$router.push('/pages/profile')">
-
-                <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
-                <span class="ml-2">Profile</span>
-              </li>
-
-              <vs-divider class="m-1"></vs-divider>
-
-              <li
-                class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                @click="logout">
-                <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
-                <span class="ml-2">Выход</span>
-              </li>
-            </ul>
-          </vs-dropdown-menu>
-        </vs-dropdown>
-      </div>
-
-    </vs-navbar>
+      </vs-navbar>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -167,7 +117,9 @@ export default {
   },
   watch: {
     '$route'() {
-      if (this.showBookmarkPagesDropdown) { this.showBookmarkPagesDropdown = false }
+      if (this.showBookmarkPagesDropdown) {
+        this.showBookmarkPagesDropdown = false
+      }
     }
   },
   computed: {
@@ -290,14 +242,14 @@ export default {
       this.$store.dispatch('auth/logout')
 
     },
-    outside: function() {
+    outside: function () {
       this.showBookmarkPagesDropdown = false
     },
 
   },
   directives: {
     'click-outside': {
-      bind: function(el, binding) {
+      bind: function (el, binding) {
         const bubble = binding.modifiers.bubble
         const handler = (e) => {
           if (bubble || (!el.contains(e.target) && el !== e.target)) {
@@ -308,7 +260,7 @@ export default {
         document.addEventListener('click', handler)
       },
 
-      unbind: function(el) {
+      unbind: function (el) {
         document.removeEventListener('click', el.__vueClickOutside__)
         el.__vueClickOutside__ = null
 
