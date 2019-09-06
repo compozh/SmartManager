@@ -295,5 +295,23 @@ export default {
     display: none;
   }
 }
-
+.downtime-layout{
+  .formio-container /deep/ {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    div {
+      width: 100%;
+      .form-group.has-feedback.formio-component {
+        width: 100%;
+        align-items: center;
+        text-align: center !important;
+      }
+      .input-group-addon.input-group-append {
+        display: none;
+      }
+    }
+  }
+}
 </style>

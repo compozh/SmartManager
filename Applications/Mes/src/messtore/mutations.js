@@ -114,7 +114,7 @@ export default {
   resetState(state) {
     state.tasks = []
     state.downtimes = []
-    state.createDowntimeFormio = []
+    state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.tasksPageState.selectedDowntime = null

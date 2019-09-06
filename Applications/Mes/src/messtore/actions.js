@@ -343,6 +343,7 @@ export default {
         }
       },
       successAction: async result => { commit('setDowntimeFormio', result) },
+      linearLoader: true
     })
   },
   toggleMenuMiniMode({getters, commit}) {

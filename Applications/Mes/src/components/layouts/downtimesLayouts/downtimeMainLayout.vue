@@ -1,5 +1,5 @@
 <template>
-<v-layout>
+<v-layout class="downtime-layout">
   <mes-form-builder
     ref="formioBuilder"
     @formioSubmit=formioSubmit
