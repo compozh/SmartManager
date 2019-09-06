@@ -8,17 +8,17 @@
       parent="#task-app"
       :click-not-close="clickNotClose"
       :hidden-background="clickNotClose"
-      v-model="isEmailSidebarActive"
+      v-model="isTaskSidebarActive"
     >
       <task-sidebar
         @changeTab="currentTab = $event"
+        :currentTab="currentTab"
         :attachments="attachments"
         :comments="comments"
       ></task-sidebar>
     </vs-sidebar>
 
     <div
-
       :class="{'sidebar-spacer': clickNotClose}"
       class="app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
     >
@@ -38,7 +38,6 @@
 
       <!-- TASK COMMENTS  -->
       <task-approvals v-if="currentTab === 'approvals'"></task-approvals>
-
     </div>
   </div>
 </template>
@@ -62,13 +61,16 @@ export default {
     loading: false,
     currentTab: 'details',
     clickNotClose: true,
-    isEmailSidebarActive: true,
+    isTaskSidebarActive: true,
     windowWidth: window.innerWidth,
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.30,
     }
   }),
+  created() {
+    this.$store.commit('TOGGLE_REDUCE_BUTTON', true)
+  },
   mounted() {
     const id = +this.$route.params.id
     if (!this.task.id) {
@@ -123,6 +125,7 @@ export default {
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleWindowResize)
+    this.$store.commit('TOGGLE_REDUCE_BUTTON', false)
   },
 }
 </script>
