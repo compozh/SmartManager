@@ -28,10 +28,9 @@
           <!-- {{userInfo}} -->
           {{userName}}
         </span>
-        <span class="user-info-text">
-          <!-- {{userInfo}} -->
+        <!-- <span class="user-info-text">
           Смена: Тест
-        </span>
+        </span> -->
       </div>
       <v-flex class="grow-0 user-description-block">
         <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>

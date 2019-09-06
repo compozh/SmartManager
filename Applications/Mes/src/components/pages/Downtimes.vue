@@ -47,7 +47,7 @@ export default {
     },
     selectedDowntime: {
       get() {
-        return this.tasksPageState.selectedDowntime
+        return this.selectedDowntime
       },
       set(selectedDowntime) {
         this.$store.commit('mes/setSelectedDowntime', selectedDowntime)

@@ -80,7 +80,7 @@ export default {
     state.tasksPageState.selectedTask = selectedTask
   },
   setSelectedDowntime(state, selectedDowntime) {
-    state.tasksPageState.selectedDowntime = selectedDowntime
+    state.selectedDowntime = selectedDowntime
   },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout

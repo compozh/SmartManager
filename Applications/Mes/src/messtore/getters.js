@@ -60,7 +60,7 @@ export default {
     return state.tasksPageState.selectedTask
   },
   selectedDowntime(state) {
-    return state.tasksPageState.selectedDowntime
+    return state.selectedDowntime
   },
   initialWorkCenter(state) {
     return state.initialWorkCenter

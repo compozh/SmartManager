@@ -311,6 +311,7 @@ export default {
       queryAction: async () => {
         try {
           const res = await api.getDowntimeFormioFromGql(formCode, properties)
+          // const downtimeTypes = this.getters['mes/downtimeTypes']
           return res
         }
         catch (e) {
