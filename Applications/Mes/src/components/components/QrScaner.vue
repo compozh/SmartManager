@@ -60,7 +60,7 @@ export default {
     onDecode (qrCodeValue) {
       this.result = qrCodeValue
       this.$emit('changeQrScanerVisible', false)
-      this.$emit('submitQrCode', { qrCodeValue })
+      this.$emit('submitQrCode', qrCodeValue)
     },
     async onInit (promise) {
       try {
