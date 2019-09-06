@@ -1,45 +1,63 @@
 <template>
-  <div id="task-app"
-       class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
-  >
-    <div class="app-fixed-height">
-      <!-- SEARCH BAR -->
-      <div
-        class="flex border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-l-0 items-center app-search-container"
-      >
-        <vs-input
-          icon="icon-search"
-          size="large"
-          icon-pack="feather"
-          :placeholder="$t('search')"
-          v-model="searchQuery"
-          class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
+  <div>
+    <div
+      id="task-app"
+      class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
+    >
+      <div class="app-fixed-height">
+        <!-- SEARCH BAR -->
+        <div
+          class="flex border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-l-0 items-center app-search-container"
+        >
+          <vs-input
+            icon="icon-search"
+            size="large"
+            icon-pack="feather"
+            :placeholder="$t('search')"
+            v-model="searchQuery"
+            class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
+        </div>
+        <!-- TASK LIST -->
+        <VuePerfectScrollbar
+          class="task-content-scroll-area"
+          :settings="settings"
+          ref="taskListPS"
+        >
+          <div
+            v-show="loading"
+            ref="taskListLoader"
+            class="vs-con-loading__container h-full"
+          ></div>
+          <transition-group
+            v-if="!loading"
+            id="task-list"
+            name="list-enter-up"
+            class="task__tasks"
+            tag="ul"
+            appear
+          >
+            <li
+              class="cursor-pointer task__task-item"
+              v-for="(task, index) in tasksToPage"
+              :key="String(task.id)"
+              :style="{transitionDelay: (index * 0.1) + 's'}"
+            >
+              <task-list-item :task="task"></task-list-item>
+            </li>
+          </transition-group>
+          <div v-if="!hasTasks" class="h-full flex justify-center items-center text-4xl">{{
+            $t('messages.noData') }}
+          </div>
+        </VuePerfectScrollbar>
       </div>
 
-      <!-- EMAILS LIST -->
-      <VuePerfectScrollbar
-        class="task-content-scroll-area"
-        :settings="settings"
-        ref="taskListPS"
-      >
-        <transition-group
-          name="list-enter-up"
-          class="task__tasks"
-          tag="ul"
-          appear
-        >
-          <li
-            class="cursor-pointer task__task-item"
-            v-for="(task, index) in tasks"
-            :key="String(mailFilter) + String(task.id)"
-            :style="{transitionDelay: (index * 0.1) + 's'}"
-          >
-            <task-list-item :task="task"></task-list-item>
-          </li>
-        </transition-group>
-      </VuePerfectScrollbar>
     </div>
-
+    <vs-pagination
+      v-if="pages > 1"
+      :total="pages"
+      v-model="currentPage"
+      class="-mb-10 mt-3 "
+    ></vs-pagination>
   </div>
 </template>
 
@@ -50,9 +68,13 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
   components: {
     TaskListItem,
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
   },
   data: () => ({
+    currentPage: 1,
+    taskPerPage: 20,
+    loading: false,
+    searchQuery: '',
     windowWidth: window.innerWidth,
     settings: {
       maxScrollbarLength: 60,
@@ -61,44 +83,64 @@ export default {
   }),
   watch: {
     '$route'(to, from) {
-      const current = from.params.code
-      const target = to.params.code
-      if (current !== target) {
-        this.getTasks(target)
+      const currentFolder = from.params.code
+      const targetFolder = to.params.code
+      if (currentFolder !== targetFolder) {
+        this.getTasks(targetFolder)
       }
-    },
-    mailFilter() {
-      this.selectedMails = []
-      this.$refs.taskListPS.$el.scrollTop = 0
     }
   },
   computed: {
     tasks() {
       return this.$store.getters['sm/tasks']
     },
-    mailFilter() {
-      //return this.$store.state.email.mail_filter
+    pages() {
+      return this.tasks
+        ? Math.ceil(this.tasks.length / this.taskPerPage)
+        : 0
     },
-    searchQuery: {
-      get() {
-        //return this.$store.state.email.mailSearchQuery
-      },
-      set(val) {
-        this.$store.dispatch('email/setMailSearchQuery', val)
+    tasksToPage() {
+      const pageTo = this.currentPage * this.taskPerPage
+      const pageFrom = pageTo - this.taskPerPage
+      if (this.tasks) {
+        return this.tasks
+          .filter((task, index) => pageFrom <= index && index < pageTo)
       }
-    }
+    },
+    hasTasks() {
+      return this.tasks ? this.tasks.length : 0
+    },
   },
   methods: {
-    getTasks(folderId) {
+    startLoading() {
+      this.loading = true
+      this.$vs.loading({
+        container: this.$refs.taskListLoader,
+        clickEffect: true
+      })
+    },
+    stopLoading() {
+      this.loading = false
+      this.$vs.loading.close(this.$refs.taskListLoader)
+    },
+    async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)
-      const loader = this.tasks ? 'setLinearLoader' : 'setCircularLoader'
-      this.$store.dispatch('sm/getTasks', {folderId, loader})
+      if (!this.tasks) {
+        this.startLoading()
+      }
+      try {
+        await this.$store.dispatch('sm/getTasks', {folderId})
+        this.stopLoading()
+      } catch (e) {
+        this.stopLoading()
+        console.log(e.message)
+      }
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     }
   },
-  created() {
+  mounted() {
     this.getTasks(this.$route.params.code)
     this.$nextTick(() => {
       window.addEventListener('resize', this.handleWindowResize)
@@ -112,4 +154,7 @@ export default {
 
 <style lang="scss">
   @import '@/assets/scss/vuesax/apps/task.scss';
+  .-mb-10 {
+    margin-bottom: -2.7rem !important;
+  }
 </style>

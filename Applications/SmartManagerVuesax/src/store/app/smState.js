@@ -10,7 +10,7 @@ export default {
   folders: null,
   currentFolder: null,
   search: null,
-  tasks: [],
+  tasks: {},
   taskInfo: {},
   users: []
 }

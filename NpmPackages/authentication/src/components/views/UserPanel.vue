@@ -43,7 +43,8 @@
                 class="#f5f5f5"
                 justify-space-between
               >
-                <v-flex class="grow-0">
+              <v-flex  v-show="hideDelegatedRightsButton"></v-flex>
+                <v-flex class="grow-0"  v-show="!hideDelegatedRightsButton">
                   <v-menu auto>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -110,8 +111,8 @@ export default {
   components: {
     userPanelRl
   },
-  props: ['mini'],
-
+  props: ['mini', 'hideDelegatedRightsButton'],
+ 
   data: () => ({
     menu: false,
     userMenuBtnStyle: [

@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default {
   setCircularLoader(state, payload) {
     state.circularLoader = payload
@@ -28,7 +30,7 @@ export default {
     state.tasks = Object.assign({}, state.tasks, payload)
   },
   setTaskInfo(state, payload) {
-    state.taskInfo = payload
+    state.taskInfo = Object.assign({}, state.taskInfo, payload)
   },
   setSearch(state, payload) {
     state.search = payload
@@ -38,19 +40,13 @@ export default {
   },
   addComment(state, payload) {
     const user = JSON.parse(localStorage.currentUser)
-    const date = new Date().toLocaleString('ru', {
-      year: 'numeric', month: 'numeric', day: 'numeric'
-    })
-    const time = new Date().toLocaleString('ru', {
-      hour: 'numeric', minute: 'numeric'
-    })
     const comment = {
-      date: `${date} ${time}`,
-      text: payload,
+      date: moment().format('DD.MM.YYYY HH:mm'),
+      text: payload.text,
       user: user.UserData.CurrentUserData.UserName,
       userId: user.UserData.CurrentUserData.UserId,
       userPhoto: user.UserData.CurrentUserData.UserPhoto
     }
-    state.taskInfo.comments.push(comment)
+    state.taskInfo[payload.id].comments.push(comment)
   }
 }
