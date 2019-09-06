@@ -187,5 +187,9 @@ export default {
   .work-centers-select .v-select__slot input {
     padding-bottom: 0;
   }
+  .tasks-list-block .v-progress-linear__content {
+    background-color: rgba(50,109,168,.5);
+    color: white;
+  }
 </style>
 

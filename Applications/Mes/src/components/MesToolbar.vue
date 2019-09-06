@@ -23,7 +23,17 @@
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
-      <v-flex class="grow-0">
+      <div class="user-info-desc">
+        <span class="user-info-text">
+          <!-- {{userInfo}} -->
+          Имя Фамилия
+        </span>
+        <span class="user-info-text">
+          <!-- {{userInfo}} -->
+          Смена: Тест
+        </span>
+      </div>
+      <v-flex class="grow-0 user-description-block">
         <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
       </v-flex>
     </v-layout>
@@ -46,12 +56,16 @@ export default {
     },
     properties() {
       return this.$store.getters['mes/properties']
+    },
+    userInfo() {
+      return this.$store.getters['mes/userInfo']
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeProperties')
+      // await this.$store.dispatch('mes/initializeUserInfo')
     },
     changeWorkCenter(newWorkCenter) {
       this.changeWorkCenterMethod(newWorkCenter)
@@ -118,5 +132,24 @@ a {
   color: #326da8;
   font-size: 30px;
   font-weight: 700;
+}
+.user-info-desc {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  padding: 3px 5px 0px 5px;
+}
+.user-info-name {
+  display: flex;
+  font-size: 14px;
+  color: #326da8;
+  font-weight: 500;
+  line-height: 12px;
+}
+.user-info-text {
+  display: flex;
+  font-size: 14px;
+  color: #326da8;
+  font-weight: 500;
 }
 </style>

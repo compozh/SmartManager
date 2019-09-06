@@ -1,0 +1,9 @@
+{
+  mes {
+    usersInfo {
+        contacts
+        byLogin
+        saveInContent
+    }
+  }
+}

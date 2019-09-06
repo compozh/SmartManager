@@ -9,10 +9,11 @@
         <div class="downtimes-list-block-content">
           <mes-downtime-cards
           :selectedDowntime=selectedDowntime
+          @changeCurrentDowntime=changeCurrentDowntime
           />
 
         </div>
-        <span v-if="initializeDowntimes && !downtimes.length" class="lack-of-downtimes-str">Задания отсутствуют</span>
+        <span v-if="initializeDowntimes && !downtimes.length" class="lack-of-downtimes-str">Простои отсутствуют</span>
       </v-flex>
     </v-layout>
   </div>
@@ -40,7 +41,11 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    changeCurrentDowntime(newDowntime) {
+      this.$emit('changeCurrentDowntime', newDowntime)
+    },
+  }
 }
 </script>
 

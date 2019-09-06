@@ -19,6 +19,20 @@ export default {
       }
     }
   },
+  async initializeUserInfo({commit}) {
+    commit('closeSnackbar')
+    try {
+      const result = await api.getUserInfoFromGql()
+      commit('setUserInfo', result.data.mes.userInfo)
+    } catch (e) {
+      if (e.networkError && e.networkError.statusCode == 401) {
+        Vue.prototype.$authentication.resetCurentUser()
+        routerDependencies.router.push({name: 'LOGIN'})
+      } else {
+        commit('setSnackbarErrorMessage', e.message)
+      }
+    }
+  },
   async initializeTicket({commit}) {
     try {
       const result = await api.getTicketFromGql()

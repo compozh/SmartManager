@@ -25,6 +25,9 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
+  setUserInfo(state, userInfo) {
+    state.userInfo = userInfo
+  },
   setWorkCenter(state, workCenter) {
     state.workCenter = workCenter
   },

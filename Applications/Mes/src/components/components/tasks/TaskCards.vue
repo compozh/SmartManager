@@ -16,8 +16,8 @@
             <span v-html="task.description"></span>
           </v-card-text>
           <v-progress-linear v-if="task.completionPercentage"
-            color="#326DA8"
-            height="25"
+            color="#326da8"
+            height="22"
             :value="Math.round(task.completionPercentage)"
             reactive
           >

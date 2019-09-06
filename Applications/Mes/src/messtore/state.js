@@ -25,6 +25,7 @@ export default {
     tasks: false
   },
   properties: null,
+  userInfo: null,
   workCenter: null,
   initialWorkCenter: false,
   workCentersForWorker: [],

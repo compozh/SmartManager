@@ -59,29 +59,9 @@ export default {
       await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
       this.initializeDowntimes = true
-      // if (!this.selectedDowntime) {
-      //   this.selectFirstTaskByTabIndex()
-      // }
-    },
-    onChangeCurrentTask(newSelectedDowntime) {
-      if (this.selectedDowntime && newSelectedDowntime.id == this.selectedDowntime.id) {
-        return
-      }
-      // if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
-      //   let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
-
-      //   if (this.productionFormio && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
-      //     this.dialogProperties.visible = true
-      //     this.dialogProperties.task = newSelectedDowntime
-      //     return
-      //   }
-      // }
-      this.changeCurrentDowntime(newSelectedDowntime)
     },
     changeCurrentDowntime(newSelectedDowntime) {
       this.selectedDowntime = newSelectedDowntime
-      // this.$store.commit('mes/resetProductionFormio')
-      // this.changeCurrentLayout('main')
     },
   }
 }
