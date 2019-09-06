@@ -26,7 +26,7 @@
       <div class="user-info-desc">
         <span class="user-info-text">
           <!-- {{userInfo}} -->
-          Имя Фамилия
+          {{userName}}
         </span>
         <span class="user-info-text">
           <!-- {{userInfo}} -->
@@ -57,15 +57,15 @@ export default {
     properties() {
       return this.$store.getters['mes/properties']
     },
-    userInfo() {
-      return this.$store.getters['mes/userInfo']
+    userName() {
+      return this.$store.getters['mes/userName']
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeProperties')
-      // await this.$store.dispatch('mes/initializeUserInfo')
+      await this.$store.dispatch('mes/initializeUserName')
     },
     changeWorkCenter(newWorkCenter) {
       this.changeWorkCenterMethod(newWorkCenter)

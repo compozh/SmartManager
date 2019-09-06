@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 // Queries
 import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
-import userInfo from './graphql/userInfo.graphql'
 import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import downtimesPrevious from './graphql/downtimes/downtimesPrevious.graphql'
@@ -99,14 +98,6 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mes.workCentersFixed
-  }
-
-  async getUserInfoFromGql() {
-    const result = await getClient().query({
-      query: gql` ${userInfo}`
-    })
-      .then(result => result)
-    return result.data.mes.userInfo
   }
 
   async getTasksFromGql(workCenter, fetchPolicy) {

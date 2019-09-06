@@ -8,8 +8,8 @@ export default {
   properties(state) {
     return state.properties
   },
-  userInfo(state) {
-    return state.userInfo
+  userName(state) {
+    return state.userName
   },
   workCenter(state) {
     return state.workCenter
