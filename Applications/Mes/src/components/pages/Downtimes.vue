@@ -47,7 +47,7 @@ export default {
     },
     selectedDowntime: {
       get() {
-        return this.selectedDowntime
+        return this.$store.getters['mes/selectedDowntime']
       },
       set(selectedDowntime) {
         this.$store.commit('mes/setSelectedDowntime', selectedDowntime)
@@ -62,7 +62,8 @@ export default {
     },
     changeCurrentDowntime(newSelectedDowntime) {
       this.selectedDowntime = newSelectedDowntime
-    },
+      this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+    }
   }
 }
 </script>

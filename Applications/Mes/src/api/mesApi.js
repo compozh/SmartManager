@@ -114,6 +114,7 @@ export class MesApi {
     const result = await getClient().query({
       query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
       variables: { workCenterCode, dateTime },
+      fetchPolicy: 'network-only'
     })
       .then(result => result)
     return result.data.mes.downtimePrevious.downtimeList
@@ -200,7 +201,7 @@ export class MesApi {
   async getDowntimeFormioFromGql(formCode, properties) {
     const result = await getClient().query({
       query: gql`query ($formCode: String, $properties: DowntimeParamsInput!) ${downtimeFormIo}`,
-      variables: { formCode, properties }
+      variables: { formCode, properties },
     })
       .then(result => result)
     return result.data.mes.downtimeFormIo
