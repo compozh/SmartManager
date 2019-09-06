@@ -50,14 +50,14 @@ export default {
   setProductionFormio(state, formio) {
     state.productionFormio = formio
   },
-  setDowntimeTypes(state, downtimeTypes) {
-    state.downtimeTypes = downtimeTypes
-  },
   resetProductionFormio(state) {
     state.productionFormio = {}
   },
   setDowntimeFormio(state, formio) {
     state.downtimeFormio = formio
+  },
+  setCreateDowntimeFormio(state, formio) {
+    state.createDowntimeFormio = formio
   },
   resetDowntimeFormio(state) {
     state.downtimeFormio = {}
@@ -114,6 +114,7 @@ export default {
   resetState(state) {
     state.tasks = []
     state.downtimes = []
+    state.createDowntimeFormio = []
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.tasksPageState.selectedDowntime = null

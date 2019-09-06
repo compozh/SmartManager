@@ -45,6 +45,9 @@ export default {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
+    downtimes() {
+      return this.$store.getters['mes/downtimes']
+    },
     selectedDowntime: {
       get() {
         return this.$store.getters['mes/selectedDowntime']
@@ -59,10 +62,18 @@ export default {
       await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
       this.initializeDowntimes = true
+      if (!this.selectedDowntime) {
+        this.seelectFirstDowntime()
+      }
     },
     changeCurrentDowntime(newSelectedDowntime) {
       this.selectedDowntime = newSelectedDowntime
-      this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+      this.$store.dispatch('mes/initializeDowntimeFormio', this.workCenter)
+    },
+    seelectFirstDowntime() {
+      if (this.downtimes.length) {
+        this.changeCurrentDowntime(this.downtimes[0])
+      }
     }
   }
 }

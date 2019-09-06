@@ -24,13 +24,15 @@
 
 export default {
   name: 'mes-downtime-cards',
-  props: {
-    selectedDowntime: Object,
-  },
   computed: {
     downtimes() {
       return this.$store.getters['mes/downtimes']
     },
+    selectedDowntime: {
+      get() {
+        return this.$store.getters['mes/selectedDowntime']
+      }
+    }
   },
   methods: {
     changeCurrentDowntime(newDowntime) {

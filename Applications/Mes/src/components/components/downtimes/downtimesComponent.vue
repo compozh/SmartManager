@@ -8,7 +8,6 @@
         />
         <div class="downtimes-list-block-content">
           <mes-downtime-cards
-          :selectedDowntime=selectedDowntime
           @changeCurrentDowntime=changeCurrentDowntime
           />
 
@@ -34,11 +33,6 @@ export default {
   computed: {
     downtimes() {
       return this.$store.getters['mes/downtimes']
-    },
-    selectedDowntime: {
-      get() {
-        return this.$store.getters['mes/selectedDowntime']
-      }
     }
   },
   methods: {

@@ -306,12 +306,31 @@ export default {
       linearLoader: true
     })
   },
-  async createDowntimeFormio({ commit }, { formCode, properties }) {
+  async initializeCreateDowntimeFormio({ commit }, workCenter) {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () => {
         try {
-          const res = await api.getDowntimeFormioFromGql(formCode, properties)
-          return res
+          return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code })
+        }
+        catch (e) {
+          if (e.networkError && e.networkError.statusCode == 401) {
+            Vue.prototype.$authentication.resetCurentUser()
+            routerDependencies.router.push({name: 'LOGIN'})
+          }
+          else {
+            commit('setSnackbarErrorMessage', e.message)
+          }
+        }
+      },
+      successAction: async result => { commit('setCreateDowntimeFormio', result) },
+    })
+  },
+  async initializeDowntimeFormio({ commit }, workCenter) {
+    commit('resetDowntimeFormio')
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () => {
+        try {
+          return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code }, 'network-only')
         }
         catch (e) {
           if (e.networkError && e.networkError.statusCode == 401) {
@@ -361,20 +380,6 @@ export default {
       linearLoader: false
     })
     commit('closeDialogLinearLoader')
-  },
-  async createDowntimeTypes({commit}) {
-    commit('closeSnackbar')
-    try {
-      const result = await api.getDowntimeTypesFromGql()
-      commit('setDowntimeTypes', result)
-    } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
-      } else {
-        commit('setSnackbarErrorMessage', e.message)
-      }
-    }
   },
   async downtimeFormIoSubmit({ commit }, { workCenter, data }) {
     // var me = this,

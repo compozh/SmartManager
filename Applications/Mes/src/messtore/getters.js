@@ -32,11 +32,11 @@ export default {
   productionFormio(state) {
     return state.productionFormio
   },
-  downtimeTypes(state) {
-    return state.downtimeTypes
-  },
   downtimeFormio(state) {
     return state.downtimeFormio
+  },
+  createDowntimeFormio(state) {
+    return state.createDowntimeFormio
   },
   menuMiniMode(state) {
     if (state.menuMiniMode === null) {

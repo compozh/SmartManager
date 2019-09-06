@@ -35,7 +35,7 @@ export default {
   productions: [],
   productionFormio: {},
   downtimeFormio: {},
-  downtimeTypes: null,
+  createDowntimeFormio: {},
   menuMiniMode: true,
   ticket: ''
 }

@@ -113,8 +113,7 @@ export class MesApi {
   async getDowntimesPreviousFromGql(workCenterCode, dateTime) {
     const result = await getClient().query({
       query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
-      variables: { workCenterCode, dateTime },
-      fetchPolicy: 'network-only'
+      variables: { workCenterCode, dateTime }
     })
       .then(result => result)
     return result.data.mes.downtimePrevious.downtimeList
@@ -198,10 +197,11 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.productionFormIoSubmit
   }
-  async getDowntimeFormioFromGql(formCode, properties) {
+  async getDowntimeFormioFromGql(formCode, properties, fetchPolicy) {
     const result = await getClient().query({
       query: gql`query ($formCode: String, $properties: DowntimeParamsInput!) ${downtimeFormIo}`,
       variables: { formCode, properties },
+      fetchPolicy: fetchPolicy || 'cache-first'
     })
       .then(result => result)
     return result.data.mes.downtimeFormIo

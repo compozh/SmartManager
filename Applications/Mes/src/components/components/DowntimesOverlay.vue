@@ -10,14 +10,14 @@
       <div class="downtimes-block">
         <v-progress-circular
           class='downtime-progress-circular'
-          v-if="!Object.keys(this.downtimeFormio).length"
+          v-if="!Object.keys(this.createDowntimeFormio).length"
           indeterminate
           color="primary"
       ></v-progress-circular>
       <mes-form-builder
         ref="formioBuilder"
         @formioSubmit=formioSubmit
-        :formioData=downtimeFormio
+        :formioData=createDowntimeFormio
         />
       </div>
     <v-btn
@@ -35,12 +35,11 @@
 export default {
   name: 'mes-downtimes-overlay',
   created() {
-    this.initializeDowntimeTypes()
-    this.initializeDowntimeFormio()
+    this.initializeCreateDowntimeFormio()
   },
   computed: {
-    downtimeFormio() {
-      return this.$store.getters['mes/downtimeFormio']
+    createDowntimeFormio() {
+      return this.$store.getters['mes/createDowntimeFormio']
     }
   },
   methods: {
@@ -50,18 +49,12 @@ export default {
     formioSubmit(data) {
       this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data })
     },
-    async initializeDowntimeFormio() {
-      if (Object.keys(this.downtimeFormio).length) {
+    initializeCreateDowntimeFormio() {
+      if (Object.keys(this.createDowntimeFormio).length) {
         return
       }
-      let workCenter = this.$parent.workCenter,
-        properties = {
-          workCenterCode: workCenter.code
-        }
-      await this.$store.dispatch('mes/createDowntimeFormio', { formCode: workCenter.downtimeRegistrationFormCode, properties })
-    },
-    async initializeDowntimeTypes() {
-      await this.$store.dispatch('mes/createDowntimeTypes')
+      let workCenter = this.$parent.workCenter
+      this.$store.dispatch('mes/initializeCreateDowntimeFormio', workCenter)
     }
   }
 }
