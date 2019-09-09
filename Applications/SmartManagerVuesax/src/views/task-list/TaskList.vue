@@ -14,7 +14,7 @@
             size="large"
             icon-pack="feather"
             :placeholder="$t('search')"
-            v-model="searchQuery"
+            v-model.trim="search"
             class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
         </div>
         <!-- TASK LIST -->
@@ -110,6 +110,14 @@ export default {
     hasTasks() {
       return this.tasks ? this.tasks.length : 0
     },
+    search: {
+      get() {
+        return this.$store.state.sm.search
+      },
+      set(search) {
+        this.$store.commit('sm/setSearch', search)
+      }
+    }
   },
   methods: {
     startLoading() {
