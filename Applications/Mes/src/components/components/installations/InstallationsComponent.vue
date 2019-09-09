@@ -1,5 +1,14 @@
 <template>
     <div class="installations-block" ref="installationsBlock">
+      <mes-dialog-component
+          :title=dialogProperties.title
+          :message=dialogProperties.message
+          :agreeMessage=dialogProperties.agreeMessage
+          :disagreeMessage=dialogProperties.disagreeMessage
+          :visible=dialogProperties.visible
+          @dialogInput=dialogInput
+          @agreeClick=dialogAgreeClick
+          @disagreeClick=dialogDisagreeClick />
       <v-card
         class="installation-card"
         v-for="installation in sortedInstallations"
@@ -8,7 +17,8 @@
       >
         <mes-installation-card
           :installation=installation
-          @removeInstallation="removeInstallation"
+          :delateInProgress= delateInProgress
+          @openDialog=openDialog
         />
 
       </v-card>
@@ -19,6 +29,20 @@
 
 export default {
   name: 'mes-installations-component',
+  data() {
+    return {
+      dialogProperties: {
+        title: '',
+        message: 'Вы действительно хотите удалить выработку?',
+        agreeMessage: 'Да',
+        disagreeMessage: 'Нет',
+        visible: false,
+        installation: null,
+        callback: false
+      },
+      delateInProgress: false
+    }
+  },
   computed: {
     installations() {
       return this.$store.getters['mes/installations']
@@ -37,7 +61,26 @@ export default {
       if (callback) {
         callback()
       }
-    }
+    },
+    openDialog({ installation, callback }) {
+      this.dialogProperties.visible = true
+      this.dialogProperties.installation = installation
+      this.dialogProperties.callback = callback
+      this.delateInProgress = true
+    },
+    dialogAgreeClick() {
+      let installation = this.dialogProperties.installation
+      let callback = this.dialogProperties.callback
+      this.removeInstallation({ installation, callback })
+      this.dialogProperties.visible = false
+    },
+    dialogDisagreeClick() {
+      this.dialogProperties.visible = false
+      this.delateInProgress = false
+    },
+    dialogInput() {
+      this.dialogProperties.visible = false
+    },
   }
 }
 </script>

@@ -16,7 +16,8 @@
 export default {
   name: 'mes-production-card',
   props: {
-    production: Object
+    production: Object,
+    delateInProgress: Boolean
   },
   data() {
     return {
@@ -26,15 +27,11 @@ export default {
         2: 'border-left: 18px solid rgba(255, 192, 0, 0.81);',
         3: 'border-left: 18px solid rgba(179, 2, 2, 0.81);'
       },
-      delateInProgress: false
     }
   },
   methods: {
     deleteProduction() {
-      this.delateInProgress = true
-      this.$emit('deleteProduction', {production: this.production, callback: () => {
-        this.delateInProgress = false
-      }})
+      this.$emit('openDialog', { production: this.production })
     }
   }
 }

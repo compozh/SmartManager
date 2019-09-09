@@ -8,19 +8,14 @@
 <script>
 
 export default {
-  data() {
-    return {delateInProgress: false}
-  },
   props: {
-    installation: Object
+    installation: Object,
+    delateInProgress: Boolean
   },
   name: 'mes-installation-card',
   methods: {
     removeInstallation() {
-      this.delateInProgress = true
-      this.$emit('removeInstallation', {installation: this.installation, callback: () => {
-        this.delateInProgress = false
-      }})
+      this.$emit('openDialog', {installation: this.installation})
     }
   }
 }

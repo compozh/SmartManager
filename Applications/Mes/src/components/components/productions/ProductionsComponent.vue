@@ -1,10 +1,20 @@
 <template>
     <v-flex class="mes-productions-content">
+      <mes-dialog-component
+          :title=dialogProperties.title
+          :message=dialogProperties.message
+          :agreeMessage=dialogProperties.agreeMessage
+          :disagreeMessage=dialogProperties.disagreeMessage
+          :visible=dialogProperties.visible
+          @dialogInput=dialogInput
+          @agreeClick=dialogAgreeClick
+          @disagreeClick=dialogDisagreeClick />
         <v-card class="productions-card" v-for="production in sortedProductions" :key="production.factId">
 
             <mes-production-card
                 :production=production
-                @deleteProduction=deleteProduction
+                :delateInProgress= delateInProgress
+                @openDialog=openDialog
             />
 
         </v-card>
@@ -15,6 +25,20 @@
 /* eslint-disable */
 export default {
   name: 'mes-productions-component',
+  data() {
+    return {
+      dialogProperties: {
+        title: '',
+        message: 'Вы действительно хотите удалить выработку?',
+        agreeMessage: 'Да',
+        disagreeMessage: 'Нет',
+        visible: false,
+        production: null,
+        callback: false
+      },
+      delateInProgress: false
+    }
+  },
   computed: {
     productions() {
       return this.$store.getters['mes/productions']
@@ -26,12 +50,31 @@ export default {
     }
   },
   methods: {
+    openDialog({ production, callback }) {
+      this.dialogProperties.visible = true
+      this.dialogProperties.production = production
+      this.dialogProperties.callback = callback
+      this.delateInProgress = true
+    },
     async deleteProduction({ production, callback }) {
       await this.$store.dispatch('mes/deleteProduction', production)
       if (callback) {
           callback()
         }
-    }
+    },
+    dialogAgreeClick() {
+      let production = this.dialogProperties.production
+      let callback = this.dialogProperties.callback
+      this.deleteProduction({ production, callback })
+      this.dialogProperties.visible = false
+    },
+    dialogDisagreeClick() {
+      this.dialogProperties.visible = false
+      this.delateInProgress = false
+    },
+    dialogInput() {
+      this.dialogProperties.visible = false
+    },
   }
 }
 </script>
