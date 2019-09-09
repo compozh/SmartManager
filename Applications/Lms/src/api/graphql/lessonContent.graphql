@@ -1,4 +1,4 @@
-query($lessonid: ID){
+{
   lms{
     lessonContent(lessonGuid: $lessonid){
       content

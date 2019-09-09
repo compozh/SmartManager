@@ -23,12 +23,12 @@
 </template>
 <script>
 
-//window.hljs.initHighlightingOnLoad();
+import hljs from 'highlight.js/lib/highlight'
+hljs.initHighlightingOnLoad();
 
 var courseName = "";
 var moduleName = "";
 var lessonData = { name: "" };
-// var content = { data: undefined };
 
 var links = [];
 links.push({
@@ -69,7 +69,6 @@ export default {
 
   created() {
     this.lessonGuid = this.$route.params.lessonGuid
-    debugger
     this.getLessonContent(this.lessonGuid)
   },
   methods: {
@@ -80,7 +79,6 @@ export default {
   computed: {
     content() {
       const lessonContent = this.$store.getters['lms/lessonContent']
-      debugger
       return lessonContent !== null ? lessonContent.content : null
     },
     lesson() {

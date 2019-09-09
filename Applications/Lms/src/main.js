@@ -28,7 +28,8 @@ import VueApollo from 'vue-apollo'
 import { routerDependencies } from './router'
 
 // Редактор quill
-//import hljs from './plugins/quill/highlight.js'
+import hljs from 'highlight.js/lib/highlight'
+import 'highlight.js/styles/github.css'
 import VueQuill from 'vue-quill'
 
 const apolloProvider = new VueApollo({
