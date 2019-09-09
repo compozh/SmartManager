@@ -1,7 +1,7 @@
 <template>
     <v-card-text class="mes-installation-card">
         <span v-html="installation.description"></span>
-        <v-btn icon color="error" class="mes-delete-installation" @click="removeInstallation" :loading="delateInProgress"><v-icon dark>delete_forever</v-icon></v-btn>
+        <v-btn icon color="error" class="mes-delete-installation" @click="removeInstallation"><v-icon dark>delete_forever</v-icon></v-btn>
     </v-card-text>
 </template>
 
@@ -10,7 +10,6 @@
 export default {
   props: {
     installation: Object,
-    delateInProgress: Boolean
   },
   name: 'mes-installation-card',
   methods: {

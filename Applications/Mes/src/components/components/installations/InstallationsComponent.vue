@@ -17,7 +17,6 @@
       >
         <mes-installation-card
           :installation=installation
-          :delateInProgress= delateInProgress
           @openDialog=openDialog
         />
 
@@ -40,7 +39,6 @@ export default {
         installation: null,
         callback: false
       },
-      delateInProgress: false
     }
   },
   computed: {
@@ -66,7 +64,6 @@ export default {
       this.dialogProperties.visible = true
       this.dialogProperties.installation = installation
       this.dialogProperties.callback = callback
-      this.delateInProgress = true
     },
     dialogAgreeClick() {
       let installation = this.dialogProperties.installation
@@ -76,7 +73,6 @@ export default {
     },
     dialogDisagreeClick() {
       this.dialogProperties.visible = false
-      this.delateInProgress = false
     },
     dialogInput() {
       this.dialogProperties.visible = false

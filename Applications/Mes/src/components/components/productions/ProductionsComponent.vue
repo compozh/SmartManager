@@ -13,7 +13,6 @@
 
             <mes-production-card
                 :production=production
-                :delateInProgress= delateInProgress
                 @openDialog=openDialog
             />
 
@@ -36,7 +35,6 @@ export default {
         production: null,
         callback: false
       },
-      delateInProgress: false
     }
   },
   computed: {
@@ -54,7 +52,6 @@ export default {
       this.dialogProperties.visible = true
       this.dialogProperties.production = production
       this.dialogProperties.callback = callback
-      this.delateInProgress = true
     },
     async deleteProduction({ production, callback }) {
       await this.$store.dispatch('mes/deleteProduction', production)
@@ -70,7 +67,6 @@ export default {
     },
     dialogDisagreeClick() {
       this.dialogProperties.visible = false
-      this.delateInProgress = false
     },
     dialogInput() {
       this.dialogProperties.visible = false
