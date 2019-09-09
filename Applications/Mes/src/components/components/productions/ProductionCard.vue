@@ -2,10 +2,10 @@
     <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
 
         <span v-html="production.description"></span>
-        <v-btn icon color="#326da8" class="mes-print-production" @click="printLabel">
+        <v-btn icon color="#326da8" class="mes-print-production" @click="printProduction" :loading="printInProgress" :disabled=deleteInProgress>
           <v-icon dark>print</v-icon>
         </v-btn>
-        <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction">
+        <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction" :loading="deleteInProgress">
           <v-icon dark>delete_forever</v-icon>
         </v-btn>
 
@@ -19,10 +19,12 @@
 export default {
   name: 'mes-production-card',
   props: {
-    production: Object,
+    production: Object
   },
   data() {
     return {
+      deleteInProgress: false,
+      printInProgress: false,
       borderColors: {
         0: 'border-left: 18px solid transparent;',
         1: 'border-left: 18px solid rgba(7, 109, 0, 0.81);',
@@ -33,10 +35,19 @@ export default {
   },
   methods: {
     deleteProduction() {
-      this.$emit('openDialog', { production: this.production })
+      var me = this
+      me.$emit('deleteProduction', { production: me.production, callback: () => {
+        me.deleteInProgress = false
+      }, dialogAgreeClick: () => {
+        me.deleteInProgress = true
+      }})
     },
-    printLabel() {
-      this.$emit('printLabel', { production: this.production })
+    printProduction() {
+      var me = this
+      me.printInProgress = true
+      me.$emit('printProduction', { production: me.production, callback: () => {
+        me.printInProgress = false
+      }})
     }
   }
 }

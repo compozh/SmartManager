@@ -181,7 +181,7 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.deleteProduction
   }
-  async printLabelGql(factId, checkWriteOffPercent) {
+  async printProductionGql(factId, checkWriteOffPercent) {
     const  result = await getClient().mutate({
       mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean!) ${printLabel}`,
       variables: { factId, checkWriteOffPercent }

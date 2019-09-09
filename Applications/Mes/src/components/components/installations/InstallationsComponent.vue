@@ -17,7 +17,7 @@
       >
         <mes-installation-card
           :installation=installation
-          @openDialog=openDialog
+          @removeInstallation=invokeDeleteInstallation
         />
 
       </v-card>
@@ -54,20 +54,24 @@ export default {
     }
   },
   methods: {
+    invokeDeleteInstallation({ installation, callback, dialogAgreeClick }) {
+      this.dialogProperties.visible = true
+      this.dialogProperties.installation = installation
+      this.dialogProperties.callback = callback
+      this.dialogProperties.dialogAgreeClick = dialogAgreeClick
+    },
     async removeInstallation({ installation, callback }) {
       await this.$store.dispatch('mes/removeInstallation', installation)
       if (callback) {
         callback()
       }
     },
-    openDialog({ installation, callback }) {
-      this.dialogProperties.visible = true
-      this.dialogProperties.installation = installation
-      this.dialogProperties.callback = callback
-    },
     dialogAgreeClick() {
       let installation = this.dialogProperties.installation
       let callback = this.dialogProperties.callback
+      if (this.dialogProperties.dialogAgreeClick) {
+        this.dialogProperties.dialogAgreeClick()
+      }
       this.removeInstallation({ installation, callback })
       this.dialogProperties.visible = false
     },

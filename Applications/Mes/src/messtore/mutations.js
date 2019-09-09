@@ -66,6 +66,9 @@ export default {
     let index = state.productions.indexOf(production)
     state.productions.splice(index, 1)
   },
+  printProduction(state, production) {
+    state.printProduction = production
+  },
   setMenuMiniMode(state, payload) {
     state.menuMiniMode = payload
     localStorage.setItem('mesMenuMiniMode', payload.toString())

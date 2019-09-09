@@ -285,12 +285,12 @@ export default {
       successAction: async () => { commit('removeProduction', production) },
     })
   },
-  async printLabel({ commit }, production) {
+  async printProduction({ commit }, production) {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () => {
         try {
           let checkWriteOffPercent = false
-          const res = await api.printLabelGql(production.factId, checkWriteOffPercent)
+          const res = await api.printProductionGql(production.factId, checkWriteOffPercent)
           return res
         }
         catch (e) {
@@ -303,7 +303,7 @@ export default {
           }
         }
       },
-      successAction: async () => { commit('removeProduction', production) },
+      successAction: async () => { commit('printProduction', production) },
     })
   },
   async createProductionFormio({ commit }, { formCode, properties }) {

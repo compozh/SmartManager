@@ -13,8 +13,8 @@
 
             <mes-production-card
                 :production=production
-                @openDialog=openDialog
-                @printLabel=printLabel
+                @deleteProduction=invokeDeleteProduction
+                @printProduction=printProduction
             />
 
         </v-card>
@@ -49,20 +49,24 @@ export default {
     }
   },
   methods: {
-    openDialog({ production, callback }) {
+    invokeDeleteProduction({ production, callback, dialogAgreeClick }) {
       this.dialogProperties.visible = true
       this.dialogProperties.production = production
       this.dialogProperties.callback = callback
+      this.dialogProperties.dialogAgreeClick = dialogAgreeClick
     },
     async deleteProduction({ production, callback }) {
       await this.$store.dispatch('mes/deleteProduction', production)
       if (callback) {
           callback()
-        }
+      }
     },
     dialogAgreeClick() {
       let production = this.dialogProperties.production
       let callback = this.dialogProperties.callback
+      if (this.dialogProperties.dialogAgreeClick) {
+        this.dialogProperties.dialogAgreeClick()
+      }
       this.deleteProduction({ production, callback })
       this.dialogProperties.visible = false
     },
@@ -72,8 +76,11 @@ export default {
     dialogInput() {
       this.dialogProperties.visible = false
     },
-    async printLabel({ production }) {
-      await this.$store.dispatch('mes/printLabel', production)
+    async printProduction({ production, callback }) {
+      await this.$store.dispatch('mes/printProduction', production)
+      if (callback) {
+        callback()
+      }
     }
   }
 }
