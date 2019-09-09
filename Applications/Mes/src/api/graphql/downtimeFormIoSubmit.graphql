@@ -1,6 +1,6 @@
-mutation($formCode:String, $data: String, $DowntimeParams: DowntimeParamsInput!) {
+mutation($formCode:String, $data: String, $downtimeParams: DowntimeParamsInput!) {
     mesMutation {
-        productionFormIoSubmit(formCode: $formCode, data: $data, DowntimeParams: $DowntimeParams) {
+        downtimeFormIoSubmit(formCode: $formCode, data: $data, downtimeParams: $downtimeParams) {
             success
             errorMessage
             successMessage

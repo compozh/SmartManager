@@ -40,6 +40,9 @@ export default {
   computed: {
     createDowntimeFormio() {
       return this.$store.getters['mes/createDowntimeFormio']
+    },
+    workCenter() {
+      return this.$store.getters['mes/workCenter']
     }
   },
   methods: {

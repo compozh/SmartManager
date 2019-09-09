@@ -383,36 +383,35 @@ export default {
     commit('closeDialogLinearLoader')
   },
   async downtimeFormIoSubmit({ commit }, { workCenter, data }) {
-    // var me = this,
-    //   params = {
-    //     formCode: workCenter.productionRegistrationFormCode,
-    //     data: data,
-    //     productionRegistrationParam: {
-    //       workCenterCode: workCenter.code,
-    //       workBarcode: '040000004620',
-    //       mode: 'FINISH'
-    //     }
-    //   }
-    // commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
-    // await me.dispatch('mes/graphqlQueryWraper', {
-    //   queryAction: async () => {
-    //     try {
-    //       const res = await api.downtimeFormIoSubmitGql(params)
-    //       return res
-    //     }
-    //     catch (e) {
-    //       if (e.networkError && e.networkError.statusCode == 401) {
-    //         Vue.prototype.$authentication.resetCurentUser()
-    //         routerDependencies.router.push({name: 'LOGIN'})
-    //       }
-    //       else {
-    //         commit('setSnackbarErrorMessage', e.message)
-    //       }
-    //     }
-    //   },
-    //   successAction: async () => { console.log('success') },
-    // })
-    // commit('closeDialogLinearLoader')
+     var me = this,
+       params = {
+         formCode: workCenter.downtimeRegistrationFormCode,
+         data: data,
+         downtimeParams: {
+           workCenterCode: workCenter.code,
+         }
+       }
+     commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
+     await me.dispatch('mes/graphqlQueryWraper', {
+       queryAction: async () => {
+         try {
+           const res = await api.downtimeFormIoSubmitGql(params)
+           return res
+         }
+         catch (e) {
+           debugger;
+           if (e.networkError && e.networkError.statusCode == 401) {
+             Vue.prototype.$authentication.resetCurentUser()
+             routerDependencies.router.push({name: 'LOGIN'})
+           }
+           else {
+             commit('setSnackbarErrorMessage', e.message)
+           }
+         }
+       },
+       successAction: async () => { console.log('success') },
+     })
+     commit('closeDialogLinearLoader')
   },
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
