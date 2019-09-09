@@ -63,19 +63,23 @@ export class LmsApi {
     .catch(error => console.log(error.message))
   }
 
-  getCourseDetailFromGql(courseid) {
+  getCourseDetailFromGql(courseGuid) {
     return getClient().query({
       query: gql`query ($courseid: ID) ${courseDetails}`,
-      variables: courseid
+      variables: {
+        courseid : courseGuid
+      }
     })
     .then(result => result)
     .catch(error => console.log(error.message))
   }
 
-  getLessonContentFromGql(lessonId) {
+  getLessonContentFromGql(lessonGuid) {
     return getClient().query({
-      query: gql`query ($lessonId: ID) ${lessonContent}`,
-      variables: lessonId
+      query: gql`query ($lessonid: ID) ${lessonContent}`,
+      variables: {
+        lessonid : lessonGuid
+      }
     })
     .then(result => result)
     .catch(error => console.log(error.message))

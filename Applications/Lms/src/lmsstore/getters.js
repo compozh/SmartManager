@@ -19,4 +19,10 @@ export default {
   modules (state) {
     return state.modules
   },
+  courseDetails (state) {
+    return state.courseDetails
+  },
+  lessonContent(state) {
+    return state.lessonContent
+  }
 }

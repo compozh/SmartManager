@@ -63,9 +63,11 @@ var searchTimeoutId = 0
 var searchParamsData = { phrase: '' }
 export default {
   name: 'lms-search',
-  props: ['modules'],
-  created() {
 
+  created() {
+    if(this.$store.getters['lms/modules'] === null) {
+      this.getModules()
+    }
   },
   mounted() {
 
@@ -83,6 +85,9 @@ export default {
     }
   },
   methods: {
+    getModules () {
+      this.$store.dispatch('lms/getModules')
+    },
     searchPhraseChanged: function() {
       //при вводе поискового запроса, запустить поиск в случае, если уже три секунды ничего не вводят
       if (searchTimeoutId > 0) {
@@ -117,6 +122,11 @@ export default {
     },
     levelSearch: function(data) {
       this.$router.push({ name: 'LMSMODULES', params: { level: data.code } })
+    }
+  },
+  computed: {
+    modules() {
+      return this.$store.getters['lms/modules']
     }
   }
 };

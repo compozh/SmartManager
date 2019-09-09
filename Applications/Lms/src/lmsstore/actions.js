@@ -89,14 +89,13 @@ export default {
     }
   },
 
-  async getCourseDetails(courseid) {
+  async getCourseDetails({commit}, payload) {
     commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
-      const result = await api.getCourseDetailFromGql(courseid)
-      const courseDetails = result.data.lms.courseDetail
-
+      const result = await api.getCourseDetailFromGql(payload)
+      const courseDetails = result.data.lms.courseDetails
       commit('setCourseDetails', courseDetails)
       commit('setCircularLoader', false)
     } catch (error) {
@@ -105,7 +104,7 @@ export default {
     }
   },
 
-  async getLessonContent (lessonid) {
+  async getLessonContent ({commit}, lessonid) {
     commit('setError', null)
     commit('setCircularLoader', true)
 

@@ -109,11 +109,12 @@ export default {
     }
   },
   created() {
-    // Перейти к home
-    if (this.$router.history.current.name == 'LMSREALHOME') {
-      return
-    }
-    this.$router.push({name: 'LMSREALHOME'})
+    // debugger
+    // // Перейти к home
+    // if (this.$router.history.current.name == 'LMSREALHOME') {
+    //   return
+    // }
+    // this.$router.push({name: 'LMSREALHOME'})
   },
   beforeMount: function () {
     // Маршруты из конструктора
