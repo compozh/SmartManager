@@ -15,6 +15,7 @@ import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
 import productions from './graphql/productions/productions.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
+import printLabel from './graphql/productions/printLabel.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import downtimeFormIo from './graphql/downtimeFormIo.graphql'
@@ -179,6 +180,14 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mesMutation.deleteProduction
+  }
+  async printLabelGql(factId, checkWriteOffPercent) {
+    const  result = await getClient().mutate({
+      mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean!) ${printLabel}`,
+      variables: { factId, checkWriteOffPercent }
+    })
+      .then(result => result)
+    return result.data.mes.printLabel
   }
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({

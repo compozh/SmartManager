@@ -14,6 +14,7 @@
             <mes-production-card
                 :production=production
                 @openDialog=openDialog
+                @printLabel=printLabel
             />
 
         </v-card>
@@ -71,6 +72,9 @@ export default {
     dialogInput() {
       this.dialogProperties.visible = false
     },
+    async printLabel({ production }) {
+      await this.$store.dispatch('mes/printLabel', production)
+    }
   }
 }
 </script>

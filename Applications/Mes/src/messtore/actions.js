@@ -285,6 +285,27 @@ export default {
       successAction: async () => { commit('removeProduction', production) },
     })
   },
+  async printLabel({ commit }, production) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      queryAction: async () => {
+        try {
+          let checkWriteOffPercent = false
+          const res = await api.printLabelGql(production.factId, checkWriteOffPercent)
+          return res
+        }
+        catch (e) {
+          if (e.networkError && e.networkError.statusCode == 401) {
+            Vue.prototype.$authentication.resetCurentUser()
+            routerDependencies.router.push({name: 'LOGIN'})
+          }
+          else {
+            commit('setSnackbarErrorMessage', e.message)
+          }
+        }
+      },
+      successAction: async () => { commit('removeProduction', production) },
+    })
+  },
   async createProductionFormio({ commit }, { formCode, properties }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       queryAction: async () => {

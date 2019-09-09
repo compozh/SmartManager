@@ -2,6 +2,9 @@
     <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
 
         <span v-html="production.description"></span>
+        <v-btn icon color="#326da8" class="mes-print-production" @click="printLabel">
+          <v-icon dark>print</v-icon>
+        </v-btn>
         <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction">
           <v-icon dark>delete_forever</v-icon>
         </v-btn>
@@ -31,6 +34,9 @@ export default {
   methods: {
     deleteProduction() {
       this.$emit('openDialog', { production: this.production })
+    },
+    printLabel() {
+      this.$emit('printLabel', { production: this.production })
     }
   }
 }
@@ -45,6 +51,12 @@ export default {
   }
   .mes-delete-production.error--text {
     color: rgba(179, 2, 2, 0.81) !important;
+  }
+  .mes-print-production {
+    min-width: auto;
+    position: absolute;
+    right: 35px;
+    top: 0;
   }
   .mes-production-card {
     height: 100%;
