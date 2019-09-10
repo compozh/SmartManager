@@ -1,6 +1,7 @@
 <template>
 <v-layout class="downtime-layout">
   <mes-form-builder
+    v-if="selectedDowntime"
     ref="formioBuilder"
     @formioSubmit=formioSubmit
     :formioData=downtimeFormio

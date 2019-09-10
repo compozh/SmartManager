@@ -115,7 +115,7 @@ export default {
     state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
-    state.tasksPageState.selectedDowntime = null
+    state.selectedDowntime = null
     state.workCenterProductionEvents = []
   }
 }
