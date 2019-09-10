@@ -2,10 +2,10 @@
     <v-layout class="mes-productions">
       <mes-production-toolbar/>
       <div class="production-main-block">
-        <mes-content-loader v-if="!initializeProductions && !productions.length"/>
+        <mes-content-loader v-if="!initializeProductions"/>
         <mes-productions-component :productions=productions />
 
-        <span class="no-data-text" v-if="initializeProductions && productions.length == 0">Нет факта регистрации выработки за смену</span>
+        <span class="no-data-text" v-if="initializeProductions && !productions.length">Нет факта регистрации выработки за смену</span>
       </div>
     </v-layout>
 </template>
@@ -90,7 +90,7 @@ export default {
     padding: 0 10px;
     margin-top: 50px;
     position: absolute;
-    height: calc(100%-50px);
+    height: calc(100% - 50px);
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
@@ -121,7 +121,7 @@ export default {
   .production-main-block::-webkit-scrollbar-button {display:none}
   .mes-content-loader {
     position: absolute;
-    z-index: 1;
+    z-index: 100;
     width: 100%;
   }
   .wait-for-data-block {
@@ -130,7 +130,6 @@ export default {
   .no-data-text {
     position: absolute;
     left: 20px;
-    top: 100px;
     font-size: 2em;
     font-weight: 500;
     color: #3d83f7;
