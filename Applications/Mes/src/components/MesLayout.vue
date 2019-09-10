@@ -194,5 +194,9 @@ export default {
     background-color: rgba(50,109,168,.5);
     color: white;
   }
+  .choices__item.choices__item--choice {
+    text-align: center;
+    padding: 10px 5px !important;
+  }
 </style>
 
