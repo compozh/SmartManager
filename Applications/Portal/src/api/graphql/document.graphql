@@ -1,0 +1,13 @@
+query q($id:Int){
+  keysQuery {
+    document(id: $id){
+      date,
+      id,
+      isPosted,
+      number,
+      rows{
+        comment count credit creditObject debit debitObject id resource debitAccount creditAccount
+      }
+    }
+  }
+}
