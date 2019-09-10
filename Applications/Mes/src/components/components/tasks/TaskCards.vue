@@ -12,7 +12,7 @@
           @click="changeCurrentTask(task)"
         >
         <v-icon v-if="task.inProgress" large class="inprogress-icon">play_arrow</v-icon>
-          <v-card-text :class="task == selectedTask ? 'active-task-item' : 'inactive-task-item'">
+          <v-card-text :class="selectedTask && task.shiftTaskId == selectedTask.shiftTaskId ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>
           <v-progress-linear v-if="task.completionPercentage"
