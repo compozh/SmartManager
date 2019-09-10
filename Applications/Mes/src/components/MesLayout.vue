@@ -174,6 +174,9 @@ export default {
   .theme--dark.v-progress-linear {
     margin-top: 14px !important;
   }
+  .v-navigation-drawer__content .v-list .v-list-item__action {
+    margin-right: 25px;
+  }
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
     margin: 0;
