@@ -198,5 +198,9 @@ export default {
     text-align: center;
     padding: 10px 5px !important;
   }
+  .v-speed-dial__list {
+    padding: 0; 
+    width: 45px !important;
+  }
 </style>
 
