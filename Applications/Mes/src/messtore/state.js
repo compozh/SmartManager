@@ -13,6 +13,9 @@ export default {
     dragResizeMode: false,
     aspectRatioLayout: [35, 65]
   },
+  productionPageState: {
+    selectedProductionTab: 0
+  },
   dialogLinearLoader: {
     visible: false,
     message: ''

@@ -1,7 +1,7 @@
 <template>
     <v-layout class="toolbar">
-      <v-tabs>
-        <v-tab v-for="tab in tabs" :key=tab.index @click="changeSelectProductionTab(tab.index)" class="tab-item">
+      <v-tabs v-model="selectedProductionTab">
+        <v-tab v-for="tab in tabs" :key=tab.index class="tab-item">
           {{tab.name}}
         </v-tab>
       </v-tabs>
@@ -20,11 +20,16 @@ export default {
       ]
     }
   },
-  methods: {
-    changeSelectProductionTab(tabIndex) {
-      this.$emit('changeSelectProductionTab', tabIndex)
+  computed: {
+    selectedProductionTab: {
+      get() {
+        return this.$store.getters['mes/selectedProductionTab']
+      },
+      set(selectedProductionTab) {
+        return this.$store.commit('mes/setSelectedProductionTab', selectedProductionTab)
+      }
     }
-  },
+  }
 }
 </script>
 

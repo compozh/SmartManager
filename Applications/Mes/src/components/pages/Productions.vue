@@ -2,10 +2,8 @@
     <v-layout class="mes-productions">
 
       <mes-content-loader v-if="!initializeProductions && !productions.length" />
-      <mes-production-toolbar
-        @changeSelectProductionTab=changeSelectProductionTab
-      />
-      <mes-productions-component/>
+      <mes-production-toolbar/>
+      <mes-productions-component :productions=productions />
 
       <span class="no-data-text" v-if="initializeProductions && productions.length == 0">Нет факта регистрации выработки за смену</span>
 
@@ -18,9 +16,7 @@ export default {
   name: 'mes-productions',
   data() {
     return {
-      initializeProductions: false,
-      productions: [],
-      currentTabIndex: 0
+      initializeProductions: false
     }
   },
   created() {
@@ -47,27 +43,33 @@ export default {
     },
     workCenterProductionEvents() {
       return this.$store.getters['mes/workCenterProductionEvents']
+    },
+    selectedProductionTab: {
+      get() {
+        return this.$store.getters['mes/selectedProductionTab']
+      },
+      set(selectedProductionTab) {
+        return this.$store.commit('mes/setSelectedProductionTab', selectedProductionTab)
+      }
+    },
+    productions() {
+      if (this.selectedProductionTab == 0) {
+        return this.usersProductionEvents
+      }
+
+      return this.workCenterProductionEvents
     }
   },
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeProperties')
-      if (this.currentTabIndex == 0) {
+      if (this.selectedProductionTab == 0) {
         await this.$store.dispatch('mes/initializeUsersProductionEvents', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
       } else {
         await this.$store.dispatch('mes/initializeWorkCenterProductionEvents', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' })
       }
       this.initializeProductions = true
-    },
-    changeSelectProductionTab(index) {
-      if (index == 0) {
-        this.currentTabIndex = 0
-        this.productions.push(this.usersProductionEvents)
-      } else {
-        this.currentTabIndex = 1
-        this.productions.push(this.workCenterProductionEvents)
-      }
-    },
+    }
   }
 }
 </script>
@@ -119,7 +121,7 @@ export default {
   .no-data-text {
     position: absolute;
     left: 20px;
-    top: 20px;
+    top: 100px;
     font-size: 2em;
     font-weight: 500;
     color: #3d83f7;

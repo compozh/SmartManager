@@ -103,6 +103,9 @@ export default {
   setInitialWorkCenter(state, value) {
     state.initialWorkCenter = value
   },
+  setSelectedProductionTab(state, selectedProductionTab) {
+    state.productionPageState.selectedProductionTab = selectedProductionTab
+  },
   setWorkCentersForWorker(state, data) {
     state.workCentersForWorker = data.workCenters
     if (!state.workCenter) {

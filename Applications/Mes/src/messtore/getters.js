@@ -70,5 +70,8 @@ export default {
   },
   workCentersForWorker(state) {
     return state.workCentersForWorker
+  },
+  selectedProductionTab(state) {
+    return state.productionPageState.selectedProductionTab
   }
 }

@@ -25,6 +25,9 @@
 /* eslint-disable */
 export default {
   name: 'mes-productions-component',
+  props: {
+    productions: Array
+  },
   data() {
     return {
       dialogProperties: {
@@ -39,9 +42,6 @@ export default {
     }
   },
   computed: {
-    productions() {
-      return this.$store.getters['mes/productions']
-    },
     sortedProductions() {
       return this.productions.sort((a,b) => {
         return a.factId < b.factId ? 1 : (a.factId == b.factId ? 0 : -1)
