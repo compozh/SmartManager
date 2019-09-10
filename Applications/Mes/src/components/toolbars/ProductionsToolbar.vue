@@ -1,7 +1,7 @@
 <template>
     <v-layout class="toolbar">
-      <v-tabs v-model="selectedProductionTab" background-color="#fafafa">
-        <v-tab v-for="tab in tabs" :key=tab.index class="tab-item">
+      <v-tabs v-model="selectedProductionTab">
+        <v-tab v-for="tab in tabs" :key=tab.index @click="changeProductionTab(tab.index)" class="tab-item">
           {{tab.name}}
         </v-tab>
       </v-tabs>
@@ -29,7 +29,15 @@ export default {
         return this.$store.commit('mes/setSelectedProductionTab', selectedProductionTab)
       }
     }
-  }
+  },
+  methods: {
+    changeProductionTab(tabIndex) {
+      if(this.selectedProductionTab == tabIndex) {
+        return
+      }
+      this.$emit('changeProductionTab', tabIndex)
+    }
+  },
 }
 </script>
 

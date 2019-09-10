@@ -1,6 +1,8 @@
 <template>
     <v-layout class="mes-productions">
-      <mes-production-toolbar class="mes-production-toolbar"/>
+      <mes-production-toolbar class="mes-production-toolbar"
+        @changeProductionTab=changeProductionTab
+      />
       <div class="production-main-block">
         <mes-content-loader v-if="!initializeProductions && !productions.length"/>
         <mes-productions-component :productions=productions />
@@ -63,12 +65,18 @@ export default {
   methods: {
     async initialize() {
       await this.$store.dispatch('mes/initializeProperties')
-      if (this.selectedProductionTab == 0) {
+      await this.updateProductionsByTabIndex(this.selectedProductionTab)
+      this.initializeProductions = true
+    },
+    async updateProductionsByTabIndex(tabIndex) {
+      if (tabIndex == 0) {
         await this.$store.dispatch('mes/initializeUsersProductionEvents', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
       } else {
         await this.$store.dispatch('mes/initializeWorkCenterProductionEvents', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' })
       }
-      this.initializeProductions = true
+    },
+    changeProductionTab(tabIndex) {
+      this.updateProductionsByTabIndex(tabIndex)
     }
   }
 }
@@ -121,7 +129,7 @@ export default {
   .production-main-block::-webkit-scrollbar-button {display:none}
   .mes-content-loader {
     position: absolute;
-    z-index: 100;
+    z-index: 1;
     width: 100%;
   }
   .wait-for-data-block {

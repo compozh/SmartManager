@@ -26,7 +26,7 @@
       <div class="user-info-desc">
         <span class="user-info-text">
           <!-- {{userInfo}} -->
-          {{userName}}
+          {{currentUserData.UserName}}
         </span>
         <!-- <span class="user-info-text">
           Смена: Тест
@@ -41,10 +41,20 @@
 </template>
 
 <script>
+
+import Vue from 'vue'
 export default {
   name: 'mes-toolbar',
   created() {
-    this.initialize()
+    this.$store.dispatch('mes/initializeWorkCenter')
+    this.$store.dispatch('mes/initializeProperties')
+    var me = this;
+    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
+      me.currentUserData = currentUSer.CurrentUserData
+    })
+  },
+  data() {
+      return { currentUserData: {} }
   },
   computed: {
     workCenter() {
@@ -57,20 +67,36 @@ export default {
       return this.$store.getters['mes/properties']
     },
     userName() {
-      return this.$store.getters['mes/userName']
+      return Vue.prototype.$authentication.getCurrentUser()
     }
   },
   methods: {
-    async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
-      await this.$store.dispatch('mes/initializeProperties')
-      await this.$store.dispatch('mes/initializeUserName')
-    },
-    changeWorkCenter(newWorkCenter) {
-      this.changeWorkCenterMethod(newWorkCenter)
-    },
-    async changeWorkCenterMethod(newWorkCenter) {
-      await this.$store.dispatch('mes/initializeWorkCenterBySelection', newWorkCenter )
+    async changeWorkCenter(newWorkCenter) {
+      if(!newWorkCenter) {
+        return
+      }
+      this.$store.commit('mes/setInitialWorkCenter', false)
+      this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
+
+      const workCentersFixed =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
+      if (!workCentersFixed) {
+        this.$store.commit('mes/closeDialogLinearLoader')
+        return
+      }
+      
+      if(this.workCenter) {
+        for(let fixation of workCentersFixed) {
+          if (fixation.code == this.workCenter.code) {
+            this.$store.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixation.fixationId })
+            break;
+          }
+        }
+      }
+      
+      this.$store.commit('mes/resetState')
+      await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
+      this.$store.commit('mes/closeDialogLinearLoader')
+      this.$store.commit('mes/setInitialWorkCenter', true)
     }
   }
 }

@@ -1,6 +1,6 @@
 export default {
-  setLinearLoader(state, payload) {
-    state.linearLoader = payload
+  setLinearLoader(state, linearLoader) {
+    state.linearLoader = linearLoader
   },
   closeDialogLinearLoader(state) {
     state.dialogLinearLoader.visible = false
@@ -72,9 +72,9 @@ export default {
   printProduction(state, production) {
     state.printProduction = production
   },
-  setMenuMiniMode(state, payload) {
-    state.menuMiniMode = payload
-    localStorage.setItem('mesMenuMiniMode', payload.toString())
+  setMenuMiniMode(state, menuMiniMode) {
+    state.menuMiniMode = menuMiniMode
+    localStorage.setItem('mesMenuMiniMode', menuMiniMode.toString())
   },
   setSelectedTasksTab(state, tabId) {
     state.tasksPageState.selectedTasksTab = tabId
@@ -106,19 +106,8 @@ export default {
   setSelectedProductionTab(state, selectedProductionTab) {
     state.productionPageState.selectedProductionTab = selectedProductionTab
   },
-  setWorkCentersForWorker(state, data) {
-    state.workCentersForWorker = data.workCenters
-    if (!state.workCenter) {
-      var firstWorkCenterCodeByFixation = data.firstWorkCenter.code
-      if (!data.workCenters) {
-        return
-      }
-      data.workCenters.forEach(workCenter => {
-        if (workCenter.code == firstWorkCenterCodeByFixation) {
-          return state.workCenter = workCenter
-        }
-      })
-    }
+  setWorkCentersForWorker(state, workCenters) {
+    state.workCentersForWorker = workCenters
   },
   resetState(state) {
     state.tasks = []
@@ -127,5 +116,6 @@ export default {
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.tasksPageState.selectedDowntime = null
+    state.workCenterProductionEvents = []
   }
 }
