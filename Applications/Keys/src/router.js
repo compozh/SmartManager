@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import auth from '@/api/auth/auth'
+//import auth from '@/api/auth/auth'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
@@ -10,7 +10,7 @@ let router = new VueRouter({
   scrollBehavior () {
     return { x: 0, y: 0 }
   },
-  base: window.appConfig.BASE_URL,
+  base: process.env.VUE_APP_BASE_PATH + 'keys/',
   routes: [
     {
       // =============================================================================
@@ -25,13 +25,11 @@ let router = new VueRouter({
         {
           path: '/',
           name: 'documents',
-          component: () => import('./views/Documents/Documents.vue'),
+          components: {
+            default: () => import('./views/Documents/Documents.vue'),
+            toolbar: () => import('./views/Documents/Toolbar.vue'),
+          },
           meta: {
-            breadcrumb: [
-              { title: 'Home', url: '/' },
-              { title: 'Документы'},
-              { title: 'Ключи', active: true },
-            ],
             pageTitle: 'Документы',
             rule: 'editor'
           }
@@ -39,15 +37,11 @@ let router = new VueRouter({
         {
           path: '/documents/:id',
           name: 'document',
-          component: () => import('./views/DocumentDetails/DocumentDetails.vue'),
+          components: {
+            default: () => import('./views/DocumentDetails/DocumentDetails.vue'),
+            toolbar: () => import('./views/DocumentDetails/Toolbar.vue'),
+          },
           meta: {
-            breadcrumb: [
-              { title: 'Home', url: '/' },
-              { title: 'Документы'},
-              { title: 'Ключи', url: '/' },
-              { title: 'Ключ', active: true },
-            ],
-            pageTitle: 'Документ',
             rule: 'editor'
           }
         }
@@ -103,24 +97,26 @@ let router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
   // get firebase current user
-  const currentUSer = auth.getCurrentUser()
-  if (
-    to.path === '/login' ||
-        to.path === '/forgot-password' ||
-        to.path === '/error-404' ||
-        to.path === '/error-500' ||
-        to.path === '/register' ||
-        to.path === '/callback' ||
+  Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
+    if (
+      to.path === '/login' ||
+          to.path === '/forgot-password' ||
+          to.path === '/error-404' ||
+          to.path === '/error-500' ||
+          to.path === '/register' ||
+          to.path === '/callback' ||
 
-        !!currentUSer
-  ) {
-    return next()
-  }
+          !!currentUSer
+    ) {
+      return next()
+    }
 
-  router.push({ path: '/login', query: { to: to.path } })
-  // Specify the current path as the customState parameter, meaning it
-  // will be returned to the application after auth
-  // auth.login({ target: to.path });
+    router.push({ path: '/login', query: { to: to.path } })
+    // Specify the current path as the customState parameter, meaning it
+    // will be returned to the application after auth
+    // auth.login({ target: to.path });
+  })
+
 })
 
 
@@ -132,6 +128,17 @@ router.afterEach(() => {
   }
 })
 
+router.history.getCurrentLocation = function() {
+  let path = window.location.pathname
+  let base = router.history.base
+
+  // Removes base from path (case-insensitive)
+  if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
+    path = path.slice(base.length)
+  }
+
+  return (path || '/') + window.location.search + window.location.hash
+}
 
 // Роутер по умолчанию
 export default router

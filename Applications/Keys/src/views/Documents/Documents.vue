@@ -5,6 +5,7 @@
 
 <template>
   <div id="documents-list-view">
+
     <!-- FILTERS -->
     <vs-sidebar
       parent="#documents-list-view"
@@ -14,7 +15,7 @@
       v-model="filterIsActive"
     >
       <div class="p-6 filter-container">
-        <h6 class="font-bold mb-3">Период</h6>
+        <h6 class="font-bold mb-3">Фильтры</h6>
         <ul>
           <li class="flex items-center cursor-pointer py-1">
             <datepicker
@@ -34,31 +35,59 @@
               v-model="dateTo"
               :highlighted="highlightedDates"
             ></datepicker>
+
           </li>
+
+          <li class="flex items-center cursor-pointer py-1">
+            <vs-input class="w-full" placeholder="Номер документа"></vs-input>
+          </li>
+          <li class="flex items-center cursor-pointer py-1">
+            <vs-checkbox  class="ml-0" >Разнесен</vs-checkbox>
+          </li>
+          <li class="flex items-center cursor-pointer py-1">
+            <vs-checkbox  class="ml-0" >Не разнесен</vs-checkbox>
+          </li>
+
         </ul>
         <vs-divider></vs-divider>
-        <h6 class="font-bold mb-3">Номер документа</h6>
+        <h6 class="font-bold mb-3">Сортировка</h6>
         <ul>
-          <li class="flex items-center cursor-pointer py-1">
-            <vs-input></vs-input>
+          <li class="flex items-center cursor-pointer py-1" @click="changeOrder('date')">
+            <feather-icon v-if="sortConfig.date > 0" icon='ChevronUpIcon'></feather-icon>
+            <feather-icon v-if="sortConfig.date < 0" icon='ChevronDownIcon'></feather-icon>
+            <feather-icon v-if="sortConfig.date == 0" icon='ChevronDownIcon' class="invisible"></feather-icon>
+            <span>Дата документа</span>
           </li>
+
+          <li class="flex items-center cursor-pointer py-1" @click="changeOrder('number')">
+            <feather-icon v-if="sortConfig.number > 0" icon='ChevronUpIcon'></feather-icon>
+            <feather-icon v-if="sortConfig.number < 0" icon='ChevronDownIcon'></feather-icon>
+            <feather-icon v-if="sortConfig.number == 0" icon='ChevronDownIcon' class="invisible"></feather-icon>
+            <span>Номер документа</span>
+          </li>
+
         </ul>
+
       </div>
     </vs-sidebar>
     <!-- CONTENT -->
     <div :class="{'sidebar-spacer-with-margin': clickNotClose}">
       <h6 class="py-3">Всего документов: {{totalDocuments.length}}</h6>
-
       <div :key="doc.id" v-for="doc in documents">
         <documents-item @click="onDocumentClick" :item="doc"></documents-item>
       </div>
       <vs-pagination :total="totalPages" v-model="currentPage"></vs-pagination>
     </div>
+    <add-document-form :active="showAddForm">
+
+    </add-document-form>
+
   </div>
 </template>
 
 <script>
 import Datepicker from 'vuejs-datepicker'
+
 import { en, ru, uk } from 'vuejs-datepicker/dist/locale'
 let localiztions = {
   en,
@@ -69,6 +98,7 @@ let localiztions = {
 export default {
   components: {
     Datepicker,
+    AddDocumentForm: () => import('./AddDocumentForm.vue'),
     DocumentsItem: () => import('./DocumentsItem.vue')
   },
   data() {
@@ -78,10 +108,17 @@ export default {
       filterIsActive: true,
       clickNotClose: true,
       currentPage: 1,
-      documentsOnPage: 15
+      documentsOnPage: 15,
+      sortConfig: {
+        date: 0,
+        number: -1
+      },
     }
   },
   computed: {
+    showAddForm() {
+      return this.$store.state.app.showAddDocumentForm
+    },
     highlightedDates() {
       return {
         from: this.dateFrom,
@@ -100,6 +137,8 @@ export default {
         this.$store.dispatch('app/setFilter', {
           dateFrom: v
         })
+        this.changePageTitle()
+
       }
     },
     dateTo: {
@@ -111,6 +150,8 @@ export default {
         this.$store.dispatch('app/setFilter', {
           dateTo: v
         })
+        this.changePageTitle()
+
       }
     },
     totalDocuments() {
@@ -122,7 +163,14 @@ export default {
       )
     },
     documents() {
-      return this.$store.state.app.documents.slice(
+
+      let documents = (this.$store.state.app.documents.slice()).sort((a,b) => {
+        if (a.date > b.date) { return -1 }
+        if (a.date < b.date) { return 1 }
+        return 0
+      })
+
+      return documents.slice(
         this.documentsOnPage * (this.currentPage - 1),
         this.documentsOnPage * this.currentPage
       )
@@ -131,6 +179,15 @@ export default {
   methods: {
     onDocumentClick(item) {
       this.$router.push({name: 'document', params: {id: item.id }})
+    },
+    changePageTitle() {
+      let from = this.$moment(this.dateFrom).format( 'DD.MM.YYYY')
+      let to = this.$moment(this.dateTo).format( 'DD.MM.YYYY')
+      this.$emit('changeRouteTitle', `Документы за период с ${from} по ${to}`)
+
+    },
+    changeOrder(name) {
+      this.sortConfig[name] = ((this.sortConfig[name] + 2 ) % 3) - 1
     }
   },
   created() {
@@ -147,6 +204,7 @@ export default {
   },
   mounted() {
     this.isMounted = true
+    this.changePageTitle()
   }
 }
 </script>
