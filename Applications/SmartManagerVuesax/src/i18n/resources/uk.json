@@ -61,7 +61,7 @@
   },
   "tabs": {
     "details": "Детально",
-    "attachments": "Вкладення",
+    "attachments": "Додатки",
     "comments": "Коментарі",
     "approvals": "Погодження"
   },
@@ -98,8 +98,8 @@
     "taskAddError": "Помилка при додаванні задачі",
     "statChangeSuccess": "Статус задачі змінено вдало",
     "statChangeFail": "Не вдалося змінити статус задачі",
-    "attachAddSuccess": "Вкладення додано вдало",
-    "attachAddFail": "Не вдалося додати вкладення",
+    "attachAddSuccess": "Додаток успішно додано",
+    "attachAddFail": "Не вдалося додати додаток",
     "commentAddSuccess": "Не вдалося додати коментар",
     "commentAddFail": "Помилка при додаванні коментаря"
   }
