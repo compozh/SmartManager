@@ -66,8 +66,12 @@ export default {
     state.downtimeFormio = {}
   },
   removeProduction(state, production) {
-    let index = state.productions.indexOf(production)
-    state.productions.splice(index, 1)
+    let index = state.usersProductionEvents.indexOf(production)
+    state.usersProductionEvents.splice(index, 1)
+    let indexWorkCenterProductionEvents = state.workCenterProductionEvents.indexOf(production)
+    if(indexWorkCenterProductionEvents !== -1) {
+      state.workCenterProductionEvents.splice(indexWorkCenterProductionEvents, 1)
+    }
   },
   printProduction(state, production) {
     state.printProduction = production
