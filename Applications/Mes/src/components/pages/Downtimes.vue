@@ -32,7 +32,7 @@ export default {
   name: 'mes-downtimes',
   data() {
     return {
-      currentDate: new Date().toJSON(),
+      currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeDowntimes: false,
       defaultSizes: [35, 65]
     }

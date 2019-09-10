@@ -234,14 +234,15 @@ export default {
          downtimeParams: {
            workCenterCode: workCenter.code,
          }
-       }
+        },
+        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
      commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
      await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
         queryAction: async () => {
           const res = await api.downtimeFormIoSubmitGql(params)
           return res
        },
-       successAction: async () => { me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: new Date().toJSON(), fetchPolicy: 'network-only' }) }
+       successAction: async () => { me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' }) }
      })
      commit('closeDialogLinearLoader')
   },
