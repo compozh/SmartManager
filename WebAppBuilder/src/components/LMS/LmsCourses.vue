@@ -86,8 +86,8 @@
 								@click='changeFavoriteState(course)'
 								>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 							<v-spacer/>
-							<!-- <v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
-							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip> -->
+							<v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
+							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
 						</v-layout>
 					</v-card>
 				</v-flex>
@@ -97,39 +97,53 @@
 
 
 <script>
-// import { threadId } from 'worker_threads'
-
 export default {
-	name: 'lms-courses',
-  created() {
-    if (this.$store.getters['lms/courses'] === null) {
-      this.getCourses()
+	name:"lms-courses",
+  props:["courses"],
+  computed: {
+    availableFilters() {
+      return this.$store.getters['availableFilters']
     }
   },
-
+  // data(){
+  //   return{
+  //     filtersData: [
+  //       {
+  //         name: 'Роль',
+  //         items: [{code: 'А', name: 'Администратор', selected: false}]
+  //       },
+  //       {
+  //         name: 'Уровень',
+  //         items: [{code: 'B', name: 'Начальный', selected: false}]
+  //       },
+  //       {
+  //         name: 'Продукт',
+  //         items: [{code: 'BUH', name: 'Бухгалтерия', selected: false}]
+  //       },
+  //       {
+  //         name: 'Тэг',
+  //         items: []
+  //       }
+  //     ]
+  //   }
+  // },
+  created () {
+    this.getAvailableFilters()
+  },
   methods: {
-    getCourses () {
-      this.$store.dispatch('lms/getCourses')
-    },
-
     goToCourseDetails ( courseId, course ) {
-      this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
+      this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}});
+    },
+    getAvailableFilters() {
+      this.$store.dispatch('lms/getAvailableFilters')
     },
 
     roleSearch: function(data) {
-      this.$router.push({ name: 'LMSCOURSES', params: { role: data.code } })
+      this.$router.push({ name: "LMSCOURSES", params: { role: data.code } });
     },
     levelSearch: function(data) {
-      this.$router.push({ name: "LMSCOURSES", params: { level: data.code } })
+      this.$router.push({ name: "LMSCOURSES", params: { level: data.code } });
     }
-  },
-  computed: {
-    availableFilters() {
-      return this.$store.getters['lms/availableFilters']
-    },
-    courses () {
-      return this.$store.getters['lms/courses']
-    }
-  },
+  }
 }
 </script>

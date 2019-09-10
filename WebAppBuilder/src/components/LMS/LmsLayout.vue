@@ -57,7 +57,7 @@
 
 		</v-toolbar>
 
-		<v-content v-if="!circularLoader"
+		<v-content
 			fill-height
 			style='background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/light_noise_diagonal.png);background-repeat: repeat;'
 			class="mx-0 my-0 px-0 py-0">
@@ -65,23 +65,6 @@
 				<router-view></router-view>
 			</v-container>
 		</v-content>
-
-    <v-container
-      v-else
-      class="circular-loader"
-      fill-height fluid
-    >
-      <v-layout row align-center>
-        <v-flex xs12>
-          <v-progress-circular
-            :size="100"
-            :width="4"
-            color="blue darken-2"
-            indeterminate
-          ></v-progress-circular>
-        </v-flex>
-      </v-layout>
-    </v-container>
 
 		<v-footer absolute class="pa-3" :fixed='fixed' app>
 			<span>IT-Enterprise 2018</span>
@@ -94,63 +77,54 @@
 
 
 export default {
-  name: 'lms-layout',
-  data() {
-    return {
-      drawer: true,
-      fixed: false,
-      isauth: '',
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      // TODO: удалить после отлвдки
+	name: "lms-layout",
+	data() {
+		return {
+			drawer: true,
+			fixed: false,
+			isauth: '',
+			miniVariant: false,
+			right: true,
+			rightDrawer: false,
+			// TODO: удалить после отлвдки
       dialogState: false,
       links: []
-    }
-  },
-  created() {
-    // debugger
-    // // Перейти к home
-    // if (this.$router.history.current.name == 'LMSREALHOME') {
-    //   return
-    // }
-    // this.$router.push({name: 'LMSREALHOME'})
-  },
-  beforeMount: function () {
+		};
+	},
+	beforeMount: function () {
     // Маршруты из конструктора
-    if (!this.$store.state.WebApps.applicationDescription) {
-      this.links = []
+      if(!this.$store.state.applicationDescription){
+         this.links = [];
       }
-    var app = this.$store.state.WebApps.applicationDescription
-      var sections = app.Sections || []
+      var app = this.$store.state.applicationDescription;
+      var sections = app.Sections||[];
 
       // Достаем роуты из разделов
-      var routs = []
+      var routs = [];
       for (let index = 0; index < sections.length; index++) {
-      const section = sections[index]
-        routs = routs.concat((section.Routes || []).map(r => (r.section = section) && r))
+        const section = sections[index];
+        routs = routs.concat((section.Routes||[]).map(r => (r.section = section)&& r));
       }
 
-    routs = [...routs, ...routs[1].Children, ...routs[0].Children]
+      routs = [...routs, ...routs[1].Children, ...routs[0].Children];
       this.links = routs.filter(l => l.Name)
-      .sort((a, b) => a.Sort > b.Sort ? 1 : -1 )
+          .sort((a, b) => a.Sort > b.Sort ? 1 : -1 );
 
       // добавить классы
       for (let index = 0; index < this.links.length; index++) {
-      this.links[index].class = 'hidden-sm-and-down';
-    }
+          this.links[index].class = "hidden-sm-and-down";
+      }
+
+      // Перейти к home
+      this.$router.push({name: 'LMSREALHOME'});
 	},
-  methods: {
+	methods: {
 
-  },
-  computed: {
-    circularLoader() {
-      return this.$store.state.lms.circularLoader
-    }
-  }
-}
+	},
+	computed: {
+	}
+};
 </script>
-
 <style>
 @import url("https://fonts.googleapis.com/css?family=Candal|Lalezar");
 

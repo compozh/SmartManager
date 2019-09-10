@@ -1,33 +1,6 @@
 {
   lms{
     courseDetails(courseGuid: $courseid){
-      course{
-        courseGuid
-        courseId
-        type
-        backgroundColor
-        imageLink
-        name
-        description
-        isFavorite
-        roles{
-          name
-          code
-        }
-        levels{
-          name
-          code
-        }
-        products{
-          name
-          code
-        }
-        tags{
-          name
-          code
-        }
-        modulesQtLabel
-      }
       modules{
         moduleGuid
         moduleId
@@ -58,10 +31,8 @@
         units{
           lessonGuid
           name
-          durationMunute
           durationMinutesLabel
           unitId
-          surveyId
         }
       }
     }

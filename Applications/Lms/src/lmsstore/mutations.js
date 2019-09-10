@@ -1,16 +1,39 @@
-import state from "./state";
-
 export default {
-  setCircularLoader ( payload ) {
+
+  setCircularLoader (state, payload ) {
     state.loading = payload
   },
-  setError ( payload ) {
+  setError (state, payload ) {
     state.error = payload
   },
-  clearError () {
+  clearError (state) {
     state.error = null
   },
-  setAvailableFilters ( payload ) {
+  setAvailableFilters (state, payload ) {
     state.availableFilters = payload
+  },
+
+  setRecommended (state, payload) {
+    state.recommended = payload
+  },
+
+  setCourses (state, payload) {
+    state.courses = payload
+  },
+
+  setModules (state, payload) {
+    state.modules = payload
+  },
+
+  setCourseDetails (state, payload) {
+    state.courseDetails = payload
+  },
+
+  setLesson (state, payload) {
+    state.unit = payload
+  },
+
+  setContent (state, payload) {
+    state.lessonContent = payload
   }
 }

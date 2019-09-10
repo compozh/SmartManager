@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid px-0 my-4>
-		<!--MODULE HEADER-->
+		<!--COURSE HEADER-->
 		<v-layout  my-2>
 			<v-flex id='modulesHeader'>
 				<v-card v-if="moduleData.data">
@@ -19,10 +19,10 @@
 								<v-spacer/>
 								<v-flex xs12 mx-3>
 									<v-layout align-top justify-start row wrap>
-										<!-- <v-chip small v-for='role in moduleData.data.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
+										<v-chip small v-for='role in moduleData.data.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
 										<v-chip small v-for='level in moduleData.data.levels' v-bind:key="level.code" @click="levelSearch(level)">{{level.name}}</v-chip>
 										<v-chip small v-for='product in moduleData.data.products' v-bind:key="product.code" @click="productSearch(product)">{{product.name}}</v-chip>
-										<v-chip small v-for='tag in moduleData.data.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip> -->
+										<v-chip small v-for='tag in moduleData.data.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip>
 										<v-layout align-top justify-end row>
 											<v-icon
 												id='favIcon'
@@ -43,7 +43,7 @@
 		<!--MODULES CONT-->
 		<v-layout v-if="moduleData.data" align-center justify-center>
 			<!--<v-flex xs9 style='border-right: darkgrey 1px solid'>!-->
-			<v-flex lg8 md10 sm10 xs12>
+			<!-- <v-flex lg8 md10 sm10 xs12>
 				<v-layout wrap column>
 					<v-card class='mt-1 mb-0' hover>
 						<v-layout reverse column>
@@ -58,7 +58,7 @@
 										<v-list-tile
 											v-for='lesson in moduleData.data.units'
 											:key='lesson.lessonGuid'
-											@click='$router.push({name: "LMSLESSON", params: {
+											@click='$router.push({name: "lesson", params: {
 												moduleGuid: moduleGuid,
 												lessonGuid: lesson.lessonGuid,
 											}})'>
@@ -79,7 +79,7 @@
 						</v-layout>
 					</v-card>
 				</v-layout>
-			</v-flex>
+			</v-flex> -->
 
 			<!--RIGHT PANEL-->
 			<v-flex xs3 class='py-5 px-4' v-if="moduleData.data" v-show="moduleData.data.additionalInfo">
@@ -94,11 +94,10 @@
 
 export default {
   name: "lms-module-details",
+  props: ["moduledetails"],
   created() {
     this.moduleGuid = this.$route.params.moduleGuid;
     this.moduleData.data = this.$route.params.moduleData
-
-
   },
   data() {
     return {
@@ -106,7 +105,7 @@ export default {
       moduleData : { data: undefined },
       lessons : { data: undefined }
     }
-  },
+  }
 }
 </script>
 

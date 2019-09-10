@@ -1,10 +1,10 @@
-  <template>
-    <v-container pa-0>
-      <v-layout>
-          <v-flex xs12>
-            <!-- Панель фильтров -->
-            <v-toolbar dense flat v-if="filters">
-              <v-label class="mr-0">
+<template>
+	<v-container pa-0>
+		<v-layout>
+				<v-flex xs12>
+					<!-- Панель фильтров -->
+					<v-toolbar dense flat v-if="filters.length > 0">
+						<v-label class="mr-0">
 								Фильтр:
 						</v-label>
 

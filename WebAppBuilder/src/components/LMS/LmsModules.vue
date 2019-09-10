@@ -41,7 +41,7 @@
 			</v-flex>
 		</v-layout>
     <!-- Filters -->
-    <Filters :filters="availableFilters" ></Filters>
+    <Filters :filters="filtersData" ></Filters>
 		<v-layout wrap row>
 			<v-flex mx-2 mt-4 mb-3>
 				<h5 class='title font-weight-regular text-xs-left'>Модули</h5>
@@ -97,28 +97,37 @@
 
 export default {
   name: "lms-modules",
-  created() {
-    this.getModules()
+  props: ["modules"],
+  data() {
+    return {
+      filtersData: [
+        {
+          name: 'Роль',
+          items: [{code: 'А', name: 'Администратор', selected: false}]
+        },
+        {
+          name: 'Уровень',
+          items: [{code: 'B', name: 'Начальный', selected: false}]
+        },
+        {
+          name: 'Продукт',
+          items: [{code: 'BUH', name: 'Бухгалтерия', selected: false}]
+        },
+        {
+          name: 'Тэг',
+          items: []
+        }
+      ]
+    }
+  },
+  mounted() {
   },
   methods: {
-    getModules () {
-      this.$store.dispatch('lms/getModules')
-    },
-
     roleSearch: function(data) {
       this.$router.push({ name: "LMSMODULES", params: { role: data.code } });
     },
     levelSearch: function(data) {
       this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
-    }
-  },
-  computed: {
-    availableFilters() {
-      return this.$store.getters['lms/availableFilters']
-    },
-
-    modules () {
-      return this.$store.getters['lms/modules']
     }
   }
 }
