@@ -420,7 +420,6 @@ export default {
            return res
          }
          catch (e) {
-           debugger;
            if (e.networkError && e.networkError.statusCode == 401) {
              Vue.prototype.$authentication.resetCurentUser()
              routerDependencies.router.push({name: 'LOGIN'})
@@ -430,7 +429,8 @@ export default {
            }
          }
        },
-       successAction: async () => { console.log('success') },
+       successAction: async () => { me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: new Date().toJSON(), fetchPolicy: 'network-only' }) },
+       linearLoader: false
      })
      commit('closeDialogLinearLoader')
   },
@@ -481,7 +481,7 @@ export default {
   },
   async unfixWorkCenterForWorker({ commit }, fixationId) {
     try {
-      let unfixation = await api.unfixWorkCenterForWorkerGql(fixationId)
+      await api.unfixWorkCenterForWorkerGql(fixationId)
     }
     catch (e){
       if (e.networkError && e.networkError.statusCode == 401) {
@@ -520,8 +520,7 @@ export default {
     }
     workCentersFixed.forEach(fixation => {
       if (fixation.code == workCenter.code) {
-        var fixationId = fixation.fixationId
-        this.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixationId })
+        this.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixation.fixationId })
       }
     });
     await commit('resetState')
