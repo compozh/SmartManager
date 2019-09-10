@@ -67,6 +67,9 @@ export default {
       }
     },
     changeCurrentDowntime(newSelectedDowntime) {
+      if(this.selectedDowntime == newSelectedDowntime) {
+        return
+      }
       this.selectedDowntime = newSelectedDowntime
       this.$store.dispatch('mes/initializeDowntimeFormio', this.workCenter)
     },
