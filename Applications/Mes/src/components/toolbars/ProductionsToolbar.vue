@@ -1,6 +1,6 @@
 <template>
     <v-layout class="toolbar">
-      <v-tabs v-model="selectedProductionTab">
+      <v-tabs v-model="selectedProductionTab" background-color="#fafafa">
         <v-tab v-for="tab in tabs" :key=tab.index class="tab-item">
           {{tab.name}}
         </v-tab>

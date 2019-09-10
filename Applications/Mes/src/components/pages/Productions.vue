@@ -1,8 +1,8 @@
 <template>
     <v-layout class="mes-productions">
-      <mes-production-toolbar/>
+      <mes-production-toolbar class="mes-production-toolbar"/>
       <div class="production-main-block">
-        <mes-content-loader v-if="!initializeProductions"/>
+        <mes-content-loader v-if="!initializeProductions && !productions.length"/>
         <mes-productions-component :productions=productions />
 
         <span class="no-data-text" v-if="initializeProductions && !productions.length">Нет факта регистрации выработки за смену</span>
