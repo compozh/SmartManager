@@ -13,7 +13,8 @@ import removeInstallation from './graphql/installations/removeInstallation.graph
 import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
 import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
-import productions from './graphql/productions/productions.graphql'
+import usersProductionEvents from './graphql/productions/usersProductionEvents.graphql'
+import workCenterProductionEvents from './graphql/productions/workCenterProductionEvents.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import printLabel from './graphql/productions/printLabel.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
@@ -164,14 +165,23 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.cancelBeginRegistration
   }
-  async getProductionsFromGql(workerCode, fetchPolicy) {
+  async getUsersProductionEventsFromGql(workerCode, fetchPolicy) {
     const result = await getClient().query({
-      query: gql`query ($workerCode: String) ${productions}`,
+      query: gql`query ($workerCode: String) ${usersProductionEvents}`,
       variables: { workerCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
       .then(result => result)
     return result.data.mes.usersProductionEvents
+  }
+  async getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy) {
+    const result = await getClient().query({
+      query: gql`query ($workCenterCode: String) ${workCenterProductionEvents}`,
+      variables: { workCenterCode },
+      fetchPolicy: fetchPolicy || 'cache-first'
+    })
+      .then(result => result)
+    return result.data.mes.workCenterProductionEvents
   }
   async deleteProductionGql(factId) {
     const  result = await getClient().mutate({

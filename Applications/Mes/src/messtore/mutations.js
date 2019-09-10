@@ -44,8 +44,11 @@ export default {
     var index = state.installations.indexOf(installation)
     state.installations.splice(index, 1)
   },
-  setProductions(state, productions) {
-    state.productions = productions
+  setUsersProductionEvents(state, usersProductionEvents) {
+    state.usersProductionEvents = usersProductionEvents
+  },
+  setWorkCenterProductionEvents(state, workCenterProductionEvents) {
+    state.workCenterProductionEvents = workCenterProductionEvents
   },
   setProductionFormio(state, formio) {
     state.productionFormio = formio

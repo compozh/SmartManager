@@ -26,8 +26,11 @@ export default {
   installations(state) {
     return state.installations
   },
-  productions(state) {
-    return state.productions
+  usersProductionEvents(state) {
+    return state.usersProductionEvents
+  },
+  workCenterProductionEvents(state) {
+    return state.workCenterProductionEvents
   },
   productionFormio(state) {
     return state.productionFormio

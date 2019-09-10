@@ -250,12 +250,27 @@ export default {
       linearLoader: true
     })
   },
-  async initializeProductions({ commit }, { workerCode, fetchPolicy }) {
+  async initializeWorkCenterProductionEvents({ commit }, { workCenterCode, fetchPolicy }) {
     commit('closeSnackbar')
 
     try {
-      let productions = await api.getProductionsFromGql(workerCode, fetchPolicy)
-      commit('setProductions', productions || [])
+      let workCenterProductionEvents = await api.getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy)
+      commit('setWorkCenterProductionEvents', workCenterProductionEvents || [])
+    } catch (e) {
+      if (e.networkError && e.networkError.statusCode == 401) {
+        Vue.prototype.$authentication.resetCurentUser()
+        routerDependencies.router.push({name: 'LOGIN'})
+      } else {
+      commit('setSnackbarErrorMessage', e.message)
+      }
+    }
+  },
+  async initializeUsersProductionEvents({ commit }, { workerCode, fetchPolicy }) {
+    commit('closeSnackbar')
+
+    try {
+      let usersProductionEvents = await api.getUsersProductionEventsFromGql(workerCode, fetchPolicy)
+      commit('setUsersProductionEvents', usersProductionEvents || [])
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
