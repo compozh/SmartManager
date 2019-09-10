@@ -22,6 +22,9 @@ export default {
   courseDetails (state) {
     return state.courseDetails
   },
+  unit(state) {
+    return state.unit
+  },
   lessonContent(state) {
     return state.lessonContent
   }

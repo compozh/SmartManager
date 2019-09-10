@@ -23,8 +23,7 @@
 </template>
 <script>
 
-import hljs from 'highlight.js/lib/highlight'
-hljs.initHighlightingOnLoad();
+//hljs.initHighlightingOnLoad()
 
 var courseName = "";
 var moduleName = "";
@@ -56,11 +55,10 @@ export default {
           readOnly: true,
           placeholder: "",
           modules: {
-            syntax: true,
+            syntax: false,
             toolbar: false
           },
           theme: "snow",
-          toolbar: [["code-block"]] //подключить блок синтаксиса
         },
         items: links,
         lessonGuid: ''
@@ -78,12 +76,10 @@ export default {
   },
   computed: {
     content() {
-      const lessonContent = this.$store.getters['lms/lessonContent']
-      return lessonContent !== null ? lessonContent.content : null
+      return this.$store.getters['lms/lessonContent']
     },
     lesson() {
-      const lessonContent = this.$store.getters['lms/lessonContent']
-      return lessonContent !== null ? lessonContent.lesson : null
+      return this.$store.getters['lms/unit']
     }
   },
   beforeCreate() {
@@ -99,25 +95,6 @@ export default {
       }
     }
   },
-  mounted() {
-    // this.runCalculation({
-    //   serviceName: "LMS.LESSONS.GETCONTENT",
-    //   parameters: { lessonId: this.$route.params.lessonGuid },
-    //   onSuccess: function(data) {
-    //     if (data.content) {
-    //       content.data = JSON.parse(data.content);
-    //     }
-    //     if(data.course)
-    //     {
-    //       links[0].text = data.course.name;
-    //       links[0].target.params.courseGuid = data.course.courseGuid;
-    //     }
-    //     links[1].text = data.module.name;
-    //     links[2].text = data.lesson.name;
-    //     lessonData.name = data.lesson.name;
-    //   }
-    // });
-  }
 }
 </script>
 

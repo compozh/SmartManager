@@ -24,7 +24,7 @@
 					<div style='height:88px;overflow:hidden' class='mt-0 ml-3'>
 						<h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{moduleData.type}}</h4>
 						<h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-							@click='$router.push({name: "moduleDetails", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
+							@click='$router.push({name: "LMSMODULEDETAILS", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
 						</h3>
 						<div class='.body-2'>{{moduleData.description}}</div>
 					</div>

@@ -6,5 +6,6 @@ export default {
   courses: null,        // Availabels course
   modules: null,        // Availabels modules
   courseDetails: null,
+  unit: null,
   lessonContent: null
 }

@@ -29,7 +29,11 @@ export default {
     state.courseDetails = payload
   },
 
-  setLessonContent (state, payload) {
+  setLesson (state, payload) {
+    state.unit = payload
+  },
+
+  setContent (state, payload) {
     state.lessonContent = payload
   }
 }
