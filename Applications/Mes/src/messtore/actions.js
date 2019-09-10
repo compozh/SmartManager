@@ -54,6 +54,10 @@ export default {
         let tasks = await api.getTasksFromGql(workCenterCode, fetchPolicy)
         var sortedTasks = await this.dispatch('mes/sortingTaskFn', { tasks: tasks })
         commit('setTasks', sortedTasks)
+
+        if (fetchPolicy == 'network-only') {
+          this.dispatch('mes/selectTaskAfterRefresh')
+        }
       }
     })
   },
@@ -306,6 +310,19 @@ export default {
   },
   setObsoluteDataTask({ commit }, obsoluteData) {
     commit('setObsoluteDataTask', obsoluteData)
+  },
+  selectTaskAfterRefresh({ getters, commit }) {
+    let selectedTask = getters.selectedTask,
+      tasks = getters.tasks
+    if(!selectedTask)
+    {
+      return
+    }
+    for (let task of tasks) {
+      if (selectedTask.shiftTaskId == task.shiftTaskId) {
+        commit('setSelectedTask', task)
+      }
+    }
   },
   async unfixWorkCenterForWorker({ commit }, fixationId) {
     await this.dispatch('mes/graphqlQueryWraper', {
