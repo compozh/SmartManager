@@ -65,12 +65,12 @@ export default {
                 commit('setWorkCentersForWorker', workCentersForWorker)
               } else {
                 commit('setWorkCentersForWorker', workCenters)
-              }              
+              }
             } else {
               commit('setWorkCentersForWorker', workCenters)
             }
           }
-          
+
           if(!getters.properties) {
             commit('addActionAfterInitializeProperties', setWorkCenterForWorker)
           } else {
@@ -211,6 +211,15 @@ export default {
       successAction: async () => { commit('printProduction', production) },
     })
   },
+  async setMaterialProduction({ commit }, production) {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        const res = await api.setMaterialProductionGql(production.factId)
+        return res
+      },
+      successAction: async () => { commit('setMaterialProduction', production) },
+    })
+  },
   async createProductionFormio({ commit }, { formCode, properties }) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -229,11 +238,11 @@ export default {
       successAction: async result => { commit('setCreateDowntimeFormio', result) },
     })
   },
-  async initializeDowntimeFormio({ commit }, workCenter) {
+  async initializeDowntimeFormio({ commit }, { workCenter, downtimeId }) {
     commit('resetDowntimeFormio')
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code }, 'network-only')
+        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code , id: downtimeId }, 'network-only')
       },
       successAction: async result => { commit('setDowntimeFormio', result) },
       linearLoader: true
@@ -263,7 +272,7 @@ export default {
     })
     commit('closeDialogLinearLoader')
   },
-  async downtimeFormIoSubmit({ commit }, { workCenter, data }) {
+  async downtimeFormIoSubmit({ commit }, { workCenter, data, successAction }) {
      var me = this,
         params = {
          formCode: workCenter.downtimeRegistrationFormCode,
@@ -279,7 +288,12 @@ export default {
           const res = await api.downtimeFormIoSubmitGql(params)
           return res
        },
-       successAction: async () => { me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' }) }
+       successAction: async () => {
+         me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
+         if(successAction) {
+          successAction();
+         }
+        }
      })
      commit('closeDialogLinearLoader')
   },

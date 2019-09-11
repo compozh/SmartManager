@@ -75,7 +75,7 @@ export default {
         return
       }
       this.selectedDowntime = newSelectedDowntime
-      this.$store.dispatch('mes/initializeDowntimeFormio', this.workCenter)
+      this.$store.dispatch('mes/initializeDowntimeFormio', { workCenter: this.workCenter, downtimeId: newSelectedDowntime.id } )
     },
     seelectFirstDowntime() {
       if (this.downtimes.length) {

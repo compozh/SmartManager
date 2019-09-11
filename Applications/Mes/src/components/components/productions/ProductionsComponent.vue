@@ -81,6 +81,12 @@ export default {
       if (callback) {
         callback()
       }
+    },
+    async setMaterialProduction({ production, callback }) {
+      await this.$store.dispatch('mes/setMaterialProduction', production)
+      if (callback) {
+        callback()
+      }
     }
   }
 }

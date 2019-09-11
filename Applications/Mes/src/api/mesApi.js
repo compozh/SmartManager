@@ -17,6 +17,7 @@ import usersProductionEvents from './graphql/productions/usersProductionEvents.g
 import workCenterProductionEvents from './graphql/productions/workCenterProductionEvents.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import printLabel from './graphql/productions/printLabel.graphql'
+import executeWriteOff from './graphql/productions/executeWriteOff.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
 import downtimeFormIo from './graphql/downtimeFormIo.graphql'
@@ -198,6 +199,14 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mes.printLabel
+  }
+  async setMaterialProductionGql(factId) {
+    const  result = await getClient().mutate({
+      mutation: gql`query ($factId: Int) ${executeWriteOff}`,
+      variables: { factId }
+    })
+      .then(result => result)
+    return result.data.mes.executeWriteOff
   }
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({

@@ -1,0 +1,11 @@
+{
+    mes {
+        executeWriteOff(factId: $factId) {
+            savedProgress
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}
