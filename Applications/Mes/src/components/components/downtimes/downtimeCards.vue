@@ -6,14 +6,10 @@
         @click="changeCurrentDowntime(downtime)"
       >
         <v-card-text :class="selectedDowntime && downtime.id == selectedDowntime.id ? 'active-downtime-item' : 'inactive-downtime-item'">
-          <span><strong>Код РЦ:</strong> {{downtime.workCenterCode}}</span>
-          <span><strong>Код события:</strong> {{downtime.eventCode}}</span>
+          <span><strong>Причина:</strong> {{downtime.description}}</span>
           <span><strong>Начало:</strong> {{downtime.eventStart}}</span>
-          <span v-if="downtime.eventEnd"><strong>Конец:</strong> {{downtime.eventEnd}}</span>
-          <span><strong>Индентификатор операции:</strong> {{downtime.operationId}}</span>
-          <span><strong>Бар-Код:</strong> {{downtime.workBarcode}}</span>
-          <span><strong>Опимание:</strong> {{downtime.description}}</span>
-          <span><strong>Коментарии:</strong> {{downtime.comment}}</span>
+          <span v-if="downtime.eventEnd"><strong>Окончание:</strong> {{downtime.eventEnd}}</span>
+          <span><strong>Комментарий:</strong> {{downtime.comment}}</span>
         </v-card-text>
       </v-card>
     </div>
