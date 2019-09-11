@@ -1,0 +1,17 @@
+{
+  mes {
+    downtimePrevious(workCenterCode: $workCenterCode, dateTime: $dateTime ) {
+        downtimeList {
+            id
+            workCenterCode
+            eventCode
+            eventStart
+            eventEnd
+            operationId
+            workBarcode
+            description
+            comment
+        }
+    }
+  }
+}

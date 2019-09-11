@@ -1,4 +1,4 @@
-import {MesApi} from '../api/mesApi'
+import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
 
@@ -6,140 +6,92 @@ const api = new MesApi()
 /* eslint-disable */
 export default {
   async initializeProperties({commit}) {
-    commit('closeSnackbar')
-    try {
-      const result = await api.getPropertiesFromGql()
-      commit('setProperties', result.data.mes.properties)
-    } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
-      } else {
-        commit('setSnackbarErrorMessage', e.message)
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        const result = await api.getPropertiesFromGql()
+        commit('setProperties', result.data.mes.properties)
       }
-    }
+    })
   },
   async initializeTicket({commit}) {
-    try {
-      const result = await api.getTicketFromGql()
-      commit('setTicket', result.data.mes.ticket)
-    } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
-      } else {
-        commit('setSnackbarErrorMessage', e.message)
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        const result = await api.getTicketFromGql()
+        commit('setTicket', result.data.mes.ticket)
       }
-    }
+    })
   },
   async initializeWorkCenter({ commit }, fetchPolicy) {
-    commit('closeSnackbar')
-    var uuid = $cookies.get('mesUuid')
-    var sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
-    if (!uuid && sessionStorageUuid) {
-      uuid = sessionStorageUuid
-    } else if (!uuid && !sessionStorageUuid) {
-      uuid = api.generateUUID()
-      // Кеширование до 3х лет
-      $cookies.set('mesUuid', uuid, '3y')
-    }
-    window.sessionStorage.setItem('mesUuid', uuid)
-    console.log(uuid)
-    try {
-      const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
-      commit('setInitialWorkCenter', true)
-      if (workCenters.length == 1) {
-        commit('setWorkCenter', workCenters[0])
-      } else {
-        await this.dispatch('mes/initializeProperties')
-        var props = this.getters['mes/properties']
-        var workerCode = props.workerCode
-        var fixations = await api.getWorkCentersFixedFromGql(workerCode, 'network-only')
-        var firstWorkCenter = fixations.length ? fixations[0] : ''
-        commit('setWorkCentersForWorker', { workCenters, firstWorkCenter })
-      }
-    }
-    catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
-      }
-      else {
-        commit('setSnackbarErrorMessage', e.message)
-      }
-    }
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let uuid = $cookies.get('mesUuid'),
+        sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
+
+        if (!uuid && sessionStorageUuid) {
+          uuid = sessionStorageUuid
+        } else if (!uuid && !sessionStorageUuid) {
+          uuid = api.generateUUID()
+          // Caching for 3 year
+          $cookies.set('mesUuid', uuid, '3y')
+        }
+
+        window.sessionStorage.setItem('mesUuid', uuid)
+        console.log('Current UUID - ' + uuid)
+
+        const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
+        if (workCenters.length == 1) {
+          commit('setWorkCenter', workCenters[0])
+        } else {
+          commit('setWorkCentersForWorker', workCenters)
+        }
+        commit('setInitialWorkCenter', true)
+      },
+      linearLoader: true
+    })
   },
   async initializeTasks({ commit }, { workCenterCode, fetchPolicy }) {
-    commit('closeSnackbar')
-    try {
-      let tasks = await api.getTasksFromGql(workCenterCode, fetchPolicy)
-      .catch( e => {
-        if (e.networkError && e.networkError && e.networkError.statusCode == 401) {
-          Vue.prototype.$authentication.resetCurentUser()
-          routerDependencies.router.push({name: 'LOGIN'})
-        }
-      })
-      commit('setTasks', tasks)
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let tasks = await api.getTasksFromGql(workCenterCode, fetchPolicy)
+        commit('setTasks', tasks)
 
-      if (fetchPolicy == 'network-only') {
-        this.dispatch('mes/selectTaskAfterRefresh')
+        if (fetchPolicy == 'network-only') {
+          this.dispatch('mes/selectTaskAfterRefresh')
+        }
       }
-    } catch (e) {
-      commit('setSnackbarErrorMessage', e.message)
-    }
+    })
+  },
+  async downloadDowntimes({ commit }, { workCenterCode, dateTime }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
+        commit('setDowntimes', downtimes)
+      }
+    })
   },
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
-    commit('closeSnackbar')
-
-    try {
-      let installations = await api.getInstallationsFromGql(workCenterCode, fetchPolicy)
-      commit('setInstallations', installations)
-    } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
-      } else {
-        commit('setSnackbarErrorMessage', e.message)
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let installations = await api.getInstallationsFromGql(workCenterCode, fetchPolicy)
+        commit('setInstallations', installations)
       }
-    }
+    })
   },
   async removeInstallation({ commit }, installation) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
-        try {
-          const res = await api.removeInstallationGql(installation.id)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        const res = await api.removeInstallationGql(installation.id)
+        return res
       },
       successAction: async () => { commit('removeInstallation', installation) }
     })
   },
   async registerMaterialInstallation({ commit }, { workCenterCode, batchBarcode, factId }) {
     var me = this
-    await me.dispatch('mes/graphqlQueryWraper', {
+    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
-        try {
-          const res = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        const res = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId)
+        return res
       },
       successAction: async () => { await me.dispatch('mes/initializeInstallations', { workCenterCode, fetchPolicy: 'network-only' }) },
       linearLoader: true
@@ -153,21 +105,10 @@ export default {
         mode: 'Start',
         success: true
       }
-    await this.dispatch('mes/graphqlQueryWraper', {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
-        try {
-          const res = await api.registerProductionGql(productionRegistrationParam)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        const res = await api.registerProductionGql(productionRegistrationParam)
+        return res
       },
       successAction: async () => {
         //todo
@@ -182,120 +123,88 @@ export default {
       linearLoader: true
     })
   },
-  async fixWorkCenterForWorker({ commit }, { workCenterCode, workerCode }) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async fixWorkCenterForWorker({ commit }, { workCenter, workerCode }) {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
-        try {
-          const res = await api.fixWorkCenterForWorkerGql(workCenterCode, workerCode)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        const res = await api.fixWorkCenterForWorkerGql(workCenter.code, workerCode)
+        return res
       },
-      successAction: async () => { this.dispatch('mes/initializeWorkCenter', 'network-only') },
+      successAction: async () => { commit('setWorkCenter', workCenter) },
       linearLoader: true
     })
   },
   async cancelBeginRegistration({ commit }, task) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
-        try {
-          const res = await api.cancelBeginRegistrationGql(task.shiftTaskId)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-        }
+        const res = await api.cancelBeginRegistrationGql(task.shiftTaskId)
+        return res
       },
       successAction: async () => { task.inProgress = false },
       linearLoader: true
     })
   },
-  async initializeProductions({ commit }, { workerCode, fetchPolicy }) {
-    commit('closeSnackbar')
-
-    try {
-      let productions = await api.getProductionsFromGql(workerCode, fetchPolicy)
-      commit('setProductions', productions || [])
-    } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
-      } else {
-      commit('setSnackbarErrorMessage', e.message)
+  async initializeWorkCenterProductionEvents({ commit }, { workCenterCode, fetchPolicy }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let workCenterProductionEvents = await api.getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy)
+        commit('setWorkCenterProductionEvents', workCenterProductionEvents || [])
       }
-    }
+    })
+  },
+  async initializeUsersProductionEvents({ commit }, { workerCode, fetchPolicy }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let usersProductionEvents = await api.getUsersProductionEventsFromGql(workerCode, fetchPolicy)
+        commit('setUsersProductionEvents', usersProductionEvents || [])
+      }
+    })
   },
   async deleteProduction({ commit }, production) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        try {
-          const res = await api.deleteProductionGql(production.factId)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        const res = await api.deleteProductionGql(production.factId)
+        return res
       },
       successAction: async () => { commit('removeProduction', production) },
     })
   },
-  async createProductionFormio({ commit }, { formCode, properties }) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async printProduction({ commit }, production) {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        try {
-          const res = await api.getProductionFormioFromGql(formCode, properties)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        let checkWriteOffPercent = false
+        const res = await api.printProductionGql(production.factId, checkWriteOffPercent)
+        return res
+      },
+      successAction: async () => { commit('printProduction', production) },
+    })
+  },
+  async createProductionFormio({ commit }, { formCode, properties }) {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        const res = await api.getProductionFormioFromGql(formCode, properties)
+        return res
       },
       successAction: async result => { commit('setProductionFormio', result) },
       linearLoader: true
     })
   },
-  async createDowntimeFormio({ commit }, { formCode, properties }) {
-    // await this.dispatch('mes/graphqlQueryWraper', {
-    //   queryAction: async () => {
-    //     try {
-    //       const res = await api.getDowntimeFormioFromGql(formCode, properties)
-    //       return res
-    //     }
-    //     catch (e) {
-    //       if (e.networkError && e.networkError.statusCode == 401) {
-    //         Vue.prototype.$authentication.resetCurentUser()
-    //         routerDependencies.router.push({name: 'LOGIN'})
-    //       }
-    //       else {
-    //         commit('setSnackbarErrorMessage', e.message)
-    //       }
-    //     }
-    //   },
-    //   successAction: async result => { commit('setDowntimeFormio', result) },
-    // })
+  async initializeCreateDowntimeFormio({ commit }, workCenter) {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code })
+      },
+      successAction: async result => { commit('setCreateDowntimeFormio', result) },
+    })
+  },
+  async initializeDowntimeFormio({ commit }, workCenter) {
+    commit('resetDowntimeFormio')
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code }, 'network-only')
+      },
+      successAction: async result => { commit('setDowntimeFormio', result) },
+      linearLoader: true
+    })
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
@@ -312,66 +221,39 @@ export default {
         }
       }
     commit('setDialogLinearLoaderMessage', 'Регистрация выработки')
-    await me.dispatch('mes/graphqlQueryWraper', {
+    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        try {
-          const res = await api.productionFormIoSubmitGql(params)
-          return res
-        }
-        catch (e) {
-          if (e.networkError && e.networkError.statusCode == 401) {
-            Vue.prototype.$authentication.resetCurentUser()
-            routerDependencies.router.push({name: 'LOGIN'})
-          }
-          else {
-            commit('setSnackbarErrorMessage', e.message)
-          }
-        }
+        const res = await api.productionFormIoSubmitGql(params)
+        return res
       },
-      successAction: async () => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }) },
-      linearLoader: false
+      successAction: async () => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }) }
     })
     commit('closeDialogLinearLoader')
   },
   async downtimeFormIoSubmit({ commit }, { workCenter, data }) {
-    // var me = this,
-    //   params = {
-    //     formCode: workCenter.productionRegistrationFormCode,
-    //     data: data,
-    //     productionRegistrationParam: {
-    //       workCenterCode: workCenter.code,
-    //       workBarcode: '040000004620',
-    //       mode: 'FINISH'
-    //     }
-    //   }
-    // commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
-    // await me.dispatch('mes/graphqlQueryWraper', {
-    //   queryAction: async () => {
-    //     try {
-    //       const res = await api.downtimeFormIoSubmitGql(params)
-    //       return res
-    //     }
-    //     catch (e) {
-    //       if (e.networkError && e.networkError.statusCode == 401) {
-    //         Vue.prototype.$authentication.resetCurentUser()
-    //         routerDependencies.router.push({name: 'LOGIN'})
-    //       }
-    //       else {
-    //         commit('setSnackbarErrorMessage', e.message)
-    //       }
-    //     }
-    //   },
-    //   successAction: async () => { console.log('success') },
-    // })
-    // commit('closeDialogLinearLoader')
+     var me = this,
+        params = {
+         formCode: workCenter.downtimeRegistrationFormCode,
+         data: data,
+         downtimeParams: {
+           workCenterCode: workCenter.code,
+         }
+        },
+        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+     commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
+     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+        queryAction: async () => {
+          const res = await api.downtimeFormIoSubmitGql(params)
+          return res
+       },
+       successAction: async () => { me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' }) }
+     })
+     commit('closeDialogLinearLoader')
   },
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },
-  changeDowntimesOverlay({commit}) {
-    commit('changeDowntimesOverlay')
-  },
-  async graphqlQueryWraper({ commit }, { queryAction, successAction, linearLoader }) {
+  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction, successAction, linearLoader }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -391,11 +273,40 @@ export default {
         commit('setSnackbarErrorMessage', result.errorMessage)
       }
     } catch (e) {
-      commit('setSnackbarErrorMessage', e.message)
+      if (e.networkError && e.networkError.statusCode == 401) {
+        Vue.prototype.$authentication.resetCurentUser()
+        routerDependencies.router.push({name: 'LOGIN'})
+      }
+      else {
+        commit('setSnackbarErrorMessage', e.message)
+      }
     }
     if (linearLoader) {
       commit('setLinearLoader', false)
     }
+  },
+  async graphqlQueryWraper({ commit }, { action, linearLoader }) {
+    commit('closeSnackbar')
+
+    if (linearLoader) {
+      commit('setLinearLoader', true)
+    }
+    var result;
+    try {
+      result = await action()
+    } catch (e) {
+      if (e.networkError && e.networkError.statusCode == 401) {
+        Vue.prototype.$authentication.resetCurentUser()
+        routerDependencies.router.push({name: 'LOGIN'})
+      }
+      else {
+        commit('setSnackbarErrorMessage', e.message)
+      }
+    }
+    if (linearLoader) {
+      commit('setLinearLoader', false)
+    }
+    return result
   },
   setObsoluteDataTask({ commit }, obsoluteData) {
     commit('setObsoluteDataTask', obsoluteData)
@@ -414,54 +325,18 @@ export default {
     }
   },
   async unfixWorkCenterForWorker({ commit }, fixationId) {
-    try {
-      let unfixation = await api.unfixWorkCenterForWorkerGql(fixationId)
-    }
-    catch (e){
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        await api.unfixWorkCenterForWorkerGql(fixationId)
       }
-      else {
-        commit('setSnackbarErrorMessage', e.message)
-      }
-    }
+    })
   },
   async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
-    try {
-      const res = await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
-      return res
-    }
-    catch (e){
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+    return await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        const res = await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
+        return res
       }
-      else {
-        commit('setSnackbarErrorMessage', e.message)
-      }
-    }
-  },
-  async initializeWorkCenterBySelection({ commit }, workCenter){
-    commit('setDialogLinearLoaderMessage', 'Смена рабочего центра')
-    var props = this.getters['mes/properties']
-    var workerCode = props.workerCode
-    const workCentersFixed =  await this.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: workerCode, fetchPolicy: 'network-only' })
-    if (!workCentersFixed) {
-      commit('closeDialogLinearLoader')
-      return
-    }
-    workCentersFixed.forEach(fixation => {
-      if (fixation.code == workCenter.code) {
-        var fixationId = fixation.fixationId
-        this.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixationId })
-      }
-    });
-    await commit('resetState')
-    await commit('setWorkCenter', workCenter)
-    await this.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-    await this.dispatch('mes/initializeInstallations', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-    await this.dispatch('mes/fixWorkCenterForWorker', { workCenterCode: workCenter.code, workerCode: props.workerCode })
-    commit('closeDialogLinearLoader')
+    })
   }
 }

@@ -1,5 +1,14 @@
 <template>
     <div class="installations-block" ref="installationsBlock">
+      <mes-dialog-component
+          :title=dialogProperties.title
+          :message=dialogProperties.message
+          :agreeMessage=dialogProperties.agreeMessage
+          :disagreeMessage=dialogProperties.disagreeMessage
+          :visible=dialogProperties.visible
+          @dialogInput=dialogInput
+          @agreeClick=dialogAgreeClick
+          @disagreeClick=dialogDisagreeClick />
       <v-card
         class="installation-card"
         v-for="installation in sortedInstallations"
@@ -8,7 +17,7 @@
       >
         <mes-installation-card
           :installation=installation
-          @removeInstallation="removeInstallation"
+          @removeInstallation=invokeDeleteInstallation
         />
 
       </v-card>
@@ -19,6 +28,19 @@
 
 export default {
   name: 'mes-installations-component',
+  data() {
+    return {
+      dialogProperties: {
+        title: '',
+        message: 'Вы действительно хотите удалить выработку?',
+        agreeMessage: 'Да',
+        disagreeMessage: 'Нет',
+        visible: false,
+        installation: null,
+        callback: false
+      },
+    }
+  },
   computed: {
     installations() {
       return this.$store.getters['mes/installations']
@@ -32,12 +54,33 @@ export default {
     }
   },
   methods: {
+    invokeDeleteInstallation({ installation, callback, dialogAgreeClick }) {
+      this.dialogProperties.visible = true
+      this.dialogProperties.installation = installation
+      this.dialogProperties.callback = callback
+      this.dialogProperties.dialogAgreeClick = dialogAgreeClick
+    },
     async removeInstallation({ installation, callback }) {
       await this.$store.dispatch('mes/removeInstallation', installation)
       if (callback) {
         callback()
       }
-    }
+    },
+    dialogAgreeClick() {
+      let installation = this.dialogProperties.installation
+      let callback = this.dialogProperties.callback
+      if (this.dialogProperties.dialogAgreeClick) {
+        this.dialogProperties.dialogAgreeClick()
+      }
+      this.removeInstallation({ installation, callback })
+      this.dialogProperties.visible = false
+    },
+    dialogDisagreeClick() {
+      this.dialogProperties.visible = false
+    },
+    dialogInput() {
+      this.dialogProperties.visible = false
+    },
   }
 }
 </script>

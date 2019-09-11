@@ -10,6 +10,7 @@
       <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <v-autocomplete
+          autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
@@ -23,8 +24,17 @@
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
-      <v-flex class="grow-0">
-        <user-panel mini="true"></user-panel>
+      <div class="user-info-desc">
+        <span class="user-info-text">
+          <!-- {{userInfo}} -->
+          {{currentUserData.UserName}}
+        </span>
+        <!-- <span class="user-info-text">
+          Смена: Тест
+        </span> -->
+      </div>
+      <v-flex class="grow-0 user-description-block">
+        <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
       </v-flex>
     </v-layout>
 
@@ -32,10 +42,20 @@
 </template>
 
 <script>
+
+import Vue from 'vue'
 export default {
   name: 'mes-toolbar',
   created() {
-    this.initialize()
+    this.$store.dispatch('mes/initializeWorkCenter')
+    this.$store.dispatch('mes/initializeProperties')
+    var me = this
+    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
+      me.currentUserData = currentUSer.CurrentUserData
+    })
+  },
+  data() {
+    return { currentUserData: {} }
   },
   computed: {
     workCenter() {
@@ -46,18 +66,38 @@ export default {
     },
     properties() {
       return this.$store.getters['mes/properties']
+    },
+    userName() {
+      return Vue.prototype.$authentication.getCurrentUser()
     }
   },
   methods: {
-    async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
-      await this.$store.dispatch('mes/initializeProperties')
-    },
-    changeWorkCenter(newWorkCenter) {
-      this.changeWorkCenterMethod(newWorkCenter)
-    },
-    async changeWorkCenterMethod(newWorkCenter) {
-      await this.$store.dispatch('mes/initializeWorkCenterBySelection', newWorkCenter )
+    async changeWorkCenter(newWorkCenter) {
+      if (!newWorkCenter) {
+        return
+      }
+      this.$store.commit('mes/setInitialWorkCenter', false)
+      this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
+
+      const workCentersFixed =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
+      if (!workCentersFixed) {
+        this.$store.commit('mes/closeDialogLinearLoader')
+        return
+      }
+      
+      if (this.workCenter) {
+        for (let fixation of workCentersFixed) {
+          if (fixation.code == this.workCenter.code) {
+            this.$store.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixation.fixationId })
+            break
+          }
+        }
+      }
+      
+      this.$store.commit('mes/resetState')
+      await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
+      this.$store.commit('mes/closeDialogLinearLoader')
+      this.$store.commit('mes/setInitialWorkCenter', true)
     }
   }
 }
@@ -118,5 +158,24 @@ a {
   color: #326da8;
   font-size: 30px;
   font-weight: 700;
+}
+.user-info-desc {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  padding: 3px 5px 0px 5px;
+}
+.user-info-name {
+  display: flex;
+  font-size: 14px;
+  color: #326da8;
+  font-weight: 500;
+  line-height: 12px;
+}
+.user-info-text {
+  display: flex;
+  font-size: 14px;
+  color: #326da8;
+  font-weight: 500;
 }
 </style>

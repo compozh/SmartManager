@@ -8,29 +8,38 @@ export default {
   properties(state) {
     return state.properties
   },
+  userName(state) {
+    return state.userName
+  },
   workCenter(state) {
     return state.workCenter
   },
   dragResizeMode(state) {
     return state.tasksPageState.dragResizeMode
   },
-  downtimesOverlay(state) {
-    return state.tasksPageState.downtimesOverlay
-  },
   tasks(state) {
     return state.tasks
+  },
+  downtimes(state) {
+    return state.downtimes
   },
   installations(state) {
     return state.installations
   },
-  productions(state) {
-    return state.productions
+  usersProductionEvents(state) {
+    return state.usersProductionEvents
+  },
+  workCenterProductionEvents(state) {
+    return state.workCenterProductionEvents
   },
   productionFormio(state) {
     return state.productionFormio
   },
   downtimeFormio(state) {
     return state.downtimeFormio
+  },
+  createDowntimeFormio(state) {
+    return state.createDowntimeFormio
   },
   menuMiniMode(state) {
     if (state.menuMiniMode === null) {
@@ -53,10 +62,16 @@ export default {
   selectedTask(state) {
     return state.tasksPageState.selectedTask
   },
+  selectedDowntime(state) {
+    return state.selectedDowntime
+  },
   initialWorkCenter(state) {
     return state.initialWorkCenter
   },
   workCentersForWorker(state) {
     return state.workCentersForWorker
+  },
+  selectedProductionTab(state) {
+    return state.productionPageState.selectedProductionTab
   }
 }
