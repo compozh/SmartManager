@@ -98,7 +98,7 @@ export default {
     padding: 0 10px;
     margin-top: 50px;
     position: absolute;
-    height: calc(100% - 50px);
+    height: calc(100% - 63px);
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
@@ -138,6 +138,7 @@ export default {
   .no-data-text {
     position: absolute;
     left: 20px;
+    top: 10px;
     font-size: 2em;
     font-weight: 500;
     color: #3d83f7;

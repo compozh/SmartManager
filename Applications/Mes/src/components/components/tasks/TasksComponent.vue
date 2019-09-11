@@ -177,6 +177,7 @@ export default {
     margin: 0 10px;
   }
   .lack-of-tasks-str {
+    display: flex;
     font-size: 2em;
     font-weight: 500;
     color: #3d83f7;

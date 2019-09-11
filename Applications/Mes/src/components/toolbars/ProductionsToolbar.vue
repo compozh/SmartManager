@@ -1,6 +1,6 @@
 <template>
     <v-layout class="toolbar">
-      <v-tabs v-model="selectedProductionTab">
+      <v-tabs v-model="selectedProductionTab" class="toolbar-tabs">
         <v-tab v-for="tab in tabs" :key=tab.index @click="changeProductionTab(tab.index)" class="tab-item">
           {{tab.name}}
         </v-tab>
@@ -44,7 +44,12 @@ export default {
 <style type="text/css" scoped>
   .toolbar {
     flex-direction: row;
-    max-height: 50px;
+    max-height: 63px;
+    display: flex;
+    align-items: center;
+  }
+  .toolbar-tabs {
+    padding: 0 5px;
   }
   .toolbar .tab-item {
     width: 250px;
