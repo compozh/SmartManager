@@ -2,7 +2,7 @@
   <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
     <div class="production-card-description">
       <span v-html="production.description"></span>      
-      <span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
+      <br><span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
     </div>
     <v-speed-dial 
       class="production-card-menu"

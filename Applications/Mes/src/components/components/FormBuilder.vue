@@ -301,6 +301,7 @@ export default {
     display: flex;
     justify-content: center;
     padding: 10px 20px;
+    background-color: #fff;
     div {
       width: 100%;
       .form-group.has-feedback.formio-component {
