@@ -1,5 +1,5 @@
 export default {
-  setAppId(state, value) {
-    state.appId = value
+  setApplicationDescription(state, value) {
+    state.applicationDescription = JSON.parse(value.data.webapps.application)
   }
 }

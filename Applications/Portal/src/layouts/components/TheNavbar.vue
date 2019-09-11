@@ -10,7 +10,8 @@
   <div class="vx-navbar-wrapper">
     <vs-navbar class="vx-navbar navbar-custom" :color="navbarColor" :class="classObj">
 
-      <!-- SM - OPEN SIDEBAR BUTTON -->
+       <!-- SM - OPEN SIDEBAR BUTTON -->
+      <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
       <router-view name="toolbar"></router-view>
 
       <vs-spacer></vs-spacer>
@@ -126,7 +127,14 @@ export default {
 
     // NAVBAR STYLE
     classObj() {
-      return 'navbar-full'
+      if (this.sidebarWidth == 'default') {
+        return 'navbar-default'
+      } else if (this.sidebarWidth == 'reduced') {
+        return 'navbar-reduced'
+      } else if (this.sidebarWidth) {
+        return 'navbar-full'
+      }
+      return ''
     },
 
     // I18N
@@ -243,15 +251,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.vx-navbar-wrapper{
-  width: 100%;
-}
-.navbar-sticky {
-    .vx-navbar-wrapper {
-         .vx-navbar {
-            width: 100%;
-        }
-    }
-}
-</style>

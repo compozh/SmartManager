@@ -1,10 +1,10 @@
 import {PortalApi} from '@/api/portalApi'
 export default {
-  setApplicationDescription({commit}, value) {
+  async loadApplicationDescription({commit}) {
+    let description = await PortalApi.getApplicationDescription()
+    commit('setApplicationDescription', description)
+
 
   },
-  loadAppId({commit}) {
-    let id = PortalApi.getAppId()
-    commit('setAppId', id)
-  }
+
 }

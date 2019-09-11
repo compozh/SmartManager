@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { PortalApi } from '@/api/portalApi'
 
-
 Vue.use(VueRouter)
 
 export async function  getRouter() {
@@ -11,13 +10,14 @@ export async function  getRouter() {
 
   let appDescription = JSON.parse(resp.data.webapps.application)
 
-  let routesDescription = appDescription.Sections[0].Routes
 
-  let routes = routesDescription.map( r => {
+  let routesDescription = [...appDescription.Sections[0].Routes]
+
+  let routes = routesDescription.sort((a,b) => a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)).map( r => {
     return {
       path: r.Path,
       name: r.Id,
-      component: Vue.component('account-personal-info-page'),
+      component: Vue.component(r.Components[0].Name),
       meta: {
         pageTitle: r.Name
       }

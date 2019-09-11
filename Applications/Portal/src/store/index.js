@@ -10,6 +10,7 @@ import state from './state'
 // Modules
 import appModule from './app/index'
 import authModule from './auth/moduleAuth'
+import personalInfoModule from './personalInfo/personalInfo'
 import notificationsModule from './notifications/moduleNotifications'
 
 Vue.use(Vuex)
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
   state,
   modules: {
     [appModule.namespace]: appModule,
+    [personalInfoModule.namespace]: personalInfoModule,
     notifications: notificationsModule,
     auth: authModule
   },

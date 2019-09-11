@@ -12,20 +12,9 @@
     <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
         <vx-tour :steps="steps" v-if="!disableThemeTour" />
 
-        <!-- НАСТРОЙЩИК ТЕМЫ -->
-        <the-customizer
-            @updateNavbar="updateNavbar"
-            @updateNavbarColor="updateNavbarColor"
-            :navbarType="navbarType"
-            :navbarColor="navbarColor"
-            :footerType="footerType"
-            @updateFooter="updateFooter"
-            :routerTransition="routerTransition"
-            @updateRouterTransition="updateRouterTransition"
-            v-if="!disableCustomizer"
-            :hideScrollToTop="hideScrollToTop"
-            @toggleHideScrollToTop="toggleHideScrollToTop"
-            />
+
+        <!-- БОКОВОЕ МЕНЮ -->
+        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="templateConfig.applicationTitle" parent=".layout--main" />
 
         <!-- ЗОНА КОНТЕНТА -->
         <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
@@ -68,11 +57,12 @@
 </template>
 
 <script>
-import TheCustomizer from '../components/customizer/TheCustomizer.vue'
+import VxSidebar from '@/layouts/components/vx-sidebar/VxSidebar.vue'
+
 import TheNavbar from '../components/TheNavbar.vue'
 import TheFooter from '../components/TheFooter.vue'
 import themeConfig from '@/../themeConfig.js'
-import sidebarItems from '@/sidebarItems.js'
+//import sidebarItems from '@/sidebarItems.js'
 import templateConfig from '@/templateConfig.js'
 import BackToTop from 'vue-backtotop'
 const VxTour = () => import('@/components/VxTour.vue')
@@ -86,7 +76,6 @@ export default {
       routerTransition: themeConfig.routerTransition || 'none',
       isNavbarDark: false,
       routeTitle: this.$route.meta.pageTitle,
-      sidebarItems: sidebarItems,
       disableCustomizer: themeConfig.disableCustomizer,
       windowWidth: window.innerWidth, //width of windows
       hideScrollToTop: themeConfig.hideScrollToTop,
@@ -108,6 +97,24 @@ export default {
     },
   },
   computed: {
+    sidebarItems() {
+      if (!this.$store.state.app.applicationDescription) {
+        return []
+      }
+
+      let routes = [...this.$store.state.app.applicationDescription.Sections[0].Routes]
+
+      return routes.sort((a,b) => a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)).map(r => {
+        return {
+          url: '/' + this.$route.params.applicationId + '/' + r.Path,
+          name: r.Name,
+          icon: r.Image,
+          slug: r.Id
+        }
+      })
+
+    },
+
     isAppPage() {
       if (this.$route.path.includes('/apps/')) { return true } else { return false }
     },
@@ -119,7 +126,14 @@ export default {
       return this.$store.state.bodyOverlay
     },
     contentAreaClass() {
-      return 'content-area-full'
+      if (this.sidebarWidth == 'default') {
+        return 'content-area-default'
+      } else if (this.sidebarWidth == 'reduced') {
+        return 'content-area-reduced'
+      } else if (this.sidebarWidth) {
+        return 'content-area-full'
+      }
+      return ''
     },
     navbarClasses() {
       return {
@@ -178,12 +192,12 @@ export default {
   components: {
     TheNavbar,
     TheFooter,
-    TheCustomizer,
     BackToTop,
-    VxTour
+    VxTour,
+    VxSidebar
   },
   created() {
-
+    this.$store.dispatch('app/loadApplicationDescription')
     this.setSidebarWidth()
     if (this.navbarColor == '#fff' && this.isThemeDark) {
       this.updateNavbarColor('#10163a')

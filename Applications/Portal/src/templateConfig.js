@@ -1,5 +1,5 @@
 export default {
-  applicationTitle: 'Учёт ключей',
+  applicationTitle: 'Личный кабинет',
   // доступные локализации
   localizations: [
     { code: 'uk', name: 'Українська',  flag: 'ua' },
@@ -8,7 +8,7 @@ export default {
   ],
   login: {
     // Возможные варианты: ['google', 'facebook', 'twitter', 'github']
-    allowedAlternativeLoginMethods: ['google', 'facebook', 'twitter', 'github'],
+    allowedAlternativeLoginMethods: [],
     allowedRegisterUser: false
   }
 }

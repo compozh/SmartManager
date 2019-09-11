@@ -1,0 +1,10 @@
+{
+  itmenu{
+    user{
+      firstName lastName patronymic
+      email
+      photo
+      dateBirthday
+    }
+  }
+}
