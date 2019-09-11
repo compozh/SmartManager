@@ -50,7 +50,10 @@ export default {
       this.$emit('changeDowntimesOverlayVisible')
     },
     formioSubmit(data) {
-      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data })
+      var me = this
+      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data, successAction: () => {
+        me.closeOverlay()
+      }})
     },
     initializeCreateDowntimeFormio() {
       if (Object.keys(this.createDowntimeFormio).length) {

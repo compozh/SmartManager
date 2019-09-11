@@ -73,5 +73,8 @@ export default {
   },
   selectedProductionTab(state) {
     return state.productionPageState.selectedProductionTab
+  },
+  actionsAfterInitializeProperties(state) {
+    return state.actionsAfterInitializeProperties    
   }
 }

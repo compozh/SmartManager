@@ -15,6 +15,7 @@
                 :production=production
                 @deleteProduction=invokeDeleteProduction
                 @printProduction=printProduction
+                @setMaterialProduction=setMaterialProduction
             />
 
         </v-card>
@@ -78,6 +79,12 @@ export default {
     },
     async printProduction({ production, callback }) {
       await this.$store.dispatch('mes/printProduction', production)
+      if (callback) {
+        callback()
+      }
+    },
+    async setMaterialProduction({ production, callback }) {
+      await this.$store.dispatch('mes/setMaterialProduction', production)
       if (callback) {
         callback()
       }

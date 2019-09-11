@@ -15,8 +15,8 @@ export default {
   data() {
     return {
       tabs: [
-        {name: 'По всем рабочим центрам', index: '0'},
-        {name: 'По текущему рабочему центру', index: '1'}
+        {name: 'Моя выработка', index: '0'},
+        {name: 'Выработка по текущему Рабочему центру', index: '1'}
       ]
     }
   },
@@ -52,7 +52,7 @@ export default {
     padding: 0 5px;
   }
   .toolbar .tab-item {
-    width: 250px;
+    width: 350px;
     border-bottom: 2px solid #0000001c;
   }
 </style>
