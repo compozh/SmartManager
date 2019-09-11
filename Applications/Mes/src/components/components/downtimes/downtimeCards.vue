@@ -49,7 +49,7 @@ export default {
   flex-direction: column;
 }
 .downtime-item {
-  margin: 5px 10px;
+  margin: 10px;
   cursor: pointer;
   text-align: center;
 }
