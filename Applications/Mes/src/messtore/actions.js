@@ -45,7 +45,8 @@ export default {
           commit('setWorkCentersForWorker', workCenters)
         }
         commit('setInitialWorkCenter', true)
-      }
+      },
+      linearLoader: true
     })
   },
   async initializeTasks({ commit }, { workCenterCode, fetchPolicy }) {
