@@ -200,11 +200,11 @@ export default {
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
-
+      
       if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
         let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
 
-        if (this.productionFormio && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
+        if (this.productionFormio && this.productionFormio.data && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
           this.dialogProperties.visible = true
           this.dialogProperties.task = newSelectedTask
           return
