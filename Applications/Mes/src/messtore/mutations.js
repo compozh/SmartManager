@@ -69,7 +69,7 @@ export default {
     let index = state.usersProductionEvents.indexOf(production)
     state.usersProductionEvents.splice(index, 1)
     let indexWorkCenterProductionEvents = state.workCenterProductionEvents.indexOf(production)
-    if(indexWorkCenterProductionEvents !== -1) {
+    if (indexWorkCenterProductionEvents !== -1) {
       state.workCenterProductionEvents.splice(indexWorkCenterProductionEvents, 1)
     }
   },

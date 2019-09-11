@@ -10,6 +10,7 @@
       <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <v-autocomplete
+          autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
@@ -48,13 +49,13 @@ export default {
   created() {
     this.$store.dispatch('mes/initializeWorkCenter')
     this.$store.dispatch('mes/initializeProperties')
-    var me = this;
+    var me = this
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })
   },
   data() {
-      return { currentUserData: {} }
+    return { currentUserData: {} }
   },
   computed: {
     workCenter() {
@@ -72,7 +73,7 @@ export default {
   },
   methods: {
     async changeWorkCenter(newWorkCenter) {
-      if(!newWorkCenter) {
+      if (!newWorkCenter) {
         return
       }
       this.$store.commit('mes/setInitialWorkCenter', false)
@@ -84,11 +85,11 @@ export default {
         return
       }
       
-      if(this.workCenter) {
-        for(let fixation of workCentersFixed) {
+      if (this.workCenter) {
+        for (let fixation of workCentersFixed) {
           if (fixation.code == this.workCenter.code) {
             this.$store.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixation.fixationId })
-            break;
+            break
           }
         }
       }

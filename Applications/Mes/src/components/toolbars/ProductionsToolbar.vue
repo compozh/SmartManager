@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     changeProductionTab(tabIndex) {
-      if(this.selectedProductionTab == tabIndex) {
+      if (this.selectedProductionTab == tabIndex) {
         return
       }
       this.$emit('changeProductionTab', tabIndex)
