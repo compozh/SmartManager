@@ -1,11 +1,23 @@
 {
   lms{
-    lessonContent(lessonGuid: $lessonId){
-      lessonGuid
-      name
-      durationMinutesLabel
+    lessonContent(lessonGuid: $lessonid){
       content
-      unitId
+      course{
+        name
+        courseGuid
+      }
+      module{
+        name
+        moduleGuid
+      }
+      lesson{
+        unitId
+        name
+        lessonGuid
+        durationMunute
+        durationMinutesLabel
+        surveyId
+      }
     }
   }
 }

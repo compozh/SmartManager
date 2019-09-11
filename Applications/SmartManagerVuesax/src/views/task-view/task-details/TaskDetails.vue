@@ -65,7 +65,7 @@
               <feather-icon icon="PaperclipIcon" class="mr-2"/>
               <span class="block py-4">{{ $t('tabs.attachments').toUpperCase() }}</span>
             </div>
-            <div class="flex" vx-row>
+            <div class="vx-row flex">
               <div
                 class="mail__attachment"
                 v-for="(attachment, index) in task.originals"
@@ -73,11 +73,10 @@
               >
                 <vs-chip
                   color="primary"
-                  class="px-4 py-2 mr-3"
+                  class="mr-3"
                 >{{ index }}</vs-chip>
               </div>
             </div>
-
           </div>
         </vx-card>
       </div>

@@ -1,6 +1,6 @@
 export default {
-  setLinearLoader(state, payload) {
-    state.linearLoader = payload
+  setLinearLoader(state, linearLoader) {
+    state.linearLoader = linearLoader
   },
   closeDialogLinearLoader(state) {
     state.dialogLinearLoader.visible = false
@@ -25,11 +25,17 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
+  setUserName(state, userName) {
+    state.userName = userName
+  },
   setWorkCenter(state, workCenter) {
     state.workCenter = workCenter
   },
   setTasks(state, tasks) {
     state.tasks = tasks
+  },
+  setDowntimes(state, downtimes) {
+    state.downtimes = downtimes
   },
   setInstallations(state, installations) {
     state.installations = installations
@@ -38,28 +44,44 @@ export default {
     var index = state.installations.indexOf(installation)
     state.installations.splice(index, 1)
   },
-  setProductions(state, productions) {
-    state.productions = productions
+  setUsersProductionEvents(state, usersProductionEvents) {
+    state.usersProductionEvents = usersProductionEvents
+  },
+  setWorkCenterProductionEvents(state, workCenterProductionEvents) {
+    state.workCenterProductionEvents = workCenterProductionEvents
   },
   setProductionFormio(state, formio) {
     state.productionFormio = formio
   },
   resetProductionFormio(state) {
-    state.productionFormio = null
+    state.productionFormio = {}
   },
   setDowntimeFormio(state, formio) {
     state.downtimeFormio = formio
   },
+  setCreateDowntimeFormio(state, formio) {
+    state.createDowntimeFormio = formio
+  },
   resetDowntimeFormio(state) {
-    state.downtimeFormio = null
+    state.downtimeFormio = {}
   },
   removeProduction(state, production) {
-    let index = state.productions.indexOf(production)
-    state.productions.splice(index, 1)
+    let index = state.usersProductionEvents.indexOf(production)
+    state.usersProductionEvents.splice(index, 1)
+    let indexWorkCenterProductionEvents = state.workCenterProductionEvents.indexOf(production)
+    if (indexWorkCenterProductionEvents !== -1) {
+      state.workCenterProductionEvents.splice(indexWorkCenterProductionEvents, 1)
+    }
   },
-  setMenuMiniMode(state, payload) {
-    state.menuMiniMode = payload
-    localStorage.setItem('mesMenuMiniMode', payload.toString())
+  printProduction(state, production) {
+    state.printProduction = production
+  },
+  setMaterialProduction(state, production) {
+    state.setMaterialProduction = production
+  },
+  setMenuMiniMode(state, menuMiniMode) {
+    state.menuMiniMode = menuMiniMode
+    localStorage.setItem('mesMenuMiniMode', menuMiniMode.toString())
   },
   setSelectedTasksTab(state, tabId) {
     state.tasksPageState.selectedTasksTab = tabId
@@ -70,14 +92,14 @@ export default {
   setSelectedTask(state, selectedTask) {
     state.tasksPageState.selectedTask = selectedTask
   },
+  setSelectedDowntime(state, selectedDowntime) {
+    state.selectedDowntime = selectedDowntime
+  },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
   },
   changeDragResizeMode(state) {
     state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode
-  },
-  changeDowntimesOverlay(state) {
-    state.tasksPageState.downtimesOverlay = !state.tasksPageState.downtimesOverlay
   },
   setObsoluteDataTask(state, obsoluteData) {
     state.obsoleteData.tasks = obsoluteData
@@ -88,23 +110,25 @@ export default {
   setInitialWorkCenter(state, value) {
     state.initialWorkCenter = value
   },
-  setWorkCentersForWorker(state, data) {
-    state.workCentersForWorker = data.workCenters
-    if (!state.workCenter) {
-      var firstWorkCenterCodeByFixation = data.firstWorkCenter.code
-      if (!data.workCenters) {
-        return
-      }
-      data.workCenters.forEach(workCenter => {
-        if (workCenter.code == firstWorkCenterCodeByFixation) {
-          return state.workCenter = workCenter
-        }
-      })
-    }
+  setSelectedProductionTab(state, selectedProductionTab) {
+    state.productionPageState.selectedProductionTab = selectedProductionTab
+  },
+  setWorkCentersForWorker(state, workCenters) {
+    state.workCentersForWorker = workCenters
+  },
+  addActionAfterInitializeProperties(state, newAction) {
+    state.actionsAfterInitializeProperties.push(newAction)
+  },
+  setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
+    state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
   resetState(state) {
     state.tasks = []
+    state.downtimes = []
+    state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
+    state.selectedDowntime = null
+    state.workCenterProductionEvents = []
   }
 }

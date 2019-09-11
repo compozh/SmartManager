@@ -15,43 +15,30 @@ export default {
   name: 'mes-form-builder',
   components: { formio: Form },
   data() {
-    return { options: { noAlerts: true }, currentData: '' }
-  },
-  computed: {
-    formioComponents() {
-      if (this.$attrs.type == 'downtimesForm') {
-        return { components: this.downtimeFormio ? JSON.parse(this.downtimeFormio.form) : [] }
-      } else {
-        return { components: this.productionFormio ? JSON.parse(this.productionFormio.form) : [] }
-      }
-    },
-    formioSubmission() {
-      if (this.$attrs.type == 'downtimesForm') {
-        return { data: this.downtimeFormio ? JSON.parse(this.downtimeFormio.data) : [] }
-      } else {
-        return { data: this.productionFormio ? JSON.parse(this.productionFormio.data) : [] }
-      }
-    },
-    productionFormio() {
-      return this.$store.getters['mes/productionFormio']
-    },
-    downtimeFormio() {
-      return this.$store.getters['mes/downtimeFormio']
+    return {
+      options: { noAlerts: true }, currentData: ''
     }
+  },
+  props: {
+    formioData: Object
   },
   methods: {
     onSubmit(params) {
-      if (this.$attrs.type == 'downtimesForm') {
-        return console.log('submit')
-      } else {
-        this.$emit('formioSubmit', JSON.stringify(params.data))
-      }
+      this.$emit('formioSubmit', JSON.stringify(params.data))
     },
     onChange(params) {
       this.currentData = params.data
     },
     getFormioData() {
       return JSON.stringify(this.currentData)
+    }
+  },
+  computed: {
+    formioComponents() {
+      return { components: this.formioData.form ? JSON.parse(this.formioData.form) : [] }
+    },
+    formioSubmission() {
+      return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
     }
   }
 }
@@ -61,6 +48,7 @@ export default {
 .formio-container /deep/ {
   @import "~bootstrap/scss/bootstrap.scss";
   @import "~choices.js/public/assets/styles/choices.css";
+  @import "~flatpickr/dist/flatpickr.min.css";
 
   font-size: 14px;
   font-weight: 500;
@@ -292,6 +280,38 @@ export default {
                 }
             }
         }
+    }
+  }
+}
+.downtimes-block .formio-container /deep/ {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .form-group.has-feedback.formio-component {
+    align-items: center;
+    text-align: center !important;
+  }
+  .input-group-addon.input-group-append {
+    display: none;
+  }
+}
+.downtime-layout{
+  .formio-container /deep/ {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    div {
+      width: 100%;
+      .form-group.has-feedback.formio-component {
+        width: 100%;
+        align-items: center;
+        text-align: center !important;
+      }
+      .input-group-addon.input-group-append {
+        display: none;
+      }
     }
   }
 }

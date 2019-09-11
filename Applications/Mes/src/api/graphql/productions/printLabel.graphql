@@ -1,0 +1,10 @@
+{
+    mes {
+        printLabel(factId: $factId, checkWriteOffPercent: $checkWriteOffPercent) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

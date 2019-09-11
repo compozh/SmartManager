@@ -6,17 +6,26 @@ export default {
     return state.error
   },
 
-  getAvailableFilters (state) {
+  availableFilters (state) {
     return state.availableFilters
   },
 
-  // recommended (state) {
-  //   return state.recommended
-  // },
-  // courses (state) {
-  //   return state.courses
-  // },
-  // modules (state) {
-  //   return state.modules
-  // },
+  recommended (state) {
+    return state.recommended
+  },
+  courses (state) {
+    return state.courses
+  },
+  modules (state) {
+    return state.modules
+  },
+  courseDetails (state) {
+    return state.courseDetails
+  },
+  unit(state) {
+    return state.unit
+  },
+  lessonContent(state) {
+    return state.lessonContent
+  }
 }

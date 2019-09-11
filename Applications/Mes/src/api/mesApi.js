@@ -7,15 +7,22 @@ import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
 import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
+import downtimesPrevious from './graphql/downtimes/downtimesPrevious.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
 import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
 import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
-import productions from './graphql/productions/productions.graphql'
+import usersProductionEvents from './graphql/productions/usersProductionEvents.graphql'
+import workCenterProductionEvents from './graphql/productions/workCenterProductionEvents.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
+import printLabel from './graphql/productions/printLabel.graphql'
+import executeWriteOff from './graphql/productions/executeWriteOff.graphql'
 import productionFormIo from './graphql/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
+import downtimeFormIo from './graphql/downtimeFormIo.graphql'
+import downtimeGetTypes from './graphql/downtimeGetTypes.graphql'
+import downtimeFormIoSubmit from './graphql/downtimeFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
@@ -106,6 +113,15 @@ export class MesApi {
     return result.data.mes.tasks
   }
 
+  async getDowntimesPreviousFromGql(workCenterCode, dateTime) {
+    const result = await getClient().query({
+      query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
+      variables: { workCenterCode, dateTime }
+    })
+      .then(result => result)
+    return result.data.mes.downtimePrevious.downtimeList
+  }
+
   async getInstallationsFromGql(workCenter, fetchPolicy) {
     const result = await getClient().query({
       query: gql`query ($workCenter: String) ${installations}`,
@@ -150,14 +166,23 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.cancelBeginRegistration
   }
-  async getProductionsFromGql(workerCode, fetchPolicy) {
+  async getUsersProductionEventsFromGql(workerCode, fetchPolicy) {
     const result = await getClient().query({
-      query: gql`query ($workerCode: String) ${productions}`,
+      query: gql`query ($workerCode: String) ${usersProductionEvents}`,
       variables: { workerCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
       .then(result => result)
     return result.data.mes.usersProductionEvents
+  }
+  async getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy) {
+    const result = await getClient().query({
+      query: gql`query ($workCenterCode: String) ${workCenterProductionEvents}`,
+      variables: { workCenterCode },
+      fetchPolicy: fetchPolicy || 'cache-first'
+    })
+      .then(result => result)
+    return result.data.mes.workCenterProductionEvents
   }
   async deleteProductionGql(factId) {
     const  result = await getClient().mutate({
@@ -166,6 +191,22 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mesMutation.deleteProduction
+  }
+  async printProductionGql(factId, checkWriteOffPercent) {
+    const  result = await getClient().mutate({
+      mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
+      variables: { factId, checkWriteOffPercent }
+    })
+      .then(result => result)
+    return result.data.mes.printLabel
+  }
+  async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
+    const  result = await getClient().mutate({
+      mutation: gql`${executeWriteOff}`,
+      variables: { factId, addAbsentInstallations, workCenterCode }
+    })
+      .then(result => result)
+    return result.data.mes.executeWriteOff
   }
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({
@@ -184,19 +225,26 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.productionFormIoSubmit
   }
-  async getDowntimeFormioFromGql(formCode, properties) {
+  async getDowntimeFormioFromGql(formCode, properties, fetchPolicy) {
     const result = await getClient().query({
-      query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
+      query: gql`query ($formCode: String, $properties: DowntimeParamsInput!) ${downtimeFormIo}`,
       variables: { formCode, properties },
-      fetchPolicy: 'network-only'
+      fetchPolicy: fetchPolicy || 'cache-first'
     })
       .then(result => result)
     return result.data.mes.downtimeFormIo
   }
-  async downtimeFormIoSubmitGql({ formCode, data, productionRegistrationParam}) {
+  async getDowntimeTypesFromGql() {
+    const result = await getClient().query({
+      query: gql` ${downtimeGetTypes}`
+    })
+      .then(result => result)
+    return result.data.mes.downtimeTypes
+  }
+  async downtimeFormIoSubmitGql({ formCode, data, downtimeParams}) {
     const result = await getClient().mutate({
-      mutation: gql`${productionFormIoSubmit}`,
-      variables: { formCode, data, productionRegistrationParam}
+      mutation: gql`${downtimeFormIoSubmit}`,
+      variables: { formCode, data, downtimeParams}
     })
       .then(result => result)
     return result.data.mesMutation.downtimeFormIoSubmit

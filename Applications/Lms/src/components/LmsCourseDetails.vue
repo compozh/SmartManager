@@ -3,33 +3,33 @@
 		<!--COURSE HEADER-->
 		<v-layout my-2>
 			<v-flex xs12>
-				<v-card v-if="course.data" v-bind:style="{'background-color': course.data.backgroundColor}">
+				<v-card v-if="course" v-bind:style="{'background-color': course.backgroundColor}">
 					<v-layout wrap row justify-center>
 						<v-flex md1 xs2 class='pt-5' hidden-xs-only>
-							<v-card-media v-bind:src='course.data.imageLink' height='90px' contain/>
+							<v-card-media v-bind:src='course.imageLink' height='90px' contain/>
 						</v-flex>
 						<v-flex lg6 md10 sm10 xs12>
-							<v-card-text :class='course.data.courseTypeInfoClass'>{{course.data.type}}</v-card-text>
-							<v-card-title :class='course.data.courseNameInfoClass'>{{course.data.name}}</v-card-title>
-							<v-card-text :class='course.data.courseDescriptionInfoClass'>{{course.data.description}}</v-card-text>
+							<v-card-text :class='course.courseTypeInfoClass'>{{course.type}}</v-card-text>
+							<v-card-title :class='course.courseNameInfoClass'>{{course.name}}</v-card-title>
+							<v-card-text :class='course.courseDescriptionInfoClass'>{{course.description}}</v-card-text>
 							<v-layout row wrap>
 								<v-flex md3 xs6>
-									<v-card-text :class='course.data.courseDetailedDurationInfoClass'>{{course.data.durationMinutesLabel}}</v-card-text>
+									<v-card-text :class='course.courseDetailedDurationInfoClass'>{{course.durationMinutesLabel}}</v-card-text>
 								</v-flex>
 								<v-spacer/>
 								<v-flex xs12>
 									<v-layout align-top justify-start row wrap>
-										<v-chip small v-for='role in course.data.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
-										<v-chip small v-for='level in course.data.levels' v-bind:key="level.code" @click="levelSearch(level)">{{level.name}}</v-chip>
-										<v-chip small v-for='product in course.data.products' v-bind:key="product.code" @click="productSearch(product)">{{product.name}}</v-chip>
-										<v-chip small v-for='tag in course.data.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip>
+										<!-- <v-chip small v-for='role in course.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
+										<v-chip small v-for='level in course.levels' v-bind:key="level.code" @click="levelSearch(level)">{{level.name}}</v-chip>
+										<v-chip small v-for='product in course.products' v-bind:key="product.code" @click="productSearch(product)">{{product.name}}</v-chip>
+										<v-chip small v-for='tag in course.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip> -->
 										<v-layout align-top justify-end row mx-3>
 											<v-icon
 												id='favIcon'
 												v-bind:color='course.isFavorite ? "red" : "grey"'
 												@mouseenter='favIconColor = "red"'
 												@mouseleave='favIconColor = "white"'
-												@click='changeFavoriteState(course)'>{{course.data.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
+												@click='changeFavoriteState(course)'>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 										</v-layout>
 									</v-layout>
 								</v-flex>
@@ -41,11 +41,11 @@
 		</v-layout>
 
 		<!--MODULES CONT-->
-		<!-- <v-layout align-center justify-center>
+		<v-layout align-center justify-center>
 			<v-flex lg6 md10 sm10 xs12>
 				<h5 class='title font-weight-regular text-xs-left mx-2 mt-3 mb-4'>Модули</h5>
-				<v-layout wrap column >
-					<v-flex v-for='moduleItem in modules.data' :key='moduleItem.moduleGuid'>
+				<v-layout wrap column v-if="modules">
+					<v-flex v-for='moduleItem in modules' :key='moduleItem.moduleGuid'>
 						<v-card class='my-2' hover >
 							<v-layout row class='pb-0'>
 								<v-flex xs2 md2 class='mt-2 ml-4 mr-2 mb-2'>
@@ -69,11 +69,11 @@
 													<v-list-tile-title class='blue--text text--darken-4'>{{moduleItem.showLessonsTitle}}</v-list-tile-title>
 												</v-list-tile-content>
 											</v-list-tile>
-											<v-list-tile v-for='lesson in moduleItem.units' :key='lesson.lessonGuid' @click='$router.push({name: "lesson", params: {
+											<v-list-tile v-for='lesson in moduleItem.units' :key='lesson.lessonGuid' @click='$router.push({name: "LMSLESSON", params: {
 															lessonData: lesson,
 															lessonName: lesson.name,
 															moduleName: moduleItem.name,
-															courseGuid: course.data.courseGuid,
+															courseGuid: course.courseGuid,
 															lessonGuid: lesson.lessonGuid,
 														}})'>
 												<v-list-tile-content class='pr-2'>
@@ -92,7 +92,7 @@
 								</v-flex>
 							</v-layout>
 							<v-card-actions>
-								<v-btn flat color="teal darken-4" @click='$router.push({name: "moduleDetails", params: {moduleGuid: moduleItem.moduleGuid, moduleName: moduleItem.name, moduleData: moduleItem}})'>Начать</v-btn>
+								<v-btn flat color="teal darken-4" @click='$router.push({name: "LMSMODULEDETAILS", params: {moduleGuid: moduleItem.moduleGuid, moduleName: moduleItem.name, moduleData: moduleItem}})'>Начать</v-btn>
 							</v-card-actions>
 						</v-card>
 					</v-flex>
@@ -100,11 +100,11 @@
 			</v-flex>
 
 
-			<v-flex xs3 class='py-5 px-4' v-if="course.data" v-show="course.data.additionalInfo">
+			<v-flex xs3 class='py-5 px-4' v-if="course" v-show="course.additionalInfo">
 				<h3>Про этот курс</h3>
-				<p>{{course.data.additionalInfo}}</p>
+				<p>{{course.additionalInfo}}</p>
 			</v-flex>
-		</v-layout> -->
+		</v-layout>
 	</v-container>
 </template>
 
@@ -112,16 +112,55 @@
 
 export default {
   name: "lms-course-details",
-  props: ["coursedetails"],
-  created() {
-    this.courseGuid = this.$route.params.courseGuid;
-    this.course.data = this.$route.params.courseData
-  },
   data() {
     return {
       courseGuid : "",
-      course : { data: undefined },
-      modules : { data: undefined }
+      //course : {},
+    }
+  },
+  created() {
+    this.courseGuid = this.$route.params.courseGuid
+    //this.course = this.$route.params.courseData
+    this.getCourseDetails(this.courseGuid)
+  },
+  methods: {
+    getCourseDetails(courseGuid) {
+      this.$store.dispatch('lms/getCourseDetails', courseGuid)
+    }
+  },
+  computed: {
+    modules () {
+      const courseDetails =  this.$store.getters['lms/courseDetails']
+      return courseDetails !== null ? courseDetails.modules : null
+    },
+    course() {
+      var courseDetails =  this.$store.getters['lms/courseDetails']
+      if (courseDetails) {
+        var course = courseDetails.course
+
+        if (course.backgroundColor != undefined) {
+          if (course.backgroundColor.toUpperCase() === "#FFFFFF") {
+            course.courseTypeInfoClass = "title font-weight-regular pt-4 pb-1 black--text";
+			  			course.courseNameInfoClass = "display-1 font-weight-medium pt-0 pb-2 black--text";
+			  			course.courseDescriptionInfoClass = "body-2 font-weight-medium pt-0 pb-3 black--text";
+			  			course.courseDetailedDurationInfoClass = "body-2 font-weight-medium pt-0 pb-4 black--text";
+			  			course.durationInfoClass = "black--text";
+              course.modulesQtInfoClass = "black--text mt-1";
+            } else {
+			  			course.courseTypeInfoClass = "title font-weight-regular pt-4 pb-1 white--text";
+			  			course.courseNameInfoClass = "display-1 font-weight-medium pt-0 pb-2 white--text";
+			  			course.courseDescriptionInfoClass = "body-2 font-weight-medium pt-0 pb-3 white--text";
+			  			course.courseDetailedDurationInfoClass = "body-2 font-weight-medium pt-0 pb-4 white--text";
+              course.durationInfoClass = "white--text";
+              course.modulesQtInfoClass = "white--text mt-1";
+            }
+        }
+        //debugger
+        return course
+        } else {
+          return null
+        }
+
     }
   }
 }

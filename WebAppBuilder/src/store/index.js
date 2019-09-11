@@ -13,6 +13,7 @@ import minfinStore from '../components/Minfin/store/index'
 import eamStore from '../components/Eam/store/store'
 import mesStore from '../components/MES/store/store'
 import purchasesStore from '../components/Purchases/store/store'
+import lmsStore from '../components/LMS/store/store'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
     [eamStore.namespace]:eamStore,
     [mesStore.namespace]:mesStore,
     [purchasesStore.namespace]:purchasesStore,
+    [lmsStore.namespace]:lmsStore
   }
 })
 

@@ -1,6 +1,10 @@
 <template>
   <v-container class="main-block">
-    <mes-downtimes-overlay v-if="downtimesOverlay" />
+
+    <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+      @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+    />
+
     <v-card ref="card">
       <vue-split
         class="main-block-layout"
@@ -34,18 +38,27 @@
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <v-layout column class="task-description-layout" id="slotTwo">
-              <mes-task-main-layout
-                v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
-                  || (currentLayout == 'inProgress' && !selectedTask.inProgress))" />
+              <div 
+                v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
+                  || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
+              >
+                <mes-task-main-layout
+                  v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
+                    || (currentLayout == 'inProgress' && !selectedTask.inProgress))"
+                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                />
 
-              <mes-task-in-progress-layout
-                ref="taskInProgressLayout"
-                v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
-                  ||(currentLayout == 'main' && selectedTask.inProgress))" />
+                <mes-task-in-progress-layout
+                  ref="taskInProgressLayout"
+                  v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
+                    ||(currentLayout == 'main' && selectedTask.inProgress))"
+                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                />
 
-              <mes-task-installations-layout
-                v-if="selectedTask && currentLayout == 'installations'" />
-
+                <mes-task-installations-layout
+                  v-if="selectedTask && currentLayout == 'installations'"
+                />
+              </div>
             </v-layout>
       </vue-split>
     </v-card>
@@ -61,6 +74,7 @@ export default {
   data() {
     return {
       initializeTasks: false,
+      downtimesOverlayVisible: false,
       dialogProperties: {
         title: '',
         message: 'Вы действительно хотите перейти на другое задание?',
@@ -72,13 +86,13 @@ export default {
     }
   },
   created() {
+    //todo: инициализацию signalr вынести в загрузку приложения
     this.initializeSignalR()
     this.initialize()
   },
   mounted() {
     if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
       this.$router.replace({path: '/MES/installations'})
-      return
     }
   },
   computed: {
@@ -115,14 +129,6 @@ export default {
       },
       set(tabIndex) {
         this.$store.commit('mes/setSelectedTasksTab', tabIndex)
-      }
-    },
-    downtimesOverlay: {
-      get() {
-        return this.$store.getters['mes/downtimesOverlay']
-      },
-      set() {
-        this.$store.dispatch('mes/changeDowntimesOverlay')
       }
     },
     tasksPageState() {
@@ -167,7 +173,6 @@ export default {
       }
     },
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
       this.initializeTasks = true
       if (!this.selectedTask) {
@@ -199,11 +204,11 @@ export default {
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
-
+      
       if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
         let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
 
-        if (this.productionFormio && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
+        if (this.productionFormio && this.productionFormio.data && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
           this.dialogProperties.visible = true
           this.dialogProperties.task = newSelectedTask
           return
@@ -274,6 +279,9 @@ export default {
       sizes.push(taskDescriptionElementWidth)
       this.aspectRatioLayout = sizes
     },
+    changeDowntimesOverlayVisible() {
+      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+    }
   }
 }
 </script>
