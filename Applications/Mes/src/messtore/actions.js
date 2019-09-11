@@ -211,10 +211,10 @@ export default {
       successAction: async () => { commit('printProduction', production) },
     })
   },
-  async setMaterialProduction({ commit }, production) {
+  async setMaterialProduction({ commit, getters }, production) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.setMaterialProductionGql(production.factId)
+        const res = await api.setMaterialProductionGql(production.factId, true, getters.workCenter.code)
         return res
       },
       successAction: async () => { commit('setMaterialProduction', production) },

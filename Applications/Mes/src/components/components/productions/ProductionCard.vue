@@ -82,12 +82,11 @@ export default {
       }})
     },
     setMaterialProduction () {
-      // var me = this
-      // me.printInProgress = true
-      // me.$emit('setMaterialProduction', { production: me.production, callback: () => {
-      //   me.setMaterialInProgress = false
-      // }})
-      console.log('Set material')
+      var me = this
+      me.printInProgress = true
+      me.$emit('setMaterialProduction', { production: me.production, callback: () => {
+        me.setMaterialInProgress = false
+      }})
     }
   }
 }

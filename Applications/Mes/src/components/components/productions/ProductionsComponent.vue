@@ -15,6 +15,7 @@
                 :production=production
                 @deleteProduction=invokeDeleteProduction
                 @printProduction=printProduction
+                @setMaterialProduction=setMaterialProduction
             />
 
         </v-card>

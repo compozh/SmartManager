@@ -194,16 +194,16 @@ export class MesApi {
   }
   async printProductionGql(factId, checkWriteOffPercent) {
     const  result = await getClient().mutate({
-      mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean!) ${printLabel}`,
+      mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
       variables: { factId, checkWriteOffPercent }
     })
       .then(result => result)
     return result.data.mes.printLabel
   }
-  async setMaterialProductionGql(factId) {
+  async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
     const  result = await getClient().mutate({
-      mutation: gql`query ($factId: Int) ${executeWriteOff}`,
-      variables: { factId }
+      mutation: gql`${executeWriteOff}`,
+      variables: { factId, addAbsentInstallations, workCenterCode }
     })
       .then(result => result)
     return result.data.mes.executeWriteOff
