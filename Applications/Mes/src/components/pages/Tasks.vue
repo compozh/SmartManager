@@ -38,22 +38,27 @@
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <v-layout column class="task-description-layout" id="slotTwo">
-              <mes-task-main-layout
-                v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
-                  || (currentLayout == 'inProgress' && !selectedTask.inProgress))"
-                @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-              />
-
-              <mes-task-in-progress-layout
-                ref="taskInProgressLayout"
-                v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
-                  ||(currentLayout == 'main' && selectedTask.inProgress))"
-                @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+              <div 
+                v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
+                  || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
+              >
+                <mes-task-main-layout
+                  v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
+                    || (currentLayout == 'inProgress' && !selectedTask.inProgress))"
+                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
                 />
 
-              <mes-task-installations-layout
-                v-if="selectedTask && currentLayout == 'installations'" />
+                <mes-task-in-progress-layout
+                  ref="taskInProgressLayout"
+                  v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
+                    ||(currentLayout == 'main' && selectedTask.inProgress))"
+                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                />
 
+                <mes-task-installations-layout
+                  v-if="selectedTask && currentLayout == 'installations'"
+                />
+              </div>
             </v-layout>
       </vue-split>
     </v-card>
