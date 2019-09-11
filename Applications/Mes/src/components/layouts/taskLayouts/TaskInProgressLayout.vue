@@ -17,7 +17,8 @@
                 :margin="[20, 20]"
                 :vertical-compact="false"
                 :use-css-transforms="true"
-                >
+              >
+
                <grid-item v-for="item in blocks"
                         :ref="item.ref"
                         :key="item.i"
@@ -28,6 +29,7 @@
                         :i="item.i"
                         :style="!dragResizeMode ? 'box-shadow: none;' : ''"
                         class="grid-element">
+
                         <div class="grid-item-data formio-block" v-if="item.i == '0'">
                           <mes-form-builder
                             ref="formioBuilder"
@@ -35,10 +37,13 @@
                             :formioData=productionFormio
                             />
                         </div>
+
                         <div class="grid-item-data" v-if="item.i != '0'">
                           <span v-html="item.data"></span>
                         </div>
+
                </grid-item>
+
             </grid-layout>
         </v-flex>
     </v-layout>
@@ -101,7 +106,6 @@ export default {
   .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-track:hover {
       background-color:#f4f4f4
   }
-
   /* scrollbar itself */
   .mes-accept-task-layout .mes-accept-task-flex::-webkit-scrollbar-thumb {
       background-color:#babac0;

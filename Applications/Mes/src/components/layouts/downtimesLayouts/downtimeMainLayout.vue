@@ -1,11 +1,13 @@
 <template>
 <v-layout class="downtime-layout">
+
   <mes-form-builder
     v-if="selectedDowntime"
     ref="formioBuilder"
     @formioSubmit=formioSubmit
     :formioData=downtimeFormio
-    />
+  />
+
   </v-layout>
 </template>
 
@@ -30,7 +32,7 @@ export default {
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormioData()
-    },
+    }
   }
 }
 </script>

@@ -52,8 +52,7 @@ export default {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         let tasks = await api.getTasksFromGql(workCenterCode, fetchPolicy)
-        var sortedTasks = await this.dispatch('mes/sortingTaskFn', { tasks: tasks })
-        commit('setTasks', sortedTasks)
+        commit('setTasks', tasks)
 
         if (fetchPolicy == 'network-only') {
           this.dispatch('mes/selectTaskAfterRefresh')
@@ -338,26 +337,5 @@ export default {
         return res
       }
     })
-  },
-  async sortingTaskFn({ commit }, { tasks }) {
-    var tasksInProgress = [],
-      tasksIsNotInProgress = [],
-      completeSortedTasks = []
-    tasks.sort((a,b) => {
-      return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
-        1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1)
-    })
-    if (tasks.length) {
-      for (var i = tasks.length - 1; i >= 0; i--) {
-        var task = tasks[i]
-        if (task.inProgress) {
-          tasksInProgress.push(task)
-        } else {
-          tasksIsNotInProgress.push(task)
-        }
-      }
-      completeSortedTasks = tasksInProgress.concat(tasksIsNotInProgress)
-    }
-    return completeSortedTasks
   }
 }

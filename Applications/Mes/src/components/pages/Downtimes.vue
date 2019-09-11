@@ -37,6 +37,11 @@ export default {
       defaultSizes: [35, 65]
     }
   },
+  mounted() {
+    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
+      this.$router.replace({path: '/MES/installations'})
+    }
+  },
   created() {
     this.initialize()
   },
@@ -59,7 +64,6 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
       this.initializeDowntimes = true
       if (!this.selectedDowntime) {

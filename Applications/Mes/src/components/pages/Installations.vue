@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code })
       this.initializeInstallations = true
     },

@@ -12,17 +12,20 @@
           @click="changeCurrentTask(task)"
         >
         <v-icon v-if="task.inProgress" large class="inprogress-icon">play_arrow</v-icon>
+
           <v-card-text :class="selectedTask && task.shiftTaskId == selectedTask.shiftTaskId ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>
+
           <v-progress-linear v-if="task.completionPercentage"
             color="#326da8"
             height="22"
             :value="Math.round(task.completionPercentage)"
             reactive
           >
-          {{Math.round(task.completionPercentage)}}%
+            {{Math.round(task.completionPercentage)}}%
           </v-progress-linear>
+
         </v-card>
       </div>
     </div>
@@ -42,31 +45,23 @@ export default {
       return this.$store.getters['mes/tasks']
     },
     sortedTasks() {
-      var tasksInProgress = [],
-        tasksIsNotInProgress = [],
-        completeSortedTasks = []
-      this.tasks.sort((a,b) => {
-        return new Date(a.startDateTime).getTime() > new Date(b.startDateTime).getTime() ?
-          1 : (new Date(a.startDateTime).getTime() == new Date(b.startDateTime).getTime() ? 0 : -1)
+      let tasks = []
+
+      tasks = this.tasks.sort((a,b) => {
+        let aStartDateTime = new Date(a.startDateTime).getTime(),
+          bStartDate = new Date(b.startDateTime).getTime(),
+          sortByDate = aStartDateTime > bStartDate ? 1 : (aStartDateTime == bStartDate ? 0 : -1)
+
+        return a.inProgress && b.inProgress ? sortByDate : a.inProgress ? -1 : b.inProgress ? 1 : sortByDate
       })
-      if (this.tasks.length) {
-        for (var i = this.tasks.length - 1; i >= 0; i--) {
-          var task = this.tasks[i]
-          if (task.inProgress) {
-            tasksInProgress.push(task)
-          } else {
-            tasksIsNotInProgress.push(task)
-          }
-        }
-        completeSortedTasks = tasksInProgress.concat(tasksIsNotInProgress)
-      }
-      return completeSortedTasks
+
+      return tasks
     }
   },
   methods: {
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask)
-    },
+    }
   }
 }
 </script>

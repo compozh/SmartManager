@@ -81,13 +81,13 @@ export default {
     }
   },
   created() {
+    //todo: инициализацию signalr вынести в загрузку приложения
     this.initializeSignalR()
     this.initialize()
   },
   mounted() {
     if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
       this.$router.replace({path: '/MES/installations'})
-      return
     }
   },
   computed: {
@@ -168,7 +168,6 @@ export default {
       }
     },
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
       this.initializeTasks = true
       if (!this.selectedTask) {
