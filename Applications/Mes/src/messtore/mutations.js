@@ -113,6 +113,12 @@ export default {
   setWorkCentersForWorker(state, workCenters) {
     state.workCentersForWorker = workCenters
   },
+  addActionAfterInitializeProperties(state, newAction) {
+    state.actionsAfterInitializeProperties.push(newAction)
+  },
+  setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
+    state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
+  },
   resetState(state) {
     state.tasks = []
     state.downtimes = []

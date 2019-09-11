@@ -5,11 +5,17 @@ import  { routerDependencies } from '../router'
 const api = new MesApi()
 /* eslint-disable */
 export default {
-  async initializeProperties({commit}) {
+  async initializeProperties({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         const result = await api.getPropertiesFromGql()
-        commit('setProperties', result.data.mes.properties)
+        let properties = result.data.mes.properties
+        commit('setProperties', properties)
+
+        for(var action of getters.actionsAfterInitializeProperties) {
+          action(properties)
+        }
+        commit('setActionsAfterInitializeProperties', [])
       }
     })
   },
@@ -21,8 +27,9 @@ export default {
       }
     })
   },
-  async initializeWorkCenter({ commit }, fetchPolicy) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async initializeWorkCenter({ commit, getters }, fetchPolicy) {
+    var me = this
+    await me.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         let uuid = $cookies.get('mesUuid'),
         sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
@@ -42,7 +49,33 @@ export default {
         if (workCenters.length == 1) {
           commit('setWorkCenter', workCenters[0])
         } else {
-          commit('setWorkCentersForWorker', workCenters)
+          var setWorkCenterForWorker = async (properties) => {
+            var workCenterForWorker = await me.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
+            if(workCenterForWorker.length) {
+              let workCentersForWorker = []
+              for(var workCenter of workCenters) {
+                for(var workCenterOfWorker of workCenterForWorker) {
+                  if(workCenter.code == workCenterOfWorker.code) {
+                    workCentersForWorker.push(workCenter)
+                  }
+                }
+              }
+              if(workCentersForWorker.length) {
+                commit('setWorkCenter', workCentersForWorker[0])
+                commit('setWorkCentersForWorker', workCentersForWorker)
+              } else {
+                commit('setWorkCentersForWorker', workCenters)
+              }              
+            } else {
+              commit('setWorkCentersForWorker', workCenters)
+            }
+          }
+          
+          if(!getters.properties) {
+            commit('addActionAfterInitializeProperties', setWorkCenterForWorker)
+          } else {
+            await setWorkCenterForWorker(getters.properties)
+          }
         }
         commit('setInitialWorkCenter', true)
       },

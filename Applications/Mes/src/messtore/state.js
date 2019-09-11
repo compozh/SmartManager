@@ -41,5 +41,6 @@ export default {
   downtimeFormio: {},
   createDowntimeFormio: {},
   menuMiniMode: true,
-  ticket: ''
+  ticket: '',
+  actionsAfterInitializeProperties: []
 }

@@ -16,7 +16,7 @@ export default {
     return {
       tabs: [
         {name: 'Моя выработка', index: '0'},
-        {name: 'Вся выработка по текущему РЦ', index: '1'}
+        {name: 'Выработка по текущему Рабочему центру', index: '1'}
       ]
     }
   },
@@ -52,7 +52,7 @@ export default {
     padding: 0 5px;
   }
   .toolbar .tab-item {
-    width: 250px;
+    width: 350px;
     border-bottom: 2px solid #0000001c;
   }
 </style>
