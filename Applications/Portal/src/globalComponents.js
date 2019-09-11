@@ -23,6 +23,7 @@ Vue.component(VxBreadcrumb.name, VxBreadcrumb)
 Vue.component(FeatherIcon.name, FeatherIcon)
 Vue.component(VxInputGroup.name, VxInputGroup)
 
+Vue.component('account-personal-info-page', () => import('./views/account-personal-info-page.vue'))
 
 // v-select component
 import vSelect from 'vue-select'

@@ -92,7 +92,7 @@
 </template>
 
 <script>
-//import auth from '@/api/auth/auth'
+import { PortalApi } from '@/api/portalApi'
 import templateConfig from '@/templateConfig'
 
 export default {
@@ -129,7 +129,14 @@ export default {
         notify: this.$vs.notify,
         closeAnimation: this.$vs.loading.close
       }
-      this.$store.dispatch('auth/login', payload)
+      this.$store.dispatch('auth/login', payload).then(ret => {
+        if (ret === true) {
+          let appId = PortalApi.getAppId()
+          this.$router.push(this.$router.currentRoute.query.to || { path: `/${appId}`})
+        } else if (ret === false) {
+          this.$router.push({name: 'page-login'})
+        }
+      })
     },
 
 

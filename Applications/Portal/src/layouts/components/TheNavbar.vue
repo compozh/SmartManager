@@ -211,7 +211,9 @@ export default {
       return 'Just Now'
     },
     logout() {
-      this.$store.dispatch('auth/logout')
+      this.$store.dispatch('auth/logout').then(() => {
+        this.$router.push({name: 'page-login', params: {...this.$route.params}})
+      })
 
     },
     outside: function() {

@@ -8,7 +8,7 @@
 ==========================================================================================*/
 
 //import auth from '@/api/auth/auth'
-import router from '@/router'
+//import router from '@/router'
 import Vue from 'vue'
 export default {
 
@@ -19,8 +19,7 @@ export default {
       // Close animation if passed as payload
       return
     }
-    Vue.prototype.$authentication.logOff().then(() => {
-      router.push('/login')
+    return Vue.prototype.$authentication.logOff().then(() => {
       commit('UPDATE_AUTHENTICATED_USER', undefined)
     })
 
@@ -50,22 +49,20 @@ export default {
     }
 
     // Try to sigin
-    Vue.prototype.$authentication.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
+    return Vue.prototype.$authentication.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
       .then(() => {
 
         var user = context.rootState.authentication.currentUser
         // Close animation if passed as payload
         if (payload.closeAnimation) { payload.closeAnimation() }
         context.commit('UPDATE_AUTHENTICATED_USER', user)
-        router.push(router.currentRoute.query.to || '/')
 
-
+        return true
 
       }, (err) => {
 
         if (err.code == 401) {
-          router.push({name: 'page-login'})
-          return
+          return false
 
         }
         // Close animation if passed as payload

@@ -1,15 +1,8 @@
 // @it-enterprise пакеты
 
 import Localization from '@it-enterprise/localization'
-import GrapgQlCore from '@it-enterprise/graphql'
 import Authentication from '@it-enterprise/authentication'
-//import '@it-enterprise/authentication/dist/authentication.css'
-//import Router from '@it-enterprise/routercore'
-import ItCommon from '@it-enterprise/common'
-//import '@it-enterprise/common/dist/common-components.css'
 
-//import auth from './api/auth/auth'
-//auth.Init()
 
 // vue пакеты
 import Vue from 'vue'
@@ -36,10 +29,6 @@ Vue.prototype.$http = axios
 import '../themeConfig.js'
 
 
-// ACL
-import acl from './acl/acl'
-
-
 // Globally Registered Components
 import './globalComponents.js'
 
@@ -50,7 +39,7 @@ import './assets/scss/main.scss'
 import '@/assets/css/main.css'
 
 // Vue Router
-import router from './router'
+import { getRouter } from './router'
 
 // Vuex Store
 import store from './store/index'
@@ -88,31 +77,18 @@ require('./assets/css/iconfont.css')
 Vue.config.productionTip = false
 
 
-// apollo
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+// // apollo
 import VueApollo from 'vue-apollo'
 
 // moment
 Vue.use(require('vue-moment'))
 
 
-const apolloProvider = new VueApollo({
-  defaultClient: new ApolloClient({
-    link: new HttpLink({}),
-    cache: new InMemoryCache(),
-    connectToDevTools: true,
-  }),
-})
-
 // объект с зависимостями
 let dependencies = {
   store,
   i18n,
-  apolloProvider,
   axios,
-  ...router
 }
 
 // Плагины стандартные
@@ -120,45 +96,18 @@ Vue.use(Vuex)
 Vue.use(VueApollo)
 
 // Плагины it-enterprise
-Vue.use(ItCommon)
-Vue.use(GrapgQlCore, { options: window.appConfig, dependencies })
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.appConfig, dependencies })
-//Vue.use(Router, { options: window.appConfig, dependencies })
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./i18n/resources/en.json'))
-
-new Vue({
-  router,
-  store,
-  i18n,
-  acl,
-  render: h => h(App)
-}).$mount('#app')
-
-
+getRouter().then(router => {
+  new Vue({
+    router,
+    store,
+    i18n,
+    render: h => h(App)
+  }).$mount('#app')
+})
 
 
 
-
-/* Использование ядра для загрузки приложения, описанного в системе
-start()
-
-async function start()   {
-  // Загрузка приложения
-  let webAppsCore = await Vue.prototype.$WebApps
-
-  let appComponent = await webAppsCore.GetApplicationComponent({
-
-    properties: {
-      i18n,
-      store
-    }
-  })
-
-  new Vue(appComponent).$mount('#app')
-}
-
-
-
-*/

@@ -1,5 +1,0 @@
-mutation delete($id:Int){
-  keysQueryMutation{
-    deleteDocument(id:$id)
-  }
-}
