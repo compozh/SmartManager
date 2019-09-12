@@ -1,5 +1,5 @@
 
-mutation($factId:String!, $addAbsentInstallations:Boolean!, $workCenterCode:String!) {
+mutation($factId:Int!, $addAbsentInstallations:Boolean!, $workCenterCode:String!) {
     mesMutation {
         executeWriteOff(factId: $factId, addAbsentInstallations: $addAbsentInstallations, workCenterCode: $workCenterCode) {
             savedProgress
