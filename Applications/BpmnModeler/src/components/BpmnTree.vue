@@ -86,7 +86,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
 .models-tree-view {
   text-align: left;
   height: 100%;

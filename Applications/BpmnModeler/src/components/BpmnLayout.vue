@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <vue-title title="Bpmn"></vue-title>
+    <vue-title title="IT-Enterprise Workflow modeler"></vue-title>
     <v-toolbar app
                clipped-left
                class="toolbar">
