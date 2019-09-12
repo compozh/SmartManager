@@ -20,17 +20,17 @@
       <v-container fluid pa-0 fill-height>
         <v-layout column>
           <bpmn-contex-menu
-                @create="createItem"
-                @edit="editItem" 
-                @remove="removeItem" 
-                @import="importItem"
-                @export="exportItem">
-                <template #activator="{ open }">
-                  <v-btn flat large class="tree-btn" v-on="open">
-                    <v-icon left>add</v-icon> {{ $t('bpmn.buttons.AddElement') }}
-                  </v-btn>
-                </template>
-              </bpmn-contex-menu>
+            @create="createItem"
+            @edit="editItem" 
+            @remove="removeItem" 
+            @import="importItem"
+            @export="exportItem">
+            <template #activator="{ open }">
+              <v-btn flat large class="tree-btn" v-on="open">
+                <v-icon left>add</v-icon> {{ $t('bpmn.buttons.AddElement') }}
+              </v-btn>
+            </template>
+          </bpmn-contex-menu>
           <v-divider></v-divider>
           <bpmn-tree :items="items" :activeItem.sync="activeItem">
             <template #context-menu="{ item }">
@@ -39,7 +39,8 @@
                 @edit="editItem" 
                 @remove="removeItem" 
                 @import="importItem"
-                @export="exportItem">
+                @export="exportItem"
+                offset>
                 <template #activator="{ open }">
                   <v-btn flat icon v-on="open">
                     <v-icon>mdi-dots-vertical</v-icon>
