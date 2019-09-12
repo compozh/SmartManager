@@ -8,8 +8,8 @@
         <v-card-text :class="selectedDowntime && downtime.id == selectedDowntime.id ? 'active-downtime-item' : 'inactive-downtime-item'">
           <span><strong>Причина:</strong> {{downtime.description}}</span>
           <span><strong>Начало:</strong> {{downtime.eventStart}}</span>
-          <span v-if="downtime.eventEnd"><strong>Окончание:</strong> {{downtime.eventEnd}}</span>
-          <span><strong>Комментарий:</strong> {{downtime.comment}}</span>
+          <span v-if="downtime.eventEnd != '0001-01-01'"><strong>Окончание:</strong> {{downtime.eventEnd}}</span>
+          <span><strong>Комментарий:</strong> {{downtime.comment ? downtime.comment : '- - -'}}</span>
         </v-card-text>
       </v-card>
     </div>
