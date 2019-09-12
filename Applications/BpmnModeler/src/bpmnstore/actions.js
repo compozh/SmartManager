@@ -24,7 +24,6 @@ export default {
     } else {
       items.push(item);
     }
-    context.dispatch('setActiveItem', item);
   },
   async removeItem(context, item) {
     if (item.parentId && item.parentId !== '') {
