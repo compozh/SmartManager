@@ -1,0 +1,12 @@
+
+mutation($factId:String!, $addAbsentInstallations:Boolean!, $workCenterCode:String!) {
+    mesMutation {
+        executeWriteOff(factId: $factId, addAbsentIstallations: $addAbsentInstallations, workCenterCode: $workCenterCode) {
+            savedProgress
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

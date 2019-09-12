@@ -7,9 +7,9 @@
       >
         <v-card-text :class="selectedDowntime && downtime.id == selectedDowntime.id ? 'active-downtime-item' : 'inactive-downtime-item'">
           <span><strong>Причина:</strong> {{downtime.description}}</span>
-          <span><strong>Начало:</strong> {{downtime.eventStart}}</span>
-          <span v-if="downtime.eventEnd"><strong>Окончание:</strong> {{downtime.eventEnd}}</span>
-          <span><strong>Комментарий:</strong> {{downtime.comment}}</span>
+          <span><strong>Начало:</strong> {{converDate(downtime.eventStart)}}</span>
+          <span v-if="downtime.eventEnd != '0001-01-01T00:00:00Z'"><strong>Окончание:</strong> {{converDate(downtime.eventEnd)}}</span>
+          <span><strong>Комментарий:</strong> {{downtime.comment ? downtime.comment : '- - -'}}</span>
         </v-card-text>
       </v-card>
     </div>
@@ -33,6 +33,20 @@ export default {
   methods: {
     changeCurrentDowntime(newDowntime) {
       this.$emit('changeCurrentDowntime', newDowntime)
+    },
+    converDate(date) {
+      date = new Date(date)
+      let getDay = date.getDate().toString(),
+        getMonth = (date.getMonth() + 1).toString(),
+        getYear = date.getYear().toString(),
+        getHours = date.getHours().toString(),
+        getMinutes = date.getMinutes().toString(),
+        day = getDay.length == 1 ? '0' + getDay : getDay,
+        month = getMonth.length == 1 ? '0' + getMonth : getMonth,
+        year = getYear.replace('1', '', 1),
+        hours = getHours.length == 1 ? '0' + getHours : getHours,
+        minutes = getMinutes.length == 1 ? '0' + getMinutes : getMinutes
+      return day + '.' + month + '.' + year + ' ' + hours + ':' + minutes
     }
   }
 }

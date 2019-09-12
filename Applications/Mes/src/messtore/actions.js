@@ -46,31 +46,27 @@ export default {
         console.log('Current UUID - ' + uuid)
 
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
+        commit('setWorkCentersForWorker', workCenters)
+
         if (workCenters.length == 1) {
           commit('setWorkCenter', workCenters[0])
         } else {
           var setWorkCenterForWorker = async (properties) => {
             var workCenterForWorker = await me.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
-            if(workCenterForWorker.length) {
-              let workCentersForWorker = []
+            workCenterForWorker = workCenterForWorker.sort((a,b) => {
+              return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
+            })
+
               for(var workCenter of workCenters) {
-                for(var workCenterOfWorker of workCenterForWorker) {
-                  if(workCenter.code == workCenterOfWorker.code) {
-                    workCentersForWorker.push(workCenter)
+                for(var fixWorkCetner of workCenterForWorker) {
+                  if(fixWorkCetner.code == workCenter.code) {
+                    commit('setWorkCenter', workCenter)
+                    return
                   }
                 }
               }
-              if(workCentersForWorker.length) {
-                commit('setWorkCenter', workCentersForWorker[0])
-                commit('setWorkCentersForWorker', workCentersForWorker)
-              } else {
-                commit('setWorkCentersForWorker', workCenters)
-              }              
-            } else {
-              commit('setWorkCentersForWorker', workCenters)
-            }
           }
-          
+
           if(!getters.properties) {
             commit('addActionAfterInitializeProperties', setWorkCenterForWorker)
           } else {
@@ -211,6 +207,15 @@ export default {
       successAction: async () => { commit('printProduction', production) },
     })
   },
+  async setMaterialProduction({ commit, getters }, production) {
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        const res = await api.setMaterialProductionGql(production.factId, true, getters.workCenter.code)
+        return res
+      },
+      successAction: async () => { commit('setMaterialProduction', production) },
+    })
+  },
   async createProductionFormio({ commit }, { formCode, properties }) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -229,11 +234,11 @@ export default {
       successAction: async result => { commit('setCreateDowntimeFormio', result) },
     })
   },
-  async initializeDowntimeFormio({ commit }, workCenter) {
+  async initializeDowntimeFormio({ commit }, { workCenter, downtimeId }) {
     commit('resetDowntimeFormio')
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code }, 'network-only')
+        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code , id: downtimeId }, 'network-only')
       },
       successAction: async result => { commit('setDowntimeFormio', result) },
       linearLoader: true
@@ -263,7 +268,7 @@ export default {
     })
     commit('closeDialogLinearLoader')
   },
-  async downtimeFormIoSubmit({ commit }, { workCenter, data }) {
+  async downtimeFormIoSubmit({ commit }, { workCenter, data, successAction }) {
      var me = this,
         params = {
          formCode: workCenter.downtimeRegistrationFormCode,
@@ -279,7 +284,12 @@ export default {
           const res = await api.downtimeFormIoSubmitGql(params)
           return res
        },
-       successAction: async () => { me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' }) }
+       successAction: async () => {
+         me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
+         if(successAction) {
+          successAction();
+         }
+        }
      })
      commit('closeDialogLinearLoader')
   },

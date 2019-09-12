@@ -1,10 +1,10 @@
 <template>
   <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
     <div class="production-card-description">
-      <span v-html="production.description"></span>      
+      <span v-html="production.description"></span>
       <br><span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
     </div>
-    <v-speed-dial 
+    <v-speed-dial
       class="production-card-menu"
       absolute
       right
@@ -29,14 +29,17 @@
         </v-btn>
       </template>
       <v-card class="btns-card" elevation=0>
+      <v-btn v-if="production && production.savedProgress < 100" icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction">
+        <v-icon dark>archive</v-icon>
+      </v-btn>
       <v-btn icon color="#326da8" class="mes-print-production" @click="printProduction">
         <v-icon dark>print</v-icon>
       </v-btn>
       <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction">
         <v-icon dark>delete_forever</v-icon>
       </v-btn>
-      </v-card>  
-      
+      </v-card>
+
     </v-speed-dial>
   </v-card-text>
 </template>
@@ -52,6 +55,7 @@ export default {
     return {
       deleteInProgress: false,
       printInProgress: false,
+      setMaterialInProgress: false,
       borderColors: {
         0: 'border-left: 18px solid transparent;',
         1: 'border-left: 18px solid rgba(7, 109, 0, 0.81);',
@@ -75,6 +79,13 @@ export default {
       me.printInProgress = true
       me.$emit('printProduction', { production: me.production, callback: () => {
         me.printInProgress = false
+      }})
+    },
+    setMaterialProduction () {
+      var me = this
+      me.printInProgress = true
+      me.$emit('setMaterialProduction', { production: me.production, callback: () => {
+        me.setMaterialInProgress = false
       }})
     }
   }
@@ -100,6 +111,9 @@ export default {
     margin: 0;
   }
   .mes-delete-production {
+    margin: 0;
+  }
+  .mes-set-material-production {
     margin: 0;
   }
   .production-card-menu  {

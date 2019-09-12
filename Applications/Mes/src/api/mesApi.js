@@ -19,6 +19,7 @@ import usersProductionEvents from './graphql/productions/usersProductionEvents.g
 import workCenterProductionEvents from './graphql/productions/workCenterProductionEvents.graphql'
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import printLabel from './graphql/productions/printLabel.graphql'
+import executeWriteOff from './graphql/productions/executeWriteOff.graphql'
 import downtimeGetTypes from './graphql/downtimeGetTypes.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
@@ -197,11 +198,19 @@ export class MesApi {
   }
   async printProductionGql(factId, checkWriteOffPercent) {
     const  result = await getClient().mutate({
-      mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean!) ${printLabel}`,
+      mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
       variables: { factId, checkWriteOffPercent }
     })
       .then(result => result)
     return result.data.mes.printLabel
+  }
+  async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
+    const  result = await getClient().mutate({
+      mutation: gql`${executeWriteOff}`,
+      variables: { factId, addAbsentInstallations, workCenterCode }
+    })
+      .then(result => result)
+    return result.data.mes.executeWriteOff
   }
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({
@@ -250,7 +259,7 @@ export class MesApi {
       variables: { formCode, formCustomEventParamsInput }
     })
       .then(result => result)
-      
+
     return result.data.mesMutation.callFormCustomEvent
   }
   generateUUID() { // Public Domain/MIT

@@ -76,6 +76,9 @@ export default {
   printProduction(state, production) {
     state.printProduction = production
   },
+  setMaterialProduction(state, production) {
+    state.setMaterialProduction = production
+  },
   setMenuMiniMode(state, menuMiniMode) {
     state.menuMiniMode = menuMiniMode
     localStorage.setItem('mesMenuMiniMode', menuMiniMode.toString())
