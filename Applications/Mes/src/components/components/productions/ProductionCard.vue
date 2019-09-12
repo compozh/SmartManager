@@ -29,7 +29,7 @@
         </v-btn>
       </template>
       <v-card class="btns-card" elevation=0>
-      <v-btn icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction">
+      <v-btn v-if="production && production.savedProgress < 100" icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction">
         <v-icon dark>archive</v-icon>
       </v-btn>
       <v-btn icon color="#326da8" class="mes-print-production" @click="printProduction">
