@@ -18,6 +18,7 @@
         ref="formioBuilder"
         @formioSubmit=formioSubmit
         :formioData=createDowntimeFormio
+        :formCode=workCenter.downtimeRegistrationFormCode
         />
       </div>
     <v-btn
