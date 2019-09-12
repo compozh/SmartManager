@@ -58,7 +58,7 @@
 
     <v-content class="white">
       <v-container fluid pa-0 fill-height>
-        <router-view />
+        <router-view ref="modeler"/>
       </v-container>
     </v-content>
 
@@ -99,6 +99,7 @@
 <script>
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
+import treeSearch from '../api/treeSearch';
 
 export default {
   name: 'bpmn-layout',
@@ -188,10 +189,10 @@ export default {
     formClose() {
       this.showForm = false;
     },
-    createItem(parent, type) {
+    createItem(parent, type, xmlView) {
       const parentId = parent ? parent.id : null;
       this.formMode = 'create';
-      this.formModel = type === 'folder' ? new Folder({ parentId }) : new Process({ parentId });
+      this.formModel = type === 'folder' ? new Folder({ parentId }) : new Process({ parentId, xmlView });
       this.formType = type;
       this.showForm = true;
     },
@@ -207,11 +208,37 @@ export default {
       this.formType = item.isFolder ? 'folder' : 'process';
       this.showForm = true;
     },
-    importItem(item) {
+    importItem(parent) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.bpmn, .dmm';
 
+      input.addEventListener('change', async () => {
+        const [file] = input.files;
+
+        if (!file) {
+          return;
+        }
+
+        file.text().then(xml => {
+          setTimeout(function() {
+            document.body.removeChild(input);  
+          }, 0);
+
+          this.createItem(parent, 'process', xml);
+        });
+
+        
+      });
+
+      document.body.appendChild(input);
+      input.click();
     },
     exportItem(item, type) {
-
+      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === 'bpmn-modeler', e => e.$children);
+      if (modeler && modeler.export) {
+        modeler.export(type);
+      }
     },
     navigateToItem(itemId) {
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
