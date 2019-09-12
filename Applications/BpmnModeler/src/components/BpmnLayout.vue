@@ -212,15 +212,13 @@ export default {
     importItem(parent) {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = '.bpmn, .dmm';
+      input.accept = '.bpmn';
 
-      input.addEventListener('change', async () => {
+      input.addEventListener('change', () => {
         const [file] = input.files;
-
         if (!file) {
           return;
         }
-
         file.text().then(xml => {
           setTimeout(function() {
             document.body.removeChild(input);  
@@ -228,10 +226,7 @@ export default {
 
           this.createItem(parent, 'process', xml);
         });
-
-        
       });
-
       document.body.appendChild(input);
       input.click();
     },
