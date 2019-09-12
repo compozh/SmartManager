@@ -1,4 +1,6 @@
+import Process from '../api/models/Process';
+
 export default {
-  models: [],
-  activeModel: { id: '', name: '', xml: '' }
+  items: [],
+  activeItem: new Process()
 };

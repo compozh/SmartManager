@@ -1,23 +1,31 @@
 {
 	"buttons": {
-		"AddElement": "Створити процес",
+		"AddElement": "Додати елемент",
 		"Refresh": "Оновити",
 		"Close": "Закрити",
 		"Rename": "Редагувати",
-		"Delete": "Виадилит",
+		"Delete": "Видалити",
 		"Save": "Зберегти",
 		"Cancel": "Відмінити",
-		"CreateProcess": "Створити процес"
+		"Create": "Створити",
+		"AddProcess": "Додати процес",
+		"AddFolder": "Додати папку",
+		"Import": "Імпортувати процес",
+		"ExportSvg": "Експортувати в форматі svg",
+		"ExportBpmn": "Експортувати в форматі bpmn"
 	},
 	"labels": {
-		"NewProcess": "Створити процес",
+		"NewProcess": "Новий процес",
 		"Search": "Пошук",
 		"ProcessSaved": "Збережено",
 		"SelectOrCreateProcess": "Створіть новий процес, або виберіть процес зі списку",
-		"ProcessName": "Назва",
+		"Name": "Назва",
 		"CreateProcess": "Створити процес",
 		"EditProcess": "Редагувати процес",
-		"DeleteProcess": "Видалити процес"
+		"DeleteProcess": "Видалити процес",
+		"CreateFolder": "Створити папку",
+		"EditFolder": "Редагувати папку",
+		"DeleteFolder": "Видалити папку"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Процеси не завантажено",

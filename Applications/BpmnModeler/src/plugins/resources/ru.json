@@ -1,23 +1,31 @@
 {
 	"buttons": {
-		"AddElement": "Создать процесс",
+		"AddElement": "Добавить елемент",
 		"Refresh": "Обновить",
 		"Close": "Закрыть",
 		"Rename": "Переименовать",
 		"Delete": "Удалить",
 		"Save": "Сохранить",
 		"Cancel": "Отменить",
-		"CreateProcess": "Создать процесс"
+		"Create": "Создать",
+		"AddProcess": "Добавить процесс",
+		"AddFolder": "Добавить папку",
+		"Import": "Импротировать процесс",
+		"ExportSvg": "Экспортировать в формате svg",
+		"ExportBpmn": "Экспортировать в формате bpmn"
 	},
 	"labels": {
-		"NewProcess": "Создать процесс",
+		"NewProcess": "Новый процесс",
 		"Search": "Поиск",
 		"ProcessSaved": "Сохранено",
 		"SelectOrCreateProcess": "Создайте новый процесс, или выберите процесс из списка",
-		"ProcessName": "Название",
+		"Name": "Название",
 		"CreateProcess": "Создать процесс",
 		"EditProcess": "Переименовать процесс",
-		"DeleteProcess": "Удалить процесс"
+		"DeleteProcess": "Удалить процесс",
+		"CreateFolder": "Создать папку",
+		"EditFolder": "Переименовать папку",
+		"DeleteFolder": "Удалить папку"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Процессы не загружены",

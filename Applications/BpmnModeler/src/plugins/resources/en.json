@@ -1,23 +1,31 @@
 {
     "buttons": {
-		"AddElement": "Add process",
+		"AddElement": "Add element",
 		"Refresh": "Refresh",
 		"Close": "Close",
 		"Rename": "Rename",
 		"Delete": "Delete",
 		"Save": "Save",
 		"Cancel": "Cancel",
-		"CreateProcess": "Create process"
+		"Create": "Створити",
+		"AddProcess": "Add process",
+		"AddFolder": "Add folder",
+		"Import": "Import process",
+		"ExportSvg": "Export svg",
+		"ExportBpmn": "Export bpmn"
 	},
 	"labels": {
 		"NewProcess": "New process",
 		"Search": "Search",
 		"ProcessSaved": "Process saved",
 		"SelectOrCreateProcess": "Create new process or select one from the list",
-		"ProcessName": "Name",
+		"Name": "Name",
 		"CreateProcess": "Create process",
 		"EditProcess": "Edit process",
-		"DeleteProcess": "Delete process"
+		"DeleteProcess": "Delete process",
+		"CreateFolder": "Create folder",
+		"EditFolder": "Edit folder",
+		"DeleteFolder": "Delete folder"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Processes not loaded",

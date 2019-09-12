@@ -181,6 +181,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
+  text-align: start;
 }
 .properties-panel-parent {
   width: 100%;
