@@ -9,7 +9,7 @@ import fullUserInfo from './graphql/fullUserInfo.graphql'
 export class PersonalInfoApi {
 
   static getFullUserInfo() {
-    return getClient('ITPORTAL').query({
+    return getClient('PERSONAL_INFO').query({
       query: gql` ${fullUserInfo}`
     })
   }

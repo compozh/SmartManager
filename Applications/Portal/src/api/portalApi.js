@@ -17,7 +17,7 @@ export class PortalApi {
     // получение appId
     let tempRouter = new VueRouter({
       mode: 'history',
-      base: process.env.VUE_APP_BASE_PATH,
+      base: process.env.VUE_APP_BASE_PATH_FULL,
       routes: [{path: '/:ApplicationId', children: [{path: '*'}]}
       ]
     })

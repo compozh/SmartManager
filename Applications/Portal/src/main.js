@@ -94,12 +94,19 @@ let dependencies = {
 // Плагины стандартные
 Vue.use(Vuex)
 Vue.use(VueApollo)
+// язык
+if (!localStorage.getItem('language')) {
+  localStorage.setItem('language','uk')
+}
 
 // Плагины it-enterprise
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.appConfig, dependencies })
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./i18n/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
+
 getRouter().then(router => {
   new Vue({
     router,

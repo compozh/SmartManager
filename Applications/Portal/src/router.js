@@ -29,7 +29,7 @@ export async function  getRouter() {
     scrollBehavior () {
       return { x: 0, y: 0 }
     },
-    base: process.env.VUE_APP_BASE_PATH,
+    base: process.env.VUE_APP_BASE_PATH_FULL,
     routes: [
       {
         // =============================================================================

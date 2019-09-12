@@ -1,10 +1,7 @@
 {
-  itmenu{
-    user{
-      firstName lastName patronymic
-      email
-      photo
-      dateBirthday
+  personalInfoQuery{
+    fullInfo{
+      adress birthdayDate departmentTitle email fullName hireDate phone skype photo
     }
   }
 }

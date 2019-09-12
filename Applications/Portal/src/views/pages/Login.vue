@@ -20,8 +20,8 @@
                         <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
                             <div class="p-8">
                                 <div class="vx-card__title mb-8">
-                                    <h4 class="mb-4">Вход</h4>
-                                    <p>Добро пожаловать, пожалуйста, войдите под своей учетной записью.</p>
+                                    <h4 class="mb-4">{{$t("Login.Enter")}}</h4>
+                                    <p>{{$t("Login.Greeting")}}</p>
                                 </div>
                                 <vs-input
                                     v-validate="'required'"
@@ -29,7 +29,7 @@
                                     name="login"
                                     icon="icon icon-user"
                                     icon-pack="feather"
-                                    label-placeholder="Логин"
+                                    :label-placeholder="$t('Login.Login')"
                                     v-model="login"
                                     class="w-full no-icon-border"/>
                                 <span class="text-danger text-sm">{{ errors.first('login') }}</span>
@@ -41,13 +41,13 @@
                                     name="password"
                                     icon="icon icon-lock"
                                     icon-pack="feather"
-                                    label-placeholder="Пароль"
+                                    :label-placeholder="$t('Login.Password')"
                                     v-model="password"
                                     class="w-full mt-6 no-icon-border" />
                                 <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
                                 <div class="flex flex-wrap justify-between my-5">
-                                    <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Запомнить меня</vs-checkbox>
+                                    <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{$t('Login.RememberMe')}}</vs-checkbox>
                                     <router-link to="/forgot-password">Забыли пароль?</router-link>
                                 </div>
                                 <!-- РЕГИСТРАЦИЯ -->
