@@ -1,7 +1,7 @@
 
 mutation($factId:String!, $addAbsentInstallations:Boolean!, $workCenterCode:String!) {
     mesMutation {
-        executeWriteOff(factId: $factId, addAbsentIstallations: $addAbsentInstallations, workCenterCode: $workCenterCode) {
+        executeWriteOff(factId: $factId, addAbsentInstallations: $addAbsentInstallations, workCenterCode: $workCenterCode) {
             savedProgress
             success
             errorMessage
