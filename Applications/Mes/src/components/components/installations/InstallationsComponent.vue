@@ -32,7 +32,7 @@ export default {
     return {
       dialogProperties: {
         title: '',
-        message: 'Вы действительно хотите удалить выработку?',
+        message: 'Вы действительно хотите удалить партию, установленную на рабочий центр?',
         agreeMessage: 'Да',
         disagreeMessage: 'Нет',
         visible: false,
