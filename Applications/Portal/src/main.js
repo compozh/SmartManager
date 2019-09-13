@@ -94,6 +94,7 @@ let dependencies = {
 // Плагины стандартные
 Vue.use(Vuex)
 Vue.use(VueApollo)
+
 // язык
 if (!localStorage.getItem('language')) {
   localStorage.setItem('language','uk')
