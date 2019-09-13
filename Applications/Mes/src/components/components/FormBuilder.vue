@@ -2,7 +2,7 @@
     <formio id="formio" class="formio-container"
       :form=formioComponents
       :submission=formioSubmission
-      :options="options"
+      :options=options
       @submit=onSubmit
       @change=onChange
       ref="formioComponent"
@@ -43,18 +43,16 @@ export default {
     requestToServerAction(eventCode, callback) {
       var me = this,
         form = this.$refs.formioComponent,
-        components = JSON.stringify(form.form.components, null, 4),
+        formData = JSON.stringify(form.form, null, 4),
         submission = JSON.stringify(form.submission, null, 4)
 
-      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode, params: { eventCode, components, submission }, successCallback: result => {
+      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode, params: { eventCode, components: formData, submission }, successCallback: result => {
             if (callback) {
               callback();
             }
             
-            if (result.components && result.components !== components) {
-              form.form = Object.assign(form.form, {
-                  components: JSON.parse(result.components)
-              });
+            if (result.components && result.components !== formData) {
+              form.form = JSON.parse(result.components)
             }
 
             if (result.submission && result.submission !== submission) {
@@ -66,7 +64,7 @@ export default {
   },
   computed: {
     formioComponents() {
-      return { components: this.formioData.form ? JSON.parse(this.formioData.form) : [] }
+      return this.formioData.form ? JSON.parse(this.formioData.form) : {}
     },
     formioSubmission() {
       return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
