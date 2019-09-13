@@ -89,7 +89,7 @@
     </div>
     <!-- PARENT TASKS -->
     <div
-      v-if="task.parentTasks.length"
+      v-if="parentTasks.length"
       class="vx-row"
       style="margin-top: 2.2rem"
     >
@@ -129,7 +129,7 @@
     </div>
     <!-- SUB TASKS -->
     <div
-      v-if="task.childTasks.length"
+      v-if="childTasks.length"
       class="vx-row"
       style="margin-top: 2.2rem"
     >
@@ -201,7 +201,17 @@ export default {
       return dateTime => dateTime
         ? dateTime.split(' ').shift()
         : ''
-    }
+    },
+    parentTasks() {
+      return this.task.parentTasks
+        ? this.task.parentTasks
+        : []
+    },
+    childTasks() {
+      return this.task.childTasks
+        ? this.task.childTasks
+        : []
+    },
   },
   methods: {
     iFrameOnLoad(event) {
