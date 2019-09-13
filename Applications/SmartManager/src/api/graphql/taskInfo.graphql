@@ -1,4 +1,4 @@
-{
+query ($taskId: Int) {
   smtasks {
     taskDetails(taskId: $taskId) {
       ...taskFields
@@ -25,6 +25,7 @@ fragment taskFields on Task {
   declarerPhoto
   performerId
   performer
+  performerPhoto
   dateplan
   dateAdd
   status
