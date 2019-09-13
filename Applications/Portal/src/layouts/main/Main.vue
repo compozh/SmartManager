@@ -11,10 +11,10 @@
 <template>
     <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
         <vx-tour :steps="steps" v-if="!disableThemeTour" />
-
+    <doc-title :title="appTitle"/>
 
         <!-- БОКОВОЕ МЕНЮ -->
-        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="templateConfig.applicationTitle" parent=".layout--main" />
+        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="appTitle" parent=".layout--main" />
 
         <!-- ЗОНА КОНТЕНТА -->
         <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
@@ -97,6 +97,16 @@ export default {
     },
   },
   computed: {
+
+    appTitle() {
+      var title = this.templateConfig.applicationTitle
+      if (typeof title == 'object') {
+        if (title.resourceKey) {
+          return this.$t(title.resourceKey)
+        }
+      }
+      return title
+    },
     sidebarItems() {
       if (!this.$store.state.app.applicationDescription) {
         return []
@@ -197,6 +207,9 @@ export default {
     VxSidebar
   },
   created() {
+
+    console.log(this.appTitle)
+
     this.$store.dispatch('app/loadApplicationDescription')
     this.setSidebarWidth()
     if (this.navbarColor == '#fff' && this.isThemeDark) {

@@ -15,7 +15,9 @@ import VxList  from './components/vx-list/VxList.vue'
 import VxBreadcrumb  from './layouts/components/VxBreadcrumb.vue'
 import FeatherIcon  from './components/FeatherIcon.vue'
 import VxInputGroup  from './components/vx-input-group/VxInputGroup.vue'
+import titleComponent from './components/DocTitle'
 
+Vue.component('doc-title', titleComponent)
 Vue.component(VxTooltip.name, VxTooltip)
 Vue.component(VxCard.name, VxCard)
 Vue.component(VxList.name, VxList)

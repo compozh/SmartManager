@@ -38,8 +38,8 @@ export default {
       }
 
       payload.notify({
-        title: 'Вход в систему',
-        text: 'Вы уже вошли в систему!',
+        title: this.$t('Login.EnterToSystem'),
+        text: this.$t('Login.YouAlreadyEntered'),
         iconPack: 'feather',
         icon: 'icon-alert-circle',
         color: 'warning'

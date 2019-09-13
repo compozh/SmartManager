@@ -24,6 +24,8 @@
                                     <p>{{$t("Login.Greeting")}}</p>
                                 </div>
                                 <vs-input
+                                    @keydown.enter="loginMethod"
+
                                     v-validate="'required'"
                                     data-vv-validate-on="blur"
                                     name="login"
@@ -35,6 +37,7 @@
                                 <span class="text-danger text-sm">{{ errors.first('login') }}</span>
 
                                 <vs-input
+                                    @keydown.enter="loginMethod"
                                     data-vv-validate-on="blur"
                                     v-validate="'required'"
                                     type="password"
@@ -48,14 +51,14 @@
 
                                 <div class="flex flex-wrap justify-between my-5">
                                     <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{$t('Login.RememberMe')}}</vs-checkbox>
-                                    <router-link to="/forgot-password">Забыли пароль?</router-link>
+                                    <router-link to="/forgot-password">{{$t("Login.ForgotPassword")}}</router-link>
                                 </div>
                                 <!-- РЕГИСТРАЦИЯ -->
-                                <vs-button v-if="config.allowedRegisterUser"  type="border" @click="registerUser">Регистрация</vs-button>
+                                <vs-button v-if="config.allowedRegisterUser"  type="border" @click="registerUser">{{$t("Login.Registration")}}</vs-button>
                                 <!-- ВХОД -->
-                                <vs-button class="float-right" :disabled="!validateForm" @click="loginMethod">Вход</vs-button>
+                                <vs-button class="float-right" :disabled="!validateForm" @click="loginMethod">{{$t("Login.Enter")}}</vs-button>
 
-                                <vs-divider>Или</vs-divider>
+                                <vs-divider v-if="anyAlternatives">{{$t("Login.Or")}}</vs-divider>
 
                                 <div class="social-login flex flex-wrap justify-between">
                                     <div class="social-login-buttons flex flex-wrap items-center mt-4">
@@ -105,6 +108,9 @@ export default {
     }
   },
   computed: {
+    anyAlternatives() {
+      return this.config.allowedAlternativeLoginMethods.length > 0
+    },
     validateForm() {
       return !this.errors.any() && this.login != '' && this.password != ''
     },
@@ -117,6 +123,9 @@ export default {
   },
   methods: {
     loginMethod() {
+      if (!this.validateForm) {
+        return
+      }
       // Loading
       this.$vs.loading()
 

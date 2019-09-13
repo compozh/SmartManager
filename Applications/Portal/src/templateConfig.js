@@ -1,5 +1,5 @@
 export default {
-  applicationTitle: 'Личный кабинет',
+  applicationTitle: { resourceKey: 'AppTitle' },
   // доступные локализации
   localizations: [
     { code: 'uk', name: 'Українська',  flag: 'ua' },
