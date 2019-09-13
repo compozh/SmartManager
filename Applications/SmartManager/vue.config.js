@@ -27,5 +27,8 @@ module.exports = {
   transpileDependencies: [
     'vue-echarts',
     'resize-detector'
-  ]
+  ],
+  configureWebpack: {
+    devtool: 'eval-source-map'
+  }
 }
