@@ -1,7 +1,7 @@
 <template>
   <v-menu close-on-click
           close-on-content-click
-          offset-x
+          :offset-x="offset"
           offset-y>
     <template v-slot:activator="{ on }">
       <slot name="activator" :open="on"></slot>
@@ -63,7 +63,8 @@
 export default {
   name: 'bpmn-contex-menu',
   props: {
-    item: Object
+    item: Object,
+    offset: Boolean
   },
   methods: {
     addFolder(item) {

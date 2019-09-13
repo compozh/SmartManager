@@ -4,19 +4,15 @@
       <span class="headline">{{ titles[type][mode] }}</span>
     </v-card-title>
     <v-card-text>
-      <v-container grid-list-md>
-        <v-layout wrap>
-          <v-flex xs12>
-            <v-text-field v-model="model.name"
-                          :label="$t('bpmn.labels.Name')"
-                          :disabled="loading || mode === 'delete'"
-                          clearable
-                          autofocus
-                          maxLength="254"
-                          required></v-text-field>
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <v-form ref="form" v-model="valid">
+        <v-text-field ref="nameField"
+                      v-model="model.name"
+                      :label="$t('bpmn.labels.Name')"
+                      :disabled="loading || mode === 'delete'"
+                      clearable
+                      maxLength="254"
+                      :rules="[rules.required]"></v-text-field>
+      </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -51,6 +47,7 @@ export default {
   },
   data() {
     return {
+      valid: true,
       titles: {
         'process': {
           'create': this.$t('bpmn.labels.CreateProcess'),
@@ -67,15 +64,28 @@ export default {
         'create': this.$t('bpmn.buttons.Create'),
         'edit': this.$t('bpmn.buttons.Save'),
         'delete': this.$t('bpmn.buttons.Delete')
+      },
+      rules: {
+        required: value => !!value || this.$t('bpmn.labels.RequiredField')
       }
     }
   },
   methods: {
     cancel() {
+      this.$refs.form.resetValidation();
       this.$emit('close');
     },
     save() {
-      this.$emit('save', this.model, this.type)
+      if (this.$refs.form.validate()) {
+        this.$refs.form.resetValidation();
+        this.$emit('save', this.model, this.type);
+      }
+    }
+  },
+  watch: {
+    model() {
+      this.$refs.form.resetValidation();
+      this.$refs.nameField.focus();
     }
   }
 }
