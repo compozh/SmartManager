@@ -23,7 +23,7 @@ let router = new VueRouter({
   scrollBehavior () {
     return { x: 0, y: 0 }
   },
-  base: window.appConfig.BASE_URL + 'SmartManagerVuesax/',
+  base: window.appConfig.BASE_URL + 'SmartManager/',
   routes: [
 
     {
