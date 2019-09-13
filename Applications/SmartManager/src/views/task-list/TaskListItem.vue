@@ -20,11 +20,6 @@
           <span>{{ task.descript }}</span>
         </div>
 
-        <div class="task__details truncate mr-3">
-          <h5 :style="{color: task.childCount ? 'blue' : 'black' }">childCount: {{ task.childCount }}</h5>
-          <h5>ARSO: {{ task.arso }}</h5>
-        </div>
-
         <div class="task-item__meta flex items-center flex-shrink-0">
           <span>{{ task.dateAdd }}</span>
         </div>
