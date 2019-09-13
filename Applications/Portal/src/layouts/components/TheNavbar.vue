@@ -19,11 +19,12 @@
       <!-- I18N -->
       <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer pr-5">
         <span class="cursor-pointer flex i18n-locale">
-          <flag class="h-4 w-5" size='small' :squared="false" :iso="getCurrentLocaleData.flag" />
           <span class="hidden sm:block ml-2">{{ getCurrentLocaleData.name }}</span>
         </span>
         <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-          <vs-dropdown-item :key="lang.code" v-for="lang in localizations" @click="updateLocale(lang.code)"><flag class="h-4 w-5" :squared="false" :iso="lang.flag" /> &nbsp;{{lang.name}}</vs-dropdown-item>
+          <vs-dropdown-item :key="lang.code" v-for="lang in localizations" @click="updateLocale(lang.code)">
+            {{lang.name}}
+          </vs-dropdown-item>
         </vs-dropdown-menu>
       </vs-dropdown>
 
@@ -68,7 +69,7 @@
                 class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                 @click="logout">
                 <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
-                <span class="ml-2">Выход</span>
+                <span class="ml-2">{{$t("Login.Exit")}}</span>
               </li>
             </ul>
           </vs-dropdown-menu>
