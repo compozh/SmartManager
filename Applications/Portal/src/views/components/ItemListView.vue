@@ -25,15 +25,15 @@
                 <div class="vx-col sm:w-1/2">
                     <div class="p-4 pt-6">
                         <slot name="item-meta">
-                            <h6 class="item-name font-semibold mb-1">{{ item.name }}</h6>
+                            <h6  class="item-name font-semibold mb-1">{{ item.name }}</h6>
                             <p class="text-sm mb-4 cursor-pointer">By <span class="text-primary font-semibold">{{ item.brand }}</span></p>
-                            <p class="item-description text-sm">{{ item.description }}</p>
+                            <p  class="item-description text-sm">{{ item.description }}</p>
                         </slot>
                     </div>
                 </div>
 
                 <!-- PURCHASE COL -->
-                <div class="vx-col sm:w-1/4 w-full flex items-center">
+                <div v-if="!minMode" class="vx-col sm:w-1/4 w-full flex items-center">
 
                     <div class="p-4 flex flex-col w-full border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0">
 
@@ -66,6 +66,9 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    minMode: {
+      type: Boolean
     }
   },
   computed: {
