@@ -43,18 +43,19 @@ export default {
     requestToServerAction(eventCode, callback) {
       var me = this,
         form = this.$refs.formioComponent,
-        formData = JSON.stringify(form.form, null, 4),
+        components = JSON.stringify(form.form.components, null, 4),
         submission = JSON.stringify(form.submission, null, 4)
 
-      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode, params: { eventCode, components: formData, submission }, successCallback: result => {
+      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode, params: { eventCode, components, submission }, successCallback: result => {
             if (callback) {
-              callback();
+              callback(result);
             }
             
-            if (result.components && result.components !== formData) {
-              form.form = JSON.parse(result.components)
+            if (result.components && result.components !== components) {
+              form.form = Object.assign(form.form, {
+                  components: JSON.parse(result.components)
+              });
             }
-
             if (result.submission && result.submission !== submission) {
               form.setSubmission(JSON.parse(result.submission));
             }
@@ -64,7 +65,7 @@ export default {
   },
   computed: {
     formioComponents() {
-      return this.formioData.form ? JSON.parse(this.formioData.form) : {}
+      return { components: this.formioData.form ? JSON.parse(this.formioData.form) : [] }
     },
     formioSubmission() {
       return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
