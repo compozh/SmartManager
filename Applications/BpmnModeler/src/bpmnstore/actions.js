@@ -1,45 +1,69 @@
 import { BpmnModelerApi } from '../api/bpmnApi';
+import Folder from '../api/models/Folder';
+import Process from '../api/models/Process';
 
 const api = new BpmnModelerApi();
 
 export default {
-  async setActiveModel(context, id) {
-    let { model } = context.getters.getModelById(id);
-    if (!model) {
-      model = { id: '', name: '', xmlView: '', isFolder: false }
+  async addItem(context, item, index) {
+    let items;
+    if (item.parentId && item.parentId !== '') {
+      const { item: parent, index } = context.getters.getItemById(item.parentId);
+      if (index === -1) {
+        return;
+      }
+      if (!parent.items) {
+        parent.items = [];
+      }
+      items = parent.items;
+    } else {
+      items = context.state.items;
     }
-    context.state.activeModel = model;
+    if (index && index >= 0) {
+      items.splice(index, 0, item);
+    } else {
+      items.push(item);
+    }
   },
-  async loadModels(context) {
-    let models;
+  async removeItem(context, item) {
+    if (item.parentId && item.parentId !== '') {
+      const { item: parent } = context.getters.getItemById(item.parentId);
+      parent.items = parent.items.filter(e => e !== item);
+    } else {
+      context.state.items = context.state.items.filter(e => e !== item);
+    }
+  },
+  async setActiveItem(context, item) {
+    if (typeof item === 'string' || item instanceof String) {
+      ({ item } = context.getters.getItemById(item));
+    }
+    if (!item) {
+      item = new Process();
+    }
+    context.state.activeItem = item;
+  },
+  async loadItems(context) {
+    let items;
     try {
-      models = await api.get();
+      items = await api.getItems()
     } catch (error) {
       console.error(error);
       return false;
     }
-
-    if (!models) {
+    if (!items) {
       return false;
     }
 
-    context.commit('setModels', models);
-    return true;
-  },
-  async createModel(context, model) {
-    try {
-      model = await api.create(model);
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-
-    if (!model) {
-      return false;
-    }
-
-    context.state.models.push(model);
-    context.dispatch('setActiveModel', model)
+    const mapTree = (items) => items.map(e => {
+      if (e.$type.startsWith('Folder')) {
+        e.items = mapTree(e.items);
+        return new Folder(e);
+      } else {
+        return new Process(e);
+      }
+    });
+    items = mapTree(items);
+    context.commit('setItems', items);
     return true;
   },
   async getXml(context, id) {
@@ -51,17 +75,17 @@ export default {
       return false;
     }
 
-    const { model } = context.getters.getModelById(id);
-    if (model) {
-      model.xml === xml;
-    }
+    // const { model } = context.getters.getModelById(id);
+    // if (model) {
+    //   model.xml === xml;
+    // }
 
     return xml;
   },
   async setXml(context, { id, xml }) {
-    const { model } = context.getters.getModelById(id);
-    const oldXml = model.xml;
-    model.xml = xml;
+    // const { model } = context.getters.getModelById(id);
+    // const oldXml = model.xml;
+    // model.xml = xml;
 
     let success = false;
     try {
@@ -70,47 +94,99 @@ export default {
       console.error(error);
     }
     
-    if (!success) {
-      model.xml = oldXml;
-    }
+    // if (!success) {
+    //   model.xml = oldXml;
+    // }
 
     return success;
   },
-  async setModelName(context, { id, name }) {
-    const { model } = context.getters.getModelById(id);
-    const oldName = model.name;
-    model.name = name;
-
-    let success = false;
+  async createProcess(context, process) {
+    let newProcess;
     try {
-      success = api.setName(model.id, model.name);
+      newProcess = await api.createProcess(process);
     } catch (error) {
       console.error(error);
-    }
-
-    if (!success) {
-      model.name = oldName;
-    }
-    return success;
-  },
-  async deleteModel(context, { id }) {
-    const { model, index } = context.getters.getModelById(id);
-    if (!model) {
       return false;
     }
 
-    context.state.models = context.state.models.filter(e => e !== model);
+    if (!newProcess) {
+      return false;
+    }
+    Object.assign(process, newProcess);
+    context.dispatch('addItem', process);
+    return true;
+  },
+  async editProcess(context, { id, name }) {
+    const { item: process } = context.getters.getItemById(id);
+    const oldName = process.name;
+    process.name = name;
+
+    let success = false;
+    try {
+      success = await api.editProcess(process);
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (!success) {
+      process.name = oldName;
+    }
+    return success;
+  },
+  async createFolder(context, folder) {
+    let newFolder;
+    try {
+      newFolder = await api.createFolder(folder);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    if (!newFolder) {
+      return false;
+    }
+    Object.assign(folder, newFolder);
+    context.dispatch('addItem', folder);
+    return true;
+  },
+  async editFolder(context, { id, name }) {
+    const { item: folder } = context.getters.getItemById(id);
+    const oldName = folder.name;
+    folder.name = name;
+
+    let success = false;
+    try {
+      success = await api.editFolder(folder);
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (!success) {
+      folder.name = oldName;
+    }
+    return success;
+  },
+  async deleteItem(context, { id }) {
+    const { item, index } = context.getters.getItemById(id);
+    if (index < 0) {
+      return false;
+    }
+
+    context.dispatch('removeItem', item);
 
     let success = false;
 
     try {
-      success = await api.deleteModel(id);
+      if (item instanceof Folder) {
+        success = await api.deleteFolder(id);
+      } else {
+        success = await api.deleteProcess(id);
+      }
     } catch (error) {
       console.error(error);
     }
-    
+
     if (!success) {
-      context.state.model.splice(index, 0, model);
+      context.dispatch('addItem', item, index);
     }
 
     return success;

@@ -1,5 +1,0 @@
- {
-  bpmnmutation {
-    setName(id: $id, name: $name)
-  }
-}

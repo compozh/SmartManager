@@ -1,23 +1,31 @@
 {
     "buttons": {
-		"AddElement": "Add process",
+		"AddElement": "Add element",
 		"Refresh": "Refresh",
 		"Close": "Close",
 		"Rename": "Rename",
 		"Delete": "Delete",
 		"Save": "Save",
 		"Cancel": "Cancel",
-		"CreateProcess": "Create process"
+		"Create": "Створити",
+		"AddProcess": "Add process",
+		"AddFolder": "Add folder",
+		"Import": "Import process",
+		"ExportSvg": "Export svg",
+		"ExportBpmn": "Export bpmn"
 	},
 	"labels": {
 		"NewProcess": "New process",
 		"Search": "Search",
 		"ProcessSaved": "Process saved",
 		"SelectOrCreateProcess": "Create new process or select one from the list",
-		"ProcessName": "Name",
+		"Name": "Name",
 		"CreateProcess": "Create process",
 		"EditProcess": "Edit process",
-		"DeleteProcess": "Delete process"
+		"DeleteProcess": "Delete process",
+		"CreateFolder": "Create folder",
+		"EditFolder": "Edit folder",
+		"DeleteFolder": "Delete folder"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Processes not loaded",
@@ -152,6 +160,27 @@
 		"Process Name": "Process Name",
 		"Executable": "Executable",
 		"Process Documentation": "Process Documentation",
-		"Category Value": "Category Value"
+		"Category Value": "Category Value",
+		"Message": "Message",
+		"Message Name": "Message Name",
+		"Signal": "Signal",
+		"Signal Name": "Signal Name",
+		"Escalation": "Escalation",
+		"Escalation Name": "Escalation Name",
+		"Escalation Code": "Escalation Code",
+		"Error": "Error",
+		"Error Name": "Error Name",
+		"Error Code": "Error Code",
+		"Link Name": "Link Name",
+		"Variable Name": "Variable Name",
+		"Variable Event": "Variable Event",
+		"Wait for Completion": "Wait for Completion",
+		"Activity Ref": "Activity Ref",
+		"Timer Definition Type": "Timer Definition Type",
+		"Timer Definition": "Timer Definition",
+		"Date": "Date",
+		"Duration": "Duration",
+		"Cycle": "Cycle",
+		"Must provide a value": "Must provide a value"
 	}
 }
