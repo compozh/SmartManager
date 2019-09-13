@@ -25,7 +25,8 @@
 		"DeleteProcess": "Видалити процес",
 		"CreateFolder": "Створити папку",
 		"EditFolder": "Редагувати папку",
-		"DeleteFolder": "Видалити папку"
+		"DeleteFolder": "Видалити папку",
+		"RequiredField": "Поле обов'язкове для вводу"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Процеси не завантажено",

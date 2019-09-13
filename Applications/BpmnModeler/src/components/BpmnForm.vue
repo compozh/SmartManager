@@ -47,8 +47,8 @@ export default {
   },
   data() {
     return {
+      valid: true,
       titles: {
-        valid: true,
         'process': {
           'create': this.$t('bpmn.labels.CreateProcess'),
           'edit': this.$t('bpmn.labels.EditProcess'),

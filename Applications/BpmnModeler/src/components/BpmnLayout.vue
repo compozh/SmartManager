@@ -3,6 +3,7 @@
     <vue-title title="IT-Enterprise Workflow modeler"></vue-title>
     <v-toolbar app
                clipped-left
+               clipped-right
                class="toolbar">
       <v-toolbar-side-icon 
         class="blue--text text--darken-2"
@@ -14,9 +15,9 @@
     </v-toolbar>
 
     <v-navigation-drawer v-model="appBar"
-                         app
-                         clipped
-                         width="380">
+      app
+      clipped
+      width="380">
       <v-container fluid pa-0 fill-height>
         <v-layout column>
           <bpmn-contex-menu

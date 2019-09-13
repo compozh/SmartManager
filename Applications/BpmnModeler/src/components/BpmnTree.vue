@@ -1,11 +1,12 @@
 <template>
-  <v-layout column>
+  <v-layout column fill-height>
     <v-text-field
       v-model="search"
       :label="$tc('bpmn.labels.Search')"
       class="tree-search"
       hide-details
       clearable
+      single-line
     ></v-text-field>
     <v-treeview :open.sync="opened"
       :items="items"
@@ -16,10 +17,9 @@
       hoverable
       class="models-tree-view">
       <template v-slot:prepend="{ item, open }">
-        <v-icon v-if="item.isFolder">
-          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+        <v-icon >
+          {{ item.isFolder ? open ? 'mdi-folder-open' : 'mdi-folder' : 'mdi-file-tree' }}
         </v-icon>
-        <v-icon v-else>mdi-file-tree</v-icon>
       </template>
       <template v-slot:append="{ item }">
         <slot name="context-menu" :item="item"></slot>
@@ -89,14 +89,46 @@ export default {
 <style>
 .models-tree-view {
   text-align: left;
+  overflow: auto;
   height: 100%;
 }
 .tree-search {
-  margin: 5px 15px 6px 25px;
+  margin: 0px 15px 6px 25px;
+  padding-top: 5px;
 }
 .v-treeview-node__label {
-  max-width: 275px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+@media only screen and (min-width: 960px) {
+  .models-tree-view i {
+    font-size: 18px;
+  }
+  .models-tree-view .v-treeview-node__label {
+    font-size: 16px;
+  }
+  .models-tree-view .v-btn {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+  }
+  .v-treeview-node {
+    margin-left: 18px;
+  }
+  .v-treeview-node--leaf {
+    margin-left: 36px;
+  }
+  .v-treeview>.v-treeview-node--leaf {
+    margin-left: 18px;
+  }
+  .v-treeview-node__content {
+    flex-shrink: unset;
+    width: 0;
+  }
+  .tree-search {
+    margin: 0px 18px 6px 18px;
+  }
 }
 </style>

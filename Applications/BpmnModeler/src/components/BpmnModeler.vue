@@ -2,17 +2,52 @@
   <v-layout fill-height>
     <v-layout v-show="loading" column justify-center align-center>
       <v-progress-circular
-          :size="70"
-          :width="7"
-          color="primary"
-          indeterminate>
-        </v-progress-circular>
+        :size="70"
+        :width="7"
+        color="primary"
+        indeterminate>
+      </v-progress-circular>
     </v-layout>
     <v-layout fill-height v-show="!loading">
-      <div class="bpmn-diagram-container" ref="container"></div>
-      <div class="properties-panel-container">
-        <div class="properties-panel-parent" ref="propertiesPanel"></div>
+      <div class="bpmn-diagram-container" ref="container">
+        <v-btn
+          v-model="panel"
+          class="properties-panel-button"
+          color="blue darken-2"
+          dark
+          absolute
+          top
+          right
+          fab
+          small
+          @click="panel = !panel"
+          >
+            <v-icon>mdi-arrow-expand-left</v-icon>
+            <v-icon>mdi-arrow-collapse-right</v-icon>
+        </v-btn>
       </div>
+      <v-navigation-drawer v-model="panel"
+        app
+        clipped
+        right
+        :width="panel ? $vuetify.breakpoint.smAndDown ? $vuetify.breakpoint.width : 320 : 0">
+        <div class="properties-panel-parent" ref="propertiesPanel"></div>
+        <v-btn
+          v-model="panel"
+          class="properties-panel-button"
+          color="blue darken-2"
+          dark
+          absolute
+          top
+          right
+          fab
+          small
+          v-if="$vuetify.breakpoint.smAndDown"
+          @click="panel = !panel">
+            <v-icon>mdi-arrow-expand-left</v-icon>
+            <v-icon>mdi-arrow-collapse-right</v-icon>
+        </v-btn>
+      </v-navigation-drawer>
       <v-tooltip v-model="saved" activator=".bpmn-diagram-container" bottom>
         <span>{{ $tc('bpmn.labels.ProcessSaved') }}</span>
       </v-tooltip>
@@ -36,14 +71,14 @@ export default {
       saved: false,
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
-      diagramId: ''
+      diagramId: '',
+      panel: !this.$vuetify.breakpoint.smAndDown
     };
   },
   mounted() {
     const customTranslateModule = {
       translate: [ 'value', (t, r) => this.translate(t, r) ]
     };
-
     this.modeler = new BpmnModeler({ 
       container: this.$refs.container,
       propertiesPanel: {
@@ -62,7 +97,7 @@ export default {
   computed: {
     activeModel() {
       return this.$store.state.bpmn.activeModel;
-    }
+    },
   },
   watch: {
     '$route': 'onRouteChanged'
@@ -216,17 +251,23 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-  text-align: start;
 }
 .properties-panel-parent {
   width: 100%;
   position: absolute;
   height: 100%;
+  text-align: start;
 }
 .properties-panel-parent:empty {
   display: none;
 }
 .properties-panel-parent > * {
   min-height:100%;
+}
+a.bjs-powered-by {
+  z-index: 4 !important;
+}
+.properties-panel-button {
+  top: 16px !important;
 }
 </style>
