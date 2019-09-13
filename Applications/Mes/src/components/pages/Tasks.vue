@@ -38,7 +38,11 @@
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <v-layout column class="task-description-layout" id="slotTwo">
-              <div 
+              <mes-un-selected-layout-toolbar
+                v-if="this.initializeTasks && !this.tasks.length"
+                @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+              />
+              <div
                 v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
               >

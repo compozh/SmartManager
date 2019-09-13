@@ -377,9 +377,16 @@ export default {
   async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
     return await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const res = await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
-        return res
+        return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
+    })
+  },
+  async callFormCustomEvent({ commit }, { formCode, params, successCallback }) {
+    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.callFormCustomEventGql(formCode, params)
+      },
+      successAction: async result => { successCallback(result) },
     })
   }
 }

@@ -6,6 +6,7 @@
     ref="formioBuilder"
     @formioSubmit=formioSubmit
     :formioData=downtimeFormio
+    :formCode=workCenter.downtimeRegistrationFormCode
   />
 
   </v-layout>
