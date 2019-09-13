@@ -88,9 +88,9 @@ export default {
       }
     },
     async uploadDowntimeOnScroll(lastDowntimeDate) {
-      this.isUploadInProcess= true
+      this.isUploadInProcess = true
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: lastDowntimeDate })
-      this.isUploadInProcess= false
+      this.isUploadInProcess = false
     }
   }
 }
