@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="userInfo">
-      <vx-card>
+      <vx-card v-if="!minMode">
         <div class="flex">
           <div>
             <vs-avatar :src="userPhoto" size="150px" />
@@ -19,10 +19,7 @@
               <span class="text-grey pr-5">{{$t("PersonalInfo.Adress")}}</span>
               <span>{{userInfo.adress}}</span>
             </div>
-
-
             <vs-divider></vs-divider>
-
             <div class="p-3">
               <span class="text-grey pr-5">Email</span>
               <span>{{userInfo.email}}</span>
@@ -48,12 +45,39 @@
           </div>
         </div>
       </vx-card>
+      <!-- aaa -->
+      <vx-card v-else :title="$t('UserInfo')">
+      <div class="flex">
+          <div>
+            <vs-avatar :src="userPhoto" size="50px" />
+          </div>
+          <div class="flex-grow">
+            <div class="p-3">
+              <span>{{userInfo.fullName}}</span>
+            </div>
+
+            <div class="p-3">
+              <span class="text-grey pr-5">Email</span>
+              <span>{{userInfo.email}}</span>
+            </div>
+            <div class="p-3">
+              <span class="text-grey pr-5">{{$t("PersonalInfo.PhoneNumber")}}</span>
+              <span>{{userInfo.phone}}</span>
+            </div>
+            <div class="p-3" v-if="userInfo.skype">
+              <span class="text-grey pr-5">Skype</span>
+              <span>{{userInfo.skype}}</span>
+            </div>
+          </div>
+        </div>
+      </vx-card>
     </template>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['minMode'],
   created() {
     this.$store.dispatch('personalInfo/loadFullUserInfo')
   },

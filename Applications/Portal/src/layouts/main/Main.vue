@@ -207,9 +207,6 @@ export default {
     VxSidebar
   },
   created() {
-
-    console.log(this.appTitle)
-
     this.$store.dispatch('app/loadApplicationDescription')
     this.setSidebarWidth()
     if (this.navbarColor == '#fff' && this.isThemeDark) {
