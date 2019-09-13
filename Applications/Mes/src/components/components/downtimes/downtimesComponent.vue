@@ -6,11 +6,11 @@
           v-if="!initializeDowntimes && !downtimes.length"
           :loaderType=loaderType
         />
-        <div class="downtimes-list-block-content">
+        <div class="downtimes-list-block-content" @scroll.passive="onScroll">
           <mes-downtime-cards
           @changeCurrentDowntime=changeCurrentDowntime
           />
-
+          <span v-if="isUploadInProcess" class='upload-downtime-str'>Загрузка простоев</span>
         </div>
         <span v-if="initializeDowntimes && !downtimes.length" class="lack-of-downtimes-str">Простои отсутствуют</span>
       </v-flex>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { async } from 'q';
 
 export default {
   name: 'mes-downtimes-component',
@@ -28,6 +29,7 @@ export default {
     }
   },
   props: {
+    isUploadInProcess: Boolean,
     initializeDowntimes: Boolean,
   },
   computed: {
@@ -39,6 +41,16 @@ export default {
     changeCurrentDowntime(newDowntime) {
       this.$emit('changeCurrentDowntime', newDowntime)
     },
+    onScroll(e) {
+      const me = this
+      let blockHeight = e.target.scrollHeight
+      let blockTop = e.target.scrollTop + 100
+      let clientHeight = e.target.clientHeight
+      if (!me.isUploadInProcess && blockHeight - blockTop >= clientHeight - 20 && blockHeight - blockTop <= clientHeight + 20) {
+        let lastDowntimeDate = me.downtimes[me.downtimes.length - 1].eventStart
+        me.$emit('uploadDowntimeOnScroll', lastDowntimeDate)
+      }
+    }
   }
 }
 </script>
@@ -88,6 +100,15 @@ export default {
   }
   /* set button(top and bottom of the scrollbar) */
   .downtimes-list-block-content::-webkit-scrollbar-button {display:none}
+
+  .upload-downtime-str {
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    font-size: 13px;
+    color: #326da8;
+    font-weight: 400;
+  }
 
   .lack-of-downtimes-str {
     font-size: 2em;
