@@ -12,6 +12,7 @@ import appModule from './app/index'
 import authModule from './auth/moduleAuth'
 import personalInfoModule from './personalInfo/personalInfo'
 import notificationsModule from './notifications/moduleNotifications'
+import moduleECommerce from './eCommerce/moduleECommerce.js'
 
 Vue.use(Vuex)
 
@@ -25,7 +26,9 @@ const store = new Vuex.Store({
     [appModule.namespace]: appModule,
     [personalInfoModule.namespace]: personalInfoModule,
     notifications: notificationsModule,
-    auth: authModule
+    auth: authModule,
+    eCommerce: moduleECommerce,
+
   },
   strict: process.env.NODE_ENV !== 'production'
 

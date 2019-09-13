@@ -1,5 +1,6 @@
 {
     "AppTitle":"User Account",
+    "UserInfo":"Personal information",
     "Login": {
         "Enter": "Entrance",
         "Greeting": "Welcome, please log in with your account.",

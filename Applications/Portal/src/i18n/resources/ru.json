@@ -1,24 +1,25 @@
 {
-    "AppTitle":"Личный кабинет",
-   "Login":{
-       "Enter":"Вход",
-       "Greeting":"Добро пожаловать, пожалуйста, войдите под своей учетной записью.",
-       "Login":"Логин",
-       "Password":"Пароль",
-       "RememberMe":"Запомнить меня",
-       "Exit":"Выход",
-       "EnterToSystem":"Вход в систему",
-       "YouAlreadyEntered":"Вы уже вошли в систему!",
-       "ForgotPassword":"Забыли пароль?",
-       "Registration":"Регистрация",
-       "Or":"Или"
-   },
-   "PersonalInfo":{
-       "FIO":"ФИО",
-       "BirthdayDate":"Дата рождения",
-       "Adress":"Адрес",
-       "PhoneNumber":"Номер телефона",
-       "Department":"Департамент",
-       "HireDate":"Дата приёма"
-   }
+    "AppTitle": "Личный кабинет",
+    "UserInfo":"Персональная информация",
+    "Login": {
+        "Enter": "Вход",
+        "Greeting": "Добро пожаловать, пожалуйста, войдите под своей учетной записью.",
+        "Login": "Логин",
+        "Password": "Пароль",
+        "RememberMe": "Запомнить меня",
+        "Exit": "Выход",
+        "EnterToSystem": "Вход в систему",
+        "YouAlreadyEntered": "Вы уже вошли в систему!",
+        "ForgotPassword": "Забыли пароль?",
+        "Registration": "Регистрация",
+        "Or": "Или"
+    },
+    "PersonalInfo": {
+        "FIO": "ФИО",
+        "BirthdayDate": "Дата рождения",
+        "Adress": "Адрес",
+        "PhoneNumber": "Номер телефона",
+        "Department": "Департамент",
+        "HireDate": "Дата приёма"
+    }
 }
