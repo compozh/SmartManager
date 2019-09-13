@@ -1,9 +1,0 @@
-mutation ($taskId: Int, $attachments: String) {
-  smtasksMutation {
-    addAttachments(taskId: $taskId, attachments: $attachments) {
-      id,
-      success,
-      errorMessage
-    }
-  }
-}
