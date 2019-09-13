@@ -24,7 +24,7 @@
 					<div style='height:118px;overflow:hidden' class='mt-2 ml-3'>
 						<h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{course.type}}</h4>
 						<h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-							@click='$router.push({name: "courseDetails", params: {courseGuid: course.courseGuid, courseName: course.name, courseData: course}})'>{{course.name}}
+							@click='$router.push({name: "LMSCOURSEDETAILS", params: {courseGuid: course.courseGuid, courseName: course.name, courseData: course}})'>{{course.name}}
 						</h3>
 						<div class='.body-2'>{{course.description}}</div>
 					</div>

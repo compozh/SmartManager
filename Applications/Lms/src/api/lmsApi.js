@@ -2,6 +2,7 @@ import {ApolloClient} from 'apollo-client'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
 import gql from 'graphql-tag'
+// Queries
 import recommended from './graphql/recommended.graphql'
 import courses from './graphql/courses.graphql'
 import modules from './graphql/modules.graphql'
@@ -10,19 +11,6 @@ import courseDetails from './graphql/courseDetails.graphql'
 import lessonContent from './graphql/lessonContent.graphql'
 import Vue from 'vue'
 
-// const options = {
-//   uri: myConfig.GrapgQlUrl + 'api/graphql',
-//   credentials: 'include',
-//   headers: {
-//     'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
-//     'schema': 'lms'
-//   }
-// }
-
-// const client = new ApolloClient ({
-//   cache: new InMemoryCache(),
-//   link: new HttpLink(options)
-// })
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
 
@@ -49,5 +37,51 @@ export class LmsApi {
     })
       .then(result => result)
       .catch(error => console.log(error.message))
+  }
+
+  getRecommendedFromGql() {
+    return getClient().query({
+      query: gql` ${recommended}`
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getCoursesFromGql() {
+    return getClient().query({
+      query: gql` ${courses}`
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getModulesFromGql() {
+    return getClient().query({
+      query: gql` ${modules}`
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getCourseDetailFromGql(courseGuid) {
+    return getClient().query({
+      query: gql`query ($courseid: ID) ${courseDetails}`,
+      variables: {
+        courseid : courseGuid
+      }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
+  }
+
+  getLessonContentFromGql(lessonGuid) {
+    return getClient().query({
+      query: gql`query ($lessonid: ID) ${lessonContent}`,
+      variables: {
+        lessonid : lessonGuid
+      }
+    })
+    .then(result => result)
+    .catch(error => console.log(error.message))
   }
 }

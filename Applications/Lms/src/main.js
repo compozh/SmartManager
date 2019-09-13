@@ -27,6 +27,13 @@ import VueApollo from 'vue-apollo'
 
 import { routerDependencies } from './router'
 
+// Редактор quill
+import VueQuill from 'vue-quill'
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
     link: new HttpLink({}),
@@ -57,6 +64,9 @@ Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.myConfig, dependencies })
 Vue.use(Router, { options: window.myConfig, dependencies })
 Vue.use(WebApps, { dependencies, options: window.myConfig })
+
+// Дополнительные плагины приложения
+Vue.use(VueQuill)
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
 

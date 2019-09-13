@@ -1,8 +1,8 @@
 export default {
-  setModels(state, models) {
-    if (!models) {
-      models = [];
+  setItems(state, items) {
+    if (!items) {
+      items = [];
     }
-    state.models = models;
+    state.items = items;
   }
 };

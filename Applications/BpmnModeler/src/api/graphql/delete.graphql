@@ -1,5 +1,0 @@
- {
-  bpmnmutation {
-    delete(id: $id)
-  }
-}

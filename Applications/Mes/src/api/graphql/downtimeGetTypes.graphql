@@ -1,0 +1,9 @@
+{
+    mes{
+        downtimeTypes {
+            code
+            event
+            isOperation
+        }
+    }
+}

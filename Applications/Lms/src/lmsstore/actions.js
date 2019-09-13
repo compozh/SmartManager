@@ -1,4 +1,5 @@
 import { LmsApi } from '../api/lmsApi'
+import { tryFunctionOrLogError } from 'apollo-utilities';
 
 const api = new LmsApi()
 
@@ -9,15 +10,115 @@ export default {
 
     try {
       const result = await api.getAvailableFiltersFromGql()
-      debugger
-      const availableFilters = result.data.lms.availableFilters
+      const filters = result.data.lms.availableFilters
+
+      var availableFilters = [
+        {
+          name: 'Роль',
+          items: filters.roles
+        },
+        {
+          name: 'Уровень',
+          items: filters.levels
+        },
+        {
+          name: 'Продукт',
+          items: filters.products
+        },
+        {
+          name: 'Тэг',
+          items: filters.tags
+        }
+      ]
 
       commit('setAvailableFilters', availableFilters)
       commit('setCircularLoader', false)
 
-    } catch (e) {
+    } catch (error) {
       commit('setCircularLoader', false)
-      commit('setError', e.message)
+      commit('setError', error.message)
+    }
+  },
+
+  async getRecommended({commit}) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    try {
+      const result = await api.getRecommendedFromGql()
+      const recommended = result.data.lms.recommended
+
+      commit('setRecommended', recommended)
+      commit('setCircularLoader', false)
+
+    } catch (error) {
+      commit('setCircularLoader', false)
+      commit('setError', error.message)
+    }
+  },
+
+  async getCourses({commit}) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      const result = await api.getCoursesFromGql()
+      const courses = result.data.lms.courses
+
+      commit('setCourses', courses)
+      commit('setCircularLoader', false)
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
+    }
+  },
+
+  async getModules ({commit}) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      const result = await api.getModulesFromGql()
+      const modules = result.data.lms.modules
+
+      commit('setModules', modules)
+      commit('setCircularLoader', false)
+
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
+    }
+  },
+
+  async getCourseDetails({commit}, payload) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+
+    try {
+      const result = await api.getCourseDetailFromGql(payload)
+      const courseDetails = result.data.lms.courseDetails
+      commit('setCourseDetails', courseDetails)
+      commit('setCircularLoader', false)
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
+    }
+  },
+
+  async getLessonContent ({commit}, lessonid) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    try {
+      const result = await api.getLessonContentFromGql(lessonid)
+      const unit = result.data.lms.lessonContent
+      const lessonContent = JSON.parse(unit.content)
+
+      commit('setLesson', unit)
+      commit('setContent', lessonContent)
+      commit('setCircularLoader', false)
+
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
     }
   }
 }

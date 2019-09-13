@@ -174,6 +174,9 @@ export default {
   .theme--dark.v-progress-linear {
     margin-top: 14px !important;
   }
+  .v-navigation-drawer__content .v-list .v-list-item__action {
+    margin-right: 25px;
+  }
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
     margin: 0;
@@ -187,21 +190,17 @@ export default {
   .work-centers-select .v-select__slot input {
     padding-bottom: 0;
   }
-  .downtimes-overlay .v-overlay__content {
-    width: 100%;
-    height: 100%;
-    padding: 2% 4%;
+  .tasks-list-block .v-progress-linear__content {
+    background-color: rgba(50,109,168,.5);
+    color: white;
   }
-  /* !!!!! */
-  .downtime-registration-button {
-    display: none
+  .choices__item.choices__item--choice {
+    text-align: center;
+    padding: 10px 5px !important;
   }
-  .drag-resize-button {
-    margin-left: auto;
+  .v-speed-dial__list {
+    padding: 0; 
+    width: 45px !important;
   }
-  .active-drag-resize-button {
-    margin-left: auto;
-  }
-  /* !!!!! */
 </style>
 

@@ -2,7 +2,7 @@
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-between>
       <v-flex>
-        <h1 class="text-left blue--text text--darken-2">Bpmn Modeler</h1>
+        <h1 class="text-left blue--text text--darken-2">Workflow modeler</h1>
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex shrink class="icon-container">
