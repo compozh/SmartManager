@@ -102,6 +102,10 @@ export default {
   white-space: nowrap;
   flex: 1;
 }
+.v-treeview-node__content {
+  flex-shrink: unset;
+  width: 0;
+}
 @media only screen and (min-width: 960px) {
   .models-tree-view i {
     font-size: 18px;
@@ -122,10 +126,6 @@ export default {
   }
   .v-treeview>.v-treeview-node--leaf {
     margin-left: 18px;
-  }
-  .v-treeview-node__content {
-    flex-shrink: unset;
-    width: 0;
   }
   .tree-search {
     margin: 0px 18px 6px 18px;

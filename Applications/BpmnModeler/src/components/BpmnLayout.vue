@@ -2,62 +2,57 @@
   <v-app>
     <vue-title title="IT-Enterprise Workflow modeler"></vue-title>
     <v-toolbar app
-               clipped-left
-               clipped-right
-               class="toolbar">
+      dense
+      clipped-left
+      clipped-right
+      class="toolbar">
       <v-toolbar-side-icon 
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
-      <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-      <router-view name="toolbar" />
+      <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
+      <bpmn-contex-menu
+        @create="createItem"
+        @edit="editItem" 
+        @remove="removeItem" 
+        @import="importItem"
+        @export="exportItem">
+        <template #activator="{ open }">
+          <v-btn icon class="text-left blue--text text--darken-2" v-on="open" :title="$t('bpmn.buttons.AddElement')">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </template>
+      </bpmn-contex-menu>
+      <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
+        <v-icon>refresh</v-icon>
+      </v-btn>
       <v-spacer></v-spacer>
+      <v-flex shrink class="icon-container">
+        <user-panel mini="true"></user-panel>
+      </v-flex>
     </v-toolbar>
-
     <v-navigation-drawer v-model="appBar"
       app
       clipped
       width="380">
-      <v-container fluid pa-0 fill-height>
-        <v-layout column>
-          <bpmn-contex-menu
+      <bpmn-tree :items="items" :activeItem.sync="activeItem">
+        <template #context-menu="{ item }">
+          <bpmn-contex-menu :item="item"
             @create="createItem"
             @edit="editItem" 
             @remove="removeItem" 
             @import="importItem"
-            @export="exportItem">
+            @export="exportItem"
+            offset>
             <template #activator="{ open }">
-              <v-btn flat large class="tree-btn" v-on="open">
-                <v-icon left>add</v-icon> {{ $t('bpmn.buttons.AddElement') }}
+              <v-btn flat icon v-on="open">
+                <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
           </bpmn-contex-menu>
-          <v-divider></v-divider>
-          <bpmn-tree :items="items" :activeItem.sync="activeItem">
-            <template #context-menu="{ item }">
-              <bpmn-contex-menu :item="item"
-                @create="createItem"
-                @edit="editItem" 
-                @remove="removeItem" 
-                @import="importItem"
-                @export="exportItem"
-                offset>
-                <template #activator="{ open }">
-                  <v-btn flat icon v-on="open">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-              </bpmn-contex-menu>
-            </template>
-          </bpmn-tree>
-          <v-divider></v-divider>
-          <v-btn flat large class="tree-btn" @click="onRouteChanged(true)">
-            <v-icon left>refresh</v-icon> {{ $t('bpmn.buttons.Refresh') }}
-          </v-btn>
-        </v-layout>
-      </v-container>
+        </template>
+      </bpmn-tree>
     </v-navigation-drawer>
-
     <v-content class="white">
       <v-container fluid pa-0 fill-height>
         <router-view ref="modeler"/>
@@ -315,5 +310,9 @@ export default {
   }
   .tree-btn > .v-btn__content {
     justify-content: flex-start;
+  }
+  .user-image {
+    height: 40px !important;
+    width: 40px !important;
   }
 </style>
