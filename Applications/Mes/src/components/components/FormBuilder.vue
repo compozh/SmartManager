@@ -1,4 +1,5 @@
 <template>
+  <v-container>
     <formio id="formio" class="formio-container"
       :form=formioComponents
       :submission=formioSubmission
@@ -7,6 +8,12 @@
       @change=onChange
       ref="formioComponent"
     />
+    <mes-qr-scaner
+      v-if="qrScanerVisible"
+      @changeQrScanerVisible=changeQrScanerVisible
+      @submitQrCode=submitQrCode
+    />
+  </v-container>
 </template>
 
 <script>
@@ -17,18 +24,42 @@ export default {
   components: { formio: Form },
   data() {
     return {
-      options: { noAlerts: true }, currentData: ''
+      options: { noAlerts: true },
+      currentData: '',
+      qrScanerVisible: false,
+      qrScanerCallback: () => {}
     }
   },
   created() {
     var me = this
-    window.requestToServer = (eventCode, callback) => {
+    window.requestToServer = (eventCode, callback)=> {
       me.requestToServerAction(eventCode, callback)
+    }
+    window.qrScaner = callback => {
+      me.qrScaner(callback)
+    }
+    window.signalRConnect = callback => {
+      me.signalRConnect(callback)
     }
   },
   props: {
     formioData: Object,
     formCode: String
+  },
+  computed: {
+    formioComponents() {
+      return {
+        display: this.formioData.display || 'form',
+        components: this.formioData.form ? JSON.parse(this.formioData.form) : [],
+        settings: this.formioData.settings ? JSON.parse(this.formioData.settings) : {}
+      }
+    },
+    formioSubmission() {
+      return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
+    },
+    ticket() {
+      return this.$store.getters['mes/ticket']
+    }
   },
   methods: {
     onSubmit(params) {
@@ -43,32 +74,64 @@ export default {
     requestToServerAction(eventCode, callback) {
       var me = this,
         form = this.$refs.formioComponent,
+        display = form.form.display,
         components = JSON.stringify(form.form.components, null, 4),
+        settings = JSON.stringify(form.form.settings, null, 4),
         submission = JSON.stringify(form.submission, null, 4)
 
-      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode, params: { eventCode, components, submission }, successCallback: result => {
+      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode,
+        params: { eventCode, components, submission, display, settings },
+        successCallback: result => {
             if (callback) {
               callback(result);
             }
             
-            if (result.components && result.components !== components) {
-              form.form = Object.assign(form.form, {
-                  components: JSON.parse(result.components)
-              });
+            var dataChanged = false;
+            if (result.components && result.components != components) {
+              components = result.components
+              dataChanged = true
             }
+            if(result.settings && result.settings != settings) {
+              settings = result.settings
+              dataChanged = true
+            }
+
+            if(dataChanged) {
+              form.form = Object.assign(form.form, {
+                  display: result.display || display,
+                  components: JSON.parse(components),
+                  settings: JSON.parse(settings)
+              });
+            } else if(result.display && result.display != display) {
+              form.setDisplay(result.display)
+            }
+
             if (result.submission && result.submission !== submission) {
-              form.setSubmission(JSON.parse(result.submission));
+              form.setSubmission(JSON.parse(result.submission))
             }
           }
       })
-    }
-  },
-  computed: {
-    formioComponents() {
-      return { components: this.formioData.form ? JSON.parse(this.formioData.form) : [] }
     },
-    formioSubmission() {
-      return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
+    qrScaner(callback) {
+      this.qrScanerVisible = true;
+      this.qrScanerCallback = callback;
+    },
+    submitQrCode(qrCodeValue) {
+      if (qrCodeValue.currentTarget) {
+        qrCodeValue = qrCodeValue.currentTarget.value
+      }
+      if(this.qrScanerCallback) {
+        this.qrScanerCallback(qrCodeValue)
+      }
+    },
+    changeQrScanerVisible(state) {
+      this.qrScanerVisible = state
+    },
+    signalRConnect(callback) {
+      if(!callback) {
+        return
+      }
+      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, msg => { callback(JSON.parse(msg)) }, this.ticket)
     }
   }
 }

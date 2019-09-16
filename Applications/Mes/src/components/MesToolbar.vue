@@ -49,6 +49,7 @@ export default {
   created() {
     this.$store.dispatch('mes/initializeWorkCenter')
     this.$store.dispatch('mes/initializeProperties')
+    this.$store.dispatch('mes/initializeTicket')
     var me = this
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData

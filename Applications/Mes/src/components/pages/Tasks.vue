@@ -153,7 +153,6 @@ export default {
   },
   methods: {
     async initializeSignalR() {
-      await this.$store.dispatch('mes/initializeTicket')
       this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket)
     },
     taskStateChanged(msg) {
