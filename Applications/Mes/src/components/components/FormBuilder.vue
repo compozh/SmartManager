@@ -38,8 +38,8 @@ export default {
     window.qrScaner = callback => {
       me.qrScaner(callback)
     }
-    window.signalRConnect = callback => {
-      me.signalRConnect(callback)
+    window.connectSignalR = (application, callback) => {
+      me.connectSignalR(application, callback)
     }
   },
   props: {
@@ -127,11 +127,12 @@ export default {
     changeQrScanerVisible(state) {
       this.qrScanerVisible = state
     },
-    signalRConnect(callback) {
-      if(!callback) {
+    connectSignalR(application, callback) {
+      if(!application || !callback) {
+        this.$store.commit('mes/setSnackbarErrorMessage', 'Ошибка инициализации SignalR')
         return
       }
-      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, msg => { callback(JSON.parse(msg)) }, this.ticket)
+      this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)
     }
   }
 }
