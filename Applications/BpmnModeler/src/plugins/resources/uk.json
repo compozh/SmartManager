@@ -197,7 +197,8 @@
 		"Add Value": "Додати значення",
 		"Validation": "Валідація",
 		"Add Constraint": "Додати обмеження",
-		"Config": "Конфігурація",
+		"Constraint Name": "Тип",
+		"Constraint Config": "Параметри",
 		"Properties": "Властивості",
 		"Add Property": "Додати властивість",
 		"Value": "Значення"

@@ -197,7 +197,8 @@
 		"Add Value": "Add Value",
 		"Validation": "Validation",
 		"Add Constraint": "Add Constraint",
-		"Config": "Config",
+		"Constraint Name": "Name",
+		"Constraint Config": "Config",
 		"Properties": "Properties",
 		"Add Property": "Add Property",
 		"Value": "Value"

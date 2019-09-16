@@ -186,43 +186,6 @@ export default function(group, element, bpmnFactory, translate) {
   });
   group.entries.push(formFieldsEntry);
 
-  // [FormData] business key form field select box
-  var formBusinessKeyFormFieldEntry = entryFactory.selectBox({
-    id: 'form-business-key',
-    label: translate('Business Key'),
-    modelProperty: 'businessKey',
-    selectOptions: function (element, inputNode) {
-      var selectOptions = [{ name: '', value: '' }];
-      var formFields = formHelper.getFormFields(element);
-      each(formFields, function (field) {
-        if (field.type !== 'boolean') {
-          selectOptions.push({ name: field.id, value: field.id });
-        }
-      });
-      return selectOptions;
-    },
-    get: function (element, node) {
-      var result = { businessKey: '' };
-      var bo = getBusinessObject(element);
-      var formDataExtension = getExtensionElements(bo, 'camunda:FormData');
-      if (formDataExtension) {
-        var formData = formDataExtension[0];
-        var storedValue = formData.get('businessKey');
-        result = { businessKey: storedValue };
-      }
-      return result;
-    },
-    set: function (element, values, node) {
-      var formData = getExtensionElements(getBusinessObject(element), 'camunda:FormData')[0];
-      return cmdHelper.updateBusinessObject(element, formData, { 'businessKey': values.businessKey || undefined });
-    },
-    hidden: function (element, node) {
-      var isStartEvent = is(element, 'bpmn:StartEvent');
-      return !(isStartEvent && formHelper.getFormFields(element).length > 0);
-    }
-  });
-  group.entries.push(formBusinessKeyFormFieldEntry);
-
   // [FormData] Form Field label
   group.entries.push(entryFactory.label({
     id: 'form-field-header',
@@ -284,11 +247,11 @@ export default function(group, element, bpmnFactory, translate) {
     id: 'form-field-type',
     label: translate('Type'),
     selectOptions: [
-      { name: 'string', value: 'string' },
-      { name: 'long', value: 'long' },
-      { name: 'boolean', value: 'boolean' },
-      { name: 'date', value: 'date' },
-      { name: 'enum', value: 'enum' }
+      { name: translate('string'), value: 'string' },
+      { name: translate('long'), value: 'long' },
+      { name: translate('boolean'), value: 'boolean' },
+      { name: translate('date'), value: 'date' },
+      { name: translate('enum'), value: 'enum' }
     ],
     modelProperty: 'type',
     emptyParameter: true,
@@ -354,6 +317,7 @@ export default function(group, element, bpmnFactory, translate) {
   group.entries.push(entryFactory.table({
     id: 'form-field-enum-values',
     labels: [translate('Id'), translate('Name')],
+    addLabel: translate('Add Value'),
     modelProperties: ['id', 'name'],
     show: function (element, node) {
       var selectedFormField = getSelectedFormField(element, node);
@@ -421,7 +385,7 @@ export default function(group, element, bpmnFactory, translate) {
   group.entries.push(entryFactory.table({
     id: 'constraints-list',
     modelProperties: ['name', 'config'],
-    labels: [translate('Name'), translate('Config')],
+    labels: [translate('Constraint Name'), translate('Constraint Config')],
     addLabel: translate('Add Constraint'),
     getElements: function (element, node) {
       var formField = getSelectedFormField(element, node);
@@ -509,4 +473,6 @@ export default function(group, element, bpmnFactory, translate) {
       return !!getSelectedFormField(element, node);
     }
   }, translate));
+
+  console.log(group);
 }

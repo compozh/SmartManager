@@ -194,10 +194,11 @@
 		"Label": "Название",
 		"Default Value": "Значение по умолчанию",
 		"Values": "Значения",
-		"Add Value": "Добавить значения",
+		"Add Value": "Добавить значение",
 		"Validation": "Валидация",
 		"Add Constraint": "Добавить ограничение",
-		"Config": "Конфигурация",
+		"Constraint Name": "Тип",
+		"Constraint Config": "Параметры",
 		"Properties": "Свойства",
 		"Add Property": "Добавить свойство",
 		"Value": "Значение"
