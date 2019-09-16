@@ -1,7 +1,7 @@
 {
   "name": "bpmn-modeler",
   "version": "1.0.0",
-  "description": "BPMN Modeler",
+  "description": "IT-Enterprise Workflow modeler",
   "author": "it-enterprise",
   "scripts": {
     "serve": "vue-cli-service serve",

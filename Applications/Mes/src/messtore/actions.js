@@ -90,11 +90,15 @@ export default {
       }
     })
   },
-  async downloadDowntimes({ commit }, { workCenterCode, dateTime }) {
+  async downloadDowntimes({ commit, getters }, { workCenterCode, dateTime }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
-        commit('setDowntimes', downtimes)
+        if (getters.downtimes.length) {
+          commit('setDowntimes', getters.downtimes.concat(downtimes))
+        } else {
+          commit('setDowntimes', downtimes)
+        }
       }
     })
   },

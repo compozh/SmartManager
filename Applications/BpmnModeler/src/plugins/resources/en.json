@@ -1,6 +1,6 @@
 {
     "buttons": {
-		"AddElement": "Add element",
+		"AddElement": "Add",
 		"Refresh": "Refresh",
 		"Close": "Close",
 		"Rename": "Rename",
@@ -25,7 +25,8 @@
 		"DeleteProcess": "Delete process",
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
-		"DeleteFolder": "Delete folder"
+		"DeleteFolder": "Delete folder",
+		"RequiredField": "Field is requierd"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Processes not loaded",

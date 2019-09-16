@@ -15,7 +15,9 @@ import VxList  from './components/vx-list/VxList.vue'
 import VxBreadcrumb  from './layouts/components/VxBreadcrumb.vue'
 import FeatherIcon  from './components/FeatherIcon.vue'
 import VxInputGroup  from './components/vx-input-group/VxInputGroup.vue'
+import titleComponent from './components/DocTitle'
 
+Vue.component('doc-title', titleComponent)
 Vue.component(VxTooltip.name, VxTooltip)
 Vue.component(VxCard.name, VxCard)
 Vue.component(VxList.name, VxList)
@@ -25,6 +27,7 @@ Vue.component(VxInputGroup.name, VxInputGroup)
 
 Vue.component('account-personal-info-page', () => import('./views/account-personal-info-page.vue'))
 Vue.component('account-home-page', () => import('./views/account-home-page.vue'))
+Vue.component('account-tmc-page', () => import('./views/account-tmc-page.vue'))
 
 // v-select component
 import vSelect from 'vue-select'

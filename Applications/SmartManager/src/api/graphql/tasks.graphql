@@ -1,4 +1,4 @@
-{
+query ($folderId: String) {
   smtasks {
     tasks(folderId: $folderId) {
       id
