@@ -182,6 +182,24 @@
 		"Date": "Date",
 		"Duration": "Duration",
 		"Cycle": "Cycle",
-		"Must provide a value": "Must provide a value"
+		"Must provide a value": "Must provide a value",
+
+		"Forms": "Forms",
+		"Form Key": "Form Key",
+		"Form Fields": "Form Fields",
+		"Business Key": "Business Key",
+		"Form Field": "Form Field",
+		"ID": "ID",
+		"Type": "Type",
+		"Label": "Label",
+		"Default Value": "Default Value",
+		"Values": "Values",
+		"Add Value": "Add Value",
+		"Validation": "Validation",
+		"Add Constraint": "Add Constraint",
+		"Config": "Config",
+		"Properties": "Properties",
+		"Add Property": "Add Property",
+		"Value": "Value"
 	}
 }
