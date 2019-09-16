@@ -94,4 +94,13 @@ export default function CamundaPropertiesProvider(
 
 }
 
+CamundaPropertiesProvider.$inject = [
+  'eventBus',
+  'canvas',
+  'bpmnFactory',
+  'elementRegistry',
+  'elementTemplates',
+  'translate'
+];
+
 inherits(CamundaPropertiesProvider, PropertiesActivator);
