@@ -30,7 +30,7 @@
         app
         clipped
         right
-        :width="panel ? $vuetify.breakpoint.smAndDown ? $vuetify.breakpoint.width : 320 : 0">
+        :width="panel ? $vuetify.breakpoint.xs ? $vuetify.breakpoint.width : 320 : 0">
         <div class="properties-panel-parent" ref="propertiesPanel"></div>
         <v-btn
           v-model="panel"
@@ -42,7 +42,7 @@
           right
           fab
           small
-          v-if="$vuetify.breakpoint.smAndDown"
+          v-if="$vuetify.breakpoint.xs"
           @click="panel = !panel">
             <v-icon>mdi-arrow-expand-left</v-icon>
             <v-icon>mdi-arrow-collapse-right</v-icon>
@@ -57,7 +57,9 @@
 <script>
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import propertiesPanelModule from 'bpmn-js-properties-panel';
-import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
+import propertiesProviderModule from '../bpmnModules/provider/camunda/';
+import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
+import camundaModdle  from 'camunda-bpmn-moddle/resources/camunda';
 import { debounce } from 'throttle-debounce';
 import { CancellationToken } from '../api/cancellationToken'
 import { SavingContext } from '../api/savingContext';
@@ -72,7 +74,7 @@ export default {
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
       diagramId: '',
-      panel: !this.$vuetify.breakpoint.smAndDown
+      panel: !this.$vuetify.breakpoint.xs
     };
   },
   mounted() {
@@ -87,8 +89,12 @@ export default {
       additionalModules: [
         propertiesPanelModule,
         propertiesProviderModule,
+        camundaExtensionModule,
         customTranslateModule
       ],
+      moddleExtensions: {
+        camunda: camundaModdle
+      }
     });
     const canvas = this.modeler.get('canvas');
     canvas.zoom('fit-viewport');
@@ -269,5 +275,29 @@ a.bjs-powered-by {
 }
 .properties-panel-button {
   top: 16px !important;
+}
+.bpp-properties-panel input {
+  background-color: white;
+}
+.bpp-properties-panel select {
+  color: black;
+  text-transform: none;
+  background-color: white;
+  border-style: solid;
+}
+.bpp-properties-panel select[data-value] {
+  -webkit-appearance: menulist;
+}
+.bpp-table-row > button {
+  height: 29px;
+}
+.bpp-properties-panel button:before {
+  top: -2px;
+}
+.bpp-table-row > button:before {
+  top: 0;
+}
+.bpp-textfield button:before {
+    top: 0;
 }
 </style>
