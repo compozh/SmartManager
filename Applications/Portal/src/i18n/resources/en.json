@@ -1,3 +1,25 @@
 {
-
+    "AppTitle":"User Account",
+    "UserInfo":"Personal information",
+    "Login": {
+        "Enter": "Entrance",
+        "Greeting": "Welcome, please log in with your account.",
+        "Login": "Login",
+        "Password": "Password",
+        "RememberMe": "Remember me",
+        "Exit": "Exit",
+        "EnterToSystem": "Login",
+        "YouAlreadyEntered": "You are already logged in!",
+        "ForgotPassword": "Forgot your password?",
+        "Registration": "Registration",
+        "Or": "Or"
+    },
+    "PersonalInfo": {
+        "FIO": "Full name",
+        "BirthdayDate": "Date of Birth",
+        "Adress": "Address",
+        "PhoneNumber": "Phone number",
+        "Department": "Department",
+        "HireDate": "Date of receipt"
+    }
 }

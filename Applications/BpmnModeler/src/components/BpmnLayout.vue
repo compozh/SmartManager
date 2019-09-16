@@ -1,8 +1,9 @@
 <template>
   <v-app>
-    <vue-title title="Bpmn"></vue-title>
+    <vue-title title="IT-Enterprise Workflow modeler"></vue-title>
     <v-toolbar app
                clipped-left
+               clipped-right
                class="toolbar">
       <v-toolbar-side-icon 
         class="blue--text text--darken-2"
@@ -14,23 +15,23 @@
     </v-toolbar>
 
     <v-navigation-drawer v-model="appBar"
-                         app
-                         clipped
-                         width="380">
+      app
+      clipped
+      width="380">
       <v-container fluid pa-0 fill-height>
         <v-layout column>
           <bpmn-contex-menu
-                @create="createItem"
-                @edit="editItem" 
-                @remove="removeItem" 
-                @import="importItem"
-                @export="exportItem">
-                <template #activator="{ open }">
-                  <v-btn flat large class="tree-btn" v-on="open">
-                    <v-icon left>add</v-icon> {{ $t('bpmn.buttons.AddElement') }}
-                  </v-btn>
-                </template>
-              </bpmn-contex-menu>
+            @create="createItem"
+            @edit="editItem" 
+            @remove="removeItem" 
+            @import="importItem"
+            @export="exportItem">
+            <template #activator="{ open }">
+              <v-btn flat large class="tree-btn" v-on="open">
+                <v-icon left>add</v-icon> {{ $t('bpmn.buttons.AddElement') }}
+              </v-btn>
+            </template>
+          </bpmn-contex-menu>
           <v-divider></v-divider>
           <bpmn-tree :items="items" :activeItem.sync="activeItem">
             <template #context-menu="{ item }">
@@ -39,7 +40,8 @@
                 @edit="editItem" 
                 @remove="removeItem" 
                 @import="importItem"
-                @export="exportItem">
+                @export="exportItem"
+                offset>
                 <template #activator="{ open }">
                   <v-btn flat icon v-on="open">
                     <v-icon>mdi-dots-vertical</v-icon>
@@ -211,15 +213,13 @@ export default {
     importItem(parent) {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = '.bpmn, .dmm';
+      input.accept = '.bpmn';
 
-      input.addEventListener('change', async () => {
+      input.addEventListener('change', () => {
         const [file] = input.files;
-
         if (!file) {
           return;
         }
-
         file.text().then(xml => {
           setTimeout(function() {
             document.body.removeChild(input);  
@@ -227,10 +227,7 @@ export default {
 
           this.createItem(parent, 'process', xml);
         });
-
-        
       });
-
       document.body.appendChild(input);
       input.click();
     },

@@ -1,6 +1,7 @@
 import {ApolloClient} from 'apollo-client'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
+import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
 // Queries
 import folders from './graphql/folders.graphql'
@@ -12,115 +13,139 @@ import changeStatus from './graphql/changeStatus.graphql'
 import addAttachments from './graphql/addAttachments.graphql'
 import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
-import Vue from 'vue'
+import auth from './auth/auth'
+import router from '@/router'
+
+const errorLink = onError(({networkError}) => {
+  if (networkError.statusCode === 401) {
+    auth.logOff()
+    router.push('/login')
+  }
+})
 
 const getClient = () => {
-  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
+  const authHeader = auth.getAuthHeader()
   const options = {
     // eslint-disable-next-line no-undef
-    uri: myConfig.GrapgQlUrl + 'api/graphql',
+    uri: appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
       ...authHeader,
       'schema': 'smartmanager'
     }
   }
+  const httpLink = new HttpLink(options)
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink(options)
+    link: errorLink.concat(httpLink)
   })
 }
 
 export class SmartManagerApi {
-  constructor() {}
-  
-  getFoldersFromGql() {
-    return getClient().query({
-      query: gql` ${folders}`
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+
+  static async getFoldersFromGql() {
+    try {
+      return await getClient()
+        .query({
+          query: gql`${folders}`
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  getTasksFromGql(folderId) {
-    return getClient().query({
-      query: gql`query ($folderId: String) ${tasks}`,
-      variables: {folderId}
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async getTasksFromGql(folderId) {
+    try {
+      return await getClient()
+        .query({
+          query: gql`${tasks}`,
+          variables: {folderId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  getTaskInfoFromGql(taskId) {
-    return getClient().query({
-      query: gql`query ($taskId: Int) ${taskInfo}`,
-      variables: {taskId}
-    })
-      .then(result => result)
+  static async getTaskInfoFromGql(taskId) {
+    try {
+      return await getClient()
+        .query({
+          query: gql`${taskInfo}`,
+          variables: {taskId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  getUsersFromGql() {
-    return getClient().query({
-      query: gql` ${users}`,
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async getUsersFromGql() {
+    try {
+      return await getClient()
+        .query({
+          query: gql`${users}`,
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  addNewTaskToGql(newTask) {
-    return getClient().mutate({
-      mutation: gql`mutation ($newTask: String) ${addTask}`,
-      variables: {
-        newTask: JSON.stringify(newTask)
-      }
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async addNewTaskToGql(newTask) {
+    try {
+      return await getClient()
+        .mutate({
+          mutation: gql`${addTask}`,
+          variables: {newTask}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  changeTaskStatusInGql(status) {
-    return getClient().mutate({
-      mutation: gql`mutation ($status: String) ${changeStatus}`,
-      variables: {
-        status: JSON.stringify(status)
-      }
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async changeTaskStatusInGql(status) {
+    try {
+      return await getClient()
+        .mutate({
+          mutation: gql`${changeStatus}`,
+          variables: {status}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  addAttachmentsInGql(taskId, attachments) {
-    return getClient().mutate({
-      mutation: gql`mutation ($taskId: Int, $attachments: String) ${addAttachments}`,
-      variables: {
-        taskId,
-        attachments: JSON.stringify(attachments)
-      }
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async addAttachmentsInGql(taskId, attachments) {
+    try {
+      return await getClient()
+        .mutate({
+          mutation: gql`${addAttachments}`,
+          variables: {taskId, attachments}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  changeTaskStageInGql(stageParams) {
-    return getClient().mutate({
-      mutation: gql`mutation ($stageParams: String) ${changeStage}`,
-      variables: {
-        stageParams: JSON.stringify(stageParams)
-      }
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async changeTaskStageInGql(stageParams) {
+    try {
+      return await getClient()
+        .mutate({
+          mutation: gql`${changeStage}`,
+          variables: {stageParams}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 
-  addTaskCommentToGql(comment, params) {
-    return getClient().mutate({
-      mutation: gql`mutation ($comment: String, $params: String) ${addComment}`,
-      variables: {
-        comment,
-        params: JSON.stringify(params)
-      }
-    })
-      .then(result => result)
-      .catch(error => console.log(error.message))
+  static async addTaskCommentToGql(comment, params) {
+    try {
+      return await getClient()
+        .mutate({
+          mutation: gql`${addComment}`,
+          variables: {comment, params}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
   }
 }

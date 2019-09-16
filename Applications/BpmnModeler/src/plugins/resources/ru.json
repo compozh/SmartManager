@@ -1,6 +1,6 @@
 {
 	"buttons": {
-		"AddElement": "Добавить елемент",
+		"AddElement": "Добавить",
 		"Refresh": "Обновить",
 		"Close": "Закрыть",
 		"Rename": "Переименовать",
@@ -25,7 +25,8 @@
 		"DeleteProcess": "Удалить процесс",
 		"CreateFolder": "Создать папку",
 		"EditFolder": "Переименовать папку",
-		"DeleteFolder": "Удалить папку"
+		"DeleteFolder": "Удалить папку",
+		"RequiredField": "Поле обязательно для ввода"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Процессы не загружены",

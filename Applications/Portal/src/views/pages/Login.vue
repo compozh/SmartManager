@@ -23,39 +23,44 @@
                                     <h4 class="mb-4">{{$t("Login.Enter")}}</h4>
                                     <p>{{$t("Login.Greeting")}}</p>
                                 </div>
-                                <vs-input
-                                    v-validate="'required'"
-                                    data-vv-validate-on="blur"
-                                    name="login"
-                                    icon="icon icon-user"
-                                    icon-pack="feather"
-                                    :label-placeholder="$t('Login.Login')"
-                                    v-model="login"
-                                    class="w-full no-icon-border"/>
-                                <span class="text-danger text-sm">{{ errors.first('login') }}</span>
+                                <ValidationObserver v-slot="{ invalid }">
+                                  <ValidationProvider :name="$t('Login.Login')" rules="required" v-slot="{ errors }">
+                                    <vs-input
+                                        @keydown.enter="loginMethod"
 
-                                <vs-input
-                                    data-vv-validate-on="blur"
-                                    v-validate="'required'"
-                                    type="password"
-                                    name="password"
-                                    icon="icon icon-lock"
-                                    icon-pack="feather"
-                                    :label-placeholder="$t('Login.Password')"
-                                    v-model="password"
-                                    class="w-full mt-6 no-icon-border" />
-                                <span class="text-danger text-sm">{{ errors.first('password') }}</span>
+                                        name="login"
+                                        icon="icon icon-user"
+                                        icon-pack="feather"
+                                        :label-placeholder="$t('Login.Login')"
+                                        v-model="login"
+                                        class="w-full no-icon-border"/>
+                                    <span class="text-danger text-sm">{{ errors[0] }}</span>
+                                  </ValidationProvider>
+                                  <ValidationProvider :name="$t('Login.Password')" rules="required" v-slot="{ errors }">
 
-                                <div class="flex flex-wrap justify-between my-5">
-                                    <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{$t('Login.RememberMe')}}</vs-checkbox>
-                                    <router-link to="/forgot-password">Забыли пароль?</router-link>
-                                </div>
-                                <!-- РЕГИСТРАЦИЯ -->
-                                <vs-button v-if="config.allowedRegisterUser"  type="border" @click="registerUser">Регистрация</vs-button>
-                                <!-- ВХОД -->
-                                <vs-button class="float-right" :disabled="!validateForm" @click="loginMethod">Вход</vs-button>
+                                    <vs-input
+                                        @keydown.enter="loginMethod"
+                                        type="password"
+                                        name="password"
+                                        icon="icon icon-lock"
+                                        icon-pack="feather"
+                                        :label-placeholder="$t('Login.Password')"
+                                        v-model="password"
+                                        class="w-full mt-6 no-icon-border" />
+                                    <span class="text-danger text-sm">{{ errors[0] }}</span>
+                                  </ValidationProvider>
+                                  <div class="flex flex-wrap justify-between my-5">
+                                      <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{$t('Login.RememberMe')}}</vs-checkbox>
+                                      <router-link to="/forgot-password">{{$t("Login.ForgotPassword")}}</router-link>
+                                  </div>
+                                  <!-- РЕГИСТРАЦИЯ -->
+                                  <vs-button v-if="config.allowedRegisterUser"  type="border" @click="registerUser">{{$t("Login.Registration")}}</vs-button>
 
-                                <vs-divider>Или</vs-divider>
+                                  <!-- ВХОД -->
+                                  <vs-button class="float-right" :disabled="invalid" @click="loginMethod">{{$t("Login.Enter")}}</vs-button>
+                                </ValidationObserver>
+
+                                <vs-divider v-if="anyAlternatives">{{$t("Login.Or")}}</vs-divider>
 
                                 <div class="social-login flex flex-wrap justify-between">
                                     <div class="social-login-buttons flex flex-wrap items-center mt-4">
@@ -105,8 +110,11 @@ export default {
     }
   },
   computed: {
+    anyAlternatives() {
+      return this.config.allowedAlternativeLoginMethods.length > 0
+    },
     validateForm() {
-      return !this.errors.any() && this.login != '' && this.password != ''
+      return true// !this.errors.any() && this.login != '' && this.password != ''
     },
     facebookAllowed() {
       return this.config.allowedAlternativeLoginMethods.includes('facebook')
@@ -117,6 +125,9 @@ export default {
   },
   methods: {
     loginMethod() {
+      if (!this.validateForm) {
+        return
+      }
       // Loading
       this.$vs.loading()
 

@@ -69,7 +69,7 @@ export class BpmnModelerApi {
   async editProcess(process) {
     const result = await getClient().mutate({
       mutation: gql`mutation ($process: ProcessInput!) ${editProcess}`,
-      variables: { process}
+      variables: { process: { id: process.id, name: process.name, parentId: process.parentId } }
     });
     return result.data.bpmnqueryMutation.editProcess;
   }
