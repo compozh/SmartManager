@@ -76,6 +76,9 @@ export default {
   printProduction(state, production) {
     state.printProduction = production
   },
+  changeMainContainerKey(state) {
+    state.mainContainerKey += 1
+  },
   setMaterialProduction(state, production) {
     state.setMaterialProduction = production
   },

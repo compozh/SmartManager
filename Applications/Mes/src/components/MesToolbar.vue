@@ -177,4 +177,7 @@ a {
   color: #326da8;
   font-weight: 500;
 }
+.router-link-active {
+  padding-left: 5px;
+}
 </style>

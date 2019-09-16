@@ -9,7 +9,7 @@
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
     <v-content>
-      <v-container class="main-block">
+      <v-container class="main-block" :key="mainContainerKey">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
@@ -55,9 +55,17 @@
 <script>
 export default {
   name: 'mes-layout',
+  data() {
+    return {
+      mainContainer: 0
+    }
+  },
   computed: {
     currentUser() {
       return this.$store.state.authentication.currentUser
+    },
+    mainContainerKey() {
+      return this.$store.getters['mes/mainContainerKey']
     },
     snackbar() {
       return this.$store.getters['mes/snackbar']
@@ -199,7 +207,7 @@ export default {
     padding: 10px 5px !important;
   }
   .v-speed-dial__list {
-    padding: 0; 
+    padding: 0;
     width: 45px !important;
   }
 </style>
