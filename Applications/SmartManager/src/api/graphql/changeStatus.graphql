@@ -1,4 +1,4 @@
-{
+mutation ($status: String) {
   smtasksMutation {
     changeStatus(status: $status) {
       success,

@@ -7,7 +7,7 @@
         </router-link>
         <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
       </v-flex>
-      <v-col class="work-centers-select" v-if="workCentersForWorker && workCentersForWorker.length > 1">
+      <v-col class="work-centers-select" v-if="workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <v-autocomplete
           autocomplete="off"
@@ -20,7 +20,7 @@
           class="work-centers-select-input"
         ></v-autocomplete>
       </v-col>
-      <div class="work-centers-caption" v-if="workCenter && !workCentersForWorker.length">
+      <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
@@ -80,22 +80,21 @@ export default {
       this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
 
       const workCentersFixed =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
-      if (!workCentersFixed) {
-        this.$store.commit('mes/closeDialogLinearLoader')
-        return
-      }
-      
+      var currentWorkCetnerFixation = false
       if (this.workCenter) {
         for (let fixation of workCentersFixed) {
-          if (fixation.code == this.workCenter.code) {
-            this.$store.dispatch('mes/unfixWorkCenterForWorker', { fixationId: fixation.fixationId })
-            break
+          if(fixation.code == newWorkCenter.code) {
+            currentWorkCetnerFixation = true
           }
         }
       }
-      
+
       this.$store.commit('mes/resetState')
-      await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
+      if(!currentWorkCetnerFixation) {
+        await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
+      } else {
+        this.$store.commit('mes/setWorkCenter', newWorkCenter)
+      }
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
     }

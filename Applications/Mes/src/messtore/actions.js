@@ -46,29 +46,25 @@ export default {
         console.log('Current UUID - ' + uuid)
 
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
+        commit('setWorkCentersForWorker', workCenters)
+
         if (workCenters.length == 1) {
           commit('setWorkCenter', workCenters[0])
         } else {
           var setWorkCenterForWorker = async (properties) => {
             var workCenterForWorker = await me.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
-            if(workCenterForWorker.length) {
-              let workCentersForWorker = []
+            workCenterForWorker = workCenterForWorker.sort((a,b) => {
+              return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
+            })
+
               for(var workCenter of workCenters) {
-                for(var workCenterOfWorker of workCenterForWorker) {
-                  if(workCenter.code == workCenterOfWorker.code) {
-                    workCentersForWorker.push(workCenter)
+                for(var fixWorkCetner of workCenterForWorker) {
+                  if(fixWorkCetner.code == workCenter.code) {
+                    commit('setWorkCenter', workCenter)
+                    return
                   }
                 }
               }
-              if(workCentersForWorker.length) {
-                commit('setWorkCenter', workCentersForWorker[0])
-                commit('setWorkCentersForWorker', workCentersForWorker)
-              } else {
-                commit('setWorkCentersForWorker', workCenters)
-              }
-            } else {
-              commit('setWorkCentersForWorker', workCenters)
-            }
           }
 
           if(!getters.properties) {
@@ -381,9 +377,16 @@ export default {
   async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
     return await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const res = await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
-        return res
+        return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
+    })
+  },
+  async callFormCustomEvent({ commit }, { formCode, params, successCallback }) {
+    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.callFormCustomEventGql(formCode, params)
+      },
+      successAction: async result => { successCallback(result) },
     })
   }
 }

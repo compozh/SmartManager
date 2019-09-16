@@ -5,6 +5,7 @@
       :options="options"
       @submit=onSubmit
       @change=onChange
+      ref="formioComponent"
     />
 </template>
 
@@ -19,8 +20,15 @@ export default {
       options: { noAlerts: true }, currentData: ''
     }
   },
+  created() {
+    var me = this
+    window.requestToServer = (eventCode, callback) => {
+      me.requestToServerAction(eventCode, callback)
+    }
+  },
   props: {
-    formioData: Object
+    formioData: Object,
+    formCode: String
   },
   methods: {
     onSubmit(params) {
@@ -31,6 +39,29 @@ export default {
     },
     getFormioData() {
       return JSON.stringify(this.currentData)
+    },
+    requestToServerAction(eventCode, callback) {
+      var me = this,
+        form = this.$refs.formioComponent,
+        components = JSON.stringify(form.form.components, null, 4),
+        submission = JSON.stringify(form.submission, null, 4)
+
+      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode, params: { eventCode, components, submission }, successCallback: result => {
+            if (callback) {
+              callback();
+            }
+            
+            if (result.components && result.components !== components) {
+              form.form = Object.assign(form.form, {
+                  components: JSON.parse(result.components)
+              });
+            }
+
+            if (result.submission && result.submission !== submission) {
+              form.setSubmission(JSON.parse(result.submission));
+            }
+          }
+      })
     }
   },
   computed: {

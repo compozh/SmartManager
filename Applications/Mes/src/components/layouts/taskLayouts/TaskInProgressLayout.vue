@@ -35,7 +35,8 @@
                             ref="formioBuilder"
                             @formioSubmit=formioSubmit
                             :formioData=productionFormio
-                            />
+                            :formCode=workCenter.productionRegistrationFormCode
+                          />
                         </div>
 
                         <div class="grid-item-data" v-if="item.i != '0'">

@@ -1,0 +1,12 @@
+mutation($formCode:String, $formCustomEventParamsInput: FormCustomEventParamsInput!) {
+    mesMutation {
+        callFormCustomEvent(formCode: $formCode, formCustomEventParamsInput: $formCustomEventParamsInput) {
+            components
+            submission
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}
