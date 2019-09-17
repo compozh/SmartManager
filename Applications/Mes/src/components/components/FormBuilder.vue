@@ -48,7 +48,6 @@ export default {
     formCode: String
   },
   watch: {
-    // whenever question changes, this function will run
     formioData: function (newData, oldData) {
       this.changedData = {}
     }
