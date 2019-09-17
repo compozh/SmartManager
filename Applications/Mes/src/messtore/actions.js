@@ -1,7 +1,6 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
-
 const api = new MesApi()
 /* eslint-disable */
 export default {
@@ -27,22 +26,10 @@ export default {
       }
     })
   },
-  async initializeWorkCenter({ commit, getters }, fetchPolicy) {
+  async initializeWorkCenter({ commit, getters }, uuid, fetchPolicy) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
-      action: async () => {
-        let uuid = $cookies.get('mesUuid'),
-        sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
-
-        if (!uuid && sessionStorageUuid) {
-          uuid = sessionStorageUuid
-        } else if (!uuid && !sessionStorageUuid) {
-          uuid = api.generateUUID()
-          // Caching for 3 year
-          $cookies.set('mesUuid', uuid, '3y')
-        }
-
-        window.sessionStorage.setItem('mesUuid', uuid)
+      action: async ( ) => {
         console.log('Current UUID - ' + uuid)
 
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)

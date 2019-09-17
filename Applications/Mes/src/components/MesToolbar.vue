@@ -47,9 +47,28 @@ import Vue from 'vue'
 export default {
   name: 'mes-toolbar',
   created() {
-    this.$store.dispatch('mes/initializeWorkCenter')
-    this.$store.dispatch('mes/initializeProperties')
-    var me = this
+    let me = this,
+      fixedUuid = me.$router.history.current.query.fixedUuid,
+      cookiesUuid = me.$cookies.get('mesUuid'),
+      sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
+      uuid
+    if (fixedUuid) {
+      uuid = fixedUuid
+    } else if (cookiesUuid) {
+      uuid = cookiesUuid
+      router.push({ query: { fixedUuid: uuid }})
+    } else if (sessionStorageUuid) {
+      uuid = sessionStorageUuid
+      router.push({ query: { fixedUuid: uuid }})
+    } else {
+      uuid = api.generateUUID()
+      router.push({ query: { fixedUuid: uuid }})
+    }
+
+    $cookies.set('mesUuid', uuid, '3y')
+    window.sessionStorage.setItem('mesUuid', uuid)
+    me.$store.dispatch('mes/initializeWorkCenter', uuid)
+    me.$store.dispatch('mes/initializeProperties')
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })
