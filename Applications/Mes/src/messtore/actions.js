@@ -181,7 +181,8 @@ export default {
       action: async () => {
         let workCenterProductionEvents = await api.getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy)
         commit('setWorkCenterProductionEvents', workCenterProductionEvents || [])
-      }
+      },
+      linearLoader: true
     })
   },
   async initializeUsersProductionEvents({ commit }, { workerCode, fetchPolicy }) {
@@ -189,7 +190,8 @@ export default {
       action: async () => {
         let usersProductionEvents = await api.getUsersProductionEventsFromGql(workerCode, fetchPolicy)
         commit('setUsersProductionEvents', usersProductionEvents || [])
-      }
+      },
+      linearLoader: true
     })
   },
   async deleteProduction({ commit }, production) {
