@@ -102,14 +102,14 @@ export default {
       var currentWorkCetnerFixation = false
       if (this.workCenter) {
         for (let fixation of workCentersFixed) {
-          if(fixation.code == newWorkCenter.code) {
+          if (fixation.code == newWorkCenter.code) {
             currentWorkCetnerFixation = true
           }
         }
       }
 
       this.$store.commit('mes/resetState')
-      if(!currentWorkCetnerFixation) {
+      if (!currentWorkCetnerFixation) {
         await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
       } else {
         this.$store.commit('mes/setWorkCenter', newWorkCenter)
