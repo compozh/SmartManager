@@ -1,10 +1,11 @@
 <template>
   <v-list>
     <v-list-item v-for="route in links" :key="route.Id" :to="{name:route.Id}">
-      <v-list-item-action>
-        <v-icon large >{{route.Image}}</v-icon>
+      <v-list-item-action @click="reloadPage(route)">
+          <v-icon large >{{route.Image}}</v-icon>
+          <v-icon class="reload-icon" v-if="$route.name == route.Id">replay</v-icon>
       </v-list-item-action>
-      <v-list-item-content>
+      <v-list-item-content  @click="reloadPage(route)">
         <v-list-item-title>{{ route.Name }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -48,6 +49,14 @@ export default {
       })
       links = links.concat(pages)
       return links.filter(l => l.Name && l.Path)
+    },
+  },
+  methods: {
+    reloadPage(route) {
+      if (this.$router.history.current.name != route.Id) {
+        return
+      }
+      this.$store.commit('mes/changeMainContainerKey')
     }
   }
 }
@@ -70,5 +79,18 @@ export default {
   }
   .v-navigation-drawer--mini-variant .v-list-item {
     justify-content: start;
-}
+  }
+  .reload-icon {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 17px !important;
+  }
+  .v-navigation-drawer__content .v-list .v-list-item__action {
+    margin-right: 0;
+  }
+  .v-navigation-drawer__content .v-list-item__title {
+    margin-left: 10px;
+    margin-top: 5px;
+  }
 </style>

@@ -17,6 +17,8 @@
         id="downtimeList"
         :initializeDowntimes=initializeDowntimes
         @changeCurrentDowntime=changeCurrentDowntime
+        @uploadDowntimeOnScroll=uploadDowntimeOnScroll
+        :isUploadInProcess=isUploadInProcess
       />
       <mes-downtime-main-layout
         id="downtimeDescription"
@@ -34,7 +36,8 @@ export default {
     return {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeDowntimes: false,
-      defaultSizes: [35, 65]
+      defaultSizes: [35, 65],
+      isUploadInProcess: false
     }
   },
   mounted() {
@@ -64,7 +67,9 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+      if (!this.downtimes.length) {
+        await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+      }
       this.initializeDowntimes = true
       if (!this.selectedDowntime) {
         this.seelectFirstDowntime()
@@ -81,6 +86,11 @@ export default {
       if (this.downtimes.length) {
         this.changeCurrentDowntime(this.downtimes[0])
       }
+    },
+    async uploadDowntimeOnScroll(lastDowntimeDate) {
+      this.isUploadInProcess = true
+      await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: lastDowntimeDate })
+      this.isUploadInProcess = false
     }
   }
 }

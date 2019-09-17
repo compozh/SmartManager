@@ -47,9 +47,28 @@ import Vue from 'vue'
 export default {
   name: 'mes-toolbar',
   created() {
-    this.$store.dispatch('mes/initializeWorkCenter')
-    this.$store.dispatch('mes/initializeProperties')
-    var me = this
+    let me = this,
+      fixedUuid = me.$router.history.current.query.fixedUuid,
+      cookiesUuid = me.$cookies.get('mesUuid'),
+      sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
+      uuid
+    if (fixedUuid) {
+      uuid = fixedUuid
+    } else if (cookiesUuid) {
+      uuid = cookiesUuid
+      me.$router.push({ query: { fixedUuid: uuid }})
+    } else if (sessionStorageUuid) {
+      uuid = sessionStorageUuid
+      me.$router.push({ query: { fixedUuid: uuid }})
+    } else {
+      uuid = this.generateUUID()
+      me.$router.push({ query: { fixedUuid: uuid }})
+    }
+
+    $cookies.set('mesUuid', uuid, '3y')
+    window.sessionStorage.setItem('mesUuid', uuid)
+    me.$store.dispatch('mes/initializeWorkCenter', uuid)
+    me.$store.dispatch('mes/initializeProperties')
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })
@@ -97,6 +116,19 @@ export default {
       }
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
+    },
+    generateUUID() { // Public Domain/MIT
+      var d = new Date().getTime()
+      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+        d += performance.now() //use high-precision timer if available
+      }
+      var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+      })
+
+      return newGuid
     }
   }
 }
@@ -176,5 +208,8 @@ a {
   font-size: 14px;
   color: #326da8;
   font-weight: 500;
+}
+.router-link-active {
+  padding-left: 5px;
 }
 </style>
