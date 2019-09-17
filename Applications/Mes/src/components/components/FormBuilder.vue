@@ -24,6 +24,7 @@ export default {
   components: { formio: Form },
   data() {
     return {
+      changedData: {},
       options: { noAlerts: true },
       currentData: '',
       qrScanerVisible: false,
@@ -46,16 +47,22 @@ export default {
     formioData: Object,
     formCode: String
   },
+  watch: {
+    // whenever question changes, this function will run
+    formioData: function (newData, oldData) {
+      this.changedData = {}
+    }
+  },
   computed: {
     formioComponents() {
       return {
-        display: this.formioData.display || 'form',
-        components: this.formioData.form ? JSON.parse(this.formioData.form) : [],
-        settings: this.formioData.settings ? JSON.parse(this.formioData.settings) : {}
+        display: this.changedData.display || this.formioData.display || 'form',
+        components: this.changedData.components || (this.formioData.form ? JSON.parse(this.formioData.form) : []),
+        settings: this.changedData.settings || (this.formioData.settings ? JSON.parse(this.formioData.settings) : {})
       }
     },
     formioSubmission() {
-      return { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
+      return this.changedData.submission || { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
     },
     ticket() {
       return this.$store.getters['mes/ticket']
@@ -95,19 +102,21 @@ export default {
               settings = result.settings
               dataChanged = true
             }
+            if(result.display && result.display != display) {
+              display = result.display
+              dataChanged = true
+            }
 
             if(dataChanged) {
-              form.form = Object.assign(form.form, {
-                  display: result.display || display,
+              me.changedData = {
+                  display,
                   components: JSON.parse(components),
                   settings: JSON.parse(settings)
-              });
-            } else if(result.display && result.display != display) {
-              form.setDisplay(result.display)
+              }
             }
 
             if (result.submission && result.submission !== submission) {
-              form.setSubmission(JSON.parse(result.submission))
+              me.changedData.submission = JSON.parse(result.submission)
             }
           }
       })
