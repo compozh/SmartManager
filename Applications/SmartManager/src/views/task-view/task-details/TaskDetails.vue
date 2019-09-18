@@ -1,6 +1,6 @@
 <template>
   <VuePerfectScrollbar
-    class="scroll-area md:px-8 pt-4 px-6"
+    class="scroll-area md:px-8 p-4"
     :settings="settings"
   >
     <div class="vx-row">
@@ -82,8 +82,6 @@
                   </vx-tooltip>
                 </div>
               </div>
-
-
         </vx-card>
       </div>
     </div>
@@ -106,7 +104,6 @@
               <div class="vx-row w-full">
                 <div class="vx-col w-full">
               <transition-group
-                id="task-list"
                 name="list-enter-up"
                 class="task__tasks  -mx-4"
                 tag="ul"
@@ -114,8 +111,8 @@
               >
                 <li
                   class="cursor-pointer task__task-item"
-                  v-for="(parentTask, index) in task.parentTasks"
-                  :key="index"
+                  v-for="parentTask in task.parentTasks"
+                  :key="parentTask.id"
                 >
                   <task-list-item :task="parentTask"></task-list-item>
                 </li>
@@ -146,7 +143,6 @@
               <div class="vx-row w-full">
                 <div class="vx-col w-full">
               <transition-group
-
                 name="list-enter-up"
                 class="task__tasks -mx-4"
                 tag="ul"
@@ -154,8 +150,8 @@
               >
                 <li
                   class="cursor-pointer task__task-item"
-                  v-for="(subTask, index) in task.childTasks"
-                  :key="index"
+                  v-for="subTask in task.childTasks"
+                  :key="subTask.id"
                 >
                   <task-list-item :task="subTask"></task-list-item>
                 </li>

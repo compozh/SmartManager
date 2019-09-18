@@ -10,7 +10,6 @@ import state from './state'
 // Modules
 import appModule from './app/smStore'
 import authModule from './auth/moduleAuth'
-import notificationsModule from './notifications/moduleNotifications'
 
 Vue.use(Vuex)
 
@@ -22,7 +21,6 @@ const store = new Vuex.Store({
   state,
   modules: {
     [appModule.namespace]: appModule,
-    notifications: notificationsModule,
     auth: authModule,
   },
   strict: process.env.NODE_ENV !== 'production'
