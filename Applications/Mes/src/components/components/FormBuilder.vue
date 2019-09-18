@@ -18,10 +18,11 @@
 
 <script>
 import { Form } from 'vue-formio'
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
   name: 'mes-form-builder',
-  components: { formio: Form },
+  components: { formio: Form, apexchart: VueApexCharts },
   data() {
     return {
       changedData: {},
