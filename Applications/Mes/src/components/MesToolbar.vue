@@ -48,7 +48,7 @@ export default {
   name: 'mes-toolbar',
   created() {
     let me = this,
-      fixedUuid = me.$router.history.current.query.fixedUuid,
+      fixedUuid = me.$router.options.params.fixedUuid,
       cookiesUuid = me.$cookies.get('mesUuid'),
       sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
       uuid

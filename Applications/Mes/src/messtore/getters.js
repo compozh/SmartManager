@@ -20,6 +20,9 @@ export default {
   tasks(state) {
     return state.tasks
   },
+  filterValue(state) {
+    return state.tasksPageState.filterValue
+  },
   downtimes(state) {
     return state.downtimes
   },

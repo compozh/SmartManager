@@ -3,7 +3,7 @@
     <v-list-item v-for="route in links" :key="route.Id" :to="{name:route.Id}">
       <v-list-item-action @click="reloadPage(route)">
           <v-icon large >{{route.Image}}</v-icon>
-          <v-icon class="reload-icon" v-if="$route.name == route.Id">replay</v-icon>
+          <v-icon class="reload-icon" v-if="$route.name == route.Id">refresh</v-icon>
       </v-list-item-action>
       <v-list-item-content  @click="reloadPage(route)">
         <v-list-item-title>{{ route.Name }}</v-list-item-title>
