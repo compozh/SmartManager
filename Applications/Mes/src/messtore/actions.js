@@ -1,7 +1,6 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
-
 const api = new MesApi()
 /* eslint-disable */
 export default {
@@ -27,22 +26,10 @@ export default {
       }
     })
   },
-  async initializeWorkCenter({ commit, getters }, fetchPolicy) {
+  async initializeWorkCenter({ commit, getters }, uuid, fetchPolicy) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
-      action: async () => {
-        let uuid = $cookies.get('mesUuid'),
-        sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
-
-        if (!uuid && sessionStorageUuid) {
-          uuid = sessionStorageUuid
-        } else if (!uuid && !sessionStorageUuid) {
-          uuid = api.generateUUID()
-          // Caching for 3 year
-          $cookies.set('mesUuid', uuid, '3y')
-        }
-
-        window.sessionStorage.setItem('mesUuid', uuid)
+      action: async ( ) => {
         console.log('Current UUID - ' + uuid)
 
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
@@ -90,11 +77,15 @@ export default {
       }
     })
   },
-  async downloadDowntimes({ commit }, { workCenterCode, dateTime }) {
+  async downloadDowntimes({ commit, getters }, { workCenterCode, dateTime }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
-        commit('setDowntimes', downtimes)
+        if (getters.downtimes.length) {
+          commit('setDowntimes', getters.downtimes.concat(downtimes))
+        } else {
+          commit('setDowntimes', downtimes)
+        }
       }
     })
   },
@@ -177,7 +168,8 @@ export default {
       action: async () => {
         let workCenterProductionEvents = await api.getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy)
         commit('setWorkCenterProductionEvents', workCenterProductionEvents || [])
-      }
+      },
+      linearLoader: true
     })
   },
   async initializeUsersProductionEvents({ commit }, { workerCode, fetchPolicy }) {
@@ -185,7 +177,8 @@ export default {
       action: async () => {
         let usersProductionEvents = await api.getUsersProductionEventsFromGql(workerCode, fetchPolicy)
         commit('setUsersProductionEvents', usersProductionEvents || [])
-      }
+      },
+      linearLoader: true
     })
   },
   async deleteProduction({ commit }, production) {

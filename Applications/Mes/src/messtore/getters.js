@@ -59,6 +59,9 @@ export default {
   ticket(state) {
     return state.ticket
   },
+  mainContainerKey(state) {
+    return state.mainContainerKey
+  },
   selectedTask(state) {
     return state.tasksPageState.selectedTask
   },
@@ -75,6 +78,6 @@ export default {
     return state.productionPageState.selectedProductionTab
   },
   actionsAfterInitializeProperties(state) {
-    return state.actionsAfterInitializeProperties    
+    return state.actionsAfterInitializeProperties
   }
 }

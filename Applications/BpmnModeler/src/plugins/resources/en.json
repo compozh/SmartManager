@@ -1,6 +1,6 @@
 {
     "buttons": {
-		"AddElement": "Add element",
+		"AddElement": "Add",
 		"Refresh": "Refresh",
 		"Close": "Close",
 		"Rename": "Rename",
@@ -25,7 +25,8 @@
 		"DeleteProcess": "Delete process",
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
-		"DeleteFolder": "Delete folder"
+		"DeleteFolder": "Delete folder",
+		"RequiredField": "Field is requierd"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Processes not loaded",
@@ -181,6 +182,24 @@
 		"Date": "Date",
 		"Duration": "Duration",
 		"Cycle": "Cycle",
-		"Must provide a value": "Must provide a value"
+		"Must provide a value": "Must provide a value",
+
+		"Forms": "Forms",
+		"Form Key": "Form Key",
+		"Form Fields": "Form Fields",
+		"Business Key": "Business Key",
+		"Form Field": "Form Field",
+		"ID": "ID",
+		"Type": "Type",
+		"Label": "Label",
+		"Default Value": "Default Value",
+		"Values": "Values",
+		"Add Value": "Add Value",
+		"Validation": "Validation",
+		"Add Constraint": "Add Constraint",
+		"Config": "Config",
+		"Properties": "Properties",
+		"Add Property": "Add Property",
+		"Value": "Value"
 	}
 }

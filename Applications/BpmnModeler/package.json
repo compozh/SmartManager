@@ -1,7 +1,7 @@
 {
   "name": "bpmn-modeler",
   "version": "1.0.0",
-  "description": "BPMN Modeler",
+  "description": "IT-Enterprise Workflow modeler",
   "author": "it-enterprise",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -29,6 +29,7 @@
     "apollo-link-http": "^1.5.16",
     "bpmn-js": "^5.0.4",
     "bpmn-js-properties-panel": "^0.32.1",
+    "camunda-bpmn-moddle": "^4.1.2",
     "diagram-js": "^5.0.2",
     "graphql": "^14.5.4",
     "graphql-tag": "^2.10.1",

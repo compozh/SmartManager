@@ -42,5 +42,6 @@ export default {
   createDowntimeFormio: {},
   menuMiniMode: true,
   ticket: '',
+  mainContainerKey: 0,
   actionsAfterInitializeProperties: []
 }

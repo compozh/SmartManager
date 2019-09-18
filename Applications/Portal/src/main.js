@@ -60,8 +60,26 @@ Vue.use(VueTour)
 require('vue-tour/dist/vue-tour.css')
 
 // VeeValidate
-import VeeValidate from 'vee-validate'
-Vue.use(VeeValidate)
+import { ValidationProvider, ValidationObserver, configure, extend  } from 'vee-validate/dist/vee-validate'
+import veeLocalize_ru from 'vee-validate/dist/locale/ru.json'
+import veeLocalize_en from 'vee-validate/dist/locale/en.json'
+import veeLocalize_uk from 'vee-validate/dist/locale/uk.json'
+
+
+// Add the required rule
+extend('required',{
+  validate: value => !!value,
+  computesRequired: true
+})
+configure({
+  defaultMessage: (_, values) => {
+    return i18n.t(`validation.${values._rule_}`, values)
+  }
+})
+
+// Register it globally
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)
 
 // Vuejs - Vue wrapper for hammerjs
 import { VueHammer } from 'vue2-hammer'
@@ -104,9 +122,19 @@ if (!localStorage.getItem('language')) {
 Vue.use(Localization, { dependencies })
 Vue.use(Authentication, { options: window.appConfig, dependencies })
 
+Vue.prototype.$localization.RegisterLanguage('validation', 'en', () => Promise.resolve({default: veeLocalize_en.messages}))
+Vue.prototype.$localization.RegisterLanguage('validation', 'ru', () => Promise.resolve({default: veeLocalize_ru.messages}))
+Vue.prototype.$localization.RegisterLanguage('validation', 'uk', () => Promise.resolve({default: veeLocalize_uk.messages}))
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
+
+
+
+
+
+
+
 
 getRouter().then(router => {
   new Vue({
