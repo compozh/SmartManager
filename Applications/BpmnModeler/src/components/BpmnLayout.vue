@@ -171,13 +171,16 @@ export default {
           this.error = this.$t('bpmn.errors.ProcessNotEdited');
           this.showError = true;
         }
+        this.activeItem = item.id;
         break;
       case 'delete':
         if (await this.$store.dispatch('bpmn/deleteItem', item)) {
           this.showForm = false;
+          this.activeItem = item.parentId;
         } else {
           this.error = this.$t('bpmn.errors.ProcessNotDeleted');
           this.showError = true;
+          this.activeItem = item.id;
         }
         break;
       }
@@ -227,13 +230,13 @@ export default {
       input.click();
     },
     async dropItem(draggingItem, dropItem, type) {
-      if (this.activeItem === draggingItem.id) {
-        this.$nextTick(() => this.$refs.treeView.setActiveItem(draggingItem.id));
-      }
+      this.loading = true;
       if (!(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem, type }))) {
         this.error = this.$t('bpmn.errors.CantDrop');
         this.showError = true;
       }
+      this.activeItem = draggingItem.id;
+      this.loading = false;
     },
     exportItem(item, type) {
       const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === 'bpmn-modeler', e => e.$children);
@@ -285,6 +288,7 @@ export default {
       },
       set(value) {
         this.$store.dispatch('bpmn/setActiveItem', value);
+        this.$refs.treeView.setActiveItem(value);
         this.navigateToItem(value);
       }
     }

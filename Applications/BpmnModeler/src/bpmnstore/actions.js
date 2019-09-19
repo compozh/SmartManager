@@ -2,39 +2,10 @@
 import { BpmnModelerApi } from '../api/bpmnApi';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
-import bpmnCompare from '../api/bpmnCompare';
 
 const api = new BpmnModelerApi();
 
 export default {
-  async addItem(context, item) {
-    let items;
-    let parent;
-    if (item.parentId && item.parentId !== '') {
-      let index
-      ({ item: parent, index } = context.getters.getItemById(item.parentId));
-      if (index === -1) {
-        return;
-      }
-      if (!parent.items) {
-        parent.items = [];
-      }
-      items = parent.items;
-    } else {
-      items = context.state.items;
-    }
-
-    items.push(item);
-    items.sort(bpmnCompare);
-  },
-  async removeItem(context, item) {
-    if (item.parentId && item.parentId !== '') {
-      const { item: parent } = context.getters.getItemById(item.parentId);
-      parent.items = parent.items.filter(e => e !== item);
-    } else {
-      context.state.items = context.state.items.filter(e => e !== item);
-    }
-  },
   async setActiveItem(context, item) {
     if (typeof item === 'string' || item instanceof String) {
       ({ item } = context.getters.getItemById(item));
@@ -115,7 +86,7 @@ export default {
       return false;
     }
     Object.assign(process, newProcess);
-    context.dispatch('addItem', process);
+    await context.dispatch('loadItems');
     return true;
   },
   async editProcess(context, { id, name }) {
@@ -147,7 +118,7 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
-    context.dispatch('addItem', folder);
+    await context.dispatch('loadItems');
     return true;
   },
   async editFolder(context, { id, name }) {
@@ -173,8 +144,6 @@ export default {
       return false;
     }
 
-    context.dispatch('removeItem', item);
-
     let success = false;
 
     try {
@@ -187,15 +156,10 @@ export default {
       console.error(error);
     }
 
-    if (!success) {
-      context.dispatch('addItem', item, index);
-    }
-
+    await context.dispatch('loadItems');
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {
-    const oldParentId = draggingItem.parentId;
-
     switch (type) {
     case 'before':
     case 'after':
@@ -205,10 +169,6 @@ export default {
       draggingItem.parentId = dropItem.id;
       break;
     }
-
-    context.dispatch('removeItem', draggingItem);
-    context.dispatch('addItem', draggingItem);
-
     let success = false;
     try {
       if (draggingItem.isFolder) {
@@ -219,11 +179,7 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
-    if (!success) {
-      draggingItem.parentId = oldParentId;
-    }
-
+    await context.dispatch('loadItems');
     return success;
   }
 };

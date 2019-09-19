@@ -103,9 +103,6 @@ export default {
     }
   },
   watch: {
-    activeItem(value) {
-      this.setActiveItem(value);
-    },
     search(value) {
       this.$refs.treeView.filter(value);
     }
