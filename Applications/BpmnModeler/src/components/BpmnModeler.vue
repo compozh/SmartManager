@@ -142,15 +142,21 @@ export default {
           // TODO: display exception
           return;
         }
-        this.modeler.importXML(xml, (err) => {
-          this.loading = false;
-          if (err) {
-            console.error(err);
-            // TODO: display exception
-            this.modeler.createDiagram();
+        if (!xml || xml === '') {
+          this.modeler.createDiagram(() => {
             this.loading = false;
-          }
-        });
+          });
+        } else {
+          this.modeler.importXML(xml, (err) => {
+            this.loading = false;
+            if (err) {
+              console.error(err);
+              // TODO: display exception
+              this.modeler.createDiagram();
+              this.loading = false;
+            }
+          });
+        }
       });
 
       this.cancellationToken = new CancellationToken(debounced);

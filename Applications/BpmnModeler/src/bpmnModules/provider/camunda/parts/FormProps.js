@@ -473,6 +473,4 @@ export default function(group, element, bpmnFactory, translate) {
       return !!getSelectedFormField(element, node);
     }
   }, translate));
-
-  console.log(group);
 }
