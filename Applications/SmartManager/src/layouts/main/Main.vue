@@ -151,11 +151,11 @@ export default {
         'footer-sticky': this.footerType === 'sticky',
         'footer-static': this.footerType === 'static',
       }
-    },
+    }
   },
   methods: {
     getFolders() {
-      this.$store.dispatch('sm/getFolders', {loader: 'setCircularLoader'})
+      this.$store.dispatch('sm/getFolders')
     },
     createUrl(code) {
       return '/tasks/' + (code === '' ? 'ALL' : code)

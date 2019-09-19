@@ -24,11 +24,6 @@
       :class="{'sidebar-spacer': clickNotClose, 'md-sidebar-spacer': mdAndDown}"
       class="md:md-sidebar-spacer app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
     >
-      <div
-        v-show="loading"
-        ref="taskViewLoader"
-        class="vs-con-loading__container h-full"
-      ></div>
       <!-- TASK DETAILS  -->
       <task-details v-if="currentTab === 'details'" :task="task" @open-attachment="openAttachment"></task-details>
 
@@ -61,7 +56,6 @@ export default {
     TaskApprovals
   },
   data: () => ({
-    loading: false,
     currentTab: 'details',
     index: 0,
     reduce: true,
@@ -110,26 +104,14 @@ export default {
     }
   },
   methods: {
-    startLoading() {
-      this.loading = true
-      this.$vs.loading({
-        container: this.$refs.taskViewLoader,
-        clickEffect: true
-      })
-    },
-    stopLoading() {
-      this.loading = false
-      this.$vs.loading.close(this.$refs.taskViewLoader)
-    },
     async getTask() {
       const id = +this.$route.params.id
       if (!this.task.id) {
-        this.startLoading()
         try {
-          await this.$store.dispatch('sm/getTaskInfo', {id})
-          this.stopLoading()
+          await this.$store.dispatch('sm/getTaskInfo', {
+            id, loading: true
+          })
         } catch (e) {
-          this.stopLoading()
           console.log(e.message)
         }
       }

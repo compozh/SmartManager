@@ -23,13 +23,7 @@
           :settings="settings"
           ref="taskListPS"
         >
-          <div
-            v-show="loading"
-            ref="taskListLoader"
-            class="vs-con-loading__container h-full"
-          ></div>
           <transition-group
-            v-if="!loading"
             id="task-list"
             name="list-enter-up"
             class="task__tasks"
@@ -45,9 +39,6 @@
               <task-list-item :task="task"></task-list-item>
             </li>
           </transition-group>
-          <div v-if="!hasTasks" class="h-full flex justify-center items-center text-4xl">{{
-            $t('messages.noData') }}
-          </div>
         </VuePerfectScrollbar>
       </div>
 
@@ -73,7 +64,6 @@ export default {
   data: () => ({
     currentPage: 1,
     taskPerPage: 20,
-    loading: false,
     searchQuery: '',
     windowWidth: window.innerWidth,
     settings: {
@@ -107,9 +97,6 @@ export default {
           .filter((task, index) => pageFrom <= index && index < pageTo)
       }
     },
-    hasTasks() {
-      return this.tasks ? this.tasks.length : 0
-    },
     search: {
       get() {
         return this.$store.state.sm.search
@@ -120,27 +107,12 @@ export default {
     }
   },
   methods: {
-    startLoading() {
-      this.loading = true
-      this.$vs.loading({
-        container: this.$refs.taskListLoader,
-        clickEffect: true
-      })
-    },
-    stopLoading() {
-      this.loading = false
-      this.$vs.loading.close(this.$refs.taskListLoader)
-    },
     async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)
-      if (!this.tasks) {
-        this.startLoading()
-      }
+      const loading = !this.tasks
       try {
-        await this.$store.dispatch('sm/getTasks', {folderId})
-        this.stopLoading()
+        await this.$store.dispatch('sm/getTasks', {folderId, loading})
       } catch (e) {
-        this.stopLoading()
         console.log(e.message)
       }
     },

@@ -1,23 +1,10 @@
 import moment from 'moment'
 
 export default {
-  setCircularLoader(state, payload) {
-    state.circularLoader = payload
-  },
-  setLinearLoader(state, payload) {
-    state.linearLoader = payload
-  },
   setMessage(state, payload) {
     state.message = payload ? payload : {}
   },
-  setMenuMode(state, payload) {
-    state.menuMode.lastState = state.menuMode.currentState
-    state.menuMode.currentState = payload
-  },
   setTaskAddForm(state, payload) {
-    if (payload === 'close') {
-      state.menuMode.currentState = state.menuMode.lastState
-    }
     state.taskAddForm = payload
   },
   setFolders(state, payload) {

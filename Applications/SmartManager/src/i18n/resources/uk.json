@@ -83,7 +83,8 @@
   },
   "comments": {
     "addComment": "Додати коментар",
-    "placeholder": "Введіть коментар"
+    "placeholder": "Введіть коментар",
+    "placeholder2": "текст коментаря..."
   },
   "messages": {
     "noMessages": "Повідомлення відсутні",
@@ -92,15 +93,28 @@
     "noComments": "Коментарі відсутні",
     "closeForm": "Для переходу в меню закрийте форму",
     "noApprovals": "Не має даних про погодження",
-    "noSupport": "ФАЙЛИ {ext} НЕ ПІДТРИМУЮТЬСЯ",
+    "noSupport": "ФАЙЛИ {ext} НЕ ПІДТРИМУЮТЬСЯ"
+  },
+  "notify": {
+    "foldersTitle": "Папки и фильлры",
+    "taskListTitle": "Список файлов",
+    "taskTitle": "Задача",
+    "usersTitle": "Пользователи",
+    "statusTitle": "Статус",
+    "stageTitle": "Стадия",
+    "attachTitle": "Вложения",
+    "commentsTitle": "Комментарии",
     "taskAddSuccess": "Задачу додано вдало",
     "taskAddFail": "Не вдалося додати задачу",
     "taskAddError": "Помилка при додаванні задачі",
     "statChangeSuccess": "Статус задачі змінено вдало",
     "statChangeFail": "Не вдалося змінити статус задачі",
+    "statChangeError": "Помилка при зміні статусу задачі",
     "attachAddSuccess": "Додаток успішно додано",
     "attachAddFail": "Не вдалося додати додаток",
-    "commentAddSuccess": "Не вдалося додати коментар",
-    "commentAddFail": "Помилка при додаванні коментаря"
+    "attachAddError": "Помилка при додаванні додатку",
+    "commentAddSuccess": "Коментар успішно додано",
+    "commentAddFail": "Не вдалося додати коментар",
+    "commentAddError": "Помилка при додаванні коментаря"
   }
 }
