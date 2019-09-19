@@ -28,9 +28,15 @@
           v-if="!initializeTasks && !tasks.length"
           :loaderType=loaderType
         />
-
+        <v-text-field
+          v-if="initializeTasks && countTasks(selectedTasksTab)"
+          class="search-task-field"
+          label="Поиск задания"
+          v-model="filterValue"
+          clearable
+        ></v-text-field>
         <div class="tasks-list-block-content">
-
+          
           <mes-task-cards
             :selectedTask=selectedTask
             :selectedTasksTab=selectedTasksTab
@@ -74,9 +80,20 @@ export default {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
+    tasksPageState() {
+      return this.$store.getters['mes/tasksPageState']
+    },
     selectedTask: {
       get() {
         return this.$store.getters['mes/selectedTask']
+      }
+    },
+    filterValue: {
+      get() {
+        return this.tasksPageState.filterValue
+      },
+      set(filterValue) {
+        this.$store.commit('mes/setFilterValue', filterValue)
       }
     }
   },
@@ -106,7 +123,7 @@ export default {
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' })
       this.$store.dispatch('mes/setObsoluteDataTask', false)
       this.refreshingTasks = false
-    }
+    },
   }
 }
 </script>
@@ -134,8 +151,18 @@ export default {
     padding-right: 10px;
   }
 
+  .search-task-field {
+    height: 45px;
+  }
+  .search-task-field .v-label {
+    left: 5px !important;
+  }
+  .search-task-field .v-application .primary--text {
+    color: #326da8 !important;
+    caret-color: #326da8 !important;
+  }
   .tasks-list-block-content {
-    height:calc(100% - 60px);
+    height:calc(100% - 109px);
     overflow-y: auto;
     position: absolute;
     width: 100%;

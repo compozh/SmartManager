@@ -149,6 +149,24 @@ export default {
     },
     productionFormio() {
       return this.$store.getters['mes/productionFormio']
+    },
+    filterValue() {
+      return this.$store.getters['mes/filterValue']
+    },
+    sortedTasks() {
+      let tasks,
+        filteredTasks = this.tasks.filter(task => {
+          return (!this.filterValue || task.description.toLowerCase().includes(this.filterValue.toLowerCase())) ? task : null
+        })
+
+      tasks = filteredTasks.sort((a,b) => {
+        let aStartDateTime = new Date(a.startDateTime).getTime(),
+          bStartDate = new Date(b.startDateTime).getTime(),
+          sortByDate = aStartDateTime > bStartDate ? 1 : (aStartDateTime == bStartDate ? 0 : -1)
+
+        return a.inProgress && b.inProgress ? sortByDate : a.inProgress ? -1 : b.inProgress ? 1 : sortByDate
+      })
+      return tasks
     }
   },
   methods: {
@@ -179,11 +197,14 @@ export default {
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
       this.initializeTasks = true
       if (!this.selectedTask) {
-        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab)
+        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab, this.sortedTasks)
       }
     },
-    selectFirstTaskByTabIndex(tabIndex) {
-      for (let task of this.tasks) {
+    selectFirstTaskByTabIndex(tabIndex, sortedTasks) {
+      if (!sortedTasks.length) {
+        return
+      }
+      for (let task of this.sortedTasks) {
         switch (tabIndex) {
         case 0:
           if (task.state == 'IN_PLAN' || task.state == 'IN_WORK') {
@@ -255,7 +276,7 @@ export default {
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex
-      this.selectFirstTaskByTabIndex(tabIndex)
+      this.selectFirstTaskByTabIndex(tabIndex, this.sortedTasks)
     },
     dialogAgreeClick() {
       this.dialogProperties.visible = false
