@@ -165,6 +165,7 @@ export default {
       });
     },
     onActiveModelChanged() {
+      this.modeler.clear();
       if (this.onElementChanged) {
         this.modeler.off('element.changed', this.onElementChanged);
       }

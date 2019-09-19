@@ -11,21 +11,23 @@
         @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
       <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
-      <bpmn-contex-menu
-        @create="createItem"
-        @edit="editItem" 
-        @remove="removeItem" 
-        @import="importItem"
-        @export="exportItem">
-        <template #activator="{ open }">
-          <v-btn icon class="text-left blue--text text--darken-2" v-on="open" :title="$t('bpmn.buttons.AddElement')">
-            <v-icon>add</v-icon>
-          </v-btn>
-        </template>
-      </bpmn-contex-menu>
-      <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
-        <v-icon>refresh</v-icon>
-      </v-btn>
+      <template v-if="currentUser">
+        <bpmn-contex-menu
+          @create="createItem"
+          @edit="editItem" 
+          @remove="removeItem" 
+          @import="importItem"
+          @export="exportItem">
+          <template #activator="{ open }">
+            <v-btn icon class="text-left blue--text text--darken-2" v-on="open" :title="$t('bpmn.buttons.AddElement')">
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+        </bpmn-contex-menu>
+        <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
+          <v-icon>refresh</v-icon>
+        </v-btn>
+      </template>
       <v-spacer></v-spacer>
       <v-flex shrink class="icon-container">
         <user-panel mini="true"></user-panel>
