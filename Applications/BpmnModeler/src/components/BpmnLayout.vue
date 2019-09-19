@@ -35,7 +35,7 @@
       app
       clipped
       width="380">
-      <bpmn-tree :items="items" :activeItem.sync="activeItem">
+      <bpmn-tree ref="treeView" :items="items" :activeItem.sync="activeItem" @drop="dropItem">
         <template #context-menu="{ item }">
           <bpmn-contex-menu :item="item"
             @create="createItem"
@@ -226,6 +226,15 @@ export default {
       document.body.appendChild(input);
       input.click();
     },
+    async dropItem(draggingItem, dropItem, type) {
+      if (this.activeItem === draggingItem.id) {
+        this.$nextTick(() => this.$refs.treeView.setActiveItem(draggingItem.id));
+      }
+      if (!(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem, type }))) {
+        this.error = this.$t('bpmn.errors.CantDrop');
+        this.showError = true;
+      }
+    },
     exportItem(item, type) {
       const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === 'bpmn-modeler', e => e.$children);
       if (modeler && modeler.export) {
@@ -237,6 +246,7 @@ export default {
       let routeName, params;
       if (index < 0) {
         routeName = 'BPMNEMPTY';
+        params = { };
       } else if (item.isFolder) {
         routeName = 'BPMNFOLDER';
         params = { id: itemId };
@@ -274,9 +284,6 @@ export default {
         return this.$store.getters['bpmn/getActiveItemId']
       },
       set(value) {
-        if (value == this.activeItem) {
-          return;
-        }
         this.$store.dispatch('bpmn/setActiveItem', value);
         this.navigateToItem(value);
       }

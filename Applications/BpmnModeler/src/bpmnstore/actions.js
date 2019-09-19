@@ -1,14 +1,18 @@
+/* eslint-disable require-atomic-updates */
 import { BpmnModelerApi } from '../api/bpmnApi';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
+import bpmnCompare from '../api/bpmnCompare';
 
 const api = new BpmnModelerApi();
 
 export default {
-  async addItem(context, item, index) {
+  async addItem(context, item) {
     let items;
+    let parent;
     if (item.parentId && item.parentId !== '') {
-      const { item: parent, index } = context.getters.getItemById(item.parentId);
+      let index
+      ({ item: parent, index } = context.getters.getItemById(item.parentId));
       if (index === -1) {
         return;
       }
@@ -19,11 +23,9 @@ export default {
     } else {
       items = context.state.items;
     }
-    if (index && index >= 0) {
-      items.splice(index, 0, item);
-    } else {
-      items.push(item);
-    }
+
+    items.push(item);
+    items.sort(bpmnCompare);
   },
   async removeItem(context, item) {
     if (item.parentId && item.parentId !== '') {
@@ -191,4 +193,38 @@ export default {
 
     return success;
   },
+  async itemDropped(context, { draggingItem, dropItem, type }) {
+    const oldParentId = draggingItem.parentId;
+
+    switch (type) {
+    case 'before':
+    case 'after':
+      draggingItem.parentId = dropItem.parentId;
+      break;
+    case 'inner':
+      draggingItem.parentId = dropItem.id;
+      break;
+    }
+
+    context.dispatch('removeItem', draggingItem);
+    context.dispatch('addItem', draggingItem);
+
+    let success = false;
+    try {
+      if (draggingItem.isFolder) {
+        success = await api.dropFolder(draggingItem.id, draggingItem.parentId);
+      } else {
+        success = await api.dropProcess(draggingItem.id, draggingItem.parentId);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (!success) {
+      draggingItem.parentId = oldParentId;
+    }
+
+    return success;
+  }
 };
+

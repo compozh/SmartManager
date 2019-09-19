@@ -29,10 +29,11 @@
 		"RequiredField": "Поле обязательно для ввода"
 	},
 	"errors": {
-		"ProcessesNotLoaded": "Процессы не загружены",
-		"ProcessNotCreated": "Процесс не создан",
-		"ProcessNotEdited": "Процесс не сохранён",
-		"ProcessNotDeleted": "Процесс не удалён"
+		"ProcessesNotLoaded": "Не удаось загрузить данные",
+		"ProcessNotCreated": "Не удалось создать элемент",
+		"ProcessNotEdited": "Не удалось удалить элемент",
+		"ProcessNotDeleted": "Не удалось удалить элемент",
+		"CantDrop": "Не удалось переместить элемент"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",

@@ -8,23 +8,30 @@
       clearable
       single-line
     ></v-text-field>
-    <v-treeview :open.sync="opened"
-      :items="items"
-      :active.sync="active"
-      :search="search"
-      item-children="items"
-      activatable
-      hoverable
-      class="models-tree-view">
-      <template v-slot:prepend="{ item, open }">
-        <v-icon >
-          {{ item.isFolder ? open ? 'mdi-folder-open' : 'mdi-folder' : 'mdi-file-tree' }}
-        </v-icon>
+    <el-tree ref="treeView"
+      class="models-tree-view"
+      :data.sync="items"
+      :props="treeProps"
+      node-key="id"
+      draggable
+      highlight-current
+      empty-text=""
+      :expand-on-click-node="false"
+      :filter-node-method="filterNode"
+      :allow-drag="allowDrag"
+      :allow-drop="allowDrop"
+      @current-change="onCurrentChanged"
+      @node-drop="onNodeDrop">
+      <template v-slot="{ node, data }">
+        <span class="treeview-node-content">
+          <v-icon >
+            {{ data.isFolder ? node.expanded ? 'mdi-folder-open' : 'mdi-folder' : 'mdi-file-tree' }}
+          </v-icon>
+          <span class="treeview-node-label">{{ node.label }}</span>
+          <slot name="context-menu" :item="data"></slot>
+        </span>
       </template>
-      <template v-slot:append="{ item }">
-        <slot name="context-menu" :item="item"></slot>
-      </template>
-    </v-treeview>
+    </el-tree>
   </v-layout>
 </template>
 <script>
@@ -39,49 +46,68 @@ export default {
   data() {
     return {
       opened: [],
-      search: ''
+      search: '',
+      treeProps: {
+        label: 'name',
+        children: 'items',
+        isLeaf: (item) => !item.isFolder
+      }
     };
   },
   methods: {
-    setActiveItem(id) {
-      if (id) {
-        this.active.length = 0;
-        this.active.push(id);
-      }
+    setActiveItem(item) {
+      this.$refs.treeView.setCurrentKey(item);
+      this.openAllParents(item);
     },
     openAllParents(item) {
-      let [{ item: { parentId = null } = {} } = {}] = treeSearch(this.items, e => e.id === item);
+      let [{ item: { id: parentId = null } = {} } = {}] = treeSearch(this.items, e => e.isFolder && e.items.find(i => i.id === item));
       while (parentId) {
-        if (!this.opened.includes(parentId)) {
-          this.opened.push(parentId);
-        }
-        ([{ item: { parentId = null } = {} } = {}] = treeSearch(this.items, e => e.id === parentId));
+        this.$refs.treeView.getNode(parentId).expanded = true;
+        ([{ item: { id: parentId = null } = {} } = {}] = treeSearch(this.items, e => e.isFolder && e.items.find(i => i.id === parentId)));
       }
+    },
+    onCurrentChanged(item, node) {
+      this.active = item.id;
+    },
+    filterNode(value, data) {
+      if (!value) {
+        return true;
+      }
+      return data.name.indexOf(value) !== -1;
+    },
+    allowDrag(draggingNode) {
+      return true;
+    },
+    allowDrop(draggingNode, dropNode, type) {
+      if (type === 'inner') {
+        return dropNode.data.isFolder;
+      } else {
+        return draggingNode.parent !== dropNode.parent;
+      }
+    },
+    onNodeDrop(draggingNode, dropNode, type, event) {
+      this.$emit('drop', draggingNode.data, dropNode.data, type);
     }
   },
   computed: {
     active: {
       get() {
-        if (this.activeItem) {
-          return [ this.activeItem ];
-        } else {
-          return [];
-        }
+        return this.activeItem;
       },
       set(value) {
-        const item = value.length ? value[0] : null;
-        if (!item && this.activeItem) {
-          this.active = [ this.activeItem ];
+        if (value === this.activeItem) {
           return;
         }
-        if (item) {
-          this.openAllParents(item);
-        }
-        if (item === this.activeItem) {
-          return;
-        }
-        this.$emit('update:activeItem', item);
+        this.$emit('update:activeItem', value);
       }
+    }
+  },
+  watch: {
+    activeItem(value) {
+      this.setActiveItem(value);
+    },
+    search(value) {
+      this.$refs.treeView.filter(value);
     }
   }
 };
@@ -93,42 +119,36 @@ export default {
   height: 100%;
 }
 .tree-search {
-  margin: 0px 15px 6px 25px;
+  margin: 0px 18px 6px 18px;
   padding-top: 5px;
 }
-.v-treeview-node__label {
+.treeview-node-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
 }
-.v-treeview-node__content {
-  flex-shrink: unset;
+.treeview-node-content {
   width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  padding-right: 6px;
 }
-@media only screen and (min-width: 960px) {
-  .models-tree-view i {
-    font-size: 18px;
-  }
-  .models-tree-view .v-treeview-node__label {
-    font-size: 16px;
-  }
-  .models-tree-view .v-btn {
-    width: 28px;
-    height: 28px;
-    margin: 0;
-  }
-  .v-treeview-node {
-    margin-left: 18px;
-  }
-  .v-treeview-node--leaf {
-    margin-left: 36px;
-  }
-  .v-treeview>.v-treeview-node--leaf {
-    margin-left: 18px;
-  }
-  .tree-search {
-    margin: 0px 18px 6px 18px;
-  }
+.treeview-node-content  i {
+  font-size: 18px;
+}
+.treeview-node-content > i {
+  margin-right: 6px;
+}
+.models-tree-view.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+  background: rgba(0,0,0,.12);
+}
+.treeview-node-content .v-btn {
+  width: 28px;
+  height: 28px;
+  margin: 0;
 }
 </style>
