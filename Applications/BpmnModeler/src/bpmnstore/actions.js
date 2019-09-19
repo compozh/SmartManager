@@ -1,4 +1,3 @@
-/* eslint-disable require-atomic-updates */
 import { BpmnModelerApi } from '../api/bpmnApi';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
@@ -47,30 +46,15 @@ export default {
       console.error(error);
       return false;
     }
-
-    // const { model } = context.getters.getModelById(id);
-    // if (model) {
-    //   model.xml === xml;
-    // }
-
     return xml;
   },
   async setXml(context, { id, xml }) {
-    // const { model } = context.getters.getModelById(id);
-    // const oldXml = model.xml;
-    // model.xml = xml;
-
     let success = false;
     try {
       success = await api.setXml(id, xml);
     } catch (error) {
       console.error(error);
     }
-    
-    // if (!success) {
-    //   model.xml = oldXml;
-    // }
-
     return success;
   },
   async createProcess(context, process) {
@@ -81,7 +65,6 @@ export default {
       console.error(error);
       return false;
     }
-
     if (!newProcess) {
       return false;
     }
@@ -100,7 +83,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
     if (!success) {
       process.name = oldName;
     }
@@ -132,7 +114,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
     if (!success) {
       folder.name = oldName;
     }
@@ -143,9 +124,7 @@ export default {
     if (index < 0) {
       return false;
     }
-
     let success = false;
-
     try {
       if (item instanceof Folder) {
         success = await api.deleteFolder(id);
@@ -155,7 +134,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
     await context.dispatch('loadItems');
     return success;
   },

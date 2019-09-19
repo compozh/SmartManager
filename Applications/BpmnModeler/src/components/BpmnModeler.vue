@@ -63,9 +63,11 @@ import camundaModdle  from 'camunda-bpmn-moddle/resources/camunda';
 import { debounce } from 'throttle-debounce';
 import { CancellationToken } from '../api/cancellationToken'
 import { SavingContext } from '../api/savingContext';
+import { exportMixin } from './mixins/importExportMixin';
 
 export default {
   name: 'bpmn-modeler',
+  mixins: [ exportMixin ],
   data() {
     return {
       modeler: {},
@@ -200,41 +202,6 @@ export default {
         });
       }
     },
-    export(type) {
-      let fileName = 'diagram.' + type;
-
-      const save = function(fileName, data) {
-        const file = new Blob([data]);
-        const a = document.createElement('a');
-        const url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function() {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);  
-        }, 0); 
-      };
-
-      switch (type) {
-      case 'bpmn':
-        this.modeler.saveXML({ format: true }, (err, xml) => {
-          if (err) {
-            return;
-          }
-          save(fileName, xml);
-        });
-        break;
-      case 'svg':
-        this.modeler.saveSVG((err, svg) => {
-          if (err) {
-            return;
-          }
-          save(fileName, svg);
-        });
-      }
-    }
   }
 };
 </script>
