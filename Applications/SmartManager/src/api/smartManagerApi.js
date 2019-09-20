@@ -16,7 +16,10 @@ import addComment from './graphql/addComment.graphql'
 import auth from './auth/auth'
 import router from '@/router'
 
-const errorLink = onError(({networkError}) => {
+const errorLink = onError(({graphQLErrors, networkError}) => {
+  if (graphQLErrors) {
+    return graphQLErrors.message // TODO: Обработать ошибку
+  }
   if (networkError.statusCode === 401) {
     auth.logOff()
     router.push('/login')

@@ -83,7 +83,8 @@
   },
   "comments": {
     "addComment": "Добавить комментарий",
-    "placeholder": "Введите комментарий"
+    "placeholder": "Введите комментарий",
+    "placeholder2": "текст комментария..."
   },
   "messages": {
     "noMessages": "Нет сообщений",
@@ -92,15 +93,28 @@
     "noComments": "Комментарии отсутствуют",
     "closeForm": "Для перехода в меню закройте форму",
     "noApprovals": "Нет данных о согласованиях",
-    "noSupport": "ФАЙЛЫ {ext} НЕ ПОДДЕРЖИВАЮТСЯ",
+    "noSupport": "ФАЙЛЫ {ext} НЕ ПОДДЕРЖИВАЮТСЯ"
+  },
+  "notify": {
+    "foldersTitle": "Папки и фильлры",
+    "taskListTitle": "Список файлов",
+    "taskTitle": "Задача",
+    "usersTitle": "Пользователи",
+    "statusTitle": "Статус",
+    "stageTitle": "Стадия",
+    "attachTitle": "Вложения",
+    "commentsTitle": "Комментарии",
     "taskAddSuccess": "Задача успешно добавлена",
-    "taskAddFail": "Не удалось добавить задачу",
+    "taskAddFail": "Не удалось добавить задачу, возможно у вас нет прав",
     "taskAddError": "Ошибка при добавлении задачи",
-    "statChangeSuccess": "Статус задачи успешно изменен",
-    "statChangeFail": "Не удалось изменить статус задачи",
-    "attachAddSuccess": "Вложение успешно добавлено",
-    "attachAddFail": "Не удалось добавить вложение",
-    "commentAddSuccess": "Не удалось добавить комментарий",
-    "commentAddFail": "Ошибка при добавлении комментария"
+    "statChangeSuccess": "Статус успешно изменен",
+    "statChangeFail": "Не удалось изменить статус, возможно у вас нет прав",
+    "statChangeError": "Ошибка при изменении статуса",
+    "attachAddSuccess": "Вложения успешно добавлены",
+    "attachAddFail": "Не удалось добавить вложения, возможно у вас нет прав",
+    "attachAddError": "Ошибка при добавлении вложения",
+    "commentAddSuccess": "Комментарий успешно добавлен",
+    "commentAddFail": "Не удалось добавить комментарий, возможно у вас нет прав",
+    "commentAddError": "Ошибка при добавлении комментария"
   }
 }

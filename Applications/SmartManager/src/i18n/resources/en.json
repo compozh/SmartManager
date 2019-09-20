@@ -83,7 +83,8 @@
   },
   "comments": {
     "addComment": "Add comment",
-    "placeholder": "Type your comment"
+    "placeholder": "Type your comment",
+    "placeholder2": "comment text..."
   },
   "messages": {
     "noMessages": "No messages",
@@ -92,15 +93,28 @@
     "noComments": "No comments",
     "closeForm": "Close the form",
     "noApprovals": "No approvals",
-    "noSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
+    "noSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED"
+  },
+  "notify": {
+    "foldersTitle": "Folders and filters",
+    "taskListTitle": "Task List",
+    "taskTitle": "Task",
+    "usersTitle": "Users",
+    "statusTitle": "Status",
+    "stageTitle": "Stage",
+    "attachTitle": "Attachment",
+    "commentsTitle": "Comments",
     "taskAddSuccess": "Task added successfully",
     "taskAddFail": "Task adding failed",
     "taskAddError": "Error adding task",
     "statChangeSuccess": "Status changed successfully",
     "statChangeFail": "Status changing failed",
+    "statChangeError": "Error status changing",
     "attachAddSuccess": "Attachment added successfully",
     "attachAddFail": "Add attachment failed",
+    "attachAddError": "Error attachment adding",
     "commentAddSuccess": "Comment added successfully",
-    "commentAddFail": "Comment adding failed"
+    "commentAddFail": "Comment adding failed",
+    "commentAddError": "Error comment adding"
   }
 }

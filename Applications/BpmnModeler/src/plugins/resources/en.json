@@ -29,10 +29,11 @@
 		"RequiredField": "Field is requierd"
 	},
 	"errors": {
-		"ProcessesNotLoaded": "Processes not loaded",
-		"ProcessNotCreated": "Process not created",
-		"ProcessNotEdited": "Process not saved",
-		"ProcessNotDeleted": "Process not deleted"
+		"ProcessesNotLoaded": "Failed to move items",
+		"ProcessNotCreated": "Failed to create item",
+		"ProcessNotEdited": "Failed to edit item",
+		"ProcessNotDeleted": "Failed to delete item",
+		"CantDrop": "Failed to move item"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
@@ -197,7 +198,8 @@
 		"Add Value": "Add Value",
 		"Validation": "Validation",
 		"Add Constraint": "Add Constraint",
-		"Config": "Config",
+		"Constraint Name": "Name",
+		"Constraint Config": "Config",
 		"Properties": "Properties",
 		"Add Property": "Add Property",
 		"Value": "Value"

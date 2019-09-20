@@ -8,9 +8,11 @@ import getXml from './graphql/getXml.graphql';
 import setXml from './graphql/setXml.graphql';
 import createProcess from './graphql/createProcess.graphql';
 import editProcess from './graphql/editProcess.graphql';
+import dropProcess from './graphql/dropProcess.graphql';
 import removeProcess from './graphql/deleteProcess.graphql';
 import createFolder from './graphql/createFolder.graphql';
 import editFolder from './graphql/editFolder.graphql';
+import dropFolder from './graphql/dropFolder.graphql';
 import removeFolder from './graphql/deleteFolder.graphql';
 
 import Vue from 'vue';
@@ -74,6 +76,14 @@ export class BpmnModelerApi {
     return result.data.bpmnqueryMutation.editProcess;
   }
 
+  async dropProcess(processId, parentId) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($processId: String!, $parentId: String) ${dropProcess}`,
+      variables: { processId, parentId }
+    });
+    return result.data.bpmnqueryMutation.dropProcess;
+  }
+
   async deleteProcess(id) {
     const result = await getClient().mutate({
       mutation: gql`mutation ($id: ID!) ${removeProcess}`,
@@ -96,6 +106,14 @@ export class BpmnModelerApi {
       variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId } }
     });
     return result.data.bpmnqueryMutation.editFolder;
+  }
+
+  async dropFolder(folderId, parentId) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($folderId: String!, $parentId: String) ${dropFolder}`,
+      variables: { folderId, parentId }
+    });
+    return result.data.bpmnqueryMutation.dropFolder;
   }
 
   async deleteFolder(id) {

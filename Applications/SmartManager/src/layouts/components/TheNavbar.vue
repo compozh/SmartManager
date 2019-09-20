@@ -36,23 +36,46 @@
 
           <div class="flex" v-if="task.isGenerate">
             <div class="flex" v-if="allowedApproveOrReject || status !== '+'">
-              <vs-button icon="done" color="success" class="px-3 btnx" type="gradient">{{ $t('buttons.approve') }}</vs-button>
+              <vs-button
+                icon="done"
+                color="success"
+                class="px-3 btnx"
+                type="gradient"
+                @click="changeStage(1)"
+              >{{ $t('buttons.approve') }}
+              </vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button class="btn-drop mr-2" size="default" color="#1CA998" icon="expand_more"></vs-button>
+                <vs-button
+                  class="btn-drop mr-2"
+                  size="default"
+                  color="#1CA998"
+                  icon="expand_more"
+                ></vs-button>
                 <vs-dropdown-menu>
-                  <vs-dropdown-item>
+                  <vs-dropdown-item @click="getPrompt(1)">
                     {{ $t('buttons.approveWithComment') }}
                   </vs-dropdown-item>
                 </vs-dropdown-menu>
               </vs-dropdown>
             </div>
-
             <div class="flex" v-if="allowedApproveOrReject || status !== '-'">
-              <vs-button icon="close" color="danger" class="px-3 btnx" type="gradient">{{ $t('buttons.reject') }}</vs-button>
+              <vs-button
+                icon="close"
+                color="danger"
+                class="px-3 btnx"
+                type="gradient"
+                @click="changeStage(0)"
+              >{{ $t('buttons.reject') }}
+              </vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button class="btn-drop mr-2" size="default" color="#BA365A" icon="expand_more"></vs-button>
+                <vs-button
+                  class="btn-drop mr-2"
+                  size="default"
+                  color="#BA365A"
+                  icon="expand_more"
+                ></vs-button>
                 <vs-dropdown-menu>
-                  <vs-dropdown-item>
+                  <vs-dropdown-item @click="getPrompt(0)">
                     {{ $t('buttons.rejectWithComment') }}
                   </vs-dropdown-item>
                 </vs-dropdown-menu>
@@ -66,15 +89,18 @@
               icon="done"
               color="success"
               type="gradient"
-              class="px-3 mr-2"
+              class="px-3 mr-2 vs-con-loading__container"
+              @click="changeStatus('+')"
             >{{ $t('buttons.execute') }}
             </vs-button>
+
             <vs-button
               v-if="status === '+'"
               icon="settings_backup_restore"
               color="warning"
               type="gradient"
               class="px-3"
+              @click="changeStatus('*')"
             >{{ $t('buttons.returnToWork') }}
             </vs-button>
           </div>
@@ -148,6 +174,24 @@
         </vs-dropdown>
       </vs-navbar>
     </div>
+    <vs-prompt
+      :title="$t('comments.addComment')"
+      @cancel="comment=''"
+      @accept="changeStage(stage, comment)"
+      :active.sync="activePrompt"
+      :acceptText="$t('buttons.send')"
+      :cancelText="$t('buttons.cancel')"
+    >
+      <div>
+        <span>{{ $t('comments.placeholder') }}</span>
+        <vs-input
+          :placeholder="$t('comments.placeholder2')"
+          v-model="comment"
+          class="mt-3 w-full"
+        />
+      </div>
+
+    </vs-prompt>
   </div>
 </template>
 
@@ -166,14 +210,14 @@ export default {
   data() {
     return {
       localizations: templateConfig.localizations,
-      navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
-      showFullSearch: false,
+      activePrompt: false,
+      stage: null,
+      comment: '',
+      buttonCancel: 'Отмена',
       settings: {
         maxScrollbarLength: 60,
         wheelSpeed: .60,
-      },
-      autoFocusSearch: false,
-      showBookmarkPagesDropdown: false,
+      }
     }
   },
   computed: {
@@ -189,14 +233,11 @@ export default {
     },
     allowedApproveOrReject() {
       return this.status === ''
-        || this.status === '*'
+          || this.status === '*'
     },
     allowedAddSubTask() {
       return this.$route.name === 'task-view'
-        && this.allowedApproveOrReject
-    },
-    unreadNotifications() {
-      return this.$store.state.notifications.unreadNotifications
+          && this.allowedApproveOrReject
     },
     // HELPER
     sidebarWidth() {
@@ -221,7 +262,6 @@ export default {
       const locale = this.$i18n.locale
       return this.localizations.find(r => r.code == locale)
     },
-
     // BOOKMARK & SEARCH
     data() {
       return this.$store.state.navbarSearchAndPinList
@@ -245,7 +285,6 @@ export default {
         this.$store.dispatch('arrangeStarredPagesMore', list)
       }
     },
-
     // PROFILE
     user_displayName() {
       return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
@@ -255,59 +294,45 @@ export default {
     }
   },
   methods: {
+    getPrompt(stage) {
+      this.stage = stage
+      this.activePrompt = true
+    },
+    async changeStage(moveMode, comment) {
+      try {
+        await this.$store.dispatch('sm/changeStage', {
+          id: this.task.id,
+          arso: this.task.arso,
+          keyValue: this.task.keyValue,
+          kidCopy: this.task.kidCopy,
+          moveMode,
+          comment,
+          processParams: null
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
+    },
+    async changeStatus(status) {
+      try {
+        await this.$store.dispatch('sm/changeStatus', {
+          id: this.task.id,
+          status: status,
+          comment: ''
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
+    },
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
     },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
     },
-    selected(item) {
-      this.$router.push(item.url)
-      this.showFullSearch = false
-    },
-
-    elapsedTime(startTime) {
-      let x = new Date(startTime)
-      let now = new Date()
-      var timeDiff = now - x
-      timeDiff /= 1000
-
-      var seconds = Math.round(timeDiff)
-      timeDiff = Math.floor(timeDiff / 60)
-
-      var minutes = Math.round(timeDiff % 60)
-      timeDiff = Math.floor(timeDiff / 60)
-
-      var hours = Math.round(timeDiff % 24)
-      timeDiff = Math.floor(timeDiff / 24)
-
-      var days = Math.round(timeDiff % 365)
-      timeDiff = Math.floor(timeDiff / 365)
-
-      var years = timeDiff
-
-      if (years > 0) {
-        return years + (years > 1 ? ' Years ' : ' Year ') + 'ago'
-      } else if (days > 0) {
-        return days + (days > 1 ? ' Days ' : ' Day ') + 'ago'
-      } else if (hours > 0) {
-        return hours + (hours > 1 ? ' Hrs ' : ' Hour ') + 'ago'
-      } else if (minutes > 0) {
-        return minutes + (minutes > 1 ? ' Mins ' : ' Min ') + 'ago'
-      } else if (seconds > 0) {
-        return seconds + (seconds > 1 ? ' sec ago' : 'just now')
-      }
-
-      return 'Just Now'
-    },
     logout() {
       this.$store.dispatch('auth/logout')
-
-    },
-    outside: function () {
-      this.showBookmarkPagesDropdown = false
-    },
-
+    }
   },
   directives: {
     'click-outside': {
@@ -340,7 +365,7 @@ export default {
 
   .btn-drop {
     border-radius: 0 5px 5px 0;
-    border-left: 1px solid rgba(255, 255, 255,.2);
+    border-left: 1px solid rgba(255, 255, 255, .2);
   }
 
   button:hover > .btn-drop {
