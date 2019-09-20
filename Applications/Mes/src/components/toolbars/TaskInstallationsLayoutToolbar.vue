@@ -72,6 +72,9 @@ export default {
       if (qrCodeValue.currentTarget) {
         qrCodeValue = qrCodeValue.currentTarget.value
       }
+      if (qrCodeValue == '') {
+        return
+      }
       me.disableQrInput = true
       me.$emit('submitQrCode', { qrCodeValue, callback: () => {
         me.disableQrInput = false
