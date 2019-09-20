@@ -10,7 +10,7 @@
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
-      <router-link :to="{ name: 'BPMNLAYOUT' }" style="text-decoration: none;">
+      <router-link :to="{ name: 'BPMNEMPTY' }" style="text-decoration: none;">
         <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
       </router-link>
       <template v-if="currentUser">
