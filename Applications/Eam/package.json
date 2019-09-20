@@ -27,6 +27,7 @@
     "apollo-link": "^1.2.11",
     "apollo-link-context": "^1.0.17",
     "apollo-link-http": "^1.5.14",
+    "core-js": "^2.5.7",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
     "lodash": "^4.17.11",
@@ -45,7 +46,9 @@
     "vue-router": "^3.0.1",
     "vue-svg-loader": "^0.12.0",
     "vue-touch": "^2.0.0-beta.4",
+    "vue-upload-component": "^2.8.20",
     "vuetify": "^1.5.18",
+    "vuetify-datetime-picker": "^2.1.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {

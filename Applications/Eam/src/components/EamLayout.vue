@@ -4,7 +4,7 @@
       app
       clipped
       hide-overlay
-      :mini-variant="menuMiniMode && $vuetify.breakpoint.mdAndUp"
+      :mini-variant="menuMiniMode && this.$vuetify.breakpoint.mdAndUp"
       v-model="drawer"
     >
       <router-view name="navigation-drawer" />
@@ -27,7 +27,7 @@
     <template v-if="error">
       <v-snackbar
         :multi-line="true"
-        :timeout="5000"
+        :timeout="0"
         color="error"
         @input="closeError"
         :value="true"
@@ -67,7 +67,7 @@ export default {
       }
     },
     closeError() {
-      this.$store.dispatch('sm/clearError')
+      this.$store.dispatch('eam/clearError')
     }
   }
 }

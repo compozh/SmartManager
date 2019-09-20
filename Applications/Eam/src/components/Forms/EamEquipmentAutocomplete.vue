@@ -1,10 +1,11 @@
 <template>
   <eam-base-autocomplete
     :query="query"
-    queryName="equipmentTypes"
+    queryName="equipments"
     :required="required"
-    label="Тип оборудования"
+    label="Оборудование"
     icon="title"
+    nameField="fullName"
     :multiple="multiple"
     v-model="internalValue"
     @input="$emit('input', internalValue)"
@@ -12,10 +13,10 @@
 </template>
 
 <script>
-import { EQUIPMENT_TYPES_SELECT } from '@/api/eam-queries.js'
+import { EQUIPMENT_SELECT } from '@/api/eam-queries.js'
 
 export default {
-  name: 'eam-equipment-type-autocomplete',
+  name: 'eam-equipment-autocomplete',
   props: {
     value: [String, Array],
     required: {
@@ -26,7 +27,7 @@ export default {
   },
   data() {
     return {
-      query: EQUIPMENT_TYPES_SELECT,
+      query: EQUIPMENT_SELECT,
       internalValue: this.value
     }
   }

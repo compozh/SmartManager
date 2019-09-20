@@ -55,18 +55,15 @@
 
 <script>
 export default {
-  name: "eam-equipment-card",
+  name: 'eam-equipment-card',
   props: {
     equipment: Object
   }
-};
+}
 </script>
 
 <style scoped>
 .v-card__title {
   background-color: lightgreen;
-}
-.v-card__text {
-  text-align: initial;
 }
 </style>

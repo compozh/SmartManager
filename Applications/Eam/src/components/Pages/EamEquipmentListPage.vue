@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ALL_EQUIPMENT } from '../../api/eam-queries.js'
+import { ALL_EQUIPMENT } from '@/api/eam-queries.js'
 
 export default {
   name: 'eam-equipment-list-page',

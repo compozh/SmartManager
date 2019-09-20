@@ -4,11 +4,12 @@
 <head>
   <script>
     var devMode = '<%= NODE_ENV %>' == "development"
-    devMode = false
+    devMode = true
     window.myConfig = {
       GrapgQlUrl: devMode ? "http://localhost:5002/" : "https://m.it.ua/GraphQlServer/",
       BASE_URL: "<%= VUE_APP_BASE_PATH %>",
       WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
+      WsPath: "https://m.it.ua/ws/",
       SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
     }
   </script>

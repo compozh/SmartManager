@@ -1,9 +1,9 @@
 <template>
-  <v-container ma-0 class="main-info">
+  <v-container pa-0 pb-3 class="main-info">
     <v-layout wrap justify-space-between>
       <v-flex d-flex xs12 md6 pt-2 :class="{'pr-2': $vuetify.breakpoint.mdAndUp}">
         <v-card min-width="200">
-          <swiper :options="swiperOption" v-if="images">
+          <swiper v-if="images && images.length" :options="swiperOption">
             <swiper-slide
               contain
               v-for="(image,i) in images"
@@ -14,12 +14,19 @@
               <img :src="image.url" class="slider" />
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
+            <viewer :images="imageUrls" @inited="inited" style="display:none;">
+              <img v-for="(image,i) in images" :src="image.url" :key="i" />
+            </viewer>
           </swiper>
-          <v-img v-else :src="require('../../equipment.png')"></v-img>
+          <img
+            v-else-if="$vuetify.breakpoint.mdAndUp"
+            :src="require('../equipment.png')"
+            class="equipment-image"
+          />
           <v-spacer></v-spacer>
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0">{{item.name}}</h3>
+              <h3 class="headline mb-0">{{item.fullName}}</h3>
               <div>{{item.description}}</div>
             </div>
           </v-card-title>
@@ -28,6 +35,7 @@
       <v-flex d-flex xs12 md6 pt-2>
         <v-list subheader dense>
           <v-subheader v-if="item.status" d-flex class="primary headline text-uppercase">Статус</v-subheader>
+
           <v-chip
             v-if="item.status"
             color="green"
@@ -36,40 +44,95 @@
             class="white--text subheading"
           >{{item.status.name}}</v-chip>
 
-          <template v-for="(listItem,i) in infoListData">
-            <v-subheader
-              v-if="listItem.header"
+          <v-subheader class="primary headline text-uppercase">Основные данные</v-subheader>
+
+          <eam-equipment-main-info-list-item
+            v-if="item.itObject"
+            icon="home"
+            title="Объект"
+            :value="item.itObject.name"
+          ></eam-equipment-main-info-list-item>
+          <eam-equipment-main-info-list-item
+            v-if="item.department"
+            icon="domain"
+            title="Подразделение"
+            :value="item.department.name"
+          ></eam-equipment-main-info-list-item>
+
+          <eam-equipment-main-info-list-item
+            v-if="item.type"
+            icon="title"
+            title="Тип"
+            :value="item.type.name"
+          ></eam-equipment-main-info-list-item>
+
+          <eam-equipment-main-info-list-item
+            v-if="item.model"
+            icon="settings"
+            title="Модель"
+            :value="item.model.name"
+          ></eam-equipment-main-info-list-item>
+
+          <eam-equipment-main-info-list-item
+            v-if="item.installDate"
+            icon="query_builder"
+            title="Дата ввода в експл."
+            :value="installDateString"
+          ></eam-equipment-main-info-list-item>
+
+          <eam-equipment-main-info-list-item
+            v-if="item.factoryNumber"
+            icon="notes"
+            title="Заводской номер"
+            :value="item.factoryNumber"
+          ></eam-equipment-main-info-list-item>
+
+          <eam-equipment-main-info-list-item
+            v-if="item.category"
+            icon="view_carousel"
+            title="Категория"
+            :value="item.category.name"
+          ></eam-equipment-main-info-list-item>
+
+          <v-subheader class="primary headline text-uppercase">Состояние</v-subheader>
+
+          <eam-equipment-main-info-list-item
+            v-if="lastRepairDateString"
+            icon="alarm_on"
+            title="Дата последнего ТО"
+            :value="lastRepairDateString"
+          ></eam-equipment-main-info-list-item>
+
+          <eam-equipment-main-info-list-item
+            v-if="lastWorkRequestDateString"
+            icon="query_builder"
+            title="Дата последней заявки"
+            :value="lastWorkRequestDateString"
+          ></eam-equipment-main-info-list-item>
+
+          <v-subheader class="primary headline text-uppercase">Ответственные</v-subheader>
+
+          <template v-for="(responsible,i) in responsibleList">
+            <eam-equipment-main-info-list-item
               :key="i"
-              class="primary headline text-uppercase"
-            >{{ listItem.title }}</v-subheader>
-            <v-list-tile v-else :key="i" avatar>
-              <v-list-tile-avatar style="heigth:auto">
-                <v-icon :color="listItem.color">{{ listItem.icon }}</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title style="white-space:normal">{{ listItem.title }}</v-list-tile-title>
-                <v-list-tile-sub-title
-                  style="white-space:normal"
-                >{{ $vuetify.breakpoint.mdAndUp ? listItem.info : listItem.value }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-list-tile-action
-                v-if="$vuetify.breakpoint.mdAndUp"
-                style="white-space:normal"
-              >{{ listItem.value }}</v-list-tile-action>
-            </v-list-tile>
+              v-if="responsible.employee"
+              icon="person"
+              :color="responsible.isResponsible ? 'blue' : ''"
+              :title="responsible.employee.fullName"
+              :value="responsible.direction ? responsible.direction.name : ''"
+            ></eam-equipment-main-info-list-item>
           </template>
         </v-list>
       </v-flex>
-      <viewer :images="imageUrls" @inited="inited" style="display:none;">
-        <img v-for="(image,i) in images" :src="image.url" :key="i" />
-      </viewer>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import { EQUIPMENT_IMAGES } from '../../api/eam-queries.js'
+import { EQUIPMENT_IMAGES } from '@/api/eam-queries.js'
+import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import * as moment from 'moment'
 
 export default {
   name: 'eam-equipment-main-info-card',
@@ -90,13 +153,29 @@ export default {
           id: this.item.id
         }
       },
-      update(data) {
-        return data.eam && data.eam.equipment.images
+      update(data) {        
+        return data.eam &&
+          data.eam.equipment &&
+          data.eam.equipment.images &&
+          data.eam.equipment.images.length
           ? data.eam.equipment.images
-          : null
+          : data.eam &&
+            data.eam.equipment &&
+            data.eam.equipment.model &&
+            data.eam.equipment.model.images
+            ? data.eam.equipment.model.images
+            : null
       },
       skip() {
         return !(this.item && this.item.id)
+      },
+      error(e) {        
+        this.$store.commit(
+          'eam/setError',
+          e.gqlError
+            ? 'Исключительная ситуация при вызове источника данных'
+            : e.message
+        )
       }
     }
   },
@@ -124,73 +203,56 @@ export default {
     imageUrls() {
       return this.images ? Array.from(this.images).map(im => im.url) : null
     },
-    infoListData() {      
-      const items = []
-      items.push({
-        header: true,
-        title: 'Основные данные'
-      })
-      if (this.item.itObject) {
-        items.push({
-          icon: 'home',
-          title: 'Объект',
-          value: this.item.itObject.name
-        })
+    installDateString() {
+      return moment(this.item.installDate).format('DD.MM.YYYY')
+    },
+    lastWorkRequestDateString() {
+      return this.item.lastWorkRequest && this.item.lastWorkRequest.length
+        ? moment(this.item.lastWorkRequest[0].creationDate).format('DD.MM.YYYY')
+        : ''
+    },
+    lastRepairDateString() {
+      return this.item.lastRepair && this.item.lastRepair.length
+        ? moment(this.item.lastRepair[0].factDate).format('DD.MM.YYYY')
+        : ''
+    },
+    responsibleList() {
+      if (!this.item) {
+        return []
       }
-      if (this.item.department) {
-        items.push({
-          icon: 'domain',
-          title: 'Подразделение',
-          value: this.item.department.name
-        })
-      }
-      if (this.item.type) {
-        items.push({
-          icon: 'title',
-          title: 'Тип',
-          value: this.item.type.name
-        })
-      }
-      if (this.item.model) { 
-        items.push({
-          icon: 'settings',
-          title: 'Модель',
-          value: this.item.model.name
-        }) 
-      }
-      if (this.item.installDate) {
-        items.push({
-          icon: 'query_builder',
-          title: 'Дата ввода в експл.',
-          value: this.item.model.installDate
-        })
-      }
-      if (this.item.factoryNumber) {
-        items.push({
-          icon: 'notes',
-          title: 'Заводской номер',
-          value: this.item.factoryNumber
-        })
-      }
-      if (this.item.category) {
-        items.push({
-          icon: 'view_carousel',
-          title: 'Категория',
-          value: this.item.category.name
-        })
-      }
-
+      let items = []
       if (this.item.responsibleEmployee) {
         items.push({
-          header: true,
-          title: 'Ответственный'
+          employee: this.item.responsibleEmployee,
+          isResponsible: true
         })
-
-        items.push({
-          icon: 'person',
-          color: 'blue',
-          title: this.item.responsibleEmployee.fullName
-        })
+      }
+      if (
+        this.item.currentMovementRecord &&
+        this.item.currentMovementRecord.technicalPlace
+      ) {
+        if (
+          this.item.currentMovementRecord.technicalPlace.responsibleEmployee
+        ) {
+          items.push({
+            employee: this.item.currentMovementRecord.technicalPlace
+              .responsibleEmployee,
+            isResponsible: true
+          })
+        }
+        if (
+          this.item.currentMovementRecord.technicalPlace.allParents &&
+          this.item.currentMovementRecord.technicalPlace.allParents.length
+        ) {
+          const parentTechPlaces = this.item.currentMovementRecord.technicalPlace.allParents.map(
+            p => p.technicalPlace
+          )
+          items = items.concat(
+            parentTechPlaces.reduce(function(a, b) {
+              return a.concat(b.responsibleSpecialists)
+            }, [])
+          )
+        }
       }
       return items
     }
@@ -211,8 +273,9 @@ export default {
 }
 </script>
 
-<style>
-.slider {
+<style >
+.slider,
+.equipment-image {
   min-width: 15vw;
   min-height: 30vh;
   max-height: 50vh;

@@ -1,21 +1,21 @@
 <template>
-  <eam-base-autocomplete
+  <eam-base-select
     :query="query"
-    queryName="equipmentTypes"
+    queryName="equipmentFailureReasons"
     :required="required"
-    label="Тип оборудования"
-    icon="title"
+    label="Причина"
+    icon="category"
     :multiple="multiple"
     v-model="internalValue"
     @input="$emit('input', internalValue)"
-  ></eam-base-autocomplete>
+  ></eam-base-select>
 </template>
 
 <script>
-import { EQUIPMENT_TYPES_SELECT } from '@/api/eam-queries.js'
+import { FAILURE_REASONS } from '@/api/eam-queries.js'
 
 export default {
-  name: 'eam-equipment-type-autocomplete',
+  name: 'eam-failure-reason-select',
   props: {
     value: [String, Array],
     required: {
@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      query: EQUIPMENT_TYPES_SELECT,
+      query: FAILURE_REASONS,
       internalValue: this.value
     }
   }

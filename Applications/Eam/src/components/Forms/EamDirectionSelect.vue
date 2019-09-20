@@ -6,13 +6,13 @@
     label="Направление"
     icon="directions"
     :multiple="multiple"
-    v-model="value"
-    @input="$emit('input', value)"
+    v-model="internalValue"
+    @input="$emit('input', internalValue)"
   ></eam-base-select>
 </template>
 
 <script>
-import { DIRECTIONS } from '../../api/eam-queries.js'
+import { DIRECTIONS } from '@/api/eam-queries.js'
 
 export default {
   name: 'eam-direction-select',
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      query: DIRECTIONS
+      query: DIRECTIONS,
+      internalValue: this.value
     }
   }
 }
