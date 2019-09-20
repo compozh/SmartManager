@@ -18,23 +18,40 @@ import axios from 'axios'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
 
 // apollo
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import { setContext } from 'apollo-link-context'
 import VueApollo from 'vue-apollo'
 
 import { routerDependencies } from './router'
 
+import signalR from './signalR'
+import './registerServiceWorker'
+
 const cache = new InMemoryCache()
-const apolloClient = new ApolloClient({
-  link: new HttpLink({
-    uri: window.myConfig.GrapgQlUrl + 'api/graphql',    
+
+const httpLink = new HttpLink({
+  uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+})
+
+const authLink = setContext((_, { headers }) => {
+  const authHeader = Vue.prototype.$authentication.getAuthHeader()
+  return {
     headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem('ItUniTocken'),
-      'schema': 'eamschema'
-    }}),
+      ...headers,
+      ...authHeader,
+      schema: 'eamschema'
+    }
+  }
+})
+
+const apolloClient = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache,
   connectToDevTools: true
 })
@@ -56,6 +73,7 @@ Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueApollo)
+Vue.use(signalR)
 
 // Плагины it-enterprise
 Vue.use(ItCommon)
@@ -81,7 +99,7 @@ req.keys().map(key => {
 
 start()
 
-async function start()   {
+async function start() {
   // Загрузка приложения
   let webAppsCore = await Vue.prototype.$WebApps
 
