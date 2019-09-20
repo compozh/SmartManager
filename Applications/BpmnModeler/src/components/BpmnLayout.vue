@@ -115,12 +115,13 @@ export default {
   },
   mounted() {
     this.onRouteChanged(false);
+    this.$router.app.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
   },
   methods: {
     async loadItems() {
       this.loading = true;
       if (!await this.$store.dispatch('bpmn/loadItems')) {
-        this.error = this.$tc('bpmn.errors.ProcessesNotLoaded');
+        this.error = this.$t('bpmn.errors.ProcessesNotLoaded');
         this.showError = true;
       }
       this.loading = false;
@@ -171,7 +172,6 @@ export default {
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
         this.$router.push({ name: routeName, params });
       }
-
     }
   },
   computed: {
