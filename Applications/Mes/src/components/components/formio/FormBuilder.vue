@@ -19,7 +19,7 @@
 <script>
 import { Form } from 'vue-formio'
 import VueApexCharts from 'vue-apexcharts'
-
+/* eslint-disable */
 export default {
   name: 'mes-form-builder',
   components: { formio: Form, apexchart: VueApexCharts },
