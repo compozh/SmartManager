@@ -62,7 +62,7 @@
     </v-content>
 
     <v-dialog :persistent="formLoading" v-model="showForm" max-width="500">
-      <bpmn-form :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
+      <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
     </v-dialog>
 
     <v-dialog v-model="loading"
