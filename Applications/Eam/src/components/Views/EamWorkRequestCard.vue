@@ -19,9 +19,9 @@
             </v-flex>
             <v-flex xs12 md6>
               <v-layout column>
-                <eam-department-simple-card :item="item.department"/>
-                <eam-techplace-simple-card :item="item.technicalPlace"/>
-                <eam-equipment-simple-card :item="item.equipment"/>
+                <eam-department-simple-card :item="item.department" />
+                <eam-techplace-simple-card :item="item.technicalPlace" />
+                <eam-equipment-simple-card :item="item.equipment" />
               </v-layout>
             </v-flex>
           </v-layout>
@@ -31,15 +31,15 @@
           <v-layout row wrap>
             <v-layout>
               З:
-              <eam-employee-simple-card :item="item.declarerEmployee"/>
+              <eam-employee-simple-card :item="item.declarerEmployee" />
             </v-layout>
             <v-layout>
               О:
-              <eam-employee-simple-card :item="item.responsibleEmployee"/>
+              <eam-employee-simple-card :item="item.responsibleEmployee" />
             </v-layout>
             <v-layout>
               И:
-              <eam-employee-simple-card :item="item.performerEmployee"/>
+              <eam-employee-simple-card :item="item.performerEmployee" />
             </v-layout>
           </v-layout>
         </v-card-text>
@@ -50,49 +50,49 @@
 
 <script>
 export default {
-  name: "eam-work-request-card",
+  name: 'eam-work-request-card',
   props: {
     item: Object
   },
   computed: {
     sourceIcon() {
       switch (this.item.source) {
-        case "REMARKS_OF_STAFF":
-          return "perm_identity";
-        case "PLANNED_WORKS":
-          return "insert_invitation";
-        case "OPERATING_STATISTICS":
-          return "multiline_chart";
-        case "DOWN_TIME":
-          return "query_builder";
-        default:
-          return "border_all";
+      case 'REMARKS_OF_STAFF':
+        return 'perm_identity'
+      case 'PLANNED_WORKS':
+        return 'insert_invitation'
+      case 'OPERATING_STATISTICS':
+        return 'multiline_chart'
+      case 'DOWN_TIME':
+        return 'query_builder'
+      default:
+        return 'border_all'
       }
     },
     statusCaption() {
       switch (this.item.status) {
-        case "CREATION":
-          return "Заявитель";
-        case "DISPATCHER":
-          return "Диспетчер";
-        case "RESPONSIBLE":
-          return "Определение ответственного";
-        case "PREPARATION":
-          return "Подготовка";
-        case "EXECUTION":
-          return "Выполнение";
-        case "DONE":
-          return "Выполнено";
-        case "CANCELED":
-          return "Отменена";
-        case "ARCHIVE":
-          return "Архив";
-        default:
-          return "Не определена";
+      case 'CREATION':
+        return 'Заявитель'
+      case 'DISPATCHER':
+        return 'Диспетчер'
+      case 'RESPONSIBLE':
+        return 'Определение ответственного'
+      case 'PREPARATION':
+        return 'Подготовка'
+      case 'EXECUTION':
+        return 'Выполнение'
+      case 'DONE':
+        return 'Выполнено'
+      case 'CANCELED':
+        return 'Отменена'
+      case 'ARCHIVE':
+        return 'Архив'
+      default:
+        return 'Не определена'
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
