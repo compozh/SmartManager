@@ -10,7 +10,9 @@
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
-      <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
+      <router-link :to="{ name: 'BPMNLAYOUT' }" style="text-decoration: none;">
+        <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
+      </router-link>
       <template v-if="currentUser">
         <bpmn-contex-menu
           @create="createItem"
@@ -62,7 +64,7 @@
     </v-content>
 
     <v-dialog :persistent="formLoading" v-model="showForm" max-width="500">
-      <bpmn-form :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
+      <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
     </v-dialog>
 
     <v-dialog v-model="loading"
@@ -115,12 +117,13 @@ export default {
   },
   mounted() {
     this.onRouteChanged(false);
+    this.$router.app.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
   },
   methods: {
     async loadItems() {
       this.loading = true;
       if (!await this.$store.dispatch('bpmn/loadItems')) {
-        this.error = this.$tc('bpmn.errors.ProcessesNotLoaded');
+        this.error = this.$t('bpmn.errors.ProcessesNotLoaded');
         this.showError = true;
       }
       this.loading = false;
@@ -171,7 +174,6 @@ export default {
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
         this.$router.push({ name: routeName, params });
       }
-
     }
   },
   computed: {

@@ -9,9 +9,6 @@ export default {
     if (typeof item === 'string' || item instanceof String) {
       ({ item } = context.getters.getItemById(item));
     }
-    if (!item) {
-      item = new Process();
-    }
     context.state.activeItem = item;
   },
   async loadItems(context) {
