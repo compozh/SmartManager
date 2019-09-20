@@ -188,13 +188,14 @@ export default {
 
         workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
         if (workCenters.indexOf(this.workCenter.code)) {
-          this.$store.dispatch('mes/setObsoluteDataTask', true)
+          this.$store.commit('mes/setObsoluteDataTask', true)
         }
         break
       }
     },
     async initialize() {
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
+      this.$store.commit('mes/setObsoluteDataTask', false)
       this.initializeTasks = true
       if (!this.selectedTask) {
         this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab, this.sortedTasks)
