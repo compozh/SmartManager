@@ -1,3 +1,4 @@
+/* eslint-disable */
 import HtmlelementComponent from '../../../../../../node_modules/formiojs/components/html/HTML';
 //todo: переписать на es6
 function PieChart(component, options, data) {

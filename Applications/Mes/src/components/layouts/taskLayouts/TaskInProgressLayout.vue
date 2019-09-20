@@ -59,11 +59,11 @@ export default {
   name: 'mes-task-in-progress-layout',
   components: { GridLayout: VueGridLayout.GridLayout, GridItem: VueGridLayout.GridItem },
   mounted() {
-    var formioElement = this.$refs.formio[0];
+    var formioElement = this.$refs.formio[0]
     formioElement.calcPosition = (x, y, w, h) => {
-      var colWidth = formioElement.calcColWidth(); // add rtl support
+      var colWidth = formioElement.calcColWidth() // add rtl support
 
-      var out;
+      var out
 
       if (formioElement.renderRtl) {
         out = {
@@ -71,17 +71,17 @@ export default {
           top: Math.round(formioElement.rowHeight * y + (y + 1) * formioElement.margin[1]),
           width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * formioElement.margin[0]),
           height: h === Infinity ? h : Math.round(formioElement.rowHeight * h + Math.max(0, h - 1) * formioElement.margin[1])
-        };
+        }
       } else {
         out = {
           left: Math.round(colWidth * x + (x + 1) * formioElement.margin[0]),
           top: Math.round(formioElement.rowHeight * y + (y + 1) * formioElement.margin[1]),
           width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * formioElement.margin[0]),
           height: formioElement.$el.offsetHeight
-        };
+        }
       }
 
-      return out;
+      return out
     }
   },
   computed: {
