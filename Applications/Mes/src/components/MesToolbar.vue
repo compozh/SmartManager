@@ -64,7 +64,7 @@ export default {
       uuid = this.generateUUID()
       me.$router.push({ query: { fixedUuid: uuid }})
     }
-
+    // eslint-disable-next-line
     $cookies.set('mesUuid', uuid, '3y')
     window.sessionStorage.setItem('mesUuid', uuid)
     me.$store.dispatch('mes/initializeWorkCenter', uuid)

@@ -20,8 +20,8 @@
         width="30px"
         height="30px"
         v-model="fab"
-        :loading="printInProgress || deleteInProgress"
-        :color="printInProgress ? '#326da8' : deleteInProgress ? 'error' : '#999999'"
+        :loading="printInProgress || deleteInProgress || setMaterialInProgress"
+        :color="( printInProgress || setMaterialInProgress ) ? '#326da8' : deleteInProgress ? 'error' : '#999999'"
         >
           <v-icon>
             more_vert
@@ -97,7 +97,7 @@ export default {
     },
     setMaterialProduction () {
       var me = this
-      me.printInProgress = true
+      me.setMaterialInProgress = true
       me.$emit('setMaterialProduction', { production: me.production, callback: () => {
         me.setMaterialInProgress = false
       }})
