@@ -19,9 +19,9 @@
             </v-flex>
             <v-flex xs12 md6>
               <v-layout column>
-                <eam-department-simple-card :item="item.department" />
-                <eam-techplace-simple-card :item="item.technicalPlace" />
-                <eam-equipment-simple-card :item="item.equipment" />
+                <eam-department-simple-card :item="item.department"/>
+                <eam-techplace-simple-card :item="item.technicalPlace"/>
+                <eam-equipment-simple-card :item="item.equipment"/>
               </v-layout>
             </v-flex>
           </v-layout>
@@ -31,15 +31,15 @@
           <v-layout row wrap>
             <v-layout>
               З:
-              <eam-employee-simple-card :item="item.declarerEmployee" />
+              <eam-employee-simple-card :item="item.declarerEmployee"/>
             </v-layout>
             <v-layout>
               О:
-              <eam-employee-simple-card :item="item.responsibleEmployee" />
+              <eam-employee-simple-card :item="item.responsibleEmployee"/>
             </v-layout>
             <v-layout>
               И:
-              <eam-employee-simple-card :item="item.performerEmployee" />
+              <eam-employee-simple-card :item="item.performerEmployee"/>
             </v-layout>
           </v-layout>
         </v-card-text>
@@ -98,8 +98,5 @@ export default {
 <style scoped>
 .v-card__title {
   background-color: rgb(232, 253, 158);
-}
-.v-card__text {
-  text-align: initial;
 }
 </style>

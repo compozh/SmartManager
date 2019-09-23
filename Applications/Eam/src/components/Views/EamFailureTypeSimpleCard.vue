@@ -7,11 +7,11 @@
 
 <script>
 export default {
-  name: "eam-failure-type-simple-card",
+  name: 'eam-failure-type-simple-card',
   props: {
     item: Object
   }
-};
+}
 </script>
 
 <style>

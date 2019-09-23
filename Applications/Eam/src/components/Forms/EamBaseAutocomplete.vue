@@ -11,8 +11,8 @@
     :chips="multiple"
     :loading="$apollo.loading"
     cache-items
-    v-model="value"
-    @input="$emit('input', value)"
+    v-model="internalValue"
+    @input="$emit('input', internalValue)"
     @click.native.prevent="change=true"
   ></v-autocomplete>
 </template>
@@ -48,16 +48,21 @@ export default {
       },
       variables() {
         return {
-          take: 10,
+          take: this.change ? 30 : 100,
           where: this.where,
-          orderBy: this.orderBy
+          orderBy: this.orderBy,
+          ids: !this.change
+            ? Array.isArray(this.value)
+              ? this.value
+              : [this.value]
+            : null
         }
       },
       update(data) {
         return data.eam[this.queryName]
       },
       skip() {
-        return !this.change
+        return !this.change && !this.value
       }
     }
   },
@@ -66,12 +71,22 @@ export default {
       itemsQuery: {},
       orderById: [{ path: 'id' }],
       change: false,
-      search: null
+      search: null,
+      internalValue: this.value
     }
   },
   computed: {
     where() {
       const filters = this.constantFilter ? this.constantFilter : []
+      // filters.push({
+      //   path: this.nameField,
+      //   comparison: 'notEqual'
+      // })
+      // filters.push({
+      //   path: this.nameField,
+      //   comparison: 'notEqual',
+      //   value: ''
+      // })
       if (this.search) {
         filters.push({
           path: this.nameField ? this.nameField : 'name',

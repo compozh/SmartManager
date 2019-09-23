@@ -15,22 +15,32 @@ export default {
   name: 'eam-menu',
   computed: {
     links() {
-      if (!this.$store.state.WebApps.applicationDescription) {
+      const app = this.$store.state.WebApps.applicationDescription
+      if (!app) {
         return []
       }
-      const app = this.$store.state.WebApps.applicationDescription
+      
       const sections = app.Sections || []
-
       let links = []
+      const isLoggedIn = this.isLoggedIn
       for (let index = 0; index < sections.length; index++) {
         const section = sections[index]
         links = links.concat(
-          (section.Routes || []).map(r => (r.section = section) && r)
+          (section.Routes || [])
+            .filter(
+              r =>
+                (!r.HideAfterLogin && isLoggedIn) ||
+                (r.AllowAnonymous && !isLoggedIn)
+            )
+            .map(r => (r.section = section) && r)
         )
       }
 
-      links = [...links, ...links[1].Children, ...links[0].Children]
+      links = [...links, ...links[0].Children]
       return links.filter(l => l.Name && l.Path)
+    },
+    isLoggedIn() {
+      return !!this.$authentication.currentUser
     }
   }
 }

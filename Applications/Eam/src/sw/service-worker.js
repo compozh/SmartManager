@@ -13,10 +13,10 @@ workbox.routing.registerNavigationRoute(baseUrlCacheKey ? baseUrlCacheKey : `${B
 
 workbox.routing.setCatchHandler(({ event }) => {
   switch (event.request.destination) {
-    case 'document':
-      return caches.match(baseUrlCacheKey ? baseUrlCacheKey : `${BASE_URL}index.html`)
-    default:
-      return Response.error()
+  case 'document':
+    return caches.match(baseUrlCacheKey ? baseUrlCacheKey : `${BASE_URL}index.html`)
+  default:
+    return Response.error()
   }
 })
 

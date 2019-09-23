@@ -20,6 +20,7 @@ import VueI18n from 'vue-i18n'
 import store from './store/index'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import DatetimePicker from 'vuetify-datetime-picker'
 
 // apollo
 import { ApolloClient } from 'apollo-client'
@@ -74,6 +75,7 @@ Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueApollo)
 Vue.use(signalR)
+Vue.use(DatetimePicker)
 
 // Плагины it-enterprise
 Vue.use(ItCommon)

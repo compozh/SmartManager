@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { eventBus } from '../../main'
+
 export default {
   name: 'eam-base-table',
   props: {
@@ -24,7 +26,8 @@ export default {
     searchPath: String,
     constantOrderBy: Array,
     headers: Array,
-    search: String
+    search: String,
+    updateEventName: String
   },
   apollo: {
     itemsCon: {
@@ -44,6 +47,9 @@ export default {
       },
       skip() {
         return !this.rowsPerPage
+      },
+      error(e) {
+        this.$store.commit('eam/setError', e.message)
       }
     }
   },
@@ -58,11 +64,14 @@ export default {
     where() {
       const filters = this.constantFilter ? this.constantFilter : []
       if (this.search) {
-        filters.push({
-          path: this.searchPath ? this.searchPath : 'name',
-          comparison: 'like',
-          value: `%${this.search}%`
-        })
+        return [
+          ...filters,
+          {
+            path: this.searchPath ? this.searchPath : 'name',
+            comparison: 'like',
+            value: `%${this.search}%`
+          }
+        ]
       }
       return filters
     },
@@ -110,6 +119,21 @@ export default {
   watch: {
     '$apollo.loading'(value) {
       this.$store.commit('eam/setLoading', value)
+    }
+  },
+  created() {
+    if (this.updateEventName) {
+      const vm = this
+      eventBus.$on(this.updateEventName, () => {
+        if (vm.$apollo.queries.itemsCon) {
+          vm.$apollo.queries.itemsCon.refetch()
+        }
+      })
+    }
+  },
+  beforeDestroy() {
+    if (this.updateEventName) {
+      eventBus.$off(this.updateEventName)
     }
   }
 }

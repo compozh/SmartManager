@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { eventBus } from '../../main'
+
 const initialRowsPerFetch = 25
 
 export default {
@@ -30,7 +32,9 @@ export default {
     searchPath: String,
     constantOrderBy: Array,
     groupingPath: String,
-    isElasticSearch: Boolean
+    isElasticSearch: Boolean,
+    additionalVariables: Object,
+    updateEventName: String
   },
   apollo: {
     itemsCon: {
@@ -39,6 +43,7 @@ export default {
       },
       variables() {
         return {
+          ...this.additionalVariables,
           after: null,
           first: initialRowsPerFetch,
           where: this.where,
@@ -48,6 +53,9 @@ export default {
       },
       update(data) {
         return data.eam[this.queryName]
+      },
+      error(e) {        
+        this.$store.commit('eam/setError', e.message)
       }
     }
   },
@@ -163,6 +171,21 @@ export default {
   },
   destroyed() {    
     window.removeEventListener('scroll', this.onScroll, false)
+  },
+  created() {
+    if (this.updateEventName) {
+      const vm = this
+      eventBus.$on(this.updateEventName, () => {
+        if (vm.$apollo.queries.itemsCon) {
+          vm.$apollo.queries.itemsCon.refetch()
+        }
+      })
+    }
+  },
+  beforeDestroy() {
+    if (this.updateEventName) {
+      eventBus.$off(this.updateEventName)
+    }
   }
 }
 </script>

@@ -15,29 +15,29 @@
     <eam-base-table
       :query="query"
       :queryName="queryName"
-      searchPath="comment"
+      searchPath="conditionParameter.name"
       :headers="headers"
       :search="search"
       :constantFilter="filter"
       :constantOrderBy="[{ path: 'id', descending: true }]"
     >
       <template slot="row" slot-scope="props">
-        <td class="text-xs-left">
+        <td>
           <v-icon :color="getIcon(props.item).color">{{ getIcon(props.item).icon }}</v-icon>
         </td>
-        <td class="text-xs-left">{{ props.item.conditionParameter.name }}</td>
-        <td class="text-xs-left">{{ formatDate(props.item.date) }}</td>
+        <td>{{ props.item.conditionParameter.name }}</td>
+        <td>{{ formatDate(props.item.date) }}</td>
         <td class="text-xs-right">{{ props.item.value }}</td>
-        <td class="text-xs-left">{{ props.item.conditionParameter.measurementUnit.name }}</td>        
+        <td>{{ props.item.conditionParameter.measurementUnit.name }}</td>
       </template>
     </eam-base-table>
   </v-container>
 </template>
 
 <script>
-import { ALL_INSPECTIONS } from '../../api/eam-queries'
+import { ALL_INSPECTIONS } from '@/api/eam-queries'
 import * as moment from 'moment'
-import * as inspectionsHelper from '../../helpers/inspections'
+import * as inspectionsHelper from '../helpers/inspections'
 
 export default {
   name: 'eam-inspections-table',
@@ -52,9 +52,9 @@ export default {
       baseFilter: [{ path: 'value', comparison: 'notEqual', value: '0' }],
       headers: [
         { text: '', value: 'source', align: 'left' },
-        { text: 'Параметр', value: 'conditionParameter.name', align: 'rigth' },
+        { text: 'Параметр', value: 'conditionParameter.name' },
         { text: 'Дата', value: 'date', align: 'left' },
-        { text: 'Значение', value: 'value', align: 'rigth' },
+        { text: 'Значение', value: 'value', align: 'right' },
         {
           text: 'ЕИ',
           value: 'conditionParameter.measurementUnit.name',

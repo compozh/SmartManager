@@ -8,8 +8,8 @@
     :prepend-icon="icon"
     :multiple="multiple"
     :loading="$apollo.loading"
-    v-model="value"
-    @input="$emit('input', value)"
+    v-model="internalValue"
+    @input="$emit('input', internalValue)"
     @click.native.prevent="change=true"
   ></v-select>
 </template>
@@ -61,7 +61,8 @@ export default {
     return {      
       itemsQuery: {},
       orderById: [{ path: 'id' }],
-      change: false
+      change: !!this.value,
+      internalValue: this.value
     }
   },
   computed: {

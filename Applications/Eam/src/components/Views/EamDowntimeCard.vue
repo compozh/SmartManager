@@ -36,9 +36,9 @@
                   v-if="item.additionalData"
                   :item="item.additionalData.responsible"
                 />
-                <eam-department-simple-card :item="item.department"/>                
-                <eam-techplace-simple-card :item="item.technicalPlace"/>
-                <eam-equipment-simple-card :item="item.equipment"/>
+                <eam-department-simple-card :item="item.department" />
+                <eam-techplace-simple-card :item="item.technicalPlace" />
+                <eam-equipment-simple-card :item="item.equipment" />
               </v-layout>
             </v-flex>
           </v-layout>
@@ -46,9 +46,17 @@
         <v-divider></v-divider>
         <v-card-text v-if="item.additionalData">
           <v-layout row wrap>
-            <eam-direction-simple-card :item="item.additionalData.direction"/>
-            <eam-failure-type-simple-card :item="item.additionalData.failureType"/>
-            <eam-failure-reason-simple-card :item="item.additionalData.failureReason"/>
+            <eam-direction-simple-card :item="item.additionalData.direction" />
+            <eam-failure-type-simple-card :item="item.additionalData.failureType" />
+            <eam-failure-reason-simple-card :item="item.additionalData.failureReason" />
+            <v-dialog v-model="editDialog" width="700" lazy>
+              <template v-slot:activator="{ on }">
+                <v-btn icon color="red lighten-2" dark v-on="on">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+              </template>
+              <eam-downtime-form :item="item" @complete="save" />
+            </v-dialog>
           </v-layout>
         </v-card-text>
       </v-card>
@@ -58,35 +66,42 @@
 
 <script>
 export default {
-  name: "eam-downtime-card",
+  name: 'eam-downtime-card',
   props: {
     item: Object
+  },
+  data: () => {
+    return {
+      editDialog: false
+    }
   },
   computed: {
     typeNeme() {
       if (!this.item.additionalData) {
-        return "";
+        return ''
       }
       switch (this.item.additionalData.downTimeType) {
-        case "T":
-          return "Технологический";
-        case "M":
-          return "Ремонтный";
-        case "E":
-          return "Внешний";
+        case 'T':
+          return 'Технологический'
+        case 'M':
+          return 'Ремонтный'
+        case 'E':
+          return 'Внешний'
         default:
-          return "";
+          return ''
       }
     }
+  },
+  methods: {
+    save() {
+      this.editDialog = false
+    }
   }
-};
+}
 </script>
 
 <style scoped>
 .v-card__title {
   background-color: rgb(144, 219, 238);
-}
-.v-card__text {
-  text-align: initial;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <v-container ma-0 pa-0  pt-3>
+  <v-container ma-0 pa-0 pt-3>
     <v-toolbar color="cyan" dark :dense="$vuetify.breakpoint.smAndDown">
       <v-toolbar-title>Заявки ТО</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -31,19 +31,26 @@
             :search="search"
             :constantFilter="activeFilter"
             :constantOrderBy="[{ path: 'id', descending: true }]"
+            updateEventName="workRequestAdded"
           >
             <template slot="row" slot-scope="props">
               <td>
                 <v-icon
-                  :color="props.item.category ? 'red' : 'green'"
+                  :color="props.item.workRequestCategoryId == '4' ? 'red' : 'green'"
                 >{{ sourceIcon(props.item.source) }}</v-icon>
               </td>
-              <td>{{ props.item.id }}</td>
+              <td class="text-xs-right">{{ props.item.id }}</td>
               <td>{{ statusCaption(props.item.status) }}</td>
-              <td>{{ timeElapsed(props.item.creationDate) }}</td>
+              <td class="text-xs-right">{{ timeElapsed(props.item.creationDate) }}</td>
               <td>{{ props.item.content }}</td>
               <td>
-                <eam-employee-simple-card :item="props.item.declarerEmployee"/>
+                <eam-wr-direction-simple-card :item="props.item.direction" />
+              </td>
+              <td>
+                <eam-wr-category-simple-card :item="props.item.category" />
+              </td>
+              <td>
+                <eam-employee-simple-card :item="props.item.declarerEmployee" />
               </td>
             </template>
           </eam-base-table>
@@ -61,7 +68,7 @@
             <template slot="row" slot-scope="props">
               <td>
                 <v-icon
-                  :color="props.item.category ? 'red' : 'green'"
+                  :color="props.item.workRequestCategoryId == '4' ? 'red' : 'green'"
                 >{{ sourceIcon(props.item.source) }}</v-icon>
               </td>
               <td>{{ props.item.id }}</td>
@@ -69,7 +76,13 @@
               <td>{{ timeElapsed(props.item.creationDate) }}</td>
               <td>{{ props.item.content }}</td>
               <td>
-                <eam-employee-simple-card :item="props.item.declarerEmployee"/>
+                <eam-wr-direction-simple-card :item="props.item.direction" />
+              </td>
+              <td>
+                <eam-wr-category-simple-card :item="props.item.category" />
+              </td>
+              <td>
+                <eam-employee-simple-card :item="props.item.declarerEmployee" />
               </td>
             </template>
           </eam-base-table>
@@ -80,9 +93,10 @@
 </template>
 
 <script>
-import { ALL_WORK_REQUESTS } from '../../api/eam-queries'
+import { ALL_WORK_REQUESTS } from '@/api/eam-queries'
+
 import * as moment from 'moment'
-import * as workRequestHelper from '../../helpers/work-requests'
+import * as workRequestHelper from '../helpers/work-requests'
 
 const archiveStatusCodes = ['A', 'C']
 
@@ -108,27 +122,37 @@ export default {
         { text: 'Статус', value: 'status', align: 'left' },
         { text: 'От подачи', value: 'creationDate', align: 'rigth' },
         { text: 'Содержание', value: 'content', align: 'left' },
+        { text: 'Направление', value: 'direction.name', align: 'left' },
+        { text: 'Категория', value: 'category.name', align: 'left' },
         { text: 'Заявитель', value: 'declarerEmployee.fullName', align: 'left' }
       ],
       search: ''
     }
   },
+
   computed: {
     activeFilter() {
-      return this.constantFilter ? this.baseActiveFilter.concat(this.constantFilter) : this.baseActiveFilter
+      return this.constantFilter
+        ? this.baseActiveFilter.concat(this.constantFilter)
+        : this.baseActiveFilter
     },
     archiveFilter() {
-      return this.constantFilter ? this.baseArchiveFilter.concat(this.constantFilter) : this.baseArchiveFilter
+      return this.constantFilter
+        ? this.baseArchiveFilter.concat(this.constantFilter)
+        : this.baseArchiveFilter
     }
   },
+
   methods: {
     timeElapsed(date) {
-      const minuteElapsed = Math.floor(
+      const totalMinuteElapsed = Math.floor(
         moment.duration(moment().diff(moment(date))).asMinutes()
       )
-      return `${Math.floor(minuteElapsed / 1440)} д ${Math.floor(
-        minuteElapsed / 60
-      ) % 24} ч ${minuteElapsed % 60} м`
+      const daysElapsed = `${Math.floor(totalMinuteElapsed / 1440)} д `
+      const hoursElapsed = `${Math.floor(totalMinuteElapsed / 60 ) % 24} ч `
+      const minuteElapsed = `${totalMinuteElapsed % 60} м`
+
+      return ` ${daysElapsed ? daysElapsed : ''}${hoursElapsed ? hoursElapsed : ''}${minuteElapsed ? minuteElapsed : ''}`
     },
     sourceIcon(source) {
       return workRequestHelper.sourceIcon(source)

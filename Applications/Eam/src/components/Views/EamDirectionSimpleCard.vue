@@ -7,11 +7,11 @@
 
 <script>
 export default {
-  name: "eam-direction-simple-card",
+  name: 'eam-direction-simple-card',
   props: {
     item: Object
   }
-};
+}
 </script>
 
 <style>
