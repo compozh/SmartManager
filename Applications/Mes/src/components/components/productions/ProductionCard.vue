@@ -11,7 +11,7 @@
       top
       v-model="fab"
       direction="bottom"
-      transition="fade-transition"
+      transition="scroll-y-transition"
     >
       <template v-slot:activator>
         <v-btn
@@ -28,7 +28,6 @@
           </v-icon>
         </v-btn>
       </template>
-      <v-card class="btns-card" elevation=0>
       <v-tooltip right>
         <template v-slot:activator="{ on }">
           <v-btn v-if="production && production.savedProgress < 100" icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction" v-on="on">
@@ -53,7 +52,6 @@
         </template>
         <span>Удалить выработку</span>
       </v-tooltip>
-      </v-card>
     </v-speed-dial>
   </v-card-text>
 </template>
