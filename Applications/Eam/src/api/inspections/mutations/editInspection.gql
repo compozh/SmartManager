@@ -1,0 +1,7 @@
+mutation editInspection($inspection: ConditionParameterValueInput!) {
+  eamMutation {
+    editInspection(inspection: $inspection) {
+      id
+    }
+  }
+}
