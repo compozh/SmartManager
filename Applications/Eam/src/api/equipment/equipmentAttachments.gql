@@ -1,0 +1,13 @@
+query equipmentAttachments($id: ID) {
+  eam {
+    equipments(id: $id) {
+      id
+      attachments {
+        id
+        fileName
+        fileSize
+        url
+      }
+    }
+  }
+}
