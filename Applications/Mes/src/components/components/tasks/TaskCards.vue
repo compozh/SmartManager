@@ -44,10 +44,16 @@ export default {
     tasks() {
       return this.$store.getters['mes/tasks']
     },
+    filterValue() {
+      return this.$store.getters['mes/filterValue']
+    },
     sortedTasks() {
-      let tasks = []
+      let tasks,
+        filteredTasks = this.tasks.filter(task => {
+          return (!this.filterValue || task.description.toLowerCase().includes(this.filterValue.toLowerCase())) ? task : null
+        })
 
-      tasks = this.tasks.sort((a,b) => {
+      tasks = filteredTasks.sort((a,b) => {
         let aStartDateTime = new Date(a.startDateTime).getTime(),
           bStartDate = new Date(b.startDateTime).getTime(),
           sortByDate = aStartDateTime > bStartDate ? 1 : (aStartDateTime == bStartDate ? 0 : -1)

@@ -7,6 +7,7 @@ export const routerDependencies = {
   router: new VueRouter({
     mode: 'history',
     base: window.myConfig.BASE_URL,
+    params: {fixedUuid: window.location.search.replace('?fixedUuid=','')},
     routes: [{path: '/:ApplicationId', children: [{path: '*'}]}
     ]
   }),

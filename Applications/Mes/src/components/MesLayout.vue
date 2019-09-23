@@ -9,8 +9,8 @@
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
     <v-content>
-      <v-container class="main-block" :key="mainContainerKey">
-        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
+      <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
+        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
     </v-content>
@@ -209,6 +209,38 @@ export default {
   .v-speed-dial__list {
     padding: 0;
     width: 45px !important;
+  }
+  .search-task-field.theme--light.v-text-field>.v-input__control>.v-input__slot:before {
+    border-color: rgba(0,0,0,.1);
+  }
+  .search-task-field label {
+    left: 10px !important;
+  }
+  /*Mes Login Style*/
+  .mes-login-form .flex {
+    text-align: center;
+    line-height: 64px;
+  }
+  .mes-login-form .flex a {
+    color: #326DA8 !important;
+  }
+  .mes-login-form .v-btn.v-btn--contained {
+    color: #326DA8 !important;
+    background-color: white !important;
+    border: 1px solid #326DA8 !important;
+    box-shadow: none !important;
+    min-width: 120px;
+    height: 50px;
+  }
+  .mes-login-form .v-label {
+    top: 1px;
+  }
+  .mes-login-form .layout {
+    padding: 0 10px;
+  }
+  .mes-login-form .cyan--text {
+    color: #326DA8!important;
+    caret-color: #326DA8 !important;
   }
 </style>
 

@@ -34,6 +34,9 @@ export default {
   setTasks(state, tasks) {
     state.tasks = tasks
   },
+  setFilterValue(state, filterValue) {
+    state.tasksPageState.filterValue = filterValue
+  },
   setDowntimes(state, downtimes) {
     state.downtimes = downtimes
   },
