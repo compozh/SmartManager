@@ -49,7 +49,7 @@ export default {
       commit('setTasks', tasks)
     } catch (e) {
       stopLoading()
-      notify('danger', 'tasksTitle', e.message)
+      notify('danger', 'taskListTitle', e.message)
     }
   },
   async getTaskInfo({commit}, payload) {
