@@ -19,6 +19,8 @@ import axios from 'axios';
 import { i18n } from './plugins/i18n';
 import VueI18n from 'vue-i18n';
 import store from './store/index';
+import VueSplit from 'vue-split-panel'
+import { Tree } from 'element-ui';
 
 // apollo
 import { ApolloClient } from 'apollo-client';
@@ -59,6 +61,10 @@ Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(VueI18n);
 Vue.use(VueApollo);
+
+Vue.use(VueSplit);
+Vue.prototype.$ELEMENT = { size: 'small' };
+Vue.use(Tree);
 
 // Плагины it-enterprise
 Vue.use(ItCommon);

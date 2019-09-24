@@ -2,35 +2,32 @@
   <div class="mes-tasks-component">
     <v-layout column class="mes-tasks-component-layout" scrollable>
       <v-flex fill-height class="grid-tabs">
-
-          <v-tabs v-model="selectedTab">
-            <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
-              <v-badge color="#326DA8" overlap>
-                <template v-slot:badge>
-                  <span class="span-count-tasks">{{countTasks(tab.index)}}</span>
-                </template>
-                {{tab.name}}
-              </v-badge>
-            </v-tab>
-          </v-tabs>
-
-        <v-btn icon @click="refreshTasks" @mousedown.stop  :loading="refreshingTasks">
-          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path :fill='obsoleteData.tasks ? "#009975" : "#326DA8"' d="M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z" />
-          </svg>
-        </v-btn>
-
+        <v-tabs v-model="selectedTab">
+          <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
+            <v-badge color="#326DA8" overlap>
+              <template v-slot:badge>
+                <span class="span-count-tasks">{{countTasks(tab.index)}}</span>
+              </template>
+              {{tab.name}}
+            </v-badge>
+          </v-tab>
+        </v-tabs>
       </v-flex>
-
       <v-flex class="tasks-list-blocks">
 
         <mes-content-loader
           v-if="!initializeTasks && !tasks.length"
           :loaderType=loaderType
         />
-
+        <v-text-field
+          v-if="initializeTasks && countTasks(selectedTasksTab)"
+          class="search-task-field"
+          label="Поиск задания"
+          v-model="filterValue"
+          clearable
+        ></v-text-field>
         <div class="tasks-list-block-content">
-
+          
           <mes-task-cards
             :selectedTask=selectedTask
             :selectedTasksTab=selectedTasksTab
@@ -56,8 +53,7 @@ export default {
         { index: 1, id: 'DONE', name: 'Выполненные'}
       ],
       loaderType: 'list',
-      selectedTab: this.selectedTasksTab,
-      refreshingTasks: false
+      selectedTab: this.selectedTasksTab
     }
   },
   props: {
@@ -68,15 +64,23 @@ export default {
     tasks() {
       return this.$store.getters['mes/tasks']
     },
-    obsoleteData() {
-      return this.$store.getters['mes/obsoleteData']
-    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
+    },
+    tasksPageState() {
+      return this.$store.getters['mes/tasksPageState']
     },
     selectedTask: {
       get() {
         return this.$store.getters['mes/selectedTask']
+      }
+    },
+    filterValue: {
+      get() {
+        return this.tasksPageState.filterValue
+      },
+      set(filterValue) {
+        this.$store.commit('mes/setFilterValue', filterValue)
       }
     }
   },
@@ -97,15 +101,6 @@ export default {
         }
       }
       return tasks.length
-    },
-    refreshTasks() {
-      this.refreshingTaskMethod()
-    },
-    async refreshingTaskMethod() {
-      this.refreshingTasks = true
-      await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code, fetchPolicy: 'network-only' })
-      this.$store.dispatch('mes/setObsoluteDataTask', false)
-      this.refreshingTasks = false
     }
   }
 }
@@ -134,8 +129,18 @@ export default {
     padding-right: 10px;
   }
 
+  .search-task-field {
+    height: 45px;
+  }
+  .search-task-field .v-label {
+    left: 5px !important;
+  }
+  .search-task-field .v-application .primary--text {
+    color: #326da8 !important;
+    caret-color: #326da8 !important;
+  }
   .tasks-list-block-content {
-    height:calc(100% - 60px);
+    height:calc(100% - 109px);
     overflow-y: auto;
     position: absolute;
     width: 100%;

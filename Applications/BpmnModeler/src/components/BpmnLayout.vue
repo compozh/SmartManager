@@ -2,62 +2,61 @@
   <v-app>
     <vue-title title="IT-Enterprise Workflow modeler"></vue-title>
     <v-toolbar app
-               clipped-left
-               clipped-right
-               class="toolbar">
+      dense
+      clipped-left
+      clipped-right
+      class="toolbar">
       <v-toolbar-side-icon 
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
-      <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-      <router-view name="toolbar" />
+      <router-link :to="{ name: 'BPMNEMPTY' }" style="text-decoration: none;">
+        <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
+      </router-link>
+      <template v-if="currentUser">
+        <bpmn-contex-menu
+          @create="createItem"
+          @edit="editItem" 
+          @remove="removeItem" 
+          @import="importItem"
+          @export="exportItem">
+          <template #activator="{ open }">
+            <v-btn icon class="text-left blue--text text--darken-2" v-on="open" :title="$t('bpmn.buttons.AddElement')">
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+        </bpmn-contex-menu>
+        <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
+          <v-icon>refresh</v-icon>
+        </v-btn>
+      </template>
       <v-spacer></v-spacer>
+      <v-flex shrink class="icon-container">
+        <user-panel mini="true"></user-panel>
+      </v-flex>
     </v-toolbar>
-
     <v-navigation-drawer v-model="appBar"
       app
       clipped
       width="380">
-      <v-container fluid pa-0 fill-height>
-        <v-layout column>
-          <bpmn-contex-menu
+      <bpmn-tree ref="treeView" :items="items" :activeItem.sync="activeItem" @drop="dropItem">
+        <template #context-menu="{ item }">
+          <bpmn-contex-menu :item="item"
             @create="createItem"
             @edit="editItem" 
             @remove="removeItem" 
             @import="importItem"
-            @export="exportItem">
+            @export="exportItem"
+            offset>
             <template #activator="{ open }">
-              <v-btn flat large class="tree-btn" v-on="open">
-                <v-icon left>add</v-icon> {{ $t('bpmn.buttons.AddElement') }}
+              <v-btn flat icon v-on="open">
+                <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
           </bpmn-contex-menu>
-          <v-divider></v-divider>
-          <bpmn-tree :items="items" :activeItem.sync="activeItem">
-            <template #context-menu="{ item }">
-              <bpmn-contex-menu :item="item"
-                @create="createItem"
-                @edit="editItem" 
-                @remove="removeItem" 
-                @import="importItem"
-                @export="exportItem"
-                offset>
-                <template #activator="{ open }">
-                  <v-btn flat icon v-on="open">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-              </bpmn-contex-menu>
-            </template>
-          </bpmn-tree>
-          <v-divider></v-divider>
-          <v-btn flat large class="tree-btn" @click="onRouteChanged(true)">
-            <v-icon left>refresh</v-icon> {{ $t('bpmn.buttons.Refresh') }}
-          </v-btn>
-        </v-layout>
-      </v-container>
+        </template>
+      </bpmn-tree>
     </v-navigation-drawer>
-
     <v-content class="white">
       <v-container fluid pa-0 fill-height>
         <router-view ref="modeler"/>
@@ -65,7 +64,7 @@
     </v-content>
 
     <v-dialog :persistent="formLoading" v-model="showForm" max-width="500">
-      <bpmn-form :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
+      <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
     </v-dialog>
 
     <v-dialog v-model="loading"
@@ -99,13 +98,14 @@
 </template>
 
 <script>
-import Folder from '../api/models/Folder';
-import Process from '../api/models/Process';
 import treeSearch from '../api/treeSearch';
+import formMixin from './mixins/formMixin';
+import { importMixin } from './mixins/importExportMixin' 
 
 export default {
   name: 'bpmn-layout',
   props: ['toolbarTitle'],
+  mixins: [ formMixin, importMixin ],
   data () {
     return {
       showAppBar: true,
@@ -113,21 +113,17 @@ export default {
       showError: false,
       error: '',
       errorTimeout: 10000,
-      showForm: false,
-      formMode: 'create',
-      formModel: undefined,
-      formLoading: false,
-      formType: 'process'
     };
   },
   mounted() {
     this.onRouteChanged(false);
+    this.$router.app.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
   },
   methods: {
     async loadItems() {
       this.loading = true;
       if (!await this.$store.dispatch('bpmn/loadItems')) {
-        this.error = this.$tc('bpmn.errors.ProcessesNotLoaded');
+        this.error = this.$t('bpmn.errors.ProcessesNotLoaded');
         this.showError = true;
       }
       this.loading = false;
@@ -146,90 +142,14 @@ export default {
         }
       }
     },
-    async formSave(item, type) {
-      this.formLoading = true;
-      let success = false;
-      switch (this.formMode) {
-      case 'create':
-        if (type === 'folder') {
-          success = await this.$store.dispatch('bpmn/createFolder', item);
-        } else {
-          success = await this.$store.dispatch('bpmn/createProcess', item);
-        }
-        if (success) {
-          this.showForm = false;
-          this.activeItem = item.id;
-        } else {
-          this.error = this.$t('bpmn.errors.ProcessNotCreated');
-          this.showError = true;
-        }
-        break;
-      case 'edit':
-        if (type === 'folder') {
-          success = await this.$store.dispatch('bpmn/editFolder', item);
-        } else {
-          success = await this.$store.dispatch('bpmn/editProcess', item);
-        }
-        if (success) {
-          this.showForm = false;
-        } else {
-          this.error = this.$t('bpmn.errors.ProcessNotEdited');
-          this.showError = true;
-        }
-        break;
-      case 'delete':
-        if (await this.$store.dispatch('bpmn/deleteItem', item)) {
-          this.showForm = false;
-        } else {
-          this.error = this.$t('bpmn.errors.ProcessNotDeleted');
-          this.showError = true;
-        }
-        break;
+    async dropItem(draggingItem, dropItem, type) {
+      this.loading = true;
+      if (!(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem, type }))) {
+        this.error = this.$t('bpmn.errors.CantDrop');
+        this.showError = true;
       }
-      this.formLoading = false;
-    },
-    formClose() {
-      this.showForm = false;
-    },
-    createItem(parent, type, xmlView) {
-      const parentId = parent ? parent.id : null;
-      this.formMode = 'create';
-      this.formModel = type === 'folder' ? new Folder({ parentId }) : new Process({ parentId, xmlView });
-      this.formType = type;
-      this.showForm = true;
-    },
-    editItem(item) {
-      this.formMode = 'edit';
-      this.formModel = item.isFolder ? new Folder(item) : new Process(item);
-      this.formType = item.isFolder ? 'folder' : 'process';
-      this.showForm = true;
-    },
-    removeItem(item) {
-      this.formMode = 'delete';
-      this.formModel = item;
-      this.formType = item.isFolder ? 'folder' : 'process';
-      this.showForm = true;
-    },
-    importItem(parent) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = '.bpmn';
-
-      input.addEventListener('change', () => {
-        const [file] = input.files;
-        if (!file) {
-          return;
-        }
-        file.text().then(xml => {
-          setTimeout(function() {
-            document.body.removeChild(input);  
-          }, 0);
-
-          this.createItem(parent, 'process', xml);
-        });
-      });
-      document.body.appendChild(input);
-      input.click();
+      this.activeItem = draggingItem.id;
+      this.loading = false;
     },
     exportItem(item, type) {
       const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === 'bpmn-modeler', e => e.$children);
@@ -242,6 +162,7 @@ export default {
       let routeName, params;
       if (index < 0) {
         routeName = 'BPMNEMPTY';
+        params = { };
       } else if (item.isFolder) {
         routeName = 'BPMNFOLDER';
         params = { id: itemId };
@@ -253,7 +174,6 @@ export default {
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
         this.$router.push({ name: routeName, params });
       }
-
     }
   },
   computed: {
@@ -279,10 +199,8 @@ export default {
         return this.$store.getters['bpmn/getActiveItemId']
       },
       set(value) {
-        if (value == this.activeItem) {
-          return;
-        }
         this.$store.dispatch('bpmn/setActiveItem', value);
+        this.$refs.treeView.setActiveItem(value);
         this.navigateToItem(value);
       }
     }
@@ -315,5 +233,9 @@ export default {
   }
   .tree-btn > .v-btn__content {
     justify-content: flex-start;
+  }
+  .user-image {
+    height: 40px !important;
+    width: 40px !important;
   }
 </style>

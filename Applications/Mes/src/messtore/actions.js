@@ -344,9 +344,6 @@ export default {
     }
     return result
   },
-  setObsoluteDataTask({ commit }, obsoluteData) {
-    commit('setObsoluteDataTask', obsoluteData)
-  },
   selectTaskAfterRefresh({ getters, commit }) {
     let selectedTask = getters.selectedTask,
       tasks = getters.tasks

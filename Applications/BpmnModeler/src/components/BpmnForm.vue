@@ -80,12 +80,15 @@ export default {
         this.$refs.form.resetValidation();
         this.$emit('save', this.model, this.type);
       }
+    },
+    reset() {
+      this.$refs.nameField.focus();
+      this.$refs.form.resetValidation();
     }
   },
   watch: {
     model() {
-      this.$refs.form.resetValidation();
-      this.$refs.nameField.focus();
+      this.reset();
     }
   }
 }

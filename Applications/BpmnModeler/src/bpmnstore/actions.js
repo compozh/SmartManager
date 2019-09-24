@@ -5,40 +5,9 @@ import Process from '../api/models/Process';
 const api = new BpmnModelerApi();
 
 export default {
-  async addItem(context, item, index) {
-    let items;
-    if (item.parentId && item.parentId !== '') {
-      const { item: parent, index } = context.getters.getItemById(item.parentId);
-      if (index === -1) {
-        return;
-      }
-      if (!parent.items) {
-        parent.items = [];
-      }
-      items = parent.items;
-    } else {
-      items = context.state.items;
-    }
-    if (index && index >= 0) {
-      items.splice(index, 0, item);
-    } else {
-      items.push(item);
-    }
-  },
-  async removeItem(context, item) {
-    if (item.parentId && item.parentId !== '') {
-      const { item: parent } = context.getters.getItemById(item.parentId);
-      parent.items = parent.items.filter(e => e !== item);
-    } else {
-      context.state.items = context.state.items.filter(e => e !== item);
-    }
-  },
   async setActiveItem(context, item) {
     if (typeof item === 'string' || item instanceof String) {
       ({ item } = context.getters.getItemById(item));
-    }
-    if (!item) {
-      item = new Process();
     }
     context.state.activeItem = item;
   },
@@ -74,30 +43,15 @@ export default {
       console.error(error);
       return false;
     }
-
-    // const { model } = context.getters.getModelById(id);
-    // if (model) {
-    //   model.xml === xml;
-    // }
-
     return xml;
   },
   async setXml(context, { id, xml }) {
-    // const { model } = context.getters.getModelById(id);
-    // const oldXml = model.xml;
-    // model.xml = xml;
-
     let success = false;
     try {
       success = await api.setXml(id, xml);
     } catch (error) {
       console.error(error);
     }
-    
-    // if (!success) {
-    //   model.xml = oldXml;
-    // }
-
     return success;
   },
   async createProcess(context, process) {
@@ -108,12 +62,11 @@ export default {
       console.error(error);
       return false;
     }
-
     if (!newProcess) {
       return false;
     }
     Object.assign(process, newProcess);
-    context.dispatch('addItem', process);
+    await context.dispatch('loadItems');
     return true;
   },
   async editProcess(context, { id, name }) {
@@ -127,7 +80,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
     if (!success) {
       process.name = oldName;
     }
@@ -145,7 +97,7 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
-    context.dispatch('addItem', folder);
+    await context.dispatch('loadItems');
     return true;
   },
   async editFolder(context, { id, name }) {
@@ -159,7 +111,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
     if (!success) {
       folder.name = oldName;
     }
@@ -170,11 +121,7 @@ export default {
     if (index < 0) {
       return false;
     }
-
-    context.dispatch('removeItem', item);
-
     let success = false;
-
     try {
       if (item instanceof Folder) {
         success = await api.deleteFolder(id);
@@ -184,11 +131,31 @@ export default {
     } catch (error) {
       console.error(error);
     }
-
-    if (!success) {
-      context.dispatch('addItem', item, index);
-    }
-
+    await context.dispatch('loadItems');
     return success;
   },
+  async itemDropped(context, { draggingItem, dropItem, type }) {
+    switch (type) {
+    case 'before':
+    case 'after':
+      draggingItem.parentId = dropItem.parentId;
+      break;
+    case 'inner':
+      draggingItem.parentId = dropItem.id;
+      break;
+    }
+    let success = false;
+    try {
+      if (draggingItem.isFolder) {
+        success = await api.dropFolder(draggingItem.id, draggingItem.parentId);
+      } else {
+        success = await api.dropProcess(draggingItem.id, draggingItem.parentId);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    await context.dispatch('loadItems');
+    return success;
+  }
 };
+

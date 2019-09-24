@@ -14,18 +14,18 @@
 
 <script>
 export default {
-  name: "eam-search",
+  name: 'eam-search',
   computed: {
     search: {
       get: function() {
-        return this.$store.getters["eam/search"];
+        return this.$store.getters['eam/search']
       },
       set: function(newValue) {
-        this.$store.commit("eam/setSearch", newValue);
+        this.$store.commit('eam/setSearch', newValue)
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

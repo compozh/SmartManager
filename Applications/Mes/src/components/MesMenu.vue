@@ -2,8 +2,8 @@
   <v-list>
     <v-list-item v-for="route in links" :key="route.Id" :to="{name:route.Id}">
       <v-list-item-action @click="reloadPage(route)">
-          <v-icon large >{{route.Image}}</v-icon>
-          <v-icon class="reload-icon" v-if="$route.name == route.Id">replay</v-icon>
+          <v-icon large>{{route.Image}}</v-icon>
+          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.Id">refresh</v-icon>
       </v-list-item-action>
       <v-list-item-content  @click="reloadPage(route)">
         <v-list-item-title>{{ route.Name }}</v-list-item-title>
@@ -50,6 +50,9 @@ export default {
       links = links.concat(pages)
       return links.filter(l => l.Name && l.Path)
     },
+    obsoleteData() {
+      return this.$store.getters['mes/obsoleteData']
+    },
   },
   methods: {
     reloadPage(route) {
@@ -84,7 +87,8 @@ export default {
     position: absolute;
     top: 4px;
     right: 4px;
-    font-size: 17px !important;
+    font-size: 19px !important;
+    font-weight: 800;
   }
   .v-navigation-drawer__content .v-list .v-list-item__action {
     margin-right: 0;
