@@ -1,7 +1,14 @@
 <template>
     <v-card-text class="mes-installation-card">
         <span v-html="installation.description"></span>
-        <v-btn icon color="error" class="mes-delete-installation" @click="removeInstallation" :loading="delateInProgress"><v-icon dark>delete_forever</v-icon></v-btn>
+         <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon color="error" class="mes-delete-installation" @click="removeInstallation" :loading="deleteInProgress" v-on="on">
+              <v-icon dark>delete_forever</v-icon>
+            </v-btn>
+          </template>
+          <span>Удалить инсталляцию</span>
+        </v-tooltip>
     </v-card-text>
 </template>
 
@@ -9,19 +16,23 @@
 
 export default {
   data() {
-    return {delateInProgress: false}
+    return {
+      deleteInProgress: false,
+    }
   },
   props: {
-    installation: Object
+    installation: Object,
   },
   name: 'mes-installation-card',
   methods: {
     removeInstallation() {
-      this.delateInProgress = true
-      this.$emit('removeInstallation', {installation: this.installation, callback: () => {
-        this.delateInProgress = false
+      var me = this
+      me.$emit('removeInstallation', { installation: me.installation, callback: () => {
+        me.deleteInProgress = false
+      }, dialogAgreeClick: () => {
+        me.deleteInProgress = true
       }})
-    }
+    },
   }
 }
 </script>

@@ -13,3 +13,4 @@
 **/*.nupkg
 **/package-lock.json
 /Dashboard Kit health/public/AppSettings_1.json
+Applications/Eam/apollo.config.js

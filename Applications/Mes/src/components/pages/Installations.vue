@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code })
       this.initializeInstallations = true
     },
@@ -57,7 +56,7 @@ export default {
         installationCard = installationCards.$refs[qrCodeValue],
         installationsBlock = installationCards.$refs.installationsBlock
 
-      if (installationCard && installationCard.length) {
+      if (installationCard && installationCard.length &&  installationCard[0].$el) {
         installationsBlock.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
         installationCard[0].$el.classList.add('activeInstallation')
         setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 2000)

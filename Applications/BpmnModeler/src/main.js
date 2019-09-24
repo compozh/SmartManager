@@ -19,6 +19,8 @@ import axios from 'axios';
 import { i18n } from './plugins/i18n';
 import VueI18n from 'vue-i18n';
 import store from './store/index';
+import VueSplit from 'vue-split-panel'
+import { Tree } from 'element-ui';
 
 // apollo
 import { ApolloClient } from 'apollo-client';
@@ -60,6 +62,10 @@ Vue.use(Vuex);
 Vue.use(VueI18n);
 Vue.use(VueApollo);
 
+Vue.use(VueSplit);
+Vue.prototype.$ELEMENT = { size: 'small' };
+Vue.use(Tree);
+
 // Плагины it-enterprise
 Vue.use(ItCommon);
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies });
@@ -69,7 +75,9 @@ Vue.use(Router, { options: window.myConfig, dependencies });
 Vue.use(Eds, { dependencies });
 Vue.use(WebApps, { dependencies, options: window.myConfig });
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'))
 
 // Шина событий
 export const eventBus = new Vue();

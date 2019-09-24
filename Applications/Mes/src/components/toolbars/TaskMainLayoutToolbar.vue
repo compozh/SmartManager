@@ -13,10 +13,17 @@
             >
                 Взять в работу
             </v-btn>
-            <v-btn class="downtime-registration-button" outlined @click="changeDowntimeOverlayMode" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
-            <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode">
-                <v-icon>control_camera</v-icon>
-            </v-btn>
+
+            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
+
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode" v-on="on">
+                  <v-icon>control_camera</v-icon>
+                </v-btn>
+              </template>
+              <span>Режим корректировки</span>
+            </v-tooltip>
         </v-flex>
     </v-layout>
 </template>
@@ -66,8 +73,8 @@ export default {
         splitter.style.cssText = 'width: 5px'
       }
     },
-    changeDowntimeOverlayMode () {
-      this.downtimesOverlay = !this.downtimesOverlay
+    changeDowntimesOverlayVisible() {
+      this.$emit('changeDowntimesOverlayVisible')
     }
   }
 }

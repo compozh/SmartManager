@@ -1,0 +1,20 @@
+query equipmentImages($id: ID) {
+  eam {
+    equipment(id: $id) {
+      id
+      images {
+        id
+        fileName
+        url
+      }
+      model {
+        id
+        attachments {
+          id
+          fileName
+          url
+        }
+      }
+    }
+  }
+}

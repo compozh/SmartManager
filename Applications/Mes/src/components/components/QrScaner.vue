@@ -3,6 +3,12 @@
     v-model="dialogVisible"
     @input="dialogInput"
   >
+    <v-tooltip top>
+      <template v-slot:activator="{ on }">
+        <v-btn outlined class="mes-arrow-back" @click="closeDialog" color="#326DA8" v-on="on"><v-icon dark>clear</v-icon></v-btn>
+      </template>
+      <span>Закрыть</span>
+    </v-tooltip>
     <div v-if="state" class="qr-state">
       {{state}}
     </div>
@@ -57,10 +63,13 @@ export default {
       this.error = ''
       this.result = ''
     },
+    closeDialog() {
+      this.$emit('changeQrScanerVisible', false)
+    },
     onDecode (qrCodeValue) {
       this.result = qrCodeValue
       this.$emit('changeQrScanerVisible', false)
-      this.$emit('submitQrCode', { qrCodeValue })
+      this.$emit('submitQrCode', qrCodeValue)
     },
     async onInit (promise) {
       try {
@@ -97,5 +106,21 @@ export default {
     color: red;
     font-size: 1.2em;
     text-align: center;
+  }
+  .mes-arrow-back {
+    display: flex;
+    margin: 0 auto;
+    max-width: 45px;
+    min-width: 45px !important;
+    height: 45px !important;
+    border-radius: 50%;
+    position: absolute;
+    left: calc(50% - 20px);
+    z-index: 10;
+    top: 25px;
+    border: 2px solid white;
+  }
+  .mes-arrow-back i {
+    color: white !important;
   }
 </style>

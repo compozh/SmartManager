@@ -1,6 +1,10 @@
 <template>
   <v-container class="main-block">
-    <mes-downtimes-overlay v-if="downtimesOverlay" />
+
+    <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+      @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+    />
+
     <v-card ref="card">
       <vue-split
         class="main-block-layout"
@@ -34,18 +38,31 @@
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <v-layout column class="task-description-layout" id="slotTwo">
-              <mes-task-main-layout
-                v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
-                  || (currentLayout == 'inProgress' && !selectedTask.inProgress))" />
+              <mes-un-selected-layout-toolbar
+                v-if="this.initializeTasks && !this.tasks.length"
+                @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+              />
+              <div
+                v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
+                  || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
+              >
+                <mes-task-main-layout
+                  v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
+                    || (currentLayout == 'inProgress' && !selectedTask.inProgress))"
+                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                />
 
-              <mes-task-in-progress-layout
-                ref="taskInProgressLayout"
-                v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
-                  ||(currentLayout == 'main' && selectedTask.inProgress))" />
+                <mes-task-in-progress-layout
+                  ref="taskInProgressLayout"
+                  v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
+                    ||(currentLayout == 'main' && selectedTask.inProgress))"
+                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                />
 
-              <mes-task-installations-layout
-                v-if="selectedTask && currentLayout == 'installations'" />
-
+                <mes-task-installations-layout
+                  v-if="selectedTask && currentLayout == 'installations'"
+                />
+              </div>
             </v-layout>
       </vue-split>
     </v-card>
@@ -61,6 +78,7 @@ export default {
   data() {
     return {
       initializeTasks: false,
+      downtimesOverlayVisible: false,
       dialogProperties: {
         title: '',
         message: 'Вы действительно хотите перейти на другое задание?',
@@ -72,13 +90,13 @@ export default {
     }
   },
   created() {
+    //todo: инициализацию signalr вынести в загрузку приложения
     this.initializeSignalR()
     this.initialize()
   },
   mounted() {
     if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
       this.$router.replace({path: '/MES/installations'})
-      return
     }
   },
   computed: {
@@ -117,14 +135,6 @@ export default {
         this.$store.commit('mes/setSelectedTasksTab', tabIndex)
       }
     },
-    downtimesOverlay: {
-      get() {
-        return this.$store.getters['mes/downtimesOverlay']
-      },
-      set() {
-        this.$store.dispatch('mes/changeDowntimesOverlay')
-      }
-    },
     tasksPageState() {
       return this.$store.getters['mes/tasksPageState']
     },
@@ -139,11 +149,28 @@ export default {
     },
     productionFormio() {
       return this.$store.getters['mes/productionFormio']
+    },
+    filterValue() {
+      return this.$store.getters['mes/filterValue']
+    },
+    sortedTasks() {
+      let tasks,
+        filteredTasks = this.tasks.filter(task => {
+          return (!this.filterValue || task.description.toLowerCase().includes(this.filterValue.toLowerCase())) ? task : null
+        })
+
+      tasks = filteredTasks.sort((a,b) => {
+        let aStartDateTime = new Date(a.startDateTime).getTime(),
+          bStartDate = new Date(b.startDateTime).getTime(),
+          sortByDate = aStartDateTime > bStartDate ? 1 : (aStartDateTime == bStartDate ? 0 : -1)
+
+        return a.inProgress && b.inProgress ? sortByDate : a.inProgress ? -1 : b.inProgress ? 1 : sortByDate
+      })
+      return tasks
     }
   },
   methods: {
     async initializeSignalR() {
-      await this.$store.dispatch('mes/initializeTicket')
       this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket)
     },
     taskStateChanged(msg) {
@@ -161,21 +188,24 @@ export default {
 
         workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
         if (workCenters.indexOf(this.workCenter.code)) {
-          this.$store.dispatch('mes/setObsoluteDataTask', true)
+          this.$store.commit('mes/setObsoluteDataTask', true)
         }
         break
       }
     },
     async initialize() {
-      await this.$store.dispatch('mes/initializeWorkCenter')
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
+      this.$store.commit('mes/setObsoluteDataTask', false)
       this.initializeTasks = true
       if (!this.selectedTask) {
-        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab)
+        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab, this.sortedTasks)
       }
     },
-    selectFirstTaskByTabIndex(tabIndex) {
-      for (let task of this.tasks) {
+    selectFirstTaskByTabIndex(tabIndex, sortedTasks) {
+      if (!sortedTasks.length) {
+        return
+      }
+      for (let task of this.sortedTasks) {
         switch (tabIndex) {
         case 0:
           if (task.state == 'IN_PLAN' || task.state == 'IN_WORK') {
@@ -199,11 +229,11 @@ export default {
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
-
+      
       if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
         let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
 
-        if (this.productionFormio && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
+        if (this.productionFormio && this.productionFormio.data && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
           this.dialogProperties.visible = true
           this.dialogProperties.task = newSelectedTask
           return
@@ -247,7 +277,7 @@ export default {
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex
-      this.selectFirstTaskByTabIndex(tabIndex)
+      this.selectFirstTaskByTabIndex(tabIndex, this.sortedTasks)
     },
     dialogAgreeClick() {
       this.dialogProperties.visible = false
@@ -265,9 +295,6 @@ export default {
     getFormioData() {
       return this.$refs.acceptTaskLayout.getFormioData()
     },
-    async submitQrCode(code) {
-      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: code, factId: 0 })
-    },
     changeAspectRatioLayout() {
       var taskListElementWidth =  this.$refs.taskList.$el.style.width
       var sizes = []
@@ -277,6 +304,9 @@ export default {
       sizes.push(taskDescriptionElementWidth)
       this.aspectRatioLayout = sizes
     },
+    changeDowntimesOverlayVisible() {
+      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+    }
   }
 }
 </script>

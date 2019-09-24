@@ -15,10 +15,10 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
-    "@it-enterprise/authentication": "^1.0.3",
+    "@it-enterprise/authentication": "^1.0.19",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
-    "@it-enterprise/localization": "^1.0.9",
+    "@it-enterprise/localization": "^1.0.10",
     "@it-enterprise/modules-manager": "1.0.0",
     "@it-enterprise/routercore": "^1.0.6",
     "@it-enterprise/webappscore": "^1.0.12",
@@ -80,7 +80,7 @@
     "vue2-hammer": "^2.1.2",
     "vuedraggable": "^2.21.0",
     "vuejs-datepicker": "^1.5.4",
-    "vuesax": "^3.9.0",
+    "vuesax": "3.9.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {

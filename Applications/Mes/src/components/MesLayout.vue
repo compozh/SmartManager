@@ -9,8 +9,8 @@
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
     <v-content>
-      <v-container class="main-block">
-        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)"/>
+      <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
+        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
     </v-content>
@@ -55,9 +55,17 @@
 <script>
 export default {
   name: 'mes-layout',
+  data() {
+    return {
+      mainContainer: 0
+    }
+  },
   computed: {
     currentUser() {
       return this.$store.state.authentication.currentUser
+    },
+    mainContainerKey() {
+      return this.$store.getters['mes/mainContainerKey']
     },
     snackbar() {
       return this.$store.getters['mes/snackbar']
@@ -174,6 +182,9 @@ export default {
   .theme--dark.v-progress-linear {
     margin-top: 14px !important;
   }
+  .v-navigation-drawer__content .v-list .v-list-item__action {
+    margin-right: 25px;
+  }
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
     margin: 0;
@@ -187,18 +198,49 @@ export default {
   .work-centers-select .v-select__slot input {
     padding-bottom: 0;
   }
-  .downtimes-overlay .v-overlay__content {
-    width: 100%;
-    height: 100%;
-    padding: 2% 4%;
+  .tasks-list-block .v-progress-linear__content {
+    background-color: rgba(50,109,168,.5);
+    color: white;
   }
-  /* !!!!! */
-  .downtime-registration-button {
-    display: none
+  .choices__item.choices__item--choice {
+    text-align: center;
+    padding: 10px 5px !important;
   }
-  .drag-resize-button {
-    margin-left: auto;
+  .v-speed-dial__list {
+    padding: 0;
+    width: 45px !important;
   }
-  /* !!!!! */
+  .search-task-field.theme--light.v-text-field>.v-input__control>.v-input__slot:before {
+    border-color: rgba(0,0,0,.1);
+  }
+  .search-task-field label {
+    left: 10px !important;
+  }
+  /*Mes Login Style*/
+  .mes-login-form .flex {
+    text-align: center;
+    line-height: 64px;
+  }
+  .mes-login-form .flex a {
+    color: #326DA8 !important;
+  }
+  .mes-login-form .v-btn.v-btn--contained {
+    color: #326DA8 !important;
+    background-color: white !important;
+    border: 1px solid #326DA8 !important;
+    box-shadow: none !important;
+    min-width: 120px;
+    height: 50px;
+  }
+  .mes-login-form .v-label {
+    top: 1px;
+  }
+  .mes-login-form .layout {
+    padding: 0 10px;
+  }
+  .mes-login-form .cyan--text {
+    color: #326DA8!important;
+    caret-color: #326DA8 !important;
+  }
 </style>
 

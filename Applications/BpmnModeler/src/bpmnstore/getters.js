@@ -1,14 +1,17 @@
+import treeSearch from '../api/treeSearch';
+
 export default {
-  getModels(state) {
-    return state.models;
+  getItems(state) {
+    return state.items;
   },
-  getModelById: state => id => {
-    for (let index = 0; index < state.models.length; index++) {
-      const model = state.models[index];
-      if (model.id === id) {
-        return { model, index }
-      }
+  getItemById: state => id => {
+    let [{ item = null, index = -1 } = {}] = treeSearch(state.items, (item) => item.id === id);
+    return { item, index };
+  },
+  getActiveItemId(state) {
+    if (state.activeItem) {
+      return state.activeItem.id;
     }
-    return { model: null, index: -1 };
-  },
+    return null;
+  }
 };

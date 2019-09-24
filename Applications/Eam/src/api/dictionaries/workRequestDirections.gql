@@ -1,0 +1,9 @@
+query directions($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    workRequestDirections(where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
+      isValid
+    }
+  }
+}

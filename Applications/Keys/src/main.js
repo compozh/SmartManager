@@ -2,14 +2,14 @@
 
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-//import Authentication from '@it-enterprise/authentication'
+import Authentication from '@it-enterprise/authentication'
 //import '@it-enterprise/authentication/dist/authentication.css'
 //import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
 //import '@it-enterprise/common/dist/common-components.css'
 
-import auth from './api/auth/auth'
-auth.Init()
+//import auth from './api/auth/auth'
+//auth.Init()
 
 // vue пакеты
 import Vue from 'vue'
@@ -123,7 +123,7 @@ Vue.use(VueApollo)
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.appConfig, dependencies })
 Vue.use(Localization, { dependencies })
-//Vue.use(Authentication, { options: window.appConfig, dependencies })
+Vue.use(Authentication, { options: window.appConfig, dependencies })
 //Vue.use(Router, { options: window.appConfig, dependencies })
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./i18n/resources/en.json'))

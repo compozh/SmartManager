@@ -1,10 +1,21 @@
 <template>
     <v-flex class="mes-productions-content">
+      <mes-dialog-component
+          :title=dialogProperties.title
+          :message=dialogProperties.message
+          :agreeMessage=dialogProperties.agreeMessage
+          :disagreeMessage=dialogProperties.disagreeMessage
+          :visible=dialogProperties.visible
+          @dialogInput=dialogInput
+          @agreeClick=dialogAgreeClick
+          @disagreeClick=dialogDisagreeClick />
         <v-card class="productions-card" v-for="production in sortedProductions" :key="production.factId">
 
             <mes-production-card
                 :production=production
-                @deleteProduction=deleteProduction
+                @deleteProduction=invokeDeleteProduction
+                @printProduction=printProduction
+                @setMaterialProduction=setMaterialProduction
             />
 
         </v-card>
@@ -15,10 +26,23 @@
 /* eslint-disable */
 export default {
   name: 'mes-productions-component',
+  props: {
+    productions: Array
+  },
+  data() {
+    return {
+      dialogProperties: {
+        title: '',
+        message: 'Вы действительно хотите удалить выработку?',
+        agreeMessage: 'Да',
+        disagreeMessage: 'Нет',
+        visible: false,
+        production: null,
+        callback: false
+      },
+    }
+  },
   computed: {
-    productions() {
-      return this.$store.getters['mes/productions']
-    },
     sortedProductions() {
       return this.productions.sort((a,b) => {
         return a.factId < b.factId ? 1 : (a.factId == b.factId ? 0 : -1)
@@ -26,11 +50,44 @@ export default {
     }
   },
   methods: {
+    invokeDeleteProduction({ production, callback, dialogAgreeClick }) {
+      this.dialogProperties.visible = true
+      this.dialogProperties.production = production
+      this.dialogProperties.callback = callback
+      this.dialogProperties.dialogAgreeClick = dialogAgreeClick
+    },
     async deleteProduction({ production, callback }) {
       await this.$store.dispatch('mes/deleteProduction', production)
       if (callback) {
           callback()
-        }
+      }
+    },
+    dialogAgreeClick() {
+      let production = this.dialogProperties.production
+      let callback = this.dialogProperties.callback
+      if (this.dialogProperties.dialogAgreeClick) {
+        this.dialogProperties.dialogAgreeClick()
+      }
+      this.deleteProduction({ production, callback })
+      this.dialogProperties.visible = false
+    },
+    dialogDisagreeClick() {
+      this.dialogProperties.visible = false
+    },
+    dialogInput() {
+      this.dialogProperties.visible = false
+    },
+    async printProduction({ production, callback }) {
+      await this.$store.dispatch('mes/printProduction', production)
+      if (callback) {
+        callback()
+      }
+    },
+    async setMaterialProduction({ production, callback }) {
+      await this.$store.dispatch('mes/setMaterialProduction', production)
+      if (callback) {
+        callback()
+      }
     }
   }
 }

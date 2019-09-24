@@ -11,8 +11,11 @@ export default {
     selectedTasksTab: 0,
     currentLayout: 'main',
     dragResizeMode: false,
-    downtimesOverlay: false,
-    aspectRatioLayout: [35, 65]
+    aspectRatioLayout: [35, 65],
+    filterValue: ''
+  },
+  productionPageState: {
+    selectedProductionTab: 0
   },
   dialogLinearLoader: {
     visible: false,
@@ -25,14 +28,21 @@ export default {
     tasks: false
   },
   properties: null,
+  userName: null,
   workCenter: null,
   initialWorkCenter: false,
   workCentersForWorker: [],
+  selectedDowntime: null,
   tasks: [],
+  downtimes: [],
   installations: [],
-  productions: [],
-  productionFormio: null,
-  downtimeFormio: null,
+  workCenterProductionEvents: [],
+  usersProductionEvents: [],
+  productionFormio: {},
+  downtimeFormio: {},
+  createDowntimeFormio: {},
   menuMiniMode: true,
-  ticket: ''
+  ticket: '',
+  mainContainerKey: 0,
+  actionsAfterInitializeProperties: []
 }

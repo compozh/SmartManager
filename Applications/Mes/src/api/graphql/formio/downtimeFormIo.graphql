@@ -1,0 +1,14 @@
+{
+    mes{
+        downtimeFormIo(formCode: $formCode, properties: $properties) {
+            form
+            data
+            display
+            settings
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

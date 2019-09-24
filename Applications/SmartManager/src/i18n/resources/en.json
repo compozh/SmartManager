@@ -1,0 +1,120 @@
+{
+  "search": "Search",
+  "pickers": {
+    "date": "Date",
+    "time": "Time",
+    "locale": "en",
+    "timeFormat": "ampm"
+  },
+  "folders": {
+    "header": "Folders",
+    "main": "Active"
+  },
+  "validate": {
+    "required": "Required field",
+    "needDate": "Date must be specified date in format DD.MM.YYYY",
+    "dateFormat": "Enter date in format DD.MM.YYYY",
+    "pastDate": "Past date",
+    "needTime": "Time must be specified time in format HH:mm",
+    "timeFormat": "Enter time in format HH:mm"
+  },
+  "tasks": {
+    "newTask": "New task",
+    "taskName": "Task name...",
+    "noTasks": "No tasks",
+    "description": "Description",
+    "id": "ID",
+    "performer": "Performer",
+    "addedDate": "Added date",
+    "planDate": "Plan date",
+    "created": "Created",
+    "deadline": "Deadline",
+    "related": "Related tasks",
+    "subTasks": "Subtasks"
+  },
+  "buttons": {
+    "addTask": "Add task",
+    "addSubTask": "Add subtask",
+    "reject": "Reject",
+    "rejectWithComment": "Reject with comment",
+    "approve": "Approve",
+    "approveWithComment": "Approve with comment",
+    "execute": "Execute",
+    "returnToWork": "Return",
+    "create": "Create",
+    "cancel": "Cancel",
+    "ok": "Ok",
+    "upload": "Upload",
+    "viewMore": "More",
+    "addAttachment": "Add attachment",
+    "add": "Add",
+    "send": "Send"
+  },
+  "icons": {
+    "priority": "High priority",
+    "attachments": "Has attachments",
+    "approve": "Need approve",
+    "comment": "Has comments",
+    "fromMe": "From me",
+    "control": "On control",
+    "notRush": "Not rush"
+  },
+  "tabs": {
+    "details": "Details",
+    "attachments": "Attachments",
+    "comments": "Comments",
+    "approvals": "Approvals"
+  },
+  "statuses": {
+    "inWork": "in work",
+    "rejected": "rejected",
+    "completed": "completed"
+  },
+  "roles": {
+    "responsible": "Responsible",
+    "coExecutors": "Сo-executors",
+    "notify": "Notify",
+    "taskFrom": "Task from"
+  },
+  "table": {
+    "name": "Name",
+    "size": "Size",
+    "uploaded": "Uploaded"
+  },
+  "comments": {
+    "addComment": "Add comment",
+    "placeholder": "Type your comment",
+    "placeholder2": "comment text..."
+  },
+  "messages": {
+    "noMessages": "No messages",
+    "noData": "No data",
+    "noFiles": "No files for view",
+    "noComments": "No comments",
+    "closeForm": "Close the form",
+    "noApprovals": "No approvals",
+    "noSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED"
+  },
+  "notify": {
+    "foldersTitle": "Folders and filters",
+    "taskListTitle": "Task List",
+    "taskTitle": "Task",
+    "usersTitle": "Users",
+    "statusTitle": "Status",
+    "stageTitle": "Stage",
+    "attachTitle": "Attachment",
+    "commentsTitle": "Comments",
+    "taskAddSuccess": "Task added successfully",
+    "taskAddFail": "Task adding failed",
+    "taskAddError": "Error adding task",
+    "statChangeSuccess": "Status changed successfully",
+    "statChangeFail": "Status changing failed",
+    "statChangeError": "Error status changing",
+    "attachAddSuccess": "Attachment added successfully",
+    "attachAddFail": "Add attachment failed",
+    "attachAddError": "Error attachment adding",
+    "commentAddSuccess": "Comment added successfully",
+    "commentAddFail": "Comment adding failed",
+    "commentAddError": "Error comment adding"
+  }
+}

@@ -11,7 +11,7 @@
     <vs-navbar class="vx-navbar navbar-custom" :color="navbarColor" :class="classObj">
 
       <!-- SM - OPEN SIDEBAR BUTTON -->
-      <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
+      <router-view name="toolbar"></router-view>
 
       <vs-spacer></vs-spacer>
 
