@@ -20,7 +20,7 @@
   },
   "tasks": {
     "newTask": "New task",
-    "taskName": "Task name...",
+    "taskName": "Task name",
     "noTasks": "No tasks",
     "description": "Description",
     "id": "ID",
