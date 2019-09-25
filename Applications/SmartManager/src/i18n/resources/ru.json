@@ -20,7 +20,7 @@
   },
   "tasks": {
     "newTask": "Новая задача",
-    "taskName": "Название задачи...",
+    "taskName": "Название задачи",
     "noTasks": "Нет задач в папке",
     "description": "Описание",
     "id": "ID",
@@ -96,8 +96,8 @@
     "noSupport": "ФАЙЛЫ {ext} НЕ ПОДДЕРЖИВАЮТСЯ"
   },
   "notify": {
-    "foldersTitle": "Папки и фильлры",
-    "taskListTitle": "Список файлов",
+    "foldersTitle": "Папки и фильтры",
+    "taskListTitle": "Список задач",
     "taskTitle": "Задача",
     "usersTitle": "Пользователи",
     "statusTitle": "Статус",

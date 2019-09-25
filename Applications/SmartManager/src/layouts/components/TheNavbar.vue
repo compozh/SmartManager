@@ -21,6 +21,7 @@
           color="primary"
           type="gradient"
           class="px-3 mr-2"
+          @click="$router.push('/task-add')"
         >{{ $t('buttons.addTask') }}
         </vs-button>
 
