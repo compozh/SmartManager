@@ -24,9 +24,7 @@
       @node-drop="onNodeDrop">
       <template v-slot="{ node, data }">
         <span class="treeview-node-content">
-          <v-icon >
-            {{ data.isFolder ? node.expanded ? 'mdi-folder-open' : 'mdi-folder' : 'mdi-file-tree' }}
-          </v-icon>
+          <bpmn-tree-icon :node="node"></bpmn-tree-icon>
           <span class="treeview-node-label">{{ node.label }}</span>
           <slot name="context-menu" :item="data"></slot>
         </span>
@@ -36,9 +34,12 @@
 </template>
 <script>
 import treeSearch from '../api/treeSearch';
+import BpmnTreeIcon from './functional/BpmnTreeIcon'
+import Folder from '../api/models/Folder';
 
 export default {
   name: 'bpmn-tree',
+  components: { BpmnTreeIcon },
   props: {
     items: Array,
     activeItem: String
@@ -50,7 +51,7 @@ export default {
       treeProps: {
         label: 'name',
         children: 'items',
-        isLeaf: (item) => !item.isFolder
+        isLeaf: (item) => !(item instanceof Folder)
       }
     };
   },

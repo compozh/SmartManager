@@ -12,7 +12,8 @@
 		"AddFolder": "Add folder",
 		"Import": "Import process",
 		"ExportSvg": "Export svg",
-		"ExportBpmn": "Export bpmn"
+		"ExportBpmn": "Export bpmn",
+		"ExportDmn": "Export dmn"
 	},
 	"labels": {
 		"NewProcess": "New process",
@@ -184,6 +185,19 @@
 		"Duration": "Duration",
 		"Cycle": "Cycle",
 		"Must provide a value": "Must provide a value",
+
+		"Version Tag": "Version Tag",
+		"Decision": "Decision",
+		"Decision Table": "Decision Table",
+		"KnowledgeSource": "KnowledgeSource",
+		"InputData": "InputData",
+		"Empty": "Empty",
+		"Connect using Information/Knowledge/Authority Requirement or Association": "Connect using Information/Knowledge/Authority Requirement or Association",
+		"This maps to the decision definition key": "This maps to the decision definition key.",
+		"Literal Expression": "Literal Expression",
+		"History Configuration": "History Configuration",
+		"History Time To Live": "History Time To Live",
+		"BusinessKnowledgeModel": "BusinessKnowledgeModel",
 
 		"Forms": "Forms",
 		"Form Key": "Form Key",

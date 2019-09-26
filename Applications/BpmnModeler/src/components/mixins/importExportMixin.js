@@ -3,7 +3,7 @@ export const importMixin = {
     importItem(parent) {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = '.bpmn';
+      input.accept = '.bpmn, .dmn';
 
       input.addEventListener('change', () => {
         const [file] = input.files;
@@ -43,6 +43,7 @@ export const exportMixin = {
       };
 
       switch (type) {
+      case 'dmn':
       case 'bpmn':
         this.modeler.saveXML({ format: true }, (err, xml) => {
           if (err) {

@@ -27,7 +27,7 @@
           <v-list-tile-title>{{ $t('bpmn.buttons.Import') }}</v-list-tile-title>
         </v-list-tile>
       </template>
-      <template v-else>
+      <template v-else-if="item.type === 'BPMN'">
         <v-list-tile @click="exportBpmn(item)">
           <v-list-tile-avatar>
             <v-icon>save_alt</v-icon>
@@ -39,6 +39,14 @@
             <v-icon>mdi-file-image</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-tile-title>
+        </v-list-tile>
+      </template>
+      <template v-else-if="item.type === 'DMN'">
+        <v-list-tile @click="exportDmn(item)">
+          <v-list-tile-avatar>
+            <v-icon>save_alt</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-tile-title>
         </v-list-tile>
       </template>
       <template v-if="item">
@@ -84,6 +92,9 @@ export default {
     },
     exportBpmn(item) {
       this.$emit('export', item, 'bpmn');
+    },
+    exportDmn(item) {
+      this.$emit('export', item, 'dmn');
     },
     exportSvg(item) {
       this.$emit('export', item, 'svg');

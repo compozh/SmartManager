@@ -31,7 +31,10 @@
     "bpmn-js": "^5.0.4",
     "bpmn-js-properties-panel": "^0.32.1",
     "camunda-bpmn-moddle": "^4.1.2",
+    "camunda-dmn-moddle": "^1.0.0",
     "diagram-js": "^5.0.2",
+    "dmn-js": "^7.0.1",
+    "dmn-js-properties-panel": "^0.3.0",
     "element-ui": "^2.12.0",
     "graphql": "^14.5.6",
     "graphql-tag": "^2.10.1",
@@ -64,6 +67,7 @@
     "eslint": "^6.3.0",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
+    "raw-loader": "^3.1.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.10"
   },
