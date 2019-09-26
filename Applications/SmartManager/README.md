@@ -1,4 +1,4 @@
-# web_app_player
+# Шаблон веб приложения
 
 ## Project setup
 ```

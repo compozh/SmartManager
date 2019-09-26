@@ -1,4 +1,4 @@
 export default {
-  models: [],
-  activeModel: { id: '', name: '', xml: '' }
+  items: [],
+  activeItem: null
 };

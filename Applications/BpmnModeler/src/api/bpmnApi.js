@@ -3,12 +3,17 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
 import gql from 'graphql-tag';
 // Queries
-import models from './graphql/models.graphql';
-import create from './graphql/create.graphql';
+import items from './graphql/items.graphql';
 import getXml from './graphql/getXml.graphql';
 import setXml from './graphql/setXml.graphql';
-import setName from './graphql/setName.graphql';
-import remove from './graphql/delete.graphql';
+import createProcess from './graphql/createProcess.graphql';
+import editProcess from './graphql/editProcess.graphql';
+import dropProcess from './graphql/dropProcess.graphql';
+import removeProcess from './graphql/deleteProcess.graphql';
+import createFolder from './graphql/createFolder.graphql';
+import editFolder from './graphql/editFolder.graphql';
+import dropFolder from './graphql/dropFolder.graphql';
+import removeFolder from './graphql/deleteFolder.graphql';
 
 import Vue from 'vue';
 
@@ -32,20 +37,11 @@ const getClient = () => {
 export class BpmnModelerApi {
   constructor() {}
 
-  async get() {
+  async getItems() {
     const result = await getClient().query({
-      query: gql`query ${models}`
+      query: gql`query ${items}`
     });
-    return result.data.bpmnquery.models;
-  }
-
-  async create(model) {
-    const result = await getClient().query({
-      query: gql`query ($model: ModelInput!) ${create}`,
-      variables: { model }
-    });
-    console.log(result);
-    return result.data.bpmnmutation.create;
+    return JSON.parse(result.data.bpmnquery.items);
   }
 
   async getXml(id) {
@@ -57,26 +53,74 @@ export class BpmnModelerApi {
   }
 
   async setXml(id, xml) {
-    const result = await getClient().query({
-      query: gql`query ($id: ID!, $xml: String!) ${setXml}`,
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($id: ID!, $xml: String!) ${setXml}`,
       variables: { id, xml }
     });
-    return result;
+    return result.data.bpmnqueryMutation.setXml;
   }
 
-  async setName(id, name) {
-    const result = await getClient().query({
-      query: gql`query ($id: ID!, $name : String!) ${setName}`,
-      variables: { id, name }
+  async createProcess(process) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($process: ProcessInput!) ${createProcess}`,
+      variables: { process }
     });
-    return result.data.bpmnmutation.setName;
+    return result.data.bpmnqueryMutation.createProcess;
   }
 
-  async deleteModel(id) {
-    const result = await getClient().query({
-      query: gql`query ($id: ID!) ${remove}`,
+  async editProcess(process) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($process: ProcessInput!) ${editProcess}`,
+      variables: { process: { id: process.id, name: process.name, parentId: process.parentId } }
+    });
+    return result.data.bpmnqueryMutation.editProcess;
+  }
+
+  async dropProcess(processId, parentId) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($processId: String!, $parentId: String) ${dropProcess}`,
+      variables: { processId, parentId }
+    });
+    return result.data.bpmnqueryMutation.dropProcess;
+  }
+
+  async deleteProcess(id) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($id: ID!) ${removeProcess}`,
       variables: { id }
     });
-    return result.data.bpmnmutation.delete;
+    return result.data.bpmnqueryMutation.deleteProcess;
+  }
+
+  async createFolder(folder) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($folder: FolderInput!) ${createFolder}`,
+      variables: { folder }
+    });
+    return result.data.bpmnqueryMutation.createFolder;
+  }
+
+  async editFolder(folder) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($folder: FolderInput!) ${editFolder}`,
+      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId } }
+    });
+    return result.data.bpmnqueryMutation.editFolder;
+  }
+
+  async dropFolder(folderId, parentId) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($folderId: String!, $parentId: String) ${dropFolder}`,
+      variables: { folderId, parentId }
+    });
+    return result.data.bpmnqueryMutation.dropFolder;
+  }
+
+  async deleteFolder(id) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($id: ID!) ${removeFolder}`,
+      variables: { id }
+    });
+    return result.data.bpmnqueryMutation.deleteFolder;
   }
 }

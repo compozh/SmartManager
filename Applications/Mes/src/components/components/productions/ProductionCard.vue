@@ -29,17 +29,31 @@
         </v-btn>
       </template>
       <v-card class="btns-card" elevation=0>
-      <v-btn icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction">
-        <v-icon dark>archive</v-icon>
-      </v-btn>
-      <v-btn icon color="#326da8" class="mes-print-production" @click="printProduction">
-        <v-icon dark>print</v-icon>
-      </v-btn>
-      <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction">
-        <v-icon dark>delete_forever</v-icon>
-      </v-btn>
+      <v-tooltip right>
+        <template v-slot:activator="{ on }">
+          <v-btn v-if="production && production.savedProgress < 100" icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction" v-on="on">
+            <v-icon dark>archive</v-icon>
+          </v-btn>
+        </template>
+        <span>Списать материалы</span>
+      </v-tooltip>
+      <v-tooltip right>
+        <template v-slot:activator="{ on }">
+          <v-btn icon color="#326da8" class="mes-print-production" @click="printProduction" v-on="on">
+            <v-icon dark>print</v-icon>
+          </v-btn>
+        </template>
+        <span>Распечатать выработку</span>
+      </v-tooltip>
+      <v-tooltip right>
+        <template v-slot:activator="{ on }">
+          <v-btn icon color="error" class="mes-delete-production" @click="deleteProduction" v-on="on">
+            <v-icon dark>delete_forever</v-icon>
+          </v-btn>
+        </template>
+        <span>Удалить выработку</span>
+      </v-tooltip>
       </v-card>
-
     </v-speed-dial>
   </v-card-text>
 </template>

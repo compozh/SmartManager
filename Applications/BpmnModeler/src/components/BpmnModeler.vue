@@ -1,96 +1,86 @@
 <template>
-  <v-layout fill-height>
-    <v-layout v-show="loading" column justify-center align-center>
-      <v-progress-circular
-          :size="70"
-          :width="7"
-          color="primary"
-          indeterminate>
-        </v-progress-circular>
-    </v-layout>
-    <v-layout fill-height v-show="!loading">
-      <div class="bpmn-diagram-container" ref="container"></div>
-      <div class="properties-panel-container">
-        <div class="properties-panel-parent" ref="propertiesPanel"></div>
-      </div>
-      <v-tooltip v-model="saved" activator=".bpmn-diagram-container" bottom>
-        <span>{{ $tc('bpmn.labels.ProcessSaved') }}</span>
-      </v-tooltip>
-    </v-layout>
-  </v-layout>
+  <modeler-layout :process="process" :loading="loading" :saved="saved">
+    <template #modeler>
+      <div class="workflow-modeler" ref="container"></div>
+    </template>
+    <template #propertiesPanel>
+      <div ref="propertiesPanel"></div>
+    </template>
+  </modeler-layout>
 </template>
 <script>
-import BpmnModeler from 'bpmn-js/lib/Modeler';
-import propertiesPanelModule from 'bpmn-js-properties-panel';
-import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
+import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css';
+
 import { debounce } from 'throttle-debounce';
 import { CancellationToken } from '../api/cancellationToken'
 import { SavingContext } from '../api/savingContext';
+import { exportMixin } from './mixins/importExportMixin';
+import Process from '../api/models/Process';
+import editorFactory from '../api/editorFactory';
+import ModelerLayout from './ModelerLayout';
+import ProcessType from '../api/models/ProcessType';
 
 export default {
   name: 'bpmn-modeler',
+  mixins: [ exportMixin ],
+  components: { ModelerLayout },
   data() {
     return {
-      modeler: {},
+      modeler: null,
       loading: false,
       saved: false,
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
-      diagramId: ''
     };
   },
   mounted() {
-    const customTranslateModule = {
-      translate: [ 'value', (t, r) => this.translate(t, r) ]
-    };
-
-    this.modeler = new BpmnModeler({ 
-      container: this.$refs.container,
-      propertiesPanel: {
-        parent: this.$refs.propertiesPanel
-      },
-      additionalModules: [
-        propertiesPanelModule,
-        propertiesProviderModule,
-        customTranslateModule
-      ],
-    });
-    const canvas = this.modeler.get('canvas');
-    canvas.zoom('fit-viewport');
-    this.onRouteChanged();
-  },
-  computed: {
-    activeModel() {
-      return this.$store.state.bpmn.activeModel;
+    if (this.process) {
+      this.createModeler();
+      this.onActiveModelChanged();
     }
   },
+  computed: {
+    process() {
+      const activeItem = this.$store.state.bpmn.activeItem;
+      if (activeItem && activeItem instanceof Process && activeItem.type === ProcessType.BPMN) {
+        return activeItem;
+      }
+      return null;
+    }
+  },
+  beforeDestroy: function () {
+    this.destroyModeler();
+  },
   watch: {
-    '$route': 'onRouteChanged'
+    process(value, oldValue) {
+      if (!value) {
+        this.destroyModeler();
+      }
+      if (!oldValue || !this.modeler || value.type !== oldValue.type) {
+        this.createModeler();
+      }
+      this.onActiveModelChanged();
+    }
   },
   methods: {
-    onRouteChanged() {
-      if (!this.$store.state.authentication.currentUser) {
-        return;
-      }
-      const diagramId = this.$route.params.id;
-      if (diagramId !== '' && diagramId !== this.diagramId) {
-        this.diagramId = diagramId;
-        this.onActiveModelChanged();
-      }
-    },
+    createModeler() {
+      this.destroyModeler();
+      this.modeler = editorFactory(this.process.type, false, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+    },    
     async loadXml() {
-      if (!this.diagramId || this.diagramId === '') {
+      if (!this.process || !this.modeler) {
         return;
       }
-
       this.loading = true;
-
       if (!this.cancellationToken.isCancelled) {
         this.cancellationToken.cancel();
       }
-      
       const debounced = debounce(500, async (cancellationToken) => {
-        const xml = await this.$store.dispatch('bpmn/getXml', this.diagramId);
+        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
         if (cancellationToken.isCancelled) {
           return;
         }
@@ -99,15 +89,21 @@ export default {
           // TODO: display exception
           return;
         }
-        this.modeler.importXML(xml, (err) => {
-          this.loading = false;
-          if (err) {
-            console.error(err);
-            // TODO: display exception
-            this.modeler.createDiagram();
+        if (!xml || xml === '') {
+          this.modeler.createDiagram(() => {
             this.loading = false;
-          }
-        });
+          });        
+        } else {
+          this.modeler.importXML(xml, (err) => {
+            this.loading = false;
+            if (err) {
+              console.error(err);
+              // TODO: display exception
+              this.modeler.createDiagram();
+              this.loading = false;
+            }
+          });
+        }
       });
 
       this.cancellationToken = new CancellationToken(debounced);
@@ -124,13 +120,17 @@ export default {
       });
     },
     onActiveModelChanged() {
+      if (!this.process || !this.modeler) {
+        return;
+      }
+      this.modeler.clear();
       if (this.onElementChanged) {
         this.modeler.off('element.changed', this.onElementChanged);
       }
       this.onElementChanged = debounce(1000, function() {
         this.saveXML();
       });
-      this.modeler.on('element.changed', this.onElementChanged, new SavingContext(this.modeler, this.diagramId, (id, xml) => this.setXML(id, xml)));
+      this.modeler.on('element.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
       this.loadXml();
     },
     translate(template, replacements) {
@@ -157,40 +157,16 @@ export default {
           return replacements[key] || '{' + key + '}';
         });
       }
+    },
+    destroyModeler() {
+      if (this.modeler) {
+        this.modeler.destroy();
+        this.modeler = null;
+      }
     }
   }
 };
 </script>
 <style>
-.bpmn-diagram-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-.canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-.properties-panel-container {
-  width: 320px;
-  border-left: 1px solid #ccc;
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: relative;
-}
-.properties-panel-parent {
-  width: 100%;
-  position: absolute;
-  height: 100%;
-}
-.properties-panel-parent:empty {
-  display: none;
-}
-.properties-panel-parent > * {
-  min-height:100%;
-}
+
 </style>

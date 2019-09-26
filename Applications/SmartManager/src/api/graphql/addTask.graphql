@@ -1,4 +1,4 @@
- {
+mutation ($newTask: String) {
   smtasksMutation {
     addTask(newTask: $newTask) {
       id

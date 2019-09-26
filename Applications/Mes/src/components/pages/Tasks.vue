@@ -38,7 +38,11 @@
             @changeSelectTasksTab=changeSelectTasksTab />
 
             <v-layout column class="task-description-layout" id="slotTwo">
-              <div 
+              <mes-un-selected-layout-toolbar
+                v-if="this.initializeTasks && !this.tasks.length"
+                @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+              />
+              <div
                 v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
               >
@@ -145,11 +149,28 @@ export default {
     },
     productionFormio() {
       return this.$store.getters['mes/productionFormio']
+    },
+    filterValue() {
+      return this.$store.getters['mes/filterValue']
+    },
+    sortedTasks() {
+      let tasks,
+        filteredTasks = this.tasks.filter(task => {
+          return (!this.filterValue || task.description.toLowerCase().includes(this.filterValue.toLowerCase())) ? task : null
+        })
+
+      tasks = filteredTasks.sort((a,b) => {
+        let aStartDateTime = new Date(a.startDateTime).getTime(),
+          bStartDate = new Date(b.startDateTime).getTime(),
+          sortByDate = aStartDateTime > bStartDate ? 1 : (aStartDateTime == bStartDate ? 0 : -1)
+
+        return a.inProgress && b.inProgress ? sortByDate : a.inProgress ? -1 : b.inProgress ? 1 : sortByDate
+      })
+      return tasks
     }
   },
   methods: {
     async initializeSignalR() {
-      await this.$store.dispatch('mes/initializeTicket')
       this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket)
     },
     taskStateChanged(msg) {
@@ -167,20 +188,24 @@ export default {
 
         workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
         if (workCenters.indexOf(this.workCenter.code)) {
-          this.$store.dispatch('mes/setObsoluteDataTask', true)
+          this.$store.commit('mes/setObsoluteDataTask', true)
         }
         break
       }
     },
     async initialize() {
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
+      this.$store.commit('mes/setObsoluteDataTask', false)
       this.initializeTasks = true
       if (!this.selectedTask) {
-        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab)
+        this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab, this.sortedTasks)
       }
     },
-    selectFirstTaskByTabIndex(tabIndex) {
-      for (let task of this.tasks) {
+    selectFirstTaskByTabIndex(tabIndex, sortedTasks) {
+      if (!sortedTasks.length) {
+        return
+      }
+      for (let task of this.sortedTasks) {
         switch (tabIndex) {
         case 0:
           if (task.state == 'IN_PLAN' || task.state == 'IN_WORK') {
@@ -252,7 +277,7 @@ export default {
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex
-      this.selectFirstTaskByTabIndex(tabIndex)
+      this.selectFirstTaskByTabIndex(tabIndex, this.sortedTasks)
     },
     dialogAgreeClick() {
       this.dialogProperties.visible = false

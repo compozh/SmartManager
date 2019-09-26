@@ -1,0 +1,8 @@
+query equipmentTypes($take:Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    equipmentTypes(take:$take, where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
+    }
+  }
+}

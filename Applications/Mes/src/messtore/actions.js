@@ -1,7 +1,6 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
-
 const api = new MesApi()
 /* eslint-disable */
 export default {
@@ -27,48 +26,32 @@ export default {
       }
     })
   },
-  async initializeWorkCenter({ commit, getters }, fetchPolicy) {
+  async initializeWorkCenter({ commit, getters }, uuid, fetchPolicy) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
-      action: async () => {
-        let uuid = $cookies.get('mesUuid'),
-        sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
-
-        if (!uuid && sessionStorageUuid) {
-          uuid = sessionStorageUuid
-        } else if (!uuid && !sessionStorageUuid) {
-          uuid = api.generateUUID()
-          // Caching for 3 year
-          $cookies.set('mesUuid', uuid, '3y')
-        }
-
-        window.sessionStorage.setItem('mesUuid', uuid)
+      action: async ( ) => {
         console.log('Current UUID - ' + uuid)
 
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
+        commit('setWorkCentersForWorker', workCenters)
+
         if (workCenters.length == 1) {
           commit('setWorkCenter', workCenters[0])
         } else {
           var setWorkCenterForWorker = async (properties) => {
             var workCenterForWorker = await me.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
-            if(workCenterForWorker.length) {
-              let workCentersForWorker = []
+            workCenterForWorker = workCenterForWorker.sort((a,b) => {
+              return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
+            })
+
               for(var workCenter of workCenters) {
-                for(var workCenterOfWorker of workCenterForWorker) {
-                  if(workCenter.code == workCenterOfWorker.code) {
-                    workCentersForWorker.push(workCenter)
+                for(var fixWorkCetner of workCenterForWorker) {
+                  if(fixWorkCetner.code == workCenter.code) {
+                    commit('setWorkCenter', workCenter)
+                    return
                   }
                 }
               }
-              if(workCentersForWorker.length) {
-                commit('setWorkCenter', workCentersForWorker[0])
-                commit('setWorkCentersForWorker', workCentersForWorker)
-              } else {
-                commit('setWorkCentersForWorker', workCenters)
-              }
-            } else {
-              commit('setWorkCentersForWorker', workCenters)
-            }
           }
 
           if(!getters.properties) {
@@ -94,11 +77,15 @@ export default {
       }
     })
   },
-  async downloadDowntimes({ commit }, { workCenterCode, dateTime }) {
+  async downloadDowntimes({ commit, getters }, { workCenterCode, dateTime }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
-        commit('setDowntimes', downtimes)
+        if (getters.downtimes.length) {
+          commit('setDowntimes', getters.downtimes.concat(downtimes))
+        } else {
+          commit('setDowntimes', downtimes)
+        }
       }
     })
   },
@@ -181,7 +168,8 @@ export default {
       action: async () => {
         let workCenterProductionEvents = await api.getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy)
         commit('setWorkCenterProductionEvents', workCenterProductionEvents || [])
-      }
+      },
+      linearLoader: true
     })
   },
   async initializeUsersProductionEvents({ commit }, { workerCode, fetchPolicy }) {
@@ -189,7 +177,8 @@ export default {
       action: async () => {
         let usersProductionEvents = await api.getUsersProductionEventsFromGql(workerCode, fetchPolicy)
         commit('setUsersProductionEvents', usersProductionEvents || [])
-      }
+      },
+      linearLoader: true
     })
   },
   async deleteProduction({ commit }, production) {
@@ -355,9 +344,6 @@ export default {
     }
     return result
   },
-  setObsoluteDataTask({ commit }, obsoluteData) {
-    commit('setObsoluteDataTask', obsoluteData)
-  },
   selectTaskAfterRefresh({ getters, commit }) {
     let selectedTask = getters.selectedTask,
       tasks = getters.tasks
@@ -381,9 +367,16 @@ export default {
   async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
     return await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const res = await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
-        return res
+        return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
+    })
+  },
+  async callFormCustomEvent({ commit }, { formCode, params, successCallback }) {
+    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.callFormCustomEventGql(formCode, params)
+      },
+      successAction: async result => { successCallback(result) },
     })
   }
 }

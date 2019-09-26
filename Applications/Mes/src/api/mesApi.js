@@ -2,6 +2,8 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import gql from 'graphql-tag'
+
+import Vue from 'vue'
 // Queries
 import properties from './graphql/properties.graphql'
 import workCenters from './graphql/workCenters.graphql'
@@ -18,15 +20,17 @@ import workCenterProductionEvents from './graphql/productions/workCenterProducti
 import deleteProduction from './graphql/productions/deleteProduction.graphql'
 import printLabel from './graphql/productions/printLabel.graphql'
 import executeWriteOff from './graphql/productions/executeWriteOff.graphql'
-import productionFormIo from './graphql/productionFormIo.graphql'
-import productionFormIoSubmit from './graphql/productionFormIoSubmit.graphql'
-import downtimeFormIo from './graphql/downtimeFormIo.graphql'
 import downtimeGetTypes from './graphql/downtimeGetTypes.graphql'
-import downtimeFormIoSubmit from './graphql/downtimeFormIoSubmit.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
-import Vue from 'vue'
+
+//formio
+import productionFormIo from './graphql/formio/productionFormIo.graphql'
+import productionFormIoSubmit from './graphql/formio/productionFormIoSubmit.graphql'
+import downtimeFormIo from './graphql/formio/downtimeFormIo.graphql'
+import downtimeFormIoSubmit from './graphql/formio/downtimeFormIoSubmit.graphql'
+import callFormCustomEvent from './graphql/formio/callFormCustomEvent.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
@@ -249,17 +253,13 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.downtimeFormIoSubmit
   }
-  generateUUID() { // Public Domain/MIT
-    var d = new Date().getTime()
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-      d += performance.now() //use high-precision timer if available
-    }
-    var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = (d + Math.random() * 16) % 16 | 0
-      d = Math.floor(d / 16)
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+  async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
+    const result = await getClient().mutate({
+      mutation: gql`${callFormCustomEvent}`,
+      variables: { formCode, formCustomEventParamsInput }
     })
+      .then(result => result)
 
-    return newGuid
+    return result.data.mesMutation.callFormCustomEvent
   }
 }

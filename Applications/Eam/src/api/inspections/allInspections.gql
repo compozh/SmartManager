@@ -1,0 +1,63 @@
+query conditionParameterValues($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID], $search: String ) {
+  eam {
+    conditionParameterValuesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
+      edges {
+        node {
+          id
+          date  
+          conditionParameter{
+            id
+            name
+            measurementUnit{
+              id
+              name
+            }
+            maxValue
+            minValue
+            valueRanges {
+              id
+              description
+              minValue
+              maxValue
+              workRequestCategoryId
+            }
+            valueInputType
+          }
+          equipment {
+            id
+            name
+            fullName
+          }
+          technicalPlace {
+            id
+            name
+          }
+          department {
+            id
+            name
+          }
+          description
+          comment
+          value
+          isClosed
+          additionalData{
+            failureReason{id name}
+            failureType{id name}
+            responsible{id fullName}
+            isValid
+          }
+          attachments {
+            id
+          }
+        }
+      }
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

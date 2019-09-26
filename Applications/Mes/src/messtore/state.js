@@ -11,7 +11,8 @@ export default {
     selectedTasksTab: 0,
     currentLayout: 'main',
     dragResizeMode: false,
-    aspectRatioLayout: [35, 65]
+    aspectRatioLayout: [35, 65],
+    filterValue: ''
   },
   productionPageState: {
     selectedProductionTab: 0
@@ -42,5 +43,6 @@ export default {
   createDowntimeFormio: {},
   menuMiniMode: true,
   ticket: '',
+  mainContainerKey: 0,
   actionsAfterInitializeProperties: []
 }

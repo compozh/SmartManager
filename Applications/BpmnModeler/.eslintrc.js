@@ -37,8 +37,8 @@ module.exports = {
     "space-before-blocks":["error"],
     "keyword-spacing":["error"],
     "brace-style":["error","1tbs", { "allowSingleLine": true }],
-    "arrow-spacing":["error"]
-
+    "arrow-spacing":["error"],
+    "no-unused-vars": "off"
   },
 
   parserOptions: {
