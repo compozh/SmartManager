@@ -25,7 +25,8 @@ Vue.component(VxBreadcrumb.name, VxBreadcrumb)
 Vue.component(FeatherIcon.name, FeatherIcon)
 Vue.component(VxInputGroup.name, VxInputGroup)
 
-Vue.component('account-personal-info-page', () => import('./views/account-personal-info-page.vue'))
+import './views/account-personal-info/main'
+
 Vue.component('account-home-page', () => import('./views/account-home-page.vue'))
 Vue.component('account-tmc-page', () => import('./views/account-tmc-page.vue'))
 
