@@ -12,7 +12,8 @@
 		"AddFolder": "Додати папку",
 		"Import": "Імпортувати процес",
 		"ExportSvg": "Експортувати в форматі svg",
-		"ExportBpmn": "Експортувати в форматі bpmn"
+		"ExportBpmn": "Експортувати в форматі bpmn",
+		"ExportDmn": "Експортувати в форматі dmn"
 	},
 	"labels": {
 		"NewProcess": "Новий процес",
@@ -184,6 +185,19 @@
 		"Duration": "Тривалість",
 		"Cycle": "Періодичність",
 		"Must provide a value": "Необхідно заповнити значення",
+
+		"Version Tag": "Тег версії",
+		"Decision": "Рішення",
+		"Decision Table": "Таблиця рішень",
+		"KnowledgeSource": "Джерело знань",
+		"InputData": "Вхідні дані",
+		"Empty": "Пусто",
+		"Connect using Information/Knowledge/Authority Requirement or Association": "З'єднати, використовуючи Вимогу до Інформації/Знань/Повномажень або Асоціацію",
+		"This maps to the decision definition key": "This maps to the decision definition key.",
+		"Literal Expression": "Вираз",
+		"History Configuration": "History Configuration",
+		"History Time To Live": "History Time To Live",
+		"BusinessKnowledgeModel": "Модель бизнес-знаний",
 
 		"Forms": "Форми",
 		"Form Key": "Ідентифікатор форми",
