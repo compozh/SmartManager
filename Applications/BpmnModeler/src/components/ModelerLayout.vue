@@ -98,7 +98,7 @@ export default {
 .properties-panel-container {
   grid-area: properties-panel;
 }
-.properties-panel-container > *:first-child {
+.properties-panel-container > * >:first-child {
   width: 100%;
   position: absolute;
   height: 100%;

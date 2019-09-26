@@ -123,7 +123,6 @@ export default {
           this.activeEditor.off('commandStack.changed', this.onElementChanged);
         }
         this.onElementChanged = debounce(1000, function() {
-          console.log('onElementChanged');
           this.saveXML();
         });
         editor.on('commandStack.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
