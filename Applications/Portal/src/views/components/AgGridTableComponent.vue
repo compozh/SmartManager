@@ -52,10 +52,11 @@ export default {
   mounted() {
     this.gridApi = this.gridOptions.api
     this.gridColumnApi = this.gridOptions.columnApi
+    // Установка ширины колонок
     this.gridApi.sizeColumnsToFit()
 
+    // Установка высоты, на весь контент
     var eGridDiv = document.querySelector('.my-grid')
-    eGridDiv.style.width = '100%'
     eGridDiv.style.height = '100%'
     this.gridApi.setDomLayout('print')
   },
@@ -64,10 +65,6 @@ export default {
 </script>
 <style scoped>
 #ag-grid{
-    height: 100%;
     width: 100%;
-}
-.card{
-  height: 100%;
 }
 </style>

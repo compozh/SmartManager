@@ -76,8 +76,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.vx-card__header{
-    display: none !important;
-}
-</style>
