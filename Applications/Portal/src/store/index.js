@@ -13,6 +13,7 @@ import authModule from './auth/moduleAuth'
 import personalInfoModule from './personalInfo/personalInfo'
 import notificationsModule from './notifications/moduleNotifications'
 import moduleECommerce from './eCommerce/moduleECommerce.js'
+import moduleEducation from './education/education'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
     notifications: notificationsModule,
     auth: authModule,
     eCommerce: moduleECommerce,
+    education: moduleEducation
 
   },
   strict: process.env.NODE_ENV !== 'production'

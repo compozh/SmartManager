@@ -21,5 +21,24 @@
         "PhoneNumber":"Номер телефону",
         "Department":"Департамент",
         "HireDate":"Дата прийому"
+    },
+    "Education":{
+        "Competence": "Компетенція",
+        "KindTraining": "Вид професійного навчання",
+        "Subject": "Тематика",
+        "TopicTraining": "Тема навчання",
+        "DateParticipationInTheTrainingEvent": "Дата участі в навчальному заході",
+        "Note": "Примітка",
+        "educationalInstitution": "Навчальний заклад/Орган, який забезпечує організацію навчання",
+        "typeAdvancedTraining": "Вид підвищення кваліфікації",
+        "StartDateEducation": "Дата початку навчання",
+        "EndDataEducation": "Дата закінчення навчання",
+        "countHours": "Кількість годин, факт",
+        "NoteLong": "Примітка (наприклад скан.сертифікату і форми зворотнього зв’язку))",
+        "Number": "№",
+        "Duty": "Обов’язковість",
+        "Priority": "Пріоритетність",
+        "Provider": "Можл. провайдер",
+        "Status": "Статус"
     }
 }

@@ -28,6 +28,9 @@ Vue.component(VxInputGroup.name, VxInputGroup)
 Vue.component('account-personal-info-page', () => import('./views/account-personal-info-page.vue'))
 Vue.component('account-home-page', () => import('./views/account-home-page.vue'))
 Vue.component('account-tmc-page', () => import('./views/account-tmc-page.vue'))
+Vue.component('account-additional-training', () => import('./views/account-additional-training.vue'))
+Vue.component('account-curriculum', () => import('./views/account-curriculum.vue'))
+Vue.component('account-learning', () => import('./views/account-learning.vue'))
 
 // v-select component
 import vSelect from 'vue-select'
