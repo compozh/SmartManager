@@ -60,7 +60,7 @@ let router = new VueRouter({
           caseSensitive: false
         },
         {
-          path: '/task-add',
+          path: '/task-add/:id?',
           name: 'task-add',
           component: () => import('./views/task-add/TaskAdd.vue'),
           meta: {
