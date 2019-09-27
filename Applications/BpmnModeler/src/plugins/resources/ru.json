@@ -27,7 +27,15 @@
 		"CreateFolder": "Создать папку",
 		"EditFolder": "Переименовать папку",
 		"DeleteFolder": "Удалить папку",
-		"RequiredField": "Поле обязательно для ввода"
+		"RequiredField": "Поле обязательно для ввода",
+		"Undo": "Отменить",
+		"Redo": "Повторить",
+		"ZoomIn": "Увеличить масштаб",
+		"ZoomOut": "Уменьшить масштаб",
+		"ResetZoom": "Восстановить масштаб",
+		"ToggleMinimap": "Переключить миникарту",
+		"ToggleFullScreen": "Переключить полноэкранный режим",
+		"TogglePropertiesPanel": "Переключить панель параметров"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удаось загрузить данные",

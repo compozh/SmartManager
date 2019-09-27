@@ -27,7 +27,15 @@
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
 		"DeleteFolder": "Delete folder",
-		"RequiredField": "Field is requierd"
+		"RequiredField": "Field is requiered",
+		"Undo": "Undo",
+		"Redo": "Redo",
+		"ZoomIn": "Zoom in",
+		"ZoomOut": "Zoom out",
+		"ResetZoom": "Reset zoom",
+		"ToggleMinimap": "Toggle minimap",
+		"ToggleFullScreen": "Toggle full screen mode",
+		"TogglePropertiesPanel": "Toggle properties panel"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
