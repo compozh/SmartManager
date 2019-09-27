@@ -1,7 +1,13 @@
 <template>
-  <modeler-layout :process="process" :loading="loading" :saved="saved">
+  <modeler-layout 
+      :process="process" :loading="loading" :saved="saved" 
+      :canMinimap="canMinimap" @minimap="onMinimap" 
+      :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
+      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
+    >
     <template #modeler>
       <v-tabs
+        show-arrows
         height="40"
         color="transparent"
         v-model="activeView"
@@ -43,6 +49,7 @@ import { debounce } from 'throttle-debounce';
 import { CancellationToken } from '../api/cancellationToken'
 import { SavingContext } from '../api/savingContext';
 import { exportMixin } from './mixins/importExportMixin';
+import editorToolbarMixin from './mixins/editorToolbarMixin';
 import editorFactory from '../api/editorFactory';
 import ModelerLayout from './ModelerLayout';
 import Process from '../api/models/Process';
@@ -51,7 +58,7 @@ import InitialDiagram from '../bpmnModules/initialDiagram.dmn'
 
 export default {
   name: 'dmn-modeler',
-  mixins: [ exportMixin ],
+  mixins: [ exportMixin, editorToolbarMixin ],
   components: { ModelerLayout },
   data() {
     return {
@@ -119,14 +126,19 @@ export default {
           return;
         }
 
-        if (this.activeEditor && this.onElementChanged) {
-          this.activeEditor.off('commandStack.changed', this.onElementChanged);
+        if (this.activeEditor) {
+          if (this.onElementChanged) {
+            this.activeEditor.off('commandStack.changed', this.onElementChanged);
+          }
+          this.activeEditor.off('commandStack.changed', this.onCanUndoRedo);
         }
         this.onElementChanged = debounce(1000, function() {
           this.saveXML();
         });
         editor.on('commandStack.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
+        editor.on('commandStack.changed', this.onCanUndoRedo);
         this.activeEditor = editor;
+        this.onEditorChanged();
       });
     },    
     async loadXml() {
@@ -220,6 +232,16 @@ export default {
         this.modeler = null;
         this.activeEditor = null;
       }
+    },
+    getEditorModule(module) {
+      if (!this.modeler || !this.activeEditor) {
+        return;
+      }
+      try {
+        return this.activeEditor.get(module);
+      } catch (error) {
+        return false;
+      }
     }
   }
 };
@@ -237,6 +259,7 @@ export default {
 .dmn-literal-expression-container,
 .dmn-decision-table-container {
   padding: 10px;
+  overflow: auto;
 }
 .dmn-tab-icon {
   font-size: 18px;
