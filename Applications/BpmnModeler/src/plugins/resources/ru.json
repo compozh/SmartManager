@@ -12,7 +12,8 @@
 		"AddFolder": "Добавить папку",
 		"Import": "Импротировать процесс",
 		"ExportSvg": "Экспортировать в формате svg",
-		"ExportBpmn": "Экспортировать в формате bpmn"
+		"ExportBpmn": "Экспортировать в формате bpmn",
+		"ExportDmn": "Экспортировать в формате dmn"
 	},
 	"labels": {
 		"NewProcess": "Новый процесс",
@@ -184,6 +185,19 @@
 		"Duration": "Длительность",
 		"Cycle": "Периодичность",
 		"Must provide a value": "Необходимо заполнить значение",
+
+		"Version Tag": "Тэг версии",
+		"Decision": "Решение",
+		"Decision Table": "Таблица решений",
+		"KnowledgeSource": "Источник знаний",
+		"InputData": "Входные данные",
+		"Empty": "Пусто",
+		"Connect using Information/Knowledge/Authority Requirement or Association": "Соединить используя Требование к Информации/Знаниям/Полномочиям или Ассоциацию",
+		"This maps to the decision definition key": "This maps to the decision definition key.",
+		"Literal Expression": "Выражение",
+		"History Configuration": "History Configuration",
+		"History Time To Live": "History Time To Live",
+		"BusinessKnowledgeModel": "Модель бизнес-знаний",
 
 		"Forms": "Формы",
 		"Form Key": "Идентификатор формы",

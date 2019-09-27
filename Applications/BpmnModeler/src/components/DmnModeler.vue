@@ -1,40 +1,73 @@
 <template>
   <modeler-layout :process="process" :loading="loading" :saved="saved">
     <template #modeler>
-      <div class="workflow-modeler" ref="container"></div>
+      <v-tabs
+        height="40"
+        color="transparent"
+        v-model="activeView"
+        slider-color="primary"
+      >
+        <v-tab v-for="view in views" :key="view.element.id">
+          <span class="dmn-tab-icon" :class="[ viewIcons[view.type] ]"></span>
+          <span>{{ view.element.name || view.element.id }}</span>
+        </v-tab>
+      </v-tabs>
+      <div class="dmn-modeler-container">
+        <div class="workflow-modeler" ref="container">
+        </div>
+      </div>
     </template>
     <template #propertiesPanel>
       <div ref="propertiesPanel"></div>
     </template>
+    <template #tab="{ item: view }">
+      <span class="dmn-tab-icon" :class="[ viewIcons[view.type] ]"></span>
+      <span>{{ view.element.name || view.element.id }}</span>
+    </template>
   </modeler-layout>
 </template>
 <script>
-import 'bpmn-js/dist/assets/diagram-js.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
-import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css';
+import 'dmn-js/dist/assets/diagram-js.css';
+import 'dmn-js/dist/assets/dmn-js-shared.css';
+import 'dmn-js/dist/assets/dmn-js-drd.css';
+import 'dmn-js/dist/assets/dmn-js-decision-table.css';
+import 'dmn-js/dist/assets/dmn-js-decision-table-controls.css';
+import 'dmn-js/dist/assets/dmn-js-literal-expression.css';
+import 'dmn-js/dist/assets/dmn-font/css/dmn.css';
+import 'dmn-js/dist/assets/dmn-font/css/dmn-embedded.css';
+import 'dmn-js/dist/assets/dmn-font/css/dmn-codes.css';
+import 'dmn-js/dist/assets/dmn-font/css/animation.css';
+import 'dmn-js-properties-panel/dist/assets/dmn-js-properties-panel.css';
 
 import { debounce } from 'throttle-debounce';
 import { CancellationToken } from '../api/cancellationToken'
 import { SavingContext } from '../api/savingContext';
 import { exportMixin } from './mixins/importExportMixin';
-import Process from '../api/models/Process';
 import editorFactory from '../api/editorFactory';
 import ModelerLayout from './ModelerLayout';
+import Process from '../api/models/Process';
 import ProcessType from '../api/models/ProcessType';
+import InitialDiagram from '../bpmnModules/initialDiagram.dmn'
 
 export default {
-  name: 'bpmn-modeler',
+  name: 'dmn-modeler',
   mixins: [ exportMixin ],
   components: { ModelerLayout },
   data() {
     return {
       modeler: null,
+      activeEditor: null,
       loading: false,
       saved: false,
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
+      activeView: null,
+      views: [],
+      viewIcons: {
+        drd: 'dmn-icon-lasso-tool',
+        decisionTable: 'dmn-icon-decision-table',
+        literalExpression: 'dmn-icon-literal-expression'
+      }
     };
   },
   mounted() {
@@ -46,7 +79,7 @@ export default {
   computed: {
     process() {
       const activeItem = this.$store.state.bpmn.activeItem;
-      if (activeItem && activeItem instanceof Process && activeItem.type === ProcessType.BPMN) {
+      if (activeItem && activeItem instanceof Process && activeItem.type === ProcessType.DMN) {
         return activeItem;
       }
       return null;
@@ -64,12 +97,38 @@ export default {
         this.createModeler();
       }
       this.onActiveModelChanged();
+    },
+    activeView(value) {
+      if (!this.modeler) {
+        return;
+      }
+      var view = this.modeler.getViews()[value];
+      this.modeler.open(view);
     }
   },
   methods: {
     createModeler() {
       this.destroyModeler();
       this.modeler = editorFactory(this.process.type, false, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+      this.modeler.on('views.changed', ({ views, activeView }) => {
+        this.views = views;
+        this.activeView = views.indexOf(activeView);
+        
+        var editor = this.modeler.getActiveViewer();
+        if (this.activeEditor === editor) {
+          return;
+        }
+
+        if (this.activeEditor && this.onElementChanged) {
+          this.activeEditor.off('commandStack.changed', this.onElementChanged);
+        }
+        this.onElementChanged = debounce(1000, function() {
+          console.log('onElementChanged');
+          this.saveXML();
+        });
+        editor.on('commandStack.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
+        this.activeEditor = editor;
+      });
     },    
     async loadXml() {
       if (!this.process || !this.modeler) {
@@ -90,16 +149,21 @@ export default {
           return;
         }
         if (!xml || xml === '') {
-          this.modeler.createDiagram(() => {
+          this.modeler.importXML(InitialDiagram, (error) => {
+            if (error) {
+              console.log(error);
+            }
             this.loading = false;
-          });        
+          }); 
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
             if (err) {
               console.error(err);
               // TODO: display exception
-              this.modeler.createDiagram();
+              var activeEditor = this.modeler.getActiveViewer();
+
+              activeEditor.createDiagram();
               this.loading = false;
             }
           });
@@ -123,14 +187,7 @@ export default {
       if (!this.process || !this.modeler) {
         return;
       }
-      this.modeler.clear();
-      if (this.onElementChanged) {
-        this.modeler.off('element.changed', this.onElementChanged);
-      }
-      this.onElementChanged = debounce(1000, function() {
-        this.saveXML();
-      });
-      this.modeler.on('element.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
+      //this.modeler.clear();
       this.loadXml();
     },
     translate(template, replacements) {
@@ -139,7 +196,7 @@ export default {
 
       for (let replacement in replacements) {
         // Попробовать перевести замены
-        const translationKey = translationPrefix + replacements[replacement];
+        const translationKey = translationPrefix + replacements[replacement.replace(/^\|+|\.+$/g, '')];
         const translation = this.$t(translationKey);
         if (translation != translationKey) {
           replacements[replacement] = translation;
@@ -147,7 +204,7 @@ export default {
       }
 
       // Перевести шаблон
-      const translationKey = translationPrefix + template;
+      const translationKey = translationPrefix + template.replace(/^\|+|\.+$/g, '');
       const translation = this.$t(translationKey, replacements);
 
       if (translation !== translationKey) {
@@ -162,11 +219,28 @@ export default {
       if (this.modeler) {
         this.modeler.destroy();
         this.modeler = null;
+        this.activeEditor = null;
       }
     }
   }
 };
 </script>
 <style>
-
+.dmn-modeler-container {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 40px);
+}
+.dmn-literal-expression-container .powered-by-logo,
+.dmn-decision-table-container .powered-by-logo {
+  z-index: 4;
+}
+.dmn-literal-expression-container,
+.dmn-decision-table-container {
+  padding: 10px;
+}
+.dmn-tab-icon {
+  font-size: 18px;
+  padding-right: 6px;
+}
 </style>

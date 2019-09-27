@@ -101,6 +101,9 @@
 import treeSearch from '../api/treeSearch';
 import formMixin from './mixins/formMixin';
 import { importMixin } from './mixins/importExportMixin' 
+import Folder from '../api/models/Folder';
+import Process from '../api/models/Process';
+import ProcessType from '../api/models/ProcessType';
 
 export default {
   name: 'bpmn-layout',
@@ -152,7 +155,7 @@ export default {
       this.loading = false;
     },
     exportItem(item, type) {
-      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === 'bpmn-modeler', e => e.$children);
+      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === type + '-modeler', e => e.$children);
       if (modeler && modeler.export) {
         modeler.export(type);
       }
@@ -163,12 +166,20 @@ export default {
       if (index < 0) {
         routeName = 'BPMNEMPTY';
         params = { };
-      } else if (item.isFolder) {
+      } else if (item instanceof Folder) {
         routeName = 'BPMNFOLDER';
         params = { id: itemId };
-      } else {
-        routeName = 'BPMNMODELER';
-        params = { id: itemId };
+      } else if (item instanceof Process) {
+        switch (item.type) {
+        case ProcessType.BPMN:
+          routeName = 'BPMNMODELER';
+          params = { id: itemId };
+          break;
+        case ProcessType.DMN:
+          routeName = 'DMNMODELER';
+          params = { id: itemId };
+          break;
+        }
       }
 
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {

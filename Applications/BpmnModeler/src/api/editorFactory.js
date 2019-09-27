@@ -1,0 +1,122 @@
+import BpmnModeler from 'bpmn-js/lib/Modeler';
+import BpmnViewer from 'bpmn-js/lib/Viewer';
+import bpmnPropertiesPanelModule from 'bpmn-js-properties-panel';
+import bpmnPropertiesProviderModule from '../bpmnModules/provider/camunda/';
+import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
+import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
+
+import DmnModeler from 'dmn-js/lib/Modeler';
+import DmnViewer from 'dmn-js/lib/Viewer';
+import dmnPropertiesPanelModule from 'dmn-js-properties-panel';
+import drdAdapterModule from 'dmn-js-properties-panel/lib/adapter/drd';
+import decisionTableAdapterModule from 'dmn-js-properties-panel/lib/adapter/decision-table';
+import literalExpressionAdapterModule from 'dmn-js-properties-panel/lib/adapter/literal-expression';
+import dmnPropertiesProviderModule from 'dmn-js-properties-panel/lib/provider/camunda';
+import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
+
+import ProcessType from './models/ProcessType';
+
+export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
+  switch (type) {
+  case ProcessType.BPMN:
+    return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, propertiesPanelContainer, translate);
+  case ProcessType.DMN:
+    return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, propertiesPanelContainer, translate);
+  default:
+    return null;
+  }
+}
+
+function createTranslationModule(translate) {
+  return {
+    translate: ['value', (t, r) => translate(t, r)]
+  }
+}
+
+function createBpmnModeler(editorContainer, propertiesPanelContainer, translate) {
+  return new BpmnModeler({
+    container: editorContainer,
+    propertiesPanel: {
+      parent: propertiesPanelContainer
+    },
+    additionalModules: [
+      bpmnPropertiesPanelModule,
+      bpmnPropertiesProviderModule,
+      camundaExtensionModule,
+      createTranslationModule(translate)
+    ],
+    moddleExtensions: {
+      camunda: camundaBpmnModdle
+    }
+  });
+}
+
+function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
+  return new DmnModeler({
+    drd: {
+      propertiesPanel: {
+        parent: propertiesPanelContainer
+      },
+      additionalModules: [
+        dmnPropertiesPanelModule,
+        dmnPropertiesProviderModule,
+        drdAdapterModule,
+        createTranslationModule(translate)
+      ]
+    },
+    decisionTable: {
+      propertiesPanel: {
+        parent: propertiesPanelContainer
+      },
+      additionalModules: [
+        dmnPropertiesPanelModule,
+        dmnPropertiesProviderModule,
+        decisionTableAdapterModule,
+        createTranslationModule(translate)
+      ]
+    },
+    literalExpression: {
+      propertiesPanel: {
+        parent: propertiesPanelContainer
+      },
+      additionalModules: [
+        dmnPropertiesPanelModule,
+        dmnPropertiesProviderModule,
+        literalExpressionAdapterModule,
+        createTranslationModule(translate)
+      ]
+    },
+    container: editorContainer,
+    moddleExtensions: {
+      camunda: camundaDmnModdle
+    }
+  });
+}
+
+function createBpmnViewer(editorContainer, translate) {
+  return new BpmnViewer({
+    container: editorContainer,
+    additionalModules: [
+      camundaExtensionModule,
+      createTranslationModule(translate)
+    ],
+    moddleExtensions: {
+      camunda: camundaBpmnModdle
+    }
+  });
+}
+
+function createDmnViewer(editorContainer, translate) {
+  return new DmnViewer({
+    drd: {
+      additionalModules: [
+        drdAdapterModule,
+        createTranslationModule(translate)
+      ]
+    },
+    container: editorContainer,
+    moddleExtensions: {
+      camunda: camundaDmnModdle
+    }
+  });
+}
