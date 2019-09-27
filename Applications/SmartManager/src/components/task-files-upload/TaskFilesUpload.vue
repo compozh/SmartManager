@@ -1,0 +1,211 @@
+<template>
+  <div>
+    <vs-table v-if="files.length" stripe :data="files">
+      <template slot="thead">
+        <vs-th v-for="(header, index) in tableHeaders"
+               :key="index"
+        >{{ header.text }}
+        </vs-th>
+      </template>
+
+      <template v-slot="{data}">
+        <vs-tr v-for="(item, index) in data"
+               :key="index"
+               :state="item.size >= size ? 'danger' : null"
+        >
+          <vs-td class="w-1/2">{{item.name}}</vs-td>
+          <vs-td class="text-center"
+          >{{ (item.size / 1024 / 1024).toFixed(2) }} Mb</vs-td>
+          <vs-td  class="text-center">
+            <vs-icon v-if="item.size >= size"
+                     icon="warning"
+                     size="small"
+                     color="danger"/>
+            <span v-else-if="!item.success"
+            >{{ parseFloat(item.progress).toFixed(2) }} %</span>
+            <vs-icon v-else
+                     icon="done"
+                     size="small"
+                     color="success"/>
+          </vs-td>
+          <vs-td class="text-center">
+            <vs-button v-if="$refs.upload && !$refs.upload.uploaded && !loading"
+                       radius
+                       class="text-center"
+                       color="#626262"
+                       type="flat"
+                       icon="close"
+                       @click="remove(item.id, $event)"/>
+          </vs-td>
+        </vs-tr>
+      </template>
+    </vs-table>
+    <file-upload
+      ref="upload"
+      class="upload-action"
+      v-model="files"
+      :extensions="extensions"
+      :accept="mimeTypes"
+      :multiple="multiple"
+      :drop="true"
+      :dropDirectory="true"
+      :headers="headers"
+      :size="size"
+      :chunk-enabled="chunk"
+      :chunk="{
+        action,
+        minSize,
+        maxActive,
+        maxRetries,
+      }"
+      :post-action="action"
+      @input-file="inputFile"
+      @input-filter="inputFilter"
+    >
+      {{ $t('buttons.addAttachment') }}
+    </file-upload>
+  </div>
+</template>
+
+<script>
+import fileUpload from 'vue-upload-with-credential'
+
+export default {
+  components: {
+    fileUpload
+  },
+  props: {
+    uploading: Boolean
+  },
+  data: () => ({
+    files: [],
+    attachments: [],
+    loading: false,
+    // eslint-disable-next-line no-undef
+    action: appConfig.GrapgQlUrl + 'upload',
+    multiple: true,
+    mimeTypes: 'image/*, application/pdf, application/msword, application/excel, text/*',
+    extensions: 'gif, jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, txt, log',
+    size: 1048576 * 100, // one file size limit - 100 Mb
+    chunk: true,
+    minSize: 512000,
+    maxActive: 1,
+    maxRetries: 10,
+    headers: {'Upload-Type': 'single'}
+  }),
+  computed: {
+    tableHeaders() {
+      return [
+        {text: this.$t('table.name'), value: 'name'},
+        {text: this.$t('table.size'), value: 'size', align: 'center'},
+        {text: this.$t('table.uploaded'), value: 'upload', align: 'center'},
+        {text: '', value: 'delete'}
+      ]
+    },
+    active() {
+      return this.$refs.upload ? this.$refs.upload.active : ''
+    }
+  },
+  watch: {
+    uploading(val) {
+      if (this.files.length) {
+        this.$refs.upload.active = val
+        this.loading = true
+      } else {
+        this.$emit('attach', [])
+      }
+    }
+  },
+  methods: {
+    inputFilter(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        // Filter
+        if (!/\.(jpeg|jpe|jpg|gif|png|pdf|doc|docx|xls|xlsx|txt|log)$/i.test(newFile.name)) {
+          return prevent()
+        }
+        // В случае если есть файлы с такими же именами то для каждого
+        // будет поочередный вывод предупреждений через setTimeout
+        let timeOut = 0
+        if (this.files.some((file, index) => {
+          timeOut = 300 * index
+          return file.name === newFile.name
+        })) {
+          setTimeout(() => {
+            this.$vs.notify({
+              title: this.$t('notify.attachTitle'),
+              text: this.$t('notify.fileAlreadyAdded', { file: newFile.name }),
+              color: 'warning'
+            })
+          }, timeOut)
+          return prevent()
+        }
+      }
+    },
+    inputFile(newFile, oldFile) {
+      if (newFile && oldFile) {
+        // File upload error
+        if (newFile.error !== oldFile.error) {
+          this.$vs.notify({
+            title: this.$t('notify.attachTitle'),
+            text: this.$t('notify.uploadError', {file: newFile.name}),
+            color: 'danger'
+          })
+        }
+        // File upload success
+        if (newFile && oldFile && newFile.success !== oldFile.success) {
+          const fileName = newFile.file.name
+          const filePath = newFile.response.fileName
+          this.attachments.push({fileName, filePath})
+
+          this.$vs.notify({
+            title: this.$t('notify.attachTitle'),
+            text: this.$t('notify.fileUploaded', {file: newFile.name}),
+            color: 'success'
+          })
+        }
+        // All files uploaded
+        if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
+          this.$emit('attach', this.attachments)
+        }
+      }
+    },
+    remove(id) {
+      this.files = this.files.filter(i => i.id !== id)
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+  .upload-action {
+    background: #f5f5f5;
+    box-sizing: border-box;
+    border-radius: 8px;
+    transition: all .25s ease;
+    border: 1px dashed rgba(0,0,0,.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 99%;
+    height: 2.5rem;
+    margin: 1.1rem auto 0 auto;
+  }
+
+  .upload-action:hover {
+    border: 1px dashed rgba(var(--vs-primary),.5);
+  }
+
+  th >>> .vs-table-text {
+    justify-content: center !important;
+  }
+
+  td {
+    padding: 7px 10px !important;
+  }
+
+  .upload-action >>> label {
+    cursor: pointer;
+  }
+
+</style>

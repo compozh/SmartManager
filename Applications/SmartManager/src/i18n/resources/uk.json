@@ -46,7 +46,7 @@
     "ok": "Вибрати",
     "upload": "Завантажити",
     "viewMore": "Показати більше",
-    "addAttachment": "Додати вкладення",
+    "addAttachment": "Натисніть тут для вибору файлів або перетягніть їх в цю область, (max 100mb)",
     "add": "Додати",
     "send": "Надіслати"
   },
@@ -97,9 +97,13 @@
   },
   "notify": {
     "foldersTitle": "Папки та фільтри",
-    "taskListTitle": "Список файлів",
+    "foldersError": "Помилка завантаження",
+    "taskListTitle": "Список задач",
+    "taskListError": "Помилка завантаження задач",
     "taskTitle": "Задача",
+    "taskError": "Помилка завантаження інформації про задачу",
     "usersTitle": "Користувачі",
+    "usersError": "Помилка завантаження списку користувачів",
     "statusTitle": "Зміна статусу",
     "stageTitle": "Переміщення",
     "attachTitle": "Додатки",
@@ -110,11 +114,15 @@
     "statChangeSuccess": "Статус задачі змінено вдало",
     "statChangeFail": "Не вдалося змінити статус задачі",
     "statChangeError": "Помилка при зміні статусу задачі",
+    "stageChangeError": "Помилка при зміні стадії задачі",
     "attachAddSuccess": "Додаток успішно додано",
     "attachAddFail": "Не вдалося додати додаток",
     "attachAddError": "Помилка при додаванні додатку",
     "commentAddSuccess": "Коментар успішно додано",
     "commentAddFail": "Не вдалося додати коментар",
-    "commentAddError": "Помилка при додаванні коментаря"
+    "commentAddError": "Помилка при додаванні коментаря",
+    "fileAlreadyAdded": "Файл {file} вже додано",
+    "fileUploaded": "Файл {file} завантажено",
+    "uploadError": "Помилка завантаження файлу {file}"
   }
 }
