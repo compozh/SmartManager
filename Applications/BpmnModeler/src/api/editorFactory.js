@@ -14,6 +14,7 @@ import literalExpressionAdapterModule from 'dmn-js-properties-panel/lib/adapter/
 import dmnPropertiesProviderModule from 'dmn-js-properties-panel/lib/provider/camunda';
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
+import minimapModule from 'diagram-js-minimap';
 import ProcessType from './models/ProcessType';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
@@ -36,6 +37,9 @@ function createTranslationModule(translate) {
 function createBpmnModeler(editorContainer, propertiesPanelContainer, translate) {
   return new BpmnModeler({
     container: editorContainer,
+    keyboard: {
+      bindTo: document
+    },
     propertiesPanel: {
       parent: propertiesPanelContainer
     },
@@ -43,6 +47,7 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
       bpmnPropertiesPanelModule,
       bpmnPropertiesProviderModule,
       camundaExtensionModule,
+      minimapModule,
       createTranslationModule(translate)
     ],
     moddleExtensions: {
@@ -53,6 +58,14 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
 
 function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
   return new DmnModeler({
+    common: {
+      keyboard: {
+        bindTo: document
+      },
+      moddleExtensions: {
+        camunda: camundaDmnModdle
+      }
+    },
     drd: {
       propertiesPanel: {
         parent: propertiesPanelContainer
@@ -61,6 +74,7 @@ function createDmnModeler(editorContainer, propertiesPanelContainer, translate) 
         dmnPropertiesPanelModule,
         dmnPropertiesProviderModule,
         drdAdapterModule,
+        minimapModule,
         createTranslationModule(translate)
       ]
     },
@@ -87,22 +101,25 @@ function createDmnModeler(editorContainer, propertiesPanelContainer, translate) 
       ]
     },
     container: editorContainer,
-    moddleExtensions: {
-      camunda: camundaDmnModdle
-    }
   });
 }
 
 function createBpmnViewer(editorContainer, translate) {
   return new BpmnViewer({
     container: editorContainer,
-    additionalModules: [
-      camundaExtensionModule,
-      createTranslationModule(translate)
-    ],
-    moddleExtensions: {
-      camunda: camundaBpmnModdle
-    }
+    common: {
+      keyboard: {
+        bindTo: document
+      },
+      additionalModules: [
+        camundaExtensionModule,
+        createTranslationModule(translate)
+      ],
+      moddleExtensions: {
+        camunda: camundaDmnModdle
+      }
+    },
+    
   });
 }
 

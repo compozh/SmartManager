@@ -1,5 +1,9 @@
 <template>
-  <modeler-layout :process="process" :loading="loading" :saved="saved">
+  <modeler-layout :process="process" :loading="loading" :saved="saved" 
+    :canMinimap="canMinimap" @minimap="onMinimap" 
+    :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
+    :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
+  >
     <template #modeler>
       <div class="workflow-modeler" ref="container"></div>
     </template>
@@ -19,6 +23,7 @@ import { debounce } from 'throttle-debounce';
 import { CancellationToken } from '../api/cancellationToken'
 import { SavingContext } from '../api/savingContext';
 import { exportMixin } from './mixins/importExportMixin';
+import editorToolbarMixin from './mixins/editorToolbarMixin';
 import Process from '../api/models/Process';
 import editorFactory from '../api/editorFactory';
 import ModelerLayout from './ModelerLayout';
@@ -26,7 +31,7 @@ import ProcessType from '../api/models/ProcessType';
 
 export default {
   name: 'bpmn-modeler',
-  mixins: [ exportMixin ],
+  mixins: [ exportMixin, editorToolbarMixin ],
   components: { ModelerLayout },
   data() {
     return {
@@ -70,6 +75,8 @@ export default {
     createModeler() {
       this.destroyModeler();
       this.modeler = editorFactory(this.process.type, false, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+      this.modeler.on('commandStack.changed', this.onCanUndoRedo);
+      this.onEditorChanged();
     },    
     async loadXml() {
       if (!this.process || !this.modeler) {
@@ -162,6 +169,16 @@ export default {
       if (this.modeler) {
         this.modeler.destroy();
         this.modeler = null;
+      }
+    },
+    getEditorModule(module) {
+      if (!this.modeler) {
+        return false;
+      }
+      try {
+        return this.modeler.get(module);
+      } catch (error) {
+        return false;
       }
     }
   }
