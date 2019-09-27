@@ -108,7 +108,7 @@ export default {
             slug: i.name,
             tag: i.count,
             tagColor: 'primary',
-            icon: 'FolderIcon',
+            icon: this.setFolderIcon(i.code),
             code: i.code
           }
         })
@@ -159,6 +159,18 @@ export default {
     },
     createUrl(code) {
       return '/tasks/' + (code === '' ? 'ALL' : code)
+    },
+    setFolderIcon(code) {
+      switch (code) {
+      case '': return 'LayersIcon'
+      case '_6': return 'ZapIcon'
+      case '_10': return 'FileTextIcon'
+      case '_1': return 'UsersIcon'
+      case 'filter_done': return 'CheckSquareIcon'
+      case 'filter_from_me': return 'UserIcon'
+      case 'filter_favorite': return 'StarIcon'
+      default: return 'FolderIcon'
+      }
     },
     changeRouteTitle(title) {
       this.routeTitle = title
