@@ -8,6 +8,8 @@
         :defaultColDef="defaultColDef"
         :rowData="education.data"
         :animateRows="true"
+        :groupSelectsChildren="true"
+        :rowClassRules="rowClassRules"
         >
       </ag-grid-vue>
     </vx-card>
@@ -27,14 +29,22 @@ export default {
   data() {
     return {
       searchQuery: '',
-      gridOptions: { },
+      gridOptions: { rowStyle: {background: '#f8f8f8'},
+        getRowStyle: function(params) {
+          // var keys = Object.keys(params)
+          if (params.node.id % 2 === 0) {
+            return { background: '#ffffff' }
+          }
+        }
+      },
       defaultColDef: {
         sortable: true,
         resizable: true,
         suppressMenu: true,
       },
+      rowClassRules: null,
       gridApi: null,
-     
+      rowSelection: null,
       columnDefs: [ ],
       
     }
@@ -48,7 +58,8 @@ export default {
       })
     }
   },
-  
+  beforeMoun() {
+  },
   mounted() {
     this.gridApi = this.gridOptions.api
     this.gridColumnApi = this.gridOptions.columnApi
