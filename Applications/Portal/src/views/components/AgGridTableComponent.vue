@@ -8,8 +8,6 @@
         :defaultColDef="defaultColDef"
         :rowData="education.data"
         :animateRows="true"
-        :groupSelectsChildren="true"
-        :rowClassRules="rowClassRules"
         >
       </ag-grid-vue>
     </vx-card>
