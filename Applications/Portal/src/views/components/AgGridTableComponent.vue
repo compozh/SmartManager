@@ -29,7 +29,6 @@ export default {
       searchQuery: '',
       gridOptions: { rowStyle: {background: '#f8f8f8'},
         getRowStyle: function(params) {
-          // var keys = Object.keys(params)
           if (params.node.id % 2 === 0) {
             return { background: '#ffffff' }
           }
@@ -55,8 +54,6 @@ export default {
         return object
       })
     }
-  },
-  beforeMoun() {
   },
   mounted() {
     this.gridApi = this.gridOptions.api
