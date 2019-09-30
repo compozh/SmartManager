@@ -10,9 +10,14 @@ import updateUserInfo from './graphql/updateUserInfo.graphql'
 export class PersonalInfoApi {
 
   static getFullUserInfo() {
-    return getClient('PERSONAL_INFO').query({
-      query: gql` ${fullUserInfo}`
-    })
+    try {
+      return getClient('PERSONAL_INFO').query({
+        query: gql` ${fullUserInfo}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+    
   }
 
   static updateUserInfo(value) {
