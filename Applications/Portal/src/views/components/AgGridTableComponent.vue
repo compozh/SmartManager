@@ -27,16 +27,20 @@ export default {
   data() {
     return {
       searchQuery: '',
-      gridOptions: { },
+      gridOptions: { rowStyle: {background: '#f8f8f8'},
+        getRowStyle: function(params) {
+          if (params.node.id % 2 === 0) {
+            return { background: '#ffffff' }
+          }
+        }
+      },
       defaultColDef: {
         sortable: true,
         resizable: true,
         suppressMenu: true,
       },
       gridApi: null,
-     
       columnDefs: [ ],
-      
     }
   },
   computed: {
@@ -48,7 +52,6 @@ export default {
       })
     }
   },
-  
   mounted() {
     this.gridApi = this.gridOptions.api
     this.gridColumnApi = this.gridOptions.columnApi
