@@ -39,11 +39,8 @@ export default {
         resizable: true,
         suppressMenu: true,
       },
-      rowClassRules: null,
       gridApi: null,
-      rowSelection: null,
       columnDefs: [ ],
-      
     }
   },
   computed: {
