@@ -26,8 +26,7 @@ export default {
           this.showForm = false;
           this.activeItem = item.id;
         } else {
-          this.error = this.$t('bpmn.errors.ProcessNotCreated');
-          this.showError = true;
+          this.showMessage(this.$t('bpmn.errors.ProcessNotCreated'), 'error');
         }
         break;
       case 'edit':
@@ -39,8 +38,7 @@ export default {
         if (success) {
           this.showForm = false;
         } else {
-          this.error = this.$t('bpmn.errors.ProcessNotEdited');
-          this.showError = true;
+          this.showMessage(this.$t('bpmn.errors.ProcessNotEdited'), 'error');
         }
         this.activeItem = item.id;
         break;
@@ -49,8 +47,7 @@ export default {
           this.showForm = false;
           this.activeItem = item.parentId;
         } else {
-          this.error = this.$t('bpmn.errors.ProcessNotDeleted');
-          this.showError = true;
+          this.showMessage(this.$t('bpmn.errors.ProcessNotDeleted'), 'error');
           this.activeItem = item.id;
         }
         break;

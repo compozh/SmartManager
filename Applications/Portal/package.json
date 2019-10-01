@@ -19,7 +19,7 @@
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/localization": "^1.0.10",
     "ag-grid-community": "^21.0.1",
-    "ag-grid-vue": "^21.0.1",
+    "ag-grid-vue": "^21.2.2",
     "algoliasearch": "^3.33.0",
     "apexcharts": "^3.6.12",
     "apollo-cache-inmemory": "^1.6.0",

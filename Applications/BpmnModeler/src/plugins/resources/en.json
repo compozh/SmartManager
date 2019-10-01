@@ -13,7 +13,8 @@
 		"Import": "Import process",
 		"ExportSvg": "Export svg",
 		"ExportBpmn": "Export bpmn",
-		"ExportDmn": "Export dmn"
+		"ExportDmn": "Export dmn",
+		"Deploy": "Deploy"
 	},
 	"labels": {
 		"NewProcess": "New process",
@@ -27,14 +28,24 @@
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
 		"DeleteFolder": "Delete folder",
-		"RequiredField": "Field is requierd"
+		"RequiredField": "Field is requiered",
+		"Undo": "Undo",
+		"Redo": "Redo",
+		"ZoomIn": "Zoom in",
+		"ZoomOut": "Zoom out",
+		"ResetZoom": "Reset zoom",
+		"ToggleMinimap": "Toggle minimap",
+		"ToggleFullScreen": "Toggle full screen mode",
+		"TogglePropertiesPanel": "Toggle properties panel"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
 		"ProcessNotCreated": "Failed to create item",
 		"ProcessNotEdited": "Failed to edit item",
 		"ProcessNotDeleted": "Failed to delete item",
-		"CantDrop": "Failed to move item"
+		"CantDrop": "Failed to move item",
+		"ProcessDeployed": "Process deployed",
+		"ProcessNotDeployed": "Failed to deploy process"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
@@ -216,6 +227,9 @@
 		"Constraint Config": "Config",
 		"Properties": "Properties",
 		"Add Property": "Add Property",
-		"Value": "Value"
+		"Value": "Value",
+
+		"Open minimap": "Open minimap",
+		"Clode minimap": "Clode minimap"
 	}
 }

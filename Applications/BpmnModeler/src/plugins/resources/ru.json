@@ -13,7 +13,8 @@
 		"Import": "Импротировать процесс",
 		"ExportSvg": "Экспортировать в формате svg",
 		"ExportBpmn": "Экспортировать в формате bpmn",
-		"ExportDmn": "Экспортировать в формате dmn"
+		"ExportDmn": "Экспортировать в формате dmn",
+		"Deploy": "Опубликовать"
 	},
 	"labels": {
 		"NewProcess": "Новый процесс",
@@ -27,14 +28,24 @@
 		"CreateFolder": "Создать папку",
 		"EditFolder": "Переименовать папку",
 		"DeleteFolder": "Удалить папку",
-		"RequiredField": "Поле обязательно для ввода"
+		"RequiredField": "Поле обязательно для ввода",
+		"Undo": "Отменить",
+		"Redo": "Повторить",
+		"ZoomIn": "Увеличить масштаб",
+		"ZoomOut": "Уменьшить масштаб",
+		"ResetZoom": "Восстановить масштаб",
+		"ToggleMinimap": "Переключить миникарту",
+		"ToggleFullScreen": "Переключить полноэкранный режим",
+		"TogglePropertiesPanel": "Переключить панель параметров"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удаось загрузить данные",
 		"ProcessNotCreated": "Не удалось создать элемент",
 		"ProcessNotEdited": "Не удалось удалить элемент",
 		"ProcessNotDeleted": "Не удалось удалить элемент",
-		"CantDrop": "Не удалось переместить элемент"
+		"CantDrop": "Не удалось переместить элемент",
+		"ProcessDeployed": "Процесс опубликован",
+		"ProcessNotDeployed": "Не удалось опубликовать процесс"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",
@@ -216,6 +227,9 @@
 		"Constraint Config": "Параметры",
 		"Properties": "Свойства",
 		"Add Property": "Добавить свойство",
-		"Value": "Значение"
+		"Value": "Значение",
+		
+		"Open minimap": "Открыть миникарту",
+		"Clode minimap": "Закрыть миникарту"
 	}
 }

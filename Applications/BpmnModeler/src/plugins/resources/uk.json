@@ -13,7 +13,8 @@
 		"Import": "Імпортувати процес",
 		"ExportSvg": "Експортувати в форматі svg",
 		"ExportBpmn": "Експортувати в форматі bpmn",
-		"ExportDmn": "Експортувати в форматі dmn"
+		"ExportDmn": "Експортувати в форматі dmn",
+		"Deploy": "Опублікувати"
 	},
 	"labels": {
 		"NewProcess": "Новий процес",
@@ -27,14 +28,24 @@
 		"CreateFolder": "Створити папку",
 		"EditFolder": "Редагувати папку",
 		"DeleteFolder": "Видалити папку",
-		"RequiredField": "Поле обов'язкове для вводу"
+		"RequiredField": "Поле обов'язкове для вводу",
+		"Undo": "Відмінити",
+		"Redo": "Повторити",
+		"ZoomIn": "Збільшити масштаб",
+		"ZoomOut": "Зменшити масштаб",
+		"ResetZoom": "Відновити масштаб",
+		"ToggleMinimap": "Перемикнути мінікарту",
+		"ToggleFullScreen": "Перемикнути повноекранний режим",
+		"TogglePropertiesPanel": "Перемикнути панель параметрів"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
 		"ProcessNotCreated": "Не вдалося створити елемент",
 		"ProcessNotEdited": "Не вдалося змінити елемент",
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
-		"CantDrop": "Не вдалося перемістити елемент"
+		"CantDrop": "Не вдалося перемістити елемент",
+		"ProcessDeployed": "Процес опубліковано",
+		"ProcessNotDeployed": "Не вдалося опублікувати процесс"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
@@ -216,6 +227,9 @@
 		"Constraint Config": "Параметри",
 		"Properties": "Властивості",
 		"Add Property": "Додати властивість",
-		"Value": "Значення"
+		"Value": "Значення",
+
+		"Open minimap": "Відкрити мінікарту",
+		"Clode minimap": "Закрити мінікарту"
 	}
 }
