@@ -43,7 +43,9 @@
 		"ProcessNotCreated": "Failed to create item",
 		"ProcessNotEdited": "Failed to edit item",
 		"ProcessNotDeleted": "Failed to delete item",
-		"CantDrop": "Failed to move item"
+		"CantDrop": "Failed to move item",
+		"ProcessDeployed": "Process deployed",
+		"ProcessNotDeployed": "Failed to deploy process"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
@@ -225,6 +227,9 @@
 		"Constraint Config": "Config",
 		"Properties": "Properties",
 		"Add Property": "Add Property",
-		"Value": "Value"
+		"Value": "Value",
+
+		"Open minimap": "Open minimap",
+		"Clode minimap": "Clode minimap"
 	}
 }

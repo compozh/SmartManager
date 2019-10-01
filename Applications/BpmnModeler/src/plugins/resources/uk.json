@@ -43,7 +43,9 @@
 		"ProcessNotCreated": "Не вдалося створити елемент",
 		"ProcessNotEdited": "Не вдалося змінити елемент",
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
-		"CantDrop": "Не вдалося перемістити елемент"
+		"CantDrop": "Не вдалося перемістити елемент",
+		"ProcessDeployed": "Процес опубліковано",
+		"ProcessNotDeployed": "Не вдалося опублікувати процесс"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
@@ -225,6 +227,9 @@
 		"Constraint Config": "Параметри",
 		"Properties": "Властивості",
 		"Add Property": "Додати властивість",
-		"Value": "Значення"
+		"Value": "Значення",
+
+		"Open minimap": "Відкрити мінікарту",
+		"Clode minimap": "Закрити мінікарту"
 	}
 }

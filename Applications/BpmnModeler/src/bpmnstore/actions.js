@@ -161,7 +161,6 @@ export default {
     let result;
     try {
       result = await api.deployProcess(id);
-      console.log(result);
     } catch (error) {
       console.log(error);
     }
