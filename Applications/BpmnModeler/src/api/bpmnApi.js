@@ -104,7 +104,7 @@ export class BpmnModelerApi {
   async createFolder(folder) {
     const result = await getClient().mutate({
       mutation: gql`mutation ($folder: FolderInput!) ${createFolder}`,
-      variables: { folder }
+      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId } }
     });
     return result.data.bpmnqueryMutation.createFolder;
   }
