@@ -47,6 +47,7 @@
             @remove="removeItem" 
             @import="importItem"
             @export="exportItem"
+            @deploy="deployItem"
             offset>
             <template #activator="{ open }">
               <v-btn flat icon v-on="open">
@@ -159,6 +160,18 @@ export default {
       if (modeler && modeler.export) {
         modeler.export(type);
       }
+    },
+    async deployItem(item) {
+      this.loading = true;
+      var result = await this.$store.dispatch('bpmn/deployProcess', item.id);
+      if (result.success) {
+        this.error = result.message || this.$t('bpmn.errors.ProcessDeployed');
+        this.showError = true;
+      } else {
+        this.error = result.message || this.$t('bpmn.errors.ProcessNotDeployed');
+        this.showError = true;
+      }
+      this.loading = false;
     },
     navigateToItem(itemId) {
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);

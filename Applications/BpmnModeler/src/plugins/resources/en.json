@@ -13,7 +13,8 @@
 		"Import": "Import process",
 		"ExportSvg": "Export svg",
 		"ExportBpmn": "Export bpmn",
-		"ExportDmn": "Export dmn"
+		"ExportDmn": "Export dmn",
+		"Deploy": "Deploy"
 	},
 	"labels": {
 		"NewProcess": "New process",

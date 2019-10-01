@@ -156,6 +156,19 @@ export default {
     }
     await context.dispatch('loadItems');
     return success;
+  },
+  async deployProcess(context, id) {
+    let result;
+    try {
+      result = await api.deployProcess(id);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+    if (!result.success) {
+      console.log(result);
+    }
+    return result;
   }
 };
 
