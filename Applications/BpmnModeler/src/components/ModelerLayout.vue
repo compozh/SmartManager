@@ -11,32 +11,32 @@
     </v-layout>
     <div class="modeler-grid" v-show="process && !loading"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar">
-        <v-btn flat :disabled="!canUndo" @click="$emit('undo')">
+        <v-btn flat :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
           <v-icon>undo</v-icon>
         </v-btn>
-        <v-btn flat :disabled="!canRedo" @click="$emit('redo')">
+        <v-btn flat :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
           <v-icon>redo</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-btn flat :disabled="!canZoom" @click="$emit('zoom-in')">
+        <v-btn flat :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
           <v-icon>zoom_in</v-icon>
         </v-btn>
-        <v-btn flat :disabled="!canZoom" @click="$emit('zoom-out')">
+        <v-btn flat :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
           <v-icon>zoom_out</v-icon>
         </v-btn>
-        <v-btn flat :disabled="!canZoom" @click="$emit('zoom-reset')">
+        <v-btn flat :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
           <v-icon>mdi-magnify-close</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn flat :disabled="!canMinimap" @click="$emit('minimap')">
+        <v-btn flat :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
           <v-icon>map</v-icon>
         </v-btn>
-        <v-btn flat @click="fullScreen = !fullScreen">
+        <v-btn flat @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
           <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
           <v-icon v-else>fullscreen</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-btn flat @click="panel = !panel">
+        <v-btn flat @click="panel = !panel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
         </v-btn>
       </v-toolbar>
@@ -69,7 +69,7 @@ export default {
     saved: Boolean,
     canUndo: Boolean,
     canRedo: Boolean,
-    canMinimap : { },
+    canMinimap: { },
     canZoom: { }
   },
   data() { 
