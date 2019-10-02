@@ -30,5 +30,11 @@ module.exports = {
   ],
   configureWebpack: {
     devtool: 'eval-source-map'
+  },
+  pwa: {
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: 'src/service-worker.js'
+    }
   }
 }
