@@ -31,6 +31,7 @@ import productionFormIoSubmit from './graphql/formio/productionFormIoSubmit.grap
 import downtimeFormIo from './graphql/formio/downtimeFormIo.graphql'
 import downtimeFormIoSubmit from './graphql/formio/downtimeFormIoSubmit.graphql'
 import callFormCustomEvent from './graphql/formio/callFormCustomEvent.graphql'
+import callItemAutocomplete from './graphql/formio/callItemAutocomplete.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
@@ -261,5 +262,14 @@ export class MesApi {
       .then(result => result)
 
     return result.data.mesMutation.callFormCustomEvent
+  }
+  async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
+    const result = await getClient().mutate({
+      mutation: gql`${callItemAutocomplete}`,
+      variables: { formCode, formItemAutocompleteParamsInput }
+    })
+      .then(result => result)
+
+    return result.data.mesMutation.callItemAutocomplete
   }
 }
