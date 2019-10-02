@@ -1,5 +1,5 @@
 /* eslint-disable */
-import HtmlelementComponent from '../../../../../../node_modules/formiojs/components/html/HTML';
+import HtmlelementComponent from 'formiojs/components/html/HTML';
 
 class PieChart extends HtmlelementComponent
 {
