@@ -196,10 +196,10 @@ export default {
 
     // PROFILE
     user_displayName() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
+      return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName
     },
     activeUserImg() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || 'avatar-s-11.png'
+      return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserPhoto || 'avatar-s-11.png'
     }
   },
   methods: {
