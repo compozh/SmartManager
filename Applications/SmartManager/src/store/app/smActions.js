@@ -14,7 +14,7 @@ function stopLoading() {
 function notify(type, title, text) {
   vs.notify({
     title: i18n.t(`notify.${title}`),
-    text,
+    text: i18n.t(`notify.${text}`),
     color: type
   })
 }
@@ -32,7 +32,8 @@ export default {
       const folders = result.data.smtasks.folders
       commit('setFolders', folders)
     } catch (e) {
-      notify('danger', 'foldersTitle', e.message)
+      console.log(e.message)
+      notify('danger', 'foldersTitle', 'foldersError')
     }
   },
   async getTasks({commit}, payload) {
@@ -49,7 +50,8 @@ export default {
       commit('setTasks', tasks)
     } catch (e) {
       stopLoading()
-      notify('danger', 'tasksTitle', e.message)
+      console.log(e.message)
+      notify('danger', 'taskListTitle', 'taskListError')
     }
   },
   async getTaskInfo({commit}, payload) {
@@ -64,7 +66,8 @@ export default {
 
     } catch (e) {
       stopLoading()
-      notify('danger','taskTitle', e.message)
+      console.log(e.message)
+      notify('danger','taskTitle', 'taskError')
     }
   },
   async getUsers({commit}) {
@@ -73,7 +76,8 @@ export default {
       const users = result.data.smtasks.users
       commit('setUsers', users)
     } catch (e) {
-      notify('danger', 'usersTitle', e.message)
+      console.log(e.message)
+      notify('danger', 'usersTitle', 'usersError')
     }
   },
   async addNewTask({dispatch}, payload) {
@@ -88,16 +92,15 @@ export default {
         notify(
           'success',
           'taskTitle',
-          i18n.t('notify.taskAddSuccess'))
+          'taskAddSuccess')
       } else {
-        notify(
-          'warning',
-          'taskTitle',
-          i18n.t('notify.taskAddFail'))
+        notify('warning','taskTitle','taskAddFail')
       }
+      return result
     } catch (e) {
       stopLoading()
-      notify('danger','taskTitle', e.message)
+      notify('danger','taskTitle', 'taskAddError')
+      throw Error
     }
   },
   async changeStatus({dispatch}, payload) {
@@ -112,10 +115,7 @@ export default {
           id: payload.id,
           loading: true
         })
-        notify(
-          'success',
-          'statusTitle',
-          i18n.t('notify.statChangeSuccess'))
+        notify('success','statusTitle','statChangeSuccess')
       } else {
         notify(
           'warning',
@@ -124,7 +124,8 @@ export default {
       }
     } catch (e) {
       stopLoading()
-      notify('danger','statusTitle', e.message)
+      console.log(e.message)
+      notify('danger','statusTitle', 'statChangeError')
     }
   },
   async addAttachments({dispatch, state}, payload) {
@@ -140,19 +141,15 @@ export default {
           taskId,
           loading: true
         })
-        notify(
-          'success',
-          'attachTitle',
-          i18n.t('notify.attachAddSuccess'))
+        notify('success','attachTitle', 'attachAddSuccess')
       } else {
-        notify(
-          'warning',
-          'attachTitle',
-          i18n.t('notify.attachAddFail'))
+        notify('warning','attachTitle','attachAddFail')
       }
+      return result
     } catch (e) {
       stopLoading()
-      notify('danger','attachTitle', e.message)
+      console.log(e.message)
+      notify('danger','attachTitle', 'attachAddError')
     }
   },
   async changeStage({dispatch}, payload) {
@@ -173,7 +170,8 @@ export default {
       }
     } catch (e) {
       stopLoading()
-      notify('danger','stageTitle', e.message)
+      console.log(e.message)
+      notify('danger','stageTitle', 'stageChangeError')
     }
   },
   async addTaskComment({commit}, payload) {
@@ -189,19 +187,14 @@ export default {
           id: payload.params.id,
           text: comment
         })
-        notify(
-          'success',
-          'commentsTitle',
-          i18n.t('notify.commentAddSuccess'))
+        notify('success','commentsTitle','commentAddSuccess')
       } else {
-        notify(
-          'warning',
-          'commentsTitle',
-          i18n.t('notify.commentAddFail'))
+        notify('warning','commentsTitle','commentAddFail')
       }
     } catch (e) {
       stopLoading()
-      notify('danger','commentsTitle', e.message)
+      console.log(e.message)
+      notify('danger','commentsTitle', 'commentAddError')
     }
   }
 }

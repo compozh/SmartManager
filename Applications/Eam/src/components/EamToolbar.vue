@@ -18,8 +18,8 @@
 
 <script>
 export default {
-  name: "eam-toolbar"
-};
+  name: 'eam-toolbar'
+}
 </script>
 
 <style scoped>

@@ -20,7 +20,7 @@
   },
   "tasks": {
     "newTask": "New task",
-    "taskName": "Task name...",
+    "taskName": "Task name",
     "noTasks": "No tasks",
     "description": "Description",
     "id": "ID",
@@ -46,7 +46,7 @@
     "ok": "Ok",
     "upload": "Upload",
     "viewMore": "More",
-    "addAttachment": "Add attachment",
+    "addAttachment": "Click here to select files or drag&drop to this area, (max 100mb)",
     "add": "Add",
     "send": "Send"
   },
@@ -97,9 +97,13 @@
   },
   "notify": {
     "foldersTitle": "Folders and filters",
+    "foldersError": "Folders loading error",
     "taskListTitle": "Task List",
+    "taskListError": "Task List loading error",
     "taskTitle": "Task",
+    "taskError": "Task info error",
     "usersTitle": "Users",
+    "usersError": "Users list loading error",
     "statusTitle": "Status",
     "stageTitle": "Stage",
     "attachTitle": "Attachment",
@@ -110,11 +114,15 @@
     "statChangeSuccess": "Status changed successfully",
     "statChangeFail": "Status changing failed",
     "statChangeError": "Error status changing",
+    "stageChangeError": "Error stage changing",
     "attachAddSuccess": "Attachment added successfully",
     "attachAddFail": "Add attachment failed",
     "attachAddError": "Error attachment adding",
     "commentAddSuccess": "Comment added successfully",
     "commentAddFail": "Comment adding failed",
-    "commentAddError": "Error comment adding"
+    "commentAddError": "Error comment adding",
+    "fileAlreadyAdded": "File {file} already added",
+    "fileUploaded": "File {file} uploaded",
+    "uploadError": "Error upload file {file}"
   }
 }

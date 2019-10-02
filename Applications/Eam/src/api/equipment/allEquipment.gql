@@ -1,0 +1,50 @@
+query allEquipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID], $search: String) {
+  eam {
+    equipmentsConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
+      edges {
+        node {
+          id
+          type {
+            id
+            name
+          }
+          responsibleEmployee {
+            id
+            fullName
+          }
+          name
+          designation
+          fullName
+          description
+          factoryNumber
+          model {
+            id
+            name
+          }
+          itObject {
+            id
+            name
+          }
+          department {
+            id
+            name
+          }
+          currentMovementRecord {
+            id
+            technicalPlace {
+              id
+              name
+            }
+          }
+        }
+      }
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+}

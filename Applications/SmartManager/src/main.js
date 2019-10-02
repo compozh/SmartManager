@@ -1,5 +1,7 @@
-// @it-enterprise пакеты
+// service-worker
+import './registerServiceWorker'
 
+// @it-enterprise пакеты
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 //import Authentication from '@it-enterprise/authentication'
@@ -35,10 +37,8 @@ Vue.prototype.$http = axios
 // Theme Configurations
 import '../themeConfig.js'
 
-
 // ACL
 import acl from './acl/acl'
-
 
 // Globally Registered Components
 import './globalComponents.js'
@@ -78,7 +78,6 @@ Vue.use(VeeValidate)
 import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
 
-
 // PrismJS
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
@@ -87,15 +86,11 @@ import 'prismjs/themes/prism-tomorrow.css'
 require('./assets/css/iconfont.css')
 Vue.config.productionTip = false
 
-
 // apollo
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
-
-
-
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -136,30 +131,3 @@ new Vue({
   acl,
   render: h => h(App)
 }).$mount('#app')
-
-
-
-
-
-
-/* Использование ядра для загрузки приложения, описанного в системе
-start()
-
-async function start()   {
-  // Загрузка приложения
-  let webAppsCore = await Vue.prototype.$WebApps
-
-  let appComponent = await webAppsCore.GetApplicationComponent({
-
-    properties: {
-      i18n,
-      store
-    }
-  })
-
-  new Vue(appComponent).$mount('#app')
-}
-
-
-
-*/
