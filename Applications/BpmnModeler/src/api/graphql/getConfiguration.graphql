@@ -1,0 +1,7 @@
+{
+  bpmnquery {
+    getConfiguration {
+      canModifySystemObjects
+    }
+  }
+}

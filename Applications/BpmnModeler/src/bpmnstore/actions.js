@@ -1,6 +1,7 @@
 import { BpmnModelerApi } from '../api/bpmnApi';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
+import Configuration from '../api/models/Configuration';
 
 const api = new BpmnModelerApi();
 
@@ -10,6 +11,15 @@ export default {
       ({ item } = context.getters.getItemById(item));
     }
     context.state.activeItem = item;
+  },
+  async loadConfiguration(context) {
+    let configuration;
+    try {
+      configuration = await api.getConfiguration();
+    } catch (error) {
+      console.error(error);
+    }
+    context.state.configuration = new Configuration(configuration);
   },
   async loadItems(context) {
     let items;
@@ -56,6 +66,12 @@ export default {
   },
   async createProcess(context, process) {
     let newProcess;
+    if (process.parentId && process.parentId.length > 0) {
+      var { item: parent } = context.getters.getItemById(process.parentId);
+      if (process.isSystem && !parent.isSystem) {
+        return false;
+      }
+    }
     try {
       newProcess = await api.createProcess(process);
     } catch (error) {
@@ -87,6 +103,12 @@ export default {
   },
   async createFolder(context, folder) {
     let newFolder;
+    if (folder.parentId && folder.parentId.length > 0) {
+      var { item: parent } = context.getters.getItemById(folder.parentId);
+      if (folder.isSystem && !parent.isSystem) {
+        return false;
+      }
+    }
     try {
       newFolder = await api.createFolder(folder);
     } catch (error) {
@@ -162,10 +184,10 @@ export default {
     try {
       result = await api.deployProcess(id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     if (!result.success) {
-      console.log(result);
+      console.error(result);
     }
     return result;
   }

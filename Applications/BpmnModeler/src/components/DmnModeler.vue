@@ -162,7 +162,7 @@ export default {
         if (!xml || xml === '') {
           this.modeler.importXML(InitialDiagram, (error) => {
             if (error) {
-              console.log(error);
+              console.error(error);
             }
             this.loading = false;
           }); 
