@@ -128,6 +128,7 @@ export default {
   methods: {
     async loadItems() {
       this.loading = true;
+      await this.$store.dispatch('bpmn/loadConfiguration');
       if (!await this.$store.dispatch('bpmn/loadItems')) {
         this.showMessage(this.$t('bpmn.errors.ProcessesNotLoaded'), 'error');
       }
@@ -138,7 +139,6 @@ export default {
         return;
       }
       if (!this.$store.state.bpmn.items.length || refresh) {
-        await this.$store.dispatch('bpmn/loadConfiguration');
         await this.loadItems();
       }
       if (this.$store.state.bpmn.items.length) {
