@@ -14,7 +14,8 @@
 		"ExportSvg": "Экспортировать в формате svg",
 		"ExportBpmn": "Экспортировать в формате bpmn",
 		"ExportDmn": "Экспортировать в формате dmn",
-		"Deploy": "Опубликовать"
+		"Deploy": "Опубликовать",
+		"Copy": "Скопировать"
 	},
 	"labels": {
 		"NewProcess": "Новый процесс",
@@ -25,9 +26,11 @@
 		"CreateProcess": "Создать процесс",
 		"EditProcess": "Переименовать процесс",
 		"DeleteProcess": "Удалить процесс",
+		"CopyProcess": "Скопировать процесс",
 		"CreateFolder": "Создать папку",
 		"EditFolder": "Переименовать папку",
 		"DeleteFolder": "Удалить папку",
+		"CopyFolder": "Скопировать папку",
 		"RequiredField": "Поле обязательно для ввода",
 		"Undo": "Отменить",
 		"Redo": "Повторить",

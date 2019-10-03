@@ -14,7 +14,8 @@
 		"ExportSvg": "Export svg",
 		"ExportBpmn": "Export bpmn",
 		"ExportDmn": "Export dmn",
-		"Deploy": "Deploy"
+		"Deploy": "Deploy",
+		"Copy": "Copy"
 	},
 	"labels": {
 		"NewProcess": "New process",
@@ -25,9 +26,11 @@
 		"CreateProcess": "Create process",
 		"EditProcess": "Edit process",
 		"DeleteProcess": "Delete process",
+		"CopyProcess": "Copy process",
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
 		"DeleteFolder": "Delete folder",
+		"CopyFolder": "Copy folder",
 		"RequiredField": "Field is requiered",
 		"Undo": "Undo",
 		"Redo": "Redo",
