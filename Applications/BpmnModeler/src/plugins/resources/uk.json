@@ -229,6 +229,12 @@
 		"Add Property": "Додати властивість",
 		"Value": "Значення",
 
+		"Implementation": "Реалізація",
+		"External": "Зовнішня задача",
+		"Topic": "Код задачі",
+		"External Task Configuration": "Конфігурація зовнішньої задачі",
+		"Task Priority": "Пріорітет задачі",
+
 		"Open minimap": "Відкрити мінікарту",
 		"Clode minimap": "Закрити мінікарту"
 	}
