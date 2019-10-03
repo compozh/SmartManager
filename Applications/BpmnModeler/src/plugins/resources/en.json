@@ -229,7 +229,11 @@
 		"Add Property": "Add Property",
 		"Value": "Value",
 
+		"Implementation": "Implementation",
+		"External": "External task",
+		"Topic": "Task indentifier",
+
 		"Open minimap": "Open minimap",
-		"Clode minimap": "Clode minimap"
+		"Close minimap": "Close minimap"
 	}
 }

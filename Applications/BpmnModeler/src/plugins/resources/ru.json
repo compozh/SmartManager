@@ -228,6 +228,10 @@
 		"Properties": "Свойства",
 		"Add Property": "Добавить свойство",
 		"Value": "Значение",
+
+		"Implementation": "Реализация",
+		"External": "Внешняя задача",
+		"Topic": "Код задачи",
 		
 		"Open minimap": "Открыть миникарту",
 		"Clode minimap": "Закрыть миникарту"
