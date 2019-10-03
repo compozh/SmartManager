@@ -2,6 +2,13 @@
   <v-card>
     <v-card-title>
       <span class="headline">{{ titles[type][mode] }}</span>
+      <v-spacer></v-spacer>
+      <v-btn-toggle v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
+        <v-btn :value="true" :disabled="mode !== 'create' || !this.canModifySystemObjects" flat style="flex-grow: 0">
+          <v-icon v-if="model.isSystem">lock</v-icon>
+          <v-icon v-else>lock_open</v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </v-card-title>
     <v-card-text>
       <v-form ref="form" v-model="valid">
@@ -12,10 +19,10 @@
           clearable
           maxLength="254"
           :rules="[rules.required]"></v-text-field>
-        <v-radio-group v-model="model.type" row v-if="mode === 'create' && !model.isFolder">
+        <v-radio-group v-model="model.type" row v-if="mode === 'create' && !model.isFolder" :label="$t('bpmn.labels.Type')">
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
-        </v-radio-group>
+        </v-radio-group>   
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -26,6 +33,7 @@
   </v-card>
 </template>
 <script>
+import Process from '../api/models/Process';
 export default {
   name: 'bpmn-form',
   props: {
@@ -38,16 +46,24 @@ export default {
     mode: {
       type: String,
       validator(value) {
-        return ['create', 'edit', 'delete'].indexOf(value) !== -1
+        return ['create', 'edit', 'delete' ].indexOf(value) !== -1
       }
     },
     model: {
       type: Object,
       default() {
-        return { id: '', name: '', parentId: '' }
+        return new Process()
       }
     },
-    type: String
+    type: {
+      type: String,
+      validator(value) {
+        return ['process', 'folder' ].indexOf(value) !== -1
+      },
+      default() {
+        return 'process';
+      }
+    }
   },
   data() {
     return {
@@ -74,6 +90,11 @@ export default {
       }
     }
   },
+  computed: {
+    canModifySystemObjects() {
+      return this.$store.state.bpmn.configuration.canModifySystemObjects;
+    }
+  },
   methods: {
     cancel() {
       this.$refs.form.resetValidation();
@@ -98,5 +119,7 @@ export default {
 }
 </script>
 <style>
-
+.v-input--radio-group__input > label.v-label {
+  width: 100%;
+}
 </style>

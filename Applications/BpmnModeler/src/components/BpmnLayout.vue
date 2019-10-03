@@ -138,6 +138,7 @@ export default {
         return;
       }
       if (!this.$store.state.bpmn.items.length || refresh) {
+        await this.$store.dispatch('bpmn/loadConfiguration');
         await this.loadItems();
       }
       if (this.$store.state.bpmn.items.length) {

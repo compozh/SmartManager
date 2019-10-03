@@ -36,7 +36,10 @@
 		"ResetZoom": "Відновити масштаб",
 		"ToggleMinimap": "Перемикнути мінікарту",
 		"ToggleFullScreen": "Перемикнути повноекранний режим",
-		"TogglePropertiesPanel": "Перемикнути панель параметрів"
+		"TogglePropertiesPanel": "Перемикнути панель параметрів",
+		"Type": "Тип",
+		"SystemRecord": "Системний запис",
+		"UserRecord": "Користувацький запис"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -236,6 +239,6 @@
 		"Task Priority": "Пріорітет задачі",
 
 		"Open minimap": "Відкрити мінікарту",
-		"Clode minimap": "Закрити мінікарту"
+		"Close minimap": "Закрити мінікарту"
 	}
 }

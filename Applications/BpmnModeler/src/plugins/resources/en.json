@@ -36,7 +36,10 @@
 		"ResetZoom": "Reset zoom",
 		"ToggleMinimap": "Toggle minimap",
 		"ToggleFullScreen": "Toggle full screen mode",
-		"TogglePropertiesPanel": "Toggle properties panel"
+		"TogglePropertiesPanel": "Toggle properties panel",
+		"Type": "Type",
+		"SystemRecord": "System record",
+		"UserRecord": "User record"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
