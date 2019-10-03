@@ -232,6 +232,8 @@
 		"Implementation": "Implementation",
 		"External": "External task",
 		"Topic": "Task indentifier",
+		"External Task Configuration": "External Task Configuration",
+		"Task Priority": "Task Priority",
 
 		"Open minimap": "Open minimap",
 		"Close minimap": "Close minimap"

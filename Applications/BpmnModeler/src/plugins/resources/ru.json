@@ -232,6 +232,8 @@
 		"Implementation": "Реализация",
 		"External": "Внешняя задача",
 		"Topic": "Код задачи",
+		"External Task Configuration": "Конфигурация внешней задачи",
+		"Task Priority": "Приоритет задачи",
 		
 		"Open minimap": "Открыть миникарту",
 		"Clode minimap": "Закрыть миникарту"
