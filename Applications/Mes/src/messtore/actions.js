@@ -289,7 +289,7 @@ export default {
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },
-  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction, successAction, linearLoader }) {
+  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction, successAction, linearLoader, actionAfterQuery }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -307,6 +307,9 @@ export default {
         }
       } else {
         commit('setSnackbarErrorMessage', result.errorMessage)
+      }
+      if(actionAfterQuery) {
+        actionAfterQuery(result)
       }
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
@@ -377,6 +380,14 @@ export default {
         return await api.callFormCustomEventGql(formCode, params)
       },
       successAction: async result => { successCallback(result) },
+    })
+  },
+  async callItemAutocomplete({ commit }, { formCode, params, fetchPolicy, callback }) {
+    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.callItemAutocompleteGql(formCode, params, fetchPolicy)
+      },
+      actionAfterQuery: async result => { callback(result) },
     })
   }
 }

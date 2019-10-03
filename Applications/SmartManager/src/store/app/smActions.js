@@ -32,7 +32,7 @@ export default {
       const folders = result.data.smtasks.folders
       commit('setFolders', folders)
     } catch (e) {
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger', 'foldersTitle', 'foldersError')
     }
   },
@@ -50,7 +50,7 @@ export default {
       commit('setTasks', tasks)
     } catch (e) {
       stopLoading()
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger', 'taskListTitle', 'taskListError')
     }
   },
@@ -66,7 +66,7 @@ export default {
 
     } catch (e) {
       stopLoading()
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger','taskTitle', 'taskError')
     }
   },
@@ -76,7 +76,7 @@ export default {
       const users = result.data.smtasks.users
       commit('setUsers', users)
     } catch (e) {
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger', 'usersTitle', 'usersError')
     }
   },
@@ -124,7 +124,7 @@ export default {
       }
     } catch (e) {
       stopLoading()
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger','statusTitle', 'statChangeError')
     }
   },
@@ -148,7 +148,7 @@ export default {
       return result
     } catch (e) {
       stopLoading()
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger','attachTitle', 'attachAddError')
     }
   },
@@ -170,7 +170,7 @@ export default {
       }
     } catch (e) {
       stopLoading()
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger','stageTitle', 'stageChangeError')
     }
   },
@@ -193,7 +193,7 @@ export default {
       }
     } catch (e) {
       stopLoading()
-      console.log('', e.message)
+      console.log(e.message)
       notify('danger','commentsTitle', 'commentAddError')
     }
   }

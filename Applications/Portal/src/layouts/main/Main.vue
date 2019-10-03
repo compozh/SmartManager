@@ -11,10 +11,10 @@
 <template>
     <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
         <vx-tour :steps="steps" v-if="!disableThemeTour" />
-    <doc-title :title="appTitle"/>
+    <doc-title :title="`${appTitle}. ${routeTitle}`"/>
 
         <!-- БОКОВОЕ МЕНЮ -->
-        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" :title="appTitle" parent=".layout--main" />
+        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/nabu.logo.png')" :title="appTitle" parent=".layout--main" />
 
         <!-- ЗОНА КОНТЕНТА -->
         <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
