@@ -27,8 +27,6 @@ Vue.component(VxInputGroup.name, VxInputGroup)
 
 import './views/account-personal-info/main'
 
-Vue.component('account-home-page', () => import('./views/account-home-page.vue'))
-// Vue.component('account-tmc-page', () => import('./views/account-tmc-page.vue'))
 Vue.component('nabu-additional-training', () => import('./views/nabu-pages/nabu-additional-training.vue'))
 Vue.component('nabu-curriculum', () => import('./views/nabu-pages/nabu-curriculum.vue'))
 Vue.component('nabu-learning', () => import('./views/nabu-pages/nabu-learning.vue'))
