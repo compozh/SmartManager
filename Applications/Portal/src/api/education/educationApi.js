@@ -14,7 +14,7 @@ import {getClient} from '../tools'
 export class EducationApi {
   static async getEducationPlan() {
     try {
-      return await getClient('TRAINING').query({
+      return await getClient('PORTALNABU').query({
         query: gql` ${educationPlan}`
       })
     } catch (e) {
