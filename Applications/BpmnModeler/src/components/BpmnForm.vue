@@ -19,7 +19,7 @@
           clearable
           maxLength="254"
           :rules="[rules.required]"></v-text-field>
-        <v-radio-group v-model="model.type" row v-if="mode !== 'edit'" :disabled="mode !== 'create'" :label="$t('bpmn.labels.Type')">
+        <v-radio-group v-model="model.type" row v-if="mode !== 'edit' && type === 'process'" :disabled="mode !== 'create'" :label="$t('bpmn.labels.Type')">
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
         </v-radio-group>   
