@@ -3,7 +3,7 @@ export default {
   async loadEducationPlan({commit}) {
     let result = await EducationApi.getEducationPlan()
     if (result) {
-      var educationPlan = result.data.trainingQuery.trainingPlan.map(element => {
+      var educationPlan = result.data.portalNabuQuery.trainingPlan.map(element => {
         var object = {
           personnelNumber: element.personnelNumber,
           competence: element.competence,
