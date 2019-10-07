@@ -36,7 +36,10 @@
 		"ResetZoom": "Reset zoom",
 		"ToggleMinimap": "Toggle minimap",
 		"ToggleFullScreen": "Toggle full screen mode",
-		"TogglePropertiesPanel": "Toggle properties panel"
+		"TogglePropertiesPanel": "Toggle properties panel",
+		"Type": "Type",
+		"SystemRecord": "System record",
+		"UserRecord": "User record"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -229,7 +232,13 @@
 		"Add Property": "Add Property",
 		"Value": "Value",
 
+		"Implementation": "Implementation",
+		"External": "External task",
+		"Topic": "Task indentifier",
+		"External Task Configuration": "External Task Configuration",
+		"Task Priority": "Task Priority",
+
 		"Open minimap": "Open minimap",
-		"Clode minimap": "Clode minimap"
+		"Close minimap": "Close minimap"
 	}
 }

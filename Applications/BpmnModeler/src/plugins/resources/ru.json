@@ -36,7 +36,10 @@
 		"ResetZoom": "Восстановить масштаб",
 		"ToggleMinimap": "Переключить миникарту",
 		"ToggleFullScreen": "Переключить полноэкранный режим",
-		"TogglePropertiesPanel": "Переключить панель параметров"
+		"TogglePropertiesPanel": "Переключить панель параметров",
+		"Type": "Тип",
+		"SystemRecord": "Системная запись",
+		"UserRecord": "Пользовательская запись"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удаось загрузить данные",
@@ -228,8 +231,14 @@
 		"Properties": "Свойства",
 		"Add Property": "Добавить свойство",
 		"Value": "Значение",
+
+		"Implementation": "Реализация",
+		"External": "Внешняя задача",
+		"Topic": "Код задачи",
+		"External Task Configuration": "Конфигурация внешней задачи",
+		"Task Priority": "Приоритет задачи",
 		
 		"Open minimap": "Открыть миникарту",
-		"Clode minimap": "Закрыть миникарту"
+		"Close minimap": "Закрыть миникарту"
 	}
 }

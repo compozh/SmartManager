@@ -25,7 +25,8 @@
       <template v-slot="{ node, data }">
         <span class="treeview-node-content">
           <bpmn-tree-icon :node="node"></bpmn-tree-icon>
-          <span class="treeview-node-label">{{ node.label }}</span>
+          <span class="treeview-node-label" :title="node.label">{{ node.label }}</span>
+          <v-icon v-if="data.isSystem" :title="$t('bpmn.labels.SystemRecord')">lock</v-icon>
           <slot name="context-menu" :item="data"></slot>
         </span>
       </template>
@@ -81,9 +82,9 @@ export default {
     },
     allowDrop(draggingNode, dropNode, type) {
       if (type === 'inner') {
-        return dropNode.data.isFolder;
+        return dropNode.data.isFolder && (!draggingNode.data.isSystem || dropNode.data.isSystem);
       } else {
-        return draggingNode.parent !== dropNode.parent;
+        return draggingNode.parent !== dropNode.parent && (!draggingNode.data.isSystem || (!(dropNode.parent.data instanceof Folder) || dropNode.parent.data.isSystem));
       }
     },
     onNodeDrop(draggingNode, dropNode, type, event) {
