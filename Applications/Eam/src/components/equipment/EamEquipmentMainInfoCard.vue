@@ -3,26 +3,7 @@
     <v-layout wrap justify-space-between>
       <v-flex d-flex xs12 md6 pt-2 :class="{'pr-2': $vuetify.breakpoint.mdAndUp}">
         <v-card min-width="200">
-          <swiper v-if="images && images.length" :options="swiperOption">
-            <swiper-slide
-              contain
-              v-for="(image,i) in images"
-              :key="i"
-              @click.native="show"
-              style="display:flex; min-height: 50vh"
-            >
-              <img :src="image.url" class="slider" />
-            </swiper-slide>
-            <div class="swiper-pagination" slot="pagination"></div>
-            <viewer :images="imageUrls" @inited="inited" style="display:none;">
-              <img v-for="(image,i) in images" :src="image.url" :key="i" />
-            </viewer>
-          </swiper>
-          <img
-            v-else-if="$vuetify.breakpoint.mdAndUp"
-            :src="require('../equipment.png')"
-            class="equipment-image"
-          />
+          <eam-equipment-images :equipmentId="item ? item.id : ''" />
           <v-spacer></v-spacer>
           <v-card-title primary-title>
             <div>
@@ -129,79 +110,16 @@
 </template>
 
 <script>
-import equipmentImages from '@/api/equipment/equipmentImages.gql'
-import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import * as moment from 'moment'
 
 export default {
-  name: 'eam-equipment-main-info-card',
-  components: {
-    swiper,
-    swiperSlide
-  },
+  name: 'eam-equipment-main-info-card',  
   props: {
     item: Object
-  },
-  apollo: {
-    images: {
-      query() {
-        return this.query
-      },
-      variables() {
-        return {
-          id: this.item.id
-        }
-      },
-      update(data) {        
-        return data.eam &&
-          data.eam.equipment &&
-          data.eam.equipment.images &&
-          data.eam.equipment.images.length
-          ? data.eam.equipment.images
-          : data.eam &&
-            data.eam.equipment &&
-            data.eam.equipment.model &&
-            data.eam.equipment.model.attachments
-            ? data.eam.equipment.model.attachments
-            : null
-      },
-      skip() {
-        return !(this.item && this.item.id)
-      },
-      error(e) {        
-        this.$store.commit(
-          'eam/setError',
-          e.gqlError
-            ? 'Исключительная ситуация при вызове источника данных'
-            : e.message
-        )
-      }
-    }
-  },
-  data() {
-    return {
-      images: {},
-      query: equipmentImages,
-      swiperOption: {
-        slidesPerView: 1,
-        speed: 1000,
-        centeredSlides: true,
-        grabCursor: true,
-        autoplay: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        }
-      }
-    }
-  },
+  },  
   computed: {
     loading() {
       return this.$store.getters['eam/loading']
-    },
-    imageUrls() {
-      return this.images ? Array.from(this.images).map(im => im.url) : null
     },
     installDateString() {
       return moment(this.item.installDate).format('DD.MM.YYYY')
@@ -256,32 +174,11 @@ export default {
       }
       return items
     }
-  },
-  methods: {
-    inited(viewer) {
-      this.$viewer = viewer
-    },
-    show() {
-      this.$viewer.show()
-    }
-  },
-  watch: {
-    '$apollo.loading'(value) {
-      this.$store.commit('eam/setLoading', value)
-    }
   }
 }
 </script>
 
-<style >
-.slider,
-.equipment-image {
-  min-width: 15vw;
-  min-height: 30vh;
-  max-height: 50vh;
-  max-width: 100%;
-  margin: auto;
-}
+<style scoped>
 .main-info >>> .v-list--dense .v-list__tile--avatar {
   height: auto;
 }
@@ -293,7 +190,10 @@ export default {
   width: auto !important;
   padding-right: 5px;
 }
-.main-info >>> .v-responsive {
-  height: auto !important;
+.v-subheader {
+  background-color: rgb(144, 219, 238) !important;
+}
+.v-subheader {
+  background-color: lightgreen !important;
 }
 </style>
