@@ -15,7 +15,7 @@
 		"ExportBpmn": "Експортувати в форматі bpmn",
 		"ExportDmn": "Експортувати в форматі dmn",
 		"Deploy": "Опублікувати",
-		"Copy": "Копіювати"
+		"Copy": "Додати за зразком"
 	},
 	"labels": {
 		"NewProcess": "Новий процес",
@@ -26,11 +26,11 @@
 		"CreateProcess": "Створити процес",
 		"EditProcess": "Редагувати процес",
 		"DeleteProcess": "Видалити процес",
-		"CopyProcess": "Копіювати процес",
+		"CopyProcess": "Додати процес за зразком",
 		"CreateFolder": "Створити папку",
 		"EditFolder": "Редагувати папку",
 		"DeleteFolder": "Видалити папку",
-		"CopyFolder": "Копіювати папку",
+		"CopyFolder": "Додати папку за зразком",
 		"RequiredField": "Поле обов'язкове для вводу",
 		"Undo": "Відмінити",
 		"Redo": "Повторити",

@@ -15,7 +15,7 @@
 		"ExportBpmn": "Export bpmn",
 		"ExportDmn": "Export dmn",
 		"Deploy": "Deploy",
-		"Copy": "Copy"
+		"Copy": "Add by sample"
 	},
 	"labels": {
 		"NewProcess": "New process",
@@ -26,11 +26,11 @@
 		"CreateProcess": "Create process",
 		"EditProcess": "Edit process",
 		"DeleteProcess": "Delete process",
-		"CopyProcess": "Copy process",
+		"CopyProcess": "Add process by sample",
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
 		"DeleteFolder": "Delete folder",
-		"CopyFolder": "Copy folder",
+		"CopyFolder": "Add folder by sample",
 		"RequiredField": "Field is requiered",
 		"Undo": "Undo",
 		"Redo": "Redo",
