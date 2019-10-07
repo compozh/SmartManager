@@ -38,7 +38,7 @@
 
         </v-flex>
 
-        <v-flex class="remove-installations-layout" xs2 v-if="installations.length">
+        <v-flex class="remove-installations-layout" xs2 v-if="installations.length && properties.allowRemoveAllInstallations">
             <v-btn class="remove-installations-button" outlined @click="onclickRemoveAllInstallations" color="#326DA8">Снять все партии</v-btn>
         </v-flex>
 
@@ -61,6 +61,9 @@ export default {
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
+    },
+    properties() {
+      return this.$store.getters['mes/properties']
     }
   },
   methods: {
