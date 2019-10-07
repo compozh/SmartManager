@@ -1,0 +1,5 @@
+query ($deployId: String!) {
+  workFlowQuery {
+    formDefinition(deployId: $deployId)
+  }
+}
