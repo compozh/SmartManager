@@ -9,7 +9,9 @@ export default {
     return { item, index };
   },
   getActiveItemId(state) {
-    let { id = null } = state.activeItem;
-    return id;
+    if (state.activeItem) {
+      return state.activeItem.id;
+    }
+    return null;
   }
 };

@@ -60,20 +60,15 @@ let router = new VueRouter({
           caseSensitive: false
         },
         {
-          path: '/pages/search',
-          name: 'page-search',
-          component: () => import('@/views/pages/Search.vue'),
+          path: '/task-add/:id?',
+          name: 'task-add',
+          component: () => import('./views/task-add/TaskAdd.vue'),
           meta: {
-            breadcrumb: [
-              { title: 'Home', url: '/' },
-              { title: 'Pages' },
-              { title: 'Search', active: true },
-            ],
-            pageTitle: 'Search',
-            rule: 'editor'
+            rule: 'admin'
           },
-        },
-      ],
+          caseSensitive: false
+        }
+      ]
     },
     // =============================================================================
     // FULL PAGE LAYOUTS

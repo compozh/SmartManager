@@ -12,7 +12,9 @@
 		"AddFolder": "Add folder",
 		"Import": "Import process",
 		"ExportSvg": "Export svg",
-		"ExportBpmn": "Export bpmn"
+		"ExportBpmn": "Export bpmn",
+		"ExportDmn": "Export dmn",
+		"Deploy": "Deploy"
 	},
 	"labels": {
 		"NewProcess": "New process",
@@ -26,14 +28,24 @@
 		"CreateFolder": "Create folder",
 		"EditFolder": "Edit folder",
 		"DeleteFolder": "Delete folder",
-		"RequiredField": "Field is requierd"
+		"RequiredField": "Field is requiered",
+		"Undo": "Undo",
+		"Redo": "Redo",
+		"ZoomIn": "Zoom in",
+		"ZoomOut": "Zoom out",
+		"ResetZoom": "Reset zoom",
+		"ToggleMinimap": "Toggle minimap",
+		"ToggleFullScreen": "Toggle full screen mode",
+		"TogglePropertiesPanel": "Toggle properties panel"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
 		"ProcessNotCreated": "Failed to create item",
 		"ProcessNotEdited": "Failed to edit item",
 		"ProcessNotDeleted": "Failed to delete item",
-		"CantDrop": "Failed to move item"
+		"CantDrop": "Failed to move item",
+		"ProcessDeployed": "Process deployed",
+		"ProcessNotDeployed": "Failed to deploy process"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
@@ -185,6 +197,19 @@
 		"Cycle": "Cycle",
 		"Must provide a value": "Must provide a value",
 
+		"Version Tag": "Version Tag",
+		"Decision": "Decision",
+		"Decision Table": "Decision Table",
+		"KnowledgeSource": "KnowledgeSource",
+		"InputData": "InputData",
+		"Empty": "Empty",
+		"Connect using Information/Knowledge/Authority Requirement or Association": "Connect using Information/Knowledge/Authority Requirement or Association",
+		"This maps to the decision definition key": "This maps to the decision definition key.",
+		"Literal Expression": "Literal Expression",
+		"History Configuration": "History Configuration",
+		"History Time To Live": "History Time To Live",
+		"BusinessKnowledgeModel": "BusinessKnowledgeModel",
+
 		"Forms": "Forms",
 		"Form Key": "Form Key",
 		"Form Fields": "Form Fields",
@@ -202,6 +227,9 @@
 		"Constraint Config": "Config",
 		"Properties": "Properties",
 		"Add Property": "Add Property",
-		"Value": "Value"
+		"Value": "Value",
+
+		"Open minimap": "Open minimap",
+		"Clode minimap": "Clode minimap"
 	}
 }

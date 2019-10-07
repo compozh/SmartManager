@@ -6,12 +6,16 @@
     <v-card-text>
       <v-form ref="form" v-model="valid">
         <v-text-field ref="nameField"
-                      v-model="model.name"
-                      :label="$t('bpmn.labels.Name')"
-                      :disabled="loading || mode === 'delete'"
-                      clearable
-                      maxLength="254"
-                      :rules="[rules.required]"></v-text-field>
+          v-model="model.name"
+          :label="$t('bpmn.labels.Name')"
+          :disabled="loading || mode === 'delete'"
+          clearable
+          maxLength="254"
+          :rules="[rules.required]"></v-text-field>
+        <v-radio-group v-model="model.type" row v-if="mode === 'create' && !model.isFolder">
+          <v-radio label="BPMN" value="BPMN"></v-radio>
+          <v-radio label="DMN" value="DMN"></v-radio>
+        </v-radio-group>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -80,12 +84,15 @@ export default {
         this.$refs.form.resetValidation();
         this.$emit('save', this.model, this.type);
       }
+    },
+    reset() {
+      this.$refs.nameField.focus();
+      this.$refs.form.resetValidation();
     }
   },
   watch: {
     model() {
-      this.$refs.form.resetValidation();
-      this.$refs.nameField.focus();
+      this.reset();
     }
   }
 }

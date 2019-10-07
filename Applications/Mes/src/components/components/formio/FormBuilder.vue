@@ -34,7 +34,7 @@ export default {
   },
   created() {
     var me = this
-    window.requestToServer = (eventCode, callback)=> {
+    window.requestToServer = (eventCode, callback) => {
       me.requestToServerAction(eventCode, callback)
     }
     window.qrScaner = callback => {
@@ -42,6 +42,9 @@ export default {
     }
     window.connectSignalR = (application, callback) => {
       me.connectSignalR(application, callback)
+    }
+    window.itemAutocomplete = (field, searchValue, callback) => {
+      me.itemAutocomplete(field, searchValue, callback)
     }
   },
   props: {
@@ -142,6 +145,14 @@ export default {
         return
       }
       this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)
+    },
+    itemAutocomplete(field, searchValue, callback) {
+      var form = this.$refs.formioComponent,
+        submission = JSON.stringify(form.submission, null, 4),
+        fieldComponent = field.component,
+        params = { fieldId: fieldComponent.key, tableName: fieldComponent.dataTable, fieldName: fieldComponent.dataTableFieldName, fieldCode: fieldComponent.dataTableFieldCode, searchValue, submission };
+
+      this.$store.dispatch('mes/callItemAutocomplete', { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only', callback });
     }
   }
 }

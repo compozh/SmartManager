@@ -26,8 +26,7 @@ export default {
           this.showForm = false;
           this.activeItem = item.id;
         } else {
-          this.error = this.$t('bpmn.errors.ProcessNotCreated');
-          this.showError = true;
+          this.showMessage(this.$t('bpmn.errors.ProcessNotCreated'), 'error');
         }
         break;
       case 'edit':
@@ -39,8 +38,7 @@ export default {
         if (success) {
           this.showForm = false;
         } else {
-          this.error = this.$t('bpmn.errors.ProcessNotEdited');
-          this.showError = true;
+          this.showMessage(this.$t('bpmn.errors.ProcessNotEdited'), 'error');
         }
         this.activeItem = item.id;
         break;
@@ -49,8 +47,7 @@ export default {
           this.showForm = false;
           this.activeItem = item.parentId;
         } else {
-          this.error = this.$t('bpmn.errors.ProcessNotDeleted');
-          this.showError = true;
+          this.showMessage(this.$t('bpmn.errors.ProcessNotDeleted'), 'error');
           this.activeItem = item.id;
         }
         break;
@@ -62,18 +59,21 @@ export default {
     },
     createItem(parent, type, xmlView) {
       const parentId = parent ? parent.id : null;
+      this.$refs.form.reset();
       this.formMode = 'create';
       this.formModel = type === 'folder' ? new Folder({ parentId }) : new Process({ parentId, xmlView });
       this.formType = type;
       this.showForm = true;
     },
     editItem(item) {
+      this.$refs.form.reset();
       this.formMode = 'edit';
       this.formModel = item.isFolder ? new Folder(item) : new Process(item);
       this.formType = item.isFolder ? 'folder' : 'process';
       this.showForm = true;
     },
     removeItem(item) {
+      this.$refs.form.reset();
       this.formMode = 'delete';
       this.formModel = item;
       this.formType = item.isFolder ? 'folder' : 'process';

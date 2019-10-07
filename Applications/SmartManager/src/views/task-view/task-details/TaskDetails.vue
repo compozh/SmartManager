@@ -19,7 +19,7 @@
               <div class="flex flex-col">
                 <h5 class="mb-1">{{ task.performer }}</h5>
                 <div class="flex items-center">
-                  <span class="text-sm truncate"></span>
+                  <h3 class="text-primary truncate">{{ task.name }}</h3>
                 </div>
               </div>
             </div>
@@ -211,7 +211,7 @@ export default {
   },
   methods: {
     iFrameOnLoad(event) {
-      this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight + 5
+      this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight * 1.2
     }
   }
 }

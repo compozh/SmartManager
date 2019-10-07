@@ -9,9 +9,6 @@ export default {
     if (typeof item === 'string' || item instanceof String) {
       ({ item } = context.getters.getItemById(item));
     }
-    if (!item) {
-      item = new Process();
-    }
     context.state.activeItem = item;
   },
   async loadItems(context) {
@@ -159,6 +156,18 @@ export default {
     }
     await context.dispatch('loadItems');
     return success;
+  },
+  async deployProcess(context, id) {
+    let result;
+    try {
+      result = await api.deployProcess(id);
+    } catch (error) {
+      console.log(error);
+    }
+    if (!result.success) {
+      console.log(result);
+    }
+    return result;
   }
 };
 

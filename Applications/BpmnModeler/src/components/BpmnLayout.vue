@@ -10,7 +10,9 @@
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
       </v-toolbar-side-icon>
-      <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
+      <router-link :to="{ name: 'BPMNEMPTY' }" style="text-decoration: none;">
+        <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
+      </router-link>
       <template v-if="currentUser">
         <bpmn-contex-menu
           @create="createItem"
@@ -45,6 +47,7 @@
             @remove="removeItem" 
             @import="importItem"
             @export="exportItem"
+            @deploy="deployItem"
             offset>
             <template #activator="{ open }">
               <v-btn flat icon v-on="open">
@@ -62,7 +65,7 @@
     </v-content>
 
     <v-dialog :persistent="formLoading" v-model="showForm" max-width="500">
-      <bpmn-form :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
+      <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
     </v-dialog>
 
     <v-dialog v-model="loading"
@@ -76,20 +79,20 @@
     </v-dialog>
 
     <v-snackbar
-      v-model="showError"
-      color="error"
-      :timeout="errorTimeout"
+      v-model="displayMessage"
+      :color="messageType"
+      :timeout="messageTimeout"
       multi-line
       top
       right
     >
-      {{ error }}
+      {{ message }}
       <v-btn
         dark
         flat
-        @click="showError = false"
+        @click="displayMessage = false"
       >
-        {{ $tc('bpmn.buttons.Close') }}
+        {{ $t('bpmn.buttons.Close') }}
       </v-btn>
     </v-snackbar>
   </v-app>
@@ -99,6 +102,10 @@
 import treeSearch from '../api/treeSearch';
 import formMixin from './mixins/formMixin';
 import { importMixin } from './mixins/importExportMixin' 
+import Folder from '../api/models/Folder';
+import Process from '../api/models/Process';
+import ProcessType from '../api/models/ProcessType';
+import { Message } from 'element-ui';
 
 export default {
   name: 'bpmn-layout',
@@ -108,20 +115,21 @@ export default {
     return {
       showAppBar: true,
       loading: false,
-      showError: false,
-      error: '',
-      errorTimeout: 10000,
+      displayMessage: false,
+      message: '',
+      messageTimeout: 10000,
+      messageType: 'error'
     };
   },
   mounted() {
     this.onRouteChanged(false);
+    this.$router.app.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
   },
   methods: {
     async loadItems() {
       this.loading = true;
       if (!await this.$store.dispatch('bpmn/loadItems')) {
-        this.error = this.$tc('bpmn.errors.ProcessesNotLoaded');
-        this.showError = true;
+        this.showMessage(this.$t('bpmn.errors.ProcessesNotLoaded'), 'error');
       }
       this.loading = false;
     },
@@ -142,17 +150,26 @@ export default {
     async dropItem(draggingItem, dropItem, type) {
       this.loading = true;
       if (!(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem, type }))) {
-        this.error = this.$t('bpmn.errors.CantDrop');
-        this.showError = true;
+        this.showMessage(this.$t('bpmn.errors.CantDrop'), 'error');
       }
       this.activeItem = draggingItem.id;
       this.loading = false;
     },
     exportItem(item, type) {
-      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === 'bpmn-modeler', e => e.$children);
+      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === type + '-modeler', e => e.$children);
       if (modeler && modeler.export) {
         modeler.export(type);
       }
+    },
+    async deployItem(item) {
+      this.loading = true;
+      var result = await this.$store.dispatch('bpmn/deployProcess', item.id);
+      if (result.success) {
+        this.showMessage(result.message || this.$t('bpmn.errors.ProcessDeployed'), 'success');
+      } else {
+        this.showMessage(result.message || this.$t('bpmn.errors.ProcessNotDeployed'), 'error');
+      }
+      this.loading = false;
     },
     navigateToItem(itemId) {
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
@@ -160,18 +177,30 @@ export default {
       if (index < 0) {
         routeName = 'BPMNEMPTY';
         params = { };
-      } else if (item.isFolder) {
+      } else if (item instanceof Folder) {
         routeName = 'BPMNFOLDER';
         params = { id: itemId };
-      } else {
-        routeName = 'BPMNMODELER';
-        params = { id: itemId };
+      } else if (item instanceof Process) {
+        switch (item.type) {
+        case ProcessType.BPMN:
+          routeName = 'BPMNMODELER';
+          params = { id: itemId };
+          break;
+        case ProcessType.DMN:
+          routeName = 'DMNMODELER';
+          params = { id: itemId };
+          break;
+        }
       }
 
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
         this.$router.push({ name: routeName, params });
       }
-
+    },
+    showMessage(message, type) {
+      this.message = message;
+      this.messageType = type;
+      this.displayMessage = true;
     }
   },
   computed: {

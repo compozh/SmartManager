@@ -12,7 +12,9 @@
 		"AddFolder": "Добавить папку",
 		"Import": "Импротировать процесс",
 		"ExportSvg": "Экспортировать в формате svg",
-		"ExportBpmn": "Экспортировать в формате bpmn"
+		"ExportBpmn": "Экспортировать в формате bpmn",
+		"ExportDmn": "Экспортировать в формате dmn",
+		"Deploy": "Опубликовать"
 	},
 	"labels": {
 		"NewProcess": "Новый процесс",
@@ -26,14 +28,24 @@
 		"CreateFolder": "Создать папку",
 		"EditFolder": "Переименовать папку",
 		"DeleteFolder": "Удалить папку",
-		"RequiredField": "Поле обязательно для ввода"
+		"RequiredField": "Поле обязательно для ввода",
+		"Undo": "Отменить",
+		"Redo": "Повторить",
+		"ZoomIn": "Увеличить масштаб",
+		"ZoomOut": "Уменьшить масштаб",
+		"ResetZoom": "Восстановить масштаб",
+		"ToggleMinimap": "Переключить миникарту",
+		"ToggleFullScreen": "Переключить полноэкранный режим",
+		"TogglePropertiesPanel": "Переключить панель параметров"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удаось загрузить данные",
 		"ProcessNotCreated": "Не удалось создать элемент",
 		"ProcessNotEdited": "Не удалось удалить элемент",
 		"ProcessNotDeleted": "Не удалось удалить элемент",
-		"CantDrop": "Не удалось переместить элемент"
+		"CantDrop": "Не удалось переместить элемент",
+		"ProcessDeployed": "Процесс опубликован",
+		"ProcessNotDeployed": "Не удалось опубликовать процесс"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",
@@ -185,6 +197,19 @@
 		"Cycle": "Периодичность",
 		"Must provide a value": "Необходимо заполнить значение",
 
+		"Version Tag": "Тэг версии",
+		"Decision": "Решение",
+		"Decision Table": "Таблица решений",
+		"KnowledgeSource": "Источник знаний",
+		"InputData": "Входные данные",
+		"Empty": "Пусто",
+		"Connect using Information/Knowledge/Authority Requirement or Association": "Соединить используя Требование к Информации/Знаниям/Полномочиям или Ассоциацию",
+		"This maps to the decision definition key": "This maps to the decision definition key.",
+		"Literal Expression": "Выражение",
+		"History Configuration": "History Configuration",
+		"History Time To Live": "History Time To Live",
+		"BusinessKnowledgeModel": "Модель бизнес-знаний",
+
 		"Forms": "Формы",
 		"Form Key": "Идентификатор формы",
 		"Form Fields": "Поля формы",
@@ -202,6 +227,9 @@
 		"Constraint Config": "Параметры",
 		"Properties": "Свойства",
 		"Add Property": "Добавить свойство",
-		"Value": "Значение"
+		"Value": "Значение",
+		
+		"Open minimap": "Открыть миникарту",
+		"Clode minimap": "Закрыть миникарту"
 	}
 }

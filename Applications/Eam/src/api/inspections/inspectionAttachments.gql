@@ -1,0 +1,12 @@
+query inspectionAttachments($id: ID) {
+  eam {
+    conditionParameterValues(id: $id) {
+      id
+      attachments {
+        id
+        fileName
+        url
+      }
+    }
+  }
+}

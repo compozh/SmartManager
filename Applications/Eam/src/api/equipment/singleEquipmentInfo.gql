@@ -1,0 +1,79 @@
+query singleEquipmentInfo($id: ID) {
+  eam {
+    equipments(id: $id) {
+      id
+      name
+      designation
+      fullName
+      description
+      factoryNumber
+      installDate
+      type {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      status {
+        id
+        name
+      }
+      responsibleEmployee {
+        id
+        fullName
+      }
+      model {
+        id
+        name
+      }
+      itObject {
+        id
+        name
+      }
+      department {
+        id
+        name
+      }
+      lastWorkRequest {
+        id
+        creationDate
+      }
+      lastRepair {
+        id
+        factDate
+      }
+      currentMovementRecord {
+        id
+        technicalPlace {
+          id
+          name
+          responsibleEmployee {
+            id
+            fullName
+          }
+          allChildren(where: {path: "hierarchyType", comparison: equal, value: "IT_STRUCT      "}){
+            id
+          }
+          allParents(where: {path: "hierarchyType", comparison: equal, value: "IT_STRUCT      "}, orderBy:{path:"level"}) {
+            technicalPlace {
+              id
+              responsibleSpecialists {
+                employee {
+                  id
+                  fullName
+                }
+                direction {
+                  id
+                  name
+                }
+                isResponsible
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

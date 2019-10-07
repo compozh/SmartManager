@@ -6,18 +6,24 @@ Vue.use(VueRouter)
 
 export async function  getRouter() {
 
+  // загрузка описания приложения
   let resp = await PortalApi.getApplicationDescription()
 
   let appDescription = JSON.parse(resp.data.webapps.application)
 
-
+  // временно тащим всё из первой секции
   let routesDescription = [...appDescription.Sections[0].Routes]
-
   let routes = routesDescription.sort((a,b) => a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)).map( r => {
+
+
+    let components = {}
+    r.Components.forEach(c => components[c.NameInRoute || 'default'] = Vue.component(c.Name) )
+
+
     return {
       path: r.Path,
       name: r.Id,
-      component: Vue.component(r.Components[0].Name),
+      components,
       meta: {
         pageTitle: r.Name
       }
@@ -113,7 +119,6 @@ export async function  getRouter() {
           to.path.endsWith('/error-404') ||
           to.path.endsWith('/error-500') ||
           to.path.endsWith('/register') ||
-          to.path.endsWith('/callback') ||
 
           !!currentUSer
       ) {

@@ -21,5 +21,24 @@
         "PhoneNumber": "Phone number",
         "Department": "Department",
         "HireDate": "Date of receipt"
+    },
+    "Education":{
+        "Competence": "Competence",
+        "KindTraining": "Kind of vocational training",
+        "Subject": "Subject",
+        "TopicTraining": "The topic of training",
+        "DateParticipationInTheTrainingEvent": "Date of participation in the training event",
+        "Note": "Note",
+        "educationalInstitution": "Educational institution / body that provides the organization of training",
+        "typeAdvancedTraining": "Type of advanced training",
+        "StartDateEducation": "Start date of study",
+        "EndDataEducation": "Date of graduation",
+        "countHours": "Number of hours, fact",
+        "NoteLong": "Note (e.g., Certificate Scan and Feedback Forms)",
+        "Number": "№",
+        "Duty": "Duty",
+        "Priority": "Priority",
+        "Provider": "Approx. the provider",
+        "Status": "Status"
     }
 }

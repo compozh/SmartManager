@@ -1,5 +1,8 @@
 export default {
-  setFullUserInfo(state, value) {
-    state.fullUserInfo = value.data.personalInfoQuery.fullInfo
+  setFullUserInfo(state, fullInfo) {
+    state.fullUserInfo = fullInfo
+  },
+  setEditMode(state, value) {
+    state.userInfoEditMode = value
   }
 }

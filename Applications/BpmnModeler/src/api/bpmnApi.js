@@ -10,6 +10,7 @@ import createProcess from './graphql/createProcess.graphql';
 import editProcess from './graphql/editProcess.graphql';
 import dropProcess from './graphql/dropProcess.graphql';
 import removeProcess from './graphql/deleteProcess.graphql';
+import deployProcess from './graphql/deployProcess.graphql'
 import createFolder from './graphql/createFolder.graphql';
 import editFolder from './graphql/editFolder.graphql';
 import dropFolder from './graphql/dropFolder.graphql';
@@ -92,10 +93,18 @@ export class BpmnModelerApi {
     return result.data.bpmnqueryMutation.deleteProcess;
   }
 
+  async deployProcess(id) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($id: ID!) ${deployProcess}`,
+      variables: { id }
+    });
+    return result.data.bpmnqueryMutation.deployProcess;
+  }
+
   async createFolder(folder) {
     const result = await getClient().mutate({
       mutation: gql`mutation ($folder: FolderInput!) ${createFolder}`,
-      variables: { folder }
+      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId } }
     });
     return result.data.bpmnqueryMutation.createFolder;
   }

@@ -12,7 +12,9 @@
 		"AddFolder": "Додати папку",
 		"Import": "Імпортувати процес",
 		"ExportSvg": "Експортувати в форматі svg",
-		"ExportBpmn": "Експортувати в форматі bpmn"
+		"ExportBpmn": "Експортувати в форматі bpmn",
+		"ExportDmn": "Експортувати в форматі dmn",
+		"Deploy": "Опублікувати"
 	},
 	"labels": {
 		"NewProcess": "Новий процес",
@@ -26,14 +28,24 @@
 		"CreateFolder": "Створити папку",
 		"EditFolder": "Редагувати папку",
 		"DeleteFolder": "Видалити папку",
-		"RequiredField": "Поле обов'язкове для вводу"
+		"RequiredField": "Поле обов'язкове для вводу",
+		"Undo": "Відмінити",
+		"Redo": "Повторити",
+		"ZoomIn": "Збільшити масштаб",
+		"ZoomOut": "Зменшити масштаб",
+		"ResetZoom": "Відновити масштаб",
+		"ToggleMinimap": "Перемикнути мінікарту",
+		"ToggleFullScreen": "Перемикнути повноекранний режим",
+		"TogglePropertiesPanel": "Перемикнути панель параметрів"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
 		"ProcessNotCreated": "Не вдалося створити елемент",
 		"ProcessNotEdited": "Не вдалося змінити елемент",
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
-		"CantDrop": "Не вдалося перемістити елемент"
+		"CantDrop": "Не вдалося перемістити елемент",
+		"ProcessDeployed": "Процес опубліковано",
+		"ProcessNotDeployed": "Не вдалося опублікувати процесс"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
@@ -185,6 +197,19 @@
 		"Cycle": "Періодичність",
 		"Must provide a value": "Необхідно заповнити значення",
 
+		"Version Tag": "Тег версії",
+		"Decision": "Рішення",
+		"Decision Table": "Таблиця рішень",
+		"KnowledgeSource": "Джерело знань",
+		"InputData": "Вхідні дані",
+		"Empty": "Пусто",
+		"Connect using Information/Knowledge/Authority Requirement or Association": "З'єднати, використовуючи Вимогу до Інформації/Знань/Повномажень або Асоціацію",
+		"This maps to the decision definition key": "This maps to the decision definition key.",
+		"Literal Expression": "Вираз",
+		"History Configuration": "History Configuration",
+		"History Time To Live": "History Time To Live",
+		"BusinessKnowledgeModel": "Модель бизнес-знаний",
+
 		"Forms": "Форми",
 		"Form Key": "Ідентифікатор форми",
 		"Form Fields": "Поля форми",
@@ -202,6 +227,9 @@
 		"Constraint Config": "Параметри",
 		"Properties": "Властивості",
 		"Add Property": "Додати властивість",
-		"Value": "Значення"
+		"Value": "Значення",
+
+		"Open minimap": "Відкрити мінікарту",
+		"Clode minimap": "Закрити мінікарту"
 	}
 }
