@@ -5,9 +5,9 @@
     :loading="loading"
     :disabled="loading"
     :placeholder="placeholder"
-    label="fio"
-    track-by="fio"
-    :options="users"
+    :label="label"
+    :track-by="label"
+    :options="items"
     :multiple="multiple"
     :hideSelected="true"
     :showLabels="false"
@@ -15,10 +15,11 @@
     <template slot="option" slot-scope="props">
       <div class="flex items-center">
         <vs-avatar
+          v-if="props.option.photo"
           size="small"
           :src="props.option.photo"
         />
-        <span class="ml-3 option__title">{{ props.option.fio }}</span>
+        <span class="ml-3 option__title">{{ props.option[label] }}</span>
       </div>
     </template>
   </multiselect>
@@ -32,10 +33,11 @@ export default {
     Multiselect
   },
   props: {
-    users: Array,
+    items: Array,
     placeholder: String,
     multiple: Boolean,
     loading: Boolean,
+    label: String,
     value: [Object, Array]
   }
 }

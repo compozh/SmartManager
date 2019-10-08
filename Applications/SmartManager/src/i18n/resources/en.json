@@ -48,7 +48,9 @@
     "viewMore": "More",
     "addAttachment": "Click here to select files or drag&drop to this area, (max 100mb)",
     "add": "Add",
-    "send": "Send"
+    "send": "Send",
+    "start": "Start",
+    "startWorkflow": "Start business process"
   },
   "icons": {
     "priority": "High priority",
@@ -123,6 +125,13 @@
     "commentAddError": "Error comment adding",
     "fileAlreadyAdded": "File {file} already added",
     "fileUploaded": "File {file} uploaded",
-    "uploadError": "Error upload file {file}"
+    "uploadError": "Error upload file {file}",
+    "bpTitle": "Business processes",
+    "bpSuccess": "Business processes success",
+    "bpFail": "Business processes fail",
+    "bpError": "Business processes error"
+  },
+  "workflow": {
+    "businessProcess": "Business process name"
   }
 }

@@ -196,5 +196,31 @@ export default {
       console.log(e.message)
       notify('danger','commentsTitle', 'commentAddError')
     }
-  }
+  },
+  async getBusinessProcesses({commit}) {
+    try {
+      const result = await api.getBusinessProcessesFromGql()
+      const businessProcesses = result.data.workFlowQuery.businessProcesses
+      commit('setBusinessProcesses', businessProcesses)
+    } catch (e) {
+      console.log(e.message)
+      notify('danger', 'bpTitle', 'bpError')
+    }
+  },
+  async getFormDefinition({commit}, deployId) {
+    startLoading(true)
+    try {
+      const response = await api.getFormDefinitionFromGql(deployId)
+      const result = response.data.workFlowQuery.formDefinition
+      stopLoading()
+      if (result.Success) {
+        return result.Data
+      }
+      notify('warning', 'bpTitle', 'bpError')
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'bpTitle', 'bpError')
+    }
+  },
 }
