@@ -1,8 +1,7 @@
 /* eslint-disable */
 import HtmlelementComponent from 'formiojs/components/html/HTML';
 
-class PieChart extends HtmlelementComponent
-{
+class PieChart extends HtmlelementComponent {
 	redraw () { 
 		return true;
 	}
