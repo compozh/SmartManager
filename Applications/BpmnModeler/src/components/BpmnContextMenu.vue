@@ -55,7 +55,7 @@
           <v-list-tile-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-tile-title>
         </v-list-tile>
       </template>
-      <template v-if="item">
+      <template v-if="item && (!item.isSystem || this.canModifySystemObjects)">
         <v-divider></v-divider>
         <v-list-tile @click="edit(item)">
           <v-list-tile-avatar>
@@ -79,6 +79,11 @@ export default {
   props: {
     item: Object,
     offset: Boolean
+  },
+  computed: {
+    canModifySystemObjects() {
+      return this.$store.state.bpmn.configuration.canModifySystemObjects;
+    }
   },
   methods: {
     addFolder(item) {

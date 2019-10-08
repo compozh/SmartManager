@@ -3,6 +3,7 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
 import gql from 'graphql-tag';
 // Queries
+import getConfiguration from './graphql/getConfiguration.graphql'
 import items from './graphql/items.graphql';
 import getXml from './graphql/getXml.graphql';
 import setXml from './graphql/setXml.graphql';
@@ -19,7 +20,7 @@ import removeFolder from './graphql/deleteFolder.graphql';
 import Vue from 'vue';
 
 const getClient = () => {
-  const authHeader =  Vue.prototype.$authentication.getAuthHeader();
+  const authHeader = Vue.prototype.$authentication.getAuthHeader();
   const options = {
     // eslint-disable-next-line no-undef
     uri: myConfig.GrapgQlUrl + 'api/graphql',
@@ -36,7 +37,14 @@ const getClient = () => {
 };
 
 export class BpmnModelerApi {
-  constructor() {}
+  constructor() { }
+  
+  async getConfiguration() {
+    const result = await getClient().query({
+      query: gql`query ${getConfiguration}`
+    });
+    return result.data.bpmnquery.getConfiguration;
+  }
 
   async getItems() {
     const result = await getClient().query({
@@ -104,7 +112,7 @@ export class BpmnModelerApi {
   async createFolder(folder) {
     const result = await getClient().mutate({
       mutation: gql`mutation ($folder: FolderInput!) ${createFolder}`,
-      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId } }
+      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId, isSystem: folder.isSystem } }
     });
     return result.data.bpmnqueryMutation.createFolder;
   }

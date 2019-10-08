@@ -1,0 +1,14 @@
+{
+	portalNabuQuery{
+    trainingPlan{
+      subject
+      competence
+      description
+      eventDateEnd
+      trainingTheme
+      eventDateStart
+      personnelNumber
+      professionalTrainingType
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-    "AppTitle":"User Account",
+    "AppTitle":"NABU. User Account",
     "UserInfo":"Personal information",
     "Login": {
         "Enter": "Entrance",
@@ -24,15 +24,15 @@
     },
     "Education":{
         "Competence": "Competence",
-        "KindTraining": "Kind of vocational training",
+        "ProfessionalTrainingType": "Kind of vocational training",
         "Subject": "Subject",
-        "TopicTraining": "The topic of training",
+        "TrainingTheme": "The topic of training",
         "DateParticipationInTheTrainingEvent": "Date of participation in the training event",
-        "Note": "Note",
+        "Description": "Note",
         "educationalInstitution": "Educational institution / body that provides the organization of training",
         "typeAdvancedTraining": "Type of advanced training",
-        "StartDateEducation": "Start date of study",
-        "EndDataEducation": "Date of graduation",
+        "EventDateStart": "Start date of study",
+        "EventDateEnd": "Date of graduation",
         "countHours": "Number of hours, fact",
         "NoteLong": "Note (e.g., Certificate Scan and Feedback Forms)",
         "Number": "№",

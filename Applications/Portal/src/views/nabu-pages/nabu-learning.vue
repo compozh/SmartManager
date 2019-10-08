@@ -1,15 +1,9 @@
 <template>
-    <div>
-      <vs-row>
-        <vs-col vs-type="flex" vs-justify="center"  vs-w="12">
-          <AgGridView :education="educationResult"></AgGridView>
-        </vs-col>
-      </vs-row>
-    </div>
+  <AgGridView :education="educationResult"></AgGridView>
 </template>
 
 <script>
-const AgGridView = () => import('./components/AgGridTableComponent.vue')
+const AgGridView = () => import('../components/AgGridTableComponent.vue')
 export default {
   components: {
     AgGridView
@@ -23,13 +17,13 @@ export default {
         headerName: this.$t('Education.typeAdvancedTraining'),
         field: 'typeAdvancedTraining',
       },{
-        headerName: this.$t('Education.TopicTraining'),
-        field: 'topicTraining',
+        headerName: this.$t('Education.TrainingTheme'),
+        field: 'TrainingTheme',
       },{
-        headerName: this.$t('Education.StartDateEducation'),
+        headerName: this.$t('Education.EventDateStart'),
         field: 'dateStart',
       },{
-        headerName: this.$t('Education.EndDataEducation'),
+        headerName: this.$t('Education.EventDateEnd'),
         field: 'dateEnd',
       },{
         headerName: this.$t('Education.countHours'),

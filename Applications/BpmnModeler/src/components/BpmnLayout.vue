@@ -128,6 +128,7 @@ export default {
   methods: {
     async loadItems() {
       this.loading = true;
+      await this.$store.dispatch('bpmn/loadConfiguration');
       if (!await this.$store.dispatch('bpmn/loadItems')) {
         this.showMessage(this.$t('bpmn.errors.ProcessesNotLoaded'), 'error');
       }
