@@ -14,16 +14,25 @@
           icon="MenuIcon"
           @click.stop="showSidebar"
         ></feather-icon>
+        <div class="flex" v-if="$route.name === 'task-list'">
+          <vs-button
+            icon="add"
+            color="primary"
+            type="gradient"
+            class="px-3 mr-2"
+            @click="$router.push('/task-add')"
+          >{{ $t('buttons.addTask') }}
+          </vs-button>
 
-        <vs-button
-          v-if="$route.name === 'task-list'"
-          icon="add"
-          color="primary"
-          type="gradient"
-          class="px-3 mr-2"
-          @click="$router.push('/task-add')"
-        >{{ $t('buttons.addTask') }}
-        </vs-button>
+          <vs-button
+            icon="get_app"
+            color="success"
+            type="gradient"
+            class="px-3 mr-2"
+            @click="$router.push('/work-flow')"
+          >{{ $t('buttons.startWorkflow') }}
+          </vs-button>
+        </div>
 
         <div class="flex" v-if="task.id">
           <vs-button

@@ -67,6 +67,15 @@ let router = new VueRouter({
             rule: 'admin'
           },
           caseSensitive: false
+        },
+        {
+          path: '/work-flow',
+          name: 'work-flow',
+          component: () => import('./views/work-flow/WorkFlow.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
         }
       ]
     },

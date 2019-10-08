@@ -13,6 +13,8 @@ import changeStatus from './graphql/changeStatus.graphql'
 import addAttachments from './graphql/addAttachments.graphql'
 import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
+import businessProcesses from './graphql/businessProcesses.graphql'
+import formDefinition from './graphql/formDefinition.graphql'
 import auth from './auth/auth'
 import router from '@/router'
 
@@ -26,7 +28,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
   }
 })
 
-const getClient = () => {
+const getClient = schema => {
   const authHeader = auth.getAuthHeader()
   const options = {
     // eslint-disable-next-line no-undef
@@ -34,7 +36,7 @@ const getClient = () => {
     credentials: 'include',
     headers: {
       ...authHeader,
-      'schema': 'smartmanager'
+      'schema': schema
     }
   }
   const httpLink = new HttpLink(options)
@@ -48,7 +50,7 @@ export class SmartManagerApi {
 
   static async getFoldersFromGql() {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .query({
           query: gql`${folders}`
         })
@@ -59,7 +61,7 @@ export class SmartManagerApi {
 
   static async getTasksFromGql(folderId) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .query({
           query: gql`${tasks}`,
           variables: {folderId}
@@ -71,7 +73,7 @@ export class SmartManagerApi {
 
   static async getTaskInfoFromGql(taskId) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .query({
           query: gql`${taskInfo}`,
           variables: {taskId}
@@ -83,7 +85,7 @@ export class SmartManagerApi {
 
   static async getUsersFromGql() {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .query({
           query: gql`${users}`,
         })
@@ -94,7 +96,7 @@ export class SmartManagerApi {
 
   static async addNewTaskToGql(newTask) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .mutate({
           mutation: gql`${addTask}`,
           variables: {newTask}
@@ -106,7 +108,7 @@ export class SmartManagerApi {
 
   static async changeTaskStatusInGql(status) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .mutate({
           mutation: gql`${changeStatus}`,
           variables: {status}
@@ -118,7 +120,7 @@ export class SmartManagerApi {
 
   static async addAttachmentsInGql(taskId, attachments) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .mutate({
           mutation: gql`${addAttachments}`,
           variables: {taskId, attachments}
@@ -130,7 +132,7 @@ export class SmartManagerApi {
 
   static async changeTaskStageInGql(stageParams) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .mutate({
           mutation: gql`${changeStage}`,
           variables: {stageParams}
@@ -142,10 +144,33 @@ export class SmartManagerApi {
 
   static async addTaskCommentToGql(comment, params) {
     try {
-      return await getClient()
+      return await getClient('smartmanager')
         .mutate({
           mutation: gql`${addComment}`,
           variables: {comment, params}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getBusinessProcessesFromGql() {
+    try {
+      return await getClient('WORKFLOW')
+        .query({
+          query: gql`${businessProcesses}`
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getFormDefinitionFromGql(deployId) {
+    try {
+      return await getClient('WORKFLOW')
+        .query({
+          query: gql`${formDefinition}`,
+          variables: {deployId}
         })
     } catch (e) {
       throw new Error(e.message)

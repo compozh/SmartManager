@@ -35,5 +35,8 @@ export default {
       userPhoto: user.UserData.CurrentUserData.UserPhoto
     }
     state.taskInfo[payload.id].comments.push(comment)
+  },
+  setBusinessProcesses(state, payload) {
+    state.businessProcesses = payload
   }
 }

@@ -48,7 +48,9 @@
     "viewMore": "Показать больше",
     "addAttachment": "Нажмите здесь для выбора файлов или перетащите их в эту область, (max 100mb)",
     "add": "Добавить",
-    "send": "Отправить"
+    "send": "Отправить",
+    "start": "Запустить",
+    "startWorkflow": "Запустить бизнес-процес"
   },
   "icons": {
     "priority": "Высокий приоритет",
@@ -123,6 +125,13 @@
     "commentAddError": "Ошибка при добавлении комментария",
     "fileAlreadyAdded": "Файл {file} уже добавлен",
     "fileUploaded": "Файл {file} загружен",
-    "uploadError": "Ошибка загрузки файла {file}"
+    "uploadError": "Ошибка загрузки файла {file}",
+    "bpTitle": "Бизнес-процессы",
+    "bpSuccess": "Бизнес-процессы success",
+    "bpFail": "Бизнес-процессы fail",
+    "bpError": "Бизнес-процессы error"
+  },
+  "workflow": {
+    "businessProcess": "Название бизнес-процесса"
   }
 }

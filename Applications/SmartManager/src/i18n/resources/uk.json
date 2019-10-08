@@ -48,7 +48,9 @@
     "viewMore": "Показати більше",
     "addAttachment": "Натисніть тут для вибору файлів або перетягніть їх в цю область, (max 100mb)",
     "add": "Додати",
-    "send": "Надіслати"
+    "send": "Надіслати",
+    "start": "Почати",
+    "startWorkflow": "Почати бізнес-процес"
   },
   "icons": {
     "priority": "Високий пріоритет",
@@ -123,6 +125,14 @@
     "commentAddError": "Помилка при додаванні коментаря",
     "fileAlreadyAdded": "Файл {file} вже додано",
     "fileUploaded": "Файл {file} завантажено",
-    "uploadError": "Помилка завантаження файлу {file}"
+    "uploadError": "Помилка завантаження файлу {file}",
+    "bpTitle": "Бізнес-процеси",
+    "bpSuccess": "Бізнес-процеси success",
+    "bpFail": "Бізнес-процеси fail",
+    "bpError": "Бізнес-процеси error"
+
+  },
+  "workflow": {
+    "businessProcess": "Назва бізнес-процесу"
   }
 }
