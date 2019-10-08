@@ -24,15 +24,15 @@
     },
     "Education":{
         "Competence": "Компетенция",
-        "KindTraining": "Вид профессионального обучения",
+        "ProfessionalTrainingType": "Вид профессионального обучения",
         "Subject": "Тематика",
-        "TopicTraining": "Тема обучения",
+        "TrainingTheme": "Тема обучения",
         "DateParticipationInTheTrainingEvent": "Дата участия в учебном мероприятии",
-        "Note": "Примечание",
+        "Description": "Примечание",
         "educationalInstitution": "Учебное заведение / Орган, который обеспечивает организацию обучения",
         "typeAdvancedTraining": "Вид повышения квалификации",
-        "StartDateEducation": "Дата начала обучени",
-        "EndDataEducation": "Дата окончания обучения",
+        "EventDateStart": "Дата начала обучени",
+        "EventDateEnd": "Дата окончания обучения",
         "countHours": "Количество часов, факт",
         "NoteLong": "Примечание (например скан.сертификату и формы обратной связи))",
         "Number": "№",
@@ -42,3 +42,4 @@
         "Status": "Статус"
     }
 }
+

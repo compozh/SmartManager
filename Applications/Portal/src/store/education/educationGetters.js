@@ -1,6 +1,9 @@
 export default {
   getEducationPlan: state => {
-    return state.educationPlan
+    if (state.educationPlan) {
+      return state.educationPlan
+    }
+    return undefined
   },
   getEducationResult: state => {
     return state.educationResult

@@ -1,7 +1,7 @@
  [{
     "educationalInstitution": "Компетенция",
     "typeAdvancedTraining": "ЛАиГ",
-    "topicTraining": "Матрицы",
+    "TrainingTheme": "Матрицы",
     "dateStart": "01.09.2019",
     "dateEnd": "27.09.2019",
     "countHours": "150",
@@ -10,7 +10,7 @@
     {
     "educationalInstitution": "Компетенция",
     "typeAdvancedTraining": "ЛАиГ",
-    "topicTraining": "Матрицы",
+    "TrainingTheme": "Матрицы",
     "dateStart": "01.09.2019",
     "dateEnd": "27.09.2019",
     "countHours":"150" ,

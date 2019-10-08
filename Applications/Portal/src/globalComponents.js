@@ -27,11 +27,18 @@ Vue.component(VxInputGroup.name, VxInputGroup)
 
 import './views/account-personal-info/main'
 
-Vue.component('account-home-page', () => import('./views/account-home-page.vue'))
-Vue.component('account-tmc-page', () => import('./views/account-tmc-page.vue'))
-Vue.component('account-additional-training', () => import('./views/account-additional-training.vue'))
-Vue.component('account-curriculum', () => import('./views/account-curriculum.vue'))
-Vue.component('account-learning', () => import('./views/account-learning.vue'))
+Vue.component('nabu-additional-training', () => import('./views/nabu-pages/nabu-additional-training.vue'))
+Vue.component('nabu-curriculum', () => import('./views/nabu-pages/nabu-curriculum.vue'))
+Vue.component('nabu-learning', () => import('./views/nabu-pages/nabu-learning.vue'))
+Vue.component('nabu-strategic-goals', () => import('./views/nabu-pages/nabu-strategic-goals.vue'))
+Vue.component('nabu-tasks-for-year', () => import('./views/nabu-pages/nabu-tasks-for-year.vue'))
+Vue.component('nabu-results-interim-evaluation', () => import('./views/nabu-pages/nabu-results-interim-evaluation.vue'))
+Vue.component('nabu-criterial-evaluation', () => import('./views/nabu-pages/nabu-criterial-evaluation.vue'))
+Vue.component('nabu-self-esteem-results', () => import('./views/nabu-pages/nabu-self-esteem-results.vue'))
+Vue.component('nabu-results-assessment-supremo', () => import('./views/nabu-pages/nabu-results-assessment-supremo.vue'))
+
+
+
 
 // v-select component
 import vSelect from 'vue-select'
