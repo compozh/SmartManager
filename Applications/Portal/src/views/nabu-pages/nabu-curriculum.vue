@@ -1,11 +1,5 @@
 <template>
-    <div>
-      <vs-row>
-        <vs-col vs-type="flex" vs-justify="center"  vs-w="12">
-          <AgGridView :education="educationPlan" v-if="dataEducation"></AgGridView>
-        </vs-col>
-      </vs-row>
-    </div>
+  <AgGridView :education="educationPlan" v-if="dataEducation"></AgGridView>
 </template>
 
 <script>
