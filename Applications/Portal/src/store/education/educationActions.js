@@ -1,7 +1,22 @@
 import { EducationApi } from '@/api/education/educationApi.js'
 export default {
   async loadEducationPlan({commit}) {
-    let educationPlan = await EducationApi.getEducationPlan()
+    let result = await EducationApi.getEducationPlan()
+    if (result) {
+      var educationPlan = result.data.portalNabuQuery.trainingPlan.map(element => {
+        var object = {
+          personnelNumber: element.personnelNumber,
+          competence: element.competence,
+          professionalTrainingType: element.professionalTrainingType,
+          subject: element.subject,
+          trainingTheme: element.trainingTheme,
+          description: element.description,
+          startAndEndDate: `${element.eventDateStart} - ${element.eventDateEnd}`
+        }
+        return object
+      })
+    }
+
     commit('setEducationPlan', educationPlan)
   },
   async loadEducationResult({commit}) {

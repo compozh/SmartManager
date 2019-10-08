@@ -103,3 +103,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .router-link-active >>> .con-vs-tooltip{
+    color: #fff;
+  }
+</style>

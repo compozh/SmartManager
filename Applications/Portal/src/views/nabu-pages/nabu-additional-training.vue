@@ -9,7 +9,7 @@
 </template>
 
 <script>
-const AgGridView = () => import('./components/OpenAgGridTableComponent.vue')
+const AgGridView = () => import('../components/OpenAgGridTableComponent.vue')
 export default {
   components: {
     AgGridView
@@ -33,7 +33,7 @@ export default {
       },{
         headerName: this.$t('Education.Status'),
       },{
-        headerName: this.$t('Education.Note'),
+        headerName: this.$t('Education.Description'),
       }]
     }
   },

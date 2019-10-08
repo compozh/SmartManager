@@ -1,17 +1,14 @@
 <template>
-  <div id="ag-grid" >
-    <vx-card>
-      <ag-grid-vue
-        class="ag-theme-material my-grid w-100 my-4 ag-grid-table"
-        :gridOptions="gridOptions"
-        :columnDefs="headers"
-        :defaultColDef="defaultColDef"
-        :rowData="education.data"
-        :animateRows="true"
-        >
-      </ag-grid-vue>
-    </vx-card>
-  </div>
+  <vx-card class="overflow-hidden">
+    <ag-grid-vue
+      class="ag-theme-material my-4 flex-grow my-ag-grid"
+      :gridOptions="gridOptions"
+      :columnDefs="columnDefs"
+      :defaultColDef="defaultColDef"
+      :rowData="rows"
+    ></ag-grid-vue>
+
+  </vx-card>
 </template>
 
 <script>
@@ -27,6 +24,7 @@ export default {
   data() {
     return {
       searchQuery: '',
+      // Зебря для строк
       gridOptions: { rowStyle: {background: '#f8f8f8'},
         getRowStyle: function(params) {
           if (params.node.id % 2 === 0) {
@@ -37,37 +35,33 @@ export default {
       defaultColDef: {
         sortable: true,
         resizable: true,
-        suppressMenu: true,
       },
       gridApi: null,
-      columnDefs: [ ],
     }
   },
   computed: {
-    headers() {
+    // Заголовки и их свойства
+    columnDefs() {
       return this.education.headers.map(element => {
         var object = element
         object.filter = true
+        object.minWidth = 100
         return object
       })
-    }
+    },
+    // Значение строк
+    rows() {
+      return this.education.data
+    },
   },
   mounted() {
     this.gridApi = this.gridOptions.api
-    this.gridColumnApi = this.gridOptions.columnApi
     // Установка ширины колонок
     this.gridApi.sizeColumnsToFit()
 
-    // Установка высоты, на весь контент
-    var eGridDiv = document.querySelector('.my-grid')
-    eGridDiv.style.height = '100%'
-    this.gridApi.setDomLayout('print')
+    // Установка высоты, на весь контент (кол-во строк * высоту + шапка и место под скролл)
+    var agGrid = document.querySelector('.my-ag-grid')
+    agGrid.style.height = (this.rows.length * 50) + 100 + 'px'
   },
 }
-
 </script>
-<style scoped>
-#ag-grid{
-    width: 100%;
-}
-</style>
