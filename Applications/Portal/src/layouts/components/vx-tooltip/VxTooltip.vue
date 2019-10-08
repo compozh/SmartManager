@@ -1,7 +1,7 @@
 <template>
   <div
     ref="convstooltip"
-    class="con-vs-tooltip"
+    class="con-vs-tooltip truncate"
     @mouseleave="mouseleavex"
     @mouseenter="mouseenterx"
     @mouseup="destroy"  >
