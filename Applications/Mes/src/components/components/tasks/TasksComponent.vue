@@ -27,7 +27,7 @@
           clearable
         ></v-text-field>
         <div class="tasks-list-block-content">
-          
+
           <mes-task-cards
             :selectedTask=selectedTask
             :selectedTasksTab=selectedTasksTab
@@ -180,6 +180,7 @@ export default {
   }
   .toolbar-item {
     margin: 0 10px;
+    min-width: 135px;
   }
   .lack-of-tasks-str {
     display: flex;

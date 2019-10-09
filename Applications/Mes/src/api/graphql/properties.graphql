@@ -20,6 +20,7 @@
         canChangeOrder
         canChangeStartStockQt
         allowUsedAllRegistration
+        allowRemoveAllInstallations
         isLocalPrint
         isPreparation
         isWasteRegistration

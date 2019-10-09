@@ -379,7 +379,7 @@ export default {
       queryAction: async () => {
         return await api.callFormCustomEventGql(formCode, params)
       },
-      successAction: async result => { successCallback(result) },
+      successAction: async result => { successCallback(result) }
     })
   },
   async callItemAutocomplete({ commit }, { formCode, params, fetchPolicy, callback }) {
@@ -387,7 +387,23 @@ export default {
       queryAction: async () => {
         return await api.callItemAutocompleteGql(formCode, params, fetchPolicy)
       },
-      actionAfterQuery: async result => { callback(result) },
+      actionAfterQuery: async result => { callback(result) }
+    })
+  },
+  async createFormio({ commit }, { params, callback }) {
+    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.createFormioGql(params)
+      },
+      successAction: async result => { callback(result) }
+    })
+  },
+  async saveFormio({ commit }, { params, callback }) {
+    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.saveFormioGql(params)
+      },
+      successAction: async result => { callback(result) }
     })
   }
 }

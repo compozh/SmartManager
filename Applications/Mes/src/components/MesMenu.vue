@@ -38,10 +38,18 @@ export default {
           pages.push(page)
         }
       }
-      if (this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES') && (this.$route.fullPath == '/MES' || this.$route.fullPath == '/MES/')) {
+      if (this.workCenter && (this.workCenter.accessPages == 'ALL_PAGES') && (
+        this.$route.path == '/MES'
+        || this.$route.path == '/MES/'
+        || this.$route.path == '/mes/'
+        || this.$route.path == '/mes')) {
         this.$router.replace({path: '/MES/tasks'})
       }
-      if (this.workCenter && (this.workCenter.accessPages == 'INSTALLATIONS')  && (this.$route.fullPath == '/MES' || this.$route.fullPath == '/MES/')) {
+      if (this.workCenter && (this.workCenter.accessPages == 'INSTALLATIONS')  && (
+        this.$route.path == '/MES'
+        || this.$route.path == '/MES/'
+        || this.$route.path == '/mes/'
+        || this.$route.path == '/mes')) {
         this.$router.replace({path: '/MES/installations'})
       }
       pages = pages.sort((a,b) => {

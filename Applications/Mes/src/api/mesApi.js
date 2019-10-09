@@ -26,6 +26,8 @@ import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 
 //formio
+import createFormio from './graphql/formio/createFormio.graphql'
+import saveFormio from './graphql/formio/saveFormio.graphql'
 import productionFormIo from './graphql/formio/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/formio/productionFormIoSubmit.graphql'
 import downtimeFormIo from './graphql/formio/downtimeFormIo.graphql'
@@ -254,6 +256,7 @@ export class MesApi {
       .then(result => result)
     return result.data.mesMutation.downtimeFormIoSubmit
   }
+
   async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
     const result = await getClient().mutate({
       mutation: gql`${callFormCustomEvent}`,
@@ -271,5 +274,25 @@ export class MesApi {
       .then(result => result)
 
     return result.data.mesMutation.callItemAutocomplete
+  }
+
+  async createFormioGql(formObjectParamsInput) {
+    const result = await getClient().mutate({
+      mutation: gql`${createFormio}`,
+      variables: { formObjectParamsInput }
+    })
+      .then(result => result)
+
+    return result.data.mesMutation.createFormio
+  }
+
+  async saveFormioGql(formObjectParamsInput) {
+    const result = await getClient().mutate({
+      mutation: gql`${saveFormio}`,
+      variables: { formObjectParamsInput }
+    })
+      .then(result => result)
+
+    return result.data.mesMutation.saveFormio
   }
 }

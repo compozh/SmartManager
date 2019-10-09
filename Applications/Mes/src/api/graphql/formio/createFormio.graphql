@@ -1,0 +1,10 @@
+mutation($formObjectParamsInput: FormObjectParamsInput!) {
+    mesMutation {
+        createFormio(formObjectParamsInput: $formObjectParamsInput) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

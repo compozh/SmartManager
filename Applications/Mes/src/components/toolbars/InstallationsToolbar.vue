@@ -29,7 +29,7 @@
       <span>Сканировать QR код</span>
     </v-tooltip>
   </v-flex>
-  <v-flex class="setup-material-layout" xs2 v-if="installations.length">
+  <v-flex class="setup-material-layout" xs2 v-if="installations.length && properties.allowRemoveAllInstallations">
 
     <v-btn outlined
       class="remove-installations-button"
@@ -53,6 +53,9 @@ export default {
   computed: {
     installations() {
       return this.$store.getters['mes/installations']
+    },
+    properties() {
+      return this.$store.getters['mes/properties']
     }
   },
   methods: {

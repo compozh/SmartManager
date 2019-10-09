@@ -97,7 +97,7 @@ export default {
     flex-direction: column;
     flex-wrap: wrap;
     padding: 0 10px;
-    margin-top: 50px;
+    margin-top: 60px;
     position: absolute;
     height: calc(100% - 63px);
     overflow-y: auto;
