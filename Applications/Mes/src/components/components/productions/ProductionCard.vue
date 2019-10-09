@@ -11,7 +11,7 @@
       top
       v-model="fab"
       direction="bottom"
-      transition="fade-transition"
+      transition="scroll-y-transition"
     >
       <template v-slot:activator>
         <v-btn
@@ -20,15 +20,14 @@
         width="30px"
         height="30px"
         v-model="fab"
-        :loading="printInProgress || deleteInProgress"
-        :color="printInProgress ? '#326da8' : deleteInProgress ? 'error' : '#999999'"
+        :loading="printInProgress || deleteInProgress || setMaterialInProgress"
+        :color="( printInProgress || setMaterialInProgress ) ? '#326da8' : deleteInProgress ? 'error' : '#999999'"
         >
           <v-icon>
             more_vert
           </v-icon>
         </v-btn>
       </template>
-      <v-card class="btns-card" elevation=0>
       <v-tooltip right>
         <template v-slot:activator="{ on }">
           <v-btn v-if="production && production.savedProgress < 100" icon color="#326da8" class="mes-set-material-production" @click="setMaterialProduction" v-on="on">
@@ -53,7 +52,6 @@
         </template>
         <span>Удалить выработку</span>
       </v-tooltip>
-      </v-card>
     </v-speed-dial>
   </v-card-text>
 </template>
@@ -97,7 +95,7 @@ export default {
     },
     setMaterialProduction () {
       var me = this
-      me.printInProgress = true
+      me.setMaterialInProgress = true
       me.$emit('setMaterialProduction', { production: me.production, callback: () => {
         me.setMaterialInProgress = false
       }})

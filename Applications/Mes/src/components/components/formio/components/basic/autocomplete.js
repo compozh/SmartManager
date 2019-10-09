@@ -1,4 +1,4 @@
-import SelectComponent from '../../../../../../node_modules/formiojs/components/select/Select';
+import SelectComponent from 'formiojs/components/select/Select';
 
 class Autocomplete extends SelectComponent {
 	attach(element) {
