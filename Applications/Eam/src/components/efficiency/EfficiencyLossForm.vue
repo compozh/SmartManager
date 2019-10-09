@@ -71,22 +71,24 @@
                 box
               ></v-textarea>
             </v-flex>-->
-            <v-layout xs12 md4>
-              <v-slider label="Уровень" v-model="internalItem.lossLevel" :max="100" :min="0"></v-slider>
-              <v-flex shrink ml-2 style="width: 60px">
-                <v-text-field
-                  v-model="internalItem.lossLevel"
-                  class="mt-0"
-                  hide-details
-                  single-line
-                  type="number"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-            <v-flex xs6 md4>
+            <v-flex xs12>
+              <v-layout>
+                <v-slider label="Уровень" v-model="internalItem.lossLevel" :max="100" :min="0"></v-slider>
+                <v-flex shrink ml-2 style="width: 60px">
+                  <v-text-field
+                    v-model="internalItem.lossLevel"
+                    class="mt-0"
+                    hide-details
+                    single-line
+                    type="number"
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex xs6>
               <v-switch label="Утвердить" v-model="internalItem.isApproved" class="justify-center"></v-switch>
             </v-flex>
-            <v-flex xs6 md4>
+            <v-flex xs6>
               <v-switch label="Отменить" v-model="internalItem.isValid" class="justify-center"></v-switch>
             </v-flex>
           </v-layout>
@@ -96,12 +98,7 @@
 
     <v-card-actions>
       <v-flex xs12 sm2>
-        <v-btn
-          block
-          medium
-          :loading="loading"
-          @click="$emit('complete')"
-        >Отменить</v-btn>
+        <v-btn block medium :loading="loading" @click="$emit('complete')">Отменить</v-btn>
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex xs12 sm2>
