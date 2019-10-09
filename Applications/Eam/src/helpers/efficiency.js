@@ -1,24 +1,24 @@
 export function typeName(type) {
   switch (type) {
-    case 'PLANNED':
-      return 'Плановый'
-    case 'ACTUAL':
-      return 'Фактический'
-    default:
-      return 'Не определено'
+  case 'PLANNED':
+    return 'Плановый'
+  case 'ACTUAL':
+    return 'Фактический'
+  default:
+    return 'Не определено'
   }
 }
 
-export function indicatorName(indicator) {
+export function indicatorName(indicator) {  
   switch (indicator) {
-    case 'AVAILABILITY':
-      return 'Доступность'
-    case 'PERFORMANCE':
-      return 'Продуктивность'
-    case 'QUALITY':
-      return 'Качество'
-    default:
-      return ''
+  case 'AVAILABILITY':
+    return 'Доступность'
+  case 'PERFORMANCE':
+    return 'Продуктивность'
+  case 'QUALITY':
+    return 'Качество'
+  default:
+    return ''
   }
 }
 
