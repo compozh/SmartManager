@@ -116,6 +116,8 @@
     "statChangeSuccess": "Status changed successfully",
     "statChangeFail": "Status changing failed",
     "statChangeError": "Error status changing",
+    "stageChangeSuccess": "Stage changed successfully",
+    "stageChangeFail": "Stage changing failed",
     "stageChangeError": "Error stage changing",
     "attachAddSuccess": "Attachment added successfully",
     "attachAddFail": "Add attachment failed",
