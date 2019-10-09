@@ -15,6 +15,7 @@ import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
 import businessProcesses from './graphql/businessProcesses.graphql'
 import formDefinition from './graphql/formDefinition.graphql'
+//import startBusinessProcess from './graphql/startBusinessProcess.graphql'
 import auth from './auth/auth'
 import router from '@/router'
 
@@ -171,6 +172,18 @@ export class SmartManagerApi {
         .query({
           query: gql`${formDefinition}`,
           variables: {deployId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async startBusinessProcessInGql(formData) {
+    try {
+      return await getClient('WORKFLOW')
+        .query({
+          query: gql`${startBusinessProcess}`,
+          variables: {formData}
         })
     } catch (e) {
       throw new Error(e.message)
