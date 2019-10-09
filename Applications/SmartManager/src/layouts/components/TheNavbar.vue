@@ -122,7 +122,6 @@
         <div class="the-navbar__user-meta flex items-center">
           <div class="text-right leading-tight hidden sm:block">
             <p class="font-semibold">{{ user_displayName }}</p>
-            <small>Available</small>
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
@@ -170,16 +169,16 @@
             </vs-dropdown-menu>
           </vs-dropdown>
         </div>
-
         <!-- I18N -->
         <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
         <span class="cursor-pointer flex i18n-locale ml-3">
-          <flag class="h-6 w-8" size="small" :squared="false" :iso="getCurrentLocaleData.flag"/>
+         {{ getCurrentLocaleData.flag.toUpperCase() }}
         </span>
           <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-            <vs-dropdown-item :key="lang.code" v-for="lang in localizations"
+            <vs-dropdown-item v-for="lang in localizations"
+                              :key="lang.code"
                               @click="updateLocale(lang.code)">
-              <flag class="h-4 w-5" :squared="false" :iso="lang.flag"/> &nbsp;{{lang.name}}
+              {{lang.flag.toUpperCase()}}   ({{lang.name}})
             </vs-dropdown-item>
           </vs-dropdown-menu>
         </vs-dropdown>
@@ -259,9 +258,9 @@ export default {
     },
     // NAVBAR STYLE
     classObj() {
-      if (this.sidebarWidth == 'default') {
+      if (this.sidebarWidth === 'default') {
         return 'navbar-default'
-      } else if (this.sidebarWidth == 'reduced') {
+      } else if (this.sidebarWidth === 'reduced') {
         return 'navbar-reduced'
       } else if (this.sidebarWidth) {
         return 'navbar-full'
@@ -271,34 +270,12 @@ export default {
     // I18N
     getCurrentLocaleData() {
       const locale = this.$i18n.locale
-      return this.localizations.find(r => r.code == locale)
-    },
-    // BOOKMARK & SEARCH
-    data() {
-      return this.$store.state.navbarSearchAndPinList
-    },
-    starredPages() {
-      return this.$store.state.starredPages
-    },
-    starredPagesLimited: {
-      get() {
-        return this.starredPages.slice(0, 10)
-      },
-      set(list) {
-        this.$store.dispatch('arrangeStarredPagesLimited', list)
-      }
-    },
-    starredPagesMore: {
-      get() {
-        return this.starredPages.slice(10)
-      },
-      set(list) {
-        this.$store.dispatch('arrangeStarredPagesMore', list)
-      }
+      return this.localizations.find(r => r.code === locale)
     },
     // PROFILE
     user_displayName() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
+      const currentUser = this.$store.state.auth.currentUser
+      return currentUser ? currentUser.UserData.CurrentUserData.UserName : ''
     },
     activeUserImg() {
       return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
