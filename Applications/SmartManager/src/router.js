@@ -150,10 +150,8 @@ router.beforeEach((to, from, next) => {
   const currentUSer = auth.getCurrentUser()
   if (
     to.path === '/login' ||
-        to.path === '/forgot-password' ||
         to.path === '/error-404' ||
         to.path === '/error-500' ||
-        to.path === '/register' ||
         to.path === '/callback' ||
 
         !!currentUSer
