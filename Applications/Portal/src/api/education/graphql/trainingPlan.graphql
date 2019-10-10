@@ -1,7 +1,7 @@
 {
 	portalNabuQuery{
     trainingPlan{
-      datas{
+      data{
         subject
         competence
         description

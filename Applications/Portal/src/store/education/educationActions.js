@@ -3,11 +3,11 @@ export default {
   async loadEducationPlan({commit}) {
     let result = await EducationApi.getEducationPlan()
     if (result) {
-      var educationPlanData = result.data.portalNabuQuery.trainingPlan[0].datas
-      var educationPlanHeaders = result.data.portalNabuQuery.trainingPlan[0].headers
+      var educationPlanData = result.data.portalNabuQuery.trainingPlan.data
+      var educationPlanHeaders = result.data.portalNabuQuery.trainingPlan.headers
     }
     var educationPlan = {
-      datas: educationPlanData,
+      data: educationPlanData,
       headers: educationPlanHeaders
     }
     commit('setEducationPlan', educationPlan)
