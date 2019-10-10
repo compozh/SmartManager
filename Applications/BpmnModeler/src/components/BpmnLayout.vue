@@ -48,6 +48,7 @@
             @import="importItem"
             @export="exportItem"
             @deploy="deployItem"
+            @copy="copyItem"
             offset>
             <template #activator="{ open }">
               <v-btn flat icon v-on="open">

@@ -51,6 +51,20 @@ export default {
           this.activeItem = item.id;
         }
         break;
+      case 'copy':
+        if (type === 'folder') {
+          success = await this.$store.dispatch('bpmn/copyFolder', item);
+        } else {
+          success = await this.$store.dispatch('bpmn/copyProcess', item);
+        }
+        if (success) {
+          this.showForm = false;
+          this.activeItem = item.id;
+        } else {
+          this.showMessage(this.$t('bpmn.errors.ProcessNotCreated'), 'error');
+        }
+        break;
+          
       }
       this.formLoading = false;
     },
@@ -79,5 +93,13 @@ export default {
       this.formType = item.isFolder ? 'folder' : 'process';
       this.showForm = true;
     },
+    copyItem(item) {
+      this.$refs.form.reset();
+      this.formMode = 'copy';
+      this.formModel = item instanceof Folder ? new Folder(item) : new Process(item);
+      this.formModel.isSystem = false;
+      this.formType = item.isFolder ? 'folder' : 'process';
+      this.showForm = true;
+    }
   }
 }
