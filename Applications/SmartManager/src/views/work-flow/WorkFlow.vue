@@ -88,13 +88,13 @@ export default {
       return this.$store.state.sm.businessProcesses
     },
     form() {
-      return require('./testForm')
-      // return {
-      //   display: 'form',
-      //   components: this.formDefinition
-      //     ? JSON.parse(this.formDefinition)
-      //     : []
-      // }
+      //return require('./testForm')
+      return {
+        display: 'form',
+        components: this.formDefinition
+          ? JSON.parse(this.formDefinition)
+          : []
+      }
     }
   },
   created() {
