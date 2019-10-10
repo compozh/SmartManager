@@ -1,9 +1,3 @@
-<!-- =========================================================================================
-  File Name: TheNavbar.vue
-  Description: Navbar component
-  Component Name: TheNavbar
-========================================================================================== -->
-
 <template>
   <div class="relative">
     <div class="vx-navbar-wrapper">
@@ -142,30 +136,26 @@
                 height="40"
                 class="rounded-full shadow-md cursor-pointer block"/>
             </div>
-            <vs-dropdown-menu class="vx-navbar-dropdown">
-              <ul style="min-width: 9rem">
-                <li
-                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="$router.push('/pages/profile')"
-                >
-                  <feather-icon
-                    icon="UserIcon"
-                    svgClasses="w-4 h-4"
-                  />
-                  <span class="ml-2">Profile</span>
-                </li>
-                <vs-divider class="m-1"></vs-divider>
-                <li
-                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="logout"
-                >
-                  <feather-icon
-                    icon="LogOutIcon"
-                    svgClasses="w-4 h-4"
-                  />
-                  <span class="ml-2">Выход</span>
-                </li>
-              </ul>
+            <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
+
+              <vs-dropdown-group vs-collapse
+                                 vs-label="Делегированные права"
+                                 vs-icon="expand_more">
+                <vs-dropdown-item v-for="rights in delegatedRights"
+                                  :key="rights.ID"
+                                  @click="applyDelegatedRights(rights.USERID)">
+                  <span :class="{'font-semibold': rights.IsActive}">{{ rights.USERNAME }}</span>
+                </vs-dropdown-item>
+                <vs-dropdown-item divider @click="setDelegation">
+                  Делегировать права
+                </vs-dropdown-item>
+
+              </vs-dropdown-group>
+
+              <vs-dropdown-item divider @click="logout">
+                <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
+                {{ $t('buttons.logout') }}
+              </vs-dropdown-item>
             </vs-dropdown-menu>
           </vs-dropdown>
         </div>
@@ -208,6 +198,7 @@
 <script>
 
 import templateConfig from '@/templateConfig'
+import auth from "@/api/auth/auth"
 
 export default {
   name: 'the-navbar',
@@ -273,12 +264,17 @@ export default {
       return this.localizations.find(r => r.code === locale)
     },
     // PROFILE
+    currentUser() {
+      return this.$store.state.auth.currentUser
+    },
     user_displayName() {
-      const currentUser = this.$store.state.auth.currentUser
-      return currentUser ? currentUser.UserData.CurrentUserData.UserName : ''
+      return this.currentUser ? this.currentUser.UserData.CurrentUserData.UserName : ''
+    },
+    delegatedRights() {
+      return this.currentUser ? this.currentUser.UserData.DelegatedRights : []
     },
     activeUserImg() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
+      return this.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
     }
   },
   methods: {
@@ -320,6 +316,12 @@ export default {
     },
     logout() {
       this.$store.dispatch('auth/logout')
+    },
+    applyDelegatedRights(userId) {
+      auth.applyDelegatedRights(userId)
+    },
+    setDelegation() {
+      console.log('Делегировать права', )
     }
   },
   directives: {
