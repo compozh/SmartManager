@@ -45,7 +45,7 @@ export default {
     },
     // Значение строк
     rows() {
-      return this.education.datas
+      return this.education.data
     },
   },
   mounted() {
