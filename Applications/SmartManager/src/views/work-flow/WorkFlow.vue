@@ -29,14 +29,12 @@
                   >{{ $t('validate.required') }}
                   </span>
                   <vs-divider></vs-divider>
-                    <div>
-                      <formio id="formio"
-                              class="formio-container"
-                              :form="form"
-                      />
-                    </div>
-
-
+                  <formio class="formio"
+                          :form="form"
+                          :options="options"
+                          :submission="submission"
+                          @submit="onSubmit"
+                  />
                   <vs-divider></vs-divider>
                   <div class="flex justify-end">
                     <vs-button class="mx-6"
@@ -79,6 +77,7 @@ export default {
     businessProcess: null,
     formDefinition: null,
     options: { noAlerts: true },
+    submission: null,
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.30,
@@ -89,12 +88,13 @@ export default {
       return this.$store.state.sm.businessProcesses
     },
     form() {
-      return {
-        display: 'form',
-        components: this.formDefinition
-          ? JSON.parse(this.formDefinition)
-          : []
-      }
+      return require('./testForm')
+      // return {
+      //   display: 'form',
+      //   components: this.formDefinition
+      //     ? JSON.parse(this.formDefinition)
+      //     : []
+      // }
     }
   },
   created() {
@@ -115,6 +115,12 @@ export default {
       )
       this.formDefinition = result ? result : null
     },
+    async onSubmit(form) {
+      // const result = await this.$store.dispatch(
+      //   'sm/startBusinessProcess', form.data
+      // )
+      console.log('onSubmit', form.data)
+    }
   }
 }
 </script>
@@ -125,7 +131,7 @@ export default {
     margin: 15px 0;
   }
 
-  .formio-container::v-deep {
+  .formio::v-deep {
     @import "~formiojs/dist/formio.form.min.css";
     @import "../../assets/scss/formio";
     @import "~bootstrap/scss/bootstrap";

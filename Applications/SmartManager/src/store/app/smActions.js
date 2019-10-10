@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import {i18n} from '../../i18n/i18n'
-import {SmartManagerApi as api} from '../../api/smartManagerApi'
+import {i18n} from '@/i18n/i18n'
+import {SmartManagerApi as api} from '@/api/smartManagerApi'
 
 const vs = new Vue().$vs
 
@@ -17,12 +17,6 @@ function notify(type, title, text) {
     text: i18n.t(`notify.${text}`),
     color: type
   })
-}
-
-function trimHtmlTags(stringWithHtmlTags) {
-  const elem = document.createElement('div')
-  elem.innerHTML = stringWithHtmlTags
-  return elem.innerText
 }
 
 export default {
@@ -120,7 +114,7 @@ export default {
         notify(
           'warning',
           'statusTitle',
-          i18n.t('notify.statChangeFail'))
+          'statChangeFail')
       }
     } catch (e) {
       stopLoading()
@@ -159,14 +153,21 @@ export default {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
       stopLoading()
+      console.log('result', result)
       if (result.success) {
         await dispatch('getTaskInfo', {
           taskId: payload.id,
           loader: true
         })
-        notify('success', 'stageTitle', trimHtmlTags(result.log))
+        notify(
+          'success',
+          'stageTitle',
+          'stageChangeSuccess')
       } else {
-        notify('warning', 'stageTitle', trimHtmlTags(result.log))
+        notify(
+          'warning',
+          'stageTitle',
+          'stageChangeFail')
       }
     } catch (e) {
       stopLoading()
@@ -207,7 +208,7 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async getFormDefinition({commit}, deployId) {
+  async getFormDefinition(context, deployId) {
     startLoading(true)
     try {
       const response = await api.getFormDefinitionFromGql(deployId)
@@ -223,4 +224,20 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
+  async startBusinessProcess(context, formData) {
+    startLoading(true)
+    try {
+      const response = await api.startBusinessProcessInGql(formData)
+      const result = response.data.workFlowQuery.startBusinessProcess
+      stopLoading()
+      if (result.Success) {
+        return result.Data
+      }
+      notify('warning', 'bpTitle', 'bpError')
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'bpTitle', 'bpError')
+    }
+  }
 }

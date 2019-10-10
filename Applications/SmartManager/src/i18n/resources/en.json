@@ -1,5 +1,6 @@
 {
   "search": "Search",
+  "rights": "All rights Reserved",
   "pickers": {
     "date": "Date",
     "time": "Time",
@@ -50,7 +51,9 @@
     "add": "Add",
     "send": "Send",
     "start": "Start",
-    "startWorkflow": "Start business process"
+    "startWorkflow": "Start business process",
+    "login": "Sign in",
+    "logout": "Logout"
   },
   "icons": {
     "priority": "High priority",
@@ -116,6 +119,8 @@
     "statChangeSuccess": "Status changed successfully",
     "statChangeFail": "Status changing failed",
     "statChangeError": "Error status changing",
+    "stageChangeSuccess": "Stage changed successfully",
+    "stageChangeFail": "Stage changing failed",
     "stageChangeError": "Error stage changing",
     "attachAddSuccess": "Attachment added successfully",
     "attachAddFail": "Add attachment failed",
@@ -133,5 +138,12 @@
   },
   "workflow": {
     "businessProcess": "Business process name"
+  },
+  "login": {
+    "title": "Sign In",
+    "welcome": "Welcome, please log in with your account.",
+    "rememberMe": "Remember me",
+    "placeholder": "Login",
+    "password": "Password"
   }
 }
