@@ -40,7 +40,7 @@ export default {
     },
     educationResult() {
       var object = {
-        data: this.dataEducation,
+        datas: this.dataEducation,
         headers: this.headers
       }
       return object

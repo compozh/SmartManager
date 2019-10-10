@@ -1,14 +1,22 @@
 {
 	portalNabuQuery{
     trainingPlan{
-      subject
-      competence
-      description
-      eventDateEnd
-      trainingTheme
-      eventDateStart
-      personnelNumber
-      professionalTrainingType
+      datas{
+        subject
+        competence
+        description
+        startAndEndDate
+        trainingTheme
+        personnelNumber
+        professionalTrainingType
+      }
+      headers{
+        field
+        headerName
+        filter
+        sortable
+        minWidth
+      }
     }
   }
 }

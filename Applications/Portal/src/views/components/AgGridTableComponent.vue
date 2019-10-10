@@ -33,7 +33,6 @@ export default {
         }
       },
       defaultColDef: {
-        sortable: true,
         resizable: true,
       },
       gridApi: null,
@@ -42,16 +41,11 @@ export default {
   computed: {
     // Заголовки и их свойства
     columnDefs() {
-      return this.education.headers.map(element => {
-        var object = element
-        object.filter = true
-        object.minWidth = 100
-        return object
-      })
+      return this.education.headers
     },
     // Значение строк
     rows() {
-      return this.education.data
+      return this.education.datas
     },
   },
   mounted() {
