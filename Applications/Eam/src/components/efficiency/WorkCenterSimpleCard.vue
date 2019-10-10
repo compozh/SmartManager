@@ -1,13 +1,13 @@
 <template>
   <v-flex v-if="item" shrink>
-    <v-icon class="mr-1" color="cyan">center_focus_weak</v-icon>
-    <span>{{ item.name }}</span>
+    <v-icon class="mr-1" color="purple">local_laundry_service</v-icon>
+    {{item.name}}
   </v-flex>
 </template>
 
 <script>
 export default {
-  name: 'eam-techplace-simple-card',
+  name: 'work-center-simple-card',
   props: {
     item: Object
   }

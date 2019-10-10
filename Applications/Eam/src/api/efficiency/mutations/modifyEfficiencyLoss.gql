@@ -1,0 +1,7 @@
+mutation modifyEfficiencyLoss($efficiencyLoss: EfficiencyLossInput!) {
+  eamMutation {
+    modifyEfficiencyLoss(efficiencyLoss: $efficiencyLoss) {
+      id
+    }
+  }
+}
