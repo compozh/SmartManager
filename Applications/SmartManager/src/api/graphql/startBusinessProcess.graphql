@@ -1,1 +1,5 @@
-
+query ($processData: String) {
+    workFlowQuery {
+        startBusinessProcess(processData: $processData)
+    }
+}
