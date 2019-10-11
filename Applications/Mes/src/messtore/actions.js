@@ -1,7 +1,11 @@
 import { MesApi } from '../api/mesApi'
+import { FormioApi } from '../formio/api/formioApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
+
 const api = new MesApi()
+const formioApi = new FormioApi()
+
 /* eslint-disable */
 export default {
   async initializeProperties({ commit, getters }) {
@@ -240,41 +244,31 @@ export default {
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
-  async productionFormIoSubmit({ commit }, { workCenter, data, task }) {
-    var me = this,
-      params = {
-        formCode: workCenter.productionRegistrationFormCode,
-        data: data,
-        productionRegistrationParam: {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode,
-          mode: 'FINISH'
-        }
-      }
+  async productionFormIoSubmit({ commit }, { workCenter, submission, task }) {
+    var me = this
     commit('setDialogLinearLoaderMessage', 'Регистрация выработки')
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.productionFormIoSubmitGql(params)
+        const res = await formioApi.formSubmit(workCenter.productionRegistrationFormCode, submission, {
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode,
+          mode: 'FINISH'
+        })
         return res
       },
       successAction: async () => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }) }
     })
     commit('closeDialogLinearLoader')
   },
-  async downtimeFormIoSubmit({ commit }, { workCenter, data, successAction }) {
+  async downtimeFormIoSubmit({ commit }, { workCenter, submission, successAction }) {
      var me = this,
-        params = {
-         formCode: workCenter.downtimeRegistrationFormCode,
-         data: data,
-         downtimeParams: {
-           workCenterCode: workCenter.code,
-         }
-        },
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
      commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
      await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
         queryAction: async () => {
-          const res = await api.downtimeFormIoSubmitGql(params)
+          const res = await formioApi.formSubmit(workCenter.downtimeRegistrationFormCode, submission, {
+            workCenterCode: workCenter.code,
+          })
           return res
        },
        successAction: async () => {

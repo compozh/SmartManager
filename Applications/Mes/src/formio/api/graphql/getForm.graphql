@@ -1,6 +1,6 @@
-{
-    mes{
-        downtimeFormIo(formCode: $formCode, properties: $properties) {
+query($formCode:String!, $properties: DictionaryType!) {
+    formio {
+        getForm(formCode: $formCode, properties: $properties) {
             components
             submission
             display

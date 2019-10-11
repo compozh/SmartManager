@@ -1,6 +1,6 @@
-{
-    mes{
-        downtimeFormIo(formCode: $formCode, properties: $properties) {
+mutation($formCode: String!, $submission: String, $properties: DictionaryType!) {
+    formioMutation {
+        submitForm(formCode: $formCode, submission: $submission, properties: $properties) {
             components
             submission
             display

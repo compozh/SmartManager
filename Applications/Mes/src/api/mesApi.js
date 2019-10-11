@@ -26,14 +26,10 @@ import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 
 //formio
-import createFormio from './graphql/formio/createFormio.graphql'
-import saveFormio from './graphql/formio/saveFormio.graphql'
 import productionFormIo from './graphql/formio/productionFormIo.graphql'
 import productionFormIoSubmit from './graphql/formio/productionFormIoSubmit.graphql'
 import downtimeFormIo from './graphql/formio/downtimeFormIo.graphql'
 import downtimeFormIoSubmit from './graphql/formio/downtimeFormIoSubmit.graphql'
-import callFormCustomEvent from './graphql/formio/callFormCustomEvent.graphql'
-import callItemAutocomplete from './graphql/formio/callItemAutocomplete.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
@@ -255,44 +251,5 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mesMutation.downtimeFormIoSubmit
-  }
-
-  async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${callFormCustomEvent}`,
-      variables: { formCode, formCustomEventParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.callFormCustomEvent
-  }
-  async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
-    const result = await getClient().mutate({
-      mutation: gql`${callItemAutocomplete}`,
-      variables: { formCode, formItemAutocompleteParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.callItemAutocomplete
-  }
-
-  async createFormioGql(formObjectParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${createFormio}`,
-      variables: { formObjectParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.createFormio
-  }
-
-  async saveFormioGql(formObjectParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${saveFormio}`,
-      variables: { formObjectParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.saveFormio
   }
 }

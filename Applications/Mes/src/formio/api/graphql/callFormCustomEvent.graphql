@@ -1,5 +1,5 @@
-mutation($formCode:String, $formCustomEventParamsInput: FormCustomEventParamsInput!) {
-    mesMutation {
+mutation($formCode: String!, $formCustomEventParamsInput: FormCustomEventParamsInput!) {
+    formioMutation {
         callFormCustomEvent(formCode: $formCode, formCustomEventParamsInput: $formCustomEventParamsInput) {
             components
             submission

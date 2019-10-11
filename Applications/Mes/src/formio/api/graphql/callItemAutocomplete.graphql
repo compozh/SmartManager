@@ -1,5 +1,5 @@
-mutation($formCode:String, $formItemAutocompleteParamsInput: FormItemAutocompleteParamsInput!) {
-    mesMutation {
+query($formCode: String!, $formItemAutocompleteParamsInput: FormItemAutocompleteParamsInput!) {
+    formio {
         callItemAutocomplete(formCode: $formCode, formItemAutocompleteParamsInput: $formItemAutocompleteParamsInput) {
             values {
                 code
