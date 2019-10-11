@@ -4,7 +4,7 @@
       <span class="headline">{{ titles[type][mode] }}</span>
       <v-spacer></v-spacer>
       <v-btn-toggle v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
-        <v-btn :value="true" :disabled="mode !== 'create' || !this.canModifySystemObjects" flat style="flex-grow: 0">
+        <v-btn :value="true" :disabled="!['create', 'copy'].includes(mode) || !this.canModifySystemObjects" flat style="flex-grow: 0">
           <v-icon v-if="model.isSystem">lock</v-icon>
           <v-icon v-else>lock_open</v-icon>
         </v-btn>
@@ -19,7 +19,7 @@
           clearable
           maxLength="254"
           :rules="[rules.required]"></v-text-field>
-        <v-radio-group v-model="model.type" row v-if="mode === 'create' && !model.isFolder" :label="$t('bpmn.labels.Type')">
+        <v-radio-group v-model="model.type" row v-if="mode !== 'edit' && type === 'process'" :disabled="mode !== 'create'" :label="$t('bpmn.labels.Type')">
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
         </v-radio-group>   
@@ -46,7 +46,7 @@ export default {
     mode: {
       type: String,
       validator(value) {
-        return ['create', 'edit', 'delete' ].indexOf(value) !== -1
+        return ['create', 'edit', 'delete', 'copy' ].indexOf(value) !== -1
       }
     },
     model: {
@@ -72,18 +72,21 @@ export default {
         'process': {
           'create': this.$t('bpmn.labels.CreateProcess'),
           'edit': this.$t('bpmn.labels.EditProcess'),
-          'delete': this.$t('bpmn.labels.DeleteProcess')
+          'delete': this.$t('bpmn.labels.DeleteProcess'),
+          'copy': this.$t('bpmn.labels.CopyProcess'),
         },
         'folder': {
           'create': this.$t('bpmn.labels.CreateFolder'),
           'edit': this.$t('bpmn.labels.EditFolder'),
-          'delete': this.$t('bpmn.labels.DeleteFolder')
+          'delete': this.$t('bpmn.labels.DeleteFolder'),
+          'copy': this.$t('bpmn.labels.CopyFolder'),
         }        
       },
       actions: {
         'create': this.$t('bpmn.buttons.Create'),
         'edit': this.$t('bpmn.buttons.Save'),
-        'delete': this.$t('bpmn.buttons.Delete')
+        'delete': this.$t('bpmn.buttons.Delete'),
+        'copy': this.$t('bpmn.buttons.Copy'),
       },
       rules: {
         required: value => !!value || this.$t('bpmn.labels.RequiredField')

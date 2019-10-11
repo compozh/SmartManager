@@ -1,0 +1,34 @@
+query singleEfficiencyLoss($id: ID) {
+  eam {
+    efficiencyLosses(id: $id) {
+      id
+      workCenter {
+        id
+        name
+      }
+      technicalPlace {
+        id
+        name
+      }
+      startTime
+      endTime
+      lossType
+      indicator
+      category {
+        id
+        name
+      }
+      reason {
+        id
+        name
+      }
+      source {
+        id
+        name
+      }
+      lossLevel
+      isApproved
+      isValid
+    }
+  }
+}

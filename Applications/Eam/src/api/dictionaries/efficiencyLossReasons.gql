@@ -1,0 +1,9 @@
+query efficiencyLossReasons($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    efficiencyLossReasons(where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
+      isValid
+    }
+  }
+}

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import { register } from 'register-service-worker'
+import { inicializeFirebase } from '@/push-notification'
 
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
@@ -10,8 +11,9 @@ if (process.env.NODE_ENV === 'production') {
         'For more details, visit https://goo.gl/AFskqB'
       )
     },
-    registered() {
+    registered(registration) {
       console.log('Service worker has been registered.')
+      inicializeFirebase(registration)
     },
     cached() {
       console.log('Content has been cached for offline use.')

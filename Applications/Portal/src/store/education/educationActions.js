@@ -3,20 +3,13 @@ export default {
   async loadEducationPlan({commit}) {
     let result = await EducationApi.getEducationPlan()
     if (result) {
-      var educationPlan = result.data.portalNabuQuery.trainingPlan.map(element => {
-        var object = {
-          personnelNumber: element.personnelNumber,
-          competence: element.competence,
-          professionalTrainingType: element.professionalTrainingType,
-          subject: element.subject,
-          trainingTheme: element.trainingTheme,
-          description: element.description,
-          startAndEndDate: `${element.eventDateStart} - ${element.eventDateEnd}`
-        }
-        return object
-      })
+      var educationPlanData = result.data.portalNabuQuery.trainingPlan.data
+      var educationPlanHeaders = result.data.portalNabuQuery.trainingPlan.headers
     }
-
+    var educationPlan = {
+      data: educationPlanData,
+      headers: educationPlanHeaders
+    }
     commit('setEducationPlan', educationPlan)
   },
   async loadEducationResult({commit}) {
