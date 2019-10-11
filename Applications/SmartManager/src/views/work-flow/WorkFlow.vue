@@ -30,10 +30,10 @@
                   </span>
                   <vs-divider></vs-divider>
                   <formio class="formio"
+                          ref="form"
                           :form="form"
                           :options="options"
                           :submission="submission"
-                          @submit="onSubmit"
                   />
                   <vs-divider></vs-divider>
                   <div class="vx-col w-full flex">
@@ -42,6 +42,11 @@
                       <tr v-for="(value, name) in startedProcess.ProcessInstance" :key="name">
                         <td class="px-4">{{ name }}</td>
                         <td class="px-4">{{ value }}</td>
+                      </tr>
+                      <tr v-for="(variable, index) in startedProcess.variables" :key="index">
+                        <td class="px-4">Variable: {{ variable.Name }}</td>
+                        <td class="px-4">Value: {{ variable.Value }}</td>
+                        <td class="px-4">Type: {{ variable.Type }}</td>
                       </tr>
                     </table>
                     <table v-else>
@@ -108,8 +113,8 @@ export default {
         ? JSON.parse(this.formDefinition.form)
         : []
     },
-    currentUserLogin() {
-      return this.$store.state.auth.currentUser.username
+    userId() {
+      return this.$store.state.auth.currentUser.UserData.LoginData.UserId
     }
   },
   created() {
@@ -128,11 +133,7 @@ export default {
       )
       this.formDefinition = result || null
     },
-    async onSubmit(formData) {
-      this.startBusinessProcess(formData)
-    },
-    getVariables(form) {
-      const data = form.data
+    getVariables(data) {
       const variables = []
       for (let field in data) {
         const Name = field
@@ -156,14 +157,19 @@ export default {
         variable.Type = type
       })
     },
-    async startBusinessProcess(formData) {
+    async startBusinessProcess() {
+      const form = this.$refs.form.formio
+      const data = form.data
+      const variables = this.getVariables(data)
+
       const processData = {
-        ProcessDefinitionId: this.formDefinition.procDefId,//,'Process_1:9:01889278-e68f-11e9-b251-00090ffe0001'
-        BusinessKey: `USER[${this.currentUserLogin}]`,
-        Variables: this.getVariables(formData)
+        ProcessDefinitionId: this.formDefinition.procDefId,
+        BusinessKey: `USER[${this.userId}]`,
+        Variables: variables
       }
       const result = await this.$store.dispatch('sm/startBusinessProcess', processData)
       this.startedProcess = JSON.parse(result)
+      this.startedProcess.variables = variables
     }
   }
 }
