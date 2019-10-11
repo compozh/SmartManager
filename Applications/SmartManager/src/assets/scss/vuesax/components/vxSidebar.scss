@@ -83,6 +83,8 @@
     margin: auto;
     width: 100%;
     height: calc(100vh - 69px);
+    display: flex;
+    flex-direction: column;
 
     > .vs-sidebar-group{
       padding: 0 15px;
