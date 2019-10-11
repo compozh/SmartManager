@@ -4,6 +4,5 @@ export default {
   search: null,
   tasks: {},
   taskInfo: {},
-  users: [],
-  businessProcesses: []
+  users: []
 }

@@ -198,11 +198,10 @@ export default {
       notify('danger','commentsTitle', 'commentAddError')
     }
   },
-  async getBusinessProcesses({commit}) {
+  async getBusinessProcesses() {
     try {
       const result = await api.getBusinessProcessesFromGql()
-      const businessProcesses = result.data.workFlowQuery.businessProcesses
-      commit('setBusinessProcesses', businessProcesses)
+      return result.data.workFlowQuery.businessProcesses
     } catch (e) {
       console.log(e.message)
       notify('danger', 'bpTitle', 'bpError')
@@ -224,16 +223,13 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async startBusinessProcess(context, formData) {
+  async startBusinessProcess(context, payload) {
+    const processData = JSON.stringify(payload)
     startLoading(true)
     try {
-      const response = await api.startBusinessProcessInGql(formData)
-      const result = response.data.workFlowQuery.startBusinessProcess
+      const response = await api.startBusinessProcessInGql(processData)
       stopLoading()
-      if (result.Success) {
-        return result.Data
-      }
-      notify('warning', 'bpTitle', 'bpError')
+      return response.data.workFlowQuery.startBusinessProcess
     } catch (e) {
       stopLoading()
       console.log(e.message)
