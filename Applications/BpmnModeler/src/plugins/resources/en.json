@@ -242,6 +242,15 @@
 		"Task Priority": "Task Priority",
 
 		"Open minimap": "Open minimap",
-		"Close minimap": "Close minimap"
+		"Close minimap": "Close minimap",
+
+		"string": "string",
+		"long": "long",
+		"boolean": "boolean",
+		"date": "date",
+		"enum": "enum",
+
+		"Result Variable": "Result Variable",
+		"Task properties": "Task properties"
 	}
 }

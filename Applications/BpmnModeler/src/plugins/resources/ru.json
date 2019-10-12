@@ -242,6 +242,15 @@
 		"Task Priority": "Приоритет задачи",
 		
 		"Open minimap": "Открыть миникарту",
-		"Close minimap": "Закрыть миникарту"
+		"Close minimap": "Закрыть миникарту",
+
+		"string": "строка",
+		"long": "число",
+		"boolean": "булевый",
+		"date": "дата",
+		"enum": "перечисление",
+
+		"Result Variable": "Переменная с результатом",
+		"Task properties": "Параметры задачи"
 	}
 }
