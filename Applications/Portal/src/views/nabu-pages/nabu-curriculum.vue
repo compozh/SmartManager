@@ -1,5 +1,5 @@
 <template>
-  <AgGridView :education="educationPlan" v-if="dataEducation"></AgGridView>
+  <AgGridView :education="dataEducation" v-if="dataEducation"></AgGridView>
 </template>
 
 <script>
@@ -8,40 +8,10 @@ export default {
   components: {
     AgGridView
   },
-  data() {
-    return {
-      headers: [{
-        headerName: this.$t('Education.Competence'),
-        field: 'competence',
-      },{
-        headerName: this.$t('Education.ProfessionalTrainingType'),
-        field: 'professionalTrainingType',
-      },{
-        headerName: this.$t('Education.Subject'),
-        field: 'subject',
-      },{
-        headerName: this.$t('Education.TrainingTheme'),
-        field: 'trainingTheme',
-      },{
-        headerName: this.$t('Education.DateParticipationInTheTrainingEvent'),
-        field: 'startAndEndDate',
-      },{
-        headerName: this.$t('Education.Description'),
-        field: 'description',
-      }]
-    }
-  },
   computed: {
     dataEducation() {
       return this.$store.getters['education/getEducationPlan']
     },
-    educationPlan() {
-      var object = {
-        data: this.dataEducation,
-        headers: this.headers
-      }
-      return object
-    }
   },
   created() {
     this.$store.dispatch('education/loadEducationPlan')

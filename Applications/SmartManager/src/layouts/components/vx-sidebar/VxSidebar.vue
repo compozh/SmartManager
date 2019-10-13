@@ -78,12 +78,13 @@
                 :key="`sidebarItem-${index}`"
                 v-if="!sidebarItem.submenu"
                 :index="index"
-                :to="sidebarItem.slug != 'external' ? sidebarItem.url : ''"
-                :href="sidebarItem.slug == 'external' ? sidebarItem.url : ''"
+                :to="sidebarItem.slug !== 'external' ? sidebarItem.url : ''"
+                :href="sidebarItem.slug === 'external' ? sidebarItem.url : ''"
                 :icon="sidebarItem.icon"
                 :target="sidebarItem.target"
                 :isDisabled="sidebarItem.isDisabled"
                 :slug="sidebarItem.slug"
+                :style="{order: sidebarItem.code === '' ? -1 : 0}"
               >
                 <span
                   v-show="!sidebarItemsMin"

@@ -55,20 +55,28 @@
           <v-list-tile-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-tile-title>
         </v-list-tile>
       </template>
-      <template v-if="item && (!item.isSystem || this.canModifySystemObjects)">
+      <template v-if="item">
         <v-divider></v-divider>
-        <v-list-tile @click="edit(item)">
-          <v-list-tile-avatar>
-            <v-icon>edit</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.Rename') }}</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="remove(item)">
-          <v-list-tile-avatar>
-            <v-icon>delete</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.Delete') }}</v-list-tile-title>
-        </v-list-tile>
+        <v-list-tile @click="copy(item)">
+            <v-list-tile-avatar>
+              <v-icon>mdi-content-copy</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-title>{{ $t('bpmn.buttons.Copy') }}</v-list-tile-title>
+          </v-list-tile>
+        <template v-if="!item.isSystem || this.canModifySystemObjects">
+          <v-list-tile @click="edit(item)">
+            <v-list-tile-avatar>
+              <v-icon>edit</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-title>{{ $t('bpmn.buttons.Rename') }}</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="remove(item)">
+            <v-list-tile-avatar>
+              <v-icon>delete</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-title>{{ $t('bpmn.buttons.Delete') }}</v-list-tile-title>
+          </v-list-tile>
+        </template>
       </template>
     </v-list>
   </v-menu>
@@ -112,6 +120,9 @@ export default {
     },
     deploy(item) {
       this.$emit('deploy', item);
+    },
+    copy(item) {
+      this.$emit('copy', item);
     }
   },
 }

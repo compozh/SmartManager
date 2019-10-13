@@ -163,9 +163,6 @@ export default {
     setFolderIcon(code) {
       switch (code) {
       case '': return 'LayersIcon'
-      case '_6': return 'ZapIcon'
-      case '_10': return 'FileTextIcon'
-      case '_1': return 'UsersIcon'
       case 'filter_done': return 'CheckSquareIcon'
       case 'filter_from_me': return 'UserIcon'
       case 'filter_favorite': return 'StarIcon'

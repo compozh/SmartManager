@@ -1,5 +1,6 @@
 {
   "search": "Search",
+  "rights": "All rights Reserved",
   "pickers": {
     "date": "Date",
     "time": "Time",
@@ -48,7 +49,11 @@
     "viewMore": "More",
     "addAttachment": "Click here to select files or drag&drop to this area, (max 100mb)",
     "add": "Add",
-    "send": "Send"
+    "send": "Send",
+    "start": "Start",
+    "startWorkflow": "Start business process",
+    "login": "Sign in",
+    "logout": "Logout"
   },
   "icons": {
     "priority": "High priority",
@@ -114,6 +119,8 @@
     "statChangeSuccess": "Status changed successfully",
     "statChangeFail": "Status changing failed",
     "statChangeError": "Error status changing",
+    "stageChangeSuccess": "Stage changed successfully",
+    "stageChangeFail": "Stage changing failed",
     "stageChangeError": "Error stage changing",
     "attachAddSuccess": "Attachment added successfully",
     "attachAddFail": "Add attachment failed",
@@ -123,6 +130,20 @@
     "commentAddError": "Error comment adding",
     "fileAlreadyAdded": "File {file} already added",
     "fileUploaded": "File {file} uploaded",
-    "uploadError": "Error upload file {file}"
+    "uploadError": "Error upload file {file}",
+    "bpTitle": "Business processes",
+    "bpSuccess": "Business processes success",
+    "bpFail": "Business processes fail",
+    "bpError": "Business processes error"
+  },
+  "workflow": {
+    "businessProcess": "Business process name"
+  },
+  "login": {
+    "title": "Sign In",
+    "welcome": "Welcome, please log in with your account.",
+    "rememberMe": "Remember me",
+    "placeholder": "Login",
+    "password": "Password"
   }
 }

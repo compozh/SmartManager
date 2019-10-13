@@ -2,13 +2,13 @@
   <v-flex xs12 md6 pa-1>
     <v-hover>
       <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 7 : 2} subheading`" height="100%">
-        <v-card-title class="py-2">
-          <eam-equipment-type-simple-card :item="equipment.type" />
-          <v-spacer></v-spacer>
-          <router-link :to="{ name: 'EAMEQUIPMENTINFO', params: { id: equipment.id }}">
+        <router-link :to="{ name: 'EAMEQUIPMENTINFO', params: { id: equipment.id }}">
+          <v-card-title class="py-2">
+            <eam-equipment-type-simple-card :item="equipment.type" />
+            <v-spacer></v-spacer>
             <a>{{equipment.id}}</a>
-          </router-link>
-        </v-card-title>
+          </v-card-title>
+        </router-link>
         <v-card-text>
           <v-layout column fill-height mb-2>
             <span class="subheading font-weight-bold">{{equipment.fullName}}</span>
@@ -26,7 +26,7 @@
               v-if="equipment.currentMovementRecord"
               :item="equipment.currentMovementRecord.technicalPlace"
             />
-          </v-layout>          
+          </v-layout>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions v-if="equipment.responsibleEmployee || equipment.factoryNumber">
@@ -54,5 +54,8 @@ export default {
 <style scoped>
 .v-card__title {
   background-color: lightgreen;
+}
+a {
+  text-decoration: none !important;
 }
 </style>

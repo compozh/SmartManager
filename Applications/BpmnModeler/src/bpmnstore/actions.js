@@ -1,3 +1,4 @@
+/* eslint-disable require-atomic-updates */
 import { BpmnModelerApi } from '../api/bpmnApi';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
@@ -190,6 +191,23 @@ export default {
       console.error(result);
     }
     return result;
+  },
+  async copyProcess(context, process) {
+    try {
+      process.xmlView = await context.dispatch('getXml', process.id);
+      return await context.dispatch('createProcess', process);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+  async copyFolder(context, folder) {
+    try {
+      return await context.dispatch('createFolder', folder);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 };
 

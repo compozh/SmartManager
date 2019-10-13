@@ -17,7 +17,7 @@
       <v-progress-linear slot="extension" v-if="loading" :indeterminate="loading" ma-0 height="3"></v-progress-linear>
     </v-toolbar>
     <v-content>
-      <v-container fluid>
+      <v-container fluid :class="{'ma-0 pa-0': $vuetify.breakpoint.xs}">
         <router-view />
       </v-container>
     </v-content>

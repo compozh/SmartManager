@@ -2,6 +2,7 @@
   <v-flex xs12 md6 pa-1>
     <v-hover>
       <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 7 : 2} subheading`" height="100%">
+        <router-link :to="{ name: 'EAMDOWNTIMEINFO', params: { id: item.id }}">
         <v-card-title class="py-2">
           <v-chip
             v-if="item.additionalData && item.additionalData.isEmergency"
@@ -30,6 +31,7 @@
           <v-spacer></v-spacer>
           <span>{{item.id}}</span>
         </v-card-title>
+        </router-link>
         <v-card-text>
           <v-layout wrap justify-space-between mb-2>
             <eam-department-simple-card :item="item.department" />
@@ -110,5 +112,8 @@ export default {
 <style scoped>
 .v-card__title {
   background-color: rgb(144, 219, 238);
+}
+a {
+  text-decoration: none !important;
 }
 </style>

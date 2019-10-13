@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 import {register} from 'register-service-worker'
 
 const notifyUserAboutUpdate = worker => {
@@ -8,7 +7,7 @@ const notifyUserAboutUpdate = worker => {
   worker.postMessage({action: 'skipWaiting'})
 }
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {
       console.log(
@@ -43,4 +42,6 @@ if (process.env.NODE_ENV === 'production') {
     window.location.reload()
     refreshing = true
   })
+} else {
+  console.log('Your browser does not support the Service-Worker!')
 }
