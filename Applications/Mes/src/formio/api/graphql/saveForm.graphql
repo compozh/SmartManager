@@ -1,5 +1,5 @@
 mutation($formDefinitionParamsInput: FormDefinitionParamsInput!) {
-    formioMutation {
+    formioQueryMutation {
         saveFormio(formDefinitionParamsInput: $formDefinitionParamsInput) {
             success
             errorMessage

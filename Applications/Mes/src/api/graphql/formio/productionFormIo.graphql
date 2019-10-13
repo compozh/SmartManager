@@ -1,6 +1,7 @@
-{
+query($formCode: String!, $properties: ProductionRegistrationParamsInput!){
     mes{
-        productionFormIo(formCode: $formCode, properties: $properties) {
+        productionFormio(formCode: $formCode, properties: $properties) {
+            name
             components
             submission
             display

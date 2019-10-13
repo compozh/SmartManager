@@ -90,8 +90,11 @@ export default {
         submission = JSON.stringify(form.submission, null, 4)
 
       me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
-        params: { eventCode, components, submission, display, settings },
-        successCallback: result => {
+        params: { eventCode, components, submission, display, settings }}).then(result => {
+          if(!result)
+          {
+            return
+          }
             if (callback) {
               callback(result);
             }
@@ -121,7 +124,6 @@ export default {
             if (result.submission && result.submission !== submission) {
               me.changedData.submission = JSON.parse(result.submission)
             }
-          }
       })
     },
     qrScaner(callback) {
@@ -160,7 +162,11 @@ export default {
         }
 
       this.$store.dispatch('formio/callItemAutocomplete', 
-      { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only', callback });
+        { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
+        if(result && callback) {
+          callback(result);
+        }
+      })
     }
   }
 }

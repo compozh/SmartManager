@@ -37,8 +37,7 @@ export class FormioApi {
     const result = await getClient().query({
       query: gql` ${ticket}`
     })
-      .then(result => result)
-    return result.data.formio.ticket
+    return result.data.formioQuery.ticket
   }
 
   async getFormGql(formCode, fetchPolicy) {
@@ -47,19 +46,15 @@ export class FormioApi {
       variables: { formCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
-
-    return result.data.formio.getForm
+    return result.data.formioQuery.getForm
   }
 
-  async submitFormGql(formCode, submission, formDefinitionParamsInput) {
+  async submitFormGql(formCode, submission) {
     const result = await getClient().mutate({
       mutation: gql`${submitForm}`,
-      variables: { formCode, submission, formDefinitionParamsInput }
+      variables: { formCode, submission }
     })
-      .then(result => result)
-
-    return result.data.formioMutation.submitForm
+    return result.data.formioQueryMutation.submitForm
   }
 
   async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
@@ -67,9 +62,7 @@ export class FormioApi {
       mutation: gql`${callFormCustomEvent}`,
       variables: { formCode, formCustomEventParamsInput }
     })
-      .then(result => result)
-
-    return result.data.formioMutation.callFormCustomEvent
+    return result.data.formioQueryMutation.callFormCustomEvent
   }
 
   async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
@@ -78,9 +71,7 @@ export class FormioApi {
       variables: { formCode, formItemAutocompleteParamsInput },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
-
-    return result.data.formio.callItemAutocomplete
+    return result.data.formioQuery.callItemAutocomplete
   }
 
   async createFormGql(formDefinitionParamsInput) {
@@ -88,9 +79,7 @@ export class FormioApi {
       mutation: gql`${createForm}`,
       variables: { formDefinitionParamsInput }
     })
-      .then(result => result)
-
-    return result.data.formioMutation.createForm
+    return result.data.formioQueryMutation.createForm
   }
 
   async saveFormGql(formDefinitionParamsInput) {
@@ -98,8 +87,6 @@ export class FormioApi {
       mutation: gql`${saveForm}`,
       variables: { formDefinitionParamsInput }
     })
-      .then(result => result)
-
-    return result.data.formioMutation.saveForm
+    return result.data.formioQueryMutation.saveForm
   }
 }

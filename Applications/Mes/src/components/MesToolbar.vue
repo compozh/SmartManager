@@ -69,6 +69,7 @@ export default {
     window.sessionStorage.setItem('mesUuid', uuid)
     me.$store.dispatch('mes/initializeWorkCenter', uuid)
     me.$store.dispatch('mes/initializeProperties')
+    me.$store.dispatch('formio/initializeTicket')
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })

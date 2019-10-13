@@ -1,5 +1,5 @@
 query($formCode: String!, $formItemAutocompleteParamsInput: FormItemAutocompleteParamsInput!) {
-    formio {
+    formioQuery {
         callItemAutocomplete(formCode: $formCode, formItemAutocompleteParamsInput: $formItemAutocompleteParamsInput) {
             values {
                 code

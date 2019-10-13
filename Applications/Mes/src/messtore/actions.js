@@ -249,7 +249,8 @@ export default {
     commit('setDialogLinearLoaderMessage', 'Регистрация выработки')
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await formioApi.formSubmit(workCenter.productionRegistrationFormCode, submission, {
+
+        const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, submission, {
           workCenterCode: workCenter.code,
           workBarcode: task.barcode,
           mode: 'FINISH'
@@ -266,7 +267,7 @@ export default {
      commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
      await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
         queryAction: async () => {
-          const res = await formioApi.formSubmit(workCenter.downtimeRegistrationFormCode, submission, {
+          const res = await api.downtimeFormioSubmitGql(workCenter.downtimeRegistrationFormCode, submission, {
             workCenterCode: workCenter.code,
           })
           return res
@@ -366,38 +367,6 @@ export default {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
-    })
-  },
-  async callFormCustomEvent({ commit }, { formCode, params, successCallback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.callFormCustomEventGql(formCode, params)
-      },
-      successAction: async result => { successCallback(result) }
-    })
-  },
-  async callItemAutocomplete({ commit }, { formCode, params, fetchPolicy, callback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.callItemAutocompleteGql(formCode, params, fetchPolicy)
-      },
-      actionAfterQuery: async result => { callback(result) }
-    })
-  },
-  async createFormio({ commit }, { params, callback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.createFormioGql(params)
-      },
-      successAction: async result => { callback(result) }
-    })
-  },
-  async saveFormio({ commit }, { params, callback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.saveFormioGql(params)
-      },
-      successAction: async result => { callback(result) }
     })
   }
 }
