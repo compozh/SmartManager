@@ -8,7 +8,7 @@
       @change=onChange
       ref="formioComponent"
     />
-    <mes-qr-scaner
+    <formio-qr-scaner
       v-if="qrScanerVisible"
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
@@ -21,13 +21,12 @@ import { Form } from 'vue-formio'
 import VueApexCharts from 'vue-apexcharts'
 /* eslint-disable */
 export default {
-  name: 'mes-form-builder',
+  name: 'formio-component',
   components: { formio: Form, apexchart: VueApexCharts },
   data() {
     return {
       changedData: {},
       options: { noAlerts: true },
-      currentData: '',
       qrScanerVisible: false,
       qrScanerCallback: () => {}
     }
@@ -48,38 +47,39 @@ export default {
     }
   },
   props: {
-    formioData: Object,
+    formDefinition: Object,
     formCode: String
   },
   watch: {
-    formioData: function (newData, oldData) {
+    formDefinition: function (newData, oldData) {
       this.changedData = {}
     }
   },
   computed: {
     formioComponents() {
       return {
-        display: this.changedData.display || this.formioData.display || 'form',
-        components: this.changedData.components || (this.formioData.form ? JSON.parse(this.formioData.form) : []),
-        settings: this.changedData.settings || (this.formioData.settings ? JSON.parse(this.formioData.settings) : {})
+        display: this.changedData.display || this.formDefinition.display || 'form',
+        components: this.changedData.components || (this.formDefinition.components ? JSON.parse(this.formDefinition.components) : []),
+        settings: this.changedData.settings || (this.formDefinition.settings ? JSON.parse(this.formDefinition.settings) : {})
       }
     },
     formioSubmission() {
-      return this.changedData.submission || { data: this.formioData.data ? JSON.parse(this.formioData.data) : [] }
+      return this.changedData.submission || { data: this.formDefinition.submission ? JSON.parse(this.formDefinition.submission) : [] }
     },
     ticket() {
-      return this.$store.getters['mes/ticket']
+      return this.$store.getters['formio/ticket']
     }
   },
   methods: {
     onSubmit(params) {
-      this.$emit('formioSubmit', JSON.stringify(params.data))
+      this.$emit('formSubmit', JSON.stringify(params.data))
     },
     onChange(params) {
-      this.currentData = params.data
+
     },
-    getFormioData() {
-      return JSON.stringify(this.currentData)
+    getFormSubmission() {
+      var form = this.$refs.formioComponent
+      return JSON.stringify(form.submission, null, 4)
     },
     requestToServerAction(eventCode, callback) {
       var me = this,
@@ -89,9 +89,12 @@ export default {
         settings = JSON.stringify(form.form.settings, null, 4),
         submission = JSON.stringify(form.submission, null, 4)
 
-      me.$store.dispatch('mes/callFormCustomEvent', { formCode: this.formCode,
-        params: { eventCode, components, submission, display, settings },
-        successCallback: result => {
+      me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
+        params: { eventCode, components, submission, display, settings }}).then(result => {
+          if(!result)
+          {
+            return
+          }
             if (callback) {
               callback(result);
             }
@@ -121,7 +124,6 @@ export default {
             if (result.submission && result.submission !== submission) {
               me.changedData.submission = JSON.parse(result.submission)
             }
-          }
       })
     },
     qrScaner(callback) {
@@ -141,7 +143,7 @@ export default {
     },
     connectSignalR(application, callback) {
       if(!application || !callback) {
-        this.$store.commit('mes/setSnackbarErrorMessage', 'Ошибка инициализации SignalR')
+        this.$store.commit('formio/setSnackbarErrorMessage', 'Ошибка инициализации SignalR')
         return
       }
       this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)
@@ -150,9 +152,21 @@ export default {
       var form = this.$refs.formioComponent,
         submission = JSON.stringify(form.submission, null, 4),
         fieldComponent = field.component,
-        params = { fieldId: fieldComponent.key, tableName: fieldComponent.dataTable, fieldName: fieldComponent.dataTableFieldName, fieldCode: fieldComponent.dataTableFieldCode, searchValue, submission };
+        params = {
+          fieldId: fieldComponent.key,
+          tableName: fieldComponent.dataTable,
+          fieldName: fieldComponent.dataTableFieldName,
+          fieldCode: fieldComponent.dataTableFieldCode,
+          searchValue,
+          submission 
+        }
 
-      this.$store.dispatch('mes/callItemAutocomplete', { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only', callback });
+      this.$store.dispatch('formio/callItemAutocomplete', 
+        { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
+        if(result && callback) {
+          callback(result);
+        }
+      })
     }
   }
 }

@@ -1,7 +1,6 @@
-query($formCode: String!, $properties: DowntimeParamsInput!){
-    mes{
-        downtimeFormio(formCode: $formCode, properties: $properties) {
-            name
+mutation($formCode: String!, $submission: String) {
+    formioQueryMutation {
+        submitForm(formCode: $formCode, submission: $submission) {
             components
             submission
             display

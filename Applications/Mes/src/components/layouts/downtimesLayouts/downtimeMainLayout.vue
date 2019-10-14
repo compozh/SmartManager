@@ -1,11 +1,11 @@
 <template>
 <v-layout class="downtime-layout">
   <v-flex class="downtime-flex">
-    <mes-form-builder
+    <formio-component
       v-if="selectedDowntime"
       ref="formioBuilder"
-      @formioSubmit=formioSubmit
-      :formioData=downtimeFormio
+      @formSubmit=formSubmit
+      :formDefinition=downtimeFormio
       :formCode=workCenter.downtimeRegistrationFormCode
     />
     </v-flex>
@@ -28,11 +28,11 @@ export default {
     }
   },
   methods: {
-    formioSubmit(data) {
-      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data, downtime: this.selectedDowntime })
+    formSubmit(submission) {
+      this.$store.dispatch('mes/downtimeFormSubmit', { workCenter: this.workCenter, submission, downtime: this.selectedDowntime })
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormioData()
+      return this.$refs.formioBuilder[0].getFormSubmission()
     }
   }
 }
