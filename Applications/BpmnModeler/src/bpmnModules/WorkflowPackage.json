@@ -1,0 +1,55 @@
+{
+  "name": "WorkflowPackage",
+  "uri": "http://it-enterprise.com/schema/1.0/bpmn",
+  "prefix": "IT-Enterprise",
+  "types": [
+    {
+      "name": "ServiceTaskLike",
+      "extends": [ "bpmn:UserTask" ],
+      "superClass": [ "camunda:ServiceTaskLike" ],
+      "properties": [
+        {
+          "name": "type",
+          "isAttr": true,
+          "type": "String",
+          "redefines": "camunda:ExternalCapable#type",
+          "default": "external"
+        }
+      ]
+    },
+    {
+      "name": "ExternalCapable",
+      "extends": [ "IT-Enterprise:ServiceTaskLike" ],
+      "superClass": [ "camunda:ExternalCapable" ]
+    },
+    {
+      "name": "ServiceTaskParameter",
+      "superClass": [ "Element" ],
+      "meta": {
+        "allowedIn": [
+          "camunda:ExternalCapable",
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "type",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "value",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    }
+  ],
+  "enumerations": [
+  ]
+}

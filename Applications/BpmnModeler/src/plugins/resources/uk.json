@@ -242,6 +242,15 @@
 		"Task Priority": "Пріорітет задачі",
 
 		"Open minimap": "Відкрити мінікарту",
-		"Close minimap": "Закрити мінікарту"
+		"Close minimap": "Закрити мінікарту",
+
+		"string": "рядок",
+		"long": "число",
+		"boolean": "логічний",
+		"date": "дата",
+		"enum": "перелік",
+
+		"Result Variable": "Змінна з результатом",
+		"Task properties": "Параметри задачі"
 	}
 }

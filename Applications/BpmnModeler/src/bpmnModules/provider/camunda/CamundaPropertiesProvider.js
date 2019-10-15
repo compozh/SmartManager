@@ -13,7 +13,7 @@ import documentationProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts
 import idProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/IdProps';
 import nameProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/NameProps';
 import executableProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/ExecutableProps';
-import serviceTaskDelegateProps from 'bpmn-js-properties-panel/lib/provider/camunda/parts/ServiceTaskDelegateProps';
+import serviceTaskDelegateProps from './parts/ServiceTaskDelegateProps';
 import externalTaskConfiguration from 'bpmn-js-properties-panel/lib/provider/camunda/parts/ExternalTaskConfigurationProps';
 
 import formProps from './parts/FormProps';
@@ -35,7 +35,7 @@ var isExternalTaskPriorityEnabled = function (element) {
 
 function createGeneralTabGroups(
   element, canvas, bpmnFactory,
-  elementRegistry, elementTemplates,  translate) {
+  elementRegistry, elementTemplates, translate, commandStack) {
 
   var generalGroup = {
     id: 'general',
@@ -52,7 +52,7 @@ function createGeneralTabGroups(
     label: translate('Details'),
     entries: []
   };
-  serviceTaskDelegateProps(detailsGroup, element, bpmnFactory, translate);
+  serviceTaskDelegateProps(detailsGroup, element, bpmnFactory, translate, commandStack);
   linkProps(detailsGroup, element, translate);
   eventProps(detailsGroup, element, bpmnFactory, elementRegistry, translate);
 
@@ -96,7 +96,7 @@ function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate) 
 
 export default function CamundaPropertiesProvider(
   eventBus, canvas, bpmnFactory,
-  elementRegistry, elementTemplates, translate) {
+  elementRegistry, elementTemplates, translate, commandStack) {
 
   PropertiesActivator.call(this, eventBus);
 
@@ -107,7 +107,7 @@ export default function CamundaPropertiesProvider(
       label: translate('General'),
       groups: createGeneralTabGroups(
         element, canvas, bpmnFactory,
-        elementRegistry, elementTemplates, translate)
+        elementRegistry, elementTemplates, translate, commandStack)
     };
 
     var formsTab = {
@@ -130,7 +130,8 @@ CamundaPropertiesProvider.$inject = [
   'bpmnFactory',
   'elementRegistry',
   'elementTemplates',
-  'translate'
+  'translate',
+  'commandStack'
 ];
 
 inherits(CamundaPropertiesProvider, PropertiesActivator);
