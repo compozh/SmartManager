@@ -2,6 +2,7 @@
 	<v-container fluid>
 		<v-layout wrap row align-center justify-center>
 			<v-flex v-for='moduleData in recommendedModules' :key='moduleData.courseId' lg4 md4 sm6 xs12>
+
 				<v-card class='mx-2 my-2' hover height='225px'>
 					<v-layout>
 						<v-flex ml-2 mt-2 mb-2>
@@ -42,6 +43,7 @@
 						<v-chip small v-show="moduleData.levels[0]" @click="levelSearch(moduleData.levels[0])">{{moduleData.levels[0] ? moduleData.levels[0].name : null}}</v-chip>
 					</v-layout>
 				</v-card>
+
 			</v-flex>
 		</v-layout>
 

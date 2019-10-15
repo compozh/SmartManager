@@ -2,6 +2,7 @@
 	<v-container fluid>
 		<v-layout wrap row align-center justify-center>
 			<v-flex v-for='course in recommendedCourses' :key='course.courseId' lg4 md4 sm6 xs122>
+
 				<v-card class='mx-2 my-2' hover height='265px'>
 					<v-layout v-bind:style="{'background-color': course.backgroundColor}">
 						<v-flex ml-2 xs4 mt-2 mb-2>
@@ -42,6 +43,7 @@
 						<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
 					</v-layout>
 				</v-card>
+
 			</v-flex>
 		</v-layout>
 

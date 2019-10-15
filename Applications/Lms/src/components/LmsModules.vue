@@ -43,9 +43,9 @@
     <!-- Filters -->
     <Filters :filters="availableFilters" ></Filters>
 		<v-layout wrap row>
-			<v-flex mx-2 mt-4 mb-3>
+			<!-- <v-flex mx-2 mt-4 mb-3>
 				<h5 class='title font-weight-regular text-xs-left'>Модули</h5>
-			</v-flex>
+			</v-flex> -->
 		</v-layout>
 		<v-layout wrap row>
 			<v-flex v-for='moduleData in modules' :key='moduleData.courseId' lg3 md4 sm6 xs12>

@@ -84,7 +84,7 @@
     </v-container>
 
 		<v-footer absolute class="pa-3" :fixed='fixed' app>
-			<span>IT-Enterprise 2018</span>
+			<span>&nbsp;</span>
 		</v-footer>
 
 	</v-app>
@@ -123,7 +123,7 @@ export default {
     var app = this.$store.state.WebApps.applicationDescription
       var sections = app.Sections || []
 
-      // Достаем роуты из разделов
+    //   // Достаем роуты из разделов
       var routs = []
       for (let index = 0; index < sections.length; index++) {
       const section = sections[index]
