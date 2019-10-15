@@ -48,7 +48,10 @@
 		</v-layout>
 			<v-layout wrap row>
 				<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
-					<v-card class='mx-2 my-2' style='margin: 0px 0px 0px 0px' hover height='280px'>
+
+          <course-card v-if="course" :course="course" />
+
+					<!-- <v-card class='mx-2 my-2' style='margin: 0px 0px 0px 0px' hover height='280px'>
 						<v-layout v-bind:style="{'background-color': course.backgroundColor}">
 							<v-flex xs4 mt-3 mb-3>
 								<v-img
@@ -69,10 +72,8 @@
 						<div style='height:118px;overflow:hidden' class='mt-2 ml-3'>
 							<h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{course.type}}</h4>
 							<h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-                  @click="goToCourseDetails(course.courseGuid, course)">
-                <!-- @click='$router.push({name: "LMSCOURSEDETAILS", params: {courseGuid: course.courseGuid, courseName: course.name, courseData: course}})' -->
-                <!-- <router-link></router-link> -->
-                {{course.name}}
+                  @click='$router.push({name: "LMSCOURSEDETAILS", params: {courseGuid: course.courseGuid, courseName: course.name, courseData: course}})'>
+                  {{course.name}}
 							</h3>
 							<div class='.body-2'>{{course.description}}</div>
 						</div>
@@ -86,10 +87,11 @@
 								@click='changeFavoriteState(course)'
 								>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 							<v-spacer/>
-							<!-- <v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
-							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip> -->
+							<v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
+							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
 						</v-layout>
-					</v-card>
+					</v-card> -->
+
 				</v-flex>
 			</v-layout>
 	</v-container>
@@ -98,6 +100,8 @@
 
 <script>
 // import { threadId } from 'worker_threads'
+
+import CourseCard from './CourseCard.vue'
 
 export default {
 	name: 'lms-courses',
@@ -112,9 +116,9 @@ export default {
       this.$store.dispatch('lms/getCourses')
     },
 
-    goToCourseDetails ( courseId, course ) {
-      this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
-    },
+    // goToCourseDetails ( courseId, course ) {
+    //   this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
+    // },
 
     roleSearch: function(data) {
       this.$router.push({ name: 'LMSCOURSES', params: { role: data.code } })
