@@ -82,6 +82,10 @@ export default {
       return this.$store.state.auth.currentUser.UserData.LoginData.UserId
     }
   },
+  beforeRouteEnter(to, from, next) {
+    to.params.routeToBack = from.path
+    next()
+  },
   created() {
     this.getBusinessProcesses()
   },
@@ -149,7 +153,8 @@ export default {
       }
       try {
         await this.$store.dispatch('sm/startBusinessProcess', processData)
-        this.$router.go(-1)
+        const routeToBack = this.$route.params.routeToBack
+        await this.$router.push(routeToBack)
       } catch (e) {
         console.log(e.message)
       }
@@ -163,7 +168,6 @@ export default {
   .vx-card {
     box-shadow: 0 4px 20px 0 rgba(0,0,0,.05);
   }
-
 
   .formio::v-deep {
     @import "~formiojs/dist/formio.form.min.css";
