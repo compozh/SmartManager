@@ -73,10 +73,10 @@ export default {
   }),
   computed: {
     form() {
-      return require('./testForm')
-      // return this.formDefinition
-      //   ? JSON.parse(this.formDefinition.form)
-      //   : {}
+      // return require('./testForm')
+      return this.formDefinition
+        ? JSON.parse(this.formDefinition.form)
+        : {}
     },
     userId() {
       return this.$store.state.auth.currentUser.UserData.LoginData.UserId
