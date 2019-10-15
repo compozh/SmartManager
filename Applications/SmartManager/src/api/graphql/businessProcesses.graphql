@@ -1,0 +1,9 @@
+{
+  workFlowQuery {
+    businessProcesses {
+      id
+      name
+      deployId
+    }
+  }
+}

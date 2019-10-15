@@ -26,12 +26,10 @@ import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 
 //formio
-import productionFormIo from './graphql/formio/productionFormIo.graphql'
-import productionFormIoSubmit from './graphql/formio/productionFormIoSubmit.graphql'
-import downtimeFormIo from './graphql/formio/downtimeFormIo.graphql'
-import downtimeFormIoSubmit from './graphql/formio/downtimeFormIoSubmit.graphql'
-import callFormCustomEvent from './graphql/formio/callFormCustomEvent.graphql'
-import callItemAutocomplete from './graphql/formio/callItemAutocomplete.graphql'
+import productionFormio from './graphql/formio/productionFormio.graphql'
+import productionFormioSubmit from './graphql/formio/productionFormioSubmit.graphql'
+import downtimeFormio from './graphql/formio/downtimeFormio.graphql'
+import downtimeFormioSubmit from './graphql/formio/downtimeFormioSubmit.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
@@ -215,29 +213,37 @@ export class MesApi {
   }
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({
-      query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
+      query: gql`${productionFormio}`,
       variables: { formCode, properties },
       fetchPolicy: 'network-only'
     })
       .then(result => result)
-    return result.data.mes.productionFormIo
+    return result.data.mes.productionFormio
   }
-  async productionFormIoSubmitGql({ formCode, data, productionRegistrationParam}) {
+  async productionFormioSubmitGql(formCode, submission, properties) {
     const result = await getClient().mutate({
-      mutation: gql`${productionFormIoSubmit}`,
-      variables: { formCode, data, productionRegistrationParam}
+      mutation: gql`${productionFormioSubmit}`,
+      variables: { formCode, submission, properties}
     })
       .then(result => result)
-    return result.data.mesMutation.productionFormIoSubmit
+    return result.data.mesMutation.productionFormioSubmit
   }
-  async getDowntimeFormioFromGql(formCode, properties, fetchPolicy) {
+  async getDowntimeFormioFromGql(formCode, properties) {
     const result = await getClient().query({
-      query: gql`query ($formCode: String, $properties: DowntimeParamsInput!) ${downtimeFormIo}`,
+      query: gql`${downtimeFormio}`,
       variables: { formCode, properties },
-      fetchPolicy: fetchPolicy || 'cache-first'
+      fetchPolicy: 'network-only'
     })
       .then(result => result)
-    return result.data.mes.downtimeFormIo
+    return result.data.mes.downtimeFormio
+  }
+  async downtimeFormioSubmitGql(formCode, submission, properties) {
+    const result = await getClient().mutate({
+      mutation: gql`${downtimeFormioSubmit}`,
+      variables: { formCode, submission, properties}
+    })
+      .then(result => result)
+    return result.data.mesMutation.downtimeFormioSubmit
   }
   async getDowntimeTypesFromGql() {
     const result = await getClient().query({
@@ -245,31 +251,5 @@ export class MesApi {
     })
       .then(result => result)
     return result.data.mes.downtimeTypes
-  }
-  async downtimeFormIoSubmitGql({ formCode, data, downtimeParams}) {
-    const result = await getClient().mutate({
-      mutation: gql`${downtimeFormIoSubmit}`,
-      variables: { formCode, data, downtimeParams}
-    })
-      .then(result => result)
-    return result.data.mesMutation.downtimeFormIoSubmit
-  }
-  async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${callFormCustomEvent}`,
-      variables: { formCode, formCustomEventParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.callFormCustomEvent
-  }
-  async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
-    const result = await getClient().mutate({
-      mutation: gql`${callItemAutocomplete}`,
-      variables: { formCode, formItemAutocompleteParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.callItemAutocomplete
   }
 }

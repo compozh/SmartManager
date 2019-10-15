@@ -32,10 +32,10 @@
                         >
 
                         <div class="grid-item-data formio-block" v-if="item.i == '0'">
-                          <mes-form-builder
+                          <formio-component
                             ref="formioBuilder"
-                            @formioSubmit=formioSubmit
-                            :formioData=productionFormio
+                            @formSubmit=formSubmit
+                            :formDefinition=productionFormio
                             :formCode=workCenter.productionRegistrationFormCode
                           />
                         </div>
@@ -105,11 +105,11 @@ export default {
     }
   },
   methods: {
-    formioSubmit(data) {
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, data, task: this.selectedTask })
+    formSubmit(submission) {
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask })
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormioData()
+      return this.$refs.formioBuilder[0].getFormSubmission()
     },
     changeDowntimesOverlayVisible() {
       this.$emit('changeDowntimesOverlayVisible')

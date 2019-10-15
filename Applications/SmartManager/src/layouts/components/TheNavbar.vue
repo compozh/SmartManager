@@ -1,9 +1,3 @@
-<!-- =========================================================================================
-  File Name: TheNavbar.vue
-  Description: Navbar component
-  Component Name: TheNavbar
-========================================================================================== -->
-
 <template>
   <div class="relative">
     <div class="vx-navbar-wrapper">
@@ -14,16 +8,25 @@
           icon="MenuIcon"
           @click.stop="showSidebar"
         ></feather-icon>
+        <div class="flex" v-if="$route.name === 'task-list'">
+          <vs-button
+            icon="add"
+            color="primary"
+            type="gradient"
+            class="px-3 mr-2"
+            @click="$router.push('/task-add')"
+          >{{ $t('buttons.addTask') }}
+          </vs-button>
 
-        <vs-button
-          v-if="$route.name === 'task-list'"
-          icon="add"
-          color="primary"
-          type="gradient"
-          class="px-3 mr-2"
-          @click="$router.push('/task-add')"
-        >{{ $t('buttons.addTask') }}
-        </vs-button>
+          <vs-button
+            icon="get_app"
+            color="success"
+            type="gradient"
+            class="px-3 mr-2"
+            @click="$router.push('/work-flow')"
+          >{{ $t('buttons.startWorkflow') }}
+          </vs-button>
+        </div>
 
         <div class="flex" v-if="task.id">
           <vs-button
@@ -113,7 +116,6 @@
         <div class="the-navbar__user-meta flex items-center">
           <div class="text-right leading-tight hidden sm:block">
             <p class="font-semibold">{{ user_displayName }}</p>
-            <small>Available</small>
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
@@ -134,43 +136,39 @@
                 height="40"
                 class="rounded-full shadow-md cursor-pointer block"/>
             </div>
-            <vs-dropdown-menu class="vx-navbar-dropdown">
-              <ul style="min-width: 9rem">
-                <li
-                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="$router.push('/pages/profile')"
-                >
-                  <feather-icon
-                    icon="UserIcon"
-                    svgClasses="w-4 h-4"
-                  />
-                  <span class="ml-2">Profile</span>
-                </li>
-                <vs-divider class="m-1"></vs-divider>
-                <li
-                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="logout"
-                >
-                  <feather-icon
-                    icon="LogOutIcon"
-                    svgClasses="w-4 h-4"
-                  />
-                  <span class="ml-2">Выход</span>
-                </li>
-              </ul>
+            <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
+
+              <vs-dropdown-group vs-collapse
+                                 vs-label="Делегированные права"
+                                 vs-icon="expand_more">
+                <vs-dropdown-item v-for="rights in delegatedRights"
+                                  :key="rights.ID"
+                                  @click="applyDelegatedRights(rights.USERID)">
+                  <span :class="{'font-semibold': rights.IsActive}">{{ rights.USERNAME }}</span>
+                </vs-dropdown-item>
+                <vs-dropdown-item divider @click="setDelegation">
+                  Делегировать права
+                </vs-dropdown-item>
+
+              </vs-dropdown-group>
+
+              <vs-dropdown-item divider @click="logout">
+                <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
+                {{ $t('buttons.logout') }}
+              </vs-dropdown-item>
             </vs-dropdown-menu>
           </vs-dropdown>
         </div>
-
         <!-- I18N -->
         <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
         <span class="cursor-pointer flex i18n-locale ml-3">
-          <flag class="h-6 w-8" size="small" :squared="false" :iso="getCurrentLocaleData.flag"/>
+         {{ getCurrentLocaleData.flag.toUpperCase() }}
         </span>
           <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-            <vs-dropdown-item :key="lang.code" v-for="lang in localizations"
+            <vs-dropdown-item v-for="lang in localizations"
+                              :key="lang.code"
                               @click="updateLocale(lang.code)">
-              <flag class="h-4 w-5" :squared="false" :iso="lang.flag"/> &nbsp;{{lang.name}}
+              {{lang.flag.toUpperCase()}}   ({{lang.name}})
             </vs-dropdown-item>
           </vs-dropdown-menu>
         </vs-dropdown>
@@ -200,6 +198,7 @@
 <script>
 
 import templateConfig from '@/templateConfig'
+import auth from "@/api/auth/auth"
 
 export default {
   name: 'the-navbar',
@@ -250,9 +249,9 @@ export default {
     },
     // NAVBAR STYLE
     classObj() {
-      if (this.sidebarWidth == 'default') {
+      if (this.sidebarWidth === 'default') {
         return 'navbar-default'
-      } else if (this.sidebarWidth == 'reduced') {
+      } else if (this.sidebarWidth === 'reduced') {
         return 'navbar-reduced'
       } else if (this.sidebarWidth) {
         return 'navbar-full'
@@ -262,37 +261,20 @@ export default {
     // I18N
     getCurrentLocaleData() {
       const locale = this.$i18n.locale
-      return this.localizations.find(r => r.code == locale)
-    },
-    // BOOKMARK & SEARCH
-    data() {
-      return this.$store.state.navbarSearchAndPinList
-    },
-    starredPages() {
-      return this.$store.state.starredPages
-    },
-    starredPagesLimited: {
-      get() {
-        return this.starredPages.slice(0, 10)
-      },
-      set(list) {
-        this.$store.dispatch('arrangeStarredPagesLimited', list)
-      }
-    },
-    starredPagesMore: {
-      get() {
-        return this.starredPages.slice(10)
-      },
-      set(list) {
-        this.$store.dispatch('arrangeStarredPagesMore', list)
-      }
+      return this.localizations.find(r => r.code === locale)
     },
     // PROFILE
+    currentUser() {
+      return this.$store.state.auth.currentUser
+    },
     user_displayName() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserName
+      return this.currentUser ? this.currentUser.UserData.CurrentUserData.UserName : ''
+    },
+    delegatedRights() {
+      return this.currentUser ? this.currentUser.UserData.DelegatedRights : []
     },
     activeUserImg() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
+      return this.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
     }
   },
   methods: {
@@ -334,6 +316,12 @@ export default {
     },
     logout() {
       this.$store.dispatch('auth/logout')
+    },
+    applyDelegatedRights(userId) {
+      auth.applyDelegatedRights(userId)
+    },
+    setDelegation() {
+      console.log('Делегировать права', )
     }
   },
   directives: {

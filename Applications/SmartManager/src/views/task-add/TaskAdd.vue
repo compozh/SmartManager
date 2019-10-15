@@ -23,10 +23,11 @@
                             :danger-text="$t('validate.required')"
                             val-icon-danger="clear"
                   />
-                  <task-add-select :users="users"
+                  <sm-autocomplete :items="users"
                                    :multiple="false"
                                    :loading="userListLoading"
                                    v-model="newTask.performer"
+                                   label="fio"
                                    :placeholder="$t('tasks.performer')"
                                    name="performer"
                                    v-validate="'required'"
@@ -72,25 +73,27 @@
                                 :options="editorOption"
                                 class="mb-6"
                   ></quill-editor>
-                  <task-add-select :users="users"
+                  <sm-autocomplete :items="users"
                                    :multiple="true"
                                    :loading="userListLoading"
+                                   label="fio"
                                    v-model="newTask.coexecutors"
                                    :placeholder="$t('roles.coExecutors')"
                                    class="my-6"
                   />
-                  <task-add-select :users="users"
+                  <sm-autocomplete :items="users"
                                    :multiple="true"
+                                   label="fio"
                                    :loading="userListLoading"
                                    v-model="newTask.notify"
                                    :placeholder="$t('roles.notify')"
                   />
-                  <task-files-upload
+                  <files-upload
                     v-on:attach="getAttachment($event)"
                     :uploading="filesUploading"
                     class="mt-3"
                   >
-                  </task-files-upload>
+                  </files-upload>
                   <vs-divider></vs-divider>
                   <div class="flex justify-end">
                     <vs-button class="mx-6"
@@ -120,21 +123,21 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import {quillEditor} from 'vue-quill-editor'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import TaskAddSelect from './TaskAddSelect'
+import SmAutocomplete from '../../components/SmAutocomplete'
 import moment from 'moment'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
 import {Ukrainian} from 'flatpickr/dist/l10n/uk.js'
-import TaskFilesUpload from '../../components/task-files-upload/TaskFilesUpload'
+import FilesUpload from '../../components/FilesUpload'
 
 export default {
   components: {
     quillEditor,
     VuePerfectScrollbar,
-    TaskAddSelect,
+    SmAutocomplete,
     flatPickr,
-    TaskFilesUpload
+    FilesUpload
   },
   props: {
     parent: Number
@@ -278,10 +281,6 @@ export default {
 </script>
 
 <style scoped>
-
-  .vs-sidebar.vs-sidebar-reduce {
-    max-width: 64px;
-  }
 
   .form-container {
     margin: 15px 0;

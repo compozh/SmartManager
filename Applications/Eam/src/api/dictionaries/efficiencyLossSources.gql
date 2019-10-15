@@ -1,0 +1,9 @@
+query efficiencyLossSources($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
+  eam {
+    efficiencyLossSources(where: $where, orderBy: $orderBy, ids: $ids) {
+      id
+      name
+      isValid
+    }
+  }
+}

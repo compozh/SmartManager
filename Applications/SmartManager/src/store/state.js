@@ -1,5 +1,5 @@
 
-import navbarSearchAndPinList from '@/layouts/components/navbarSearchAndPinList'
+
 import themeConfig from '@/../themeConfig.js'
 import colors from '@/../themeConfig.js'
 
@@ -11,7 +11,6 @@ const state = {
   bodyOverlay: false,
   sidebarItemsMin: false,
   theme: themeConfig.theme || 'light',
-  navbarSearchAndPinList: navbarSearchAndPinList,
   AppActiveUser: {
     id: 0,
     name: 'John Doe',
@@ -21,7 +20,7 @@ const state = {
   },
   themePrimaryColor: colors.primary,
 
-  starredPages: navbarSearchAndPinList.data.filter((page) => page.highlightAction),
+  starredPages: '',
   userRole: null,
 
   // Can be used to get current window with

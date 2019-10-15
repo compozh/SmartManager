@@ -1,6 +1,6 @@
 <template>
   <v-flex v-if="item" shrink>
-    <v-icon class="mr-1" color="cyan">line_style</v-icon>
+    <v-icon class="mr-1" color="cyan">center_focus_weak</v-icon>
     <span>{{ item.name }}</span>
   </v-flex>
 </template>
