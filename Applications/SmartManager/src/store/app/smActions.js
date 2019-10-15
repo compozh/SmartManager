@@ -234,7 +234,6 @@ export default {
       const startedProcess = JSON.parse(result)
 
       if (startedProcess.ProcessInstance) {
-        console.log('', startedProcess.ProcessInstance)
         notify('success', 'bpTitle', 'bpSuccess')
       }
     } catch (e) {

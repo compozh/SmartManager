@@ -149,6 +149,7 @@ export default {
       }
       try {
         await this.$store.dispatch('sm/startBusinessProcess', processData)
+        this.$router.go(-1)
       } catch (e) {
         console.log(e.message)
       }
