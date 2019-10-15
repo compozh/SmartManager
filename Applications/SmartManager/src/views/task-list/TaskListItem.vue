@@ -5,7 +5,7 @@
     @click="taskLink(task.id)"
   >
     <!-- TASK ROW 1 : META -->
-    <div class="flex w-full">
+    <div class="flex w-full items-center">
       <vs-avatar
         class="sender__avatar flex-shrink-0 mr-3 border-2 border-solid border-white"
         :src="task.performerPhoto"
@@ -15,29 +15,53 @@
       <div class="flex w-full justify-between items-start">
         <div class="task__details truncate mr-3">
           <h5 class="mb-1" :class="{'font-semibold': !task.isRead}"
-          >{{ task.performer }}
-          </h5>
-          <span>{{ task.descript }}</span>
+          >{{ task.performer }}</h5>
+          <h6 class="text-primary">{{ task.name }}</h6>
         </div>
 
         <div class="task-item__meta flex items-center flex-shrink-0">
-          <span>{{ task.dateAdd }}</span>
+          <span v-if="taskInProgress">{{ $t('tasks.deadline') }}: {{ task.dateplan }}</span>
+          <span v-if="taskIsDone">{{ $t('tasks.done') }}: {{ task.dateFact }}</span>
         </div>
       </div>
     </div>
 
     <!-- TASK ROW 2 : MSG & ACTIONS -->
-    <div class="flex w-full">
-      <div class="task__message truncate mx-3">
-        <span>{{ task.name | filter_tags }}</span>
+    <div class="flex w-full" style="padding-left: 45px;">
+      <div
+        v-if="task.isGenerate && task.name !== task.descript"
+        class="task__message truncate mx-3">
+        <span>{{ task.descript | filter_tags }}</span>
+      </div>
+      <div v-else class="task__message truncate mx-3">
+        <span>{{ $t('tasks.taskFrom') }}: {{ task.addedFio }}</span>
       </div>
       <vs-spacer></vs-spacer>
+
+      <vx-tooltip :text="$t('icons.attachments')" color="rgb(98, 98, 98, .95)">
+        <feather-icon v-if="task.hasOrig" icon="PaperclipIcon" class="mr-2"/>
+      </vx-tooltip>
+
+      <vx-tooltip :text="$t('icons.comment')" color="rgb(98, 98, 98, .95)">
+        <feather-icon v-if="task.hasComm" icon="MessageSquareIcon" class="mr-2"/>
+      </vx-tooltip>
+
+      <vx-tooltip :text="$t('icons.control')" color="rgb(98, 98, 98, .95)">
+        <feather-icon v-if="task.myControl" icon="InfoIcon" class="mr-2"/>
+      </vx-tooltip>
+
+      <vx-tooltip :text="$t('icons.document')" color="rgb(98, 98, 98, .95)">
+        <feather-icon v-if="task.isGenerate" icon="FileTextIcon" class="mr-2"/>
+      </vx-tooltip>
+
       <vs-chip
         :color="taskStatus().color"
         class="flex-shrink-0"
         style="flex-basis: 80px"
+        icon="ActivityIcon"
       >{{ taskStatus().text }}
       </vs-chip>
+
     </div>
   </div>
 </template>
@@ -59,7 +83,7 @@ export default {
         switch (this.task.status) {
         case '':
           return {
-            color: 'warning',
+            color: 'primary',
             icon: 'loop',
             text: this.$t('statuses.inWork')
           }
@@ -89,6 +113,13 @@ export default {
           }
         }
       }
+    },
+    taskInProgress() {
+      return this.task.status === ''
+        || this.task.status === '*'
+    },
+    taskIsDone() {
+      return this.task.status === '+'
     }
   },
   methods: {

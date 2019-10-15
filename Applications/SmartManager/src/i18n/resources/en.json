@@ -31,7 +31,9 @@
     "created": "Created",
     "deadline": "Deadline",
     "related": "Related tasks",
-    "subTasks": "Subtasks"
+    "subTasks": "Subtasks",
+    "done": "Completed",
+    "taskFrom": "Task from"
   },
   "buttons": {
     "addTask": "Add task",
@@ -62,7 +64,8 @@
     "comment": "Has comments",
     "fromMe": "From me",
     "control": "On control",
-    "notRush": "Not rush"
+    "notRush": "Not rush",
+    "document": "Document"
   },
   "tabs": {
     "details": "Details",
@@ -132,18 +135,21 @@
     "fileUploaded": "File {file} uploaded",
     "uploadError": "Error upload file {file}",
     "bpTitle": "Business processes",
-    "bpSuccess": "Business processes success",
-    "bpFail": "Business processes fail",
-    "bpError": "Business processes error"
+    "bpSuccess": "Business processes successfully ran",
+    "bpFail": "Business process start fail",
+    "bpError": "Business process start error"
   },
   "workflow": {
-    "businessProcess": "Business process name"
+    "businessProcess": "Business process",
+    "bpSelectLabel": "Choose a business process"
   },
   "login": {
     "title": "Sign In",
     "welcome": "Welcome, please log in with your account.",
     "rememberMe": "Remember me",
     "placeholder": "Login",
-    "password": "Password"
+    "password": "Password",
+    "subTitle": "Login",
+    "loggedIn": "You are already logged in!"
   }
 }
