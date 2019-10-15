@@ -38,8 +38,7 @@ export default {
     menuItems: [
       {name: 'details', icon: 'AlertCircleIcon'},
       {name: 'attachments', icon: 'PaperclipIcon', chipColor: 'primary'},
-      {name: 'comments', icon: 'MessageSquareIcon', chipColor: 'warning'},
-      {name: 'approvals', icon: 'CheckIcon'}
+      {name: 'comments', icon: 'MessageSquareIcon', chipColor: 'warning'}
     ],
     settings: {
       maxScrollbarLength: 60,
@@ -50,8 +49,8 @@ export default {
     chips() {
       return itemName => {
         switch (itemName) {
-          case 'attachments': return this.attachments.length
-          case 'comments': return this.comments.length
+        case 'attachments': return this.attachments.length
+        case 'comments': return this.comments.length
         }
       }
     }
