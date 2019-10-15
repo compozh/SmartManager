@@ -14,10 +14,10 @@
           indeterminate
           color="primary"
       ></v-progress-circular>
-      <mes-form-builder
+      <formio-component
         ref="formioBuilder"
         @formioSubmit=formioSubmit
-        :formioData=createDowntimeFormio
+        :formDefinition=createDowntimeFormio
         :formCode=workCenter.downtimeRegistrationFormCode
         />
       </div>
