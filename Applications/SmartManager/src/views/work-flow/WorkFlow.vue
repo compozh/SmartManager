@@ -1,18 +1,11 @@
 <template>
-  <div
-    class="app-fixed-height border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
-  >
-    <VuePerfectScrollbar
-      class="scroll-area"
-      :settings="settings"
-    >
+  <div class="app-fixed-height rounded relative overflow-hidden">
       <div class="vx-row form-container">
         <div class="vx-col w-full h-full">
           <vx-card>
-            <!-- TASK APPROVALS -->
             <div class="vx-row">
               <div class="vx-col w-full">
-                <!-- add task -->
+                <!-- select and start business-process -->
                 <form @submit.prevent>
                   <sm-autocomplete :items="businessProcesses"
                                    :multiple="false"
@@ -20,7 +13,8 @@
                                    v-model="businessProcess"
                                    @input="getFormDefinition"
                                    label="name"
-                                   :placeholder="$t('workflow.businessProcess')"
+                                   :title="$t('workflow.businessProcess')"
+                                   :placeholder="$t('workflow.bpSelectLabel') + '...'"
                                    name="businessProcess"
                                    v-validate="'required'"
                   />
@@ -28,36 +22,15 @@
                         class="required-text"
                   >{{ $t('validate.required') }}
                   </span>
-                  <vs-divider></vs-divider>
-                  <formio class="formio"
+
+                  <formio class="formio mt-4"
                           ref="form"
                           :form="form"
                           :options="options"
                           :submission="submission"
                   />
-                  <vs-divider></vs-divider>
-                  <div class="vx-col w-full flex">
-                    <table v-if="startedProcess.ProcessInstance">
-                      <thead class="text-success px-4">Success process started</thead>
-                      <tr v-for="(value, name) in startedProcess.ProcessInstance" :key="name">
-                        <td class="px-4">{{ name }}</td>
-                        <td class="px-4">{{ value }}</td>
-                      </tr>
-                      <tr v-for="(variable, index) in startedProcess.variables" :key="index">
-                        <td class="px-4">Variable: {{ variable.Name }}</td>
-                        <td class="px-4">Value: {{ variable.Value }}</td>
-                        <td class="px-4">Type: {{ variable.Type }}</td>
-                      </tr>
-                    </table>
-                    <table v-else>
-                      <tr v-for="(value, name) in startedProcess" :key="name">
-                        <td class="px-4">{{ name }}</td>
-                        <td class="px-4">{{ value }}</td>
-                    </tr>
-                    </table>
-                  </div>
+                  <no-data v-if="!this.formDefinition">{{ $t('workflow.bpSelectLabel') }}</no-data>
 
-                  <vs-divider></vs-divider>
                   <div class="flex justify-end">
                     <vs-button class="mx-6"
                                color="primary"
@@ -65,11 +38,10 @@
                                @click="$router.go(-1)"
                     >{{ $t('buttons.cancel') }}
                     </vs-button>
-                    <vs-button
-                      type="gradient"
-                      @click="startBusinessProcess"
-                    >{{ $t('buttons.start') }}
-                    </vs-button>
+                    <vs-button type="gradient"
+                               @click="onSubmit"
+                               :disabled="!this.formDefinition"
+                    >{{ $t('buttons.start') }}</vs-button>
                   </div>
                 </form>
               </div>
@@ -77,41 +49,34 @@
           </vx-card>
         </div>
       </div>
-    </VuePerfectScrollbar>
   </div>
 </template>
 <script>
 
-import SmAutocomplete from '../../components/SmAutocomplete'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import SmAutocomplete from '@/components/SmAutocomplete'
 import {Form} from 'vue-formio'
+import noData from '@/components/noData'
 
 export default {
   components: {
-    VuePerfectScrollbar,
     SmAutocomplete,
     formio: Form,
+    noData
   },
-  props: {},
   data: () => ({
     bpListLoading: false,
     businessProcesses: [],
     businessProcess: null,
     formDefinition: null,
-    startedProcess: {},
     options: {noAlerts: true},
     submission: {},
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.30,
-    }
   }),
   computed: {
     form() {
-      //return require('./testForm')
-      return this.formDefinition
-        ? JSON.parse(this.formDefinition.form)
-        : []
+      return require('./testForm')
+      // return this.formDefinition
+      //   ? JSON.parse(this.formDefinition.form)
+      //   : {}
     },
     userId() {
       return this.$store.state.auth.currentUser.UserData.LoginData.UserId
@@ -157,19 +122,36 @@ export default {
         variable.Type = type
       })
     },
-    async startBusinessProcess() {
+    async onSubmit() {
       const form = this.$refs.form.formio
-      const data = form.data
-      const variables = this.getVariables(data)
-
+      try {
+        const result = await form.submit()
+        await this.startBusinessProcess(result.data)
+      } catch (errors) {
+        if (errors.length) {
+          errors.forEach(e => {
+            this.$vs.notify({
+              title: this.$t('notify.bpTitle'),
+              text: e.message,
+              color: 'danger'
+            })
+          })
+        } else {
+          console.log(errors.message)
+        }
+      }
+    },
+    async startBusinessProcess(data) {
       const processData = {
         ProcessDefinitionId: this.formDefinition.procDefId,
         BusinessKey: `USER[${this.userId}]`,
-        Variables: variables
+        Variables: this.getVariables(data)
       }
-      const result = await this.$store.dispatch('sm/startBusinessProcess', processData)
-      this.startedProcess = JSON.parse(result)
-      this.startedProcess.variables = variables
+      try {
+        await this.$store.dispatch('sm/startBusinessProcess', processData)
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 }
@@ -177,14 +159,19 @@ export default {
 
 <style scoped lang="scss">
 
-  .form-container {
-    margin: 15px 0;
+  .vx-card {
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,.05);
   }
+
 
   .formio::v-deep {
     @import "~formiojs/dist/formio.form.min.css";
     @import "../../assets/scss/formio";
     @import "~bootstrap/scss/bootstrap";
+
+    .formio-form {
+      min-height: 20px !important;
+    }
 
     button:hover {
       -webkit-transform: translateY(-2px);

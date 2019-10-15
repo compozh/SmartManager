@@ -7,6 +7,7 @@ const vs = new Vue().$vs
 function startLoading(loading) {
   !loading || vs.loading()
 }
+
 function stopLoading() {
   vs.loading.close()
 }
@@ -61,7 +62,7 @@ export default {
     } catch (e) {
       stopLoading()
       console.log(e.message)
-      notify('danger','taskTitle', 'taskError')
+      notify('danger', 'taskTitle', 'taskError')
     }
   },
   async getUsers({commit}) {
@@ -88,12 +89,12 @@ export default {
           'taskTitle',
           'taskAddSuccess')
       } else {
-        notify('warning','taskTitle','taskAddFail')
+        notify('warning', 'taskTitle', 'taskAddFail')
       }
       return result
     } catch (e) {
       stopLoading()
-      notify('danger','taskTitle', 'taskAddError')
+      notify('danger', 'taskTitle', 'taskAddError')
       throw Error
     }
   },
@@ -109,7 +110,7 @@ export default {
           id: payload.id,
           loading: true
         })
-        notify('success','statusTitle','statChangeSuccess')
+        notify('success', 'statusTitle', 'statChangeSuccess')
       } else {
         notify(
           'warning',
@@ -119,7 +120,7 @@ export default {
     } catch (e) {
       stopLoading()
       console.log(e.message)
-      notify('danger','statusTitle', 'statChangeError')
+      notify('danger', 'statusTitle', 'statChangeError')
     }
   },
   async addAttachments({dispatch, state}, payload) {
@@ -135,15 +136,15 @@ export default {
           taskId,
           loading: true
         })
-        notify('success','attachTitle', 'attachAddSuccess')
+        notify('success', 'attachTitle', 'attachAddSuccess')
       } else {
-        notify('warning','attachTitle','attachAddFail')
+        notify('warning', 'attachTitle', 'attachAddFail')
       }
       return result
     } catch (e) {
       stopLoading()
       console.log(e.message)
-      notify('danger','attachTitle', 'attachAddError')
+      notify('danger', 'attachTitle', 'attachAddError')
     }
   },
   async changeStage({dispatch}, payload) {
@@ -172,7 +173,7 @@ export default {
     } catch (e) {
       stopLoading()
       console.log(e.message)
-      notify('danger','stageTitle', 'stageChangeError')
+      notify('danger', 'stageTitle', 'stageChangeError')
     }
   },
   async addTaskComment({commit}, payload) {
@@ -188,14 +189,14 @@ export default {
           id: payload.params.id,
           text: comment
         })
-        notify('success','commentsTitle','commentAddSuccess')
+        notify('success', 'commentsTitle', 'commentAddSuccess')
       } else {
-        notify('warning','commentsTitle','commentAddFail')
+        notify('warning', 'commentsTitle', 'commentAddFail')
       }
     } catch (e) {
       stopLoading()
       console.log(e.message)
-      notify('danger','commentsTitle', 'commentAddError')
+      notify('danger', 'commentsTitle', 'commentAddError')
     }
   },
   async getBusinessProcesses() {
@@ -229,7 +230,13 @@ export default {
     try {
       const response = await api.startBusinessProcessInGql(processData)
       stopLoading()
-      return response.data.workFlowQuery.startBusinessProcess
+      const result = response.data.workFlowQuery.startBusinessProcess
+      const startedProcess = JSON.parse(result)
+
+      if (startedProcess.ProcessInstance) {
+        console.log('', startedProcess.ProcessInstance)
+        notify('success', 'bpTitle', 'bpSuccess')
+      }
     } catch (e) {
       stopLoading()
       console.log(e.message)
