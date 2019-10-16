@@ -5,7 +5,9 @@ import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
 import extensionElementsHelper from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper'
+import { is } from 'bpmn-js/lib/util/ModelUtil';
 import { eventBus } from '../../../../main';
+import ActionDefinitionType from '../../../../api/models/ActionDefinitionType';
 
 function executeCommands(commandStack, commands, element) {
   var commandToExecute;
@@ -41,8 +43,9 @@ export default function (element, bpmnFactory, options, translate, commandStack)
     buttonAction: {
       name: 'search',
       method: (element, inputNode) => {
+        var definitionType = is(element, 'bpmn:UserTask') ? ActionDefinitionType.UserTask : ActionDefinitionType.ExternalTask;
         var bo = getBusinessObject(element);
-        eventBus.$emit('properties-panel.select-external-task', bo.get('camunda:topic'), (newValue) => {
+        eventBus.$emit('properties-panel.select-external-task', bo.get('camunda:topic'), definitionType, (newValue) => {
           
           var cmd = cmdHelper.updateBusinessObject(element, bo, {
             'camunda:topic': newValue

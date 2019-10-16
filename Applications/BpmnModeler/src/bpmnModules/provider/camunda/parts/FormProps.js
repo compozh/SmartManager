@@ -9,7 +9,7 @@ import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import formHelper from 'bpmn-js-properties-panel/lib/helper/FormHelper';
 import utils from 'bpmn-js-properties-panel/lib/Utils';
 import find from 'lodash/find';
-import each from 'lodash/forEach';
+import { eventBus } from '../../../../main';
 
 function generateValueId() {
   return utils.nextId('Value_');
@@ -78,7 +78,7 @@ function ensureFormKeyAndDataSupported(element) {
   ) || is(element, 'bpmn:UserTask');
 }
 
-export default function(group, element, bpmnFactory, translate) {
+export default function(group, element, bpmnFactory, translate, commandStack) {
   if (!ensureFormKeyAndDataSupported(element)) {
     return;
   }
@@ -102,11 +102,43 @@ export default function(group, element, bpmnFactory, translate) {
     return formHelper.getFormField(element, selected.idx);
   }
 
+  group.entries.push(entryFactory.link({
+    id: 'createForm',
+    label: translate('Create form'),
+    showLink: (element, node) => true,
+    handleClick: (element, node, event) => {
+      var bo = getBusinessObject(element);
+      eventBus.$emit('properties-panel.create-formio', (formKey) => {
+        var cmd = cmdHelper.updateBusinessObject(element, bo, {
+          'camunda:formKey': formKey
+        });
+        commandStack.execute(cmd.cmd, cmd.context);
+      });
+    }
+  }));
+
   // [FormKey] form key text input field
   group.entries.push(entryFactory.textField({
     id: 'form-key',
     label: translate('Form Key'),
     modelProperty: 'formKey',
+    buttonAction: {
+      name: 'search',
+      method: (element, inputNode) => {
+        var bo = getBusinessObject(element);
+        eventBus.$emit('properties-panel.select-form-key', bo.get('camunda:formKey'), (formKey) => {
+          var cmd = cmdHelper.updateBusinessObject(element, bo, {
+            'camunda:formKey': formKey
+          });
+          commandStack.execute(cmd.cmd, cmd.context);
+        });
+        return true;
+      }
+    },
+    buttonShow: {
+      name: 'canSearch',
+      method: (element, inputNode) => true
+    },
     get: function (element, node) {
       var bo = getBusinessObject(element);
 
@@ -119,6 +151,21 @@ export default function(group, element, bpmnFactory, translate) {
         formKey = values.formKey || undefined;
 
       return cmdHelper.updateBusinessObject(element, bo, { 'camunda:formKey': formKey });
+    }
+  }));
+
+  group.entries.push(entryFactory.link({
+    id: 'editForm',
+    label: translate('Edit form'),
+    showLink: (element, node) => {
+      var bo = getBusinessObject(element);
+      var formKey = bo.get('camunda:formKey');
+      return formKey && formKey.trim() !== ''
+    },
+    handleClick: (element, node, event) => {
+      var bo = getBusinessObject(element);
+      var formKey = bo.get('camunda:formKey');
+      eventBus.$emit('properties-panel.edit-formio', formKey);
     }
   }));
 
