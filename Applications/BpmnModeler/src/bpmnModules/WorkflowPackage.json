@@ -4,23 +4,15 @@
   "prefix": "IT-Enterprise",
   "types": [
     {
-      "name": "ServiceTaskLike",
+      "name": "UserTask",
       "extends": [ "bpmn:UserTask" ],
-      "superClass": [ "camunda:ServiceTaskLike" ],
       "properties": [
         {
-          "name": "type",
+          "name": "actionDefinitionId",
           "isAttr": true,
-          "type": "String",
-          "redefines": "camunda:ExternalCapable#type",
-          "default": "external"
+          "type": "String"
         }
       ]
-    },
-    {
-      "name": "ExternalCapable",
-      "extends": [ "IT-Enterprise:ServiceTaskLike" ],
-      "superClass": [ "camunda:ExternalCapable" ]
     },
     {
       "name": "ServiceTaskParameter",

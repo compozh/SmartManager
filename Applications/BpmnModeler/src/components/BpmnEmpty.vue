@@ -5,11 +5,12 @@
   </v-layout>
 </template>
 <script>
+import { eventBus } from '../main'
 export default {
   name: 'bpmn-empty',
   methods: {
     addProcess() {
-      this.$router.app.$emit('add-process');
+      eventBus.$emit('add-process');
     }
   }
 };
