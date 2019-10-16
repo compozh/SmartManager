@@ -70,7 +70,8 @@
     </v-dialog>
 
     <v-dialog v-model="showSelectionGrid" max-width="800">
-      <selection-grid :items="selectionGridItems" @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
+      <selection-grid :items="selectionGridItems" :title="selectionGridTitle" :selectedItems="selectionGridSelectedItems"
+                      @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
     </v-dialog>
 
     <v-dialog v-model="loading"
@@ -127,6 +128,8 @@ export default {
       messageType: 'error',
       showSelectionGrid: false,
       selectionGridItems: [],
+      selectionGridSelectedItems: [],
+      selectionGridTitle: '',
       propertiesPanelCallback: null
     };
   },
@@ -137,6 +140,7 @@ export default {
 
     });
     eventBus.$on('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
+    eventBus.$on('properties-panel.select-form-key', this.onSelectFormKey);
   },
   methods: {
     async loadItems() {
@@ -228,7 +232,26 @@ export default {
       }
       this.loading = false;
       this.propertiesPanelCallback = callback;
+      this.selectionGridTitle = this.$t('bpmn.labels.SelectAction');
       this.selectionGridItems = items;
+      this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
+      this.showSelectionGrid = true;
+    },
+    async onSelectFormKey(formKey, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getFormsForProcess', { processId: this.activeItem });
+      if (!items) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.FormsNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      this.loading = false;
+      this.propertiesPanelCallback = callback;
+      this.selectionGridTitle = this.$t('bpmn.labels.SelectForm');
+      this.selectionGridItems = items;
+      this.selectionGridSelectedItems = items.filter(item => item.id === formKey);
       this.showSelectionGrid = true;
     },
     onSelectionGridSelect(item) {
@@ -239,7 +262,9 @@ export default {
       this.propertiesPanelCallback(item.id);
       this.propertiesPanelCallback = null;
       this.selectionGridItems = [];
-    }
+      this.selectionGridSelectedItems = [];
+      this.selectionGridTitle = '';
+    },
   },
   computed: {
     currentUser() {
@@ -277,6 +302,14 @@ export default {
         this.onRouteChanged(true);
       }
     }
+  },
+  beforeDestroy() {
+    eventBus.$off('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
+    // eventBus.$on('properties-panel.set-external-task-properties', (taskCode, callback) => {
+
+    // });
+    eventBus.$off('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
+    eventBus.$off('properties-panel.select-form-key', this.onSelectFormKey);
   }
 };
 </script>

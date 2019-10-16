@@ -221,6 +221,18 @@ export default {
       return false;
     }
     return items.map(action => new ActionDefinition(action));
+  },
+  async getFormsForProcess(context, { processId }) {
+    let items;
+    try {
+      items = await api.getFormsForProcess(processId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items;
   }
 };
 

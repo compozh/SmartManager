@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title primary-title>
-        <h4 class="headline mb-0">{{ $t('bpmn.labels.SelectAction') }}</h4>
+        <h4 class="headline mb-0">{{ title }}</h4>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -11,7 +11,7 @@
           hide-details
         ></v-text-field>
     </v-card-title>
-    <v-card-text style="max-height: 500px">
+    <v-card-text style="max-height: 500px; overflow-y: auto;">
        <v-data-table
         hide-actions
         hide-headers
@@ -50,7 +50,7 @@
           <tr :active="props.selected" @click="selectProp(props)">
             <td>
               <v-checkbox
-                :value="props.selected"
+                :input-value="props.selected"
                 @input="selectProp(props)"
                 primary
                 hide-details
@@ -70,6 +70,8 @@
   </v-card>
 </template>
 <script>
+import goTo from 'vuetify/lib/components/Vuetify/goTo'
+
 export default {
   name: 'selection-grid',
   props: {
@@ -83,8 +85,17 @@ export default {
         return [ { text: this.$t('bpmn.labels.Id'), value: 'id' }, { text: this.$t('bpmn.labels.Name'), value: 'name' } ];
       }
     },
-    items: Array,
-    loading: Boolean
+    items: {
+      type: Array,
+      required: true,
+      default() { return [] }
+    },
+    selectedItems: {
+      type: Array,
+      default() { return [] }
+    },
+    loading: Boolean,
+    title: String
   },
   data() {
     return {
@@ -94,6 +105,11 @@ export default {
         sortBy: 'name',
         rowsPerPage: -1
       }
+    }
+  },
+  watch: {
+    selectedItems(value) {
+      this.selected = value;
     }
   },
   methods: {

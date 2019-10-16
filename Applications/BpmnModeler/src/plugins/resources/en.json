@@ -45,7 +45,8 @@
 		"SystemRecord": "System record",
 		"UserRecord": "User record",
 		"Id": "Id",
-		"SelectAction": "Select action"
+		"SelectAction": "Select action",
+		"SelectForm": "Select Form"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -261,6 +262,7 @@
 
 		"Result Variable": "Result Variable",
 		"Task properties": "Task properties",
-		"Configure Connector": "Configure Connector"
+		"Configure Connector": "Configure Connector",
+		"Must configure Connector": "Must configure Connector"
 	}
 }
