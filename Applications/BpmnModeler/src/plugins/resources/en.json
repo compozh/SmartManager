@@ -217,6 +217,8 @@
 		"BusinessKnowledgeModel": "BusinessKnowledgeModel",
 
 		"Forms": "Forms",
+		"Create form": "Create form",
+		"Edit form": "Edit form",
 		"Form Key": "Form Key",
 		"Form Fields": "Form Fields",
 		"Business Key": "Business Key",
@@ -237,11 +239,24 @@
 
 		"Implementation": "Implementation",
 		"External": "External task",
+		"Expression": "Expression",
+		"Script": "Script",
+		"Connector": "Connector",
+		"DMN": "DMN",
 		"Topic": "Task indentifier",
 		"External Task Configuration": "External Task Configuration",
 		"Task Priority": "Task Priority",
 
 		"Open minimap": "Open minimap",
-		"Close minimap": "Close minimap"
+		"Close minimap": "Close minimap",
+
+		"string": "string",
+		"long": "long",
+		"boolean": "boolean",
+		"date": "date",
+		"enum": "enum",
+
+		"Result Variable": "Result Variable",
+		"Task properties": "Task properties"
 	}
 }

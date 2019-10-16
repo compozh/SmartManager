@@ -453,3 +453,8 @@ export default {
   }
 }
 </style>
+
+
+
+
+Type a message

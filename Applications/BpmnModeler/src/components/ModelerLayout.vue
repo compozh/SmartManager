@@ -205,4 +205,23 @@ a.bjs-powered-by {
 .djs-minimap .toggle {
   display: none;
 }
+.bpp-properties-group.group-closed {
+  max-height: 30px;
+}
+.bpp-textfield .search {
+    background: transparent;
+    border: none;
+    top: 0;
+    right: 0;
+}
+.bpp-properties-panel button.search:before {
+    content: "\F349";
+    font: normal normal normal 24px/1 "Material Design Icons";
+}
+.bpp-properties-panel button.search {
+    padding: 0;
+    margin-top: 3px;
+    margin-right: 3px;
+    height: 23px;
+}
 </style>

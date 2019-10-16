@@ -218,6 +218,8 @@
 
 		"Forms": "Формы",
 		"Form Key": "Идентификатор формы",
+		"Create form": "Создать форму",
+		"Edit form": "Корректировать форму",
 		"Form Fields": "Поля формы",
 		"Business Key": "Бизнесс-идентификатор",
 		"Form Field": "Поле формы",
@@ -237,11 +239,24 @@
 
 		"Implementation": "Реализация",
 		"External": "Внешняя задача",
+		"Expression": "Выражение",
+		"Script": "Скрипт",
+		"Connector": "Коннектор",
+		"DMN": "DMN",
 		"Topic": "Код задачи",
 		"External Task Configuration": "Конфигурация внешней задачи",
 		"Task Priority": "Приоритет задачи",
 		
 		"Open minimap": "Открыть миникарту",
-		"Close minimap": "Закрыть миникарту"
+		"Close minimap": "Закрыть миникарту",
+
+		"string": "строка",
+		"long": "число",
+		"boolean": "булевый",
+		"date": "дата",
+		"enum": "перечисление",
+
+		"Result Variable": "Переменная с результатом",
+		"Task properties": "Параметры задачи"
 	}
 }
