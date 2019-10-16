@@ -1,10 +1,8 @@
 import { MesApi } from '../api/mesApi'
-import { FormioApi } from '../formio/api/formioApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
 
 const api = new MesApi()
-const formioApi = new FormioApi()
 
 /* eslint-disable */
 export default {
@@ -30,7 +28,7 @@ export default {
       }
     })
   },
-  async initializeWorkCenter({ commit, getters }, uuid, fetchPolicy) {
+  async initializeWorkCenter({ dispatch, commit, getters }, uuid, fetchPolicy) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
       action: async ( ) => {
@@ -43,7 +41,7 @@ export default {
           commit('setWorkCenter', workCenters[0])
         } else {
           var setWorkCenterForWorker = async (properties) => {
-            var workCenterForWorker = await me.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
+            var workCenterForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
             workCenterForWorker = workCenterForWorker.sort((a,b) => {
               return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
             })
@@ -362,8 +360,8 @@ export default {
       }
     })
   },
-  async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
-    return await this.dispatch('mes/graphqlQueryWraper', {
+  async getFixationWorkCenterForWorker ({ dispatch, commit }, { workerCode, fetchPolicy } ) {
+    return await dispatch('graphqlQueryWraper', {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
