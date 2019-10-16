@@ -81,13 +81,13 @@ function createGeneralTabGroups(
 
 }
 
-function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate) {
+function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate, commandStack) {
   var formGroup = {
     id: 'forms',
     label: translate('Forms'),
     entries: []
   };
-  formProps(formGroup, element, bpmnFactory, translate);
+  formProps(formGroup, element, bpmnFactory, translate, commandStack);
 
   return [
     formGroup
@@ -113,7 +113,7 @@ export default function CamundaPropertiesProvider(
     var formsTab = {
       id: 'forms',
       label: translate('Forms'),
-      groups: createFormsTabGroups(element, bpmnFactory, elementRegistry, translate)
+      groups: createFormsTabGroups(element, bpmnFactory, elementRegistry, translate, commandStack)
     };
 
     return [
