@@ -12,13 +12,9 @@
 import Vue from 'vue'
 export default {
 
+  // Разлогиниться из приложения
+  logout({commit}) {
 
-  logout({commit, state}) {
-    // If user is already logged in notify and exit
-    if (!state.isUserLoggedIn()) {
-      // Close animation if passed as payload
-      return
-    }
     return Vue.prototype.$authentication.logOff().then(() => {
       commit('UPDATE_AUTHENTICATED_USER', undefined)
     })

@@ -98,7 +98,7 @@ export default {
             if (callback) {
               callback(result);
             }
-            
+
             var dataChanged = false;
             if (result.components && result.components != components) {
               components = result.components
@@ -158,10 +158,10 @@ export default {
           fieldName: fieldComponent.dataTableFieldName,
           fieldCode: fieldComponent.dataTableFieldCode,
           searchValue,
-          submission 
+          submission
         }
 
-      this.$store.dispatch('formio/callItemAutocomplete', 
+      this.$store.dispatch('formio/callItemAutocomplete',
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);
@@ -211,6 +211,9 @@ export default {
   .btn.btn-danger:active, .btn.btn-danger:focus {
     outline: none !important;
     box-shadow: none;
+  }
+  .input-group-text {
+    display: none;
   }
   .btn.btn-danger::-moz-focus-inner {
     border: 0;
@@ -415,6 +418,9 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+  .input-group-text {
+    display: none;
+  }
   .form-group.has-feedback.formio-component {
     align-items: center;
     text-align: center !important;
@@ -441,6 +447,14 @@ export default {
         display: none;
       }
     }
+    .input-group-text {
+      display: none;
+    }
   }
 }
 </style>
+
+
+
+
+Type a message

@@ -26,10 +26,10 @@ import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 
 //formio
-import productionFormio from './graphql/formio/productionFormio.graphql'
-import productionFormioSubmit from './graphql/formio/productionFormioSubmit.graphql'
-import downtimeFormio from './graphql/formio/downtimeFormio.graphql'
-import downtimeFormioSubmit from './graphql/formio/downtimeFormioSubmit.graphql'
+import productionFormio from './graphql/formio/productionForm.graphql'
+import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphql'
+import downtimeFormio from './graphql/formio/downtimeForm.graphql'
+import downtimeFormioSubmit from './graphql/formio/downtimeFormSubmit.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
