@@ -1,5 +1,5 @@
 {
-    "buttons": {
+  "buttons": {
 		"AddElement": "Add",
 		"Refresh": "Refresh",
 		"Close": "Close",
@@ -15,7 +15,8 @@
 		"ExportBpmn": "Export bpmn",
 		"ExportDmn": "Export dmn",
 		"Deploy": "Deploy",
-		"Copy": "Add by sample"
+		"Copy": "Add by sample",
+		"Select": "Select"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -42,7 +43,9 @@
 		"TogglePropertiesPanel": "Toggle properties panel",
 		"Type": "Type",
 		"SystemRecord": "System record",
-		"UserRecord": "User record"
+		"UserRecord": "User record",
+		"Id": "Id",
+		"SelectAction": "Select action"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -257,6 +260,7 @@
 		"enum": "enum",
 
 		"Result Variable": "Result Variable",
-		"Task properties": "Task properties"
+		"Task properties": "Task properties",
+		"Configure Connector": "Configure Connector"
 	}
 }

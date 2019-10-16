@@ -15,6 +15,7 @@ import nameProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/NameProp
 import executableProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/ExecutableProps';
 import serviceTaskDelegateProps from './parts/ServiceTaskDelegateProps';
 import externalTaskConfiguration from 'bpmn-js-properties-panel/lib/provider/camunda/parts/ExternalTaskConfigurationProps';
+import userTaskProps from './parts/UserTaskProps';
 
 import formProps from './parts/FormProps';
 
@@ -52,6 +53,7 @@ function createGeneralTabGroups(
     label: translate('Details'),
     entries: []
   };
+  userTaskProps(detailsGroup, element, bpmnFactory, translate, commandStack);
   serviceTaskDelegateProps(detailsGroup, element, bpmnFactory, translate, commandStack);
   linkProps(detailsGroup, element, translate);
   eventProps(detailsGroup, element, bpmnFactory, elementRegistry, translate);

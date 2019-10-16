@@ -3,6 +3,7 @@ import { BpmnModelerApi } from '../api/bpmnApi';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
 import Configuration from '../api/models/Configuration';
+import ActionDefinition from '../api/models/ActionDefinition';
 
 const api = new BpmnModelerApi();
 
@@ -208,6 +209,18 @@ export default {
       console.error(error);
       return false;
     }
+  },
+  async getAvailableActions(context, { processId, definitionType }) {
+    let items;
+    try {
+      items = await api.getAvailableActions(processId, definitionType);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items.map(action => new ActionDefinition(action));
   }
 };
 

@@ -69,6 +69,10 @@
       <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
     </v-dialog>
 
+    <v-dialog v-model="showSelectionGrid" max-width="800">
+      <selection-grid :items="selectionGridItems" @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
+    </v-dialog>
+
     <v-dialog v-model="loading"
               full-width
               persistent>
@@ -106,11 +110,12 @@ import { importMixin } from './mixins/importExportMixin'
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
 import ProcessType from '../api/models/ProcessType';
-import { Message } from 'element-ui';
+import SelectionGrid from './SelectionGrid'
+import { eventBus } from '../main'
 
 export default {
   name: 'bpmn-layout',
-  props: ['toolbarTitle'],
+  components: { SelectionGrid },
   mixins: [ formMixin, importMixin ],
   data () {
     return {
@@ -119,12 +124,19 @@ export default {
       displayMessage: false,
       message: '',
       messageTimeout: 10000,
-      messageType: 'error'
+      messageType: 'error',
+      showSelectionGrid: false,
+      selectionGridItems: [],
+      propertiesPanelCallback: null
     };
   },
   mounted() {
     this.onRouteChanged(false);
-    this.$router.app.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
+    eventBus.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
+    eventBus.$on('properties-panel.set-external-task-properties', (taskCode, callback) => {
+
+    });
+    eventBus.$on('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
   },
   methods: {
     async loadItems() {
@@ -203,6 +215,30 @@ export default {
       this.message = message;
       this.messageType = type;
       this.displayMessage = true;
+    },
+    async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getAvailableActions', { processId: this.activeItem, definitionType });
+      if (!items) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.ActionsNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      this.loading = false;
+      this.propertiesPanelCallback = callback;
+      this.selectionGridItems = items;
+      this.showSelectionGrid = true;
+    },
+    onSelectionGridSelect(item) {
+      this.showSelectionGrid = false;
+      if (!item) {
+        return;
+      }
+      this.propertiesPanelCallback(item.id);
+      this.propertiesPanelCallback = null;
+      this.selectionGridItems = [];
     }
   },
   computed: {

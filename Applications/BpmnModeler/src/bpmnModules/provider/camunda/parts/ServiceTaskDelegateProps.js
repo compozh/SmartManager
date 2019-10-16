@@ -1,12 +1,14 @@
 'use strict';
-import { is } from 'bpmn-js/lib/util/ModelUtil';
-import { ImplementationTypeHelper } from '../../../ImplementationTypeHelper'
 
+import ImplementationTypeHelper from 'bpmn-js-properties-panel/lib/helper/ImplementationTypeHelper'
+import InputOutputHelper from 'bpmn-js-properties-panel/lib/helper/InputOutputHelper';
 import callable from 'bpmn-js-properties-panel/lib/provider/camunda/parts/implementation/Callable';
 import implementationType from '../implementation/ImplementationType';
 import externalTaskProperties from '../implementation/ExternalTaskProperties';
 import resultVariable from 'bpmn-js-properties-panel/lib/provider/camunda/parts/implementation/ResultVariable';
-
+import { escapeHTML, triggerClickEvent } from 'bpmn-js-properties-panel/lib/Utils'
+import { query as domQuery, closest as domClosest, classes as domClasses } from 'min-dom';
+import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 
 function getImplementationType(element) {
   return ImplementationTypeHelper.getImplementationType(element);
@@ -39,15 +41,13 @@ export default function (group, element, bpmnFactory, translate, commandStack) {
 
   // implementation type ////////////////////////////////////
 
-  if (!is(element, 'IT-Enterprise:ServiceTaskLike')) {
-    group.entries = group.entries.concat(implementationType(element, bpmnFactory, {
-      getBusinessObject: getBusinessObject,
-      getImplementationType: getImplementationType,
-      hasDmnSupport: hasDmnSupport,
-      hasExternalSupport: hasExternalSupport,
-      hasServiceTaskLikeSupport: true
-    }, translate));
-  }
+  group.entries = group.entries.concat(implementationType(element, bpmnFactory, {
+    getBusinessObject: getBusinessObject,
+    getImplementationType: getImplementationType,
+    hasDmnSupport: hasDmnSupport,
+    hasExternalSupport: hasExternalSupport,
+    hasServiceTaskLikeSupport: true
+  }, translate));
 
   // result variable /////////////////////////////////////////
 
@@ -68,7 +68,6 @@ export default function (group, element, bpmnFactory, translate, commandStack) {
     }, translate, commandStack));
   }
 
-
   // dmn ////////////////////////////////////////////////////////
 
   if (hasDmnSupport) {
@@ -77,4 +76,53 @@ export default function (group, element, bpmnFactory, translate, commandStack) {
     }, translate));
   }
 
+  // connector ////////////////////////////////////////////////
+
+  var isConnector = function (element) {
+    return getImplementationType(element) === 'connector';
+  };
+
+  group.entries.push(entryFactory.link({
+    id: 'configureConnectorLink',
+    label: translate('Configure Connector'),
+    handleClick: function (element, node, event) {
+
+      var connectorTabEl = getTabNode(node, 'connector');
+
+      if (connectorTabEl) {
+        triggerClickEvent(connectorTabEl);
+      }
+
+      // suppress actual link click
+      return false;
+    },
+    showLink: function (element, node) {
+      var link = domQuery('a', node);
+      link.textContent = '';
+
+      domClasses(link).remove('bpp-error-message');
+
+      if (isConnector(element)) {
+        var connectorId = InputOutputHelper.getConnector(element).get('connectorId');
+        if (connectorId) {
+          link.textContent = translate('Configure Connector');
+        } else {
+          link.innerHTML = '<span class="bpp-icon-warning"></span> ' + escapeHTML(translate('Must configure Connector'));
+          domClasses(link).add('bpp-error-message');
+        }
+
+        return true;
+      }
+
+      return false;
+    }
+  }));
+}
+
+// helpers ///////////////////////////
+
+function getTabNode(el, id) {
+  var containerEl = domClosest(el, '.bpp-properties-panel');
+
+  return domQuery('a[data-tab-target="' + id + '"]', containerEl);
 }

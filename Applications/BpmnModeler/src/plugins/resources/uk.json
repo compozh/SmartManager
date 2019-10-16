@@ -15,7 +15,8 @@
 		"ExportBpmn": "Експортувати в форматі bpmn",
 		"ExportDmn": "Експортувати в форматі dmn",
 		"Deploy": "Опублікувати",
-		"Copy": "Додати за зразком"
+		"Copy": "Додати за зразком",
+		"Select": "Вибрати"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -42,7 +43,9 @@
 		"TogglePropertiesPanel": "Перемикнути панель параметрів",
 		"Type": "Тип",
 		"SystemRecord": "Системний запис",
-		"UserRecord": "Користувацький запис"
+		"UserRecord": "Користувацький запис",
+		"Id": "Ідентифікатор",
+		"SelectAction": "Виберіть дію"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -257,6 +260,7 @@
 		"enum": "перелік",
 
 		"Result Variable": "Змінна з результатом",
-		"Task properties": "Параметри задачі"
+		"Task properties": "Параметри задачі",
+		"Configure Connector": "Налаштуйте коннектор"
 	}
 }
