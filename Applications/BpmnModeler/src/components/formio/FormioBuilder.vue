@@ -21,7 +21,7 @@ export default {
   data() {
     return {
         callback: null,
-        showFormioBuilder: true,
+        showFormioBuilder: false,
         formDefinition: {}
     }
   },
@@ -44,8 +44,8 @@ export default {
         var me = this
         await this.$store.dispatch('formio/getForm', { formCode }).then(result => {
             if(result.success) {
-                this.formDefinition = formDefinition
-                this.changeFormVisible(true)
+                me.formDefinition = formDefinition
+                me.changeFormVisible(true)
             }
         })
     },

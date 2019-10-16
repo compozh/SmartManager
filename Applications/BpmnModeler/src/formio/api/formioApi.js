@@ -79,7 +79,6 @@ export class FormioApi {
       mutation: gql`${createForm}`,
       variables: { formDefinitionParamsInput }
     })
-    debugger;
     return result.data.formioQueryMutation.createForm
   }
 
