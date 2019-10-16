@@ -15,7 +15,8 @@
 		"ExportBpmn": "Експортувати в форматі bpmn",
 		"ExportDmn": "Експортувати в форматі dmn",
 		"Deploy": "Опублікувати",
-		"Copy": "Додати за зразком"
+		"Copy": "Додати за зразком",
+		"Select": "Вибрати"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -42,7 +43,9 @@
 		"TogglePropertiesPanel": "Перемикнути панель параметрів",
 		"Type": "Тип",
 		"SystemRecord": "Системний запис",
-		"UserRecord": "Користувацький запис"
+		"UserRecord": "Користувацький запис",
+		"Id": "Ідентифікатор",
+		"SelectAction": "Виберіть дію"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -218,6 +221,8 @@
 
 		"Forms": "Форми",
 		"Form Key": "Ідентифікатор форми",
+		"Create form": "Створити форму",
+		"Edit form": "Редагувати форму",
 		"Form Fields": "Поля форми",
 		"Business Key": "Бізнес-ідентифікатор",
 		"Form Field": "Поля форми",
@@ -237,6 +242,10 @@
 
 		"Implementation": "Реалізація",
 		"External": "Зовнішня задача",
+		"Expression": "Вираз",
+		"Script": "Скрипт",
+		"Connector": "Конектор",
+		"DMN": "DMN",
 		"Topic": "Код задачі",
 		"External Task Configuration": "Конфігурація зовнішньої задачі",
 		"Task Priority": "Пріорітет задачі",
@@ -251,6 +260,7 @@
 		"enum": "перелік",
 
 		"Result Variable": "Змінна з результатом",
-		"Task properties": "Параметри задачі"
+		"Task properties": "Параметри задачі",
+		"Configure Connector": "Налаштуйте коннектор"
 	}
 }

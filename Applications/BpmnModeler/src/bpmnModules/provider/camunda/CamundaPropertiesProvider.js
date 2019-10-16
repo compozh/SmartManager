@@ -15,6 +15,7 @@ import nameProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/NameProp
 import executableProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/ExecutableProps';
 import serviceTaskDelegateProps from './parts/ServiceTaskDelegateProps';
 import externalTaskConfiguration from 'bpmn-js-properties-panel/lib/provider/camunda/parts/ExternalTaskConfigurationProps';
+import userTaskProps from './parts/UserTaskProps';
 
 import formProps from './parts/FormProps';
 
@@ -52,6 +53,7 @@ function createGeneralTabGroups(
     label: translate('Details'),
     entries: []
   };
+  userTaskProps(detailsGroup, element, bpmnFactory, translate, commandStack);
   serviceTaskDelegateProps(detailsGroup, element, bpmnFactory, translate, commandStack);
   linkProps(detailsGroup, element, translate);
   eventProps(detailsGroup, element, bpmnFactory, elementRegistry, translate);
@@ -81,13 +83,13 @@ function createGeneralTabGroups(
 
 }
 
-function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate) {
+function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate, commandStack) {
   var formGroup = {
     id: 'forms',
     label: translate('Forms'),
     entries: []
   };
-  formProps(formGroup, element, bpmnFactory, translate);
+  formProps(formGroup, element, bpmnFactory, translate, commandStack);
 
   return [
     formGroup
@@ -113,7 +115,7 @@ export default function CamundaPropertiesProvider(
     var formsTab = {
       id: 'forms',
       label: translate('Forms'),
-      groups: createFormsTabGroups(element, bpmnFactory, elementRegistry, translate)
+      groups: createFormsTabGroups(element, bpmnFactory, elementRegistry, translate, commandStack)
     };
 
     return [

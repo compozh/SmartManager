@@ -1,11 +1,9 @@
-'use strict';
-
 import flattenDeep from 'lodash/flattenDeep';
 import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
 import extensionElementsHelper from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper'
-import { is } from 'bpmn-js/lib/util/ModelUtil';
+import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import { eventBus } from '../../../../main';
 import ActionDefinitionType from '../../../../api/models/ActionDefinitionType';
 
@@ -26,29 +24,26 @@ function executeCommands(commandStack, commands, element) {
   }
 }
 
-export default function (element, bpmnFactory, options, translate, commandStack) {
+export default function (group, element, bpmnFactory, translate, commandStack) {
 
-  var getImplementationType = options.getImplementationType,
-    getBusinessObject = options.getBusinessObject;
-
-  function isExternal(element) {
-    return getImplementationType(element) === 'external';
+  if (!is(element, 'IT-Enterprise:UserTask')) {
+    return;
   }
 
   var topicEntry = entryFactory.textField({
-    id: 'externalTopic',
+    id: 'actionDefinitionId',
     label: translate('Topic'),
-    modelProperty: 'externalTopic',
+    modelProperty: 'actionDefinitionId',
 
     buttonAction: {
       name: 'search',
       method: (element, inputNode) => {
-        var definitionType = ActionDefinitionType.ExternalTask;
+        var definitionType = ActionDefinitionType.UserTask;
         var bo = getBusinessObject(element);
-        eventBus.$emit('properties-panel.select-external-task', bo.get('camunda:topic'), definitionType, (newValue) => {
-          
+        eventBus.$emit('properties-panel.select-external-task', bo.get('IT-Enterprise:actionDefinitionId'), definitionType, (newValue) => {
+
           var cmd = cmdHelper.updateBusinessObject(element, bo, {
-            'camunda:topic': newValue
+            'IT-Enterprise:actionDefinitionId': newValue
           });
           commandStack.execute(cmd.cmd, cmd.context);
         });
@@ -62,22 +57,22 @@ export default function (element, bpmnFactory, options, translate, commandStack)
 
     get: function (element, node) {
       var bo = getBusinessObject(element);
-      return { externalTopic: bo.get('camunda:topic') };
+      return { actionDefinitionId: bo.get('IT-Enterprise:actionDefinitionId') };
     },
 
     set: function (element, values, node) {
       var bo = getBusinessObject(element);
       return cmdHelper.updateBusinessObject(element, bo, {
-        'camunda:topic': values.externalTopic
+        'IT-Enterprise:actionDefinitionId': values.actionDefinitionId
       });
     },
 
     validate: function (element, values, node) {
-      return isExternal(element) && !values.externalTopic ? { externalTopic: translate('Must provide a value') } : {};
+      return is(element, 'IT-Enterprise:UserTask') && !values.actionDefinitionId ? { actionDefinitionId: translate('Must provide a value') } : {};
     },
 
     hidden: function (element, node) {
-      return !isExternal(element);
+      return !is(element, 'IT-Enterprise:UserTask');
     }
 
   });
@@ -86,16 +81,16 @@ export default function (element, bpmnFactory, options, translate, commandStack)
     id: 'externalTaskProperties',
     label: translate('Task properties'),
     showLink: (element, node) => {
-      if (!isExternal(element)) {
+      if (!is(element, 'IT-Enterprise:UserTask')) {
         return false;
       }
       var bo = getBusinessObject(element);
-      var taskCode = bo.get('camunda:topic');
+      var taskCode = bo.get('IT-Enterprise:actionDefinitionId');
       return taskCode && taskCode.trim() !== ''
     },
     handleClick: (element, node, event) => {
       var bo = getBusinessObject(element);
-      var taskCode = bo.get('camunda:topic');
+      var taskCode = bo.get('IT-Enterprise:actionDefinitionId');
       // Вызываем событие для ввода параметров задачи
       // По событию должен открыться диалог ввода параметров
       // Параметры собития: код задачи из таблицы WFEXEC и callback, в который будут переданы новые параметры 
@@ -118,7 +113,7 @@ export default function (element, bpmnFactory, options, translate, commandStack)
         var existingParameters = extensionElementsHelper.getExtensionElements(bo, 'IT-Enterprise:ServiceTaskParameter');
 
         // Записываем новые параметры и удаляем старые
-        commands.push(cmdHelper.addAndRemoveElementsFromList(element, extensionElements, 'values', 'extensionElements', parameters.map(p => 
+        commands.push(cmdHelper.addAndRemoveElementsFromList(element, extensionElements, 'values', 'extensionElements', parameters.map(p =>
           elementHelper.createElement('IT-Enterprise:ServiceTaskParameter', {
             'name': p.name,
             'type': p.type,
@@ -131,6 +126,5 @@ export default function (element, bpmnFactory, options, translate, commandStack)
     }
   });
 
-  return [ topicEntry, taskProperties];
-
+  group.entries = group.entries.concat([topicEntry, taskProperties]);
 }

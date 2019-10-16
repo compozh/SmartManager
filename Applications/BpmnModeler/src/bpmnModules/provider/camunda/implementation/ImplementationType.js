@@ -47,9 +47,9 @@ export default function (element, bpmnFactory, options, translate) {
     { value: 'external', name: translate('External') }
   ];
 
-  // var CONNECTOR_OPTION = [
-  //   { value: 'connector', name: translate('Connector') }
-  // ];
+  var CONNECTOR_OPTION = [
+    { value: 'connector', name: translate('Connector') }
+  ];
 
   var SCRIPT_OPTION = [
     { value: 'script', name: translate('Script') }
@@ -75,9 +75,9 @@ export default function (element, bpmnFactory, options, translate) {
     selectOptions = selectOptions.concat(EXTERNAL_OPTION);
   }
 
-  // if (hasServiceTaskLikeSupport) {
-  //   selectOptions = selectOptions.concat(CONNECTOR_OPTION);
-  // }
+  if (hasServiceTaskLikeSupport) {
+    selectOptions = selectOptions.concat(CONNECTOR_OPTION);
+  }
 
   if (hasScriptSupport) {
     selectOptions = selectOptions.concat(SCRIPT_OPTION);

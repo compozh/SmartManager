@@ -1,12 +1,4 @@
-/*=========================================================================================
-  File Name: moduleAuthActions.js
-  Description: Auth Module Actions
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
-
+import {i18n} from '@/i18n/i18n'
 import auth from '@/api/auth/auth'
 import router from '@/router'
 import Vue from 'vue'
@@ -40,13 +32,13 @@ export default {
       }
 
       payload.notify({
-        title: 'Вход в систему',
-        text: 'Вы уже вошли в систему!',
+        title: i18n.t('login.subTitle'),
+        text: i18n.t('login.loggedIn'),
         iconPack: 'feather',
         icon: 'icon-alert-circle',
         color: 'warning'
       })
-
+      router.push('/')
       return false
     }
 

@@ -15,7 +15,8 @@
 		"ExportBpmn": "Экспортировать в формате bpmn",
 		"ExportDmn": "Экспортировать в формате dmn",
 		"Deploy": "Опубликовать",
-		"Copy": "Создать по образцу"
+		"Copy": "Создать по образцу",
+		"Select": "Выбрать"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -42,7 +43,9 @@
 		"TogglePropertiesPanel": "Переключить панель параметров",
 		"Type": "Тип",
 		"SystemRecord": "Системная запись",
-		"UserRecord": "Пользовательская запись"
+		"UserRecord": "Пользовательская запись",
+		"Id": "Идентификатор",
+		"SelectAction": "Выберите действие"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -218,6 +221,8 @@
 
 		"Forms": "Формы",
 		"Form Key": "Идентификатор формы",
+		"Create form": "Создать форму",
+		"Edit form": "Корректировать форму",
 		"Form Fields": "Поля формы",
 		"Business Key": "Бизнесс-идентификатор",
 		"Form Field": "Поле формы",
@@ -237,6 +242,10 @@
 
 		"Implementation": "Реализация",
 		"External": "Внешняя задача",
+		"Expression": "Выражение",
+		"Script": "Скрипт",
+		"Connector": "Коннектор",
+		"DMN": "DMN",
 		"Topic": "Код задачи",
 		"External Task Configuration": "Конфигурация внешней задачи",
 		"Task Priority": "Приоритет задачи",
@@ -251,6 +260,7 @@
 		"enum": "перечисление",
 
 		"Result Variable": "Переменная с результатом",
-		"Task properties": "Параметры задачи"
+		"Task properties": "Параметры задачи",
+		"Configure Connector": "Настройте коннектор"
 	}
 }
