@@ -7,7 +7,13 @@
         </router-link>
         <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
       </v-flex>
-      <v-col class="work-centers-select" v-if="workCentersForWorker.length > 1">
+      <v-tooltip :disabled="!workCenterDescription" bottom v-if="workCenterState == 'DOWN_TIME' || workCenterState == 'BUSY'">
+        <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
+          <v-icon large class="work-center-state" :color="workCenterState == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
+        </template>
+        <span v-html="workCenterDescription"></span>
+      </v-tooltip>
+      <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <v-autocomplete
           autocomplete="off"
@@ -19,7 +25,7 @@
           @change="changeWorkCenter"
           class="work-centers-select-input"
         ></v-autocomplete>
-      </v-col>
+      </div>
       <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
@@ -80,6 +86,14 @@ export default {
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
+    },
+    workCenterState() {
+      console.log(this.$store.getters['mes/workCenterState'])
+      return this.$store.getters['mes/workCenterState']
+    },
+    workCenterDescription() {
+      console.log(this.$store.getters['mes/workCenterDescription'])
+      return this.$store.getters['mes/workCenterDescription']
     },
     workCentersForWorker() {
       return this.$store.getters['mes/workCentersForWorker']
@@ -164,6 +178,12 @@ a {
   color: #326DA8;
   width: 120px;
 }
+.work-center-state {
+  margin: 0 10px;
+}
+.work-center-state-tooltip {
+  padding: 15px;
+}
 .work-centers-name {
   font-size: 14px;
   font-weight: 500;
@@ -175,7 +195,7 @@ a {
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
-  flex-grow: 10;
+  min-width: 450px;
 }
 .work-centers-select-input {
   margin: 0 5px;
@@ -212,5 +232,8 @@ a {
 }
 .router-link-active {
   padding-left: 5px;
+}
+.v-tooltip__content.menuable__content__active.v-tooltip__content--fixed {
+  padding: 16px;
 }
 </style>

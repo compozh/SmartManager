@@ -14,6 +14,12 @@ export default {
   workCenter(state) {
     return state.workCenter
   },
+  workCenterState(state) {
+    return state.workCenterState
+  },
+  workCenterDescription(state) {
+    return state.workCenterDescription
+  },
   dragResizeMode(state) {
     return state.tasksPageState.dragResizeMode
   },

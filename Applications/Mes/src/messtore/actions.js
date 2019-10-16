@@ -50,6 +50,8 @@ export default {
                 for(var fixWorkCetner of workCenterForWorker) {
                   if(fixWorkCetner.code == workCenter.code) {
                     commit('setWorkCenter', workCenter)
+                    commit('setWorkCenterState', fixWorkCetner.state)
+                    commit('setWorkCenterDescription', fixWorkCetner.description)
                     return
                   }
                 }

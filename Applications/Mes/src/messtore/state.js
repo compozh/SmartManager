@@ -30,6 +30,8 @@ export default {
   properties: null,
   userName: null,
   workCenter: null,
+  workCenterState: null,
+  workCenterDescription: null,
   initialWorkCenter: false,
   workCentersForWorker: [],
   selectedDowntime: null,

@@ -31,6 +31,12 @@ export default {
   setWorkCenter(state, workCenter) {
     state.workCenter = workCenter
   },
+  setWorkCenterState(state, workCenterState) {
+    state.workCenterState = workCenterState
+  },
+  setWorkCenterDescription(state, workCenterDescription) {
+    state.workCenterDescription = workCenterDescription
+  },
   setTasks(state, tasks) {
     state.tasks = tasks
   },
