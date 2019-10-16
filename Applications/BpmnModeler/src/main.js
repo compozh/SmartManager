@@ -83,6 +83,14 @@ req.keys().map(key => {
   Vue.component(req(key).default.name, req(key).default);
 });
 
+const reqFormio = require.context('@/formio/', true, /\.(js|vue)$/i)
+reqFormio.keys().map(key => {
+  if (!(reqFormio(key).default || {}).name) {
+    return
+  }
+  Vue.component(reqFormio(key).default.name, reqFormio(key).default)
+})
+
 start();
 
 async function start()   {

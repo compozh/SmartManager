@@ -96,6 +96,9 @@
         {{ $t('bpmn.buttons.Close') }}
       </v-btn>
     </v-snackbar>
+
+    <formio-builder-container/>
+    
   </v-app>
 </template>
 
