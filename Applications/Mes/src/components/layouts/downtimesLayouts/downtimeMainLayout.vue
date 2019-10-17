@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     formSubmit(submission) {
-      this.$store.dispatch('mes/downtimeFormSubmit', { workCenter: this.workCenter, submission, downtime: this.selectedDowntime })
+      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, downtime: this.selectedDowntime })
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()
