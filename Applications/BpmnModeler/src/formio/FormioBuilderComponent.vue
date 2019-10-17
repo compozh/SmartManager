@@ -20,15 +20,17 @@
                 Отменить
             </v-btn>
             <v-text-field
-                class="toolbar-item"
+                class="toolbar-item form-code-text-field"
                 :disabled="Boolean(Object.keys(formDefinition).length)"
                 v-model=formCodeProperty
+                :full-width=false
+                counter
                 :maxlength="10"
                 label="Код формы"
                 required
             />
             <v-text-field
-                class="toolbar-item"
+                class="toolbar-item form-name-text-field"
                 v-model=formNameProperty
                 label="Наименование формы"
                 required
@@ -119,5 +121,11 @@ export default {
     }
     .toolbar-item {
         padding: 0 5px;
+    }
+    .form-code-text-field {
+        max-width: 200px;
+    }
+    .form-name-text-field {
+      max-width: 500px;  
     }
 </style>
