@@ -70,11 +70,11 @@ export default {
 
         commit('setInitialWorkCenter', true)
 
-        for(var event of getters.afterInitializeWorkCenterEvents) {
-          if(event.action) {
-            event.action();
-          }
-        }
+        // for(var event of getters.afterInitializeWorkCenterEvents) {
+        //   if(event.action) {
+        //     event.action();
+        //   }
+        // }
 
       },
       linearLoader: true
@@ -154,11 +154,11 @@ export default {
           workBarcode: task.barcode
         }
         me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
-        for(var event of getters.afterChangeTaskStateEvents) {
-          if(event.action) {
-            event.action()
-          }
-        }
+        // for(var event of getters.afterChangeTaskStateEvents) {
+        //   if(event.action) {
+        //     event.action()
+        //   }
+        // }
       },
       linearLoader: true
     })
@@ -181,11 +181,11 @@ export default {
       },
       successAction: async () => {
         task.inProgress = false
-        for(var event of getters.afterChangeTaskStateEvents) {
-          if(event.action) {
-            event.action()
-          }
-        }
+        // for(var event of getters.afterChangeTaskStateEvents) {
+        //   if(event.action) {
+        //     event.action()
+        //   }
+        // }
       },
       linearLoader: true
     })

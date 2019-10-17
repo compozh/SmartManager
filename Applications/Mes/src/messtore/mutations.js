@@ -131,12 +131,12 @@ export default {
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
-  addAfterInitializeWorkCenterEvent(state, action) {
-    state.events.afterInitializeWorkCenter.push(action)
-  },
-  addAfterChangeTaskStateEvent(state, action) {
-    state.events.afterChangeTaskStateEvents.push(action)
-  },
+  // addAfterInitializeWorkCenterEvent(state, action) {
+  //   state.events.afterInitializeWorkCenter.push(action)
+  // },
+  // addAfterChangeTaskStateEvent(state, action) {
+  //   state.events.afterChangeTaskStateEvents.push(action)
+  // },
   // addAfterDowntimeRegistrationEvent(state, action) {
   //   state.events.afterDowntimeRegistrationEvents.push(action)
   // },

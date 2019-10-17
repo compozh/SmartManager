@@ -11,7 +11,7 @@
       </v-flex>
 
       <!-- Состояние РЦ -->
-      <v-tooltip :key="workCenterFixationData.state" :disabled="!workCenterFixationData.description" bottom v-if="workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
+      <v-tooltip :disabled="!workCenterFixationData.description" bottom v-if="workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
           <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
         </template>
@@ -89,17 +89,17 @@ export default {
       me.currentUserData = currentUSer.CurrentUserData
     })
 
-    var action = async () => {
-      var workCenterForWorker = await me.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: me.properties.workerCode, fetchPolicy: 'network-only' })
-      for (var fixation of workCenterForWorker) {
-        if (me.workCenter.code == fixation.code) {
-          me.$store.commit('mes/setWorkCenterFixationData', fixation)
-          return
-        }
-      }
-    }
+    // var action = async () => {
+    //   var workCenterForWorker = await me.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: me.properties.workerCode, fetchPolicy: 'network-only' })
+    //   for (var fixation of workCenterForWorker) {
+    //     if (me.workCenter.code == fixation.code) {
+    //       me.$store.commit('mes/setWorkCenterFixationData', fixation)
+    //       return
+    //     }
+    //   }
+    // }
 
-    me.$store.commit('mes/addAfterChangeTaskStateEvent', { action })
+    // me.$store.commit('mes/addAfterChangeTaskStateEvent', { action })
     // me.$store.commit('mes/addAfterDowntimeRegistrationEvent', { action })
   },
   data() {

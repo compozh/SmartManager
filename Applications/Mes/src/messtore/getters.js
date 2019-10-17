@@ -86,12 +86,12 @@ export default {
   actionsAfterInitializeProperties(state) {
     return state.actionsAfterInitializeProperties
   },
-  afterInitializeWorkCenterEvents(state) {
-    return state.events.afterInitializeWorkCenter
-  },
-  afterChangeTaskStateEvents(state) {
-    return state.events.afterChangeTaskStateEvents
-  },
+  // afterInitializeWorkCenterEvents(state) {
+  //   return state.events.afterInitializeWorkCenter
+  // },
+  // afterChangeTaskStateEvents(state) {
+  //   return state.events.afterChangeTaskStateEvents
+  // },
   // afterDowntimeRegistrationEvents(state) {
   //   return state.events.afterDowntimeRegistrationEvents
   // }
