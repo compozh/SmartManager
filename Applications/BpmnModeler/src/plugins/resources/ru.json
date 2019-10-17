@@ -47,7 +47,8 @@
 		"Id": "Идентификатор",
 		"SelectAction": "Выберите действие",
 		"SelectForm": "Выберите форму",
-		"EnterTaskParams": "Введите параметры задачи"
+		"EnterTaskParams": "Введите параметры задачи",
+		"SelectTaskCreationRule": "Выберите правило создания задачи"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -56,7 +57,13 @@
 		"ProcessNotDeleted": "Не удалось удалить элемент",
 		"CantDrop": "Не удалось переместить элемент",
 		"ProcessDeployed": "Диаграмма опубликована",
-		"ProcessNotDeployed": "Не удалось опубликовать диаграмму"
+		"ProcessNotDeployed": "Не удалось опубликовать диаграмму",
+		"FormsNotLoaded": "Не удалось загрузить список форм",
+		"FormNotLoaded": "Не удалось загрузить форму",
+		"ActionNotLoaded": "Не удалось загрузить действие",
+		"RuleNotLoaded": "Не удалось загрузить правило",
+		"ActionWithoutForm": "К этому действию не привязана форма",
+		"RuleWithoutForm": "К этому правилу не привязана форма"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",
@@ -264,6 +271,11 @@
 		"Result Variable": "Переменная с результатом",
 		"Task properties": "Параметры задачи",
 		"Configure Connector": "Настройте коннектор",
-		"Must configure Connector": "Необходимо настроить коннектор"
+		"Must configure Connector": "Необходимо настроить коннектор",
+
+		"Action": "Действие",
+		"Config": "Настройка",
+		"Task creation rule": "Правило создания задачи",
+		"Item description": "Описание элемента"
 	}
 }

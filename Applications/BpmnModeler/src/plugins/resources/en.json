@@ -46,7 +46,8 @@
 		"UserRecord": "User record",
 		"Id": "Id",
 		"SelectAction": "Select action",
-		"SelectForm": "Select Form"
+		"SelectForm": "Select Form",
+		"SelectTaskCreationRule": "Select task creation rule"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -55,7 +56,13 @@
 		"ProcessNotDeleted": "Failed to delete item",
 		"CantDrop": "Failed to move item",
 		"ProcessDeployed": "Diagram deployed",
-		"ProcessNotDeployed": "Failed to deploy diagram"
+		"ProcessNotDeployed": "Failed to deploy diagram",
+		"FormsNotLoaded": "Forms not loaded",
+		"FormNotLoaded": "Form not loaded",
+		"ActionNotLoaded": "Action not loaded",
+		"RuleNotLoaded": "Rule not loaded",
+		"ActionWithoutForm": "Form is not attached to this action",
+		"RuleWithoutForm": "Form is not attached to this rule"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
@@ -263,6 +270,11 @@
 		"Result Variable": "Result Variable",
 		"Task properties": "Task properties",
 		"Configure Connector": "Configure Connector",
-		"Must configure Connector": "Must configure Connector"
+		"Must configure Connector": "Must configure Connector",
+
+		"Action": "Action",
+		"Config": "Configuration",
+		"Task creation rule": "Task creation rule",
+		"Item description": "Item decription"
 	}
 }

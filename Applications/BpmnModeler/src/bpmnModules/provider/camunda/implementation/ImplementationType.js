@@ -44,7 +44,7 @@ export default function (element, bpmnFactory, options, translate) {
   ];
 
   var EXTERNAL_OPTION = [
-    { value: 'external', name: translate('External') }
+    { value: 'external', name: translate('Action') }
   ];
 
   var CONNECTOR_OPTION = [

@@ -46,7 +46,8 @@
 		"UserRecord": "Користувацький запис",
 		"Id": "Ідентифікатор",
 		"SelectAction": "Виберіть дію",
-		"SelectForm": "Виберіть форму"
+		"SelectForm": "Виберіть форму",
+		"SelectTaskCreationRule": "Виберіть правило створення задачі"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -55,7 +56,13 @@
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
 		"CantDrop": "Не вдалося перемістити елемент",
 		"ProcessDeployed": "Діаграму опубліковано",
-		"ProcessNotDeployed": "Не вдалося опублікувати діаграму"
+		"ProcessNotDeployed": "Не вдалося опублікувати діаграму",
+		"FormsNotLoaded": "Не вдалося завантажити список форм",
+		"FormNotLoaded": "Не вдалося завантажити форму",
+		"ActionNotLoaded": "Не вдалося завантажити дію",
+		"RuleNotLoaded": "Не вдалося завантажити правило",
+		"ActionWithoutForm": "До цієї дії не прив'язана форма",
+		"RuleWithoutForm": "До цього правила не прив'язана форма"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
@@ -263,6 +270,11 @@
 		"Result Variable": "Змінна з результатом",
 		"Task properties": "Параметри задачі",
 		"Configure Connector": "Налаштуйте коннектор",
-		"Must configure Connector": "Необхідно налаштувати коннектор"
+		"Must configure Connector": "Необхідно налаштувати коннектор",
+
+		"Action": "Дія",
+		"Config": "Налаштування",
+		"Task creation rule": "Правило створення задачі",
+		"Item description": "Опис елемента"
 	}
 }

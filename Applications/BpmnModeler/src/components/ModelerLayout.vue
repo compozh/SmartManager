@@ -130,6 +130,11 @@ export default {
 }
 </script>
 <style>
+:root {
+  --main-color: #1976d2;
+  --main-gradient: rgba(25, 118, 210, 0.2);
+}
+
 .modeler-grid {
   position: absolute;
   height: 100%;
@@ -209,19 +214,54 @@ a.bjs-powered-by {
   max-height: 30px;
 }
 .bpp-textfield .search {
-    background: transparent;
-    border: none;
-    top: 0;
-    right: 0;
+  background: transparent;
+  border: none;
+  top: 0;
+  right: 0;
 }
 .bpp-properties-panel button.search:before {
-    content: "\F349";
-    font: normal normal normal 24px/1 "Material Design Icons";
+  content: "\F349";
+  font: normal normal normal 24px/1 "Material Design Icons";
 }
 .bpp-properties-panel button.search {
-    padding: 0;
-    margin-top: 3px;
-    margin-right: 3px;
-    height: 23px;
+  padding: 0;
+  margin-top: 3px;
+  margin-right: 3px;
+  height: 23px;
+}
+.djs-popup-body .entry {
+  text-align: left;
+}
+.dmn-decision-table-container .powered-by-logo .logo,
+a.bjs-powered-by {
+  display: none;
+}
+.bpp-entry-link {
+  color: var(--main-color);
+}
+ul.bpp-properties-tabs-links > li.bpp-active a {
+  border-top: 2px solid var(--main-color);
+}
+.bpp-properties-group > .group-toggle:hover {
+    background-color: var(--main-color);
+}
+.bpp-properties-panel button:hover {
+    color: var(--main-color);
+}
+.bpp-properties-panel input:focus, 
+.bpp-properties-panel button:focus, 
+.bpp-properties-panel textarea:focus, 
+.bpp-properties-panel [contenteditable]:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 1px 2px var(--main-gradient);
+}
+.bpp-properties-group.group-closed {
+    background-color: var(--main-gradient);
+}
+.bpp-properties-group:hover > .group-toggle:hover {
+    background-color: var(--main-color);
+}
+.bpp-properties-group.group-closed:hover > .group-label {
+    color: var(--main-color);
 }
 </style>

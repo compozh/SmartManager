@@ -131,7 +131,8 @@ import Process from '../api/models/Process';
 import ProcessType from '../api/models/ProcessType';
 import SelectionGrid from './SelectionGrid';
 import FormioComponent from '../formio/FormioComponent';
-import { eventBus } from '../main'
+import { eventBus } from '../main';
+import ActionDefinitionType from '../api/models/ActionDefinitionType';
 
 export default {
   name: 'bpmn-layout',
@@ -252,7 +253,7 @@ export default {
       }
       this.loading = false;
       this.propertiesPanelCallback = callback;
-      this.selectionGridTitle = this.$t('bpmn.labels.SelectAction');
+      this.selectionGridTitle = definitionType == ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction');
       this.selectionGridItems = items;
       this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
       this.showSelectionGrid = true;
