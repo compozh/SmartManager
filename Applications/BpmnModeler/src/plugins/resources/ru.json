@@ -45,7 +45,9 @@
 		"SystemRecord": "Системная запись",
 		"UserRecord": "Пользовательская запись",
 		"Id": "Идентификатор",
-		"SelectAction": "Выберите действие"
+		"SelectAction": "Выберите действие",
+		"SelectForm": "Выберите форму",
+		"EnterTaskParams": "Введите параметры задачи"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -261,6 +263,7 @@
 
 		"Result Variable": "Переменная с результатом",
 		"Task properties": "Параметры задачи",
-		"Configure Connector": "Настройте коннектор"
+		"Configure Connector": "Настройте коннектор",
+		"Must configure Connector": "Необходимо настроить коннектор"
 	}
 }

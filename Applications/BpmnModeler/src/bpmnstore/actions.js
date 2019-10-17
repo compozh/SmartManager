@@ -221,6 +221,31 @@ export default {
       return false;
     }
     return items.map(action => new ActionDefinition(action));
+  },
+  async getActionById(context, actionId) {
+    console.log(actionId);
+    let item;
+    try {
+      item = await api.getActionById(actionId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!item) {
+      return false;
+    }
+    return new ActionDefinition(item);
+  },
+  async getFormsForProcess(context, { processId }) {
+    let items;
+    try {
+      items = await api.getFormsForProcess(processId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items;
   }
 };
 

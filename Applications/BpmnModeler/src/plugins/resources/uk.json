@@ -45,7 +45,8 @@
 		"SystemRecord": "Системний запис",
 		"UserRecord": "Користувацький запис",
 		"Id": "Ідентифікатор",
-		"SelectAction": "Виберіть дію"
+		"SelectAction": "Виберіть дію",
+		"SelectForm": "Виберіть форму"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -261,6 +262,7 @@
 
 		"Result Variable": "Змінна з результатом",
 		"Task properties": "Параметри задачі",
-		"Configure Connector": "Налаштуйте коннектор"
+		"Configure Connector": "Налаштуйте коннектор",
+		"Must configure Connector": "Необхідно налаштувати коннектор"
 	}
 }

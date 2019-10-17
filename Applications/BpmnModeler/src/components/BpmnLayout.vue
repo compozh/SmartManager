@@ -70,7 +70,8 @@
     </v-dialog>
 
     <v-dialog v-model="showSelectionGrid" max-width="800">
-      <selection-grid :items="selectionGridItems" @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
+      <selection-grid :items="selectionGridItems" :title="selectionGridTitle" :selectedItems="selectionGridSelectedItems"
+                      @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
     </v-dialog>
 
     <v-dialog v-model="loading"
@@ -130,16 +131,20 @@ export default {
       messageType: 'error',
       showSelectionGrid: false,
       selectionGridItems: [],
-      propertiesPanelCallback: null
+      selectionGridSelectedItems: [],
+      selectionGridTitle: '',
+      propertiesPanelCallback: null,
+      showFormioDialog: false,
+      formioCode: '',
+      formioDefinition: {}
     };
   },
   mounted() {
     this.onRouteChanged(false);
     eventBus.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
-    eventBus.$on('properties-panel.set-external-task-properties', (taskCode, callback) => {
-
-    });
+    eventBus.$on('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
     eventBus.$on('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
+    eventBus.$on('properties-panel.select-form-key', this.onPropertiesPanelSelectFormKey);
   },
   methods: {
     async loadItems() {
@@ -231,7 +236,26 @@ export default {
       }
       this.loading = false;
       this.propertiesPanelCallback = callback;
+      this.selectionGridTitle = this.$t('bpmn.labels.SelectAction');
       this.selectionGridItems = items;
+      this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
+      this.showSelectionGrid = true;
+    },
+    async onPropertiesPanelSelectFormKey(formKey, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getFormsForProcess', { processId: this.activeItem });
+      if (!items) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.FormsNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      this.loading = false;
+      this.propertiesPanelCallback = callback;
+      this.selectionGridTitle = this.$t('bpmn.labels.SelectForm');
+      this.selectionGridItems = items;
+      this.selectionGridSelectedItems = items.filter(item => item.id === formKey);
       this.showSelectionGrid = true;
     },
     onSelectionGridSelect(item) {
@@ -242,6 +266,45 @@ export default {
       this.propertiesPanelCallback(item.id);
       this.propertiesPanelCallback = null;
       this.selectionGridItems = [];
+      this.selectionGridSelectedItems = [];
+      this.selectionGridTitle = '';
+    },
+    async onPropertiesPanelSetExternalTaskProperties(taskCode, callback) {
+      this.loading = true;
+      var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
+      console.log(action);
+      if (!action) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.ActionNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      if (!action.unformio || action.unformio.trim() === '') {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.ActionWithoutForm');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
+      
+      if (!form) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.FormNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+
+      this.formioCode = action.unformio;
+      this.formioDefinition = form;
+      this.showFormioDialog = true;
+
+      this.loading = false;
+    },
+    onFormioSubmit(data) {
+      console.log(JSON.parse(data));
     }
   },
   computed: {
@@ -280,6 +343,11 @@ export default {
         this.onRouteChanged(true);
       }
     }
+  },
+  beforeDestroy() {
+    eventBus.$off('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
+    eventBus.$off('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
+    eventBus.$off('properties-panel.select-form-key', this.onSelectFormKey);
   }
 };
 </script>

@@ -2,6 +2,9 @@
   "name": "WorkflowPackage",
   "uri": "http://it-enterprise.com/schema/1.0/bpmn",
   "prefix": "IT-Enterprise",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
   "types": [
     {
       "name": "UserTask",
