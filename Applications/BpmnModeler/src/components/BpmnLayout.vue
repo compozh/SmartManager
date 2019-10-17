@@ -74,7 +74,7 @@
                       @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
     </v-dialog>
 
-    <v-dialog v-model="loading"
+    <v-dialog v-model="dataLoading"
               full-width
               persistent>
       <v-progress-circular
@@ -352,13 +352,16 @@ export default {
     },
     activeItem: {
       get() {
-        return this.$store.getters['bpmn/getActiveItemId']
+        return this.$store.getters['bpmn/getActiveItemId'];
       },
       set(value) {
         this.$store.dispatch('bpmn/setActiveItem', value);
         this.$refs.treeView.setActiveItem(value);
         this.navigateToItem(value);
       }
+    },
+    dataLoading() {
+      return this.$store.getters['formio/linearLoader'] || this.loading;
     }
   },
   watch: {
