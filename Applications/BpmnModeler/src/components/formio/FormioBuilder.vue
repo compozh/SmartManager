@@ -61,7 +61,7 @@ export default {
         if(!Object.keys(me.formDefinition).length) {
             await me.$store.dispatch('formio/createForm', formDefinition).then(result => {
                 if(result.success && me.callback) {
-                    me.callback(formDefinition)
+                    me.callback(formDefinition.formCode)
                 }
                 me.callback = null
             })

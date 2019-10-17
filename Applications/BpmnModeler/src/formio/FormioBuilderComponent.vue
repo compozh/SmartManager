@@ -103,12 +103,17 @@ export default {
 </script>
 
 <style lang="scss">
-        .formio-builder-component-class /deep/ {
-            @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
-            @import "~formiojs/dist/formio.full.min.css";
-            @import "~bootstrap/dist/css/bootstrap";            
-            padding: 0 10px;
+    .formio-builder-component-class /deep/ {
+        @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+        @import "~formiojs/dist/formio.full.min.css";
+        @import "~bootstrap/dist/css/bootstrap";            
+        padding: 0 10px;
+        .component-settings-button > i {
+            position: relative;
+            top: -7px;
+            left: -5px;
         }
+    }
     .toolbar {
         margin: 9px 0 0 0;
     }
