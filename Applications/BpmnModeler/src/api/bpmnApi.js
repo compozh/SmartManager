@@ -153,7 +153,6 @@ export class BpmnModelerApi {
   }
 
   async getActionById(actionId) {
-    console.log(actionId);
     const result = await getClient().query({
       query: gql`query ($actionId: ID!) ${getActionById}`,
       variables: { actionId }

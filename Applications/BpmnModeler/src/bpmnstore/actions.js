@@ -223,7 +223,6 @@ export default {
     return items.map(action => new ActionDefinition(action));
   },
   async getActionById(context, actionId) {
-    console.log(actionId);
     let item;
     try {
       item = await api.getActionById(actionId);

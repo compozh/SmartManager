@@ -110,8 +110,12 @@
           <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
         </v-card-title>
         <v-card-text>
-          <formio-component :formCode="formioCode" :formDefinition="formioDefinition"></formio-component>
+          <formio-component ref="formioForm" :formCode="formioCode" :formDefinition="formioDefinition"></formio-component>
         </v-card-text>
+        <v-card-actions>
+          <v-btn flat @click="showFormioDialog = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+          <v-btn flat @click="onFormioSubmit" color="primary">{{ $t('bpmn.buttons.Save') }}</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     
@@ -284,7 +288,6 @@ export default {
     async onPropertiesPanelSetExternalTaskProperties(taskCode, callback) {
       this.loading = true;
       var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
-      console.log(action);
       if (!action) {
         this.loading = false;
         this.message = this.$t('bpmn.errors.ActionNotLoaded');
@@ -300,7 +303,6 @@ export default {
         return;
       }
       var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
-      console.log(form);
       if (!form) {
         this.loading = false;
         this.message = this.$t('bpmn.errors.FormNotLoaded');
@@ -312,11 +314,22 @@ export default {
       this.formioCode = action.unformio;
       this.formioDefinition = form;
       this.showFormioDialog = true;
+      this.propertiesPanelCallback = callback;
 
       this.loading = false;
     },
-    onFormioSubmit(data) {
-      console.log(JSON.parse(data));
+    onFormioSubmit() {
+      var form = this.$refs.formioForm;
+      var submission = JSON.parse(form.getFormSubmission());
+      var params = [];
+      for (var param in submission.data) {
+        params.push({ name: param, type: typeof(submission.data[param]), value: submission.data[param] });
+      }
+      this.propertiesPanelCallback(params);
+      this.propertiesPanelCallback = null;
+      this.showFormioDialog = false;
+      this.formioCode = '';
+      this.formioDefinition = {};
     }
   },
   computed: {
