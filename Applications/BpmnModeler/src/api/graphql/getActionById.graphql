@@ -1,0 +1,11 @@
+{
+  bpmnquery {
+    getActionById(actionId: $actionId) {
+      id,
+      type,
+      name,
+      unformio,
+      isSystem
+    }
+  }
+}

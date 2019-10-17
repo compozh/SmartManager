@@ -130,17 +130,18 @@ export default {
       selectionGridItems: [],
       selectionGridSelectedItems: [],
       selectionGridTitle: '',
-      propertiesPanelCallback: null
+      propertiesPanelCallback: null,
+      showFormioDialog: false,
+      formioCode: '',
+      formioDefinition: {}
     };
   },
   mounted() {
     this.onRouteChanged(false);
     eventBus.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
-    eventBus.$on('properties-panel.set-external-task-properties', (taskCode, callback) => {
-
-    });
+    eventBus.$on('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
     eventBus.$on('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
-    eventBus.$on('properties-panel.select-form-key', this.onSelectFormKey);
+    eventBus.$on('properties-panel.select-form-key', this.onPropertiesPanelSelectFormKey);
   },
   methods: {
     async loadItems() {
@@ -237,7 +238,7 @@ export default {
       this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
       this.showSelectionGrid = true;
     },
-    async onSelectFormKey(formKey, callback) {
+    async onPropertiesPanelSelectFormKey(formKey, callback) {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getFormsForProcess', { processId: this.activeItem });
       if (!items) {
@@ -265,6 +266,43 @@ export default {
       this.selectionGridSelectedItems = [];
       this.selectionGridTitle = '';
     },
+    async onPropertiesPanelSetExternalTaskProperties(taskCode, callback) {
+      this.loading = true;
+      var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
+      console.log(action);
+      if (!action) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.ActionNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      if (!action.unformio || action.unformio.trim() === '') {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.ActionWithoutForm');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+      var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
+      
+      if (!form) {
+        this.loading = false;
+        this.message = this.$t('bpmn.errors.FormNotLoaded');
+        this.messageType = 'error';
+        this.displayMessage = true;
+        return;
+      }
+
+      this.formioCode = action.unformio;
+      this.formioDefinition = form;
+      this.showFormioDialog = true;
+
+      this.loading = false;
+    },
+    onFormioSubmit(data) {
+      console.log(JSON.parse(data));
+    }
   },
   computed: {
     currentUser() {
@@ -304,10 +342,7 @@ export default {
     }
   },
   beforeDestroy() {
-    eventBus.$off('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
-    // eventBus.$on('properties-panel.set-external-task-properties', (taskCode, callback) => {
-
-    // });
+    eventBus.$off('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
     eventBus.$off('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
     eventBus.$off('properties-panel.select-form-key', this.onSelectFormKey);
   }
