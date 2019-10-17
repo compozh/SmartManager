@@ -37,23 +37,29 @@ export default {
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
         commit('setWorkCentersForWorker', workCenters)
 
-        if (workCenters.length == 1) {
-          commit('setWorkCenter', workCenters[0])
-        } else {
           var setWorkCenterForWorker = async (properties) => {
             var workCenterForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
             workCenterForWorker = workCenterForWorker.sort((a,b) => {
               return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
             })
-
+            if (workCenters.length == 1) {
+              commit('setWorkCenter', workCenters[0])
+              for(var fixWorkCetner of workCenterForWorker) {
+                if(fixWorkCetner.code == workCenters[0].code) {
+                  commit('setWorkCenterFixationData', fixWorkCetner)
+                }
+              }
+            } else {
               for(var workCenter of workCenters) {
                 for(var fixWorkCetner of workCenterForWorker) {
                   if(fixWorkCetner.code == workCenter.code) {
                     commit('setWorkCenter', workCenter)
+                    commit('setWorkCenterFixationData', fixWorkCetner)
                     return
                   }
                 }
               }
+            }
           }
 
           if(!getters.properties) {
@@ -61,8 +67,15 @@ export default {
           } else {
             await setWorkCenterForWorker(getters.properties)
           }
-        }
+
         commit('setInitialWorkCenter', true)
+
+        // for(var event of getters.afterInitializeWorkCenterEvents) {
+        //   if(event.action) {
+        //     event.action();
+        //   }
+        // }
+
       },
       linearLoader: true
     })
@@ -119,7 +132,7 @@ export default {
       linearLoader: true
     })
   },
-  async registerProduction({ commit }, { workCenter, task }) {
+  async registerProduction({ commit, getters }, { workCenter, task }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -141,6 +154,11 @@ export default {
           workBarcode: task.barcode
         }
         me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+        // for(var event of getters.afterChangeTaskStateEvents) {
+        //   if(event.action) {
+        //     event.action()
+        //   }
+        // }
       },
       linearLoader: true
     })
@@ -155,13 +173,20 @@ export default {
       linearLoader: true
     })
   },
-  async cancelBeginRegistration({ commit }, task) {
+  async cancelBeginRegistration({ commit, getters }, task) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.cancelBeginRegistrationGql(task.shiftTaskId)
         return res
       },
-      successAction: async () => { task.inProgress = false },
+      successAction: async () => {
+        task.inProgress = false
+        // for(var event of getters.afterChangeTaskStateEvents) {
+        //   if(event.action) {
+        //     event.action()
+        //   }
+        // }
+      },
       linearLoader: true
     })
   },
@@ -269,12 +294,13 @@ export default {
             workCenterCode: workCenter.code,
           })
           return res
-       },
-       successAction: async () => {
-         me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
-         if(successAction) {
-          successAction();
-         }
+        },
+        successAction: async () => {
+          commit('setDowntimes', [])
+          me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
+          if(successAction) {
+            successAction();
+          }
         }
      })
      commit('closeDialogLinearLoader')

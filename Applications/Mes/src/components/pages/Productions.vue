@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     async initialize() {
-      await this.$store.dispatch('mes/initializeProperties')
       await this.updateProductionsByTabIndex(this.selectedProductionTab)
       //todo: на каждую вкладку свое свойство
       this.initializeProductions = true
