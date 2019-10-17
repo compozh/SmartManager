@@ -7,6 +7,7 @@
                 outlined
                 @click="onAction"
                 class="toolbar-item"
+                :loading=buttonLoading
             >
                 {{actionText}}
             </v-btn>
@@ -14,21 +15,21 @@
                 outlined
                 class="toolbar-item"
                 @click="onCancel"
+                :disabled=buttonLoading
             >
                 Отменить
             </v-btn>
             <v-text-field
                 class="toolbar-item"
                 :disabled="Boolean(Object.keys(formDefinition).length)"
-                :value="formDefinition.formCode"
-                :v-model="formCode"
+                v-model=formCodeProperty
+                :maxlength="10"
                 label="Код формы"
                 required
             />
             <v-text-field
                 class="toolbar-item"
-                :value="formDefinition.name"
-                :v-model="formName"
+                v-model=formNameProperty
                 label="Наименование формы"
                 required
             />
@@ -51,13 +52,14 @@ export default {
   components: { formbuilder: FormBuilder, apexchart: VueApexCharts },
   data() {
     return {
-        formCode: '',
-        formName: '',
+        formCodeProperty: this.formDefinition.formCode,
+        formNameProperty: this.formDefinition.name,
         options: { noAlerts: true }
     }
   },
   props: {
-    formDefinition: Object
+    formDefinition: Object,
+    buttonLoading: Boolean
   },
   computed: {
     formioComponents() {
@@ -89,12 +91,11 @@ export default {
             form = this.$refs.formio
 
         return {
-            formCode: this.formDefinition.formCode || this.formCode,
-            name: this.formDefinition.name || this.formName,
+            formCode: this.formCodeProperty,
+            name: this.formNameProperty,
             display: form.form.display,
             components: JSON.stringify(form.form.components, null, 4),
-            settings: JSON.stringify(form.form.settings, null, 4),
-            //submission: JSON.stringify(form.submission, null, 4)
+            settings: JSON.stringify(form.form.settings, null, 4)
         }
     }
   }

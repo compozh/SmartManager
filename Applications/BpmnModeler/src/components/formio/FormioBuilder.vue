@@ -7,6 +7,7 @@
         <formio-builder-component
             class="formio-builder-component"
             :formDefinition=formDefinition
+            :buttonLoading=buttonLoading
             @action=onAction
             @cancel=onCancel
         />
@@ -22,6 +23,7 @@ export default {
     return {
         callback: null,
         showFormioBuilder: false,
+        buttonLoading: false,
         formDefinition: {}
     }
   },
@@ -42,17 +44,20 @@ export default {
     },
     async editForm(formCode) {
         var me = this
+        this.$store.commit('formio/setLinearLoader', true)
         await this.$store.dispatch('formio/getForm', { formCode }).then(result => {
             if(result.success) {
                 me.formDefinition = result
                 me.formDefinition.formCode = formCode //todo: добавить в оъект FormDefinition formCode
+
+                this.$store.commit('formio/setLinearLoader', false)
                 me.changeFormVisible(true)
             }
         })
     },
     async onAction(formDefinition) {
         var me = this
-        
+        this.buttonLoading = true
         if(!Object.keys(me.formDefinition).length) {
             await me.$store.dispatch('formio/createForm', formDefinition).then(result => {
                 if(result.success && me.callback) {
@@ -63,6 +68,7 @@ export default {
         } else {
             await me.$store.dispatch('formio/saveForm', formDefinition)
         }
+        this.buttonLoading = false
         this.changeFormVisible(false)
     },
     onCancel(formDefinition) {

@@ -107,7 +107,6 @@ var Form = /** @class */ (function (_super) {
         });
     };
     Form.prototype.setupForm = function () {
-        debugger
         var _this = this;
         if (!this.formio) {
             return;

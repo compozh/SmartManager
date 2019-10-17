@@ -38,7 +38,6 @@ var FormBuilder = /** @class */ (function (_super) {
         }
     };
     FormBuilder.prototype.mounted = function () {
-        debugger;
         this.initializeBuilder()
             .catch(function (err) {
             /* eslint-disable no-console */
