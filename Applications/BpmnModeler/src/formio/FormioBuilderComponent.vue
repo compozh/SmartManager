@@ -1,6 +1,8 @@
 <template>
-    <v-container>
-        <v-layout row wrap>
+    <div class="toolbar-builder-container">
+        <v-layout row wrap
+            class="toolbar"
+        >
             <v-btn
                 outlined
                 @click="onAction"
@@ -21,7 +23,6 @@
                 :value="formDefinition.formCode"
                 :v-model="formCode"
                 label="Код формы"
-                @change=onFormCodeChange
                 required
             />
             <v-text-field
@@ -29,21 +30,20 @@
                 :value="formDefinition.name"
                 :v-model="formName"
                 label="Наименование формы"
-                @change=onFormNameChange
                 required
             />
         </v-layout>
         <formbuilder
-            class="formio-container"
+            class="formio-builder-component-class"
             :form=formioComponents
             :options=options
-            ref="formioComponent"
+            ref="formio"
         />
-    </v-container>
+    </div>
 </template>
 
 <script>
-import { FormBuilder } from 'vue-formio'
+import { FormBuilder } from './lib/components/FormBuilder'
 import VueApexCharts from 'vue-apexcharts'
 /* eslint-disable */
 export default {
@@ -86,7 +86,7 @@ export default {
     },
     getFormParams() {
         var me = this,
-            form = this.$refs.formioComponent
+            form = this.$refs.formio
 
         return {
             formCode: this.formDefinition.formCode || this.formCode,
@@ -96,22 +96,20 @@ export default {
             settings: JSON.stringify(form.form.settings, null, 4),
             //submission: JSON.stringify(form.submission, null, 4)
         }
-    },
-    onFormCodeChange(value) {
-        this.formCode = value
-    },
-    onFormNameChange(value) {
-        this.formName = value
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-    .formio-container /deep/ {
-  @import "~bootstrap/scss/bootstrap.scss";
-  @import "~choices.js/public/assets/styles/choices.css";
-  @import "~flatpickr/dist/flatpickr.min.css";
+<style lang="scss">
+        .formio-builder-component-class /deep/ {
+            @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+            @import "~formiojs/dist/formio.full.min.css";
+            @import "~bootstrap/dist/css/bootstrap";            
+            padding: 0 10px;
+        }
+    .toolbar {
+        margin: 9px 0 0 0;
     }
     .toolbar-item {
         padding: 0 5px;

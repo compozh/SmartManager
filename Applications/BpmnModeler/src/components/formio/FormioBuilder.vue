@@ -5,7 +5,7 @@
     >
         <div class="overlay"/>
         <formio-builder-component
-            class="formio-builder-container"
+            class="formio-builder-component"
             :formDefinition=formDefinition
             @action=onAction
             @cancel=onCancel
@@ -17,7 +17,7 @@
 /* eslint-disable */
 import { eventBus } from '../../main'
 export default {
-  name: 'formio-builder-container',
+  name: 'formio-builder-container', 
   data() {
     return {
         callback: null,
@@ -44,7 +44,8 @@ export default {
         var me = this
         await this.$store.dispatch('formio/getForm', { formCode }).then(result => {
             if(result.success) {
-                me.formDefinition = formDefinition
+                me.formDefinition = result
+                me.formDefinition.formCode = formCode //todo: добавить в оъект FormDefinition formCode
                 me.changeFormVisible(true)
             }
         })
@@ -76,10 +77,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .formio-container /deep/ {
-        @import "~bootstrap/scss/bootstrap.scss";
-        @import "~choices.js/public/assets/styles/choices.css";
-        @import "~flatpickr/dist/flatpickr.min.css";
+    .formio-container {
         height: 100%;
         width: 100%;
         position: absolute;
@@ -98,9 +96,17 @@ export default {
         top: 0;
         transition: inherit;
         width: 100%;
+        z-index: 100;
     }
-    .formio-builder-container {
+    .formio-builder-component {
         background-color: #fff;
         z-index: 101;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        bottom: 20px;
+        right: 20px;
+        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+        border-radius: 10px;
     }
 </style>

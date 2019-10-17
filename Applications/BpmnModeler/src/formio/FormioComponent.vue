@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <formio id="formio" class="formio-container"
+    <formio id="formio" class="formio-container-class"
       :form=formioComponents
       :submission=formioSubmission
       :options=options
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Form } from 'vue-formio'
+import { Form } from './lib/components/FormBuilder'
 import VueApexCharts from 'vue-apexcharts'
 /* eslint-disable */
 export default {
@@ -173,10 +173,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.formio-container /deep/ {
-  @import "~bootstrap/scss/bootstrap.scss";
-  @import "~choices.js/public/assets/styles/choices.css";
-  @import "~flatpickr/dist/flatpickr.min.css";
+.formio-container-class /deep/ {
+  @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+  @import "~formiojs/dist/formio.full.min.css";
+  @import "~bootstrap/dist/css/bootstrap";
 
   font-size: 14px;
   font-weight: 500;

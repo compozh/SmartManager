@@ -101,7 +101,7 @@
       </v-btn>
     </v-snackbar>
 
-    <formio-builder-container/>
+    <formio-builder-container />
     
   </v-app>
 </template>
@@ -283,7 +283,7 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
   .toolbar {
     background: #fff;
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
@@ -305,5 +305,22 @@ export default {
   .user-image {
     height: 40px !important;
     width: 40px !important;
+  }
+  .component-settings /deep/ {
+    @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+    @import "~formiojs/dist/formio.full.css";
+    @import "~bootstrap/dist/css/bootstrap";
+    position: absolute;
+    z-index: 102;
+    background-color: #fff;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 10px;
+    padding: 5px;
+    font-family: Roboto;
   }
 </style>
