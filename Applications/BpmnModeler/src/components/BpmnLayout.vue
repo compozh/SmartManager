@@ -103,6 +103,17 @@
     </v-snackbar>
 
     <formio-builder-container />
+
+    <v-dialog v-model="showFormioDialog" max-width="800px">
+      <v-card>
+        <v-card-title>
+          <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
+        </v-card-title>
+        <v-card-text>
+          <formio-component :formCode="formioCode" :formDefinition="formioDefinition"></formio-component>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     
   </v-app>
 </template>
@@ -114,12 +125,13 @@ import { importMixin } from './mixins/importExportMixin'
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
 import ProcessType from '../api/models/ProcessType';
-import SelectionGrid from './SelectionGrid'
+import SelectionGrid from './SelectionGrid';
+import FormioComponent from '../formio/FormioComponent';
 import { eventBus } from '../main'
 
 export default {
   name: 'bpmn-layout',
-  components: { SelectionGrid },
+  components: { SelectionGrid, FormioComponent },
   mixins: [ formMixin, importMixin ],
   data () {
     return {
@@ -288,7 +300,7 @@ export default {
         return;
       }
       var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
-      
+      console.log(form);
       if (!form) {
         this.loading = false;
         this.message = this.$t('bpmn.errors.FormNotLoaded');

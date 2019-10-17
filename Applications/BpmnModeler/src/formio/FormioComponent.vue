@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Form } from './lib/components/FormBuilder'
+import { Form } from './lib/components/Form'
 import VueApexCharts from 'vue-apexcharts'
 /* eslint-disable */
 export default {
@@ -177,6 +177,8 @@ export default {
   @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/dist/css/bootstrap";
+  @import "~choices.js/public/assets/styles/choices.css";
+  @import "~flatpickr/dist/flatpickr.min.css";
 
   font-size: 14px;
   font-weight: 500;
