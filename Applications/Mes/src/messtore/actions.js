@@ -294,12 +294,13 @@ export default {
             workCenterCode: workCenter.code,
           })
           return res
-       },
-       successAction: async () => {
-         me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
-         if(successAction) {
-          successAction();
-         }
+        },
+        successAction: async () => {
+          commit('setDowntimes', [])
+          me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
+          if(successAction) {
+            successAction();
+          }
         }
      })
      commit('closeDialogLinearLoader')
