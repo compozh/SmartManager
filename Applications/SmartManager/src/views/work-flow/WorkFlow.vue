@@ -1,5 +1,5 @@
 <template>
-    <div class="app-fixed-height rounded relative overflow-hidden">
+    <div class="rounded relative overflow-hidden">
       <VuePerfectScrollbar :settings="settings" class="scroll-area">
             <vx-card>
               <div class="d-flex">
