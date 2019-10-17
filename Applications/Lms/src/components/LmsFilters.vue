@@ -11,18 +11,18 @@
 						<v-divider class="mx-2" vertical></v-divider>
 						<!-- Кнопки фильтров -->
 						<v-btn-toggle max
-									v-model="currentFilter"
+									v-model="currentFilterIndex"
 									class="transparent">
 							<!-- Если нет доступного фильтра - скрыть кнопку -->
 							<v-layout v-for="(filter, index) in filters" :key="index">
 								<v-btn
                       v-if="filter.items.length > 0"
-											:value="index + 1"
+											:value="index"
 											@click="setFilter(index)"
 											flat
 											class="mx-2">
 										{{filter.name}}
-									<v-icon>{{index + 1 === currentFilter ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+									<v-icon>{{index === currentFilterIndex ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
 								</v-btn>
 							</v-layout>
 						</v-btn-toggle>
@@ -76,7 +76,7 @@ export default {
 	data() {
 		return {
 			// текущий активный фильтр
-			currentFilter: 0,
+			currentFilterIndex: - 1,
 			filterButtonPressed: false,
 			currentFilters: [],
 			filtersLoaded: false
@@ -84,10 +84,10 @@ export default {
 	},
 	methods: {
 		applyFilter() {
-			this.currentFilter = undefined
+			this.currentFilterIndex = -1
 			this.filterButtonPressed = false
 			// Применить фильтр к текущим модулям/курсам - передать текущий фильтр родителю
-			this.$emit('filter-changed', { currentFilters: this.currentFilters })
+			this.$emit('filterChanged', { currentFilters: this.currentFilters })
 		},
 		setFilter(index) {
 			// загрузить данные из props в локльную переменную. однократно
@@ -97,14 +97,15 @@ export default {
 				}
 				this.filtersLoaded = true
 			}
-			if (this.currentFilter === index + 1) {
+			if (this.currentFilterIndex === index) {
 				this.filterButtonPressed = !this.filterButtonPressed
 			} else {
 				this.filterButtonPressed = true
 			}
 		},
 		clearFilter() {
-			// сбросить выбор
+      // сбросить выбор
+      debugger
 			for (let index = 0; index < this.currentFilters[this.currentFilterIndex].items.length; index++) {
 				this.currentFilters[this.currentFilterIndex].items[index].selected = false
 			}
@@ -113,7 +114,7 @@ export default {
 	computed: {
 		// индекс текущего активного фильтра
 		currentFilterIndex() {
-				return this.currentFilter !== undefined ? this.currentFilter - 1 : 0
+				return this.currentFilterIndex !== -1 ? this.currentFilterIndex - 1 : 0
 			}
 	}
 }

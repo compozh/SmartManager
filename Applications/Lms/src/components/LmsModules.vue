@@ -41,7 +41,7 @@
 			</v-flex>
 		</v-layout>
     <!-- Filters -->
-    <Filters :filters="availableFilters" ></Filters>
+    <Filters :filters="availableFilters" @filterChanged="refreshModulesFilter"></Filters>
 		<v-layout wrap row>
 			<!-- <v-flex mx-2 mt-4 mb-3>
 				<h5 class='title font-weight-regular text-xs-left'>Модули</h5>
@@ -58,12 +58,27 @@
 </template>
 
 <script>
+import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 
 export default {
   name: "lms-modules",
   created() {
-    this.getModules()
+    if (this.$store.getters['lms/modules'] === null) {
+      this.getModules()
+    }
+    if (this.$store.getters['lms/availableFilters'] === null) {
+      this.getAvailableFilters()
+    }
   },
+
+  data() {
+    return {
+      filterChanged: false,
+      allModules: [],
+      modulesFiltered: []
+    }
+  },
+
   methods: {
     getModules () {
       this.$store.dispatch('lms/getModules')
@@ -74,15 +89,154 @@ export default {
     },
     levelSearch: function(data) {
       this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
+    },
+
+    refreshModulesFilter: function(data) {
+      var roles = []
+      var levels = []
+      var products = []
+      var tags = []
+      // проверить установленные фильтры
+      const filters = data.currentFilters
+      var setFilters = false
+      if (filters) {
+        for (let index = 0; index < filters.length; index++) {
+          const filter = filters[index];
+          for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
+            if (filter.items[itemIndex].selected) {
+              setFilters = true
+              break
+            }
+          }
+          if (setFilters) {
+            break
+          }
+        }
+      }
+
+      //var setFilters = checkFiltersChanges(filters)
+
+      // Если фильтры не установлены
+      if (!setFilters) {
+        this.filterChanged = false
+      } else {
+        this.filterChanged = true
+        this.modulesFiltered.length = 0
+        // разделить фильтры по категориям
+        for (let index = 0; index < filters.length; index++) {
+          const filter = filters[index]
+          switch (filter.name) {
+            case 'Роль':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  roles.push(filter.items[index])
+                }
+              }
+              break
+            case 'Уровень':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  levels.push(filter.items[index])
+                }
+              }
+              break
+            case 'Продукт':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  products.push(filter.items[index])
+                }
+              }
+              break
+            case 'Тэг':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  tags.push(filter.items[index])
+                }
+              }
+              break
+          }
+        }
+
+        // var separatedFilters = separateFilters (filters)
+        // roles = separatedFilters.roles
+        // levels = separatedFilters.levels
+        // products = separatedFilters.products
+        // tags = separatedFilters.tags
+
+        // Отфильтровать модули по выбранным фильтрам
+        var selectedListId = []
+        for (let index = 0; index < this.allModules.length; index++) {
+          const moduleData = this.allModules[index];
+          // roles
+          for (let itemIndex = 0; itemIndex <  moduleData.roles.length; itemIndex++) {
+            const role = moduleData.roles[itemIndex];
+            for (let indexFilter = 0; indexFilter < roles.length; indexFilter++) {
+              if (role.code === roles[indexFilter].code
+                  && !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+          // levels
+          for (let itemIndex = 0; itemIndex < moduleData.levels.length; itemIndex++) {
+            const level = moduleData.levels[itemIndex]
+            for (let indexFilter = 0; indexFilter < levels.length; indexFilter++) {
+              if (level.code === levels[indexFilter]
+                  && !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+          // products
+          for (let index = 0; index < moduleData.products.length; index++) {
+            const product = moduleData.products[index]
+            for (let indexFilter = 0; indexFilter < products.length; indexFilter++) {
+              if (product.code === products[indexFilter].code
+                  && !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+          // tags
+          for (let index = 0; index < moduleData.tags.length; index++) {
+            const tag = moduleData.tags[index]
+            for (let indexFilter = 0; indexFilter < tags.length; indexFilter++) {
+              if (tag.code === tags[indexFilter].code &&
+                  !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+        }
+      }
     }
   },
   computed: {
     availableFilters() {
-      return this.$store.getters['lms/availableFilters']
+      var filters = this.$store.getters['lms/availableFilters']
+      // добавить поле-признак выбора
+      if (filters) {
+        for (let index = 0; index < filters.length; index++) {
+          var filter = filters[index];
+          for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
+             filter.items[itemIndex].selected = false;
+          }
+        }
+      }
+      return filters
     },
 
     modules () {
-      return this.$store.getters['lms/modules']
+      if (this.filterChanged) {
+        return this.modulesFiltered
+      } else {
+        this.allModules = this.$store.getters['lms/modules']
+        return this.allModules
+      }
     }
   }
 }

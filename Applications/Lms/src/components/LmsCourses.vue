@@ -40,7 +40,7 @@
 				</v-card>
 			</v-flex>
 		</v-layout>
-    <Filters :filters="availableFilters"></Filters>
+    <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
 		<v-layout wrap row>
 			<!-- <v-flex mx-2 mt-4 mb-3>
 			<h5 class='title font-weight-regular text-xs-left'>Курсы</h5>
@@ -99,15 +99,26 @@
 
 
 <script>
-// import { threadId } from 'worker_threads'
 
 import CourseCard from './CourseCard.vue'
+import Filters from './LmsFilters.vue'
 
 export default {
 	name: 'lms-courses',
   created() {
     if (this.$store.getters['lms/courses'] === null) {
       this.getCourses()
+    }
+    if (this.$store.getters['lms/availableFilters'] === null) {
+      this.getAvailableFilters()
+    }
+  },
+
+  data() {
+    return {
+      filterChanged: false,
+      allCourses: [],
+      coursesFiltered: []
     }
   },
 
@@ -116,23 +127,155 @@ export default {
       this.$store.dispatch('lms/getCourses')
     },
 
-    // goToCourseDetails ( courseId, course ) {
-    //   this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
-    // },
-
     roleSearch: function(data) {
       this.$router.push({ name: 'LMSCOURSES', params: { role: data.code } })
     },
     levelSearch: function(data) {
       this.$router.push({ name: "LMSCOURSES", params: { level: data.code } })
+    },
+
+    refreshCoursesFilter: function(data) {
+      var roles = []
+      var levels = []
+      var products = []
+      var tags = []
+      // проверить установленные фильры
+      const filters = data.currentFilters
+      var setFilters = false
+      if (filters) {
+        for (let index = 0; index < filters.length; index++) {
+          const filter = filters[index]
+          for (let itemIndex = 0; itemIndex< filter.items.length; itemIndex++) {
+             if (filter.items[itemIndex].selected) {
+               setFilters = true
+               break
+             }
+          }
+          if (setFilters) {
+               break
+          }
+        }
+      }
+      // Если не установлены
+      if (!setFilters) {
+        this.filterChanged = false;
+      } else {
+        this.coursesFiltered.length = 0
+        this.filterChanged = true;
+        // разделить фильтры по категориям
+        for (let index = 0; index < filters.length; index++) {
+          var filter = filters[index]
+          switch (filter.name) {
+            case 'Роль':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  roles.push(filter.items[index])
+                }
+              }
+              break
+            case 'Уровень':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  levels.push(filter.items[index])
+                }
+              }
+              break
+            case 'Продукт':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  products.push(filter.items[index])
+                }
+              }
+              // products = filter.items
+              break
+            case 'Тэг':
+              for (let index = 0; index < filter.items.length; index++) {
+                if (filter.items[index].selected) {
+                  tags.push(filter.items[index])
+                }
+              }
+              // tags = filter.items
+              break
+          }
+        }
+        // отфильтровать курсы по установленному фильтру
+        var selectedListId = []
+        for (let index = 0; index < this.allCourses.length; index++) {
+          const course = this.allCourses[index]
+          // roles
+          for (let index = 0; index < course.roles.length; index++) {
+            const role = course.roles[index]
+            for (let indexFilter = 0; indexFilter < roles.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (role.code === roles[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+          // levels
+          for (let index = 0; index < course.levels.length; index++) {
+            const level = course.levels[index]
+            for (let indexFilter = 0; indexFilter < levels.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (level.code === levels[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+          // products
+          for (let index = 0; index < course.products.length; index++) {
+            const product = course.products[index]
+            for (let indexFilter = 0; indexFilter < products.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (product.code === products[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+          // tags
+          for (let index = 0; index < course.tags.length; index++) {
+            const tag = course.tags[index]
+            for (let indexFilter = 0; indexFilter < tags.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (tag.code === tags[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+        }
+      }
     }
   },
   computed: {
     availableFilters() {
-      return this.$store.getters['lms/availableFilters']
+      var filters = this.$store.getters['lms/availableFilters']
+      // Добавить поле - признак выбора
+      if (filters) {
+        for (let index = 0; index < filters.length; index++) {
+          var filter = filters[index]
+          for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
+             filter.items[itemIndex].selected = false;
+          }
+        }
+      }
+      return filters
     },
+
     courses () {
-      return this.$store.getters['lms/courses']
+      if (this.filterChanged) {
+        return this.coursesFiltered
+      } else {
+        this.allCourses = this.$store.getters['lms/courses']
+        return this.allCourses
+      }
     }
   },
 }
