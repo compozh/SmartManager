@@ -46,7 +46,9 @@
 		"UserRecord": "User record",
 		"Id": "Id",
 		"SelectAction": "Select action",
-		"SelectForm": "Select Form"
+		"SelectForm": "Select Form",
+		"FormCode": "Form code",
+		"FormName": "Form name"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -55,7 +57,8 @@
 		"ProcessNotDeleted": "Failed to delete item",
 		"CantDrop": "Failed to move item",
 		"ProcessDeployed": "Diagram deployed",
-		"ProcessNotDeployed": "Failed to deploy diagram"
+		"ProcessNotDeployed": "Failed to deploy diagram",
+		"InitializeSignalR": "Failed initialize SignalR"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",

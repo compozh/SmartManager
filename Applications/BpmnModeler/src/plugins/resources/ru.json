@@ -47,7 +47,9 @@
 		"Id": "Идентификатор",
 		"SelectAction": "Выберите действие",
 		"SelectForm": "Выберите форму",
-		"EnterTaskParams": "Введите параметры задачи"
+		"EnterTaskParams": "Введите параметры задачи",
+		"FormCode": "Код формы",
+		"FormName": "Наименование формы"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -56,7 +58,8 @@
 		"ProcessNotDeleted": "Не удалось удалить элемент",
 		"CantDrop": "Не удалось переместить элемент",
 		"ProcessDeployed": "Диаграмма опубликована",
-		"ProcessNotDeployed": "Не удалось опубликовать диаграмму"
+		"ProcessNotDeployed": "Не удалось опубликовать диаграмму",
+		"InitializeSignalR": "Ошибка инициализации SignalR"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",

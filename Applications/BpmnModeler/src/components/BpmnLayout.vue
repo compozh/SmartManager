@@ -362,6 +362,12 @@ export default {
     },
     dataLoading() {
       return this.$store.getters['formio/linearLoader'] || this.loading;
+    },
+    snackbar() {
+      return this.$store.getters['formio/snackbar']; 
+    },
+    snackbarVisible() {
+      return this.snackbar.visible; 
     }
   },
   watch: {
@@ -370,6 +376,11 @@ export default {
         this.appBar = true;
         this.onRouteChanged(true);
       }
+    },
+    snackbarVisible() {
+      this.message = this.snackbar.message;
+      this.messageType = this.snackbar.type;
+      this.displayMessage = this.snackbar.visible;
     }
   },
   beforeDestroy() {

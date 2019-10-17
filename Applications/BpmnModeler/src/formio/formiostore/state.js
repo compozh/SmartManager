@@ -5,9 +5,5 @@ export default {
     message: '',
     visible: false
   },
-  dialogLinearLoader: {
-    visible: false,
-    message: ''
-  },
   ticket: ''
 }
