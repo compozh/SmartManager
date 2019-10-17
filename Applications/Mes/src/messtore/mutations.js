@@ -31,11 +31,8 @@ export default {
   setWorkCenter(state, workCenter) {
     state.workCenter = workCenter
   },
-  setWorkCenterState(state, workCenterState) {
-    state.workCenterState = workCenterState
-  },
-  setWorkCenterDescription(state, workCenterDescription) {
-    state.workCenterDescription = workCenterDescription
+  setWorkCenterFixationData(state, workCenterFixationData) {
+    state.workCenterFixationData = workCenterFixationData
   },
   setTasks(state, tasks) {
     state.tasks = tasks
@@ -134,6 +131,15 @@ export default {
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
+  addAfterInitializeWorkCenterEvent(state, action) {
+    state.events.afterInitializeWorkCenter.push(action)
+  },
+  addAfterChangeTaskStateEvent(state, action) {
+    state.events.afterChangeTaskStateEvents.push(action)
+  },
+  // addAfterDowntimeRegistrationEvent(state, action) {
+  //   state.events.afterDowntimeRegistrationEvents.push(action)
+  // },
   resetState(state) {
     state.tasks = []
     state.downtimes = []

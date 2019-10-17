@@ -1,18 +1,24 @@
 <template>
   <v-container fluid pa-0>
     <v-layout row align-center justify-space-beetwen class="main-toolbar">
+
+      <!-- Лого -->
       <v-flex row>
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a class="mes-title-link">MES</a>
         </router-link>
         <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
       </v-flex>
-      <v-tooltip :disabled="!workCenterDescription" bottom v-if="workCenterState == 'DOWN_TIME' || workCenterState == 'BUSY'">
+
+      <!-- Состояние РЦ -->
+      <v-tooltip :key="workCenterFixationData.state" :disabled="!workCenterFixationData.description" bottom v-if="workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
-          <v-icon large class="work-center-state" :color="workCenterState == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
+          <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
         </template>
-        <span v-html="workCenterDescription"></span>
+        <span v-html="workCenterFixationData.description"></span>
       </v-tooltip>
+
+      <!-- Выпадающий лист с рабочими центрами для фиксации -->
       <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <v-autocomplete
@@ -26,24 +32,26 @@
           class="work-centers-select-input"
         ></v-autocomplete>
       </div>
+
+      <!-- Зафиксированый РЦ -->
       <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
         <span class='work-centers-title'>Рабочий центр: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
+
+      <!-- Информация Юзера -->
       <div class="user-info-desc">
         <span class="user-info-text">
-          <!-- {{userInfo}} -->
           {{currentUserData.UserName}}
         </span>
-        <!-- <span class="user-info-text">
-          Смена: Тест
-        </span> -->
       </div>
+
+      <!-- Панель Юзера -->
       <v-flex class="grow-0 user-description-block">
         <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
       </v-flex>
-    </v-layout>
 
+    </v-layout>
   </v-container>
 </template>
 
@@ -53,7 +61,7 @@ import Vue from 'vue'
 export default {
   name: 'mes-toolbar',
   created() {
-    let me = this,
+    var me = this,
       fixedUuid = me.$router.options.params.fixedUuid,
       cookiesUuid = me.$cookies.get('mesUuid'),
       sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
@@ -76,9 +84,23 @@ export default {
     me.$store.dispatch('mes/initializeWorkCenter', uuid)
     me.$store.dispatch('mes/initializeProperties')
     me.$store.dispatch('formio/initializeTicket')
+    me.$store.dispatch('mes/initializeTicket')
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })
+
+    var action = async () => {
+      var workCenterForWorker = await me.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: me.properties.workerCode, fetchPolicy: 'network-only' })
+      for (var fixation of workCenterForWorker) {
+        if (me.workCenter.code == fixation.code) {
+          me.$store.commit('mes/setWorkCenterFixationData', fixation)
+          return
+        }
+      }
+    }
+
+    me.$store.commit('mes/addAfterChangeTaskStateEvent', { action })
+    // me.$store.commit('mes/addAfterDowntimeRegistrationEvent', { action })
   },
   data() {
     return { currentUserData: {} }
@@ -87,13 +109,8 @@ export default {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
-    workCenterState() {
-      console.log(this.$store.getters['mes/workCenterState'])
-      return this.$store.getters['mes/workCenterState']
-    },
-    workCenterDescription() {
-      console.log(this.$store.getters['mes/workCenterDescription'])
-      return this.$store.getters['mes/workCenterDescription']
+    workCenterFixationData() {
+      return this.$store.getters['mes/workCenterFixationData']
     },
     workCentersForWorker() {
       return this.$store.getters['mes/workCentersForWorker']
@@ -103,6 +120,9 @@ export default {
     },
     userName() {
       return Vue.prototype.$authentication.getCurrentUser()
+    },
+    tasksPageState() {
+      return this.$store.getters['mes/tasksPageState']
     }
   },
   methods: {
@@ -118,6 +138,7 @@ export default {
       if (this.workCenter) {
         for (let fixation of workCentersFixed) {
           if (fixation.code == newWorkCenter.code) {
+            this.$store.commit('mes/setWorkCenterFixationData', fixation)
             currentWorkCetnerFixation = true
           }
         }

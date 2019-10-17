@@ -30,8 +30,7 @@ export default {
   properties: null,
   userName: null,
   workCenter: null,
-  workCenterState: null,
-  workCenterDescription: null,
+  workCenterFixationData: {},
   initialWorkCenter: false,
   workCentersForWorker: [],
   selectedDowntime: null,
@@ -46,5 +45,10 @@ export default {
   menuMiniMode: true,
   ticket: '',
   mainContainerKey: 0,
-  actionsAfterInitializeProperties: []
+  actionsAfterInitializeProperties: [],
+  events: {
+    afterInitializeWorkCenter: [], //{ action }
+    afterChangeTaskStateEvents: []
+    // afterDowntimeRegistrationEvents: []
+  }
 }

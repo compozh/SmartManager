@@ -1,5 +1,6 @@
 <template>
   <v-app id="mes-app">
+    <!-- Меню -->
     <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" hide-overlay :mini-variant="menuMiniMode">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
@@ -8,12 +9,16 @@
       <router-view name="toolbar"/>
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
+
+    <!-- Контент -->
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
     </v-content>
+
+    <!-- Выплывающие подсказки -->
     <template v-if="snackbar.visible">
       <v-snackbar
         :top="true"
@@ -29,6 +34,8 @@
         </v-btn>
       </v-snackbar>
     </template>
+
+    <!-- Диалоговое меню -->
     <v-dialog
       v-model="dialogLinearLoader.visible"
       :hide-overlay="false"
@@ -49,6 +56,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
   </v-app>
 </template>
 
