@@ -30,8 +30,6 @@
     "apollo-link-http": "^1.5.16",
     "babel-plugin-component": "^1.1.1",
     "bootstrap": "^4.3.1",
-    "bootstrap-sass": "^3.4.1",
-    "bootswatch": "^3.4.1",
     "bpmn-js": "^5.0.5",
     "bpmn-js-properties-panel": "^0.32.1",
     "camunda-bpmn-moddle": "^4.1.2",
