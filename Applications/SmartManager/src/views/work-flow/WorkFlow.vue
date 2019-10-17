@@ -1,64 +1,65 @@
 <template>
-  <div class="app-fixed-height rounded relative overflow-hidden">
-      <div class="vx-row form-container">
-        <div class="vx-col w-full h-full">
-          <vx-card>
-            <div class="vx-row">
-              <div class="vx-col w-full">
-                <!-- select and start business-process -->
-                <form @submit.prevent>
-                  <sm-autocomplete :items="businessProcesses"
-                                   :multiple="false"
-                                   :loading="bpListLoading"
-                                   v-model="businessProcess"
-                                   @input="getFormDefinition"
-                                   label="name"
-                                   :title="$t('workflow.businessProcess')"
-                                   :placeholder="$t('workflow.bpSelectLabel') + '...'"
-                                   name="businessProcess"
-                                   v-validate="'required'"
-                  />
-                  <span v-if="errors.has('businessProcess')"
-                        class="required-text"
-                  >{{ $t('validate.required') }}
-                  </span>
+    <div class="app-fixed-height rounded relative overflow-hidden">
+      <VuePerfectScrollbar :settings="settings" class="scroll-area">
+            <vx-card>
+              <div class="d-flex">
+                <div class="w-full">
+                  <!-- select and start business-process -->
+                  <form @submit.prevent>
+                    <sm-autocomplete :items="businessProcesses"
+                                     :multiple="false"
+                                     :loading="bpListLoading"
+                                     v-model="businessProcess"
+                                     @input="getFormDefinition"
+                                     label="name"
+                                     :title="$t('workflow.businessProcess')"
+                                     :placeholder="$t('workflow.bpSelectLabel') + '...'"
+                                     name="businessProcess"
+                                     v-validate="'required'"
+                    />
+                    <span v-if="errors.has('businessProcess')"
+                          class="required-text"
+                    >{{ $t('validate.required') }}
+                    </span>
 
-                  <formio class="formio mt-4"
-                          ref="form"
-                          :form="form"
-                          :options="options"
-                          :submission="submission"
-                  />
-                  <no-data v-if="!this.formDefinition">{{ $t('workflow.bpSelectLabel') }}</no-data>
+                    <formio class="formio mt-4"
+                            ref="form"
+                            :form="form"
+                            :options="options"
+                            :submission="submission"
+                    />
+                    <no-data v-if="!this.formDefinition">{{ $t('workflow.bpSelectLabel') }}</no-data>
 
-                  <div class="flex justify-end">
-                    <vs-button class="mx-6"
-                               color="primary"
-                               type="flat"
-                               @click="$router.go(-1)"
-                    >{{ $t('buttons.cancel') }}
-                    </vs-button>
-                    <vs-button type="gradient"
-                               @click="onSubmit"
-                               :disabled="!this.formDefinition"
-                    >{{ $t('buttons.start') }}</vs-button>
-                  </div>
-                </form>
+                    <div class="flex justify-end">
+                      <vs-button class="mx-6"
+                                 color="primary"
+                                 type="flat"
+                                 @click="$router.go(-1)"
+                      >{{ $t('buttons.cancel') }}
+                      </vs-button>
+                      <vs-button type="gradient"
+                                 @click="onSubmit"
+                                 :disabled="!this.formDefinition"
+                      >{{ $t('buttons.start') }}</vs-button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>
-          </vx-card>
-        </div>
-      </div>
-  </div>
+            </vx-card>
+      </VuePerfectScrollbar>
+    </div>
 </template>
+
 <script>
 
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import SmAutocomplete from '@/components/SmAutocomplete'
 import {Form} from 'vue-formio'
 import noData from '@/components/noData'
 
 export default {
   components: {
+    VuePerfectScrollbar,
     SmAutocomplete,
     formio: Form,
     noData
@@ -70,6 +71,10 @@ export default {
     formDefinition: null,
     options: {noAlerts: true},
     submission: {},
+    settings: {
+      maxScrollbarLength: 60,
+      wheelSpeed: 0.50,
+    },
   }),
   computed: {
     form() {
