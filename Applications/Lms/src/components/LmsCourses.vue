@@ -102,6 +102,7 @@
 
 import CourseCard from './CourseCard.vue'
 import Filters from './LmsFilters.vue'
+import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 
 export default {
 	name: 'lms-courses',
@@ -141,63 +142,22 @@ export default {
       var tags = []
       // проверить установленные фильры
       const filters = data.currentFilters
-      var setFilters = false
-      if (filters) {
-        for (let index = 0; index < filters.length; index++) {
-          const filter = filters[index]
-          for (let itemIndex = 0; itemIndex< filter.items.length; itemIndex++) {
-             if (filter.items[itemIndex].selected) {
-               setFilters = true
-               break
-             }
-          }
-          if (setFilters) {
-               break
-          }
-        }
-      }
+      var setFilters = checkFiltersChanges(filters)
+
       // Если не установлены
       if (!setFilters) {
         this.filterChanged = false;
       } else {
         this.coursesFiltered.length = 0
         this.filterChanged = true;
+
         // разделить фильтры по категориям
-        for (let index = 0; index < filters.length; index++) {
-          var filter = filters[index]
-          switch (filter.name) {
-            case 'Роль':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  roles.push(filter.items[index])
-                }
-              }
-              break
-            case 'Уровень':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  levels.push(filter.items[index])
-                }
-              }
-              break
-            case 'Продукт':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  products.push(filter.items[index])
-                }
-              }
-              // products = filter.items
-              break
-            case 'Тэг':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  tags.push(filter.items[index])
-                }
-              }
-              // tags = filter.items
-              break
-          }
-        }
+        var separatedFilters = separateFilters(filters)
+        roles = separatedFilters.roles
+        levels = separatedFilters.levels
+        products = separatedFilters.products
+        tags = separatedFilters.tags
+
         // отфильтровать курсы по установленному фильтру
         var selectedListId = []
         for (let index = 0; index < this.allCourses.length; index++) {

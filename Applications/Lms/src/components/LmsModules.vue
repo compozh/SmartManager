@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import ModuleCard from './ModuleCard.vue'
+import Filters from './LmsFilters.vue'
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 
 export default {
@@ -98,23 +100,7 @@ export default {
       var tags = []
       // проверить установленные фильтры
       const filters = data.currentFilters
-      var setFilters = false
-      if (filters) {
-        for (let index = 0; index < filters.length; index++) {
-          const filter = filters[index];
-          for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
-            if (filter.items[itemIndex].selected) {
-              setFilters = true
-              break
-            }
-          }
-          if (setFilters) {
-            break
-          }
-        }
-      }
-
-      //var setFilters = checkFiltersChanges(filters)
+      var setFilters = checkFiltersChanges(filters)
 
       // Если фильтры не установлены
       if (!setFilters) {
@@ -122,46 +108,13 @@ export default {
       } else {
         this.filterChanged = true
         this.modulesFiltered.length = 0
-        // разделить фильтры по категориям
-        for (let index = 0; index < filters.length; index++) {
-          const filter = filters[index]
-          switch (filter.name) {
-            case 'Роль':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  roles.push(filter.items[index])
-                }
-              }
-              break
-            case 'Уровень':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  levels.push(filter.items[index])
-                }
-              }
-              break
-            case 'Продукт':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  products.push(filter.items[index])
-                }
-              }
-              break
-            case 'Тэг':
-              for (let index = 0; index < filter.items.length; index++) {
-                if (filter.items[index].selected) {
-                  tags.push(filter.items[index])
-                }
-              }
-              break
-          }
-        }
 
-        // var separatedFilters = separateFilters (filters)
-        // roles = separatedFilters.roles
-        // levels = separatedFilters.levels
-        // products = separatedFilters.products
-        // tags = separatedFilters.tags
+        // разделить фильтры по категориям
+        var separatedFilters = separateFilters (filters)
+        roles = separatedFilters.roles
+        levels = separatedFilters.levels
+        products = separatedFilters.products
+        tags = separatedFilters.tags
 
         // Отфильтровать модули по выбранным фильтрам
         var selectedListId = []
