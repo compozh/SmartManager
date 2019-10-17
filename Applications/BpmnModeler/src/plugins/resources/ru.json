@@ -46,7 +46,8 @@
 		"UserRecord": "Пользовательская запись",
 		"Id": "Идентификатор",
 		"SelectAction": "Выберите действие",
-		"SelectForm": "Выберите форму"
+		"SelectForm": "Выберите форму",
+		"EnterTaskParams": "Введите параметры задачи"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
