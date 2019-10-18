@@ -1,0 +1,80 @@
+import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
+import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
+import { eventBus } from '../../../../main';
+import ActionDefinitionType from '../../../../api/models/ActionDefinitionType';
+import { setServiceTaskParameters } from '../utils'
+
+export default function (group, element, bpmnFactory, translate, commandStack) {
+
+  if (!is(element, 'IT-Enterprise:UserTask')) {
+    return;
+  }
+
+  var topicEntry = entryFactory.textField({
+    id: 'actionDefinitionId',
+    label: translate('Task creation rule'),
+    modelProperty: 'actionDefinitionId',
+
+    buttonAction: {
+      name: 'search',
+      method: (element, inputNode) => {
+        var definitionType = ActionDefinitionType.UserTask;
+        var bo = getBusinessObject(element);
+        eventBus.$emit('properties-panel.select-external-task', bo.get('IT-Enterprise:actionDefinitionId'), definitionType, (newValue) => {
+
+          var cmd = cmdHelper.updateBusinessObject(element, bo, {
+            'IT-Enterprise:actionDefinitionId': newValue
+          });
+          commandStack.execute(cmd.cmd, cmd.context);
+        });
+        return true;
+      }
+    },
+    buttonShow: {
+      name: 'canSearch',
+      method: (element, inputNode) => true
+    },
+
+    get: function (element, node) {
+      var bo = getBusinessObject(element);
+      return { actionDefinitionId: bo.get('IT-Enterprise:actionDefinitionId') };
+    },
+
+    set: function (element, values, node) {
+      var bo = getBusinessObject(element);
+      return cmdHelper.updateBusinessObject(element, bo, {
+        'IT-Enterprise:actionDefinitionId': values.actionDefinitionId
+      });
+    },
+
+    validate: function (element, values, node) {
+      return is(element, 'IT-Enterprise:UserTask') && !values.actionDefinitionId ? { actionDefinitionId: translate('Must provide a value') } : {};
+    },
+
+    hidden: function (element, node) {
+      return !is(element, 'IT-Enterprise:UserTask');
+    }
+
+  });
+
+  var taskProperties = entryFactory.link({
+    id: 'externalTaskProperties',
+    label: translate('Task properties'),
+    showLink: (element, node) => {
+      if (!is(element, 'IT-Enterprise:UserTask')) {
+        return false;
+      }
+      var bo = getBusinessObject(element);
+      var taskCode = bo.get('IT-Enterprise:actionDefinitionId');
+      return taskCode && taskCode.trim() !== ''
+    },
+    handleClick: (element, node, event) => {
+      var bo = getBusinessObject(element);
+      var actionId = bo.get('IT-Enterprise:actionDefinitionId');
+      setServiceTaskParameters(element, bo, actionId, bpmnFactory, commandStack);
+    }
+  });
+
+  group.entries = group.entries.concat([topicEntry, taskProperties]);
+}

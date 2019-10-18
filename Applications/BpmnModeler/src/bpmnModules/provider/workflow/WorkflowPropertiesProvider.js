@@ -96,7 +96,7 @@ function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate, 
   ];
 }
 
-export default function CamundaPropertiesProvider(
+export default function WorkflowPropertiesProvider(
   eventBus, canvas, bpmnFactory,
   elementRegistry, elementTemplates, translate, commandStack) {
 
@@ -126,7 +126,7 @@ export default function CamundaPropertiesProvider(
 
 }
 
-CamundaPropertiesProvider.$inject = [
+WorkflowPropertiesProvider.$inject = [
   'eventBus',
   'canvas',
   'bpmnFactory',
@@ -136,4 +136,4 @@ CamundaPropertiesProvider.$inject = [
   'commandStack'
 ];
 
-inherits(CamundaPropertiesProvider, PropertiesActivator);
+inherits(WorkflowPropertiesProvider, PropertiesActivator);
