@@ -46,7 +46,9 @@
 		"UserRecord": "Користувацький запис",
 		"Id": "Ідентифікатор",
 		"SelectAction": "Виберіть дію",
-		"SelectForm": "Виберіть форму"
+		"SelectForm": "Виберіть форму",
+		"FormCode": "Код форми",
+		"FormName": "Найменування форми"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -55,7 +57,8 @@
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
 		"CantDrop": "Не вдалося перемістити елемент",
 		"ProcessDeployed": "Діаграму опубліковано",
-		"ProcessNotDeployed": "Не вдалося опублікувати діаграму"
+		"ProcessNotDeployed": "Не вдалося опублікувати діаграму",
+		"InitializeSignalR": "Не вдалося ініціалізувати SignalR"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",

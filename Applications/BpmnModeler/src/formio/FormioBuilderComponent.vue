@@ -17,20 +17,21 @@
                 @click="onCancel"
                 :disabled=buttonLoading
             >
-                Отменить
+            {{ $t('bpmn.buttons.Cancel') }}
             </v-btn>
             <v-text-field
-                class="toolbar-item"
+                class="toolbar-item form-code-text-field"
                 :disabled="Boolean(Object.keys(formDefinition).length)"
                 v-model=formCodeProperty
+                :full-width=false
                 :maxlength="10"
-                label="Код формы"
+                :label=formCodeLabel
                 required
             />
             <v-text-field
-                class="toolbar-item"
+                class="toolbar-item form-name-text-field"
                 v-model=formNameProperty
-                label="Наименование формы"
+                :label=formNameLabel
                 required
             />
         </v-layout>
@@ -54,6 +55,8 @@ export default {
     return {
         formCodeProperty: this.formDefinition.formCode,
         formNameProperty: this.formDefinition.name,
+        formNameLabel: this.$t('bpmn.labels.FormName'),
+        formCodeLabel: this.$t('bpmn.labels.FormCode'),
         options: { noAlerts: true }
     }
   },
@@ -73,7 +76,7 @@ export default {
       return { data: this.formDefinition.submission ? JSON.parse(this.formDefinition.submission) : [] }
     },
     actionText() {
-        return Object.keys(this.formDefinition).length ? 'Сохранить' : 'Создать';     
+        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');     
     }
   },
   methods: {
@@ -119,5 +122,11 @@ export default {
     }
     .toolbar-item {
         padding: 0 5px;
+    }
+    .form-code-text-field {
+        max-width: 200px;
+    }
+    .form-name-text-field {
+      max-width: 500px;  
     }
 </style>

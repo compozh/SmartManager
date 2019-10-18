@@ -32,8 +32,6 @@ export default {
     messages: {
       ru: {
         qrScaner: {
-          tryAgain: 'Повторить попытку',
-          loginError: 'По данному коду не удалось войти в систему',
           notAllowedError: 'Для входа вам нужно дать разрешение на доступ к камере',
           notFoundError: 'На этом устройстве камера не обнаружена',
           streamApiNotSupportedError: 'Stream API не поддерживается в этом браузере. Попробуйте использовать GoogleChrome'
