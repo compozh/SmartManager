@@ -67,9 +67,10 @@ export default {
   },
   methods: {
     async initialize() {
-      if (!this.downtimes.length) {
-        await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+      if (this.downtimes.length) {
+        this.$store.commit('mes/setDowntimes', [])
       }
+      await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
       this.initializeDowntimes = true
       if (!this.selectedDowntime) {
         this.seelectFirstDowntime()
