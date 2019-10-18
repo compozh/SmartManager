@@ -56,7 +56,7 @@ class PDFViewer extends BaseViewer {
       }
       if (page.id === currentId) {
         stillFullyVisible = true
-        break;
+        break
       }
     }
     if (!stillFullyVisible) {

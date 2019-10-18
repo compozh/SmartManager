@@ -1,4 +1,4 @@
-require('../../modules/es.object.values');
-var path = require('../../internals/path');
+require('../../modules/es.object.values')
+var path = require('../../internals/path')
 
-module.exports = path.Object.values;
+module.exports = path.Object.values

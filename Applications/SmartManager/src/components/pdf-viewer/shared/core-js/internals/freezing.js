@@ -1,5 +1,5 @@
-var fails = require('../internals/fails');
+var fails = require('../internals/fails')
 
 module.exports = !fails(function () {
-  return Object.isExtensible(Object.preventExtensions({}));
-});
+  return Object.isExtensible(Object.preventExtensions({}))
+})

@@ -1,11 +1,13 @@
-var classof = require('../internals/classof');
-var Iterators = require('../internals/iterators');
-var wellKnownSymbol = require('../internals/well-known-symbol');
+var classof = require('../internals/classof')
+var Iterators = require('../internals/iterators')
+var wellKnownSymbol = require('../internals/well-known-symbol')
 
-var ITERATOR = wellKnownSymbol('iterator');
+var ITERATOR = wellKnownSymbol('iterator')
 
 module.exports = function (it) {
-  if (it != undefined) return it[ITERATOR]
+  if (it != undefined) {
+    return it[ITERATOR]
     || it['@@iterator']
-    || Iterators[classof(it)];
-};
+    || Iterators[classof(it)] 
+  }
+}

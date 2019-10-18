@@ -1,1 +1,1 @@
-module.exports = require('../../stable/url/to-json');
+module.exports = require('../../stable/url/to-json')

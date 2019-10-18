@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { createObjectURL, shadow } from '../shared/util';
-import { DecodeStream } from './stream';
-import { isDict } from './primitives';
-import { JpegImage } from './jpg';
+import { createObjectURL, shadow } from '../shared/util'
+import { DecodeStream } from './stream'
+import { isDict } from './primitives'
+import { JpegImage } from './jpg'
 
 /**
  * Depending on the type of JPEG a JpegStream is handled in different ways. For
@@ -29,92 +29,92 @@ let JpegStream = (function JpegStreamClosure() {
   function JpegStream(stream, maybeLength, dict, params) {
     // Some images may contain 'junk' before the SOI (start-of-image) marker.
     // Note: this seems to mainly affect inline images.
-    let ch;
+    let ch
     while ((ch = stream.getByte()) !== -1) {
       if (ch === 0xFF) { // Find the first byte of the SOI marker (0xFFD8).
-        stream.skip(-1); // Reset the stream position to the SOI.
-        break;
+        stream.skip(-1) // Reset the stream position to the SOI.
+        break
       }
     }
-    this.stream = stream;
-    this.maybeLength = maybeLength;
-    this.dict = dict;
-    this.params = params;
+    this.stream = stream
+    this.maybeLength = maybeLength
+    this.dict = dict
+    this.params = params
 
-    DecodeStream.call(this, maybeLength);
+    DecodeStream.call(this, maybeLength)
   }
 
-  JpegStream.prototype = Object.create(DecodeStream.prototype);
+  JpegStream.prototype = Object.create(DecodeStream.prototype)
 
   Object.defineProperty(JpegStream.prototype, 'bytes', {
     get: function JpegStream_bytes() {
       // If `this.maybeLength` is null, we'll get the entire stream.
-      return shadow(this, 'bytes', this.stream.getBytes(this.maybeLength));
+      return shadow(this, 'bytes', this.stream.getBytes(this.maybeLength))
     },
     configurable: true,
-  });
+  })
 
   JpegStream.prototype.ensureBuffer = function(requested) {
     // No-op, since `this.readBlock` will always parse the entire image and
     // directly insert all of its data into `this.buffer`.
-  };
+  }
 
   JpegStream.prototype.readBlock = function() {
     if (this.eof) {
-      return;
+      return
     }
     let jpegOptions = {
       decodeTransform: undefined,
       colorTransform: undefined,
-    };
+    }
 
     // Checking if values need to be transformed before conversion.
-    let decodeArr = this.dict.getArray('Decode', 'D');
+    let decodeArr = this.dict.getArray('Decode', 'D')
     if (this.forceRGB && Array.isArray(decodeArr)) {
-      let bitsPerComponent = this.dict.get('BitsPerComponent') || 8;
-      let decodeArrLength = decodeArr.length;
-      let transform = new Int32Array(decodeArrLength);
-      let transformNeeded = false;
-      let maxValue = (1 << bitsPerComponent) - 1;
+      let bitsPerComponent = this.dict.get('BitsPerComponent') || 8
+      let decodeArrLength = decodeArr.length
+      let transform = new Int32Array(decodeArrLength)
+      let transformNeeded = false
+      let maxValue = (1 << bitsPerComponent) - 1
       for (let i = 0; i < decodeArrLength; i += 2) {
-        transform[i] = ((decodeArr[i + 1] - decodeArr[i]) * 256) | 0;
-        transform[i + 1] = (decodeArr[i] * maxValue) | 0;
+        transform[i] = ((decodeArr[i + 1] - decodeArr[i]) * 256) | 0
+        transform[i + 1] = (decodeArr[i] * maxValue) | 0
         if (transform[i] !== 256 || transform[i + 1] !== 0) {
-          transformNeeded = true;
+          transformNeeded = true
         }
       }
       if (transformNeeded) {
-        jpegOptions.decodeTransform = transform;
+        jpegOptions.decodeTransform = transform
       }
     }
     // Fetching the 'ColorTransform' entry, if it exists.
     if (isDict(this.params)) {
-      let colorTransform = this.params.get('ColorTransform');
+      let colorTransform = this.params.get('ColorTransform')
       if (Number.isInteger(colorTransform)) {
-        jpegOptions.colorTransform = colorTransform;
+        jpegOptions.colorTransform = colorTransform
       }
     }
-    const jpegImage = new JpegImage(jpegOptions);
+    const jpegImage = new JpegImage(jpegOptions)
 
-    jpegImage.parse(this.bytes);
+    jpegImage.parse(this.bytes)
     let data = jpegImage.getData({
       width: this.drawWidth,
       height: this.drawHeight,
       forceRGB: this.forceRGB,
       isSourcePDF: true,
-    });
-    this.buffer = data;
-    this.bufferLength = data.length;
-    this.eof = true;
-  };
+    })
+    this.buffer = data
+    this.bufferLength = data.length
+    this.eof = true
+  }
 
   JpegStream.prototype.getIR = function(forceDataSchema = false) {
-    return createObjectURL(this.bytes, 'image/jpeg', forceDataSchema);
-  };
+    return createObjectURL(this.bytes, 'image/jpeg', forceDataSchema)
+  }
 
-  return JpegStream;
-})();
+  return JpegStream
+})()
 
 export {
   JpegStream,
-};
+}

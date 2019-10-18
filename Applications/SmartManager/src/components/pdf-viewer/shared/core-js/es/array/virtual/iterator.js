@@ -1,4 +1,4 @@
-require('../../../modules/es.array.iterator');
-var entryVirtual = require('../../../internals/entry-virtual');
+require('../../../modules/es.array.iterator')
+var entryVirtual = require('../../../internals/entry-virtual')
 
-module.exports = entryVirtual('Array').values;
+module.exports = entryVirtual('Array').values

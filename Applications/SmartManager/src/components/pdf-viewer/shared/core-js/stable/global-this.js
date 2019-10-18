@@ -1,1 +1,1 @@
-module.exports = require('../es/global-this');
+module.exports = require('../es/global-this')

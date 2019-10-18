@@ -16,13 +16,13 @@ limitations under the License.
 /* eslint strict: ["error", "function"] */
 
 (function() {
-  'use strict';
-  var storageLocal = chrome.storage.local;
-  var storageSync = chrome.storage.sync;
+  
+  var storageLocal = chrome.storage.local
+  var storageSync = chrome.storage.sync
 
   if (!storageSync) {
     // No sync storage area - nothing to migrate to.
-    return;
+    return
   }
 
   getStorageNames(function(storageKeys) {
@@ -30,23 +30,23 @@ limitations under the License.
       if (!values || !Object.keys(values).length) {
         // No local storage - nothing to migrate.
         // ... except possibly for a renamed preference name.
-        migrateRenamedStorage();
-        return;
+        migrateRenamedStorage()
+        return
       }
-      migrateToSyncStorage(values);
-    });
-  });
+      migrateToSyncStorage(values)
+    })
+  })
 
   function getStorageNames(callback) {
-    var x = new XMLHttpRequest();
-    var schema_location = chrome.runtime.getManifest().storage.managed_schema;
-    x.open('get', chrome.runtime.getURL(schema_location));
+    var x = new XMLHttpRequest()
+    var schema_location = chrome.runtime.getManifest().storage.managed_schema
+    x.open('get', chrome.runtime.getURL(schema_location))
     x.onload = function() {
-      var storageKeys = Object.keys(x.response.properties);
-      callback(storageKeys);
-    };
-    x.responseType = 'json';
-    x.send();
+      var storageKeys = Object.keys(x.response.properties)
+      callback(storageKeys)
+    }
+    x.responseType = 'json'
+    x.send()
   }
 
   // Save |values| to storage.sync and delete the values with that key from
@@ -55,8 +55,8 @@ limitations under the License.
     storageSync.set(values, function() {
       if (chrome.runtime.lastError) {
         console.error('Failed to migrate settings due to an error: ' +
-            chrome.runtime.lastError.message);
-        return;
+            chrome.runtime.lastError.message)
+        return
       }
       // Migration successful. Delete local settings.
       storageLocal.remove(Object.keys(values), function() {
@@ -64,10 +64,10 @@ limitations under the License.
         // backend is corrupt), but since storageSync.set succeeded, consider
         // the migration successful.
         console.log(
-            'Successfully migrated preferences from local to sync storage.');
-        migrateRenamedStorage();
-      });
-    });
+          'Successfully migrated preferences from local to sync storage.')
+        migrateRenamedStorage()
+      })
+    })
   }
 
   // TODO: Remove this migration code somewhere in the future, when most users
@@ -92,28 +92,28 @@ limitations under the License.
             cursorToolOnLoad: 1,
           }, function() {
             if (!chrome.runtime.lastError) {
-              storageSync.remove('enableHandToolOnLoad');
+              storageSync.remove('enableHandToolOnLoad')
             }
-          });
+          })
         } else {
-          storageSync.remove('enableHandToolOnLoad');
+          storageSync.remove('enableHandToolOnLoad')
         }
       }
       // Migration code for https://github.com/mozilla/pdf.js/pull/9479.
       if (typeof items.disableTextLayer === 'boolean') {
         var textLayerMode = items.disableTextLayer ? 0 :
-          items.enhanceTextSelection ? 2 : 1;
+          items.enhanceTextSelection ? 2 : 1
         if (textLayerMode !== 1) {
           // Overwrite if computed textLayerMode is not the default value (1).
           storageSync.set({
             textLayerMode: textLayerMode,
           }, function() {
             if (!chrome.runtime.lastError) {
-              storageSync.remove(['disableTextLayer', 'enhanceTextSelection']);
+              storageSync.remove(['disableTextLayer', 'enhanceTextSelection'])
             }
-          });
+          })
         } else {
-          storageSync.remove(['disableTextLayer', 'enhanceTextSelection']);
+          storageSync.remove(['disableTextLayer', 'enhanceTextSelection'])
         }
       }
       // Migration code for https://github.com/mozilla/pdf.js/pull/10502.
@@ -123,13 +123,13 @@ limitations under the License.
             viewOnLoad: 1,
           }, function() {
             if (!chrome.runtime.lastError) {
-              storageSync.remove(['showPreviousViewOnLoad', 'disablePageMode']);
+              storageSync.remove(['showPreviousViewOnLoad', 'disablePageMode'])
             }
-          });
+          })
         } else {
-          storageSync.remove(['showPreviousViewOnLoad', 'disablePageMode']);
+          storageSync.remove(['showPreviousViewOnLoad', 'disablePageMode'])
         }
       }
-    });
+    })
   }
-})();
+})()

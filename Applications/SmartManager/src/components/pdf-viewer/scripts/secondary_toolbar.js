@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import { SCROLLBAR_PADDING, ScrollMode, SpreadMode } from './ui_utils';
-import { CursorTool } from './pdf_cursor_tools';
-import { PDFSinglePageViewer } from './pdf_single_page_viewer';
+import { SCROLLBAR_PADDING, ScrollMode, SpreadMode } from './ui_utils'
+import { CursorTool } from './pdf_cursor_tools'
+import { PDFSinglePageViewer } from './pdf_single_page_viewer'
 
 /**
  * @typedef {Object} SecondaryToolbarOptions
@@ -56,9 +56,9 @@ class SecondaryToolbar {
    * @param {EventBus} eventBus
    */
   constructor(options, mainContainer, eventBus) {
-    this.toolbar = options.toolbar;
-    this.toggleButton = options.toggleButton;
-    this.toolbarButtonContainer = options.toolbarButtonContainer;
+    this.toolbar = options.toolbar
+    this.toggleButton = options.toggleButton
+    this.toolbarButtonContainer = options.toolbarButtonContainer
     this.buttons = [
       { element: options.presentationModeButton, eventName: 'presentationmode',
         close: true, },
@@ -91,179 +91,179 @@ class SecondaryToolbar {
         eventDetails: { mode: SpreadMode.EVEN, }, close: true, },
       { element: options.documentPropertiesButton,
         eventName: 'documentproperties', close: true, },
-    ];
+    ]
     this.items = {
       firstPage: options.firstPageButton,
       lastPage: options.lastPageButton,
       pageRotateCw: options.pageRotateCwButton,
       pageRotateCcw: options.pageRotateCcwButton,
-    };
+    }
 
-    this.mainContainer = mainContainer;
-    this.eventBus = eventBus;
+    this.mainContainer = mainContainer
+    this.eventBus = eventBus
 
-    this.opened = false;
-    this.containerHeight = null;
-    this.previousContainerHeight = null;
+    this.opened = false
+    this.containerHeight = null
+    this.previousContainerHeight = null
 
-    this.reset();
+    this.reset()
 
     // Bind the event listeners for click, cursor tool, and scroll/spread mode
     // actions.
-    this._bindClickListeners();
-    this._bindCursorToolsListener(options);
-    this._bindScrollModeListener(options);
-    this._bindSpreadModeListener(options);
+    this._bindClickListeners()
+    this._bindCursorToolsListener(options)
+    this._bindScrollModeListener(options)
+    this._bindSpreadModeListener(options)
 
     // Bind the event listener for adjusting the 'max-height' of the toolbar.
-    this.eventBus.on('resize', this._setMaxHeight.bind(this));
+    this.eventBus.on('resize', this._setMaxHeight.bind(this))
 
     // Hide the Scroll/Spread mode buttons, when they're not applicable to the
     // current `BaseViewer` instance (in particular `PDFSinglePageViewer`).
     this.eventBus.on('baseviewerinit', (evt) => {
       if (evt.source instanceof PDFSinglePageViewer) {
         this.toolbarButtonContainer.classList.add('hiddenScrollModeButtons',
-                                                  'hiddenSpreadModeButtons');
+          'hiddenSpreadModeButtons')
       } else {
         this.toolbarButtonContainer.classList.remove('hiddenScrollModeButtons',
-                                                     'hiddenSpreadModeButtons');
+          'hiddenSpreadModeButtons')
       }
-    });
+    })
   }
 
   /**
    * @type {boolean}
    */
   get isOpen() {
-    return this.opened;
+    return this.opened
   }
 
   setPageNumber(pageNumber) {
-    this.pageNumber = pageNumber;
-    this._updateUIState();
+    this.pageNumber = pageNumber
+    this._updateUIState()
   }
 
   setPagesCount(pagesCount) {
-    this.pagesCount = pagesCount;
-    this._updateUIState();
+    this.pagesCount = pagesCount
+    this._updateUIState()
   }
 
   reset() {
-    this.pageNumber = 0;
-    this.pagesCount = 0;
-    this._updateUIState();
+    this.pageNumber = 0
+    this.pagesCount = 0
+    this._updateUIState()
 
     // Reset the Scroll/Spread buttons too, since they're document specific.
-    this.eventBus.dispatch('secondarytoolbarreset', { source: this, });
+    this.eventBus.dispatch('secondarytoolbarreset', { source: this, })
   }
 
   _updateUIState() {
-    this.items.firstPage.disabled = (this.pageNumber <= 1);
-    this.items.lastPage.disabled = (this.pageNumber >= this.pagesCount);
-    this.items.pageRotateCw.disabled = this.pagesCount === 0;
-    this.items.pageRotateCcw.disabled = this.pagesCount === 0;
+    this.items.firstPage.disabled = (this.pageNumber <= 1)
+    this.items.lastPage.disabled = (this.pageNumber >= this.pagesCount)
+    this.items.pageRotateCw.disabled = this.pagesCount === 0
+    this.items.pageRotateCcw.disabled = this.pagesCount === 0
   }
 
   _bindClickListeners() {
     // Button to toggle the visibility of the secondary toolbar.
-    this.toggleButton.addEventListener('click', this.toggle.bind(this));
+    this.toggleButton.addEventListener('click', this.toggle.bind(this))
 
     // All items within the secondary toolbar.
     for (let button in this.buttons) {
-      let { element, eventName, close, eventDetails, } = this.buttons[button];
+      let { element, eventName, close, eventDetails, } = this.buttons[button]
 
       element.addEventListener('click', (evt) => {
         if (eventName !== null) {
-          let details = { source: this, };
+          let details = { source: this, }
           for (let property in eventDetails) {
-            details[property] = eventDetails[property];
+            details[property] = eventDetails[property]
           }
-          this.eventBus.dispatch(eventName, details);
+          this.eventBus.dispatch(eventName, details)
         }
         if (close) {
-          this.close();
+          this.close()
         }
-      });
+      })
     }
   }
 
   _bindCursorToolsListener(buttons) {
     this.eventBus.on('cursortoolchanged', function({ tool, }) {
       buttons.cursorSelectToolButton.classList.toggle('toggled',
-        tool === CursorTool.SELECT);
+        tool === CursorTool.SELECT)
       buttons.cursorHandToolButton.classList.toggle('toggled',
-        tool === CursorTool.HAND);
-    });
+        tool === CursorTool.HAND)
+    })
   }
 
   _bindScrollModeListener(buttons) {
     function scrollModeChanged({ mode, }) {
       buttons.scrollVerticalButton.classList.toggle('toggled',
-        mode === ScrollMode.VERTICAL);
+        mode === ScrollMode.VERTICAL)
       buttons.scrollHorizontalButton.classList.toggle('toggled',
-        mode === ScrollMode.HORIZONTAL);
+        mode === ScrollMode.HORIZONTAL)
       buttons.scrollWrappedButton.classList.toggle('toggled',
-        mode === ScrollMode.WRAPPED);
+        mode === ScrollMode.WRAPPED)
 
       // Temporarily *disable* the Spread buttons when horizontal scrolling is
       // enabled, since the non-default Spread modes doesn't affect the layout.
-      const isScrollModeHorizontal = (mode === ScrollMode.HORIZONTAL);
-      buttons.spreadNoneButton.disabled = isScrollModeHorizontal;
-      buttons.spreadOddButton.disabled = isScrollModeHorizontal;
-      buttons.spreadEvenButton.disabled = isScrollModeHorizontal;
+      const isScrollModeHorizontal = (mode === ScrollMode.HORIZONTAL)
+      buttons.spreadNoneButton.disabled = isScrollModeHorizontal
+      buttons.spreadOddButton.disabled = isScrollModeHorizontal
+      buttons.spreadEvenButton.disabled = isScrollModeHorizontal
     }
-    this.eventBus.on('scrollmodechanged', scrollModeChanged);
+    this.eventBus.on('scrollmodechanged', scrollModeChanged)
 
     this.eventBus.on('secondarytoolbarreset', (evt) => {
       if (evt.source === this) {
-        scrollModeChanged({ mode: ScrollMode.VERTICAL, });
+        scrollModeChanged({ mode: ScrollMode.VERTICAL, })
       }
-    });
+    })
   }
 
   _bindSpreadModeListener(buttons) {
     function spreadModeChanged({ mode, }) {
       buttons.spreadNoneButton.classList.toggle('toggled',
-        mode === SpreadMode.NONE);
+        mode === SpreadMode.NONE)
       buttons.spreadOddButton.classList.toggle('toggled',
-        mode === SpreadMode.ODD);
+        mode === SpreadMode.ODD)
       buttons.spreadEvenButton.classList.toggle('toggled',
-        mode === SpreadMode.EVEN);
+        mode === SpreadMode.EVEN)
     }
-    this.eventBus.on('spreadmodechanged', spreadModeChanged);
+    this.eventBus.on('spreadmodechanged', spreadModeChanged)
 
     this.eventBus.on('secondarytoolbarreset', (evt) => {
       if (evt.source === this) {
-        spreadModeChanged({ mode: SpreadMode.NONE, });
+        spreadModeChanged({ mode: SpreadMode.NONE, })
       }
-    });
+    })
   }
 
   open() {
     if (this.opened) {
-      return;
+      return
     }
-    this.opened = true;
-    this._setMaxHeight();
+    this.opened = true
+    this._setMaxHeight()
 
-    this.toggleButton.classList.add('toggled');
-    this.toolbar.classList.remove('hidden');
+    this.toggleButton.classList.add('toggled')
+    this.toolbar.classList.remove('hidden')
   }
 
   close() {
     if (!this.opened) {
-      return;
+      return
     }
-    this.opened = false;
-    this.toolbar.classList.add('hidden');
-    this.toggleButton.classList.remove('toggled');
+    this.opened = false
+    this.toolbar.classList.add('hidden')
+    this.toggleButton.classList.remove('toggled')
   }
 
   toggle() {
     if (this.opened) {
-      this.close();
+      this.close()
     } else {
-      this.open();
+      this.open()
     }
   }
 
@@ -272,20 +272,20 @@ class SecondaryToolbar {
    */
   _setMaxHeight() {
     if (!this.opened) {
-      return; // Only adjust the 'max-height' if the toolbar is visible.
+      return // Only adjust the 'max-height' if the toolbar is visible.
     }
-    this.containerHeight = this.mainContainer.clientHeight;
+    this.containerHeight = this.mainContainer.clientHeight
 
     if (this.containerHeight === this.previousContainerHeight) {
-      return;
+      return
     }
     this.toolbarButtonContainer.setAttribute('style',
-      'max-height: ' + (this.containerHeight - SCROLLBAR_PADDING) + 'px;');
+      'max-height: ' + (this.containerHeight - SCROLLBAR_PADDING) + 'px;')
 
-    this.previousContainerHeight = this.containerHeight;
+    this.previousContainerHeight = this.containerHeight
   }
 }
 
 export {
   SecondaryToolbar,
-};
+}

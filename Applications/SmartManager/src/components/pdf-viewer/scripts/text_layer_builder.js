@@ -233,7 +233,7 @@ class TextLayerBuilder {
         span.className = className
         span.appendChild(node)
         div.appendChild(span)
-        return;
+        return
       }
       div.appendChild(node)
     }

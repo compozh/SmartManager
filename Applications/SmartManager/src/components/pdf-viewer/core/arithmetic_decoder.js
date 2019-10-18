@@ -63,7 +63,7 @@ const QeTable = [
   { qe: 0x0005, nmps: 45, nlps: 42, switchFlag: 0, },
   { qe: 0x0001, nmps: 45, nlps: 43, switchFlag: 0, },
   { qe: 0x5601, nmps: 46, nlps: 46, switchFlag: 0, },
-];
+]
 
 /**
  * This class implements the QM Coder decoding as defined in
@@ -77,45 +77,45 @@ const QeTable = [
 class ArithmeticDecoder {
   // C.3.5 Initialisation of the decoder (INITDEC)
   constructor(data, start, end) {
-    this.data = data;
-    this.bp = start;
-    this.dataEnd = end;
+    this.data = data
+    this.bp = start
+    this.dataEnd = end
 
-    this.chigh = data[start];
-    this.clow = 0;
+    this.chigh = data[start]
+    this.clow = 0
 
-    this.byteIn();
+    this.byteIn()
 
-    this.chigh = ((this.chigh << 7) & 0xFFFF) | ((this.clow >> 9) & 0x7F);
-    this.clow = (this.clow << 7) & 0xFFFF;
-    this.ct -= 7;
-    this.a = 0x8000;
+    this.chigh = ((this.chigh << 7) & 0xFFFF) | ((this.clow >> 9) & 0x7F)
+    this.clow = (this.clow << 7) & 0xFFFF
+    this.ct -= 7
+    this.a = 0x8000
   }
 
   // C.3.4 Compressed data input (BYTEIN)
   byteIn() {
-    const data = this.data;
-    let bp = this.bp;
+    const data = this.data
+    let bp = this.bp
 
     if (data[bp] === 0xFF) {
       if (data[bp + 1] > 0x8F) {
-        this.clow += 0xFF00;
-        this.ct = 8;
+        this.clow += 0xFF00
+        this.ct = 8
       } else {
-        bp++;
-        this.clow += (data[bp] << 9);
-        this.ct = 7;
-        this.bp = bp;
+        bp++
+        this.clow += (data[bp] << 9)
+        this.ct = 7
+        this.bp = bp
       }
     } else {
-      bp++;
-      this.clow += bp < this.dataEnd ? (data[bp] << 8) : 0xFF00;
-      this.ct = 8;
-      this.bp = bp;
+      bp++
+      this.clow += bp < this.dataEnd ? (data[bp] << 8) : 0xFF00
+      this.ct = 8
+      this.bp = bp
     }
     if (this.clow > 0xFFFF) {
-      this.chigh += (this.clow >> 16);
-      this.clow &= 0xFFFF;
+      this.chigh += (this.clow >> 16)
+      this.clow &= 0xFFFF
     }
   }
 
@@ -123,62 +123,62 @@ class ArithmeticDecoder {
   readBit(contexts, pos) {
     // Contexts are packed into 1 byte:
     // highest 7 bits carry cx.index, lowest bit carries cx.mps
-    let cx_index = contexts[pos] >> 1, cx_mps = contexts[pos] & 1;
-    const qeTableIcx = QeTable[cx_index];
-    const qeIcx = qeTableIcx.qe;
-    let d;
-    let a = this.a - qeIcx;
+    let cx_index = contexts[pos] >> 1, cx_mps = contexts[pos] & 1
+    const qeTableIcx = QeTable[cx_index]
+    const qeIcx = qeTableIcx.qe
+    let d
+    let a = this.a - qeIcx
 
     if (this.chigh < qeIcx) {
       // exchangeLps
       if (a < qeIcx) {
-        a = qeIcx;
-        d = cx_mps;
-        cx_index = qeTableIcx.nmps;
+        a = qeIcx
+        d = cx_mps
+        cx_index = qeTableIcx.nmps
       } else {
-        a = qeIcx;
-        d = 1 ^ cx_mps;
+        a = qeIcx
+        d = 1 ^ cx_mps
         if (qeTableIcx.switchFlag === 1) {
-          cx_mps = d;
+          cx_mps = d
         }
-        cx_index = qeTableIcx.nlps;
+        cx_index = qeTableIcx.nlps
       }
     } else {
-      this.chigh -= qeIcx;
+      this.chigh -= qeIcx
       if ((a & 0x8000) !== 0) {
-        this.a = a;
-        return cx_mps;
+        this.a = a
+        return cx_mps
       }
       // exchangeMps
       if (a < qeIcx) {
-        d = 1 ^ cx_mps;
+        d = 1 ^ cx_mps
         if (qeTableIcx.switchFlag === 1) {
-          cx_mps = d;
+          cx_mps = d
         }
-        cx_index = qeTableIcx.nlps;
+        cx_index = qeTableIcx.nlps
       } else {
-        d = cx_mps;
-        cx_index = qeTableIcx.nmps;
+        d = cx_mps
+        cx_index = qeTableIcx.nmps
       }
     }
     // C.3.3 renormD;
     do {
       if (this.ct === 0) {
-        this.byteIn();
+        this.byteIn()
       }
 
-      a <<= 1;
-      this.chigh = ((this.chigh << 1) & 0xFFFF) | ((this.clow >> 15) & 1);
-      this.clow = (this.clow << 1) & 0xFFFF;
-      this.ct--;
-    } while ((a & 0x8000) === 0);
-    this.a = a;
+      a <<= 1
+      this.chigh = ((this.chigh << 1) & 0xFFFF) | ((this.clow >> 15) & 1)
+      this.clow = (this.clow << 1) & 0xFFFF
+      this.ct--
+    } while ((a & 0x8000) === 0)
+    this.a = a
 
-    contexts[pos] = cx_index << 1 | cx_mps;
-    return d;
+    contexts[pos] = cx_index << 1 | cx_mps
+    return d
   }
 }
 
 export {
   ArithmeticDecoder,
-};
+}

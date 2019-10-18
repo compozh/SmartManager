@@ -1,9 +1,9 @@
-var at = require('../string/virtual/at');
+var at = require('../string/virtual/at')
 
-var StringPrototype = String.prototype;
+var StringPrototype = String.prototype
 
 module.exports = function (it) {
-  var own = it.at;
+  var own = it.at
   return typeof it === 'string' || it === StringPrototype
-    || (it instanceof String && own === StringPrototype.at) ? at : own;
-};
+    || (it instanceof String && own === StringPrototype.at) ? at : own
+}

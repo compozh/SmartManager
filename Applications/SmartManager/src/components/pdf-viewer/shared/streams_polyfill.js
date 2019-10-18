@@ -17,39 +17,39 @@
 if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('MOZCENTRAL')) {
   if (typeof ReadableStream === 'undefined') {
     throw new Error('Please enable ReadableStream support by resetting the ' +
-      '"javascript.options.streams" preference to "true" in about:config.');
+      '"javascript.options.streams" preference to "true" in about:config.')
   }
-  exports.ReadableStream = ReadableStream;
+  exports.ReadableStream = ReadableStream
 } else {
-  let isReadableStreamSupported = false;
+  let isReadableStreamSupported = false
   if (typeof ReadableStream !== 'undefined') {
     // MS Edge may say it has ReadableStream but they are not up to spec yet.
     try {
       // eslint-disable-next-line no-new
       new ReadableStream({
         start(controller) {
-          controller.close();
+          controller.close()
         },
-      });
-      isReadableStreamSupported = true;
+      })
+      isReadableStreamSupported = true
     } catch (e) {
       // The ReadableStream constructor cannot be used.
     }
   }
   if (isReadableStreamSupported) {
-    exports.ReadableStream = ReadableStream;
+    exports.ReadableStream = ReadableStream
   } else if (typeof PDFJSDev !== 'undefined' &&
              PDFJSDev.test('IMAGE_DECODERS')) {
     class DummyReadableStream {
       constructor() {
         throw new Error('The current image decoders are synchronous, ' +
                         'hence `ReadableStream` shouldn\'t need to be ' +
-                        'polyfilled for the IMAGE_DECODERS build target.');
+                        'polyfilled for the IMAGE_DECODERS build target.')
       }
     }
-    exports.ReadableStream = DummyReadableStream;
+    exports.ReadableStream = DummyReadableStream
   } else {
     exports.ReadableStream =
-      require('web-streams-polyfill/dist/ponyfill').ReadableStream;
+      require('web-streams-polyfill/dist/ponyfill').ReadableStream
   }
 }

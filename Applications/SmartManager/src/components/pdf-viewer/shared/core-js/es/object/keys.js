@@ -1,4 +1,4 @@
-require('../../modules/es.object.keys');
-var path = require('../../internals/path');
+require('../../modules/es.object.keys')
+var path = require('../../internals/path')
 
-module.exports = path.Object.keys;
+module.exports = path.Object.keys

@@ -1,4 +1,4 @@
-require('../../modules/es.symbol');
-var path = require('../../internals/path');
+require('../../modules/es.symbol')
+var path = require('../../internals/path')
 
-module.exports = path.Symbol.keyFor;
+module.exports = path.Symbol.keyFor

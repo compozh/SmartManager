@@ -146,7 +146,7 @@ class IPDFTextLayerFactory {
    * @returns {TextLayerBuilder}
    */
   createTextLayerBuilder(textLayerDiv, pageIndex, viewport,
-                         enhanceTextSelection = false) {}
+    enhanceTextSelection = false) {}
 }
 
 /**
@@ -163,8 +163,8 @@ class IPDFAnnotationLayerFactory {
    * @returns {AnnotationLayerBuilder}
    */
   createAnnotationLayerBuilder(pageDiv, pdfPage, imageResourcesPath = '',
-                               renderInteractiveForms = false,
-                               l10n = undefined) {}
+    renderInteractiveForms = false,
+    l10n = undefined) {}
 }
 
 /**
@@ -207,4 +207,4 @@ export {
   IPDFTextLayerFactory,
   IPDFAnnotationLayerFactory,
   IL10n,
-};
+}

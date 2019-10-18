@@ -20,5 +20,5 @@ module.exports = function isNodeJS() {
   // https://electronjs.org/docs/api/process#processversionselectron
   return typeof process === 'object' &&
          process + '' === '[object process]' &&
-         !process.versions['nw'] && !process.versions['electron'];
-};
+         !process.versions['nw'] && !process.versions['electron']
+}

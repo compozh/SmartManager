@@ -1,7 +1,7 @@
-var global = require('../internals/global');
-var task = require('../internals/task');
+var global = require('../internals/global')
+var task = require('../internals/task')
 
-var FORCED = !global.setImmediate || !global.clearImmediate;
+var FORCED = !global.setImmediate || !global.clearImmediate
 
 // http://w3c.github.io/setImmediate/
 require('../internals/export')({ global: true, bind: true, enumerable: true, forced: FORCED }, {
@@ -11,4 +11,4 @@ require('../internals/export')({ global: true, bind: true, enumerable: true, for
   // `clearImmediate` method
   // http://w3c.github.io/setImmediate/#si-clearImmediate
   clearImmediate: task.clear
-});
+})

@@ -1,5 +1,5 @@
-require('../../modules/es.regexp.to-string');
+require('../../modules/es.regexp.to-string')
 
 module.exports = function toString(it) {
-  return RegExp.prototype.toString.call(it);
-};
+  return RegExp.prototype.toString.call(it)
+}

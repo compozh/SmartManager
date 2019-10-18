@@ -1,1 +1,1 @@
-require('../modules/esnext.array.is-template-object');
+require('../modules/esnext.array.is-template-object')

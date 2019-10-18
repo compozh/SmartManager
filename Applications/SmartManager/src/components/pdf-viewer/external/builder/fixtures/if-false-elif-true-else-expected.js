@@ -1,2 +1,2 @@
-'use strict';
-var b;
+'use strict'
+var b

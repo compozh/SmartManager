@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import { DecodeStream } from './stream';
-import { JpxImage } from './jpx';
-import { shadow } from '../shared/util';
+import { DecodeStream } from './stream'
+import { JpxImage } from './jpx'
+import { shadow } from '../shared/util'
 
 /**
  * For JPEG 2000's we use a library to decode these images and
@@ -23,74 +23,74 @@ import { shadow } from '../shared/util';
  */
 let JpxStream = (function JpxStreamClosure() {
   function JpxStream(stream, maybeLength, dict, params) {
-    this.stream = stream;
-    this.maybeLength = maybeLength;
-    this.dict = dict;
-    this.params = params;
+    this.stream = stream
+    this.maybeLength = maybeLength
+    this.dict = dict
+    this.params = params
 
-    DecodeStream.call(this, maybeLength);
+    DecodeStream.call(this, maybeLength)
   }
 
-  JpxStream.prototype = Object.create(DecodeStream.prototype);
+  JpxStream.prototype = Object.create(DecodeStream.prototype)
 
   Object.defineProperty(JpxStream.prototype, 'bytes', {
     get: function JpxStream_bytes() {
       // If `this.maybeLength` is null, we'll get the entire stream.
-      return shadow(this, 'bytes', this.stream.getBytes(this.maybeLength));
+      return shadow(this, 'bytes', this.stream.getBytes(this.maybeLength))
     },
     configurable: true,
-  });
+  })
 
   JpxStream.prototype.ensureBuffer = function(requested) {
     // No-op, since `this.readBlock` will always parse the entire image and
     // directly insert all of its data into `this.buffer`.
-  };
+  }
 
   JpxStream.prototype.readBlock = function() {
     if (this.eof) {
-      return;
+      return
     }
-    let jpxImage = new JpxImage();
-    jpxImage.parse(this.bytes);
+    let jpxImage = new JpxImage()
+    jpxImage.parse(this.bytes)
 
-    let width = jpxImage.width;
-    let height = jpxImage.height;
-    let componentsCount = jpxImage.componentsCount;
-    let tileCount = jpxImage.tiles.length;
+    let width = jpxImage.width
+    let height = jpxImage.height
+    let componentsCount = jpxImage.componentsCount
+    let tileCount = jpxImage.tiles.length
     if (tileCount === 1) {
-      this.buffer = jpxImage.tiles[0].items;
+      this.buffer = jpxImage.tiles[0].items
     } else {
-      let data = new Uint8ClampedArray(width * height * componentsCount);
+      let data = new Uint8ClampedArray(width * height * componentsCount)
 
       for (let k = 0; k < tileCount; k++) {
-        let tileComponents = jpxImage.tiles[k];
-        let tileWidth = tileComponents.width;
-        let tileHeight = tileComponents.height;
-        let tileLeft = tileComponents.left;
-        let tileTop = tileComponents.top;
+        let tileComponents = jpxImage.tiles[k]
+        let tileWidth = tileComponents.width
+        let tileHeight = tileComponents.height
+        let tileLeft = tileComponents.left
+        let tileTop = tileComponents.top
 
-        let src = tileComponents.items;
-        let srcPosition = 0;
-        let dataPosition = (width * tileTop + tileLeft) * componentsCount;
-        let imgRowSize = width * componentsCount;
-        let tileRowSize = tileWidth * componentsCount;
+        let src = tileComponents.items
+        let srcPosition = 0
+        let dataPosition = (width * tileTop + tileLeft) * componentsCount
+        let imgRowSize = width * componentsCount
+        let tileRowSize = tileWidth * componentsCount
 
         for (let j = 0; j < tileHeight; j++) {
-          let rowBytes = src.subarray(srcPosition, srcPosition + tileRowSize);
-          data.set(rowBytes, dataPosition);
-          srcPosition += tileRowSize;
-          dataPosition += imgRowSize;
+          let rowBytes = src.subarray(srcPosition, srcPosition + tileRowSize)
+          data.set(rowBytes, dataPosition)
+          srcPosition += tileRowSize
+          dataPosition += imgRowSize
         }
       }
-      this.buffer = data;
+      this.buffer = data
     }
-    this.bufferLength = this.buffer.length;
-    this.eof = true;
-  };
+    this.bufferLength = this.buffer.length
+    this.eof = true
+  }
 
-  return JpxStream;
-})();
+  return JpxStream
+})()
 
 export {
   JpxStream,
-};
+}

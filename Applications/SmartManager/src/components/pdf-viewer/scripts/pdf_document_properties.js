@@ -98,7 +98,7 @@ class PDFDocumentProperties {
         enumerable: true,
         configurable: true,
       })
-    };
+    }
 
     Promise.all([this.overlayManager.open(this.overlayName),
       this._dataAvailableCapability.promise]).then(() => {
@@ -111,7 +111,7 @@ class PDFDocumentProperties {
           currentPageNumber === this.fieldData['_currentPageNumber'] &&
           pagesRotation === this.fieldData['_pagesRotation']) {
         this._updateUI()
-        return;
+        return
       }
 
       // Get the document properties.
@@ -127,10 +127,10 @@ class PDFDocumentProperties {
             this.pdfDocument.getPage(currentPageNumber).then((pdfPage) => {
               return this._parsePageSize(getPageSizeInches(pdfPage),
                 pagesRotation)
-          }),
+            }),
             this._parseLinearization(info.IsLinearized),
           ])
-      }).then(([info, metadata, fileName, fileSize, creationDate, modDate,
+        }).then(([info, metadata, fileName, fileSize, creationDate, modDate,
         pageSize, isLinearized]) => {
         freezeFieldData({
           'fileName': fileName,

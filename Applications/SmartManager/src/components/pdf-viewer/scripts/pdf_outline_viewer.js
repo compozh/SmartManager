@@ -78,7 +78,7 @@ class PDFOutlineViewer {
         rel: linkService.externalLinkRel,
         enabled: linkService.externalLinkEnabled,
       })
-      return;
+      return
     }
 
     element.href = linkService.getDestinationHash(dest)
@@ -87,7 +87,7 @@ class PDFOutlineViewer {
         linkService.navigateTo(dest)
       }
       return false
-    };
+    }
   }
 
   /**
@@ -170,7 +170,7 @@ class PDFOutlineViewer {
 
     if (!outline) {
       this._dispatchEvent(outlineCount)
-      return;
+      return
     }
 
     let fragment = document.createDocumentFragment()

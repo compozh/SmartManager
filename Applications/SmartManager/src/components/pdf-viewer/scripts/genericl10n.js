@@ -13,41 +13,41 @@
  * limitations under the License.
  */
 
-import '../external/webL10n/l10n';
+import '../external/webL10n/l10n'
 
-let webL10n = document.webL10n;
+let webL10n = document.webL10n
 
 class GenericL10n {
   constructor(lang) {
-    this._lang = lang;
+    this._lang = lang
     this._ready = new Promise((resolve, reject) => {
       webL10n.setLanguage(lang, () => {
-        resolve(webL10n);
-      });
-    });
+        resolve(webL10n)
+      })
+    })
   }
 
   async getLanguage() {
-    const l10n = await this._ready;
-    return l10n.getLanguage();
+    const l10n = await this._ready
+    return l10n.getLanguage()
   }
 
   async getDirection() {
-    const l10n = await this._ready;
-    return l10n.getDirection();
+    const l10n = await this._ready
+    return l10n.getDirection()
   }
 
   async get(property, args, fallback) {
-    const l10n = await this._ready;
-    return l10n.get(property, args, fallback);
+    const l10n = await this._ready
+    return l10n.get(property, args, fallback)
   }
 
   async translate(element) {
-    const l10n = await this._ready;
-    return l10n.translate(element);
+    const l10n = await this._ready
+    return l10n.translate(element)
   }
 }
 
 export {
   GenericL10n,
-};
+}

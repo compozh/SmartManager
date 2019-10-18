@@ -221,7 +221,7 @@ class PDFPageView {
         cssTransform: true,
         timestamp: performance.now(),
       })
-      return;
+      return
     }
 
     let isScalingRestricted = false
@@ -245,7 +245,7 @@ class PDFPageView {
           cssTransform: true,
           timestamp: performance.now(),
         })
-        return;
+        return
       }
       if (!this.zoomLayer && !this.canvas.hasAttribute('hidden')) {
         this.zoomLayer = this.canvas.parentNode
@@ -320,22 +320,22 @@ class PDFPageView {
       switch (textAbsRotation) {
       case 0:
         transX = transY = 0
-          break;
+        break
       case 90:
         transX = 0
-          transY = '-' + textLayerDiv.style.height
-          break;
+        transY = '-' + textLayerDiv.style.height
+        break
       case 180:
         transX = '-' + textLayerDiv.style.width
-          transY = '-' + textLayerDiv.style.height
-          break;
+        transY = '-' + textLayerDiv.style.height
+        break
       case 270:
         transX = '-' + textLayerDiv.style.width
-          transY = 0
-          break;
+        transY = 0
+        break
       default:
         console.error('Bad rotation value.')
-          break;
+        break
       }
 
       textLayerDiv.style.transform =
@@ -418,11 +418,11 @@ class PDFPageView {
           this.resume = () => {
             this.renderingState = RenderingStates.RUNNING
             cont()
-          };
+          }
           return
         }
         cont()
-      };
+      }
     }
 
     const finishPaintTask = async (error) => {
@@ -435,7 +435,7 @@ class PDFPageView {
 
       if (error instanceof RenderingCancelledException) {
         this.error = null
-        return;
+        return
       }
 
       this.renderingState = RenderingStates.FINISHED

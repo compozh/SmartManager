@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 // https://github.com/tc39/proposal-iterator-helpers
-var $ = require('../internals/export');
-var anObject = require('../internals/an-object');
-var toPositiveInteger = require('../internals/to-positive-integer');
-var createAsyncIteratorProxy = require('../internals/create-async-iterator-proxy');
+var $ = require('../internals/export')
+var anObject = require('../internals/an-object')
+var toPositiveInteger = require('../internals/to-positive-integer')
+var createAsyncIteratorProxy = require('../internals/create-async-iterator-proxy')
 
 var AsyncIteratorProxy = createAsyncIteratorProxy(function (arg, Promise) {
-  var state = this;
+  var state = this
 
   return new Promise(function (resolve, reject) {
     var loop = function () {
@@ -16,26 +16,26 @@ var AsyncIteratorProxy = createAsyncIteratorProxy(function (arg, Promise) {
         ).then(function (step) {
           try {
             if (anObject(step).done) {
-              state.done = true;
-              resolve({ done: true, value: undefined });
+              state.done = true
+              resolve({ done: true, value: undefined })
             } else if (state.remaining) {
-              state.remaining--;
-              loop();
-            } else resolve({ done: false, value: step.value });
-          } catch (err) { reject(err); }
-        }, reject);
-      } catch (error) { reject(error); }
-    };
+              state.remaining--
+              loop()
+            } else { resolve({ done: false, value: step.value }) }
+          } catch (err) { reject(err) }
+        }, reject)
+      } catch (error) { reject(error) }
+    }
 
-    loop();
-  });
-});
+    loop()
+  })
+})
 
 $({ target: 'AsyncIterator', proto: true, real: true }, {
   drop: function drop(limit) {
     return new AsyncIteratorProxy({
       iterator: anObject(this),
       remaining: toPositiveInteger(limit)
-    });
+    })
   }
-});
+})

@@ -1,4 +1,4 @@
-require('../proposals/promise-any');
-require('../proposals/string-replace-all');
+require('../proposals/promise-any')
+require('../proposals/string-replace-all')
 
-module.exports = require('./4');
+module.exports = require('./4')

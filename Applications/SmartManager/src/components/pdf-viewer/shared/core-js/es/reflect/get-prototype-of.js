@@ -1,4 +1,4 @@
-require('../../modules/es.reflect.get-prototype-of');
-var path = require('../../internals/path');
+require('../../modules/es.reflect.get-prototype-of')
+var path = require('../../internals/path')
 
-module.exports = path.Reflect.getPrototypeOf;
+module.exports = path.Reflect.getPrototypeOf

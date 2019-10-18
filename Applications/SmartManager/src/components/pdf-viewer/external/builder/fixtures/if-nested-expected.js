@@ -1,6 +1,6 @@
-'use strict';
-var a;
+'use strict'
+var a
 
-var b;
+var b
 
-var d;
+var d

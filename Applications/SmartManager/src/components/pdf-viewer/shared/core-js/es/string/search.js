@@ -1,4 +1,4 @@
-require('../../modules/es.string.search');
-var entryUnbind = require('../../internals/entry-unbind');
+require('../../modules/es.string.search')
+var entryUnbind = require('../../internals/entry-unbind')
 
-module.exports = entryUnbind('String', 'search');
+module.exports = entryUnbind('String', 'search')

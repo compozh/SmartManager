@@ -1,4 +1,4 @@
-require('../../modules/es.math.trunc');
-var path = require('../../internals/path');
+require('../../modules/es.math.trunc')
+var path = require('../../internals/path')
 
-module.exports = path.Math.trunc;
+module.exports = path.Math.trunc

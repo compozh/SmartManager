@@ -1,4 +1,4 @@
-require('../../modules/es.reflect.get-own-property-descriptor');
-var path = require('../../internals/path');
+require('../../modules/es.reflect.get-own-property-descriptor')
+var path = require('../../internals/path')
 
-module.exports = path.Reflect.getOwnPropertyDescriptor;
+module.exports = path.Reflect.getOwnPropertyDescriptor

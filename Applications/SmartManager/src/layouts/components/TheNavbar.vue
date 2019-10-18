@@ -198,7 +198,7 @@
 <script>
 
 import templateConfig from '@/templateConfig'
-import auth from "@/api/auth/auth"
+import auth from '@/api/auth/auth'
 
 export default {
   name: 'the-navbar',

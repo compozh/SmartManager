@@ -1,1 +1,1 @@
-module.exports = require('../../stable/url-search-params');
+module.exports = require('../../stable/url-search-params')

@@ -1,4 +1,4 @@
-require('../../modules/es.math.fround');
-var path = require('../../internals/path');
+require('../../modules/es.math.fround')
+var path = require('../../internals/path')
 
-module.exports = path.Math.fround;
+module.exports = path.Math.fround

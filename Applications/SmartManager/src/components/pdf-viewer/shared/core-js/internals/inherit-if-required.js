@@ -1,9 +1,9 @@
-var isObject = require('../internals/is-object');
-var setPrototypeOf = require('../internals/object-set-prototype-of');
+var isObject = require('../internals/is-object')
+var setPrototypeOf = require('../internals/object-set-prototype-of')
 
 // makes subclassing work correct for wrapped built-ins
 module.exports = function ($this, dummy, Wrapper) {
-  var NewTarget, NewTargetPrototype;
+  var NewTarget, NewTargetPrototype
   if (
     // it can work only with native `setPrototypeOf`
     setPrototypeOf &&
@@ -12,6 +12,6 @@ module.exports = function ($this, dummy, Wrapper) {
     NewTarget !== Wrapper &&
     isObject(NewTargetPrototype = NewTarget.prototype) &&
     NewTargetPrototype !== Wrapper.prototype
-  ) setPrototypeOf($this, NewTargetPrototype);
-  return $this;
-};
+  ) { setPrototypeOf($this, NewTargetPrototype) }
+  return $this
+}

@@ -66,7 +66,7 @@ function composePage(pdfDocument, pageNumber, size, printContainer) {
         obj.done()
       }
     })
-  };
+  }
 }
 
 function FirefoxPrintService(pdfDocument, pagesOverview, printContainer) {

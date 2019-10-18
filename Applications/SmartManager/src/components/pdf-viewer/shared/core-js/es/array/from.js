@@ -1,5 +1,5 @@
-require('../../modules/es.string.iterator');
-require('../../modules/es.array.from');
-var path = require('../../internals/path');
+require('../../modules/es.string.iterator')
+require('../../modules/es.array.from')
+var path = require('../../internals/path')
 
-module.exports = path.Array.from;
+module.exports = path.Array.from

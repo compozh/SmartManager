@@ -1,1 +1,1 @@
-module.exports = require('../../es/promise/all-settled');
+module.exports = require('../../es/promise/all-settled')

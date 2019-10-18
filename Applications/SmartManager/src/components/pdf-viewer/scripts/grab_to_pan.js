@@ -24,26 +24,26 @@
  *  shows whether grab-to-pan is activated.
  */
 function GrabToPan(options) {
-  this.element = options.element;
-  this.document = options.element.ownerDocument;
+  this.element = options.element
+  this.document = options.element.ownerDocument
   if (typeof options.ignoreTarget === 'function') {
-    this.ignoreTarget = options.ignoreTarget;
+    this.ignoreTarget = options.ignoreTarget
   }
-  this.onActiveChanged = options.onActiveChanged;
+  this.onActiveChanged = options.onActiveChanged
 
   // Bind the contexts to ensure that `this` always points to
   // the GrabToPan instance.
-  this.activate = this.activate.bind(this);
-  this.deactivate = this.deactivate.bind(this);
-  this.toggle = this.toggle.bind(this);
-  this._onmousedown = this._onmousedown.bind(this);
-  this._onmousemove = this._onmousemove.bind(this);
-  this._endPan = this._endPan.bind(this);
+  this.activate = this.activate.bind(this)
+  this.deactivate = this.deactivate.bind(this)
+  this.toggle = this.toggle.bind(this)
+  this._onmousedown = this._onmousedown.bind(this)
+  this._onmousemove = this._onmousemove.bind(this)
+  this._endPan = this._endPan.bind(this)
 
   // This overlay will be inserted in the document when the mouse moves during
   // a grab operation, to ensure that the cursor has the desired appearance.
-  var overlay = this.overlay = document.createElement('div');
-  overlay.className = 'grab-to-pan-grabbing';
+  var overlay = this.overlay = document.createElement('div')
+  overlay.className = 'grab-to-pan-grabbing'
 }
 GrabToPan.prototype = {
   /**
@@ -56,11 +56,11 @@ GrabToPan.prototype = {
    */
   activate: function GrabToPan_activate() {
     if (!this.active) {
-      this.active = true;
-      this.element.addEventListener('mousedown', this._onmousedown, true);
-      this.element.classList.add(this.CSS_CLASS_GRAB);
+      this.active = true
+      this.element.addEventListener('mousedown', this._onmousedown, true)
+      this.element.classList.add(this.CSS_CLASS_GRAB)
       if (this.onActiveChanged) {
-        this.onActiveChanged(true);
+        this.onActiveChanged(true)
       }
     }
   },
@@ -70,21 +70,21 @@ GrabToPan.prototype = {
    */
   deactivate: function GrabToPan_deactivate() {
     if (this.active) {
-      this.active = false;
-      this.element.removeEventListener('mousedown', this._onmousedown, true);
-      this._endPan();
-      this.element.classList.remove(this.CSS_CLASS_GRAB);
+      this.active = false
+      this.element.removeEventListener('mousedown', this._onmousedown, true)
+      this._endPan()
+      this.element.classList.remove(this.CSS_CLASS_GRAB)
       if (this.onActiveChanged) {
-        this.onActiveChanged(false);
+        this.onActiveChanged(false)
       }
     }
   },
 
   toggle: function GrabToPan_toggle() {
     if (this.active) {
-      this.deactivate();
+      this.deactivate()
     } else {
-      this.activate();
+      this.activate()
     }
   },
 
@@ -100,7 +100,7 @@ GrabToPan.prototype = {
     // is (a child of) an input element / link
     return node[matchesSelector](
       'a[href], a[href] *, input, textarea, button, button *, select, option'
-    );
+    )
   },
 
   /**
@@ -108,34 +108,34 @@ GrabToPan.prototype = {
    */
   _onmousedown: function GrabToPan__onmousedown(event) {
     if (event.button !== 0 || this.ignoreTarget(event.target)) {
-      return;
+      return
     }
     if (event.originalTarget) {
       try {
         // eslint-disable-next-line no-unused-expressions
-        event.originalTarget.tagName;
+        event.originalTarget.tagName
       } catch (e) {
         // Mozilla-specific: element is a scrollbar (XUL element)
-        return;
+        return
       }
     }
 
-    this.scrollLeftStart = this.element.scrollLeft;
-    this.scrollTopStart = this.element.scrollTop;
-    this.clientXStart = event.clientX;
-    this.clientYStart = event.clientY;
-    this.document.addEventListener('mousemove', this._onmousemove, true);
-    this.document.addEventListener('mouseup', this._endPan, true);
+    this.scrollLeftStart = this.element.scrollLeft
+    this.scrollTopStart = this.element.scrollTop
+    this.clientXStart = event.clientX
+    this.clientYStart = event.clientY
+    this.document.addEventListener('mousemove', this._onmousemove, true)
+    this.document.addEventListener('mouseup', this._endPan, true)
     // When a scroll event occurs before a mousemove, assume that the user
     // dragged a scrollbar (necessary for Opera Presto, Safari and IE)
     // (not needed for Chrome/Firefox)
-    this.element.addEventListener('scroll', this._endPan, true);
-    event.preventDefault();
-    event.stopPropagation();
+    this.element.addEventListener('scroll', this._endPan, true)
+    event.preventDefault()
+    event.stopPropagation()
 
-    var focusedElement = document.activeElement;
+    var focusedElement = document.activeElement
     if (focusedElement && !focusedElement.contains(event.target)) {
-      focusedElement.blur();
+      focusedElement.blur()
     }
   },
 
@@ -143,27 +143,27 @@ GrabToPan.prototype = {
    * @private
    */
   _onmousemove: function GrabToPan__onmousemove(event) {
-    this.element.removeEventListener('scroll', this._endPan, true);
+    this.element.removeEventListener('scroll', this._endPan, true)
     if (isLeftMouseReleased(event)) {
-      this._endPan();
-      return;
+      this._endPan()
+      return
     }
-    var xDiff = event.clientX - this.clientXStart;
-    var yDiff = event.clientY - this.clientYStart;
-    var scrollTop = this.scrollTopStart - yDiff;
-    var scrollLeft = this.scrollLeftStart - xDiff;
+    var xDiff = event.clientX - this.clientXStart
+    var yDiff = event.clientY - this.clientYStart
+    var scrollTop = this.scrollTopStart - yDiff
+    var scrollLeft = this.scrollLeftStart - xDiff
     if (this.element.scrollTo) {
       this.element.scrollTo({
         top: scrollTop,
         left: scrollLeft,
         behavior: 'instant',
-      });
+      })
     } else {
-      this.element.scrollTop = scrollTop;
-      this.element.scrollLeft = scrollLeft;
+      this.element.scrollTop = scrollTop
+      this.element.scrollLeft = scrollLeft
     }
     if (!this.overlay.parentNode) {
-      document.body.appendChild(this.overlay);
+      document.body.appendChild(this.overlay)
     }
   },
 
@@ -171,36 +171,36 @@ GrabToPan.prototype = {
    * @private
    */
   _endPan: function GrabToPan__endPan() {
-    this.element.removeEventListener('scroll', this._endPan, true);
-    this.document.removeEventListener('mousemove', this._onmousemove, true);
-    this.document.removeEventListener('mouseup', this._endPan, true);
+    this.element.removeEventListener('scroll', this._endPan, true)
+    this.document.removeEventListener('mousemove', this._onmousemove, true)
+    this.document.removeEventListener('mouseup', this._endPan, true)
     // Note: ChildNode.remove doesn't throw if the parentNode is undefined.
-    this.overlay.remove();
+    this.overlay.remove()
   },
-};
+}
 
 // Get the correct (vendor-prefixed) name of the matches method.
 var matchesSelector;
 ['webkitM', 'mozM', 'msM', 'oM', 'm'].some(function(prefix) {
-  var name = prefix + 'atches';
+  var name = prefix + 'atches'
   if (name in document.documentElement) {
-    matchesSelector = name;
+    matchesSelector = name
   }
-  name += 'Selector';
+  name += 'Selector'
   if (name in document.documentElement) {
-    matchesSelector = name;
+    matchesSelector = name
   }
-  return matchesSelector; // If found, then truthy, and [].some() ends.
-});
+  return matchesSelector // If found, then truthy, and [].some() ends.
+})
 
 // Browser sniffing because it's impossible to feature-detect
 // whether event.which for onmousemove is reliable
-var isNotIEorIsIE10plus = !document.documentMode || document.documentMode > 9;
-var chrome = window.chrome;
-var isChrome15OrOpera15plus = chrome && (chrome.webstore || chrome.app);
+var isNotIEorIsIE10plus = !document.documentMode || document.documentMode > 9
+var chrome = window.chrome
+var isChrome15OrOpera15plus = chrome && (chrome.webstore || chrome.app)
 //                                       ^ Chrome 15+       ^ Opera 15+
 var isSafari6plus = /Apple/.test(navigator.vendor) &&
-                    /Version\/([6-9]\d*|[1-5]\d+)/.test(navigator.userAgent);
+                    /Version\/([6-9]\d*|[1-5]\d+)/.test(navigator.userAgent)
 
 /**
  * Whether the left mouse is not pressed.
@@ -213,17 +213,17 @@ function isLeftMouseReleased(event) {
     // http://www.w3.org/TR/DOM-Level-3-Events/#events-MouseEvent-buttons
     // Firefox 15+
     // Internet Explorer 10+
-    return !(event.buttons & 1);
+    return !(event.buttons & 1)
   }
   if (isChrome15OrOpera15plus || isSafari6plus) {
     // Chrome 14+
     // Opera 15+
     // Safari 6.0+
-    return event.which === 0;
+    return event.which === 0
   }
-  return false;
+  return false
 }
 
 export {
   GrabToPan,
-};
+}

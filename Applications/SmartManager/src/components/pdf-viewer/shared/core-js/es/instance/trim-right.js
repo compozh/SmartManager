@@ -1,9 +1,9 @@
-var trimRight = require('../string/virtual/trim-right');
+var trimRight = require('../string/virtual/trim-right')
 
-var StringPrototype = String.prototype;
+var StringPrototype = String.prototype
 
 module.exports = function (it) {
-  var own = it.trimRight;
+  var own = it.trimRight
   return typeof it === 'string' || it === StringPrototype
-    || (it instanceof String && own === StringPrototype.trimRight) ? trimRight : own;
-};
+    || (it instanceof String && own === StringPrototype.trimRight) ? trimRight : own
+}

@@ -1,4 +1,4 @@
-require('../../modules/esnext.array.is-template-object');
-var path = require('../../internals/path');
+require('../../modules/esnext.array.is-template-object')
+var path = require('../../internals/path')
 
-module.exports = path.Array.isTemplateObject;
+module.exports = path.Array.isTemplateObject

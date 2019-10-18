@@ -1,4 +1,4 @@
-var defineWellKnownSymbol = require('../internals/define-well-known-symbol');
+var defineWellKnownSymbol = require('../internals/define-well-known-symbol')
 
 // `Symbol.matchAll` well-known symbol
-defineWellKnownSymbol('matchAll');
+defineWellKnownSymbol('matchAll')

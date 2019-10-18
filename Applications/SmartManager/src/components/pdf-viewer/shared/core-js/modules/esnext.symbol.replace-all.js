@@ -1,4 +1,4 @@
 // TODO: remove from `core-js@4`
-var defineWellKnownSymbol = require('../internals/define-well-known-symbol');
+var defineWellKnownSymbol = require('../internals/define-well-known-symbol')
 
-defineWellKnownSymbol('replaceAll');
+defineWellKnownSymbol('replaceAll')

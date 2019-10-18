@@ -1,3 +1,3 @@
-var global = require('../internals/global');
+var global = require('../internals/global')
 
-module.exports = global.Promise;
+module.exports = global.Promise

@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
-var url = location.search.match(/[&?]file=([^&]+)/i);
+var url = location.search.match(/[&?]file=([^&]+)/i)
 if (url) {
-  url = decodeURIComponent(url[1]);
-  document.body.textContent = url;
+  url = decodeURIComponent(url[1])
+  document.body.textContent = url
   // Set cursor to end of the content-editable section.
-  window.getSelection().selectAllChildren(document.body);
-  window.getSelection().collapseToEnd();
+  window.getSelection().selectAllChildren(document.body)
+  window.getSelection().collapseToEnd()
 }

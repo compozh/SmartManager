@@ -1,4 +1,4 @@
-require('../../../modules/es.string.small');
-var entryVirtual = require('../../../internals/entry-virtual');
+require('../../../modules/es.string.small')
+var entryVirtual = require('../../../internals/entry-virtual')
 
-module.exports = entryVirtual('String').small;
+module.exports = entryVirtual('String').small

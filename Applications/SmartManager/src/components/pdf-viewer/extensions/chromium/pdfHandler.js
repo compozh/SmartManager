@@ -15,12 +15,12 @@ limitations under the License.
 */
 /* import-globals-from preserve-referer.js */
 
-'use strict';
+'use strict'
 
-var VIEWER_URL = chrome.extension.getURL('content/web/viewer.html');
+var VIEWER_URL = chrome.extension.getURL('content/web/viewer.html')
 
 function getViewerURL(pdf_url) {
-  return VIEWER_URL + '?file=' + encodeURIComponent(pdf_url);
+  return VIEWER_URL + '?file=' + encodeURIComponent(pdf_url)
 }
 
 /**
@@ -30,7 +30,7 @@ function getViewerURL(pdf_url) {
  */
 function isPdfDownloadable(details) {
   if (details.url.includes('pdfjs.action=download')) {
-    return true;
+    return true
   }
   // Display the PDF viewer regardless of the Content-Disposition header if the
   // file is displayed in the main frame, since most often users want to view
@@ -40,11 +40,11 @@ function isPdfDownloadable(details) {
   // header specifies an attachment. This allows sites like Google Drive to
   // operate correctly (#6106).
   if (details.type === 'main_frame' && !details.url.includes('=download')) {
-    return false;
+    return false
   }
   var cdHeader = (details.responseHeaders &&
-    getHeaderFromHeaders(details.responseHeaders, 'content-disposition'));
-  return (cdHeader && /^attachment/i.test(cdHeader.value));
+    getHeaderFromHeaders(details.responseHeaders, 'content-disposition'))
+  return (cdHeader && /^attachment/i.test(cdHeader.value))
 }
 
 /**
@@ -54,12 +54,12 @@ function isPdfDownloadable(details) {
  */
 function getHeaderFromHeaders(headers, headerName) {
   for (var i = 0; i < headers.length; ++i) {
-    var header = headers[i];
+    var header = headers[i]
     if (header.name.toLowerCase() === headerName) {
-      return header;
+      return header
     }
   }
-  return undefined;
+  return undefined
 }
 
 /**
@@ -70,24 +70,24 @@ function getHeaderFromHeaders(headers, headerName) {
  * @returns {boolean} True if the resource is a PDF file.
  */
 function isPdfFile(details) {
-  var header = getHeaderFromHeaders(details.responseHeaders, 'content-type');
+  var header = getHeaderFromHeaders(details.responseHeaders, 'content-type')
   if (header) {
-    var headerValue = header.value.toLowerCase().split(';', 1)[0].trim();
+    var headerValue = header.value.toLowerCase().split(';', 1)[0].trim()
     if (headerValue === 'application/pdf') {
-      return true;
+      return true
     }
     if (headerValue === 'application/octet-stream') {
       if (details.url.toLowerCase().indexOf('.pdf') > 0) {
-        return true;
+        return true
       }
       var cdHeader =
-        getHeaderFromHeaders(details.responseHeaders, 'content-disposition');
+        getHeaderFromHeaders(details.responseHeaders, 'content-disposition')
       if (cdHeader && /\.pdf(["']|$)/i.test(cdHeader.value)) {
-        return true;
+        return true
       }
     }
   }
-  return false;
+  return false
 }
 
 /**
@@ -100,39 +100,39 @@ function isPdfFile(details) {
  *                             have been modified, undefined otherwise.
  */
 function getHeadersWithContentDispositionAttachment(details) {
-  var headers = details.responseHeaders;
-  var cdHeader = getHeaderFromHeaders(headers, 'content-disposition');
+  var headers = details.responseHeaders
+  var cdHeader = getHeaderFromHeaders(headers, 'content-disposition')
   if (!cdHeader) {
-    cdHeader = { name: 'Content-Disposition', };
-    headers.push(cdHeader);
+    cdHeader = { name: 'Content-Disposition', }
+    headers.push(cdHeader)
   }
   if (!/^attachment/i.test(cdHeader.value)) {
-    cdHeader.value = 'attachment' + cdHeader.value.replace(/^[^;]+/i, '');
-    return { responseHeaders: headers, };
+    cdHeader.value = 'attachment' + cdHeader.value.replace(/^[^;]+/i, '')
+    return { responseHeaders: headers, }
   }
-  return undefined;
+  return undefined
 }
 
 chrome.webRequest.onHeadersReceived.addListener(
   function(details) {
     if (details.method !== 'GET') {
       // Don't intercept POST requests until http://crbug.com/104058 is fixed.
-      return undefined;
+      return undefined
     }
     if (!isPdfFile(details)) {
-      return undefined;
+      return undefined
     }
     if (isPdfDownloadable(details)) {
       // Force download by ensuring that Content-Disposition: attachment is set
-      return getHeadersWithContentDispositionAttachment(details);
+      return getHeadersWithContentDispositionAttachment(details)
     }
 
-    var viewerUrl = getViewerURL(details.url);
+    var viewerUrl = getViewerURL(details.url)
 
     // Implemented in preserve-referer.js
-    saveReferer(details);
+    saveReferer(details)
 
-    return { redirectUrl: viewerUrl, };
+    return { redirectUrl: viewerUrl, }
   },
   {
     urls: [
@@ -140,17 +140,17 @@ chrome.webRequest.onHeadersReceived.addListener(
     ],
     types: ['main_frame', 'sub_frame'],
   },
-  ['blocking', 'responseHeaders']);
+  ['blocking', 'responseHeaders'])
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
     if (isPdfDownloadable(details)) {
-      return undefined;
+      return undefined
     }
 
-    var viewerUrl = getViewerURL(details.url);
+    var viewerUrl = getViewerURL(details.url)
 
-    return { redirectUrl: viewerUrl, };
+    return { redirectUrl: viewerUrl, }
   },
   {
     urls: [
@@ -159,21 +159,21 @@ chrome.webRequest.onBeforeRequest.addListener(
       ...(
         // Duck-typing: MediaError.prototype.message was added in Chrome 59.
         MediaError.prototype.hasOwnProperty('message') ? [] :
-        [
+          [
           // Note: Chrome 59 has disabled ftp resource loading by default:
           // https://www.chromestatus.com/feature/5709390967472128
-          'ftp://*/*.pdf',
-          'ftp://*/*.PDF',
-        ]
+            'ftp://*/*.pdf',
+            'ftp://*/*.PDF',
+          ]
       ),
     ],
     types: ['main_frame', 'sub_frame'],
   },
-  ['blocking']);
+  ['blocking'])
 
 chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
   if (isAllowedAccess) {
-    return;
+    return
   }
   // If the user has not granted access to file:-URLs, then the webRequest API
   // will not catch the request. It is still visible through the webNavigation
@@ -184,7 +184,7 @@ chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
     if (details.frameId === 0 && !isPdfDownloadable(details)) {
       chrome.tabs.update(details.tabId, {
         url: getViewerURL(details.url),
-      });
+      })
     }
   }, {
     url: [{
@@ -194,61 +194,61 @@ chrome.extension.isAllowedFileSchemeAccess(function(isAllowedAccess) {
       urlPrefix: 'file://',
       pathSuffix: '.PDF',
     }],
-  });
-});
+  })
+})
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message && message.action === 'getParentOrigin') {
     // getParentOrigin is used to determine whether it is safe to embed a
     // sensitive (local) file in a frame.
     if (!sender.tab) {
-      sendResponse('');
-      return undefined;
+      sendResponse('')
+      return undefined
     }
     // TODO: This should be the URL of the parent frame, not the tab. But
     // chrome-extension:-URLs are not visible in the webNavigation API
     // (https://crbug.com/326768), so the next best thing is using the tab's URL
     // for making security decisions.
-    var parentUrl = sender.tab.url;
+    var parentUrl = sender.tab.url
     if (!parentUrl) {
-      sendResponse('');
-      return undefined;
+      sendResponse('')
+      return undefined
     }
     if (parentUrl.lastIndexOf('file:', 0) === 0) {
-      sendResponse('file://');
-      return undefined;
+      sendResponse('file://')
+      return undefined
     }
     // The regexp should always match for valid URLs, but in case it doesn't,
     // just give the full URL (e.g. data URLs).
-    var origin = /^[^:]+:\/\/[^/]+/.exec(parentUrl);
-    sendResponse(origin ? origin[1] : parentUrl);
-    return true;
+    var origin = /^[^:]+:\/\/[^/]+/.exec(parentUrl)
+    sendResponse(origin ? origin[1] : parentUrl)
+    return true
   }
   if (message && message.action === 'isAllowedFileSchemeAccess') {
-    chrome.extension.isAllowedFileSchemeAccess(sendResponse);
-    return true;
+    chrome.extension.isAllowedFileSchemeAccess(sendResponse)
+    return true
   }
   if (message && message.action === 'openExtensionsPageForFileAccess') {
-    var url = 'chrome://extensions/?id=' + chrome.runtime.id;
+    var url = 'chrome://extensions/?id=' + chrome.runtime.id
     if (message.data.newTab) {
       chrome.tabs.create({
         windowId: sender.tab.windowId,
         index: sender.tab.index + 1,
         url: url,
         openerTabId: sender.tab.id,
-      });
+      })
     } else {
       chrome.tabs.update(sender.tab.id, {
         url: url,
-      });
+      })
     }
   }
-  return undefined;
-});
+  return undefined
+})
 
 // Remove keys from storage that were once part of the deleted feature-detect.js
 chrome.storage.local.remove([
   'featureDetectLastUA',
   'webRequestRedirectUrl',
   'extensionSupportsFTP',
-]);
+])

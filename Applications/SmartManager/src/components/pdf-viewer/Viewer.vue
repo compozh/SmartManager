@@ -412,16 +412,18 @@
 </template>
 
 <script>
-require('./scripts/viewer.js')
+
+import { webViewerLoad } from './scripts/viewer.js'
 export default {
   mounted() {
+    webViewerLoad('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
 
   }
 }
 </script>
 
 <style scoped>
-  
+
   #viewerComponent {
     width: 100%;
     height: 100%;

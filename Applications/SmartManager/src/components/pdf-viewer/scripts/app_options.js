@@ -276,7 +276,7 @@ class AppOptions {
           if (valueType === 'boolean' || valueType === 'string' ||
               (valueType === 'number' && Number.isInteger(value))) {
             options[name] = value
-            continue;
+            continue
           }
           throw new Error(`Invalid type for preference: ${name}`)
         }

@@ -403,8 +403,8 @@ let PDFViewerApplication = {
       eventBus, this.l10n)
   },
 
-  run(config) {
-    this.initialize(config).then(webViewerInitialized)
+  run(config, url) {
+    this.initialize(config).then(() => webViewerInitialized(url))
   },
 
   zoomIn(ticks) {
@@ -1559,19 +1559,19 @@ function loadAndEnablePDFBug(enabledTabs) {
   })
 }
 
-function webViewerInitialized() {
+function webViewerInitialized(url) {
   let appConfig = PDFViewerApplication.appConfig
-  let file
-  if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
-    let queryString = document.location.search.substring(1)
-    let params = parseQueryString(queryString)
-    file = 'file' in params ? params.file : AppOptions.get('defaultUrl')
-    validateFileURL(file)
-  } else if (PDFJSDev.test('FIREFOX || MOZCENTRAL')) {
-    file = window.location.href.split('#')[0]
-  } else if (PDFJSDev.test('CHROME')) {
-    file = AppOptions.get('defaultUrl')
-  }
+  let file = url
+  // if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
+  //   let queryString = document.location.search.substring(1)
+  //   let params = parseQueryString(queryString)
+  //   file = 'file' in params ? params.file : AppOptions.get('defaultUrl')
+  //   validateFileURL(file)
+  // } else if (PDFJSDev.test('FIREFOX || MOZCENTRAL')) {
+  //   file = window.location.href.split('#')[0]
+  // } else if (PDFJSDev.test('CHROME')) {
+  //   file = AppOptions.get('defaultUrl')
+  // }
 
   if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
     let fileInput = document.createElement('input')

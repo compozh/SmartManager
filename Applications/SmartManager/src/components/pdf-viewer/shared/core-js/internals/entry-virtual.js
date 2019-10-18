@@ -1,5 +1,5 @@
-var global = require('../internals/global');
+var global = require('../internals/global')
 
 module.exports = function (CONSTRUCTOR) {
-  return global[CONSTRUCTOR].prototype;
-};
+  return global[CONSTRUCTOR].prototype
+}

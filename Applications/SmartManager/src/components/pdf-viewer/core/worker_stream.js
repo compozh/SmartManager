@@ -14,120 +14,120 @@
  */
 /* eslint no-var: error */
 
-import { assert } from '../shared/util';
+import { assert } from '../shared/util'
 
 /** @implements {IPDFStream} */
 class PDFWorkerStream {
   constructor(msgHandler) {
-    this._msgHandler = msgHandler;
-    this._contentLength = null;
-    this._fullRequestReader = null;
-    this._rangeRequestReaders = [];
+    this._msgHandler = msgHandler
+    this._contentLength = null
+    this._fullRequestReader = null
+    this._rangeRequestReaders = []
   }
 
   getFullReader() {
-    assert(!this._fullRequestReader);
-    this._fullRequestReader = new PDFWorkerStreamReader(this._msgHandler);
-    return this._fullRequestReader;
+    assert(!this._fullRequestReader)
+    this._fullRequestReader = new PDFWorkerStreamReader(this._msgHandler)
+    return this._fullRequestReader
   }
 
   getRangeReader(begin, end) {
-    const reader = new PDFWorkerStreamRangeReader(begin, end, this._msgHandler);
-    this._rangeRequestReaders.push(reader);
-    return reader;
+    const reader = new PDFWorkerStreamRangeReader(begin, end, this._msgHandler)
+    this._rangeRequestReaders.push(reader)
+    return reader
   }
 
   cancelAllRequests(reason) {
     if (this._fullRequestReader) {
-      this._fullRequestReader.cancel(reason);
+      this._fullRequestReader.cancel(reason)
     }
-    const readers = this._rangeRequestReaders.slice(0);
+    const readers = this._rangeRequestReaders.slice(0)
     readers.forEach(function(reader) {
-      reader.cancel(reason);
-    });
+      reader.cancel(reason)
+    })
   }
 }
 
 /** @implements {IPDFStreamReader} */
 class PDFWorkerStreamReader {
   constructor(msgHandler) {
-    this._msgHandler = msgHandler;
-    this.onProgress = null;
+    this._msgHandler = msgHandler
+    this.onProgress = null
 
-    this._contentLength = null;
-    this._isRangeSupported = false;
-    this._isStreamingSupported = false;
+    this._contentLength = null
+    this._isRangeSupported = false
+    this._isStreamingSupported = false
 
-    const readableStream = this._msgHandler.sendWithStream('GetReader');
-    this._reader = readableStream.getReader();
+    const readableStream = this._msgHandler.sendWithStream('GetReader')
+    this._reader = readableStream.getReader()
 
     this._headersReady = this._msgHandler.sendWithPromise('ReaderHeadersReady').
-        then((data) => {
-      this._isStreamingSupported = data.isStreamingSupported;
-      this._isRangeSupported = data.isRangeSupported;
-      this._contentLength = data.contentLength;
-    });
+      then((data) => {
+        this._isStreamingSupported = data.isStreamingSupported
+        this._isRangeSupported = data.isRangeSupported
+        this._contentLength = data.contentLength
+      })
   }
 
   get headersReady() {
-    return this._headersReady;
+    return this._headersReady
   }
 
   get contentLength() {
-    return this._contentLength;
+    return this._contentLength
   }
 
   get isStreamingSupported() {
-    return this._isStreamingSupported;
+    return this._isStreamingSupported
   }
 
   get isRangeSupported() {
-    return this._isRangeSupported;
+    return this._isRangeSupported
   }
 
   async read() {
-    const { value, done, } = await this._reader.read();
+    const { value, done, } = await this._reader.read()
     if (done) {
-      return { value: undefined, done: true, };
+      return { value: undefined, done: true, }
     }
     // `value` is wrapped into Uint8Array, we need to
     // unwrap it to ArrayBuffer for further processing.
-    return { value: value.buffer, done: false, };
+    return { value: value.buffer, done: false, }
   }
 
   cancel(reason) {
-    this._reader.cancel(reason);
+    this._reader.cancel(reason)
   }
 }
 
 /** @implements {IPDFStreamRangeReader} */
 class PDFWorkerStreamRangeReader {
   constructor(begin, end, msgHandler) {
-    this._msgHandler = msgHandler;
-    this.onProgress = null;
+    this._msgHandler = msgHandler
+    this.onProgress = null
 
     const readableStream = this._msgHandler.sendWithStream('GetRangeReader',
-                                                           { begin, end, });
-    this._reader = readableStream.getReader();
+      { begin, end, })
+    this._reader = readableStream.getReader()
   }
 
   get isStreamingSupported() {
-    return false;
+    return false
   }
 
   async read() {
-    const { value, done, } = await this._reader.read();
+    const { value, done, } = await this._reader.read()
     if (done) {
-      return { value: undefined, done: true, };
+      return { value: undefined, done: true, }
     }
-    return { value: value.buffer, done: false, };
+    return { value: value.buffer, done: false, }
   }
 
   cancel(reason) {
-    this._reader.cancel(reason);
+    this._reader.cancel(reason)
   }
 }
 
 export {
   PDFWorkerStream,
-};
+}

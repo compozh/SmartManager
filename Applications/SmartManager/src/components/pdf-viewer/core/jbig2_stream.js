@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { isDict, isStream } from './primitives';
-import { DecodeStream } from './stream';
-import { Jbig2Image } from './jbig2';
-import { shadow } from '../shared/util';
+import { isDict, isStream } from './primitives'
+import { DecodeStream } from './stream'
+import { Jbig2Image } from './jbig2'
+import { shadow } from '../shared/util'
 
 /**
  * For JBIG2's we use a library to decode these images and
@@ -24,59 +24,59 @@ import { shadow } from '../shared/util';
  */
 let Jbig2Stream = (function Jbig2StreamClosure() {
   function Jbig2Stream(stream, maybeLength, dict, params) {
-    this.stream = stream;
-    this.maybeLength = maybeLength;
-    this.dict = dict;
-    this.params = params;
+    this.stream = stream
+    this.maybeLength = maybeLength
+    this.dict = dict
+    this.params = params
 
-    DecodeStream.call(this, maybeLength);
+    DecodeStream.call(this, maybeLength)
   }
 
-  Jbig2Stream.prototype = Object.create(DecodeStream.prototype);
+  Jbig2Stream.prototype = Object.create(DecodeStream.prototype)
 
   Object.defineProperty(Jbig2Stream.prototype, 'bytes', {
     get() {
       // If `this.maybeLength` is null, we'll get the entire stream.
-      return shadow(this, 'bytes', this.stream.getBytes(this.maybeLength));
+      return shadow(this, 'bytes', this.stream.getBytes(this.maybeLength))
     },
     configurable: true,
-  });
+  })
 
   Jbig2Stream.prototype.ensureBuffer = function(requested) {
     // No-op, since `this.readBlock` will always parse the entire image and
     // directly insert all of its data into `this.buffer`.
-  };
+  }
 
   Jbig2Stream.prototype.readBlock = function() {
     if (this.eof) {
-      return;
+      return
     }
-    let jbig2Image = new Jbig2Image();
+    let jbig2Image = new Jbig2Image()
 
-    let chunks = [];
+    let chunks = []
     if (isDict(this.params)) {
-      let globalsStream = this.params.get('JBIG2Globals');
+      let globalsStream = this.params.get('JBIG2Globals')
       if (isStream(globalsStream)) {
-        let globals = globalsStream.getBytes();
-        chunks.push({ data: globals, start: 0, end: globals.length, });
+        let globals = globalsStream.getBytes()
+        chunks.push({ data: globals, start: 0, end: globals.length, })
       }
     }
-    chunks.push({ data: this.bytes, start: 0, end: this.bytes.length, });
-    let data = jbig2Image.parseChunks(chunks);
-    let dataLength = data.length;
+    chunks.push({ data: this.bytes, start: 0, end: this.bytes.length, })
+    let data = jbig2Image.parseChunks(chunks)
+    let dataLength = data.length
 
     // JBIG2 had black as 1 and white as 0, inverting the colors
     for (let i = 0; i < dataLength; i++) {
-      data[i] ^= 0xFF;
+      data[i] ^= 0xFF
     }
-    this.buffer = data;
-    this.bufferLength = dataLength;
-    this.eof = true;
-  };
+    this.buffer = data
+    this.bufferLength = dataLength
+    this.eof = true
+  }
 
-  return Jbig2Stream;
-})();
+  return Jbig2Stream
+})()
 
 export {
   Jbig2Stream,
-};
+}

@@ -1,38 +1,38 @@
-var wellKnownSymbol = require('../internals/well-known-symbol');
+var wellKnownSymbol = require('../internals/well-known-symbol')
 
-var ITERATOR = wellKnownSymbol('iterator');
-var SAFE_CLOSING = false;
+var ITERATOR = wellKnownSymbol('iterator')
+var SAFE_CLOSING = false
 
 try {
-  var called = 0;
+  var called = 0
   var iteratorWithReturn = {
     next: function () {
-      return { done: !!called++ };
+      return { done: !!called++ }
     },
     'return': function () {
-      SAFE_CLOSING = true;
+      SAFE_CLOSING = true
     }
-  };
+  }
   iteratorWithReturn[ITERATOR] = function () {
-    return this;
-  };
+    return this
+  }
   // eslint-disable-next-line no-throw-literal
-  Array.from(iteratorWithReturn, function () { throw 2; });
+  Array.from(iteratorWithReturn, function () { throw 2 })
 } catch (error) { /* empty */ }
 
 module.exports = function (exec, SKIP_CLOSING) {
-  if (!SKIP_CLOSING && !SAFE_CLOSING) return false;
-  var ITERATION_SUPPORT = false;
+  if (!SKIP_CLOSING && !SAFE_CLOSING) { return false }
+  var ITERATION_SUPPORT = false
   try {
-    var object = {};
+    var object = {}
     object[ITERATOR] = function () {
       return {
         next: function () {
-          return { done: ITERATION_SUPPORT = true };
+          return { done: ITERATION_SUPPORT = true }
         }
-      };
-    };
-    exec(object);
+      }
+    }
+    exec(object)
   } catch (error) { /* empty */ }
-  return ITERATION_SUPPORT;
-};
+  return ITERATION_SUPPORT
+}

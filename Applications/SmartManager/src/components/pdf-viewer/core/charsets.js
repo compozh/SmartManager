@@ -49,7 +49,7 @@ const ISOAdobeCharset = [
   'idieresis', 'igrave', 'ntilde', 'oacute', 'ocircumflex', 'odieresis',
   'ograve', 'otilde', 'scaron', 'uacute', 'ucircumflex', 'udieresis',
   'ugrave', 'yacute', 'ydieresis', 'zcaron'
-];
+]
 
 const ExpertCharset = [
   '.notdef', 'space', 'exclamsmall', 'Hungarumlautsmall', 'dollaroldstyle',
@@ -89,7 +89,7 @@ const ExpertCharset = [
   'Odieresissmall', 'OEsmall', 'Oslashsmall', 'Ugravesmall', 'Uacutesmall',
   'Ucircumflexsmall', 'Udieresissmall', 'Yacutesmall', 'Thornsmall',
   'Ydieresissmall'
-];
+]
 
 const ExpertSubsetCharset = [
   '.notdef', 'space', 'dollaroldstyle', 'dollarsuperior',
@@ -112,10 +112,10 @@ const ExpertSubsetCharset = [
   'fourinferior', 'fiveinferior', 'sixinferior', 'seveninferior',
   'eightinferior', 'nineinferior', 'centinferior', 'dollarinferior',
   'periodinferior', 'commainferior'
-];
+]
 
 export {
   ISOAdobeCharset,
   ExpertCharset,
   ExpertSubsetCharset,
-};
+}

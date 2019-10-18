@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { warn } from '../shared/util';
+import { warn } from '../shared/util'
 
 // Character types for symbols from 0000 to 00FF.
 // Source: ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
@@ -38,7 +38,7 @@ var baseTypes = [
   'L', 'ON', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L',
   'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L',
   'L', 'L', 'L', 'L', 'L', 'ON', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L'
-];
+]
 
 // Character types for symbols from 0600 to 06FF.
 // Source: ftp://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt
@@ -69,36 +69,36 @@ var arabicTypes = [
   'ON', 'NSM', 'NSM', 'NSM', 'NSM', 'NSM', 'NSM', 'AL', 'AL', 'NSM', 'NSM',
   'ON', 'NSM', 'NSM', 'NSM', 'NSM', 'AL', 'AL', 'EN', 'EN', 'EN', 'EN',
   'EN', 'EN', 'EN', 'EN', 'EN', 'EN', 'AL', 'AL', 'AL', 'AL', 'AL', 'AL'
-];
+]
 
 function isOdd(i) {
-  return (i & 1) !== 0;
+  return (i & 1) !== 0
 }
 
 function isEven(i) {
-  return (i & 1) === 0;
+  return (i & 1) === 0
 }
 
 function findUnequal(arr, start, value) {
   for (var j = start, jj = arr.length; j < jj; ++j) {
     if (arr[j] !== value) {
-      return j;
+      return j
     }
   }
-  return j;
+  return j
 }
 
 function setValues(arr, start, end, value) {
   for (var j = start; j < end; ++j) {
-    arr[j] = value;
+    arr[j] = value
   }
 }
 
 function reverseValues(arr, start, end) {
   for (var i = start, j = end - 1; i < j; ++i, --j) {
-    var temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    var temp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = temp
   }
 }
 
@@ -106,48 +106,48 @@ function createBidiText(str, isLTR, vertical) {
   return {
     str,
     dir: (vertical ? 'ttb' : (isLTR ? 'ltr' : 'rtl')),
-  };
+  }
 }
 
 // These are used in bidi(), which is called frequently. We re-use them on
 // each call to avoid unnecessary allocations.
-var chars = [];
-var types = [];
+var chars = []
+var types = []
 
 function bidi(str, startLevel, vertical) {
-  var isLTR = true;
-  var strLength = str.length;
+  var isLTR = true
+  var strLength = str.length
   if (strLength === 0 || vertical) {
-    return createBidiText(str, isLTR, vertical);
+    return createBidiText(str, isLTR, vertical)
   }
 
   // Get types and fill arrays
-  chars.length = strLength;
-  types.length = strLength;
-  var numBidi = 0;
+  chars.length = strLength
+  types.length = strLength
+  var numBidi = 0
 
-  var i, ii;
+  var i, ii
   for (i = 0; i < strLength; ++i) {
-    chars[i] = str.charAt(i);
+    chars[i] = str.charAt(i)
 
-    var charCode = str.charCodeAt(i);
-    var charType = 'L';
+    var charCode = str.charCodeAt(i)
+    var charType = 'L'
     if (charCode <= 0x00ff) {
-      charType = baseTypes[charCode];
+      charType = baseTypes[charCode]
     } else if (0x0590 <= charCode && charCode <= 0x05f4) {
-      charType = 'R';
+      charType = 'R'
     } else if (0x0600 <= charCode && charCode <= 0x06ff) {
-      charType = arabicTypes[charCode & 0xff];
+      charType = arabicTypes[charCode & 0xff]
       if (!charType) {
-        warn('Bidi: invalid Unicode character ' + charCode.toString(16));
+        warn('Bidi: invalid Unicode character ' + charCode.toString(16))
       }
     } else if (0x0700 <= charCode && charCode <= 0x08AC) {
-      charType = 'AL';
+      charType = 'AL'
     }
     if (charType === 'R' || charType === 'AL' || charType === 'AN') {
-      numBidi++;
+      numBidi++
     }
-    types[i] = charType;
+    types[i] = charType
   }
 
   // Detect the bidi method
@@ -155,43 +155,43 @@ function bidi(str, startLevel, vertical) {
   // - If less than 30% chars are rtl then string is primarily ltr
   // - If more than 30% chars are rtl then string is primarily rtl
   if (numBidi === 0) {
-    isLTR = true;
-    return createBidiText(str, isLTR);
+    isLTR = true
+    return createBidiText(str, isLTR)
   }
 
   if (startLevel === -1) {
     if ((numBidi / strLength) < 0.3) {
-      isLTR = true;
-      startLevel = 0;
+      isLTR = true
+      startLevel = 0
     } else {
-      isLTR = false;
-      startLevel = 1;
+      isLTR = false
+      startLevel = 1
     }
   }
 
-  var levels = [];
+  var levels = []
   for (i = 0; i < strLength; ++i) {
-    levels[i] = startLevel;
+    levels[i] = startLevel
   }
 
   /*
    X1-X10: skip most of this, since we are NOT doing the embeddings.
    */
-  var e = (isOdd(startLevel) ? 'R' : 'L');
-  var sor = e;
-  var eor = sor;
+  var e = (isOdd(startLevel) ? 'R' : 'L')
+  var sor = e
+  var eor = sor
 
   /*
    W1. Examine each non-spacing mark (NSM) in the level run, and change the
    type of the NSM to the type of the previous character. If the NSM is at the
    start of the level run, it will get the type of sor.
    */
-  var lastType = sor;
+  var lastType = sor
   for (i = 0; i < strLength; ++i) {
     if (types[i] === 'NSM') {
-      types[i] = lastType;
+      types[i] = lastType
     } else {
-      lastType = types[i];
+      lastType = types[i]
     }
   }
 
@@ -200,14 +200,14 @@ function bidi(str, startLevel, vertical) {
    first strong type (R, L, AL, or sor) is found.  If an AL is found, change
    the type of the European number to Arabic number.
    */
-  lastType = sor;
-  var t;
+  lastType = sor
+  var t
   for (i = 0; i < strLength; ++i) {
-    t = types[i];
+    t = types[i]
     if (t === 'EN') {
-      types[i] = (lastType === 'AL') ? 'AN' : 'EN';
+      types[i] = (lastType === 'AL') ? 'AN' : 'EN'
     } else if (t === 'R' || t === 'L' || t === 'AL') {
-      lastType = t;
+      lastType = t
     }
   }
 
@@ -215,9 +215,9 @@ function bidi(str, startLevel, vertical) {
    W3. Change all ALs to R.
    */
   for (i = 0; i < strLength; ++i) {
-    t = types[i];
+    t = types[i]
     if (t === 'AL') {
-      types[i] = 'R';
+      types[i] = 'R'
     }
   }
 
@@ -228,12 +228,12 @@ function bidi(str, startLevel, vertical) {
    */
   for (i = 1; i < strLength - 1; ++i) {
     if (types[i] === 'ES' && types[i - 1] === 'EN' && types[i + 1] === 'EN') {
-      types[i] = 'EN';
+      types[i] = 'EN'
     }
     if (types[i] === 'CS' &&
         (types[i - 1] === 'EN' || types[i - 1] === 'AN') &&
         types[i + 1] === types[i - 1]) {
-      types[i] = types[i - 1];
+      types[i] = types[i - 1]
     }
   }
 
@@ -244,19 +244,19 @@ function bidi(str, startLevel, vertical) {
   for (i = 0; i < strLength; ++i) {
     if (types[i] === 'EN') {
       // do before
-      var j;
+      var j
       for (j = i - 1; j >= 0; --j) {
         if (types[j] !== 'ET') {
-          break;
+          break
         }
-        types[j] = 'EN';
+        types[j] = 'EN'
       }
       // do after
       for (j = i + 1; j < strLength; ++j) {
         if (types[j] !== 'ET') {
-          break;
+          break
         }
-        types[j] = 'EN';
+        types[j] = 'EN'
       }
     }
   }
@@ -265,9 +265,9 @@ function bidi(str, startLevel, vertical) {
    W6. Otherwise, separators and terminators change to Other Neutral:
    */
   for (i = 0; i < strLength; ++i) {
-    t = types[i];
+    t = types[i]
     if (t === 'WS' || t === 'ES' || t === 'ET' || t === 'CS') {
-      types[i] = 'ON';
+      types[i] = 'ON'
     }
   }
 
@@ -276,13 +276,13 @@ function bidi(str, startLevel, vertical) {
    first strong type (R, L, or sor) is found. If an L is found,  then change
    the type of the European number to L.
    */
-  lastType = sor;
+  lastType = sor
   for (i = 0; i < strLength; ++i) {
-    t = types[i];
+    t = types[i]
     if (t === 'EN') {
-      types[i] = ((lastType === 'L') ? 'L' : 'EN');
+      types[i] = ((lastType === 'L') ? 'L' : 'EN')
     } else if (t === 'R' || t === 'L') {
-      lastType = t;
+      lastType = t
     }
   }
 
@@ -294,26 +294,26 @@ function bidi(str, startLevel, vertical) {
    */
   for (i = 0; i < strLength; ++i) {
     if (types[i] === 'ON') {
-      var end = findUnequal(types, i + 1, 'ON');
-      var before = sor;
+      var end = findUnequal(types, i + 1, 'ON')
+      var before = sor
       if (i > 0) {
-        before = types[i - 1];
+        before = types[i - 1]
       }
 
-      var after = eor;
+      var after = eor
       if (end + 1 < strLength) {
-        after = types[end + 1];
+        after = types[end + 1]
       }
       if (before !== 'L') {
-        before = 'R';
+        before = 'R'
       }
       if (after !== 'L') {
-        after = 'R';
+        after = 'R'
       }
       if (before === after) {
-        setValues(types, i, end, before);
+        setValues(types, i, end, before)
       }
-      i = end - 1; // reset to end (-1 so next iteration is ok)
+      i = end - 1 // reset to end (-1 so next iteration is ok)
     }
   }
 
@@ -322,7 +322,7 @@ function bidi(str, startLevel, vertical) {
    */
   for (i = 0; i < strLength; ++i) {
     if (types[i] === 'ON') {
-      types[i] = e;
+      types[i] = e
     }
   }
 
@@ -334,16 +334,16 @@ function bidi(str, startLevel, vertical) {
    those of type L, EN or AN go up one level.
    */
   for (i = 0; i < strLength; ++i) {
-    t = types[i];
+    t = types[i]
     if (isEven(levels[i])) {
       if (t === 'R') {
-        levels[i] += 1;
+        levels[i] += 1
       } else if (t === 'AN' || t === 'EN') {
-        levels[i] += 2;
+        levels[i] += 2
       }
     } else { // isOdd
       if (t === 'L' || t === 'AN' || t === 'EN') {
-        levels[i] += 1;
+        levels[i] += 1
       }
     }
   }
@@ -368,35 +368,35 @@ function bidi(str, startLevel, vertical) {
    */
 
   // find highest level & lowest odd level
-  var highestLevel = -1;
-  var lowestOddLevel = 99;
-  var level;
+  var highestLevel = -1
+  var lowestOddLevel = 99
+  var level
   for (i = 0, ii = levels.length; i < ii; ++i) {
-    level = levels[i];
+    level = levels[i]
     if (highestLevel < level) {
-      highestLevel = level;
+      highestLevel = level
     }
     if (lowestOddLevel > level && isOdd(level)) {
-      lowestOddLevel = level;
+      lowestOddLevel = level
     }
   }
 
   // now reverse between those limits
   for (level = highestLevel; level >= lowestOddLevel; --level) {
     // find segments to reverse
-    var start = -1;
+    var start = -1
     for (i = 0, ii = levels.length; i < ii; ++i) {
       if (levels[i] < level) {
         if (start >= 0) {
-          reverseValues(chars, start, i);
-          start = -1;
+          reverseValues(chars, start, i)
+          start = -1
         }
       } else if (start < 0) {
-        start = i;
+        start = i
       }
     }
     if (start >= 0) {
-      reverseValues(chars, start, levels.length);
+      reverseValues(chars, start, levels.length)
     }
   }
 
@@ -419,14 +419,14 @@ function bidi(str, startLevel, vertical) {
 
   // Finally, return string
   for (i = 0, ii = chars.length; i < ii; ++i) {
-    var ch = chars[i];
+    var ch = chars[i]
     if (ch === '<' || ch === '>') {
-      chars[i] = '';
+      chars[i] = ''
     }
   }
-  return createBidiText(chars.join(''), isLTR);
+  return createBidiText(chars.join(''), isLTR)
 }
 
 export {
   bidi,
-};
+}

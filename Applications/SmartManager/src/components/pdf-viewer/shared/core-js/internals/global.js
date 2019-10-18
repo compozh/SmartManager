@@ -1,6 +1,6 @@
 var check = function (it) {
-  return it && it.Math == Math && it;
-};
+  return it && it.Math == Math && it
+}
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
@@ -10,4 +10,4 @@ module.exports =
   check(typeof self == 'object' && self) ||
   check(typeof global == 'object' && global) ||
   // eslint-disable-next-line no-new-func
-  Function('return this')();
+  Function('return this')()

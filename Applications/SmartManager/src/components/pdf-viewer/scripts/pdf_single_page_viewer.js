@@ -50,21 +50,21 @@ class PDFSinglePageViewer extends BaseViewer {
     switch (viewerNodes.length) {
     case 0: // Should *only* occur on initial loading.
       this.viewer.appendChild(pageView.div)
-        break;
+      break
     case 1: // The normal page-switching case.
       if (viewerNodes[0] !== previousPageView.div) {
         throw new Error(
           '_ensurePageViewVisible: Unexpected previously visible page.')
-        }
+      }
       if (pageView === previousPageView) {
         break // The correct page is already visible.
-        }
+      }
       // Switch visible pages, and reset the viewerContainer scroll position.
       this._shadowViewer.appendChild(previousPageView.div)
-        this.viewer.appendChild(pageView.div)
+      this.viewer.appendChild(pageView.div)
 
-        this.container.scrollTop = 0
-        break;
+      this.container.scrollTop = 0
+      break
     default:
       throw new Error(
         '_ensurePageViewVisible: Only one page should be visible at a time.')
@@ -97,7 +97,7 @@ class PDFSinglePageViewer extends BaseViewer {
     this._updateScrollDown = () => {
       this.scroll.down = scrolledDown
       this._updateScrollDown = null
-    };
+    }
   }
 
   _getVisiblePages() {

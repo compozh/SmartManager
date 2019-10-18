@@ -242,22 +242,22 @@ class PDFFindController {
     switch (cmd) {
     case 'findagain':
       const pageNumber = this._selected.pageIdx + 1
-        const linkService = this._linkService
-        // Only treat a 'findagain' event as a new search operation when it's
-        // *absolutely* certain that the currently selected match is no longer
-        // visible, e.g. as a result of the user scrolling in the document.
-        //
-        // NOTE: If only a simple `this._linkService.page` check was used here,
-        // there's a risk that consecutive 'findagain' operations could "skip"
-        // over matches at the top/bottom of pages thus making them completely
-        // inaccessible when there's multiple pages visible in the viewer.
-        if (pageNumber >= 1 && pageNumber <= linkService.pagesCount &&
+      const linkService = this._linkService
+      // Only treat a 'findagain' event as a new search operation when it's
+      // *absolutely* certain that the currently selected match is no longer
+      // visible, e.g. as a result of the user scrolling in the document.
+      //
+      // NOTE: If only a simple `this._linkService.page` check was used here,
+      // there's a risk that consecutive 'findagain' operations could "skip"
+      // over matches at the top/bottom of pages thus making them completely
+      // inaccessible when there's multiple pages visible in the viewer.
+      if (pageNumber >= 1 && pageNumber <= linkService.pagesCount &&
             pageNumber !== linkService.page &&
             !linkService.isPageVisible(pageNumber)) {
         return true
-        }
+      }
       return false
-      case 'findhighlightallchange':
+    case 'findhighlightallchange':
       return false
     }
     return true
@@ -527,7 +527,7 @@ class PDFFindController {
     // If there's no query there's no point in searching.
     if (this._query === '') {
       this._updateUIState(FindState.FOUND)
-      return;
+      return
     }
     // If we're waiting on a page, we return since we can't do anything else.
     if (this._resumePageIdx) {
@@ -548,7 +548,7 @@ class PDFFindController {
         offset.matchIdx = (previous ? offset.matchIdx - 1 :
           offset.matchIdx + 1)
         this._updateMatch(/* found = */ true)
-        return;
+        return
       }
       // We went beyond the current page's matches, so we advance to
       // the next page.
@@ -598,7 +598,7 @@ class PDFFindController {
         // The matches don't exist yet for processing by `_matchesReady`,
         // so set a resume point for when they do exist.
         this._resumePageIdx = pageIdx
-        break;
+        break
       }
     } while (!this._matchesReady(matches))
   }

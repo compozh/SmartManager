@@ -183,7 +183,7 @@ function getViewerConfiguration() {
   }
 }
 
-function webViewerLoad() {
+export function webViewerLoad(url) {
   let config = getViewerConfiguration()
   if (typeof PDFJSDev === 'undefined' || !PDFJSDev.test('PRODUCTION')) {
     Promise.all([
@@ -194,7 +194,7 @@ function webViewerLoad() {
     ]).then(function([app, appOptions, ...otherModules]) {
       window.PDFViewerApplication = app.PDFViewerApplication
       window.PDFViewerApplicationOptions = appOptions.AppOptions
-      app.PDFViewerApplication.run(config)
+      app.PDFViewerApplication.run(config, url)
     })
   } else {
     if (typeof PDFJSDev !== 'undefined' && PDFJSDev.test('CHROME')) {
@@ -215,11 +215,4 @@ function webViewerLoad() {
 
     pdfjsWebApp.PDFViewerApplication.run(config)
   }
-}
-
-if (document.readyState === 'interactive' ||
-    document.readyState === 'complete') {
-  webViewerLoad()
-} else {
-  document.addEventListener('DOMContentLoaded', webViewerLoad, true)
 }

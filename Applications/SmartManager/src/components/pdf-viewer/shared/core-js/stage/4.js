@@ -1,5 +1,5 @@
-require('../proposals/global-this');
-require('../proposals/promise-all-settled');
-require('../proposals/string-match-all');
+require('../proposals/global-this')
+require('../proposals/promise-all-settled')
+require('../proposals/string-match-all')
 
-module.exports = require('../internals/path');
+module.exports = require('../internals/path')

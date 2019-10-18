@@ -1,5 +1,5 @@
-'use strict';
+'use strict'
 //#if FALSE
 //#error "Some Error"
 //#endif
-var a;
+var a

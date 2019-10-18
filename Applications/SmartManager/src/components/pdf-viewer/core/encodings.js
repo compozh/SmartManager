@@ -54,7 +54,7 @@ const ExpertEncoding = [
   'Ogravesmall', 'Oacutesmall', 'Ocircumflexsmall', 'Otildesmall',
   'Odieresissmall', 'OEsmall', 'Oslashsmall', 'Ugravesmall', 'Uacutesmall',
   'Ucircumflexsmall', 'Udieresissmall', 'Yacutesmall', 'Thornsmall',
-  'Ydieresissmall'];
+  'Ydieresissmall']
 
 const MacExpertEncoding = [
   '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -96,7 +96,7 @@ const MacExpertEncoding = [
   'rsuperior', 'tsuperior', '', '', 'isuperior', 'ssuperior', 'dsuperior',
   '', '', '', '', '', 'lsuperior', 'Ogoneksmall', 'Brevesmall',
   'Macronsmall', 'bsuperior', 'nsuperior', 'msuperior', 'commasuperior',
-  'periodsuperior', 'Dotaccentsmall', 'Ringsmall', '', '', '', ''];
+  'periodsuperior', 'Dotaccentsmall', 'Ringsmall', '', '', '', '']
 
 const MacRomanEncoding = [
   '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -132,7 +132,7 @@ const MacRomanEncoding = [
   'Icircumflex', 'Idieresis', 'Igrave', 'Oacute', 'Ocircumflex', 'apple',
   'Ograve', 'Uacute', 'Ucircumflex', 'Ugrave', 'dotlessi', 'circumflex',
   'tilde', 'macron', 'breve', 'dotaccent', 'ring', 'cedilla', 'hungarumlaut',
-  'ogonek', 'caron'];
+  'ogonek', 'caron']
 
 const StandardEncoding = [
   '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -160,7 +160,7 @@ const StandardEncoding = [
   '', '', '', '', '', '', '', '', '', '', 'AE', '', 'ordfeminine', '', '',
   '', '', 'Lslash', 'Oslash', 'OE', 'ordmasculine', '', '', '', '', '', 'ae',
   '', '', '', 'dotlessi', '', '', 'lslash', 'oslash', 'oe', 'germandbls', '',
-  '', '', ''];
+  '', '', '']
 
 const WinAnsiEncoding = [
   '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -196,7 +196,7 @@ const WinAnsiEncoding = [
   'igrave', 'iacute', 'icircumflex', 'idieresis', 'eth', 'ntilde', 'ograve',
   'oacute', 'ocircumflex', 'otilde', 'odieresis', 'divide', 'oslash',
   'ugrave', 'uacute', 'ucircumflex', 'udieresis', 'yacute', 'thorn',
-  'ydieresis'];
+  'ydieresis']
 
 const SymbolSetEncoding = [
   '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -234,7 +234,7 @@ const SymbolSetEncoding = [
   '', 'angleright', 'integral', 'integraltp', 'integralex', 'integralbt',
   'parenrighttp', 'parenrightex', 'parenrightbt', 'bracketrighttp',
   'bracketrightex', 'bracketrightbt', 'bracerighttp', 'bracerightmid',
-  'bracerightbt', ''];
+  'bracerightbt', '']
 
 const ZapfDingbatsEncoding = [
   '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -260,26 +260,26 @@ const ZapfDingbatsEncoding = [
   'a192', 'a166', 'a167', 'a168', 'a169', 'a170', 'a171', 'a172', 'a173',
   'a162', 'a174', 'a175', 'a176', 'a177', 'a178', 'a179', 'a193', 'a180',
   'a199', 'a181', 'a200', 'a182', '', 'a201', 'a183', 'a184', 'a197', 'a185',
-  'a194', 'a198', 'a186', 'a195', 'a187', 'a188', 'a189', 'a190', 'a191', ''];
+  'a194', 'a198', 'a186', 'a195', 'a187', 'a188', 'a189', 'a190', 'a191', '']
 
 function getEncoding(encodingName) {
   switch (encodingName) {
-    case 'WinAnsiEncoding':
-      return WinAnsiEncoding;
-    case 'StandardEncoding':
-      return StandardEncoding;
-    case 'MacRomanEncoding':
-      return MacRomanEncoding;
-    case 'SymbolSetEncoding':
-      return SymbolSetEncoding;
-    case 'ZapfDingbatsEncoding':
-      return ZapfDingbatsEncoding;
-    case 'ExpertEncoding':
-      return ExpertEncoding;
-    case 'MacExpertEncoding':
-      return MacExpertEncoding;
-    default:
-      return null;
+  case 'WinAnsiEncoding':
+    return WinAnsiEncoding
+  case 'StandardEncoding':
+    return StandardEncoding
+  case 'MacRomanEncoding':
+    return MacRomanEncoding
+  case 'SymbolSetEncoding':
+    return SymbolSetEncoding
+  case 'ZapfDingbatsEncoding':
+    return ZapfDingbatsEncoding
+  case 'ExpertEncoding':
+    return ExpertEncoding
+  case 'MacExpertEncoding':
+    return MacExpertEncoding
+  default:
+    return null
   }
 }
 
@@ -291,4 +291,4 @@ export {
   ZapfDingbatsEncoding,
   ExpertEncoding,
   getEncoding,
-};
+}

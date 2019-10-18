@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 //#elif TRUE
-var a;
+var a
 //#endif

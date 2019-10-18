@@ -1,4 +1,4 @@
-require('../../modules/es.array.sort');
-var entryUnbind = require('../../internals/entry-unbind');
+require('../../modules/es.array.sort')
+var entryUnbind = require('../../internals/entry-unbind')
 
-module.exports = entryUnbind('Array', 'sort');
+module.exports = entryUnbind('Array', 'sort')

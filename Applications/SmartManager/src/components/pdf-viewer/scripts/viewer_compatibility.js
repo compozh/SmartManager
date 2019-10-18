@@ -13,16 +13,16 @@
  * limitations under the License.
  */
 
-let compatibilityParams = Object.create(null);
+let compatibilityParams = Object.create(null)
 if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
   const userAgent =
-    (typeof navigator !== 'undefined' && navigator.userAgent) || '';
+    (typeof navigator !== 'undefined' && navigator.userAgent) || ''
   const platform =
-    (typeof navigator !== 'undefined' && navigator.platform) || '';
+    (typeof navigator !== 'undefined' && navigator.platform) || ''
   const maxTouchPoints =
-    (typeof navigator !== 'undefined' && navigator.maxTouchPoints) || 1;
+    (typeof navigator !== 'undefined' && navigator.maxTouchPoints) || 1
 
-  const isAndroid = /Android/.test(userAgent);
+  const isAndroid = /Android/.test(userAgent)
   const isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent) ||
                 (platform === 'MacIntel' && maxTouchPoints > 1);
 
@@ -30,9 +30,9 @@ if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
   // Support: Android, iOS
   (function checkCanvasSizeLimitation() {
     if (isIOS || isAndroid) {
-      compatibilityParams.maxCanvasPixels = 5242880;
+      compatibilityParams.maxCanvasPixels = 5242880
     }
-  })();
+  })()
 }
 
-exports.viewerCompatibilityParams = Object.freeze(compatibilityParams);
+exports.viewerCompatibilityParams = Object.freeze(compatibilityParams)

@@ -1,4 +1,4 @@
-require('../../../modules/es.number.to-fixed');
-var entryVirtual = require('../../../internals/entry-virtual');
+require('../../../modules/es.number.to-fixed')
+var entryVirtual = require('../../../internals/entry-virtual')
 
-module.exports = entryVirtual('Number').toFixed;
+module.exports = entryVirtual('Number').toFixed

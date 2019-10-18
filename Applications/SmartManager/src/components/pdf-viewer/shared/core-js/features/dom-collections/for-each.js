@@ -1,1 +1,1 @@
-module.exports = require('../../stable/dom-collections/for-each');
+module.exports = require('../../stable/dom-collections/for-each')

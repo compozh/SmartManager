@@ -1,4 +1,4 @@
-require('../../modules/es.math.cbrt');
-var path = require('../../internals/path');
+require('../../modules/es.math.cbrt')
+var path = require('../../internals/path')
 
-module.exports = path.Math.cbrt;
+module.exports = path.Math.cbrt

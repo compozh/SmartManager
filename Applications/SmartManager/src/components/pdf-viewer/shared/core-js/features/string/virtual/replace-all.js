@@ -1,4 +1,4 @@
-require('../../../modules/esnext.string.replace-all');
-var entryVirtual = require('../../../internals/entry-virtual');
+require('../../../modules/esnext.string.replace-all')
+var entryVirtual = require('../../../internals/entry-virtual')
 
-module.exports = entryVirtual('String').replaceAll;
+module.exports = entryVirtual('String').replaceAll

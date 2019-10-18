@@ -1,1 +1,1 @@
-module.exports = require('../../../es/string/virtual/match-all');
+module.exports = require('../../../es/string/virtual/match-all')

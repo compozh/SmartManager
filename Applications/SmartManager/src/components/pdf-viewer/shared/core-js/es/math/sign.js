@@ -1,4 +1,4 @@
-require('../../modules/es.math.sign');
-var path = require('../../internals/path');
+require('../../modules/es.math.sign')
+var path = require('../../internals/path')
 
-module.exports = path.Math.sign;
+module.exports = path.Math.sign

@@ -1,4 +1,4 @@
-require('../../modules/es.number.parse-int');
-var path = require('../../internals/path');
+require('../../modules/es.number.parse-int')
+var path = require('../../internals/path')
 
-module.exports = path.Number.parseInt;
+module.exports = path.Number.parseInt

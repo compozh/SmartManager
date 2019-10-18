@@ -1,4 +1,4 @@
-require('../../modules/esnext.math.scale');
-var path = require('../../internals/path');
+require('../../modules/esnext.math.scale')
+var path = require('../../internals/path')
 
-module.exports = path.Math.scale;
+module.exports = path.Math.scale

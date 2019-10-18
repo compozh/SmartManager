@@ -1,4 +1,4 @@
-require('../../modules/es.object.set-prototype-of');
-var path = require('../../internals/path');
+require('../../modules/es.object.set-prototype-of')
+var path = require('../../internals/path')
 
-module.exports = path.Object.setPrototypeOf;
+module.exports = path.Object.setPrototypeOf

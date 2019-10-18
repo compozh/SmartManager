@@ -1,4 +1,4 @@
-require('../../modules/esnext.symbol.observable');
-var WrappedWellKnownSymbolModule = require('../../internals/wrapped-well-known-symbol');
+require('../../modules/esnext.symbol.observable')
+var WrappedWellKnownSymbolModule = require('../../internals/wrapped-well-known-symbol')
 
-module.exports = WrappedWellKnownSymbolModule.f('observable');
+module.exports = WrappedWellKnownSymbolModule.f('observable')

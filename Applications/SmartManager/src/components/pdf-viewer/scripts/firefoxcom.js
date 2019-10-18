@@ -114,7 +114,7 @@ class DownloadManager {
         this.onerror(err)
       }
       URL.revokeObjectURL(blobUrl)
-    };
+    }
 
     FirefoxCom.request('download', {
       blobUrl,
@@ -178,7 +178,7 @@ class MozL10n {
     }
     if (type === 'findbarclose') {
       PDFViewerApplication.eventBus.dispatch(type, { source: window, })
-      return;
+      return
     }
     PDFViewerApplication.eventBus.dispatch('find', {
       source: window,
@@ -190,7 +190,7 @@ class MozL10n {
       highlightAll: !!detail.highlightAll,
       findPrevious: !!detail.findPrevious,
     })
-  };
+  }
 
   for (const event of events) {
     window.addEventListener(event, handleEvent)
@@ -214,7 +214,7 @@ class MozL10n {
       return
     }
     PDFViewerApplication.eventBus.dispatch(type, { source: window, })
-  };
+  }
 
   for (const event of events) {
     window.addEventListener(event, handleEvent)
@@ -248,7 +248,7 @@ PDFViewerApplication.externalServices = {
       if (e.source !== null) {
         // The message MUST originate from Chrome code.
         console.warn('Rejected untrusted message from ' + e.origin)
-        return;
+        return
       }
       let args = e.data
 
@@ -260,37 +260,37 @@ PDFViewerApplication.externalServices = {
         pdfDataRangeTransport =
             new FirefoxComDataRangeTransport(args.length, args.data, args.done)
 
-          callbacks.onOpenWithTransport(args.pdfUrl, args.length,
+        callbacks.onOpenWithTransport(args.pdfUrl, args.length,
           pdfDataRangeTransport)
-          break;
+        break
       case 'range':
         pdfDataRangeTransport.onDataRange(args.begin, args.chunk)
-          break;
+        break
       case 'rangeProgress':
         pdfDataRangeTransport.onDataProgress(args.loaded)
-          break;
+        break
       case 'progressiveRead':
         pdfDataRangeTransport.onDataProgressiveRead(args.chunk)
 
-          // Don't forget to report loading progress as well, since otherwise
-          // the loadingBar won't update when `disableRange=true` is set.
-          pdfDataRangeTransport.onDataProgress(args.loaded, args.total)
-          break;
+        // Don't forget to report loading progress as well, since otherwise
+        // the loadingBar won't update when `disableRange=true` is set.
+        pdfDataRangeTransport.onDataProgress(args.loaded, args.total)
+        break
       case 'progressiveDone':
         if (pdfDataRangeTransport) {
           pdfDataRangeTransport.onDataProgressiveDone()
-          }
+        }
         break
-        case 'progress':
+      case 'progress':
         callbacks.onProgress(args.loaded, args.total)
-          break;
+        break
       case 'complete':
         if (!args.data) {
           callbacks.onError(args.errorCode)
-            break;
+          break
         }
         callbacks.onOpenWithData(args.data)
-          break;
+        break
       }
     })
     FirefoxCom.requestSync('initPassiveLoading', null)

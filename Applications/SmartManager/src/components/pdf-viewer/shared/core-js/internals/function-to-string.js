@@ -1,3 +1,3 @@
-var shared = require('../internals/shared');
+var shared = require('../internals/shared')
 
-module.exports = shared('native-function-to-string', Function.toString);
+module.exports = shared('native-function-to-string', Function.toString)

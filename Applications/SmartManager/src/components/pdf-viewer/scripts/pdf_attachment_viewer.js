@@ -99,7 +99,7 @@ class PDFAttachmentViewer {
       }
       window.open(viewerUrl)
       return false
-    };
+    }
   }
 
   /**
@@ -109,7 +109,7 @@ class PDFAttachmentViewer {
     button.onclick = () => {
       this.downloadManager.downloadData(content, filename, '')
       return false
-    };
+    }
   }
 
   /**
@@ -125,7 +125,7 @@ class PDFAttachmentViewer {
 
     if (!attachments) {
       this._dispatchEvent(attachmentsCount)
-      return;
+      return
     }
 
     let names = Object.keys(attachments).sort(function(a, b) {

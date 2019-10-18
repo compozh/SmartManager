@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 //#if TRUE
 ////var a;
 //var b;
-var c;
+var c
 //#endif

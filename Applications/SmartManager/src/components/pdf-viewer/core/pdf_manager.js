@@ -15,123 +15,123 @@
 
 import {
   createValidAbsoluteUrl, shadow, unreachable, warn
-} from '../shared/util';
-import { ChunkedStreamManager } from './chunked_stream';
-import { MissingDataException } from './core_utils';
-import { PDFDocument } from './document';
-import { Stream } from './stream';
+} from '../shared/util'
+import { ChunkedStreamManager } from './chunked_stream'
+import { MissingDataException } from './core_utils'
+import { PDFDocument } from './document'
+import { Stream } from './stream'
 
 class BasePdfManager {
   constructor() {
     if (this.constructor === BasePdfManager) {
-      unreachable('Cannot initialize BasePdfManager.');
+      unreachable('Cannot initialize BasePdfManager.')
     }
   }
 
   get docId() {
-    return this._docId;
+    return this._docId
   }
 
   get password() {
-    return this._password;
+    return this._password
   }
 
   get docBaseUrl() {
-    let docBaseUrl = null;
+    let docBaseUrl = null
     if (this._docBaseUrl) {
-      const absoluteUrl = createValidAbsoluteUrl(this._docBaseUrl);
+      const absoluteUrl = createValidAbsoluteUrl(this._docBaseUrl)
       if (absoluteUrl) {
-        docBaseUrl = absoluteUrl.href;
+        docBaseUrl = absoluteUrl.href
       } else {
-        warn(`Invalid absolute docBaseUrl: "${this._docBaseUrl}".`);
+        warn(`Invalid absolute docBaseUrl: "${this._docBaseUrl}".`)
       }
     }
-    return shadow(this, 'docBaseUrl', docBaseUrl);
+    return shadow(this, 'docBaseUrl', docBaseUrl)
   }
 
   onLoadedStream() {
-    unreachable('Abstract method `onLoadedStream` called');
+    unreachable('Abstract method `onLoadedStream` called')
   }
 
   ensureDoc(prop, args) {
-    return this.ensure(this.pdfDocument, prop, args);
+    return this.ensure(this.pdfDocument, prop, args)
   }
 
   ensureXRef(prop, args) {
-    return this.ensure(this.pdfDocument.xref, prop, args);
+    return this.ensure(this.pdfDocument.xref, prop, args)
   }
 
   ensureCatalog(prop, args) {
-    return this.ensure(this.pdfDocument.catalog, prop, args);
+    return this.ensure(this.pdfDocument.catalog, prop, args)
   }
 
   getPage(pageIndex) {
-    return this.pdfDocument.getPage(pageIndex);
+    return this.pdfDocument.getPage(pageIndex)
   }
 
   fontFallback(id, handler) {
-    return this.pdfDocument.fontFallback(id, handler);
+    return this.pdfDocument.fontFallback(id, handler)
   }
 
   cleanup() {
-    return this.pdfDocument.cleanup();
+    return this.pdfDocument.cleanup()
   }
 
   async ensure(obj, prop, args) {
-    unreachable('Abstract method `ensure` called');
+    unreachable('Abstract method `ensure` called')
   }
 
   requestRange(begin, end) {
-    unreachable('Abstract method `requestRange` called');
+    unreachable('Abstract method `requestRange` called')
   }
 
   requestLoadedStream() {
-    unreachable('Abstract method `requestLoadedStream` called');
+    unreachable('Abstract method `requestLoadedStream` called')
   }
 
   sendProgressiveData(chunk) {
-    unreachable('Abstract method `sendProgressiveData` called');
+    unreachable('Abstract method `sendProgressiveData` called')
   }
 
   updatePassword(password) {
-    this._password = password;
+    this._password = password
   }
 
   terminate(reason) {
-    unreachable('Abstract method `terminate` called');
+    unreachable('Abstract method `terminate` called')
   }
 }
 
 class LocalPdfManager extends BasePdfManager {
   constructor(docId, data, password, evaluatorOptions, docBaseUrl) {
-    super();
+    super()
 
-    this._docId = docId;
-    this._password = password;
-    this._docBaseUrl = docBaseUrl;
-    this.evaluatorOptions = evaluatorOptions;
+    this._docId = docId
+    this._password = password
+    this._docBaseUrl = docBaseUrl
+    this.evaluatorOptions = evaluatorOptions
 
-    const stream = new Stream(data);
-    this.pdfDocument = new PDFDocument(this, stream);
-    this._loadedStreamPromise = Promise.resolve(stream);
+    const stream = new Stream(data)
+    this.pdfDocument = new PDFDocument(this, stream)
+    this._loadedStreamPromise = Promise.resolve(stream)
   }
 
   async ensure(obj, prop, args) {
-    const value = obj[prop];
+    const value = obj[prop]
     if (typeof value === 'function') {
-      return value.apply(obj, args);
+      return value.apply(obj, args)
     }
-    return value;
+    return value
   }
 
   requestRange(begin, end) {
-    return Promise.resolve();
+    return Promise.resolve()
   }
 
   requestLoadedStream() {}
 
   onLoadedStream() {
-    return this._loadedStreamPromise;
+    return this._loadedStreamPromise
   }
 
   terminate(reason) {}
@@ -139,61 +139,61 @@ class LocalPdfManager extends BasePdfManager {
 
 class NetworkPdfManager extends BasePdfManager {
   constructor(docId, pdfNetworkStream, args, evaluatorOptions, docBaseUrl) {
-    super();
+    super()
 
-    this._docId = docId;
-    this._password = args.password;
-    this._docBaseUrl = docBaseUrl;
-    this.msgHandler = args.msgHandler;
-    this.evaluatorOptions = evaluatorOptions;
+    this._docId = docId
+    this._password = args.password
+    this._docBaseUrl = docBaseUrl
+    this.msgHandler = args.msgHandler
+    this.evaluatorOptions = evaluatorOptions
 
     this.streamManager = new ChunkedStreamManager(pdfNetworkStream, {
       msgHandler: args.msgHandler,
       length: args.length,
       disableAutoFetch: args.disableAutoFetch,
       rangeChunkSize: args.rangeChunkSize,
-    });
-    this.pdfDocument = new PDFDocument(this, this.streamManager.getStream());
+    })
+    this.pdfDocument = new PDFDocument(this, this.streamManager.getStream())
   }
 
   async ensure(obj, prop, args) {
     try {
-      const value = obj[prop];
+      const value = obj[prop]
       if (typeof value === 'function') {
-        return value.apply(obj, args);
+        return value.apply(obj, args)
       }
-      return value;
+      return value
     } catch (ex) {
       if (!(ex instanceof MissingDataException)) {
-        throw ex;
+        throw ex
       }
-      await this.requestRange(ex.begin, ex.end);
-      return this.ensure(obj, prop, args);
+      await this.requestRange(ex.begin, ex.end)
+      return this.ensure(obj, prop, args)
     }
   }
 
   requestRange(begin, end) {
-    return this.streamManager.requestRange(begin, end);
+    return this.streamManager.requestRange(begin, end)
   }
 
   requestLoadedStream() {
-    this.streamManager.requestAllChunks();
+    this.streamManager.requestAllChunks()
   }
 
   sendProgressiveData(chunk) {
-    this.streamManager.onReceiveData({ chunk, });
+    this.streamManager.onReceiveData({ chunk, })
   }
 
   onLoadedStream() {
-    return this.streamManager.onLoadedStream();
+    return this.streamManager.onLoadedStream()
   }
 
   terminate(reason) {
-    this.streamManager.abort(reason);
+    this.streamManager.abort(reason)
   }
 }
 
 export {
   LocalPdfManager,
   NetworkPdfManager,
-};
+}

@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 //#if TRUE
-var a;
+var a
 
 //#if TRUE
-var b;
+var b
 //#else
-var c;
+var c
 //#endif
 
-var d;
+var d
 //#else
-var e;
+var e
 //#if TRUE
-var f;
+var f
 //#endif
 
-var g;
+var g
 //#endif

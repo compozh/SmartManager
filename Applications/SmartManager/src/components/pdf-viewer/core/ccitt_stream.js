@@ -13,24 +13,24 @@
  * limitations under the License.
  */
 
-import { Dict, isDict } from './primitives';
-import { CCITTFaxDecoder } from './ccitt';
-import { DecodeStream } from './stream';
+import { Dict, isDict } from './primitives'
+import { CCITTFaxDecoder } from './ccitt'
+import { DecodeStream } from './stream'
 
 var CCITTFaxStream = (function CCITTFaxStreamClosure() {
   function CCITTFaxStream(str, maybeLength, params) {
-    this.str = str;
-    this.dict = str.dict;
+    this.str = str
+    this.dict = str.dict
 
     if (!isDict(params)) {
-      params = Dict.empty;
+      params = Dict.empty
     }
 
     const source = {
       next() {
-        return str.getByte();
+        return str.getByte()
       },
-    };
+    }
     this.ccittFaxDecoder = new CCITTFaxDecoder(source, {
       K: params.get('K'),
       EndOfLine: params.get('EndOfLine'),
@@ -39,28 +39,28 @@ var CCITTFaxStream = (function CCITTFaxStreamClosure() {
       Rows: params.get('Rows'),
       EndOfBlock: params.get('EndOfBlock'),
       BlackIs1: params.get('BlackIs1'),
-    });
+    })
 
-    DecodeStream.call(this, maybeLength);
+    DecodeStream.call(this, maybeLength)
   }
 
-  CCITTFaxStream.prototype = Object.create(DecodeStream.prototype);
+  CCITTFaxStream.prototype = Object.create(DecodeStream.prototype)
 
   CCITTFaxStream.prototype.readBlock = function() {
     while (!this.eof) {
-      let c = this.ccittFaxDecoder.readNextChar();
+      let c = this.ccittFaxDecoder.readNextChar()
       if (c === -1) {
-        this.eof = true;
-        return;
+        this.eof = true
+        return
       }
-      this.ensureBuffer(this.bufferLength + 1);
-      this.buffer[this.bufferLength++] = c;
+      this.ensureBuffer(this.bufferLength + 1)
+      this.buffer[this.bufferLength++] = c
     }
-  };
+  }
 
-  return CCITTFaxStream;
-})();
+  return CCITTFaxStream
+})()
 
 export {
   CCITTFaxStream,
-};
+}

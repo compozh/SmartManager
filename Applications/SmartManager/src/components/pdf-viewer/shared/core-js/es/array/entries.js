@@ -1,4 +1,4 @@
-require('../../modules/es.array.iterator');
-var entryUnbind = require('../../internals/entry-unbind');
+require('../../modules/es.array.iterator')
+var entryUnbind = require('../../internals/entry-unbind')
 
-module.exports = entryUnbind('Array', 'entries');
+module.exports = entryUnbind('Array', 'entries')

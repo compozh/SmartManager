@@ -1,9 +1,9 @@
-var repeat = require('../string/virtual/repeat');
+var repeat = require('../string/virtual/repeat')
 
-var StringPrototype = String.prototype;
+var StringPrototype = String.prototype
 
 module.exports = function (it) {
-  var own = it.repeat;
+  var own = it.repeat
   return typeof it === 'string' || it === StringPrototype
-    || (it instanceof String && own === StringPrototype.repeat) ? repeat : own;
-};
+    || (it instanceof String && own === StringPrototype.repeat) ? repeat : own
+}

@@ -1,25 +1,25 @@
 if ('test') {
-  "1";
+  '1'
 }
 if (true) {
-  "1";
+  '1'
 }
 if (true) {
-  "1";
+  '1'
 } else {
-  "2";
+  '2'
 }
 if (false) {
-  "1";
+  '1'
 }
 if (false) {
-  "1";
+  '1'
 } else {
-  "2";
+  '2'
 }
 if (true && false) {
-  "1";
+  '1'
 }
 if (true && false || '1') {
-  "1";
+  '1'
 }

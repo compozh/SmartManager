@@ -10,7 +10,7 @@ module.exports = Math.scale || function scale(x, inLow, inHigh, outLow, outHigh)
       || outLow != outLow
       || outHigh != outHigh
       /* eslint-enable no-self-compare */
-  ) return NaN;
-  if (x === Infinity || x === -Infinity) return x;
-  return (x - inLow) * (outHigh - outLow) / (inHigh - inLow) + outLow;
-};
+  ) { return NaN }
+  if (x === Infinity || x === -Infinity) { return x }
+  return (x - inLow) * (outHigh - outLow) / (inHigh - inLow) + outLow
+}

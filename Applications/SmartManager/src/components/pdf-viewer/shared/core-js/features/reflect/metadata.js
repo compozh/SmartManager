@@ -1,4 +1,4 @@
-require('../../modules/esnext.reflect.metadata');
-var path = require('../../internals/path');
+require('../../modules/esnext.reflect.metadata')
+var path = require('../../internals/path')
 
-module.exports = path.Reflect.metadata;
+module.exports = path.Reflect.metadata

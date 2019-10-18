@@ -13,121 +13,121 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
-var fs = require('fs');
-var https = require('https');
-var path = require('path');
+var fs = require('fs')
+var https = require('https')
+var path = require('path')
 
 // Fetches all languages that have an *active* translation in mozilla-central.
 // This is used in gulpfile.js for the `importl10n` command.
 
-var EXCLUDE_LANG_CODES = ['ca-valencia', 'ja-JP-mac'];
+var EXCLUDE_LANG_CODES = ['ca-valencia', 'ja-JP-mac']
 
 function normalizeText(s) {
-  return s.replace(/\r\n?/g, '\n').replace(/\uFEFF/g, '');
+  return s.replace(/\r\n?/g, '\n').replace(/\uFEFF/g, '')
 }
 
 function downloadLanguageCodes() {
-  console.log('Downloading language codes...\n');
+  console.log('Downloading language codes...\n')
 
-  var ALL_LOCALES = 'https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/all-locales';
+  var ALL_LOCALES = 'https://hg.mozilla.org/mozilla-central/raw-file/tip/browser/locales/all-locales'
 
   return new Promise(function(resolve) {
     https.get(ALL_LOCALES, function(response) {
       if (response.statusCode === 200) {
-        var content = '';
-        response.setEncoding('utf8');
+        var content = ''
+        response.setEncoding('utf8')
         response.on('data', function(chunk) {
-          content += chunk;
-        });
+          content += chunk
+        })
         response.on('end', function() {
-          content = content.trim(); // Remove any leading/trailing white-space.
-          var langCodes = normalizeText(content).split('\n');
-          resolve(langCodes);
-        });
+          content = content.trim() // Remove any leading/trailing white-space.
+          var langCodes = normalizeText(content).split('\n')
+          resolve(langCodes)
+        })
       } else {
-        resolve([]);
+        resolve([])
       }
-    });
-  });
+    })
+  })
 }
 
 function downloadLanguageFiles(root, langCode) {
-  console.log('Downloading ' + langCode + '...');
+  console.log('Downloading ' + langCode + '...')
 
   // Constants for constructing the URLs. Translations are taken from the
   // Nightly channel as those are the most recent ones.
-  var MOZ_CENTRAL_ROOT = 'https://hg.mozilla.org/l10n-central/';
-  var MOZ_CENTRAL_PDFJS_DIR = '/raw-file/default/browser/pdfviewer/';
+  var MOZ_CENTRAL_ROOT = 'https://hg.mozilla.org/l10n-central/'
+  var MOZ_CENTRAL_PDFJS_DIR = '/raw-file/default/browser/pdfviewer/'
 
   // Defines which files to download for each language.
-  var files = ['chrome.properties', 'viewer.properties'];
-  var downloadsLeft = files.length;
+  var files = ['chrome.properties', 'viewer.properties']
+  var downloadsLeft = files.length
 
-  var outputDir = path.join(root, langCode);
+  var outputDir = path.join(root, langCode)
   if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir);
+    fs.mkdirSync(outputDir)
   }
 
   return new Promise(function(resolve) {
     // Download the necessary files for this language.
     files.forEach(function(fileName) {
-      var outputPath = path.join(outputDir, fileName);
-      var url = MOZ_CENTRAL_ROOT + langCode + MOZ_CENTRAL_PDFJS_DIR + fileName;
+      var outputPath = path.join(outputDir, fileName)
+      var url = MOZ_CENTRAL_ROOT + langCode + MOZ_CENTRAL_PDFJS_DIR + fileName
 
       https.get(url, function(response) {
         // Not all files exist for each language. Files without translations
         // have been removed (https://bugzilla.mozilla.org/show_bug.cgi?id=1443175).
         if (response.statusCode === 200) {
-          var content = '';
-          response.setEncoding('utf8');
+          var content = ''
+          response.setEncoding('utf8')
           response.on('data', function(chunk) {
-            content += chunk;
-          });
+            content += chunk
+          })
           response.on('end', function() {
-            fs.writeFileSync(outputPath, normalizeText(content), 'utf8');
+            fs.writeFileSync(outputPath, normalizeText(content), 'utf8')
             if (--downloadsLeft === 0) {
-              resolve();
+              resolve()
             }
-          });
+          })
         } else {
           if (--downloadsLeft === 0) {
-            resolve();
+            resolve()
           }
         }
-      });
-    });
-  });
+      })
+    })
+  })
 }
 
 async function downloadL10n(root, callback) {
-  var langCodes = await downloadLanguageCodes();
+  var langCodes = await downloadLanguageCodes()
 
   for (var langCode of langCodes) {
     if (!langCode || EXCLUDE_LANG_CODES.includes(langCode)) {
-      continue;
+      continue
     }
-    await downloadLanguageFiles(root, langCode);
+    await downloadLanguageFiles(root, langCode)
   }
 
-  var removeCodes = [];
+  var removeCodes = []
   for (var entry of fs.readdirSync(root)) {
-    var dirPath = path.join(root, entry), stat = fs.lstatSync(dirPath);
+    var dirPath = path.join(root, entry), stat = fs.lstatSync(dirPath)
 
     if (stat.isDirectory() && entry !== 'en-US' &&
         (!langCodes.includes(entry) || EXCLUDE_LANG_CODES.includes(entry))) {
-      removeCodes.push(entry);
+      removeCodes.push(entry)
     }
   }
   if (removeCodes.length) {
     console.log('\nConsider removing the following unmaintained locales:\n' +
-                removeCodes.join(', ') + '\n');
+                removeCodes.join(', ') + '\n')
   }
 
   if (callback) {
-    callback();
+    callback()
   }
 }
 
-exports.downloadL10n = downloadL10n;
+exports.downloadL10n = downloadL10n

@@ -1,4 +1,4 @@
-require('../../modules/es.math.clz32');
-var path = require('../../internals/path');
+require('../../modules/es.math.clz32')
+var path = require('../../internals/path')
 
-module.exports = path.Math.clz32;
+module.exports = path.Math.clz32

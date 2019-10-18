@@ -1,4 +1,4 @@
-require('../../modules/es.math.acosh');
-var path = require('../../internals/path');
+require('../../modules/es.math.acosh')
+var path = require('../../internals/path')
 
-module.exports = path.Math.acosh;
+module.exports = path.Math.acosh

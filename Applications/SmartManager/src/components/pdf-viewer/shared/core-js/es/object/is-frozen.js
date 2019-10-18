@@ -1,4 +1,4 @@
-require('../../modules/es.object.is-frozen');
-var path = require('../../internals/path');
+require('../../modules/es.object.is-frozen')
+var path = require('../../internals/path')
 
-module.exports = path.Object.isFrozen;
+module.exports = path.Object.isFrozen

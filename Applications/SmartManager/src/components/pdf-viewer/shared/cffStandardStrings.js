@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-'use strict';
+'use strict'
 
 var CFFEncodingMap = {
   '0': '-reserved-',
@@ -72,7 +72,7 @@ var CFFEncodingMap = {
   '29': 'callgsubr',
   '30': 'vhcurveto',
   '31': 'hvcurveto'
-};
+}
 
 var CFFDictDataMap = {
   '0': {
@@ -231,7 +231,7 @@ var CFFDictDataMap = {
   '21': {
     name: 'nominalWidthX'
   }
-};
+}
 
 var CFFDictPrivateDataMap = {
   '6': {
@@ -308,4 +308,4 @@ var CFFDictPrivateDataMap = {
     name: 'nominalWidthX',
     operand: 0
   }
-};
+}

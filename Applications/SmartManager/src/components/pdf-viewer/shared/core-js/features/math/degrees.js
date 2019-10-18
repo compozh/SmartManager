@@ -1,4 +1,4 @@
-require('../../modules/esnext.math.degrees');
-var path = require('../../internals/path');
+require('../../modules/esnext.math.degrees')
+var path = require('../../internals/path')
 
-module.exports = path.Math.degrees;
+module.exports = path.Math.degrees

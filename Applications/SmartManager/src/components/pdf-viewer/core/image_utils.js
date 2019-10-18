@@ -14,38 +14,38 @@
  */
 /* eslint no-var: error */
 
-import { ColorSpace } from './colorspace';
-import { JpegStream } from './jpeg_stream';
-import { Stream } from './stream';
+import { ColorSpace } from './colorspace'
+import { JpegStream } from './jpeg_stream'
+import { Stream } from './stream'
 
 class NativeImageDecoder {
   constructor({ xref, resources, handler, forceDataSchema = false,
-                pdfFunctionFactory, }) {
-    this.xref = xref;
-    this.resources = resources;
-    this.handler = handler;
-    this.forceDataSchema = forceDataSchema;
-    this.pdfFunctionFactory = pdfFunctionFactory;
+    pdfFunctionFactory, }) {
+    this.xref = xref
+    this.resources = resources
+    this.handler = handler
+    this.forceDataSchema = forceDataSchema
+    this.pdfFunctionFactory = pdfFunctionFactory
   }
 
   canDecode(image) {
     return image instanceof JpegStream &&
            NativeImageDecoder.isDecodable(image, this.xref, this.resources,
-                                          this.pdfFunctionFactory);
+             this.pdfFunctionFactory)
   }
 
   decode(image) {
     // For natively supported JPEGs send them to the main thread for decoding.
-    const dict = image.dict;
-    let colorSpace = dict.get('ColorSpace', 'CS');
+    const dict = image.dict
+    let colorSpace = dict.get('ColorSpace', 'CS')
     colorSpace = ColorSpace.parse(colorSpace, this.xref, this.resources,
-                                  this.pdfFunctionFactory);
+      this.pdfFunctionFactory)
 
     return this.handler.sendWithPromise('JpegDecode', [
       image.getIR(this.forceDataSchema), colorSpace.numComps
     ]).then(function({ data, width, height, }) {
-      return new Stream(data, 0, data.length, dict);
-    });
+      return new Stream(data, 0, data.length, dict)
+    })
   }
 
   /**
@@ -53,33 +53,33 @@ class NativeImageDecoder {
    * further processing such as color space conversions.
    */
   static isSupported(image, xref, res, pdfFunctionFactory) {
-    const dict = image.dict;
+    const dict = image.dict
     if (dict.has('DecodeParms') || dict.has('DP')) {
-      return false;
+      return false
     }
     const cs = ColorSpace.parse(dict.get('ColorSpace', 'CS'), xref, res,
-                                pdfFunctionFactory);
+      pdfFunctionFactory)
     // isDefaultDecode() of DeviceGray and DeviceRGB needs no `bpc` argument.
     return (cs.name === 'DeviceGray' || cs.name === 'DeviceRGB') &&
-           cs.isDefaultDecode(dict.getArray('Decode', 'D'));
+           cs.isDefaultDecode(dict.getArray('Decode', 'D'))
   }
 
   /**
    * Checks if the image can be decoded by the browser.
    */
   static isDecodable(image, xref, res, pdfFunctionFactory) {
-    const dict = image.dict;
+    const dict = image.dict
     if (dict.has('DecodeParms') || dict.has('DP')) {
-      return false;
+      return false
     }
     const cs = ColorSpace.parse(dict.get('ColorSpace', 'CS'), xref, res,
-                                pdfFunctionFactory);
-    const bpc = dict.get('BitsPerComponent', 'BPC') || 1;
+      pdfFunctionFactory)
+    const bpc = dict.get('BitsPerComponent', 'BPC') || 1
     return (cs.numComps === 1 || cs.numComps === 3) &&
-           cs.isDefaultDecode(dict.getArray('Decode', 'D'), bpc);
+           cs.isDefaultDecode(dict.getArray('Decode', 'D'), bpc)
   }
 }
 
 export {
   NativeImageDecoder,
-};
+}

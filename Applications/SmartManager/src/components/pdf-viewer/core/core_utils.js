@@ -14,25 +14,25 @@
  */
 /* eslint no-var: error */
 
-import { assert, BaseException, warn } from '../shared/util';
+import { assert, BaseException, warn } from '../shared/util'
 
 function getLookupTableFactory(initializer) {
-  let lookup;
+  let lookup
   return function() {
     if (initializer) {
-      lookup = Object.create(null);
-      initializer(lookup);
-      initializer = null;
+      lookup = Object.create(null)
+      initializer(lookup)
+      initializer = null
     }
-    return lookup;
-  };
+    return lookup
+  }
 }
 
 class MissingDataException extends BaseException {
   constructor(begin, end) {
-    super(`Missing data [${begin}, ${end})`);
-    this.begin = begin;
-    this.end = end;
+    super(`Missing data [${begin}, ${end})`)
+    this.begin = begin
+    this.end = end
   }
 }
 
@@ -62,36 +62,36 @@ class XRefParseException extends BaseException { }
  *   levels of the tree. The default value is `true`.
  */
 function getInheritableProperty({ dict, key, getArray = false,
-                                  stopWhenFound = true, }) {
-  const LOOP_LIMIT = 100;
-  let loopCount = 0;
-  let values;
+  stopWhenFound = true, }) {
+  const LOOP_LIMIT = 100
+  let loopCount = 0
+  let values
 
   while (dict) {
-    const value = getArray ? dict.getArray(key) : dict.get(key);
+    const value = getArray ? dict.getArray(key) : dict.get(key)
     if (value !== undefined) {
       if (stopWhenFound) {
-        return value;
+        return value
       }
       if (!values) {
-        values = [];
+        values = []
       }
-      values.push(value);
+      values.push(value)
     }
     if (++loopCount > LOOP_LIMIT) {
-      warn(`getInheritableProperty: maximum loop count exceeded for "${key}"`);
-      break;
+      warn(`getInheritableProperty: maximum loop count exceeded for "${key}"`)
+      break
     }
-    dict = dict.get('Parent');
+    dict = dict.get('Parent')
   }
-  return values;
+  return values
 }
 
 const ROMAN_NUMBER_MAP = [
   '', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
   '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
   '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'
-];
+]
 
 /**
  * Converts positive integers to (upper case) Roman numerals.
@@ -102,26 +102,26 @@ const ROMAN_NUMBER_MAP = [
  */
 function toRomanNumerals(number, lowerCase = false) {
   assert(Number.isInteger(number) && number > 0,
-         'The number should be a positive integer.');
-  let pos, romanBuf = [];
+    'The number should be a positive integer.')
+  let pos, romanBuf = []
   // Thousands
   while (number >= 1000) {
-    number -= 1000;
-    romanBuf.push('M');
+    number -= 1000
+    romanBuf.push('M')
   }
   // Hundreds
-  pos = (number / 100) | 0;
-  number %= 100;
-  romanBuf.push(ROMAN_NUMBER_MAP[pos]);
+  pos = (number / 100) | 0
+  number %= 100
+  romanBuf.push(ROMAN_NUMBER_MAP[pos])
   // Tens
-  pos = (number / 10) | 0;
-  number %= 10;
-  romanBuf.push(ROMAN_NUMBER_MAP[10 + pos]);
+  pos = (number / 10) | 0
+  number %= 10
+  romanBuf.push(ROMAN_NUMBER_MAP[10 + pos])
   // Ones
-  romanBuf.push(ROMAN_NUMBER_MAP[20 + number]);
+  romanBuf.push(ROMAN_NUMBER_MAP[20 + number])
 
-  const romanStr = romanBuf.join('');
-  return (lowerCase ? romanStr.toLowerCase() : romanStr);
+  const romanStr = romanBuf.join('')
+  return (lowerCase ? romanStr.toLowerCase() : romanStr)
 }
 
 export {
@@ -131,4 +131,4 @@ export {
   XRefParseException,
   getInheritableProperty,
   toRomanNumerals,
-};
+}

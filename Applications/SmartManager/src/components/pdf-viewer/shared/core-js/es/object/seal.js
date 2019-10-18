@@ -1,4 +1,4 @@
-require('../../modules/es.object.seal');
-var path = require('../../internals/path');
+require('../../modules/es.object.seal')
+var path = require('../../internals/path')
 
-module.exports = path.Object.seal;
+module.exports = path.Object.seal

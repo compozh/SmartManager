@@ -1,5 +1,5 @@
-var hasOwnProperty = {}.hasOwnProperty;
+var hasOwnProperty = {}.hasOwnProperty
 
 module.exports = function (it, key) {
-  return hasOwnProperty.call(it, key);
-};
+  return hasOwnProperty.call(it, key)
+}

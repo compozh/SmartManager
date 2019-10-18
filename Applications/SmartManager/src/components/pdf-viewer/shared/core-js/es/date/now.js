@@ -1,4 +1,4 @@
-require('../../modules/es.date.now');
-var path = require('../../internals/path');
+require('../../modules/es.date.now')
+var path = require('../../internals/path')
 
-module.exports = path.Date.now;
+module.exports = path.Date.now

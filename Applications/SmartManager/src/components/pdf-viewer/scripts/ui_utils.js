@@ -13,56 +13,56 @@
  * limitations under the License.
  */
 
-const CSS_UNITS = 96.0 / 72.0;
-const DEFAULT_SCALE_VALUE = 'auto';
-const DEFAULT_SCALE = 1.0;
-const MIN_SCALE = 0.10;
-const MAX_SCALE = 10.0;
-const UNKNOWN_SCALE = 0;
-const MAX_AUTO_SCALE = 1.25;
-const SCROLLBAR_PADDING = 40;
-const VERTICAL_PADDING = 5;
+const CSS_UNITS = 96.0 / 72.0
+const DEFAULT_SCALE_VALUE = 'auto'
+const DEFAULT_SCALE = 1.0
+const MIN_SCALE = 0.10
+const MAX_SCALE = 10.0
+const UNKNOWN_SCALE = 0
+const MAX_AUTO_SCALE = 1.25
+const SCROLLBAR_PADDING = 40
+const VERTICAL_PADDING = 5
 
 const PresentationModeState = {
   UNKNOWN: 0,
   NORMAL: 1,
   CHANGING: 2,
   FULLSCREEN: 3,
-};
+}
 
 const RendererType = {
   CANVAS: 'canvas',
   SVG: 'svg',
-};
+}
 
 const TextLayerMode = {
   DISABLE: 0,
   ENABLE: 1,
   ENABLE_ENHANCE: 2,
-};
+}
 
 const ScrollMode = {
   UNKNOWN: -1,
   VERTICAL: 0, // Default value.
   HORIZONTAL: 1,
   WRAPPED: 2,
-};
+}
 
 const SpreadMode = {
   UNKNOWN: -1,
   NONE: 0, // Default value.
   ODD: 1,
   EVEN: 2,
-};
+}
 
 // Replaces {{arguments}} with their values.
 function formatL10nValue(text, args) {
   if (!args) {
-    return text;
+    return text
   }
   return text.replace(/\{\{\s*(\w+)\s*\}\}/g, (all, name) => {
-    return (name in args ? args[name] : '{{' + name + '}}');
-  });
+    return (name in args ? args[name] : '{{' + name + '}}')
+  })
 }
 
 /**
@@ -71,19 +71,19 @@ function formatL10nValue(text, args) {
  */
 let NullL10n = {
   async getLanguage() {
-    return 'en-us';
+    return 'en-us'
   },
 
   async getDirection() {
-    return 'ltr';
+    return 'ltr'
   },
 
   async get(property, args, fallback) {
-    return formatL10nValue(fallback, args);
+    return formatL10nValue(fallback, args)
   },
 
   async translate(element) { },
-};
+}
 
 /**
  * Returns scale factor for the canvas. It makes sense for the HiDPI displays.
@@ -92,18 +92,18 @@ let NullL10n = {
  *                   not required, true otherwise.
  */
 function getOutputScale(ctx) {
-  let devicePixelRatio = window.devicePixelRatio || 1;
+  let devicePixelRatio = window.devicePixelRatio || 1
   let backingStoreRatio = ctx.webkitBackingStorePixelRatio ||
                           ctx.mozBackingStorePixelRatio ||
                           ctx.msBackingStorePixelRatio ||
                           ctx.oBackingStorePixelRatio ||
-                          ctx.backingStorePixelRatio || 1;
-  let pixelRatio = devicePixelRatio / backingStoreRatio;
+                          ctx.backingStorePixelRatio || 1
+  let pixelRatio = devicePixelRatio / backingStoreRatio
   return {
     sx: pixelRatio,
     sy: pixelRatio,
     scaled: pixelRatio !== 1,
-  };
+  }
 }
 
 /**
@@ -118,38 +118,38 @@ function scrollIntoView(element, spot, skipOverflowHiddenElements = false) {
   // Assuming offsetParent is available (it's not available when viewer is in
   // hidden iframe or object). We have to scroll: if the offsetParent is not set
   // producing the error. See also animationStarted.
-  let parent = element.offsetParent;
+  let parent = element.offsetParent
   if (!parent) {
-    console.error('offsetParent is not set -- cannot scroll');
-    return;
+    console.error('offsetParent is not set -- cannot scroll')
+    return
   }
-  let offsetY = element.offsetTop + element.clientTop;
-  let offsetX = element.offsetLeft + element.clientLeft;
+  let offsetY = element.offsetTop + element.clientTop
+  let offsetX = element.offsetLeft + element.clientLeft
   while ((parent.clientHeight === parent.scrollHeight &&
           parent.clientWidth === parent.scrollWidth) ||
          (skipOverflowHiddenElements &&
           getComputedStyle(parent).overflow === 'hidden')) {
     if (parent.dataset._scaleY) {
-      offsetY /= parent.dataset._scaleY;
-      offsetX /= parent.dataset._scaleX;
+      offsetY /= parent.dataset._scaleY
+      offsetX /= parent.dataset._scaleX
     }
-    offsetY += parent.offsetTop;
-    offsetX += parent.offsetLeft;
-    parent = parent.offsetParent;
+    offsetY += parent.offsetTop
+    offsetX += parent.offsetLeft
+    parent = parent.offsetParent
     if (!parent) {
-      return; // no need to scroll
+      return // no need to scroll
     }
   }
   if (spot) {
     if (spot.top !== undefined) {
-      offsetY += spot.top;
+      offsetY += spot.top
     }
     if (spot.left !== undefined) {
-      offsetX += spot.left;
-      parent.scrollLeft = offsetX;
+      offsetX += spot.left
+      parent.scrollLeft = offsetX
     }
   }
-  parent.scrollTop = offsetY;
+  parent.scrollTop = offsetY
 }
 
 /**
@@ -159,27 +159,27 @@ function scrollIntoView(element, spot, skipOverflowHiddenElements = false) {
 function watchScroll(viewAreaElement, callback) {
   let debounceScroll = function(evt) {
     if (rAF) {
-      return;
+      return
     }
     // schedule an invocation of scroll for next animation frame.
     rAF = window.requestAnimationFrame(function viewAreaElementScrolled() {
-      rAF = null;
+      rAF = null
 
-      let currentX = viewAreaElement.scrollLeft;
-      let lastX = state.lastX;
+      let currentX = viewAreaElement.scrollLeft
+      let lastX = state.lastX
       if (currentX !== lastX) {
-        state.right = currentX > lastX;
+        state.right = currentX > lastX
       }
-      state.lastX = currentX;
-      let currentY = viewAreaElement.scrollTop;
-      let lastY = state.lastY;
+      state.lastX = currentX
+      let currentY = viewAreaElement.scrollTop
+      let lastY = state.lastY
       if (currentY !== lastY) {
-        state.down = currentY > lastY;
+        state.down = currentY > lastY
       }
-      state.lastY = currentY;
-      callback(state);
-    });
-  };
+      state.lastY = currentY
+      callback(state)
+    })
+  }
 
   let state = {
     right: true,
@@ -187,26 +187,26 @@ function watchScroll(viewAreaElement, callback) {
     lastX: viewAreaElement.scrollLeft,
     lastY: viewAreaElement.scrollTop,
     _eventHandler: debounceScroll,
-  };
+  }
 
-  let rAF = null;
-  viewAreaElement.addEventListener('scroll', debounceScroll, true);
-  return state;
+  let rAF = null
+  viewAreaElement.addEventListener('scroll', debounceScroll, true)
+  return state
 }
 
 /**
  * Helper function to parse query string (e.g. ?param1=value&parm2=...).
  */
 function parseQueryString(query) {
-  let parts = query.split('&');
-  let params = Object.create(null);
+  let parts = query.split('&')
+  let params = Object.create(null)
   for (let i = 0, ii = parts.length; i < ii; ++i) {
-    let param = parts[i].split('=');
-    let key = param[0].toLowerCase();
-    let value = param.length > 1 ? param[1] : null;
-    params[decodeURIComponent(key)] = decodeURIComponent(value);
+    let param = parts[i].split('=')
+    let key = param[0].toLowerCase()
+    let value = param.length > 1 ? param[1] : null
+    params[decodeURIComponent(key)] = decodeURIComponent(value)
   }
-  return params;
+  return params
 }
 
 /**
@@ -219,26 +219,26 @@ function parseQueryString(query) {
  *                   or |items.length| if no such element exists.
  */
 function binarySearchFirstItem(items, condition) {
-  let minIndex = 0;
-  let maxIndex = items.length - 1;
+  let minIndex = 0
+  let maxIndex = items.length - 1
 
   if (items.length === 0 || !condition(items[maxIndex])) {
-    return items.length;
+    return items.length
   }
   if (condition(items[minIndex])) {
-    return minIndex;
+    return minIndex
   }
 
   while (minIndex < maxIndex) {
-    let currentIndex = (minIndex + maxIndex) >> 1;
-    let currentItem = items[currentIndex];
+    let currentIndex = (minIndex + maxIndex) >> 1
+    let currentItem = items[currentIndex]
     if (condition(currentItem)) {
-      maxIndex = currentIndex;
+      maxIndex = currentIndex
     } else {
-      minIndex = currentIndex + 1;
+      minIndex = currentIndex + 1
     }
   }
-  return minIndex; /* === maxIndex */
+  return minIndex /* === maxIndex */
 }
 
 /**
@@ -251,45 +251,45 @@ function binarySearchFirstItem(items, condition) {
 function approximateFraction(x) {
   // Fast paths for int numbers or their inversions.
   if (Math.floor(x) === x) {
-    return [x, 1];
+    return [x, 1]
   }
-  let xinv = 1 / x;
-  let limit = 8;
+  let xinv = 1 / x
+  let limit = 8
   if (xinv > limit) {
-    return [1, limit];
+    return [1, limit]
   } else if (Math.floor(xinv) === xinv) {
-    return [1, xinv];
+    return [1, xinv]
   }
 
-  let x_ = x > 1 ? xinv : x;
+  let x_ = x > 1 ? xinv : x
   // a/b and c/d are neighbours in Farey sequence.
-  let a = 0, b = 1, c = 1, d = 1;
+  let a = 0, b = 1, c = 1, d = 1
   // Limiting search to order 8.
   while (true) {
     // Generating next term in sequence (order of q).
-    let p = a + c, q = b + d;
+    let p = a + c, q = b + d
     if (q > limit) {
-      break;
+      break
     }
     if (x_ <= p / q) {
-      c = p; d = q;
+      c = p; d = q
     } else {
-      a = p; b = q;
+      a = p; b = q
     }
   }
-  let result;
+  let result
   // Select closest of the neighbours to x.
   if (x_ - a / b < c / d - x_) {
-    result = x_ === x ? [a, b] : [b, a];
+    result = x_ === x ? [a, b] : [b, a]
   } else {
-    result = x_ === x ? [c, d] : [d, c];
+    result = x_ === x ? [c, d] : [d, c]
   }
-  return result;
+  return result
 }
 
 function roundToDivide(x, div) {
-  let r = x % div;
-  return r === 0 ? x : Math.round(x - r + div);
+  let r = x % div
+  return r === 0 ? x : Math.round(x - r + div)
 }
 
 /**
@@ -300,17 +300,17 @@ function roundToDivide(x, div) {
  *   and {number} `height`, given in inches.
  */
 function getPageSizeInches({ view, userUnit, rotate, }) {
-  const [x1, y1, x2, y2] = view;
+  const [x1, y1, x2, y2] = view
   // We need to take the page rotation into account as well.
-  const changeOrientation = rotate % 180 !== 0;
+  const changeOrientation = rotate % 180 !== 0
 
-  const width = (x2 - x1) / 72 * userUnit;
-  const height = (y2 - y1) / 72 * userUnit;
+  const width = (x2 - x1) / 72 * userUnit
+  const height = (y2 - y1) / 72 * userUnit
 
   return {
     width: (changeOrientation ? height : width),
     height: (changeOrientation ? width : height),
-  };
+  }
 }
 
 /**
@@ -338,7 +338,7 @@ function backtrackBeforeAllVisibleElements(index, views, top) {
   // Of course, if either this element or the previous (hidden) element is also
   // the first element, there's nothing to worry about.
   if (index < 2) {
-    return index;
+    return index
   }
 
   // That aside, the possible cases are represented below.
@@ -364,8 +364,8 @@ function backtrackBeforeAllVisibleElements(index, views, top) {
   // (case 1, 2, or 4), which means finding a page that is above the current
   // page's top. If the found page is partially visible, we're definitely not in
   // case 3, and this assumption is correct.
-  let elt = views[index].div;
-  let pageTop = elt.offsetTop + elt.clientTop;
+  let elt = views[index].div
+  let pageTop = elt.offsetTop + elt.clientTop
 
   if (pageTop >= top) {
     // The found page is fully visible, so we're actually either in case 3 or 4,
@@ -373,8 +373,8 @@ function backtrackBeforeAllVisibleElements(index, views, top) {
     // scanning the entire previous row, so we just conservatively assume that
     // we do need to backtrack to that row. In both cases, the previous page is
     // in the previous row, so use its top instead.
-    elt = views[index - 1].div;
-    pageTop = elt.offsetTop + elt.clientTop;
+    elt = views[index - 1].div
+    pageTop = elt.offsetTop + elt.clientTop
   }
 
   // Now we backtrack to the first page that still has its bottom below
@@ -386,16 +386,16 @@ function backtrackBeforeAllVisibleElements(index, views, top) {
   // which is the case when pages are stacked vertically, `index` should remain
   // unchanged, so we use a distinct loop variable.)
   for (let i = index - 2; i >= 0; --i) {
-    elt = views[i].div;
+    elt = views[i].div
     if (elt.offsetTop + elt.clientTop + elt.clientHeight <= pageTop) {
       // We have reached the previous row, so stop now.
       // This loop is expected to terminate relatively quickly because the
       // number of pages per row is expected to be small.
-      break;
+      break
     }
-    index = i;
+    index = i
   }
-  return index;
+  return index
 }
 
 /**
@@ -426,9 +426,9 @@ function backtrackBeforeAllVisibleElements(index, views, top) {
  * @returns {Object} `{ first, last, views: [{ id, x, y, view, percent }] }`
  */
 function getVisibleElements(scrollEl, views, sortByVisibility = false,
-                            horizontal = false) {
-  const top = scrollEl.scrollTop, bottom = top + scrollEl.clientHeight;
-  const left = scrollEl.scrollLeft, right = left + scrollEl.clientWidth;
+  horizontal = false) {
+  const top = scrollEl.scrollTop, bottom = top + scrollEl.clientHeight
+  const left = scrollEl.scrollLeft, right = left + scrollEl.clientWidth
 
   // Throughout this "generic" function, comments will assume we're working with
   // PDF document pages, which is the most important and complex case. In this
@@ -441,22 +441,22 @@ function getVisibleElements(scrollEl, views, sortByVisibility = false,
   // the border). Adding clientWidth/Height gets us the bottom-right corner of
   // the padding edge.
   function isElementBottomAfterViewTop(view) {
-    const element = view.div;
+    const element = view.div
     const elementBottom =
-      element.offsetTop + element.clientTop + element.clientHeight;
-    return elementBottom > top;
+      element.offsetTop + element.clientTop + element.clientHeight
+    return elementBottom > top
   }
   function isElementRightAfterViewLeft(view) {
-    const element = view.div;
+    const element = view.div
     const elementRight =
-      element.offsetLeft + element.clientLeft + element.clientWidth;
-    return elementRight > left;
+      element.offsetLeft + element.clientLeft + element.clientWidth
+    return elementRight > left
   }
 
-  const visible = [], numViews = views.length;
+  const visible = [], numViews = views.length
   let firstVisibleElementInd = numViews === 0 ? 0 :
     binarySearchFirstItem(views, horizontal ? isElementRightAfterViewLeft :
-                                              isElementBottomAfterViewTop);
+      isElementBottomAfterViewTop)
 
   // Please note the return value of the `binarySearchFirstItem` function when
   // no valid element is found (hence the `firstVisibleElementInd` check below).
@@ -468,7 +468,7 @@ function getVisibleElements(scrollEl, views, sortByVisibility = false,
     // pages with bottoms below. This function detects and corrects that error;
     // see it for more comments.
     firstVisibleElementInd =
-      backtrackBeforeAllVisibleElements(firstVisibleElementInd, views, top);
+      backtrackBeforeAllVisibleElements(firstVisibleElementInd, views, top)
   }
 
   // lastEdge acts as a cutoff for us to stop looping, because we know all
@@ -479,15 +479,15 @@ function getVisibleElements(scrollEl, views, sortByVisibility = false,
   // the tops of subsequent pages on the same row could still be visible. In
   // horizontal scrolling, we don't have that issue, so we can stop as soon as
   // we pass `right`, without needing the code below that handles the -1 case.
-  let lastEdge = horizontal ? right : -1;
+  let lastEdge = horizontal ? right : -1
 
   for (let i = firstVisibleElementInd; i < numViews; i++) {
-    const view = views[i], element = view.div;
-    const currentWidth = element.offsetLeft + element.clientLeft;
-    const currentHeight = element.offsetTop + element.clientTop;
-    const viewWidth = element.clientWidth, viewHeight = element.clientHeight;
-    const viewRight = currentWidth + viewWidth;
-    const viewBottom = currentHeight + viewHeight;
+    const view = views[i], element = view.div
+    const currentWidth = element.offsetLeft + element.clientLeft
+    const currentHeight = element.offsetTop + element.clientTop
+    const viewWidth = element.clientWidth, viewHeight = element.clientHeight
+    const viewRight = currentWidth + viewWidth
+    const viewBottom = currentHeight + viewHeight
 
     if (lastEdge === -1) {
       // As commented above, this is only needed in non-horizontal cases.
@@ -495,59 +495,59 @@ function getVisibleElements(scrollEl, views, sortByVisibility = false,
       // visible ensures that the next page fully below lastEdge is on the
       // next row, which has to be fully hidden along with all subsequent rows.
       if (viewBottom >= bottom) {
-        lastEdge = viewBottom;
+        lastEdge = viewBottom
       }
     } else if ((horizontal ? currentWidth : currentHeight) > lastEdge) {
-      break;
+      break
     }
 
     if (viewBottom <= top || currentHeight >= bottom ||
         viewRight <= left || currentWidth >= right) {
-      continue;
+      continue
     }
 
     const hiddenHeight = Math.max(0, top - currentHeight) +
-                         Math.max(0, viewBottom - bottom);
+                         Math.max(0, viewBottom - bottom)
     const hiddenWidth = Math.max(0, left - currentWidth) +
-                        Math.max(0, viewRight - right);
+                        Math.max(0, viewRight - right)
     const percent = ((viewHeight - hiddenHeight) * (viewWidth - hiddenWidth) *
-                     100 / viewHeight / viewWidth) | 0;
+                     100 / viewHeight / viewWidth) | 0
     visible.push({
       id: view.id,
       x: currentWidth,
       y: currentHeight,
       view,
       percent,
-    });
+    })
   }
 
-  const first = visible[0], last = visible[visible.length - 1];
+  const first = visible[0], last = visible[visible.length - 1]
 
   if (sortByVisibility) {
     visible.sort(function(a, b) {
-      let pc = a.percent - b.percent;
+      let pc = a.percent - b.percent
       if (Math.abs(pc) > 0.001) {
-        return -pc;
+        return -pc
       }
-      return a.id - b.id; // ensure stability
-    });
+      return a.id - b.id // ensure stability
+    })
   }
-  return { first, last, views: visible, };
+  return { first, last, views: visible, }
 }
 
 /**
  * Event handler to suppress context menu.
  */
 function noContextMenuHandler(evt) {
-  evt.preventDefault();
+  evt.preventDefault()
 }
 
 function isDataSchema(url) {
-  let i = 0, ii = url.length;
+  let i = 0, ii = url.length
   while (i < ii && url[i].trim() === '') {
-    i++;
+    i++
   }
-  return url.substring(i, i + 5).toLowerCase() === 'data:';
+  return url.substring(i, i + 5).toLowerCase() === 'data:'
 }
 
 /**
@@ -560,81 +560,81 @@ function isDataSchema(url) {
 function getPDFFileNameFromURL(url, defaultFilename = 'document.pdf') {
   console.log('getPDFFileNameFromURL', url)
   if (typeof url !== 'string') {
-    return defaultFilename;
+    return defaultFilename
   }
   if (isDataSchema(url)) {
     console.warn('getPDFFileNameFromURL: ' +
-                 'ignoring "data:" URL for performance reasons.');
-    return defaultFilename;
+                 'ignoring "data:" URL for performance reasons.')
+    return defaultFilename
   }
-  const reURI = /^(?:(?:[^:]+:)?\/\/[^\/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
+  const reURI = /^(?:(?:[^:]+:)?\/\/[^\/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/
   //            SCHEME        HOST         1.PATH  2.QUERY   3.REF
   // Pattern to get last matching NAME.pdf
-  const reFilename = /[^\/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
-  let splitURI = reURI.exec(url);
+  const reFilename = /[^\/?#=]+\.pdf\b(?!.*\.pdf\b)/i
+  let splitURI = reURI.exec(url)
   let suggestedFilename = reFilename.exec(splitURI[1]) ||
                           reFilename.exec(splitURI[2]) ||
-                          reFilename.exec(splitURI[3]);
+                          reFilename.exec(splitURI[3])
   if (suggestedFilename) {
-    suggestedFilename = suggestedFilename[0];
+    suggestedFilename = suggestedFilename[0]
     if (suggestedFilename.includes('%')) {
       // URL-encoded %2Fpath%2Fto%2Ffile.pdf should be file.pdf
       try {
         suggestedFilename =
-          reFilename.exec(decodeURIComponent(suggestedFilename))[0];
+          reFilename.exec(decodeURIComponent(suggestedFilename))[0]
       } catch (ex) { // Possible (extremely rare) errors:
         // URIError "Malformed URI", e.g. for "%AA.pdf"
         // TypeError "null has no properties", e.g. for "%2F.pdf"
       }
     }
   }
-  return suggestedFilename || defaultFilename;
+  return suggestedFilename || defaultFilename
 }
 
 function normalizeWheelEventDelta(evt) {
-  let delta = Math.sqrt(evt.deltaX * evt.deltaX + evt.deltaY * evt.deltaY);
-  let angle = Math.atan2(evt.deltaY, evt.deltaX);
+  let delta = Math.sqrt(evt.deltaX * evt.deltaX + evt.deltaY * evt.deltaY)
+  let angle = Math.atan2(evt.deltaY, evt.deltaX)
   if (-0.25 * Math.PI < angle && angle < 0.75 * Math.PI) {
     // All that is left-up oriented has to change the sign.
-    delta = -delta;
+    delta = -delta
   }
 
-  const MOUSE_DOM_DELTA_PIXEL_MODE = 0;
-  const MOUSE_DOM_DELTA_LINE_MODE = 1;
-  const MOUSE_PIXELS_PER_LINE = 30;
-  const MOUSE_LINES_PER_PAGE = 30;
+  const MOUSE_DOM_DELTA_PIXEL_MODE = 0
+  const MOUSE_DOM_DELTA_LINE_MODE = 1
+  const MOUSE_PIXELS_PER_LINE = 30
+  const MOUSE_LINES_PER_PAGE = 30
 
   // Converts delta to per-page units
   if (evt.deltaMode === MOUSE_DOM_DELTA_PIXEL_MODE) {
-    delta /= MOUSE_PIXELS_PER_LINE * MOUSE_LINES_PER_PAGE;
+    delta /= MOUSE_PIXELS_PER_LINE * MOUSE_LINES_PER_PAGE
   } else if (evt.deltaMode === MOUSE_DOM_DELTA_LINE_MODE) {
-    delta /= MOUSE_LINES_PER_PAGE;
+    delta /= MOUSE_LINES_PER_PAGE
   }
-  return delta;
+  return delta
 }
 
 function isValidRotation(angle) {
-  return Number.isInteger(angle) && angle % 90 === 0;
+  return Number.isInteger(angle) && angle % 90 === 0
 }
 
 function isValidScrollMode(mode) {
   return (Number.isInteger(mode) && Object.values(ScrollMode).includes(mode) &&
-          mode !== ScrollMode.UNKNOWN);
+          mode !== ScrollMode.UNKNOWN)
 }
 
 function isValidSpreadMode(mode) {
   return (Number.isInteger(mode) && Object.values(SpreadMode).includes(mode) &&
-          mode !== SpreadMode.UNKNOWN);
+          mode !== SpreadMode.UNKNOWN)
 }
 
 function isPortraitOrientation(size) {
-  return size.width <= size.height;
+  return size.width <= size.height
 }
 
 const WaitOnType = {
   EVENT: 'event',
   TIMEOUT: 'timeout',
-};
+}
 
 /**
  * @typedef {Object} WaitOnEventOrTimeoutParameters
@@ -657,32 +657,32 @@ function waitOnEventOrTimeout({ target, name, delay = 0, }) {
   return new Promise(function(resolve, reject) {
     if (typeof target !== 'object' || !(name && typeof name === 'string') ||
         !(Number.isInteger(delay) && delay >= 0)) {
-      throw new Error('waitOnEventOrTimeout - invalid parameters.');
+      throw new Error('waitOnEventOrTimeout - invalid parameters.')
     }
 
     function handler(type) {
       if (target instanceof EventBus) {
-        target.off(name, eventHandler);
+        target.off(name, eventHandler)
       } else {
-        target.removeEventListener(name, eventHandler);
+        target.removeEventListener(name, eventHandler)
       }
 
       if (timeout) {
-        clearTimeout(timeout);
+        clearTimeout(timeout)
       }
-      resolve(type);
+      resolve(type)
     }
 
-    const eventHandler = handler.bind(null, WaitOnType.EVENT);
+    const eventHandler = handler.bind(null, WaitOnType.EVENT)
     if (target instanceof EventBus) {
-      target.on(name, eventHandler);
+      target.on(name, eventHandler)
     } else {
-      target.addEventListener(name, eventHandler);
+      target.addEventListener(name, eventHandler)
     }
 
-    const timeoutHandler = handler.bind(null, WaitOnType.TIMEOUT);
-    let timeout = setTimeout(timeoutHandler, delay);
-  });
+    const timeoutHandler = handler.bind(null, WaitOnType.TIMEOUT)
+    let timeout = setTimeout(timeoutHandler, delay)
+  })
 }
 
 /**
@@ -693,11 +693,11 @@ let animationStarted = new Promise(function (resolve) {
       typeof window === 'undefined') {
     // Prevent "ReferenceError: window is not defined" errors when running the
     // unit-tests in Node.js/Travis.
-    setTimeout(resolve, 20);
-    return;
+    setTimeout(resolve, 20)
+    return
   }
-  window.requestAnimationFrame(resolve);
-});
+  window.requestAnimationFrame(resolve)
+})
 
 /**
  * Simple event bus for an application. Listeners are attached using the
@@ -706,46 +706,46 @@ let animationStarted = new Promise(function (resolve) {
  */
 class EventBus {
   constructor({ dispatchToDOM = false, } = {}) {
-    this._listeners = Object.create(null);
-    this._dispatchToDOM = dispatchToDOM === true;
+    this._listeners = Object.create(null)
+    this._dispatchToDOM = dispatchToDOM === true
   }
 
   on(eventName, listener) {
-    let eventListeners = this._listeners[eventName];
+    let eventListeners = this._listeners[eventName]
     if (!eventListeners) {
-      eventListeners = [];
-      this._listeners[eventName] = eventListeners;
+      eventListeners = []
+      this._listeners[eventName] = eventListeners
     }
-    eventListeners.push(listener);
+    eventListeners.push(listener)
   }
 
   off(eventName, listener) {
-    let eventListeners = this._listeners[eventName];
-    let i;
+    let eventListeners = this._listeners[eventName]
+    let i
     if (!eventListeners || ((i = eventListeners.indexOf(listener)) < 0)) {
-      return;
+      return
     }
-    eventListeners.splice(i, 1);
+    eventListeners.splice(i, 1)
   }
 
   dispatch(eventName) {
-    let eventListeners = this._listeners[eventName];
+    let eventListeners = this._listeners[eventName]
     if (!eventListeners || eventListeners.length === 0) {
       if (this._dispatchToDOM) {
-        const args = Array.prototype.slice.call(arguments, 1);
-        this._dispatchDOMEvent(eventName, args);
+        const args = Array.prototype.slice.call(arguments, 1)
+        this._dispatchDOMEvent(eventName, args)
       }
-      return;
+      return
     }
     // Passing all arguments after the eventName to the listeners.
-    const args = Array.prototype.slice.call(arguments, 1);
+    const args = Array.prototype.slice.call(arguments, 1)
     // Making copy of the listeners array in case if it will be modified
     // during dispatch.
     eventListeners.slice(0).forEach(function (listener) {
-      listener.apply(null, args);
-    });
+      listener.apply(null, args)
+    })
     if (this._dispatchToDOM) {
-      this._dispatchDOMEvent(eventName, args);
+      this._dispatchDOMEvent(eventName, args)
     }
   }
 
@@ -753,107 +753,107 @@ class EventBus {
    * @private
    */
   _dispatchDOMEvent(eventName, args = null) {
-    const details = Object.create(null);
+    const details = Object.create(null)
     if (args && args.length > 0) {
-      const obj = args[0];
+      const obj = args[0]
       for (let key in obj) {
-        const value = obj[key];
+        const value = obj[key]
         if (key === 'source') {
           if (value === window || value === document) {
-            return; // No need to re-dispatch (already) global events.
+            return // No need to re-dispatch (already) global events.
           }
-          continue; // Ignore the `source` property.
+          continue // Ignore the `source` property.
         }
-        details[key] = value;
+        details[key] = value
       }
     }
-    const event = document.createEvent('CustomEvent');
-    event.initCustomEvent(eventName, true, true, details);
-    document.dispatchEvent(event);
+    const event = document.createEvent('CustomEvent')
+    event.initCustomEvent(eventName, true, true, details)
+    document.dispatchEvent(event)
   }
 }
 
-let globalEventBus = null;
+let globalEventBus = null
 function getGlobalEventBus(dispatchToDOM = false) {
   if (!globalEventBus) {
-    globalEventBus = new EventBus({ dispatchToDOM, });
+    globalEventBus = new EventBus({ dispatchToDOM, })
   }
-  return globalEventBus;
+  return globalEventBus
 }
 
 function clamp(v, min, max) {
-  return Math.min(Math.max(v, min), max);
+  return Math.min(Math.max(v, min), max)
 }
 
 class ProgressBar {
   constructor(id, { height, width, units, } = {}) {
-    this.visible = true;
+    this.visible = true
 
     // Fetch the sub-elements for later.
-    this.div = document.querySelector(id + ' .progress');
+    this.div = document.querySelector(id + ' .progress')
     // Get the loading bar element, so it can be resized to fit the viewer.
-    this.bar = this.div.parentNode;
+    this.bar = this.div.parentNode
 
     // Get options, with sensible defaults.
-    this.height = height || 100;
-    this.width = width || 100;
-    this.units = units || '%';
+    this.height = height || 100
+    this.width = width || 100
+    this.units = units || '%'
 
     // Initialize heights.
-    this.div.style.height = this.height + this.units;
-    this.percent = 0;
+    this.div.style.height = this.height + this.units
+    this.percent = 0
   }
 
   _updateBar() {
     if (this._indeterminate) {
-      this.div.classList.add('indeterminate');
-      this.div.style.width = this.width + this.units;
-      return;
+      this.div.classList.add('indeterminate')
+      this.div.style.width = this.width + this.units
+      return
     }
 
-    this.div.classList.remove('indeterminate');
-    let progressSize = this.width * this._percent / 100;
-    this.div.style.width = progressSize + this.units;
+    this.div.classList.remove('indeterminate')
+    let progressSize = this.width * this._percent / 100
+    this.div.style.width = progressSize + this.units
   }
 
   get percent() {
-    return this._percent;
+    return this._percent
   }
 
   set percent(val) {
-    this._indeterminate = isNaN(val);
-    this._percent = clamp(val, 0, 100);
-    this._updateBar();
+    this._indeterminate = isNaN(val)
+    this._percent = clamp(val, 0, 100)
+    this._updateBar()
   }
 
   setWidth(viewer) {
     if (!viewer) {
-      return;
+      return
     }
-    let container = viewer.parentNode;
-    let scrollbarWidth = container.offsetWidth - viewer.offsetWidth;
+    let container = viewer.parentNode
+    let scrollbarWidth = container.offsetWidth - viewer.offsetWidth
     if (scrollbarWidth > 0) {
       this.bar.setAttribute('style', 'width: calc(100% - ' +
-                                     scrollbarWidth + 'px);');
+                                     scrollbarWidth + 'px);')
     }
   }
 
   hide() {
     if (!this.visible) {
-      return;
+      return
     }
-    this.visible = false;
-    this.bar.classList.add('hidden');
-    document.body.classList.remove('loadingInProgress');
+    this.visible = false
+    this.bar.classList.add('hidden')
+    document.body.classList.remove('loadingInProgress')
   }
 
   show() {
     if (this.visible) {
-      return;
+      return
     }
-    this.visible = true;
-    document.body.classList.add('loadingInProgress');
-    this.bar.classList.remove('hidden');
+    this.visible = true
+    document.body.classList.add('loadingInProgress')
+    this.bar.classList.remove('hidden')
   }
 }
 
@@ -862,18 +862,18 @@ class ProgressBar {
  * array, preserving the order of the rest.
  */
 function moveToEndOfArray(arr, condition) {
-  const moved = [], len = arr.length;
-  let write = 0;
+  const moved = [], len = arr.length
+  let write = 0
   for (let read = 0; read < len; ++read) {
     if (condition(arr[read])) {
-      moved.push(arr[read]);
+      moved.push(arr[read])
     } else {
-      arr[write] = arr[read];
-      ++write;
+      arr[write] = arr[read]
+      ++write
     }
   }
   for (let read = 0; write < len; ++read, ++write) {
-    arr[write] = moved[read];
+    arr[write] = moved[read]
   }
 }
 
@@ -918,4 +918,4 @@ export {
   WaitOnType,
   waitOnEventOrTimeout,
   moveToEndOfArray,
-};
+}

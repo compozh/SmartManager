@@ -1,7 +1,7 @@
 module.exports = function (exec) {
   try {
-    return !!exec();
+    return !!exec()
   } catch (error) {
-    return true;
+    return true
   }
-};
+}

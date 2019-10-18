@@ -118,11 +118,11 @@ class PDFThumbnailView {
     this.l10n.get('thumb_page_title', { page: id, }, 'Page {{page}}').
       then((msg) => {
         anchor.title = msg
-    })
+      })
     anchor.onclick = function() {
       linkService.page = id
       return false
-    };
+    }
     this.anchor = anchor
 
     let div = document.createElement('div')
@@ -258,7 +258,7 @@ class PDFThumbnailView {
 
       this.div.setAttribute('data-loaded', true)
       this.ring.appendChild(this.canvas)
-      return;
+      return
     }
     let image = document.createElement('img')
     image.id = id
@@ -267,7 +267,7 @@ class PDFThumbnailView {
       'Thumbnail of Page {{page}}').
       then((msg) => {
         image.setAttribute('aria-label', msg)
-    })
+      })
 
     image.style.width = this.canvasWidth + 'px'
     image.style.height = this.canvasHeight + 'px'
@@ -303,7 +303,7 @@ class PDFThumbnailView {
 
       if (error instanceof RenderingCancelledException) {
         renderCapability.resolve(undefined)
-        return;
+        return
       }
 
       this.renderingState = RenderingStates.FINISHED
@@ -324,11 +324,11 @@ class PDFThumbnailView {
         this.resume = () => {
           this.renderingState = RenderingStates.RUNNING
           cont()
-        };
+        }
         return
       }
       cont()
-    };
+    }
 
     let renderContext = {
       canvasContext: ctx,
@@ -365,7 +365,7 @@ class PDFThumbnailView {
       ctx.drawImage(img, 0, 0, img.width, img.height,
         0, 0, canvas.width, canvas.height)
       this._convertCanvasToImage()
-      return;
+      return
     }
 
     // drawImage does an awful job of rescaling the image, doing it gradually.

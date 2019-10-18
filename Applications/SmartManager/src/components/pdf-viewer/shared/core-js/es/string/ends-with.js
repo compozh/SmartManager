@@ -1,4 +1,4 @@
-require('../../modules/es.string.ends-with');
-var entryUnbind = require('../../internals/entry-unbind');
+require('../../modules/es.string.ends-with')
+var entryUnbind = require('../../internals/entry-unbind')
 
-module.exports = entryUnbind('String', 'endsWith');
+module.exports = entryUnbind('String', 'endsWith')

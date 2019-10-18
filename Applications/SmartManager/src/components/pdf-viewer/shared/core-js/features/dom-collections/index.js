@@ -1,1 +1,1 @@
-module.exports = require('../../stable/dom-collections');
+module.exports = require('../../stable/dom-collections')

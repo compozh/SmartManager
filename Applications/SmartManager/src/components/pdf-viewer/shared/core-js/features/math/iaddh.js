@@ -1,4 +1,4 @@
-require('../../modules/esnext.math.iaddh');
-var path = require('../../internals/path');
+require('../../modules/esnext.math.iaddh')
+var path = require('../../internals/path')
 
-module.exports = path.Math.iaddh;
+module.exports = path.Math.iaddh
