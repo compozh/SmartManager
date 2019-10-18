@@ -68,6 +68,9 @@ export default {
       mainContainer: 0
     }
   },
+  created() {
+    this.initializeSignalR()
+  },
   computed: {
     currentUser() {
       return this.$store.state.authentication.currentUser
@@ -77,6 +80,9 @@ export default {
     },
     snackbar() {
       return this.$store.getters['mes/snackbar']
+    },
+    workCenterFixationData() {
+      return this.$store.getters['mes/workCenterFixationData']
     },
     dialogLinearLoader() {
       return this.$store.getters['mes/dialogLinearLoader']
@@ -95,6 +101,44 @@ export default {
     }
   },
   methods: {
+    async initializeSignalR() {
+      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.applySignalR, this.ticket)
+    },
+    applySignalR(msg) {
+      let data = JSON.parse(msg)
+      if (!data) {
+        return
+      }
+      switch (data.Payload.Action) {
+      case 'WorkCenterStateChanged':
+        var state = data.Payload.Payload['STATE'],
+          workCenterFixationData = this.workCenterFixationData
+        switch (state) {
+        case 0: //DOWN_TIME
+          workCenterFixationData.state = 'DOWN_TIME'
+          break
+        case 1: //BUSY
+          workCenterFixationData.state = 'BUSY'
+          break
+        case 2: //EMERGENCY
+          workCenterFixationData.state = 'EMERGENCY'
+          break
+        }
+        workCenterFixationData.description = data.Message
+        this.$store.commit('mes/setWorkCenterFixationData', workCenterFixationData)
+        break
+      case 'TaskStateChanged':
+        var workCenters = data.Payload.Payload['WORKCENTERCODES']
+        if (!workCenters || !this.workCenter) {
+          break
+        }
+        workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
+        if (workCenters.includes(this.workCenter.code)) {
+          this.$store.commit('mes/setObsoluteDataTask', true)
+        }
+        break
+      }
+    },
     toggleMenuMode() {
       this.$store.dispatch('mes/toggleMenuMiniMode')
     },

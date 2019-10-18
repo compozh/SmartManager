@@ -88,19 +88,6 @@ export default {
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })
-    this.initializeSignalR()
-    // var action = async () => {
-    //   var workCenterForWorker = await me.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: me.properties.workerCode, fetchPolicy: 'network-only' })
-    //   for (var fixation of workCenterForWorker) {
-    //     if (me.workCenter.code == fixation.code) {
-    //       me.$store.commit('mes/setWorkCenterFixationData', fixation)
-    //       return
-    //     }
-    //   }
-    // }
-
-    // me.$store.commit('mes/addAfterChangeTaskStateEvent', { action })
-    // me.$store.commit('mes/addAfterDowntimeRegistrationEvent', { action })
   },
   data() {
     return { currentUserData: {} }
@@ -126,30 +113,6 @@ export default {
     }
   },
   methods: {
-     async initializeSignalR() {
-      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.workCenterStateChanged, this.ticket)
-    },
-    workCenterStateChanged(msg) {
-      let data = JSON.parse(msg)
-      if (!data || data.Payload.Action != 'WorkCenterStateChanged') {
-        return
-      }
-      var state = data.Payload.Payload['STATE'],
-        workCenterFixationData = this.workCenterFixationData
-      switch (state) {
-        case 0: //DOWN_TIME
-          workCenterFixationData.state = "DOWN_TIME"
-        break
-        case 1: //BUSY
-          workCenterFixationData.state = "BUSY"
-        break
-        case 2: //EMERGENCY
-          workCenterFixationData.state = "EMERGENCY"
-        break
-      }
-      workCenterFixationData.description = data.Message
-      this.$store.commit('mes/setWorkCenterFixationData', workCenterFixationData)
-    },
     async changeWorkCenter(newWorkCenter) {
       if (!newWorkCenter) {
         return
