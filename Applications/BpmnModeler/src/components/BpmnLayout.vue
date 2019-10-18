@@ -104,7 +104,7 @@
 
     <formio-builder-container />
 
-    <v-dialog v-model="showFormioDialog" max-width="800px">
+    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px">
       <v-card>
         <v-card-title>
           <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
@@ -286,7 +286,7 @@ export default {
       this.selectionGridSelectedItems = [];
       this.selectionGridTitle = '';
     },
-    async onPropertiesPanelSetExternalTaskProperties(taskCode, callback) {
+    async onPropertiesPanelSetExternalTaskProperties(taskCode, submission, callback) {
       this.loading = true;
       var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
       if (!action) {
@@ -312,6 +312,7 @@ export default {
         return;
       }
 
+      form.submission = JSON.stringify(submission);
       this.formioCode = action.unformio;
       this.formioDefinition = form;
       this.showFormioDialog = true;
@@ -321,7 +322,7 @@ export default {
     },
     onFormioSubmit() {
       var form = this.$refs.formioForm;
-      var submission = JSON.parse(form.getFormSubmission());
+      var submission = JSON.parse(form.getFormSubmission());     
       var params = [];
       for (var param in submission.data) {
         params.push({ name: param, type: typeof(submission.data[param]), value: submission.data[param] });
