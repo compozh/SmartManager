@@ -37,7 +37,7 @@ export default function (element, bpmnFactory, options, translate, commandStack)
 
   var topicEntry = entryFactory.textField({
     id: 'externalTopic',
-    label: translate('Topic'),
+    label: translate('Action'),
     modelProperty: 'externalTopic',
 
     buttonAction: {

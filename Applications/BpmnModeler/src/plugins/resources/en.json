@@ -47,6 +47,7 @@
 		"Id": "Id",
 		"SelectAction": "Select action",
 		"SelectForm": "Select Form",
+		"SelectTaskCreationRule": "Select task creation rule",
 		"FormCode": "Form code",
 		"FormName": "Form name"
 	},
@@ -58,6 +59,12 @@
 		"CantDrop": "Failed to move item",
 		"ProcessDeployed": "Diagram deployed",
 		"ProcessNotDeployed": "Failed to deploy diagram",
+		"FormsNotLoaded": "Forms not loaded",
+		"FormNotLoaded": "Form not loaded",
+		"ActionNotLoaded": "Action not loaded",
+		"RuleNotLoaded": "Rule not loaded",
+		"ActionWithoutForm": "Form is not attached to this action",
+		"RuleWithoutForm": "Form is not attached to this rule",
 		"InitializeSignalR": "Failed initialize SignalR"
 	},
 	"modeler": {
@@ -266,6 +273,11 @@
 		"Result Variable": "Result Variable",
 		"Task properties": "Task properties",
 		"Configure Connector": "Configure Connector",
-		"Must configure Connector": "Must configure Connector"
+		"Must configure Connector": "Must configure Connector",
+
+		"Action": "Action",
+		"Config": "Configuration",
+		"Task creation rule": "Task creation rule",
+		"Item description": "Item decription"
 	}
 }

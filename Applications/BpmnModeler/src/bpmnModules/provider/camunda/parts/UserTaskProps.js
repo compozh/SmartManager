@@ -32,7 +32,7 @@ export default function (group, element, bpmnFactory, translate, commandStack) {
 
   var topicEntry = entryFactory.textField({
     id: 'actionDefinitionId',
-    label: translate('Topic'),
+    label: translate('Task creation rule'),
     modelProperty: 'actionDefinitionId',
 
     buttonAction: {

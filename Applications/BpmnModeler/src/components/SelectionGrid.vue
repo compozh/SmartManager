@@ -13,8 +13,7 @@
     </v-card-title>
     <v-card-text style="max-height: 500px; overflow-y: auto;">
        <v-data-table
-        hide-actions
-        hide-headers
+        hide-actions      
         v-model="selected"
         :headers="columns"
         :items="items"
@@ -56,8 +55,8 @@
                 hide-details
               ></v-checkbox>
             </td>
-            <td>{{ props.item.id }}</td>
-            <td>{{ props.item.name }}</td>
+            <td class="text-xs-left">{{ props.item.name }}</td>
+            <td class="text-xs-left">{{ props.item.id }}</td>
           </tr>
           
         </template>
@@ -82,7 +81,7 @@ export default {
     columns: {
       type: Array,
       default() {
-        return [ { text: this.$t('bpmn.labels.Id'), value: 'id' }, { text: this.$t('bpmn.labels.Name'), value: 'name' } ];
+        return [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ];
       }
     },
     items: {
