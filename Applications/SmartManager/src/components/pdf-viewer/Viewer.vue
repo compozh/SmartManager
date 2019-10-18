@@ -405,28 +405,37 @@
           </div>
         </div>
       </div>  <!-- overlayContainer -->
-
     </div> <!-- outerContainer -->
     <div id="printContainer"></div>
   </div>
 </template>
 
 <script>
-
 import { webViewerLoad } from './scripts/viewer.js'
-export default {
-  mounted() {
-    webViewerLoad('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
 
+export default {
+  props: {
+    url: String
+  },
+  mounted() {
+    webViewerLoad(this.url)
+  },
+  watch: {
+    url(newUrl, oldUrl) {
+      if (newUrl !== oldUrl) {
+        webViewerLoad(newUrl)
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
+  @import "./css/viewer.css";
 
   #viewerComponent {
     width: 100%;
     height: 100%;
-  @import "./css/viewer.css";
+    overflow: hidden;
   }
 </style>

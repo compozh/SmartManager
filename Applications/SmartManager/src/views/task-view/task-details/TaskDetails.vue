@@ -71,7 +71,7 @@
                   class="mail__attachment"
                   v-for="(attachment, index) in task.originals"
                   :key="index"
-                  @click="$emit('open-attachment', index)"
+                  @click="$emit('open-attachment', attachment.fileUrl)"
                 >
                   <vx-tooltip :text="attachment.fileName" color="rgb(98, 98, 98, .95)">
                     <vs-chip

@@ -28,7 +28,7 @@
       <task-details v-if="currentTab === 'details'" :task="task" @open-attachment="openAttachment"></task-details>
 
       <!-- TASK ATTACHMENTS  -->
-      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments" :index="index"></task-attachments>
+      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments" :url="url"></task-attachments>
 
       <!-- TASK DETAILS  -->
       <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
@@ -119,9 +119,9 @@ export default {
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     },
-    openAttachment(index) {
+    openAttachment(url) {
       this.currentTab = 'attachments'
-      this.index = index
+      this.url = url
     }
   },
   beforeDestroy() {
