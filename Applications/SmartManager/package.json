@@ -49,6 +49,7 @@
     "instantsearch.css": "^7.3.1",
     "material-icons": "^0.3.1",
     "moment": "^2.24.0",
+    "pdfjs-dist": "^2.2.228",
     "perfect-scrollbar": "^1.4.0",
     "prismjs": "^1.16.0",
     "register-service-worker": "^1.6.2",
@@ -90,7 +91,8 @@
     "vuedraggable": "^2.21.0",
     "vuejs-datepicker": "^1.5.4",
     "vuesax": "3.9.0",
-    "vuex": "^3.1.0"
+    "vuex": "^3.1.0",
+    "web-streams-polyfill": "^2.0.4"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",

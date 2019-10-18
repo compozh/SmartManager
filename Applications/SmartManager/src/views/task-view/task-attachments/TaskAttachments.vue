@@ -32,13 +32,14 @@
           <div class="vx-row">
             <vs-divider/>
             <div class="vx-col w-full flex">
-              <vs-list>
-                <vs-list-item
-                  v-for="(field, index) in viewAttachment"
-                  :key="index"
-                  :title="index"
-                >{{ field }}</vs-list-item>
-              </vs-list>
+              <pdf-viewer class="viewer"></pdf-viewer>
+<!--              <vs-list>-->
+<!--                <vs-list-item-->
+<!--                  v-for="(field, index) in viewAttachment"-->
+<!--                  :key="index"-->
+<!--                  :title="index"-->
+<!--                >{{ field }}</vs-list-item>-->
+<!--              </vs-list>-->
             </div>
           </div>
           <div class="vx-col w-full flex">
@@ -53,6 +54,7 @@
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { FileIcon } from 'vue-feather-icons'
+import PdfViewer from '@/components/pdf-viewer/Viewer'
 
 export default {
   props: {
@@ -61,7 +63,8 @@ export default {
   },
   components: {
     VuePerfectScrollbar,
-    FileIcon
+    FileIcon,
+    PdfViewer
   },
   data: () => ({
     currentFile: {},
@@ -90,4 +93,5 @@ export default {
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
   }
+
 </style>
