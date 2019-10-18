@@ -88,19 +88,6 @@ export default {
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
     })
-
-    // var action = async () => {
-    //   var workCenterForWorker = await me.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: me.properties.workerCode, fetchPolicy: 'network-only' })
-    //   for (var fixation of workCenterForWorker) {
-    //     if (me.workCenter.code == fixation.code) {
-    //       me.$store.commit('mes/setWorkCenterFixationData', fixation)
-    //       return
-    //     }
-    //   }
-    // }
-
-    // me.$store.commit('mes/addAfterChangeTaskStateEvent', { action })
-    // me.$store.commit('mes/addAfterDowntimeRegistrationEvent', { action })
   },
   data() {
     return { currentUserData: {} }
