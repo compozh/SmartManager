@@ -47,7 +47,9 @@
 		"Id": "Ідентифікатор",
 		"SelectAction": "Виберіть дію",
 		"SelectForm": "Виберіть форму",
-		"SelectTaskCreationRule": "Виберіть правило створення задачі"
+		"SelectTaskCreationRule": "Виберіть правило створення задачі",
+		"FormCode": "Код форми",
+		"FormName": "Найменування форми"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -62,7 +64,8 @@
 		"ActionNotLoaded": "Не вдалося завантажити дію",
 		"RuleNotLoaded": "Не вдалося завантажити правило",
 		"ActionWithoutForm": "До цієї дії не прив'язана форма",
-		"RuleWithoutForm": "До цього правила не прив'язана форма"
+		"RuleWithoutForm": "До цього правила не прив'язана форма",
+		"InitializeSignalR": "Не вдалося ініціалізувати SignalR"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",

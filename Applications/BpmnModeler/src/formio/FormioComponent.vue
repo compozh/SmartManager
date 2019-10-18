@@ -143,7 +143,7 @@ export default {
     },
     connectSignalR(application, callback) {
       if(!application || !callback) {
-        this.$store.commit('formio/setSnackbarErrorMessage', 'Ошибка инициализации SignalR')
+        this.$store.commit('formio/setSnackbarErrorMessage', this.$t('bpmn.errors.InitializeSignalR'))
         return
       }
       this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)

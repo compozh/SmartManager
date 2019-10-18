@@ -363,6 +363,12 @@ export default {
     },
     dataLoading() {
       return this.$store.getters['formio/linearLoader'] || this.loading;
+    },
+    snackbar() {
+      return this.$store.getters['formio/snackbar']; 
+    },
+    snackbarVisible() {
+      return this.snackbar.visible; 
     }
   },
   watch: {
@@ -371,6 +377,11 @@ export default {
         this.appBar = true;
         this.onRouteChanged(true);
       }
+    },
+    snackbarVisible() {
+      this.message = this.snackbar.message;
+      this.messageType = this.snackbar.type;
+      this.displayMessage = this.snackbar.visible;
     }
   },
   beforeDestroy() {
@@ -418,6 +429,18 @@ export default {
     overflow-x: hidden;
     border-radius: 10px;
     padding: 5px;
+    font-family: Roboto;
+  }
+  .formcomponent {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    text-align: center;
+    vertical-align: middle;
     font-family: Roboto;
   }
 </style>
