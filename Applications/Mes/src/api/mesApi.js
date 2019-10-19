@@ -54,7 +54,6 @@ export class MesApi {
     const result = await getClient().query({
       query: gql` ${properties}`
     })
-      .then(result => result)
     return result
   }
 
@@ -63,7 +62,6 @@ export class MesApi {
     const result = await getClient().query({
       query: gql` ${ticket}`
     })
-      .then(result => result)
     return result
   }
 
@@ -72,7 +70,6 @@ export class MesApi {
       mutation: gql`${fixWorkCenterForWorker}`,
       variables: { workCenterCode, workerCode }
     })
-      .then(result => result)
     return result.data.mesMutation.fixWorkCenterForWorker
   }
 
@@ -82,7 +79,6 @@ export class MesApi {
       mutation: gql`${unfixWorkCenterForWorker}`,
       variables: { fixationId }
     })
-      .then(result => result)
     return result.data.mesMutation.unfixWorkCenterForWorker
   }
 
@@ -92,7 +88,6 @@ export class MesApi {
       variables: { uuid, login },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.workCenters
   }
 
@@ -102,7 +97,6 @@ export class MesApi {
       variables: { workerCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.workCentersFixed
   }
 
@@ -112,7 +106,6 @@ export class MesApi {
       variables: { workCenter },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.tasks
   }
 
@@ -121,7 +114,6 @@ export class MesApi {
       query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
       variables: { workCenterCode, dateTime }
     })
-      .then(result => result)
     return result.data.mes.downtimePrevious.downtimeList
   }
 
@@ -131,7 +123,6 @@ export class MesApi {
       variables: { workCenter },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.installations.installations
   }
 
@@ -140,7 +131,6 @@ export class MesApi {
       mutation: gql`${removeInstallation}`,
       variables: { installationId }
     })
-      .then(result => result)
     return result.data.mesMutation.removeInstallation
   }
 
@@ -149,7 +139,6 @@ export class MesApi {
       mutation: gql`${registerMaterialInstallation}`,
       variables: { workCenterCode, batchBarcode, factId }
     })
-      .then(result => result)
     return result.data.mesMutation.registerMaterialInstallation
   }
 
@@ -158,7 +147,6 @@ export class MesApi {
       mutation: gql`${registerProduction}`,
       variables: { productionRegistrationParam }
     })
-      .then(result => result)
     return result.data.mesMutation.registerProduction
   }
   async cancelBeginRegistrationGql(taskId) {
@@ -166,7 +154,6 @@ export class MesApi {
       mutation: gql`${cancelBeginRegistration}`,
       variables: { taskId }
     })
-      .then(result => result)
     return result.data.mesMutation.cancelBeginRegistration
   }
   async getUsersProductionEventsFromGql(workerCode, fetchPolicy) {
@@ -175,7 +162,6 @@ export class MesApi {
       variables: { workerCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.usersProductionEvents
   }
   async getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy) {
@@ -184,7 +170,6 @@ export class MesApi {
       variables: { workCenterCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.workCenterProductionEvents
   }
   async deleteProductionGql(factId) {
@@ -192,7 +177,6 @@ export class MesApi {
       mutation: gql`${deleteProduction}`,
       variables: { factId }
     })
-      .then(result => result)
     return result.data.mesMutation.deleteProduction
   }
   async printProductionGql(factId, checkWriteOffPercent) {
@@ -200,7 +184,6 @@ export class MesApi {
       mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
       variables: { factId, checkWriteOffPercent }
     })
-      .then(result => result)
     return result.data.mes.printLabel
   }
   async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
@@ -208,7 +191,6 @@ export class MesApi {
       mutation: gql`${executeWriteOff}`,
       variables: { factId, addAbsentInstallations, workCenterCode }
     })
-      .then(result => result)
     return result.data.mes.executeWriteOff
   }
   async getProductionFormioFromGql(formCode, properties) {
@@ -217,7 +199,6 @@ export class MesApi {
       variables: { formCode, properties },
       fetchPolicy: 'network-only'
     })
-      .then(result => result)
     return result.data.mes.productionFormio
   }
   async productionFormioSubmitGql(formCode, submission, properties) {
@@ -225,7 +206,6 @@ export class MesApi {
       mutation: gql`${productionFormioSubmit}`,
       variables: { formCode, submission, properties}
     })
-      .then(result => result)
     return result.data.mesMutation.productionFormioSubmit
   }
   async getDowntimeFormioFromGql(formCode, properties) {
@@ -234,7 +214,6 @@ export class MesApi {
       variables: { formCode, properties },
       fetchPolicy: 'network-only'
     })
-      .then(result => result)
     return result.data.mes.downtimeFormio
   }
   async downtimeFormioSubmitGql(formCode, submission, properties) {
@@ -242,14 +221,12 @@ export class MesApi {
       mutation: gql`${downtimeFormioSubmit}`,
       variables: { formCode, submission, properties}
     })
-      .then(result => result)
     return result.data.mesMutation.downtimeFormioSubmit
   }
   async getDowntimeTypesFromGql() {
     const result = await getClient().query({
       query: gql` ${downtimeGetTypes}`
     })
-      .then(result => result)
     return result.data.mes.downtimeTypes
   }
 }

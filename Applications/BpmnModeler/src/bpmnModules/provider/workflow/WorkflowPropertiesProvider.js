@@ -50,7 +50,7 @@ function createGeneralTabGroups(
 
   var detailsGroup = {
     id: 'details',
-    label: translate('Details'),
+    label: translate('Config'),
     entries: []
   };
   userTaskProps(detailsGroup, element, bpmnFactory, translate, commandStack);
@@ -68,7 +68,7 @@ function createGeneralTabGroups(
 
   var documentationGroup = {
     id: 'documentation',
-    label: translate('Documentation'),
+    label: translate('Item description'),
     entries: []
   };
 
@@ -96,7 +96,7 @@ function createFormsTabGroups(element, bpmnFactory, elementRegistry, translate, 
   ];
 }
 
-export default function CamundaPropertiesProvider(
+export default function WorkflowPropertiesProvider(
   eventBus, canvas, bpmnFactory,
   elementRegistry, elementTemplates, translate, commandStack) {
 
@@ -126,7 +126,7 @@ export default function CamundaPropertiesProvider(
 
 }
 
-CamundaPropertiesProvider.$inject = [
+WorkflowPropertiesProvider.$inject = [
   'eventBus',
   'canvas',
   'bpmnFactory',
@@ -136,4 +136,4 @@ CamundaPropertiesProvider.$inject = [
   'commandStack'
 ];
 
-inherits(CamundaPropertiesProvider, PropertiesActivator);
+inherits(WorkflowPropertiesProvider, PropertiesActivator);

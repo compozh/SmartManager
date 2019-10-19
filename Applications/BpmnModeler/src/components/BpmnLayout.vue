@@ -104,7 +104,7 @@
 
     <formio-builder-container />
 
-    <v-dialog v-model="showFormioDialog" max-width="800px">
+    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px">
       <v-card>
         <v-card-title>
           <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
@@ -131,7 +131,8 @@ import Process from '../api/models/Process';
 import ProcessType from '../api/models/ProcessType';
 import SelectionGrid from './SelectionGrid';
 import FormioComponent from '../formio/FormioComponent';
-import { eventBus } from '../main'
+import { eventBus } from '../main';
+import ActionDefinitionType from '../api/models/ActionDefinitionType';
 
 export default {
   name: 'bpmn-layout',
@@ -252,7 +253,7 @@ export default {
       }
       this.loading = false;
       this.propertiesPanelCallback = callback;
-      this.selectionGridTitle = this.$t('bpmn.labels.SelectAction');
+      this.selectionGridTitle = definitionType == ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction');
       this.selectionGridItems = items;
       this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
       this.showSelectionGrid = true;
@@ -285,7 +286,7 @@ export default {
       this.selectionGridSelectedItems = [];
       this.selectionGridTitle = '';
     },
-    async onPropertiesPanelSetExternalTaskProperties(taskCode, callback) {
+    async onPropertiesPanelSetExternalTaskProperties(taskCode, submission, callback) {
       this.loading = true;
       var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
       if (!action) {
@@ -311,6 +312,7 @@ export default {
         return;
       }
 
+      form.submission = JSON.stringify(submission);
       this.formioCode = action.unformio;
       this.formioDefinition = form;
       this.showFormioDialog = true;
@@ -320,7 +322,7 @@ export default {
     },
     onFormioSubmit() {
       var form = this.$refs.formioForm;
-      var submission = JSON.parse(form.getFormSubmission());
+      var submission = JSON.parse(form.getFormSubmission());     
       var params = [];
       for (var param in submission.data) {
         params.push({ name: param, type: typeof(submission.data[param]), value: submission.data[param] });

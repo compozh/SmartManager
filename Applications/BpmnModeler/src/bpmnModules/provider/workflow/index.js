@@ -1,4 +1,4 @@
-import CamundaPropertiesProvider from './CamundaPropertiesProvider';
+import WorkflowPropertiesProvider from './WorkflowPropertiesProvider';
 import elementTemplates from 'bpmn-js-properties-panel/lib/provider/camunda/element-templates';
 import translate from 'diagram-js/lib/i18n/translate';
 
@@ -8,5 +8,5 @@ export default {
     elementTemplates,
     translate
   ],
-  propertiesProvider: ['type', CamundaPropertiesProvider]
+  propertiesProvider: ['type', WorkflowPropertiesProvider]
 };
