@@ -39,6 +39,7 @@
               <task-list-item :task="task"></task-list-item>
             </li>
           </transition-group>
+          <no-data v-if="!this.tasksToPage.length">{{ $t('tasks.noTasks') }}</no-data>
         </VuePerfectScrollbar>
       </div>
 
@@ -55,26 +56,29 @@
 <script>
 import TaskListItem from './TaskListItem.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import noData from '@/components/noData'
 
 export default {
   components: {
     TaskListItem,
     VuePerfectScrollbar,
+    noData
   },
   data: () => ({
     currentPage: 1,
     taskPerPage: 20,
-    searchQuery: '',
     windowWidth: window.innerWidth,
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.30,
+      scrollYMarginOffset: 100
     }
   }),
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       const currentFolder = from.params.code
       const targetFolder = to.params.code
+      this.currentPage = 1
       if (currentFolder !== targetFolder) {
         this.getTasks(targetFolder)
       }
@@ -96,12 +100,14 @@ export default {
         return this.tasks
           .filter((task, index) => pageFrom <= index && index < pageTo)
       }
+      return []
     },
     search: {
       get() {
         return this.$store.state.sm.search
       },
       set(search) {
+        this.currentPage = 1
         this.$store.commit('sm/setSearch', search)
       }
     }

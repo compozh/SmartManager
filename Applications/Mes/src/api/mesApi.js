@@ -26,14 +26,10 @@ import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 
 //formio
-import createFormio from './graphql/formio/createFormio.graphql'
-import saveFormio from './graphql/formio/saveFormio.graphql'
-import productionFormIo from './graphql/formio/productionFormIo.graphql'
-import productionFormIoSubmit from './graphql/formio/productionFormIoSubmit.graphql'
-import downtimeFormIo from './graphql/formio/downtimeFormIo.graphql'
-import downtimeFormIoSubmit from './graphql/formio/downtimeFormIoSubmit.graphql'
-import callFormCustomEvent from './graphql/formio/callFormCustomEvent.graphql'
-import callItemAutocomplete from './graphql/formio/callItemAutocomplete.graphql'
+import productionFormio from './graphql/formio/productionForm.graphql'
+import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphql'
+import downtimeFormio from './graphql/formio/downtimeForm.graphql'
+import downtimeFormioSubmit from './graphql/formio/downtimeFormSubmit.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
@@ -58,7 +54,6 @@ export class MesApi {
     const result = await getClient().query({
       query: gql` ${properties}`
     })
-      .then(result => result)
     return result
   }
 
@@ -67,7 +62,6 @@ export class MesApi {
     const result = await getClient().query({
       query: gql` ${ticket}`
     })
-      .then(result => result)
     return result
   }
 
@@ -76,7 +70,6 @@ export class MesApi {
       mutation: gql`${fixWorkCenterForWorker}`,
       variables: { workCenterCode, workerCode }
     })
-      .then(result => result)
     return result.data.mesMutation.fixWorkCenterForWorker
   }
 
@@ -86,7 +79,6 @@ export class MesApi {
       mutation: gql`${unfixWorkCenterForWorker}`,
       variables: { fixationId }
     })
-      .then(result => result)
     return result.data.mesMutation.unfixWorkCenterForWorker
   }
 
@@ -96,7 +88,6 @@ export class MesApi {
       variables: { uuid, login },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.workCenters
   }
 
@@ -106,7 +97,6 @@ export class MesApi {
       variables: { workerCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.workCentersFixed
   }
 
@@ -116,7 +106,6 @@ export class MesApi {
       variables: { workCenter },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.tasks
   }
 
@@ -125,7 +114,6 @@ export class MesApi {
       query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
       variables: { workCenterCode, dateTime }
     })
-      .then(result => result)
     return result.data.mes.downtimePrevious.downtimeList
   }
 
@@ -135,7 +123,6 @@ export class MesApi {
       variables: { workCenter },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.installations.installations
   }
 
@@ -144,7 +131,6 @@ export class MesApi {
       mutation: gql`${removeInstallation}`,
       variables: { installationId }
     })
-      .then(result => result)
     return result.data.mesMutation.removeInstallation
   }
 
@@ -153,7 +139,6 @@ export class MesApi {
       mutation: gql`${registerMaterialInstallation}`,
       variables: { workCenterCode, batchBarcode, factId }
     })
-      .then(result => result)
     return result.data.mesMutation.registerMaterialInstallation
   }
 
@@ -162,7 +147,6 @@ export class MesApi {
       mutation: gql`${registerProduction}`,
       variables: { productionRegistrationParam }
     })
-      .then(result => result)
     return result.data.mesMutation.registerProduction
   }
   async cancelBeginRegistrationGql(taskId) {
@@ -170,7 +154,6 @@ export class MesApi {
       mutation: gql`${cancelBeginRegistration}`,
       variables: { taskId }
     })
-      .then(result => result)
     return result.data.mesMutation.cancelBeginRegistration
   }
   async getUsersProductionEventsFromGql(workerCode, fetchPolicy) {
@@ -179,7 +162,6 @@ export class MesApi {
       variables: { workerCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.usersProductionEvents
   }
   async getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy) {
@@ -188,7 +170,6 @@ export class MesApi {
       variables: { workCenterCode },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
-      .then(result => result)
     return result.data.mes.workCenterProductionEvents
   }
   async deleteProductionGql(factId) {
@@ -196,7 +177,6 @@ export class MesApi {
       mutation: gql`${deleteProduction}`,
       variables: { factId }
     })
-      .then(result => result)
     return result.data.mesMutation.deleteProduction
   }
   async printProductionGql(factId, checkWriteOffPercent) {
@@ -204,7 +184,6 @@ export class MesApi {
       mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
       variables: { factId, checkWriteOffPercent }
     })
-      .then(result => result)
     return result.data.mes.printLabel
   }
   async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
@@ -212,87 +191,42 @@ export class MesApi {
       mutation: gql`${executeWriteOff}`,
       variables: { factId, addAbsentInstallations, workCenterCode }
     })
-      .then(result => result)
     return result.data.mes.executeWriteOff
   }
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({
-      query: gql`query ($formCode: String, $properties: ProductionRegistrationParamsInput!) ${productionFormIo}`,
+      query: gql`${productionFormio}`,
       variables: { formCode, properties },
       fetchPolicy: 'network-only'
     })
-      .then(result => result)
-    return result.data.mes.productionFormIo
+    return result.data.mes.productionFormio
   }
-  async productionFormIoSubmitGql({ formCode, data, productionRegistrationParam}) {
+  async productionFormioSubmitGql(formCode, submission, properties) {
     const result = await getClient().mutate({
-      mutation: gql`${productionFormIoSubmit}`,
-      variables: { formCode, data, productionRegistrationParam}
+      mutation: gql`${productionFormioSubmit}`,
+      variables: { formCode, submission, properties}
     })
-      .then(result => result)
-    return result.data.mesMutation.productionFormIoSubmit
+    return result.data.mesMutation.productionFormioSubmit
   }
-  async getDowntimeFormioFromGql(formCode, properties, fetchPolicy) {
+  async getDowntimeFormioFromGql(formCode, properties) {
     const result = await getClient().query({
-      query: gql`query ($formCode: String, $properties: DowntimeParamsInput!) ${downtimeFormIo}`,
+      query: gql`${downtimeFormio}`,
       variables: { formCode, properties },
-      fetchPolicy: fetchPolicy || 'cache-first'
+      fetchPolicy: 'network-only'
     })
-      .then(result => result)
-    return result.data.mes.downtimeFormIo
+    return result.data.mes.downtimeFormio
+  }
+  async downtimeFormioSubmitGql(formCode, submission, properties) {
+    const result = await getClient().mutate({
+      mutation: gql`${downtimeFormioSubmit}`,
+      variables: { formCode, submission, properties}
+    })
+    return result.data.mesMutation.downtimeFormioSubmit
   }
   async getDowntimeTypesFromGql() {
     const result = await getClient().query({
       query: gql` ${downtimeGetTypes}`
     })
-      .then(result => result)
     return result.data.mes.downtimeTypes
-  }
-  async downtimeFormIoSubmitGql({ formCode, data, downtimeParams}) {
-    const result = await getClient().mutate({
-      mutation: gql`${downtimeFormIoSubmit}`,
-      variables: { formCode, data, downtimeParams}
-    })
-      .then(result => result)
-    return result.data.mesMutation.downtimeFormIoSubmit
-  }
-
-  async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${callFormCustomEvent}`,
-      variables: { formCode, formCustomEventParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.callFormCustomEvent
-  }
-  async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
-    const result = await getClient().mutate({
-      mutation: gql`${callItemAutocomplete}`,
-      variables: { formCode, formItemAutocompleteParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.callItemAutocomplete
-  }
-
-  async createFormioGql(formObjectParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${createFormio}`,
-      variables: { formObjectParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.createFormio
-  }
-
-  async saveFormioGql(formObjectParamsInput) {
-    const result = await getClient().mutate({
-      mutation: gql`${saveFormio}`,
-      variables: { formObjectParamsInput }
-    })
-      .then(result => result)
-
-    return result.data.mesMutation.saveFormio
   }
 }

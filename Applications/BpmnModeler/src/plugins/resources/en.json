@@ -1,5 +1,5 @@
 {
-    "buttons": {
+  "buttons": {
 		"AddElement": "Add",
 		"Refresh": "Refresh",
 		"Close": "Close",
@@ -15,7 +15,8 @@
 		"ExportBpmn": "Export bpmn",
 		"ExportDmn": "Export dmn",
 		"Deploy": "Deploy",
-		"Copy": "Add by sample"
+		"Copy": "Add by sample",
+		"Select": "Select"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -42,7 +43,13 @@
 		"TogglePropertiesPanel": "Toggle properties panel",
 		"Type": "Type",
 		"SystemRecord": "System record",
-		"UserRecord": "User record"
+		"UserRecord": "User record",
+		"Id": "Id",
+		"SelectAction": "Select action",
+		"SelectForm": "Select Form",
+		"SelectTaskCreationRule": "Select task creation rule",
+		"FormCode": "Form code",
+		"FormName": "Form name"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -51,7 +58,14 @@
 		"ProcessNotDeleted": "Failed to delete item",
 		"CantDrop": "Failed to move item",
 		"ProcessDeployed": "Diagram deployed",
-		"ProcessNotDeployed": "Failed to deploy diagram"
+		"ProcessNotDeployed": "Failed to deploy diagram",
+		"FormsNotLoaded": "Forms not loaded",
+		"FormNotLoaded": "Form not loaded",
+		"ActionNotLoaded": "Action not loaded",
+		"RuleNotLoaded": "Rule not loaded",
+		"ActionWithoutForm": "Form is not attached to this action",
+		"RuleWithoutForm": "Form is not attached to this rule",
+		"InitializeSignalR": "Failed initialize SignalR"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
@@ -217,6 +231,8 @@
 		"BusinessKnowledgeModel": "BusinessKnowledgeModel",
 
 		"Forms": "Forms",
+		"Create form": "Create form",
+		"Edit form": "Edit form",
 		"Form Key": "Form Key",
 		"Form Fields": "Form Fields",
 		"Business Key": "Business Key",
@@ -237,11 +253,31 @@
 
 		"Implementation": "Implementation",
 		"External": "External task",
+		"Expression": "Expression",
+		"Script": "Script",
+		"Connector": "Connector",
+		"DMN": "DMN",
 		"Topic": "Task indentifier",
 		"External Task Configuration": "External Task Configuration",
 		"Task Priority": "Task Priority",
 
 		"Open minimap": "Open minimap",
-		"Close minimap": "Close minimap"
+		"Close minimap": "Close minimap",
+
+		"string": "string",
+		"long": "long",
+		"boolean": "boolean",
+		"date": "date",
+		"enum": "enum",
+
+		"Result Variable": "Result Variable",
+		"Task properties": "Task properties",
+		"Configure Connector": "Configure Connector",
+		"Must configure Connector": "Must configure Connector",
+
+		"Action": "Action",
+		"Config": "Configuration",
+		"Task creation rule": "Task creation rule",
+		"Item description": "Item decription"
 	}
 }

@@ -14,10 +14,10 @@
           indeterminate
           color="primary"
       ></v-progress-circular>
-      <mes-form-builder
+      <formio-component
         ref="formioBuilder"
-        @formioSubmit=formioSubmit
-        :formioData=createDowntimeFormio
+        @formSubmit=formSubmit
+        :formDefinition=createDowntimeFormio
         :formCode=workCenter.downtimeRegistrationFormCode
         />
       </div>
@@ -50,9 +50,9 @@ export default {
     closeOverlay () {
       this.$emit('changeDowntimesOverlayVisible')
     },
-    formioSubmit(data) {
+    formSubmit(submission) {
       var me = this
-      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, data, successAction: () => {
+      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, successAction: () => {
         me.closeOverlay()
       }})
     },

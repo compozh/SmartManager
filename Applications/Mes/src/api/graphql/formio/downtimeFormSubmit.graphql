@@ -1,0 +1,10 @@
+mutation($formCode:String!, $submission: String, $properties: DowntimeParamsInput!) {
+    mesMutation {
+        downtimeFormioSubmit(formCode: $formCode, submission: $submission, properties: $properties) {
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

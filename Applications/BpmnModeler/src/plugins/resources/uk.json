@@ -15,7 +15,8 @@
 		"ExportBpmn": "Експортувати в форматі bpmn",
 		"ExportDmn": "Експортувати в форматі dmn",
 		"Deploy": "Опублікувати",
-		"Copy": "Додати за зразком"
+		"Copy": "Додати за зразком",
+		"Select": "Вибрати"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -42,7 +43,13 @@
 		"TogglePropertiesPanel": "Перемикнути панель параметрів",
 		"Type": "Тип",
 		"SystemRecord": "Системний запис",
-		"UserRecord": "Користувацький запис"
+		"UserRecord": "Користувацький запис",
+		"Id": "Ідентифікатор",
+		"SelectAction": "Виберіть дію",
+		"SelectForm": "Виберіть форму",
+		"SelectTaskCreationRule": "Виберіть правило створення задачі",
+		"FormCode": "Код форми",
+		"FormName": "Найменування форми"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -51,7 +58,14 @@
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
 		"CantDrop": "Не вдалося перемістити елемент",
 		"ProcessDeployed": "Діаграму опубліковано",
-		"ProcessNotDeployed": "Не вдалося опублікувати діаграму"
+		"ProcessNotDeployed": "Не вдалося опублікувати діаграму",
+		"FormsNotLoaded": "Не вдалося завантажити список форм",
+		"FormNotLoaded": "Не вдалося завантажити форму",
+		"ActionNotLoaded": "Не вдалося завантажити дію",
+		"RuleNotLoaded": "Не вдалося завантажити правило",
+		"ActionWithoutForm": "До цієї дії не прив'язана форма",
+		"RuleWithoutForm": "До цього правила не прив'язана форма",
+		"InitializeSignalR": "Не вдалося ініціалізувати SignalR"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
@@ -218,6 +232,8 @@
 
 		"Forms": "Форми",
 		"Form Key": "Ідентифікатор форми",
+		"Create form": "Створити форму",
+		"Edit form": "Редагувати форму",
 		"Form Fields": "Поля форми",
 		"Business Key": "Бізнес-ідентифікатор",
 		"Form Field": "Поля форми",
@@ -237,11 +253,31 @@
 
 		"Implementation": "Реалізація",
 		"External": "Зовнішня задача",
+		"Expression": "Вираз",
+		"Script": "Скрипт",
+		"Connector": "Конектор",
+		"DMN": "DMN",
 		"Topic": "Код задачі",
 		"External Task Configuration": "Конфігурація зовнішньої задачі",
 		"Task Priority": "Пріорітет задачі",
 
 		"Open minimap": "Відкрити мінікарту",
-		"Close minimap": "Закрити мінікарту"
+		"Close minimap": "Закрити мінікарту",
+
+		"string": "рядок",
+		"long": "число",
+		"boolean": "логічний",
+		"date": "дата",
+		"enum": "перелік",
+
+		"Result Variable": "Змінна з результатом",
+		"Task properties": "Параметри задачі",
+		"Configure Connector": "Налаштуйте коннектор",
+		"Must configure Connector": "Необхідно налаштувати коннектор",
+
+		"Action": "Дія",
+		"Config": "Налаштування",
+		"Task creation rule": "Правило створення задачі",
+		"Item description": "Опис елемента"
 	}
 }

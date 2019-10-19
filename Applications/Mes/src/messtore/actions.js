@@ -1,7 +1,9 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
 import  { routerDependencies } from '../router'
+
 const api = new MesApi()
+
 /* eslint-disable */
 export default {
   async initializeProperties({ commit, getters }) {
@@ -26,7 +28,7 @@ export default {
       }
     })
   },
-  async initializeWorkCenter({ commit, getters }, uuid, fetchPolicy) {
+  async initializeWorkCenter({ dispatch, commit, getters }, uuid, fetchPolicy) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
       action: async ( ) => {
@@ -35,23 +37,29 @@ export default {
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
         commit('setWorkCentersForWorker', workCenters)
 
-        if (workCenters.length == 1) {
-          commit('setWorkCenter', workCenters[0])
-        } else {
           var setWorkCenterForWorker = async (properties) => {
-            var workCenterForWorker = await me.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
+            var workCenterForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
             workCenterForWorker = workCenterForWorker.sort((a,b) => {
               return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
             })
-
+            if (workCenters.length == 1) {
+              commit('setWorkCenter', workCenters[0])
+              for(var fixWorkCetner of workCenterForWorker) {
+                if(fixWorkCetner.code == workCenters[0].code) {
+                  commit('setWorkCenterFixationData', fixWorkCetner)
+                }
+              }
+            } else {
               for(var workCenter of workCenters) {
                 for(var fixWorkCetner of workCenterForWorker) {
                   if(fixWorkCetner.code == workCenter.code) {
                     commit('setWorkCenter', workCenter)
+                    commit('setWorkCenterFixationData', fixWorkCetner)
                     return
                   }
                 }
               }
+            }
           }
 
           if(!getters.properties) {
@@ -59,8 +67,15 @@ export default {
           } else {
             await setWorkCenterForWorker(getters.properties)
           }
-        }
+
         commit('setInitialWorkCenter', true)
+
+        // for(var event of getters.afterInitializeWorkCenterEvents) {
+        //   if(event.action) {
+        //     event.action();
+        //   }
+        // }
+
       },
       linearLoader: true
     })
@@ -117,7 +132,7 @@ export default {
       linearLoader: true
     })
   },
-  async registerProduction({ commit }, { workCenter, task }) {
+  async registerProduction({ commit, getters }, { workCenter, task }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -139,6 +154,11 @@ export default {
           workBarcode: task.barcode
         }
         me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+        // for(var event of getters.afterChangeTaskStateEvents) {
+        //   if(event.action) {
+        //     event.action()
+        //   }
+        // }
       },
       linearLoader: true
     })
@@ -153,13 +173,20 @@ export default {
       linearLoader: true
     })
   },
-  async cancelBeginRegistration({ commit }, task) {
+  async cancelBeginRegistration({ commit, getters }, task) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.cancelBeginRegistrationGql(task.shiftTaskId)
         return res
       },
-      successAction: async () => { task.inProgress = false },
+      successAction: async () => {
+        task.inProgress = false
+        // for(var event of getters.afterChangeTaskStateEvents) {
+        //   if(event.action) {
+        //     event.action()
+        //   }
+        // }
+      },
       linearLoader: true
     })
   },
@@ -240,48 +267,40 @@ export default {
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
-  async productionFormIoSubmit({ commit }, { workCenter, data, task }) {
-    var me = this,
-      params = {
-        formCode: workCenter.productionRegistrationFormCode,
-        data: data,
-        productionRegistrationParam: {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode,
-          mode: 'FINISH'
-        }
-      }
+  async productionFormIoSubmit({ commit }, { workCenter, submission, task }) {
+    var me = this
     commit('setDialogLinearLoaderMessage', 'Регистрация выработки')
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.productionFormIoSubmitGql(params)
+
+        const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, submission, {
+          workCenterCode: workCenter.code,
+          workBarcode: task.barcode,
+          mode: 'FINISH'
+        })
         return res
       },
       successAction: async () => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }) }
     })
     commit('closeDialogLinearLoader')
   },
-  async downtimeFormIoSubmit({ commit }, { workCenter, data, successAction }) {
+  async downtimeFormIoSubmit({ commit }, { workCenter, submission, successAction }) {
      var me = this,
-        params = {
-         formCode: workCenter.downtimeRegistrationFormCode,
-         data: data,
-         downtimeParams: {
-           workCenterCode: workCenter.code,
-         }
-        },
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
      commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
      await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
         queryAction: async () => {
-          const res = await api.downtimeFormIoSubmitGql(params)
+          const res = await api.downtimeFormioSubmitGql(workCenter.downtimeRegistrationFormCode, submission, {
+            workCenterCode: workCenter.code,
+          })
           return res
-       },
-       successAction: async () => {
-         me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
-         if(successAction) {
-          successAction();
-         }
+        },
+        successAction: async () => {
+          commit('setDowntimes', [])
+          me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
+          if(successAction) {
+            successAction();
+          }
         }
      })
      commit('closeDialogLinearLoader')
@@ -367,43 +386,11 @@ export default {
       }
     })
   },
-  async getFixationWorkCenterForWorker ({ commit }, { workerCode, fetchPolicy } ) {
-    return await this.dispatch('mes/graphqlQueryWraper', {
+  async getFixationWorkCenterForWorker ({ dispatch, commit }, { workerCode, fetchPolicy } ) {
+    return await dispatch('graphqlQueryWraper', {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
-    })
-  },
-  async callFormCustomEvent({ commit }, { formCode, params, successCallback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.callFormCustomEventGql(formCode, params)
-      },
-      successAction: async result => { successCallback(result) }
-    })
-  },
-  async callItemAutocomplete({ commit }, { formCode, params, fetchPolicy, callback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.callItemAutocompleteGql(formCode, params, fetchPolicy)
-      },
-      actionAfterQuery: async result => { callback(result) }
-    })
-  },
-  async createFormio({ commit }, { params, callback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.createFormioGql(params)
-      },
-      successAction: async result => { callback(result) }
-    })
-  },
-  async saveFormio({ commit }, { params, callback }) {
-    return await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.saveFormioGql(params)
-      },
-      successAction: async result => { callback(result) }
     })
   }
 }

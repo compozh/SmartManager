@@ -14,6 +14,9 @@ export default {
   workCenter(state) {
     return state.workCenter
   },
+  workCenterFixationData(state) {
+    return state.workCenterFixationData
+  },
   dragResizeMode(state) {
     return state.tasksPageState.dragResizeMode
   },
@@ -82,5 +85,14 @@ export default {
   },
   actionsAfterInitializeProperties(state) {
     return state.actionsAfterInitializeProperties
-  }
+  },
+  // afterInitializeWorkCenterEvents(state) {
+  //   return state.events.afterInitializeWorkCenter
+  // },
+  // afterChangeTaskStateEvents(state) {
+  //   return state.events.afterChangeTaskStateEvents
+  // },
+  // afterDowntimeRegistrationEvents(state) {
+  //   return state.events.afterDowntimeRegistrationEvents
+  // }
 }

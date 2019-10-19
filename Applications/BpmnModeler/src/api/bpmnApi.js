@@ -16,6 +16,9 @@ import createFolder from './graphql/createFolder.graphql';
 import editFolder from './graphql/editFolder.graphql';
 import dropFolder from './graphql/dropFolder.graphql';
 import removeFolder from './graphql/deleteFolder.graphql';
+import getAvailableActions from './graphql/getAvailableActions.graphql';
+import getActionById from './graphql/getActionById.graphql';
+import getFormsForProcess from './graphql/getFormsForProcess.graphql';
 
 import Vue from 'vue';
 
@@ -139,5 +142,29 @@ export class BpmnModelerApi {
       variables: { id }
     });
     return result.data.bpmnqueryMutation.deleteFolder;
+  }
+
+  async getAvailableActions(processId, definitionType) {
+    const result = await getClient().query({
+      query: gql`query ($processId: ID!, $definitionType: ActionDefinitionType!) ${getAvailableActions}`,
+      variables: { processId, definitionType }
+    });
+    return result.data.bpmnquery.getAvailableActions;
+  }
+
+  async getActionById(actionId) {
+    const result = await getClient().query({
+      query: gql`query ($actionId: ID!) ${getActionById}`,
+      variables: { actionId }
+    });
+    return result.data.bpmnquery.getActionById;
+  }
+
+  async getFormsForProcess(processId) {
+    const result = await getClient().query({
+      query: gql`query ($processId: ID!) ${getFormsForProcess}`,
+      variables: { processId }
+    });
+    return result.data.bpmnquery.getFormsForProcess;
   }
 }

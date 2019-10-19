@@ -1,9 +1,10 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js/lib/Viewer';
 import bpmnPropertiesPanelModule from 'bpmn-js-properties-panel';
-import bpmnPropertiesProviderModule from '../bpmnModules/provider/camunda/';
+import bpmnPropertiesProviderModule from '../bpmnModules/provider/workflow/';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
+import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
 
 import DmnModeler from 'dmn-js/lib/Modeler';
 import DmnViewer from 'dmn-js/lib/Viewer';
@@ -51,7 +52,8 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
       createTranslationModule(translate)
     ],
     moddleExtensions: {
-      camunda: camundaBpmnModdle
+      camunda: camundaBpmnModdle,
+      workflow: workflowBpmnModdle
     }
   });
 }
@@ -116,7 +118,8 @@ function createBpmnViewer(editorContainer, translate) {
         createTranslationModule(translate)
       ],
       moddleExtensions: {
-        camunda: camundaDmnModdle
+        camunda: camundaDmnModdle,
+        workflow: workflowBpmnModdle
       }
     },
     
