@@ -49,8 +49,10 @@
 		"SelectForm": "Выберите форму",
 		"EnterTaskParams": "Введите параметры задачи",
 		"SelectTaskCreationRule": "Выберите правило создания задачи",
-		"FormCode": "Код формы",
-		"FormName": "Наименование формы"
+		"Code": "Код",
+		"Designer": "Конструктор",
+		"Preview": "Просмотр",
+		"FormContructor": "Конструктор формы"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
