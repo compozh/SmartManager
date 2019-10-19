@@ -438,9 +438,9 @@ export default {
     line-height: 1.5;
     border-radius: 0.2rem;
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    text-align: center;
+    background-color: #1976d2;
+    border-color: #1976d2;
+    text-align: left !important;
     vertical-align: middle;
     font-family: Roboto;
   }

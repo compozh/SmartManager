@@ -48,8 +48,10 @@
 		"SelectAction": "Виберіть дію",
 		"SelectForm": "Виберіть форму",
 		"SelectTaskCreationRule": "Виберіть правило створення задачі",
-		"FormCode": "Код форми",
-		"FormName": "Найменування форми"
+		"Code": "Код",
+		"Designer": "Конструктор",
+		"Preview": "Перегляд",
+		"FormContructor": "Конструктор форми"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

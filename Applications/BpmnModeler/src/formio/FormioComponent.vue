@@ -34,21 +34,28 @@ export default {
   created() {
     var me = this
     window.requestToServer = (eventCode, callback) => {
-      me.requestToServerAction(eventCode, callback)
+      if(!me.actionsDisabled) {
+        me.requestToServerAction(eventCode, callback)
+      }
     }
     window.qrScaner = callback => {
-      me.qrScaner(callback)
+        me.qrScaner(callback)
     }
     window.connectSignalR = (application, callback) => {
-      me.connectSignalR(application, callback)
+      if(!me.actionsDisabled) {
+        me.connectSignalR(application, callback)
+      }
     }
     window.itemAutocomplete = (field, searchValue, callback) => {
-      me.itemAutocomplete(field, searchValue, callback)
+      if(!me.actionsDisabled) {
+        me.itemAutocomplete(field, searchValue, callback)
+      }
     }
   },
   props: {
     formDefinition: Object,
-    formCode: String
+    formCode: String,
+    actionsDisabled: Boolean
   },
   watch: {
     formDefinition: function (newData, oldData) {
