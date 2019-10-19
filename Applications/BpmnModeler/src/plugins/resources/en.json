@@ -47,8 +47,10 @@
 		"Id": "Id",
 		"SelectAction": "Select action",
 		"SelectForm": "Select Form",
-		"FormCode": "Form code",
-		"FormName": "Form name"
+		"Code": "Code",
+		"Designer": "Designer",
+		"Preview": "Preview",
+		"FormContructor": "Form constructor"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
