@@ -59,6 +59,27 @@
             </div>
           </div>
 
+          <!-- FORMIO -->
+
+          <vs-divider/>
+          <div class="w-full">
+            <!-- select and start business-process -->
+            <form @submit.prevent>
+
+
+              <formio class="formio mt-4"
+                      ref="form"
+                      :form="form"
+                      :options="options"
+                      :submission="submission"
+
+                      @submit="onFormSubmit"
+
+              />
+
+
+            </form>
+          </div>
           <!-- TASK ATTACHMENTS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6 flex">
             <div class="vx-col flex">
@@ -169,6 +190,8 @@
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import TaskListItem from '../../task-list/TaskListItem.vue'
+import {Form} from 'vue-formio'
+import {eventBus} from '@/main'
 
 export default {
   props: {
@@ -176,7 +199,8 @@ export default {
   },
   components: {
     VuePerfectScrollbar,
-    TaskListItem
+    TaskListItem,
+    formio: Form,
   },
   data: () => ({
     defaultDescHeight: 250,
@@ -186,8 +210,20 @@ export default {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
     },
+    options: {noAlerts: true},
+    submission: {},
   }),
   computed: {
+
+
+    // formio
+    form() {
+      if (this.task.externalParams) {
+        return JSON.parse((JSON.parse(this.task.externalParams || '{}') || {}).FORM || '{}') || {}
+      }
+      return {}
+    },
+
     time() {
       return dateTime => dateTime
         ? dateTime.split(' ').pop()
@@ -212,12 +248,48 @@ export default {
   methods: {
     iFrameOnLoad(event) {
       this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight * 1.2
+    },
+
+    // обработка смены статуса задачи
+    async onChangeStatus(data) {
+      const form = this.$refs.form.formio
+      try {
+        const result = await form.submit()
+        await this.$store.dispatch('sm/changeStatus',{
+          ...data,
+          CompleteParams: JSON.stringify(result.data)
+        } )
+      } catch (errors) {
+        if (errors.length) {
+          errors.forEach(e => {
+            this.$vs.notify({
+              title: this.$t('notify.bpTitle'),
+              text: e.message,
+              color: 'danger'
+            })
+          })
+        } else {
+          console.log(errors.message)
+        }
+      }
+
+    },
+    onFormSubmit(data) {
+      // console.log(data)
     }
+  },
+
+  // подписка на событие смены статуса задачи
+  created() {
+    eventBus.$on('changeStatus',async data => {
+      await this.onChangeStatus(data)
+    })
+
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .custom-truncate {
     display: block;
     max-width: 100px;
@@ -225,5 +297,19 @@ export default {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
+  }
+   .formio::v-deep {
+    @import "~formiojs/dist/formio.form.min.css";
+    @import "../../../assets/scss/formio";
+    @import "~bootstrap/scss/bootstrap";
+
+    .formio-form {
+      min-height: 20px !important;
+    }
+
+    button:hover {
+      -webkit-transform: translateY(-2px);
+      transform: translateY(-2px);
+    }
   }
 </style>
