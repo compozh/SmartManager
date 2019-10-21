@@ -90,8 +90,6 @@ export default {
     }
   },
   created() {
-    //todo: инициализацию signalr вынести в загрузку приложения
-    this.initializeSignalR()
     this.initialize()
   },
   mounted() {
@@ -170,29 +168,6 @@ export default {
     }
   },
   methods: {
-    async initializeSignalR() {
-      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket)
-    },
-    taskStateChanged(msg) {
-      let data = JSON.parse(msg)
-      if (!data) {
-        return
-      }
-
-      switch (data.Payload.Action) {
-      case 'TaskStateChanged':
-        var workCenters = data.Payload.Payload['WORKCENTERCODES']
-        if (!workCenters) {
-          return
-        }
-
-        workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
-        if (workCenters.indexOf(this.workCenter.code)) {
-          this.$store.commit('mes/setObsoluteDataTask', true)
-        }
-        break
-      }
-    },
     async initialize() {
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
       this.$store.commit('mes/setObsoluteDataTask', false)
@@ -229,7 +204,7 @@ export default {
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
-      
+
       if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
         let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
 

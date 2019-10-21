@@ -1,0 +1,22 @@
+{
+	portalNabuQuery{
+    trainingPlan{
+      data{
+        subject
+        competence
+        description
+        startAndEndDate
+        trainingTheme
+        personnelNumber
+        professionalTrainingType
+      }
+      headers{
+        field
+        headerName
+        filter
+        sortable
+        minWidth
+      }
+    }
+  }
+}

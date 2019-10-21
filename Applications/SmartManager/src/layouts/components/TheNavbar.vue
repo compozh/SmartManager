@@ -198,7 +198,9 @@
 <script>
 
 import templateConfig from '@/templateConfig'
-import auth from "@/api/auth/auth"
+import auth from '@/api/auth/auth'
+
+import {eventBus} from '@/main'
 
 export default {
   name: 'the-navbar',
@@ -298,15 +300,11 @@ export default {
       }
     },
     async changeStatus(status) {
-      try {
-        await this.$store.dispatch('sm/changeStatus', {
-          id: this.task.id,
-          status: status,
-          comment: ''
-        })
-      } catch (e) {
-        console.log(e.message)
-      }
+      eventBus.$emit('changeStatus', {
+        id: this.task.id,
+        status: status,
+        comment: ''
+      })
     },
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
