@@ -133,6 +133,7 @@ import SelectionGrid from './SelectionGrid';
 import FormioComponent from '../formio/FormioComponent';
 import { eventBus } from '../main';
 import ActionDefinitionType from '../api/models/ActionDefinitionType';
+import { events } from '../constants';
 
 export default {
   name: 'bpmn-layout',
@@ -160,9 +161,9 @@ export default {
   mounted() {
     this.onRouteChanged(false);
     eventBus.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
-    eventBus.$on('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
-    eventBus.$on('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
-    eventBus.$on('properties-panel.select-form-key', this.onPropertiesPanelSelectFormKey);
+    eventBus.$on(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
+    eventBus.$on(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
+    eventBus.$on(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
   },
   methods: {
     async loadItems() {
@@ -196,10 +197,7 @@ export default {
       this.loading = false;
     },
     exportItem(item, type) {
-      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === type + '-modeler', e => e.$children);
-      if (modeler && modeler.export) {
-        modeler.export(type);
-      }
+      eventBus.$emit('modeler.export', type);
     },
     async deployItem(item) {
       this.loading = true;
@@ -287,7 +285,7 @@ export default {
       this.selectionGridSelectedItems = [];
       this.selectionGridTitle = '';
     },
-    async onPropertiesPanelSetExternalTaskProperties(taskCode, submission, callback) {
+    async onPropertiesPanelSetExternalTaskProperties(taskCode, existingParameters, callback) {
       this.loading = true;
       var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
       if (!action) {
@@ -311,6 +309,14 @@ export default {
         this.messageType = 'error';
         this.displayMessage = true;
         return;
+      }
+
+      let submission = {};
+      if (existingParameters && existingParameters.length) {
+        for (let index = 0; index < existingParameters.length; index++) {
+          const element = existingParameters[index];
+          submission[element.name] = element.value;
+        }
       }
 
       form.submission = JSON.stringify(submission);
@@ -397,9 +403,9 @@ export default {
     }
   },
   beforeDestroy() {
-    eventBus.$off('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
-    eventBus.$off('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
-    eventBus.$off('properties-panel.select-form-key', this.onSelectFormKey);
+    eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
+    eventBus.$off(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
+    eventBus.$off(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
   }
 };
 </script>
