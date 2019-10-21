@@ -16,7 +16,7 @@
                 :src="task.performerPhoto"
                 size="65px"
               ></vs-avatar>
-              <div class="flex flex-col">
+              <div class="flex flex-col w-full">
                 <h5 class="mb-1">{{ task.performer }}</h5>
                 <div class="flex items-center">
                   <h3 class="text-primary truncate">{{ task.name }}</h3>

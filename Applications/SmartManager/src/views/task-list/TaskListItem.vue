@@ -1,6 +1,6 @@
 <template>
   <div
-    class="task__task-item sm:px-4 px-2 py-6"
+    class="task__task-item sm:px-4 px-2 py-3"
     :class="{'task__opened-task': task.isRead}"
     @click="taskLink(task.id)"
   >
@@ -12,7 +12,7 @@
         size="40px"
       ></vs-avatar>
 
-      <div class="flex w-full justify-between items-start">
+      <div class="flex justify-between items-start" style="width: calc(100% - 58px);">
         <div class="task__details truncate mr-3">
           <h5 class="mb-1" :class="{'font-semibold': !task.isRead}"
           >{{ task.performer }}</h5>
