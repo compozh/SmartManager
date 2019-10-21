@@ -1,0 +1,45 @@
+{
+    "AppTitle": "НАБУ. Личный кабинет",
+    "UserInfo":"Персональная информация",
+    "Login": {
+        "Enter": "Вход",
+        "Greeting": "Добро пожаловать, пожалуйста, войдите под своей учетной записью.",
+        "Login": "Логин",
+        "Password": "Пароль",
+        "RememberMe": "Запомнить меня",
+        "Exit": "Выход",
+        "EnterToSystem": "Вход в систему",
+        "YouAlreadyEntered": "Вы уже вошли в систему!",
+        "ForgotPassword": "Забыли пароль?",
+        "Registration": "Регистрация",
+        "Or": "Или"
+    },
+    "PersonalInfo": {
+        "FIO": "ФИО",
+        "BirthdayDate": "Дата рождения",
+        "Adress": "Адрес",
+        "PhoneNumber": "Номер телефона",
+        "Department": "Департамент",
+        "HireDate": "Дата приёма"
+    },
+    "Education":{
+        "Competence": "Компетенция",
+        "ProfessionalTrainingType": "Вид профессионального обучения",
+        "Subject": "Тематика",
+        "TrainingTheme": "Тема обучения",
+        "DateParticipationInTheTrainingEvent": "Дата участия в учебном мероприятии",
+        "Description": "Примечание",
+        "educationalInstitution": "Учебное заведение / Орган, который обеспечивает организацию обучения",
+        "typeAdvancedTraining": "Вид повышения квалификации",
+        "EventDateStart": "Дата начала обучени",
+        "EventDateEnd": "Дата окончания обучения",
+        "countHours": "Количество часов, факт",
+        "NoteLong": "Примечание (например скан.сертификату и формы обратной связи))",
+        "Number": "№",
+        "Duty": "Обязательность",
+        "Priority": "Приоритетность",
+        "Provider": "Возм. провайдер",
+        "Status": "Статус"
+    }
+}
+

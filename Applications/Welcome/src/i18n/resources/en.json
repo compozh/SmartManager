@@ -1,0 +1,44 @@
+{
+    "AppTitle":"NABU. User Account",
+    "UserInfo":"Personal information",
+    "Login": {
+        "Enter": "Entrance",
+        "Greeting": "Welcome, please log in with your account.",
+        "Login": "Login",
+        "Password": "Password",
+        "RememberMe": "Remember me",
+        "Exit": "Exit",
+        "EnterToSystem": "Login",
+        "YouAlreadyEntered": "You are already logged in!",
+        "ForgotPassword": "Forgot your password?",
+        "Registration": "Registration",
+        "Or": "Or"
+    },
+    "PersonalInfo": {
+        "FIO": "Full name",
+        "BirthdayDate": "Date of Birth",
+        "Adress": "Address",
+        "PhoneNumber": "Phone number",
+        "Department": "Department",
+        "HireDate": "Date of receipt"
+    },
+    "Education":{
+        "Competence": "Competence",
+        "ProfessionalTrainingType": "Kind of vocational training",
+        "Subject": "Subject",
+        "TrainingTheme": "The topic of training",
+        "DateParticipationInTheTrainingEvent": "Date of participation in the training event",
+        "Description": "Note",
+        "educationalInstitution": "Educational institution / body that provides the organization of training",
+        "typeAdvancedTraining": "Type of advanced training",
+        "EventDateStart": "Start date of study",
+        "EventDateEnd": "Date of graduation",
+        "countHours": "Number of hours, fact",
+        "NoteLong": "Note (e.g., Certificate Scan and Feedback Forms)",
+        "Number": "№",
+        "Duty": "Duty",
+        "Priority": "Priority",
+        "Provider": "Approx. the provider",
+        "Status": "Status"
+    }
+}
