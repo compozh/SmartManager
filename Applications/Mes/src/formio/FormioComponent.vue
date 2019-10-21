@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <formio id="formio" class="formio-container"
+    <formio id="formio" class="formio-container-class"
       :form=formioComponents
       :submission=formioSubmission
       :options=options
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Form } from 'vue-formio'
+import { Form } from './lib/components/Form'
 import VueApexCharts from 'vue-apexcharts'
 /* eslint-disable */
 export default {
@@ -34,21 +34,28 @@ export default {
   created() {
     var me = this
     window.requestToServer = (eventCode, callback) => {
-      me.requestToServerAction(eventCode, callback)
+      if(!me.actionsDisabled) {
+        me.requestToServerAction(eventCode, callback)
+      }
     }
     window.qrScaner = callback => {
-      me.qrScaner(callback)
+        me.qrScaner(callback)
     }
     window.connectSignalR = (application, callback) => {
-      me.connectSignalR(application, callback)
+      if(!me.actionsDisabled) {
+        me.connectSignalR(application, callback)
+      }
     }
     window.itemAutocomplete = (field, searchValue, callback) => {
-      me.itemAutocomplete(field, searchValue, callback)
+      if(!me.actionsDisabled) {
+        me.itemAutocomplete(field, searchValue, callback)
+      }
     }
   },
   props: {
     formDefinition: Object,
-    formCode: String
+    formCode: String,
+    actionsDisabled: Boolean
   },
   watch: {
     formDefinition: function (newData, oldData) {
@@ -98,7 +105,7 @@ export default {
             if (callback) {
               callback(result);
             }
-
+            
             var dataChanged = false;
             if (result.components && result.components != components) {
               components = result.components
@@ -143,7 +150,7 @@ export default {
     },
     connectSignalR(application, callback) {
       if(!application || !callback) {
-        this.$store.commit('formio/setSnackbarErrorMessage', 'Ошибка инициализации SignalR')
+        this.$store.commit('formio/setSnackbarErrorMessage', this.$t('bpmn.errors.InitializeSignalR'))
         return
       }
       this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)
@@ -158,10 +165,10 @@ export default {
           fieldName: fieldComponent.dataTableFieldName,
           fieldCode: fieldComponent.dataTableFieldCode,
           searchValue,
-          submission
+          submission 
         }
 
-      this.$store.dispatch('formio/callItemAutocomplete',
+      this.$store.dispatch('formio/callItemAutocomplete', 
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);
@@ -173,8 +180,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.formio-container /deep/ {
-  @import "~bootstrap/scss/bootstrap.scss";
+.formio-container-class /deep/ {
+  @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+  @import "~formiojs/dist/formio.full.min.css";
+  @import "~bootstrap/dist/css/bootstrap";
   @import "~choices.js/public/assets/styles/choices.css";
   @import "~flatpickr/dist/flatpickr.min.css";
 
@@ -211,9 +220,6 @@ export default {
   .btn.btn-danger:active, .btn.btn-danger:focus {
     outline: none !important;
     box-shadow: none;
-  }
-  .input-group-text {
-    display: none;
   }
   .btn.btn-danger::-moz-focus-inner {
     border: 0;
@@ -418,9 +424,6 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  .input-group-text {
-    display: none;
-  }
   .form-group.has-feedback.formio-component {
     align-items: center;
     text-align: center !important;
@@ -447,14 +450,6 @@ export default {
         display: none;
       }
     }
-    .input-group-text {
-      display: none;
-    }
   }
 }
 </style>
-
-
-
-
-Type a message

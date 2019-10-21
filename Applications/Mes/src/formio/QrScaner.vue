@@ -3,12 +3,7 @@
     v-model="dialogVisible"
     @input="dialogInput"
   >
-    <v-tooltip top>
-      <template v-slot:activator="{ on }">
-        <v-btn outlined class="mes-arrow-back" @click="closeDialog" color="#326DA8" v-on="on"><v-icon dark>clear</v-icon></v-btn>
-      </template>
-      <span>Закрыть</span>
-    </v-tooltip>
+    <v-btn outlined class="mes-arrow-back" @click="closeDialog" color="#326DA8"><v-icon dark>clear</v-icon></v-btn>
     <div v-if="state" class="qr-state">
       {{state}}
     </div>
@@ -32,8 +27,6 @@ export default {
     messages: {
       ru: {
         qrScaner: {
-          tryAgain: 'Повторить попытку',
-          loginError: 'По данному коду не удалось войти в систему',
           notAllowedError: 'Для входа вам нужно дать разрешение на доступ к камере',
           notFoundError: 'На этом устройстве камера не обнаружена',
           streamApiNotSupportedError: 'Stream API не поддерживается в этом браузере. Попробуйте использовать GoogleChrome'
@@ -108,6 +101,7 @@ export default {
     text-align: center;
   }
   .mes-arrow-back {
+    cursor: pointer;
     display: flex;
     margin: 0 auto;
     max-width: 45px;

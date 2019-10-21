@@ -24,7 +24,7 @@
                     ref="formCode"
                     v-model=formCodeProperty
                     :full-width=false
-                    :maxlength="10"
+                    :maxlength="16"
                     :label=formCodeLabel
                     :rules="[() => !!formCodeProperty || this.$t('bpmn.errors.RequiredInputField')]"
                     required
