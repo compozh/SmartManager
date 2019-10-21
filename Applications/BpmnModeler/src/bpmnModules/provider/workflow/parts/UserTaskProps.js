@@ -2,6 +2,7 @@ import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import { eventBus } from '../../../../main';
+import { events } from '../../../../constants';
 import ActionDefinitionType from '../../../../api/models/ActionDefinitionType';
 import { setServiceTaskParameters } from '../utils'
 
@@ -19,9 +20,8 @@ export default function (group, element, bpmnFactory, translate, commandStack) {
     buttonAction: {
       name: 'search',
       method: (element, inputNode) => {
-        var definitionType = ActionDefinitionType.UserTask;
         var bo = getBusinessObject(element);
-        eventBus.$emit('properties-panel.select-external-task', bo.get('IT-Enterprise:actionDefinitionId'), definitionType, (newValue) => {
+        eventBus.$emit(events.propertiesPanel.selectAction, bo.get('IT-Enterprise:actionDefinitionId'), ActionDefinitionType.UserTask, (newValue) => {
 
           var cmd = cmdHelper.updateBusinessObject(element, bo, {
             'IT-Enterprise:actionDefinitionId': newValue

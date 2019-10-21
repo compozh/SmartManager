@@ -265,4 +265,10 @@ export default {
   font-size: 18px;
   padding-right: 6px;
 }
+div[data-group="historyConfiguration"] {
+  display: none;
+}
+div[data-entry="id"] > .dpp-field-description {
+  display: none;
+}
 </style>
