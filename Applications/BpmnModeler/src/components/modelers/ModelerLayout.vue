@@ -60,7 +60,7 @@
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
 
-import Process from '../api/models/Process';
+import Process from '../../api/models/Process';
 export default {
   name: 'modeler-layout',
   props: {

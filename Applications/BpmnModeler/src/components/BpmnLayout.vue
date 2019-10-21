@@ -117,7 +117,7 @@ import setExternalTaskPropertiesMixin from './mixins/SetExternalTaskProperties';
 import Folder from '../api/models/Folder';
 import Process from '../api/models/Process';
 import ProcessType from '../api/models/ProcessType';
-import SelectionGrid from './SelectionGrid';
+import SelectionGrid from './dialogs/SelectionGrid';
 import FormioContainer from './formio/Formio';
 import ActionDefinitionType from '../api/models/ActionDefinitionType';
 import { Notification } from 'element-ui';

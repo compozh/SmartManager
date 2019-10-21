@@ -33,7 +33,7 @@
   </v-card>
 </template>
 <script>
-import Process from '../api/models/Process';
+import Process from '../../api/models/Process';
 export default {
   name: 'bpmn-form',
   props: {
