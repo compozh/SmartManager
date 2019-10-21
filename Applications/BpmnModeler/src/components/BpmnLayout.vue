@@ -104,7 +104,7 @@
 
     <formio-builder-container />
 
-    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px">
+    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px" :persistent="formioLoading">
       <v-card>
         <v-card-title>
           <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
@@ -113,8 +113,8 @@
           <formio-component ref="formioForm" :formCode="formioCode" :formDefinition="formioDefinition"></formio-component>
         </v-card-text>
         <v-card-actions>
-          <v-btn flat @click="showFormioDialog = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-          <v-btn flat @click="onFormioSubmit" color="primary">{{ $t('bpmn.buttons.Save') }}</v-btn>
+          <v-btn flat @click="showFormioDialog = false" :disabled="formioLoading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+          <v-btn flat @click="onFormioSubmit" color="primary" :loading="formioLoading">{{ $t('bpmn.buttons.Save') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -153,7 +153,8 @@ export default {
       propertiesPanelCallback: null,
       showFormioDialog: false,
       formioCode: '',
-      formioDefinition: {}
+      formioDefinition: {},
+      formioLoading: false
     };
   },
   mounted() {
@@ -320,15 +321,25 @@ export default {
 
       this.loading = false;
     },
-    onFormioSubmit() {
+    async onFormioSubmit() {
       var form = this.$refs.formioForm;
       var submission = JSON.parse(form.getFormSubmission());     
+      this.formioLoading = true;
+
+      var result = await this.$store.dispatch('formio/submitForm', { formCode: this.formioCode, submission: JSON.stringify(submission) });
+
+      if (!result || !result.success) {
+        this.formioLoading = false;
+        return;
+      }
+
       var params = [];
       for (var param in submission.data) {
         params.push({ name: param, type: typeof(submission.data[param]), value: submission.data[param] });
       }
       this.propertiesPanelCallback(params);
       this.propertiesPanelCallback = null;
+      this.formioLoading = false;
       this.showFormioDialog = false;
       this.formioCode = '';
       this.formioDefinition = {};
