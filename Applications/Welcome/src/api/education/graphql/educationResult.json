@@ -1,0 +1,18 @@
+ [{
+    "educationalInstitution": "Компетенция",
+    "typeAdvancedTraining": "ЛАиГ",
+    "TrainingTheme": "Матрицы",
+    "dateStart": "01.09.2019",
+    "dateEnd": "27.09.2019",
+    "countHours": "150",
+    "note":"Быть всем"
+    },
+    {
+    "educationalInstitution": "Компетенция",
+    "typeAdvancedTraining": "ЛАиГ",
+    "TrainingTheme": "Матрицы",
+    "dateStart": "01.09.2019",
+    "dateEnd": "27.09.2019",
+    "countHours":"150" ,
+    "note":"Быть всем"
+}]
