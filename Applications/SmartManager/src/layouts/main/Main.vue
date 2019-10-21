@@ -38,7 +38,7 @@
           :navbarColor="navbarColor"
           :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]"/>
 
-        <div class="router-view">
+        <div class="router-view pb-0">
           <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
 
             <div class="content-area__content">

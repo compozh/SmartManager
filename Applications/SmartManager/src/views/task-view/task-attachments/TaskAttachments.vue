@@ -1,10 +1,17 @@
 <template>
   <VuePerfectScrollbar
-    class="scroll-area md:px-8 pt-4 px-6 mb-4"
+    class="scroll-area md:px-8 p-4"
     :settings="settings"
   >
-    <pdf-viewer :url="url"></pdf-viewer>
+    <div class="vx-row h-full">
+      <div class="vx-col w-full h-full">
+        <vx-card class="px-4 h-full">
 
+          <pdf-viewer :url="url"></pdf-viewer>
+
+        </vx-card>
+      </div>
+    </div>
   </VuePerfectScrollbar>
 </template>
 
@@ -16,7 +23,7 @@ import PdfViewer from '@/components/pdf-viewer/Viewer'
 export default {
   props: {
     attachments: Array,
-    url: Number
+    url: String
   },
   components: {
     VuePerfectScrollbar,
@@ -44,6 +51,11 @@ export default {
 
 <style scoped>
 
+  .vx-card >>> .vx-card__collapsible-content.vs-con-loading__container,
+  .vx-card >>> .vx-card__collapsible-content .vx-card__body {
+    height: 100%;
+    padding: 0;
+  }
 
   .custom-truncate {
     display: block;

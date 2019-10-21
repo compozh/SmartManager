@@ -124,6 +124,8 @@ Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/reso
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
 
+export const eventBus = new Vue()
+
 new Vue({
   router,
   store,

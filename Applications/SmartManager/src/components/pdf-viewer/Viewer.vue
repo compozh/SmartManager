@@ -283,9 +283,12 @@
         </menu>
 
         <div id="viewerContainer" tabindex="0">
-          <div id="viewer" class="pdfViewer"></div>
-        </div>
 
+
+            <div id="viewer" class="pdfViewer"></div>
+
+
+        </div>
         <div id="errorWrapper" hidden='true'>
           <div id="errorMessageLeft">
             <span id="errorMessage"></span>
@@ -412,7 +415,6 @@
 
 <script>
 import { webViewerLoad } from './scripts/viewer.js'
-
 export default {
   props: {
     url: String

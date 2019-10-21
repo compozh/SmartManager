@@ -97,4 +97,5 @@ fragment taskFields on Task {
     isAgree
   }
   hasNewComment
+  externalParams
 }

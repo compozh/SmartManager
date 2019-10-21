@@ -535,30 +535,6 @@ let PDFViewerApplication = {
     })
   },
 
-  setTitleUsingUrl(url = '') {
-    this.url = url
-    this.baseUrl = url.split('#')[0]
-    let title = getPDFFileNameFromURL(url, '')
-    if (!title) {
-      try {
-        title = decodeURIComponent(getFilenameFromUrl(url)) || url
-      } catch (ex) {
-        // decodeURIComponent may throw URIError,
-        // fall back to using the unprocessed url in that case
-        title = url
-      }
-    }
-    this.setTitle(title)
-  },
-
-  setTitle(title) {
-    if (this.isViewerEmbedded) {
-      // Embedded PDF viewers should not be changing their parent page's title.
-      return
-    }
-    document.title = title
-  },
-
   /**
    * Closes opened PDF document.
    * @returns {Promise} - Returns the promise, which is resolved when all
@@ -625,15 +601,13 @@ let PDFViewerApplication = {
     for (let key in workerParameters) {
       GlobalWorkerOptions[key] = workerParameters[key]
     }
-
+``
     let parameters = Object.create(null)
     if (typeof file === 'string') { // URL
-      this.setTitleUsingUrl(file)
       parameters.url = file
     } else if (file && 'byteLength' in file) { // ArrayBuffer
       parameters.data = file
     } else if (file.url && file.originalUrl) {
-      this.setTitleUsingUrl(file.originalUrl)
       parameters.url = file.url
     }
     // Set the necessary API parameters, using the available options.
@@ -1113,26 +1087,6 @@ let PDFViewerApplication = {
                   ' / ' + (info.Creator || '-').trim() + ']' +
                   ' (PDF.js: ' + (version || '-') +
                   (AppOptions.get('enableWebGL') ? ' [WebGL]' : '') + ')')
-
-        let pdfTitle
-        if (metadata && metadata.has('dc:title')) {
-          let title = metadata.get('dc:title')
-          // Ghostscript sometimes return 'Untitled', sets the title to 'Untitled'
-          if (title !== 'Untitled') {
-            pdfTitle = title
-          }
-        }
-
-        if (!pdfTitle && info && info['Title']) {
-          pdfTitle = info['Title']
-        }
-
-        if (pdfTitle) {
-          this.setTitle(
-            `${pdfTitle} - ${contentDispositionFilename || document.title}`)
-        } else if (contentDispositionFilename) {
-          this.setTitle(contentDispositionFilename)
-        }
 
         if (info.IsAcroFormPresent) {
           console.warn('Warning: AcroForm/XFA is not supported')
@@ -1671,7 +1625,6 @@ if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
       // file:-scheme. Load the contents in the main thread because QtWebKit
       // cannot load file:-URLs in a Web Worker. file:-URLs are usually loaded
       // very quickly, so there is no need to set up progress event listeners.
-      PDFViewerApplication.setTitleUsingUrl(file)
       const xhr = new XMLHttpRequest()
       xhr.onload = function() {
         PDFViewerApplication.open(new Uint8Array(xhr.response))
@@ -1688,7 +1641,6 @@ if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
   }
 } else if (PDFJSDev.test('FIREFOX || MOZCENTRAL || CHROME')) {
   webViewerOpenFileViaURL = function webViewerOpenFileViaURL(file) {
-    PDFViewerApplication.setTitleUsingUrl(file)
     PDFViewerApplication.initPassiveLoading()
   }
 } else {
@@ -1908,7 +1860,6 @@ if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
       }
       PDFViewerApplication.open(url)
     } else {
-      PDFViewerApplication.setTitleUsingUrl(file.name)
       // Read the local file into a Uint8Array.
       let fileReader = new FileReader()
       fileReader.onload = function webViewerChangeFileReaderOnload(evt) {

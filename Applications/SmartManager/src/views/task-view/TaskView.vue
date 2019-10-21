@@ -61,11 +61,7 @@ export default {
     reduce: true,
     clickNotClose: true,
     isTaskSidebarActive: true,
-    windowWidth: window.innerWidth,
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.30,
-    }
+    windowWidth: window.innerWidth
   }),
   created() {
     this.$store.commit('TOGGLE_REDUCE_BUTTON', true)
@@ -141,5 +137,9 @@ export default {
   .md-sidebar-spacer {
     width: calc(100% - 64px);
     margin-left: 64px;
+  }
+
+  .app-fixed-height {
+    height: calc(100vh - 12rem);
   }
 </style>

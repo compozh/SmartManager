@@ -607,7 +607,8 @@ html[dir='rtl'] #outerContainer.sidebarOpen #sidebarContainer {
   -webkit-overflow-scrolling: touch;
   position: absolute;
   width: 100%;
-  background-color: hsla(0,0%,0%,.1);
+  background-color: #5c5c5c;
+  background-image: url(../images/texture.png);
 }
 #sidebarContent {
   left: 0;
@@ -1614,7 +1615,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   box-sizing: content-box;
-  background-color: #7d7d7d;
+  background-color: #5c5c5c;
   background-image: url(../images/texture.png);
 }
 
@@ -2391,7 +2392,8 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 
 @media all and (max-width: 840px) {
   #sidebarContent {
-    background-color: hsla(0,0%,0%,.7);
+    background-color: #5c5c5c;
+    background-image: url(../images/texture.png);
   }
 
   #outerContainer.sidebarOpen #viewerContainer {
