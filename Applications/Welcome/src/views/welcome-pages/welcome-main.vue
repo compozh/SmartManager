@@ -4,7 +4,7 @@
 			<vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12" >
         <vs-col vs-w="7">
           <div class="header-container">
-            <h1 class="header">Приложения</h1>
+            <h1 class="header">{{$t("Welcome.Apps")}}</h1>
           </div>
         
           <FragmentApp v-for="(item, index) in apps" :key="index" 
@@ -20,7 +20,7 @@
 
         <vs-col vs-w="3">
           <div class="header-container">
-            <h1 class="header">Полезная информация</h1>
+            <h1 class="header">{{$t("Welcome.HelpFullInfo")}}</h1>
           </div>
           <FragmentDocumentation :items='documentations'></FragmentDocumentation>
         </vs-col>

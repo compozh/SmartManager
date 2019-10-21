@@ -1,5 +1,5 @@
 {
-    "AppTitle":"NABU. User Account",
+    "AppTitle":"WELCOME. Launcher",
     "UserInfo":"Personal information",
     "Login": {
         "Enter": "Entrance",
@@ -22,23 +22,8 @@
         "Department": "Department",
         "HireDate": "Date of receipt"
     },
-    "Education":{
-        "Competence": "Competence",
-        "ProfessionalTrainingType": "Kind of vocational training",
-        "Subject": "Subject",
-        "TrainingTheme": "The topic of training",
-        "DateParticipationInTheTrainingEvent": "Date of participation in the training event",
-        "Description": "Note",
-        "educationalInstitution": "Educational institution / body that provides the organization of training",
-        "typeAdvancedTraining": "Type of advanced training",
-        "EventDateStart": "Start date of study",
-        "EventDateEnd": "Date of graduation",
-        "countHours": "Number of hours, fact",
-        "NoteLong": "Note (e.g., Certificate Scan and Feedback Forms)",
-        "Number": "№",
-        "Duty": "Duty",
-        "Priority": "Priority",
-        "Provider": "Approx. the provider",
-        "Status": "Status"
+    "Welcome" :{
+        "Apps": "Applications",
+        "HelpFullInfo": "Helpful information"
     }
 }
