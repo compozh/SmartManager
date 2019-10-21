@@ -10,6 +10,7 @@ import formHelper from 'bpmn-js-properties-panel/lib/helper/FormHelper';
 import utils from 'bpmn-js-properties-panel/lib/Utils';
 import find from 'lodash/find';
 import { eventBus } from '../../../../main';
+import { events } from '../../../../constants';
 
 function generateValueId() {
   return utils.nextId('Value_');
@@ -108,7 +109,7 @@ export default function(group, element, bpmnFactory, translate, commandStack) {
     showLink: (element, node) => true,
     handleClick: (element, node, event) => {
       var bo = getBusinessObject(element);
-      eventBus.$emit('properties-panel.create-formio', (formKey) => {
+      eventBus.$emit(events.propertiesPanel.createForm, (formKey) => {
         var cmd = cmdHelper.updateBusinessObject(element, bo, {
           'camunda:formKey': formKey
         });
@@ -126,7 +127,7 @@ export default function(group, element, bpmnFactory, translate, commandStack) {
       name: 'search',
       method: (element, inputNode) => {
         var bo = getBusinessObject(element);
-        eventBus.$emit('properties-panel.select-form-key', bo.get('camunda:formKey'), (formKey) => {
+        eventBus.$emit(events.propertiesPanel.selectForm, bo.get('camunda:formKey'), (formKey) => {
           var cmd = cmdHelper.updateBusinessObject(element, bo, {
             'camunda:formKey': formKey
           });
@@ -165,7 +166,7 @@ export default function(group, element, bpmnFactory, translate, commandStack) {
     handleClick: (element, node, event) => {
       var bo = getBusinessObject(element);
       var formKey = bo.get('camunda:formKey');
-      eventBus.$emit('properties-panel.edit-formio', formKey);
+      eventBus.$emit(events.propertiesPanel.editForm, formKey);
     }
   }));
 

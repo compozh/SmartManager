@@ -17,6 +17,8 @@
 <script>
 /* eslint-disable */
 import { eventBus } from '../../main'
+import { events } from '../../constants'
+
 export default {
   name: 'formio-builder-container', 
   data() {
@@ -29,10 +31,10 @@ export default {
   },
   created() {
     var me = this;
-    eventBus.$on('properties-panel.create-formio', (callback) => {
+    eventBus.$on(events.propertiesPanel.createForm, (callback) => {
         me.createForm(callback)
     })
-    eventBus.$on('properties-panel.edit-formio', (formCode) => {
+    eventBus.$on(events.propertiesPanel.editForm, (formCode) => {
         me.editForm(formCode)
     })
   },
