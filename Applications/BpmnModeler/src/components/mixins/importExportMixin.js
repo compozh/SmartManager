@@ -1,3 +1,5 @@
+import { eventBus } from '../../main';
+
 export const importMixin = {
   methods: {
     importItem(parent) {
@@ -24,6 +26,12 @@ export const importMixin = {
   }
 };
 export const exportMixin = {
+  mounted() {
+    eventBus.$on('modeler.export', this.export);
+  },
+  beforeDestroy() {
+    eventBus.$off('modeler.export', this.export);
+  },
   methods: {
     export(type) {
       let fileName = 'diagram.' + type;

@@ -22056,7 +22056,7 @@
 
   var replaceOptions = {
     DECISION: [{
-      label: 'Empty',
+      label: 'Пусто',
       actionName: 'replace-with-empty-decision',
       className: 'dmn-icon-clear',
       target: {
@@ -22065,7 +22065,7 @@
         expression: false
       }
     }, {
-      label: 'Decision Table',
+      label: 'Таблица решения',
       actionName: 'replace-with-decision-table',
       className: 'dmn-icon-decision-table',
       target: {
@@ -22074,7 +22074,7 @@
         expression: false
       }
     }, {
-      label: 'Literal Expression',
+      label: 'Литеральное выражение',
       actionName: 'replace-with-literal-expression',
       className: 'dmn-icon-literal-expression',
       target: {
@@ -35392,7 +35392,7 @@
         element = props.element;
     var actualClassName = className + ' type-ref';
     return createVNode(1, "th", actualClassName, element.typeRef, 0, {
-      "title": "Data Type"
+      "title": "Тип данных"
     });
   }
 
@@ -35521,9 +35521,9 @@
             id = _root$businessObject$.id,
             name = _root$businessObject$.name;
         return createVNode(1, "header", "decision-table-properties", [createVNode(1, "h3", "decision-table-name", name, 0, {
-          "title": "Decision Name"
+          "title": "Наименовние выражения"
         }), createVNode(1, "h5", "decision-table-id", id, 0, {
-          "title": "Decision Id"
+          "title": "Идентификатор выражения"
         })], 4);
       }
     }]);
@@ -42594,7 +42594,7 @@
             target: element.col || element
           });
 
-          entries.push(createVNode(1, "div", "context-menu-group context-menu-group-input", [createVNode(1, "h4", "context-menu-group-title", createTextVNode("Выход"), 2), createVNode(1, "div", "context-menu-group-entry context-menu-entry-add-input-left", [createVNode(1, "span", "context-menu-group-entry-icon dmn-icon-left"), createTextVNode("Добавить слева")], 4, {
+          entries.push(createVNode(1, "div", "context-menu-group context-menu-group-input", [createVNode(1, "h4", "context-menu-group-title", createTextVNode("Входящий параметр"), 2), createVNode(1, "div", "context-menu-group-entry context-menu-entry-add-input-left", [createVNode(1, "span", "context-menu-group-entry-icon dmn-icon-left"), createTextVNode("Добавить слева")], 4, {
             "onClick": function onClick() {
               return handlers.addInputLeft(actualElement);
             }
@@ -42635,7 +42635,7 @@
             target: element.col || element
           });
 
-          entries.push(createVNode(1, "div", "context-menu-group context-menu-group-output", [createVNode(1, "h4", "context-menu-group-title", createTextVNode("Выход"), 2), createVNode(1, "div", "context-menu-group-entry context-menu-entry-add-output-left", [createVNode(1, "span", "context-menu-group-entry-icon dmn-icon-left"), createTextVNode("Вставить слева")], 4, {
+          entries.push(createVNode(1, "div", "context-menu-group context-menu-group-output", [createVNode(1, "h4", "context-menu-group-title", createTextVNode("Исходящий параметр"), 2), createVNode(1, "div", "context-menu-group-entry context-menu-entry-add-output-left", [createVNode(1, "span", "context-menu-group-entry-icon dmn-icon-left"), createTextVNode("Вставить слева")], 4, {
             "onClick": function onClick() {
               return handlers.addOutputLeft(_actualElement);
             }
@@ -42878,9 +42878,9 @@
           },
           col: output
         }), label ? createVNode(1, "span", "output-label", label, 0, {
-          "title": "Output Label"
+          "title": "Метка исходящего параметра"
         }) : createVNode(1, "span", "output-name", name || '-', 0, {
-          "title": "Output Expression"
+          "title": "Выражение исходящего параметра"
         })], 0, {
           "data-col-id": output.id,
           "onClick": this.onClick,
@@ -43634,7 +43634,7 @@
         }), inputVariable && createVNode(1, "span", "dms-badge dmn-variable-name input-variable", inputVariable, 0, {
           "title": "Переменная входящего параметра"
         }), showLanguageBadge && createVNode(1, "span", "dms-badge dmn-expression-language input-expression-language", [createVNode(1, "span", "dms-badge-icon dmn-icon-file-code"), createVNode(1, "span", "dms-badge-label", expressionLanguage, 0)], 4, {
-          "title": 'Язык выхажения входящего = ' + expressionLanguage
+          "title": 'Язык выражения входящего параметра = ' + expressionLanguage
         })], 0, {
           "data-col-id": input.id,
           "onClick": this.onClick,
@@ -44724,7 +44724,7 @@
         var actualClassName = (className || '') + ' type-ref';
         var colId = is(element, 'dmn:LiteralExpression') ? element.$parent.id : element.id;
         return createVNode(1, "th", actualClassName, element.typeRef, 0, {
-          "title": "Data Type",
+          "title": "Тип данных",
           "data-col-id": colId,
           "onClick": this.onClick,
           "onContextmenu": this.onContextmenu
@@ -46504,7 +46504,7 @@
             });
           };
         } else if (cellType === 'input-cell' || cellType === 'output-cell') {
-          var title = "Переместить ".concat(isInput(col) ? 'Вход' : 'Выход');
+          var title = "Переместить ".concat(isInput(col) ? 'входящий параметр' : 'исходящий параметр');
           return function () {
             return createVNode(1, "span", "dmn-icon-drag horizontal", null, 1, {
               "draggable": "true",
@@ -47623,7 +47623,7 @@
         return createVNode(1, "h3", className, this.getEditor(), 0, {
           "data-element-id": this.props.elementId,
           "data-coords": this.props.coords,
-          "title": "Decision Name"
+          "title": "Наименование решения"
         });
       }
     }]);
@@ -47651,7 +47651,7 @@
       value: function render$$1() {
         var className = classNames(this.getSelectionClasses(), this.getClassName());
         return createVNode(1, "h5", className, this.getEditor(), 0, {
-          "title": "Decision Id",
+          "title": "Идентификатор решения",
           "data-element-id": this.props.elementId,
           "data-coords": this.props.coords
         });
@@ -51175,7 +51175,7 @@
         return createVNode(1, "div", this.getClassName(), [isString(description) && !isFocussed && createVNode(1, "div", "description-indicator"), this.getEditor({
           className: isScript ? 'script-editor' : null
         }), !isDefaultExpressionLanguage && !isFocussed && createVNode(1, "span", "dms-badge dmn-expression-language", [createVNode(1, "span", "dms-badge-icon dmn-icon-file-code"), createVNode(1, "span", "dms-badge-label", expressionLanguageLabel, 0)], 4, {
-          "title": "Expression Language = ".concat(expressionLanguageLabel)
+          "title": "Язык выражения = ".concat(expressionLanguageLabel)
         })], 0);
       }
     }]);
