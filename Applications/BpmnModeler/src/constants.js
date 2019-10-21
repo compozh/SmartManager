@@ -18,7 +18,17 @@
 export const events = {
   /** События в редакторе bpmn.io */
   modeler: {
-    export: 'modeler.export'
+    /**
+     * Экспортировать активную диаграмму
+     * @event Modeler#export
+     * @param {string} type - тип экспортируемой диаграммы
+     */
+    export: 'modeler.export',
+    /**
+     * Отобразить диалог создания новой диаграммы
+     * @event Modeler#createDiagram
+     */
+    createDiagram: 'modeler.create-diagram'
   },
   /** События в панели свойств */
   propertiesPanel: {

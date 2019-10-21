@@ -28,6 +28,14 @@ export function executeCommands(commandStack, commands, element) {
   }
 }
 
+/**
+ * Установить параметры для сервисной или пользовательской задачи
+ * @param {Object} element - пользовательская/сервисная задача
+ * @param {Object} bo - бизнес-обьект
+ * @param {Object} actionId - сохраненный код действия
+ * @param {Object} bpmnFactory - фабрика элементов
+ * @param {Object} commandStack - стек команд
+ */
 export function setServiceTaskParameters(element, bo, actionId, bpmnFactory, commandStack) {
   // Уже сохраненные параметры
   var existingParameters = extensionElementsHelper.getExtensionElements(bo, 'IT-Enterprise:ServiceTaskParameter');
