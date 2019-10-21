@@ -1,4 +1,4 @@
-<template>    
+<template>
     <div class="toolbar-builder-container">
         <div class="constructor-title">{{constructorCaption}}</div>
         <v-tabs v-model="selectedTab" class="constructor-tabs">
@@ -21,10 +21,12 @@
                 <v-text-field
                     class="toolbar-item form-code-text-field"
                     :disabled="Boolean(Object.keys(formDefinition).length)"
+                    ref="formCode"
                     v-model=formCodeProperty
                     :full-width=false
                     :maxlength="10"
                     :label=formCodeLabel
+                    :rules="[() => !!formCodeProperty || this.$t('bpmn.errors.RequiredInputField')]"
                     required
                 />
                 <div class="button-container">
@@ -105,7 +107,7 @@ export default {
       return { data: this.formDefinition.submission ? JSON.parse(this.formDefinition.submission) : [] }
     },
     actionText() {
-        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');     
+        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');
     }
   },
   methods: {
@@ -113,6 +115,11 @@ export default {
         this.$emit('change', this.getFormParams());
     },
     onAction() {
+      var formCodeInput = this.$refs.formCode
+      if (!formCodeInput.value) {
+        formCodeInput.validate(true)
+        return
+      }
         this.$emit('action', this.getFormParams());
     },
     onCancel() {
@@ -193,14 +200,14 @@ export default {
         max-width: 200px;
     }
     .form-name-text-field {
-      max-width: 350px;  
+      max-width: 350px;
     }
     .action-button {
     }
     .cancel-button {
     }
     .constructor-tabs {
-        
+
     }
     .form-preview-component {
         overflow-y: auto !important;
