@@ -6,7 +6,7 @@ import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
 import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
 
-import DmnModeler from 'dmn-js/lib/Modeler';
+import DmnJS from '../bpmnModules/dmn-modeler.development';
 import DmnViewer from 'dmn-js/lib/Viewer';
 import dmnPropertiesPanelModule from 'dmn-js-properties-panel';
 import drdAdapterModule from 'dmn-js-properties-panel/lib/adapter/drd';
@@ -59,7 +59,7 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
 }
 
 function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
-  return new DmnModeler({
+  return new DmnJS({
     common: {
       keyboard: {
         bindTo: document
