@@ -417,6 +417,7 @@ input,
 button,
 select {
   font: message-box;
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
   outline: none;
 }
 
@@ -1613,6 +1614,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
   bottom: 0;
   padding: 10px 30px 0;
   overflow: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   box-sizing: content-box;
   background-color: #5c5c5c;
