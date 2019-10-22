@@ -28,7 +28,7 @@
       <task-details v-if="currentTab === 'details'" :task="task" @open-attachment="openAttachment"></task-details>
 
       <!-- TASK ATTACHMENTS  -->
-      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments" :url="url"></task-attachments>
+      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments" :index="index"></task-attachments>
 
       <!-- TASK DETAILS  -->
       <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
@@ -45,15 +45,13 @@ import TaskSidebar from './TaskSidebar.vue'
 import TaskDetails from './task-details/TaskDetails.vue'
 import TaskAttachments from './task-attachments/TaskAttachments.vue'
 import TaskComments from './task-comments/TaskComments.vue'
-import TaskApprovals from './task-approvals/TaskApprovals.vue'
 
 export default {
   components: {
     TaskSidebar,
     TaskDetails,
     TaskComments,
-    TaskAttachments,
-    TaskApprovals
+    TaskAttachments
   },
   data: () => ({
     currentTab: 'details',
@@ -115,9 +113,9 @@ export default {
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     },
-    openAttachment(url) {
+    openAttachment(index) {
       this.currentTab = 'attachments'
-      this.url = url
+      this.index = index
     }
   },
   beforeDestroy() {
