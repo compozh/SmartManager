@@ -101,7 +101,7 @@
     "noComments": "No comments",
     "closeForm": "Close the form",
     "noApprovals": "No approvals",
-    "noSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED"
+    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED"
   },
   "notify": {
     "foldersTitle": "Folders and filters",
