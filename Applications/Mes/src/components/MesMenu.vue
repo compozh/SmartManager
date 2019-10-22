@@ -46,9 +46,7 @@ export default {
             pages.push(page)
             break
           case 'ONLY_INSTALLATION':
-            debugger;
             if (page.Id == 'INSTALLATIONS') {
-              debugger;
               pages.push(page)
             }
             break
