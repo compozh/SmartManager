@@ -724,32 +724,32 @@ var CFFParser = (function CFFParserClosure() {
       length -= 1
 
       switch (format) {
-      case 0:
-        for (i = 0; i < length; i++) {
-          id = (bytes[pos++] << 8) | bytes[pos++]
-          charset.push(cid ? id : strings.get(id))
-        }
-        break
-      case 1:
-        while (charset.length <= length) {
-          id = (bytes[pos++] << 8) | bytes[pos++]
-          count = bytes[pos++]
-          for (i = 0; i <= count; i++) {
-            charset.push(cid ? id++ : strings.get(id++))
+        case 0:
+          for (i = 0; i < length; i++) {
+            id = (bytes[pos++] << 8) | bytes[pos++]
+            charset.push(cid ? id : strings.get(id))
           }
-        }
-        break
-      case 2:
-        while (charset.length <= length) {
-          id = (bytes[pos++] << 8) | bytes[pos++]
-          count = (bytes[pos++] << 8) | bytes[pos++]
-          for (i = 0; i <= count; i++) {
-            charset.push(cid ? id++ : strings.get(id++))
+          break
+        case 1:
+          while (charset.length <= length) {
+            id = (bytes[pos++] << 8) | bytes[pos++]
+            count = bytes[pos++]
+            for (i = 0; i <= count; i++) {
+              charset.push(cid ? id++ : strings.get(id++))
+            }
           }
-        }
-        break
-      default:
-        throw new FormatError('Unknown charset format')
+          break
+        case 2:
+          while (charset.length <= length) {
+            id = (bytes[pos++] << 8) | bytes[pos++]
+            count = (bytes[pos++] << 8) | bytes[pos++]
+            for (i = 0; i <= count; i++) {
+              charset.push(cid ? id++ : strings.get(id++))
+            }
+          }
+          break
+        default:
+          throw new FormatError('Unknown charset format')
       }
       // Raw won't be needed if we actually compile the charset.
       var end = pos
@@ -790,27 +790,27 @@ var CFFParser = (function CFFParserClosure() {
         var dataStart = pos
         format = bytes[pos++]
         switch (format & 0x7f) {
-        case 0:
-          var glyphsCount = bytes[pos++]
-          for (i = 1; i <= glyphsCount; i++) {
-            encoding[bytes[pos++]] = i
-          }
-          break
-
-        case 1:
-          var rangesCount = bytes[pos++]
-          var gid = 1
-          for (i = 0; i < rangesCount; i++) {
-            var start = bytes[pos++]
-            var left = bytes[pos++]
-            for (var j = start; j <= start + left; j++) {
-              encoding[j] = gid++
+          case 0:
+            var glyphsCount = bytes[pos++]
+            for (i = 1; i <= glyphsCount; i++) {
+              encoding[bytes[pos++]] = i
             }
-          }
-          break
+            break
 
-        default:
-          throw new FormatError(`Unknown encoding format: ${format} in CFF`)
+          case 1:
+            var rangesCount = bytes[pos++]
+            var gid = 1
+            for (i = 0; i < rangesCount; i++) {
+              var start = bytes[pos++]
+              var left = bytes[pos++]
+              for (var j = start; j <= start + left; j++) {
+                encoding[j] = gid++
+              }
+            }
+            break
+
+          default:
+            throw new FormatError(`Unknown encoding format: ${format} in CFF`)
         }
         var dataEnd = pos
         if (format & 0x80) { // hasSupplement
@@ -834,32 +834,32 @@ var CFFParser = (function CFFParserClosure() {
       var i
 
       switch (format) {
-      case 0:
-        for (i = 0; i < length; ++i) {
-          var id = bytes[pos++]
-          fdSelect.push(id)
-        }
-        break
-      case 3:
-        var rangesCount = (bytes[pos++] << 8) | bytes[pos++]
-        for (i = 0; i < rangesCount; ++i) {
-          var first = (bytes[pos++] << 8) | bytes[pos++]
-          if (i === 0 && first !== 0) {
-            warn('parseFDSelect: The first range must have a first GID of 0' +
+        case 0:
+          for (i = 0; i < length; ++i) {
+            var id = bytes[pos++]
+            fdSelect.push(id)
+          }
+          break
+        case 3:
+          var rangesCount = (bytes[pos++] << 8) | bytes[pos++]
+          for (i = 0; i < rangesCount; ++i) {
+            var first = (bytes[pos++] << 8) | bytes[pos++]
+            if (i === 0 && first !== 0) {
+              warn('parseFDSelect: The first range must have a first GID of 0' +
                    ' -- trying to recover.')
-            first = 0
+              first = 0
+            }
+            var fdIndex = bytes[pos++]
+            var next = (bytes[pos] << 8) | bytes[pos + 1]
+            for (var j = first; j < next; ++j) {
+              fdSelect.push(fdIndex)
+            }
           }
-          var fdIndex = bytes[pos++]
-          var next = (bytes[pos] << 8) | bytes[pos + 1]
-          for (var j = first; j < next; ++j) {
-            fdSelect.push(fdIndex)
-          }
-        }
-        // Advance past the sentinel(next).
-        pos += 2
-        break
-      default:
-        throw new FormatError(`parseFDSelect: Unknown format "${format}".`)
+          // Advance past the sentinel(next).
+          pos += 2
+          break
+        default:
+          throw new FormatError(`parseFDSelect: Unknown format "${format}".`)
       }
       if (fdSelect.length !== length) {
         throw new FormatError('parseFDSelect: Invalid font data.')
@@ -1538,31 +1538,31 @@ var CFFCompiler = (function CFFCompilerClosure() {
           var type = types[j]
           var value = values[j]
           switch (type) {
-          case 'num':
-          case 'sid':
-            out = out.concat(this.encodeNumber(value))
-            break
-          case 'offset':
+            case 'num':
+            case 'sid':
+              out = out.concat(this.encodeNumber(value))
+              break
+            case 'offset':
             // For offsets we just insert a 32bit integer so we don't have to
             // deal with figuring out the length of the offset when it gets
             // replaced later on by the compiler.
-            var name = dict.keyToNameMap[key]
-            // Some offsets have the offset and the length, so just record the
-            // position of the first one.
-            if (!offsetTracker.isTracking(name)) {
-              offsetTracker.track(name, out.length)
-            }
-            out = out.concat([0x1d, 0, 0, 0, 0])
-            break
-          case 'array':
-          case 'delta':
-            out = out.concat(this.encodeNumber(value))
-            for (var k = 1, kk = values.length; k < kk; ++k) {
-              out = out.concat(this.encodeNumber(values[k]))
-            }
-            break
-          default:
-            throw new FormatError(`Unknown data type of ${type}`)
+              var name = dict.keyToNameMap[key]
+              // Some offsets have the offset and the length, so just record the
+              // position of the first one.
+              if (!offsetTracker.isTracking(name)) {
+                offsetTracker.track(name, out.length)
+              }
+              out = out.concat([0x1d, 0, 0, 0, 0])
+              break
+            case 'array':
+            case 'delta':
+              out = out.concat(this.encodeNumber(value))
+              for (var k = 1, kk = values.length; k < kk; ++k) {
+                out = out.concat(this.encodeNumber(values[k]))
+              }
+              break
+            default:
+              throw new FormatError(`Unknown data type of ${type}`)
           }
         }
         out = out.concat(dict.opcodes[key])
@@ -1643,39 +1643,39 @@ var CFFCompiler = (function CFFCompilerClosure() {
       let format = fdSelect.format
       let out, i
       switch (format) {
-      case 0:
-        out = new Uint8Array(1 + fdSelect.fdSelect.length)
-        out[0] = format
-        for (i = 0; i < fdSelect.fdSelect.length; i++) {
-          out[i + 1] = fdSelect.fdSelect[i]
-        }
-        break
-      case 3:
-        let start = 0
-        let lastFD = fdSelect.fdSelect[0]
-        let ranges = [
-          format,
-          0, // nRanges place holder
-          0, // nRanges place holder
-          (start >> 8) & 0xFF,
-          start & 0xFF,
-          lastFD
-        ]
-        for (i = 1; i < fdSelect.fdSelect.length; i++) {
-          let currentFD = fdSelect.fdSelect[i]
-          if (currentFD !== lastFD) {
-            ranges.push((i >> 8) & 0xFF, i & 0xFF, currentFD)
-            lastFD = currentFD
+        case 0:
+          out = new Uint8Array(1 + fdSelect.fdSelect.length)
+          out[0] = format
+          for (i = 0; i < fdSelect.fdSelect.length; i++) {
+            out[i + 1] = fdSelect.fdSelect[i]
           }
-        }
-        // 3 bytes are pushed for every range and there are 3 header bytes.
-        let numRanges = (ranges.length - 3) / 3
-        ranges[1] = (numRanges >> 8) & 0xFF
-        ranges[2] = numRanges & 0xFF
-        // sentinel
-        ranges.push((i >> 8) & 0xFF, i & 0xFF)
-        out = new Uint8Array(ranges)
-        break
+          break
+        case 3:
+          let start = 0
+          let lastFD = fdSelect.fdSelect[0]
+          let ranges = [
+            format,
+            0, // nRanges place holder
+            0, // nRanges place holder
+            (start >> 8) & 0xFF,
+            start & 0xFF,
+            lastFD
+          ]
+          for (i = 1; i < fdSelect.fdSelect.length; i++) {
+            let currentFD = fdSelect.fdSelect[i]
+            if (currentFD !== lastFD) {
+              ranges.push((i >> 8) & 0xFF, i & 0xFF, currentFD)
+              lastFD = currentFD
+            }
+          }
+          // 3 bytes are pushed for every range and there are 3 header bytes.
+          let numRanges = (ranges.length - 3) / 3
+          ranges[1] = (numRanges >> 8) & 0xFF
+          ranges[2] = numRanges & 0xFF
+          // sentinel
+          ranges.push((i >> 8) & 0xFF, i & 0xFF)
+          out = new Uint8Array(ranges)
+          break
       }
       return this.compileTypedArray(out)
     },

@@ -115,51 +115,51 @@ function preprocess(inFilename, outFilename, defines) {
     var m = control.exec(line)
     if (m) {
       switch (m[1]) {
-      case 'if':
-        stack.push(state)
-        state = evaluateCondition(m[2]) ? STATE_IF_TRUE : STATE_IF_FALSE
-        break
-      case 'elif':
-        if (state === STATE_IF_TRUE || state === STATE_ELSE_FALSE) {
-          state = STATE_ELSE_FALSE
-        } else if (state === STATE_IF_FALSE) {
+        case 'if':
+          stack.push(state)
           state = evaluateCondition(m[2]) ? STATE_IF_TRUE : STATE_IF_FALSE
-        } else if (state === STATE_ELSE_TRUE) {
-          throw new Error('Found #elif after #else at ' + loc())
-        } else {
-          throw new Error('Found #elif without matching #if at ' + loc())
-        }
-        break
-      case 'else':
-        if (state === STATE_IF_TRUE || state === STATE_ELSE_FALSE) {
-          state = STATE_ELSE_FALSE
-        } else if (state === STATE_IF_FALSE) {
-          state = STATE_ELSE_TRUE
-        } else {
-          throw new Error('Found #else without matching #if at ' + loc())
-        }
-        break
-      case 'endif':
-        if (state === STATE_NONE) {
-          throw new Error('Found #endif without #if at ' + loc())
-        }
-        state = stack.pop()
-        break
-      case 'expand':
-        if (state !== STATE_IF_FALSE && state !== STATE_ELSE_FALSE) {
-          expand(m[2])
-        }
-        break
-      case 'include':
-        if (state !== STATE_IF_FALSE && state !== STATE_ELSE_FALSE) {
-          include(m[2])
-        }
-        break
-      case 'error':
-        if (state !== STATE_IF_FALSE && state !== STATE_ELSE_FALSE) {
-          throw new Error('Found #error ' + m[2] + ' at ' + loc())
-        }
-        break
+          break
+        case 'elif':
+          if (state === STATE_IF_TRUE || state === STATE_ELSE_FALSE) {
+            state = STATE_ELSE_FALSE
+          } else if (state === STATE_IF_FALSE) {
+            state = evaluateCondition(m[2]) ? STATE_IF_TRUE : STATE_IF_FALSE
+          } else if (state === STATE_ELSE_TRUE) {
+            throw new Error('Found #elif after #else at ' + loc())
+          } else {
+            throw new Error('Found #elif without matching #if at ' + loc())
+          }
+          break
+        case 'else':
+          if (state === STATE_IF_TRUE || state === STATE_ELSE_FALSE) {
+            state = STATE_ELSE_FALSE
+          } else if (state === STATE_IF_FALSE) {
+            state = STATE_ELSE_TRUE
+          } else {
+            throw new Error('Found #else without matching #if at ' + loc())
+          }
+          break
+        case 'endif':
+          if (state === STATE_NONE) {
+            throw new Error('Found #endif without #if at ' + loc())
+          }
+          state = stack.pop()
+          break
+        case 'expand':
+          if (state !== STATE_IF_FALSE && state !== STATE_ELSE_FALSE) {
+            expand(m[2])
+          }
+          break
+        case 'include':
+          if (state !== STATE_IF_FALSE && state !== STATE_ELSE_FALSE) {
+            include(m[2])
+          }
+          break
+        case 'error':
+          if (state !== STATE_IF_FALSE && state !== STATE_ELSE_FALSE) {
+            throw new Error('Found #error ' + m[2] + ' at ' + loc())
+          }
+          break
       }
     } else {
       if (state === STATE_NONE) {

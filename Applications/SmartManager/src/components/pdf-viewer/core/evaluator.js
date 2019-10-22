@@ -130,39 +130,39 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
       return 'source-over'
     }
     switch (value.name) {
-    case 'Normal':
-    case 'Compatible':
-      return 'source-over'
-    case 'Multiply':
-      return 'multiply'
-    case 'Screen':
-      return 'screen'
-    case 'Overlay':
-      return 'overlay'
-    case 'Darken':
-      return 'darken'
-    case 'Lighten':
-      return 'lighten'
-    case 'ColorDodge':
-      return 'color-dodge'
-    case 'ColorBurn':
-      return 'color-burn'
-    case 'HardLight':
-      return 'hard-light'
-    case 'SoftLight':
-      return 'soft-light'
-    case 'Difference':
-      return 'difference'
-    case 'Exclusion':
-      return 'exclusion'
-    case 'Hue':
-      return 'hue'
-    case 'Saturation':
-      return 'saturation'
-    case 'Color':
-      return 'color'
-    case 'Luminosity':
-      return 'luminosity'
+      case 'Normal':
+      case 'Compatible':
+        return 'source-over'
+      case 'Multiply':
+        return 'multiply'
+      case 'Screen':
+        return 'screen'
+      case 'Overlay':
+        return 'overlay'
+      case 'Darken':
+        return 'darken'
+      case 'Lighten':
+        return 'lighten'
+      case 'ColorDodge':
+        return 'color-dodge'
+      case 'ColorBurn':
+        return 'color-burn'
+      case 'HardLight':
+        return 'hard-light'
+      case 'SoftLight':
+        return 'soft-light'
+      case 'Difference':
+        return 'difference'
+      case 'Exclusion':
+        return 'exclusion'
+      case 'Hue':
+        return 'hue'
+      case 'Saturation':
+        return 'saturation'
+      case 'Color':
+        return 'color'
+      case 'Luminosity':
+        return 'luminosity'
     }
     warn('Unsupported blend mode: ' + value.name)
     return 'source-over'
@@ -639,70 +639,70 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
         let key = gStateKeys[i]
         let value = gState.get(key)
         switch (key) {
-        case 'Type':
-          break
-        case 'LW':
-        case 'LC':
-        case 'LJ':
-        case 'ML':
-        case 'D':
-        case 'RI':
-        case 'FL':
-        case 'CA':
-        case 'ca':
-          gStateObj.push([key, value])
-          break
-        case 'Font':
-          promise = promise.then(() => {
-            return this.handleSetFont(resources, null, value[0], operatorList,
-              task, stateManager.state).
-              then(function (loadedName) {
-                operatorList.addDependency(loadedName)
-                gStateObj.push([key, [loadedName, value[1]]])
-              })
-          })
-          break
-        case 'BM':
-          gStateObj.push([key, normalizeBlendMode(value)])
-          break
-        case 'SMask':
-          if (isName(value, 'None')) {
-            gStateObj.push([key, false])
+          case 'Type':
             break
-          }
-          if (isDict(value)) {
+          case 'LW':
+          case 'LC':
+          case 'LJ':
+          case 'ML':
+          case 'D':
+          case 'RI':
+          case 'FL':
+          case 'CA':
+          case 'ca':
+            gStateObj.push([key, value])
+            break
+          case 'Font':
             promise = promise.then(() => {
-              return this.handleSMask(value, resources, operatorList,
-                task, stateManager)
+              return this.handleSetFont(resources, null, value[0], operatorList,
+                task, stateManager.state).
+                then(function (loadedName) {
+                  operatorList.addDependency(loadedName)
+                  gStateObj.push([key, [loadedName, value[1]]])
+                })
             })
-            gStateObj.push([key, true])
-          } else {
-            warn('Unsupported SMask type')
-          }
+            break
+          case 'BM':
+            gStateObj.push([key, normalizeBlendMode(value)])
+            break
+          case 'SMask':
+            if (isName(value, 'None')) {
+              gStateObj.push([key, false])
+              break
+            }
+            if (isDict(value)) {
+              promise = promise.then(() => {
+                return this.handleSMask(value, resources, operatorList,
+                  task, stateManager)
+              })
+              gStateObj.push([key, true])
+            } else {
+              warn('Unsupported SMask type')
+            }
 
-          break
+            break
           // Only generate info log messages for the following since
           // they are unlikely to have a big impact on the rendering.
-        case 'OP':
-        case 'op':
-        case 'OPM':
-        case 'BG':
-        case 'BG2':
-        case 'UCR':
-        case 'UCR2':
-        case 'TR':
-        case 'TR2':
-        case 'HT':
-        case 'SM':
-        case 'SA':
-        case 'AIS':
-        case 'TK':
+          case 'OP':
+          case 'op':
+          case 'OPM':
+          case 'BG':
+          case 'BG2':
+          case 'UCR':
+          case 'UCR2':
+          case 'TR':
+          case 'TR2':
+          case 'HT':
+          case 'SM':
+          case 'SA':
+          case 'AIS':
+          case 'TK':
           // TODO implement these operators.
-          info('graphic state operator ' + key)
-          break
-        default:
-          info('Unknown graphic state operator ' + key)
-          break
+            info('graphic state operator ' + key)
+            break
+          default:
+            info('Unknown graphic state operator ' + key)
+            break
         }
       }
       return promise.then(function () {
@@ -986,284 +986,284 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
           var fn = operation.fn
 
           switch (fn | 0) {
-          case OPS.paintXObject:
+            case OPS.paintXObject:
             // eagerly compile XForm objects
-            var name = args[0].name
-            if (name && imageCache[name] !== undefined) {
-              operatorList.addOp(imageCache[name].fn, imageCache[name].args)
-              args = null
-              continue
-            }
-
-            next(new Promise(function(resolveXObject, rejectXObject) {
-              if (!name) {
-                throw new FormatError('XObject must be referred to by name.')
-              }
-
-              let xobj = xobjs.get(name)
-              if (!xobj) {
-                operatorList.addOp(fn, args)
-                resolveXObject()
-                return
-              }
-              if (!isStream(xobj)) {
-                throw new FormatError('XObject should be a stream')
-              }
-
-              let type = xobj.dict.get('Subtype')
-              if (!isName(type)) {
-                throw new FormatError('XObject should have a Name subtype')
-              }
-
-              if (type.name === 'Form') {
-                stateManager.save()
-                self.buildFormXObject(resources, xobj, null, operatorList,
-                  task, stateManager.state.clone()).
-                  then(function() {
-                    stateManager.restore()
-                    resolveXObject()
-                  }, rejectXObject)
-                return
-              } else if (type.name === 'Image') {
-                self.buildPaintImageXObject({
-                  resources,
-                  image: xobj,
-                  operatorList,
-                  cacheKey: name,
-                  imageCache,
-                }).then(resolveXObject, rejectXObject)
-                return
-              } else if (type.name === 'PS') {
-                // PostScript XObjects are unused when viewing documents.
-                // See section 4.7.1 of Adobe's PDF reference.
-                info('Ignored XObject subtype PS')
-              } else {
-                throw new FormatError(
-                  `Unhandled XObject subtype ${type.name}`)
-              }
-              resolveXObject()
-            }).catch(function(reason) {
-              if (reason instanceof AbortException) {
-                return
-              }
-              if (self.options.ignoreErrors) {
-                // Error(s) in the XObject -- sending unsupported feature
-                // notification and allow rendering to continue.
-                self.handler.send('UnsupportedFeature',
-                  { featureId: UNSUPPORTED_FEATURES.unknown, })
-                warn(`getOperatorList - ignoring XObject: "${reason}".`)
-                return
-              }
-              throw reason
-            }))
-            return
-          case OPS.setFont:
-            var fontSize = args[1]
-            // eagerly collect all fonts
-            next(self.handleSetFont(resources, args, null, operatorList,
-              task, stateManager.state).
-              then(function (loadedName) {
-                operatorList.addDependency(loadedName)
-                operatorList.addOp(OPS.setFont, [loadedName, fontSize])
-              }))
-            return
-          case OPS.beginText:
-            parsingText = true
-            break
-          case OPS.endText:
-            parsingText = false
-            break
-          case OPS.endInlineImage:
-            var cacheKey = args[0].cacheKey
-            if (cacheKey) {
-              var cacheEntry = imageCache[cacheKey]
-              if (cacheEntry !== undefined) {
-                operatorList.addOp(cacheEntry.fn, cacheEntry.args)
+              var name = args[0].name
+              if (name && imageCache[name] !== undefined) {
+                operatorList.addOp(imageCache[name].fn, imageCache[name].args)
                 args = null
                 continue
               }
-            }
-            next(self.buildPaintImageXObject({
-              resources,
-              image: args[0],
-              isInline: true,
-              operatorList,
-              cacheKey,
-              imageCache,
-            }))
-            return
-          case OPS.showText:
-            args[0] = self.handleText(args[0], stateManager.state)
-            break
-          case OPS.showSpacedText:
-            var arr = args[0]
-            var combinedGlyphs = []
-            var arrLength = arr.length
-            var state = stateManager.state
-            for (i = 0; i < arrLength; ++i) {
-              var arrItem = arr[i]
-              if (isString(arrItem)) {
-                Array.prototype.push.apply(combinedGlyphs,
-                  self.handleText(arrItem, state))
-              } else if (isNum(arrItem)) {
-                combinedGlyphs.push(arrItem)
-              }
-            }
-            args[0] = combinedGlyphs
-            fn = OPS.showText
-            break
-          case OPS.nextLineShowText:
-            operatorList.addOp(OPS.nextLine)
-            args[0] = self.handleText(args[0], stateManager.state)
-            fn = OPS.showText
-            break
-          case OPS.nextLineSetSpacingShowText:
-            operatorList.addOp(OPS.nextLine)
-            operatorList.addOp(OPS.setWordSpacing, [args.shift()])
-            operatorList.addOp(OPS.setCharSpacing, [args.shift()])
-            args[0] = self.handleText(args[0], stateManager.state)
-            fn = OPS.showText
-            break
-          case OPS.setTextRenderingMode:
-            stateManager.state.textRenderingMode = args[0]
-            break
 
-          case OPS.setFillColorSpace:
-            stateManager.state.fillColorSpace =
-                ColorSpace.parse(args[0], xref, resources,
-                  self.pdfFunctionFactory)
-            continue
-          case OPS.setStrokeColorSpace:
-            stateManager.state.strokeColorSpace =
-                ColorSpace.parse(args[0], xref, resources,
-                  self.pdfFunctionFactory)
-            continue
-          case OPS.setFillColor:
-            cs = stateManager.state.fillColorSpace
-            args = cs.getRgb(args, 0)
-            fn = OPS.setFillRGBColor
-            break
-          case OPS.setStrokeColor:
-            cs = stateManager.state.strokeColorSpace
-            args = cs.getRgb(args, 0)
-            fn = OPS.setStrokeRGBColor
-            break
-          case OPS.setFillGray:
-            stateManager.state.fillColorSpace = ColorSpace.singletons.gray
-            args = ColorSpace.singletons.gray.getRgb(args, 0)
-            fn = OPS.setFillRGBColor
-            break
-          case OPS.setStrokeGray:
-            stateManager.state.strokeColorSpace = ColorSpace.singletons.gray
-            args = ColorSpace.singletons.gray.getRgb(args, 0)
-            fn = OPS.setStrokeRGBColor
-            break
-          case OPS.setFillCMYKColor:
-            stateManager.state.fillColorSpace = ColorSpace.singletons.cmyk
-            args = ColorSpace.singletons.cmyk.getRgb(args, 0)
-            fn = OPS.setFillRGBColor
-            break
-          case OPS.setStrokeCMYKColor:
-            stateManager.state.strokeColorSpace = ColorSpace.singletons.cmyk
-            args = ColorSpace.singletons.cmyk.getRgb(args, 0)
-            fn = OPS.setStrokeRGBColor
-            break
-          case OPS.setFillRGBColor:
-            stateManager.state.fillColorSpace = ColorSpace.singletons.rgb
-            args = ColorSpace.singletons.rgb.getRgb(args, 0)
-            break
-          case OPS.setStrokeRGBColor:
-            stateManager.state.strokeColorSpace = ColorSpace.singletons.rgb
-            args = ColorSpace.singletons.rgb.getRgb(args, 0)
-            break
-          case OPS.setFillColorN:
-            cs = stateManager.state.fillColorSpace
-            if (cs.name === 'Pattern') {
-              next(self.handleColorN(operatorList, OPS.setFillColorN, args,
-                cs, patterns, resources, task))
+              next(new Promise(function(resolveXObject, rejectXObject) {
+                if (!name) {
+                  throw new FormatError('XObject must be referred to by name.')
+                }
+
+                let xobj = xobjs.get(name)
+                if (!xobj) {
+                  operatorList.addOp(fn, args)
+                  resolveXObject()
+                  return
+                }
+                if (!isStream(xobj)) {
+                  throw new FormatError('XObject should be a stream')
+                }
+
+                let type = xobj.dict.get('Subtype')
+                if (!isName(type)) {
+                  throw new FormatError('XObject should have a Name subtype')
+                }
+
+                if (type.name === 'Form') {
+                  stateManager.save()
+                  self.buildFormXObject(resources, xobj, null, operatorList,
+                    task, stateManager.state.clone()).
+                    then(function() {
+                      stateManager.restore()
+                      resolveXObject()
+                    }, rejectXObject)
+                  return
+                } else if (type.name === 'Image') {
+                  self.buildPaintImageXObject({
+                    resources,
+                    image: xobj,
+                    operatorList,
+                    cacheKey: name,
+                    imageCache,
+                  }).then(resolveXObject, rejectXObject)
+                  return
+                } else if (type.name === 'PS') {
+                // PostScript XObjects are unused when viewing documents.
+                // See section 4.7.1 of Adobe's PDF reference.
+                  info('Ignored XObject subtype PS')
+                } else {
+                  throw new FormatError(
+                    `Unhandled XObject subtype ${type.name}`)
+                }
+                resolveXObject()
+              }).catch(function(reason) {
+                if (reason instanceof AbortException) {
+                  return
+                }
+                if (self.options.ignoreErrors) {
+                // Error(s) in the XObject -- sending unsupported feature
+                // notification and allow rendering to continue.
+                  self.handler.send('UnsupportedFeature',
+                    { featureId: UNSUPPORTED_FEATURES.unknown, })
+                  warn(`getOperatorList - ignoring XObject: "${reason}".`)
+                  return
+                }
+                throw reason
+              }))
               return
-            }
-            args = cs.getRgb(args, 0)
-            fn = OPS.setFillRGBColor
-            break
-          case OPS.setStrokeColorN:
-            cs = stateManager.state.strokeColorSpace
-            if (cs.name === 'Pattern') {
-              next(self.handleColorN(operatorList, OPS.setStrokeColorN, args,
-                cs, patterns, resources, task))
+            case OPS.setFont:
+              var fontSize = args[1]
+              // eagerly collect all fonts
+              next(self.handleSetFont(resources, args, null, operatorList,
+                task, stateManager.state).
+                then(function (loadedName) {
+                  operatorList.addDependency(loadedName)
+                  operatorList.addOp(OPS.setFont, [loadedName, fontSize])
+                }))
               return
-            }
-            args = cs.getRgb(args, 0)
-            fn = OPS.setStrokeRGBColor
-            break
-
-          case OPS.shadingFill:
-            var shadingRes = resources.get('Shading')
-            if (!shadingRes) {
-              throw new FormatError('No shading resource found')
-            }
-
-            var shading = shadingRes.get(args[0].name)
-            if (!shading) {
-              throw new FormatError('No shading object found')
-            }
-
-            var shadingFill = Pattern.parseShading(shading, null, xref,
-              resources, self.handler, self.pdfFunctionFactory)
-            var patternIR = shadingFill.getIR()
-            args = [patternIR]
-            fn = OPS.shadingFill
-            break
-          case OPS.setGState:
-            var dictName = args[0]
-            var extGState = resources.get('ExtGState')
-
-            if (!isDict(extGState) || !extGState.has(dictName.name)) {
+            case OPS.beginText:
+              parsingText = true
               break
-            }
+            case OPS.endText:
+              parsingText = false
+              break
+            case OPS.endInlineImage:
+              var cacheKey = args[0].cacheKey
+              if (cacheKey) {
+                var cacheEntry = imageCache[cacheKey]
+                if (cacheEntry !== undefined) {
+                  operatorList.addOp(cacheEntry.fn, cacheEntry.args)
+                  args = null
+                  continue
+                }
+              }
+              next(self.buildPaintImageXObject({
+                resources,
+                image: args[0],
+                isInline: true,
+                operatorList,
+                cacheKey,
+                imageCache,
+              }))
+              return
+            case OPS.showText:
+              args[0] = self.handleText(args[0], stateManager.state)
+              break
+            case OPS.showSpacedText:
+              var arr = args[0]
+              var combinedGlyphs = []
+              var arrLength = arr.length
+              var state = stateManager.state
+              for (i = 0; i < arrLength; ++i) {
+                var arrItem = arr[i]
+                if (isString(arrItem)) {
+                  Array.prototype.push.apply(combinedGlyphs,
+                    self.handleText(arrItem, state))
+                } else if (isNum(arrItem)) {
+                  combinedGlyphs.push(arrItem)
+                }
+              }
+              args[0] = combinedGlyphs
+              fn = OPS.showText
+              break
+            case OPS.nextLineShowText:
+              operatorList.addOp(OPS.nextLine)
+              args[0] = self.handleText(args[0], stateManager.state)
+              fn = OPS.showText
+              break
+            case OPS.nextLineSetSpacingShowText:
+              operatorList.addOp(OPS.nextLine)
+              operatorList.addOp(OPS.setWordSpacing, [args.shift()])
+              operatorList.addOp(OPS.setCharSpacing, [args.shift()])
+              args[0] = self.handleText(args[0], stateManager.state)
+              fn = OPS.showText
+              break
+            case OPS.setTextRenderingMode:
+              stateManager.state.textRenderingMode = args[0]
+              break
 
-            var gState = extGState.get(dictName.name)
-            next(self.setGState(resources, gState, operatorList, task,
-              stateManager))
-            return
-          case OPS.moveTo:
-          case OPS.lineTo:
-          case OPS.curveTo:
-          case OPS.curveTo2:
-          case OPS.curveTo3:
-          case OPS.closePath:
-          case OPS.rectangle:
-            self.buildPath(operatorList, fn, args, parsingText)
-            continue
-          case OPS.markPoint:
-          case OPS.markPointProps:
-          case OPS.beginMarkedContent:
-          case OPS.beginMarkedContentProps:
-          case OPS.endMarkedContent:
-          case OPS.beginCompat:
-          case OPS.endCompat:
+            case OPS.setFillColorSpace:
+              stateManager.state.fillColorSpace =
+                ColorSpace.parse(args[0], xref, resources,
+                  self.pdfFunctionFactory)
+              continue
+            case OPS.setStrokeColorSpace:
+              stateManager.state.strokeColorSpace =
+                ColorSpace.parse(args[0], xref, resources,
+                  self.pdfFunctionFactory)
+              continue
+            case OPS.setFillColor:
+              cs = stateManager.state.fillColorSpace
+              args = cs.getRgb(args, 0)
+              fn = OPS.setFillRGBColor
+              break
+            case OPS.setStrokeColor:
+              cs = stateManager.state.strokeColorSpace
+              args = cs.getRgb(args, 0)
+              fn = OPS.setStrokeRGBColor
+              break
+            case OPS.setFillGray:
+              stateManager.state.fillColorSpace = ColorSpace.singletons.gray
+              args = ColorSpace.singletons.gray.getRgb(args, 0)
+              fn = OPS.setFillRGBColor
+              break
+            case OPS.setStrokeGray:
+              stateManager.state.strokeColorSpace = ColorSpace.singletons.gray
+              args = ColorSpace.singletons.gray.getRgb(args, 0)
+              fn = OPS.setStrokeRGBColor
+              break
+            case OPS.setFillCMYKColor:
+              stateManager.state.fillColorSpace = ColorSpace.singletons.cmyk
+              args = ColorSpace.singletons.cmyk.getRgb(args, 0)
+              fn = OPS.setFillRGBColor
+              break
+            case OPS.setStrokeCMYKColor:
+              stateManager.state.strokeColorSpace = ColorSpace.singletons.cmyk
+              args = ColorSpace.singletons.cmyk.getRgb(args, 0)
+              fn = OPS.setStrokeRGBColor
+              break
+            case OPS.setFillRGBColor:
+              stateManager.state.fillColorSpace = ColorSpace.singletons.rgb
+              args = ColorSpace.singletons.rgb.getRgb(args, 0)
+              break
+            case OPS.setStrokeRGBColor:
+              stateManager.state.strokeColorSpace = ColorSpace.singletons.rgb
+              args = ColorSpace.singletons.rgb.getRgb(args, 0)
+              break
+            case OPS.setFillColorN:
+              cs = stateManager.state.fillColorSpace
+              if (cs.name === 'Pattern') {
+                next(self.handleColorN(operatorList, OPS.setFillColorN, args,
+                  cs, patterns, resources, task))
+                return
+              }
+              args = cs.getRgb(args, 0)
+              fn = OPS.setFillRGBColor
+              break
+            case OPS.setStrokeColorN:
+              cs = stateManager.state.strokeColorSpace
+              if (cs.name === 'Pattern') {
+                next(self.handleColorN(operatorList, OPS.setStrokeColorN, args,
+                  cs, patterns, resources, task))
+                return
+              }
+              args = cs.getRgb(args, 0)
+              fn = OPS.setStrokeRGBColor
+              break
+
+            case OPS.shadingFill:
+              var shadingRes = resources.get('Shading')
+              if (!shadingRes) {
+                throw new FormatError('No shading resource found')
+              }
+
+              var shading = shadingRes.get(args[0].name)
+              if (!shading) {
+                throw new FormatError('No shading object found')
+              }
+
+              var shadingFill = Pattern.parseShading(shading, null, xref,
+                resources, self.handler, self.pdfFunctionFactory)
+              var patternIR = shadingFill.getIR()
+              args = [patternIR]
+              fn = OPS.shadingFill
+              break
+            case OPS.setGState:
+              var dictName = args[0]
+              var extGState = resources.get('ExtGState')
+
+              if (!isDict(extGState) || !extGState.has(dictName.name)) {
+                break
+              }
+
+              var gState = extGState.get(dictName.name)
+              next(self.setGState(resources, gState, operatorList, task,
+                stateManager))
+              return
+            case OPS.moveTo:
+            case OPS.lineTo:
+            case OPS.curveTo:
+            case OPS.curveTo2:
+            case OPS.curveTo3:
+            case OPS.closePath:
+            case OPS.rectangle:
+              self.buildPath(operatorList, fn, args, parsingText)
+              continue
+            case OPS.markPoint:
+            case OPS.markPointProps:
+            case OPS.beginMarkedContent:
+            case OPS.beginMarkedContentProps:
+            case OPS.endMarkedContent:
+            case OPS.beginCompat:
+            case OPS.endCompat:
             // Ignore operators where the corresponding handlers are known to
             // be no-op in CanvasGraphics (display/canvas.js). This prevents
             // serialization errors and is also a bit more efficient.
             // We could also try to serialize all objects in a general way,
             // e.g. as done in https://github.com/mozilla/pdf.js/pull/6266,
             // but doing so is meaningless without knowing the semantics.
-            continue
-          default:
+              continue
+            default:
             // Note: Ignore the operator if it has `Dict` arguments, since
             // those are non-serializable, otherwise postMessage will throw
             // "An object could not be cloned.".
-            if (args !== null) {
-              for (i = 0, ii = args.length; i < ii; i++) {
-                if (args[i] instanceof Dict) {
-                  break
+              if (args !== null) {
+                for (i = 0, ii = args.length; i < ii; i++) {
+                  if (args[i] instanceof Dict) {
+                    break
+                  }
+                }
+                if (i < ii) {
+                  warn('getOperatorList - ignoring operator: ' + fn)
+                  continue
                 }
               }
-              if (i < ii) {
-                warn('getOperatorList - ignoring operator: ' + fn)
-                continue
-              }
-            }
           }
           operatorList.addOp(fn, args)
         }
@@ -1577,280 +1577,280 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
           var advance, diff
 
           switch (fn | 0) {
-          case OPS.setFont:
+            case OPS.setFont:
             // Optimization to ignore multiple identical Tf commands.
-            var fontNameArg = args[0].name, fontSizeArg = args[1]
-            if (textState.font && fontNameArg === textState.fontName &&
+              var fontNameArg = args[0].name, fontSizeArg = args[1]
+              if (textState.font && fontNameArg === textState.fontName &&
                   fontSizeArg === textState.fontSize) {
-              break
-            }
+                break
+              }
 
-            flushTextContentItem()
-            textState.fontName = fontNameArg
-            textState.fontSize = fontSizeArg
-            next(handleSetFont(fontNameArg, null))
-            return
-          case OPS.setTextRise:
-            flushTextContentItem()
-            textState.textRise = args[0]
-            break
-          case OPS.setHScale:
-            flushTextContentItem()
-            textState.textHScale = args[0] / 100
-            break
-          case OPS.setLeading:
-            flushTextContentItem()
-            textState.leading = args[0]
-            break
-          case OPS.moveText:
+              flushTextContentItem()
+              textState.fontName = fontNameArg
+              textState.fontSize = fontSizeArg
+              next(handleSetFont(fontNameArg, null))
+              return
+            case OPS.setTextRise:
+              flushTextContentItem()
+              textState.textRise = args[0]
+              break
+            case OPS.setHScale:
+              flushTextContentItem()
+              textState.textHScale = args[0] / 100
+              break
+            case OPS.setLeading:
+              flushTextContentItem()
+              textState.leading = args[0]
+              break
+            case OPS.moveText:
             // Optimization to treat same line movement as advance
-            var isSameTextLine = !textState.font ? false :
-              ((textState.font.vertical ? args[0] : args[1]) === 0)
-            advance = args[0] - args[1]
-            if (combineTextItems &&
+              var isSameTextLine = !textState.font ? false :
+                ((textState.font.vertical ? args[0] : args[1]) === 0)
+              advance = args[0] - args[1]
+              if (combineTextItems &&
                   isSameTextLine && textContentItem.initialized &&
                   advance > 0 &&
                   advance <= textContentItem.fakeMultiSpaceMax) {
-              textState.translateTextLineMatrix(args[0], args[1])
-              textContentItem.width +=
+                textState.translateTextLineMatrix(args[0], args[1])
+                textContentItem.width +=
                   (args[0] - textContentItem.lastAdvanceWidth)
-              textContentItem.height +=
+                textContentItem.height +=
                   (args[1] - textContentItem.lastAdvanceHeight)
-              diff = (args[0] - textContentItem.lastAdvanceWidth) -
+                diff = (args[0] - textContentItem.lastAdvanceWidth) -
                        (args[1] - textContentItem.lastAdvanceHeight)
-              addFakeSpaces(diff, textContentItem.str)
-              break
-            }
+                addFakeSpaces(diff, textContentItem.str)
+                break
+              }
 
-            flushTextContentItem()
-            textState.translateTextLineMatrix(args[0], args[1])
-            textState.textMatrix = textState.textLineMatrix.slice()
-            break
-          case OPS.setLeadingMoveText:
-            flushTextContentItem()
-            textState.leading = -args[1]
-            textState.translateTextLineMatrix(args[0], args[1])
-            textState.textMatrix = textState.textLineMatrix.slice()
-            break
-          case OPS.nextLine:
-            flushTextContentItem()
-            textState.carriageReturn()
-            break
-          case OPS.setTextMatrix:
+              flushTextContentItem()
+              textState.translateTextLineMatrix(args[0], args[1])
+              textState.textMatrix = textState.textLineMatrix.slice()
+              break
+            case OPS.setLeadingMoveText:
+              flushTextContentItem()
+              textState.leading = -args[1]
+              textState.translateTextLineMatrix(args[0], args[1])
+              textState.textMatrix = textState.textLineMatrix.slice()
+              break
+            case OPS.nextLine:
+              flushTextContentItem()
+              textState.carriageReturn()
+              break
+            case OPS.setTextMatrix:
             // Optimization to treat same line movement as advance.
-            advance = textState.calcTextLineMatrixAdvance(
-              args[0], args[1], args[2], args[3], args[4], args[5])
-            if (combineTextItems &&
+              advance = textState.calcTextLineMatrixAdvance(
+                args[0], args[1], args[2], args[3], args[4], args[5])
+              if (combineTextItems &&
                   advance !== null && textContentItem.initialized &&
                   advance.value > 0 &&
                   advance.value <= textContentItem.fakeMultiSpaceMax) {
-              textState.translateTextLineMatrix(advance.width,
-                advance.height)
-              textContentItem.width +=
+                textState.translateTextLineMatrix(advance.width,
+                  advance.height)
+                textContentItem.width +=
                   (advance.width - textContentItem.lastAdvanceWidth)
-              textContentItem.height +=
+                textContentItem.height +=
                   (advance.height - textContentItem.lastAdvanceHeight)
-              diff = (advance.width - textContentItem.lastAdvanceWidth) -
+                diff = (advance.width - textContentItem.lastAdvanceWidth) -
                        (advance.height - textContentItem.lastAdvanceHeight)
-              addFakeSpaces(diff, textContentItem.str)
+                addFakeSpaces(diff, textContentItem.str)
+                break
+              }
+
+              flushTextContentItem()
+              textState.setTextMatrix(args[0], args[1], args[2], args[3],
+                args[4], args[5])
+              textState.setTextLineMatrix(args[0], args[1], args[2], args[3],
+                args[4], args[5])
               break
-            }
+            case OPS.setCharSpacing:
+              textState.charSpacing = args[0]
+              break
+            case OPS.setWordSpacing:
+              textState.wordSpacing = args[0]
+              break
+            case OPS.beginText:
+              flushTextContentItem()
+              textState.textMatrix = IDENTITY_MATRIX.slice()
+              textState.textLineMatrix = IDENTITY_MATRIX.slice()
+              break
+            case OPS.showSpacedText:
+              var items = args[0]
+              var offset
+              for (var j = 0, jj = items.length; j < jj; j++) {
+                if (typeof items[j] === 'string') {
+                  buildTextContentItem(items[j])
+                } else if (isNum(items[j])) {
+                  ensureTextContentItem()
 
-            flushTextContentItem()
-            textState.setTextMatrix(args[0], args[1], args[2], args[3],
-              args[4], args[5])
-            textState.setTextLineMatrix(args[0], args[1], args[2], args[3],
-              args[4], args[5])
-            break
-          case OPS.setCharSpacing:
-            textState.charSpacing = args[0]
-            break
-          case OPS.setWordSpacing:
-            textState.wordSpacing = args[0]
-            break
-          case OPS.beginText:
-            flushTextContentItem()
-            textState.textMatrix = IDENTITY_MATRIX.slice()
-            textState.textLineMatrix = IDENTITY_MATRIX.slice()
-            break
-          case OPS.showSpacedText:
-            var items = args[0]
-            var offset
-            for (var j = 0, jj = items.length; j < jj; j++) {
-              if (typeof items[j] === 'string') {
-                buildTextContentItem(items[j])
-              } else if (isNum(items[j])) {
-                ensureTextContentItem()
-
-                // PDF Specification 5.3.2 states:
-                // The number is expressed in thousandths of a unit of text
-                // space.
-                // This amount is subtracted from the current horizontal or
-                // vertical coordinate, depending on the writing mode.
-                // In the default coordinate system, a positive adjustment
-                // has the effect of moving the next glyph painted either to
-                // the left or down by the given amount.
-                advance = items[j] * textState.fontSize / 1000
-                var breakTextRun = false
-                if (textState.font.vertical) {
-                  offset = advance
-                  textState.translateTextMatrix(0, offset)
-                  breakTextRun = textContentItem.textRunBreakAllowed &&
+                  // PDF Specification 5.3.2 states:
+                  // The number is expressed in thousandths of a unit of text
+                  // space.
+                  // This amount is subtracted from the current horizontal or
+                  // vertical coordinate, depending on the writing mode.
+                  // In the default coordinate system, a positive adjustment
+                  // has the effect of moving the next glyph painted either to
+                  // the left or down by the given amount.
+                  advance = items[j] * textState.fontSize / 1000
+                  var breakTextRun = false
+                  if (textState.font.vertical) {
+                    offset = advance
+                    textState.translateTextMatrix(0, offset)
+                    breakTextRun = textContentItem.textRunBreakAllowed &&
                                    advance > textContentItem.fakeMultiSpaceMax
-                  if (!breakTextRun) {
+                    if (!breakTextRun) {
                     // Value needs to be added to height to paint down.
-                    textContentItem.height += offset
-                  }
-                } else {
-                  advance = -advance
-                  offset = advance * textState.textHScale
-                  textState.translateTextMatrix(offset, 0)
-                  breakTextRun = textContentItem.textRunBreakAllowed &&
+                      textContentItem.height += offset
+                    }
+                  } else {
+                    advance = -advance
+                    offset = advance * textState.textHScale
+                    textState.translateTextMatrix(offset, 0)
+                    breakTextRun = textContentItem.textRunBreakAllowed &&
                                    advance > textContentItem.fakeMultiSpaceMax
-                  if (!breakTextRun) {
+                    if (!breakTextRun) {
                     // Value needs to be subtracted from width to paint left.
-                    textContentItem.width += offset
+                      textContentItem.width += offset
+                    }
+                  }
+                  if (breakTextRun) {
+                    flushTextContentItem()
+                  } else if (advance > 0) {
+                    addFakeSpaces(advance, textContentItem.str)
                   }
                 }
-                if (breakTextRun) {
-                  flushTextContentItem()
-                } else if (advance > 0) {
-                  addFakeSpaces(advance, textContentItem.str)
-                }
               }
-            }
-            break
-          case OPS.showText:
-            buildTextContentItem(args[0])
-            break
-          case OPS.nextLineShowText:
-            flushTextContentItem()
-            textState.carriageReturn()
-            buildTextContentItem(args[0])
-            break
-          case OPS.nextLineSetSpacingShowText:
-            flushTextContentItem()
-            textState.wordSpacing = args[0]
-            textState.charSpacing = args[1]
-            textState.carriageReturn()
-            buildTextContentItem(args[2])
-            break
-          case OPS.paintXObject:
-            flushTextContentItem()
-            if (!xobjs) {
-              xobjs = (resources.get('XObject') || Dict.empty)
-            }
-
-            var name = args[0].name
-            if (name && skipEmptyXObjs[name] !== undefined) {
               break
-            }
-
-            next(new Promise(function(resolveXObject, rejectXObject) {
-              if (!name) {
-                throw new FormatError('XObject must be referred to by name.')
+            case OPS.showText:
+              buildTextContentItem(args[0])
+              break
+            case OPS.nextLineShowText:
+              flushTextContentItem()
+              textState.carriageReturn()
+              buildTextContentItem(args[0])
+              break
+            case OPS.nextLineSetSpacingShowText:
+              flushTextContentItem()
+              textState.wordSpacing = args[0]
+              textState.charSpacing = args[1]
+              textState.carriageReturn()
+              buildTextContentItem(args[2])
+              break
+            case OPS.paintXObject:
+              flushTextContentItem()
+              if (!xobjs) {
+                xobjs = (resources.get('XObject') || Dict.empty)
               }
 
-              let xobj = xobjs.get(name)
-              if (!xobj) {
-                resolveXObject()
-                return
-              }
-              if (!isStream(xobj)) {
-                throw new FormatError('XObject should be a stream')
+              var name = args[0].name
+              if (name && skipEmptyXObjs[name] !== undefined) {
+                break
               }
 
-              let type = xobj.dict.get('Subtype')
-              if (!isName(type)) {
-                throw new FormatError('XObject should have a Name subtype')
-              }
-
-              if (type.name !== 'Form') {
-                skipEmptyXObjs[name] = true
-                resolveXObject()
-                return
-              }
-
-              // Use a new `StateManager` to prevent incorrect positioning of
-              // textItems *after* the Form XObject, since errors in the data
-              // can otherwise prevent `restore` operators from executing.
-              // NOTE: Only an issue when `options.ignoreErrors === true`.
-              let currentState = stateManager.state.clone()
-              let xObjStateManager = new StateManager(currentState)
-
-              let matrix = xobj.dict.getArray('Matrix')
-              if (Array.isArray(matrix) && matrix.length === 6) {
-                xObjStateManager.transform(matrix)
-              }
-
-              // Enqueue the `textContent` chunk before parsing the /Form
-              // XObject.
-              enqueueChunk()
-              let sinkWrapper = {
-                enqueueInvoked: false,
-
-                enqueue(chunk, size) {
-                  this.enqueueInvoked = true
-                  sink.enqueue(chunk, size)
-                },
-
-                get desiredSize() {
-                  return sink.desiredSize
-                },
-
-                get ready() {
-                  return sink.ready
-                },
-              }
-
-              self.getTextContent({
-                stream: xobj,
-                task,
-                resources: xobj.dict.get('Resources') || resources,
-                stateManager: xObjStateManager,
-                normalizeWhitespace,
-                combineTextItems,
-                sink: sinkWrapper,
-                seenStyles,
-              }).then(function() {
-                if (!sinkWrapper.enqueueInvoked) {
-                  skipEmptyXObjs[name] = true
+              next(new Promise(function(resolveXObject, rejectXObject) {
+                if (!name) {
+                  throw new FormatError('XObject must be referred to by name.')
                 }
-                resolveXObject()
-              }, rejectXObject)
-            }).catch(function(reason) {
-              if (reason instanceof AbortException) {
-                return
-              }
-              if (self.options.ignoreErrors) {
+
+                let xobj = xobjs.get(name)
+                if (!xobj) {
+                  resolveXObject()
+                  return
+                }
+                if (!isStream(xobj)) {
+                  throw new FormatError('XObject should be a stream')
+                }
+
+                let type = xobj.dict.get('Subtype')
+                if (!isName(type)) {
+                  throw new FormatError('XObject should have a Name subtype')
+                }
+
+                if (type.name !== 'Form') {
+                  skipEmptyXObjs[name] = true
+                  resolveXObject()
+                  return
+                }
+
+                // Use a new `StateManager` to prevent incorrect positioning of
+                // textItems *after* the Form XObject, since errors in the data
+                // can otherwise prevent `restore` operators from executing.
+                // NOTE: Only an issue when `options.ignoreErrors === true`.
+                let currentState = stateManager.state.clone()
+                let xObjStateManager = new StateManager(currentState)
+
+                let matrix = xobj.dict.getArray('Matrix')
+                if (Array.isArray(matrix) && matrix.length === 6) {
+                  xObjStateManager.transform(matrix)
+                }
+
+                // Enqueue the `textContent` chunk before parsing the /Form
+                // XObject.
+                enqueueChunk()
+                let sinkWrapper = {
+                  enqueueInvoked: false,
+
+                  enqueue(chunk, size) {
+                    this.enqueueInvoked = true
+                    sink.enqueue(chunk, size)
+                  },
+
+                  get desiredSize() {
+                    return sink.desiredSize
+                  },
+
+                  get ready() {
+                    return sink.ready
+                  },
+                }
+
+                self.getTextContent({
+                  stream: xobj,
+                  task,
+                  resources: xobj.dict.get('Resources') || resources,
+                  stateManager: xObjStateManager,
+                  normalizeWhitespace,
+                  combineTextItems,
+                  sink: sinkWrapper,
+                  seenStyles,
+                }).then(function() {
+                  if (!sinkWrapper.enqueueInvoked) {
+                    skipEmptyXObjs[name] = true
+                  }
+                  resolveXObject()
+                }, rejectXObject)
+              }).catch(function(reason) {
+                if (reason instanceof AbortException) {
+                  return
+                }
+                if (self.options.ignoreErrors) {
                 // Error(s) in the XObject -- allow text-extraction to
                 // continue.
-                warn(`getTextContent - ignoring XObject: "${reason}".`)
+                  warn(`getTextContent - ignoring XObject: "${reason}".`)
+                  return
+                }
+                throw reason
+              }))
+              return
+            case OPS.setGState:
+              flushTextContentItem()
+              var dictName = args[0]
+              var extGState = resources.get('ExtGState')
+
+              if (!isDict(extGState) || !isName(dictName)) {
+                break
+              }
+              var gState = extGState.get(dictName.name)
+              if (!isDict(gState)) {
+                break
+              }
+              var gStateFont = gState.get('Font')
+              if (gStateFont) {
+                textState.fontName = null
+                textState.fontSize = gStateFont[1]
+                next(handleSetFont(null, gStateFont[0]))
                 return
               }
-              throw reason
-            }))
-            return
-          case OPS.setGState:
-            flushTextContentItem()
-            var dictName = args[0]
-            var extGState = resources.get('ExtGState')
-
-            if (!isDict(extGState) || !isName(dictName)) {
               break
-            }
-            var gState = extGState.get(dictName.name)
-            if (!isDict(gState)) {
-              break
-            }
-            var gStateFont = gState.get('Font')
-            if (gStateFont) {
-              textState.fontName = null
-              textState.fontSize = gStateFont[1]
-              next(handleSetFont(null, gStateFont[0]))
-              return
-            }
-            break
           } // switch
           if (textContent.items.length >= sink.desiredSize) {
             // Wait for ready, if we reach highWaterMark.
@@ -2031,45 +2031,45 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
           // NOTE: Adobe Reader does not do this step, but OSX Preview does
           let code = 0
           switch (glyphName[0]) {
-          case 'G': // Gxx glyph
-            if (glyphName.length === 3) {
-              code = parseInt(glyphName.substring(1), 16)
-            }
-            break
-          case 'g': // g00xx glyph
-            if (glyphName.length === 5) {
-              code = parseInt(glyphName.substring(1), 16)
-            }
-            break
-          case 'C': // Cdd{d} glyph
-          case 'c': // cdd{d} glyph
-            if (glyphName.length >= 3 && glyphName.length <= 4) {
-              const codeStr = glyphName.substring(1)
-
-              if (forceGlyphs) {
-                code = parseInt(codeStr, 16)
-                break
+            case 'G': // Gxx glyph
+              if (glyphName.length === 3) {
+                code = parseInt(glyphName.substring(1), 16)
               }
-              // Normally the Cdd{d}/cdd{d} glyphName format will contain
-              // regular, i.e. base 10, charCodes (see issue4550.pdf)...
-              code = +codeStr
+              break
+            case 'g': // g00xx glyph
+              if (glyphName.length === 5) {
+                code = parseInt(glyphName.substring(1), 16)
+              }
+              break
+            case 'C': // Cdd{d} glyph
+            case 'c': // cdd{d} glyph
+              if (glyphName.length >= 3 && glyphName.length <= 4) {
+                const codeStr = glyphName.substring(1)
 
-              // ... however some PDF generators violate that assumption by
-              // containing glyph, i.e. base 16, codes instead.
-              // In that case we need to re-parse the *entire* encoding to
-              // prevent broken text-selection (fixes issue9655_reduced.pdf).
-              if (Number.isNaN(code) &&
+                if (forceGlyphs) {
+                  code = parseInt(codeStr, 16)
+                  break
+                }
+                // Normally the Cdd{d}/cdd{d} glyphName format will contain
+                // regular, i.e. base 10, charCodes (see issue4550.pdf)...
+                code = +codeStr
+
+                // ... however some PDF generators violate that assumption by
+                // containing glyph, i.e. base 16, codes instead.
+                // In that case we need to re-parse the *entire* encoding to
+                // prevent broken text-selection (fixes issue9655_reduced.pdf).
+                if (Number.isNaN(code) &&
                     Number.isInteger(parseInt(codeStr, 16))) {
-                return this._buildSimpleFontToUnicode(properties,
+                  return this._buildSimpleFontToUnicode(properties,
                   /* forceGlyphs */ true)
+                }
               }
-            }
-            break
-          default: // 'uniXXXX'/'uXXXX{XX}' glyphs
-            let unicode = getUnicodeForGlyph(glyphName, glyphsUnicodeMap)
-            if (unicode !== -1) {
-              code = unicode
-            }
+              break
+            default: // 'uniXXXX'/'uXXXX{XX}' glyphs
+              let unicode = getUnicodeForGlyph(glyphName, glyphsUnicodeMap)
+              if (unicode !== -1) {
+                code = unicode
+              }
           }
           if (code) {
             // If `baseEncodingName` is one the predefined encodings, and `code`
@@ -3152,15 +3152,15 @@ var EvaluatorPreprocessor = (function EvaluatorPreprocessorClosure() {
     preprocessCommand:
         function EvaluatorPreprocessor_preprocessCommand(fn, args) {
           switch (fn | 0) {
-          case OPS.save:
-            this.stateManager.save()
-            break
-          case OPS.restore:
-            this.stateManager.restore()
-            break
-          case OPS.transform:
-            this.stateManager.transform(args)
-            break
+            case OPS.save:
+              this.stateManager.save()
+              break
+            case OPS.restore:
+              this.stateManager.restore()
+              break
+            case OPS.transform:
+              this.stateManager.transform(args)
+              break
           }
         },
   }

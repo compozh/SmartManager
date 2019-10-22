@@ -632,19 +632,19 @@ var Jbig2Image = (function Jbig2ImageClosure() {
             // outside bitmap region
             var maxWidth = Math.min(width - offsetT, symbolWidth)
             switch (combinationOperator) {
-            case 0: // OR
-              for (t2 = 0; t2 < maxWidth; t2++) {
-                row[offsetT + t2] |= symbolRow[t2]
-              }
-              break
-            case 2: // XOR
-              for (t2 = 0; t2 < maxWidth; t2++) {
-                row[offsetT + t2] ^= symbolRow[t2]
-              }
-              break
-            default:
-              throw new Jbig2Error(
-                `operator ${combinationOperator} is not supported`)
+              case 0: // OR
+                for (t2 = 0; t2 < maxWidth; t2++) {
+                  row[offsetT + t2] |= symbolRow[t2]
+                }
+                break
+              case 2: // XOR
+                for (t2 = 0; t2 < maxWidth; t2++) {
+                  row[offsetT + t2] ^= symbolRow[t2]
+                }
+                break
+              default:
+                throw new Jbig2Error(
+                  `operator ${combinationOperator} is not supported`)
             }
           }
           currentS += symbolHeight - 1
@@ -656,19 +656,19 @@ var Jbig2Image = (function Jbig2ImageClosure() {
             }
             symbolRow = symbolBitmap[t2]
             switch (combinationOperator) {
-            case 0: // OR
-              for (s2 = 0; s2 < symbolWidth; s2++) {
-                row[offsetS + s2] |= symbolRow[s2]
-              }
-              break
-            case 2: // XOR
-              for (s2 = 0; s2 < symbolWidth; s2++) {
-                row[offsetS + s2] ^= symbolRow[s2]
-              }
-              break
-            default:
-              throw new Jbig2Error(
-                `operator ${combinationOperator} is not supported`)
+              case 0: // OR
+                for (s2 = 0; s2 < symbolWidth; s2++) {
+                  row[offsetS + s2] |= symbolRow[s2]
+                }
+                break
+              case 2: // XOR
+                for (s2 = 0; s2 < symbolWidth; s2++) {
+                  row[offsetS + s2] ^= symbolRow[s2]
+                }
+                break
+              default:
+                throw new Jbig2Error(
+                  `operator ${combinationOperator} is not supported`)
             }
           }
           currentS += symbolWidth - 1
@@ -979,191 +979,191 @@ var Jbig2Image = (function Jbig2ImageClosure() {
     var data = segment.data, position = segment.start, end = segment.end
     var args, at, i, atLength
     switch (header.type) {
-    case 0: // SymbolDictionary
+      case 0: // SymbolDictionary
       // 7.4.2 Symbol dictionary segment syntax
-      var dictionary = {}
-      var dictionaryFlags = readUint16(data, position) // 7.4.2.1.1
-      dictionary.huffman = !!(dictionaryFlags & 1)
-      dictionary.refinement = !!(dictionaryFlags & 2)
-      dictionary.huffmanDHSelector = (dictionaryFlags >> 2) & 3
-      dictionary.huffmanDWSelector = (dictionaryFlags >> 4) & 3
-      dictionary.bitmapSizeSelector = (dictionaryFlags >> 6) & 1
-      dictionary.aggregationInstancesSelector = (dictionaryFlags >> 7) & 1
-      dictionary.bitmapCodingContextUsed = !!(dictionaryFlags & 256)
-      dictionary.bitmapCodingContextRetained = !!(dictionaryFlags & 512)
-      dictionary.template = (dictionaryFlags >> 10) & 3
-      dictionary.refinementTemplate = (dictionaryFlags >> 12) & 1
-      position += 2
-      if (!dictionary.huffman) {
-        atLength = dictionary.template === 0 ? 4 : 1
-        at = []
-        for (i = 0; i < atLength; i++) {
-          at.push({
-            x: readInt8(data, position),
-            y: readInt8(data, position + 1),
-          })
-          position += 2
-        }
-        dictionary.at = at
-      }
-      if (dictionary.refinement && !dictionary.refinementTemplate) {
-        at = []
-        for (i = 0; i < 2; i++) {
-          at.push({
-            x: readInt8(data, position),
-            y: readInt8(data, position + 1),
-          })
-          position += 2
-        }
-        dictionary.refinementAt = at
-      }
-      dictionary.numberOfExportedSymbols = readUint32(data, position)
-      position += 4
-      dictionary.numberOfNewSymbols = readUint32(data, position)
-      position += 4
-      args = [dictionary, header.number, header.referredTo,
-        data, position, end]
-      break
-    case 6: // ImmediateTextRegion
-    case 7: // ImmediateLosslessTextRegion
-      var textRegion = {}
-      textRegion.info = readRegionSegmentInformation(data, position)
-      position += RegionSegmentInformationFieldLength
-      var textRegionSegmentFlags = readUint16(data, position)
-      position += 2
-      textRegion.huffman = !!(textRegionSegmentFlags & 1)
-      textRegion.refinement = !!(textRegionSegmentFlags & 2)
-      textRegion.logStripSize = (textRegionSegmentFlags >> 2) & 3
-      textRegion.stripSize = 1 << textRegion.logStripSize
-      textRegion.referenceCorner = (textRegionSegmentFlags >> 4) & 3
-      textRegion.transposed = !!(textRegionSegmentFlags & 64)
-      textRegion.combinationOperator = (textRegionSegmentFlags >> 7) & 3
-      textRegion.defaultPixelValue = (textRegionSegmentFlags >> 9) & 1
-      textRegion.dsOffset = (textRegionSegmentFlags << 17) >> 27
-      textRegion.refinementTemplate = (textRegionSegmentFlags >> 15) & 1
-      if (textRegion.huffman) {
-        var textRegionHuffmanFlags = readUint16(data, position)
+        var dictionary = {}
+        var dictionaryFlags = readUint16(data, position) // 7.4.2.1.1
+        dictionary.huffman = !!(dictionaryFlags & 1)
+        dictionary.refinement = !!(dictionaryFlags & 2)
+        dictionary.huffmanDHSelector = (dictionaryFlags >> 2) & 3
+        dictionary.huffmanDWSelector = (dictionaryFlags >> 4) & 3
+        dictionary.bitmapSizeSelector = (dictionaryFlags >> 6) & 1
+        dictionary.aggregationInstancesSelector = (dictionaryFlags >> 7) & 1
+        dictionary.bitmapCodingContextUsed = !!(dictionaryFlags & 256)
+        dictionary.bitmapCodingContextRetained = !!(dictionaryFlags & 512)
+        dictionary.template = (dictionaryFlags >> 10) & 3
+        dictionary.refinementTemplate = (dictionaryFlags >> 12) & 1
         position += 2
-        textRegion.huffmanFS = (textRegionHuffmanFlags) & 3
-        textRegion.huffmanDS = (textRegionHuffmanFlags >> 2) & 3
-        textRegion.huffmanDT = (textRegionHuffmanFlags >> 4) & 3
-        textRegion.huffmanRefinementDW = (textRegionHuffmanFlags >> 6) & 3
-        textRegion.huffmanRefinementDH = (textRegionHuffmanFlags >> 8) & 3
-        textRegion.huffmanRefinementDX = (textRegionHuffmanFlags >> 10) & 3
-        textRegion.huffmanRefinementDY = (textRegionHuffmanFlags >> 12) & 3
-        textRegion.huffmanRefinementSizeSelector =
+        if (!dictionary.huffman) {
+          atLength = dictionary.template === 0 ? 4 : 1
+          at = []
+          for (i = 0; i < atLength; i++) {
+            at.push({
+              x: readInt8(data, position),
+              y: readInt8(data, position + 1),
+            })
+            position += 2
+          }
+          dictionary.at = at
+        }
+        if (dictionary.refinement && !dictionary.refinementTemplate) {
+          at = []
+          for (i = 0; i < 2; i++) {
+            at.push({
+              x: readInt8(data, position),
+              y: readInt8(data, position + 1),
+            })
+            position += 2
+          }
+          dictionary.refinementAt = at
+        }
+        dictionary.numberOfExportedSymbols = readUint32(data, position)
+        position += 4
+        dictionary.numberOfNewSymbols = readUint32(data, position)
+        position += 4
+        args = [dictionary, header.number, header.referredTo,
+          data, position, end]
+        break
+      case 6: // ImmediateTextRegion
+      case 7: // ImmediateLosslessTextRegion
+        var textRegion = {}
+        textRegion.info = readRegionSegmentInformation(data, position)
+        position += RegionSegmentInformationFieldLength
+        var textRegionSegmentFlags = readUint16(data, position)
+        position += 2
+        textRegion.huffman = !!(textRegionSegmentFlags & 1)
+        textRegion.refinement = !!(textRegionSegmentFlags & 2)
+        textRegion.logStripSize = (textRegionSegmentFlags >> 2) & 3
+        textRegion.stripSize = 1 << textRegion.logStripSize
+        textRegion.referenceCorner = (textRegionSegmentFlags >> 4) & 3
+        textRegion.transposed = !!(textRegionSegmentFlags & 64)
+        textRegion.combinationOperator = (textRegionSegmentFlags >> 7) & 3
+        textRegion.defaultPixelValue = (textRegionSegmentFlags >> 9) & 1
+        textRegion.dsOffset = (textRegionSegmentFlags << 17) >> 27
+        textRegion.refinementTemplate = (textRegionSegmentFlags >> 15) & 1
+        if (textRegion.huffman) {
+          var textRegionHuffmanFlags = readUint16(data, position)
+          position += 2
+          textRegion.huffmanFS = (textRegionHuffmanFlags) & 3
+          textRegion.huffmanDS = (textRegionHuffmanFlags >> 2) & 3
+          textRegion.huffmanDT = (textRegionHuffmanFlags >> 4) & 3
+          textRegion.huffmanRefinementDW = (textRegionHuffmanFlags >> 6) & 3
+          textRegion.huffmanRefinementDH = (textRegionHuffmanFlags >> 8) & 3
+          textRegion.huffmanRefinementDX = (textRegionHuffmanFlags >> 10) & 3
+          textRegion.huffmanRefinementDY = (textRegionHuffmanFlags >> 12) & 3
+          textRegion.huffmanRefinementSizeSelector =
             !!(textRegionHuffmanFlags & 0x4000)
-      }
-      if (textRegion.refinement && !textRegion.refinementTemplate) {
-        at = []
-        for (i = 0; i < 2; i++) {
-          at.push({
-            x: readInt8(data, position),
-            y: readInt8(data, position + 1),
-          })
-          position += 2
         }
-        textRegion.refinementAt = at
-      }
-      textRegion.numberOfSymbolInstances = readUint32(data, position)
-      position += 4
-      args = [textRegion, header.referredTo, data, position, end]
-      break
-    case 16: // PatternDictionary
+        if (textRegion.refinement && !textRegion.refinementTemplate) {
+          at = []
+          for (i = 0; i < 2; i++) {
+            at.push({
+              x: readInt8(data, position),
+              y: readInt8(data, position + 1),
+            })
+            position += 2
+          }
+          textRegion.refinementAt = at
+        }
+        textRegion.numberOfSymbolInstances = readUint32(data, position)
+        position += 4
+        args = [textRegion, header.referredTo, data, position, end]
+        break
+      case 16: // PatternDictionary
       // 7.4.4. Pattern dictionary segment syntax
-      let patternDictionary = {}
-      let patternDictionaryFlags = data[position++]
-      patternDictionary.mmr = !!(patternDictionaryFlags & 1)
-      patternDictionary.template = (patternDictionaryFlags >> 1) & 3
-      patternDictionary.patternWidth = data[position++]
-      patternDictionary.patternHeight = data[position++]
-      patternDictionary.maxPatternIndex = readUint32(data, position)
-      position += 4
-      args = [patternDictionary, header.number, data, position, end]
-      break
-    case 22: // ImmediateHalftoneRegion
-    case 23: // ImmediateLosslessHalftoneRegion
+        let patternDictionary = {}
+        let patternDictionaryFlags = data[position++]
+        patternDictionary.mmr = !!(patternDictionaryFlags & 1)
+        patternDictionary.template = (patternDictionaryFlags >> 1) & 3
+        patternDictionary.patternWidth = data[position++]
+        patternDictionary.patternHeight = data[position++]
+        patternDictionary.maxPatternIndex = readUint32(data, position)
+        position += 4
+        args = [patternDictionary, header.number, data, position, end]
+        break
+      case 22: // ImmediateHalftoneRegion
+      case 23: // ImmediateLosslessHalftoneRegion
       // 7.4.5 Halftone region segment syntax
-      let halftoneRegion = {}
-      halftoneRegion.info = readRegionSegmentInformation(data, position)
-      position += RegionSegmentInformationFieldLength
-      let halftoneRegionFlags = data[position++]
-      halftoneRegion.mmr = !!(halftoneRegionFlags & 1)
-      halftoneRegion.template = (halftoneRegionFlags >> 1) & 3
-      halftoneRegion.enableSkip = !!(halftoneRegionFlags & 8)
-      halftoneRegion.combinationOperator = (halftoneRegionFlags >> 4) & 7
-      halftoneRegion.defaultPixelValue = (halftoneRegionFlags >> 7) & 1
-      halftoneRegion.gridWidth = readUint32(data, position)
-      position += 4
-      halftoneRegion.gridHeight = readUint32(data, position)
-      position += 4
-      halftoneRegion.gridOffsetX = readUint32(data, position) & 0xFFFFFFFF
-      position += 4
-      halftoneRegion.gridOffsetY = readUint32(data, position) & 0xFFFFFFFF
-      position += 4
-      halftoneRegion.gridVectorX = readUint16(data, position)
-      position += 2
-      halftoneRegion.gridVectorY = readUint16(data, position)
-      position += 2
-      args = [halftoneRegion, header.referredTo, data, position, end]
-      break
-    case 38: // ImmediateGenericRegion
-    case 39: // ImmediateLosslessGenericRegion
-      var genericRegion = {}
-      genericRegion.info = readRegionSegmentInformation(data, position)
-      position += RegionSegmentInformationFieldLength
-      var genericRegionSegmentFlags = data[position++]
-      genericRegion.mmr = !!(genericRegionSegmentFlags & 1)
-      genericRegion.template = (genericRegionSegmentFlags >> 1) & 3
-      genericRegion.prediction = !!(genericRegionSegmentFlags & 8)
-      if (!genericRegion.mmr) {
-        atLength = genericRegion.template === 0 ? 4 : 1
-        at = []
-        for (i = 0; i < atLength; i++) {
-          at.push({
-            x: readInt8(data, position),
-            y: readInt8(data, position + 1),
-          })
-          position += 2
+        let halftoneRegion = {}
+        halftoneRegion.info = readRegionSegmentInformation(data, position)
+        position += RegionSegmentInformationFieldLength
+        let halftoneRegionFlags = data[position++]
+        halftoneRegion.mmr = !!(halftoneRegionFlags & 1)
+        halftoneRegion.template = (halftoneRegionFlags >> 1) & 3
+        halftoneRegion.enableSkip = !!(halftoneRegionFlags & 8)
+        halftoneRegion.combinationOperator = (halftoneRegionFlags >> 4) & 7
+        halftoneRegion.defaultPixelValue = (halftoneRegionFlags >> 7) & 1
+        halftoneRegion.gridWidth = readUint32(data, position)
+        position += 4
+        halftoneRegion.gridHeight = readUint32(data, position)
+        position += 4
+        halftoneRegion.gridOffsetX = readUint32(data, position) & 0xFFFFFFFF
+        position += 4
+        halftoneRegion.gridOffsetY = readUint32(data, position) & 0xFFFFFFFF
+        position += 4
+        halftoneRegion.gridVectorX = readUint16(data, position)
+        position += 2
+        halftoneRegion.gridVectorY = readUint16(data, position)
+        position += 2
+        args = [halftoneRegion, header.referredTo, data, position, end]
+        break
+      case 38: // ImmediateGenericRegion
+      case 39: // ImmediateLosslessGenericRegion
+        var genericRegion = {}
+        genericRegion.info = readRegionSegmentInformation(data, position)
+        position += RegionSegmentInformationFieldLength
+        var genericRegionSegmentFlags = data[position++]
+        genericRegion.mmr = !!(genericRegionSegmentFlags & 1)
+        genericRegion.template = (genericRegionSegmentFlags >> 1) & 3
+        genericRegion.prediction = !!(genericRegionSegmentFlags & 8)
+        if (!genericRegion.mmr) {
+          atLength = genericRegion.template === 0 ? 4 : 1
+          at = []
+          for (i = 0; i < atLength; i++) {
+            at.push({
+              x: readInt8(data, position),
+              y: readInt8(data, position + 1),
+            })
+            position += 2
+          }
+          genericRegion.at = at
         }
-        genericRegion.at = at
-      }
-      args = [genericRegion, data, position, end]
-      break
-    case 48: // PageInformation
-      var pageInfo = {
-        width: readUint32(data, position),
-        height: readUint32(data, position + 4),
-        resolutionX: readUint32(data, position + 8),
-        resolutionY: readUint32(data, position + 12),
-      }
-      if (pageInfo.height === 0xFFFFFFFF) {
-        delete pageInfo.height
-      }
-      var pageSegmentFlags = data[position + 16]
-      readUint16(data, position + 17) // pageStripingInformation
-      pageInfo.lossless = !!(pageSegmentFlags & 1)
-      pageInfo.refinement = !!(pageSegmentFlags & 2)
-      pageInfo.defaultPixelValue = (pageSegmentFlags >> 2) & 1
-      pageInfo.combinationOperator = (pageSegmentFlags >> 3) & 3
-      pageInfo.requiresBuffer = !!(pageSegmentFlags & 32)
-      pageInfo.combinationOperatorOverride = !!(pageSegmentFlags & 64)
-      args = [pageInfo]
-      break
-    case 49: // EndOfPage
-      break
-    case 50: // EndOfStripe
-      break
-    case 51: // EndOfFile
-      break
-    case 53: // Tables
-      args = [header.number, data, position, end]
-      break
-    case 62: // 7.4.15 defines 2 extension types which
+        args = [genericRegion, data, position, end]
+        break
+      case 48: // PageInformation
+        var pageInfo = {
+          width: readUint32(data, position),
+          height: readUint32(data, position + 4),
+          resolutionX: readUint32(data, position + 8),
+          resolutionY: readUint32(data, position + 12),
+        }
+        if (pageInfo.height === 0xFFFFFFFF) {
+          delete pageInfo.height
+        }
+        var pageSegmentFlags = data[position + 16]
+        readUint16(data, position + 17) // pageStripingInformation
+        pageInfo.lossless = !!(pageSegmentFlags & 1)
+        pageInfo.refinement = !!(pageSegmentFlags & 2)
+        pageInfo.defaultPixelValue = (pageSegmentFlags >> 2) & 1
+        pageInfo.combinationOperator = (pageSegmentFlags >> 3) & 3
+        pageInfo.requiresBuffer = !!(pageSegmentFlags & 32)
+        pageInfo.combinationOperatorOverride = !!(pageSegmentFlags & 64)
+        args = [pageInfo]
+        break
+      case 49: // EndOfPage
+        break
+      case 50: // EndOfStripe
+        break
+      case 51: // EndOfFile
+        break
+      case 53: // Tables
+        args = [header.number, data, position, end]
+        break
+      case 62: // 7.4.15 defines 2 extension types which
       // are comments and can be ignored.
-      break
-    default:
-      throw new Jbig2Error(`segment type ${header.typeName}(${header.type})` +
+        break
+      default:
+        throw new Jbig2Error(`segment type ${header.typeName}(${header.type})` +
                              ' is not implemented')
     }
     var callbackName = 'on' + header.typeName
@@ -1256,43 +1256,43 @@ var Jbig2Image = (function Jbig2ImageClosure() {
       var offset0 = regionInfo.y * rowSize + (regionInfo.x >> 3)
       var i, j, mask, offset
       switch (combinationOperator) {
-      case 0: // OR
-        for (i = 0; i < height; i++) {
-          mask = mask0
-          offset = offset0
-          for (j = 0; j < width; j++) {
-            if (bitmap[i][j]) {
-              buffer[offset] |= mask
+        case 0: // OR
+          for (i = 0; i < height; i++) {
+            mask = mask0
+            offset = offset0
+            for (j = 0; j < width; j++) {
+              if (bitmap[i][j]) {
+                buffer[offset] |= mask
+              }
+              mask >>= 1
+              if (!mask) {
+                mask = 128
+                offset++
+              }
             }
-            mask >>= 1
-            if (!mask) {
-              mask = 128
-              offset++
-            }
+            offset0 += rowSize
           }
-          offset0 += rowSize
-        }
-        break
-      case 2: // XOR
-        for (i = 0; i < height; i++) {
-          mask = mask0
-          offset = offset0
-          for (j = 0; j < width; j++) {
-            if (bitmap[i][j]) {
-              buffer[offset] ^= mask
+          break
+        case 2: // XOR
+          for (i = 0; i < height; i++) {
+            mask = mask0
+            offset = offset0
+            for (j = 0; j < width; j++) {
+              if (bitmap[i][j]) {
+                buffer[offset] ^= mask
+              }
+              mask >>= 1
+              if (!mask) {
+                mask = 128
+                offset++
+              }
             }
-            mask >>= 1
-            if (!mask) {
-              mask = 128
-              offset++
-            }
+            offset0 += rowSize
           }
-          offset0 += rowSize
-        }
-        break
-      default:
-        throw new Jbig2Error(
-          `operator ${combinationOperator} is not supported`)
+          break
+        default:
+          throw new Jbig2Error(
+            `operator ${combinationOperator} is not supported`)
       }
     },
     onImmediateGenericRegion:
@@ -1586,252 +1586,252 @@ var Jbig2Image = (function Jbig2ImageClosure() {
     }
     let lines
     switch (number) {
-    case 1:
-      lines = [
-        [0, 1, 4, 0x0],
-        [16, 2, 8, 0x2],
-        [272, 3, 16, 0x6],
-        [65808, 3, 32, 0x7] // upper
-      ]
-      break
-    case 2:
-      lines = [
-        [0, 1, 0, 0x0],
-        [1, 2, 0, 0x2],
-        [2, 3, 0, 0x6],
-        [3, 4, 3, 0xE],
-        [11, 5, 6, 0x1E],
-        [75, 6, 32, 0x3E], // upper
-        [6, 0x3F] // OOB
-      ]
-      break
-    case 3:
-      lines = [
-        [-256, 8, 8, 0xFE],
-        [0, 1, 0, 0x0],
-        [1, 2, 0, 0x2],
-        [2, 3, 0, 0x6],
-        [3, 4, 3, 0xE],
-        [11, 5, 6, 0x1E],
-        [-257, 8, 32, 0xFF, 'lower'],
-        [75, 7, 32, 0x7E], // upper
-        [6, 0x3E] // OOB
-      ]
-      break
-    case 4:
-      lines = [
-        [1, 1, 0, 0x0],
-        [2, 2, 0, 0x2],
-        [3, 3, 0, 0x6],
-        [4, 4, 3, 0xE],
-        [12, 5, 6, 0x1E],
-        [76, 5, 32, 0x1F] // upper
-      ]
-      break
-    case 5:
-      lines = [
-        [-255, 7, 8, 0x7E],
-        [1, 1, 0, 0x0],
-        [2, 2, 0, 0x2],
-        [3, 3, 0, 0x6],
-        [4, 4, 3, 0xE],
-        [12, 5, 6, 0x1E],
-        [-256, 7, 32, 0x7F, 'lower'],
-        [76, 6, 32, 0x3E] // upper
-      ]
-      break
-    case 6:
-      lines = [
-        [-2048, 5, 10, 0x1C],
-        [-1024, 4, 9, 0x8],
-        [-512, 4, 8, 0x9],
-        [-256, 4, 7, 0xA],
-        [-128, 5, 6, 0x1D],
-        [-64, 5, 5, 0x1E],
-        [-32, 4, 5, 0xB],
-        [0, 2, 7, 0x0],
-        [128, 3, 7, 0x2],
-        [256, 3, 8, 0x3],
-        [512, 4, 9, 0xC],
-        [1024, 4, 10, 0xD],
-        [-2049, 6, 32, 0x3E, 'lower'],
-        [2048, 6, 32, 0x3F] // upper
-      ]
-      break
-    case 7:
-      lines = [
-        [-1024, 4, 9, 0x8],
-        [-512, 3, 8, 0x0],
-        [-256, 4, 7, 0x9],
-        [-128, 5, 6, 0x1A],
-        [-64, 5, 5, 0x1B],
-        [-32, 4, 5, 0xA],
-        [0, 4, 5, 0xB],
-        [32, 5, 5, 0x1C],
-        [64, 5, 6, 0x1D],
-        [128, 4, 7, 0xC],
-        [256, 3, 8, 0x1],
-        [512, 3, 9, 0x2],
-        [1024, 3, 10, 0x3],
-        [-1025, 5, 32, 0x1E, 'lower'],
-        [2048, 5, 32, 0x1F] // upper
-      ]
-      break
-    case 8:
-      lines = [
-        [-15, 8, 3, 0xFC],
-        [-7, 9, 1, 0x1FC],
-        [-5, 8, 1, 0xFD],
-        [-3, 9, 0, 0x1FD],
-        [-2, 7, 0, 0x7C],
-        [-1, 4, 0, 0xA],
-        [0, 2, 1, 0x0],
-        [2, 5, 0, 0x1A],
-        [3, 6, 0, 0x3A],
-        [4, 3, 4, 0x4],
-        [20, 6, 1, 0x3B],
-        [22, 4, 4, 0xB],
-        [38, 4, 5, 0xC],
-        [70, 5, 6, 0x1B],
-        [134, 5, 7, 0x1C],
-        [262, 6, 7, 0x3C],
-        [390, 7, 8, 0x7D],
-        [646, 6, 10, 0x3D],
-        [-16, 9, 32, 0x1FE, 'lower'],
-        [1670, 9, 32, 0x1FF], // upper
-        [2, 0x1] // OOB
-      ]
-      break
-    case 9:
-      lines = [
-        [-31, 8, 4, 0xFC],
-        [-15, 9, 2, 0x1FC],
-        [-11, 8, 2, 0xFD],
-        [-7, 9, 1, 0x1FD],
-        [-5, 7, 1, 0x7C],
-        [-3, 4, 1, 0xA],
-        [-1, 3, 1, 0x2],
-        [1, 3, 1, 0x3],
-        [3, 5, 1, 0x1A],
-        [5, 6, 1, 0x3A],
-        [7, 3, 5, 0x4],
-        [39, 6, 2, 0x3B],
-        [43, 4, 5, 0xB],
-        [75, 4, 6, 0xC],
-        [139, 5, 7, 0x1B],
-        [267, 5, 8, 0x1C],
-        [523, 6, 8, 0x3C],
-        [779, 7, 9, 0x7D],
-        [1291, 6, 11, 0x3D],
-        [-32, 9, 32, 0x1FE, 'lower'],
-        [3339, 9, 32, 0x1FF], // upper
-        [2, 0x0] // OOB
-      ]
-      break
-    case 10:
-      lines = [
-        [-21, 7, 4, 0x7A],
-        [-5, 8, 0, 0xFC],
-        [-4, 7, 0, 0x7B],
-        [-3, 5, 0, 0x18],
-        [-2, 2, 2, 0x0],
-        [2, 5, 0, 0x19],
-        [3, 6, 0, 0x36],
-        [4, 7, 0, 0x7C],
-        [5, 8, 0, 0xFD],
-        [6, 2, 6, 0x1],
-        [70, 5, 5, 0x1A],
-        [102, 6, 5, 0x37],
-        [134, 6, 6, 0x38],
-        [198, 6, 7, 0x39],
-        [326, 6, 8, 0x3A],
-        [582, 6, 9, 0x3B],
-        [1094, 6, 10, 0x3C],
-        [2118, 7, 11, 0x7D],
-        [-22, 8, 32, 0xFE, 'lower'],
-        [4166, 8, 32, 0xFF], // upper
-        [2, 0x2] // OOB
-      ]
-      break
-    case 11:
-      lines = [
-        [1, 1, 0, 0x0],
-        [2, 2, 1, 0x2],
-        [4, 4, 0, 0xC],
-        [5, 4, 1, 0xD],
-        [7, 5, 1, 0x1C],
-        [9, 5, 2, 0x1D],
-        [13, 6, 2, 0x3C],
-        [17, 7, 2, 0x7A],
-        [21, 7, 3, 0x7B],
-        [29, 7, 4, 0x7C],
-        [45, 7, 5, 0x7D],
-        [77, 7, 6, 0x7E],
-        [141, 7, 32, 0x7F] // upper
-      ]
-      break
-    case 12:
-      lines = [
-        [1, 1, 0, 0x0],
-        [2, 2, 0, 0x2],
-        [3, 3, 1, 0x6],
-        [5, 5, 0, 0x1C],
-        [6, 5, 1, 0x1D],
-        [8, 6, 1, 0x3C],
-        [10, 7, 0, 0x7A],
-        [11, 7, 1, 0x7B],
-        [13, 7, 2, 0x7C],
-        [17, 7, 3, 0x7D],
-        [25, 7, 4, 0x7E],
-        [41, 8, 5, 0xFE],
-        [73, 8, 32, 0xFF] // upper
-      ]
-      break
-    case 13:
-      lines = [
-        [1, 1, 0, 0x0],
-        [2, 3, 0, 0x4],
-        [3, 4, 0, 0xC],
-        [4, 5, 0, 0x1C],
-        [5, 4, 1, 0xD],
-        [7, 3, 3, 0x5],
-        [15, 6, 1, 0x3A],
-        [17, 6, 2, 0x3B],
-        [21, 6, 3, 0x3C],
-        [29, 6, 4, 0x3D],
-        [45, 6, 5, 0x3E],
-        [77, 7, 6, 0x7E],
-        [141, 7, 32, 0x7F] // upper
-      ]
-      break
-    case 14:
-      lines = [
-        [-2, 3, 0, 0x4],
-        [-1, 3, 0, 0x5],
-        [0, 1, 0, 0x0],
-        [1, 3, 0, 0x6],
-        [2, 3, 0, 0x7]
-      ]
-      break
-    case 15:
-      lines = [
-        [-24, 7, 4, 0x7C],
-        [-8, 6, 2, 0x3C],
-        [-4, 5, 1, 0x1C],
-        [-2, 4, 0, 0xC],
-        [-1, 3, 0, 0x4],
-        [0, 1, 0, 0x0],
-        [1, 3, 0, 0x5],
-        [2, 4, 0, 0xD],
-        [3, 5, 1, 0x1D],
-        [5, 6, 2, 0x3D],
-        [9, 7, 4, 0x7D],
-        [-25, 7, 32, 0x7E, 'lower'],
-        [25, 7, 32, 0x7F] // upper
-      ]
-      break
-    default:
-      throw new Jbig2Error(`standard table B.${number} does not exist`)
+      case 1:
+        lines = [
+          [0, 1, 4, 0x0],
+          [16, 2, 8, 0x2],
+          [272, 3, 16, 0x6],
+          [65808, 3, 32, 0x7] // upper
+        ]
+        break
+      case 2:
+        lines = [
+          [0, 1, 0, 0x0],
+          [1, 2, 0, 0x2],
+          [2, 3, 0, 0x6],
+          [3, 4, 3, 0xE],
+          [11, 5, 6, 0x1E],
+          [75, 6, 32, 0x3E], // upper
+          [6, 0x3F] // OOB
+        ]
+        break
+      case 3:
+        lines = [
+          [-256, 8, 8, 0xFE],
+          [0, 1, 0, 0x0],
+          [1, 2, 0, 0x2],
+          [2, 3, 0, 0x6],
+          [3, 4, 3, 0xE],
+          [11, 5, 6, 0x1E],
+          [-257, 8, 32, 0xFF, 'lower'],
+          [75, 7, 32, 0x7E], // upper
+          [6, 0x3E] // OOB
+        ]
+        break
+      case 4:
+        lines = [
+          [1, 1, 0, 0x0],
+          [2, 2, 0, 0x2],
+          [3, 3, 0, 0x6],
+          [4, 4, 3, 0xE],
+          [12, 5, 6, 0x1E],
+          [76, 5, 32, 0x1F] // upper
+        ]
+        break
+      case 5:
+        lines = [
+          [-255, 7, 8, 0x7E],
+          [1, 1, 0, 0x0],
+          [2, 2, 0, 0x2],
+          [3, 3, 0, 0x6],
+          [4, 4, 3, 0xE],
+          [12, 5, 6, 0x1E],
+          [-256, 7, 32, 0x7F, 'lower'],
+          [76, 6, 32, 0x3E] // upper
+        ]
+        break
+      case 6:
+        lines = [
+          [-2048, 5, 10, 0x1C],
+          [-1024, 4, 9, 0x8],
+          [-512, 4, 8, 0x9],
+          [-256, 4, 7, 0xA],
+          [-128, 5, 6, 0x1D],
+          [-64, 5, 5, 0x1E],
+          [-32, 4, 5, 0xB],
+          [0, 2, 7, 0x0],
+          [128, 3, 7, 0x2],
+          [256, 3, 8, 0x3],
+          [512, 4, 9, 0xC],
+          [1024, 4, 10, 0xD],
+          [-2049, 6, 32, 0x3E, 'lower'],
+          [2048, 6, 32, 0x3F] // upper
+        ]
+        break
+      case 7:
+        lines = [
+          [-1024, 4, 9, 0x8],
+          [-512, 3, 8, 0x0],
+          [-256, 4, 7, 0x9],
+          [-128, 5, 6, 0x1A],
+          [-64, 5, 5, 0x1B],
+          [-32, 4, 5, 0xA],
+          [0, 4, 5, 0xB],
+          [32, 5, 5, 0x1C],
+          [64, 5, 6, 0x1D],
+          [128, 4, 7, 0xC],
+          [256, 3, 8, 0x1],
+          [512, 3, 9, 0x2],
+          [1024, 3, 10, 0x3],
+          [-1025, 5, 32, 0x1E, 'lower'],
+          [2048, 5, 32, 0x1F] // upper
+        ]
+        break
+      case 8:
+        lines = [
+          [-15, 8, 3, 0xFC],
+          [-7, 9, 1, 0x1FC],
+          [-5, 8, 1, 0xFD],
+          [-3, 9, 0, 0x1FD],
+          [-2, 7, 0, 0x7C],
+          [-1, 4, 0, 0xA],
+          [0, 2, 1, 0x0],
+          [2, 5, 0, 0x1A],
+          [3, 6, 0, 0x3A],
+          [4, 3, 4, 0x4],
+          [20, 6, 1, 0x3B],
+          [22, 4, 4, 0xB],
+          [38, 4, 5, 0xC],
+          [70, 5, 6, 0x1B],
+          [134, 5, 7, 0x1C],
+          [262, 6, 7, 0x3C],
+          [390, 7, 8, 0x7D],
+          [646, 6, 10, 0x3D],
+          [-16, 9, 32, 0x1FE, 'lower'],
+          [1670, 9, 32, 0x1FF], // upper
+          [2, 0x1] // OOB
+        ]
+        break
+      case 9:
+        lines = [
+          [-31, 8, 4, 0xFC],
+          [-15, 9, 2, 0x1FC],
+          [-11, 8, 2, 0xFD],
+          [-7, 9, 1, 0x1FD],
+          [-5, 7, 1, 0x7C],
+          [-3, 4, 1, 0xA],
+          [-1, 3, 1, 0x2],
+          [1, 3, 1, 0x3],
+          [3, 5, 1, 0x1A],
+          [5, 6, 1, 0x3A],
+          [7, 3, 5, 0x4],
+          [39, 6, 2, 0x3B],
+          [43, 4, 5, 0xB],
+          [75, 4, 6, 0xC],
+          [139, 5, 7, 0x1B],
+          [267, 5, 8, 0x1C],
+          [523, 6, 8, 0x3C],
+          [779, 7, 9, 0x7D],
+          [1291, 6, 11, 0x3D],
+          [-32, 9, 32, 0x1FE, 'lower'],
+          [3339, 9, 32, 0x1FF], // upper
+          [2, 0x0] // OOB
+        ]
+        break
+      case 10:
+        lines = [
+          [-21, 7, 4, 0x7A],
+          [-5, 8, 0, 0xFC],
+          [-4, 7, 0, 0x7B],
+          [-3, 5, 0, 0x18],
+          [-2, 2, 2, 0x0],
+          [2, 5, 0, 0x19],
+          [3, 6, 0, 0x36],
+          [4, 7, 0, 0x7C],
+          [5, 8, 0, 0xFD],
+          [6, 2, 6, 0x1],
+          [70, 5, 5, 0x1A],
+          [102, 6, 5, 0x37],
+          [134, 6, 6, 0x38],
+          [198, 6, 7, 0x39],
+          [326, 6, 8, 0x3A],
+          [582, 6, 9, 0x3B],
+          [1094, 6, 10, 0x3C],
+          [2118, 7, 11, 0x7D],
+          [-22, 8, 32, 0xFE, 'lower'],
+          [4166, 8, 32, 0xFF], // upper
+          [2, 0x2] // OOB
+        ]
+        break
+      case 11:
+        lines = [
+          [1, 1, 0, 0x0],
+          [2, 2, 1, 0x2],
+          [4, 4, 0, 0xC],
+          [5, 4, 1, 0xD],
+          [7, 5, 1, 0x1C],
+          [9, 5, 2, 0x1D],
+          [13, 6, 2, 0x3C],
+          [17, 7, 2, 0x7A],
+          [21, 7, 3, 0x7B],
+          [29, 7, 4, 0x7C],
+          [45, 7, 5, 0x7D],
+          [77, 7, 6, 0x7E],
+          [141, 7, 32, 0x7F] // upper
+        ]
+        break
+      case 12:
+        lines = [
+          [1, 1, 0, 0x0],
+          [2, 2, 0, 0x2],
+          [3, 3, 1, 0x6],
+          [5, 5, 0, 0x1C],
+          [6, 5, 1, 0x1D],
+          [8, 6, 1, 0x3C],
+          [10, 7, 0, 0x7A],
+          [11, 7, 1, 0x7B],
+          [13, 7, 2, 0x7C],
+          [17, 7, 3, 0x7D],
+          [25, 7, 4, 0x7E],
+          [41, 8, 5, 0xFE],
+          [73, 8, 32, 0xFF] // upper
+        ]
+        break
+      case 13:
+        lines = [
+          [1, 1, 0, 0x0],
+          [2, 3, 0, 0x4],
+          [3, 4, 0, 0xC],
+          [4, 5, 0, 0x1C],
+          [5, 4, 1, 0xD],
+          [7, 3, 3, 0x5],
+          [15, 6, 1, 0x3A],
+          [17, 6, 2, 0x3B],
+          [21, 6, 3, 0x3C],
+          [29, 6, 4, 0x3D],
+          [45, 6, 5, 0x3E],
+          [77, 7, 6, 0x7E],
+          [141, 7, 32, 0x7F] // upper
+        ]
+        break
+      case 14:
+        lines = [
+          [-2, 3, 0, 0x4],
+          [-1, 3, 0, 0x5],
+          [0, 1, 0, 0x0],
+          [1, 3, 0, 0x6],
+          [2, 3, 0, 0x7]
+        ]
+        break
+      case 15:
+        lines = [
+          [-24, 7, 4, 0x7C],
+          [-8, 6, 2, 0x3C],
+          [-4, 5, 1, 0x1C],
+          [-2, 4, 0, 0xC],
+          [-1, 3, 0, 0x4],
+          [0, 1, 0, 0x0],
+          [1, 3, 0, 0x5],
+          [2, 4, 0, 0xD],
+          [3, 5, 1, 0x1D],
+          [5, 6, 2, 0x3D],
+          [9, 7, 4, 0x7D],
+          [-25, 7, 32, 0x7E, 'lower'],
+          [25, 7, 32, 0x7F] // upper
+        ]
+        break
+      default:
+        throw new Jbig2Error(`standard table B.${number} does not exist`)
     }
 
     let length = lines.length, i
@@ -1923,23 +1923,23 @@ var Jbig2Image = (function Jbig2ImageClosure() {
       if (codeLength >= 32) {
         let repeatedLength, numberOfRepeats, j
         switch (codeLength) {
-        case 32:
-          if (i === 0) {
-            throw new Jbig2Error('no previous value in symbol ID table')
-          }
-          numberOfRepeats = reader.readBits(2) + 3
-          repeatedLength = codes[i - 1].prefixLength
-          break
-        case 33:
-          numberOfRepeats = reader.readBits(3) + 3
-          repeatedLength = 0
-          break
-        case 34:
-          numberOfRepeats = reader.readBits(7) + 11
-          repeatedLength = 0
-          break
-        default:
-          throw new Jbig2Error('invalid code length in symbol ID table')
+          case 32:
+            if (i === 0) {
+              throw new Jbig2Error('no previous value in symbol ID table')
+            }
+            numberOfRepeats = reader.readBits(2) + 3
+            repeatedLength = codes[i - 1].prefixLength
+            break
+          case 33:
+            numberOfRepeats = reader.readBits(3) + 3
+            repeatedLength = 0
+            break
+          case 34:
+            numberOfRepeats = reader.readBits(7) + 11
+            repeatedLength = 0
+            break
+          default:
+            throw new Jbig2Error('invalid code length in symbol ID table')
         }
         for (j = 0; j < numberOfRepeats; j++) {
           codes.push(new HuffmanLine([i, repeatedLength, 0, 0]))
@@ -1958,47 +1958,47 @@ var Jbig2Image = (function Jbig2ImageClosure() {
     let customIndex = 0, tableFirstS, tableDeltaS, tableDeltaT
 
     switch (textRegion.huffmanFS) {
-    case 0:
-    case 1:
-      tableFirstS = getStandardTable(textRegion.huffmanFS + 6)
-      break
-    case 3:
-      tableFirstS = getCustomHuffmanTable(customIndex, referredTo,
-        customTables)
-      customIndex++
-      break
-    default:
-      throw new Jbig2Error('invalid Huffman FS selector')
+      case 0:
+      case 1:
+        tableFirstS = getStandardTable(textRegion.huffmanFS + 6)
+        break
+      case 3:
+        tableFirstS = getCustomHuffmanTable(customIndex, referredTo,
+          customTables)
+        customIndex++
+        break
+      default:
+        throw new Jbig2Error('invalid Huffman FS selector')
     }
 
     switch (textRegion.huffmanDS) {
-    case 0:
-    case 1:
-    case 2:
-      tableDeltaS = getStandardTable(textRegion.huffmanDS + 8)
-      break
-    case 3:
-      tableDeltaS = getCustomHuffmanTable(customIndex, referredTo,
-        customTables)
-      customIndex++
-      break
-    default:
-      throw new Jbig2Error('invalid Huffman DS selector')
+      case 0:
+      case 1:
+      case 2:
+        tableDeltaS = getStandardTable(textRegion.huffmanDS + 8)
+        break
+      case 3:
+        tableDeltaS = getCustomHuffmanTable(customIndex, referredTo,
+          customTables)
+        customIndex++
+        break
+      default:
+        throw new Jbig2Error('invalid Huffman DS selector')
     }
 
     switch (textRegion.huffmanDT) {
-    case 0:
-    case 1:
-    case 2:
-      tableDeltaT = getStandardTable(textRegion.huffmanDT + 11)
-      break
-    case 3:
-      tableDeltaT = getCustomHuffmanTable(customIndex, referredTo,
-        customTables)
-      customIndex++
-      break
-    default:
-      throw new Jbig2Error('invalid Huffman DT selector')
+      case 0:
+      case 1:
+      case 2:
+        tableDeltaT = getStandardTable(textRegion.huffmanDT + 11)
+        break
+      case 3:
+        tableDeltaT = getCustomHuffmanTable(customIndex, referredTo,
+          customTables)
+        customIndex++
+        break
+      default:
+        throw new Jbig2Error('invalid Huffman DT selector')
     }
 
     if (textRegion.refinement) {
@@ -2020,31 +2020,31 @@ var Jbig2Image = (function Jbig2ImageClosure() {
 
     let customIndex = 0, tableDeltaHeight, tableDeltaWidth
     switch (dictionary.huffmanDHSelector) {
-    case 0:
-    case 1:
-      tableDeltaHeight = getStandardTable(dictionary.huffmanDHSelector + 4)
-      break
-    case 3:
-      tableDeltaHeight = getCustomHuffmanTable(customIndex, referredTo,
-        customTables)
-      customIndex++
-      break
-    default:
-      throw new Jbig2Error('invalid Huffman DH selector')
+      case 0:
+      case 1:
+        tableDeltaHeight = getStandardTable(dictionary.huffmanDHSelector + 4)
+        break
+      case 3:
+        tableDeltaHeight = getCustomHuffmanTable(customIndex, referredTo,
+          customTables)
+        customIndex++
+        break
+      default:
+        throw new Jbig2Error('invalid Huffman DH selector')
     }
 
     switch (dictionary.huffmanDWSelector) {
-    case 0:
-    case 1:
-      tableDeltaWidth = getStandardTable(dictionary.huffmanDWSelector + 2)
-      break
-    case 3:
-      tableDeltaWidth = getCustomHuffmanTable(customIndex, referredTo,
-        customTables)
-      customIndex++
-      break
-    default:
-      throw new Jbig2Error('invalid Huffman DW selector')
+      case 0:
+      case 1:
+        tableDeltaWidth = getStandardTable(dictionary.huffmanDWSelector + 2)
+        break
+      case 3:
+        tableDeltaWidth = getCustomHuffmanTable(customIndex, referredTo,
+          customTables)
+        customIndex++
+        break
+      default:
+        throw new Jbig2Error('invalid Huffman DW selector')
     }
 
     let tableBitmapSize, tableAggregateInstances

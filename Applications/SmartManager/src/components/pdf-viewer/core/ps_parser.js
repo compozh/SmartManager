@@ -183,17 +183,17 @@ class PostScriptLexer {
       ch = this.nextChar()
     }
     switch (ch | 0) {
-    case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: // '0'-'4'
-    case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: // '5'-'9'
-    case 0x2B: case 0x2D: case 0x2E: // '+', '-', '.'
-      return new PostScriptToken(PostScriptTokenTypes.NUMBER,
-        this.getNumber())
-    case 0x7B: // '{'
-      this.nextChar()
-      return PostScriptToken.LBRACE
-    case 0x7D: // '}'
-      this.nextChar()
-      return PostScriptToken.RBRACE
+      case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: // '0'-'4'
+      case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: // '5'-'9'
+      case 0x2B: case 0x2D: case 0x2E: // '+', '-', '.'
+        return new PostScriptToken(PostScriptTokenTypes.NUMBER,
+          this.getNumber())
+      case 0x7B: // '{'
+        this.nextChar()
+        return PostScriptToken.LBRACE
+      case 0x7D: // '}'
+        this.nextChar()
+        return PostScriptToken.RBRACE
     }
     // operator
     const strBuf = this.strBuf
@@ -206,12 +206,12 @@ class PostScriptLexer {
     }
     const str = strBuf.join('')
     switch (str.toLowerCase()) {
-    case 'if':
-      return PostScriptToken.IF
-    case 'ifelse':
-      return PostScriptToken.IFELSE
-    default:
-      return PostScriptToken.getOperator(str)
+      case 'if':
+        return PostScriptToken.IF
+      case 'ifelse':
+        return PostScriptToken.IFELSE
+      default:
+        return PostScriptToken.getOperator(str)
     }
   }
 

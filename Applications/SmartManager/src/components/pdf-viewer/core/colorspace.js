@@ -221,46 +221,46 @@ class ColorSpace {
     let whitePoint, blackPoint, gamma
 
     switch (name) {
-    case 'DeviceGrayCS':
-      return this.singletons.gray
-    case 'DeviceRgbCS':
-      return this.singletons.rgb
-    case 'DeviceCmykCS':
-      return this.singletons.cmyk
-    case 'CalGrayCS':
-      whitePoint = IR[1]
-      blackPoint = IR[2]
-      gamma = IR[3]
-      return new CalGrayCS(whitePoint, blackPoint, gamma)
-    case 'CalRGBCS':
-      whitePoint = IR[1]
-      blackPoint = IR[2]
-      gamma = IR[3]
-      let matrix = IR[4]
-      return new CalRGBCS(whitePoint, blackPoint, gamma, matrix)
-    case 'PatternCS':
-      let basePatternCS = IR[1]
-      if (basePatternCS) {
-        basePatternCS = this.fromIR(basePatternCS)
-      }
-      return new PatternCS(basePatternCS)
-    case 'IndexedCS':
-      let baseIndexedCS = IR[1]
-      let hiVal = IR[2]
-      let lookup = IR[3]
-      return new IndexedCS(this.fromIR(baseIndexedCS), hiVal, lookup)
-    case 'AlternateCS':
-      let numComps = IR[1]
-      let alt = IR[2]
-      let tintFn = IR[3]
-      return new AlternateCS(numComps, this.fromIR(alt), tintFn)
-    case 'LabCS':
-      whitePoint = IR[1]
-      blackPoint = IR[2]
-      let range = IR[3]
-      return new LabCS(whitePoint, blackPoint, range)
-    default:
-      throw new FormatError(`Unknown colorspace name: ${name}`)
+      case 'DeviceGrayCS':
+        return this.singletons.gray
+      case 'DeviceRgbCS':
+        return this.singletons.rgb
+      case 'DeviceCmykCS':
+        return this.singletons.cmyk
+      case 'CalGrayCS':
+        whitePoint = IR[1]
+        blackPoint = IR[2]
+        gamma = IR[3]
+        return new CalGrayCS(whitePoint, blackPoint, gamma)
+      case 'CalRGBCS':
+        whitePoint = IR[1]
+        blackPoint = IR[2]
+        gamma = IR[3]
+        let matrix = IR[4]
+        return new CalRGBCS(whitePoint, blackPoint, gamma, matrix)
+      case 'PatternCS':
+        let basePatternCS = IR[1]
+        if (basePatternCS) {
+          basePatternCS = this.fromIR(basePatternCS)
+        }
+        return new PatternCS(basePatternCS)
+      case 'IndexedCS':
+        let baseIndexedCS = IR[1]
+        let hiVal = IR[2]
+        let lookup = IR[3]
+        return new IndexedCS(this.fromIR(baseIndexedCS), hiVal, lookup)
+      case 'AlternateCS':
+        let numComps = IR[1]
+        let alt = IR[2]
+        let tintFn = IR[3]
+        return new AlternateCS(numComps, this.fromIR(alt), tintFn)
+      case 'LabCS':
+        whitePoint = IR[1]
+        blackPoint = IR[2]
+        let range = IR[3]
+        return new LabCS(whitePoint, blackPoint, range)
+      default:
+        throw new FormatError(`Unknown colorspace name: ${name}`)
     }
   }
 
@@ -268,32 +268,32 @@ class ColorSpace {
     cs = xref.fetchIfRef(cs)
     if (isName(cs)) {
       switch (cs.name) {
-      case 'DeviceGray':
-      case 'G':
-        return 'DeviceGrayCS'
-      case 'DeviceRGB':
-      case 'RGB':
-        return 'DeviceRgbCS'
-      case 'DeviceCMYK':
-      case 'CMYK':
-        return 'DeviceCmykCS'
-      case 'Pattern':
-        return ['PatternCS', null]
-      default:
-        if (isDict(res)) {
-          let colorSpaces = res.get('ColorSpace')
-          if (isDict(colorSpaces)) {
-            let resCS = colorSpaces.get(cs.name)
-            if (resCS) {
-              if (isName(resCS)) {
-                return this.parseToIR(resCS, xref, res, pdfFunctionFactory)
+        case 'DeviceGray':
+        case 'G':
+          return 'DeviceGrayCS'
+        case 'DeviceRGB':
+        case 'RGB':
+          return 'DeviceRgbCS'
+        case 'DeviceCMYK':
+        case 'CMYK':
+          return 'DeviceCmykCS'
+        case 'Pattern':
+          return ['PatternCS', null]
+        default:
+          if (isDict(res)) {
+            let colorSpaces = res.get('ColorSpace')
+            if (isDict(colorSpaces)) {
+              let resCS = colorSpaces.get(cs.name)
+              if (resCS) {
+                if (isName(resCS)) {
+                  return this.parseToIR(resCS, xref, res, pdfFunctionFactory)
+                }
+                cs = resCS
+                break
               }
-              cs = resCS
-              break
             }
           }
-        }
-        throw new FormatError(`unrecognized colorspace ${cs.name}`)
+          throw new FormatError(`unrecognized colorspace ${cs.name}`)
       }
     }
     if (Array.isArray(cs)) {
@@ -301,83 +301,83 @@ class ColorSpace {
       let numComps, params, alt, whitePoint, blackPoint, gamma
 
       switch (mode) {
-      case 'DeviceGray':
-      case 'G':
-        return 'DeviceGrayCS'
-      case 'DeviceRGB':
-      case 'RGB':
-        return 'DeviceRgbCS'
-      case 'DeviceCMYK':
-      case 'CMYK':
-        return 'DeviceCmykCS'
-      case 'CalGray':
-        params = xref.fetchIfRef(cs[1])
-        whitePoint = params.getArray('WhitePoint')
-        blackPoint = params.getArray('BlackPoint')
-        gamma = params.get('Gamma')
-        return ['CalGrayCS', whitePoint, blackPoint, gamma]
-      case 'CalRGB':
-        params = xref.fetchIfRef(cs[1])
-        whitePoint = params.getArray('WhitePoint')
-        blackPoint = params.getArray('BlackPoint')
-        gamma = params.getArray('Gamma')
-        let matrix = params.getArray('Matrix')
-        return ['CalRGBCS', whitePoint, blackPoint, gamma, matrix]
-      case 'ICCBased':
-        let stream = xref.fetchIfRef(cs[1])
-        let dict = stream.dict
-        numComps = dict.get('N')
-        alt = dict.get('Alternate')
-        if (alt) {
-          let altIR = this.parseToIR(alt, xref, res, pdfFunctionFactory)
-          // Parse the /Alternate CS to ensure that the number of components
-          // are correct, and also (indirectly) that it is not a PatternCS.
-          let altCS = this.fromIR(altIR, pdfFunctionFactory)
-          if (altCS.numComps === numComps) {
-            return altIR
-          }
-          warn('ICCBased color space: Ignoring incorrect /Alternate entry.')
-        }
-        if (numComps === 1) {
+        case 'DeviceGray':
+        case 'G':
           return 'DeviceGrayCS'
-        } else if (numComps === 3) {
+        case 'DeviceRGB':
+        case 'RGB':
           return 'DeviceRgbCS'
-        } else if (numComps === 4) {
+        case 'DeviceCMYK':
+        case 'CMYK':
           return 'DeviceCmykCS'
-        }
-        break
-      case 'Pattern':
-        let basePatternCS = cs[1] || null
-        if (basePatternCS) {
-          basePatternCS = this.parseToIR(basePatternCS, xref, res,
+        case 'CalGray':
+          params = xref.fetchIfRef(cs[1])
+          whitePoint = params.getArray('WhitePoint')
+          blackPoint = params.getArray('BlackPoint')
+          gamma = params.get('Gamma')
+          return ['CalGrayCS', whitePoint, blackPoint, gamma]
+        case 'CalRGB':
+          params = xref.fetchIfRef(cs[1])
+          whitePoint = params.getArray('WhitePoint')
+          blackPoint = params.getArray('BlackPoint')
+          gamma = params.getArray('Gamma')
+          let matrix = params.getArray('Matrix')
+          return ['CalRGBCS', whitePoint, blackPoint, gamma, matrix]
+        case 'ICCBased':
+          let stream = xref.fetchIfRef(cs[1])
+          let dict = stream.dict
+          numComps = dict.get('N')
+          alt = dict.get('Alternate')
+          if (alt) {
+            let altIR = this.parseToIR(alt, xref, res, pdfFunctionFactory)
+            // Parse the /Alternate CS to ensure that the number of components
+            // are correct, and also (indirectly) that it is not a PatternCS.
+            let altCS = this.fromIR(altIR, pdfFunctionFactory)
+            if (altCS.numComps === numComps) {
+              return altIR
+            }
+            warn('ICCBased color space: Ignoring incorrect /Alternate entry.')
+          }
+          if (numComps === 1) {
+            return 'DeviceGrayCS'
+          } else if (numComps === 3) {
+            return 'DeviceRgbCS'
+          } else if (numComps === 4) {
+            return 'DeviceCmykCS'
+          }
+          break
+        case 'Pattern':
+          let basePatternCS = cs[1] || null
+          if (basePatternCS) {
+            basePatternCS = this.parseToIR(basePatternCS, xref, res,
+              pdfFunctionFactory)
+          }
+          return ['PatternCS', basePatternCS]
+        case 'Indexed':
+        case 'I':
+          let baseIndexedCS = this.parseToIR(cs[1], xref, res,
             pdfFunctionFactory)
-        }
-        return ['PatternCS', basePatternCS]
-      case 'Indexed':
-      case 'I':
-        let baseIndexedCS = this.parseToIR(cs[1], xref, res,
-          pdfFunctionFactory)
-        let hiVal = xref.fetchIfRef(cs[2]) + 1
-        let lookup = xref.fetchIfRef(cs[3])
-        if (isStream(lookup)) {
-          lookup = lookup.getBytes()
-        }
-        return ['IndexedCS', baseIndexedCS, hiVal, lookup]
-      case 'Separation':
-      case 'DeviceN':
-        let name = xref.fetchIfRef(cs[1])
-        numComps = Array.isArray(name) ? name.length : 1
-        alt = this.parseToIR(cs[2], xref, res, pdfFunctionFactory)
-        let tintFn = pdfFunctionFactory.create(xref.fetchIfRef(cs[3]))
-        return ['AlternateCS', numComps, alt, tintFn]
-      case 'Lab':
-        params = xref.fetchIfRef(cs[1])
-        whitePoint = params.getArray('WhitePoint')
-        blackPoint = params.getArray('BlackPoint')
-        let range = params.getArray('Range')
-        return ['LabCS', whitePoint, blackPoint, range]
-      default:
-        throw new FormatError(`unimplemented color space object "${mode}"`)
+          let hiVal = xref.fetchIfRef(cs[2]) + 1
+          let lookup = xref.fetchIfRef(cs[3])
+          if (isStream(lookup)) {
+            lookup = lookup.getBytes()
+          }
+          return ['IndexedCS', baseIndexedCS, hiVal, lookup]
+        case 'Separation':
+        case 'DeviceN':
+          let name = xref.fetchIfRef(cs[1])
+          numComps = Array.isArray(name) ? name.length : 1
+          alt = this.parseToIR(cs[2], xref, res, pdfFunctionFactory)
+          let tintFn = pdfFunctionFactory.create(xref.fetchIfRef(cs[3]))
+          return ['AlternateCS', numComps, alt, tintFn]
+        case 'Lab':
+          params = xref.fetchIfRef(cs[1])
+          whitePoint = params.getArray('WhitePoint')
+          blackPoint = params.getArray('BlackPoint')
+          let range = params.getArray('Range')
+          return ['LabCS', whitePoint, blackPoint, range]
+        default:
+          throw new FormatError(`unimplemented color space object "${mode}"`)
       }
     }
     throw new FormatError(`unrecognized color space object: "${cs}"`)

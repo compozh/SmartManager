@@ -38,73 +38,73 @@ function compressCmap(srcPath, destPath, verify) {
     var flags = (item.type << 5) | (sequence ? 0x10 : 0)
     var nextStart, nextCode
     switch (item.type) {
-    case 0:
-      out += writeByte(flags | getHexSize(first.start)) + writeNumber(subitems.length)
-      out += first.start + writeNumber(subHex(first.end, first.start))
-      nextStart = incHex(first.end)
-      for (var j = 1; j < subitems.length; j++) {
-        out += writeNumber(subHex(subitems[j].start, nextStart)) +
+      case 0:
+        out += writeByte(flags | getHexSize(first.start)) + writeNumber(subitems.length)
+        out += first.start + writeNumber(subHex(first.end, first.start))
+        nextStart = incHex(first.end)
+        for (var j = 1; j < subitems.length; j++) {
+          out += writeNumber(subHex(subitems[j].start, nextStart)) +
             writeNumber(subHex(subitems[j].end, subitems[j].start))
-        nextStart = incHex(subitems[j].end)
-      }
-      break
-    case 1:
-      out += writeByte(flags | getHexSize(first.start)) + writeNumber(subitems.length)
-      out += first.start + writeNumber(subHex(first.end, first.start)) + writeNumber(first.code)
-      nextStart = incHex(first.end)
-      for (var j = 1; j < subitems.length; j++) {
-        out += writeNumber(subHex(subitems[j].start, nextStart)) +
+          nextStart = incHex(subitems[j].end)
+        }
+        break
+      case 1:
+        out += writeByte(flags | getHexSize(first.start)) + writeNumber(subitems.length)
+        out += first.start + writeNumber(subHex(first.end, first.start)) + writeNumber(first.code)
+        nextStart = incHex(first.end)
+        for (var j = 1; j < subitems.length; j++) {
+          out += writeNumber(subHex(subitems[j].start, nextStart)) +
             writeNumber(subHex(subitems[j].end, subitems[j].start)) +
             writeNumber(subitems[j].code)
-        nextStart = incHex(subitems[j].end)
-      }
-      break
-    case 2:
-      out += writeByte(flags | getHexSize(first.char)) + writeNumber(subitems.length)
-      out += first.char + writeNumber(first.code)
-      nextStart = incHex(first.char)
-      nextCode = first.code + 1
-      for (var j = 1; j < subitems.length; j++) {
-        out += (sequence ? '' : writeNumber(subHex(subitems[j].char, nextStart))) +
+          nextStart = incHex(subitems[j].end)
+        }
+        break
+      case 2:
+        out += writeByte(flags | getHexSize(first.char)) + writeNumber(subitems.length)
+        out += first.char + writeNumber(first.code)
+        nextStart = incHex(first.char)
+        nextCode = first.code + 1
+        for (var j = 1; j < subitems.length; j++) {
+          out += (sequence ? '' : writeNumber(subHex(subitems[j].char, nextStart))) +
             writeSigned(subitems[j].code - nextCode)
-        nextStart = incHex(subitems[j].char)
-        nextCode = item.items[j].code + 1
-      }
-      break
-    case 3:
-      out += writeByte(flags | getHexSize(first.start)) + writeNumber(subitems.length)
-      out += first.start + writeNumber(subHex(first.end, first.start)) + writeNumber(first.code)
-      nextStart = incHex(first.end)
-      for (var j = 1; j < subitems.length; j++) {
-        out += (sequence ? '' : writeNumber(subHex(subitems[j].start, nextStart))) +
+          nextStart = incHex(subitems[j].char)
+          nextCode = item.items[j].code + 1
+        }
+        break
+      case 3:
+        out += writeByte(flags | getHexSize(first.start)) + writeNumber(subitems.length)
+        out += first.start + writeNumber(subHex(first.end, first.start)) + writeNumber(first.code)
+        nextStart = incHex(first.end)
+        for (var j = 1; j < subitems.length; j++) {
+          out += (sequence ? '' : writeNumber(subHex(subitems[j].start, nextStart))) +
             writeNumber(subHex(subitems[j].end, subitems[j].start)) +
             writeNumber(subitems[j].code)
-        nextStart = incHex(subitems[j].end)
-      }
-      break
-    case 4:
-      out += writeByte(flags | getHexSize(first.code)) + writeNumber(subitems.length)
-      out += first.char + first.code
-      nextStart = incHex(first.char)
-      nextCode = incHex(first.code)
-      for (var j = 1; j < subitems.length; j++) {
-        out += (sequence ? '' : writeNumber(subHex(subitems[j].char, nextStart))) +
+          nextStart = incHex(subitems[j].end)
+        }
+        break
+      case 4:
+        out += writeByte(flags | getHexSize(first.code)) + writeNumber(subitems.length)
+        out += first.char + first.code
+        nextStart = incHex(first.char)
+        nextCode = incHex(first.code)
+        for (var j = 1; j < subitems.length; j++) {
+          out += (sequence ? '' : writeNumber(subHex(subitems[j].char, nextStart))) +
             writeSigned(subHex(subitems[j].code, nextCode))
-        nextStart = incHex(subitems[j].char)
-        nextCode = incHex(subitems[j].code)
-      }
-      break
-    case 5:
-      out += writeByte(flags | getHexSize(first.code)) + writeNumber(subitems.length)
-      out += first.start + writeNumber(subHex(first.end, first.start)) + first.code
-      nextStart = incHex(first.end)
-      for (var j = 1; j < subitems.length; j++) {
-        out += (sequence ? '' : writeNumber(subHex(subitems[j].start, nextStart))) +
+          nextStart = incHex(subitems[j].char)
+          nextCode = incHex(subitems[j].code)
+        }
+        break
+      case 5:
+        out += writeByte(flags | getHexSize(first.code)) + writeNumber(subitems.length)
+        out += first.start + writeNumber(subHex(first.end, first.start)) + first.code
+        nextStart = incHex(first.end)
+        for (var j = 1; j < subitems.length; j++) {
+          out += (sequence ? '' : writeNumber(subHex(subitems[j].start, nextStart))) +
             writeNumber(subHex(subitems[j].end, subitems[j].start)) +
             subitems[j].code
-        nextStart = incHex(subitems[j].end)
-      }
-      break
+          nextStart = incHex(subitems[j].end)
+        }
+        break
 
     }
   }
@@ -215,12 +215,12 @@ function parseCMap(binaryData) {
     var type = b >> 5
     if (type === 7) {
       switch (b & 0x1F) {
-      case 0:
-        result.comment = reader.readString()
-        break
-      case 1:
-        result.usecmap = reader.readString()
-        break
+        case 0:
+          result.comment = reader.readString()
+          break
+        case 1:
+          result.usecmap = reader.readString()
+          break
       }
       continue
     }
@@ -238,74 +238,74 @@ function parseCMap(binaryData) {
     var subitemsCount = reader.readNumber()
     var start, end, code, char
     switch (type) {
-    case 0:
-      start = reader.readHex(dataSize)
-      end = addHex(reader.readHexNumber(dataSize), start)
-      subitems.push({start: start, end: end})
-      for (var i = 1; i < subitemsCount; i++) {
-        start = addHex(reader.readHexNumber(dataSize), incHex(end))
+      case 0:
+        start = reader.readHex(dataSize)
         end = addHex(reader.readHexNumber(dataSize), start)
         subitems.push({start: start, end: end})
-      }
-      break
-    case 1:
-      start = reader.readHex(dataSize)
-      end = addHex(reader.readHexNumber(dataSize), start)
-      code = reader.readNumber()
-      subitems.push({start: start, end: end, code: code})
-      for (var i = 1; i < subitemsCount; i++) {
-        start = addHex(reader.readHexNumber(dataSize), incHex(end))
+        for (var i = 1; i < subitemsCount; i++) {
+          start = addHex(reader.readHexNumber(dataSize), incHex(end))
+          end = addHex(reader.readHexNumber(dataSize), start)
+          subitems.push({start: start, end: end})
+        }
+        break
+      case 1:
+        start = reader.readHex(dataSize)
         end = addHex(reader.readHexNumber(dataSize), start)
         code = reader.readNumber()
         subitems.push({start: start, end: end, code: code})
-      }
-      break
-    case 2:
-      char = reader.readHex(dataSize)
-      code = reader.readNumber()
-      subitems.push({char: char, code: code})
-      for (var i = 1; i < subitemsCount; i++) {
-        char = sequence ? incHex(char) : addHex(reader.readHexNumber(dataSize), incHex(char))
-        code = reader.readSigned() + (code + 1)
+        for (var i = 1; i < subitemsCount; i++) {
+          start = addHex(reader.readHexNumber(dataSize), incHex(end))
+          end = addHex(reader.readHexNumber(dataSize), start)
+          code = reader.readNumber()
+          subitems.push({start: start, end: end, code: code})
+        }
+        break
+      case 2:
+        char = reader.readHex(dataSize)
+        code = reader.readNumber()
         subitems.push({char: char, code: code})
-      }
-      break
-    case 3:
-      start = reader.readHex(dataSize)
-      end = addHex(reader.readHexNumber(dataSize), start)
-      code = reader.readNumber()
-      subitems.push({start: start, end: end, code: code})
-      for (var i = 1; i < subitemsCount; i++) {
-        start = sequence ? incHex(end) : addHex(reader.readHexNumber(dataSize), incHex(end))
+        for (var i = 1; i < subitemsCount; i++) {
+          char = sequence ? incHex(char) : addHex(reader.readHexNumber(dataSize), incHex(char))
+          code = reader.readSigned() + (code + 1)
+          subitems.push({char: char, code: code})
+        }
+        break
+      case 3:
+        start = reader.readHex(dataSize)
         end = addHex(reader.readHexNumber(dataSize), start)
         code = reader.readNumber()
         subitems.push({start: start, end: end, code: code})
-      }
-      break
-    case 4:
-      char = reader.readHex(ucs2DataSize)
-      code = reader.readHex(dataSize)
-      subitems.push({char: char, code: code})
-      for (var i = 1; i < subitemsCount; i++) {
-        char = sequence ? incHex(char) : addHex(reader.readHexNumber(ucs2DataSize), incHex(char))
-        code = addHex(reader.readHexSigned(dataSize), incHex(code))
+        for (var i = 1; i < subitemsCount; i++) {
+          start = sequence ? incHex(end) : addHex(reader.readHexNumber(dataSize), incHex(end))
+          end = addHex(reader.readHexNumber(dataSize), start)
+          code = reader.readNumber()
+          subitems.push({start: start, end: end, code: code})
+        }
+        break
+      case 4:
+        char = reader.readHex(ucs2DataSize)
+        code = reader.readHex(dataSize)
         subitems.push({char: char, code: code})
-      }
-      break
-    case 5:
-      start = reader.readHex(ucs2DataSize)
-      end = addHex(reader.readHexNumber(ucs2DataSize), start)
-      code = reader.readHex(dataSize)
-      subitems.push({start: start, end: end, code: code})
-      for (var i = 1; i < subitemsCount; i++) {
-        start = sequence ? incHex(end) : addHex(reader.readHexNumber(ucs2DataSize), incHex(end))
+        for (var i = 1; i < subitemsCount; i++) {
+          char = sequence ? incHex(char) : addHex(reader.readHexNumber(ucs2DataSize), incHex(char))
+          code = addHex(reader.readHexSigned(dataSize), incHex(code))
+          subitems.push({char: char, code: code})
+        }
+        break
+      case 5:
+        start = reader.readHex(ucs2DataSize)
         end = addHex(reader.readHexNumber(ucs2DataSize), start)
         code = reader.readHex(dataSize)
         subitems.push({start: start, end: end, code: code})
-      }
-      break
-    default:
-      throw new Error('Unknown type: ' + type)
+        for (var i = 1; i < subitemsCount; i++) {
+          start = sequence ? incHex(end) : addHex(reader.readHexNumber(ucs2DataSize), incHex(end))
+          end = addHex(reader.readHexNumber(ucs2DataSize), start)
+          code = reader.readHex(dataSize)
+          subitems.push({start: start, end: end, code: code})
+        }
+        break
+      default:
+        throw new Error('Unknown type: ' + type)
     }
     result.body.push(item)
   }

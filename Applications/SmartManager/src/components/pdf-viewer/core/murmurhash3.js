@@ -85,24 +85,24 @@ class MurmurHash3_64 {
     k1 = 0
 
     switch (tailLength) {
-    case 3:
-      k1 ^= data[blockCounts * 4 + 2] << 16
+      case 3:
+        k1 ^= data[blockCounts * 4 + 2] << 16
       /* falls through */
-    case 2:
-      k1 ^= data[blockCounts * 4 + 1] << 8
+      case 2:
+        k1 ^= data[blockCounts * 4 + 1] << 8
       /* falls through */
-    case 1:
-      k1 ^= data[blockCounts * 4]
-      /* falls through */
+      case 1:
+        k1 ^= data[blockCounts * 4]
+        /* falls through */
 
-      k1 = (k1 * C1 & MASK_HIGH) | (k1 * C1_LOW & MASK_LOW)
-      k1 = k1 << 15 | k1 >>> 17
-      k1 = (k1 * C2 & MASK_HIGH) | (k1 * C2_LOW & MASK_LOW)
-      if (blockCounts & 1) {
-        h1 ^= k1
-      } else {
-        h2 ^= k1
-      }
+        k1 = (k1 * C1 & MASK_HIGH) | (k1 * C1_LOW & MASK_LOW)
+        k1 = k1 << 15 | k1 >>> 17
+        k1 = (k1 * C2 & MASK_HIGH) | (k1 * C2_LOW & MASK_LOW)
+        if (blockCounts & 1) {
+          h1 ^= k1
+        } else {
+          h2 ^= k1
+        }
     }
 
     this.h1 = h1

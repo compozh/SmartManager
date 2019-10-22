@@ -256,41 +256,41 @@ PDFViewerApplication.externalServices = {
         return
       }
       switch (args.pdfjsLoadAction) {
-      case 'supportsRangedLoading':
-        pdfDataRangeTransport =
+        case 'supportsRangedLoading':
+          pdfDataRangeTransport =
             new FirefoxComDataRangeTransport(args.length, args.data, args.done)
 
-        callbacks.onOpenWithTransport(args.pdfUrl, args.length,
-          pdfDataRangeTransport)
-        break
-      case 'range':
-        pdfDataRangeTransport.onDataRange(args.begin, args.chunk)
-        break
-      case 'rangeProgress':
-        pdfDataRangeTransport.onDataProgress(args.loaded)
-        break
-      case 'progressiveRead':
-        pdfDataRangeTransport.onDataProgressiveRead(args.chunk)
-
-        // Don't forget to report loading progress as well, since otherwise
-        // the loadingBar won't update when `disableRange=true` is set.
-        pdfDataRangeTransport.onDataProgress(args.loaded, args.total)
-        break
-      case 'progressiveDone':
-        if (pdfDataRangeTransport) {
-          pdfDataRangeTransport.onDataProgressiveDone()
-        }
-        break
-      case 'progress':
-        callbacks.onProgress(args.loaded, args.total)
-        break
-      case 'complete':
-        if (!args.data) {
-          callbacks.onError(args.errorCode)
+          callbacks.onOpenWithTransport(args.pdfUrl, args.length,
+            pdfDataRangeTransport)
           break
-        }
-        callbacks.onOpenWithData(args.data)
-        break
+        case 'range':
+          pdfDataRangeTransport.onDataRange(args.begin, args.chunk)
+          break
+        case 'rangeProgress':
+          pdfDataRangeTransport.onDataProgress(args.loaded)
+          break
+        case 'progressiveRead':
+          pdfDataRangeTransport.onDataProgressiveRead(args.chunk)
+
+          // Don't forget to report loading progress as well, since otherwise
+          // the loadingBar won't update when `disableRange=true` is set.
+          pdfDataRangeTransport.onDataProgress(args.loaded, args.total)
+          break
+        case 'progressiveDone':
+          if (pdfDataRangeTransport) {
+            pdfDataRangeTransport.onDataProgressiveDone()
+          }
+          break
+        case 'progress':
+          callbacks.onProgress(args.loaded, args.total)
+          break
+        case 'complete':
+          if (!args.data) {
+            callbacks.onError(args.errorCode)
+            break
+          }
+          callbacks.onOpenWithData(args.data)
+          break
       }
     })
     FirefoxCom.requestSync('initPassiveLoading', null)

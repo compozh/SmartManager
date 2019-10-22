@@ -318,24 +318,24 @@ class PDFPageView {
       let textLayerDiv = this.textLayer.textLayerDiv
       let transX, transY
       switch (textAbsRotation) {
-      case 0:
-        transX = transY = 0
-        break
-      case 90:
-        transX = 0
-        transY = '-' + textLayerDiv.style.height
-        break
-      case 180:
-        transX = '-' + textLayerDiv.style.width
-        transY = '-' + textLayerDiv.style.height
-        break
-      case 270:
-        transX = '-' + textLayerDiv.style.width
-        transY = 0
-        break
-      default:
-        console.error('Bad rotation value.')
-        break
+        case 0:
+          transX = transY = 0
+          break
+        case 90:
+          transX = 0
+          transY = '-' + textLayerDiv.style.height
+          break
+        case 180:
+          transX = '-' + textLayerDiv.style.width
+          transY = '-' + textLayerDiv.style.height
+          break
+        case 270:
+          transX = '-' + textLayerDiv.style.width
+          transY = 0
+          break
+        default:
+          console.error('Bad rotation value.')
+          break
       }
 
       textLayerDiv.style.transform =

@@ -31,11 +31,11 @@ $({ target: 'Reflect', stat: true, forced: FORCED, sham: FORCED }, {
     if (Target == newTarget) {
       // w/o altered newTarget, optimization for 0-4 arguments
       switch (args.length) {
-      case 0: return new Target()
-      case 1: return new Target(args[0])
-      case 2: return new Target(args[0], args[1])
-      case 3: return new Target(args[0], args[1], args[2])
-      case 4: return new Target(args[0], args[1], args[2], args[3])
+        case 0: return new Target()
+        case 1: return new Target(args[0])
+        case 2: return new Target(args[0], args[1])
+        case 3: return new Target(args[0], args[1], args[2])
+        case 4: return new Target(args[0], args[1], args[2], args[3])
       }
       // w/o altered newTarget, lot of arguments case
       var $args = [null]

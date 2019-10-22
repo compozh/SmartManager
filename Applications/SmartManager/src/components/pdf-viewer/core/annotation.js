@@ -68,81 +68,81 @@ class AnnotationFactory {
     }
 
     switch (subtype) {
-    case 'Link':
-      return new LinkAnnotation(parameters)
+      case 'Link':
+        return new LinkAnnotation(parameters)
 
-    case 'Text':
-      return new TextAnnotation(parameters)
+      case 'Text':
+        return new TextAnnotation(parameters)
 
-    case 'Widget':
-      let fieldType = getInheritableProperty({ dict, key: 'FT', })
-      fieldType = isName(fieldType) ? fieldType.name : null
+      case 'Widget':
+        let fieldType = getInheritableProperty({ dict, key: 'FT', })
+        fieldType = isName(fieldType) ? fieldType.name : null
 
-      switch (fieldType) {
-      case 'Tx':
-        return new TextWidgetAnnotation(parameters)
-      case 'Btn':
-        return new ButtonWidgetAnnotation(parameters)
-      case 'Ch':
-        return new ChoiceWidgetAnnotation(parameters)
-      }
-      warn('Unimplemented widget field type "' + fieldType + '", ' +
+        switch (fieldType) {
+          case 'Tx':
+            return new TextWidgetAnnotation(parameters)
+          case 'Btn':
+            return new ButtonWidgetAnnotation(parameters)
+          case 'Ch':
+            return new ChoiceWidgetAnnotation(parameters)
+        }
+        warn('Unimplemented widget field type "' + fieldType + '", ' +
              'falling back to base field type.')
-      return new WidgetAnnotation(parameters)
+        return new WidgetAnnotation(parameters)
 
-    case 'Popup':
-      return new PopupAnnotation(parameters)
+      case 'Popup':
+        return new PopupAnnotation(parameters)
 
-    case 'FreeText':
-      return new FreeTextAnnotation(parameters)
+      case 'FreeText':
+        return new FreeTextAnnotation(parameters)
 
-    case 'Line':
-      return new LineAnnotation(parameters)
+      case 'Line':
+        return new LineAnnotation(parameters)
 
-    case 'Square':
-      return new SquareAnnotation(parameters)
+      case 'Square':
+        return new SquareAnnotation(parameters)
 
-    case 'Circle':
-      return new CircleAnnotation(parameters)
+      case 'Circle':
+        return new CircleAnnotation(parameters)
 
-    case 'PolyLine':
-      return new PolylineAnnotation(parameters)
+      case 'PolyLine':
+        return new PolylineAnnotation(parameters)
 
-    case 'Polygon':
-      return new PolygonAnnotation(parameters)
+      case 'Polygon':
+        return new PolygonAnnotation(parameters)
 
-    case 'Caret':
-      return new CaretAnnotation(parameters)
+      case 'Caret':
+        return new CaretAnnotation(parameters)
 
-    case 'Ink':
-      return new InkAnnotation(parameters)
+      case 'Ink':
+        return new InkAnnotation(parameters)
 
-    case 'Highlight':
-      return new HighlightAnnotation(parameters)
+      case 'Highlight':
+        return new HighlightAnnotation(parameters)
 
-    case 'Underline':
-      return new UnderlineAnnotation(parameters)
+      case 'Underline':
+        return new UnderlineAnnotation(parameters)
 
-    case 'Squiggly':
-      return new SquigglyAnnotation(parameters)
+      case 'Squiggly':
+        return new SquigglyAnnotation(parameters)
 
-    case 'StrikeOut':
-      return new StrikeOutAnnotation(parameters)
+      case 'StrikeOut':
+        return new StrikeOutAnnotation(parameters)
 
-    case 'Stamp':
-      return new StampAnnotation(parameters)
+      case 'Stamp':
+        return new StampAnnotation(parameters)
 
-    case 'FileAttachment':
-      return new FileAttachmentAnnotation(parameters)
+      case 'FileAttachment':
+        return new FileAttachmentAnnotation(parameters)
 
-    default:
-      if (!subtype) {
-        warn('Annotation is missing the required /Subtype.')
-      } else {
-        warn('Unimplemented annotation type "' + subtype + '", ' +
+      default:
+        if (!subtype) {
+          warn('Annotation is missing the required /Subtype.')
+        } else {
+          warn('Unimplemented annotation type "' + subtype + '", ' +
                'falling back to base annotation.')
-      }
-      return new Annotation(parameters)
+        }
+        return new Annotation(parameters)
     }
   }
 }
@@ -359,28 +359,28 @@ class Annotation {
     }
 
     switch (color.length) {
-    case 0: // Transparent, which we indicate with a null value
-      this.color = null
-      break
+      case 0: // Transparent, which we indicate with a null value
+        this.color = null
+        break
 
-    case 1: // Convert grayscale to RGB
-      ColorSpace.singletons.gray.getRgbItem(color, 0, rgbColor, 0)
-      this.color = rgbColor
-      break
+      case 1: // Convert grayscale to RGB
+        ColorSpace.singletons.gray.getRgbItem(color, 0, rgbColor, 0)
+        this.color = rgbColor
+        break
 
-    case 3: // Convert RGB percentages to RGB
-      ColorSpace.singletons.rgb.getRgbItem(color, 0, rgbColor, 0)
-      this.color = rgbColor
-      break
+      case 3: // Convert RGB percentages to RGB
+        ColorSpace.singletons.rgb.getRgbItem(color, 0, rgbColor, 0)
+        this.color = rgbColor
+        break
 
-    case 4: // Convert CMYK to RGB
-      ColorSpace.singletons.cmyk.getRgbItem(color, 0, rgbColor, 0)
-      this.color = rgbColor
-      break
+      case 4: // Convert CMYK to RGB
+        ColorSpace.singletons.cmyk.getRgbItem(color, 0, rgbColor, 0)
+        this.color = rgbColor
+        break
 
-    default:
-      this.color = rgbColor
-      break
+      default:
+        this.color = rgbColor
+        break
     }
   }
 
@@ -578,28 +578,28 @@ class AnnotationBorderStyle {
       return
     }
     switch (style.name) {
-    case 'S':
-      this.style = AnnotationBorderStyleType.SOLID
-      break
+      case 'S':
+        this.style = AnnotationBorderStyleType.SOLID
+        break
 
-    case 'D':
-      this.style = AnnotationBorderStyleType.DASHED
-      break
+      case 'D':
+        this.style = AnnotationBorderStyleType.DASHED
+        break
 
-    case 'B':
-      this.style = AnnotationBorderStyleType.BEVELED
-      break
+      case 'B':
+        this.style = AnnotationBorderStyleType.BEVELED
+        break
 
-    case 'I':
-      this.style = AnnotationBorderStyleType.INSET
-      break
+      case 'I':
+        this.style = AnnotationBorderStyleType.INSET
+        break
 
-    case 'U':
-      this.style = AnnotationBorderStyleType.UNDERLINE
-      break
+      case 'U':
+        this.style = AnnotationBorderStyleType.UNDERLINE
+        break
 
-    default:
-      break
+      default:
+        break
     }
   }
 

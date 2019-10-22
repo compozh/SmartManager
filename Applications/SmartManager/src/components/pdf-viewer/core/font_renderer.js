@@ -227,31 +227,31 @@ var FontRendererFactory = (function FontRendererFactoryClosure() {
       }
       for (j = 0; j < numberOfPoints; j++) {
         switch (points[j].flags & 0x12) {
-        case 0x00:
-          x += ((code[i] << 24) | (code[i + 1] << 16)) >> 16
-          i += 2
-          break
-        case 0x02:
-          x -= code[i++]
-          break
-        case 0x12:
-          x += code[i++]
-          break
+          case 0x00:
+            x += ((code[i] << 24) | (code[i + 1] << 16)) >> 16
+            i += 2
+            break
+          case 0x02:
+            x -= code[i++]
+            break
+          case 0x12:
+            x += code[i++]
+            break
         }
         points[j].x = x
       }
       for (j = 0; j < numberOfPoints; j++) {
         switch (points[j].flags & 0x24) {
-        case 0x00:
-          y += ((code[i] << 24) | (code[i + 1] << 16)) >> 16
-          i += 2
-          break
-        case 0x04:
-          y -= code[i++]
-          break
-        case 0x24:
-          y += code[i++]
-          break
+          case 0x00:
+            y += ((code[i] << 24) | (code[i + 1] << 16)) >> 16
+            i += 2
+            break
+          case 0x04:
+            y -= code[i++]
+            break
+          case 0x24:
+            y += code[i++]
+            break
         }
         points[j].y = y
       }
@@ -318,295 +318,295 @@ var FontRendererFactory = (function FontRendererFactoryClosure() {
         var v = code[i++]
         var xa, xb, ya, yb, y1, y2, y3, n, subrCode
         switch (v) {
-        case 1: // hstem
-          stems += stack.length >> 1
-          stackClean = true
-          break
-        case 3: // vstem
-          stems += stack.length >> 1
-          stackClean = true
-          break
-        case 4: // vmoveto
-          y += stack.pop()
-          moveTo(x, y)
-          stackClean = true
-          break
-        case 5: // rlineto
-          while (stack.length > 0) {
-            x += stack.shift()
-            y += stack.shift()
-            lineTo(x, y)
-          }
-          break
-        case 6: // hlineto
-          while (stack.length > 0) {
-            x += stack.shift()
-            lineTo(x, y)
-            if (stack.length === 0) {
-              break
-            }
-            y += stack.shift()
-            lineTo(x, y)
-          }
-          break
-        case 7: // vlineto
-          while (stack.length > 0) {
-            y += stack.shift()
-            lineTo(x, y)
-            if (stack.length === 0) {
-              break
-            }
-            x += stack.shift()
-            lineTo(x, y)
-          }
-          break
-        case 8: // rrcurveto
-          while (stack.length > 0) {
-            xa = x + stack.shift(); ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift(); y = yb + stack.shift()
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-          }
-          break
-        case 10: // callsubr
-          n = stack.pop()
-          subrCode = null
-          if (font.isCFFCIDFont) {
-            let fdIndex = font.fdSelect.getFDIndex(glyphId)
-            if (fdIndex >= 0 && fdIndex < font.fdArray.length) {
-              let fontDict = font.fdArray[fdIndex], subrs
-              if (fontDict.privateDict && fontDict.privateDict.subrsIndex) {
-                subrs = fontDict.privateDict.subrsIndex.objects
-              }
-              if (subrs) {
-                let numSubrs = subrs.length
-                // Add subroutine bias.
-                n += numSubrs < 1240 ? 107 :
-                  (numSubrs < 33900 ? 1131 : 32768)
-                subrCode = subrs[n]
-              }
-            } else {
-              warn('Invalid fd index for glyph index.')
-            }
-          } else {
-            subrCode = font.subrs[n + font.subrsBias]
-          }
-          if (subrCode) {
-            parse(subrCode)
-          }
-          break
-        case 11: // return
-          return
-        case 12:
-          v = code[i++]
-          switch (v) {
-          case 34: // flex
-            xa = x + stack.shift()
-            xb = xa + stack.shift(); y1 = y + stack.shift()
-            x = xb + stack.shift()
-            bezierCurveTo(xa, y, xb, y1, x, y1)
-            xa = x + stack.shift()
-            xb = xa + stack.shift()
-            x = xb + stack.shift()
-            bezierCurveTo(xa, y1, xb, y, x, y)
+          case 1: // hstem
+            stems += stack.length >> 1
+            stackClean = true
             break
-          case 35: // flex
-            xa = x + stack.shift(); ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift(); y = yb + stack.shift()
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-            xa = x + stack.shift(); ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift(); y = yb + stack.shift()
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-            stack.pop() // fd
+          case 3: // vstem
+            stems += stack.length >> 1
+            stackClean = true
             break
-          case 36: // hflex1
-            xa = x + stack.shift(); y1 = y + stack.shift()
-            xb = xa + stack.shift(); y2 = y1 + stack.shift()
-            x = xb + stack.shift()
-            bezierCurveTo(xa, y1, xb, y2, x, y2)
-            xa = x + stack.shift()
-            xb = xa + stack.shift(); y3 = y2 + stack.shift()
-            x = xb + stack.shift()
-            bezierCurveTo(xa, y2, xb, y3, x, y)
+          case 4: // vmoveto
+            y += stack.pop()
+            moveTo(x, y)
+            stackClean = true
             break
-          case 37: // flex1
-            var x0 = x, y0 = y
-            xa = x + stack.shift(); ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift(); y = yb + stack.shift()
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-            xa = x + stack.shift(); ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb; y = yb
-            if (Math.abs(x - x0) > Math.abs(y - y0)) {
+          case 5: // rlineto
+            while (stack.length > 0) {
               x += stack.shift()
+              y += stack.shift()
+              lineTo(x, y)
+            }
+            break
+          case 6: // hlineto
+            while (stack.length > 0) {
+              x += stack.shift()
+              lineTo(x, y)
+              if (stack.length === 0) {
+                break
+              }
+              y += stack.shift()
+              lineTo(x, y)
+            }
+            break
+          case 7: // vlineto
+            while (stack.length > 0) {
+              y += stack.shift()
+              lineTo(x, y)
+              if (stack.length === 0) {
+                break
+              }
+              x += stack.shift()
+              lineTo(x, y)
+            }
+            break
+          case 8: // rrcurveto
+            while (stack.length > 0) {
+              xa = x + stack.shift(); ya = y + stack.shift()
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              x = xb + stack.shift(); y = yb + stack.shift()
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+            }
+            break
+          case 10: // callsubr
+            n = stack.pop()
+            subrCode = null
+            if (font.isCFFCIDFont) {
+              let fdIndex = font.fdSelect.getFDIndex(glyphId)
+              if (fdIndex >= 0 && fdIndex < font.fdArray.length) {
+                let fontDict = font.fdArray[fdIndex], subrs
+                if (fontDict.privateDict && fontDict.privateDict.subrsIndex) {
+                  subrs = fontDict.privateDict.subrsIndex.objects
+                }
+                if (subrs) {
+                  let numSubrs = subrs.length
+                  // Add subroutine bias.
+                  n += numSubrs < 1240 ? 107 :
+                    (numSubrs < 33900 ? 1131 : 32768)
+                  subrCode = subrs[n]
+                }
+              } else {
+                warn('Invalid fd index for glyph index.')
+              }
             } else {
+              subrCode = font.subrs[n + font.subrsBias]
+            }
+            if (subrCode) {
+              parse(subrCode)
+            }
+            break
+          case 11: // return
+            return
+          case 12:
+            v = code[i++]
+            switch (v) {
+              case 34: // flex
+                xa = x + stack.shift()
+                xb = xa + stack.shift(); y1 = y + stack.shift()
+                x = xb + stack.shift()
+                bezierCurveTo(xa, y, xb, y1, x, y1)
+                xa = x + stack.shift()
+                xb = xa + stack.shift()
+                x = xb + stack.shift()
+                bezierCurveTo(xa, y1, xb, y, x, y)
+                break
+              case 35: // flex
+                xa = x + stack.shift(); ya = y + stack.shift()
+                xb = xa + stack.shift(); yb = ya + stack.shift()
+                x = xb + stack.shift(); y = yb + stack.shift()
+                bezierCurveTo(xa, ya, xb, yb, x, y)
+                xa = x + stack.shift(); ya = y + stack.shift()
+                xb = xa + stack.shift(); yb = ya + stack.shift()
+                x = xb + stack.shift(); y = yb + stack.shift()
+                bezierCurveTo(xa, ya, xb, yb, x, y)
+                stack.pop() // fd
+                break
+              case 36: // hflex1
+                xa = x + stack.shift(); y1 = y + stack.shift()
+                xb = xa + stack.shift(); y2 = y1 + stack.shift()
+                x = xb + stack.shift()
+                bezierCurveTo(xa, y1, xb, y2, x, y2)
+                xa = x + stack.shift()
+                xb = xa + stack.shift(); y3 = y2 + stack.shift()
+                x = xb + stack.shift()
+                bezierCurveTo(xa, y2, xb, y3, x, y)
+                break
+              case 37: // flex1
+                var x0 = x, y0 = y
+                xa = x + stack.shift(); ya = y + stack.shift()
+                xb = xa + stack.shift(); yb = ya + stack.shift()
+                x = xb + stack.shift(); y = yb + stack.shift()
+                bezierCurveTo(xa, ya, xb, yb, x, y)
+                xa = x + stack.shift(); ya = y + stack.shift()
+                xb = xa + stack.shift(); yb = ya + stack.shift()
+                x = xb; y = yb
+                if (Math.abs(x - x0) > Math.abs(y - y0)) {
+                  x += stack.shift()
+                } else {
+                  y += stack.shift()
+                }
+                bezierCurveTo(xa, ya, xb, yb, x, y)
+                break
+              default:
+                throw new FormatError(`unknown operator: 12 ${v}`)
+            }
+            break
+          case 14: // endchar
+            if (stack.length >= 4) {
+              var achar = stack.pop()
+              var bchar = stack.pop()
+              y = stack.pop()
+              x = stack.pop()
+              cmds.push({ cmd: 'save', })
+              cmds.push({ cmd: 'translate', args: [x, y], })
+              var cmap = lookupCmap(font.cmap, String.fromCharCode(
+                font.glyphNameMap[StandardEncoding[achar]]))
+              compileCharString(font.glyphs[cmap.glyphId], cmds, font,
+                cmap.glyphId)
+              cmds.push({ cmd: 'restore', })
+
+              cmap = lookupCmap(font.cmap, String.fromCharCode(
+                font.glyphNameMap[StandardEncoding[bchar]]))
+              compileCharString(font.glyphs[cmap.glyphId], cmds, font,
+                cmap.glyphId)
+            }
+            return
+          case 18: // hstemhm
+            stems += stack.length >> 1
+            stackClean = true
+            break
+          case 19: // hintmask
+            stems += stack.length >> 1
+            i += (stems + 7) >> 3
+            stackClean = true
+            break
+          case 20: // cntrmask
+            stems += stack.length >> 1
+            i += (stems + 7) >> 3
+            stackClean = true
+            break
+          case 21: // rmoveto
+            y += stack.pop()
+            x += stack.pop()
+            moveTo(x, y)
+            stackClean = true
+            break
+          case 22: // hmoveto
+            x += stack.pop()
+            moveTo(x, y)
+            stackClean = true
+            break
+          case 23: // vstemhm
+            stems += stack.length >> 1
+            stackClean = true
+            break
+          case 24: // rcurveline
+            while (stack.length > 2) {
+              xa = x + stack.shift(); ya = y + stack.shift()
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              x = xb + stack.shift(); y = yb + stack.shift()
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+            }
+            x += stack.shift()
+            y += stack.shift()
+            lineTo(x, y)
+            break
+          case 25: // rlinecurve
+            while (stack.length > 6) {
+              x += stack.shift()
+              y += stack.shift()
+              lineTo(x, y)
+            }
+            xa = x + stack.shift(); ya = y + stack.shift()
+            xb = xa + stack.shift(); yb = ya + stack.shift()
+            x = xb + stack.shift(); y = yb + stack.shift()
+            bezierCurveTo(xa, ya, xb, yb, x, y)
+            break
+          case 26: // vvcurveto
+            if (stack.length % 2) {
+              x += stack.shift()
+            }
+            while (stack.length > 0) {
+              xa = x; ya = y + stack.shift()
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              x = xb; y = yb + stack.shift()
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+            }
+            break
+          case 27: // hhcurveto
+            if (stack.length % 2) {
               y += stack.shift()
             }
-            bezierCurveTo(xa, ya, xb, yb, x, y)
+            while (stack.length > 0) {
+              xa = x + stack.shift(); ya = y
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              x = xb + stack.shift(); y = yb
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+            }
+            break
+          case 28:
+            stack.push(((code[i] << 24) | (code[i + 1] << 16)) >> 16)
+            i += 2
+            break
+          case 29: // callgsubr
+            n = stack.pop() + font.gsubrsBias
+            subrCode = font.gsubrs[n]
+            if (subrCode) {
+              parse(subrCode)
+            }
+            break
+          case 30: // vhcurveto
+            while (stack.length > 0) {
+              xa = x; ya = y + stack.shift()
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              x = xb + stack.shift()
+              y = yb + (stack.length === 1 ? stack.shift() : 0)
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+              if (stack.length === 0) {
+                break
+              }
+
+              xa = x + stack.shift(); ya = y
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              y = yb + stack.shift()
+              x = xb + (stack.length === 1 ? stack.shift() : 0)
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+            }
+            break
+          case 31: // hvcurveto
+            while (stack.length > 0) {
+              xa = x + stack.shift(); ya = y
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              y = yb + stack.shift()
+              x = xb + (stack.length === 1 ? stack.shift() : 0)
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+              if (stack.length === 0) {
+                break
+              }
+
+              xa = x; ya = y + stack.shift()
+              xb = xa + stack.shift(); yb = ya + stack.shift()
+              x = xb + stack.shift()
+              y = yb + (stack.length === 1 ? stack.shift() : 0)
+              bezierCurveTo(xa, ya, xb, yb, x, y)
+            }
             break
           default:
-            throw new FormatError(`unknown operator: 12 ${v}`)
-          }
-          break
-        case 14: // endchar
-          if (stack.length >= 4) {
-            var achar = stack.pop()
-            var bchar = stack.pop()
-            y = stack.pop()
-            x = stack.pop()
-            cmds.push({ cmd: 'save', })
-            cmds.push({ cmd: 'translate', args: [x, y], })
-            var cmap = lookupCmap(font.cmap, String.fromCharCode(
-              font.glyphNameMap[StandardEncoding[achar]]))
-            compileCharString(font.glyphs[cmap.glyphId], cmds, font,
-              cmap.glyphId)
-            cmds.push({ cmd: 'restore', })
-
-            cmap = lookupCmap(font.cmap, String.fromCharCode(
-              font.glyphNameMap[StandardEncoding[bchar]]))
-            compileCharString(font.glyphs[cmap.glyphId], cmds, font,
-              cmap.glyphId)
-          }
-          return
-        case 18: // hstemhm
-          stems += stack.length >> 1
-          stackClean = true
-          break
-        case 19: // hintmask
-          stems += stack.length >> 1
-          i += (stems + 7) >> 3
-          stackClean = true
-          break
-        case 20: // cntrmask
-          stems += stack.length >> 1
-          i += (stems + 7) >> 3
-          stackClean = true
-          break
-        case 21: // rmoveto
-          y += stack.pop()
-          x += stack.pop()
-          moveTo(x, y)
-          stackClean = true
-          break
-        case 22: // hmoveto
-          x += stack.pop()
-          moveTo(x, y)
-          stackClean = true
-          break
-        case 23: // vstemhm
-          stems += stack.length >> 1
-          stackClean = true
-          break
-        case 24: // rcurveline
-          while (stack.length > 2) {
-            xa = x + stack.shift(); ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift(); y = yb + stack.shift()
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-          }
-          x += stack.shift()
-          y += stack.shift()
-          lineTo(x, y)
-          break
-        case 25: // rlinecurve
-          while (stack.length > 6) {
-            x += stack.shift()
-            y += stack.shift()
-            lineTo(x, y)
-          }
-          xa = x + stack.shift(); ya = y + stack.shift()
-          xb = xa + stack.shift(); yb = ya + stack.shift()
-          x = xb + stack.shift(); y = yb + stack.shift()
-          bezierCurveTo(xa, ya, xb, yb, x, y)
-          break
-        case 26: // vvcurveto
-          if (stack.length % 2) {
-            x += stack.shift()
-          }
-          while (stack.length > 0) {
-            xa = x; ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb; y = yb + stack.shift()
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-          }
-          break
-        case 27: // hhcurveto
-          if (stack.length % 2) {
-            y += stack.shift()
-          }
-          while (stack.length > 0) {
-            xa = x + stack.shift(); ya = y
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift(); y = yb
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-          }
-          break
-        case 28:
-          stack.push(((code[i] << 24) | (code[i + 1] << 16)) >> 16)
-          i += 2
-          break
-        case 29: // callgsubr
-          n = stack.pop() + font.gsubrsBias
-          subrCode = font.gsubrs[n]
-          if (subrCode) {
-            parse(subrCode)
-          }
-          break
-        case 30: // vhcurveto
-          while (stack.length > 0) {
-            xa = x; ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift()
-            y = yb + (stack.length === 1 ? stack.shift() : 0)
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-            if (stack.length === 0) {
-              break
+            if (v < 32) {
+              throw new FormatError(`unknown operator: ${v}`)
             }
-
-            xa = x + stack.shift(); ya = y
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            y = yb + stack.shift()
-            x = xb + (stack.length === 1 ? stack.shift() : 0)
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-          }
-          break
-        case 31: // hvcurveto
-          while (stack.length > 0) {
-            xa = x + stack.shift(); ya = y
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            y = yb + stack.shift()
-            x = xb + (stack.length === 1 ? stack.shift() : 0)
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-            if (stack.length === 0) {
-              break
-            }
-
-            xa = x; ya = y + stack.shift()
-            xb = xa + stack.shift(); yb = ya + stack.shift()
-            x = xb + stack.shift()
-            y = yb + (stack.length === 1 ? stack.shift() : 0)
-            bezierCurveTo(xa, ya, xb, yb, x, y)
-          }
-          break
-        default:
-          if (v < 32) {
-            throw new FormatError(`unknown operator: ${v}`)
-          }
-          if (v < 247) {
-            stack.push(v - 139)
-          } else if (v < 251) {
-            stack.push((v - 247) * 256 + code[i++] + 108)
-          } else if (v < 255) {
-            stack.push(-(v - 251) * 256 - code[i++] - 108)
-          } else {
-            stack.push(((code[i] << 24) | (code[i + 1] << 16) |
+            if (v < 247) {
+              stack.push(v - 139)
+            } else if (v < 251) {
+              stack.push((v - 247) * 256 + code[i++] + 108)
+            } else if (v < 255) {
+              stack.push(-(v - 251) * 256 - code[i++] - 108)
+            } else {
+              stack.push(((code[i] << 24) | (code[i + 1] << 16) |
                          (code[i + 2] << 8) | code[i + 3]) / 65536)
-            i += 4
-          }
-          break
+              i += 4
+            }
+            break
         }
         if (stackClean) {
           stack.length = 0
@@ -731,22 +731,22 @@ var FontRendererFactory = (function FontRendererFactoryClosure() {
         var offset = getLong(data, p + 8)
         var length = getLong(data, p + 12)
         switch (tag) {
-        case 'cmap':
-          cmap = parseCmap(data, offset, offset + length)
-          break
-        case 'glyf':
-          glyf = data.subarray(offset, offset + length)
-          break
-        case 'loca':
-          loca = data.subarray(offset, offset + length)
-          break
-        case 'head':
-          unitsPerEm = getUshort(data, offset + 18)
-          indexToLocFormat = getUshort(data, offset + 50)
-          break
-        case 'CFF ':
-          cff = parseCff(data, offset, offset + length, seacAnalysisEnabled)
-          break
+          case 'cmap':
+            cmap = parseCmap(data, offset, offset + length)
+            break
+          case 'glyf':
+            glyf = data.subarray(offset, offset + length)
+            break
+          case 'loca':
+            loca = data.subarray(offset, offset + length)
+            break
+          case 'head':
+            unitsPerEm = getUshort(data, offset + 18)
+            indexToLocFormat = getUshort(data, offset + 50)
+            break
+          case 'CFF ':
+            cff = parseCff(data, offset, offset + length, seacAnalysisEnabled)
+            break
         }
       }
 

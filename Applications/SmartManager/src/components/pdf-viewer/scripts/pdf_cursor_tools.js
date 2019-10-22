@@ -76,29 +76,29 @@ class PDFCursorTools {
 
     let disableActiveTool = () => {
       switch (this.active) {
-      case CursorTool.SELECT:
-        break
-      case CursorTool.HAND:
-        this.handTool.deactivate()
-        break
-      case CursorTool.ZOOM:
+        case CursorTool.SELECT:
+          break
+        case CursorTool.HAND:
+          this.handTool.deactivate()
+          break
+        case CursorTool.ZOOM:
           /* falls through */
       }
     }
 
     switch (tool) { // Enable the new cursor tool.
-    case CursorTool.SELECT:
-      disableActiveTool()
-      break
-    case CursorTool.HAND:
-      disableActiveTool()
-      this.handTool.activate()
-      break
-    case CursorTool.ZOOM:
+      case CursorTool.SELECT:
+        disableActiveTool()
+        break
+      case CursorTool.HAND:
+        disableActiveTool()
+        this.handTool.activate()
+        break
+      case CursorTool.ZOOM:
       /* falls through */
-    default:
-      console.error(`switchTool: "${tool}" is an unsupported value.`)
-      return
+      default:
+        console.error(`switchTool: "${tool}" is an unsupported value.`)
+        return
     }
     // Update the active tool *after* it has been validated above,
     // in order to prevent setting it to an invalid state.

@@ -343,34 +343,34 @@ class Catalog {
       }
 
       switch (style) {
-      case 'D':
-        currentLabel = currentIndex
-        break
-      case 'R':
-      case 'r':
-        currentLabel = toRomanNumerals(currentIndex, style === 'r')
-        break
-      case 'A':
-      case 'a':
-        const LIMIT = 26 // Use only the characters A-Z, or a-z.
-        const A_UPPER_CASE = 0x41, A_LOWER_CASE = 0x61
+        case 'D':
+          currentLabel = currentIndex
+          break
+        case 'R':
+        case 'r':
+          currentLabel = toRomanNumerals(currentIndex, style === 'r')
+          break
+        case 'A':
+        case 'a':
+          const LIMIT = 26 // Use only the characters A-Z, or a-z.
+          const A_UPPER_CASE = 0x41, A_LOWER_CASE = 0x61
 
-        const baseCharCode = (style === 'a' ? A_LOWER_CASE : A_UPPER_CASE)
-        const letterIndex = currentIndex - 1
-        const character = String.fromCharCode(baseCharCode +
+          const baseCharCode = (style === 'a' ? A_LOWER_CASE : A_UPPER_CASE)
+          const letterIndex = currentIndex - 1
+          const character = String.fromCharCode(baseCharCode +
                                                 (letterIndex % LIMIT))
-        const charBuf = []
-        for (let j = 0, jj = (letterIndex / LIMIT) | 0; j <= jj; j++) {
-          charBuf.push(character)
-        }
-        currentLabel = charBuf.join('')
-        break
-      default:
-        if (style) {
-          throw new FormatError(
-            `Invalid style "${style}" in PageLabel dictionary.`)
-        }
-        currentLabel = ''
+          const charBuf = []
+          for (let j = 0, jj = (letterIndex / LIMIT) | 0; j <= jj; j++) {
+            charBuf.push(character)
+          }
+          currentLabel = charBuf.join('')
+          break
+        default:
+          if (style) {
+            throw new FormatError(
+              `Invalid style "${style}" in PageLabel dictionary.`)
+          }
+          currentLabel = ''
       }
 
       pageLabels[i] = prefix + currentLabel
@@ -388,13 +388,13 @@ class Catalog {
 
     if (isName(obj)) {
       switch (obj.name) {
-      case 'SinglePage':
-      case 'OneColumn':
-      case 'TwoColumnLeft':
-      case 'TwoColumnRight':
-      case 'TwoPageLeft':
-      case 'TwoPageRight':
-        pageLayout = obj.name
+        case 'SinglePage':
+        case 'OneColumn':
+        case 'TwoColumnLeft':
+        case 'TwoColumnRight':
+        case 'TwoPageLeft':
+        case 'TwoPageRight':
+          pageLayout = obj.name
       }
     }
     return shadow(this, 'pageLayout', pageLayout)
@@ -406,13 +406,13 @@ class Catalog {
 
     if (isName(obj)) {
       switch (obj.name) {
-      case 'UseNone':
-      case 'UseOutlines':
-      case 'UseThumbs':
-      case 'FullScreen':
-      case 'UseOC':
-      case 'UseAttachments':
-        pageMode = obj.name
+        case 'UseNone':
+        case 'UseOutlines':
+        case 'UseThumbs':
+        case 'FullScreen':
+        case 'UseOC':
+        case 'UseAttachments':
+          pageMode = obj.name
       }
     }
     return shadow(this, 'pageMode', pageMode)
@@ -456,86 +456,86 @@ class Catalog {
         let prefValue
 
         switch (key) {
-        case 'NonFullScreenPageMode':
-          switch (value.name) {
-          case 'UseNone':
-          case 'UseOutlines':
-          case 'UseThumbs':
-          case 'UseOC':
-            prefValue = value.name
+          case 'NonFullScreenPageMode':
+            switch (value.name) {
+              case 'UseNone':
+              case 'UseOutlines':
+              case 'UseThumbs':
+              case 'UseOC':
+                prefValue = value.name
+                break
+              default:
+                prefValue = 'UseNone'
+            }
             break
-          default:
-            prefValue = 'UseNone'
-          }
-          break
-        case 'Direction':
-          switch (value.name) {
-          case 'L2R':
-          case 'R2L':
-            prefValue = value.name
+          case 'Direction':
+            switch (value.name) {
+              case 'L2R':
+              case 'R2L':
+                prefValue = value.name
+                break
+              default:
+                prefValue = 'L2R'
+            }
             break
-          default:
-            prefValue = 'L2R'
-          }
-          break
-        case 'ViewArea':
-        case 'ViewClip':
-        case 'PrintArea':
-        case 'PrintClip':
-          switch (value.name) {
-          case 'MediaBox':
-          case 'CropBox':
-          case 'BleedBox':
-          case 'TrimBox':
-          case 'ArtBox':
-            prefValue = value.name
+          case 'ViewArea':
+          case 'ViewClip':
+          case 'PrintArea':
+          case 'PrintClip':
+            switch (value.name) {
+              case 'MediaBox':
+              case 'CropBox':
+              case 'BleedBox':
+              case 'TrimBox':
+              case 'ArtBox':
+                prefValue = value.name
+                break
+              default:
+                prefValue = 'CropBox'
+            }
             break
-          default:
-            prefValue = 'CropBox'
-          }
-          break
-        case 'PrintScaling':
-          switch (value.name) {
-          case 'None':
-          case 'AppDefault':
-            prefValue = value.name
+          case 'PrintScaling':
+            switch (value.name) {
+              case 'None':
+              case 'AppDefault':
+                prefValue = value.name
+                break
+              default:
+                prefValue = 'AppDefault'
+            }
             break
-          default:
-            prefValue = 'AppDefault'
-          }
-          break
-        case 'Duplex':
-          switch (value.name) {
-          case 'Simplex':
-          case 'DuplexFlipShortEdge':
-          case 'DuplexFlipLongEdge':
-            prefValue = value.name
+          case 'Duplex':
+            switch (value.name) {
+              case 'Simplex':
+              case 'DuplexFlipShortEdge':
+              case 'DuplexFlipLongEdge':
+                prefValue = value.name
+                break
+              default:
+                prefValue = 'None'
+            }
             break
-          default:
-            prefValue = 'None'
-          }
-          break
-        case 'PrintPageRange':
-          const length = value.length
-          if (length % 2 !== 0) { // The number of elements must be even.
-            break
-          }
-          const isValid = value.every((page, i, arr) => {
-            return (Number.isInteger(page) && page > 0) &&
+          case 'PrintPageRange':
+            const length = value.length
+            if (length % 2 !== 0) { // The number of elements must be even.
+              break
+            }
+            const isValid = value.every((page, i, arr) => {
+              return (Number.isInteger(page) && page > 0) &&
                      (i === 0 || page >= arr[i - 1]) && page <= this.numPages
-          })
-          if (isValid) {
+            })
+            if (isValid) {
+              prefValue = value
+            }
+            break
+          case 'NumCopies':
+            if (value > 0) {
+              prefValue = value
+            }
+            break
+          default:
+            assert(typeof value === 'boolean')
             prefValue = value
-          }
-          break
-        case 'NumCopies':
-          if (value > 0) {
-            prefValue = value
-          }
-          break
-        default:
-          assert(typeof value === 'boolean')
-          prefValue = value
         }
 
         if (prefValue !== undefined) {
@@ -915,104 +915,104 @@ class Catalog {
       const actionName = actionType.name
 
       switch (actionName) {
-      case 'URI':
-        url = action.get('URI')
-        if (isName(url)) {
+        case 'URI':
+          url = action.get('URI')
+          if (isName(url)) {
           // Some bad PDFs do not put parentheses around relative URLs.
-          url = '/' + url.name
-        } else if (isString(url)) {
-          url = addDefaultProtocolToUrl(url)
-        }
-        // TODO: pdf spec mentions urls can be relative to a Base
-        // entry in the dictionary.
-        break
+            url = '/' + url.name
+          } else if (isString(url)) {
+            url = addDefaultProtocolToUrl(url)
+          }
+          // TODO: pdf spec mentions urls can be relative to a Base
+          // entry in the dictionary.
+          break
 
-      case 'GoTo':
-        dest = action.get('D')
-        break
+        case 'GoTo':
+          dest = action.get('D')
+          break
 
-      case 'Launch':
+        case 'Launch':
         // We neither want, nor can, support arbitrary 'Launch' actions.
         // However, in practice they are mostly used for linking to other PDF
         // files, which we thus attempt to support (utilizing `docBaseUrl`).
         /* falls through */
 
-      case 'GoToR':
-        const urlDict = action.get('F')
-        if (isDict(urlDict)) {
+        case 'GoToR':
+          const urlDict = action.get('F')
+          if (isDict(urlDict)) {
           // We assume that we found a FileSpec dictionary
           // and fetch the URL without checking any further.
-          url = urlDict.get('F') || null
-        } else if (isString(urlDict)) {
-          url = urlDict
-        }
-
-        // NOTE: the destination is relative to the *remote* document.
-        let remoteDest = action.get('D')
-        if (remoteDest) {
-          if (isName(remoteDest)) {
-            remoteDest = remoteDest.name
+            url = urlDict.get('F') || null
+          } else if (isString(urlDict)) {
+            url = urlDict
           }
-          if (isString(url)) {
-            const baseUrl = url.split('#')[0]
-            if (isString(remoteDest)) {
-              url = baseUrl + '#' + remoteDest
-            } else if (Array.isArray(remoteDest)) {
-              url = baseUrl + '#' + JSON.stringify(remoteDest)
+
+          // NOTE: the destination is relative to the *remote* document.
+          let remoteDest = action.get('D')
+          if (remoteDest) {
+            if (isName(remoteDest)) {
+              remoteDest = remoteDest.name
+            }
+            if (isString(url)) {
+              const baseUrl = url.split('#')[0]
+              if (isString(remoteDest)) {
+                url = baseUrl + '#' + remoteDest
+              } else if (Array.isArray(remoteDest)) {
+                url = baseUrl + '#' + JSON.stringify(remoteDest)
+              }
             }
           }
-        }
-        // The 'NewWindow' property, equal to `LinkTarget.BLANK`.
-        const newWindow = action.get('NewWindow')
-        if (isBool(newWindow)) {
-          resultObj.newWindow = newWindow
-        }
-        break
+          // The 'NewWindow' property, equal to `LinkTarget.BLANK`.
+          const newWindow = action.get('NewWindow')
+          if (isBool(newWindow)) {
+            resultObj.newWindow = newWindow
+          }
+          break
 
-      case 'Named':
-        const namedAction = action.get('N')
-        if (isName(namedAction)) {
-          resultObj.action = namedAction.name
-        }
-        break
+        case 'Named':
+          const namedAction = action.get('N')
+          if (isName(namedAction)) {
+            resultObj.action = namedAction.name
+          }
+          break
 
-      case 'JavaScript':
-        const jsAction = action.get('JS')
-        let js
+        case 'JavaScript':
+          const jsAction = action.get('JS')
+          let js
 
-        if (isStream(jsAction)) {
-          js = bytesToString(jsAction.getBytes())
-        } else if (isString(jsAction)) {
-          js = jsAction
-        }
+          if (isStream(jsAction)) {
+            js = bytesToString(jsAction.getBytes())
+          } else if (isString(jsAction)) {
+            js = jsAction
+          }
 
-        if (js) {
+          if (js) {
           // Attempt to recover valid URLs from `JS` entries with certain
           // white-listed formats:
           //  - window.open('http://example.com')
           //  - app.launchURL('http://example.com', true)
-          const URL_OPEN_METHODS = [
-            'app.launchURL',
-            'window.open'
-          ]
-          const regex = new RegExp(
-            '^\\s*(' + URL_OPEN_METHODS.join('|').split('.').join('\\.') +
+            const URL_OPEN_METHODS = [
+              'app.launchURL',
+              'window.open'
+            ]
+            const regex = new RegExp(
+              '^\\s*(' + URL_OPEN_METHODS.join('|').split('.').join('\\.') +
               ')\\((?:\'|\")([^\'\"]*)(?:\'|\")(?:,\\s*(\\w+)\\)|\\))', 'i')
 
-          const jsUrl = regex.exec(stringToPDFString(js))
-          if (jsUrl && jsUrl[2]) {
-            url = jsUrl[2]
+            const jsUrl = regex.exec(stringToPDFString(js))
+            if (jsUrl && jsUrl[2]) {
+              url = jsUrl[2]
 
-            if (jsUrl[3] === 'true' && jsUrl[1] === 'app.launchURL') {
-              resultObj.newWindow = true
+              if (jsUrl[3] === 'true' && jsUrl[1] === 'app.launchURL') {
+                resultObj.newWindow = true
+              }
+              break
             }
-            break
           }
-        }
         /* falls through */
-      default:
-        warn(`parseDestDictionary: unsupported action type "${actionName}".`)
-        break
+        default:
+          warn(`parseDestDictionary: unsupported action type "${actionName}".`)
+          break
       }
     } else if (destDict.has('Dest')) { // Simple destination.
       dest = destDict.get('Dest')
@@ -1201,12 +1201,12 @@ var XRef = (function XRefClosure() {
 
           if (type instanceof Cmd) {
             switch (type.cmd) {
-            case 'f':
-              entry.free = true
-              break
-            case 'n':
-              entry.uncompressed = true
-              break
+              case 'f':
+                entry.free = true
+                break
+              case 'n':
+                entry.uncompressed = true
+                break
             }
           }
 
@@ -1315,16 +1315,16 @@ var XRef = (function XRefClosure() {
           entry.offset = offset
           entry.gen = generation
           switch (type) {
-          case 0:
-            entry.free = true
-            break
-          case 1:
-            entry.uncompressed = true
-            break
-          case 2:
-            break
-          default:
-            throw new FormatError(`Invalid XRef entry type: ${type}`)
+            case 0:
+              entry.free = true
+              break
+            case 1:
+              entry.uncompressed = true
+              break
+            case 2:
+              break
+            default:
+              throw new FormatError(`Invalid XRef entry type: ${type}`)
           }
           if (!this.entries[first + i]) {
             this.entries[first + i] = entry

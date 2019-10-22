@@ -126,16 +126,16 @@ var PDFFunction = (function PDFFunctionClosure() {
     fromIR({ xref, isEvalSupported, IR, }) {
       var type = IR[0]
       switch (type) {
-      case CONSTRUCT_SAMPLED:
-        return this.constructSampledFromIR({ xref, isEvalSupported, IR, })
-      case CONSTRUCT_INTERPOLATED:
-        return this.constructInterpolatedFromIR({ xref, isEvalSupported,
-          IR, })
-      case CONSTRUCT_STICHED:
-        return this.constructStichedFromIR({ xref, isEvalSupported, IR, })
+        case CONSTRUCT_SAMPLED:
+          return this.constructSampledFromIR({ xref, isEvalSupported, IR, })
+        case CONSTRUCT_INTERPOLATED:
+          return this.constructInterpolatedFromIR({ xref, isEvalSupported,
+            IR, })
+        case CONSTRUCT_STICHED:
+          return this.constructStichedFromIR({ xref, isEvalSupported, IR, })
         // case CONSTRUCT_POSTSCRIPT:
-      default:
-        return this.constructPostScriptFromIR({ xref, isEvalSupported, IR, })
+        default:
+          return this.constructPostScriptFromIR({ xref, isEvalSupported, IR, })
       }
     },
 
@@ -587,214 +587,214 @@ var PostScriptEvaluator = (function PostScriptEvaluatorClosure() {
         }
         switch (operator) {
         // non standard ps operators
-        case 'jz': // jump if false
-          b = stack.pop()
-          a = stack.pop()
-          if (!a) {
-            counter = b
-          }
-          break
-        case 'j': // jump
-          a = stack.pop()
-          counter = a
-          break
+          case 'jz': // jump if false
+            b = stack.pop()
+            a = stack.pop()
+            if (!a) {
+              counter = b
+            }
+            break
+          case 'j': // jump
+            a = stack.pop()
+            counter = a
+            break
 
           // all ps operators in alphabetical order (excluding if/ifelse)
-        case 'abs':
-          a = stack.pop()
-          stack.push(Math.abs(a))
-          break
-        case 'add':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a + b)
-          break
-        case 'and':
-          b = stack.pop()
-          a = stack.pop()
-          if (isBool(a) && isBool(b)) {
-            stack.push(a && b)
-          } else {
-            stack.push(a & b)
-          }
-          break
-        case 'atan':
-          a = stack.pop()
-          stack.push(Math.atan(a))
-          break
-        case 'bitshift':
-          b = stack.pop()
-          a = stack.pop()
-          if (a > 0) {
-            stack.push(a << b)
-          } else {
-            stack.push(a >> b)
-          }
-          break
-        case 'ceiling':
-          a = stack.pop()
-          stack.push(Math.ceil(a))
-          break
-        case 'copy':
-          a = stack.pop()
-          stack.copy(a)
-          break
-        case 'cos':
-          a = stack.pop()
-          stack.push(Math.cos(a))
-          break
-        case 'cvi':
-          a = stack.pop() | 0
-          stack.push(a)
-          break
-        case 'cvr':
+          case 'abs':
+            a = stack.pop()
+            stack.push(Math.abs(a))
+            break
+          case 'add':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a + b)
+            break
+          case 'and':
+            b = stack.pop()
+            a = stack.pop()
+            if (isBool(a) && isBool(b)) {
+              stack.push(a && b)
+            } else {
+              stack.push(a & b)
+            }
+            break
+          case 'atan':
+            a = stack.pop()
+            stack.push(Math.atan(a))
+            break
+          case 'bitshift':
+            b = stack.pop()
+            a = stack.pop()
+            if (a > 0) {
+              stack.push(a << b)
+            } else {
+              stack.push(a >> b)
+            }
+            break
+          case 'ceiling':
+            a = stack.pop()
+            stack.push(Math.ceil(a))
+            break
+          case 'copy':
+            a = stack.pop()
+            stack.copy(a)
+            break
+          case 'cos':
+            a = stack.pop()
+            stack.push(Math.cos(a))
+            break
+          case 'cvi':
+            a = stack.pop() | 0
+            stack.push(a)
+            break
+          case 'cvr':
           // noop
-          break
-        case 'div':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a / b)
-          break
-        case 'dup':
-          stack.copy(1)
-          break
-        case 'eq':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a === b)
-          break
-        case 'exch':
-          stack.roll(2, 1)
-          break
-        case 'exp':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(Math.pow(a, b))
-          break
-        case 'false':
-          stack.push(false)
-          break
-        case 'floor':
-          a = stack.pop()
-          stack.push(Math.floor(a))
-          break
-        case 'ge':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a >= b)
-          break
-        case 'gt':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a > b)
-          break
-        case 'idiv':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push((a / b) | 0)
-          break
-        case 'index':
-          a = stack.pop()
-          stack.index(a)
-          break
-        case 'le':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a <= b)
-          break
-        case 'ln':
-          a = stack.pop()
-          stack.push(Math.log(a))
-          break
-        case 'log':
-          a = stack.pop()
-          stack.push(Math.log(a) / Math.LN10)
-          break
-        case 'lt':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a < b)
-          break
-        case 'mod':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a % b)
-          break
-        case 'mul':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a * b)
-          break
-        case 'ne':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a !== b)
-          break
-        case 'neg':
-          a = stack.pop()
-          stack.push(-a)
-          break
-        case 'not':
-          a = stack.pop()
-          if (isBool(a)) {
-            stack.push(!a)
-          } else {
-            stack.push(~a)
-          }
-          break
-        case 'or':
-          b = stack.pop()
-          a = stack.pop()
-          if (isBool(a) && isBool(b)) {
-            stack.push(a || b)
-          } else {
-            stack.push(a | b)
-          }
-          break
-        case 'pop':
-          stack.pop()
-          break
-        case 'roll':
-          b = stack.pop()
-          a = stack.pop()
-          stack.roll(a, b)
-          break
-        case 'round':
-          a = stack.pop()
-          stack.push(Math.round(a))
-          break
-        case 'sin':
-          a = stack.pop()
-          stack.push(Math.sin(a))
-          break
-        case 'sqrt':
-          a = stack.pop()
-          stack.push(Math.sqrt(a))
-          break
-        case 'sub':
-          b = stack.pop()
-          a = stack.pop()
-          stack.push(a - b)
-          break
-        case 'true':
-          stack.push(true)
-          break
-        case 'truncate':
-          a = stack.pop()
-          a = a < 0 ? Math.ceil(a) : Math.floor(a)
-          stack.push(a)
-          break
-        case 'xor':
-          b = stack.pop()
-          a = stack.pop()
-          if (isBool(a) && isBool(b)) {
+            break
+          case 'div':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a / b)
+            break
+          case 'dup':
+            stack.copy(1)
+            break
+          case 'eq':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a === b)
+            break
+          case 'exch':
+            stack.roll(2, 1)
+            break
+          case 'exp':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(Math.pow(a, b))
+            break
+          case 'false':
+            stack.push(false)
+            break
+          case 'floor':
+            a = stack.pop()
+            stack.push(Math.floor(a))
+            break
+          case 'ge':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a >= b)
+            break
+          case 'gt':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a > b)
+            break
+          case 'idiv':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push((a / b) | 0)
+            break
+          case 'index':
+            a = stack.pop()
+            stack.index(a)
+            break
+          case 'le':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a <= b)
+            break
+          case 'ln':
+            a = stack.pop()
+            stack.push(Math.log(a))
+            break
+          case 'log':
+            a = stack.pop()
+            stack.push(Math.log(a) / Math.LN10)
+            break
+          case 'lt':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a < b)
+            break
+          case 'mod':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a % b)
+            break
+          case 'mul':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a * b)
+            break
+          case 'ne':
+            b = stack.pop()
+            a = stack.pop()
             stack.push(a !== b)
-          } else {
-            stack.push(a ^ b)
-          }
-          break
-        default:
-          throw new FormatError(`Unknown operator ${operator}`)
+            break
+          case 'neg':
+            a = stack.pop()
+            stack.push(-a)
+            break
+          case 'not':
+            a = stack.pop()
+            if (isBool(a)) {
+              stack.push(!a)
+            } else {
+              stack.push(~a)
+            }
+            break
+          case 'or':
+            b = stack.pop()
+            a = stack.pop()
+            if (isBool(a) && isBool(b)) {
+              stack.push(a || b)
+            } else {
+              stack.push(a | b)
+            }
+            break
+          case 'pop':
+            stack.pop()
+            break
+          case 'roll':
+            b = stack.pop()
+            a = stack.pop()
+            stack.roll(a, b)
+            break
+          case 'round':
+            a = stack.pop()
+            stack.push(Math.round(a))
+            break
+          case 'sin':
+            a = stack.pop()
+            stack.push(Math.sin(a))
+            break
+          case 'sqrt':
+            a = stack.pop()
+            stack.push(Math.sqrt(a))
+            break
+          case 'sub':
+            b = stack.pop()
+            a = stack.pop()
+            stack.push(a - b)
+            break
+          case 'true':
+            stack.push(true)
+            break
+          case 'truncate':
+            a = stack.pop()
+            a = a < 0 ? Math.ceil(a) : Math.floor(a)
+            stack.push(a)
+            break
+          case 'xor':
+            b = stack.pop()
+            a = stack.pop()
+            if (isBool(a) && isBool(b)) {
+              stack.push(a !== b)
+            } else {
+              stack.push(a ^ b)
+            }
+            break
+          default:
+            throw new FormatError(`Unknown operator ${operator}`)
         }
       }
       return stack.stack
@@ -1019,121 +1019,121 @@ var PostScriptCompiler = (function PostScriptCompilerClosure() {
         }
 
         switch (item) {
-        case 'add':
-          if (stack.length < 2) {
-            return null
-          }
-          num2 = stack.pop()
-          num1 = stack.pop()
-          stack.push(buildAddOperation(num1, num2))
-          break
-        case 'cvr':
-          if (stack.length < 1) {
-            return null
-          }
-          break
-        case 'mul':
-          if (stack.length < 2) {
-            return null
-          }
-          num2 = stack.pop()
-          num1 = stack.pop()
-          stack.push(buildMulOperation(num1, num2))
-          break
-        case 'sub':
-          if (stack.length < 2) {
-            return null
-          }
-          num2 = stack.pop()
-          num1 = stack.pop()
-          stack.push(buildSubOperation(num1, num2))
-          break
-        case 'exch':
-          if (stack.length < 2) {
-            return null
-          }
-          ast1 = stack.pop(); ast2 = stack.pop()
-          stack.push(ast1, ast2)
-          break
-        case 'pop':
-          if (stack.length < 1) {
-            return null
-          }
-          stack.pop()
-          break
-        case 'index':
-          if (stack.length < 1) {
-            return null
-          }
-          num1 = stack.pop()
-          if (num1.type !== 'literal') {
-            return null
-          }
-          n = num1.number
-          if (n < 0 || !Number.isInteger(n) || stack.length < n) {
-            return null
-          }
-          ast1 = stack[stack.length - n - 1]
-          if (ast1.type === 'literal' || ast1.type === 'var') {
-            stack.push(ast1)
+          case 'add':
+            if (stack.length < 2) {
+              return null
+            }
+            num2 = stack.pop()
+            num1 = stack.pop()
+            stack.push(buildAddOperation(num1, num2))
             break
-          }
-          tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max)
-          stack[stack.length - n - 1] = tmpVar
-          stack.push(tmpVar)
-          instructions.push(new AstVariableDefinition(tmpVar, ast1))
-          break
-        case 'dup':
-          if (stack.length < 1) {
-            return null
-          }
-          if (typeof code[i + 1] === 'number' && code[i + 2] === 'gt' &&
+          case 'cvr':
+            if (stack.length < 1) {
+              return null
+            }
+            break
+          case 'mul':
+            if (stack.length < 2) {
+              return null
+            }
+            num2 = stack.pop()
+            num1 = stack.pop()
+            stack.push(buildMulOperation(num1, num2))
+            break
+          case 'sub':
+            if (stack.length < 2) {
+              return null
+            }
+            num2 = stack.pop()
+            num1 = stack.pop()
+            stack.push(buildSubOperation(num1, num2))
+            break
+          case 'exch':
+            if (stack.length < 2) {
+              return null
+            }
+            ast1 = stack.pop(); ast2 = stack.pop()
+            stack.push(ast1, ast2)
+            break
+          case 'pop':
+            if (stack.length < 1) {
+              return null
+            }
+            stack.pop()
+            break
+          case 'index':
+            if (stack.length < 1) {
+              return null
+            }
+            num1 = stack.pop()
+            if (num1.type !== 'literal') {
+              return null
+            }
+            n = num1.number
+            if (n < 0 || !Number.isInteger(n) || stack.length < n) {
+              return null
+            }
+            ast1 = stack[stack.length - n - 1]
+            if (ast1.type === 'literal' || ast1.type === 'var') {
+              stack.push(ast1)
+              break
+            }
+            tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max)
+            stack[stack.length - n - 1] = tmpVar
+            stack.push(tmpVar)
+            instructions.push(new AstVariableDefinition(tmpVar, ast1))
+            break
+          case 'dup':
+            if (stack.length < 1) {
+              return null
+            }
+            if (typeof code[i + 1] === 'number' && code[i + 2] === 'gt' &&
                 code[i + 3] === i + 7 && code[i + 4] === 'jz' &&
                 code[i + 5] === 'pop' && code[i + 6] === code[i + 1]) {
             // special case of the commands sequence for the min operation
-            num1 = stack.pop()
-            stack.push(buildMinOperation(num1, code[i + 1]))
-            i += 6
-            break
-          }
-          ast1 = stack[stack.length - 1]
-          if (ast1.type === 'literal' || ast1.type === 'var') {
+              num1 = stack.pop()
+              stack.push(buildMinOperation(num1, code[i + 1]))
+              i += 6
+              break
+            }
+            ast1 = stack[stack.length - 1]
+            if (ast1.type === 'literal' || ast1.type === 'var') {
             // we don't have to save into intermediate variable a literal or
             // variable.
-            stack.push(ast1)
+              stack.push(ast1)
+              break
+            }
+            tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max)
+            stack[stack.length - 1] = tmpVar
+            stack.push(tmpVar)
+            instructions.push(new AstVariableDefinition(tmpVar, ast1))
             break
-          }
-          tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max)
-          stack[stack.length - 1] = tmpVar
-          stack.push(tmpVar)
-          instructions.push(new AstVariableDefinition(tmpVar, ast1))
-          break
-        case 'roll':
-          if (stack.length < 2) {
-            return null
-          }
-          num2 = stack.pop()
-          num1 = stack.pop()
-          if (num2.type !== 'literal' || num1.type !== 'literal') {
+          case 'roll':
+            if (stack.length < 2) {
+              return null
+            }
+            num2 = stack.pop()
+            num1 = stack.pop()
+            if (num2.type !== 'literal' || num1.type !== 'literal') {
             // both roll operands must be numbers
-            return null
-          }
-          j = num2.number
-          n = num1.number
-          if (n <= 0 || !Number.isInteger(n) || !Number.isInteger(j) ||
+              return null
+            }
+            j = num2.number
+            n = num1.number
+            if (n <= 0 || !Number.isInteger(n) || !Number.isInteger(j) ||
                 stack.length < n) {
             // ... and integers
-            return null
-          }
-          j = ((j % n) + n) % n
-          if (j === 0) {
-            break // just skipping -- there are nothing to rotate
-          }
-          Array.prototype.push.apply(stack,
-            stack.splice(stack.length - n, n - j))
-          break
-        default:
-          return null // unsupported operator
+              return null
+            }
+            j = ((j % n) + n) % n
+            if (j === 0) {
+              break // just skipping -- there are nothing to rotate
+            }
+            Array.prototype.push.apply(stack,
+              stack.splice(stack.length - n, n - j))
+            break
+          default:
+            return null // unsupported operator
         }
       }
 

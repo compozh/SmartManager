@@ -95,54 +95,54 @@ class Parser {
 
     if (buf1 instanceof Cmd) {
       switch (buf1.cmd) {
-      case 'BI': // inline image
-        return this.makeInlineImage(cipherTransform)
-      case '[': // array
-        const array = []
-        while (!isCmd(this.buf1, ']') && !isEOF(this.buf1)) {
-          array.push(this.getObj(cipherTransform))
-        }
-        if (isEOF(this.buf1)) {
-          if (!this.recoveryMode) {
-            throw new FormatError('End of file inside array')
+        case 'BI': // inline image
+          return this.makeInlineImage(cipherTransform)
+        case '[': // array
+          const array = []
+          while (!isCmd(this.buf1, ']') && !isEOF(this.buf1)) {
+            array.push(this.getObj(cipherTransform))
           }
-          return array
-        }
-        this.shift()
-        return array
-      case '<<': // dictionary or stream
-        const dict = new Dict(this.xref)
-        while (!isCmd(this.buf1, '>>') && !isEOF(this.buf1)) {
-          if (!isName(this.buf1)) {
-            info('Malformed dictionary: key must be a name object')
-            this.shift()
-            continue
-          }
-
-          const key = this.buf1.name
-          this.shift()
           if (isEOF(this.buf1)) {
-            break
+            if (!this.recoveryMode) {
+              throw new FormatError('End of file inside array')
+            }
+            return array
           }
-          dict.set(key, this.getObj(cipherTransform))
-        }
-        if (isEOF(this.buf1)) {
-          if (!this.recoveryMode) {
-            throw new FormatError('End of file inside dictionary')
-          }
-          return dict
-        }
+          this.shift()
+          return array
+        case '<<': // dictionary or stream
+          const dict = new Dict(this.xref)
+          while (!isCmd(this.buf1, '>>') && !isEOF(this.buf1)) {
+            if (!isName(this.buf1)) {
+              info('Malformed dictionary: key must be a name object')
+              this.shift()
+              continue
+            }
 
-        // Stream objects are not allowed inside content streams or
-        // object streams.
-        if (isCmd(this.buf2, 'stream')) {
-          return (this.allowStreams ?
-            this.makeStream(dict, cipherTransform) : dict)
-        }
-        this.shift()
-        return dict
-      default: // simple object
-        return buf1
+            const key = this.buf1.name
+            this.shift()
+            if (isEOF(this.buf1)) {
+              break
+            }
+            dict.set(key, this.getObj(cipherTransform))
+          }
+          if (isEOF(this.buf1)) {
+            if (!this.recoveryMode) {
+              throw new FormatError('End of file inside dictionary')
+            }
+            return dict
+          }
+
+          // Stream objects are not allowed inside content streams or
+          // object streams.
+          if (isCmd(this.buf2, 'stream')) {
+            return (this.allowStreams ?
+              this.makeStream(dict, cipherTransform) : dict)
+          }
+          this.shift()
+          return dict
+        default: // simple object
+          return buf1
       }
     }
 
@@ -250,75 +250,75 @@ class Parser {
         continue
       }
       switch (stream.getByte()) {
-      case 0x00: // Byte stuffing.
+        case 0x00: // Byte stuffing.
         // 0xFF00 appears to be a very common byte sequence in JPEG images.
-        break
+          break
 
-      case 0xFF: // Fill byte.
+        case 0xFF: // Fill byte.
         // Avoid skipping a valid marker, resetting the stream position.
-        stream.skip(-1)
-        break
+          stream.skip(-1)
+          break
 
-      case 0xD9: // EOI
-        foundEOI = true
-        break
+        case 0xD9: // EOI
+          foundEOI = true
+          break
 
-      case 0xC0: // SOF0
-      case 0xC1: // SOF1
-      case 0xC2: // SOF2
-      case 0xC3: // SOF3
+        case 0xC0: // SOF0
+        case 0xC1: // SOF1
+        case 0xC2: // SOF2
+        case 0xC3: // SOF3
         /* falls through */
-      case 0xC5: // SOF5
-      case 0xC6: // SOF6
-      case 0xC7: // SOF7
+        case 0xC5: // SOF5
+        case 0xC6: // SOF6
+        case 0xC7: // SOF7
         /* falls through */
-      case 0xC9: // SOF9
-      case 0xCA: // SOF10
-      case 0xCB: // SOF11
+        case 0xC9: // SOF9
+        case 0xCA: // SOF10
+        case 0xCB: // SOF11
         /* falls through */
-      case 0xCD: // SOF13
-      case 0xCE: // SOF14
-      case 0xCF: // SOF15
+        case 0xCD: // SOF13
+        case 0xCE: // SOF14
+        case 0xCF: // SOF15
         /* falls through */
-      case 0xC4: // DHT
-      case 0xCC: // DAC
+        case 0xC4: // DHT
+        case 0xCC: // DAC
         /* falls through */
-      case 0xDA: // SOS
-      case 0xDB: // DQT
-      case 0xDC: // DNL
-      case 0xDD: // DRI
-      case 0xDE: // DHP
-      case 0xDF: // EXP
+        case 0xDA: // SOS
+        case 0xDB: // DQT
+        case 0xDC: // DNL
+        case 0xDD: // DRI
+        case 0xDE: // DHP
+        case 0xDF: // EXP
         /* falls through */
-      case 0xE0: // APP0
-      case 0xE1: // APP1
-      case 0xE2: // APP2
-      case 0xE3: // APP3
-      case 0xE4: // APP4
-      case 0xE5: // APP5
-      case 0xE6: // APP6
-      case 0xE7: // APP7
-      case 0xE8: // APP8
-      case 0xE9: // APP9
-      case 0xEA: // APP10
-      case 0xEB: // APP11
-      case 0xEC: // APP12
-      case 0xED: // APP13
-      case 0xEE: // APP14
-      case 0xEF: // APP15
+        case 0xE0: // APP0
+        case 0xE1: // APP1
+        case 0xE2: // APP2
+        case 0xE3: // APP3
+        case 0xE4: // APP4
+        case 0xE5: // APP5
+        case 0xE6: // APP6
+        case 0xE7: // APP7
+        case 0xE8: // APP8
+        case 0xE9: // APP9
+        case 0xEA: // APP10
+        case 0xEB: // APP11
+        case 0xEC: // APP12
+        case 0xED: // APP13
+        case 0xEE: // APP14
+        case 0xEF: // APP15
         /* falls through */
-      case 0xFE: // COM
+        case 0xFE: // COM
         // The marker should be followed by the length of the segment.
-        markerLength = stream.getUint16()
-        if (markerLength > 2) {
+          markerLength = stream.getUint16()
+          if (markerLength > 2) {
           // |markerLength| contains the byte length of the marker segment,
           // including its own length (2 bytes) and excluding the marker.
-          stream.skip(markerLength - 2) // Jump to the next marker.
-        } else {
+            stream.skip(markerLength - 2) // Jump to the next marker.
+          } else {
           // The marker length is invalid, resetting the stream position.
-          stream.skip(-2)
-        }
-        break
+            stream.skip(-2)
+          }
+          break
       }
       if (foundEOI) {
         break
@@ -879,79 +879,79 @@ class Lexer {
     while (true) {
       let charBuffered = false
       switch (ch | 0) {
-      case -1:
-        warn('Unterminated string')
-        done = true
-        break
-      case 0x28: // '('
-        ++numParen
-        strBuf.push('(')
-        break
-      case 0x29: // ')'
-        if (--numParen === 0) {
-          this.nextChar() // consume strings ')'
-          done = true
-        } else {
-          strBuf.push(')')
-        }
-        break
-      case 0x5C: // '\\'
-        ch = this.nextChar()
-        switch (ch) {
         case -1:
           warn('Unterminated string')
           done = true
           break
-        case 0x6E: // 'n'
-          strBuf.push('\n')
-          break
-        case 0x72: // 'r'
-          strBuf.push('\r')
-          break
-        case 0x74: // 't'
-          strBuf.push('\t')
-          break
-        case 0x62: // 'b'
-          strBuf.push('\b')
-          break
-        case 0x66: // 'f'
-          strBuf.push('\f')
-          break
-        case 0x5C: // '\'
         case 0x28: // '('
+          ++numParen
+          strBuf.push('(')
+          break
         case 0x29: // ')'
-          strBuf.push(String.fromCharCode(ch))
+          if (--numParen === 0) {
+            this.nextChar() // consume strings ')'
+            done = true
+          } else {
+            strBuf.push(')')
+          }
           break
-        case 0x30: case 0x31: case 0x32: case 0x33: // '0'-'3'
-        case 0x34: case 0x35: case 0x36: case 0x37: // '4'-'7'
-          let x = ch & 0x0F
+        case 0x5C: // '\\'
           ch = this.nextChar()
-          charBuffered = true
-          if (ch >= 0x30 && ch <= 0x37) { // '0'-'7'
-            x = (x << 3) + (ch & 0x0F)
-            ch = this.nextChar()
-            if (ch >= 0x30 && ch <= 0x37) {  // '0'-'7'
-              charBuffered = false
-              x = (x << 3) + (ch & 0x0F)
-            }
+          switch (ch) {
+            case -1:
+              warn('Unterminated string')
+              done = true
+              break
+            case 0x6E: // 'n'
+              strBuf.push('\n')
+              break
+            case 0x72: // 'r'
+              strBuf.push('\r')
+              break
+            case 0x74: // 't'
+              strBuf.push('\t')
+              break
+            case 0x62: // 'b'
+              strBuf.push('\b')
+              break
+            case 0x66: // 'f'
+              strBuf.push('\f')
+              break
+            case 0x5C: // '\'
+            case 0x28: // '('
+            case 0x29: // ')'
+              strBuf.push(String.fromCharCode(ch))
+              break
+            case 0x30: case 0x31: case 0x32: case 0x33: // '0'-'3'
+            case 0x34: case 0x35: case 0x36: case 0x37: // '4'-'7'
+              let x = ch & 0x0F
+              ch = this.nextChar()
+              charBuffered = true
+              if (ch >= 0x30 && ch <= 0x37) { // '0'-'7'
+                x = (x << 3) + (ch & 0x0F)
+                ch = this.nextChar()
+                if (ch >= 0x30 && ch <= 0x37) {  // '0'-'7'
+                  charBuffered = false
+                  x = (x << 3) + (ch & 0x0F)
+                }
+              }
+              strBuf.push(String.fromCharCode(x))
+              break
+            case 0x0D: // CR
+              if (this.peekChar() === 0x0A) { // LF
+                this.nextChar()
+              }
+              break
+            case 0x0A: // LF
+              break
+            default:
+              strBuf.push(String.fromCharCode(ch))
+              break
           }
-          strBuf.push(String.fromCharCode(x))
-          break
-        case 0x0D: // CR
-          if (this.peekChar() === 0x0A) { // LF
-            this.nextChar()
-          }
-          break
-        case 0x0A: // LF
           break
         default:
           strBuf.push(String.fromCharCode(ch))
           break
-        }
-        break
-      default:
-        strBuf.push(String.fromCharCode(ch))
-        break
       }
       if (done) {
         break
@@ -1069,51 +1069,51 @@ class Lexer {
 
     // Start reading a token.
     switch (ch | 0) {
-    case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: // '0'-'4'
-    case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: // '5'-'9'
-    case 0x2B: case 0x2D: case 0x2E: // '+', '-', '.'
-      return this.getNumber()
-    case 0x28: // '('
-      return this.getString()
-    case 0x2F: // '/'
-      return this.getName()
+      case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: // '0'-'4'
+      case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: // '5'-'9'
+      case 0x2B: case 0x2D: case 0x2E: // '+', '-', '.'
+        return this.getNumber()
+      case 0x28: // '('
+        return this.getString()
+      case 0x2F: // '/'
+        return this.getName()
       // array punctuation
-    case 0x5B: // '['
-      this.nextChar()
-      return Cmd.get('[')
-    case 0x5D: // ']'
-      this.nextChar()
-      return Cmd.get(']')
+      case 0x5B: // '['
+        this.nextChar()
+        return Cmd.get('[')
+      case 0x5D: // ']'
+        this.nextChar()
+        return Cmd.get(']')
       // hex string or dict punctuation
-    case 0x3C: // '<'
-      ch = this.nextChar()
-      if (ch === 0x3C) {
+      case 0x3C: // '<'
+        ch = this.nextChar()
+        if (ch === 0x3C) {
         // dict punctuation
-        this.nextChar()
-        return Cmd.get('<<')
-      }
-      return this.getHexString()
+          this.nextChar()
+          return Cmd.get('<<')
+        }
+        return this.getHexString()
       // dict punctuation
-    case 0x3E: // '>'
-      ch = this.nextChar()
-      if (ch === 0x3E) {
+      case 0x3E: // '>'
+        ch = this.nextChar()
+        if (ch === 0x3E) {
+          this.nextChar()
+          return Cmd.get('>>')
+        }
+        return Cmd.get('>')
+      case 0x7B: // '{'
         this.nextChar()
-        return Cmd.get('>>')
-      }
-      return Cmd.get('>')
-    case 0x7B: // '{'
-      this.nextChar()
-      return Cmd.get('{')
-    case 0x7D: // '}'
-      this.nextChar()
-      return Cmd.get('}')
-    case 0x29: // ')'
+        return Cmd.get('{')
+      case 0x7D: // '}'
+        this.nextChar()
+        return Cmd.get('}')
+      case 0x29: // ')'
       // Consume the current character in order to avoid permanently hanging
       // the worker thread if `Lexer.getObject` is called from within a loop
       // containing try-catch statements, since we would otherwise attempt
       // to parse the *same* character over and over (fixes issue8061.pdf).
-      this.nextChar()
-      throw new FormatError(`Illegal character: ${ch}`)
+        this.nextChar()
+        throw new FormatError(`Illegal character: ${ch}`)
     }
 
     // Start reading a command.

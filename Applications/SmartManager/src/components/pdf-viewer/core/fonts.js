@@ -150,23 +150,23 @@ function adjustToUnicode(properties, builtInEncoding) {
 
 function getFontType(type, subtype) {
   switch (type) {
-  case 'Type1':
-    return subtype === 'Type1C' ? FontType.TYPE1C : FontType.TYPE1
-  case 'CIDFontType0':
-    return subtype === 'CIDFontType0C' ? FontType.CIDFONTTYPE0C :
-      FontType.CIDFONTTYPE0
-  case 'OpenType':
-    return FontType.OPENTYPE
-  case 'TrueType':
-    return FontType.TRUETYPE
-  case 'CIDFontType2':
-    return FontType.CIDFONTTYPE2
-  case 'MMType1':
-    return FontType.MMTYPE1
-  case 'Type0':
-    return FontType.TYPE0
-  default:
-    return FontType.UNKNOWN
+    case 'Type1':
+      return subtype === 'Type1C' ? FontType.TYPE1C : FontType.TYPE1
+    case 'CIDFontType0':
+      return subtype === 'CIDFontType0C' ? FontType.CIDFONTTYPE0C :
+        FontType.CIDFONTTYPE0
+    case 'OpenType':
+      return FontType.OPENTYPE
+    case 'TrueType':
+      return FontType.TRUETYPE
+    case 'CIDFontType2':
+      return FontType.CIDFONTTYPE2
+    case 'MMType1':
+      return FontType.MMTYPE1
+    case 'Type0':
+      return FontType.TYPE0
+    default:
+      return FontType.UNKNOWN
   }
 }
 
@@ -538,40 +538,40 @@ var Font = (function FontClosure() {
     try {
       var data
       switch (type) {
-      case 'MMType1':
-        info('MMType1 font (' + name + '), falling back to Type1.')
+        case 'MMType1':
+          info('MMType1 font (' + name + '), falling back to Type1.')
         /* falls through */
-      case 'Type1':
-      case 'CIDFontType0':
-        this.mimetype = 'font/opentype'
+        case 'Type1':
+        case 'CIDFontType0':
+          this.mimetype = 'font/opentype'
 
-        var cff = (subtype === 'Type1C' || subtype === 'CIDFontType0C') ?
-          new CFFFont(file, properties) :
-          new Type1Font(name, file, properties)
+          var cff = (subtype === 'Type1C' || subtype === 'CIDFontType0C') ?
+            new CFFFont(file, properties) :
+            new Type1Font(name, file, properties)
 
-        adjustWidths(properties)
-
-        // Wrap the CFF data inside an OTF font file
-        data = this.convert(name, cff, properties)
-        break
-
-      case 'OpenType':
-      case 'TrueType':
-      case 'CIDFontType2':
-        this.mimetype = 'font/opentype'
-
-        // Repair the TrueType file. It is can be damaged in the point of
-        // view of the sanitizer
-        data = this.checkAndRepair(name, file, properties)
-        if (this.isOpenType) {
           adjustWidths(properties)
 
-          type = 'OpenType'
-        }
-        break
+          // Wrap the CFF data inside an OTF font file
+          data = this.convert(name, cff, properties)
+          break
 
-      default:
-        throw new FormatError(`Font ${type} is not supported`)
+        case 'OpenType':
+        case 'TrueType':
+        case 'CIDFontType2':
+          this.mimetype = 'font/opentype'
+
+          // Repair the TrueType file. It is can be damaged in the point of
+          // view of the sanitizer
+          data = this.checkAndRepair(name, file, properties)
+          if (this.isOpenType) {
+            adjustWidths(properties)
+
+            type = 'OpenType'
+          }
+          break
+
+        default:
+          throw new FormatError(`Font ${type} is not supported`)
       }
     } catch (e) {
       warn(e)
@@ -1351,13 +1351,13 @@ var Font = (function FontClosure() {
           offsetTable,
         }
         switch (majorVersion) {
-        case 1:
-          return header
-        case 2:
-          header.dsigTag = ttc.getInt32() >>> 0
-          header.dsigLength = ttc.getInt32() >>> 0
-          header.dsigOffset = ttc.getInt32() >>> 0
-          return header
+          case 1:
+            return header
+          case 2:
+            header.dsigTag = ttc.getInt32() >>> 0
+            header.dsigLength = ttc.getInt32() >>> 0
+            header.dsigOffset = ttc.getInt32() >>> 0
+            return header
         }
         throw new FormatError(
           `Invalid TrueType Collection majorVersion: ${majorVersion}.`)
@@ -1910,56 +1910,56 @@ var Font = (function FontClosure() {
         var i
 
         switch (version) {
-        case 0x00010000:
-          glyphNames = MacStandardGlyphOrdering
-          break
-        case 0x00020000:
-          var numGlyphs = font.getUint16()
-          if (numGlyphs !== maxpNumGlyphs) {
-            valid = false
+          case 0x00010000:
+            glyphNames = MacStandardGlyphOrdering
             break
-          }
-          var glyphNameIndexes = []
-          for (i = 0; i < numGlyphs; ++i) {
-            var index = font.getUint16()
-            if (index >= 32768) {
+          case 0x00020000:
+            var numGlyphs = font.getUint16()
+            if (numGlyphs !== maxpNumGlyphs) {
               valid = false
               break
             }
-            glyphNameIndexes.push(index)
-          }
-          if (!valid) {
+            var glyphNameIndexes = []
+            for (i = 0; i < numGlyphs; ++i) {
+              var index = font.getUint16()
+              if (index >= 32768) {
+                valid = false
+                break
+              }
+              glyphNameIndexes.push(index)
+            }
+            if (!valid) {
+              break
+            }
+            var customNames = []
+            var strBuf = []
+            while (font.pos < end) {
+              var stringLength = font.getByte()
+              strBuf.length = stringLength
+              for (i = 0; i < stringLength; ++i) {
+                strBuf[i] = String.fromCharCode(font.getByte())
+              }
+              customNames.push(strBuf.join(''))
+            }
+            glyphNames = []
+            for (i = 0; i < numGlyphs; ++i) {
+              var j = glyphNameIndexes[i]
+              if (j < 258) {
+                glyphNames.push(MacStandardGlyphOrdering[j])
+                continue
+              }
+              glyphNames.push(customNames[j - 258])
+            }
             break
-          }
-          var customNames = []
-          var strBuf = []
-          while (font.pos < end) {
-            var stringLength = font.getByte()
-            strBuf.length = stringLength
-            for (i = 0; i < stringLength; ++i) {
-              strBuf[i] = String.fromCharCode(font.getByte())
+          case 0x00030000:
+            break
+          default:
+            warn('Unknown/unsupported post table version ' + version)
+            valid = false
+            if (properties.defaultEncoding) {
+              glyphNames = properties.defaultEncoding
             }
-            customNames.push(strBuf.join(''))
-          }
-          glyphNames = []
-          for (i = 0; i < numGlyphs; ++i) {
-            var j = glyphNameIndexes[i]
-            if (j < 258) {
-              glyphNames.push(MacStandardGlyphOrdering[j])
-              continue
-            }
-            glyphNames.push(customNames[j - 258])
-          }
-          break
-        case 0x00030000:
-          break
-        default:
-          warn('Unknown/unsupported post table version ' + version)
-          valid = false
-          if (properties.defaultEncoding) {
-            glyphNames = properties.defaultEncoding
-          }
-          break
+            break
         }
         properties.glyphNames = glyphNames
         return valid

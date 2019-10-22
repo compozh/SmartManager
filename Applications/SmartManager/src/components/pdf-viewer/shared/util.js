@@ -362,14 +362,14 @@ function _isValidProtocol(url) {
     return false
   }
   switch (url.protocol) {
-  case 'http:':
-  case 'https:':
-  case 'ftp:':
-  case 'mailto:':
-  case 'tel:':
-    return true
-  default:
-    return false
+    case 'http:':
+    case 'https:':
+    case 'ftp:':
+    case 'mailto:':
+    case 'tel:':
+      return true
+    default:
+      return false
   }
 }
 

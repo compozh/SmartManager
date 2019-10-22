@@ -151,21 +151,21 @@ class PDFRenderingQueue {
    */
   renderView(view) {
     switch (view.renderingState) {
-    case RenderingStates.FINISHED:
-      return false
-    case RenderingStates.PAUSED:
-      this.highestPriorityPage = view.renderingId
-      view.resume()
-      break
-    case RenderingStates.RUNNING:
-      this.highestPriorityPage = view.renderingId
-      break
-    case RenderingStates.INITIAL:
-      this.highestPriorityPage = view.renderingId
-      view.draw().finally(() => {
-        this.renderHighestPriority()
-      })
-      break
+      case RenderingStates.FINISHED:
+        return false
+      case RenderingStates.PAUSED:
+        this.highestPriorityPage = view.renderingId
+        view.resume()
+        break
+      case RenderingStates.RUNNING:
+        this.highestPriorityPage = view.renderingId
+        break
+      case RenderingStates.INITIAL:
+        this.highestPriorityPage = view.renderingId
+        view.draw().finally(() => {
+          this.renderHighestPriority()
+        })
+        break
     }
     return true
   }

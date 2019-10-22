@@ -63,14 +63,14 @@ var QueueOptimizer = (function QueueOptimizerClosure() {
       var iFirstSave = context.iCurr - 3
       var pos = (i - iFirstSave) % 4
       switch (pos) {
-      case 0:
-        return fnArray[i] === OPS.save
-      case 1:
-        return fnArray[i] === OPS.transform
-      case 2:
-        return fnArray[i] === OPS.paintInlineImageXObject
-      case 3:
-        return fnArray[i] === OPS.restore
+        case 0:
+          return fnArray[i] === OPS.save
+        case 1:
+          return fnArray[i] === OPS.transform
+        case 2:
+          return fnArray[i] === OPS.paintInlineImageXObject
+        case 3:
+          return fnArray[i] === OPS.restore
       }
       throw new Error(`iterateInlineImageGroup - invalid pos: ${pos}`)
     },
@@ -166,14 +166,14 @@ var QueueOptimizer = (function QueueOptimizerClosure() {
       var iFirstSave = context.iCurr - 3
       var pos = (i - iFirstSave) % 4
       switch (pos) {
-      case 0:
-        return fnArray[i] === OPS.save
-      case 1:
-        return fnArray[i] === OPS.transform
-      case 2:
-        return fnArray[i] === OPS.paintImageMaskXObject
-      case 3:
-        return fnArray[i] === OPS.restore
+        case 0:
+          return fnArray[i] === OPS.save
+        case 1:
+          return fnArray[i] === OPS.transform
+        case 2:
+          return fnArray[i] === OPS.paintImageMaskXObject
+        case 3:
+          return fnArray[i] === OPS.restore
       }
       throw new Error(`iterateImageMaskGroup - invalid pos: ${pos}`)
     },
@@ -274,34 +274,34 @@ var QueueOptimizer = (function QueueOptimizerClosure() {
       var iFirstSave = context.iCurr - 3
       var pos = (i - iFirstSave) % 4
       switch (pos) {
-      case 0:
-        return fnArray[i] === OPS.save
-      case 1:
-        if (fnArray[i] !== OPS.transform) {
-          return false
-        }
-        var iFirstTransform = context.iCurr - 2
-        var firstTransformArg0 = argsArray[iFirstTransform][0]
-        var firstTransformArg3 = argsArray[iFirstTransform][3]
-        if (argsArray[i][0] !== firstTransformArg0 ||
+        case 0:
+          return fnArray[i] === OPS.save
+        case 1:
+          if (fnArray[i] !== OPS.transform) {
+            return false
+          }
+          var iFirstTransform = context.iCurr - 2
+          var firstTransformArg0 = argsArray[iFirstTransform][0]
+          var firstTransformArg3 = argsArray[iFirstTransform][3]
+          if (argsArray[i][0] !== firstTransformArg0 ||
               argsArray[i][1] !== 0 ||
               argsArray[i][2] !== 0 ||
               argsArray[i][3] !== firstTransformArg3) {
-          return false // transforms don't match
-        }
-        return true
-      case 2:
-        if (fnArray[i] !== OPS.paintImageXObject) {
-          return false
-        }
-        var iFirstPIXO = context.iCurr - 1
-        var firstPIXOArg0 = argsArray[iFirstPIXO][0]
-        if (argsArray[i][0] !== firstPIXOArg0) {
-          return false // images don't match
-        }
-        return true
-      case 3:
-        return fnArray[i] === OPS.restore
+            return false // transforms don't match
+          }
+          return true
+        case 2:
+          if (fnArray[i] !== OPS.paintImageXObject) {
+            return false
+          }
+          var iFirstPIXO = context.iCurr - 1
+          var firstPIXOArg0 = argsArray[iFirstPIXO][0]
+          if (argsArray[i][0] !== firstPIXOArg0) {
+            return false // images don't match
+          }
+          return true
+        case 3:
+          return fnArray[i] === OPS.restore
       }
       throw new Error(`iterateImageGroup - invalid pos: ${pos}`)
     },
@@ -355,26 +355,26 @@ var QueueOptimizer = (function QueueOptimizerClosure() {
       var iFirstSave = context.iCurr - 4
       var pos = (i - iFirstSave) % 5
       switch (pos) {
-      case 0:
-        return fnArray[i] === OPS.beginText
-      case 1:
-        return fnArray[i] === OPS.setFont
-      case 2:
-        return fnArray[i] === OPS.setTextMatrix
-      case 3:
-        if (fnArray[i] !== OPS.showText) {
-          return false
-        }
-        var iFirstSetFont = context.iCurr - 3
-        var firstSetFontArg0 = argsArray[iFirstSetFont][0]
-        var firstSetFontArg1 = argsArray[iFirstSetFont][1]
-        if (argsArray[i][0] !== firstSetFontArg0 ||
+        case 0:
+          return fnArray[i] === OPS.beginText
+        case 1:
+          return fnArray[i] === OPS.setFont
+        case 2:
+          return fnArray[i] === OPS.setTextMatrix
+        case 3:
+          if (fnArray[i] !== OPS.showText) {
+            return false
+          }
+          var iFirstSetFont = context.iCurr - 3
+          var firstSetFontArg0 = argsArray[iFirstSetFont][0]
+          var firstSetFontArg1 = argsArray[iFirstSetFont][1]
+          if (argsArray[i][0] !== firstSetFontArg0 ||
               argsArray[i][1] !== firstSetFontArg1) {
-          return false // fonts don't match
-        }
-        return true
-      case 4:
-        return fnArray[i] === OPS.endText
+            return false // fonts don't match
+          }
+          return true
+        case 4:
+          return fnArray[i] === OPS.endText
       }
       throw new Error(`iterateShowTextGroup - invalid pos: ${pos}`)
     },
@@ -623,20 +623,20 @@ var OperatorList = (function OperatorListClosure() {
       const { fnArray, argsArray, length, } = this
       for (let i = 0; i < length; i++) {
         switch (fnArray[i]) {
-        case OPS.paintInlineImageXObject:
-        case OPS.paintInlineImageXObjectGroup:
-        case OPS.paintImageMaskXObject:
-          const arg = argsArray[i][0] // first param in imgData
+          case OPS.paintInlineImageXObject:
+          case OPS.paintInlineImageXObjectGroup:
+          case OPS.paintImageMaskXObject:
+            const arg = argsArray[i][0] // first param in imgData
 
-          if (typeof PDFJSDev === 'undefined' ||
+            if (typeof PDFJSDev === 'undefined' ||
                 PDFJSDev.test('!PRODUCTION || TESTING')) {
-            assert(arg.data instanceof Uint8ClampedArray,
-              'OperatorList._transfers: Unsupported "arg.data" type.')
-          }
-          if (!arg.cached) {
-            transfers.push(arg.data.buffer)
-          }
-          break
+              assert(arg.data instanceof Uint8ClampedArray,
+                'OperatorList._transfers: Unsupported "arg.data" type.')
+            }
+            if (!arg.cached) {
+              transfers.push(arg.data.buffer)
+            }
+            break
         }
       }
       return transfers

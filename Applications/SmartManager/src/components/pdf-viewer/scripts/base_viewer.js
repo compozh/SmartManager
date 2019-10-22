@@ -620,29 +620,29 @@ class BaseViewer {
       let pageHeightScale = (this.container.clientHeight - vPadding) /
                             currentPage.height * currentPage.scale
       switch (value) {
-      case 'page-actual':
-        scale = 1
-        break
-      case 'page-width':
-        scale = pageWidthScale
-        break
-      case 'page-height':
-        scale = pageHeightScale
-        break
-      case 'page-fit':
-        scale = Math.min(pageWidthScale, pageHeightScale)
-        break
-      case 'auto':
+        case 'page-actual':
+          scale = 1
+          break
+        case 'page-width':
+          scale = pageWidthScale
+          break
+        case 'page-height':
+          scale = pageHeightScale
+          break
+        case 'page-fit':
+          scale = Math.min(pageWidthScale, pageHeightScale)
+          break
+        case 'auto':
         // For pages in landscape mode, fit the page height to the viewer
         // *unless* the page would thus become too wide to fit horizontally.
-        let horizontalScale = isPortraitOrientation(currentPage) ?
-          pageWidthScale : Math.min(pageHeightScale, pageWidthScale)
-        scale = Math.min(MAX_AUTO_SCALE, horizontalScale)
-        break
-      default:
-        console.error(
-          `${this._name}._setScale: "${value}" is an unknown zoom value.`)
-        return
+          let horizontalScale = isPortraitOrientation(currentPage) ?
+            pageWidthScale : Math.min(pageHeightScale, pageWidthScale)
+          scale = Math.min(MAX_AUTO_SCALE, horizontalScale)
+          break
+        default:
+          console.error(
+            `${this._name}._setScale: "${value}" is an unknown zoom value.`)
+          return
       }
       this._setScaleUpdatePages(scale, value, noScroll, /* preset = */ true)
     }
@@ -701,57 +701,57 @@ class BaseViewer {
       pageView.scale / CSS_UNITS
     let scale = 0
     switch (destArray[1].name) {
-    case 'XYZ':
-      x = destArray[2]
-      y = destArray[3]
-      scale = destArray[4]
-      // If x and/or y coordinates are not supplied, default to
-      // _top_ left of the page (not the obvious bottom left,
-      // since aligning the bottom of the intended page with the
-      // top of the window is rarely helpful).
-      x = x !== null ? x : 0
-      y = y !== null ? y : pageHeight
-      break
-    case 'Fit':
-    case 'FitB':
-      scale = 'page-fit'
-      break
-    case 'FitH':
-    case 'FitBH':
-      y = destArray[2]
-      scale = 'page-width'
-      // According to the PDF spec, section 12.3.2.2, a `null` value in the
-      // parameter should maintain the position relative to the new page.
-      if (y === null && this._location) {
-        x = this._location.left
-        y = this._location.top
-      }
-      break
-    case 'FitV':
-    case 'FitBV':
-      x = destArray[2]
-      width = pageWidth
-      height = pageHeight
-      scale = 'page-height'
-      break
-    case 'FitR':
-      x = destArray[2]
-      y = destArray[3]
-      width = destArray[4] - x
-      height = destArray[5] - y
-      let hPadding = this.removePageBorders ? 0 : SCROLLBAR_PADDING
-      let vPadding = this.removePageBorders ? 0 : VERTICAL_PADDING
+      case 'XYZ':
+        x = destArray[2]
+        y = destArray[3]
+        scale = destArray[4]
+        // If x and/or y coordinates are not supplied, default to
+        // _top_ left of the page (not the obvious bottom left,
+        // since aligning the bottom of the intended page with the
+        // top of the window is rarely helpful).
+        x = x !== null ? x : 0
+        y = y !== null ? y : pageHeight
+        break
+      case 'Fit':
+      case 'FitB':
+        scale = 'page-fit'
+        break
+      case 'FitH':
+      case 'FitBH':
+        y = destArray[2]
+        scale = 'page-width'
+        // According to the PDF spec, section 12.3.2.2, a `null` value in the
+        // parameter should maintain the position relative to the new page.
+        if (y === null && this._location) {
+          x = this._location.left
+          y = this._location.top
+        }
+        break
+      case 'FitV':
+      case 'FitBV':
+        x = destArray[2]
+        width = pageWidth
+        height = pageHeight
+        scale = 'page-height'
+        break
+      case 'FitR':
+        x = destArray[2]
+        y = destArray[3]
+        width = destArray[4] - x
+        height = destArray[5] - y
+        let hPadding = this.removePageBorders ? 0 : SCROLLBAR_PADDING
+        let vPadding = this.removePageBorders ? 0 : VERTICAL_PADDING
 
-      widthScale = (this.container.clientWidth - hPadding) /
+        widthScale = (this.container.clientWidth - hPadding) /
           width / CSS_UNITS
-      heightScale = (this.container.clientHeight - vPadding) /
+        heightScale = (this.container.clientHeight - vPadding) /
           height / CSS_UNITS
-      scale = Math.min(Math.abs(widthScale), Math.abs(heightScale))
-      break
-    default:
-      console.error(`${this._name}.scrollPageIntoView: ` +
+        scale = Math.min(Math.abs(widthScale), Math.abs(heightScale))
+        break
+      default:
+        console.error(`${this._name}.scrollPageIntoView: ` +
           `"${destArray[1].name}" is not a valid destination type.`)
-      return
+        return
     }
 
     if (scale && scale !== this._currentScale) {

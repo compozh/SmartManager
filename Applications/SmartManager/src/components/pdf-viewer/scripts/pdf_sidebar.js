@@ -169,30 +169,30 @@ class PDFSidebar {
     let shouldForceRendering = false
 
     switch (view) {
-    case SidebarView.NONE:
-      if (this.isOpen) {
-        this.close()
-        return true // Closing will trigger rendering and dispatch the event.
-      }
-      return false
-    case SidebarView.THUMBS:
-      if (this.isOpen && isViewChanged) {
-        shouldForceRendering = true
-      }
-      break
-    case SidebarView.OUTLINE:
-      if (this.outlineButton.disabled) {
+      case SidebarView.NONE:
+        if (this.isOpen) {
+          this.close()
+          return true // Closing will trigger rendering and dispatch the event.
+        }
         return false
-      }
-      break
-    case SidebarView.ATTACHMENTS:
-      if (this.attachmentsButton.disabled) {
+      case SidebarView.THUMBS:
+        if (this.isOpen && isViewChanged) {
+          shouldForceRendering = true
+        }
+        break
+      case SidebarView.OUTLINE:
+        if (this.outlineButton.disabled) {
+          return false
+        }
+        break
+      case SidebarView.ATTACHMENTS:
+        if (this.attachmentsButton.disabled) {
+          return false
+        }
+        break
+      default:
+        console.error(`PDFSidebar._switchView: "${view}" is not a valid view.`)
         return false
-      }
-      break
-    default:
-      console.error(`PDFSidebar._switchView: "${view}" is not a valid view.`)
-      return false
     }
     // Update the active view *after* it has been validated above,
     // in order to prevent setting it to an invalid state.
@@ -331,12 +331,12 @@ class PDFSidebar {
     }
 
     switch (view) {
-    case SidebarView.OUTLINE:
-      this.outlineButton.classList.add(UI_NOTIFICATION_CLASS)
-      break
-    case SidebarView.ATTACHMENTS:
-      this.attachmentsButton.classList.add(UI_NOTIFICATION_CLASS)
-      break
+      case SidebarView.OUTLINE:
+        this.outlineButton.classList.add(UI_NOTIFICATION_CLASS)
+        break
+      case SidebarView.ATTACHMENTS:
+        this.attachmentsButton.classList.add(UI_NOTIFICATION_CLASS)
+        break
     }
   }
 
@@ -350,12 +350,12 @@ class PDFSidebar {
 
     let removeNotification = (view) => {
       switch (view) {
-      case SidebarView.OUTLINE:
-        this.outlineButton.classList.remove(UI_NOTIFICATION_CLASS)
-        break
-      case SidebarView.ATTACHMENTS:
-        this.attachmentsButton.classList.remove(UI_NOTIFICATION_CLASS)
-        break
+        case SidebarView.OUTLINE:
+          this.outlineButton.classList.remove(UI_NOTIFICATION_CLASS)
+          break
+        case SidebarView.ATTACHMENTS:
+          this.attachmentsButton.classList.remove(UI_NOTIFICATION_CLASS)
+          break
       }
     }
 

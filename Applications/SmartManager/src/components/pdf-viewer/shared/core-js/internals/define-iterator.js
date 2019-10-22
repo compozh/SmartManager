@@ -27,9 +27,9 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
     if (KIND === DEFAULT && defaultIterator) { return defaultIterator }
     if (!BUGGY_SAFARI_ITERATORS && KIND in IterablePrototype) { return IterablePrototype[KIND] }
     switch (KIND) {
-    case KEYS: return function keys() { return new IteratorConstructor(this, KIND) }
-    case VALUES: return function values() { return new IteratorConstructor(this, KIND) }
-    case ENTRIES: return function entries() { return new IteratorConstructor(this, KIND) }
+      case KEYS: return function keys() { return new IteratorConstructor(this, KIND) }
+      case VALUES: return function values() { return new IteratorConstructor(this, KIND) }
+      case ENTRIES: return function entries() { return new IteratorConstructor(this, KIND) }
     } return function () { return new IteratorConstructor(this) }
   }
 

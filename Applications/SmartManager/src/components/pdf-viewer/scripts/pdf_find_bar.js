@@ -52,14 +52,14 @@ class PDFFindBar {
 
     this.bar.addEventListener('keydown', (e) => {
       switch (e.keyCode) {
-      case 13: // Enter
-        if (e.target === this.findField) {
-          this.dispatchEvent('again', e.shiftKey)
-        }
-        break
-      case 27: // Escape
-        this.close()
-        break
+        case 13: // Enter
+          if (e.target === this.findField) {
+            this.dispatchEvent('again', e.shiftKey)
+          }
+          break
+        case 27: // Escape
+          this.close()
+          break
       }
     })
 
@@ -109,27 +109,27 @@ class PDFFindBar {
     let status = ''
 
     switch (state) {
-    case FindState.FOUND:
-      break
+      case FindState.FOUND:
+        break
 
-    case FindState.PENDING:
-      status = 'pending'
-      break
+      case FindState.PENDING:
+        status = 'pending'
+        break
 
-    case FindState.NOT_FOUND:
-      findMsg = this.l10n.get('find_not_found', null, 'Phrase not found')
-      notFound = true
-      break
+      case FindState.NOT_FOUND:
+        findMsg = this.l10n.get('find_not_found', null, 'Phrase not found')
+        notFound = true
+        break
 
-    case FindState.WRAPPED:
-      if (previous) {
-        findMsg = this.l10n.get('find_reached_top', null,
-          'Reached top of document, continued from bottom')
-      } else {
-        findMsg = this.l10n.get('find_reached_bottom', null,
-          'Reached end of document, continued from top')
-      }
-      break
+      case FindState.WRAPPED:
+        if (previous) {
+          findMsg = this.l10n.get('find_reached_top', null,
+            'Reached top of document, continued from bottom')
+        } else {
+          findMsg = this.l10n.get('find_reached_bottom', null,
+            'Reached end of document, continued from top')
+        }
+        break
     }
 
     this.findField.classList.toggle('notFound', notFound)

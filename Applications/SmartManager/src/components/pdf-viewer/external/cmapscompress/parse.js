@@ -40,60 +40,60 @@ exports.parseAdobeCMap = function (content) {
     var lines = m[3].toLowerCase().split('\n')
     var m2
     switch (m[2]) {
-    case 'begincodespacerange':
-      result.body.push({
-        type: 0,
-        items: lines.map(function (line) {
-          var m = /<(\w+)>\s+<(\w+)>/.exec(line)
-          return {start: m[1], end: m[2]}
+      case 'begincodespacerange':
+        result.body.push({
+          type: 0,
+          items: lines.map(function (line) {
+            var m = /<(\w+)>\s+<(\w+)>/.exec(line)
+            return {start: m[1], end: m[2]}
+          })
         })
-      })
-      break
-    case 'beginnotdefrange':
-      result.body.push({
-        type: 1,
-        items: lines.map(function (line) {
-          var m = /<(\w+)>\s+<(\w+)>\s+(\d+)/.exec(line)
-          return {start: m[1], end: m[2], code: +m[3]}
+        break
+      case 'beginnotdefrange':
+        result.body.push({
+          type: 1,
+          items: lines.map(function (line) {
+            var m = /<(\w+)>\s+<(\w+)>\s+(\d+)/.exec(line)
+            return {start: m[1], end: m[2], code: +m[3]}
+          })
         })
-      })
-      break
-    case 'begincidchar':
-      result.body.push({
-        type: 2,
-        items: lines.map(function (line) {
-          var m = /<(\w+)>\s+(\d+)/.exec(line)
-          return {char: m[1], code: +m[2]}
+        break
+      case 'begincidchar':
+        result.body.push({
+          type: 2,
+          items: lines.map(function (line) {
+            var m = /<(\w+)>\s+(\d+)/.exec(line)
+            return {char: m[1], code: +m[2]}
+          })
         })
-      })
-      break
-    case 'begincidrange':
-      result.body.push({
-        type: 3,
-        items: lines.map(function (line) {
-          var m = /<(\w+)>\s+<(\w+)>\s+(\d+)/.exec(line)
-          return {start: m[1], end: m[2], code: +m[3]}
+        break
+      case 'begincidrange':
+        result.body.push({
+          type: 3,
+          items: lines.map(function (line) {
+            var m = /<(\w+)>\s+<(\w+)>\s+(\d+)/.exec(line)
+            return {start: m[1], end: m[2], code: +m[3]}
+          })
         })
-      })
-      break
-    case 'beginbfchar':
-      result.body.push({
-        type: 4,
-        items: lines.map(function (line) {
-          var m = /<(\w+)>\s+<(\w+)>/.exec(line)
-          return {char: m[1], code: m[2]}
+        break
+      case 'beginbfchar':
+        result.body.push({
+          type: 4,
+          items: lines.map(function (line) {
+            var m = /<(\w+)>\s+<(\w+)>/.exec(line)
+            return {char: m[1], code: m[2]}
+          })
         })
-      })
-      break
-    case 'beginbfrange':
-      result.body.push({
-        type: 5,
-        items: lines.map(function (line) {
-          var m = /<(\w+)>\s+<(\w+)>\s+<(\w+)>/.exec(line)
-          return {start: m[1], end: m[2], code: m[3]}
+        break
+      case 'beginbfrange':
+        result.body.push({
+          type: 5,
+          items: lines.map(function (line) {
+            var m = /<(\w+)>\s+<(\w+)>\s+<(\w+)>/.exec(line)
+            return {start: m[1], end: m[2], code: m[3]}
+          })
         })
-      })
-      break
+        break
     }
   }
 

@@ -160,44 +160,44 @@ var WorkerMessageHandler = {
           return _regenerator['default'].wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2
-                return pdfManager.ensureDoc('checkHeader')
+                case 0:
+                  _context.next = 2
+                  return pdfManager.ensureDoc('checkHeader')
 
-              case 2:
-                _context.next = 4
-                return pdfManager.ensureDoc('parseStartXRef')
+                case 2:
+                  _context.next = 4
+                  return pdfManager.ensureDoc('parseStartXRef')
 
-              case 4:
-                _context.next = 6
-                return pdfManager.ensureDoc('parse', [recoveryMode])
+                case 4:
+                  _context.next = 6
+                  return pdfManager.ensureDoc('parse', [recoveryMode])
 
-              case 6:
-                if (recoveryMode) {
+                case 6:
+                  if (recoveryMode) {
+                    _context.next = 9
+                    break
+                  }
+
                   _context.next = 9
-                  break
-                }
+                  return pdfManager.ensureDoc('checkFirstPage')
 
-                _context.next = 9
-                return pdfManager.ensureDoc('checkFirstPage')
+                case 9:
+                  _context.next = 11
+                  return Promise.all([pdfManager.ensureDoc('numPages'), pdfManager.ensureDoc('fingerprint')])
 
-              case 9:
-                _context.next = 11
-                return Promise.all([pdfManager.ensureDoc('numPages'), pdfManager.ensureDoc('fingerprint')])
+                case 11:
+                  _ref4 = _context.sent
+                  _ref5 = _slicedToArray(_ref4, 2)
+                  numPages = _ref5[0]
+                  fingerprint = _ref5[1]
+                  return _context.abrupt('return', {
+                    numPages: numPages,
+                    fingerprint: fingerprint
+                  })
 
-              case 11:
-                _ref4 = _context.sent
-                _ref5 = _slicedToArray(_ref4, 2)
-                numPages = _ref5[0]
-                fingerprint = _ref5[1]
-                return _context.abrupt('return', {
-                  numPages: numPages,
-                  fingerprint: fingerprint
-                })
-
-              case 16:
-              case 'end':
-                return _context.stop()
+                case 16:
+                case 'end':
+                  return _context.stop()
               }
             }
           }, _callee)

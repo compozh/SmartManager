@@ -99,207 +99,207 @@ var Type1CharString = (function Type1CharStringClosure() {
             value = (value << 8) + encoded[++i]
           }
           switch (value) {
-          case 1: // hstem
-            if (!HINTING_ENABLED) {
+            case 1: // hstem
+              if (!HINTING_ENABLED) {
+                this.stack = []
+                break
+              }
+              error = this.executeCommand(2, COMMAND_MAP.hstem)
+              break
+            case 3: // vstem
+              if (!HINTING_ENABLED) {
+                this.stack = []
+                break
+              }
+              error = this.executeCommand(2, COMMAND_MAP.vstem)
+              break
+            case 4: // vmoveto
+              if (this.flexing) {
+                if (this.stack.length < 1) {
+                  error = true
+                  break
+                }
+                // Add the dx for flex and but also swap the values so they are
+                // the right order.
+                var dy = this.stack.pop()
+                this.stack.push(0, dy)
+                break
+              }
+              error = this.executeCommand(1, COMMAND_MAP.vmoveto)
+              break
+            case 5: // rlineto
+              error = this.executeCommand(2, COMMAND_MAP.rlineto)
+              break
+            case 6: // hlineto
+              error = this.executeCommand(1, COMMAND_MAP.hlineto)
+              break
+            case 7: // vlineto
+              error = this.executeCommand(1, COMMAND_MAP.vlineto)
+              break
+            case 8: // rrcurveto
+              error = this.executeCommand(6, COMMAND_MAP.rrcurveto)
+              break
+            case 9: // closepath
+            // closepath is a Type1 command that does not take argument and is
+            // useless in Type2 and it can simply be ignored.
               this.stack = []
               break
-            }
-            error = this.executeCommand(2, COMMAND_MAP.hstem)
-            break
-          case 3: // vstem
-            if (!HINTING_ENABLED) {
-              this.stack = []
-              break
-            }
-            error = this.executeCommand(2, COMMAND_MAP.vstem)
-            break
-          case 4: // vmoveto
-            if (this.flexing) {
+            case 10: // callsubr
               if (this.stack.length < 1) {
                 error = true
                 break
               }
-              // Add the dx for flex and but also swap the values so they are
-              // the right order.
-              var dy = this.stack.pop()
-              this.stack.push(0, dy)
+              subrNumber = this.stack.pop()
+              if (!subrs[subrNumber]) {
+                error = true
+                break
+              }
+              error = this.convert(subrs[subrNumber], subrs,
+                seacAnalysisEnabled)
               break
-            }
-            error = this.executeCommand(1, COMMAND_MAP.vmoveto)
-            break
-          case 5: // rlineto
-            error = this.executeCommand(2, COMMAND_MAP.rlineto)
-            break
-          case 6: // hlineto
-            error = this.executeCommand(1, COMMAND_MAP.hlineto)
-            break
-          case 7: // vlineto
-            error = this.executeCommand(1, COMMAND_MAP.vlineto)
-            break
-          case 8: // rrcurveto
-            error = this.executeCommand(6, COMMAND_MAP.rrcurveto)
-            break
-          case 9: // closepath
-            // closepath is a Type1 command that does not take argument and is
-            // useless in Type2 and it can simply be ignored.
-            this.stack = []
-            break
-          case 10: // callsubr
-            if (this.stack.length < 1) {
-              error = true
+            case 11: // return
+              return error
+            case 13: // hsbw
+              if (this.stack.length < 2) {
+                error = true
+                break
+              }
+              // To convert to type2 we have to move the width value to the
+              // first part of the charstring and then use hmoveto with lsb.
+              wx = this.stack.pop()
+              sbx = this.stack.pop()
+              this.lsb = sbx
+              this.width = wx
+              this.stack.push(wx, sbx)
+              error = this.executeCommand(2, COMMAND_MAP.hmoveto)
               break
-            }
-            subrNumber = this.stack.pop()
-            if (!subrs[subrNumber]) {
-              error = true
+            case 14: // endchar
+              this.output.push(COMMAND_MAP.endchar[0])
               break
-            }
-            error = this.convert(subrs[subrNumber], subrs,
-              seacAnalysisEnabled)
-            break
-          case 11: // return
-            return error
-          case 13: // hsbw
-            if (this.stack.length < 2) {
-              error = true
+            case 21: // rmoveto
+              if (this.flexing) {
+                break
+              }
+              error = this.executeCommand(2, COMMAND_MAP.rmoveto)
               break
-            }
-            // To convert to type2 we have to move the width value to the
-            // first part of the charstring and then use hmoveto with lsb.
-            wx = this.stack.pop()
-            sbx = this.stack.pop()
-            this.lsb = sbx
-            this.width = wx
-            this.stack.push(wx, sbx)
-            error = this.executeCommand(2, COMMAND_MAP.hmoveto)
-            break
-          case 14: // endchar
-            this.output.push(COMMAND_MAP.endchar[0])
-            break
-          case 21: // rmoveto
-            if (this.flexing) {
-              break
-            }
-            error = this.executeCommand(2, COMMAND_MAP.rmoveto)
-            break
-          case 22: // hmoveto
-            if (this.flexing) {
+            case 22: // hmoveto
+              if (this.flexing) {
               // Add the dy for flex.
-              this.stack.push(0)
+                this.stack.push(0)
+                break
+              }
+              error = this.executeCommand(1, COMMAND_MAP.hmoveto)
               break
-            }
-            error = this.executeCommand(1, COMMAND_MAP.hmoveto)
-            break
-          case 30: // vhcurveto
-            error = this.executeCommand(4, COMMAND_MAP.vhcurveto)
-            break
-          case 31: // hvcurveto
-            error = this.executeCommand(4, COMMAND_MAP.hvcurveto)
-            break
-          case (12 << 8) + 0: // dotsection
+            case 30: // vhcurveto
+              error = this.executeCommand(4, COMMAND_MAP.vhcurveto)
+              break
+            case 31: // hvcurveto
+              error = this.executeCommand(4, COMMAND_MAP.hvcurveto)
+              break
+            case (12 << 8) + 0: // dotsection
             // dotsection is a Type1 command to specify some hinting feature
             // for dots that do not take a parameter and it can safely be
             // ignored for Type2.
-            this.stack = []
-            break
-          case (12 << 8) + 1: // vstem3
-            if (!HINTING_ENABLED) {
               this.stack = []
               break
-            }
-            // [vh]stem3 are Type1 only and Type2 supports [vh]stem with
-            // multiple parameters, so instead of returning [vh]stem3 take a
-            // shortcut and return [vhstem] instead.
-            error = this.executeCommand(2, COMMAND_MAP.vstem)
-            break
-          case (12 << 8) + 2: // hstem3
-            if (!HINTING_ENABLED) {
-              this.stack = []
+            case (12 << 8) + 1: // vstem3
+              if (!HINTING_ENABLED) {
+                this.stack = []
+                break
+              }
+              // [vh]stem3 are Type1 only and Type2 supports [vh]stem with
+              // multiple parameters, so instead of returning [vh]stem3 take a
+              // shortcut and return [vhstem] instead.
+              error = this.executeCommand(2, COMMAND_MAP.vstem)
               break
-            }
-            // See vstem3.
-            error = this.executeCommand(2, COMMAND_MAP.hstem)
-            break
-          case (12 << 8) + 6: // seac
+            case (12 << 8) + 2: // hstem3
+              if (!HINTING_ENABLED) {
+                this.stack = []
+                break
+              }
+              // See vstem3.
+              error = this.executeCommand(2, COMMAND_MAP.hstem)
+              break
+            case (12 << 8) + 6: // seac
             // seac is like type 2's special endchar but it doesn't use the
             // first argument asb, so remove it.
-            if (seacAnalysisEnabled) {
-              this.seac = this.stack.splice(-4, 4)
-              error = this.executeCommand(0, COMMAND_MAP.endchar)
-            } else {
-              error = this.executeCommand(4, COMMAND_MAP.endchar)
-            }
-            break
-          case (12 << 8) + 7: // sbw
-            if (this.stack.length < 4) {
-              error = true
+              if (seacAnalysisEnabled) {
+                this.seac = this.stack.splice(-4, 4)
+                error = this.executeCommand(0, COMMAND_MAP.endchar)
+              } else {
+                error = this.executeCommand(4, COMMAND_MAP.endchar)
+              }
               break
-            }
-            // To convert to type2 we have to move the width value to the
-            // first part of the charstring and then use rmoveto with
-            // (dx, dy). The height argument will not be used for vmtx and
-            // vhea tables reconstruction -- ignoring it.
-            this.stack.pop() // wy
-            wx = this.stack.pop()
-            var sby = this.stack.pop()
-            sbx = this.stack.pop()
-            this.lsb = sbx
-            this.width = wx
-            this.stack.push(wx, sbx, sby)
-            error = this.executeCommand(3, COMMAND_MAP.rmoveto)
-            break
-          case (12 << 8) + 12: // div
-            if (this.stack.length < 2) {
-              error = true
+            case (12 << 8) + 7: // sbw
+              if (this.stack.length < 4) {
+                error = true
+                break
+              }
+              // To convert to type2 we have to move the width value to the
+              // first part of the charstring and then use rmoveto with
+              // (dx, dy). The height argument will not be used for vmtx and
+              // vhea tables reconstruction -- ignoring it.
+              this.stack.pop() // wy
+              wx = this.stack.pop()
+              var sby = this.stack.pop()
+              sbx = this.stack.pop()
+              this.lsb = sbx
+              this.width = wx
+              this.stack.push(wx, sbx, sby)
+              error = this.executeCommand(3, COMMAND_MAP.rmoveto)
               break
-            }
-            var num2 = this.stack.pop()
-            var num1 = this.stack.pop()
-            this.stack.push(num1 / num2)
-            break
-          case (12 << 8) + 16: // callothersubr
-            if (this.stack.length < 2) {
-              error = true
+            case (12 << 8) + 12: // div
+              if (this.stack.length < 2) {
+                error = true
+                break
+              }
+              var num2 = this.stack.pop()
+              var num1 = this.stack.pop()
+              this.stack.push(num1 / num2)
               break
-            }
-            subrNumber = this.stack.pop()
-            var numArgs = this.stack.pop()
-            if (subrNumber === 0 && numArgs === 3) {
-              var flexArgs = this.stack.splice(this.stack.length - 17, 17)
-              this.stack.push(
-                flexArgs[2] + flexArgs[0], // bcp1x + rpx
-                flexArgs[3] + flexArgs[1], // bcp1y + rpy
-                flexArgs[4], // bcp2x
-                flexArgs[5], // bcp2y
-                flexArgs[6], // p2x
-                flexArgs[7], // p2y
-                flexArgs[8], // bcp3x
-                flexArgs[9], // bcp3y
-                flexArgs[10], // bcp4x
-                flexArgs[11], // bcp4y
-                flexArgs[12], // p3x
-                flexArgs[13], // p3y
-                flexArgs[14] // flexDepth
+            case (12 << 8) + 16: // callothersubr
+              if (this.stack.length < 2) {
+                error = true
+                break
+              }
+              subrNumber = this.stack.pop()
+              var numArgs = this.stack.pop()
+              if (subrNumber === 0 && numArgs === 3) {
+                var flexArgs = this.stack.splice(this.stack.length - 17, 17)
+                this.stack.push(
+                  flexArgs[2] + flexArgs[0], // bcp1x + rpx
+                  flexArgs[3] + flexArgs[1], // bcp1y + rpy
+                  flexArgs[4], // bcp2x
+                  flexArgs[5], // bcp2y
+                  flexArgs[6], // p2x
+                  flexArgs[7], // p2y
+                  flexArgs[8], // bcp3x
+                  flexArgs[9], // bcp3y
+                  flexArgs[10], // bcp4x
+                  flexArgs[11], // bcp4y
+                  flexArgs[12], // p3x
+                  flexArgs[13], // p3y
+                  flexArgs[14] // flexDepth
                 // 15 = finalx unused by flex
                 // 16 = finaly unused by flex
-              )
-              error = this.executeCommand(13, COMMAND_MAP.flex, true)
-              this.flexing = false
-              this.stack.push(flexArgs[15], flexArgs[16])
-            } else if (subrNumber === 1 && numArgs === 0) {
-              this.flexing = true
-            }
-            break
-          case (12 << 8) + 17: // pop
+                )
+                error = this.executeCommand(13, COMMAND_MAP.flex, true)
+                this.flexing = false
+                this.stack.push(flexArgs[15], flexArgs[16])
+              } else if (subrNumber === 1 && numArgs === 0) {
+                this.flexing = true
+              }
+              break
+            case (12 << 8) + 17: // pop
             // Ignore this since it is only used with othersubr.
-            break
-          case (12 << 8) + 33: // setcurrentpoint
+              break
+            case (12 << 8) + 33: // setcurrentpoint
             // Ignore for now.
-            this.stack = []
-            break
-          default:
-            warn('Unknown type 1 charstring command of "' + value + '"')
-            break
+              this.stack = []
+              break
+            default:
+              warn('Unknown type 1 charstring command of "' + value + '"')
+              break
           }
           if (error) {
             break
@@ -540,89 +540,89 @@ var Type1Parser = (function Type1ParserClosure() {
         }
         token = this.getToken()
         switch (token) {
-        case 'CharStrings':
+          case 'CharStrings':
           // The number immediately following CharStrings must be greater or
           // equal to the number of CharStrings.
-          this.getToken()
-          this.getToken() // read in 'dict'
-          this.getToken() // read in 'dup'
-          this.getToken() // read in 'begin'
-          while (true) {
-            token = this.getToken()
-            if (token === null || token === 'end') {
-              break
-            }
+            this.getToken()
+            this.getToken() // read in 'dict'
+            this.getToken() // read in 'dup'
+            this.getToken() // read in 'begin'
+            while (true) {
+              token = this.getToken()
+              if (token === null || token === 'end') {
+                break
+              }
 
-            if (token !== '/') {
-              continue
+              if (token !== '/') {
+                continue
+              }
+              var glyph = this.getToken()
+              length = this.readInt()
+              this.getToken() // read in 'RD' or '-|'
+              data = (length > 0 ? stream.getBytes(length) : new Uint8Array(0))
+              lenIV = program.properties.privateData['lenIV']
+              encoded = this.readCharStrings(data, lenIV)
+              this.nextChar()
+              token = this.getToken() // read in 'ND' or '|-'
+              if (token === 'noaccess') {
+                this.getToken() // read in 'def'
+              }
+              charstrings.push({
+                glyph,
+                encoded,
+              })
             }
-            var glyph = this.getToken()
-            length = this.readInt()
-            this.getToken() // read in 'RD' or '-|'
-            data = (length > 0 ? stream.getBytes(length) : new Uint8Array(0))
-            lenIV = program.properties.privateData['lenIV']
-            encoded = this.readCharStrings(data, lenIV)
-            this.nextChar()
-            token = this.getToken() // read in 'ND' or '|-'
-            if (token === 'noaccess') {
-              this.getToken() // read in 'def'
+            break
+          case 'Subrs':
+            this.readInt() // num
+            this.getToken() // read in 'array'
+            while (this.getToken() === 'dup') {
+              var index = this.readInt()
+              length = this.readInt()
+              this.getToken() // read in 'RD' or '-|'
+              data = (length > 0 ? stream.getBytes(length) : new Uint8Array(0))
+              lenIV = program.properties.privateData['lenIV']
+              encoded = this.readCharStrings(data, lenIV)
+              this.nextChar()
+              token = this.getToken() // read in 'NP' or '|'
+              if (token === 'noaccess') {
+                this.getToken() // read in 'put'
+              }
+              subrs[index] = encoded
             }
-            charstrings.push({
-              glyph,
-              encoded,
-            })
-          }
-          break
-        case 'Subrs':
-          this.readInt() // num
-          this.getToken() // read in 'array'
-          while (this.getToken() === 'dup') {
-            var index = this.readInt()
-            length = this.readInt()
-            this.getToken() // read in 'RD' or '-|'
-            data = (length > 0 ? stream.getBytes(length) : new Uint8Array(0))
-            lenIV = program.properties.privateData['lenIV']
-            encoded = this.readCharStrings(data, lenIV)
-            this.nextChar()
-            token = this.getToken() // read in 'NP' or '|'
-            if (token === 'noaccess') {
-              this.getToken() // read in 'put'
-            }
-            subrs[index] = encoded
-          }
-          break
-        case 'BlueValues':
-        case 'OtherBlues':
-        case 'FamilyBlues':
-        case 'FamilyOtherBlues':
-          var blueArray = this.readNumberArray()
-          // *Blue* values may contain invalid data: disables reading of
-          // those values when hinting is disabled.
-          if (blueArray.length > 0 && (blueArray.length % 2) === 0 &&
+            break
+          case 'BlueValues':
+          case 'OtherBlues':
+          case 'FamilyBlues':
+          case 'FamilyOtherBlues':
+            var blueArray = this.readNumberArray()
+            // *Blue* values may contain invalid data: disables reading of
+            // those values when hinting is disabled.
+            if (blueArray.length > 0 && (blueArray.length % 2) === 0 &&
                 HINTING_ENABLED) {
-            program.properties.privateData[token] = blueArray
-          }
-          break
-        case 'StemSnapH':
-        case 'StemSnapV':
-          program.properties.privateData[token] = this.readNumberArray()
-          break
-        case 'StdHW':
-        case 'StdVW':
-          program.properties.privateData[token] =
+              program.properties.privateData[token] = blueArray
+            }
+            break
+          case 'StemSnapH':
+          case 'StemSnapV':
+            program.properties.privateData[token] = this.readNumberArray()
+            break
+          case 'StdHW':
+          case 'StdVW':
+            program.properties.privateData[token] =
               this.readNumberArray()[0]
-          break
-        case 'BlueShift':
-        case 'lenIV':
-        case 'BlueFuzz':
-        case 'BlueScale':
-        case 'LanguageGroup':
-        case 'ExpansionFactor':
-          program.properties.privateData[token] = this.readNumber()
-          break
-        case 'ForceBold':
-          program.properties.privateData[token] = this.readBoolean()
-          break
+            break
+          case 'BlueShift':
+          case 'lenIV':
+          case 'BlueFuzz':
+          case 'BlueScale':
+          case 'LanguageGroup':
+          case 'ExpansionFactor':
+            program.properties.privateData[token] = this.readNumber()
+            break
+          case 'ForceBold':
+            program.properties.privateData[token] = this.readBoolean()
+            break
         }
       }
 
@@ -669,49 +669,49 @@ var Type1Parser = (function Type1ParserClosure() {
         }
         token = this.getToken()
         switch (token) {
-        case 'FontMatrix':
-          var matrix = this.readNumberArray()
-          properties.fontMatrix = matrix
-          break
-        case 'Encoding':
-          var encodingArg = this.getToken()
-          var encoding
-          if (!/^\d+$/.test(encodingArg)) {
+          case 'FontMatrix':
+            var matrix = this.readNumberArray()
+            properties.fontMatrix = matrix
+            break
+          case 'Encoding':
+            var encodingArg = this.getToken()
+            var encoding
+            if (!/^\d+$/.test(encodingArg)) {
             // encoding name is specified
-            encoding = getEncoding(encodingArg)
-          } else {
-            encoding = []
-            var size = parseInt(encodingArg, 10) | 0
-            this.getToken() // read in 'array'
+              encoding = getEncoding(encodingArg)
+            } else {
+              encoding = []
+              var size = parseInt(encodingArg, 10) | 0
+              this.getToken() // read in 'array'
 
-            for (var j = 0; j < size; j++) {
-              token = this.getToken()
-              // skipping till first dup or def (e.g. ignoring for statement)
-              while (token !== 'dup' && token !== 'def') {
+              for (var j = 0; j < size; j++) {
                 token = this.getToken()
-                if (token === null) {
-                  return // invalid header
+                // skipping till first dup or def (e.g. ignoring for statement)
+                while (token !== 'dup' && token !== 'def') {
+                  token = this.getToken()
+                  if (token === null) {
+                    return // invalid header
+                  }
                 }
+                if (token === 'def') {
+                  break // read all array data
+                }
+                var index = this.readInt()
+                this.getToken() // read in '/'
+                var glyph = this.getToken()
+                encoding[index] = glyph
+                this.getToken() // read the in 'put'
               }
-              if (token === 'def') {
-                break // read all array data
-              }
-              var index = this.readInt()
-              this.getToken() // read in '/'
-              var glyph = this.getToken()
-              encoding[index] = glyph
-              this.getToken() // read the in 'put'
             }
-          }
-          properties.builtInEncoding = encoding
-          break
-        case 'FontBBox':
-          var fontBBox = this.readNumberArray()
-          // adjusting ascent/descent
-          properties.ascent = Math.max(fontBBox[3], fontBBox[1])
-          properties.descent = Math.min(fontBBox[1], fontBBox[3])
-          properties.ascentScaled = true
-          break
+            properties.builtInEncoding = encoding
+            break
+          case 'FontBBox':
+            var fontBBox = this.readNumberArray()
+            // adjusting ascent/descent
+            properties.ascent = Math.max(fontBBox[3], fontBBox[1])
+            properties.descent = Math.min(fontBBox[1], fontBBox[3])
+            properties.ascentScaled = true
+            break
         }
       }
     },

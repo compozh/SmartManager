@@ -253,51 +253,51 @@ var JpegImage = (function JpegImageClosure() {
         let offsetZ = offset + dctZigZag[k]
         let sign = component.blockData[offsetZ] < 0 ? -1 : 1
         switch (successiveACState) {
-        case 0: // initial state
-          rs = decodeHuffman(component.huffmanTableAC)
-          s = rs & 15
-          r = rs >> 4
-          if (s === 0) {
-            if (r < 15) {
-              eobrun = receive(r) + (1 << r)
-              successiveACState = 4
+          case 0: // initial state
+            rs = decodeHuffman(component.huffmanTableAC)
+            s = rs & 15
+            r = rs >> 4
+            if (s === 0) {
+              if (r < 15) {
+                eobrun = receive(r) + (1 << r)
+                successiveACState = 4
+              } else {
+                r = 16
+                successiveACState = 1
+              }
             } else {
-              r = 16
-              successiveACState = 1
+              if (s !== 1) {
+                throw new JpegError('invalid ACn encoding')
+              }
+              successiveACNextValue = receiveAndExtend(s)
+              successiveACState = r ? 2 : 3
             }
-          } else {
-            if (s !== 1) {
-              throw new JpegError('invalid ACn encoding')
+            continue
+          case 1: // skipping r zero items
+          case 2:
+            if (component.blockData[offsetZ]) {
+              component.blockData[offsetZ] += sign * (readBit() << successive)
+            } else {
+              r--
+              if (r === 0) {
+                successiveACState = successiveACState === 2 ? 3 : 0
+              }
             }
-            successiveACNextValue = receiveAndExtend(s)
-            successiveACState = r ? 2 : 3
-          }
-          continue
-        case 1: // skipping r zero items
-        case 2:
-          if (component.blockData[offsetZ]) {
-            component.blockData[offsetZ] += sign * (readBit() << successive)
-          } else {
-            r--
-            if (r === 0) {
-              successiveACState = successiveACState === 2 ? 3 : 0
-            }
-          }
-          break
-        case 3: // set value for a zero item
-          if (component.blockData[offsetZ]) {
-            component.blockData[offsetZ] += sign * (readBit() << successive)
-          } else {
-            component.blockData[offsetZ] =
+            break
+          case 3: // set value for a zero item
+            if (component.blockData[offsetZ]) {
+              component.blockData[offsetZ] += sign * (readBit() << successive)
+            } else {
+              component.blockData[offsetZ] =
                 successiveACNextValue << successive
-            successiveACState = 0
-          }
-          break
-        case 4: // eob
-          if (component.blockData[offsetZ]) {
-            component.blockData[offsetZ] += sign * (readBit() << successive)
-          }
-          break
+              successiveACState = 0
+            }
+            break
+          case 4: // eob
+            if (component.blockData[offsetZ]) {
+              component.blockData[offsetZ] += sign * (readBit() << successive)
+            }
+            break
         }
         k++
       }
@@ -715,221 +715,221 @@ var JpegImage = (function JpegImageClosure() {
       markerLoop: while (fileMarker !== 0xFFD9) { // EOI (End of image)
         var i, j, l
         switch (fileMarker) {
-        case 0xFFE0: // APP0 (Application Specific)
-        case 0xFFE1: // APP1
-        case 0xFFE2: // APP2
-        case 0xFFE3: // APP3
-        case 0xFFE4: // APP4
-        case 0xFFE5: // APP5
-        case 0xFFE6: // APP6
-        case 0xFFE7: // APP7
-        case 0xFFE8: // APP8
-        case 0xFFE9: // APP9
-        case 0xFFEA: // APP10
-        case 0xFFEB: // APP11
-        case 0xFFEC: // APP12
-        case 0xFFED: // APP13
-        case 0xFFEE: // APP14
-        case 0xFFEF: // APP15
-        case 0xFFFE: // COM (Comment)
-          var appData = readDataBlock()
+          case 0xFFE0: // APP0 (Application Specific)
+          case 0xFFE1: // APP1
+          case 0xFFE2: // APP2
+          case 0xFFE3: // APP3
+          case 0xFFE4: // APP4
+          case 0xFFE5: // APP5
+          case 0xFFE6: // APP6
+          case 0xFFE7: // APP7
+          case 0xFFE8: // APP8
+          case 0xFFE9: // APP9
+          case 0xFFEA: // APP10
+          case 0xFFEB: // APP11
+          case 0xFFEC: // APP12
+          case 0xFFED: // APP13
+          case 0xFFEE: // APP14
+          case 0xFFEF: // APP15
+          case 0xFFFE: // COM (Comment)
+            var appData = readDataBlock()
 
-          if (fileMarker === 0xFFE0) {
-            if (appData[0] === 0x4A && appData[1] === 0x46 &&
+            if (fileMarker === 0xFFE0) {
+              if (appData[0] === 0x4A && appData[1] === 0x46 &&
                   appData[2] === 0x49 && appData[3] === 0x46 &&
                   appData[4] === 0) { // 'JFIF\x00'
-              jfif = {
-                version: { major: appData[5], minor: appData[6], },
-                densityUnits: appData[7],
-                xDensity: (appData[8] << 8) | appData[9],
-                yDensity: (appData[10] << 8) | appData[11],
-                thumbWidth: appData[12],
-                thumbHeight: appData[13],
-                thumbData: appData.subarray(14, 14 +
+                jfif = {
+                  version: { major: appData[5], minor: appData[6], },
+                  densityUnits: appData[7],
+                  xDensity: (appData[8] << 8) | appData[9],
+                  yDensity: (appData[10] << 8) | appData[11],
+                  thumbWidth: appData[12],
+                  thumbHeight: appData[13],
+                  thumbData: appData.subarray(14, 14 +
                                               3 * appData[12] * appData[13]),
+                }
               }
             }
-          }
-          // TODO APP1 - Exif
-          if (fileMarker === 0xFFEE) {
-            if (appData[0] === 0x41 && appData[1] === 0x64 &&
+            // TODO APP1 - Exif
+            if (fileMarker === 0xFFEE) {
+              if (appData[0] === 0x41 && appData[1] === 0x64 &&
                   appData[2] === 0x6F && appData[3] === 0x62 &&
                   appData[4] === 0x65) { // 'Adobe'
-              adobe = {
-                version: (appData[5] << 8) | appData[6],
-                flags0: (appData[7] << 8) | appData[8],
-                flags1: (appData[9] << 8) | appData[10],
-                transformCode: appData[11],
+                adobe = {
+                  version: (appData[5] << 8) | appData[6],
+                  flags0: (appData[7] << 8) | appData[8],
+                  flags1: (appData[9] << 8) | appData[10],
+                  transformCode: appData[11],
+                }
               }
             }
-          }
-          break
+            break
 
-        case 0xFFDB: // DQT (Define Quantization Tables)
-          var quantizationTablesLength = readUint16()
-          var quantizationTablesEnd = quantizationTablesLength + offset - 2
-          var z
-          while (offset < quantizationTablesEnd) {
-            var quantizationTableSpec = data[offset++]
-            var tableData = new Uint16Array(64)
-            if ((quantizationTableSpec >> 4) === 0) { // 8 bit values
-              for (j = 0; j < 64; j++) {
-                z = dctZigZag[j]
-                tableData[z] = data[offset++]
+          case 0xFFDB: // DQT (Define Quantization Tables)
+            var quantizationTablesLength = readUint16()
+            var quantizationTablesEnd = quantizationTablesLength + offset - 2
+            var z
+            while (offset < quantizationTablesEnd) {
+              var quantizationTableSpec = data[offset++]
+              var tableData = new Uint16Array(64)
+              if ((quantizationTableSpec >> 4) === 0) { // 8 bit values
+                for (j = 0; j < 64; j++) {
+                  z = dctZigZag[j]
+                  tableData[z] = data[offset++]
+                }
+              } else if ((quantizationTableSpec >> 4) === 1) { // 16 bit values
+                for (j = 0; j < 64; j++) {
+                  z = dctZigZag[j]
+                  tableData[z] = readUint16()
+                }
+              } else {
+                throw new JpegError('DQT - invalid table spec')
               }
-            } else if ((quantizationTableSpec >> 4) === 1) { // 16 bit values
-              for (j = 0; j < 64; j++) {
-                z = dctZigZag[j]
-                tableData[z] = readUint16()
+              quantizationTables[quantizationTableSpec & 15] = tableData
+            }
+            break
+
+          case 0xFFC0: // SOF0 (Start of Frame, Baseline DCT)
+          case 0xFFC1: // SOF1 (Start of Frame, Extended DCT)
+          case 0xFFC2: // SOF2 (Start of Frame, Progressive DCT)
+            if (frame) {
+              throw new JpegError('Only single frame JPEGs supported')
+            }
+            readUint16() // skip data length
+            frame = {}
+            frame.extended = (fileMarker === 0xFFC1)
+            frame.progressive = (fileMarker === 0xFFC2)
+            frame.precision = data[offset++]
+            const sofScanLines = readUint16()
+            frame.scanLines = dnlScanLines || sofScanLines
+            frame.samplesPerLine = readUint16()
+            frame.components = []
+            frame.componentIds = {}
+            var componentsCount = data[offset++], componentId
+            var maxH = 0, maxV = 0
+            for (i = 0; i < componentsCount; i++) {
+              componentId = data[offset]
+              var h = data[offset + 1] >> 4
+              var v = data[offset + 1] & 15
+              if (maxH < h) {
+                maxH = h
               }
-            } else {
-              throw new JpegError('DQT - invalid table spec')
+              if (maxV < v) {
+                maxV = v
+              }
+              var qId = data[offset + 2]
+              l = frame.components.push({
+                h,
+                v,
+                quantizationId: qId,
+                quantizationTable: null, // See comment below.
+              })
+              frame.componentIds[componentId] = l - 1
+              offset += 3
             }
-            quantizationTables[quantizationTableSpec & 15] = tableData
-          }
-          break
+            frame.maxH = maxH
+            frame.maxV = maxV
+            prepareComponents(frame)
+            break
 
-        case 0xFFC0: // SOF0 (Start of Frame, Baseline DCT)
-        case 0xFFC1: // SOF1 (Start of Frame, Extended DCT)
-        case 0xFFC2: // SOF2 (Start of Frame, Progressive DCT)
-          if (frame) {
-            throw new JpegError('Only single frame JPEGs supported')
-          }
-          readUint16() // skip data length
-          frame = {}
-          frame.extended = (fileMarker === 0xFFC1)
-          frame.progressive = (fileMarker === 0xFFC2)
-          frame.precision = data[offset++]
-          const sofScanLines = readUint16()
-          frame.scanLines = dnlScanLines || sofScanLines
-          frame.samplesPerLine = readUint16()
-          frame.components = []
-          frame.componentIds = {}
-          var componentsCount = data[offset++], componentId
-          var maxH = 0, maxV = 0
-          for (i = 0; i < componentsCount; i++) {
-            componentId = data[offset]
-            var h = data[offset + 1] >> 4
-            var v = data[offset + 1] & 15
-            if (maxH < h) {
-              maxH = h
-            }
-            if (maxV < v) {
-              maxV = v
-            }
-            var qId = data[offset + 2]
-            l = frame.components.push({
-              h,
-              v,
-              quantizationId: qId,
-              quantizationTable: null, // See comment below.
-            })
-            frame.componentIds[componentId] = l - 1
-            offset += 3
-          }
-          frame.maxH = maxH
-          frame.maxV = maxV
-          prepareComponents(frame)
-          break
+          case 0xFFC4: // DHT (Define Huffman Tables)
+            var huffmanLength = readUint16()
+            for (i = 2; i < huffmanLength;) {
+              var huffmanTableSpec = data[offset++]
+              var codeLengths = new Uint8Array(16)
+              var codeLengthSum = 0
+              for (j = 0; j < 16; j++, offset++) {
+                codeLengthSum += (codeLengths[j] = data[offset])
+              }
+              var huffmanValues = new Uint8Array(codeLengthSum)
+              for (j = 0; j < codeLengthSum; j++, offset++) {
+                huffmanValues[j] = data[offset]
+              }
+              i += 17 + codeLengthSum;
 
-        case 0xFFC4: // DHT (Define Huffman Tables)
-          var huffmanLength = readUint16()
-          for (i = 2; i < huffmanLength;) {
-            var huffmanTableSpec = data[offset++]
-            var codeLengths = new Uint8Array(16)
-            var codeLengthSum = 0
-            for (j = 0; j < 16; j++, offset++) {
-              codeLengthSum += (codeLengths[j] = data[offset])
-            }
-            var huffmanValues = new Uint8Array(codeLengthSum)
-            for (j = 0; j < codeLengthSum; j++, offset++) {
-              huffmanValues[j] = data[offset]
-            }
-            i += 17 + codeLengthSum;
-
-            ((huffmanTableSpec >> 4) === 0 ?
-              huffmanTablesDC : huffmanTablesAC)[huffmanTableSpec & 15] =
+              ((huffmanTableSpec >> 4) === 0 ?
+                huffmanTablesDC : huffmanTablesAC)[huffmanTableSpec & 15] =
                 buildHuffmanTable(codeLengths, huffmanValues)
-          }
-          break
+            }
+            break
 
-        case 0xFFDD: // DRI (Define Restart Interval)
-          readUint16() // skip data length
-          resetInterval = readUint16()
-          break
+          case 0xFFDD: // DRI (Define Restart Interval)
+            readUint16() // skip data length
+            resetInterval = readUint16()
+            break
 
-        case 0xFFDA: // SOS (Start of Scan)
+          case 0xFFDA: // SOS (Start of Scan)
           // A DNL marker (0xFFDC), if it exists, is only allowed at the end
           // of the first scan segment and may only occur once in an image.
           // Furthermore, to prevent an infinite loop, do *not* attempt to
           // parse DNL markers during re-parsing of the JPEG scan data.
-          const parseDNLMarker = (++numSOSMarkers) === 1 && !dnlScanLines
+            const parseDNLMarker = (++numSOSMarkers) === 1 && !dnlScanLines
 
-          readUint16() // scanLength
-          var selectorsCount = data[offset++]
-          var components = [], component
-          for (i = 0; i < selectorsCount; i++) {
-            var componentIndex = frame.componentIds[data[offset++]]
-            component = frame.components[componentIndex]
-            var tableSpec = data[offset++]
-            component.huffmanTableDC = huffmanTablesDC[tableSpec >> 4]
-            component.huffmanTableAC = huffmanTablesAC[tableSpec & 15]
-            components.push(component)
-          }
-          var spectralStart = data[offset++]
-          var spectralEnd = data[offset++]
-          var successiveApproximation = data[offset++]
-          try {
-            var processed = decodeScan(data, offset,
-              frame, components, resetInterval,
-              spectralStart, spectralEnd,
-              successiveApproximation >> 4, successiveApproximation & 15,
-              parseDNLMarker)
-            offset += processed
-          } catch (ex) {
-            if (ex instanceof DNLMarkerError) {
-              warn(`${ex.message} -- attempting to re-parse the JPEG image.`)
-              return this.parse(data, { dnlScanLines: ex.scanLines, })
-            } else if (ex instanceof EOIMarkerError) {
-              warn(`${ex.message} -- ignoring the rest of the image data.`)
-              break markerLoop
+            readUint16() // scanLength
+            var selectorsCount = data[offset++]
+            var components = [], component
+            for (i = 0; i < selectorsCount; i++) {
+              var componentIndex = frame.componentIds[data[offset++]]
+              component = frame.components[componentIndex]
+              var tableSpec = data[offset++]
+              component.huffmanTableDC = huffmanTablesDC[tableSpec >> 4]
+              component.huffmanTableAC = huffmanTablesAC[tableSpec & 15]
+              components.push(component)
             }
-            throw ex
-          }
-          break
+            var spectralStart = data[offset++]
+            var spectralEnd = data[offset++]
+            var successiveApproximation = data[offset++]
+            try {
+              var processed = decodeScan(data, offset,
+                frame, components, resetInterval,
+                spectralStart, spectralEnd,
+                successiveApproximation >> 4, successiveApproximation & 15,
+                parseDNLMarker)
+              offset += processed
+            } catch (ex) {
+              if (ex instanceof DNLMarkerError) {
+                warn(`${ex.message} -- attempting to re-parse the JPEG image.`)
+                return this.parse(data, { dnlScanLines: ex.scanLines, })
+              } else if (ex instanceof EOIMarkerError) {
+                warn(`${ex.message} -- ignoring the rest of the image data.`)
+                break markerLoop
+              }
+              throw ex
+            }
+            break
 
-        case 0xFFDC: // DNL (Define Number of Lines)
+          case 0xFFDC: // DNL (Define Number of Lines)
           // Ignore the marker, since it's being handled in `decodeScan`.
-          offset += 4
-          break
+            offset += 4
+            break
 
-        case 0xFFFF: // Fill bytes
-          if (data[offset] !== 0xFF) { // Avoid skipping a valid marker.
-            offset--
-          }
-          break
+          case 0xFFFF: // Fill bytes
+            if (data[offset] !== 0xFF) { // Avoid skipping a valid marker.
+              offset--
+            }
+            break
 
-        default:
-          if (data[offset - 3] === 0xFF &&
+          default:
+            if (data[offset - 3] === 0xFF &&
                 data[offset - 2] >= 0xC0 && data[offset - 2] <= 0xFE) {
             // could be incorrect encoding -- last 0xFF byte of the previous
             // block was eaten by the encoder
-            offset -= 3
-            break
-          }
-          let nextFileMarker = findNextFileMarker(data, offset - 2)
-          if (nextFileMarker && nextFileMarker.invalid) {
-            warn('JpegImage.parse - unexpected data, current marker is: ' +
+              offset -= 3
+              break
+            }
+            let nextFileMarker = findNextFileMarker(data, offset - 2)
+            if (nextFileMarker && nextFileMarker.invalid) {
+              warn('JpegImage.parse - unexpected data, current marker is: ' +
                    nextFileMarker.invalid)
-            offset = nextFileMarker.offset
-            break
-          }
-          if (offset > (data.length - 2)) {
-            warn('JpegImage.parse - reached the end of the image data ' +
+              offset = nextFileMarker.offset
+              break
+            }
+            if (offset > (data.length - 2)) {
+              warn('JpegImage.parse - reached the end of the image data ' +
                    'without finding an EOI marker (0xFFD9).')
-            break markerLoop
-          }
-          throw new JpegError('JpegImage.parse - unknown marker: ' +
+              break markerLoop
+            }
+            throw new JpegError('JpegImage.parse - unknown marker: ' +
                                 fileMarker.toString(16))
         }
         fileMarker = readUint16()

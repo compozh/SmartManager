@@ -41,16 +41,16 @@ function wrapReason(reason) {
     return reason
   }
   switch (reason.name) {
-  case 'AbortException':
-    return new AbortException(reason.message)
-  case 'MissingPDFException':
-    return new MissingPDFException(reason.message)
-  case 'UnexpectedResponseException':
-    return new UnexpectedResponseException(reason.message, reason.status)
-  case 'UnknownErrorException':
-    return new UnknownErrorException(reason.message, reason.details)
-  default:
-    return new UnknownErrorException(reason.message, reason.toString())
+    case 'AbortException':
+      return new AbortException(reason.message)
+    case 'MissingPDFException':
+      return new MissingPDFException(reason.message)
+    case 'UnexpectedResponseException':
+      return new UnexpectedResponseException(reason.message, reason.status)
+    case 'UnknownErrorException':
+      return new UnknownErrorException(reason.message, reason.details)
+    default:
+      return new UnknownErrorException(reason.message, reason.toString())
   }
 }
 
@@ -341,129 +341,129 @@ MessageHandler.prototype = {
     const comObj = this.comObj
 
     switch (data.stream) {
-    case StreamKind.START_COMPLETE:
-      if (data.success) {
-        this.streamControllers[streamId].startCall.resolve()
-      } else {
-        this.streamControllers[streamId].startCall.reject(
-          wrapReason(data.reason))
-      }
-      break
-    case StreamKind.PULL_COMPLETE:
-      if (data.success) {
-        this.streamControllers[streamId].pullCall.resolve()
-      } else {
-        this.streamControllers[streamId].pullCall.reject(
-          wrapReason(data.reason))
-      }
-      break
-    case StreamKind.PULL:
+      case StreamKind.START_COMPLETE:
+        if (data.success) {
+          this.streamControllers[streamId].startCall.resolve()
+        } else {
+          this.streamControllers[streamId].startCall.reject(
+            wrapReason(data.reason))
+        }
+        break
+      case StreamKind.PULL_COMPLETE:
+        if (data.success) {
+          this.streamControllers[streamId].pullCall.resolve()
+        } else {
+          this.streamControllers[streamId].pullCall.reject(
+            wrapReason(data.reason))
+        }
+        break
+      case StreamKind.PULL:
       // Ignore any pull after close is called.
-      if (!this.streamSinks[streamId]) {
-        comObj.postMessage({
-          sourceName,
-          targetName,
-          stream: StreamKind.PULL_COMPLETE,
-          streamId,
-          success: true,
-        })
-        break
-      }
-      // Pull increases the desiredSize property of sink,
-      // so when it changes from negative to positive,
-      // set ready property as resolved promise.
-      if (this.streamSinks[streamId].desiredSize <= 0 &&
+        if (!this.streamSinks[streamId]) {
+          comObj.postMessage({
+            sourceName,
+            targetName,
+            stream: StreamKind.PULL_COMPLETE,
+            streamId,
+            success: true,
+          })
+          break
+        }
+        // Pull increases the desiredSize property of sink,
+        // so when it changes from negative to positive,
+        // set ready property as resolved promise.
+        if (this.streamSinks[streamId].desiredSize <= 0 &&
             data.desiredSize > 0) {
-        this.streamSinks[streamId].sinkCapability.resolve()
-      }
-      // Reset desiredSize property of sink on every pull.
-      this.streamSinks[streamId].desiredSize = data.desiredSize
-      const { onPull, } = this.streamSinks[data.streamId]
-      new Promise(function(resolve) {
-        resolve(onPull && onPull())
-      }).then(function() {
-        comObj.postMessage({
-          sourceName,
-          targetName,
-          stream: StreamKind.PULL_COMPLETE,
-          streamId,
-          success: true,
+          this.streamSinks[streamId].sinkCapability.resolve()
+        }
+        // Reset desiredSize property of sink on every pull.
+        this.streamSinks[streamId].desiredSize = data.desiredSize
+        const { onPull, } = this.streamSinks[data.streamId]
+        new Promise(function(resolve) {
+          resolve(onPull && onPull())
+        }).then(function() {
+          comObj.postMessage({
+            sourceName,
+            targetName,
+            stream: StreamKind.PULL_COMPLETE,
+            streamId,
+            success: true,
+          })
+        }, function(reason) {
+          comObj.postMessage({
+            sourceName,
+            targetName,
+            stream: StreamKind.PULL_COMPLETE,
+            streamId,
+            reason: wrapReason(reason),
+          })
         })
-      }, function(reason) {
-        comObj.postMessage({
-          sourceName,
-          targetName,
-          stream: StreamKind.PULL_COMPLETE,
-          streamId,
-          reason: wrapReason(reason),
-        })
-      })
-      break
-    case StreamKind.ENQUEUE:
-      assert(this.streamControllers[streamId],
-        'enqueue should have stream controller')
-      if (this.streamControllers[streamId].isClosed) {
         break
-      }
-      this.streamControllers[streamId].controller.enqueue(data.chunk)
-      break
-    case StreamKind.CLOSE:
-      assert(this.streamControllers[streamId],
-        'close should have stream controller')
-      if (this.streamControllers[streamId].isClosed) {
+      case StreamKind.ENQUEUE:
+        assert(this.streamControllers[streamId],
+          'enqueue should have stream controller')
+        if (this.streamControllers[streamId].isClosed) {
+          break
+        }
+        this.streamControllers[streamId].controller.enqueue(data.chunk)
         break
-      }
-      this.streamControllers[streamId].isClosed = true
-      this.streamControllers[streamId].controller.close()
-      this._deleteStreamController(streamId)
-      break
-    case StreamKind.ERROR:
-      assert(this.streamControllers[streamId],
-        'error should have stream controller')
-      this.streamControllers[streamId].controller.error(
-        wrapReason(data.reason))
-      this._deleteStreamController(streamId)
-      break
-    case StreamKind.CANCEL_COMPLETE:
-      if (data.success) {
-        this.streamControllers[streamId].cancelCall.resolve()
-      } else {
-        this.streamControllers[streamId].cancelCall.reject(
+      case StreamKind.CLOSE:
+        assert(this.streamControllers[streamId],
+          'close should have stream controller')
+        if (this.streamControllers[streamId].isClosed) {
+          break
+        }
+        this.streamControllers[streamId].isClosed = true
+        this.streamControllers[streamId].controller.close()
+        this._deleteStreamController(streamId)
+        break
+      case StreamKind.ERROR:
+        assert(this.streamControllers[streamId],
+          'error should have stream controller')
+        this.streamControllers[streamId].controller.error(
           wrapReason(data.reason))
-      }
-      this._deleteStreamController(streamId)
-      break
-    case StreamKind.CANCEL:
-      if (!this.streamSinks[streamId]) {
+        this._deleteStreamController(streamId)
         break
-      }
-      const { onCancel, } = this.streamSinks[data.streamId]
-      new Promise(function(resolve) {
-        resolve(onCancel && onCancel(wrapReason(data.reason)))
-      }).then(function() {
-        comObj.postMessage({
-          sourceName,
-          targetName,
-          stream: StreamKind.CANCEL_COMPLETE,
-          streamId,
-          success: true,
+      case StreamKind.CANCEL_COMPLETE:
+        if (data.success) {
+          this.streamControllers[streamId].cancelCall.resolve()
+        } else {
+          this.streamControllers[streamId].cancelCall.reject(
+            wrapReason(data.reason))
+        }
+        this._deleteStreamController(streamId)
+        break
+      case StreamKind.CANCEL:
+        if (!this.streamSinks[streamId]) {
+          break
+        }
+        const { onCancel, } = this.streamSinks[data.streamId]
+        new Promise(function(resolve) {
+          resolve(onCancel && onCancel(wrapReason(data.reason)))
+        }).then(function() {
+          comObj.postMessage({
+            sourceName,
+            targetName,
+            stream: StreamKind.CANCEL_COMPLETE,
+            streamId,
+            success: true,
+          })
+        }, function(reason) {
+          comObj.postMessage({
+            sourceName,
+            targetName,
+            stream: StreamKind.CANCEL_COMPLETE,
+            streamId,
+            reason: wrapReason(reason),
+          })
         })
-      }, function(reason) {
-        comObj.postMessage({
-          sourceName,
-          targetName,
-          stream: StreamKind.CANCEL_COMPLETE,
-          streamId,
-          reason: wrapReason(reason),
-        })
-      })
-      this.streamSinks[streamId].sinkCapability.reject(
-        wrapReason(data.reason))
-      this.streamSinks[streamId].isCancelled = true
-      delete this.streamSinks[streamId]
-      break
-    default:
-      throw new Error('Unexpected stream case')
+        this.streamSinks[streamId].sinkCapability.reject(
+          wrapReason(data.reason))
+        this.streamSinks[streamId].isCancelled = true
+        delete this.streamSinks[streamId]
+        break
+      default:
+        throw new Error('Unexpected stream case')
     }
   },
 

@@ -31,10 +31,10 @@ var createMethod = function (TYPE) {
           if (IS_MAP) { target[index] = result } // map
           else if (result) {
             switch (TYPE) {
-            case 3: return true              // some
-            case 5: return value             // find
-            case 6: return index             // findIndex
-            case 2: push.call(target, value) // filter
+              case 3: return true              // some
+              case 5: return value             // find
+              case 6: return index             // findIndex
+              case 2: push.call(target, value) // filter
             }
           } else if (IS_EVERY) { return false }  // every
         }

@@ -295,40 +295,40 @@ class PDFLinkService {
   executeNamedAction(action) {
     // See PDF reference, table 8.45 - Named action
     switch (action) {
-    case 'GoBack':
-      if (this.pdfHistory) {
-        this.pdfHistory.back()
-      }
-      break
+      case 'GoBack':
+        if (this.pdfHistory) {
+          this.pdfHistory.back()
+        }
+        break
 
-    case 'GoForward':
-      if (this.pdfHistory) {
-        this.pdfHistory.forward()
-      }
-      break
+      case 'GoForward':
+        if (this.pdfHistory) {
+          this.pdfHistory.forward()
+        }
+        break
 
-    case 'NextPage':
-      if (this.page < this.pagesCount) {
-        this.page++
-      }
-      break
+      case 'NextPage':
+        if (this.page < this.pagesCount) {
+          this.page++
+        }
+        break
 
-    case 'PrevPage':
-      if (this.page > 1) {
-        this.page--
-      }
-      break
+      case 'PrevPage':
+        if (this.page > 1) {
+          this.page--
+        }
+        break
 
-    case 'LastPage':
-      this.page = this.pagesCount
-      break
+      case 'LastPage':
+        this.page = this.pagesCount
+        break
 
-    case 'FirstPage':
-      this.page = 1
-      break
+      case 'FirstPage':
+        this.page = 1
+        break
 
-    default:
-      break // No action according to spec
+      default:
+        break // No action according to spec
     }
 
     this.eventBus.dispatch('namedaction', {
@@ -383,30 +383,30 @@ function isValidExplicitDestination(dest) {
     return false
   }
   switch (zoom.name) {
-  case 'XYZ':
-    if (destLength !== 5) {
+    case 'XYZ':
+      if (destLength !== 5) {
+        return false
+      }
+      break
+    case 'Fit':
+    case 'FitB':
+      return destLength === 2
+    case 'FitH':
+    case 'FitBH':
+    case 'FitV':
+    case 'FitBV':
+      if (destLength !== 3) {
+        return false
+      }
+      break
+    case 'FitR':
+      if (destLength !== 6) {
+        return false
+      }
+      allowNull = false
+      break
+    default:
       return false
-    }
-    break
-  case 'Fit':
-  case 'FitB':
-    return destLength === 2
-  case 'FitH':
-  case 'FitBH':
-  case 'FitV':
-  case 'FitBV':
-    if (destLength !== 3) {
-      return false
-    }
-    break
-  case 'FitR':
-    if (destLength !== 6) {
-      return false
-    }
-    allowNull = false
-    break
-  default:
-    return false
   }
   for (let i = 2; i < destLength; i++) {
     let param = dest[i]

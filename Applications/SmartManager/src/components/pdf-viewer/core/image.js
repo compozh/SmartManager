@@ -87,20 +87,20 @@ var PDFImage = (function PDFImageClosure() {
     const filter = dict.get('Filter')
     if (isName(filter)) {
       switch (filter.name) {
-      case 'JPXDecode':
-        var jpxImage = new JpxImage()
-        jpxImage.parseImageProperties(image.stream)
-        image.stream.reset()
+        case 'JPXDecode':
+          var jpxImage = new JpxImage()
+          jpxImage.parseImageProperties(image.stream)
+          image.stream.reset()
 
-        image.width = jpxImage.width
-        image.height = jpxImage.height
-        image.bitsPerComponent = jpxImage.bitsPerComponent
-        image.numComps = jpxImage.componentsCount
-        break
-      case 'JBIG2Decode':
-        image.bitsPerComponent = 1
-        image.numComps = 1
-        break
+          image.width = jpxImage.width
+          image.height = jpxImage.height
+          image.bitsPerComponent = jpxImage.bitsPerComponent
+          image.numComps = jpxImage.componentsCount
+          break
+        case 'JBIG2Decode':
+          image.bitsPerComponent = 1
+          image.numComps = 1
+          break
       }
     }
     // TODO cache rendered images?
@@ -146,17 +146,17 @@ var PDFImage = (function PDFImageClosure() {
       if (!colorSpace) {
         info('JPX images (which do not require color spaces)')
         switch (image.numComps) {
-        case 1:
-          colorSpace = Name.get('DeviceGray')
-          break
-        case 3:
-          colorSpace = Name.get('DeviceRGB')
-          break
-        case 4:
-          colorSpace = Name.get('DeviceCMYK')
-          break
-        default:
-          throw new Error(`JPX images with ${image.numComps} ` +
+          case 1:
+            colorSpace = Name.get('DeviceGray')
+            break
+          case 3:
+            colorSpace = Name.get('DeviceRGB')
+            break
+          case 4:
+            colorSpace = Name.get('DeviceCMYK')
+            break
+          default:
+            throw new Error(`JPX images with ${image.numComps} ` +
                             'color components not supported.')
         }
       }
@@ -592,17 +592,17 @@ var PDFImage = (function PDFImageClosure() {
         if (this.image instanceof JpegStream && !this.smask && !this.mask) {
           let imageLength = originalHeight * rowBytes
           switch (this.colorSpace.name) {
-          case 'DeviceGray':
+            case 'DeviceGray':
             // Avoid truncating the image, since `JpegImage.getData`
             // will expand the image data when `forceRGB === true`.
-            imageLength *= 3
+              imageLength *= 3
             /* falls through */
-          case 'DeviceRGB':
-          case 'DeviceCMYK':
-            imgData.kind = ImageKind.RGB_24BPP
-            imgData.data = this.getImageBytes(imageLength,
-              drawWidth, drawHeight, /* forceRGB = */ true)
-            return imgData
+            case 'DeviceRGB':
+            case 'DeviceCMYK':
+              imgData.kind = ImageKind.RGB_24BPP
+              imgData.data = this.getImageBytes(imageLength,
+                drawWidth, drawHeight, /* forceRGB = */ true)
+              return imgData
           }
         }
       }

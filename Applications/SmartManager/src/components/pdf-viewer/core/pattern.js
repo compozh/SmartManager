@@ -52,19 +52,19 @@ var Pattern = (function PatternClosure() {
 
     try {
       switch (type) {
-      case ShadingType.AXIAL:
-      case ShadingType.RADIAL:
+        case ShadingType.AXIAL:
+        case ShadingType.RADIAL:
         // Both radial and axial shadings are handled by RadialAxial shading.
-        return new Shadings.RadialAxial(dict, matrix, xref, res,
-          pdfFunctionFactory)
-      case ShadingType.FREE_FORM_MESH:
-      case ShadingType.LATTICE_FORM_MESH:
-      case ShadingType.COONS_PATCH_MESH:
-      case ShadingType.TENSOR_PATCH_MESH:
-        return new Shadings.Mesh(shading, matrix, xref, res,
-          pdfFunctionFactory)
-      default:
-        throw new FormatError('Unsupported ShadingType: ' + type)
+          return new Shadings.RadialAxial(dict, matrix, xref, res,
+            pdfFunctionFactory)
+        case ShadingType.FREE_FORM_MESH:
+        case ShadingType.LATTICE_FORM_MESH:
+        case ShadingType.COONS_PATCH_MESH:
+        case ShadingType.TENSOR_PATCH_MESH:
+          return new Shadings.Mesh(shading, matrix, xref, res,
+            pdfFunctionFactory)
+        default:
+          throw new FormatError('Unsupported ShadingType: ' + type)
       }
     } catch (ex) {
       if (ex instanceof MissingDataException) {
@@ -338,17 +338,17 @@ Shadings.Mesh = (function MeshClosure() {
           throw new FormatError('Unknown type4 flag')
         }
         switch (f) {
-        case 0:
-          verticesLeft = 3
-          break
-        case 1:
-          ps.push(ps[ps.length - 2], ps[ps.length - 1])
-          verticesLeft = 1
-          break
-        case 2:
-          ps.push(ps[ps.length - 3], ps[ps.length - 1])
-          verticesLeft = 1
-          break
+          case 0:
+            verticesLeft = 3
+            break
+          case 1:
+            ps.push(ps[ps.length - 2], ps[ps.length - 1])
+            verticesLeft = 1
+            break
+          case 2:
+            ps.push(ps[ps.length - 3], ps[ps.length - 1])
+            verticesLeft = 1
+            break
         }
         operators.push(f)
       }
@@ -514,43 +514,43 @@ Shadings.Mesh = (function MeshClosure() {
       }
       var tmp1, tmp2, tmp3, tmp4
       switch (f) {
-      case 0:
-        ps[12] = pi + 3; ps[13] = pi + 4;  ps[14] = pi + 5;  ps[15] = pi + 6
-        ps[ 8] = pi + 2; /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 7
-        ps[ 4] = pi + 1; /* calculated below              */ ps[ 7] = pi + 8
-        ps[ 0] = pi;     ps[ 1] = pi + 11; ps[ 2] = pi + 10; ps[ 3] = pi + 9
-        cs[2] = ci + 1; cs[3] = ci + 2
-        cs[0] = ci;     cs[1] = ci + 3
-        break
-      case 1:
-        tmp1 = ps[12]; tmp2 = ps[13]; tmp3 = ps[14]; tmp4 = ps[15]
-        ps[12] = tmp4; ps[13] = pi + 0;  ps[14] = pi + 1;  ps[15] = pi + 2
-        ps[ 8] = tmp3; /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 3
-        ps[ 4] = tmp2; /* calculated below              */ ps[ 7] = pi + 4
-        ps[ 0] = tmp1; ps[ 1] = pi + 7;   ps[ 2] = pi + 6; ps[ 3] = pi + 5
-        tmp1 = cs[2]; tmp2 = cs[3]
-        cs[2] = tmp2;   cs[3] = ci
-        cs[0] = tmp1;   cs[1] = ci + 1
-        break
-      case 2:
-        tmp1 = ps[15]
-        tmp2 = ps[11]
-        ps[12] = ps[3];  ps[13] = pi + 0; ps[14] = pi + 1;   ps[15] = pi + 2
-        ps[ 8] = ps[7];  /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 3
-        ps[ 4] = tmp2;   /* calculated below              */ ps[ 7] = pi + 4
-        ps[ 0] = tmp1;  ps[ 1] = pi + 7;   ps[ 2] = pi + 6;  ps[ 3] = pi + 5
-        tmp1 = cs[3]
-        cs[2] = cs[1]; cs[3] = ci
-        cs[0] = tmp1;  cs[1] = ci + 1
-        break
-      case 3:
-        ps[12] = ps[0];  ps[13] = pi + 0;   ps[14] = pi + 1; ps[15] = pi + 2
-        ps[ 8] = ps[1];  /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 3
-        ps[ 4] = ps[2];  /* calculated below              */ ps[ 7] = pi + 4
-        ps[ 0] = ps[3];  ps[ 1] = pi + 7;   ps[ 2] = pi + 6; ps[ 3] = pi + 5
-        cs[2] = cs[0]; cs[3] = ci
-        cs[0] = cs[1]; cs[1] = ci + 1
-        break
+        case 0:
+          ps[12] = pi + 3; ps[13] = pi + 4;  ps[14] = pi + 5;  ps[15] = pi + 6
+          ps[ 8] = pi + 2; /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 7
+          ps[ 4] = pi + 1; /* calculated below              */ ps[ 7] = pi + 8
+          ps[ 0] = pi;     ps[ 1] = pi + 11; ps[ 2] = pi + 10; ps[ 3] = pi + 9
+          cs[2] = ci + 1; cs[3] = ci + 2
+          cs[0] = ci;     cs[1] = ci + 3
+          break
+        case 1:
+          tmp1 = ps[12]; tmp2 = ps[13]; tmp3 = ps[14]; tmp4 = ps[15]
+          ps[12] = tmp4; ps[13] = pi + 0;  ps[14] = pi + 1;  ps[15] = pi + 2
+          ps[ 8] = tmp3; /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 3
+          ps[ 4] = tmp2; /* calculated below              */ ps[ 7] = pi + 4
+          ps[ 0] = tmp1; ps[ 1] = pi + 7;   ps[ 2] = pi + 6; ps[ 3] = pi + 5
+          tmp1 = cs[2]; tmp2 = cs[3]
+          cs[2] = tmp2;   cs[3] = ci
+          cs[0] = tmp1;   cs[1] = ci + 1
+          break
+        case 2:
+          tmp1 = ps[15]
+          tmp2 = ps[11]
+          ps[12] = ps[3];  ps[13] = pi + 0; ps[14] = pi + 1;   ps[15] = pi + 2
+          ps[ 8] = ps[7];  /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 3
+          ps[ 4] = tmp2;   /* calculated below              */ ps[ 7] = pi + 4
+          ps[ 0] = tmp1;  ps[ 1] = pi + 7;   ps[ 2] = pi + 6;  ps[ 3] = pi + 5
+          tmp1 = cs[3]
+          cs[2] = cs[1]; cs[3] = ci
+          cs[0] = tmp1;  cs[1] = ci + 1
+          break
+        case 3:
+          ps[12] = ps[0];  ps[13] = pi + 0;   ps[14] = pi + 1; ps[15] = pi + 2
+          ps[ 8] = ps[1];  /* values for 5, 6, 9, 10 are    */ ps[11] = pi + 3
+          ps[ 4] = ps[2];  /* calculated below              */ ps[ 7] = pi + 4
+          ps[ 0] = ps[3];  ps[ 1] = pi + 7;   ps[ 2] = pi + 6; ps[ 3] = pi + 5
+          cs[2] = cs[0]; cs[3] = ci
+          cs[0] = cs[1]; cs[1] = ci + 1
+          break
       }
       // set p11, p12, p21, p22
       ps[5] = coords.length
@@ -626,43 +626,43 @@ Shadings.Mesh = (function MeshClosure() {
       }
       var tmp1, tmp2, tmp3, tmp4
       switch (f) {
-      case 0:
-        ps[12] = pi + 3; ps[13] = pi + 4;  ps[14] = pi + 5;  ps[15] = pi + 6
-        ps[ 8] = pi + 2; ps[ 9] = pi + 13; ps[10] = pi + 14; ps[11] = pi + 7
-        ps[ 4] = pi + 1; ps[ 5] = pi + 12; ps[ 6] = pi + 15; ps[ 7] = pi + 8
-        ps[ 0] = pi;     ps[ 1] = pi + 11; ps[ 2] = pi + 10; ps[ 3] = pi + 9
-        cs[2] = ci + 1; cs[3] = ci + 2
-        cs[0] = ci;     cs[1] = ci + 3
-        break
-      case 1:
-        tmp1 = ps[12]; tmp2 = ps[13]; tmp3 = ps[14]; tmp4 = ps[15]
-        ps[12] = tmp4;   ps[13] = pi + 0;  ps[14] = pi + 1;  ps[15] = pi + 2
-        ps[ 8] = tmp3;   ps[ 9] = pi + 9;  ps[10] = pi + 10; ps[11] = pi + 3
-        ps[ 4] = tmp2;   ps[ 5] = pi + 8;  ps[ 6] = pi + 11; ps[ 7] = pi + 4
-        ps[ 0] = tmp1;   ps[ 1] = pi + 7;  ps[ 2] = pi + 6;  ps[ 3] = pi + 5
-        tmp1 = cs[2]; tmp2 = cs[3]
-        cs[2] = tmp2;   cs[3] = ci
-        cs[0] = tmp1;   cs[1] = ci + 1
-        break
-      case 2:
-        tmp1 = ps[15]
-        tmp2 = ps[11]
-        ps[12] = ps[3]; ps[13] = pi + 0; ps[14] = pi + 1;  ps[15] = pi + 2
-        ps[ 8] = ps[7]; ps[ 9] = pi + 9; ps[10] = pi + 10; ps[11] = pi + 3
-        ps[ 4] = tmp2;  ps[ 5] = pi + 8; ps[ 6] = pi + 11; ps[ 7] = pi + 4
-        ps[ 0] = tmp1;  ps[ 1] = pi + 7; ps[ 2] = pi + 6;  ps[ 3] = pi + 5
-        tmp1 = cs[3]
-        cs[2] = cs[1]; cs[3] = ci
-        cs[0] = tmp1;  cs[1] = ci + 1
-        break
-      case 3:
-        ps[12] = ps[0];  ps[13] = pi + 0;  ps[14] = pi + 1;  ps[15] = pi + 2
-        ps[ 8] = ps[1];  ps[ 9] = pi + 9;  ps[10] = pi + 10; ps[11] = pi + 3
-        ps[ 4] = ps[2];  ps[ 5] = pi + 8;  ps[ 6] = pi + 11; ps[ 7] = pi + 4
-        ps[ 0] = ps[3];  ps[ 1] = pi + 7;  ps[ 2] = pi + 6;  ps[ 3] = pi + 5
-        cs[2] = cs[0]; cs[3] = ci
-        cs[0] = cs[1]; cs[1] = ci + 1
-        break
+        case 0:
+          ps[12] = pi + 3; ps[13] = pi + 4;  ps[14] = pi + 5;  ps[15] = pi + 6
+          ps[ 8] = pi + 2; ps[ 9] = pi + 13; ps[10] = pi + 14; ps[11] = pi + 7
+          ps[ 4] = pi + 1; ps[ 5] = pi + 12; ps[ 6] = pi + 15; ps[ 7] = pi + 8
+          ps[ 0] = pi;     ps[ 1] = pi + 11; ps[ 2] = pi + 10; ps[ 3] = pi + 9
+          cs[2] = ci + 1; cs[3] = ci + 2
+          cs[0] = ci;     cs[1] = ci + 3
+          break
+        case 1:
+          tmp1 = ps[12]; tmp2 = ps[13]; tmp3 = ps[14]; tmp4 = ps[15]
+          ps[12] = tmp4;   ps[13] = pi + 0;  ps[14] = pi + 1;  ps[15] = pi + 2
+          ps[ 8] = tmp3;   ps[ 9] = pi + 9;  ps[10] = pi + 10; ps[11] = pi + 3
+          ps[ 4] = tmp2;   ps[ 5] = pi + 8;  ps[ 6] = pi + 11; ps[ 7] = pi + 4
+          ps[ 0] = tmp1;   ps[ 1] = pi + 7;  ps[ 2] = pi + 6;  ps[ 3] = pi + 5
+          tmp1 = cs[2]; tmp2 = cs[3]
+          cs[2] = tmp2;   cs[3] = ci
+          cs[0] = tmp1;   cs[1] = ci + 1
+          break
+        case 2:
+          tmp1 = ps[15]
+          tmp2 = ps[11]
+          ps[12] = ps[3]; ps[13] = pi + 0; ps[14] = pi + 1;  ps[15] = pi + 2
+          ps[ 8] = ps[7]; ps[ 9] = pi + 9; ps[10] = pi + 10; ps[11] = pi + 3
+          ps[ 4] = tmp2;  ps[ 5] = pi + 8; ps[ 6] = pi + 11; ps[ 7] = pi + 4
+          ps[ 0] = tmp1;  ps[ 1] = pi + 7; ps[ 2] = pi + 6;  ps[ 3] = pi + 5
+          tmp1 = cs[3]
+          cs[2] = cs[1]; cs[3] = ci
+          cs[0] = tmp1;  cs[1] = ci + 1
+          break
+        case 3:
+          ps[12] = ps[0];  ps[13] = pi + 0;  ps[14] = pi + 1;  ps[15] = pi + 2
+          ps[ 8] = ps[1];  ps[ 9] = pi + 9;  ps[10] = pi + 10; ps[11] = pi + 3
+          ps[ 4] = ps[2];  ps[ 5] = pi + 8;  ps[ 6] = pi + 11; ps[ 7] = pi + 4
+          ps[ 0] = ps[3];  ps[ 1] = pi + 7;  ps[ 2] = pi + 6;  ps[ 3] = pi + 5
+          cs[2] = cs[0]; cs[3] = ci
+          cs[0] = cs[1]; cs[1] = ci + 1
+          break
       }
       mesh.figures.push({
         type: 'patch',
@@ -757,27 +757,27 @@ Shadings.Mesh = (function MeshClosure() {
 
     var patchMesh = false
     switch (this.shadingType) {
-    case ShadingType.FREE_FORM_MESH:
-      decodeType4Shading(this, reader)
-      break
-    case ShadingType.LATTICE_FORM_MESH:
-      var verticesPerRow = dict.get('VerticesPerRow') | 0
-      if (verticesPerRow < 2) {
-        throw new FormatError('Invalid VerticesPerRow')
-      }
-      decodeType5Shading(this, reader, verticesPerRow)
-      break
-    case ShadingType.COONS_PATCH_MESH:
-      decodeType6Shading(this, reader)
-      patchMesh = true
-      break
-    case ShadingType.TENSOR_PATCH_MESH:
-      decodeType7Shading(this, reader)
-      patchMesh = true
-      break
-    default:
-      unreachable('Unsupported mesh type.')
-      break
+      case ShadingType.FREE_FORM_MESH:
+        decodeType4Shading(this, reader)
+        break
+      case ShadingType.LATTICE_FORM_MESH:
+        var verticesPerRow = dict.get('VerticesPerRow') | 0
+        if (verticesPerRow < 2) {
+          throw new FormatError('Invalid VerticesPerRow')
+        }
+        decodeType5Shading(this, reader, verticesPerRow)
+        break
+      case ShadingType.COONS_PATCH_MESH:
+        decodeType6Shading(this, reader)
+        patchMesh = true
+        break
+      case ShadingType.TENSOR_PATCH_MESH:
+        decodeType7Shading(this, reader)
+        patchMesh = true
+        break
+      default:
+        unreachable('Unsupported mesh type.')
+        break
     }
 
     if (patchMesh) {

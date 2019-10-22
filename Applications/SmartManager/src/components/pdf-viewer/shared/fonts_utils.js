@@ -143,26 +143,26 @@ function readFontDictData(aString, aMap) {
         for (var j = 0; j < nibbles.length; j++) {
           var nibble = nibbles[j]
           switch (nibble) {
-          case 0xA:
-            token += '.'
-            break
-          case 0xB:
-            token += 'E'
-            break
-          case 0xC:
-            token += 'E-'
-            break
-          case 0xD:
-            break
-          case 0xE:
-            token += '-'
-            break
-          case 0xF:
-            parsed = true
-            break
-          default:
-            token += nibble
-            break
+            case 0xA:
+              token += '.'
+              break
+            case 0xB:
+              token += 'E'
+              break
+            case 0xC:
+              token += 'E-'
+              break
+            case 0xD:
+              break
+            case 0xE:
+              token += '-'
+              break
+            case 0xF:
+              parsed = true
+              break
+            default:
+              token += nibble
+              break
           }
         }
       }
@@ -204,17 +204,17 @@ function readFontIndexData(aStream, aIsByte) {
 
   function getNextOffset() {
     switch (offsize) {
-    case 0:
-      return 0
-    case 1:
-      return aStream.getByte()
-    case 2:
-      return aStream.getByte() << 8 | aStream.getByte()
-    case 3:
-      return aStream.getByte() << 16 | aStream.getByte() << 8 |
+      case 0:
+        return 0
+      case 1:
+        return aStream.getByte()
+      case 2:
+        return aStream.getByte() << 8 | aStream.getByte()
+      case 3:
+        return aStream.getByte() << 16 | aStream.getByte() << 8 |
                aStream.getByte()
-    case 4:
-      return aStream.getByte() << 24 | aStream.getByte() << 16 |
+      case 4:
+        return aStream.getByte() << 24 | aStream.getByte() << 16 |
              aStream.getByte() << 8 | aStream.getByte()
     }
     throw new FormatError(offsize + ' is not a valid offset size')
@@ -277,32 +277,32 @@ var Type2Parser = function type2Parser(aFilePath) {
         stack.push(token)
       } else {
         switch (token.operand) {
-        case 'SID':
-          font.set(token.name, CFFStrings[stack.pop()])
-          break
-        case 'number number':
-          font.set(token.name, {
-            offset: stack.pop(),
-            size: stack.pop()
-          })
-          break
-        case 'boolean':
-          font.set(token.name, stack.pop())
-          break
-        case 'delta':
-          font.set(token.name, stack.pop())
-          break
-        default:
-          if (token.operand && token.operand.length) {
-            var array = []
-            for (var j = 0; j < token.operand.length; j++) {
-              array.push(stack.pop())
-            }
-            font.set(token.name, array)
-          } else {
+          case 'SID':
+            font.set(token.name, CFFStrings[stack.pop()])
+            break
+          case 'number number':
+            font.set(token.name, {
+              offset: stack.pop(),
+              size: stack.pop()
+            })
+            break
+          case 'boolean':
             font.set(token.name, stack.pop())
-          }
-          break
+            break
+          case 'delta':
+            font.set(token.name, stack.pop())
+            break
+          default:
+            if (token.operand && token.operand.length) {
+              var array = []
+              for (var j = 0; j < token.operand.length; j++) {
+                array.push(stack.pop())
+              }
+              font.set(token.name, array)
+            } else {
+              font.set(token.name, stack.pop())
+            }
+            break
         }
       }
     }

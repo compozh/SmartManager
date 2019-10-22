@@ -356,48 +356,48 @@ class PDFPresentationMode {
     }
 
     switch (evt.type) {
-    case 'touchstart':
-      this.touchSwipeState = {
-        startX: evt.touches[0].pageX,
-        startY: evt.touches[0].pageY,
-        endX: evt.touches[0].pageX,
-        endY: evt.touches[0].pageY,
-      }
-      break
-    case 'touchmove':
-      if (this.touchSwipeState === null) {
-        return
-      }
-      this.touchSwipeState.endX = evt.touches[0].pageX
-      this.touchSwipeState.endY = evt.touches[0].pageY
-      // Avoid the swipe from triggering browser gestures (Chrome in
-      // particular has some sort of swipe gesture in fullscreen mode).
-      evt.preventDefault()
-      break
-    case 'touchend':
-      if (this.touchSwipeState === null) {
-        return
-      }
-      let delta = 0
-      let dx = this.touchSwipeState.endX - this.touchSwipeState.startX
-      let dy = this.touchSwipeState.endY - this.touchSwipeState.startY
-      let absAngle = Math.abs(Math.atan2(dy, dx))
-      if (Math.abs(dx) > SWIPE_MIN_DISTANCE_THRESHOLD &&
+      case 'touchstart':
+        this.touchSwipeState = {
+          startX: evt.touches[0].pageX,
+          startY: evt.touches[0].pageY,
+          endX: evt.touches[0].pageX,
+          endY: evt.touches[0].pageY,
+        }
+        break
+      case 'touchmove':
+        if (this.touchSwipeState === null) {
+          return
+        }
+        this.touchSwipeState.endX = evt.touches[0].pageX
+        this.touchSwipeState.endY = evt.touches[0].pageY
+        // Avoid the swipe from triggering browser gestures (Chrome in
+        // particular has some sort of swipe gesture in fullscreen mode).
+        evt.preventDefault()
+        break
+      case 'touchend':
+        if (this.touchSwipeState === null) {
+          return
+        }
+        let delta = 0
+        let dx = this.touchSwipeState.endX - this.touchSwipeState.startX
+        let dy = this.touchSwipeState.endY - this.touchSwipeState.startY
+        let absAngle = Math.abs(Math.atan2(dy, dx))
+        if (Math.abs(dx) > SWIPE_MIN_DISTANCE_THRESHOLD &&
             (absAngle <= SWIPE_ANGLE_THRESHOLD ||
              absAngle >= (Math.PI - SWIPE_ANGLE_THRESHOLD))) {
         // Horizontal swipe.
-        delta = dx
-      } else if (Math.abs(dy) > SWIPE_MIN_DISTANCE_THRESHOLD &&
+          delta = dx
+        } else if (Math.abs(dy) > SWIPE_MIN_DISTANCE_THRESHOLD &&
             Math.abs(absAngle - (Math.PI / 2)) <= SWIPE_ANGLE_THRESHOLD) {
         // Vertical swipe.
-        delta = dy
-      }
-      if (delta > 0) {
-        this._goToPreviousPage()
-      } else if (delta < 0) {
-        this._goToNextPage()
-      }
-      break
+          delta = dy
+        }
+        if (delta > 0) {
+          this._goToPreviousPage()
+        } else if (delta < 0) {
+          this._goToNextPage()
+        }
+        break
     }
   }
 

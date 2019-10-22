@@ -237,15 +237,15 @@ let PDFViewerApplication = {
     }
     if ('textlayer' in hashParams) {
       switch (hashParams['textlayer']) {
-      case 'off':
-        AppOptions.set('textLayerMode', TextLayerMode.DISABLE)
-        break
-      case 'visible':
-      case 'shadow':
-      case 'hover':
-        let viewer = this.appConfig.viewerContainer
-        viewer.classList.add('textLayer-' + hashParams['textlayer'])
-        break
+        case 'off':
+          AppOptions.set('textLayerMode', TextLayerMode.DISABLE)
+          break
+        case 'visible':
+        case 'shadow':
+        case 'hover':
+          let viewer = this.appConfig.viewerContainer
+          viewer.classList.add('textLayer-' + hashParams['textlayer'])
+          break
       }
     }
     if ('pdfbug' in hashParams) {
@@ -601,7 +601,7 @@ let PDFViewerApplication = {
     for (let key in workerParameters) {
       GlobalWorkerOptions[key] = workerParameters[key]
     }
-``
+    ''
     let parameters = Object.create(null)
     if (typeof file === 'string') { // URL
       parameters.url = file
@@ -1721,22 +1721,22 @@ function webViewerPageMode(evt) {
   // Handle the 'pagemode' hash parameter, see also `PDFLinkService_setHash`.
   let mode = evt.mode, view
   switch (mode) {
-  case 'thumbs':
-    view = SidebarView.THUMBS
-    break
-  case 'bookmarks':
-  case 'outline':
-    view = SidebarView.OUTLINE
-    break
-  case 'attachments':
-    view = SidebarView.ATTACHMENTS
-    break
-  case 'none':
-    view = SidebarView.NONE
-    break
-  default:
-    console.error('Invalid "pagemode" hash parameter: ' + mode)
-    return
+    case 'thumbs':
+      view = SidebarView.THUMBS
+      break
+    case 'bookmarks':
+    case 'outline':
+      view = SidebarView.OUTLINE
+      break
+    case 'attachments':
+      view = SidebarView.ATTACHMENTS
+      break
+    case 'none':
+      view = SidebarView.NONE
+      break
+    default:
+      console.error('Invalid "pagemode" hash parameter: ' + mode)
+      return
   }
   PDFViewerApplication.pdfSidebar.switchView(view, /* forceOpen = */ true)
 }
@@ -1746,15 +1746,15 @@ function webViewerNamedAction(evt) {
   // See also PDFLinkService.executeNamedAction
   let action = evt.action
   switch (action) {
-  case 'GoToPage':
-    PDFViewerApplication.appConfig.toolbar.pageNumber.select()
-    break
+    case 'GoToPage':
+      PDFViewerApplication.appConfig.toolbar.pageNumber.select()
+      break
 
-  case 'Find':
-    if (!PDFViewerApplication.supportsIntegratedFind) {
-      PDFViewerApplication.findBar.toggle()
-    }
-    break
+    case 'Find':
+      if (!PDFViewerApplication.supportsIntegratedFind) {
+        PDFViewerApplication.findBar.toggle()
+      }
+      break
   }
 }
 
@@ -2123,72 +2123,72 @@ function webViewerKeyDown(evt) {
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     // either CTRL or META key with optional SHIFT.
     switch (evt.keyCode) {
-    case 70: // f
-      if (!PDFViewerApplication.supportsIntegratedFind) {
-        PDFViewerApplication.findBar.open()
-        handled = true
-      }
-      break
-    case 71: // g
-      if (!PDFViewerApplication.supportsIntegratedFind) {
-        let findState = PDFViewerApplication.findController.state
-        if (findState) {
-          PDFViewerApplication.findController.executeCommand('findagain', {
-            query: findState.query,
-            phraseSearch: findState.phraseSearch,
-            caseSensitive: findState.caseSensitive,
-            entireWord: findState.entireWord,
-            highlightAll: findState.highlightAll,
-            findPrevious: cmd === 5 || cmd === 12,
-          })
+      case 70: // f
+        if (!PDFViewerApplication.supportsIntegratedFind) {
+          PDFViewerApplication.findBar.open()
+          handled = true
+        }
+        break
+      case 71: // g
+        if (!PDFViewerApplication.supportsIntegratedFind) {
+          let findState = PDFViewerApplication.findController.state
+          if (findState) {
+            PDFViewerApplication.findController.executeCommand('findagain', {
+              query: findState.query,
+              phraseSearch: findState.phraseSearch,
+              caseSensitive: findState.caseSensitive,
+              entireWord: findState.entireWord,
+              highlightAll: findState.highlightAll,
+              findPrevious: cmd === 5 || cmd === 12,
+            })
+          }
+          handled = true
+        }
+        break
+      case 61: // FF/Mac '='
+      case 107: // FF '+' and '='
+      case 187: // Chrome '+'
+      case 171: // FF with German keyboard
+        if (!isViewerInPresentationMode) {
+          PDFViewerApplication.zoomIn()
         }
         handled = true
-      }
-      break
-    case 61: // FF/Mac '='
-    case 107: // FF '+' and '='
-    case 187: // Chrome '+'
-    case 171: // FF with German keyboard
-      if (!isViewerInPresentationMode) {
-        PDFViewerApplication.zoomIn()
-      }
-      handled = true
-      break
-    case 173: // FF/Mac '-'
-    case 109: // FF '-'
-    case 189: // Chrome '-'
-      if (!isViewerInPresentationMode) {
-        PDFViewerApplication.zoomOut()
-      }
-      handled = true
-      break
-    case 48: // '0'
-    case 96: // '0' on Numpad of Swedish keyboard
-      if (!isViewerInPresentationMode) {
+        break
+      case 173: // FF/Mac '-'
+      case 109: // FF '-'
+      case 189: // Chrome '-'
+        if (!isViewerInPresentationMode) {
+          PDFViewerApplication.zoomOut()
+        }
+        handled = true
+        break
+      case 48: // '0'
+      case 96: // '0' on Numpad of Swedish keyboard
+        if (!isViewerInPresentationMode) {
         // keeping it unhandled (to restore page zoom to 100%)
-        setTimeout(function() {
+          setTimeout(function() {
           // ... and resetting the scale after browser adjusts its scale
-          PDFViewerApplication.zoomReset()
-        })
-        handled = false
-      }
-      break
+            PDFViewerApplication.zoomReset()
+          })
+          handled = false
+        }
+        break
 
-    case 38: // up arrow
-      if (isViewerInPresentationMode || PDFViewerApplication.page > 1) {
-        PDFViewerApplication.page = 1
-        handled = true
-        ensureViewerFocused = true
-      }
-      break
-    case 40: // down arrow
-      if (isViewerInPresentationMode ||
+      case 38: // up arrow
+        if (isViewerInPresentationMode || PDFViewerApplication.page > 1) {
+          PDFViewerApplication.page = 1
+          handled = true
+          ensureViewerFocused = true
+        }
+        break
+      case 40: // down arrow
+        if (isViewerInPresentationMode ||
             PDFViewerApplication.page < PDFViewerApplication.pagesCount) {
-        PDFViewerApplication.page = PDFViewerApplication.pagesCount
-        handled = true
-        ensureViewerFocused = true
-      }
-      break
+          PDFViewerApplication.page = PDFViewerApplication.pagesCount
+          handled = true
+          ensureViewerFocused = true
+        }
+        break
     }
   }
 
@@ -2197,10 +2197,10 @@ function webViewerKeyDown(evt) {
     // CTRL or META without shift
     if (cmd === 1 || cmd === 8) {
       switch (evt.keyCode) {
-      case 83: // s
-        PDFViewerApplication.download()
-        handled = true
-        break
+        case 83: // s
+          PDFViewerApplication.download()
+          handled = true
+          break
       }
     }
   }
@@ -2208,15 +2208,15 @@ function webViewerKeyDown(evt) {
   // CTRL+ALT or Option+Command
   if (cmd === 3 || cmd === 10) {
     switch (evt.keyCode) {
-    case 80: // p
-      PDFViewerApplication.requestPresentationMode()
-      handled = true
-      break
-    case 71: // g
+      case 80: // p
+        PDFViewerApplication.requestPresentationMode()
+        handled = true
+        break
+      case 71: // g
       // focuses input#pageNumber field
-      PDFViewerApplication.appConfig.toolbar.pageNumber.select()
-      handled = true
-      break
+        PDFViewerApplication.appConfig.toolbar.pageNumber.select()
+        handled = true
+        break
     }
   }
 
@@ -2244,97 +2244,97 @@ function webViewerKeyDown(evt) {
   if (cmd === 0) { // no control key pressed at all.
     let turnPage = 0, turnOnlyIfPageFit = false
     switch (evt.keyCode) {
-    case 38: // up arrow
-    case 33: // pg up
+      case 38: // up arrow
+      case 33: // pg up
       // vertical scrolling using arrow/pg keys
-      if (pdfViewer.isVerticalScrollbarEnabled) {
-        turnOnlyIfPageFit = true
-      }
-      turnPage = -1
-      break
-    case 8: // backspace
-      if (!isViewerInPresentationMode) {
-        turnOnlyIfPageFit = true
-      }
-      turnPage = -1
-      break
-    case 37: // left arrow
+        if (pdfViewer.isVerticalScrollbarEnabled) {
+          turnOnlyIfPageFit = true
+        }
+        turnPage = -1
+        break
+      case 8: // backspace
+        if (!isViewerInPresentationMode) {
+          turnOnlyIfPageFit = true
+        }
+        turnPage = -1
+        break
+      case 37: // left arrow
       // horizontal scrolling using arrow keys
-      if (pdfViewer.isHorizontalScrollbarEnabled) {
-        turnOnlyIfPageFit = true
-      }
+        if (pdfViewer.isHorizontalScrollbarEnabled) {
+          turnOnlyIfPageFit = true
+        }
       /* falls through */
-    case 75: // 'k'
-    case 80: // 'p'
-      turnPage = -1
-      break
-    case 27: // esc key
-      if (PDFViewerApplication.secondaryToolbar.isOpen) {
-        PDFViewerApplication.secondaryToolbar.close()
-        handled = true
-      }
-      if (!PDFViewerApplication.supportsIntegratedFind &&
+      case 75: // 'k'
+      case 80: // 'p'
+        turnPage = -1
+        break
+      case 27: // esc key
+        if (PDFViewerApplication.secondaryToolbar.isOpen) {
+          PDFViewerApplication.secondaryToolbar.close()
+          handled = true
+        }
+        if (!PDFViewerApplication.supportsIntegratedFind &&
             PDFViewerApplication.findBar.opened) {
-        PDFViewerApplication.findBar.close()
-        handled = true
-      }
-      break
-    case 40: // down arrow
-    case 34: // pg down
+          PDFViewerApplication.findBar.close()
+          handled = true
+        }
+        break
+      case 40: // down arrow
+      case 34: // pg down
       // vertical scrolling using arrow/pg keys
-      if (pdfViewer.isVerticalScrollbarEnabled) {
-        turnOnlyIfPageFit = true
-      }
-      turnPage = 1
-      break
-    case 13: // enter key
-    case 32: // spacebar
-      if (!isViewerInPresentationMode) {
-        turnOnlyIfPageFit = true
-      }
-      turnPage = 1
-      break
-    case 39: // right arrow
+        if (pdfViewer.isVerticalScrollbarEnabled) {
+          turnOnlyIfPageFit = true
+        }
+        turnPage = 1
+        break
+      case 13: // enter key
+      case 32: // spacebar
+        if (!isViewerInPresentationMode) {
+          turnOnlyIfPageFit = true
+        }
+        turnPage = 1
+        break
+      case 39: // right arrow
       // horizontal scrolling using arrow keys
-      if (pdfViewer.isHorizontalScrollbarEnabled) {
-        turnOnlyIfPageFit = true
-      }
+        if (pdfViewer.isHorizontalScrollbarEnabled) {
+          turnOnlyIfPageFit = true
+        }
       /* falls through */
-    case 74: // 'j'
-    case 78: // 'n'
-      turnPage = 1
-      break
+      case 74: // 'j'
+      case 78: // 'n'
+        turnPage = 1
+        break
 
-    case 36: // home
-      if (isViewerInPresentationMode || PDFViewerApplication.page > 1) {
-        PDFViewerApplication.page = 1
-        handled = true
-        ensureViewerFocused = true
-      }
-      break
-    case 35: // end
-      if (isViewerInPresentationMode ||
+      case 36: // home
+        if (isViewerInPresentationMode || PDFViewerApplication.page > 1) {
+          PDFViewerApplication.page = 1
+          handled = true
+          ensureViewerFocused = true
+        }
+        break
+      case 35: // end
+        if (isViewerInPresentationMode ||
             PDFViewerApplication.page < PDFViewerApplication.pagesCount) {
-        PDFViewerApplication.page = PDFViewerApplication.pagesCount
-        handled = true
-        ensureViewerFocused = true
-      }
-      break
+          PDFViewerApplication.page = PDFViewerApplication.pagesCount
+          handled = true
+          ensureViewerFocused = true
+        }
+        break
 
-    case 83: // 's'
-      PDFViewerApplication.pdfCursorTools.switchTool(CursorTool.SELECT)
-      break
-    case 72: // 'h'
-      PDFViewerApplication.pdfCursorTools.switchTool(CursorTool.HAND)
-      break
+      case 83: // 's'
+        PDFViewerApplication.pdfCursorTools.switchTool(CursorTool.SELECT)
+        break
+      case 72: // 'h'
+        PDFViewerApplication.pdfCursorTools.switchTool(CursorTool.HAND)
+        break
 
-    case 82: // 'r'
-      PDFViewerApplication.rotatePages(90)
-      break
+      case 82: // 'r'
+        PDFViewerApplication.rotatePages(90)
+        break
 
-    case 115: // F4
-      PDFViewerApplication.pdfSidebar.toggle()
-      break
+      case 115: // F4
+        PDFViewerApplication.pdfSidebar.toggle()
+        break
     }
 
     if (turnPage !== 0 &&
@@ -2354,21 +2354,21 @@ function webViewerKeyDown(evt) {
 
   if (cmd === 4) { // shift-key
     switch (evt.keyCode) {
-    case 13: // enter key
-    case 32: // spacebar
-      if (!isViewerInPresentationMode &&
+      case 13: // enter key
+      case 32: // spacebar
+        if (!isViewerInPresentationMode &&
             pdfViewer.currentScaleValue !== 'page-fit') {
+          break
+        }
+        if (PDFViewerApplication.page > 1) {
+          PDFViewerApplication.page--
+        }
+        handled = true
         break
-      }
-      if (PDFViewerApplication.page > 1) {
-        PDFViewerApplication.page--
-      }
-      handled = true
-      break
 
-    case 82: // 'r'
-      PDFViewerApplication.rotatePages(-90)
-      break
+      case 82: // 'r'
+        PDFViewerApplication.rotatePages(-90)
+        break
     }
   }
 
@@ -2404,15 +2404,15 @@ function webViewerKeyDown(evt) {
  */
 function apiPageLayoutToSpreadMode(layout) {
   switch (layout) {
-  case 'SinglePage':
-  case 'OneColumn':
-    return SpreadMode.NONE
-  case 'TwoColumnLeft':
-  case 'TwoPageLeft':
-    return SpreadMode.ODD
-  case 'TwoColumnRight':
-  case 'TwoPageRight':
-    return SpreadMode.EVEN
+    case 'SinglePage':
+    case 'OneColumn':
+      return SpreadMode.NONE
+    case 'TwoColumnLeft':
+    case 'TwoPageLeft':
+      return SpreadMode.ODD
+    case 'TwoColumnRight':
+    case 'TwoPageRight':
+      return SpreadMode.EVEN
   }
   return SpreadMode.NONE // Default value.
 }
@@ -2427,15 +2427,15 @@ function apiPageLayoutToSpreadMode(layout) {
  */
 function apiPageModeToSidebarView(mode) {
   switch (mode) {
-  case 'UseNone':
-    return SidebarView.NONE
-  case 'UseThumbs':
-    return SidebarView.THUMBS
-  case 'UseOutlines':
-    return SidebarView.OUTLINE
-  case 'UseAttachments':
-    return SidebarView.ATTACHMENTS
-  case 'UseOC':
+    case 'UseNone':
+      return SidebarView.NONE
+    case 'UseThumbs':
+      return SidebarView.THUMBS
+    case 'UseOutlines':
+      return SidebarView.OUTLINE
+    case 'UseAttachments':
+      return SidebarView.ATTACHMENTS
+    case 'UseOC':
       // Not implemented, since we don't support Optional Content Groups yet.
   }
   return SidebarView.NONE // Default value.

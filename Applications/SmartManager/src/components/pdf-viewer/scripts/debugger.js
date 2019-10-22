@@ -400,19 +400,19 @@ var Stepper = (function StepperClosure() {
       self.currentIdx = idx
       var listener = function(e) {
         switch (e.keyCode) {
-        case 83: // step
-          dom.removeEventListener('keydown', listener)
-          self.nextBreakPoint = self.currentIdx + 1
-          self.goTo(-1)
-          callback()
-          break
-        case 67: // continue
-          dom.removeEventListener('keydown', listener)
-          var breakPoint = self.getNextBreakPoint()
-          self.nextBreakPoint = breakPoint
-          self.goTo(-1)
-          callback()
-          break
+          case 83: // step
+            dom.removeEventListener('keydown', listener)
+            self.nextBreakPoint = self.currentIdx + 1
+            self.goTo(-1)
+            callback()
+            break
+          case 67: // continue
+            dom.removeEventListener('keydown', listener)
+            var breakPoint = self.getNextBreakPoint()
+            self.nextBreakPoint = breakPoint
+            self.goTo(-1)
+            callback()
+            break
         }
       }
       dom.addEventListener('keydown', listener)

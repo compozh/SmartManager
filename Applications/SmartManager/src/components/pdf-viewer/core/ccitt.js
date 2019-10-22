@@ -540,137 +540,137 @@ let CCITTFaxDecoder = (function CCITTFaxDecoder() {
           while (codingLine[this.codingPos] < columns) {
             code1 = this._getTwoDimCode()
             switch (code1) {
-            case twoDimPass:
-              this._addPixels(refLine[refPos + 1], blackPixels)
-              if (refLine[refPos + 1] < columns) {
-                refPos += 2
-              }
-              break
-            case twoDimHoriz:
-              code1 = code2 = 0
-              if (blackPixels) {
-                do {
-                  code1 += (code3 = this._getBlackCode())
-                } while (code3 >= 64)
-                do {
-                  code2 += (code3 = this._getWhiteCode())
-                } while (code3 >= 64)
-              } else {
-                do {
-                  code1 += (code3 = this._getWhiteCode())
-                } while (code3 >= 64)
-                do {
-                  code2 += (code3 = this._getBlackCode())
-                } while (code3 >= 64)
-              }
-              this._addPixels(codingLine[this.codingPos] +
+              case twoDimPass:
+                this._addPixels(refLine[refPos + 1], blackPixels)
+                if (refLine[refPos + 1] < columns) {
+                  refPos += 2
+                }
+                break
+              case twoDimHoriz:
+                code1 = code2 = 0
+                if (blackPixels) {
+                  do {
+                    code1 += (code3 = this._getBlackCode())
+                  } while (code3 >= 64)
+                  do {
+                    code2 += (code3 = this._getWhiteCode())
+                  } while (code3 >= 64)
+                } else {
+                  do {
+                    code1 += (code3 = this._getWhiteCode())
+                  } while (code3 >= 64)
+                  do {
+                    code2 += (code3 = this._getBlackCode())
+                  } while (code3 >= 64)
+                }
+                this._addPixels(codingLine[this.codingPos] +
                                code1, blackPixels)
-              if (codingLine[this.codingPos] < columns) {
-                this._addPixels(codingLine[this.codingPos] + code2,
-                  blackPixels ^ 1)
-              }
-              while (refLine[refPos] <= codingLine[this.codingPos] &&
+                if (codingLine[this.codingPos] < columns) {
+                  this._addPixels(codingLine[this.codingPos] + code2,
+                    blackPixels ^ 1)
+                }
+                while (refLine[refPos] <= codingLine[this.codingPos] &&
                        refLine[refPos] < columns) {
-                refPos += 2
-              }
-              break
-            case twoDimVertR3:
-              this._addPixels(refLine[refPos] + 3, blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                ++refPos
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
-                         refLine[refPos] < columns) {
                   refPos += 2
                 }
-              }
-              break
-            case twoDimVertR2:
-              this._addPixels(refLine[refPos] + 2, blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                ++refPos
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
-                         refLine[refPos] < columns) {
-                  refPos += 2
-                }
-              }
-              break
-            case twoDimVertR1:
-              this._addPixels(refLine[refPos] + 1, blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                ++refPos
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
-                         refLine[refPos] < columns) {
-                  refPos += 2
-                }
-              }
-              break
-            case twoDimVert0:
-              this._addPixels(refLine[refPos], blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                ++refPos
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
-                         refLine[refPos] < columns) {
-                  refPos += 2
-                }
-              }
-              break
-            case twoDimVertL3:
-              this._addPixelsNeg(refLine[refPos] - 3, blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                if (refPos > 0) {
-                  --refPos
-                } else {
+                break
+              case twoDimVertR3:
+                this._addPixels(refLine[refPos] + 3, blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
                   ++refPos
-                }
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
                          refLine[refPos] < columns) {
-                  refPos += 2
+                    refPos += 2
+                  }
                 }
-              }
-              break
-            case twoDimVertL2:
-              this._addPixelsNeg(refLine[refPos] - 2, blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                if (refPos > 0) {
-                  --refPos
-                } else {
+                break
+              case twoDimVertR2:
+                this._addPixels(refLine[refPos] + 2, blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
                   ++refPos
-                }
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
                          refLine[refPos] < columns) {
-                  refPos += 2
+                    refPos += 2
+                  }
                 }
-              }
-              break
-            case twoDimVertL1:
-              this._addPixelsNeg(refLine[refPos] - 1, blackPixels)
-              blackPixels ^= 1
-              if (codingLine[this.codingPos] < columns) {
-                if (refPos > 0) {
-                  --refPos
-                } else {
+                break
+              case twoDimVertR1:
+                this._addPixels(refLine[refPos] + 1, blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
                   ++refPos
-                }
-                while (refLine[refPos] <= codingLine[this.codingPos] &&
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
                          refLine[refPos] < columns) {
-                  refPos += 2
+                    refPos += 2
+                  }
                 }
-              }
-              break
-            case ccittEOF:
-              this._addPixels(columns, 0)
-              this.eof = true
-              break
-            default:
-              info('bad 2d code')
-              this._addPixels(columns, 0)
-              this.err = true
+                break
+              case twoDimVert0:
+                this._addPixels(refLine[refPos], blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
+                  ++refPos
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
+                         refLine[refPos] < columns) {
+                    refPos += 2
+                  }
+                }
+                break
+              case twoDimVertL3:
+                this._addPixelsNeg(refLine[refPos] - 3, blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
+                  if (refPos > 0) {
+                    --refPos
+                  } else {
+                    ++refPos
+                  }
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
+                         refLine[refPos] < columns) {
+                    refPos += 2
+                  }
+                }
+                break
+              case twoDimVertL2:
+                this._addPixelsNeg(refLine[refPos] - 2, blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
+                  if (refPos > 0) {
+                    --refPos
+                  } else {
+                    ++refPos
+                  }
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
+                         refLine[refPos] < columns) {
+                    refPos += 2
+                  }
+                }
+                break
+              case twoDimVertL1:
+                this._addPixelsNeg(refLine[refPos] - 1, blackPixels)
+                blackPixels ^= 1
+                if (codingLine[this.codingPos] < columns) {
+                  if (refPos > 0) {
+                    --refPos
+                  } else {
+                    ++refPos
+                  }
+                  while (refLine[refPos] <= codingLine[this.codingPos] &&
+                         refLine[refPos] < columns) {
+                    refPos += 2
+                  }
+                }
+                break
+              case ccittEOF:
+                this._addPixels(columns, 0)
+                this.eof = true
+                break
+              default:
+                info('bad 2d code')
+                this._addPixels(columns, 0)
+                this.err = true
             }
           }
         } else {
