@@ -46,15 +46,11 @@ import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 import 'dmn-js-properties-panel/dist/assets/dmn-js-properties-panel.css';
 
 import { debounce } from 'throttle-debounce';
-import { CancellationToken } from '../../api/cancellationToken'
-import { SavingContext } from '../../api/savingContext';
-import { exportMixin } from '../mixins/importExportMixin';
-import editorToolbarMixin from '../mixins/editorToolbarMixin';
-import editorFactory from '../../api/editorFactory';
 import ModelerLayout from './ModelerLayout';
-import Process from '../../api/models/Process';
-import ProcessType from '../../api/models/ProcessType';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+import { Process, ProcessType } from '../../api/models';
+import { CancellationToken, SavingContext, editorFactory } from '../../api';
+import { editorToolbarMixin, exportMixin } from '../mixins';
 
 export default {
   name: 'dmn-modeler',

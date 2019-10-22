@@ -65,15 +65,6 @@
       </v-container>
     </v-content>
 
-    <v-dialog :persistent="formLoading" v-model="showForm" max-width="500">
-      <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
-    </v-dialog>
-
-    <v-dialog v-model="showSelectionGrid" max-width="800">
-      <selection-grid :items="selectionGridItems" :title="selectionGridTitle" :selectedItems="selectionGridSelectedItems"
-                      @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
-    </v-dialog>
-
     <v-dialog v-model="dataLoading"
               full-width
               persistent>
@@ -103,23 +94,17 @@
     </v-snackbar>
 
     <formio-builder-container />
-
-    <formio-container v-bind="formio" @submit="onFormioSubmit" />
-    
+    <formio-container />
+    <bpmn-form></bpmn-form>
+    <selection-grid></selection-grid>
   </v-app>
 </template>
 
 <script>
-import treeSearch from '../api/treeSearch';
-import formMixin from './mixins/formMixin';
-import { importMixin } from './mixins/importExportMixin';
-import setExternalTaskPropertiesMixin from './mixins/SetExternalTaskProperties';
-import Folder from '../api/models/Folder';
-import Process from '../api/models/Process';
-import ProcessType from '../api/models/ProcessType';
+import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from './mixins';
+import { Folder, Process, ProcessType } from '../api/models';
 import SelectionGrid from './dialogs/SelectionGrid';
 import FormioContainer from './formio/Formio';
-import ActionDefinitionType from '../api/models/ActionDefinitionType';
 import { Notification } from 'element-ui';
 import { eventBus } from '../main';
 import { events } from '../constants';
@@ -127,7 +112,7 @@ import { events } from '../constants';
 export default {
   name: 'bpmn-layout',
   components: { SelectionGrid, FormioContainer },
-  mixins: [ formMixin, importMixin, setExternalTaskPropertiesMixin ],
+  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   data () {
     return {
       showAppBar: true,
@@ -135,19 +120,12 @@ export default {
       displayMessage: false,
       message: '',
       messageTimeout: 10000,
-      messageType: 'error',
-      showSelectionGrid: false,
-      selectionGridItems: [],
-      selectionGridSelectedItems: [],
-      selectionGridTitle: '',
-      propertiesPanelCallback: null,
+      messageType: 'error'
     };
   },
   mounted() {
     this.onRouteChanged(false);
     eventBus.$on(events.modeler.createDiagram, this.onCreateDiagram);
-    eventBus.$on(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
-    eventBus.$on(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
   },
   methods: {
     async loadItems() {
@@ -214,60 +192,12 @@ export default {
           break;
         }
       }
-
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
         this.$router.push({ name: routeName, params });
       }
     },
-    showMessage(message, type) {
-      this.message = message;
-      this.messageType = type;
-      this.displayMessage = true;
-    },
-    async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
-      this.loading = true;
-      var items = await this.$store.dispatch('bpmn/getAvailableActions', { processId: this.activeItem, definitionType });
-      if (!items) {
-        this.loading = false;
-        Notification.error(this.$t('bpmn.errors.ActionsNotLoaded'));
-        return;
-      }
-      this.loading = false;
-      this.propertiesPanelCallback = callback;
-      this.selectionGridTitle = definitionType == ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction');
-      this.selectionGridItems = items;
-      this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
-      this.showSelectionGrid = true;
-    },
-    async onPropertiesPanelSelectFormKey(formKey, callback) {
-      this.loading = true;
-      var items = await this.$store.dispatch('bpmn/getFormsForProcess', { processId: this.activeItem });
-      if (!items) {
-        this.loading = false;
-        Notification.error(this.$t('bpmn.errors.FormsNotLoaded'));
-        return;
-      }
-      this.loading = false;
-      this.propertiesPanelCallback = callback;
-      this.selectionGridTitle = this.$t('bpmn.labels.SelectForm');
-      this.selectionGridItems = items;
-      this.selectionGridSelectedItems = items.filter(item => item.id === formKey);
-      this.showSelectionGrid = true;
-    },
-    onSelectionGridSelect(item) {
-      this.showSelectionGrid = false;
-      if (!item) {
-        return;
-      }
-      this.propertiesPanelCallback(item.id);
-      this.propertiesPanelCallback = null;
-      this.selectionGridItems = [];
-      this.selectionGridSelectedItems = [];
-      this.selectionGridTitle = '';
-    },
-    /** Обработчик события создания диаграммы */
     onCreateDiagram() {
-      this.createItem(this.$store.state.bpmn.activeItem, 'process')
+      this.createItem(this.$store.state.bpmn.activeItem, 'process');
     }
   },
   computed: {
@@ -316,15 +246,14 @@ export default {
       }
     },
     snackbarVisible() {
-      this.message = this.snackbar.message;
-      this.messageType = this.snackbar.type;
-      this.displayMessage = this.snackbar.visible;
+      Notification({
+        message: this.snackbar.message,
+        type: this.snackbar.type
+      });
     }
   },
   beforeDestroy() {
     eventBus.$off(events.modeler.createDiagram, this.onCreateDiagram);
-    eventBus.$off(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
-    eventBus.$off(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
   }
 };
 </script>

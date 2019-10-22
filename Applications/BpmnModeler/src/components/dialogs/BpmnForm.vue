@@ -1,10 +1,11 @@
 <template>
+<v-dialog v-if="show" :persistent="loading" v-model="show" max-width="500">
   <v-card>
     <v-card-title>
       <span class="headline">{{ titles[type][mode] }}</span>
       <v-spacer></v-spacer>
       <v-btn-toggle v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
-        <v-btn :value="true" :disabled="!['create', 'copy'].includes(mode) || !this.canModifySystemObjects" flat style="flex-grow: 0">
+        <v-btn :value="true" :disabled="!canChangeIsSystemProperty || loading" flat style="flex-grow: 0">
           <v-icon v-if="model.isSystem">lock</v-icon>
           <v-icon v-else>lock_open</v-icon>
         </v-btn>
@@ -19,7 +20,7 @@
           clearable
           maxLength="254"
           :rules="[rules.required]"></v-text-field>
-        <v-radio-group v-model="model.type" row v-if="mode !== 'edit' && type === 'process'" :disabled="mode !== 'create'" :label="$t('bpmn.labels.Type')">
+        <v-radio-group v-model="model.type" row v-if="mode !== 'edit' && type === 'process'" :disabled="mode !== 'create' || loading" :label="$t('bpmn.labels.Type')">
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
         </v-radio-group>   
@@ -28,45 +29,25 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn :disabled="loading" flat @click="cancel()">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-      <v-btn :loading="loading" flat @click="save()" color="primary">{{ actions[mode] }}</v-btn>
+      <v-btn :loading="loading" :disabled="!valid" flat @click="save()" color="primary">{{ actions[mode] }}</v-btn>
     </v-card-actions>
   </v-card>
+</v-dialog>
 </template>
 <script>
-import Process from '../../api/models/Process';
+import { eventBus } from '../../main';
+import { events } from '../../constants';
+
 export default {
   name: 'bpmn-form',
-  props: {
-    loading: {
-      type: Boolean,
-      default() {
-        return false;
-      }
-    },
-    mode: {
-      type: String,
-      validator(value) {
-        return ['create', 'edit', 'delete', 'copy' ].indexOf(value) !== -1
-      }
-    },
-    model: {
-      type: Object,
-      default() {
-        return new Process()
-      }
-    },
-    type: {
-      type: String,
-      validator(value) {
-        return ['process', 'folder' ].indexOf(value) !== -1
-      },
-      default() {
-        return 'process';
-      }
-    }
-  },
   data() {
     return {
+      show: false,
+      loading: false,
+      mode: '',
+      type: '',
+      model: null,
+      callback: null,
       valid: true,
       titles: {
         'process': {
@@ -93,30 +74,42 @@ export default {
       }
     }
   },
+  mounted() {
+    eventBus.$on(events.modeler.showForm, this.onShowForm);
+  },
+  beforeDestroy() {
+    eventBus.$off(events.modeler.showForm, this.onShowForm);
+  },
   computed: {
-    canModifySystemObjects() {
-      return this.$store.state.bpmn.configuration.canModifySystemObjects;
+    canChangeIsSystemProperty() {
+      return ['create', 'copy'].includes(this.mode) && this.$store.state.bpmn.configuration.canModifySystemObjects;
     }
   },
   methods: {
+    onShowForm(mode, type, model, callback) {
+      this.mode = mode;
+      this.type = type;
+      this.model = model;
+      this.callback = callback;
+      this.show = true;
+    },
     cancel() {
       this.$refs.form.resetValidation();
-      this.$emit('close');
+      this.show = false;
     },
-    save() {
-      if (this.$refs.form.validate()) {
-        this.$refs.form.resetValidation();
-        this.$emit('save', this.model, this.type);
+    async save() {
+      if (!this.$refs.form.validate()) {
+        return;
       }
-    },
-    reset() {
-      this.$refs.nameField.focus();
-      this.$refs.form.resetValidation();
-    }
-  },
-  watch: {
-    model() {
-      this.reset();
+      if (this.callback) {
+        this.loading = true;
+        const success = await this.callback(this.model, this.type, this.mode);
+        this.loading = false;
+        if (success) {
+          this.cancel();
+        }
+        this.callback = null;
+      }
     }
   }
 }

@@ -1,6 +1,11 @@
 /**
- * @callback formCallback
+ * @callback formioCallback
  * @param {string} unformio - код формы
+ */
+
+/**
+ * @callback submitFormioCallback
+ * @param {string} submission - данные с формы
  */
 
 /**
@@ -13,10 +18,20 @@
  * @param {ServiceTaskParameter[]} properties - новые значения параметров
  */
 
+/**
+ * @callback itemSelectedCallback
+ * @param {Object} selectedItem - выбранный элемент
+ */
+
+/**
+ * @callback formSaveCallback
+ * @param {Object} model - модель формы
+ * @param {string} type - тип формы (process/folder)
+ */
 
 /** События */
 export const events = {
-  /** События в редакторе bpmn.io */
+  /** События в приложении */
   modeler: {
     /**
      * Экспортировать активную диаграмму
@@ -24,32 +39,42 @@ export const events = {
      * @param {string} type - тип экспортируемой диаграммы
      */
     export: 'modeler.export',
+
     /**
      * Отобразить диалог создания новой диаграммы
      * @event Modeler#createDiagram
      */
-    createDiagram: 'modeler.create-diagram'
+    createDiagram: 'modeler.create-diagram',
+
+    /**
+     * Отобразить диалог выбора элемента из списка
+     * @event Modeler#showSelectionGrid
+     * @param {string} title - Заголовок диалога
+     * @param {Object[]} items - элеиенты для выбора
+     * @param {string} items.id - код элемента
+     * @param {string} items.name - название элемента
+     * @param {Object} selectedItem - выбранный элемент
+     * @param {itemSelectedCallback} callback - коллбек, вызываемый при выборе элемента
+     */
+    showSelectionGrid: 'modeler.show-selection-grid',
+
+    /**
+     * Отобразить форму корректировки элемента
+     * @event Modeler#showForm
+     * @param {string} mode - режим формы (create/edit/delete/copy)
+     * @param {string} type - тип элемента (process/folder)
+     * @param {Object} model - элемент
+     * @param {formSaveCallback} callback - коллбек, вызываемый при нажатии на кнопку "сохранить"
+     */
+    showForm: 'modeler.show-form'
   },
   /** События в панели свойств */
   propertiesPanel: {
     /**
-     * Отобразить диалог создания формы formio
-     * @event PropertiesPanel#createForm
-     * @param {formCallback} callback - коллбек, вызываемый при успешном создании формы
-     */
-    createForm: 'properties-panel.create-form',
-    /**
-     * Отобразить диалог корректировки формы formio
-     * @event PropertiesPanel#editForm
-     * @param {string} unformio - код формы, которую нужно отредактировать
-     */
-    editForm: 'properties-panel.edit-form',
-
-    /**
      * Отобразить диалог выбора формы formio
      * @event PropertiesPanel#selectForm
      * @param {string} unformio - код выбранной формы
-     * @param {formCallback} - коллбек, вызываемый после выбора формы
+     * @param {formioCallback} - коллбек, вызываемый после выбора формы
      */
     selectForm: 'properties-panel.select-form',
 
@@ -58,7 +83,7 @@ export const events = {
      * @event PropertiesPanel#selectAction
      * @param {string} actionId - код выбранного действия
      * @param {ActionDefinitionType} type - тип задачи
-     * @param {formCallback} callback - коллбек, вызываемый после выбора действия
+     * @param {actionCallback} callback - коллбек, вызываемый после выбора действия
      */
     selectAction: 'properties-panel.select-action',
 
@@ -70,5 +95,30 @@ export const events = {
      * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
      */
     setServiceTaskProperties: 'properties-panel.set-service-task-parameters'
+  },
+  /** События formio */
+  formio: {
+    /**
+     * Отобразить диалог с формой formio
+     * @event Formio#showForm
+     * @param {string} code - код формы
+     * @param {Object} definition - определение формы
+     * @param {submitFormioCallback} callback - коллбек, вызываемый при нажатие на кнопку submit
+     */
+    showForm: 'formio.show-form',
+
+    /**
+     * Отобразить диалог создания формы formio
+     * @event Formio#createForm
+     * @param {formioCallback} callback - коллбек, вызываемый при успешном создании формы
+     */
+    createForm: 'formio.create-form',
+
+    /**
+     * Отобразить диалог корректировки формы formio
+     * @event Formio#editForm
+     * @param {string} unformio - код формы, которую нужно отредактировать
+     */
+    editForm: 'formio.edit-form'
   }
 }

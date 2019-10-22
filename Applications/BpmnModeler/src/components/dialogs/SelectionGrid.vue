@@ -1,6 +1,7 @@
 <template>
-  <v-card>
-    <v-card-title primary-title>
+  <v-dialog v-if="show" v-model="show" max-width="800">
+    <v-card>
+      <v-card-title primary-title>
         <h4 class="headline mb-0">{{ title }}</h4>
         <v-spacer></v-spacer>
         <v-text-field
@@ -10,101 +11,81 @@
           single-line
           hide-details
         ></v-text-field>
-    </v-card-title>
-    <v-card-text style="max-height: 500px; overflow-y: auto;">
-       <v-data-table
-        hide-actions      
-        v-model="selected"
-        :headers="columns"
-        :items="items"
-        :search="search"
-        :pagination.sync="pagination"
-        :loading="loading"
-      >
-        <template v-slot:headers="props">
-          <tr>
-            <th>
-              <v-checkbox
-                v-if="multi"
-                :input-value="props.all"
-                :indeterminate="props.indeterminate"
-                primary
-                hide-details
-                @click.stop="toggleAll"
-              ></v-checkbox>
-              <div v-else></div>
-            </th>
-            <th
-              v-for="header in props.headers"
-              :key="header.text"
-              :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-              @click="changeSort(header.value)"
-            >
-              <v-icon small>arrow_upward</v-icon>
-              {{ header.text }}
-            </th>
-          </tr>
-        </template>
-        <template v-slot:items="props">
-          <tr :active="props.selected" @click="selectProp(props)">
-            <td>
-              <v-checkbox
-                :input-value="props.selected"
-                @input="selectProp(props)"
-                primary
-                hide-details
-              ></v-checkbox>
-            </td>
-            <td class="text-xs-left">{{ props.item.name }}</td>
-            <td class="text-xs-left">{{ props.item.id }}</td>
-          </tr>
-          
-        </template>
-      </v-data-table>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn flat @click="cancel()">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-      <v-btn flat color="primary" :disabled="!selected.length || loading" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
-    </v-card-actions>
-  </v-card>
+      </v-card-title>
+      <v-card-text style="max-height: 500px; overflow-y: auto;">
+        <v-data-table
+          hide-actions      
+          v-model="selected"
+          :headers="columns"
+          :items="items"
+          :search="search"
+          :pagination.sync="pagination"
+        >
+          <template v-slot:headers="props">
+            <tr>
+              <th>
+                <div></div>
+              </th>
+              <th
+                v-for="header in props.headers"
+                :key="header.text"
+                :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                @click="changeSort(header.value)"
+              >
+                <v-icon small>arrow_upward</v-icon>
+                {{ header.text }}
+              </th>
+            </tr>
+          </template>
+          <template v-slot:items="props">
+            <tr :active="props.selected" @click="selectProp(props)">
+              <td>
+                <v-checkbox
+                  :input-value="props.selected"
+                  @input="selectProp(props)"
+                  primary
+                  hide-details
+                ></v-checkbox>
+              </td>
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.id }}</td>
+            </tr>
+            
+          </template>
+        </v-data-table>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn flat @click="show = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+        <v-btn flat color="primary" :disabled="!selected.length" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script>
-import goTo from 'vuetify/lib/components/Vuetify/goTo'
+import { eventBus } from '../../main';
+import { events } from '../../constants';
 
 export default {
   name: 'selection-grid',
-  props: {
-    multi: {
-      type: Boolean,
-      default() { return false }
-    },
-    columns: {
-      type: Array,
-      default() {
-        return [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ];
-      }
-    },
-    items: {
-      type: Array,
-      required: true,
-      default() { return [] }
-    },
-    selectedItems: {
-      type: Array,
-      default() { return [] }
-    },
-    loading: Boolean,
-    title: String
-  },
   data() {
     return {
+      show: false,
       search: '',
+      title: '',
+      items: [],
       selected: [],
       pagination: {
         sortBy: 'name',
         rowsPerPage: -1
-      }
+      },
+      columns: [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ]
     }
+  },
+  mounted() {
+    eventBus.$on(events.modeler.showSelectionGrid, this.onShowSelectionGrid);
+  },
+  beforeDestroy() {
+    eventBus.$off(events.modeler.showSelectionGrid, this.onShowSelectionGrid);
   },
   watch: {
     selectedItems(value) {
@@ -112,6 +93,13 @@ export default {
     }
   },
   methods: {
+    onShowSelectionGrid(title, items, selectedItem, callback) {
+      this.title = title;
+      this.items = items;
+      this.selected = [selectedItem];
+      this.callback = callback;
+      this.show = true;
+    },
     toggleAll () {
       if (this.selected.length) { 
         this.selected = [];
@@ -131,15 +119,14 @@ export default {
       if (!this.selected.length) {
         return;
       }
-      this.$emit('select', this.multi ? this.selected : this.selected[0]);
-    },
-    cancel() {
-      this.$emit('cancel');
+      if (this.callback) {
+        this.callback(this.selected[0]);
+        this.callback = null;
+      }
+      this.show = false;
     },
     selectProp(props) {
-      if (!this.multi) {
-        this.selected = [];
-      }
+      this.selected = [];
       this.$nextTick(() => {
         props.selected = !props.selected;
       });

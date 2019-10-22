@@ -20,22 +20,28 @@ import { events } from '../../constants';
 
 export default {
   name: 'formio-container',
-  props: {
-    show: Boolean,
-    code: String,
-    definition: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
-  },
   data() {
     return {
       loading: false,
+      show: false,
+      code: '',
+      definition: null,
+      callback: null
     }
   },
+  mounted() {
+    eventBus.$on(events.formio.showForm, this.onShowForm);
+  },
+  beforeDestroy() {
+    eventBus.$off(events.formio.showForm, this.onShowForm);
+  },
   methods: {
+    onShowForm(code, definition, callback) {
+      this.code = code;
+      this.definition = definition;
+      this.show = true;
+      this.callback = callback;
+    },
     async onSubmit() {
       var form = this.$refs.formioForm;
       var submission = JSON.parse(form.getFormSubmission());     
@@ -48,6 +54,12 @@ export default {
       }
 
       this.loading = false;
+      
+      if (this.callback) {
+        this.callback(submission);
+        this.callback = null;
+      }
+      this.show = false;
     }
   }
 }

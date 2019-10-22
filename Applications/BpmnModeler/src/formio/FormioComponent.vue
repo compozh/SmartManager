@@ -180,7 +180,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.formio-container-class /deep/ {
+.formio-container-class {
   @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/dist/css/bootstrap";
@@ -420,7 +420,7 @@ export default {
     }
   }
 }
-.downtimes-block .formio-container /deep/ {
+.downtimes-block .formio-container {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -433,7 +433,7 @@ export default {
   }
 }
 .downtime-layout{
-  .formio-container /deep/ {
+  .formio-container {
     width: 100%;
     display: flex;
     justify-content: center;

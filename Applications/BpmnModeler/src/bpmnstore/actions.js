@@ -1,9 +1,6 @@
 /* eslint-disable require-atomic-updates */
-import { BpmnModelerApi } from '../api/bpmnApi';
-import Folder from '../api/models/Folder';
-import Process from '../api/models/Process';
-import Configuration from '../api/models/Configuration';
-import ActionDefinition from '../api/models/ActionDefinition';
+import { BpmnModelerApi } from '../api';
+import { Folder, Process, Configuration, ActionDefinition } from '../api/models';
 
 const api = new BpmnModelerApi();
 

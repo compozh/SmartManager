@@ -20,14 +20,11 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css';
 
 import { debounce } from 'throttle-debounce';
-import { CancellationToken } from '../../api/cancellationToken'
-import { SavingContext } from '../../api/savingContext';
-import { exportMixin } from '../mixins/importExportMixin';
-import editorToolbarMixin from '../mixins/editorToolbarMixin';
-import Process from '../../api/models/Process';
-import editorFactory from '../../api/editorFactory';
 import ModelerLayout from './ModelerLayout';
-import ProcessType from '../../api/models/ProcessType';
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+import { Process, ProcessType } from '../../api/models';
+import { CancellationToken, SavingContext, editorFactory } from '../../api';
+import { editorToolbarMixin, exportMixin } from '../mixins';
 
 export default {
   name: 'bpmn-modeler',

@@ -1,4 +1,4 @@
-export class SavingContext {
+export default class SavingContext {
   constructor(modeler, diagramId, callback) {
     this.modeler = modeler;
     this.diagramId = diagramId;

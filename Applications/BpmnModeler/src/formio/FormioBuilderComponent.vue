@@ -138,7 +138,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .formio-builder-component-class /deep/ {
+    .formio-builder-component-class {
         @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
         @import "~formiojs/dist/formio.full.min.css";
         @import "~bootstrap/dist/css/bootstrap";
@@ -147,11 +147,6 @@ export default {
         .btn-primary {
             background-color: #1976d2;
             border-color: #1976d2;
-        }
-        .component-settings-button > i {
-            position: relative;
-            top: -7px;
-            left: -5px;
         }
     }
     .formio-builder-component-class {
