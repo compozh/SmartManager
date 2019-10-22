@@ -45,13 +45,13 @@ export default {
           case 'ALL_PAGES':
             pages.push(page)
             break
-          case 'INSTALLATIONS':
-            if (page.id == 'INSTALLATIONS') {
+          case 'ONLY_INSTALLATION':
+            if (page.Id == 'INSTALLATIONS') {
               pages.push(page)
             }
             break
-          case 'QUALITY':
-            if (page.id == 'QUALITY') {
+          case 'ONLY_QUALITY':
+            if (page.Id == 'QUALITY') {
               pages.push(page)
             }
             break
@@ -64,10 +64,10 @@ export default {
         case 'ALL_PAGES':
           pagePath = '/MES/tasks'
           break
-        case 'INSTALLATIONS':
+        case 'ONLY_INSTALLATION':
           pagePath = '/MES/installations'
           break
-        case 'QUALITY':
+        case 'ONLY_QUALITY':
           pagePath = '/MES/quality'
           break
         }
