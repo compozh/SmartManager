@@ -85,12 +85,15 @@
                   class="mail__attachment"
                   v-for="(attachment, index) in task.originals"
                   :key="index"
-                  @click="$emit('open-attachment', attachment.fileUrl)"
+                  @click="$emit('open-attachment', index)"
                 >
                   <vx-tooltip :text="attachment.fileName" color="rgb(98, 98, 98, .95)">
                     <vs-chip
                       class="mr-3 max-w-sm cursor-pointer hover:bg-primary hover:text-white"
                     >
+                      <span class="flex mr-2 text-primary">
+                        <file-icon :extention="attachment.fileExt"></file-icon>
+                      </span>
                       <span class="custom-truncate">{{ attachment.fileName }}</span>
                     </vs-chip>
                   </vx-tooltip>
@@ -182,7 +185,8 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import TaskListItem from '../../task-list/TaskListItem.vue'
+import TaskListItem from '@/views/task-list/TaskListItem.vue'
+import FileIcon from '@/components/FileIcon'
 import {Form} from 'vue-formio'
 import {eventBus} from '@/main'
 
@@ -194,6 +198,7 @@ export default {
     VuePerfectScrollbar,
     TaskListItem,
     formio: Form,
+    FileIcon
   },
   data: () => ({
     defaultDescHeight: 250,
@@ -207,8 +212,6 @@ export default {
     submission: {},
   }),
   computed: {
-
-
     // formio
     form() {
       if (this.task.externalParams) {
