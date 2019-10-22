@@ -81,36 +81,36 @@ export default {
     taskStatus() {
       return () => {
         switch (this.task.status) {
-        case '':
-          return {
-            color: 'primary',
-            icon: 'loop',
-            text: this.$t('statuses.inWork')
-          }
-        case '*':
-          return {
-            color: 'primary',
-            icon: 'loop',
-            text: this.$t('statuses.inWork')
-          }
-        case '-':
-          return {
-            color: 'danger',
-            icon: 'highlight_off',
-            text: this.$t('statuses.rejected')
-          }
-        case '+':
-          return {
-            color: 'success',
-            icon: 'check_circle_outline',
-            text: this.$t('statuses.completed')
-          }
-        default:
-          return {
-            color: '',
-            icon: '',
-            text: ''
-          }
+          case '':
+            return {
+              color: 'primary',
+              icon: 'loop',
+              text: this.$t('statuses.inWork')
+            }
+          case '*':
+            return {
+              color: 'primary',
+              icon: 'loop',
+              text: this.$t('statuses.inWork')
+            }
+          case '-':
+            return {
+              color: 'danger',
+              icon: 'highlight_off',
+              text: this.$t('statuses.rejected')
+            }
+          case '+':
+            return {
+              color: 'success',
+              icon: 'check_circle_outline',
+              text: this.$t('statuses.completed')
+            }
+          default:
+            return {
+              color: '',
+              icon: '',
+              text: ''
+            }
         }
       }
     },

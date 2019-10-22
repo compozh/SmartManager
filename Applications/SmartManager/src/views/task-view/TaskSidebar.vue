@@ -49,8 +49,8 @@ export default {
     chips() {
       return itemName => {
         switch (itemName) {
-        case 'attachments': return this.attachments.length
-        case 'comments': return this.comments.length
+          case 'attachments': return this.attachments.length
+          case 'comments': return this.comments.length
         }
       }
     }

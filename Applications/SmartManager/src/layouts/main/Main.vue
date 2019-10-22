@@ -162,11 +162,11 @@ export default {
     },
     setFolderIcon(code) {
       switch (code) {
-      case '': return 'LayersIcon'
-      case 'filter_done': return 'CheckSquareIcon'
-      case 'filter_from_me': return 'UserIcon'
-      case 'filter_favorite': return 'StarIcon'
-      default: return 'FolderIcon'
+        case '': return 'LayersIcon'
+        case 'filter_done': return 'CheckSquareIcon'
+        case 'filter_from_me': return 'UserIcon'
+        case 'filter_favorite': return 'StarIcon'
+        default: return 'FolderIcon'
       }
     },
     changeRouteTitle(title) {
