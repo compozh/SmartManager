@@ -56,13 +56,13 @@
 <script>
 import TaskListItem from './TaskListItem.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import noData from '@/components/noData'
+import NoData from '@/components/NoData'
 
 export default {
   components: {
     TaskListItem,
     VuePerfectScrollbar,
-    noData
+    NoData
   },
   data: () => ({
     currentPage: 1,
