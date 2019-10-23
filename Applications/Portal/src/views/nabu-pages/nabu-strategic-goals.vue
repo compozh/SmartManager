@@ -1,10 +1,26 @@
 <template>
-  <h1>test</h1>
+  <AgGridView :education="dataStrategicGoals" v-if="dataStrategicGoals"></AgGridView>
 </template>
 
 <script>
-export default {
+const AgGridView = () => import('../components/AgGridTableComponent.vue')
 
+export default {
+  components: {
+    AgGridView
+  },
+  created() {
+    // if (this.$store.getters['education/getStrategicGoals']) {
+    //   return
+    // }
+    // this.$store.dispatch('education/loadStrategicGoals')
+  },
+  computed: {
+    dataStrategicGoals() {
+      // return this.$store.getters['education/getStrategicGoals']
+      return undefined
+    }
+  }
 }
 </script>
 

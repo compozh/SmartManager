@@ -17,6 +17,12 @@ export default {
     commit('setFullUserInfo', result.data.personalInfoQueryMutation.setFullInfo)
 
   },
+  async loadEmployeeInfo({commit}) {
+    let result = await PersonalInfoApi.getEmployeeInfo()
+    if (result) {
+      commit('setEmployeeInfo', ...result.data.portalNabuQuery.employeeInfo.data)
+    }
+  },
   setEditMode({commit}, value) {
     commit('setEditMode', value)
   }

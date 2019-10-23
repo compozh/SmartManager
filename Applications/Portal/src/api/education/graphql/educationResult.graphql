@@ -1,0 +1,22 @@
+{
+    portalNabuQuery{
+      trainingResult{
+        data{
+            subject
+          factHours
+          description
+          trainingDateEnd
+          trainingOrgTitle
+          trainingDateStart
+          professionalTrainingType
+        }
+        headers{
+          field
+          filter
+          minWidth
+          sortable
+          headerName
+        }
+      }
+    }
+  }

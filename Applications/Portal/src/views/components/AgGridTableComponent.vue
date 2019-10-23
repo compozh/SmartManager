@@ -7,7 +7,6 @@
       :defaultColDef="defaultColDef"
       :rowData="rows"
     ></ag-grid-vue>
-
   </vx-card>
 </template>
 
@@ -41,21 +40,37 @@ export default {
   computed: {
     // Заголовки и их свойства
     columnDefs() {
+      if (!this.education) {
+        return null
+      }
       return this.education.headers
     },
     // Значение строк
     rows() {
+      if (!this.education) {
+        return null
+      }
       return this.education.data
     },
   },
   mounted() {
+    if (!this.education) {
+      return
+    }
     this.gridApi = this.gridOptions.api
+    this.gridColumnApi = this.gridOptions.columnApi
     // Установка ширины колонок
     this.gridApi.sizeColumnsToFit()
-
+    
     // Установка высоты, на весь контент (кол-во строк * высоту + шапка и место под скролл)
     var agGrid = document.querySelector('.my-ag-grid')
     agGrid.style.height = (this.rows.length * 50) + 100 + 'px'
   },
 }
 </script>
+
+<style scoped>
+.my-header{
+  color: red !important;
+}
+</style>

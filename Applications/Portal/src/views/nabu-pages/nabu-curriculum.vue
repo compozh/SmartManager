@@ -14,6 +14,9 @@ export default {
     },
   },
   created() {
+    if (this.$store.getters['education/getEducationPlan']) {
+      return
+    }
     this.$store.dispatch('education/loadEducationPlan')
   }
 }

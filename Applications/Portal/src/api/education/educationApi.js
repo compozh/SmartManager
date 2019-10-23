@@ -2,9 +2,15 @@
 
 //queries
 
-import educationResult from './graphql/educationResult.json'
-import educationAdditionalTraining from './graphql/educationAdditionalTraining.json'
+import educationResult from './graphql/educationResult.graphql'
+import educationAdditionalTraining from './graphql/educationAdditionalTraining.graphql'
 import educationPlan from './graphql/trainingPlan.graphql'
+import strategicGoals from './graphql/strategicGoals.graphql'
+import taskForYear from './graphql/taskForYear.graphql'
+import resultsInterimEvaluation from './graphql/resultsInterimEvaluation.graphql'
+import criterialEvaluation from './graphql/criterialEvaluation.graphql'
+import selfEsteemResults from './graphql/selfEsteemResults.graphql'
+import resultsAssessmentSupremo from './graphql/resultsAssessmentSupremo.graphql'
 
 
 import gql from 'graphql-tag'
@@ -22,16 +28,82 @@ export class EducationApi {
     }
   }
 
-  static getEducationResult() {
+
+  static async getStrategicGoals() {
     try {
-      return educationResult
+      return await getClient('PORTALNABU').query({
+        query: gql` ${strategicGoals}`
+      })
     } catch (e) {
       throw new Error(e.message)
     }
   }
-  static getEducationAdditionalTraining() {
+
+  static async getTaskForYear() {
     try {
-      return educationAdditionalTraining
+      return await getClient('PORTALNABU').query({
+        query: gql` ${taskForYear}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+  
+  static async getResultsInterimEvaluation() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${resultsInterimEvaluation}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getCriterialEvaluation() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${criterialEvaluation}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getSelfEsteemResults() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${selfEsteemResults}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getResultsAssessmentSupremo() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${resultsAssessmentSupremo}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+  
+  static async getEducationResult() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${educationResult}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getEducationAdditionalTraining() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${educationAdditionalTraining}`
+      })
     } catch (e) {
       throw new Error(e.message)
     }

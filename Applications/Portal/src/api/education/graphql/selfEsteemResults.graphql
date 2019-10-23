@@ -1,0 +1,18 @@
+{
+  portalNabuQuery{
+    selfGradeForYear{
+      data{
+      	grade
+        taskType
+        taskTitle
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}
