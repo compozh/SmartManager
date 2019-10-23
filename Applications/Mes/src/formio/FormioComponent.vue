@@ -19,6 +19,7 @@
 <script>
 import { Form } from './lib/components/Form'
 import VueApexCharts from 'vue-apexcharts'
+
 /* eslint-disable */
 export default {
   name: 'formio-component',
@@ -180,8 +181,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.formio-container-class /deep/ {
-  @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+.formio-container-class /deep/ {  
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/dist/css/bootstrap";
   @import "~choices.js/public/assets/styles/choices.css";
