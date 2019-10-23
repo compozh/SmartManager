@@ -38,7 +38,7 @@
           :navbarColor="navbarColor"
           :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]"/>
 
-        <div class="router-view">
+        <div class="router-view pb-0">
           <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
 
             <div class="content-area__content">
@@ -162,11 +162,11 @@ export default {
     },
     setFolderIcon(code) {
       switch (code) {
-      case '': return 'LayersIcon'
-      case 'filter_done': return 'CheckSquareIcon'
-      case 'filter_from_me': return 'UserIcon'
-      case 'filter_favorite': return 'StarIcon'
-      default: return 'FolderIcon'
+        case '': return 'LayersIcon'
+        case 'filter_done': return 'CheckSquareIcon'
+        case 'filter_from_me': return 'UserIcon'
+        case 'filter_favorite': return 'StarIcon'
+        default: return 'FolderIcon'
       }
     },
     changeRouteTitle(title) {

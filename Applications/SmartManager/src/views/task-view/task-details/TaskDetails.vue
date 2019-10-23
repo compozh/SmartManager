@@ -16,7 +16,7 @@
                 :src="task.performerPhoto"
                 size="65px"
               ></vs-avatar>
-              <div class="flex flex-col">
+              <div class="flex flex-col w-full">
                 <h5 class="mb-1">{{ task.performer }}</h5>
                 <div class="flex items-center">
                   <h3 class="text-primary truncate">{{ task.name }}</h3>
@@ -33,7 +33,7 @@
           </div>
 
           <!-- TASK CONTENT -->
-          <div class="vx-row">
+          <div class="vx-row border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid">
             <div class="vx-col w-full">
               <div v-if="task.htmlDescript" class="mail__content break-words mt-8 mb-4">
                 <iframe
@@ -60,13 +60,9 @@
           </div>
 
           <!-- FORMIO -->
-
-          <vs-divider/>
           <div class="w-full">
             <!-- select and start business-process -->
             <form @submit.prevent>
-
-
               <formio class="formio mt-4"
                       ref="form"
                       :form="form"
@@ -74,10 +70,7 @@
                       :submission="submission"
 
                       @submit="onFormSubmit"
-
               />
-
-
             </form>
           </div>
           <!-- TASK ATTACHMENTS -->
@@ -98,6 +91,9 @@
                     <vs-chip
                       class="mr-3 max-w-sm cursor-pointer hover:bg-primary hover:text-white"
                     >
+                      <span class="flex mr-2 text-primary">
+                        <file-icon :extention="attachment.fileExt"></file-icon>
+                      </span>
                       <span class="custom-truncate">{{ attachment.fileName }}</span>
                     </vs-chip>
                   </vx-tooltip>
@@ -189,7 +185,8 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import TaskListItem from '../../task-list/TaskListItem.vue'
+import TaskListItem from '@/views/task-list/TaskListItem.vue'
+import FileIcon from '@/components/FileIcon'
 import {Form} from 'vue-formio'
 import {eventBus} from '@/main'
 
@@ -201,6 +198,7 @@ export default {
     VuePerfectScrollbar,
     TaskListItem,
     formio: Form,
+    FileIcon
   },
   data: () => ({
     defaultDescHeight: 250,
@@ -214,8 +212,6 @@ export default {
     submission: {},
   }),
   computed: {
-
-
     // formio
     form() {
       if (this.task.externalParams) {

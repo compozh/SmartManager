@@ -1,6 +1,6 @@
 <template>
   <div
-    class="task__task-item sm:px-4 px-2 py-6"
+    class="task__task-item sm:px-4 px-2 py-3"
     :class="{'task__opened-task': task.isRead}"
     @click="taskLink(task.id)"
   >
@@ -12,7 +12,7 @@
         size="40px"
       ></vs-avatar>
 
-      <div class="flex w-full justify-between items-start">
+      <div class="flex justify-between items-start" style="width: calc(100% - 58px);">
         <div class="task__details truncate mr-3">
           <h5 class="mb-1" :class="{'font-semibold': !task.isRead}"
           >{{ task.performer }}</h5>
@@ -81,36 +81,36 @@ export default {
     taskStatus() {
       return () => {
         switch (this.task.status) {
-        case '':
-          return {
-            color: 'primary',
-            icon: 'loop',
-            text: this.$t('statuses.inWork')
-          }
-        case '*':
-          return {
-            color: 'primary',
-            icon: 'loop',
-            text: this.$t('statuses.inWork')
-          }
-        case '-':
-          return {
-            color: 'danger',
-            icon: 'highlight_off',
-            text: this.$t('statuses.rejected')
-          }
-        case '+':
-          return {
-            color: 'success',
-            icon: 'check_circle_outline',
-            text: this.$t('statuses.completed')
-          }
-        default:
-          return {
-            color: '',
-            icon: '',
-            text: ''
-          }
+          case '':
+            return {
+              color: 'primary',
+              icon: 'loop',
+              text: this.$t('statuses.inWork')
+            }
+          case '*':
+            return {
+              color: 'primary',
+              icon: 'loop',
+              text: this.$t('statuses.inWork')
+            }
+          case '-':
+            return {
+              color: 'danger',
+              icon: 'highlight_off',
+              text: this.$t('statuses.rejected')
+            }
+          case '+':
+            return {
+              color: 'success',
+              icon: 'check_circle_outline',
+              text: this.$t('statuses.completed')
+            }
+          default:
+            return {
+              color: '',
+              icon: '',
+              text: ''
+            }
         }
       }
     },

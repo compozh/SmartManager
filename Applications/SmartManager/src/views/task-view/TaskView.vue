@@ -45,15 +45,13 @@ import TaskSidebar from './TaskSidebar.vue'
 import TaskDetails from './task-details/TaskDetails.vue'
 import TaskAttachments from './task-attachments/TaskAttachments.vue'
 import TaskComments from './task-comments/TaskComments.vue'
-import TaskApprovals from './task-approvals/TaskApprovals.vue'
 
 export default {
   components: {
     TaskSidebar,
     TaskDetails,
     TaskComments,
-    TaskAttachments,
-    TaskApprovals
+    TaskAttachments
   },
   data: () => ({
     currentTab: 'details',
@@ -61,11 +59,7 @@ export default {
     reduce: true,
     clickNotClose: true,
     isTaskSidebarActive: true,
-    windowWidth: window.innerWidth,
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.30,
-    }
+    windowWidth: window.innerWidth
   }),
   created() {
     this.$store.commit('TOGGLE_REDUCE_BUTTON', true)
@@ -141,5 +135,9 @@ export default {
   .md-sidebar-spacer {
     width: calc(100% - 64px);
     margin-left: 64px;
+  }
+
+  .app-fixed-height {
+    height: calc(100vh - 12rem);
   }
 </style>
