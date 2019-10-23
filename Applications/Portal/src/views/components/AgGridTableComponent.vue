@@ -6,12 +6,14 @@
       :columnDefs="columnDefs"
       :defaultColDef="defaultColDef"
       :rowData="rows"
+      :frameworkComponents="frameworkComponents"
     ></ag-grid-vue>
   </vx-card>
 </template>
 
 <script>
 import { AgGridVue } from 'ag-grid-vue'
+import CustomTooltip from './customTooltip.vue'
 
 import '@/assets/scss/vuesax/extraComponents/agGridStyleOverride.scss'
 
@@ -22,8 +24,9 @@ export default {
   props: ['education'],
   data() {
     return {
+      frameworkComponents: null,
       searchQuery: '',
-      // Зебря для строк
+      // Зебра для строк
       gridOptions: { rowStyle: {background: '#f8f8f8'},
         getRowStyle: function(params) {
           if (params.node.id % 2 === 0) {
@@ -43,7 +46,16 @@ export default {
       if (!this.education) {
         return null
       }
-      return this.education.headers
+      // Встраиваем tooltip
+      let headers = this.education.headers.map(el => {
+        let element = el
+        element.tooltipComponent = 'customTooltip',
+        element.tooltipValueGetter = params => {
+          return { value: params.value }
+        }
+        return element
+      })
+      return headers
     },
     // Значение строк
     rows() {
@@ -53,10 +65,14 @@ export default {
       return this.education.data
     },
   },
+  beforeMount() {
+    this.frameworkComponents = { customTooltip: CustomTooltip }
+  },
   mounted() {
     if (!this.education) {
       return
     }
+
     this.gridApi = this.gridOptions.api
     this.gridColumnApi = this.gridOptions.columnApi
     // Установка ширины колонок
