@@ -17,9 +17,11 @@
     "PersonalInfo":{
         "FIO":"ПІБ",
         "BirthdayDate":"Дата народження",
-        "Adress":"Адреса",
+        "Gender": "Стать",
         "PhoneNumber":"Номер телефону",
-        "Department":"Департамент",
+        "Department":"Найменування підрозділу",
+        "Control": "Найменування управління",
+        "Position": "Категорія посади",
         "HireDate":"Дата прийому"
     },
     "Education":{

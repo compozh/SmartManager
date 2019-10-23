@@ -17,9 +17,11 @@
     "PersonalInfo": {
         "FIO": "ФИО",
         "BirthdayDate": "Дата рождения",
-        "Adress": "Адрес",
+        "Gender": "Пол",
         "PhoneNumber": "Номер телефона",
-        "Department": "Департамент",
+        "Department": "Наименование подразделения",
+        "Control": "Наименование управления",
+        "Position": "Категория должности",
         "HireDate": "Дата приёма"
     },
     "Education":{
