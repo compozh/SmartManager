@@ -6,7 +6,7 @@
       ref="formioBuilder"
       @formSubmit=formSubmit
       :formDefinition=qualityFormio
-      :formCode=workCenter.qualityRegistrationFormCode
+      :formCode=properties.qualityProcessType
     />
     </v-flex>
   </v-layout>
@@ -20,6 +20,9 @@ export default {
     selectedQuality() {
       return this.$store.getters['mes/selectedQuality']
     },
+    properties() {
+      return this.$store.getters['mes/properties']
+    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
@@ -29,7 +32,7 @@ export default {
   },
   methods: {
     formSubmit(submission) {
-      this.$store.dispatch('mes/qualityFormIoSubmit', { workCenter: this.workCenter, submission, quality: this.selectedQuality })
+      this.$store.dispatch('mes/qualityFormIoSubmit', { formCode: this.properties.qualityProcessType, workCenter: this.workCenter, submission, quality: this.selectedQuality })
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()

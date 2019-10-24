@@ -1,0 +1,15 @@
+query($formCode: String!, $properties: ProcessParamsInput!){
+    mes{
+        qualityFormio(formCode: $formCode, properties: $properties) {
+            name
+            components
+            submission
+            display
+            settings
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

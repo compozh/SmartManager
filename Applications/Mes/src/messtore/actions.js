@@ -104,19 +104,18 @@ export default {
       }
     })
   },
-  async downloadQualities({ commit, getters }, { workCenterCode, dateTime }) {
-    var qualities = [{id: 0},{id: 1},{id: 2},{id: 3}]
-    commit('setQualities', qualities)
-    // await this.dispatch('mes/graphqlQueryWraper', {
-    //   action: async () => {
-    //     let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
-    //     if (getters.downtimes.length) {
-    //       commit('setDowntimes', getters.downtimes.concat(downtimes))
-    //     } else {
-    //       commit('setDowntimes', downtimes)
-    //     }
-    //   }
-    // })
+  async downloadQualities({ commit, getters }, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let qualities = await api.getQualitiesFromGql(retrieveParams)
+          if (getters.qualities.length) {
+            commit('setQualities', getters.qualities.concat(qualities))
+          } else {
+            commit('setQualities', qualities)
+          }
+        }
+      }
+    )
   },
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
@@ -278,16 +277,15 @@ export default {
       linearLoader: true
     })
   },
-  async initializeQualityFormio({ commit }, { workCenter, qualityId }) {
-    commit('setQualityFormio', {})
-    // commit('resetDowntimeFormio')
-    // await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-    //   queryAction: async () => {
-    //     return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code , id: downtimeId }, 'network-only')
-    //   },
-    //   successAction: async result => { commit('setDowntimeFormio', result) },
-    //   linearLoader: true
-    // })
+  async initializeQualityFormio({ commit }, { formCode, workCenter, qualityId }) {
+    commit('resetQualityFormio')
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getQualityFormioFromGql(formCode, { workCenterCode: workCenter.code , id: qualityId }, 'network-only')
+      },
+      successAction: async result => { commit('setQualityFormio', result) },
+      linearLoader: true
+    })
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
@@ -330,6 +328,28 @@ export default {
      })
      commit('closeDialogLinearLoader')
   },
+  async qualityFormIoSubmit({ commit }, { formCode, workCenter, submission, successAction }) {
+    var me = this,
+       currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+    commit('setDialogLinearLoaderMessage', 'Регистрация качества')
+    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+       queryAction: async () => {
+         const res = await api.qualityFormioSubmitGql( formCode, submission, {
+           workCenterCode: workCenter.code,
+         })
+         return res
+       },
+       successAction: async () => {
+         commit('setQualities', [])
+
+         me.dispatch('mes/downloadQualities', { formCode: formCode, searchDateTime: currentDate, direction: 1, fetchPolicy: 'network-only' })
+         if(successAction) {
+           successAction();
+         }
+       }
+    })
+    commit('closeDialogLinearLoader')
+ },
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },

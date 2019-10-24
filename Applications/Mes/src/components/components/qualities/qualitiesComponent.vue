@@ -10,9 +10,9 @@
           <mes-quality-cards
           @changeCurrentQuality=changeCurrentQuality
           />
-          <span v-if="isUploadInProcess" class='upload-quality-str'>Загрузка простоев</span>
+          <span v-if="isUploadInProcess" class='upload-quality-str'>Загрузка документов</span>
         </div>
-        <span v-if="initializeQualities && !qualities.length" class="lack-of-qualities-str">Простои отсутствуют</span>
+        <span v-if="initializeQualities && !qualities.length" class="lack-of-qualities-str">Документы отсутствуют</span>
       </v-flex>
     </v-layout>
   </div>
@@ -45,7 +45,7 @@ export default {
       let blockTop = e.target.scrollTop + 100
       let clientHeight = e.target.clientHeight
       if (!me.isUploadInProcess && blockHeight - blockTop >= clientHeight - 20 && blockHeight - blockTop <= clientHeight + 20) {
-        let lastQualityDate = me.qualities[me.qualities.length - 1].eventStart
+        let lastQualityDate = me.qualities[me.qualities.length - 1].timeStamp
         me.$emit('uploadQualityOnScroll', lastQualityDate)
       }
     }

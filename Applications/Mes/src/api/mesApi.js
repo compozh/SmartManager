@@ -10,6 +10,7 @@ import workCenters from './graphql/workCenters.graphql'
 import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import downtimesPrevious from './graphql/downtimes/downtimesPrevious.graphql'
+import documents from './graphql/qualities/documents.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
 import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
@@ -30,6 +31,8 @@ import productionFormio from './graphql/formio/productionForm.graphql'
 import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphql'
 import downtimeFormio from './graphql/formio/downtimeForm.graphql'
 import downtimeFormioSubmit from './graphql/formio/downtimeFormSubmit.graphql'
+import qualityFormio from './graphql/formio/qualityForm.graphql'
+import qualityFormioSubmit from './graphql/formio/qualityFormSubmit.graphql'
 
 const getClient = () => {
   const authHeader =  Vue.prototype.$authentication.getAuthHeader()
@@ -115,6 +118,14 @@ export class MesApi {
       variables: { workCenterCode, dateTime }
     })
     return result.data.mes.downtimePrevious.downtimeList
+  }
+
+  async getQualitiesFromGql(retrieveParams) {
+    const result = await getClient().query({
+      query: gql`query ($retrieveParams: ProcessRetrieveParamsInput!) ${documents}`,
+      variables: { retrieveParams }
+    })
+    return result.data.mes.documents.processes
   }
 
   async getInstallationsFromGql(workCenter, fetchPolicy) {
@@ -216,12 +227,27 @@ export class MesApi {
     })
     return result.data.mes.downtimeFormio
   }
+  async getQualityFormioFromGql(formCode, properties) {
+    const result = await getClient().query({
+      query: gql`${qualityFormio}`,
+      variables: { formCode, properties },
+      fetchPolicy: 'network-only'
+    })
+    return result.data.mes.qualityFormio
+  }
   async downtimeFormioSubmitGql(formCode, submission, properties) {
     const result = await getClient().mutate({
       mutation: gql`${downtimeFormioSubmit}`,
       variables: { formCode, submission, properties}
     })
     return result.data.mesMutation.downtimeFormioSubmit
+  }
+  async qualityFormioSubmitGql(formCode, submission, properties) {
+    const result = await getClient().mutate({
+      mutation: gql`${qualityFormioSubmit}`,
+      variables: { formCode, submission, properties}
+    })
+    return result.data.mesMutation.qualityFormioSubmit
   }
   async getDowntimeTypesFromGql() {
     const result = await getClient().query({

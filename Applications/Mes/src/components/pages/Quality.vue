@@ -32,7 +32,6 @@ import VueSplit from 'vue-splitjs'
 export default {
   name: 'mes-quality',
   data() {
-    debugger;
     return {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeQualities: false,
@@ -56,6 +55,9 @@ export default {
     qualities() {
       return this.$store.getters['mes/qualities']
     },
+    properties() {
+      return this.$store.getters['mes/properties']
+    },
     selectedQuality: {
       get() {
         return this.$store.getters['mes/selectedQuality']
@@ -70,7 +72,7 @@ export default {
       if (this.qualities.length) {
         this.$store.commit('mes/setQualities', [])
       }
-      await this.$store.dispatch('mes/downloadQualities', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate , direction: 1 })
       this.initializeQualities = true
       if (!this.selectedQuality) {
         this.seelectFirstQuality()
@@ -81,7 +83,12 @@ export default {
         return
       }
       this.selectedQuality = newSelectedQuality
-      this.$store.dispatch('mes/initializeQualityFormio', { workCenter: this.workCenter, qualityId: newSelectedQuality.id } )
+      // this.$store.dispatch('formio').then((formDefinition) => {
+      //   commit('mes/setQualityFormio', formDefinition)
+      // }).catch((err) => {
+
+      // });
+      this.$store.dispatch('mes/initializeQualityFormio', { formCode: this.properties.qualityForm, workCenter: this.workCenter, qualityId: newSelectedQuality.id } )
     },
     seelectFirstQuality() {
       if (this.qualities.length) {
@@ -90,7 +97,7 @@ export default {
     },
     async uploadQualityOnScroll(lastQualityDate) {
       this.isUploadInProcess = true
-      await this.$store.dispatch('mes/downloadQualities', { workCenterCode: this.workCenter.code, dateTime: lastQualityDate })
+      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: lastQualityDate , direction: 1 })
       this.isUploadInProcess = false
     }
   }

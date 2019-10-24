@@ -6,12 +6,7 @@
         @click="changeCurrentQuality(quality)"
       >
         <v-card-text :class="selectedQuality && quality.id == selectedQuality.id ? 'active-quality-item' : 'inactive-quality-item'">
-          <span>Test</span>
-          <span>{{quality.id}}</span>
-          <!-- <span><strong>Причина:</strong> {{quality.description}}</span>
-          <span><strong>Начало:</strong> {{converDate(quality.eventStart)}}</span>
-          <span v-if="quality.eventEnd != '0001-01-01T00:00:00Z'"><strong>Окончание:</strong> {{converDate(quality.eventEnd)}}</span>
-          <span><strong>Комментарий:</strong> {{quality.comment ? quality.comment : '- - -'}}</span> -->
+          <span v-html="quality.description"></span>
         </v-card-text>
       </v-card>
     </div>
