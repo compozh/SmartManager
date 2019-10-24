@@ -44,6 +44,9 @@ export default {
     context.commit('setItems', items);
     return true;
   },
+
+  //#region Diagrams
+  
   async getXml(context, id) {
     let xml;
     try {
@@ -100,6 +103,68 @@ export default {
     }
     return success;
   },
+  async deployProcess(context, id) {
+    let result;
+    try {
+      result = await api.deployProcess(id);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!result.success) {
+      console.error(result);
+    }
+    return result;
+  },
+  async copyProcess(context, process) {
+    try {
+      process.xmlView = await context.dispatch('getXml', process.id);
+      return await context.dispatch('createProcess', process);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+  async getAvailableActions(context, { processId, definitionType }) {
+    let items;
+    try {
+      items = await api.getAvailableActions(processId, definitionType);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items.map(action => new ActionDefinition(action));
+  },
+  async getFormsForProcess(context, { processId }) {
+    let items;
+    try {
+      items = await api.getFormsForProcess(processId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items;
+  },
+  async getActionById(context, actionId) {
+    let item;
+    try {
+      item = await api.getActionById(actionId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!item) {
+      return false;
+    }
+    return new ActionDefinition(item);
+  },
+
+  //#endregion
+
+  //#region Folders
+
   async createFolder(context, folder) {
     let newFolder;
     if (folder.parentId && folder.parentId.length > 0) {
@@ -137,6 +202,19 @@ export default {
     }
     return success;
   },
+  async copyFolder(context, folder) {
+    try {
+      return await context.dispatch('createFolder', folder);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  //#endregion
+
+  //#region Common
+
   async deleteItem(context, { id }) {
     const { item, index } = context.getters.getItemById(id);
     if (index < 0) {
@@ -178,70 +256,7 @@ export default {
     await context.dispatch('loadItems');
     return success;
   },
-  async deployProcess(context, id) {
-    let result;
-    try {
-      result = await api.deployProcess(id);
-    } catch (error) {
-      console.error(error);
-    }
-    if (!result.success) {
-      console.error(result);
-    }
-    return result;
-  },
-  async copyProcess(context, process) {
-    try {
-      process.xmlView = await context.dispatch('getXml', process.id);
-      return await context.dispatch('createProcess', process);
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  },
-  async copyFolder(context, folder) {
-    try {
-      return await context.dispatch('createFolder', folder);
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  },
-  async getAvailableActions(context, { processId, definitionType }) {
-    let items;
-    try {
-      items = await api.getAvailableActions(processId, definitionType);
-    } catch (error) {
-      console.error(error);
-    }
-    if (!items) {
-      return false;
-    }
-    return items.map(action => new ActionDefinition(action));
-  },
-  async getActionById(context, actionId) {
-    let item;
-    try {
-      item = await api.getActionById(actionId);
-    } catch (error) {
-      console.error(error);
-    }
-    if (!item) {
-      return false;
-    }
-    return new ActionDefinition(item);
-  },
-  async getFormsForProcess(context, { processId }) {
-    let items;
-    try {
-      items = await api.getFormsForProcess(processId);
-    } catch (error) {
-      console.error(error);
-    }
-    if (!items) {
-      return false;
-    }
-    return items;
-  }
+
+  //#endregion
 };
 
