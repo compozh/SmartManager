@@ -14,51 +14,32 @@
             </div>
             <div class="p-3 flex items-center">
               <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.BirthdayDate")}}</span>
-              <span>{{userInfo.birthdayDate}}</span>
+              <span>{{userInfo.birthDate}}</span>
             </div>
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Adress")}}</span>
-              <span>{{userInfo.adress}}</span>
+              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Gender")}}</span>
+              <span>{{userInfo.gender}}</span>
             </div>
             <vs-divider></vs-divider>
 
 
             <!-- email -->
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">Email</span>
-              <span v-if="!editMode">{{userInfo.email}}</span>
-              <vs-input v-else v-model="userInfo.email"></vs-input>
+              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Department")}}</span>
+              <span v-if="!editMode">{{userInfo.departmentTitle}}</span>
+              <vs-input v-else v-model="userInfo.departmentTitle"></vs-input>
             </div>
             <!-- телефон -->
             <div class="p-3 flex items-center">
-                <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.PhoneNumber")}}</span>
-                <span v-if="!editMode">{{userInfo.phone}}</span>
-              <vs-input v-else v-model="userInfo.phone"></vs-input>
+                <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Control")}}</span>
+                <span v-if="!editMode">{{userInfo.parentDepartmentTitle}}</span>
+              <vs-input v-else v-model="userInfo.parentDepartmentTitle"></vs-input>
             </div>
             <!-- скайп -->
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">Skype</span>
-              <span v-if="!editMode">{{userInfo.skype || "Не указан"}}</span>
-              <vs-input v-else v-model="userInfo.skype"></vs-input>
-            </div>
-
-            <vs-divider></vs-divider>
-
-
-            <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Department")}}</span>
-              <span>{{userInfo.departmentTitle}}</span>
-            </div>
-
-            <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.HireDate")}}</span>
-              <span>{{userInfo.hireDate}}</span>
-            </div>
-
-            <!-- панель кнопок -->
-            <div v-if="editMode" class="p-3 flex items-center justify-end">
-              <vs-button  type="filled" @click="onSave">Сохранить</vs-button>
-              <vs-button type="flat" @click="onEndEdit">Отмена</vs-button>
+              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Position")}}</span>
+              <span v-if="!editMode">{{userInfo.positionCategory || "Не указан"}}</span>
+              <vs-input v-else v-model="userInfo.positionCategory"></vs-input>
             </div>
           </div>
         </div>
@@ -98,30 +79,29 @@ export default {
   data() {
     return {
       inEditMode: 'phone',
-      userInfo: undefined
-
     }
   },
   props: ['minMode'],
   created() {
-    this.$store.dispatch('personalInfo/loadFullUserInfo').then(() => this.setUserInfo())
+    this.$store.dispatch('personalInfo/loadEmployeeInfo')
   },
   computed: {
-
     editMode() {
       return this.$store.state.personalInfo.userInfoEditMode
     },
     userPhoto() {
+      if (!this.userInfo.photo) {
+        return 'https://cdn1.iconfinder.com/data/icons/facebook-ui/48/additional_icons-03-256.png'
+      }
       return this.userInfo ? `data:image/png;base64, ${this.userInfo.photo}` : ''
+    },
+    userInfo() {
+      return this.$store.getters['personalInfo/getEmployeeInfo']
     }
   },
   methods: {
-    setUserInfo() {
-      this.userInfo = {...this.$store.state.personalInfo.fullUserInfo}
-    },
     onSave() {
       this.$store.dispatch('personalInfo/updateUserInfo', this.userInfo).then(() => this.onEndEdit())
-
     },
     onEndEdit() {
       this.$store.dispatch('personalInfo/setEditMode', false)

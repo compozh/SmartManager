@@ -1,0 +1,22 @@
+{
+    portalNabuQuery{
+      additionalTraining{
+        data{
+            status
+          subject
+          priority
+          provider
+          required
+          description
+          competenceTitle
+        }
+        headers{
+          field
+          filter
+          minWidth
+          sortable
+          headerName
+        }
+      }
+    }
+}

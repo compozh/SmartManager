@@ -61,7 +61,6 @@ class QrCode extends TextFieldComponent {
                                 dataComponent.hidden = true;
                             }
                         }
-
                     }
                 }
             }
