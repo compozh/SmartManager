@@ -7,6 +7,7 @@
       :defaultColDef="defaultColDef"
       :rowData="rows"
       :frameworkComponents="frameworkComponents"
+      
     ></ag-grid-vue>
   </vx-card>
 </template>
@@ -28,6 +29,9 @@ export default {
       searchQuery: '',
       // Зебра для строк
       gridOptions: { rowStyle: {background: '#f8f8f8'},
+        localeText: {
+          noRowsToShow: this.$t('Education.NoRowsToShow'),
+        },
         getRowStyle: function(params) {
           if (params.node.id % 2 === 0) {
             return { background: '#ffffff' }
@@ -88,5 +92,12 @@ export default {
 <style scoped>
 .my-header{
   color: red !important;
+}
+::v-deep .ag-overlay-no-rows-center{
+  position: relative;
+  bottom: -25px;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.54);
 }
 </style>

@@ -1,4 +1,5 @@
 import { EducationApi } from '@/api/education/educationApi.js'
+import moment from 'moment'
 export default {
 
   async loadStrategicGoals({commit}) {
@@ -13,6 +14,10 @@ export default {
     let result = await EducationApi.getTaskForYear()
     if (result) {
       let taskForYear = CommonDataAndHeaders(result.data.portalNabuQuery.taskForYear)
+
+      taskForYear.data.forEach(el => {
+        el.goalDate = moment(el.goalDate ).format('DD.MM.YYYY')
+      })
       commit('setTaskForYear', taskForYear)
     }
   },
@@ -21,6 +26,13 @@ export default {
     let result = await EducationApi.getResultsInterimEvaluation()
     if (result) {
       let midtermGrade = CommonDataAndHeaders(result.data.portalNabuQuery.midtermGrade)
+
+      midtermGrade.data.forEach(el => {
+        el.goalDate = moment(el.goalDate ).format('DD.MM.YYYY')
+        el.dateView = moment(el.dateView ).format('DD.MM.YYYY')
+        return el
+      })
+
       commit('setResultsInterimEvaluation', midtermGrade)
     }
   },
@@ -53,6 +65,10 @@ export default {
     let result = await EducationApi.getEducationPlan()
     if (result) {
       let trainingPlan = CommonDataAndHeaders(result.data.portalNabuQuery.trainingPlan)
+      trainingPlan.data.forEach(el => {
+        el.startAndEndDate = `${moment(el.eventDateStart ).format('DD.MM.YYYY')} - ${moment(el.eventDateEnd ).format('DD.MM.YYYY')}`
+        return el
+      })
       commit('setEducationPlan', trainingPlan)
     }
   },

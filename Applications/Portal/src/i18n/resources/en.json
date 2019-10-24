@@ -41,6 +41,7 @@
         "Duty": "Duty",
         "Priority": "Priority",
         "Provider": "Approx. the provider",
-        "Status": "Status"
+        "Status": "Status",
+        "NoRowsToShow": "No rows to show"
     }
 }

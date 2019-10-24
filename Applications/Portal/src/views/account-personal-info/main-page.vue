@@ -9,37 +9,74 @@
           </div>
           <div class="flex-grow">
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.FIO")}}</span>
-              <span>{{userInfo.fullName}}</span>
+              <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="3">
+                  <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.FIO")}}</span>
+                </vs-col>
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="5">
+                  <span>{{userInfo.fullName}}</span>
+                </vs-col>
+              </vs-col>
             </div>
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.BirthdayDate")}}</span>
-              <span>{{userInfo.birthDate}}</span>
+              <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="3">
+                  <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.BirthdayDate")}}</span>
+                </vs-col>
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="5">
+                  <span>{{userInfo.birthDate}}</span>
+                </vs-col>
+              </vs-col>
             </div>
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Gender")}}</span>
-              <span>{{userInfo.gender}}</span>
+              <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="3">
+                <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Gender")}}</span>
+                </vs-col>
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="5">
+                  <span>{{userInfo.gender}}</span>
+                </vs-col>
+              </vs-col>
             </div>
             <vs-divider></vs-divider>
 
 
-            <!-- email -->
+            <!-- подразделение -->
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Department")}}</span>
-              <span v-if="!editMode">{{userInfo.departmentTitle}}</span>
-              <vs-input v-else v-model="userInfo.departmentTitle"></vs-input>
+              <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="3">
+                <span class="text-grey pr-5">{{$t("PersonalInfo.Department")}}</span>
+                </vs-col>
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="5">
+                  <span v-if="!editMode">{{userInfo.departmentTitle}}</span>
+                  <vs-input v-else v-model="userInfo.departmentTitle"></vs-input>
+                </vs-col>
+              </vs-col>
             </div>
-            <!-- телефон -->
+            <!-- управление -->
             <div class="p-3 flex items-center">
-                <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Control")}}</span>
-                <span v-if="!editMode">{{userInfo.parentDepartmentTitle}}</span>
+              <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="3">
+                <span class=" text-grey pr-5">{{$t("PersonalInfo.Control")}}</span>
+                </vs-col>
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="5">
+                 <span v-if="!editMode">{{userInfo.parentDepartmentTitle}}</span>
               <vs-input v-else v-model="userInfo.parentDepartmentTitle"></vs-input>
+                </vs-col>
+              </vs-col>
             </div>
-            <!-- скайп -->
+            <!-- должность -->
             <div class="p-3 flex items-center">
-              <span class="w-48 text-grey pr-5">{{$t("PersonalInfo.Position")}}</span>
-              <span v-if="!editMode">{{userInfo.positionCategory || "Не указан"}}</span>
-              <vs-input v-else v-model="userInfo.positionCategory"></vs-input>
+              <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="3">
+                <span class="text-grey pr-5">{{$t("PersonalInfo.Position")}}</span>
+                </vs-col>
+                <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="5">
+                  <span v-if="!editMode">{{userInfo.positionCategory || "Не указан"}}</span>
+                  <vs-input v-else v-model="userInfo.positionCategory"></vs-input>
+                </vs-col>
+              </vs-col>
+              
             </div>
           </div>
         </div>
