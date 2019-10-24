@@ -1,0 +1,12 @@
+{
+  bpmnquery {
+    getAccessRecordsForProcess(processId: $processId) {
+      allowAccess,
+      groupId,
+      recordId,
+      rights,
+      type,
+      userId
+    }
+  }
+}
