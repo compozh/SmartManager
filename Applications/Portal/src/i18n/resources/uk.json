@@ -41,7 +41,17 @@
         "Duty": "Обов’язковість",
         "Priority": "Пріоритетність",
         "Provider": "Можл. провайдер",
-        "Status": "Статус",
+        "Status": "Статус"
+    },
+    "agGrid":{
+        "contains": "Містить",
+        "notContains": "Не містить",
+        "startsWith": "Починається з",
+        "endsWith": "Закінчується",
+        "equals": "Дорівнює",
+        "notEqual": "Не дорівнює",
+        "andCondition": "І",
+        "orCondition": "АБО",
         "NoRowsToShow": "Немає рядків для відображення"
     }
 }

@@ -30,7 +30,15 @@ export default {
       // Зебра для строк
       gridOptions: { rowStyle: {background: '#f8f8f8'},
         localeText: {
-          noRowsToShow: this.$t('Education.NoRowsToShow'),
+          noRowsToShow: this.$t('agGrid.NoRowsToShow'),
+          contains: this.$t('agGrid.contains'),
+          notContains: this.$t('agGrid.notContains'),
+          startsWith: this.$t('agGrid.startsWith'),
+          endsWith: this.$t('agGrid.endsWith'),
+          equals: this.$t('agGrid.equals'),
+          notEqual: this.$t('agGrid.notEqual'),
+          andCondition: this.$t('agGrid.andCondition'),
+          orCondition: this.$t('agGrid.orCondition')
         },
         getRowStyle: function(params) {
           if (params.node.id % 2 === 0) {

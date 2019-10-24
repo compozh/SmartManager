@@ -41,7 +41,17 @@
         "Duty": "Duty",
         "Priority": "Priority",
         "Provider": "Approx. the provider",
-        "Status": "Status",
+        "Status": "Status"
+    },
+    "agGrid":{
+        "contains": "Сontains",
+        "notContains": "Not contains",
+        "startsWith": "Starts with",
+        "endsWith": "Ends with",
+        "equals": "Equals",
+        "notEqual": "Not equal",
+        "andCondition": "AND",
+        "orCondition": "OR",
         "NoRowsToShow": "No rows to show"
     }
 }
