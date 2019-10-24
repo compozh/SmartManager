@@ -34,21 +34,20 @@ export default {
   initialWorkCenter: false,
   workCentersForWorker: [],
   selectedDowntime: null,
+  selectedQuality: null,
   tasks: [],
   downtimes: [],
+  qualities: [],
   installations: [],
   workCenterProductionEvents: [],
   usersProductionEvents: [],
   productionFormio: {},
   downtimeFormio: {},
+  qualityFormio: {},
   createDowntimeFormio: {},
   menuMiniMode: true,
   ticket: '',
   mainContainerKey: 0,
-  actionsAfterInitializeProperties: []
-  // events: {
-  //   afterInitializeWorkCenter: [], //{ action }
-  //   afterChangeTaskStateEvents: []
-  //   afterDowntimeRegistrationEvents: []
-  // }
+  actionsAfterInitializeProperties: [],
+  initializeQualities: false
 }

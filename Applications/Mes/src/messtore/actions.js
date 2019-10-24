@@ -61,21 +61,12 @@ export default {
               }
             }
           }
-
           if(!getters.properties) {
             commit('addActionAfterInitializeProperties', setWorkCenterForWorker)
           } else {
             await setWorkCenterForWorker(getters.properties)
           }
-
         commit('setInitialWorkCenter', true)
-
-        // for(var event of getters.afterInitializeWorkCenterEvents) {
-        //   if(event.action) {
-        //     event.action();
-        //   }
-        // }
-
       },
       linearLoader: true
     })
@@ -103,6 +94,20 @@ export default {
         }
       }
     })
+  },
+  async downloadQualities({ commit, getters }, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let qualities = await api.getQualitiesFromGql(retrieveParams)
+          if (getters.qualities.length) {
+            commit('setQualities', getters.qualities.concat(qualities))
+          } else {
+            commit('setQualities', qualities)
+            commit('setInitializeQualities', true)
+          }
+        }
+      }
+    )
   },
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
@@ -154,11 +159,6 @@ export default {
           workBarcode: task.barcode
         }
         me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
-        // for(var event of getters.afterChangeTaskStateEvents) {
-        //   if(event.action) {
-        //     event.action()
-        //   }
-        // }
       },
       linearLoader: true
     })
@@ -181,11 +181,6 @@ export default {
       },
       successAction: async () => {
         task.inProgress = false
-        // for(var event of getters.afterChangeTaskStateEvents) {
-        //   if(event.action) {
-        //     event.action()
-        //   }
-        // }
       },
       linearLoader: true
     })
@@ -264,6 +259,16 @@ export default {
       linearLoader: true
     })
   },
+  async initializeQualityFormio({ commit }, { formCode, workCenter, qualityId }) {
+    commit('resetQualityFormio')
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getQualityFormioFromGql(formCode, { workCenterCode: workCenter.code , id: qualityId }, 'network-only')
+      },
+      successAction: async result => { commit('setQualityFormio', result) },
+      linearLoader: true
+    })
+  },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
@@ -305,6 +310,30 @@ export default {
      })
      commit('closeDialogLinearLoader')
   },
+  async qualityFormIoSubmit({ commit, getters }, { formCode, workCenter, submission, quality, successAction }) {
+    var me = this,
+       currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
+       qualityProcessType = getters.properties.qualityProcessType
+    commit('setDialogLinearLoaderMessage', 'Регистрация качества')
+    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+       queryAction: async () => {
+         const res = await api.qualityFormioSubmitGql( formCode, submission, {
+           workCenterCode: workCenter.code,
+           id: quality.id
+         })
+         return res
+       },
+       successAction: async () => {
+         commit('setQualities', [])
+         commit('setInitializeQualities', false)
+         me.dispatch('mes/downloadQualities', { processTypeCode: qualityProcessType, searchDateTime: currentDate, direction: 1 })
+         if(successAction) {
+           successAction();
+         }
+       }
+    })
+    commit('closeDialogLinearLoader')
+ },
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },

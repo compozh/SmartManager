@@ -32,6 +32,8 @@
         startPageDisplayParam
         deviationAccounting
         workCenterRegistrationMethod
+        qualityProcessType
+        qualityForm
         isIncomingTechnicalTareRegistrationEnabled
         blockOverallInput
         blockInputNowQuantity
