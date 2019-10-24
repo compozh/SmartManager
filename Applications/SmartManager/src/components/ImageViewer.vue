@@ -1,10 +1,20 @@
 <template>
-  <div class="flex flex-col flex-1 justify-center items-center h-full overflow-hidden viewer-wrapper">
+  <div
+    class="flex flex-col flex-1
+           justify-center items-center
+           h-full overflow-hidden
+           border border-l-0 border-r-0
+           border-b-0 border-solid
+           d-theme-border-grey-light"
+  >
     <viewer :options="options"
             :images="[url]"
             @inited="init"
-            class="flex flex-col flex-1 justify-center items-center h-full viewer">
-      <template slot-scope="scope">
+            class="flex flex-col flex-1
+                   justify-center items-center
+                    h-full viewer"
+    >
+      <template slot-scope="scope" class="test">
         <img v-for="src in scope.images"
              :src="src"
              :key="src"
@@ -19,6 +29,7 @@ import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer/src/component.vue'
 import ViewerP from 'v-viewer'
 import Vue from 'vue'
+
 Vue.use(ViewerP, {
   defaultOptions: {
     zIndex: 99999
@@ -58,3 +69,25 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+  div {
+    .viewer-container {
+      &.viewer-backdrop {
+        background-color: #fff !important;
+      }
+
+      &.viewer-fixed {
+        background-color: rgba(0, 0, 0, .5) !important;
+      }
+      // hide unused buttons
+      .viewer {
+        &-one-to-one, &-prev, &-play, &-next {
+          display: none;
+        }
+      }
+    }
+  }
+
+</style>

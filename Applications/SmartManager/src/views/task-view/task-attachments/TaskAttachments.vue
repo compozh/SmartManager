@@ -1,21 +1,22 @@
 <template>
   <div class="flex flex-col h-full bg-white" ref="container">
-    <div class="vx-row mx-3 p-3" ref="items">
+    <div class="vx-row m-0 px-6 py-3" ref="items">
       <div>
       </div>
       <div class="flex flex-wrap">
         <div
           class="mail__attachment my-1"
-          v-for="(attachment, index) in attachments"
+          v-for="(attachment, index) in task.originals"
           :key="index"
-          @click="currentFile = attachment"
+          @click="getUrl(attachment)"
         >
           <vx-tooltip
+            class="custom-tooltip"
             :text="attachment.fileName"
             color="rgb(98, 98, 98, .95)"
           >
             <vs-chip
-              :color="attachment.id === currentFile.id ? 'success' : 'primary'"
+              :color="attachment.id === fileId ? 'warning' : 'primary'"
               class="mr-3 max-w-sm cursor-pointer"
             >
               <span class="flex mr-2">
@@ -27,7 +28,7 @@
         </div>
       </div>
     </div>
-    <component :is="viewer" :url="url"></component>
+    <component :is="viewer" :url="fileUrl"></component>
   </div>
 </template>
 
@@ -36,11 +37,12 @@ import PdfViewer from '@/components/pdf-viewer/Viewer'
 import ImgViewer from '@/components/ImageViewer'
 import TxtViewer from '@/components/TextViewer'
 import NotSupport from '@/components/NotSupport'
+import NoData from '@/components/NoData'
 import FileIcon from '@/components/FileIcon'
 
 export default {
   props: {
-    attachments: Array,
+    task: Object,
     index: Number
   },
   components: {
@@ -48,18 +50,21 @@ export default {
     ImgViewer,
     TxtViewer,
     NotSupport,
+    NoData,
     FileIcon
   },
   data: () => ({
-    currentFile: {}
+    fileId: 0,
+    fileUrl: ''
   }),
+  created() {
+    if (!this.fileId) {
+      const attachment = this.task.originals[this.index]
+      this.fileId = attachment.id || 0
+      this.getUrl(attachment)
+    }
+  },
   computed: {
-    url() {
-      if (!Object.keys(this.currentFile).length) {
-        this.currentFile = this.attachments[this.index]
-      }
-      return this.currentFile.fileUrl
-    },
     isImage() {
       const image = ['png', 'jpeg', 'jpg', 'bmp']
       return ext => image.some(i => i === ext)
@@ -69,27 +74,43 @@ export default {
       return ext => text.some(i => i === ext)
     },
     viewer() {
-      const ext = this.url.split('.').pop()
-      switch (true) {
-        case ext === 'pdf': return 'pdf-viewer'
-        case this.isText(ext): return 'txt-viewer'
-        case this.isImage(ext): return 'img-viewer'
-        default: return 'not-support'
+      if (this.fileUrl) {
+        const ext = this.fileUrl.split('.').pop()
+        switch (true) {
+          case ext === 'pdf': return 'pdf-viewer'
+          case this.isText(ext): return 'txt-viewer'
+          case this.isImage(ext): return 'img-viewer'
+          default: return 'not-support'
+        }
       }
+      return 'no-data'
+    }
+  },
+  methods: {
+    async getUrl({id, fileExt: ext, fileUrl}) {
+      const taskId = this.task.id
+      this.fileId = id
+      this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {id, ext, taskId})
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
+
+  .vs-tooltip {
+    max-width: 300px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 
   .custom-truncate {
-    display: block;
-    max-width: 100px;
+    max-width: 200px;
     margin: 0;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
+    justify-content: flex-start;
   }
 
 </style>

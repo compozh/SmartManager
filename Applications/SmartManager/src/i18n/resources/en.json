@@ -55,7 +55,8 @@
     "start": "Start",
     "startWorkflow": "Start business process",
     "login": "Sign in",
-    "logout": "Logout"
+    "logout": "Logout",
+    "download": "Download"
   },
   "icons": {
     "priority": "High priority",
@@ -101,7 +102,8 @@
     "noComments": "No comments",
     "closeForm": "Close the form",
     "noApprovals": "No approvals",
-    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED"
+    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
+    "downloadFile": "Download and open file"
   },
   "notify": {
     "foldersTitle": "Folders and filters",

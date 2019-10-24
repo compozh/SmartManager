@@ -33,7 +33,8 @@
           </div>
 
           <!-- TASK CONTENT -->
-          <div class="vx-row border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid">
+          <div
+            class="vx-row border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid">
             <div class="vx-col w-full">
               <div v-if="task.htmlDescript" class="mail__content break-words mt-8 mb-4">
                 <iframe
@@ -74,31 +75,31 @@
             </form>
           </div>
           <!-- TASK ATTACHMENTS -->
-          <div class="vx-row border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6 flex">
+          <div
+            class="vx-row border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6 flex">
             <div class="vx-col flex">
-                <feather-icon icon="PaperclipIcon" class="mr-2"/>
-                <span class="py-4">{{ $t('tabs.attachments').toUpperCase() }}</span>
+              <feather-icon icon="PaperclipIcon" class="mr-2"/>
+              <span class="py-4">{{ $t('tabs.attachments').toUpperCase() }}</span>
             </div>
           </div>
-              <div class="vx-row">
-                <div
-                  class="mail__attachment"
-                  v-for="(attachment, index) in task.originals"
-                  :key="index"
-                  @click="$emit('open-attachment', index)"
-                >
-                  <vx-tooltip :text="attachment.fileName" color="rgb(98, 98, 98, .95)">
-                    <vs-chip
-                      class="mr-3 max-w-sm cursor-pointer hover:bg-primary hover:text-white"
-                    >
-                      <span class="flex mr-2 text-primary">
+          <div class="vx-row">
+            <div
+              class="mail__attachment my-1"
+              v-for="(attachment, index) in task.originals"
+              :key="index"
+              @click="$emit('open-attachment', index)"
+            >
+              <vx-tooltip :text="attachment.fileName" color="rgb(98, 98, 98, .95)">
+                <vs-chip
+                  class="mr-3 max-w-sm chips">
+                      <span class="icon flex mr-2">
                         <file-icon :extention="attachment.fileExt"></file-icon>
                       </span>
-                      <span class="custom-truncate">{{ attachment.fileName }}</span>
-                    </vs-chip>
-                  </vx-tooltip>
-                </div>
-              </div>
+                  <span class="custom-truncate">{{ attachment.fileName }}</span>
+                </vs-chip>
+              </vx-tooltip>
+            </div>
+          </div>
         </vx-card>
       </div>
     </div>
@@ -112,7 +113,8 @@
         <vx-card>
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
-              <div class="vx-row w-full border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6">
+              <div
+                class="vx-row w-full border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6">
                 <div class="vx-col w-full flex">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
                   <span class="py-4">{{ $t('tasks.related').toUpperCase() }}</span>
@@ -120,23 +122,23 @@
               </div>
               <div class="vx-row w-full">
                 <div class="vx-col w-full">
-              <transition-group
-                name="list-enter-up"
-                class="task__tasks  -mx-4"
-                tag="ul"
-                appear
-              >
-                <li
-                  class="cursor-pointer task__task-item"
-                  v-for="parentTask in task.parentTasks"
-                  :key="parentTask.id"
-                >
-                  <task-list-item :task="parentTask"></task-list-item>
-                </li>
-              </transition-group>
+                  <transition-group
+                    name="list-enter-up"
+                    class="task__tasks  -mx-4"
+                    tag="ul"
+                    appear
+                  >
+                    <li
+                      class="cursor-pointer task__task-item"
+                      v-for="parentTask in task.parentTasks"
+                      :key="parentTask.id"
+                    >
+                      <task-list-item :task="parentTask"></task-list-item>
+                    </li>
+                  </transition-group>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
           </div>
         </vx-card>
       </div>
@@ -151,7 +153,8 @@
         <vx-card>
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
-              <div class="vx-row w-full border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6">
+              <div
+                class="vx-row w-full border-b border-l-0 border-r-0 border-t-0 d-theme-border-grey-light border-solid mb-6">
                 <div class="vx-col w-full flex">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
                   <span class="py-4">{{ $t('tasks.subTasks').toUpperCase() }}</span>
@@ -159,23 +162,23 @@
               </div>
               <div class="vx-row w-full">
                 <div class="vx-col w-full">
-              <transition-group
-                name="list-enter-up"
-                class="task__tasks -mx-4"
-                tag="ul"
-                appear
-              >
-                <li
-                  class="cursor-pointer task__task-item"
-                  v-for="subTask in task.childTasks"
-                  :key="subTask.id"
-                >
-                  <task-list-item :task="subTask"></task-list-item>
-                </li>
-              </transition-group>
+                  <transition-group
+                    name="list-enter-up"
+                    class="task__tasks -mx-4"
+                    tag="ul"
+                    appear
+                  >
+                    <li
+                      class="cursor-pointer task__task-item"
+                      v-for="subTask in task.childTasks"
+                      :key="subTask.id"
+                    >
+                      <task-list-item :task="subTask"></task-list-item>
+                    </li>
+                  </transition-group>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
           </div>
         </vx-card>
       </div>
@@ -251,10 +254,10 @@ export default {
       const form = this.$refs.form.formio
       try {
         const result = await form.submit()
-        await this.$store.dispatch('sm/changeStatus',{
+        await this.$store.dispatch('sm/changeStatus', {
           ...data,
           CompleteParams: JSON.stringify(result.data)
-        } )
+        })
       } catch (errors) {
         if (errors.length) {
           errors.forEach(e => {
@@ -277,7 +280,7 @@ export default {
 
   // подписка на событие смены статуса задачи
   created() {
-    eventBus.$on('changeStatus',async data => {
+    eventBus.$on('changeStatus', async data => {
       await this.onChangeStatus(data)
     })
 
@@ -286,15 +289,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .custom-truncate {
-    display: block;
-    max-width: 100px;
-    margin: 0;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
+
+  .chips {
+    cursor: pointer;
+
+    span {
+      .icon {
+        color: #7367F0;
+      }
+    }
+
+    &:hover {
+      background: #7367F0;
+
+      span {
+        color: white;
+
+        .icon {
+          color: white;
+        }
+      }
+    }
   }
-   .formio::v-deep {
+
+  .formio::v-deep {
     @import "~formiojs/dist/formio.form.min.css";
     @import "../../../assets/scss/formio";
     @import "~bootstrap/scss/bootstrap";
@@ -308,4 +326,5 @@ export default {
       transform: translateY(-2px);
     }
   }
+
 </style>

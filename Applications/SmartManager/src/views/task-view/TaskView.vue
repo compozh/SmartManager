@@ -28,14 +28,10 @@
       <task-details v-if="currentTab === 'details'" :task="task" @open-attachment="openAttachment"></task-details>
 
       <!-- TASK ATTACHMENTS  -->
-      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments" :index="index"></task-attachments>
-
-      <!-- TASK DETAILS  -->
-      <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
+      <task-attachments v-if="currentTab === 'attachments'" :task="task" :index="index"></task-attachments>
 
       <!-- TASK COMMENTS  -->
-      <task-approvals v-if="currentTab === 'approvals'"></task-approvals>
-
+      <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
     </div>
   </div>
 </template>
