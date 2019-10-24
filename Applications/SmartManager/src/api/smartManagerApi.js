@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import folders from './graphql/folders.graphql'
 import tasks from './graphql/tasks.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
+import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
@@ -78,6 +79,18 @@ export class SmartManagerApi {
         .query({
           query: gql`${taskInfo}`,
           variables: {taskId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getFileUrlFromGql(id, ext) {
+    try {
+      return await getClient('smartmanager')
+        .query({
+          query: gql`${fileUrl}`,
+          variables: {id, ext}
         })
     } catch (e) {
       throw new Error(e.message)
