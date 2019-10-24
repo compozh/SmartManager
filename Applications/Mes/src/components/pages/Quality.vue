@@ -14,7 +14,6 @@
       >
       <mes-quality-component
         id="qualitiesList"
-        :initializeQualities=initializeQualities
         @changeCurrentQuality=changeCurrentQuality
         @uploadQualityOnScroll=uploadQualityOnScroll
         :isUploadInProcess=isUploadInProcess
@@ -34,7 +33,6 @@ export default {
   data() {
     return {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
-      initializeQualities: false,
       defaultSizes: [35, 65],
       isUploadInProcess: false
     }
@@ -58,6 +56,9 @@ export default {
     properties() {
       return this.$store.getters['mes/properties']
     },
+    initializeQualities() {
+      return this.$store.getters['mes/initializeQualities']
+    },
     selectedQuality: {
       get() {
         return this.$store.getters['mes/selectedQuality']
@@ -73,7 +74,7 @@ export default {
         this.$store.commit('mes/setQualities', [])
       }
       await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate , direction: 1 })
-      this.initializeQualities = true
+
       if (!this.selectedQuality) {
         this.seelectFirstQuality()
       }
@@ -83,11 +84,6 @@ export default {
         return
       }
       this.selectedQuality = newSelectedQuality
-      // this.$store.dispatch('formio').then((formDefinition) => {
-      //   commit('mes/setQualityFormio', formDefinition)
-      // }).catch((err) => {
-
-      // });
       this.$store.dispatch('mes/initializeQualityFormio', { formCode: this.properties.qualityForm, workCenter: this.workCenter, qualityId: newSelectedQuality.id } )
     },
     seelectFirstQuality() {

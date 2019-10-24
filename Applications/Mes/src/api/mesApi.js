@@ -60,7 +60,6 @@ export class MesApi {
     return result
   }
 
-
   async getTicketFromGql () {
     const result = await getClient().query({
       query: gql` ${ticket}`
@@ -160,6 +159,7 @@ export class MesApi {
     })
     return result.data.mesMutation.registerProduction
   }
+
   async cancelBeginRegistrationGql(taskId) {
     const result = await getClient().mutate({
       mutation: gql`${cancelBeginRegistration}`,
@@ -167,6 +167,7 @@ export class MesApi {
     })
     return result.data.mesMutation.cancelBeginRegistration
   }
+
   async getUsersProductionEventsFromGql(workerCode, fetchPolicy) {
     const result = await getClient().query({
       query: gql`query ($workerCode: String) ${usersProductionEvents}`,
@@ -175,6 +176,7 @@ export class MesApi {
     })
     return result.data.mes.usersProductionEvents
   }
+
   async getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy) {
     const result = await getClient().query({
       query: gql`query ($workCenterCode: String) ${workCenterProductionEvents}`,
@@ -183,6 +185,7 @@ export class MesApi {
     })
     return result.data.mes.workCenterProductionEvents
   }
+
   async deleteProductionGql(factId) {
     const  result = await getClient().mutate({
       mutation: gql`${deleteProduction}`,
@@ -190,6 +193,7 @@ export class MesApi {
     })
     return result.data.mesMutation.deleteProduction
   }
+
   async printProductionGql(factId, checkWriteOffPercent) {
     const  result = await getClient().mutate({
       mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
@@ -197,6 +201,7 @@ export class MesApi {
     })
     return result.data.mes.printLabel
   }
+
   async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
     const  result = await getClient().mutate({
       mutation: gql`${executeWriteOff}`,
@@ -204,6 +209,7 @@ export class MesApi {
     })
     return result.data.mes.executeWriteOff
   }
+
   async getProductionFormioFromGql(formCode, properties) {
     const result = await getClient().query({
       query: gql`${productionFormio}`,
@@ -212,6 +218,7 @@ export class MesApi {
     })
     return result.data.mes.productionFormio
   }
+
   async productionFormioSubmitGql(formCode, submission, properties) {
     const result = await getClient().mutate({
       mutation: gql`${productionFormioSubmit}`,
@@ -219,6 +226,7 @@ export class MesApi {
     })
     return result.data.mesMutation.productionFormioSubmit
   }
+
   async getDowntimeFormioFromGql(formCode, properties) {
     const result = await getClient().query({
       query: gql`${downtimeFormio}`,
@@ -227,6 +235,7 @@ export class MesApi {
     })
     return result.data.mes.downtimeFormio
   }
+
   async getQualityFormioFromGql(formCode, properties) {
     const result = await getClient().query({
       query: gql`${qualityFormio}`,
@@ -235,6 +244,7 @@ export class MesApi {
     })
     return result.data.mes.qualityFormio
   }
+
   async downtimeFormioSubmitGql(formCode, submission, properties) {
     const result = await getClient().mutate({
       mutation: gql`${downtimeFormioSubmit}`,
@@ -242,6 +252,7 @@ export class MesApi {
     })
     return result.data.mesMutation.downtimeFormioSubmit
   }
+
   async qualityFormioSubmitGql(formCode, submission, properties) {
     const result = await getClient().mutate({
       mutation: gql`${qualityFormioSubmit}`,
@@ -249,6 +260,7 @@ export class MesApi {
     })
     return result.data.mesMutation.qualityFormioSubmit
   }
+
   async getDowntimeTypesFromGql() {
     const result = await getClient().query({
       query: gql` ${downtimeGetTypes}`

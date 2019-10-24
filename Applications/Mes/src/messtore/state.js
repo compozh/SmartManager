@@ -48,10 +48,6 @@ export default {
   menuMiniMode: true,
   ticket: '',
   mainContainerKey: 0,
-  actionsAfterInitializeProperties: []
-  // events: {
-  //   afterInitializeWorkCenter: [], //{ action }
-  //   afterChangeTaskStateEvents: []
-  //   afterDowntimeRegistrationEvents: []
-  // }
+  actionsAfterInitializeProperties: [],
+  initializeQualities: false
 }

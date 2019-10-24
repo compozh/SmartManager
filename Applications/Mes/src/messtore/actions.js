@@ -61,21 +61,12 @@ export default {
               }
             }
           }
-
           if(!getters.properties) {
             commit('addActionAfterInitializeProperties', setWorkCenterForWorker)
           } else {
             await setWorkCenterForWorker(getters.properties)
           }
-
         commit('setInitialWorkCenter', true)
-
-        // for(var event of getters.afterInitializeWorkCenterEvents) {
-        //   if(event.action) {
-        //     event.action();
-        //   }
-        // }
-
       },
       linearLoader: true
     })
@@ -112,6 +103,7 @@ export default {
             commit('setQualities', getters.qualities.concat(qualities))
           } else {
             commit('setQualities', qualities)
+            commit('setInitializeQualities', true)
           }
         }
       }
@@ -167,11 +159,6 @@ export default {
           workBarcode: task.barcode
         }
         me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
-        // for(var event of getters.afterChangeTaskStateEvents) {
-        //   if(event.action) {
-        //     event.action()
-        //   }
-        // }
       },
       linearLoader: true
     })
@@ -194,11 +181,6 @@ export default {
       },
       successAction: async () => {
         task.inProgress = false
-        // for(var event of getters.afterChangeTaskStateEvents) {
-        //   if(event.action) {
-        //     event.action()
-        //   }
-        // }
       },
       linearLoader: true
     })
@@ -328,21 +310,23 @@ export default {
      })
      commit('closeDialogLinearLoader')
   },
-  async qualityFormIoSubmit({ commit }, { formCode, workCenter, submission, successAction }) {
+  async qualityFormIoSubmit({ commit, getters }, { formCode, workCenter, submission, quality, successAction }) {
     var me = this,
-       currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+       currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
+       qualityProcessType = getters.properties.qualityProcessType
     commit('setDialogLinearLoaderMessage', 'Регистрация качества')
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
        queryAction: async () => {
          const res = await api.qualityFormioSubmitGql( formCode, submission, {
            workCenterCode: workCenter.code,
+           id: quality.id
          })
          return res
        },
        successAction: async () => {
          commit('setQualities', [])
-
-         me.dispatch('mes/downloadQualities', { formCode: formCode, searchDateTime: currentDate, direction: 1, fetchPolicy: 'network-only' })
+         commit('setInitializeQualities', false)
+         me.dispatch('mes/downloadQualities', { processTypeCode: qualityProcessType, searchDateTime: currentDate, direction: 1 })
          if(successAction) {
            successAction();
          }

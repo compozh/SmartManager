@@ -28,11 +28,13 @@ export default {
   },
   props: {
     isUploadInProcess: Boolean,
-    initializeQualities: Boolean,
   },
   computed: {
     qualities() {
       return this.$store.getters['mes/qualities']
+    },
+    initializeQualities() {
+      return this.$store.getters['mes/initializeQualities']
     }
   },
   methods: {
