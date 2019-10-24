@@ -29,6 +29,9 @@ export default {
   downtimes(state) {
     return state.downtimes
   },
+  qualities(state) {
+    return state.qualities
+  },
   installations(state) {
     return state.installations
   },
@@ -43,6 +46,9 @@ export default {
   },
   downtimeFormio(state) {
     return state.downtimeFormio
+  },
+  qualityFormio(state) {
+    return state.qualityFormio
   },
   createDowntimeFormio(state) {
     return state.createDowntimeFormio
@@ -73,6 +79,9 @@ export default {
   },
   selectedDowntime(state) {
     return state.selectedDowntime
+  },
+  selectedQuality(state) {
+    return state.selectedQuality
   },
   initialWorkCenter(state) {
     return state.initialWorkCenter

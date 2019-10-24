@@ -43,6 +43,9 @@ export default {
   setDowntimes(state, downtimes) {
     state.downtimes = downtimes
   },
+  setQualities(state, qualities) {
+    state.qualities = qualities
+  },
   setInstallations(state, installations) {
     state.installations = installations
   },
@@ -65,11 +68,17 @@ export default {
   setDowntimeFormio(state, formio) {
     state.downtimeFormio = formio
   },
+  setQualityFormio(state, formio) {
+    state.qualityFormio = formio
+  },
   setCreateDowntimeFormio(state, formio) {
     state.createDowntimeFormio = formio
   },
   resetDowntimeFormio(state) {
     state.downtimeFormio = {}
+  },
+  resetQualityFormio(state) {
+    state.qualityFormio = {}
   },
   removeProduction(state, production) {
     let index = state.usersProductionEvents.indexOf(production)
@@ -103,6 +112,9 @@ export default {
   },
   setSelectedDowntime(state, selectedDowntime) {
     state.selectedDowntime = selectedDowntime
+  },
+  setSelectedQuality(state, selectedQuality) {
+    state.selectedQuality = selectedQuality
   },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
@@ -143,10 +155,12 @@ export default {
   resetState(state) {
     state.tasks = []
     state.downtimes = []
+    state.qualities = []
     state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.selectedDowntime = null
+    state.selectedQuality = null
     state.workCenterProductionEvents = []
   }
 }

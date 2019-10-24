@@ -104,6 +104,20 @@ export default {
       }
     })
   },
+  async downloadQualities({ commit, getters }, { workCenterCode, dateTime }) {
+    var qualities = [{id: 0},{id: 1},{id: 2},{id: 3}]
+    commit('setQualities', qualities)
+    // await this.dispatch('mes/graphqlQueryWraper', {
+    //   action: async () => {
+    //     let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
+    //     if (getters.downtimes.length) {
+    //       commit('setDowntimes', getters.downtimes.concat(downtimes))
+    //     } else {
+    //       commit('setDowntimes', downtimes)
+    //     }
+    //   }
+    // })
+  },
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -263,6 +277,17 @@ export default {
       successAction: async result => { commit('setDowntimeFormio', result) },
       linearLoader: true
     })
+  },
+  async initializeQualityFormio({ commit }, { workCenter, qualityId }) {
+    commit('setQualityFormio', {})
+    // commit('resetDowntimeFormio')
+    // await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    //   queryAction: async () => {
+    //     return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code , id: downtimeId }, 'network-only')
+    //   },
+    //   successAction: async result => { commit('setDowntimeFormio', result) },
+    //   linearLoader: true
+    // })
   },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
