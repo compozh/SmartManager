@@ -56,3 +56,13 @@ export default {
   props: ['education'],
 }
 </script>
+
+<style scoped>
+::v-deep .vs-table--thead{
+    color: rgba(0, 0, 0, 0.54);
+    font-weight: 600;
+}
+::v-deep .vs-table-text{
+    font-size: 14px;
+}
+</style>
