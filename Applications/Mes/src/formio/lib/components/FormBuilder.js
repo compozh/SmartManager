@@ -38,12 +38,7 @@ var FormBuilder = /** @class */ (function (_super) {
         }
     };
     FormBuilder.prototype.mounted = function () {
-        this.initializeBuilder()
-            .catch(function (err) {
-            /* eslint-disable no-console */
-            console.warn(err);
-            /* eslint-enable no-console */
-        });
+        this.initializeBuilder();
     };
     FormBuilder.prototype.destroyed = function () {
         if (this.builder) {
@@ -54,26 +49,26 @@ var FormBuilder = /** @class */ (function (_super) {
         var _this = this;
         if (this.form) {
             // @ts-ignore
-            this.builder = new FormBuilder_1.default(this.$refs.formio, this.form, this.options).then(function () {
-                _this.builder.instance.events.onAny(function () {
-                    var args = [];
-                    for (var _i = 0; _i < arguments.length; _i++) {
-                        args[_i] = arguments[_i];
-                    }
-                    var eventParts = args[0].split('.');
-                    // Only handle formio events.
-                    if (eventParts[0] !== 'formio' || eventParts.length !== 2) {
-                        return;
-                    }
-                    // Remove formio. from event.
-                    args[0] = eventParts[1];
+            this.builder = new FormBuilder_1.default(this.$refs.formio, this.form, this.options);
+
+            _this.builder.instance.events.onAny(function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                var eventParts = args[0].split('.');
+                // Only handle formio events.
+                if (eventParts[0] !== 'formio' || eventParts.length !== 2) {
+                    return;
+                }
+                // Remove formio. from event.
+                args[0] = eventParts[1];
+                _this.$emit.apply(_this, args);
+                // Emit a change event if the schema changes.
+                if (['saveComponent', 'updateComponent', 'deleteComponent'].includes(eventParts[1])) {
+                    args[0] = 'change';
                     _this.$emit.apply(_this, args);
-                    // Emit a change event if the schema changes.
-                    if (['saveComponent', 'updateComponent', 'deleteComponent'].includes(eventParts[1])) {
-                        args[0] = 'change';
-                        _this.$emit.apply(_this, args);
-                    }
-                });
+                }
             });
         }
         else {

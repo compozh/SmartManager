@@ -150,6 +150,8 @@ export default {
 </script>
 <style type="text/css">
   html{
+    font-family: Roboto;
+    font-weight: 500;
     overflow-y: hidden;
   }
   body{

@@ -2,7 +2,7 @@
     <div class="toolbar-builder-container">
         <div class="constructor-title">{{constructorCaption}}</div>
         <v-tabs v-model="selectedTab" class="constructor-tabs">
-          <v-tab v-for="tab in tabs" :key=tab.id @click="changeTab(tab.index)">
+          <v-tab v-for="tab in tabs" :key=tab.id >
             <v-badge color="#326DA8" overlap>
               {{tab.name}}
             </v-badge>
@@ -21,31 +21,43 @@
                 <v-text-field
                     class="toolbar-item form-code-text-field"
                     :disabled="Boolean(Object.keys(formDefinition).length)"
+                    ref="formCode"
                     v-model=formCodeProperty
                     :full-width=false
-                    :maxlength="10"
+                    :maxlength="16"
                     :label=formCodeLabel
+                    :rules="[() => !!formCodeProperty || this.$t('bpmn.errors.RequiredInputField')]"
                     required
                 />
+                <v-select
+                    v-model=formDisplayProperty
+                    class="toolbar-item form-display-type-field"
+                    ref="displayType"
+                    :items="displays"
+                    item-text="text"
+                    item-value="value"
+                    :label=displayTypeLabel
+                    @change=displayChange
+                />
                 <div class="button-container">
-                <v-btn
-                    outline
-                    color="success"
-                    @click="onAction"
-                    class="action-button"
-                    :loading=buttonLoading
-                >
-                    {{actionText}}
-                </v-btn>
-                <v-btn
-                    outline
-                    color="error"
-                    class="cancel-button"
-                    @click="onCancel"
-                    :disabled=buttonLoading
-                >
-                {{ $t('bpmn.buttons.Cancel') }}
-                </v-btn>
+                    <v-btn
+                        outline
+                        color="success"
+                        @click="onAction"
+                        class="action-button"
+                        :loading=buttonLoading
+                    >
+                        {{actionText}}
+                    </v-btn>
+                    <v-btn
+                        outline
+                        color="error"
+                        class="cancel-button"
+                        @click="onCancel"
+                        :disabled=buttonLoading
+                    >
+                    {{ $t('bpmn.buttons.Cancel') }}
+                    </v-btn>
                 </div>
             </v-layout>
             <formbuilder
@@ -69,7 +81,6 @@
 <script>
 import { FormBuilder } from './lib/components/FormBuilder'
 import VueApexCharts from 'vue-apexcharts'
-
 /* eslint-disable */
 export default {
   name: 'formio-builder-component',
@@ -77,17 +88,20 @@ export default {
   data() {
         var me = this
         return {
+            formDisplayProperty: me.formDefinition.display || 'form',
             formCodeProperty: me.formDefinition.formCode,
             formNameProperty: me.formDefinition.name,
             formNameLabel: me.$t('bpmn.labels.Name'),
             formCodeLabel: me.$t('bpmn.labels.Code'),
+            displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
             options: { noAlerts: true },
             tabs: [
                 { index: 0, id: 'designer', name: me.$t('bpmn.labels.Designer')},
                 { index: 1, id: 'preview', name: me.$t('bpmn.labels.Preview')}
             ],
             selectedTab: 0,
-            constructorCaption: this.$t('bpmn.labels.FormContructor')
+            constructorCaption: this.$t('bpmn.labels.FormContructor'),
+            displays: [ { text: 'Form', value: 'form' }, { text: 'Wizard', value: 'wizard' }, { text: 'PDF', value: 'pdf' } ]
         }
   },
   props: {
@@ -114,6 +128,11 @@ export default {
         this.$emit('change', this.getFormParams());
     },
     onAction() {
+      var formCodeInput = this.$refs.formCode
+      if (!formCodeInput.value) {
+        formCodeInput.validate(true)
+        return
+      }
         this.$emit('action', this.getFormParams());
     },
     onCancel() {
@@ -131,8 +150,9 @@ export default {
             settings: JSON.stringify(form.form.settings, null, 4)
         }
     },
-    changeTab() {
-
+    displayChange(display) {
+        var form = this.$refs.formio;
+        form.builder.setDisplay(display);
     }
   }
 }
@@ -143,6 +163,7 @@ export default {
   @import'./assets/theme.scss';
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/scss/bootstrap";
+  @import'./assets/overide.scss';
   @import "~choices.js/public/assets/styles/choices.css";
   @import "~flatpickr/dist/flatpickr.min.css";
 }
