@@ -51,7 +51,8 @@
 		"Code": "Code",
 		"Designer": "Designer",
 		"Preview": "Preview",
-		"FormContructor": "Form constructor"
+		"FormContructor": "Form constructor",
+		"DisplayType": "Display type"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

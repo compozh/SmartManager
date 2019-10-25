@@ -181,7 +181,6 @@ export default {
 
 <style scoped lang="scss">
 .formio-container-class /deep/ {
-  @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/dist/css/bootstrap";
   @import "~choices.js/public/assets/styles/choices.css";
@@ -189,6 +188,7 @@ export default {
 
   font-size: 14px;
   font-weight: 500;
+  font-family: Roboto;
   label {
     margin-top: .5rem !important;
     font-size: 16px;
@@ -417,38 +417,6 @@ export default {
                 }
             }
         }
-    }
-  }
-}
-.downtimes-block .formio-container /deep/ {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  .form-group.has-feedback.formio-component {
-    align-items: center;
-    text-align: center !important;
-  }
-  .input-group-addon.input-group-append {
-    display: none;
-  }
-}
-.downtime-layout{
-  .formio-container /deep/ {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 10px 20px;
-    background-color: #fff;
-    div {
-      width: 100%;
-      .form-group.has-feedback.formio-component {
-        width: 100%;
-        align-items: center;
-        text-align: center !important;
-      }
-      .input-group-addon.input-group-append {
-        display: none;
-      }
     }
   }
 }

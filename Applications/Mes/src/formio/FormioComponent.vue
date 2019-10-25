@@ -189,6 +189,7 @@ export default {
 
   font-size: 14px;
   font-weight: 500;
+  font-family: Roboto;
   label {
     margin-top: .5rem !important;
     font-size: 16px;
