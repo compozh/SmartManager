@@ -1,4 +1,4 @@
-<template>    
+<template>
     <div class="toolbar-builder-container">
         <div class="constructor-title">{{constructorCaption}}</div>
         <v-tabs v-model="selectedTab" class="constructor-tabs">
@@ -106,7 +106,7 @@ export default {
       return { data: this.formDefinition.submission ? JSON.parse(this.formDefinition.submission) : [] }
     },
     actionText() {
-        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');     
+        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');
     }
   },
   methods: {
@@ -139,131 +139,11 @@ export default {
 </script>
 
 <style lang="scss">
-    .formio-builder-component-class /deep/ {
-        @import "~formiojs/dist/formio.full.min.css";
-        @import "~bootstrap/dist/css/bootstrap";
-        @import "~choices.js/public/assets/styles/choices.css";
-        @import "~flatpickr/dist/flatpickr.min.css";
-        .btn-primary {
-            background-color: #1976d2;
-            border-color: #1976d2;
-        }
-        .component-settings-button > i {
-            position: relative;
-            top: -7px;
-            left: -5px;
-        }
-    }
-    .formio-builder-component-class {
-        overflow-y: auto !important;
-        position: absolute;
-        top: 145px;
-        bottom: 10px;
-        right: 32px;
-        left: 32px;
-        padding: 0 16px;
-    }
-    .constructor-title {
-        padding-left: 10px;
-        display: block;
-        width: 100%;
-        font-size: 1.25rem !important;
-        font-weight: 500;
-        line-height: 2rem;
-        letter-spacing: 0.0125em !important;
-        font-family: "Roboto", sans-serif !important;
-        z-index: 102;
-    }
-    .toolbar-builder-container {
-        overflow: hidden;
-        padding: 0 40px;
-        position: relative;
-    }
-    .builder-component {
-        text-align: left;
-    }
-    .toolbar {
-        width: 100%;
-        margin: 9px 0 0 0;
-    }
-    .toolbar-item {
-        padding: 0 5px;
-    }
-    .form-code-text-field {
-        max-width: 200px;
-    }
-    .form-name-text-field {
-      max-width: 350px;  
-    }
-    .action-button {
-    }
-    .cancel-button {
-    }
-    .constructor-tabs {
-        
-    }
-    .form-preview-component {
-        overflow-y: auto !important;
-        position: absolute;
-        top: 125px;
-        bottom: 10px;
-        right: 32px;
-        left: 32px;
-        padding: 0 16px;
-    }
-
-    .button-container {
-        margin-left: auto;
-    }
-
-    .form-preview-component::-webkit-scrollbar {
-        background-color:#fff;
-        width:16px
-    }
-    /* background of the scrollbar except button or resizer */
-    .form-preview-component::-webkit-scrollbar-track {
-        background-color:#fff
-    }
-    .form-preview-component::-webkit-scrollbar-track:hover {
-        background-color:#f4f4f4
-    }
-
-    /* scrollbar itself */
-    .form-preview-component::-webkit-scrollbar-thumb {
-        background-color:#babac0;
-        border-radius:16px;
-        border:5px solid #fff
-    }
-    .form-preview-component::-webkit-scrollbar-thumb:hover {
-        background-color:#a0a0a5;
-        border:4px solid #f4f4f4
-    }
-    /* set button(top and bottom of the scrollbar) */
-    .form-preview-component::-webkit-scrollbar-button {display:none}
-
-  //formio-builder-component-class
-    .formio-builder-component-class::-webkit-scrollbar {
-        background-color:#fff;
-        width:16px
-    }
-    /* background of the scrollbar except button or resizer */
-    .formio-builder-component-class::-webkit-scrollbar-track {
-        background-color:#fff
-    }
-    .formio-builder-component-class::-webkit-scrollbar-track:hover {
-        background-color:#f4f4f4
-    }
-
-    /* scrollbar itself */
-    .formio-builder-component-class::-webkit-scrollbar-thumb {
-        background-color:#babac0;
-        border-radius:16px;
-        border:5px solid #fff
-    }
-    .formio-builder-component-class::-webkit-scrollbar-thumb:hover {
-        background-color:#a0a0a5;
-        border:4px solid #f4f4f4
-    }
-    /* set button(top and bottom of the scrollbar) */
-    .formio-builder-component-class::-webkit-scrollbar-button {display:none}
+.formio-builder-component-class /deep/ {
+  @import'./assets/theme.scss';
+  @import "~formiojs/dist/formio.full.min.css";
+  @import "~bootstrap/scss/bootstrap";
+  @import "~choices.js/public/assets/styles/choices.css";
+  @import "~flatpickr/dist/flatpickr.min.css";
+}
 </style>
