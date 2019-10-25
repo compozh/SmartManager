@@ -23,7 +23,7 @@
                             :danger-text="$t('validate.required')"
                             val-icon-danger="clear"
                   />
-                  <sm-autocomplete :items="users"
+                  <autocomplete :items="users"
                                    :multiple="false"
                                    :loading="userListLoading"
                                    v-model="newTask.performer"
@@ -73,7 +73,7 @@
                                 :options="editorOption"
                                 class="mb-6"
                   ></quill-editor>
-                  <sm-autocomplete :items="users"
+                  <autocomplete :items="users"
                                    :multiple="true"
                                    :loading="userListLoading"
                                    label="fio"
@@ -81,7 +81,7 @@
                                    :placeholder="$t('roles.coExecutors')"
                                    class="my-6"
                   />
-                  <sm-autocomplete :items="users"
+                  <autocomplete :items="users"
                                    :multiple="true"
                                    label="fio"
                                    :loading="userListLoading"
@@ -123,19 +123,19 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import {quillEditor} from 'vue-quill-editor'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import SmAutocomplete from '../../components/SmAutocomplete'
+import Autocomplete from '@/components/Autocomplete'
 import moment from 'moment'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
 import {Ukrainian} from 'flatpickr/dist/l10n/uk.js'
-import FilesUpload from '../../components/FilesUpload'
+import FilesUpload from '@/components/FilesUpload'
 
 export default {
   components: {
     quillEditor,
     VuePerfectScrollbar,
-    SmAutocomplete,
+    Autocomplete,
     flatPickr,
     FilesUpload
   },

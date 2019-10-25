@@ -48,8 +48,10 @@
 		"SelectAction": "Select action",
 		"SelectForm": "Select Form",
 		"SelectTaskCreationRule": "Select task creation rule",
-		"FormCode": "Form code",
-		"FormName": "Form name"
+		"Code": "Code",
+		"Designer": "Designer",
+		"Preview": "Preview",
+		"FormContructor": "Form constructor"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -65,7 +67,9 @@
 		"RuleNotLoaded": "Rule not loaded",
 		"ActionWithoutForm": "Form is not attached to this action",
 		"RuleWithoutForm": "Form is not attached to this rule",
-		"InitializeSignalR": "Failed initialize SignalR"
+		"InitializeSignalR": "Failed initialize SignalR",
+		"InputCodeForm": "Input code form",
+		"RequiredInputField": "Field is required"
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",

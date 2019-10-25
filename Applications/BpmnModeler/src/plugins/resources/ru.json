@@ -49,8 +49,10 @@
 		"SelectForm": "Выберите форму",
 		"EnterTaskParams": "Введите параметры задачи",
 		"SelectTaskCreationRule": "Выберите правило создания задачи",
-		"FormCode": "Код формы",
-		"FormName": "Наименование формы"
+		"Code": "Код",
+		"Designer": "Конструктор",
+		"Preview": "Просмотр",
+		"FormContructor": "Конструктор формы"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -66,7 +68,9 @@
 		"RuleNotLoaded": "Не удалось загрузить правило",
 		"ActionWithoutForm": "К этому действию не привязана форма",
 		"RuleWithoutForm": "К этому правилу не привязана форма",
-		"InitializeSignalR": "Ошибка инициализации SignalR"
+		"InitializeSignalR": "Ошибка инициализации SignalR",
+		"InputCodeForm": "Введите код формы",
+		"RequiredInputField": "Обезательное поле"
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",

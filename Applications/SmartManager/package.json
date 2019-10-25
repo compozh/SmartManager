@@ -21,6 +21,10 @@
     "@capacitor/cli": "^1.0.0-alpha.38",
     "@capacitor/core": "^1.0.0-alpha.38",
     "@chenfengyuan/vue-countdown": "^1.1.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-regular-svg-icons": "^5.11.2",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/vue-fontawesome": "^0.1.7",
     "@it-enterprise/authentication": "^1.0.19",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
@@ -49,9 +53,11 @@
     "instantsearch.css": "^7.3.1",
     "material-icons": "^0.3.1",
     "moment": "^2.24.0",
+    "pdfjs-dist": "^2.2.228",
     "perfect-scrollbar": "^1.4.0",
     "prismjs": "^1.16.0",
     "register-service-worker": "^1.6.2",
+    "v-viewer": "^1.4.2",
     "vee-validate": "^2.2.8",
     "vue": "^2.6.6",
     "vue-acl": "4.0.7",
@@ -90,7 +96,8 @@
     "vuedraggable": "^2.21.0",
     "vuejs-datepicker": "^1.5.4",
     "vuesax": "3.9.0",
-    "vuex": "^3.1.0"
+    "vuex": "^3.1.0",
+    "web-streams-polyfill": "^2.0.4"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",

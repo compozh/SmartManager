@@ -3,6 +3,7 @@
 import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import { eventBus } from '../../../../main';
+import { events } from '../../../../constants'; 
 import ActionDefinitionType from '../../../../api/models/ActionDefinitionType';
 import { setServiceTaskParameters } from '../utils'
 
@@ -24,10 +25,8 @@ export default function (element, bpmnFactory, options, translate, commandStack)
     buttonAction: {
       name: 'search',
       method: (element, inputNode) => {
-        var definitionType = ActionDefinitionType.ExternalTask;
         var bo = getBusinessObject(element);
-        eventBus.$emit('properties-panel.select-external-task', bo.get('camunda:topic'), definitionType, (newValue) => {
-          
+        eventBus.$emit(events.propertiesPanel.selectAction, bo.get('camunda:topic'), ActionDefinitionType.ExternalTask, (newValue) => {
           var cmd = cmdHelper.updateBusinessObject(element, bo, {
             'camunda:topic': newValue
           });

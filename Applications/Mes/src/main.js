@@ -11,6 +11,7 @@ import '@it-enterprise/common/dist/common-components.css'
 
 // vue пакеты
 import 'material-design-icons-iconfont/dist/material-design-icons.css' // mdi icons
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
@@ -110,7 +111,7 @@ async function start()   {
           lg: 1280,
           xl: 1920,
         },
-        scrollBarWidth: 24,
+        scrollBarWidth: 24
       }
     },
     icons: {
@@ -122,7 +123,7 @@ async function start()   {
     properties: {
       i18n,
       store,
-      vuetify: new Vuetify(opts),
+      vuetify: new Vuetify(opts)
     }
   })
 
@@ -130,6 +131,3 @@ async function start()   {
 
   new Vue(appComponent).$mount('#app')
 }
-
-
-

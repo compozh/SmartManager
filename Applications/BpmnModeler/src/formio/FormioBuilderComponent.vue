@@ -1,46 +1,70 @@
 <template>
     <div class="toolbar-builder-container">
-        <v-layout row wrap
-            class="toolbar"
-        >
-            <v-btn
-                outlined
-                @click="onAction"
-                class="toolbar-item"
-                :loading=buttonLoading
+        <div class="constructor-title">{{constructorCaption}}</div>
+        <v-tabs v-model="selectedTab" class="constructor-tabs">
+          <v-tab v-for="tab in tabs" :key=tab.id @click="changeTab(tab.index)">
+            <v-badge color="#326DA8" overlap>
+              {{tab.name}}
+            </v-badge>
+          </v-tab>
+        </v-tabs>
+        <div v-if="selectedTab == 0">
+            <v-layout row wrap
+                class="toolbar"
             >
-                {{actionText}}
-            </v-btn>
-            <v-btn
-                outlined
-                class="toolbar-item"
-                @click="onCancel"
-                :disabled=buttonLoading
-            >
-            {{ $t('bpmn.buttons.Cancel') }}
-            </v-btn>
-            <v-text-field
-                class="toolbar-item form-code-text-field"
-                :disabled="Boolean(Object.keys(formDefinition).length)"
-                v-model=formCodeProperty
-                :full-width=false
-                :maxlength="10"
-                :label=formCodeLabel
-                required
+                <v-text-field
+                    class="toolbar-item form-name-text-field"
+                    v-model=formNameProperty
+                    :label=formNameLabel
+                    required
+                />
+                <v-text-field
+                    class="toolbar-item form-code-text-field"
+                    :disabled="Boolean(Object.keys(formDefinition).length)"
+                    ref="formCode"
+                    v-model=formCodeProperty
+                    :full-width=false
+                    :maxlength="16"
+                    :label=formCodeLabel
+                    :rules="[() => !!formCodeProperty || this.$t('bpmn.errors.RequiredInputField')]"
+                    required
+                />
+                <div class="button-container">
+                <v-btn
+                    outline
+                    color="success"
+                    @click="onAction"
+                    class="action-button"
+                    :loading=buttonLoading
+                >
+                    {{actionText}}
+                </v-btn>
+                <v-btn
+                    outline
+                    color="error"
+                    class="cancel-button"
+                    @click="onCancel"
+                    :disabled=buttonLoading
+                >
+                {{ $t('bpmn.buttons.Cancel') }}
+                </v-btn>
+                </div>
+            </v-layout>
+            <formbuilder
+                class="formio-builder-component-class"
+                :form=formioComponents
+                :options=options
+                ref="formio"
             />
-            <v-text-field
-                class="toolbar-item form-name-text-field"
-                v-model=formNameProperty
-                :label=formNameLabel
-                required
+        </div>
+        <div v-if="selectedTab==1" class="form-preview-component">
+            <formio-component
+                class="formio-component-preview"
+                :formDefinition=getFormParams()
+                :formCode=formCodeProperty
+                :actionsDisabled="!Object.keys(formDefinition).length"
             />
-        </v-layout>
-        <formbuilder
-            class="formio-builder-component-class"
-            :form=formioComponents
-            :options=options
-            ref="formio"
-        />
+        </div>
     </div>
 </template>
 
@@ -52,13 +76,20 @@ export default {
   name: 'formio-builder-component',
   components: { formbuilder: FormBuilder, apexchart: VueApexCharts },
   data() {
-    return {
-        formCodeProperty: this.formDefinition.formCode,
-        formNameProperty: this.formDefinition.name,
-        formNameLabel: this.$t('bpmn.labels.FormName'),
-        formCodeLabel: this.$t('bpmn.labels.FormCode'),
-        options: { noAlerts: true }
-    }
+        var me = this
+        return {
+            formCodeProperty: me.formDefinition.formCode,
+            formNameProperty: me.formDefinition.name,
+            formNameLabel: me.$t('bpmn.labels.Name'),
+            formCodeLabel: me.$t('bpmn.labels.Code'),
+            options: { noAlerts: true },
+            tabs: [
+                { index: 0, id: 'designer', name: me.$t('bpmn.labels.Designer')},
+                { index: 1, id: 'preview', name: me.$t('bpmn.labels.Preview')}
+            ],
+            selectedTab: 0,
+            constructorCaption: this.$t('bpmn.labels.FormContructor')
+        }
   },
   props: {
     formDefinition: Object,
@@ -76,7 +107,7 @@ export default {
       return { data: this.formDefinition.submission ? JSON.parse(this.formDefinition.submission) : [] }
     },
     actionText() {
-        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');     
+        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');
     }
   },
   methods: {
@@ -84,6 +115,11 @@ export default {
         this.$emit('change', this.getFormParams());
     },
     onAction() {
+      var formCodeInput = this.$refs.formCode
+      if (!formCodeInput.value) {
+        formCodeInput.validate(true)
+        return
+      }
         this.$emit('action', this.getFormParams());
     },
     onCancel() {
@@ -100,6 +136,9 @@ export default {
             components: JSON.stringify(form.form.components, null, 4),
             settings: JSON.stringify(form.form.settings, null, 4)
         }
+    },
+    changeTab() {
+
     }
   }
 }
@@ -109,15 +148,49 @@ export default {
     .formio-builder-component-class /deep/ {
         @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
         @import "~formiojs/dist/formio.full.min.css";
-        @import "~bootstrap/dist/css/bootstrap";            
-        padding: 0 10px;
+        @import "~bootstrap/dist/css/bootstrap";
+        @import "~choices.js/public/assets/styles/choices.css";
+        @import "~flatpickr/dist/flatpickr.min.css";
+        .btn-primary {
+            background-color: #1976d2;
+            border-color: #1976d2;
+        }
         .component-settings-button > i {
             position: relative;
             top: -7px;
             left: -5px;
         }
     }
+    .formio-builder-component-class {
+        overflow-y: auto !important;
+        position: absolute;
+        top: 145px;
+        bottom: 10px;
+        right: 32px;
+        left: 32px;
+        padding: 0 16px;
+    }
+    .constructor-title {
+        padding-left: 10px;
+        display: block;
+        width: 100%;
+        font-size: 1.25rem !important;
+        font-weight: 500;
+        line-height: 2rem;
+        letter-spacing: 0.0125em !important;
+        font-family: "Roboto", sans-serif !important;
+        z-index: 102;
+    }
+    .toolbar-builder-container {
+        overflow: hidden;
+        padding: 0 40px;
+        position: relative;
+    }
+    .builder-component {
+        text-align: left;
+    }
     .toolbar {
+        width: 100%;
         margin: 9px 0 0 0;
     }
     .toolbar-item {
@@ -127,6 +200,77 @@ export default {
         max-width: 200px;
     }
     .form-name-text-field {
-      max-width: 500px;  
+      max-width: 350px;
     }
+    .action-button {
+    }
+    .cancel-button {
+    }
+    .constructor-tabs {
+
+    }
+    .form-preview-component {
+        overflow-y: auto !important;
+        position: absolute;
+        top: 125px;
+        bottom: 10px;
+        right: 32px;
+        left: 32px;
+        padding: 0 16px;
+    }
+
+    .button-container {
+        margin-left: auto;
+    }
+
+    .form-preview-component::-webkit-scrollbar {
+        background-color:#fff;
+        width:16px
+    }
+    /* background of the scrollbar except button or resizer */
+    .form-preview-component::-webkit-scrollbar-track {
+        background-color:#fff
+    }
+    .form-preview-component::-webkit-scrollbar-track:hover {
+        background-color:#f4f4f4
+    }
+
+    /* scrollbar itself */
+    .form-preview-component::-webkit-scrollbar-thumb {
+        background-color:#babac0;
+        border-radius:16px;
+        border:5px solid #fff
+    }
+    .form-preview-component::-webkit-scrollbar-thumb:hover {
+        background-color:#a0a0a5;
+        border:4px solid #f4f4f4
+    }
+    /* set button(top and bottom of the scrollbar) */
+    .form-preview-component::-webkit-scrollbar-button {display:none}
+
+  //formio-builder-component-class
+    .formio-builder-component-class::-webkit-scrollbar {
+        background-color:#fff;
+        width:16px
+    }
+    /* background of the scrollbar except button or resizer */
+    .formio-builder-component-class::-webkit-scrollbar-track {
+        background-color:#fff
+    }
+    .formio-builder-component-class::-webkit-scrollbar-track:hover {
+        background-color:#f4f4f4
+    }
+
+    /* scrollbar itself */
+    .formio-builder-component-class::-webkit-scrollbar-thumb {
+        background-color:#babac0;
+        border-radius:16px;
+        border:5px solid #fff
+    }
+    .formio-builder-component-class::-webkit-scrollbar-thumb:hover {
+        background-color:#a0a0a5;
+        border:4px solid #f4f4f4
+    }
+    /* set button(top and bottom of the scrollbar) */
+    .formio-builder-component-class::-webkit-scrollbar-button {display:none}
 </style>

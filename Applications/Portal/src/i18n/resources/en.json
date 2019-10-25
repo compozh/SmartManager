@@ -17,9 +17,11 @@
     "PersonalInfo": {
         "FIO": "Full name",
         "BirthdayDate": "Date of Birth",
-        "Adress": "Address",
+        "Gender": "Gender",
         "PhoneNumber": "Phone number",
         "Department": "Department",
+        "Control": "Management Name",
+        "Position": "Category of post",
         "HireDate": "Date of receipt"
     },
     "Education":{
@@ -40,5 +42,16 @@
         "Priority": "Priority",
         "Provider": "Approx. the provider",
         "Status": "Status"
+    },
+    "agGrid":{
+        "contains": "Сontains",
+        "notContains": "Not contains",
+        "startsWith": "Starts with",
+        "endsWith": "Ends with",
+        "equals": "Equals",
+        "notEqual": "Not equal",
+        "andCondition": "AND",
+        "orCondition": "OR",
+        "NoRowsToShow": "No rows to show"
     }
 }

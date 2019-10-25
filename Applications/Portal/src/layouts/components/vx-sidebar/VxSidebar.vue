@@ -16,7 +16,6 @@
                 <div class="header-sidebar flex items-start justify-between" slot="header">
                     <div class="logo  items-center">
                         <img :src="logo" alt="logo" class="w-full mr-4" v-if="logo">
-                        <div class="logo-text pt-3 text-sm" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</div>
                     </div>
                     <div>
                         <template v-if="showCloseButton">
@@ -28,12 +27,10 @@
                         </template>
                     </div>
                 </div>
-
                 <div class="shadow-bottom" v-show="showShadowBottom"></div>
 
                 <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--main-sidebar pt-2" :settings="settings" @ps-scroll-y="psSectionScroll">
                     <template v-for="(sidebarItem, index) in sidebarItems">
-
                         <!-- GROUP ITEM HEADER -->
                         <span :key="`header-${index}`" v-if="sidebarItem.header && !sidebarItemsMin" class="navigation-header truncate">{{ $t(sidebarItem.i18n) || sidebarItem.header }}</span>
                         <template v-else-if="!sidebarItem.header">

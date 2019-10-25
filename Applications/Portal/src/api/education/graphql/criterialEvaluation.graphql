@@ -1,0 +1,17 @@
+{
+  portalNabuQuery{
+    gradeCriteria{
+      data{
+      gradeTitle
+      description
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}

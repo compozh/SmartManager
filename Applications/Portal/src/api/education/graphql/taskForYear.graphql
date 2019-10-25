@@ -1,0 +1,20 @@
+{
+  portalNabuQuery{
+    taskForYear{
+      data{
+        goalDate
+        taskType
+        taskTitle
+        perfomanceIndicator
+        
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}

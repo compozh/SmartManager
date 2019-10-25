@@ -98,6 +98,9 @@ Vue.config.productionTip = false
 // // apollo
 import VueApollo from 'vue-apollo'
 
+import vueCookie from 'vue-cookies'
+Vue.use(vueCookie)
+
 // moment
 Vue.use(require('vue-moment'))
 
@@ -129,12 +132,7 @@ Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/reso
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
 
-
-
-
-
-
-
+Vue.prototype.$cookies.set('c', localStorage.getItem('language'))
 
 getRouter().then(router => {
   new Vue({

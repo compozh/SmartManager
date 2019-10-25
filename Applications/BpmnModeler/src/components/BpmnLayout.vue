@@ -104,7 +104,7 @@
 
     <formio-builder-container />
 
-    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px">
+    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px" :persistent="formioLoading">
       <v-card>
         <v-card-title>
           <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
@@ -113,8 +113,8 @@
           <formio-component ref="formioForm" :formCode="formioCode" :formDefinition="formioDefinition"></formio-component>
         </v-card-text>
         <v-card-actions>
-          <v-btn flat @click="showFormioDialog = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-          <v-btn flat @click="onFormioSubmit" color="primary">{{ $t('bpmn.buttons.Save') }}</v-btn>
+          <v-btn flat @click="showFormioDialog = false" :disabled="formioLoading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+          <v-btn flat @click="onFormioSubmit" color="primary" :loading="formioLoading">{{ $t('bpmn.buttons.Save') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -133,6 +133,7 @@ import SelectionGrid from './SelectionGrid';
 import FormioComponent from '../formio/FormioComponent';
 import { eventBus } from '../main';
 import ActionDefinitionType from '../api/models/ActionDefinitionType';
+import { events } from '../constants';
 
 export default {
   name: 'bpmn-layout',
@@ -153,15 +154,16 @@ export default {
       propertiesPanelCallback: null,
       showFormioDialog: false,
       formioCode: '',
-      formioDefinition: {}
+      formioDefinition: {},
+      formioLoading: false
     };
   },
   mounted() {
     this.onRouteChanged(false);
     eventBus.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
-    eventBus.$on('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
-    eventBus.$on('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
-    eventBus.$on('properties-panel.select-form-key', this.onPropertiesPanelSelectFormKey);
+    eventBus.$on(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
+    eventBus.$on(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
+    eventBus.$on(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
   },
   methods: {
     async loadItems() {
@@ -195,10 +197,7 @@ export default {
       this.loading = false;
     },
     exportItem(item, type) {
-      const [{ item: modeler } = {}] = treeSearch([this.$refs.modeler], e => e.$options.name === type + '-modeler', e => e.$children);
-      if (modeler && modeler.export) {
-        modeler.export(type);
-      }
+      eventBus.$emit('modeler.export', type);
     },
     async deployItem(item) {
       this.loading = true;
@@ -286,7 +285,7 @@ export default {
       this.selectionGridSelectedItems = [];
       this.selectionGridTitle = '';
     },
-    async onPropertiesPanelSetExternalTaskProperties(taskCode, submission, callback) {
+    async onPropertiesPanelSetExternalTaskProperties(taskCode, existingParameters, callback) {
       this.loading = true;
       var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
       if (!action) {
@@ -312,6 +311,14 @@ export default {
         return;
       }
 
+      let submission = {};
+      if (existingParameters && existingParameters.length) {
+        for (let index = 0; index < existingParameters.length; index++) {
+          const element = existingParameters[index];
+          submission[element.name] = element.value;
+        }
+      }
+
       form.submission = JSON.stringify(submission);
       this.formioCode = action.unformio;
       this.formioDefinition = form;
@@ -320,15 +327,25 @@ export default {
 
       this.loading = false;
     },
-    onFormioSubmit() {
+    async onFormioSubmit() {
       var form = this.$refs.formioForm;
       var submission = JSON.parse(form.getFormSubmission());     
+      this.formioLoading = true;
+
+      var result = await this.$store.dispatch('formio/submitForm', { formCode: this.formioCode, submission: JSON.stringify(submission) });
+
+      if (!result || !result.success) {
+        this.formioLoading = false;
+        return;
+      }
+
       var params = [];
       for (var param in submission.data) {
         params.push({ name: param, type: typeof(submission.data[param]), value: submission.data[param] });
       }
       this.propertiesPanelCallback(params);
       this.propertiesPanelCallback = null;
+      this.formioLoading = false;
       this.showFormioDialog = false;
       this.formioCode = '';
       this.formioDefinition = {};
@@ -386,9 +403,9 @@ export default {
     }
   },
   beforeDestroy() {
-    eventBus.$off('properties-panel.set-external-task-properties', this.onPropertiesPanelSetExternalTaskProperties);
-    eventBus.$off('properties-panel.select-external-task', this.onPropertiesPanelSelectTask);
-    eventBus.$off('properties-panel.select-form-key', this.onSelectFormKey);
+    eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
+    eventBus.$off(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
+    eventBus.$off(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
   }
 };
 </script>
@@ -438,9 +455,9 @@ export default {
     line-height: 1.5;
     border-radius: 0.2rem;
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    text-align: center;
+    background-color: #1976d2;
+    border-color: #1976d2;
+    text-align: left !important;
     vertical-align: middle;
     font-family: Roboto;
   }

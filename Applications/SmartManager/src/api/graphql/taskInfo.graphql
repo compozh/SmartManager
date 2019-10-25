@@ -1,28 +1,25 @@
 query ($taskId: Int) {
   smtasks {
     taskDetails(taskId: $taskId) {
-      ...taskFields
+      ...mainTaskFields
+      ...detailTaskFields
       parentTasks {
-        ...taskFields
+        ...mainTaskFields
       }
       childTasks {
-        ...taskFields
+        ...mainTaskFields
       }
       parentTask {
-        ...taskFields
+        ...mainTaskFields
       }
     }
   }
 }
 
-fragment taskFields on Task {
+fragment mainTaskFields on Task {
   id
   name
   descript
-  htmlDescript
-  declarerId
-  declarer
-  declarerPhoto
   performerId
   performer
   performerPhoto
@@ -32,61 +29,36 @@ fragment taskFields on Task {
   isMy
   myControl
   isGenerate
-  needApprov
-  needComm
+  hasOrig
+  hasComm
+  priority
+  dateFact
+  isRead
+}
+
+fragment detailTaskFields on Task {
+  htmlDescript
+  declarerId
+  declarer
+  declarerPhoto
   arso
   keyValue
   kidCopy
-  hasOrig
-  hasComm
-  isAgree
-  isResponsible
-  childCount
-  childDoneCount
-  priority
-  dateRemind
   addedId
   addedFio
   addedPhoto
-  dateFact
-  isRead
-  caseId
-  docCaption
-  docText
-  docPlanDate
-  docImportant
-  isDocTextHtml
-  docType
-  docOrg
   nextButtonText
   previousButtonText
-  role
   participants {
     userId
     userFio
     name
     role
   }
-  relArso
-  relKeyValue
-  relKidCopy
-  relType
-  relName
   originals {
     id
-    ndor
     fileName
-    user
-    date
-    isMy
     fileExt
-    comm
-    fileSize
-    type
-    typeName
-    typeDescription
-    isSign
-    fileUrl
   }
   comments {
     userId
@@ -94,7 +66,5 @@ fragment taskFields on Task {
     userPhoto
     date
     text
-    isAgree
   }
-  hasNewComment
 }

@@ -29,6 +29,12 @@ export default {
   downtimes(state) {
     return state.downtimes
   },
+  qualities(state) {
+    return state.qualities
+  },
+  initializeQualities(state) {
+    return state.initializeQualities
+  },
   installations(state) {
     return state.installations
   },
@@ -43,6 +49,9 @@ export default {
   },
   downtimeFormio(state) {
     return state.downtimeFormio
+  },
+  qualityFormio(state) {
+    return state.qualityFormio
   },
   createDowntimeFormio(state) {
     return state.createDowntimeFormio
@@ -74,6 +83,9 @@ export default {
   selectedDowntime(state) {
     return state.selectedDowntime
   },
+  selectedQuality(state) {
+    return state.selectedQuality
+  },
   initialWorkCenter(state) {
     return state.initialWorkCenter
   },
@@ -86,13 +98,4 @@ export default {
   actionsAfterInitializeProperties(state) {
     return state.actionsAfterInitializeProperties
   },
-  // afterInitializeWorkCenterEvents(state) {
-  //   return state.events.afterInitializeWorkCenter
-  // },
-  // afterChangeTaskStateEvents(state) {
-  //   return state.events.afterChangeTaskStateEvents
-  // },
-  // afterDowntimeRegistrationEvents(state) {
-  //   return state.events.afterDowntimeRegistrationEvents
-  // }
 }
