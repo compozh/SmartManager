@@ -23,7 +23,7 @@
                             :danger-text="$t('validate.required')"
                             val-icon-danger="clear"
                   />
-                  <sm-autocomplete :items="users"
+                  <autocomplete :items="users"
                                    :multiple="false"
                                    :loading="userListLoading"
                                    v-model="newTask.performer"
@@ -73,7 +73,7 @@
                                 :options="editorOption"
                                 class="mb-6"
                   ></quill-editor>
-                  <sm-autocomplete :items="users"
+                  <autocomplete :items="users"
                                    :multiple="true"
                                    :loading="userListLoading"
                                    label="fio"
@@ -81,7 +81,7 @@
                                    :placeholder="$t('roles.coExecutors')"
                                    class="my-6"
                   />
-                  <sm-autocomplete :items="users"
+                  <autocomplete :items="users"
                                    :multiple="true"
                                    label="fio"
                                    :loading="userListLoading"

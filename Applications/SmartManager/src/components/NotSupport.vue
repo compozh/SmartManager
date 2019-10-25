@@ -5,9 +5,16 @@
     :settings="settings"
   >
     <div class="not-support-container">
-      <i18n path="messages.notSupport">
-        <b place="ext">{{ ext }}</b>
+      <i18n path="messages.notSupport" tag="div" class="mb-6 text-4xl">
+        <template v-slot:ext>
+          <b>{{ ext }}</b>
+        </template>
       </i18n>
+      <vs-button :href="url"
+                 color="primary"
+                 type="border"
+                 icon-pack="feather"
+                 icon="icon-download">{{ $t('messages.downloadFile') }}</vs-button>
     </div>
   </VuePerfectScrollbar>
 </template>
@@ -41,6 +48,7 @@ export default {
 
   .not-support-container {
     display: flex;
+    flex-direction: column;
     height: 100%;
     justify-content: center;
     align-items: center;
