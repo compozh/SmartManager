@@ -1,3 +1,4 @@
+import moment from 'moment'
 export default {
   setFullUserInfo(state, fullInfo) {
     state.fullUserInfo = fullInfo
@@ -6,6 +7,7 @@ export default {
     state.userInfoEditMode = value
   },
   setEmployeeInfo(state, value) {
+    value.birthDate =  moment(value.birthDate ).format('DD.MM.YYYY')
     state.employeeInfo = value
   },
 }
