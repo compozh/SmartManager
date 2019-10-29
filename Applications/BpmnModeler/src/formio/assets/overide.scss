@@ -1,0 +1,132 @@
+//Button 
+.outline {
+    .btn {
+        background-color: $white;
+        text-transform: uppercase;
+        font-weight: 500;
+        opacity: 1;
+        padding-top: 7px;
+    }
+    .btn:hover {
+        
+    }
+    //Primary
+    .btn-primary {color: $primary;}
+    .btn-primary:hover {background-color: $transparentPrimary;}
+    //Danger
+    .btn-secondary {color: $secondary;}
+    .btn-secondary:hover {background-color: $transparentSecondary;}
+    //Info
+    .btn-info {color: $info;}
+    .btn-info:hover {background-color: $transparentInfo;}
+    //Success
+    .btn-success {color: $success;}
+    .btn-success:hover {background-color: $transparentSuccess;}   
+    //Danger
+    .btn-danger {color: $danger;}
+    .btn-danger:hover {background-color: $transparentDanger;}
+    //Warning
+    .btn-warning {color: $warning;}
+    .btn-warning:hover {background-color: $transparentWarning;}    
+    
+    //Outline text field
+    .form-control {
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+        border-radius: 0;
+        outline: none;
+        transition: 0.5s ease all;
+        -moz-transition: 0.5s ease all;
+        -webkit-transition: 0.5s ease all;
+    }
+    .form-control:focus {
+        outline: none;
+        box-shadow: none;
+        border-bottom: 2px solid $primary;
+        transition: 0.5s ease all;
+        -moz-transition: 0.5s ease all;
+        -webkit-transition: 0.5s ease all;
+    }
+    .form-control[disabled="disabled"] {
+        border: none;
+    }
+    /*checkbox MD*/
+    .control-label.form-check-label {
+        margin: 16px 0;
+        display: block;
+        cursor: pointer;
+        input {
+            display: none;
+            & + span {
+                line-height: 20px;
+                height: 20px;
+                padding-left: 20px;
+                display: block;
+                position: relative;
+                &:not(:empty) {
+                    padding-left: 20px + 8;
+                }
+                &:before,
+                &:after {
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    display: block;
+                    border-radius: 50%;
+                    left: 0;
+                    top: 0;
+                    position: absolute;
+                }
+                &:before {
+                    background: #D1D7E3;
+                    transition: background .2s ease, transform .4s cubic-bezier(.175, .885, .32, 2);
+                }
+                &:after {
+                    background: #fff;
+                    transform: scale(.78);
+                    transition: transform .6s cubic-bezier(.175, .885, .32, 1.4);
+                }
+            }
+            &:checked + span {
+                &:before {
+                    transform: scale(1.04);
+                    background: $primary;
+                }
+                &:after {
+                    transform: scale(.4);
+                    transition: transform .3s ease;
+                }
+            }
+        }
+        &:hover {
+            input {
+                & + span {
+                    &:before {
+                        transform: scale(.92);
+                    }
+                    &:after {
+                        transform: scale(.74);
+                    }
+                }
+                &:checked + span {
+                    &:after {
+                        transform: scale(.4);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//Overide Formio styles
+.formbuilder {
+    font-size: 14px;
+  font-weight: 500;
+} 
+
+//Fix settings button
+.component-settings-button > i {
+    position: relative;
+    top: -7px;
+    left: -6px;
+}

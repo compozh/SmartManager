@@ -30,7 +30,7 @@
                     required
                 />
                 <v-select
-                    v-model=formDisplayProperty 
+                    v-model=formDisplayProperty
                     class="toolbar-item form-display-type-field"
                     ref="displayType"
                     :items="displays"
@@ -160,8 +160,10 @@ export default {
 
 <style lang="scss">
     .formio-builder-component-class /deep/ {
+        @import "./assets/theme.scss";
         @import "~formiojs/dist/formio.full.min.css";
-        @import "~bootstrap/dist/css/bootstrap";
+        @import "~bootstrap/scss/bootstrap";
+        @import "./assets/overide.scss";
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
         .btn-primary {
