@@ -78,9 +78,6 @@ export default {
     mainContainerKey() {
       return this.$store.getters['mes/mainContainerKey']
     },
-    snackbar() {
-      return this.$store.getters['mes/snackbar']
-    },
     workCenterFixationData() {
       return this.$store.getters['mes/workCenterFixationData']
     },
@@ -98,6 +95,15 @@ export default {
     },
     initialWorkCenter() {
       return this.$store.getters['mes/initialWorkCenter']
+    },
+    mesSnackbar() {
+      return this.$store.getters['mes/snackbar']
+    },
+    formioSnackbar() {
+      return this.$store.getters['formio/snackbar']
+    },
+    snackbar() {
+      return this.mesSnackbar.visible ? this.mesSnackbar : this.formioSnackbar
     }
   },
   methods: {
@@ -144,6 +150,7 @@ export default {
     },
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')
+      this.$store.commit('formio/closeSnackbar')
     }
   }
 }

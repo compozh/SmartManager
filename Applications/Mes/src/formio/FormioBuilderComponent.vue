@@ -94,7 +94,29 @@ export default {
             formNameLabel: me.$t('bpmn.labels.Name'),
             formCodeLabel: me.$t('bpmn.labels.Code'),
             displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
-            options: { noAlerts: true },
+            options: { 
+                noAlerts: true,
+                builder: {
+                    basic: configBuilder.basic ? {} : false,
+                    advanced: configBuilder.advanced ? {} : false,
+                    data: configBuilder.data ? {} : false,
+                    layout: configBuilder.layout ? {} : false,
+                    premium: configBuilder.premium ? {} : false,
+                    customBasic: configBuilder.charts ? {
+                        title: 'Charts',
+                        default: false,
+                        weight: 1000,
+                        components: {
+                            piechart: true,
+                            donutchart: true,
+                            linechart: true,
+                            areachart: true,
+                            barchart: true,
+                            radialbarchart: true
+                        }
+                    } : false
+                }
+            },
             tabs: [
                 { index: 0, id: 'designer', name: me.$t('bpmn.labels.Designer')},
                 { index: 1, id: 'preview', name: me.$t('bpmn.labels.Preview')}

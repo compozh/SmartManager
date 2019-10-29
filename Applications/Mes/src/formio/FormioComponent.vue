@@ -165,10 +165,12 @@ export default {
           tableName: fieldComponent.dataTable,
           fieldName: fieldComponent.dataTableFieldName,
           fieldCode: fieldComponent.dataTableFieldCode,
+          additionalCondition: fieldComponent.additionalCondition,
+			    countRowToSelect: fieldComponent.countRowToSelect,
           searchValue,
           submission 
         }
-
+        
       this.$store.dispatch('formio/callItemAutocomplete', 
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
