@@ -1,10 +1,10 @@
 import HtmlelementComponent from 'formiojs/components/html/HTML';
 
-export default class Chart extends HtmlelementComponent {
+export default class PercentageChart extends HtmlelementComponent {
 	attach(element) {
 		const superAttach = super.attach(element);
-		var chartElement = document.createElement('div');
-		element.appendChild(chartElement);
+		var percentageChartElement = document.createElement('div');
+		element.appendChild(percentageChartElement);
 		var chartData = this.component.chartData,
 			labels = [],
 			series = [];
@@ -15,24 +15,21 @@ export default class Chart extends HtmlelementComponent {
 		}
 		var options = {
 			chart: {
-				width: this.component.chartWidth,
+				height: this.component.chartHeight,
 				type: this.component.typeChart
 			},
-			labels: labels,
-			series: series,
-			responsive: [{
-				breakpoint: 480,
-				options: {
-					chart: {
-						width: 200
-					},
-					legend: {
-						position: this.component.legendPosition
+			plotOptions: {
+				radialBar: {
+					hollow: {
+						size: '70%'
 					}
 				}
-			}]
+			},
+			series: series,
+			labels: labels
 		};
-		var chart = new ApexCharts(chartElement, options);
+
+		var chart = new ApexCharts(percentageChartElement, options);
 		chart.render();
 
 		return superAttach;
@@ -40,13 +37,13 @@ export default class Chart extends HtmlelementComponent {
 
 	static editForm() {
 		var chartForm = HtmlelementComponent.editForm(),
-			chartWidth = {
+			chartHeight = {
 				type: 'number',
 				weight: 10,
 				input: true,
-				key: 'chartWidth',
-				label: 'Chart width',
-				defaultValue: 300
+				key: 'chartHeight',
+				label: 'Chart height',
+				defaultValue: 350
 				//tooltip: 'The name of the indexeddb database.',
 			},
 			dataElement = {
@@ -57,7 +54,7 @@ export default class Chart extends HtmlelementComponent {
 				//tooltip: 'Values to use as the data source. Labels are shown in the select field. Values are the corresponding values saved with the submission.',
 				weight: 10,
 				reorder: true,
-				defaultValue: [{ label: '', serie: 1 }],
+				defaultValue: [{ label: '', serie: 50 }],
 				components: [
 					{
 						label: 'Label',
@@ -72,36 +69,17 @@ export default class Chart extends HtmlelementComponent {
 						key: 'serie',
 						input: true,
 						type: 'number',
-						defaultValue: 1
+						defaultValue: 50
 					}
 				]
-			},
-			legendPositionElement = {
-				type: 'select',
-				input: true,
-				weight: 0,
-				//tooltip: 'The source to use for the select data. Values lets you provide your own values and labels.',
-				key: 'legendPosition',
-				defaultValue: 'top',
-				label: 'Legend position',
-				dataSrc: 'values',
-				data: {
-					values: [
-						{ label: 'Top', value: 'top' },
-						{ label: 'Bottom', value: 'bottom' },
-						{ label: 'Left', value: 'left' },
-						{ label: 'Right', value: 'right' }
-					]
-				}
 			};
 
 		for (var formComponent of chartForm.components) {
 			if (formComponent.key === 'tabs') {
 				var dataComponent = {};
 				dataComponent.components = [];
-				dataComponent.components.push(chartWidth);
+				dataComponent.components.push(chartHeight);
 				dataComponent.components.push(dataElement);
-				dataComponent.components.push(legendPositionElement);
 				dataComponent.key = 'data';
 				dataComponent.label = 'Data';
 				dataComponent.weight = 20;
@@ -114,11 +92,10 @@ export default class Chart extends HtmlelementComponent {
 	}
 	static schema(...extend) {
 		return super.schema({
-			type: 'chart',
+			type: 'percentageChart',
 			label: 'chartelement',
-			chartData: [{ label: '', serie: 1 }],
-			legendPosition: 'top',
-			chartWidth: 300
+			chartData: [{ label: '', serie: 50 }],
+			chartHeight: 350
 		}, ...extend);
 	}
 
@@ -128,4 +105,4 @@ export default class Chart extends HtmlelementComponent {
 	}
 }
 
-Formio.registerComponent('chart', Chart);
+Formio.registerComponent('percentagechart', PercentageChart);

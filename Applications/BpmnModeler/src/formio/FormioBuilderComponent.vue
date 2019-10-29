@@ -94,7 +94,29 @@ export default {
             formNameLabel: me.$t('bpmn.labels.Name'),
             formCodeLabel: me.$t('bpmn.labels.Code'),
             displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
-            options: { noAlerts: true },
+            options: { 
+                noAlerts: true,
+                builder: {
+                    basic: {},
+                    advanced: {},
+                    data: {},
+                    layout: {},
+                    premium: {},
+                    customBasic: {
+                        title: 'Charts',
+                        default: false,
+                        weight: 1000,
+                        components: {
+                            piechart: true,
+                            donutchart: true,
+                            linechart: true,
+                            areachart: true,
+                            barchart: true,
+                            radialbarchart: true
+                        }
+                    }
+                }
+            },
             tabs: [
                 { index: 0, id: 'designer', name: me.$t('bpmn.labels.Designer')},
                 { index: 1, id: 'preview', name: me.$t('bpmn.labels.Preview')}
@@ -160,25 +182,16 @@ export default {
 
 <style lang="scss">
     .formio-builder-component-class /deep/ {
-        @import "./assets/theme.scss";
+        @import './assets/theme.scss';
         @import "~formiojs/dist/formio.full.min.css";
         @import "~bootstrap/scss/bootstrap";
-        @import "./assets/overide.scss";
+        @import './assets/overide.scss';
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
-        .btn-primary {
-            background-color: #1976d2;
-            border-color: #1976d2;
-        }
-        .component-settings-button > i {
-            position: relative;
-            top: -7px;
-            left: -5px;
-        }
 
         font-family: Roboto;
     }
-    .formio-builder-component-class {
+        .formio-builder-component-class {
         overflow-y: auto !important;
         position: absolute;
         top: 145px;

@@ -433,8 +433,10 @@ export default {
     width: 40px !important;
   }
   .component-settings /deep/ {
+    @import './../formio/assets/theme.scss';
     @import "~formiojs/dist/formio.full.min.css";
-    @import "~bootstrap/dist/css/bootstrap";
+    @import "~bootstrap/scss/bootstrap";
+    @import './../formio/assets/overide.scss';
     @import "~choices.js/public/assets/styles/choices.css";
     @import "~flatpickr/dist/flatpickr.min.css";
 

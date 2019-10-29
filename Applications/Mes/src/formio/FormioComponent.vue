@@ -184,10 +184,10 @@ export default {
 
 <style scoped lang="scss">
 .formio-container-class /deep/ {
-  @import'./assets/theme.scss';
+  @import './assets/theme.scss';
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/scss/bootstrap";
-  @import'./assets/overide.scss';
+  @import './assets/overide.scss';
   @import "~choices.js/public/assets/styles/choices.css";
   @import "~flatpickr/dist/flatpickr.min.css";
 }

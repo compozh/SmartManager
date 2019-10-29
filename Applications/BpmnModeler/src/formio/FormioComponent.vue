@@ -19,6 +19,7 @@
 <script>
 import { Form } from './lib/components/Form'
 import VueApexCharts from 'vue-apexcharts'
+
 /* eslint-disable */
 export default {
   name: 'formio-component',
@@ -164,11 +165,13 @@ export default {
           tableName: fieldComponent.dataTable,
           fieldName: fieldComponent.dataTableFieldName,
           fieldCode: fieldComponent.dataTableFieldCode,
+          additionalCondition: fieldComponent.additionalCondition,
+			    countRowToSelect: fieldComponent.countRowToSelect,
           searchValue,
           submission
         }
-
-      this.$store.dispatch('formio/callItemAutocomplete',
+        
+      this.$store.dispatch('formio/callItemAutocomplete', 
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);
@@ -181,10 +184,10 @@ export default {
 
 <style scoped lang="scss">
 .formio-container-class /deep/ {
-  @import "./assets/theme.scss";
+  @import './assets/theme.scss';
   @import "~formiojs/dist/formio.full.min.css";
   @import "~bootstrap/scss/bootstrap";
-  @import "./assets/overide.scss";
+  @import './assets/overide.scss';
   @import "~choices.js/public/assets/styles/choices.css";
   @import "~flatpickr/dist/flatpickr.min.css";
 }
