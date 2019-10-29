@@ -98,10 +98,14 @@ export default {
     },
     initialWorkCenter() {
       return this.$store.getters['mes/initialWorkCenter']
-    }
+    },
+    ticket() {
+      return this.$store.getters['mes/ticket']
+    },
   },
   methods: {
     async initializeSignalR() {
+      await this.$store.dispatch('mes/initializeTicket')
       this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.applySignalR, this.ticket)
     },
     applySignalR(msg) {
