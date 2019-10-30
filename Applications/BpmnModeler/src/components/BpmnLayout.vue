@@ -292,9 +292,12 @@ export default {
   }
 
   .component-settings {
-    @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
-    @import "~formiojs/dist/formio.full.css";
-    @import "~bootstrap/dist/css/bootstrap";
+    @import './../formio/assets/theme.scss';
+    @import "~formiojs/dist/formio.full.min.css";
+    @import "~bootstrap/scss/bootstrap";
+    @import './../formio/assets/overide.scss';
+    @import "~choices.js/public/assets/styles/choices.css";
+    @import "~flatpickr/dist/flatpickr.min.css";
     position: absolute;
     z-index: 102;
     background-color: #fff;

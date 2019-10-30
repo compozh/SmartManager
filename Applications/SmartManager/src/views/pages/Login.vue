@@ -5,7 +5,7 @@
       <vx-card>
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row no-gutter justify-center items-center">
-            <div class="vx-col hidden lg:block lg:w-1/2">
+            <div class="vx-col lg:block lg:w-1/2">
               <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto">
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">

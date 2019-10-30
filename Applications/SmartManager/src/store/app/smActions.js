@@ -39,7 +39,7 @@ export default {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
       )
-      stopLoading()
+      !payload.loading || stopLoading()
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
@@ -59,6 +59,20 @@ export default {
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
 
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'taskTitle', 'taskError')
+    }
+  },
+  async getFileUrl({commit}, {id, ext, taskId}) {
+    startLoading(true)
+    try {
+      const result = await api.getFileUrlFromGql(id, ext)
+      const fileUrl = result.data.smtasks.fileUrl
+      commit('setFileUrl', {id, fileUrl, taskId})
+      stopLoading()
+      return fileUrl
     } catch (e) {
       stopLoading()
       console.log(e.message)

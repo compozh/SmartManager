@@ -17,20 +17,20 @@
                   <vs-input name="taskName"
                             :label-placeholder="$t('tasks.taskName')"
                             v-model="newTask.title"
-                            class="w-full mb-6"
+                            class="w-full mb-6 input-task-name"
                             v-validate="'required'"
                             :danger="errors.has('taskName')"
                             :danger-text="$t('validate.required')"
                             val-icon-danger="clear"
                   />
-                  <sm-autocomplete :items="users"
-                                   :multiple="false"
-                                   :loading="userListLoading"
-                                   v-model="newTask.performer"
-                                   label="fio"
-                                   :placeholder="$t('tasks.performer')"
-                                   name="performer"
-                                   v-validate="'required'"
+                  <autocomplete :items="users"
+                                :multiple="false"
+                                :loading="userListLoading"
+                                v-model="newTask.performer"
+                                label="fio"
+                                :placeholder="$t('tasks.performer')"
+                                name="performer"
+                                v-validate="'required'"
                   />
                   <span v-if="errors.has('performer')"
                         class="required-text"
@@ -73,20 +73,20 @@
                                 :options="editorOption"
                                 class="mb-6"
                   ></quill-editor>
-                  <sm-autocomplete :items="users"
-                                   :multiple="true"
-                                   :loading="userListLoading"
-                                   label="fio"
-                                   v-model="newTask.coexecutors"
-                                   :placeholder="$t('roles.coExecutors')"
-                                   class="my-6"
+                  <autocomplete :items="users"
+                                :multiple="true"
+                                :loading="userListLoading"
+                                label="fio"
+                                v-model="newTask.coexecutors"
+                                :placeholder="$t('roles.coExecutors')"
+                                class="my-6"
                   />
-                  <sm-autocomplete :items="users"
-                                   :multiple="true"
-                                   label="fio"
-                                   :loading="userListLoading"
-                                   v-model="newTask.notify"
-                                   :placeholder="$t('roles.notify')"
+                  <autocomplete :items="users"
+                                :multiple="true"
+                                label="fio"
+                                :loading="userListLoading"
+                                v-model="newTask.notify"
+                                :placeholder="$t('roles.notify')"
                   />
                   <files-upload
                     v-on:attach="getAttachment($event)"
@@ -123,19 +123,19 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import {quillEditor} from 'vue-quill-editor'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import SmAutocomplete from '../../components/SmAutocomplete'
+import Autocomplete from '@/components/Autocomplete'
 import moment from 'moment'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
 import {Ukrainian} from 'flatpickr/dist/l10n/uk.js'
-import FilesUpload from '../../components/FilesUpload'
+import FilesUpload from '@/components/FilesUpload'
 
 export default {
   components: {
     quillEditor,
     VuePerfectScrollbar,
-    SmAutocomplete,
+    Autocomplete,
     flatPickr,
     FilesUpload
   },

@@ -1,0 +1,19 @@
+{
+  portalNabuQuery{
+    headGradeForYear{
+      data{
+      	grade
+        taskType
+        taskTitle
+        headDescription
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}

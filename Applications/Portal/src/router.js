@@ -112,14 +112,13 @@ export async function  getRouter() {
   router.beforeEach((to, from, next) => {
 
     // get firebase current user
-    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
+    Vue.prototype.$authentication.ActualizeCurrentUser().then(currentUSer => {
       if (
         to.path.endsWith('/login') ||
           to.path.endsWith('/forgot-password') ||
           to.path.endsWith('/error-404') ||
           to.path.endsWith('/error-500') ||
           to.path.endsWith('/register') ||
-
           !!currentUSer
       ) {
         return next()
@@ -128,6 +127,19 @@ export async function  getRouter() {
       // Specify the current path as the customState parameter, meaning it
       // will be returned to the application after auth
       // auth.login({ target: to.path });
+    }).catch( (e) => {
+      if (
+        to.path.endsWith('/login') ||
+          to.path.endsWith('/forgot-password') ||
+          to.path.endsWith('/error-404') ||
+          to.path.endsWith('/error-500') ||
+          to.path.endsWith('/register') ||
+          !!e.response.status == 401
+      ) {
+        return next()
+      }
+      router.push({ name: 'page-login', query: { to: to.path }, params: {...to.params} })
+
     })
 
   })

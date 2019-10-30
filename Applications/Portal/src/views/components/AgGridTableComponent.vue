@@ -6,13 +6,15 @@
       :columnDefs="columnDefs"
       :defaultColDef="defaultColDef"
       :rowData="rows"
+      :frameworkComponents="frameworkComponents"
+      
     ></ag-grid-vue>
-
   </vx-card>
 </template>
 
 <script>
 import { AgGridVue } from 'ag-grid-vue'
+import CustomTooltip from './customTooltip.vue'
 
 import '@/assets/scss/vuesax/extraComponents/agGridStyleOverride.scss'
 
@@ -23,9 +25,21 @@ export default {
   props: ['education'],
   data() {
     return {
+      frameworkComponents: null,
       searchQuery: '',
-      // Зебря для строк
+      // Зебра для строк
       gridOptions: { rowStyle: {background: '#f8f8f8'},
+        localeText: {
+          noRowsToShow: this.$t('agGrid.NoRowsToShow'),
+          contains: this.$t('agGrid.contains'),
+          notContains: this.$t('agGrid.notContains'),
+          startsWith: this.$t('agGrid.startsWith'),
+          endsWith: this.$t('agGrid.endsWith'),
+          equals: this.$t('agGrid.equals'),
+          notEqual: this.$t('agGrid.notEqual'),
+          andCondition: this.$t('agGrid.andCondition'),
+          orCondition: this.$t('agGrid.orCondition')
+        },
         getRowStyle: function(params) {
           if (params.node.id % 2 === 0) {
             return { background: '#ffffff' }
@@ -41,21 +55,57 @@ export default {
   computed: {
     // Заголовки и их свойства
     columnDefs() {
-      return this.education.headers
+      if (!this.education) {
+        return null
+      }
+      // Встраиваем tooltip
+      let headers = this.education.headers.map(el => {
+        let element = el
+        element.tooltipComponent = 'customTooltip',
+        element.tooltipValueGetter = params => {
+          return { value: params.value }
+        }
+        return element
+      })
+      return headers
     },
     // Значение строк
     rows() {
+      if (!this.education) {
+        return null
+      }
       return this.education.data
     },
   },
+  beforeMount() {
+    this.frameworkComponents = { customTooltip: CustomTooltip }
+  },
   mounted() {
+    if (!this.education) {
+      return
+    }
+
     this.gridApi = this.gridOptions.api
+    this.gridColumnApi = this.gridOptions.columnApi
     // Установка ширины колонок
     this.gridApi.sizeColumnsToFit()
-
+    
     // Установка высоты, на весь контент (кол-во строк * высоту + шапка и место под скролл)
     var agGrid = document.querySelector('.my-ag-grid')
     agGrid.style.height = (this.rows.length * 50) + 100 + 'px'
   },
 }
 </script>
+
+<style scoped>
+.my-header{
+  color: red !important;
+}
+::v-deep .ag-overlay-no-rows-center{
+  position: relative;
+  bottom: -25px;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.54);
+}
+</style>

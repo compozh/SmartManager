@@ -1,0 +1,21 @@
+{
+  portalNabuQuery{
+    midtermGrade{
+      data{
+        version
+        dateView
+        goalDate
+        taskType
+        taskTitle
+        perfomanceIndicator
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}

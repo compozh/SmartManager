@@ -1,0 +1,21 @@
+{
+  portalNabuQuery{
+    employeeInfo{
+      data{
+        gender
+        fullName
+        birthDate
+        departmentTitle
+        positionCategory
+        parentDepartmentTitle
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}

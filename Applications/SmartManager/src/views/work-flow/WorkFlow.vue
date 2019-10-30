@@ -6,7 +6,7 @@
                 <div class="w-full">
                   <!-- select and start business-process -->
                   <form @submit.prevent>
-                    <sm-autocomplete :items="businessProcesses"
+                    <autocomplete :items="businessProcesses"
                                      :multiple="false"
                                      :loading="bpListLoading"
                                      v-model="businessProcess"
@@ -53,16 +53,16 @@
 <script>
 
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import SmAutocomplete from '@/components/SmAutocomplete'
+import Autocomplete from '@/components/Autocomplete'
 import {Form} from 'vue-formio'
-import noData from '@/components/noData'
+import NoData from '@/components/NoData'
 
 export default {
   components: {
     VuePerfectScrollbar,
-    SmAutocomplete,
+    Autocomplete,
     formio: Form,
-    noData
+    NoData
   },
   data: () => ({
     bpListLoading: false,

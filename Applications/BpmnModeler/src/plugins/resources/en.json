@@ -69,7 +69,8 @@
 		"AddRights": "Add access rights",
 		"EditRights": "Edit access rights",
 		"RemoveRights": "Remove access rights",
-		"NoData": "No data"
+		"NoData": "No data",
+		"DisplayType": "Display type"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -87,7 +88,9 @@
 		"RuleWithoutForm": "Form is not attached to this rule",
 		"InitializeSignalR": "Failed initialize SignalR",
 		"AccessRecordsNotLoaded": "Failed to load access settings",
-		"RequestError": "Failed to execute request"
+		"RequestError": "Failed to execute request",
+		"InputCodeForm": "Input code form",
+		"RequiredInputField": "Field is required"
 	},
 	"enums": {
 		"AccessType": {

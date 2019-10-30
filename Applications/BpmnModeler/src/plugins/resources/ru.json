@@ -70,7 +70,8 @@
 		"AddRights": "Добавить права доступа",
 		"EditRights": "Изменить права доступа",
 		"RemoveRights": "Удалить права доступа",
-		"NoData": "Нет данных"
+		"NoData": "Нет данных",
+		"DisplayType": "Тип отображения"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -88,7 +89,9 @@
 		"RuleWithoutForm": "К этому правилу не привязана форма",
 		"InitializeSignalR": "Ошибка инициализации SignalR",
 		"AccessRecordsNotLoaded": "Не удалось загрузить настройки доступа",
-		"RequestError": "Ошибка при выполнении запроса"
+		"RequestError": "Ошибка при выполнении запроса",
+		"InputCodeForm": "Введите код формы",
+		"RequiredInputField": "Обезательное поле"
 	},
 	"enums": {
 		"AccessType": {
