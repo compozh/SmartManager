@@ -314,8 +314,29 @@ export default {
     logout() {
       this.$store.dispatch('auth/logout')
     },
-    applyDelegatedRights(userId) {
-      auth.applyDelegatedRights(userId)
+    async applyDelegatedRights(userId) {
+      try {
+        const result = await auth.applyDelegatedRights(userId)
+        if (result) {
+          this.$vs.notify({
+            title: this.$t('notify.applyRightsTittle'),
+            text: this.$t('notify.applyRightsSuccess'),
+            color: 'success'
+          })
+          window.location.reload()
+        }
+        this.$vs.notify({
+          title: this.$t('notify.applyRightsTittle'),
+          text: this.$t('notify.applyRightsFail'),
+          color: 'warning'
+        })
+      } catch (e) {
+        this.$vs.notify({
+          title: this.$t('notify.applyRightsTittle'),
+          text: this.$t('notify.applyRightsError'),
+          color: 'danger'
+        })
+      }
     },
     setDelegation() {
       console.log('Делегировать права', )
