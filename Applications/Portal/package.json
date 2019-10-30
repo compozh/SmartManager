@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.2",
-    "@it-enterprise/authentication": "^1.1.0",
+    "@it-enterprise/authentication": "^1.2.1",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/localization": "^1.0.10",
     "ag-grid-community": "^21.0.1",
