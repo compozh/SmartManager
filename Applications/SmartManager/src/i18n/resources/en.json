@@ -139,7 +139,11 @@
     "bpTitle": "Business processes",
     "bpSuccess": "Business processes successfully ran",
     "bpFail": "Business process start fail",
-    "bpError": "Business process start error"
+    "bpError": "Business process start error",
+    "applyRightsTittle": "Delegated rights",
+    "applyRightsSuccess": "Rights changed successfully",
+    "applyRightsFail": "Apply delegated rights failed",
+    "applyRightsError": "Change rights error"
   },
   "workflow": {
     "businessProcess": "Business process",
