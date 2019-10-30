@@ -1,24 +1,23 @@
 /* eslint-disable */
 import ChartComponent from "../_classes/chart/chart";
 
-
-class PieChart extends ChartComponent {
+class DonutChart extends ChartComponent {
 	static schema(...extend) {
 		return ChartComponent.schema({
-			type: 'piechart',
-			typeChart: 'pie',
+			type: 'donutchart',
+			typeChart: 'donut'
 		});
 	}
 
 	static get builderInfo() {
 		return {
-			title: 'Pie Chart',
+			title: 'Donut Chart',
 			group: 'customBasic',
-			icon: 'pie-chart',
+			icon: 'circle-o-notch',
 			weight: 70,
 			schema: this.schema()
 		};
 	}
 }
 
-Formio.registerComponent('piechart', PieChart)
+Formio.registerComponent('donutchart', DonutChart);

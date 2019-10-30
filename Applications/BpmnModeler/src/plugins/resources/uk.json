@@ -51,7 +51,8 @@
 		"Code": "Код",
 		"Designer": "Конструктор",
 		"Preview": "Перегляд",
-		"FormContructor": "Конструктор форми"
+		"FormContructor": "Конструктор форми",
+		"DisplayType": "Тип відображення"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
