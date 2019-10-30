@@ -5,15 +5,22 @@ import Vue from 'vue'
 
 export const getClient = (schema) => {
 
-  const authHeader = Vue.prototype.$authentication ? Vue.prototype.$authentication.getAuthHeader() : undefined
   const options = {
     uri: window.appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
-    headers: {
-      ... authHeader,
-      'schema': schema
+    get headers() {
+
+      const authHeader = Vue.prototype.$authentication ? Vue.prototype.$authentication.getAuthHeader() : undefined
+      return {
+        ... authHeader,
+        'schema': schema
+      }
+
     }
   }
+
+
+
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink(options)

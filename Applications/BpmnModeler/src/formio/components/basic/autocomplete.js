@@ -1,55 +1,80 @@
 import SelectComponent from 'formiojs/components/select/Select';
 
-/* eslint-disable */
 class Autocomplete extends SelectComponent {
 	attach(element) {
 		var me = this;
+		this.initializeValue = false;
 		const superAttach = super.attach(element);
-		var requestInvoked = false,
-			lastSearchValue = '',
-			items = [];
+		me.requestInvoked = false;
+		var lastSearchValue = '';
 
-			// Make sure to clear the search when no value is provided.
+		// Make sure to clear the search when no value is provided.
 		if (this.choices && this.choices.input && this.choices.input.element) {
 			var inputAction = (event) => {
 				lastSearchValue = event.target.value;
-				if (!requestInvoked) {
-					requestInvoked = true;
+				if (!me.requestInvoked) {
+					me.requestInvoked = true;
 					setTimeout(() => {
 						if (!lastSearchValue) {
-							requestInvoked = false;
+							me.requestInvoked = false;
 							return;
 						}
-						itemAutocomplete(me, lastSearchValue, ({ mostSuitableValue, values }) => {
-							me.selectOptions = [];
-							if (mostSuitableValue && mostSuitableValue.code) {
-								me.choices.setChoiceByValue(mostSuitableValue.code);
-							}
-							if (values) {
-								values.forEach(value => {
-									var valueObject = {
-										label: value.name,
-										value: value.code
-									};
-									items[value.code] = valueObject;
-									me.selectOptions.push(valueObject);
-								});
-							}
-
-							me.component.data.values = [];
-							Object.values(items).forEach(item => {
-								me.component.data.values.push(item);
-							});
-
-							me.setItems(me.component.data.values, false, me.selectOptions);
-							requestInvoked = false;
-						});
+						me.callAutocomplete(lastSearchValue);
 					}, 2000);
 				}
 			};
 			this.addEventListener(this.choices.input.element, 'input', inputAction);
 		}
+
+		if (this.component.qrScaner) {
+			var qrScanerEleement = document.createElement('span');
+			qrScanerEleement.className = "input-group-text";
+			qrScanerEleement.innerHTML = '<i class="fa fa-qrcode" ref="icon"></i>';
+			element.appendChild(qrScanerEleement);
+			qrScanerEleement.addEventListener('click', () => {
+				window.qrScaner(value => {
+					me.callAutocomplete(value);
+				});
+			});
+		}
+
 		return superAttach;
+	}
+
+	callAutocomplete(searchValue) {
+		var me = this,
+			items = [];
+		if (!searchValue) {
+			me.requestInvoked = false;
+			return;
+		}
+		me.initializeValue = true;
+		itemAutocomplete(me, searchValue, ({ mostSuitableValue, values }) => {
+			me.selectOptions = [];
+
+			if (values) {
+				values.forEach(value => {
+					var valueObject = {
+						label: value.name,
+						value: value.code
+					};
+					items[value.code] = valueObject;
+					me.selectOptions.push(valueObject);
+				});
+			}
+
+			me.component.data.values = [];
+			Object.values(items).forEach(item => {
+				me.component.data.values.push(item);
+			});
+
+			me.setItems(me.component.data.values, false, me.selectOptions);
+
+			if (mostSuitableValue && mostSuitableValue.code) {
+				me.choices.setChoiceByValue(mostSuitableValue.code);
+			}
+			me.requestInvoked = false;
+		});
 	}
 
 	setItems(items, fromSearch, selectOptions) {
@@ -90,16 +115,16 @@ class Autocomplete extends SelectComponent {
 		if (this.isInfiniteScrollProvided) {
 			areItemsEqual = this.isSelectURL ? _.isEqual(items, this.downloadedResources) : false;
 
-			const areItemsEnded = this.component.limit > items.length
+			const areItemsEnded = this.component.limit > items.length;
 			const areItemsDownloaded = areItemsEqual
 				&& this.downloadedResources
-				&& this.downloadedResources.length === items.length
+				&& this.downloadedResources.length === items.length;
 
 			if (areItemsEnded) {
 				this.disableInfiniteScroll();
 			}
 			else if (areItemsDownloaded) {
-				this.selectOptions = []
+				this.selectOptions = [];
 			}
 			else {
 				this.serverCount = items.serverCount;
@@ -167,6 +192,10 @@ class Autocomplete extends SelectComponent {
 	}
 
 	setValue(value, flags) {
+		if (!this.initializeValue) {
+			this.callAutocomplete(value);
+			return;
+		}
 		flags = flags || {};
 		const previousValue = this.dataValue;
 		const changed = this.updateValue(value, flags);
@@ -317,7 +346,7 @@ class Autocomplete extends SelectComponent {
 			else {
 				notFoundValuesToAdd.map(notFoundValue => {
 					this.addOption(notFoundValue.value, notFoundValue.label);
-				})
+				});
 			}
 		}
 		return added;
@@ -330,14 +359,14 @@ class Autocomplete extends SelectComponent {
 			icon: 'th-list',
 			weight: 1000,
 			schema: Autocomplete.schema()
-		}
+		};
 	}
 
 	static editForm() {
 		var autocompleteForm = SelectComponent.editForm();
-		autocompleteForm.components.forEach(c => {
-			if (c.key === 'tabs') {
-				c.components.forEach(tabComponent => {
+		for (var formComponent of autocompleteForm.components) {
+			if (formComponent.key === 'tabs') {
+				for (var tabComponent of formComponent.components) {
 					if (tabComponent.key === 'data') {
 						tabComponent.components.unshift({
 							input: true,
@@ -346,7 +375,26 @@ class Autocomplete extends SelectComponent {
 							tooltip: "Caching data",
 							type: "checkbox",
 							weight: 0
-						})
+						});
+						tabComponent.components.unshift({
+							input: true,
+							key: "additionalCondition",
+							label: "Additional condition",
+							placeholder: "Additional condition",
+							tooltip: "Additional condition for request",
+							type: "textfield",
+							weight: 0
+						});
+						tabComponent.components.unshift({
+							input: true,
+							key: "countRowToSelect",
+							label: "Count row to select",
+							placeholder: "Count",
+							tooltip: "Count row to select",
+							type: "number",
+							weight: 0,
+							validate: { required: true }
+						});
 						tabComponent.components.unshift({
 							input: true,
 							key: "dataTableFieldName",
@@ -356,7 +404,7 @@ class Autocomplete extends SelectComponent {
 							type: "textfield",
 							weight: 0,
 							validate: { required: true }
-						})
+						});
 						tabComponent.components.unshift({
 							input: true,
 							key: "dataTableFieldCode",
@@ -366,7 +414,7 @@ class Autocomplete extends SelectComponent {
 							type: "textfield",
 							weight: 0,
 							validate: { required: true }
-						})
+						});
 						tabComponent.components.unshift({
 							input: true,
 							key: "dataTable",
@@ -376,19 +424,30 @@ class Autocomplete extends SelectComponent {
 							type: "textfield",
 							weight: 0,
 							validate: { required: true }
-						})
+						});
 					}
-				})
+
+					if (tabComponent.key === 'display') {
+						tabComponent.components.push({
+							weight: 1501,
+							type: 'checkbox',
+							label: 'QR Scaner',
+							key: 'qrScaner',
+							input: true
+						});
+					}
+				}
 			}
-		})
-		return autocompleteForm
+		}
+		return autocompleteForm;
 	}
 
 	static schema(...extend) {
-		return SelectComponent.schema({
-			type: 'autocomplete'
-		});
+		return super.schema({
+			type: 'autocomplete',
+			countRowToSelect: 20
+		}, ...extend);
 	}
 }
 
-Formio.registerComponent('autocomplete', Autocomplete)
+Formio.registerComponent('autocomplete', Autocomplete);
