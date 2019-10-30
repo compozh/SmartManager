@@ -66,7 +66,15 @@ export const events = {
      * @param {Object} model - элемент
      * @param {formSaveCallback} callback - коллбек, вызываемый при нажатии на кнопку "сохранить"
      */
-    showForm: 'modeler.show-form'
+    showForm: 'modeler.show-form',
+
+    /**
+     * Отобразить диалог с настройками общего доступа
+     * @event Modeler#showAccessDialog
+     * @param {string} recordId - код диаграммы, для которой необходимо отобразить диалог с настройками общего доступа
+     * 
+     */
+    showAccessDialog: 'modeler.show-access-dialog'
   },
   /** События в панели свойств */
   propertiesPanel: {

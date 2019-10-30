@@ -16,7 +16,9 @@
 		"ExportDmn": "Експортувати в форматі dmn",
 		"Deploy": "Опублікувати",
 		"Copy": "Додати за зразком",
-		"Select": "Вибрати"
+		"Select": "Вибрати",
+		"Share": "Загальний доступ",
+		"Edit": "Редагувати"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -51,7 +53,28 @@
 		"Code": "Код",
 		"Designer": "Конструктор",
 		"Preview": "Перегляд",
-		"FormContructor": "Конструктор форми"
+		"FormContructor": "Конструктор форми",
+		"Add": "Додати",
+		"Save": "Зберегти",
+		"Edit": "Редагувати",
+		"Delete": "Видалити",
+		"Cancel": "Відмінити",
+		"Access": "Доступ",
+		"Allow": "Дозволити",
+		"Allowed": "Дозволений",
+		"Decline": "Заборонити",
+		"Declined": "Заборонений",
+		"AccessRights": "Права доступу",
+		"Group": "Група",
+		"User": "Користувач",
+		"Sharing": "Загальний доступ",
+		"Rights": "Права",
+		"Actions": "Дії",
+		"SelectOne": "Виберіть хоча б один елемент",
+		"AddRights": "Додати права доступу",
+		"EditRights": "Змінити права доступу",
+		"RemoveRights": "Видалити права доступу",
+		"NoData": "Немає даних"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -67,7 +90,24 @@
 		"RuleNotLoaded": "Не вдалося завантажити правило",
 		"ActionWithoutForm": "До цієї дії не прив'язана форма",
 		"RuleWithoutForm": "До цього правила не прив'язана форма",
-		"InitializeSignalR": "Не вдалося ініціалізувати SignalR"
+		"InitializeSignalR": "Не вдалося ініціалізувати SignalR",
+		"AccessRecordsNotLoaded": "Не удалось завантажити налаштування доступу",
+		"RequestError": "Помилка при виконанні запиту"
+	},
+	"enums": {
+		"AccessType": {
+			"USER": "Користувач",
+			"GROUP": "Група",
+			"ALL": "Всі"
+		},
+		"DiagramAccessRights": {
+			"READ": "Перегляд",
+			"WRITE": "Редагування",
+			"DELETE": "Видалення",
+			"SHARE": "Видача прав доступу",
+			"DEPLOY": "Публікація",
+			"EXECUTE": "Запуск"
+		}
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",

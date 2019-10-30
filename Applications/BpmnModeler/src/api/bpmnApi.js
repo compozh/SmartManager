@@ -153,4 +153,65 @@ export class BpmnModelerApi {
     });
     return result.data.bpmnquery.getFormsForProcess;
   }
+
+  //#region Общий доступ
+
+  async getAccessRecordsForProcess(processId) {
+    const result = await getClient().query({
+      query: gql`query ($processId: String!) ${queries.getAccessRecordsForProcess}`,
+      variables: { processId }
+    });
+    return result.data.bpmnquery.getAccessRecordsForProcess;
+  }
+
+  async giveAccessToProcess(accessParams) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.giveAccessToProcess}`,
+      variables: {
+        accessParams: {
+          recordId: accessParams.recordId,
+          userId: accessParams.userId,
+          groupId: accessParams.groupId,
+          allowAccess: accessParams.allowAccess,
+          rights: accessParams.rights
+        }
+      }
+    });
+    console.log(result.data.bpmnqueryMutation.giveAccessToProcess);
+    return result.data.bpmnqueryMutation.giveAccessToProcess;
+  }
+
+  async editAccessToProcess(accessParams) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.editAccessToProcess}`,
+      variables: {
+        accessParams: {
+          recordId: accessParams.recordId,
+          userId: accessParams.userId,
+          groupId: accessParams.groupId,
+          allowAccess: accessParams.allowAccess,
+          rights: accessParams.rights
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.editAccessToProcess;
+  }
+
+  async removeAccessToProcess(accessParams) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.removeAccessToProcess}`,
+      variables: {
+        accessParams: {
+          recordId: accessParams.recordId,
+          userId: accessParams.userId,
+          groupId: accessParams.groupId,
+          allowAccess: accessParams.allowAccess,
+          rights: accessParams.rights
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.removeAccessToProcess;
+  }
+
+  //#endregion
 }

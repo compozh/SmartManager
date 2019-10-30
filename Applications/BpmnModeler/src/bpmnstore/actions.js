@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 import { BpmnModelerApi } from '../api';
-import { Folder, Process, Configuration, ActionDefinition } from '../api/models';
+import { Folder, Process, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
 
 const api = new BpmnModelerApi();
 
@@ -258,5 +258,51 @@ export default {
   },
 
   //#endregion
+
+  //#region Access
+
+  async getAccessRecordsForProcess(context, diagramId) {
+    let records;
+    try {
+      records = await api.getAccessRecordsForProcess(diagramId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    console.log(records);
+    return records.map(record => new DiagramAccess(record));
+  },
+
+  async giveAccessToProcess(context, accessParams) {
+    try {
+      var result = await api.giveAccessToProcess(accessParams);
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async editAccessToProcess(context, accessParams) {
+    try {
+      return await api.editAccessToProcess(accessParams);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async removeAccessToProcess(context, accessParams) {
+    try {
+      return await api.removeAccessToProcess(accessParams);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  //#endregion
+
 };
 

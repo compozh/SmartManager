@@ -97,13 +97,14 @@
     <formio-container />
     <bpmn-form></bpmn-form>
     <selection-grid></selection-grid>
+    <access-dialog></access-dialog>
   </v-app>
 </template>
 
 <script>
 import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from './mixins';
 import { Folder, Process, ProcessType } from '../api/models';
-import SelectionGrid from './dialogs/SelectionGrid';
+import * as Dialogs from './dialogs';
 import FormioContainer from './formio/Formio';
 import { Notification } from 'element-ui';
 import { eventBus } from '../main';
@@ -111,7 +112,7 @@ import { events } from '../constants';
 
 export default {
   name: 'bpmn-layout',
-  components: { SelectionGrid, FormioContainer },
+  components: { SelectionGrid: Dialogs.SelectionGrid, AccessDialog: Dialogs.AccessDialog, FormioContainer },
   mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   data () {
     return {
@@ -278,9 +279,11 @@ export default {
     justify-content: flex-start;
   }
 
+  .user-icon,
   .user-image {
     height: 40px !important;
     width: 40px !important;
+    font-size: 40px !important;
   }
 
   .el-notification {

@@ -16,7 +16,9 @@
 		"ExportDmn": "Экспортировать в формате dmn",
 		"Deploy": "Опубликовать",
 		"Copy": "Создать по образцу",
-		"Select": "Выбрать"
+		"Select": "Выбрать",
+		"Share": "Общий доступ",
+		"Edit": "Корректировать"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -52,7 +54,23 @@
 		"Code": "Код",
 		"Designer": "Конструктор",
 		"Preview": "Просмотр",
-		"FormContructor": "Конструктор формы"
+		"FormContructor": "Конструктор формы",
+		"Access": "Доступ",
+		"Allow": "Разрешить",
+		"Allowed": "Разрешен",
+		"Decline": "Запретить",
+		"Declined": "Запрещён",
+		"AccessRights": "Права доступа",
+		"Group": "Группа",
+		"User": "Пользователь",
+		"Sharing": "Общий доступ",
+		"Rights": "Права",
+		"Actions": "Действия",
+		"SelectOne": "Выберите хотя бы один элемент",
+		"AddRights": "Добавить права доступа",
+		"EditRights": "Изменить права доступа",
+		"RemoveRights": "Удалить права доступа",
+		"NoData": "Нет данных"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -68,7 +86,24 @@
 		"RuleNotLoaded": "Не удалось загрузить правило",
 		"ActionWithoutForm": "К этому действию не привязана форма",
 		"RuleWithoutForm": "К этому правилу не привязана форма",
-		"InitializeSignalR": "Ошибка инициализации SignalR"
+		"InitializeSignalR": "Ошибка инициализации SignalR",
+		"AccessRecordsNotLoaded": "Не удалось загрузить настройки доступа",
+		"RequestError": "Ошибка при выполнении запроса"
+	},
+	"enums": {
+		"AccessType": {
+			"USER": "Пользователь",
+			"GROUP": "Группа",
+			"ALL": "Все"
+		},
+		"DiagramAccessRights": {
+			"READ": "Просмотр",
+			"WRITE": "Корректировка",
+			"DELETE": "Удаление",
+			"SHARE": "Выдача прав доступа",
+			"DEPLOY": "Публикация",
+			"EXECUTE": "Запуск"
+		}
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",

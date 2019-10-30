@@ -6,13 +6,14 @@
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
-          append-icon="search"
+          prepend-icon="search"
           :label="$t('bpmn.labels.Search')"
           single-line
           hide-details
+          clearable
         ></v-text-field>
       </v-card-title>
-      <v-card-text style="max-height: 500px; overflow-y: auto;">
+      <v-card-text style="height: 500px; overflow-y: auto;">
         <v-data-table
           hide-actions      
           v-model="selected"
@@ -20,6 +21,8 @@
           :items="items"
           :search="search"
           :pagination.sync="pagination"
+          :no-data-text="$t('bpmn.labels.NoData')"
+          :no-results-text="$t('bpmn.labels.NoData')"
         >
           <template v-slot:headers="props">
             <tr>
@@ -55,6 +58,7 @@
         </v-data-table>
       </v-card-text>
       <v-card-actions>
+        <v-spacer></v-spacer>
         <v-btn flat @click="show = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
         <v-btn flat color="primary" :disabled="!selected.length" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
       </v-card-actions>

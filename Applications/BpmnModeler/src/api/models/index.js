@@ -6,3 +6,4 @@ import Process from './Process';
 import ProcessType from './ProcessType';
 
 export { ActionDefinition, ActionDefinitionType, Configuration, Folder, Process, ProcessType };
+export * from './access';
