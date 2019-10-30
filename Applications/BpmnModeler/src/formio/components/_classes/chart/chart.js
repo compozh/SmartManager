@@ -121,11 +121,4 @@ export default class Chart extends HtmlelementComponent {
 			chartWidth: 300
 		}, ...extend);
 	}
-
-	static get builderInfo() {
-		return {
-		};
-	}
 }
-
-Formio.registerComponent('chart', Chart);

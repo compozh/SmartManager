@@ -1,6 +1,4 @@
-/* eslint-disable */
 import ChartComponent from "../_classes/chart/chart";
-
 
 class PieChart extends ChartComponent {
 	static schema(...extend) {

@@ -98,11 +98,4 @@ export default class PercentageChart extends HtmlelementComponent {
 			chartHeight: 350
 		}, ...extend);
 	}
-
-	static get builderInfo() {
-		return {
-		};
-	}
 }
-
-Formio.registerComponent('percentagechart', PercentageChart);

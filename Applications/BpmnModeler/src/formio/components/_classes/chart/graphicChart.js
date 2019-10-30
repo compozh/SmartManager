@@ -93,17 +93,16 @@ export default class GraphicChart extends HtmlelementComponent {
 			dataElement = {
 				weight: 30,
 				input: true,
-				label: 'Advanced Logic',
+				label: 'Flow Data',
 				key: 'flowData',
 				templates: {
-					header: '<div class="row"> \n  <div class="col-sm-6">\n    <strong>{{ value.length }} Advanced Logic Configured</strong>\n  </div>\n</div>',
+					header: '<div class="row"> \n  <div class="col-sm-6">\n    <strong>{{ value.length }} Flow Data Configured</strong>\n  </div>\n</div>',
 					row: '<div class="row"> \n  <div class="col-sm-6">\n    <div>{{ row.name }} </div>\n  </div>\n  <div class="col-sm-2"> \n    <div class="btn-group pull-right"> \n      <div class="btn btn-default editRow">Edit</div> \n      <div class="btn btn-danger removeRow">Delete</div> \n    </div> \n  </div> \n</div>',
 					footer: ''
 				},
 				type: 'editgrid',
 				addAnother: 'Add Flow Data',
-				saveRow: 'Save Flow Data',
-				defaultValue: [],
+        saveRow: 'Save Flow Data',
 				components: [
 					{
 						weight: 40,
@@ -122,13 +121,14 @@ export default class GraphicChart extends HtmlelementComponent {
 						label: 'Flow Data',
 						key: 'series',
 						weight: 50,
-						reorder: true,
+            reorder: true,
 						components: [
 							{
+                type: 'number',
+                weight: 10,
+                input: true,
 								label: 'Serie',
-								key: 'serie',
-								input: true,
-								type: 'number'
+								key: 'serie'
 							}
 						]
 					}
@@ -165,7 +165,6 @@ export default class GraphicChart extends HtmlelementComponent {
 				dataComponent.label = 'Data';
 				dataComponent.weight = 20;
 				formComponent.components.push(dataComponent);
-
 			}
 		}
 
@@ -183,12 +182,4 @@ export default class GraphicChart extends HtmlelementComponent {
 
 		return schema;
 	}
-
-	static get builderInfo() {
-		return {
-			
-		};
-	}
 }
-
-Formio.registerComponent('graphicchart', GraphicChart);
