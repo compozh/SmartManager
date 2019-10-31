@@ -127,7 +127,9 @@ import Autocomplete from '@/components/Autocomplete'
 import moment from 'moment'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+// eslint-disable-next-line no-unused-vars
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
+// eslint-disable-next-line no-unused-vars
 import {Ukrainian} from 'flatpickr/dist/l10n/uk.js'
 import FilesUpload from '@/components/FilesUpload'
 
