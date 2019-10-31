@@ -16,6 +16,7 @@
         id="qualitiesList"
         @changeCurrentQuality=changeCurrentQuality
         @uploadQualityOnScroll=uploadQualityOnScroll
+        @initialize=initialize
         :isUploadInProcess=isUploadInProcess
       />
       <mes-quality-main-layout
@@ -59,6 +60,9 @@ export default {
     initializeQualities() {
       return this.$store.getters['mes/initializeQualities']
     },
+    documentSearchValue() {
+      return this.$store.getters['mes/documentSearchValue']
+    },
     selectedQuality: {
       get() {
         return this.$store.getters['mes/selectedQuality']
@@ -73,7 +77,7 @@ export default {
       if (this.qualities.length) {
         this.$store.commit('mes/setQualities', [])
       }
-      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate , direction: 1 })
+      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
 
       if (!this.selectedQuality) {
         this.seelectFirstQuality()
@@ -93,7 +97,7 @@ export default {
     },
     async uploadQualityOnScroll(lastQualityDate) {
       this.isUploadInProcess = true
-      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: lastQualityDate , direction: 1 })
+      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: lastQualityDate, query: this.documentSearchValue, direction: 1 })
       this.isUploadInProcess = false
     }
   }

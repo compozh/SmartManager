@@ -118,7 +118,6 @@ export default {
   methods: {
     async initializeSignalR() {
       await this.$store.dispatch('mes/initializeTicket')
-      debugger;
       this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.applySignalR, this.ticket)
     },
     applySignalR(msg) {

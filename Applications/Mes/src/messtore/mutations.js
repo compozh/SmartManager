@@ -40,6 +40,9 @@ export default {
   setFilterValue(state, filterValue) {
     state.tasksPageState.filterValue = filterValue
   },
+  setDocumentSearchValue(state, documentSearchValue) {
+    state.documentSearchValue = documentSearchValue
+  },
   setDowntimes(state, downtimes) {
     state.downtimes = downtimes
   },

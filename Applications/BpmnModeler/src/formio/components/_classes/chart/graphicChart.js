@@ -6,7 +6,8 @@ export default class GraphicChart extends HtmlelementComponent {
 		var chartElement = document.createElement('div');
 		element.appendChild(chartElement);
 		var categories = [],
-			series = [];
+			series = [],
+			colors = [];
 
 		for (var flowData of this.component.flowData) {
 			var serie = {
@@ -17,6 +18,9 @@ export default class GraphicChart extends HtmlelementComponent {
 				serie.data.push(flowSeries.serie);
 			}
 			series.push(serie);
+		}
+		for (var color of this.component.colorData) {
+			colors.push(color.color)
 		}
 
 		for (var category of this.component.categories) {
@@ -47,7 +51,8 @@ export default class GraphicChart extends HtmlelementComponent {
 			},
 			xaxis: {
 				categories
-			}
+			},
+			colors: colors
 		};
 		var chart = new ApexCharts(chartElement, options);
 		chart.render();
@@ -56,7 +61,7 @@ export default class GraphicChart extends HtmlelementComponent {
 	}
 
 	static editForm() {
-		var chartForm = HtmlelementComponent.editForm(),
+		var chartForm = super.editForm(),
 			chartTitle = {
 				type: 'textfield',
 				weight: 5,
@@ -90,13 +95,28 @@ export default class GraphicChart extends HtmlelementComponent {
 					]
 				}
 			},
+			colorsElement = {
+				type: 'datagrid',
+				input: true,
+				label: 'Colors Data',
+				key: 'colorData',
+				weight: 50,
+				reorder: true,
+				defaultValue: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }],
+				components: [{
+					label: 'Color',
+					key: 'color',
+					input: true,
+					type: 'textfield'
+				}]
+			},
 			dataElement = {
 				weight: 30,
 				input: true,
-				label: 'Advanced Logic',
+				label: 'Flow Data',
 				key: 'flowData',
 				templates: {
-					header: '<div class="row"> \n  <div class="col-sm-6">\n    <strong>{{ value.length }} Advanced Logic Configured</strong>\n  </div>\n</div>',
+					header: '<div class="row"> \n  <div class="col-sm-6">\n    <strong>{{ value.length }} Flow Data Configured</strong>\n  </div>\n</div>',
 					row: '<div class="row"> \n  <div class="col-sm-6">\n    <div>{{ row.name }} </div>\n  </div>\n  <div class="col-sm-2"> \n    <div class="btn-group pull-right"> \n      <div class="btn btn-default editRow">Edit</div> \n      <div class="btn btn-danger removeRow">Delete</div> \n    </div> \n  </div> \n</div>',
 					footer: ''
 				},
@@ -144,6 +164,7 @@ export default class GraphicChart extends HtmlelementComponent {
 				if (this.name != 'BarChart') {
 					dataComponent.components.push(strokeElement);
 				}
+				dataComponent.components.push(colorsElement);
 				dataComponent.components.push({
 					type: 'datagrid',
 					input: true,
@@ -178,7 +199,8 @@ export default class GraphicChart extends HtmlelementComponent {
 			strokeElement: 'straight',
 			flowData: [],
 			categories: [],
-			chartWidth: 300
+			chartWidth: 300,
+			colorData: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }]
 		}, ...extend);
 
 		return schema;
@@ -186,9 +208,7 @@ export default class GraphicChart extends HtmlelementComponent {
 
 	static get builderInfo() {
 		return {
-			
+
 		};
 	}
 }
-
-Formio.registerComponent('graphicchart', GraphicChart);
