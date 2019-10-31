@@ -95,17 +95,22 @@ export default  class Authentication {
    * Использовать делегированные права
    */
   static async applyDelegatedRights(userId) {
-    let result =  await  axios({
-      method: 'POST',
-      url: `${ window.appConfig.GrapgQlUrl }api/authentication/delegated`,
-      withCredentials: true,
-      data: userId
-    })
-
-    if (!result.data) {
+    try {
+      const result = await axios({
+        method: 'POST',
+        url: `${ window.appConfig.GrapgQlUrl }api/authentication/delegated`,
+        withCredentials: true,
+        data: userId
+      })
+      if (result.data) {
+        await this._setCurrentUserInfo()
+        return result.data
+      }
       throw new Error('Ошибка смены делегированных прав!')
+    } catch (error) {
+      console.log(error.message)
+      return error
     }
-    await this._setCurrentUser()
   }
 
   /**

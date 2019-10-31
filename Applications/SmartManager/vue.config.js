@@ -32,6 +32,9 @@ module.exports = {
     devtool: 'eval-source-map'
   },
   pwa: {
+    name: 'Smart Manager',
+    short_name: 'Smart Manager',
+    themeColor: '#7367F0',
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       swSrc: 'src/service-worker.js'

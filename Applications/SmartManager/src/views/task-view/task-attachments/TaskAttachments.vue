@@ -58,13 +58,18 @@ export default {
     fileUrl: ''
   }),
   created() {
-    if (!this.fileId) {
-      const attachment = this.task.originals[this.index]
+    if (!this.fileId && this.originals) {
+      const attachment = this.originals[this.index]
       this.fileId = attachment.id || 0
       this.getUrl(attachment)
     }
   },
   computed: {
+    originals() {
+      return this.task.originals.length
+        ? this.task.originals
+        : null
+    },
     isImage() {
       const image = ['png', 'jpeg', 'jpg', 'bmp']
       return ext => image.some(i => i === ext)
