@@ -227,11 +227,14 @@ export default {
     padding: 0;
     width: 45px !important;
   }
-  .search-task-field.theme--light.v-text-field>.v-input__control>.v-input__slot:before {
+  .search-field.theme--light.v-text-field>.v-input__control>.v-input__slot:before {
     border-color: rgba(0,0,0,.1);
   }
-  .search-task-field label {
+  .search-field label {
     left: 10px !important;
+  }
+  .search-field .v-text-field__details{
+    display: none;
   }
   /*Mes Login Style*/
   .mes-login-form .flex {

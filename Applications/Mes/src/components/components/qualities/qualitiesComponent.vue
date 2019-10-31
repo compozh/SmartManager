@@ -8,7 +8,7 @@
         />
         <v-text-field
           v-if="initializeQualities"
-          class="search-quality-field"
+          class="search-field"
           label="Поиск документов"
           v-model="documentSearchValue"
           @keydown.enter="documentSearchSubmit"
@@ -89,7 +89,7 @@ export default {
   }
 
   .qualities-list-block-content {
-    height:calc(100% - 50px);
+    height:calc(100% - 55px);
     overflow-y: auto;
     position: absolute;
     width: 100%;
