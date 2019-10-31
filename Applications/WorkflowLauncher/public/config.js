@@ -9,12 +9,12 @@ window.appConfig = {
 const apps = [
   {
     'name': 'Smart Manager',
-    'image': 'http://192.168.4.204:8080/camunda/app/welcome/assets/images/tasklist.svg',
+    'image': '/img/app/smartmanager.svg',
     'link': 'https://m.it.ua/webapps/SmartManager/'
   },
   {
     'name': 'Bpmn Modeler',
-    'image': 'http://192.168.4.204:8080/camunda/app/welcome/assets/images/cockpit.svg', 
+    'image': '/img/app/bpmnmodeler.svg', 
     'link': 'https://m.it.ua/webapps/BpmnModeler/'
   },
   {
