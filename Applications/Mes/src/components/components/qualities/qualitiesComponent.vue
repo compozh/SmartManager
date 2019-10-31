@@ -18,6 +18,7 @@
         <div class="qualities-list-block-content" @scroll.passive="onScroll">
           <mes-quality-cards
           @changeCurrentQuality=changeCurrentQuality
+          :initializeQualities=initializeQualities
           />
           <span v-if="isUploadInProcess" class='upload-quality-str'>Загрузка документов</span>
         </div>
@@ -37,13 +38,11 @@ export default {
   },
   props: {
     isUploadInProcess: Boolean,
+    initializeQualities: Boolean
   },
   computed: {
     qualities() {
       return this.$store.getters['mes/qualities']
-    },
-    initializeQualities() {
-      return this.$store.getters['mes/initializeQualities']
     },
     documentSearchValue: {
       get() {

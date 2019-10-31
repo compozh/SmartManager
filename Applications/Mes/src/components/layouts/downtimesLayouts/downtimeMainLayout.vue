@@ -1,6 +1,6 @@
 <template>
 <v-layout class="downtime-layout">
-  <v-flex class="downtime-flex">
+  <v-flex class="downtime-flex" v-if="initializeDowntimes">
     <formio-component
       v-if="selectedDowntime"
       ref="formioBuilder"
@@ -16,6 +16,9 @@
 
 export default {
   name: 'mes-downtime-main-layout',
+  props: {
+    initializeDowntimes: Boolean,
+  },
   computed: {
     selectedDowntime() {
       return this.$store.getters['mes/selectedDowntime']
