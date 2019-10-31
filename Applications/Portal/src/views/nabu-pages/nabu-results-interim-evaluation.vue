@@ -1,5 +1,5 @@
 <template>
-  <AgGridView :education="dataResultsInterimEvaluation" v-if="dataResultsInterimEvaluation"></AgGridView>
+  <AgGridView :education="dataResultsInterimEvaluation" v-show="dataResultsInterimEvaluation"></AgGridView>
 </template>
 
 <script>
@@ -9,9 +9,11 @@ export default {
     AgGridView
   },
   created() {
-    if (this.$store.getters['education/getResultsInterimEvaluation']) {
-      return
+    let object = {
+      load: 'loadResultsInterimEvaluation',
+      clear: 'setResultsInterimEvaluation'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadResultsInterimEvaluation')
   },
   computed: {

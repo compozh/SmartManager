@@ -1,19 +1,20 @@
 <template>
-<div>
-  <AgGridView :education="dataTaskForYear" v-if="dataTaskForYear"></AgGridView>
-</div>
+    <AgGridView :education="dataTaskForYear" v-show="dataTaskForYear"></AgGridView>
 </template>
 
 <script>
 const AgGridView = () => import('../components/AgGridTableComponent.vue')
+
 export default {
   components: {
     AgGridView
   },
   created() {
-    if (this.$store.getters['education/getTaskForYear']) {
-      return
+    let object = {
+      load: 'loadTaskForYear',
+      clear: 'setTaskForYear'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadTaskForYear')
   },
   computed: {

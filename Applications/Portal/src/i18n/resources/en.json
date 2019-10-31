@@ -52,6 +52,7 @@
         "notEqual": "Not equal",
         "andCondition": "AND",
         "orCondition": "OR",
-        "NoRowsToShow": "No rows to show"
+        "NoRowsToShow": "No rows to show",
+        "filter": "Filter..."
     }
 }
