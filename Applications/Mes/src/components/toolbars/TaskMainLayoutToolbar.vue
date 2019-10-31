@@ -8,22 +8,13 @@
             <v-btn class="status-task-btn"
                 :disabled="selectedTask.state == 'DONE'"
                 outlined
-                color="rgba(7, 109, 0, 0.81)"
-                @click="onclickRegisterProduction"
+                :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' :  'rgba(7, 109, 0, 0.81)'"
+                @click="changeStatusTask"
             >
-                Взять в работу
+                {{selectedTask.inProgress ? 'Приостановить' :  'Взять в работу'}}
             </v-btn>
 
             <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
-
-            <v-tooltip left>
-              <template v-slot:activator="{ on }">
-                <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode" v-on="on">
-                  <v-icon>control_camera</v-icon>
-                </v-btn>
-              </template>
-              <span>Режим корректировки</span>
-            </v-tooltip>
         </v-flex>
     </v-layout>
 </template>
@@ -61,7 +52,11 @@ export default {
     onclickSetupMaterial() {
       this.$store.commit('mes/setCurrentLayout', 'installations')
     },
-    onclickRegisterProduction() {
+    changeStatusTask() {
+      if (this.selectedTask.inProgress) {
+        this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
+        return
+      }
       this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask })
     },
     changeDragResizeMode () {
