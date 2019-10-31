@@ -11,7 +11,7 @@ export default {
     selectedTasksTab: 0,
     currentLayout: 'main',
     dragResizeMode: false,
-    aspectRatioLayout: [35, 65],
+    aspectRatioLayout: [25, 75],
     filterValue: ''
   },
   productionPageState: {
