@@ -49,5 +49,6 @@ export default {
   ticket: '',
   mainContainerKey: 0,
   actionsAfterInitializeProperties: [],
-  initializeQualities: false
+  initializeQualities: false,
+  documentSearchValue: ''
 }

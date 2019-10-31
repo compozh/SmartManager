@@ -6,6 +6,15 @@
           v-if="!initializeQualities && !qualities.length"
           :loaderType=loaderType
         />
+        <v-text-field
+          v-if="initializeQualities"
+          class="search-quality-field"
+          label="Поиск документов"
+          v-model="documentSearchValue"
+          @keydown.enter="documentSearchSubmit"
+          @click:clear="documentClearSearch"
+          clearable
+        ></v-text-field>
         <div class="qualities-list-block-content" @scroll.passive="onScroll">
           <mes-quality-cards
           @changeCurrentQuality=changeCurrentQuality
@@ -35,9 +44,24 @@ export default {
     },
     initializeQualities() {
       return this.$store.getters['mes/initializeQualities']
+    },
+    documentSearchValue: {
+      get() {
+        return this.$store.getters['mes/documentSearchValue']
+      },
+      set(documentSearchValue) {
+        this.$store.commit('mes/setDocumentSearchValue', documentSearchValue)
+      }
     }
   },
   methods: {
+    documentSearchSubmit(e){
+      this.$emit('initialize')
+    },
+    documentClearSearch() {
+      this.$store.commit('mes/setDocumentSearchValue', '')
+      this.$emit('initialize')
+    },
     changeCurrentQuality(newQuality) {
       this.$emit('changeCurrentQuality', newQuality)
     },
@@ -66,7 +90,7 @@ export default {
   }
 
   .qualities-list-block-content {
-    height:100%;
+    height:calc(100% - 50px);
     overflow-y: auto;
     position: absolute;
     width: 100%;
@@ -116,5 +140,11 @@ export default {
     color: #3d83f7;
     opacity: 0.5;
     padding-left: 10px;
+  }
+  .search-quality-field {
+    height: 46px;
+  }
+  .search-quality-field .v-label {
+    left: 5px !important;
   }
 </style>
