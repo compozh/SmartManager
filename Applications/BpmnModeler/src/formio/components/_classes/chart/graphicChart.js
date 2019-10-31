@@ -6,7 +6,8 @@ export default class GraphicChart extends HtmlelementComponent {
 		var chartElement = document.createElement('div');
 		element.appendChild(chartElement);
 		var categories = [],
-			series = [];
+			series = [],
+			colors = [];
 
 		for (var flowData of this.component.flowData) {
 			var serie = {
@@ -17,6 +18,9 @@ export default class GraphicChart extends HtmlelementComponent {
 				serie.data.push(flowSeries.serie);
 			}
 			series.push(serie);
+		}
+		for (var color of this.component.colorData) {
+			colors.push(color.color)
 		}
 
 		for (var category of this.component.categories) {
@@ -47,7 +51,8 @@ export default class GraphicChart extends HtmlelementComponent {
 			},
 			xaxis: {
 				categories
-			}
+			},
+			colors: colors
 		};
 		var chart = new ApexCharts(chartElement, options);
 		chart.render();
@@ -56,7 +61,7 @@ export default class GraphicChart extends HtmlelementComponent {
 	}
 
 	static editForm() {
-		var chartForm = HtmlelementComponent.editForm(),
+		var chartForm = super.editForm(),
 			chartTitle = {
 				type: 'textfield',
 				weight: 5,
@@ -90,6 +95,21 @@ export default class GraphicChart extends HtmlelementComponent {
 					]
 				}
 			},
+			colorsElement = {
+				type: 'datagrid',
+				input: true,
+				label: 'Colors Data',
+				key: 'colorData',
+				weight: 50,
+				reorder: true,
+				defaultValue: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }],
+				components: [{
+					label: 'Color',
+					key: 'color',
+					input: true,
+					type: 'textfield'
+				}]
+			},
 			dataElement = {
 				weight: 30,
 				input: true,
@@ -102,7 +122,8 @@ export default class GraphicChart extends HtmlelementComponent {
 				},
 				type: 'editgrid',
 				addAnother: 'Add Flow Data',
-        saveRow: 'Save Flow Data',
+				saveRow: 'Save Flow Data',
+				defaultValue: [],
 				components: [
 					{
 						weight: 40,
@@ -121,14 +142,13 @@ export default class GraphicChart extends HtmlelementComponent {
 						label: 'Flow Data',
 						key: 'series',
 						weight: 50,
-            reorder: true,
+						reorder: true,
 						components: [
 							{
-                type: 'number',
-                weight: 10,
-                input: true,
 								label: 'Serie',
-								key: 'serie'
+								key: 'serie',
+								input: true,
+								type: 'number'
 							}
 						]
 					}
@@ -144,6 +164,7 @@ export default class GraphicChart extends HtmlelementComponent {
 				if (this.name != 'BarChart') {
 					dataComponent.components.push(strokeElement);
 				}
+				dataComponent.components.push(colorsElement);
 				dataComponent.components.push({
 					type: 'datagrid',
 					input: true,
@@ -165,6 +186,7 @@ export default class GraphicChart extends HtmlelementComponent {
 				dataComponent.label = 'Data';
 				dataComponent.weight = 20;
 				formComponent.components.push(dataComponent);
+
 			}
 		}
 
@@ -177,9 +199,16 @@ export default class GraphicChart extends HtmlelementComponent {
 			strokeElement: 'straight',
 			flowData: [],
 			categories: [],
-			chartWidth: 300
+			chartWidth: 300,
+			colorData: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }]
 		}, ...extend);
 
 		return schema;
+	}
+
+	static get builderInfo() {
+		return {
+
+		};
 	}
 }

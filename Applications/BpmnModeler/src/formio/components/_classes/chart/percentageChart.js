@@ -7,11 +7,15 @@ export default class PercentageChart extends HtmlelementComponent {
 		element.appendChild(percentageChartElement);
 		var chartData = this.component.chartData,
 			labels = [],
-			series = [];
+			series = [],
+			colors = [];
 
 		for (var item of chartData) {
 			labels.push(item.label);
 			series.push(item.serie);
+		}
+		for (var color of this.component.colorData) {
+			colors.push(color.color)
 		}
 		var options = {
 			chart: {
@@ -26,7 +30,8 @@ export default class PercentageChart extends HtmlelementComponent {
 				}
 			},
 			series: series,
-			labels: labels
+			labels: labels,
+			colors: colors
 		};
 
 		var chart = new ApexCharts(percentageChartElement, options);
@@ -36,7 +41,7 @@ export default class PercentageChart extends HtmlelementComponent {
 	}
 
 	static editForm() {
-		var chartForm = HtmlelementComponent.editForm(),
+		var chartForm = super.editForm(),
 			chartHeight = {
 				type: 'number',
 				weight: 10,
@@ -44,14 +49,27 @@ export default class PercentageChart extends HtmlelementComponent {
 				key: 'chartHeight',
 				label: 'Chart height',
 				defaultValue: 350
-				//tooltip: 'The name of the indexeddb database.',
+			},
+			colorsElement = {
+				type: 'datagrid',
+				input: true,
+				label: 'Colors Data',
+				key: 'colorData',
+				weight: 50,
+				reorder: true,
+				defaultValue: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }],
+				components: [{
+					label: 'Color',
+					key: 'color',
+					input: true,
+					type: 'textfield'
+				}]
 			},
 			dataElement = {
 				type: 'datagrid',
 				input: true,
 				label: 'Chart data',
 				key: 'chartData',
-				//tooltip: 'Values to use as the data source. Labels are shown in the select field. Values are the corresponding values saved with the submission.',
 				weight: 10,
 				reorder: true,
 				defaultValue: [{ label: '', serie: 50 }],
@@ -79,6 +97,7 @@ export default class PercentageChart extends HtmlelementComponent {
 				var dataComponent = {};
 				dataComponent.components = [];
 				dataComponent.components.push(chartHeight);
+				dataComponent.components.push(colorsElement);
 				dataComponent.components.push(dataElement);
 				dataComponent.key = 'data';
 				dataComponent.label = 'Data';
@@ -95,7 +114,13 @@ export default class PercentageChart extends HtmlelementComponent {
 			type: 'percentageChart',
 			label: 'chartelement',
 			chartData: [{ label: '', serie: 50 }],
-			chartHeight: 350
+			chartHeight: 350,
+			colorData: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }]
 		}, ...extend);
+	}
+
+	static get builderInfo() {
+		return {
+		};
 	}
 }

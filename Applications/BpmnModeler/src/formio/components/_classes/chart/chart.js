@@ -7,11 +7,15 @@ export default class Chart extends HtmlelementComponent {
 		element.appendChild(chartElement);
 		var chartData = this.component.chartData,
 			labels = [],
-			series = [];
+			series = [],
+			colors = [];
 
 		for (var item of chartData) {
 			labels.push(item.label);
 			series.push(item.serie);
+		}
+		for (var color of this.component.colorData) {
+			colors.push(color.color)
 		}
 		var options = {
 			chart: {
@@ -30,8 +34,10 @@ export default class Chart extends HtmlelementComponent {
 						position: this.component.legendPosition
 					}
 				}
-			}]
+			}],
+			colors: colors
 		};
+
 		var chart = new ApexCharts(chartElement, options);
 		chart.render();
 
@@ -39,7 +45,7 @@ export default class Chart extends HtmlelementComponent {
 	}
 
 	static editForm() {
-		var chartForm = HtmlelementComponent.editForm(),
+		var chartForm = super.editForm(),
 			chartWidth = {
 				type: 'number',
 				weight: 10,
@@ -47,14 +53,12 @@ export default class Chart extends HtmlelementComponent {
 				key: 'chartWidth',
 				label: 'Chart width',
 				defaultValue: 300
-				//tooltip: 'The name of the indexeddb database.',
 			},
 			dataElement = {
 				type: 'datagrid',
 				input: true,
 				label: 'Chart data',
 				key: 'chartData',
-				//tooltip: 'Values to use as the data source. Labels are shown in the select field. Values are the corresponding values saved with the submission.',
 				weight: 10,
 				reorder: true,
 				defaultValue: [{ label: '', serie: 1 }],
@@ -80,7 +84,6 @@ export default class Chart extends HtmlelementComponent {
 				type: 'select',
 				input: true,
 				weight: 0,
-				//tooltip: 'The source to use for the select data. Values lets you provide your own values and labels.',
 				key: 'legendPosition',
 				defaultValue: 'top',
 				label: 'Legend position',
@@ -93,6 +96,21 @@ export default class Chart extends HtmlelementComponent {
 						{ label: 'Right', value: 'right' }
 					]
 				}
+			},
+			colorsElement = {
+				type: 'datagrid',
+				input: true,
+				label: 'Colors Data',
+				key: 'colorData',
+				weight: 50,
+				reorder: true,
+				defaultValue: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }],
+				components: [{
+					label: 'Color',
+					key: 'color',
+					input: true,
+					type: 'textfield'
+				}]
 			};
 
 		for (var formComponent of chartForm.components) {
@@ -102,6 +120,7 @@ export default class Chart extends HtmlelementComponent {
 				dataComponent.components.push(chartWidth);
 				dataComponent.components.push(dataElement);
 				dataComponent.components.push(legendPositionElement);
+				dataComponent.components.push(colorsElement);
 				dataComponent.key = 'data';
 				dataComponent.label = 'Data';
 				dataComponent.weight = 20;
@@ -118,7 +137,13 @@ export default class Chart extends HtmlelementComponent {
 			label: 'chartelement',
 			chartData: [{ label: '', serie: 1 }],
 			legendPosition: 'top',
-			chartWidth: 300
+			chartWidth: 300,
+			colorData: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }]
 		}, ...extend);
+	}
+
+	static get builderInfo() {
+		return {
+		};
 	}
 }
