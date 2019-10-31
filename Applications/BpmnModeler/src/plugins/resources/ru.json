@@ -71,7 +71,8 @@
 		"EditRights": "Изменить права доступа",
 		"RemoveRights": "Удалить права доступа",
 		"NoData": "Нет данных",
-		"DisplayType": "Тип отображения"
+		"DisplayType": "Тип отображения",
+		"NoReadAccess": "У вас нет прав на просмотр этой диаграммы"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

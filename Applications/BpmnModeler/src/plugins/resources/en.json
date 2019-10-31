@@ -70,7 +70,8 @@
 		"EditRights": "Edit access rights",
 		"RemoveRights": "Remove access rights",
 		"NoData": "No data",
-		"DisplayType": "Display type"
+		"DisplayType": "Display type",
+		"NoReadAccess": "You don`t have rights to view this diagram"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -99,7 +100,7 @@
 			"ALL": "All"
 		},
 		"DiagramAccessRights": {
-			"READ": "Read",
+			"READ": "View",
 			"WRITE": "Edit",
 			"DELETE": "Delete",
 			"SHARE": "Edit access rights",

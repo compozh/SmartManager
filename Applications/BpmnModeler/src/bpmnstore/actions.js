@@ -269,14 +269,12 @@ export default {
       console.error(error);
       return false;
     }
-    console.log(records);
     return records.map(record => new DiagramAccess(record));
   },
 
   async giveAccessToProcess(context, accessParams) {
     try {
       var result = await api.giveAccessToProcess(accessParams);
-      console.log(result);
       return result;
     } catch (error) {
       console.error(error);

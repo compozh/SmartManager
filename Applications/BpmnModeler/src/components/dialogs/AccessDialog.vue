@@ -15,7 +15,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="form.show"  :persistent="form.loading" max-width="500px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.labels.Add') }}</v-btn>
+            <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.buttons.Add') }}</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -52,7 +52,7 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.labels.Cancel') }}</v-btn>
+              <v-btn color="blue darken-1" flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
               <v-btn color="blue darken-1" flat @click="formSave" :loading="form.loading">{{ form.actions[form.mode] }}</v-btn>
             </v-card-actions>
           </v-card>
@@ -128,14 +128,14 @@ export default {
         title: '',
         mode: '',
         actions: {
-          "create": this.$t('bpmn.buttons.Create'),
-          "edit": this.$t('bpmn.buttons.Save'),
-          "delete": this.$t('bpmn.buttons.Delete')
+          'create': this.$t('bpmn.buttons.Create'),
+          'edit': this.$t('bpmn.buttons.Save'),
+          'delete': this.$t('bpmn.buttons.Delete')
         },
         titles: {
-          "create": this.$t('bpmn.labels.AddRights'),
-          "edit": this.$t('bpmn.labels.EditRights'),
-          "delete": this.$t('bpmn.labels.RemoveRights')
+          'create': this.$t('bpmn.labels.AddRights'),
+          'edit': this.$t('bpmn.labels.EditRights'),
+          'delete': this.$t('bpmn.labels.RemoveRights')
         },
         rules: {
           required: value => !!value || this.$t('bpmn.labels.RequiredField'),
@@ -211,12 +211,9 @@ export default {
       if (!this.$refs.form.validate()) {
         return;
       }
-
       this.form.loading = true;
-
       let result = false;
-      console.log(this.form.mode);
-      console.log(this.form.editedItem);
+      
       switch (this.form.mode) {
       case 'create':
         result = await this.$store.dispatch('bpmn/giveAccessToProcess', this.form.editedItem);

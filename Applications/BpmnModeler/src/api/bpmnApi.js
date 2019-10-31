@@ -177,7 +177,6 @@ export class BpmnModelerApi {
         }
       }
     });
-    console.log(result.data.bpmnqueryMutation.giveAccessToProcess);
     return result.data.bpmnqueryMutation.giveAccessToProcess;
   }
 
