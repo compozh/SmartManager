@@ -1,12 +1,9 @@
-/* eslint-disable no-console */
 import {register} from 'register-service-worker'
 
 if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {
-      console.log(
-        'App is being served from cache by a service worker.'
-      )
+      console.log('App is being served from cache by a service worker.')
     },
     registered() {
       console.log('Service worker has been registered.')
@@ -21,7 +18,7 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
       console.log('New content is available and will be refresh.')
       if (window.confirm('A new version is available, update now?')) {
         const worker = registration.waiting
-        worker.postMessage({ action: 'SKIP_WAITING' })
+        worker.postMessage({action: 'skipWaiting'})
       }
     },
     offline() {
@@ -30,14 +27,6 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     error(error) {
       console.error('Error during service worker registration:', error)
     }
-  })
-  let refreshing
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) {
-      return
-    }
-    window.location.reload()
-    refreshing = true
   })
 } else {
   console.log('Your browser does not support the Service-Worker!')
