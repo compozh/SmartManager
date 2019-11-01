@@ -20,7 +20,7 @@
           :loaderType=loaderType
         />
         <v-text-field
-          v-if="initializeTasks && countTasks(selectedTasksTab)"
+          v-if="initializeTasks"
           class="search-field"
           label="Поиск задания"
           v-model="filterValue"
