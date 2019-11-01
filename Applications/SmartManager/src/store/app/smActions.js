@@ -49,9 +49,8 @@ export default {
       notify('danger', 'taskListTitle', 'taskListError')
     }
   },
-  async getTaskInfo({commit}, payload) {
-    const taskId = payload.id
-    startLoading(payload.loading)
+  async getTaskInfo({commit}, {taskId, loading}) {
+    startLoading(loading)
     try {
       const result = await api.getTaskInfoFromGql(taskId)
       stopLoading()
@@ -121,7 +120,7 @@ export default {
       const result = response.data.smtasksMutation.changeStatus
       if (result.success) {
         await dispatch('getTaskInfo', {
-          id: payload.id,
+          taskId: payload.id,
           loading: true
         })
         notify('success', 'statusTitle', 'statChangeSuccess')
@@ -137,10 +136,8 @@ export default {
       notify('danger', 'statusTitle', 'statChangeError')
     }
   },
-  async addAttachments({dispatch, state}, payload) {
+  async addAttachments({dispatch}, {taskId, attachments}) {
     startLoading(true)
-    const taskId = state.taskInfo.id
-    const attachments = JSON.stringify(payload)
     try {
       const response = await api.addAttachmentsInGql(taskId, attachments)
       const result = response.data.smtasksMutation.addAttachments

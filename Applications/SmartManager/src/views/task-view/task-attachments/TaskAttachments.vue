@@ -5,7 +5,7 @@
       </div>
       <div class="flex flex-wrap">
         <div
-          class="mail__attachment my-1"
+          class="my-1"
           v-for="(attachment, index) in task.originals"
           :key="index"
           @click="getUrl(attachment)"

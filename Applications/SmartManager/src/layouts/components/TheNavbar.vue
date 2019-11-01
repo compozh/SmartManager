@@ -4,7 +4,7 @@
       <vs-navbar class="vx-navbar navbar-custom" :color="navbarColor" :class="classObj">
         <!-- SM - OPEN SIDEBAR BUTTON -->
         <feather-icon
-          class="sm:inline-flex xl:hidden cursor-pointer mr-1"
+          class="sm:inline-flex xl:hidden cursor-pointer mr-4"
           icon="MenuIcon"
           @click.stop="showSidebar"
         ></feather-icon>
