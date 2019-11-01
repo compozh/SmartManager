@@ -219,10 +219,10 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async getFormDefinition(context, deployId) {
+  async getFormDefinition(context, procDefId) {
     startLoading(true)
     try {
-      const response = await api.getFormDefinitionFromGql(deployId)
+      const response = await api.getFormDefinitionFromGql(procDefId)
       const result = response.data.workFlowQuery.formDefinition
       stopLoading()
       if (result.Success) {

@@ -179,12 +179,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async getFormDefinitionFromGql(deployId) {
+  static async getFormDefinitionFromGql(procDefId) {
     try {
       return await getClient('WORKFLOW')
         .query({
           query: gql`${formDefinition}`,
-          variables: {deployId}
+          variables: {procDefId}
         })
     } catch (e) {
       throw new Error(e.message)
