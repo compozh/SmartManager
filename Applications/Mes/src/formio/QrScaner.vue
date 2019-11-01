@@ -3,7 +3,7 @@
     v-model="dialogVisible"
     @input="dialogInput"
   >
-    <v-btn outlined class="mes-arrow-back" @click="closeDialog" color="#326DA8"><v-icon dark>clear</v-icon></v-btn>
+    <v-btn outlined class="mes-close-layout" @click="closeDialog" color="#326DA8"><v-icon dark>clear</v-icon></v-btn>
     <div v-if="state" class="qr-state">
       {{state}}
     </div>
@@ -100,13 +100,13 @@ export default {
     font-size: 1.2em;
     text-align: center;
   }
-  .mes-arrow-back {
+  .mes-close-layout {
     cursor: pointer;
     display: flex;
     margin: 0 auto;
-    max-width: 45px;
-    min-width: 45px !important;
-    height: 45px !important;
+    max-width: 60px;
+    min-width: 60px !important;
+    height: 60px !important;
     border-radius: 50%;
     position: absolute;
     left: calc(50% - 20px);
