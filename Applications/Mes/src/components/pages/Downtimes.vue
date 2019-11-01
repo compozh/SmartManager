@@ -22,6 +22,7 @@
       />
       <mes-downtime-main-layout
         id="downtimeDescription"
+        :initializeDowntimes=initializeDowntimes
       />
       </vue-split>
     </v-layout>
@@ -36,7 +37,7 @@ export default {
     return {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeDowntimes: false,
-      defaultSizes: [35, 65],
+      defaultSizes: [25, 75],
       isUploadInProcess: false
     }
   },

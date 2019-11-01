@@ -14,7 +14,7 @@
         ]"
         direction="horizontal"
         :min-size="100"
-        :gutter-size="0"
+        :gutter-size="5"
         :snap-offset="50"
         :sizes=aspectRatioLayout
         @onDragEnd="changeAspectRatioLayout"
