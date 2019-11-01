@@ -56,7 +56,7 @@ export default {
   flex-direction: column;
 }
 .quality-item {
-  margin: 10px;
+  margin: 5px 10px;
   cursor: pointer;
   text-align: center;
 }

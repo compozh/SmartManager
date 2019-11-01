@@ -97,6 +97,7 @@ export default {
 <style scoped>
   .qr-code-stream {
     font-size: 1.2em;
+    margin: 0 auto;
   }
   .qr-loader{
     margin: 40px;
@@ -110,12 +111,12 @@ export default {
   .mes-arrow-back {
     display: flex;
     margin: 0 auto;
-    max-width: 45px;
-    min-width: 45px !important;
-    height: 45px !important;
+    max-width: 60px;
+    min-width: 60px !important;
+    height: 60px !important;
     border-radius: 50%;
     position: absolute;
-    left: calc(50% - 20px);
+    left: calc(50% - 35px);
     z-index: 10;
     top: 25px;
     border: 2px solid white;
