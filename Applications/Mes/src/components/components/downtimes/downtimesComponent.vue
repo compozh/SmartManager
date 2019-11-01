@@ -10,9 +10,9 @@
           <mes-downtime-cards
           @changeCurrentDowntime=changeCurrentDowntime
           />
-          <span v-if="isUploadInProcess" class='upload-downtime-str'>Загрузка простоев</span>
+          <span v-if="isUploadInProcess" class='upload-downtime-str'>{{this.$t('mes.labels.DownloadDowntimes')}}</span>
         </div>
-        <span v-if="initializeDowntimes && !downtimes.length" class="lack-of-downtimes-str">Простои отсутствуют</span>
+        <span v-if="initializeDowntimes && !downtimes.length" class="lack-of-downtimes-str">{{this.$t('mes.labels.NoDowntime')}}</span>
       </v-flex>
     </v-layout>
   </div>

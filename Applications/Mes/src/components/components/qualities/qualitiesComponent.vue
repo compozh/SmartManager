@@ -9,7 +9,7 @@
         <v-text-field
           v-if="initializeQualities"
           class="search-field"
-          label="Поиск документов"
+          :label="this.$t('mes.placeholders.SearchDocument')"
           v-model="documentSearchValue"
           @keydown.enter="documentSearchSubmit"
           @click:clear="documentClearSearch"
@@ -20,9 +20,9 @@
           @changeCurrentQuality=changeCurrentQuality
           :initializeQualities=initializeQualities
           />
-          <span v-if="isUploadInProcess" class='upload-quality-str'>Загрузка документов</span>
+          <span v-if="isUploadInProcess" class='upload-quality-str'>{{this.$t('mes.labels.DownloadDocuments')}}</span>
         </div>
-        <span v-if="initializeQualities && !qualities.length" class="lack-of-qualities-str">Документы отсутствуют</span>
+        <span v-if="initializeQualities && !qualities.length" class="lack-of-qualities-str">{{this.$t('mes.labels.NoDocuments')}}</span>
       </v-flex>
     </v-layout>
   </div>

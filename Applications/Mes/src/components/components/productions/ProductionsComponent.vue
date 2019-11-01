@@ -33,9 +33,9 @@ export default {
     return {
       dialogProperties: {
         title: '',
-        message: 'Вы действительно хотите удалить выработку?',
-        agreeMessage: 'Да',
-        disagreeMessage: 'Нет',
+        message: this.$t('mes.dialogs.DeleteProduction'),
+        agreeMessage: this.$t('mes.dialogs.Yes'),
+        disagreeMessage: this.$t('mes.dialogs.No'),
         visible: false,
         production: null,
         callback: false

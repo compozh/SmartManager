@@ -66,7 +66,9 @@ Vue.use(Authentication, { options: window.myConfig, dependencies })
 Vue.use(Router, { options: window.myConfig, dependencies })
 Vue.use(WebApps, { dependencies, options: window.myConfig })
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'ua', () => import('./plugins/resources/ua.json'))
 
 // Шина событий
 export const eventBus = new Vue()

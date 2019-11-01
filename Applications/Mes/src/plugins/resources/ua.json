@@ -1,0 +1,70 @@
+{
+    "buttons": {
+		"AddElement": "Додати",
+		"Refresh": "Перезавантажити",
+		"Close": "Закрити",
+		"Rename": "Перейменувати",
+		"Delete": "Видалити",
+		"Save": "Зберегти",
+		"Cancel": "Відміна",
+		"Create": "Створити",
+		"AddProcess": "Додати процес",
+		"AddFolder": "Додати папку",
+		"Import": "Імпорт",
+		"Deploy": "Розгорнути",
+		"Copy": "Копіювати",
+        "Select": "Выбрати",
+        "SetupMaterial": "Встановити матеріали",
+        "TakeToWork": "Взяти в роботу",
+        "Pause": "Призупинити",
+        "Downtime": "Простій",
+        "RemoveAllParties": "Зняти всі партії",
+        "ScanQRCode": "Сканувати QR код",
+        "ComeBack": "Повернутись назад",
+        "MyProduction": "Моє вироблення",
+        "ProductionOfTheCurrentWorkCenter": "Вироблення за поточним Рабочим центром",
+        "Fixate": "Зафіксувати",
+        "DeleteInstallation": "Видалити інсталяцію",
+        "WriteOffMaterials": "Списати матеріали",
+        "PrintProduction": "Роздрукувати вироблення",
+        "DeleteProduction": "Видалити вироблення"
+    },
+    "tabs": {
+        "InPlan": "В плані",
+        "Done": "Виконано"
+    },
+    "placeholders": {
+        "SearchMaterial": "Вкажіть QR-партії матеріалів для встановлення",
+        "SearchDocument": "Пошук документів",
+        "SearchTask": "Пошук завдань"
+    },
+    "labels": {
+        "WorkCenter": "Робочий центр",
+        "NoWorkCenter": "Відсутній робочий центр",
+        "FixOnWorkCenter": "Зафіксуйтесь за робочим центром",
+        "DowntimeFixation": "Фіксація простою",
+        "SelectWorkCenterToCommit": "Выберіть Робочий центр для фіксації",
+        "AbsentInstalledParties": "Відсутні встановлені партії",
+        "NoFactOfRegistration": "Відсутній факт регистрації вироблуння за зміну",
+        "DownloadDowntimes": "Завантаження простоїв",
+        "NoDowntime": "Простої відсутні",
+        "DownloadDocuments": "Завантаження документів",
+        "NoDocuments": "Документи відсутні",
+        "NoTasks": "Завдання відсутні"
+    },
+    "dialogs": {
+        "Yes": "Так",
+        "No": "Ні",
+        "WorkCenterChange": "Зміна робочого центру",
+        "SwitchToAnotherTask": "Ви дійсно бажаєте перейти на інше завдання?",
+        "DeleteInstallation": "Ви дійсно бажаєте видалити партію, встановлену на робочий центр?",
+        "DeleteProduction": "Ви дійсно хочете видалити вироблення?"
+    },
+    "cards": {
+        "Cause": "Причина",
+        "Start": "Початок",
+        "End": "Кінець",
+        "Comment": "Коментар",
+        "WriteOff": "Списання"
+    }
+}

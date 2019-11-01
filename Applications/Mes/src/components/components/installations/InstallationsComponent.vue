@@ -32,9 +32,9 @@ export default {
     return {
       dialogProperties: {
         title: '',
-        message: 'Вы действительно хотите удалить партию, установленную на рабочий центр?',
-        agreeMessage: 'Да',
-        disagreeMessage: 'Нет',
+        message: this.$t('mes.dialogs.DeleteInstallation'),
+        agreeMessage: this.$t('mes.dialogs.Yes'),
+        disagreeMessage: this.$t('mes.dialogs.No'),
         visible: false,
         installation: null,
         callback: false

@@ -5,7 +5,7 @@
       class="headline grey lighten-2"
       primary-title
     >
-      Фиксация простоя
+      {{this.$t('mes.labels.DowntimeFixation')}}
     </v-card-title>
       <div class="downtimes-block">
         <v-progress-circular

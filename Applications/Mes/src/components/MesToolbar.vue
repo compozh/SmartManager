@@ -20,14 +20,14 @@
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
       <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <v-autocomplete
           autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
           return-object
-          no-data-text="--- Рабочий центр отсутствует ---"
+          :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
           class="work-centers-select-input"
         ></v-autocomplete>
@@ -35,7 +35,7 @@
 
       <!-- Зафиксированый РЦ -->
       <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
@@ -160,7 +160,7 @@ export default {
         return
       }
       this.$store.commit('mes/setInitialWorkCenter', false)
-      this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
+      this.$store.commit('mes/setDialogLinearLoaderMessage', this.$t('mes.dialogs.WorkCenterChange'))
 
       const workCentersFixed =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
       var currentWorkCetnerFixation = false

@@ -7,7 +7,7 @@
       <template v-slot:activator="{ on }">
         <v-btn outlined class="mes-arrow-back" @click="closeDialog" color="#326DA8" v-on="on"><v-icon dark>clear</v-icon></v-btn>
       </template>
-      <span>Закрыть</span>
+      <span>{{this.$t('mes.buttons.Close')}}</span>
     </v-tooltip>
     <div v-if="state" class="qr-state">
       {{state}}

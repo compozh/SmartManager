@@ -1,13 +1,13 @@
 <template>
   <v-layout v-if="workCentersForWorker.length" class="mes-fix-workcenter-layout">
-      <span>Выберите Рабочий центр для фиксации</span>
+      <span>{{this.$t('mes.labels.SelectWorkCenterToCommit')}}</span>
       <v-flex xs12 sm6 d-flex>
         <v-select
           :items="workCenterItems()"
           label="Рабочий центр"
         ></v-select>
       </v-flex>
-      <v-btn class="setup-installations-button" outlined @click="onClickFixWorkCenter" text color="#326DA8">Зафиксировать</v-btn>
+      <v-btn class="setup-installations-button" outlined @click="onClickFixWorkCenter" text color="#326DA8">{{this.$t('mes.buttons.Fixate')}}</v-btn>
   </v-layout>
 </template>
 
