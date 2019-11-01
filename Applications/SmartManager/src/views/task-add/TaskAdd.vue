@@ -88,13 +88,11 @@
                                 v-model="newTask.notify"
                                 :placeholder="$t('roles.notify')"
                   />
-                  <files-upload
-                    v-on:attach="getAttachment($event)"
-                    :uploading="filesUploading"
-                    class="mt-3"
-                  >
-                  </files-upload>
-                  <vs-divider></vs-divider>
+                  <files-upload @attach="getAttachment($event)"
+                                :uploading="filesUploading"
+                                class="mt-4"
+                  />
+                  <vs-divider/>
                   <div class="flex justify-end">
                     <vs-button class="mx-6"
                                color="primary"
@@ -102,9 +100,8 @@
                                @click="$router.go(-1)"
                     >{{ $t('buttons.cancel') }}
                     </vs-button>
-                    <vs-button
-                      type="gradient"
-                      @click="submitForm"
+                    <vs-button type="gradient"
+                               @click="submitForm"
                     >{{ $t('buttons.create') }}
                     </vs-button>
                   </div>
@@ -124,12 +121,14 @@ import 'quill/dist/quill.bubble.css'
 import {quillEditor} from 'vue-quill-editor'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import Autocomplete from '@/components/Autocomplete'
+import FilesUpload from '@/components/FilesUpload'
 import moment from 'moment'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+// eslint-disable-next-line no-unused-vars
 import {Russian} from 'flatpickr/dist/l10n/ru.js'
+// eslint-disable-next-line no-unused-vars
 import {Ukrainian} from 'flatpickr/dist/l10n/uk.js'
-import FilesUpload from '@/components/FilesUpload'
 
 export default {
   components: {

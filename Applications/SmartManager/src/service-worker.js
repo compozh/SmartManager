@@ -16,25 +16,35 @@ self.__precacheManifest = [].concat(self.__precacheManifest || [])
 workbox.precaching.suppressWarnings()
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
 
-//workbox.routing.registerRoute(/\/webapps\/SmartManager\//, workbox.strategies.networkFirst(), 'GET')
+workbox.routing.registerRoute(/\/webapps\/SmartManager\//,
+  new workbox.strategies.CacheFirst({
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+)
 
 workbox.routing.registerRoute(
   /\/GraphQlServer\/api\//,
-  ({url, event}) => {
-    console.log('registerRoute ', url)
-    console.log('GraphQlServer/api')
-    return staleWhileRevalidate(event)
-  },
+  ({event}) => postHandler(event),
   'POST'
 )
 
-self.addEventListener('fetch', event => {
-  if (event.request.method === 'POST') {
-    event.responseWith(staleWhileRevalidate(event))
+self.addEventListener('message', event => {
+  if (event.data === 'skipWaiting') {
+    self.skipWaiting()
   }
 })
 
-async function staleWhileRevalidate(event) {
+self.addEventListener('fetch', async event => {
+  if (event.request.method === 'POST') {
+    event.responseWith(postHandler(event))
+  }
+})
+
+async function postHandler(event) {
   const cachedResponse = await getCache(event.request.clone())
   const fetchPromise = fetch(event.request.clone())
     .then(response => {
