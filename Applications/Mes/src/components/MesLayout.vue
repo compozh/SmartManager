@@ -262,5 +262,9 @@ export default {
     color: #326DA8!important;
     caret-color: #326DA8 !important;
   }
+  .qr-code-stream .camera {
+    width: auto !important;
+    height: 80vh !important;
+  }
 </style>
 

@@ -97,6 +97,7 @@ export default {
 <style scoped>
   .qr-code-stream {
     font-size: 1.2em;
+    margin: 0 auto;
   }
   .qr-loader{
     margin: 40px;
