@@ -1,6 +1,6 @@
 
 window.appConfig = {
-  GrapgQlUrl: window.devMode ? 'http://localhost:15504/' : '/GraphQlServer/',
+  GrapgQlUrl: window.devMode ? 'http://localhost:15504/' : 'https://m.it.ua/GraphQlServer/',
   BASE_URL: window.VUE_APP_BASE_PATH,
   WsUrl: window.devMode ? 'http://localhost:64137/ws/api/' : '/ws/api/',
   SignalRUrl: 'https://m.it.ua/ws/signalr/hubs'
@@ -19,7 +19,7 @@ const apps = [
   },
   {
     'name': 'Bpmn Cockpit',
-    'image': 'http://192.168.4.204:8080/camunda/app/welcome/assets/images/admin.svg', 
+    'image': '/img/app/admin.svg', 
     'link': 'https://m.it.ua/webapps/skd/'
   }
 ]
