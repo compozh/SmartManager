@@ -54,7 +54,7 @@ export default {
       var me = this
       this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, successAction: () => {
         me.closeOverlay()
-      }})
+      }, message: this.$t('mes.dialogs.RegistrationDowntime')})
     },
     initializeCreateDowntimeFormio() {
       if (Object.keys(this.createDowntimeFormio).length) {

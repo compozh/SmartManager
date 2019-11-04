@@ -58,7 +58,11 @@
         "WorkCenterChange": "Work Center Change",
         "SwitchToAnotherTask": "Are you sure you want to switch to another task?",
         "DeleteInstallation": "Are you sure you want to delete the batch installed on the work center?",
-        "DeleteProduction": "Are you sure you want to remove the production?"
+        "DeleteProduction": "Are you sure you want to remove the production?",
+        "RegistrationProduction": "Registration production",
+        "RegistrationDowntime": "Registration downtime",
+        "RegistrationDocument": "Registration document"
+
     },
     "cards": {
         "Cause": "Cause",

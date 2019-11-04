@@ -58,7 +58,10 @@
         "WorkCenterChange": "Зміна робочого центру",
         "SwitchToAnotherTask": "Ви дійсно бажаєте перейти на інше завдання?",
         "DeleteInstallation": "Ви дійсно бажаєте видалити партію, встановлену на робочий центр?",
-        "DeleteProduction": "Ви дійсно хочете видалити вироблення?"
+        "DeleteProduction": "Ви дійсно хочете видалити вироблення?",
+        "RegistrationProduction": "Реєстрація вироблення",
+        "RegistrationDowntime": "Реєстрація простою",
+        "RegistrationDocument": "Реєстрація документа"
     },
     "cards": {
         "Cause": "Причина",
