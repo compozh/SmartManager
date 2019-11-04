@@ -1,5 +1,5 @@
 <template>
-  <AgGridView :education="dataEducation" v-if="dataEducation"></AgGridView>
+  <AgGridView :education="dataEducation" v-show="dataEducation"></AgGridView>
 </template>
 
 <script>
@@ -14,9 +14,11 @@ export default {
     },
   },
   created() {
-    if (this.$store.getters['education/getEducationPlan']) {
-      return
+    let object = {
+      load: 'loadEducationPlan',
+      clear: 'setEducationPlan'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadEducationPlan')
   }
 }

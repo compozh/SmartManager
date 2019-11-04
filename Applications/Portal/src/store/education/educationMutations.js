@@ -25,6 +25,9 @@ export default {
   },
   setResultsAssessmentSupremo(state, value) {
     state.resultsAssessmentSupremo = value
+  },
+  setCurrentPageNabu(state, value) {
+    state.currentPageNabu = value
   }
 }
   

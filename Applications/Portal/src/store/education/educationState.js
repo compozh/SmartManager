@@ -9,6 +9,7 @@ export default {
   criterialEvaluation: undefined,
   selfEsteemResults: undefined,
   resultsAssessmentSupremo: undefined,
+  currentPageNabu: undefined
   
 }
   

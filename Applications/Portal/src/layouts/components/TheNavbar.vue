@@ -154,6 +154,15 @@ export default {
   methods: {
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
+      this.$cookies.set('c', locale)
+      var currentPage = this.$store.getters['education/getCurrentPageNabu']
+      this.$store.commit(`education/${currentPage.clear}`, null)
+      
+      setTimeout(() => {
+        this.$store.dispatch('app/loadApplicationDescription')
+        this.$store.dispatch(`education/${currentPage.load}`)
+      },
+      10)
     },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)

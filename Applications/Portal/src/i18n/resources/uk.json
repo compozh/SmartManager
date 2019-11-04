@@ -52,6 +52,7 @@
         "notEqual": "Не дорівнює",
         "andCondition": "І",
         "orCondition": "АБО",
-        "NoRowsToShow": "Немає рядків для відображення"
+        "NoRowsToShow": "Немає рядків для відображення",
+        "filter": "Фільтр..."
     }
 }

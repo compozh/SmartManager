@@ -1,13 +1,14 @@
 <template>
-  <vx-card class="overflow-hidden">
+  <vx-card class="ag-card" >
     <ag-grid-vue
       class="ag-theme-material my-4 flex-grow my-ag-grid"
       :gridOptions="gridOptions"
-      :columnDefs="columnDefs"
+      @grid-ready="onGridReady"
+      @grid-columns-changed="eventChange"
       :defaultColDef="defaultColDef"
+      :columnDefs="columnDefs"
       :rowData="rows"
       :frameworkComponents="frameworkComponents"
-      
     ></ag-grid-vue>
   </vx-card>
 </template>
@@ -38,7 +39,8 @@ export default {
           equals: this.$t('agGrid.equals'),
           notEqual: this.$t('agGrid.notEqual'),
           andCondition: this.$t('agGrid.andCondition'),
-          orCondition: this.$t('agGrid.orCondition')
+          orCondition: this.$t('agGrid.orCondition'),
+          filterOoo: this.$t('agGrid.filter')
         },
         getRowStyle: function(params) {
           if (params.node.id % 2 === 0) {
@@ -53,6 +55,9 @@ export default {
     }
   },
   computed: {
+    myGrid() {
+      return document.querySelector('.my-ag-grid')
+    },
     // Заголовки и их свойства
     columnDefs() {
       if (!this.education) {
@@ -80,27 +85,29 @@ export default {
   beforeMount() {
     this.frameworkComponents = { customTooltip: CustomTooltip }
   },
-  mounted() {
-    if (!this.education) {
-      return
+  methods: {
+    onGridReady(params) {
+      this.gridApi = params.api
+      this.gridColumnApi = params.columnApi
+    },
+    eventChange(params) {
+      if (!this.columnDefs) {
+        return
+      }
+      // Установка ширины колонок
+      setTimeout(() => params.api.sizeColumnsToFit(), 0)
+      this.myGrid.style.height = (this.rows.length * 50) + 100 + 'px'
     }
-
-    this.gridApi = this.gridOptions.api
-    this.gridColumnApi = this.gridOptions.columnApi
-    // Установка ширины колонок
-    this.gridApi.sizeColumnsToFit()
-    
-    // Установка высоты, на весь контент (кол-во строк * высоту + шапка и место под скролл)
-    var agGrid = document.querySelector('.my-ag-grid')
-    agGrid.style.height = (this.rows.length * 50) + 100 + 'px'
   },
+  destroyed() {
+    var currentPage = this.$store.getters['education/getCurrentPageNabu']
+    this.$store.commit(`education/${currentPage.clear}`, null)
+  }
+
 }
 </script>
 
 <style scoped>
-.my-header{
-  color: red !important;
-}
 ::v-deep .ag-overlay-no-rows-center{
   position: relative;
   bottom: -25px;
