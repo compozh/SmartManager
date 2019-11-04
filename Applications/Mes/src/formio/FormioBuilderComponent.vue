@@ -96,6 +96,10 @@ export default {
             displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
             options: {
                 noAlerts: true,
+                language: 'ru',
+                i18n: {
+                  ru: this.$t('mes.formioForm')
+                },
                 builder: {
                     basic: {},
                     advanced: {},

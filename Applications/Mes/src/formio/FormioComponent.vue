@@ -4,6 +4,7 @@
       :form=formioComponents
       :submission=formioSubmission
       :options=options
+      language="ru"
       @submit=onSubmit
       @change=onChange
       ref="formioComponent"
@@ -29,9 +30,8 @@ export default {
       changedData: {},
       options: {
         noAlerts: true,
+        language: 'ru',
         i18n: {
-          en: this.$t('mes.formioForm'),
-          ua: this.$t('mes.formioForm'),
           ru: this.$t('mes.formioForm')
         }
        },
