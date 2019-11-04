@@ -18,7 +18,8 @@
 		"Copy": "Add by sample",
 		"Select": "Select",
 		"Share": "Share",
-		"Edit": "Edit"
+		"Edit": "Edit",
+		"Add": "Add"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -71,7 +72,9 @@
 		"RemoveRights": "Remove access rights",
 		"NoData": "No data",
 		"DisplayType": "Display type",
-		"NoReadAccess": "You don`t have rights to view this diagram"
+		"NoReadAccess": "You don`t have rights to view this diagram",
+		"WhoHasAccess": "Who has access",
+		"All": "All"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -91,7 +94,8 @@
 		"AccessRecordsNotLoaded": "Failed to load access settings",
 		"RequestError": "Failed to execute request",
 		"InputCodeForm": "Input code form",
-		"RequiredInputField": "Field is required"
+		"RequiredInputField": "Field is required",
+		"AccessError": "Failed to give access for {identity}"
 	},
 	"enums": {
 		"AccessType": {

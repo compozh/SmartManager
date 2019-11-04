@@ -154,7 +154,7 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.getFormsForProcess;
   }
 
-  //#region Общий доступ
+  //#region Access
 
   async getAccessRecordsForProcess(processId) {
     const result = await getClient().query({
@@ -213,4 +213,23 @@ export class BpmnModelerApi {
   }
 
   //#endregion
+
+  //#region Other
+
+  async queryUsers() {
+    const result = await getClient().query({
+      query: gql`query ${queries.queryUsers}`
+    })
+    return result.data.bpmnquery.queryUsers;
+  }
+
+  async queryGroups() {
+    const result = await getClient().query({
+      query: gql`query ${queries.queryGroups}`
+    })
+    return result.data.bpmnquery.queryGroups;
+  }
+
+  //#endregion
+
 }

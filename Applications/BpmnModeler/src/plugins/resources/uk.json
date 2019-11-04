@@ -18,7 +18,8 @@
 		"Copy": "Додати за зразком",
 		"Select": "Вибрати",
 		"Share": "Загальний доступ",
-		"Edit": "Редагувати"
+		"Edit": "Редагувати",
+		"Add": "Додати"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -76,7 +77,9 @@
 		"RemoveRights": "Видалити права доступу",
 		"NoData": "Немає даних",
 		"DisplayType": "Тип відображення",
-		"NoReadAccess": "У вас відсутні права на перегляд цієї діаграми"
+		"NoReadAccess": "У вас відсутні права на перегляд цієї діаграми",
+		"WhoHasAccess": "У кого є доступ",
+		"All": "Всі"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -96,7 +99,8 @@
 		"AccessRecordsNotLoaded": "Не удалось завантажити налаштування доступу",
 		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
-		"RequiredInputField": "Обов'язкове поле"
+		"RequiredInputField": "Обов'язкове поле",
+		"AccessError": "не вдалося надати доступ для {identity}"
 	},
 	"enums": {
 		"AccessType": {

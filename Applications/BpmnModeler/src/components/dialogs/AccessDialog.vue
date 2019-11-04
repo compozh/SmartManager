@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-if="show" v-model="show" max-width="1200px">
+  <v-dialog v-if="show" v-model="show" max-width="1200px" scrollable>
     <v-card>
       <v-card-title primary-title>
         <h4 class="headline mb-0">{{ $t('bpmn.labels.Sharing') }}</h4>
@@ -13,7 +13,7 @@
           clearable
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-dialog v-model="form.show"  :persistent="form.loading" max-width="500px">
+        <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.buttons.Add') }}</v-btn>
           </template>
@@ -23,20 +23,36 @@
             </v-card-title>
 
             <v-card-text>
-              <v-form ref="form">
-                <v-radio-group v-model="form.editedItem.type" row :label="$t('bpmn.labels.Type')" :disabled="form.loading || form.mode !== 'create'">
+              <v-form ref="form" onSubmit="return false;">
+                <!-- <v-radio-group v-model="form.editedItem.type" row :label="$t('bpmn.labels.Type')" :disabled="form.loading || form.mode !== 'create'">
                   <v-radio v-for="accessType in enums.accessType" :key="accessType"  :label="$t('bpmn.enums.AccessType.' + accessType)" :value="accessType"></v-radio>
-                </v-radio-group>
-                <v-text-field v-if="form.editedItem.type === 'GROUP'" :disabled="form.loading || form.mode !== 'create'"
-                  v-model="form.editedItem.groupId" :rules="[form.rules.required]" :label="$t('bpmn.labels.Group')"></v-text-field>
-                <v-text-field v-if="form.editedItem.type === 'USER'"  :disabled="form.loading || form.mode !== 'create'"
-                  v-model="form.editedItem.userId" :rules="[form.rules.required]" :label="$t('bpmn.labels.User')"></v-text-field>
-                <v-radio-group v-model="form.editedItem.allowAccess" :label="$t('bpmn.labels.Access')"
+                </v-radio-group> -->
+                <autocompletebox
+                  v-model="form.editedItem.identities"
+                  :queryItems="queryUsersAndGroups"
+                  :disabled="form.loading || form.mode !== 'create'"
+                  :rules="[form.rules.required]"
+                  :label="$t('bpmn.labels.WhoHasAccess')"
+                  multiple
+                >
+                  <template #item="{ data }">
+                    <template v-if="typeof data.item !== 'object'">
+                      <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                    </template>
+                    <template v-else>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                          <v-list-tile-sub-title v-html="data.item.id + ' ' + (data.item.login || '')"></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                  </template>
+                </autocompletebox>
+                <!-- <v-radio-group v-model="form.editedItem.allowAccess" :label="$t('bpmn.labels.Access')"
                    :disabled="form.loading || form.mode !== 'create'"
                 >
                   <v-radio :label="$t('bpmn.labels.Allowed')" :value="true"></v-radio>
                   <v-radio :label="$t('bpmn.labels.Declined')" :value="false"></v-radio>
-                </v-radio-group>
+                </v-radio-group> -->
                 <h5>{{ $t('bpmn.labels.AccessRights') }}</h5>
                 <v-container fluid>
                   <v-layout row wrap>
@@ -75,12 +91,13 @@
         >
           <template slot="items" slot-scope="props">
             <tr>
-              <td>{{ props.item.type }}</td>
-              <td>{{ props.item.group }}</td>
-              <td>{{ props.item.user }}</td>
-              <td>{{ props.item.rights }}</td>
-              <td>{{ props.item.allowAccess }}</td>
-              <td class="justify-center layout px-0">
+              <td class="text-xs-left">
+                <v-icon v-if="props.item.model.type === 'USER'" small>person</v-icon>
+                <v-icon v-else-if="props.item.model.type === 'GROUP'" small>group</v-icon>
+              </td>
+              <td class="text-xs-left">{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
+              <td class="text-xs-left">{{ props.item.rights }}</td>
+              <td class="justify-left layout">
                 <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                 <v-icon :title="$t('bpmn.buttons.Delete')" small @click="deleteItem(props.item)">delete</v-icon>
               </td>
@@ -96,19 +113,20 @@ import { Notification } from 'element-ui';
 import * as Models from '../../api/models';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
+import AutoCompleteBox from '../AutoCompleteBox';
 
 export default {
   name: 'access-dialog',
+  // eslint-disable-next-line
+  components: { AutoCompleteBox },
   data() {
     return {
       show: false,
       headers: [
-        { text: this.$t('bpmn.labels.Type'), value: 'type', align: 'center' },
-        { text: this.$t('bpmn.labels.Group'), value: 'group', align: 'center' },
-        { text: this.$t('bpmn.labels.User'), value: 'user', align: 'center' },
-        { text: this.$t('bpmn.labels.Rights'), value: 'rights', align: 'center' },
-        { text: this.$t('bpmn.labels.Access'), value: 'allowAccess', align: 'center' },
-        { text: this.$t('bpmn.labels.Actions'), value: 'name', align: 'center', sortable: false }
+        { text: this.$t('bpmn.labels.Type'), value: 'type' },
+        { text: this.$t('bpmn.labels.WhoHasAccess'), value: 'groupName' },
+        { text: this.$t('bpmn.labels.Rights'), value: 'rights' },
+        { text: this.$t('bpmn.labels.Actions'), value: 'name', align: 'left', sortable: false }
       ],
       pagination: {
         sortBy: 'type',
@@ -122,7 +140,13 @@ export default {
       },
       form: {
         editedIndex: -1,
-        editedItem: new Models.DiagramAccess(),
+        editedItem: { 
+          recordId: null, 
+          identities: [], 
+          allowAccess: true, 
+          type: Models.AccessType.All,
+          rights: [ ] 
+        },
         show: false,
         loading: false,
         title: '',
@@ -140,7 +164,8 @@ export default {
         rules: {
           required: value => !!value || this.$t('bpmn.labels.RequiredField'),
           selectOne: value => (value && value.length > 0) || ' '
-        }
+        },
+        usersAndGroups: [],
       },
       recordId: '',
       items: []
@@ -157,6 +182,11 @@ export default {
       if (oldValue && !newValue) {
         this.recordId = null;
         this.items = [];
+      }
+    },
+    'form.show'(newValue, oldValue) {
+      if (oldValue && !newValue) {
+        this.$refs.form.reset();
       }
     }
   },
@@ -178,52 +208,122 @@ export default {
           model: item,
           id: item.id,
           type: this.$t('bpmn.enums.AccessType.' + item.type),
-          group: item.groupId,
-          user: item.userId,
+          groupId: item.groupId,
+          groupName: item.groupName,
+          userId: item.userId,
+          userName: item.userName,
           rights: item.rights.map(right => this.$t('bpmn.enums.DiagramAccessRights.' + right)).join(', '),
           allowAccess: item.allowAccess ? this.$t('bpmn.labels.Allow') : this.$t('bpmn.labels.Decline')
         }
       });
       this.loading = false;
       this.recordId = diagramId;
+      console.log(this.$refs.form);
+    },
+    async queryUsersAndGroups(filter) {
+      if (!this.form.usersAndGroups.length) {
+        var users = (await this.$store.dispatch('bpmn/queryUsers')).map(user => { return { ...user, type: 'user' } });
+        var groups = (await this.$store.dispatch('bpmn/queryGroups')).map(group => { return { ...group, type: 'group' } });
+        this.form.usersAndGroups.push(
+          { id: '', name: this.$t('bpmn.labels.All'), type: 'all' },
+          { divider: true },
+          { header: this.$t('bpmn.labels.Users')},
+          users,
+          { divider: true },
+          { header: this.$t('bpmn.labels.Groups')},
+          groups );
+        this.form.usersAndGroups = this.form.usersAndGroups.flat();
+      }
+
+      return typeof filter === 'string' ? this.form.usersAndGroups.filter(item => 
+        (item.id && item.id.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
+        (item.name && item.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
+        (item.login && item.login.toLowerCase().indexOf(filter.toLowerCase()) >= 0)
+      ) : this.form.usersAndGroups;
     },
     createItem() {
-      this.form.editedItem = new Models.DiagramAccess({ recordId: this.recordId, rights: [ Models.DiagramAccessRights.Read ] });
+      this.form.editedItem.recordId = this.recordId;
+      this.form.editedItem.rights = [ Models.DiagramAccessRights.Read ];
       this.form.mode = 'create';
       this.form.show = true;
     },
     editItem(item) {
-      this.form.editedItem = new Models.DiagramAccess(item.model);
+      this.form.editedItem.recordId = item.model.recordId;
+      this.form.editedItem.rights = item.model.rights;
+      if (item.userId && item.userId.trim() !== '') {
+        this.form.editedItem.identities.push(item.userId);
+      } else if (item.groupId && item.groupId.trim() !== '') {
+        this.form.editedItem.identities.push(item.groupId);
+      } else {
+        this.form.editedItem.identities.push('');
+      }
       this.form.mode = 'edit';
       this.form.show = true;
     },
     deleteItem(item) {
-      this.form.editedItem = item.model;
+      console.log(item);
+      this.form.editedItem.recordId = item.model.recordId;
+      this.form.editedItem.rights = item.model.rights;
+      if (item.userId && item.userId.trim() !== '') {
+        this.form.editedItem.identities.push(item.userId);
+      } else if (item.groupId && item.groupId.trim() !== '') {
+        this.form.editedItem.identities.push(item.groupId);
+      } else {
+        this.form.editedItem.identities.push('');
+      }
       this.form.mode = 'delete';
       this.form.show = true;
     },
-    formClose () {
+    formClose() {
       this.form.loading = false;
       this.form.show = false;
-      this.form.editedItem = {}
+      this.form.editedItem.recordId = this.recordId;
+      this.form.editedItem.identities = [];
+      this.form.editedItem.rights = [];
     },
-    async formSave () {
+    async formSave() {
       if (!this.$refs.form.validate()) {
         return;
       }
       this.form.loading = true;
       let result = false;
-      
+
+      let storeAction;
+
       switch (this.form.mode) {
       case 'create':
-        result = await this.$store.dispatch('bpmn/giveAccessToProcess', this.form.editedItem);
+        storeAction = 'bpmn/giveAccessToProcess';
         break;
       case 'edit':
-        result = await this.$store.dispatch('bpmn/editAccessToProcess', this.form.editedItem);
+        storeAction = 'bpmn/editAccessToProcess';
         break;
       case 'delete':
-        result = await this.$store.dispatch('bpmn/removeAccessToProcess', this.form.editedItem);
+        storeAction = 'bpmn/removeAccessToProcess', this.form.editedItem;
         break;
+      }
+
+      for (let i = 0; i < this.form.editedItem.identities.length; i++) {
+        const identity = this.form.editedItem.identities[i];
+        const access = new Models.DiagramAccess(this.form.editedItem);
+        const { type: identityType, name } = this.form.usersAndGroups.find(e => e.id === identity);
+
+        switch (identityType) {
+        case 'user':
+          access.userId = identity;
+          result = await this.$store.dispatch(storeAction, access);
+          break;
+        case 'group':
+          access.groupId = identity;
+          result = await this.$store.dispatch(storeAction, access);
+          break;
+        case 'all':
+          result = await this.$store.dispatch(storeAction, access);
+          break;
+        }
+
+        if (!result) {
+          Notification.error('bpmn.errors.AccessError', { identity: name });
+        }
       }
 
       if (result) {

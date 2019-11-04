@@ -18,7 +18,8 @@
 		"Copy": "Создать по образцу",
 		"Select": "Выбрать",
 		"Share": "Общий доступ",
-		"Edit": "Корректировать"
+		"Edit": "Корректировать",
+		"Add": "Добавить"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -72,7 +73,9 @@
 		"RemoveRights": "Удалить права доступа",
 		"NoData": "Нет данных",
 		"DisplayType": "Тип отображения",
-		"NoReadAccess": "У вас нет прав на просмотр этой диаграммы"
+		"NoReadAccess": "У вас нет прав на просмотр этой диаграммы",
+		"WhoHasAccess": "У кого есть доступ",
+		"All": "Все"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -92,7 +95,8 @@
 		"AccessRecordsNotLoaded": "Не удалось загрузить настройки доступа",
 		"RequestError": "Ошибка при выполнении запроса",
 		"InputCodeForm": "Введите код формы",
-		"RequiredInputField": "Обезательное поле"
+		"RequiredInputField": "Обезательное поле",
+		"AccessError": "Не удалось предоставить доступ для {identity}"
 	},
 	"enums": {
 		"AccessType": {

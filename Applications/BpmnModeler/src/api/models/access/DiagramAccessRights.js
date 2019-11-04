@@ -2,5 +2,6 @@ export default {
   Read: 'READ',
   Write: 'WRITE',
   Deploy: 'DEPLOY',
-  Execute: 'EXECUTE'
+  Execute: 'EXECUTE',
+  Share: 'SHARE'
 }

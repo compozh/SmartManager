@@ -302,5 +302,27 @@ export default {
 
   //#endregion
 
+  //#region Other
+
+  async queryUsers(context) {
+    try {
+      return await api.queryUsers();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async queryGroups(context) {
+    try {
+      return await api.queryGroups();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
+  //#endregion
+
 };
 

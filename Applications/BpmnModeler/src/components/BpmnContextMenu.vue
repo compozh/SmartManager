@@ -27,7 +27,7 @@
           <v-list-tile-title>{{ $t('bpmn.buttons.Import') }}</v-list-tile-title>
         </v-list-tile>
       </template>
-      <template v-else-if="item.type === 'BPMN'">
+      <template v-else-if="isBpmn(item)">
         <v-list-tile @click="exportBpmn(item)">
           <v-list-tile-avatar>
             <v-icon>mdi-file-code</v-icon>
@@ -40,14 +40,8 @@
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile v-if="canDeploy(item)" @click="deploy(item)">
-          <v-list-tile-avatar>
-            <v-icon>save_alt</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-tile-title>
-        </v-list-tile>
       </template>
-      <template v-else-if="item.type === 'DMN'">
+      <template v-else-if="isDmn(item)">
         <v-list-tile @click="exportDmn(item)">
           <v-list-tile-avatar>
             <v-icon>save_alt</v-icon>
@@ -56,6 +50,12 @@
         </v-list-tile>
       </template>
       <template v-if="item">
+        <v-list-tile v-if="canDeploy(item)" @click="deploy(item)">
+          <v-list-tile-avatar>
+            <v-icon>save_alt</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-tile-title>
+        </v-list-tile>
         <v-divider></v-divider>
         <v-list-tile @click="copy(item)">
             <v-list-tile-avatar>
@@ -102,12 +102,6 @@ export default {
     canModifySystemObjects() {
       return this.$store.state.bpmn.configuration.canModifySystemObjects;
     },
-    currentUserId() {
-      if (this.$store.state.authentication.currentUser) {
-        return this.$store.state.authentication.currentUser.UserData.LoginData.UserId;
-      }
-      return null;
-    },
   },
   methods: {
     addFolder(item) {
@@ -153,7 +147,13 @@ export default {
       return item.hasRight(this.isFolder(item) ? Models.FolderAccessRights.Write : Models.DiagramAccessRights.Write);
     },
     canShare(item) {
-      return !this.isFolder(item) && item.ownerId === this.currentUserId;
+      return !this.isFolder(item) && item.hasRight(Models.DiagramAccessRights.Share);
+    },
+    isBpmn(item) {
+      return item.type === Models.ProcessType.BPMN;
+    },
+    isDmn(item) {
+      return item.type === Models.ProcessType.DMN;
     }
   },
 }

@@ -1,11 +1,12 @@
 import AccessType from './AccessType';
-import DiagramAccessRights from './DiagramAccessRights';
 
 export default class DiagramAccess {
-  constructor({ recordId, userId = '', groupId = '', allowAccess = true, type = AccessType.All, rights = [ ] } = {}) {
+  constructor({ recordId, userId = '', userName = '', groupId = '', groupName = '', allowAccess = true, type = AccessType.All, rights = [ ] } = {}) {
     this.recordId = recordId;
     this.userId = userId;
+    this.userName = userName;
     this.groupId = groupId;
+    this.groupName = groupName;
     this.allowAccess = allowAccess;
     this.type = type;
     this.rights = rights;

@@ -12,7 +12,7 @@
       </v-btn-toggle>
     </v-card-title>
     <v-card-text>
-      <v-form ref="form" v-model="valid">
+      <v-form ref="form" v-model="valid" onSubmit="return false;">
         <v-text-field ref="nameField"
           v-model="model.name"
           :label="$t('bpmn.labels.Name')"
