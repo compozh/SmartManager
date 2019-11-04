@@ -120,21 +120,17 @@
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
               <img
-                v-if="activeUserImg.startsWith('http')"
-                key="onlineImg"
+                v-if="activeUserImg"
                 :src="activeUserImg"
                 alt="user-img"
                 width="40"
                 height="40"
                 class="rounded-full shadow-md cursor-pointer block"/>
-              <img
+              <vs-avatar
                 v-else
-                key="localImg"
-                :src="require(`@/assets/images/portrait/small/${activeUserImg}`)"
-                alt="user-img"
-                width="40"
-                height="40"
-                class="rounded-full shadow-md cursor-pointer block"/>
+                class="rounded-full shadow-md cursor-pointer block"
+                size="40px"
+              ></vs-avatar>
             </div>
             <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
 
@@ -266,16 +262,19 @@ export default {
     },
     // PROFILE
     currentUser() {
-      return this.$store.state.auth.currentUser
+      const currentUser = this.$store.state.auth.currentUser
+      return currentUser ? currentUser.UserData : {}
     },
     user_displayName() {
-      return this.currentUser ? this.currentUser.UserData.CurrentUserData.UserName : ''
+      const userData = this.currentUser.CurrentUserData
+      return userData ? userData.UserName : ''
     },
     delegatedRights() {
-      return this.currentUser ? this.currentUser.UserData.DelegatedRights : []
+      return this.currentUser.DelegatedRights || []
     },
     activeUserImg() {
-      return this.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
+      const userData = this.currentUser.CurrentUserData
+      return userData ? userData.UserPhoto : ''
     }
   },
   methods: {
