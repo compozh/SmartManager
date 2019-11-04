@@ -27,7 +27,14 @@ export default {
   data() {
     return {
       changedData: {},
-      options: { noAlerts: true },
+      options: {
+        noAlerts: true,
+        i18n: {
+          en: this.$t('mes.formioForm'),
+          ua: this.$t('mes.formioForm'),
+          ru: this.$t('mes.formioForm')
+        }
+       },
       qrScanerVisible: false,
       qrScanerCallback: () => {}
     }
@@ -170,8 +177,8 @@ export default {
           searchValue,
           submission
         }
-        
-      this.$store.dispatch('formio/callItemAutocomplete', 
+
+      this.$store.dispatch('formio/callItemAutocomplete',
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);
