@@ -14,7 +14,7 @@
         ]"
         direction="horizontal"
         :min-size="100"
-        :gutter-size="0"
+        :gutter-size="5"
         :snap-offset="50"
         :sizes=aspectRatioLayout
         @onDragEnd="changeAspectRatioLayout"
@@ -47,15 +47,8 @@
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
               >
                 <mes-task-main-layout
-                  v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
-                    || (currentLayout == 'inProgress' && !selectedTask.inProgress))"
-                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-                />
-
-                <mes-task-in-progress-layout
-                  ref="taskInProgressLayout"
-                  v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
-                    ||(currentLayout == 'main' && selectedTask.inProgress))"
+                  ref="taskMainLayout"
+                  v-if="selectedTask && currentLayout === 'main'"
                   @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
                 />
 
@@ -204,9 +197,8 @@ export default {
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
-
-      if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
-        let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
+      if (this.$refs.taskMainLayout && !this.dialogProperties.task) {
+        let currentFormioData = this.$refs.taskMainLayout.getFormioData()
 
         if (this.productionFormio && this.productionFormio.data && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
           this.dialogProperties.visible = true
@@ -235,12 +227,8 @@ export default {
     },
     changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask
-
       this.$store.commit('mes/resetProductionFormio')
-      if (newSelectedTask.inProgress) {
-        this.initializeFormio(newSelectedTask)
-      }
-      this.changeCurrentLayout('main')
+      this.initializeFormio(newSelectedTask)
     },
     initializeFormio(task) {
       let workCenter = this.workCenter,

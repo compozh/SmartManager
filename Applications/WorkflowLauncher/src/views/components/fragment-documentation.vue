@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <ul>
-            <li v-for="(item, index) in items" :key="index" class="item-container" @click="FollowLink(item.link)">
+    <ul>
+        <li v-for="(item, index) in items" :key="index" class="item-container sm:item-container-size md:item-container-size lg:item-container-size xl:item-container-size" @click="FollowLink(item.link)">
+            <vx-tooltip :text="item.name" position="left" >
                 <div class="container">
-                    <div class="inner-container">
+                    <div class="inner-container truncate">
                         <feather-icon :icon="item.image" class="icon" ></feather-icon>
-                        <vx-tooltip :text="item.name" position="bottom" >
-                            <span v-html="item.name" class="text"></span>
-                        </vx-tooltip>
+                        <span v-html="item.name" class="text"></span>
                     </div>
                 </div>
-            </li>
-        </ul>
-    </div>
+            </vx-tooltip>
+        </li>
+    </ul>
 </template>
 
 <script>
@@ -29,6 +27,26 @@ export default {
 ::v-deep .vs-image--img{
 	background-repeat: no-repeat;
 }
+
+@media (min-width: 768px) {
+  .md\:item-container-size { 
+    width: 60%;
+    margin: auto;
+   }
+}
+@media (min-width: 1024px) {
+  .lg\:item-container-size { 
+      width: 80%;
+    }
+}
+@media (min-width: 1280px) {
+  .xl\:item-container-size { 
+      width: 80%;
+      margin-right: 0;
+    }
+}
+
+
 .item-container{
     cursor: pointer;
 }
@@ -45,12 +63,17 @@ export default {
 .inner-container{
     display: flex;
 	align-items: center;
-    width: 100%;
 }
 .icon{
     padding-right: 10px;
 }
 .text{
-    font-size: 16px
+    font-size: 16px;
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    justify-content: flex-start;
 }
 </style>

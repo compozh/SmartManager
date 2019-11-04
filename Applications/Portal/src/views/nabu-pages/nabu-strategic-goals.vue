@@ -1,5 +1,5 @@
 <template>
-  <AgGridView :education="dataStrategicGoals" v-if="dataStrategicGoals"></AgGridView>
+  <AgGridView :education="dataStrategicGoals" v-show="dataStrategicGoals"></AgGridView>
 </template>
 
 <script>

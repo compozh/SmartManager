@@ -88,6 +88,10 @@ export default {
       commit('setEducationAdditionalTraining', additionalTraining)
     }
   },
+
+  setCurrentPageNabu({commit}, page) {
+    commit('setCurrentPageNabu', page)
+  }
 }
 
 function CommonDataAndHeaders(type) {

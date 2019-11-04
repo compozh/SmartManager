@@ -20,8 +20,8 @@
           :loaderType=loaderType
         />
         <v-text-field
-          v-if="initializeTasks && countTasks(selectedTasksTab)"
-          class="search-task-field"
+          v-if="initializeTasks"
+          class="search-field"
           label="Поиск задания"
           v-model="filterValue"
           clearable
@@ -129,13 +129,13 @@ export default {
     padding-right: 10px;
   }
 
-  .search-task-field {
+  .search-field {
     height: 45px;
   }
-  .search-task-field .v-label {
+  .search-field .v-label {
     left: 5px !important;
   }
-  .search-task-field .v-application .primary--text {
+  .search-field .v-application .primary--text {
     color: #326da8 !important;
     caret-color: #326da8 !important;
   }

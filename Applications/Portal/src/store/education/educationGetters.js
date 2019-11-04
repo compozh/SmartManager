@@ -60,4 +60,7 @@ export default {
     }
     return undefined
   },
+  getCurrentPageNabu: state => {
+    return state.currentPageNabu
+  }
 }

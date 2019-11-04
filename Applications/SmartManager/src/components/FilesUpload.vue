@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-table v-if="files.length" stripe :data="files">
+    <vs-table v-if="files.length" stripe :data="files" class="mb-4">
       <template slot="thead">
         <vs-th v-for="(header, index) in tableHeaders"
                :key="index"
@@ -11,8 +11,7 @@
       <template v-slot="{data}">
         <vs-tr v-for="(item, index) in data"
                :key="index"
-               :state="item.size >= size ? 'danger' : null"
-        >
+               :state="item.size >= size ? 'danger' : null">
           <vs-td class="w-1/2">{{item.name}}</vs-td>
           <vs-td class="text-center"
           >{{ (item.size / 1024 / 1024).toFixed(2) }} Mb</vs-td>
@@ -40,6 +39,24 @@
         </vs-tr>
       </template>
     </vs-table>
+    <div class="flex justify-center">
+      <vs-button v-if="uploadBtn && files.length"
+                 @click="startUpload"
+                 class="mb-4 w-1/2"
+                 color="primary"
+                 size="small"
+                 type="border"
+                 icon-pack="feather"
+                 icon="icon-upload">{{ $t('buttons.upload') }}</vs-button>
+      <vs-button v-if="resetBtn && files.length"
+                 @click="files = []"
+                 class="mb-4 ml-3 "
+                 color="danger"
+                 size="small"
+                 type="border"
+                 icon-pack="feather"
+                 icon="icon-trash-2">{{ $t('buttons.cancel') }}</vs-button>
+    </div>
     <file-upload
       ref="upload"
       class="upload-action"
@@ -75,7 +92,18 @@ export default {
     fileUpload
   },
   props: {
-    uploading: Boolean
+    uploading: {
+      type: Boolean,
+      default: false
+    },
+    resetBtn: {
+      type: Boolean,
+      default: false
+    },
+    uploadBtn: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
     files: [],
@@ -108,15 +136,17 @@ export default {
   },
   watch: {
     uploading(val) {
-      if (this.files.length) {
-        this.$refs.upload.active = val
-        this.loading = true
+      if (this.files.length && val) {
+        this.startUpload()
       } else {
         this.$emit('attach', [])
       }
     }
   },
   methods: {
+    startUpload() {
+      this.$refs.upload.active = this.loading = true
+    },
     inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         // Filter
@@ -187,9 +217,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 99%;
-    height: 2.5rem;
-    margin: 1.1rem auto 0 auto;
+    padding: 0.25rem 0;
   }
 
   .upload-action:hover {

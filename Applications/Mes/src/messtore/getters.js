@@ -26,6 +26,9 @@ export default {
   filterValue(state) {
     return state.tasksPageState.filterValue
   },
+  documentSearchValue(state) {
+    return state.documentSearchValue
+  },
   downtimes(state) {
     return state.downtimes
   },

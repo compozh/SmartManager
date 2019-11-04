@@ -103,7 +103,7 @@ export default {
     },
     async getFormDefinition(bp) {
       const result = await this.$store.dispatch(
-        'sm/getFormDefinition', bp.deployId
+        'sm/getFormDefinition', bp.procDefId
       )
       this.formDefinition = result || null
     },

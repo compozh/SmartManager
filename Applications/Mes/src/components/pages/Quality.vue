@@ -16,10 +16,13 @@
         id="qualitiesList"
         @changeCurrentQuality=changeCurrentQuality
         @uploadQualityOnScroll=uploadQualityOnScroll
+        @initialize=initialize
         :isUploadInProcess=isUploadInProcess
+        :initializeQualities=initializeQualities
       />
       <mes-quality-main-layout
         id="qualitiesDescription"
+        :initializeQualities=initializeQualities
       />
       </vue-split>
     </v-layout>
@@ -32,8 +35,9 @@ export default {
   name: 'mes-quality',
   data() {
     return {
+      initializeQualities: false,
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
-      defaultSizes: [35, 65],
+      defaultSizes: [25, 75],
       isUploadInProcess: false
     }
   },
@@ -56,8 +60,8 @@ export default {
     properties() {
       return this.$store.getters['mes/properties']
     },
-    initializeQualities() {
-      return this.$store.getters['mes/initializeQualities']
+    documentSearchValue() {
+      return this.$store.getters['mes/documentSearchValue']
     },
     selectedQuality: {
       get() {
@@ -71,10 +75,11 @@ export default {
   methods: {
     async initialize() {
       if (this.qualities.length) {
+        this.initializeQualities = false
         this.$store.commit('mes/setQualities', [])
       }
-      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate , direction: 1 })
-
+      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
+      this.initializeQualities = true
       if (!this.selectedQuality) {
         this.seelectFirstQuality()
       }
@@ -93,7 +98,7 @@ export default {
     },
     async uploadQualityOnScroll(lastQualityDate) {
       this.isUploadInProcess = true
-      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: lastQualityDate , direction: 1 })
+      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: lastQualityDate, query: this.documentSearchValue, direction: 1 })
       this.isUploadInProcess = false
     }
   }

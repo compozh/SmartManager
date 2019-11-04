@@ -1,18 +1,9 @@
-/* eslint-disable no-console */
 import {register} from 'register-service-worker'
-
-const notifyUserAboutUpdate = worker => {
-  // Здесь можно добавить уведомление для пользователя
-  // о доступности обновлений контента
-  worker.postMessage({action: 'skipWaiting'})
-}
 
 if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {
-      console.log(
-        'App is being served from cache by a service worker.'
-      )
+      console.log('App is being served from cache by a service worker.')
     },
     registered() {
       console.log('Service worker has been registered.')
@@ -25,7 +16,10 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     },
     updated(registration) {
       console.log('New content is available and will be refresh.')
-      notifyUserAboutUpdate(registration.waiting)
+      if (window.confirm('A new version is available, update now?')) {
+        const worker = registration.waiting
+        worker.postMessage({action: 'skipWaiting'})
+      }
     },
     offline() {
       console.log('No internet connection found. App is running in offline mode.')
@@ -33,14 +27,6 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     error(error) {
       console.error('Error during service worker registration:', error)
     }
-  })
-  let refreshing
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) {
-      return
-    }
-    window.location.reload()
-    refreshing = true
   })
 } else {
   console.log('Your browser does not support the Service-Worker!')

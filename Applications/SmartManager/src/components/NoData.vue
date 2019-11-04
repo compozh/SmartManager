@@ -1,6 +1,6 @@
 <template>
   <div class="no-data-container">
-    <slot>No data</slot>
+    <slot>{{ $t('messages.noData') }}</slot>
   </div>
 </template>
 
