@@ -133,7 +133,11 @@ export default  class Authentication {
       return
     }
     let token = this.getCurrentUser().access_token
-    return {'Authorization': `Bearer ${token}`}
+    let userId = this.getCurrentUser().UserData.CurrentUserData.UserId
+    return {
+      'Authorization': `Bearer ${token}`,
+      'X-User-Id': userId
+    }
   }
 
   /**

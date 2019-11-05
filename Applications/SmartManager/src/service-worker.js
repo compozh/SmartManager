@@ -1,10 +1,10 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js')
 importScripts('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval-iife.min.js')
 
-workbox.core.setCacheNameDetails({prefix: 'webapp'})
+workbox.core.setCacheNameDetails({prefix: 'SmartManager'})
 
 // Init indexedDB using idb-keyval, https://github.com/jakearchibald/idb-keyval
-const store = new idbKeyval.Store('GraphQL-Cache', 'sm-queries')
+const store = new idbKeyval.Store('SmartManager', 'data')
 
 if (workbox) {
   console.log('Workbox is loaded')
@@ -15,6 +15,8 @@ if (workbox) {
 self.__precacheManifest = [].concat(self.__precacheManifest || [])
 workbox.precaching.suppressWarnings()
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
+
+workbox.skipWaiting()
 
 workbox.routing.registerRoute(/\/webapps\/SmartManager\//,
   new workbox.strategies.CacheFirst({
@@ -32,19 +34,21 @@ workbox.routing.registerRoute(
   'POST'
 )
 
-self.addEventListener('message', event => {
-  if (event.data === 'skipWaiting') {
-    self.skipWaiting()
-  }
-})
-
-self.addEventListener('fetch', async event => {
-  if (event.request.method === 'POST') {
-    event.responseWith(postHandler(event))
+self.addEventListener('fetch', event => {
+  try {
+    if (event.request.method === 'POST') {
+      event.respondWith(postHandler(event))
+    }
+  } catch (error) {
+    console.log(error.message)
   }
 })
 
 async function postHandler(event) {
+  // Запросы связанные с авторизацией не кешируем
+  if (event.request.url.includes('authentication')) {
+    return await fetch(event.request.clone())
+  }
   const cachedResponse = await getCache(event.request.clone())
   const fetchPromise = fetch(event.request.clone())
     .then(response => {
@@ -72,14 +76,15 @@ async function serializeResponse(response) {
 async function setCache(request, response) {
   try {
     const id = await getPostKey(request)
+    const reqJson = await request.clone().json()
     const entry = {
-      query: await request.json(),
+      query: reqJson.query,
       response: await serializeResponse(response),
       timestamp: Date.now()
     }
     idbKeyval.set(id, entry, store)
   } catch (error) {
-    console.log(error.message)
+    console.log(error)
   }
 }
 
@@ -106,12 +111,13 @@ async function getCache(request) {
 
 async function getPostKey(request) {
   try {
-    const req = await request.clone().json()
-    const query = req.query
-    const variables = JSON.stringify(req.variables)
-    const key = query + variables
-    return CryptoJS.MD5(key).toString()
+    const userId = request.headers.get('X-User-Id')
+    const reqJson = await request.clone().json()
+    const query = reqJson.query
+    const variables = JSON.stringify(reqJson.variables)
+    const key = CryptoJS.MD5(query + variables).toString()
+    return `${key}/${userId}`
   } catch (error) {
-    console.log(error.message)
+    console.log(error)
   }
 }
