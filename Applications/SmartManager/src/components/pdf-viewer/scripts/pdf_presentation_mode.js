@@ -414,11 +414,11 @@ class PDFPresentationMode {
 
     window.addEventListener('mousemove', this.showControlsBind)
     window.addEventListener('mousedown', this.mouseDownBind)
-    window.addEventListener('wheel', this.mouseWheelBind)
+    window.addEventListener('wheel', this.mouseWheelBind, { passive: true})
     window.addEventListener('keydown', this.resetMouseScrollStateBind)
     window.addEventListener('contextmenu', this.contextMenuBind)
-    window.addEventListener('touchstart', this.touchSwipeBind)
-    window.addEventListener('touchmove', this.touchSwipeBind)
+    window.addEventListener('touchstart', this.touchSwipeBind, {passive: true})
+    window.addEventListener('touchmove', this.touchSwipeBind, {passive: true})
     window.addEventListener('touchend', this.touchSwipeBind)
   }
 

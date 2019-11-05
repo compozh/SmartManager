@@ -1362,7 +1362,7 @@ let PDFViewerApplication = {
     }
 
     window.addEventListener('visibilitychange', webViewerVisibilityChange)
-    window.addEventListener('wheel', webViewerWheel, { passive: false, })
+    window.addEventListener('wheel', webViewerWheel, { passive: true})
     window.addEventListener('click', webViewerClick)
     window.addEventListener('keydown', webViewerKeyDown)
     window.addEventListener('resize', _boundEvents.windowResize)
