@@ -61,7 +61,7 @@ export class BpmnModelerApi {
   async createProcess(process) {
     const result = await getClient().mutate({
       mutation: gql`mutation ($process: ProcessInput!) ${mutations.createProcess}`,
-      variables: { process: { name: process.name, parentId: process.parentId, isSystem: process.isSystem, type: process.type } }
+      variables: { process: { name: process.name, parentId: process.parentId, isSystem: process.isSystem, type: process.type, xmlView: process.xmlView } }
     });
     return result.data.bpmnqueryMutation.createProcess;
   }
