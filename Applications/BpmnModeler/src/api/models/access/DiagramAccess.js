@@ -19,4 +19,10 @@ export default class DiagramAccess {
   get id() {
     return this.recordId + this.userId + this.groupId + this.allowAccess;
   }
+
+  get identity() {
+    return this.userId && this.userId.trim() !== '' ? this.userId :
+      this.groupId && this.groupId.trim() !== '' ? this.groupId :
+        '';
+  }
 }

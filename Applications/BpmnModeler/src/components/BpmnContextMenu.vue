@@ -44,7 +44,7 @@
       <template v-else-if="isDmn(item)">
         <v-list-tile @click="exportDmn(item)">
           <v-list-tile-avatar>
-            <v-icon>save_alt</v-icon>
+            <v-icon>mdi-file-code</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-tile-title>
         </v-list-tile>
