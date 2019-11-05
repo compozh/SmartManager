@@ -250,13 +250,7 @@ export default {
     editItem(item) {
       this.form.editedItem.recordId = item.model.recordId;
       this.form.editedItem.rights = item.model.rights;
-      if (item.userId && item.userId.trim() !== '') {
-        this.form.editedItem.identities.push(item.userId);
-      } else if (item.groupId && item.groupId.trim() !== '') {
-        this.form.editedItem.identities.push(item.groupId);
-      } else {
-        this.form.editedItem.identities.push('');
-      }
+      this.form.editedItem.identities.push(item.model.identity);
       this.form.mode = 'edit';
       this.form.show = true;
     },
@@ -264,13 +258,7 @@ export default {
       console.log(item);
       this.form.editedItem.recordId = item.model.recordId;
       this.form.editedItem.rights = item.model.rights;
-      if (item.userId && item.userId.trim() !== '') {
-        this.form.editedItem.identities.push(item.userId);
-      } else if (item.groupId && item.groupId.trim() !== '') {
-        this.form.editedItem.identities.push(item.groupId);
-      } else {
-        this.form.editedItem.identities.push('');
-      }
+      this.form.editedItem.identities.push(item.model.identity);
       this.form.mode = 'delete';
       this.form.show = true;
     },
