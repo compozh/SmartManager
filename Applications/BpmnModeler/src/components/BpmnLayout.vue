@@ -65,15 +65,6 @@
       </v-container>
     </v-content>
 
-    <v-dialog :persistent="formLoading" v-model="showForm" max-width="500">
-      <bpmn-form ref="form" :model="formModel" :loading="formLoading" :mode="formMode" :type="formType" @save="formSave" @close="formClose"></bpmn-form>
-    </v-dialog>
-
-    <v-dialog v-model="showSelectionGrid" max-width="800">
-      <selection-grid :items="selectionGridItems" :title="selectionGridTitle" :selectedItems="selectionGridSelectedItems"
-                      @select="onSelectionGridSelect" @cancel="showSelectionGrid = false"></selection-grid>
-    </v-dialog>
-
     <v-dialog v-model="dataLoading"
               full-width
               persistent>
@@ -103,42 +94,26 @@
     </v-snackbar>
 
     <formio-builder-container />
-
-    <v-dialog v-if="showFormioDialog" v-model="showFormioDialog" max-width="800px" :persistent="formioLoading">
-      <v-card>
-        <v-card-title>
-          <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
-        </v-card-title>
-        <v-card-text>
-          <formio-component ref="formioForm" :formCode="formioCode" :formDefinition="formioDefinition"></formio-component>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn flat @click="showFormioDialog = false" :disabled="formioLoading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-          <v-btn flat @click="onFormioSubmit" color="primary" :loading="formioLoading">{{ $t('bpmn.buttons.Save') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    
+    <formio-container />
+    <bpmn-form></bpmn-form>
+    <selection-grid></selection-grid>
+    <access-dialog></access-dialog>
   </v-app>
 </template>
 
 <script>
-import treeSearch from '../api/treeSearch';
-import formMixin from './mixins/formMixin';
-import { importMixin } from './mixins/importExportMixin' 
-import Folder from '../api/models/Folder';
-import Process from '../api/models/Process';
-import ProcessType from '../api/models/ProcessType';
-import SelectionGrid from './SelectionGrid';
-import FormioComponent from '../formio/FormioComponent';
+import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from './mixins';
+import { Folder, Process, ProcessType } from '../api/models';
+import * as Dialogs from './dialogs';
+import FormioContainer from './formio/Formio';
+import { Notification } from 'element-ui';
 import { eventBus } from '../main';
-import ActionDefinitionType from '../api/models/ActionDefinitionType';
 import { events } from '../constants';
 
 export default {
   name: 'bpmn-layout',
-  components: { SelectionGrid, FormioComponent },
-  mixins: [ formMixin, importMixin ],
+  components: { SelectionGrid: Dialogs.SelectionGrid, AccessDialog: Dialogs.AccessDialog, FormioContainer },
+  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   data () {
     return {
       showAppBar: true,
@@ -146,31 +121,19 @@ export default {
       displayMessage: false,
       message: '',
       messageTimeout: 10000,
-      messageType: 'error',
-      showSelectionGrid: false,
-      selectionGridItems: [],
-      selectionGridSelectedItems: [],
-      selectionGridTitle: '',
-      propertiesPanelCallback: null,
-      showFormioDialog: false,
-      formioCode: '',
-      formioDefinition: {},
-      formioLoading: false
+      messageType: 'error'
     };
   },
   mounted() {
     this.onRouteChanged(false);
-    eventBus.$on('add-process', () => this.createItem(this.$store.state.bpmn.activeItem, 'process'));
-    eventBus.$on(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
-    eventBus.$on(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
-    eventBus.$on(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
+    eventBus.$on(events.modeler.createDiagram, this.onCreateDiagram);
   },
   methods: {
     async loadItems() {
       this.loading = true;
       await this.$store.dispatch('bpmn/loadConfiguration');
       if (!await this.$store.dispatch('bpmn/loadItems')) {
-        this.showMessage(this.$t('bpmn.errors.ProcessesNotLoaded'), 'error');
+        Notification.error(this.$t('bpmn.errors.ProcessesNotLoaded'));
       }
       this.loading = false;
     },
@@ -191,21 +154,21 @@ export default {
     async dropItem(draggingItem, dropItem, type) {
       this.loading = true;
       if (!(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem, type }))) {
-        this.showMessage(this.$t('bpmn.errors.CantDrop'), 'error');
+        Notification.error(this.$t('bpmn.errors.CantDrop'));
       }
       this.activeItem = draggingItem.id;
       this.loading = false;
     },
     exportItem(item, type) {
-      eventBus.$emit('modeler.export', type);
+      eventBus.$emit(events.modeler.export, type);
     },
     async deployItem(item) {
       this.loading = true;
       var result = await this.$store.dispatch('bpmn/deployProcess', item.id);
       if (result.success) {
-        this.showMessage(result.message || this.$t('bpmn.errors.ProcessDeployed'), 'success');
+        Notification.success(result.message || this.$t('bpmn.errors.ProcessDeployed'));
       } else {
-        this.showMessage(result.message || this.$t('bpmn.errors.ProcessNotDeployed'), 'error');
+        Notification.error(result.message || this.$t('bpmn.errors.ProcessNotDeployed'));
       }
       this.loading = false;
     },
@@ -230,125 +193,12 @@ export default {
           break;
         }
       }
-
       if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
         this.$router.push({ name: routeName, params });
       }
     },
-    showMessage(message, type) {
-      this.message = message;
-      this.messageType = type;
-      this.displayMessage = true;
-    },
-    async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
-      this.loading = true;
-      var items = await this.$store.dispatch('bpmn/getAvailableActions', { processId: this.activeItem, definitionType });
-      if (!items) {
-        this.loading = false;
-        this.message = this.$t('bpmn.errors.ActionsNotLoaded');
-        this.messageType = 'error';
-        this.displayMessage = true;
-        return;
-      }
-      this.loading = false;
-      this.propertiesPanelCallback = callback;
-      this.selectionGridTitle = definitionType == ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction');
-      this.selectionGridItems = items;
-      this.selectionGridSelectedItems = items.filter(item => item.id === taskCode);
-      this.showSelectionGrid = true;
-    },
-    async onPropertiesPanelSelectFormKey(formKey, callback) {
-      this.loading = true;
-      var items = await this.$store.dispatch('bpmn/getFormsForProcess', { processId: this.activeItem });
-      if (!items) {
-        this.loading = false;
-        this.message = this.$t('bpmn.errors.FormsNotLoaded');
-        this.messageType = 'error';
-        this.displayMessage = true;
-        return;
-      }
-      this.loading = false;
-      this.propertiesPanelCallback = callback;
-      this.selectionGridTitle = this.$t('bpmn.labels.SelectForm');
-      this.selectionGridItems = items;
-      this.selectionGridSelectedItems = items.filter(item => item.id === formKey);
-      this.showSelectionGrid = true;
-    },
-    onSelectionGridSelect(item) {
-      this.showSelectionGrid = false;
-      if (!item) {
-        return;
-      }
-      this.propertiesPanelCallback(item.id);
-      this.propertiesPanelCallback = null;
-      this.selectionGridItems = [];
-      this.selectionGridSelectedItems = [];
-      this.selectionGridTitle = '';
-    },
-    async onPropertiesPanelSetExternalTaskProperties(taskCode, existingParameters, callback) {
-      this.loading = true;
-      var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
-      if (!action) {
-        this.loading = false;
-        this.message = this.$t('bpmn.errors.ActionNotLoaded');
-        this.messageType = 'error';
-        this.displayMessage = true;
-        return;
-      }
-      if (!action.unformio || action.unformio.trim() === '') {
-        this.loading = false;
-        this.message = this.$t('bpmn.errors.ActionWithoutForm');
-        this.messageType = 'error';
-        this.displayMessage = true;
-        return;
-      }
-      var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
-      if (!form) {
-        this.loading = false;
-        this.message = this.$t('bpmn.errors.FormNotLoaded');
-        this.messageType = 'error';
-        this.displayMessage = true;
-        return;
-      }
-
-      let submission = {};
-      if (existingParameters && existingParameters.length) {
-        for (let index = 0; index < existingParameters.length; index++) {
-          const element = existingParameters[index];
-          submission[element.name] = element.value;
-        }
-      }
-
-      form.submission = JSON.stringify(submission);
-      this.formioCode = action.unformio;
-      this.formioDefinition = form;
-      this.showFormioDialog = true;
-      this.propertiesPanelCallback = callback;
-
-      this.loading = false;
-    },
-    async onFormioSubmit() {
-      var form = this.$refs.formioForm;
-      var submission = JSON.parse(form.getFormSubmission());     
-      this.formioLoading = true;
-
-      var result = await this.$store.dispatch('formio/submitForm', { formCode: this.formioCode, submission: JSON.stringify(submission) });
-
-      if (!result || !result.success) {
-        this.formioLoading = false;
-        return;
-      }
-
-      var params = [];
-      for (var param in submission.data) {
-        params.push({ name: param, type: typeof(submission.data[param]), value: submission.data[param] });
-      }
-      this.propertiesPanelCallback(params);
-      this.propertiesPanelCallback = null;
-      this.formioLoading = false;
-      this.showFormioDialog = false;
-      this.formioCode = '';
-      this.formioDefinition = {};
+    onCreateDiagram() {
+      this.createItem(this.$store.state.bpmn.activeItem, 'process');
     }
   },
   computed: {
@@ -397,15 +247,14 @@ export default {
       }
     },
     snackbarVisible() {
-      this.message = this.snackbar.message;
-      this.messageType = this.snackbar.type;
-      this.displayMessage = this.snackbar.visible;
+      Notification({
+        message: this.snackbar.message,
+        type: this.snackbar.type
+      });
     }
   },
   beforeDestroy() {
-    eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
-    eventBus.$off(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
-    eventBus.$off(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
+    eventBus.$off(events.modeler.createDiagram, this.onCreateDiagram);
   }
 };
 </script>
@@ -425,21 +274,30 @@ export default {
     margin: 0;
     padding: 0 20px;
   }
+
   .tree-btn > .v-btn__content {
     justify-content: flex-start;
   }
+
+  .user-icon,
   .user-image {
     height: 40px !important;
     width: 40px !important;
+    font-size: 40px !important;
   }
-  .component-settings /deep/ {
+
+  .el-notification {
+    font-family: "Roboto";
+    border-radius: 0px;
+  }
+
+  .component-settings {
     @import './../formio/assets/theme.scss';
     @import "~formiojs/dist/formio.full.min.css";
     @import "~bootstrap/scss/bootstrap";
     @import './../formio/assets/overide.scss';
     @import "~choices.js/public/assets/styles/choices.css";
     @import "~flatpickr/dist/flatpickr.min.css";
-
     position: absolute;
     z-index: 102;
     background-color: #fff;

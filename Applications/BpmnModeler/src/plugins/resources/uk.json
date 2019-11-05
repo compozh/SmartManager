@@ -16,7 +16,10 @@
 		"ExportDmn": "Експортувати в форматі dmn",
 		"Deploy": "Опублікувати",
 		"Copy": "Додати за зразком",
-		"Select": "Вибрати"
+		"Select": "Вибрати",
+		"Share": "Загальний доступ",
+		"Edit": "Редагувати",
+		"Add": "Додати"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -52,7 +55,31 @@
 		"Designer": "Конструктор",
 		"Preview": "Перегляд",
 		"FormContructor": "Конструктор форми",
-		"DisplayType": "Тип відображення"
+		"Add": "Додати",
+		"Save": "Зберегти",
+		"Edit": "Редагувати",
+		"Delete": "Видалити",
+		"Cancel": "Відмінити",
+		"Access": "Доступ",
+		"Allow": "Дозволити",
+		"Allowed": "Дозволений",
+		"Decline": "Заборонити",
+		"Declined": "Заборонений",
+		"AccessRights": "Права доступу",
+		"Group": "Група",
+		"User": "Користувач",
+		"Sharing": "Загальний доступ",
+		"Rights": "Права",
+		"Actions": "Дії",
+		"SelectOne": "Виберіть хоча б один елемент",
+		"AddRights": "Додати права доступу",
+		"EditRights": "Змінити права доступу",
+		"RemoveRights": "Видалити права доступу",
+		"NoData": "Немає даних",
+		"DisplayType": "Тип відображення",
+		"NoReadAccess": "У вас відсутні права на перегляд цієї діаграми",
+		"WhoHasAccess": "У кого є доступ",
+		"All": "Всі"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -69,8 +96,26 @@
 		"ActionWithoutForm": "До цієї дії не прив'язана форма",
 		"RuleWithoutForm": "До цього правила не прив'язана форма",
 		"InitializeSignalR": "Не вдалося ініціалізувати SignalR",
+		"AccessRecordsNotLoaded": "Не удалось завантажити налаштування доступу",
+		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
-		"RequiredInputField": "Обов'язкове поле"
+		"RequiredInputField": "Обов'язкове поле",
+		"AccessError": "не вдалося надати доступ для {identity}"
+	},
+	"enums": {
+		"AccessType": {
+			"USER": "Користувач",
+			"GROUP": "Група",
+			"ALL": "Всі"
+		},
+		"DiagramAccessRights": {
+			"READ": "Перегляд",
+			"WRITE": "Редагування",
+			"DELETE": "Видалення",
+			"SHARE": "Видача прав доступу",
+			"DEPLOY": "Публікація",
+			"EXECUTE": "Запуск"
+		}
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",

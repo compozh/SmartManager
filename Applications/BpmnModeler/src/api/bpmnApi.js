@@ -3,22 +3,8 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
 import gql from 'graphql-tag';
 // Queries
-import getConfiguration from './graphql/getConfiguration.graphql'
-import items from './graphql/items.graphql';
-import getXml from './graphql/getXml.graphql';
-import setXml from './graphql/setXml.graphql';
-import createProcess from './graphql/createProcess.graphql';
-import editProcess from './graphql/editProcess.graphql';
-import dropProcess from './graphql/dropProcess.graphql';
-import removeProcess from './graphql/deleteProcess.graphql';
-import deployProcess from './graphql/deployProcess.graphql'
-import createFolder from './graphql/createFolder.graphql';
-import editFolder from './graphql/editFolder.graphql';
-import dropFolder from './graphql/dropFolder.graphql';
-import removeFolder from './graphql/deleteFolder.graphql';
-import getAvailableActions from './graphql/getAvailableActions.graphql';
-import getActionById from './graphql/getActionById.graphql';
-import getFormsForProcess from './graphql/getFormsForProcess.graphql';
+import * as queries from './graphql/queries';
+import * as mutations from './graphql/mutations';
 
 import Vue from 'vue';
 
@@ -44,21 +30,21 @@ export class BpmnModelerApi {
   
   async getConfiguration() {
     const result = await getClient().query({
-      query: gql`query ${getConfiguration}`
+      query: gql`query ${queries.getConfiguration}`
     });
     return result.data.bpmnquery.getConfiguration;
   }
 
   async getItems() {
     const result = await getClient().query({
-      query: gql`query ${items}`
+      query: gql`query ${queries.items}`
     });
     return JSON.parse(result.data.bpmnquery.items);
   }
 
   async getXml(id) {
     const result = await getClient().query({
-      query: gql`query ($id: ID!) ${getXml}`,
+      query: gql`query ($id: ID!) ${queries.getXml}`,
       variables: { id }
     });
     return result.data.bpmnquery.getXml;
@@ -66,7 +52,7 @@ export class BpmnModelerApi {
 
   async setXml(id, xml) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!, $xml: String!) ${setXml}`,
+      mutation: gql`mutation ($id: ID!, $xml: String!) ${mutations.setXml}`,
       variables: { id, xml }
     });
     return result.data.bpmnqueryMutation.setXml;
@@ -74,15 +60,15 @@ export class BpmnModelerApi {
 
   async createProcess(process) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($process: ProcessInput!) ${createProcess}`,
-      variables: { process }
+      mutation: gql`mutation ($process: ProcessInput!) ${mutations.createProcess}`,
+      variables: { process: { name: process.name, parentId: process.parentId, isSystem: process.isSystem, type: process.type } }
     });
     return result.data.bpmnqueryMutation.createProcess;
   }
 
   async editProcess(process) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($process: ProcessInput!) ${editProcess}`,
+      mutation: gql`mutation ($process: ProcessInput!) ${mutations.editProcess}`,
       variables: { process: { id: process.id, name: process.name, parentId: process.parentId } }
     });
     return result.data.bpmnqueryMutation.editProcess;
@@ -90,7 +76,7 @@ export class BpmnModelerApi {
 
   async dropProcess(processId, parentId) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($processId: String!, $parentId: String) ${dropProcess}`,
+      mutation: gql`mutation ($processId: String!, $parentId: String) ${mutations.dropProcess}`,
       variables: { processId, parentId }
     });
     return result.data.bpmnqueryMutation.dropProcess;
@@ -98,7 +84,7 @@ export class BpmnModelerApi {
 
   async deleteProcess(id) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!) ${removeProcess}`,
+      mutation: gql`mutation ($id: ID!) ${mutations.removeProcess}`,
       variables: { id }
     });
     return result.data.bpmnqueryMutation.deleteProcess;
@@ -106,7 +92,7 @@ export class BpmnModelerApi {
 
   async deployProcess(id) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!) ${deployProcess}`,
+      mutation: gql`mutation ($id: ID!) ${mutations.deployProcess}`,
       variables: { id }
     });
     return result.data.bpmnqueryMutation.deployProcess;
@@ -114,7 +100,7 @@ export class BpmnModelerApi {
 
   async createFolder(folder) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($folder: FolderInput!) ${createFolder}`,
+      mutation: gql`mutation ($folder: FolderInput!) ${mutations.createFolder}`,
       variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId, isSystem: folder.isSystem } }
     });
     return result.data.bpmnqueryMutation.createFolder;
@@ -122,7 +108,7 @@ export class BpmnModelerApi {
 
   async editFolder(folder) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($folder: FolderInput!) ${editFolder}`,
+      mutation: gql`mutation ($folder: FolderInput!) ${mutations.editFolder}`,
       variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId } }
     });
     return result.data.bpmnqueryMutation.editFolder;
@@ -130,7 +116,7 @@ export class BpmnModelerApi {
 
   async dropFolder(folderId, parentId) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($folderId: String!, $parentId: String) ${dropFolder}`,
+      mutation: gql`mutation ($folderId: String!, $parentId: String) ${mutations.dropFolder}`,
       variables: { folderId, parentId }
     });
     return result.data.bpmnqueryMutation.dropFolder;
@@ -138,7 +124,7 @@ export class BpmnModelerApi {
 
   async deleteFolder(id) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!) ${removeFolder}`,
+      mutation: gql`mutation ($id: ID!) ${mutations.removeFolder}`,
       variables: { id }
     });
     return result.data.bpmnqueryMutation.deleteFolder;
@@ -146,7 +132,7 @@ export class BpmnModelerApi {
 
   async getAvailableActions(processId, definitionType) {
     const result = await getClient().query({
-      query: gql`query ($processId: ID!, $definitionType: ActionDefinitionType!) ${getAvailableActions}`,
+      query: gql`query ($processId: ID!, $definitionType: ActionDefinitionType!) ${queries.getAvailableActions}`,
       variables: { processId, definitionType }
     });
     return result.data.bpmnquery.getAvailableActions;
@@ -154,7 +140,7 @@ export class BpmnModelerApi {
 
   async getActionById(actionId) {
     const result = await getClient().query({
-      query: gql`query ($actionId: ID!) ${getActionById}`,
+      query: gql`query ($actionId: ID!) ${queries.getActionById}`,
       variables: { actionId }
     });
     return result.data.bpmnquery.getActionById;
@@ -162,9 +148,88 @@ export class BpmnModelerApi {
 
   async getFormsForProcess(processId) {
     const result = await getClient().query({
-      query: gql`query ($processId: ID!) ${getFormsForProcess}`,
+      query: gql`query ($processId: ID!) ${queries.getFormsForProcess}`,
       variables: { processId }
     });
     return result.data.bpmnquery.getFormsForProcess;
   }
+
+  //#region Access
+
+  async getAccessRecordsForProcess(processId) {
+    const result = await getClient().query({
+      query: gql`query ($processId: String!) ${queries.getAccessRecordsForProcess}`,
+      variables: { processId }
+    });
+    return result.data.bpmnquery.getAccessRecordsForProcess;
+  }
+
+  async giveAccessToProcess(accessParams) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.giveAccessToProcess}`,
+      variables: {
+        accessParams: {
+          recordId: accessParams.recordId,
+          userId: accessParams.userId,
+          groupId: accessParams.groupId,
+          allowAccess: accessParams.allowAccess,
+          rights: accessParams.rights
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.giveAccessToProcess;
+  }
+
+  async editAccessToProcess(accessParams) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.editAccessToProcess}`,
+      variables: {
+        accessParams: {
+          recordId: accessParams.recordId,
+          userId: accessParams.userId,
+          groupId: accessParams.groupId,
+          allowAccess: accessParams.allowAccess,
+          rights: accessParams.rights
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.editAccessToProcess;
+  }
+
+  async removeAccessToProcess(accessParams) {
+    const result = await getClient().mutate({
+      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.removeAccessToProcess}`,
+      variables: {
+        accessParams: {
+          recordId: accessParams.recordId,
+          userId: accessParams.userId,
+          groupId: accessParams.groupId,
+          allowAccess: accessParams.allowAccess,
+          rights: accessParams.rights
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.removeAccessToProcess;
+  }
+
+  //#endregion
+
+  //#region Other
+
+  async queryUsers() {
+    const result = await getClient().query({
+      query: gql`query ${queries.queryUsers}`
+    })
+    return result.data.bpmnquery.queryUsers;
+  }
+
+  async queryGroups() {
+    const result = await getClient().query({
+      query: gql`query ${queries.queryGroups}`
+    })
+    return result.data.bpmnquery.queryGroups;
+  }
+
+  //#endregion
+
 }

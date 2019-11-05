@@ -1,23 +1,32 @@
 <template>
-  <AgGridView :education="dataCriterialEvaluation" v-if="dataCriterialEvaluation"></AgGridView>
+  <AgGridView :education="dataCriterialEvaluation" v-show="dataCriterialEvaluation"></AgGridView>
 </template>
 
 <script>
-const AgGridView = () => import('../components/AgGridTableComponent.vue')
+import AgGridView from '../components/AgGridTableComponent.vue'
 export default {
 
   components: {
     AgGridView
   },
   created() {
-    if (this.$store.getters['education/getCriterialEvaluation']) {
-      return
+    let object = {
+      load: 'loadCriterialEvaluation',
+      clear: 'setCriterialEvaluation'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadCriterialEvaluation')
   },
   computed: {
     dataCriterialEvaluation() {
-      return this.$store.getters['education/getCriterialEvaluation']
+
+      let test = this.$store.getters['education/getCriterialEvaluation']
+      if (test) {
+        test.headers[0].width = 50
+      }
+
+
+      return test
     }
   }
 }

@@ -9,7 +9,10 @@
       >
       </v-progress-circular>
     </v-layout>
-    <div class="modeler-grid" v-show="process && !loading"  ref="layout">
+    <v-layout v-if="!loading && noAccess" column justify-center align-center>
+      <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
+    </v-layout>
+    <div class="modeler-grid" v-show="process && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar">
         <v-btn flat :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
           <v-icon>undo</v-icon>
@@ -36,14 +39,14 @@
           <v-icon v-else>fullscreen</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-btn flat @click="panel = !panel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
+        <v-btn flat @click="panel = !panel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
         </v-btn>
       </v-toolbar>
       <div class="bpmn-diagram-container">
         <slot name="modeler"></slot>
       </div>
-      <v-navigation-drawer v-model="panel" class="properties-panel-container"
+      <v-navigation-drawer v-model="showPanel" class="properties-panel-container"
         clipped
         right
         disable-resize-watcher
@@ -59,8 +62,8 @@
 </template>
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
+import Process from '../../api/models/Process';
 
-import Process from '../api/models/Process';
 export default {
   name: 'modeler-layout',
   props: {
@@ -70,7 +73,14 @@ export default {
     canUndo: Boolean,
     canRedo: Boolean,
     canMinimap: { },
-    canZoom: { }
+    canZoom: { },
+    canShowPanel: {
+      type: Boolean,
+      default() {
+        return true;
+      }
+    },
+    noAccess: Boolean
   },
   data() { 
     return {
@@ -119,6 +129,21 @@ export default {
           }
         }
         this.isFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+      }
+    },
+    showPanel: {
+      get() {
+        return this.canShowPanel && this.panel
+      },
+      set(value) {
+        this.panel = value;
+      }
+    }
+  },
+  watch: {
+    canShowPanel(newValue, oldValue) {
+      if (newValue && !oldValue) {
+        this.panel = !this.$vuetify.breakpoint.xs;
       }
     }
   },

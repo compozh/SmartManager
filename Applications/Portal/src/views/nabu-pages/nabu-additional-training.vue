@@ -14,9 +14,11 @@ export default {
     },
   },
   created() {
-    if (this.$store.getters['education/getEducationAdditionalTraining']) {
-      return
+    let object = {
+      load: 'loadEducationAdditionalTraining',
+      clear: 'setEducationAdditionalTraining'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadEducationAdditionalTraining')
   }
 }

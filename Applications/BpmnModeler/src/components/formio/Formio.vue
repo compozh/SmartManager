@@ -1,0 +1,69 @@
+<template>
+  <v-dialog v-if="show" v-model="show" max-width="800px" :persistent="loading">
+    <v-card>
+      <v-card-title>
+        <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
+      </v-card-title>
+      <v-card-text>
+        <formio-component ref="formioForm" :formCode="code" :formDefinition="definition"></formio-component>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn flat @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+        <v-btn flat @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>
+<script>
+import { eventBus } from '../../main';
+import { events } from '../../constants';
+
+export default {
+  name: 'formio-container',
+  data() {
+    return {
+      loading: false,
+      show: false,
+      code: '',
+      definition: null,
+      callback: null
+    }
+  },
+  mounted() {
+    eventBus.$on(events.formio.showForm, this.onShowForm);
+  },
+  beforeDestroy() {
+    eventBus.$off(events.formio.showForm, this.onShowForm);
+  },
+  methods: {
+    onShowForm(code, definition, callback) {
+      this.code = code;
+      this.definition = definition;
+      this.show = true;
+      this.callback = callback;
+    },
+    async onSubmit() {
+      var form = this.$refs.formioForm;
+      var submission = JSON.parse(form.getFormSubmission());     
+      this.loading = true;
+
+      var result = await this.$store.dispatch('formio/submitForm', { formCode: this.code, submission: JSON.stringify(submission) });
+
+      if (result && result.success) {
+        this.$emit('submit', submission);
+      }
+
+      this.loading = false;
+      
+      if (this.callback) {
+        this.callback(submission);
+        this.callback = null;
+      }
+      this.show = false;
+    }
+  }
+}
+</script>
+<style>
+
+</style>

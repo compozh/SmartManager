@@ -31,10 +31,10 @@ export default {
   },
   created() {
     var me = this;
-    eventBus.$on(events.propertiesPanel.createForm, (callback) => {
+    eventBus.$on(events.formio.createForm, (callback) => {
         me.createForm(callback)
     })
-    eventBus.$on(events.propertiesPanel.editForm, (formCode) => {
+    eventBus.$on(events.formio.editForm, (formCode) => {
         me.editForm(formCode)
     })
   },

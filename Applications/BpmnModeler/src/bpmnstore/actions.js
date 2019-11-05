@@ -1,9 +1,6 @@
 /* eslint-disable require-atomic-updates */
-import { BpmnModelerApi } from '../api/bpmnApi';
-import Folder from '../api/models/Folder';
-import Process from '../api/models/Process';
-import Configuration from '../api/models/Configuration';
-import ActionDefinition from '../api/models/ActionDefinition';
+import { BpmnModelerApi } from '../api';
+import { Folder, Process, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
 
 const api = new BpmnModelerApi();
 
@@ -47,6 +44,9 @@ export default {
     context.commit('setItems', items);
     return true;
   },
+
+  //#region Diagrams
+  
   async getXml(context, id) {
     let xml;
     try {
@@ -103,6 +103,68 @@ export default {
     }
     return success;
   },
+  async deployProcess(context, id) {
+    let result;
+    try {
+      result = await api.deployProcess(id);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!result.success) {
+      console.error(result);
+    }
+    return result;
+  },
+  async copyProcess(context, process) {
+    try {
+      process.xmlView = await context.dispatch('getXml', process.id);
+      return await context.dispatch('createProcess', process);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+  async getAvailableActions(context, { processId, definitionType }) {
+    let items;
+    try {
+      items = await api.getAvailableActions(processId, definitionType);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items.map(action => new ActionDefinition(action));
+  },
+  async getFormsForProcess(context, { processId }) {
+    let items;
+    try {
+      items = await api.getFormsForProcess(processId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!items) {
+      return false;
+    }
+    return items;
+  },
+  async getActionById(context, actionId) {
+    let item;
+    try {
+      item = await api.getActionById(actionId);
+    } catch (error) {
+      console.error(error);
+    }
+    if (!item) {
+      return false;
+    }
+    return new ActionDefinition(item);
+  },
+
+  //#endregion
+
+  //#region Folders
+
   async createFolder(context, folder) {
     let newFolder;
     if (folder.parentId && folder.parentId.length > 0) {
@@ -140,6 +202,19 @@ export default {
     }
     return success;
   },
+  async copyFolder(context, folder) {
+    try {
+      return await context.dispatch('createFolder', folder);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  //#endregion
+
+  //#region Common
+
   async deleteItem(context, { id }) {
     const { item, index } = context.getters.getItemById(id);
     if (index < 0) {
@@ -181,70 +256,73 @@ export default {
     await context.dispatch('loadItems');
     return success;
   },
-  async deployProcess(context, id) {
-    let result;
+
+  //#endregion
+
+  //#region Access
+
+  async getAccessRecordsForProcess(context, diagramId) {
+    let records;
     try {
-      result = await api.deployProcess(id);
+      records = await api.getAccessRecordsForProcess(diagramId);
     } catch (error) {
       console.error(error);
+      return false;
     }
-    if (!result.success) {
-      console.error(result);
-    }
-    return result;
+    return records.map(record => new DiagramAccess(record));
   },
-  async copyProcess(context, process) {
+
+  async giveAccessToProcess(context, accessParams) {
     try {
-      process.xmlView = await context.dispatch('getXml', process.id);
-      return await context.dispatch('createProcess', process);
+      var result = await api.giveAccessToProcess(accessParams);
+      return result;
     } catch (error) {
       console.error(error);
       return false;
     }
   },
-  async copyFolder(context, folder) {
+
+  async editAccessToProcess(context, accessParams) {
     try {
-      return await context.dispatch('createFolder', folder);
+      return await api.editAccessToProcess(accessParams);
     } catch (error) {
       console.error(error);
       return false;
     }
   },
-  async getAvailableActions(context, { processId, definitionType }) {
-    let items;
+
+  async removeAccessToProcess(context, accessParams) {
     try {
-      items = await api.getAvailableActions(processId, definitionType);
+      return await api.removeAccessToProcess(accessParams);
     } catch (error) {
       console.error(error);
-    }
-    if (!items) {
       return false;
     }
-    return items.map(action => new ActionDefinition(action));
   },
-  async getActionById(context, actionId) {
-    let item;
+
+  //#endregion
+
+  //#region Other
+
+  async queryUsers(context) {
     try {
-      item = await api.getActionById(actionId);
+      return await api.queryUsers();
     } catch (error) {
       console.error(error);
-    }
-    if (!item) {
       return false;
     }
-    return new ActionDefinition(item);
   },
-  async getFormsForProcess(context, { processId }) {
-    let items;
+
+  async queryGroups(context) {
     try {
-      items = await api.getFormsForProcess(processId);
+      return await api.queryGroups();
     } catch (error) {
       console.error(error);
-    }
-    if (!items) {
       return false;
     }
-    return items;
   }
+
+  //#endregion
+
 };
 

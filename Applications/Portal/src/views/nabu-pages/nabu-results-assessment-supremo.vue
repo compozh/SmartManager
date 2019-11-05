@@ -1,5 +1,5 @@
 <template>
-  <AgGridView :education="dataResultsAssessmentSupremo" v-if="dataResultsAssessmentSupremo"></AgGridView>
+  <AgGridView :education="dataResultsAssessmentSupremo" v-show="dataResultsAssessmentSupremo"></AgGridView>
 </template>
 
 <script>
@@ -9,9 +9,11 @@ export default {
     AgGridView
   },
   created() {
-    if (this.$store.getters['education/getResultsAssessmentSupremo']) {
-      return
+    let object = {
+      load: 'loadResultsAssessmentSupremo',
+      clear: 'setResultsAssessmentSupremo'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadResultsAssessmentSupremo')
   },
   computed: {
