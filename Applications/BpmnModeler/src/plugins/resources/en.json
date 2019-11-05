@@ -16,7 +16,10 @@
 		"ExportDmn": "Export dmn",
 		"Deploy": "Deploy",
 		"Copy": "Add by sample",
-		"Select": "Select"
+		"Select": "Select",
+		"Share": "Share",
+		"Edit": "Edit",
+		"Add": "Add"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -52,7 +55,26 @@
 		"Designer": "Designer",
 		"Preview": "Preview",
 		"FormContructor": "Form constructor",
-		"DisplayType": "Display type"
+		"Access": "Access",
+		"Allow": "Allow",
+		"Allowed": "Allowed",
+		"Decline": "Decline",
+		"Declined": "Declined",
+		"AccessRights": "Access rights",
+		"Group": "Group",
+		"User": "User",
+		"Sharing": "Sharing",
+		"Rights": "Rights",
+		"Actions": "Actions",
+		"SelectOne": "Select al least one element",
+		"AddRights": "Add access rights",
+		"EditRights": "Edit access rights",
+		"RemoveRights": "Remove access rights",
+		"NoData": "No data",
+		"DisplayType": "Display type",
+		"NoReadAccess": "You don`t have rights to view this diagram",
+		"WhoHasAccess": "Who has access",
+		"All": "All"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -69,8 +91,26 @@
 		"ActionWithoutForm": "Form is not attached to this action",
 		"RuleWithoutForm": "Form is not attached to this rule",
 		"InitializeSignalR": "Failed initialize SignalR",
+		"AccessRecordsNotLoaded": "Failed to load access settings",
+		"RequestError": "Failed to execute request",
 		"InputCodeForm": "Input code form",
-		"RequiredInputField": "Field is required"
+		"RequiredInputField": "Field is required",
+		"AccessError": "Failed to give access for {identity}"
+	},
+	"enums": {
+		"AccessType": {
+			"USER": "User",
+			"GROUP": "Group",
+			"ALL": "All"
+		},
+		"DiagramAccessRights": {
+			"READ": "View",
+			"WRITE": "Edit",
+			"DELETE": "Delete",
+			"SHARE": "Edit access rights",
+			"DEPLOY": "Deploy",
+			"EXECUTE": "Execute"
+		}
 	},
 	"modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",

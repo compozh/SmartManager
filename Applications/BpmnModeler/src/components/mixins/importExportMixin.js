@@ -1,4 +1,5 @@
 import { eventBus } from '../../main';
+import { events } from '../../constants';
 
 export const importMixin = {
   methods: {
@@ -27,10 +28,10 @@ export const importMixin = {
 };
 export const exportMixin = {
   mounted() {
-    eventBus.$on('modeler.export', this.export);
+    eventBus.$on(events.modeler.export, this.export);
   },
   beforeDestroy() {
-    eventBus.$off('modeler.export', this.export);
+    eventBus.$off(events.modeler.export, this.export);
   },
   methods: {
     export(type) {

@@ -188,8 +188,12 @@ export default {
         @import './assets/overide.scss';
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
-
         font-family: Roboto;
+        
+        .btn-primary {
+            background-color: #1976d2;
+            border-color: #1976d2;
+        }
     }
         .formio-builder-component-class {
         overflow-y: auto !important;

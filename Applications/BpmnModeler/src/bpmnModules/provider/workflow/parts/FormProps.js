@@ -109,7 +109,7 @@ export default function(group, element, bpmnFactory, translate, commandStack) {
     showLink: (element, node) => true,
     handleClick: (element, node, event) => {
       var bo = getBusinessObject(element);
-      eventBus.$emit(events.propertiesPanel.createForm, (formKey) => {
+      eventBus.$emit(events.formio.createForm, (formKey) => {
         var cmd = cmdHelper.updateBusinessObject(element, bo, {
           'camunda:formKey': formKey
         });
@@ -166,7 +166,7 @@ export default function(group, element, bpmnFactory, translate, commandStack) {
     handleClick: (element, node, event) => {
       var bo = getBusinessObject(element);
       var formKey = bo.get('camunda:formKey');
-      eventBus.$emit(events.propertiesPanel.editForm, formKey);
+      eventBus.$emit(events.formio.editForm, formKey);
     }
   }));
 

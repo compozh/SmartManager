@@ -1,4 +1,4 @@
-export class CancellationToken {
+export default class CancellationToken {
   constructor(debounced) {
     this.cancelled = false;
     this.debounced = debounced;

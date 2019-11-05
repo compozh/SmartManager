@@ -1,5 +1,5 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
-import BpmnViewer from 'bpmn-js/lib/Viewer';
+import BpmnViewer from 'bpmn-js/lib/NavigatedViewer';
 import bpmnPropertiesPanelModule from 'bpmn-js-properties-panel';
 import bpmnPropertiesProviderModule from '../bpmnModules/provider/workflow/';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
@@ -58,6 +58,24 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
   });
 }
 
+function createBpmnViewer(editorContainer, translate) {
+  return new BpmnViewer({
+    container: editorContainer,
+    keyboard: {
+      bindTo: document
+    },
+    additionalModules: [
+      camundaExtensionModule,
+      minimapModule,
+      createTranslationModule(translate)
+    ],
+    moddleExtensions: {
+      camunda: camundaBpmnModdle,
+      workflow: workflowBpmnModdle
+    }   
+  });
+}
+
 function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
   return new DmnJS({
     common: {
@@ -106,37 +124,32 @@ function createDmnModeler(editorContainer, propertiesPanelContainer, translate) 
   });
 }
 
-function createBpmnViewer(editorContainer, translate) {
-  return new BpmnViewer({
+function createDmnViewer(editorContainer, translate) {
+  return new DmnViewer({
     container: editorContainer,
     common: {
       keyboard: {
         bindTo: document
       },
-      additionalModules: [
-        camundaExtensionModule,
-        createTranslationModule(translate)
-      ],
       moddleExtensions: {
-        camunda: camundaDmnModdle,
-        workflow: workflowBpmnModdle
+        camunda: camundaDmnModdle
       }
     },
-    
-  });
-}
-
-function createDmnViewer(editorContainer, translate) {
-  return new DmnViewer({
     drd: {
       additionalModules: [
-        drdAdapterModule,
+        minimapModule,
         createTranslationModule(translate)
       ]
     },
-    container: editorContainer,
-    moddleExtensions: {
-      camunda: camundaDmnModdle
-    }
+    decisionTable: {
+      additionalModules: [
+        createTranslationModule(translate)
+      ]
+    },
+    literalExpression: {
+      additionalModules: [
+        createTranslationModule(translate)
+      ]
+    },
   });
 }

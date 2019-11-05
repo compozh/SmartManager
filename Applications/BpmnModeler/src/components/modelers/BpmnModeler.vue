@@ -1,5 +1,5 @@
 <template>
-  <modeler-layout :process="process" :loading="loading" :saved="saved" 
+  <modeler-layout :process="process" :loading="loading" :saved="saved" :canShowPanel="canShowPanel" :noAccess="noAccess"
     :canMinimap="canMinimap" @minimap="onMinimap" 
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
@@ -20,14 +20,11 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css';
 
 import { debounce } from 'throttle-debounce';
-import { CancellationToken } from '../api/cancellationToken'
-import { SavingContext } from '../api/savingContext';
-import { exportMixin } from './mixins/importExportMixin';
-import editorToolbarMixin from './mixins/editorToolbarMixin';
-import Process from '../api/models/Process';
-import editorFactory from '../api/editorFactory';
 import ModelerLayout from './ModelerLayout';
-import ProcessType from '../api/models/ProcessType';
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+import { Process, ProcessType, DiagramAccessRights } from '../../api/models';
+import { CancellationToken, SavingContext, editorFactory } from '../../api';
+import { editorToolbarMixin, exportMixin } from '../mixins';
 
 export default {
   name: 'bpmn-modeler',
@@ -40,6 +37,7 @@ export default {
       saved: false,
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
+      canShowPanel: true,
     };
   },
   mounted() {
@@ -55,6 +53,9 @@ export default {
         return activeItem;
       }
       return null;
+    },
+    noAccess() {
+      return this.process && !this.process.hasRight(DiagramAccessRights.Read);
     }
   },
   beforeDestroy: function () {
@@ -65,7 +66,7 @@ export default {
       if (!value) {
         this.destroyModeler();
       }
-      if (!oldValue || !this.modeler || value.type !== oldValue.type) {
+      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(DiagramAccessRights.Write) !== oldValue.hasRight(DiagramAccessRights.Write))) {
         this.createModeler();
       }
       this.onActiveModelChanged();
@@ -74,7 +75,9 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      this.modeler = editorFactory(this.process.type, false, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+      const canEdit = this.process.hasRight(DiagramAccessRights.Write);
+      this.canShowPanel = canEdit;
+      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.onEditorChanged();
     },    
@@ -127,7 +130,7 @@ export default {
       });
     },
     onActiveModelChanged() {
-      if (!this.process || !this.modeler) {
+      if (!this.process || !this.modeler || this.noAccess) {
         return;
       }
       this.modeler.clear();
