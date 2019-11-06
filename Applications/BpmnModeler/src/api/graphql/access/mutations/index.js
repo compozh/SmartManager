@@ -1,5 +1,5 @@
-import giveAccessToProcess from './giveAccessToProcess.graphql';
-import editAccessToProcess from './editAccessToProcess.graphql';
-import removeAccessToProcess from './removeAccessToProcess.graphql';
+import giveAccessToDiagram from './giveAccessToDiagram.graphql';
+import editAccessToDiagram from './editAccessToDiagram.graphql';
+import removeAccessToDiagram from './removeAccessToDiagram.graphql';
 
-export { giveAccessToProcess, editAccessToProcess, removeAccessToProcess };
+export { giveAccessToDiagram, editAccessToDiagram, removeAccessToDiagram };

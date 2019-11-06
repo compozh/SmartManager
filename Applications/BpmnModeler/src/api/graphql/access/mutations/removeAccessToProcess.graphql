@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    removeAccessToProcess(accessParams: $accessParams)
-  }
-}

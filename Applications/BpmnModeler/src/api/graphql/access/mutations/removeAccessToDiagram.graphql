@@ -1,0 +1,5 @@
+{
+  bpmnqueryMutation {
+    removeAccessToDiagram(accessParams: $accessParams)
+  }
+}

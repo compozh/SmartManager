@@ -1,0 +1,5 @@
+{
+  bpmnqueryMutation {
+    giveAccessToDiagram(accessParams: $accessParams)
+  }
+}

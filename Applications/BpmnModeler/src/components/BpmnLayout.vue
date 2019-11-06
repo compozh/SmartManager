@@ -103,7 +103,7 @@
 
 <script>
 import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from './mixins';
-import { Folder, Process, ProcessType } from '../api/models';
+import { Folder, Diagram, DiagramType } from '../api/models';
 import * as Dialogs from './dialogs';
 import FormioContainer from './formio/Formio';
 import { Notification } from 'element-ui';
@@ -181,13 +181,13 @@ export default {
       } else if (item instanceof Folder) {
         routeName = 'BPMNFOLDER';
         params = { id: itemId };
-      } else if (item instanceof Process) {
+      } else if (item instanceof Diagram) {
         switch (item.type) {
-        case ProcessType.BPMN:
+        case DiagramType.BPMN:
           routeName = 'BPMNMODELER';
           params = { id: itemId };
           break;
-        case ProcessType.DMN:
+        case DiagramType.DMN:
           routeName = 'DMNMODELER';
           params = { id: itemId };
           break;

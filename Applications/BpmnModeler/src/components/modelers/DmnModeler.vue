@@ -48,7 +48,7 @@ import 'dmn-js-properties-panel/dist/assets/dmn-js-properties-panel.css';
 import { debounce } from 'throttle-debounce';
 import ModelerLayout from './ModelerLayout';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
-import { Process, ProcessType, DiagramAccessRights } from '../../api/models';
+import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 
@@ -83,7 +83,7 @@ export default {
   computed: {
     process() {
       const activeItem = this.$store.state.bpmn.activeItem;
-      if (activeItem && activeItem instanceof Process && activeItem.type === ProcessType.DMN) {
+      if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.DMN) {
         return activeItem;
       }
       return null;

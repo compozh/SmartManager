@@ -1,8 +1,8 @@
 import setXml from './setXml.graphql';
-import createProcess from './createProcess.graphql';
-import editProcess from './editProcess.graphql';
-import dropProcess from './dropProcess.graphql';
-import removeProcess from './deleteProcess.graphql';
-import deployProcess from './deployProcess.graphql';
+import createDiagram from './createDiagram.graphql';
+import editDiagram from './editDiagram.graphql';
+import moveDiagram from './moveDiagram.graphql';
+import removeDiagram from './deleteDiagram.graphql';
+import deployDiagram from './deployDiagram.graphql';
 
-export { setXml, createProcess, editProcess, dropProcess, removeProcess, deployProcess };
+export { setXml, createDiagram, editDiagram, moveDiagram, removeDiagram, deployDiagram };

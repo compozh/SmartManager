@@ -1,6 +1,6 @@
 {
   bpmnquery {
-    getFormsForProcess(processId: $processId) {
+    getForms(onlySystem: $onlySystem) {
       id,
       name
     }

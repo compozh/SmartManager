@@ -1,6 +1,6 @@
 {
   bpmnquery {
-    getAvailableActions(processId: $processId, definitionType: $definitionType) {
+    getActions(definitionType: $definitionType, onlySystem: $onlySystem) {
       id,
       type,
       name,
