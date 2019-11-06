@@ -242,7 +242,7 @@ export class MesApi {
       variables: { formCode, properties },
       fetchPolicy: 'network-only'
     })
-    return result.data.mes.qualityFormio
+    return result.data.mes.getFormio
   }
 
   async downtimeFormioSubmitGql(formCode, submission, properties) {
