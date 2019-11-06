@@ -1,5 +1,5 @@
 {
   bpmnqueryMutation {
-    deleteProcess(id: $id)
+    deleteDiagram(id: $id)
   }
 }

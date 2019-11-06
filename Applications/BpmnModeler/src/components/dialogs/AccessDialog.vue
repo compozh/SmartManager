@@ -24,9 +24,6 @@
 
             <v-card-text>
               <v-form ref="form" onSubmit="return false;">
-                <!-- <v-radio-group v-model="form.editedItem.type" row :label="$t('bpmn.labels.Type')" :disabled="form.loading || form.mode !== 'create'">
-                  <v-radio v-for="accessType in enums.accessType" :key="accessType"  :label="$t('bpmn.enums.AccessType.' + accessType)" :value="accessType"></v-radio>
-                </v-radio-group> -->
                 <autocompletebox
                   v-model="form.editedItem.identities"
                   :queryItems="queryUsersAndGroups"
@@ -47,12 +44,6 @@
                     </template>
                   </template>
                 </autocompletebox>
-                <!-- <v-radio-group v-model="form.editedItem.allowAccess" :label="$t('bpmn.labels.Access')"
-                   :disabled="form.loading || form.mode !== 'create'"
-                >
-                  <v-radio :label="$t('bpmn.labels.Allowed')" :value="true"></v-radio>
-                  <v-radio :label="$t('bpmn.labels.Declined')" :value="false"></v-radio>
-                </v-radio-group> -->
                 <h5>{{ $t('bpmn.labels.AccessRights') }}</h5>
                 <v-container fluid>
                   <v-layout row wrap>
@@ -145,7 +136,7 @@ export default {
           identities: [], 
           allowAccess: true, 
           type: Models.AccessType.All,
-          rights: [ ] 
+          rights: [] 
         },
         show: false,
         loading: false,

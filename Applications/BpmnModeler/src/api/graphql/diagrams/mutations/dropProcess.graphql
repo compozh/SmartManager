@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    dropProcess(processId: $processId, parentId: $parentId)
-  }
-}

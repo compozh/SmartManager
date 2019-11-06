@@ -1,6 +1,6 @@
 {
   bpmnqueryMutation {
-    createProcess(process: $process) {
+    createDiagram(diagram: $diagram) {
       id
       name
       parentId

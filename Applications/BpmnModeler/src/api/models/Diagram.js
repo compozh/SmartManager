@@ -1,7 +1,7 @@
-import ProcessType from './ProcessType';
+import DiagramType from './DiagramType';
 
-export default class Process {
-  constructor({ id = null, name = '', parentId = null, isSystem = false, type = ProcessType.BPMN, xmlView, rights = [ ], ownerId = '' } = {}) {
+export default class Diagram {
+  constructor({ id = null, name = '', parentId = null, isSystem = false, type = DiagramType.BPMN, xmlView, rights = [ ], ownerId = '' } = {}) {
     this.id = id;
     this.name = name;
     this.parentId = parentId;
