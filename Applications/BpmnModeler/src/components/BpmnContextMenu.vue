@@ -40,6 +40,12 @@
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-tile-title>
         </v-list-tile>
+        <v-list-tile @click="exportPng(item)">
+          <v-list-tile-avatar>
+            <v-icon>mdi-file-image-outline</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-tile-title>
+        </v-list-tile>
       </template>
       <template v-else-if="isDmn(item)">
         <v-list-tile @click="exportDmn(item)">
@@ -127,6 +133,9 @@ export default {
     },
     exportSvg(item) {
       this.$emit('export', item, 'svg');
+    },
+    exportPng(item) {
+      this.$emit('export', item, 'png');
     },
     deploy(item) {
       this.$emit('deploy', item);

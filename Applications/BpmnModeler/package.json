@@ -34,6 +34,7 @@
     "bpmn-js-properties-panel": "^0.32.2",
     "camunda-bpmn-moddle": "^4.3.0",
     "camunda-dmn-moddle": "^1.0.0",
+    "canvg": "^2.0.0",
     "css-loader": "^3.2.0",
     "diagram-js": "^5.1.1",
     "diagram-js-minimap": "^2.0.3",

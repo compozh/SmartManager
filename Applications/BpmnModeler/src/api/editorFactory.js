@@ -17,6 +17,7 @@ import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
 import minimapModule from 'diagram-js-minimap';
 import DiagramType from './models/DiagramType';
+import ContextPadProvider from '../bpmnModules/context-pad/';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
   switch (type) {
@@ -49,7 +50,8 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
       bpmnPropertiesProviderModule,
       camundaExtensionModule,
       minimapModule,
-      createTranslationModule(translate)
+      createTranslationModule(translate),
+      ContextPadProvider
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,

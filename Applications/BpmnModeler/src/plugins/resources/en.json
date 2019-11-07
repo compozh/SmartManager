@@ -11,9 +11,10 @@
 		"AddProcess": "Add diagram",
 		"AddFolder": "Add folder",
 		"Import": "Import",
-		"ExportSvg": "Export svg",
-		"ExportBpmn": "Export bpmn",
-		"ExportDmn": "Export dmn",
+		"ExportSvg": "Export SVG",
+		"ExportBpmn": "Export BPMN",
+		"ExportDmn": "Export DMN",
+		"ExportPng": "Export PNG",
 		"Deploy": "Deploy",
 		"Copy": "Add by sample",
 		"Select": "Select",
@@ -325,6 +326,8 @@
 		"Action": "Action",
 		"Config": "Configuration",
 		"Task creation rule": "Task creation rule",
-		"Item description": "Item decription"
+		"Item description": "Item decription",
+
+		"Colorize": "Colorize"
 	}
 }
