@@ -17,9 +17,9 @@
       <template slot="option" slot-scope="props">
         <div class="flex items-center">
           <vs-avatar
-            v-if="props.option.photo"
-            size="small"
+            size="30px"
             :src="props.option.photo"
+            class="m-0"
           />
           <span class="ml-3 option__title">{{ props.option[label] }}</span>
         </div>
