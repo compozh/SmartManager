@@ -244,9 +244,10 @@ a.bjs-powered-by {
   top: 0;
   right: 0;
 }
-.bpp-properties-panel button.search:before {
+.bpp-properties-panel button.search::before {
   content: "\F349";
-  font: normal normal normal 24px/1 "Material Design Icons";
+  font-family: "Material Design Icons";
+  font-size: 24px;
 }
 .bpp-properties-panel button.search {
   padding: 0;
@@ -288,5 +289,10 @@ ul.bpp-properties-tabs-links > li.bpp-active a {
 }
 .bpp-properties-group.group-closed:hover > .group-label {
     color: var(--main-color);
+}
+.bpmn-icon-colorize::before {
+  content: "\F0C9";
+  font-family: "Material Design Icons";
+  padding-top: 3px;
 }
 </style>

@@ -325,6 +325,8 @@
 		"Action": "Action",
 		"Config": "Configuration",
 		"Task creation rule": "Task creation rule",
-		"Item description": "Item decription"
+		"Item description": "Item decription",
+
+		"Colorize": "Colorize"
 	}
 }

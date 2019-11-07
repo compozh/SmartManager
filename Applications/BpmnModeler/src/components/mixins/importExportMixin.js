@@ -7,6 +7,7 @@ export const importMixin = {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = '.bpmn, .dmn';
+      input.style.display = 'none';
 
       input.addEventListener('change', () => {
         const [file] = input.files;
@@ -40,6 +41,7 @@ export const exportMixin = {
       const save = function (fileName, data) {
         const file = new Blob([data]);
         const a = document.createElement('a');
+        a.style.display = 'none';
         const url = URL.createObjectURL(file);
         a.href = url;
         a.download = fileName;

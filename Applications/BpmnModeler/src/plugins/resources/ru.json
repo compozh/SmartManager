@@ -326,6 +326,8 @@
 		"Action": "Действие",
 		"Config": "Настройка",
 		"Task creation rule": "Правило создания задачи",
-		"Item description": "Описание элемента"
+		"Item description": "Описание элемента",
+
+		"Colorize": "Изменить цвет"
 	}
 }

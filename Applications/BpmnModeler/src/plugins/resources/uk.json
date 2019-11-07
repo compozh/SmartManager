@@ -330,6 +330,8 @@
 		"Action": "Дія",
 		"Config": "Налаштування",
 		"Task creation rule": "Правило створення задачі",
-		"Item description": "Опис елемента"
+		"Item description": "Опис елемента",
+
+		"Colorize": "Змінити колір"
 	}
 }
