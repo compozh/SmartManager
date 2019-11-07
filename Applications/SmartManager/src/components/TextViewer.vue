@@ -27,7 +27,6 @@ export default {
   }),
   watch: {
     url(newVal, oldVal) {
-      console.log('', newVal, oldVal)
       if (newVal !== oldVal) {
         this.getText()
       }
