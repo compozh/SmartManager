@@ -49,6 +49,11 @@ async function postHandler(event) {
   if (event.request.url.includes('authentication')) {
     return await fetch(event.request.clone())
   }
+  // Запросы с мутациями не кешируем
+  const reqJson = await event.request.clone().json()
+  if (reqJson.query.includes('mutation')) {
+    return await fetch(event.request.clone())
+  }
   const cachedResponse = await getCache(event.request.clone())
   const fetchPromise = fetch(event.request.clone())
     .then(response => {
