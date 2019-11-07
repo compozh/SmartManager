@@ -115,26 +115,15 @@
         <!-- USER META -->
         <div class="the-navbar__user-meta flex items-center">
           <div class="text-right leading-tight sm:block">
-            <p class="font-semibold">{{ user_displayName }}</p>
+            <p class="font-semibold">{{ currentUserName }}</p>
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
-              <img
-                v-if="activeUserImg.startsWith('http')"
-                key="onlineImg"
-                :src="activeUserImg"
-                alt="user-img"
-                width="40"
-                height="40"
-                class="rounded-full shadow-md cursor-pointer block"/>
-              <img
-                v-else
-                key="localImg"
-                :src="require(`@/assets/images/portrait/small/${activeUserImg}`)"
-                alt="user-img"
-                width="40"
-                height="40"
-                class="rounded-full shadow-md cursor-pointer block"/>
+              <vs-avatar
+                class="rounded-full shadow-md cursor-pointer block m-0"
+                :src="currentUserPhoto"
+                size="40px"
+              ></vs-avatar>
             </div>
             <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
 
@@ -200,6 +189,7 @@
 import templateConfig from '@/templateConfig'
 import auth from '@/api/auth/auth'
 import {eventBus} from '@/main'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'the-navbar',
@@ -223,6 +213,12 @@ export default {
     }
   },
   computed: {
+    // PROFILE
+    ...mapGetters('auth', [
+      'currentUserName',
+      'currentUserPhoto',
+      'delegatedRights'
+    ]),
     task() {
       const id = +this.$route.params.id
       const task = this.$store.state.sm.taskInfo[id]
@@ -263,19 +259,6 @@ export default {
     getCurrentLocaleData() {
       const locale = this.$i18n.locale
       return this.localizations.find(r => r.code === locale)
-    },
-    // PROFILE
-    currentUser() {
-      return this.$store.state.auth.currentUser
-    },
-    user_displayName() {
-      return this.currentUser ? this.currentUser.UserData.CurrentUserData.UserName : ''
-    },
-    delegatedRights() {
-      return this.currentUser ? this.currentUser.UserData.DelegatedRights : []
-    },
-    activeUserImg() {
-      return this.currentUser.UserData.CurrentUserData.UserPhoto || this.$store.state.AppActiveUser.img
     }
   },
   methods: {
@@ -307,6 +290,8 @@ export default {
     },
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
+      // Перечитка папок для обновления локализации
+      this.$store.dispatch('sm/getFolders')
     },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)

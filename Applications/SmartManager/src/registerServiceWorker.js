@@ -14,12 +14,8 @@ if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     updatefound() {
       console.log('New content is downloading.')
     },
-    updated(registration) {
+    updated() {
       console.log('New content is available and will be refresh.')
-      if (window.confirm('A new version is available, update now?')) {
-        const worker = registration.waiting
-        worker.postMessage({action: 'skipWaiting'})
-      }
     },
     offline() {
       console.log('No internet connection found. App is running in offline mode.')
