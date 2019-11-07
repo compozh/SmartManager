@@ -1,3 +1,4 @@
+import Canvg from 'canvg';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 
@@ -70,6 +71,26 @@ export const exportMixin = {
           }
           save(fileName, svg);
         });
+        break;
+      case 'png':
+        this.modeler.saveSVG((err, svg) => {
+          if (err) {
+            return;
+          }
+          var canvas = document.createElement('canvas');
+          Canvg(canvas, svg);
+
+          var dataURL = canvas.toDataURL('image/png');
+          var data = atob(dataURL.substring('data:image/png;base64,'.length)),
+            asArray = new Uint8Array(data.length);
+
+          for (var i = 0, len = data.length; i < len; ++i) {
+            asArray[i] = data.charCodeAt(i);
+          }
+
+          save(fileName, asArray.buffer);
+        });
+        break;
       }
     }
   }
