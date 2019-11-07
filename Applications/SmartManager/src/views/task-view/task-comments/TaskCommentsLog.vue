@@ -66,11 +66,9 @@ export default {
     comments: Array
   },
   computed: {
-    currentUser() {
-      return this.$store.state.auth.currentUser.UserData.CurrentUserData
-    },
     currentUserIsSender() {
-      return userId => userId === this.currentUser.UserId
+      const currentUserId = this.$store.getters.currentUserId
+      return userId => userId === currentUserId
     },
     hasSentPreviousMsg() {
       return (last_sender, current_sender) => last_sender === current_sender

@@ -84,7 +84,7 @@ export default {
         : {}
     },
     userId() {
-      return this.$store.state.auth.currentUser.UserData.LoginData.UserId
+      return this.$store.getters.loggedUserId
     }
   },
   beforeRouteEnter(to, from, next) {
