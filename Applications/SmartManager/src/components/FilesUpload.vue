@@ -186,12 +186,6 @@ export default {
           const fileName = newFile.file.name
           const filePath = newFile.response.fileName
           this.attachments.push({fileName, filePath})
-
-          this.$vs.notify({
-            title: this.$t('notify.attachTitle'),
-            text: this.$t('notify.fileUploaded', {file: newFile.name}),
-            color: 'success'
-          })
         }
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
