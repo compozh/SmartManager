@@ -129,11 +129,16 @@ export default  class Authentication {
    * Получить токен для авторизации на веб сервере
    */
   static getAuthHeader() {
-    if (!this.getCurrentUser()) {
+    const user = this.getCurrentUser()
+    if (!user) {
       return
     }
-    let token = this.getCurrentUser().access_token
-    return {'Authorization': `Bearer ${token}`}
+    const token = user.access_token
+    const userId = user.UserData.CurrentUserData.UserId
+    return {
+      'Authorization': `Bearer ${token}`,
+      'X-User-Id': userId
+    }
   }
 
   /**
