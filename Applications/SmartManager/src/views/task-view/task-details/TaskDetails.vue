@@ -12,7 +12,7 @@
                        border-t-0 d-theme-border-grey-light
                        border-solid flex justify-between flex items-center">
 
-            <div class="vx-col sm:w-4/5 w-full flex flex-wrap items-center mb-2">
+            <div class="vx-col sm:w-4/5 w-full flex items-center mb-2">
               <vs-avatar class="sender__avatar--single flex-shrink-0
                                 mr-3 border-2 border-solid border-white"
                          :src="task.performerPhoto"
