@@ -74,7 +74,9 @@
 		"DisplayType": "Display type",
 		"NoReadAccess": "You don`t have rights to view this diagram",
 		"WhoHasAccess": "Who has access",
-		"All": "All"
+		"All": "All",
+		"Users": "Users",
+		"Groups": "Groups"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

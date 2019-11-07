@@ -42,6 +42,8 @@ export class BpmnModelerApi {
     return JSON.parse(result.data.bpmnquery.items);
   }
 
+  //#region Diagram
+
   async getXml(id) {
     const result = await getClient().query({
       query: gql`query ($id: ID!) ${queries.getXml}`,
@@ -58,45 +60,49 @@ export class BpmnModelerApi {
     return result.data.bpmnqueryMutation.setXml;
   }
 
-  async createProcess(process) {
+  async createDiagram(diagram) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($process: ProcessInput!) ${mutations.createProcess}`,
-      variables: { process: { name: process.name, parentId: process.parentId, isSystem: process.isSystem, type: process.type } }
+      mutation: gql`mutation ($diagram: DiagramInput!) ${mutations.createDiagram}`,
+      variables: { diagram: { name: diagram.name, parentId: diagram.parentId, isSystem: diagram.isSystem, type: diagram.type, xmlView: diagram.xmlView } }
     });
-    return result.data.bpmnqueryMutation.createProcess;
+    return result.data.bpmnqueryMutation.createDiagram;
   }
 
-  async editProcess(process) {
+  async editDiagram(diagram) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($process: ProcessInput!) ${mutations.editProcess}`,
-      variables: { process: { id: process.id, name: process.name, parentId: process.parentId } }
+      mutation: gql`mutation ($diagram: DiagramInput!) ${mutations.editDiagram}`,
+      variables: { diagram: { id: diagram.id, name: diagram.name, parentId: diagram.parentId } }
     });
-    return result.data.bpmnqueryMutation.editProcess;
+    return result.data.bpmnqueryMutation.editDiagram;
   }
 
-  async dropProcess(processId, parentId) {
+  async moveDiagram(diagramId, parentId) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($processId: String!, $parentId: String) ${mutations.dropProcess}`,
-      variables: { processId, parentId }
+      mutation: gql`mutation ($diagramId: ID!, $parentId: ID) ${mutations.moveDiagram}`,
+      variables: { diagramId, parentId }
     });
-    return result.data.bpmnqueryMutation.dropProcess;
+    return result.data.bpmnqueryMutation.moveDiagram;
   }
 
-  async deleteProcess(id) {
+  async deleteDiagram(id) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!) ${mutations.removeProcess}`,
+      mutation: gql`mutation ($id: ID!) ${mutations.removeDiagram}`,
       variables: { id }
     });
-    return result.data.bpmnqueryMutation.deleteProcess;
+    return result.data.bpmnqueryMutation.deleteDiagram;
   }
 
-  async deployProcess(id) {
+  async deployDiagram(id) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!) ${mutations.deployProcess}`,
+      mutation: gql`mutation ($id: ID!) ${mutations.deployDiagram}`,
       variables: { id }
     });
-    return result.data.bpmnqueryMutation.deployProcess;
+    return result.data.bpmnqueryMutation.deployDiagram;
   }
+
+  //#endregion
+
+  //#region Folder
 
   async createFolder(folder) {
     const result = await getClient().mutate({
@@ -114,12 +120,12 @@ export class BpmnModelerApi {
     return result.data.bpmnqueryMutation.editFolder;
   }
 
-  async dropFolder(folderId, parentId) {
+  async moveFolder(folderId, parentId) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($folderId: String!, $parentId: String) ${mutations.dropFolder}`,
+      mutation: gql`mutation ($folderId: ID!, $parentId: ID) ${mutations.moveFolder}`,
       variables: { folderId, parentId }
     });
-    return result.data.bpmnqueryMutation.dropFolder;
+    return result.data.bpmnqueryMutation.moveFolder;
   }
 
   async deleteFolder(id) {
@@ -130,43 +136,21 @@ export class BpmnModelerApi {
     return result.data.bpmnqueryMutation.deleteFolder;
   }
 
-  async getAvailableActions(processId, definitionType) {
-    const result = await getClient().query({
-      query: gql`query ($processId: ID!, $definitionType: ActionDefinitionType!) ${queries.getAvailableActions}`,
-      variables: { processId, definitionType }
-    });
-    return result.data.bpmnquery.getAvailableActions;
-  }
-
-  async getActionById(actionId) {
-    const result = await getClient().query({
-      query: gql`query ($actionId: ID!) ${queries.getActionById}`,
-      variables: { actionId }
-    });
-    return result.data.bpmnquery.getActionById;
-  }
-
-  async getFormsForProcess(processId) {
-    const result = await getClient().query({
-      query: gql`query ($processId: ID!) ${queries.getFormsForProcess}`,
-      variables: { processId }
-    });
-    return result.data.bpmnquery.getFormsForProcess;
-  }
+  //#endregion
 
   //#region Access
 
-  async getAccessRecordsForProcess(processId) {
+  async getAccessRecordsForDiagram(diagramId) {
     const result = await getClient().query({
-      query: gql`query ($processId: String!) ${queries.getAccessRecordsForProcess}`,
-      variables: { processId }
+      query: gql`query ($diagramId: ID!) ${queries.getAccessRecordsForDiagram}`,
+      variables: { diagramId }
     });
-    return result.data.bpmnquery.getAccessRecordsForProcess;
+    return result.data.bpmnquery.getAccessRecordsForDiagram;
   }
 
-  async giveAccessToProcess(accessParams) {
+  async giveAccessToDiagram(accessParams) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.giveAccessToProcess}`,
+      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.giveAccessToDiagram}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
@@ -177,12 +161,13 @@ export class BpmnModelerApi {
         }
       }
     });
-    return result.data.bpmnqueryMutation.giveAccessToProcess;
+    return result.data.bpmnqueryMutation.giveAccessToDiagram;
   }
 
-  async editAccessToProcess(accessParams) {
+  async editAccessToDiagram(accessParams) {
+    console.log(accessParams);
     const result = await getClient().mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.editAccessToProcess}`,
+      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.editAccessToDiagram}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
@@ -193,12 +178,12 @@ export class BpmnModelerApi {
         }
       }
     });
-    return result.data.bpmnqueryMutation.editAccessToProcess;
+    return result.data.bpmnqueryMutation.editAccessToDiagram;
   }
 
-  async removeAccessToProcess(accessParams) {
+  async removeAccessToDiagram(accessParams) {
     const result = await getClient().mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessInput!) ${mutations.removeAccessToProcess}`,
+      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.removeAccessToDiagram}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
@@ -209,7 +194,7 @@ export class BpmnModelerApi {
         }
       }
     });
-    return result.data.bpmnqueryMutation.removeAccessToProcess;
+    return result.data.bpmnqueryMutation.removeAccessToDiagram;
   }
 
   //#endregion
@@ -228,6 +213,30 @@ export class BpmnModelerApi {
       query: gql`query ${queries.queryGroups}`
     })
     return result.data.bpmnquery.queryGroups;
+  }
+
+  async getActions(definitionType, onlySystem) {
+    const result = await getClient().query({
+      query: gql`query ($definitionType: ActionDefinitionType!, onlySystem: Boolean!) ${queries.getActions}`,
+      variables: { definitionType, onlySystem }
+    });
+    return result.data.bpmnquery.getActions;
+  }
+
+  async getActionById(actionId) {
+    const result = await getClient().query({
+      query: gql`query ($actionId: ID!) ${queries.getActionById}`,
+      variables: { actionId }
+    });
+    return result.data.bpmnquery.getActionById;
+  }
+
+  async getForms(onlySystem) {
+    const result = await getClient().query({
+      query: gql`query ($onlySystem: Boolean!) ${queries.getForms}`,
+      variables: { onlySystem }
+    });
+    return result.data.bpmnquery.getForms;
   }
 
   //#endregion

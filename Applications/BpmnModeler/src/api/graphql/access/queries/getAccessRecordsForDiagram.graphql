@@ -1,6 +1,6 @@
 {
   bpmnquery {
-    getAccessRecordsForProcess(processId: $processId) {
+    getAccessRecordsForDiagram(diagramId: $diagramId) {
       allowAccess,
       groupId,
       groupName,

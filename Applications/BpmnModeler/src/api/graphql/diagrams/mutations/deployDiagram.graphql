@@ -1,6 +1,6 @@
 {
   bpmnqueryMutation {
-    deployProcess(id: $id) {
+    deployDiagram(id: $id) {
       success
       message
     }

@@ -1,3 +1,3 @@
-import getAccessRecordsForProcess from './getAccessRecordsForProcess.graphql';
+import getAccessRecordsForDiagram from './getAccessRecordsForDiagram.graphql';
 
-export { getAccessRecordsForProcess };
+export { getAccessRecordsForDiagram };

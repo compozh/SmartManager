@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 import { BpmnModelerApi } from '../api';
-import { Folder, Process, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
+import { Folder, Diagram, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
 
 const api = new BpmnModelerApi();
 
@@ -37,7 +37,7 @@ export default {
         e.items = mapTree(e.items);
         return new Folder(e);
       } else {
-        return new Process(e);
+        return new Diagram(e);
       }
     });
     items = mapTree(items);
@@ -66,24 +66,24 @@ export default {
     }
     return success;
   },
-  async createProcess(context, process) {
-    let newProcess;
-    if (process.parentId && process.parentId.length > 0) {
-      var { item: parent } = context.getters.getItemById(process.parentId);
-      if (process.isSystem && !parent.isSystem) {
+  async createProcess(context, diagram) {
+    let newDiagram;
+    if (diagram.parentId && diagram.parentId.length > 0) {
+      var { item: parent } = context.getters.getItemById(diagram.parentId);
+      if (diagram.isSystem && !parent.isSystem) {
         return false;
       }
     }
     try {
-      newProcess = await api.createProcess(process);
+      newDiagram = await api.createDiagram(diagram);
     } catch (error) {
       console.error(error);
       return false;
     }
-    if (!newProcess) {
+    if (!newDiagram) {
       return false;
     }
-    Object.assign(process, newProcess);
+    Object.assign(diagram, newDiagram);
     await context.dispatch('loadItems');
     return true;
   },
@@ -94,7 +94,7 @@ export default {
 
     let success = false;
     try {
-      success = await api.editProcess(process);
+      success = await api.editDiagram(process);
     } catch (error) {
       console.error(error);
     }
@@ -106,7 +106,7 @@ export default {
   async deployProcess(context, id) {
     let result;
     try {
-      result = await api.deployProcess(id);
+      result = await api.deployDiagram(id);
     } catch (error) {
       console.error(error);
     }
@@ -124,10 +124,11 @@ export default {
       return false;
     }
   },
-  async getAvailableActions(context, { processId, definitionType }) {
+  async getAvailableActions(context, { processId: id, definitionType }) {
+    const { item: diagram } = context.getters.getItemById(id);
     let items;
     try {
-      items = await api.getAvailableActions(processId, definitionType);
+      items = await api.getActions(definitionType, diagram.isSystem);
     } catch (error) {
       console.error(error);
     }
@@ -136,10 +137,11 @@ export default {
     }
     return items.map(action => new ActionDefinition(action));
   },
-  async getFormsForProcess(context, { processId }) {
+  async getFormsForProcess(context, { processId: id }) {
+    const { item: diagram } = context.getters.getItemById(id);
     let items;
     try {
-      items = await api.getFormsForProcess(processId);
+      items = await api.getForms(diagram.isSystem);
     } catch (error) {
       console.error(error);
     }
@@ -225,7 +227,7 @@ export default {
       if (item instanceof Folder) {
         success = await api.deleteFolder(id);
       } else {
-        success = await api.deleteProcess(id);
+        success = await api.deleteDiagram(id);
       }
     } catch (error) {
       console.error(error);
@@ -246,9 +248,9 @@ export default {
     let success = false;
     try {
       if (draggingItem.isFolder) {
-        success = await api.dropFolder(draggingItem.id, draggingItem.parentId);
+        success = await api.moveFolder(draggingItem.id, draggingItem.parentId);
       } else {
-        success = await api.dropProcess(draggingItem.id, draggingItem.parentId);
+        success = await api.moveDiagram(draggingItem.id, draggingItem.parentId);
       }
     } catch (error) {
       console.error(error);
@@ -264,7 +266,7 @@ export default {
   async getAccessRecordsForProcess(context, diagramId) {
     let records;
     try {
-      records = await api.getAccessRecordsForProcess(diagramId);
+      records = await api.getAccessRecordsForDiagram(diagramId);
     } catch (error) {
       console.error(error);
       return false;
@@ -274,7 +276,7 @@ export default {
 
   async giveAccessToProcess(context, accessParams) {
     try {
-      var result = await api.giveAccessToProcess(accessParams);
+      var result = await api.giveAccessToDiagram(accessParams);
       return result;
     } catch (error) {
       console.error(error);
@@ -284,7 +286,7 @@ export default {
 
   async editAccessToProcess(context, accessParams) {
     try {
-      return await api.editAccessToProcess(accessParams);
+      return await api.editAccessToDiagram(accessParams);
     } catch (error) {
       console.error(error);
       return false;
@@ -293,7 +295,7 @@ export default {
 
   async removeAccessToProcess(context, accessParams) {
     try {
-      return await api.removeAccessToProcess(accessParams);
+      return await api.removeAccessToDiagram(accessParams);
     } catch (error) {
       console.error(error);
       return false;

@@ -1,4 +1,4 @@
-import { Folder, Process } from '../../api/models';
+import { Folder, Diagram } from '../../api/models';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import { Notification } from 'element-ui';
@@ -57,7 +57,7 @@ export default {
     },
     createItem(parent, type, xmlView) {
       const parentId = parent ? parent.id : null;
-      const model = type === 'folder' ? new Folder({ parentId }) : new Process({ parentId, xmlView });
+      const model = type === 'folder' ? new Folder({ parentId }) : new Diagram({ parentId, xmlView });
       eventBus.$emit(events.modeler.showForm,
         'create',
         type,
@@ -68,18 +68,18 @@ export default {
       eventBus.$emit(events.modeler.showForm,
         'edit',
         item.isFolder ? 'folder' : 'process',
-        item.isFolder ? new Folder(item) : new Process(item),
+        item.isFolder ? new Folder(item) : new Diagram(item),
         this.formSave);
     },
     removeItem(item) {
       eventBus.$emit(events.modeler.showForm,
         'delete',
         item.isFolder ? 'folder' : 'process',
-        item.isFolder ? new Folder(item) : new Process(item),
+        item.isFolder ? new Folder(item) : new Diagram(item),
         this.formSave);
     },
     copyItem(item) {
-      const model = item instanceof Folder ? new Folder(item) : new Process(item);
+      const model = item instanceof Folder ? new Folder(item) : new Diagram(item);
       model.isSystem = false;
       eventBus.$emit(events.modeler.showForm,
         'copy',

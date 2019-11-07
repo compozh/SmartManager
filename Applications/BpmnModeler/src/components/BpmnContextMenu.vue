@@ -150,10 +150,10 @@ export default {
       return !this.isFolder(item) && item.hasRight(Models.DiagramAccessRights.Share);
     },
     isBpmn(item) {
-      return item.type === Models.ProcessType.BPMN;
+      return item.type === Models.DiagramType.BPMN;
     },
     isDmn(item) {
-      return item.type === Models.ProcessType.DMN;
+      return item.type === Models.DiagramType.DMN;
     }
   },
 }

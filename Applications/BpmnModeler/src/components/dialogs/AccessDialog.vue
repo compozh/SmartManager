@@ -24,14 +24,11 @@
 
             <v-card-text>
               <v-form ref="form" onSubmit="return false;">
-                <!-- <v-radio-group v-model="form.editedItem.type" row :label="$t('bpmn.labels.Type')" :disabled="form.loading || form.mode !== 'create'">
-                  <v-radio v-for="accessType in enums.accessType" :key="accessType"  :label="$t('bpmn.enums.AccessType.' + accessType)" :value="accessType"></v-radio>
-                </v-radio-group> -->
                 <autocompletebox
                   v-model="form.editedItem.identities"
                   :queryItems="queryUsersAndGroups"
                   :disabled="form.loading || form.mode !== 'create'"
-                  :rules="[form.rules.required]"
+                  :rules="[form.rules.selectOne]"
                   :label="$t('bpmn.labels.WhoHasAccess')"
                   multiple
                 >
@@ -47,12 +44,6 @@
                     </template>
                   </template>
                 </autocompletebox>
-                <!-- <v-radio-group v-model="form.editedItem.allowAccess" :label="$t('bpmn.labels.Access')"
-                   :disabled="form.loading || form.mode !== 'create'"
-                >
-                  <v-radio :label="$t('bpmn.labels.Allowed')" :value="true"></v-radio>
-                  <v-radio :label="$t('bpmn.labels.Declined')" :value="false"></v-radio>
-                </v-radio-group> -->
                 <h5>{{ $t('bpmn.labels.AccessRights') }}</h5>
                 <v-container fluid>
                   <v-layout row wrap>
@@ -92,10 +83,10 @@
           <template slot="items" slot-scope="props">
             <tr>
               <td class="text-xs-left">
-                <v-icon v-if="props.item.model.type === 'USER'" small>person</v-icon>
-                <v-icon v-else-if="props.item.model.type === 'GROUP'" small>group</v-icon>
+                <v-icon v-if="props.item.model.type === 'USER'" :title="$t('bpmn.labels.User')" small>person</v-icon>
+                <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>group</v-icon>
               </td>
-              <td class="text-xs-left">{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
+              <td class="text-xs-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
               <td class="text-xs-left">{{ props.item.rights }}</td>
               <td class="justify-left layout">
                 <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
@@ -145,7 +136,7 @@ export default {
           identities: [], 
           allowAccess: true, 
           type: Models.AccessType.All,
-          rights: [ ] 
+          rights: [] 
         },
         show: false,
         loading: false,
@@ -162,7 +153,6 @@ export default {
           'delete': this.$t('bpmn.labels.RemoveRights')
         },
         rules: {
-          required: value => !!value || this.$t('bpmn.labels.RequiredField'),
           selectOne: value => (value && value.length > 0) || ' '
         },
         usersAndGroups: [],
@@ -187,6 +177,17 @@ export default {
     'form.show'(newValue, oldValue) {
       if (oldValue && !newValue) {
         this.$refs.form.reset();
+      }
+    },
+    'form.editedItem.rights'(value, oldValue) {
+      if (oldValue.includes(Models.DiagramAccessRights.Read) && !value.includes(Models.DiagramAccessRights.Read)) {
+        this.$nextTick(() => {
+          this.form.editedItem.rights = [];
+        });
+      } else if (value.length && !value.includes(Models.DiagramAccessRights.Read)) {
+        this.$nextTick(() => {
+          this.form.editedItem.rights.push(Models.DiagramAccessRights.Read);
+        });
       }
     }
   },
@@ -218,28 +219,39 @@ export default {
       });
       this.loading = false;
       this.recordId = diagramId;
-      console.log(this.$refs.form);
     },
     async queryUsersAndGroups(filter) {
       if (!this.form.usersAndGroups.length) {
-        var users = (await this.$store.dispatch('bpmn/queryUsers')).map(user => { return { ...user, type: 'user' } });
-        var groups = (await this.$store.dispatch('bpmn/queryGroups')).map(group => { return { ...group, type: 'group' } });
-        this.form.usersAndGroups.push(
-          { id: '', name: this.$t('bpmn.labels.All'), type: 'all' },
-          { divider: true },
-          { header: this.$t('bpmn.labels.Users')},
-          users,
-          { divider: true },
-          { header: this.$t('bpmn.labels.Groups')},
-          groups );
-        this.form.usersAndGroups = this.form.usersAndGroups.flat();
+        await this.loadUsersAndGroups();
       }
 
-      return typeof filter === 'string' ? this.form.usersAndGroups.filter(item => 
-        (item.id && item.id.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
-        (item.name && item.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0) ||
-        (item.login && item.login.toLowerCase().indexOf(filter.toLowerCase()) >= 0)
-      ) : this.form.usersAndGroups;
+      if (typeof filter !== 'string') {
+        return this.form.usersAndGroups;
+      }
+      filter = filter.toLowerCase();
+      return this.form.usersAndGroups.filter(item => {
+        for (const key in item) {
+          if (({}).hasOwnProperty.call(item, key)) {
+            const property = item[key];
+            if (property && property.toString().toLowerCase().indexOf(filter) >= 0) {
+              return true;
+            }
+          }
+        }
+      });
+    },
+    async loadUsersAndGroups() {
+      var users = (await this.$store.dispatch('bpmn/queryUsers')).map(user => { return { ...user, type: 'user' } });
+      var groups = (await this.$store.dispatch('bpmn/queryGroups')).map(group => { return { ...group, type: 'group' } });
+      this.form.usersAndGroups.push(
+        { id: '', name: this.$t('bpmn.labels.All'), type: 'all' },
+        { divider: true },
+        { header: this.$t('bpmn.labels.Users')},
+        users,
+        { divider: true },
+        { header: this.$t('bpmn.labels.Groups')},
+        groups );
+      this.form.usersAndGroups = this.form.usersAndGroups.flat();
     },
     createItem() {
       this.form.editedItem.recordId = this.recordId;
@@ -255,7 +267,6 @@ export default {
       this.form.show = true;
     },
     deleteItem(item) {
-      console.log(item);
       this.form.editedItem.recordId = item.model.recordId;
       this.form.editedItem.rights = item.model.rights;
       this.form.editedItem.identities.push(item.model.identity);

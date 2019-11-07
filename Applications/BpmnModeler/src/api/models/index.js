@@ -2,8 +2,8 @@ import ActionDefinition from './ActionDefinition';
 import ActionDefinitionType from './ActionDefinitionType';
 import Configuration from './Configuration';
 import Folder from './Folder';
-import Process from './Process';
-import ProcessType from './ProcessType';
+import Diagram from './Diagram';
+import DiagramType from './DiagramType';
 
-export { ActionDefinition, ActionDefinitionType, Configuration, Folder, Process, ProcessType };
+export { ActionDefinition, ActionDefinitionType, Configuration, Folder, Diagram, DiagramType };
 export * from './access';

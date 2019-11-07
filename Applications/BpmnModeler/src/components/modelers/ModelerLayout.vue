@@ -62,12 +62,12 @@
 </template>
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
-import Process from '../../api/models/Process';
+import Diagram from '../../api/models/Diagram';
 
 export default {
   name: 'modeler-layout',
   props: {
-    process: Process,
+    process: Diagram,
     loading: Boolean,
     saved: Boolean,
     canUndo: Boolean,

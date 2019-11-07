@@ -16,13 +16,13 @@ import dmnPropertiesProviderModule from 'dmn-js-properties-panel/lib/provider/ca
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
 import minimapModule from 'diagram-js-minimap';
-import ProcessType from './models/ProcessType';
+import DiagramType from './models/DiagramType';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
   switch (type) {
-  case ProcessType.BPMN:
+  case DiagramType.BPMN:
     return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, propertiesPanelContainer, translate);
-  case ProcessType.DMN:
+  case DiagramType.DMN:
     return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, propertiesPanelContainer, translate);
   default:
     return null;
