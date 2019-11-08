@@ -1,3 +1,4 @@
+import { Notification } from 'element-ui';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import ActionDefinitionType from '../../api/models/ActionDefinitionType';
