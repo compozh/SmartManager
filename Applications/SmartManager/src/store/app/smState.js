@@ -4,5 +4,6 @@ export default {
   search: null,
   tasks: {},
   taskInfo: {},
-  users: []
+  users: [],
+  cases: []
 }

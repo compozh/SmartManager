@@ -252,5 +252,17 @@ export default {
       console.log(e.message)
       notify('danger', 'bpTitle', 'bpError')
     }
+  },
+  async getCases({commit}) {
+    startLoading(true)
+    try {
+      const result = await api.getCasesFromGql()
+      stopLoading()
+      const cases = result.data.smtasks.cases
+      commit('setCases', cases)
+    } catch (e) {
+      console.log(e.message)
+      notify('danger', 'casesTitle', 'casesError')
+    }
   }
 }

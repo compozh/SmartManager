@@ -36,7 +36,7 @@
               :key="String(item.id)"
               :style="{transitionDelay: (index * 0.1) + 's'}"
             >
-              <case-list-item :case="item"></case-list-item>
+              <case-list-item :caseItem="item"></case-list-item>
             </li>
           </transition-group>
           <no-data v-if="!this.casesToPage.length">{{ $t('cases.noTasks') }}</no-data>
@@ -74,16 +74,6 @@ export default {
       scrollYMarginOffset: 100
     }
   }),
-  watch: {
-    // $route(to, from) {
-    //   const currentFolder = from.params.code
-    //   const targetFolder = to.params.code
-    //   this.currentPage = 1
-    //   if (currentFolder !== targetFolder) {
-    //     this.getTasks(targetFolder)
-    //   }
-    // }
-  },
   computed: {
     cases() {
       return this.$store.getters['sm/cases']
@@ -114,9 +104,9 @@ export default {
   },
   methods: {
     async getCases() {
-      const loading = !this.cases
+      const loading = true //!this.cases
       try {
-        await this.$store.dispatch('sm/getCases', {loading})
+        await this.$store.dispatch('sm/getCases', true)
       } catch (e) {
         console.log(e.message)
       }
