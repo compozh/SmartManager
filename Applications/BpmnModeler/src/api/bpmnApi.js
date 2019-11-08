@@ -165,7 +165,6 @@ export class BpmnModelerApi {
   }
 
   async editAccessToDiagram(accessParams) {
-    console.log(accessParams);
     const result = await getClient().mutate({
       mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.editAccessToDiagram}`,
       variables: {
@@ -217,10 +216,10 @@ export class BpmnModelerApi {
 
   async getActions(definitionType, onlySystem) {
     const result = await getClient().query({
-      query: gql`query ($definitionType: ActionDefinitionType!, onlySystem: Boolean!) ${queries.getActions}`,
+      query: gql`query ($definitionType: ActionDefinitionType!, $onlySystem: Boolean!) ${queries.getActions}`,
       variables: { definitionType, onlySystem }
     });
-    return result.data.bpmnquery.getActions;
+    return result.data.bpmnquery.getAvailableActions;
   }
 
   async getActionById(actionId) {
@@ -236,7 +235,7 @@ export class BpmnModelerApi {
       query: gql`query ($onlySystem: Boolean!) ${queries.getForms}`,
       variables: { onlySystem }
     });
-    return result.data.bpmnquery.getForms;
+    return result.data.bpmnquery.getFormsForProcess;
   }
 
   //#endregion
