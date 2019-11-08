@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 // Queries
 import folders from './graphql/folders.graphql'
 import tasks from './graphql/tasks.graphql'
+import cases from './graphql/cases.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
@@ -198,6 +199,17 @@ export class SmartManagerApi {
           query: gql`${startBusinessProcess}`,
           variables: {processData}
         })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getCasesFromGql() {
+    try {
+      return await getClient('smartmanager')
+      .query({
+        query: gql`${cases}`
+      })
     } catch (e) {
       throw new Error(e.message)
     }
