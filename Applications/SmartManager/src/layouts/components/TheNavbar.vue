@@ -39,15 +39,15 @@
           >{{ $t('buttons.addSubTask') }}
           </vs-button>
 
-          <div class="flex" v-if="task.isGenerate">
-            <div class="flex" v-if="allowedApproveOrReject || status !== '+'">
+          <div class="flex" v-if="taskType === 'AGREE'">
+            <div class="flex" v-if="allowedNextPrevButtons || status !== '+'">
               <vs-button
                 icon="done"
                 color="success"
                 class="px-3 btnx"
                 type="gradient"
                 @click="changeStage(1)"
-              >{{ $t('buttons.approve') }}
+              >{{ buttonApprove }}
               </vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button
@@ -58,19 +58,19 @@
                 ></vs-button>
                 <vs-dropdown-menu>
                   <vs-dropdown-item @click="getPrompt(1)">
-                    {{ $t('buttons.approveWithComment') }}
+                    {{ buttonApprove + $t('buttons.withComment') }}
                   </vs-dropdown-item>
                 </vs-dropdown-menu>
               </vs-dropdown>
             </div>
-            <div class="flex" v-if="allowedApproveOrReject || status !== '-'">
+            <div class="flex" v-if="allowedNextPrevButtons || status !== '-'">
               <vs-button
                 icon="close"
                 color="danger"
                 class="px-3 btnx"
                 type="gradient"
                 @click="changeStage(0)"
-              >{{ $t('buttons.reject') }}
+              >{{ buttonReject }}
               </vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button
@@ -81,7 +81,56 @@
                 ></vs-button>
                 <vs-dropdown-menu>
                   <vs-dropdown-item @click="getPrompt(0)">
-                    {{ $t('buttons.rejectWithComment') }}
+                    {{ buttonReject + $t('buttons.withComment') }}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+            </div>
+          </div>
+
+          <div class="flex" v-else-if="taskType === 'WORKFLOW'">
+            <div class="flex" v-if="allowedNextPrevButtons || status !== '+'">
+              <vs-button
+                icon="done"
+                color="success"
+                class="px-3 btnx"
+                type="gradient"
+                @click="changeStage(1)"
+              >{{ buttonForward }}
+              </vs-button>
+              <vs-dropdown vs-trigger-click class="cursor-pointer">
+                <vs-button
+                  class="btn-drop mr-2"
+                  size="default"
+                  color="#1CA998"
+                  icon="expand_more"
+                ></vs-button>
+                <vs-dropdown-menu>
+                  <vs-dropdown-item @click="getPrompt(1)">
+                    {{ buttonForward + $t('buttons.withComment') }}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+            </div>
+            <div class="flex" v-if="allowedNextPrevButtons || status !== '-'">
+              <vs-button
+                icon="close"
+                color="danger"
+                class="px-3 btnx"
+                type="gradient"
+                @click="changeStage(0)"
+              >{{ buttonBack }}
+              </vs-button>
+              <vs-dropdown vs-trigger-click class="cursor-pointer">
+                <vs-button
+                  class="btn-drop mr-2"
+                  size="default"
+                  color="#BA365A"
+                  icon="expand_more"
+                ></vs-button>
+                <vs-dropdown-menu>
+                  <vs-dropdown-item @click="getPrompt(0)">
+                    {{ buttonBack + $t('buttons.withComment')}}
                   </vs-dropdown-item>
                 </vs-dropdown-menu>
               </vs-dropdown>
@@ -224,18 +273,38 @@ export default {
       const task = this.$store.state.sm.taskInfo[id]
       return task ? task : {}
     },
+    taskType() {
+      return this.task ? this.task.taskType : null
+    },
     status() {
       return this.task.status
         ? this.task.status
         : ''
     },
-    allowedApproveOrReject() {
+    allowedNextPrevButtons() {
       return this.status === ''
           || this.status === '*'
     },
     allowedAddSubTask() {
       return this.$route.name === 'task-view'
-          && this.allowedApproveOrReject
+          && this.allowedNextPrevButtons
+    },
+    // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
+    buttonBack() {
+      return this.task.previousButtonText
+        || this.$t('buttons.back')
+    },
+    buttonForward() {
+      return this.task.nextButtonText
+        || this.$t('buttons.forward')
+    },
+    buttonReject() {
+      return this.task.previousButtonText
+        || this.$t('buttons.reject')
+    },
+    buttonApprove() {
+      return this.task.nextButtonText
+        || this.$t('buttons.approve')
     },
     // HELPER
     sidebarWidth() {

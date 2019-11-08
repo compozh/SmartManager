@@ -12,13 +12,13 @@
                        border-t-0 d-theme-border-grey-light
                        border-solid flex justify-between flex items-center">
 
-            <div class="vx-col sm:w-4/5 w-full flex flex-wrap items-center mb-2">
+            <div class="vx-col sm:w-4/5 w-full flex items-center mb-2">
               <vs-avatar class="sender__avatar--single flex-shrink-0
                                 mr-3 border-2 border-solid border-white"
                          :src="task.performerPhoto"
                          size="65px"></vs-avatar>
 
-              <div class="flex flex-col w-full">
+              <div class="flex flex-col w-11/12">
                 <h5 class="mb-1">{{ task.performer }}</h5>
                 <div class="flex items-center">
                   <h3 class="text-primary truncate">{{ task.name }}</h3>
@@ -31,6 +31,8 @@
               >{{ time(task.dateAdd) }}</span>
               <span class="flex self-end sm:mt-2 mt-0 whitespace-no-wrap"
               >{{ date(task.dateAdd) }}</span>
+              <span class="flex self-end sm:mt-2 mt-0 whitespace-no-wrap"
+              >Тип: {{ typeName }}</span>
             </div>
           </div>
 
@@ -234,6 +236,18 @@ export default {
         ? this.task.childTasks
         : []
     },
+    taskType() {
+      return this.task ? this.task.taskType : null
+    },
+    typeName() {
+      switch (this.taskType) {
+        case '': return 'обычная задача/документ'
+        case 'AGREE': return 'согласование'
+        case 'WORKFLOW': return 'выполнение БП'
+        case 'EXTERNAL': return 'внешняя задача'
+        default: return 'unknown type'
+      }
+    }
   },
   methods: {
     iFrameOnLoad(event) {

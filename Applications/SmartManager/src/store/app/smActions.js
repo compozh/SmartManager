@@ -228,7 +228,7 @@ export default {
       if (result.Success) {
         return result.Data
       }
-      notify('warning', 'bpTitle', 'bpError')
+      notify('warning', 'bpTitle', result.ErrorMessage)
     } catch (e) {
       stopLoading()
       console.log(e.message)
