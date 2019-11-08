@@ -285,7 +285,10 @@ export default {
         })
         return res
       },
-      successAction: async () => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }) }
+      successAction: async () => {
+        me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }})
+      }
     })
     commit('closeDialogLinearLoader')
   },
