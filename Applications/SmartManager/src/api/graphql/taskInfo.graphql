@@ -49,6 +49,7 @@ fragment detailTaskFields on Task {
   addedPhoto
   nextButtonText
   previousButtonText
+  taskType
   participants {
     userId
     userFio
