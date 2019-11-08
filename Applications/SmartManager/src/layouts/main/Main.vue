@@ -80,12 +80,32 @@ export default {
             slug: i.name,
             tag: i.count,
             tagColor: 'primary',
-            icon: this.setFolderIcon(i.code),
+            icon: this.menuItemIcon(i.code),
             code: i.code
           }
         })
       }
       return []
+    },
+    createUrl() {
+      return code => {
+        if (code === 'cases') {
+          return '/cases'
+        }
+        return '/tasks/' + (code === '' ? 'ALL' : code)
+      }
+    },
+    menuItemIcon() {
+      return code => {
+        switch (code) {
+          case '': return 'LayersIcon'
+          case 'filter_done': return 'CheckSquareIcon'
+          case 'filter_from_me': return 'UserIcon'
+          case 'filter_favorite': return 'StarIcon'
+          case 'cases': return 'BriefcaseIcon'
+          default: return 'FolderIcon'
+        }
+      }
     },
     isAppPage() {
       return !!this.$route.path.includes('/apps/')
@@ -128,18 +148,6 @@ export default {
   methods: {
     getFolders() {
       this.$store.dispatch('sm/getFolders')
-    },
-    createUrl(code) {
-      return '/tasks/' + (code === '' ? 'ALL' : code)
-    },
-    setFolderIcon(code) {
-      switch (code) {
-        case '': return 'LayersIcon'
-        case 'filter_done': return 'CheckSquareIcon'
-        case 'filter_from_me': return 'UserIcon'
-        case 'filter_favorite': return 'StarIcon'
-        default: return 'FolderIcon'
-      }
     },
     changeRouteTitle(title) {
       this.routeTitle = title
