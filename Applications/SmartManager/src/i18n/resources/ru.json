@@ -35,6 +35,18 @@
     "done": "Завершено",
     "taskFrom": "Задача от"
   },
+  "cases": {
+    "newCase": "Новый кейс",
+    "caseName": "Название кейса",
+    "noCases": "Отсутствуют кейсы для отображения",
+    "description": "Описание кейса",
+    "id": "ID",
+    "fioAdd": "Добавил",
+    "dateAdd": "Добавлено",
+    "dateFrom": "От",
+    "dateTo": "До",
+    "caseFrom": "Кейс от"
+  },
   "buttons": {
     "addTask": "Добавить задачу",
     "addSubTask": "Добавить подзадачу",
