@@ -39,7 +39,7 @@
               <case-list-item :caseItem="item"></case-list-item>
             </li>
           </transition-group>
-          <no-data v-if="!this.casesToPage.length">{{ $t('cases.noTasks') }}</no-data>
+          <no-data v-if="!this.casesToPage.length">{{ $t('cases.noCases') }}</no-data>
         </VuePerfectScrollbar>
       </div>
 
@@ -76,7 +76,8 @@ export default {
   }),
   computed: {
     cases() {
-      return this.$store.getters['sm/cases']
+      const cases = this.$store.getters['sm/cases']
+      return cases.filter(i => i.folderId === +this.$route.params.id)
     },
     pages() {
       return this.cases
@@ -102,6 +103,16 @@ export default {
       }
     }
   },
+  // watch: {
+  //   $route(to, from) {
+  //     const currentFolder = from.params.id
+  //     const targetFolder = to.params.id
+  //     this.currentPage = 1
+  //     if (currentFolder !== targetFolder) {
+  //       this.cases(targetFolder)
+  //     }
+  //   }
+  // },
   methods: {
     async getCases() {
       const loading = true //!this.cases

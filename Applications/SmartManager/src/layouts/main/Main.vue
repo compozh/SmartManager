@@ -75,7 +75,7 @@ export default {
       if (items) {
         return items.map(i => {
           return {
-            url: this.createUrl(i.code),
+            url: this.createUrl(i),
             name: i.name,
             slug: i.name,
             tag: i.count,
@@ -88,11 +88,14 @@ export default {
       return []
     },
     createUrl() {
-      return code => {
-        if (code === 'cases') {
-          return '/cases'
+      return item => {
+        if (item.code === 'cases') {
+          return '/cases/0'
         }
-        return '/tasks/' + (code === '' ? 'ALL' : code)
+        if (item.folderId) {
+          return '/cases/' + item.folderId
+        }
+        return '/tasks/' + (item.code === '' ? 'ALL' : item.code)
       }
     },
     menuItemIcon() {
