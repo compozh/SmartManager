@@ -33,6 +33,9 @@ export default {
   setUsers(state, payload) {
     state.users = payload
   },
+  setCases(state, payload) {
+    state.cases = payload
+  },
   addComment(state, payload) {
     const user = JSON.parse(localStorage.currentUser)
     const comment = {

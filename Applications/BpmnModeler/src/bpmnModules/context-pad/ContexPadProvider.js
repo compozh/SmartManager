@@ -41,7 +41,6 @@ ContextPadProvider.prototype.getContextPadEntries = function (element) {
   var di = getBusinessObject(element).di;
   
   function colorize() {
-    
     const input = document.createElement('input');
     input.type = 'color';
     input.value = di.fill;
@@ -58,8 +57,6 @@ ContextPadProvider.prototype.getContextPadEntries = function (element) {
     document.body.appendChild(input);
     input.click();
   }
-
-  console.log(element);
 
   if ((is(di, 'bpmndi:BPMNPlane') || is(di, 'bpmndi:BPMNShape')) && !is(element, 'bpmn:Group')) {
     assign(actions, {

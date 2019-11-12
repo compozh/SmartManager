@@ -31,6 +31,7 @@
                                 :placeholder="$t('tasks.performer')"
                                 name="performer"
                                 v-validate="'required'"
+                                avatar
                   />
                   <span v-if="errors.has('performer')"
                         class="required-text"
@@ -80,6 +81,7 @@
                                 v-model="newTask.coexecutors"
                                 :placeholder="$t('roles.coExecutors')"
                                 class="my-6"
+                                avatar
                   />
                   <autocomplete :items="users"
                                 :multiple="true"
@@ -87,6 +89,7 @@
                                 :loading="userListLoading"
                                 v-model="newTask.notify"
                                 :placeholder="$t('roles.notify')"
+                                avatar
                   />
                   <files-upload @attach="getAttachment($event)"
                                 :uploading="filesUploading"

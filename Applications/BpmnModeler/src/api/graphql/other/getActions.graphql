@@ -1,6 +1,6 @@
 {
   bpmnquery {
-    getActions(definitionType: $definitionType, onlySystem: $onlySystem) {
+    getAvailableActions(definitionType: $definitionType, onlySystem: $onlySystem) {
       id,
       type,
       name,
