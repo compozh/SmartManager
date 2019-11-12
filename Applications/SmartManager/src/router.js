@@ -78,7 +78,7 @@ let router = new VueRouter({
           caseSensitive: false
         },
         {
-          path: '/cases',
+          path: '/cases/:id?',
           name: 'case-list',
           component: () => import('./views/case-list/CaseList.vue'),
           meta: {
