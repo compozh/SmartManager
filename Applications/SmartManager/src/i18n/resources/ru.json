@@ -45,7 +45,9 @@
     "dateAdd": "Добавлено",
     "dateFrom": "От",
     "dateTo": "До",
-    "caseFrom": "Кейс от"
+    "caseFrom": "Кейс от",
+    "participants": "Учасники",
+    "comm": "Примечание"
   },
   "buttons": {
     "addTask": "Добавить задачу",
