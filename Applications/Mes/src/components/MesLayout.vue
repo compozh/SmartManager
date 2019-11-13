@@ -266,5 +266,9 @@ export default {
     width: auto !important;
     height: 80vh !important;
   }
+
+  .formio-component {
+        position: relative;
+  }
 </style>
 

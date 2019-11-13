@@ -57,14 +57,14 @@ export class MesApi {
     const result = await getClient().query({
       query: gql` ${properties}`
     })
-    return result
+    return result.data.mes.properties
   }
 
   async getTicketFromGql () {
     const result = await getClient().query({
       query: gql` ${ticket}`
     })
-    return result
+    return result.data.mes.ticket
   }
 
   async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
