@@ -8,6 +8,7 @@ import folders from './graphql/folders.graphql'
 import tasks from './graphql/tasks.graphql'
 import cases from './graphql/cases.graphql'
 import caseDetails from './graphql/caseDetails.graphql'
+import caseUpdate from './graphql/caseUpdate.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
@@ -222,6 +223,18 @@ export class SmartManagerApi {
         .query({
           query: gql`${caseDetails}`,
           variables: {caseId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async caseUpdateInGql(caseData) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseUpdate}`,
+          variables: {caseData}
         })
     } catch (e) {
       throw new Error(e.message)

@@ -251,13 +251,28 @@ export default {
     }
   },
   async getCaseDetails({commit}, {caseId, loading}) {
-    startLoading(loading)
+    startLoading(loading || true)
     try {
       const result = await api.getCaseDetailsFromGql(caseId)
       stopLoading()
       const caseDetails = result.data.smtasks.caseDetails
       const caseItem = {[caseId]: caseDetails}
       commit('setCaseDetails', caseItem)
+    } catch (e) {
+      console.log(e.message)
+      notify('danger', 'caseTitle', 'caseError')
+    }
+  },
+  async caseUpdate({dispatch}, caseData) {
+    const caseDataJson = JSON.stringify(caseData)
+    startLoading(true)
+    try {
+      const response = await api.caseUpdateInGql(caseDataJson)
+      const result = response.data.smtasksMutation.caseUpdate
+      stopLoading()
+      if (result.success) {
+        dispatch('getCaseDetails', {caseId: caseData.id})
+      }
     } catch (e) {
       console.log(e.message)
       notify('danger', 'caseTitle', 'caseError')
