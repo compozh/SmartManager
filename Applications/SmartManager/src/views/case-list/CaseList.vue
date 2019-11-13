@@ -103,21 +103,11 @@ export default {
       }
     }
   },
-  // watch: {
-  //   $route(to, from) {
-  //     const currentFolder = from.params.id
-  //     const targetFolder = to.params.id
-  //     this.currentPage = 1
-  //     if (currentFolder !== targetFolder) {
-  //       this.cases(targetFolder)
-  //     }
-  //   }
-  // },
   methods: {
     async getCases() {
-      const loading = true //!this.cases
+      const loading = !this.cases
       try {
-        await this.$store.dispatch('sm/getCases', true)
+        await this.$store.dispatch('sm/getCases', {loading})
       } catch (e) {
         console.log(e.message)
       }
@@ -126,8 +116,8 @@ export default {
       this.windowWidth = event.currentTarget.innerWidth
     }
   },
-  mounted() {
-    this.getCases()
+  async mounted() {
+    await this.getCases()
     this.$nextTick(() => {
       window.addEventListener('resize', this.handleWindowResize)
     })

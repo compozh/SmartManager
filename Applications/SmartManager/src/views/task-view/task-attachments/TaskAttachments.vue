@@ -92,10 +92,10 @@ export default {
     }
   },
   methods: {
-    async getUrl({id, fileExt: ext, fileUrl}) {
-      const taskId = this.task.id
-      this.fileId = id
-      this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {id, ext, taskId})
+    async getUrl({id: fileId, fileExt, fileUrl}) {
+      const id = this.$route.params.id
+      this.fileId = fileId
+      this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {fileId, fileExt, id})
     }
   }
 }

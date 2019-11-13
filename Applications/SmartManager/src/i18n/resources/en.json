@@ -45,7 +45,9 @@
     "dateAdd": "Created",
     "dateFrom": "From",
     "dateTo": "To",
-    "caseFrom": "Case from"
+    "caseFrom": "Case from",
+    "participants": "Participants",
+    "comm": "Note"
   },
   "buttons": {
     "addTask": "Add task",

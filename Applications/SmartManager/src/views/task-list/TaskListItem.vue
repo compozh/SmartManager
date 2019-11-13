@@ -1,17 +1,12 @@
 <template>
-  <div
-    class="task__task-item sm:px-4 px-2 py-3"
-    :class="{'task__opened-task': task.isRead}"
-    @click="taskLink(task.id)"
-  >
+  <router-link :to="{name: 'task-view', params: {id: task.id}}"
+               class="task__task-item block sm:px-4 px-2 py-3"
+               :class="{'task__opened-task': task.isRead}">
     <!-- TASK ROW 1 : META -->
     <div class="flex w-full items-center">
-      <vs-avatar
-        class="sender__avatar flex-shrink-0 mr-3 border-2 border-solid border-white"
-        :src="task.performerPhoto"
-        size="40px"
-      ></vs-avatar>
-
+      <vs-avatar class="sender__avatar flex-shrink-0 mr-3 border-2 border-solid border-white"
+                 :src="task.performerPhoto"
+                 size="40px"/>
       <div class="flex justify-between items-start" style="width: calc(100% - 58px);">
         <div class="task__details truncate mr-3">
           <h5 class="mb-1" :class="{'font-semibold': !task.isRead}"
@@ -54,16 +49,14 @@
         <feather-icon v-if="task.isGenerate" icon="FileTextIcon" class="mr-2"/>
       </vx-tooltip>
 
-      <vs-chip
-        :color="taskStatus().color"
-        class="flex-shrink-0"
-        style="flex-basis: 80px"
-        icon="ActivityIcon"
-      >{{ taskStatus().text }}
-      </vs-chip>
+      <vs-chip :color="taskStatus().color"
+               class="flex-shrink-0"
+               style="flex-basis: 80px"
+               icon="ActivityIcon"
+      >{{ taskStatus().text }}</vs-chip>
 
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
