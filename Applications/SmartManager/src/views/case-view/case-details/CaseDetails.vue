@@ -14,21 +14,34 @@
 
             <div class="vx-col sm:w-4/5 w-full flex items-center mb-2">
               <div class="flex flex-col w-11/12">
-                <h5 class="mb-1">{{ caseItem.name }}</h5>
-                <div class="flex items-center">
-                  <h3 class="text-primary truncate">{{ caseItem.purpose }}</h3>
+                <div class="flex items-center mb-2">
+                  <h5 id="name"
+                      class="editable mb-2 hover:bg-white hover:border-gray-300"
+                  >{{ caseItem.name }}</h5>
+                  <span class="save-btn" @click="saveChanges">{{ $t('buttons.save') }}</span>
+                </div>
+                <div class="flex items-center mb-2">
+                  <h3 id="purpose" class="editable text-primary truncate"
+                  >{{ caseItem.purpose }}</h3>
+                  <span class="save-btn" @click="saveChanges">{{ $t('buttons.save') }}</span>
+                </div>
+                <div class="flex items-center mb-2">
+                  <span id="comm" class="editable"
+                  >{{ caseItem.comm }}</span>
+                  <span class="save-btn" @click="saveChanges">{{ $t('buttons.save') }}</span>
                 </div>
               </div>
             </div>
             <div class="vx-col sm:w-1/5 w-full flex sm:flex-col
                         items-center sm:justify-end mb-2">
-              <span class="flex sm:mr-0 mr-2 self-end whitespace-no-wrap"
-              >{{ time(caseItem.dateAdd) }}</span>
-              <span class="flex self-end sm:mt-2 mt-0 whitespace-no-wrap"
-              >{{ date(caseItem.dateAdd) }}</span>
-              <span class="flex self-end sm:mt-2 mt-0 whitespace-no-wrap"
-                    v-if="caseItem.comm"
-              >{{ $t('cases.comm') }}: {{ caseItem.comm }}</span>
+              <span class="flex p-2 self-end cursor-pointer rounded
+                           hover:text-primary hover:bg-grey-light"
+                    @click="changeDate('from')"
+              >Начало: {{ date(caseItem.dateFrom) }} в {{ time(caseItem.dateFrom) }}</span>
+              <span class="flex p-2 self-end cursor-pointer rounded
+                           hover:text-primary hover:bg-grey-light"
+                    @click="changeDate('to')"
+              >Завершение: {{ date(caseItem.dateTo) }} в {{ time(caseItem.dateTo) }}</span>
             </div>
           </div>
 
@@ -122,6 +135,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import TaskListItem from '@/views/task-list/TaskListItem.vue'
 import FilesUpload from '@/components/FilesUpload'
@@ -138,16 +152,10 @@ export default {
     FileIcon
   },
   data: () => ({
-    defaultDescHeight: 250,
-    iFrameHeight: 250,
-    showThread: false,
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
     },
-    options: {noAlerts: true},
-    submission: {},
-    attachments: [],
     filesUploading: false,
   }),
   computed: {
@@ -165,33 +173,74 @@ export default {
       return this.caseItem.tasks
         ? this.caseItem.tasks
         : []
+    },
+    dateTime() {
+      return dateTime => {
+        const date = this.date(dateTime)
+        const time = this.time(dateTime)
+        const formatDate = moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD')
+        return `${formatDate} ${time}`
+      }
     }
   },
+  mounted() {
+    this.makeEditableTextField()
+  },
   methods: {
-    iFrameOnLoad(event) {
-      this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight * 1.2
+    makeEditableTextField() {
+      const fields = document.querySelectorAll('.editable')
+      for (let i = 0; i < fields.length; i++) {
+        fields[i].setAttribute('contenteditable', 'true')
+        fields[i].addEventListener('input', this.changedField)
+        fields[i].addEventListener('blur', this.restoreField)
+      }
     },
-    // обработка смены статуса задачи
-    async onChangeStatus(data) {
-      const form = this.$refs.form.formio
+    changeDate(flag) {
+      console.log('changeDate', flag)
+    },
+    changedField(event) {
+      const elem = event.target
+      if (!elem.changed) {
+        elem.changed = true
+        elem.saved = false
+        elem.nextElementSibling.style.display = 'flex'
+      }
+    },
+    restoreField(event) {
+      const elem = event.target
+      if (elem.changed) {
+        setTimeout(() => {
+          if (!elem.saved) {
+            console.log('restoreField', )
+            const field = elem.id
+            elem.innerHTML = this.caseItem[field]
+            elem.changed = false
+            elem.nextElementSibling.style.display = 'none'
+          }
+        }, 500)
+      }
+    },
+    async saveChanges(event) {
+      const elem = event.target.previousElementSibling
+      elem.saved = true
+      const field = elem.id
+      const newValue = elem.innerHTML
+      const dateFrom = this.caseItem.dateFrom
+      const dateTo = this.caseItem.dateTo
+      const caseData = {
+        id: this.$route.params.id,
+        name: this.caseItem.name,
+        purpose: this.caseItem.purpose,
+        dateFrom: this.dateTime(dateFrom),
+        dateTo: this.dateTime(dateTo),
+        comm: this.caseItem.comm
+      }
+      caseData[field] = newValue
       try {
-        const result = await form.submit()
-        await this.$store.dispatch('sm/changeStatus', {
-          ...data,
-          CompleteParams: JSON.stringify(result.data)
-        })
-      } catch (errors) {
-        if (errors.length) {
-          errors.forEach(e => {
-            this.$vs.notify({
-              title: this.$t('notify.bpTitle'),
-              text: e.message,
-              color: 'danger'
-            })
-          })
-        } else {
-          console.log(errors.message)
-        }
+        await this.$store.dispatch('sm/caseUpdate', caseData)
+        elem.nextElementSibling.style.display = 'none'
+      } catch (e) {
+        console.log('', e)
       }
     },
     getAttachment(event) {
@@ -214,6 +263,40 @@ export default {
 
 <style scoped lang="scss">
 
+  .editable {
+    position: relative;
+    margin: 0 !important;
+    &:focus {
+      overflow: visible !important;
+      cursor: text;
+      &:before {
+        content: "";
+        position: absolute;
+        top: -0.25rem;
+        left: -0.25rem;
+        width: calc(100% + 0.5rem);
+        height: calc(100% + 0.35rem);
+        border-radius: 0.5rem;
+        transition: all 0.25s ease;
+        border: 1px dashed rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .save-btn {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+    color: #7367F0;
+    cursor: pointer;
+    padding: 0 0.25rem;
+    margin-left: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #7367F0;
+    animation: scale 1s linear infinite;
+  }
+
   .chips {
     cursor: pointer;
 
@@ -233,6 +316,15 @@ export default {
           color: white;
         }
       }
+    }
+  }
+
+  @keyframes scale {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
     }
   }
 
