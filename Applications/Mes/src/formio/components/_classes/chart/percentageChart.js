@@ -1,4 +1,5 @@
 import HtmlelementComponent from 'formiojs/components/html/HTML';
+import DatamapComponent from 'formiojs/components/datamap/DataMap';
 
 export default class PercentageChart extends HtmlelementComponent {
 	attach(element) {
@@ -15,7 +16,7 @@ export default class PercentageChart extends HtmlelementComponent {
 			series.push(item.serie);
 		}
 		for (var color of this.component.colorData) {
-			colors.push(color.color)
+			colors.push(color.color);
 		}
 		var options = {
 			chart: {
@@ -92,17 +93,40 @@ export default class PercentageChart extends HtmlelementComponent {
 				]
 			};
 
+		var baseEditForm = DatamapComponent.editForm();
+		var dataComponent = null;
+		for (var baseFormComponent of baseEditForm.components) {
+			if (baseFormComponent.key === 'tabs') {
+				for (var baseTabComponent of baseFormComponent.components) {
+					if (baseTabComponent.key === 'data') {
+						dataComponent = baseTabComponent;
+					}
+				}
+			}
+		}
+
+		if (dataComponent) {
+			for (var component of dataComponent.components) {
+				if (component.key === 'persistent' || component.key === 'protected' || component.key === 'dbIndex' || component.key === 'encrypted') {
+					component.hidden = true;
+				}
+			}
+		}
+
 		for (var formComponent of chartForm.components) {
 			if (formComponent.key === 'tabs') {
-				var dataComponent = {};
-				dataComponent.components = [];
-				dataComponent.components.push(chartHeight);
-				dataComponent.components.push(colorsElement);
-				dataComponent.components.push(dataElement);
-				dataComponent.key = 'data';
-				dataComponent.label = 'Data';
-				dataComponent.weight = 20;
-				formComponent.components.push(dataComponent);
+				if (dataComponent) {
+					formComponent.components.splice(1, 0, dataComponent);
+				}
+
+				var visualizationComponent = {
+					key: 'visualization',
+					label: 'Visualization',
+					weight: 20,
+					components: [chartHeight, colorsElement, dataElement]
+				};
+
+				formComponent.components.push(visualizationComponent);
 
 			}
 		}
