@@ -1,4 +1,5 @@
 import HtmlelementComponent from 'formiojs/components/html/HTML';
+import DatamapComponent from 'formiojs/components/datamap/DataMap';
 
 export default class GraphicChart extends HtmlelementComponent {
 	attach(element) {
@@ -155,17 +156,43 @@ export default class GraphicChart extends HtmlelementComponent {
 				]
 			};
 
+		var baseEditForm = DatamapComponent.editForm();
+		var dataComponent = null;
+		for (var baseFormComponent of baseEditForm.components) {
+			if (baseFormComponent.key === 'tabs') {
+				for (var baseTabComponent of baseFormComponent.components) {
+					if (baseTabComponent.key === 'data') {
+						dataComponent = baseTabComponent;
+					}
+				}
+			}
+		}
+
+		if (dataComponent) {
+			for (var component of dataComponent.components) {
+				if (component.key === 'persistent' || component.key === 'protected' || component.key === 'dbIndex' || component.key === 'encrypted') {
+					component.hidden = true;
+				}
+			}
+		}
+
 		for (var formComponent of chartForm.components) {
 			if (formComponent.key === 'tabs') {
-				var dataComponent = {};
-				dataComponent.components = [];
-				dataComponent.components.push(chartTitle);
-				dataComponent.components.push(chartWidth);
-				if (this.name != 'BarChart') {
-					dataComponent.components.push(strokeElement);
+				if (dataComponent) {
+					formComponent.components.splice(1, 0, dataComponent);
 				}
-				dataComponent.components.push(colorsElement);
-				dataComponent.components.push({
+				var visualizationComponent = {
+					key: 'visualization',
+					label: 'Visualization',
+					weight: 20,
+					components: [chartTitle, chartWidth]
+				};
+
+				if (this.name != 'BarChart') {
+					visualizationComponent.components.push(strokeElement);
+				}
+				visualizationComponent.components.push(colorsElement);
+				visualizationComponent.components.push({
 					type: 'datagrid',
 					input: true,
 					label: 'Flow Categories',
@@ -180,12 +207,9 @@ export default class GraphicChart extends HtmlelementComponent {
 							type: 'textfield'
 						}
 					]
-				})
-				dataComponent.components.push(dataElement);
-				dataComponent.key = 'data';
-				dataComponent.label = 'Data';
-				dataComponent.weight = 20;
-				formComponent.components.push(dataComponent);
+				});
+				visualizationComponent.components.push(dataElement);
+				formComponent.components.push(visualizationComponent);
 
 			}
 		}
@@ -208,7 +232,7 @@ export default class GraphicChart extends HtmlelementComponent {
 
 	static get builderInfo() {
 		return {
-
+			
 		};
 	}
 }
