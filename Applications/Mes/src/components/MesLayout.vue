@@ -1,7 +1,7 @@
 <template>
   <v-app id="mes-app">
     <!-- Меню -->
-    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" hide-overlay :mini-variant="menuMiniMode">
+    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" permanent hide-overlay :stateless="true" :mini-variant="menuMiniMode">
       <router-view name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
@@ -202,6 +202,32 @@ export default {
   .v-navigation-drawer__content .v-list .v-list-item__action {
     margin-right: 25px;
   }
+
+  .v-navigation-drawer__content::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px
+  }
+  /* background of the scrollbar except button or resizer */
+  .v-navigation-drawer__content::-webkit-scrollbar-track {
+    background-color:#fff
+  }
+  .v-navigation-drawer__content::-webkit-scrollbar-track:hover {
+    background-color:#f4f4f4
+  }
+
+  /* scrollbar itself */
+  .v-navigation-drawer__content::-webkit-scrollbar-thumb {
+    background-color:#babac0;
+    border-radius:16px;
+    border:5px solid #fff
+  }
+  .v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
+    background-color:#a0a0a5;
+    border:4px solid #f4f4f4
+  }
+  /* set button(top and bottom of the scrollbar) */
+  .v-navigation-drawer__content::-webkit-scrollbar-button {display:none}
+
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tab:first-child,
   .v-application--is-ltr .v-tabs-bar.v-tabs-bar--is-mobile:not(.v-tabs-bar--show-arrows)>.v-slide-group__wrapper>.v-tabs-bar__content>.v-tabs-slider-wrapper+.v-tab {
     margin: 0;
