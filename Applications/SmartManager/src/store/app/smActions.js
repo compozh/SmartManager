@@ -31,15 +31,14 @@ export default {
       notify('danger', 'foldersTitle', 'foldersError')
     }
   },
-  async getTasks({commit}, payload) {
-    const folderId = payload.folderId
+  async getTasks({commit}, {folderId, loading}) {
     commit('setSearch', null)
-    startLoading(payload.loading)
+    startLoading(loading)
     try {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
       )
-      !payload.loading || stopLoading()
+      !loading || stopLoading()
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
@@ -57,19 +56,18 @@ export default {
       const taskInfo = result.data.smtasks.taskDetails
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
-
     } catch (e) {
       stopLoading()
       console.log(e.message)
       notify('danger', 'taskTitle', 'taskError')
     }
   },
-  async getFileUrl({commit}, {id, ext, taskId}) {
+  async getFileUrl({commit}, {fileId, fileExt, id: taskOrCaseId}) {
     startLoading(true)
     try {
-      const result = await api.getFileUrlFromGql(id, ext)
+      const result = await api.getFileUrlFromGql(fileId, fileExt)
       const fileUrl = result.data.smtasks.fileUrl
-      commit('setFileUrl', {id, fileUrl, taskId})
+      commit('setFileUrl', {fileId, fileUrl, taskOrCaseId})
       stopLoading()
       return fileUrl
     } catch (e) {
@@ -97,12 +95,9 @@ export default {
       stopLoading()
       if (result.success) {
         await dispatch('getFolders')
-        notify(
-          'success',
-          'taskTitle',
-          'taskAddSuccess')
+        notify('success','taskTitle','taskAddSuccess')
       } else {
-        notify('warning', 'taskTitle', 'taskAddFail')
+        notify('warning','taskTitle','taskAddFail')
       }
       return result
     } catch (e) {
@@ -125,10 +120,7 @@ export default {
         })
         notify('success', 'statusTitle', 'statChangeSuccess')
       } else {
-        notify(
-          'warning',
-          'statusTitle',
-          'statChangeFail')
+        notify('warning','statusTitle','statChangeFail')
       }
     } catch (e) {
       stopLoading()
@@ -171,15 +163,9 @@ export default {
           taskId: payload.id,
           loader: true
         })
-        notify(
-          'success',
-          'stageTitle',
-          'stageChangeSuccess')
+        notify('success','stageTitle','stageChangeSuccess')
       } else {
-        notify(
-          'warning',
-          'stageTitle',
-          'stageChangeFail')
+        notify('warning','stageTitle','stageChangeFail')
       }
     } catch (e) {
       stopLoading()
@@ -187,17 +173,16 @@ export default {
       notify('danger', 'stageTitle', 'stageChangeError')
     }
   },
-  async addTaskComment({commit}, payload) {
-    const comment = payload.comment
-    const params = JSON.stringify(payload.params)
+  async addTaskComment({commit}, {comment, params}) {
+    const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.addTaskCommentToGql(comment, params)
+      const response = await api.addTaskCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
       stopLoading()
       if (result.success) {
         commit('addComment', {
-          id: payload.params.id,
+          id: params.id,
           text: comment
         })
         notify('success', 'commentsTitle', 'commentAddSuccess')
@@ -253,8 +238,8 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async getCases({commit}) {
-    startLoading(true)
+  async getCases({commit}, {loading}) {
+    startLoading(loading)
     try {
       const result = await api.getCasesFromGql()
       stopLoading()
@@ -263,6 +248,19 @@ export default {
     } catch (e) {
       console.log(e.message)
       notify('danger', 'casesTitle', 'casesError')
+    }
+  },
+  async getCaseDetails({commit}, {caseId, loading}) {
+    startLoading(loading)
+    try {
+      const result = await api.getCaseDetailsFromGql(caseId)
+      stopLoading()
+      const caseDetails = result.data.smtasks.caseDetails
+      const caseItem = {[caseId]: caseDetails}
+      commit('setCaseDetails', caseItem)
+    } catch (e) {
+      console.log(e.message)
+      notify('danger', 'caseTitle', 'caseError')
     }
   }
 }

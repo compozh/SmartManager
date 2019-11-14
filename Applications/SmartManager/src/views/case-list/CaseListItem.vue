@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="task__task-item sm:px-4 px-2 py-3"
-    @click="caseLink(caseItem.id)"
-  >
+  <router-link :to="{name: 'case-view', params: {id: caseItem.id}}"
+               class="task__task-item block sm:px-4 px-2 py-3">
     <!-- TASK ROW 1 : META -->
     <div class="flex w-full items-center" style="padding-left: 45px;">
       <div class="flex justify-between items-start w-full">
@@ -35,7 +33,7 @@
       </vx-tooltip>
 
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
