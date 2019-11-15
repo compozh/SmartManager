@@ -9,8 +9,7 @@ export default {
   async initializeProperties({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const result = await api.getPropertiesFromGql()
-        let properties = result.data.mes.properties
+        const properties = await api.getPropertiesFromGql()
         commit('setProperties', properties)
 
         for(var action of getters.actionsAfterInitializeProperties) {
@@ -23,8 +22,8 @@ export default {
   async initializeTicket({commit}) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const result = await api.getTicketFromGql()
-        commit('setTicket', result.data.mes.ticket)
+        const ticket = await api.getTicketFromGql()
+        commit('setTicket', ticket)
       }
     })
   },

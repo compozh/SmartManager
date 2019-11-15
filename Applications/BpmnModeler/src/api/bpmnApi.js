@@ -8,26 +8,38 @@ import * as mutations from './graphql/mutations';
 
 import Vue from 'vue';
 
+var client;
+
+/**
+ * @returns {ApolloClient}
+ */
 const getClient = () => {
-  const authHeader = Vue.prototype.$authentication.getAuthHeader();
-  const options = {
-    // eslint-disable-next-line no-undef
-    uri: myConfig.GrapgQlUrl + 'api/graphql',
-    credentials: 'include',
-    headers: {
-      ...authHeader,
-      'schema': 'bpmnmodeler'
-    }
-  };
-  return new ApolloClient({
-    cache: new InMemoryCache(),
-    link: new HttpLink(options)
-  });
+  if (!client) {
+    const authHeader = Vue.prototype.$authentication.getAuthHeader();
+    const options = {
+      // eslint-disable-next-line no-undef
+      uri: myConfig.GrapgQlUrl + 'api/graphql',
+      credentials: 'include',
+      headers: {
+        ...authHeader,
+        'schema': 'bpmnmodeler'
+      }
+    };
+    client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: new HttpLink(options)
+    });
+  }
+  return client; 
 };
 
 export class BpmnModelerApi {
   constructor() { }
   
+  async reset() {
+    await getClient().resetStore(); 
+  }
+
   async getConfiguration() {
     const result = await getClient().query({
       query: gql`query ${queries.getConfiguration}`
@@ -53,11 +65,20 @@ export class BpmnModelerApi {
   }
 
   async setXml(id, xml) {
-    const result = await getClient().mutate({
-      mutation: gql`mutation ($id: ID!, $xml: String!) ${mutations.setXml}`,
-      variables: { id, xml }
-    });
-    return result.data.bpmnqueryMutation.setXml;
+    const client = getClient(),
+      result = await client.mutate({
+        mutation: gql`mutation ($id: ID!, $xml: String!) ${mutations.setXml}`,
+        variables: { id, xml }
+      }),
+      success = result.data.bpmnqueryMutation.setXml;
+    if (success) {
+      client.writeQuery({
+        query: gql`query ($id: ID!) ${queries.getXml}`,
+        variables: { id },
+        data: { bpmnquery: { getXml: xml, __typename: 'String' } }
+      });
+    }
+    return success;
   }
 
   async createDiagram(diagram) {
@@ -159,7 +180,8 @@ export class BpmnModelerApi {
           allowAccess: accessParams.allowAccess,
           rights: accessParams.rights
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     });
     return result.data.bpmnqueryMutation.giveAccessToDiagram;
   }
@@ -238,6 +260,28 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.getFormsForProcess;
   }
 
+  addForm(id, name) {
+    const client = getClient(),
+      query = gql`query ($onlySystem: Boolean!) ${queries.getForms}`,
+      variables = { onlySystem: false },
+      result = client.readQuery({
+        query,
+        variables
+      });
+    result.bpmnquery.getFormsForProcess.push({
+      id: id,
+      name: name,
+      __typename: 'FormIO'
+    });
+    client.writeQuery({
+      query,
+      variables,
+      data: result
+    });
+  }
+
   //#endregion
 
 }
+
+export const api = new BpmnModelerApi();

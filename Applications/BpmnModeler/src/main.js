@@ -20,7 +20,7 @@ import { i18n } from './plugins/i18n';
 import VueI18n from 'vue-i18n';
 import store from './store/index';
 import VueSplit from 'vue-split-panel'
-import { Tree } from 'element-ui';
+import { Tree, Collapse, CollapseItem } from 'element-ui';
 
 // apollo
 import { ApolloClient } from 'apollo-client';
@@ -55,8 +55,12 @@ Vue.use(VueI18n);
 Vue.use(VueApollo);
 
 Vue.use(VueSplit);
+
+// Element UI
 Vue.prototype.$ELEMENT = { size: 'small' };
 Vue.use(Tree);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
 
 // Плагины it-enterprise
 Vue.use(ItCommon);
