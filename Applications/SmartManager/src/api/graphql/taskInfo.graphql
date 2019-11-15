@@ -1,71 +1,68 @@
 query ($taskId: Int) {
-  smtasks {
-    taskDetails(taskId: $taskId) {
-      ...mainTaskFields
-      ...detailTaskFields
-      parentTasks {
-        ...mainTaskFields
-      }
-      childTasks {
-        ...mainTaskFields
-      }
-      parentTask {
-        ...mainTaskFields
-      }
+    smtasks {
+        taskDetails(taskId: $taskId) {
+            ...mainTaskFields
+            ...detailTaskFields
+            parentTasks {
+                ...mainTaskFields
+            }
+            childTasks {
+                ...mainTaskFields
+            }
+        }
     }
-  }
 }
 
 fragment mainTaskFields on Task {
-  id
-  name
-  descript
-  performerId
-  performer
-  performerPhoto
-  dateplan
-  dateAdd
-  status
-  isMy
-  myControl
-  isGenerate
-  hasOrig
-  hasComm
-  priority
-  dateFact
-  isRead
+    id
+    name
+    descript
+    performerId
+    performer
+    performerPhoto
+    dateplan
+    dateAdd
+    addedFio
+    status
+    isMy
+    myControl
+    isGenerate
+    hasOrig
+    hasComm
+    priority
+    dateFact
+    isRead
 }
 
 fragment detailTaskFields on Task {
-  htmlDescript
-  declarerId
-  declarer
-  declarerPhoto
-  arso
-  keyValue
-  kidCopy
-  addedId
-  addedFio
-  addedPhoto
-  nextButtonText
-  previousButtonText
-  taskType
-  participants {
-    userId
-    userFio
-    name
-    role
-  }
-  originals {
-    id
-    fileName
-    fileExt
-  }
-  comments {
-    userId
-    user
-    userPhoto
-    date
-    text
-  }
+    htmlDescript
+    declarerId
+    declarer
+    declarerPhoto
+    arso
+    keyValue
+    kidCopy
+    addedId
+    addedPhoto
+    nextButtonText
+    previousButtonText
+    taskType
+    participants {
+        userId
+        userFio
+        name
+        role
+    }
+    originals {
+        id
+        fileName
+        fileExt
+    }
+    comments {
+        userId
+        user
+        userPhoto
+        date
+        text
+    }
 }

@@ -19,10 +19,11 @@ export default {
   setTaskInfo(state, payload) {
     state.taskInfo = Object.assign({}, state.taskInfo, payload)
   },
-  setFileUrl(state, {id, fileUrl, taskId}) {
-    const task = state.taskInfo[taskId]
+  setFileUrl(state, {fileId, fileUrl, taskOrCaseId: id}) {
+    const task = state.taskInfo[id]
+      || state.caseDetails[id]
     task.originals.forEach(original => {
-      if (original.id === id) {
+      if (original.id === fileId) {
         original.fileUrl = fileUrl
       }
     })
@@ -32,6 +33,12 @@ export default {
   },
   setUsers(state, payload) {
     state.users = payload
+  },
+  setCases(state, payload) {
+    state.cases = payload
+  },
+  setCaseDetails(state, payload) {
+    state.caseDetails = Object.assign({}, state.caseDetails, payload)
   },
   addComment(state, payload) {
     const user = JSON.parse(localStorage.currentUser)

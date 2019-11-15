@@ -117,4 +117,8 @@ export default {
   .mes-arrow-back i {
     color: white !important;
   }
+  .wrapper {
+    display: flex;
+    justify-content: center;
+  }
 </style>

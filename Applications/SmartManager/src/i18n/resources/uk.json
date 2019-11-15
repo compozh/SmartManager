@@ -33,7 +33,21 @@
     "related": "Зв'язані задачі",
     "subTasks": "Підзадачі",
     "done": "Завершено",
-    "taskFrom": "Задача от"
+    "taskFrom": "Задача від"
+  },
+  "cases": {
+    "newCase": "Новий кейс",
+    "caseName": "Назва кейсу",
+    "noCases": "Відсутні кейси для відображення",
+    "description": "Опис кейсу",
+    "id": "ID",
+    "fioAdd": "Додав",
+    "dateAdd": "Додано",
+    "dateFrom": "Від",
+    "dateTo": "До",
+    "caseFrom": "Кейс від",
+    "participants": "Учасники",
+    "comm": "Примітка"
   },
   "buttons": {
     "addTask": "Додати задачу",

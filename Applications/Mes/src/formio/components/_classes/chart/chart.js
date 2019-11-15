@@ -1,4 +1,5 @@
 import HtmlelementComponent from 'formiojs/components/html/HTML';
+import DatamapComponent from 'formiojs/components/datamap/DataMap';
 
 export default class Chart extends HtmlelementComponent {
 	attach(element) {
@@ -15,7 +16,7 @@ export default class Chart extends HtmlelementComponent {
 			series.push(item.serie);
 		}
 		for (var color of this.component.colorData) {
-			colors.push(color.color)
+			colors.push(color.color);
 		}
 		var options = {
 			chart: {
@@ -29,12 +30,12 @@ export default class Chart extends HtmlelementComponent {
 				options: {
 					chart: {
 						width: 200
-					},
-					legend: {
-						position: this.component.legendPosition
 					}
 				}
 			}],
+			legend: {
+				position: this.component.legendPosition
+			},
 			colors: colors
 		};
 
@@ -113,19 +114,40 @@ export default class Chart extends HtmlelementComponent {
 				}]
 			};
 
+		var baseEditForm = DatamapComponent.editForm();
+		var dataComponent = null;
+		for (var baseFormComponent of baseEditForm.components) {
+			if (baseFormComponent.key === 'tabs') {
+				for (var baseTabComponent of baseFormComponent.components) {
+					if (baseTabComponent.key === 'data') {
+						dataComponent = baseTabComponent;
+					}
+				}
+			}
+		}
+
+		if (dataComponent) {
+			for (var component of dataComponent.components) {
+				if (component.key === 'persistent' || component.key === 'protected' || component.key === 'dbIndex' || component.key === 'encrypted') {
+					component.hidden = true;
+				}
+			}
+		}
+
 		for (var formComponent of chartForm.components) {
 			if (formComponent.key === 'tabs') {
-				var dataComponent = {};
-				dataComponent.components = [];
-				dataComponent.components.push(chartWidth);
-				dataComponent.components.push(dataElement);
-				dataComponent.components.push(legendPositionElement);
-				dataComponent.components.push(colorsElement);
-				dataComponent.key = 'data';
-				dataComponent.label = 'Data';
-				dataComponent.weight = 20;
-				formComponent.components.push(dataComponent);
+				if (dataComponent) {
+					formComponent.components.splice(1, 0, dataComponent);
+				}
 
+				var visualizationComponent = {
+					key: 'visualization',
+					label: 'Visualization',
+					weight: 20,
+					components: [chartWidth, dataElement, legendPositionElement, colorsElement]
+				};
+
+				formComponent.components.push(visualizationComponent);
 			}
 		}
 
@@ -136,7 +158,7 @@ export default class Chart extends HtmlelementComponent {
 			type: 'chart',
 			label: 'chartelement',
 			chartData: [{ label: '', serie: 1 }],
-			legendPosition: 'top',
+			legendPosition: 'right',
 			chartWidth: 300,
 			colorData: [{ color: '#008FFB' }, { color: '#00E396' }, { color: '#FEB019' }, { color: '#FF4560' }, { color: '#775DD0' }]
 		}, ...extend);

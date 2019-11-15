@@ -35,6 +35,20 @@
     "done": "Completed",
     "taskFrom": "Task from"
   },
+  "cases": {
+    "newCase": "New case",
+    "caseName": "Case name",
+    "noCases": "No cases",
+    "description": "Case description",
+    "id": "ID",
+    "fioAdd": "Added",
+    "dateAdd": "Created",
+    "dateFrom": "From",
+    "dateTo": "To",
+    "caseFrom": "Case from",
+    "participants": "Participants",
+    "comm": "Note"
+  },
   "buttons": {
     "addTask": "Add task",
     "addSubTask": "Add subtask",

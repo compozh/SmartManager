@@ -7,15 +7,16 @@
                   <!-- select and start business-process -->
                   <form @submit.prevent>
                     <autocomplete :items="businessProcesses"
-                                     :multiple="false"
-                                     :loading="bpListLoading"
-                                     v-model="businessProcess"
-                                     @input="getFormDefinition"
-                                     label="name"
-                                     :title="$t('workflow.businessProcess')"
-                                     :placeholder="$t('workflow.bpSelectLabel') + '...'"
-                                     name="businessProcess"
-                                     v-validate="'required'"
+                                  :multiple="false"
+                                  :loading="bpListLoading"
+                                  v-model="businessProcess"
+                                  @input="getFormDefinition"
+                                  label="name"
+                                  :title="$t('workflow.businessProcess')"
+                                  :placeholder="$t('workflow.bpSelectLabel') + '...'"
+                                  name="businessProcess"
+                                  v-validate="'required'"
+                                  icon="CodesandboxIcon"
                     />
                     <span v-if="errors.has('businessProcess')"
                           class="required-text"
@@ -154,7 +155,7 @@ export default {
     },
     async startBusinessProcess(data) {
       const processData = {
-        ProcessDefinitionId: this.formDefinition.procDefId,
+        ProcessDefinitionId: this.businessProcess.procDefId,
         BusinessKey: `USER[${this.userId}]`,
         Variables: this.getVariables(data)
       }

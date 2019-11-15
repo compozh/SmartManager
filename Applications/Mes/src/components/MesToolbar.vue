@@ -7,7 +7,7 @@
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
+        <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
       </v-flex>
 
       <!-- Состояние РЦ -->
@@ -194,6 +194,9 @@ export default {
       })
 
       return newGuid
+    },
+    refreshApp() {
+      this.$router.go()
     }
   }
 }
@@ -260,6 +263,7 @@ a {
   color: #326da8;
   font-size: 30px;
   font-weight: 700;
+  cursor: pointer;
 }
 .user-info-desc {
   display: flex;

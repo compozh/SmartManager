@@ -9,10 +9,11 @@ import {
   faFilePdf as pdf,
   faFilePowerpoint as ppt,
   faFileWord as doc,
-  faFileAlt as txt
+  faFileAlt as txt,
+  faFile as file
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
-library.add(xls, img, pdf, ppt, doc, txt)
+library.add(xls, img, pdf, ppt, doc, txt, file)
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 export default {
   components: {
@@ -53,6 +54,7 @@ export default {
           case this.isExcel(ext): return 'file-excel'
           case this.isWord(ext): return 'file-word'
           case this.isPowPoint(ext): return 'file-powerpoint'
+          default: return 'file'
         }
       }
     },

@@ -1,6 +1,6 @@
 <template>
 <v-layout class="quality-layout">
-  <v-flex class="quality-flex" v-if="initializeQualities">
+  <v-flex class="quality-flex" v-if="initializeQualities" :key="this.qualityFormioKey">
     <formio-component
       v-if="selectedQuality"
       ref="formioBuilder"
@@ -19,6 +19,11 @@ export default {
   props: {
     initializeQualities: Boolean
   },
+  data() {
+    return {
+      qualityFormioKey: 0
+    }
+  },
   computed: {
     selectedQuality() {
       return this.$store.getters['mes/selectedQuality']
@@ -30,6 +35,7 @@ export default {
       return this.$store.getters['mes/workCenter']
     },
     qualityFormio() {
+      this.qualityFormioKey += 1
       return this.$store.getters['mes/qualityFormio']
     }
   },

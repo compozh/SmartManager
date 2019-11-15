@@ -76,6 +76,24 @@ let router = new VueRouter({
             rule: 'admin'
           },
           caseSensitive: false
+        },
+        {
+          path: '/cases/:id?',
+          name: 'case-list',
+          component: () => import('./views/case-list/CaseList.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case/:id',
+          name: 'case-view',
+          component: () => import('./views/case-view/CaseView.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
         }
       ]
     },
