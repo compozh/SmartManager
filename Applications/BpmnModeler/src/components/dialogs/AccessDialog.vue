@@ -241,17 +241,27 @@ export default {
       });
     },
     async loadUsersAndGroups() {
-      var users = (await this.$store.dispatch('bpmn/queryUsers')).map(user => { return { ...user, type: 'user' } });
-      var groups = (await this.$store.dispatch('bpmn/queryGroups')).map(group => { return { ...group, type: 'group' } });
-      this.form.usersAndGroups.push(
-        { id: '', name: this.$t('bpmn.labels.All'), type: 'all' },
-        { divider: true },
-        { header: this.$t('bpmn.labels.Users')},
-        users,
-        { divider: true },
-        { header: this.$t('bpmn.labels.Groups')},
-        groups );
-      this.form.usersAndGroups = this.form.usersAndGroups.flat();
+      var [ users, groups ] = await Promise.all([
+        (await this.$store.dispatch('bpmn/queryUsers')).map(user => { return { ...user, type: 'user' } }),
+        (await this.$store.dispatch('bpmn/queryGroups')).map(group => { return { ...group, type: 'group' } })
+      ]);
+
+      this.form.usersAndGroups = [ { id: '', name: this.$t('bpmn.labels.All'), type: 'all' } ];
+
+      if (users) {
+        this.form.usersAndGroups.push(
+          { divider: true },
+          { header: this.$t('bpmn.labels.Users')},
+          ...users,
+        );
+      }
+      if (groups) {
+        this.form.usersAndGroups.push(
+          { divider: true },
+          { header: this.$t('bpmn.labels.Groups')},
+          ...groups
+        );
+      }
     },
     createItem() {
       this.form.editedItem.recordId = this.recordId;
@@ -297,7 +307,7 @@ export default {
         storeAction = 'bpmn/editAccessToProcess';
         break;
       case 'delete':
-        storeAction = 'bpmn/removeAccessToProcess', this.form.editedItem;
+        storeAction = 'bpmn/removeAccessToProcess';
         break;
       }
 

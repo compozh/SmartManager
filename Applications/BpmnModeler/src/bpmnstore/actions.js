@@ -1,10 +1,15 @@
 /* eslint-disable require-atomic-updates */
-import { BpmnModelerApi } from '../api';
+import { api } from '../api/bpmnApi';
 import { Folder, Diagram, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
 
-const api = new BpmnModelerApi();
-
 export default {
+  async resetCache() {
+    try {
+      await api.reset();
+    } catch {
+      //
+    }
+  },
   async setActiveItem(context, item) {
     if (typeof item === 'string' || item instanceof String) {
       ({ item } = context.getters.getItemById(item));
