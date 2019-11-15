@@ -3,8 +3,7 @@
       class="vs-sidebar--item" v-if="canSee"
       :class="[
         {'vs-sidebar-item-active':activeLink},
-        {'disabled-item pointer-events-none': isDisabled},
-        {'ml-3': to.includes('cases') && !to.includes('/0')}
+        {'disabled-item pointer-events-none': isDisabled}
       ]"
     >
         <router-link

@@ -281,10 +281,10 @@ export default {
       this.addAttachments()
     },
     async addAttachments() {
-      const taskId = this.task.id
+      const id = this.task.id
       const attachments = JSON.stringify(this.attachments)
       try {
-        await this.$store.dispatch('sm/addAttachments', {taskId, attachments})
+        await this.$store.dispatch('sm/addAttachments', {id, type: 'TASK', attachments})
         this.attachments.length = 0
       } catch (e) {
         console.log('', e.message)
