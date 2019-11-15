@@ -37,7 +37,7 @@
   },
   "cases": {
     "newCase": "New case",
-    "caseName": "Case name",
+    "тф": "Case name",
     "noCases": "No cases",
     "description": "Case description",
     "id": "ID",
@@ -71,7 +71,9 @@
     "startWorkflow": "Start business process",
     "login": "Sign in",
     "logout": "Logout",
-    "download": "Download"
+    "download": "Download",
+    "save": "Save",
+    "addCase": "Add case"
   },
   "icons": {
     "priority": "High priority",
