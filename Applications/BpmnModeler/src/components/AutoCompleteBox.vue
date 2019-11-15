@@ -6,11 +6,13 @@
     :search-input.sync="search"
     :label="label"
     :disabled="disabled"
+    :readonly="readonly"
     :rules="rules"
     item-value="id"
     item-text="name"
     no-filter
     :multiple="multiple"
+    
   >
     <template #item="data">
       <slot name="item" :data="data"></slot>
@@ -24,10 +26,11 @@ export default {
   name: 'autocompletebox',
   props: {
     label: String,
-    queryItems: {},
+    queryItems: Function,
     value: {},
-    disabled: {},
-    rules: {},
+    disabled: Boolean,
+    readonly: Boolean,
+    rules: Array,
     multiple: Boolean
   },
   mounted() {

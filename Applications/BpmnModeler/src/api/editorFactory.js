@@ -22,7 +22,7 @@ import ContextPadProvider from '../bpmnModules/context-pad/';
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
   switch (type) {
   case DiagramType.BPMN:
-    return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, propertiesPanelContainer, translate);
+    return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, translate);
   case DiagramType.DMN:
     return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, propertiesPanelContainer, translate);
   default:
@@ -36,14 +36,11 @@ function createTranslationModule(translate) {
   }
 }
 
-function createBpmnModeler(editorContainer, propertiesPanelContainer, translate) {
+function createBpmnModeler(editorContainer, translate) {
   return new BpmnModeler({
     container: editorContainer,
     keyboard: {
       bindTo: document
-    },
-    propertiesPanel: {
-      parent: propertiesPanelContainer
     },
     additionalModules: [
       bpmnPropertiesPanelModule,

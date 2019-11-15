@@ -2,16 +2,15 @@ import flattenDeep from 'lodash/flattenDeep';
 import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
 import extensionElementsHelper from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
-import { eventBus } from '../../../main';
-import { events } from '../../../constants';
+import { eventBus } from '../../main';
+import { events } from '../../constants';
 
 /**
  * Выполнить несколько команд одной командой
- * @param {Object} commandStack - стек команд
  * @param {Object[]} commands - команды, которые необходимо выполнить
- * @param {Object} element - элемент, для которого выполняются команды
+ * @returns {Object} Комманда, выполняющая несколько комманд
  */
-export function executeCommands(commandStack, commands, element) {
+export function concatCommands(commands) {
   var commandToExecute;
 
   if (commands.length > 1) {
@@ -23,9 +22,7 @@ export function executeCommands(commandStack, commands, element) {
     commandToExecute = commands[0];
   }
 
-  if (commandToExecute) {
-    commandStack.execute(commandToExecute.cmd, commandToExecute.context || { element: element });
-  }
+  return commandToExecute;
 }
 
 /**
@@ -63,6 +60,9 @@ export function setServiceTaskParameters(element, bo, actionId, bpmnFactory, com
       elementHelper.createElement('IT-Enterprise:ServiceTaskParameter', param, extensionElements, bpmnFactory)), existingParameters));
 
     // Применить изменения
-    executeCommands(commandStack, commands, element);
+    const command = concatCommands(commands);
+    if (command) {
+      commandStack.execute(command.cmd, command.context || { element: element });
+    }
   });
 }

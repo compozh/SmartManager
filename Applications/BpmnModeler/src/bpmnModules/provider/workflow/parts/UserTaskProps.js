@@ -4,7 +4,7 @@ import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import { eventBus } from '../../../../main';
 import { events } from '../../../../constants';
 import ActionDefinitionType from '../../../../api/models/ActionDefinitionType';
-import { setServiceTaskParameters } from '../utils'
+import { setServiceTaskParameters } from '../../../properties-panel/utils'
 
 export default function (group, element, bpmnFactory, translate, commandStack) {
 

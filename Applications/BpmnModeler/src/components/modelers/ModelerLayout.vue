@@ -63,9 +63,11 @@
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
 import Diagram from '../../api/models/Diagram';
+import { fullScreenMixin } from '../mixins';
 
 export default {
   name: 'modeler-layout',
+  mixins: [ fullScreenMixin ],
   props: {
     process: Diagram,
     loading: Boolean,
@@ -88,49 +90,7 @@ export default {
       isFullScreen: false
     }
   },
-  mounted() {
-    document.addEventListener('fullscreenchange', this.onFullScreenChanged);
-    document.addEventListener('mozfullscreenchange', this.onFullScreenChanged);
-    document.addEventListener('webkitfullscreenchange', this.onFullScreenChanged);
-    document.addEventListener('msfullscreenchange', this.onFullScreenChanged);
-  },
-  beforeDestroy() {
-    document.removeEventListener('fullscreenchange', this.onFullScreenChanged);
-    document.removeEventListener('mozfullscreenchange', this.onFullScreenChanged);
-    document.removeEventListener('webkitfullscreenchange', this.onFullScreenChanged);
-    document.removeEventListener('msfullscreenchange', this.onFullScreenChanged);
-  },
   computed: {
-    fullScreen: {
-      get() {
-        return this.isFullScreen;
-      },
-      set(value) {
-        const element = this.$refs.layout;
-        if (value) {
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (document.documentElement.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-          }
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          }
-        }
-        this.isFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-      }
-    },
     showPanel: {
       get() {
         return this.canShowPanel && this.panel
@@ -148,9 +108,9 @@ export default {
     }
   },
   methods: {
-    onFullScreenChanged() {
-      this.isFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-    },
+    getFullScreenContainer() {
+      return this.$refs.layout;
+    }
   }
 }
 </script>

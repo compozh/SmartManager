@@ -8,7 +8,7 @@
       <div class="workflow-modeler" ref="container"></div>
     </template>
     <template #propertiesPanel>
-      <div ref="propertiesPanel"></div>
+      <properties-panel :modeler="modeler" :propertiesProvider="propertiesProvider"/>
     </template>
   </modeler-layout>
 </template>
@@ -25,6 +25,7 @@ import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
 import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
+import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
 
 export default {
   name: 'bpmn-modeler',
@@ -38,6 +39,7 @@ export default {
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
       canShowPanel: true,
+      propertiesProvider: null
     };
   },
   mounted() {
@@ -76,9 +78,9 @@ export default {
     createModeler() {
       this.destroyModeler();
       const canEdit = this.process.hasRight(DiagramAccessRights.Write);
-      this.canShowPanel = canEdit;
-      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
+      this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();
     },    
     async loadXml() {
