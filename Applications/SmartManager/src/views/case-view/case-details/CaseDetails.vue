@@ -32,12 +32,12 @@
             </div>
           </div>
 
-          <!-- CASE PARTICIPANTS -->
+          <!-- CASE MEMBERS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
                       d-theme-border-grey-light border-solid flex">
             <div class="vx-col flex">
               <feather-icon icon="UsersIcon" class="mr-2"/>
-              <span class="py-4">{{ $t('cases.participants').toUpperCase() }}</span>
+              <span class="py-4">{{ $t('cases.members').toUpperCase() }}</span>
             </div>
           </div>
           <div class="vx-row my-3">
@@ -84,7 +84,7 @@
         </vx-card>
       </div>
     </div>
-    <!-- PARENT TASKS -->
+    <!-- TASKS -->
     <div v-if="tasks.length"
          class="vx-row"
          style="margin-top: 2.2rem">
@@ -199,10 +199,10 @@ export default {
       this.addAttachments()
     },
     async addAttachments() {
-      const taskId = this.task.id
+      const id = this.$route.params.id
       const attachments = JSON.stringify(this.attachments)
       try {
-        await this.$store.dispatch('sm/addAttachments', {taskId, attachments})
+        await this.$store.dispatch('sm/addAttachments', {id, type: 'CASE', attachments})
         this.attachments.length = 0
       } catch (e) {
         console.log('', e.message)

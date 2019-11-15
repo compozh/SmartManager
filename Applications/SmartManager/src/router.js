@@ -94,6 +94,15 @@ let router = new VueRouter({
             rule: 'admin'
           },
           caseSensitive: false
+        },
+        {
+          path: '/case-add/:id?',
+          name: 'case-add',
+          component: () => import('./views/case-add/CaseAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
         }
       ]
     },

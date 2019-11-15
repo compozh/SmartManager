@@ -1,18 +1,13 @@
 <template>
-  <div
-    class="app-fixed-height border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
-  >
-    <VuePerfectScrollbar
-      class="scroll-area"
-      :settings="settings"
-    >
+  <div class="app-fixed-height border border-solid rounded
+              d-theme-border-grey-light relative overflow-hidden">
+    <VuePerfectScrollbar class="scroll-area" :settings="settings">
       <div class="vx-row form-container">
         <div class="vx-col w-full h-full">
           <vx-card>
-            <!-- TASK APPROVALS -->
             <div class="vx-row">
               <div class="vx-col w-full">
-                <!-- add task -->
+                <!-- ADD TASK -->
                 <form @submit.prevent>
                   <vs-input name="taskName"
                             :label-placeholder="$t('tasks.taskName')"
@@ -21,8 +16,7 @@
                             v-validate="'required'"
                             :danger="errors.has('taskName')"
                             :danger-text="$t('validate.required')"
-                            val-icon-danger="clear"
-                  />
+                            val-icon-danger="clear"/>
                   <autocomplete :items="users"
                                 :multiple="false"
                                 :loading="userListLoading"
@@ -31,49 +25,40 @@
                                 :placeholder="$t('tasks.performer')"
                                 name="performer"
                                 v-validate="'required'"
-                                avatar
-                  />
+                                avatar/>
                   <span v-if="errors.has('performer')"
                         class="required-text"
-                  >{{ $t('validate.required') }}
-                  </span>
+                  >{{ $t('validate.required') }}</span>
                   <div class="mt-3">{{ $t('tasks.deadline') }}:</div>
                   <div class="inline-flex flex-wrap items-center mr-12 mt-3 mb-6">
                     <span class="w-16">{{ $t('pickers.date') }}:</span>
                     <div class="date-wrapper">
-                      <flat-pickr
-                        :config="configDatePicker"
-                        v-model="newTask.planDate"
-                        name="date"
-                        v-validate="'required'"
-                      />
+                      <flat-pickr :config="configDatePicker"
+                                  v-model="newTask.planDate"
+                                  name="date"
+                                  v-validate="'required'"/>
                       <span v-if="errors.has('date')"
                             class="required-text"
-                      >{{ $t('validate.required') }}
-                      </span>
+                      >{{ $t('validate.required') }}</span>
                     </div>
                   </div>
 
                   <div class="inline-flex flex-wrap items-center mb-12">
                     <span class="w-16">{{ $t('pickers.time') }}:</span>
                     <div class="time-wrapper">
-                      <flat-pickr
-                        :config="configTimePicker"
-                        v-model="newTask.planTime"
-                        name="time"
-                        v-validate="'required'"
-                      />
+                      <flat-pickr :config="configTimePicker"
+                                  v-model="newTask.planTime"
+                                  name="time"
+                                  v-validate="'required'"/>
                       <span v-if="errors.has('time')"
                             class="required-text"
-                      >{{ $t('validate.required') }}
-                    </span>
+                      >{{ $t('validate.required') }}</span>
                     </div>
                   </div>
                   <quill-editor v-model="newTask.description"
                                 :placeholder="$t('tasks.description')"
                                 :options="editorOption"
-                                class="mb-6"
-                  ></quill-editor>
+                                class="mb-6"/>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 :loading="userListLoading"
@@ -81,32 +66,27 @@
                                 v-model="newTask.coexecutors"
                                 :placeholder="$t('roles.coExecutors')"
                                 class="my-6"
-                                avatar
-                  />
+                                avatar/>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 label="fio"
                                 :loading="userListLoading"
                                 v-model="newTask.notify"
                                 :placeholder="$t('roles.notify')"
-                                avatar
-                  />
+                                avatar/>
                   <files-upload @attach="getAttachment($event)"
                                 :uploading="filesUploading"
-                                class="mt-4"
-                  />
+                                class="mt-4"/>
                   <vs-divider/>
                   <div class="flex justify-end">
                     <vs-button class="mx-6"
                                color="primary"
                                type="flat"
                                @click="$router.go(-1)"
-                    >{{ $t('buttons.cancel') }}
-                    </vs-button>
+                    >{{ $t('buttons.cancel') }}</vs-button>
                     <vs-button type="gradient"
                                @click="submitForm"
-                    >{{ $t('buttons.create') }}
-                    </vs-button>
+                    >{{ $t('buttons.create') }}</vs-button>
                   </div>
                 </form>
               </div>
@@ -117,6 +97,7 @@
     </VuePerfectScrollbar>
   </div>
 </template>
+
 <script>
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -320,4 +301,5 @@ export default {
     padding: 2px 4px 4px 4px;
     display: block;
   }
+
 </style>

@@ -8,14 +8,23 @@
           icon="MenuIcon"
           @click.stop="showSidebar"
         ></feather-icon>
-        <div class="flex" v-if="$route.name === 'task-list'">
-          <vs-button
-            icon="add"
-            color="primary"
-            type="gradient"
-            class="px-3 mr-2"
-            @click="$router.push('/task-add')"
+        <div class="flex" v-if="$route.name === 'task-list' || $route.name === 'case-list' ">
+          <vs-button v-if="$route.name === 'task-list'"
+                     icon="add"
+                     color="primary"
+                     type="gradient"
+                     class="px-3 mr-2"
+                     @click="$router.push('/task-add')"
           >{{ $t('buttons.addTask') }}
+          </vs-button>
+
+          <vs-button v-if="$route.name === 'case-list'"
+                     icon="add"
+                     color="primary"
+                     type="gradient"
+                     class="px-3 mr-2"
+                     @click="$router.push('/case-add')"
+          >{{ $t('buttons.addCase') }}
           </vs-button>
 
           <vs-button
@@ -222,13 +231,10 @@
     >
       <div>
         <span>{{ $t('comments.placeholder') }}</span>
-        <vs-input
-          :placeholder="$t('comments.placeholder2')"
-          v-model="comment"
-          class="mt-3 w-full"
-        />
+        <vs-input :placeholder="$t('comments.placeholder2')"
+                  v-model="comment"
+                  class="mt-3 w-full"/>
       </div>
-
     </vs-prompt>
   </div>
 </template>
