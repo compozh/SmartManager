@@ -128,17 +128,24 @@ export default {
       notify('danger', 'statusTitle', 'statChangeError')
     }
   },
-  async addAttachments({dispatch}, {taskId, attachments}) {
+  async addAttachments({dispatch}, payload) {
     startLoading(true)
     try {
-      const response = await api.addAttachmentsInGql(taskId, attachments)
+      const response = await api.addAttachmentsInGql(payload)
       const result = response.data.smtasksMutation.addAttachments
       stopLoading()
       if (result.success) {
-        await dispatch('getTaskInfo', {
-          taskId,
-          loading: true
-        })
+        switch (payload.type) {
+          case 'task': await dispatch('getTaskInfo', {
+            taskId: payload.id,
+            loading: true
+          })
+            break
+          case 'case': await dispatch('getCaseDetails', {
+            caseId: payload.id,
+            loading: true
+          })
+        }
         notify('success', 'attachTitle', 'attachAddSuccess')
       } else {
         notify('warning', 'attachTitle', 'attachAddFail')
@@ -247,6 +254,7 @@ export default {
       commit('setCases', cases)
     } catch (e) {
       console.log(e.message)
+      stopLoading()
       notify('danger', 'casesTitle', 'casesError')
     }
   },
@@ -260,6 +268,21 @@ export default {
       commit('setCaseDetails', caseItem)
     } catch (e) {
       console.log(e.message)
+      stopLoading()
+      notify('danger', 'caseTitle', 'caseError')
+    }
+  },
+  async caseCreate(context, newCase) {
+    const newCaseJson = JSON.stringify(newCase)
+    startLoading(true)
+    try {
+      const response = await api.caseCreateInGql(newCaseJson)
+      stopLoading()
+      notify('success', 'caseTitle', 'caseCreateSuccess')
+      return response.data.smtasksMutation.newCase
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
       notify('danger', 'caseTitle', 'caseError')
     }
   },
@@ -275,7 +298,21 @@ export default {
       }
     } catch (e) {
       console.log(e.message)
+      stopLoading()
       notify('danger', 'caseTitle', 'caseError')
+    }
+  },
+  async caseFolderCreate({dispatch}, folderName) {
+    startLoading(true)
+    try {
+      await api.caseFolderCreateInGql(folderName)
+      await dispatch('getFolders')
+      stopLoading()
+      notify('success', 'foldersTitle', 'folderCreateSuccess')
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'foldersTitle', 'folderCreateError')
     }
   }
 }
