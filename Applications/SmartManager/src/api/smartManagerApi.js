@@ -8,6 +8,9 @@ import folders from './graphql/folders.graphql'
 import tasks from './graphql/tasks.graphql'
 import cases from './graphql/cases.graphql'
 import caseDetails from './graphql/caseDetails.graphql'
+import caseCreate from './graphql/caseCreate.graphql'
+import caseUpdate from './graphql/caseUpdate.graphql'
+import caseFolderCreate from './graphql/caseFolderCreate.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
@@ -134,12 +137,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async addAttachmentsInGql(taskId, attachments) {
+  static async addAttachmentsInGql({id, type, attachments}) {
     try {
       return await getClient('smartmanager')
         .mutate({
           mutation: gql`${addAttachments}`,
-          variables: {taskId, attachments}
+          variables: {id, type, attachments}
         })
     } catch (e) {
       throw new Error(e.message)
@@ -222,6 +225,42 @@ export class SmartManagerApi {
         .query({
           query: gql`${caseDetails}`,
           variables: {caseId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async caseCreateInGql(newCase) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseCreate}`,
+          variables: {newCase}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async caseUpdateInGql(caseData) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseUpdate}`,
+          variables: {caseData}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async caseFolderCreateInGql(folderName) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseFolderCreate}`,
+          variables: {folderName}
         })
     } catch (e) {
       throw new Error(e.message)
