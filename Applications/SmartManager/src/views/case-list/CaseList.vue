@@ -110,7 +110,7 @@ export default {
     async getCases() {
       const loading = !this.cases
       try {
-        await this.$store.dispatch('sm/getCases', {loading})
+        await this.$store.dispatch('sm/getCases', loading)
       } catch (e) {
         console.log(e.message)
       }

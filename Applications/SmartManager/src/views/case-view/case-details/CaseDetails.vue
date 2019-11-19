@@ -248,10 +248,13 @@ export default {
       this.addAttachments()
     },
     async addAttachments() {
-      const id = this.$route.params.id
       const attachments = JSON.stringify(this.attachments)
+      const params = {
+        id: this.$route.params.id,
+        type: 'CASE',
+      }
       try {
-        await this.$store.dispatch('sm/addAttachments', {id, type: 'CASE', attachments})
+        await this.$store.dispatch('sm/addAttachments', {attachments, params})
         this.attachments.length = 0
       } catch (e) {
         console.log('', e.message)

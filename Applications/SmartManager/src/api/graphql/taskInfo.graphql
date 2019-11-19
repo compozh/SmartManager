@@ -47,6 +47,7 @@ fragment detailTaskFields on Task {
     nextButtonText
     previousButtonText
     taskType
+    caseId
     participants {
         userId
         userFio
