@@ -24,47 +24,46 @@
                      type="gradient"
                      class="px-3 mr-2"
                      @click="$router.push('/case-add')"
-          >{{ $t('buttons.addCase') }}
-          </vs-button>
+          >{{ $t('buttons.addCase') }}</vs-button>
 
-          <vs-button
-            icon="get_app"
-            color="success"
-            type="gradient"
-            class="px-3 mr-2"
-            @click="$router.push('/work-flow')"
-          >{{ $t('buttons.startWorkflow') }}
-          </vs-button>
+          <vs-button icon="get_app"
+                     color="success"
+                     type="gradient"
+                     class="px-3 mr-2"
+                     @click="$router.push('/work-flow')"
+          >{{ $t('buttons.startWorkflow') }}</vs-button>
         </div>
 
-        <div class="flex" v-if="task.id">
-          <vs-button
-            v-if="allowedAddSubTask"
-            icon="add"
-            color="primary"
-            type="gradient"
-            class="px-3 mr-2"
-            @click="$router.push('/task-add/' + task.id)"
-          >{{ $t('buttons.addSubTask') }}
-          </vs-button>
+        <div class="flex" v-if="task.id || caseItem.name">
+          <vs-button v-if="allowedAddSubTask"
+                     icon="add"
+                     color="primary"
+                     type="gradient"
+                     class="px-3 mr-2"
+                     @click="$router.push('/task-add/' + task.id)"
+          >{{ $t('buttons.addSubTask') }}</vs-button>
+
+          <vs-button v-if="$route.name === 'case-view'"
+                     icon="add"
+                     color="primary"
+                     type="gradient"
+                     class="px-3 mr-2"
+                     @click="$router.push({name: 'task-add', params: {bindCaseId: caseItem.id}})"
+          >{{ $t('buttons.addCaseTask') }}</vs-button>
 
           <div class="flex" v-if="taskType === 'AGREE'">
             <div class="flex" v-if="allowedNextPrevButtons || status !== '+'">
-              <vs-button
-                icon="done"
-                color="success"
-                class="px-3 btnx"
-                type="gradient"
-                @click="changeStage(1)"
-              >{{ buttonApprove }}
-              </vs-button>
+              <vs-button icon="done"
+                         color="success"
+                         class="px-3 btnx"
+                         type="gradient"
+                         @click="changeStage(1)"
+              >{{ buttonApprove }}</vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button
-                  class="btn-drop mr-2"
-                  size="default"
-                  color="#1CA998"
-                  icon="expand_more"
-                ></vs-button>
+                <vs-button class="btn-drop mr-2"
+                           size="default"
+                           color="#1CA998"
+                           icon="expand_more"/>
                 <vs-dropdown-menu>
                   <vs-dropdown-item @click="getPrompt(1)">
                     {{ buttonApprove + $t('buttons.withComment') }}
@@ -73,21 +72,17 @@
               </vs-dropdown>
             </div>
             <div class="flex" v-if="allowedNextPrevButtons || status !== '-'">
-              <vs-button
-                icon="close"
-                color="danger"
-                class="px-3 btnx"
-                type="gradient"
-                @click="changeStage(0)"
-              >{{ buttonReject }}
-              </vs-button>
+              <vs-button icon="close"
+                         color="danger"
+                         class="px-3 btnx"
+                         type="gradient"
+                         @click="changeStage(0)"
+              >{{ buttonReject }}</vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button
-                  class="btn-drop mr-2"
-                  size="default"
-                  color="#BA365A"
-                  icon="expand_more"
-                ></vs-button>
+                <vs-button class="btn-drop mr-2"
+                           size="default"
+                           color="#BA365A"
+                           icon="expand_more"/>
                 <vs-dropdown-menu>
                   <vs-dropdown-item @click="getPrompt(0)">
                     {{ buttonReject + $t('buttons.withComment') }}
@@ -99,21 +94,17 @@
 
           <div class="flex" v-else-if="taskType === 'WORKFLOW'">
             <div class="flex" v-if="allowedNextPrevButtons || status !== '+'">
-              <vs-button
-                icon="done"
-                color="success"
-                class="px-3 btnx"
-                type="gradient"
-                @click="changeStage(1)"
-              >{{ buttonForward }}
-              </vs-button>
+              <vs-button icon="done"
+                         color="success"
+                         class="px-3 btnx"
+                         type="gradient"
+                         @click="changeStage(1)"
+              >{{ buttonForward }}</vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button
-                  class="btn-drop mr-2"
-                  size="default"
-                  color="#1CA998"
-                  icon="expand_more"
-                ></vs-button>
+                <vs-button class="btn-drop mr-2"
+                           size="default"
+                           color="#1CA998"
+                           icon="expand_more"/>
                 <vs-dropdown-menu>
                   <vs-dropdown-item @click="getPrompt(1)">
                     {{ buttonForward + $t('buttons.withComment') }}
@@ -122,21 +113,17 @@
               </vs-dropdown>
             </div>
             <div class="flex" v-if="allowedNextPrevButtons || status !== '-'">
-              <vs-button
-                icon="close"
-                color="danger"
-                class="px-3 btnx"
-                type="gradient"
-                @click="changeStage(0)"
-              >{{ buttonBack }}
-              </vs-button>
+              <vs-button icon="close"
+                         color="danger"
+                         class="px-3 btnx"
+                         type="gradient"
+                         @click="changeStage(0)"
+              >{{ buttonBack }}</vs-button>
               <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button
-                  class="btn-drop mr-2"
-                  size="default"
-                  color="#BA365A"
-                  icon="expand_more"
-                ></vs-button>
+                <vs-button class="btn-drop mr-2"
+                           size="default"
+                           color="#BA365A"
+                           icon="expand_more"/>
                 <vs-dropdown-menu>
                   <vs-dropdown-item @click="getPrompt(0)">
                     {{ buttonBack + $t('buttons.withComment')}}
@@ -147,25 +134,21 @@
           </div>
 
           <div class="flex" v-else>
-            <vs-button
-              v-if="allowedAddSubTask"
-              icon="done"
-              color="success"
-              type="gradient"
-              class="px-3 mr-2 vs-con-loading__container"
-              @click="changeStatus('+')"
-            >{{ $t('buttons.execute') }}
-            </vs-button>
+            <vs-button v-if="allowedAddSubTask"
+                       icon="done"
+                       color="success"
+                       type="gradient"
+                       class="px-3 mr-2 vs-con-loading__container"
+                       @click="changeStatus('+')"
+            >{{ $t('buttons.execute') }}</vs-button>
 
-            <vs-button
-              v-if="status === '+'"
-              icon="settings_backup_restore"
-              color="warning"
-              type="gradient"
-              class="px-3"
-              @click="changeStatus('*')"
-            >{{ $t('buttons.returnToWork') }}
-            </vs-button>
+            <vs-button v-if="status === '+'"
+                       icon="settings_backup_restore"
+                       color="warning"
+                       type="gradient"
+                       class="px-3"
+                       @click="changeStatus('*')"
+            >{{ $t('buttons.returnToWork') }}</vs-button>
           </div>
         </div>
         <vs-spacer></vs-spacer>
@@ -177,11 +160,9 @@
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
-              <vs-avatar
-                class="rounded-full shadow-md cursor-pointer block m-0"
-                :src="currentUserPhoto"
-                size="40px"
-              ></vs-avatar>
+              <vs-avatar class="rounded-full shadow-md cursor-pointer block m-0"
+                         :src="currentUserPhoto"
+                         size="40px"/>
             </div>
             <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
 
@@ -221,14 +202,12 @@
         </vs-dropdown>
       </vs-navbar>
     </div>
-    <vs-prompt
-      :title="$t('comments.addComment')"
-      @cancel="comment=''"
-      @accept="changeStage(stage, comment)"
-      :active.sync="activePrompt"
-      :acceptText="$t('buttons.send')"
-      :cancelText="$t('buttons.cancel')"
-    >
+    <vs-prompt :title="$t('comments.addComment')"
+               @cancel="comment=''"
+               @accept="changeStage(stage, comment)"
+               :active.sync="activePrompt"
+               :acceptText="$t('buttons.send')"
+               :cancelText="$t('buttons.cancel')">
       <div>
         <span>{{ $t('comments.placeholder') }}</span>
         <vs-input :placeholder="$t('comments.placeholder2')"
@@ -278,6 +257,11 @@ export default {
       const id = +this.$route.params.id
       const task = this.$store.state.sm.taskInfo[id]
       return task ? task : {}
+    },
+    caseItem() {
+      const id = +this.$route.params.id
+      const caseItem = this.$store.state.sm.caseDetails[id]
+      return caseItem ? caseItem : {}
     },
     taskType() {
       return this.task ? this.task.taskType : null
