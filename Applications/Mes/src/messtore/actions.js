@@ -40,9 +40,7 @@ export default {
               for(var fixWorkCetner of fixationForWorker){
                 await dispatch('unfixWorkCenterForWorker', {fixationId: fixWorkCetner.fixationId})
               }
-              fixationForWorker = []
-            }
-            if (fixationForWorker && fixationForWorker.length) {
+            } else {
               for(var workCenter of workCenters){
                 if (workCenter.code == fixationForWorker[0].code) {
                   commit('setWorkCenter', workCenter)
