@@ -62,6 +62,7 @@ let router = new VueRouter({
         {
           path: '/task-add/:id?',
           name: 'task-add',
+          props: true,
           component: () => import('./views/task-add/TaskAdd.vue'),
           meta: {
             rule: 'admin'
@@ -96,7 +97,7 @@ let router = new VueRouter({
           caseSensitive: false
         },
         {
-          path: '/case-add/:id?',
+          path: '/case-add',
           name: 'case-add',
           component: () => import('./views/case-add/CaseAdd.vue'),
           meta: {

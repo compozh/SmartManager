@@ -4,7 +4,7 @@
     <multiselect :value="value"
                  @input="$emit('input', $event)"
                  :loading="loading"
-                 :disabled="loading"
+                 :disabled="disabled"
                  :placeholder="placeholder"
                  :label="label"
                  :track-by="label"
@@ -46,6 +46,7 @@ export default {
     placeholder: String,
     multiple: Boolean,
     loading: Boolean,
+    disabled: Boolean,
     label: String,
     title: String,
     value: [Object, Array],

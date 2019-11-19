@@ -137,12 +137,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async addAttachmentsInGql({id, type, attachments}) {
+  static async addAttachmentsInGql(attachments, params) {
     try {
       return await getClient('smartmanager')
         .mutate({
           mutation: gql`${addAttachments}`,
-          variables: {id, type, attachments}
+          variables: {attachments, params}
         })
     } catch (e) {
       throw new Error(e.message)
@@ -161,7 +161,7 @@ export class SmartManagerApi {
     }
   }
 
-  static async addTaskCommentToGql(comment, params) {
+  static async addCommentToGql(comment, params) {
     try {
       return await getClient('smartmanager')
         .mutate({

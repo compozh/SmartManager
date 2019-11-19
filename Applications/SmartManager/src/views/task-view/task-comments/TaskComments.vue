@@ -75,16 +75,22 @@ export default {
         : []
     },
     type() {
-      return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+      if (this.task.__typename === 'Task') {
+        return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+      }
+      if (this.task.__typename === 'Case') {
+        return 'CASE'
+      }
+      return ''
     }
   },
   methods: {
     sendMsg() {
-      this.$store.dispatch('sm/addTaskComment', {
+      this.$store.dispatch('sm/addComment', {
         comment: this.comment,
         params: {
           type: this.type,
-          id: this.task.id,
+          id: this.task.id || this.$route.params.id,
           arso: this.task.arso,
           keyValue: this.task.keyValue,
           kidCopy: this.task.kidCopy

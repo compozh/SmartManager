@@ -1,5 +1,3 @@
-import moment from 'moment'
-
 export default {
   setMessage(state, payload) {
     state.message = payload ? payload : {}
@@ -39,17 +37,6 @@ export default {
   },
   setCaseDetails(state, payload) {
     state.caseDetails = Object.assign({}, state.caseDetails, payload)
-  },
-  addComment(state, payload) {
-    const user = JSON.parse(localStorage.currentUser)
-    const comment = {
-      date: moment().format('DD.MM.YYYY HH:mm'),
-      text: payload.text,
-      user: user.UserData.CurrentUserData.UserName,
-      userId: user.UserData.CurrentUserData.UserId,
-      userPhoto: user.UserData.CurrentUserData.UserPhoto
-    }
-    state.taskInfo[payload.id].comments.push(comment)
   },
   setBusinessProcesses(state, payload) {
     state.businessProcesses = payload

@@ -9,7 +9,11 @@
   },
   "folders": {
     "header": "Папки",
-    "main": "Активные"
+    "main": "Активные",
+    "folder": "Папка",
+    "createFolder": "Добавить новую папку",
+    "placeholderNew": "Новая папка",
+    "placeholderCreate": "Введите название папки"
   },
   "validate": {
     "required": "Поле обязательно для заполнения",
@@ -45,13 +49,17 @@
     "dateAdd": "Добавлено",
     "dateFrom": "От",
     "dateTo": "До",
+    "dateStart": "Дата начала",
+    "dateEnd": "Дата окончания",
     "caseFrom": "Кейс от",
-    "participants": "Учасники",
-    "comm": "Примечание"
+    "members": "Учасники",
+    "comm": "Примечание",
+    "purpose": "Цель"
   },
   "buttons": {
     "addTask": "Добавить задачу",
     "addSubTask": "Добавить подзадачу",
+    "addCaseTask": "Добавить задачу к кейсу",
     "reject": "Отклонить",
     "approve": "Согласовать",
     "back": "Вернуть назад",
@@ -73,7 +81,8 @@
     "logout": "Выход",
     "download": "Загрузить",
     "save": "Сохранить",
-    "addCase": "Добавить кейс"
+    "addCase": "Добавить кейс",
+    "addFolder": "Создать папку"
   },
   "icons": {
     "priority": "Высокий приоритет",
@@ -125,6 +134,9 @@
   "notify": {
     "foldersTitle": "Папки и фильтры",
     "foldersError": "Ошибка загрузки папок",
+    "folderCreateSuccess": "Папка успешно создана",
+    "folderCreateFail": "Не удалось создать папку",
+    "folderCreateError": "Ошибка при создании папки",
     "taskListTitle": "Список задач",
     "taskListError": "Ошибка загрузки задач",
     "taskTitle": "Задача",
@@ -160,7 +172,14 @@
     "applyRightsTittle": "Делегирование прав",
     "applyRightsSuccess": "Права успешно изменены",
     "applyRightsFail": "Не удалось применить делегированные права",
-    "applyRightsError": "Ошибка при изменении прав"
+    "applyRightsError": "Ошибка при изменении прав",
+    "casesTitle": "Кейсы",
+    "caseListError" : "Ошибка загрузки списка кейсов",
+    "caseDetailsError" : "Ошибка получения информации о кейсе",
+    "caseCreateSuccess": "Кейс успешно создан",
+    "caseCreateError": "Ошибка создания кейса",
+    "caseUpdateSuccess": "Кейс успешно обновлен",
+    "caseUpdateError": "Ошибка обновления кейса"
   },
   "workflow": {
     "businessProcess": "Бизнес-процесс",

@@ -20,6 +20,7 @@
                   <autocomplete :items="users"
                                 :multiple="false"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 v-model="newTask.performer"
                                 label="fio"
                                 :placeholder="$t('tasks.performer')"
@@ -59,9 +60,18 @@
                                 :placeholder="$t('tasks.description')"
                                 :options="editorOption"
                                 class="mb-6"/>
+                  <autocomplete :items="cases"
+                                :multiple="false"
+                                label="name"
+                                :loading="caseListLoading"
+                                :disabled="caseListLoading || bindCaseId"
+                                v-model="newTask.case"
+                                :placeholder="$t('cases.name')"
+                                icon="BriefcaseIcon"/>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 label="fio"
                                 v-model="newTask.coexecutors"
                                 :placeholder="$t('roles.coExecutors')"
@@ -71,6 +81,7 @@
                                 :multiple="true"
                                 label="fio"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 v-model="newTask.notify"
                                 :placeholder="$t('roles.notify')"
                                 avatar/>
@@ -123,7 +134,7 @@ export default {
     FilesUpload
   },
   props: {
-    parent: Number
+    bindCaseId: Number
   },
   data() {
     return {
@@ -135,7 +146,8 @@ export default {
         description: '',
         coexecutors: [],
         notify: [],
-        attachments: []
+        attachments: [],
+        case: null
       },
       configDatePicker: {
         locale: this.$i18n.locale,
@@ -150,6 +162,7 @@ export default {
         allowInput: true
       },
       userListLoading: false,
+      caseListLoading: false,
       filesUploading: false,
       editorOption: {
         modules: {
@@ -181,6 +194,9 @@ export default {
     users() {
       return this.$store.state.sm.users
     },
+    cases() {
+      return this.$store.state.sm.cases
+    },
     dateplan() {
       const formatDate = moment(this.newTask.planDate, 'DD.MM.YYYY')
         .format('YYYY-MM-DD')
@@ -192,15 +208,28 @@ export default {
   },
   created() {
     this.getUsers()
+    this.getCases()
+  },
+  mounted() {
+    if (this.bindCaseId && this.cases.length !== 0) {
+      this.newTask.case = this.cases
+        .find(caseItem => caseItem.id === this.bindCaseId)
+    }
   },
   methods: {
     async getUsers() {
       this.userListLoading = true
-      const users = this.$store.state.sm.users
-      if (users.length === 0) {
+      if (this.users.length === 0) {
         await this.$store.dispatch('sm/getUsers')
       }
       this.userListLoading = false
+    },
+    async getCases() {
+      this.caseListLoading = true
+      if (this.cases.length === 0) {
+        await this.$store.dispatch('sm/getCases', false)
+      }
+      this.caseListLoading = false
     },
     async createTask() {
       const newTask = {
@@ -212,23 +241,19 @@ export default {
         attachments: this.newTask.attachments,
         needApprove: false,
         needComm: false,
-        priority: 0
+        priority: 0,
+        caseId: this.newTask.case.id
       }
       if (this.$route.params.id) {
         newTask.parentTaskId = this.$route.params.id
       }
       try {
         const result = await this.$store.dispatch('sm/addNewTask', newTask)
-        if (this.parent) {
-          await this.$store.dispatch('sm/getTaskInfo', {
-            taskId: this.parent,
-            loader: false
-          })
-        }
         if (result.success) {
           await this.$router.push({name: 'task-view', params: {id: result.id}})
         }
       } catch (e) {
+        // Задержка нужна чтобы показать сообщение об ошибке
         setTimeout(() => this.$router.go(0), 1000)
       }
     },
