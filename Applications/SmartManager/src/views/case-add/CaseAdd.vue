@@ -99,6 +99,7 @@
                   <autocomplete :items="users"
                                 :multiple="true"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 label="fio"
                                 v-model="newCase.members"
                                 :placeholder="$t('cases.members')"

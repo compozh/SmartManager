@@ -42,14 +42,15 @@
   "cases": {
     "newCase": "Новий кейс",
     "name": "Назва кейсу",
+    "related": "Входить до кейсу",
     "noCases": "Відсутні кейси для відображення",
     "id": "ID",
     "fioAdd": "Додав",
     "dateAdd": "Додано",
     "dateFrom": "Від",
+    "dateTo": "До",
     "dateStart": "Дата початку",
     "dateEnd": "Дата закінчення",
-    "dateTo": "До",
     "caseFrom": "Кейс від",
     "members": "Учасники",
     "comm": "Примітка",
@@ -58,6 +59,7 @@
   "buttons": {
     "addTask": "Додати задачу",
     "addSubTask": "Додати підзадачу",
+    "addCaseTask": "Додати задачу до кейсу",
     "reject": "Відхилити",
     "approve": "Погодити",
     "back": "Повернути назад",
@@ -132,7 +134,7 @@
   "notify": {
     "foldersTitle": "Папки та фільтри",
     "foldersError": "Помилка завантаження",
-    "folderCreateSuccess": "Нова папка успішно створена",
+    "folderCreateSuccess": "Папка успішно створена",
     "folderCreateFail": "Не вдалося створити папку",
     "folderCreateError": "Помилка при створенні папки",
     "taskListTitle": "Список задач",
@@ -170,8 +172,14 @@
     "applyRightsTittle": "Делегування прав",
     "applyRightsSuccess": "Права успішно змінено",
     "applyRightsFail": "Не вдалося застосувати делеговані права",
-    "applyRightsError": "Помилка зміни прав"
-
+    "applyRightsError": "Помилка зміни прав",
+    "casesTitle": "Кейси",
+    "caseListError" : "Помилка завантаження кейсів",
+    "caseDetailsError" : "Помилка отримання інформації про кейс",
+    "caseCreateSuccess": "Кейс успішно створено",
+    "caseCreateError": "Помилка створення кейсу",
+    "caseUpdateSuccess": "Кейс успішно оновлено",
+    "caseUpdateError": "Помилка при оновленні кейсу"
   },
   "workflow": {
     "businessProcess": "Бізнес-процес",

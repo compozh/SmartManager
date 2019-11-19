@@ -128,24 +128,18 @@ export default {
       notify('danger', 'statusTitle', 'statChangeError')
     }
   },
-  async addAttachments({dispatch}, payload) {
+  async addAttachments({dispatch}, {attachments, params}) {
+    const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.addAttachmentsInGql(payload)
+      const response = await api.addAttachmentsInGql(attachments, paramsJson)
       const result = response.data.smtasksMutation.addAttachments
       stopLoading()
       if (result.success) {
-        switch (payload.type) {
-          case 'task': await dispatch('getTaskInfo', {
-            taskId: payload.id,
-            loading: true
-          })
-            break
-          case 'case': await dispatch('getCaseDetails', {
-            caseId: payload.id,
-            loading: true
-          })
-        }
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id
+        })
         notify('success', 'attachTitle', 'attachAddSuccess')
       } else {
         notify('warning', 'attachTitle', 'attachAddFail')
@@ -180,17 +174,17 @@ export default {
       notify('danger', 'stageTitle', 'stageChangeError')
     }
   },
-  async addTaskComment({commit}, {comment, params}) {
+  async addComment({dispatch}, {comment, params}) {
     const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.addTaskCommentToGql(comment, paramsJson)
+      const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
       stopLoading()
       if (result.success) {
-        commit('addComment', {
-          id: params.id,
-          text: comment
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id
         })
         notify('success', 'commentsTitle', 'commentAddSuccess')
       } else {
@@ -245,7 +239,7 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async getCases({commit}, {loading}) {
+  async getCases({commit}, loading) {
     startLoading(loading)
     try {
       const result = await api.getCasesFromGql()
@@ -255,7 +249,7 @@ export default {
     } catch (e) {
       console.log(e.message)
       stopLoading()
-      notify('danger', 'casesTitle', 'casesError')
+      notify('danger', 'casesTitle', 'caseListError')
     }
   },
   async getCaseDetails({commit}, {caseId, loading}) {
@@ -269,7 +263,7 @@ export default {
     } catch (e) {
       console.log(e.message)
       stopLoading()
-      notify('danger', 'caseTitle', 'caseError')
+      notify('danger', 'casesTitle', 'caseDetailsError')
     }
   },
   async caseCreate(context, newCase) {
@@ -299,7 +293,7 @@ export default {
     } catch (e) {
       console.log(e.message)
       stopLoading()
-      notify('danger', 'caseTitle', 'caseError')
+      notify('danger', 'casesTitle', 'caseUpdateError')
     }
   },
   async caseFolderCreate({dispatch}, folderName) {
@@ -313,6 +307,20 @@ export default {
       console.log(e.message)
       stopLoading()
       notify('danger', 'foldersTitle', 'folderCreateError')
+    }
+  },
+  async updateInfo({dispatch}, {type, id}) {
+    if (type === 'TASK' || type === 'DOCUMENT') {
+      return await dispatch('getTaskInfo', {
+        taskId: id,
+        loading: true
+      })
+    }
+    if (type === 'CASE') {
+      return await dispatch('getCaseDetails', {
+        caseId: id,
+        loading: true
+      })
     }
   }
 }

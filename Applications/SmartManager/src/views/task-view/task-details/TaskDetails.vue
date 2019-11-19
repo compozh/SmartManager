@@ -105,6 +105,38 @@
         </vx-card>
       </div>
     </div>
+    <!-- CASE -->
+    <div v-if="caseItem"
+         class="vx-row"
+         style="margin-top: 2.2rem">
+      <div class="vx-col w-full">
+        <vx-card>
+          <div class="vx-row">
+            <div class="vx-col w-full flex flex-wrap justify-center">
+              <div class="vx-row w-full border-b border-l-0 border-r-0
+                          border-t-0 d-theme-border-grey-light border-solid mb-6">
+                <div class="vx-col w-full flex pb-4">
+                  <feather-icon icon="BriefcaseIcon" class="mr-2"/>
+                  <span class="self-end">{{ $t('cases.related').toUpperCase() }}</span>
+                </div>
+              </div>
+              <div class="vx-row w-full">
+                <div class="vx-col w-full">
+                  <transition-group name="list-enter-up"
+                                    class="task__tasks  -mx-4"
+                                    tag="ul"
+                                    appear>
+                    <li class="cursor-pointer task__task-item" :key="caseItem.id">
+                      <case-list-item :caseItem="caseItem"></case-list-item>
+                    </li>
+                  </transition-group>
+                </div>
+              </div>
+            </div>
+          </div>
+        </vx-card>
+      </div>
+    </div>
     <!-- PARENT TASKS -->
     <div v-if="parentTasks.length"
          class="vx-row"
@@ -115,9 +147,9 @@
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full border-b border-l-0 border-r-0
                           border-t-0 d-theme-border-grey-light border-solid mb-6">
-                <div class="vx-col w-full flex">
+                <div class="vx-col w-full flex pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span class="py-4">{{ $t('tasks.related').toUpperCase() }}</span>
+                  <span class="self-end">{{ $t('tasks.related').toUpperCase() }}</span>
                 </div>
               </div>
               <div class="vx-row w-full">
@@ -149,9 +181,9 @@
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full border-b border-l-0 border-r-0
                           border-t-0 d-theme-border-grey-light border-solid mb-6">
-                <div class="vx-col w-full flex">
+                <div class="vx-col w-full flex pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span class="py-4">{{ $t('tasks.subTasks').toUpperCase() }}</span>
+                  <span class="self-end">{{ $t('tasks.subTasks').toUpperCase() }}</span>
                 </div>
               </div>
               <div class="vx-row w-full">
@@ -179,6 +211,7 @@
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import TaskListItem from '@/views/task-list/TaskListItem.vue'
+import CaseListItem from '@/views/case-list/CaseListItem.vue'
 import FilesUpload from '@/components/FilesUpload'
 import FileIcon from '@/components/FileIcon'
 import {Form} from 'vue-formio'
@@ -191,6 +224,7 @@ export default {
   components: {
     VuePerfectScrollbar,
     TaskListItem,
+    CaseListItem,
     FilesUpload,
     formio: Form,
     FileIcon
@@ -247,9 +281,26 @@ export default {
         case 'EXTERNAL': return 'внешняя задача'
         default: return 'unknown type'
       }
+    },
+    caseItem() {
+      const cases = this.$store.state.sm.cases
+      return cases.find(caseItem => caseItem.id === this.task.caseId)
     }
   },
+  created() {
+    // подписка на событие смены статуса задачи
+    eventBus.$on('changeStatus', async data => {
+      await this.onChangeStatus(data)
+    })
+    this.getCases()
+  },
   methods: {
+    async getCases() {
+      const cases = this.$store.state.sm.cases
+      if (cases.length === 0) {
+        await this.$store.dispatch('sm/getCases', false)
+      }
+    },
     iFrameOnLoad(event) {
       this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight * 1.2
     },
@@ -281,10 +332,16 @@ export default {
       this.addAttachments()
     },
     async addAttachments() {
-      const id = this.task.id
       const attachments = JSON.stringify(this.attachments)
+      const params = {
+        id: this.task.id || this.$route.params.id,
+        type: this.task.isGenerate ? 'DOCUMENT' : 'TASK',
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy
+      }
       try {
-        await this.$store.dispatch('sm/addAttachments', {id, type: 'TASK', attachments})
+        await this.$store.dispatch('sm/addAttachments', {attachments, params})
         this.attachments.length = 0
       } catch (e) {
         console.log('', e.message)
@@ -293,13 +350,6 @@ export default {
     onFormSubmit(data) {
       // console.log(data)
     }
-  },
-  // подписка на событие смены статуса задачи
-  created() {
-    eventBus.$on('changeStatus', async data => {
-      await this.onChangeStatus(data)
-    })
-
   }
 }
 </script>

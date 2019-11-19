@@ -75,7 +75,13 @@ export default {
         : []
     },
     type() {
-      return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+      if (this.task.__typename === 'Task') {
+        return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+      }
+      if (this.task.__typename === 'Case') {
+        return 'CASE'
+      }
+      return ''
     }
   },
   methods: {
