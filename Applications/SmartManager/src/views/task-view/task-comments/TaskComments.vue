@@ -80,19 +80,6 @@ export default {
   },
   methods: {
     sendMsg() {
-<<<<<<< Updated upstream
-      this.$store.dispatch('sm/addTaskComment', {
-        comment: this.comment,
-        params: {
-          type: this.type,
-          id: this.task.id,
-          arso: this.task.arso,
-          keyValue: this.task.keyValue,
-          kidCopy: this.task.kidCopy
-        }
-      })
-      this.comment = ''
-=======
       if (this.comment) {
         this.$store.dispatch('sm/addComment', {
           comment: this.comment,
@@ -106,7 +93,6 @@ export default {
         })
         this.comment = ''
       }
->>>>>>> Stashed changes
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
