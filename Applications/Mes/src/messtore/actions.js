@@ -32,32 +32,21 @@ export default {
     await me.dispatch('mes/graphqlQueryWraper', {
       action: async ( ) => {
         console.log('Current UUID - ' + uuid)
-
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
         commit('setWorkCentersForWorker', workCenters)
-
           var setWorkCenterForWorker = async (properties) => {
-            var workCenterForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
-            workCenterForWorker = workCenterForWorker.sort((a,b) => {
-              return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
-            })
-            if (workCenters.length == 1) {
-              commit('setWorkCenter', workCenters[0])
-              for(var fixWorkCetner of workCenterForWorker) {
-                if(fixWorkCetner.code == workCenters[0].code) {
-                  commit('setWorkCenterFixationData', fixWorkCetner)
-                }
+            var fixationForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
+            if (fixationForWorker && fixationForWorker.length != 1) {
+              for(var fixWorkCetner of fixationForWorker){
+                await dispatch('unfixWorkCenterForWorker', {fixationId: fixWorkCetner.fixationId})
               }
             } else {
-              for(var workCenter of workCenters) {
-                for(var fixWorkCetner of workCenterForWorker) {
-                  if(fixWorkCetner.code == workCenter.code) {
-                    commit('setWorkCenter', workCenter)
-                    commit('setWorkCenterFixationData', fixWorkCetner)
-                    return
-                  }
+              for(var workCenter of workCenters){
+                if (workCenter.code == fixationForWorker[0].code) {
+                  commit('setWorkCenter', workCenter)
                 }
               }
+              commit('setWorkCenterFixationData', fixationForWorker[0])
             }
           }
           if(!getters.properties) {
@@ -168,7 +157,6 @@ export default {
         const res = await api.fixWorkCenterForWorkerGql(workCenter.code, workerCode)
         return res
       },
-      successAction: async () => { commit('setWorkCenter', workCenter) },
       linearLoader: true
     })
   },
