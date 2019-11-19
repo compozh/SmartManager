@@ -41,9 +41,10 @@
   },
   "cases": {
     "newCase": "Новый кейс",
-    "caseName": "Название кейса",
+    "name": "Название кейса",
+    "related": "Включено в кейс",
+    "noRelated": "Не включено в кейс",
     "noCases": "Отсутствуют кейсы для отображения",
-    "description": "Описание кейса",
     "id": "ID",
     "fioAdd": "Добавил",
     "dateAdd": "Добавлено",
@@ -82,7 +83,9 @@
     "download": "Загрузить",
     "save": "Сохранить",
     "addCase": "Добавить кейс",
-    "addFolder": "Создать папку"
+    "addFolder": "Создать папку",
+    "bindToCase": "Привязать к кейсу",
+    "unbindFromCase": "Отвязать от кейса"
   },
   "icons": {
     "priority": "Высокий приоритет",
@@ -179,7 +182,9 @@
     "caseCreateSuccess": "Кейс успешно создан",
     "caseCreateError": "Ошибка создания кейса",
     "caseUpdateSuccess": "Кейс успешно обновлен",
-    "caseUpdateError": "Ошибка обновления кейса"
+    "caseUpdateError": "Ошибка обновления кейса",
+    "bindingFail": "Не удалось изменить привязку",
+    "bindingError": "Ошибка при изменении привязки"
   },
   "workflow": {
     "businessProcess": "Бизнес-процесс",
