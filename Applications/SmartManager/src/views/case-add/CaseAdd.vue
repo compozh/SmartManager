@@ -237,7 +237,7 @@ export default {
       const dateTo = this.$refs.dateFieldTo
       const fromWidth = dateFrom.clientWidth
       const toWidth = dateTo.clientWidth
-      const width = (fromWidth < toWidth ? toWidth : fromWidth) + 'px'
+      const width = (fromWidth < toWidth ? toWidth : fromWidth) + 5 + 'px'
       dateFrom.style.width = dateTo.style.width = width
     },
     async getUsers() {

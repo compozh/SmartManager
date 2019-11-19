@@ -28,10 +28,14 @@
         class="task__message truncate mx-3">
         <span>{{ task.descript | filter_tags }}</span>
       </div>
-      <div v-else class="task__message truncate mx-3">
+      <div v-else class="task__message truncate mx-3" style="color: #9c9c9c;">
         <span>{{ $t('tasks.taskFrom') }}: {{ task.addedFio }}</span>
       </div>
       <vs-spacer></vs-spacer>
+
+      <vx-tooltip :text="caseItem.name" color="rgb(98, 98, 98, .95)">
+        <feather-icon v-if="task.caseId" icon="BriefcaseIcon" class="mr-2"/>
+      </vx-tooltip>
 
       <vx-tooltip :text="$t('icons.attachments')" color="rgb(98, 98, 98, .95)">
         <feather-icon v-if="task.hasOrig" icon="PaperclipIcon" class="mr-2"/>
@@ -70,6 +74,13 @@ export default {
   computed: {
     comments() {
       return this.task.comments ? this.task.comments.length : 0
+    },
+    cases() {
+      return this.$store.state.sm.cases
+    },
+    caseItem() {
+      return this.cases
+        .find(caseItem => caseItem.id === this.task.caseId) || {}
     },
     taskStatus() {
       return () => {
