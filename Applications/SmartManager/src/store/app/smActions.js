@@ -52,10 +52,10 @@ export default {
     startLoading(loading)
     try {
       const result = await api.getTaskInfoFromGql(taskId)
-      stopLoading()
       const taskInfo = result.data.smtasks.taskDetails
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
+      stopLoading()
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -307,6 +307,23 @@ export default {
       console.log(e.message)
       stopLoading()
       notify('danger', 'foldersTitle', 'folderCreateError')
+    }
+  },
+  async changeBinding({dispatch}, {caseId, taskId, bind}) {
+    startLoading(true)
+    try {
+      const response = await api.changeBindingInGql(caseId, taskId, bind)
+      const result = response.data.smtasksMutation.binding
+      stopLoading()
+      if (result.success) {
+        await dispatch('getTaskInfo', {taskId, loader: true})
+      } else {
+        notify('warning', 'taskTitle', 'bindingFail')
+      }
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'bindingError')
     }
   },
   async updateInfo({dispatch}, {type, id}) {

@@ -88,6 +88,9 @@ export default {
     tasks() {
       return this.$store.getters['sm/tasks']
     },
+    cases() {
+      return this.$store.state.sm.cases
+    },
     pages() {
       return this.tasks
         ? Math.ceil(this.tasks.length / this.taskPerPage)
@@ -112,6 +115,13 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getTasks(this.$route.params.code)
+    this.getCases()
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.handleWindowResize)
+    })
+  },
   methods: {
     async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)
@@ -122,15 +132,14 @@ export default {
         console.log(e.message)
       }
     },
+    async getCases() {
+      if (this.cases.length === 0) {
+        await this.$store.dispatch('sm/getCases', false)
+      }
+    },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
     }
-  },
-  mounted() {
-    this.getTasks(this.$route.params.code)
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.handleWindowResize)
-    })
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleWindowResize)

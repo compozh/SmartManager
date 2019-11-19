@@ -11,6 +11,7 @@ import caseDetails from './graphql/caseDetails.graphql'
 import caseCreate from './graphql/caseCreate.graphql'
 import caseUpdate from './graphql/caseUpdate.graphql'
 import caseFolderCreate from './graphql/caseFolderCreate.graphql'
+import binding from './graphql/binding.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
@@ -261,6 +262,18 @@ export class SmartManagerApi {
         .mutate({
           mutation: gql`${caseFolderCreate}`,
           variables: {folderName}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async changeBindingInGql(caseId, taskId, bind) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${binding}`,
+          variables: {caseId, taskId, bind}
         })
     } catch (e) {
       throw new Error(e.message)
