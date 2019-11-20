@@ -87,15 +87,20 @@
                             v-model="newCase.comm"
                             class="w-full mb-6 input-task-name"
                             val-icon-danger="clear"/>
-                  <autocomplete :items="folders"
-                                :multiple="false"
-                                label="name"
-                                v-model="newCase.folder"
-                                :placeholder="$t('folders.folder')"
-                                icon="FolderIcon"/>
-                  <vs-button type="line"
-                             @click="activePrompt = true"
-                  >&#128193; {{ $t('buttons.addFolder') }}</vs-button>
+                  <div class="flex">
+                    <autocomplete class="flex-1 mr-6"
+                                  :items="folders"
+                                  :multiple="false"
+                                  label="name"
+                                  v-model="newCase.folder"
+                                  :placeholder="$t('folders.folder')"
+                                  icon="FolderIcon"/>
+                    <vs-button color="primary"
+                               type="border"
+                               icon="create_new_folder"
+                               @click="activePrompt = true"
+                    >{{ $t('buttons.addFolder') }}</vs-button>
+                  </div>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 :loading="userListLoading"
@@ -175,8 +180,8 @@ export default {
         timeFrom: '12:00',
         dateTo: moment().add(1, 'days').format('DD.MM.YYYY'),
         timeTo: '12:00',
-        purpose: null,
-        comm: null,
+        purpose: '',
+        comm: '',
         folder: [],
         members: [],
         attachments: []
@@ -209,7 +214,10 @@ export default {
     },
     folders() {
       const allFolders = this.$store.state.sm.folders || []
-      return allFolders.filter(folder => !!folder.folderId)
+      return allFolders.filter(i => !!i.folderId)
+    },
+    folderById() {
+      return id => this.folders.filter(i => i.folderId === id)
     },
     dateFormat() {
       return postfix => {
@@ -225,6 +233,14 @@ export default {
         deleteMembers: []
       }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    const folderId = from.params.id
+    next(vm => {
+      if (from.name === 'case-list' && folderId !== 'ALL') {
+        vm.newCase.folder = vm.folderById(+folderId)
+      }
+    })
   },
   mounted() {
     this.getUsers()
