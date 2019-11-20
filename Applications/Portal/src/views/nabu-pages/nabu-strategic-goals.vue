@@ -1,29 +1,122 @@
 <template>
-  <AgGridView :education="dataStrategicGoals" v-show="dataStrategicGoals"></AgGridView>
+  <div v-show="dataStrategicGoals">
+    <vs-col vs-w="8">
+      <AgGridView :education="dataStrategicGoals" v-show="dataStrategicGoals"></AgGridView>
+    </vs-col>
+    <vs-col vs-w="4">
+      <ul class="file-container">
+        <li v-for="(element, index) in employeeOriginal" :key="index" class="item-container"  @click.prevent="downloadItem(element.filePath)" @mouseover="hoverElement(index)" @mouseleave="leaveElement(index)">
+          <div  class="download-container" >
+            <div class="file-name">
+              <documentFormat :format="element.format" :hover="testing[index].hover" />
+              <a class="link-text" id="my_iframe" :href="element.filePath" download v-text="element.fileName">{{element.fileName}}</a>
+            </div>  
+          </div>
+        </li>
+      </ul>
+    </vs-col>
+  </div>
 </template>
 
 <script>
-const AgGridView = () => import('../components/AgGridTableComponent.vue')
+/* eslint-disable */
 
+const AgGridView = () => import('../components/AgGridTableComponent.vue')
+const documentFormat = () => import('../components/documentFormat.vue')
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
+  data() {
+    return {
+      testing: null,
+       settings: { // perfectscrollbar settings
+      maxScrollbarLength: 60,
+      wheelSpeed: 1,
+      swipeEasing: true
+    },
+    }
+  },
   components: {
-    AgGridView
+    AgGridView,
+    documentFormat,
+    VuePerfectScrollbar,
+
   },
   created() {
-    // if (this.$store.getters['education/getStrategicGoals']) {
-    //   return
-    // }
-    // this.$store.dispatch('education/loadStrategicGoals')
+    let object = {
+      load: 'loadStrategicGoals',
+      clear: 'setStrategicGoals'
+    }
+    
+    this.$store.dispatch('education/setCurrentPageNabu', object)
+    this.$store.dispatch('education/loadStrategicGoals')
+    
   },
   computed: {
     dataStrategicGoals() {
-      // return this.$store.getters['education/getStrategicGoals']
-      return undefined
+      return this.$store.getters['education/getStrategicGoals']
+    },
+
+    employeeOriginal() {
+      let files = this.$store.getters['education/getEmployeeOriginal']
+      
+      if (!files) {
+        return null
+      }
+      this.testing = files.map(x => {
+        
+        let format = x.fileName.split('.')
+
+        let newFormat = format[format.length - 1]
+
+        return {
+          fileName: x.fileName,
+          filePath: x.filePath,
+          format: newFormat.toLowerCase(),
+          hover: false
+        }
+      })
+      return this.testing
     }
-  }
+  },
+  methods: {
+    downloadItem(url) {
+      window.open(url); 
+    },
+    leaveElement(index) {
+      this.testing[index].hover = false
+    },
+    hoverElement(index) {
+      this.testing[index].hover = true
+    }
+  },
+  
 }
 </script>
 
-<style>
+<style scoped>
+.download-container{
+margin-top: 5px;
+margin-bottom: 5px;
+}
+.file-name{
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+.link-text{
+  padding-left: 10px;
+}
+.item-container{
+    cursor: pointer;
+    padding: 5px;
+}
+.item-container:hover{
+    background: #ffffff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    border-radius: 5px;
+}
+.file-container{
+  margin-top: 30px;
+}
 
 </style>

@@ -3,7 +3,7 @@
         <vs-table stripe :data="education.data">
 
             <template slot="thead">
-                <vs-th v-for='(element, index) in education.headers' :key="index">{{element.headerName}}</vs-th>
+                <vs-th v-for='(element, index) in education.headers' :key="index" v-show="element.field !== 'detailRowValue'">{{element.headerName}}</vs-th>
             </template>
 
             <template slot-scope="{data}">
@@ -14,8 +14,9 @@
                     <vs-td :data="tr.subject">
                         {{tr.subject}}
                     </vs-td>
-                    <vs-td :data="tr.required">
-                        {{tr.required}}
+                    <vs-td :data="tr.isRequired">
+                        <!-- {{tr.isRequired}} -->
+                        <vs-checkbox disabled="true" v-model="tr.isRequired"></vs-checkbox>
                     </vs-td>
                     <vs-td :data="tr.priority">
                         {{tr.priority}}
@@ -23,25 +24,18 @@
                     <vs-td :data="tr.provider">
                         {{tr.provider}}
                     </vs-td>
-                    <vs-td :data="tr.status">
-                        {{tr.status}}
+                    <vs-td :data="tr.statusTitle">
+                        {{tr.statusTitle}}
                     </vs-td>
-                    <vs-td :data="tr.description">
-                        {{tr.description}}
-                    </vs-td>
-
                     <template class="expand-user" slot="expand">
                         <div class="con-expand-users w-full">
-                            <div class="con-btns-user flex items-center justify-between">
+                            <!-- <div class="con-btns-user flex items-center justify-between">
                                 <div class="con-userx flex items-center justify-start">
                                     <span>{{ tr.subject }}</span>
                                 </div>
-                            </div>
+                            </div> -->
                             <vs-list>
-                                <vs-list-item icon-pack="feather" icon="icon-mail" :title="tr.status"></vs-list-item>
-                                <vs-list-item icon-pack="feather" icon="icon-globe" :title="tr.priority"></vs-list-item>
-                                <vs-list-item icon-pack="feather" icon="icon-globe" :title="tr.description"></vs-list-item>
-                                <vs-list-item icon-pack="feather" icon="icon-globe" :title="tr.typeAdvancedTraining"></vs-list-item>
+                                <vs-list-item icon-pack="feather" icon="icon-type" :title="tr.detailRowValue"></vs-list-item>
                             </vs-list>
                         </div>
                     </template>
@@ -52,6 +46,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   props: ['education'],
 }

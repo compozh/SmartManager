@@ -1,0 +1,22 @@
+{
+  portalNabuQuery{
+     trainingSchedule{
+      data{
+        subject
+        eventTitle
+        trainingDateStart
+        trainingDateEnd
+        city
+        trainingOrgTitle
+        toolTitle
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+  }
+}
