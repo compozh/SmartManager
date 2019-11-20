@@ -5,6 +5,8 @@ import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import { Diagram, ActionDefinitionType } from '../../../../api/models';
 import { api } from '../../../../api/bpmnApi'; 
 import { setServiceTaskParameters } from '../../utils';
+import { eventBus } from '../../../../main';
+import { events } from '../../../../constants';
 
 /**
  * Добавить в группу свойства пользовательской задачи
@@ -18,34 +20,41 @@ export default function addUserTaskProps(group, diagram, element, entryFactory, 
   if (!is(element, 'IT-Enterprise:UserTask')) {
     return;
   }
+  var bo = getBusinessObject(element);
 
   var actionDefinitionEntry = entryFactory.autocompleteBox({
     id: 'actionDefinitionId',
     label: translate('Task creation rule'),
     model: 'actionDefinitionId',
-    get(element) {
-      var bo = getBusinessObject(element);
+    get() {
       return bo.get('IT-Enterprise:actionDefinitionId');
     },
     set(element, value) {
-      var bo = getBusinessObject(element);
       return cmdHelper.updateBusinessObject(element, bo, {
         'IT-Enterprise:actionDefinitionId': value
       });
     },
-    loadItems: api.getActions(ActionDefinitionType.UserTask, diagram.isSystem)
+    loadItems: api.getActions(ActionDefinitionType.UserTask, diagram.isSystem),
+    appendIcon: 'search',
+    append() {
+      const value = bo.get('IT-Enterprise:actionDefinitionId');
+      eventBus.$emit(events.propertiesPanel.selectAction, value, ActionDefinitionType.UserTask, (newValue) => {
+        var cmd = cmdHelper.updateBusinessObject(element, bo, {
+          'IT-Enterprise:actionDefinitionId': newValue
+        });
+        commandStack.execute(cmd.cmd, cmd.context);
+      });
+    }
   });
 
   var setTaskPropertiesEntry = entryFactory.button({
     id: 'setExternalTaskProperties',
     label: translate('Task properties'),
-    disabled(element) {
-      var bo = getBusinessObject(element);
+    disabled() {
       var id = bo.get('IT-Enterprise:actionDefinitionId');
       return typeof id !== 'string' || id.trim() === '';
     },
     click(element) {
-      var bo = getBusinessObject(element);
       var actionId = bo.get('IT-Enterprise:actionDefinitionId');
       setServiceTaskParameters(element, bo, actionId, bpmnFactory, commandStack);
     }
