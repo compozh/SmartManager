@@ -1,18 +1,13 @@
 <template>
-  <div
-    class="app-fixed-height border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
-  >
-    <VuePerfectScrollbar
-      class="scroll-area"
-      :settings="settings"
-    >
+  <div class="app-fixed-height border border-solid rounded
+              d-theme-border-grey-light relative overflow-hidden">
+    <VuePerfectScrollbar class="scroll-area" :settings="settings">
       <div class="vx-row form-container">
         <div class="vx-col w-full h-full">
           <vx-card>
-            <!-- TASK APPROVALS -->
             <div class="vx-row">
               <div class="vx-col w-full">
-                <!-- add task -->
+                <!-- ADD TASK -->
                 <form @submit.prevent>
                   <vs-input name="taskName"
                             :label-placeholder="$t('tasks.taskName')"
@@ -21,92 +16,88 @@
                             v-validate="'required'"
                             :danger="errors.has('taskName')"
                             :danger-text="$t('validate.required')"
-                            val-icon-danger="clear"
-                  />
+                            val-icon-danger="clear"/>
                   <autocomplete :items="users"
                                 :multiple="false"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 v-model="newTask.performer"
                                 label="fio"
                                 :placeholder="$t('tasks.performer')"
                                 name="performer"
                                 v-validate="'required'"
-                                avatar
-                  />
+                                avatar/>
                   <span v-if="errors.has('performer')"
                         class="required-text"
-                  >{{ $t('validate.required') }}
-                  </span>
+                  >{{ $t('validate.required') }}</span>
                   <div class="mt-3">{{ $t('tasks.deadline') }}:</div>
                   <div class="inline-flex flex-wrap items-center mr-12 mt-3 mb-6">
                     <span class="w-16">{{ $t('pickers.date') }}:</span>
                     <div class="date-wrapper">
-                      <flat-pickr
-                        :config="configDatePicker"
-                        v-model="newTask.planDate"
-                        name="date"
-                        v-validate="'required'"
-                      />
+                      <flat-pickr :config="configDatePicker"
+                                  v-model="newTask.planDate"
+                                  name="date"
+                                  v-validate="'required'"/>
                       <span v-if="errors.has('date')"
                             class="required-text"
-                      >{{ $t('validate.required') }}
-                      </span>
+                      >{{ $t('validate.required') }}</span>
                     </div>
                   </div>
 
                   <div class="inline-flex flex-wrap items-center mb-12">
                     <span class="w-16">{{ $t('pickers.time') }}:</span>
                     <div class="time-wrapper">
-                      <flat-pickr
-                        :config="configTimePicker"
-                        v-model="newTask.planTime"
-                        name="time"
-                        v-validate="'required'"
-                      />
+                      <flat-pickr :config="configTimePicker"
+                                  v-model="newTask.planTime"
+                                  name="time"
+                                  v-validate="'required'"/>
                       <span v-if="errors.has('time')"
                             class="required-text"
-                      >{{ $t('validate.required') }}
-                    </span>
+                      >{{ $t('validate.required') }}</span>
                     </div>
                   </div>
                   <quill-editor v-model="newTask.description"
                                 :placeholder="$t('tasks.description')"
                                 :options="editorOption"
-                                class="mb-6"
-                  ></quill-editor>
+                                class="mb-6"/>
+                  <autocomplete :items="cases"
+                                :multiple="false"
+                                label="name"
+                                :loading="caseListLoading"
+                                :disabled="caseListLoading || bindCaseId"
+                                v-model="newTask.case"
+                                :placeholder="$t('cases.name')"
+                                icon="BriefcaseIcon"/>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 label="fio"
                                 v-model="newTask.coexecutors"
                                 :placeholder="$t('roles.coExecutors')"
                                 class="my-6"
-                                avatar
-                  />
+                                avatar/>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 label="fio"
                                 :loading="userListLoading"
+                                :disabled="userListLoading"
                                 v-model="newTask.notify"
                                 :placeholder="$t('roles.notify')"
-                                avatar
-                  />
+                                avatar/>
                   <files-upload @attach="getAttachment($event)"
                                 :uploading="filesUploading"
-                                class="mt-4"
-                  />
+                                class="mt-4"/>
                   <vs-divider/>
                   <div class="flex justify-end">
                     <vs-button class="mx-6"
                                color="primary"
                                type="flat"
                                @click="$router.go(-1)"
-                    >{{ $t('buttons.cancel') }}
-                    </vs-button>
+                    >{{ $t('buttons.cancel') }}</vs-button>
                     <vs-button type="gradient"
                                @click="submitForm"
-                    >{{ $t('buttons.create') }}
-                    </vs-button>
+                    >{{ $t('buttons.create') }}</vs-button>
                   </div>
                 </form>
               </div>
@@ -117,6 +108,7 @@
     </VuePerfectScrollbar>
   </div>
 </template>
+
 <script>
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -142,7 +134,7 @@ export default {
     FilesUpload
   },
   props: {
-    parent: Number
+    bindCaseId: Number
   },
   data() {
     return {
@@ -154,7 +146,8 @@ export default {
         description: '',
         coexecutors: [],
         notify: [],
-        attachments: []
+        attachments: [],
+        case: null
       },
       configDatePicker: {
         locale: this.$i18n.locale,
@@ -169,6 +162,7 @@ export default {
         allowInput: true
       },
       userListLoading: false,
+      caseListLoading: false,
       filesUploading: false,
       editorOption: {
         modules: {
@@ -200,6 +194,9 @@ export default {
     users() {
       return this.$store.state.sm.users
     },
+    cases() {
+      return this.$store.state.sm.cases
+    },
     dateplan() {
       const formatDate = moment(this.newTask.planDate, 'DD.MM.YYYY')
         .format('YYYY-MM-DD')
@@ -211,15 +208,28 @@ export default {
   },
   created() {
     this.getUsers()
+    this.getCases()
+  },
+  mounted() {
+    if (this.bindCaseId && this.cases.length !== 0) {
+      this.newTask.case = this.cases
+        .find(caseItem => caseItem.id === this.bindCaseId)
+    }
   },
   methods: {
     async getUsers() {
       this.userListLoading = true
-      const users = this.$store.state.sm.users
-      if (users.length === 0) {
+      if (this.users.length === 0) {
         await this.$store.dispatch('sm/getUsers')
       }
       this.userListLoading = false
+    },
+    async getCases() {
+      this.caseListLoading = true
+      if (this.cases.length === 0) {
+        await this.$store.dispatch('sm/getCases', false)
+      }
+      this.caseListLoading = false
     },
     async createTask() {
       const newTask = {
@@ -231,23 +241,19 @@ export default {
         attachments: this.newTask.attachments,
         needApprove: false,
         needComm: false,
-        priority: 0
+        priority: 0,
+        caseId: this.newTask.case.id
       }
       if (this.$route.params.id) {
         newTask.parentTaskId = this.$route.params.id
       }
       try {
         const result = await this.$store.dispatch('sm/addNewTask', newTask)
-        if (this.parent) {
-          await this.$store.dispatch('sm/getTaskInfo', {
-            taskId: this.parent,
-            loader: false
-          })
-        }
         if (result.success) {
           await this.$router.push({name: 'task-view', params: {id: result.id}})
         }
       } catch (e) {
+        // Задержка нужна чтобы показать сообщение об ошибке
         setTimeout(() => this.$router.go(0), 1000)
       }
     },
@@ -320,4 +326,5 @@ export default {
     padding: 2px 4px 4px 4px;
     display: block;
   }
+
 </style>

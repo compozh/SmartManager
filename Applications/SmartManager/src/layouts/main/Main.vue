@@ -90,7 +90,7 @@ export default {
     createUrl() {
       return item => {
         if (item.code === 'cases') {
-          return '/cases/0'
+          return '/cases/ALL'
         }
         if (item.folderId) {
           return '/cases/' + item.folderId

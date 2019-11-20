@@ -22,6 +22,8 @@ fragment mainTaskFields on Task {
   hasOrig
   hasComm
   priority
+  addedFio
   dateFact
   isRead
+  caseId
 }

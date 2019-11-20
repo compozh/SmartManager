@@ -22,7 +22,6 @@ fragment mainTaskFields on Task {
     performerPhoto
     dateplan
     dateAdd
-    addedFio
     status
     isMy
     myControl
@@ -30,23 +29,22 @@ fragment mainTaskFields on Task {
     hasOrig
     hasComm
     priority
+    addedFio
     dateFact
     isRead
+    caseId
 }
 
 fragment detailTaskFields on Task {
     htmlDescript
-    declarerId
     declarer
-    declarerPhoto
     arso
     keyValue
     kidCopy
-    addedId
-    addedPhoto
     nextButtonText
     previousButtonText
     taskType
+    caseId
     participants {
         userId
         userFio

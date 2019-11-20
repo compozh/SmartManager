@@ -1,52 +1,40 @@
 <template>
-    <div
-      class="vs-sidebar--item" v-if="canSee"
-      :class="[
+  <div
+    class="vs-sidebar--item" v-if="canSee"
+    :class="[
         {'vs-sidebar-item-active':activeLink},
         {'disabled-item pointer-events-none': isDisabled},
-        {'ml-3': to.includes('cases') && !to.includes('/0')}
+        {'disabled-item pointer-events-none': isDisabled}
       ]"
-    >
-        <router-link
-          v-if="to"
-          :to="to"
-          :class="[{'router-link-active': activeLink}]"
-          :target="target"
-          exact
-        >
-            <vs-icon
-              v-if="!featherIcon"
-              :icon-pack="iconPack"
-              :icon="icon"
-            >
-            </vs-icon>
-            <feather-icon
-              :icon="icon"
-              :class="{'w-3 h-3': iconSmall}"
-              v-else>
-            </feather-icon>
-            <slot></slot>
-        </router-link>
+  >
+    <vs-divider v-if="to === '/cases/ALL'" class="my-1"/>
 
-        <a
-          v-else
-          :target="target"
-          :href="href"
-        >
-            <vs-icon
-              v-if="!featherIcon"
+    <router-link v-if="to"
+                 :to="to"
+                 :class="[{'router-link-active': activeLink}]"
+                 :target="target"
+                 exact>
+      <vs-icon v-if="!featherIcon"
+               :icon-pack="iconPack"
+               :icon="icon"/>
+      <feather-icon :icon="icon"
+                    :class="{'w-3 h-3': iconSmall}"
+                    v-else/>
+      <slot></slot>
+    </router-link>
+
+    <a v-else
+      :target="target"
+      :href="href">
+      <vs-icon v-if="!featherIcon"
               :icon-pack="iconPack"
-              :icon="icon"
-            >
-            </vs-icon>
-            <feather-icon
-              :icon="icon"
-              :class="{'w-3 h-3': iconSmall}"
-              v-else
-            ></feather-icon>
-            <slot></slot>
-        </a>
-    </div>
+              :icon="icon"/>
+      <feather-icon :icon="icon"
+                    :class="{'w-3 h-3': iconSmall}"
+                    v-else/>
+      <slot></slot>
+    </a>
+  </div>
 </template>
 
 <script>
@@ -108,7 +96,7 @@ export default {
     CheckIsActive() {
       if (this.to) {
         this.activeLink = !!((this.to === this.$router.path && this.to)
-          || (this.$route.meta.parent === this.slug))
+            || (this.$route.meta.parent === this.slug))
       }
     }
   },

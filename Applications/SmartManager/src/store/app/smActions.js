@@ -52,10 +52,10 @@ export default {
     startLoading(loading)
     try {
       const result = await api.getTaskInfoFromGql(taskId)
-      stopLoading()
       const taskInfo = result.data.smtasks.taskDetails
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
+      stopLoading()
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -128,16 +128,17 @@ export default {
       notify('danger', 'statusTitle', 'statChangeError')
     }
   },
-  async addAttachments({dispatch}, {taskId, attachments}) {
+  async addAttachments({dispatch}, {attachments, params}) {
+    const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.addAttachmentsInGql(taskId, attachments)
+      const response = await api.addAttachmentsInGql(attachments, paramsJson)
       const result = response.data.smtasksMutation.addAttachments
       stopLoading()
       if (result.success) {
-        await dispatch('getTaskInfo', {
-          taskId,
-          loading: true
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id
         })
         notify('success', 'attachTitle', 'attachAddSuccess')
       } else {
@@ -173,17 +174,17 @@ export default {
       notify('danger', 'stageTitle', 'stageChangeError')
     }
   },
-  async addTaskComment({commit}, {comment, params}) {
+  async addComment({dispatch}, {comment, params}) {
     const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.addTaskCommentToGql(comment, paramsJson)
+      const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
       stopLoading()
       if (result.success) {
-        commit('addComment', {
-          id: params.id,
-          text: comment
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id
         })
         notify('success', 'commentsTitle', 'commentAddSuccess')
       } else {
@@ -238,7 +239,7 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async getCases({commit}, {loading}) {
+  async getCases({commit}, loading) {
     startLoading(loading)
     try {
       const result = await api.getCasesFromGql()
@@ -247,11 +248,12 @@ export default {
       commit('setCases', cases)
     } catch (e) {
       console.log(e.message)
-      notify('danger', 'casesTitle', 'casesError')
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseListError')
     }
   },
   async getCaseDetails({commit}, {caseId, loading}) {
-    startLoading(loading)
+    startLoading(loading || true)
     try {
       const result = await api.getCaseDetailsFromGql(caseId)
       stopLoading()
@@ -260,7 +262,82 @@ export default {
       commit('setCaseDetails', caseItem)
     } catch (e) {
       console.log(e.message)
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseDetailsError')
+    }
+  },
+  async caseCreate(context, newCase) {
+    const newCaseJson = JSON.stringify(newCase)
+    startLoading(true)
+    try {
+      const response = await api.caseCreateInGql(newCaseJson)
+      stopLoading()
+      notify('success', 'caseTitle', 'caseCreateSuccess')
+      return response.data.smtasksMutation.newCase
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
       notify('danger', 'caseTitle', 'caseError')
+    }
+  },
+  async caseUpdate({dispatch}, caseData) {
+    const caseDataJson = JSON.stringify(caseData)
+    startLoading(true)
+    try {
+      const response = await api.caseUpdateInGql(caseDataJson)
+      const result = response.data.smtasksMutation.caseUpdate
+      stopLoading()
+      if (result.success) {
+        dispatch('getCaseDetails', {caseId: caseData.id})
+      }
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseUpdateError')
+    }
+  },
+  async caseFolderCreate({dispatch}, folderName) {
+    startLoading(true)
+    try {
+      await api.caseFolderCreateInGql(folderName)
+      await dispatch('getFolders')
+      stopLoading()
+      notify('success', 'foldersTitle', 'folderCreateSuccess')
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'foldersTitle', 'folderCreateError')
+    }
+  },
+  async changeBinding({dispatch}, {caseId, taskId, bind}) {
+    startLoading(true)
+    try {
+      const response = await api.changeBindingInGql(caseId, taskId, bind)
+      const result = response.data.smtasksMutation.binding
+      stopLoading()
+      if (result.success) {
+        await dispatch('getTaskInfo', {taskId, loader: true})
+      } else {
+        notify('warning', 'taskTitle', 'bindingFail')
+      }
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'bindingError')
+    }
+  },
+  async updateInfo({dispatch}, {type, id}) {
+    if (type === 'TASK' || type === 'DOCUMENT') {
+      return await dispatch('getTaskInfo', {
+        taskId: id,
+        loading: true
+      })
+    }
+    if (type === 'CASE') {
+      return await dispatch('getCaseDetails', {
+        caseId: id,
+        loading: true
+      })
     }
   }
 }

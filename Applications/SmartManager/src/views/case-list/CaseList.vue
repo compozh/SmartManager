@@ -17,7 +17,7 @@
             v-model.trim="search"
             class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
         </div>
-        <!-- TASK LIST -->
+        <!-- CASE LIST -->
         <VuePerfectScrollbar
           class="task-content-scroll-area"
           :settings="settings"
@@ -77,6 +77,9 @@ export default {
   computed: {
     cases() {
       const cases = this.$store.getters['sm/cases']
+      if (this.$route.params.id === 'ALL') {
+        return cases
+      }
       return cases.filter(i => i.folderId === +this.$route.params.id)
     },
     pages() {
@@ -107,7 +110,7 @@ export default {
     async getCases() {
       const loading = !this.cases
       try {
-        await this.$store.dispatch('sm/getCases', {loading})
+        await this.$store.dispatch('sm/getCases', loading)
       } catch (e) {
         console.log(e.message)
       }

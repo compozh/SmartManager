@@ -9,7 +9,11 @@
   },
   "folders": {
     "header": "Папки",
-    "main": "Активні"
+    "main": "Активні",
+    "folder": "Папка",
+    "createFolder": "Додати нову папку",
+    "placeholderNew": "Нова папка",
+    "placeholderCreate": "Введіть назву папки"
   },
   "validate": {
     "required": "Поле обов'язкове для заповнення",
@@ -37,21 +41,26 @@
   },
   "cases": {
     "newCase": "Новий кейс",
-    "caseName": "Назва кейсу",
+    "name": "Назва кейсу",
+    "related": "Входить до кейсу",
+    "noRelated": "Не входить до кейсу",
     "noCases": "Відсутні кейси для відображення",
-    "description": "Опис кейсу",
     "id": "ID",
     "fioAdd": "Додав",
     "dateAdd": "Додано",
     "dateFrom": "Від",
     "dateTo": "До",
+    "dateStart": "Дата початку",
+    "dateEnd": "Дата закінчення",
     "caseFrom": "Кейс від",
-    "participants": "Учасники",
-    "comm": "Примітка"
+    "members": "Учасники",
+    "comm": "Примітка",
+    "purpose": "Ціль"
   },
   "buttons": {
     "addTask": "Додати задачу",
     "addSubTask": "Додати підзадачу",
+    "addCaseTask": "Додати задачу до кейсу",
     "reject": "Відхилити",
     "approve": "Погодити",
     "back": "Повернути назад",
@@ -71,7 +80,12 @@
     "startWorkflow": "Почати бізнес-процес",
     "login": "Вхід",
     "logout": "Вихід",
-    "download": "Завантажити"
+    "download": "Завантажити",
+    "save": "Зберегти",
+    "addCase": "Додати кейс",
+    "addFolder": "Створити папку",
+    "bindToCase": "Прив'язати до кейсу",
+    "unbindFromCase": "Відв'язати від кейсу"
   },
   "icons": {
     "priority": "Високий пріоритет",
@@ -123,6 +137,9 @@
   "notify": {
     "foldersTitle": "Папки та фільтри",
     "foldersError": "Помилка завантаження",
+    "folderCreateSuccess": "Папка успішно створена",
+    "folderCreateFail": "Не вдалося створити папку",
+    "folderCreateError": "Помилка при створенні папки",
     "taskListTitle": "Список задач",
     "taskListError": "Помилка завантаження задач",
     "taskTitle": "Задача",
@@ -158,8 +175,16 @@
     "applyRightsTittle": "Делегування прав",
     "applyRightsSuccess": "Права успішно змінено",
     "applyRightsFail": "Не вдалося застосувати делеговані права",
-    "applyRightsError": "Помилка зміни прав"
-
+    "applyRightsError": "Помилка зміни прав",
+    "casesTitle": "Кейси",
+    "caseListError" : "Помилка завантаження кейсів",
+    "caseDetailsError" : "Помилка отримання інформації про кейс",
+    "caseCreateSuccess": "Кейс успішно створено",
+    "caseCreateError": "Помилка створення кейсу",
+    "caseUpdateSuccess": "Кейс успішно оновлено",
+    "caseUpdateError": "Помилка при оновленні кейсу",
+    "bindingFail": "Не вдалося змінити прив'язку",
+    "bindingError": "Помилка зміни прив'язки"
   },
   "workflow": {
     "businessProcess": "Бізнес-процес",
