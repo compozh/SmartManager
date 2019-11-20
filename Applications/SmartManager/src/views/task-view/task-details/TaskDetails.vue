@@ -127,23 +127,15 @@
                              size="small"
                              type="border"
                              icon="work_off">{{ $t('buttons.unbindFromCase') }}</vs-button>
-                  <vs-button v-if="!task.caseId && !caseList"
-                             @click="caseList = true"
+                  <vs-button v-if="caseForBind"
+                             @click="changeBinding(true)"
                              class="ml-3"
                              color="primary"
                              size="small"
                              type="border"
-                             icon="work_outline">{{ $t('buttons.bindToCase') }}</vs-button>
-                  <vs-button v-if="caseList"
-                             @click="changeBinding(true)"
-                             class="ml-3"
-                             color="success"
-                             :disabled="!caseForBind"
-                             size="small"
-                             type="border"
                   icon="save">{{ $t('buttons.save') }}</vs-button>
-                <vs-button v-if="caseList"
-                           @click="caseList = caseForBind = null"
+                <vs-button v-if="caseForBind"
+                           @click="caseForBind = null"
                            class="ml-3"
                            color="danger"
                            size="small"
@@ -162,14 +154,14 @@
                       <case-list-item :caseItem="caseItem"></case-list-item>
                     </li>
                   </transition-group>
-                  <autocomplete v-if="caseList"
+                  <autocomplete v-if="!task.caseId"
                                 :items="cases"
                                 :multiple="false"
                                 label="name"
                                 v-model="caseForBind"
                                 :loading="caseListLoading"
                                 :disabled="caseListLoading"
-                                :placeholder="$t('cases.name')"
+                                :placeholder="$t('buttons.bindToCase')"
                                 class="mt-6"
                                 icon="BriefcaseIcon"/>
                 </div>
