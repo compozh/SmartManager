@@ -1,14 +1,13 @@
 <template>
 <v-layout column fill-height>
-  <v-tabs
-    v-model="currentTab"
+  <el-tabs
+     v-model="currentTab"
     class="properties-panel"
   >
-    <v-tab v-for="tab in tabs" :key="tab.key" :href="`#tab-${tab.key}`">{{ tab.title }}</v-tab>
-    <v-tab-item v-for="tab in tabs" :key="tab.key" :value="`tab-${tab.key}`">
+    <el-tab-pane v-for="tab in tabs" :key="tab.key" :name="tab.key" :label="tab.title">
       <properties-panel-tab :tab="tab"></properties-panel-tab>
-    </v-tab-item>
-  </v-tabs>
+    </el-tab-pane>
+  </el-tabs>
 </v-layout>
 </template>
 <script>
@@ -94,6 +93,10 @@ export default {
       }
       this.tabs = this.propertiesProvider.getTabs(element);
       this.currentElement = element;
+      
+      if (!this.currentTab || !this.tabs.find(tab => tab.key === this.currentTab)) {
+        this.currentTab = this.tabs[0].key;
+      }
     },
     onRootAdded(e) {
       const element = e.element;
@@ -157,5 +160,14 @@ function isImplicitRoot(element) {
   }
   .properties-panel .el-collapse-item__content {
     padding: 0 15px;
+  }
+  .properties-panel .el-tabs__header.is-top {
+    margin: 0;
+  }
+  .properties-panel .el-tabs__nav-wrap.is-top {
+    padding: 0 15px;
+  }
+  .properties-panel .el-tabs__item {
+    padding: 0px 12px;
   }
 </style>

@@ -80,10 +80,10 @@ export default class EntryFactory {
     data.props.loadItems = options.loadItems;
     data.props.prependIcon = options.prependIcon;
     data.props.appendIcon = options.appendIcon;
-    if (options.prepend) {
+    if (!this.readonly && options.prepend) {
       data.on.prepend = options.prepend;
     }
-    if (options.append) {
+    if (!this.readonly && options.append) {
       data.on.append = options.append;
     }
     

@@ -6,6 +6,8 @@ import { PropertiesPanelGroup } from '../../Models';
 import { Diagram, ActionDefinitionType } from '../../../../api/models';
 import { api } from '../../../../api/bpmnApi';
 import { setServiceTaskParameters } from '../../utils';
+import { eventBus } from '../../../../main';
+import { events } from '../../../../constants';
 
 /**
  * Добавить в группу свойсва сервисной задачи
@@ -34,23 +36,32 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
   }));
 
   if (isExternal(element)) {
+    var bo = getBusinessObject(element);
+
     group.entries.push(
       entryFactory.autocompleteBox({
         id: 'externalTopic',
         label: translate('Action'),
         model: 'externalTopic',
         loadItems: api.getActions(ActionDefinitionType.ExternalTask, diagram.isSystem),
-        get: function (element) {
-          var bo = getBusinessObject(element);
+        get() {
           return bo.get('camunda:topic');
         },
-
-        set: function (element, value) {
-          var bo = getBusinessObject(element);
+        set(element, value) {
           return cmdHelper.updateBusinessObject(element, bo, {
             'camunda:topic': value
           });
         },
+        appendIcon: 'search',
+        append() {
+          const value = bo.get('camunda:topic');
+          eventBus.$emit(events.propertiesPanel.selectAction, value, ActionDefinitionType.ExternalTask, (newValue) => {
+            var cmd = cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:topic': newValue
+            });
+            commandStack.execute(cmd.cmd, cmd.context);
+          });
+        }
       }),
       entryFactory.button({
         id: 'externalTaskProperties',

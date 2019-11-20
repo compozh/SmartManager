@@ -164,7 +164,8 @@ export class BpmnModelerApi {
   async getAccessRecordsForDiagram(diagramId) {
     const result = await getClient().query({
       query: gql`query ($diagramId: ID!) ${queries.getAccessRecordsForDiagram}`,
-      variables: { diagramId }
+      variables: { diagramId },
+      fetchPolicy: 'no-cache'
     });
     return result.data.bpmnquery.getAccessRecordsForDiagram;
   }
@@ -180,8 +181,7 @@ export class BpmnModelerApi {
           allowAccess: accessParams.allowAccess,
           rights: accessParams.rights
         }
-      },
-      fetchPolicy: 'no-cache'
+      }
     });
     return result.data.bpmnqueryMutation.giveAccessToDiagram;
   }
