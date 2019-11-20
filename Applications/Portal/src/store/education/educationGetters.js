@@ -62,5 +62,14 @@ export default {
   },
   getCurrentPageNabu: state => {
     return state.currentPageNabu
+  },
+  getEmployeeOriginal: state => {
+    return state.employeeOriginal
+  },
+  getTrainingSchedule: state => {
+    return state.trainingSchedule
+  },
+  getIndividualPlanReport: state => {
+    return state.individualPlanReport
   }
 }

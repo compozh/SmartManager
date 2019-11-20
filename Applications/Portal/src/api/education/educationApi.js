@@ -11,6 +11,8 @@ import resultsInterimEvaluation from './graphql/resultsInterimEvaluation.graphql
 import criterialEvaluation from './graphql/criterialEvaluation.graphql'
 import selfEsteemResults from './graphql/selfEsteemResults.graphql'
 import resultsAssessmentSupremo from './graphql/resultsAssessmentSupremo.graphql'
+import trainingSchedule from './graphql/trainingSchedule.graphql'
+import individualPlanReport from './graphql/individualPlanReport.graphql'
 
 
 import gql from 'graphql-tag'
@@ -109,4 +111,24 @@ export class EducationApi {
     }
   }
 
+  static async getTrainingSchedule() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${trainingSchedule}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+  
+  static async getIndividualPlanReport() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${individualPlanReport}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+  
 }

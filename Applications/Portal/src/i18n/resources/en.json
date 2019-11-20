@@ -41,7 +41,8 @@
         "Duty": "Duty",
         "Priority": "Priority",
         "Provider": "Approx. the provider",
-        "Status": "Status"
+        "Status": "Status",
+        "btnFormPlane": "Create an individual development plan"
     },
     "agGrid":{
         "contains": "Сontains",

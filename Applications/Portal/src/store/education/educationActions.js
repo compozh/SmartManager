@@ -5,8 +5,11 @@ export default {
   async loadStrategicGoals({commit}) {
     let result = await EducationApi.getStrategicGoals()
     if (result) {
-      let strategicGoals = CommonDataAndHeaders(result.data.portalNabuQuery.strategicGoals)
+      let strategicGoals = CommonDataAndHeaders(result.data.portalNabuQuery.strategicGoal)
       commit('setStrategicGoals', strategicGoals)
+
+      let employeeOriginal = result.data.portalNabuQuery.emplOriginal.data
+      commit('setEmployeeOriginal', employeeOriginal)
     }
 
   },
@@ -86,6 +89,21 @@ export default {
     if (result) {
       let additionalTraining = CommonDataAndHeaders(result.data.portalNabuQuery.additionalTraining)
       commit('setEducationAdditionalTraining', additionalTraining)
+    }
+  },
+
+  async loadTrainingSchedule({commit}) {
+    let result = await EducationApi.getTrainingSchedule()
+    if (result) {
+      let trainingSchedule = CommonDataAndHeaders(result.data.portalNabuQuery.trainingSchedule)
+      commit('setTrainingSchedule', trainingSchedule)
+    }
+  },
+
+  async loadIndividualPlanReport({commit}) {
+    let result = await EducationApi.getIndividualPlanReport()
+    if (result) {
+      commit('setIndividualPlanReport',result.data.portalNabuQuery.individualPlanReport)
     }
   },
 

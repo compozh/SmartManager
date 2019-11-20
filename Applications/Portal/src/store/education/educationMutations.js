@@ -28,6 +28,16 @@ export default {
   },
   setCurrentPageNabu(state, value) {
     state.currentPageNabu = value
+  },
+  setEmployeeOriginal(state, value) {
+    state.employeeOriginal = value
+  },
+  setTrainingSchedule(state, value) {
+    state.trainingSchedule = value
+  },
+  setIndividualPlanReport(state, value) {
+    state.individualPlanReport = value
   }
+
 }
   
