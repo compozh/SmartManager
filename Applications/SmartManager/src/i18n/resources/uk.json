@@ -43,6 +43,7 @@
     "newCase": "Новий кейс",
     "name": "Назва кейсу",
     "related": "Входить до кейсу",
+    "noRelated": "Не входить до кейсу",
     "noCases": "Відсутні кейси для відображення",
     "id": "ID",
     "fioAdd": "Додав",
@@ -82,7 +83,9 @@
     "download": "Завантажити",
     "save": "Зберегти",
     "addCase": "Додати кейс",
-    "addFolder": "Створити папку"
+    "addFolder": "Створити папку",
+    "bindToCase": "Прив'язати до кейсу",
+    "unbindFromCase": "Відв'язати від кейсу"
   },
   "icons": {
     "priority": "Високий пріоритет",
@@ -179,7 +182,9 @@
     "caseCreateSuccess": "Кейс успішно створено",
     "caseCreateError": "Помилка створення кейсу",
     "caseUpdateSuccess": "Кейс успішно оновлено",
-    "caseUpdateError": "Помилка при оновленні кейсу"
+    "caseUpdateError": "Помилка при оновленні кейсу",
+    "bindingFail": "Не вдалося змінити прив'язку",
+    "bindingError": "Помилка зміни прив'язки"
   },
   "workflow": {
     "businessProcess": "Бізнес-процес",
