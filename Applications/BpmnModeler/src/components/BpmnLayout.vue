@@ -132,11 +132,8 @@ export default {
     async loadItems() {
       this.loading = true;
       await this.$store.dispatch('bpmn/resetCache');
-      const [ _, loadItemsResult ] = await Promise.all([
-        this.$store.dispatch('bpmn/loadConfiguration'),
-        this.$store.dispatch('bpmn/loadItems')
-      ]);
-      if (!loadItemsResult) {
+      await this.$store.dispatch('bpmn/loadConfiguration');
+      if (!(await this.$store.dispatch('bpmn/loadItems'))) {
         Notification.error(this.$t('bpmn.errors.ProcessesNotLoaded'));
       }
       this.loading = false;

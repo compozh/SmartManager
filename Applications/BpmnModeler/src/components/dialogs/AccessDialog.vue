@@ -104,12 +104,9 @@ import { Notification } from 'element-ui';
 import * as Models from '../../api/models';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
-import AutoCompleteBox from '../AutoCompleteBox';
 
 export default {
   name: 'access-dialog',
-  // eslint-disable-next-line
-  components: { AutoCompleteBox },
   data() {
     return {
       show: false,
@@ -241,10 +238,8 @@ export default {
       });
     },
     async loadUsersAndGroups() {
-      var [ users, groups ] = await Promise.all([
-        (await this.$store.dispatch('bpmn/queryUsers')).map(user => { return { ...user, type: 'user' } }),
-        (await this.$store.dispatch('bpmn/queryGroups')).map(group => { return { ...group, type: 'group' } })
-      ]);
+      const users = await this.$store.dispatch('bpmn/queryUsers');
+      const groups = await this.$store.dispatch('bpmn/queryGroups');
 
       this.form.usersAndGroups = [ { id: '', name: this.$t('bpmn.labels.All'), type: 'all' } ];
 
@@ -252,14 +247,14 @@ export default {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Users')},
-          ...users,
+          ...users.map(user => { return { ...user, type: 'user' } }),
         );
       }
       if (groups) {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Groups')},
-          ...groups
+          ...groups.map(group => { return { ...group, type: 'group' } })
         );
       }
     },
