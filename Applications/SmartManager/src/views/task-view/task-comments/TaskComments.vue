@@ -86,17 +86,19 @@ export default {
   },
   methods: {
     sendMsg() {
-      this.$store.dispatch('sm/addComment', {
-        comment: this.comment,
-        params: {
-          type: this.type,
-          id: this.task.id || this.$route.params.id,
-          arso: this.task.arso,
-          keyValue: this.task.keyValue,
-          kidCopy: this.task.kidCopy
-        }
-      })
-      this.comment = ''
+      if (this.comment) {
+        this.$store.dispatch('sm/addComment', {
+          comment: this.comment,
+          params: {
+            type: this.type,
+            id: this.task.id || this.$route.params.id,
+            arso: this.task.arso,
+            keyValue: this.task.keyValue,
+            kidCopy: this.task.kidCopy
+          }
+        })
+        this.comment = ''
+      }
     },
     handleWindowResize(event) {
       this.windowWidth = event.currentTarget.innerWidth
