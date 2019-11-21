@@ -33,6 +33,14 @@ export default {
   },
   methods: {
     getFormPlan() {
+      if(!this.fileLink){
+        this.$vs.notify({
+          title: this.$t('Education.cantdoFormPlane'),
+          text: this.$t('Education.filePathNotFound'),
+          color:'warning'
+        })
+        return
+      }
       window.open(this.fileLink); 
     }
   }
