@@ -1,124 +1,70 @@
 <template>
   <div class="editor" ref="editor">
     <v-subheader>{{ label }}</v-subheader>
-
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
       <div class="menubar">
+        <v-btn-toggle :value="isActive.bold()">
+          <v-btn :value="true" @click="commands.bold" flat small><v-icon>mdi-format-bold</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bold() }"
-          @click="commands.bold"
-        >
-          <v-icon>mdi-format-bold</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.italic()">
+          <v-btn :value="true" @click="commands.italic" flat small><v-icon>mdi-format-italic</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.italic() }"
-          @click="commands.italic"
-        >
-          <v-icon>mdi-format-italic</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.strike()">
+          <v-btn :value="true" @click="commands.strike" flat small><v-icon>mdi-format-strikethrough</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.strike() }"
-          @click="commands.strike"
-        >
-          <v-icon>mdi-format-strikethrough</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.underline()">
+          <v-btn :value="true" @click="commands.underline" flat small><v-icon>mdi-format-underline</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.underline() }"
-          @click="commands.underline"
-        >
-          <v-icon>mdi-format-underline</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.heading({ level: 1 })">
+          <v-btn :value="true" @click="commands.heading({ level: 1 })" flat small><v-icon>mdi-format-header-1</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-          @click="commands.heading({ level: 1 })"
-        >
-          <v-icon>mdi-format-header-1</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.heading({ level: 2 })">
+          <v-btn :value="true" @click="commands.heading({ level: 2 })" flat small><v-icon>mdi-format-header-2</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-          @click="commands.heading({ level: 2 })"
-        >
-          <v-icon>mdi-format-header-2</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.heading({ level: 3 })">
+          <v-btn :value="true" @click="commands.heading({ level: 3 })" flat small><v-icon>mdi-format-header-3</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-          @click="commands.heading({ level: 3 })"
-        >
-          <v-icon>mdi-format-header-3</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.bullet_list()">
+          <v-btn :value="true" @click="commands.bullet_list" flat small><v-icon>mdi-format-list-bulleted</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bullet_list() }"
-          @click="commands.bullet_list"
-        >
-          <v-icon>mdi-format-list-bulleted</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.ordered_list()">
+          <v-btn :value="true" @click="commands.ordered_list" flat small><v-icon>mdi-format-list-numbered</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.ordered_list() }"
-          @click="commands.ordered_list"
-        >
-          <v-icon>mdi-format-list-numbered</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.blockquote()">
+          <v-btn :value="true" @click="commands.blockquote" flat small><v-icon>mdi-format-quote-close</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.blockquote() }"
-          @click="commands.blockquote"
-        >
-          <v-icon>mdi-format-quote-close</v-icon>
-        </button>
+        <v-btn-toggle :value="isActive.code_block()">
+          <v-btn :value="true" @click="commands.code_block" flat small><v-icon>code</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.code_block() }"
-          @click="commands.code_block"
-        >
-          <v-icon>code</v-icon>
-        </button>
+        <v-btn-toggle v-model="toggle">
+          <v-btn :value="false" @click="() => { commands.horizontal_rule(); $nextTick(() => toggle = []); }" flat small><v-icon>mdi-minus</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          @click="commands.horizontal_rule"
-        >
-          <v-icon>mdi-minus</v-icon>
-        </button>
+        <v-btn-toggle v-model="toggle">
+          <v-btn :value="false" @click="() => { commands.undo(); $nextTick(() => toggle = []); }" flat small><v-icon>undo</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          @click="commands.undo"
-        >
-          <v-icon>undo</v-icon>
-        </button>
+        <v-btn-toggle v-model="toggle">
+          <v-btn :value="false" @click="() => { commands.redo(); $nextTick(() => toggle = []); }" flat small><v-icon>redo</v-icon></v-btn>
+        </v-btn-toggle>
 
-        <button
-          class="menubar__button"
-          @click="commands.redo"
-        >
-          <v-icon>redo</v-icon>
-        </button>
-
-        <button @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')" v-if="fullscreenEnabled">
-          <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
-          <v-icon v-else>fullscreen</v-icon>
-        </button>
-
+        <v-btn-toggle v-model="toggle">
+          <v-btn :value="false" @click="() => { fullScreen = !fullScreen; $nextTick(() => toggle = []); }" flat small>
+            <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
+            <v-icon v-else>fullscreen</v-icon>
+          </v-btn>
+        </v-btn-toggle>
       </div>
     </editor-menu-bar>
 
@@ -173,7 +119,34 @@ export default {
     return {
       isfullscreen: false,
       fullscreenEnabled: document.fullscreenEnabled,
-      editor: new Editor({
+      editor: null,
+      toggle: []
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(value) {
+        if (this.editor && value === this.editor.getHTML()) {
+          return;
+        }
+        this.createEditor();
+      }
+    },
+    readonly(value) {
+      this.editor.setOptions({ editable: !value });
+    }
+  },
+  methods: {
+    getFullScreenContainer() {
+      return this.$refs.editor;
+    },
+    createEditor() {
+      if (this.editor) {
+        this.editor.destroy();
+      }
+
+      this.editor = new Editor({
         extensions: [
           new Blockquote(),
           new Code(),
@@ -200,24 +173,13 @@ export default {
         onUpdate: (e) => {
           this.$emit('input', e.getHTML());
         }
-      }),
-    }
-  },
-  watch: {
-    value(value) {
-      this.editor.setContent(value);
-    },
-    readonly(value) {
-      this.editor.setOptions({ editable: !value });
-    }
-  },
-  methods: {
-    getFullScreenContainer() {
-      return this.$refs.editor;
+      });
     }
   },
   beforeDestroy() {
-    this.editor.destroy()
+    if (this.editor) {
+      this.editor.destroy();
+    }
   },
 }
 </script>
@@ -255,5 +217,14 @@ export default {
 
 .editor .menubar__button {
   padding: 0px 3px;
+}
+
+.menubar .v-btn {
+  padding: 0 2px;
+  opacity: 1;
+}
+
+.menubar .v-icon {
+  color: rgba(0,0,0,.54) !important;
 }
 </style>

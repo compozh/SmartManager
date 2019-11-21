@@ -1,7 +1,7 @@
 <template>
 <v-layout column fill-height>
   <el-tabs
-     v-model="currentTab"
+    v-model="currentTab"
     class="properties-panel"
   >
     <el-tab-pane v-for="tab in tabs" :key="tab.key" :name="tab.key" :label="tab.title">
@@ -155,6 +155,11 @@ function isImplicitRoot(element) {
 }
 </script>
 <style>
+  .properties-panel {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
   .properties-panel .el-collapse-item__header {
     padding-left: 15px;
   }
@@ -169,5 +174,8 @@ function isImplicitRoot(element) {
   }
   .properties-panel .el-tabs__item {
     padding: 0px 12px;
+  }
+  .properties-panel .el-tabs__content {
+    overflow-y: auto;
   }
 </style>
