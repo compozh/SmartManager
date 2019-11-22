@@ -8,7 +8,7 @@ Vue.use(VueI18n)
 
 const defaultLang = 'ru'
 
-const currentLang = () => {
+export const currentLang = () => {
   if (localStorage.language) {
     return localStorage.language
   }

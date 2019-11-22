@@ -20,7 +20,8 @@
 		"Select": "Вибрати",
 		"Share": "Загальний доступ",
 		"Edit": "Редагувати",
-		"Add": "Додати"
+		"Add": "Додати",
+		"OK": "ОК"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -236,6 +237,8 @@
 		"element {element} referenced by {referenced}#{property} not yet drawn": "елемент {element}, на який посилається {referenced}#{property} ще не розміщено",
 		"already rendered {element}": "{element} уже розміщено",
 		"failed to import {element}": "{element} не вдалося імпортувати",
+		"Form field id must not be empty": "Ідентифікатор поля форми не може бути пустим",
+		"Form field id already used in form data": "Цей ідентифікатор вже використовується",
 
 		"General": "Загальні",
 		"Id": "Ідентифікатор",
@@ -284,16 +287,17 @@
 		"BusinessKnowledgeModel": "Модель бизнес-знаний",
 
 		"Forms": "Форми",
+		"Simple form": "Проста форма",
 		"Form Key": "Ідентифікатор форми",
 		"Create form": "Створити форму",
 		"Edit form": "Редагувати форму",
 		"Form Fields": "Поля форми",
 		"Business Key": "Бізнес-ідентифікатор",
-		"Form Field": "Поля форми",
-		"ID": "Ідентифакатор",
+		"Form Field": "Поле форми",
+		"ID": "Ідентифікатор",
 		"Type": "Тип",
 		"Label": "Назва",
-		"Default Value": "Значення по замовчуванню",
+		"Default Value": "Значення за замовчуванням",
 		"Values": "Значення",
 		"Add Value": "Додати значення",
 		"Validation": "Валідація",
@@ -321,7 +325,7 @@
 		"long": "число",
 		"boolean": "логічний",
 		"date": "дата",
-		"enum": "перелік",
+		"enum": "перечислення значень",
 
 		"Result Variable": "Змінна з результатом",
 		"Task properties": "Параметри задачі",

@@ -20,7 +20,8 @@
 		"Select": "Выбрать",
 		"Share": "Общий доступ",
 		"Edit": "Корректировать",
-		"Add": "Добавить"
+		"Add": "Добавить",
+		"OK": "ОК"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -232,6 +233,8 @@
 		"element {element} referenced by {referenced}#{property} not yet drawn": "элемент {element}, на который ссылается {referenced}#{property} ещё не отрисован",
 		"already rendered {element}": "{element} уже отрисован",
 		"failed to import {element}": "{element} не удалось импортировать",
+		"Form field id must not be empty": "Идентификатор поля формы не должен быть пустым",
+		"Form field id already used in form data": "Этот идентификатор уже используется",
 
 		"General": "Общие",
 		"Id": "Идентификатор",
@@ -280,6 +283,7 @@
 		"BusinessKnowledgeModel": "Модель бизнес-знаний",
 
 		"Forms": "Формы",
+		"Simple form": "Простая форма",
 		"Form Key": "Идентификатор формы",
 		"Create form": "Создать форму",
 		"Edit form": "Корректировать форму",

@@ -178,4 +178,7 @@ function isImplicitRoot(element) {
   .properties-panel .el-tabs__content {
     overflow-y: auto;
   }
+  .properties-panel-label {
+    font-weight: 500;
+  }
 </style>

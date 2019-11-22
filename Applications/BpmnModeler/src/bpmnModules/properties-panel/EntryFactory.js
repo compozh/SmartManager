@@ -1,6 +1,8 @@
 import { PropertiesPanelEntry } from './Models';
 import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
+import utils from 'bpmn-js-properties-panel/lib/Utils';
 import { debounce } from 'min-dash';
 import { concatCommands } from './utils';
 
@@ -12,12 +14,14 @@ export default class EntryFactory {
   /**
    * Создать экзмемпляр панели свойств
    * @param {Object} element - Выбранный элемент
-   * @param {Object} commandStack - Моделер
+   * @param {Object} commandStack - Стек комманд
+   * @param {Object} bpmnFactory - Фабрика bpmn элементов
    * @param {Boolean} readonly - Режим для чтения
    */
-  constructor(element, commandStack, readonly) {
+  constructor(element, commandStack, bpmnFactory, readonly) {
     this.element = element;
     this.commandStack = commandStack;
+    this.bpmnFactory = bpmnFactory;
     this.readonly = readonly;
   }
 
@@ -29,6 +33,9 @@ export default class EntryFactory {
   textField(options) {
     const data = getDefaultData(options, this.element, this.readonly, this.commandStack);
     data.on.input = debounce(data.on.input, 800);
+    if (options.type) {
+      data.props.type = options.type;
+    }
     return new PropertiesPanelEntry('v-text-field', data);
   }
 
@@ -116,8 +123,71 @@ export default class EntryFactory {
       },
       on: {
         click: () => options.click ? options.click(this.element) : null
-      }
+      },
+      style: getDefaultStyle(options)
     }, () => options.label)
+  }
+
+  /**
+   * Создать описание поля "Элементы расширения"
+   * @param {ExtensionElementsOptions} options - параметы поля
+   * @returns Описание поля "Элементы расширения"
+   */
+  extensionElements(options) {
+    var data = {
+      props: {
+        key: options.id,
+        label: options.label,
+        readonly: this.readonly,
+        element: this.element,
+        getExtensionElements: options.getExtensionElements,
+        createExtensionElement: () => {
+          var commands = [],
+            bo = getBusinessObject(this.element),
+            extensionElements = bo.get('extensionElements');
+          if (!extensionElements) {
+            extensionElements = elementHelper.createElement('bpmn:ExtensionElements', { values: [] }, bo, this.bpmnFactory);
+            commands.push(cmdHelper.updateBusinessObject(this.element, bo, { extensionElements: extensionElements }));
+          }
+          commands.push(options.createExtensionElement(extensionElements, generateElementId(options.prefix)));
+          execute(commands.flat(), this.commandStack);
+        },
+        removeExtensionElement: (element) => {
+          execute(options.removeExtensionElement(element), this.commandStack);
+        }
+      },
+      style: getDefaultStyle(options)
+    };
+    if (options.onActiveElementChanged) {
+      data.props.onActiveElementChanged = options.onActiveElementChanged;
+    }
+    return new PropertiesPanelEntry('properties-panel-extension-elements', data);
+  }
+
+  /**
+   * Создать описание поля выбора даты
+   * @param {EntryOptions} options - Параметры поля выбора даты
+   * @returns Описание поля выбора даты
+   */
+  datePicker(options) {
+    return new PropertiesPanelEntry('properties-panel-date-picker-field', getDefaultData(options, this.element, this.readonly, this.commandStack));
+  }
+
+  /**
+   * Создать описание текстовой метки
+   * @param {LabelOptions} options - Параметры текстовой метки
+   * @returns Описание текстовой метки
+   */
+  label(options) {
+    return new PropertiesPanelEntry('p', {
+      props: {
+        key: options.id
+      },
+      class: {
+        'properties-panel-label': true
+      },
+      style: getDefaultStyle(options)
+    }, () => options.value);
   }
 }
 
@@ -133,7 +203,8 @@ function getDefaultData(options, element, readonly, commandStack) {
     },
     on: {
       input: (value) => set(options, element, readonly, commandStack, value)
-    }
+    },
+    style: getDefaultStyle(options)
   };
 }
 
@@ -156,17 +227,35 @@ function set(options, element, readonly, commandStack, value) {
   var command;
   if (options.set) {
     command = options.set(element, value);
-    if (Array.isArray(command)) {
-      command = concatCommands(command);
-    }
   } else {
     command = cmdHelper.updateProperties(element, { [options.model]: value });
   }
+  execute(command, commandStack);
+}
+
+function execute(command, commandStack) {
+  if (Array.isArray(command)) {
+    command = concatCommands(command);
+  }
   try {
-    commandStack.execute(command.cmd, command.context || { element });
+    commandStack.execute(command.cmd, command.context);
   } catch (error) {
     console.error(error);
   }
+}
+
+function generateElementId(prefix) {
+  prefix = prefix + '_';
+  return utils.nextId(prefix);
+}
+
+function getDefaultStyle(options) {
+  const visible = typeof options.visible === 'boolean' ? options.visible : true;
+  const style = { ...options.style };
+  if (!visible) {
+    style.display = 'none';
+  }
+  return style;
 }
 
 /**
@@ -233,7 +322,7 @@ export class TextAreaOptions extends EntryOptions {
    * @param {GetCallback} [get] - Функция получения значения
    * @param {SetCallback} [set] - Функция установки значения
    * @param {ValidateCallback} [validate] - Функция валидации
-   * @param {number} [rows] - Функция валидации
+   * @param {number} [rows] - Колличество строк в поле по умолчанию
    */
   constructor(id, label, model, get, set, validate, rows) {
     if (!rows) {
@@ -301,5 +390,43 @@ export class ButtonOptions {
     this.label = label;
     this.disabled = disabled;
     this.click = click;
+  }
+}
+
+export class ExtensionElementsOptions {
+  /**
+   * Создать описание поля "Элементы расширения"
+   * @param {string} id - Идентификатор
+   * @param {string} label - Метка
+   * @param {string} prefix - Префикс идентификаторов дочерних элементов
+   * @param {Function} getExtensionElements - Функция, возвращающая список элементов расширения
+   * @param {Function} addExtensionElement - Функция, добавляющая новый элемент
+   * @param {Function} removeExtensionElement - Функция, удаляющая указанный элемент
+   * @param {Function} onActiveElementChanged - Функция, вызываемая при смене выбранного элемента
+   */
+  constructor(id, label, prefix, getExtensionElements, addExtensionElement, removeExtensionElement, onActiveElementChanged) {
+    this.id = id;
+    this.label = label;
+    this.prefix = prefix;
+    this.getExtensionElements = getExtensionElements;
+    this.addExtensionElement = addExtensionElement;
+    this.removeExtensionElement = removeExtensionElement;
+    this.onActiveElementChanged = onActiveElementChanged;
+  }
+}
+
+export class LabelOptions {
+  /**
+   * Создать описание текстовой метки
+   * @param {string} id 
+   * @param {string} value 
+   * @param {boolean} visible 
+   * @param {Object} style 
+   */
+  constructor(id, value, visible, style) {
+    this.id = id;
+    this.value = value;
+    this.visible = visible;
+    this.style = style;
   }
 }

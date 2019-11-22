@@ -79,7 +79,6 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
         var bo = getBusinessObject(element);
         var oldType = getType(element);
         var newType = value;
-        console.log(value);
 
         var props = assign({}, DELEGATE_PROPS);
 
