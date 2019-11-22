@@ -80,7 +80,6 @@ export default {
     let result = await EducationApi.getEducationResult()
     if (result) {
       let trainingResult = CommonDataAndHeaders(result.data.portalNabuQuery.trainingResult)
-      console.log(trainingResult)
       trainingResult.data.forEach(el => {
         el.trainingDateStart = moment(el.trainingDateStart).format('DD.MM.YYYY')
         el.trainingDateEnd = moment(el.trainingDateEnd).format('DD.MM.YYYY')
