@@ -70,6 +70,16 @@ let router = new VueRouter({
           caseSensitive: false
         },
         {
+          path: '/task/:id/edit',
+          name: 'task-edit',
+          props: true,
+          component: () => import('./views/task-add/TaskAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
           path: '/work-flow',
           name: 'work-flow',
           component: () => import('./views/work-flow/WorkFlow.vue'),
@@ -79,7 +89,7 @@ let router = new VueRouter({
           caseSensitive: false
         },
         {
-          path: '/cases/:id?',
+          path: '/cases/:id',
           name: 'case-list',
           component: () => import('./views/case-list/CaseList.vue'),
           meta: {
@@ -99,6 +109,15 @@ let router = new VueRouter({
         {
           path: '/case-add',
           name: 'case-add',
+          component: () => import('./views/case-add/CaseAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case/:id/edit',
+          name: 'case-edit',
           component: () => import('./views/case-add/CaseAdd.vue'),
           meta: {
             rule: 'admin'
