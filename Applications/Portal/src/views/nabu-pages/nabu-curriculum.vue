@@ -17,7 +17,7 @@ export default {
     dataEducation() {
       return this.$store.getters['education/getEducationPlan']
     },
-    fileLink(){
+    fileLink() {
       return this.$store.getters['education/getIndividualPlanReport']
     }
 
@@ -33,15 +33,15 @@ export default {
   },
   methods: {
     getFormPlan() {
-      if(!this.fileLink){
+      if (!this.fileLink) {
         this.$vs.notify({
           title: this.$t('Education.cantdoFormPlane'),
           text: this.$t('Education.filePathNotFound'),
-          color:'warning'
+          color: 'warning'
         })
         return
       }
-      window.open(this.fileLink); 
+      window.location.href = this.fileLink
     }
   }
 }

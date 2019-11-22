@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     downloadItem(url) {
-      window.open(url); 
+      window.location.href = url
     },
     leaveElement(index) {
       this.testing[index].hover = false
