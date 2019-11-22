@@ -20,6 +20,7 @@ import taskPin from './graphql/taskPin.graphql'
 import taskDelete from './graphql/taskDelete.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
 import addAttachments from './graphql/addAttachments.graphql'
+import attachmentDelete from './graphql/attachmentDelete.graphql'
 import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
 import businessProcesses from './graphql/businessProcesses.graphql'
@@ -300,6 +301,18 @@ export class SmartManagerApi {
         .mutate({
           mutation: gql`${taskPin}`,
           variables: {taskId, pin}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async attachmentDeleteInGql(id) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${attachmentDelete}`,
+          variables: {id}
         })
     } catch (e) {
       throw new Error(e.message)

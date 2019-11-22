@@ -1,0 +1,8 @@
+mutation ($id: Int!) {
+    smtasksMutation {
+        attachmentDelete(id: $id) {
+            success
+            errorMessage
+        }
+    }
+}

@@ -151,6 +151,24 @@ export default {
       notify('danger', 'attachTitle', 'attachAddError')
     }
   },
+  async attachmentDelete(context, id) {
+    startLoading(true)
+    try {
+      const response = await api.attachmentDeleteInGql(id)
+      const result = response.data.smtasksMutation.attachmentDelete
+      stopLoading()
+      if (result.success) {
+        notify('success', 'attachTitle', 'attachDelSuccess')
+      } else {
+        notify('warning', 'attachTitle', 'attachDelFail')
+      }
+      return result
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'attachTitle', 'attachDelError')
+    }
+  },
   async changeStage({dispatch}, payload) {
     const stageParams = JSON.stringify(payload)
     startLoading(true)
