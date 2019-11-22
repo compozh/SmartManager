@@ -64,7 +64,7 @@
                                 :multiple="false"
                                 label="name"
                                 :loading="caseListLoading"
-                                :disabled="caseListLoading || bindCaseId"
+                                :disabled="caseListLoading || !!bindCaseId"
                                 v-model="newTask.case"
                                 :placeholder="$t('cases.name')"
                                 icon="BriefcaseIcon"/>
@@ -126,6 +126,7 @@ import {Russian} from 'flatpickr/dist/l10n/ru.js'
 import {Ukrainian} from 'flatpickr/dist/l10n/uk.js'
 
 export default {
+
   components: {
     quillEditor,
     VuePerfectScrollbar,
@@ -134,6 +135,7 @@ export default {
     FilesUpload
   },
   props: {
+    // From route params when task need bind
     bindCaseId: Number
   },
   data() {
@@ -203,7 +205,8 @@ export default {
       return `${formatDate} ${this.newTask.planTime}`
     },
     htmlDescription() {
-      return `<body>${this.newTask.description}</body>`
+      const description = this.newTask.description
+      return description ? `<body>${description}</body>` : ''
     }
   },
   created() {
@@ -242,14 +245,14 @@ export default {
         needApprove: false,
         needComm: false,
         priority: 0,
-        caseId: this.newTask.case.id
+        caseId: this.newTask.case ? this.newTask.case.id : 0
       }
       if (this.$route.params.id) {
         newTask.parentTaskId = this.$route.params.id
       }
       try {
         const result = await this.$store.dispatch('sm/addNewTask', newTask)
-        if (result.success) {
+        if (result) {
           await this.$router.push({name: 'task-view', params: {id: result.id}})
         }
       } catch (e) {

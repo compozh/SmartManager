@@ -172,7 +172,7 @@
       </div>
     </div>
     <!-- PARENT TASKS -->
-    <div v-if="parentTasks.length"
+    <div v-if="parentTask"
          class="vx-row"
          style="margin-top: 2.2rem">
       <div class="vx-col w-full">
@@ -183,7 +183,7 @@
                           border-t-0 d-theme-border-grey-light border-solid mb-6">
                 <div class="vx-col w-full flex pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span class="self-end">{{ $t('tasks.related').toUpperCase() }}</span>
+                  <span class="self-end">{{ $t('tasks.base').toUpperCase() }}</span>
                 </div>
               </div>
               <div class="vx-row w-full">
@@ -192,10 +192,8 @@
                                     class="task__tasks  -mx-4"
                                     tag="ul"
                                     appear>
-                    <li class="cursor-pointer task__task-item"
-                        v-for="parentTask in task.parentTasks"
-                        :key="parentTask.id">
-                      <task-list-item :task="parentTask"></task-list-item>
+                    <li class="cursor-pointer task__task-item" :key="parentTask.id">
+                      <task-list-item :task="parentTask"/>
                     </li>
                   </transition-group>
                 </div>
@@ -206,18 +204,26 @@
       </div>
     </div>
     <!-- SUB TASKS -->
-    <div v-if="childTasks.length"
-         class="vx-row"
+    <div class="vx-row"
          style="margin-top: 2.2rem">
       <div class="vx-col w-full">
         <vx-card>
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
-              <div class="vx-row w-full border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid mb-6">
-                <div class="vx-col w-full flex pb-4">
+              <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
+                          border-t-0 d-theme-border-grey-light border-solid pb-4">
+                <div class="vx-col flex items-center">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span class="self-end">{{ $t('tasks.subTasks').toUpperCase() }}</span>
+                  <span v-if="childTasks.length" class="self-end">{{ $t('tasks.subTasks').toUpperCase() }}</span>
+                  <span v-else class="self-end">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
+                </div>
+                <div class="flex">
+                  <vs-button @click="$router.push('/task-add/' + task.id)"
+                             class="ml-3"
+                             color="primary"
+                             size="small"
+                             type="border"
+                             icon="library_add">{{ $t('buttons.addSubTask') }}</vs-button>
                 </div>
               </div>
               <div class="vx-row w-full">
@@ -305,10 +311,10 @@ export default {
       const body = doc.body.innerHTML.trim()
       return body ? this.task.htmlDescript : body
     },
-    parentTasks() {
-      return this.task.parentTasks
-        ? this.task.parentTasks
-        : []
+    parentTask() {
+      return this.task.parentTask && this.task.parentTask.id
+        ? this.task.parentTask
+        : null
     },
     childTasks() {
       return this.task.childTasks
@@ -355,24 +361,26 @@ export default {
     },
     // обработка смены статуса задачи
     async onChangeStatus(data) {
-      const form = this.$refs.form.formio
-      try {
-        const result = await form.submit()
-        await this.$store.dispatch('sm/changeStatus', {
-          ...data,
-          CompleteParams: JSON.stringify(result.data)
-        })
-      } catch (errors) {
-        if (errors.length) {
-          errors.forEach(e => {
-            this.$vs.notify({
-              title: this.$t('notify.bpTitle'),
-              text: e.message,
-              color: 'danger'
-            })
+      if (this.$refs.form) {
+        const form = this.$refs.form.formio
+        try {
+          const result = await form.submit()
+          await this.$store.dispatch('sm/changeStatus', {
+            ...data,
+            CompleteParams: JSON.stringify(result.data)
           })
-        } else {
-          console.log(errors.message)
+        } catch (errors) {
+          if (errors.length) {
+            errors.forEach(e => {
+              this.$vs.notify({
+                title: this.$t('notify.bpTitle'),
+                text: e.message,
+                color: 'danger'
+              })
+            })
+          } else {
+            console.log(errors.message)
+          }
         }
       }
     },

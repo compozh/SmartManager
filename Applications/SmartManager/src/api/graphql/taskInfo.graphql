@@ -3,7 +3,7 @@ query ($taskId: Int) {
         taskDetails(taskId: $taskId) {
             ...mainTaskFields
             ...detailTaskFields
-            parentTasks {
+            parentTask {
                 ...mainTaskFields
             }
             childTasks {
@@ -33,6 +33,7 @@ fragment mainTaskFields on Task {
     dateFact
     isRead
     caseId
+    isFavorite
 }
 
 fragment detailTaskFields on Task {

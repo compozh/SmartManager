@@ -26,4 +26,5 @@ fragment mainTaskFields on Task {
   dateFact
   isRead
   caseId
+  isFavorite
 }
