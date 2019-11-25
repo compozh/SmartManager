@@ -218,7 +218,7 @@
                   <span v-else class="self-end">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
                 </div>
                 <div class="flex">
-                  <vs-button @click="$router.push('/task-add/' + task.id)"
+                  <vs-button :to="{name: 'task-add', params: {id: task.id}}"
                              class="ml-3"
                              color="primary"
                              size="small"
