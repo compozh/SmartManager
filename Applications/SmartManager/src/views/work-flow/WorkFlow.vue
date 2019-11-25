@@ -16,7 +16,7 @@
                                   :placeholder="$t('workflow.bpSelectLabel') + '...'"
                                   name="businessProcess"
                                   v-validate="'required'"
-                                  icon="CodesandboxIcon"
+                                  icon="ExternalLinkIcon"
                     />
                     <span v-if="errors.has('businessProcess')"
                           class="required-text"
