@@ -86,6 +86,7 @@
                                 :placeholder="$t('roles.notify')"
                                 avatar/>
                   <files-upload @attach="getAttachment($event)"
+                                :existingFiles="existingFiles"
                                 :uploading="filesUploading"
                                 class="mt-4"/>
                   <vs-divider/>
@@ -166,6 +167,7 @@ export default {
       userListLoading: false,
       caseListLoading: false,
       filesUploading: false,
+      oldAttachments: [],
       editorOption: {
         modules: {
           toolbar: [
@@ -207,6 +209,16 @@ export default {
     htmlDescription() {
       const description = this.newTask.description
       return description ? `<body>${description}</body>` : ''
+    },
+    existingFiles() {
+      return this.oldAttachments.map(attachment => ({
+        id: attachment.id,
+        size: attachment.fileSize,
+        name: attachment.fileName,
+        progress: '100.0',
+        success: true,
+        existing: true
+      }))
     }
   },
   created() {
@@ -279,6 +291,7 @@ export default {
     },
     getAttachment(event) {
       this.newTask.attachments = event
+      this.filesUploading = false
       this.createTask()
     },
     async submitForm() {

@@ -39,16 +39,11 @@
                   <vs-input name="casePurpose"
                             :label-placeholder="$t('cases.purpose')"
                             v-model="newCase.purpose"
-                            class="w-full mb-6 input-task-name"
-                            v-validate="'required'"
-                            :danger="errors.has('casePurpose')"
-                            :danger-text="$t('validate.required')"
-                            val-icon-danger="clear"/>
+                            class="w-full mb-6 input-task-name"/>
                   <vs-input name="caseComm"
                             :label-placeholder="$t('cases.comm')"
                             v-model="newCase.comm"
-                            class="w-full mb-6 input-task-name"
-                            val-icon-danger="clear"/>
+                            class="w-full mb-6 input-task-name"/>
                   <div class="flex">
                     <autocomplete class="flex-1 mr-6"
                                   :items="folders"
@@ -73,6 +68,7 @@
                                 class="my-6"
                                 avatar/>
                   <files-upload @attach="getAttachment($event)"
+                                :existingFiles="existingFiles"
                                 :uploading="filesUploading"
                                 class="mt-4"/>
                   <vs-divider/>
@@ -154,6 +150,7 @@ export default {
       filesUploading: false,
       activePrompt: false,
       newFolderName: '',
+      oldAttachments: [],
       oldMembers: [],
       settings: {
         maxScrollbarLength: 60,
@@ -186,8 +183,21 @@ export default {
     },
     date() {
       return date => {
-        return moment(date,'DD.MM.YYYY').format('YYYY-MM-DD')
+        if (date) {
+          return moment(date,'DD.MM.YYYY').format('YYYY-MM-DD')
+        }
+        return '0001-01-01'
       }
+    },
+    existingFiles() {
+      return this.oldAttachments.map(attachment => ({
+        id: attachment.id,
+        size: attachment.fileSize,
+        name: attachment.fileName,
+        progress: '100.0',
+        success: true,
+        existing: true
+      }))
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -227,6 +237,7 @@ export default {
       this.oldMembers = this.users.filter(user => caseItem.participants
         .some(member => member.userId === user.userId))
       this.newCase.members = this.oldMembers
+      this.oldAttachments = caseItem.originals
     },
     async getUsers() {
       this.userListLoading = true
@@ -256,6 +267,7 @@ export default {
     },
     getAttachment(event) {
       this.newCase.attachments = event
+      this.filesUploading = false
       this.caseEdit ? this.caseUpdate() : this.createCase()
     },
     async createCase() {
