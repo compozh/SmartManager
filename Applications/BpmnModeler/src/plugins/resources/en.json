@@ -20,7 +20,8 @@
 		"Select": "Select",
 		"Share": "Share",
 		"Edit": "Edit",
-		"Add": "Add"
+		"Add": "Add",
+		"OK": "OK"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -51,6 +52,7 @@
 		"Id": "Id",
 		"SelectAction": "Select action",
 		"SelectForm": "Select Form",
+		"EnterTaskParams": "Enter task params",
 		"SelectTaskCreationRule": "Select task creation rule",
 		"Code": "Code",
 		"Designer": "Designer",
@@ -231,6 +233,8 @@
 		"element {element} referenced by {referenced}#{property} not yet drawn": "element {element} referenced by {referenced}#{property} not yet drawn",
 		"already rendered {element}": "already rendered {element}",
 		"failed to import {element}": "failed to import {element}",
+		"Form field id must not be empty": "Form field id must not be empty",
+		"Form field id already used in form data": "Form field id already used in form data",
 
 		"General": "General",
 		"Id": "Id",
@@ -279,6 +283,7 @@
 		"BusinessKnowledgeModel": "BusinessKnowledgeModel",
 
 		"Forms": "Forms",
+		"Simple form": "Simple form",
 		"Create form": "Create form",
 		"Edit form": "Edit form",
 		"Form Key": "Form Key",

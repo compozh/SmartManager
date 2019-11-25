@@ -1,9 +1,9 @@
 import { PropertiesPanelEntry } from '../../Models';
 import EntryFactory from '../../EntryFactory';
 
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
-import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
-import extensionElementsHelper from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper';
+import * as cmdHelper from '../../helpers/CmdHelper';
+import elementHelper from '../../helpers/ElementHelper';
+import * as extensionElementsHelper from '../../helpers/ExtensionElementsHelper';
 import assign from 'lodash/assign';
 import map from 'lodash/map';
 
@@ -79,7 +79,6 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
         var bo = getBusinessObject(element);
         var oldType = getType(element);
         var newType = value;
-        console.log(value);
 
         var props = assign({}, DELEGATE_PROPS);
 

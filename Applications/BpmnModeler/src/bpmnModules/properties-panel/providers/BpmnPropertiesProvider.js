@@ -29,10 +29,10 @@ export default class BpmnPropertiesProvider {
       commandStack = getModule(this.modeler, 'commandStack'),
       canvas = getModule(this.modeler, 'canvas'),
       bpmnFactory = getModule(this.modeler, 'bpmnFactory'),
-      entryFactory = new EntryFactory(element, commandStack, this.readonly);
+      entryFactory = new EntryFactory(element, commandStack, bpmnFactory, this.readonly);
 
     tabs.push(new GeneralTab(this.diagram, element, entryFactory, canvas, bpmnFactory, commandStack, translate));
-    tabs.push(new FormsTab(this.diagram, element, entryFactory, commandStack, translate));
+    tabs.push(new FormsTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, translate));
 
     return tabs.filter(tab => tab.groups.length > 0);
   }

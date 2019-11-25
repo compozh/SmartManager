@@ -1,7 +1,7 @@
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import participantHelper from 'bpmn-js-properties-panel/lib/helper/ParticipantHelper';
-import utils from 'bpmn-js-properties-panel/lib/Utils';
+import participantHelper from '../../helpers/ImplementationTypeHelper';
 import { PropertiesPanelGroup } from '../../Models';
+import { isIdValid } from '../../utils';
 
 /**
  * Добавить в группу свойства процесса
@@ -32,7 +32,7 @@ export default function addProcessProps(group, element, entryFactory, translate)
             return translate('Id can`t be empty');
           }
           var bo = getBusinessObject(element);
-          var processIdError = utils.isIdValid(bo.processRef, value, translate);
+          var processIdError = isIdValid(bo.processRef, value, translate);
           return processIdError ? processIdError : true;
         }
       });

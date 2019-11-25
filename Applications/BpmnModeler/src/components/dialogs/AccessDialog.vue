@@ -14,7 +14,7 @@
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
-          <template v-slot:activator="{ on }">
+          <template #activator="">
             <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.buttons.Add') }}</v-btn>
           </template>
           <v-card>

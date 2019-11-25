@@ -1,7 +1,7 @@
 import { PropertiesPanelGroup } from '../../Models';
 import EntryFactory from '../../EntryFactory';
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import * as cmdHelper from '../../helpers/CmdHelper';
 import { Diagram, ActionDefinitionType } from '../../../../api/models';
 import { api } from '../../../../api/bpmnApi'; 
 import { setServiceTaskParameters } from '../../utils';

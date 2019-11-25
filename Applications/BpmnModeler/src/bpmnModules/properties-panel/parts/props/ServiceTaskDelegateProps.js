@@ -1,5 +1,5 @@
-import ImplementationTypeHelper from 'bpmn-js-properties-panel/lib/helper/ImplementationTypeHelper';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import ImplementationTypeHelper from '../../helpers/ImplementationTypeHelper';
+import * as cmdHelper from '../../helpers/CmdHelper';
 import { ImplementationTypeEntry } from '../entries';
 import EntryFactory from '../../EntryFactory';
 import { PropertiesPanelGroup } from '../../Models';
