@@ -1,9 +1,8 @@
 import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import { getExtensionElements } from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper';
-import { removeEntry } from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper';
-import formHelper from 'bpmn-js-properties-panel/lib/helper/FormHelper';
-import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import { getExtensionElements, removeEntry } from '../../helpers/ExtensionElementsHelper';
+import formHelper from '../../helpers/FormHelper';
+import elementHelper from '../../helpers/ElementHelper';
+import * as cmdHelper from '../../helpers/CmdHelper';
 import { PropertiesPanelGroup } from '../../Models';
 import EntryFactory from '../../EntryFactory';
 
@@ -26,7 +25,7 @@ export default class SimpleFormGroup extends PropertiesPanelGroup {
       getExtensionElements() {
         return formHelper.getFormFields(element);
       },
-      createExtensionElement(extensionElements, id) {
+      createExtensionElement: (extensionElements, id) => {
         var commands = [],
           formData = formHelper.getFormData(element);
 
@@ -51,7 +50,7 @@ export default class SimpleFormGroup extends PropertiesPanelGroup {
         }
         return commands;
       },
-      removeExtensionElement(field) {
+      removeExtensionElement: (field) => {
         var formData = getExtensionElements(getBusinessObject(element), 'camunda:FormData')[0],
           entry = field,
           commands = [];

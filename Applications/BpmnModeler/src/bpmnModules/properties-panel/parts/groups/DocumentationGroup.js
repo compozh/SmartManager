@@ -1,6 +1,6 @@
 import { PropertiesPanelGroup } from '../../Models';
 import EntryFactory from '../../EntryFactory';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import * as cmdHelper from '../../helpers/CmdHelper';
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
 
 /**

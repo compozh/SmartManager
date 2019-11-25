@@ -4,7 +4,7 @@ import { api } from '../../../../api/bpmnApi';
 import { eventBus } from '../../../../main';
 import { events } from '../../../../constants';
 import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import * as cmdHelper from '../../helpers/CmdHelper';
 import { Diagram } from '../../../../api/models';
 
 /**

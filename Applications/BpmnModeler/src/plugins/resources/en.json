@@ -52,6 +52,7 @@
 		"Id": "Id",
 		"SelectAction": "Select action",
 		"SelectForm": "Select Form",
+		"EnterTaskParams": "Enter task params",
 		"SelectTaskCreationRule": "Select task creation rule",
 		"Code": "Code",
 		"Designer": "Designer",

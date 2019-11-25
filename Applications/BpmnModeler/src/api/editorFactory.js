@@ -1,7 +1,5 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js/lib/NavigatedViewer';
-import bpmnPropertiesPanelModule from 'bpmn-js-properties-panel';
-import bpmnPropertiesProviderModule from '../bpmnModules/provider/workflow/';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
 import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
@@ -18,6 +16,7 @@ import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 import minimapModule from 'diagram-js-minimap';
 import DiagramType from './models/DiagramType';
 import ContextPadProvider from '../bpmnModules/context-pad/';
+import propertiesPanelCommands from '../bpmnModules/properties-panel/cmd';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
   switch (type) {
@@ -43,8 +42,7 @@ function createBpmnModeler(editorContainer, translate) {
       bindTo: document
     },
     additionalModules: [
-      bpmnPropertiesPanelModule,
-      bpmnPropertiesProviderModule,
+      propertiesPanelCommands,
       camundaExtensionModule,
       minimapModule,
       createTranslationModule(translate),

@@ -3,7 +3,7 @@
     <v-layout row class="header">
       <v-subheader>{{ label }}</v-subheader>
       <v-spacer></v-spacer>
-      <v-btn v-if="canCreate && !readonly" icon small :title="$t('bpmn.buttons.Add')" @click="createElement()">
+      <v-btn v-if="canCreate" icon small :title="$t('bpmn.buttons.Add')" @click="createElement()">
         <v-icon>add</v-icon>
       </v-btn>
     </v-layout>
@@ -15,11 +15,11 @@
         highlight-current
         node-key="id"
         empty-text=""
-        @current-change="(item) => active = item">
+        @current-change="onCurrentChange">
         <template v-slot="{ data: field }">
           <span class="treeview-node-content">
             <span class="treeview-node-label">{{ field.label || field.id }}</span>
-            <v-btn v-if="canRemove && !readonly" flat icon :title="$t('bpmn.buttons.Delete')" @click="removeElement(field)"><v-icon>close</v-icon></v-btn>
+            <v-btn v-if="canRemove" flat icon :title="$t('bpmn.buttons.Delete')" @click="removeElement(field)"><v-icon>close</v-icon></v-btn>
           </span>
         </template>
       </el-tree>
@@ -54,10 +54,10 @@ export default {
   },
   computed: {
     canCreate() {
-      return typeof this.createExtensionElement === 'function';
+      return typeof this.createExtensionElement === 'function' && !this.readonly;
     },
     canRemove() {
-      return typeof this.removeExtensionElement === 'function';
+      return typeof this.removeExtensionElement === 'function' && !this.readonly;
     },
     active: {
       get() {
@@ -77,7 +77,9 @@ export default {
     onActiveElementChanged: {
       immediate: true,
       handler() {
-        this.onActiveElementChanged(this.active);
+        if (this.active) {
+          this.onActiveElementChanged(this.active);
+        }
       }
     },
     element(value, newValue) {
@@ -90,15 +92,23 @@ export default {
     createElement() {
       this.createExtensionElement();
       this.$nextTick(() => {
-        this.$refs.tree.setCurrentKey(this.fields[this.fields.length - 1].id);
+        const field = this.fields[this.fields.length - 1];
+        this.active = field;
+        this.$refs.tree.setCurrentKey(field.id);
         var container = this.$el.querySelector('.external-elements > .tree-container');
         container.scrollTop = container.scrollHeight;
-      })
-      
+        
+      });
     },
     removeElement(element) {
+      this.$refs.tree.setCurrentKey(null);
+      this.active = undefined;
       this.removeExtensionElement(element);
-      this.$nextTick(() => this.$refs.tree.setCurrentKey());
+    },
+    onCurrentChange(item) {
+      if (this.fields.includes(item)) {
+        this.active = item;
+      }
     }
   }
 }

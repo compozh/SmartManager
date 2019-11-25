@@ -1,9 +1,10 @@
 import flattenDeep from 'lodash/flattenDeep';
-import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
-import extensionElementsHelper from 'bpmn-js-properties-panel/lib/helper/ExtensionElementsHelper';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
+import elementHelper from './helpers/ElementHelper';
+import * as extensionElementsHelper from './helpers/ExtensionElementsHelper';
+import * as cmdHelper from './helpers/CmdHelper';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
+import Ids from 'ids';
 
 /**
  * Выполнить несколько команд одной командой
@@ -65,4 +66,72 @@ export function setServiceTaskParameters(element, bo, actionId, bpmnFactory, com
       commandStack.execute(command.cmd, command.context || { element: element });
     }
   });
+}
+
+
+export function nextId(prefix) {
+  var ids = new Ids([32, 32, 1]);
+
+  return ids.nextPrefixed(prefix);
+}
+
+/**
+ * checks whether the id value is valid
+ *
+ * @param {ModdleElement} bo
+ * @param {String} idValue
+ * @param {Function} translate
+ *
+ * @return {String} error message
+ */
+export function isIdValid(bo, idValue, translate) {
+  var assigned = bo.$model.ids.assigned(idValue);
+
+  var idExists = assigned && assigned !== bo;
+
+  if (!idValue || idExists) {
+    return translate('Element must have an unique id.');
+  }
+
+  return validateId(idValue, translate);
+}
+
+var SPACE_REGEX = /\s/;
+
+// for QName validation as per http://www.w3.org/TR/REC-xml/#NT-NameChar
+var QNAME_REGEX = /^([a-z][\w-.]*:)?[a-z_][\w-.]*$/i;
+
+// for ID validation as per BPMN Schema (QName - Namespace)
+var ID_REGEX = /^[a-z_][\w-.]*$/i;
+
+var PLACEHOLDER_REGEX = /\$\{([^}]*)\}/g;
+
+function validateId(idValue, translate) {
+
+  idValue = stripPlaceholders(idValue);
+
+  if (containsSpace(idValue)) {
+    return translate('Id must not contain spaces.');
+  }
+
+  if (!ID_REGEX.test(idValue)) {
+
+    if (QNAME_REGEX.test(idValue)) {
+      return translate('Id must not contain prefix.');
+    }
+
+    return translate('Id must be a valid QName.');
+  }
+}
+
+function containsSpace(value) {
+  return SPACE_REGEX.test(value);
+}
+
+function stripPlaceholders(idValue) {
+
+  // replace expression e.g. ${VERSION_TAG}
+  // use only the content between ${}
+  // for the REGEX check
+  return idValue.replace(PLACEHOLDER_REGEX, '$1');
 }

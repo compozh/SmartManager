@@ -1,6 +1,6 @@
 import { PropertiesPanelEntry } from '../../Models';
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
-import { createCategoryValue } from 'bpmn-js-properties-panel/lib/helper/CategoryHelper';
+import { createCategoryValue } from '../../helpers/CategoryHelper';
 import EntryFactory from '../../EntryFactory';
 
 /**

@@ -8,6 +8,7 @@
         <formio-component ref="formioForm" :formCode="code" :formDefinition="definition"></formio-component>
       </v-card-text>
       <v-card-actions>
+        <v-spacer></v-spacer>
         <v-btn flat @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
         <v-btn flat @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
       </v-card-actions>

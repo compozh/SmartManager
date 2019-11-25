@@ -52,6 +52,7 @@
 		"Id": "Ідентифікатор",
 		"SelectAction": "Виберіть дію",
 		"SelectForm": "Виберіть форму",
+		"EnterTaskParams": "Введіть параметри задачі",
 		"SelectTaskCreationRule": "Виберіть правило створення задачі",
 		"Code": "Код",
 		"Designer": "Конструктор",

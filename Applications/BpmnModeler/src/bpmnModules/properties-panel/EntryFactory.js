@@ -1,8 +1,8 @@
 import { PropertiesPanelEntry } from './Models';
 import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
-import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
-import utils from 'bpmn-js-properties-panel/lib/Utils';
+import * as cmdHelper from './helpers/CmdHelper';
+import elementHelper from './helpers/ElementHelper';
+import { nextId } from './utils';
 import { debounce } from 'min-dash';
 import { concatCommands } from './utils';
 
@@ -46,7 +46,7 @@ export default class EntryFactory {
    */
   textArea(options) {
     const data = getDefaultData(options, this.element, this.readonly, this.commandStack);
-    data.props.rows = options.rows || 1;
+    data.props.rows = typeof options.rows === 'number' ? options.rows : 1;
     data.props['auto-grow'] = true;
     data.on.input = debounce(data.on.input, 800);
     return new PropertiesPanelEntry('v-textarea', data);
@@ -246,7 +246,7 @@ function execute(command, commandStack) {
 
 function generateElementId(prefix) {
   prefix = prefix + '_';
-  return utils.nextId(prefix);
+  return nextId(prefix);
 }
 
 function getDefaultStyle(options) {

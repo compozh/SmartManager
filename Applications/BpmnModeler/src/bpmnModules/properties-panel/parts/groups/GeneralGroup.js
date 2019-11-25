@@ -1,9 +1,9 @@
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import utils from 'bpmn-js-properties-panel/lib/Utils';
 import { PropertiesPanelGroup } from '../../Models';
 import EntryFactory from '../../EntryFactory';
 import { NameEntry } from '../entries/';
 import { addProcessProps, addExecutableProps } from '../props';
+import { isIdValid } from '../../utils';
 
 /**
  * Группа "Общие" 
@@ -30,7 +30,7 @@ export default class GeneralGroup extends PropertiesPanelGroup {
           return translate('Id can`t be empty');
         }
         var bo = getBusinessObject(element);
-        var processIdError = utils.isIdValid(bo, value, translate);
+        var processIdError = isIdValid(bo, value, translate);
         return processIdError ? processIdError : true;
       }
     }));
