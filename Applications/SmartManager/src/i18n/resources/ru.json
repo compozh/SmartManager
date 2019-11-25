@@ -209,7 +209,7 @@
     "taskPinError":  "Ошибка при изменении избранных задач"
   },
   "workflow": {
-    "businessProcess": "Бизнес-процесс",
+    "businessProcess": "Запустить бизнес-процесс",
     "bpSelectLabel": "Выберите бизнес-процесс"
   },
   "login": {

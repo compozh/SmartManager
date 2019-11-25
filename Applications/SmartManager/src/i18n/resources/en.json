@@ -209,7 +209,7 @@
     "taskPinError":  "Favorite tasks change error"
   },
   "workflow": {
-    "businessProcess": "Business process",
+    "businessProcess": "Start business process",
     "bpSelectLabel": "Choose a business process"
   },
   "login": {
