@@ -99,7 +99,7 @@ export default {
       } else {
         notify('warning','taskTitle','taskAddFail')
       }
-      return result
+      return result.success
     } catch (e) {
       stopLoading()
       notify('danger', 'taskTitle', 'taskAddError')
@@ -151,6 +151,24 @@ export default {
       notify('danger', 'attachTitle', 'attachAddError')
     }
   },
+  async attachmentDelete(context, id) {
+    startLoading(true)
+    try {
+      const response = await api.attachmentDeleteInGql(id)
+      const result = response.data.smtasksMutation.attachmentDelete
+      stopLoading()
+      if (result.success) {
+        notify('success', 'attachTitle', 'attachDelSuccess')
+      } else {
+        notify('warning', 'attachTitle', 'attachDelFail')
+      }
+      return result
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'attachTitle', 'attachDelError')
+    }
+  },
   async changeStage({dispatch}, payload) {
     const stageParams = JSON.stringify(payload)
     startLoading(true)
@@ -158,7 +176,6 @@ export default {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
       stopLoading()
-      console.log('result', result)
       if (result.success) {
         await dispatch('getTaskInfo', {
           taskId: payload.id,
@@ -272,12 +289,12 @@ export default {
     try {
       const response = await api.caseCreateInGql(newCaseJson)
       stopLoading()
-      notify('success', 'caseTitle', 'caseCreateSuccess')
+      notify('success', 'casesTitle', 'caseCreateSuccess')
       return response.data.smtasksMutation.newCase
     } catch (e) {
       console.log(e.message)
       stopLoading()
-      notify('danger', 'caseTitle', 'caseError')
+      notify('danger', 'casesTitle', 'caseError')
     }
   },
   async caseUpdate({dispatch}, caseData) {
@@ -290,6 +307,7 @@ export default {
       if (result.success) {
         dispatch('getCaseDetails', {caseId: caseData.id})
       }
+      return result.success
     } catch (e) {
       console.log(e.message)
       stopLoading()
@@ -324,6 +342,43 @@ export default {
       console.log(e.message)
       stopLoading()
       notify('danger', 'taskTitle', 'bindingError')
+    }
+  },
+  async taskDelete(context, taskId) {
+    startLoading(true)
+    try {
+      const response = await api.taskDeleteInGql(taskId)
+      const result = response.data.smtasksMutation.taskDelete
+      stopLoading()
+      if (result.success) {
+        notify('success', 'taskTitle', 'taskDelSuccess')
+      } else {
+        notify('warning', 'taskTitle', 'taskDelFail')
+      }
+      return result.success
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'taskDelError')
+      return false
+    }
+  },
+  async taskPin({dispatch}, {taskId, pin}) {
+    startLoading(true)
+    try {
+      const response = await api.taskPinInGql(taskId, pin)
+      const result = response.data.smtasksMutation.taskPin
+      stopLoading()
+      if (result.success) {
+        await dispatch('getTaskInfo', {taskId, loader: true})
+        notify('success', 'taskTitle', 'taskPinSuccess')
+      } else {
+        notify('warning', 'taskTitle', 'taskPinFail')
+      }
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'taskPinError')
     }
   },
   async updateInfo({dispatch}, {type, id}) {
