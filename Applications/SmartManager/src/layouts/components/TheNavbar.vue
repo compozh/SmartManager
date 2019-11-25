@@ -9,6 +9,29 @@
           @click.stop="showSidebar"
         ></feather-icon>
 
+        <div v-if="$route.name === 'task-add'" class="text-primary truncate">
+          <i18n v-if="$route.params.id"
+                path="tasks.newSubTask" tag="div" class="truncate">
+            <template v-slot:task>
+              <span class="text-success">"{{ task.name }}"</span>
+            </template>
+          </i18n>
+
+          <i18n v-if="$route.params.bindCaseId"
+                path="tasks.newTaskForCase" tag="div" class="truncate">
+            <template v-slot:case>
+              <span class="text-success">"{{ $route.params.bindCaseName }}"</span>
+            </template>
+          </i18n>
+
+          <span v-if="!$route.params.id && !$route.params.bindCaseId">
+            {{ $t('tasks.newTask') }}</span>
+        </div>
+
+        <span v-if="$route.name === 'case-add'"
+              class="text-primary truncate">
+          {{ $t('cases.newCase') }}</span>
+
         <vs-button v-if="/task-(view|list)/.test($route.name)"
                    icon="library_add"
                    color="primary"
@@ -17,7 +40,7 @@
                    to="/task-add"
         >{{ $t('buttons.addTask') }}</vs-button>
 
-        <vs-button v-if="$route.name === 'case-list'"
+        <vs-button v-if="/case-(view|list)/.test($route.name)"
                    icon="library_add"
                    color="primary"
                    type="flat"
@@ -32,14 +55,6 @@
                    class="px-3 mr-2"
                    to="/work-flow"
         >{{ $t('buttons.workflow') }}</vs-button>
-
-        <vs-button v-if="$route.name === 'case-view'"
-                   icon="library_add"
-                   color="primary"
-                   type="flat"
-                   class="px-3 mr-2"
-                   :to="{name: 'task-add', params: {bindCaseId: caseItem.id}}"
-        >{{ $t('buttons.addCaseTask') }}</vs-button>
 
         <vs-button v-if="$route.name === 'case-view' && allowedEdit"
                    icon="edit"
