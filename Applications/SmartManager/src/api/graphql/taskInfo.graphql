@@ -56,6 +56,7 @@ fragment detailTaskFields on Task {
         id
         fileName
         fileExt
+        fileSize
     }
     comments {
         userId

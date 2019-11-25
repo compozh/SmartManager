@@ -36,6 +36,7 @@ query($caseId: Int!) {
                 id
                 fileName
                 fileExt
+                fileSize
             }
             comments {
                 userId
