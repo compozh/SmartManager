@@ -25,6 +25,8 @@
   },
   "tasks": {
     "newTask": "Новая задача",
+    "newSubTask": "Новая подзадача для задачи {task}",
+    "newTaskForCase": "Новая задача для кейса {case}",
     "taskName": "Название задачи",
     "noTasks": "Нет задач в папке",
     "description": "Описание",
@@ -35,6 +37,7 @@
     "created": "Создано",
     "deadline": "Срок до",
     "related": "Связанные задачи",
+    "noRelatedTasks": "Нет связанных задач",
     "base": "Базовая задача",
     "subTasks": "Подзадачи",
     "noSubTasks": "Нет подзадач",

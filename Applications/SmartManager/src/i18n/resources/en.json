@@ -25,6 +25,8 @@
   },
   "tasks": {
     "newTask": "New task",
+    "newSubTask": "New subtask for task {task}",
+    "newTaskForCase": "New task for case {case}",
     "taskName": "Task name",
     "noTasks": "No tasks",
     "description": "Description",
@@ -35,6 +37,7 @@
     "created": "Created",
     "deadline": "Deadline",
     "related": "Related tasks",
+    "noRelatedTasks": "No related tasks",
     "base": "Base task",
     "subTasks": "Subtasks",
     "noSubTasks": "No subtasks",
