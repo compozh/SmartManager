@@ -55,7 +55,7 @@ export default {
       const taskInfo = result.data.smtasks.taskDetails
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
-      stopLoading()
+      !loading || stopLoading()
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -243,7 +243,7 @@ export default {
     startLoading(loading)
     try {
       const result = await api.getCasesFromGql()
-      stopLoading()
+      !loading || stopLoading()
       const cases = result.data.smtasks.cases
       commit('setCases', cases)
     } catch (e) {

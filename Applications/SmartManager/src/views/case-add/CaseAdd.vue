@@ -20,60 +20,22 @@
 
                   <div class="flex mb-8">
                     <div class="flex items-center">
-                      <span ref="dateFieldFrom">{{ $t('cases.dateStart') }}:</span>
+                      <span>{{ $t('cases.dateStart') }}:</span>
                       <div class="date-wrapper mx-8">
                         <flat-pickr :config="configDatePicker"
                                     v-model="newCase.dateFrom"
-                                    name="dateFrom"
-                                    v-validate="'required'"/>
-                        <span v-if="errors.has('dateFrom')"
-                              class="required-text"
-                        >{{ $t('validate.required') }}</span>
+                                    name="dateFrom"/>
                       </div>
                     </div>
-
-                    <div class="flex items-center ml-16">
-                      <span ref="timeFieldFrom">{{ $t('pickers.time') }}:</span>
-                      <div class="time-wrapper ml-8">
-                        <flat-pickr :config="configTimePicker"
-                                    v-model="newCase.timeFrom"
-                                    name="timeFrom"
-                                    v-validate="'required'"/>
-                        <span v-if="errors.has('timeFrom')"
-                              class="required-text"
-                        >{{ $t('validate.required') }}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="flex mb-8">
                     <div class="flex items-center">
-                      <span ref="dateFieldTo">{{ $t('cases.dateEnd') }}:</span>
+                      <span>{{ $t('cases.dateEnd') }}:</span>
                       <div class="date-wrapper mx-8">
                         <flat-pickr :config="configDatePicker"
                                     v-model="newCase.dateTo"
-                                    name="dateFrom"
-                                    v-validate="'required'"/>
-                        <span v-if="errors.has('dateTo')"
-                              class="required-text"
-                        >{{ $t('validate.required') }}</span>
-                      </div>
-                    </div>
-
-                    <div class="flex items-center ml-16">
-                      <span ref="timeFieldTo">{{ $t('pickers.time') }}:</span>
-                      <div class="time-wrapper ml-8">
-                        <flat-pickr :config="configTimePicker"
-                                    v-model="newCase.timeTo"
-                                    name="timeFrom"
-                                    v-validate="'required'"/>
-                        <span v-if="errors.has('timeTo')"
-                              class="required-text"
-                        >{{ $t('validate.required') }}</span>
+                                    name="dateFrom"/>
                       </div>
                     </div>
                   </div>
-
                   <vs-input name="casePurpose"
                             :label-placeholder="$t('cases.purpose')"
                             v-model="newCase.purpose"
@@ -87,15 +49,20 @@
                             v-model="newCase.comm"
                             class="w-full mb-6 input-task-name"
                             val-icon-danger="clear"/>
-                  <autocomplete :items="folders"
-                                :multiple="false"
-                                label="name"
-                                v-model="newCase.folder"
-                                :placeholder="$t('folders.folder')"
-                                icon="FolderIcon"/>
-                  <vs-button type="line"
-                             @click="activePrompt = true"
-                  >&#128193; {{ $t('buttons.addFolder') }}</vs-button>
+                  <div class="flex">
+                    <autocomplete class="flex-1 mr-6"
+                                  :items="folders"
+                                  :multiple="false"
+                                  label="name"
+                                  v-model="newCase.folder"
+                                  :placeholder="$t('folders.folder')"
+                                  icon="FolderIcon"/>
+                    <vs-button color="primary"
+                               type="border"
+                               icon="create_new_folder"
+                               @click="activePrompt = true"
+                    >{{ $t('buttons.addFolder') }}</vs-button>
+                  </div>
                   <autocomplete :items="users"
                                 :multiple="true"
                                 :loading="userListLoading"
@@ -117,7 +84,7 @@
                     >{{ $t('buttons.cancel') }}</vs-button>
                     <vs-button type="gradient"
                                @click="submitForm"
-                    >{{ $t('buttons.create') }}</vs-button>
+                    >{{ caseEdit ? $t('buttons.save') : $t('buttons.create') }}</vs-button>
                   </div>
                 </form>
               </div>
@@ -126,14 +93,12 @@
         </div>
       </div>
     </VuePerfectScrollbar>
-    <vs-prompt
-      :title="$t('folders.createFolder')"
-      @cancel="newFolderName=''"
-      @accept="createFolder(newFolderName)"
-      :active.sync="activePrompt"
-      :acceptText="$t('buttons.create')"
-      :cancelText="$t('buttons.cancel')"
-    >
+    <vs-prompt :title="$t('folders.createFolder')"
+               @cancel="newFolderName=''"
+               @accept="createFolder(newFolderName)"
+               :active.sync="activePrompt"
+               :acceptText="$t('buttons.create')"
+               :cancelText="$t('buttons.cancel')">
       <div>
         <span>{{ $t('folders.placeholderNew') }}</span>
         <vs-input :placeholder="$t('folders.placeholderCreate')"
@@ -168,15 +133,13 @@ export default {
   },
   data() {
     return {
+      caseEdit: false,
       newCase: {
         name: '',
-        // TODO: Начальную дату и время изменить на текущие
-        dateFrom: moment().add(1, 'days').format('DD.MM.YYYY'),
-        timeFrom: '12:00',
+        dateFrom: moment().format('DD.MM.YYYY'),
         dateTo: moment().add(1, 'days').format('DD.MM.YYYY'),
-        timeTo: '12:00',
-        purpose: null,
-        comm: null,
+        purpose: '',
+        comm: '',
         folder: [],
         members: [],
         attachments: []
@@ -184,19 +147,14 @@ export default {
       configDatePicker: {
         locale: this.$i18n.locale,
         dateFormat: 'd.m.Y',
-        minDate: new Date(),
-        allowInput: true
-      },
-      configTimePicker: {
-        enableTime: true,
-        noCalendar: true,
-        time_24hr: true,
+        minDate: moment().format('DD.MM.YYYY'),
         allowInput: true
       },
       userListLoading: false,
       filesUploading: false,
       activePrompt: false,
       newFolderName: '',
+      oldMembers: [],
       settings: {
         maxScrollbarLength: 60,
         wheelSpeed: 0.30,
@@ -209,36 +167,66 @@ export default {
     },
     folders() {
       const allFolders = this.$store.state.sm.folders || []
-      return allFolders.filter(folder => !!folder.folderId)
+      return allFolders.filter(i => !!i.folderId)
     },
-    dateFormat() {
-      return postfix => {
-        const formatDate = moment(this.newCase[`date${postfix}`], 'DD.MM.YYYY')
-          .format('YYYY-MM-DD')
-        return `${formatDate} ${this.newCase[`time${postfix}`]}`
-      }
+    folderById() {
+      return id => this.folders.filter(i => i.folderId === id)
     },
     members() {
-      const members = this.newCase.members
+      const oldMembers = this.oldMembers
+      const newMembers = this.newCase.members
+      const add = newMembers.filter(newMember => oldMembers
+        .every(oldMember => oldMember.userId !== newMember.userId))
+      const del = oldMembers.filter(oldMember => newMembers
+        .every(newMember => newMember.userId !== oldMember.userId))
       return {
-        addMembers: members.map(member => ({ID: member.userId, TYPE: 'USER'})),
-        deleteMembers: []
+        addMembers: add.map(member => ({ID: member.userId, TYPE: 'USER'})),
+        deleteMembers: del.map(member => ({ID: member.userId, TYPE: 'USER'})),
+      }
+    },
+    date() {
+      return date => {
+        return moment(date,'DD.MM.YYYY').format('YYYY-MM-DD')
       }
     }
   },
-  mounted() {
+  beforeRouteEnter(to, from, next) {
+    const folderId = from.params.id
+    next(vm => {
+      if (from.name === 'case-list' && folderId !== 'ALL') {
+        vm.newCase.folder = vm.folderById(+folderId)
+      }
+    })
+  },
+  async mounted() {
     this.getUsers()
-    this.dateFieldWidth()
+    if (this.$route.name === 'case-edit') {
+      this.caseEdit = true
+      const caseItem = await this.getCase()
+      this.setFieldsForUpdate(caseItem)
+    }
   },
   methods: {
-    dateFieldWidth() {
-      // TODO: Добавить такой же расчет для времени
-      const dateFrom = this.$refs.dateFieldFrom
-      const dateTo = this.$refs.dateFieldTo
-      const fromWidth = dateFrom.clientWidth
-      const toWidth = dateTo.clientWidth
-      const width = (fromWidth < toWidth ? toWidth : fromWidth) + 5 + 'px'
-      dateFrom.style.width = dateTo.style.width = width
+    async getCase() {
+      const caseId = +this.$route.params.id
+      await this.$store.dispatch('sm/getCaseDetails', {
+        caseId, loading: true
+      })
+      return this.$store.state.sm.caseDetails[caseId]
+    },
+    setFieldsForUpdate(caseItem) {
+      if (this.date(caseItem.dateFrom) !== '0001-01-01') {
+        this.configDatePicker.minDate = caseItem.dateFrom
+      }
+      this.newCase.name = caseItem.name
+      this.newCase.dateFrom = caseItem.dateFrom
+      this.newCase.dateTo = caseItem.dateTo
+      this.newCase.purpose = caseItem.purpose
+      this.newCase.comm = caseItem.comm
+      this.newCase.folder = this.folderById(caseItem.folderId)
+      this.oldMembers = this.users.filter(user => caseItem.participants
+        .some(member => member.userId === user.userId))
+      this.newCase.members = this.oldMembers
     },
     async getUsers() {
       this.userListLoading = true
@@ -268,13 +256,13 @@ export default {
     },
     getAttachment(event) {
       this.newCase.attachments = event
-      this.createCase()
+      this.caseEdit ? this.caseUpdate() : this.createCase()
     },
     async createCase() {
       const newCase = {
         name: this.newCase.name,
-        dateFrom: this.dateFormat('From'),
-        dateTo: this.dateFormat('To'),
+        dateFrom: this.date(this.newCase.dateFrom),
+        dateTo: this.date(this.newCase.dateTo),
         purpose: this.newCase.purpose,
         comm: this.newCase.comm,
         folderId: this.newCase.folder.folderId || 0,
@@ -286,6 +274,27 @@ export default {
         await this.$router.push({name: 'case-view', params: {id: newCaseId}})
       } catch (e) {
         setTimeout(() => this.$router.go(0), 1000)
+      }
+    },
+    async caseUpdate() {
+      const newCaseData = {
+        id: this.$route.params.id,
+        name: this.newCase.name,
+        dateFrom: this.date(this.newCase.dateFrom),
+        dateTo: this.date(this.newCase.dateTo),
+        purpose: this.newCase.purpose,
+        comm: this.newCase.comm,
+        folderId: this.newCase.folder.folderId || 0,
+        members: this.members,
+        attachments: this.newCase.attachments
+      }
+      try {
+        const result = await this.$store.dispatch('sm/caseUpdate', newCaseData)
+        if (result) {
+          await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
+        }
+      } catch (e) {
+        console.log('', e)
       }
     }
   }
