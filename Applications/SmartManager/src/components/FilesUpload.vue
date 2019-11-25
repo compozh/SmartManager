@@ -28,13 +28,13 @@
                      color="success"/>
           </vs-td>
           <vs-td class="text-center">
-            <vs-button v-if="$refs.upload && !$refs.upload.uploaded && !loading"
+            <vs-button v-if="$refs.upload && !$refs.upload.uploaded && !loading || item.existing"
                        radius
                        class="text-center"
                        color="#626262"
                        type="flat"
                        icon="close"
-                       @click="remove(item.id, $event)"/>
+                       @click="remove(item.id, item.existing)"/>
           </vs-td>
         </vs-tr>
       </template>
@@ -92,6 +92,9 @@ export default {
     fileUpload
   },
   props: {
+    existingFiles: {
+      type: Array
+    },
     uploading: {
       type: Boolean,
       default: false
@@ -135,11 +138,17 @@ export default {
     }
   },
   watch: {
+    existingFiles(val) {
+      this.files = val
+    },
     uploading(val) {
-      if (this.files.length && val) {
-        this.startUpload()
-      } else {
-        this.$emit('attach', [])
+      if (val) {
+        const newFiles = this.files.filter(file => !file.existing)
+        if (newFiles.length) {
+          this.startUpload()
+        } else {
+          this.$emit('attach', [])
+        }
       }
     }
   },
@@ -187,13 +196,17 @@ export default {
           const filePath = newFile.response.fileName
           this.attachments.push({fileName, filePath})
         }
+        console.log('upload', this.$refs.upload)
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
           this.$emit('attach', this.attachments)
         }
       }
     },
-    remove(id) {
+    async remove(id, existing) {
+      if (existing) {
+        await this.$store.dispatch('sm/attachmentDelete', id)
+      }
       this.files = this.files.filter(i => i.id !== id)
     }
   }
