@@ -231,6 +231,10 @@ export default {
     border: 1px dashed rgba(var(--vs-primary),.5);
   }
 
+  .vs-table-body {
+    z-index: auto;
+  }
+
   th >>> .vs-table-text {
     justify-content: center !important;
   }
