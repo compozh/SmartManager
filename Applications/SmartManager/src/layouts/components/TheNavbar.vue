@@ -8,149 +8,163 @@
           icon="MenuIcon"
           @click.stop="showSidebar"
         ></feather-icon>
-        <div class="flex" v-if="$route.name === 'task-list' || $route.name === 'case-list' ">
-          <vs-button v-if="$route.name === 'task-list'"
-                     icon="add"
-                     color="primary"
-                     type="gradient"
-                     class="px-3 mr-2"
-                     @click="$router.push('/task-add')"
-          >{{ $t('buttons.addTask') }}
-          </vs-button>
 
-          <vs-button v-if="$route.name === 'case-list'"
-                     icon="add"
-                     color="primary"
-                     type="gradient"
-                     class="px-3 mr-2"
-                     @click="$router.push('/case-add')"
-          >{{ $t('buttons.addCase') }}</vs-button>
+        <vs-button v-if="/task-(view|list)/.test($route.name)"
+                   icon="library_add"
+                   color="primary"
+                   type="flat"
+                   class="px-3 mr-2"
+                   to="/task-add"
+        >{{ $t('buttons.addTask') }}</vs-button>
 
-          <vs-button icon="get_app"
-                     color="success"
-                     type="gradient"
-                     class="px-3 mr-2"
-                     @click="$router.push('/work-flow')"
-          >{{ $t('buttons.startWorkflow') }}</vs-button>
-        </div>
+        <vs-button v-if="$route.name === 'case-list'"
+                   icon="library_add"
+                   color="primary"
+                   type="flat"
+                   class="px-3 mr-2"
+                   to="/case-add"
+        >{{ $t('buttons.addCase') }}</vs-button>
 
-        <div class="flex" v-if="task.id || caseItem.name">
-          <vs-button v-if="allowedAddSubTask"
-                     icon="add"
-                     color="primary"
-                     type="gradient"
-                     class="px-3 mr-2"
-                     @click="$router.push('/task-add/' + task.id)"
-          >{{ $t('buttons.addSubTask') }}</vs-button>
+        <vs-button v-if="/(task|case)-list/.test($route.name)"
+                   icon="launch"
+                   color="success"
+                   type="flat"
+                   class="px-3 mr-2"
+                   to="/work-flow"
+        >{{ $t('buttons.workflow') }}</vs-button>
 
-          <vs-button v-if="$route.name === 'case-view'"
-                     icon="add"
-                     color="primary"
-                     type="gradient"
-                     class="px-3 mr-2"
-                     @click="$router.push({name: 'task-add', params: {bindCaseId: caseItem.id}})"
-          >{{ $t('buttons.addCaseTask') }}</vs-button>
+        <vs-button v-if="$route.name === 'case-view'"
+                   icon="library_add"
+                   color="primary"
+                   type="flat"
+                   class="px-3 mr-2"
+                   :to="{name: 'task-add', params: {bindCaseId: caseItem.id}}"
+        >{{ $t('buttons.addCaseTask') }}</vs-button>
 
-          <div class="flex" v-if="taskType === 'AGREE'">
-            <div class="flex" v-if="allowedNextPrevButtons || status !== '+'">
-              <vs-button icon="done"
+        <vs-button v-if="$route.name === 'case-view' && allowedEdit"
+                   icon="edit"
+                   color="#607D8B"
+                   type="flat"
+                   class="px-3 mr-2"
+                   :to="$route.path + '/edit'"
+        >{{ $t('buttons.edit') }}</vs-button>
+
+        <div class="flex" v-if="$route.name === 'task-view'">
+          <vs-button v-if="simpleTaskExecuted"
+                     icon="settings_backup_restore"
+                     color="warning"
+                     type="flat"
+                     class="px-3 mr-2"
+                     @click="changeStatus('*')"
+          >{{ $t('buttons.returnToWork') }}</vs-button>
+
+          <div class="flex" v-if="agreeTaskInWork">
+            <vs-dropdown vs-trigger-click class="cursor-pointer">
+              <vs-button icon="expand_more"
                          color="success"
-                         class="px-3 btnx"
-                         type="gradient"
-                         @click="changeStage(1)"
+                         class="px-3 btn-drop-approve"
+                         type="flat"
               >{{ buttonApprove }}</vs-button>
-              <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button class="btn-drop mr-2"
-                           size="default"
-                           color="#1CA998"
-                           icon="expand_more"/>
-                <vs-dropdown-menu>
-                  <vs-dropdown-item @click="getPrompt(1)">
-                    {{ buttonApprove + $t('buttons.withComment') }}
-                  </vs-dropdown-item>
-                </vs-dropdown-menu>
-              </vs-dropdown>
-            </div>
-            <div class="flex" v-if="allowedNextPrevButtons || status !== '-'">
-              <vs-button icon="close"
+              <vs-dropdown-menu>
+                <vs-dropdown-item @click="changeStage(1)">
+                  {{ buttonApprove }}
+                </vs-dropdown-item>
+                <vs-dropdown-item @click="getPrompt(1)">
+                  {{ buttonApprove + $t('buttons.withComment') }}
+                </vs-dropdown-item>
+              </vs-dropdown-menu>
+            </vs-dropdown>
+            <vs-dropdown vs-trigger-click class="cursor-pointer">
+              <vs-button icon="expand_more"
                          color="danger"
-                         class="px-3 btnx"
-                         type="gradient"
-                         @click="changeStage(0)"
+                         class="px-3 btn-drop-reject"
+                         type="flat"
               >{{ buttonReject }}</vs-button>
-              <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button class="btn-drop mr-2"
-                           size="default"
-                           color="#BA365A"
-                           icon="expand_more"/>
-                <vs-dropdown-menu>
-                  <vs-dropdown-item @click="getPrompt(0)">
-                    {{ buttonReject + $t('buttons.withComment') }}
-                  </vs-dropdown-item>
-                </vs-dropdown-menu>
-              </vs-dropdown>
-            </div>
+              <vs-dropdown-menu>
+                <vs-dropdown-item @click="changeStage(0)">
+                  {{ buttonReject }}
+                </vs-dropdown-item>
+                <vs-dropdown-item @click="getPrompt(0)">
+                  {{ buttonReject + $t('buttons.withComment')}}
+                </vs-dropdown-item>
+              </vs-dropdown-menu>
+            </vs-dropdown>
           </div>
 
-          <div class="flex" v-else-if="taskType === 'WORKFLOW'">
-            <div class="flex" v-if="allowedNextPrevButtons || status !== '+'">
-              <vs-button icon="done"
+          <div class="flex" v-if="workFlowTaskInWork">
+            <vs-dropdown vs-trigger-click class="cursor-pointer">
+              <vs-button icon="expand_more"
                          color="success"
-                         class="px-3 btnx"
-                         type="gradient"
-                         @click="changeStage(1)"
+                         class="px-3 btn-drop-approve"
+                         type="flat"
               >{{ buttonForward }}</vs-button>
-              <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button class="btn-drop mr-2"
-                           size="default"
-                           color="#1CA998"
-                           icon="expand_more"/>
-                <vs-dropdown-menu>
-                  <vs-dropdown-item @click="getPrompt(1)">
-                    {{ buttonForward + $t('buttons.withComment') }}
-                  </vs-dropdown-item>
-                </vs-dropdown-menu>
-              </vs-dropdown>
-            </div>
-            <div class="flex" v-if="allowedNextPrevButtons || status !== '-'">
-              <vs-button icon="close"
+              <vs-dropdown-menu>
+                <vs-dropdown-item @click="changeStage(1)">
+                  {{ buttonForward }}
+                </vs-dropdown-item>
+                <vs-dropdown-item @click="getPrompt(1)">
+                  {{ buttonForward + $t('buttons.withComment') }}
+                </vs-dropdown-item>
+              </vs-dropdown-menu>
+            </vs-dropdown>
+            <vs-dropdown vs-trigger-click class="cursor-pointer">
+              <vs-button icon="expand_more"
                          color="danger"
-                         class="px-3 btnx"
-                         type="gradient"
-                         @click="changeStage(0)"
+                         class="px-3 btn-drop-reject"
+                         type="flat"
               >{{ buttonBack }}</vs-button>
-              <vs-dropdown vs-trigger-click class="cursor-pointer">
-                <vs-button class="btn-drop mr-2"
-                           size="default"
-                           color="#BA365A"
-                           icon="expand_more"/>
-                <vs-dropdown-menu>
-                  <vs-dropdown-item @click="getPrompt(0)">
-                    {{ buttonBack + $t('buttons.withComment')}}
-                  </vs-dropdown-item>
-                </vs-dropdown-menu>
-              </vs-dropdown>
-            </div>
+              <vs-dropdown-menu>
+                <vs-dropdown-item @click="changeStage(0)">
+                  {{ buttonBack }}
+                </vs-dropdown-item>
+                <vs-dropdown-item @click="getPrompt(0)">
+                  {{ buttonBack + $t('buttons.withComment')}}
+                </vs-dropdown-item>
+              </vs-dropdown-menu>
+            </vs-dropdown>
           </div>
 
-          <div class="flex" v-else>
-            <vs-button v-if="allowedAddSubTask"
-                       icon="done"
-                       color="success"
-                       type="gradient"
-                       class="px-3 mr-2 vs-con-loading__container"
-                       @click="changeStatus('+')"
-            >{{ $t('buttons.execute') }}</vs-button>
+          <vs-button v-if="internalTaskInWork && taskType === ''"
+                     icon="done"
+                     color="success"
+                     type="flat"
+                     class="px-3 mr-2"
+                     @click="changeStatus('+')"
+          >{{ $t('buttons.execute') }}</vs-button>
 
-            <vs-button v-if="status === '+'"
-                       icon="settings_backup_restore"
-                       color="warning"
-                       type="gradient"
-                       class="px-3"
-                       @click="changeStatus('*')"
-            >{{ $t('buttons.returnToWork') }}</vs-button>
-          </div>
+          <vs-button v-if="!task.isFavorite && !simpleTaskExecuted"
+                     icon="star"
+                     color="warning"
+                     type="flat"
+                     class="px-3 mr-2"
+                     @click="taskPin(true)"
+          >{{ $t('buttons.pin') }}</vs-button>
+
+          <vs-button v-if="task.isFavorite"
+                     icon="star_border"
+                     color="danger"
+                     type="flat"
+                     class="px-3 mr-2"
+                     @click="taskPin(false)"
+          >{{ $t('buttons.unpin') }}</vs-button>
+
+          <vs-button v-if="allowedEdit"
+                     icon="edit"
+                     color="#607D8B"
+                     type="flat"
+                     class="px-3 mr-2"
+                     :to="$route.path + '/edit'"
+          >{{ $t('buttons.edit') }}</vs-button>
+
+            <vs-button v-if="internalTaskInWork"
+                       icon="delete_forever"
+                       color="danger"
+                       type="flat"
+                       class="px-3 mr-2"
+                       @click="confirmDelete"
+            >{{ $t('buttons.delete') }}</vs-button>
         </div>
+
         <vs-spacer></vs-spacer>
 
         <!-- USER META -->
@@ -271,13 +285,31 @@ export default {
         ? this.task.status
         : ''
     },
-    allowedNextPrevButtons() {
+    taskInWork() {
       return this.status === ''
-          || this.status === '*'
+        || this.status === '*'
     },
-    allowedAddSubTask() {
-      return this.$route.name === 'task-view'
-          && this.allowedNextPrevButtons
+    internalTask() {
+      return this.taskType === ''
+        || this.taskType === 'AGREE'
+        || this.taskType === 'WORKFLOW'
+    },
+    // CONDITIONS FOR BUTTONS
+    internalTaskInWork() {
+      return this.internalTask && this.taskInWork
+    },
+    simpleTaskExecuted() {
+      return this.taskType === '' && this.status === '+'
+    },
+    agreeTaskInWork() {
+      return this.taskType === 'AGREE' && this.taskInWork
+    },
+    workFlowTaskInWork() {
+      return this.taskType === 'WORKFLOW' && this.taskInWork
+    },
+    allowedEdit() {
+      return this.$route.name === 'case-view'
+        || (this.$route.name === 'task-view' && this.internalTaskInWork)
     },
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonBack() {
@@ -320,27 +352,50 @@ export default {
       return this.localizations.find(r => r.code === locale)
     }
   },
+  beforeRouteEnter(to, from, next) {
+    to.params.routeToBack = from.path
+    next()
+  },
   methods: {
     getPrompt(stage) {
       this.stage = stage
       this.activePrompt = true
     },
-    async changeStage(moveMode, comment) {
-      try {
-        await this.$store.dispatch('sm/changeStage', {
-          id: this.task.id,
-          arso: this.task.arso,
-          keyValue: this.task.keyValue,
-          kidCopy: this.task.kidCopy,
-          moveMode,
-          comment,
-          processParams: null
-        })
-      } catch (e) {
-        console.log(e.message)
+    taskPin(pin) {
+      this.$store.dispatch('sm/taskPin', {
+        taskId: this.task.id,
+        pin
+      })
+    },
+    confirmDelete() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: this.$t('tasks.delConfirmTitle'),
+        text: this.$t('tasks.delConfirmText'),
+        acceptText: this.$t('buttons.delete'),
+        cancelText: this.$t('buttons.cancel'),
+        accept: this.taskDelete
+      })
+    },
+    async taskDelete() {
+      const success = await this.$store.dispatch('sm/taskDelete', this.task.id)
+      if (success) {
+        await this.$router.push('/')
       }
     },
-    async changeStatus(status) {
+    changeStage(moveMode, comment) {
+      this.$store.dispatch('sm/changeStage', {
+        id: this.task.id,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy,
+        moveMode,
+        comment,
+        processParams: null
+      })
+    },
+    changeStatus(status) {
       eventBus.$emit('changeStatus', {
         id: this.task.id,
         status: status,
@@ -410,21 +465,12 @@ export default {
 </script>
 
 <style scoped>
-  .btnx {
-    border-radius: 5px 0 0 5px;
-    height: 38px;
+
+  button:hover > .btn-drop-approve {
+    background: rgba(var(--vs-success),.08)!important;;
+  }
+  button:hover > .btn-drop-reject {
+    background: rgba(var(--vs-danger),.08)!important;;
   }
 
-  .btn-drop {
-    border-radius: 0 5px 5px 0;
-    border-left: 1px solid rgba(255, 255, 255, .2);
-  }
-
-  button:hover > .btn-drop {
-    transform: translateY(-2px);
-  }
-
-  button:active > .btn-drop {
-    transform: translateY(0);
-  }
 </style>
