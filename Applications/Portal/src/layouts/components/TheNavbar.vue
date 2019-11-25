@@ -148,7 +148,17 @@ export default {
       return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName
     },
     activeUserImg() {
-      return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserPhoto || ''
+      // TODO заменить на graphql
+      var link = this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserPhoto
+      if (!link) {
+        return ''
+      }
+      var fileFolder = link.split('?')[1]
+      var file = fileFolder.split('&')[0]
+      if (file.length == 5) {
+        return '' 
+      }
+      return link
     }
   },
   methods: {

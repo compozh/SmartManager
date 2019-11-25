@@ -5,16 +5,10 @@
         gender
         fullName
         birthDate
+        photoFilePath
         departmentTitle
         positionCategory
         parentDepartmentTitle
-      }
-      headers{
-        field
-        filter
-        minWidth
-        sortable
-        headerName
       }
     }
   }

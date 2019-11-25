@@ -9,7 +9,9 @@ export default {
   criterialEvaluation: undefined,
   selfEsteemResults: undefined,
   resultsAssessmentSupremo: undefined,
-  currentPageNabu: undefined
-  
+  currentPageNabu: undefined,
+  employeeOriginal: undefined,
+  trainingSchedule: undefined,
+  individualPlanReport: undefined
 }
   

@@ -2,12 +2,12 @@
     portalNabuQuery{
       additionalTraining{
         data{
-            status
           subject
           priority
           provider
-          required
-          description
+          isRequired
+          statusTitle
+          detailRowValue
           competenceTitle
         }
         headers{

@@ -16,8 +16,11 @@ import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
+import taskPin from './graphql/taskPin.graphql'
+import taskDelete from './graphql/taskDelete.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
 import addAttachments from './graphql/addAttachments.graphql'
+import attachmentDelete from './graphql/attachmentDelete.graphql'
 import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
 import businessProcesses from './graphql/businessProcesses.graphql'
@@ -274,6 +277,42 @@ export class SmartManagerApi {
         .mutate({
           mutation: gql`${binding}`,
           variables: {caseId, taskId, bind}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async taskDeleteInGql(taskId) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${taskDelete}`,
+          variables: {taskId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async taskPinInGql(taskId, pin) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${taskPin}`,
+          variables: {taskId, pin}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async attachmentDeleteInGql(id) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${attachmentDelete}`,
+          variables: {id}
         })
     } catch (e) {
       throw new Error(e.message)

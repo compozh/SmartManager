@@ -7,15 +7,18 @@
                  icon="card_travel"
                  size="40px"/>
       <div class="flex justify-between items-start" style="width: calc(100% - 58px);">
-          <div class="task__details truncate mr-3">
-            <h5 class="mb-1">{{ caseItem.name }}</h5>
-            <h6 class="text-primary">{{ caseItem.purpose }}</h6>
-          </div>
-        <div class="task-item__meta flex items-center flex-shrink-0">
-            <span class="mr-2">{{ $t('cases.dateFrom') }}: {{ date(caseItem.dateFrom) }}</span>
-            <span>{{ $t('cases.dateTo') }}: {{ date(caseItem.dateTo) }}</span>
-          </div>
+        <div class="task__details truncate mr-3">
+          <h5 class="mb-1">{{ caseItem.name }}</h5>
+          <h6 class="text-primary">{{ caseItem.purpose }}</h6>
         </div>
+        <div class="vx-col sm:w-1/5 w-full flex sm:flex-col
+                    items-center sm:justify-end">
+          <span v-if="dateFrom" class="flex self-end"
+          >{{ $t('cases.dateFrom') }}: {{ dateFrom }}</span>
+          <span v-if="dateTo" class="flex self-end"
+          >{{ $t('cases.dateTo') }}: {{ dateTo }}</span>
+        </div>
+      </div>
 
     </div>
 
@@ -40,26 +43,24 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   props: {
-    caseItem: {
-      type: Object,
-      required: true,
-    }
+    caseItem: Object
   },
   computed: {
     date() {
-      return dateTime => dateTime
-        ? dateTime.split(' ').shift()
-        : ''
+      return date => {
+        const formatDate = moment(date, 'DD.MM.YYYY').format('DD.MM.YYYY')
+        return formatDate === '01.01.0001' ? '' : formatDate
+      }
     },
-    comments() {
-      return this.case.comments ? this.case.comments.length : 0
-    }
-  },
-  methods: {
-    caseLink(id) {
-      this.$router.push({name: 'case-view', params: {id}})
+    dateFrom() {
+      return this.date(this.caseItem.dateFrom)
+    },
+    dateTo() {
+      return this.date(this.caseItem.dateTo)
     }
   }
 }

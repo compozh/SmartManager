@@ -35,9 +35,13 @@
     "created": "Created",
     "deadline": "Deadline",
     "related": "Related tasks",
+    "base": "Base task",
     "subTasks": "Subtasks",
+    "noSubTasks": "No subtasks",
     "done": "Completed",
-    "taskFrom": "Task from"
+    "taskFrom": "Task from",
+    "delConfirmTitle": "Task delete",
+    "delConfirmText": "Are you sure you want to delete the task?"
   },
   "cases": {
     "newCase": "New case",
@@ -77,6 +81,7 @@
     "add": "Add",
     "send": "Send",
     "start": "Start",
+    "workflow": "Business process",
     "startWorkflow": "Start business process",
     "login": "Sign in",
     "logout": "Logout",
@@ -85,7 +90,11 @@
     "addCase": "Add case",
     "addFolder": "Create folder",
     "bindToCase": "Bind to case",
-    "unbindFromCase": "Unbind from case"
+    "unbindFromCase": "Unbind from case",
+    "pin": "Add to favorites",
+    "unpin": "Remove from favorites",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "icons": {
     "priority": "High priority",
@@ -95,7 +104,8 @@
     "fromMe": "From me",
     "control": "On control",
     "notRush": "Not rush",
-    "document": "Document"
+    "document": "Document",
+    "favorite": "In favorites"
   },
   "tabs": {
     "details": "Details",
@@ -162,6 +172,9 @@
     "attachAddSuccess": "Attachment added successfully",
     "attachAddFail": "Add attachment failed",
     "attachAddError": "Attachment adding error",
+    "attachDelSuccess": "Attachment delete successfully",
+    "attachDelFail": "Attachment delete failed",
+    "attachDelError": "Attachment delete error",
     "commentAddSuccess": "Comment added successfully",
     "commentAddFail": "Comment adding failed",
     "commentAddError": "Comment adding error",
@@ -179,12 +192,18 @@
     "casesTitle": "Cases",
     "caseListError" : "Case list load error",
     "caseDetailsError" : "Case details load error",
-    "caseCreateSuccess": "Case create success",
+    "caseCreateSuccess": "Case create successfully",
     "caseCreateError": "Case create error",
-    "caseUpdateSuccess": "Case update success",
+    "caseUpdateSuccess": "Case update successfully",
     "caseUpdateError": "Case update error",
     "bindingFail": "Binding changing fail",
-    "bindingError": "Binding changing error"
+    "bindingError": "Binding changing error",
+    "taskDelSuccess": "Task delete successfully",
+    "taskDelFail": "Task delete fail",
+    "taskDelError": "Task delete error",
+    "taskPinSuccess": "Favorite tasks changed successfully",
+    "taskPinFail": "Favorite tasks change fail",
+    "taskPinError":  "Favorite tasks change error"
   },
   "workflow": {
     "businessProcess": "Business process",
