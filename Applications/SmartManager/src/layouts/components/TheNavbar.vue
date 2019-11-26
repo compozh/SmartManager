@@ -28,9 +28,21 @@
             {{ $t('tasks.newTask') }}</span>
         </div>
 
+        <span v-if="/task\/\d+\/edit/.test($route.path)"
+              class="text-primary truncate">
+          {{ $t('tasks.edit') }}</span>
+
         <span v-if="$route.name === 'case-add'"
               class="text-primary truncate">
           {{ $t('cases.newCase') }}</span>
+
+        <span v-if="/case\/\d+\/edit/.test($route.path)"
+              class="text-primary truncate">
+          {{ $t('cases.edit') }}</span>
+
+        <span v-if="$route.name === 'work-flow'"
+              class="text-primary truncate">
+          {{ $t('workflow.newBusinessProcess') }}</span>
 
         <vs-button v-if="/task-(view|list)/.test($route.name)"
                    icon="library_add"
@@ -55,14 +67,6 @@
                    class="px-3 mr-2"
                    to="/work-flow"
         >{{ $t('buttons.workflow') }}</vs-button>
-
-        <vs-button v-if="$route.name === 'case-view' && allowedEdit"
-                   icon="edit"
-                   color="#607D8B"
-                   type="flat"
-                   class="px-3 mr-2"
-                   :to="$route.path + '/edit'"
-        >{{ $t('buttons.edit') }}</vs-button>
 
         <div class="flex" v-if="$route.name === 'task-view'">
           <vs-button v-if="simpleTaskExecuted"
@@ -162,23 +166,23 @@
                      class="px-3 mr-2"
                      @click="taskPin(false)"
           >{{ $t('buttons.unpin') }}</vs-button>
-
-          <vs-button v-if="allowedEdit"
-                     icon="edit"
-                     color="#607D8B"
-                     type="flat"
-                     class="px-3 mr-2"
-                     :to="$route.path + '/edit'"
-          >{{ $t('buttons.edit') }}</vs-button>
-
-            <vs-button v-if="internalTaskInWork"
-                       icon="delete_forever"
-                       color="danger"
-                       type="flat"
-                       class="px-3 mr-2"
-                       @click="confirmDelete"
-            >{{ $t('buttons.delete') }}</vs-button>
         </div>
+
+        <vs-button v-if="allowedTaskEdit || allowedCaseEdit"
+                   icon="edit"
+                   color="dark"
+                   type="flat"
+                   class="px-3 mr-2"
+                   :to="$route.path + '/edit'"
+        >{{ $t('buttons.edit') }}</vs-button>
+
+        <vs-button v-if="allowedTaskEdit"
+                   icon="delete_forever"
+                   color="danger"
+                   type="flat"
+                   class="px-3 mr-2"
+                   @click="confirmDelete"
+        >{{ $t('buttons.delete') }}</vs-button>
 
         <vs-spacer></vs-spacer>
 
@@ -278,6 +282,7 @@ export default {
   computed: {
     // PROFILE
     ...mapGetters('auth', [
+      'currentUserId',
       'currentUserName',
       'currentUserPhoto',
       'delegatedRights'
@@ -322,9 +327,14 @@ export default {
     workFlowTaskInWork() {
       return this.taskType === 'WORKFLOW' && this.taskInWork
     },
-    allowedEdit() {
+    allowedCaseEdit() {
       return this.$route.name === 'case-view'
-        || (this.$route.name === 'task-view' && this.internalTaskInWork)
+        && this.currentUserId === this.caseItem.userAdd
+    },
+    allowedTaskEdit() {
+      return this.$route.name === 'task-view'
+        && this.internalTaskInWork
+        && this.currentUserId === this.task.declarerId
     },
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonBack() {
@@ -437,13 +447,15 @@ export default {
             text: this.$t('notify.applyRightsSuccess'),
             color: 'success'
           })
+          await this.$router.push('/')
           window.location.reload()
+        } else {
+          this.$vs.notify({
+            title: this.$t('notify.applyRightsTittle'),
+            text: this.$t('notify.applyRightsFail'),
+            color: 'warning'
+          })
         }
-        this.$vs.notify({
-          title: this.$t('notify.applyRightsTittle'),
-          text: this.$t('notify.applyRightsFail'),
-          color: 'warning'
-        })
       } catch (e) {
         this.$vs.notify({
           title: this.$t('notify.applyRightsTittle'),
