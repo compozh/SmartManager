@@ -32,6 +32,10 @@
               class="text-primary truncate">
           {{ $t('cases.newCase') }}</span>
 
+        <span v-if="$route.name === 'work-flow'"
+              class="text-primary truncate">
+          {{ $t('workflow.newBusinessProcess') }}</span>
+
         <vs-button v-if="/task-(view|list)/.test($route.name)"
                    icon="library_add"
                    color="primary"
@@ -54,7 +58,7 @@
                    type="flat"
                    class="px-3 mr-2"
                    to="/work-flow"
-        >{{ $t('buttons.workflow') }}</vs-button>
+        >{{ $t('buttons.startWorkflow') }}</vs-button>
 
         <vs-button v-if="$route.name === 'case-view' && allowedEdit"
                    icon="edit"
