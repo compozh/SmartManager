@@ -39,6 +39,7 @@ fragment mainTaskFields on Task {
 fragment detailTaskFields on Task {
     htmlDescript
     declarer
+    declarerId
     arso
     keyValue
     kidCopy
