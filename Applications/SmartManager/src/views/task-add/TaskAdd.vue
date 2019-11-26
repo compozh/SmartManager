@@ -12,7 +12,7 @@
                   <vs-input name="taskName"
                             :label-placeholder="$t('tasks.taskName')"
                             v-model="newTask.title"
-                            class="w-full mb-6 input-task-name"
+                            class="w-full mb-6"
                             v-validate="'required'"
                             :danger="errors.has('taskName')"
                             :danger-text="$t('validate.required')"
@@ -98,7 +98,7 @@
                     >{{ $t('buttons.cancel') }}</vs-button>
                     <vs-button type="gradient"
                                @click="submitForm"
-                    >{{ $t('buttons.create') }}</vs-button>
+                    >{{ taskEdit ? $t('buttons.save') : $t('buttons.create') }}</vs-button>
                   </div>
                 </form>
               </div>
@@ -141,6 +141,7 @@ export default {
   },
   data() {
     return {
+      taskEdit: false,
       newTask: {
         title: '',
         performer: null,
@@ -155,7 +156,7 @@ export default {
       configDatePicker: {
         locale: this.$i18n.locale,
         dateFormat: 'd.m.Y',
-        minDate: new Date(),
+        minDate: moment().format('DD.MM.YYYY'),
         allowInput: true
       },
       configTimePicker: {
@@ -167,7 +168,10 @@ export default {
       userListLoading: false,
       caseListLoading: false,
       filesUploading: false,
+      oldCaseId: 0,
       oldAttachments: [],
+      oldCoexecutors: [],
+      oldNotify: [],
       editorOption: {
         modules: {
           toolbar: [
@@ -201,8 +205,11 @@ export default {
     cases() {
       return this.$store.state.sm.cases
     },
+    dateFormat() {
+      return date => moment(date, 'DD.MM.YYYY')
+    },
     dateplan() {
-      const formatDate = moment(this.newTask.planDate, 'DD.MM.YYYY')
+      const formatDate = this.dateFormat(this.newTask.planDate)
         .format('YYYY-MM-DD')
       return `${formatDate} ${this.newTask.planTime}`
     },
@@ -221,17 +228,67 @@ export default {
       }))
     }
   },
+  beforeRouteLeave(to, from, next) {
+    // TODO: Add confirm for saving
+    next()
+  },
   created() {
     this.getUsers()
     this.getCases()
   },
-  mounted() {
+  async mounted() {
     if (this.bindCaseId && this.cases.length !== 0) {
       this.newTask.case = this.cases
         .find(caseItem => caseItem.id === this.bindCaseId)
     }
+    if (this.$route.name === 'task-edit') {
+      this.taskEdit = true
+      const task = await this.getTask()
+      this.setFieldsForUpdate(task)
+    }
   },
   methods: {
+    async getTask() {
+      const taskId = +this.$route.params.id
+      await this.$store.dispatch('sm/getTaskInfo', {
+        taskId, loading: true
+      })
+      return this.$store.state.sm.taskInfo[taskId]
+    },
+    setFieldsForUpdate(task) {
+      const date = task.dateplan.split(' ').shift()
+      const time = task.dateplan.split(' ').pop()
+      const minDate = this.configDatePicker.minDate
+      this.configDatePicker.minDate = this.dateFormat(minDate)
+        .isAfter(this.dateFormat(date)) ? date : minDate
+      this.newTask.title = task.name
+      this.newTask.performer = this.users
+        .find(user => user.userId === task.performerId)
+      this.newTask.planDate = date
+      this.newTask.planTime = time
+
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(task.htmlDescript, 'text/html')
+      this.newTask.description = doc.body.innerHTML
+
+      this.oldCoexecutors = this.users.filter(user => task.participants
+        .some(participant => {
+          return participant.userId === user.userId
+                 && participant.role === 'COEXECUTOR'
+        }))
+      this.newTask.coexecutors = this.oldCoexecutors
+
+      this.oldNotify = this.users.filter(user => task.participants
+        .some(participant => {
+          return participant.userId === user.userId
+            && participant.role === 'OBSERVER'
+        }))
+      this.newTask.notify = this.oldNotify
+      this.oldAttachments = task.originals
+      this.oldCaseId = task.caseId
+      this.newTask.case = this.cases
+        .find(caseItem => caseItem.id === task.caseId)
+    },
     async getUsers() {
       this.userListLoading = true
       if (this.users.length === 0) {
@@ -264,12 +321,32 @@ export default {
       }
       try {
         const result = await this.$store.dispatch('sm/addNewTask', newTask)
-        if (result) {
+        if (result.success) {
           await this.$router.push({name: 'task-view', params: {id: result.id}})
         }
       } catch (e) {
         // Задержка нужна чтобы показать сообщение об ошибке
         setTimeout(() => this.$router.go(0), 1000)
+      }
+    },
+    async updateTask() {
+      const newTaskData = {
+        id: this.$route.params.id,
+        name: this.newTask.title,
+        performerId: this.newTask.performer.userId,
+        descript: this.htmlDescription,
+        dateplan: this.dateplan,
+        participants: this.getParticipants(),
+        attachments: this.newTask.attachments,
+        needApprove: false,
+        needComm: false,
+        priority: 0,
+        caseId: this.newTask.case ? this.newTask.case.id : 0,
+        unbindId: this.oldCaseId
+      }
+      const result = await this.$store.dispatch('sm/updateTask', newTaskData)
+      if (result) {
+        await this.$router.push({name: 'task-view', params: {id: newTaskData.id}})
       }
     },
     getParticipants() {
@@ -286,25 +363,29 @@ export default {
         ...observers
       ]
     },
+    async submitForm() {
+      const result = await this.$validator.validateAll()
+      if (result) {
+        this.upload()
+      }
+    },
     upload() {
       this.filesUploading = true
     },
     getAttachment(event) {
       this.newTask.attachments = event
       this.filesUploading = false
-      this.createTask()
-    },
-    async submitForm() {
-      const result = await this.$validator.validateAll()
-      if (result) {
-        this.upload()
-      }
+      this.taskEdit ? this.updateTask() : this.createTask()
     }
   }
 }
 </script>
 
 <style scoped>
+
+  * >>> input {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+  }
 
   .form-container {
     margin: 15px 0;

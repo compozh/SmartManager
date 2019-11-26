@@ -99,10 +99,30 @@ export default {
       } else {
         notify('warning','taskTitle','taskAddFail')
       }
-      return result.success
+      return result
     } catch (e) {
       stopLoading()
       notify('danger', 'taskTitle', 'taskAddError')
+      throw Error
+    }
+  },
+  async updateTask({dispatch}, taskData) {
+    const taskDataJson = JSON.stringify(taskData)
+    startLoading(true)
+    try {
+      const response = await api.updateTaskInGql(taskDataJson)
+      const result = response.data.smtasksMutation.taskUpdating
+      stopLoading()
+      if (result.success) {
+        dispatch('getTaskInfo', {taskId: taskData.id})
+        notify('success','taskTitle','updateSuccess')
+      } else {
+        notify('warning','taskTitle','updateFail')
+      }
+      return result.success
+    } catch (e) {
+      stopLoading()
+      notify('danger', 'taskTitle', 'updateError')
       throw Error
     }
   },
@@ -138,7 +158,7 @@ export default {
       if (result.success) {
         await dispatch('updateInfo', {
           type: params.type,
-          id: params.id
+          id: params.id,
         })
         notify('success', 'attachTitle', 'attachAddSuccess')
       } else {
@@ -269,8 +289,8 @@ export default {
       notify('danger', 'casesTitle', 'caseListError')
     }
   },
-  async getCaseDetails({commit}, {caseId, loading}) {
-    startLoading(loading || true)
+  async getCaseDetails({commit}, {caseId}) {
+    startLoading(true)
     try {
       const result = await api.getCaseDetailsFromGql(caseId)
       stopLoading()
@@ -301,11 +321,14 @@ export default {
     const caseDataJson = JSON.stringify(caseData)
     startLoading(true)
     try {
-      const response = await api.caseUpdateInGql(caseDataJson)
+      const response = await api.updateCaseInGql(caseDataJson)
       const result = response.data.smtasksMutation.caseUpdate
       stopLoading()
       if (result.success) {
-        dispatch('getCaseDetails', {caseId: caseData.id})
+        await dispatch('getCaseDetails', {caseId: caseData.id})
+        notify('success','casesTitle','updateSuccess')
+      } else {
+        notify('warning','casesTitle','updateFail')
       }
       return result.success
     } catch (e) {
@@ -344,13 +367,24 @@ export default {
       notify('danger', 'taskTitle', 'bindingError')
     }
   },
-  async taskDelete(context, taskId) {
+  async taskDelete({dispatch, state}, taskId) {
     startLoading(true)
     try {
       const response = await api.taskDeleteInGql(taskId)
       const result = response.data.smtasksMutation.taskDelete
       stopLoading()
       if (result.success) {
+        // If deleted task has parent - update parent
+        const parentId = state.taskInfo[taskId].parentTask.id
+        if (parentId) {
+          await dispatch('getTaskInfo', { taskId: parentId })
+        }
+        // If deleted task bind to case - update case
+        const caseId = state.taskInfo[taskId].caseId
+        if (caseId) {
+          await dispatch('getCaseDetails', { caseId: caseId })
+        }
+        // TODO: If deleted task has child tasks - update child tasks
         notify('success', 'taskTitle', 'taskDelSuccess')
       } else {
         notify('warning', 'taskTitle', 'taskDelFail')

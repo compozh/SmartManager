@@ -16,6 +16,7 @@ import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
+import updateTask from './graphql/updateTask.graphql'
 import taskPin from './graphql/taskPin.graphql'
 import taskDelete from './graphql/taskDelete.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
@@ -123,6 +124,18 @@ export class SmartManagerApi {
         .mutate({
           mutation: gql`${addTask}`,
           variables: {newTask}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async updateTaskInGql(taskData) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${updateTask}`,
+          variables: {taskData}
         })
     } catch (e) {
       throw new Error(e.message)
@@ -247,7 +260,7 @@ export class SmartManagerApi {
     }
   }
 
-  static async caseUpdateInGql(caseData) {
+  static async updateCaseInGql(caseData) {
     try {
       return await getClient('smartmanager')
         .mutate({
