@@ -181,7 +181,10 @@ export default {
         deleteMembers: del.map(member => ({ID: member.userId, TYPE: 'USER'})),
       }
     },
-    date() {
+    dateClient() {
+      return date => moment(date, 'DD.MM.YYYY')
+    },
+    dateServer() {
       return date => {
         if (date) {
           return moment(date,'DD.MM.YYYY').format('YYYY-MM-DD')
@@ -208,6 +211,10 @@ export default {
       }
     })
   },
+  beforeRouteLeave(to, from, next) {
+    // TODO: Add confirm for saving
+    next()
+  },
   async mounted() {
     this.getUsers()
     if (this.$route.name === 'case-edit') {
@@ -225,8 +232,11 @@ export default {
       return this.$store.state.sm.caseDetails[caseId]
     },
     setFieldsForUpdate(caseItem) {
-      if (this.date(caseItem.dateFrom) !== '0001-01-01') {
-        this.configDatePicker.minDate = caseItem.dateFrom
+      if (this.dateServer(caseItem.dateFrom) !== '0001-01-01') {
+        const date = caseItem.dateFrom
+        const minDate = this.configDatePicker.minDate
+        this.configDatePicker.minDate = this.dateClient(minDate)
+          .isAfter(this.dateClient(date)) ? date : minDate
       }
       this.newCase.name = caseItem.name
       this.newCase.dateFrom = caseItem.dateFrom
@@ -248,13 +258,9 @@ export default {
       this.userListLoading = false
     },
     async createFolder() {
-      try {
-        await this.$store.dispatch('sm/caseFolderCreate', this.newFolderName)
-        this.activePrompt = false
-        this.newFolderName = ''
-      } catch (e) {
-        console.log('', e.message)
-      }
+      await this.$store.dispatch('sm/caseFolderCreate', this.newFolderName)
+      this.activePrompt = false
+      this.newFolderName = ''
     },
     async submitForm() {
       const result = await this.$validator.validateAll()
@@ -273,8 +279,8 @@ export default {
     async createCase() {
       const newCase = {
         name: this.newCase.name,
-        dateFrom: this.date(this.newCase.dateFrom),
-        dateTo: this.date(this.newCase.dateTo),
+        dateFrom: this.dateServer(this.newCase.dateFrom),
+        dateTo: this.dateServer(this.newCase.dateTo),
         purpose: this.newCase.purpose,
         comm: this.newCase.comm,
         folderId: this.newCase.folder.folderId || 0,
@@ -292,21 +298,17 @@ export default {
       const newCaseData = {
         id: this.$route.params.id,
         name: this.newCase.name,
-        dateFrom: this.date(this.newCase.dateFrom),
-        dateTo: this.date(this.newCase.dateTo),
+        dateFrom: this.dateServer(this.newCase.dateFrom),
+        dateTo: this.dateServer(this.newCase.dateTo),
         purpose: this.newCase.purpose,
         comm: this.newCase.comm,
         folderId: this.newCase.folder.folderId || 0,
         members: this.members,
         attachments: this.newCase.attachments
       }
-      try {
-        const result = await this.$store.dispatch('sm/caseUpdate', newCaseData)
-        if (result) {
-          await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
-        }
-      } catch (e) {
-        console.log('', e)
+      const result = await this.$store.dispatch('sm/caseUpdate', newCaseData)
+      if (result) {
+        await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
       }
     }
   }
@@ -314,6 +316,10 @@ export default {
 </script>
 
 <style scoped>
+
+  * >>> input {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+  }
 
   .form-container {
     margin: 15px 0;

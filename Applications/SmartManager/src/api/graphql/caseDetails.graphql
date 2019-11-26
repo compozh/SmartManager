@@ -7,6 +7,7 @@ query($caseId: Int!) {
             dateFrom
             dateTo
             comm
+            userAdd
             fioAdd
             dateAdd
             hasOrig
