@@ -71,5 +71,11 @@ export default {
   },
   getIndividualPlanReport: state => {
     return state.individualPlanReport
+  },
+  getCharacteristic: state => {
+    return state.characteristic
+  },
+  getNormsOfWorkwear: state => {
+    return state.normsOfWorkwear
   }
 }

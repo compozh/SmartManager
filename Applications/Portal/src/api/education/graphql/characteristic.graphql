@@ -1,0 +1,17 @@
+{
+  portalNabuQuery{
+   sizesForPersonnel{
+    data{
+      parametrName
+      parametrValue
+    }
+    headers{
+      field
+      filter
+      minWidth
+      sortable
+      headerName
+    }
+  } 
+  }
+}

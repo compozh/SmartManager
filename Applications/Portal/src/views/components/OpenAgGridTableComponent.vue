@@ -1,6 +1,6 @@
 <template>
     <vx-card>
-        <vs-table stripe :data="education.data">
+        <vs-table stripe :data="education.data" :noDataText="$t('agGrid.noDataAvailabl')">
 
             <template slot="thead">
                 <vs-th v-for='(element, index) in education.headers' :key="index" v-show="element.field !== 'detailRowValue'">{{element.headerName}}</vs-th>
@@ -15,7 +15,6 @@
                         {{tr.subject}}
                     </vs-td>
                     <vs-td :data="tr.isRequired">
-                        <!-- {{tr.isRequired}} -->
                         <vs-checkbox disabled="true" v-model="tr.isRequired"></vs-checkbox>
                     </vs-td>
                     <vs-td :data="tr.priority">
@@ -29,11 +28,6 @@
                     </vs-td>
                     <template class="expand-user" slot="expand">
                         <div class="con-expand-users w-full">
-                            <!-- <div class="con-btns-user flex items-center justify-between">
-                                <div class="con-userx flex items-center justify-start">
-                                    <span>{{ tr.subject }}</span>
-                                </div>
-                            </div> -->
                             <vs-list>
                                 <vs-list-item icon-pack="feather" icon="icon-type" :title="tr.detailRowValue"></vs-list-item>
                             </vs-list>

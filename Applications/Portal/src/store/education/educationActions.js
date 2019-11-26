@@ -116,6 +116,21 @@ export default {
     }
   },
 
+  async loadCharacteristic({commit}) {
+    let result = await EducationApi.getСharacteristic()
+    if (result) {
+      commit('setCharacteristic',result.data.portalNabuQuery.sizesForPersonnel)
+    }
+  },
+
+  async loadNormsOfWorkwear({commit}) {
+    let result = await EducationApi.getNormsOfWorkwear()
+    if (result) {
+      commit('setNormsOfWorkwear',result.data.portalNabuQuery.workWearNormasForPersonnel)
+    }
+  },
+  
+
   setCurrentPageNabu({commit}, page) {
     commit('setCurrentPageNabu', page)
   }
