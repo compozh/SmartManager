@@ -56,6 +56,7 @@
         "andCondition": "І",
         "orCondition": "АБО",
         "NoRowsToShow": "Немає рядків для відображення",
-        "filter": "Фільтр..."
+        "filter": "Фільтр...",
+        "noDataAvailabl": "Немає даних"
     }
 }

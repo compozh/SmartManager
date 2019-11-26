@@ -13,6 +13,8 @@ import selfEsteemResults from './graphql/selfEsteemResults.graphql'
 import resultsAssessmentSupremo from './graphql/resultsAssessmentSupremo.graphql'
 import trainingSchedule from './graphql/trainingSchedule.graphql'
 import individualPlanReport from './graphql/individualPlanReport.graphql'
+import characteristic from './graphql/characteristic.graphql'
+import normsOfWorkwear from './graphql/normsOfWorkwear.graphql'
 
 
 import gql from 'graphql-tag'
@@ -125,6 +127,26 @@ export class EducationApi {
     try {
       return await getClient('PORTALNABU').query({
         query: gql` ${individualPlanReport}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getСharacteristic() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${characteristic}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+  
+  static async getNormsOfWorkwear() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${normsOfWorkwear}`
       })
     } catch (e) {
       throw new Error(e.message)

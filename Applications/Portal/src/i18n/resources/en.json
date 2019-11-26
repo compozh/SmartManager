@@ -57,6 +57,7 @@
         "andCondition": "AND",
         "orCondition": "OR",
         "NoRowsToShow": "No rows to show",
-        "filter": "Filter..."
+        "filter": "Filter...",
+        "noDataAvailabl": "No data Available"
     }
 }

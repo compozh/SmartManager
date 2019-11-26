@@ -56,7 +56,8 @@
         "andCondition": "И",
         "orCondition": "ИЛИ",
         "NoRowsToShow": "Нет строк для отображения",
-        "filter": "Фильтр..."
+        "filter": "Фильтр...",
+        "noDataAvailabl": "Данные недоступны"
     }
 }
 

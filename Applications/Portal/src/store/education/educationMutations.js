@@ -37,7 +37,12 @@ export default {
   },
   setIndividualPlanReport(state, value) {
     state.individualPlanReport = value
+  },
+  setCharacteristic(state, value) {
+    state.characteristic = value
+  },
+  setNormsOfWorkwear(state, value) {
+    state.normsOfWorkwear = value
   }
-
 }
   
