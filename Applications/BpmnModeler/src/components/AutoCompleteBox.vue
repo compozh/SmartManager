@@ -12,7 +12,9 @@
     item-text="name"
     no-filter
     :multiple="multiple"
-    
+    :chips="multiple"
+    deletable-chips
+    @change="search = ''"
   >
     <template #item="data">
       <slot name="item" :data="data"></slot>
@@ -20,7 +22,7 @@
   </v-autocomplete>
 </template>
 <script>
-import { debounce } from 'throttle-debounce'
+import { debounce } from 'throttle-debounce';
 
 export default {
   name: 'autocompletebox',

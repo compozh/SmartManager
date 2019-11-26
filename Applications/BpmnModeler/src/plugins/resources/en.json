@@ -79,7 +79,8 @@
 		"WhoHasAccess": "Who has access",
 		"All": "All",
 		"Users": "Users",
-		"Groups": "Groups"
+		"Groups": "Groups",
+		"UserOrGroup": "User or group"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

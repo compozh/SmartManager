@@ -81,10 +81,11 @@
 		"NoData": "Немає даних",
 		"DisplayType": "Тип відображення",
 		"NoReadAccess": "У вас відсутні права на перегляд цієї діаграми",
-		"WhoHasAccess": "У кого є доступ",
+		"WhoHasAccess": "Кому",
 		"All": "Всі",
 		"Users": "Користувачі",
-		"Groups": "Групи"
+		"Groups": "Групи",
+		"UserOrGroup": "Користувач чи группа"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

@@ -44,13 +44,18 @@
                     </template>
                   </template>
                 </autocompletebox>
-                <h5>{{ $t('bpmn.labels.AccessRights') }}</h5>
+                <p style="text-align: left; margin: 0;">{{ $t('bpmn.labels.AccessRights') }}</p>
                 <v-container fluid>
-                  <v-layout row wrap>
-                    <v-checkbox v-model="form.editedItem.rights" 
+                  <v-layout column>
+                    <v-checkbox
+                      class="rights-checkbox"
+                      hide-details
+                      v-model="form.editedItem.rights" 
                       v-for="right in enums.diagramRights" :key="right" 
-                      :label="$t('bpmn.enums.DiagramAccessRights.' + right)" :value="right"
-                      :rules="[form.rules.selectOne]" :disabled="form.loading || form.mode === 'delete'">
+                      :label="$t('bpmn.enums.DiagramAccessRights.' + right)" 
+                      :value="right"
+                      :rules="[form.rules.selectOne]" 
+                      :disabled="form.loading || form.mode === 'delete'">
                     </v-checkbox>
                    </v-layout>
                  </v-container>
@@ -59,8 +64,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-              <v-btn color="blue darken-1" flat @click="formSave" :loading="form.loading">{{ form.actions[form.mode] }}</v-btn>
+              <v-btn flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+              <v-btn flat @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -87,7 +92,17 @@
                 <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>group</v-icon>
               </td>
               <td class="text-xs-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
-              <td class="text-xs-left">{{ props.item.rights }}</td>
+              <td 
+                v-for="right in enums.diagramRights" :key="right" 
+                class="text-xs-left">
+                <v-checkbox
+                  class="rights-checkbox"
+                  hide-details
+                  v-model="props.item.rights" 
+                  :value="right"
+                  :readonly="true">
+                </v-checkbox>
+              </td>
               <td class="justify-left layout">
                 <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                 <v-icon :title="$t('bpmn.buttons.Delete')" small @click="deleteItem(props.item)">delete</v-icon>
@@ -104,6 +119,7 @@ import { Notification } from 'element-ui';
 import * as Models from '../../api/models';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
+import { map } from 'min-dash';
 
 export default {
   name: 'access-dialog',
@@ -111,10 +127,10 @@ export default {
     return {
       show: false,
       headers: [
-        { text: this.$t('bpmn.labels.Type'), value: 'type' },
-        { text: this.$t('bpmn.labels.WhoHasAccess'), value: 'groupName' },
-        { text: this.$t('bpmn.labels.Rights'), value: 'rights' },
-        { text: this.$t('bpmn.labels.Actions'), value: 'name', align: 'left', sortable: false }
+        { text: '', value: 'type' },
+        { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
+        ...map(Models.DiagramAccessRights, right => { return { text: this.$t('bpmn.enums.DiagramAccessRights.' + right), value: 'rights' } }),
+        { text: '', value: 'name', align: 'left', sortable: false }
       ],
       pagination: {
         sortBy: 'type',
@@ -210,7 +226,7 @@ export default {
           groupName: item.groupName,
           userId: item.userId,
           userName: item.userName,
-          rights: item.rights.map(right => this.$t('bpmn.enums.DiagramAccessRights.' + right)).join(', '),
+          rights: item.rights,
           allowAccess: item.allowAccess ? this.$t('bpmn.labels.Allow') : this.$t('bpmn.labels.Decline')
         }
       });
@@ -342,5 +358,7 @@ export default {
 }
 </script>
 <style>
-
+.rights-checkbox {
+  margin: 0;
+}
 </style>
