@@ -66,7 +66,7 @@
                    type="flat"
                    class="px-3 mr-2"
                    to="/work-flow"
-        >{{ $t('buttons.workflow') }}</vs-button>
+        >{{ $t('buttons.startWorkflow') }}</vs-button>
 
         <div class="flex" v-if="$route.name === 'task-view'">
           <vs-button v-if="simpleTaskExecuted"

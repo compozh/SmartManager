@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-table v-if="files.length" stripe :data="files" class="mb-4">
+    <vs-table v-if="files.length" stripe :data="files" class="mb-4 attachments-table">
       <template slot="thead">
         <vs-th v-for="(header, index) in tableHeaders"
                :key="index"
@@ -196,7 +196,6 @@ export default {
           const filePath = newFile.response.fileName
           this.attachments.push({fileName, filePath})
         }
-        console.log('upload', this.$refs.upload)
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
           this.$emit('attach', this.attachments)
@@ -231,8 +230,8 @@ export default {
     border: 1px dashed rgba(var(--vs-primary),.5);
   }
 
-  .vs-table-body {
-    z-index: auto;
+  .attachments-table >>> .vs-table--tbody {
+    z-index: 0 !important;
   }
 
   th >>> .vs-table-text {

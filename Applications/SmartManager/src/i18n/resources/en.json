@@ -210,6 +210,7 @@
   },
   "workflow": {
     "businessProcess": "Business process",
+    "newBusinessProcess": "New business process",
     "bpSelectLabel": "Choose a business process"
   },
   "login": {
