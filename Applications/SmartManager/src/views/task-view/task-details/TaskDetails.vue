@@ -214,8 +214,8 @@
                           border-t-0 d-theme-border-grey-light border-solid pb-4">
                 <div class="vx-col flex items-center">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span v-if="childTasks.length" class="self-end">{{ $t('tasks.subTasks').toUpperCase() }}</span>
-                  <span v-else class="self-end">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
+                  <span v-if="childTasks.length" class="pt-1">{{ $t('tasks.subTasks').toUpperCase() }}</span>
+                  <span v-else class="pt-1">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
                 </div>
                 <div class="flex">
                   <vs-button :to="{name: 'task-add', params: {id: task.id}}"
