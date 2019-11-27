@@ -4,17 +4,17 @@
                :class="{'task__opened-task': task.isRead}">
     <!-- TASK ROW 1 : META -->
     <div class="flex w-full items-center">
-      <vs-avatar class="sender__avatar flex-shrink-0 mr-3 border-2 border-solid border-white"
-                 :src="task.performerPhoto"
+      <vs-avatar class="sender__avatar flex-shrink-0 m-0 border-2 border-solid border-white"
+                 :src="task.addedPhoto"
                  size="40px"/>
-      <div class="flex justify-between items-start" style="width: calc(100% - 58px);">
-        <div class="task__details truncate mr-3">
-          <h5 class="mb-1" :class="{'font-semibold': !task.isRead}"
-          >{{ task.performer }}</h5>
-          <h6 class="text-primary">{{ task.name }}</h6>
+      <div class="flex justify-between ml-3" style="width: calc(100% - 58px);">
+        <div class="task__details truncate">
+          <span class="text-primary truncate" :class="{'font-semibold': !task.isRead}"
+          >{{ task.docCaption }}</span>
+          <h6 class="truncate mt-1" >{{ task.addedFio }}</h6>
         </div>
 
-        <div class="task-item__meta flex items-center flex-shrink-0">
+        <div class="task-item__meta flex items-start flex-shrink-0">
           <span v-if="taskInProgress">{{ $t('tasks.deadline') }}: {{ task.dateplan }}</span>
           <span v-if="taskIsDone">{{ $t('tasks.done') }}: {{ task.dateFact }}</span>
         </div>
@@ -22,19 +22,22 @@
     </div>
 
     <!-- TASK ROW 2 : MSG & ACTIONS -->
-    <div class="flex w-full" style="padding-left: 45px;">
-      <div
-        v-if="task.isGenerate && task.name !== task.descript"
-        class="task__message truncate mx-3">
-        <span>{{ task.descript | filter_tags }}</span>
-      </div>
-      <div v-else class="task__message truncate mx-3" style="color: #9c9c9c;">
-        <span>{{ $t('tasks.taskFrom') }}: {{ task.addedFio }}</span>
+    <div class="flex w-full items-end sm:pl-12"
+         :class="{ 'mt-2': (task.descript || task.name) && task.docCaption !== task.descript }">
+      <div class="task__message truncate sm:pl-2">
+        <h6 v-if="task.name !== task.descript"
+            class="text-primary truncate mb-2">{{ task.name }}</h6>
+        <span v-if="task.docCaption !== task.descript"
+              style="color: #9c9c9c;">{{ task.descript | filter_tags }}</span>
       </div>
       <vs-spacer></vs-spacer>
 
       <vx-tooltip :text="$t('icons.favorite')" color="rgb(98, 98, 98, .95)">
         <feather-icon v-if="task.isFavorite" icon="StarIcon" class="mr-2"/>
+      </vx-tooltip>
+
+      <vx-tooltip :text="$t('icons.favorite')" color="rgb(98, 98, 98, .95)">
+        <feather-icon v-if="task.isDocTextHtml" icon="TargetIcon" class="mr-2"/>
       </vx-tooltip>
 
       <vx-tooltip :text="caseItem.name" color="rgb(98, 98, 98, .95)">
