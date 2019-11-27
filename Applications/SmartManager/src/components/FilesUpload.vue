@@ -106,6 +106,10 @@ export default {
     uploadBtn: {
       type: Boolean,
       default: false
+    },
+    uploadAuto: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -178,9 +182,14 @@ export default {
           }, timeOut)
           return prevent()
         }
+        if (this.uploadAuto && !this.$refs.upload.active) {
+          this.startUpload()
+        }
       }
     },
     inputFile(newFile, oldFile) {
+
+      console.log('inputFile', (newFile && oldFile))
       if (newFile && oldFile) {
         // File upload error
         if (newFile.error !== oldFile.error) {
@@ -190,6 +199,7 @@ export default {
             color: 'danger'
           })
         }
+
         // File upload success
         if (newFile && oldFile && newFile.success !== oldFile.success) {
           const fileName = newFile.file.name
