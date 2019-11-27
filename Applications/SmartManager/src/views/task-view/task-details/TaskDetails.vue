@@ -96,11 +96,7 @@
             </div>
           </div>
           <div class="vx-row">
-            <files-upload @attach="getAttachment($event)"
-                          resetBtn
-                          uploadBtn
-                          class="w-full"
-            ></files-upload>
+            <files-upload class="w-full" @attach="getAttachment($event)" uploadAuto/>
           </div>
         </vx-card>
       </div>
