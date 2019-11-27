@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-table v-if="files.length" stripe :data="files" class="mb-4">
+    <vs-table v-if="files.length" stripe :data="files" class="mb-4 attachments-table">
       <template slot="thead">
         <vs-th v-for="(header, index) in tableHeaders"
                :key="index"
@@ -28,13 +28,13 @@
                      color="success"/>
           </vs-td>
           <vs-td class="text-center">
-            <vs-button v-if="$refs.upload && !$refs.upload.uploaded && !loading"
+            <vs-button v-if="$refs.upload && !$refs.upload.uploaded && !loading || item.existing"
                        radius
                        class="text-center"
                        color="#626262"
                        type="flat"
                        icon="close"
-                       @click="remove(item.id, $event)"/>
+                       @click="remove(item.id, item.existing)"/>
           </vs-td>
         </vs-tr>
       </template>
@@ -92,6 +92,9 @@ export default {
     fileUpload
   },
   props: {
+    existingFiles: {
+      type: Array
+    },
     uploading: {
       type: Boolean,
       default: false
@@ -135,11 +138,17 @@ export default {
     }
   },
   watch: {
+    existingFiles(val) {
+      this.files = val
+    },
     uploading(val) {
-      if (this.files.length && val) {
-        this.startUpload()
-      } else {
-        this.$emit('attach', [])
+      if (val) {
+        const newFiles = this.files.filter(file => !file.existing)
+        if (newFiles.length) {
+          this.startUpload()
+        } else {
+          this.$emit('attach', [])
+        }
       }
     }
   },
@@ -193,7 +202,10 @@ export default {
         }
       }
     },
-    remove(id) {
+    async remove(id, existing) {
+      if (existing) {
+        await this.$store.dispatch('sm/attachmentDelete', id)
+      }
       this.files = this.files.filter(i => i.id !== id)
     }
   }
@@ -216,6 +228,10 @@ export default {
 
   .upload-action:hover {
     border: 1px dashed rgba(var(--vs-primary),.5);
+  }
+
+  .attachments-table >>> .vs-table--tbody {
+    z-index: 0 !important;
   }
 
   th >>> .vs-table-text {

@@ -39,6 +39,7 @@ fragment mainTaskFields on Task {
 fragment detailTaskFields on Task {
     htmlDescript
     declarer
+    declarerId
     arso
     keyValue
     kidCopy
@@ -56,6 +57,7 @@ fragment detailTaskFields on Task {
         id
         fileName
         fileExt
+        fileSize
     }
     comments {
         userId
