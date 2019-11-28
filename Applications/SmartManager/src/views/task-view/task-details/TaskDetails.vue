@@ -96,7 +96,10 @@
             </div>
           </div>
           <div class="vx-row">
-            <files-upload class="w-full" @attach="getAttachment($event)" uploadAuto/>
+            <files-upload class="w-full"
+                          @attach="getAttachment($event)"
+                          :uploadErrors="uploadErrors"
+                          uploadAuto/>
           </div>
         </vx-card>
       </div>
@@ -279,6 +282,7 @@ export default {
     submission: {},
     attachments: [],
     filesUploading: false,
+    uploadErrors: [],
     caseListLoading: false,
     caseList: false,
     caseForBind: null
@@ -396,12 +400,17 @@ export default {
         keyValue: this.task.keyValue,
         kidCopy: this.task.kidCopy
       }
-      try {
-        await this.$store.dispatch('sm/addAttachments', {attachments, params})
-        this.attachments.length = 0
-      } catch (e) {
-        console.log('', e.message)
-      }
+      // Returns results list
+      const results = await this.$store.dispatch('sm/addAttachments', {attachments, params})
+      results.forEach(result => {
+        if (!result.success) {
+          this.uploadErrors.push({
+            fileName: result.name,
+            message: result.errorMessage
+          })
+        }
+      })
+      this.attachments.length = 0
     },
     async changeBinding(bind) {
       try {
