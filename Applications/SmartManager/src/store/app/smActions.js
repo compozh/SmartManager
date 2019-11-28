@@ -154,18 +154,31 @@ export default {
     startLoading(true)
     try {
       const response = await api.addAttachmentsInGql(attachments, paramsJson)
-      const result = response.data.smtasksMutation.addAttachments
       stopLoading()
-      if (result.success) {
-        await dispatch('updateInfo', {
-          type: params.type,
-          id: params.id,
-        })
-        notify('success', 'attachTitle', 'attachAddSuccess')
-      } else {
-        notify('warning', 'attachTitle', 'attachAddFail')
-      }
-      return result
+      // Returns results list
+      const results = response.data.smtasksMutation.addAttachments
+      results.forEach(result => {
+        if (result.success) {
+          vs.notify({
+            title: result.name,
+            text: i18n.t('notify.attachAddSuccess'),
+            color: 'success'
+          })
+        } else if (result.errorMessage) {
+          vs.notify({
+            title: result.name,
+            text: result.errorMessage,
+            color: 'warning'
+          })
+        } else {
+          notify('warning', 'attachTitle', 'attachAddFail')
+        }
+      })
+      await dispatch('updateInfo', {
+        type: params.type,
+        id: params.id,
+      })
+      return results
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -222,7 +235,8 @@ export default {
       if (result.success) {
         await dispatch('updateInfo', {
           type: params.type,
-          id: params.id
+          id: params.id,
+          loading: true
         })
         notify('success', 'commentsTitle', 'commentAddSuccess')
       } else {
@@ -416,12 +430,10 @@ export default {
       notify('danger', 'taskTitle', 'taskPinError')
     }
   },
-  async updateInfo({dispatch}, {type, id}) {
+  async updateInfo({dispatch}, {type, id, loading}) {
     if (type === 'TASK' || type === 'DOCUMENT') {
       return await dispatch('getTaskInfo', {
-        taskId: id,
-        loading: true
-      })
+        taskId: id, loading})
     }
     if (type === 'CASE') {
       return await dispatch('getCaseDetails', {
