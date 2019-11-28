@@ -361,10 +361,13 @@ export default {
         const form = this.$refs.form.formio
         try {
           const result = await form.submit()
-          await this.$store.dispatch('sm/changeStatus', {
+          const success = await this.$store.dispatch('sm/changeStatus', {
             ...data,
             CompleteParams: JSON.stringify(result.data)
           })
+          if (data.status === '+' && success) {
+            await this.$router.push('/')
+          }
         } catch (errors) {
           if (errors.length) {
             errors.forEach(e => {
