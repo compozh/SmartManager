@@ -14,7 +14,7 @@
                :state="item.size >= size ? 'danger' : null">
           <vs-td class="w-1/2">{{item.name}}</vs-td>
           <vs-td class="text-center"
-          >{{ (item.size / 1024 / 1024).toFixed(2) }} Mb</vs-td>
+          >{{ fileSize(item.size) }}</vs-td>
           <vs-td  class="text-center">
             <vs-icon v-if="item.size >= size"
                      icon="warning"
@@ -61,8 +61,6 @@
       ref="upload"
       class="upload-action"
       v-model="files"
-      :extensions="extensions"
-      :accept="mimeTypes"
       :multiple="multiple"
       :drop="true"
       :dropDirectory="true"
@@ -119,8 +117,6 @@ export default {
     // eslint-disable-next-line no-undef
     action: appConfig.GrapgQlUrl + 'upload',
     multiple: true,
-    mimeTypes: 'image/*, application/pdf, application/msword, application/excel, text/*',
-    extensions: 'gif, jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, txt, log',
     size: 1048576 * 100, // one file size limit - 100 Mb
     chunk: true,
     minSize: 512000,
@@ -129,6 +125,15 @@ export default {
     headers: {'Upload-Type': 'single'}
   }),
   computed: {
+    fileSize() {
+      return size => {
+        switch (true) {
+          case size < 1024: return `${size} Byte`
+          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
+        }
+      }
+    },
     tableHeaders() {
       return [
         {text: this.$t('table.name'), value: 'name'},
@@ -162,10 +167,6 @@ export default {
     },
     inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
-        // Filter
-        if (!/\.(jpeg|jpe|jpg|gif|png|pdf|doc|docx|xls|xlsx|txt|log)$/i.test(newFile.name)) {
-          return prevent()
-        }
         // В случае если есть файлы с такими же именами то для каждого
         // будет поочередный вывод предупреждений через setTimeout
         let timeOut = 0
@@ -188,8 +189,6 @@ export default {
       }
     },
     inputFile(newFile, oldFile) {
-
-      console.log('inputFile', (newFile && oldFile))
       if (newFile && oldFile) {
         // File upload error
         if (newFile.error !== oldFile.error) {
@@ -209,6 +208,7 @@ export default {
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
           this.$emit('attach', this.attachments)
+          this.$refs.upload.active = this.loading = false
         }
       }
     },
