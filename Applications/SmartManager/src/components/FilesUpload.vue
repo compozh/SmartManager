@@ -14,7 +14,7 @@
                :state="item.size >= size ? 'danger' : null">
           <vs-td class="w-1/2">{{item.name}}</vs-td>
           <vs-td class="text-center"
-          >{{ (item.size / 1024 / 1024).toFixed(2) }} Mb</vs-td>
+          >{{ fileSize(item.size) }}</vs-td>
           <vs-td  class="text-center">
             <vs-icon v-if="item.size >= size"
                      icon="warning"
@@ -125,6 +125,15 @@ export default {
     headers: {'Upload-Type': 'single'}
   }),
   computed: {
+    fileSize() {
+      return size => {
+        switch (true) {
+          case size < 1024: return `${size} Byte`
+          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
+        }
+      }
+    },
     tableHeaders() {
       return [
         {text: this.$t('table.name'), value: 'name'},
