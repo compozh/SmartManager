@@ -36,10 +36,6 @@
         <feather-icon v-if="task.isFavorite" icon="StarIcon" class="mr-2"/>
       </vx-tooltip>
 
-      <vx-tooltip :text="$t('icons.favorite')" color="rgb(98, 98, 98, .95)">
-        <feather-icon v-if="task.isDocTextHtml" icon="TargetIcon" class="mr-2"/>
-      </vx-tooltip>
-
       <vx-tooltip :text="caseItem.name" color="rgb(98, 98, 98, .95)">
         <feather-icon v-if="task.caseId" icon="BriefcaseIcon" class="mr-2"/>
       </vx-tooltip>
