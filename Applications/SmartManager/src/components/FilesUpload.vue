@@ -11,15 +11,18 @@
       <template v-slot="{data}">
         <vs-tr v-for="(item, index) in data"
                :key="index"
-               :state="item.size >= size ? 'danger' : null">
+               :state="item.size >= size || item.error ? 'danger' : null">
           <vs-td class="w-1/2">{{item.name}}</vs-td>
           <vs-td class="text-center"
           >{{ fileSize(item.size) }}</vs-td>
-          <vs-td  class="text-center">
-            <vs-icon v-if="item.size >= size"
-                     icon="warning"
-                     size="small"
-                     color="danger"/>
+          <vs-td  class="text-center cursor-default">
+            <vx-tooltip v-if="item.size >= size || item.error"
+                        :text="item.error" color="danger">
+              <vs-icon icon="warning"
+                       size="small"
+                       color="danger"
+                       class="cursor-pointer"/>
+            </vx-tooltip>
             <span v-else-if="!item.success"
             >{{ parseFloat(item.progress).toFixed(2) }} %</span>
             <vs-icon v-else
@@ -108,6 +111,10 @@ export default {
     uploadAuto: {
       type: Boolean,
       default: false
+    },
+    uploadErrors: {
+      type: Array,
+      default: null
     }
   },
   data: () => ({
@@ -159,6 +166,12 @@ export default {
           this.$emit('attach', [])
         }
       }
+    },
+    uploadErrors(errors) {
+      errors.forEach(error => {
+        const file = this.files.find(file => file.name === error.fileName)
+        file.error = error.message
+      })
     }
   },
   methods: {
