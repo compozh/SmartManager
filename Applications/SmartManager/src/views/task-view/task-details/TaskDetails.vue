@@ -51,12 +51,9 @@
                         style="pointer-events: none;"
                 ></iframe>
               </div>
-              <div v-if="task.descript"
+              <div v-if="task.docTextHtml"
                    class="mail__content break-words mt-8 mb-4"
-                   v-html="task.descript"></div>
-              <div v-if="task.docCaption"
-                   class="mail__content break-words mt-8 mb-4"
-                   v-html="task.docCaption"></div>
+                   v-html="task.docTextHtml"></div>
             </div>
           </div>
 
