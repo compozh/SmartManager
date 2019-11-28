@@ -139,6 +139,7 @@ export default {
           loading: true
         })
         notify('success', 'statusTitle', 'statChangeSuccess')
+        return result.success
       } else {
         notify('warning','statusTitle','statChangeFail')
       }
