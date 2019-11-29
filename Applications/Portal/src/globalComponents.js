@@ -39,6 +39,7 @@ Vue.component('nabu-self-esteem-results', () => import('./views/nabu-pages/nabu-
 Vue.component('nabu-results-assessment-supremo', () => import('./views/nabu-pages/nabu-results-assessment-supremo.vue'))
 Vue.component('nabu-characteristics', () => import('./views/nabu-pages/nabu-characteristics.vue'))
 Vue.component('nabu-norms-of-workwear', () => import('./views/nabu-pages/nabu-norms-of-workwear.vue'))
+Vue.component('nabu-workwear-on-personal', () => import('./views/nabu-pages/nabu-workwear-on-personal.vue'))
 
 
 

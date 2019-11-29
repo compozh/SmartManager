@@ -44,8 +44,8 @@
         "Status": "Status",
         "btnFormPlane": "Create an individual development plan",
         "cantdoFormPlane": "It is impossible to create an individual development plan",
-        "filePathNotFound": "File path not found"
-
+        "filePathNotFound": "File path not found",
+        "getworkwear": "Property received"
     },
     "agGrid":{
         "contains": "Сontains",

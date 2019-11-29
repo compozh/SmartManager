@@ -43,6 +43,10 @@ export default {
   },
   setNormsOfWorkwear(state, value) {
     state.normsOfWorkwear = value
+  },
+  setWorkwearOnPersonal(state, value) {
+    state.workwearOnPersonal = value
   }
+
 }
   

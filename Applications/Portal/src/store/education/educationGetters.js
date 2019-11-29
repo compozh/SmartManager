@@ -77,5 +77,8 @@ export default {
   },
   getNormsOfWorkwear: state => {
     return state.normsOfWorkwear
+  },
+  getWorkwearOnPersonal: state => {
+    return state.workwearOnPersonal
   }
 }
