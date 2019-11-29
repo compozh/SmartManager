@@ -95,7 +95,7 @@ export default {
         display = form.form.display,
         components = JSON.stringify(form.form.components, null, 4),
         settings = JSON.stringify(form.form.settings, null, 4),
-        submission = JSON.stringify(form.submission, null, 4)
+        submission = JSON.stringify(form.submission.data, null, 4)
 
       me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
         params: { eventCode, components, submission, display, settings }}).then(result => {
@@ -158,7 +158,7 @@ export default {
     },
     itemAutocomplete(field, searchValue, callback) {
       var form = this.$refs.formioComponent,
-        submission = JSON.stringify(form.submission, null, 4),
+        submission = JSON.stringify(form.submission.data, null, 4),
         fieldComponent = field.component,
         params = {
           fieldId: fieldComponent.key,
@@ -191,7 +191,7 @@ export default {
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
     }
-    
+
     .formio-component {
         position: relative;
     }
