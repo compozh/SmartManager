@@ -22,6 +22,7 @@
           class="task-content-scroll-area"
           :settings="settings"
           ref="taskListPS"
+          @ps-x-reach-end="scrollPosition"
         >
           <transition-group
             id="task-list"
@@ -30,14 +31,16 @@
             tag="ul"
             appear
           >
-            <li
-              class="cursor-pointer task__task-item"
-              v-for="(task, index) in tasksToPage"
-              :key="String(task.id)"
-              :style="{transitionDelay: (index * 0.1) + 's'}"
-            >
-              <task-list-item :task="task"></task-list-item>
-            </li>
+
+              <li
+                class="cursor-pointer task__task-item"
+                v-for="(task, index) in tasksToPage"
+                :key="String(task.id)"
+                :style="{transitionDelay: (index * 0.1) + 's'}"
+              >
+                <task-list-item :task="task"></task-list-item>
+              </li>
+
           </transition-group>
           <no-data v-if="!this.tasksToPage.length">{{ $t('tasks.noTasks') }}</no-data>
         </VuePerfectScrollbar>
@@ -59,6 +62,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import NoData from '@/components/NoData'
 
 export default {
+  name: 'task-list',
   components: {
     TaskListItem,
     VuePerfectScrollbar,
@@ -67,6 +71,7 @@ export default {
   data: () => ({
     currentPage: 1,
     taskPerPage: 20,
+    listPosition: {},
     windowWidth: window.innerWidth,
     settings: {
       maxScrollbarLength: 60,
@@ -78,13 +83,32 @@ export default {
     $route(to, from) {
       const currentFolder = from.params.code
       const targetFolder = to.params.code
-      this.currentPage = 1
-      if (currentFolder !== targetFolder) {
+      if (to.name === 'task-list' && currentFolder !== targetFolder) {
+        this.currentPage = this.listPosition[targetFolder]
+          ? this.listPosition[targetFolder].page : 1
+        // this.$refs.taskListPS.$el.scrollTop = this.listPosition[targetFolder]
+        //   ? this.listPosition[targetFolder].scrollTop : 0
         this.getTasks(targetFolder)
+      }
+    },
+    currentPage(page) {
+      const folder = this.$route.params.code
+      if (folder) {
+        this.listPosition[folder] = Object
+          .assign({}, this.listPosition[folder], {page})
       }
     }
   },
   computed: {
+    // scrollPosition() {
+    //   const folder = this.$route.params.code
+    //   if (folder) {
+    //     this.listPosition[folder] = Object
+    //       .assign({}, this.listPosition[folder], {
+    //         scrollTop: this.$refs.taskListPS.$el.scrollTop
+    //       })
+    //   }
+    // },
     tasks() {
       return this.$store.getters['sm/tasks']
     },
@@ -123,6 +147,15 @@ export default {
     })
   },
   methods: {
+    // scrollPosition(event) {
+    //   const folder = this.$route.params.code
+    //   if (folder) {
+    //     this.listPosition[folder] = Object
+    //       .assign({}, this.listPosition[folder], {
+    //         scrollTop: event.target.scrollTop
+    //       })
+    //   }
+    //},
     async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)
       const loading = !this.tasks
@@ -142,6 +175,7 @@ export default {
     }
   },
   beforeDestroy: function () {
+    console.log('beforeDestroy', )
     window.removeEventListener('resize', this.handleWindowResize)
   },
 }

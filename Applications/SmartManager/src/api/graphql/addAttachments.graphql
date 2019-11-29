@@ -1,8 +1,9 @@
 mutation ($attachments: String!, $params: String) {
   smtasksMutation {
     addAttachments(attachments: $attachments, params: $params) {
-      id,
-      success,
+      id
+      name
+      success
       errorMessage
     }
   }

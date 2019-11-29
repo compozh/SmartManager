@@ -447,7 +447,9 @@ export default {
             text: this.$t('notify.applyRightsSuccess'),
             color: 'success'
           })
-          await this.$router.push('/')
+          if (this.$route.name !== 'task-list') {
+            await this.$router.push('/')
+          }
           window.location.reload()
         } else {
           this.$vs.notify({

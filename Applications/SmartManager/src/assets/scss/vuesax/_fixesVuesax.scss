@@ -569,7 +569,9 @@ h3.vs-navbar--title {
 }
 
 .vs-avatar--con-img {
+  display: flex;
+  align-items: center;
   img {
-    height: 100%;
+    min-height: 100%;
   }
 }

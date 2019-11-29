@@ -77,11 +77,10 @@
             </div>
           </div>
           <div class="vx-row">
-            <files-upload @attach="getAttachment($event)"
-                          resetBtn
-                          uploadBtn
-                          class="w-full"
-            ></files-upload>
+            <files-upload class="w-full"
+                          @attach="getAttachment($event)"
+                          :uploadErrors="uploadErrors"
+                          uploadAuto/>
           </div>
         </vx-card>
       </div>
@@ -157,6 +156,7 @@ export default {
       wheelSpeed: 0.50,
     },
     filesUploading: false,
+    uploadErrors: []
   }),
   computed: {
     tasks() {
@@ -188,12 +188,17 @@ export default {
         id: this.$route.params.id,
         type: 'CASE',
       }
-      try {
-        await this.$store.dispatch('sm/addAttachments', {attachments, params})
-        this.attachments.length = 0
-      } catch (e) {
-        console.log('', e.message)
-      }
+      // Returns results list
+      const results = await this.$store.dispatch('sm/addAttachments', {attachments, params})
+      results.forEach(result => {
+        if (!result.success) {
+          this.uploadErrors.push({
+            fileName: result.name,
+            message: result.errorMessage
+          })
+        }
+      })
+      this.attachments.length = 0
     }
   }
 }

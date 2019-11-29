@@ -11,15 +11,18 @@
       <template v-slot="{data}">
         <vs-tr v-for="(item, index) in data"
                :key="index"
-               :state="item.size >= size ? 'danger' : null">
+               :state="item.size >= size || item.error ? 'danger' : null">
           <vs-td class="w-1/2">{{item.name}}</vs-td>
           <vs-td class="text-center"
-          >{{ (item.size / 1024 / 1024).toFixed(2) }} Mb</vs-td>
-          <vs-td  class="text-center">
-            <vs-icon v-if="item.size >= size"
-                     icon="warning"
-                     size="small"
-                     color="danger"/>
+          >{{ fileSize(item.size) }}</vs-td>
+          <vs-td  class="text-center cursor-default">
+            <vx-tooltip v-if="item.size >= size || item.error"
+                        :text="item.error" color="danger">
+              <vs-icon icon="warning"
+                       size="small"
+                       color="danger"
+                       class="cursor-pointer"/>
+            </vx-tooltip>
             <span v-else-if="!item.success"
             >{{ parseFloat(item.progress).toFixed(2) }} %</span>
             <vs-icon v-else
@@ -61,8 +64,6 @@
       ref="upload"
       class="upload-action"
       v-model="files"
-      :extensions="extensions"
-      :accept="mimeTypes"
       :multiple="multiple"
       :drop="true"
       :dropDirectory="true"
@@ -106,6 +107,14 @@ export default {
     uploadBtn: {
       type: Boolean,
       default: false
+    },
+    uploadAuto: {
+      type: Boolean,
+      default: false
+    },
+    uploadErrors: {
+      type: Array,
+      default: null
     }
   },
   data: () => ({
@@ -115,8 +124,6 @@ export default {
     // eslint-disable-next-line no-undef
     action: appConfig.GrapgQlUrl + 'upload',
     multiple: true,
-    mimeTypes: 'image/*, application/pdf, application/msword, application/excel, text/*',
-    extensions: 'gif, jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, txt, log',
     size: 1048576 * 100, // one file size limit - 100 Mb
     chunk: true,
     minSize: 512000,
@@ -125,6 +132,15 @@ export default {
     headers: {'Upload-Type': 'single'}
   }),
   computed: {
+    fileSize() {
+      return size => {
+        switch (true) {
+          case size < 1024: return `${size} Byte`
+          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
+        }
+      }
+    },
     tableHeaders() {
       return [
         {text: this.$t('table.name'), value: 'name'},
@@ -150,6 +166,12 @@ export default {
           this.$emit('attach', [])
         }
       }
+    },
+    uploadErrors(errors) {
+      errors.forEach(error => {
+        const file = this.files.find(file => file.name === error.fileName)
+        file.error = error.message
+      })
     }
   },
   methods: {
@@ -158,10 +180,6 @@ export default {
     },
     inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
-        // Filter
-        if (!/\.(jpeg|jpe|jpg|gif|png|pdf|doc|docx|xls|xlsx|txt|log)$/i.test(newFile.name)) {
-          return prevent()
-        }
         // В случае если есть файлы с такими же именами то для каждого
         // будет поочередный вывод предупреждений через setTimeout
         let timeOut = 0
@@ -178,6 +196,9 @@ export default {
           }, timeOut)
           return prevent()
         }
+        if (this.uploadAuto && !this.$refs.upload.active) {
+          this.startUpload()
+        }
       }
     },
     inputFile(newFile, oldFile) {
@@ -190,6 +211,7 @@ export default {
             color: 'danger'
           })
         }
+
         // File upload success
         if (newFile && oldFile && newFile.success !== oldFile.success) {
           const fileName = newFile.file.name
@@ -199,6 +221,7 @@ export default {
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
           this.$emit('attach', this.attachments)
+          this.$refs.upload.active = this.loading = false
         }
       }
     },
