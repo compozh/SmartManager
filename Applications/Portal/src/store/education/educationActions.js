@@ -130,6 +130,14 @@ export default {
     }
   },
   
+  async loadWorkwearOnPersonal({commit}) {
+    let result = await EducationApi.getWorkwearOnPersonal()
+    if (result) {
+      commit('setWorkwearOnPersonal',result.data.portalNabuQuery.workWearOnPersonal)
+    }
+  },
+
+  
 
   setCurrentPageNabu({commit}, page) {
     commit('setCurrentPageNabu', page)

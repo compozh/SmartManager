@@ -14,6 +14,7 @@ export default {
   trainingSchedule: undefined,
   individualPlanReport: undefined,
   characteristic: undefined,
-  normsOfWorkwear: undefined
+  normsOfWorkwear: undefined,
+  workwearOnPersonal: undefined
 }
   
