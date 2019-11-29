@@ -1,7 +1,7 @@
 <template>
   <div>
     		<v-card class='mx-2 my-2' hover height='278px'>
-          <!-- Course card header -->
+          <!-- Module card header -->
 					<v-layout v-bind:style="{'background-color': moduleData.backgroundColor}">
 						<v-flex ml-2 mt-2 mb-2>
 							<v-img
@@ -21,10 +21,10 @@
 						</v-flex>
 					</v-layout>
 
-          <!-- Card text -->
+          <!-- Modlue text -->
           <v-layout>
-            <v-card-text class="px-4 py-2">
-              <div style='height:118px;overflow:hidden' class='mt-0 ml-3'>
+            <v-card-text class="px-6 py-2">
+              <div style='height:118px;overflow:hidden' class='px-4'>
   						  <h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{moduleData.type}}</h4>
   						  <h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
   						  	@click='$router.push({name: "LMSMODULEDETAILS", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
