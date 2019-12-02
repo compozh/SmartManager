@@ -4,7 +4,7 @@
       <v-flex xs12 sm6 d-flex>
         <v-select
           :items="workCenterItems()"
-          label="Рабочий центр"
+          :label="this.$t('mes.labels.WorkCenter')"
         ></v-select>
       </v-flex>
       <v-btn class="setup-installations-button" outlined @click="onClickFixWorkCenter" text color="#326DA8">{{this.$t('mes.buttons.Fixate')}}</v-btn>
