@@ -38,8 +38,14 @@ export default {
   qualities(state) {
     return state.qualities
   },
+  documents(state) {
+    return state.documents
+  },
   initializeQualities(state) {
     return state.initializeQualities
+  },
+  initializeDocuments(state) {
+    return state.initializeDocuments
   },
   installations(state) {
     return state.installations
@@ -58,6 +64,9 @@ export default {
   },
   qualityFormio(state) {
     return state.qualityFormio
+  },
+  documentFormio(state) {
+    return state.documentFormio
   },
   createDowntimeFormio(state) {
     return state.createDowntimeFormio
@@ -91,6 +100,9 @@ export default {
   },
   selectedQuality(state) {
     return state.selectedQuality
+  },
+  selectedDocument(state) {
+    return state.selectedDocument
   },
   initialWorkCenter(state) {
     return state.initialWorkCenter

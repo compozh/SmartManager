@@ -52,6 +52,9 @@ export default {
   setQualities(state, qualities) {
     state.qualities = qualities
   },
+  setDocuments(state, documents) {
+    state.documents = documents
+  },
   setInstallations(state, installations) {
     state.installations = installations
   },
@@ -77,8 +80,14 @@ export default {
   setQualityFormio(state, formio) {
     state.qualityFormio = formio
   },
+  setDocumentFormio(state, formio) {
+    state.documentFormio = formio
+  },
   setInitializeQualities(state, initializeQualities) {
     state.initializeQualities = initializeQualities
+  },
+  setInitializeDocuments(state, initializeDocuments) {
+    state.initializeDocuments = initializeDocuments
   },
   setCreateDowntimeFormio(state, formio) {
     state.createDowntimeFormio = formio
@@ -88,6 +97,9 @@ export default {
   },
   resetQualityFormio(state) {
     state.qualityFormio = {}
+  },
+  resetDocumentFormio(state) {
+    state.documentFormio = {}
   },
   removeProduction(state, production) {
     let index = state.usersProductionEvents.indexOf(production)
@@ -125,6 +137,9 @@ export default {
   setSelectedQuality(state, selectedQuality) {
     state.selectedQuality = selectedQuality
   },
+  setSelectedDocument(state, selectedDocument) {
+    state.selectedDocument = selectedDocument
+  },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
   },
@@ -156,11 +171,13 @@ export default {
     state.tasks = []
     state.downtimes = []
     state.qualities = []
+    state.documents = []
     state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.selectedDowntime = null
     state.selectedQuality = null
+    state.selectedDocument = null
     state.workCenterProductionEvents = []
   }
 }

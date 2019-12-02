@@ -105,6 +105,20 @@ export default {
       }
     )
   },
+  async downloadDocuments({ commit, getters }, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let documents = await api.getDocumentsFromGql(retrieveParams)
+          if (getters.documents.length) {
+            commit('setDocuments', getters.documents.concat(documents))
+          } else {
+            commit('setDocuments', documents)
+            commit('setInitializeDocuments', true)
+          }
+        }
+      }
+    )
+  },
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -264,6 +278,18 @@ export default {
       linearLoader: true
     })
   },
+  async initializeDocumentFormio({ commit }, { formCode, workCenter, documentId }) {
+    commit('resetDocumentFormio')
+    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getDocumentFormioFromGql(formCode, { workCenterCode: workCenter.code , id: documentId }, 'network-only')
+      },
+      successAction: async result => {
+        commit('setDocumentFormio', result)
+         },
+      linearLoader: true
+    })
+  },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
@@ -325,6 +351,30 @@ export default {
          commit('setQualities', [])
          commit('setInitializeQualities', false)
          me.dispatch('mes/downloadQualities', { processTypeCode: qualityProcessType, searchDateTime: currentDate, direction: 1 })
+         if(successAction) {
+           successAction();
+         }
+       }
+    })
+    commit('closeDialogLinearLoader')
+  },
+
+  async documentFormIoSubmit({ commit, getters }, { formCode, workCenter, submission, document, processType, successAction }) {
+    var me = this,
+       currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+    commit('setDialogLinearLoaderMessage', 'Регистрация')
+    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+       queryAction: async () => {
+         const res = await api.documentFormioSubmitGql( formCode, submission, {
+           workCenterCode: workCenter.code,
+           id: document.id
+         })
+         return res
+       },
+       successAction: async () => {
+         commit('setDocuments', [])
+         commit('setInitializeDocuments', false)
+         me.dispatch('mes/downloadDocuments', { processTypeCode: processType, searchDateTime: currentDate, direction: 1 })
          if(successAction) {
            successAction();
          }
