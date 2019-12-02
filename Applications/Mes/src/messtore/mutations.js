@@ -25,6 +25,9 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
+  setDynamicPages(state, dynamicPages) {
+    state.dynamicPages = dynamicPages
+  },
   setUserName(state, userName) {
     state.userName = userName
   },

@@ -28,6 +28,7 @@ export default {
     tasks: false
   },
   properties: null,
+  dynamicPages: null,
   userName: null,
   workCenter: null,
   workCenterFixationData: {},

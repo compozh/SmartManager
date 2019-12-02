@@ -8,6 +8,9 @@ export default {
   properties(state) {
     return state.properties
   },
+  dynamicPages(state) {
+    return state.dynamicPages
+  },
   userName(state) {
     return state.userName
   },

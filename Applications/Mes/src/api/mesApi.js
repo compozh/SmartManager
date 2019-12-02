@@ -25,6 +25,7 @@ import downtimeGetTypes from './graphql/downtimeGetTypes.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
+import mobilityProperties from './graphql/mobilityProperties.graphql'
 
 //formio
 import productionFormio from './graphql/formio/productionForm.graphql'
@@ -65,6 +66,14 @@ export class MesApi {
       query: gql` ${ticket}`
     })
     return result.data.mes.ticket
+  }
+
+  async getDynamicPagesFromGql(webAppId) {
+    const result = await getClient().query({
+      query: gql` query ($webAppId: String) ${mobilityProperties}`,
+      variables: { webAppId }
+    })
+    return result.data.mes.mobilityProperties
   }
 
   async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {

@@ -19,6 +19,14 @@ export default {
       }
     })
   },
+  async initializeDynamicPages({commit}) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        const result = await api.getDynamicPagesFromGql("MOBILITYWEB")
+        commit('setDynamicPages', result)
+      }
+    })
+  },
   async initializeTicket({commit}) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
