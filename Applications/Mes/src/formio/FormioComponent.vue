@@ -4,6 +4,7 @@
       :form=formioComponents
       :submission=formioSubmission
       :options=options
+      language="ru"
       @submit=onSubmit
       @change=onChange
       ref="formioComponent"
@@ -27,7 +28,13 @@ export default {
   data() {
     return {
       changedData: {},
-      options: { noAlerts: true },
+      options: {
+        noAlerts: true,
+        language: 'ru',
+        i18n: {
+          ru: this.$t('mes.formioForm')
+        }
+       },
       qrScanerVisible: false,
       qrScanerCallback: () => {}
     }
@@ -170,8 +177,8 @@ export default {
           searchValue,
           submission
         }
-        
-      this.$store.dispatch('formio/callItemAutocomplete', 
+
+      this.$store.dispatch('formio/callItemAutocomplete',
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);

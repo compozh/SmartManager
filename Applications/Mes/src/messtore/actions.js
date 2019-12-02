@@ -259,9 +259,9 @@ export default {
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
-  async productionFormIoSubmit({ commit }, { workCenter, submission, task }) {
+  async productionFormIoSubmit({ commit }, { workCenter, submission, task, message }) {
     var me = this
-    commit('setDialogLinearLoaderMessage', 'Регистрация выработки')
+    commit('setDialogLinearLoaderMessage', message)
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
 
@@ -279,10 +279,10 @@ export default {
     })
     commit('closeDialogLinearLoader')
   },
-  async downtimeFormIoSubmit({ commit }, { workCenter, submission, successAction }) {
+  async downtimeFormIoSubmit({ commit }, { workCenter, submission, successAction, message }) {
      var me = this,
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
-     commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
+     commit('setDialogLinearLoaderMessage', message)
      await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
         queryAction: async () => {
           const res = await api.downtimeFormioSubmitGql(workCenter.downtimeRegistrationFormCode, submission, {
@@ -300,11 +300,11 @@ export default {
      })
      commit('closeDialogLinearLoader')
   },
-  async qualityFormIoSubmit({ commit, getters }, { formCode, workCenter, submission, quality, successAction }) {
+  async qualityFormIoSubmit({ commit, getters }, { formCode, workCenter, submission, quality, successAction, message }) {
     var me = this,
        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
        qualityProcessType = getters.properties.qualityProcessType
-    commit('setDialogLinearLoaderMessage', 'Регистрация качества')
+    commit('setDialogLinearLoaderMessage', message)
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
        queryAction: async () => {
          const res = await api.qualityFormioSubmitGql( formCode, submission, {

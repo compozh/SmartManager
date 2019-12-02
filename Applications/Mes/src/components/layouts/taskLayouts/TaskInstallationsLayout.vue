@@ -11,7 +11,7 @@
         ref="installationCards"
       />
 
-      <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">Нет установленных партий</span>
+      <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">{{this.$t('mes.labels.AbsentInstalledParties')}}</span>
 
   </v-layout>
 </template>
