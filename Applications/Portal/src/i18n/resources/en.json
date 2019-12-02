@@ -41,7 +41,11 @@
         "Duty": "Duty",
         "Priority": "Priority",
         "Provider": "Approx. the provider",
-        "Status": "Status"
+        "Status": "Status",
+        "btnFormPlane": "Create an individual development plan",
+        "cantdoFormPlane": "It is impossible to create an individual development plan",
+        "filePathNotFound": "File path not found",
+        "getworkwear": "Property received"
     },
     "agGrid":{
         "contains": "Сontains",
@@ -52,6 +56,8 @@
         "notEqual": "Not equal",
         "andCondition": "AND",
         "orCondition": "OR",
-        "NoRowsToShow": "No rows to show"
+        "NoRowsToShow": "No rows to show",
+        "filter": "Filter...",
+        "noDataAvailabl": "No data Available"
     }
 }

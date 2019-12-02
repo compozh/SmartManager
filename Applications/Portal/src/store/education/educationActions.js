@@ -5,8 +5,11 @@ export default {
   async loadStrategicGoals({commit}) {
     let result = await EducationApi.getStrategicGoals()
     if (result) {
-      let strategicGoals = CommonDataAndHeaders(result.data.portalNabuQuery.strategicGoals)
+      let strategicGoals = CommonDataAndHeaders(result.data.portalNabuQuery.strategicGoal)
       commit('setStrategicGoals', strategicGoals)
+
+      let employeeOriginal = result.data.portalNabuQuery.emplOriginal.data
+      commit('setEmployeeOriginal', employeeOriginal)
     }
 
   },
@@ -77,6 +80,10 @@ export default {
     let result = await EducationApi.getEducationResult()
     if (result) {
       let trainingResult = CommonDataAndHeaders(result.data.portalNabuQuery.trainingResult)
+      trainingResult.data.forEach(el => {
+        el.trainingDateStart = moment(el.trainingDateStart).format('DD.MM.YYYY')
+        el.trainingDateEnd = moment(el.trainingDateEnd).format('DD.MM.YYYY')
+      })
       commit('setEducationResult', trainingResult)
     }
   },
@@ -88,6 +95,53 @@ export default {
       commit('setEducationAdditionalTraining', additionalTraining)
     }
   },
+
+  async loadTrainingSchedule({commit}) {
+    let result = await EducationApi.getTrainingSchedule()
+    if (result) {
+      let trainingSchedule = CommonDataAndHeaders(result.data.portalNabuQuery.trainingSchedule)
+      trainingSchedule.data.forEach(el => {
+        el.trainingDateEnd = moment(el.trainingDateEnd).format('DD.MM.YYYY')
+        el.trainingDateStart = moment(el.trainingDateStart).format('DD.MM.YYYY')
+        return el
+      })
+      commit('setTrainingSchedule', trainingSchedule)
+    }
+  },
+
+  async loadIndividualPlanReport({commit}) {
+    let result = await EducationApi.getIndividualPlanReport()
+    if (result) {
+      commit('setIndividualPlanReport',result.data.portalNabuQuery.individualPlanReport)
+    }
+  },
+
+  async loadCharacteristic({commit}) {
+    let result = await EducationApi.getСharacteristic()
+    if (result) {
+      commit('setCharacteristic',result.data.portalNabuQuery.sizesForPersonnel)
+    }
+  },
+
+  async loadNormsOfWorkwear({commit}) {
+    let result = await EducationApi.getNormsOfWorkwear()
+    if (result) {
+      commit('setNormsOfWorkwear',result.data.portalNabuQuery.workWearNormasForPersonnel)
+    }
+  },
+  
+  async loadWorkwearOnPersonal({commit}) {
+    let result = await EducationApi.getWorkwearOnPersonal()
+    if (result) {
+      commit('setWorkwearOnPersonal',result.data.portalNabuQuery.workWearOnPersonal)
+    }
+  },
+
+  
+
+  setCurrentPageNabu({commit}, page) {
+    commit('setCurrentPageNabu', page)
+  }
 }
 
 function CommonDataAndHeaders(type) {

@@ -7,15 +7,16 @@
                   <!-- select and start business-process -->
                   <form @submit.prevent>
                     <autocomplete :items="businessProcesses"
-                                     :multiple="false"
-                                     :loading="bpListLoading"
-                                     v-model="businessProcess"
-                                     @input="getFormDefinition"
-                                     label="name"
-                                     :title="$t('workflow.businessProcess')"
-                                     :placeholder="$t('workflow.bpSelectLabel') + '...'"
-                                     name="businessProcess"
-                                     v-validate="'required'"
+                                  :multiple="false"
+                                  :loading="bpListLoading"
+                                  v-model="businessProcess"
+                                  @input="getFormDefinition"
+                                  label="name"
+                                  :title="$t('workflow.businessProcess')"
+                                  :placeholder="$t('workflow.bpSelectLabel') + '...'"
+                                  name="businessProcess"
+                                  v-validate="'required'"
+                                  icon="ExternalLinkIcon"
                     />
                     <span v-if="errors.has('businessProcess')"
                           class="required-text"
@@ -78,13 +79,15 @@ export default {
   }),
   computed: {
     form() {
-      // return require('./testForm')
-      return this.formDefinition
-        ? JSON.parse(this.formDefinition.form)
-        : {}
+      if (this.formDefinition) {
+        return JSON.parse(this.formDefinition, function (key, value) {
+          return key === 'components' ? JSON.parse(value) : value
+        })
+      }
+      return {}
     },
     userId() {
-      return this.$store.state.auth.currentUser.UserData.LoginData.UserId
+      return this.$store.getters.loggedUserId
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -103,7 +106,7 @@ export default {
     },
     async getFormDefinition(bp) {
       const result = await this.$store.dispatch(
-        'sm/getFormDefinition', bp.deployId
+        'sm/getFormDefinition', bp.procDefId
       )
       this.formDefinition = result || null
     },
@@ -152,7 +155,7 @@ export default {
     },
     async startBusinessProcess(data) {
       const processData = {
-        ProcessDefinitionId: this.formDefinition.procDefId,
+        ProcessDefinitionId: this.businessProcess.procDefId,
         BusinessKey: `USER[${this.userId}]`,
         Variables: this.getVariables(data)
       }

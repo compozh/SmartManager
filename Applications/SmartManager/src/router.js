@@ -62,6 +62,17 @@ let router = new VueRouter({
         {
           path: '/task-add/:id?',
           name: 'task-add',
+          props: true,
+          component: () => import('./views/task-add/TaskAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/task/:id/edit',
+          name: 'task-edit',
+          props: true,
           component: () => import('./views/task-add/TaskAdd.vue'),
           meta: {
             rule: 'admin'
@@ -72,6 +83,42 @@ let router = new VueRouter({
           path: '/work-flow',
           name: 'work-flow',
           component: () => import('./views/work-flow/WorkFlow.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/cases/:id',
+          name: 'case-list',
+          component: () => import('./views/case-list/CaseList.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case/:id',
+          name: 'case-view',
+          component: () => import('./views/case-view/CaseView.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case-add',
+          name: 'case-add',
+          component: () => import('./views/case-add/CaseAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case/:id/edit',
+          name: 'case-edit',
+          component: () => import('./views/case-add/CaseAdd.vue'),
           meta: {
             rule: 'admin'
           },

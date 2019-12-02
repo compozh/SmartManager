@@ -5,7 +5,7 @@
   />
 
      <v-layout class="mes-task-main-layout">
-        <v-flex class="mes-task-main-flex">
+        <v-flex class="mes-task-main-flex" :key="this.productionFormioKey">
           <formio-component
             ref="formioBuilder"
             @formSubmit=formSubmit
@@ -20,6 +20,11 @@
 <script>
 export default {
   name: 'mes-task-main-layout',
+  data() {
+    return {
+      productionFormioKey: 0
+    }
+  },
   computed: {
     dragResizeMode() {
       return this.$store.getters['mes/dragResizeMode']
@@ -31,6 +36,7 @@ export default {
       return this.$store.getters['mes/workCenter']
     },
     productionFormio() {
+      this.productionFormioKey += 1
       return this.$store.getters['mes/productionFormio']
     }
   },

@@ -7,7 +7,7 @@
         <router-link tag="h1" :to="{ name:'MESROOT'}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
+        <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
       </v-flex>
 
       <!-- Состояние РЦ -->
@@ -160,25 +160,14 @@ export default {
         return
       }
       this.$store.commit('mes/setInitialWorkCenter', false)
-      this.$store.commit('mes/setDialogLinearLoaderMessage', this.$t('mes.dialogs.WorkCenterChange'))
-
-      const workCentersFixed =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
-      var currentWorkCetnerFixation = false
-      if (this.workCenter) {
-        for (let fixation of workCentersFixed) {
-          if (fixation.code == newWorkCenter.code) {
-            this.$store.commit('mes/setWorkCenterFixationData', fixation)
-            currentWorkCetnerFixation = true
-          }
-        }
+      this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
+      const prevWorkCenterFixation =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
+      if (prevWorkCenterFixation && prevWorkCenterFixation.length) {
+        this.$store.commit('mes/resetState')
+        await this.$store.dispatch('mes/unfixWorkCenterForWorker', { fixationId: prevWorkCenterFixation[0].fixationId })
       }
-
-      this.$store.commit('mes/resetState')
-      if (!currentWorkCetnerFixation) {
-        await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
-      } else {
-        this.$store.commit('mes/setWorkCenter', newWorkCenter)
-      }
+      await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
+      this.$store.commit('mes/setWorkCenter', newWorkCenter)
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
     },
@@ -194,6 +183,9 @@ export default {
       })
 
       return newGuid
+    },
+    refreshApp() {
+      this.$router.go()
     }
   }
 }
@@ -260,6 +252,7 @@ a {
   color: #326da8;
   font-size: 30px;
   font-weight: 700;
+  cursor: pointer;
 }
 .user-info-desc {
   display: flex;

@@ -31,10 +31,10 @@ export default {
   },
   created() {
     var me = this;
-    eventBus.$on(events.propertiesPanel.createForm, (callback) => {
+    eventBus.$on(events.formio.createForm, (callback) => {
         me.createForm(callback)
     })
-    eventBus.$on(events.propertiesPanel.editForm, (formCode) => {
+    eventBus.$on(events.formio.editForm, (formCode) => {
         me.editForm(formCode)
     })
   },
@@ -63,7 +63,7 @@ export default {
         if(!Object.keys(me.formDefinition).length) {
             await me.$store.dispatch('formio/createForm', formDefinition).then(result => {
                 if(result.success && me.callback) {
-                    me.callback(formDefinition.formCode)
+                    me.callback(formDefinition.formCode, formDefinition.name)
                 }
                 me.callback = null
             })

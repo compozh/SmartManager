@@ -1,0 +1,14 @@
+{
+  bpmnquery {
+    getAccessRecordsForDiagram(diagramId: $diagramId) {
+      allowAccess,
+      groupId,
+      groupName,
+      recordId,
+      rights,
+      type,
+      userId,
+      userName
+    }
+  }
+}

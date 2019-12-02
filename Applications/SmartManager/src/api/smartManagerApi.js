@@ -6,12 +6,22 @@ import gql from 'graphql-tag'
 // Queries
 import folders from './graphql/folders.graphql'
 import tasks from './graphql/tasks.graphql'
+import cases from './graphql/cases.graphql'
+import caseDetails from './graphql/caseDetails.graphql'
+import caseCreate from './graphql/caseCreate.graphql'
+import caseUpdate from './graphql/caseUpdate.graphql'
+import caseFolderCreate from './graphql/caseFolderCreate.graphql'
+import binding from './graphql/binding.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
 import fileUrl from './graphql/fileUrl.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
+import updateTask from './graphql/updateTask.graphql'
+import taskPin from './graphql/taskPin.graphql'
+import taskDelete from './graphql/taskDelete.graphql'
 import changeStatus from './graphql/changeStatus.graphql'
 import addAttachments from './graphql/addAttachments.graphql'
+import attachmentDelete from './graphql/attachmentDelete.graphql'
 import changeStage from './graphql/changeStage.graphql'
 import addComment from './graphql/addComment.graphql'
 import businessProcesses from './graphql/businessProcesses.graphql'
@@ -120,6 +130,18 @@ export class SmartManagerApi {
     }
   }
 
+  static async updateTaskInGql(taskData) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${updateTask}`,
+          variables: {taskData}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
   static async changeTaskStatusInGql(status) {
     try {
       return await getClient('smartmanager')
@@ -132,12 +154,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async addAttachmentsInGql(taskId, attachments) {
+  static async addAttachmentsInGql(attachments, params) {
     try {
       return await getClient('smartmanager')
         .mutate({
           mutation: gql`${addAttachments}`,
-          variables: {taskId, attachments}
+          variables: {attachments, params}
         })
     } catch (e) {
       throw new Error(e.message)
@@ -156,7 +178,7 @@ export class SmartManagerApi {
     }
   }
 
-  static async addTaskCommentToGql(comment, params) {
+  static async addCommentToGql(comment, params) {
     try {
       return await getClient('smartmanager')
         .mutate({
@@ -179,12 +201,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async getFormDefinitionFromGql(deployId) {
+  static async getFormDefinitionFromGql(procDefId) {
     try {
       return await getClient('WORKFLOW')
         .query({
           query: gql`${formDefinition}`,
-          variables: {deployId}
+          variables: {procDefId}
         })
     } catch (e) {
       throw new Error(e.message)
@@ -197,6 +219,113 @@ export class SmartManagerApi {
         .query({
           query: gql`${startBusinessProcess}`,
           variables: {processData}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getCasesFromGql() {
+    try {
+      return await getClient('smartmanager')
+        .query({
+          query: gql`${cases}`
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getCaseDetailsFromGql(caseId) {
+    try {
+      return await getClient('smartmanager')
+        .query({
+          query: gql`${caseDetails}`,
+          variables: {caseId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async caseCreateInGql(newCase) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseCreate}`,
+          variables: {newCase}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async updateCaseInGql(caseData) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseUpdate}`,
+          variables: {caseData}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async caseFolderCreateInGql(folderName) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${caseFolderCreate}`,
+          variables: {folderName}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async changeBindingInGql(caseId, taskId, bind) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${binding}`,
+          variables: {caseId, taskId, bind}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async taskDeleteInGql(taskId) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${taskDelete}`,
+          variables: {taskId}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async taskPinInGql(taskId, pin) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${taskPin}`,
+          variables: {taskId, pin}
+        })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async attachmentDeleteInGql(id) {
+    try {
+      return await getClient('smartmanager')
+        .mutate({
+          mutation: gql`${attachmentDelete}`,
+          variables: {id}
         })
     } catch (e) {
       throw new Error(e.message)

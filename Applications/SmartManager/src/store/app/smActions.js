@@ -31,15 +31,14 @@ export default {
       notify('danger', 'foldersTitle', 'foldersError')
     }
   },
-  async getTasks({commit}, payload) {
-    const folderId = payload.folderId
+  async getTasks({commit}, {folderId, loading}) {
     commit('setSearch', null)
-    startLoading(payload.loading)
+    startLoading(loading)
     try {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
       )
-      !payload.loading || stopLoading()
+      !loading || stopLoading()
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
@@ -49,28 +48,26 @@ export default {
       notify('danger', 'taskListTitle', 'taskListError')
     }
   },
-  async getTaskInfo({commit}, payload) {
-    const taskId = payload.id
-    startLoading(payload.loading)
+  async getTaskInfo({commit}, {taskId, loading}) {
+    startLoading(loading)
     try {
       const result = await api.getTaskInfoFromGql(taskId)
-      stopLoading()
       const taskInfo = result.data.smtasks.taskDetails
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
-
+      !loading || stopLoading()
     } catch (e) {
       stopLoading()
       console.log(e.message)
       notify('danger', 'taskTitle', 'taskError')
     }
   },
-  async getFileUrl({commit}, {id, ext, taskId}) {
+  async getFileUrl({commit}, {fileId, fileExt, id: taskOrCaseId}) {
     startLoading(true)
     try {
-      const result = await api.getFileUrlFromGql(id, ext)
+      const result = await api.getFileUrlFromGql(fileId, fileExt)
       const fileUrl = result.data.smtasks.fileUrl
-      commit('setFileUrl', {id, fileUrl, taskId})
+      commit('setFileUrl', {fileId, fileUrl, taskOrCaseId})
       stopLoading()
       return fileUrl
     } catch (e) {
@@ -98,17 +95,34 @@ export default {
       stopLoading()
       if (result.success) {
         await dispatch('getFolders')
-        notify(
-          'success',
-          'taskTitle',
-          'taskAddSuccess')
+        notify('success','taskTitle','taskAddSuccess')
       } else {
-        notify('warning', 'taskTitle', 'taskAddFail')
+        notify('warning','taskTitle','taskAddFail')
       }
       return result
     } catch (e) {
       stopLoading()
       notify('danger', 'taskTitle', 'taskAddError')
+      throw Error
+    }
+  },
+  async updateTask({dispatch}, taskData) {
+    const taskDataJson = JSON.stringify(taskData)
+    startLoading(true)
+    try {
+      const response = await api.updateTaskInGql(taskDataJson)
+      const result = response.data.smtasksMutation.taskUpdating
+      stopLoading()
+      if (result.success) {
+        dispatch('getTaskInfo', {taskId: taskData.id})
+        notify('success','taskTitle','updateSuccess')
+      } else {
+        notify('warning','taskTitle','updateFail')
+      }
+      return result.success
+    } catch (e) {
+      stopLoading()
+      notify('danger', 'taskTitle', 'updateError')
       throw Error
     }
   },
@@ -121,15 +135,13 @@ export default {
       const result = response.data.smtasksMutation.changeStatus
       if (result.success) {
         await dispatch('getTaskInfo', {
-          id: payload.id,
+          taskId: payload.id,
           loading: true
         })
         notify('success', 'statusTitle', 'statChangeSuccess')
+        return result.success
       } else {
-        notify(
-          'warning',
-          'statusTitle',
-          'statChangeFail')
+        notify('warning','statusTitle','statChangeFail')
       }
     } catch (e) {
       stopLoading()
@@ -137,28 +149,58 @@ export default {
       notify('danger', 'statusTitle', 'statChangeError')
     }
   },
-  async addAttachments({dispatch, state}, payload) {
+  async addAttachments({dispatch}, {attachments, params}) {
+    const paramsJson = JSON.stringify(params)
     startLoading(true)
-    const taskId = state.taskInfo.id
-    const attachments = JSON.stringify(payload)
     try {
-      const response = await api.addAttachmentsInGql(taskId, attachments)
-      const result = response.data.smtasksMutation.addAttachments
+      const response = await api.addAttachmentsInGql(attachments, paramsJson)
+      stopLoading()
+      // Returns results list
+      const results = response.data.smtasksMutation.addAttachments
+      results.forEach(result => {
+        if (result.success) {
+          vs.notify({
+            title: result.name,
+            text: i18n.t('notify.attachAddSuccess'),
+            color: 'success'
+          })
+        } else if (result.errorMessage) {
+          vs.notify({
+            title: result.name,
+            text: result.errorMessage,
+            color: 'warning'
+          })
+        } else {
+          notify('warning', 'attachTitle', 'attachAddFail')
+        }
+      })
+      await dispatch('updateInfo', {
+        type: params.type,
+        id: params.id,
+      })
+      return results
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'attachTitle', 'attachAddError')
+    }
+  },
+  async attachmentDelete(context, id) {
+    startLoading(true)
+    try {
+      const response = await api.attachmentDeleteInGql(id)
+      const result = response.data.smtasksMutation.attachmentDelete
       stopLoading()
       if (result.success) {
-        await dispatch('getTaskInfo', {
-          taskId,
-          loading: true
-        })
-        notify('success', 'attachTitle', 'attachAddSuccess')
+        notify('success', 'attachTitle', 'attachDelSuccess')
       } else {
-        notify('warning', 'attachTitle', 'attachAddFail')
+        notify('warning', 'attachTitle', 'attachDelFail')
       }
       return result
     } catch (e) {
       stopLoading()
       console.log(e.message)
-      notify('danger', 'attachTitle', 'attachAddError')
+      notify('danger', 'attachTitle', 'attachDelError')
     }
   },
   async changeStage({dispatch}, payload) {
@@ -168,21 +210,14 @@ export default {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
       stopLoading()
-      console.log('result', result)
       if (result.success) {
         await dispatch('getTaskInfo', {
           taskId: payload.id,
           loader: true
         })
-        notify(
-          'success',
-          'stageTitle',
-          'stageChangeSuccess')
+        notify('success','stageTitle','stageChangeSuccess')
       } else {
-        notify(
-          'warning',
-          'stageTitle',
-          'stageChangeFail')
+        notify('warning','stageTitle','stageChangeFail')
       }
     } catch (e) {
       stopLoading()
@@ -190,18 +225,18 @@ export default {
       notify('danger', 'stageTitle', 'stageChangeError')
     }
   },
-  async addTaskComment({commit}, payload) {
-    const comment = payload.comment
-    const params = JSON.stringify(payload.params)
+  async addComment({dispatch}, {comment, params}) {
+    const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.addTaskCommentToGql(comment, params)
+      const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
       stopLoading()
       if (result.success) {
-        commit('addComment', {
-          id: payload.params.id,
-          text: comment
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id,
+          loading: true
         })
         notify('success', 'commentsTitle', 'commentAddSuccess')
       } else {
@@ -222,16 +257,16 @@ export default {
       notify('danger', 'bpTitle', 'bpError')
     }
   },
-  async getFormDefinition(context, deployId) {
+  async getFormDefinition(context, procDefId) {
     startLoading(true)
     try {
-      const response = await api.getFormDefinitionFromGql(deployId)
+      const response = await api.getFormDefinitionFromGql(procDefId)
       const result = response.data.workFlowQuery.formDefinition
       stopLoading()
       if (result.Success) {
         return result.Data
       }
-      notify('warning', 'bpTitle', 'bpError')
+      notify('warning', 'bpTitle', result.ErrorMessage)
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -254,6 +289,157 @@ export default {
       stopLoading()
       console.log(e.message)
       notify('danger', 'bpTitle', 'bpError')
+    }
+  },
+  async getCases({commit}, loading) {
+    startLoading(loading)
+    try {
+      const result = await api.getCasesFromGql()
+      !loading || stopLoading()
+      const cases = result.data.smtasks.cases
+      commit('setCases', cases)
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseListError')
+    }
+  },
+  async getCaseDetails({commit}, {caseId}) {
+    startLoading(true)
+    try {
+      const result = await api.getCaseDetailsFromGql(caseId)
+      stopLoading()
+      const caseDetails = result.data.smtasks.caseDetails
+      const caseItem = {[caseId]: caseDetails}
+      commit('setCaseDetails', caseItem)
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseDetailsError')
+    }
+  },
+  async caseCreate(context, newCase) {
+    const newCaseJson = JSON.stringify(newCase)
+    startLoading(true)
+    try {
+      const response = await api.caseCreateInGql(newCaseJson)
+      stopLoading()
+      notify('success', 'casesTitle', 'caseCreateSuccess')
+      return response.data.smtasksMutation.newCase
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseError')
+    }
+  },
+  async caseUpdate({dispatch}, caseData) {
+    const caseDataJson = JSON.stringify(caseData)
+    startLoading(true)
+    try {
+      const response = await api.updateCaseInGql(caseDataJson)
+      const result = response.data.smtasksMutation.caseUpdate
+      stopLoading()
+      if (result.success) {
+        await dispatch('getCaseDetails', {caseId: caseData.id})
+        notify('success','casesTitle','updateSuccess')
+      } else {
+        notify('warning','casesTitle','updateFail')
+      }
+      return result.success
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'casesTitle', 'caseUpdateError')
+    }
+  },
+  async caseFolderCreate({dispatch}, folderName) {
+    startLoading(true)
+    try {
+      await api.caseFolderCreateInGql(folderName)
+      await dispatch('getFolders')
+      stopLoading()
+      notify('success', 'foldersTitle', 'folderCreateSuccess')
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'foldersTitle', 'folderCreateError')
+    }
+  },
+  async changeBinding({dispatch}, {caseId, taskId, bind}) {
+    startLoading(true)
+    try {
+      const response = await api.changeBindingInGql(caseId, taskId, bind)
+      const result = response.data.smtasksMutation.binding
+      stopLoading()
+      if (result.success) {
+        await dispatch('getTaskInfo', {taskId, loader: true})
+      } else {
+        notify('warning', 'taskTitle', 'bindingFail')
+      }
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'bindingError')
+    }
+  },
+  async taskDelete({dispatch, state}, taskId) {
+    startLoading(true)
+    try {
+      const response = await api.taskDeleteInGql(taskId)
+      const result = response.data.smtasksMutation.taskDelete
+      stopLoading()
+      if (result.success) {
+        // If deleted task has parent - update parent
+        const parentId = state.taskInfo[taskId].parentTask.id
+        if (parentId) {
+          await dispatch('getTaskInfo', { taskId: parentId })
+        }
+        // If deleted task bind to case - update case
+        const caseId = state.taskInfo[taskId].caseId
+        if (caseId) {
+          await dispatch('getCaseDetails', { caseId: caseId })
+        }
+        // TODO: If deleted task has child tasks - update child tasks
+        notify('success', 'taskTitle', 'taskDelSuccess')
+      } else {
+        notify('warning', 'taskTitle', 'taskDelFail')
+      }
+      return result.success
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'taskDelError')
+      return false
+    }
+  },
+  async taskPin({dispatch}, {taskId, pin}) {
+    startLoading(true)
+    try {
+      const response = await api.taskPinInGql(taskId, pin)
+      const result = response.data.smtasksMutation.taskPin
+      stopLoading()
+      if (result.success) {
+        await dispatch('getTaskInfo', {taskId, loader: true})
+        notify('success', 'taskTitle', 'taskPinSuccess')
+      } else {
+        notify('warning', 'taskTitle', 'taskPinFail')
+      }
+    } catch (e) {
+      console.log(e.message)
+      stopLoading()
+      notify('danger', 'taskTitle', 'taskPinError')
+    }
+  },
+  async updateInfo({dispatch}, {type, id, loading}) {
+    if (type === 'TASK' || type === 'DOCUMENT') {
+      return await dispatch('getTaskInfo', {
+        taskId: id, loading})
+    }
+    if (type === 'CASE') {
+      return await dispatch('getCaseDetails', {
+        caseId: id,
+        loading: true
+      })
     }
   }
 }

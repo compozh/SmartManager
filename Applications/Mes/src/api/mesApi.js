@@ -57,14 +57,14 @@ export class MesApi {
     const result = await getClient().query({
       query: gql` ${properties}`
     })
-    return result
+    return result.data.mes.properties
   }
 
   async getTicketFromGql () {
     const result = await getClient().query({
       query: gql` ${ticket}`
     })
-    return result
+    return result.data.mes.ticket
   }
 
   async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
@@ -242,7 +242,7 @@ export class MesApi {
       variables: { formCode, properties },
       fetchPolicy: 'network-only'
     })
-    return result.data.mes.qualityFormio
+    return result.data.mes.getFormio
   }
 
   async downtimeFormioSubmitGql(formCode, submission, properties) {

@@ -1,5 +1,10 @@
 <template>
-  <AgGridView :education="dataEducation" v-if="dataEducation"></AgGridView>
+<div v-show="dataEducation">
+  <div class="btn-container" >
+    <vs-button size="large" type="line" icon-pack="feather" icon="icon-clipboard" @click="getFormPlan">{{$t('Education.btnFormPlane')}}</vs-button>
+  </div>
+  <AgGridView :education="dataEducation" v-show="dataEducation"></AgGridView>
+</div>
 </template>
 
 <script>
@@ -12,12 +17,37 @@ export default {
     dataEducation() {
       return this.$store.getters['education/getEducationPlan']
     },
+    fileLink() {
+      return this.$store.getters['education/getIndividualPlanReport']
+    }
+
   },
   created() {
-    if (this.$store.getters['education/getEducationPlan']) {
-      return
+    let object = {
+      load: 'loadEducationPlan',
+      clear: 'setEducationPlan'
     }
+    this.$store.dispatch('education/setCurrentPageNabu', object)
     this.$store.dispatch('education/loadEducationPlan')
+    this.$store.dispatch('education/loadIndividualPlanReport')
+  },
+  methods: {
+    getFormPlan() {
+      if (!this.fileLink) {
+        this.$vs.notify({
+          title: this.$t('Education.cantdoFormPlane'),
+          text: this.$t('Education.filePathNotFound'),
+          color: 'warning'
+        })
+        return
+      }
+      window.open(this.fileLink)
+    }
   }
 }
 </script>
+<style scoped>
+.btn-container{
+  margin-bottom: 10px;
+}
+</style>

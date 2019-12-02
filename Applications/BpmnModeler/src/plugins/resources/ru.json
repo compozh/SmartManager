@@ -11,12 +11,17 @@
 		"AddProcess": "Добавить диаграмму",
 		"AddFolder": "Добавить папку",
 		"Import": "Импортировать",
-		"ExportSvg": "Экспортировать в формате svg",
-		"ExportBpmn": "Экспортировать в формате bpmn",
-		"ExportDmn": "Экспортировать в формате dmn",
+		"ExportSvg": "Экспортировать в формате SVG",
+		"ExportBpmn": "Экспортировать в формате BPMN",
+		"ExportDmn": "Экспортировать в формате DMN",
+		"ExportPng": "Экспортировать в формате PNG",
 		"Deploy": "Опубликовать",
 		"Copy": "Создать по образцу",
-		"Select": "Выбрать"
+		"Select": "Выбрать",
+		"Share": "Общий доступ",
+		"Edit": "Корректировать",
+		"Add": "Добавить",
+		"OK": "ОК"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -53,7 +58,29 @@
 		"Designer": "Конструктор",
 		"Preview": "Просмотр",
 		"FormContructor": "Конструктор формы",
-		"DisplayType": "Тип отображения"
+		"Access": "Доступ",
+		"Allow": "Разрешить",
+		"Allowed": "Разрешен",
+		"Decline": "Запретить",
+		"Declined": "Запрещён",
+		"AccessRights": "Права доступа",
+		"Group": "Группа",
+		"User": "Пользователь",
+		"Sharing": "Общий доступ",
+		"Rights": "Права",
+		"Actions": "Действия",
+		"SelectOne": "Выберите хотя бы один элемент",
+		"AddRights": "Добавить права доступа",
+		"EditRights": "Изменить права доступа",
+		"RemoveRights": "Удалить права доступа",
+		"NoData": "Нет данных",
+		"DisplayType": "Тип отображения",
+		"NoReadAccess": "У вас нет прав на просмотр этой диаграммы",
+		"WhoHasAccess": "Кому",
+		"All": "Все",
+		"Users": "Пользователи",
+		"Groups": "Группы",
+		"UserOrGroup": "Пользователь или группа"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -70,8 +97,26 @@
 		"ActionWithoutForm": "К этому действию не привязана форма",
 		"RuleWithoutForm": "К этому правилу не привязана форма",
 		"InitializeSignalR": "Ошибка инициализации SignalR",
+		"AccessRecordsNotLoaded": "Не удалось загрузить настройки доступа",
+		"RequestError": "Ошибка при выполнении запроса",
 		"InputCodeForm": "Введите код формы",
-		"RequiredInputField": "Обезательное поле"
+		"RequiredInputField": "Обезательное поле",
+		"AccessError": "Не удалось предоставить доступ для {identity}"
+	},
+	"enums": {
+		"AccessType": {
+			"USER": "Пользователь",
+			"GROUP": "Группа",
+			"ALL": "Все"
+		},
+		"DiagramAccessRights": {
+			"READ": "Просмотр",
+			"WRITE": "Корректировка",
+			"DELETE": "Удаление",
+			"SHARE": "Выдача прав доступа",
+			"DEPLOY": "Публикация",
+			"EXECUTE": "Запуск процесса"
+		}
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",
@@ -189,6 +234,8 @@
 		"element {element} referenced by {referenced}#{property} not yet drawn": "элемент {element}, на который ссылается {referenced}#{property} ещё не отрисован",
 		"already rendered {element}": "{element} уже отрисован",
 		"failed to import {element}": "{element} не удалось импортировать",
+		"Form field id must not be empty": "Идентификатор поля формы не должен быть пустым",
+		"Form field id already used in form data": "Этот идентификатор уже используется",
 
 		"General": "Общие",
 		"Id": "Идентификатор",
@@ -237,6 +284,7 @@
 		"BusinessKnowledgeModel": "Модель бизнес-знаний",
 
 		"Forms": "Формы",
+		"Simple form": "Простая форма",
 		"Form Key": "Идентификатор формы",
 		"Create form": "Создать форму",
 		"Edit form": "Корректировать форму",
@@ -284,6 +332,8 @@
 		"Action": "Действие",
 		"Config": "Настройка",
 		"Task creation rule": "Правило создания задачи",
-		"Item description": "Описание элемента"
+		"Item description": "Описание элемента",
+
+		"Colorize": "Изменить цвет"
 	}
 }

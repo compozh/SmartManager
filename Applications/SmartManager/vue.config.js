@@ -1,14 +1,6 @@
 const path = require('path')
 module.exports = {
   chainWebpack: config => {
-    //const svgRule = config.module.rule('svg')
-
-    //svgRule.uses.clear()
-
-    // svgRule
-    //   .use('vue-svg-loader')
-    //   .loader('vue-svg-loader')
-
     config.module
       .rule('graphql')
       .test(/\.(graphql|gql)$/)
@@ -32,6 +24,9 @@ module.exports = {
     devtool: 'eval-source-map'
   },
   pwa: {
+    name: 'Smart Manager',
+    short_name: 'Smart Manager',
+    themeColor: '#7367F0',
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       swSrc: 'src/service-worker.js'

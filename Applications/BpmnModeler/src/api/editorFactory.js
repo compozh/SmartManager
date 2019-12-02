@@ -1,7 +1,5 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
-import BpmnViewer from 'bpmn-js/lib/Viewer';
-import bpmnPropertiesPanelModule from 'bpmn-js-properties-panel';
-import bpmnPropertiesProviderModule from '../bpmnModules/provider/workflow/';
+import BpmnViewer from 'bpmn-js/lib/NavigatedViewer';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
 import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
@@ -16,13 +14,15 @@ import dmnPropertiesProviderModule from 'dmn-js-properties-panel/lib/provider/ca
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
 import minimapModule from 'diagram-js-minimap';
-import ProcessType from './models/ProcessType';
+import DiagramType from './models/DiagramType';
+import ContextPadProvider from '../bpmnModules/context-pad/';
+import propertiesPanelCommands from '../bpmnModules/properties-panel/cmd';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
   switch (type) {
-  case ProcessType.BPMN:
-    return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, propertiesPanelContainer, translate);
-  case ProcessType.DMN:
+  case DiagramType.BPMN:
+    return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, translate);
+  case DiagramType.DMN:
     return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, propertiesPanelContainer, translate);
   default:
     return null;
@@ -35,18 +35,33 @@ function createTranslationModule(translate) {
   }
 }
 
-function createBpmnModeler(editorContainer, propertiesPanelContainer, translate) {
+function createBpmnModeler(editorContainer, translate) {
   return new BpmnModeler({
     container: editorContainer,
     keyboard: {
       bindTo: document
     },
-    propertiesPanel: {
-      parent: propertiesPanelContainer
+    additionalModules: [
+      propertiesPanelCommands,
+      camundaExtensionModule,
+      minimapModule,
+      createTranslationModule(translate),
+      ContextPadProvider
+    ],
+    moddleExtensions: {
+      camunda: camundaBpmnModdle,
+      workflow: workflowBpmnModdle
+    }
+  });
+}
+
+function createBpmnViewer(editorContainer, translate) {
+  return new BpmnViewer({
+    container: editorContainer,
+    keyboard: {
+      bindTo: document
     },
     additionalModules: [
-      bpmnPropertiesPanelModule,
-      bpmnPropertiesProviderModule,
       camundaExtensionModule,
       minimapModule,
       createTranslationModule(translate)
@@ -54,7 +69,7 @@ function createBpmnModeler(editorContainer, propertiesPanelContainer, translate)
     moddleExtensions: {
       camunda: camundaBpmnModdle,
       workflow: workflowBpmnModdle
-    }
+    }   
   });
 }
 
@@ -106,37 +121,32 @@ function createDmnModeler(editorContainer, propertiesPanelContainer, translate) 
   });
 }
 
-function createBpmnViewer(editorContainer, translate) {
-  return new BpmnViewer({
+function createDmnViewer(editorContainer, translate) {
+  return new DmnViewer({
     container: editorContainer,
     common: {
       keyboard: {
         bindTo: document
       },
-      additionalModules: [
-        camundaExtensionModule,
-        createTranslationModule(translate)
-      ],
       moddleExtensions: {
-        camunda: camundaDmnModdle,
-        workflow: workflowBpmnModdle
+        camunda: camundaDmnModdle
       }
     },
-    
-  });
-}
-
-function createDmnViewer(editorContainer, translate) {
-  return new DmnViewer({
     drd: {
       additionalModules: [
-        drdAdapterModule,
+        minimapModule,
         createTranslationModule(translate)
       ]
     },
-    container: editorContainer,
-    moddleExtensions: {
-      camunda: camundaDmnModdle
-    }
+    decisionTable: {
+      additionalModules: [
+        createTranslationModule(translate)
+      ]
+    },
+    literalExpression: {
+      additionalModules: [
+        createTranslationModule(translate)
+      ]
+    },
   });
 }

@@ -1,8 +1,0 @@
-{
-  bpmnqueryMutation {
-    deployProcess(id: $id) {
-      success
-      message
-    }
-  }
-}

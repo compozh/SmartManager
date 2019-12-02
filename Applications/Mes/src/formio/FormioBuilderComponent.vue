@@ -195,7 +195,12 @@ export default {
 
         font-family: Roboto;
     }
-        .formio-builder-component-class {
+    
+    .formio-component {
+        position: relative;
+    }
+
+    .formio-builder-component-class {
         overflow-y: auto !important;
         position: absolute;
         top: 145px;

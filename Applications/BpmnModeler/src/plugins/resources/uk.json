@@ -11,12 +11,17 @@
 		"AddProcess": "Додати діаграму",
 		"AddFolder": "Додати папку",
 		"Import": "Імпортувати",
-		"ExportSvg": "Експортувати в форматі svg",
-		"ExportBpmn": "Експортувати в форматі bpmn",
-		"ExportDmn": "Експортувати в форматі dmn",
+		"ExportSvg": "Експортувати в форматі SVG",
+		"ExportBpmn": "Експортувати в форматі BPMN",
+		"ExportDmn": "Експортувати в форматі DMN",
+		"ExportPng": "Експортувати в форматі PNG",
 		"Deploy": "Опублікувати",
 		"Copy": "Додати за зразком",
-		"Select": "Вибрати"
+		"Select": "Вибрати",
+		"Share": "Загальний доступ",
+		"Edit": "Редагувати",
+		"Add": "Додати",
+		"OK": "ОК"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -47,12 +52,40 @@
 		"Id": "Ідентифікатор",
 		"SelectAction": "Виберіть дію",
 		"SelectForm": "Виберіть форму",
+		"EnterTaskParams": "Введіть параметри задачі",
 		"SelectTaskCreationRule": "Виберіть правило створення задачі",
 		"Code": "Код",
 		"Designer": "Конструктор",
 		"Preview": "Перегляд",
 		"FormContructor": "Конструктор форми",
-		"DisplayType": "Тип відображення"
+		"Add": "Додати",
+		"Save": "Зберегти",
+		"Edit": "Редагувати",
+		"Delete": "Видалити",
+		"Cancel": "Відмінити",
+		"Access": "Доступ",
+		"Allow": "Дозволити",
+		"Allowed": "Дозволений",
+		"Decline": "Заборонити",
+		"Declined": "Заборонений",
+		"AccessRights": "Права доступу",
+		"Group": "Група",
+		"User": "Користувач",
+		"Sharing": "Загальний доступ",
+		"Rights": "Права",
+		"Actions": "Дії",
+		"SelectOne": "Виберіть хоча б один елемент",
+		"AddRights": "Додати права доступу",
+		"EditRights": "Змінити права доступу",
+		"RemoveRights": "Видалити права доступу",
+		"NoData": "Немає даних",
+		"DisplayType": "Тип відображення",
+		"NoReadAccess": "У вас відсутні права на перегляд цієї діаграми",
+		"WhoHasAccess": "Кому",
+		"All": "Всі",
+		"Users": "Користувачі",
+		"Groups": "Групи",
+		"UserOrGroup": "Користувач чи группа"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -69,8 +102,26 @@
 		"ActionWithoutForm": "До цієї дії не прив'язана форма",
 		"RuleWithoutForm": "До цього правила не прив'язана форма",
 		"InitializeSignalR": "Не вдалося ініціалізувати SignalR",
+		"AccessRecordsNotLoaded": "Не удалось завантажити налаштування доступу",
+		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
-		"RequiredInputField": "Обов'язкове поле"
+		"RequiredInputField": "Обов'язкове поле",
+		"AccessError": "не вдалося надати доступ для {identity}"
+	},
+	"enums": {
+		"AccessType": {
+			"USER": "Користувач",
+			"GROUP": "Група",
+			"ALL": "Всі"
+		},
+		"DiagramAccessRights": {
+			"READ": "Перегляд",
+			"WRITE": "Редагування",
+			"DELETE": "Видалення",
+			"SHARE": "Видача прав доступу",
+			"DEPLOY": "Публікація",
+			"EXECUTE": "Запуск"
+		}
 	},
 	"modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
@@ -188,6 +239,8 @@
 		"element {element} referenced by {referenced}#{property} not yet drawn": "елемент {element}, на який посилається {referenced}#{property} ще не розміщено",
 		"already rendered {element}": "{element} уже розміщено",
 		"failed to import {element}": "{element} не вдалося імпортувати",
+		"Form field id must not be empty": "Ідентифікатор поля форми не може бути пустим",
+		"Form field id already used in form data": "Цей ідентифікатор вже використовується",
 
 		"General": "Загальні",
 		"Id": "Ідентифікатор",
@@ -236,16 +289,17 @@
 		"BusinessKnowledgeModel": "Модель бизнес-знаний",
 
 		"Forms": "Форми",
+		"Simple form": "Проста форма",
 		"Form Key": "Ідентифікатор форми",
 		"Create form": "Створити форму",
 		"Edit form": "Редагувати форму",
 		"Form Fields": "Поля форми",
 		"Business Key": "Бізнес-ідентифікатор",
-		"Form Field": "Поля форми",
-		"ID": "Ідентифакатор",
+		"Form Field": "Поле форми",
+		"ID": "Ідентифікатор",
 		"Type": "Тип",
 		"Label": "Назва",
-		"Default Value": "Значення по замовчуванню",
+		"Default Value": "Значення за замовчуванням",
 		"Values": "Значення",
 		"Add Value": "Додати значення",
 		"Validation": "Валідація",
@@ -273,7 +327,7 @@
 		"long": "число",
 		"boolean": "логічний",
 		"date": "дата",
-		"enum": "перелік",
+		"enum": "перечислення значень",
 
 		"Result Variable": "Змінна з результатом",
 		"Task properties": "Параметри задачі",
@@ -283,6 +337,8 @@
 		"Action": "Дія",
 		"Config": "Налаштування",
 		"Task creation rule": "Правило створення задачі",
-		"Item description": "Опис елемента"
+		"Item description": "Опис елемента",
+
+		"Colorize": "Змінити колір"
 	}
 }

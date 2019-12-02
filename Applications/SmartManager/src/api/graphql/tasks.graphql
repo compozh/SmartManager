@@ -10,11 +10,9 @@ fragment mainTaskFields on Task {
   id
   name
   descript
-  performerId
-  performer
-  performerPhoto
+  addedFio
+  addedPhoto
   dateplan
-  dateAdd
   status
   isMy
   myControl
@@ -24,4 +22,7 @@ fragment mainTaskFields on Task {
   priority
   dateFact
   isRead
+  caseId
+  isFavorite
+  docCaption
 }

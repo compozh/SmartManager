@@ -1,26 +1,32 @@
 <template>
   <div>
     <label>{{ title }}</label>
-    <multiselect
-      :value="value"
-      @input="$emit('input', $event)"
-      :loading="loading"
-      :disabled="loading"
-      :placeholder="placeholder"
-      :label="label"
-      :track-by="label"
-      :options="items"
-      :multiple="multiple"
-      :hideSelected="true"
-      :showLabels="false"
+    <multiselect :value="value"
+                 @input="$emit('input', $event)"
+                 :loading="loading"
+                 :disabled="disabled"
+                 :placeholder="placeholder"
+                 :label="label"
+                 :track-by="label"
+                 :options="items"
+                 :multiple="multiple"
+                 :hideSelected="true"
+                 :showLabels="false"
+                 :avatar="avatar"
+                 :icon="icon"
     >
       <template slot="option" slot-scope="props">
         <div class="flex items-center">
-          <vs-avatar
-            v-if="props.option.photo"
-            size="small"
-            :src="props.option.photo"
+          <vs-avatar v-if="avatar"
+                     size="30px"
+                     :src="props.option.photo"
+                     class="m-0 ml-2"
           />
+          <feather-icon :icon="icon"
+                        class="ml-2 w-5 h-5"
+                        v-else
+          >
+          </feather-icon>
           <span class="ml-3 option__title">{{ props.option[label] }}</span>
         </div>
       </template>
@@ -40,9 +46,12 @@ export default {
     placeholder: String,
     multiple: Boolean,
     loading: Boolean,
+    disabled: Boolean,
     label: String,
     title: String,
-    value: [Object, Array]
+    value: [Object, Array],
+    avatar: Boolean,
+    icon: String
   }
 }
 </script>

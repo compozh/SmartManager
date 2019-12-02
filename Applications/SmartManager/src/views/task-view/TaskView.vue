@@ -95,11 +95,11 @@ export default {
   },
   methods: {
     async getTask() {
-      const id = +this.$route.params.id
+      const taskId = +this.$route.params.id
       if (!this.task.id) {
         try {
           await this.$store.dispatch('sm/getTaskInfo', {
-            id, loading: true
+            taskId, loading: true
           })
         } catch (e) {
           console.log(e.message)

@@ -1,0 +1,20 @@
+{
+portalNabuQuery{
+  workWearOnPersonal{
+    data{
+      name
+      quantity
+      unitName
+      exploitationTime
+      nomenklatureNumber
+    }
+    headers{
+      field
+      filter
+      minWidth
+      sortable
+      headerName
+    }
+  }
+}
+}

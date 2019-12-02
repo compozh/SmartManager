@@ -9,6 +9,12 @@ export default {
   criterialEvaluation: undefined,
   selfEsteemResults: undefined,
   resultsAssessmentSupremo: undefined,
-  
+  currentPageNabu: undefined,
+  employeeOriginal: undefined,
+  trainingSchedule: undefined,
+  individualPlanReport: undefined,
+  characteristic: undefined,
+  normsOfWorkwear: undefined,
+  workwearOnPersonal: undefined
 }
   

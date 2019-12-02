@@ -57,9 +57,6 @@ export default {
       }, message: this.$t('mes.dialogs.RegistrationDowntime')})
     },
     initializeCreateDowntimeFormio() {
-      if (Object.keys(this.createDowntimeFormio).length) {
-        return
-      }
       let workCenter = this.$parent.workCenter
       this.$store.dispatch('mes/initializeCreateDowntimeFormio', workCenter)
     }

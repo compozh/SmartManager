@@ -1,0 +1,193 @@
+<template>
+  <modeler-layout :process="process" :loading="loading" :saved="saved" :canShowPanel="canShowPanel" :noAccess="noAccess"
+    :canMinimap="canMinimap" @minimap="onMinimap" 
+    :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
+    :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
+  >
+    <template #modeler>
+      <div class="workflow-modeler" ref="container"></div>
+    </template>
+    <template #propertiesPanel>
+      <properties-panel :modeler="modeler" :propertiesProvider="propertiesProvider"/>
+    </template>
+  </modeler-layout>
+</template>
+<script>
+import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+
+import { debounce } from 'throttle-debounce';
+import ModelerLayout from './ModelerLayout';
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
+import { CancellationToken, SavingContext, editorFactory } from '../../api';
+import { editorToolbarMixin, exportMixin } from '../mixins';
+import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
+
+export default {
+  name: 'bpmn-modeler',
+  mixins: [ exportMixin, editorToolbarMixin ],
+  components: { ModelerLayout },
+  data() {
+    return {
+      modeler: null,
+      loading: false,
+      saved: false,
+      cancellationToken: new CancellationToken(),
+      onElementChanged: null,
+      canShowPanel: true,
+      propertiesProvider: null
+    };
+  },
+  mounted() {
+    if (this.process) {
+      this.createModeler();
+      this.onActiveModelChanged();
+    }
+  },
+  computed: {
+    process() {
+      const activeItem = this.$store.state.bpmn.activeItem;
+      if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.BPMN) {
+        return activeItem;
+      }
+      return null;
+    },
+    noAccess() {
+      return this.process && !this.process.hasRight(DiagramAccessRights.Read);
+    }
+  },
+  beforeDestroy: function () {
+    this.destroyModeler();
+  },
+  watch: {
+    process(value, oldValue) {
+      if (!value) {
+        this.destroyModeler();
+      }
+      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(DiagramAccessRights.Write) !== oldValue.hasRight(DiagramAccessRights.Write))) {
+        this.createModeler();
+      }
+      this.onActiveModelChanged();
+    }
+  },
+  methods: {
+    createModeler() {
+      this.destroyModeler();
+      const canEdit = this.process.hasRight(DiagramAccessRights.Write);
+      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
+      this.modeler.on('commandStack.changed', this.onCanUndoRedo);
+      this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
+      this.onEditorChanged();
+    },    
+    async loadXml() {
+      if (!this.process || !this.modeler) {
+        return;
+      }
+      this.loading = true;
+      if (!this.cancellationToken.isCancelled) {
+        this.cancellationToken.cancel();
+      }
+      const debounced = debounce(500, async (cancellationToken) => {
+        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
+        if (cancellationToken.isCancelled) {
+          return;
+        }
+        if (xml === false) {
+          this.loading = false;
+          // TODO: display exception
+          return;
+        }
+        if (!xml || xml === '') {
+          this.modeler.createDiagram(() => {
+            this.loading = false;
+          });        
+        } else {
+          this.modeler.importXML(xml, (err) => {
+            this.loading = false;
+            if (err) {
+              console.error(err);
+              // TODO: display exception
+              this.modeler.createDiagram();
+              this.loading = false;
+            }
+          });
+        }
+      });
+
+      this.cancellationToken = new CancellationToken(debounced);
+      debounced(this.cancellationToken);
+    },
+    setXML(id, xml) {
+      this.$store.dispatch('bpmn/setXml', { id, xml }).then(success => {
+        if (success) {
+          this.saved = true;
+          setTimeout(() => this.saved = false, 1000);
+        } else {
+          // TODO: display exception
+        }
+      });
+    },
+    onActiveModelChanged() {
+      if (!this.process || !this.modeler || this.noAccess) {
+        return;
+      }
+      this.modeler.clear();
+      if (this.onElementChanged) {
+        this.modeler.off('element.changed', this.onElementChanged);
+      }
+      this.onElementChanged = debounce(1000, function() {
+        this.saveXML();
+      });
+      this.modeler.on('element.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
+      this.loadXml();
+    },
+    translate(template, replacements) {
+      const translationPrefix = 'bpmn.modeler.';
+      replacements = replacements || {};
+
+      for (let replacement in replacements) {
+        // Попробовать перевести замены
+        const translationKey = translationPrefix + replacements[replacement];
+        const translation = this.$t(translationKey);
+        if (translation != translationKey) {
+          replacements[replacement] = translation;
+        }
+      }
+
+      // Перевести шаблон
+      const translationKey = translationPrefix + template;
+      const translation = this.$t(translationKey, replacements);
+
+      if (translation !== translationKey) {
+        return translation;
+      } else {
+        return template.replace(/{([^}]+)}/g, function(_, key) {
+          return replacements[key] || '{' + key + '}';
+        });
+      }
+    },
+    destroyModeler() {
+      if (this.modeler) {
+        this.modeler.destroy();
+        this.modeler = null;
+      }
+    },
+    getEditorModule(module) {
+      if (!this.modeler) {
+        return false;
+      }
+      try {
+        return this.modeler.get(module);
+      } catch (error) {
+        return false;
+      }
+    }
+  }
+};
+</script>
+<style>
+
+</style>

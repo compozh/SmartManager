@@ -1,0 +1,8 @@
+{
+  bpmnqueryMutation {
+    deployDiagram(id: $id) {
+      success
+      message
+    }
+  }
+}

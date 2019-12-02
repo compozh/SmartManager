@@ -27,6 +27,7 @@ Vue.component(VxInputGroup.name, VxInputGroup)
 
 import './views/account-personal-info/main'
 
+Vue.component('nabu-traning-schedule', () => import('./views/nabu-pages/nabu-traning-schedule.vue'))
 Vue.component('nabu-additional-training', () => import('./views/nabu-pages/nabu-additional-training.vue'))
 Vue.component('nabu-curriculum', () => import('./views/nabu-pages/nabu-curriculum.vue'))
 Vue.component('nabu-learning', () => import('./views/nabu-pages/nabu-learning.vue'))
@@ -36,6 +37,9 @@ Vue.component('nabu-results-interim-evaluation', () => import('./views/nabu-page
 Vue.component('nabu-criterial-evaluation', () => import('./views/nabu-pages/nabu-criterial-evaluation.vue'))
 Vue.component('nabu-self-esteem-results', () => import('./views/nabu-pages/nabu-self-esteem-results.vue'))
 Vue.component('nabu-results-assessment-supremo', () => import('./views/nabu-pages/nabu-results-assessment-supremo.vue'))
+Vue.component('nabu-characteristics', () => import('./views/nabu-pages/nabu-characteristics.vue'))
+Vue.component('nabu-norms-of-workwear', () => import('./views/nabu-pages/nabu-norms-of-workwear.vue'))
+Vue.component('nabu-workwear-on-personal', () => import('./views/nabu-pages/nabu-workwear-on-personal.vue'))
 
 
 

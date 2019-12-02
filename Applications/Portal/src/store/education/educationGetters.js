@@ -60,4 +60,25 @@ export default {
     }
     return undefined
   },
+  getCurrentPageNabu: state => {
+    return state.currentPageNabu
+  },
+  getEmployeeOriginal: state => {
+    return state.employeeOriginal
+  },
+  getTrainingSchedule: state => {
+    return state.trainingSchedule
+  },
+  getIndividualPlanReport: state => {
+    return state.individualPlanReport
+  },
+  getCharacteristic: state => {
+    return state.characteristic
+  },
+  getNormsOfWorkwear: state => {
+    return state.normsOfWorkwear
+  },
+  getWorkwearOnPersonal: state => {
+    return state.workwearOnPersonal
+  }
 }

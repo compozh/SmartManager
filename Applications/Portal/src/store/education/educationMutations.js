@@ -25,6 +25,28 @@ export default {
   },
   setResultsAssessmentSupremo(state, value) {
     state.resultsAssessmentSupremo = value
+  },
+  setCurrentPageNabu(state, value) {
+    state.currentPageNabu = value
+  },
+  setEmployeeOriginal(state, value) {
+    state.employeeOriginal = value
+  },
+  setTrainingSchedule(state, value) {
+    state.trainingSchedule = value
+  },
+  setIndividualPlanReport(state, value) {
+    state.individualPlanReport = value
+  },
+  setCharacteristic(state, value) {
+    state.characteristic = value
+  },
+  setNormsOfWorkwear(state, value) {
+    state.normsOfWorkwear = value
+  },
+  setWorkwearOnPersonal(state, value) {
+    state.workwearOnPersonal = value
   }
+
 }
   

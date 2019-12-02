@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    editProcess(process: $process)
-  }
-}

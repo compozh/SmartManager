@@ -9,8 +9,7 @@ export default {
   async initializeProperties({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const result = await api.getPropertiesFromGql()
-        let properties = result.data.mes.properties
+        const properties = await api.getPropertiesFromGql()
         commit('setProperties', properties)
 
         for(var action of getters.actionsAfterInitializeProperties) {
@@ -23,8 +22,8 @@ export default {
   async initializeTicket({commit}) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const result = await api.getTicketFromGql()
-        commit('setTicket', result.data.mes.ticket)
+        const ticket = await api.getTicketFromGql()
+        commit('setTicket', ticket)
       }
     })
   },
@@ -33,32 +32,21 @@ export default {
     await me.dispatch('mes/graphqlQueryWraper', {
       action: async ( ) => {
         console.log('Current UUID - ' + uuid)
-
         const workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
         commit('setWorkCentersForWorker', workCenters)
-
           var setWorkCenterForWorker = async (properties) => {
-            var workCenterForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
-            workCenterForWorker = workCenterForWorker.sort((a,b) => {
-              return a.fixationId > b.fixationId ? -1 : a.fixationId == b.fixationId ? 0 : 1
-            })
-            if (workCenters.length == 1) {
-              commit('setWorkCenter', workCenters[0])
-              for(var fixWorkCetner of workCenterForWorker) {
-                if(fixWorkCetner.code == workCenters[0].code) {
-                  commit('setWorkCenterFixationData', fixWorkCetner)
-                }
+            var fixationForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })
+            if (fixationForWorker && fixationForWorker.length != 1) {
+              for(var fixWorkCetner of fixationForWorker){
+                await dispatch('unfixWorkCenterForWorker', {fixationId: fixWorkCetner.fixationId})
               }
             } else {
-              for(var workCenter of workCenters) {
-                for(var fixWorkCetner of workCenterForWorker) {
-                  if(fixWorkCetner.code == workCenter.code) {
-                    commit('setWorkCenter', workCenter)
-                    commit('setWorkCenterFixationData', fixWorkCetner)
-                    return
-                  }
+              for(var workCenter of workCenters){
+                if (workCenter.code == fixationForWorker[0].code) {
+                  commit('setWorkCenter', workCenter)
                 }
               }
+              commit('setWorkCenterFixationData', fixationForWorker[0])
             }
           }
           if(!getters.properties) {
@@ -169,7 +157,6 @@ export default {
         const res = await api.fixWorkCenterForWorkerGql(workCenter.code, workerCode)
         return res
       },
-      successAction: async () => { commit('setWorkCenter', workCenter) },
       linearLoader: true
     })
   },
@@ -285,7 +272,10 @@ export default {
         })
         return res
       },
-      successAction: async () => { me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' }) }
+      successAction: async () => {
+        me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }})
+      }
     })
     commit('closeDialogLinearLoader')
   },

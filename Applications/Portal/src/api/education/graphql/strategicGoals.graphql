@@ -1,3 +1,22 @@
 {
-    a
+    portalNabuQuery{
+    strategicGoal{
+      data{
+        strategicTitle
+      }
+      headers{
+        field
+        filter
+        minWidth
+        sortable
+        headerName
+      }
+    }
+    emplOriginal{
+      data{
+        fileName
+        filePath
+      }
+    }
+  }
 }
