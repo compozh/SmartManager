@@ -80,7 +80,7 @@ export default {
     },
     viewer() {
       if (this.fileUrl) {
-        const ext = this.fileUrl.split('.').pop()
+        const ext = this.fileUrl.split('.').pop().toLowerCase()
         switch (true) {
           case ext === 'pdf': return 'pdf-viewer'
           case this.isText(ext): return 'txt-viewer'
