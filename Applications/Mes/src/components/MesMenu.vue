@@ -43,7 +43,7 @@ export default {
       }
       var dynamicPagesWithKey = []
       this.dynamicPages.properties.forEach(page => {
-         dynamicPagesWithKey[('_' + page.id).toLowerCase()] = dynamicPagesWithKey
+         dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
       })
       var pages = []
       for (let page of links[1].Children) {
@@ -52,6 +52,9 @@ export default {
           case 'ALL_PAGES':
             if (page.Components[0].Name == "mes-dynamic-page" && !dynamicPagesWithKey[page.Id.toLowerCase()]) {
               continue
+            }
+            if (dynamicPagesWithKey[page.Id.toLowerCase()]) {
+              page.Name = dynamicPagesWithKey[page.Id.toLowerCase()].name
             }
             pages.push(page)
             break
