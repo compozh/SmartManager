@@ -31,12 +31,12 @@ import auth from './auth/auth'
 import router from '@/router'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
-  if (graphQLErrors) {
-    return graphQLErrors.message // TODO: Обработать ошибку
-  }
   if (networkError.statusCode === 401) {
     auth.logOff()
-    router.push('/login')
+    router.push('/pages/not-authorized')
+  }
+  if (graphQLErrors) {
+    return graphQLErrors.message // TODO: Обработать ошибку
   }
 })
 
@@ -142,12 +142,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async changeTaskStatusInGql(status) {
+  static async changeTaskStatusInGql(statusParams) {
     try {
       return await getClient('smartmanager')
         .mutate({
           mutation: gql`${changeStatus}`,
-          variables: {status}
+          variables: {statusParams}
         })
     } catch (e) {
       throw new Error(e.message)

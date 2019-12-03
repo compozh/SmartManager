@@ -71,16 +71,16 @@ export default {
         : null
     },
     isImage() {
-      const image = ['png', 'jpeg', 'jpg', 'bmp']
+      const image = ['png', 'jpeg', 'jpg', 'webp', 'bmp', 'gif']
       return ext => image.some(i => i === ext)
     },
     isText() {
-      const text = ['txt', 'log']
+      const text = ['txt', 'log', 'ini', 'dll', 'bat', 'config', 'json']
       return ext => text.some(i => i === ext)
     },
     viewer() {
       if (this.fileUrl) {
-        const ext = this.fileUrl.split('.').pop()
+        const ext = this.fileUrl.split('.').pop().toLowerCase()
         switch (true) {
           case ext === 'pdf': return 'pdf-viewer'
           case this.isText(ext): return 'txt-viewer'

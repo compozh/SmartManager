@@ -110,7 +110,7 @@ export default {
             return {
               color: 'success',
               icon: 'check_circle_outline',
-              text: this.$t('statuses.completed')
+              text: this.$t('statuses.done')
             }
           default:
             return {

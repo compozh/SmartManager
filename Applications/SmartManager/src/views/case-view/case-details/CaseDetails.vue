@@ -11,29 +11,54 @@
           <div class="vx-row border-b border-l-0 border-r-0
                        border-t-0 d-theme-border-grey-light
                        border-solid flex justify-between flex items-center">
-
+            <!-- CASE META COL-1 (Name, purpose, comment)-->
             <div class="vx-col sm:w-4/5 w-full flex items-center mb-2">
               <div class="flex flex-col w-11/12">
                 <div class="flex items-center mb-2">
-                  <h5 class="mb-2 hover:bg-white hover:border-gray-300">{{ caseItem.name }}</h5>
+                  <h5 class="mb-2 hover:bg-white hover:border-gray-300 truncate">{{ caseItem.name }}</h5>
                 </div>
                 <div class="flex items-center mb-2">
                   <h3 class="text-primary truncate">{{ caseItem.purpose }}</h3>
                 </div>
                 <div class="flex items-center mb-2">
-                  <span>{{ caseItem.comm }}</span>
+                  <span class="truncate">{{ caseItem.comm }}</span>
                 </div>
               </div>
             </div>
+            <!-- CASE META COL-2 (Date from, date to)-->
             <div class="vx-col sm:w-1/5 w-full flex sm:flex-col
                         items-center sm:justify-end mb-2">
-              <span v-if="dateFrom" class="flex p-2 self-end"
-              >{{ $t('cases.dateStart') }}: {{ dateFrom }}</span>
-              <span v-if="dateTo" class="flex p-2 self-end"
-              >{{ $t('cases.dateEnd') }}: {{ dateTo }}</span>
+              <span v-if="dateFrom" class="flex p-2 w-full justify-between">
+                <feather-icon icon="CalendarIcon" class="mr-2 text-primary"/>
+                <span class="flex-1 pt-1">{{ $t('cases.dateStart') }}:</span>
+                <span class="pt-1 self-end">{{ dateFrom }}</span>
+              </span>
+              <span v-if="dateTo" class="flex p-2 w-full justify-between">
+                <feather-icon icon="CalendarIcon" class="mr-2 text-danger"/>
+                <span class="flex-1 pt-1">{{ $t('cases.dateEnd') }}:</span>
+                <span class="pt-1 self-end">{{ dateTo }}</span>
+              </span>
             </div>
           </div>
-
+            <!-- CASE META (Status, Folder)-->
+            <div class="flex w-full py-4"
+                 :class="caseItem.folderId ? 'justify-between' : 'justify-end'">
+              <div v-if="caseItem.folderId" class="flex w-1/2 items-center">
+                <vs-icon icon="icon-folder" icon-pack="feather" size="20px"/>
+                <span class="ml-2 mr-4">{{ $t('folders.folder').toUpperCase() }}:</span>
+                <vs-chip class="mr-3 max-w-sm text-primary">
+                  {{ folderName(caseItem.folderId) }}
+                </vs-chip>
+              </div>
+              <div class="flex items-center">
+                <vs-icon icon="icon-refresh-ccw" icon-pack="feather" size="18px"/>
+                <span class="ml-2 mr-4">{{ $t('statuses.status').toUpperCase() }}:</span>
+                <vs-chip :color="caseStatus().color"
+                         class="flex-shrink-0"
+                         style="flex-basis: 80px"
+                >{{ caseStatus().text }}</vs-chip>
+              </div>
+            </div>
           <!-- CASE MEMBERS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
                       d-theme-border-grey-light border-solid flex">
@@ -85,7 +110,7 @@
         </vx-card>
       </div>
     </div>
-    <!-- TASKS -->
+    <!-- RELATIVE TASKS -->
     <div class="vx-row"
          style="margin-top: 2.2rem">
       <div class="vx-col w-full">
@@ -175,6 +200,34 @@ export default {
     },
     dateTo() {
       return this.date(this.caseItem.dateTo)
+    },
+    folders() {
+      const allFolders = this.$store.state.sm.folders || []
+      return allFolders.filter(i => !!i.folderId)
+    },
+    folderName() {
+      return id => this.folders.find(i => i.folderId === id).name || ''
+    },
+    caseStatus() {
+      return () => {
+        switch (this.caseItem.status) {
+          case '':
+            return {
+              color: 'primary',
+              text: this.$t('statuses.inWork')
+            }
+          case '+':
+            return {
+              color: 'success',
+              text: this.$t('statuses.done')
+            }
+          default:
+            return {
+              color: 'primary',
+              text: 'unknown'
+            }
+        }
+      }
     }
   },
   methods: {

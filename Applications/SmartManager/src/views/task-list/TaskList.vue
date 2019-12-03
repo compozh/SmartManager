@@ -146,7 +146,10 @@ export default {
       const scrollArea = document.querySelector('#scrollArea')
       try {
         scrollArea.scrollTop = pos || this.listPosition[this.folderCode].scrollTop
-      } catch (e) {}
+        // eslint-disable-next-line no-unused-vars, no-empty
+      } catch (e) {
+        // provides clear console when scrollArea is null
+      }
     },
     async getTasks(folderId) {
       this.$store.commit('sm/setCurrentFolder', folderId)

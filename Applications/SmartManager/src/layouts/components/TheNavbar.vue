@@ -68,15 +68,15 @@
                    to="/work-flow"
         >{{ $t('buttons.startWorkflow') }}</vs-button>
 
-        <div class="flex" v-if="$route.name === 'task-view'">
-          <vs-button v-if="simpleTaskExecuted"
-                     icon="settings_backup_restore"
-                     color="warning"
-                     type="flat"
-                     class="px-3 mr-2"
-                     @click="changeStatus('*')"
-          >{{ $t('buttons.returnToWork') }}</vs-button>
+        <vs-button v-if="taskCompleted || caseStatus === '+'"
+                   icon="settings_backup_restore"
+                   color="warning"
+                   type="flat"
+                   class="px-3 mr-2"
+                   @click="changeStatus('')"
+        >{{ $t('buttons.returnToWork') }}</vs-button>
 
+        <div class="flex" v-if="$route.name === 'task-view'">
           <div class="flex" v-if="agreeTaskInWork">
             <vs-dropdown vs-trigger-click class="cursor-pointer">
               <vs-button icon="expand_more"
@@ -142,16 +142,19 @@
               </vs-dropdown-menu>
             </vs-dropdown>
           </div>
+        </div>
 
-          <vs-button v-if="internalTaskInWork && taskType === ''"
+        <div class="flex" v-if="/(task|case)-view/.test($route.name)">
+          <vs-button v-if="caseStatus === '' ||
+                           (internalTaskInWork && taskType === '')"
                      icon="done"
                      color="success"
                      type="flat"
                      class="px-3 mr-2"
                      @click="changeStatus('+')"
-          >{{ $t('buttons.execute') }}</vs-button>
+          >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}</vs-button>
 
-          <vs-button v-if="!task.isFavorite && !simpleTaskExecuted"
+          <vs-button v-if="task.id && !task.isFavorite && !taskCompleted"
                      icon="star"
                      color="warning"
                      type="flat"
@@ -166,23 +169,23 @@
                      class="px-3 mr-2"
                      @click="taskPin(false)"
           >{{ $t('buttons.unpin') }}</vs-button>
+
+          <vs-button v-if="allowedTaskEdit || allowedCaseEdit"
+                     icon="edit"
+                     color="dark"
+                     type="flat"
+                     class="px-3 mr-2"
+                     :to="$route.path + '/edit'"
+          >{{ $t('buttons.edit') }}</vs-button>
+
+          <vs-button v-if="allowedTaskEdit"
+                     icon="delete_forever"
+                     color="danger"
+                     type="flat"
+                     class="px-3 mr-2"
+                     @click="confirmDelete"
+          >{{ $t('buttons.delete') }}</vs-button>
         </div>
-
-        <vs-button v-if="allowedTaskEdit || allowedCaseEdit"
-                   icon="edit"
-                   color="dark"
-                   type="flat"
-                   class="px-3 mr-2"
-                   :to="$route.path + '/edit'"
-        >{{ $t('buttons.edit') }}</vs-button>
-
-        <vs-button v-if="allowedTaskEdit"
-                   icon="delete_forever"
-                   color="danger"
-                   type="flat"
-                   class="px-3 mr-2"
-                   @click="confirmDelete"
-        >{{ $t('buttons.delete') }}</vs-button>
 
         <vs-spacer></vs-spacer>
 
@@ -297,17 +300,18 @@ export default {
       const caseItem = this.$store.state.sm.caseDetails[id]
       return caseItem ? caseItem : {}
     },
-    taskType() {
-      return this.task ? this.task.taskType : null
+    caseStatus() {
+      return this.caseItem.status
     },
-    status() {
-      return this.task.status
-        ? this.task.status
-        : ''
+    taskStatus() {
+      return this.task.status || ''
+    },
+    taskType() {
+      return this.task.taskType
     },
     taskInWork() {
-      return this.status === ''
-        || this.status === '*'
+      return this.taskStatus === ''
+        || this.taskStatus === '*'
     },
     internalTask() {
       return this.taskType === ''
@@ -318,8 +322,8 @@ export default {
     internalTaskInWork() {
       return this.internalTask && this.taskInWork
     },
-    simpleTaskExecuted() {
-      return this.taskType === '' && this.status === '+'
+    taskCompleted() {
+      return this.taskType === '' && this.taskStatus === '+'
     },
     agreeTaskInWork() {
       return this.taskType === 'AGREE' && this.taskInWork
@@ -329,6 +333,7 @@ export default {
     },
     allowedCaseEdit() {
       return this.$route.name === 'case-view'
+        && this.caseStatus === ''
         && this.currentUserId === this.caseItem.userAdd
     },
     allowedTaskEdit() {
@@ -420,12 +425,21 @@ export default {
         processParams: null
       })
     },
-    changeStatus(status) {
-      eventBus.$emit('changeStatus', {
-        id: this.task.id,
-        status: status,
-        comment: ''
-      })
+    async changeStatus(status) {
+      if (this.$route.name === 'task-view') {
+        eventBus.$emit('changeStatus', {
+          type: 'TASK',
+          id: this.task.id,
+          status,
+          comment: ''
+        })
+      } else if (this.$route.name === 'case-view') {
+        await this.$store.dispatch('sm/changeStatus', {
+          type: 'CASE',
+          id: this.caseItem.id,
+          status,
+        })
+      }
     },
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
