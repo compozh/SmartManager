@@ -1,6 +1,6 @@
-mutation ($status: String) {
+mutation ($statusParams: String) {
   smtasksMutation {
-    changeStatus(status: $status) {
+    changeStatus(statusParams: $statusParams) {
       success,
       errorMessage
     }
