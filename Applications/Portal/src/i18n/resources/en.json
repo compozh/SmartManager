@@ -45,7 +45,8 @@
         "btnFormPlane": "Create an individual development plan",
         "cantdoFormPlane": "It is impossible to create an individual development plan",
         "filePathNotFound": "File path not found",
-        "getworkwear": "Property received"
+        "getworkwear": "Property received",
+        "getworkwearonplace": "Insufficient overalls in the warehouse"
     },
     "agGrid":{
         "contains": "Сontains",

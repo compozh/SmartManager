@@ -15,6 +15,9 @@ export default {
   individualPlanReport: undefined,
   characteristic: undefined,
   normsOfWorkwear: undefined,
-  workwearOnPersonal: undefined
+  workwearOnPersonal: undefined,
+  otherStocksOnPersonal: undefined,
+  workWearOnPlace: undefined
+  
 }
   

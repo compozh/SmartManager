@@ -16,6 +16,8 @@ import individualPlanReport from './graphql/individualPlanReport.graphql'
 import characteristic from './graphql/characteristic.graphql'
 import normsOfWorkwear from './graphql/normsOfWorkwear.graphql'
 import workwearOnPersonal from './graphql/workwearOnPersonal.graphql'
+import otherStocksOnPersonal from './graphql/otherStocksOnPersonal.graphql'
+import workWearOnPlace from './graphql/workWearOnPlace.graphql'
 
 
 import gql from 'graphql-tag'
@@ -164,6 +166,25 @@ export class EducationApi {
     }
   }
 
+  static async getOtherStocksOnPersonal() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${otherStocksOnPersonal}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getWorkWearOnPlace() {
+    try {
+      return await getClient('PORTALNABU').query({
+        query: gql` ${workWearOnPlace}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
   
   
 }

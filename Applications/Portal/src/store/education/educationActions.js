@@ -137,6 +137,19 @@ export default {
     }
   },
 
+  async loadOtherStocksOnPersonal({commit}) {
+    let result = await EducationApi.getOtherStocksOnPersonal()
+    if (result) {
+      commit('setOtherStocksOnPersonal',result.data.portalNabuQuery.otherStocksOnPersonal)
+    }
+  },
+
+  async loadWorkWearOnPlace({commit}) {
+    let result = await EducationApi.getWorkWearOnPlace()
+    if (result) {
+      commit('setWorkWearOnPlace',result.data.portalNabuQuery.workWearOnPlace)
+    }
+  },
   
 
   setCurrentPageNabu({commit}, page) {

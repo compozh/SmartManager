@@ -40,6 +40,8 @@ Vue.component('nabu-results-assessment-supremo', () => import('./views/nabu-page
 Vue.component('nabu-characteristics', () => import('./views/nabu-pages/nabu-characteristics.vue'))
 Vue.component('nabu-norms-of-workwear', () => import('./views/nabu-pages/nabu-norms-of-workwear.vue'))
 Vue.component('nabu-workwear-on-personal', () => import('./views/nabu-pages/nabu-workwear-on-personal.vue'))
+Vue.component('nabu-other-stocks-on-personal', () => import('./views/nabu-pages/nabu-other-stocks-on-personal.vue'))
+Vue.component('nabu-work-wear-on-place', () => import('./views/nabu-pages/nabu-work-wear-on-place.vue'))
 
 
 
