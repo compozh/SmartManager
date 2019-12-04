@@ -31,7 +31,7 @@ import auth from './auth/auth'
 import router from '@/router'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
-  if (networkError.statusCode === 401) {
+  if (networkError && networkError.statusCode === 401) {
     auth.logOff()
     router.push('/pages/not-authorized')
   }

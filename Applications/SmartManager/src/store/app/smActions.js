@@ -232,7 +232,7 @@ export default {
     try {
       const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
-      stopLoading()
+      // Loading will be stopped after task info update
       if (result.success) {
         await dispatch('updateInfo', {
           type: params.type,
