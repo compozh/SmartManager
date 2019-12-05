@@ -95,14 +95,22 @@ export default {
     },
     customEvent(params){
       var me = this,
-        form = me.$refs.formioComponent;
-      var submitEl = form.formio.getComponent('submit');
-				submitEl.loading = true;
-				submitEl.disabled = true;
-				me.requestToServerAction(params.type, () => {
-					submitEl.loading = false;
-					submitEl.disabled = false
-				});
+        form = me.$refs.formioComponent,
+        component = params.component
+
+      me.setComponentLoading(component.key, true)
+
+			me.requestToServerAction(params.type, () => {
+        me.setComponentLoading(component.key, false)
+			});
+    },
+    setComponentLoading(componentKey, loading) {
+      var me = this,
+        form = me.$refs.formioComponent
+
+        let componentElement = form.formio.getComponent(componentKey)
+        componentElement.loading = loading
+        componentElement.disabled = loading
     },
     getFormSubmission() {
       var form = this.$refs.formioComponent
@@ -121,9 +129,6 @@ export default {
           if(!result) {
             return
           }
-            if (callback) {
-              callback(result);
-            }
 
             var dataChanged = false;
             if (result.components && result.components != components) {
@@ -158,6 +163,10 @@ export default {
               submission = { data: JSON.parse(result.submission) }
               me.changedData.submission = submission
               form.formio.setSubmission(submission)
+            }
+
+            if (callback) {
+              callback(result);
             }
       })
     },
