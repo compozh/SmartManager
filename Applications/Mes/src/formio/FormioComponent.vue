@@ -106,8 +106,7 @@ export default {
 
       me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
         params: { eventCode, components, submission, display, settings }}).then(result => {
-          if(!result)
-          {
+          if(!result) {
             return
           }
             if (callback) {
@@ -116,12 +115,18 @@ export default {
 
             var dataChanged = false;
             if (result.components && result.components != components) {
-              components = result.components
-              dataChanged = true
+              let tempComponents = JSON.parse(result.components)
+              if(tempComponents.length) {
+                components = result.components
+                dataChanged = true
+              }
             }
             if(result.settings && result.settings != settings) {
-              settings = result.settings
-              dataChanged = true
+              let tempSettings = JSON.parse(result.settings)
+              if(tempSettings) {
+                settings = result.settings
+                dataChanged = true
+              }
             }
             if(result.display && result.display != display) {
               display = result.display
@@ -136,8 +141,11 @@ export default {
               }
             }
 
+
             if (result.submission && result.submission !== submission) {
-              me.changedData.submission = JSON.parse(result.submission)
+              submission = { data: JSON.parse(result.submission) }
+              me.changedData.submission = submission
+              form.formio.setSubmission(submission)
             }
       })
     },

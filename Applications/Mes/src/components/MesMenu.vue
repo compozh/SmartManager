@@ -50,7 +50,8 @@ export default {
         if (this.workCenter)  {
           switch (this.workCenter.accessPages) {
           case 'ALL_PAGES':
-            if (page.Components[0].Name == "mes-dynamic-page" && !dynamicPagesWithKey[page.Id.toLowerCase()]) {
+            let component = page.Components[0]
+            if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[page.Id.toLowerCase()]) {
               continue
             }
             if (dynamicPagesWithKey[page.Id.toLowerCase()]) {
