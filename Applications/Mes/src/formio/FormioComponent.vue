@@ -6,6 +6,7 @@
       :options=options
       @submit=onSubmit
       @change=onChange
+      @customEvent=customEvent
       ref="formioComponent"
     />
     <formio-qr-scaner
@@ -84,6 +85,9 @@ export default {
     },
     onChange(params) {
 
+    },
+    customEvent(params) {
+      this.requestToServerAction(params.type)
     },
     getFormSubmission() {
       var form = this.$refs.formioComponent
