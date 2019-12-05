@@ -4,6 +4,7 @@
       :form=formioComponents
       :submission=formioSubmission
       :options=options
+      language="ru"
       @submit=onSubmit
       @change=onChange
       @customEvent=customEvent
@@ -28,7 +29,13 @@ export default {
   data() {
     return {
       changedData: {},
-      options: { noAlerts: true },
+      options: {
+        noAlerts: true,
+        language: 'ru',
+        i18n: {
+          ru: this.$t('mes.formioForm')
+        }
+       },
       qrScanerVisible: false,
       qrScanerCallback: () => {}
     }
@@ -86,8 +93,24 @@ export default {
     onChange(params) {
 
     },
-    customEvent(params) {
-      this.requestToServerAction(params.type)
+    customEvent(params){
+      var me = this,
+        form = me.$refs.formioComponent,
+        component = params.component
+
+      me.setComponentLoading(component.key, true)
+
+			me.requestToServerAction(params.type, () => {
+        me.setComponentLoading(component.key, false)
+			});
+    },
+    setComponentLoading(componentKey, loading) {
+      var me = this,
+        form = me.$refs.formioComponent
+
+        let componentElement = form.formio.getComponent(componentKey)
+        componentElement.loading = loading
+        componentElement.disabled = loading
     },
     getFormSubmission() {
       var form = this.$refs.formioComponent
@@ -106,9 +129,6 @@ export default {
           if(!result) {
             return
           }
-            if (callback) {
-              callback(result);
-            }
 
             var dataChanged = false;
             if (result.components && result.components != components) {
@@ -143,6 +163,10 @@ export default {
               submission = { data: JSON.parse(result.submission) }
               me.changedData.submission = submission
               form.formio.setSubmission(submission)
+            }
+
+            if (callback) {
+              callback(result);
             }
       })
     },
@@ -182,8 +206,8 @@ export default {
           searchValue,
           submission
         }
-        
-      this.$store.dispatch('formio/callItemAutocomplete', 
+
+      this.$store.dispatch('formio/callItemAutocomplete',
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);

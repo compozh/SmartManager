@@ -11,7 +11,7 @@
 
     <v-text-field
           class="qr-input"
-          label="Укажите QR-партии материала для установки"
+          :label="this.$t('mes.placeholders.SearchMaterial')"
           v-model="inputQrCode"
           :disabled="this.disableQrInput"
           required @keyup.enter="submitQrCode"
@@ -26,7 +26,7 @@
           </svg>
         </v-btn>
       </template>
-      <span>Сканировать QR код</span>
+      <span>{{this.$t('mes.buttons.ScanQRCode')}}</span>
     </v-tooltip>
   </v-flex>
   <v-flex class="setup-material-layout" xs2 v-if="installations.length && properties.allowRemoveAllInstallations">
@@ -36,7 +36,7 @@
       @click="onclickRemoveAllInstallations"
       color="#326DA8"
     >
-      Снять все партии
+      {{this.$t('mes.buttons.RemoveAllParties')}}
     </v-btn>
 
   </v-flex>

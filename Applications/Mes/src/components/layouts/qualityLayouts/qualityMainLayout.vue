@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     formSubmit(submission) {
-      this.$store.dispatch('mes/qualityFormIoSubmit', { formCode: this.properties.qualityForm, workCenter: this.workCenter, submission, quality: this.selectedQuality })
+      this.$store.dispatch('mes/qualityFormIoSubmit', { formCode: this.properties.qualityForm, workCenter: this.workCenter, submission, quality: this.selectedQuality, message: this.$t('mes.dialogs.RegistrationDowntime')})
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()

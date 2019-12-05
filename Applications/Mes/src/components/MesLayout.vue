@@ -14,7 +14,7 @@
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
-        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
+        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
 
@@ -30,7 +30,7 @@
       >
         {{ snackbar.message }}
         <v-btn @click.native="closeSnackbar" text color="white">
-          Закрыть
+          {{this.$t('mes.buttons.Close')}}
         </v-btn>
       </v-snackbar>
     </template>

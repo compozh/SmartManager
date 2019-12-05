@@ -15,8 +15,8 @@ export default {
   data() {
     return {
       tabs: [
-        {name: 'Моя выработка', index: '0'},
-        {name: 'Выработка по текущему Рабочему центру', index: '1'}
+        {name: this.$t('mes.buttons.MyProduction'), index: '0'},
+        {name: this.$t('mes.buttons.ProductionOfTheCurrentWorkCenter'), index: '1'}
       ]
     }
   },

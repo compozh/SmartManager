@@ -46,6 +46,13 @@ export default {
   },
   setWorkwearOnPersonal(state, value) {
     state.workwearOnPersonal = value
+  },
+  setOtherStocksOnPersonal(state, value) {
+    state.otherStocksOnPersonal = value
+  },
+  setWorkWearOnPlace(state, value) {
+    state.workWearOnPlace = value
+
   }
 
 }

@@ -3,7 +3,7 @@
         <v-flex
             class="toolbar-basebuttons"
         >
-            <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" color="#326DA8">Установить материалы</v-btn>
+            <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
             <v-btn class="status-task-btn"
                 :disabled="selectedTask.state == 'DONE'"
@@ -11,10 +11,10 @@
                 :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' :  'rgba(7, 109, 0, 0.81)'"
                 @click="changeStatusTask"
             >
-                {{selectedTask.inProgress ? 'Приостановить' :  'Взять в работу'}}
+                {{selectedTask.inProgress ? this.$t('mes.buttons.Pause') :  this.$t('mes.buttons.TakeToWork')}}
             </v-btn>
 
-            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
+            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">{{this.$t('mes.buttons.Downtime')}}</v-btn>
               <!-- <v-tooltip left>
               <template v-slot:activator="{ on }">
                 <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode" v-on="on">
