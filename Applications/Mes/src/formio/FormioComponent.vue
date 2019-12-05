@@ -96,12 +96,15 @@ export default {
     customEvent(params){
       var me = this,
         form = me.$refs.formioComponent,
-        component = params.component
-
+        component = params.component,
+        displayLoading = component.displayLoading
+      if (displayLoading){
       me.setComponentLoading(component.key, true)
-
+      }
 			me.requestToServerAction(params.type, () => {
-        me.setComponentLoading(component.key, false)
+        if (displayLoading){
+          me.setComponentLoading(component.key, false)
+        }
 			});
     },
     setComponentLoading(componentKey, loading) {
