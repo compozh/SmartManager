@@ -7,6 +7,7 @@
       language="ru"
       @submit=onSubmit
       @change=onChange
+      @customEvent=customEvent
       ref="formioComponent"
     />
     <formio-qr-scaner
@@ -91,6 +92,17 @@ export default {
     },
     onChange(params) {
 
+    },
+    customEvent(params){
+      var me = this,
+        form = me.$refs.formioComponent;
+      var submitEl = form.formio.getComponent('submit');
+				submitEl.loading = true;
+				submitEl.disabled = true;
+				me.requestToServerAction(params.type, () => {
+					submitEl.loading = false;
+					submitEl.disabled = false
+				});
     },
     getFormSubmission() {
       var form = this.$refs.formioComponent
