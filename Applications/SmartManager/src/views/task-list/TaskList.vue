@@ -38,6 +38,7 @@
     </div>
     <vs-pagination v-if="pages > 1"
                   :total="pages"
+                   :max="breakpoint === 'md' ? 5 : 9"
                   v-model="currentPage"
                   class="-mb-10 mt-3"/>
   </div>
@@ -87,6 +88,9 @@ export default {
     },
   },
   computed: {
+    breakpoint() {
+      return this.$store.state.breakpoint
+    },
     tasks() {
       return this.$store.getters['sm/tasks']
     },

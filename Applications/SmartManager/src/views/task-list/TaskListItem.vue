@@ -7,7 +7,7 @@
       <vs-avatar class="sender__avatar flex-shrink-0 m-0 border-2 border-solid border-white"
                  :src="task.addedPhoto"
                  size="40px"/>
-      <div class="flex justify-between ml-3" style="width: calc(100% - 58px);">
+      <div class="flex justify-between ml-3 flex-wrap" style="width: calc(100% - 58px);">
         <div class="task__details truncate">
           <span class="text-primary truncate" :class="{'font-semibold': !task.isRead}"
           >{{ task.docCaption }}</span>
@@ -58,9 +58,8 @@
 
       <vs-chip :color="taskStatus().color"
                class="flex-shrink-0"
-               style="flex-basis: 80px"
-               icon="ActivityIcon"
-      >{{ taskStatus().text }}</vs-chip>
+               :style="{'flex-basis': breakpoint !== 'md' ? '80px' : 0 }"
+      >{{ breakpoint === 'md' ? '' : taskStatus().text }}</vs-chip>
 
     </div>
   </router-link>
@@ -75,6 +74,9 @@ export default {
     }
   },
   computed: {
+    breakpoint() {
+      return this.$store.state.breakpoint
+    },
     comments() {
       return this.task.comments ? this.task.comments.length : 0
     },
