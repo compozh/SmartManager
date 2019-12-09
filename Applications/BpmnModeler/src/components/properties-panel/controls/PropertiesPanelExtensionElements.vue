@@ -45,11 +45,13 @@ export default {
     readonly: {
       type: Boolean,
       required: true
-    }
-  },
-  data() {
-    return {
-      activeElement: null,
+    },
+    activeElement: {},
+    resetOnElementChanged: {
+      type: Boolean,
+      default() {
+        return false;
+      }
     }
   },
   computed: {
@@ -64,7 +66,7 @@ export default {
         return this.activeElement;
       },
       set(value) {
-        this.activeElement = value;
+        console.log('computed active')
         this.$emit('update:activeElement', value);
         this.onActiveElementChanged(value);
       }
@@ -82,9 +84,23 @@ export default {
         }
       }
     },
-    element(value, newValue) {
-      if (value !== newValue) {
-        this.active = undefined;
+    element: {
+      immediate: true,
+      handler(value, oldValue) {
+        if (value !== oldValue) {
+          if (this.resetOnElementChanged) {
+            this.active = undefined;
+          } else {
+            console.log(this.active);
+            this.$nextTick(() => this.$refs.tree.setCurrentKey(this.active));
+          }
+        }
+      }
+    },
+    activeElement: {
+      immediate: true,
+      handler(value) {
+        this.$nextTick(() => this.$refs.tree.setCurrentKey(value));
       }
     }
   },
@@ -93,7 +109,7 @@ export default {
       this.createExtensionElement();
       this.$nextTick(() => {
         const field = this.fields[this.fields.length - 1];
-        this.active = field;
+        this.active = field.id;
         this.$refs.tree.setCurrentKey(field.id);
         var container = this.$el.querySelector('.external-elements > .tree-container');
         container.scrollTop = container.scrollHeight;
@@ -103,11 +119,11 @@ export default {
     removeElement(element) {
       this.$refs.tree.setCurrentKey(null);
       this.active = undefined;
-      this.removeExtensionElement(element);
+      this.removeExtensionElement(element.id);
     },
     onCurrentChange(item) {
       if (this.fields.includes(item)) {
-        this.active = item;
+        this.active = item.id;
       }
     }
   }
