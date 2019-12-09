@@ -39,16 +39,11 @@
                   <vs-input name="casePurpose"
                             :label-placeholder="$t('cases.purpose')"
                             v-model="newCase.purpose"
-                            class="w-full mb-6 input-task-name"
-                            v-validate="'required'"
-                            :danger="errors.has('casePurpose')"
-                            :danger-text="$t('validate.required')"
-                            val-icon-danger="clear"/>
+                            class="w-full mb-6 input-task-name"/>
                   <vs-input name="caseComm"
                             :label-placeholder="$t('cases.comm')"
                             v-model="newCase.comm"
-                            class="w-full mb-6 input-task-name"
-                            val-icon-danger="clear"/>
+                            class="w-full mb-6 input-task-name"/>
                   <div class="flex">
                     <autocomplete class="flex-1 mr-6"
                                   :items="folders"
@@ -73,6 +68,7 @@
                                 class="my-6"
                                 avatar/>
                   <files-upload @attach="getAttachment($event)"
+                                :existingFiles="existingFiles"
                                 :uploading="filesUploading"
                                 class="mt-4"/>
                   <vs-divider/>
@@ -154,6 +150,7 @@ export default {
       filesUploading: false,
       activePrompt: false,
       newFolderName: '',
+      oldAttachments: [],
       oldMembers: [],
       settings: {
         maxScrollbarLength: 60,
@@ -184,10 +181,26 @@ export default {
         deleteMembers: del.map(member => ({ID: member.userId, TYPE: 'USER'})),
       }
     },
-    date() {
+    dateClient() {
+      return date => moment(date, 'DD.MM.YYYY')
+    },
+    dateServer() {
       return date => {
-        return moment(date,'DD.MM.YYYY').format('YYYY-MM-DD')
+        if (date) {
+          return moment(date,'DD.MM.YYYY').format('YYYY-MM-DD')
+        }
+        return '0001-01-01'
       }
+    },
+    existingFiles() {
+      return this.oldAttachments.map(attachment => ({
+        id: attachment.id,
+        size: attachment.fileSize,
+        name: attachment.fileName,
+        progress: '100.0',
+        success: true,
+        existing: true
+      }))
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -197,6 +210,10 @@ export default {
         vm.newCase.folder = vm.folderById(+folderId)
       }
     })
+  },
+  beforeRouteLeave(to, from, next) {
+    // TODO: Add confirm for saving
+    next()
   },
   async mounted() {
     this.getUsers()
@@ -215,8 +232,11 @@ export default {
       return this.$store.state.sm.caseDetails[caseId]
     },
     setFieldsForUpdate(caseItem) {
-      if (this.date(caseItem.dateFrom) !== '0001-01-01') {
-        this.configDatePicker.minDate = caseItem.dateFrom
+      if (this.dateServer(caseItem.dateFrom) !== '0001-01-01') {
+        const date = caseItem.dateFrom
+        const minDate = this.configDatePicker.minDate
+        this.configDatePicker.minDate = this.dateClient(minDate)
+          .isAfter(this.dateClient(date)) ? date : minDate
       }
       this.newCase.name = caseItem.name
       this.newCase.dateFrom = caseItem.dateFrom
@@ -227,6 +247,7 @@ export default {
       this.oldMembers = this.users.filter(user => caseItem.participants
         .some(member => member.userId === user.userId))
       this.newCase.members = this.oldMembers
+      this.oldAttachments = caseItem.originals
     },
     async getUsers() {
       this.userListLoading = true
@@ -237,13 +258,9 @@ export default {
       this.userListLoading = false
     },
     async createFolder() {
-      try {
-        await this.$store.dispatch('sm/caseFolderCreate', this.newFolderName)
-        this.activePrompt = false
-        this.newFolderName = ''
-      } catch (e) {
-        console.log('', e.message)
-      }
+      await this.$store.dispatch('sm/caseFolderCreate', this.newFolderName)
+      this.activePrompt = false
+      this.newFolderName = ''
     },
     async submitForm() {
       const result = await this.$validator.validateAll()
@@ -256,13 +273,14 @@ export default {
     },
     getAttachment(event) {
       this.newCase.attachments = event
+      this.filesUploading = false
       this.caseEdit ? this.caseUpdate() : this.createCase()
     },
     async createCase() {
       const newCase = {
         name: this.newCase.name,
-        dateFrom: this.date(this.newCase.dateFrom),
-        dateTo: this.date(this.newCase.dateTo),
+        dateFrom: this.dateServer(this.newCase.dateFrom),
+        dateTo: this.dateServer(this.newCase.dateTo),
         purpose: this.newCase.purpose,
         comm: this.newCase.comm,
         folderId: this.newCase.folder.folderId || 0,
@@ -280,21 +298,17 @@ export default {
       const newCaseData = {
         id: this.$route.params.id,
         name: this.newCase.name,
-        dateFrom: this.date(this.newCase.dateFrom),
-        dateTo: this.date(this.newCase.dateTo),
+        dateFrom: this.dateServer(this.newCase.dateFrom),
+        dateTo: this.dateServer(this.newCase.dateTo),
         purpose: this.newCase.purpose,
         comm: this.newCase.comm,
         folderId: this.newCase.folder.folderId || 0,
         members: this.members,
         attachments: this.newCase.attachments
       }
-      try {
-        const result = await this.$store.dispatch('sm/caseUpdate', newCaseData)
-        if (result) {
-          await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
-        }
-      } catch (e) {
-        console.log('', e)
+      const result = await this.$store.dispatch('sm/caseUpdate', newCaseData)
+      if (result) {
+        await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
       }
     }
   }
@@ -302,6 +316,10 @@ export default {
 </script>
 
 <style scoped>
+
+  * >>> input {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+  }
 
   .form-container {
     margin: 15px 0;

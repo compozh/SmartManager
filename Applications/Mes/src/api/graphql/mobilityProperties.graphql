@@ -1,0 +1,14 @@
+{
+    mes{
+        mobilityProperties(webAppId: $webAppId){
+            properties{
+                id,
+                name,
+                formCode,
+                image,        
+                searchAvailable,
+                sortOrder
+            }
+        }
+    }
+}

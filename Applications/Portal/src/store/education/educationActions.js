@@ -116,6 +116,42 @@ export default {
     }
   },
 
+  async loadCharacteristic({commit}) {
+    let result = await EducationApi.getСharacteristic()
+    if (result) {
+      commit('setCharacteristic',result.data.portalNabuQuery.sizesForPersonnel)
+    }
+  },
+
+  async loadNormsOfWorkwear({commit}) {
+    let result = await EducationApi.getNormsOfWorkwear()
+    if (result) {
+      commit('setNormsOfWorkwear',result.data.portalNabuQuery.workWearNormasForPersonnel)
+    }
+  },
+  
+  async loadWorkwearOnPersonal({commit}) {
+    let result = await EducationApi.getWorkwearOnPersonal()
+    if (result) {
+      commit('setWorkwearOnPersonal',result.data.portalNabuQuery.workWearOnPersonal)
+    }
+  },
+
+  async loadOtherStocksOnPersonal({commit}) {
+    let result = await EducationApi.getOtherStocksOnPersonal()
+    if (result) {
+      commit('setOtherStocksOnPersonal',result.data.portalNabuQuery.otherStocksOnPersonal)
+    }
+  },
+
+  async loadWorkWearOnPlace({commit}) {
+    let result = await EducationApi.getWorkWearOnPlace()
+    if (result) {
+      commit('setWorkWearOnPlace',result.data.portalNabuQuery.workWearOnPlace)
+    }
+  },
+  
+
   setCurrentPageNabu({commit}, page) {
     commit('setCurrentPageNabu', page)
   }

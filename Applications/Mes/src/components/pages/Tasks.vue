@@ -74,9 +74,9 @@ export default {
       downtimesOverlayVisible: false,
       dialogProperties: {
         title: '',
-        message: 'Вы действительно хотите перейти на другое задание?',
-        agreeMessage: 'Да',
-        disagreeMessage: 'Нет',
+        message: this.$t('mes.dialogs.SwitchToAnotherTask'),
+        agreeMessage: this.$t('mes.dialogs.Yes'),
+        disagreeMessage: this.$t('mes.dialogs.No'),
         visible: false,
         task: null
       },

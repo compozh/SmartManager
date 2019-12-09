@@ -94,8 +94,12 @@ export default {
             formNameLabel: me.$t('bpmn.labels.Name'),
             formCodeLabel: me.$t('bpmn.labels.Code'),
             displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
-            options: { 
+            options: {
                 noAlerts: true,
+                language: 'ru',
+                i18n: {
+                  ru: this.$t('mes.formioForm')
+                },
                 builder: {
                     basic: {},
                     advanced: {},
@@ -239,13 +243,6 @@ export default {
     }
     .form-name-text-field {
       max-width: 350px;
-    }
-    .action-button {
-    }
-    .cancel-button {
-    }
-    .constructor-tabs {
-
     }
     .form-preview-component {
         overflow-y: auto !important;

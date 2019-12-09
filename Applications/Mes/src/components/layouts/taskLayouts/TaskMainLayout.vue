@@ -45,7 +45,7 @@ export default {
       this.$emit('changeDowntimesOverlayVisible')
     },
     formSubmit(submission) {
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask })
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction') })
     },
     getFormioData() {
       return this.$refs.formioBuilder.getFormSubmission()

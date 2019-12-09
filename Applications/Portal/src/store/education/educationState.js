@@ -12,6 +12,12 @@ export default {
   currentPageNabu: undefined,
   employeeOriginal: undefined,
   trainingSchedule: undefined,
-  individualPlanReport: undefined
+  individualPlanReport: undefined,
+  characteristic: undefined,
+  normsOfWorkwear: undefined,
+  workwearOnPersonal: undefined,
+  otherStocksOnPersonal: undefined,
+  workWearOnPlace: undefined
+  
 }
   

@@ -25,7 +25,9 @@
                 <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg"/>
               </back-to-top>
               <transition :name="routerTransition" mode="out-in">
-                <router-view @changeRouteTitle="changeRouteTitle"></router-view>
+                <keep-alive :include="['task-list', 'case-list']">
+                  <router-view @changeRouteTitle="changeRouteTitle"></router-view>
+                </keep-alive>
               </transition>
             </div>
           </div>
@@ -45,6 +47,7 @@ import templateConfig from '@/templateConfig.js'
 import BackToTop from 'vue-backtotop'
 
 export default {
+  name: 'layout',
   data() {
     return {
       navbarType: themeConfig.navbarType || 'floating',

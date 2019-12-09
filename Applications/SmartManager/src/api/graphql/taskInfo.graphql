@@ -34,11 +34,13 @@ fragment mainTaskFields on Task {
     isRead
     caseId
     isFavorite
+    docTextHtml
 }
 
 fragment detailTaskFields on Task {
     htmlDescript
     declarer
+    declarerId
     arso
     keyValue
     kidCopy
@@ -56,6 +58,7 @@ fragment detailTaskFields on Task {
         id
         fileName
         fileExt
+        fileSize
     }
     comments {
         userId

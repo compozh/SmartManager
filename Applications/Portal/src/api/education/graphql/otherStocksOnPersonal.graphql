@@ -1,0 +1,24 @@
+{
+    portalNabuQuery{
+        otherStocksOnPersonal{
+            data{
+                name
+                place
+                barCode
+                quantity
+                unitName
+                batchCode
+                department
+                documentIssued
+                exploitationTime
+            }
+            headers{
+                field
+                filter
+                minWidth
+                sortable
+                headerName
+            }
+        }
+    }
+}

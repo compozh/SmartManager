@@ -5,13 +5,15 @@
     </vs-col>
     <vs-col vs-w="4">
       <ul class="file-container">
-        <li v-for="(element, index) in employeeOriginal" :key="index" class="item-container"  @click.prevent="downloadItem(element.filePath)" @mouseover="hoverElement(index)" @mouseleave="leaveElement(index)">
-          <div  class="download-container" >
-            <div class="file-name">
-              <documentFormat :format="element.format" :hover="testing[index].hover" />
-              <a class="link-text" id="my_iframe" :href="element.filePath" download v-text="element.fileName">{{element.fileName}}</a>
-            </div>  
-          </div>
+        <li v-for="(element, index) in employeeOriginal" :key="index" class="item-container" @mouseover="hoverElement(index)" @mouseleave="leaveElement(index)">
+          <a class="link-text" id="my_iframe" :href="element.filePath" download >
+             <div  class="download-container" >
+              <div class="file-name">
+                <documentFormat :format="element.format" :hover="testing[index].hover" />
+                {{element.fileName}}
+              </div>  
+            </div>
+          </a>
         </li>
       </ul>
     </vs-col>
@@ -28,7 +30,7 @@ export default {
   data() {
     return {
       testing: null,
-       settings: { // perfectscrollbar settings
+       settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 1,
       swipeEasing: true
@@ -79,9 +81,6 @@ export default {
     }
   },
   methods: {
-    downloadItem(url) {
-      window.location.href = url
-    },
     leaveElement(index) {
       this.testing[index].hover = false
     },
@@ -105,10 +104,14 @@ margin-bottom: 5px;
 }
 .link-text{
   padding-left: 10px;
+  width: 100%;
+  height: 100%;
 }
 .item-container{
     cursor: pointer;
     padding: 5px;
+    display: flex;
+    align-items: center;
 }
 .item-container:hover{
     background: #ffffff;

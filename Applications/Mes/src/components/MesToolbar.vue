@@ -20,14 +20,14 @@
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
       <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <v-autocomplete
           autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
           return-object
-          no-data-text="--- Рабочий центр отсутствует ---"
+          :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
           class="work-centers-select-input"
         ></v-autocomplete>
@@ -35,7 +35,7 @@
 
       <!-- Зафиксированый РЦ -->
       <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
@@ -84,6 +84,7 @@ export default {
     me.$store.dispatch('mes/initializeWorkCenter', uuid)
     me.$store.dispatch('mes/initializeProperties')
     me.$store.dispatch('formio/initializeTicket')
+    me.$store.dispatch('mes/initializeDynamicPages')
     me.initializeSignalR()
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData

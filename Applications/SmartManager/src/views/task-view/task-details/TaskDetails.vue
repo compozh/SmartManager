@@ -51,12 +51,9 @@
                         style="pointer-events: none;"
                 ></iframe>
               </div>
-              <div v-if="task.descript"
+              <div v-if="task.docTextHtml"
                    class="mail__content break-words mt-8 mb-4"
-                   v-html="task.descript"></div>
-              <div v-if="task.docCaption"
-                   class="mail__content break-words mt-8 mb-4"
-                   v-html="task.docCaption"></div>
+                   v-html="task.docTextHtml"></div>
             </div>
           </div>
 
@@ -96,11 +93,10 @@
             </div>
           </div>
           <div class="vx-row">
-            <files-upload @attach="getAttachment($event)"
-                          resetBtn
-                          uploadBtn
-                          class="w-full"
-            ></files-upload>
+            <files-upload class="w-full"
+                          @attach="getAttachment($event)"
+                          :uploadErrors="uploadErrors"
+                          uploadAuto/>
           </div>
         </vx-card>
       </div>
@@ -214,11 +210,11 @@
                           border-t-0 d-theme-border-grey-light border-solid pb-4">
                 <div class="vx-col flex items-center">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span v-if="childTasks.length" class="self-end">{{ $t('tasks.subTasks').toUpperCase() }}</span>
-                  <span v-else class="self-end">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
+                  <span v-if="childTasks.length" class="pt-1">{{ $t('tasks.subTasks').toUpperCase() }}</span>
+                  <span v-else class="pt-1">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
                 </div>
                 <div class="flex">
-                  <vs-button @click="$router.push('/task-add/' + task.id)"
+                  <vs-button :to="{name: 'task-add', params: {id: task.id}}"
                              class="ml-3"
                              color="primary"
                              size="small"
@@ -283,6 +279,7 @@ export default {
     submission: {},
     attachments: [],
     filesUploading: false,
+    uploadErrors: [],
     caseListLoading: false,
     caseList: false,
     caseForBind: null
@@ -365,10 +362,13 @@ export default {
         const form = this.$refs.form.formio
         try {
           const result = await form.submit()
-          await this.$store.dispatch('sm/changeStatus', {
+          const success = await this.$store.dispatch('sm/changeStatus', {
             ...data,
             CompleteParams: JSON.stringify(result.data)
           })
+          if (data.status === '+' && success) {
+            await this.$router.push('/')
+          }
         } catch (errors) {
           if (errors.length) {
             errors.forEach(e => {
@@ -397,12 +397,17 @@ export default {
         keyValue: this.task.keyValue,
         kidCopy: this.task.kidCopy
       }
-      try {
-        await this.$store.dispatch('sm/addAttachments', {attachments, params})
-        this.attachments.length = 0
-      } catch (e) {
-        console.log('', e.message)
-      }
+      // Returns results list
+      const results = await this.$store.dispatch('sm/addAttachments', {attachments, params})
+      results.forEach(result => {
+        if (!result.success) {
+          this.uploadErrors.push({
+            fileName: result.name,
+            message: result.errorMessage
+          })
+        }
+      })
+      this.attachments.length = 0
     },
     async changeBinding(bind) {
       try {

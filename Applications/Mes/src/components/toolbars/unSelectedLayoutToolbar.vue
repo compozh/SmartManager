@@ -1,7 +1,7 @@
 <template>
     <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
         <v-flex class="toolbar-basebuttons">
-            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
+            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">{{this.$t('mes.buttons.Downtime')}}</v-btn>
         </v-flex>
     </v-layout>
 </template>

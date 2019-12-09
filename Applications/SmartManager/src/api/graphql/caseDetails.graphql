@@ -7,6 +7,7 @@ query($caseId: Int!) {
             dateFrom
             dateTo
             comm
+            userAdd
             fioAdd
             dateAdd
             hasOrig
@@ -36,6 +37,7 @@ query($caseId: Int!) {
                 id
                 fileName
                 fileExt
+                fileSize
             }
             comments {
                 userId

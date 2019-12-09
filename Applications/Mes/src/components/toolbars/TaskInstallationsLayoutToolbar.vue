@@ -14,12 +14,12 @@
               <template v-slot:activator="{ on }">
                 <v-btn outlined class="mes-arrow-back" @click="backToMainLayout" color="#326DA8" v-on="on"><v-icon dark>arrow_back</v-icon></v-btn>
               </template>
-              <span>Вернуться назад</span>
+              <span>{{this.$t('mes.buttons.ComeBack')}}</span>
             </v-tooltip>
 
             <v-text-field
                 class="qr-input"
-                label="Укажите QR-партии материала для установки"
+                :label="this.$t('mes.placeholders.SearchMaterial')"
                 required @keyup.enter="submitQrCode"
                 v-model="inputQrCode"
                 :disabled="this.disableQrInput"
@@ -33,13 +33,13 @@
                     </svg>
                 </v-btn>
               </template>
-              <span>Сканировать QR код</span>
+              <span>{{this.$t('mes.buttons.ScanQRCode')}}</span>
             </v-tooltip>
 
         </v-flex>
 
         <v-flex class="remove-installations-layout" xs2 v-if="installations.length && properties.allowRemoveAllInstallations">
-            <v-btn class="remove-installations-button" outlined @click="onclickRemoveAllInstallations" color="#326DA8">Снять все партии</v-btn>
+            <v-btn class="remove-installations-button" outlined @click="onclickRemoveAllInstallations" color="#326DA8">{{this.$t('mes.buttons.RemoveAllParties')}}</v-btn>
         </v-flex>
 
     </v-layout>

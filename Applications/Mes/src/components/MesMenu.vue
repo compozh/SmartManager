@@ -24,8 +24,11 @@ export default {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
+    dynamicPages() {
+      return this.$store.getters['mes/dynamicPages']
+    },
     links() {
-      if (!this.$store.state.WebApps.applicationDescription) {
+      if (!this.$store.state.WebApps.applicationDescription || !this.dynamicPages) {
         return []
       }
 
@@ -38,11 +41,22 @@ export default {
           (section.Routes || []).map(r => (r.section = section) && r)
         )
       }
+      var dynamicPagesWithKey = []
+      this.dynamicPages.properties.forEach(page => {
+         dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
+      })
       var pages = []
       for (let page of links[1].Children) {
         if (this.workCenter)  {
           switch (this.workCenter.accessPages) {
           case 'ALL_PAGES':
+            let component = page.Components[0]
+            if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[page.Id.toLowerCase()]) {
+              continue
+            }
+            if (dynamicPagesWithKey[page.Id.toLowerCase()]) {
+              page.Name = dynamicPagesWithKey[page.Id.toLowerCase()].name
+            }
             pages.push(page)
             break
           case 'ONLY_INSTALLATION':
@@ -76,6 +90,7 @@ export default {
       pages = pages.sort((a,b) => {
         return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1)
       })
+
       links = links.concat(pages)
       return links.filter(l => l.Name && l.Path)
     },

@@ -77,28 +77,38 @@
             </div>
           </div>
           <div class="vx-row">
-            <files-upload @attach="getAttachment($event)"
-                          resetBtn
-                          uploadBtn
-                          class="w-full"
-            ></files-upload>
+            <files-upload class="w-full"
+                          @attach="getAttachment($event)"
+                          :uploadErrors="uploadErrors"
+                          uploadAuto/>
           </div>
         </vx-card>
       </div>
     </div>
     <!-- TASKS -->
-    <div v-if="tasks.length"
-         class="vx-row"
+    <div class="vx-row"
          style="margin-top: 2.2rem">
       <div class="vx-col w-full">
         <vx-card>
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
-              <div class="vx-row w-full border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid mb-6">
-                <div class="vx-col w-full flex">
+              <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
+                          border-t-0 d-theme-border-grey-light border-solid pb-4">
+                <div class="vx-col flex items-center">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
-                  <span class="py-4">{{ $t('tasks.related').toUpperCase() }}</span>
+                  <span v-if="tasks.length" class="pt-1">{{ $t('tasks.related').toUpperCase() }}</span>
+                  <span v-else class="pt-1">{{ $t('tasks.noRelatedTasks').toUpperCase() }}</span>
+                </div>
+                <div class="flex">
+                  <vs-button :to="{name: 'task-add', params: {
+                                bindCaseId: caseItem.id,
+                                bindCaseName: caseItem.name
+                             }}"
+                             class="ml-3"
+                             color="primary"
+                             size="small"
+                             type="border"
+                             icon="library_add">{{ $t('buttons.addCaseTask') }}</vs-button>
                 </div>
               </div>
               <div class="vx-row w-full">
@@ -146,6 +156,7 @@ export default {
       wheelSpeed: 0.50,
     },
     filesUploading: false,
+    uploadErrors: []
   }),
   computed: {
     tasks() {
@@ -177,12 +188,17 @@ export default {
         id: this.$route.params.id,
         type: 'CASE',
       }
-      try {
-        await this.$store.dispatch('sm/addAttachments', {attachments, params})
-        this.attachments.length = 0
-      } catch (e) {
-        console.log('', e.message)
-      }
+      // Returns results list
+      const results = await this.$store.dispatch('sm/addAttachments', {attachments, params})
+      results.forEach(result => {
+        if (!result.success) {
+          this.uploadErrors.push({
+            fileName: result.name,
+            message: result.errorMessage
+          })
+        }
+      })
+      this.attachments.length = 0
     }
   }
 }
