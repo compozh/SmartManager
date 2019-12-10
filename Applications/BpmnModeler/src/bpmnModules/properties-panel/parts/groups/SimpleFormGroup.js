@@ -69,9 +69,7 @@ export default class SimpleFormGroup extends PropertiesPanelGroup {
         return commands;
       },
       onActiveElementChanged: (fieldId) => {
-        console.log(fieldId);
         this.activeField = aField = formHelper.getFormFieldById(element, fieldId);
-        console.log(aField);
       }
     })]);
     this.entryFactory = entryFactory;
@@ -87,10 +85,6 @@ export default class SimpleFormGroup extends PropertiesPanelGroup {
 
     const activeField = this.activeField || aField || { },
       fieldPropsVisible = aField != null;
-    
-    console.log('entries');
-    console.log(activeField);
-    console.log(fieldPropsVisible);
     
     entries.push(entryFactory.label({
       id: 'form-field-header',

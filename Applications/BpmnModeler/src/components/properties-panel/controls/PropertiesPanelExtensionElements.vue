@@ -66,7 +66,6 @@ export default {
         return this.activeElement;
       },
       set(value) {
-        console.log('computed active')
         this.$emit('update:activeElement', value);
         this.onActiveElementChanged(value);
       }
@@ -91,7 +90,6 @@ export default {
           if (this.resetOnElementChanged) {
             this.active = undefined;
           } else {
-            console.log(this.active);
             this.$nextTick(() => this.$refs.tree.setCurrentKey(this.active));
           }
         }
