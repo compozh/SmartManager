@@ -4,6 +4,22 @@ import { tryFunctionOrLogError } from 'apollo-utilities';
 const api = new LmsApi()
 
 export default {
+  async getLogoLink({commit}) {
+    commit('setError', null)
+    commit('setCircilarLoader', true)
+    try {
+      debugger
+      const result = await api.getLogo()
+      debugger
+      const link = result
+      commit('setLogoLink', link)
+    } catch (error) {
+      commit('setCircularLoader', false)
+      commit('setError', error.message)
+      commit('setLogoLink', 'https://m.it.ua/s00/ws/GetFile.ashx?file=itlogo.png&folder=DOCS')
+    }
+  },
+
   async getAvailableFilters({commit}) {
     commit('setError', null)
     commit('setCircularLoader', true)

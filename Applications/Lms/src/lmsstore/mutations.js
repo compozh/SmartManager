@@ -9,6 +9,10 @@ export default {
   clearError (state) {
     state.error = null
   },
+  setLogoLink (state, payload) {
+    debugger
+    state.logoLink = payload
+  },
   setAvailableFilters (state, payload ) {
     state.availableFilters = payload
   },

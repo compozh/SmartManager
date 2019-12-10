@@ -69,12 +69,12 @@
 
 <script>
 export default {
-	name: 'Filters',
+  name: 'Filters',
   props: {
-		filters: Array
-	},
-	data() {
-		return {
+    filters: Array
+  },
+  data() {
+    return {
 			// текущий активный фильтр
 			currentFilterIndex: - 1,
 			filterButtonPressed: false,
@@ -105,7 +105,6 @@ export default {
 		},
 		clearFilter() {
       // сбросить выбор
-      debugger
 			for (let index = 0; index < this.currentFilters[this.currentFilterIndex].items.length; index++) {
 				this.currentFilters[this.currentFilterIndex].items[index].selected = false
 			}
