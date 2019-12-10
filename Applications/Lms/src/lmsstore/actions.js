@@ -4,13 +4,11 @@ import { tryFunctionOrLogError } from 'apollo-utilities';
 const api = new LmsApi()
 
 export default {
-  async getLogoLink({commit}) {
+  getLogoLink({commit}) {
     commit('setError', null)
     commit('setCircilarLoader', true)
     try {
-      debugger
-      const result = await api.getLogo()
-      debugger
+      const result = api.getLogo()
       const link = result
       commit('setLogoLink', link)
     } catch (error) {

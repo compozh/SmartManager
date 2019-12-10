@@ -10,7 +10,6 @@ export default {
     state.error = null
   },
   setLogoLink (state, payload) {
-    debugger
     state.logoLink = payload
   },
   setAvailableFilters (state, payload ) {
