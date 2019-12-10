@@ -76,13 +76,14 @@
     "forward": "Send forward",
     "withComment": " with comment",
     "execute": "Execute",
-    "returnToWork": "Return",
+    "returnToWork": "Return to work",
     "create": "Create",
     "cancel": "Cancel",
     "ok": "Ok",
     "upload": "Upload",
     "viewMore": "More",
-    "addAttachment": "Click here to select files or drag&drop to this area, (max 100mb)",
+    "addAttachLong": "Click here to select files or drag&drop to this area, (max 100mb)",
+    "addAttachShot": "Select files (max 100mb)",
     "add": "Add",
     "send": "Send",
     "start": "Start",
@@ -99,7 +100,8 @@
     "pin": "Add to favorites",
     "unpin": "Remove from favorites",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "complete": "Complete"
   },
   "icons": {
     "priority": "High priority",
@@ -119,9 +121,11 @@
     "approvals": "Approvals"
   },
   "statuses": {
-    "inWork": "in work",
-    "rejected": "rejected",
-    "completed": "completed"
+    "status": "Status",
+    "inWork": "In work",
+    "rejected": "Rejected",
+    "done": "Done",
+    "completed": "Completed"
   },
   "roles": {
     "responsible": "Responsible",

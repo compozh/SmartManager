@@ -21,9 +21,6 @@
           <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
 
             <div class="content-area__content">
-              <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
-                <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg"/>
-              </back-to-top>
               <transition :name="routerTransition" mode="out-in">
                 <keep-alive :include="['task-list', 'case-list']">
                   <router-view @changeRouteTitle="changeRouteTitle"></router-view>
@@ -44,7 +41,6 @@ import TheNavbar from '../components/TheNavbar.vue'
 import TheFooter from '../components/TheFooter.vue'
 import themeConfig from '@/../themeConfig.js'
 import templateConfig from '@/templateConfig.js'
-import BackToTop from 'vue-backtotop'
 
 export default {
   name: 'layout',
@@ -200,8 +196,7 @@ export default {
   components: {
     VxSidebar,
     TheNavbar,
-    TheFooter,
-    BackToTop,
+    TheFooter
   },
   created() {
     this.getFolders()

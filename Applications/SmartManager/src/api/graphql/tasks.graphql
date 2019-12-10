@@ -1,28 +1,24 @@
 query ($folderId: String) {
   smtasks {
     tasks(folderId: $folderId) {
-      ...mainTaskFields
+      id
+      name
+      descript
+      addedFio
+      addedPhoto
+      dateplan
+      status
+      isMy
+      myControl
+      isGenerate
+      hasOrig
+      hasComm
+      priority
+      dateFact
+      isRead
+      caseId
+      isFavorite
+      docCaption
     }
   }
-}
-
-fragment mainTaskFields on Task {
-  id
-  name
-  descript
-  addedFio
-  addedPhoto
-  dateplan
-  status
-  isMy
-  myControl
-  isGenerate
-  hasOrig
-  hasComm
-  priority
-  dateFact
-  isRead
-  caseId
-  isFavorite
-  docCaption
 }

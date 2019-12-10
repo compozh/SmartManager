@@ -38,6 +38,11 @@
         <feather-icon v-if="caseItem.hasComm" icon="MessageSquareIcon" class="mr-2"/>
       </vx-tooltip>
 
+      <vs-chip :color="caseStatus().color"
+               class="flex-shrink-0"
+               style="flex-basis: 80px"
+      >{{ caseStatus().text }}</vs-chip>
+
     </div>
   </router-link>
 </template>
@@ -61,6 +66,27 @@ export default {
     },
     dateTo() {
       return this.date(this.caseItem.dateTo)
+    },
+    caseStatus() {
+      return () => {
+        switch (this.caseItem.status) {
+          case '':
+            return {
+              color: 'primary',
+              text: this.$t('statuses.inWork')
+            }
+          case '+':
+            return {
+              color: 'success',
+              text: this.$t('statuses.done')
+            }
+          default:
+            return {
+              color: 'primary',
+              text: 'unknown'
+            }
+        }
+      }
     }
   }
 }

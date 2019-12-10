@@ -54,14 +54,14 @@ async function postHandler(event) {
   if (reqJson.query.includes('mutation')) {
     return await fetch(event.request.clone())
   }
-  const cachedResponse = await getCache(event.request.clone())
   const fetchPromise = fetch(event.request.clone())
+  const cachedResponse = await getCache(event.request.clone())
     .then(response => {
       setCache(event.request.clone(), response.clone())
       return response
     })
-  return cachedResponse
-    ? await Promise.resolve(cachedResponse) : fetchPromise
+  return fetchPromise
+    ? fetchPromise : await Promise.resolve(cachedResponse)
 }
 
 async function serializeResponse(response) {

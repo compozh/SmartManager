@@ -126,16 +126,17 @@ export default {
       throw Error
     }
   },
-  async changeStatus({dispatch}, payload) {
-    const status = JSON.stringify(payload)
+  async changeStatus({dispatch}, params) {
+    const paramsJson = JSON.stringify(params)
     startLoading(true)
     try {
-      const response = await api.changeTaskStatusInGql(status)
+      const response = await api.changeTaskStatusInGql(paramsJson)
       stopLoading()
       const result = response.data.smtasksMutation.changeStatus
       if (result.success) {
-        await dispatch('getTaskInfo', {
-          taskId: payload.id,
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id,
           loading: true
         })
         notify('success', 'statusTitle', 'statChangeSuccess')
@@ -231,7 +232,7 @@ export default {
     try {
       const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
-      stopLoading()
+      // Loading will be stopped after task info update
       if (result.success) {
         await dispatch('updateInfo', {
           type: params.type,

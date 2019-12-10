@@ -40,5 +40,18 @@ export default {
   },
   setBusinessProcesses(state, payload) {
     state.businessProcesses = payload
+  },
+  setTaskListPosition(state, {folder, page, scrollTop}) {
+    if (!state.taskListPosition[folder]) {
+      state.taskListPosition = Object
+        .assign({}, state.taskListPosition, {
+          [folder]: {page: 1, scrollTop: 0}
+        })
+    }
+    state.taskListPosition[folder] = Object
+      .assign({}, state.taskListPosition[folder], {
+        page: page || state.taskListPosition[folder].page,
+        scrollTop: scrollTop || state.taskListPosition[folder].scrollTop
+      })
   }
 }

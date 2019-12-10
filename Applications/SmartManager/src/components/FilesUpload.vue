@@ -80,7 +80,7 @@
       @input-file="inputFile"
       @input-filter="inputFilter"
     >
-      {{ $t('buttons.addAttachment') }}
+      {{ breakpoint === 'md' ? $t('buttons.addAttachShot') : $t('buttons.addAttachLong') }}
     </file-upload>
   </div>
 </template>
@@ -132,6 +132,9 @@ export default {
     headers: {'Upload-Type': 'single'}
   }),
   computed: {
+    breakpoint() {
+      return this.$store.state.breakpoint
+    },
     fileSize() {
       return size => {
         switch (true) {
