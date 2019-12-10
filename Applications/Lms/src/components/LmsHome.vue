@@ -28,7 +28,7 @@
 
 <script>
 
-import image from "../assets/home.jpg"
+import image from '../assets/home.jpg'
 import recommendedCourses from './LmsRecommendedCourses.vue'
 import recommendedModules from './LmsRecommendedModules.vue'
 

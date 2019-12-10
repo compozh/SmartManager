@@ -127,11 +127,6 @@ export default {
     routs = [...routs, ...routs[1].Children, ...routs[0].Children]
     this.links = routs.filter(l => l.Name)
       .sort((a, b) => a.Sort > b.Sort ? 1 : -1 )
-
-    // добавить классы
-    // for (let index = 0; index < this.links.length; index++) {
-    //   this.links[index].class = 'hidden-sm-and-down'
-    // }
   },
   methods: {
     getLogoLink () {

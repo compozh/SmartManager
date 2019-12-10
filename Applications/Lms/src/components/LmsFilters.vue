@@ -45,7 +45,7 @@
 								</v-card-title>
 								<!-- Список элементов фильтра -->
 								<v-list>
-									<v-list-tile v-for="(item, index) in filters[currentFilterIndex].items" :key="index"
+									<v-list-tile v-for="(item, index) in currentFilters[currentFilterIndex].items" :key="index"
 															style="height:30px">
 										<v-list-tile-action>
 											<v-checkbox v-model="item.selected" :label="item.name"></v-checkbox>
@@ -81,7 +81,7 @@ export default {
 			currentFilters: [],
 			filtersLoaded: false
 		}
-	},
+  },
 	methods: {
 		applyFilter() {
 			this.currentFilterIndex = -1
