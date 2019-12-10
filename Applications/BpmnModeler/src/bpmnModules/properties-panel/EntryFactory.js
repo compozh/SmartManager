@@ -154,7 +154,8 @@ export default class EntryFactory {
         },
         removeExtensionElement: (element) => {
           execute(options.removeExtensionElement(element), this.commandStack);
-        }
+        },
+        resetOnElementChanged: true
       },
       style: getDefaultStyle(options)
     };
