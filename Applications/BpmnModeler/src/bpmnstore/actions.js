@@ -89,6 +89,7 @@ export default {
       return false;
     }
     Object.assign(diagram, newDiagram);
+    await context.dispatch('resetCache');
     await context.dispatch('loadItems');
     return true;
   },
@@ -190,6 +191,7 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
+    await context.dispatch('resetCache');
     await context.dispatch('loadItems');
     return true;
   },
@@ -237,6 +239,7 @@ export default {
     } catch (error) {
       console.error(error);
     }
+    await context.dispatch('resetCache');
     await context.dispatch('loadItems');
     return success;
   },
@@ -260,6 +263,7 @@ export default {
     } catch (error) {
       console.error(error);
     }
+    await context.dispatch('resetCache');
     await context.dispatch('loadItems');
     return success;
   },
