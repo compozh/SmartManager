@@ -7,4 +7,6 @@ export default {
   taskInfo: {},
   cases: [],
   caseDetails: {},
+  taskListPosition: {},
+  caseListPosition: {}
 }

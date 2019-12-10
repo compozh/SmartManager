@@ -11,29 +11,54 @@
           <div class="vx-row border-b border-l-0 border-r-0
                        border-t-0 d-theme-border-grey-light
                        border-solid flex justify-between flex items-center">
-
-            <div class="vx-col sm:w-4/5 w-full flex items-center mb-2">
+            <!-- CASE META COL-1 (Name, purpose, comment)-->
+            <div class="vx-col lg:w-3/5 xl:w-4/5 w-full flex items-center mb-2">
               <div class="flex flex-col w-11/12">
                 <div class="flex items-center mb-2">
-                  <h5 class="mb-2 hover:bg-white hover:border-gray-300">{{ caseItem.name }}</h5>
+                  <h5 class="mb-2 hover:bg-white hover:border-gray-300 truncate">{{ caseItem.name }}</h5>
                 </div>
                 <div class="flex items-center mb-2">
                   <h3 class="text-primary truncate">{{ caseItem.purpose }}</h3>
                 </div>
                 <div class="flex items-center mb-2">
-                  <span>{{ caseItem.comm }}</span>
+                  <span class="truncate">{{ caseItem.comm }}</span>
                 </div>
               </div>
             </div>
-            <div class="vx-col sm:w-1/5 w-full flex sm:flex-col
-                        items-center sm:justify-end mb-2">
-              <span v-if="dateFrom" class="flex p-2 self-end"
-              >{{ $t('cases.dateStart') }}: {{ dateFrom }}</span>
-              <span v-if="dateTo" class="flex p-2 self-end"
-              >{{ $t('cases.dateEnd') }}: {{ dateTo }}</span>
+            <!-- CASE META COL-2 (Date from, date to)-->
+            <div class="vx-col lg:w-2/5 xl:w-1/5 w-full flex sm:flex-col
+                        items-center mb-2 flex-wrap">
+              <span v-if="dateFrom" class="flex p-2 md:pl-0 sm:pl-0 xs:pl-0 w-full justify-between">
+                <feather-icon icon="CalendarIcon" class="mr-2 text-primary"/>
+                <span class="flex-1 pt-1">{{ $t('cases.dateStart') }}:</span>
+                <span class="pt-1">{{ dateFrom }}</span>
+              </span>
+              <span v-if="dateTo" class="flex p-2 md:pl-0 sm:pl-0 xs:pl-0 w-full justify-between">
+                <feather-icon icon="CalendarIcon" class="mr-2 text-danger"/>
+                <span class="flex-1 pt-1">{{ $t('cases.dateEnd') }}:</span>
+                <span class="pt-1 xs:self-end sm:self-end">{{ dateTo }}</span>
+              </span>
             </div>
           </div>
-
+            <!-- CASE META (Status, Folder)-->
+            <div class="flex w-full pt-4 flex-wrap"
+                 :class="caseItem.folderId ? 'justify-between' : 'justify-end'">
+              <div v-if="caseItem.folderId" class="flex items-center pb-4">
+                <vs-icon icon="icon-folder" icon-pack="feather" size="20px"/>
+                <span class="ml-2 mr-4">{{ $t('folders.folder').toUpperCase() }}:</span>
+                <vs-chip class="mr-3 max-w-sm text-primary">
+                  {{ folderName(caseItem.folderId) }}
+                </vs-chip>
+              </div>
+              <div class="flex items-center pb-4">
+                <vs-icon icon="icon-refresh-ccw" icon-pack="feather" size="18px"/>
+                <span class="ml-2 mr-4">{{ $t('statuses.status').toUpperCase() }}:</span>
+                <vs-chip :color="caseStatus().color"
+                         class="flex-shrink-0"
+                         style="flex-basis: 80px"
+                >{{ caseStatus().text }}</vs-chip>
+              </div>
+            </div>
           <!-- CASE MEMBERS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
                       d-theme-border-grey-light border-solid flex">
@@ -85,7 +110,7 @@
         </vx-card>
       </div>
     </div>
-    <!-- TASKS -->
+    <!-- RELATIVE TASKS -->
     <div class="vx-row"
          style="margin-top: 2.2rem">
       <div class="vx-col w-full">
@@ -93,13 +118,13 @@
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid pb-4">
-                <div class="vx-col flex items-center">
+                          border-t-0 d-theme-border-grey-light border-solid">
+                <div class="vx-col flex items-center pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
                   <span v-if="tasks.length" class="pt-1">{{ $t('tasks.related').toUpperCase() }}</span>
                   <span v-else class="pt-1">{{ $t('tasks.noRelatedTasks').toUpperCase() }}</span>
                 </div>
-                <div class="flex">
+                <div class="flex pb-4">
                   <vs-button :to="{name: 'task-add', params: {
                                 bindCaseId: caseItem.id,
                                 bindCaseName: caseItem.name
@@ -175,6 +200,34 @@ export default {
     },
     dateTo() {
       return this.date(this.caseItem.dateTo)
+    },
+    folders() {
+      const allFolders = this.$store.state.sm.folders || []
+      return allFolders.filter(i => !!i.folderId)
+    },
+    folderName() {
+      return id => this.folders.find(i => i.folderId === id).name || ''
+    },
+    caseStatus() {
+      return () => {
+        switch (this.caseItem.status) {
+          case '':
+            return {
+              color: 'primary',
+              text: this.$t('statuses.inWork')
+            }
+          case '+':
+            return {
+              color: 'success',
+              text: this.$t('statuses.done')
+            }
+          default:
+            return {
+              color: 'primary',
+              text: 'unknown'
+            }
+        }
+      }
     }
   },
   methods: {

@@ -13,6 +13,7 @@ query($caseId: Int!) {
             hasOrig
             hasComm
             folderId
+            status
             tasks {
                 id
                 name

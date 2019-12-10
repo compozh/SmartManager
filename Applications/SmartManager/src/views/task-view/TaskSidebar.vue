@@ -1,6 +1,5 @@
 <template>
-  <VuePerfectScrollbar class="email-scroll-area" :settings="settings">
-    <div class="px-6 py-6 flex flex-col">
+    <div class="p-6 md:px-6 sm:px-2 xs:px-2 flex flex-col">
       <div
         v-for="(item, index) in menuItems"
         :key="index"
@@ -19,11 +18,9 @@
         >{{ chips(item.name) }}</vs-chip>
       </div>
     </div>
-  </VuePerfectScrollbar>
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
   props: {
@@ -31,19 +28,12 @@ export default {
     attachments: Array,
     comments: Array,
   },
-  components: {
-    VuePerfectScrollbar
-  },
   data: () => ({
     menuItems: [
       {name: 'details', icon: 'AlertCircleIcon'},
       {name: 'attachments', icon: 'PaperclipIcon', chipColor: 'primary'},
       {name: 'comments', icon: 'MessageSquareIcon', chipColor: 'warning'}
-    ],
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.30,
-    }
+    ]
   }),
   computed: {
     chips() {
