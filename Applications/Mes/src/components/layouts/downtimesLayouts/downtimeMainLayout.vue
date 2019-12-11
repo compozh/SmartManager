@@ -37,8 +37,20 @@ export default {
     }
   },
   methods: {
-    formSubmit(submission) {
-      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, downtime: this.selectedDowntime, message:this.$t('mes.dialogs.RegistrationDowntime')})
+    async formSubmit(submission) {
+      var me = this,
+        formCode = me.workCenter.downtimeRegistrationFormCode,
+        properties = { workCenterCode: me.workCenter.code },
+        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+        
+      me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))
+      
+      await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {
+        me.$store.commit('mes/setDowntimes', [])
+        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })        
+      })
+
+      me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()

@@ -57,8 +57,15 @@ export default {
       }, message: this.$t('mes.dialogs.RegistrationDowntime')})
     },
     initializeCreateDowntimeFormio() {
-      let workCenter = this.$parent.workCenter
-      this.$store.dispatch('mes/initializeCreateDowntimeFormio', workCenter)
+      var me = this,
+        workCenter = this.$parent.workCenter,
+        formCode = workCenter.downtimeRegistrationFormCode,
+        properties = { RCENTR: workCenter.code },
+        fetchPolicy = 'network-only'
+
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+        me.$store.commit('mes/setCreateDowntimeFormio', result)
+      })
     }
   }
 }

@@ -94,7 +94,7 @@ export default {
       this.initializeDynamicPage = true
       this.selectFirstDocument()
     },
-    async changeCurrentDocument(newSelectedDocument) {
+    changeCurrentDocument(newSelectedDocument) {
       var me = this
       if (me.selectedDocument == newSelectedDocument) {
         return
@@ -102,12 +102,14 @@ export default {
       me.selectedDocument = newSelectedDocument
       me.$store.commit('mes/resetDocumentFormio')
 
-      var properties = { workCenterCode: me.workCenter.code , id: newSelectedDocument.id }
-      await me.$store.dispatch('formio/getForm', { formCode: me.pageProps.id, properties }).then(params => {
-        if(params.success) {
-          me.$store.commit('mes/setDocumentFormio', params)
-        }
+      var formCode = me.pageProps.id,
+        properties = { RCENTR: me.workCenter.code, ID: newSelectedDocument.id },
+        fetchPolicy = 'network-only'
 
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+        if(result.success) {
+          me.$store.commit('mes/setDocumentFormio', result)
+        }
       })
     },
     selectFirstDocument() {

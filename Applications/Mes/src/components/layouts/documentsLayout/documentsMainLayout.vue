@@ -52,8 +52,8 @@ export default {
         searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
 
       me.$store.commit('mes/setDialogLinearLoaderMessage', this.$t('mes.dialogs.RegistrationDocument'))
-      await me.$store.dispatch('formio/submitForm', { formCode: pageProps.formCode, submission, properties }).then((params) => {
-        if(params.success) {
+      await me.$store.dispatch('formio/submitForm', { formCode: pageProps.formCode, submission, properties }).then(result => {
+        if(result.success) {
           me.$store.commit('mes/setDocuments', [])
           me.$store.commit('mes/setInitializeDocuments', false)
           me.$store.dispatch('mes/downloadDocuments', { processTypeCode: pageProps.id, searchDateTime, direction })
