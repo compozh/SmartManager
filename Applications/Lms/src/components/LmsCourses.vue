@@ -40,15 +40,18 @@
 				</v-card>
 			</v-flex>
 		</v-layout>
-    <Filters :filters="availableFilters"></Filters>
+    <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
 		<v-layout wrap row>
-			<v-flex mx-2 mt-4 mb-3>
+			<!-- <v-flex mx-2 mt-4 mb-3>
 			<h5 class='title font-weight-regular text-xs-left'>Курсы</h5>
-			</v-flex>
+			</v-flex> -->
 		</v-layout>
 			<v-layout wrap row>
 				<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
-					<v-card class='mx-2 my-2' style='margin: 0px 0px 0px 0px' hover height='280px'>
+
+          <course-card v-if="course" :course="course" />
+
+					<!-- <v-card class='mx-2 my-2' style='margin: 0px 0px 0px 0px' hover height='280px'>
 						<v-layout v-bind:style="{'background-color': course.backgroundColor}">
 							<v-flex xs4 mt-3 mb-3>
 								<v-img
@@ -69,10 +72,8 @@
 						<div style='height:118px;overflow:hidden' class='mt-2 ml-3'>
 							<h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{course.type}}</h4>
 							<h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-                  @click="goToCourseDetails(course.courseGuid, course)">
-                <!-- @click='$router.push({name: "LMSCOURSEDETAILS", params: {courseGuid: course.courseGuid, courseName: course.name, courseData: course}})' -->
-                <!-- <router-link></router-link> -->
-                {{course.name}}
+                  @click='$router.push({name: "LMSCOURSEDETAILS", params: {courseGuid: course.courseGuid, courseName: course.name, courseData: course}})'>
+                  {{course.name}}
 							</h3>
 							<div class='.body-2'>{{course.description}}</div>
 						</div>
@@ -86,10 +87,11 @@
 								@click='changeFavoriteState(course)'
 								>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
 							<v-spacer/>
-							<!-- <v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
-							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip> -->
+							<v-chip small v-show="course.roles[0]" @click="roleSearch(course.roles[0])">{{course.roles[0] ? course.roles[0].name: null}}</v-chip>
+							<v-chip small v-show="course.levels[0]" @click="levelSearch(course.levels[0])">{{course.levels[0] ? course.levels[0].name : null}}</v-chip>
 						</v-layout>
-					</v-card>
+					</v-card> -->
+
 				</v-flex>
 			</v-layout>
 	</v-container>
@@ -97,13 +99,27 @@
 
 
 <script>
-// import { threadId } from 'worker_threads'
+
+import CourseCard from './CourseCard.vue'
+import Filters from './LmsFilters.vue'
+import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 
 export default {
 	name: 'lms-courses',
   created() {
     if (this.$store.getters['lms/courses'] === null) {
       this.getCourses()
+    }
+    if (this.$store.getters['lms/availableFilters'] === null) {
+      this.getAvailableFilters()
+    }
+  },
+
+  data() {
+    return {
+      filterChanged: false,
+      allCourses: [],
+      coursesFiltered: []
     }
   },
 
@@ -112,23 +128,114 @@ export default {
       this.$store.dispatch('lms/getCourses')
     },
 
-    goToCourseDetails ( courseId, course ) {
-      this.$router.push({ name: 'LMSCOURSEDETAILS', params: {courseGuid: courseId, courseName: course.name, courseData: course}})
-    },
-
     roleSearch: function(data) {
       this.$router.push({ name: 'LMSCOURSES', params: { role: data.code } })
     },
     levelSearch: function(data) {
       this.$router.push({ name: "LMSCOURSES", params: { level: data.code } })
+    },
+
+    refreshCoursesFilter: function(data) {
+      var roles = []
+      var levels = []
+      var products = []
+      var tags = []
+      // проверить установленные фильры
+      const filters = data.currentFilters
+      var setFilters = checkFiltersChanges(filters)
+
+      // Если не установлены
+      if (!setFilters) {
+        this.filterChanged = false;
+      } else {
+        this.coursesFiltered.length = 0
+        this.filterChanged = true;
+
+        // разделить фильтры по категориям
+        var separatedFilters = separateFilters(filters)
+        roles = separatedFilters.roles
+        levels = separatedFilters.levels
+        products = separatedFilters.products
+        tags = separatedFilters.tags
+
+        // отфильтровать курсы по установленному фильтру
+        var selectedListId = []
+        for (let index = 0; index < this.allCourses.length; index++) {
+          const course = this.allCourses[index]
+          // roles
+          for (let index = 0; index < course.roles.length; index++) {
+            const role = course.roles[index]
+            for (let indexFilter = 0; indexFilter < roles.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (role.code === roles[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+          // levels
+          for (let index = 0; index < course.levels.length; index++) {
+            const level = course.levels[index]
+            for (let indexFilter = 0; indexFilter < levels.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (level.code === levels[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+          // products
+          for (let index = 0; index < course.products.length; index++) {
+            const product = course.products[index]
+            for (let indexFilter = 0; indexFilter < products.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (product.code === products[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+          // tags
+          for (let index = 0; index < course.tags.length; index++) {
+            const tag = course.tags[index]
+            for (let indexFilter = 0; indexFilter < tags.length; indexFilter++) {
+              // Если у курса есть признак и не был выбран - добавить
+              if (tag.code === tags[indexFilter].code &&
+                  !selectedListId.includes(course.courseGuid)) {
+                selectedListId.push(course.courseGuid)
+                this.coursesFiltered.push(course)
+              }
+            }
+          }
+        }
+      }
     }
   },
   computed: {
     availableFilters() {
-      return this.$store.getters['lms/availableFilters']
+      var filters = this.$store.getters['lms/availableFilters']
+      // Добавить поле - признак выбора
+      if (filters) {
+        for (let index = 0; index < filters.length; index++) {
+          var filter = filters[index]
+          for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
+             filter.items[itemIndex].selected = false;
+          }
+        }
+      }
+      return filters
     },
+
     courses () {
-      return this.$store.getters['lms/courses']
+      if (this.filterChanged) {
+        return this.coursesFiltered
+      } else {
+        this.allCourses = this.$store.getters['lms/courses']
+        return this.allCourses
+      }
     }
   },
 }
