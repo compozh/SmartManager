@@ -278,18 +278,6 @@ export default {
       linearLoader: true
     })
   },
-  async initializeDocumentFormio({ commit }, { formCode, workCenter, documentId }) {
-    commit('resetDocumentFormio')
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.getDocumentFormioFromGql(formCode, { workCenterCode: workCenter.code , id: documentId }, 'network-only')
-      },
-      successAction: async result => {
-        commit('setDocumentFormio', result)
-         },
-      linearLoader: true
-    })
-  },
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },

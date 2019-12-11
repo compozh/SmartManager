@@ -94,12 +94,21 @@ export default {
       this.initializeDynamicPage = true
       this.selectFirstDocument()
     },
-    changeCurrentDocument(newSelectedDocument) {
-      if (this.selectedDocument == newSelectedDocument) {
+    async changeCurrentDocument(newSelectedDocument) {
+      var me = this
+      if (me.selectedDocument == newSelectedDocument) {
         return
       }
-      this.selectedDocument = newSelectedDocument
-      this.$store.dispatch('mes/initializeDocumentFormio', { formCode: this.pageProps.id, workCenter: this.workCenter, documentId: newSelectedDocument.id } )
+      me.selectedDocument = newSelectedDocument
+      me.$store.commit('mes/resetDocumentFormio')
+
+      var properties = { workCenterCode: me.workCenter.code , id: newSelectedDocument.id }
+      await me.$store.dispatch('formio/getForm', { formCode: me.pageProps.id, properties }).then(params => {
+        if(params.success) {
+          me.$store.commit('mes/setDocumentFormio', params)
+        }
+
+      })
     },
     selectFirstDocument() {
       if (this.documents.length) {
