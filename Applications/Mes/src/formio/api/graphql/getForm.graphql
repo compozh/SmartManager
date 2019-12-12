@@ -1,6 +1,6 @@
-query($formCode:String!) {
+query($formCode:String!, , $properties: String) {
     formioQuery {
-        getForm(formCode: $formCode) {
+        getForm(formCode: $formCode, properties: $properties) {
             name
             components
             submission

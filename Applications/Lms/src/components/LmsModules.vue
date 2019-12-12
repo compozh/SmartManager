@@ -41,65 +41,46 @@
 			</v-flex>
 		</v-layout>
     <!-- Filters -->
-    <Filters :filters="availableFilters" ></Filters>
+    <Filters :filters="availableFilters" @filterChanged="refreshModulesFilter"></Filters>
 		<v-layout wrap row>
-			<v-flex mx-2 mt-4 mb-3>
+			<!-- <v-flex mx-2 mt-4 mb-3>
 				<h5 class='title font-weight-regular text-xs-left'>Модули</h5>
-			</v-flex>
+			</v-flex> -->
 		</v-layout>
 		<v-layout wrap row>
 			<v-flex v-for='moduleData in modules' :key='moduleData.courseId' lg3 md4 sm6 xs12>
-				<v-card class='mx-2 my-2' hover height='255px'>
-					<v-layout>
-						<v-flex xs4 mt-2 mb-2>
-							<v-img
-								v-show="moduleData.imageLink"
-								v-bind:src='moduleData.imageLink'
-								height='80px'
-								contain/>
-						</v-flex>
-						<v-flex xs8>
-							<v-card-title primary-title>
-								<v-layout align-end justify-start column>
-									<div style='font-size:14px;font-weight:500'>{{moduleData.durationMinutesLabel}}</div>
-									<div class='grey--text mt-1' style='font-size:14px;font-weight:400'>{{moduleData.lessonsQtLabel}}</div>
-								</v-layout>
-							</v-card-title>
-						</v-flex>
-					</v-layout>
-					<div style='height:118px;overflow:hidden' class='mt-0 ml-3'>
-						<h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{moduleData.type}}</h4>
-						<h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-							@click='$router.push({name: "LMSMODULEDETAILS", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
-						</h3>
-						<div class='.body-2'>{{moduleData.description}}</div>
-					</div>
-					<v-divider light></v-divider>
-					<v-layout align-end justify-center row>
-						<v-icon
-							id='favIcon'
-							v-bind:color='moduleData.isFavorite ? "red" : "grey"'
-							@mouseenter='favIconColor = "red"'
-							@mouseleave='favIconColor = "grey"'
-							@click='moduleData.isFavorite = !moduleData.isFavorite'
-							>{{moduleData.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
-						<v-spacer/>
-						<v-chip small v-show="moduleData.roles[0]" @click="roleSearch(moduleData.roles[0])">{{moduleData.roles[0] ? moduleData.roles[0].name: null}}</v-chip>
-						<v-chip small v-show="moduleData.levels[0]" @click="levelSearch(moduleData.levels[0])">{{moduleData.levels[0] ? moduleData.levels[0].name : null}}</v-chip>
-					</v-layout>
-				</v-card>
+
+        <module-card v-if="moduleData" :moduleData="moduleData" />
+
 			</v-flex>
 		</v-layout>
 	</v-container>
 </template>
 
 <script>
+import ModuleCard from './ModuleCard.vue'
+import Filters from './LmsFilters.vue'
+import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 
 export default {
   name: "lms-modules",
   created() {
-    this.getModules()
+    if (this.$store.getters['lms/modules'] === null) {
+      this.getModules()
+    }
+    if (this.$store.getters['lms/availableFilters'] === null) {
+      this.getAvailableFilters()
+    }
   },
+
+  data() {
+    return {
+      filterChanged: false,
+      allModules: [],
+      modulesFiltered: []
+    }
+  },
+
   methods: {
     getModules () {
       this.$store.dispatch('lms/getModules')
@@ -110,15 +91,105 @@ export default {
     },
     levelSearch: function(data) {
       this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
+    },
+
+    refreshModulesFilter: function(data) {
+      var roles = []
+      var levels = []
+      var products = []
+      var tags = []
+      // проверить установленные фильтры
+      const filters = data.currentFilters
+      var setFilters = checkFiltersChanges(filters)
+
+      // Если фильтры не установлены
+      if (!setFilters) {
+        this.filterChanged = false
+      } else {
+        this.filterChanged = true
+        this.modulesFiltered.length = 0
+
+        // разделить фильтры по категориям
+        var separatedFilters = separateFilters (filters)
+        roles = separatedFilters.roles
+        levels = separatedFilters.levels
+        products = separatedFilters.products
+        tags = separatedFilters.tags
+
+        // Отфильтровать модули по выбранным фильтрам
+        var selectedListId = []
+        for (let index = 0; index < this.allModules.length; index++) {
+          const moduleData = this.allModules[index];
+          // roles
+          for (let itemIndex = 0; itemIndex <  moduleData.roles.length; itemIndex++) {
+            const role = moduleData.roles[itemIndex];
+            for (let indexFilter = 0; indexFilter < roles.length; indexFilter++) {
+              if (role.code === roles[indexFilter].code
+                  && !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+          // levels
+          for (let itemIndex = 0; itemIndex < moduleData.levels.length; itemIndex++) {
+            const level = moduleData.levels[itemIndex]
+            for (let indexFilter = 0; indexFilter < levels.length; indexFilter++) {
+              if (level.code === levels[indexFilter]
+                  && !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+          // products
+          for (let index = 0; index < moduleData.products.length; index++) {
+            const product = moduleData.products[index]
+            for (let indexFilter = 0; indexFilter < products.length; indexFilter++) {
+              if (product.code === products[indexFilter].code
+                  && !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+          // tags
+          for (let index = 0; index < moduleData.tags.length; index++) {
+            const tag = moduleData.tags[index]
+            for (let indexFilter = 0; indexFilter < tags.length; indexFilter++) {
+              if (tag.code === tags[indexFilter].code &&
+                  !selectedListId.includes(moduleData.moduleGuid)) {
+                selectedListId.push(moduleData.moduleGuid)
+                this.modulesFiltered.push(moduleData)
+              }
+            }
+          }
+        }
+      }
     }
   },
   computed: {
     availableFilters() {
-      return this.$store.getters['lms/availableFilters']
+      var filters = this.$store.getters['lms/availableFilters']
+      // добавить поле-признак выбора
+      if (filters) {
+        for (let index = 0; index < filters.length; index++) {
+          var filter = filters[index];
+          for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
+             filter.items[itemIndex].selected = false;
+          }
+        }
+      }
+      return filters
     },
 
     modules () {
-      return this.$store.getters['lms/modules']
+      if (this.filterChanged) {
+        return this.modulesFiltered
+      } else {
+        this.allModules = this.$store.getters['lms/modules']
+        return this.allModules
+      }
     }
   }
 }

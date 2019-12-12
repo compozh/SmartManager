@@ -95,11 +95,22 @@ export default {
       this.selectFirstDocument()
     },
     changeCurrentDocument(newSelectedDocument) {
-      if (this.selectedDocument == newSelectedDocument) {
+      var me = this
+      if (me.selectedDocument == newSelectedDocument) {
         return
       }
-      this.selectedDocument = newSelectedDocument
-      this.$store.dispatch('mes/initializeDocumentFormio', { formCode: this.pageProps.id, workCenter: this.workCenter, documentId: newSelectedDocument.id } )
+      me.selectedDocument = newSelectedDocument
+      me.$store.commit('mes/resetDocumentFormio')
+
+      var formCode = me.pageProps.id,
+        properties = { RCENTR: me.workCenter.code, ID: newSelectedDocument.id },
+        fetchPolicy = 'network-only'
+
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+        if(result.success) {
+          me.$store.commit('mes/setDocumentFormio', result)
+        }
+      })
     },
     selectFirstDocument() {
       if (this.documents.length) {

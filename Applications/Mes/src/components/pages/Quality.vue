@@ -85,11 +85,19 @@ export default {
       }
     },
     changeCurrentQuality(newSelectedQuality) {
-      if (this.selectedQuality == newSelectedQuality) {
+      var me = this
+      if (me.selectedQuality == newSelectedQuality) {
         return
       }
-      this.selectedQuality = newSelectedQuality
-      this.$store.dispatch('mes/initializeQualityFormio', { formCode: this.properties.qualityForm, workCenter: this.workCenter, qualityId: newSelectedQuality.id } )
+      me.selectedQuality = newSelectedQuality
+
+      var formCode = me.properties.qualityForm,
+        properties = { RCENTR: me.workCenter.code , ID: newSelectedQuality.id },
+        fetchPolicy = 'network-only'
+
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+          me.$store.commit('mes/setQualityFormio', result)
+      })
     },
     seelectFirstQuality() {
       if (this.qualities.length) {

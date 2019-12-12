@@ -77,12 +77,25 @@ export default {
         this.seelectFirstDowntime()
       }
     },
-    changeCurrentDowntime(newSelectedDowntime) {
-      if (this.selectedDowntime == newSelectedDowntime) {
+    async changeCurrentDowntime(newSelectedDowntime) {
+      var me = this
+      if (me.selectedDowntime == newSelectedDowntime) {
         return
       }
-      this.selectedDowntime = newSelectedDowntime
-      this.$store.dispatch('mes/initializeDowntimeFormio', { workCenter: this.workCenter, downtimeId: newSelectedDowntime.id } )
+      me.selectedDowntime = newSelectedDowntime
+
+      var formCode = me.workCenter.downtimeRegistrationFormCode,
+        properties = {
+          RCENTR: me.workCenter.code,
+          ID: newSelectedDowntime.id
+        }
+
+      me.$store.commit('mes/resetDowntimeFormio')
+      me.$store.commit('mes/setLinearLoader', true)
+      await me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy: 'network-only' }).then(result => {
+        me.$store.commit('mes/setDowntimeFormio', result)
+      })
+      me.$store.commit('mes/setLinearLoader', false)
     },
     seelectFirstDowntime() {
       if (this.downtimes.length) {

@@ -1,10 +1,6 @@
-mutation($formCode: String!, $submission: String) {
+mutation($formCode: String!, $submission: String, $properties: String) {
     formioQueryMutation {
-        submitForm(formCode: $formCode, submission: $submission) {
-            components
-            submission
-            display
-            settings
+        submitForm(formCode: $formCode, submission: $submission, properties: $properties) {
             success
             errorMessage
             successMessage

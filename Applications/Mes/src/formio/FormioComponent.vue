@@ -7,6 +7,7 @@
       language="ru"
       @submit=onSubmit
       @change=onChange
+      @customEvent=customEvent
       ref="formioComponent"
     />
     <formio-qr-scaner
@@ -92,6 +93,28 @@ export default {
     onChange(params) {
 
     },
+    customEvent(params){
+      var me = this,
+        form = me.$refs.formioComponent,
+        component = params.component,
+        displayLoading = component.displayLoading
+      if (displayLoading){
+      me.setComponentLoading(component.key, true)
+      }
+			me.requestToServerAction(params.type, () => {
+        if (displayLoading){
+          me.setComponentLoading(component.key, false)
+        }
+			});
+    },
+    setComponentLoading(componentKey, loading) {
+      var me = this,
+        form = me.$refs.formioComponent
+
+        let componentElement = form.formio.getComponent(componentKey)
+        componentElement.loading = loading
+        componentElement.disabled = loading
+    },
     getFormSubmission() {
       var form = this.$refs.formioComponent
       return JSON.stringify(form.submission, null, 4)
@@ -109,9 +132,6 @@ export default {
           if(!result) {
             return
           }
-            if (callback) {
-              callback(result);
-            }
 
             var dataChanged = false;
             if (result.components && result.components != components) {
@@ -146,6 +166,10 @@ export default {
               submission = { data: JSON.parse(result.submission) }
               me.changedData.submission = submission
               form.formio.setSubmission(submission)
+            }
+
+            if (callback) {
+              callback(result);
             }
       })
     },

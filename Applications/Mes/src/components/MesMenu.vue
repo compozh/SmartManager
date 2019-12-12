@@ -50,12 +50,16 @@ export default {
         if (this.workCenter)  {
           switch (this.workCenter.accessPages) {
           case 'ALL_PAGES':
-            let component = page.Components[0]
-            if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[page.Id.toLowerCase()]) {
+            let component = page.Components[0],
+              pageId = page.Id.toLowerCase()
+            if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[pageId]) {
               continue
             }
-            if (dynamicPagesWithKey[page.Id.toLowerCase()]) {
-              page.Name = dynamicPagesWithKey[page.Id.toLowerCase()].name
+            let dynamicPage = dynamicPagesWithKey[pageId]
+            if (dynamicPage) {
+              page.Name = dynamicPage.name
+              page.Image = dynamicPage.image || 'description'
+              page.Sort = 100
             }
             pages.push(page)
             break
@@ -96,7 +100,7 @@ export default {
     },
     obsoleteData() {
       return this.$store.getters['mes/obsoleteData']
-    },
+    }
   },
   methods: {
     reloadPage(route) {
