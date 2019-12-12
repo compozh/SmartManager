@@ -1,6 +1,7 @@
 export default {
   circularLoader: false, // Circular progress component
   error: null,    // SnackBar for errors
+  logoLink: null,
   availableFilters: null,
   recommended: null,    // common object for recommendedCourses & recommendedModules
   courses: null,        // Availabels course

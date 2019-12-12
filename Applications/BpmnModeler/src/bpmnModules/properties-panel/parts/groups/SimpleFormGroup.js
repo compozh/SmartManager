@@ -6,6 +6,8 @@ import * as cmdHelper from '../../helpers/CmdHelper';
 import { PropertiesPanelGroup } from '../../Models';
 import EntryFactory from '../../EntryFactory';
 
+let aField;
+
 /**
  * Группа "Простая форма"
  */
@@ -66,21 +68,23 @@ export default class SimpleFormGroup extends PropertiesPanelGroup {
         }
         return commands;
       },
-      onActiveElementChanged: (field) => this.activeField = field
+      onActiveElementChanged: (fieldId) => {
+        this.activeField = aField = formHelper.getFormFieldById(element, fieldId);
+      }
     })]);
     this.entryFactory = entryFactory;
     this.translate = translate;
   }
 
-  activeField
+  activeField = aField
 
   get entries() {
     const entries = [],
       entryFactory = this.entryFactory,
       translate = this.translate;
 
-    const activeField = this.activeField || { },
-      fieldPropsVisible = this.activeField != null;
+    const activeField = this.activeField || aField || { },
+      fieldPropsVisible = aField != null;
     
     entries.push(entryFactory.label({
       id: 'form-field-header',

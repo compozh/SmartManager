@@ -302,7 +302,7 @@ export default {
         dateTo: this.dateServer(this.newCase.dateTo),
         purpose: this.newCase.purpose,
         comm: this.newCase.comm,
-        folderId: this.newCase.folder.folderId || 0,
+        folderId: this.newCase.folder ? this.newCase.folder.folderId : 0,
         members: this.members,
         attachments: this.newCase.attachments
       }

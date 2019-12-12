@@ -25,179 +25,200 @@
           </i18n>
 
           <span v-if="!$route.params.id && !$route.params.bindCaseId">
-            {{ $t('tasks.newTask') }}</span>
+              {{ $t('tasks.newTask') }}</span>
         </div>
 
         <span v-if="/task\/\d+\/edit/.test($route.path)"
               class="text-primary truncate">
-          {{ $t('tasks.edit') }}</span>
+            {{ $t('tasks.edit') }}</span>
 
         <span v-if="$route.name === 'case-add'"
               class="text-primary truncate">
-          {{ $t('cases.newCase') }}</span>
+            {{ $t('cases.newCase') }}</span>
 
         <span v-if="/case\/\d+\/edit/.test($route.path)"
               class="text-primary truncate">
-          {{ $t('cases.edit') }}</span>
+            {{ $t('cases.edit') }}</span>
 
         <span v-if="$route.name === 'work-flow'"
               class="text-primary truncate">
-          {{ $t('workflow.newBusinessProcess') }}</span>
+            {{ $t('workflow.newBusinessProcess') }}</span>
 
-        <vs-button v-if="/task-(view|list)/.test($route.name)"
-                   icon="library_add"
-                   color="primary"
-                   type="flat"
-                   class="px-3 mr-2"
-                   to="/task-add"
-        >{{ $t('buttons.addTask') }}</vs-button>
+        <VuePerfectScrollbar class=flex :settings="settings">
 
-        <vs-button v-if="/case-(view|list)/.test($route.name)"
-                   icon="library_add"
-                   color="primary"
-                   type="flat"
-                   class="px-3 mr-2"
-                   to="/case-add"
-        >{{ $t('buttons.addCase') }}</vs-button>
+            <!-- CREATE TASK BUTTON -->
+            <vs-button v-if="taskView || taskList"
+                       icon="library_add"
+                       color="primary"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       to="/task-add"
+            >{{ $t('buttons.addTask') }}
+            </vs-button>
+            <!-- CREATE CASE BUTTON -->
+            <vs-button v-if="caseView || caseList"
+                       icon="library_add"
+                       color="primary"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       to="/case-add"
+            >{{ $t('buttons.addCase') }}
+            </vs-button>
+            <!-- START BUSINESS PROCESS BUTTON -->
+            <vs-button v-if="taskList || caseList"
+                       icon="launch"
+                       color="success"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       to="/work-flow"
+            >{{ $t('buttons.startWorkflow') }}
+            </vs-button>
+            <!-- RETURN TASK/CASE TO WORK BUTTON -->
+            <vs-button v-if="taskCompleted || caseStatus === '+'"
+                       icon="settings_backup_restore"
+                       color="warning"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       @click="changeStatus('')"
+            >{{ $t('buttons.returnToWork') }}
+            </vs-button>
+            <!-- APPROVE/FORVARD DROPDOWN BUTTON -->
+            <div class="flex fit" v-if="taskView && agreeTaskInWork">
+              <vs-dropdown vs-trigger-click class="cursor-pointer">
+                <vs-button icon="expand_more"
+                           color="success"
+                           class="px-3 btn-drop-approve"
+                           type="flat"
+                >{{ buttonApprove }}
+                </vs-button>
+                <vs-dropdown-menu>
+                  <vs-dropdown-item @click="changeStage(1)">
+                    {{ buttonApprove }}
+                  </vs-dropdown-item>
+                  <vs-dropdown-item @click="getPrompt(1)">
+                    {{ buttonApprove + $t('buttons.withComment') }}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+              <vs-dropdown vs-trigger-click class="cursor-pointer">
+                <vs-button icon="expand_more"
+                           color="danger"
+                           class="px-3 btn-drop-reject"
+                           type="flat"
+                >{{ buttonReject }}
+                </vs-button>
+                <vs-dropdown-menu>
+                  <vs-dropdown-item @click="changeStage(0)">
+                    {{ buttonReject }}
+                  </vs-dropdown-item>
+                  <vs-dropdown-item @click="getPrompt(0)">
+                    {{ buttonReject + $t('buttons.withComment')}}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+            </div>
+            <!-- REJECT/BACK DROPDOWN BUTTON -->
+            <div class="flex fit" v-if="taskView && workFlowTaskInWork">
+              <vs-dropdown vs-trigger-click class="cursor-pointer">
+                <vs-button icon="expand_more"
+                           color="success"
+                           class="px-3 btn-drop-approve"
+                           type="flat"
+                >{{ buttonForward }}
+                </vs-button>
+                <vs-dropdown-menu>
+                  <vs-dropdown-item @click="changeStage(1)">
+                    {{ buttonForward }}
+                  </vs-dropdown-item>
+                  <vs-dropdown-item @click="getPrompt(1)">
+                    {{ buttonForward + $t('buttons.withComment') }}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+              <vs-dropdown vs-trigger-click class="cursor-pointer">
+                <vs-button icon="expand_more"
+                           color="danger"
+                           class="px-3 btn-drop-reject"
+                           type="flat"
+                >{{ buttonBack }}
+                </vs-button>
+                <vs-dropdown-menu>
+                  <vs-dropdown-item @click="changeStage(0)">
+                    {{ buttonBack }}
+                  </vs-dropdown-item>
+                  <vs-dropdown-item @click="getPrompt(0)">
+                    {{ buttonBack + $t('buttons.withComment')}}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+            </div>
+            <!-- FINISH TASK/CASE BUTTON -->
+            <vs-button v-if="taskOrCaseView && (caseStatus === '' ||
+                             (internalTaskInWork && taskType === ''))"
+                       icon="done"
+                       color="success"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       @click="changeStatus('+')"
+            >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
+            </vs-button>
+            <!-- TASK TO FAVORITE BUTTON -->
+            <vs-button v-if="taskOrCaseView && task.id && !task.isFavorite && !taskCompleted"
+                       icon="star"
+                       color="warning"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       @click="taskPin(true)"
+            >{{ $t('buttons.pin') }}
+            </vs-button>
+            <!-- TASK REMOVE FROM FAVORITE BUTTON -->
+            <vs-button v-if="taskOrCaseView && task.isFavorite"
+                       icon="star_border"
+                       color="danger"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       @click="taskPin(false)"
+            >{{ $t('buttons.unpin') }}
+            </vs-button>
+            <!-- TASK/CASE EDIT BUTTON -->
+            <vs-button v-if="taskOrCaseView && allowedTaskEdit || allowedCaseEdit"
+                       icon="edit"
+                       color="dark"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       :to="$route.path + '/edit'"
+            >{{ $t('buttons.edit') }}
+            </vs-button>
+            <!-- TASK DELETE BUTTON -->
+            <vs-button v-if="taskOrCaseView && allowedTaskEdit"
+                       icon="delete_forever"
+                       color="danger"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       @click="confirmDelete"
+            >{{ $t('buttons.delete') }}
+            </vs-button>
 
-        <vs-button v-if="/(task|case)-list/.test($route.name)"
-                   icon="launch"
-                   color="success"
-                   type="flat"
-                   class="px-3 mr-2"
-                   to="/work-flow"
-        >{{ $t('buttons.startWorkflow') }}</vs-button>
+        </VuePerfectScrollbar>
 
-        <div class="flex" v-if="$route.name === 'task-view'">
-          <vs-button v-if="simpleTaskExecuted"
-                     icon="settings_backup_restore"
-                     color="warning"
-                     type="flat"
-                     class="px-3 mr-2"
-                     @click="changeStatus('*')"
-          >{{ $t('buttons.returnToWork') }}</vs-button>
+        <vs-spacer class="hidden"></vs-spacer>
 
-          <div class="flex" v-if="agreeTaskInWork">
-            <vs-dropdown vs-trigger-click class="cursor-pointer">
-              <vs-button icon="expand_more"
-                         color="success"
-                         class="px-3 btn-drop-approve"
-                         type="flat"
-              >{{ buttonApprove }}</vs-button>
-              <vs-dropdown-menu>
-                <vs-dropdown-item @click="changeStage(1)">
-                  {{ buttonApprove }}
-                </vs-dropdown-item>
-                <vs-dropdown-item @click="getPrompt(1)">
-                  {{ buttonApprove + $t('buttons.withComment') }}
-                </vs-dropdown-item>
-              </vs-dropdown-menu>
-            </vs-dropdown>
-            <vs-dropdown vs-trigger-click class="cursor-pointer">
-              <vs-button icon="expand_more"
-                         color="danger"
-                         class="px-3 btn-drop-reject"
-                         type="flat"
-              >{{ buttonReject }}</vs-button>
-              <vs-dropdown-menu>
-                <vs-dropdown-item @click="changeStage(0)">
-                  {{ buttonReject }}
-                </vs-dropdown-item>
-                <vs-dropdown-item @click="getPrompt(0)">
-                  {{ buttonReject + $t('buttons.withComment')}}
-                </vs-dropdown-item>
-              </vs-dropdown-menu>
-            </vs-dropdown>
-          </div>
-
-          <div class="flex" v-if="workFlowTaskInWork">
-            <vs-dropdown vs-trigger-click class="cursor-pointer">
-              <vs-button icon="expand_more"
-                         color="success"
-                         class="px-3 btn-drop-approve"
-                         type="flat"
-              >{{ buttonForward }}</vs-button>
-              <vs-dropdown-menu>
-                <vs-dropdown-item @click="changeStage(1)">
-                  {{ buttonForward }}
-                </vs-dropdown-item>
-                <vs-dropdown-item @click="getPrompt(1)">
-                  {{ buttonForward + $t('buttons.withComment') }}
-                </vs-dropdown-item>
-              </vs-dropdown-menu>
-            </vs-dropdown>
-            <vs-dropdown vs-trigger-click class="cursor-pointer">
-              <vs-button icon="expand_more"
-                         color="danger"
-                         class="px-3 btn-drop-reject"
-                         type="flat"
-              >{{ buttonBack }}</vs-button>
-              <vs-dropdown-menu>
-                <vs-dropdown-item @click="changeStage(0)">
-                  {{ buttonBack }}
-                </vs-dropdown-item>
-                <vs-dropdown-item @click="getPrompt(0)">
-                  {{ buttonBack + $t('buttons.withComment')}}
-                </vs-dropdown-item>
-              </vs-dropdown-menu>
-            </vs-dropdown>
-          </div>
-
-          <vs-button v-if="internalTaskInWork && taskType === ''"
-                     icon="done"
-                     color="success"
-                     type="flat"
-                     class="px-3 mr-2"
-                     @click="changeStatus('+')"
-          >{{ $t('buttons.execute') }}</vs-button>
-
-          <vs-button v-if="!task.isFavorite && !simpleTaskExecuted"
-                     icon="star"
-                     color="warning"
-                     type="flat"
-                     class="px-3 mr-2"
-                     @click="taskPin(true)"
-          >{{ $t('buttons.pin') }}</vs-button>
-
-          <vs-button v-if="task.isFavorite"
-                     icon="star_border"
-                     color="danger"
-                     type="flat"
-                     class="px-3 mr-2"
-                     @click="taskPin(false)"
-          >{{ $t('buttons.unpin') }}</vs-button>
-        </div>
-
-        <vs-button v-if="allowedTaskEdit || allowedCaseEdit"
-                   icon="edit"
-                   color="dark"
-                   type="flat"
-                   class="px-3 mr-2"
-                   :to="$route.path + '/edit'"
-        >{{ $t('buttons.edit') }}</vs-button>
-
-        <vs-button v-if="allowedTaskEdit"
-                   icon="delete_forever"
-                   color="danger"
-                   type="flat"
-                   class="px-3 mr-2"
-                   @click="confirmDelete"
-        >{{ $t('buttons.delete') }}</vs-button>
-
-        <vs-spacer></vs-spacer>
-
-        <!-- USER META -->
+        <!-- USER PANEL -->
         <div class="the-navbar__user-meta flex items-center">
-          <div class="text-right leading-tight sm:block">
+          <div class="text-right leading-tight
+                      xl:block lg:hidden md:hidden sm:hidden xs:hidden">
             <p class="font-semibold">{{ currentUserName }}</p>
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
-              <vs-avatar class="rounded-full shadow-md cursor-pointer block m-0"
+              <vs-avatar class="rounded-full shadow-md cursor-pointer block m-0 hover:shadow-2xl"
                          :src="currentUserPhoto"
                          size="40px"/>
             </div>
             <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
+              <div class="ml-3 leading-tight xl:hidden">
+                <p class="font-semibold">{{ currentUserName }}</p>
+              </div>
 
               <vs-dropdown-group vs-collapse
                                  vs-label="Делегированные права"
@@ -222,14 +243,14 @@
         </div>
         <!-- I18N -->
         <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-        <span class="cursor-pointer flex i18n-locale ml-3">
-         {{ getCurrentLocaleData.flag.toUpperCase() }}
-        </span>
+          <span class="cursor-pointer flex i18n-locale ml-3">
+           {{ getCurrentLocaleData.flag.toUpperCase() }}
+          </span>
           <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
             <vs-dropdown-item v-for="lang in localizations"
                               :key="lang.code"
                               @click="updateLocale(lang.code)">
-              {{lang.flag.toUpperCase()}}   ({{lang.name}})
+              {{lang.flag.toUpperCase()}} ({{lang.name}})
             </vs-dropdown-item>
           </vs-dropdown-menu>
         </vs-dropdown>
@@ -254,12 +275,17 @@
 <script>
 
 import templateConfig from '@/templateConfig'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import 'swiper/dist/css/swiper.min.css'
 import auth from '@/api/auth/auth'
 import {eventBus} from '@/main'
 import {mapGetters} from 'vuex'
 
 export default {
   name: 'the-navbar',
+  components: {
+    VuePerfectScrollbar
+  },
   props: {
     navbarColor: {
       type: String,
@@ -274,8 +300,9 @@ export default {
       comment: '',
       buttonCancel: 'Отмена',
       settings: {
-        maxScrollbarLength: 60,
-        wheelSpeed: .60,
+        wheelSpeed: 2,
+        wheelPropagation: true,
+        minScrollbarLength: 20
       }
     }
   },
@@ -297,29 +324,46 @@ export default {
       const caseItem = this.$store.state.sm.caseDetails[id]
       return caseItem ? caseItem : {}
     },
-    taskType() {
-      return this.task ? this.task.taskType : null
+    caseStatus() {
+      return this.caseItem.status
     },
-    status() {
-      return this.task.status
-        ? this.task.status
-        : ''
+    taskStatus() {
+      return this.task.status || ''
+    },
+    taskType() {
+      return this.task.taskType
     },
     taskInWork() {
-      return this.status === ''
-        || this.status === '*'
+      return this.taskStatus === ''
+          || this.taskStatus === '*'
     },
     internalTask() {
       return this.taskType === ''
-        || this.taskType === 'AGREE'
-        || this.taskType === 'WORKFLOW'
+          || this.taskType === 'AGREE'
+          || this.taskType === 'WORKFLOW'
+    },
+    // ROUTES CONDITIONS
+    taskList() {
+      return this.$route.name === 'task-list'
+    },
+    taskView() {
+      return this.$route.name === 'task-view'
+    },
+    caseList() {
+      return this.$route.name === 'case-list'
+    },
+    caseView() {
+      return this.$route.name === 'case-view'
+    },
+    taskOrCaseView() {
+      return this.taskView || this.caseView
     },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork() {
       return this.internalTask && this.taskInWork
     },
-    simpleTaskExecuted() {
-      return this.taskType === '' && this.status === '+'
+    taskCompleted() {
+      return this.taskType === '' && this.taskStatus === '+'
     },
     agreeTaskInWork() {
       return this.taskType === 'AGREE' && this.taskInWork
@@ -329,29 +373,30 @@ export default {
     },
     allowedCaseEdit() {
       return this.$route.name === 'case-view'
-        && this.currentUserId === this.caseItem.userAdd
+          && this.caseStatus === ''
+          && this.currentUserId === this.caseItem.userAdd
     },
     allowedTaskEdit() {
       return this.$route.name === 'task-view'
-        && this.internalTaskInWork
-        && this.currentUserId === this.task.declarerId
+          && this.internalTaskInWork
+          && this.currentUserId === this.task.declarerId
     },
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonBack() {
       return this.task.previousButtonText
-        || this.$t('buttons.back')
+          || this.$t('buttons.back')
     },
     buttonForward() {
       return this.task.nextButtonText
-        || this.$t('buttons.forward')
+          || this.$t('buttons.forward')
     },
     buttonReject() {
       return this.task.previousButtonText
-        || this.$t('buttons.reject')
+          || this.$t('buttons.reject')
     },
     buttonApprove() {
       return this.task.nextButtonText
-        || this.$t('buttons.approve')
+          || this.$t('buttons.approve')
     },
     // HELPER
     sidebarWidth() {
@@ -420,12 +465,21 @@ export default {
         processParams: null
       })
     },
-    changeStatus(status) {
-      eventBus.$emit('changeStatus', {
-        id: this.task.id,
-        status: status,
-        comment: ''
-      })
+    async changeStatus(status) {
+      if (this.$route.name === 'task-view') {
+        eventBus.$emit('changeStatus', {
+          type: 'TASK',
+          id: this.task.id,
+          status,
+          comment: ''
+        })
+      } else if (this.$route.name === 'case-view') {
+        await this.$store.dispatch('sm/changeStatus', {
+          type: 'CASE',
+          id: this.caseItem.id,
+          status,
+        })
+      }
     },
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
@@ -467,7 +521,7 @@ export default {
       }
     },
     setDelegation() {
-      console.log('Делегировать права', )
+      console.log('Делегировать права',)
     }
   },
   directives: {
@@ -495,11 +549,16 @@ export default {
 
 <style scoped>
 
-  button:hover > .btn-drop-approve {
-    background: rgba(var(--vs-success),.08)!important;;
+  .fit {
+    min-width: max-content;
   }
+
+  button:hover > .btn-drop-approve {
+    background: rgba(var(--vs-success), .08) !important;;
+  }
+
   button:hover > .btn-drop-reject {
-    background: rgba(var(--vs-danger),.08)!important;;
+    background: rgba(var(--vs-danger), .08) !important;;
   }
 
 </style>

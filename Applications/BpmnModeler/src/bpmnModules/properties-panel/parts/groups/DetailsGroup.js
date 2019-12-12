@@ -2,6 +2,7 @@ import { PropertiesPanelGroup } from '../../Models';
 import { addUserTaskProps, addServiceTaskProps } from '../props';
 import { Diagram } from '../../../../api/models';
 import EntryFactory from '../../EntryFactory';
+import addEventProps from '../props/EventProps';
 
 /**
  * Группа "Настройка"
@@ -21,5 +22,6 @@ export default class DetailsGroup extends PropertiesPanelGroup {
 
     addUserTaskProps(this, diagram, element, entryFactory, bpmnFactory, commandStack, translate);
     addServiceTaskProps(this, diagram, element, entryFactory, bpmnFactory, commandStack, translate);
+    addEventProps(this, element, entryFactory, bpmnFactory, commandStack, translate);
   }
 }

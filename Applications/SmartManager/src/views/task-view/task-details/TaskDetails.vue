@@ -18,27 +18,28 @@
                          :src="task.performerPhoto"
                          size="65px"></vs-avatar>
 
-              <div class="flex flex-col w-11/12">
+              <div class="flex flex-col w-9/12">
                 <h5 class="mb-1">{{ task.performer }}</h5>
                 <div class="flex items-center">
                   <h3 class="text-primary truncate">{{ task.name }}</h3>
                 </div>
               </div>
             </div>
-            <div class="vx-col sm:w-1/5 w-full flex sm:flex-col
-                        items-center sm:justify-end mb-2">
-              <span class="flex sm:mr-0 mr-2 self-end whitespace-no-wrap"
+            <div class="vx-col xs:w-10/12 lg:w-1/5 w-full flex lg:flex-col
+                        items-center xs:justify-start lg:justify-end mb-2">
+              <span class="flex lg:mr-0 xs:ml-2 mr-2 self-end whitespace-no-wrap lg:order-first"
               >{{ time(task.dateAdd) }}</span>
-              <span class="flex self-end sm:mt-2 mt-0 whitespace-no-wrap"
+              <span class="flex self-end lg:mt-2 mt-0 whitespace-no-wrap xs:order-first"
               >{{ date(task.dateAdd) }}</span>
-              <span class="flex self-end sm:mt-2 mt-0 whitespace-no-wrap"
+              <span class="flex self-end lg:mt-2 mt-0 whitespace-no-wrap xs:hidden lg:block"
               >Тип: {{ typeName }}</span>
             </div>
           </div>
 
           <!-- TASK CONTENT -->
           <div class="vx-row border-b border-l-0 border-r-0
-                      border-t-0 d-theme-border-grey-light border-solid">
+                      border-t-0 d-theme-border-grey-light"
+                :class="{'border-solid': htmlDescription}">
             <div class="vx-col w-full">
               <div v-if="htmlDescription" class="mail__content break-words mt-8 mb-4">
                 <iframe seamless
@@ -58,7 +59,7 @@
           </div>
 
           <!-- FORMIO -->
-          <div class="w-full">
+          <div v-if="Object.keys(form).length" class="w-full">
             <!-- select and start business-process -->
             <form @submit.prevent>
               <formio class="formio mt-4"
@@ -109,13 +110,13 @@
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid pb-4">
-                <div class="vx-col flex items-center">
+                          border-t-0 d-theme-border-grey-light border-solid">
+                <div class="vx-col flex items-center pb-4">
                   <feather-icon icon="BriefcaseIcon" class="mr-2"/>
                   <span v-if="task.caseId" class="pt-1">{{ $t('cases.related').toUpperCase() }}</span>
                   <span v-else class="pt-1">{{ $t('cases.noRelated').toUpperCase() }}</span>
                 </div>
-                <div class="flex">
+                <div class="flex pb-4">
                   <vs-button v-if="task.caseId"
                              @click="changeBinding(false)"
                              class="ml-3"
@@ -207,13 +208,13 @@
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid pb-4">
-                <div class="vx-col flex items-center">
+                          border-t-0 d-theme-border-grey-light border-solid">
+                <div class="vx-col flex items-center pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
                   <span v-if="childTasks.length" class="pt-1">{{ $t('tasks.subTasks').toUpperCase() }}</span>
                   <span v-else class="pt-1">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
                 </div>
-                <div class="flex">
+                <div class="flex pb-4">
                   <vs-button :to="{name: 'task-add', params: {id: task.id}}"
                              class="ml-3"
                              color="primary"

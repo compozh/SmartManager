@@ -10,6 +10,7 @@
       :click-not-close="clickNotClose"
       :hidden-background="clickNotClose"
       reduce-not-rebound
+      reduce-not-hover-expand
       v-model="isCaseSidebarActive"
     >
       <task-sidebar
@@ -135,5 +136,16 @@ export default {
 
   .app-fixed-height {
     height: calc(100vh - 12rem);
+  }
+
+  @media (max-width: 768px) {
+    .vs-sidebar.vs-sidebar-reduce {
+      max-width: 38px;
+    }
+
+    .md-sidebar-spacer {
+      width: calc(100% - 38px);
+      margin-left: 38px;
+    }
   }
 </style>
