@@ -61,12 +61,30 @@
 </template>
 
 <script>
+
+import BarcodeScanerEvents from './components/BarcodeScanerEvents'
 export default {
   name: 'mes-layout',
+  components: { BarcodeScanerEvents },
   data() {
     return {
       mainContainer: 0
     }
+  },
+  created() {
+    var barcodeScanerEvents = new BarcodeScanerEvents()
+    barcodeScanerEvents.initialize()
+
+    var me = this
+
+    document.addEventListener("onbarcodescaned", event => {
+      if(event.detail) {
+        var tasksPageState = me.$store.getters['mes/tasksPageState']
+        if(me.$route.name == "INSTALLATIONS" || (me.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
+          me.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: me.workCenter.code, batchBarcode: event.detail.code, factId: 0 })
+        }
+      }
+    })
   },
   computed: {
     currentUser() {
