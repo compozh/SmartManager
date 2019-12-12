@@ -41,8 +41,25 @@ export default {
     }
   },
   methods: {
-    formSubmit(submission) {
-      this.$store.dispatch('mes/documentFormIoSubmit', { formCode: this.pageProps.formCode, workCenter: this.workCenter, submission, document: this.selectedDocument, processType: this.pageProps.id })
+    async formSubmit(submission) {
+      var me = this,
+        direction = 1,
+        pageProps = me.pageProps,
+        properties = {
+          workCenterCode: me.workCenter.code,
+          id: me.selectedDocument.id
+        },
+        searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+
+      me.$store.commit('mes/setDialogLinearLoaderMessage', this.$t('mes.dialogs.RegistrationDocument'))
+      await me.$store.dispatch('formio/submitForm', { formCode: pageProps.formCode, submission, properties }).then(result => {
+        if(result.success) {
+          me.$store.commit('mes/setDocuments', [])
+          me.$store.commit('mes/setInitializeDocuments', false)
+          me.$store.dispatch('mes/downloadDocuments', { processTypeCode: pageProps.id, searchDateTime, direction })
+        }
+      })
+      me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()

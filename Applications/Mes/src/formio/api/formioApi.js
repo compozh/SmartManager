@@ -40,19 +40,19 @@ export class FormioApi {
     return result.data.formioQuery.ticket
   }
 
-  async getFormGql(formCode, fetchPolicy) {
+  async getFormGql(formCode, properties, fetchPolicy) {
     const result = await getClient().query({
       query: gql`${getForm}`,
-      variables: { formCode },
+      variables: { formCode, properties },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.formioQuery.getForm
   }
 
-  async submitFormGql(formCode, submission) {
+  async submitFormGql(formCode, submission, properties) {
     const result = await getClient().mutate({
       mutation: gql`${submitForm}`,
-      variables: { formCode, submission }
+      variables: { formCode, submission, properties }
     })
     return result.data.formioQueryMutation.submitForm
   }
