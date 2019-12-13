@@ -24,7 +24,6 @@ var textfieldInit = TextFieldComponent.prototype.init;
 TextFieldComponent.prototype.init = function () {
 	var superInit = textfieldInit.call(this);
 	if (this.component.qrScaner) {
-		this.widget.addPrefix('qrScaner');
 		this.component.prefix = 'qrScaner';
 	}
 	return superInit;
@@ -38,11 +37,6 @@ TextFieldComponent.editForm = function () {
 		if (formComponent.key === 'tabs') {
 			for (var tabComponent of formComponent.components) {
 				if (tabComponent.key === 'display') {
-					for (var dataComponent of tabComponent.components) {
-						if (dataComponent.key === 'prefix') {
-							dataComponent.hidden = true;
-						}
-					}
 
 					tabComponent.components.push({
 						weight: 1502,

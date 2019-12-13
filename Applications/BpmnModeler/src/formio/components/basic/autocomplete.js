@@ -37,18 +37,18 @@ class Autocomplete extends SelectComponent {
 
 		if (this.component.qrScaner) {
 			var qrScanerElement = document.createElement('span');
-			qrScanerElement.style.position = 'absolute';
-			qrScanerElement.style.left = '0';
-			qrScanerElement.style.top = '0';
-			qrScanerElement.style.display = 'block';
-			qrScanerElement.style.padding = '7px 12px 5px 12px';
-			qrScanerElement.className = 'input-group-text';
+			qrScanerElement.style.cssText = 'display: block; padding: 7px 12px 5px 12px; border-bottom-right-radius: 0; border-top-right-radius: 0;';
+			qrScanerElement.className = 'input-group-text input-group-prepend';
 			qrScanerElement.innerHTML = '<i class="fa fa-qrcode" ref="icon"></i>';
-			this.choices.containerOuter.element.appendChild(qrScanerElement);
+			var outerContainerElement = this.choices.containerOuter.element;
+			outerContainerElement.insertBefore(qrScanerElement, outerContainerElement.firstChild);
+			outerContainerElement.classList.add('input-group');
 			qrScanerElement.addEventListener('click', () => {
-				me.emit('qrScaner', { callback: value => {
-					me.callAutocomplete(value);
-				} });
+				me.emit('qrScaner', {
+					callback: value => {
+						me.callAutocomplete(value);
+					}
+				});
 			});
 		}
 
