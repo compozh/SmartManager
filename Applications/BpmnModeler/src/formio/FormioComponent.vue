@@ -189,9 +189,6 @@ export default {
       this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)
     },
     itemAutocomplete({ component, searchValue, callback }) {
-      if(this.actionsDisabled) {
-        return;
-      }
       var form = this.$refs.formioComponent,
         submission = JSON.stringify(form.submission.data, null, 4),
         fieldComponent = component.component,

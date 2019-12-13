@@ -62,6 +62,7 @@
 
 <script>
 
+import Vue from 'vue'
 import BarcodeScanerEvents from './components/BarcodeScanerEvents'
 export default {
   name: 'mes-layout',
@@ -79,9 +80,15 @@ export default {
 
     document.addEventListener("onbarcodescaned", event => {
       if(event.detail) {
+        var barcode = event.detail.code
+        if(me.$route.name == "MESLOGIN") {
+          Vue.prototype.$authentication.loginByQr(barcode).then(result => {
+          result && me.$router.replace({path: '/MES/tasks'})
+        })
+        }
         var tasksPageState = me.$store.getters['mes/tasksPageState']
         if(me.$route.name == "INSTALLATIONS" || (me.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
-          me.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: me.workCenter.code, batchBarcode: event.detail.code, factId: 0 })
+          me.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: me.workCenter.code, batchBarcode: barcode, factId: 0 })
         }
       }
     })

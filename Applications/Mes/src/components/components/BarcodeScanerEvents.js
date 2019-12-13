@@ -12,10 +12,17 @@ export default class BarcodeScanerEvents {
 
     onKeyup(event) {
         var me = this
-        
         if (me.timeoutHandler) {
             clearTimeout(me.timeoutHandler)
-            me.inputString += String.fromCharCode(event.which)
+            switch(event.which) {
+                case 16:
+                case 0:
+                case 13:
+                    break
+                default:
+                    me.inputString += event.key
+                    break
+            }
         } 
 
         me.timeoutHandler = setTimeout(() => {
