@@ -26,7 +26,7 @@
                     :full-width=false
                     :maxlength="16"
                     :label=formCodeLabel
-                    :rules="[() => !!formCodeProperty || this.$t('bpmn.errors.RequiredInputField')]"
+                    :rules="[() => !!formCodeProperty || this.$t('mes.errors.RequiredInputField')]"
                     required
                 />
                 <v-select
@@ -56,7 +56,7 @@
                         @click="onCancel"
                         :disabled=buttonLoading
                     >
-                    {{ $t('bpmn.buttons.Cancel') }}
+                    {{ $t('mes.buttons.Cancel') }}
                     </v-btn>
                 </div>
             </v-layout>
@@ -91,9 +91,9 @@ export default {
             formDisplayProperty: me.formDefinition.display || 'form',
             formCodeProperty: me.formDefinition.formCode,
             formNameProperty: me.formDefinition.name,
-            formNameLabel: me.$t('bpmn.labels.Name'),
-            formCodeLabel: me.$t('bpmn.labels.Code'),
-            displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
+            formNameLabel: me.$t('mes.labels.Name'),
+            formCodeLabel: me.$t('mes.labels.Code'),
+            displayTypeLabel: me.$t('mes.labels.DisplayType'),
             options: {
                 noAlerts: true,
                 language: 'ru',
@@ -122,11 +122,11 @@ export default {
                 }
             },
             tabs: [
-                { index: 0, id: 'designer', name: me.$t('bpmn.labels.Designer')},
-                { index: 1, id: 'preview', name: me.$t('bpmn.labels.Preview')}
+                { index: 0, id: 'designer', name: me.$t('mes.labels.Designer')},
+                { index: 1, id: 'preview', name: me.$t('mes.labels.Preview')}
             ],
             selectedTab: 0,
-            constructorCaption: this.$t('bpmn.labels.FormContructor'),
+            constructorCaption: this.$t('mes.labels.FormContructor'),
             displays: [ { text: 'Form', value: 'form' }, { text: 'Wizard', value: 'wizard' }, { text: 'PDF', value: 'pdf' } ]
         }
   },
@@ -146,7 +146,7 @@ export default {
       return { data: this.formDefinition.submission ? JSON.parse(this.formDefinition.submission) : [] }
     },
     actionText() {
-        return Object.keys(this.formDefinition).length ? this.$t('bpmn.buttons.Save') : this.$t('bpmn.buttons.Create');
+        return Object.keys(this.formDefinition).length ? this.$t('mes.buttons.Save') : this.$t('mes.buttons.Create');
     }
   },
   methods: {

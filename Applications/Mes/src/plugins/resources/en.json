@@ -50,7 +50,13 @@
         "NoDowntime": "No downtime",
         "DownloadDocuments": "Download documents",
         "NoDocuments": "No documents",
-        "NoTasks": "No tasks"
+        "NoTasks": "No tasks",
+        "Name": "Name",
+        "Code": "Code",
+		"Designer": "Designer",
+        "Preview": "Preview",
+        "DisplayType": "Display type",
+        "FormContructor": "Form constructor"
     },
     "dialogs": {
         "Yes": "Yes",
@@ -111,5 +117,10 @@
         "cancel": "Cancel",
         "submit": "Submit Form",
         "Type to search" : "Type to search"
+    },
+    "errors": {
+        "InitializeSignalR": "Failed initialize SignalR",
+        "InputCodeForm": "Input code form",
+		"RequiredInputField": "Field is required"
     }
 }

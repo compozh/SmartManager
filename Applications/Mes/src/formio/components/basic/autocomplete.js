@@ -1,40 +1,54 @@
 import SelectComponent from 'formiojs/components/select/Select';
 
 class Autocomplete extends SelectComponent {
+
+	init() {
+		super.init();
+		this.initializeValue = false;
+	}
+
 	attach(element) {
 		var me = this;
-		this.initializeValue = false;
+
 		const superAttach = super.attach(element);
 		me.requestInvoked = false;
 		var lastSearchValue = '';
 
 		// Make sure to clear the search when no value is provided.
 		if (this.choices && this.choices.input && this.choices.input.element) {
-			var inputAction = (event) => {
-				lastSearchValue = event.target.value;
-				if (!me.requestInvoked) {
-					me.requestInvoked = true;
-					setTimeout(() => {
-						if (!lastSearchValue) {
-							me.requestInvoked = false;
-							return;
-						}
-						me.callAutocomplete(lastSearchValue);
-					}, 2000);
-				}
-			};
+			var timeout = null,
+				inputAction = (event) => {
+					lastSearchValue = event.target.value;
+					if (!me.requestInvoked) {
+						me.requestInvoked = true;
+						clearTimeout(timeout);
+
+						timeout = setTimeout(() => {
+							if (!lastSearchValue) {
+								me.requestInvoked = false;
+								return;
+							}
+							me.callAutocomplete(lastSearchValue);
+						}, 2000);
+					}
+				};
 			this.addEventListener(this.choices.input.element, 'input', inputAction);
 		}
 
 		if (this.component.qrScaner) {
-			var qrScanerEleement = document.createElement('span');
-			qrScanerEleement.className = "input-group-text";
-			qrScanerEleement.innerHTML = '<i class="fa fa-qrcode" ref="icon"></i>';
-			element.appendChild(qrScanerEleement);
-			qrScanerEleement.addEventListener('click', () => {
-				window.qrScaner(value => {
+			var qrScanerElement = document.createElement('span');
+			qrScanerElement.style.position = 'absolute';
+			qrScanerElement.style.left = '0';
+			qrScanerElement.style.top = '0';
+			qrScanerElement.style.display = 'block';
+			qrScanerElement.style.padding = '7px 12px 5px 12px';
+			qrScanerElement.className = 'input-group-text';
+			qrScanerElement.innerHTML = '<i class="fa fa-qrcode" ref="icon"></i>';
+			this.choices.containerOuter.element.appendChild(qrScanerElement);
+			qrScanerElement.addEventListener('click', () => {
+				me.emit('qrScaner', { callback: value => {
 					me.callAutocomplete(value);
-				});
+				} });
 			});
 		}
 
@@ -44,36 +58,43 @@ class Autocomplete extends SelectComponent {
 	callAutocomplete(searchValue) {
 		var me = this,
 			items = [];
+
+		me.initializeValue = true;
+
 		if (!searchValue) {
 			me.requestInvoked = false;
 			return;
 		}
-		me.initializeValue = true;
-		itemAutocomplete(me, searchValue, ({ mostSuitableValue, values }) => {
-			me.selectOptions = [];
 
-			if (values) {
-				values.forEach(value => {
-					var valueObject = {
-						label: value.name,
-						value: value.code
-					};
-					items[value.code] = valueObject;
-					me.selectOptions.push(valueObject);
+		me.emit('itemAutocomplete', {
+			component: me,
+			searchValue,
+			callback: ({ mostSuitableValue, values }) => {
+				me.selectOptions = [];
+
+				if (values) {
+					for (var value of values) {
+						var valueObject = {
+							label: value.name,
+							value: value.code
+						};
+						items[value.code] = valueObject;
+						me.selectOptions.push(valueObject);
+					}
+				}
+
+				me.component.data.values = [];
+				Object.values(items).forEach(item => {
+					me.component.data.values.push(item);
 				});
+
+				me.setItems(me.component.data.values, false, me.selectOptions);
+
+				if (mostSuitableValue && mostSuitableValue.code) {
+					me.choices.setChoiceByValue(mostSuitableValue.code);
+				}
+				me.requestInvoked = false;
 			}
-
-			me.component.data.values = [];
-			Object.values(items).forEach(item => {
-				me.component.data.values.push(item);
-			});
-
-			me.setItems(me.component.data.values, false, me.selectOptions);
-
-			if (mostSuitableValue && mostSuitableValue.code) {
-				me.choices.setChoiceByValue(mostSuitableValue.code);
-			}
-			me.requestInvoked = false;
 		});
 	}
 
@@ -193,7 +214,13 @@ class Autocomplete extends SelectComponent {
 
 	setValue(value, flags) {
 		if (!this.initializeValue) {
-			this.callAutocomplete(value);
+			if (Array.isArray(value)) {
+				for (var searchValue of value) {
+					this.callAutocomplete(searchValue);
+				}
+			} else {
+				this.callAutocomplete(value);
+			}
 			return;
 		}
 		flags = flags || {};
@@ -368,6 +395,16 @@ class Autocomplete extends SelectComponent {
 			if (formComponent.key === 'tabs') {
 				for (var tabComponent of formComponent.components) {
 					if (tabComponent.key === 'data') {
+						for (var dataComponent of tabComponent.components) {
+							switch (dataComponent.key) {
+								case 'dataSrc':
+								case 'data.values':
+									dataComponent.hidden = true;
+									delete dataComponent.conditional;
+									break;
+							}
+						}
+
 						tabComponent.components.unshift({
 							input: true,
 							key: "cachingData",
@@ -431,7 +468,7 @@ class Autocomplete extends SelectComponent {
 						tabComponent.components.push({
 							weight: 1501,
 							type: 'checkbox',
-							label: 'QR Scaner',
+							label: 'Visible Qr Scaner',
 							key: 'qrScaner',
 							input: true
 						});

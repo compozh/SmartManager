@@ -12,7 +12,7 @@ export default {
   async getForm({ dispatch }, { formCode, properties, fetchPolicy }) {
     return await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.getFormGql(formCode, JSON.stringify(properties || '{}', null, 4), fetchPolicy)
+        return await api.getFormGql(formCode, JSON.stringify(properties || '', null, 4), fetchPolicy)
       }
     })
   },
@@ -47,7 +47,7 @@ export default {
   async submitForm({ dispatch }, { formCode, submission, properties }) {
     return await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.submitFormGql(formCode, submission, JSON.stringify(properties || '{}', null, 4))
+        return await api.submitFormGql(formCode, submission, JSON.stringify(properties || '', null, 4))
       }
     })
   },
