@@ -1,4 +1,4 @@
-query($formCode:String!, , $properties: String) {
+query($formCode:String!, $properties: String) {
     formioQuery {
         getForm(formCode: $formCode, properties: $properties) {
             name
