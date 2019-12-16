@@ -84,7 +84,7 @@ export default {
     me.$store.dispatch('mes/initializeWorkCenter', uuid)
     me.$store.dispatch('mes/initializeProperties')
     me.$store.dispatch('formio/initializeTicket')
-    me.$store.dispatch('mes/initializeDynamicPages')
+    me.$store.dispatch('mes/initializeMobilityProperties')
     me.initializeSignalR()
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData

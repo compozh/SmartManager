@@ -64,7 +64,7 @@ export class MesApi {
     return result.data.mes.ticket
   }
 
-  async getDynamicPagesFromGql(webAppId) {
+  async getMobilityPropertiesFromGql(webAppId) {
     const result = await getClient().query({
       query: gql` query ($webAppId: String) ${mobilityProperties}`,
       variables: { webAppId }

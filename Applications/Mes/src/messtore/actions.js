@@ -20,11 +20,11 @@ export default {
     })
   },
 
-  async initializeDynamicPages({commit}) {
+  async initializeMobilityProperties({commit}) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const result = await api.getDynamicPagesFromGql("MOBILITYWEB")
-        commit('setDynamicPages', result)
+        const result = await api.getMobilityPropertiesFromGql("MOBILITYWEB")
+        commit('setMobilityProperties', result)
       }
     })
   },

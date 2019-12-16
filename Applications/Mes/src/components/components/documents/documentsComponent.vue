@@ -82,7 +82,6 @@ export default {
 .mes-documents-component {
     height: 100%;
     width: 30%;
-    min-width: 330px
   }
   .mes-documents-component-layout {
     height: 100%;

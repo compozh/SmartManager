@@ -8,8 +8,8 @@ export default {
   properties(state) {
     return state.properties
   },
-  dynamicPages(state) {
-    return state.dynamicPages
+  mobilityProperties(state) {
+    return state.mobilityProperties
   },
   userName(state) {
     return state.userName
@@ -116,4 +116,7 @@ export default {
   actionsAfterInitializeProperties(state) {
     return state.actionsAfterInitializeProperties
   },
+  dynamicPagesCache(state) {
+    return state.dynamicPagesCache
+  }
 }
