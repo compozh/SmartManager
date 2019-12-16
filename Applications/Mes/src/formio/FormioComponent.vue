@@ -4,10 +4,14 @@
       :form=formioComponents
       :submission=formioSubmission
       :options=options
-      language="ru"
+      :language=options.language
       @submit=onSubmit
       @change=onChange
       @customEvent=customEvent
+      @callCustomEvent=requestToServerAction
+      @qrScaner=qrScaner
+      @itemAutocomplete=itemAutocomplete
+      @connectSignalR=connectSignalR
       ref="formioComponent"
     />
     <formio-qr-scaner
@@ -43,22 +47,7 @@ export default {
   created() {
     var me = this
     window.requestToServer = (eventCode, callback) => {
-      if(!me.actionsDisabled) {
-        me.requestToServerAction(eventCode, callback)
-      }
-    }
-    window.qrScaner = callback => {
-        me.qrScaner(callback)
-    }
-    window.connectSignalR = (application, callback) => {
-      if(!me.actionsDisabled) {
-        me.connectSignalR(application, callback)
-      }
-    }
-    window.itemAutocomplete = (field, searchValue, callback) => {
-      if(!me.actionsDisabled) {
-        me.itemAutocomplete(field, searchValue, callback)
-      }
+        me.requestToServerAction({ eventCode, callback })
     }
   },
   props: {
@@ -94,6 +83,9 @@ export default {
 
     },
     customEvent(params){
+      if(this.actionsDisabled) {
+        return;
+      }
       var me = this,
         form = me.$refs.formioComponent,
         component = params.component,
@@ -101,11 +93,11 @@ export default {
       if (displayLoading){
       me.setComponentLoading(component.key, true)
       }
-			me.requestToServerAction(params.type, () => {
-        if (displayLoading){
+			me.requestToServerAction({ eventCode: params.type, callback: () => {
+        if (displayLoading) {
           me.setComponentLoading(component.key, false)
         }
-			});
+			} });
     },
     setComponentLoading(componentKey, loading) {
       var me = this,
@@ -119,7 +111,10 @@ export default {
       var form = this.$refs.formioComponent
       return JSON.stringify(form.submission, null, 4)
     },
-    requestToServerAction(eventCode, callback) {
+    requestToServerAction({ eventCode, callback }) {
+      if(this.actionsDisabled) {
+        return;
+      }
       var me = this,
         form = this.$refs.formioComponent,
         display = form.form.display,
@@ -129,10 +124,7 @@ export default {
 
       me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
         params: { eventCode, components, submission, display, settings }}).then(result => {
-          if(!result) {
-            return
-          }
-
+          if(result && result.success) {
             var dataChanged = false;
             if (result.components && result.components != components) {
               let tempComponents = JSON.parse(result.components)
@@ -167,13 +159,14 @@ export default {
               me.changedData.submission = submission
               form.formio.setSubmission(submission)
             }
+          }
 
             if (callback) {
               callback(result);
             }
       })
     },
-    qrScaner(callback) {
+    qrScaner({ callback }) {
       this.qrScanerVisible = true;
       this.qrScanerCallback = callback;
     },
@@ -188,17 +181,17 @@ export default {
     changeQrScanerVisible(state) {
       this.qrScanerVisible = state
     },
-    connectSignalR(application, callback) {
+    connectSignalR({ application, callback }) {
       if(!application || !callback) {
-        this.$store.commit('formio/setSnackbarErrorMessage', this.$t('bpmn.errors.InitializeSignalR'))
+        this.$store.commit('formio/setSnackbarErrorMessage', this.$t('mes.errors.InitializeSignalR'))
         return
       }
       this.$signalR.connect(application, window.myConfig.SignalRUrl, callback, this.ticket)
     },
-    itemAutocomplete(field, searchValue, callback) {
+    itemAutocomplete({ component, searchValue, callback }) {
       var form = this.$refs.formioComponent,
         submission = JSON.stringify(form.submission.data, null, 4),
-        fieldComponent = field.component,
+        fieldComponent = component.component,
         params = {
           fieldId: fieldComponent.key,
           tableName: fieldComponent.dataTable,

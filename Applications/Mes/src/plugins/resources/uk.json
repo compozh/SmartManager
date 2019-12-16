@@ -50,7 +50,13 @@
         "NoDowntime": "Простої відсутні",
         "DownloadDocuments": "Завантаження документів",
         "NoDocuments": "Документи відсутні",
-        "NoTasks": "Завдання відсутні"
+        "NoTasks": "Завдання відсутні",
+        "Name": "Назва",
+        "Code": "Код",
+		"Designer": "Конструктор",
+        "Preview": "Перегляд",
+        "DisplayType": "Тип відображення",
+        "FormContructor": "Конструктор форми"
     },
     "dialogs": {
         "Yes": "Так",
@@ -110,5 +116,10 @@
         "cancel": "Відміна",
         "submit": "Відправити форму",
         "Type to search" : "Введіть для пошуку"
+    },
+    "errors": {
+        "InitializeSignalR": "Не вдалося ініціалізувати SignalR",
+        "InputCodeForm": "Введіть код форми",
+		"RequiredInputField": "Обов'язкове поле"
     }
 }

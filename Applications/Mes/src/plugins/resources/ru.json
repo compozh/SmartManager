@@ -50,7 +50,13 @@
         "NoDowntime": "Простои отсутствуют",
         "DownloadDocuments": "Загрузка документов",
         "NoDocuments": "Документы отсутствуют",
-        "NoTasks": "Задания отсутствуют"
+        "NoTasks": "Задания отсутствуют",
+        "Name": "Название",
+        "Code": "Код",
+		"Designer": "Конструктор",
+        "Preview": "Просмотр",
+        "DisplayType": "Тип отображения",
+        "FormContructor": "Конструктор формы"
     },
     "dialogs": {
         "Yes": "Да",
@@ -110,5 +116,10 @@
         "cancel": "Отмена",
         "submit": "Отправить форму",
         "Type to search" : "Введите для поиска"
+    },
+    "errors": {
+        "InitializeSignalR": "Ошибка инициализации SignalR",
+        "InputCodeForm": "Введите код формы",
+		"RequiredInputField": "Обезательное поле"
     }
 }

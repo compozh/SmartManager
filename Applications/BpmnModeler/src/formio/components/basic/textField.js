@@ -37,6 +37,7 @@ TextFieldComponent.editForm = function () {
 		if (formComponent.key === 'tabs') {
 			for (var tabComponent of formComponent.components) {
 				if (tabComponent.key === 'display') {
+
 					tabComponent.components.push({
 						weight: 1502,
 						type: 'checkbox',

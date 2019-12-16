@@ -3,10 +3,10 @@ import ChartComponent from "../_classes/chart/chart";
 
 class DonutChart extends ChartComponent {
 	static schema(...extend) {
-		return ChartComponent.schema({
+		return super.schema({
 			type: 'donutchart',
 			typeChart: 'donut'
-		});
+		}, ...extend);
 	}
 
 	static get builderInfo() {
