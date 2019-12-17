@@ -33,7 +33,7 @@ export default class BarcodeScanerEvents {
             case 0:
                 break;
             default:
-                var code = event.key
+                var code = event.key.length > 1 ? '' : event.key
                 if(event.which >= 65 && event.which <= 90) {
                     code = String.fromCharCode(event.which)
                 }
