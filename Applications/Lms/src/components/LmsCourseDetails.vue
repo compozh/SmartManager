@@ -1,7 +1,7 @@
 <template>
-	<v-container fluid px-0 my-4>
+	<v-container fluid px-0 py-0 mx-0 my-0>
 		<!--COURSE HEADER-->
-		<v-layout my-2>
+		<v-layout >
 			<v-flex xs12>
 				<v-card v-if="course" v-bind:style="{'background-color': course.backgroundColor}">
 					<v-layout wrap row justify-center>
@@ -19,18 +19,14 @@
 								<v-spacer/>
 								<v-flex xs12>
 									<v-layout align-top justify-start row wrap>
-										<!-- <v-chip small v-for='role in course.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
-										<v-chip small v-for='level in course.levels' v-bind:key="level.code" @click="levelSearch(level)">{{level.name}}</v-chip>
-										<v-chip small v-for='product in course.products' v-bind:key="product.code" @click="productSearch(product)">{{product.name}}</v-chip>
-										<v-chip small v-for='tag in course.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip> -->
-										<v-layout align-top justify-end row mx-3>
+										<!-- <v-layout align-top justify-end row mx-3>
 											<v-icon
 												id='favIcon'
 												v-bind:color='course.isFavorite ? "red" : "grey"'
 												@mouseenter='favIconColor = "red"'
 												@mouseleave='favIconColor = "white"'
 												@click='changeFavoriteState(course)'>{{course.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
-										</v-layout>
+										</v-layout> -->
 									</v-layout>
 								</v-flex>
 							</v-layout>
@@ -41,9 +37,8 @@
 		</v-layout>
 
 		<!--MODULES CONT-->
-		<v-layout align-center justify-center>
+		<v-layout align-center justify-center mx-2 mt-4 mb-4>
 			<v-flex lg6 md10 sm10 xs12>
-				<h5 class='title font-weight-regular text-xs-left mx-2 mt-3 mb-4'>Модули</h5>
 				<v-layout wrap column v-if="modules">
 					<v-flex v-for='moduleItem in modules' :key='moduleItem.moduleGuid'>
 						<v-card class='my-2' hover >
@@ -98,7 +93,6 @@
 					</v-flex>
 				</v-layout>
 			</v-flex>
-
 
 			<v-flex xs3 class='py-5 px-4' v-if="course" v-show="course.additionalInfo">
 				<h3>Про этот курс</h3>

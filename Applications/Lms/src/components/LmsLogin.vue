@@ -85,14 +85,12 @@ export default {
   methods: {
     signIn() {
       // Проверка полей
-      debugger
       if (this.$refs.form.validate()) {
-        var roteToBack = this.$route.params.routeToBack
         this.snackbar = true
         this.$authentication.logIn(this.login, this.password, this.checkbox_remember_me)
         .then(result => {
-          if (result && result.tempPasword) {
-            this.$router.replace({path: routeToBack})
+          if (result && !result.tempPasword) {
+            this.$router.replace({path: this.$route.params.routeToBack})
           }
         })
         .catch((e) => {
@@ -102,7 +100,6 @@ export default {
 
     },
     goToRecoverPage() {
-      debugger
       this.$authentication.GetRecoveryPasswordUrl()
       .then(res => {
         if (res.ALLOWED) {

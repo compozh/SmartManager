@@ -50,7 +50,6 @@
         <v-flex >
           <v-menu v-if="currentUser"
             v-model="menu"
-            :close-on-content-click="click=!click"
             :nudge-width="200"
             bottom
             offset-x
@@ -117,7 +116,6 @@ export default {
       login: '',
       password: '',
       checkbox_remember_me: false,
-      auth: false,
       error: '',
       links: [],
       logoLink: null,
@@ -165,12 +163,11 @@ export default {
 
     },
     personalAccount() {
-
+      this.$router.push({name: 'LMSPERSONALACCOUNT'})
     },
     signOut() {
-      debugger
       this.$authentication.logOff()
-
+      this.$store.state.authentication.currentUser = null
       this.goHome()
     },
     search() {
