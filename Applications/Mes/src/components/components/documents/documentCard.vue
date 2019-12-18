@@ -8,6 +8,7 @@
         <v-card-text :class="selectedDocument && document.id == selectedDocument.id ? 'active-document-item' : 'inactive-document-item'">
           <span v-html="document.description"></span>
           <v-speed-dial
+            v-if="pageProps.methods.length"
             class="document-card-menu"
               absolute
               right
@@ -22,6 +23,7 @@
                 icon
                 width="30px"
                 height="30px"
+                min-width="30px"
                 :loading="processMethodInProgress"
                 color="#326da8"
                 v-model="document.fab"
