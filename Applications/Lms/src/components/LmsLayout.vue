@@ -77,7 +77,7 @@
           </v-menu>
         </v-flex>
 
-        <v-flex  class="grow-0">
+        <v-flex v-if="currentUser" class="grow-0">
           <user-panel mini="true"></user-panel>
         </v-flex>
 
