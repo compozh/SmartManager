@@ -55,7 +55,6 @@
 </template>
 
 <script>
-//import auth from '@/api/auth/auth'
 import templateConfig from '@/templateConfig'
 
 export default {
@@ -78,11 +77,9 @@ export default {
       this.$vs.loading()
 
       const payload = {
-        checkbox_remember_me: this.checkbox_remember_me,
-        userDetails: {
-          email: this.login,
-          password: this.password
-        },
+        login: this.login,
+        password: this.password,
+        rememberMe: this.checkbox_remember_me,
         notify: this.$vs.notify,
         closeAnimation: this.$vs.loading.close
       }
