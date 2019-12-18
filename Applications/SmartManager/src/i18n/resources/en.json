@@ -45,7 +45,9 @@
     "done": "Completed",
     "taskFrom": "Task from",
     "delConfirmTitle": "Task delete",
-    "delConfirmText": "Are you sure you want to delete the task?"
+    "delConfirmText": "Are you sure you want to delete the task?",
+    "saveDialogTitle": "Task not saved",
+    "saveDialogText": "Data has been changed. Exit without saving?"
   },
   "cases": {
     "newCase": "New case",
@@ -64,7 +66,9 @@
     "caseFrom": "Case from",
     "members": "Members",
     "comm": "Note",
-    "purpose": "Purpose"
+    "purpose": "Purpose",
+    "saveDialogTitle": "Case not saved",
+    "saveDialogText": "Data has been changed. Exit without saving?"
   },
   "buttons": {
     "addTask": "Add task",
@@ -101,7 +105,9 @@
     "unpin": "Remove from favorites",
     "edit": "Edit",
     "delete": "Delete",
-    "complete": "Complete"
+    "complete": "Complete",
+    "yes": "Yes",
+    "no": "No"
   },
   "icons": {
     "priority": "High priority",
