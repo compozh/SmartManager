@@ -4,14 +4,15 @@
       app
       :clipped="$vuetify.breakpoint.lgAndUp"
 			v-model="drawer"
-      :mini-variant.sync="drawerMini">
-
+      >
+      <!-- :mini-variant.sync="drawerMini" -->
       <v-list dense>
         <v-list-tile
           v-for="(link, index) in links"
           :key="index"
-          @click.stop='drawerMini = !drawerMini'
+
           :to="{name: link.Id}">
+          <!-- @click.stop='drawerMini = !drawerMini' -->
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
           </v-list-tile-action>
@@ -101,8 +102,7 @@ export default {
   name: 'lms-layout',
   data() {
     return {
-      drawer: null,
-      drawerMini: true,
+      drawer: false,
       // user-panel ->
       fixed: false,
       isauth: '',
@@ -112,7 +112,6 @@ export default {
       // TODO: удалить после отлвдки
       dialogState: false,
       // <-- user-panel
-      valid: false,
       login: '',
       password: '',
       checkbox_remember_me: false,

@@ -1,16 +1,14 @@
 <template>
 	<v-container fill-height fluid>
     <v-layout row justify-center>
-      <v-flex xs12 sm8 md6>
+      <v-flex xs12 sm6 md4>
         <v-card v-if="!message" class="elevation-12">
 		       <v-toolbar dark color="primary">
-		       	<v-toolbar-title>Вход в University</v-toolbar-title>
+		       	<v-toolbar-title>Вход</v-toolbar-title>
 		       	<v-spacer></v-spacer>
 		       </v-toolbar>
 		       <v-card-text>
-		       	<v-form
-              ref="form"
-              v-model="valid">
+		       	<v-form>
 		       		<v-text-field
 		       				prepend-icon="person"
 		       				v-model="login"
@@ -30,18 +28,24 @@
 		       				type="password"
 		       				required>
 		       		</v-text-field>
-              <v-layout row align-center ustify-space-between>
-                <v-checkbox
-                  v-model="checkbox_remember_me"
-                  label="Запомнить меня"></v-checkbox>
+
+              <v-layout row align-center justify-space-between>
+                <v-layout row align-center>
+                  <v-checkbox style="margin-left:28px"
+                    v-model="checkbox_remember_me"
+                    label="Запомнить меня"></v-checkbox>
+                </v-layout>
                 <div>
                   <a @click="goToRecoverPage">Забыли пароль?</a>
-                  <v-btn
-                     :disabled="!valid"
-                     color="primary"
-                    @click="signIn">Войти</v-btn>
                 </div>
               </v-layout>
+
+              <v-layout align-center justify-end fill-height>
+                <v-btn
+                     color="primary"
+                    @click="signIn">Войти</v-btn>
+              </v-layout>
+
 		       	</v-form>
 		     	</v-card-text>
 		     </v-card>
@@ -56,9 +60,11 @@
                <h3>{{message}}</h3>
              </v-card-title>
            </v-card-text>
-           <v-card-actions>
+           <v-layout align-center justify-end fill-height>
+            <v-card-actions>
              <v-btn @click="clearError">Ok</v-btn>
            </v-card-actions>
+           </v-layout>
          </v-card>
       </v-flex>
     </v-layout>
@@ -72,32 +78,32 @@ export default {
   name: 'lms-login',
   data() {
     return {
-      valid: true,
       login: '',
       password: '',
       checkbox_remember_me: false,
-      loginRule: [ v => !!v || 'Введите логин!' ],
-      passwordRule: [ v => !!v || 'Введите пароль!' ],
       message: '',
 
     }
   },
   methods: {
     signIn() {
-      // Проверка полей
-      if (this.$refs.form.validate()) {
-        this.snackbar = true
-        this.$authentication.logIn(this.login, this.password, this.checkbox_remember_me)
-        .then(result => {
-          if (result && !result.tempPasword) {
-            this.$router.replace({path: this.$route.params.routeToBack})
-          }
-        })
-        .catch((e) => {
-          return (this.message = e || 'Ошибка авторизации')
-        })
+      if(!this.login) {
+        this.message = "Введите логин!"
+        return
       }
-
+      if(!this.password) {
+        this.message = "Введите пароль!"
+        return
+      }
+      this.$authentication.logIn(this.login, this.password, this.checkbox_remember_me)
+      .then(result => {
+        if (result && !result.tempPasword) {
+          this.$router.replace({path: this.$route.params.routeToBack})
+        }
+      })
+      .catch((e) => {
+        return (this.message = e || 'Ошибка авторизации')
+      })
     },
     goToRecoverPage() {
       this.$authentication.GetRecoveryPasswordUrl()
