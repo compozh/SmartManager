@@ -1,4 +1,5 @@
 export default {
+  user: null,
   folders: null,
   currentFolder: null,
   search: null,
