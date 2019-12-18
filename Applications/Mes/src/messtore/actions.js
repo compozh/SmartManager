@@ -127,6 +127,19 @@ export default {
     )
   },
 
+  async applyDocumentMethod ({ dispatch, commit }, processMethodParamsInput ) {
+    return await dispatch('graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.applyDocumentMethod(processMethodParamsInput)
+      },
+      successAction: (result) => {
+        if (result.reRead){
+          commit('updateDocument')
+        }
+      },
+    })
+  },
+
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {

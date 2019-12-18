@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="mes-dynamic-page">
+    <v-layout class="mes-dynamic-page" :key="documentKey">
       <vue-split
         class="main-dynamic-page-layout"
         :elements="this.pageProps.showListOnRightSide ? [
@@ -30,6 +30,7 @@
           @initialize=initialize
           :isUploadInProcess=isUploadInProcess
           :initializeDynamicPage=initializeDynamicPage
+          :pageProps=pageProps
         />
         <mes-documents-main-layout
           v-if="!this.pageProps.showListOnRightSide"
@@ -79,6 +80,9 @@ export default {
     mobilityProperties() {
       return this.$store.getters['mes/mobilityProperties']
     },
+    documentKey(){
+      return this.$store.getters['mes/documentKey']
+    },
     selectedDocument: {
       get() {
         return this.$store.getters['mes/selectedDocument']
@@ -109,7 +113,7 @@ export default {
         var page = this.mobilityProperties.processesProperties[j];
         var pageId = '_' + page.id
         if (pageId.toLowerCase() == this.$route.name.toLowerCase()) {
-           this.pageProps = page
+          this.pageProps = page
          }
       }
       await this.$store.dispatch('mes/downloadDocuments', { processTypeCode: this.pageProps.id, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
