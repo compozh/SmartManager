@@ -115,6 +115,9 @@ export default {
   changeMainContainerKey(state) {
     state.mainContainerKey += 1
   },
+  updateDocument(state){
+    state.documentKey += 1
+  },
   setMaterialProduction(state, production) {
     state.setMaterialProduction = production
   },

@@ -56,5 +56,6 @@ export default {
   initializeDocuments: false,
   initializeQualities: false,
   documentSearchValue: '',
-  dynamicPagesCache: []
+  dynamicPagesCache: [],
+  documentKey: 0
 }

@@ -92,6 +92,9 @@ export default {
   mainContainerKey(state) {
     return state.mainContainerKey
   },
+  documentKey(state){
+    return state.documentKey
+  },
   selectedTask(state) {
     return state.tasksPageState.selectedTask
   },
