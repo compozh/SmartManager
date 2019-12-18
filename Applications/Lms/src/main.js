@@ -37,8 +37,8 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
 // Режим разработки
-Vue.config.productionTip = false
-Vue.config.devtools = true
+// Vue.config.productionTip = false
+// Vue.config.devtools = true
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({

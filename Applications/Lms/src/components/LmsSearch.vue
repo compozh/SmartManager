@@ -11,7 +11,7 @@
 					@keyup.native.enter="searchPhraseChangedForce"></v-text-field>
 			</v-flex>
 		</v-layout>
-		<h5 class='title font-weight-regular text-xs-left mx-2 mt-3 mb-4'>{{searchResult.resultsQt}} Результатов</h5>
+		<h5 class='title font-weight-regular text-xs-left mx-2 mt-3 mb-4'>{{resultsQt}} Результатов</h5>
 		<v-layout wrap row>
 			<v-flex v-for='moduleData in modules' :key='moduleData.courseId' xs12>
 				<v-card class='mx-2 my-2' hover>
@@ -53,14 +53,7 @@
 </template>
 
 <script>
-var moduleCardsData = []
-var searchResultData = {
-  resultsQt: 10,
-  results: []
-}
 
-var searchTimeoutId = 0
-var searchParamsData = { phrase: '' }
 export default {
   name: 'lms-search',
 
@@ -75,13 +68,13 @@ export default {
   beforeUpdate() {},
   data() {
     return {
-      favIconColor: 'grey',
-		  searchParams: searchParamsData,
-      searchResult: searchResultData,
-      searchResultData: {
-        resultsQt: 10,
+      searchTimeoutId: 0,
+		  searchParams: { phrase: '' },
+      searchResult: {
+        resultsQt: 0,
         results: []
-      }
+      },
+      favIconColor: 'grey',
     }
   },
   methods: {
@@ -90,32 +83,22 @@ export default {
     },
     searchPhraseChanged: function() {
       //при вводе поискового запроса, запустить поиск в случае, если уже три секунды ничего не вводят
-      if (searchTimeoutId > 0) {
-        clearTimeout(searchTimeoutId)
-      }
-      if (this.searchPhrase != '') {
-        // searchTimeoutId = setTimeout(
-        //   () => this.$router.push("/search/" + this.searchParams.phrase),
-        //   3000
-        // );
-      }
     },
     searchPhraseChangedForce: function() {
-      //при вводе поискового запроса, запустить поиск в случае, если уже три секунды ничего не вводят
-      if (searchTimeoutId > 0) {
-        clearTimeout(searchTimeoutId)
+      const phrase = this.searchParams.phrase
+      if(!phrase) {
+        return
       }
-      //this.$router.push("/search/" + this.searchParams.phrase);
-		},
-    changeFavoriteState: function(moduleData) {
-      moduleData.isFavorite = !moduleData.isFavorite
-      // this.runCalculation({
-      //   serviceName: "LMS.MODULES.SETFAVORITE",
-      //   parameters: {
-      //     moduleId: moduleData.courseGuid,
-      //     isFavorite: moduleData.isFavorite
-      //   }
-      // });
+      if (this.searchTimeoutId > 0) {
+        clearTimeout(this.searchTimeoutId)
+      }
+      // выполнить поиск по фразе
+      const modules = this.$store.getters['lms/modules']
+      var searchRegExp = new RegExp(phrase, 'i')
+      var searchResult = modules.filter(m => searchRegExp.test(m.name)
+            || searchRegExp.test(m.description))
+      this.searchResult.results = searchResult
+      this.searchResult.resultsQt = searchResult.length
     },
     roleSearch: function(data) {
       this.$router.push({ name: 'LMSMODULES', params: { role: data.code } })
@@ -126,7 +109,11 @@ export default {
   },
   computed: {
     modules() {
-      return this.$store.getters['lms/modules']
+      // this.$store.getters['lms/modules']
+      return this.searchResult.results
+    },
+    resultsQt() {
+      return this.searchResult.resultsQt
     }
   }
 };
