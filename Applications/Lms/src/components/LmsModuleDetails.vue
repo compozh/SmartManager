@@ -1,7 +1,7 @@
 <template>
-	<v-container fluid px-0 my-4>
+	<v-container fluid pa-0 ma-0>
 		<!--MODULE HEADER-->
-		<v-layout  my-2>
+		<v-layout mb-4>
 			<v-flex id='modulesHeader'>
 				<v-card v-if="moduleData.data">
 					<v-layout wrap row justify-center>

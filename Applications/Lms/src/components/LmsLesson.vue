@@ -23,8 +23,6 @@
 </template>
 <script>
 
-//hljs.initHighlightingOnLoad()
-
 var courseName = "";
 var moduleName = "";
 var lessonData = { name: "" };

@@ -36,7 +36,7 @@
 
           <v-divider light></v-divider>
 
-					<v-layout align-end justify-center row>
+					<v-layout align-end justify-center row class='pa-2'>
 						<v-icon
 							id='favIcon'
 							v-bind:color='moduleData.isFavorite ? "red" : "grey"'
