@@ -5,9 +5,8 @@ import './registerServiceWorker'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
-
-import auth from './api/auth/auth'
-auth.Init()
+import auth from '@it-enterprise/jwtauthentication'
+Vue.prototype.$auth = auth
 
 // vue пакеты
 import Vue from 'vue'
@@ -28,6 +27,22 @@ Vue.use(FlagIcon)
 
 // axios
 import axios from 'axios'
+
+// set authorization token
+axios.interceptors.request.use(
+  config => {
+    console.log('config', config)
+    const token = auth.getToken()
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${ token }`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
 Vue.prototype.$http = axios
 
 // Theme Configurations
@@ -117,6 +132,8 @@ Vue.use(Localization, { dependencies })
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
+
+
 
 export const eventBus = new Vue()
 
