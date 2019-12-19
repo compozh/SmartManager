@@ -119,6 +119,7 @@ export const events = {
      * Отобразить диалог создания формы formio
      * @event Formio#createForm
      * @param {formioCallback} callback - коллбек, вызываемый при успешном создании формы
+     * @param {boolean} isSystem - признак системности формы
      */
     createForm: 'formio.create-form',
 
