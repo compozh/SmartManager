@@ -47,40 +47,39 @@
           <v-icon>input</v-icon>
         </v-btn>
 
-        <!-- User menu -->
-        <v-flex >
-          <v-menu v-if="currentUser"
-            v-model="menu"
-            :nudge-width="200"
-            bottom
-            offset-x
-            offser-y>
+        <v-layout row align-center fill-height>
+          <!-- User menu -->
+          <v-flex >
+            <v-menu v-if="currentUser"
+              v-model="menu"
+              :nudge-width="200"
+              nudge-bottom="52"
+              bottom
+              offset-x
+              offser-y>
 
-            <template v-slot:activator="{on}">
-                <v-btn v-on="on" icon large>
-                  <v-icon>person</v-icon>
-                </v-btn>
-            </template>
+              <template v-slot:activator="{on}">
+                  <v-btn v-on="on" icon large>
+                    <v-img class="user-photo" :src="currentUser.UserData.CurrentUserData.UserPhoto"></v-img>
+                  </v-btn>
+              </template>
 
-            <v-card>
-              <v-list>
-                <v-list-tile
-                  v-for="(item, i) in userMenuItems" :key="i"
-                  @click="item.action">
-                    <v-list-tile-title>
-                      <v-icon>{{item.icon}}</v-icon>
-                      {{item.title}}
-                    </v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-            </v-card>
+              <v-card>
+                <v-list>
+                  <v-list-tile
+                    v-for="(item, i) in userMenuItems" :key="i"
+                    @click="item.action">
+                      <v-list-tile-title>
+                        <v-icon>{{item.icon}}</v-icon>
+                        {{item.title}}
+                      </v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+            </v-menu>
+          </v-flex>
 
-          </v-menu>
-        </v-flex>
-
-        <v-flex v-if="currentUser" class="grow-0">
-          <user-panel mini="true"></user-panel>
-        </v-flex>
+        </v-layout>
 
 			</v-toolbar-items>
 		</v-toolbar>
@@ -96,10 +95,13 @@
 </template>
 
 <script>
-
+import LmsUserPanel from './LmsUserPanel.vue'
 
 export default {
   name: 'lms-layout',
+  components: {
+    LmsUserPanel
+  },
   data() {
     return {
       drawer: false,
@@ -155,7 +157,7 @@ export default {
 			this.logoLink = this.$store.getters['lms/logoLink']
     },
     openLoginDialog() {
-      this.$router.push('LOGIN')
+      this.$router.push({name: 'LMSLOGIN'})
     },
 
     userProfile() {
@@ -204,5 +206,12 @@ export default {
 #appTitle {
   color: #55B332;
   font-size:28px;
+}
+
+.user-photo {
+  border-radius: 50%;
+  background-size: cover;
+  width: 40px;
+  height: 40px;
 }
 </style>
