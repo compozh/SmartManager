@@ -12,7 +12,6 @@
 		       		<v-text-field
 		       				prepend-icon="person"
 		       				v-model="login"
-                   :rules="loginRule"
 		       				name="login"
 		       				label="Логин"
 		       				type="text"
@@ -23,7 +22,6 @@
 		       				v-model="password"
 		       				name="password"
 		       				label="Пароль"
-                   :rules="passwordRule"
 		       				id="password"
 		       				type="password"
 		       				required>
