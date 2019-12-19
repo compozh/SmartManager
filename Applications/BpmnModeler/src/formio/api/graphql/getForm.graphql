@@ -6,6 +6,7 @@ query($formCode:String!, $properties: String) {
             submission
             display
             settings
+            isSystem
             success
             errorMessage
             successMessage
