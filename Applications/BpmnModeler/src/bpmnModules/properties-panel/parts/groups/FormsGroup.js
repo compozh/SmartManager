@@ -38,7 +38,7 @@ export default class FormsGroup extends PropertiesPanelGroup {
             'camunda:formKey': formKey
           });
           commandStack.execute(cmd.cmd, cmd.context);
-        });
+        }, diagram.isSystem);
       }
     } else {
       options.prependIcon = 'edit';

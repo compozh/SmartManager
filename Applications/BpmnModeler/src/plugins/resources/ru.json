@@ -308,7 +308,6 @@
 		"Implementation": "Реализация",
 		"External": "Внешняя задача",
 		"Expression": "Выражение",
-		"Script": "Скрипт",
 		"Connector": "Коннектор",
 		"DMN": "DMN",
 		"Topic": "Код задачи",
@@ -333,6 +332,12 @@
 		"Config": "Настройка",
 		"Task creation rule": "Правило создания задачи",
 		"Item description": "Описание элемента",
+
+		"Condition": "Условие",
+		"Script": "Скрипт",
+		"Script Format": "Язык скрипта",
+		"Inline Script": "Встроенный скрипт",
+		"External Resource": "Внешний ресурс",
 
 		"Colorize": "Изменить цвет"
 	},

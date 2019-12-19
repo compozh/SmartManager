@@ -251,7 +251,7 @@ ul.bpp-properties-tabs-links > li.bpp-active a {
     color: var(--main-color);
 }
 .bpmn-icon-colorize::before {
-  content: "\F0C9";
+  content: "\F0E3";
   font-family: "Material Design Icons";
   padding-top: 3px;
 }
