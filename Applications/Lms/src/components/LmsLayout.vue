@@ -3,16 +3,12 @@
 		<v-navigation-drawer
       app
       :clipped="$vuetify.breakpoint.lgAndUp"
-			v-model="drawer"
-      >
-      <!-- :mini-variant.sync="drawerMini" -->
+			v-model="drawer">
       <v-list dense>
         <v-list-tile
           v-for="(link, index) in links"
           :key="index"
-
           :to="{name: link.Id}">
-          <!-- @click.stop='drawerMini = !drawerMini' -->
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
           </v-list-tile-action>
@@ -65,6 +61,28 @@
               </template>
 
               <v-card>
+                <v-card-title class="grey lighten-4">
+                  <v-layout row align-center justify-center>
+                    <v-flex>
+                      <v-list-tile-avatar>
+                        <v-img class="user-photo" :src="currentUser.UserData.CurrentUserData.UserPhoto"></v-img>
+                      </v-list-tile-avatar>
+                    </v-flex>
+                    <v-flex>
+                      <v-layout column align-start justify-center>
+                        <v-flex>
+                          <h4>{{currentUser.UserData.LoginData.UserName}}</h4>
+                        </v-flex>
+                        <v-flex align-self-end>
+                          {{currentUser.UserData.LoginData.UserLogin.toLowerCase()}}
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                </v-card-title>
+
+                <v-divider light></v-divider>
+
                 <v-list>
                   <v-list-tile
                     v-for="(item, i) in userMenuItems" :key="i"
