@@ -2,7 +2,6 @@
   <div class="editor" ref="editor">
     <v-subheader>{{ label }}</v-subheader>
     <quill-editor ref="quillEditor" v-model="content" :options="editorOptions"></quill-editor>
-
     <v-divider></v-divider>
   </div>
 </template>
@@ -11,13 +10,19 @@
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import { quillEditor } from 'vue-quill-editor';
-
 import { fullScreenMixin } from '../../mixins';
 
+const TOOLBAR_CONFIG = [
+  [{ header: ['1', '2', '3', false] }],
+  ['bold', 'italic', 'underline', 'link'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['clean'],
+  ['fullscreen']
+];
 
 export default {
   name: 'properties-panel-rich-edit',
-  mixins: [ fullScreenMixin ],
+  mixins: [fullScreenMixin],
   components: {
     quillEditor
   },
@@ -37,9 +42,9 @@ export default {
     return {
       isfullscreen: false,
       fullscreenEnabled: document.fullscreenEnabled,
-      editorOptions: { },
+      editorOptions: { modules: { toolbar: TOOLBAR_CONFIG } },
       content: ''
-    }
+    };
   },
   watch: {
     value: {
@@ -64,27 +69,38 @@ export default {
   },
   computed: {
     editor() {
-      return this.$refs.quillEditor.quill
+      return this.$refs.quillEditor.quill;
     }
   },
   mounted() {
     this.editor.enable(!this.readonly);
+    const fullscreenBtn = document.querySelector('button.ql-fullscreen');
+    fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
   },
   methods: {
     getFullScreenContainer() {
-      return this.$refs.quillEditor;
-    },
+      console.log(this.$refs.quillEditor);
+      return this.$refs.quillEditor.$el;
+    }
   }
-}
+};
 </script>
 <style>
-.editor {
+.quill-editor {
   padding-bottom: 20px;
   background-color: white;
 }
 
-.editor:fullscreen {
+.quill-editor:fullscreen {
   padding: 20px;
+}
+
+.quill-editor:fullscreen .ql-container {
+  height: calc(100% - 40px);
+}
+
+.quill-editor:fullscreen .ql-editor {
+ overflow: auto;
 }
 
 .editor .v-subheader {
@@ -98,5 +114,18 @@ export default {
   height: 48px;
   font-size: 16px;
   font-weight: 500;
+}
+
+.ql-fullscreen:focus{
+  outline: none;
+}
+
+.ql-fullscreen::after {
+  content: "\F293";
+  font-family: "Material Design Icons";
+  font-size: 24px;
+  position: relative;
+  top: -12px;
+  left: -4px;
 }
 </style>
