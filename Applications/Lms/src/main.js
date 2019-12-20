@@ -30,7 +30,7 @@ import { routerDependencies } from './router'
 //import LmsLayout from './components/LmsLayout.vue'
 
 // Редактор quill
-import VueQuill from 'vue-quill'
+import VueQuill from 'it-vue-quill'
 // require styles
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'

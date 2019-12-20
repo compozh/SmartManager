@@ -308,7 +308,6 @@
 		"Implementation": "Implementation",
 		"External": "External task",
 		"Expression": "Expression",
-		"Script": "Script",
 		"Connector": "Connector",
 		"DMN": "DMN",
 		"Topic": "Task indentifier",
@@ -333,6 +332,12 @@
 		"Config": "Configuration",
 		"Task creation rule": "Task creation rule",
 		"Item description": "Item decription",
+
+		"Condition": "Condition",
+		"Script": "Script",
+		"Script Format": "Script Format",
+		"Inline Script": "Inline Script",
+		"External Resource": "External Resource",
 
 		"Colorize": "Colorize"
 	},

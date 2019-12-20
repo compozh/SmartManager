@@ -34,7 +34,7 @@
     "camunda-bpmn-moddle": "^4.3.0",
     "camunda-dmn-moddle": "^1.0.0",
     "canvg": "2.0.0",
-    "css-loader": "^3.3.0",
+    "css-loader": "3.2.0",
     "diagram-js": "^6.1.0",
     "diagram-js-minimap": "^2.0.3",
     "dmn-js": "^7.2.1",

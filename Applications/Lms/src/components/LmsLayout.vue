@@ -3,14 +3,11 @@
 		<v-navigation-drawer
       app
       :clipped="$vuetify.breakpoint.lgAndUp"
-			v-model="drawer"
-      :mini-variant.sync="drawerMini">
-
+			v-model="drawer">
       <v-list dense>
         <v-list-tile
           v-for="(link, index) in links"
           :key="index"
-          @click.stop='drawerMini = !drawerMini'
           :to="{name: link.Id}">
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
@@ -46,40 +43,61 @@
           <v-icon>input</v-icon>
         </v-btn>
 
-        <!-- User menu -->
-        <v-flex >
-          <v-menu v-if="currentUser"
-            v-model="menu"
-            :nudge-width="200"
-            bottom
-            offset-x
-            offser-y>
+        <v-layout row align-center fill-height>
+          <!-- User menu -->
+          <v-flex >
+            <v-menu v-if="currentUser"
+              v-model="menu"
+              :nudge-width="200"
+              nudge-bottom="52"
+              bottom
+              offset-x
+              offser-y>
 
-            <template v-slot:activator="{on}">
-                <v-btn v-on="on" icon large>
-                  <v-icon>person</v-icon>
-                </v-btn>
-            </template>
+              <template v-slot:activator="{on}">
+                  <v-btn v-on="on" icon large>
+                    <v-img class="user-photo" :src="currentUser.UserData.CurrentUserData.UserPhoto"></v-img>
+                  </v-btn>
+              </template>
 
-            <v-card>
-              <v-list>
-                <v-list-tile
-                  v-for="(item, i) in userMenuItems" :key="i"
-                  @click="item.action">
-                    <v-list-tile-title>
-                      <v-icon>{{item.icon}}</v-icon>
-                      {{item.title}}
-                    </v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-            </v-card>
+              <v-card>
+                <v-card-title class="grey lighten-4">
+                  <v-layout row align-center justify-center>
+                    <v-flex>
+                      <v-list-tile-avatar>
+                        <v-img class="user-photo" :src="currentUser.UserData.CurrentUserData.UserPhoto"></v-img>
+                      </v-list-tile-avatar>
+                    </v-flex>
+                    <v-flex>
+                      <v-layout column align-start justify-center>
+                        <v-flex>
+                          <h4>{{currentUser.UserData.LoginData.UserName}}</h4>
+                        </v-flex>
+                        <v-flex align-self-end>
+                          {{currentUser.UserData.LoginData.UserLogin.toLowerCase()}}
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                </v-card-title>
 
-          </v-menu>
-        </v-flex>
+                <v-divider light></v-divider>
 
-        <v-flex v-if="currentUser" class="grow-0">
-          <user-panel mini="true"></user-panel>
-        </v-flex>
+                <v-list>
+                  <v-list-tile
+                    v-for="(item, i) in userMenuItems" :key="i"
+                    @click="item.action">
+                      <v-list-tile-title>
+                        <v-icon>{{item.icon}}</v-icon>
+                        {{item.title}}
+                      </v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+            </v-menu>
+          </v-flex>
+
+        </v-layout>
 
 			</v-toolbar-items>
 		</v-toolbar>
@@ -95,14 +113,16 @@
 </template>
 
 <script>
-
+import LmsUserPanel from './LmsUserPanel.vue'
 
 export default {
   name: 'lms-layout',
+  components: {
+    LmsUserPanel
+  },
   data() {
     return {
-      drawer: null,
-      drawerMini: true,
+      drawer: false,
       // user-panel ->
       fixed: false,
       isauth: '',
@@ -112,7 +132,6 @@ export default {
       // TODO: удалить после отлвдки
       dialogState: false,
       // <-- user-panel
-      valid: false,
       login: '',
       password: '',
       checkbox_remember_me: false,
@@ -156,7 +175,7 @@ export default {
 			this.logoLink = this.$store.getters['lms/logoLink']
     },
     openLoginDialog() {
-      this.$router.push('LOGIN')
+      this.$router.push({name: 'LMSLOGIN'})
     },
 
     userProfile() {
@@ -205,5 +224,12 @@ export default {
 #appTitle {
   color: #55B332;
   font-size:28px;
+}
+
+.user-photo {
+  border-radius: 50%;
+  background-size: cover;
+  width: 40px;
+  height: 40px;
 }
 </style>
