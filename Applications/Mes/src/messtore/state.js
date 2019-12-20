@@ -57,5 +57,6 @@ export default {
   initializeQualities: false,
   documentSearchValue: '',
   dynamicPagesCache: [],
-  documentKey: 0
+  documentKey: 0,
+  cameraAvailability: false
 }

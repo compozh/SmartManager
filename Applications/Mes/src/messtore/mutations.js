@@ -173,6 +173,9 @@ export default {
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
+  setCameraAvailability(state, cameraAvailability) {
+    state.cameraAvailability = cameraAvailability
+  },
   resetState(state) {
     state.tasks = []
     state.downtimes = []

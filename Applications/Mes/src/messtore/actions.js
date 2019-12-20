@@ -400,5 +400,13 @@ export default {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
     })
+  },
+
+  async verifyCamera({ commit }) {
+    await navigator.mediaDevices.getUserMedia({video: true}).then(function() {
+      return commit('setCameraAvailability', true)
+    }).catch(function() {
+      return commit('setCameraAvailability', false)
+    })
   }
 }

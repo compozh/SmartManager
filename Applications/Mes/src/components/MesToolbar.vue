@@ -58,37 +58,20 @@
 <script>
 
 import Vue from 'vue'
+import Init from './components/Init'
+import UuidHelper from './components/UuidHelper'
+
 export default {
   name: 'mes-toolbar',
+  components: { Init },
   created() {
-    var me = this,
-      fixedUuid = me.$router.options.params.fixedUuid,
-      cookiesUuid = me.$cookies.get('mesUuid'),
-      sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
-      uuid
-    if (fixedUuid) {
-      uuid = fixedUuid
-    } else if (cookiesUuid) {
-      uuid = cookiesUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else if (sessionStorageUuid) {
-      uuid = sessionStorageUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else {
-      uuid = this.generateUUID()
-      me.$router.push({ query: { fixedUuid: uuid }})
-    }
-    // eslint-disable-next-line
-    $cookies.set('mesUuid', uuid, '3y')
-    window.sessionStorage.setItem('mesUuid', uuid)
-    me.$store.dispatch('mes/initializeWorkCenter', uuid)
-    me.$store.dispatch('mes/initializeProperties')
-    me.$store.dispatch('formio/initializeTicket')
-    me.$store.dispatch('mes/initializeMobilityProperties')
+    var init = new Init(),
+      me = this
+    init.initialize()
     me.initializeSignalR()
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
-    })
+    })    
   },
   data() {
     return { currentUserData: {} }
