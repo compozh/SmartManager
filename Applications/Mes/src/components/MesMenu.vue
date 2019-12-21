@@ -24,11 +24,11 @@ export default {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
-    dynamicPages() {
-      return this.$store.getters['mes/dynamicPages']
+    mobilityProperties() {
+      return this.$store.getters['mes/mobilityProperties']
     },
     links() {
-      if (!this.$store.state.WebApps.applicationDescription || !this.dynamicPages) {
+      if (!this.$store.state.WebApps.applicationDescription || !this.mobilityProperties) {
         return []
       }
 
@@ -42,7 +42,7 @@ export default {
         )
       }
       var dynamicPagesWithKey = []
-      this.dynamicPages.properties.forEach(page => {
+      this.mobilityProperties.processesProperties.forEach(page => {
          dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
       })
       var pages = []

@@ -1,0 +1,19 @@
+mutation($processMethodParams: ProcessMethodParamsInput!) {
+    mesMutation {
+        callProcessMethod(processMethodParams: $processMethodParams) {
+            process {
+                type
+                id
+                description
+                timeStamp
+                isReadOnly
+                qrCode
+            }
+            reRead
+            success
+            errorMessage
+            successMessage
+            errorCode
+        }
+    }
+}

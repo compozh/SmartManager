@@ -28,7 +28,7 @@ export default {
     tasks: false
   },
   properties: null,
-  dynamicPages: null,
+  mobilityProperties: null,
   userName: null,
   workCenter: null,
   workCenterFixationData: {},
@@ -55,5 +55,8 @@ export default {
   actionsAfterInitializeProperties: [],
   initializeDocuments: false,
   initializeQualities: false,
-  documentSearchValue: ''
+  documentSearchValue: '',
+  dynamicPagesCache: [],
+  documentKey: 0,
+  cameraAvailability: false
 }
