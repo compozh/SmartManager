@@ -1,6 +1,6 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
-import  { routerDependencies } from '../router'
+import router from '../router'
 
 const api = new MesApi()
 
@@ -337,7 +337,7 @@ export default {
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+        router.push({name: 'MESLOGIN'})
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -360,7 +360,7 @@ export default {
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+        router.push({name: 'MESLOGIN'})
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
