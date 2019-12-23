@@ -128,9 +128,10 @@ export default class Init {
             }
           }
         }
+
         if (store.getters['mes/workCenter'] && scope.$route.path.replace('/', '').toLowerCase() == 'mes') {
           var pagePath = ''
-          switch (this.workCenter.accessPages) {
+          switch (store.getters['mes/workCenter'].accessPages) {
           case 'ALL_PAGES':
             pagePath = '/MES/tasks'
             break
