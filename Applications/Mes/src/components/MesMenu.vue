@@ -2,10 +2,10 @@
   <v-list>
 
     <!-- Пункт меню -->
-    <v-list-item v-for="route in links" :key="route.Id" :to="{name:route.Id}">
+    <v-list-item v-for="route in links" :key="route.name" :to="{name:route.name}">
       <v-list-item-action @click="reloadPage(route)">
           <v-icon large>{{route.Image}}</v-icon>
-          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.Id">refresh</v-icon>
+          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.name">refresh</v-icon>
       </v-list-item-action>
 
       <!-- Описание пункта меню -->
@@ -28,30 +28,36 @@ export default {
       return this.$store.getters['mes/dynamicPages']
     },
     links() {
-      if (!this.$store.state.WebApps.applicationDescription || !this.dynamicPages) {
+      console.log(this)
+      // if (!this.$store.state.WebApps.applicationDescription || !this.dynamicPages) {
+      //   return []
+      // }
+
+      // const app = this.$store.state.WebApps.applicationDescription
+      // const sections = app.Sections || []
+      // var links = []
+      // for (let index = 0; index < sections.length; index++) {
+      //   const section = sections[index]
+      //   links = links.concat(
+      //     (section.Routes || []).map(r => (r.section = section) && r)
+      //   )
+      // }
+       let links = this.$router.options.routes[0].children
+      if (!links || !this.dynamicPages) {
         return []
       }
 
-      const app = this.$store.state.WebApps.applicationDescription
-      const sections = app.Sections || []
-      var links = []
-      for (let index = 0; index < sections.length; index++) {
-        const section = sections[index]
-        links = links.concat(
-          (section.Routes || []).map(r => (r.section = section) && r)
-        )
-      }
       var dynamicPagesWithKey = []
       this.dynamicPages.properties.forEach(page => {
-         dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
+         dynamicPagesWithKey[('_' + page.name).toLowerCase()] = page
       })
       var pages = []
-      for (let page of links[1].Children) {
+      for (let page of links) {
         if (this.workCenter)  {
           switch (this.workCenter.accessPages) {
           case 'ALL_PAGES':
-            let component = page.Components[0],
-              pageId = page.Id.toLowerCase()
+            let component = page.component,
+              pageId = page.name.toLowerCase()
             if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[pageId]) {
               continue
             }
@@ -64,12 +70,12 @@ export default {
             pages.push(page)
             break
           case 'ONLY_INSTALLATION':
-            if (page.Id == 'INSTALLATIONS') {
+            if (page.name == 'INSTALLATIONS') {
               pages.push(page)
             }
             break
           case 'ONLY_QUALITY':
-            if (page.Id == 'QUALITY') {
+            if (page.name == 'QUALITY') {
               pages.push(page)
             }
             break
@@ -96,7 +102,8 @@ export default {
       })
 
       links = links.concat(pages)
-      return links.filter(l => l.Name && l.Path)
+      console.log(this)
+      return links.filter(l => l.name && l.path)
     },
     obsoleteData() {
       return this.$store.getters['mes/obsoleteData']
@@ -104,7 +111,7 @@ export default {
   },
   methods: {
     reloadPage(route) {
-      if (this.$router.history.current.name != route.Id) {
+      if (this.$router.history.current.name != route.name) {
         return
       }
       this.$store.commit('mes/changeMainContainerKey')

@@ -1,6 +1,6 @@
 import { FormioApi } from '../api/formioApi'
 import Vue from 'vue'
-import  { routerDependencies } from '../../router'
+import  router from '../../router'
 
 const api = new FormioApi()
 /* eslint-disable */
@@ -66,7 +66,7 @@ export default {
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+        router.push({name: 'MESLOGIN'})
       }
       else {
         commit('setSnackbarErrorMessage', e.message)

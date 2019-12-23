@@ -2,11 +2,11 @@
   <v-app id="mes-app">
     <!-- Меню -->
     <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" permanent hide-overlay :stateless="true" :mini-variant="menuMiniMode">
-      <router-view name="navigation-drawer"/>
+      <mes-menu name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
       <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter" color="black"></v-app-bar-nav-icon>
-      <router-view name="toolbar"/>
+      <mes-toolbar name="toolbar"/>
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
 
@@ -77,6 +77,7 @@ export default {
     barcodeScanerEvents.initialize()
 
     var me = this
+      console.log(this)
 
     document.addEventListener("onbarcodescaned", event => {
       if(event.detail) {
