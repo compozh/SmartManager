@@ -43,30 +43,17 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
     var getType = options.getImplementationType,
       getBusinessObject = options.getBusinessObject;
 
-    var hasDmnSupport = options.hasDmnSupport,
-      hasExternalSupport = options.hasExternalSupport,
-      hasScriptSupport = options.hasScriptSupport,
+    var hasExternalSupport = options.hasExternalSupport,
       hasServiceTaskLikeSupport = options.hasServiceTaskLikeSupport;
 
     var DEFAULT_OPTIONS = [ { value: 'expression', name: translate('Expression') } ];
-    var DMN_OPTION = { value: 'dmn', name: translate('DMN') };
     var EXTERNAL_OPTION = { value: 'external', name: translate('Action') };
-    var SCRIPT_OPTION = { value: 'script', name: translate('Script') };
     
     var selectOptions = DEFAULT_OPTIONS;
-
-    if (hasDmnSupport) {
-      //selectOptions.push(DMN_OPTION);
-    }
 
     if (hasExternalSupport) {
       selectOptions.push(EXTERNAL_OPTION);
     }
-
-    if (hasScriptSupport) {
-      //selectOptions.push(SCRIPT_OPTION);
-    }
-
     const comboBox = entryFactory.selectBox({
       id: 'implementation',
       label: translate('Implementation'),
@@ -91,26 +78,11 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
           props['camunda:' + newType] = newValue;
         }
 
-        if (hasDmnSupport) {
-          props = assign(props, DMN_CAPABLE_PROPS);
-          if (newType === 'dmn') {
-            props['camunda:decisionRef'] = '';
-          }
-        }
-
         if (hasExternalSupport) {
           props = assign(props, EXTERNAL_CAPABLE_PROPS);
           if (newType === 'external') {
             props['camunda:type'] = 'external';
             props['camunda:topic'] = '';
-          }
-        }
-
-        if (hasScriptSupport) {
-          props['camunda:script'] = undefined;
-
-          if (newType === 'script') {
-            props['camunda:script'] = elementHelper.createElement('camunda:Script', {}, bo, bpmnFactory);
           }
         }
 
