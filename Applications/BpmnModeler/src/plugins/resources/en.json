@@ -54,6 +54,8 @@
 		"SelectForm": "Select Form",
 		"EnterTaskParams": "Enter task params",
 		"SelectTaskCreationRule": "Select task creation rule",
+		"SelectProcess": "Select process",
+		"SelectDecisionTable": "Select decision table",
 		"Code": "Code",
 		"Designer": "Designer",
 		"Preview": "Preview",
@@ -101,7 +103,8 @@
 		"RequestError": "Failed to execute request",
 		"InputCodeForm": "Input code form",
 		"RequiredInputField": "Field is required",
-		"AccessError": "Failed to give access for {identity}"
+		"AccessError": "Failed to give access for {identity}",
+		"ElementsNotLoaded": "Failed to load element"
 	},
 	"enums": {
 		"AccessType": {
@@ -339,7 +342,13 @@
 		"Inline Script": "Inline Script",
 		"External Resource": "External Resource",
 
-		"Colorize": "Colorize"
+		"Colorize": "Colorize",
+
+		"Called Element": "Called Element",
+		"Decision Ref": "Decision Ref",
+		"Binding": "Binding",
+		"Latest": "Latest",
+		"Version": "Version"
 	},
 	"formioForm": {
         "complete": "Submission Complete",

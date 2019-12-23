@@ -29,6 +29,16 @@
  * @param {string} type - тип формы (process/folder)
  */
 
+/**
+ * @callback deployedProcessCallback
+ * @param {string} procDefId - код задачи
+ */
+
+/**
+ * @callback deployedDecisionCallback
+ * @param {string} decDefId - код задачи
+ */
+
 /** События */
 export const events = {
   /** События в приложении */
@@ -97,12 +107,28 @@ export const events = {
 
     /**
      * Отобразить диалог ввода параметров задачи
-     * @event PropertiesPanel#setServiceTaskparameters
+     * @event PropertiesPanel#setServiceTaskParameters
      * @param {string} actionId - код действия
      * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
      * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
      */
-    setServiceTaskProperties: 'properties-panel.set-service-task-parameters'
+    setServiceTaskProperties: 'properties-panel.set-service-task-parameters',
+
+    /** 
+     * Отобразить диалог выбора опубликованных процессов
+     * @event PropertiesPanel#selectDeployedProcess
+     * @param {string} procDefKey - ключ опубликованного процесса
+     * @param {deployedProcessCallback} callback - коллбек, вызываемый после выбора действия
+     */
+    selectDeployedProcess: 'properties-panel.select-deployed-process',
+
+    /** 
+     * Отобразить диалог выбора опубликованных dmn решений
+     * @event PropertiesPanel#selectDeployedProcess
+     * @param {string} decDefKey - ключ опубликованного dmn решения
+     * @param {deployedDecisionCallback} callback - коллбек, вызываемый после выбора dmn решения
+     */
+    selectDeployedDecision: 'properties-panel.select-deployed-decision',
   },
   /** События formio */
   formio: {
