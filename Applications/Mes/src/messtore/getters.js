@@ -121,5 +121,8 @@ export default {
   },
   dynamicPagesCache(state) {
     return state.dynamicPagesCache
+  },
+  cameraAvailability(state){
+    return state.cameraAvailability
   }
 }
