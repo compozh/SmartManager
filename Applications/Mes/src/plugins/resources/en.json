@@ -121,6 +121,7 @@
     "errors": {
         "InitializeSignalR": "Failed initialize SignalR",
         "InputCodeForm": "Input code form",
-		"RequiredInputField": "Field is required"
+        "RequiredInputField": "Field is required",
+        "loginError": "Login failed for this code"
     }
 }

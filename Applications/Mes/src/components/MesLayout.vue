@@ -84,7 +84,9 @@ export default {
         if(me.$route.name == "MESLOGIN") {
           Vue.prototype.$authentication.loginByQr(barcode).then(result => {
           result && me.$router.replace({path: '/MES/tasks'})
-        })
+        }).catch(reason => {
+          me.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
+        });
         }
         var tasksPageState = me.$store.getters['mes/tasksPageState']
         if(me.$route.name == "INSTALLATIONS" || (me.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {

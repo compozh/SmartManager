@@ -120,6 +120,7 @@
     "errors": {
         "InitializeSignalR": "Ошибка инициализации SignalR",
         "InputCodeForm": "Введите код формы",
-		"RequiredInputField": "Обезательное поле"
+		"RequiredInputField": "Обезательное поле",
+        "loginError": "По данному коду не удалось войти в систему"
     }
 }
