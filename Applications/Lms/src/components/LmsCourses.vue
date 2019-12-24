@@ -13,16 +13,16 @@
 				</v-card>
 			</v-flex>
 		</v-layout>
-    <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
-		<v-layout wrap row mx-2 mt-2 mb-3>
+		<v-layout mb-3>
+      <v-flex>
+        <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
+      </v-flex>
 		</v-layout>
-			<v-layout wrap row>
-				<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
-
-          <course-card v-if="course" :course="course" />
-
-				</v-flex>
-			</v-layout>
+		<v-layout wrap row>
+			<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
+         <course-card v-if="course" :course="course" />
+			</v-flex>
+		</v-layout>
 	</v-container>
 </template>
 
