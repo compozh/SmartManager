@@ -6,7 +6,7 @@ import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
 import auth from '@it-enterprise/jwtauthentication'
-Vue.prototype.$auth = auth
+auth.config(window.appConfig.GrapgQlUrl)
 
 // vue пакеты
 import Vue from 'vue'
@@ -27,21 +27,6 @@ Vue.use(FlagIcon)
 
 // axios
 import axios from 'axios'
-
-// set authorization token
-axios.interceptors.request.use(
-  config => {
-    console.log('config', config)
-    const token = auth.getToken()
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${ token }`
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
 
 Vue.prototype.$http = axios
 

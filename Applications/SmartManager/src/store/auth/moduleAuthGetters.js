@@ -1,22 +1,17 @@
 export default {
   // All user data
-  userAllInfo: state => state.currentUser || {},
-  userData: (state, getters) => getters.userAllInfo.UserData || {},
+  user: state => state.user || {},
 
-  // Logged user data
-  delegatedRights: (state, getters) => getters.userData.DelegatedRights || [],
-  loginData: (state, getters) => getters.userData.LoginData || {},
-  loggedUserId: (state, getters) => getters.loginData.UserId || '',
-  loggedUserLogin: (state, getters) => getters.loginData.UserLogin || '',
-  loggedUserName: (state, getters) => getters.loginData.UserName || '',
+  // Delegated rights
+  delegatedRights: (state, getters) => getters.user.delegatedRights || [],
 
-  // Current user data
-  currentUserData: (state, getters) => getters.userData.CurrentUserData || {},
-  currentUserId: (state, getters) => getters.currentUserData.UserId || '',
-  currentUserName: (state, getters) => getters.currentUserData.UserName || '',
-  currentUserPhoto: (state, getters) => {
-    let photoLink = getters.currentUserData.UserPhoto
-    // Checking link valid
-    return photoLink.includes('=&') ? '' : photoLink
+  // User data
+  userId: (state, getters) => getters.user.id || '',
+  userLogin: (state, getters) => getters.user.login || '',
+  userName: (state, getters) => getters.user.userName || '',
+  userPhoto: (state, getters) => {
+    let photoLink = getters.user.userPhoto
+    // Checking link is valid
+    return photoLink && photoLink.includes('=&') ? '' : photoLink
   }
 }

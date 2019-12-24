@@ -1,7 +1,4 @@
 export default {
-  UPDATE_AUTHENTICATED_USER(state, user) {
-    state.user = user
-  },
   setMessage(state, payload) {
     state.message = payload ? payload : {}
   },
