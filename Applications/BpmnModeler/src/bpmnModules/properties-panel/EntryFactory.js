@@ -217,7 +217,7 @@ function get(options, element) {
   if (options.get) {
     return options.get(element);
   } else {
-    return getBusinessObject(element)[options.model];
+    return getBusinessObject(element).get(options.model);
   }
 }
 

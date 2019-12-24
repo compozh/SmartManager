@@ -8,6 +8,7 @@ import { api } from '../../../../api/bpmnApi';
 import { setServiceTaskParameters } from '../../utils';
 import { eventBus } from '../../../../main';
 import { events } from '../../../../constants';
+import { is } from 'bpmn-js/lib/util/ModelUtil';
 
 /**
  * Добавить в группу свойсва сервисной задачи
@@ -24,13 +25,11 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
     return;
   }
 
-  var hasDmnSupport = isDmnCapable(element);
   var hasExternalSupport = isExternalCapable(getBusinessObject(element));
 
   group.entries.push(new ImplementationTypeEntry(entryFactory, bpmnFactory, translate, {
     getBusinessObject: getBusinessObject,
     getImplementationType: getImplementationType,
-    hasDmnSupport: hasDmnSupport,
     hasExternalSupport: hasExternalSupport,
     hasServiceTaskLikeSupport: true
   }));
@@ -89,16 +88,13 @@ function getBusinessObject(element) {
   return ImplementationTypeHelper.getServiceTaskLikeBusinessObject(element);
 }
 
-function isDmnCapable(element) {
-  return ImplementationTypeHelper.isDmnCapable(element);
-}
-
 function isExternalCapable(element) {
   return ImplementationTypeHelper.isExternalCapable(element);
 }
 
 function isServiceTaskLike(element) {
-  return ImplementationTypeHelper.isServiceTaskLike(element);
+  // для DMN отдельная обработка
+  return ImplementationTypeHelper.isServiceTaskLike(element) && !is(element, 'bpmn:BusinessRuleTask');
 }
 
 function isExternal(element) {
