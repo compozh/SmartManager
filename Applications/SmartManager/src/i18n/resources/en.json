@@ -229,6 +229,9 @@
     "placeholder": "Login",
     "password": "Password",
     "subTitle": "Login",
-    "loggedIn": "You are already logged in!"
+    "loggedIn": "You are already logged in!",
+    "loginSuccess": "Login successful",
+    "loginFail": "Failed to login, try again later",
+    "loginError": "Error trying to login, contact support"
   }
 }
