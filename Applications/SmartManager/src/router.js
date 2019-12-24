@@ -1,20 +1,5 @@
-/*=========================================================================================
-  File Name: router.js
-  Description: Routes for vue-router. Lazy loading is enabled.
-  Object Strucutre:
-                    path => router path
-                    name => router name
-                    component(lazy loading) => component to load
-                    meta : {
-                      rule => which user can have access (ACL)
-                      breadcrumb => Add breadcrumb to specific page
-                        { title, url, active }
-                      pageTitle => Display title besides breadcrumb
-                    }
-==========================================================================================*/
-
 import Vue from 'vue'
-import auth from '@/api/auth/auth'
+import auth from '@it-enterprise/jwtauthentication'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
@@ -25,7 +10,6 @@ let router = new VueRouter({
   },
   base: window.appConfig.BASE_URL + 'SmartManager/',
   routes: [
-
     {
       // =============================================================================
       // MAIN LAYOUT ROUTES
@@ -186,27 +170,19 @@ router.history.getCurrentLocation = function() {
   if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
     path = path.slice(base.length)
   }
-
   return (path || '/') + window.location.search + window.location.hash
 }
 
 // protection of paths from an unauthenticated access
-router.beforeEach((to, from, next) => {
-
-  // get current user
-  const currentUSer = auth.getCurrentUser()
-  if (
-    to.path === '/login' ||
-        to.path === '/error-404' ||
-        to.path === '/error-500' ||
-        to.path === '/callback' ||
-
-        !!currentUSer
-  ) {
+router.beforeEach(async (to, from, next) => {
+  const token = await auth.getToken()
+  const unProtectedRoutes = ['/login', '/error-404', '/error-500', '/not-authorized']
+  if (token || unProtectedRoutes.includes(to.path)) {
     return next()
   }
-
-  router.push({ path: '/login', query: { to: to.path } })
+  if (router.currentRoute.name !== 'login') {
+    await router.push({path: '/login', query: { to: to.path }})
+  }
 })
 
 router.afterEach(() => {
