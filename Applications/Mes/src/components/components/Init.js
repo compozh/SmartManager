@@ -82,49 +82,23 @@ export default class Init {
         if (!store.getters['mes/mobilityProperties']) {
           return []
         }
-        // console.log(store.getters['mes/mobilityProperties'])
-        // console.log(store.state.WebApps.applicationDescription.Sections[0].Routes[1].Children)
-        debugger
         const app = router.options.routes[0].children
-        console.log(router)
         
-        // const sections = app.Sections || []
         var links = []
-        // for (let index = 0; index < sections.length; index++) {
-        //   const section = sections[index]
-        //   links = links.concat(
-        //     (section.Routes || []).map(r => (r.section = section) && r)
-        //   )
-        // }
-        // var dynamicPagesWithKey = []
-        // store.getters['mes/mobilityProperties'].processesProperties.forEach(page => {
-        //    dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
-        // })
         var pages = []
         for (let page of app) {
           if (store.getters['mes/workCenter'])  {
             switch (store.getters['mes/workCenter'].accessPages) {
             case 'ALL_PAGES':
-              let component = page.component
-                // pageId = page.Id.toLowerCase()
-              // if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[pageId]) {
-              //   continue
-              // }
-              // let dynamicPage = dynamicPagesWithKey[pageId]
-              // if (dynamicPage) {
-              //   page.Name = dynamicPage.name
-              //   page.Image = dynamicPage.image || 'description'
-              //   page.Sort = 100
-              // }
               pages.push(page)
               break
             case 'ONLY_INSTALLATION':
-              if (page.Id == 'INSTALLATIONS') {
+              if (page.id == 'INSTALLATIONS') {
                 pages.push(page)
               }
               break
             case 'ONLY_QUALITY':
-              if (page.Id == 'QUALITY') {
+              if (page.id == 'QUALITY') {
                 pages.push(page)
               }
               break

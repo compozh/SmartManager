@@ -1,56 +1,29 @@
-// http://tfs2017:8080/tfs/DefaultCollection/_git/WebApplicationsimport Vue from 'vue'
-
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from './store'
 Vue.use(VueRouter)
-// debugger
-// Роутер по умолчанию
 
-
-let routerChildren =  [
-  {
-    name: 'TASKS',
-    path: 'tasks',
-    component: () => import('@/components/pages/Tasks.vue'),
-    meta: {
-      rule: 'isPublic',
-    },
-    caseSensitive: false
-  },
+let routerChildren = [
   {
     name: 'MESLOGIN',
     path: 'login',
     caseSensitive: false
     // component: () => import('@/public/components/Authentification/Login.vue'),
-    // meta: {
-    //   rule: 'isPublic',
-    //   isMenu: false
-    // },
   },
-  // {
-  //   path: '*',
-  //   name: 'navigation-drawer',
-  //   component: () => import('@/components/MesMenu.vue')
-  // },
-  // {
-  //   path: '*',
-  //   name: 'toolbar',
-  //   component: () => import('@/components/MesToolbar.vue')
-  // },
-
-  // {
-  //   path: '/',
-  //   name: 'home',
-  //   component: () => import('./components/MesLayout.vue'),
-  //   meta: {
-  //     rule: 'isNormal',
-  //     // icon: 'home',
-  //     // caption: 'purchases.Menu.Home',
-  //     // isMenu: true
-  //   },
-  //   caseSensitive: false
-  // },
+  {
+    name: 'TASKS',
+    path: 'tasks',
+    id: 'TASKS',
+    component: () => import('@/components/pages/Tasks.vue'),
+    meta: {
+      rule: 'isPublic',
+    },
+    caseSensitive: false,
+    allowAnonymous: false,
+    text: "Задания",
+    sort: "1",
+    image: "assignment",
+  },
   { 
     name: 'QUALITY',
     path: "quality",
@@ -113,12 +86,27 @@ let routerChildren =  [
   }
 ]
 
+let routerRoutes = [
+  {
+    path: '/:ApplicationId',
+    name: 'MESROOT',
+    component: () => import('./components/MesLayout.vue'),
+    children: [{path:'*'}]
+    },
+    {
+      path:'*',
+      redirect: {name: 'MESROOT', path: '/:ApplicationId' },
+      caseSensitive: false
+    }
+  ]
+
 export let initDynamicRoutes = async () => {
-  debugger
+
   let dynamicPagesWithKey = []
   let pages = await store.getters['mes/mobilityProperties'].processesProperties
+
   pages.forEach(page => {
-    let child = {}
+  let child = {}
     child.name = page.id
     child.path = page.id.toLowerCase()
     child.id = page.id
@@ -127,35 +115,22 @@ export let initDynamicRoutes = async () => {
     child.sort = 100
     child.image = 'description'
     dynamicPagesWithKey.push(child)
-
  })
+ 
   routerChildren = routerChildren.concat(dynamicPagesWithKey)
-  router.options.routes[0].children = routerChildren
-  console.log(router)
-  debugger
+  routerRoutes[0].children = routerChildren
+  router.addRoutes(routerRoutes)
   return dynamicPagesWithKey
 }
 
-// initDynamicRoutes()
-export const  router = new VueRouter({
+export const router = new VueRouter({
   mode: 'history',
   base: window.myConfig.BASE_URL ,
   params: {fixedUuid: window.location.search.replace('?fixedUuid=','')},
-  routes: [
-    {
-      path: '/:ApplicationId',
-      name: 'MESROOT',
-      component: () => import('./components/MesLayout.vue'),
-      children: routerChildren
-      },
-        {
-          path:'*',
-          redirect: {name: 'MESROOT'},
-          caseSensitive: false
-        }
-    ]
+  routes: routerRoutes
 })
-  
+
+
 router.beforeEach((to, from, next) => {
   // get current user
   Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
