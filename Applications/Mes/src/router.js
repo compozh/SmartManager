@@ -106,15 +106,18 @@ export let initDynamicRoutes = async () => {
   let pages = await store.getters['mes/mobilityProperties'].processesProperties
 
   pages.forEach(page => {
-  let child = {}
-    child.name = page.id
-    child.path = page.id.toLowerCase()
-    child.id = page.id
-    child.component = () => import('@/components/pages/DynamicPage.vue')
-    child.text = page.name
-    child.sort = 100
-    child.image = 'description'
-    dynamicPagesWithKey.push(child)
+    if (!routerChildren.find(el => el. name == page.id)) {
+      let child = {}
+          child.name = page.id
+          child.path = page.id.toLowerCase()
+          child.id = page.id
+          child.component = () => import('@/components/pages/DynamicPage.vue')
+          child.text = page.name
+          child.sort = 100
+          child.image = 'description'
+          dynamicPagesWithKey.push(child)
+    }
+   
  })
  
   routerChildren = routerChildren.concat(dynamicPagesWithKey)

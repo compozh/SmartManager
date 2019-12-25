@@ -21,7 +21,6 @@ export default {
   },
 
   async initializeMobilityProperties({commit}) {
-    debugger
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         const result = await api.getMobilityPropertiesFromGql("MOBILITYWEB")
@@ -286,7 +285,13 @@ export default {
   },
 
   toggleMenuMiniMode({getters, commit}) {
+    debugger
     commit('setMenuMiniMode', !getters.menuMiniMode)
+  },
+
+  toggleMenuDrawerMode({getters, commit}) {
+    debugger
+    commit('setMenuDrawerMode', !getters.menuDrawerMode)
   },
 
   async productionFormIoSubmit({ commit }, { workCenter, submission, task, message }) {

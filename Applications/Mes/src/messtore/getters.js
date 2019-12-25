@@ -77,6 +77,12 @@ export default {
     }
     return state.menuMiniMode
   },
+  menuDrawerMode(state) {
+    if (state.menuDrawerMode === null) {
+      state.menuDrawerMode = localStorage.getItem('mesMenuDrawerMode') === 'true'
+    }
+    return state.menuDrawerMode
+  },
   tasksPageState(state) {
     return state.tasksPageState
   },

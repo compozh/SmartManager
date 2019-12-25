@@ -10,7 +10,7 @@
 
       <!-- Описание пункта меню -->
       <v-list-item-content  @click="reloadPage(route)">
-        <v-list-item-title>{{ route.Name }}</v-list-item-title>
+        <v-list-item-title >{{ route.text }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -57,6 +57,7 @@ export default {
     height: 100%;
   }
   .v-navigation-drawer__content .v-list-item__title {
+    text-align: start;
     font-size: 14px;
     height: 24px;
     line-height: 24px;

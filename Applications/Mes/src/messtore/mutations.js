@@ -125,6 +125,10 @@ export default {
     state.menuMiniMode = menuMiniMode
     localStorage.setItem('mesMenuMiniMode', menuMiniMode.toString())
   },
+  setMenuDrawerMode(state, menuDrawerMode) {
+    state.menuDrawerMode = menuDrawerMode
+    localStorage.setItem('mesMenuDrawerMode', menuDrawerMode.toString())
+  },
   setSelectedTasksTab(state, tabId) {
     state.tasksPageState.selectedTasksTab = tabId
   },

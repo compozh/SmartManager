@@ -1,7 +1,9 @@
 <template>
   <v-app id="mes-app">
     <!-- Меню -->
-    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" permanent hide-overlay :stateless="true" :mini-variant="menuMiniMode">
+    <v-navigation-drawer  app clipped mobile-break-point="false" width="320" 
+      :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
+      v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter">
       <mes-menu name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
@@ -110,6 +112,9 @@ export default {
     menuMiniMode() {
       return this.$store.getters['mes/menuMiniMode']
     },
+    menuDrawerMode() {
+      return this.$store.getters['mes/menuDrawerMode']
+    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
@@ -128,7 +133,9 @@ export default {
   },
   methods: {
     toggleMenuMode() {
-      this.$store.dispatch('mes/toggleMenuMiniMode')
+      this.$vuetify.breakpoint.smAndDown ? 
+      this.$store.dispatch('mes/toggleMenuDrawerMode') :
+      this.$store.dispatch('mes/toggleMenuMiniMode') 
     },
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')
