@@ -1,6 +1,6 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
-import router from '../router'
+import {router, initDynamicRoutes} from '../router'
 
 const api = new MesApi()
 
@@ -21,10 +21,12 @@ export default {
   },
 
   async initializeMobilityProperties({commit}) {
+    debugger
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
         const result = await api.getMobilityPropertiesFromGql("MOBILITYWEB")
         commit('setMobilityProperties', result)
+        initDynamicRoutes()
       }
     })
   },

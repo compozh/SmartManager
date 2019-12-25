@@ -77,7 +77,7 @@ export default {
     barcodeScanerEvents.initialize()
 
     var me = this
-      console.log(this)
+      // console.log(this)
 
     document.addEventListener("onbarcodescaned", event => {
       if(event.detail) {

@@ -2,10 +2,10 @@
   <v-list>
 
     <!-- Пункт меню -->
-    <v-list-item v-for="route in links" :key="route.name" :to="{name:route.name}">
+    <v-list-item v-for="route in links" :key="route.id" :to="{ name: route.id }">
       <v-list-item-action @click="reloadPage(route)">
-          <v-icon large>{{route.Image}}</v-icon>
-          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.name">refresh</v-icon>
+          <v-icon large>{{route.image}}</v-icon>
+          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.id">refresh</v-icon>
       </v-list-item-action>
 
       <!-- Описание пункта меню -->
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     reloadPage(route) {
-      if (this.$router.history.current.name != route.name) {
+      if (this.$router.history.current.name != route.id) {
         return
       }
       this.$store.commit('mes/changeMainContainerKey')
