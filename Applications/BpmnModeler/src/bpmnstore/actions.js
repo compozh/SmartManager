@@ -331,6 +331,24 @@ export default {
       console.error(error);
       return false;
     }
+  },
+
+  async getDeployedProcesses(context) {
+    try {
+      return await api.getDeployedProcesses();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getDeployedDecisions(context) {
+    try {
+      return await api.getDeployedDecisions();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
   //#endregion

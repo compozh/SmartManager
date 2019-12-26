@@ -273,10 +273,11 @@ export default {
     })
   },
 
-  async createProductionFormio({ commit }, { formCode, properties }) {
+  async createProductionFormio({ commit }, { formCode, properties, deviceSizeType }) {
+    deviceSizeType = deviceSizeType || 'lg'
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.getProductionFormioFromGql(formCode, properties)
+        const res = await api.getProductionFormioFromGql(formCode, properties, deviceSizeType)
         return res
       },
       successAction: async result => { commit('setProductionFormio', result) },

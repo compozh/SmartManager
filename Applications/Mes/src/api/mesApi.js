@@ -232,10 +232,10 @@ export class MesApi {
     return result.data.mes.executeWriteOff
   }
 
-  async getProductionFormioFromGql(formCode, properties) {
+  async getProductionFormioFromGql(formCode, properties, deviceSizeType) {
     const result = await getClient().query({
       query: gql`${productionFormio}`,
-      variables: { formCode, properties },
+      variables: { formCode, properties, deviceSizeType },
       fetchPolicy: 'network-only'
     })
     return result.data.mes.productionFormio

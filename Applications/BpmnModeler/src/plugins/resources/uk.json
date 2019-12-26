@@ -54,6 +54,8 @@
 		"SelectForm": "Виберіть форму",
 		"EnterTaskParams": "Введіть параметри задачі",
 		"SelectTaskCreationRule": "Виберіть правило створення задачі",
+		"SelectProcess": "Виберіть процес",
+		"SelectDecisionTable": "Виберіть таблицю рішень",
 		"Code": "Код",
 		"Designer": "Конструктор",
 		"Preview": "Перегляд",
@@ -106,7 +108,8 @@
 		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
 		"RequiredInputField": "Обов'язкове поле",
-		"AccessError": "не вдалося надати доступ для {identity}"
+		"AccessError": "не вдалося надати доступ для {identity}",
+		"ElementsNotLoaded": "Не вдалося завантажити елементи"
 	},
 	"enums": {
 		"AccessType": {
@@ -166,7 +169,7 @@
 		"Business Rule Task": "Бізнес-правило",
 		"Service Task": "Сервісне завдання",
 		"Script Task": "Завдання-сценарій",
-		"Call Activity": "Виклик Дії",
+		"Call Activity": "Виклик процессу",
 		"Sub Process (collapsed)": "Підпроцес (згорнутий)",
 		"Sub Process (expanded)": "Підпроцес (розгорнутий)",
 		"Start Event": "Початкова подія",
@@ -344,7 +347,13 @@
 		"Inline Script": "Вбудований скрипт",
 		"External Resource": "Зовнішній ресурс",
 
-		"Colorize": "Змінити колір"
+		"Colorize": "Змінити колір",
+
+		"Called Element": "Процес",
+		"Decision Ref": "Таблиця рішень",
+		"Binding": "Прив'язка",
+		"Latest": "Остання версія",
+		"Version": "Версія"
 	},
 	"formioForm": {
         "complete": "Відправка завершена",

@@ -280,6 +280,20 @@ export class BpmnModelerApi {
     });
   }
 
+  async getDeployedProcesses() {
+    const result = await getClient().query({
+      query: gql`query ${queries.getDeployedProcesses}`
+    });
+    return result.data.bpmnquery.deployedProcesses;
+  }
+
+  async getDeployedDecisions() {
+    const result = await getClient().query({
+      query: gql`query ${queries.getDeployedDecisions}`
+    });
+    return result.data.bpmnquery.deployedDecisions;
+  }
+
   //#endregion
 
 }
