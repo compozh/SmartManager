@@ -172,7 +172,7 @@ export default {
     })
   },
 
-  async registerProduction({ commit, getters }, { workCenter, task }) {
+  async registerProduction({ commit, getters }, { workCenter, task, deviceSizeType }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -193,7 +193,7 @@ export default {
           workCenterCode: workCenter.code,
           workBarcode: task.barcode
         }
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
       linearLoader: true
     })

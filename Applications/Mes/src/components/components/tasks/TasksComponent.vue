@@ -1,51 +1,57 @@
 <template>
   <div class="mes-tasks-component">
-    <v-layout column class="mes-tasks-component-layout" scrollable>
-      <v-flex fill-height class="grid-tabs">
-        <v-tabs v-model="selectedTab">
-          <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
-            <v-badge color="#326DA8" overlap>
-              <template v-slot:badge>
-                <span class="span-count-tasks">{{countTasks(tab.index)}}</span>
-              </template>
-              {{tab.name}}
-            </v-badge>
-          </v-tab>
-        </v-tabs>
-      </v-flex>
-      <v-flex class="tasks-list-blocks">
+    <vue-pull-refresh :on-refresh="onRefresh">
+      <v-layout column class="mes-tasks-component-layout" scrollable>
+        <v-flex fill-height class="grid-tabs">
+          <v-tabs v-model="selectedTab">
+            <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
+              <v-badge color="#326DA8" overlap>
+                <template v-slot:badge>
+                  <span class="span-count-tasks">{{countTasks(tab.index)}}</span>
+                </template>
+                {{tab.name}}
+              </v-badge>
+            </v-tab>
+          </v-tabs>
+        </v-flex>
+        <v-flex class="tasks-list-blocks">
 
-        <mes-content-loader
-          v-if="!initializeTasks && !tasks.length"
-          :loaderType=loaderType
-        />
-        <v-text-field
-          v-if="initializeTasks"
-          class="search-field"
-          :label="this.$t('mes.placeholders.SearchTask')"
-          v-model="filterValue"
-          clearable
-        ></v-text-field>
-        <div class="tasks-list-block-content">
-
-          <mes-task-cards
-            :selectedTask=selectedTask
-            :selectedTasksTab=selectedTasksTab
-            @changeCurrentTask=changeCurrentTask
+          <mes-content-loader
+            v-if="!initializeTasks && !tasks.length"
+            :loaderType=loaderType
           />
+          <v-text-field
+            v-if="initializeTasks"
+            class="search-field"
+            :label="this.$t('mes.placeholders.SearchTask')"
+            v-model="filterValue"
+            clearable
+          ></v-text-field>
+          <div class="tasks-list-block-content">
 
-        </div>
-        <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">{{this.$t('mes.labels.NoTasks')}}</span>
-      </v-flex>
+            <mes-task-cards
+              :selectedTask=selectedTask
+              :selectedTasksTab=selectedTasksTab
+              @changeCurrentTask=changeCurrentTask
+              @changeTaskTableView=changeTaskTableView
+            />
 
-    </v-layout>
-    </div>
+          </div>
+          <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">{{this.$t('mes.labels.NoTasks')}}</span>
+        </v-flex>
+
+      </v-layout>
+    </vue-pull-refresh>
+  </div>
 </template>
 
 <script>
-
+import VuePullRefresh from 'vue-pull-refresh'
 export default {
   name: 'mes-tasks-component',
+  components: {
+    'vue-pull-refresh': VuePullRefresh
+  },
   data() {
     return {
       tabs: [
@@ -62,6 +68,7 @@ export default {
   },
   computed: {
     tasks() {
+      console.log(this.$store.getters['mes/tasks'])
       return this.$store.getters['mes/tasks']
     },
     workCenter() {
@@ -91,6 +98,9 @@ export default {
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask)
     },
+    changeTaskTableView() {
+      this.$emit('changeTaskTableView', false)
+    },
     countTasks(tabIndex) {
       var me = this,
         tasks = []
@@ -101,7 +111,19 @@ export default {
         }
       }
       return tasks.length
-    }
+    }, 
+    onRefresh() {
+      return new Promise( async (resolve, reject) => {
+        this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code }).then(()=>{
+          this.$forceUpdate()
+          resolve()
+        })
+      })
+    },
+  },
+  mounted() {
+    let refreshLabel = document.querySelector('.pull-down-content--label')
+    refreshLabel.innerText = 'wait'
   }
 }
 </script>

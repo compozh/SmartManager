@@ -1,7 +1,8 @@
 <template>
 <v-layout class="task-main-layout-block">
-  <mes-task-main-layout-toolbar  v-if="$vuetify.breakpoint.mdAndUp"
+  <mes-task-main-layout-toolbar 
     @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+    @changeTaskTableView=changeTaskTableView
   />
 
      <v-layout class="mes-task-main-layout">
@@ -43,6 +44,9 @@ export default {
   methods: {
     changeDowntimesOverlayVisible() {
       this.$emit('changeDowntimesOverlayVisible')
+    },
+    changeTaskTableView() {
+      this.$emit('changeTaskTableView', true)
     },
     formSubmit(submission) {
       this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction') })

@@ -26,7 +26,7 @@ let routerChildren = [
   },
   { 
     name: 'QUALITY',
-    path: "quality",
+    path: "quality/:id?",
     id: "QUALITY",
     component: () => import('@/components/pages/Quality.vue'),
     meta: {
@@ -41,7 +41,7 @@ let routerChildren = [
   },
   {
     name: 'DOWNTIMES',
-    path: 'downtimes',
+    path: 'downtimes/:id?',
     id: "DOWNTIMES",
     component: () => import('@/components/pages/Downtimes.vue'),
     meta: {
@@ -56,7 +56,7 @@ let routerChildren = [
   },
   {
     name: 'INSTALLATIONS',
-    path: 'installations',
+    path: 'installations/:id?',
     id: "INSTALLATIONS",
     component: () => import('@/components/pages/Installations.vue'),
     meta: {
@@ -95,7 +95,8 @@ let routerRoutes = [
     path: '/:ApplicationId',
     name: 'MESROOT',
     component: () => import('./components/MesLayout.vue'),
-    children: [{path:'*'}]
+    children: [{path:'*'}],
+
     },
     {
       path:'*',
@@ -125,6 +126,9 @@ export let initDynamicRoutes = async () => {
  })
  
   routerChildren = routerChildren.concat(dynamicPagesWithKey)
+  routerChildren.forEach(route => {
+    route.query = {fixedUuid: ''}
+  })
   routerRoutes[0].children = routerChildren
   router.addRoutes(routerRoutes)
   return dynamicPagesWithKey

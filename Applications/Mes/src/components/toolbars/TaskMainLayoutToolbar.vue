@@ -3,7 +3,7 @@
         <v-flex
             class="toolbar-basebuttons"
         >
-            <!-- <v-btn v-if="$vuetify.breakpoint.smAndDown" @click="taskTableView = !taskTableView" text outlined>close</v-btn> -->
+            <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown" @click="changeTaskTableView" text outlined>close</v-btn>
             <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
             <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp"
@@ -71,6 +71,10 @@ export default {
     changeDragResizeMode () {
       this.dragResizeMode = !this.dragResizeMode
       var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
+      if(this.$vuetify.breakpoint.smAndDown) {
+        splitter.style.display = 'none'
+        return
+      }
       if (!this.dragResizeMode) {
         splitter.style.cssText = 'width:0'
       } else {
@@ -79,6 +83,9 @@ export default {
     },
     changeDowntimesOverlayVisible() {
       this.$emit('changeDowntimesOverlayVisible')
+    },
+    changeTaskTableView() {
+      this.$emit('changeTaskTableView',true)
     }
   }
 }

@@ -9,7 +9,7 @@
 
         <v-card ripple
           class="task-item"
-          @click="changeCurrentTask(task)"
+          @click="changeCurrentTask(task),closeTaskTableView(false)"
         >
         <v-icon v-if="task.inProgress" large class="inprogress-icon">play_arrow</v-icon>
 
@@ -67,7 +67,10 @@ export default {
   methods: {
     changeCurrentTask(newTask) {
       this.$emit('changeCurrentTask', newTask)
-    }
+    },
+    changeTaskTableView() {
+      this.$emit('changeTaskTableView', false)
+    },
   }
 }
 </script>

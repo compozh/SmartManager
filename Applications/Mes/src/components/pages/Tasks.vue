@@ -29,20 +29,25 @@
           @agreeClick=dialogAgreeClick
           @disagreeClick=dialogDisagreeClick />
 
+        <!-- <vue-pull-refresh :on-refresh="onRefresh"> -->
           <mes-tasks-component
           id="slotOne"
           ref="taskList"
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=onChangeCurrentTask
-            @changeSelectTasksTab=changeSelectTasksTab 
+            @changeSelectTasksTab=changeSelectTasksTab
+            @changeTaskTableView=changeTaskTableView
             :class="$vuetify.breakpoint.smAndDown? 'tasks-table-small' : ''"
             v-if="$vuetify.breakpoint.smAndDown? taskTableView : true"/>
+        <!-- </vue-pull-refresh> -->
+          
 
             <v-layout column class="task-description-layout" id="slotTwo" v-if="$vuetify.breakpoint.smAndDown? !taskTableView : true">
               <mes-un-selected-layout-toolbar
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                @changeTaskTableView=openTaskTableView
               />
               
               <div
@@ -53,6 +58,7 @@
                   ref="taskMainLayout"
                   v-if="selectedTask && currentLayout === 'main'"
                   @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                  @changeTaskTableView=changeTaskTableView
                 />
 
                 <mes-task-installations-layout
@@ -87,6 +93,7 @@ export default {
     }
   },
   created() {
+    console.log(this)
     this.initialize()
   },
   mounted() {
@@ -172,6 +179,7 @@ export default {
       if (!this.selectedTask) {
         this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab, this.sortedTasks)
       }
+      // console.log('initialized')
     },
     selectFirstTaskByTabIndex(tabIndex, sortedTasks) {
       if (!sortedTasks.length) {
@@ -198,7 +206,8 @@ export default {
       this.currentLayout = currentLayout
     },
     onChangeCurrentTask(newSelectedTask) {
-      this.taskTableView = false
+      // this.taskTableView = false
+      // console.log('this.taskTableView = ' + this.taskTableView)
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
@@ -240,7 +249,8 @@ export default {
         properties = {
           workCenterCode: workCenter.code,
           workBarcode: task.barcode
-        }
+        },
+        deviceSizeType = this.$vuetify.breakpoint.name
       this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
     },
     changeSelectTasksTab(tabIndex) {
@@ -274,6 +284,10 @@ export default {
     },
     changeDowntimesOverlayVisible() {
       this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+    },
+    changeTaskTableView(mode) {
+      console.log('change')
+      this.taskTableView = mode
     }
   }
 }
