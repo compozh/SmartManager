@@ -9,10 +9,11 @@ export default {
         const result = await api.getTicketFromGql()
         commit('setTicket', result)
   },
-  async getForm({ dispatch }, { formCode, properties, fetchPolicy }) {
+  async getForm({ dispatch }, { formCode, properties, fetchPolicy, deviceSizeType }) {
+    deviceSizeType = deviceSizeType || 'lg'
     return await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.getFormGql(formCode, JSON.stringify(properties || '', null, 4), fetchPolicy)
+        return await api.getFormGql(formCode, JSON.stringify(properties || '', null, 4), fetchPolicy, deviceSizeType)
       }
     })
   },

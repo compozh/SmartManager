@@ -40,10 +40,10 @@ export class FormioApi {
     return result.data.formioQuery.ticket
   }
 
-  async getFormGql(formCode, properties, fetchPolicy) {
+  async getFormGql(formCode, properties, fetchPolicy, deviceSizeType) {
     const result = await getClient().query({
       query: gql`${getForm}`,
-      variables: { formCode, properties },
+      variables: { formCode, properties, deviceSizeType },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.formioQuery.getForm
