@@ -285,12 +285,10 @@ export default {
   },
 
   toggleMenuMiniMode({getters, commit}) {
-    debugger
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
 
   toggleMenuDrawerMode({getters, commit}) {
-    debugger
     commit('setMenuDrawerMode', !getters.menuDrawerMode)
   },
 

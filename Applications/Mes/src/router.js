@@ -83,6 +83,10 @@ let routerChildren = [
     sort: "2",
     image: "chrome_reader_mode",
     // UniqId: "adf35957-e0f6-4543-9787-d6159c413c4d",
+  },
+  {
+    path: '/',
+    name: 'home',
   }
 ]
 
@@ -108,14 +112,14 @@ export let initDynamicRoutes = async () => {
   pages.forEach(page => {
     if (!routerChildren.find(el => el. name == page.id)) {
       let child = {}
-          child.name = page.id
-          child.path = page.id.toLowerCase()
-          child.id = page.id
-          child.component = () => import('@/components/pages/DynamicPage.vue')
-          child.text = page.name
-          child.sort = 100
-          child.image = 'description'
-          dynamicPagesWithKey.push(child)
+      child.name = page.id
+      child.path = page.id.toLowerCase()
+      child.id = page.id
+      child.component = () => import('@/components/pages/DynamicPage.vue')
+      child.text = page.name
+      child.sort = 100
+      child.image = 'description'
+      dynamicPagesWithKey.push(child)
     }
    
  })

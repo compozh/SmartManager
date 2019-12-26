@@ -35,13 +35,16 @@
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=onChangeCurrentTask
-            @changeSelectTasksTab=changeSelectTasksTab />
+            @changeSelectTasksTab=changeSelectTasksTab 
+            :class="$vuetify.breakpoint.smAndDown? 'tasks-table-small' : ''"
+            v-if="$vuetify.breakpoint.smAndDown? taskTableView : true"/>
 
-            <v-layout column class="task-description-layout" id="slotTwo">
+            <v-layout column class="task-description-layout" id="slotTwo" v-if="$vuetify.breakpoint.smAndDown? !taskTableView : true">
               <mes-un-selected-layout-toolbar
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
               />
+              <div><v-btn @click="taskTableView = !taskTableView">close</v-btn></div>
               <div
                 v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
@@ -80,6 +83,7 @@ export default {
         visible: false,
         task: null
       },
+      taskTableView: true
     }
   },
   created() {
@@ -194,6 +198,7 @@ export default {
       this.currentLayout = currentLayout
     },
     onChangeCurrentTask(newSelectedTask) {
+      this.taskTableView = false
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
@@ -300,5 +305,9 @@ export default {
   .task-description-layout {
     border-left: 1px solid rgba(2, 2, 2, 0.08) !important;
     height: 100%;
+  }
+
+  .tasks-table-small {
+    min-width: 100vw
   }
 </style>

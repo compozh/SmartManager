@@ -2,7 +2,7 @@
   <v-list>
 
     <!-- Пункт меню -->
-    <v-list-item v-for="route in links" :key="route.id" :to="{ name: route.id }">
+    <v-list-item v-for="route in links" :key="route.id" :to="{ name: route.id }" @click="toggleMenuMode">
       <v-list-item-action @click="reloadPage(route)">
           <v-icon large>{{route.image}}</v-icon>
           <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.id">refresh</v-icon>
@@ -42,7 +42,12 @@ export default {
         return
       }
       this.$store.commit('mes/changeMainContainerKey')
-    }
+    },
+    toggleMenuMode() {
+      this.$vuetify.breakpoint.smAndDown ? 
+      this.$store.commit('mes/setMenuDrawerMode', false) :
+      this.$store.commit('mes/setMenuMiniMode', true)
+    },
   }
 }
 </script>

@@ -3,15 +3,16 @@
     <v-layout row align-center justify-space-beetwen class="main-toolbar">
 
       <!-- Лого -->
-      <v-flex row>
-        <router-link tag="h1" :to="{ name:'MESROOT'}">
+      <v-flex row v-if="!searchWorkCenter">
+        <router-link tag="h1" :to="{ name:'home', path: '/'}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
+        <span v-if="properties && properties.brandName && $vuetify.breakpoint.mdAndUp" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
       </v-flex>
 
       <!-- Состояние РЦ -->
-      <v-tooltip :disabled="!workCenterFixationData.description" bottom v-if="workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
+      <v-tooltip :disabled="!workCenterFixationData.description" bottom 
+        v-if="!searchWorkCenter && workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
           <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
         </template>
@@ -19,9 +20,16 @@
       </v-tooltip>
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
-      <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
-        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
+      <div :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select' : 'work-centers-select-small'" 
+        v-if="workCentersForWorker.length > 1">
+        <span class='work-centers-title' v-if="$vuetify.breakpoint.mdAndUp">
+          {{this.$t('mes.labels.WorkCenter')}}: 
+        </span>
+        <v-btn icon v-else-if="!searchWorkCenter" @click="searchWorkCenter = !searchWorkCenter">
+          <v-icon>work_outline</v-icon>
+        </v-btn>
         <v-autocomplete
+          v-if="searchWorkCenter || $vuetify.breakpoint.mdAndUp"
           autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
@@ -29,26 +37,32 @@
           return-object
           :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
-          class="work-centers-select-input"
+          @blur="searchWorkCenter = !searchWorkCenter"
+          :autofocus="$vuetify.breakpoint.smAndDown? true : false"
+          :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select-input' : 'work-centers-select-input-small'" 
         ></v-autocomplete>
       </div>
 
       <!-- Зафиксированый РЦ -->
-      <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
+      <div class="work-centers-caption" v-if="!searchWorkCenter && workCenter && workCentersForWorker.length == 1">
         <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc">
-        <span class="user-info-text">
+      <div class="user-info-desc" v-if="!searchWorkCenter">
+        <span class="user-info-text" v-if="$vuetify.breakpoint.mdAndUp">
           {{currentUserData.UserName}}
         </span>
       </div>
 
       <!-- Панель Юзера -->
-      <v-flex class="grow-0 user-description-block">
-        <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
+      <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter">
+        <user-panel hideDelegatedRightsButton="true" mini="true" style="border: 1px solid silver">
+          <v-btn v-if="$vuetify.breakpoint.smAndDown" icon>
+            <v-icon>account_circle</v-icon>
+          </v-btn>
+        </user-panel>
       </v-flex>
 
     </v-layout>
@@ -74,7 +88,10 @@ export default {
     })    
   },
   data() {
-    return { currentUserData: {} }
+    return { 
+      currentUserData: {},
+      searchWorkCenter: false
+    }
   },
   computed: {
     workCenter() {
@@ -123,7 +140,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
   font-size: 30px;
   text-align: left;
@@ -171,9 +188,25 @@ a {
   align-items: center;
   min-width: 450px;
 }
+
+.work-centers-select-small {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
 .work-centers-select-input {
   margin: 0 5px;
   max-width: 330px;
+}
+
+.work-centers-select-input-small {
+  min-width: 80vw;
+  height: 32px;
+}
+.work-centers-select-input-small .v-text-field__details {
+  height: 0;
 }
 .work-centers-select-input .v-input__control {
   width: inherit;

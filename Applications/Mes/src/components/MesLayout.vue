@@ -1,7 +1,7 @@
 <template>
   <v-app id="mes-app">
     <!-- Меню -->
-    <v-navigation-drawer  app clipped mobile-break-point="false" width="320" 
+    <v-navigation-drawer  app clipped mobile-break-point="false" width="320" overlay-opacity="0.4" :hide-overlay="!menuDrawerMode || $vuetify.breakpoint.mdAndUp"
       :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
       v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter">
       <mes-menu name="navigation-drawer"/>
@@ -79,7 +79,6 @@ export default {
     barcodeScanerEvents.initialize()
 
     var me = this
-      // console.log(this)
 
     document.addEventListener("onbarcodescaned", event => {
       if(event.detail) {
@@ -112,8 +111,14 @@ export default {
     menuMiniMode() {
       return this.$store.getters['mes/menuMiniMode']
     },
-    menuDrawerMode() {
-      return this.$store.getters['mes/menuDrawerMode']
+    
+    menuDrawerMode: {
+      get: function() { 
+        return this.$store.getters['mes/menuDrawerMode']
+      },
+      set: function(newVal) {
+        this.$store.commit('mes/setMenuDrawerMode', newVal)
+      }
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
@@ -135,7 +140,7 @@ export default {
     toggleMenuMode() {
       this.$vuetify.breakpoint.smAndDown ? 
       this.$store.dispatch('mes/toggleMenuDrawerMode') :
-      this.$store.dispatch('mes/toggleMenuMiniMode') 
+      this.$store.dispatch('mes/toggleMenuMiniMode')
     },
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')
