@@ -11,6 +11,7 @@ import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import downtimesPrevious from './graphql/downtimes/downtimesPrevious.graphql'
 import documents from './graphql/qualities/documents.graphql'
+import documentMethod from './graphql/qualities/documentMethod.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
 import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
@@ -64,7 +65,7 @@ export class MesApi {
     return result.data.mes.ticket
   }
 
-  async getDynamicPagesFromGql(webAppId) {
+  async getMobilityPropertiesFromGql(webAppId) {
     const result = await getClient().query({
       query: gql` query ($webAppId: String) ${mobilityProperties}`,
       variables: { webAppId }
@@ -138,6 +139,14 @@ export class MesApi {
       variables: { retrieveParams }
     })
     return result.data.mes.documents.processes
+  }
+
+  async applyDocumentMethod(processMethodParams) {
+    const result = await getClient().mutate({
+      mutation: gql`${documentMethod}`,
+      variables: { processMethodParams }
+    })
+    return result.data.mesMutation.callProcessMethod
   }
 
   async getInstallationsFromGql(workCenter, fetchPolicy) {
@@ -223,10 +232,10 @@ export class MesApi {
     return result.data.mes.executeWriteOff
   }
 
-  async getProductionFormioFromGql(formCode, properties) {
+  async getProductionFormioFromGql(formCode, properties, deviceSizeType) {
     const result = await getClient().query({
       query: gql`${productionFormio}`,
-      variables: { formCode, properties },
+      variables: { formCode, properties, deviceSizeType },
       fetchPolicy: 'network-only'
     })
     return result.data.mes.productionFormio

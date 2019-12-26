@@ -18,85 +18,19 @@
   </v-list>
 </template>
 <script>
+import Init from './components/Init'
+
 export default {
   name: 'mes-menu',
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
-    dynamicPages() {
-      return this.$store.getters['mes/dynamicPages']
+    mobilityProperties() {
+      return this.$store.getters['mes/mobilityProperties']
     },
     links() {
-      if (!this.$store.state.WebApps.applicationDescription || !this.dynamicPages) {
-        return []
-      }
-
-      const app = this.$store.state.WebApps.applicationDescription
-      const sections = app.Sections || []
-      var links = []
-      for (let index = 0; index < sections.length; index++) {
-        const section = sections[index]
-        links = links.concat(
-          (section.Routes || []).map(r => (r.section = section) && r)
-        )
-      }
-      var dynamicPagesWithKey = []
-      this.dynamicPages.properties.forEach(page => {
-         dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
-      })
-      var pages = []
-      for (let page of links[1].Children) {
-        if (this.workCenter)  {
-          switch (this.workCenter.accessPages) {
-          case 'ALL_PAGES':
-            let component = page.Components[0],
-              pageId = page.Id.toLowerCase()
-            if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[pageId]) {
-              continue
-            }
-            let dynamicPage = dynamicPagesWithKey[pageId]
-            if (dynamicPage) {
-              page.Name = dynamicPage.name
-              page.Image = dynamicPage.image || 'description'
-              page.Sort = 100
-            }
-            pages.push(page)
-            break
-          case 'ONLY_INSTALLATION':
-            if (page.Id == 'INSTALLATIONS') {
-              pages.push(page)
-            }
-            break
-          case 'ONLY_QUALITY':
-            if (page.Id == 'QUALITY') {
-              pages.push(page)
-            }
-            break
-          }
-        }
-      }
-      if (this.workCenter && this.$route.path.replace('/', '').toLowerCase() == 'mes') {
-        var pagePath = ''
-        switch (this.workCenter.accessPages) {
-        case 'ALL_PAGES':
-          pagePath = '/MES/tasks'
-          break
-        case 'ONLY_INSTALLATION':
-          pagePath = '/MES/installations'
-          break
-        case 'ONLY_QUALITY':
-          pagePath = '/MES/quality'
-          break
-        }
-        this.$router.replace({path: pagePath})
-      }
-      pages = pages.sort((a,b) => {
-        return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1)
-      })
-
-      links = links.concat(pages)
-      return links.filter(l => l.Name && l.Path)
+      return Init.prototype.preparePages(this)
     },
     obsoleteData() {
       return this.$store.getters['mes/obsoleteData']

@@ -19,6 +19,7 @@
           <mes-document-cards
           @changeCurrentDocument=changeCurrentDocument
           :initializeDocuments=initializeDocuments
+          :pageProps=pageProps
           />
           <span v-if="isUploadInProcess" class='upload-documents-str'>Загрузка документов</span>
         </div>
@@ -38,7 +39,8 @@ export default {
   },
   props: {
     isUploadInProcess: Boolean,
-    initializeDocuments: Boolean
+    initializeDocuments: Boolean,
+    pageProps: Object
   },
   computed: {
     documents() {
@@ -82,7 +84,6 @@ export default {
 .mes-documents-component {
     height: 100%;
     width: 30%;
-    min-width: 330px
   }
   .mes-documents-component-layout {
     height: 100%;

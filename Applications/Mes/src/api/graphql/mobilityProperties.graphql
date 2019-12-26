@@ -1,13 +1,23 @@
 {
     mes{
         mobilityProperties(webAppId: $webAppId){
-            properties{
+            processesProperties {
                 id,
                 name,
                 formCode,
                 image,        
                 searchAvailable,
-                sortOrder
+                sortOrder,
+                hideList,
+                showListOnRightSide,
+                methods {
+                    code,
+                    name,
+                    needConfirmation,
+                    sortOrder,
+                    blockScreen,
+                    iconCode
+                }
             }
         }
     }
