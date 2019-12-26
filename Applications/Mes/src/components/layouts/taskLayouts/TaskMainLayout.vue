@@ -1,6 +1,6 @@
 <template>
 <v-layout class="task-main-layout-block">
-  <mes-task-main-layout-toolbar
+  <mes-task-main-layout-toolbar  v-if="$vuetify.breakpoint.mdAndUp"
     @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
   />
 

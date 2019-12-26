@@ -10,6 +10,9 @@
         <span v-if="properties && properties.brandName && $vuetify.breakpoint.mdAndUp" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
       </v-flex>
 
+      <v-btn class="downtime-registration-button"  outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">
+        <v-icon>pause</v-icon>
+      </v-btn>
       <!-- Состояние РЦ -->
       <v-tooltip :disabled="!workCenterFixationData.description" bottom 
         v-if="!searchWorkCenter && workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
@@ -50,12 +53,11 @@
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc" v-if="!searchWorkCenter">
-        <span class="user-info-text" v-if="$vuetify.breakpoint.mdAndUp">
+      <div class="user-info-desc" v-if="!searchWorkCenter && $vuetify.breakpoint.mdAndUp">
+        <span class="user-info-text">
           {{currentUserData.UserName}}
         </span>
       </div>
-
       <!-- Панель Юзера -->
       <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter">
         <user-panel hideDelegatedRightsButton="true" mini="true" style="border: 1px solid silver">
@@ -135,6 +137,9 @@ export default {
     },
     refreshApp() {
       this.$router.go()
+    },
+    changeDowntimesOverlayVisible() {
+      this.$emit('changeDowntimesOverlayVisible')
     }
   }
 }
@@ -243,5 +248,10 @@ a {
 }
 .v-tooltip__content.menuable__content__active.v-tooltip__content--fixed {
   padding: 16px;
+}
+.downtime-registration-button {
+  margin: 0;
+  min-width: 50px !important;
+  padding: 0 !important
 }
 </style>

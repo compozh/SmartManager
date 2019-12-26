@@ -44,7 +44,7 @@
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
               />
-              <div><v-btn @click="taskTableView = !taskTableView">close</v-btn></div>
+              
               <div
                 v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
@@ -241,7 +241,7 @@ export default {
           workCenterCode: workCenter.code,
           workBarcode: task.barcode
         }
-      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex

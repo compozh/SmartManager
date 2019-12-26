@@ -3,9 +3,10 @@
         <v-flex
             class="toolbar-basebuttons"
         >
-            <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
+            <!-- <v-btn v-if="$vuetify.breakpoint.smAndDown" @click="taskTableView = !taskTableView" text outlined>close</v-btn> -->
+            <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
-            <v-btn class="status-task-btn"
+            <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp"
                 :disabled="selectedTask.state == 'DONE'"
                 outlined
                 :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' :  'rgba(7, 109, 0, 0.81)'"
@@ -14,7 +15,7 @@
                 {{selectedTask.inProgress ? this.$t('mes.buttons.Pause') :  this.$t('mes.buttons.TakeToWork')}}
             </v-btn>
 
-            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">{{this.$t('mes.buttons.Downtime')}}</v-btn>
+            <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.mdAndUp" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">{{this.$t('mes.buttons.Downtime')}}</v-btn>
               <!-- <v-tooltip left>
               <template v-slot:activator="{ on }">
                 <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode" v-on="on">
@@ -65,7 +66,7 @@ export default {
         this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
         return
       }
-      this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask })
+      this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
     },
     changeDragResizeMode () {
       this.dragResizeMode = !this.dragResizeMode
