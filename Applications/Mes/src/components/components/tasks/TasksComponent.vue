@@ -68,7 +68,6 @@ export default {
   },
   computed: {
     tasks() {
-      console.log(this.$store.getters['mes/tasks'])
       return this.$store.getters['mes/tasks']
     },
     workCenter() {
@@ -115,7 +114,8 @@ export default {
     onRefresh() {
       return new Promise( async (resolve, reject) => {
         this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code }).then(()=>{
-          this.$forceUpdate()
+          
+          this.$store.commit('mes/setObsoluteDataTask', false)
           resolve()
         })
       })

@@ -75,7 +75,6 @@ export default {
     }
   },
   created() {
-    console.log(this)
     var barcodeScanerEvents = new BarcodeScanerEvents()
     barcodeScanerEvents.initialize()
 

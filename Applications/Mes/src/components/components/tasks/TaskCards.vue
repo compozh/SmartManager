@@ -9,7 +9,7 @@
 
         <v-card ripple
           class="task-item"
-          @click="changeCurrentTask(task),closeTaskTableView(false)"
+          @click="changeCurrentTask(task),changeTaskTableView(false)"
         >
         <v-icon v-if="task.inProgress" large class="inprogress-icon">play_arrow</v-icon>
 

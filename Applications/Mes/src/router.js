@@ -90,17 +90,16 @@ let routerChildren = [
   }
 ]
 
-let routerRoutes = [
+let mainRouterRoutes = [
   {
-    path: '/:ApplicationId',
+    path: '',
     name: 'MESROOT',
     component: () => import('./components/MesLayout.vue'),
-    children: [{path:'*'}],
-
+    children: routerChildren
     },
     {
       path:'*',
-      redirect: {name: 'MESROOT', path: '/:ApplicationId' },
+      redirect: '/',
       caseSensitive: false
     }
   ]
@@ -122,28 +121,22 @@ export let initDynamicRoutes = async () => {
       child.image = 'description'
       dynamicPagesWithKey.push(child)
     }
-   
- })
- 
-  routerChildren = routerChildren.concat(dynamicPagesWithKey)
-  routerChildren.forEach(route => {
-    route.query = {fixedUuid: ''}
   })
-  routerRoutes[0].children = routerChildren
-  router.addRoutes(routerRoutes)
+  routerChildren = routerChildren.concat(dynamicPagesWithKey)
+  mainRouterRoutes[0].children = routerChildren
+  router.addRoutes(mainRouterRoutes)
   return dynamicPagesWithKey
 }
 
 export const router = new VueRouter({
   mode: 'history',
-  base: window.myConfig.BASE_URL ,
+  base: window.myConfig.BASE_URL + "MES/" ,
   params: {fixedUuid: window.location.search.replace('?fixedUuid=','')},
-  routes: routerRoutes
+  routes: mainRouterRoutes
 })
 
 
 router.beforeEach((to, from, next) => {
-  // get current user
   Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
     if (
       to.path === '/login' ||
@@ -155,8 +148,5 @@ router.beforeEach((to, from, next) => {
     }
     router.push({ name: 'login', query: { to: to.path } })
   })
-  // Specify the current path as the customState parameter, meaning it
-  // will be returned to the application after auth
-  // auth.login({ target: to.path });
 })
 export default router

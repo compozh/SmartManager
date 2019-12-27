@@ -93,7 +93,6 @@ export default {
     }
   },
   created() {
-    console.log(this)
     this.initialize()
   },
   mounted() {
@@ -179,7 +178,6 @@ export default {
       if (!this.selectedTask) {
         this.selectFirstTaskByTabIndex(this.tasksPageState.selectedTasksTab, this.sortedTasks)
       }
-      // console.log('initialized')
     },
     selectFirstTaskByTabIndex(tabIndex, sortedTasks) {
       if (!sortedTasks.length) {
@@ -206,8 +204,6 @@ export default {
       this.currentLayout = currentLayout
     },
     onChangeCurrentTask(newSelectedTask) {
-      // this.taskTableView = false
-      // console.log('this.taskTableView = ' + this.taskTableView)
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
@@ -286,7 +282,6 @@ export default {
       this.downtimesOverlayVisible = !this.downtimesOverlayVisible
     },
     changeTaskTableView(mode) {
-      console.log('change')
       this.taskTableView = mode
     }
   }
