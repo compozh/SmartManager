@@ -85,48 +85,87 @@ let routerChildren = [
     // UniqId: "adf35957-e0f6-4543-9787-d6159c413c4d",
   },
   {
+    path: '/dynamic/:id',
+    name: 'DYNAMIC',
+    id: "DYNAMIC",
+
+    component : () => import('@/components/pages/DynamicPage.vue'),
+    // image: 'description',
+    caseSensitive: false,
+
+  },
+  {
     path: '/',
     name: 'home',
-  }
+    component: () => import('@/components/pages/Main.vue'),
+  },
+  {
+    path: 'error/:status_code',
+    name: 'ERRORr',
+    component: () => import('@/components/pages/Error.vue'),
+    meta: {
+      rule: 'isPublic',
+      isMenu: false
+    },
+    caseSensitive: false
+  },
 ]
 
 let mainRouterRoutes = [
   {
-    path: '',
+    path: '/',
     name: 'MESROOT',
     component: () => import('./components/MesLayout.vue'),
     children: routerChildren
-    },
-    {
-      path:'*',
-      redirect: '/',
-      caseSensitive: false
-    }
-  ]
+  },
+  {
+    path: '/*',
+    redirect: 'error/404/',
+    caseSensitive: false
+  }
+]
 
-export let initDynamicRoutes = async () => {
+// let dynamicPages= []
 
-  let dynamicPagesWithKey = []
-  let pages = await store.getters['mes/mobilityProperties'].processesProperties
+// export let initDynamicRoutes =  () => {
+//   let pages =  store.getters['mes/mobilityProperties'].processesProperties
+//   debugger
+//   pages.forEach(page => {
+//     if (!dynamicPages.find(el => el.name == page.id)) {
+//       let child = {}
+//       child.name = page.id
+//       child.path = page.id.toLowerCase()
+//       child.id = page.id
+//       child.component = () => import('@/components/pages/DynamicPage.vue')
+//       child.text = page.name
+//       child.sort = 100
+//       child.image = 'description'
+//       dynamicPages.push(child)
+//     }
+//   })
+//   dynamicPages.concat([{
+//       path: '/*',
+//       redirect: 'error/404/',
+//       caseSensitive: false
+//     }])
+  
+//   router.addRoutes([{
+//     path: '/dynamic',
+//     name: 'DYNAMIC',
+//     component: () => import('./components/MesLayout.vue'),
+//     children: dynamicPages
+//   },
+//   {
+//     path: '/*',
+//     redirect: 'error/404/',
+//     caseSensitive: false
+//   }]
+// )
+// debugger
+//   // router.go()
+//   return dynamicPages
+// }
 
-  pages.forEach(page => {
-    if (!routerChildren.find(el => el. name == page.id)) {
-      let child = {}
-      child.name = page.id
-      child.path = page.id.toLowerCase()
-      child.id = page.id
-      child.component = () => import('@/components/pages/DynamicPage.vue')
-      child.text = page.name
-      child.sort = 100
-      child.image = 'description'
-      dynamicPagesWithKey.push(child)
-    }
-  })
-  routerChildren = routerChildren.concat(dynamicPagesWithKey)
-  mainRouterRoutes[0].children = routerChildren
-  router.addRoutes(mainRouterRoutes)
-  return dynamicPagesWithKey
-}
 
 export const router = new VueRouter({
   mode: 'history',
@@ -140,13 +179,13 @@ router.beforeEach((to, from, next) => {
   Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
     if (
       to.path === '/login' ||
-      // to.path === '/error/404' ||
-      // to.path === '/error/500' ||
+      to.path === '/error/404' ||
+      to.path === '/error/500' ||
       !!currentUSer
     ) {
       return next()
     }
-    router.push({ name: 'login', query: { to: to.path } })
+    router.push({ name: 'MESLOGIN'})
   })
 })
 export default router

@@ -122,6 +122,16 @@
         "InitializeSignalR": "Failed initialize SignalR",
         "InputCodeForm": "Input code form",
         "RequiredInputField": "Field is required",
-        "loginError": "Login failed for this code"
+        "loginError": "Login failed for this code",
+        "NoConnection" : "Unable to verify your Internet connection",
+        "Er404" : "Sory, we don't have such page",
+        "Search" : "You can search something else",
+        "GoTo" : "Or go to",
+        "HomePage" : "home page",
+        "Er500" : "Sorry, the server got sick :(",
+        "Wait" : "Keep calm and wait for a while",
+        "TryAgain" : "You can try again",
+        "Er403" : "Sorry, but you do not have access",
+        "Er402" : "Sorry, this content was not purchased"
     }
 }

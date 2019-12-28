@@ -43,7 +43,7 @@
         <!-- </vue-pull-refresh> -->
           
 
-            <v-layout column class="task-description-layout" id="slotTwo" v-if="$vuetify.breakpoint.smAndDown? !taskTableView : true">
+            <v-layout column class="task-description-layout" id="slotTwo" v-show="$vuetify.breakpoint.smAndDown? !taskTableView : true">
               <mes-un-selected-layout-toolbar
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible

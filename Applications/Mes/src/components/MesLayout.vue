@@ -1,9 +1,9 @@
 <template>
   <v-app id="mes-app">
     <!-- Меню -->
-    <v-navigation-drawer  app clipped mobile-break-point="false" width="320" overlay-opacity="0.4" :hide-overlay="!menuDrawerMode || $vuetify.breakpoint.mdAndUp"
+    <v-navigation-drawer  app clipped mobile-break-point="false" width="320" overlay-opacity="0.4" 
       :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
-      v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter">
+      v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter" @blur="toggleMenuMode">
       <mes-menu name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
@@ -77,6 +77,8 @@ export default {
   created() {
     var barcodeScanerEvents = new BarcodeScanerEvents()
     barcodeScanerEvents.initialize()
+
+    this.menuDrawerMode = this.$vuetify.breakpoint.smAndDown ? false : true
 
     var me = this
 

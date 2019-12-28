@@ -68,6 +68,7 @@ export default {
   },
   computed: {
     tasks() {
+      // console.log(this.$store.getters['mes/tasks'])
       return this.$store.getters['mes/tasks']
     },
     workCenter() {

@@ -172,7 +172,7 @@ a {
   font-size: 16px;
   font-weight: 500;
   color: #326DA8;
-  width: 120px;
+  width: 150px;
 }
 .work-center-state {
   margin: 0 10px;

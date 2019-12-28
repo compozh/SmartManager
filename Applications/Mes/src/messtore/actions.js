@@ -25,7 +25,6 @@ export default {
       action: async () => {
         const result = await api.getMobilityPropertiesFromGql("MOBILITYWEB")
         commit('setMobilityProperties', result)
-        initDynamicRoutes()
       }
     })
   },
