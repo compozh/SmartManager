@@ -9,14 +9,31 @@
 
         <v-card ripple
           class="task-item"
-          @click="changeCurrentTask(task),changeTaskTableView(false)"
+          @click="changeCurrentTask(task)"
         >
         <v-icon v-if="task.inProgress" large class="inprogress-icon">play_arrow</v-icon>
 
-          <v-card-text :class="selectedTask && task.shiftTaskId == selectedTask.shiftTaskId ? 'active-task-item' : 'inactive-task-item'">
+          <v-card-text @click.stop="changeTaskTableView(false)"  @click="changeCurrentTask(task)" :class="selectedTask && task.shiftTaskId == selectedTask.shiftTaskId ? 'active-task-item' : 'inactive-task-item'">
             <span v-html="task.description"></span>
           </v-card-text>
-
+          <v-card-actions v-if="$vuetify.breakpoint.smAndDown" >
+            <!-- <v-menu offset-y>
+              <template v-slot:activator="{on}">
+                <v-btn text v-on="on" @blur="!on">
+                  FUNCTIONS
+                </v-btn>
+              </template> -->
+               <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>FUNCTIONS</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                    <mes-task-main-layout-toolbar 
+                      :inTasksTable='true'
+                    />
+                    </v-expansion-panel-content>
+                  </v-expansion-panel></v-expansion-panels>
+            <!-- </v-menu> -->
+          </v-card-actions>
           <v-progress-linear v-if="task.completionPercentage"
             color="#326da8"
             height="22"
@@ -95,4 +112,9 @@ export default {
     top: 0;
     color: rgba(7, 109, 0, 0.81);
   }
+</style>
+<style>
+  .v-expansion-panel-content__wrap{
+  padding: 10px;
+}
 </style>

@@ -5,7 +5,7 @@
     <v-list-item v-for="(route, i) in links" :key="route.id + i" :to="{ name: route.id, params: { id:  route.params}}" @click="toggleMenuMode">
       <v-list-item-action @click="reloadPage(route)">
           <v-icon large>{{route.image}}</v-icon>
-          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.id ">refresh</v-icon>
+          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' >refresh</v-icon>
       </v-list-item-action>
 
       <!-- Описание пункта меню -->
@@ -30,8 +30,6 @@ export default {
       return this.$store.getters['mes/mobilityProperties']
     },
     links() {
-      // && route.params.id ?  : 
-      console.log(this.$route)
       return Init.prototype.preparePages(this)
     },
     obsoleteData() {
@@ -73,13 +71,18 @@ export default {
   .v-navigation-drawer--mini-variant .v-list-item {
     justify-content: start;
   }
-  .reload-icon {
+  .v-list-item .reload-icon {
+    display: none;
+  }
+  .v-list-item--active .reload-icon {
     position: absolute;
     top: 4px;
     right: 4px;
     font-size: 19px !important;
     font-weight: 800;
+    display: block;
   }
+  
   .v-navigation-drawer__content .v-list .v-list-item__action {
     margin-right: 0;
   }

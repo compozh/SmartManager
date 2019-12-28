@@ -40,7 +40,7 @@
           return-object
           :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
-          @blur="searchWorkCenter = !searchWorkCenter"
+          @blur="searchWorkCenter = false"
           :autofocus="$vuetify.breakpoint.smAndDown? true : false"
           :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select-input' : 'work-centers-select-input-small'" 
         ></v-autocomplete>
@@ -87,7 +87,7 @@ export default {
     init.initializeSignalR()
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
-    })    
+    })
   },
   data() {
     return { 

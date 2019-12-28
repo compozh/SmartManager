@@ -1,5 +1,5 @@
 // @it-enterprise пакеты
-import WebApps from '@it-enterprise/webappscore'
+// import WebApps from '@it-enterprise/webappscore'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 import Authentication from '@it-enterprise/authentication'

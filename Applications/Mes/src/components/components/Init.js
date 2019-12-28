@@ -82,9 +82,7 @@ export default class Init {
         if (!store.getters['mes/mobilityProperties'] ) {
           return []
         }
-        let dynamic = store.getters['mes/mobilityProperties'].processesProperties
-        // console.log(dynamic)
-
+        
         var dynamicPages = []
         store.getters['mes/mobilityProperties'].processesProperties.forEach(page => {
             let child = {}
@@ -92,37 +90,14 @@ export default class Init {
             child.params = page.id.toLowerCase()
             child.path = 'dynamic'
             child.id = 'DYNAMIC'
-            // child.component = () => import('@/components/pages/DynamicPage.vue')
             child.text = page.name
             child.sort = 100
             child.image = 'description'
             dynamicPages.push(child)
-          //  dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
         })
 
         let links = router.options.routes[0].children
         links =  links.concat(dynamicPages)
-        // console.log(links)
-
-        // var pages = []
-        // for (let page of links[1].Children) {
-        //   if (store.getters['mes/workCenter'])  {
-        //     switch (store.getters['mes/workCenter'].accessPages) {
-        //     case 'ALL_PAGES':
-        //       let component = page.Components[0],
-        //         pageId = page.Id.toLowerCase()
-        //       if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[pageId]) {
-        //         continue
-        //       }
-        //       let dynamicPage = dynamicPagesWithKey[pageId]
-        //       if (dynamicPage) {
-        //         page.Name = dynamicPage.name
-        //         page.Image = dynamicPage.image || 'description'
-        //         page.Sort = 100
-        //       }
-        //       pages.push(page)
-        //       break
-
 
         var pages = []
         for (let page of links) {
@@ -163,9 +138,6 @@ export default class Init {
         pages = pages.sort((a,b) => {
           return a.sort > b.sort ? 1 : (a.sort == b.sort ? 0 : -1)
         })
-        // console.log(pages)
-        
-        // links = links.concat(pages)
         return pages.filter(l => l.text && (l.path || l.params))
       }
 }

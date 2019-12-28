@@ -1,12 +1,12 @@
 <template>
-    <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
+    <v-layout  lg12 xs12 md12 sm12 show-arrows class="toolbar">
         <v-flex
-            class="toolbar-basebuttons"
+            :class="inTasksTable? 'task-toolbar-basebuttons' : 'toolbar-basebuttons'"
         >
-            <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown" @click="changeTaskTableView" text outlined>close</v-btn>
-            <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
+            <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown && !inTasksTable" @click="changeTaskTableView" text outlined>close</v-btn>
+            <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp || inTasksTable" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
-            <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp"
+            <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp  || inTasksTable"
                 :disabled="selectedTask.state == 'DONE'"
                 outlined
                 :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' :  'rgba(7, 109, 0, 0.81)'"
@@ -33,6 +33,12 @@
 
 export default {
   name: 'mes-task-main-layout-toolbar',
+  props:{
+    inTasksTable: {
+      required: false,
+      type: Boolean
+    }
+  },
   computed: {
     selectedTask() {
       return this.$store.getters['mes/selectedTask']
@@ -97,8 +103,14 @@ export default {
     flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
+    width: 95%;
     margin: 0;
+  }
+  .toolbar .task-toolbar-basebuttonss {
+    flex-direction: column !important;
+    justify-content: flex-start;
+    height: 100%;
+    border-bottom: none;
   }
   .toolbar-basebuttons {
     display: flex;
@@ -107,6 +119,9 @@ export default {
     align-items: center;
     height: 63px;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
+  }
+  .task-toolbar-basebuttons .v-btn {
+    min-width: 100%;
   }
   .status-task-btn {
     border-radius: 5px;

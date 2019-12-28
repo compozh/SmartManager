@@ -16,6 +16,7 @@
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
+        <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
