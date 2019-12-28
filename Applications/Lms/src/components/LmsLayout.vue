@@ -176,12 +176,14 @@ export default {
     },
     openLoginDialog() {
       this.$router.push({name: 'LMSLOGIN'})
+      this.menu = false
     },
 
     userProfile() {
-
+      this.menu = false
     },
     personalAccount() {
+      this.menu = false
       this.$router.push({name: 'LMSPERSONALACCOUNT'})
     },
     signOut() {
