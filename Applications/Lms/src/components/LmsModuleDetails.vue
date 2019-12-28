@@ -14,6 +14,7 @@
 							<v-card-text class='body-2 font-weight-medium pt-0 pb-3' color="#424242">{{moduleData.data.description}}</v-card-text>
 							<v-layout row wrap>
 								<v-flex md2 xs6>
+                  <v-card-text class='body-2 font-weight-medium pt-0 pb-1' color="#424242">{{moduleData.data.lessonsQtLabel}}</v-card-text>
 									<v-card-text class='body-2 font-weight-medium pt-0 pb-4' color="#424242">{{moduleData.data.durationMinutesLabel}}</v-card-text>
 								</v-flex>
 								<v-spacer/>
@@ -65,7 +66,7 @@
 											}})'>
 											<v-list-tile-content class='px-2'>
 												<v-list-tile-title class='blue--text text--darken-4 font-weight-medium'>{{lesson.name}}</v-list-tile-title>
-												<v-list-tile-sub-title>{{lesson.durationMinutes}} mins</v-list-tile-sub-title>
+												<v-list-tile-sub-title>{{lesson.durationMinutesLabel}}</v-list-tile-sub-title>
 											</v-list-tile-content>
 											<v-list-tile-action>
 												<v-btn icon ripple>

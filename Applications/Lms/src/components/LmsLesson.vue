@@ -12,7 +12,7 @@
     <v-layout align-center justify-center row fill-height>
       <v-flex lg8 md10 sm10 xs12>
         <v-card class='py-2' v-if="lesson">
-          <h1 class='display-1 font-weight-regular pb-2 ml-2'>{{lesson.name}}</h1>
+          <h1 class='display-1 font-weight-regular pb-2 ml-2'>{{lesson.lesson.name}}</h1>
           <v-flex xs12 v-if="content">
             <quill v-model="content" :config="config"></quill>
           </v-flex>
@@ -30,7 +30,7 @@ var lessonData = { name: "" };
 var links = [];
 links.push({
     text: courseName,
-    disabled: true,
+    disabled: false,
     target: { name: "LMSCOURSEDETAILS", params: { courseGuid: undefined } }
   });
 links.push({
@@ -40,7 +40,7 @@ links.push({
   });
 links.push({
     text: lessonData.name,
-    disabled: false,
+    disabled: true,
     target: { name: "lmslesson", params: { lessonGuid: undefined } }
   });
 
@@ -48,7 +48,10 @@ export default {
   name: "lms-lesson",
     data() {
       return {
-        //content: content,
+        courseName: '',
+        moduleName: '',
+        lessonData: null,
+        // quilljs config
         config: {
           readOnly: true,
           placeholder: "",
@@ -81,6 +84,7 @@ export default {
     }
   },
   beforeCreate() {
+    // debugger
     links[0].target.params.courseGuid = this.$route.params.courseGuid;
     links[1].target.params.moduleGuid = this.$route.params.moduleGuid;
     links[2].target.params.lessonGuid = this.$route.params.lessonGuid;

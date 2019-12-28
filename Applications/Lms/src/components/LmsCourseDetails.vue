@@ -14,7 +14,8 @@
 							<v-card-text :class='course.courseDescriptionInfoClass'>{{course.description}}</v-card-text>
 							<v-layout row wrap>
 								<v-flex md3 xs6>
-									<v-card-text :class='course.courseDetailedDurationInfoClass'>{{course.durationMinutesLabel}}</v-card-text>
+									<v-card-text :class='course.modulesQtInfoClass'>{{course.modulesQtLabel}}</v-card-text>
+                  <v-card-text :class='course.courseDetailedDurationInfoClass'>{{course.durationMinutesLabel}}</v-card-text>
 								</v-flex>
 								<v-spacer/>
 								<v-flex xs12>
@@ -73,7 +74,7 @@
 														}})'>
 												<v-list-tile-content class='pr-2'>
 													<v-list-tile-title class='blue--text text--darken-4 font-weight-medium'>{{lesson.name}}</v-list-tile-title>
-													<v-list-tile-sub-title>{{lesson.durationMinutes}} mins</v-list-tile-sub-title>
+													<v-list-tile-sub-title>{{lesson.durationMinutesLabel}}</v-list-tile-sub-title>
 												</v-list-tile-content>
 												<v-list-tile-action>
 													<v-btn icon ripple>
@@ -108,18 +109,22 @@ export default {
   name: "lms-course-details",
   data() {
     return {
-      courseGuid : "",
-      //course : {},
+      courseGuid : ""
     }
   },
   created() {
     this.courseGuid = this.$route.params.courseGuid
-    //this.course = this.$route.params.courseData
     this.getCourseDetails(this.courseGuid)
   },
   methods: {
     getCourseDetails(courseGuid) {
-      this.$store.dispatch('lms/getCourseDetails', courseGuid)
+      const courseDetails = this.$store.getters['lms/courses']
+      .finde(course => course.courseGuid === courseGuid)
+      if(courseDetails) {
+        commit('setCourseDetails', courseDetails)
+      } else {
+        this.$store.dispatch('lms/getCourseDetails', courseGuid)
+      }
     }
   },
   computed: {
@@ -139,14 +144,14 @@ export default {
 			  		course.courseDescriptionInfoClass = "body-2 font-weight-medium pt-0 pb-3 black--text"
 			  		course.courseDetailedDurationInfoClass = "body-2 font-weight-medium pt-0 pb-4 black--text"
 			  		course.durationInfoClass = "black--text"
-            course.modulesQtInfoClass = "black--text mt-1"
+            course.modulesQtInfoClass = "black--text mt-1 pb-1"
           } else {
             course.courseTypeInfoClass = "title font-weight-regular pt-4 pb-1 white--text"
             course.courseNameInfoClass = "display-1 font-weight-medium pt-0 pb-2 white--text"
             course.courseDescriptionInfoClass = "body-2 font-weight-medium pt-0 pb-3 white--text"
             course.courseDetailedDurationInfoClass = "body-2 font-weight-medium pt-0 pb-4 white--text"
             course.durationInfoClass = "white--text"
-            course.modulesQtInfoClass = "white--text mt-1"
+            course.modulesQtInfoClass = "white--text mt-1 pb-1"
           }
         }
         return course
