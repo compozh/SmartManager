@@ -170,8 +170,8 @@ export default {
           searchValue,
           submission
         }
-        
-      this.$store.dispatch('formio/callItemAutocomplete', 
+
+      this.$store.dispatch('formio/callItemAutocomplete',
         { formCode: this.formCode, params, fetchPolicy: fieldComponent.cachingData ? '' : 'network-only'}).then(result => {
         if(result && callback) {
           callback(result);
@@ -183,7 +183,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .formio-container-class /deep/ {
+    .formio-container-class::v-deep {
         @import './assets/theme.scss';
         @import "~formiojs/dist/formio.full.min.css";
         @import "~bootstrap/scss/bootstrap";
@@ -191,7 +191,7 @@ export default {
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
     }
-    
+
     .formio-component {
         position: relative;
     }

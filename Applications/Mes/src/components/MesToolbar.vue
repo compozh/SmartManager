@@ -42,7 +42,7 @@
       <!-- Информация Юзера -->
       <div class="user-info-desc">
         <span class="user-info-text">
-          {{currentUserData.UserName}}
+          {{userData.userName}}
         </span>
       </div>
 
@@ -57,9 +57,13 @@
 
 <script>
 
-import Vue from 'vue'
+import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
+
 export default {
   name: 'mes-toolbar',
+  components: {
+    UserPanel
+  },
   created() {
     var me = this,
       fixedUuid = me.$router.options.params.fixedUuid,
@@ -85,14 +89,11 @@ export default {
     me.$store.dispatch('mes/initializeProperties')
     me.$store.dispatch('formio/initializeTicket')
     me.initializeSignalR()
-    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
-      me.currentUserData = currentUSer.CurrentUserData
-    })
-  },
-  data() {
-    return { currentUserData: {} }
   },
   computed: {
+    userData() {
+      return this.$store.state.user || {}
+    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
@@ -104,9 +105,6 @@ export default {
     },
     properties() {
       return this.$store.getters['mes/properties']
-    },
-    userName() {
-      return Vue.prototype.$authentication.getCurrentUser()
     },
     tasksPageState() {
       return this.$store.getters['mes/tasksPageState']

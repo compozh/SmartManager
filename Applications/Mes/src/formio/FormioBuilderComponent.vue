@@ -94,7 +94,7 @@ export default {
             formNameLabel: me.$t('bpmn.labels.Name'),
             formCodeLabel: me.$t('bpmn.labels.Code'),
             displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
-            options: { 
+            options: {
                 noAlerts: true,
                 builder: {
                     basic: {},
@@ -181,7 +181,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .formio-builder-component-class /deep/ {
+    .formio-builder-component-class::v-deep {
         @import './assets/theme.scss';
         @import "~formiojs/dist/formio.full.min.css";
         @import "~bootstrap/scss/bootstrap";
@@ -191,7 +191,7 @@ export default {
 
         font-family: Roboto;
     }
-    
+
     .formio-component {
         position: relative;
     }

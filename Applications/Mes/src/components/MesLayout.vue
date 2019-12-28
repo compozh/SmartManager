@@ -14,7 +14,7 @@
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
-        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
+        <span class="mes-device-not-fixed" v-if="userData && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
       </v-container>
     </v-content>
 
@@ -69,8 +69,8 @@ export default {
     }
   },
   computed: {
-    currentUser() {
-      return this.$store.state.authentication.currentUser
+    userData() {
+      return this.$store.state.user
     },
     mainContainerKey() {
       return this.$store.getters['mes/mainContainerKey']
