@@ -8,14 +8,17 @@
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
       <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter" color="black"></v-app-bar-nav-icon>
-      <mes-toolbar name="toolbar"/>
+      <mes-toolbar name="toolbar" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
 
     <!-- Контент -->
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
-        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
+         <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+            @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+          />
+        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
         <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
@@ -72,7 +75,9 @@ export default {
   components: { BarcodeScanerEvents },
   data() {
     return {
-      mainContainer: 0
+      mainContainer: 0,
+      downtimesOverlayVisible: false,
+
     }
   },
   created() {
@@ -83,6 +88,11 @@ export default {
 
     var me = this
 
+      
+      // this.$store.state.WebApps = []
+      // this.$store.state.WebApps.applicationDescription = []
+      // this.$store.state.WebApps.applicationDescription.Sections = []
+      
     document.addEventListener("onbarcodescaned", event => {
       if(event.detail) {
         var barcode = event.detail.code
@@ -102,6 +112,11 @@ export default {
   },
   computed: {
     currentUser() {
+      
+      // this.$store.state.WebApps = []
+      // this.$store.state.WebApps.applicationDescription = []
+      // this.$store.state.WebApps.applicationDescription.Sections = []
+      // console.log(this.$store.state.authentication.currentUser)
       return this.$store.state.authentication.currentUser
     },
     mainContainerKey() {
@@ -150,8 +165,22 @@ export default {
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')
       this.$store.commit('formio/closeSnackbar')
-    }
-  }
+    },
+    changeDowntimesOverlayVisible() {
+      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+    },
+  },
+  // watch: {
+  //   currentUser(val) {
+  //     console.log(val)
+  //     if(!val) {
+  //       this.$router.push({name: 'MESLOGIN'})
+  //     } else if (val.access_token) {
+  //       this.$router.push({name: 'tasks'})
+  //       // this.$router.go()
+  //     }
+  //   }
+  // }
 }
 </script>
 <style type="text/css">

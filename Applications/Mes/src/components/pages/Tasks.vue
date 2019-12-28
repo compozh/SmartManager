@@ -1,9 +1,9 @@
 <template>
   <v-container class="main-block">
 
-    <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+    <!-- <mes-downtimes-overlay v-if="downtimesOverlayVisible"
       @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-    />
+    /> -->
 
     <v-card ref="card">
       <vue-split
@@ -279,7 +279,7 @@ export default {
       this.aspectRatioLayout = sizes
     },
     changeDowntimesOverlayVisible() {
-      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+      this.$emit('changeDowntimesOverlayVisible')
     },
     changeTaskTableView(mode) {
       this.taskTableView = mode
