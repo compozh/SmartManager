@@ -1,6 +1,5 @@
 <template>
   <div class="mes-tasks-component">
-    <vue-pull-refresh :on-refresh="onRefresh">
       <v-layout column class="mes-tasks-component-layout" scrollable>
         <v-flex fill-height class="grid-tabs">
           <v-tabs v-model="selectedTab">
@@ -27,6 +26,7 @@
             v-model="filterValue"
             clearable
           ></v-text-field>
+    <vue-pull-refresh :on-refresh="onRefresh">
           <div class="tasks-list-block-content">
 
             <mes-task-cards
@@ -37,11 +37,11 @@
             />
 
           </div>
+    </vue-pull-refresh>
           <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">{{this.$t('mes.labels.NoTasks')}}</span>
         </v-flex>
 
       </v-layout>
-    </vue-pull-refresh>
   </div>
 </template>
 

@@ -3,11 +3,11 @@
     <!-- Меню -->
     <v-navigation-drawer  app clipped mobile-break-point="false" width="320" overlay-opacity="0.4" 
       :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
-      v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter" @blur="toggleMenuMode">
+      v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter && $route.name !='MESLOGIN'" @blur="toggleMenuMode">
       <mes-menu name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
-      <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter" color="black"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter && $route.name !='MESLOGIN'" color="black"></v-app-bar-nav-icon>
       <mes-toolbar name="toolbar" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
@@ -16,8 +16,7 @@
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
          <mes-downtimes-overlay v-if="downtimesOverlayVisible"
-            @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-          />
+            @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
         <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
         <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>

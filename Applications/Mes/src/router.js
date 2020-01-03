@@ -140,8 +140,10 @@ router.beforeEach((to, from, next) => {
       from.path == to.path 
       && from.path === '/login' && 
       !!currentUSer) {
-        // router.go()
-        return   next({name: 'home'})
+        router.push({ name: 'home'}).then(() => {
+          router.go()
+        })
+        return 
     } 
     if (
       to.path === '/login' ||
@@ -149,7 +151,6 @@ router.beforeEach((to, from, next) => {
       to.path === '/error/500' ||
       !!currentUSer
     ) {
-      console.log(router)
       return next()
     }
     router.push({ name: 'MESLOGIN', params:{ routeToBack: from.path }} )

@@ -33,7 +33,8 @@ export default {
 
   methods: {
     logoutCallback(logoutFunctionPointer) {
-      this.$router.push({ name: 'MESLOGIN', params:{ routeToBack: this.$router.currentRoute.path }} )
+      this.$router.push({ name: 'MESLOGIN', params:{ routeToBack: this.$router.currentRoute.path }})
+      this.$store.commit('mes/resetState')
       logoutFunctionPointer.click()
     }
   }
