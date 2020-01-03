@@ -10,7 +10,7 @@
         <span v-if="properties && properties.brandName && $vuetify.breakpoint.mdAndUp" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
       </v-flex>
 
-      <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.smAndDown && !searchWorkCenter" icon  @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">
+      <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.smAndDown && !searchWorkCenter && currentUserData.UserName" icon  @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">
         <v-icon>pause</v-icon>
       </v-btn>
       <!-- Состояние РЦ -->

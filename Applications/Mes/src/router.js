@@ -7,7 +7,9 @@ Vue.use(VueRouter)
 export const router = new VueRouter({
   mode: 'history',
   base: window.myConfig.BASE_URL + "MES/" ,
-  params: {fixedUuid: window.location.search.replace('?fixedUuid=','')},
+  params: {
+    fixedUuid: window.location.search.replace('?fixedUuid=','')
+  },
   routes: [
     {
       path: '/',
@@ -134,15 +136,23 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
+    if(
+      from.path == to.path 
+      && from.path === '/login' && 
+      !!currentUSer) {
+        // router.go()
+        return   next({name: 'home'})
+    } 
     if (
       to.path === '/login' ||
       to.path === '/error/404' ||
       to.path === '/error/500' ||
       !!currentUSer
     ) {
+      console.log(router)
       return next()
     }
-    router.push({ name: 'MESLOGIN'})
+    router.push({ name: 'MESLOGIN', params:{ routeToBack: from.path }} )
   })
 })
 export default router

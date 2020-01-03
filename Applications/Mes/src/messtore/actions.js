@@ -342,7 +342,9 @@ export default {
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
-        router.push({name: 'MESLOGIN'})
+        if(router.currentRoute.name != 'MESLOGIN'){
+          router.push({name: 'MESLOGIN'})
+        }
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -365,7 +367,9 @@ export default {
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
-        router.push({name: 'MESLOGIN'})
+        if(router.currentRoute.name != 'MESLOGIN'){
+          router.push({name: 'MESLOGIN'})
+        }
       }
       else {
         commit('setSnackbarErrorMessage', e.message)

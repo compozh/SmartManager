@@ -88,11 +88,6 @@ export default {
 
     var me = this
 
-      
-      // this.$store.state.WebApps = []
-      // this.$store.state.WebApps.applicationDescription = []
-      // this.$store.state.WebApps.applicationDescription.Sections = []
-      
     document.addEventListener("onbarcodescaned", event => {
       if(event.detail) {
         var barcode = event.detail.code
@@ -112,11 +107,6 @@ export default {
   },
   computed: {
     currentUser() {
-      
-      // this.$store.state.WebApps = []
-      // this.$store.state.WebApps.applicationDescription = []
-      // this.$store.state.WebApps.applicationDescription.Sections = []
-      // console.log(this.$store.state.authentication.currentUser)
       return this.$store.state.authentication.currentUser
     },
     mainContainerKey() {
@@ -168,19 +158,8 @@ export default {
     },
     changeDowntimesOverlayVisible() {
       this.downtimesOverlayVisible = !this.downtimesOverlayVisible
-    },
-  },
-  // watch: {
-  //   currentUser(val) {
-  //     console.log(val)
-  //     if(!val) {
-  //       this.$router.push({name: 'MESLOGIN'})
-  //     } else if (val.access_token) {
-  //       this.$router.push({name: 'tasks'})
-  //       // this.$router.go()
-  //     }
-  //   }
-  // }
+    }
+  }
 }
 </script>
 <style type="text/css">
