@@ -76,11 +76,6 @@ export default {
     },
     changeDragResizeMode () {
       this.dragResizeMode = !this.dragResizeMode
-      var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
-      if(this.$vuetify.breakpoint.smAndDown) {
-        splitter.style.display = 'none'
-        return
-      }
       if (!this.dragResizeMode) {
         splitter.style.cssText = 'width:0'
       } else {
@@ -92,6 +87,13 @@ export default {
     },
     changeTaskTableView() {
       this.$emit('changeTaskTableView',true)
+    }
+  },
+  created() {
+    var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
+    if(this.$vuetify.breakpoint.smAndDown) {
+      splitter.style.display = 'none'
+      return
     }
   }
 }

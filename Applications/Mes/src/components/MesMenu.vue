@@ -1,6 +1,14 @@
 <template>
   <v-list>
 
+    <!-- Лого -->
+    <v-list-item row v-if="$vuetify.breakpoint.smAndDown" class="logo">
+      <router-link tag="h1" :to="{ name:'home', path: '/'}">
+        <a class="mes-title-link">MES</a>
+      </router-link>
+      <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
+    </v-list-item>
+
     <!-- Пункт меню -->
     <v-list-item v-for="(route, i) in links" :key="route.id + i" :to="{ name: route.id, params: { id:  route.params}}" @click="toggleMenuMode">
       <v-list-item-action @click="reloadPage(route)">
@@ -34,7 +42,10 @@ export default {
     },
     obsoleteData() {
       return this.$store.getters['mes/obsoleteData']
-    }
+    },
+    properties() {
+      return this.$store.getters['mes/properties']
+    },
   },
   methods: {
     reloadPage(route) {
@@ -42,6 +53,9 @@ export default {
         return
       }
       this.$store.commit('mes/changeMainContainerKey')
+    },
+    refreshApp() {
+      this.$router.go()
     },
     toggleMenuMode() {
       this.$vuetify.breakpoint.smAndDown ? 
@@ -90,4 +104,32 @@ export default {
     margin-left: 10px;
     margin-top: 5px;
   }
+
+.brand-name {
+  align-self: center;
+  padding: 0 10px;
+  color: #326da8;
+  font-size: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+h1 {
+  font-size: 30px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+.mes-title-link {
+  color: #326da8 !important;
+}
+
+.logo {
+  border-bottom: 1px solid silver;
+  height: 70px;
+}
 </style>

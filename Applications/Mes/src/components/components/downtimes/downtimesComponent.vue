@@ -9,6 +9,7 @@
         <div class="downtimes-list-block-content" @scroll.passive="onScroll">
           <mes-downtime-cards
           @changeCurrentDowntime=changeCurrentDowntime
+          @changeDowtimesTableView=changeDowtimesTableView
           />
           <span v-if="isUploadInProcess" class='upload-downtime-str'>{{this.$t('mes.labels.DownloadDowntimes')}}</span>
         </div>
@@ -36,6 +37,9 @@ export default {
     }
   },
   methods: {
+    changeDowtimesTableView() {
+      this.$emit('changeDowtimesTableView', false)
+    },
     changeCurrentDowntime(newDowntime) {
       this.$emit('changeCurrentDowntime', newDowntime)
     },

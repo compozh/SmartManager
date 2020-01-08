@@ -19,6 +19,7 @@
           <mes-quality-cards
           @changeCurrentQuality=changeCurrentQuality
           :initializeQualities=initializeQualities
+          @changeQualityTableView=changeQualityTableView
           />
           <span v-if="isUploadInProcess" class='upload-quality-str'>{{this.$t('mes.labels.DownloadDocuments')}}</span>
         </div>
@@ -54,6 +55,9 @@ export default {
     }
   },
   methods: {
+    changeQualityTableView() {
+      this.$emit('changeQualityTableView', false)
+    },
     documentSearchSubmit(e){
       this.$emit('initialize')
     },

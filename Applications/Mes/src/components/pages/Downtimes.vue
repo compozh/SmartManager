@@ -19,10 +19,15 @@
         @changeCurrentDowntime=changeCurrentDowntime
         @uploadDowntimeOnScroll=uploadDowntimeOnScroll
         :isUploadInProcess=isUploadInProcess
+        v-if="$vuetify.breakpoint.smAndDown? dowtimesTableView : true"
+        :class="$vuetify.breakpoint.smAndDown? 'dowtimes-table-small' : ''"
+        @changeDowtimesTableView=changeDowtimesTableView
       />
       <mes-downtime-main-layout
+        v-if="$vuetify.breakpoint.smAndDown? !dowtimesTableView : true"
         id="downtimeDescription"
         :initializeDowntimes=initializeDowntimes
+        @changeDowtimesTableView=changeDowtimesTableView
       />
       </vue-split>
     </v-layout>
@@ -38,7 +43,8 @@ export default {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeDowntimes: false,
       defaultSizes: [25, 75],
-      isUploadInProcess: false
+      isUploadInProcess: false,
+      dowtimesTableView: true
     }
   },
   mounted() {
@@ -106,6 +112,9 @@ export default {
       this.isUploadInProcess = true
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: lastDowntimeDate })
       this.isUploadInProcess = false
+    },
+    changeDowtimesTableView(mode) {
+      this.dowtimesTableView = mode
     }
   }
 }
@@ -117,5 +126,8 @@ export default {
 }
 .main-downtime-layout {
   width: 100%;
+}
+.dowtimes-table-small {
+    min-width: 100vw
 }
 </style>

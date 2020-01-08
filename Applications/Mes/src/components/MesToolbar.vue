@@ -23,7 +23,7 @@
       </v-tooltip>
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
-      <div :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select' : 'work-centers-select-small'" 
+      <div :class="`work-centers-select ${$vuetify.breakpoint.mdAndUp ? 'static' : searchWorkCenter ? 'search' : 'small'}`"  
         v-if="workCentersForWorker.length > 1 && $route.name !='MESLOGIN'">
         <span class='work-centers-title' v-if="$vuetify.breakpoint.mdAndUp">
           {{this.$t('mes.labels.WorkCenter')}}: 
@@ -191,15 +191,14 @@ a {
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+}
+
+.work-centers-select.static {
   min-width: 450px;
 }
 
-.work-centers-select-small {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: center;
+.work-centers-select.search {
+  width: 100%;
 }
 .work-centers-select-input {
   margin: 0 5px;
@@ -207,7 +206,7 @@ a {
 }
 
 .work-centers-select-input-small {
-  min-width: 80vw;
+  min-width: 100%;
   height: 32px;
 }
 .work-centers-select-input-small .v-text-field__details {
