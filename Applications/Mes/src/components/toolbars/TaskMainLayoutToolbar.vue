@@ -103,7 +103,7 @@ export default {
     flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-between;
-    width: 95%;
+    width: 100%;
     margin: 0;
   }
   .toolbar .task-toolbar-basebuttonss {
@@ -121,7 +121,7 @@ export default {
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
   }
   .task-toolbar-basebuttons .v-btn {
-    min-width: 100%;
+    min-width: 95%;
   }
   .status-task-btn {
     border-radius: 5px;

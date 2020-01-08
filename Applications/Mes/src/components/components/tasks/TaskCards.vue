@@ -7,7 +7,7 @@
         || (selectedTasksTab == 1 && task.state == 'DONE')"
       >
 
-        <v-card ripple
+        <v-card ripple :class="selectedTask && task.shiftTaskId == selectedTask.shiftTaskId ? 'active-task-item' : 'inactive-task-item'"
           class="task-item"
           @click="changeCurrentTask(task)"
         >

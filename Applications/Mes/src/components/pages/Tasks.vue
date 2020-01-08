@@ -47,7 +47,7 @@
               <mes-un-selected-layout-toolbar
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-                @changeTaskTableView=openTaskTableView
+                @changeTaskTableView=changeTaskTableView
               />
               
               <div

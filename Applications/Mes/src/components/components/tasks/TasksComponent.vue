@@ -26,18 +26,18 @@
             v-model="filterValue"
             clearable
           ></v-text-field>
-    <vue-pull-refresh :on-refresh="onRefresh">
-          <div class="tasks-list-block-content">
+          <vue-pull-refresh :on-refresh="onRefresh">
+            <div class="tasks-list-block-content">
 
-            <mes-task-cards
-              :selectedTask=selectedTask
-              :selectedTasksTab=selectedTasksTab
-              @changeCurrentTask=changeCurrentTask
-              @changeTaskTableView=changeTaskTableView
-            />
+              <mes-task-cards
+                :selectedTask=selectedTask
+                :selectedTasksTab=selectedTasksTab
+                @changeCurrentTask=changeCurrentTask
+                @changeTaskTableView=changeTaskTableView
+              />
 
-          </div>
-    </vue-pull-refresh>
+            </div>
+          </vue-pull-refresh>
           <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">{{this.$t('mes.labels.NoTasks')}}</span>
         </v-flex>
 
@@ -113,6 +113,7 @@ export default {
     }, 
     onRefresh() {
       return new Promise( async (resolve, reject) => {
+        
         this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code }).then(()=>{
           
           this.$store.commit('mes/setObsoluteDataTask', false)

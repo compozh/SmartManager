@@ -1,7 +1,7 @@
 <template>
   <v-app id="mes-app">
     <!-- Меню -->
-    <v-navigation-drawer  app clipped mobile-break-point="false" width="320" overlay-opacity="0.4" 
+    <v-navigation-drawer  app clipped  width="320" overlay-opacity="0.4" 
       :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
       v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter && $route.name !='MESLOGIN'" @blur="toggleMenuMode">
       <mes-menu name="navigation-drawer"/>
