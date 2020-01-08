@@ -12,7 +12,7 @@ export default {
   name: 'bpmn-empty',
   methods: {
     addProcess() {
-      eventBus.$emit(events.modeler.export);
+      eventBus.$emit(events.modeler.createDiagram);
     }
   }
 };

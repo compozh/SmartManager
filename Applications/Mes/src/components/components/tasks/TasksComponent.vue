@@ -22,7 +22,7 @@
         <v-text-field
           v-if="initializeTasks"
           class="search-field"
-          label="Поиск задания"
+          :label="this.$t('mes.placeholders.SearchTask')"
           v-model="filterValue"
           clearable
         ></v-text-field>
@@ -35,7 +35,7 @@
           />
 
         </div>
-        <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">Задания отсутствуют</span>
+        <span v-if="initializeTasks && !countTasks(selectedTasksTab)" class="lack-of-tasks-str">{{this.$t('mes.labels.NoTasks')}}</span>
       </v-flex>
 
     </v-layout>
@@ -49,8 +49,8 @@ export default {
   data() {
     return {
       tabs: [
-        { index: 0, id: 'PLAN', name: 'В плане'},
-        { index: 1, id: 'DONE', name: 'Выполненные'}
+        { index: 0, id: 'PLAN', name: this.$t('mes.tabs.InPlan')},
+        { index: 1, id: 'DONE', name: this.$t('mes.tabs.Done')}
       ],
       loaderType: 'list',
       selectedTab: this.selectedTasksTab

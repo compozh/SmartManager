@@ -8,11 +8,15 @@ export default {
     eventBus.$on(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
     eventBus.$on(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
     eventBus.$on(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
+    eventBus.$on(events.propertiesPanel.selectDeployedProcess, this.onPropertiesPanelSelectDeployedProcess);
+    eventBus.$on(events.propertiesPanel.selectDeployedDecision, this.onPropertiesPanelSelectDeployedDecision);
   },
   beforeDestroy() {
     eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
     eventBus.$off(events.propertiesPanel.selectAction, this.onPropertiesPanelSelectTask);
     eventBus.$off(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
+    eventBus.$off(events.propertiesPanel.selectDeployedProcess, this.onPropertiesPanelSelectDeployedProcess);
+    eventBus.$off(events.propertiesPanel.selectDeployedDecision, this.onPropertiesPanelSelectDeployedDecision);
   },
   methods: {
     async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
@@ -82,6 +86,43 @@ export default {
         }
         callback(params);
       });
+    },
+    async onPropertiesPanelSelectDeployedProcess(procDefKey, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getDeployedProcesses');
+      if (!items) {
+        this.loading = false;
+        Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
+        return;
+      }
+      this.loading = false;
+      items = items
+        .map(process => { return { id: process.procDefKey, name: process.procName } })
+        .filter((process, index, self) => self.findIndex(p => p.id === process.id) === index);
+
+      eventBus.$emit(events.modeler.showSelectionGrid,
+        this.$t('bpmn.labels.SelectProcess'),
+        items, items.find(item => item.id === procDefKey),
+        (selectedItem) => callback(selectedItem.id));
+    }
+    ,
+    async onPropertiesPanelSelectDeployedDecision(decDefKey, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getDeployedDecisions');
+      if (!items) {
+        this.loading = false;
+        Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
+        return;
+      }
+      this.loading = false;
+      items = items
+        .map(decision => { return { id: decision.decDefKey, name: decision.decDefName } })
+        .filter((decision, index, self) => self.findIndex(p => p.id === decision.id) === index);
+
+      eventBus.$emit(events.modeler.showSelectionGrid,
+        this.$t('bpmn.labels.SelectDecisionTable'),
+        items, items.find(item => item.id === decDefKey),
+        (selectedItem) => callback(selectedItem.id));
     }
   }
 }

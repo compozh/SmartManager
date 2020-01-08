@@ -16,6 +16,7 @@ import workCentersFixed from './graphql/fixedWorkCenters.graphql'
 import tasks from './graphql/tasks/tasks.graphql'
 import downtimesPrevious from './graphql/downtimes/downtimesPrevious.graphql'
 import documents from './graphql/qualities/documents.graphql'
+import documentMethod from './graphql/qualities/documentMethod.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
 import registerMaterialInstallation
@@ -31,14 +32,11 @@ import downtimeGetTypes from './graphql/downtimeGetTypes.graphql'
 import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
+import mobilityProperties from './graphql/mobilityProperties.graphql'
 
 //formio
 import productionFormio from './graphql/formio/productionForm.graphql'
 import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphql'
-import downtimeFormio from './graphql/formio/downtimeForm.graphql'
-import downtimeFormioSubmit from './graphql/formio/downtimeFormSubmit.graphql'
-import qualityFormio from './graphql/formio/qualityForm.graphql'
-import qualityFormioSubmit from './graphql/formio/qualityFormSubmit.graphql'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
@@ -54,8 +52,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 const getClient = async () => {
   const token = await auth.getToken()
   const options = {
-    // eslint-disable-next-line no-undef
-    uri: myConfig.GrapgQlUrl + 'api/graphql',
+    uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -85,6 +82,15 @@ export class MesApi {
       query: gql` ${ticket}`
     })
     return result.data.mes.ticket
+  }
+
+  async getMobilityPropertiesFromGql(webAppId) {
+    const client = await getClient()
+    const result = await client.query({
+      query: gql` query ($webAppId: String) ${mobilityProperties}`,
+      variables: { webAppId }
+    })
+    return result.data.mes.mobilityProperties
   }
 
   async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
@@ -154,6 +160,23 @@ export class MesApi {
     return result.data.mes.documents.processes
   }
 
+  async getDocumentsFromGql(retrieveParams) {
+    const client = await getClient()
+    const result = await client.query({
+      query: gql`query ($retrieveParams: ProcessRetrieveParamsInput!) ${documents}`,
+      variables: { retrieveParams }
+    })
+    return result.data.mes.documents.processes
+  }
+
+  async applyDocumentMethod(processMethodParams) {
+    const result = await getClient().mutate({
+      mutation: gql`${documentMethod}`,
+      variables: { processMethodParams }
+    })
+    return result.data.mesMutation.callProcessMethod
+  }
+
   async getInstallationsFromGql(workCenter, fetchPolicy) {
     const client = await getClient()
     const result = await client.query({
@@ -221,7 +244,8 @@ export class MesApi {
   }
 
   async deleteProductionGql(factId) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${deleteProduction}`,
       variables: {factId}
     })
@@ -229,7 +253,8 @@ export class MesApi {
   }
 
   async printProductionGql(factId, checkWriteOffPercent) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
       variables: {factId, checkWriteOffPercent}
     })
@@ -237,18 +262,19 @@ export class MesApi {
   }
 
   async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${executeWriteOff}`,
       variables: {factId, addAbsentInstallations, workCenterCode}
     })
     return result.data.mes.executeWriteOff
   }
 
-  async getProductionFormioFromGql(formCode, properties) {
+  async getProductionFormioFromGql(formCode, properties, deviceSizeType) {
     const client = await getClient()
     const result = await client.query({
       query: gql`${productionFormio}`,
-      variables: {formCode, properties},
+      variables: { formCode, properties, deviceSizeType },
       fetchPolicy: 'network-only'
     })
     return result.data.mes.productionFormio
@@ -261,44 +287,6 @@ export class MesApi {
       variables: {formCode, submission, properties}
     })
     return result.data.mesMutation.productionFormioSubmit
-  }
-
-  async getDowntimeFormioFromGql(formCode, properties) {
-    const client = await getClient()
-    const result = await client.query({
-      query: gql`${downtimeFormio}`,
-      variables: {formCode, properties},
-      fetchPolicy: 'network-only'
-    })
-    return result.data.mes.downtimeFormio
-  }
-
-  async getQualityFormioFromGql(formCode, properties) {
-    const client = await getClient()
-    const result = await client.query({
-      query: gql`${qualityFormio}`,
-      variables: {formCode, properties},
-      fetchPolicy: 'network-only'
-    })
-    return result.data.mes.getFormio
-  }
-
-  async downtimeFormioSubmitGql(formCode, submission, properties) {
-    const client = await getClient()
-    const result = await client.mutate({
-      mutation: gql`${downtimeFormioSubmit}`,
-      variables: {formCode, submission, properties}
-    })
-    return result.data.mesMutation.downtimeFormioSubmit
-  }
-
-  async qualityFormioSubmitGql(formCode, submission, properties) {
-    const client = await getClient()
-    const result = await client.mutate({
-      mutation: gql`${qualityFormioSubmit}`,
-      variables: {formCode, submission, properties}
-    })
-    return result.data.mesMutation.qualityFormioSubmit
   }
 
   async getDowntimeTypesFromGql() {

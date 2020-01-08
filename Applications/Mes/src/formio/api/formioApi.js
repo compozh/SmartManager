@@ -31,8 +31,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 const getClient = async () => {
   const token = await auth.getToken()
   const options = {
-    // eslint-disable-next-line no-undef
-    uri: myConfig.GrapgQlUrl + 'api/graphql',
+    uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -57,21 +56,21 @@ export class FormioApi {
     return result.data.formioQuery.ticket
   }
 
-  async getFormGql(formCode, fetchPolicy) {
+  async getFormGql(formCode, properties, deviceSizeType, fetchPolicy) {
     const client = await getClient()
     const result = await client.query({
       query: gql`${getForm}`,
-      variables: { formCode },
+      variables: { formCode, properties, deviceSizeType },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.formioQuery.getForm
   }
 
-  async submitFormGql(formCode, submission) {
+  async submitFormGql(formCode, submission, properties) {
     const client = await getClient()
     const result = await client.mutate({
       mutation: gql`${submitForm}`,
-      variables: { formCode, submission }
+      variables: { formCode, submission, properties }
     })
     return result.data.formioQueryMutation.submitForm
   }

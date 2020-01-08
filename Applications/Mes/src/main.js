@@ -65,7 +65,9 @@ Vue.use(Localization, { dependencies })
 Vue.use(Router, { options: window.myConfig, dependencies }, () => auth.getToken())
 Vue.use(WebApps, { dependencies, options: window.myConfig }, () => auth.getToken())
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)

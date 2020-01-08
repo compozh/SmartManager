@@ -54,6 +54,8 @@
 		"SelectForm": "Виберіть форму",
 		"EnterTaskParams": "Введіть параметри задачі",
 		"SelectTaskCreationRule": "Виберіть правило створення задачі",
+		"SelectProcess": "Виберіть процес",
+		"SelectDecisionTable": "Виберіть таблицю рішень",
 		"Code": "Код",
 		"Designer": "Конструктор",
 		"Preview": "Перегляд",
@@ -106,7 +108,8 @@
 		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
 		"RequiredInputField": "Обов'язкове поле",
-		"AccessError": "не вдалося надати доступ для {identity}"
+		"AccessError": "не вдалося надати доступ для {identity}",
+		"ElementsNotLoaded": "Не вдалося завантажити елементи"
 	},
 	"enums": {
 		"AccessType": {
@@ -166,7 +169,7 @@
 		"Business Rule Task": "Бізнес-правило",
 		"Service Task": "Сервісне завдання",
 		"Script Task": "Завдання-сценарій",
-		"Call Activity": "Виклик Дії",
+		"Call Activity": "Виклик процессу",
 		"Sub Process (collapsed)": "Підпроцес (згорнутий)",
 		"Sub Process (expanded)": "Підпроцес (розгорнутий)",
 		"Start Event": "Початкова подія",
@@ -313,7 +316,6 @@
 		"Implementation": "Реалізація",
 		"External": "Зовнішня задача",
 		"Expression": "Вираз",
-		"Script": "Скрипт",
 		"Connector": "Конектор",
 		"DMN": "DMN",
 		"Topic": "Код задачі",
@@ -339,6 +341,59 @@
 		"Task creation rule": "Правило створення задачі",
 		"Item description": "Опис елемента",
 
-		"Colorize": "Змінити колір"
-	}
+		"Condition": "Умова",
+		"Script": "Скрипт",
+		"Script Format": "Мова скрипта",
+		"Inline Script": "Вбудований скрипт",
+		"External Resource": "Зовнішній ресурс",
+
+		"Colorize": "Змінити колір",
+
+		"Called Element": "Процес",
+		"Decision Ref": "Таблиця рішень",
+		"Binding": "Прив'язка",
+		"Latest": "Остання версія",
+		"Version": "Версія"
+	},
+	"formioForm": {
+        "complete": "Відправка завершена",
+        "error": "Будь ласка, виправте наступні помилки перед відправкою.",
+        "required": "{{field}} обов'язкове",
+        "pattern": "{{field}} не відповідає шаблоном {{pattern}}",
+        "minLength": "{{field}} повинен бути довшим {{length}} характеристик.",
+        "maxLength": "{{field}} повинен бути коротше {{length}} характеристик.",
+        "minWords": "{{field}} повинно мати більше, ніж {{length}} слів.",
+        "maxWords": "{{field}} має бути менше ніж {{length}} слів.",
+        "min": "{{field}} не може бути менше ніж {{min}}.",
+        "max": "{{field}} не може бути більше ніж {{max}}.",
+        "maxDate": "{{field}} не повинен містити дату після {{- maxDate}}",
+        "minDate": "{{field}} не повинен містити дату раніше {{- minDate}}",
+        "invalid_email": "{{field}} повинен бути дійсний адреса електронної пошти.",
+        "invalid_url": "{{field}} повинен бути дійсною URL.",
+        "invalid_regex": "{{field}} не відповідає шаблоном {{regex}}.",
+        "invalid_date": "{{field}} недійсна дата.",
+        "invalid_day": "{{field}} недійсний день.",
+        "mask": "{{field}} не відповідає масці.",
+        "stripe": "{{stripe}}",
+        "month": "Місяць",
+        "day": "День",
+        "year": "Рік",
+        "january": "Січень",
+        "february": "Лютий",
+        "march": "Березень",
+        "april": "Квітень",
+        "may": "Травень",
+        "june": "Червень",
+        "july": "Липень",
+        "august": "Серпень",
+        "september": "Вересень",
+        "october": "Жовтень",
+        "november": "Листопад",
+        "december": "Грудень",
+        "next": "Наступний",
+        "previous": "Попередній",
+        "cancel": "Відміна",
+        "submit": "Відправити форму",
+        "Type to search" : "Введіть для пошуку"
+    }
 }

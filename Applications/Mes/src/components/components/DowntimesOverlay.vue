@@ -5,7 +5,7 @@
       class="headline grey lighten-2"
       primary-title
     >
-      Фиксация простоя
+      {{this.$t('mes.labels.DowntimeFixation')}}
     </v-card-title>
       <div class="downtimes-block">
         <v-progress-circular
@@ -54,11 +54,18 @@ export default {
       var me = this
       this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, successAction: () => {
         me.closeOverlay()
-      }})
+      }, message: this.$t('mes.dialogs.RegistrationDowntime')})
     },
     initializeCreateDowntimeFormio() {
-      let workCenter = this.$parent.workCenter
-      this.$store.dispatch('mes/initializeCreateDowntimeFormio', workCenter)
+      var me = this,
+        workCenter = this.$parent.workCenter,
+        formCode = workCenter.downtimeRegistrationFormCode,
+        properties = { RCENTR: workCenter.code },
+        fetchPolicy = 'network-only'
+
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+        me.$store.commit('mes/setCreateDowntimeFormio', result)
+      })
     }
   }
 }

@@ -94,8 +94,12 @@ export default {
             formNameLabel: me.$t('bpmn.labels.Name'),
             formCodeLabel: me.$t('bpmn.labels.Code'),
             displayTypeLabel: me.$t('bpmn.labels.DisplayType'),
-            options: { 
+            options: {
                 noAlerts: true,
+                language: 'ru',
+                i18n: {
+                  ru: this.$t('bpmn.formioForm')
+                },
                 builder: {
                     basic: {},
                     advanced: {},
@@ -188,14 +192,15 @@ export default {
         @import './assets/overide.scss';
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
+
         font-family: Roboto;
-        
-        .btn-primary {
-            background-color: #1976d2;
-            border-color: #1976d2;
-        }
     }
-        .formio-builder-component-class {
+    
+    .formio-component {
+        position: relative;
+    }
+
+    .formio-builder-component-class {
         overflow-y: auto !important;
         position: absolute;
         top: 145px;
@@ -238,13 +243,6 @@ export default {
     }
     .form-name-text-field {
       max-width: 350px;
-    }
-    .action-button {
-    }
-    .cancel-button {
-    }
-    .constructor-tabs {
-
     }
     .form-preview-component {
         overflow-y: auto !important;

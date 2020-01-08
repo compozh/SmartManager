@@ -84,4 +84,8 @@ export class LmsApi {
     .then(result => result)
     .catch(error => console.log(error.message))
   }
+
+  getLogo () {
+    return 'https://m.it.ua/s00/ws/GetFile.ashx?file=itlogo.png&folder=DOCS'
+  }
 }

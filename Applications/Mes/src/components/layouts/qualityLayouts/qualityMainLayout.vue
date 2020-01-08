@@ -40,8 +40,24 @@ export default {
     }
   },
   methods: {
-    formSubmit(submission) {
-      this.$store.dispatch('mes/qualityFormIoSubmit', { formCode: this.properties.qualityForm, workCenter: this.workCenter, submission, quality: this.selectedQuality })
+    async formSubmit(submission) {
+      var me = this,
+        direction = 1,
+        properties = {
+          workCenterCode: me.workCenter.code,
+          id: me.selectedQuality.id
+        },
+        searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+
+      me.$store.commit('mes/setDialogLinearLoaderMessage', this.$t('mes.dialogs.RegistrationDowntime'))
+      await this.$store.dispatch('formio/submitForm', { formCode: me.properties.qualityForm, submission, properties }).then(params => {
+        if(params.success) {
+          me.$store.commit('mes/setQualities', [])
+          me.$store.commit('mes/setInitializeQualities', false)
+          me.$store.dispatch('mes/downloadQualities', { processTypeCode: me.properties.qualityProcessType, searchDateTime, direction })
+        }
+      })
+      me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()

@@ -5,6 +5,7 @@ import * as cmdHelper from './helpers/CmdHelper';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import Ids from 'ids';
+import { is } from 'bpmn-js/lib/util/ModelUtil';
 
 /**
  * Выполнить несколько команд одной командой
@@ -134,4 +135,39 @@ function stripPlaceholders(idValue) {
   // use only the content between ${}
   // for the REGEX check
   return idValue.replace(PLACEHOLDER_REGEX, '$1');
+}
+
+export function findRootElementsByType(businessObject, referencedType) {
+  var root = getRoot(businessObject);
+
+  return filterElementsByType(root.rootElements, referencedType);
+}
+
+/**
+ * filters all elements in the list which have a given type.
+ * returns a new list
+ */
+export function filterElementsByType(objectList, type) {
+  var list = objectList || [];
+  var result = [];
+  list.forEach(function (obj) {
+    if (is(obj, type)) {
+      result.push(obj);
+    }
+  });
+  return result;
+}
+
+/**
+ * Retrieve the root element the document this
+ * business object is contained in.
+ *
+ * @return {ModdleElement}
+ */
+export function getRoot(businessObject) {
+  var parent = businessObject;
+  while (parent.$parent) {
+    parent = parent.$parent;
+  }
+  return parent;
 }

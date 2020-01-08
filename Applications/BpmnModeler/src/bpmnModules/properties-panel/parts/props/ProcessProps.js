@@ -1,5 +1,5 @@
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import participantHelper from '../../helpers/ImplementationTypeHelper';
+import participantHelper from '../../helpers/ParticipantHelper';
 import { PropertiesPanelGroup } from '../../Models';
 import { isIdValid } from '../../utils';
 

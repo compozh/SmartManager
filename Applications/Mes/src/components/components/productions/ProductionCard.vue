@@ -2,7 +2,7 @@
   <v-card-text class="mes-production-card" :style="this.borderColors[production.color]">
     <div class="production-card-description">
       <span v-html="production.description"></span>
-      <br><span v-if="production.mode != 'START'">Cписаниe: <b>{{production.savedProgress}}</b>%</span>
+      <br><span v-if="production.mode != 'START'">{{this.$t('mes.cards.WriteOff')}}: <b>{{production.savedProgress}}</b>%</span>
     </div>
     <v-speed-dial
       class="production-card-menu"
@@ -34,7 +34,7 @@
             <v-icon dark>archive</v-icon>
           </v-btn>
         </template>
-        <span>Списать материалы</span>
+        <span>{{this.$t('mes.buttons.WriteOffMaterials')}}</span>
       </v-tooltip>
       <v-tooltip right>
         <template v-slot:activator="{ on }">
@@ -42,7 +42,7 @@
             <v-icon dark>print</v-icon>
           </v-btn>
         </template>
-        <span>Распечатать выработку</span>
+        <span>{{this.$t('mes.buttons.PrintProduction')}}</span>
       </v-tooltip>
       <v-tooltip right>
         <template v-slot:activator="{ on }">
@@ -50,7 +50,7 @@
             <v-icon dark>delete_forever</v-icon>
           </v-btn>
         </template>
-        <span>Удалить выработку</span>
+        <span>{{this.$t('mes.buttons.DeleteProduction')}}</span>
       </v-tooltip>
     </v-speed-dial>
   </v-card-text>

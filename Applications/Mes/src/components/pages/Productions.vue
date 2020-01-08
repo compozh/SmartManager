@@ -7,7 +7,7 @@
         <mes-content-loader v-if="!initializeProductions && !productions.length"/>
         <mes-productions-component :productions=productions />
 
-        <span class="no-data-text" v-if="initializeProductions && !productions.length">Нет факта регистрации выработки за смену</span>
+        <span class="no-data-text" v-if="initializeProductions && !productions.length">{{this.$t('mes.labels.NoFactOfRegistration')}}</span>
       </div>
     </v-layout>
 </template>

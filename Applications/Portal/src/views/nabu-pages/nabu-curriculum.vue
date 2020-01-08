@@ -1,7 +1,7 @@
 <template>
 <div v-show="dataEducation">
   <div class="btn-container" >
-      <vs-button size="large" type="line" icon-pack="feather" icon="icon-clipboard" @click="getFormPlan">{{$t('Education.btnFormPlane')}}</vs-button>
+    <vs-button size="large" type="line" icon-pack="feather" icon="icon-clipboard" @click="getFormPlan">{{$t('Education.btnFormPlane')}}</vs-button>
   </div>
   <AgGridView :education="dataEducation" v-show="dataEducation"></AgGridView>
 </div>
@@ -41,7 +41,7 @@ export default {
         })
         return
       }
-      window.location.href = this.fileLink
+      window.open(this.fileLink)
     }
   }
 }

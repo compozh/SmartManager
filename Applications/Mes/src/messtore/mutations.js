@@ -25,6 +25,9 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
+  setMobilityProperties(state, mobilityProperties) {
+    state.mobilityProperties = mobilityProperties
+  },
   setUserName(state, userName) {
     state.userName = userName
   },
@@ -48,6 +51,9 @@ export default {
   },
   setQualities(state, qualities) {
     state.qualities = qualities
+  },
+  setDocuments(state, documents) {
+    state.documents = documents
   },
   setInstallations(state, installations) {
     state.installations = installations
@@ -74,8 +80,14 @@ export default {
   setQualityFormio(state, formio) {
     state.qualityFormio = formio
   },
+  setDocumentFormio(state, formio) {
+    state.documentFormio = formio
+  },
   setInitializeQualities(state, initializeQualities) {
     state.initializeQualities = initializeQualities
+  },
+  setInitializeDocuments(state, initializeDocuments) {
+    state.initializeDocuments = initializeDocuments
   },
   setCreateDowntimeFormio(state, formio) {
     state.createDowntimeFormio = formio
@@ -85,6 +97,9 @@ export default {
   },
   resetQualityFormio(state) {
     state.qualityFormio = {}
+  },
+  resetDocumentFormio(state) {
+    state.documentFormio = {}
   },
   removeProduction(state, production) {
     let index = state.usersProductionEvents.indexOf(production)
@@ -99,6 +114,9 @@ export default {
   },
   changeMainContainerKey(state) {
     state.mainContainerKey += 1
+  },
+  updateDocument(state){
+    state.documentKey += 1
   },
   setMaterialProduction(state, production) {
     state.setMaterialProduction = production
@@ -122,8 +140,14 @@ export default {
   setSelectedQuality(state, selectedQuality) {
     state.selectedQuality = selectedQuality
   },
+  setSelectedDocument(state, selectedDocument) {
+    state.selectedDocument = selectedDocument
+  },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
+  },
+  setDynamicPagesCache(state, dynamicPagesCache) {
+    state.dynamicPagesCache = dynamicPagesCache
   },
   changeDragResizeMode(state) {
     state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode
@@ -149,15 +173,20 @@ export default {
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
+  setCameraAvailability(state, cameraAvailability) {
+    state.cameraAvailability = cameraAvailability
+  },
   resetState(state) {
     state.tasks = []
     state.downtimes = []
     state.qualities = []
+    state.documents = []
     state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.selectedDowntime = null
     state.selectedQuality = null
+    state.selectedDocument = null
     state.workCenterProductionEvents = []
   }
 }
