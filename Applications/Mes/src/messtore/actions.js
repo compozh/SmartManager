@@ -349,7 +349,8 @@ export default {
       }
     } catch (e) {
       if (e.networkError && e.networkError.statusCode === 401) {
-        await dispatch('logout')
+        debugger
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -370,7 +371,7 @@ export default {
       result = await action()
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
-        await dispatch('logout')
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
