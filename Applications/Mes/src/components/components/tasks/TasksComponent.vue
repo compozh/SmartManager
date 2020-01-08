@@ -123,7 +123,7 @@ export default {
   },
   mounted() {
     let refreshLabel = document.querySelector('.pull-down-content--label')
-    refreshLabel.innerText = 'wait'
+    refreshLabel.innerText = this.$t('mes.labels.Wait')
   }
 }
 </script>

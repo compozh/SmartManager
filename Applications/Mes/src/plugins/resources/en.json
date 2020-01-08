@@ -27,7 +27,9 @@
         "DeleteInstallation": "Delete installation",
         "WriteOffMaterials": "Write off materials",
         "PrintProduction": "Print production",
-        "DeleteProduction": "Delete production"
+        "DeleteProduction": "Delete production",
+        "Exit" : "Exit",
+        "Functions" : "Functions"
     },
     "tabs": {
         "InPlan": "In plan",
@@ -56,7 +58,8 @@
 		"Designer": "Designer",
         "Preview": "Preview",
         "DisplayType": "Display type",
-        "FormContructor": "Form constructor"
+        "FormContructor": "Form constructor",
+        "Wait" : "Wait"
     },
     "dialogs": {
         "Yes": "Yes",

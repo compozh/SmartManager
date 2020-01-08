@@ -24,7 +24,7 @@
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
       <div :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select' : 'work-centers-select-small'" 
-        v-if="workCentersForWorker.length > 1">
+        v-if="workCentersForWorker.length > 1 && $route.name !='MESLOGIN'">
         <span class='work-centers-title' v-if="$vuetify.breakpoint.mdAndUp">
           {{this.$t('mes.labels.WorkCenter')}}: 
         </span>
@@ -47,19 +47,19 @@
       </div>
 
       <!-- Зафиксированый РЦ -->
-      <div class="work-centers-caption" v-if="!searchWorkCenter && workCenter && workCentersForWorker.length == 1">
+      <div class="work-centers-caption" v-if="!searchWorkCenter && workCenter && $route.name !='MESLOGIN' && workCentersForWorker.length == 1">
         <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc" v-if="!searchWorkCenter && $vuetify.breakpoint.mdAndUp">
+      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.mdAndUp">
         <span class="user-info-text">
           {{currentUserData.UserName}}
         </span>
       </div>
       <!-- Панель Юзера -->
-      <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter">
+      <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter && $route.name !='MESLOGIN'">
         <user-panel hideDelegatedRightsButton="true" mini="true" style="border: 1px solid silver">
           <v-btn v-if="$vuetify.breakpoint.smAndDown" icon>
             <v-icon>account_circle</v-icon>

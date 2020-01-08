@@ -3,7 +3,7 @@
         <v-flex
             :class="inTasksTable? 'task-toolbar-basebuttons' : 'toolbar-basebuttons'"
         >
-            <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown && !inTasksTable" @click="changeTaskTableView" text outlined>close</v-btn>
+            <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown && !inTasksTable" @click="changeTaskTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
             <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp || inTasksTable" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
             <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp  || inTasksTable"

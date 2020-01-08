@@ -18,7 +18,7 @@
           <v-col class="pa-2 #f5f5f5 lighten-4 grey" justify="space-between">
  
             <v-row justify="center">
-              <v-btn text v-on:click="logoutCallback(params.logOut)">Выход</v-btn>
+              <v-btn text v-on:click="logoutCallback(params.logOut)">{{ $t('mes.buttons.Exit') }}</v-btn>
             </v-row>
           </v-col>
         </v-row>

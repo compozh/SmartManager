@@ -27,7 +27,9 @@
         "DeleteInstallation": "Удалить инсталяцию",
         "WriteOffMaterials": "Списать материалы",
         "PrintProduction": "Распечатать выработку",
-        "DeleteProduction": "Удалить выработку"
+        "DeleteProduction": "Удалить выработку",
+		"Exit" : "Выход",
+        "Functions" : "Функции"
     },
     "tabs": {
         "InPlan": "В плане",
@@ -56,7 +58,8 @@
 		"Designer": "Конструктор",
         "Preview": "Просмотр",
         "DisplayType": "Тип отображения",
-        "FormContructor": "Конструктор формы"
+        "FormContructor": "Конструктор формы",
+        "Wait" : "Подождите"
     },
     "dialogs": {
         "Yes": "Да",

@@ -17,22 +17,16 @@
             <span v-html="task.description"></span>
           </v-card-text>
           <v-card-actions v-if="$vuetify.breakpoint.smAndDown" >
-            <!-- <v-menu offset-y>
-              <template v-slot:activator="{on}">
-                <v-btn text v-on="on" @blur="!on">
-                  FUNCTIONS
-                </v-btn>
-              </template> -->
-               <v-expansion-panels>
-                  <v-expansion-panel>
-                    <v-expansion-panel-header>FUNCTIONS</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                    <mes-task-main-layout-toolbar 
-                      :inTasksTable='true'
-                    />
-                    </v-expansion-panel-content>
-                  </v-expansion-panel></v-expansion-panels>
-            <!-- </v-menu> -->
+            <v-expansion-panels>
+              <v-expansion-panel>
+                <v-expansion-panel-header>{{ $t('mes.buttons.Functions') }}</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <mes-task-main-layout-toolbar 
+                    :inTasksTable='true'
+                  />
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </v-card-actions>
           <v-progress-linear v-if="task.completionPercentage"
             color="#326da8"

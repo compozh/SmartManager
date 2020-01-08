@@ -4,8 +4,8 @@
     <!-- Пункт меню -->
     <v-list-item v-for="(route, i) in links" :key="route.id + i" :to="{ name: route.id, params: { id:  route.params}}" @click="toggleMenuMode">
       <v-list-item-action @click="reloadPage(route)">
-          <v-icon large>{{route.image}}</v-icon>
-          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' >refresh</v-icon>
+        <v-icon large>{{route.image}}</v-icon>
+        <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' >refresh</v-icon>
       </v-list-item-action>
 
       <!-- Описание пункта меню -->
