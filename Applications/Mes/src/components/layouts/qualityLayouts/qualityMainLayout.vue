@@ -1,7 +1,7 @@
 <template>
 <v-layout class="quality-layout"> 
-  <v-flex class="toolbar my-0">
-    <v-btn class="col-12 ma-0 close-btn" v-if="$vuetify.breakpoint.smAndDown" @click="changeQualityTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
+  <v-flex class="toolbar my-0" v-if="$vuetify.breakpoint.smAndDown">
+    <v-btn class="col-12 ma-0 close-btn" @click="changeQualityTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
   <v-flex class="quality-flex" :class="$vuetify.breakpoint.smAndDown? 'small' : ''" v-if="initializeQualities" :key="this.qualityFormioKey">
     <formio-component
@@ -67,13 +67,6 @@ export default {
     },
     changeQualityTableView() {
       this.$emit('changeQualityTableView', true)
-    }
-  },
-  created() {
-    var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
-    if(this.$vuetify.breakpoint.smAndDown) {
-      splitter.style.display = 'none'
-      return
     }
   }
 }

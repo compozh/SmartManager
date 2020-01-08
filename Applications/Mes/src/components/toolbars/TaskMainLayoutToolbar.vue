@@ -89,13 +89,7 @@ export default {
       this.$emit('changeTaskTableView',true)
     }
   },
-  created() {
-    var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
-    if(this.$vuetify.breakpoint.smAndDown) {
-      splitter.style.display = 'none'
-      return
-    }
-  }
+
 }
 </script>
 

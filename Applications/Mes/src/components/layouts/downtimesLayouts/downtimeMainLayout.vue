@@ -1,7 +1,7 @@
 <template>
 <v-layout class="downtime-layout">
-  <v-flex class="toolbar ma-0">
-    <v-btn class="col-12 ma-0 close-btn" v-if="$vuetify.breakpoint.smAndDown" @click="changeDowtimesTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
+  <v-flex class="toolbar ma-0" v-if="$vuetify.breakpoint.smAndDown">
+    <v-btn class="col-12 ma-0 close-btn" @click="changeDowtimesTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
   <v-flex class="downtime-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''" v-if="initializeDowntimes" :key="this.downtimeFormioKey">
     <formio-component
@@ -60,13 +60,6 @@ export default {
     },
     changeDowtimesTableView() {
       this.$emit('changeDowtimesTableView', true)
-    }
-  },
-  created() {
-    var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
-    if(this.$vuetify.breakpoint.smAndDown) {
-      splitter.style.display = 'none'
-      return
     }
   }
 }
