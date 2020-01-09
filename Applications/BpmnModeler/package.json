@@ -38,7 +38,6 @@
     "diagram-js": "^6.1.0",
     "diagram-js-minimap": "^2.0.3",
     "dmn-js": "^7.2.1",
-    "dmn-js-properties-panel": "^0.3.3",
     "element-ui": "^2.13.0",
     "formio": "^1.62.0",
     "formiojs": "4.7.8",
