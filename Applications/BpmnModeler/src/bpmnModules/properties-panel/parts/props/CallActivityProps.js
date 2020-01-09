@@ -146,14 +146,14 @@ function setBusinessKey(element, text, bpmnFactory) {
 
     var allIn = elementHelper.createElement(
       'camunda:In',
-      { 'valiables': 'all' },
+      { 'variables': 'all' },
       extensionElements,
       bpmnFactory
     );
 
     var allOut = elementHelper.createElement(
       'camunda:Out',
-      { 'valiables': 'all' },
+      { 'variables': 'all' },
       extensionElements,
       bpmnFactory
     );

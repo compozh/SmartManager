@@ -1,6 +1,6 @@
 <template>
   <div class="editor" ref="editor">
-    <v-subheader>{{ label }}</v-subheader>
+    <v-subheader v-if="label">{{ label }}</v-subheader>
     <quill-editor ref="quillEditor" v-model="content" :options="editorOptions"></quill-editor>
     <v-divider></v-divider>
   </div>
@@ -58,7 +58,7 @@ export default {
     },
     readonly: {
       handler(value) {
-        this.editor.enable(!value);
+        this.changeReadOnly(value)
       }
     },
     content(value) {
@@ -73,14 +73,18 @@ export default {
     }
   },
   mounted() {
-    this.editor.enable(!this.readonly);
+    this.changeReadOnly(this.readonly);
+    this.readonly = !!this.readonly;
     const fullscreenBtn = document.querySelector('button.ql-fullscreen');
     fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
   },
   methods: {
     getFullScreenContainer() {
-      console.log(this.$refs.quillEditor);
       return this.$refs.quillEditor.$el;
+    },
+    changeReadOnly(value) {
+      this.editor.enable(!value);
+      this.getFullScreenContainer().querySelector('.ql-toolbar').style.display = value ? 'none' : '';
     }
   }
 };
@@ -127,5 +131,13 @@ export default {
   position: relative;
   top: -12px;
   left: -4px;
+}
+
+.ql-container.ql-snow.ql-disabled {
+  border-top: 1px solid #ccc !important;
+}
+
+.ql-blank::before {
+  content: '' !important;
 }
 </style>

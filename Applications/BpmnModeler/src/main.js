@@ -23,28 +23,12 @@ import VueSplit from 'vue-split-panel'
 import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 import './element-variables.scss';
 
-// apollo
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import VueApollo from 'vue-apollo';
-
 import { routerDependencies } from './router';
-
-const apolloProvider = new VueApollo({
-  defaultClient: new ApolloClient({
-    link: new HttpLink({}),
-    cache: new InMemoryCache(),
-    connectToDevTools: true,
-  }),
-});
-
 
 // объект с зависимостями
 let dependencies = {
   store,
   i18n,
-  apolloProvider,
   axios,
   ...routerDependencies
 };
@@ -53,7 +37,6 @@ let dependencies = {
 Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(VueI18n);
-Vue.use(VueApollo);
 
 Vue.use(VueSplit);
 

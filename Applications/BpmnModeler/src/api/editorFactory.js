@@ -6,11 +6,6 @@ import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
 
 import DmnJS from '../bpmnModules/dmn-modeler.development';
 import DmnViewer from 'dmn-js/lib/Viewer';
-import dmnPropertiesPanelModule from 'dmn-js-properties-panel';
-import drdAdapterModule from 'dmn-js-properties-panel/lib/adapter/drd';
-import decisionTableAdapterModule from 'dmn-js-properties-panel/lib/adapter/decision-table';
-import literalExpressionAdapterModule from 'dmn-js-properties-panel/lib/adapter/literal-expression';
-import dmnPropertiesProviderModule from 'dmn-js-properties-panel/lib/provider/camunda';
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
 import minimapModule from 'diagram-js-minimap';
@@ -84,36 +79,18 @@ function createDmnModeler(editorContainer, propertiesPanelContainer, translate) 
       }
     },
     drd: {
-      propertiesPanel: {
-        parent: propertiesPanelContainer
-      },
       additionalModules: [
-        dmnPropertiesPanelModule,
-        dmnPropertiesProviderModule,
-        drdAdapterModule,
         minimapModule,
         createTranslationModule(translate)
       ]
     },
     decisionTable: {
-      propertiesPanel: {
-        parent: propertiesPanelContainer
-      },
       additionalModules: [
-        dmnPropertiesPanelModule,
-        dmnPropertiesProviderModule,
-        decisionTableAdapterModule,
         createTranslationModule(translate)
       ]
     },
     literalExpression: {
-      propertiesPanel: {
-        parent: propertiesPanelContainer
-      },
       additionalModules: [
-        dmnPropertiesPanelModule,
-        dmnPropertiesProviderModule,
-        literalExpressionAdapterModule,
         createTranslationModule(translate)
       ]
     },

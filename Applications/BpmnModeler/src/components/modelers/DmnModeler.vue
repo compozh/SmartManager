@@ -1,6 +1,6 @@
 <template>
   <modeler-layout 
-      :process="process" :loading="loading" :saved="saved" :canShowPanel="canShowPanel" :noAccess="noAccess"
+      :diagram="decision" :loading="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
       :canMinimap="canMinimap" @minimap="onMinimap" 
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
       :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
@@ -75,13 +75,13 @@ export default {
     };
   },
   mounted() {
-    if (this.process) {
+    if (this.decision) {
       this.createModeler();
       this.onActiveModelChanged();
     }
   },
   computed: {
-    process() {
+    decision() {
       const activeItem = this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.DMN) {
         return activeItem;
@@ -89,14 +89,14 @@ export default {
       return null;
     },
     noAccess() {
-      return this.process && !this.process.hasRight(DiagramAccessRights.Read);
+      return this.decision && !this.decision.hasRight(DiagramAccessRights.Read);
     }
   },
   beforeDestroy: function () {
     this.destroyModeler();
   },
   watch: {
-    process(value, oldValue) {
+    decision(value, oldValue) {
       if (!value) {
         this.destroyModeler();
       }
@@ -116,9 +116,9 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.process.hasRight(DiagramAccessRights.Write);
+      const canEdit = this.decision.hasRight(DiagramAccessRights.Write);
       this.canShowPanel = canEdit;
-      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+      this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
       this.modeler.on('views.changed', ({ views, activeView }) => {
         this.views = views;
         this.activeView = views.indexOf(activeView);
@@ -137,14 +137,14 @@ export default {
         this.onElementChanged = debounce(1000, function() {
           this.saveXML();
         });
-        editor.on('commandStack.changed', this.onElementChanged, new SavingContext(this.modeler, this.process.id, (id, xml) => this.setXML(id, xml)));
+        editor.on('commandStack.changed', this.onElementChanged, new SavingContext(this.modeler, this.decision.id, (id, xml) => this.setXML(id, xml)));
         editor.on('commandStack.changed', this.onCanUndoRedo);
         this.activeEditor = editor;
         this.onEditorChanged();
       });
     },    
     async loadXml() {
-      if (!this.process || !this.modeler) {
+      if (!this.decision || !this.modeler) {
         return;
       }
       this.loading = true;
@@ -152,7 +152,7 @@ export default {
         this.cancellationToken.cancel();
       }
       const debounced = debounce(500, async (cancellationToken) => {
-        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
+        const xml = await this.$store.dispatch('bpmn/getXml', this.decision.id);
         if (cancellationToken.isCancelled) {
           return;
         }
@@ -197,7 +197,7 @@ export default {
       });
     },
     onActiveModelChanged() {
-      if (!this.process || !this.modeler || this.noAccess) {
+      if (!this.decision || !this.modeler || this.noAccess) {
         return;
       }
       //this.modeler.clear();
@@ -250,7 +250,6 @@ export default {
 </script>
 <style>
 .dmn-modeler-container {
-  position: absolute;
   width: 100%;
   height: calc(100% - 40px);
 }
