@@ -1,6 +1,6 @@
 import { PropertiesPanelTab } from '../../Models';
 import { FormsGroup, SimpleFormGroup } from '../groups';
-import { is } from 'bpmn-js/lib/util/ModelUtil';
+import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import { Diagram } from '../../../../api/models';
 import EntryFactory from '../../EntryFactory';
 
@@ -28,6 +28,11 @@ export default class FormsTab extends PropertiesPanelTab {
 
 function ensureFormKeyAndDataSupported(element) {
   return (
-    is(element, 'bpmn:StartEvent') && !is(element.parent, 'bpmn:SubProcess')
+    (is(element, 'bpmn:StartEvent') && isSimpleEvent(element)) && !is(element.parent, 'bpmn:SubProcess')
   ) || is(element, 'bpmn:UserTask');
+}
+
+function isSimpleEvent(element) {
+  const bo = getBusinessObject(element);
+  return !bo.eventDefinitions;
 }

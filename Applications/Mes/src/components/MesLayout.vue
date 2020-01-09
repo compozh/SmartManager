@@ -14,7 +14,7 @@
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
-        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">Зафиксируйтесь за рабочим центром</span>
+        <span class="mes-device-not-fixed" v-if="userData && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
 
@@ -30,7 +30,7 @@
       >
         {{ snackbar.message }}
         <v-btn @click.native="closeSnackbar" text color="white">
-          Закрыть
+          {{this.$t('mes.buttons.Close')}}
         </v-btn>
       </v-snackbar>
     </template>
@@ -61,16 +61,43 @@
 </template>
 
 <script>
+
+import Vue from 'vue'
+import BarcodeScanerEvents from './components/BarcodeScanerEvents'
 export default {
   name: 'mes-layout',
+  components: { BarcodeScanerEvents },
   data() {
     return {
       mainContainer: 0
     }
   },
+  created() {
+    var barcodeScanerEvents = new BarcodeScanerEvents()
+    barcodeScanerEvents.initialize()
+
+    var me = this
+
+    document.addEventListener("onbarcodescaned", event => {
+      if(event.detail) {
+        var barcode = event.detail.code
+        if(me.$route.name == "MESLOGIN") {
+          Vue.prototype.$authentication.loginByQr(barcode).then(result => {
+          result && me.$router.replace({path: '/MES/tasks'})
+        }).catch(reason => {
+          me.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
+        });
+        }
+        var tasksPageState = me.$store.getters['mes/tasksPageState']
+        if(me.$route.name == "INSTALLATIONS" || (me.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
+          me.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: me.workCenter.code, batchBarcode: barcode, factId: 0 })
+        }
+      }
+    })
+  },
   computed: {
-    currentUser() {
-      return this.$store.state.authentication.currentUser
+    userData() {
+      return this.$store.state.user
     },
     mainContainerKey() {
       return this.$store.getters['mes/mainContainerKey']

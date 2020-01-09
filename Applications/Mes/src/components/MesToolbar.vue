@@ -20,14 +20,14 @@
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
       <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <v-autocomplete
           autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
           return-object
-          no-data-text="--- Рабочий центр отсутствует ---"
+          :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
           class="work-centers-select-input"
         ></v-autocomplete>
@@ -35,14 +35,14 @@
 
       <!-- Зафиксированый РЦ -->
       <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
       <!-- Информация Юзера -->
       <div class="user-info-desc">
         <span class="user-info-text">
-          {{currentUserData.UserName}}
+          {{userData.userName}}
         </span>
       </div>
 
@@ -57,42 +57,24 @@
 
 <script>
 
-import Vue from 'vue'
+import Init from './components/Init'
+import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
+
 export default {
   name: 'mes-toolbar',
-  created() {
-    var me = this,
-      fixedUuid = me.$router.options.params.fixedUuid,
-      cookiesUuid = me.$cookies.get('mesUuid'),
-      sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
-      uuid
-    if (fixedUuid) {
-      uuid = fixedUuid
-    } else if (cookiesUuid) {
-      uuid = cookiesUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else if (sessionStorageUuid) {
-      uuid = sessionStorageUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else {
-      uuid = this.generateUUID()
-      me.$router.push({ query: { fixedUuid: uuid }})
-    }
-    // eslint-disable-next-line
-    $cookies.set('mesUuid', uuid, '3y')
-    window.sessionStorage.setItem('mesUuid', uuid)
-    me.$store.dispatch('mes/initializeWorkCenter', uuid)
-    me.$store.dispatch('mes/initializeProperties')
-    me.$store.dispatch('formio/initializeTicket')
-    me.initializeSignalR()
-    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
-      me.currentUserData = currentUSer.CurrentUserData
-    })
+  components: {
+    Init,
+    UserPanel
   },
-  data() {
-    return { currentUserData: {} }
+  created() {
+    const init = new Init()
+    init.initialize()
+    init.initializeSignalR()
   },
   computed: {
+    userData() {
+      return this.$store.state.user || {}
+    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
@@ -105,9 +87,6 @@ export default {
     properties() {
       return this.$store.getters['mes/properties']
     },
-    userName() {
-      return Vue.prototype.$authentication.getCurrentUser()
-    },
     tasksPageState() {
       return this.$store.getters['mes/tasksPageState']
     },
@@ -116,45 +95,6 @@ export default {
     }
   },
   methods: {
-    async initializeSignalR() {
-      await this.$store.dispatch('mes/initializeTicket')
-      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.applySignalR, this.ticket)
-    },
-    applySignalR(msg) {
-      let data = JSON.parse(msg)
-      if (!data) {
-        return
-      }
-      switch (data.Payload.Action) {
-      case 'WorkCenterStateChanged':
-        var state = data.Payload.Payload['STATE'],
-          workCenterFixationData = this.workCenterFixationData
-        switch (state) {
-        case 0: //DOWN_TIME
-          workCenterFixationData.state = 'DOWN_TIME'
-          break
-        case 1: //BUSY
-          workCenterFixationData.state = 'BUSY'
-          break
-        case 2: //EMERGENCY
-          workCenterFixationData.state = 'EMERGENCY'
-          break
-        }
-        workCenterFixationData.description = data.Message
-        this.$store.commit('mes/setWorkCenterFixationData', workCenterFixationData)
-        break
-      case 'TaskStateChanged':
-        var workCenters = data.Payload.Payload['WORKCENTERCODES']
-        if (!workCenters || !this.workCenter) {
-          break
-        }
-        workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
-        if (workCenters.includes(this.workCenter.code)) {
-          this.$store.commit('mes/setObsoluteDataTask', true)
-        }
-        break
-      }
-    },
     async changeWorkCenter(newWorkCenter) {
       if (!newWorkCenter) {
         return
@@ -170,19 +110,6 @@ export default {
       this.$store.commit('mes/setWorkCenter', newWorkCenter)
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
-    },
-    generateUUID() { // Public Domain/MIT
-      var d = new Date().getTime()
-      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now() //use high-precision timer if available
-      }
-      var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-      })
-
-      return newGuid
     },
     refreshApp() {
       this.$router.go()

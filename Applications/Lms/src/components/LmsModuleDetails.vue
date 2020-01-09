@@ -1,7 +1,7 @@
 <template>
-	<v-container fluid px-0 my-4>
+	<v-container fluid pa-0 ma-0>
 		<!--MODULE HEADER-->
-		<v-layout  my-2>
+		<v-layout mb-4>
 			<v-flex id='modulesHeader'>
 				<v-card v-if="moduleData.data">
 					<v-layout wrap row justify-center>
@@ -58,8 +58,9 @@
 										<v-list-tile
 											v-for='lesson in moduleData.data.units'
 											:key='lesson.lessonGuid'
-											@click='$router.push({name: "LMSLESSON", params: {
+											@click='$router.push({name: "LMSMODULELESSON", params: {
 												moduleGuid: moduleGuid,
+                        moduleData: moduleData,
 												lessonGuid: lesson.lessonGuid,
 											}})'>
 											<v-list-tile-content class='px-2'>

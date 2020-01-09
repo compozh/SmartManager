@@ -59,6 +59,9 @@ FormHelper.getFormField = function (element, idx) {
   return formFields[idx];
 };
 
+FormHelper.getFormFieldById = function (element, fieldId) {
+  return this.getFormFields(element).find(field => field.id === fieldId);
+}
 
 /**
  * Get all constraints for a specific form field from the business object

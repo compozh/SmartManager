@@ -54,6 +54,8 @@
 		"SelectForm": "Select Form",
 		"EnterTaskParams": "Enter task params",
 		"SelectTaskCreationRule": "Select task creation rule",
+		"SelectProcess": "Select process",
+		"SelectDecisionTable": "Select decision table",
 		"Code": "Code",
 		"Designer": "Designer",
 		"Preview": "Preview",
@@ -101,7 +103,8 @@
 		"RequestError": "Failed to execute request",
 		"InputCodeForm": "Input code form",
 		"RequiredInputField": "Field is required",
-		"AccessError": "Failed to give access for {identity}"
+		"AccessError": "Failed to give access for {identity}",
+		"ElementsNotLoaded": "Failed to load element"
 	},
 	"enums": {
 		"AccessType": {
@@ -308,7 +311,6 @@
 		"Implementation": "Implementation",
 		"External": "External task",
 		"Expression": "Expression",
-		"Script": "Script",
 		"Connector": "Connector",
 		"DMN": "DMN",
 		"Topic": "Task indentifier",
@@ -334,6 +336,59 @@
 		"Task creation rule": "Task creation rule",
 		"Item description": "Item decription",
 
-		"Colorize": "Colorize"
-	}
+		"Condition": "Condition",
+		"Script": "Script",
+		"Script Format": "Script Format",
+		"Inline Script": "Inline Script",
+		"External Resource": "External Resource",
+
+		"Colorize": "Colorize",
+
+		"Called Element": "Called Element",
+		"Decision Ref": "Decision Ref",
+		"Binding": "Binding",
+		"Latest": "Latest",
+		"Version": "Version"
+	},
+	"formioForm": {
+        "complete": "Submission Complete",
+        "error": "Please fix the following errors before submitting.",
+        "required": "{{field}} is required",
+        "pattern": "{{field}} does not match the pattern {{pattern}}",
+        "minLength": "{{field}} must be longer than {{length}} characters.",
+        "maxLength": "{{field}} must be shorter than {{length}} characters.",
+        "minWords": "{{field}} must have more than {{length}} words.",
+        "maxWords": "{{field}} must have less than {{length}} words.",
+        "min": "{{field}} cannot be less than {{min}}.",
+        "max": "{{field}} cannot be greater than {{max}}.",
+        "maxDate": "{{field}} should not contain date after {{- maxDate}}",
+        "minDate": "{{field}} should not contain date before {{- minDate}}",
+        "invalid_email": "{{field}} must be a valid email.",
+        "invalid_url": "{{field}} must be a valid url.",
+        "invalid_regex": "{{field}} does not match the pattern {{regex}}.",
+        "invalid_date": "{{field}} is not a valid date.",
+        "invalid_day": "{{field}} is not a valid day.",
+        "mask": "{{field}} does not match the mask.",
+        "stripe": "{{stripe}}",
+        "month": "Month",
+        "day": "Day",
+        "year": "Year",
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December",
+        "next": "Next",
+        "previous": "Previous",
+        "cancel": "Cancel",
+        "submit": "Submit Form",
+        "Type to search" : "Type to search"
+    }
 }

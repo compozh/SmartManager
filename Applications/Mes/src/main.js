@@ -2,12 +2,12 @@
 import WebApps from '@it-enterprise/webappscore'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-import Authentication from '@it-enterprise/authentication'
-import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
 import '@it-enterprise/common/dist/common-components.css'
 
+import auth from '@it-enterprise/jwtauthentication'
+auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
 import 'material-design-icons-iconfont/dist/material-design-icons.css' // mdi icons
@@ -62,14 +62,12 @@ Vue.use(signalR)
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
-Vue.use(Authentication, { options: window.myConfig, dependencies })
-Vue.use(Router, { options: window.myConfig, dependencies })
-Vue.use(WebApps, { dependencies, options: window.myConfig })
+Vue.use(Router, { options: window.myConfig, dependencies }, () => auth.getToken())
+Vue.use(WebApps, { dependencies, options: window.myConfig }, () => auth.getToken())
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
-
-// Шина событий
-export const eventBus = new Vue()
+Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
@@ -126,7 +124,6 @@ async function start()   {
       vuetify: new Vuetify(opts)
     }
   })
-
 
 
   new Vue(appComponent).$mount('#app')

@@ -1,6 +1,4 @@
 import { MesApi } from '../api/mesApi'
-import Vue from 'vue'
-import  { routerDependencies } from '../router'
 
 const api = new MesApi()
 
@@ -19,6 +17,16 @@ export default {
       }
     })
   },
+
+  async initializeMobilityProperties({commit}) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        const result = await api.getMobilityPropertiesFromGql("MOBILITYWEB")
+        commit('setMobilityProperties', result)
+      }
+    })
+  },
+
   async initializeTicket({commit}) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -27,6 +35,7 @@ export default {
       }
     })
   },
+
   async initializeWorkCenter({ dispatch, commit, getters }, uuid, fetchPolicy) {
     var me = this
     await me.dispatch('mes/graphqlQueryWraper', {
@@ -59,6 +68,7 @@ export default {
       linearLoader: true
     })
   },
+
   async initializeTasks({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -71,6 +81,7 @@ export default {
       }
     })
   },
+
   async downloadDowntimes({ commit, getters }, { workCenterCode, dateTime }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -83,6 +94,7 @@ export default {
       }
     })
   },
+
   async downloadQualities({ commit, getters }, retrieveParams) {
     await this.dispatch('mes/graphqlQueryWraper', {
         action: async () => {
@@ -97,6 +109,35 @@ export default {
       }
     )
   },
+
+  async downloadDocuments({ commit, getters }, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let documents = await api.getDocumentsFromGql(retrieveParams)
+          if (getters.documents.length) {
+            commit('setDocuments', getters.documents.concat(documents))
+          } else {
+            commit('setDocuments', documents)
+            commit('setInitializeDocuments', true)
+          }
+        }
+      }
+    )
+  },
+
+  async applyDocumentMethod ({ dispatch, commit }, processMethodParamsInput ) {
+    return await dispatch('graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.applyDocumentMethod(processMethodParamsInput)
+      },
+      successAction: (result) => {
+        if (result.reRead){
+          commit('updateDocument')
+        }
+      },
+    })
+  },
+
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -105,6 +146,7 @@ export default {
       }
     })
   },
+
   async removeInstallation({ commit }, installation) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
@@ -114,6 +156,7 @@ export default {
       successAction: async () => { commit('removeInstallation', installation) }
     })
   },
+
   async registerMaterialInstallation({ commit }, { workCenterCode, batchBarcode, factId }) {
     var me = this
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
@@ -125,6 +168,7 @@ export default {
       linearLoader: true
     })
   },
+
   async registerProduction({ commit, getters }, { workCenter, task }) {
     var me = this,
       productionRegistrationParam = {
@@ -151,6 +195,7 @@ export default {
       linearLoader: true
     })
   },
+
   async fixWorkCenterForWorker({ commit }, { workCenter, workerCode }) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
@@ -160,6 +205,7 @@ export default {
       linearLoader: true
     })
   },
+
   async cancelBeginRegistration({ commit, getters }, task) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
@@ -172,6 +218,7 @@ export default {
       linearLoader: true
     })
   },
+
   async initializeWorkCenterProductionEvents({ commit }, { workCenterCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -181,6 +228,7 @@ export default {
       linearLoader: true
     })
   },
+
   async initializeUsersProductionEvents({ commit }, { workerCode, fetchPolicy }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -190,6 +238,7 @@ export default {
       linearLoader: true
     })
   },
+
   async deleteProduction({ commit }, production) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -199,6 +248,7 @@ export default {
       successAction: async () => { commit('removeProduction', production) },
     })
   },
+
   async printProduction({ commit }, production) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -209,6 +259,7 @@ export default {
       successAction: async () => { commit('printProduction', production) },
     })
   },
+
   async setMaterialProduction({ commit, getters }, production) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -218,50 +269,26 @@ export default {
       successAction: async () => { commit('setMaterialProduction', production) },
     })
   },
-  async createProductionFormio({ commit }, { formCode, properties }) {
+
+  async createProductionFormio({ commit }, { formCode, properties, deviceSizeType }) {
+    deviceSizeType = deviceSizeType || 'lg'
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.getProductionFormioFromGql(formCode, properties)
+        const res = await api.getProductionFormioFromGql(formCode, properties, deviceSizeType)
         return res
       },
       successAction: async result => { commit('setProductionFormio', result) },
       linearLoader: true
     })
   },
-  async initializeCreateDowntimeFormio({ commit }, workCenter) {
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code })
-      },
-      successAction: async result => { commit('setCreateDowntimeFormio', result) },
-    })
-  },
-  async initializeDowntimeFormio({ commit }, { workCenter, downtimeId }) {
-    commit('resetDowntimeFormio')
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.getDowntimeFormioFromGql(workCenter.downtimeRegistrationFormCode, { workCenterCode: workCenter.code , id: downtimeId }, 'network-only')
-      },
-      successAction: async result => { commit('setDowntimeFormio', result) },
-      linearLoader: true
-    })
-  },
-  async initializeQualityFormio({ commit }, { formCode, workCenter, qualityId }) {
-    commit('resetQualityFormio')
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-      queryAction: async () => {
-        return await api.getQualityFormioFromGql(formCode, { workCenterCode: workCenter.code , id: qualityId }, 'network-only')
-      },
-      successAction: async result => { commit('setQualityFormio', result) },
-      linearLoader: true
-    })
-  },
+
   toggleMenuMiniMode({getters, commit}) {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
-  async productionFormIoSubmit({ commit }, { workCenter, submission, task }) {
+
+  async productionFormIoSubmit({ commit }, { workCenter, submission, task, message }) {
     var me = this
-    commit('setDialogLinearLoaderMessage', 'Регистрация выработки')
+    commit('setDialogLinearLoaderMessage', message)
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
 
@@ -279,55 +306,11 @@ export default {
     })
     commit('closeDialogLinearLoader')
   },
-  async downtimeFormIoSubmit({ commit }, { workCenter, submission, successAction }) {
-     var me = this,
-        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
-     commit('setDialogLinearLoaderMessage', 'Регистрация простоя')
-     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-        queryAction: async () => {
-          const res = await api.downtimeFormioSubmitGql(workCenter.downtimeRegistrationFormCode, submission, {
-            workCenterCode: workCenter.code,
-          })
-          return res
-        },
-        successAction: async () => {
-          commit('setDowntimes', [])
-          me.dispatch('mes/downloadDowntimes', { workCenterCode: workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
-          if(successAction) {
-            successAction();
-          }
-        }
-     })
-     commit('closeDialogLinearLoader')
-  },
-  async qualityFormIoSubmit({ commit, getters }, { formCode, workCenter, submission, quality, successAction }) {
-    var me = this,
-       currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
-       qualityProcessType = getters.properties.qualityProcessType
-    commit('setDialogLinearLoaderMessage', 'Регистрация качества')
-    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
-       queryAction: async () => {
-         const res = await api.qualityFormioSubmitGql( formCode, submission, {
-           workCenterCode: workCenter.code,
-           id: quality.id
-         })
-         return res
-       },
-       successAction: async () => {
-         commit('setQualities', [])
-         commit('setInitializeQualities', false)
-         me.dispatch('mes/downloadQualities', { processTypeCode: qualityProcessType, searchDateTime: currentDate, direction: 1 })
-         if(successAction) {
-           successAction();
-         }
-       }
-    })
-    commit('closeDialogLinearLoader')
- },
+
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },
-  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction, successAction, linearLoader, actionAfterQuery }) {
+  async graphqlQueryWithRequestResultWraper({ commit, dispatch}, { queryAction, successAction, linearLoader, actionAfterQuery }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -350,9 +333,9 @@ export default {
         actionAfterQuery(result)
       }
     } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+      if (e.networkError && e.networkError.statusCode === 401) {
+        debugger
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -362,7 +345,7 @@ export default {
       commit('setLinearLoader', false)
     }
   },
-  async graphqlQueryWraper({ commit }, { action, linearLoader }) {
+  async graphqlQueryWraper({ commit, dispatch }, { action, linearLoader }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -373,8 +356,7 @@ export default {
       result = await action()
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -385,6 +367,7 @@ export default {
     }
     return result
   },
+
   selectTaskAfterRefresh({ getters, commit }) {
     let selectedTask = getters.selectedTask,
       tasks = getters.tasks
@@ -398,6 +381,7 @@ export default {
       }
     }
   },
+
   async unfixWorkCenterForWorker({ commit }, fixationId) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -405,11 +389,20 @@ export default {
       }
     })
   },
+
   async getFixationWorkCenterForWorker ({ dispatch, commit }, { workerCode, fetchPolicy } ) {
     return await dispatch('graphqlQueryWraper', {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
+    })
+  },
+
+  async verifyCamera({ commit }) {
+    await navigator.mediaDevices.getUserMedia({video: true}).then(function() {
+      return commit('setCameraAvailability', true)
+    }).catch(function() {
+      return commit('setCameraAvailability', false)
     })
   }
 }

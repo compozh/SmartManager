@@ -154,7 +154,8 @@ export default class EntryFactory {
         },
         removeExtensionElement: (element) => {
           execute(options.removeExtensionElement(element), this.commandStack);
-        }
+        },
+        resetOnElementChanged: true
       },
       style: getDefaultStyle(options)
     };
@@ -216,7 +217,7 @@ function get(options, element) {
   if (options.get) {
     return options.get(element);
   } else {
-    return getBusinessObject(element)[options.model];
+    return getBusinessObject(element).get(options.model);
   }
 }
 

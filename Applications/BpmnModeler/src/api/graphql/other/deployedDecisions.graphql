@@ -1,0 +1,11 @@
+{
+  bpmnquery {
+    deployedDecisions {
+      deployId,
+      decDefId,
+      decDefKey,
+      decDefVer,
+      decDefName
+    }
+  }
+}
