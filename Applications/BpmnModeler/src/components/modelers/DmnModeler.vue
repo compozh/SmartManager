@@ -43,7 +43,6 @@ import 'dmn-js/dist/assets/dmn-font/css/dmn.css';
 import 'dmn-js/dist/assets/dmn-font/css/dmn-embedded.css';
 import 'dmn-js/dist/assets/dmn-font/css/dmn-codes.css';
 import 'dmn-js/dist/assets/dmn-font/css/animation.css';
-import 'dmn-js-properties-panel/dist/assets/dmn-js-properties-panel.css';
 
 import { debounce } from 'throttle-debounce';
 import ModelerLayout from './ModelerLayout';
