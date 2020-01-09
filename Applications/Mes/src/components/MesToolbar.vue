@@ -57,9 +57,7 @@
 
 <script>
 
-import Vue from 'vue'
 import Init from './components/Init'
-import UuidHelper from './components/UuidHelper'
 import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
 
 export default {
@@ -69,13 +67,9 @@ export default {
     UserPanel
   },
   created() {
-    var init = new Init(),
-      me = this
+    const init = new Init()
     init.initialize()
     init.initializeSignalR()
-    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
-      me.currentUserData = currentUSer.CurrentUserData
-    })
   },
   computed: {
     userData() {
