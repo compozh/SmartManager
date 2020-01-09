@@ -1,11 +1,11 @@
 export default class BarcodeScanerEvents {
-    
+
     constructor() {
         this.timeoutHandler = 0
         this.inputString = ''
         this.charToUpper = false
     }
-    
+
     initialize() {
         var me = this
         document.addEventListener('keyup', event => me.onKeyup(event))
@@ -33,7 +33,7 @@ export default class BarcodeScanerEvents {
             case 0:
                 break;
             default:
-                var code = event.key.length > 1 ? '' : event.key
+                var code = event.key && event.key.length > 1 ? event.key : ''
                 if(event.which >= 65 && event.which <= 90) {
                     code = String.fromCharCode(event.which)
                 }
@@ -44,7 +44,7 @@ export default class BarcodeScanerEvents {
                             break
                         case '-':
                             code = '_'
-                            break                         
+                            break
                     }
                 } else {
                     code = code.toLocaleLowerCase()
@@ -56,15 +56,15 @@ export default class BarcodeScanerEvents {
 
         me.timeoutHandler = setTimeout(() => me.handleInputEvent(), 20)
     }
-    
+
     handleInputEvent() {
         var me = this
-        
+
         if (me.inputString.length <= 3) {
             me.inputString = ''
             return
         }
-        
+
         me.callBarcodescanedEvent(me.inputString)
         me.inputString = ''
     }

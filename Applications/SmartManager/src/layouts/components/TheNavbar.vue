@@ -207,17 +207,17 @@
         <div class="the-navbar__user-meta flex items-center">
           <div class="text-right leading-tight
                       xl:block lg:hidden md:hidden sm:hidden xs:hidden">
-            <p class="font-semibold">{{ currentUserName }}</p>
+            <p class="font-semibold">{{ userName }}</p>
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
               <vs-avatar class="rounded-full shadow-md cursor-pointer block m-0 hover:shadow-2xl"
-                         :src="currentUserPhoto"
+                         :src="userPhoto"
                          size="40px"/>
             </div>
             <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
               <div class="ml-3 leading-tight xl:hidden">
-                <p class="font-semibold">{{ currentUserName }}</p>
+                <p class="font-semibold">{{ userName }}</p>
               </div>
 
               <vs-dropdown-group vs-collapse
@@ -249,7 +249,8 @@
           <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
             <vs-dropdown-item v-for="lang in localizations"
                               :key="lang.code"
-                              @click="updateLocale(lang.code)">
+                              @click="updateLocale(lang.code)"
+                              :class="{'font-semibold': lang.code === getCurrentLocaleData.flag}">
               {{lang.flag.toUpperCase()}} ({{lang.name}})
             </vs-dropdown-item>
           </vs-dropdown-menu>
@@ -277,7 +278,6 @@
 import templateConfig from '@/templateConfig'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import 'swiper/dist/css/swiper.min.css'
-import auth from '@/api/auth/auth'
 import {eventBus} from '@/main'
 import {mapGetters} from 'vuex'
 
@@ -309,9 +309,9 @@ export default {
   computed: {
     // PROFILE
     ...mapGetters('auth', [
-      'currentUserId',
-      'currentUserName',
-      'currentUserPhoto',
+      'userId',
+      'userName',
+      'userPhoto',
       'delegatedRights'
     ]),
     task() {
@@ -374,12 +374,12 @@ export default {
     allowedCaseEdit() {
       return this.$route.name === 'case-view'
           && this.caseStatus === ''
-          && this.currentUserId === this.caseItem.userAdd
+          && this.userId === this.caseItem.userAdd
     },
     allowedTaskEdit() {
       return this.$route.name === 'task-view'
           && this.internalTaskInWork
-          && this.currentUserId === this.task.declarerId
+          && this.userId === this.task.declarerId
     },
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonBack() {
@@ -492,33 +492,8 @@ export default {
     logout() {
       this.$store.dispatch('auth/logout')
     },
-    async applyDelegatedRights(userId) {
-      try {
-        const result = await auth.applyDelegatedRights(userId)
-        if (result) {
-          this.$vs.notify({
-            title: this.$t('notify.applyRightsTittle'),
-            text: this.$t('notify.applyRightsSuccess'),
-            color: 'success'
-          })
-          if (this.$route.name !== 'task-list') {
-            await this.$router.push('/')
-          }
-          window.location.reload()
-        } else {
-          this.$vs.notify({
-            title: this.$t('notify.applyRightsTittle'),
-            text: this.$t('notify.applyRightsFail'),
-            color: 'warning'
-          })
-        }
-      } catch (e) {
-        this.$vs.notify({
-          title: this.$t('notify.applyRightsTittle'),
-          text: this.$t('notify.applyRightsError'),
-          color: 'danger'
-        })
-      }
+    applyDelegatedRights(userId) {
+      this.$store.dispatch('auth/applyDelegatedRights', userId)
     },
     setDelegation() {
       console.log('Делегировать права',)

@@ -1,6 +1,4 @@
 import { MesApi } from '../api/mesApi'
-import Vue from 'vue'
-import  { routerDependencies } from '../router'
 
 const api = new MesApi()
 
@@ -312,8 +310,7 @@ export default {
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },
-
-  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction, successAction, linearLoader, actionAfterQuery }) {
+  async graphqlQueryWithRequestResultWraper({ commit, dispatch}, { queryAction, successAction, linearLoader, actionAfterQuery }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -336,9 +333,9 @@ export default {
         actionAfterQuery(result)
       }
     } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+      if (e.networkError && e.networkError.statusCode === 401) {
+        debugger
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -348,8 +345,7 @@ export default {
       commit('setLinearLoader', false)
     }
   },
-
-  async graphqlQueryWraper({ commit }, { action, linearLoader }) {
+  async graphqlQueryWraper({ commit, dispatch }, { action, linearLoader }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -360,8 +356,7 @@ export default {
       result = await action()
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)

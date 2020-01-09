@@ -1,6 +1,4 @@
 import { FormioApi } from '../api/formioApi'
-import Vue from 'vue'
-import  { routerDependencies } from '../../router'
 
 const api = new FormioApi()
 /* eslint-disable */
@@ -52,7 +50,7 @@ export default {
       }
     })
   },
-  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction }) {
+  async graphqlQueryWithRequestResultWraper({ commit, dispatch }, { queryAction }) {
     commit('closeSnackbar')
     try {
       let result = await queryAction()
@@ -65,9 +63,8 @@ export default {
       }
       return result
     } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        routerDependencies.router.push({name: 'LOGIN'})
+      if (e.networkError && e.networkError.statusCode === 401) {
+        await dispatch('auth/logout')
       }
       else {
         commit('setSnackbarErrorMessage', e.message)

@@ -55,12 +55,12 @@
 </template>
 
 <script>
-//import auth from '@/api/auth/auth'
 import templateConfig from '@/templateConfig'
 
 export default {
   data() {
     return {
+      code: '',
       login: '',
       password: '',
       checkbox_remember_me: false,
@@ -72,21 +72,23 @@ export default {
       return !this.errors.any() && this.login !== '' && this.password !== ''
     }
   },
+  created() {
+    this.$store.dispatch('auth/logout')
+  },
   methods: {
     loginMethod() {
       // Loading
       this.$vs.loading()
 
       const payload = {
-        checkbox_remember_me: this.checkbox_remember_me,
-        userDetails: {
-          email: this.login,
-          password: this.password
-        },
-        notify: this.$vs.notify,
-        closeAnimation: this.$vs.loading.close
+        login: this.login,
+        password: this.password,
+        rememberMe: this.checkbox_remember_me,
       }
       this.$store.dispatch('auth/login', payload)
+    },
+    loginByCode() {
+      this.$store.dispatch('auth/loginByCode', this.code)
     }
   }
 }
