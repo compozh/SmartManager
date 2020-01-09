@@ -18,9 +18,7 @@
           <span>{{ view.element.name || view.element.id }}</span>
         </v-tab>
       </v-tabs>
-      <div class="dmn-modeler-container">
-        <div class="workflow-modeler" ref="container">
-        </div>
+      <div class="dmn-modeler-container" ref="container">
       </div>
     </template>
     <template #propertiesPanel>
@@ -250,7 +248,8 @@ export default {
 <style>
 .dmn-modeler-container {
   width: 100%;
-  height: calc(100% - 40px);
+  height: 100%;
+  position: absolute;
 }
 .dmn-literal-expression-container .powered-by-logo,
 .dmn-decision-table-container .powered-by-logo {
