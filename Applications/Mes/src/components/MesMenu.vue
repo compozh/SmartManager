@@ -3,14 +3,15 @@
 
     <!-- Лого -->
     <v-list-item row v-if="$vuetify.breakpoint.smAndDown" class="logo">
-      <router-link tag="h1" :to="{ name:'home', path: '/'}">
+      <router-link tag="h1" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">
         <a class="mes-title-link">MES</a>
       </router-link>
       <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
     </v-list-item>
 
     <!-- Пункт меню -->
-    <v-list-item v-for="(route, i) in links" :key="route.id + i" :to="{ name: route.id, params: { id:  route.params}}" @click="toggleMenuMode">
+    <v-list-item v-for="(route, i) in links" :key="route.id + i"  @click="toggleMenuMode"
+      :to="{ name: route.id, params: route.name == 'DYNAMIC'?  { id:  route.params} : {}, query : {fixedUuid: $route.query.fixedUuid}}">
       <v-list-item-action @click="reloadPage(route)">
         <v-icon large>{{route.image}}</v-icon>
         <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' >refresh</v-icon>
@@ -18,7 +19,7 @@
 
       <!-- Описание пункта меню -->
       <v-list-item-content  @click="reloadPage(route)">
-        <v-list-item-title >{{ route.text }}</v-list-item-title>
+        <v-list-item-title style="white-space: normal;">{{ $t(route.text) }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -78,7 +79,7 @@ export default {
   .v-navigation-drawer__content .v-list-item__title {
     text-align: start;
     font-size: 14px;
-    height: 24px;
+    /* height: 24px; */
     line-height: 24px;
     font-weight: 500;
   }

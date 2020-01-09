@@ -1,13 +1,15 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center justify-space-beetwen class="main-toolbar">
+    <v-layout row align-center justify-space-beetwen class="main-toolbar pl-4">
 
       <!-- Лого -->
       <v-flex row v-if="!searchWorkCenter">
-        <router-link tag="h1" :to="{ name:'home', path: '/'}">
+        <router-link tag="h1" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="properties && properties.brandName && $vuetify.breakpoint.mdAndUp" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
+        <span v-if="properties && properties.brandName && $vuetify.breakpoint.smAndUp" class="brand-name" @click="refreshApp">
+          {{properties.brandName}}
+        </span>
       </v-flex>
 
       <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.smAndDown && !searchWorkCenter && currentUserData.UserName" icon  @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">

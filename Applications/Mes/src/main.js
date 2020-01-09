@@ -20,8 +20,7 @@ import axios from 'axios'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
-import './scss/main.scss'
-// import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import App from './App.vue'
 
 // apollo

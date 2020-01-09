@@ -2,7 +2,7 @@
 	<v-container>
 		<v-card>
       <v-card-title>
-        Hello :) You are on the main page
+         Домашняя страница
       </v-card-title>
     </v-card>
 	</v-container>

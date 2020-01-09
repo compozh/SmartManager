@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from './store'
+import cookies from 'vue-cookies'
+
 Vue.use(VueRouter)
 
+let  cookiesUuid = cookies.get('mesUuid'),
+  sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
 
 export const router = new VueRouter({
   mode: 'history',
@@ -13,7 +16,6 @@ export const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'MESROOT',
       component: () => import('./components/MesLayout.vue'),
       children:  [
         {
@@ -35,13 +37,13 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
-          text: "Задания",
+          text: "mes.menu.tasks",
           sort: "1",
           image: "assignment",
         },
         { 
           name: 'QUALITY',
-          path: "quality/:id?",
+          path: "quality/",
           id: "QUALITY",
           component: () => import('@/components/pages/Quality.vue'),
           meta: {
@@ -49,14 +51,13 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
-          text: "Качество",
+          text: "mes.menu.quality",
           sort: "5",
           image: "bar_chart",
-          // UniqId: "65f12887-f58d-4986-903a-b7742901c394",
         },
         {
           name: 'DOWNTIMES',
-          path: 'downtimes/:id?',
+          path: 'downtimes/',
           id: "DOWNTIMES",
           component: () => import('@/components/pages/Downtimes.vue'),
           meta: {
@@ -64,14 +65,13 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
-          text: "Простои",
+          text: "mes.menu.downtimes",
           sort: "4",
           image: "warning",
-          // UniqId: "580d530e-8eaf-4457-9b18-d3ca4d701893"
         },
         {
           name: 'INSTALLATIONS',
-          path: 'installations/:id?',
+          path: 'installations/',
           id: "INSTALLATIONS",
           component: () => import('@/components/pages/Installations.vue'),
           meta: {
@@ -79,10 +79,9 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
-          text: "Установка материалов",
+          text: "mes.menu.installations",
           sort: "3",
           image: "archive",
-          // UniqId: "7e30a0ea-4339-4598-a51e-387978de535b",
         },
         {
           name: 'PRODUCTIONS',
@@ -94,20 +93,16 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
-          text: "Журнал работ",
+          text: "mes.menu.productions",
           sort: "2",
           image: "chrome_reader_mode",
-          // UniqId: "adf35957-e0f6-4543-9787-d6159c413c4d",
         },
         {
           path: '/dynamic/:id',
           name: 'DYNAMIC',
           id: "DYNAMIC",
-      
           component : () => import('@/components/pages/DynamicPage.vue'),
-          // image: 'description',
           caseSensitive: false,
-      
         },
         {
           path: '/',
@@ -116,7 +111,7 @@ export const router = new VueRouter({
         },
         {
           path: 'error/:status_code',
-          name: 'ERRORr',
+          name: 'ERROR',
           component: () => import('@/components/pages/Error.vue'),
           meta: {
             rule: 'isPublic',
@@ -135,6 +130,9 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  if(from.query.to && to.name == from.name) {
+    return next({ name: from.query.to, query: {fixedUuid: from.query.fixedUuid || cookiesUuid || sessionStorageUuid }} )
+  }
   Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
     if(
       from.path == to.path 
@@ -153,7 +151,7 @@ router.beforeEach((to, from, next) => {
     ) {
       return next()
     }
-    router.push({ name: 'MESLOGIN', params:{ routeToBack: from.path }} )
+    router.push({ name: 'MESLOGIN', query: { to: to.path , fixedUuid: cookiesUuid}} )
   })
 })
 export default router

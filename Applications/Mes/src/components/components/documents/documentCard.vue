@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     changeCurrentDocument(newDocument) {
+      this.$emit('changeDynamicTableView', false)
       this.$emit('changeCurrentDocument', newDocument)
     },
     converDate(date) {

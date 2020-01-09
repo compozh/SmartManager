@@ -26,7 +26,8 @@
     <!-- Выплывающие подсказки -->
     <template v-if="snackbar.visible">
       <v-snackbar
-        :top="true"
+        :top="false"
+        style="max-height: 100px; overflow: auto"
         :multi-line="true"
         :timeout="5000"
         :color=snackbar.type
@@ -92,7 +93,7 @@ export default {
         var barcode = event.detail.code
         if(me.$route.name == "MESLOGIN") {
           Vue.prototype.$authentication.loginByQr(barcode).then(result => {
-          result && me.$router.replace({path: '/MES/tasks'})
+          result && me.$router.replace({path: '/tasks'})
         }).catch(reason => {
           me.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
         });
@@ -233,15 +234,16 @@ export default {
   .grid-item-data {
     font-size: 14px;
   }
-  /* .v-toolbar__content {
-    padding: 0 24px;
-  } */
+  .v-toolbar__content {
+    padding: 0 12px;
+  }
   .v-toolbar__content .v-btn.v-btn--icon.v-size--default, .v-toolbar__extension .v-btn.v-btn--icon.v-size--default {
     height: 36px;
     width: 36px;
   }
   .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
-    margin-left: -6px !important;
+    /* margin-right: 10px !important; */
+    margin: 0 !important;
   }
   .v-dialog>.v-card>.v-card__text {
     padding: 16px;

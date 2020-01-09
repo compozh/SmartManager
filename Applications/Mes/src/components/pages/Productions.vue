@@ -24,12 +24,6 @@ export default {
   created() {
     this.initialize()
   },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
-      return
-    }
-  },
   computed: {
     initialWorkCenter() {
       return this.$store.getters['mes/initialWorkCenter']

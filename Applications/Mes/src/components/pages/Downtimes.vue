@@ -47,11 +47,6 @@ export default {
       dowtimesTableView: true
     }
   },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
-    }
-  },
   created() {
     this.initialize()
   },

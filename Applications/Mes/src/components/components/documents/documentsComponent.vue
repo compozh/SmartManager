@@ -18,6 +18,7 @@
         <div class="documents-list-block-content" @scroll.passive="onScroll">
           <mes-document-cards
           @changeCurrentDocument=changeCurrentDocument
+          @changeDynamicTableView=changeDynamicTableView
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
           />
@@ -56,6 +57,9 @@ export default {
     }
   },
   methods: {
+    changeDynamicTableView() {
+      this.$emit('changeDynamicTableView', false)
+    },
     documentSearchSubmit(e){
       this.$emit('initialize')
     },

@@ -26,7 +26,7 @@
             v-model="filterValue"
             clearable
           ></v-text-field>
-          <vue-pull-refresh :on-refresh="onRefresh">
+          <vue-pull-refresh :on-refresh="onRefresh" @touchstart.prevent="$vuetify.breakpoint.smAndDown ? '' : onRefresh" >
             <div class="tasks-list-block-content">
 
               <mes-task-cards
@@ -112,10 +112,12 @@ export default {
       return tasks.length
     }, 
     onRefresh() {
+      debugger
+      if(this.$vuetify.breakpoint.mdAndUp) {
+        return
+      }
       return new Promise( async (resolve, reject) => {
-        
         this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code }).then(()=>{
-          
           this.$store.commit('mes/setObsoluteDataTask', false)
           resolve()
         })
@@ -124,7 +126,9 @@ export default {
   },
   mounted() {
     let refreshLabel = document.querySelector('.pull-down-content--label')
-    refreshLabel.innerText = this.$t('mes.labels.Wait')
+    let refreshHeader = document.querySelector('.pull-down-header')
+    refreshHeader.style.display = this.$vuetify.breakpoint.smAndDown ? 'block' :  'none'
+    refreshLabel.innerText = ''
   }
 }
 </script>

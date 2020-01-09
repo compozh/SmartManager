@@ -79,12 +79,13 @@ export default class Init {
       }
 
       preparePages(scope) {
-        if (!store.getters['mes/mobilityProperties'] ) {
-          return []
-        }
         
-        var dynamicPages = []
-        store.getters['mes/mobilityProperties'].processesProperties.forEach(page => {
+        let dynamic  = store.getters['mes/mobilityProperties']
+        let links = router.options.routes[0].children
+
+        if ( dynamic ) {
+           var dynamicPages = []
+           dynamic.processesProperties.forEach(page => {
             let child = {}
             child.name = 'DYNAMIC'
             child.params = page.id.toLowerCase()
@@ -95,9 +96,8 @@ export default class Init {
             child.image = 'description'
             dynamicPages.push(child)
         })
-
-        let links = router.options.routes[0].children
-        links =  links.concat(dynamicPages)
+          links =  links.concat(dynamicPages)
+        }
 
         var pages = []
         for (let page of links) {
@@ -109,10 +109,16 @@ export default class Init {
             case 'ONLY_INSTALLATION':
               if (page.id == 'INSTALLATIONS') {
                 pages.push(page)
+                if(page.name != scope.$route.name && scope.$route.name != 'ERROR' ) {
+                  router.replace({path: page.path})
+                }
               }
               break
             case 'ONLY_QUALITY':
               if (page.id == 'QUALITY') {
+                if(page.name != scope.$route.name && scope.$route.name != 'ERROR' ) {
+                  router.replace({path: page.path})
+                }
                 pages.push(page)
               }
               break
@@ -120,21 +126,6 @@ export default class Init {
           }
         }
 
-        if (store.getters['mes/workCenter'] && scope.$route.path.replace('/', '').toLowerCase() == 'mes') {
-          var pagePath = ''
-          switch (store.getters['mes/workCenter'].accessPages) {
-          case 'ALL_PAGES':
-            pagePath = '/MES/tasks'
-            break
-          case 'ONLY_INSTALLATION':
-            pagePath = '/MES/installations'
-            break
-          case 'ONLY_QUALITY':
-            pagePath = '/MES/quality'
-            break
-          }
-          router.replace({path: pagePath})
-        }
         pages = pages.sort((a,b) => {
           return a.sort > b.sort ? 1 : (a.sort == b.sort ? 0 : -1)
         })

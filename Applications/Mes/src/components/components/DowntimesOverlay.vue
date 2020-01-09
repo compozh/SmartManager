@@ -58,7 +58,7 @@ export default {
     },
     initializeCreateDowntimeFormio() {
       var me = this,
-        workCenter = this.$parent.workCenter,
+        workCenter = this.workCenter,
         formCode = workCenter.downtimeRegistrationFormCode,
         properties = { RCENTR: workCenter.code },
         fetchPolicy = 'network-only',
