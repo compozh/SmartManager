@@ -58,37 +58,20 @@
 <script>
 
 import Vue from 'vue'
+import Init from './components/Init'
+import UuidHelper from './components/UuidHelper'
+
 export default {
   name: 'mes-toolbar',
+  components: { Init },
   created() {
-    var me = this,
-      fixedUuid = me.$router.options.params.fixedUuid,
-      cookiesUuid = me.$cookies.get('mesUuid'),
-      sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
-      uuid
-    if (fixedUuid) {
-      uuid = fixedUuid
-    } else if (cookiesUuid) {
-      uuid = cookiesUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else if (sessionStorageUuid) {
-      uuid = sessionStorageUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else {
-      uuid = this.generateUUID()
-      me.$router.push({ query: { fixedUuid: uuid }})
-    }
-    // eslint-disable-next-line
-    $cookies.set('mesUuid', uuid, '3y')
-    window.sessionStorage.setItem('mesUuid', uuid)
-    me.$store.dispatch('mes/initializeWorkCenter', uuid)
-    me.$store.dispatch('mes/initializeProperties')
-    me.$store.dispatch('formio/initializeTicket')
-    me.$store.dispatch('mes/initializeDynamicPages')
-    me.initializeSignalR()
+    var init = new Init(),
+      me = this
+    init.initialize()
+    init.initializeSignalR()
     Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
       me.currentUserData = currentUSer.CurrentUserData
-    })
+    })    
   },
   data() {
     return { currentUserData: {} }
@@ -117,45 +100,6 @@ export default {
     }
   },
   methods: {
-    async initializeSignalR() {
-      await this.$store.dispatch('mes/initializeTicket')
-      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.applySignalR, this.ticket)
-    },
-    applySignalR(msg) {
-      let data = JSON.parse(msg)
-      if (!data) {
-        return
-      }
-      switch (data.Payload.Action) {
-      case 'WorkCenterStateChanged':
-        var state = data.Payload.Payload['STATE'],
-          workCenterFixationData = this.workCenterFixationData
-        switch (state) {
-        case 0: //DOWN_TIME
-          workCenterFixationData.state = 'DOWN_TIME'
-          break
-        case 1: //BUSY
-          workCenterFixationData.state = 'BUSY'
-          break
-        case 2: //EMERGENCY
-          workCenterFixationData.state = 'EMERGENCY'
-          break
-        }
-        workCenterFixationData.description = data.Message
-        this.$store.commit('mes/setWorkCenterFixationData', workCenterFixationData)
-        break
-      case 'TaskStateChanged':
-        var workCenters = data.Payload.Payload['WORKCENTERCODES']
-        if (!workCenters || !this.workCenter) {
-          break
-        }
-        workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
-        if (workCenters.includes(this.workCenter.code)) {
-          this.$store.commit('mes/setObsoluteDataTask', true)
-        }
-        break
-      }
-    },
     async changeWorkCenter(newWorkCenter) {
       if (!newWorkCenter) {
         return
@@ -171,19 +115,6 @@ export default {
       this.$store.commit('mes/setWorkCenter', newWorkCenter)
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
-    },
-    generateUUID() { // Public Domain/MIT
-      var d = new Date().getTime()
-      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now() //use high-precision timer if available
-      }
-      var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-      })
-
-      return newGuid
     },
     refreshApp() {
       this.$router.go()

@@ -58,8 +58,9 @@
 										<v-list-tile
 											v-for='lesson in moduleData.data.units'
 											:key='lesson.lessonGuid'
-											@click='$router.push({name: "LMSLESSON", params: {
+											@click='$router.push({name: "LMSMODULELESSON", params: {
 												moduleGuid: moduleGuid,
+                        moduleData: moduleData,
 												lessonGuid: lesson.lessonGuid,
 											}})'>
 											<v-list-tile-content class='px-2'>

@@ -20,11 +20,11 @@ export default {
     })
   },
 
-  async initializeDynamicPages({commit}) {
+  async initializeMobilityProperties({commit}) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
-        const result = await api.getDynamicPagesFromGql("MOBILITYWEB")
-        commit('setDynamicPages', result)
+        const result = await api.getMobilityPropertiesFromGql("MOBILITYWEB")
+        commit('setMobilityProperties', result)
       }
     })
   },
@@ -125,6 +125,19 @@ export default {
         }
       }
     )
+  },
+
+  async applyDocumentMethod ({ dispatch, commit }, processMethodParamsInput ) {
+    return await dispatch('graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.applyDocumentMethod(processMethodParamsInput)
+      },
+      successAction: (result) => {
+        if (result.reRead){
+          commit('updateDocument')
+        }
+      },
+    })
   },
 
   async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
@@ -259,10 +272,11 @@ export default {
     })
   },
 
-  async createProductionFormio({ commit }, { formCode, properties }) {
+  async createProductionFormio({ commit }, { formCode, properties, deviceSizeType }) {
+    deviceSizeType = deviceSizeType || 'lg'
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.getProductionFormioFromGql(formCode, properties)
+        const res = await api.getProductionFormioFromGql(formCode, properties, deviceSizeType)
         return res
       },
       successAction: async result => { commit('setProductionFormio', result) },
@@ -386,6 +400,14 @@ export default {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
       }
+    })
+  },
+
+  async verifyCamera({ commit }) {
+    await navigator.mediaDevices.getUserMedia({video: true}).then(function() {
+      return commit('setCameraAvailability', true)
+    }).catch(function() {
+      return commit('setCameraAvailability', false)
     })
   }
 }

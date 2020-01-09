@@ -25,8 +25,8 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
-  setDynamicPages(state, dynamicPages) {
-    state.dynamicPages = dynamicPages
+  setMobilityProperties(state, mobilityProperties) {
+    state.mobilityProperties = mobilityProperties
   },
   setUserName(state, userName) {
     state.userName = userName
@@ -115,6 +115,9 @@ export default {
   changeMainContainerKey(state) {
     state.mainContainerKey += 1
   },
+  updateDocument(state){
+    state.documentKey += 1
+  },
   setMaterialProduction(state, production) {
     state.setMaterialProduction = production
   },
@@ -143,6 +146,9 @@ export default {
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
   },
+  setDynamicPagesCache(state, dynamicPagesCache) {
+    state.dynamicPagesCache = dynamicPagesCache
+  },
   changeDragResizeMode(state) {
     state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode
   },
@@ -166,6 +172,9 @@ export default {
   },
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
+  },
+  setCameraAvailability(state, cameraAvailability) {
+    state.cameraAvailability = cameraAvailability
   },
   resetState(state) {
     state.tasks = []
