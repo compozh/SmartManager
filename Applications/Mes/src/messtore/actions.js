@@ -1,6 +1,6 @@
 import { MesApi } from '../api/mesApi'
 import Vue from 'vue'
-import {router, initDynamicRoutes} from '../router'
+import router from '../router'
 
 const api = new MesApi()
 
@@ -292,7 +292,7 @@ export default {
     commit('setMenuDrawerMode', !getters.menuDrawerMode)
   },
 
-  async productionFormIoSubmit({ commit }, { workCenter, submission, task, message }) {
+  async productionFormIoSubmit({ commit }, { workCenter, submission, task, message, deviceSizeType }) {
     var me = this
     commit('setDialogLinearLoaderMessage', message)
     await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
@@ -307,7 +307,7 @@ export default {
       },
       successAction: async () => {
         me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }})
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }, deviceSizeType})
       }
     })
     commit('closeDialogLinearLoader')

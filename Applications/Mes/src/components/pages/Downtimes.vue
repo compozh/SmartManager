@@ -94,11 +94,13 @@ export default {
         properties = {
           RCENTR: me.workCenter.code,
           ID: newSelectedDowntime.id
-        }
+        },
+        
+        deviceSizeType = this.$vuetify.breakpoint.name
 
       me.$store.commit('mes/resetDowntimeFormio')
       me.$store.commit('mes/setLinearLoader', true)
-      await me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy: 'network-only' }).then(result => {
+      await me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy: 'network-only',deviceSizeType }).then(result => {
         me.$store.commit('mes/setDowntimeFormio', result)
       })
       me.$store.commit('mes/setLinearLoader', false)

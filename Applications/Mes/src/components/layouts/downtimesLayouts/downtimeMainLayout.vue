@@ -90,9 +90,8 @@ export default {
   height: 100%;
   overflow-y: auto;
   width: 100%;
-  top: 60px;
 }
-  .small {
+.small {
     top: 60px;
 }
 .downtime-flex::-webkit-scrollbar {

@@ -99,9 +99,10 @@ export default {
 
       var formCode = me.properties.qualityForm,
         properties = { RCENTR: me.workCenter.code , ID: newSelectedQuality.id },
-        fetchPolicy = 'network-only'
+        fetchPolicy = 'network-only',
+        deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
           me.$store.commit('mes/setQualityFormio', result)
       })
     },

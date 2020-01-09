@@ -130,9 +130,10 @@ export default {
 
       var formCode = me.pageProps.id,
         properties = { RCENTR: me.workCenter.code, ID: newSelectedDocument.id },
-        fetchPolicy = 'network-only'
+        fetchPolicy = 'network-only',
+        deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
         if(result.success) {
           me.$store.commit('mes/setDocumentFormio', result)
         }

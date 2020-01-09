@@ -49,7 +49,7 @@ export default {
       this.$emit('changeTaskTableView', true)
     },
     formSubmit(submission) {
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction') })
+      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction'), deviceSizeType: this.$vuetify.breakpoint.name})
     },
     getFormioData() {
       return this.$refs.formioBuilder.getFormSubmission()

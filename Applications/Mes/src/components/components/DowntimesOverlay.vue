@@ -61,9 +61,10 @@ export default {
         workCenter = this.$parent.workCenter,
         formCode = workCenter.downtimeRegistrationFormCode,
         properties = { RCENTR: workCenter.code },
-        fetchPolicy = 'network-only'
+        fetchPolicy = 'network-only',
+        deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
         me.$store.commit('mes/setCreateDowntimeFormio', result)
       })
     }
