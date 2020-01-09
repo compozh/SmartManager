@@ -1,7 +1,12 @@
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
+import {ApolloClient} from 'apollo-client'
+import {InMemoryCache} from 'apollo-cache-inmemory'
+import {HttpLink} from 'apollo-link-http'
+import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
+import auth from '@it-enterprise/jwtauthentication'
+import {routerDependencies} from '@/router'
+
+const router = routerDependencies.router
 
 import Vue from 'vue'
 // Queries
@@ -14,7 +19,8 @@ import documents from './graphql/qualities/documents.graphql'
 import documentMethod from './graphql/qualities/documentMethod.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
-import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
+import registerMaterialInstallation
+  from './graphql/installations/registerMaterialInstallation.graphql'
 import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
 import usersProductionEvents from './graphql/productions/usersProductionEvents.graphql'
@@ -32,41 +38,55 @@ import mobilityProperties from './graphql/mobilityProperties.graphql'
 import productionFormio from './graphql/formio/productionForm.graphql'
 import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphql'
 
-const getClient = () => {
-  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
+const errorLink = onError(({graphQLErrors, networkError}) => {
+  if (networkError && networkError.statusCode === 401) {
+    auth.clearTokens()
+    router.push('/MES/LOGIN')
+  }
+  if (graphQLErrors) {
+    // TODO: Обработать ошибку
+    return graphQLErrors.message
+  }
+})
+
+const getClient = async () => {
+  const token = await auth.getToken()
   const options = {
     uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
-      ...authHeader,
+      'Authorization': `Bearer ${token}`,
       'schema': 'mes'
     }
   }
+  const httpLink = new HttpLink(options)
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink(options)
+    link: errorLink.concat(httpLink)
   })
 }
 
 export class MesApi {
-  constructor() {}
 
-  async getPropertiesFromGql () {
-    const result = await getClient().query({
+  async getPropertiesFromGql() {
+    const client = await getClient()
+    const result = await client.query({
       query: gql` ${properties}`
     })
     return result.data.mes.properties
   }
 
-  async getTicketFromGql () {
-    const result = await getClient().query({
+  async getTicketFromGql() {
+    const client = await getClient()
+    const result = await client.query({
       query: gql` ${ticket}`
     })
     return result.data.mes.ticket
   }
 
   async getMobilityPropertiesFromGql(webAppId) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql` query ($webAppId: String) ${mobilityProperties}`,
       variables: { webAppId }
     })
@@ -74,67 +94,75 @@ export class MesApi {
   }
 
   async fixWorkCenterForWorkerGql(workCenterCode, workerCode) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${fixWorkCenterForWorker}`,
-      variables: { workCenterCode, workerCode }
+      variables: {workCenterCode, workerCode}
     })
     return result.data.mesMutation.fixWorkCenterForWorker
   }
 
   async unfixWorkCenterForWorkerGql(fixationIds) {
     var fixationId = fixationIds.fixationId
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${unfixWorkCenterForWorker}`,
-      variables: { fixationId }
+      variables: {fixationId}
     })
     return result.data.mesMutation.unfixWorkCenterForWorker
   }
 
   async getWorkCentersFromGql(uuid, login, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql` query ($uuid: String, $login: String) ${workCenters}`,
-      variables: { uuid, login },
+      variables: {uuid, login},
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.mes.workCenters
   }
 
   async getWorkCentersFixedFromGql(workerCode, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql` query ($workerCode: String) ${workCentersFixed}`,
-      variables: { workerCode },
+      variables: {workerCode},
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.mes.workCentersFixed
   }
 
   async getTasksFromGql(workCenter, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($workCenter: String) ${tasks}`,
-      variables: { workCenter },
+      variables: {workCenter},
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.mes.tasks
   }
 
   async getDowntimesPreviousFromGql(workCenterCode, dateTime) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($workCenterCode: String, $dateTime: DateTime) ${downtimesPrevious}`,
-      variables: { workCenterCode, dateTime }
+      variables: {workCenterCode, dateTime}
     })
     return result.data.mes.downtimePrevious.downtimeList
   }
 
   async getQualitiesFromGql(retrieveParams) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($retrieveParams: ProcessRetrieveParamsInput!) ${documents}`,
-      variables: { retrieveParams }
+      variables: {retrieveParams}
     })
     return result.data.mes.documents.processes
   }
 
   async getDocumentsFromGql(retrieveParams) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($retrieveParams: ProcessRetrieveParamsInput!) ${documents}`,
       variables: { retrieveParams }
     })
@@ -150,90 +178,101 @@ export class MesApi {
   }
 
   async getInstallationsFromGql(workCenter, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($workCenter: String) ${installations}`,
-      variables: { workCenter },
+      variables: {workCenter},
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.mes.installations.installations
   }
 
   async removeInstallationGql(installationId) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${removeInstallation}`,
-      variables: { installationId }
+      variables: {installationId}
     })
     return result.data.mesMutation.removeInstallation
   }
 
   async registerMaterialInstallationGql(workCenterCode, batchBarcode, factId) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${registerMaterialInstallation}`,
-      variables: { workCenterCode, batchBarcode, factId }
+      variables: {workCenterCode, batchBarcode, factId}
     })
     return result.data.mesMutation.registerMaterialInstallation
   }
 
   async registerProductionGql(productionRegistrationParam) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${registerProduction}`,
-      variables: { productionRegistrationParam }
+      variables: {productionRegistrationParam}
     })
     return result.data.mesMutation.registerProduction
   }
 
   async cancelBeginRegistrationGql(taskId) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${cancelBeginRegistration}`,
-      variables: { taskId }
+      variables: {taskId}
     })
     return result.data.mesMutation.cancelBeginRegistration
   }
 
   async getUsersProductionEventsFromGql(workerCode, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($workerCode: String) ${usersProductionEvents}`,
-      variables: { workerCode },
+      variables: {workerCode},
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.mes.usersProductionEvents
   }
 
   async getWorkCenterProductionEventsFromGql(workCenterCode, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`query ($workCenterCode: String) ${workCenterProductionEvents}`,
-      variables: { workCenterCode },
+      variables: {workCenterCode},
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.mes.workCenterProductionEvents
   }
 
   async deleteProductionGql(factId) {
-    const  result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${deleteProduction}`,
-      variables: { factId }
+      variables: {factId}
     })
     return result.data.mesMutation.deleteProduction
   }
 
   async printProductionGql(factId, checkWriteOffPercent) {
-    const  result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`query ($factId: Int, $checkWriteOffPercent: Boolean) ${printLabel}`,
-      variables: { factId, checkWriteOffPercent }
+      variables: {factId, checkWriteOffPercent}
     })
     return result.data.mes.printLabel
   }
 
   async setMaterialProductionGql(factId, addAbsentInstallations, workCenterCode) {
-    const  result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${executeWriteOff}`,
-      variables: { factId, addAbsentInstallations, workCenterCode }
+      variables: {factId, addAbsentInstallations, workCenterCode}
     })
     return result.data.mes.executeWriteOff
   }
 
   async getProductionFormioFromGql(formCode, properties, deviceSizeType) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`${productionFormio}`,
       variables: { formCode, properties, deviceSizeType },
       fetchPolicy: 'network-only'
@@ -242,15 +281,17 @@ export class MesApi {
   }
 
   async productionFormioSubmitGql(formCode, submission, properties) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${productionFormioSubmit}`,
-      variables: { formCode, submission, properties}
+      variables: {formCode, submission, properties}
     })
     return result.data.mesMutation.productionFormioSubmit
   }
 
   async getDowntimeTypesFromGql() {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql` ${downtimeGetTypes}`
     })
     return result.data.mes.downtimeTypes

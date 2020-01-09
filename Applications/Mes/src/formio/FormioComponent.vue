@@ -215,7 +215,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .formio-container-class /deep/ {
+    .formio-container-class::v-deep {
         @import './assets/theme.scss';
         @import "~formiojs/dist/formio.full.min.css";
         @import "~bootstrap/scss/bootstrap";

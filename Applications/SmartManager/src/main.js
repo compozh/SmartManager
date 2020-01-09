@@ -5,9 +5,8 @@ import './registerServiceWorker'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
-
-import auth from './api/auth/auth'
-auth.Init()
+import auth from '@it-enterprise/jwtauthentication'
+auth.config(window.appConfig.GrapgQlUrl)
 
 // vue пакеты
 import Vue from 'vue'
@@ -28,6 +27,7 @@ Vue.use(FlagIcon)
 
 // axios
 import axios from 'axios'
+
 Vue.prototype.$http = axios
 
 // Theme Configurations
@@ -117,6 +117,8 @@ Vue.use(Localization, { dependencies })
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
+
+
 
 export const eventBus = new Vue()
 

@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     currentUserIsSender() {
-      const currentUserId = this.$store.getters.currentUserId
+      const currentUserId = this.$store.getters.userId
       return userId => userId === currentUserId
     },
     hasSentPreviousMsg() {
