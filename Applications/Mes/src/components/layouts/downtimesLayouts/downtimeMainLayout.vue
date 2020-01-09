@@ -37,7 +37,15 @@ export default {
     downtimeFormio() {
       this.downtimeFormioKey += 1
       return this.$store.getters['mes/downtimeFormio']
-    }
+    },
+    dragResizeMode: {
+      get() {
+        return this.$store.getters['mes/dragResizeMode']
+      },
+      set() {
+        this.$store.dispatch('mes/changeDragResizeMode')
+      }
+    },
   },
   methods: {
     async formSubmit(submission) {
@@ -60,6 +68,20 @@ export default {
     },
     changeDowtimesTableView() {
       this.$emit('changeDowtimesTableView', true)
+    },
+    changeDragResizeMode (mode) {
+      this.dragResizeMode = mode
+      var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
+      if (!this.dragResizeMode) {
+        splitter.style.cssText = 'width:0'
+      } else {
+        splitter.style.cssText = 'width: 5px'
+      }
+    },
+  },
+  created() {
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.changeDragResizeMode(false)
     }
   }
 }

@@ -74,8 +74,9 @@ export default {
       }
       this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
     },
-    changeDragResizeMode () {
-      this.dragResizeMode = !this.dragResizeMode
+    changeDragResizeMode (mode) {
+      this.dragResizeMode = mode
+      var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
       if (!this.dragResizeMode) {
         splitter.style.cssText = 'width:0'
       } else {
@@ -89,7 +90,11 @@ export default {
       this.$emit('changeTaskTableView',true)
     }
   },
-
+  created() {
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.changeDragResizeMode(false)
+    }
+  }
 }
 </script>
 

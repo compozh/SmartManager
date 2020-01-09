@@ -233,15 +233,15 @@ export default {
   .grid-item-data {
     font-size: 14px;
   }
-  .v-toolbar__content {
+  /* .v-toolbar__content {
     padding: 0 24px;
-  }
+  } */
   .v-toolbar__content .v-btn.v-btn--icon.v-size--default, .v-toolbar__extension .v-btn.v-btn--icon.v-size--default {
     height: 36px;
     width: 36px;
   }
   .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
-    margin-left: -6px;
+    margin-left: -6px !important;
   }
   .v-dialog>.v-card>.v-card__text {
     padding: 16px;

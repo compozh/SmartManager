@@ -40,7 +40,15 @@ export default {
     qualityFormio() {
       this.qualityFormioKey += 1
       return this.$store.getters['mes/qualityFormio']
-    }
+    },
+    dragResizeMode: {
+      get() {
+        return this.$store.getters['mes/dragResizeMode']
+      },
+      set() {
+        this.$store.dispatch('mes/changeDragResizeMode')
+      }
+    },
   },
   methods: {
     async formSubmit(submission) {
@@ -67,6 +75,20 @@ export default {
     },
     changeQualityTableView() {
       this.$emit('changeQualityTableView', true)
+    },
+    changeDragResizeMode (mode) {
+      this.dragResizeMode = mode
+      var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
+      if (!this.dragResizeMode) {
+        splitter.style.cssText = 'width:0'
+      } else {
+        splitter.style.cssText = 'width: 5px'
+      }
+    },
+  },
+  created() {
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.changeDragResizeMode(false)
     }
   }
 }

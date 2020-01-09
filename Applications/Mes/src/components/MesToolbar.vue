@@ -53,7 +53,7 @@
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.mdAndUp">
+      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.width > 1040">
         <span class="user-info-text">
           {{currentUserData.UserName}}
         </span>
