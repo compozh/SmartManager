@@ -6,7 +6,7 @@ import UuidHelper from './UuidHelper'
 
 export default class Init {
     initialize() {
-        var fixedUuid = router.options.params.fixedUuid,
+        var fixedUuid = router.currentRoute.query.fixedUuid,
             cookiesUuid = cookies.get('mesUuid'),
             sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
             uuid
@@ -15,13 +15,13 @@ export default class Init {
             uuid = fixedUuid
         } else if (cookiesUuid) {
             uuid = cookiesUuid
-            router.push({ query: { fixedUuid: uuid }})
+            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         } else if (sessionStorageUuid) {
             uuid = sessionStorageUuid
-            router.push({ query: { fixedUuid: uuid }})
+            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         } else {
             uuid = UuidHelper.generate()
-            router.push({ query: { fixedUuid: uuid }})
+            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         }
         // eslint-disable-next-line
         cookies.set('mesUuid', uuid, '3y')
@@ -80,11 +80,11 @@ export default class Init {
 
       preparePages(scope) {
         
-        let dynamic  = store.getters['mes/mobilityProperties']
+        let dynamic  =  store.getters['mes/mobilityProperties']
         let links = router.options.routes[0].children
-
+        let dynamicPages = []
         if ( dynamic ) {
-           var dynamicPages = []
+           
            dynamic.processesProperties.forEach(page => {
             let child = {}
             child.name = 'DYNAMIC'
@@ -97,6 +97,9 @@ export default class Init {
             dynamicPages.push(child)
         })
           links =  links.concat(dynamicPages)
+        } else {
+          // console.error('dynamic')
+          store.dispatch('mes/initializeMobilityProperties')            
         }
 
         var pages = []

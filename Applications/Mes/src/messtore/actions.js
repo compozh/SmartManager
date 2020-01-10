@@ -343,7 +343,7 @@ export default {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
         if(router.currentRoute.name != 'MESLOGIN'){
-          router.push({name: 'MESLOGIN', query: { to: router.currentRoute.name, fixedUuid: router.currentRoute.query.fixedUuid }})
+          router.push({name: 'MESLOGIN', query: { to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid }})
         }
       }
       else {
@@ -368,7 +368,7 @@ export default {
       if (e.networkError && e.networkError.statusCode == 401) {
         Vue.prototype.$authentication.resetCurentUser()
         if(router.currentRoute.name != 'MESLOGIN'){
-          router.push({name: 'MESLOGIN', query: { to: router.currentRoute.name, fixedUuid: router.currentRoute.query.fixedUuid }})
+          router.push({name: 'MESLOGIN', query: { to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid }})
         }
       }
       else {

@@ -9,6 +9,7 @@
       <v-col>
         <v-row justify="center">
           <user-icon :src="user.photo" size="60" />
+          
         </v-row>
         <v-row justify="center">
           <p class="ma-0 pl-2 subheading">{{ user.name }}</p>
@@ -16,7 +17,6 @@
         <v-divider />
         <v-row>
           <v-col class="pa-2 #f5f5f5 lighten-4 grey" justify="space-between">
- 
             <v-row justify="center">
               <v-btn text v-on:click="logoutCallback(params.logOut)">{{ $t('mes.buttons.Exit') }}</v-btn>
             </v-row>
@@ -33,7 +33,7 @@ export default {
 
   methods: {
     logoutCallback(logoutFunctionPointer) {
-      this.$router.push({ name: 'MESLOGIN', query: { to: this.$router.currentRoute.name, fixedUuid: this.$router.currentRoute.query.fixedUuid }})
+      this.$router.push({ name: 'MESLOGIN', query: { to: this.$router.currentRoute.path, fixedUuid: this.$router.currentRoute.query.fixedUuid }})
       this.$store.commit('mes/resetState')
       logoutFunctionPointer.click()
     }

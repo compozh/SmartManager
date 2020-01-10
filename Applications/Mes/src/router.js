@@ -10,9 +10,9 @@ let  cookiesUuid = cookies.get('mesUuid'),
 export const router = new VueRouter({
   mode: 'history',
   base: window.myConfig.BASE_URL + "MES/" ,
-  params: {
-    fixedUuid: window.location.search.replace('?fixedUuid=','')
-  },
+  // params: {
+  //   fixedUuid: window.location.search.replace('?fixedUuid=','')
+  // },
   routes: [
     {
       path: '/',
@@ -131,7 +131,7 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if(from.query.to && to.name == from.name) {
-    return next({ name: from.query.to, query: {fixedUuid: from.query.fixedUuid || cookiesUuid || sessionStorageUuid }} )
+    return router.push({ path: from.query.to, query: {fixedUuid: from.query.fixedUuid || cookiesUuid || sessionStorageUuid }} )
   }
   Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
     if(

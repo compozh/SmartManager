@@ -19,7 +19,7 @@
 
       <!-- Описание пункта меню -->
       <v-list-item-content  @click="reloadPage(route)">
-        <v-list-item-title style="white-space: normal;">{{ $t(route.text) }}</v-list-item-title>
+        <v-list-item-title style="white-space: normal;">{{ route.name == 'DYNAMIC'? route.text : $t(route.text) }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
