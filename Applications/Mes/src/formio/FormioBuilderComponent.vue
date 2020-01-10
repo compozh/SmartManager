@@ -185,7 +185,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .formio-builder-component-class /deep/ {
+    .formio-builder-component-class::v-deep {
         @import './assets/theme.scss';
         @import "~formiojs/dist/formio.full.min.css";
         @import "~bootstrap/scss/bootstrap";
@@ -195,7 +195,7 @@ export default {
 
         font-family: Roboto;
     }
-    
+
     .formio-component {
         position: relative;
     }

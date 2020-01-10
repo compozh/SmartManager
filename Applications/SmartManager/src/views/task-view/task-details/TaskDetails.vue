@@ -422,7 +422,7 @@ export default {
         console.log(e.message)
       }
     },
-    onFormSubmit(data) {
+    onFormSubmit() {
       // console.log(data)
     }
   }

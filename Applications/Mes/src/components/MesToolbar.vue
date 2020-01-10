@@ -42,7 +42,7 @@
       <!-- Информация Юзера -->
       <div class="user-info-desc">
         <span class="user-info-text">
-          {{currentUserData.UserName}}
+          {{userData.userName}}
         </span>
       </div>
 
@@ -57,26 +57,24 @@
 
 <script>
 
-import Vue from 'vue'
 import Init from './components/Init'
-import UuidHelper from './components/UuidHelper'
+import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
 
 export default {
   name: 'mes-toolbar',
-  components: { Init },
+  components: {
+    Init,
+    UserPanel
+  },
   created() {
-    var init = new Init(),
-      me = this
+    const init = new Init()
     init.initialize()
     init.initializeSignalR()
-    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
-      me.currentUserData = currentUSer.CurrentUserData
-    })    
-  },
-  data() {
-    return { currentUserData: {} }
   },
   computed: {
+    userData() {
+      return this.$store.state.user || {}
+    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
@@ -88,9 +86,6 @@ export default {
     },
     properties() {
       return this.$store.getters['mes/properties']
-    },
-    userName() {
-      return Vue.prototype.$authentication.getCurrentUser()
     },
     tasksPageState() {
       return this.$store.getters['mes/tasksPageState']

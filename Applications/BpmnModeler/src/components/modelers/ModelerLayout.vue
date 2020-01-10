@@ -12,7 +12,7 @@
     <v-layout v-if="!loading && noAccess" column justify-center align-center>
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
     </v-layout>
-    <div class="modeler-grid" v-show="diagram && !loading && !noAccess"  ref="layout">
+    <div class="modeler-grid" :class="{ 'no-panel': !showPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar">
         <v-btn flat :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
           <v-icon>undo</v-icon>
@@ -55,7 +55,7 @@
           </div>
         </SplitArea>
       </Split>
-      <div v-else>
+      <div v-else class="bpmn-diagram-container">
         <slot name="modeler"></slot>
       </div>
       <v-tooltip v-model="saved" activator=".bpmn-diagram-container" bottom>
@@ -124,13 +124,20 @@ export default {
 </script>
 <style>
 .modeler-grid {
+  position: absolute;
   height: 100%;
   width: 100%;
   background-color: white;
+  display: grid;
+  grid-template-rows: 40px 1fr;
+  grid-template-areas: 
+    "toolbar"
+    "modeler";
 }
 .modeler-toolbar {
   grid-area: toolbar;
   border-bottom: rgba(0,0,0,.12) 1px solid;
+  grid-area: toolbar;
 }
 .modeler-toolbar button {
   min-width: 36px;
@@ -143,10 +150,15 @@ export default {
 .bpmn-diagram-container {
   width: 100%;
   height: 100%;
+  grid-area: modeler;
+}
+.modeler-grid.no-panel {
+  height: calc(100% - 81px);
 }
 .bpmn-diagram-container .workflow-modeler {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 .properties-panel-container > * >:first-child {
   overflow-y: auto;
@@ -169,8 +181,5 @@ a.bjs-powered-by {
   content: "\F0E3";
   font-family: "Material Design Icons";
   padding-top: 3px;
-}
-.split {
-  height: calc(100% - 41px);
 }
 </style>

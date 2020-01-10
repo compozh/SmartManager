@@ -168,6 +168,7 @@ export default {
       userListLoading: false,
       caseListLoading: false,
       filesUploading: false,
+      formSnapshot: '',
       oldCaseId: 0,
       oldAttachments: [],
       oldCoexecutors: [],
@@ -229,8 +230,10 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    // TODO: Add confirm for saving
-    next()
+    this.$route.params.routeToGo = to.path
+    this.formSnapshot === this.getFormSnapshot()
+      ? next()
+      : this.saveDialog()
   },
   created() {
     this.getUsers()
@@ -246,6 +249,7 @@ export default {
       const task = await this.getTask()
       this.setFieldsForUpdate(task)
     }
+    this.formSnapshot = this.getFormSnapshot()
   },
   methods: {
     async getTask() {
@@ -267,9 +271,8 @@ export default {
       this.newTask.planDate = date
       this.newTask.planTime = time
 
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(task.htmlDescript, 'text/html')
-      this.newTask.description = doc.body.innerHTML
+      const description = this.htmlParser(task.htmlDescript)
+      this.newTask.description = description.body.innerHTML
 
       this.oldCoexecutors = this.users.filter(user => task.participants
         .some(participant => {
@@ -363,9 +366,14 @@ export default {
         ...observers
       ]
     },
+    cancelForm() {
+      this.formSnapshot = this.getFormSnapshot()
+      this.$router.push(this.$route.params.routeToGo)
+    },
     async submitForm() {
       const result = await this.$validator.validateAll()
       if (result) {
+        this.formSnapshot = this.getFormSnapshot()
         this.upload()
       }
     },
@@ -376,7 +384,28 @@ export default {
       this.newTask.attachments = event
       this.filesUploading = false
       this.taskEdit ? this.updateTask() : this.createTask()
-    }
+    },
+    htmlParser(html) {
+      const parser = new DOMParser()
+      return parser.parseFromString(html, 'text/html')
+    },
+    getFormSnapshot() {
+      const data = {...this.newTask}
+      const description = this.htmlParser(this.newTask.description)
+      data.description = description.body.innerHTML.trim()
+      return JSON.stringify(data)
+    },
+    saveDialog() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'primary',
+        title: this.$t('tasks.saveDialogTitle'),
+        text: this.$t('tasks.saveDialogText'),
+        cancelText: this.$t('buttons.no'),
+        acceptText: this.$t('buttons.yes'),
+        accept: this.cancelForm
+      })
+    },
   }
 }
 </script>
