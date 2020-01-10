@@ -19,6 +19,10 @@ export default class BarcodeScanerEvents {
     }
 
     onKeyup(event) {
+        if(!('which' in event)) {
+            return;
+        }
+        
         var me = this
         if (me.timeoutHandler) {
             clearTimeout(me.timeoutHandler)
