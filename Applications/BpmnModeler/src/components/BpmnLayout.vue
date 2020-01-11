@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <vue-title title="IT-Enterprise Workflow modeler"></vue-title>
     <v-toolbar app
       dense
       clipped-left
@@ -31,7 +30,7 @@
         </v-btn>
       </template>
       <v-spacer></v-spacer>
-      <v-flex shrink class="icon-container">
+      <v-flex shrink class="icon-container" v-if="currentUser">
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-toolbar>
@@ -204,8 +203,8 @@ export default {
   },
   computed: {
     currentUser() {
-      if (this.$store.state.authentication.currentUser) {
-        return this.$store.state.authentication.currentUser;
+      if (this.$store.state.auth.user) {
+        return this.$store.state.auth.user;
       }
       return null;
     },
