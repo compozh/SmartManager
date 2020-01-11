@@ -195,7 +195,7 @@ export default {
 
         font-family: Roboto;
     }
-    
+
     .formio-component {
         position: relative;
     }

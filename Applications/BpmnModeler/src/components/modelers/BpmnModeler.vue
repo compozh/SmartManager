@@ -1,5 +1,5 @@
 <template>
-  <modeler-layout :process="process" :loading="loading" :saved="saved" :canShowPanel="canShowPanel" :noAccess="noAccess"
+  <modeler-layout :diagram="process" :loading="loading" :saved="saved" :noAccess="noAccess"
     :canMinimap="canMinimap" @minimap="onMinimap" 
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
@@ -37,7 +37,6 @@ export default {
       saved: false,
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
-      canShowPanel: true,
       propertiesProvider: null
     };
   },

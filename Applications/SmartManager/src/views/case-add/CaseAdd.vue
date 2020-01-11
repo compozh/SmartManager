@@ -212,8 +212,10 @@ export default {
     })
   },
   beforeRouteLeave(to, from, next) {
-    // TODO: Add confirm for saving
-    next()
+    this.$route.params.routeToGo = to.path
+    this.formSnapshot === this.getFormSnapshot()
+      ? next()
+      : this.saveDialog()
   },
   async mounted() {
     this.getUsers()
@@ -222,6 +224,7 @@ export default {
       const caseItem = await this.getCase()
       this.setFieldsForUpdate(caseItem)
     }
+    this.formSnapshot = this.getFormSnapshot()
   },
   methods: {
     async getCase() {
@@ -262,9 +265,14 @@ export default {
       this.activePrompt = false
       this.newFolderName = ''
     },
+    cancelForm() {
+      this.formSnapshot = this.getFormSnapshot()
+      this.$router.push(this.$route.params.routeToGo)
+    },
     async submitForm() {
       const result = await this.$validator.validateAll()
       if (result) {
+        this.formSnapshot = this.getFormSnapshot()
         this.upload()
       }
     },
@@ -310,7 +318,22 @@ export default {
       if (result) {
         await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
       }
-    }
+    },
+    getFormSnapshot() {
+      const data = {...this.newCase}
+      return JSON.stringify(data)
+    },
+    saveDialog() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'primary',
+        title: this.$t('cases.saveDialogTitle'),
+        text: this.$t('cases.saveDialogText'),
+        cancelText: this.$t('buttons.no'),
+        acceptText: this.$t('buttons.yes'),
+        accept: this.cancelForm
+      })
+    },
   }
 }
 </script>

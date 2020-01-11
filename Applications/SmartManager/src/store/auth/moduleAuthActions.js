@@ -1,37 +1,82 @@
-import {i18n} from '@/i18n/i18n'
-import auth from '@/api/auth/auth'
-import router from '@/router'
 import Vue from 'vue'
+import {i18n} from '@/i18n/i18n'
+import router from '@/router'
+import auth from '@it-enterprise/jwtauthentication'
+const vm = new Vue()
+
 export default {
-
-
-  logout({commit, state}) {
-    // If user is already logged in notify and exit
-    if (!state.isUserLoggedIn()) {
-      // Close animation if passed as payload
+  logout({commit}) {
+    auth.clearTokens()
+    commit('UPDATE_AUTHENTICATED_USER', null)
+    if (router.currentRoute.name !== 'login') {
+      router.push({path: '/login'})
+    }
+  },
+  async login({dispatch}, {login, password, rememberMe}) {
+    const userIsLoggedIn = await dispatch('userIsLoggedIn')
+    if (userIsLoggedIn) {
       return
     }
-
-    auth.logOff().then(() => {
-      commit('UPDATE_AUTHENTICATED_USER', undefined)
-      router.push('/login')
-    })
-
+    try {
+      const result = await auth.login(login, password, rememberMe)
+      await dispatch('updateAuthenticatedUser', result)
+      return result
+    } catch (e) {
+      console.warn('', e.message)
+      vm.$vs.notify({
+        title: i18n.t('login.subTitle'),
+        text: i18n.t('login.loginError'),
+        color: 'danger'
+      })
+    }
   },
-
-  login({ commit, state }, payload) {
-
-    // If user is already logged in notify and exit
-    if (state.isUserLoggedIn()) {
-      // Close animation if passed as payload
-
-      if (payload.closeAnimation) {
-        Vue.nextTick().then(() => {
-          payload.closeAnimation()
+  async loginByCode({dispatch}, code) {
+    const userIsLoggedIn = await dispatch('userIsLoggedIn')
+    if (userIsLoggedIn) {
+      return
+    }
+    try {
+      const result = await auth.loginByCode(code)
+      await dispatch('updateAuthenticatedUser', result)
+      return result
+    } catch (e) {
+      console.warn('', e.message)
+      vm.$vs.notify({
+        title: i18n.t('login.subTitle'),
+        text: i18n.t('login.loginError'),
+        color: 'danger'
+      })
+    }
+  },
+  async applyDelegatedRights(context, userId) {
+    try {
+      const result = await auth.applyDelegationRights(userId)
+      if (result.success) {
+        if (router.currentRoute.name !== 'task-list') {
+          await router.push('/')
+        }
+        window.location.reload()
+      } else {
+        vm.$vs.notify({
+          title: i18n.t('notify.applyRightsTittle'),
+          text: result.errorMessage,
+          color: 'warning'
         })
       }
-
-      payload.notify({
+    } catch (e) {
+      vm.$vs.notify({
+        title: i18n.t('notify.applyRightsTittle'),
+        text: i18n.t('notify.applyRightsError'),
+        color: 'danger'
+      })
+    }
+  },
+  userIsLoggedIn({state}) {
+    // If user is already logged in notify and exit
+    if (state.user) {
+      // Close animation if passed as payload
+      !vm.$vs.loading || vm.$vs.loading.close()
+      vm.$vs.notify({
         title: i18n.t('login.subTitle'),
         text: i18n.t('login.loggedIn'),
         iconPack: 'feather',
@@ -39,30 +84,25 @@ export default {
         color: 'warning'
       })
       router.push('/')
-      return false
+      return true
     }
-
-    // Try to sigin
-    auth.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
-      .then((result) => {
-        // Close animation if passed as payload
-        if (payload.closeAnimation) { payload.closeAnimation() }
-        commit('UPDATE_AUTHENTICATED_USER', result)
-        router.push(router.currentRoute.query.to || '/')
-
-      }, (err) => {
-
-        // Close animation if passed as payload
-        if (payload.closeAnimation) { payload.closeAnimation() }
-
-        payload.notify({
-          time: 2500,
-          title: 'Error',
-          text: err.message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          color: 'danger'
-        })
+    return false
+  },
+  async updateAuthenticatedUser({commit}, result) {
+    if (result.success) {
+      commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
+      // Close animation if passed as payload
+      !vm.$vs.loading || vm.$vs.loading.close()
+      await router.push(router.currentRoute.query.to || '/')
+    } else {
+      vm.$vs.notify({
+        title: i18n.t('login.subTitle'),
+        text: result.errorMessage,
+        color: 'warning'
       })
+      if (router.currentRoute.name !== 'login') {
+        await router.push({path: '/login'})
+      }
+    }
   }
 }

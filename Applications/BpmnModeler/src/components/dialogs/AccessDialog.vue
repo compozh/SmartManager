@@ -13,10 +13,8 @@
           clearable
         ></v-text-field>
         <v-spacer></v-spacer>
+        <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.buttons.Add') }}</v-btn>
         <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
-          <template #activator="">
-            <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.buttons.Add') }}</v-btn>
-          </template>
           <v-card>
             <v-card-title>
               <span class="headline">{{ form.titles[form.mode] }}</span>

@@ -132,7 +132,6 @@ export default {
 .external-elements {
   padding-bottom: 20px;
 }
-
 .external-elements > .header > .v-subheader {
   padding: 0;
   height: 24px;
@@ -154,5 +153,8 @@ export default {
 }
 .external-elements > .tree-container > .tree .el-tree-node.is-current > .el-tree-node__content {
   background: rgba(0,0,0,.12);
+}
+.external-elements > .tree-container > .tree .treeview-node-label {
+  text-align: start;
 }
 </style>

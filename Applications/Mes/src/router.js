@@ -25,7 +25,7 @@ export const router = new VueRouter({
           meta: {
             rule: 'isPublic',
           },
-          // component: () => import('@/public/components/Authentification/Login.vue'),
+          component: () => import('@/components/layouts/login/Login.vue'),
         },
         {
           name: 'TASKS',
@@ -130,14 +130,14 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(from.query.to && to.name == from.name) {
-    return router.push({ path: from.query.to, query: {fixedUuid: from.query.fixedUuid || cookiesUuid || sessionStorageUuid }} )
-  }
-  Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
+  // if(from.query.to && to.name == from.name) {
+  //   return router.push({ path: from.query.to, query: {fixedUuid: from.query.fixedUuid || cookiesUuid || sessionStorageUuid }} )
+  // }
+  debugger
+  // Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
     if(
       from.path == to.path 
-      && from.path === '/login' && 
-      !!currentUSer) {
+      && from.path === '/login') {
         router.push({ name: 'home'}).then(() => {
           router.go()
         })
@@ -146,12 +146,11 @@ router.beforeEach((to, from, next) => {
     if (
       to.path === '/login' ||
       to.path === '/error/404' ||
-      to.path === '/error/500' ||
-      !!currentUSer
+      to.path === '/error/500' 
     ) {
       return next()
     }
-    router.push({ name: 'MESLOGIN', query: { to: to.path , fixedUuid: cookiesUuid}} )
-  })
+    // router.push({ name: 'MESLOGIN', query: { to: to.path , fixedUuid: cookiesUuid}} )
+  // })
 })
 export default router

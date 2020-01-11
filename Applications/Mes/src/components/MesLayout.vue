@@ -19,7 +19,7 @@
             @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
         <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
-        <span class="mes-device-not-fixed" v-if="currentUser && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
+        <span class="mes-device-not-fixed" v-if="userData && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
 
@@ -106,8 +106,8 @@ export default {
     })
   },
   computed: {
-    currentUser() {
-      return this.$store.state.authentication.currentUser
+    userData() {
+      return this.$store.state.user
     },
     mainContainerKey() {
       return this.$store.getters['mes/mainContainerKey']

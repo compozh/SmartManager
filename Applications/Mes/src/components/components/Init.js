@@ -28,6 +28,7 @@ export default class Init {
         window.sessionStorage.setItem('mesUuid', uuid)
         store.dispatch('mes/initializeWorkCenter', uuid)
         store.dispatch('mes/initializeProperties')
+        store.dispatch('mes/initializeUser')
         store.dispatch('formio/initializeTicket')
         store.dispatch('mes/initializeMobilityProperties')
         store.dispatch('mes/verifyCamera')

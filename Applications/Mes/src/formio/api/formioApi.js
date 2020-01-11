@@ -1,9 +1,12 @@
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
+import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
+import auth from '@it-enterprise/jwtauthentication'
+import router from '@/router'
 
-import Vue from 'vue'
+// const router = routerDependencies.router
 
 import ticket from './graphql/ticket.graphql'
 
@@ -14,19 +17,31 @@ import submitForm from './graphql/submitForm.graphql'
 import callFormCustomEvent from './graphql/callFormCustomEvent.graphql'
 import callItemAutocomplete from './graphql/callItemAutocomplete.graphql'
 
-const getClient = () => {
-  const authHeader =  Vue.prototype.$authentication.getAuthHeader()
+const errorLink = onError(({graphQLErrors, networkError}) => {
+  if (networkError && networkError.statusCode === 401) {
+    auth.clearTokens()
+    router.push({path: 'login'})
+  }
+  if (graphQLErrors) {
+    // TODO: Обработать ошибку
+    return graphQLErrors.message
+  }
+})
+
+const getClient = async () => {
+  const token = await auth.getToken()
   const options = {
     uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
-      ...authHeader,
+      'Authorization': `Bearer ${token}`,
       'schema': 'formio'
     }
   }
+  const httpLink = new HttpLink(options)
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink(options)
+    link: errorLink.concat(httpLink)
   })
 }
 
@@ -34,23 +49,26 @@ export class FormioApi {
   constructor() {}
 
   async getTicketFromGql () {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql` ${ticket}`
     })
     return result.data.formioQuery.ticket
   }
 
-  async getFormGql(formCode, properties, fetchPolicy, deviceSizeType) {
-    const result = await getClient().query({
+  async getFormGql(formCode, properties, deviceSizeType, fetchPolicy) {
+    const client = await getClient()
+    const result = await client.query({
       query: gql`${getForm}`,
-      variables: { formCode, properties,deviceSizeType },
+      variables: { formCode, properties, deviceSizeType },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.formioQuery.getForm
   }
 
   async submitFormGql(formCode, submission, properties) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${submitForm}`,
       variables: { formCode, submission, properties }
     })
@@ -58,7 +76,8 @@ export class FormioApi {
   }
 
   async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${callFormCustomEvent}`,
       variables: { formCode, formCustomEventParamsInput }
     })
@@ -66,7 +85,8 @@ export class FormioApi {
   }
 
   async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
-    const result = await getClient().query({
+    const client = await getClient()
+    const result = await client.query({
       query: gql`${callItemAutocomplete}`,
       variables: { formCode, formItemAutocompleteParamsInput },
       fetchPolicy: fetchPolicy || 'cache-first'
@@ -75,7 +95,8 @@ export class FormioApi {
   }
 
   async createFormGql(formDefinitionParamsInput) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${createForm}`,
       variables: { formDefinitionParamsInput }
     })
@@ -83,7 +104,8 @@ export class FormioApi {
   }
 
   async saveFormGql(formDefinitionParamsInput) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${saveForm}`,
       variables: { formDefinitionParamsInput }
     })

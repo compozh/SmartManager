@@ -12,7 +12,7 @@
     <v-layout v-if="!loading && noAccess" column justify-center align-center>
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
     </v-layout>
-    <div class="modeler-grid" v-show="process && !loading && !noAccess"  ref="layout">
+    <div class="modeler-grid" :class="{ 'no-panel': !showPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar">
         <v-btn flat :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
           <v-icon>undo</v-icon>
@@ -38,22 +38,26 @@
           <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
           <v-icon v-else>fullscreen</v-icon>
         </v-btn>
-        <v-divider vertical></v-divider>
+        <!-- <v-divider vertical></v-divider>
         <v-btn flat @click="panel = !panel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
-        </v-btn>
+        </v-btn> -->
       </v-toolbar>
-      <div class="bpmn-diagram-container">
+      <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
+        <SplitArea :size="100 - splitSize">
+          <div class="bpmn-diagram-container">
+            <slot name="modeler"></slot>
+          </div>
+        </SplitArea>
+        <SplitArea :size="splitSize" :minSize="0">
+          <div class="properties-panel-container">
+            <slot name="propertiesPanel"></slot>
+          </div>
+        </SplitArea>
+      </Split>
+      <div v-else class="bpmn-diagram-container">
         <slot name="modeler"></slot>
       </div>
-      <v-navigation-drawer v-model="showPanel" class="properties-panel-container"
-        clipped
-        right
-        disable-resize-watcher
-        hide-overlay
-        :width="panel ? $vuetify.breakpoint.xs ? $vuetify.breakpoint.width : 320 : 0">
-        <slot name="propertiesPanel"></slot>
-      </v-navigation-drawer>
       <v-tooltip v-model="saved" activator=".bpmn-diagram-container" bottom>
         <span>{{ $t('bpmn.labels.ProcessSaved') }}</span>
       </v-tooltip>
@@ -69,7 +73,7 @@ export default {
   name: 'modeler-layout',
   mixins: [ fullScreenMixin ],
   props: {
-    process: Diagram,
+    diagram: Diagram,
     loading: Boolean,
     saved: Boolean,
     canUndo: Boolean,
@@ -98,44 +102,42 @@ export default {
       set(value) {
         this.panel = value;
       }
-    }
-  },
-  watch: {
-    canShowPanel(newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.panel = !this.$vuetify.breakpoint.xs;
+    },
+    splitSize: {
+      get() {
+        return Number.parseInt(localStorage.getItem('properties-panel-split-size') || 20);
+      },
+      set(value) {
+        localStorage.setItem('properties-panel-split-size', value);
       }
     }
   },
   methods: {
     getFullScreenContainer() {
       return this.$refs.layout;
+    },
+    onSplitDragEnd(size) {
+      this.splitSize = 100 - Number.parseInt(size);
     }
   }
 }
 </script>
 <style>
-:root {
-  --main-color: #1976d2;
-  --main-gradient: rgba(25, 118, 210, 0.2);
-}
-
 .modeler-grid {
   position: absolute;
   height: 100%;
   width: 100%;
   background-color: white;
   display: grid;
-  grid-template-areas: 
-  "toolbar toolbar"
-  "modeler properties-panel";
   grid-template-rows: 40px 1fr;
-  grid-template-columns: 1fr auto;
-  gap: 0;
+  grid-template-areas: 
+    "toolbar"
+    "modeler";
 }
 .modeler-toolbar {
   grid-area: toolbar;
   border-bottom: rgba(0,0,0,.12) 1px solid;
+  grid-area: toolbar;
 }
 .modeler-toolbar button {
   min-width: 36px;
@@ -146,74 +148,27 @@ export default {
   margin: 0 24px;
 }
 .bpmn-diagram-container {
-  position: absolute;
   width: 100%;
   height: 100%;
   grid-area: modeler;
 }
+.modeler-grid.no-panel {
+  height: calc(100% - 81px);
+}
 .bpmn-diagram-container .workflow-modeler {
-  position: relative;
   width: 100%;
   height: 100%;
-}
-.properties-panel-container {
-  grid-area: properties-panel;
+  position: relative;
 }
 .properties-panel-container > * >:first-child {
-  width: 100%;
-  position: absolute;
-  height: 100%;
-  text-align: start;
+  overflow-y: auto;
+  display: contents;
 }
 a.bjs-powered-by {
   z-index: 4 !important;
 }
-.bpp-properties-panel input {
-  background-color: white;
-}
-.bpp-properties-panel select {
-  color: black;
-  text-transform: none;
-  background-color: white;
-  border-style: solid;
-}
-.bpp-properties-panel select[data-value] {
-  -webkit-appearance: menulist;
-}
-.bpp-table-row > button {
-  height: 29px;
-}
-.bpp-properties-panel button:before {
-  top: -2px;
-}
-.bpp-table-row > button:before {
-  top: 0;
-}
-.bpp-textfield button:before {
-  top: 0;
-}
 .djs-minimap .toggle {
   display: none;
-}
-.bpp-properties-group.group-closed {
-  max-height: 30px;
-}
-.bpp-textfield .search {
-  background: transparent;
-  border: none;
-  top: 0;
-  right: 0;
-}
-.bpp-properties-panel button.search::before {
-  content: "\F349";
-  font-family: "Material Design Icons";
-  font-size: 24px;
-}
-.bpp-properties-panel button.search {
-  padding: 0;
-  margin-top: 3px;
-  margin-right: 3px;
-  height: 23px;
 }
 .djs-popup-body .entry {
   text-align: left;
@@ -221,34 +176,6 @@ a.bjs-powered-by {
 .dmn-decision-table-container .powered-by-logo .logo,
 a.bjs-powered-by {
   display: none;
-}
-.bpp-entry-link {
-  color: var(--main-color);
-}
-ul.bpp-properties-tabs-links > li.bpp-active a {
-  border-top: 2px solid var(--main-color);
-}
-.bpp-properties-group > .group-toggle:hover {
-    background-color: var(--main-color);
-}
-.bpp-properties-panel button:hover {
-    color: var(--main-color);
-}
-.bpp-properties-panel input:focus, 
-.bpp-properties-panel button:focus, 
-.bpp-properties-panel textarea:focus, 
-.bpp-properties-panel [contenteditable]:focus {
-    border-color: var(--main-color);
-    box-shadow: 0 0 1px 2px var(--main-gradient);
-}
-.bpp-properties-group.group-closed {
-    background-color: var(--main-gradient);
-}
-.bpp-properties-group:hover > .group-toggle:hover {
-    background-color: var(--main-color);
-}
-.bpp-properties-group.group-closed:hover > .group-label {
-    color: var(--main-color);
 }
 .bpmn-icon-colorize::before {
   content: "\F0E3";

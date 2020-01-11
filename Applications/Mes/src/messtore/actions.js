@@ -1,11 +1,17 @@
 import { MesApi } from '../api/mesApi'
-import Vue from 'vue'
-import router from '../router'
 
 const api = new MesApi()
 
 /* eslint-disable */
 export default {
+  async initializeUser({ commit, getters }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        
+      action: async () => {console.log('tog')
+        const tog = await api.getUser()
+      }
+    })
+  },
   async initializeProperties({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -316,8 +322,7 @@ export default {
   changeDragResizeMode({commit}) {
     commit('changeDragResizeMode')
   },
-
-  async graphqlQueryWithRequestResultWraper({ commit }, { queryAction, successAction, linearLoader, actionAfterQuery }) {
+  async graphqlQueryWithRequestResultWraper({ commit, dispatch}, { queryAction, successAction, linearLoader, actionAfterQuery }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -340,11 +345,9 @@ export default {
         actionAfterQuery(result)
       }
     } catch (e) {
-      if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        if(router.currentRoute.name != 'MESLOGIN'){
-          router.push({name: 'MESLOGIN', query: { to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid }})
-        }
+      if (e.networkError && e.networkError.statusCode === 401) {
+        debugger
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)
@@ -354,8 +357,7 @@ export default {
       commit('setLinearLoader', false)
     }
   },
-
-  async graphqlQueryWraper({ commit }, { action, linearLoader }) {
+  async graphqlQueryWraper({ commit, dispatch }, { action, linearLoader }) {
     commit('closeSnackbar')
 
     if (linearLoader) {
@@ -366,10 +368,7 @@ export default {
       result = await action()
     } catch (e) {
       if (e.networkError && e.networkError.statusCode == 401) {
-        Vue.prototype.$authentication.resetCurentUser()
-        if(router.currentRoute.name != 'MESLOGIN'){
-          router.push({name: 'MESLOGIN', query: { to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid }})
-        }
+        await dispatch('auth/logout', null, { root: true })
       }
       else {
         commit('setSnackbarErrorMessage', e.message)

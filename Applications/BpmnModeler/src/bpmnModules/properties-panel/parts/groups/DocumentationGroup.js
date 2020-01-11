@@ -43,7 +43,6 @@ export default class DocumentationGroup extends PropertiesPanelGroup {
 
     entries.push(entryFactory.richEdit({
       id: 'documentation',
-      label: translate('Element Documentation'),
       model: 'documentation',
       get: getValue(bo),
       set: setValue(bo)
