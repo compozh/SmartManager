@@ -47,8 +47,6 @@ Vue.use(CollapseItem);
 Vue.use(Tabs);
 Vue.use(TabPane);
 
-console.log(config);
-
 // Плагины it-enterprise
 Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
 Vue.use(Router, { options: config, dependencies }, () => auth.getUserData());

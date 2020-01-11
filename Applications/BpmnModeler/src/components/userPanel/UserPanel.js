@@ -11,7 +11,6 @@ export default {
     }
   },
   render() {
-    console.log(this.userData);
     return this.$scopedSlots.default({
       user: {
         id: this.userData.id,

@@ -41,7 +41,7 @@
                   <v-flex class="text-xs-right">
                     <a v-on="params.buttonEventRecoverPasswordUrl">Забыли пароль?</a>
                     <v-btn
-                      class="cyan white--text text-xs-right"
+                      class="primary text-xs-right"
                       v-bind="params.buttonAttrs"
                       v-on="params.buttonEvents"
                     >Войти
@@ -57,7 +57,7 @@
               <v-flex>
                 <v-btn v-if="allowQrMode"
                   @click="qrMode = true"
-                  class="cyan white--text text-xs-right">
+                  class="primary text-xs-right">
                   Войти с помощью QR
                 </v-btn>
               </v-flex>
@@ -70,7 +70,7 @@
                 <qr-login></qr-login>
                 <v-btn
                   @click="qrMode = false"
-                  class="cyan white--text text-xs-right">
+                  class="primary text-xs-right">
                   Ввести логин и пароль
                 </v-btn>
               </v-flex>
