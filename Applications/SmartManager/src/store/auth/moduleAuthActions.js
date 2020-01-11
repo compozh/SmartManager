@@ -50,7 +50,7 @@ export default {
   },
   async applyDelegatedRights(context, userId) {
     try {
-      const result = await auth.applyDelegationRights(userId)
+      const result = await auth.applyDelegatedRights(userId)
       if (result.success) {
         if (router.currentRoute.name !== 'task-list') {
           await router.push('/')
