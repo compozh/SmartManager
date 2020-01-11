@@ -93,8 +93,13 @@ $appArray = New-Object System.Collections.Generic.List[System.Object]
 $haveWebApps = $false
 $GlobalPath = ""
 
-$eventSubmit = [System.EventHandler]{
-       
+
+$arrPropsApp = @()
+
+$eventSubmit = [System.EventHandler] {
+    $arrPropsApp = @()
+    write-host $arrPropsApp
+
     if($TextBoxSpNumber.Text -eq ""){
 		Write-Host "Please write path to SP"
 		return
@@ -119,6 +124,13 @@ $eventSubmit = [System.EventHandler]{
 	  
     foreach($app in $appArray){
 
+    $appObject = @{
+        appName = $app
+        buildNumber = ''
+        status = ''
+        exit = $false
+    }
+
         # Добавление GraphQL
         if($app -eq "GraphQL"){
             $body = @{
@@ -127,28 +139,51 @@ $eventSubmit = [System.EventHandler]{
                 }
                 parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false", "dir.projectName": "' + ($app) + '"}'
             }
-            Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+            $resultGQ = Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+            
+            $appObject.buildNumber = $resultGQ.buildNumber
+            $arrPropsApp += $appObject
+
             continue
         }
             
-        # HealthSummary Api
+        # HealthSummary Api  Потрудиться над нормальным выводом в HS
         if($app -eq "HealthSummary + api"){
             $body = @{
                 definition = @{
                     id = 72
                 }
-                parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false", "dir.projectName": "ProjectSummaryHealthApi"}'
+                parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false", "dir.projectName": "HealthSummaryApi"}'
             }
-            Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+
+
+            $resultHSApi = Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
             
+            $healthSummaryApi = @{
+                appName = "healthSummaryApi"
+                buildNumber = $resultHSApi.buildNumber
+                status = ''
+                exit = $false
+            }
+            $arrPropsApp += $healthSummaryApi
+
             # HealthSummary App
             $body = @{
                 definition = @{
                     id = 73
                 }
-                parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false", "dir.projectName": "ProjectHealthSummary"}'
+                parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false", "dir.projectName": "HealthSummary"}'
             }
-            Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+            $resultHS = Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+            
+            $healthSummary = @{
+                appName = "healthSummary"
+                buildNumber = $resultHS.buildNumber
+                status = ''
+                exit = $false
+            }
+    
+            $arrPropsApp += $healthSummary
             continue
         }
 
@@ -160,15 +195,17 @@ $eventSubmit = [System.EventHandler]{
             }
             parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false", "dir.projectName": "' + ($app) + '"}'
         }
-        Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
-        
+        $resultApp = Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+        $appObject.buildNumber = $resultApp.buildNumber
+        $arrPropsApp += $appObject
+       
         $haveWebApps = $true
     }
 
-       
-
-    # Если были добавлены веб приложения, значит добавляем и веб конфиг
+    
+    # Веб приложения не добавлены
     if($haveWebApps -eq $false){
+        StatusBuilds
         return
     }
         
@@ -182,16 +219,102 @@ $eventSubmit = [System.EventHandler]{
         }
         parameters = '{"pathToSP":'+$GlobalPath+',"system.debug":"false"}'# можно передавать просто имена, что обеспечит нам один билд, а не каждый под приложение
     }
-    Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+    $appConfig = Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?api-version=3.1" -UseDefaultCredentials -Method Post -ContentType 'application/json' -body ($body | convertto-json -Compress -Depth 10)
+    
+    $appWebConfig = @{
+        appName = "AppWebConfig"
+        buildNumber = $appConfig.buildNumber
+        status = ''
+        exit = $false
+    }
+    
+    $arrPropsApp += $appWebConfig
+
+    # Рекурсивный вызов функции
+    StatusBuilds
 };
+
+
+
+
+function StatusBuilds 
+{ 
+    # Переменная для выхода из рекурсии
+    $exitBuildsCount = 0
+    Write-Host  "Apppication               Buildnumber     Status"
+
+    foreach($app in $arrPropsApp){
+        $result = Invoke-RestMethod -Uri "$($url)/$($urlWebApps)/_apis/build/builds?buildNumber=$($app.buildNumber)&api-version=3.1" -UseDefaultCredentials -Method Get
+        
+        #-------------------------------------
+        # Кустарный способ добавление пробелов
+        $spacesName = ""
+        $spacesBuilds = ""
+        $countName = 24 - $app.appName.length
+        $countBuilds = 14 - $app.buildNumber.length
+
+        for($i=0; $i -lt $countName; $i++){
+            $spacesName +=" "
+        }
+        for($i=0; $i -lt $countBuilds; $i++){
+            $spacesBuilds +=" "
+        }
+        #-------------------------------------
+
+        if($result.value.status -eq "inProgress"){
+            Write-Host $app.appName $spacesName $app.buildNumber $spacesBuilds $result.value.status -ForegroundColor Cyan  
+            
+        }
+        if($result.value.status -eq "notStarted"){
+            Write-Host $app.appName $spacesName $app.buildNumber $spacesBuilds $result.value.status -ForegroundColor Gray
+        }
+
+        
+        if($result.value.result -eq "succeeded"){
+            Write-Host $app.appName $spacesName $app.buildNumber $spacesBuilds $result.value.result -ForegroundColor Green
+            $app.exit = $true
+        }
+
+        if($result.value.result -eq "failed"){
+            Write-Host $app.appName $spacesName $app.buildNumber $spacesBuilds $result.value.result -ForegroundColor Red 
+            $app.exit = $true
+        }
+
+        if($result.value.result -eq "canceled"){
+            Write-Host $app.appName $spacesName $app.buildNumber $spacesBuilds $result.value.result -ForegroundColor Yellow
+            $app.exit = $true
+        }
+       
+    }
+
+    foreach($app in $arrPropsApp){
+        if($app.exit -eq $true){
+            $exitBuildsCount++
+        }
+    }
+
+    Write-Host  $exitBuildsCount of $arrPropsApp.Count
+
+    if($exitBuildsCount -eq $arrPropsApp.Count){
+        Wait-Event -Timeout 2
+        Write-Host -ForegroundColor Green Completed
+        return
+    }
+
+    Wait-Event -Timeout 3
+    clear
+    StatusBuilds
+}
 
 
 $buttonOk.Add_Click($eventSubmit)
 
-
 $objForm.Controls.Add($buttonOk)
-
-
 
 $objForm.Add_Shown({$objForm.Activate()})
 [void] $objForm.ShowDialog()
+
+
+
+   
+       
