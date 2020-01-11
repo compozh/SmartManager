@@ -28,10 +28,6 @@ const mutations = {
   UPDATE_PRIMARY_COLOR(state, val) {
     state.themePrimaryColor = val
   },
-  UPDATE_USER_ROLE(state, val) {
-    state.userRole = val
-    localStorage.setItem('userRole', val)
-  },
   UPDATE_WINDOW_WIDTH(state, width) {
     state.windowWidth = width
   },
