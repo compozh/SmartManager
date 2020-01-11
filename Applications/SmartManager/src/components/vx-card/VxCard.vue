@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: VxCard.vue
-    Description: Card Component
-    Component Name: VxCard
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
  <template>
     <div class="vx-card" ref="card" :class="[
         {'overflow-hidden': tempHidden},
@@ -55,19 +45,10 @@
                 <slot name="footer"></slot>
             </div>
         </div>
-
-        <div class="vx-card__code-container" ref="codeContainer" v-show="this.$slots.codeContainer" :style="codeContainerStyles" :class="{collapsed: !showCode}">
-            <div class="code-content">
-                <prism :language="codeLanguage">
-                        <slot name="codeContainer"></slot>
-                </prism>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
-import Prism from 'vue-prism-component'
 import _color from '@/assets/utils/color.js'
 
 export default {
@@ -119,14 +100,6 @@ export default {
       default: '',
       type: String
     },
-    // bodyBackground: {
-    //   default: '',
-    //   type: String
-    // },
-    // headerbackground: {
-    //   default: '',
-    //   type: String
-    // },
     cardBackground: {
       default: '',
       type: String
@@ -175,17 +148,14 @@ export default {
     },
     cardClasses() {
       let str = ''
-
       // Add bg class
       if (_color.isColor(this.cardBackground)) {
         str += ` bg-${this.cardBackground}`
       }
-
       // add content color
       if (_color.isColor(this.contentColor)) {
         str += ` text-${this.contentColor}`
       }
-
       return str.trim()
     },
     titleStyles() {
@@ -195,12 +165,10 @@ export default {
     },
     titleClasses() {
       let str = ''
-
       // add content color
       if (_color.isColor(this.titleColor)) {
         str += ` text-${this.titleColor}`
       }
-
       return str.trim()
     },
     subtitleStyles() {
@@ -211,12 +179,10 @@ export default {
     },
     subtitleClasses() {
       let str = ''
-
       // add content color
       if (_color.isColor(this.subtitleColor)) {
         str += ` text-${this.subtitleColor}`
       }
-
       return str.trim()
     },
   },
@@ -281,9 +247,6 @@ export default {
         }, 150)
       }
     },
-  },
-  components: {
-    Prism,
   }
 }
 </script>

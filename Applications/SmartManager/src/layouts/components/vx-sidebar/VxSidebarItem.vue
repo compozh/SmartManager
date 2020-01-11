@@ -1,6 +1,6 @@
 <template>
   <div
-    class="vs-sidebar--item" v-if="canSee"
+    class="vs-sidebar--item"
     :class="[
         {'vs-sidebar-item-active':activeLink},
         {'disabled-item pointer-events-none': isDisabled},
@@ -98,15 +98,6 @@ export default {
         this.activeLink = !!((this.to === this.$router.path && this.to)
             || (this.$route.meta.parent === this.slug))
       }
-    }
-  },
-  computed: {
-    canSee() {
-      this.$acl.check(this.$store.state.userRole)
-      if (this.to) {
-        return this.$acl.check(this.$router.match(this.to).meta.rule)
-      }
-      return true
     }
   },
   updated() {

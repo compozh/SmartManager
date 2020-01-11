@@ -193,7 +193,7 @@ export class SmartManagerApi {
 
   static async getBusinessProcessesFromGql() {
     try {
-      const client = await getClient('smartmanager')
+      const client = await getClient('workFlow')
       return await client.query({
         query: gql`${businessProcesses}`
       })
@@ -204,7 +204,7 @@ export class SmartManagerApi {
 
   static async getFormDefinitionFromGql(procDefId) {
     try {
-      const client = await getClient('smartmanager')
+      const client = await getClient('workFlow')
       return await client.query({
         query: gql`${formDefinition}`,
         variables: {procDefId}
@@ -216,7 +216,7 @@ export class SmartManagerApi {
 
   static async startBusinessProcessInGql(processData) {
     try {
-      const client = await getClient('smartmanager')
+      const client = await getClient('workFlow')
       return await client.query({
         query: gql`${startBusinessProcess}`,
         variables: {processData}

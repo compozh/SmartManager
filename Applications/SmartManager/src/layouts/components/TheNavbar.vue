@@ -258,7 +258,7 @@
       </vs-navbar>
     </div>
     <vs-prompt :title="$t('comments.addComment')"
-               @cancel="comment=''"
+               @cancel="comment = ''"
                @accept="changeStage(stage, comment)"
                :active.sync="activePrompt"
                :acceptText="$t('buttons.send')"
@@ -484,7 +484,7 @@ export default {
     updateLocale(locale) {
       this.$localization.SetLocalization(locale)
       // Перечитка папок для обновления локализации
-      this.$store.dispatch('sm/getFolders')
+      this.$store.dispatch('sm/getFolders', true)
     },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
