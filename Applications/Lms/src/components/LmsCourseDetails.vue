@@ -3,13 +3,16 @@
 		<!--COURSE HEADER-->
 		<v-layout >
 			<v-flex xs12>
+        <v-card >
+          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+        </v-card>
 				<v-card v-if="course" v-bind:style="{'background-color': course.backgroundColor}">
 					<v-layout wrap row justify-center>
 						<v-flex md1 xs2 class='pt-5' hidden-xs-only>
 							<v-card-media v-bind:src='course.imageLink' height='90px' contain/>
 						</v-flex>
 						<v-flex lg6 md10 sm10 xs12>
-							<v-card-text :class='course.courseTypeInfoClass'>{{course.type}}</v-card-text>
+							<!-- <v-card-text :class='course.courseTypeInfoClass'>{{course.type}}</v-card-text> -->
 							<v-card-title :class='course.courseNameInfoClass'>{{course.name}}</v-card-title>
 							<v-card-text :class='course.courseDescriptionInfoClass'>{{course.description}}</v-card-text>
 							<v-layout row wrap>
@@ -106,10 +109,10 @@
 <script>
 
 export default {
-  name: "lms-course-details",
+  name: 'lms-course-details',
   data() {
     return {
-      courseGuid : ""
+      courseGuid: '',
     }
   },
   created() {
@@ -118,13 +121,7 @@ export default {
   },
   methods: {
     getCourseDetails(courseGuid) {
-      const courseDetails = this.$store.getters['lms/courses']
-      .finde(course => course.courseGuid === courseGuid)
-      if(courseDetails) {
-        commit('setCourseDetails', courseDetails)
-      } else {
-        this.$store.dispatch('lms/getCourseDetails', courseGuid)
-      }
+      this.$store.dispatch('lms/getCourseDetails', courseGuid)
     }
   },
   computed: {
@@ -138,26 +135,37 @@ export default {
         var course = courseDetails.course
 
         if (course.backgroundColor != undefined) {
-          if (course.backgroundColor.toUpperCase() === "#FFFFFF") {
-            course.courseTypeInfoClass = "title font-weight-regular pt-4 pb-1 black--text"
-			  		course.courseNameInfoClass = "display-1 font-weight-medium pt-0 pb-2 black--text"
-			  		course.courseDescriptionInfoClass = "body-2 font-weight-medium pt-0 pb-3 black--text"
-			  		course.courseDetailedDurationInfoClass = "body-2 font-weight-medium pt-0 pb-4 black--text"
-			  		course.durationInfoClass = "black--text"
-            course.modulesQtInfoClass = "black--text mt-1 pb-1"
+          if (course.backgroundColor.toUpperCase() === '#FFFFFF') {
+            course.courseTypeInfoClass = 'title font-weight-regular pt-4 pb-1 black--text'
+            course.courseNameInfoClass = 'display-1 font-weight-medium pt-0 pb-2 black--text'
+            course.courseDescriptionInfoClass = 'body-2 font-weight-medium pt-0 pb-3 black--text'
+            course.courseDetailedDurationInfoClass = 'body-2 font-weight-medium pt-0 pb-4 black--text'
+            course.durationInfoClass = 'black--text'
+            course.modulesQtInfoClass = 'black--text mt-1 pb-1'
           } else {
-            course.courseTypeInfoClass = "title font-weight-regular pt-4 pb-1 white--text"
-            course.courseNameInfoClass = "display-1 font-weight-medium pt-0 pb-2 white--text"
-            course.courseDescriptionInfoClass = "body-2 font-weight-medium pt-0 pb-3 white--text"
-            course.courseDetailedDurationInfoClass = "body-2 font-weight-medium pt-0 pb-4 white--text"
-            course.durationInfoClass = "white--text"
-            course.modulesQtInfoClass = "white--text mt-1 pb-1"
+            course.courseTypeInfoClass = 'title font-weight-regular pt-4 pb-1 white--text'
+            course.courseNameInfoClass = 'display-1 font-weight-medium pt-0 pb-2 white--text'
+            course.courseDescriptionInfoClass = 'body-2 font-weight-medium pt-0 pb-3 white--text'
+            course.courseDetailedDurationInfoClass = 'body-2 font-weight-medium pt-0 pb-4 white--text'
+            course.durationInfoClass = 'white--text'
+            course.modulesQtInfoClass = 'white--text mt-1 pb-1'
           }
         }
         return course
       } else {
         return null
       }
+    },
+    links() {
+      let inputLinks = this.$route.params.links
+      let links = [...inputLinks,
+        {
+          text: this.$route.params.courseName,
+          disabled: true,
+          href: this.$route.path
+        }]
+      links[links.length - 2].disabled = false
+      return links
     }
   }
 }

@@ -3,6 +3,9 @@
 		<!--MODULE HEADER-->
 		<v-layout mb-4>
 			<v-flex id='modulesHeader'>
+        <v-card >
+          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+        </v-card>
 				<v-card v-if="moduleData.data">
 					<v-layout wrap row justify-center>
 						<v-flex md1 xs2 class='pt-3' hidden-xs-only>
@@ -95,20 +98,31 @@
 <script>
 
 export default {
-  name: "lms-module-details",
+  name: 'lms-module-details',
   created() {
-    this.moduleGuid = this.$route.params.moduleGuid;
+    this.moduleGuid = this.$route.params.moduleGuid
     this.moduleData.data = this.$route.params.moduleData
-
-
   },
   data() {
     return {
-      moduleGuid : "",
-      moduleData : { data: undefined },
-      lessons : { data: undefined }
+      moduleGuid: '',
+      moduleData: { data: undefined },
+      lessons: { data: undefined }
     }
   },
+  computed: {
+    links() {
+      let inputLinks = this.$route.params.links
+      let links = [...inputLinks,
+        {
+          text: this.$route.params.moduleName,
+          disabled: true,
+          href: this.$route.path
+        }]
+      links[links.length - 2].disabled = false
+      return links
+    }
+  }
 }
 </script>
 

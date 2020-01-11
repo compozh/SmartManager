@@ -84,7 +84,6 @@ export default {
     }
   },
   beforeCreate() {
-    // debugger
     links[0].target.params.courseGuid = this.$route.params.courseGuid;
     links[1].target.params.moduleGuid = this.$route.params.moduleGuid;
     links[2].target.params.lessonGuid = this.$route.params.lessonGuid;

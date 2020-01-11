@@ -2,6 +2,9 @@
 	<v-container fluid pa-0 ma-0>
 		<v-layout>
 			<v-flex xs12>
+        <v-card>
+          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+        </v-card>
 				<v-card v-bind:style="{'background-color': '#1a237e'}">
 					<v-flex py-3>
 						<h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми курсами</h4>
@@ -20,7 +23,7 @@
 		</v-layout>
 		<v-layout wrap row>
 			<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
-         <course-card v-if="course" :course="course" />
+         <course-card v-if="course" :links="links" :course="course" />
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -157,7 +160,6 @@ export default {
       }
       return filters
     },
-
     courses () {
       if (this.filterChanged) {
         return this.coursesFiltered
@@ -165,6 +167,21 @@ export default {
         this.allCourses = this.$store.getters['lms/courses']
         return this.allCourses
       }
+    },
+    links() {
+      let links
+      const thisLink = {
+          text: 'Курсы',
+          disabled: true,
+          href: this.$route.path
+        }
+      if(this.$route.params) {
+        const inputLinks = this.$route.params.links
+        links = [...inputLinks, thisLink]
+      } else {
+        links = [thisLink]
+      }
+      return links
     }
   },
 }

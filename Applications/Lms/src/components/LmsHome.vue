@@ -49,7 +49,10 @@ export default {
     },
 
     getRecommended() {
-      this.$store.dispatch('lms/getRecommended')
+      const recommended = this.$store.getters['lms/recommended']
+      if(!recommended) {
+        this.$store.dispatch('lms/getRecommended')
+      }
     }
   },
   created () {

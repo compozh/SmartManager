@@ -27,7 +27,12 @@
               <div style='height:118px;overflow:hidden' class='px-4'>
   						  <h4 class='caption font-weight-medium' style='color:rgba(0,0,0,.5)'>{{moduleData.type}}</h4>
   						  <h3 class='cardTitle subheading font-weight-medium mb-1 blue--text text--darken-4'
-  						  	@click='$router.push({name: "LMSMODULEDETAILS", params: {moduleGuid: moduleData.moduleGuid, moduleName: moduleData.name, moduleData: moduleData}})'>{{moduleData.name}}
+  						  	@click='$router.push({name: "LMSMODULEDETAILS", params: {
+                    moduleGuid: moduleData.moduleGuid,
+                    moduleName: moduleData.name,
+                    moduleData: moduleData,
+                    links
+                    }})'>{{moduleData.name}}
   						  </h3>
 						  <div class='.body-2'>{{moduleData.description}}</div>
 					  </div>
@@ -59,6 +64,7 @@
 export default {
   name: 'module-card',
   props: {
+    links: Array,
     moduleData: Object
   }
 }

@@ -2,6 +2,9 @@
 	<v-container fluid pa-0 ma-0>
 		<v-layout>
 			<v-flex xs12>
+        <v-card>
+          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+        </v-card>
 				<v-card v-bind:style="{'background-color': '#1a237e'}">
 					<v-flex py-3>
 						<h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми модулями</h4>
@@ -19,7 +22,7 @@
 		<v-layout wrap row mx-2 mt-2 mb-4>
 			<v-flex v-for='moduleData in modules' :key='moduleData.courseId' lg3 md4 sm6 xs12>
 
-        <module-card v-if="moduleData" :moduleData="moduleData" />
+        <module-card v-if="moduleData" :links="links" :moduleData="moduleData" />
 
 			</v-flex>
 		</v-layout>
@@ -151,7 +154,6 @@ export default {
       }
       return filters
     },
-
     modules () {
       if (this.filterChanged) {
         return this.modulesFiltered
@@ -159,6 +161,21 @@ export default {
         this.allModules = this.$store.getters['lms/modules']
         return this.allModules
       }
+    },
+    links() {
+      let links
+      const thisLink = {
+          text: 'Модули',
+          disabled: true,
+          href: this.$route.path
+        }
+      if(this.$route.params) {
+        const inputLinks = this.$route.params.links
+        links = [...inputLinks, thisLink]
+      } else {
+        links = [thisLink]
+      }
+      return links
     }
   }
 }

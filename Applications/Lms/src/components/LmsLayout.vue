@@ -8,7 +8,8 @@
         <v-list-tile
           v-for="(link, index) in links"
           :key="index"
-          :to="{name: link.Id}">
+          :to="{name: link.Id, params: {links:[{text: 'Главная', disabled: false, href: $route.path}]}}"
+          >
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
           </v-list-tile-action>
@@ -192,7 +193,7 @@ export default {
       this.goHome()
     },
     search() {
-      this.$router.push('search')
+      this.$router.push({name: 'LMSSEARCH'})
     },
     goHome() {
       if (this.$router.history.current.name == 'LMSREALHOME') {
