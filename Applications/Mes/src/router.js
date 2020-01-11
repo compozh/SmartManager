@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import cookies from 'vue-cookies'
 
+import store from './store/index'
 Vue.use(VueRouter)
 
 let  cookiesUuid = cookies.get('mesUuid'),
@@ -130,27 +131,19 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // if(from.query.to && to.name == from.name) {
-  //   return router.push({ path: from.query.to, query: {fixedUuid: from.query.fixedUuid || cookiesUuid || sessionStorageUuid }} )
-  // }
-  debugger
-  // Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
-    if(
-      from.path == to.path 
-      && from.path === '/login') {
-        router.push({ name: 'home'}).then(() => {
-          router.go()
-        })
-        return 
-    } 
-    if (
-      to.path === '/login' ||
-      to.path === '/error/404' ||
-      to.path === '/error/500' 
-    ) {
-      return next()
-    }
-    // router.push({ name: 'MESLOGIN', query: { to: to.path , fixedUuid: cookiesUuid}} )
-  // })
+  if( to.name == from.name && to.name == 'MESLOGIN' ) {
+    return 
+  }
+  let user = store.state.auth.user
+  if (
+    to.path === '/login' ||
+    to.path === '/error/404' ||
+    to.path === '/error/500' || 
+    !!user
+  ) {
+    return next()
+  } 
+  router.push({ name: 'MESLOGIN', query: { to: from.path , fixedUuid: cookiesUuid}} )
+  
 })
 export default router

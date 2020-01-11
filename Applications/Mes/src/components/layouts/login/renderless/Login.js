@@ -12,7 +12,7 @@ export default {
   }),
   computed: {
     routeToBack() {
-      return this.$router.currentRoute.query.to || 'home'
+      return this.$router.currentRoute.query.to || '/'
     },
     needEnterTempPassword() {
       // Не реализовано
@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     async login() {
-        console.log( this.userData )
       if (!this.userData.login) {
         return (this.message = this.$t('authentication.emptyLogin'))
       }
@@ -33,7 +32,10 @@ export default {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
         if (result.success) {
-          await this.$router.push({ path: this.routeToBack })
+          await this.$router.push({ path: this.routeToBack, query: this.$router.currentRoute.query.fixedUuid  })
+          if(!this.$router.currentRoute.query.to ) {
+            router.go()
+          }
         } else {
           throw result.errorMessage
         }

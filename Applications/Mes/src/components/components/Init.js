@@ -15,6 +15,7 @@ export default class Init {
             uuid = fixedUuid
         } else if (cookiesUuid) {
             uuid = cookiesUuid
+            console.log({ query: {...router.currentRoute.query, fixedUuid: uuid }})
             router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         } else if (sessionStorageUuid) {
             uuid = sessionStorageUuid

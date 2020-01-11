@@ -7,8 +7,8 @@ export default {
   async initializeUser({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
         
-      action: async () => {console.log('tog')
-        const tog = await api.getUser()
+      action: async () => {
+        await api.getUser()
       }
     })
   },
@@ -346,7 +346,6 @@ export default {
       }
     } catch (e) {
       if (e.networkError && e.networkError.statusCode === 401) {
-        debugger
         await dispatch('auth/logout', null, { root: true })
       }
       else {

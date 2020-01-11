@@ -7,13 +7,13 @@ export default {
     auth.clearTokens()
     commit('UPDATE_AUTHENTICATED_USER', null)
     if (router.currentRoute.name !== 'MESLOGIN') {
-      router.push({path: '/MES/LOGIN'})
+      router.push({path: 'login', query: { to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid }})
     }
   },
   async login({dispatch}, {login, password, remember}) {
     const userIsLoggedIn = await dispatch('userIsLoggedIn')
     if (userIsLoggedIn) {
-      return
+      return {success: true}
     }
     try {
       const result = await auth.login(login, password, remember)
@@ -43,7 +43,7 @@ export default {
     // If user is already logged in notify and exit
     if (state.user) {
       // TODO: Уведомление о том что пользователь уже вошел в систему
-      router.push('/MES')
+      router.push('home')
       return true
     }
     return false
@@ -51,7 +51,7 @@ export default {
   updateAuthenticatedUser({commit}, result) {
     if (result.success) {
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      router.push(router.currentRoute.query.to || '/MES')
+      router.push(router.currentRoute.query.to || 'home')
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
       if (router.currentRoute.name !== 'MESLOGIN') {

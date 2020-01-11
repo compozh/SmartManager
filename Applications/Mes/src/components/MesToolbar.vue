@@ -58,12 +58,12 @@
       <!-- Информация Юзера -->
       <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.width > 1040">
         <span class="user-info-text">
-          {{userData.userName}}
+          {{userData.userName || userData.login }}
         </span>
       </div>
       <!-- Панель Юзера -->
       <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter && $route.name !='MESLOGIN'">
-        <user-panel hideDelegatedRightsButton="true" mini="true" style="border: 1px solid silver">
+        <user-panel hideDelegatedRightsButton="true" mini="true" >
           <v-btn v-if="$vuetify.breakpoint.smAndDown" icon>
             <v-icon>account_circle</v-icon>
           </v-btn>
@@ -81,6 +81,9 @@ import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
 
 export default {
   name: 'mes-toolbar',
+  data() {
+    return {searchWorkCenter: false}
+  },
   components: {
     Init,
     UserPanel
@@ -92,7 +95,7 @@ export default {
   },
   computed: {
     userData() {
-      return this.$store.state.user || {}
+      return this.$store.state.auth.user || {}
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
