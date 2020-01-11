@@ -297,7 +297,6 @@ function addAuthHeader(options, token) {
 }
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  console.log('error');
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens();
     routerDependencies.router.push('/login');
