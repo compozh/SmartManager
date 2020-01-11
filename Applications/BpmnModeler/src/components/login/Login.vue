@@ -41,6 +41,7 @@
                   <v-flex class="text-xs-right">
                     <a v-on="params.buttonEventRecoverPasswordUrl">Забыли пароль?</a>
                     <v-btn
+                      :loading="loading"
                       class="primary text-xs-right"
                       v-bind="params.buttonAttrs"
                       v-on="params.buttonEvents"
