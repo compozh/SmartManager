@@ -3,12 +3,8 @@ import WebApps from '@it-enterprise/webappscore';
 import Localization from '@it-enterprise/localization';
 import Eds from '@it-enterprise/eds';
 import GrapgQlCore from '@it-enterprise/graphql';
-import Authentication from '@it-enterprise/authentication';
-import '@it-enterprise/authentication/dist/authentication.css';
 import Router from '@it-enterprise/routercore';
-import ItCommon from '@it-enterprise/common';
-import '@it-enterprise/common/dist/common-components.css';
-
+import auth from '@it-enterprise/jwtauthentication';
 
 // vue пакеты
 import Vue from 'vue';
@@ -24,7 +20,9 @@ import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 import './element-variables.scss';
 
 import { routerDependencies } from './router';
+import config from './config';
 
+auth.config(config.GrapgQlUrl);
 // объект с зависимостями
 let dependencies = {
   store,
@@ -38,6 +36,7 @@ Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(VueI18n);
 
+// VueSplit
 Vue.use(VueSplit);
 
 // Element UI
@@ -49,17 +48,15 @@ Vue.use(Tabs);
 Vue.use(TabPane);
 
 // Плагины it-enterprise
-Vue.use(ItCommon);
-Vue.use(GrapgQlCore, { options: window.myConfig, dependencies });
+Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
+Vue.use(Router, { options: config, dependencies }, () => auth.getUserData());
+Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
-Vue.use(Authentication, { options: window.myConfig, dependencies });
-Vue.use(Router, { options: window.myConfig, dependencies });
 Vue.use(Eds, { dependencies });
-Vue.use(WebApps, { dependencies, options: window.myConfig });
 
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'))
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'))
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'))
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'));
 
 // Шина событий
 export const eventBus = new Vue();
@@ -79,24 +76,20 @@ reqFormio.keys().map(key => {
     return
   }
   Vue.component(reqFormio(key).default.name, reqFormio(key).default)
-})
+});
 
 start();
 
+/**
+ * Загрузка приложения
+ */
 async function start()   {
-  // Загрузка приложения
   let webAppsCore = await Vue.prototype.$WebApps;
-
   let appComponent = await webAppsCore.GetApplicationComponent({
-
     properties: {
       i18n,
       store
     }
   });
-
   new Vue(appComponent).$mount('#app');
 }
-
-
-

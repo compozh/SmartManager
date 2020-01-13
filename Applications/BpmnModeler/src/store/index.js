@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 
 // Modules
 import bpmnStore from '../bpmnstore/store';
-import formiostore from '../formio/formiostore/store'
+import formiostore from '../formio/formiostore/store';
+import authModule from './auth/moduleAuth';
 
 Vue.use(Vuex);
 
@@ -12,7 +13,8 @@ const store = new Vuex.Store({
   state: {},
   modules: {
     [bpmnStore.namespace]: bpmnStore,
-    [formiostore.namespace]: formiostore
+    [formiostore.namespace]: formiostore,
+    auth: authModule
   }
 });
 

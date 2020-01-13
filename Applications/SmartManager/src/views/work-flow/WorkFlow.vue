@@ -102,7 +102,7 @@ export default {
       this.bpListLoading = true
       const result = await this.$store.dispatch('sm/getBusinessProcesses')
       this.bpListLoading = false
-      this.businessProcesses = result
+      this.businessProcesses = result || []
     },
     async getFormDefinition(bp) {
       const result = await this.$store.dispatch(
@@ -180,7 +180,7 @@ export default {
   .formio::v-deep {
     @import "~formiojs/dist/formio.form.min.css";
     @import "../../assets/scss/formio";
-    @import "~bootstrap/scss/bootstrap";
+    @import "../../assets/scss/bootstrap/bootstrap";
 
     .formio-form {
       min-height: 20px !important;

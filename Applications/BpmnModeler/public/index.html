@@ -1,15 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<script>
-		var devMode = '<%= NODE_ENV %>' == "development"
-		window.myConfig = {
-			GrapgQlUrl: devMode ? "http://localhost:15504/" : "/GraphQlServer/",
-			BASE_URL: "<%= VUE_APP_BASE_PATH %>",
-			WsUrl: devMode ? "http://localhost:64137/ws/api/" : "/ws/api/",
-			SignalRUrl: "https://m.it.ua/ws/signalr/hubs"
-		}
-	</script>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -30,18 +21,9 @@
 			-moz-osx-font-smoothing: grayscale;
 			text-align: center;
 		}
-
 		html {
 			overflow-y: auto;
 		}
-
-		.one {
-			position: fixed;
-			right: 20px;
-			top: 10px;
-			z-index: 999;
-		}
 	</style>
-	<!-- built files will be auto injected -->
 </body>
 </html>
