@@ -32,6 +32,7 @@ import VueCookies from 'vue-cookies'
 import { routerDependencies } from './router'
 
 import signalR from './signalR'
+import BarcodeScaner from './components/components/BarcodeScaner'
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -68,6 +69,9 @@ Vue.use(WebApps, { dependencies, options: window.myConfig }, () => auth.getToken
 Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
+
+// Шина событий
+export const eventBus = new Vue();
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
@@ -125,6 +129,8 @@ async function start()   {
     }
   })
 
-
   new Vue(appComponent).$mount('#app')
+
+  var barcodeScaner = new BarcodeScaner()
+    barcodeScaner.initialize()
 }
