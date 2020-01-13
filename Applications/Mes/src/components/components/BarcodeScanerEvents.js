@@ -19,6 +19,10 @@ export default class BarcodeScanerEvents {
     }
 
     onKeyup(event) {
+        if(!('which' in event)) {
+            return;
+        }
+        
         var me = this
         if (me.timeoutHandler) {
             clearTimeout(me.timeoutHandler)
@@ -33,7 +37,7 @@ export default class BarcodeScanerEvents {
             case 0:
                 break;
             default:
-                var code = event.key && event.key.length > 1 ? event.key : ''
+                var code = event.key && event.key.length > 1 ? '' : event.key
                 if(event.which >= 65 && event.which <= 90) {
                     code = String.fromCharCode(event.which)
                 }
