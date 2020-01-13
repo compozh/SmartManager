@@ -43,19 +43,23 @@ export default {
     // If user is already logged in notify and exit
     if (state.user) {
       // TODO: Уведомление о том что пользователь уже вошел в систему
-      router.push('home')
+      router.push({path:router.currentRoute.query.to || 'home', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
       return true
     }
     return false
   },
   updateAuthenticatedUser({commit}, result) {
     if (result.success) {
+      let to = router.currentRoute.query.to
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      router.push(router.currentRoute.query.to || 'home')
+      router.push({path: to || 'home', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+      if(!to ) {
+        router.go()
+      }
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
       if (router.currentRoute.name !== 'MESLOGIN') {
-        router.push({path: 'login'})
+        router.push({path: 'login', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
       }
     }
   }

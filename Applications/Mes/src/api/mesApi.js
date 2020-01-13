@@ -41,7 +41,7 @@ import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphq
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens()
-    router.push({path: 'login'})
+    router.push({path: 'login', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
   }
   if (graphQLErrors) {
     // TODO: Обработать ошибку

@@ -15,7 +15,6 @@ export default class Init {
             uuid = fixedUuid
         } else if (cookiesUuid) {
             uuid = cookiesUuid
-            console.log({ query: {...router.currentRoute.query, fixedUuid: uuid }})
             router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         } else if (sessionStorageUuid) {
             uuid = sessionStorageUuid
@@ -100,7 +99,6 @@ export default class Init {
         })
           links =  links.concat(dynamicPages)
         } else {
-          // console.error('dynamic')
           store.dispatch('mes/initializeMobilityProperties')            
         }
 
@@ -115,14 +113,14 @@ export default class Init {
               if (page.id == 'INSTALLATIONS') {
                 pages.push(page)
                 if(page.name != scope.$route.name && scope.$route.name != 'ERROR' ) {
-                  router.replace({path: page.path})
+                  router.replace({path: page.path, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
                 }
               }
               break
             case 'ONLY_QUALITY':
               if (page.id == 'QUALITY') {
                 if(page.name != scope.$route.name && scope.$route.name != 'ERROR' ) {
-                  router.replace({path: page.path})
+                  router.replace({path: page.path , query: {fixedUuid: router.currentRoute.query.fixedUuid}})
                 }
                 pages.push(page)
               }

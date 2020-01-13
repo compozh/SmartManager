@@ -93,7 +93,7 @@ export default {
         var barcode = event.detail.code
         if(me.$route.name == "MESLOGIN") {
           Vue.prototype.$authentication.loginByQr(barcode).then(result => {
-          result && me.$router.replace({path: '/tasks'})
+          result && me.$router.replace({path: '/tasks', query: {fixedUuid: this.$router.currentRoute.query.fixedUuid}})
         }).catch(reason => {
           me.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
         });

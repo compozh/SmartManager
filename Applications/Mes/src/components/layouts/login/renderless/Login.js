@@ -31,12 +31,7 @@ export default {
       try {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
-        if (result.success) {
-          await this.$router.push({ path: this.routeToBack, query: this.$router.currentRoute.query.fixedUuid  })
-          if(!this.$router.currentRoute.query.to ) {
-            router.go()
-          }
-        } else {
+        if (!result.success) {
           throw result.errorMessage
         }
       } catch (e) {

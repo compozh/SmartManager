@@ -131,7 +131,7 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if( to.name == from.name && to.name == 'MESLOGIN' ) {
+  if( to.name == from.name && to.name == 'MESLOGIN' && to.query.fixedUuid == from.query.fixedUuid ) {
     return 
   }
   let user = store.state.auth.user
