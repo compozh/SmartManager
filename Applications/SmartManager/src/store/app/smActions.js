@@ -21,12 +21,15 @@ function notify(type, title, text) {
 }
 
 export default {
-  async getFolders({commit}) {
+  async getFolders({commit}, loading) {
+    startLoading(loading)
     try {
       const result = await api.getFoldersFromGql()
+      !loading || stopLoading()
       const folders = result.data.smtasks.folders
       commit('setFolders', folders)
     } catch (e) {
+      stopLoading()
       console.log(e.message)
       notify('danger', 'foldersTitle', 'foldersError')
     }

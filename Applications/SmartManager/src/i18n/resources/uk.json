@@ -29,7 +29,7 @@
     "newSubTask": "Нова підзадача для задачі {task}",
     "newTaskForCase": "Нова задача для кейсу {case}",
     "taskName": "Назва задачі",
-    "noTasks": "Не має задач у папці",
+    "noTasks": "Немає задач",
     "description": "Опис задачі",
     "id": "ID",
     "performer": "Виконавець",

@@ -1,10 +1,4 @@
-
 const actions = ({
-
-  // ////////////////////////////////////////////
-  // SIDEBAR & UI UX
-  // ////////////////////////////////////////////
-
   updateSidebarWidth({ commit }, width) {
     commit('UPDATE_SIDEBAR_WIDTH', width)
   },
@@ -14,30 +8,9 @@ const actions = ({
   updateTheme({ commit }, val) {
     commit('UPDATE_THEME', val)
   },
-  updateUserRole({ commit }, val) {
-    commit('UPDATE_USER_ROLE', val)
-  },
   updateWindowWidth({ commit }, width) {
     commit('UPDATE_WINDOW_WIDTH', width)
-  },
-
-
-  // ////////////////////////////////////////////
-  // COMPONENT
-  // ////////////////////////////////////////////
-
-  // VxAutoSuggest
-  updateStarredPage({ commit }, payload) {
-    commit('UPDATE_STARRED_PAGE', payload)
-  },
-
-  //  The Navbar
-  arrangeStarredPagesLimited({ commit }, list) {
-    commit('ARRANGE_STARRED_PAGES_LIMITED', list)
-  },
-  arrangeStarredPagesMore({ commit }, list) {
-    commit('ARRANGE_STARRED_PAGES_MORE', list)
-  },
+  }
 })
 
 export default actions
