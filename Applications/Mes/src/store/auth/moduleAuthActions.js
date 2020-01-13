@@ -43,16 +43,16 @@ export default {
     // If user is already logged in notify and exit
     if (state.user) {
       // TODO: Уведомление о том что пользователь уже вошел в систему
-      router.push({path:router.currentRoute.query.to || 'home', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+      router.push({path:router.currentRoute.query.to || '/', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
       return true
     }
     return false
   },
-  updateAuthenticatedUser({commit}, result) {
+  async updateAuthenticatedUser({commit}, result) {
     if (result.success) {
       let to = router.currentRoute.query.to
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      router.push({path: to || 'home', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+      await router.push({path: to || '/', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
       if(!to ) {
         router.go()
       }
