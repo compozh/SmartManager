@@ -62,7 +62,7 @@ Vue.use(signalR)
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
-Vue.use(Router, { options: window.myConfig, dependencies }, () => auth.getToken())
+Vue.use(Router, { options: window.myConfig, dependencies }, () => auth.getUserData())
 Vue.use(WebApps, { dependencies, options: window.myConfig }, () => auth.getToken())
 
 Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))

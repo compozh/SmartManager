@@ -455,8 +455,8 @@ export default {
 
   .formio::v-deep {
     @import "~formiojs/dist/formio.form.min.css";
-    @import "../../../assets/scss/formio";
-    @import "~bootstrap/scss/bootstrap";
+    @import "@/assets/scss/formio";
+    @import "@/assets/scss/bootstrap/bootstrap";
 
     .formio-form {
       min-height: 20px !important;

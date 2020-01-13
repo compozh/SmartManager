@@ -3,7 +3,7 @@
   <div id="component-chat-log" class="m-8">
     <div
       v-for="(comment, index) in comments"
-      class="msg-grp-container md:max-w-sm"
+      class="msg-grp-container"
       :key="index"
     >
       <!-- If previouse msg is older than current time -->
