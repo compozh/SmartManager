@@ -81,7 +81,23 @@ export default {
   },
   methods: {
     onSubmit(params) {
-      this.$emit('formSubmit', JSON.stringify(params.data))
+      var submission = JSON.stringify(params.data),
+        form = this.$refs.formioComponent
+
+      this.$emit('formSubmit', { submission, completeSubmissionCallback: result => {
+          var event = '',
+            message = ''
+            
+          if (result && result.success) {
+              event = 'submitDone'
+              message = result.successMessage
+          } else {
+              event = 'submitError'
+              message = result ? result.errorMessage : ''
+          }
+          form.formio.emit(event, message)
+        }
+      })
     },
     onChange(params) {
 
