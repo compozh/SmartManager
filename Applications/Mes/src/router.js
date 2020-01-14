@@ -109,6 +109,7 @@ export const router = new VueRouter({
           path: '/',
           name: 'home',
           component: () => import('@/components/pages/Main.vue'),
+          redirect: 'tasks',
         },
         {
           path: 'error/:status_code',
