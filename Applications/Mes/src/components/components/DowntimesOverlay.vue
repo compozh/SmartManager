@@ -14,7 +14,7 @@
           indeterminate
           color="primary"
       ></v-progress-circular>
-      <formio-component
+      <formio-form-component
         ref="formioBuilder"
         @formSubmit=formSubmit
         :formDefinition=createDowntimeFormio

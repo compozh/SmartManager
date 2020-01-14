@@ -1,7 +1,7 @@
 <template>
 <v-layout class="quality-layout">
   <v-flex class="quality-flex" v-if="initializeQualities" :key="this.qualityFormioKey">
-    <formio-component
+    <formio-form-component
       v-if="selectedQuality"
       ref="formioBuilder"
       @formSubmit=formSubmit
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    async formSubmit(submission) {
+    async formSubmit({ submission, completeSubmissionCallback }) {
       var me = this,
         direction = 1,
         properties = {
@@ -56,6 +56,7 @@ export default {
           me.$store.commit('mes/setInitializeQualities', false)
           me.$store.dispatch('mes/downloadQualities', { processTypeCode: me.properties.qualityProcessType, searchDateTime, direction })
         }
+        completeSubmissionCallback(result)
       })
       me.$store.commit('mes/closeDialogLinearLoader')
     },
