@@ -6,7 +6,6 @@
       :options=options
       :language=options.language
       @submit=onSubmit
-      @change=onChange
       @customEvent=customEvent
       @callCustomEvent=requestToServerAction
       @qrScaner=qrScaner
@@ -50,8 +49,8 @@ export default {
   },
   created() {
     var me = this
-    window.requestToServer = (eventCode, callback) => {
-        me.requestToServerAction({ eventCode, callback })
+    window.requestToServer = (eventCode, callback, params) => {
+        me.requestToServerAction({ eventCode, callback, params })
     }
   },
   props: {
@@ -80,14 +79,14 @@ export default {
     }
   },
   methods: {
-    onSubmit(params) {
-      var submission = JSON.stringify(params.data),
+    onSubmit({ data }) {
+      var submission = JSON.stringify(data),
         form = this.$refs.formioComponent
 
       this.$emit('formSubmit', { submission, completeSubmissionCallback: result => {
           var event = '',
             message = ''
-            
+
           if (result && result.success) {
               event = 'submitDone'
               message = result.successMessage
@@ -99,21 +98,17 @@ export default {
         }
       })
     },
-    onChange(params) {
-
-    },
-    customEvent(params){
+    customEvent({ component, type, params }){
       if(this.actionsDisabled) {
         return;
       }
       var me = this,
         form = me.$refs.formioComponent,
-        component = params.component,
         displayLoading = component.displayLoading
       if (displayLoading){
       me.setComponentLoading(component.key, true)
       }
-			me.requestToServerAction({ eventCode: params.type, callback: () => {
+			me.requestToServerAction({ eventCode: type, params, callback: () => {
         if (displayLoading) {
           me.setComponentLoading(component.key, false)
         }
@@ -131,7 +126,7 @@ export default {
       var form = this.$refs.formioComponent
       return JSON.stringify(form.submission, null, 4)
     },
-    requestToServerAction({ eventCode, callback }) {
+    requestToServerAction({ eventCode, callback, params }) {
       if(this.actionsDisabled) {
         return;
       }
@@ -143,7 +138,7 @@ export default {
         submission = JSON.stringify(form.submission.data, null, 4)
 
       me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
-        params: { eventCode, components, submission, display, settings }}).then(result => {
+        params: { eventCode, components, submission, display, settings, params }}).then(result => {
           if(result && result.success) {
             var dataChanged = false;
             if (result.components && result.components != components) {
