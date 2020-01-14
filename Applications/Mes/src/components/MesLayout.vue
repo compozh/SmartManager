@@ -81,6 +81,11 @@ export default {
     }
   },
   created() {
+    
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.$store.commit('mes/setMenuDrawerMode', false)
+    }
+
     eventBus.$on(events.scannedBarCode, barcode => {
       if(this.$route.name == "MESLOGIN") {
         Vue.prototype.$authentication.loginByQr(barcode).then(result => {
@@ -97,7 +102,7 @@ export default {
   },
   computed: {
     userData() {
-      return this.$store.state.user
+      return this.$store.state.auth.user
     },
     mainContainerKey() {
       return this.$store.getters['mes/mainContainerKey']
@@ -335,7 +340,7 @@ export default {
     height: 80vh !important;
   }
 
-  .formio-component {
+  .formio-form-component {
         position: relative;
   }
 </style>

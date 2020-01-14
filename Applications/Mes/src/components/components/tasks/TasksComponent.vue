@@ -4,7 +4,7 @@
         <v-flex fill-height class="grid-tabs">
           <v-tabs v-model="selectedTab">
             <v-tab v-for="tab in tabs" :key=tab.id @click="changeSelectTasksTab(tab.index)" class="toolbar-item">
-              <v-badge color="#326DA8" overlap>
+              <v-badge color="#326DA8" >
                 <template v-slot:badge>
                   <span class="span-count-tasks">{{countTasks(tab.index)}}</span>
                 </template>

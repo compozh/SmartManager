@@ -253,7 +253,7 @@ export default {
         @import "~flatpickr/dist/flatpickr.min.css";
     }
 
-    .formio-component {
+    .formio-form-component {
         position: relative;
     }
 </style>

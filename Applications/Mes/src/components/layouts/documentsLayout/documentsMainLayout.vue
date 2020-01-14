@@ -4,7 +4,7 @@
     <v-btn class="col-12 ma-0 close-btn" @click="changeDynamicTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
   <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDynamicPage" :key="this.documentFormioKey">
-    <formio-component
+    <formio-form-component
       v-if="selectedDocument"
       ref="formioBuilder"
       @formSubmit=formSubmit
