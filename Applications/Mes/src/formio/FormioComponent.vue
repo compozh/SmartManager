@@ -138,7 +138,7 @@ export default {
         submission = JSON.stringify(form.submission.data, null, 4)
 
       me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
-        params: { eventCode, components, submission, display, settings, params }}).then(result => {
+        params: { eventCode, components, submission, display, settings, params: JSON.stringify(params || '') }}).then(result => {
           if(result && result.success) {
             var dataChanged = false;
             if (result.components && result.components != components) {
