@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-flex class="formio-base-block">
     <formio id="formio" class="formio-container-class"
       :form=formioComponents
       :submission=formioSubmission
@@ -19,7 +19,7 @@
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
     />
-  </v-container>
+  </v-flex>
 </template>
 
 <script>
@@ -247,7 +247,9 @@ export default {
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
     }
-
+    .formio-base-block {
+      padding: 15px;
+    }
     .formio-component {
         position: relative;
     }
