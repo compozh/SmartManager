@@ -6,7 +6,7 @@
 
      <v-layout class="mes-task-main-layout">
         <v-flex class="mes-task-main-flex" :key="this.productionFormioKey">
-          <formio-component
+          <formio-form-component
             ref="formioBuilder"
             @formSubmit=formSubmit
             :formDefinition=productionFormio
@@ -44,8 +44,10 @@ export default {
     changeDowntimesOverlayVisible() {
       this.$emit('changeDowntimesOverlayVisible')
     },
-    formSubmit(submission) {
-      this.$store.dispatch('mes/productionFormIoSubmit', { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction') })
+    formSubmit({ submission, completeSubmissionCallback }) {
+      this.$store.dispatch('mes/productionFormIoSubmit',
+        { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction') }
+      ).then(completeSubmissionCallback)
     },
     getFormioData() {
       return this.$refs.formioBuilder.getFormSubmission()

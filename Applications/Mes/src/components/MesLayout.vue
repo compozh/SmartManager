@@ -61,37 +61,29 @@
 </template>
 
 <script>
-
 import Vue from 'vue'
-import BarcodeScanerEvents from './components/BarcodeScanerEvents'
+import { events } from '../constants'
+import { eventBus } from '../main'
+
 export default {
   name: 'mes-layout',
-  components: { BarcodeScanerEvents },
   data() {
     return {
       mainContainer: 0
     }
   },
   created() {
-    var barcodeScanerEvents = new BarcodeScanerEvents()
-    barcodeScanerEvents.initialize()
-
-    var me = this
-
-    document.addEventListener("onbarcodescaned", event => {
-      if(event.detail) {
-        var barcode = event.detail.code
-        if(me.$route.name == "MESLOGIN") {
-          Vue.prototype.$authentication.loginByQr(barcode).then(result => {
-          result && me.$router.replace({path: '/MES/tasks'})
+    eventBus.$on(events.scannedBarCode, barcode => {
+      if(this.$route.name == "MESLOGIN") {
+        Vue.prototype.$authentication.loginByQr(barcode).then(result => {
+          result && this.$router.replace({path: '/MES/tasks'})
         }).catch(reason => {
-          me.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
-        });
-        }
-        var tasksPageState = me.$store.getters['mes/tasksPageState']
-        if(me.$route.name == "INSTALLATIONS" || (me.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
-          me.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: me.workCenter.code, batchBarcode: barcode, factId: 0 })
-        }
+          this.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
+        })
+      }
+      var tasksPageState = this.$store.getters['mes/tasksPageState']
+      if(this.$route.name == "INSTALLATIONS" || (this.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
+        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: barcode, factId: 0 })
       }
     })
   },

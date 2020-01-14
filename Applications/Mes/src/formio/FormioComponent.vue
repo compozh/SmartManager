@@ -12,6 +12,7 @@
       @qrScaner=qrScaner
       @itemAutocomplete=itemAutocomplete
       @connectSignalR=connectSignalR
+      @subscribeExternalScanner=subscribeExternalScanner
       ref="formioComponent"
     />
     <formio-qr-scaner
@@ -26,9 +27,12 @@
 import { Form } from './lib/components/Form'
 import VueApexCharts from 'vue-apexcharts'
 
+import { eventBus } from '../main';
+import { events } from '../constants';
+
 /* eslint-disable */
 export default {
-  name: 'formio-component',
+  name: 'formio-form-component',
   components: { formio: Form, apexchart: VueApexCharts },
   data() {
     return {
@@ -77,7 +81,23 @@ export default {
   },
   methods: {
     onSubmit(params) {
-      this.$emit('formSubmit', JSON.stringify(params.data))
+      var submission = JSON.stringify(params.data),
+        form = this.$refs.formioComponent
+
+      this.$emit('formSubmit', { submission, completeSubmissionCallback: result => {
+          var event = '',
+            message = ''
+            
+          if (result && result.success) {
+              event = 'submitDone'
+              message = result.successMessage
+          } else {
+              event = 'submitError'
+              message = result ? result.errorMessage : ''
+          }
+          form.formio.emit(event, message)
+        }
+      })
     },
     onChange(params) {
 
@@ -208,6 +228,15 @@ export default {
         if(result && callback) {
           callback(result);
         }
+      })
+    },
+    subscribeExternalScanner({ callback }) {
+      var currentPageId = this.$route.name
+
+      eventBus.$on(events.scannedBarCode, result => {
+          if(currentPageId == this.$route.name) {
+              callback(result)
+          }
       })
     }
   }

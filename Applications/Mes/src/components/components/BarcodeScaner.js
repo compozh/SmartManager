@@ -1,5 +1,7 @@
-export default class BarcodeScanerEvents {
+import { eventBus } from '../../main';
+import { events } from '../../constants';
 
+export default class BarcodeScaner {
     constructor() {
         this.timeoutHandler = 0
         this.inputString = ''
@@ -11,14 +13,11 @@ export default class BarcodeScanerEvents {
         document.addEventListener('keyup', event => me.onKeyup(event))
     }
 
-    callBarcodescanedEvent(inputString) {
-        var onbarcodescanedEvent = new CustomEvent("onbarcodescaned", {
-            detail: { code: inputString }
-        })
-        document.dispatchEvent(onbarcodescanedEvent);
-    }
-
     onKeyup(event) {
+        if(!('which' in event)) {
+            return;
+        }
+        
         var me = this
         if (me.timeoutHandler) {
             clearTimeout(me.timeoutHandler)
@@ -33,7 +32,7 @@ export default class BarcodeScanerEvents {
             case 0:
                 break;
             default:
-                var code = event.key && event.key.length > 1 ? event.key : ''
+                var code = event.key && event.key.length > 1 ? '' : event.key
                 if(event.which >= 65 && event.which <= 90) {
                     code = String.fromCharCode(event.which)
                 }
@@ -58,14 +57,13 @@ export default class BarcodeScanerEvents {
     }
 
     handleInputEvent() {
-        var me = this
-
-        if (me.inputString.length <= 3) {
-            me.inputString = ''
+        if (this.inputString.length <= 3) {
+            this.inputString = ''
             return
         }
 
-        me.callBarcodescanedEvent(me.inputString)
-        me.inputString = ''
+        eventBus.$emit(events.scannedBarCode, this.inputString)
+
+        this.inputString = ''
     }
 }

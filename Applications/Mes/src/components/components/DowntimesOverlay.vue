@@ -14,7 +14,7 @@
           indeterminate
           color="primary"
       ></v-progress-circular>
-      <formio-component
+      <formio-form-component
         ref="formioBuilder"
         @formSubmit=formSubmit
         :formDefinition=createDowntimeFormio
@@ -50,11 +50,20 @@ export default {
     closeOverlay () {
       this.$emit('changeDowntimesOverlayVisible')
     },
-    formSubmit(submission) {
-      var me = this
-      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, successAction: () => {
-        me.closeOverlay()
-      }, message: this.$t('mes.dialogs.RegistrationDowntime')})
+    async formSubmit(submission) {
+      var me = this,
+        formCode = me.workCenter.downtimeRegistrationFormCode,
+        properties = { workCenterCode: me.workCenter.code },
+        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+        
+      me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))
+      
+      await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {
+        me.$store.commit('mes/setDowntimes', [])
+        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })        
+      })
+
+      me.$store.commit('mes/closeDialogLinearLoader')
     },
     initializeCreateDowntimeFormio() {
       var me = this,

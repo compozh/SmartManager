@@ -1,9 +1,9 @@
 <template>
 <v-layout class="downtime-layout">
   <v-flex class="downtime-flex" v-if="initializeDowntimes" :key="this.downtimeFormioKey">
-    <formio-component
+    <formio-form-component
       v-if="selectedDowntime"
-      ref="formioBuilder"
+      ref="formioComponent"
       @formSubmit=formSubmit
       :formDefinition=downtimeFormio
       :formCode=workCenter.downtimeRegistrationFormCode
@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    async formSubmit(submission) {
+    async formSubmit({ submission, completeSubmissionCallback }) {
       var me = this,
         formCode = me.workCenter.downtimeRegistrationFormCode,
         properties = { workCenterCode: me.workCenter.code },
@@ -47,13 +47,15 @@ export default {
       
       await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {
         me.$store.commit('mes/setDowntimes', [])
-        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })        
+        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
+        
+        completeSubmissionCallback(result)
       })
 
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioComponent[0].getFormSubmission()
     }
   }
 }
