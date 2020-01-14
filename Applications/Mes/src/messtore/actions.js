@@ -102,6 +102,14 @@ export default {
       }
     })
   },
+  async uploadDowntimes({ commit, getters }, { workCenterCode, dateTime }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
+        commit('setDowntimes', downtimes)
+      }
+    })
+  },
 
   async downloadQualities({ commit, getters }, retrieveParams) {
     await this.dispatch('mes/graphqlQueryWraper', {
@@ -117,6 +125,16 @@ export default {
       }
     )
   },
+  async uploadQualities({ commit}, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let qualities = await api.getQualitiesFromGql(retrieveParams)
+          commit('setQualities', qualities)
+          commit('setInitializeQualities', true)
+        }
+      }
+    )
+  },
 
   async downloadDocuments({ commit, getters }, retrieveParams) {
     await this.dispatch('mes/graphqlQueryWraper', {
@@ -128,6 +146,16 @@ export default {
             commit('setDocuments', documents)
             commit('setInitializeDocuments', true)
           }
+        }
+      }
+    )
+  },
+  async uploadDocuments({ commit, getters }, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let documents = await api.getDocumentsFromGql(retrieveParams)
+          commit('setDocuments', documents)
+          commit('setInitializeDocuments', true)
         }
       }
     )

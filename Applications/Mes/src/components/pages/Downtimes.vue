@@ -14,6 +14,8 @@
         :sizes="this.defaultSizes"
       >
       <mes-downtimes-component
+        :currentDate=currentDate
+        :workCenter=workCenter
         id="downtimeList"
         :initializeDowntimes=initializeDowntimes
         @changeCurrentDowntime=changeCurrentDowntime

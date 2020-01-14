@@ -17,6 +17,8 @@
         @changeCurrentQuality=changeCurrentQuality
         @uploadQualityOnScroll=uploadQualityOnScroll
         @initialize=initialize
+        :currentDate=currentDate
+        :properties=properties
         :isUploadInProcess=isUploadInProcess
         :initializeQualities=initializeQualities
         v-if="$vuetify.breakpoint.smAndDown? qualityTableView : true"
@@ -79,11 +81,12 @@ export default {
         this.initializeQualities = false
         this.$store.commit('mes/setQualities', [])
       }
-      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
+      let qualities = await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
       this.initializeQualities = true
       if (!this.selectedQuality) {
         this.seelectFirstQuality()
       }
+      return qualities
     },
     changeCurrentQuality(newSelectedQuality) {
       var me = this

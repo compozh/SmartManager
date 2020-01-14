@@ -31,6 +31,7 @@
           :isUploadInProcess=isUploadInProcess
           :initializeDynamicPage=initializeDynamicPage
           :pageProps=pageProps
+          :currentDate=currentDate
           v-if="$vuetify.breakpoint.smAndDown? dynamicTableView : true"
           :class="$vuetify.breakpoint.smAndDown? 'dynamic-table-small' : ''"
           @changeDynamicTableView=changeDynamicTableView

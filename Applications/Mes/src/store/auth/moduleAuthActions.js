@@ -59,7 +59,7 @@ export default {
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
       if (router.currentRoute.name !== 'MESLOGIN') {
-        router.push({path: 'login', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+        router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
       }
     }
   }

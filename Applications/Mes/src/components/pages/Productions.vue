@@ -5,7 +5,7 @@
       />
       <div class="production-main-block">
         <mes-content-loader v-if="!initializeProductions && !productions.length" :loaderType="$vuetify.breakpoint.smAndDown ? 'list' : ''" />
-        <mes-productions-component :productions=productions />
+        <mes-productions-component :productions=productions  :properties=properties />
 
         <span class="no-data-text" v-if="initializeProductions && !productions.length">{{this.$t('mes.labels.NoFactOfRegistration')}}</span>
       </div>
