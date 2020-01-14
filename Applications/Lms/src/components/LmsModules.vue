@@ -35,7 +35,11 @@ import Filters from './LmsFilters.vue'
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 
 export default {
-  name: "lms-modules",
+  name: 'lms-modules',
+  components: {
+    ModuleCard,
+    Filters
+  },
   created() {
     if (this.$store.getters['lms/modules'] === null) {
       this.getModules()
@@ -59,10 +63,10 @@ export default {
     },
 
     roleSearch: function(data) {
-      this.$router.push({ name: "LMSMODULES", params: { role: data.code } });
+      this.$router.push({ name: 'LMSMODULES', params: { role: data.code } })
     },
     levelSearch: function(data) {
-      this.$router.push({ name: "LMSMODULES", params: { level: data.code } });
+      this.$router.push({ name: 'LMSMODULES', params: { level: data.code } })
     },
 
     refreshModulesFilter: function(data) {
@@ -91,10 +95,10 @@ export default {
         // Отфильтровать модули по выбранным фильтрам
         var selectedListId = []
         for (let index = 0; index < this.allModules.length; index++) {
-          const moduleData = this.allModules[index];
+          const moduleData = this.allModules[index]
           // roles
           for (let itemIndex = 0; itemIndex <  moduleData.roles.length; itemIndex++) {
-            const role = moduleData.roles[itemIndex];
+            const role = moduleData.roles[itemIndex]
             for (let indexFilter = 0; indexFilter < roles.length; indexFilter++) {
               if (role.code === roles[indexFilter].code
                   && !selectedListId.includes(moduleData.moduleGuid)) {
@@ -146,9 +150,9 @@ export default {
       // добавить поле-признак выбора
       if (filters) {
         for (let index = 0; index < filters.length; index++) {
-          var filter = filters[index];
+          var filter = filters[index]
           for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
-             filter.items[itemIndex].selected = false;
+            filter.items[itemIndex].selected = false
           }
         }
       }
@@ -165,11 +169,11 @@ export default {
     links() {
       let links
       const thisLink = {
-          text: 'Модули',
-          disabled: true,
-          href: this.$route.path
-        }
-      if(this.$route.params) {
+        text: 'Модули',
+        disabled: true,
+        href: this.$route.path
+      }
+      if (this.$route.params.links) {
         const inputLinks = this.$route.params.links
         links = [...inputLinks, thisLink]
       } else {

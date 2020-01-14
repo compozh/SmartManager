@@ -104,9 +104,8 @@
 		</v-toolbar>
 
     <v-content
-      fill-height
       style='background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/light_noise_diagonal.png);background-repeat: repeat;'>
-			<v-container fluid class="mx-0 my-0 px-0 py-0">
+			<v-container fill-height fluid class="mx-0 my-0 px-0 py-0">
 				<router-view></router-view>
 			</v-container>
 		</v-content>

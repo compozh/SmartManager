@@ -171,11 +171,11 @@ export default {
     links() {
       let links
       const thisLink = {
-          text: 'Курсы',
-          disabled: true,
-          href: this.$route.path
-        }
-      if(this.$route.params) {
+        text: 'Курсы',
+        disabled: true,
+        href: this.$route.path
+      }
+      if (this.$route.params.links) {
         const inputLinks = this.$route.params.links
         links = [...inputLinks, thisLink]
       } else {

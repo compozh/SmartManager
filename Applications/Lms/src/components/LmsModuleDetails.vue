@@ -2,14 +2,14 @@
 	<v-container fluid pa-0 ma-0>
 		<!--MODULE HEADER-->
 		<v-layout mb-4>
-			<v-flex id='modulesHeader'>
+			<v-flex xs12>
         <v-card >
           <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
         </v-card>
 				<v-card v-if="moduleData.data">
 					<v-layout wrap row justify-center>
 						<v-flex md1 xs2 class='pt-3' hidden-xs-only>
-							<v-card-media v-bind:src='moduleData.data.imageLink' height='80px' contain/>
+							<v-img v-bind:src='moduleData.data.imageLink' height='80px' contain/>
 						</v-flex>
 						<v-flex lg8 md10 sm10 xs12>
 							<v-card-text class='title font-weight-regular pt-4 pb-1' color="#424242">{{moduleData.data.type}}</v-card-text>
