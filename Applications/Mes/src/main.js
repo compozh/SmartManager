@@ -1,8 +1,6 @@
 // @it-enterprise пакеты
-// import WebApps from '@it-enterprise/webappscore'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-// import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
 import '@it-enterprise/common/dist/common-components.css'
 
@@ -64,12 +62,15 @@ Vue.use(signalR)
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
-// Vue.use(Router, { options: window.myConfig, dependencies }, () => auth.getToken())
-// Vue.use(WebApps, { dependencies, options: window.myConfig }, () => auth.getToken())
 
 Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
+
+
+
+
+// подключение vuetify
 
 const opts = {
   theme: {
@@ -90,8 +91,9 @@ const opts = {
   }
 }
 const vuetify = new Vuetify(opts)
+
 // Шина событий
-new Vue({
+export const eventBus = new Vue({
   router,
   vuetify,
   store,
@@ -99,6 +101,9 @@ new Vue({
   apolloProvider,
   render: h => h(App)
 }).$mount('#app')
+
+var barcodeScaner = new BarcodeScaner()
+  barcodeScaner.initialize()
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
@@ -116,31 +121,3 @@ reqFormio.keys().map(key => {
   }
   Vue.component(reqFormio(key).default.name, reqFormio(key).default)
 })
-
-// start()
-
-// async function start()   {
-//   // Загрузка приложения
-//   let webAppsCore = await Vue.prototype.$WebApps
-//   // Редирект индексной страницы напрямую к приложению
-//   //ToDo Поискать другой способ
-//   if ((webAppsCore.__router.app._route.fullPath == '/index.html')
-//       || (webAppsCore.__router.app._route.fullPath == '/MES/index.html')
-//       || (webAppsCore.__router.app._route.fullPath == '/meswebapps/MES/index.html')) {
-//     webAppsCore.__router.replace({path: '/MES/'})
-//   }
-
-  // let appComponent = await webAppsCore.GetApplicationComponent({
-
-    // properties: {
-  //     i18n,
-  //     store,
-  //     vuetify: new Vuetify(opts),
-  //     render: h => h(App)
-  //   }
-  // })
-
-
-
-//   new Vue(appComponent).$mount('#app')
-// }

@@ -2,7 +2,7 @@ export default {
   name: 'userPanelRl',
   computed: {
     userData() {
-      return this.$store.state.user || {}
+      return this.$store.state.auth.user || {}
     }
   },
   methods: {
@@ -14,7 +14,7 @@ export default {
     return this.$scopedSlots.default({
       user: {
         id: this.userData.id,
-        name: this.userData.userName,
+        name: this.userData.userName || this.userData.login ,
         photo: this.userData.userPhoto,
         rights: this.userData.delegatedRights
       },

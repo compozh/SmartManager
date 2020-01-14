@@ -1,15 +1,10 @@
 <template>
 <v-layout class="downtime-layout">
-<<<<<<< HEAD
   <v-flex class="toolbar ma-0" v-if="$vuetify.breakpoint.smAndDown">
     <v-btn class="col-12 ma-0 close-btn" @click="changeDowtimesTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
   <v-flex class="downtime-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''" v-if="initializeDowntimes" :key="this.downtimeFormioKey">
-    <formio-component
-=======
-  <v-flex class="downtime-flex" v-if="initializeDowntimes" :key="this.downtimeFormioKey">
     <formio-form-component
->>>>>>> master
       v-if="selectedDowntime"
       ref="formioComponent"
       @formSubmit=formSubmit

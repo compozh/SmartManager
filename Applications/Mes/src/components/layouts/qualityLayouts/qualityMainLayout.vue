@@ -4,7 +4,7 @@
     <v-btn class="col-12 ma-0 close-btn" @click="changeQualityTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
   <v-flex class="quality-flex" :class="$vuetify.breakpoint.smAndDown? 'small' : ''" v-if="initializeQualities" :key="this.qualityFormioKey">
-    <formio-component
+    <formio-form-component
       v-if="selectedQuality"
       ref="formioBuilder"
       @formSubmit=formSubmit

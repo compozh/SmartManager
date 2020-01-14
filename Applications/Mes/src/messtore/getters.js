@@ -79,7 +79,7 @@ export default {
   },
   menuDrawerMode(state) {
     if (state.menuDrawerMode === null) {
-      state.menuDrawerMode = localStorage.getItem('mesMenuDrawerMode') === 'true'
+      state.menuDrawerMode = localStorage.getItem('mesMenuDrawerMode') === 'false'
     }
     return state.menuDrawerMode
   },
