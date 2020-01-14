@@ -8,7 +8,8 @@
         <v-list-tile
           v-for="(link, index) in links"
           :key="index"
-          :to="{name: link.Id}">
+          :to="{name: link.Id, params: {links:[{text: 'Главная', disabled: false, href: $route.path}]}}"
+          >
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
           </v-list-tile-action>
@@ -103,9 +104,8 @@
 		</v-toolbar>
 
     <v-content
-      fill-height
       style='background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/light_noise_diagonal.png);background-repeat: repeat;'>
-			<v-container fluid class="mx-0 my-0 px-0 py-0">
+			<v-container fill-height fluid class="mx-0 my-0 px-0 py-0">
 				<router-view></router-view>
 			</v-container>
 		</v-content>
@@ -176,12 +176,14 @@ export default {
     },
     openLoginDialog() {
       this.$router.push({name: 'LMSLOGIN'})
+      this.menu = false
     },
 
     userProfile() {
-
+      this.menu = false
     },
     personalAccount() {
+      this.menu = false
       this.$router.push({name: 'LMSPERSONALACCOUNT'})
     },
     signOut() {
@@ -190,7 +192,7 @@ export default {
       this.goHome()
     },
     search() {
-      this.$router.push('search')
+      this.$router.push({name: 'LMSSEARCH'})
     },
     goHome() {
       if (this.$router.history.current.name == 'LMSREALHOME') {

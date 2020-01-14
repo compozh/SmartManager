@@ -27,6 +27,7 @@
           code
         }
         modulesQtLabel
+				durationMinutesLabel
       }
       modules{
         moduleGuid
