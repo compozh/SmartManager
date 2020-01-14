@@ -6,7 +6,7 @@ export default {
   recommended: null,    // common object for recommendedCourses & recommendedModules
   courses: null,        // Availabels course
   modules: null,        // Availabels modules
-  courseDetails: null,
-  unit: null,
-  lessonContent: null
+  courseDetails: null,  // Подробная информация о курсе
+  unit: null,           // Информация об уроке
+  lessonContent: null   // Содержимое урока
 }

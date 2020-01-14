@@ -2,11 +2,14 @@
 	<v-container fluid pa-0 ma-0>
 		<!--MODULE HEADER-->
 		<v-layout mb-4>
-			<v-flex id='modulesHeader'>
+			<v-flex xs12>
+        <v-card >
+          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+        </v-card>
 				<v-card v-if="moduleData.data">
 					<v-layout wrap row justify-center>
 						<v-flex md1 xs2 class='pt-3' hidden-xs-only>
-							<v-card-media v-bind:src='moduleData.data.imageLink' height='80px' contain/>
+							<v-img v-bind:src='moduleData.data.imageLink' height='80px' contain/>
 						</v-flex>
 						<v-flex lg8 md10 sm10 xs12>
 							<v-card-text class='title font-weight-regular pt-4 pb-1' color="#424242">{{moduleData.data.type}}</v-card-text>
@@ -14,6 +17,7 @@
 							<v-card-text class='body-2 font-weight-medium pt-0 pb-3' color="#424242">{{moduleData.data.description}}</v-card-text>
 							<v-layout row wrap>
 								<v-flex md2 xs6>
+                  <v-card-text class='body-2 font-weight-medium pt-0 pb-1' color="#424242">{{moduleData.data.lessonsQtLabel}}</v-card-text>
 									<v-card-text class='body-2 font-weight-medium pt-0 pb-4' color="#424242">{{moduleData.data.durationMinutesLabel}}</v-card-text>
 								</v-flex>
 								<v-spacer/>
@@ -65,7 +69,7 @@
 											}})'>
 											<v-list-tile-content class='px-2'>
 												<v-list-tile-title class='blue--text text--darken-4 font-weight-medium'>{{lesson.name}}</v-list-tile-title>
-												<v-list-tile-sub-title>{{lesson.durationMinutes}} mins</v-list-tile-sub-title>
+												<v-list-tile-sub-title>{{lesson.durationMinutesLabel}}</v-list-tile-sub-title>
 											</v-list-tile-content>
 											<v-list-tile-action>
 												<v-btn icon ripple>
@@ -94,20 +98,31 @@
 <script>
 
 export default {
-  name: "lms-module-details",
+  name: 'lms-module-details',
   created() {
-    this.moduleGuid = this.$route.params.moduleGuid;
+    this.moduleGuid = this.$route.params.moduleGuid
     this.moduleData.data = this.$route.params.moduleData
-
-
   },
   data() {
     return {
-      moduleGuid : "",
-      moduleData : { data: undefined },
-      lessons : { data: undefined }
+      moduleGuid: '',
+      moduleData: { data: undefined },
+      lessons: { data: undefined }
     }
   },
+  computed: {
+    links() {
+      let inputLinks = this.$route.params.links
+      let links = [...inputLinks,
+        {
+          text: this.$route.params.moduleName,
+          disabled: true,
+          href: this.$route.path
+        }]
+      links[links.length - 2].disabled = false
+      return links
+    }
+  }
 }
 </script>
 

@@ -3,7 +3,7 @@
 		<v-layout wrap row align-center justify-center>
 			<v-flex v-for='course in recommendedCourses' :key='course.courseId' lg4 md4 sm6 xs122>
 
-        <course-card v-if="course" :course="course" />
+        <course-card v-if="course" :links="links" :course="course" />
 
 			</v-flex>
 		</v-layout>
@@ -23,10 +23,14 @@ export default {
   },
   props: ['recommendedCourses'],
   data: () => ({
-    favIconColor: "grey"
+    favIconColor: "grey",
+    links: []
   }),
   created () {
-
+    this.links.push({
+      text: 'Главная', // TODO: добавить локализацию
+      disabled: false,
+      href: this.$route.path})
   },
   methods: {
     changeFavoriteState: function(course){
