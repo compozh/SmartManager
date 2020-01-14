@@ -12,6 +12,7 @@ import minimapModule from 'diagram-js-minimap';
 import DiagramType from './models/DiagramType';
 import ContextPadProvider from '../bpmnModules/context-pad/';
 import propertiesPanelCommands from '../bpmnModules/properties-panel/cmd';
+import WorkflowRules from '../bpmnModules/rules';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
   switch (type) {
@@ -41,7 +42,8 @@ function createBpmnModeler(editorContainer, translate) {
       camundaExtensionModule,
       minimapModule,
       createTranslationModule(translate),
-      ContextPadProvider
+      ContextPadProvider,
+      WorkflowRules
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
