@@ -48,7 +48,8 @@ ContextPadProvider.prototype.getContextPadEntries = function (element) {
 
     input.addEventListener('change', (event) => {
       const color = event.target.value;
-      modeling.setColor(element, { fill: color });
+      const attrs = is(di, 'bpmndi:BPMNEdge') ? { stroke: color } : { fill: color }
+      modeling.setColor(element, attrs);
       setTimeout(function () {
         document.body.removeChild(input);
       }, 0);
@@ -58,7 +59,7 @@ ContextPadProvider.prototype.getContextPadEntries = function (element) {
     input.click();
   }
 
-  if ((is(di, 'bpmndi:BPMNPlane') || is(di, 'bpmndi:BPMNShape')) && !is(element, 'bpmn:Group')) {
+  if ((is(di, 'bpmndi:BPMNPlane') || is(di, 'bpmndi:BPMNShape') || is(di, 'bpmndi:BPMNEdge')) && !is(element, 'bpmn:Group')) {
     assign(actions, {
       'color-picker': {
         group: 'edit',

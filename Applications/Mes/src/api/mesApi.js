@@ -170,7 +170,8 @@ export class MesApi {
   }
 
   async applyDocumentMethod(processMethodParams) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${documentMethod}`,
       variables: { processMethodParams }
     })

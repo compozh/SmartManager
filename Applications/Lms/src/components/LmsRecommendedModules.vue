@@ -3,7 +3,7 @@
 		<v-layout wrap row align-center justify-center>
 			<v-flex v-for='moduleData in recommendedModules' :key='moduleData.courseId' lg4 md4 sm6 xs12>
 
-        <module-card v-if="moduleData" :moduleData="moduleData" />
+        <module-card v-if="moduleData" :links="links" :moduleData="moduleData" />
 
 			</v-flex>
 		</v-layout>
@@ -23,8 +23,16 @@ export default {
   },
   props: ['recommendedModules'],
   data: () => ({
-    favIconColor: 'grey'
+    favIconColor: 'grey',
+    links: []
   }),
+  created() {
+    this.links.push({
+      text: 'Главная',
+      disabled: false,
+      href: this.$route.path // TODO: добавить локализацию
+    })
+  },
   methods: {
     changeFavoriteState: function(moduleData) {
       moduleData.isFavorite = !moduleData.isFavorite

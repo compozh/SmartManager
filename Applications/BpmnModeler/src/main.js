@@ -24,7 +24,7 @@ import './element-variables.scss';
 import { routerDependencies } from './router';
 import config from './config';
 
-auth.config('http://localhost:5002/');
+auth.config(config.GrapgQlUrl);
 // объект с зависимостями
 let dependencies = {
   store,
