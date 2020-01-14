@@ -51,7 +51,7 @@ export default {
     },
   },
   methods: {
-    async formSubmit(submission) {
+    async formSubmit({ submission, completeSubmissionCallback }) {
       var me = this,
         direction = 1,
         properties = {
@@ -67,6 +67,7 @@ export default {
           me.$store.commit('mes/setInitializeQualities', false)
           me.$store.dispatch('mes/downloadQualities', { processTypeCode: me.properties.qualityProcessType, searchDateTime, direction })
         }
+        completeSubmissionCallback(result)
       })
       me.$store.commit('mes/closeDialogLinearLoader')
     },

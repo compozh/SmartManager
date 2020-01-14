@@ -301,7 +301,7 @@ export default {
   async productionFormIoSubmit({ commit }, { workCenter, submission, task, message, deviceSizeType }) {
     var me = this
     commit('setDialogLinearLoaderMessage', message)
-    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var submitResult = await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
 
         const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, submission, {
@@ -317,6 +317,8 @@ export default {
       }
     })
     commit('closeDialogLinearLoader')
+
+    return submitResult
   },
 
   changeDragResizeMode({commit}) {

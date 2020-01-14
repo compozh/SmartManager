@@ -33,6 +33,7 @@ import VueCookies from 'vue-cookies'
 import router from './router'
 
 import signalR from './signalR'
+import BarcodeScaner from './components/components/BarcodeScaner'
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({

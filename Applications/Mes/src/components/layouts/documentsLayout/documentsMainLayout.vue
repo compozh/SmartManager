@@ -52,7 +52,7 @@ export default {
     },
   },
   methods: {
-    async formSubmit(submission) {
+    async formSubmit({ submission, completeSubmissionCallback }) {
       var me = this,
         direction = 1,
         pageProps = me.pageProps,
@@ -69,6 +69,7 @@ export default {
           me.$store.commit('mes/setInitializeDocuments', false)
           me.$store.dispatch('mes/downloadDocuments', { processTypeCode: pageProps.id, searchDateTime, direction })
         }
+        completeSubmissionCallback(result)
       })
       me.$store.commit('mes/closeDialogLinearLoader')
     },

@@ -5,6 +5,8 @@ import Eds from '@it-enterprise/eds';
 import GrapgQlCore from '@it-enterprise/graphql';
 import Router from '@it-enterprise/routercore';
 import auth from '@it-enterprise/jwtauthentication';
+import formio from '@it-enterprise/formio'
+import '@it-enterprise/formio/dist/formio.css'
 
 // vue пакеты
 import Vue from 'vue';
@@ -54,6 +56,12 @@ Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
 Vue.use(Eds, { dependencies });
 
+var formioOptions = {}
+formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
+formioOptions.routerDependencies = () => routerDependencies
+formioOptions.GraphQlUrl = config.GrapgQlUrl
+Vue.use(formio, { options: formioOptions, dependencies });
+
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'));
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'));
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'));
@@ -68,14 +76,6 @@ req.keys().map(key => {
     return;
   }
   Vue.component(req(key).default.name, req(key).default);
-});
-
-const reqFormio = require.context('@/formio/', true, /\.(js|vue)$/i)
-reqFormio.keys().map(key => {
-  if (!(reqFormio(key).default || {}).name) {
-    return
-  }
-  Vue.component(reqFormio(key).default.name, reqFormio(key).default)
 });
 
 start();
