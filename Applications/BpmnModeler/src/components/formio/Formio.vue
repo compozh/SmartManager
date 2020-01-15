@@ -8,7 +8,7 @@
 				<h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
         </v-card-title>
         <v-card-text>
-        <formio-component ref="formioForm" :formCode="code" :formDefinition="definition"></formio-component>
+        <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
         </v-card-text>
         <v-card-actions>
 				<v-spacer></v-spacer>
