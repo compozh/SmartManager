@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import store from '@/store'
-import  { routerDependencies } from '@/router'
+import router from '@/router'
 import cookies from 'vue-cookies'
 import UuidHelper from './UuidHelper'
 
 export default class Init {
     initialize() {
-        var router = routerDependencies.router,
-            fixedUuid = router.options.params.fixedUuid,
+        var fixedUuid = router.currentRoute.query.fixedUuid,
             cookiesUuid = cookies.get('mesUuid'),
             sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
             uuid
@@ -16,19 +15,20 @@ export default class Init {
             uuid = fixedUuid
         } else if (cookiesUuid) {
             uuid = cookiesUuid
-            router.push({ query: { fixedUuid: uuid }})
+            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         } else if (sessionStorageUuid) {
             uuid = sessionStorageUuid
-            router.push({ query: { fixedUuid: uuid }})
+            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         } else {
             uuid = UuidHelper.generate()
-            router.push({ query: { fixedUuid: uuid }})
+            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
         }
         // eslint-disable-next-line
         cookies.set('mesUuid', uuid, '3y')
         window.sessionStorage.setItem('mesUuid', uuid)
         store.dispatch('mes/initializeWorkCenter', uuid)
         store.dispatch('mes/initializeProperties')
+        store.dispatch('mes/initializeUser')
         store.dispatch('formio/initializeTicket')
         store.dispatch('mes/initializeMobilityProperties')
         store.dispatch('mes/verifyCamera')
@@ -80,48 +80,48 @@ export default class Init {
       }
 
       preparePages(scope) {
-        if (!store.state.WebApps.applicationDescription || !store.getters['mes/mobilityProperties']) {
-          return []
+        
+        let dynamic  =  store.getters['mes/mobilityProperties']
+        let links = router.options.routes[0].children
+        let dynamicPages = []
+        if ( dynamic ) {
+           
+           dynamic.processesProperties.forEach(page => {
+            let child = {}
+            child.name = 'DYNAMIC'
+            child.params = page.id.toLowerCase()
+            child.path = 'dynamic'
+            child.id = 'DYNAMIC'
+            child.text = page.name
+            child.sort = 100
+            child.image = 'description'
+            dynamicPages.push(child)
+        })
+          links =  links.concat(dynamicPages)
+        } else {
+          store.dispatch('mes/initializeMobilityProperties')            
         }
 
-        const app = store.state.WebApps.applicationDescription
-        const sections = app.Sections || []
-        var links = []
-        for (let index = 0; index < sections.length; index++) {
-          const section = sections[index]
-          links = links.concat(
-            (section.Routes || []).map(r => (r.section = section) && r)
-          )
-        }
-        var dynamicPagesWithKey = []
-        store.getters['mes/mobilityProperties'].processesProperties.forEach(page => {
-           dynamicPagesWithKey[('_' + page.id).toLowerCase()] = page
-        })
         var pages = []
-        for (let page of links[1].Children) {
+        for (let page of links) {
           if (store.getters['mes/workCenter'])  {
             switch (store.getters['mes/workCenter'].accessPages) {
             case 'ALL_PAGES':
-              let component = page.Components[0],
-                pageId = page.Id.toLowerCase()
-              if (component && component.Name == "mes-dynamic-page" && !dynamicPagesWithKey[pageId]) {
-                continue
-              }
-              let dynamicPage = dynamicPagesWithKey[pageId]
-              if (dynamicPage) {
-                page.Name = dynamicPage.name
-                page.Image = dynamicPage.image || 'description'
-                page.Sort = 100
-              }
               pages.push(page)
               break
             case 'ONLY_INSTALLATION':
-              if (page.Id == 'INSTALLATIONS') {
+              if (page.id == 'INSTALLATIONS') {
                 pages.push(page)
+                if(page.name != scope.$route.name && scope.$route.name != 'ERROR' ) {
+                  router.replace({path: page.path, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+                }
               }
               break
             case 'ONLY_QUALITY':
-              if (page.Id == 'QUALITY') {
+              if (page.id == 'QUALITY') {
+                if(page.name != scope.$route.name && scope.$route.name != 'ERROR' ) {
+                  router.replace({path: page.path , query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+                }
                 pages.push(page)
               }
               break
@@ -129,26 +129,9 @@ export default class Init {
           }
         }
 
-        if (store.getters['mes/workCenter'] && scope.$route.path.replace('/', '').toLowerCase() == 'mes') {
-          var pagePath = ''
-          switch (store.getters['mes/workCenter'].accessPages) {
-          case 'ALL_PAGES':
-            pagePath = '/MES/tasks'
-            break
-          case 'ONLY_INSTALLATION':
-            pagePath = '/MES/installations'
-            break
-          case 'ONLY_QUALITY':
-            pagePath = '/MES/quality'
-            break
-          }
-          routerDependencies.router.replace({path: pagePath})
-        }
         pages = pages.sort((a,b) => {
-          return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1)
+          return a.sort > b.sort ? 1 : (a.sort == b.sort ? 0 : -1)
         })
-
-        links = links.concat(pages)
-        return links.filter(l => l.Name && l.Path)
+        return pages.filter(l => l.text && (l.path || l.params))
       }
 }

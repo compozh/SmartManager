@@ -1,19 +1,24 @@
 <template>
   <v-app id="mes-app">
     <!-- Меню -->
-    <v-navigation-drawer v-if="initialWorkCenter && workCenter" app clipped mobile-break-point="false" permanent hide-overlay :stateless="true" :mini-variant="menuMiniMode">
-      <router-view name="navigation-drawer"/>
+    <v-navigation-drawer  app clipped mobile-break-point="960" width="320" overlay-opacity="0.4" 
+      :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
+      v-model="menuDrawerMode" v-if="initialWorkCenter && workCenter && $route.name !='MESLOGIN'" @blur="toggleMenuMode">
+      <mes-menu name="navigation-drawer"/>
     </v-navigation-drawer>
     <v-app-bar app fixed clipped-left extended :extension-height="3">
-      <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter" color="black"></v-app-bar-nav-icon>
-      <router-view name="toolbar"/>
+      <v-app-bar-nav-icon @click.stop="toggleMenuMode" v-if="initialWorkCenter && workCenter && $route.name !='MESLOGIN'" color="black"></v-app-bar-nav-icon>
+      <mes-toolbar name="toolbar" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
       <v-progress-linear :id="linearLoader" slot="extension" v-if="linearLoader" :indeterminate="linearLoader" ma-0 height="5"></v-progress-linear>
     </v-app-bar>
 
     <!-- Контент -->
     <v-content>
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
-        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" />
+         <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+            @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
+        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
+        <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
         <span class="mes-device-not-fixed" v-if="userData && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
@@ -21,7 +26,8 @@
     <!-- Выплывающие подсказки -->
     <template v-if="snackbar.visible">
       <v-snackbar
-        :top="true"
+        :top="false"
+        style="max-height: 100px; overflow: auto"
         :multi-line="true"
         :timeout="5000"
         :color=snackbar.type
@@ -69,14 +75,21 @@ export default {
   name: 'mes-layout',
   data() {
     return {
-      mainContainer: 0
+      mainContainer: 0,
+      downtimesOverlayVisible: false,
+
     }
   },
   created() {
+    
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.$store.commit('mes/setMenuDrawerMode', false)
+    }
+
     eventBus.$on(events.scannedBarCode, barcode => {
       if(this.$route.name == "MESLOGIN") {
         Vue.prototype.$authentication.loginByQr(barcode).then(result => {
-          result && this.$router.replace({path: '/MES/tasks'})
+          result && me.$router.replace({path: '/tasks', query: {fixedUuid: this.$router.currentRoute.query.fixedUuid}})
         }).catch(reason => {
           this.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
         })
@@ -89,7 +102,7 @@ export default {
   },
   computed: {
     userData() {
-      return this.$store.state.user
+      return this.$store.state.auth.user
     },
     mainContainerKey() {
       return this.$store.getters['mes/mainContainerKey']
@@ -102,6 +115,15 @@ export default {
     },
     menuMiniMode() {
       return this.$store.getters['mes/menuMiniMode']
+    },
+    
+    menuDrawerMode: {
+      get: function() { 
+        return this.$store.getters['mes/menuDrawerMode']
+      },
+      set: function(newVal) {
+        this.$store.commit('mes/setMenuDrawerMode', newVal)
+      }
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
@@ -121,11 +143,16 @@ export default {
   },
   methods: {
     toggleMenuMode() {
+      this.$vuetify.breakpoint.smAndDown ? 
+      this.$store.dispatch('mes/toggleMenuDrawerMode') :
       this.$store.dispatch('mes/toggleMenuMiniMode')
     },
     closeSnackbar() {
       this.$store.commit('mes/closeSnackbar')
       this.$store.commit('formio/closeSnackbar')
+    },
+    changeDowntimesOverlayVisible() {
+      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
     }
   }
 }
@@ -203,14 +230,15 @@ export default {
     font-size: 14px;
   }
   .v-toolbar__content {
-    padding: 0 24px;
+    padding: 0 12px;
   }
   .v-toolbar__content .v-btn.v-btn--icon.v-size--default, .v-toolbar__extension .v-btn.v-btn--icon.v-size--default {
     height: 36px;
     width: 36px;
   }
   .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
-    margin-left: -6px;
+    /* margin-right: 10px !important; */
+    margin: 0 !important;
   }
   .v-dialog>.v-card>.v-card__text {
     padding: 16px;
@@ -312,7 +340,7 @@ export default {
     height: 80vh !important;
   }
 
-  .formio-component {
+  .formio-form-component {
         position: relative;
   }
 </style>

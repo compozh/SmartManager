@@ -12,7 +12,7 @@ export default {
   }),
   computed: {
     routeToBack() {
-      return this.$route.params.routeToBack
+      return this.$router.currentRoute.query.to || '/'
     },
     needEnterTempPassword() {
       // Не реализовано
@@ -31,8 +31,8 @@ export default {
       try {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
-        if (result.success) {
-          await this.$router.replace({ path: this.routeToBack })
+        if (!result.success) {
+          throw result.errorMessage
         }
       } catch (e) {
         this.loading = false

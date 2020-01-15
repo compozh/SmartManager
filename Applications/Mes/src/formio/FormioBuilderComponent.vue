@@ -68,8 +68,8 @@
             />
         </div>
         <div v-if="selectedTab==1" class="form-preview-component">
-            <formio-component
-                class="formio-component-preview"
+            <formio-form-component
+                class="formio-form-component-preview"
                 :formDefinition=getFormParams()
                 :formCode=formCodeProperty
                 :actionsDisabled="!Object.keys(formDefinition).length"
@@ -196,7 +196,7 @@ export default {
         font-family: Roboto;
     }
 
-    .formio-component {
+    .formio-form-component {
         position: relative;
     }
 

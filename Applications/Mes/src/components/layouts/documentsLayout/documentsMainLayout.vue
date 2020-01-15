@@ -1,6 +1,9 @@
 <template>
 <v-layout class="documents-layout">
-  <v-flex class="documents-flex" v-if="initializeDynamicPage" :key="this.documentFormioKey">
+  <v-flex class="toolbar ma-0" v-if="$vuetify.breakpoint.smAndDown">
+    <v-btn class="col-12 ma-0 close-btn" @click="changeDynamicTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
+  </v-flex>
+  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDynamicPage" :key="this.documentFormioKey">
     <formio-form-component
       v-if="selectedDocument"
       ref="formioBuilder"
@@ -38,7 +41,15 @@ export default {
     documentFormio() {
       this.documentFormioKey += 1
       return this.$store.getters['mes/documentFormio']
-    }
+    },
+    dragResizeMode: {
+      get() {
+        return this.$store.getters['mes/dragResizeMode']
+      },
+      set() {
+        this.$store.dispatch('mes/changeDragResizeMode')
+      }
+    },
   },
   methods: {
     async formSubmit({ submission, completeSubmissionCallback }) {
@@ -64,6 +75,23 @@ export default {
     },
     getFormioData() {
       return this.$refs.formioBuilder[0].getFormSubmission()
+    },
+    changeDynamicTableView() {
+      this.$emit('changeDynamicTableView', true)
+    },
+    changeDragResizeMode (mode) {
+      this.dragResizeMode = mode
+      var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
+      if (!this.dragResizeMode) {
+        splitter.style.cssText = 'width:0'
+      } else {
+        splitter.style.cssText = 'width: 5px'
+      }
+    },
+  },
+  created() {
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.changeDragResizeMode(false)
     }
   }
 }
@@ -72,6 +100,24 @@ export default {
 .documents-layout {
   width: 100%;
   height: 100%;
+}
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  height: 63px;
+  border-bottom: 1px solid rgba(2, 2, 2, 0.08);
+}
+.close-btn {
+  min-width: 95% !important;
+  height: 50px !important;
+  border-radius: 5px;
+  background-color:#fff;
+  border: 1px solid rgba(2, 2, 2, 0.08);
+}
+.small {
+    top: 60px;
 }
 .documents-flex {
     position: absolute;

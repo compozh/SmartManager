@@ -1,7 +1,7 @@
 <template>
     <v-layout class="toolbar">
-      <v-tabs v-model="selectedProductionTab" class="toolbar-tabs">
-        <v-tab v-for="tab in tabs" :key=tab.index @click="changeProductionTab(tab.index)" class="tab-item">
+      <v-tabs v-model="selectedProductionTab" class="toolbar-tabs" :show-arrows="$vuetify.breakpoint.smAndDown">
+        <v-tab v-for="tab in tabs" :key=tab.index @click="changeProductionTab(tab.index)" :class="`tab-item ${$vuetify.breakpoint.smAndDown ? 'small' : ''}`">
           {{tab.name}}
         </v-tab>
       </v-tabs>
@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style type="text/css" scoped>
+<style type="text/css" lang="scss" scoped>
   .toolbar {
     flex-direction: row;
     max-height: 63px;
@@ -54,5 +54,8 @@ export default {
   .toolbar .tab-item {
     width: 350px;
     border-bottom: 2px solid #0000001c;
+    &.small {
+      width: 60vw;
+    }
   }
 </style>

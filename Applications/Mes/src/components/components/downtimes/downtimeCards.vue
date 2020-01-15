@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     changeCurrentDowntime(newDowntime) {
+      this.$emit('changeDowtimesTableView', false)
       this.$emit('changeCurrentDowntime', newDowntime)
     },
     converDate(date) {

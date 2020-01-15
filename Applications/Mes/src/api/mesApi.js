@@ -4,9 +4,9 @@ import {HttpLink} from 'apollo-link-http'
 import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
 import auth from '@it-enterprise/jwtauthentication'
-import {routerDependencies} from '@/router'
+import router from '@/router'
 
-const router = routerDependencies.router
+// const router = routerDependencies.router
 
 import Vue from 'vue'
 // Queries
@@ -41,7 +41,7 @@ import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphq
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens()
-    router.push('/MES/LOGIN')
+    router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
   }
   if (graphQLErrors) {
     // TODO: Обработать ошибку
@@ -67,7 +67,10 @@ const getClient = async () => {
 }
 
 export class MesApi {
-
+  async getUser() {
+    const client = await getClient()
+    return client
+  }
   async getPropertiesFromGql() {
     const client = await getClient()
     const result = await client.query({

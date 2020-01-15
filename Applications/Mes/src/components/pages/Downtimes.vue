@@ -14,15 +14,22 @@
         :sizes="this.defaultSizes"
       >
       <mes-downtimes-component
+        :currentDate=currentDate
+        :workCenter=workCenter
         id="downtimeList"
         :initializeDowntimes=initializeDowntimes
         @changeCurrentDowntime=changeCurrentDowntime
         @uploadDowntimeOnScroll=uploadDowntimeOnScroll
         :isUploadInProcess=isUploadInProcess
+        v-if="$vuetify.breakpoint.smAndDown? dowtimesTableView : true"
+        :class="$vuetify.breakpoint.smAndDown? 'dowtimes-table-small' : ''"
+        @changeDowtimesTableView=changeDowtimesTableView
       />
       <mes-downtime-main-layout
+        v-if="$vuetify.breakpoint.smAndDown? !dowtimesTableView : true"
         id="downtimeDescription"
         :initializeDowntimes=initializeDowntimes
+        @changeDowtimesTableView=changeDowtimesTableView
       />
       </vue-split>
     </v-layout>
@@ -38,12 +45,8 @@ export default {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeDowntimes: false,
       defaultSizes: [25, 75],
-      isUploadInProcess: false
-    }
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
+      isUploadInProcess: false,
+      dowtimesTableView: true
     }
   },
   created() {
@@ -88,11 +91,13 @@ export default {
         properties = {
           RCENTR: me.workCenter.code,
           ID: newSelectedDowntime.id
-        }
+        },
+        
+        deviceSizeType = this.$vuetify.breakpoint.name
 
       me.$store.commit('mes/resetDowntimeFormio')
       me.$store.commit('mes/setLinearLoader', true)
-      await me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy: 'network-only' }).then(result => {
+      await me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy: 'network-only',deviceSizeType }).then(result => {
         me.$store.commit('mes/setDowntimeFormio', result)
       })
       me.$store.commit('mes/setLinearLoader', false)
@@ -106,6 +111,9 @@ export default {
       this.isUploadInProcess = true
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: lastDowntimeDate })
       this.isUploadInProcess = false
+    },
+    changeDowtimesTableView(mode) {
+      this.dowtimesTableView = mode
     }
   }
 }
@@ -117,5 +125,8 @@ export default {
 }
 .main-downtime-layout {
   width: 100%;
+}
+.dowtimes-table-small {
+    min-width: 100vw
 }
 </style>

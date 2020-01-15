@@ -1,4 +1,5 @@
 <template>
+  <vue-pull-refresh :on-refresh="onRefresh">
     <div class="installations-block" ref="installationsBlock">
       <mes-dialog-component
           :title=dialogProperties.title
@@ -22,12 +23,16 @@
 
       </v-card>
     </div>
+  </vue-pull-refresh>
 </template>
 
 <script>
-
+import VuePullRefresh from 'vue-pull-refresh'
 export default {
   name: 'mes-installations-component',
+  components: {
+    'vue-pull-refresh': VuePullRefresh
+  },
   data() {
     return {
       dialogProperties: {
@@ -37,7 +42,7 @@ export default {
         disagreeMessage: this.$t('mes.dialogs.No'),
         visible: false,
         installation: null,
-        callback: false
+        callback: false,
       },
     }
   },
@@ -51,7 +56,10 @@ export default {
         return a.id < b.id ? 1 : (a.id == b.id ? 0 : -1)
       })
       return installations
-    }
+    },
+    workCenter() {
+      return this.$store.getters['mes/workCenter']
+    },
   },
   methods: {
     invokeDeleteInstallation({ installation, callback, dialogAgreeClick }) {
@@ -81,6 +89,28 @@ export default {
     dialogInput() {
       this.dialogProperties.visible = false
     },
+    onRefresh() {
+      if(this.$vuetify.breakpoint.mdAndUp) {
+        return
+      }
+      return new Promise( async (resolve, reject) => {
+        let refreshIcon = document.querySelector('.pull-down-content--icon')
+        refreshIcon.innerHTML = '<svg class="spinner" viewBox="0 0 64 64"><g stroke="black" stroke-width="6" stroke-linecap="round"><line y1="17" y2="29" transform="translate(32,32) rotate(180)"><animate attributeName="stroke-opacity" dur="750ms" values="1;.85;.7;.65;.55;.45;.35;.25;.15;.1;0;1" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(210)"><animate attributeName="stroke-opacity" dur="750ms" values="0;1;.85;.7;.65;.55;.45;.35;.25;.15;.1;0" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(240)"><animate attributeName="stroke-opacity" dur="750ms" values=".1;0;1;.85;.7;.65;.55;.45;.35;.25;.15;.1" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(270)"><animate attributeName="stroke-opacity" dur="750ms" values=".15;.1;0;1;.85;.7;.65;.55;.45;.35;.25;.15" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(300)"><animate attributeName="stroke-opacity" dur="750ms" values=".25;.15;.1;0;1;.85;.7;.65;.55;.45;.35;.25" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(330)"><animate attributeName="stroke-opacity" dur="750ms" values=".35;.25;.15;.1;0;1;.85;.7;.65;.55;.45;.35" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(0)"><animate attributeName="stroke-opacity" dur="750ms" values=".45;.35;.25;.15;.1;0;1;.85;.7;.65;.55;.45" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(30)"><animate attributeName="stroke-opacity" dur="750ms" values=".55;.45;.35;.25;.15;.1;0;1;.85;.7;.65;.55" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(60)"><animate attributeName="stroke-opacity" dur="750ms" values=".65;.55;.45;.35;.25;.15;.1;0;1;.85;.7;.65" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(90)"><animate attributeName="stroke-opacity" dur="750ms" values=".7;.65;.55;.45;.35;.25;.15;.1;0;1;.85;.7" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(120)"><animate attributeName="stroke-opacity" dur="750ms" values=".85;.7;.65;.55;.45;.35;.25;.15;.1;0;1;.85" repeatCount="indefinite"></animate></line><line y1="17" y2="29" transform="translate(32,32) rotate(150)"><animate attributeName="stroke-opacity" dur="750ms" values="1;.85;.7;.65;.55;.45;.35;.25;.15;.1;0;1" repeatCount="indefinite"></animate></line></g></svg>'
+        refreshIcon.style = "background: none; height : 40px; width : 40px; -webkit-animation: none; margin-top: 0"
+        this.$store.dispatch('mes/initializeInstallations',
+          { workCenterCode: this.workCenter.code })
+        .then(()=>{
+          resolve()
+        })
+      })
+    },
+  },
+  mounted() {
+    let refreshLabel = document.querySelector('.pull-down-content--label')
+    let refreshHeader = document.querySelector('.pull-down-header')
+    refreshHeader.style.display = this.$vuetify.breakpoint.smAndDown ? 'block' :  'none'
+    refreshHeader.style.backgroundColor = "white"
+    refreshLabel.innerText = ''
   }
 }
 </script>

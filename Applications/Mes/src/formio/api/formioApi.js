@@ -4,9 +4,9 @@ import { HttpLink } from 'apollo-link-http'
 import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
 import auth from '@it-enterprise/jwtauthentication'
-import {routerDependencies} from '@/router'
+import router from '@/router'
 
-const router = routerDependencies.router
+// const router = routerDependencies.router
 
 import ticket from './graphql/ticket.graphql'
 
@@ -20,7 +20,7 @@ import callItemAutocomplete from './graphql/callItemAutocomplete.graphql'
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens()
-    router.push('/MES/LOGIN')
+    router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
   }
   if (graphQLErrors) {
     // TODO: Обработать ошибку
