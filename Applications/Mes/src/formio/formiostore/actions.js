@@ -58,8 +58,9 @@ export default {
   },
   async graphqlQueryWithRequestResultWraper({ commit, dispatch }, { queryAction }) {
     commit('closeSnackbar')
+    var result
     try {
-      let result = await queryAction()
+      result = await queryAction()
       if (result.success == true) {
         if (result.successMessage) {
           commit('setSnackbarSuccessMessage', result.successMessage)
@@ -76,6 +77,6 @@ export default {
         commit('setSnackbarErrorMessage', e.message)
       }
     }
-    return false
+    return result
   }
 }

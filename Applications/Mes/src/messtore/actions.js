@@ -205,7 +205,7 @@ export default {
     })
   },
 
-  async registerProduction({ commit, getters }, { workCenter, task, deviceSizeType }) {
+  async registerProduction({ commit, dispatch }, { workCenter, task, deviceSizeType }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -213,7 +213,7 @@ export default {
         mode: 'Start',
         success: true
       }
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.registerProductionGql(productionRegistrationParam)
         return res
@@ -223,10 +223,10 @@ export default {
         commit('resetProductionFormio')
         task.inProgress = true
         let properties = {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode
+          WORKCENTERCODE: workCenter.code,
+          WORKBARCODE: task.barcode
         }
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
       linearLoader: true
     })
@@ -330,17 +330,16 @@ export default {
   },
 
   async productionFormIoSubmit({ commit, dispatch }, { workCenter, submission, task, message, deviceSizeType }) {
-    var me = this
     commit('setDialogLinearLoaderMessage', message)
     var submitResult = await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
         var params = {
             submission,
-            params: {
-              workCenterCode: workCenter.code,
-              workBarcode: task.barcode,
-              mode: 'FINISH'
-            },
+            params: JSON.stringify({
+              WORKCENTERCODE: workCenter.code,
+              WORKBARCODE: task.barcode,
+              MDOE: 'FINISH'
+            }, null, 4),
             deviceSizeType: deviceSizeType || 'lg'
         }
         const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, params)
@@ -348,7 +347,7 @@ export default {
       },
       successAction: async () => {
         dispatch('initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }, deviceSizeType})
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { WORKCENTERCODE: workCenter.code, WORKBARCODE: task.barcode }, deviceSizeType})
       }
     })
     commit('closeDialogLinearLoader')
@@ -365,9 +364,9 @@ export default {
     if (linearLoader) {
       commit('setLinearLoader', true)
     }
-
+    var result
     try {
-      let result = await queryAction()
+      result = await queryAction()
       if (result.success == true) {
         if (successAction) {
           await successAction(result)
@@ -392,6 +391,8 @@ export default {
     if (linearLoader) {
       commit('setLinearLoader', false)
     }
+
+    return result
   },
   async graphqlQueryWraper({ commit, dispatch }, { action, linearLoader }) {
     commit('closeSnackbar')

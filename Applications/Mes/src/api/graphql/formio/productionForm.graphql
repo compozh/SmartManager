@@ -1,4 +1,4 @@
-query($formCode: String!, $params: ProductionRegistrationParamsInput!){
+query($formCode: String!, $params: FormGettingParamsInput!){
     mes{
         productionFormio(formCode: $formCode, params: $params) {
             name
