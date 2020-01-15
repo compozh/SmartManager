@@ -18,7 +18,6 @@
          <mes-downtimes-overlay v-if="downtimesOverlayVisible"
             @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
         <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
-        <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
         <span class="mes-device-not-fixed" v-if="userData && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
@@ -81,7 +80,6 @@ export default {
     }
   },
   created() {
-    
     if(this.$vuetify.breakpoint.smAndDown){
       this.$store.commit('mes/setMenuDrawerMode', false)
     }

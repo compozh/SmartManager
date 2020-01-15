@@ -20,7 +20,9 @@ import callItemAutocomplete from './graphql/callItemAutocomplete.graphql'
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens()
-    router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
+    if (router.currentRoute.name !== 'MESLOGIN') {
+      router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
+    }
   }
   if (graphQLErrors) {
     // TODO: Обработать ошибку

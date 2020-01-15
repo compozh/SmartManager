@@ -132,19 +132,13 @@ export const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if( to.name == from.name && to.name == 'MESLOGIN' && to.query.fixedUuid == from.query.fixedUuid ) {
+  let same = Object.values(to).every((el) => {
+    return Object.values(from).find( fromEl =>  fromEl == el) 
+  })
+  if( same ) {
     return 
-  }
-  let user = store.state.auth.user
-  if (
-    to.path === '/login' ||
-    to.path === '/error/404' ||
-    to.path === '/error/500' || 
-    !!user
-  ) {
+  } else  {
     return next()
   } 
-  router.push({ name: 'MESLOGIN', query: { to: from.path , fixedUuid: cookiesUuid}} )
-  
 })
 export default router

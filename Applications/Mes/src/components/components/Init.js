@@ -9,21 +9,11 @@ export default class Init {
         var fixedUuid = router.currentRoute.query.fixedUuid,
             cookiesUuid = cookies.get('mesUuid'),
             sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
-            uuid
+            uuid = fixedUuid || cookiesUuid || sessionStorageUuid || UuidHelper.generate()
 
-        if (fixedUuid) {
-            uuid = fixedUuid
-        } else if (cookiesUuid) {
-            uuid = cookiesUuid
-            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
-        } else if (sessionStorageUuid) {
-            uuid = sessionStorageUuid
-            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
-        } else {
-            uuid = UuidHelper.generate()
-            router.push({ query: {...router.currentRoute.query, fixedUuid: uuid }})
-        }
-        // eslint-disable-next-line
+            if(!fixedUuid) {
+              router.push({ query: {...router.currentRoute.query.to, fixedUuid: uuid }})
+            }
         cookies.set('mesUuid', uuid, '3y')
         window.sessionStorage.setItem('mesUuid', uuid)
         store.dispatch('mes/initializeWorkCenter', uuid)

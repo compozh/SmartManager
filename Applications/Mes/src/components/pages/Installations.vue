@@ -9,10 +9,9 @@
     />
 
     <mes-content-loader v-if="!initializeInstallations && !installations.length" :loaderType="$vuetify.breakpoint.smAndDown ? 'list' : ''" />
-
-    <mes-installations-component
-      ref="installationCards"
-    />
+      <mes-installations-component
+        ref="installationCards"
+      />
     <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">{{this.$t('mes.labels.AbsentInstalledParties')}}</span>
   </v-layout>
 </template>

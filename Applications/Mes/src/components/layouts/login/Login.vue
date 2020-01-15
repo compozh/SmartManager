@@ -47,6 +47,7 @@
                       class="cyan white--text text-xs-right"
                       v-bind="params.buttonAttrs"
                       v-on="params.buttonEvents"
+                      :loading="loading"
                     >Войти
                     </v-btn>
                   </v-flex>
