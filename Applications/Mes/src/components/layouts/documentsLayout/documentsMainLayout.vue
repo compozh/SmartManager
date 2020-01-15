@@ -1,6 +1,6 @@
 <template>
 <v-layout class="documents-layout">
-  <v-flex class="documents-flex" v-if="initializeDynamicPage" :key="this.documentFormioKey">
+  <v-flex class="documents-flex" v-if="initializeDocuments" :key="this.documentFormioKey">
     <formio-form-component
       v-if="selectedDocument"
       ref="formioBuilder"
@@ -17,7 +17,7 @@
 export default {
   name: 'mes-documents-main-layout',
   props: {
-    initializeDynamicPage: Boolean,
+    initializeDocuments: Boolean,
     pageProps:Object
   },
   data() {
