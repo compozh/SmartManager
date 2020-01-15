@@ -1,9 +1,9 @@
 <template>
   <v-container class="main-block">
 
-    <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+    <!-- <mes-downtimes-overlay v-if="downtimesOverlayVisible"
       @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-    />
+    /> -->
 
     <v-card ref="card">
       <vue-split
@@ -29,19 +29,27 @@
           @agreeClick=dialogAgreeClick
           @disagreeClick=dialogDisagreeClick />
 
+        <!-- <vue-pull-refresh :on-refresh="onRefresh"> -->
           <mes-tasks-component
           id="slotOne"
           ref="taskList"
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=onChangeCurrentTask
-            @changeSelectTasksTab=changeSelectTasksTab />
+            @changeSelectTasksTab=changeSelectTasksTab
+            @changeTaskTableView=changeTaskTableView
+            :class="$vuetify.breakpoint.smAndDown? 'tasks-table-small' : ''"
+            v-if="$vuetify.breakpoint.smAndDown? taskTableView : true"/>
+        <!-- </vue-pull-refresh> -->
+          
 
-            <v-layout column class="task-description-layout" id="slotTwo">
+            <v-layout column class="task-description-layout" id="slotTwo" v-show="$vuetify.breakpoint.smAndDown? !taskTableView : true">
               <mes-un-selected-layout-toolbar
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                @changeTaskTableView=changeTaskTableView
               />
+              
               <div
                 v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
@@ -50,6 +58,7 @@
                   ref="taskMainLayout"
                   v-if="selectedTask && currentLayout === 'main'"
                   @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                  @changeTaskTableView=changeTaskTableView
                 />
 
                 <mes-task-installations-layout
@@ -80,15 +89,11 @@ export default {
         visible: false,
         task: null
       },
+      taskTableView: true
     }
   },
   created() {
     this.initialize()
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
-    }
   },
   computed: {
     initialWorkCenter() {
@@ -235,8 +240,9 @@ export default {
         properties = {
           workCenterCode: workCenter.code,
           workBarcode: task.barcode
-        }
-      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+        },
+        deviceSizeType = this.$vuetify.breakpoint.name
+      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex
@@ -268,7 +274,10 @@ export default {
       this.aspectRatioLayout = sizes
     },
     changeDowntimesOverlayVisible() {
-      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+      this.$emit('changeDowntimesOverlayVisible')
+    },
+    changeTaskTableView(mode) {
+      this.taskTableView = mode
     }
   }
 }
@@ -300,5 +309,9 @@ export default {
   .task-description-layout {
     border-left: 1px solid rgba(2, 2, 2, 0.08) !important;
     height: 100%;
+  }
+
+  .tasks-table-small {
+    min-width: 100vw
   }
 </style>

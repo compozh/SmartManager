@@ -17,12 +17,19 @@
         @changeCurrentQuality=changeCurrentQuality
         @uploadQualityOnScroll=uploadQualityOnScroll
         @initialize=initialize
+        :currentDate=currentDate
+        :properties=properties
         :isUploadInProcess=isUploadInProcess
         :initializeQualities=initializeQualities
+        v-if="$vuetify.breakpoint.smAndDown? qualityTableView : true"
+        :class="$vuetify.breakpoint.smAndDown? 'quality-table-small' : ''"
+        @changeQualityTableView=changeQualityTableView
       />
       <mes-quality-main-layout
         id="qualitiesDescription"
         :initializeQualities=initializeQualities
+        @changeQualityTableView=changeQualityTableView
+        v-if="$vuetify.breakpoint.smAndDown? !qualityTableView : true"
       />
       </vue-split>
     </v-layout>
@@ -38,12 +45,8 @@ export default {
       initializeQualities: false,
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       defaultSizes: [25, 75],
-      isUploadInProcess: false
-    }
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
+      isUploadInProcess: false,
+      qualityTableView: true
     }
   },
   created() {
@@ -78,11 +81,12 @@ export default {
         this.initializeQualities = false
         this.$store.commit('mes/setQualities', [])
       }
-      await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
+      let qualities = await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
       this.initializeQualities = true
       if (!this.selectedQuality) {
         this.seelectFirstQuality()
       }
+      return qualities
     },
     changeCurrentQuality(newSelectedQuality) {
       var me = this
@@ -93,9 +97,10 @@ export default {
 
       var formCode = me.properties.qualityForm,
         properties = { RCENTR: me.workCenter.code , ID: newSelectedQuality.id },
-        fetchPolicy = 'network-only'
+        fetchPolicy = 'network-only',
+        deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
           me.$store.commit('mes/setQualityFormio', result)
       })
     },
@@ -108,6 +113,9 @@ export default {
       this.isUploadInProcess = true
       await this.$store.dispatch('mes/downloadQualities', { processTypeCode: this.properties.qualityProcessType, searchDateTime: lastQualityDate, query: this.documentSearchValue, direction: 1 })
       this.isUploadInProcess = false
+    },
+    changeQualityTableView(mode) {
+      this.qualityTableView = mode
     }
   }
 }
@@ -119,5 +127,8 @@ export default {
 }
 .main-quality-layout {
   width: 100%;
+}
+.quality-table-small {
+    min-width: 100vw
 }
 </style>

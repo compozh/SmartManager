@@ -249,10 +249,12 @@ export default {
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
     }
+
     .formio-base-block {
       padding: 15px;
     }
-    .formio-component {
+
+    .formio-form-component {
         position: relative;
     }
 </style>

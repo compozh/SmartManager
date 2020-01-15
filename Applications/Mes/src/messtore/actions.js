@@ -4,6 +4,14 @@ const api = new MesApi()
 
 /* eslint-disable */
 export default {
+  async initializeUser({ commit, getters }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        
+      action: async () => {
+        await api.getUser()
+      }
+    })
+  },
   async initializeProperties({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
       action: async () => {
@@ -94,6 +102,14 @@ export default {
       }
     })
   },
+  async uploadDowntimes({ commit, getters }, { workCenterCode, dateTime }) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+      action: async () => {
+        let downtimes = await api.getDowntimesPreviousFromGql(workCenterCode, dateTime)
+        commit('setDowntimes', downtimes)
+      }
+    })
+  },
 
   async downloadQualities({ commit, getters }, retrieveParams) {
     await this.dispatch('mes/graphqlQueryWraper', {
@@ -109,6 +125,16 @@ export default {
       }
     )
   },
+  async uploadQualities({ commit}, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let qualities = await api.getQualitiesFromGql(retrieveParams)
+          commit('setQualities', qualities)
+          commit('setInitializeQualities', true)
+        }
+      }
+    )
+  },
 
   async downloadDocuments({ commit, getters }, retrieveParams) {
     await this.dispatch('mes/graphqlQueryWraper', {
@@ -120,6 +146,16 @@ export default {
             commit('setDocuments', documents)
             commit('setInitializeDocuments', true)
           }
+        }
+      }
+    )
+  },
+  async uploadDocuments({ commit, getters }, retrieveParams) {
+    await this.dispatch('mes/graphqlQueryWraper', {
+        action: async () => {
+          let documents = await api.getDocumentsFromGql(retrieveParams)
+          commit('setDocuments', documents)
+          commit('setInitializeDocuments', true)
         }
       }
     )
@@ -169,7 +205,7 @@ export default {
     })
   },
 
-  async registerProduction({ commit, getters }, { workCenter, task }) {
+  async registerProduction({ commit, getters }, { workCenter, task, deviceSizeType }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -190,7 +226,7 @@ export default {
           workCenterCode: workCenter.code,
           workBarcode: task.barcode
         }
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
       linearLoader: true
     })
@@ -289,7 +325,12 @@ export default {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
 
+  toggleMenuDrawerMode({getters, commit}) {
+    commit('setMenuDrawerMode', !getters.menuDrawerMode)
+  },
+
   async productionFormIoSubmit({ commit, dispatch }, { workCenter, submission, task, message, deviceSizeType }) {
+    var me = this
     commit('setDialogLinearLoaderMessage', message)
     var submitResult = await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -307,7 +348,7 @@ export default {
       },
       successAction: async () => {
         dispatch('initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }})
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }, deviceSizeType})
       }
     })
     commit('closeDialogLinearLoader')

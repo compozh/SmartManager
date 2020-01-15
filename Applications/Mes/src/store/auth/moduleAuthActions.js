@@ -1,19 +1,19 @@
 import auth from '@it-enterprise/jwtauthentication'
-import {routerDependencies} from '@/router'
-const router = routerDependencies.router
+import router from '@/router'
+// const router = routerDependencies.router
 
 export default {
   logout({commit}) {
     auth.clearTokens()
     commit('UPDATE_AUTHENTICATED_USER', null)
     if (router.currentRoute.name !== 'MESLOGIN') {
-      router.push({path: '/MES/LOGIN'})
+      router.push({path: 'login', query: { to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid }})
     }
   },
   async login({dispatch}, {login, password, remember}) {
     const userIsLoggedIn = await dispatch('userIsLoggedIn')
     if (userIsLoggedIn) {
-      return
+      return {success: true}
     }
     try {
       const result = await auth.login(login, password, remember)
@@ -21,6 +21,7 @@ export default {
       return result
     } catch (e) {
       console.warn(e.message)
+      return e
       // TODO: Вывести уведомление об о ошибке для пользователя
     }
   },
@@ -42,19 +43,23 @@ export default {
     // If user is already logged in notify and exit
     if (state.user) {
       // TODO: Уведомление о том что пользователь уже вошел в систему
-      router.push('/MES')
+      router.push({path:router.currentRoute.query.to || '/', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
       return true
     }
     return false
   },
-  updateAuthenticatedUser({commit}, result) {
+  async updateAuthenticatedUser({commit}, result) {
     if (result.success) {
+      let to = router.currentRoute.query.to
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      router.push(router.currentRoute.query.to || '/MES')
+      await router.push({path: to || '/', query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+      if(!to ) {
+        router.go()
+      }
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
       if (router.currentRoute.name !== 'MESLOGIN') {
-        router.push({path: '/LOGIN'})
+        router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
       }
     }
   }

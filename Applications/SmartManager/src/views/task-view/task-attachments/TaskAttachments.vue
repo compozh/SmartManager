@@ -1,38 +1,39 @@
 <template>
   <div class="flex flex-col h-full bg-white" ref="container">
-    <div class="vx-row m-0 px-6 py-3" ref="items">
-      <div>
+        <VuePerfectScrollbar
+          class="scroll-area my-2"
+          :settings="settings"
+          style="height: auto; max-height: 15%">
+      <div class="vx-row m-0 px-6" ref="items">
+          <div class="flex flex-wrap">
+            <div
+              class="my-1"
+              v-for="(attachment, index) in task.originals"
+              :key="index"
+              @click="getUrl(attachment)">
+              <vx-tooltip
+                class="custom-tooltip"
+                :text="attachment.fileName"
+                color="rgb(98, 98, 98, .95)">
+                <vs-chip
+                  :color="attachment.id === fileId ? 'warning' : 'primary'"
+                  class="mr-3 max-w-sm cursor-pointer">
+                  <span class="flex mr-2">
+                    <file-icon :extention="attachment.fileExt"></file-icon>
+                  </span>
+                  <span class="custom-truncate">{{ attachment.fileName }}</span>
+                </vs-chip>
+              </vx-tooltip>
+            </div>
+          </div>
       </div>
-      <div class="flex flex-wrap">
-        <div
-          class="my-1"
-          v-for="(attachment, index) in task.originals"
-          :key="index"
-          @click="getUrl(attachment)"
-        >
-          <vx-tooltip
-            class="custom-tooltip"
-            :text="attachment.fileName"
-            color="rgb(98, 98, 98, .95)"
-          >
-            <vs-chip
-              :color="attachment.id === fileId ? 'warning' : 'primary'"
-              class="mr-3 max-w-sm cursor-pointer"
-            >
-              <span class="flex mr-2">
-                <file-icon :extention="attachment.fileExt"></file-icon>
-              </span>
-              <span class="custom-truncate">{{ attachment.fileName }}</span>
-            </vs-chip>
-          </vx-tooltip>
-        </div>
-      </div>
-    </div>
+        </VuePerfectScrollbar>
     <component :is="viewer" :url="fileUrl"></component>
   </div>
 </template>
 
 <script>
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import PdfViewer from '@/components/pdf-viewer/Viewer'
 import ImgViewer from '@/components/ImageViewer'
 import TxtViewer from '@/components/TextViewer'
@@ -46,6 +47,7 @@ export default {
     index: Number
   },
   components: {
+    VuePerfectScrollbar,
     PdfViewer,
     ImgViewer,
     TxtViewer,
@@ -55,7 +57,11 @@ export default {
   },
   data: () => ({
     fileId: 0,
-    fileUrl: ''
+    fileUrl: '',
+    settings: {
+      maxScrollbarLength: 60,
+      wheelSpeed: 0.50,
+    }
   }),
   created() {
     if (!this.fileId && this.originals) {

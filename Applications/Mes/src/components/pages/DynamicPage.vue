@@ -17,7 +17,7 @@
         @onDragEnd="changeAspectRatioLayout"
       >
         <mes-documents-main-layout
-          v-if="this.pageProps.showListOnRightSide"
+          v-if="this.pageProps.showListOnRightSide && !vuetify.breakpoint.smAndDown"
           id="dynamicPageDescription"
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
@@ -31,9 +31,14 @@
           :isUploadInProcess=isUploadInProcess
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
+          :currentDate=currentDate
+          v-if="$vuetify.breakpoint.smAndDown? dynamicTableView : true"
+          :class="$vuetify.breakpoint.smAndDown? 'dynamic-table-small' : ''"
+          @changeDynamicTableView=changeDynamicTableView
         />
         <mes-documents-main-layout
-          v-if="!this.pageProps.showListOnRightSide"
+          @changeDynamicTableView=changeDynamicTableView
+          v-if="$vuetify.breakpoint.smAndDown? !dynamicTableView : !this.pageProps.showListOnRightSide "
           id="dynamicPageDescription"
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
@@ -51,12 +56,8 @@ export default {
     return {
       pageProps: {},
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
-      isUploadInProcess: false
-    }
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
+      isUploadInProcess: false,
+      dynamicTableView: true
     }
   },
   created() {
@@ -131,9 +132,10 @@ export default {
 
       var formCode = me.pageProps.id,
         properties = { RCENTR: me.workCenter.code, ID: newSelectedDocument.id },
-        fetchPolicy = 'network-only'
+        fetchPolicy = 'network-only',
+        deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy }).then(result => {
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
         if(result.success) {
           me.$store.commit('mes/setDocumentFormio', result)
         }
@@ -157,6 +159,9 @@ export default {
       this.isUploadInProcess = true
       await this.$store.dispatch('mes/downloadDocuments', { processTypeCode: this.pageProps.id, searchDateTime: lastDocumentDate, query: this.documentSearchValue, direction: 1 })
       this.isUploadInProcess = false
+    },
+    changeDynamicTableView(mode) {
+      this.dynamicTableView = mode
     }
   }
 }
@@ -168,5 +173,8 @@ export default {
 }
 .main-dynamic-page-layout {
   width: 100%;
+}
+.dynamic-table-small {
+    min-width: 100vw
 }
 </style>

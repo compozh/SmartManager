@@ -1,17 +1,24 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center justify-space-beetwen class="main-toolbar">
+    <v-layout row align-center justify-space-beetwen class="main-toolbar pl-4">
 
       <!-- Лого -->
-      <v-flex row>
-        <router-link tag="h1" :to="{ name:'MESROOT'}">
+      <v-flex row v-if="!searchWorkCenter">
+        <router-link tag="h1" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
+        <span v-if="properties && properties.brandName && $vuetify.breakpoint.smAndUp" class="brand-name" @click="refreshApp">
+          {{properties.brandName}}
+        </span>
       </v-flex>
 
+      <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.smAndDown && !searchWorkCenter && $route.name !='MESLOGIN'"
+        icon  @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">
+        <v-icon>pause</v-icon>
+      </v-btn>
       <!-- Состояние РЦ -->
-      <v-tooltip :disabled="!workCenterFixationData.description" bottom v-if="workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
+      <v-tooltip :disabled="!workCenterFixationData.description" bottom 
+        v-if="!searchWorkCenter && workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
           <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
         </template>
@@ -19,9 +26,16 @@
       </v-tooltip>
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
-      <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
-        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
+      <div :class="`work-centers-select ${$vuetify.breakpoint.mdAndUp ? 'static' : searchWorkCenter ? 'search' : 'small'}`"  
+        v-if="workCentersForWorker.length > 1 && $route.name !='MESLOGIN'">
+        <span class='work-centers-title' v-if="$vuetify.breakpoint.mdAndUp">
+          {{this.$t('mes.labels.WorkCenter')}}: 
+        </span>
+        <v-btn icon v-else-if="!searchWorkCenter" @click="searchWorkCenter = !searchWorkCenter">
+          <v-icon>work_outline</v-icon>
+        </v-btn>
         <v-autocomplete
+          v-if="searchWorkCenter || $vuetify.breakpoint.mdAndUp"
           autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
@@ -29,26 +43,31 @@
           return-object
           :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
-          class="work-centers-select-input"
+          @blur="searchWorkCenter = false"
+          :autofocus="$vuetify.breakpoint.smAndDown? true : false"
+          :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select-input' : 'work-centers-select-input-small'" 
         ></v-autocomplete>
       </div>
 
       <!-- Зафиксированый РЦ -->
-      <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
+      <div class="work-centers-caption" v-if="!searchWorkCenter && workCenter && $route.name !='MESLOGIN' && workCentersForWorker.length == 1">
         <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc">
+      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.width > 1040">
         <span class="user-info-text">
-          {{userData.userName}}
+          {{userData.userName || userData.login }}
         </span>
       </div>
-
       <!-- Панель Юзера -->
-      <v-flex class="grow-0 user-description-block">
-        <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
+      <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter && $route.name !='MESLOGIN'">
+        <user-panel hideDelegatedRightsButton="true" mini="true" >
+          <v-btn v-if="$vuetify.breakpoint.smAndDown" icon>
+            <v-icon>account_circle</v-icon>
+          </v-btn>
+        </user-panel>
       </v-flex>
 
     </v-layout>
@@ -62,6 +81,9 @@ import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
 
 export default {
   name: 'mes-toolbar',
+  data() {
+    return {searchWorkCenter: false}
+  },
   components: {
     Init,
     UserPanel
@@ -73,7 +95,7 @@ export default {
   },
   computed: {
     userData() {
-      return this.$store.state.user || {}
+      return this.$store.state.auth.user || {}
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
@@ -113,12 +135,15 @@ export default {
     },
     refreshApp() {
       this.$router.go()
+    },
+    changeDowntimesOverlayVisible() {
+      this.$emit('changeDowntimesOverlayVisible')
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
   font-size: 30px;
   text-align: left;
@@ -145,7 +170,7 @@ a {
   font-size: 16px;
   font-weight: 500;
   color: #326DA8;
-  width: 120px;
+  width: 150px;
 }
 .work-center-state {
   margin: 0 10px;
@@ -164,11 +189,26 @@ a {
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+}
+
+.work-centers-select.static {
   min-width: 450px;
+}
+
+.work-centers-select.search {
+  width: 100%;
 }
 .work-centers-select-input {
   margin: 0 5px;
   max-width: 330px;
+}
+
+.work-centers-select-input-small {
+  min-width: 100%;
+  height: 32px;
+}
+.work-centers-select-input-small .v-text-field__details {
+  height: 0;
 }
 .work-centers-select-input .v-input__control {
   width: inherit;
@@ -205,5 +245,10 @@ a {
 }
 .v-tooltip__content.menuable__content__active.v-tooltip__content--fixed {
   padding: 16px;
+}
+.downtime-registration-button {
+  margin: 0;
+  // min-width: 50px !important;
+  // padding: 0 !important
 }
 </style>

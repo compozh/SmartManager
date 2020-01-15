@@ -103,7 +103,8 @@
       </div>
     </div>
     <!-- CASE -->
-    <div class="vx-row"
+    <div v-if="task.taskType === '' && !task.isGenerate"
+         class="vx-row"
          style="margin-top: 2.2rem">
       <div class="vx-col w-full">
         <vx-card>
