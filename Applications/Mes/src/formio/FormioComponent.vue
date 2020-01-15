@@ -84,7 +84,6 @@ export default {
         form = this.$refs.formioComponent
 
       this.$emit('formSubmit', { submission, completeSubmissionCallback: result => {
-        result = { success: true}
           var event = '',
             message = ''
 
