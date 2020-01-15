@@ -6,17 +6,7 @@
     >
       <div class="app-fixed-height">
         <!-- SEARCH BAR -->
-        <div
-          class="flex border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-l-0 items-center app-search-container"
-        >
-          <vs-input
-            icon="icon-search"
-            size="large"
-            icon-pack="feather"
-            :placeholder="$t('search')"
-            v-model.trim="search"
-            class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
-        </div>
+        <search-bar @search="currentPage = 1"></search-bar>
         <!-- CASE LIST -->
         <VuePerfectScrollbar
           class="task-content-scroll-area"
@@ -54,12 +44,14 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar.vue'
 import CaseListItem from './CaseListItem.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import NoData from '@/components/NoData'
 
 export default {
   components: {
+    SearchBar,
     CaseListItem,
     VuePerfectScrollbar,
     NoData
@@ -95,15 +87,6 @@ export default {
           .filter((item, index) => pageFrom <= index && index < pageTo)
       }
       return []
-    },
-    search: {
-      get() {
-        return this.$store.state.sm.search
-      },
-      set(search) {
-        this.currentPage = 1
-        this.$store.commit('sm/setSearch', search)
-      }
     }
   },
   methods: {
