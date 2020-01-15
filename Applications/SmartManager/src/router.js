@@ -5,9 +5,6 @@ Vue.use(VueRouter)
 
 let router = new VueRouter({
   mode: 'history',
-  scrollBehavior () {
-    return { x: 0, y: 0 }
-  },
   base: window.appConfig.BASE_URL + 'SmartManager/',
   routes: [
     {
