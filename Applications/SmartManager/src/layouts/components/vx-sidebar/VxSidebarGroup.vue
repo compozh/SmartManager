@@ -1,14 +1,3 @@
-<!-- =========================================================================================
-	File Name: VxSidebarGroup.vue
-	Description: Sidebar Group Component. Extends vuesax framework's 'vs-sidebar-group' component
-	Component Name: VxSidebarGroup
-	----------------------------------------------------------------------------------------
-	Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
   <div
     :class="[{'vs-sidebar-group-open' : openItems}, {'vs-sidebar-group-active': open}, {'disabled-item pointer-events-none': group.isDisabled}]"
@@ -30,32 +19,26 @@
       <span class="vs-sidebar--tooltip">{{ $t(group.i18n) || group.name }}</span>
     </div>
 
-    <ul
-      ref="items"
-      :style="styleItems"
-      class="vs-sidebar-group-items"
-    >
-      <li
-        v-for="(groupItem, index) in group.submenu"
-        :key="index"
-      >
-        <vx-sidebar-group
-          :group="groupItem"
-          :groupIndex="Number(`${groupIndex}.${index}`)"
-          :open="isGroupActive(groupItem)"
-          :openHover="openHover"
-          v-if="groupItem.submenu"/>
+    <ul ref="items"
+        :style="styleItems"
+        class="vs-sidebar-group-items">
+      <li v-for="(groupItem, index) in group.submenu"
+        :key="index">
+        <vx-sidebar-group :group="groupItem"
+                          :groupIndex="Number(`${groupIndex}.${index}`)"
+                          :open="isGroupActive(groupItem)"
+                          :openHover="openHover"
+                          v-if="groupItem.submenu"/>
 
-        <vx-sidebar-item
-          :index="groupIndex + '.' + index"
-          :to="groupItem.url"
-          :icon="itemIcon(groupIndex + '.' + index)"
-          :slug="groupItem.slug"
+        <vx-sidebar-item :index="groupIndex + '.' + index"
+                         :to="groupItem.url"
+                         :icon="itemIcon(groupIndex + '.' + index)"
+                         :slug="groupItem.slug"
                          icon-small :target="groupItem.target" v-else>
           <span class="truncate">{{ $t(groupItem.i18n) || groupItem.name }}</span>
-          <vs-chip class="ml-auto" :color="groupItem.tagColor" v-if="groupItem.tag">{{ groupItem.tag
-            }}
-          </vs-chip>
+          <vs-chip v-if="groupItem.tag"
+                   class="ml-auto"
+                   :color="groupItem.tagColor">{{ groupItem.tag }}</vs-chip>
         </vx-sidebar-item>
       </li>
     </ul>
@@ -105,7 +88,6 @@ export default {
     },
     isGroupActive() {
       return (sidebarItem) => {
-
         const path = this.$route.fullPath
         let open = false
         let func = function (sidebarItem) {
@@ -119,7 +101,6 @@ export default {
             })
           }
         }
-
         func(sidebarItem)
         return open
       }
@@ -184,7 +165,6 @@ export default {
             this.maxHeight = `${0}px`
           }, 50)
         }
-
         this.$parent.$children.map((child) => {
           if (child.isGroupActive) {
 
@@ -223,5 +203,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "@/assets/scss/vuesax/components/vxSidebarGroup.scss"
+  @import "@/assets/scss/vuesax/components/vxSidebarGroup.scss";
 </style>
