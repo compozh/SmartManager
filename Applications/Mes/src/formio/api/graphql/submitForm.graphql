@@ -1,6 +1,6 @@
-mutation($formCode: String!, $submission: String, $properties: String) {
+mutation($formCode: String!, $params: FormSubmitParamsInput!) {
     formioQueryMutation {
-        submitForm(formCode: $formCode, submission: $submission, properties: $properties) {
+        submitForm(formCode: $formCode, params: $params) {
             success
             errorMessage
             successMessage

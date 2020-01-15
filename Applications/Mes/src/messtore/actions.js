@@ -260,8 +260,8 @@ export default {
     })
   },
 
-  async setMaterialProduction({ commit, getters }, production) {
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+  async setMaterialProduction({ commit, getters, dispatch }, production) {
+    await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
         const res = await api.setMaterialProductionGql(production.factId, true, getters.workCenter.code)
         return res
@@ -270,11 +270,14 @@ export default {
     })
   },
 
-  async createProductionFormio({ commit }, { formCode, properties, deviceSizeType }) {
-    deviceSizeType = deviceSizeType || 'lg'
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+  async createProductionFormio({ commit, dispatch }, { formCode, properties, deviceSizeType }) {
+    var params = { 
+      params: JSON.stringify(properties || '', null, 4),
+      deviceSizeType: deviceSizeType || 'lg'
+    }
+    await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.getProductionFormioFromGql(formCode, properties, deviceSizeType)
+        const res = await api.getProductionFormioFromGql(formCode, params)
         return res
       },
       successAction: async result => { commit('setProductionFormio', result) },
@@ -286,22 +289,25 @@ export default {
     commit('setMenuMiniMode', !getters.menuMiniMode)
   },
 
-  async productionFormIoSubmit({ commit }, { workCenter, submission, task, message }) {
-    var me = this
+  async productionFormIoSubmit({ commit, dispatch }, { workCenter, submission, task, message, deviceSizeType }) {
     commit('setDialogLinearLoaderMessage', message)
-    var submitResult = await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var submitResult = await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-
-        const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, submission, {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode,
-          mode: 'FINISH'
-        })
+        var params = {
+            submission,
+            params: {
+              workCenterCode: workCenter.code,
+              workBarcode: task.barcode,
+              mode: 'FINISH'
+            },
+            deviceSizeType: deviceSizeType || 'lg'
+        }
+        const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, params)
         return res
       },
       successAction: async () => {
-        me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }})
+        dispatch('initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }})
       }
     })
     commit('closeDialogLinearLoader')
@@ -336,7 +342,6 @@ export default {
       }
     } catch (e) {
       if (e.networkError && e.networkError.statusCode === 401) {
-        debugger
         await dispatch('auth/logout', null, { root: true })
       }
       else {
@@ -384,15 +389,15 @@ export default {
     }
   },
 
-  async unfixWorkCenterForWorker({ commit }, fixationId) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async unfixWorkCenterForWorker({ dispatch }, fixationId) {
+    await dispatch('graphqlQueryWraper', {
       action: async () => {
         await api.unfixWorkCenterForWorkerGql(fixationId)
       }
     })
   },
 
-  async getFixationWorkCenterForWorker ({ dispatch, commit }, { workerCode, fetchPolicy } ) {
+  async getFixationWorkCenterForWorker ({ dispatch }, { workerCode, fetchPolicy } ) {
     return await dispatch('graphqlQueryWraper', {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
