@@ -14,7 +14,8 @@
                  color="primary"
                  type="border"
                  icon-pack="feather"
-                 icon="icon-download">{{ $t('messages.downloadFile') }}</vs-button>
+                 icon="icon-download">{{ $t('messages.downloadFile') }}
+      </vs-button>
     </div>
   </VuePerfectScrollbar>
 </template>
