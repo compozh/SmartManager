@@ -1,8 +1,35 @@
-import {SkdApi} from '../api/skdApi'
-const api = new SkdApi()
-
+import {SkdApi as api} from '../api/skdApi'
+import auth from '@it-enterprise/jwtauthentication'
+import {routerDependencies} from '@/router'
+const router = routerDependencies.router
 
 export default {
+  logout({commit}) {
+    auth.clearTokens()
+    commit('UPDATE_AUTHENTICATED_USER', null)
+    if (router.currentRoute.name !== 'SKDLOGIN') {
+      router.push({name: 'SKDLOGIN'})
+    }
+  },
+  async login({commit, state}, {login, password, remember}) {
+    if (state.user) {
+      await router.push({name: 'SKDALLUSERS'})
+      return
+    }
+    try {
+      const result = await auth.login(login, password, remember)
+      if (result.success) {
+        commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
+        await router.push(router.currentRoute.query.to || {name: 'SKDALLUSERS'})
+      } else {
+        if (router.currentRoute.name !== 'SKDLOGIN') {
+          await router.push({name: 'SKDLOGIN'})
+        }
+      }
+    } catch (e) {
+      console.warn(e.message)
+    }
+  },
   async getUsers({commit}) {
     try {
       const result = await api.getUsersFromGql()
