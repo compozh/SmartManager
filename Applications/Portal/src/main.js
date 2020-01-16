@@ -1,8 +1,7 @@
 // @it-enterprise пакеты
-
 import Localization from '@it-enterprise/localization'
-import Authentication from '@it-enterprise/authentication'
-
+import auth from '@it-enterprise/jwtauthentication'
+auth.config(window.appConfig.GrapgQlUrl)
 
 // vue пакеты
 import Vue from 'vue'
@@ -27,7 +26,6 @@ Vue.prototype.$http = axios
 
 // Theme Configurations
 import '../themeConfig.js'
-
 
 // Globally Registered Components
 import './globalComponents.js'
@@ -65,7 +63,6 @@ import veeLocalize_ru from 'vee-validate/dist/locale/ru.json'
 import veeLocalize_en from 'vee-validate/dist/locale/en.json'
 import veeLocalize_uk from 'vee-validate/dist/locale/uk.json'
 
-
 // Add the required rule
 extend('required',{
   validate: value => !!value,
@@ -85,15 +82,9 @@ Vue.component('ValidationObserver', ValidationObserver)
 import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
 
-
-// PrismJS
-import 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css'
-
 // Feather font icon
 require('./assets/css/iconfont.css')
 Vue.config.productionTip = false
-
 
 // // apollo
 import VueApollo from 'vue-apollo'
@@ -103,7 +94,6 @@ Vue.use(vueCookie)
 
 // moment
 Vue.use(require('vue-moment'))
-
 
 // объект с зависимостями
 let dependencies = {
@@ -123,7 +113,6 @@ if (!localStorage.getItem('language')) {
 
 // Плагины it-enterprise
 Vue.use(Localization, { dependencies })
-Vue.use(Authentication, { options: window.appConfig, dependencies })
 
 Vue.prototype.$localization.RegisterLanguage('validation', 'en', () => Promise.resolve({default: veeLocalize_en.messages}))
 Vue.prototype.$localization.RegisterLanguage('validation', 'ru', () => Promise.resolve({default: veeLocalize_ru.messages}))
@@ -143,5 +132,23 @@ getRouter().then(router => {
   }).$mount('#app')
 })
 
-
-
+// Vue Router
+// import VueRouter from 'vue-router'
+// Vue.use(VueRouter)
+// const getRouter = () => import('./router')
+// import {PortalApi} from '@/api/portalApi'
+//
+// PortalApi.getApplicationDescription()
+//   .then(description => JSON.stringify(description))
+//   .then(description => {
+//     sessionStorage.setItem('appDescription', description)
+//
+//     getRouter().then(router => {
+//       new Vue({
+//         router,
+//         store,
+//         i18n,
+//         render: h => h(App)
+//       }).$mount('#app')
+//     })
+//   })
