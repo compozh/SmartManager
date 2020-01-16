@@ -67,7 +67,7 @@ export default {
           me.$store.commit('mes/setInitializeQualities', false)
           me.$store.dispatch('mes/downloadQualities', { processTypeCode: me.properties.qualityProcessType, searchDateTime, direction })
         }
-        completeSubmissionCallback(result)
+        completeSubmissionCallback(params)
       })
       me.$store.commit('mes/closeDialogLinearLoader')
     },

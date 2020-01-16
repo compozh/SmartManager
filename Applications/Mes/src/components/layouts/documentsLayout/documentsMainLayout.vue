@@ -3,7 +3,7 @@
   <v-flex class="toolbar ma-0" v-if="$vuetify.breakpoint.smAndDown">
     <v-btn class="col-12 ma-0 close-btn" @click="changeDynamicTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
-  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDynamicPage" :key="this.documentFormioKey">
+  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDocuments" :key="this.documentFormioKey">
     <formio-form-component
       v-if="selectedDocument"
       ref="formioBuilder"
@@ -20,7 +20,7 @@
 export default {
   name: 'mes-documents-main-layout',
   props: {
-    initializeDynamicPage: Boolean,
+    initializeDocuments: Boolean,
     pageProps:Object
   },
   data() {

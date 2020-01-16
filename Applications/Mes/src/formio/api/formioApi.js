@@ -56,39 +56,39 @@ export class FormioApi {
     return result.data.formioQuery.ticket
   }
 
-  async getFormGql(formCode, properties, deviceSizeType, fetchPolicy) {
+  async getFormGql(formCode, params, fetchPolicy) {
     const client = await getClient()
     const result = await client.query({
       query: gql`${getForm}`,
-      variables: { formCode, properties, deviceSizeType },
+      variables: { formCode, params },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.formioQuery.getForm
   }
 
-  async submitFormGql(formCode, submission, properties) {
+  async submitFormGql(formCode, params) {
     const client = await getClient()
     const result = await client.mutate({
       mutation: gql`${submitForm}`,
-      variables: { formCode, submission, properties }
+      variables: { formCode, params }
     })
     return result.data.formioQueryMutation.submitForm
   }
 
-  async callFormCustomEventGql(formCode, formCustomEventParamsInput) {
+  async callFormCustomEventGql(formCode, params) {
     const client = await getClient()
     const result = await client.mutate({
       mutation: gql`${callFormCustomEvent}`,
-      variables: { formCode, formCustomEventParamsInput }
+      variables: { formCode, params }
     })
     return result.data.formioQueryMutation.callFormCustomEvent
   }
 
-  async callItemAutocompleteGql(formCode, formItemAutocompleteParamsInput, fetchPolicy) {
+  async callItemAutocompleteGql(formCode, params, fetchPolicy) {
     const client = await getClient()
     const result = await client.query({
       query: gql`${callItemAutocomplete}`,
-      variables: { formCode, formItemAutocompleteParamsInput },
+      variables: { formCode, params },
       fetchPolicy: fetchPolicy || 'cache-first'
     })
     return result.data.formioQuery.callItemAutocomplete

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-flex class="formio-base-block">
     <formio id="formio" class="formio-container-class"
       :form=formioComponents
       :submission=formioSubmission
@@ -19,7 +19,7 @@
       @changeQrScanerVisible=changeQrScanerVisible
       @submitQrCode=submitQrCode
     />
-  </v-container>
+  </v-flex>
 </template>
 
 <script>
@@ -137,8 +137,10 @@ export default {
         settings = JSON.stringify(form.form.settings, null, 4),
         submission = JSON.stringify(form.submission.data, null, 4)
 
-      me.$store.dispatch('formio/callFormCustomEvent', { formCode: this.formCode,
-        params: { eventCode, components, submission, display, settings, params: JSON.stringify(params || '') }}).then(result => {
+      me.$store.dispatch('formio/callFormCustomEvent', { 
+        formCode: this.formCode,
+        params: { eventCode, components, submission, display, settings, params: JSON.stringify(params || ''), deviceSizeType: 'lg' } //todo: добавить заполнение deviceSizeType
+      }).then(result => {
           if(result && result.success) {
             var dataChanged = false;
             if (result.components && result.components != components) {
@@ -246,6 +248,10 @@ export default {
         @import './assets/overide.scss';
         @import "~choices.js/public/assets/styles/choices.css";
         @import "~flatpickr/dist/flatpickr.min.css";
+    }
+
+    .formio-base-block {
+      padding: 15px;
     }
 
     .formio-form-component {
