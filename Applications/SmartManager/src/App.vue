@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-	File Name: App.vue
-	Description: Main vue file - APP
-	----------------------------------------------------------------------------------------
-	Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
 	<div id="app">
 		<router-view></router-view>
@@ -22,9 +12,6 @@ export default {
     '$store.state.theme'(val) {
       this.toggleClassInBody(val)
     }
-  },
-  async created() {
-
   },
   methods: {
     toggleClassInBody(className) {
@@ -41,7 +28,7 @@ export default {
     },
     handleWindowResize(event) {
       this.$store.dispatch('updateWindowWidth', event.currentTarget.innerWidth)
-    },
+    }
   },
   mounted() {
     this.toggleClassInBody(themeConfig.theme)
@@ -52,7 +39,6 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleWindowResize)
-  },
+  }
 }
-
 </script>

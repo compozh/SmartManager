@@ -34,12 +34,13 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import PdfViewer from '@/components/pdf-viewer/Viewer'
-import ImgViewer from '@/components/ImageViewer'
-import TxtViewer from '@/components/TextViewer'
 import NotSupport from '@/components/NotSupport'
 import NoData from '@/components/NoData'
 import FileIcon from '@/components/FileIcon'
+
+const PdfViewer = () => import('@/components/pdf-viewer/Viewer')
+const ImgViewer = () => import('@/components/ImageViewer')
+const TxtViewer = () => import('@/components/TextViewer')
 
 export default {
   props: {
@@ -47,10 +48,10 @@ export default {
     index: Number
   },
   components: {
-    VuePerfectScrollbar,
     PdfViewer,
     ImgViewer,
     TxtViewer,
+    VuePerfectScrollbar,
     NotSupport,
     NoData,
     FileIcon
