@@ -4,14 +4,15 @@ const api = new FormioApi()
 /* eslint-disable */
 export default {
   async initializeTicket({ commit }) {
-        const result = await api.getTicketFromGql()
-        commit('setTicket', result)
+    const result = await api.getTicketFromGql()
+    commit('setTicket', result)
   },
   async getForm({ dispatch }, { formCode, properties, fetchPolicy, deviceSizeType }) {
     deviceSizeType = deviceSizeType || 'lg'
+    var params = { params: JSON.stringify(properties || '', null, 4), deviceSizeType }
     return await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.getFormGql(formCode, JSON.stringify(properties || '', null, 4), fetchPolicy, deviceSizeType)
+        return await api.getFormGql(formCode, params, fetchPolicy)
       }
     })
   },
@@ -43,17 +44,23 @@ export default {
       }
     })
   },
-  async submitForm({ dispatch }, { formCode, submission, properties }) {
+  async submitForm({ dispatch }, { formCode, submission, properties, deviceSizeType }) {
+    var params = { 
+      submission,
+      params: JSON.stringify(properties || '', null, 4),
+      deviceSizeType: deviceSizeType || 'lg' 
+     }
     return await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        return await api.submitFormGql(formCode, submission, JSON.stringify(properties || '', null, 4))
+        return await api.submitFormGql(formCode, params)
       }
     })
   },
   async graphqlQueryWithRequestResultWraper({ commit, dispatch }, { queryAction }) {
     commit('closeSnackbar')
+    var result
     try {
-      let result = await queryAction()
+      result = await queryAction()
       if (result.success == true) {
         if (result.successMessage) {
           commit('setSnackbarSuccessMessage', result.successMessage)
@@ -70,6 +77,6 @@ export default {
         commit('setSnackbarErrorMessage', e.message)
       }
     }
-    return false
+    return result
   }
 }

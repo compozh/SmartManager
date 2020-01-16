@@ -6,9 +6,10 @@
 			v-model="drawer">
       <v-list dense>
         <v-list-tile
-          v-for="(link, index) in links"
+          v-for="(link, index) in _links"
           :key="index"
-          :to="{name: link.Id}">
+          :to="{name: link.Id, params: {links: links}}"
+          >
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
           </v-list-tile-action>
@@ -103,9 +104,8 @@
 		</v-toolbar>
 
     <v-content
-      fill-height
       style='background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/light_noise_diagonal.png);background-repeat: repeat;'>
-			<v-container fluid class="mx-0 my-0 px-0 py-0">
+			<v-container fill-height fluid class="mx-0 my-0 px-0 py-0">
 				<router-view></router-view>
 			</v-container>
 		</v-content>
@@ -114,6 +114,7 @@
 
 <script>
 import LmsUserPanel from './LmsUserPanel.vue'
+import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-layout',
@@ -136,6 +137,7 @@ export default {
       password: '',
       checkbox_remember_me: false,
       error: '',
+      _links: [],
       links: [],
       logoLink: null,
       menu: false,
@@ -149,12 +151,13 @@ export default {
   created() {
     this.getLogoLink()
     this.goHome()
+    this.links.push(getThisLink('Главная', this.$route.path, false))
   },
   beforeMount: function () {
     // Маршруты из конструктора
     var app = this.$store.state.WebApps.applicationDescription
     if (!app) {
-      this.links = []
+      this._links = []
     }
     var sections = app.Sections || []
 
@@ -166,7 +169,7 @@ export default {
     }
 
     routs = [...routs, ...routs[1].Children, ...routs[0].Children]
-    this.links = routs.filter(l => l.Name)
+    this._links = routs.filter(l => l.Name)
       .sort((a, b) => a.Sort > b.Sort ? 1 : -1 )
   },
   methods: {
@@ -176,12 +179,14 @@ export default {
     },
     openLoginDialog() {
       this.$router.push({name: 'LMSLOGIN'})
+      this.menu = false
     },
 
     userProfile() {
-
+      this.menu = false
     },
     personalAccount() {
+      this.menu = false
       this.$router.push({name: 'LMSPERSONALACCOUNT'})
     },
     signOut() {
@@ -190,7 +195,7 @@ export default {
       this.goHome()
     },
     search() {
-      this.$router.push('search')
+      this.$router.push({name: 'LMSSEARCH'})
     },
     goHome() {
       if (this.$router.history.current.name == 'LMSREALHOME') {

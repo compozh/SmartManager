@@ -175,7 +175,8 @@ export class MesApi {
   }
 
   async applyDocumentMethod(processMethodParams) {
-    const result = await getClient().mutate({
+    const client = await getClient()
+    const result = await client.mutate({
       mutation: gql`${documentMethod}`,
       variables: { processMethodParams }
     })
@@ -275,21 +276,21 @@ export class MesApi {
     return result.data.mes.executeWriteOff
   }
 
-  async getProductionFormioFromGql(formCode, properties, deviceSizeType) {
+  async getProductionFormioFromGql(formCode, params) {
     const client = await getClient()
     const result = await client.query({
       query: gql`${productionFormio}`,
-      variables: { formCode, properties, deviceSizeType },
+      variables: { formCode, params },
       fetchPolicy: 'network-only'
     })
     return result.data.mes.productionFormio
   }
 
-  async productionFormioSubmitGql(formCode, submission, properties) {
+  async productionFormioSubmitGql(formCode, params) {
     const client = await getClient()
     const result = await client.mutate({
       mutation: gql`${productionFormioSubmit}`,
-      variables: {formCode, submission, properties}
+      variables: {formCode, params }
     })
     return result.data.mesMutation.productionFormioSubmit
   }

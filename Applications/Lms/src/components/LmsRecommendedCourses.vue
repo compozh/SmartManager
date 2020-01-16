@@ -3,7 +3,7 @@
 		<v-layout wrap row align-center justify-center>
 			<v-flex v-for='course in recommendedCourses' :key='course.courseId' lg4 md4 sm6 xs122>
 
-        <course-card v-if="course" :course="course" />
+        <course-card v-if="course" :links="links" :course="course" />
 
 			</v-flex>
 		</v-layout>
@@ -15,6 +15,7 @@
 var courseCardsData = [];
 
 import CourseCard from './CourseCard.vue'
+import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: "lms-recommended-courses",
@@ -23,10 +24,16 @@ export default {
   },
   props: ['recommendedCourses'],
   data: () => ({
-    favIconColor: "grey"
+    favIconColor: "grey",
+    links: []
   }),
   created () {
-
+  /* {
+      text: 'Главная',
+      disabled: false,
+      href: base.slice(0, base.lenght -1) + this.$route.path // TODO: добавить локализацию
+     } */
+    this.links.push( getThisLink('Главная', this.$route.path, false))
   },
   methods: {
     changeFavoriteState: function(course){

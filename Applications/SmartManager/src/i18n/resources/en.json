@@ -107,7 +107,8 @@
     "delete": "Delete",
     "complete": "Complete",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "globalSearch": "Search all documents"
   },
   "icons": {
     "priority": "High priority",

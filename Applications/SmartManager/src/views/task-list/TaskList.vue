@@ -4,15 +4,7 @@
          class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden">
       <div class="app-fixed-height">
         <!-- SEARCH BAR -->
-        <div class="flex border border-solid d-theme-border-grey-light border-r-0
-                    border-t-0 border-l-0 items-center app-search-container">
-          <vs-input icon="icon-search"
-                    size="large"
-                    icon-pack="feather"
-                    :placeholder="$t('search')"
-                    v-model.trim="search"
-                    class="vs-input-no-border vs-input-no-shdow-focus w-full no-icon-border"/>
-        </div>
+        <search-bar @search="currentPage = 1"></search-bar>
         <!-- TASK LIST -->
         <VuePerfectScrollbar class="task-content-scroll-area"
                              id="scrollArea"
@@ -45,6 +37,7 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar.vue'
 import TaskListItem from './TaskListItem.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import NoData from '@/components/NoData'
@@ -52,6 +45,7 @@ import NoData from '@/components/NoData'
 export default {
   name: 'task-list',
   components: {
+    SearchBar,
     TaskListItem,
     VuePerfectScrollbar,
     NoData
@@ -156,13 +150,7 @@ export default {
       }
     },
     async getTasks(folderId) {
-      this.$store.commit('sm/setCurrentFolder', folderId)
-      const loading = !this.tasks
-      try {
-        await this.$store.dispatch('sm/getTasks', {folderId, loading})
-      } catch (e) {
-        console.log(e.message)
-      }
+      await this.$store.dispatch('sm/getTasks', folderId)
     },
     async getCases() {
       if (this.cases.length === 0) {

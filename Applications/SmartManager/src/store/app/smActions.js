@@ -3,16 +3,9 @@ import {i18n} from '@/i18n/i18n'
 import {SmartManagerApi as api} from '@/api/smartManagerApi'
 
 const vs = new Vue().$vs
-
-function startLoading(loading) {
-  !loading || vs.loading()
-}
-
-function stopLoading() {
-  vs.loading.close()
-}
-
-function notify(type, title, text) {
+const startLoading = vs.loading
+const stopLoading = vs.loading.close
+const notify = (type, title, text) => {
   vs.notify({
     title: i18n.t(`notify.${title}`),
     text: i18n.t(`notify.${text}`),
@@ -22,7 +15,7 @@ function notify(type, title, text) {
 
 export default {
   async getFolders({commit}, loading) {
-    startLoading(loading)
+    !loading || startLoading()
     try {
       const result = await api.getFoldersFromGql()
       !loading || stopLoading()
@@ -34,9 +27,14 @@ export default {
       notify('danger', 'foldersTitle', 'foldersError')
     }
   },
-  async getTasks({commit}, {folderId, loading}) {
+  async getTasks({commit, state}, folderId) {
+    if (folderId === 'search') {
+      return
+    }
+    const loading = !state.tasks[folderId]
     commit('setSearch', null)
-    startLoading(loading)
+    commit('setCurrentFolder', folderId)
+    !loading || startLoading()
     try {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
@@ -52,7 +50,7 @@ export default {
     }
   },
   async getTaskInfo({commit}, {taskId, loading}) {
-    startLoading(loading)
+    !loading || startLoading()
     try {
       const result = await api.getTaskInfoFromGql(taskId)
       const taskInfo = result.data.smtasks.taskDetails
@@ -66,7 +64,7 @@ export default {
     }
   },
   async getFileUrl({commit}, {fileId, fileExt, id: taskOrCaseId}) {
-    startLoading(true)
+    startLoading()
     try {
       const result = await api.getFileUrlFromGql(fileId, fileExt)
       const fileUrl = result.data.smtasks.fileUrl
@@ -91,7 +89,7 @@ export default {
   },
   async addNewTask({dispatch}, payload) {
     const newTask = JSON.stringify(payload)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.addNewTaskToGql(newTask)
       const result = response.data.smtasksMutation.addTask
@@ -111,7 +109,7 @@ export default {
   },
   async updateTask({dispatch}, taskData) {
     const taskDataJson = JSON.stringify(taskData)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.updateTaskInGql(taskDataJson)
       const result = response.data.smtasksMutation.taskUpdating
@@ -131,7 +129,7 @@ export default {
   },
   async changeStatus({dispatch}, params) {
     const paramsJson = JSON.stringify(params)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.changeTaskStatusInGql(paramsJson)
       stopLoading()
@@ -155,7 +153,7 @@ export default {
   },
   async addAttachments({dispatch}, {attachments, params}) {
     const paramsJson = JSON.stringify(params)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.addAttachmentsInGql(attachments, paramsJson)
       stopLoading()
@@ -190,7 +188,7 @@ export default {
     }
   },
   async attachmentDelete(context, id) {
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.attachmentDeleteInGql(id)
       const result = response.data.smtasksMutation.attachmentDelete
@@ -209,7 +207,7 @@ export default {
   },
   async changeStage({dispatch}, payload) {
     const stageParams = JSON.stringify(payload)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
@@ -231,7 +229,7 @@ export default {
   },
   async addComment({dispatch}, {comment, params}) {
     const paramsJson = JSON.stringify(params)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
@@ -262,7 +260,7 @@ export default {
     }
   },
   async getFormDefinition(context, procDefId) {
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.getFormDefinitionFromGql(procDefId)
       const result = response.data.workFlowQuery.formDefinition
@@ -279,7 +277,7 @@ export default {
   },
   async startBusinessProcess(context, payload) {
     const processData = JSON.stringify(payload)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.startBusinessProcessInGql(processData)
       stopLoading()
@@ -296,7 +294,7 @@ export default {
     }
   },
   async getCases({commit}, loading) {
-    startLoading(loading)
+    !loading || startLoading()
     try {
       const result = await api.getCasesFromGql()
       !loading || stopLoading()
@@ -309,7 +307,7 @@ export default {
     }
   },
   async getCaseDetails({commit}, {caseId}) {
-    startLoading(true)
+    startLoading()
     try {
       const result = await api.getCaseDetailsFromGql(caseId)
       stopLoading()
@@ -324,7 +322,7 @@ export default {
   },
   async caseCreate(context, newCase) {
     const newCaseJson = JSON.stringify(newCase)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.caseCreateInGql(newCaseJson)
       stopLoading()
@@ -338,7 +336,7 @@ export default {
   },
   async caseUpdate({dispatch}, caseData) {
     const caseDataJson = JSON.stringify(caseData)
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.updateCaseInGql(caseDataJson)
       const result = response.data.smtasksMutation.caseUpdate
@@ -357,7 +355,7 @@ export default {
     }
   },
   async caseFolderCreate({dispatch}, folderName) {
-    startLoading(true)
+    startLoading()
     try {
       await api.caseFolderCreateInGql(folderName)
       await dispatch('getFolders')
@@ -370,7 +368,7 @@ export default {
     }
   },
   async changeBinding({dispatch}, {caseId, taskId, bind}) {
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.changeBindingInGql(caseId, taskId, bind)
       const result = response.data.smtasksMutation.binding
@@ -387,7 +385,7 @@ export default {
     }
   },
   async taskDelete({dispatch, state}, taskId) {
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.taskDeleteInGql(taskId)
       const result = response.data.smtasksMutation.taskDelete
@@ -417,7 +415,7 @@ export default {
     }
   },
   async taskPin({dispatch}, {taskId, pin}) {
-    startLoading(true)
+    startLoading()
     try {
       const response = await api.taskPinInGql(taskId, pin)
       const result = response.data.smtasksMutation.taskPin
@@ -432,6 +430,21 @@ export default {
       console.log(e.message)
       stopLoading()
       notify('danger', 'taskTitle', 'taskPinError')
+    }
+  },
+  async globalSearch({commit, state}) {
+    startLoading()
+    commit('setCurrentFolder', 'search')
+    try {
+      const response = await api.globalSearchInGql(state.search)
+      stopLoading()
+      const result = response.data.smtasks.globalSearchResult
+      commit('setTasks', {search: result})
+      commit('setSearch', null)
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'taskListTitle', 'taskListError')
     }
   },
   async updateInfo({dispatch}, {type, id, loading}) {
