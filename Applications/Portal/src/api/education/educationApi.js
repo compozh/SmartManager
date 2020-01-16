@@ -1,7 +1,4 @@
-
-
 //queries
-
 import educationResult from './graphql/educationResult.graphql'
 import educationAdditionalTraining from './graphql/educationAdditionalTraining.graphql'
 import educationPlan from './graphql/trainingPlan.graphql'
@@ -19,15 +16,14 @@ import workwearOnPersonal from './graphql/workwearOnPersonal.graphql'
 import otherStocksOnPersonal from './graphql/otherStocksOnPersonal.graphql'
 import workWearOnPlace from './graphql/workWearOnPlace.graphql'
 
-
 import gql from 'graphql-tag'
-
 import {getClient} from '../tools'
 
 export class EducationApi {
   static async getEducationPlan() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${educationPlan}`
       })
     } catch (e) {
@@ -38,7 +34,8 @@ export class EducationApi {
 
   static async getStrategicGoals() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${strategicGoals}`
       })
     } catch (e) {
@@ -48,17 +45,19 @@ export class EducationApi {
 
   static async getTaskForYear() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${taskForYear}`
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
-  
+
   static async getResultsInterimEvaluation() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${resultsInterimEvaluation}`
       })
     } catch (e) {
@@ -68,7 +67,8 @@ export class EducationApi {
 
   static async getCriterialEvaluation() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${criterialEvaluation}`
       })
     } catch (e) {
@@ -78,7 +78,8 @@ export class EducationApi {
 
   static async getSelfEsteemResults() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${selfEsteemResults}`
       })
     } catch (e) {
@@ -88,17 +89,19 @@ export class EducationApi {
 
   static async getResultsAssessmentSupremo() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${resultsAssessmentSupremo}`
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
-  
+
   static async getEducationResult() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${educationResult}`
       })
     } catch (e) {
@@ -108,7 +111,8 @@ export class EducationApi {
 
   static async getEducationAdditionalTraining() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${educationAdditionalTraining}`
       })
     } catch (e) {
@@ -118,17 +122,19 @@ export class EducationApi {
 
   static async getTrainingSchedule() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${trainingSchedule}`
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
-  
+
   static async getIndividualPlanReport() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${individualPlanReport}`
       })
     } catch (e) {
@@ -138,17 +144,19 @@ export class EducationApi {
 
   static async getСharacteristic() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${characteristic}`
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
-  
+
   static async getNormsOfWorkwear() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${normsOfWorkwear}`
       })
     } catch (e) {
@@ -158,7 +166,8 @@ export class EducationApi {
 
   static async getWorkwearOnPersonal() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${workwearOnPersonal}`
       })
     } catch (e) {
@@ -168,7 +177,8 @@ export class EducationApi {
 
   static async getOtherStocksOnPersonal() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${otherStocksOnPersonal}`
       })
     } catch (e) {
@@ -178,13 +188,14 @@ export class EducationApi {
 
   static async getWorkWearOnPlace() {
     try {
-      return await getClient('PORTALNABU').query({
+      const client = await getClient('PORTALNABU')
+      return await client.query({
         query: gql` ${workWearOnPlace}`
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
-  
-  
+
+
 }
