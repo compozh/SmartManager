@@ -4,11 +4,11 @@
       <v-flex>
         <v-card flat px-2>
           <v-card-title >
-            <h3>Материалы к уроку</h3>
+            <h3>Материалы к уроку <span class="indigo--text">{{lesson.name}}</span></h3>
           </v-card-title>
           <v-list>
             <v-list-group
-              v-for="item in lessonMaterials"
+              v-for="item in lesson.materials"
               :key="item.id"
               v-if="item.enclosures"
               v-model="item.active"
@@ -45,8 +45,8 @@
 export default {
   name: 'lesson-materials',
   props: {
-    lessonMaterials: {
-      type: Array,
+    lesson: {
+      type: Object,
       default: null
     }
   },
