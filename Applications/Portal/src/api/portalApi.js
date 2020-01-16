@@ -5,14 +5,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-
 // Queries
-
-
-
-
 export class PortalApi {
-
   static getAppId() {
     // получение appId
     let tempRouter = new VueRouter({
@@ -25,16 +19,13 @@ export class PortalApi {
     tempRouter.history.getCurrentLocation = function() {
       let path = window.location.pathname
       let base = tempRouter.history.base
-  
+
       // Removes base from path (case-insensitive)
       if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
         path = path.slice(base.length)
       }
-  
       return (path || '/') + window.location.search + window.location.hash
     }
-
-
     let tempVue = new Vue({
       router: tempRouter
     })
@@ -42,14 +33,12 @@ export class PortalApi {
   }
 
   static async getApplicationDescription() {
-
-    let appId = PortalApi.getAppId()
-
+    const appId = this.getAppId()
     // загрузка описания приложения
-    return await getClient('WEBAPPS').query({
+    const client = await getClient('WEBAPPS')
+    return await client.query({
       query: gql` query q($appId : String) {\n  webapps{\n    application(applicationId:$appId)\n  }\n}`,
       variables: { appId }
     })
   }
-
 }
