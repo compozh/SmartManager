@@ -96,7 +96,11 @@ export default {
       me.selectedQuality = newSelectedQuality
 
       var formCode = me.properties.qualityForm,
-        properties = { RCENTR: me.workCenter.code , ID: newSelectedQuality.id },
+        properties = {
+          RCENTR: me.workCenter.code,
+          ID: newSelectedQuality.id,
+          instance: newSelectedQuality
+        },
         fetchPolicy = 'network-only',
         deviceSizeType = this.$vuetify.breakpoint.name
 

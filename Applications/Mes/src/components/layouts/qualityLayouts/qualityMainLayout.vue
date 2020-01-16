@@ -10,6 +10,7 @@
       @formSubmit=formSubmit
       :formDefinition=qualityFormio
       :formCode=properties.qualityProcessType
+      :instance=selectedQuality
     />
     </v-flex>
   </v-layout>
@@ -56,7 +57,8 @@ export default {
         direction = 1,
         properties = {
           workCenterCode: me.workCenter.code,
-          id: me.selectedQuality.id
+          id: me.selectedQuality.id,
+          instance: me.selectedQuality
         },
         searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
 

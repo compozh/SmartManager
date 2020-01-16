@@ -56,7 +56,8 @@ export default {
   props: {
     formDefinition: Object,
     formCode: String,
-    actionsDisabled: Boolean
+    actionsDisabled: Boolean,
+    instance: Object
   },
   watch: {
     formDefinition: function (newData, oldData) {
@@ -106,7 +107,7 @@ export default {
         form = me.$refs.formioComponent,
         displayLoading = component.displayLoading
       if (displayLoading){
-      me.setComponentLoading(component.key, true)
+        me.setComponentLoading(component.key, true)
       }
 			me.requestToServerAction({ eventCode: type, params, callback: () => {
         if (displayLoading) {
@@ -130,6 +131,10 @@ export default {
       if(this.actionsDisabled) {
         return;
       }
+
+      params = params || ''
+      params.instance = this.instance || {}
+
       var me = this,
         form = this.$refs.formioComponent,
         display = form.form.display,
@@ -139,7 +144,7 @@ export default {
 
       me.$store.dispatch('formio/callFormCustomEvent', { 
         formCode: this.formCode,
-        params: { eventCode, components, submission, display, settings, params: JSON.stringify(params || ''), deviceSizeType: 'lg' } //todo: добавить заполнение deviceSizeType
+        params: { eventCode, components, submission, display, settings, params: JSON.stringify(params), deviceSizeType: 'lg' } //todo: добавить заполнение deviceSizeType
       }).then(result => {
           if(result && result.success) {
             var dataChanged = false;
@@ -169,7 +174,6 @@ export default {
                   settings: JSON.parse(settings)
               }
             }
-
 
             if (result.submission && result.submission !== submission) {
               submission = { data: JSON.parse(result.submission) }
