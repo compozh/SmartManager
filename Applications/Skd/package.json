@@ -14,13 +14,13 @@
     "build-bundle": "vue-cli-service build --target lib --name smartManager ./src/main.js"
   },
   "dependencies": {
-    "@it-enterprise/authentication": "^1.0.3",
+    "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/localization": "^1.0.5",
     "@it-enterprise/modules-manager": "1.0.0",
-    "@it-enterprise/routercore": "^1.0.6",
-    "@it-enterprise/webappscore": "^1.0.12",
+    "@it-enterprise/routercore": "^2.0.1",
+    "@it-enterprise/webappscore": "^2.0.2",
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",
