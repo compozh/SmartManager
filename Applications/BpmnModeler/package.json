@@ -14,7 +14,7 @@
     "build-bundle": "vue-cli-service build --target lib --name smartManager ./src/main.js"
   },
   "dependencies": {
-    "@it-enterprise/formio": "1.0.4",
+    "@it-enterprise/formio": "^1.0.7",
     "@it-enterprise/eds": "^1.0.1",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^1.0.14",
