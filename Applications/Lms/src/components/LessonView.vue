@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { link } from 'fs'
 
 export default {
   name: 'lesson-view',

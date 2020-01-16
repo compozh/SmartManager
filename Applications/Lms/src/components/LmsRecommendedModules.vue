@@ -15,6 +15,7 @@
 var moduleCardsData = [];
 
 import ModuleCard from './ModuleCard.vue'
+import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-recommended-modules',
@@ -27,11 +28,12 @@ export default {
     links: []
   }),
   created() {
-    this.links.push({
-      text: 'Главная',
-      disabled: false,
-      href: this.$route.path // TODO: добавить локализацию
-    })
+    /* {
+        text: 'Главная',
+        disabled: false,
+        href: base.slice(0, base.lenght -1) +  // TODO: добавить локализацию
+       } */
+    this.links.push(getThisLink('Главная', this.$route.path, false))
   },
   methods: {
     changeFavoriteState: function(moduleData) {

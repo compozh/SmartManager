@@ -33,6 +33,7 @@
 import ModuleCard from './ModuleCard.vue'
 import Filters from './LmsFilters.vue'
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
+import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-modules',
@@ -167,18 +168,20 @@ export default {
       }
     },
     links() {
-      let links
-      const thisLink = {
+      /* {
         text: 'Модули',
         disabled: true,
-        href: this.$route.path
-      }
-      if (this.$route.params.links) {
-        const inputLinks = this.$route.params.links
-        links = [...inputLinks, thisLink]
-      } else {
-        links = [thisLink]
-      }
+        href: window.myConfig.BASE_URL + this.$route.path
+      } */
+      const thisLink = getThisLink('Модули', this.$route.path, true)
+
+      // if (this.$route.params.links) {
+      //   const inputLinks = this.$route.params.links
+      //   links = [...inputLinks, thisLink]
+      // } else {
+      //   links = [thisLink]
+      // }
+      let links = getRoutesLinks(this.$route.params.links, thisLink)
       return links
     }
   }
