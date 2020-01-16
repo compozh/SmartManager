@@ -1,0 +1,93 @@
+export default {
+  name: 'loginRl',
+  data: () => ({
+    userData: {
+      login: '',
+      password: '',
+      remember: false
+    },
+    message: '',
+    loading: false
+  }),
+  methods: {
+    login() {
+      if (!this.userData.login) {
+        return (this.message = 'Введите логин')
+      }
+      if (!this.userData.password) {
+        return (this.message = 'Введите пароль')
+      }
+      this.loading = true
+      this.$store.dispatch('skd/login', this.userData)
+    },
+
+  },
+  created() {
+    this.$store.dispatch('skd/logout')
+  },
+  render() {
+    return this.$scopedSlots.default({
+      userData: this.userData,
+      message: this.message,
+      needEnterTempPassword: this.needEnterTempPassword,
+      loading: this.loading,
+      params: {
+        loginAttrs: {
+          value: this.userData.login,
+          label: 'Логин',
+          placeholder: 'Введите логин...',
+          title: 'Поле для ввода логина',
+          required: true
+        },
+        loginEvents: {
+          input: value => (this.userData.login = value),
+          keydown: e => {
+            if (e.key === 'Enter') {
+              this.userData.login = e.target.value
+              e.preventDefault()
+              this.login()
+            }
+          }
+        },
+        passwordAttrs: {
+          type: 'password',
+          value: this.userData.password,
+          label: 'Пароль',
+          placeholder: 'Введите пароль...',
+          title: 'Поле для ввода пароля',
+          required: true
+        },
+        passwordEvents: {
+          input: value => (this.userData.password = value),
+          keydown: e => {
+            if (e.key === 'Enter') {
+              this.userData.password = e.target.value
+              e.preventDefault()
+              this.login()
+            }
+          }
+        },
+        rememberAttrs: {
+          value: this.userData.remember,
+          label: 'Оставаться в системе',
+          title: ''
+        },
+        rememberEvents: {
+          change: () => (this.userData.remember = !this.userData.remember)
+        },
+        buttonAttrs: {
+          value: this.userData.remember
+        },
+        buttonEvents: {
+          click: () => this.login()
+        },
+        buttonEventRecoverPasswordUrl: {
+          click: () => this.GetRecoveryPasswordUrl()
+        },
+        messageAttrs: {
+          style: [{ display: this.message ? 'block' : 'none' }]
+        }
+      }
+    })
+  }
+}
