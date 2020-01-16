@@ -74,6 +74,9 @@ export default {
       config: templateConfig.login
     }
   },
+  created() {
+    this.$store.dispatch('auth/logout')
+  },
   methods: {
     async loginMethod() {
       this.$vs.loading()
