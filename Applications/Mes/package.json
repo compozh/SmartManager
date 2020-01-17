@@ -21,7 +21,7 @@
     "@it-enterprise/modules-manager": "1.0.0",
     "@it-enterprise/webappscore": "^2.0.2",
     "@it-enterprise/routercore": "^2.0.1",
-    "@it-enterprise/formio": "^1.0.9",
+    "@it-enterprise/formio": "^1.0.11",
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",
