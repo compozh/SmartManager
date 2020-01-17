@@ -9,7 +9,6 @@ import state from './state'
 
 // Modules
 import messtore from '../messtore/store'
-import formiostore from '../formio/formiostore/store'
 import authModule from './auth/moduleAuth'
 
 Vue.use(Vuex)
@@ -22,7 +21,6 @@ const store = new Vuex.Store({
   state,
   modules: {
     [messtore.namespace]: messtore,
-    [formiostore.namespace]: formiostore,
     auth: authModule
   }
 })

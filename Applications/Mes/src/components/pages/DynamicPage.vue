@@ -131,7 +131,11 @@ export default {
       me.$store.commit('mes/resetDocumentFormio')
 
       var formCode = me.pageProps.id,
-        properties = { RCENTR: me.workCenter.code, ID: newSelectedDocument.id },
+        properties = {
+          RCENTR: me.workCenter.code,
+          ID: newSelectedDocument.id,
+          instance: newSelectedDocument
+        },
         fetchPolicy = 'network-only',
         deviceSizeType = this.$vuetify.breakpoint.name
 

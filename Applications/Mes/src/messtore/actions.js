@@ -224,7 +224,8 @@ export default {
         task.inProgress = true
         let properties = {
           WORKCENTERCODE: workCenter.code,
-          WORKBARCODE: task.barcode
+          WORKBARCODE: task.barcode,
+          instance: task
         }
         dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
@@ -338,8 +339,9 @@ export default {
             params: JSON.stringify({
               WORKCENTERCODE: workCenter.code,
               WORKBARCODE: task.barcode,
-              MDOE: 'FINISH'
-            }, null, 4),
+              MODE: 2,
+              instance: task
+            }),
             deviceSizeType: deviceSizeType || 'lg'
         }
         const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, params)
@@ -347,7 +349,12 @@ export default {
       },
       successAction: async () => {
         dispatch('initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { WORKCENTERCODE: workCenter.code, WORKBARCODE: task.barcode }, deviceSizeType})
+        var properties = {
+          WORKCENTERCODE: workCenter.code,
+          WORKBARCODE: task.barcode,
+          instance: task
+        }
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType})
       }
     })
     commit('closeDialogLinearLoader')
