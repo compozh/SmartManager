@@ -108,6 +108,7 @@ import FormioContainer from './formio/Formio';
 import { Notification } from 'element-ui';
 import { eventBus } from '../main';
 import { events } from '../constants';
+import auth from '@it-enterprise/jwtauthentication';
 
 export default {
   name: 'bpmn-layout',
@@ -203,10 +204,9 @@ export default {
   },
   computed: {
     currentUser() {
-      if (this.$store.state.auth.user) {
-        return this.$store.state.auth.user;
-      }
-      return null;
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.$store.state.auth.user = auth.getUserData();
+      return this.$store.state.auth.user;
     },
     appBar: {
       get() {

@@ -20,7 +20,7 @@
     "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/localization": "^1.0.10",
     "@it-enterprise/modules-manager": "1.0.0",
-    "@it-enterprise/routercore": "^2.0.1",
+    "@it-enterprise/routercore": "^2.0.2",
     "@it-enterprise/webappscore": "^2.0.2",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
