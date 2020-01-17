@@ -2,9 +2,9 @@
 <div class='group-container'>
  <v-list class="pa-0">
   <v-list-tile avatar>
-        <user-panel mini="true"></user-panel>
+        <user-panel mini="true" hideDelegatedRightsButton="true"></user-panel>
     <v-list-tile-content>
-      <v-list-tile-title class="textname">{{curentUser.UserName}}</v-list-tile-title>
+      <v-list-tile-title class="textname">{{ userName }}</v-list-tile-title>
     </v-list-tile-content>
   </v-list-tile>
 	</v-list>
@@ -20,7 +20,7 @@
 				</v-list-tile>
 			</v-list>
 </div>
- 
+
 </template>
 
 <script>
@@ -39,9 +39,11 @@ export default {
       var that = groups.map((el, ind) => ({key: ind, caption: el, selected: group == ind}))
       return that
     },
+    userName() {
+      return this.$store.getters['skd/userName']
+    },
     curentUser() {
       var user = {}
-      console.log(22)
       if (localStorage.getItem('currentUser') != null || localStorage.getItem('currentUser') != undefined) {
         user = JSON.parse(localStorage.getItem('currentUser'))
         return user.UserData.CurrentUserData

@@ -132,7 +132,7 @@ export const router = new VueRouter({
   ]
 })
 
-function func(to) {
+function func(to,from, next) {
   let workCenter = store.getters['mes/workCenter']
   let result
   if(workCenter) {

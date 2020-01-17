@@ -1,10 +1,3 @@
-<!-- =========================================================================================
-  File Name: TheNavbar.vue
-  Description: Navbar component
-  Component Name: TheNavbar
-========================================================================================== -->
-
-
 <template>
 <div class="relative">
   <div class="vx-navbar-wrapper">
@@ -96,7 +89,6 @@ export default {
     }
   },
   computed: {
-
     unreadNotifications() {
       return this.$store.state.notifications.unreadNotifications
     },
@@ -145,18 +137,18 @@ export default {
 
     // PROFILE
     user_displayName() {
-      return this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserName
+      return this.$store.getters['auth/userName']
     },
     activeUserImg() {
       // TODO заменить на graphql
-      var link = this.$store.state.authentication.currentUser.UserData.CurrentUserData.UserPhoto
+      var link = this.$store.getters['auth/userPhoto']
       if (!link) {
         return ''
       }
       var fileFolder = link.split('?')[1]
       var file = fileFolder.split('&')[0]
       if (file.length == 5) {
-        return '' 
+        return ''
       }
       return link
     }
@@ -167,7 +159,7 @@ export default {
       this.$cookies.set('c', locale)
       var currentPage = this.$store.getters['education/getCurrentPageNabu']
       this.$store.commit(`education/${currentPage.clear}`, null)
-      
+
       setTimeout(() => {
         this.$store.dispatch('app/loadApplicationDescription')
         this.$store.dispatch(`education/${currentPage.load}`)
@@ -217,14 +209,13 @@ export default {
       } else if (seconds > 0) {
         return seconds + (seconds > 1 ? ' sec ago' : 'just now')
       }
-
       return 'Just Now'
     },
-    logout() {
-      this.$store.dispatch('auth/logout').then(() => {
-        this.$router.push({name: 'page-login', params: {...this.$route.params}})
-      })
-
+    async logout() {
+      await this.$store.dispatch('auth/logout')
+      if (this.$router.currentRoute.path !== '/login') {
+        await this.$router.push({path: '/login'})
+      }
     },
     outside: function() {
       this.showBookmarkPagesDropdown = false
@@ -243,11 +234,9 @@ export default {
         el.__vueClickOutside__ = handler
         document.addEventListener('click', handler)
       },
-
       unbind: function(el) {
         document.removeEventListener('click', el.__vueClickOutside__)
         el.__vueClickOutside__ = null
-
       }
     }
   }

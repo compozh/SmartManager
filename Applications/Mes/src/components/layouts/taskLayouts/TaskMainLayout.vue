@@ -12,6 +12,7 @@
             @formSubmit=formSubmit
             :formDefinition=productionFormio
             :formCode=workCenter.productionRegistrationFormCode
+            :instance=selectedTask
           />
         </v-flex>
     </v-layout>

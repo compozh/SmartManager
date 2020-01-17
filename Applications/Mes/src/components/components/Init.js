@@ -75,7 +75,6 @@ export default class Init {
     let center = scope.$store.getters['mes/workCenter']
     if(center){
       let access = center.accessPages
-      scope.$acl.change(access)
     
       let pathTo = 
         access === 'ALL_PAGES' ? '/tasks' :
@@ -84,6 +83,7 @@ export default class Init {
         access === 'ONLY_QUALITY' ? '/quality' : '/error/403'
 
       if(scope.$acl.get == access || pathTo == router.currentRoute.path) return
+      scope.$acl.change(access)
       router.replace({path : pathTo, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
     }
   }

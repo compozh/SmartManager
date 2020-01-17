@@ -1,77 +1,37 @@
-/*=========================================================================================
-  File Name: moduleAuthActions.js
-  Description: Auth Module Actions
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
-
-//import auth from '@/api/auth/auth'
-//import router from '@/router'
 import Vue from 'vue'
+import auth from '@it-enterprise/jwtauthentication'
+const vm = new Vue()
+
 export default {
-
-  // Разлогиниться из приложения
   logout({commit}) {
-
-    return Vue.prototype.$authentication.logOff().then(() => {
-      commit('UPDATE_AUTHENTICATED_USER', undefined)
-    })
-
+    auth.clearTokens()
+    commit('UPDATE_AUTHENTICATED_USER', null)
   },
-
-  login(context, payload) {
-
+  async login({commit, state}, {login, password, rememberMe}) {
     // If user is already logged in notify and exit
-    if (context.state.isUserLoggedIn()) {
+    if (state.user) {
       // Close animation if passed as payload
-
-      if (payload.closeAnimation) {
-        Vue.nextTick().then(() => {
-          payload.closeAnimation()
-        })
+      !vm.$vs.loading || vm.$vs.loading.close()
+      return 'alreadyLoggedIn'
+    }
+    try {
+      const result = await auth.login(login, password, rememberMe)
+      if (result.success) {
+        commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
+        // Close animation if passed as payload
+        !vm.$vs.loading || vm.$vs.loading.close()
+        return 'success'
       }
-
-      payload.notify({
-        title: this.$t('Login.EnterToSystem'),
-        text: this.$t('Login.YouAlreadyEntered'),
+    } catch (e) {
+      console.warn('', e.message)
+      vm.$vs.notify({
+        time: 2500,
+        title: 'Error',
+        text: e.message,
         iconPack: 'feather',
         icon: 'icon-alert-circle',
-        color: 'warning'
+        color: 'danger'
       })
-
-      return false
     }
-
-    // Try to sigin
-    return Vue.prototype.$authentication.logIn(payload.userDetails.email, payload.userDetails.password, payload.checkbox_remember_me)
-      .then(() => {
-
-        var user = context.rootState.authentication.currentUser
-        // Close animation if passed as payload
-        if (payload.closeAnimation) { payload.closeAnimation() }
-        context.commit('UPDATE_AUTHENTICATED_USER', user)
-
-        return true
-
-      }, (err) => {
-
-        if (err.code == 401) {
-          return false
-
-        }
-        // Close animation if passed as payload
-        if (payload.closeAnimation) { payload.closeAnimation() }
-
-        payload.notify({
-          time: 2500,
-          title: 'Error',
-          text: err.message,
-          iconPack: 'feather',
-          icon: 'icon-alert-circle',
-          color: 'danger'
-        })
-      })
   }
 }

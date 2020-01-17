@@ -20,7 +20,7 @@ var userFilterFunction = state => {
     if (a.movementDate > b.movementDate) { return -1 }
     return 0
   }
-	
+
   return users.sort(compare)
 }
 
@@ -28,7 +28,7 @@ export default {
   getUsersListFiltered: state => userFilterFunction(state),
   getGroupedUserList: state => {
     if (!state.users.personsTable) {
-      return 
+      return
     }
     var users = userFilterFunction(state)
     switch (+state.grouping) {
@@ -45,7 +45,7 @@ export default {
       return _.transform(_.groupBy(users, u => u.department), (result, users, group) => {
         result.push({group, users})
       }, [])
-				
+
     case 5:
       return _.transform(_.groupBy(users, u => u.placeName), (result, users, group) => {
         result.push({group, users})
@@ -55,7 +55,7 @@ export default {
       return [{group: '', users: _.filter(users, u => !u.IsGone && !u.IsAbsend && u.placeName == 'Кухня')}]
 
     }
-		
+
   },
   getUsersList(state) {
     if (!state.users.personsTable) {
@@ -93,4 +93,20 @@ export default {
 
   getItemsOffset: state => state.itemsOffset,
   getFilter: state => state.filter,
+
+  // All user data
+  user: state => state.user || {},
+
+  // Delegated rights
+  delegatedRights: (state, getters) => getters.user.delegatedRights || [],
+
+  // User data
+  userId: (state, getters) => getters.user.id || '',
+  userLogin: (state, getters) => getters.user.login || '',
+  userName: (state, getters) => getters.user.userName || '',
+  userPhoto: (state, getters) => {
+    let photoLink = getters.user.userPhoto
+    // Checking link is valid
+    return photoLink && photoLink.includes('=&') ? '' : photoLink
+  }
 }
