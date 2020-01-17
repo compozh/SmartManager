@@ -21,7 +21,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens()
     if (router.currentRoute.name !== 'MESLOGIN') {
-      router.push({path: 'login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
+      router.push({path: '/login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
     }
   }
   if (graphQLErrors) {

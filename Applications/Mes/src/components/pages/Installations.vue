@@ -8,7 +8,7 @@
       @submitQrCode=submitQrCode
     />
 
-    <mes-content-loader v-if="!initializeInstallations && !installations.length" :loaderType="$vuetify.breakpoint.smAndDown ? 'list' : ''" />
+    <mes-content-loader v-if="!initializeInstallations && !installations.length" :loaderType="$vuetify.breakpoint.xs ? 'list' : ''" />
       <mes-installations-component
         ref="installationCards"
       />

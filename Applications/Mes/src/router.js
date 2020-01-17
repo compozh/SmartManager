@@ -1,19 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import cookies from 'vue-cookies'
-
 import store from './store/index'
-Vue.use(VueRouter)
 
-let  cookiesUuid = cookies.get('mesUuid'),
-  sessionStorageUuid = window.sessionStorage.getItem('mesUuid')
+Vue.use(VueRouter)
 
 export const router = new VueRouter({
   mode: 'history',
-  base: window.myConfig.BASE_URL + "MES/" ,
-  // params: {
-  //   fixedUuid: window.location.search.replace('?fixedUuid=','')
-  // },
+  base: window.myConfig.BASE_URL + "MES/",
   routes: [
     {
       path: '/',
@@ -21,7 +14,7 @@ export const router = new VueRouter({
       children:  [
         {
           name: 'MESLOGIN',
-          path: 'login',
+          path: '/login',
           caseSensitive: false,
           meta: {
             rule: 'isPublic',
@@ -29,12 +22,21 @@ export const router = new VueRouter({
           component: () => import('@/components/layouts/login/Login.vue'),
         },
         {
+          path: '/',
+          name: 'home',
+          component: () => import('@/components/pages/Main.vue'),
+          meta: {
+            rule: 'isPublic',
+          },
+          beforeEnter : func ,
+        },
+        {
           name: 'TASKS',
-          path: 'tasks',
+          path: '/tasks',
           id: 'TASKS',
           component: () => import('@/components/pages/Tasks.vue'),
           meta: {
-            rule: 'isPublic',
+            rule: 'Production',
           },
           caseSensitive: false,
           allowAnonymous: false,
@@ -44,11 +46,11 @@ export const router = new VueRouter({
         },
         { 
           name: 'QUALITY',
-          path: "quality/",
+          path: "/quality",
           id: "QUALITY",
           component: () => import('@/components/pages/Quality.vue'),
           meta: {
-            rule: 'isPublic',
+            rule: 'onlyQuality',
           },
           caseSensitive: false,
           allowAnonymous: false,
@@ -62,7 +64,7 @@ export const router = new VueRouter({
           id: "DOWNTIMES",
           component: () => import('@/components/pages/Downtimes.vue'),
           meta: {
-            rule: 'isPublic',
+            rule: 'Production',
           },
           caseSensitive: false,
           allowAnonymous: false,
@@ -76,7 +78,7 @@ export const router = new VueRouter({
           id: "INSTALLATIONS",
           component: () => import('@/components/pages/Installations.vue'),
           meta: {
-            rule: 'isPublic',
+            rule: 'onlyInstallations',
           },
           caseSensitive: false,
           allowAnonymous: false,
@@ -90,7 +92,7 @@ export const router = new VueRouter({
           id: "PRODUCTIONS",
           component: () => import('@/components/pages/Productions.vue'),
           meta: {
-            rule: 'isPublic',
+            rule: 'Production',
           },
           caseSensitive: false,
           allowAnonymous: false,
@@ -102,22 +104,18 @@ export const router = new VueRouter({
           path: '/dynamic/:id',
           name: 'DYNAMIC',
           id: "DYNAMIC",
+          meta: {
+            rule: 'allPages',
+          },
           component : () => import('@/components/pages/DynamicPage.vue'),
           caseSensitive: false,
         },
         {
-          path: '/',
-          name: 'home',
-          component: () => import('@/components/pages/Main.vue'),
-          redirect: 'tasks',
-        },
-        {
-          path: 'error/:status_code',
+          path: 'error/:status_code/',
           name: 'ERROR',
           component: () => import('@/components/pages/Error.vue'),
           meta: {
             rule: 'isPublic',
-            isMenu: false
           },
           caseSensitive: false
         },
@@ -126,10 +124,31 @@ export const router = new VueRouter({
     {
       path: '/*',
       redirect: 'error/404/',
-      caseSensitive: false
+      caseSensitive: false,
+      meta: {
+        rule: 'isPublic',
+      },
     }
   ]
 })
+
+function func(to) {
+  let workCenter = store.getters['mes/workCenter']
+  let result
+  if(workCenter) {
+    let access =  workCenter.accessPages
+    result = 
+        access === 'ONLY_QUALITY' ? '/quality' : 
+        access === 'ONLY_INSTALLATION' ? '/installations' :
+        access === 'PRODUCTION' ? '/productions' 
+        : '/tasks'
+    return next({ path: result, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
+  } else if(!store.state.auth.user){
+    router.go()
+  } else {
+    return next()
+  }
+}
 
 router.beforeEach((to, from, next) => {
   let same = Object.values(to).every((el) => {
@@ -139,6 +158,6 @@ router.beforeEach((to, from, next) => {
     return 
   } else  {
     return next()
-  } 
+  }
 })
 export default router
