@@ -62,12 +62,10 @@
           <div v-if="Object.keys(form).length" class="w-full">
             <!-- select and start business-process -->
             <form @submit.prevent>
-              <formio class="formio mt-4"
-                      ref="form"
-                      :form="form"
-                      :options="options"
-                      :submission="submission"
-                      @submit="onFormSubmit"/>
+              <formio-form-component class="formio mt-4"
+                                     ref="form"
+                                     :formCode="form.unformio"
+                                     :formDefinition="form"/>
             </form>
           </div>
           <!-- TASK ATTACHMENTS -->
@@ -253,7 +251,6 @@ import TaskListItem from '@/views/task-list/TaskListItem.vue'
 import CaseListItem from '@/views/case-list/CaseListItem.vue'
 import FilesUpload from '@/components/FilesUpload'
 import FileIcon from '@/components/FileIcon'
-import {Form} from 'vue-formio'
 import {eventBus} from '@/main'
 
 export default {
@@ -266,7 +263,6 @@ export default {
     TaskListItem,
     CaseListItem,
     FilesUpload,
-    formio: Form,
     FileIcon
   },
   data: () => ({
@@ -290,7 +286,7 @@ export default {
     // formio
     form() {
       if (this.task.externalParams) {
-        return JSON.parse((JSON.parse(this.task.externalParams || '{}') || {}).FORM || '{}') || {}
+        return JSON.parse(JSON.parse(this.task.externalParams)) || {}
       }
       return {}
     },
@@ -454,19 +450,9 @@ export default {
     }
   }
 
-  .formio::v-deep {
-    @import "~formiojs/dist/formio.form.min.css";
-    @import "@/assets/scss/formio";
-    @import "@/assets/scss/bootstrap/bootstrap";
-
-    .formio-form {
-      min-height: 20px !important;
-    }
-
-    button:hover {
-      -webkit-transform: translateY(-2px);
-      transform: translateY(-2px);
-    }
+  button:hover {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
   }
 
 </style>
