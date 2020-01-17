@@ -12,7 +12,7 @@
     <v-layout v-if="!loading && noAccess" column justify-center align-center>
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
     </v-layout>
-    <div class="modeler-grid" :class="{ 'no-panel': !showPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
+    <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar">
         <v-btn flat :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
           <v-icon>undo</v-icon>
@@ -38,10 +38,10 @@
           <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
           <v-icon v-else>fullscreen</v-icon>
         </v-btn>
-        <!-- <v-divider vertical></v-divider>
-        <v-btn flat @click="panel = !panel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
+        <v-divider vertical></v-divider>
+        <v-btn flat @click="showPanel = !showPanel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
-        </v-btn> -->
+        </v-btn>
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize">
@@ -50,7 +50,7 @@
           </div>
         </SplitArea>
         <SplitArea :size="splitSize" :minSize="0">
-          <div class="properties-panel-container">
+          <div class="properties-panel-container" v-show="showPanel">
             <slot name="propertiesPanel"></slot>
           </div>
         </SplitArea>
@@ -91,23 +91,40 @@ export default {
   data() { 
     return {
       panel: !this.$vuetify.breakpoint.xs,
-      isFullScreen: false
+      isFullScreen: false,
+      split: null
     }
   },
   computed: {
     showPanel: {
       get() {
-        return this.canShowPanel && this.panel
+        return this.canShowPanel && this.splitSize > 1
       },
       set(value) {
-        this.panel = value;
+        if (value && this.splitSize > 1) {
+          return;
+        }
+        this.splitSize = value ? 20 : 1;
+        console.log(value);
+        console.log(this.splitSize);
       }
     },
     splitSize: {
       get() {
-        return Number.parseInt(localStorage.getItem('properties-panel-split-size') || 20);
+        
+        if (this.split === null) {
+          let size = localStorage.getItem('properties-panel-split-size');
+          if (typeof size !== 'string' || size === '') {
+            size = '20';
+          }
+          return Number.parseInt(size);
+        }
+
+        
+        return this.split;
       },
       set(value) {
+        this.split = value;
         localStorage.setItem('properties-panel-split-size', value);
       }
     }
