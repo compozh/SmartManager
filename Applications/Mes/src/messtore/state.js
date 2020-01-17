@@ -50,6 +50,7 @@ export default {
   documentFormio: {},
   createDowntimeFormio: {},
   menuMiniMode: true,
+  menuDrawerMode: true,
   ticket: '',
   mainContainerKey: 0,
   actionsAfterInitializeProperties: [],

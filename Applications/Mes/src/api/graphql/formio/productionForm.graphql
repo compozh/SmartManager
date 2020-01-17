@@ -1,6 +1,6 @@
-query($formCode: String!, $properties: ProductionRegistrationParamsInput!, $deviceSizeType: String){
+query($formCode: String!, $params: FormGettingParamsInput!){
     mes{
-        productionFormio(formCode: $formCode, properties: $properties, deviceSizeType: $deviceSizeType) {
+        productionFormio(formCode: $formCode, params: $params) {
             name
             components
             submission

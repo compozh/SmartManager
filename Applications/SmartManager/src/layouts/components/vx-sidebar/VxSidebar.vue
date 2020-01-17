@@ -48,11 +48,10 @@
             </template>
             <template v-else-if="!showCloseButton && !sidebarItemsMin">
               <feather-icon icon="DiscIcon" class="mr-0 cursor-pointer" svg-classes="stroke-current"
-                            v-show="!reduce" @click="toggleReduce(true)"
-                            id="btnSidebarToggler"></feather-icon>
+                            v-show="!reduce" @click="toggleReduce(true)"></feather-icon>
               <feather-icon icon="CircleIcon" class="mr-0 cursor-pointer"
                             svg-classes="stroke-current" v-show="reduce"
-                            @click="toggleReduce(false)" id="btnSidebarToggler"></feather-icon>
+                            @click="toggleReduce(false)"></feather-icon>
             </template>
           </div>
         </div>

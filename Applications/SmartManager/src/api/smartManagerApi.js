@@ -29,6 +29,7 @@ import addComment from './graphql/addComment.graphql'
 import businessProcesses from './graphql/businessProcesses.graphql'
 import formDefinition from './graphql/formDefinition.graphql'
 import startBusinessProcess from './graphql/startBusinessProcess.graphql'
+import globalSearch from './graphql/globalSearch.graphql'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
@@ -327,6 +328,18 @@ export class SmartManagerApi {
       return await client.mutate({
         mutation: gql`${attachmentDelete}`,
         variables: {id}
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async globalSearchInGql(searchText) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        query: gql`${globalSearch}`,
+        variables: {searchText}
       })
     } catch (e) {
       throw new Error(e.message)

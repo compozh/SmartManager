@@ -1,6 +1,6 @@
-mutation($formCode:String!, $submission: String, $properties: ProductionRegistrationParamsInput!) {
+mutation($formCode:String!, $params: FormSubmitParamsInput!) {
     mesMutation {
-        productionFormioSubmit(formCode: $formCode, submission: $submission, properties: $properties) {
+        productionFormioSubmit(formCode: $formCode, params: $params) {
             success
             errorMessage
             successMessage

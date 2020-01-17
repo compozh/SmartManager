@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     changeCurrentQuality(newQuality) {
+      this.$emit('changeQualityTableView', false)
       this.$emit('changeCurrentQuality', newQuality)
     },
     converDate(date) {

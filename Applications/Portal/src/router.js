@@ -1,48 +1,45 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { PortalApi } from '@/api/portalApi'
+import auth from '@it-enterprise/jwtauthentication'
 
 Vue.use(VueRouter)
 
-export async function  getRouter() {
-
+export const getRouter = async () => {
   // загрузка описания приложения
-  let resp = await PortalApi.getApplicationDescription()
-
-  let appDescription = JSON.parse(resp.data.webapps.application)
-
+  const resp = await PortalApi.getApplicationDescription()
+  const appDescription = JSON.parse(resp.data.webapps.application)
   // временно тащим всё из первой секции
-  let routesDescription = [...appDescription.Sections[0].Routes]
-  let routes = routesDescription.sort((a,b) => a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)).map( r => {
-
-
+  const routesDescription = [...appDescription.Sections[0].Routes]
+  const routes = routesDescription.sort((a, b) => {
+    return a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)
+  }).map(route => {
     let components = {}
-    r.Components.forEach(c => components[c.NameInRoute || 'default'] = Vue.component(c.Name) )
-
-
+    route.Components.forEach(component => {
+      return components[component.NameInRoute || 'default'] = Vue.component(component.Name)
+    })
     return {
-      path: r.Path,
-      name: r.Id,
+      path: route.Path,
+      name: route.Id,
       components,
       meta: {
-        pageTitle: r.Name
+        pageTitle: route.Name
       }
     }
   })
-
-  let routerConfig = {
+  const routerConfig = {
     mode: 'history',
     scrollBehavior () {
       return { x: 0, y: 0 }
     },
-    base: process.env.VUE_APP_BASE_PATH_FULL,
+    base: window.appConfig.BASE_URL + '_NABUPORTAL/',
     routes: [
       {
         // =============================================================================
         // MAIN LAYOUT ROUTES
         // =============================================================================
 
-        path: '/:applicationId',
+        path: '/',
         component: () => import('./layouts/main/Main.vue'),
         // =============================================================================
         // Theme Routes
@@ -57,7 +54,7 @@ export async function  getRouter() {
       // FULL PAGE LAYOUTS
       // =============================================================================
       {
-        path: '/:applicationId',
+        path: '/',
         component: () => import('@/layouts/full-page/FullPage.vue'),
         children: [
           // =============================================================================
@@ -94,56 +91,29 @@ export async function  getRouter() {
       },
       // Redirect to 404 page, if no match found
       {
-        path: '/:applicationId/*',
-        redirect: '/:applicationId/error-404'
+        path: '*',
+        redirect: '/error-404'
       }
     ]
   }
-
-
-
-
-
-
-  let router = new VueRouter(routerConfig)
-
+  const router = new VueRouter(routerConfig)
+  const unProtectedRoutes = [
+    '/login',
+    '/error-404',
+    '/error-500',
+    '/not-authorized'
+  ]
 
   // protection of paths from an unauthenticated access
-  router.beforeEach((to, from, next) => {
-
-    // get firebase current user
-    Vue.prototype.$authentication.ActualizeCurrentUser().then(currentUSer => {
-      if (
-        to.path.endsWith('/login') ||
-          to.path.endsWith('/forgot-password') ||
-          to.path.endsWith('/error-404') ||
-          to.path.endsWith('/error-500') ||
-          to.path.endsWith('/register') ||
-          !!currentUSer
-      ) {
-        return next()
-      }
-      router.push({ name: 'page-login', query: { to: to.path }, params: {...to.params} })
-      // Specify the current path as the customState parameter, meaning it
-      // will be returned to the application after auth
-      // auth.login({ target: to.path });
-    }).catch( (e) => {
-      if (
-        to.path.endsWith('/login') ||
-          to.path.endsWith('/forgot-password') ||
-          to.path.endsWith('/error-404') ||
-          to.path.endsWith('/error-500') ||
-          to.path.endsWith('/register') ||
-          !!e.response.status == 401
-      ) {
-        return next()
-      }
-      router.push({ name: 'page-login', query: { to: to.path }, params: {...to.params} })
-
-    })
-
+  router.beforeEach(async (to, from, next) => {
+    const token = await auth.getToken()
+    if (token || unProtectedRoutes.includes(to.path)) {
+      return next()
+    }
+    if (router.currentRoute.name !== 'page-login') {
+      await router.push({path: '/login', query: { to: to.path }})
+    }
   })
-
 
   router.afterEach(() => {
     // Remove initial loading
@@ -152,33 +122,16 @@ export async function  getRouter() {
       appLoading.style.display = 'none'
     }
   })
-
-  router.history.getCurrentLocation = function() {
+  router.history.getCurrentLocation = () => {
     let path = window.location.pathname
     let base = router.history.base
-
     // Removes base from path (case-insensitive)
     if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
       path = path.slice(base.length)
     }
-
     return (path || '/') + window.location.search + window.location.hash
   }
 
   // Роутер по умолчанию
   return router
 }
-
-
-// let args = {
-//   query:
-//     'query q($appId : String) {\n  webapps{\n    application(applicationId:$appId)\n  }\n}',
-//   schema: 'WEBAPPS',
-//   variables: { appId },
-//   operationName: 'q'
-// }
-
-
-
-
-

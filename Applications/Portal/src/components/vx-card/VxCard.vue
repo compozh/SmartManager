@@ -55,19 +55,10 @@
                 <slot name="footer"></slot>
             </div>
         </div>
-
-        <div class="vx-card__code-container" ref="codeContainer" v-show="this.$slots.codeContainer" :style="codeContainerStyles" :class="{collapsed: !showCode}">
-            <div class="code-content">
-                <prism :language="codeLanguage">
-                        <slot name="codeContainer"></slot>
-                </prism>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
-import Prism from 'vue-prism-component'
 import _color from '@/assets/utils/color.js'
 
 export default {
@@ -119,14 +110,6 @@ export default {
       default: '',
       type: String
     },
-    // bodyBackground: {
-    //   default: '',
-    //   type: String
-    // },
-    // headerbackground: {
-    //   default: '',
-    //   type: String
-    // },
     cardBackground: {
       default: '',
       type: String
@@ -281,9 +264,6 @@ export default {
         }, 150)
       }
     },
-  },
-  components: {
-    Prism,
   }
 }
 </script>
