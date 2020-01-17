@@ -10,6 +10,7 @@
       @formSubmit=formSubmit
       :formDefinition=downtimeFormio
       :formCode=workCenter.downtimeRegistrationFormCode
+      :instance=selectedDowntime
     />
     </v-flex>
   </v-layout>
@@ -51,7 +52,10 @@ export default {
     async formSubmit({ submission, completeSubmissionCallback }) {
       var me = this,
         formCode = me.workCenter.downtimeRegistrationFormCode,
-        properties = { workCenterCode: me.workCenter.code },
+        properties = { 
+          workCenterCode: me.workCenter.code,
+          instance: selectedDowntime
+        },
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
         
       me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))

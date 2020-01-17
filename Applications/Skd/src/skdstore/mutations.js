@@ -1,6 +1,9 @@
 var moment = require('moment')
 import 'moment/locale/ru'
 export default {
+  UPDATE_AUTHENTICATED_USER(state, user) {
+    state.user = user
+  },
   changeSort (state) {
     if (state.sort === 0) {
       state.sort = 1
@@ -41,7 +44,7 @@ export default {
   },
   resetItemsOffset(state) {
     state.itemsOffset = 20
-    window.scrollTo(0,0) 
+    window.scrollTo(0,0)
   },
   setFilter (state, filter) {
     filter = filter || ''

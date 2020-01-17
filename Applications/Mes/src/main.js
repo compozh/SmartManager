@@ -3,6 +3,8 @@ import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
 import '@it-enterprise/common/dist/common-components.css'
+import formio from '@it-enterprise/formio'
+import '@it-enterprise/formio/dist/formio.css'
 
 import auth from '@it-enterprise/jwtauthentication'
 auth.config(window.myConfig.GrapgQlUrl)
@@ -64,12 +66,15 @@ Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 
+var formioOptions = {}
+formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
+formioOptions.routerDependencies = () => routerDependencies
+formioOptions.GraphQlUrl = window.myConfig.GrapgQlUrl
+Vue.use(formio, { options: formioOptions, dependencies });
+
 Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
-
-
-
 
 // подключение vuetify
 
@@ -105,7 +110,7 @@ export const eventBus = new Vue({
 }).$mount('#app')
 
 var barcodeScaner = new BarcodeScaner()
-  barcodeScaner.initialize()
+barcodeScaner.initialize()
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
@@ -114,12 +119,4 @@ req.keys().map(key => {
     return
   }
   Vue.component(req(key).default.name, req(key).default)
-})
-
-const reqFormio = require.context('@/formio/', true, /\.(js|vue)$/i)
-reqFormio.keys().map(key => {
-  if (!(reqFormio(key).default || {}).name) {
-    return
-  }
-  Vue.component(reqFormio(key).default.name, reqFormio(key).default)
 })

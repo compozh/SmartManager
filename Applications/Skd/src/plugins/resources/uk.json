@@ -1,0 +1,13 @@
+{
+    "login": "Логін",
+    "password": "Пароль",
+    "rememberMe": "Запам'ятати мене",
+    "signIn": "УВІЙТИ",
+    "emptyLogin": "Ви не ввели логін",
+    "emptyPassword": "Ви не ввели пароль",
+    "enterTempCode": "Введіть тимчасовий код",
+    "enterTempCodeDot": "Введіть тимчасовий код...",
+    "enterTempCodeTitle": "Поле для введення тимчасового коду",
+    "send": "Надіслати"
+
+}
