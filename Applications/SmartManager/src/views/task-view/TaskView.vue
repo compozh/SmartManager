@@ -38,8 +38,8 @@
 </template>
 
 <script>
+const TaskDetails = () => import('./task-details/TaskDetails.vue')
 import TaskSidebar from './TaskSidebar.vue'
-import TaskDetails from './task-details/TaskDetails.vue'
 import TaskAttachments from './task-attachments/TaskAttachments.vue'
 import TaskComments from './task-comments/TaskComments.vue'
 
