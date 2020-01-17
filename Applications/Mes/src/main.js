@@ -17,6 +17,7 @@ import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import axios from 'axios'
+import acl from './acl/acl'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
@@ -104,6 +105,7 @@ export const eventBus = new Vue({
   store,
   i18n,
   apolloProvider,
+  acl,
   render: h => h(App)
 }).$mount('#app')
 

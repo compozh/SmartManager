@@ -50,6 +50,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 360px;
+  /* width: 360px; */
 }
 </style>

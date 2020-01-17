@@ -1,6 +1,6 @@
 <template>
   <vue-pull-refresh :on-refresh="onRefresh">
-    <div class="installations-block" ref="installationsBlock">
+    <div class="installations-block justify-center" ref="installationsBlock">
       <mes-dialog-component
           :title=dialogProperties.title
           :message=dialogProperties.message
@@ -10,18 +10,19 @@
           @dialogInput=dialogInput
           @agreeClick=dialogAgreeClick
           @disagreeClick=dialogDisagreeClick />
-      <v-card
-        class="installation-card"
-        v-for="installation in sortedInstallations"
-        :key="installation.id"
-        :ref="installation.batchBarcode"
-      >
-        <mes-installation-card
-          :installation=installation
-          @removeInstallation=invokeDeleteInstallation
-        />
+      <v-col v-for="installation in sortedInstallations"
+      :key="installation.id" :cols="$vuetify.breakpoint.xs ? '12' : ''" sm="6" md="4" lg="3" xl="2" class="pa-1" >
+        <v-card
+          class="installation-card" 
+          :ref="installation.batchBarcode"
+        >
+          <mes-installation-card
+            :installation=installation
+            @removeInstallation=invokeDeleteInstallation
+          />
 
-      </v-card>
+        </v-card>
+      </v-col>
     </div>
   </vue-pull-refresh>
 </template>
@@ -154,8 +155,10 @@ export default {
   .installation-card {
     display: flex;
     align-items: center;
-    width: 360px;
-    margin: 10px;
+    /* width: 360px; */
+    height: 100%;
+    width: 100%;
+    /* margin: 6px; */
     border-radius: 5px;
     background-color: white;
     transition: background-color .5s ease-in-out;
