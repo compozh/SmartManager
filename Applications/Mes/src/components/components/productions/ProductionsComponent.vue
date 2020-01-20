@@ -10,15 +10,19 @@
           @agreeClick=dialogAgreeClick
           @disagreeClick=dialogDisagreeClick />
 
-        <vue-pull-refresh :on-refresh="onRefresh">
-          <v-card class="productions-card" v-for="production in sortedProductions" :key="production.factId">
-            <mes-production-card
-                :production=production
-                @deleteProduction=invokeDeleteProduction
-                @printProduction=printProduction
-                @setMaterialProduction=setMaterialProduction
-            />
-          </v-card>
+        <vue-pull-refresh style="width: 100%" :on-refresh="onRefresh">
+          <div class="mes-productions-content">
+            <v-col v-for="production in sortedProductions" :key="production.factId" :cols="$vuetify.breakpoint.xs ? '12' : ''" sm="6" md="4" lg="3" xl="2" class="pa-1" >
+              <v-card class="productions-card"  >
+                <mes-production-card
+                    :production=production
+                    @deleteProduction=invokeDeleteProduction
+                    @printProduction=printProduction
+                    @setMaterialProduction=setMaterialProduction
+                />
+              </v-card>
+            </v-col>
+          </div>
         </vue-pull-refresh>
     </v-flex>
 </template>
@@ -132,6 +136,8 @@ export default {
     refreshHeader.style.display = this.$vuetify.breakpoint.smAndDown ? 'block' :  'none'
     refreshHeader.style.backgroundColor = "white"
     refreshLabel.innerText = ''
+  },
+  created() {
   }
 }
 </script>
@@ -142,13 +148,17 @@ export default {
         flex-direction: row;
         flex-wrap: wrap;
         align-content: start;
+        justify-content: center;
+        margin-top: 10px;
     }
     .productions-card {
         display: flex;
         align-items: start;
-        margin: 10px;
-        max-width: 400px;
-        width: 360px;
+        height: 100%;
+        width: 100%;
+        /* margin: 10px; */
+        /* max-width: 400px; */
+        /* width: 360px; */
         border-radius: 5px;
     }
 </style>

@@ -11,7 +11,7 @@
         <p>{{$t('mes.errors.TryAgain')}}</p>
       </v-row>
       <v-row  justify="center">
-        <p> {{$t('mes.errors.GoTo')}} <v-btn text color="blue" to="/">{{$t('mes.errors.HomePage')}}</v-btn></p>
+        <p> {{$t('mes.errors.GoTo')}} <v-btn text color="blue" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">{{$t('mes.errors.HomePage')}}</v-btn></p>
       </v-row>
     </v-col>
   </div>

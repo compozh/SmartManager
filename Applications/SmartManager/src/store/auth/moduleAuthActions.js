@@ -13,6 +13,7 @@ export default {
     }
   },
   async login({dispatch}, {login, password, rememberMe}) {
+    vm.$vs.loading()
     const userIsLoggedIn = await dispatch('userIsLoggedIn')
     if (userIsLoggedIn) {
       return
@@ -89,15 +90,15 @@ export default {
     return false
   },
   async updateAuthenticatedUser({commit}, result) {
+    // Close animation if passed as payload
+    !vm.$vs.loading || vm.$vs.loading.close()
     if (result.success) {
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      // Close animation if passed as payload
-      !vm.$vs.loading || vm.$vs.loading.close()
       await router.push(router.currentRoute.query.to || '/')
     } else {
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
-        text: result.errorMessage,
+        text: result.FAILREASON,
         color: 'warning'
       })
       if (router.currentRoute.name !== 'login') {

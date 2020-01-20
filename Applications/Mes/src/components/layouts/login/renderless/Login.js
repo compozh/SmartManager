@@ -1,3 +1,4 @@
+import Init from '@/components/components/Init'
 export default {
   name: 'loginRl',
   data: () => ({
@@ -31,6 +32,9 @@ export default {
       try {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
+        const init = new Init()
+        init.initialize()
+        init.initializeSignalR()
         if (!result.success) {
           throw result.errorMessage
         }
