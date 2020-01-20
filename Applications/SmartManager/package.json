@@ -5,7 +5,7 @@
   "author": "it-enterprise",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js build --open",
     "lint": "vue-cli-service lint",
     "build-bundle": "vue-cli-service build --target lib --name smartManager ./src/main.js",
     "capacitor-copy": "vue-cli-service capacitor-copy",
