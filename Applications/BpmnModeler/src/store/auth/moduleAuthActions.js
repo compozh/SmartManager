@@ -50,7 +50,7 @@ export default {
   updateAuthenticatedUser({ commit }, result) {
     if (result.success) {
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      router.push(router.currentRoute.query.to || '/bpmnmodeler')
+      router.push(router.currentRoute.params.routeToBack || '/bpmnmodeler')
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
       if (router.currentRoute.name !== 'BPMNLOGIN') {
