@@ -53,7 +53,16 @@
                        type="flat"
                        class="px-3 mr-2 fit"
                        to="/task-add"
-            >{{ $t('buttons.addTask') }}
+            >{{ $t('buttons.addTask') }} </vs-button>
+
+            <vs-button v-if="taskView && externalTaskCamunda && userIsPerformer"
+                       icon="done"
+                       color="success"
+                       type="flat"
+                       class="px-3 mr-2 fit"
+                       @click="changeStatus('+')"
+            >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
+
             </vs-button>
             <!-- CREATE CASE BUTTON -->
             <vs-button v-if="caseView || caseList"
@@ -370,6 +379,17 @@ export default {
     },
     workFlowTaskInWork() {
       return this.taskType === 'WORKFLOW' && this.taskInWork
+    },
+    externalTaskCamunda() {
+      if (!this.task.externalParams) {
+        return
+      }
+      const externalParams = JSON.parse(this.task.externalParams)
+      return this.taskType === 'EXTERNAL'
+        && externalParams.EXTERNALSOURCE === 'C'
+    },
+    userIsPerformer() {
+      return this.userId === this.task.performerId
     },
     allowedCaseEdit() {
       return this.$route.name === 'case-view'

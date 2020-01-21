@@ -23,7 +23,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@it-enterprise/common": "^1.0.1",
-    "@it-enterprise/formio": "^1.0.14",
+    "@it-enterprise/formio": "^1.0.16",
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/localization": "^1.0.10",

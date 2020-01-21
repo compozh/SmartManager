@@ -130,7 +130,7 @@ export default {
       })
     },
     async onSubmit() {
-      const form = this.$refs.form.formioComponent.formio
+      const form = this.$refs.form.$refs.formioComponent.formio
       try {
         const result = await form.submit()
         await this.startBusinessProcess(result.data)
