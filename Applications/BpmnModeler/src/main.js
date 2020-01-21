@@ -51,7 +51,7 @@ Vue.use(TabPane);
 
 // Плагины it-enterprise
 Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
-Vue.use(Router, { options: config, dependencies }, () => auth.getUserData());
+Vue.use(Router, { options: config, dependencies }, () => auth.getToken());
 Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
 Vue.use(Eds, { dependencies });
