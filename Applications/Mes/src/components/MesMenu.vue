@@ -99,7 +99,7 @@ export default {
   }
   
   .v-navigation-drawer__content .v-list .v-list-item__action {
-    margin-right: 0;
+    margin-right: 0 !important ;
   }
   .v-navigation-drawer__content .v-list-item__title {
     margin-left: 10px;

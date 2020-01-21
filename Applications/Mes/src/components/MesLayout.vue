@@ -172,7 +172,7 @@ export default {
   .main-block {
     padding: 0 !important;
     margin: 0 !important;
-    max-width: 100%;
+    max-width: 100vw !important;
     height: 100%;
     overflow: hidden;
   }
