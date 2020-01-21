@@ -4,7 +4,7 @@ import store from './store/index'
 
 Vue.use(VueRouter)
 
-export const router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: window.myConfig.BASE_URL + "MES/",
   routes: [

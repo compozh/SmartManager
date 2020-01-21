@@ -7,10 +7,12 @@
           v-model="menu"
         >
           <template v-slot:activator="{on}">
-            <v-layout class="user-panel" v-on="on" align-center>
-              <v-flex id="user-icon">
-                <user-icon :src="user.photo" size="50" style="max-width:50px"></user-icon>
-              </v-flex>
+            <v-layout class="user-panel" v-on="on" id="user-icon" align-center>
+              <!-- <v-flex > -->
+                <v-img v-if="user.photo" :src="user.photo" width='50px'></v-img>
+                <v-icon v-else size=50>account_circle</v-icon>
+                <!-- <user-icon :src="user.photo" size="50" style="max-width:50px"></user-icon> -->
+              <!-- </v-flex> -->
               <v-flex v-if="!mini" class="hidden-xs-only">
                 <p class="ma-0 pl-2 subheading">{{ user.name }}</p>
               </v-flex>
@@ -20,10 +22,12 @@
             <v-flex>
               <v-layout pa-2>
                 <v-flex class="grow-0">
-                  <user-icon
+                  <!-- <user-icon
                     :src="user.photo"
                     size="60"
-                  ></user-icon>
+                  ></user-icon> -->
+                  <v-img v-if="user.photo" :src="user.photo" width='60px'></v-img>
+                  <v-icon v-else size=60>account_circle</v-icon>
                 </v-flex>
                 <v-flex ml-3 class="text-xs-left">
                   <p v-if="mini || $router.breakpoint.smAndDown" class="mb-1">{{ user.name || user.email}}</p>

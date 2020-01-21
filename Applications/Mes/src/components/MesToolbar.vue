@@ -64,9 +64,6 @@
       <!-- Панель Юзера -->
       <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter && $route.name !='MESLOGIN'">
         <user-panel hideDelegatedRightsButton="true" mini="true" >
-          <v-btn v-if="$vuetify.breakpoint.smAndDown" icon>
-            <v-icon>account_circle</v-icon>
-          </v-btn>
         </user-panel>
       </v-flex>
 
