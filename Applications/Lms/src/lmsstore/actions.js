@@ -7,14 +7,14 @@ export default {
   logout({commit}) {
     auth.clearTokens()
     commit('setUser', null)
-    if (router.currentRoute.name !== 'LMSLOGIN') {
-      router.push({name: 'LMSLOGIN'})
+    if (router.currentRoute.name !== 'LMSREALHOME') {
+      router.push({name: 'LMSREALHOME'})
     }
   },
   async login({commit, state}, {login, password, remember}) {
     if (state.user) {
       console.log('User is logged in')
-      await router.push({name: 'LMSREALHOME'})
+      await router.push(router.currentRoute.params.routeToBack || {name: 'LMSREALHOME'})
       return
     }
     try {
