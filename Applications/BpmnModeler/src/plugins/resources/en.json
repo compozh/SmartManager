@@ -349,5 +349,14 @@
 		"Binding": "Binding",
 		"Latest": "Latest",
 		"Version": "Version"
+	},
+	"authentication": {
+		"login": "Login",
+		"userName": "Username",
+		"password": "Password",
+		"emptyLogin": "Enter username",
+		"emptyPassword": "Enter password",
+		"rememberMe": "Remember me",
+		"error": "Error"
 	}
 }

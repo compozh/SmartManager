@@ -1,59 +1,44 @@
-<!-- =========================================================================================
-    File Name: Main.vue
-    Description: Main layout
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-    Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
-    <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
-        <vx-tour :steps="steps" v-if="!disableThemeTour" />
+  <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
+    <vx-tour :steps="steps" v-if="!disableThemeTour"/>
     <doc-title :title="`${appTitle}. ${routeTitle}`"/>
 
-        <!-- БОКОВОЕ МЕНЮ -->
-        <vx-sidebar  :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/nabu.logo.png')" :title="appTitle" parent=".layout--main" />
+    <!-- БОКОВОЕ МЕНЮ -->
+    <vx-sidebar :sidebarItems="sidebarItems"
+                :logo="require('@/assets/images/logo/nabu.logo.png')"
+                :title="appTitle" parent=".layout--main"/>
 
-        <!-- ЗОНА КОНТЕНТА -->
-        <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
-
-            <div id="content-overlay"></div>
-
-            <div class="content-wrapper">
-
-                <the-navbar :navbarColor="navbarColor" :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]" />
-
-                <div class="router-view">
-                    <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
-                        <transition :name="routerTransition">
-                        <div class="router-header flex flex-wrap items-center mb-6" v-if="$route.meta.breadcrumb || $route.meta.pageTitle">
-                            <div class="content-area__heading" :class="{'pr-4 border-0 md:border-r border-t-0 border-b-0 border-l-0 border-solid border-grey-light' : $route.meta.breadcrumb}">
-                                <h2 class="mb-1">{{ routeTitle }}</h2>
-                            </div>
-
-                            <!-- BREADCRUMB -->
-                            <vx-breadcrumb class="ml-4 md:block hidden" v-if="$route.meta.breadcrumb" :route="$route" />
-
-                        </div>
-                        </transition>
-                        <div class="content-area__content">
-                            <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
-                                <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg" />
-                            </back-to-top>
-                            <transition :name="routerTransition" mode="out-in">
-                                <router-view @changeRouteTitle="changeRouteTitle"></router-view>
-                            </transition>
-                        </div>
-                    </div>
+    <!-- ЗОНА КОНТЕНТА -->
+    <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
+      <div id="content-overlay"></div>
+      <div class="content-wrapper">
+        <the-navbar :navbarColor="navbarColor"
+                    :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]"/>
+        <div class="router-view">
+          <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
+            <transition :name="routerTransition">
+              <div class="router-header flex flex-wrap items-center mb-6"
+                   v-if="$route.meta.breadcrumb || $route.meta.pageTitle">
+                <div class="content-area__heading"
+                     :class="{'pr-4 border-0 md:border-r border-t-0 border-b-0 border-l-0 border-solid border-grey-light' : $route.meta.breadcrumb}">
+                  <h2 class="mb-1">{{ routeTitle }}</h2>
                 </div>
-
+              </div>
+            </transition>
+            <div class="content-area__content">
+              <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
+                <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg"/>
+              </back-to-top>
+              <transition :name="routerTransition" mode="out-in">
+                <router-view @changeRouteTitle="changeRouteTitle"></router-view>
+              </transition>
             </div>
-
-            <the-footer></the-footer>
+          </div>
         </div>
+      </div>
+      <the-footer></the-footer>
     </div>
+  </div>
 </template>
 
 <script>
@@ -65,6 +50,7 @@ import themeConfig from '@/../themeConfig.js'
 //import sidebarItems from '@/sidebarItems.js'
 import templateConfig from '@/templateConfig.js'
 import BackToTop from 'vue-backtotop'
+
 const VxTour = () => import('@/components/VxTour.vue')
 
 export default {
@@ -97,7 +83,6 @@ export default {
     },
   },
   computed: {
-
     appTitle() {
       var title = this.templateConfig.applicationTitle
       if (typeof title == 'object') {
@@ -108,27 +93,30 @@ export default {
       return title
     },
     sidebarItems() {
-      if (!this.$store.state.app.applicationDescription) {
+      const appDescription = this.$store.state.app.appDescription
+      if (!appDescription) {
         return []
       }
-
-      let routes = [...this.$store.state.app.applicationDescription.Sections[0].Routes]
-
-      return routes.sort((a,b) => a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)).map(r => {
+      let routes = [...appDescription.Sections[0].Routes]
+      return routes.sort((a, b) => a.Sort > b.Sort ? 1 : (a.Sort < b.Sort ? -1 : 0)).map(r => {
         return {
-          url: '/' + this.$route.params.applicationId + '/' + r.Path,
+          url: '/' + r.Path,
           name: r.Name,
           icon: r.Image,
           slug: r.Id
         }
       })
-
     },
-
     isAppPage() {
-      if (this.$route.path.includes('/apps/')) { return true } else { return false }
+      if (this.$route.path.includes('/apps/')) {
+        return true
+      } else {
+        return false
+      }
     },
-    isThemeDark() { return this.$store.state.theme == 'dark' },
+    isThemeDark() {
+      return this.$store.state.theme == 'dark'
+    },
     sidebarWidth() {
       return this.$store.state.sidebarWidth
     },
@@ -166,12 +154,18 @@ export default {
       this.routeTitle = title
     },
     updateNavbar(val) {
-      if (val == 'static') { this.updateNavbarColor('#fff') }
+      if (val == 'static') {
+        this.updateNavbarColor('#fff')
+      }
       this.navbarType = val
     },
     updateNavbarColor(val) {
       this.navbarColor = val
-      if (val == '#fff') { this.isNavbarDark = false } else { this.isNavbarDark = true }
+      if (val == '#fff') {
+        this.isNavbarDark = false
+      } else {
+        this.isNavbarDark = true
+      }
     },
     updateFooter(val) {
       this.footerType = val

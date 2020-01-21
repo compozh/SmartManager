@@ -6,6 +6,8 @@ import Localization from '@it-enterprise/localization'
 import GraphQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
 import auth from '@it-enterprise/jwtauthentication'
+import formio from '@it-enterprise/formio'
+import '@it-enterprise/formio/dist/formio.css'
 auth.config(window.appConfig.GrapgQlUrl)
 
 // vue пакеты
@@ -92,9 +94,18 @@ Vue.use(ItCommon)
 Vue.use(GraphQlCore, { options: window.appConfig, dependencies })
 Vue.use(Localization, { dependencies })
 
+const routerDependencies = {
+  router
+}
+
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
+
+const formioOptions = {}
+formioOptions.routerDependencies = () => routerDependencies
+formioOptions.GraphQlUrl = window.appConfig.GrapgQlUrl
+Vue.use(formio, { options: formioOptions, dependencies })
 
 export const eventBus = new Vue()
 

@@ -17,9 +17,8 @@
       <v-container class="main-block" :key="mainContainerKey" :class="$route.name =='MESLOGIN' ? 'mes-login-form' : ''">
          <mes-downtimes-overlay v-if="downtimesOverlayVisible"
             @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
-        <router-view v-if="$route.name =='MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
-        <login :allowQrMode="true" v-if="$route.name =='MESLOGIN'" />
-        <span class="mes-device-not-fixed" v-if="userData && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
+        <router-view v-if="$route.name == 'MESLOGIN' || (initialWorkCenter && workCenter)" @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible />
+        <span class="mes-device-not-fixed" v-else-if="userData && initialWorkCenter && !workCenter">{{this.$t('mes.labels.FixOnWorkCenter')}}</span>
       </v-container>
     </v-content>
 
@@ -70,6 +69,7 @@
 import Vue from 'vue'
 import { events } from '../constants'
 import { eventBus } from '../main'
+import Init from './components/Init'
 
 export default {
   name: 'mes-layout',
@@ -81,7 +81,6 @@ export default {
     }
   },
   created() {
-    
     if(this.$vuetify.breakpoint.smAndDown){
       this.$store.commit('mes/setMenuDrawerMode', false)
     }
@@ -126,7 +125,11 @@ export default {
       }
     },
     workCenter() {
-      return this.$store.getters['mes/workCenter']
+      let center = this.$store.getters['mes/workCenter']
+      if (center) {
+        Init.prototype.changeRoots(this)
+      }
+      return center
     },
     initialWorkCenter() {
       return this.$store.getters['mes/initialWorkCenter']
@@ -169,7 +172,7 @@ export default {
   .main-block {
     padding: 0 !important;
     margin: 0 !important;
-    max-width: 100%;
+    max-width: 100vw !important;
     height: 100%;
     overflow: hidden;
   }
@@ -342,6 +345,9 @@ export default {
 
   .formio-form-component {
         position: relative;
+  }
+  .wait {
+    font-size: 5em
   }
 </style>
 

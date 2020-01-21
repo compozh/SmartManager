@@ -1,31 +1,41 @@
 <template>
-	<v-container fluid pa-0 ma-0>
-		<v-layout>
-			<v-flex xs12>
-        <v-card>
-          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
-        </v-card>
-				<v-card v-bind:style="{'background-color': '#1a237e'}">
-					<v-flex py-3>
-						<h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми курсами</h4>
-						<h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--lighten-3'>Курсы обучения - ориентированные учебные пути, которые комплексно повышают ваши навыки работы</h5>
-					</v-flex>
-					<v-flex py-2>
-						<v-divider />
-					</v-flex>
-				</v-card>
-			</v-flex>
-		</v-layout>
-		<v-layout mb-3>
-      <v-flex>
-        <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
+	<v-container fill-height fluid pa-0 ma-0>
+    <v-layout column>
+      <v-flex >
+        <v-layout column>
+          <v-flex>
+            <v-layout column>
+              <v-flex xs12>
+                <v-card>
+                  <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+                </v-card>
+        			</v-flex>
+              <v-flex>
+         				<v-card v-bind:style="{'background-color': '#1a237e'}">
+        					<v-flex py-3>
+        						<h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми курсами</h4>
+        						<h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--lighten-3'>Курсы обучения - ориентированные учебные пути, которые комплексно повышают ваши навыки работы</h5>
+        					</v-flex>
+        					<v-flex py-2>
+        						<v-divider />
+        					</v-flex>
+        				</v-card>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+         	<v-layout mb-3>
+             <v-flex>
+               <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
+             </v-flex>
+        	</v-layout>
+		    </v-layout>
+		    <v-layout wrap row>
+		    	<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
+             <course-card v-if="course" :links="links" :course="course" />
+		    	</v-flex>
+		    </v-layout>
       </v-flex>
-		</v-layout>
-		<v-layout wrap row>
-			<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
-         <course-card v-if="course" :links="links" :course="course" />
-			</v-flex>
-		</v-layout>
+    </v-layout>
 	</v-container>
 </template>
 
@@ -35,6 +45,7 @@
 import CourseCard from './CourseCard.vue'
 import Filters from './LmsFilters.vue'
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
+import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
 
 export default {
 	name: 'lms-courses',
@@ -169,18 +180,13 @@ export default {
       }
     },
     links() {
-      let links
-      const thisLink = {
+      /*{
         text: 'Курсы',
         disabled: true,
-        href: this.$route.path
-      }
-      if (this.$route.params.links) {
-        const inputLinks = this.$route.params.links
-        links = [...inputLinks, thisLink]
-      } else {
-        links = [thisLink]
-      }
+        href: window.myConfig.BASE_URL + this.$route.path
+      } */
+      const thisLink = getThisLink('Курсы', this.$route.path, true)
+      let links = getRoutesLinks(this.$route.params.links, thisLink)
       return links
     }
   },

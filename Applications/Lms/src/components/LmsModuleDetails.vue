@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-module-details',
@@ -112,14 +113,8 @@ export default {
   },
   computed: {
     links() {
-      let inputLinks = this.$route.params.links
-      let links = [...inputLinks,
-        {
-          text: this.$route.params.moduleName,
-          disabled: true,
-          href: this.$route.path
-        }]
-      links[links.length - 2].disabled = false
+      const thisLink = getThisLink(this.$route.params.moduleName, this.$route.path, true)
+      let links = getRoutesLinks(this.$route.params.links, thisLink)
       return links
     }
   }

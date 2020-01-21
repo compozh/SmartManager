@@ -77,9 +77,6 @@ export default {
   },
   methods: {
     loginMethod() {
-      // Loading
-      this.$vs.loading()
-
       const payload = {
         login: this.login,
         password: this.password,

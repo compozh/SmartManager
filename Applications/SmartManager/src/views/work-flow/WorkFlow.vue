@@ -23,12 +23,11 @@
                     >{{ $t('validate.required') }}
                     </span>
 
-                    <formio class="formio mt-4"
+                    <formio-form-component class="formio mt-4"
                             ref="form"
-                            :form="form"
-                            :options="options"
-                            :submission="submission"
-                    />
+                            :formCode="form.unformio"
+                            :formDefinition="form"/>
+
                     <no-data v-if="!this.formDefinition">{{ $t('workflow.bpSelectLabel') }}</no-data>
 
                     <div class="flex justify-end">
@@ -55,14 +54,12 @@
 
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import Autocomplete from '@/components/Autocomplete'
-import {Form} from 'vue-formio'
 import NoData from '@/components/NoData'
 
 export default {
   components: {
     VuePerfectScrollbar,
     Autocomplete,
-    formio: Form,
     NoData
   },
   data: () => ({
@@ -80,9 +77,7 @@ export default {
   computed: {
     form() {
       if (this.formDefinition) {
-        return JSON.parse(this.formDefinition, function (key, value) {
-          return key === 'components' ? JSON.parse(value) : value
-        })
+        return JSON.parse(this.formDefinition)
       }
       return {}
     },
@@ -177,19 +172,9 @@ export default {
     box-shadow: 0 4px 20px 0 rgba(0,0,0,.05);
   }
 
-  .formio::v-deep {
-    @import "~formiojs/dist/formio.form.min.css";
-    @import "../../assets/scss/formio";
-    @import "../../assets/scss/bootstrap/bootstrap";
-
-    .formio-form {
-      min-height: 20px !important;
-    }
-
-    button:hover {
-      -webkit-transform: translateY(-2px);
-      transform: translateY(-2px);
-    }
+  button:hover {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
   }
 
 </style>
