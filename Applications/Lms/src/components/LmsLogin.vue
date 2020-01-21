@@ -79,37 +79,31 @@ export default {
       login: '',
       password: '',
       checkbox_remember_me: false,
-      message: '',
-
+      message: ''
     }
   },
+  created() {
+    this.$store.dispatch('lms/logout')
+  },
   methods: {
-    signIn() {
-      if(!this.login) {
-        this.message = "Введите логин!"
+    async signIn() {
+      if (!this.login) {
+        this.message = 'Введите логин!'
         return
       }
-      if(!this.password) {
-        this.message = "Введите пароль!"
+      if (!this.password) {
+        this.message = 'Введите пароль!'
         return
       }
-      this.$authentication.logIn(this.login, this.password, this.checkbox_remember_me)
-      .then(result => {
-        if (result && !result.tempPasword) {
-          this.$router.replace({path: this.$route.params.routeToBack})
-        }
-      })
-      .catch((e) => {
-        return (this.message = e || 'Ошибка авторизации')
-      })
+      const payload = {
+        login: this.login,
+        password: this.password,
+        remember: this.checkbox_remember_me
+      }
+      await this.$store.dispatch('lms/login', payload)
     },
     goToRecoverPage() {
-      this.$authentication.GetRecoveryPasswordUrl()
-      .then(res => {
-        if (res.ALLOWED) {
-          window.open(res.LINK, '_blank')
-        }
-      })
+      console.log('Функционал не реализован')
     },
     clearError() {
       this.message = null

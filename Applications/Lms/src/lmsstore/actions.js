@@ -1,27 +1,47 @@
-import { LmsApi } from '../api/lmsApi'
-import { tryFunctionOrLogError } from 'apollo-utilities';
-
-const api = new LmsApi()
+import { LmsApi as api } from '../api/lmsApi'
+import auth from '@it-enterprise/jwtauthentication'
+import { routerDependencies } from '@/router'
+const router = routerDependencies.router
 
 export default {
+  logout({commit}) {
+    auth.clearTokens()
+    commit('setUser', null)
+    if (router.currentRoute.name !== 'LMSLOGIN') {
+      router.push({name: 'LMSLOGIN'})
+    }
+  },
+  async login({commit, state}, {login, password, remember}) {
+    if (state.user) {
+      console.log('User is logged in')
+      await router.push({name: 'LMSREALHOME'})
+      return
+    }
+    try {
+      const result = await auth.login(login, password, remember)
+      if (result.success) {
+        commit('setUser', auth.getUserData())
+        await router.push({name: 'LMSREALHOME'})
+      } else {
+        console.log(result.errorMessage)
+      }
+    } catch (e) {
+      console.log(e.message)
+    }
+  },
   getLogoLink({commit}) {
     commit('setError', null)
-    commit('setCircilarLoader', true)
     try {
       const result = api.getLogo()
       const link = result
       commit('setLogoLink', link)
     } catch (error) {
-      commit('setCircularLoader', false)
       commit('setError', error.message)
       commit('setLogoLink', 'https://m.it.ua/s00/ws/GetFile.ashx?file=itlogo.png&folder=DOCS')
     }
   },
-
   async getAvailableFilters({commit}) {
     commit('setError', null)
-    commit('setCircularLoader', true)
-
     try {
       const result = await api.getAvailableFiltersFromGql()
       const filters = result.data.lms.availableFilters
