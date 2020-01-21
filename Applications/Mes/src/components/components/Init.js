@@ -29,11 +29,10 @@ export default class Init {
         store.dispatch('mes/initializeWorkCenter', uuid)
         store.dispatch('mes/initializeProperties')
         store.dispatch('mes/initializeUser')
-        store.dispatch('formio/initializeTicket')
         store.dispatch('mes/initializeMobilityProperties')
         store.dispatch('mes/verifyCamera')
 
-        window.navigator.mediaDevices.ondevicechange = function(e) {
+        window.navigator.mediaDevices.ondevicechange = e => {
             store.dispatch('mes/verifyCamera')
         }
     }

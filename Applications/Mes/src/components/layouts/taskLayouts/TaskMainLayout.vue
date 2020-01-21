@@ -8,24 +8,45 @@
      <v-layout class="mes-task-main-layout">
         <v-flex class="mes-task-main-flex" :key="this.productionFormioKey">
           <formio-form-component
-            ref="formioBuilder"
+            ref="formioFormComponent"
+
             @formSubmit=formSubmit
+            @signalRConnect=signalRConnect
+            @signalRDisconnect=signalRDisconnect
+            @signalRSendMessage=signalRSendMessage
+            @signalRSendMessageToAll=signalRSendMessageToAll
+            @signalrROnRecieveMessage=signalrROnRecieveMessage
+            @signalrROffRecieveMessage=signalrROffRecieveMessage
+
             :formDefinition=productionFormio
             :formCode=workCenter.productionRegistrationFormCode
             :instance=selectedTask
           />
         </v-flex>
     </v-layout>
+
   </v-layout>
 </template>
 
 <script>
+import { events } from '../../../constants'
+import { eventBus } from '../../../main'
+import IotSignalRService from '../../components/IotSignalRService'
+
 export default {
   name: 'mes-task-main-layout',
   data() {
     return {
       productionFormioKey: 0
     }
+  },
+  watch: {
+    productionFormio() {
+      this.signalRDisconnect()
+    }
+  },
+  mounted() {
+    eventBus.$on(events.workCenterChanged, this.workCenterChanged)
   },
   computed: {
     dragResizeMode() {
@@ -38,8 +59,11 @@ export default {
       return this.$store.getters['mes/workCenter']
     },
     productionFormio() {
-      this.productionFormioKey += 1
+      this.productionFormioKey++
       return this.$store.getters['mes/productionFormio']
+    },
+    iotSettings() {
+      return this.$store.getters['mes/iotSettings']
     }
   },
   methods: {
@@ -51,15 +75,83 @@ export default {
     },
     formSubmit({ submission, completeSubmissionCallback }) {
       this.$store.dispatch('mes/productionFormIoSubmit',
-        { workCenter: this.workCenter, submission, task: this.selectedTask, message: this.$t('mes.dialogs.RegistrationProduction'), deviceSizeType: this.$vuetify.breakpoint.name }
+        {
+          workCenter: this.workCenter,
+          submission,
+          task: this.selectedTask,
+          message: this.$t('mes.dialogs.RegistrationProduction'),
+          deviceSizeType: this.$vuetify.breakpoint.name
+        }
       ).then(completeSubmissionCallback)
     },
     getFormioData() {
-      return this.$refs.formioBuilder.getFormSubmission()
+      return this.$refs.formioFormComponent.getFormSubmission()
+    },
+    async signalRConnect() {
+      if(this.iotSettings.iotSignalRConnection) {
+        return false
+      }
+      
+      var thingId = this.workCenter.thingId
+      this.iotSettings.iotSignalRConnection = new IotSignalRService(thingId)
+
+      await this.$store.dispatch('mes/initializeIotSignalRUrl', { thingId })
+      let iotSignalRUrl = this.iotSettings.iotSignalRUrl
+
+      if(iotSignalRUrl) {
+        this.iotSettings.iotSignalRConnection.connect(iotSignalRUrl)
+      }
+      
+      return true
+    },
+    async signalRDisconnect(thingId) {
+      let connection = this.iotSettings.iotSignalRConnection
+      if(!connection || !connection.connected) {
+        return
+      }
+      
+      await connection.dispose(thingId || this.workCenter.thingId)
+      this.iotSettings.iotSignalRConnection = null
+    },
+    signalRSendMessage(params) {
+      let connection = this.iotSettings.iotSignalRConnection
+      if(!connection || !connection.connected) {
+        return
+      }
+      connection.sendMessage(params)
+    },
+    signalRSendMessageToAll(params) {
+      let connection = this.iotSettings.iotSignalRConnection
+      if(!connection || !connection.connected) {
+        return
+      }
+      connection.sendMessageToAll(params)
+    },
+    async signalrROnRecieveMessage(params) {
+      let connection = this.iotSettings.iotSignalRConnection
+      if(!connection || !connection.connected) {
+        var result = await this.signalRConnect()
+        if(!result) {
+          return
+        }
+      }
+      
+      this.iotSettings.iotSignalRConnection.onRecieveMessage(params)
+    },
+    signalrROffRecieveMessage(params) {
+      let connection = this.iotSettings.iotSignalRConnection
+      if(!connection || !connection.connected) {
+        return
+      }
+      connection.offRecieveMessage(params)
+    },
+    workCenterChanged(workCenter) {
+      this.signalRDisconnect(workCenter.thingId)
     }
   }
 }
 </script>
+
 <style type="text/css" scoped>
   .mes-task-main-layout  .mes-task-main-flex{
     position: absolute;

@@ -33,8 +33,10 @@ function connect(app, url, onReceive, ticket) {
   connection.reconnected(function() {
     subscribeFunc(app, ticket)
   })
-
+  
   connection.start({ withCredentials: false }).done(function() {
     subscribeFunc(app, ticket)
   })
+
+  return connection
 }

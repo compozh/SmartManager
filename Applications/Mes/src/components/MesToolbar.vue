@@ -78,6 +78,8 @@
 
 import Init from './components/Init'
 import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
+import { events } from '../constants'
+import { eventBus } from '../main'
 
 export default {
   name: 'mes-toolbar',
@@ -121,6 +123,7 @@ export default {
       if (!newWorkCenter) {
         return
       }
+      var unFixedWorkCenter = this.workCenter
       this.$store.commit('mes/setInitialWorkCenter', false)
       this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
       const prevWorkCenterFixation =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
@@ -132,6 +135,8 @@ export default {
       this.$store.commit('mes/setWorkCenter', newWorkCenter)
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
+
+      eventBus.$emit(events.workCenterChanged, unFixedWorkCenter)
     },
     refreshApp() {
       this.$router.go()

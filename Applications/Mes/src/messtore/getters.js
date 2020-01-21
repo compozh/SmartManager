@@ -130,5 +130,8 @@ export default {
   },
   cameraAvailability(state){
     return state.cameraAvailability
+  },
+  iotSettings(state) {
+    return state.iotSettings
   }
 }
