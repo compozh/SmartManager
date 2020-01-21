@@ -22,7 +22,7 @@ import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 import './element-variables.scss';
 
 import { routerDependencies } from './router';
-import config from './config';
+const config = window.config;
 
 auth.config(config.GrapgQlUrl);
 // объект с зависимостями
