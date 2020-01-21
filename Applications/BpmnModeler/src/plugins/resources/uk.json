@@ -87,7 +87,10 @@
 		"All": "Всі",
 		"Users": "Користувачі",
 		"Groups": "Групи",
-		"UserOrGroup": "Користувач чи группа"
+		"UserOrGroup": "Користувач чи группа",
+		"RecentlyActive" : "Нещодавно активні",
+		"LastChanged": "Діаграми востаннє змінені вами",
+		"Projects" : "Проекти"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

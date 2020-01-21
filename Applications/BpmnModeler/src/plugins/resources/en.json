@@ -7,7 +7,7 @@
 		"Delete": "Delete",
 		"Save": "Save",
 		"Cancel": "Cancel",
-		"Create": "Створити",
+		"Create": "Create",
 		"AddProcess": "Add diagram",
 		"AddFolder": "Add folder",
 		"Import": "Import",
@@ -82,7 +82,10 @@
 		"All": "All",
 		"Users": "Users",
 		"Groups": "Groups",
-		"UserOrGroup": "User or group"
+		"UserOrGroup": "User or group",		
+		"RecentlyActive" : "Recently Active",
+		"LastChanged": "Diagrams last changed by you",
+		"Projects" : "Projects"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

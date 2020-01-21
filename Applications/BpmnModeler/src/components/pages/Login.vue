@@ -84,9 +84,9 @@
 </template>
 
 <script>
-import loginRl from './renderless/Login'
-import qrLogin from './QrLogin.vue'
-import confirmPassword from './ConfirmTempPassword.vue'
+import loginRl from '../login/renderless/Login'
+import qrLogin from '../login/QrLogin.vue'
+import confirmPassword from '../login/ConfirmTempPassword.vue'
 export default {
   name: 'login',
   props: ['allowQrMode'],

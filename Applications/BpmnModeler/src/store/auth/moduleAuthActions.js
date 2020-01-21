@@ -1,6 +1,6 @@
 import auth from '@it-enterprise/jwtauthentication';
-import { routerDependencies } from '@/router';
-const router = routerDependencies.router;
+import router from '@/router';
+// const router = routerDependencies.router;
 
 export default {
   logout({ commit }) {

@@ -5,7 +5,7 @@ import { onError } from 'apollo-link-error';
 import gql from 'graphql-tag';
 
 import auth from '@it-enterprise/jwtauthentication';
-import { routerDependencies } from '@/router';
+import router from '@/router';
 import config from '../config';
 
 // Queries
@@ -299,7 +299,7 @@ function addAuthHeader(options, token) {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens();
-    routerDependencies.router.push('/login');
+    router.push('/login');
   }
   if (graphQLErrors) {
     return graphQLErrors.message;

@@ -12,8 +12,8 @@
         </v-card-text>
         <v-card-actions>
 				<v-spacer></v-spacer>
-				<v-btn flat @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-				<v-btn flat @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
+				<v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+				<v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
         </v-card-actions>
 			</v-card>
 	</div>

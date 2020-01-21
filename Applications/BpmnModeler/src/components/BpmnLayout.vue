@@ -1,19 +1,15 @@
 <template>
   <v-app>
-    <v-toolbar app
-      dense
-      clipped-left
-      clipped-right
-      class="toolbar">
-      <v-toolbar-side-icon 
+    <v-app-bar app fixed dense class="toolbar">
+      <!-- <v-app-bar-nav-icon 
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
-      </v-toolbar-side-icon>
-      <router-link :to="{ name: 'BPMNEMPTY' }" style="text-decoration: none;">
+      </v-app-bar-nav-icon> -->
+      <router-link :to="{ name: 'Main' }" style="text-decoration: none;">
         <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
       </router-link>
       <template v-if="currentUser">
-        <bpmn-contex-menu
+        <!-- <bpmn-contex-menu
           @create="createItem"
           @edit="editItem" 
           @remove="removeItem" 
@@ -24,7 +20,7 @@
               <v-icon>add</v-icon>
             </v-btn>
           </template>
-        </bpmn-contex-menu>
+        </bpmn-contex-menu> -->
         <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
           <v-icon>refresh</v-icon>
         </v-btn>
@@ -33,8 +29,8 @@
       <v-flex shrink class="icon-container" v-if="currentUser">
         <user-panel mini="true"></user-panel>
       </v-flex>
-    </v-toolbar>
-    <v-navigation-drawer v-model="appBar"
+    </v-app-bar>
+    <!-- <v-navigation-drawer v-model="appBar"
       app
       clipped
       width="380">
@@ -50,23 +46,27 @@
             @copy="copyItem"
             offset>
             <template #activator="{ open }">
-              <v-btn flat icon v-on="open">
+              <v-btn text icon v-on="open">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
           </bpmn-contex-menu>
         </template>
       </bpmn-tree>
-    </v-navigation-drawer>
-    <v-content class="white">
-      <v-container fluid pa-0 fill-height>
-        <router-view ref="modeler"/>
+    </v-navigation-drawer> -->
+    <v-content>
+      <v-container fluid pa-0  >
+        <router-view ref="modeler" v-if="!loading" :items.sync="items"/>
       </v-container>
     </v-content>
+    <v-row >
+      <router-link tag="h1" :to="{ name:'Main'}" > <v-btn>Main</v-btn></router-link>
+      <router-link tag="h1" :to="{ name:'Process'}" ><v-btn>Process</v-btn></router-link>
+      <router-link tag="h1" :to="{ name:'Decision'}"  ><v-btn>Decision</v-btn></router-link>
+      <router-link tag="h1" :to="{ name:'Project'}"  ><v-btn>Project</v-btn></router-link>
+    </v-row>
 
-    <v-dialog v-model="dataLoading"
-              full-width
-              persistent>
+    <v-dialog v-model="dataLoading" persistent>
       <v-progress-circular
         :size="70"
         :width="7"
@@ -85,7 +85,7 @@
       {{ message }}
       <v-btn
         dark
-        flat
+        text
         @click="displayMessage = false"
       >
         {{ $t('bpmn.buttons.Close') }}
@@ -263,6 +263,7 @@ export default {
 </script>
 <style lang="scss">
   .toolbar {
+    height: 48px;
     background: #fff;
     box-shadow: inset 0 -1px 0 rgba(100, 121, 143, 0.122);
   }
