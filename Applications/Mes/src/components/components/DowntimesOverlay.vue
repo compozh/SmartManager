@@ -15,7 +15,7 @@
           color="primary"
       ></v-progress-circular>
       <formio-form-component
-        ref="formioBuilder"
+        ref="formioFormComponent"
         @formSubmit=formSubmit
         :formDefinition=createDowntimeFormio
         :formCode=workCenter.downtimeRegistrationFormCode

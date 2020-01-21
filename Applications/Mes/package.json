@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@it-enterprise/common": "^1.0.1",
+    "@it-enterprise/formio": "^1.0.14",
     "@it-enterprise/graphql": "^1.0.7",
-    "@it-enterprise/jwtauthentication": "^1.0.14",
+    "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/localization": "^1.0.10",
     "@it-enterprise/modules-manager": "1.0.0",
-    "@it-enterprise/formio": "^1.0.9",
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",

@@ -59,5 +59,9 @@ export default {
   documentSearchValue: '',
   dynamicPagesCache: [],
   documentKey: 0,
-  cameraAvailability: false
+  cameraAvailability: false,
+  iotSettings: {
+    iotSignalRUrl: '',
+    iotSignalRConnection: null
+  }
 }
