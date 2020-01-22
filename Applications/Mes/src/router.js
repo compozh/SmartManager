@@ -133,8 +133,10 @@ const router = new VueRouter({
 })
 
 function func(to,from, next) {
-  let workCenter = store.getters['mes/workCenter']
-  let result
+  let workCenter = store.getters['mes/workCenter'],
+    result,
+    query = { fixedUuid: router.currentRoute.query.fixedUuid }
+
   if(workCenter) {
     let access =  workCenter.accessPages
     result = 
@@ -142,9 +144,9 @@ function func(to,from, next) {
         access === 'ONLY_INSTALLATION' ? '/installations' :
         access === 'PRODUCTION' ? '/productions' 
         : '/tasks'
-    return next({ path: result, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
-  } else if(!store.state.auth.user){
-    router.go()
+    return next({ path: result, query })
+  } else if(!store.state.auth.user) {
+    next({ path: '/login', query })
   } else {
     return next()
   }
