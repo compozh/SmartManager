@@ -6,9 +6,9 @@
 			v-model="drawer">
       <v-list dense>
         <v-list-tile
-          v-for="(link, index) in _links"
+          v-for="(link, index) in links"
           :key="index"
-          :to="{name: link.Id, params: {links: links}}"
+          :to="{name: link.Id, params: {links: prevLinks}}"
           >
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
@@ -113,32 +113,16 @@
 </template>
 
 <script>
-import LmsUserPanel from './LmsUserPanel.vue'
 import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-layout',
-  components: {
-    LmsUserPanel
-  },
   data() {
     return {
       drawer: false,
-      // user-panel ->
-      fixed: false,
-      isauth: '',
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      // TODO: удалить после отлвдки
-      dialogState: false,
-      // <-- user-panel
-      login: '',
-      password: '',
-      checkbox_remember_me: false,
       error: '',
-      _links: [],
       links: [],
+      prevLinks: [],
       logoLink: null,
       menu: false,
       userMenuItems: [
@@ -151,13 +135,13 @@ export default {
   created() {
     this.getLogoLink()
     this.goHome()
-    this.links.push(getThisLink('Главная', this.$route.path, false))
+    this.prevLinks.push(getThisLink('Главная', this.$route.path, false))
   },
   beforeMount: function () {
     // Маршруты из конструктора
     var app = this.$store.state.WebApps.applicationDescription
     if (!app) {
-      this._links = []
+      this.links = []
     }
     var sections = app.Sections || []
 
@@ -169,7 +153,7 @@ export default {
     }
 
     routs = [...routs, ...routs[1].Children, ...routs[0].Children]
-    this._links = routs.filter(l => l.Name)
+    this.links = routs.filter(l => l.Name)
       .sort((a, b) => a.Sort > b.Sort ? 1 : -1 )
   },
   methods: {

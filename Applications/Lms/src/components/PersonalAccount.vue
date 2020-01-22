@@ -37,7 +37,7 @@ export default {
   name: 'lms-personal-account',
   computed: {
     user() {
-      return this.$store.state.user
+      return this.$store.state.lms.user
     },
     userName() {
       return this.user ? this.user.userName : ''

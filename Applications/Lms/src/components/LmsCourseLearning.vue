@@ -231,7 +231,7 @@ export default {
       for (let i = 0; i < this.modules.length; i++) {
         let curModule = this.modules[i].units
         let les = curModule.find(l => l.lessonGuid === lessonGuid)
-        if (!!les) {
+        if (les) {
           this.getMaterials(les)
           this.lesson = les
           return
