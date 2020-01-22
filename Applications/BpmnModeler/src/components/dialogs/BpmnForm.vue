@@ -5,7 +5,7 @@
       <span class="headline">{{ titles[type][mode] }}</span>
       <v-spacer></v-spacer>
       <v-btn-toggle v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
-        <v-btn :value="true" :disabled="!canChangeIsSystemProperty || loading" flat style="flex-grow: 0">
+        <v-btn :value="true" :disabled="!canChangeIsSystemProperty || loading" text style="flex-grow: 0">
           <v-icon v-if="model.isSystem">lock</v-icon>
           <v-icon v-else>lock_open</v-icon>
         </v-btn>
@@ -29,7 +29,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn :disabled="loading" text @click="cancel()">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-      <v-btn :loading="loading" :disabled="!valid" flat @click="save()" color="primary">{{ actions[mode] }}</v-btn>
+      <v-btn :loading="loading" :disabled="!valid" text @click="save()" color="primary">{{ actions[mode] }}</v-btn>
     </v-card-actions>
   </v-card>
 </v-dialog>

@@ -12,7 +12,8 @@ export default {
     }
   },
   render(createElement, { props }) {
-    const item = props.node.data;
+    // const item = props.node.data;
+    const item = props.node;
     if (item instanceof Folder) {
       if (props.node.expanded) {
         return createElement('v-icon', 'mdi-folder-open');

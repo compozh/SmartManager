@@ -85,7 +85,10 @@
 		"UserOrGroup": "User or group",		
 		"RecentlyActive" : "Recently Active",
 		"LastChanged": "Diagrams last changed by you",
-		"Projects" : "Projects"
+		"Projects" : "Projects",
+		"Count" : "Number of files or folders",
+		"PerPage" : "Elements on page",
+		"Of" : "of"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

@@ -204,11 +204,11 @@ router.beforeEach((to, from, next) => {
     to.path === '/error/404' ||
     to.path === '/error/500' ||
     !!store.state.auth.user
-  ){
+  ) {
     let same = Object.values(to).every((el) => {
       return Object.values(from).find( fromEl =>  fromEl == el) 
     })
-    if( same ) {
+    if ( same ) {
       return 
     } else  {
       return next()

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app fixed  class="toolbar">
+    <v-app-bar app fixed  class="toolbar" elevation="1">
       <!-- <v-app-bar-nav-icon 
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
@@ -21,27 +21,52 @@
             </v-btn>
           </template>
         </bpmn-contex-menu> -->
-        <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
+        <!-- <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
           <v-icon>refresh</v-icon>
-        </v-btn>
+        </v-btn> -->
       </template>
       <v-spacer></v-spacer>
       <v-flex shrink class="icon-container" v-if="currentUser">
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-app-bar>
-
-    <v-content>
+<!-- <v-navigation-drawer v-model="appBar"
+      app
+      clipped
+      width="380">
+      <bpmn-tree ref="treeView" :items="items" :activeItem.sync="activeItem" @drop="dropItem">
+        <template #context-menu="{ item }">
+          <bpmn-contex-menu :item="item"
+            @create="createItem"
+            @edit="editItem" 
+            @remove="removeItem" 
+            @import="importItem"
+            @export="exportItem"
+            @copy="copyItem"
+            offset>
+            <template #activator="{ open }">
+              <v-btn text icon v-on="open">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+          </bpmn-contex-menu>
+        </template>
+      </bpmn-tree>
+    </v-navigation-drawer> -->
+    <v-content class="grey lighten-4">
       <v-container fluid pa-0  >
-        <router-view ref="modeler" v-if="!loading" :items.sync="items"/>
+        <router-view ref="modeler" v-if="!loading" 
+          :items.sync="items"
+          @deployItem="deployItem"
+          @exportItem="exportItem"/>
       </v-container>
     </v-content>
-    <v-row >
+    <!-- <v-row >
       <router-link tag="h1" :to="{ name:'Main'}" > <v-btn>Main</v-btn></router-link>
       <router-link tag="h1" :to="{ name:'Process'}" ><v-btn>Process</v-btn></router-link>
       <router-link tag="h1" :to="{ name:'Decision'}"  ><v-btn>Decision</v-btn></router-link>
       <router-link tag="h1" :to="{ name:'Project'}"  ><v-btn>Project</v-btn></router-link>
-    </v-row>
+    </v-row> -->
 
     <v-dialog v-model="dataLoading" persistent>
       <v-progress-circular
@@ -152,28 +177,29 @@ export default {
     },
     navigateToItem(itemId) {
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
-      let routeName, params;
-      if (index < 0) {
-        routeName = 'BPMNEMPTY';
-        params = { };
-      } else if (item instanceof Folder) {
-        routeName = 'BPMNFOLDER';
-        params = { id: itemId };
-      } else if (item instanceof Diagram) {
-        switch (item.type) {
-        case DiagramType.BPMN:
-          routeName = 'BPMNMODELER';
-          params = { id: itemId };
-          break;
-        case DiagramType.DMN:
-          routeName = 'DMNMODELER';
-          params = { id: itemId };
-          break;
-        }
-      }
-      if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
-        this.$router.push({ name: routeName, params });
-      }
+      console.log({ item, index })
+      // let routeName, params;
+      // if (index < 0) {
+      //   routeName = 'BPMNEMPTY';
+      //   params = { };
+      // } else if (item instanceof Folder) {
+      //   routeName = 'BPMNFOLDER';
+      //   params = { id: itemId };
+      // } else if (item instanceof Diagram) {
+      //   switch (item.type) {
+      //   case DiagramType.BPMN:
+      //     routeName = 'BPMNMODELER';
+      //     params = { id: itemId };
+      //     break;
+      //   case DiagramType.DMN:
+      //     routeName = 'DMNMODELER';
+      //     params = { id: itemId };
+      //     break;
+      //   }
+      // }
+      // if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
+      //   this.$router.push({ name: routeName, params });
+      // }
     },
     onCreateDiagram() {
       this.createItem(this.$store.state.bpmn.activeItem, 'process');
@@ -202,7 +228,7 @@ export default {
       },
       set(value) {
         this.$store.dispatch('bpmn/setActiveItem', value);
-        this.$refs.treeView.setActiveItem(value);
+        // this.$refs.treeView.setActiveItem(value);
         this.navigateToItem(value);
       }
     },
