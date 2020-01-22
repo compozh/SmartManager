@@ -90,9 +90,9 @@ export default {
       var formCode = me.workCenter.downtimeRegistrationFormCode,
         properties = {
           RCENTR: me.workCenter.code,
-          ID: newSelectedDowntime.id
+          ID: newSelectedDowntime.id,
+          instance: newSelectedDowntime
         },
-        
         deviceSizeType = this.$vuetify.breakpoint.name
 
       me.$store.commit('mes/resetDowntimeFormio')

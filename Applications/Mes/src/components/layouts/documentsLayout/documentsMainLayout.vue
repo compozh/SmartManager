@@ -3,13 +3,14 @@
   <v-flex class="toolbar ma-0" v-if="$vuetify.breakpoint.smAndDown">
     <v-btn class="col-12 ma-0 close-btn" @click="changeDynamicTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
-  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDynamicPage" :key="this.documentFormioKey">
+  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDocuments" :key="this.documentFormioKey">
     <formio-form-component
       v-if="selectedDocument"
-      ref="formioBuilder"
+      ref="formioFormComponent"
       @formSubmit=formSubmit
       :formDefinition=documentFormio
       :formCode=pageProps.formCode
+      :instance=selectedDocument
     />
     </v-flex>
   </v-layout>
@@ -20,7 +21,7 @@
 export default {
   name: 'mes-documents-main-layout',
   props: {
-    initializeDynamicPage: Boolean,
+    initializeDocuments: Boolean,
     pageProps:Object
   },
   data() {
@@ -58,7 +59,8 @@ export default {
         pageProps = me.pageProps,
         properties = {
           workCenterCode: me.workCenter.code,
-          id: me.selectedDocument.id
+          id: me.selectedDocument.id,
+          instance: me.selectedDocument
         },
         searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
 
@@ -74,7 +76,7 @@ export default {
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioFormComponent[0].getFormSubmission()
     },
     changeDynamicTableView() {
       this.$emit('changeDynamicTableView', true)

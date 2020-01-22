@@ -15,6 +15,7 @@
 var courseCardsData = [];
 
 import CourseCard from './CourseCard.vue'
+import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: "lms-recommended-courses",
@@ -27,10 +28,12 @@ export default {
     links: []
   }),
   created () {
-    this.links.push({
-      text: 'Главная', // TODO: добавить локализацию
+  /* {
+      text: 'Главная',
       disabled: false,
-      href: this.$route.path})
+      href: base.slice(0, base.lenght -1) + this.$route.path // TODO: добавить локализацию
+     } */
+    this.links.push( getThisLink('Главная', this.$route.path, false))
   },
   methods: {
     changeFavoriteState: function(course){

@@ -22,7 +22,7 @@ import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 import './element-variables.scss';
 
 import { routerDependencies } from './router';
-import config from './config';
+const config = window.config;
 
 auth.config(config.GrapgQlUrl);
 // объект с зависимостями
@@ -51,7 +51,7 @@ Vue.use(TabPane);
 
 // Плагины it-enterprise
 Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
-Vue.use(Router, { options: config, dependencies }, () => auth.getUserData());
+Vue.use(Router, { options: config, dependencies }, () => auth.getToken());
 Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
 Vue.use(Eds, { dependencies });

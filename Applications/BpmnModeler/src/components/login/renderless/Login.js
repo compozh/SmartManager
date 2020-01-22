@@ -22,10 +22,10 @@ export default {
   methods: {
     async login() {
       if (!this.userData.login) {
-        return (this.message = this.$t('authentication.emptyLogin'))
+        return (this.message = this.$t('bpmn.authentication.emptyLogin'))
       }
       if (!this.userData.password) {
-        return (this.message = this.$t('authentication.emptyPassword'))
+        return (this.message = this.$t('bpmn.authentication.emptyPassword'))
       }
       this.loading = true
       try {
@@ -33,10 +33,18 @@ export default {
         this.loading = false
         if (result.success) {
           await this.$router.replace({ path: this.routeToBack })
+        } else {
+          try {
+            const resultMessage = JSON.parse(result.errorMessage.substring(result.errorMessage.indexOf(':') + 1));
+            return (this.message = resultMessage.FAILREASON)
+          } catch (error) {
+            console.error(error);
+            return (this.message = this.$t('bpmn.authentication.error'))
+          }
         }
       } catch (e) {
         this.loading = false
-        return (this.message = e || 'Ошибка авторизации')
+        return (this.message = e || this.$t('bpmn.authentication.error'))
       }
     },
     GetRecoveryPasswordUrl() {
@@ -55,9 +63,8 @@ export default {
       params: {
         loginAttrs: {
           value: this.userData.login,
-          label: 'Логин',
-          placeholder: 'Введите логин...',
-          title: 'Поле для ввода логина',
+          label: this.$t('bpmn.authentication.userName'),
+          title: this.$t('bpmn.authentication.userName'),
           required: true
         },
         loginEvents: {
@@ -73,9 +80,8 @@ export default {
         passwordAttrs: {
           type: 'password',
           value: this.userData.password,
-          label: 'Пароль',
-          placeholder: 'Введите пароль...',
-          title: 'Поле для ввода пароля',
+          label: this.$t('bpmn.authentication.password'),
+          title: this.$t('bpmn.authentication.password'),
           required: true
         },
         passwordEvents: {
@@ -90,8 +96,8 @@ export default {
         },
         rememberAttrs: {
           value: this.userData.remember,
-          label: 'Оставаться в системе',
-          title: ''
+          label: this.$t('bpmn.authentication.rememberMe'),
+          title: this.$t('bpmn.authentication.rememberMe')
         },
         rememberEvents: {
           change: () => (this.userData.remember = !this.userData.remember)

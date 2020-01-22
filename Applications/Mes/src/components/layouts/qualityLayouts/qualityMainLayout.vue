@@ -6,10 +6,11 @@
   <v-flex class="quality-flex" :class="$vuetify.breakpoint.smAndDown? 'small' : ''" v-if="initializeQualities" :key="this.qualityFormioKey">
     <formio-form-component
       v-if="selectedQuality"
-      ref="formioBuilder"
+      ref="formioFormComponent"
       @formSubmit=formSubmit
       :formDefinition=qualityFormio
       :formCode=properties.qualityProcessType
+      :instance=selectedQuality
     />
     </v-flex>
   </v-layout>
@@ -56,7 +57,8 @@ export default {
         direction = 1,
         properties = {
           workCenterCode: me.workCenter.code,
-          id: me.selectedQuality.id
+          id: me.selectedQuality.id,
+          instance: me.selectedQuality
         },
         searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
 
@@ -67,12 +69,12 @@ export default {
           me.$store.commit('mes/setInitializeQualities', false)
           me.$store.dispatch('mes/downloadQualities', { processTypeCode: me.properties.qualityProcessType, searchDateTime, direction })
         }
-        completeSubmissionCallback(result)
+        completeSubmissionCallback(params)
       })
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioFormComponent[0].getFormSubmission()
     },
     changeQualityTableView() {
       this.$emit('changeQualityTableView', true)

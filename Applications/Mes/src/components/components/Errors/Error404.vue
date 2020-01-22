@@ -7,7 +7,7 @@
       <p>{{$t('mes.errors.Search')}}</p>
     </v-row>
     <v-row style="font-size: 20px;" justify="center">
-      <p> {{$t('mes.errors.GoTo')}} <v-btn text color="blue" to="/">{{$t('mes.errors.HomePage')}}</v-btn></p>
+      <p> {{$t('mes.errors.GoTo')}} <v-btn text color="blue" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">{{$t('mes.errors.HomePage')}}</v-btn></p>
     </v-row>
   </div>
 </template>

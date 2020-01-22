@@ -108,6 +108,7 @@ import FormioContainer from './formio/Formio';
 import { Notification } from 'element-ui';
 import { eventBus } from '../main';
 import { events } from '../constants';
+import auth from '@it-enterprise/jwtauthentication';
 
 export default {
   name: 'bpmn-layout',
@@ -203,10 +204,9 @@ export default {
   },
   computed: {
     currentUser() {
-      if (this.$store.state.auth.user) {
-        return this.$store.state.auth.user;
-      }
-      return null;
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.$store.state.auth.user = auth.getUserData();
+      return this.$store.state.auth.user;
     },
     appBar: {
       get() {
@@ -292,34 +292,5 @@ export default {
   .el-notification {
     font-family: "Roboto";
     border-radius: 0px;
-  }
-
-  .component-settings {
-    @import "~bootstrap/scss/bootstrap";
- 
-    position: absolute;
-    z-index: 102;
-    background-color: #fff;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 10px;
-    padding: 5px;
-    font-family: Roboto;
-  }
-  .formcomponent {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    border-radius: 0.2rem;
-    color: #fff;
-    background-color: #1976d2;
-    border-color: #1976d2;
-    text-align: left !important;
-    vertical-align: middle;
-    font-family: Roboto;
   }
 </style>

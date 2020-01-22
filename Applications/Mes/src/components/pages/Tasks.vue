@@ -238,8 +238,9 @@ export default {
     initializeFormio(task) {
       let workCenter = this.workCenter,
         properties = {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode
+          WORKCENTERCODE: workCenter.code,
+          WORKBARCODE: task.barcode,
+          instance: task
         },
         deviceSizeType = this.$vuetify.breakpoint.name
       this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })

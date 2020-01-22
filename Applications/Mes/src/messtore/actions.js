@@ -205,7 +205,7 @@ export default {
     })
   },
 
-  async registerProduction({ commit, getters }, { workCenter, task, deviceSizeType }) {
+  async registerProduction({ commit, dispatch }, { workCenter, task, deviceSizeType }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -213,7 +213,7 @@ export default {
         mode: 'Start',
         success: true
       }
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.registerProductionGql(productionRegistrationParam)
         return res
@@ -223,10 +223,11 @@ export default {
         commit('resetProductionFormio')
         task.inProgress = true
         let properties = {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode
+          WORKCENTERCODE: workCenter.code,
+          WORKBARCODE: task.barcode,
+          instance: task
         }
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
       linearLoader: true
     })
@@ -296,8 +297,8 @@ export default {
     })
   },
 
-  async setMaterialProduction({ commit, getters }, production) {
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+  async setMaterialProduction({ commit, getters, dispatch }, production) {
+    await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
         const res = await api.setMaterialProductionGql(production.factId, true, getters.workCenter.code)
         return res
@@ -306,11 +307,14 @@ export default {
     })
   },
 
-  async createProductionFormio({ commit }, { formCode, properties, deviceSizeType }) {
-    deviceSizeType = deviceSizeType || 'lg'
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+  async createProductionFormio({ commit, dispatch }, { formCode, properties, deviceSizeType }) {
+    var params = { 
+      params: JSON.stringify(properties || '', null, 4),
+      deviceSizeType: deviceSizeType || 'lg'
+    }
+    await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-        const res = await api.getProductionFormioFromGql(formCode, properties, deviceSizeType)
+        const res = await api.getProductionFormioFromGql(formCode, params)
         return res
       },
       successAction: async result => { commit('setProductionFormio', result) },
@@ -326,22 +330,31 @@ export default {
     commit('setMenuDrawerMode', !getters.menuDrawerMode)
   },
 
-  async productionFormIoSubmit({ commit }, { workCenter, submission, task, message, deviceSizeType }) {
-    var me = this
+  async productionFormIoSubmit({ commit, dispatch }, { workCenter, submission, task, message, deviceSizeType }) {
     commit('setDialogLinearLoaderMessage', message)
-    var submitResult = await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var submitResult = await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
-
-        const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, submission, {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode,
-          mode: 'FINISH'
-        })
+        var params = {
+            submission,
+            params: JSON.stringify({
+              WORKCENTERCODE: workCenter.code,
+              WORKBARCODE: task.barcode,
+              MODE: 2,
+              instance: task
+            }),
+            deviceSizeType: deviceSizeType || 'lg'
+        }
+        const res = await api.productionFormioSubmitGql(workCenter.productionRegistrationFormCode, params)
         return res
       },
       successAction: async () => {
-        me.dispatch('mes/initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
-        me.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties: { workCenterCode: workCenter.code, workBarcode: task.barcode }, deviceSizeType})
+        dispatch('initializeTasks', { workCenterCode: workCenter.code, fetchPolicy: 'network-only' })
+        var properties = {
+          WORKCENTERCODE: workCenter.code,
+          WORKBARCODE: task.barcode,
+          instance: task
+        }
+        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType})
       }
     })
     commit('closeDialogLinearLoader')
@@ -358,9 +371,9 @@ export default {
     if (linearLoader) {
       commit('setLinearLoader', true)
     }
-
+    var result
     try {
-      let result = await queryAction()
+      result = await queryAction()
       if (result.success == true) {
         if (successAction) {
           await successAction(result)
@@ -385,6 +398,8 @@ export default {
     if (linearLoader) {
       commit('setLinearLoader', false)
     }
+
+    return result
   },
   async graphqlQueryWraper({ commit, dispatch }, { action, linearLoader }) {
     commit('closeSnackbar')
@@ -423,15 +438,15 @@ export default {
     }
   },
 
-  async unfixWorkCenterForWorker({ commit }, fixationId) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async unfixWorkCenterForWorker({ dispatch }, fixationId) {
+    await dispatch('graphqlQueryWraper', {
       action: async () => {
         await api.unfixWorkCenterForWorkerGql(fixationId)
       }
     })
   },
 
-  async getFixationWorkCenterForWorker ({ dispatch, commit }, { workerCode, fetchPolicy } ) {
+  async getFixationWorkCenterForWorker ({ dispatch }, { workerCode, fetchPolicy } ) {
     return await dispatch('graphqlQueryWraper', {
       action: async () => {
         return await api.getWorkCentersFixedFromGql(workerCode, fetchPolicy)
@@ -444,6 +459,19 @@ export default {
       return commit('setCameraAvailability', true)
     }).catch(function() {
       return commit('setCameraAvailability', false)
+    })
+  },
+
+  async initializeIotSignalRUrl ({ dispatch, commit, getters }, { thingId }) {
+    return await dispatch('graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getIotSignalRUrlFromGql(thingId)
+      },
+      successAction: result => {
+        if (result.success) {
+          getters['iotSettings'].iotSignalRUrl =  result.url
+        }
+      },
     })
   }
 }

@@ -19,7 +19,7 @@
         <mes-documents-main-layout
           v-if="this.pageProps.showListOnRightSide && !vuetify.breakpoint.smAndDown"
           id="dynamicPageDescription"
-          :initializeDynamicPage=initializeDynamicPage
+          :initializeDocuments=initializeDocuments
           :pageProps=pageProps
         />
         <mes-documents-component
@@ -29,7 +29,7 @@
           @uploadDocumentsOnScroll=uploadDocumentsOnScroll
           @initialize=initialize
           :isUploadInProcess=isUploadInProcess
-          :initializeDynamicPage=initializeDynamicPage
+          :initializeDocuments=initializeDocuments
           :pageProps=pageProps
           :currentDate=currentDate
           v-if="$vuetify.breakpoint.smAndDown? dynamicTableView : true"
@@ -40,7 +40,7 @@
           @changeDynamicTableView=changeDynamicTableView
           v-if="$vuetify.breakpoint.smAndDown? !dynamicTableView : !this.pageProps.showListOnRightSide "
           id="dynamicPageDescription"
-          :initializeDynamicPage=initializeDynamicPage
+          :initializeDocuments=initializeDocuments
           :pageProps=pageProps
         />
       </vue-split>
@@ -55,7 +55,6 @@ export default {
   data() {
     return {
       pageProps: {},
-      initializeDynamicPage: false,
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       isUploadInProcess: false,
       dynamicTableView: true
@@ -84,6 +83,9 @@ export default {
     documentKey(){
       return this.$store.getters['mes/documentKey']
     },
+    initializeDocuments() {
+      return this.$store.getters['mes/initializeDocuments']
+    },
     selectedDocument: {
       get() {
         return this.$store.getters['mes/selectedDocument']
@@ -107,7 +109,7 @@ export default {
   methods: {
     async initialize() {
       if (this.documents.length) {
-        this.initializeDynamicPage = false
+        this.$store.commit('mes/setInitializeDocuments', false)
         this.$store.commit('mes/setDocuments', [])
       }
       for (var j = 0; j < this.mobilityProperties.processesProperties.length; j++) {
@@ -118,7 +120,6 @@ export default {
          }
       }
       await this.$store.dispatch('mes/downloadDocuments', { processTypeCode: this.pageProps.id, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
-      this.initializeDynamicPage = true
       this.selectFirstDocument()
     },
     changeCurrentDocument(newSelectedDocument) {
@@ -130,7 +131,11 @@ export default {
       me.$store.commit('mes/resetDocumentFormio')
 
       var formCode = me.pageProps.id,
-        properties = { RCENTR: me.workCenter.code, ID: newSelectedDocument.id },
+        properties = {
+          RCENTR: me.workCenter.code,
+          ID: newSelectedDocument.id,
+          instance: newSelectedDocument
+        },
         fetchPolicy = 'network-only',
         deviceSizeType = this.$vuetify.breakpoint.name
 

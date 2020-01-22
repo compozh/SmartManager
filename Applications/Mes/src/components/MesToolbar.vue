@@ -18,7 +18,7 @@
       </v-btn>
       <!-- Состояние РЦ -->
       <v-tooltip :disabled="!workCenterFixationData.description" bottom 
-        v-if="!searchWorkCenter && workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
+        v-if="!searchWorkCenter && (workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY') && $route.name !='MESLOGIN'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
           <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
         </template>
@@ -56,7 +56,7 @@
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.width > 1040">
+      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.width > 1200">
         <span class="user-info-text">
           {{userData.userName || userData.login }}
         </span>
@@ -64,9 +64,6 @@
       <!-- Панель Юзера -->
       <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter && $route.name !='MESLOGIN'">
         <user-panel hideDelegatedRightsButton="true" mini="true" >
-          <v-btn v-if="$vuetify.breakpoint.smAndDown" icon>
-            <v-icon>account_circle</v-icon>
-          </v-btn>
         </user-panel>
       </v-flex>
 
@@ -78,6 +75,8 @@
 
 import Init from './components/Init'
 import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
+import { events } from '../constants'
+import { eventBus } from '../main'
 
 export default {
   name: 'mes-toolbar',
@@ -121,6 +120,7 @@ export default {
       if (!newWorkCenter) {
         return
       }
+      var unFixedWorkCenter = this.workCenter
       this.$store.commit('mes/setInitialWorkCenter', false)
       this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
       const prevWorkCenterFixation =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
@@ -132,6 +132,8 @@ export default {
       this.$store.commit('mes/setWorkCenter', newWorkCenter)
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
+
+      eventBus.$emit(events.workCenterChanged, unFixedWorkCenter)
     },
     refreshApp() {
       this.$router.go()

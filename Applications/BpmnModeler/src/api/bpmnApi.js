@@ -6,7 +6,6 @@ import gql from 'graphql-tag';
 
 import auth from '@it-enterprise/jwtauthentication';
 import { routerDependencies } from '@/router';
-import config from '../config';
 
 // Queries
 import * as queries from './graphql/queries';
@@ -309,7 +308,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: errorLink.concat(new HttpLink({
-    uri: config.GrapgQlUrl + 'api/graphql',
+    uri: window.config.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
       'schema': 'bpmnmodeler'

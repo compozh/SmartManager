@@ -39,13 +39,14 @@
                     ></v-checkbox>
                   </v-flex>
                   <v-flex class="text-xs-right">
-                    <a v-on="params.buttonEventRecoverPasswordUrl">Забыли пароль?</a>
+                    <!-- <a v-on="params.buttonEventRecoverPasswordUrl">Забыли пароль?</a> -->
                     <v-btn
                       :loading="loading"
                       class="primary text-xs-right"
                       v-bind="params.buttonAttrs"
                       v-on="params.buttonEvents"
-                    >Войти
+                    >
+                    {{ $t('bpmn.authentication.login') }}
                     </v-btn>
                   </v-flex>
                 </v-layout>
