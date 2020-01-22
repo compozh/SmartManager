@@ -144,7 +144,7 @@ function func(to,from, next) {
         : '/tasks'
     return next({ path: result, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
   } else if(!store.state.auth.user){
-    router.go()
+    router.push('/login')
   } else {
     return next()
   }
