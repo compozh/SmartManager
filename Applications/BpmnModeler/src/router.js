@@ -16,6 +16,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import config from './config'
+import store from './store/index'
 
 Vue.use(VueRouter)
 
@@ -47,7 +48,7 @@ export const router = new VueRouter({
         },
         {
           name: 'Project',
-          path: '/project',
+          path: '/project/:id?',
           // id: 'TASKS',
           component: () => import('@/components/pages/Project.vue'),
           meta: {
@@ -55,13 +56,16 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
+          props: {
+            item: Object
+          },
           // text: "mes.menu.tasks",
           // sort: "1",
           // image: "assignment",
         }, 
         {
           name: 'Decision',
-          path: '/decision',
+          path: '/decision/:id?',
           // id: 'TASKS',
           component: () => import('@/components/pages/Decision.vue'),
           meta: {
@@ -75,7 +79,7 @@ export const router = new VueRouter({
         },
         {
           name: 'Process',
-          path: '/process',
+          path: '/process/:id?',
           // id: 'TASKS',
           component: () => import('@/components/pages/Process.vue'),
           meta: {
@@ -193,16 +197,25 @@ export const router = new VueRouter({
 //   }
 // }
 
-// router.beforeEach((to, from, next) => {
-//   let same = Object.values(to).every((el) => {
-//     return Object.values(from).find( fromEl =>  fromEl == el) 
-//   })
-//   if( same ) {
-//     return 
-//   } else  {
-//     return next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+
+  if (
+    to.path === '/login' ||
+    to.path === '/error/404' ||
+    to.path === '/error/500' ||
+    !!store.state.auth.user
+  ){
+    let same = Object.values(to).every((el) => {
+      return Object.values(from).find( fromEl =>  fromEl == el) 
+    })
+    if( same ) {
+      return 
+    } else  {
+      return next()
+    }
+  }
+  router.push({ name: 'Login', query: { to: to.path } })
+})
 
 // used routes
 

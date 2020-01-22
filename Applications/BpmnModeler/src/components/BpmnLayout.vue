@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app fixed dense class="toolbar">
+    <v-app-bar app fixed  class="toolbar">
       <!-- <v-app-bar-nav-icon 
         class="blue--text text--darken-2"
         @click.stop="showAppBar = !showAppBar">
@@ -30,30 +30,7 @@
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-app-bar>
-    <!-- <v-navigation-drawer v-model="appBar"
-      app
-      clipped
-      width="380">
-      <bpmn-tree ref="treeView" :items="items" :activeItem.sync="activeItem" @drop="dropItem">
-        <template #context-menu="{ item }">
-          <bpmn-contex-menu :item="item"
-            @create="createItem"
-            @edit="editItem" 
-            @remove="removeItem" 
-            @import="importItem"
-            @export="exportItem"
-            @deploy="deployItem"
-            @copy="copyItem"
-            offset>
-            <template #activator="{ open }">
-              <v-btn text icon v-on="open">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-          </bpmn-contex-menu>
-        </template>
-      </bpmn-tree>
-    </v-navigation-drawer> -->
+
     <v-content>
       <v-container fluid pa-0  >
         <router-view ref="modeler" v-if="!loading" :items.sync="items"/>

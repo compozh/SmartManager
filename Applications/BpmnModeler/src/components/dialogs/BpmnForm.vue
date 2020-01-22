@@ -28,7 +28,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn :disabled="loading" flat @click="cancel()">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+      <v-btn :disabled="loading" text @click="cancel()">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
       <v-btn :loading="loading" :disabled="!valid" flat @click="save()" color="primary">{{ actions[mode] }}</v-btn>
     </v-card-actions>
   </v-card>

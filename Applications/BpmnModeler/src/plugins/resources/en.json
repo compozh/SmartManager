@@ -107,7 +107,17 @@
 		"InputCodeForm": "Input code form",
 		"RequiredInputField": "Field is required",
 		"AccessError": "Failed to give access for {identity}",
-		"ElementsNotLoaded": "Failed to load element"
+		"ElementsNotLoaded": "Failed to load element",
+		"NoConnection" : "Unable to verify your Internet connection",
+    "Er404" : "Sory, we don't have such page",
+    "Search" : "You can search something else",
+		"GoTo" : "Or go to",
+		"HomePage" : "home page",
+    "Er500" : "Sorry, the server got sick :(",
+    "Wait" : "Keep calm and wait for a while",
+    "TryAgain" : "You can try again",
+    "Er403" : "Sorry, but you do not have access",
+    "Er402" : "Sorry, this content was not purchased"
 	},
 	"enums": {
 		"AccessType": {

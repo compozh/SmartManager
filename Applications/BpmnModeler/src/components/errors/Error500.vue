@@ -1,17 +1,17 @@
 <template>
   <div>
     <v-row style="font-size: 40px;" justify="center" class="pt-10 pb-0">
-      {{$t('mes.errors.Er500')}}
+      {{$t('bpmn.errors.Er500')}}
     </v-row>
     <v-row style="font-size: 20px;" justify="center" class="pt-0 pb-5">
-      {{$t('mes.errors.Wait')}}
+      {{$t('bpmn.errors.Wait')}}
     </v-row>
     <v-col style="font-size: 20px;" class="pt-10">
       <v-row  justify="center" >
-        <p>{{$t('mes.errors.TryAgain')}}</p>
+        <p>{{$t('bpmn.errors.TryAgain')}}</p>
       </v-row>
       <v-row  justify="center">
-        <p> {{$t('mes.errors.GoTo')}} <v-btn text color="blue" :to="{ path: '/', query : {fixedUuid: $route.query.fixedUuid}}">{{$t('mes.errors.HomePage')}}</v-btn></p>
+        <p> {{$t('bpmn.errors.GoTo')}} <v-btn text color="blue" :to="{ path: '/', query : {fixedUuid: $route.query.fixedUuid}}">{{$t('bpmn.errors.HomePage')}}</v-btn></p>
       </v-row>
     </v-col>
   </div>
