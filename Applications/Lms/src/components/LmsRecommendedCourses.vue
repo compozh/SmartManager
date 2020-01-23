@@ -12,42 +12,29 @@
 </template>
 
 <script>
-var courseCardsData = [];
-
 import CourseCard from './CourseCard.vue'
 import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
-  name: "lms-recommended-courses",
+  name: 'lms-recommended-courses',
   components: {
     CourseCard
   },
   props: ['recommendedCourses'],
   data: () => ({
-    favIconColor: "grey",
+    favIconColor: 'grey',
     links: []
   }),
   created () {
-  /* {
-      text: 'Главная',
-      disabled: false,
-      href: base.slice(0, base.lenght -1) + this.$route.path // TODO: добавить локализацию
-     } */
     this.links.push( getThisLink('Главная', this.$route.path, false))
   },
   methods: {
-    changeFavoriteState: function(course){
-      course.isFavorite = !course.isFavorite;
+    changeFavoriteState: function(course) {
+      course.isFavorite = !course.isFavorite
 
     },
-    roleSearch: function(data) {
-      //this.$router.push({ name: "courses", params: { role: data.code } });
-    },
-    levelSearch: function(data) {
-      //this.$router.push({ name: "courses", params: { level: data.code } });
-    }
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

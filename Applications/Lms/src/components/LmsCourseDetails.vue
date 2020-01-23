@@ -12,7 +12,7 @@
 							<v-img v-bind:src='courseData.imageLink' height='90px' contain/>
 						</v-flex>
 						<v-flex lg6 md10 sm10 xs12>
-							<v-card-title :class='courseData.courseNameInfoClass'>{{courseName}}</v-card-title>
+							<v-card-title :class='courseData.courseNameInfoClass'>{{courseData.name}}</v-card-title>
 							<v-card-text :class='courseData.courseDescriptionInfoClass'>{{courseData.description}}</v-card-text>
 							<v-layout row wrap>
 								<v-flex md3 xs6>
@@ -68,7 +68,7 @@
 
     <!-- Сводка. Количественные характеристики -->
     <v-layout align-center justify-center mx-2 mb-4>
-      <v-falex lg6 mb8 sm10 sx12>
+      <v-flex lg6 mb8 sm10 sx12>
         <v-card v-if="courseData">
           <v-card-title>
             <h3>Этот курс включает</h3>
@@ -89,7 +89,7 @@
             </v-list>
           </v-card-text>
         </v-card>
-      </v-falex>
+      </v-flex>
     </v-layout>
 
 		<!--MODULES CONT-->
@@ -174,16 +174,19 @@ export default {
   data() {
     return {
       courseGuid: '',
-      courseName: '',
       courseData: null,
       panel: [true],
     }
   },
   created() {
     this.courseGuid = this.$route.params.courseGuid
-    this.courseName = this.$route.params.courseName
-    this.courseData = this.$route.params.courseData
-    this.getCourseDetails(this.courseGuid)
+    if (this.$route.params.courseData) {
+      this.courseData = this.$route.params.courseData
+      this.getCourseDetails(this.courseGuid)
+    } else {
+      let courseDetails = this.$store.getters['lms/courseDetails']
+      this.courseData = courseDetails.course
+    }
     const course = this.courseData
     if (course.backgroundColor != undefined) {
       if (course.backgroundColor.toUpperCase() === '#FFFFFF') {
@@ -224,8 +227,7 @@ export default {
         const module1st = courseDetails.modules ? courseDetails.modules[0] : null
         if (module1st) {
           return module1st.units ? module1st.units[0].lessonGuid : ''
-        }
-        else {
+        } else {
           return ''
         }
       } else {
@@ -283,7 +285,7 @@ export default {
       let modulesLessons = courseDetails.modules.map(m => m.units.length)
       let lessonsQty = modulesLessons.reduce((total, current) => total + current)
       return [
-         {
+        {
           title: '',
           label: this.courseData.modulesQtLabel,
           icon: 'view_module'

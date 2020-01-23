@@ -12,14 +12,14 @@
               <v-list-tile-avatar>
                 <v-img
                   class="elevation-6"
-                  :src="userData.CurrentUserData.UserPhoto"></v-img>
+                  :src="userPhoto"></v-img>
               </v-list-tile-avatar>
             </v-list-tile>
             <v-card-title>
-              <div>{{userData.CurrentUserData.UserName}}</div>
+              <div>{{userName}}</div>
             </v-card-title>
             <v-card-title>
-              <div>{{userData.LoginData.UserLogin}}</div>
+              <div>{{userLogin}}</div>
             </v-card-title>
           </v-card>
         </v-flex>
@@ -35,15 +35,18 @@
 <script>
 export default {
   name: 'lms-personal-account',
-  data() {
-
-  },
-  created() {
-
-  },
   computed: {
-    userData() {
-      return this.$store.state.authentication.currentUser.UserData
+    user() {
+      return this.$store.state.lms.user
+    },
+    userName() {
+      return this.user ? this.user.userName : ''
+    },
+    userLogin() {
+      return this.user ? this.user.login : ''
+    },
+    userPhoto() {
+      return this.user ? this.user.userPhoto : ''
     }
   }
 }
