@@ -1,4 +1,5 @@
 const path = require('path')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 module.exports = {
   chainWebpack: config => {
     const svgRule = config.module.rule('svg')
@@ -25,6 +26,13 @@ module.exports = {
     }
   },
   configureWebpack: {
-    devtool: 'eval-source-map'
-  }
+    plugins: [
+      new CompressionWebpackPlugin({
+        filename: '[path].gz[query]',
+        algorithm: 'gzip',
+        test: /\.(js|css)$/
+      })
+    ]
+  },
+  productionSourceMap: false
 }
