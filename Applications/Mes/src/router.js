@@ -15,11 +15,12 @@ const router = new VueRouter({
         {
           name: 'MESLOGIN',
           path: '/login',
-          caseSensitive: false,
+          caseSensitive: false,          
           meta: {
             rule: 'isPublic',
           },
           component: () => import('@/components/layouts/login/Login.vue'),
+          props: { allowQrMode: true }
         },
         {
           path: '/',
@@ -146,7 +147,7 @@ function func(to,from, next) {
         : '/tasks'
     return next({ path: result, query })
   } else if(!store.state.auth.user) {
-    next({ path: '/login', query })
+    return next({ path: '/login', query })
   } else {
     return next()
   }

@@ -96,6 +96,7 @@ export default {
     display: flex;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     padding: 30px;
     /* background-color: #326da80d; */
