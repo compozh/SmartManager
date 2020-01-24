@@ -2,19 +2,17 @@
     <v-container fluid>
     <v-layout>
       <v-flex>
-        <v-card flat px-2>
+        <v-card flat px-2 v-if="lesson">
           <v-card-title >
             <h3>Материалы к уроку <span class="indigo--text">{{lesson.name}}</span></h3>
           </v-card-title>
           <v-list>
-            <v-list-group
-              v-for="item in lesson.materials"
-              :key="item.id"
-              v-if="item.enclosures"
-              v-model="item.active"
-              :prepend-icon="item.icon"
-              no-action
-            >
+            <v-list-group v-for="item in lesson.materials"
+                          :key="item.id"
+                          v-model="item.active"
+                          :prepend-icon="item.icon"
+                          v-if="item.enclosures"
+                          no-action>
               <template v-slot:activator>
                 <v-list-tile>
                   <v-list-tile-content>

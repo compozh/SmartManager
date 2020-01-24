@@ -85,12 +85,12 @@ export class LmsApi {
     }
   }
 
-  static async getLessonContentFromGql(lessonid) {
+  static async getLessonContentFromGql(lessonid, isfree) {
     try {
       const client = await getClient()
       return await client.query({
-        query: gql`query ($lessonid: ID) ${lessonContent}`,
-        variables: {lessonid}
+        query: gql`query ($lessonid: ID, $isfree: Boolean) ${lessonContent}`,
+        variables: {lessonid, isfree}
       })
     } catch (e) {
       console.log(e.message)

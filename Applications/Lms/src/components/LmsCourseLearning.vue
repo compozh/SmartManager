@@ -64,8 +64,8 @@
                         v-for="tabItem in tabItems"
                         :key="tabItem.title">
                         <v-card flat>
-                          <lesson-view v-if='tabItem.id==="l"' :lesson='lesson'></lesson-view>
-                          <lesson-materials v-if='tabItem.id==="m" && lesson' :lesson="lesson"></lesson-materials>
+                          <lesson-view v-if='tabItem.id==="l"' :lesson='currentLesson'></lesson-view>
+                          <lesson-materials v-if='tabItem.id==="m" && lesson' :lesson="currentLesson"></lesson-materials>
                           <questions-and-answers v-if='tabItem.id==="q"'></questions-and-answers>
                         </v-card>
                       </v-tab-item>
@@ -83,7 +83,7 @@
                       </v-btn>
                       <v-btn flat>
                         Следующий урок
-                        <v-icon right dark>keyboard_arrow_right</v-icon>
+                        <v-icon right dark @click='prevLesson()'>keyboard_arrow_right</v-icon>
                       </v-btn>
                     </v-toolbar>
                   </v-flex>
@@ -162,7 +162,7 @@ export default {
         { id: 'q', title: 'Вопросы и ответы', nestedView: QuestionsAndAnswers}
       ],
       progress: {
-        passed: 10,
+        passed: 0,
         total: 29
       },
       course: {},
@@ -220,37 +220,40 @@ export default {
   created() {
     this.course = this.$route.params.course
     this.modules = this.$route.params.modules
-    this.currentLessonGuid = this.$route.params.currentLessonGuid
-    this.getLesson(this.currentLessonGuid)
-    this.lessonGuidsList = this.getLessonGuidList()
+    this.currentLessonGuid = this.$route.params.lessonGuid
+    this.putPassedFieldToLessons(this.modules)
+    this.progress = this.getInitialProgress(this.modules)
+    // признак свободного доступа к уроку
+    // isLessonFree(this.currentLessonGuid)
+    const isFree = true
+    this.getLesson(this.currentLessonGuid, isFree)
     // STUB признак прохождения урока пока добавлять программно
-    this.putPassedFieldToLessons()
   },
   methods: {
-    getLesson(lessonGuid) {
-      for (let i = 0; i < this.modules.length; i++) {
-        let curModule = this.modules[i].units
-        let les = curModule.find(l => l.lessonGuid === lessonGuid)
-        if (les) {
-          this.getMaterials(les)
-          this.lesson = les
-          return
-        }
+    async getLesson(lessonGuid, isFree) {
+      // Получить урок
+      await this.$store.dispatch('lms/getLessonContent', { lessonGuid, isFree })
+    },
+    getInitialProgress(modules) {
+      const modulesLessons = modules.map(m => m.units.length)
+      let lessonsTotal = modulesLessons.reduce((total, current) => total + current)
+      let lessonPassed = 0
+      for (const m of modules) {
+        let passedLessonInModule = m.units.filter(l => l.passed)
+        lessonPassed += passedLessonInModule.length
       }
-      this.lesson = null
+      return {total: lessonsTotal, passed: lessonPassed}
     },
-    getLessonGuidList() {
-
-    },
-    putPassedFieldToLessons() {
-      for (const _module of this.modules) {
+    // Заглушка для получения статуса урока пройден/непройден
+    putPassedFieldToLessons(modules) {
+      for (const _module of modules) {
         _module.units.forEach((u) => {
           u.passed = false
-          u.disabled = true
+          u.disabled = false
         })
       }
-      this.modules[0].units[0].passed = true
-      this.modules[0].units[0].disabled = false
+      modules[0].units[0].passed = true
+      modules[0].units[0].disabled = false
     },
     getMaterials(lesson) {
       lesson.type = 'video',
@@ -262,6 +265,7 @@ export default {
         }
       }
       lesson.materials = this.materials
+      return lesson
     }
   },
   computed: {
@@ -270,7 +274,10 @@ export default {
         ? Math.round(this.progress.passed / this.progress.total * 100) : 0
       return value + '%'
     },
-
+    currentLesson() {
+      const currentLesson = this.$store.getters['lms/lessonContent']
+      return currentLesson ? this.getMaterials(currentLesson) : null
+    }
   }
 }
 </script>
