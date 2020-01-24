@@ -1,3 +1,6 @@
+import { events } from '../../../../constants'
+import { eventBus } from '../../../../main'
+
 export default {
   name: 'QrLoginRl',
 
@@ -63,6 +66,7 @@ export default {
           if(result) {
             if(result.success) {
               this.$router.replace({ path: this.routeToBack })
+              eventBus.$emit(events.initialize)
             } else {
               this.error = result.errorMessage
             }

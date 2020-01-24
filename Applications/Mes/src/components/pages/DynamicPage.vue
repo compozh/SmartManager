@@ -129,29 +129,25 @@ export default {
         }
       )
       this.selectFirstDocument()
-    },
-    changeCurrentDocument(newSelectedDocument) {
-      var me = this
-      if (me.selectedDocument == newSelectedDocument) {
-        return
-      }
-      me.selectedDocument = newSelectedDocument
-      me.$store.commit('mes/resetDocumentFormio')
 
-      var formCode = me.pageProps.id,
+      var formCode = this.pageProps.id,
         properties = {
-          RCENTR: me.workCenter.code,
-          ID: newSelectedDocument.id,
-          instance: newSelectedDocument
+          RCENTR: this.workCenter.code
         },
         fetchPolicy = 'network-only',
         deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
+      this.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
         if(result.success) {
-          me.$store.commit('mes/setDocumentFormio', result)
+          this.$store.commit('mes/setDocumentFormio', result)
         }
       })
+    },
+    changeCurrentDocument(newSelectedDocument) {
+      if (this.selectedDocument == newSelectedDocument) {
+        return
+      }
+      this.selectedDocument = newSelectedDocument
     },
     selectFirstDocument() {
       if (this.documents.length) {

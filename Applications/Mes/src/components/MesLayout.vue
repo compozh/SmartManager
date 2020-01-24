@@ -90,6 +90,7 @@ export default {
           if(result) {
             if(result.success) {
               this.$router.replace({path: '/tasks', query: {fixedUuid: this.$router.currentRoute.query.fixedUuid}})
+              eventBus.$emit(events.initialize)
             } else {
               this.$store.commit('mes/setSnackbarErrorMessage', result.errorMessage)
             }
