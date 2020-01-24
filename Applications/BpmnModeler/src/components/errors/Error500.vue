@@ -11,7 +11,7 @@
         <p>{{$t('bpmn.errors.TryAgain')}}</p>
       </v-row>
       <v-row  justify="center">
-        <p> {{$t('bpmn.errors.GoTo')}} <v-btn text color="blue" :to="{ path: '/', query : {fixedUuid: $route.query.fixedUuid}}">{{$t('bpmn.errors.HomePage')}}</v-btn></p>
+        <p> {{$t('bpmn.errors.GoTo')}} <v-btn text color="blue" :to="{ path: '/'}">{{$t('bpmn.errors.HomePage')}}</v-btn></p>
       </v-row>
     </v-col>
   </div>

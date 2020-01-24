@@ -2,7 +2,7 @@
 <v-dialog v-if="show" :persistent="loading" v-model="show" max-width="500">
   <v-card>
     <v-card-title>
-      <span class="headline">{{ titles[type][mode] }}</span>
+      <span class="headline">{{ $t(titles[type][mode]) }}</span>
       <v-spacer></v-spacer>
       <v-btn-toggle v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
         <v-btn :value="true" :disabled="!canChangeIsSystemProperty || loading" text style="flex-grow: 0">
@@ -29,7 +29,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn :disabled="loading" text @click="cancel()">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-      <v-btn :loading="loading" :disabled="!valid" text @click="save()" color="primary">{{ actions[mode] }}</v-btn>
+      <v-btn :loading="loading" :disabled="!valid" text @click="save()" color="primary">{{ $t(actions[mode]) }}</v-btn>
     </v-card-actions>
   </v-card>
 </v-dialog>
@@ -51,23 +51,23 @@ export default {
       valid: true,
       titles: {
         'process': {
-          'create': this.$t('bpmn.labels.CreateProcess'),
-          'edit': this.$t('bpmn.labels.EditProcess'),
-          'delete': this.$t('bpmn.labels.DeleteProcess'),
-          'copy': this.$t('bpmn.labels.CopyProcess'),
+          'create': 'bpmn.labels.CreateProcess',
+          'edit': 'bpmn.labels.EditProcess',
+          'delete': 'bpmn.labels.DeleteProcess',
+          'copy': 'bpmn.labels.CopyProcess',
         },
         'folder': {
-          'create': this.$t('bpmn.labels.CreateFolder'),
-          'edit': this.$t('bpmn.labels.EditFolder'),
-          'delete': this.$t('bpmn.labels.DeleteFolder'),
-          'copy': this.$t('bpmn.labels.CopyFolder'),
+          'create': 'bpmn.labels.CreateFolder',
+          'edit': 'bpmn.labels.EditFolder',
+          'delete': 'bpmn.labels.DeleteFolder',
+          'copy': 'bpmn.labels.CopyFolder',
         }        
       },
       actions: {
-        'create': this.$t('bpmn.buttons.Create'),
-        'edit': this.$t('bpmn.buttons.Save'),
-        'delete': this.$t('bpmn.buttons.Delete'),
-        'copy': this.$t('bpmn.buttons.Copy'),
+        'create': 'bpmn.buttons.Create',
+        'edit': 'bpmn.buttons.Save',
+        'delete': 'bpmn.buttons.Delete',
+        'copy': 'bpmn.buttons.Copy',
       },
       rules: {
         required: value => !!value || this.$t('bpmn.labels.RequiredField')

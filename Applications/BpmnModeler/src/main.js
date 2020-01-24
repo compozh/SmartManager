@@ -101,7 +101,7 @@ export const eventBus = new Vue({
 
 
 // импорт компонентов
-const req = require.context('@/components/', true, /\.(vue)$/i);
+const req = require.context('@/components/', true, /\.(js|vue)$/i);
 req.keys().map(key => {
   if (!(req(key).default || {}).name) {
     return;

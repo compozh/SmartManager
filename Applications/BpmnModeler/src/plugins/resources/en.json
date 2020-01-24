@@ -88,7 +88,12 @@
 		"Projects" : "Projects",
 		"Count" : "Number of files or folders",
 		"PerPage" : "Elements on page",
-		"Of" : "of"
+		"Of" : "of",
+		"Home" : "Home",
+		"SortBy": "Sort",
+		"NoDataText" : "No data",
+		"Folders" : "Folders",
+		"Diagrams": "Diagrams"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

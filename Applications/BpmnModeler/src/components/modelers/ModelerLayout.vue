@@ -1,6 +1,6 @@
 <template>
   <v-layout fill-height>
-    <v-layout v-if="loading" column justify-center align-center>
+    <v-layout v-if="loading" fill-height column justify-center align-center>
       <v-progress-circular
         :size="70"
         :width="7"
@@ -95,6 +95,7 @@ export default {
       split: null
     }
   },
+  created() { console.log(this.saved) },
   computed: {
     showPanel: {
       get() {
