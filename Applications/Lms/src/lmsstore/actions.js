@@ -138,11 +138,11 @@ export default {
     }
   },
 
-  async getLessonContent ({commit}, lessonid) {
+  async getLessonContent ({commit}, { lessonGuid, isFree }) {
     commit('setError', null)
     commit('setCircularLoader', true)
     try {
-      const result = await api.getLessonContentFromGql(lessonid)
+      const result = await api.getLessonContentFromGql(lessonGuid, isFree)
       const unit = result.data.lms.lessonContent
       const lessonContent = JSON.parse(unit.content)
 

@@ -9,6 +9,11 @@
         imageLink
         name
         description
+        coursGoals
+        audience
+        entryLvl
+        exitKnowledge
+        exitSkills
         isFavorite
         roles{
           name
