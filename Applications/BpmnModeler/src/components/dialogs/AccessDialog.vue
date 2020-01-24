@@ -17,7 +17,7 @@
         <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
           <v-card>
             <v-card-title>
-              <span class="headline">{{ form.titles[form.mode] }}</span>
+              <span class="headline">{{ $t(form.titles[form.mode]) }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -63,7 +63,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
+              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ $t(form.actions[form.mode]) }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -154,14 +154,14 @@ export default {
         title: '',
         mode: '',
         actions: {
-          'create': this.$t('bpmn.buttons.Create'),
-          'edit': this.$t('bpmn.buttons.Save'),
-          'delete': this.$t('bpmn.buttons.Delete')
+          'create': 'bpmn.buttons.Create',
+          'edit': 'bpmn.buttons.Save',
+          'delete': 'bpmn.buttons.Delete'
         },
         titles: {
-          'create': this.$t('bpmn.labels.AddRights'),
-          'edit': this.$t('bpmn.labels.EditRights'),
-          'delete': this.$t('bpmn.labels.RemoveRights')
+          'create': 'bpmn.labels.AddRights',
+          'edit': 'bpmn.labels.EditRights',
+          'delete': 'bpmn.labels.RemoveRights'
         },
         rules: {
           selectOne: value => (value && value.length > 0) || ' '

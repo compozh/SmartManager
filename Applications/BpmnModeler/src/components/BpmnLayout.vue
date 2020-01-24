@@ -1,40 +1,23 @@
 <template>
   <v-app>
-    <v-app-bar app fixed  class="toolbar" elevation="1">
-      <!-- <v-app-bar-nav-icon 
-        class="blue--text text--darken-2"
-        @click.stop="showAppBar = !showAppBar">
-      </v-app-bar-nav-icon> -->
+    <v-app-bar app fixed  class="toolbar" elevation="3">
       <router-link :to="{ name: 'Main' }" style="text-decoration: none;">
         <h1 class="text-left blue--text text--darken-2" style="margin: 0 20px;">Workflow modeler</h1>
       </router-link>
-      <template v-if="currentUser">
-        <!-- <bpmn-contex-menu
-          @create="createItem"
-          @edit="editItem" 
-          @remove="removeItem" 
-          @import="importItem"
-          @export="exportItem">
-          <template #activator="{ open }">
-            <v-btn icon class="text-left blue--text text--darken-2" v-on="open" :title="$t('bpmn.buttons.AddElement')">
-              <v-icon>add</v-icon>
-            </v-btn>
-          </template>
-        </bpmn-contex-menu> -->
-        <!-- <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
-          <v-icon>refresh</v-icon>
-        </v-btn> -->
-      </template>
+      <!-- <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
+        <v-icon>refresh</v-icon>
+      </v-btn> -->
+      <breadcrumbs class="pl-4" :activeItem.sync="activeItem" />
       <v-spacer></v-spacer>
       <v-flex shrink class="icon-container" v-if="currentUser">
         <user-panel mini="true"></user-panel>
       </v-flex>
     </v-app-bar>
-<!-- <v-navigation-drawer v-model="appBar"
+    <!-- <v-navigation-drawer v-model="appBar"
       app
       clipped
       width="380">
-      <bpmn-tree ref="treeView" :items="items" :activeItem.sync="activeItem" @drop="dropItem">
+      <bpmn-tree ref="treeView" :items="items" " @drop="dropItem">
         <template #context-menu="{ item }">
           <bpmn-contex-menu :item="item"
             @create="createItem"
@@ -54,11 +37,9 @@
       </bpmn-tree>
     </v-navigation-drawer> -->
     <v-content class="grey lighten-4">
-      <v-container fluid pa-0  >
+      <v-container fluid pa-0 fill-height class="align-start" >
         <router-view ref="modeler" v-if="!loading" 
-          :items.sync="items"
-          @deployItem="deployItem"
-          @exportItem="exportItem"/>
+          :activeItem.sync="activeItem"/>
       </v-container>
     </v-content>
     <!-- <v-row >
@@ -118,7 +99,6 @@ export default {
   mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   data () {
     return {
-      showAppBar: true,
       loading: false,
       displayMessage: false,
       message: '',
@@ -141,6 +121,7 @@ export default {
       this.loading = false;
     },
     async onRouteChanged(refresh) {
+      // debugger
       if (!this.currentUser) {
         return;
       }
@@ -163,6 +144,7 @@ export default {
       this.loading = false;
     },
     exportItem(item, type) {
+      // debugger
       eventBus.$emit(events.modeler.export, type);
     },
     async deployItem(item) {
@@ -175,35 +157,19 @@ export default {
       }
       this.loading = false;
     },
-    navigateToItem(itemId) {
-      const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
-      console.log({ item, index })
-      // let routeName, params;
-      // if (index < 0) {
-      //   routeName = 'BPMNEMPTY';
-      //   params = { };
-      // } else if (item instanceof Folder) {
-      //   routeName = 'BPMNFOLDER';
-      //   params = { id: itemId };
-      // } else if (item instanceof Diagram) {
-      //   switch (item.type) {
-      //   case DiagramType.BPMN:
-      //     routeName = 'BPMNMODELER';
-      //     params = { id: itemId };
-      //     break;
-      //   case DiagramType.DMN:
-      //     routeName = 'DMNMODELER';
-      //     params = { id: itemId };
-      //     break;
-      //   }
-      // }
-      // if (this.$route.name !== routeName || this.$route.params.id !== params.id) {
-      //   this.$router.push({ name: routeName, params });
-      // }
-    },
     onCreateDiagram() {
       this.createItem(this.$store.state.bpmn.activeItem, 'process');
-    }
+    },
+    navigateToItem(value) {
+      if(!value.id) {
+        let elem = this.$store.getters['bpmn/getItemById'](value)
+        value = elem.item
+      } 
+      if( this.$route.params.id == value.id) return
+      value.type == 'BPMN' ? this.$router.push({name: 'Process', params: {id: value.id}}) 
+      : value.type == 'DMN' ? this.$router.push({name: 'Decision', params: {id: value.id}})
+        : this.$router.push({name: 'Project', params: {id: value.id}}) 
+    },
   },
   computed: {
     currentUser() {
@@ -211,25 +177,18 @@ export default {
       this.$store.state.auth.user = auth.getUserData();
       return this.$store.state.auth.user;
     },
-    appBar: {
-      get() {
-        return this.showAppBar && this.currentUser !== null;
-      },
-      set(value) {
-        this.showAppBar = value;
-      }
-    },
     items() {
       return this.$store.state.bpmn.items;
     },
     activeItem: {
       get() {
+        // debugger
         return this.$store.getters['bpmn/getActiveItemId'];
       },
       set(value) {
+        // debugger
         this.$store.dispatch('bpmn/setActiveItem', value);
-        // this.$refs.treeView.setActiveItem(value);
-        this.navigateToItem(value);
+        this.navigateToItem(value)
       }
     },
     dataLoading() {
@@ -244,7 +203,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
-      if (from.name === 'BPMNLOGIN') {
+      if (from.name === 'Login') {
         this.appBar = true;
         this.onRouteChanged(true);
       }

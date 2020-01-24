@@ -67,7 +67,7 @@ export const router = new VueRouter({
           name: 'Decision',
           path: '/decision/:id?',
           // id: 'TASKS',
-          component: () => import('@/components/pages/Decision.vue'),
+          component: () => import('@/components/modelers/DmnModeler.vue'),
           meta: {
             rule: 'isPublic',
           },
@@ -81,7 +81,7 @@ export const router = new VueRouter({
           name: 'Process',
           path: '/process/:id?',
           // id: 'TASKS',
-          component: () => import('@/components/pages/Process.vue'),
+          component: () => import('@/components/modelers/BpmnModeler.vue'),
           meta: {
             rule: 'isPublic',
           },
@@ -198,7 +198,7 @@ export const router = new VueRouter({
 // }
 
 router.beforeEach((to, from, next) => {
-
+  // debugger
   if (
     to.path === '/login' ||
     to.path === '/error/404' ||
