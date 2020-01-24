@@ -455,11 +455,11 @@ export default {
   },
 
   async verifyCamera({ commit }) {
-    await navigator.mediaDevices.getUserMedia({video: true}).then(function() {
-      return commit('setCameraAvailability', true)
-    }).catch(function() {
-      return commit('setCameraAvailability', false)
-    })
+      await navigator.mediaDevices.getUserMedia({video: true}).then(() => {
+        return commit('setCameraAvailability', true)
+      }).catch(() => {
+        return commit('setCameraAvailability', false)
+      })
   },
 
   async initializeIotSignalRUrl ({ dispatch, commit, getters }, { thingId }) {

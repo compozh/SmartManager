@@ -8,7 +8,7 @@ Vue.use(AclInstaller)
 export default new AclCreate({
   initial: store.state.auth.user ? 'user' : 'public' ,
   notfound: {
-    path: '/error/403',
+    path: '/login', //path: '/error/403',
     forwardQueryParams: true,
   },
   router,

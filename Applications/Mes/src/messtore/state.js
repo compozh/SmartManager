@@ -59,7 +59,10 @@ export default {
   documentSearchValue: '',
   dynamicPagesCache: [],
   documentKey: 0,
-  cameraAvailability: false,
+  cameraSettings: {
+    initialized: false,
+    cameraAvailability: false
+  },
   iotSettings: {
     iotSignalRUrl: '',
     iotSignalRConnection: null
