@@ -115,10 +115,15 @@
                         <v-list-tile
                           v-for="lesson in moduleItem.units"
                           :key="lesson.id"
-                          @click="getLesson(lesson.lessonGuid)"
+                          @click="getLesson(lesson.lessonGuid, lesson.isFree)"
                         >
                           <v-list-tile-action>
-                            <v-checkbox v-model='lesson.passed' :disabled="lesson.disabled"></v-checkbox>
+                            <v-checkbox
+                              v-model='lessonPassed'
+                              :value="lesson.lessonGuid"
+                              @checked="lessonComplete(lesson)"
+                              :disabled="lesson.disabled"
+                              ></v-checkbox>
                           </v-list-tile-action>
                           <v-list-tile-content>
                             <v-list-tile-title>{{ lesson.name }}</v-list-tile-title>
@@ -168,6 +173,7 @@ export default {
       course: {},
       modules: [],
       lesson: {},
+      lessonsPassed: [],
       currentLessonGuid: '',
       currentModuleIndex: 0,
       // STUB materials
@@ -218,11 +224,13 @@ export default {
     }
   },
   created() {
+    debugger
     this.course = this.$route.params.course
     this.modules = this.$route.params.modules
     this.currentLessonGuid = this.$route.params.lessonGuid
     this.putPassedFieldToLessons(this.modules)
     this.progress = this.getInitialProgress(this.modules)
+    this.lessonPassed = this.getInitialPassedLesson(this.modules)
     // признак свободного доступа к уроку
     // isLessonFree(this.currentLessonGuid)
     const isFree = true
@@ -235,6 +243,7 @@ export default {
       await this.$store.dispatch('lms/getLessonContent', { lessonGuid, isFree })
     },
     getInitialProgress(modules) {
+      debugger
       const modulesLessons = modules.map(m => m.units.length)
       let lessonsTotal = modulesLessons.reduce((total, current) => total + current)
       let lessonPassed = 0
@@ -243,6 +252,18 @@ export default {
         lessonPassed += passedLessonInModule.length
       }
       return {total: lessonsTotal, passed: lessonPassed}
+    },
+    getInitialPassedLesson(modules) {
+      const allLessons = modules.map(m => m.units)
+      let passedLessons = []
+      for (let i = 0; i < allLessons.length; i++) {
+        passedLessons = passedLessons.concat(allLessons[i])
+      }
+      this.lessonsPassed = passedLessons
+    },
+    lessonComplete(lesson) {
+      lesson.passed = !lesson.passed
+      // запрос на запись. урок lesson.lessonGuid пройден
     },
     // Заглушка для получения статуса урока пройден/непройден
     putPassedFieldToLessons(modules) {
@@ -270,6 +291,7 @@ export default {
   },
   computed: {
     progressValue() {
+      debugger
       let value = this.progress.total
         ? Math.round(this.progress.passed / this.progress.total * 100) : 0
       return value + '%'
