@@ -12,8 +12,6 @@
 </template>
 
 <script>
-var moduleCardsData = [];
-
 import ModuleCard from './ModuleCard.vue'
 import { getThisLink } from '../helpers/navihelp.js'
 
@@ -28,23 +26,12 @@ export default {
     links: []
   }),
   created() {
-    /* {
-        text: 'Главная',
-        disabled: false,
-        href: base.slice(0, base.lenght -1) +  // TODO: добавить локализацию
-       } */
     this.links.push(getThisLink('Главная', this.$route.path, false))
   },
   methods: {
     changeFavoriteState: function(moduleData) {
       moduleData.isFavorite = !moduleData.isFavorite
 
-    },
-    roleSearch: function(data) {
-      //this.$router.push({ name: "modules", params: { role: data.code } });
-    },
-    levelSearch: function(data) {
-      //this.$router.push({ name: "modules", params: { level: data.code } });
     }
   }
 }

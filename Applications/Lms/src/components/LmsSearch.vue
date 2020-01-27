@@ -58,7 +58,7 @@ export default {
   name: 'lms-search',
 
   created() {
-    if(this.$store.getters['lms/modules'] === null) {
+    if (this.$store.getters['lms/modules'] === null) {
       this.getModules()
     }
   },
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       searchTimeoutId: 0,
-		  searchParams: { phrase: '' },
+      searchParams: { phrase: '' },
       searchResult: {
         resultsQt: 0,
         results: []
@@ -86,7 +86,7 @@ export default {
     },
     searchPhraseChangedForce: function() {
       const phrase = this.searchParams.phrase
-      if(!phrase) {
+      if (!phrase) {
         return
       }
       if (this.searchTimeoutId > 0) {
@@ -109,14 +109,13 @@ export default {
   },
   computed: {
     modules() {
-      // this.$store.getters['lms/modules']
       return this.searchResult.results
     },
     resultsQt() {
       return this.searchResult.resultsQt
     }
   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
