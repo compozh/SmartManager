@@ -36,7 +36,7 @@ export default {
     if (!items) {
       return false;
     }
-
+    
     const mapTree = (items) => items.map(e => {
       if (e.$type.startsWith('Folder')) {
         e.items = mapTree(e.items);
@@ -47,9 +47,16 @@ export default {
     });
     items = mapTree(items);
     context.commit('setItems', items);
+    await context.dispatch('checkForOwnFolder');
     return true;
   },
-
+  async checkForOwnFolder(context) {
+    const folderExisit = context.state.items.findIndex(item => item instanceof Folder) >= 0;
+    if (folderExisit) {
+      return;
+    }
+    await context.dispatch('createFolder', new Folder({ name: context.rootState.auth.user.userName }))
+  },
   //#region Diagrams
   
   async getXml(context, id) {
