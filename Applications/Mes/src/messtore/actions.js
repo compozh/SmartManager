@@ -460,5 +460,18 @@ export default {
     }).catch(function() {
       return commit('setCameraAvailability', false)
     })
+  },
+
+  async initializeIotSignalRUrl ({ dispatch, commit, getters }, { thingId }) {
+    return await dispatch('graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getIotSignalRUrlFromGql(thingId)
+      },
+      successAction: result => {
+        if (result.success) {
+          getters['iotSettings'].iotSignalRUrl =  result.url
+        }
+      },
+    })
   }
 }

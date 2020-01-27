@@ -3,29 +3,29 @@
     <v-layout row justify-center>
       <v-flex xs12 sm6 md4>
         <v-card v-if="!message" class="elevation-12">
-		       <v-toolbar dark color="primary">
-		       	<v-toolbar-title>Вход</v-toolbar-title>
-		       	<v-spacer></v-spacer>
-		       </v-toolbar>
-		       <v-card-text>
-		       	<v-form>
-		       		<v-text-field
-		       				prepend-icon="person"
-		       				v-model="login"
-		       				name="login"
-		       				label="Логин"
-		       				type="text"
-		       				required>
-		       		</v-text-field>
-		       		<v-text-field
-		       				prepend-icon="lock"
-		       				v-model="password"
-		       				name="password"
-		       				label="Пароль"
-		       				id="password"
-		       				type="password"
-		       				required>
-		       		</v-text-field>
+          <v-toolbar dark color="primary">
+            <v-toolbar-title>Вход</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-card-text>
+            <v-form>
+              <v-text-field
+                  prepend-icon="person"
+                  v-model="login"
+                  name="login"
+                  label="Логин"
+                  type="text"
+                  required>
+              </v-text-field>
+              <v-text-field
+                  prepend-icon="lock"
+                  v-model="password"
+                  name="password"
+                  label="Пароль"
+                  id="password"
+                  type="password"
+                  required>
+              </v-text-field>
 
               <v-layout row align-center justify-space-between>
                 <v-layout row align-center>
@@ -44,15 +44,15 @@
                     @click="signIn">Войти</v-btn>
               </v-layout>
 
-		       	</v-form>
-		     	</v-card-text>
-		     </v-card>
+            </v-form>
+          </v-card-text>
+         </v-card>
 
          <v-card v-if="message">
            <v-toolbar dark color="error">
-		       	  <v-toolbar-title>Ошибка</v-toolbar-title>
+              <v-toolbar-title>Ошибка</v-toolbar-title>
            </v-toolbar>
-		       <v-spacer></v-spacer>
+           <v-spacer></v-spacer>
            <v-card-text>
              <v-card-title>
                <h3>{{message}}</h3>
@@ -79,37 +79,31 @@ export default {
       login: '',
       password: '',
       checkbox_remember_me: false,
-      message: '',
-
+      message: ''
     }
   },
+  created() {
+
+  },
   methods: {
-    signIn() {
-      if(!this.login) {
-        this.message = "Введите логин!"
+    async signIn() {
+      if (!this.login) {
+        this.message = 'Введите логин!'
         return
       }
-      if(!this.password) {
-        this.message = "Введите пароль!"
+      if (!this.password) {
+        this.message = 'Введите пароль!'
         return
       }
-      this.$authentication.logIn(this.login, this.password, this.checkbox_remember_me)
-      .then(result => {
-        if (result && !result.tempPasword) {
-          this.$router.replace({path: this.$route.params.routeToBack})
-        }
-      })
-      .catch((e) => {
-        return (this.message = e || 'Ошибка авторизации')
-      })
+      const payload = {
+        login: this.login,
+        password: this.password,
+        remember: this.checkbox_remember_me
+      }
+      await this.$store.dispatch('lms/login', payload)
     },
     goToRecoverPage() {
-      this.$authentication.GetRecoveryPasswordUrl()
-      .then(res => {
-        if (res.ALLOWED) {
-          window.open(res.LINK, '_blank')
-        }
-      })
+      console.log('Функционал не реализован')
     },
     clearError() {
       this.message = null

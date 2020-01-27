@@ -60,13 +60,14 @@
 
           <!-- FORMIO -->
           <div v-if="Object.keys(form).length" class="w-full">
-            <!-- select and start business-process -->
-            <form @submit.prevent>
-              <formio-form-component class="formio mt-4"
+            <h5 class="mt-4">{{ form.name }}</h5>
+
+              <formio-form-component class="formio"
                                      ref="form"
                                      :formCode="form.unformio"
-                                     :formDefinition="form"/>
-            </form>
+                                     :formDefinition="form"
+                                     :submission="submission"/>
+
           </div>
           <!-- TASK ATTACHMENTS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
@@ -274,7 +275,6 @@ export default {
       wheelSpeed: 0.50,
     },
     options: {noAlerts: true},
-    submission: {},
     attachments: [],
     filesUploading: false,
     uploadErrors: [],
@@ -283,10 +283,32 @@ export default {
     caseForBind: null
   }),
   computed: {
-    // formio
-    form() {
+    externalParams() {
       if (this.task.externalParams) {
-        return JSON.parse(JSON.parse(this.task.externalParams)) || {}
+        return JSON.parse(this.task.externalParams) || {}
+      }
+      return {}
+    },
+    form() {
+      if (this.externalParams.FORM) {
+        return JSON.parse(this.externalParams.FORM) || {}
+      }
+      return {}
+    },
+    submission() {
+      const vars = {}
+      if (this.externalParams.VARIABLES) {
+        this.externalParams.VARIABLES.forEach(v => vars[v['Key']] = v.Value.value)
+      }
+      return {
+        data: vars
+      }
+    },
+    components() {
+      if (this.externalParams.FORM) {
+        const form = JSON.parse(this.externalParams.FORM) || {}
+        const components = JSON.parse(form.components)
+        return JSON.stringify(components)
       }
       return {}
     },
@@ -344,6 +366,9 @@ export default {
     this.getCases()
   },
   methods: {
+    submit() {
+      console.log('submit', )
+    },
     async getCases() {
       this.caseListLoading = true
       if (this.cases.length === 0) {
@@ -357,9 +382,10 @@ export default {
     // обработка смены статуса задачи
     async onChangeStatus(data) {
       if (this.$refs.form) {
-        const form = this.$refs.form.formio
+        const form = this.$refs.form.$refs.formioComponent.formio
         try {
           const result = await form.submit()
+          console.log('', result)
           const success = await this.$store.dispatch('sm/changeStatus', {
             ...data,
             CompleteParams: JSON.stringify(result.data)
@@ -377,7 +403,7 @@ export default {
               })
             })
           } else {
-            console.log(errors.message)
+            console.log(errors)
           }
         }
       }

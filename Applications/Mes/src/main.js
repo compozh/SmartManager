@@ -10,12 +10,10 @@ import auth from '@it-enterprise/jwtauthentication'
 auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
-import 'material-design-icons-iconfont/dist/material-design-icons.css' // mdi icons
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import acl from './acl/acl'
 import { i18n } from './plugins/i18n'
@@ -54,7 +52,6 @@ let dependencies = {
 }
 
 // Плагины стандартные
-Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueApollo)
@@ -70,33 +67,12 @@ var formioOptions = {}
 formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
 formioOptions.routerDependencies = () => routerDependencies
 formioOptions.GraphQlUrl = window.myConfig.GrapgQlUrl
-Vue.use(formio, { options: formioOptions, dependencies });
-
+Vue.use(formio, { options: formioOptions, dependencies })
 Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
 
-// подключение vuetify
 
-const opts = {
-  theme: {
-    light: true,
-    breakpoint: {
-      thresholds: {
-        xs: 340,
-        sm: 540,
-        md: 800,
-        lg: 1280,
-        xl: 1920,
-      },
-      scrollBarWidth: 24
-    }
-  },
-  icons: {
-    iconfont: 'md',
-  }
-}
-const vuetify = new Vuetify(opts)
 
 // Шина событий
 export const eventBus = new Vue({
@@ -113,7 +89,28 @@ var barcodeScaner = new BarcodeScaner()
 barcodeScaner.initialize()
 
 // импорт компонентов
-const req = require.context('@/components/', true, /\.(js|vue)$/i)
+let req = require.context('@/components/', false, /\.(js|vue)$/i)
+req.keys().map(key => {
+  if (!(req(key).default || {}).name) {
+    return
+  }
+  Vue.component(req(key).default.name, req(key).default)
+})
+req = require.context('@/components/components', true, /\.(js|vue)$/i)
+req.keys().map(key => {
+  if (!(req(key).default || {}).name) {
+    return
+  }
+  Vue.component(req(key).default.name, req(key).default)
+})
+req = require.context('@/components/layouts', true, /\.(js|vue)$/i)
+req.keys().map(key => {
+  if (!(req(key).default || {}).name) {
+    return
+  }
+  Vue.component(req(key).default.name, req(key).default)
+})
+req = require.context('@/components/toolbars', false, /\.(js|vue)$/i)
 req.keys().map(key => {
   if (!(req(key).default || {}).name) {
     return

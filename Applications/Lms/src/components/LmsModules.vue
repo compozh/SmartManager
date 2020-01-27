@@ -1,32 +1,43 @@
 <template>
-	<v-container fluid pa-0 ma-0>
-		<v-layout>
-			<v-flex xs12>
-        <v-card>
-          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
-        </v-card>
-				<v-card v-bind:style="{'background-color': '#1a237e'}">
-					<v-flex py-3>
-						<h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми модулями</h4>
-						<h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--lighten-3'>Модули - короткие самостоятельные учебные пособия, которые охватывают отдельные темы и задачи</h5>
-					</v-flex>
-					<v-flex py-2>
-						<v-divider />
-					</v-flex>
-				</v-card>
-			</v-flex>
-		</v-layout>
-    <!-- Filters -->
-    <Filters :filters="availableFilters" @filterChanged="refreshModulesFilter"></Filters>
-
-		<v-layout wrap row mx-2 mt-2 mb-4>
-			<v-flex v-for='moduleData in modules' :key='moduleData.courseId' lg3 md4 sm6 xs12>
-
-        <module-card v-if="moduleData" :links="links" :moduleData="moduleData" />
-
-			</v-flex>
-		</v-layout>
-	</v-container>
+	<v-container fill-height fluid pa-0 ma-0>
+		<v-layout column>
+			<v-flex>
+        <v-layout column>
+          <v-flex>
+            <v-layout column>
+              <v-flex xs12>
+                <v-card>
+                  <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+                </v-card>
+              </v-flex>
+              <v-flex>
+                <v-card v-bind:style="{'background-color': '#1a237e'}">
+                  <v-flex py-3>
+                    <h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми модулями</h4>
+                    <h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--lighten-3'>Модули - короткие самостоятельные учебные пособия, которые охватывают отдельные темы и задачи</h5>
+                  </v-flex>
+                  <v-flex py-2>
+                    <v-divider />
+                  </v-flex>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-layout mb-3>
+            <v-flex>
+              <!-- Filters -->
+              <Filters :filters="availableFilters" @filterChanged="refreshModulesFilter"></Filters>
+            </v-flex>
+          </v-layout>
+        </v-layout>
+        <v-layout wrap row mx-2 mt-2 mb-4>
+          <v-flex v-for='moduleData in modules' :key='moduleData.courseId' lg3 md4 sm6 xs12>
+            <module-card v-if="moduleData" :links="links" :moduleData="moduleData" />
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -53,7 +64,7 @@ export default {
   data() {
     return {
       filterChanged: false,
-      allModules: [],
+      // allModules: [],
       modulesFiltered: []
     }
   },
@@ -159,28 +170,18 @@ export default {
       }
       return filters
     },
-    modules () {
+    allModules() {
+      return this.$store.getters['lms/modules']
+    },
+    modules() {
       if (this.filterChanged) {
         return this.modulesFiltered
       } else {
-        this.allModules = this.$store.getters['lms/modules']
-        return this.allModules
+        return this.$store.getters['lms/modules']
       }
     },
     links() {
-      /* {
-        text: 'Модули',
-        disabled: true,
-        href: window.myConfig.BASE_URL + this.$route.path
-      } */
       const thisLink = getThisLink('Модули', this.$route.path, true)
-
-      // if (this.$route.params.links) {
-      //   const inputLinks = this.$route.params.links
-      //   links = [...inputLinks, thisLink]
-      // } else {
-      //   links = [thisLink]
-      // }
       let links = getRoutesLinks(this.$route.params.links, thisLink)
       return links
     }

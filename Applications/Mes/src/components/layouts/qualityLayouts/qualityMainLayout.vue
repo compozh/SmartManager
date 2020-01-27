@@ -6,7 +6,7 @@
   <v-flex class="quality-flex" :class="$vuetify.breakpoint.smAndDown? 'small' : ''" v-if="initializeQualities" :key="this.qualityFormioKey">
     <formio-form-component
       v-if="selectedQuality"
-      ref="formioBuilder"
+      ref="formioFormComponent"
       @formSubmit=formSubmit
       :formDefinition=qualityFormio
       :formCode=properties.qualityProcessType
@@ -74,7 +74,7 @@ export default {
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioFormComponent[0].getFormSubmission()
     },
     changeQualityTableView() {
       this.$emit('changeQualityTableView', true)

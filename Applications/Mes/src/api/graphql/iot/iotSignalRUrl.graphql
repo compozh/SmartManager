@@ -1,0 +1,11 @@
+query ($thingId: Int) {
+  mes {
+    iotSignalRUrl(thingId: $thingId) {
+      url
+      success
+      errorMessage
+      successMessage
+      errorCode
+    }
+  }
+}

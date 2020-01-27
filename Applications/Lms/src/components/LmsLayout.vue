@@ -6,9 +6,9 @@
 			v-model="drawer">
       <v-list dense>
         <v-list-tile
-          v-for="(link, index) in _links"
+          v-for="(link, index) in links"
           :key="index"
-          :to="{name: link.Id, params: {links: links}}"
+          :to="{name: link.Id, params: {links: prevLinks}}"
           >
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
@@ -40,14 +40,14 @@
         <v-btn @click="search" icon large>
           <v-icon>search</v-icon>
         </v-btn>
-        <v-btn v-if="!currentUser" @click="openLoginDialog" icon large>
+        <v-btn v-if="!user" @click="openLoginDialog" icon large>
           <v-icon>input</v-icon>
         </v-btn>
 
         <v-layout row align-center fill-height>
           <!-- User menu -->
           <v-flex >
-            <v-menu v-if="currentUser"
+            <v-menu v-if="user"
               v-model="menu"
               :nudge-width="200"
               nudge-bottom="52"
@@ -57,7 +57,7 @@
 
               <template v-slot:activator="{on}">
                   <v-btn v-on="on" icon large>
-                    <v-img class="user-photo" :src="currentUser.UserData.CurrentUserData.UserPhoto"></v-img>
+                    <v-img class="user-photo" :src="userPhoto"></v-img>
                   </v-btn>
               </template>
 
@@ -66,16 +66,16 @@
                   <v-layout row align-center justify-center>
                     <v-flex>
                       <v-list-tile-avatar>
-                        <v-img class="user-photo" :src="currentUser.UserData.CurrentUserData.UserPhoto"></v-img>
+                        <v-img class="user-photo" :src="userPhoto"></v-img>
                       </v-list-tile-avatar>
                     </v-flex>
                     <v-flex>
                       <v-layout column align-start justify-center>
                         <v-flex>
-                          <h4>{{currentUser.UserData.LoginData.UserName}}</h4>
+                          <h4>{{userName}}</h4>
                         </v-flex>
                         <v-flex align-self-end>
-                          {{currentUser.UserData.LoginData.UserLogin.toLowerCase()}}
+                          {{userLogin.toLowerCase()}}
                         </v-flex>
                       </v-layout>
                     </v-flex>
@@ -113,32 +113,16 @@
 </template>
 
 <script>
-import LmsUserPanel from './LmsUserPanel.vue'
 import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-layout',
-  components: {
-    LmsUserPanel
-  },
   data() {
     return {
       drawer: false,
-      // user-panel ->
-      fixed: false,
-      isauth: '',
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      // TODO: удалить после отлвдки
-      dialogState: false,
-      // <-- user-panel
-      login: '',
-      password: '',
-      checkbox_remember_me: false,
       error: '',
-      _links: [],
       links: [],
+      prevLinks: [],
       logoLink: null,
       menu: false,
       userMenuItems: [
@@ -151,13 +135,13 @@ export default {
   created() {
     this.getLogoLink()
     this.goHome()
-    this.links.push(getThisLink('Главная', this.$route.path, false))
+    this.prevLinks.push(getThisLink('Главная', this.$route.path, false))
   },
   beforeMount: function () {
     // Маршруты из конструктора
     var app = this.$store.state.WebApps.applicationDescription
     if (!app) {
-      this._links = []
+      this.links = []
     }
     var sections = app.Sections || []
 
@@ -169,19 +153,18 @@ export default {
     }
 
     routs = [...routs, ...routs[1].Children, ...routs[0].Children]
-    this._links = routs.filter(l => l.Name)
+    this.links = routs.filter(l => l.Name)
       .sort((a, b) => a.Sort > b.Sort ? 1 : -1 )
   },
   methods: {
     getLogoLink () {
-			this.$store.dispatch('lms/getLogoLink')
-			this.logoLink = this.$store.getters['lms/logoLink']
+      this.$store.dispatch('lms/getLogoLink')
+      this.logoLink = this.$store.getters['lms/logoLink']
     },
     openLoginDialog() {
       this.$router.push({name: 'LMSLOGIN'})
       this.menu = false
     },
-
     userProfile() {
       this.menu = false
     },
@@ -190,26 +173,29 @@ export default {
       this.$router.push({name: 'LMSPERSONALACCOUNT'})
     },
     signOut() {
-      this.$authentication.logOff()
-      this.$store.state.authentication.currentUser = null
-      this.goHome()
+      this.$store.dispatch('lms/logout')
     },
     search() {
       this.$router.push({name: 'LMSSEARCH'})
     },
     goHome() {
-      if (this.$router.history.current.name == 'LMSREALHOME') {
-        return
+      if (this.$router.history.current.name !== 'LMSREALHOME') {
+        this.$router.push({name: 'LMSREALHOME'})
       }
-      this.$router.push({name: 'LMSREALHOME'})
-    },
+    }
   },
   computed: {
-    currentUser() {
-      if (this.$store.state.authentication.currentUser) {
-        return this.$store.state.authentication.currentUser
-      }
-      return null
+    user() {
+      return this.$store.state.lms.user
+    },
+    userName() {
+      return this.user ? this.user.userName : ''
+    },
+    userLogin() {
+      return this.user ? this.user.login : ''
+    },
+    userPhoto() {
+      return this.user ? this.user.userPhoto : ''
     }
   }
 }

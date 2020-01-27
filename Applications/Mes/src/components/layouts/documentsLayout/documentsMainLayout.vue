@@ -6,7 +6,7 @@
   <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDocuments" :key="this.documentFormioKey">
     <formio-form-component
       v-if="selectedDocument"
-      ref="formioBuilder"
+      ref="formioFormComponent"
       @formSubmit=formSubmit
       :formDefinition=documentFormio
       :formCode=pageProps.formCode
@@ -76,7 +76,7 @@ export default {
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioFormComponent[0].getFormSubmission()
     },
     changeDynamicTableView() {
       this.$emit('changeDynamicTableView', true)

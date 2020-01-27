@@ -82,7 +82,7 @@ export default {
       return {}
     },
     userId() {
-      return this.$store.getters.loggedUserId
+      return this.$store.getters['auth/userId']
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -130,7 +130,7 @@ export default {
       })
     },
     async onSubmit() {
-      const form = this.$refs.form.formio
+      const form = this.$refs.form.$refs.formioComponent.formio
       try {
         const result = await form.submit()
         await this.startBusinessProcess(result.data)

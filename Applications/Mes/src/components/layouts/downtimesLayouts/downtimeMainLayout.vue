@@ -70,7 +70,7 @@ export default {
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioFormComponent[0].getFormSubmission()
     },
     changeDowtimesTableView() {
       this.$emit('changeDowtimesTableView', true)

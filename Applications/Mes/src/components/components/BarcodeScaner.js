@@ -15,7 +15,7 @@ export default class BarcodeScaner {
 
     onKeyup(event) {
         if(!('which' in event)) {
-            return;
+            return
         }
         
         var me = this

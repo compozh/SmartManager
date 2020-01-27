@@ -15,7 +15,7 @@
           color="primary"
       ></v-progress-circular>
       <formio-form-component
-        ref="formioBuilder"
+        ref="formioFormComponent"
         @formSubmit=formSubmit
         :formDefinition=createDowntimeFormio
         :formCode=workCenter.downtimeRegistrationFormCode
@@ -96,6 +96,7 @@ export default {
     display: flex;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     padding: 30px;
     /* background-color: #326da80d; */
