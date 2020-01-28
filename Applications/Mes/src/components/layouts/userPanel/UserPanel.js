@@ -8,7 +8,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('auth/logout')
-      this.$store.commit('mes/setWorkCenter', {})
+      this.$store.commit('mes/setWorkCenter', null)
       this.$store.commit('mes/setInitialWorkCenter', false)
       this.$store.commit('mes/resetState')
     }

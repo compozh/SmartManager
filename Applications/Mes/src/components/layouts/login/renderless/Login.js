@@ -34,12 +34,12 @@ export default {
       try {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
-
-        eventBus.$emit(events.initialize)
         
         if (!result.success) {
           throw result.errorMessage
         }
+        
+        eventBus.$emit(events.initialize)
       } catch (e) {
         this.loading = false
         return (this.message = e || 'Ошибка авторизации')

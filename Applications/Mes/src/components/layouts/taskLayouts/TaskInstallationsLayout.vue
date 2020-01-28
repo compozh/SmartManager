@@ -21,7 +21,14 @@
 export default {
   name: 'mes-task-installations-layout',
   created() {
-    this.initialize()
+    if(!this.cameraSettings.initialized) {
+      this.$store.dispatch('mes/verifyCamera').then(result => {
+        this.$store.commit('mes/setCameraInitialized',  true)
+      })
+    }
+    this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(() => {
+      this.initializeInstallations = true
+    })
   },
   data() {
     return { initializeInstallations: false }
@@ -35,13 +42,12 @@ export default {
     },
     selectedTask() {
       return this.$store.getters['mes/selectedTask']
+    },
+    cameraSettings() {
+      return this.$store.getters['mes/cameraSettings']
     }
   },
   methods: {
-    async initialize() {
-      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code })
-      this.initializeInstallations = true
-    },
     async submitQrCode({ qrCodeValue, callback}) {
       let installationCards = this.$refs.installationCards,
         installationCard = installationCards.$refs[qrCodeValue],

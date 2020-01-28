@@ -137,7 +137,9 @@ function func(to,from, next) {
   let workCenter = store.getters['mes/workCenter'],
     result,
     query = { fixedUuid: router.currentRoute.query.fixedUuid }
-
+  if(window.myConfig.debugMode) {
+    console.log('router-func: 0.0.1')
+  }
   if(workCenter) {
     let access =  workCenter.accessPages
     result = 
