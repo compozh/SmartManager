@@ -14,13 +14,13 @@
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.AddFolder') }}</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile @click="addProcess(item)">
+        <v-list-tile v-if="item" @click="addProcess(item)">
           <v-list-tile-avatar>
             <v-icon>mdi-file-tree</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.AddProcess') }}</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile @click="importBpmn(item)">
+        <v-list-tile v-if="item" @click="importBpmn(item)">
           <v-list-tile-avatar>
             <v-icon>mdi-import</v-icon>
           </v-list-tile-avatar>
