@@ -19,7 +19,7 @@
         <template v-slot="{ data: field }">
           <span class="treeview-node-content">
             <span class="treeview-node-label">{{ field.label || field.id }}</span>
-            <v-btn v-if="canRemove" flat icon :title="$t('bpmn.buttons.Delete')" @click="removeElement(field)"><v-icon>close</v-icon></v-btn>
+            <v-btn v-if="canRemove" flat icon :title="$t('bpmn.buttons.Delete')" @click="removeElement(field)"><v-icon>mdi-close</v-icon></v-btn>
           </span>
         </template>
       </el-tree>

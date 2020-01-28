@@ -68,7 +68,7 @@
                         :key="index"
                       >
                         <div class="icon-container grow-0">
-                          <v-icon v-show="item.IsActive">done</v-icon>
+                          <v-icon v-show="item.IsActive">mdi-check</v-icon>
                         </div>
                         <span :id="item.USERID">{{ item.USERNAME }}</span>
                       </v-flex>

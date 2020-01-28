@@ -15,7 +15,7 @@
       <v-text-field
         v-model="date"
         :label="label"
-        prepend-icon="event"
+        prepend-icon="mdi-calendar"
         readonly
         :clearable="clearable"
         v-on="on"
