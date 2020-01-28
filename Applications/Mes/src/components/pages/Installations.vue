@@ -27,7 +27,14 @@ export default {
     }
   },
   created() {
-    this.initialize()
+    if(!this.cameraSettings.initialized) {
+      this.$store.dispatch('mes/verifyCamera').then(result => {
+        this.$store.commit('mes/setCameraInitialized',  true)
+      })
+    }
+    this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(() => {
+      this.initializeInstallations = true
+    })
   },
   computed: {
     workCenter() {
@@ -35,13 +42,12 @@ export default {
     },
     installations() {
       return this.$store.getters['mes/installations']
+    },
+    cameraSettings() {
+      return this.$store.getters['mes/cameraSettings']
     }
   },
   methods: {
-    async initialize() {
-      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code })
-      this.initializeInstallations = true
-    },
     removeAllInstallations() {
       for (let installation of this.installations) {
         this.removeInstallation(installation)

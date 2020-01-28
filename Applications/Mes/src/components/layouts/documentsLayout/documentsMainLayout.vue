@@ -3,9 +3,8 @@
   <v-flex class="toolbar ma-0" v-if="$vuetify.breakpoint.smAndDown">
     <v-btn class="col-12 ma-0 close-btn" @click="changeDynamicTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
   </v-flex>
-  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''"  v-if="initializeDocuments" :key="this.documentFormioKey">
+  <v-flex class="documents-flex"  :class="$vuetify.breakpoint.smAndDown? 'small' : ''">
     <formio-form-component
-      v-if="selectedDocument"
       ref="formioFormComponent"
       @formSubmit=formSubmit
       :formDefinition=documentFormio
@@ -24,11 +23,6 @@ export default {
     initializeDocuments: Boolean,
     pageProps:Object
   },
-  data() {
-    return {
-      documentFormioKey: 0
-    }
-  },
   computed: {
     selectedDocument() {
       return this.$store.getters['mes/selectedDocument']
@@ -40,7 +34,6 @@ export default {
       return this.$store.getters['mes/workCenter']
     },
     documentFormio() {
-      this.documentFormioKey += 1
       return this.$store.getters['mes/documentFormio']
     },
     dragResizeMode: {
