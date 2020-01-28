@@ -30,6 +30,7 @@ import businessProcesses from './graphql/businessProcesses.graphql'
 import formDefinition from './graphql/formDefinition.graphql'
 import startBusinessProcess from './graphql/startBusinessProcess.graphql'
 import globalSearch from './graphql/globalSearch.graphql'
+import attachmentTypes from './graphql/attachmentTypes.graphql'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError && networkError.statusCode === 401) {
@@ -342,6 +343,19 @@ export class SmartManagerApi {
         variables: {searchText}
       })
     } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async getAttachmentTypesFromGql(params) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        query: gql`${attachmentTypes}`,
+        variables: {params}
+      })
+    } catch (e) {
+      console.log(e.message)
       throw new Error(e.message)
     }
   }

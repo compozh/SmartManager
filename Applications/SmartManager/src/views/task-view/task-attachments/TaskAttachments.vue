@@ -59,6 +59,7 @@ export default {
   data: () => ({
     fileId: 0,
     fileUrl: '',
+    types: [],
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
@@ -69,6 +70,7 @@ export default {
       const attachment = this.originals[this.index]
       this.fileId = attachment.id || 0
       this.getUrl(attachment)
+      this.getAttachmentTypes()
     }
   },
   computed: {
@@ -96,6 +98,15 @@ export default {
         }
       }
       return 'no-data'
+    },
+    type() {
+      if (this.task.__typename === 'Task') {
+        return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+      }
+      if (this.task.__typename === 'Case') {
+        return 'CASE'
+      }
+      return ''
     }
   },
   methods: {
@@ -103,6 +114,17 @@ export default {
       const id = this.$route.params.id
       this.fileId = fileId
       this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {fileId, fileExt, id})
+    },
+    async getAttachmentTypes() {
+      const params = {
+        type: this.type,
+        id: this.task.id || this.$route.params.id,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy
+      }
+      const result = await this.$store.dispatch('sm/getAttachmentTypes', params)
+      this.types = result.data
     }
   }
 }

@@ -447,6 +447,23 @@ export default {
       notify('danger', 'taskListTitle', 'taskListError')
     }
   },
+  async getAttachmentTypes(context, params) {
+    const paramsJson = JSON.stringify(params)
+    startLoading()
+    try {
+      const response = await api.getAttachmentTypesFromGql(paramsJson)
+      const result = response.data.smtasks.attachmentTypes
+      if (result.success) {
+        return result
+      } else {
+        notify('warning', 'commentsTitle', 'commentAddFail')
+      }
+    } catch (e) {
+      stopLoading()
+      console.log(e.message)
+      notify('danger', 'commentsTitle', 'commentAddError')
+    }
+  },
   async updateInfo({dispatch}, {type, id, loading}) {
     if (type === 'TASK' || type === 'DOCUMENT') {
       return await dispatch('getTaskInfo', {
