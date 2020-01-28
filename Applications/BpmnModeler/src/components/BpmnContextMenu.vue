@@ -58,7 +58,7 @@
       <template v-if="item">
         <v-list-tile v-if="canDeploy(item)" @click="deploy(item)">
           <v-list-tile-avatar>
-            <v-icon>save_alt</v-icon>
+            <v-icon>mdi-export</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-tile-title>
         </v-list-tile>
@@ -72,20 +72,20 @@
         <template v-if="canEdit(item)">
           <v-list-tile @click="edit(item)">
             <v-list-tile-avatar>
-              <v-icon>edit</v-icon>
+              <v-icon>mdi-pencil</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-title>{{ $t('bpmn.buttons.Rename') }}</v-list-tile-title>
           </v-list-tile>
           <v-list-tile @click="remove(item)">
             <v-list-tile-avatar>
-              <v-icon>delete</v-icon>
+              <v-icon>mdi-delete</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-title>{{ $t('bpmn.buttons.Delete') }}</v-list-tile-title>
           </v-list-tile>
         </template>
         <v-list-tile v-if="canShare(item)" @click="share(item)">
           <v-list-tile-avatar>
-            <v-icon>share</v-icon>
+            <v-icon>mdi-share-variant</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-title>{{ $t('bpmn.buttons.Share') }}</v-list-tile-title>
         </v-list-tile>

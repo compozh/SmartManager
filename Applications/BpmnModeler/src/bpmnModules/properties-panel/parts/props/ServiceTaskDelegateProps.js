@@ -51,7 +51,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             'camunda:topic': value
           });
         },
-        appendIcon: 'search',
+        appendIcon: 'mdi-magnify',
         append() {
           const value = bo.get('camunda:topic');
           eventBus.$emit(events.propertiesPanel.selectAction, value, ActionDefinitionType.ExternalTask, (newValue) => {

@@ -15,28 +15,28 @@
     <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar">
         <v-btn flat :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
-          <v-icon>undo</v-icon>
+          <v-icon>mdi-undo</v-icon>
         </v-btn>
         <v-btn flat :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
-          <v-icon>redo</v-icon>
+          <v-icon>mdi-redo</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
         <v-btn flat :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
-          <v-icon>zoom_in</v-icon>
+          <v-icon>mdi-magnify-plus-outline</v-icon>
         </v-btn>
         <v-btn flat :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
-          <v-icon>zoom_out</v-icon>
+          <v-icon>mdi-magnify-minus-outline</v-icon>
         </v-btn>
         <v-btn flat :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
           <v-icon>mdi-magnify-close</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn flat :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
-          <v-icon>map</v-icon>
+          <v-icon>mdi-map</v-icon>
         </v-btn>
         <v-btn flat @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
-          <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
-          <v-icon v-else>fullscreen</v-icon>
+          <v-icon v-if="fullScreen">mdi-fullscreen_exit</v-icon>
+          <v-icon v-else>mdi-fullscreen</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
         <v-btn flat @click="showPanel = !showPanel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
