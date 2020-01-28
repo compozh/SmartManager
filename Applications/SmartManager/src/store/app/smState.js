@@ -2,7 +2,11 @@ export default {
   folders: null,
   currentFolder: null,
   search: null,
+  users: [],
   tasks: {},
   taskInfo: {},
-  users: []
+  cases: [],
+  caseDetails: {},
+  taskListPosition: {},
+  caseListPosition: {}
 }

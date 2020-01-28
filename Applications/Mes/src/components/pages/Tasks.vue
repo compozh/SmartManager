@@ -1,9 +1,9 @@
 <template>
   <v-container class="main-block">
 
-    <mes-downtimes-overlay v-if="downtimesOverlayVisible"
+    <!-- <mes-downtimes-overlay v-if="downtimesOverlayVisible"
       @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-    />
+    /> -->
 
     <v-card ref="card">
       <vue-split
@@ -14,7 +14,7 @@
         ]"
         direction="horizontal"
         :min-size="100"
-        :gutter-size="0"
+        :gutter-size="5"
         :snap-offset="50"
         :sizes=aspectRatioLayout
         @onDragEnd="changeAspectRatioLayout"
@@ -29,34 +29,36 @@
           @agreeClick=dialogAgreeClick
           @disagreeClick=dialogDisagreeClick />
 
+        <!-- <vue-pull-refresh :on-refresh="onRefresh"> -->
           <mes-tasks-component
           id="slotOne"
           ref="taskList"
             :initializeTasks=initializeTasks
             :selectedTasksTab=selectedTasksTab
             @changeCurrentTask=onChangeCurrentTask
-            @changeSelectTasksTab=changeSelectTasksTab />
+            @changeSelectTasksTab=changeSelectTasksTab
+            @changeTaskTableView=changeTaskTableView
+            :class="$vuetify.breakpoint.smAndDown? 'tasks-table-small' : ''"
+            v-if="$vuetify.breakpoint.smAndDown? taskTableView : true"/>
+        <!-- </vue-pull-refresh> -->
+          
 
-            <v-layout column class="task-description-layout" id="slotTwo">
+            <v-layout column class="task-description-layout" id="slotTwo" v-show="$vuetify.breakpoint.smAndDown? !taskTableView : true">
               <mes-un-selected-layout-toolbar
                 v-if="this.initializeTasks && !this.tasks.length"
                 @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                @changeTaskTableView=changeTaskTableView
               />
+              
               <div
                 v-if="selectedTask && (((selectedTask.state == 'IN_PLAN' || selectedTask.state == 'IN_WORK') && selectedTasksTab == 0)
                   || (selectedTask.state == 'DONE' && selectedTasksTab == 1))"
               >
                 <mes-task-main-layout
-                  v-if="selectedTask && ((currentLayout === 'main' && !selectedTask.inProgress)
-                    || (currentLayout == 'inProgress' && !selectedTask.inProgress))"
+                  ref="taskMainLayout"
+                  v-if="selectedTask && currentLayout === 'main'"
                   @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
-                />
-
-                <mes-task-in-progress-layout
-                  ref="taskInProgressLayout"
-                  v-if="selectedTask && ((currentLayout == 'inProgress' && selectedTask.inProgress)
-                    ||(currentLayout == 'main' && selectedTask.inProgress))"
-                  @changeDowntimesOverlayVisible=changeDowntimesOverlayVisible
+                  @changeTaskTableView=changeTaskTableView
                 />
 
                 <mes-task-installations-layout
@@ -81,23 +83,17 @@ export default {
       downtimesOverlayVisible: false,
       dialogProperties: {
         title: '',
-        message: 'Вы действительно хотите перейти на другое задание?',
-        agreeMessage: 'Да',
-        disagreeMessage: 'Нет',
+        message: this.$t('mes.dialogs.SwitchToAnotherTask'),
+        agreeMessage: this.$t('mes.dialogs.Yes'),
+        disagreeMessage: this.$t('mes.dialogs.No'),
         visible: false,
         task: null
       },
+      taskTableView: true
     }
   },
   created() {
-    //todo: инициализацию signalr вынести в загрузку приложения
-    this.initializeSignalR()
     this.initialize()
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
-    }
   },
   computed: {
     initialWorkCenter() {
@@ -170,29 +166,6 @@ export default {
     }
   },
   methods: {
-    async initializeSignalR() {
-      this.$signalR.connect('HUBBER', window.myConfig.SignalRUrl, this.taskStateChanged, this.ticket)
-    },
-    taskStateChanged(msg) {
-      let data = JSON.parse(msg)
-      if (!data) {
-        return
-      }
-
-      switch (data.Payload.Action) {
-      case 'TaskStateChanged':
-        var workCenters = data.Payload.Payload['WORKCENTERCODES']
-        if (!workCenters) {
-          return
-        }
-
-        workCenters = workCenters.includes(',') ? workCenters.trim().split(',') : [workCenters]
-        if (workCenters.indexOf(this.workCenter.code)) {
-          this.$store.commit('mes/setObsoluteDataTask', true)
-        }
-        break
-      }
-    },
     async initialize() {
       await this.$store.dispatch('mes/initializeTasks', { workCenterCode: this.workCenter.code })
       this.$store.commit('mes/setObsoluteDataTask', false)
@@ -229,9 +202,8 @@ export default {
       if (this.selectedTask && newSelectedTask.shiftTaskId == this.selectedTask.shiftTaskId) {
         return
       }
-      
-      if (this.$refs.taskInProgressLayout && !this.dialogProperties.task) {
-        let currentFormioData = this.$refs.taskInProgressLayout.getFormioData()
+      if (this.$refs.taskMainLayout && !this.dialogProperties.task) {
+        let currentFormioData = this.$refs.taskMainLayout.getFormioData()
 
         if (this.productionFormio && this.productionFormio.data && this.checkChangeFormioData(this.productionFormio.data, currentFormioData)) {
           this.dialogProperties.visible = true
@@ -260,20 +232,18 @@ export default {
     },
     changeCurrentTask(newSelectedTask) {
       this.selectedTask = newSelectedTask
-
       this.$store.commit('mes/resetProductionFormio')
-      if (newSelectedTask.inProgress) {
-        this.initializeFormio(newSelectedTask)
-      }
-      this.changeCurrentLayout('main')
+      this.initializeFormio(newSelectedTask)
     },
     initializeFormio(task) {
       let workCenter = this.workCenter,
         properties = {
-          workCenterCode: workCenter.code,
-          workBarcode: task.barcode
-        }
-      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties })
+          WORKCENTERCODE: workCenter.code,
+          WORKBARCODE: task.barcode,
+          instance: task
+        },
+        deviceSizeType = this.$vuetify.breakpoint.name
+      this.$store.dispatch('mes/createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
     },
     changeSelectTasksTab(tabIndex) {
       this.selectedTasksTab = tabIndex
@@ -305,7 +275,10 @@ export default {
       this.aspectRatioLayout = sizes
     },
     changeDowntimesOverlayVisible() {
-      this.downtimesOverlayVisible = !this.downtimesOverlayVisible
+      this.$emit('changeDowntimesOverlayVisible')
+    },
+    changeTaskTableView(mode) {
+      this.taskTableView = mode
     }
   }
 }
@@ -337,5 +310,9 @@ export default {
   .task-description-layout {
     border-left: 1px solid rgba(2, 2, 2, 0.08) !important;
     height: 100%;
+  }
+
+  .tasks-table-small {
+    min-width: 100vw
   }
 </style>

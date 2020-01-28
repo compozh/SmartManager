@@ -7,7 +7,7 @@
       <template v-slot:activator="{ on }">
         <v-btn outlined class="mes-arrow-back" @click="closeDialog" color="#326DA8" v-on="on"><v-icon dark>clear</v-icon></v-btn>
       </template>
-      <span>Закрыть</span>
+      <span>{{this.$t('mes.buttons.Close')}}</span>
     </v-tooltip>
     <div v-if="state" class="qr-state">
       {{state}}
@@ -52,7 +52,7 @@ export default {
       return !this.error && !this.result
     },
     routeToBack() {
-      return this.$route.params.routeToBack
+      return this.$router.currentRoute.query.to
     }
   },
   methods: {
@@ -97,6 +97,7 @@ export default {
 <style scoped>
   .qr-code-stream {
     font-size: 1.2em;
+    margin: 0 auto;
   }
   .qr-loader{
     margin: 40px;
@@ -110,17 +111,21 @@ export default {
   .mes-arrow-back {
     display: flex;
     margin: 0 auto;
-    max-width: 45px;
-    min-width: 45px !important;
-    height: 45px !important;
+    max-width: 60px;
+    min-width: 60px !important;
+    height: 60px !important;
     border-radius: 50%;
     position: absolute;
-    left: calc(50% - 20px);
+    left: calc(50% - 35px);
     z-index: 10;
     top: 25px;
     border: 2px solid white;
   }
   .mes-arrow-back i {
     color: white !important;
+  }
+  .wrapper {
+    display: flex;
+    justify-content: center;
   }
 </style>

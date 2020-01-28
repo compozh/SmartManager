@@ -1,21 +1,13 @@
-import Folder from '../../api/models/Folder';
-import Process from '../../api/models/Process';
+import { Folder, Diagram } from '../../api/models';
+import { eventBus } from '../../main';
+import { events } from '../../constants';
+import { Notification } from 'element-ui';
 
 export default {
-  data() {
-    return {
-      showForm: false,
-      formMode: 'create',
-      formModel: undefined,
-      formLoading: false,
-      formType: 'process'
-    }
-  },
   methods: {
-    async formSave(item, type) {
-      this.formLoading = true;
+    async formSave(item, type, mode) {
       let success = false;
-      switch (this.formMode) {
+      switch (mode) {
       case 'create':
         if (type === 'folder') {
           success = await this.$store.dispatch('bpmn/createFolder', item);
@@ -23,10 +15,9 @@ export default {
           success = await this.$store.dispatch('bpmn/createProcess', item);
         }
         if (success) {
-          this.showForm = false;
           this.activeItem = item.id;
         } else {
-          this.showMessage(this.$t('bpmn.errors.ProcessNotCreated'), 'error');
+          Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
         break;
       case 'edit':
@@ -35,19 +26,17 @@ export default {
         } else {
           success = await this.$store.dispatch('bpmn/editProcess', item);
         }
-        if (success) {
-          this.showForm = false;
-        } else {
-          this.showMessage(this.$t('bpmn.errors.ProcessNotEdited'), 'error');
+        if (!success) {
+          Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
         }
         this.activeItem = item.id;
         break;
       case 'delete':
-        if (await this.$store.dispatch('bpmn/deleteItem', item)) {
-          this.showForm = false;
+        success = await this.$store.dispatch('bpmn/deleteItem', item);
+        if (success) {
           this.activeItem = item.parentId;
         } else {
-          this.showMessage(this.$t('bpmn.errors.ProcessNotDeleted'), 'error');
+          Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
           this.activeItem = item.id;
         }
         break;
@@ -58,48 +47,45 @@ export default {
           success = await this.$store.dispatch('bpmn/copyProcess', item);
         }
         if (success) {
-          this.showForm = false;
           this.activeItem = item.id;
         } else {
-          this.showMessage(this.$t('bpmn.errors.ProcessNotCreated'), 'error');
+          Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
         break;
-          
       }
-      this.formLoading = false;
-    },
-    formClose() {
-      this.showForm = false;
+      return success;
     },
     createItem(parent, type, xmlView) {
       const parentId = parent ? parent.id : null;
-      this.$refs.form.reset();
-      this.formMode = 'create';
-      this.formModel = type === 'folder' ? new Folder({ parentId }) : new Process({ parentId, xmlView });
-      this.formType = type;
-      this.showForm = true;
+      const model = type === 'folder' ? new Folder({ parentId }) : new Diagram({ parentId, xmlView });
+      eventBus.$emit(events.modeler.showForm,
+        'create',
+        type,
+        model,
+        this.formSave);
     },
     editItem(item) {
-      this.$refs.form.reset();
-      this.formMode = 'edit';
-      this.formModel = item.isFolder ? new Folder(item) : new Process(item);
-      this.formType = item.isFolder ? 'folder' : 'process';
-      this.showForm = true;
+      eventBus.$emit(events.modeler.showForm,
+        'edit',
+        item.isFolder ? 'folder' : 'process',
+        item.isFolder ? new Folder(item) : new Diagram(item),
+        this.formSave);
     },
     removeItem(item) {
-      this.$refs.form.reset();
-      this.formMode = 'delete';
-      this.formModel = item;
-      this.formType = item.isFolder ? 'folder' : 'process';
-      this.showForm = true;
+      eventBus.$emit(events.modeler.showForm,
+        'delete',
+        item.isFolder ? 'folder' : 'process',
+        item.isFolder ? new Folder(item) : new Diagram(item),
+        this.formSave);
     },
     copyItem(item) {
-      this.$refs.form.reset();
-      this.formMode = 'copy';
-      this.formModel = item instanceof Folder ? new Folder(item) : new Process(item);
-      this.formModel.isSystem = false;
-      this.formType = item.isFolder ? 'folder' : 'process';
-      this.showForm = true;
+      const model = item instanceof Folder ? new Folder(item) : new Diagram(item);
+      model.isSystem = false;
+      eventBus.$emit(events.modeler.showForm,
+        'copy',
+        this.formType = item.isFolder ? 'folder' : 'process',
+        model,
+        this.formSave);
     }
   }
 }

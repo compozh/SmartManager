@@ -1,5 +1,7 @@
 export default {
-
+  setUser(state, user) {
+    state.user = user
+  },
   setCircularLoader (state, payload ) {
     state.loading = payload
   },
@@ -8,6 +10,9 @@ export default {
   },
   clearError (state) {
     state.error = null
+  },
+  setLogoLink (state, payload) {
+    state.logoLink = payload
   },
   setAvailableFilters (state, payload ) {
     state.availableFilters = payload

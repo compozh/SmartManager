@@ -17,9 +17,11 @@
     "PersonalInfo": {
         "FIO": "Full name",
         "BirthdayDate": "Date of Birth",
-        "Adress": "Address",
+        "Gender": "Gender",
         "PhoneNumber": "Phone number",
         "Department": "Department",
+        "Control": "Management Name",
+        "Position": "Category of post",
         "HireDate": "Date of receipt"
     },
     "Education":{
@@ -39,6 +41,24 @@
         "Duty": "Duty",
         "Priority": "Priority",
         "Provider": "Approx. the provider",
-        "Status": "Status"
+        "Status": "Status",
+        "btnFormPlane": "Create an individual development plan",
+        "cantdoFormPlane": "It is impossible to create an individual development plan",
+        "filePathNotFound": "File path not found",
+        "getworkwear": "Property received",
+        "getworkwearonplace": "Insufficient overalls in the warehouse"
+    },
+    "agGrid":{
+        "contains": "Сontains",
+        "notContains": "Not contains",
+        "startsWith": "Starts with",
+        "endsWith": "Ends with",
+        "equals": "Equals",
+        "notEqual": "Not equal",
+        "andCondition": "AND",
+        "orCondition": "OR",
+        "NoRowsToShow": "No rows to show",
+        "filter": "Filter...",
+        "noDataAvailabl": "No data Available"
     }
 }

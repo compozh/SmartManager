@@ -1,9 +1,0 @@
-{
-  bpmnqueryMutation {
-    createProcess(process: $process) {
-      id
-      name
-      parentId
-    }
-  }
-}

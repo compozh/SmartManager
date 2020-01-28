@@ -1,25 +1,26 @@
 // @it-enterprise пакеты
-import WebApps from '@it-enterprise/webappscore'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-import Authentication from '@it-enterprise/authentication'
-import '@it-enterprise/authentication/dist/authentication.css'
-import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
 import '@it-enterprise/common/dist/common-components.css'
+import formio from '@it-enterprise/formio'
+import '@it-enterprise/formio/dist/formio.css'
 
+import auth from '@it-enterprise/jwtauthentication'
+auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
-import 'material-design-icons-iconfont/dist/material-design-icons.css' // mdi icons
+
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import vuetify from './plugins/vuetify'
 import axios from 'axios'
+import acl from './acl/acl'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import App from './App.vue'
 
 // apollo
 import { ApolloClient } from 'apollo-client'
@@ -28,9 +29,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import VueCookies from 'vue-cookies'
 
-import { routerDependencies } from './router'
+import router from './router'
 
 import signalR from './signalR'
+import BarcodeScaner from './components/components/BarcodeScaner'
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -46,11 +48,10 @@ let dependencies = {
   i18n,
   apolloProvider,
   axios,
-  ...routerDependencies
+  router
 }
 
 // Плагины стандартные
-Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueI18n)
 Vue.use(VueApollo)
@@ -61,75 +62,58 @@ Vue.use(signalR)
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
-Vue.use(Authentication, { options: window.myConfig, dependencies })
-Vue.use(Router, { options: window.myConfig, dependencies })
-Vue.use(WebApps, { dependencies, options: window.myConfig })
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
+var formioOptions = {}
+formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
+formioOptions.routerDependencies = () => routerDependencies
+formioOptions.GraphQlUrl = window.myConfig.GrapgQlUrl
+Vue.use(formio, { options: formioOptions, dependencies })
+Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
+
+
 
 // Шина событий
-export const eventBus = new Vue()
+export const eventBus = new Vue({
+  router,
+  vuetify,
+  store,
+  i18n,
+  apolloProvider,
+  acl,
+  render: h => h(App)
+}).$mount('#app')
+
+var barcodeScaner = new BarcodeScaner()
+barcodeScaner.initialize()
 
 // импорт компонентов
-const req = require.context('@/components/', true, /\.(js|vue)$/i)
+let req = require.context('@/components/', false, /\.(js|vue)$/i)
 req.keys().map(key => {
   if (!(req(key).default || {}).name) {
     return
   }
   Vue.component(req(key).default.name, req(key).default)
 })
-
-const reqFormio = require.context('@/formio/', true, /\.(js|vue)$/i)
-reqFormio.keys().map(key => {
-  if (!(reqFormio(key).default || {}).name) {
+req = require.context('@/components/components', true, /\.(js|vue)$/i)
+req.keys().map(key => {
+  if (!(req(key).default || {}).name) {
     return
   }
-  Vue.component(reqFormio(key).default.name, reqFormio(key).default)
+  Vue.component(req(key).default.name, req(key).default)
 })
-
-start()
-
-async function start()   {
-  // Загрузка приложения
-  let webAppsCore = await Vue.prototype.$WebApps
-  // Редирект индексной страницы напрямую к приложению
-  //ToDo Поискать другой способ
-  if ((webAppsCore.__router.app._route.fullPath == '/index.html')
-      || (webAppsCore.__router.app._route.fullPath == '/MES/index.html')
-      || (webAppsCore.__router.app._route.fullPath == '/meswebapps/MES/index.html')) {
-    webAppsCore.__router.replace({path: '/MES/'})
+req = require.context('@/components/layouts', true, /\.(js|vue)$/i)
+req.keys().map(key => {
+  if (!(req(key).default || {}).name) {
+    return
   }
-  const opts = {
-    theme: {
-      light: true,
-      breakpoint: {
-        thresholds: {
-          xs: 340,
-          sm: 540,
-          md: 800,
-          lg: 1280,
-          xl: 1920,
-        },
-        scrollBarWidth: 24,
-      }
-    },
-    icons: {
-      iconfont: 'md',
-    }
+  Vue.component(req(key).default.name, req(key).default)
+})
+req = require.context('@/components/toolbars', false, /\.(js|vue)$/i)
+req.keys().map(key => {
+  if (!(req(key).default || {}).name) {
+    return
   }
-  let appComponent = await webAppsCore.GetApplicationComponent({
-
-    properties: {
-      i18n,
-      store,
-      vuetify: new Vuetify(opts),
-    }
-  })
-
-
-
-  new Vue(appComponent).$mount('#app')
-}
-
-
-
+  Vue.component(req(key).default.name, req(key).default)
+})

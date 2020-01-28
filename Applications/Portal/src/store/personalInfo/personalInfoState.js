@@ -1,4 +1,5 @@
 export default {
   fullUserInfo: undefined,
-  userInfoEditMode: false
+  userInfoEditMode: false,
+  employeeInfo: undefined,
 }

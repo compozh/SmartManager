@@ -5,7 +5,7 @@
       class="headline grey lighten-2"
       primary-title
     >
-      Фиксация простоя
+      {{this.$t('mes.labels.DowntimeFixation')}}
     </v-card-title>
       <div class="downtimes-block">
         <v-progress-circular
@@ -14,8 +14,8 @@
           indeterminate
           color="primary"
       ></v-progress-circular>
-      <formio-component
-        ref="formioBuilder"
+      <formio-form-component
+        ref="formioFormComponent"
         @formSubmit=formSubmit
         :formDefinition=createDowntimeFormio
         :formCode=workCenter.downtimeRegistrationFormCode
@@ -50,18 +50,34 @@ export default {
     closeOverlay () {
       this.$emit('changeDowntimesOverlayVisible')
     },
-    formSubmit(submission) {
-      var me = this
-      this.$store.dispatch('mes/downtimeFormIoSubmit', { workCenter: this.workCenter, submission, successAction: () => {
-        me.closeOverlay()
-      }})
+    async formSubmit({ submission, completeSubmissionCallback }) {
+      var me = this,
+        formCode = me.workCenter.downtimeRegistrationFormCode,
+        properties = { workCenterCode: me.workCenter.code },
+        currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+        
+      me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))
+
+      await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {
+        me.$store.commit('mes/setDowntimes', [])
+        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })  
+        
+        completeSubmissionCallback(result)
+      })
+
+      me.$store.commit('mes/closeDialogLinearLoader')
     },
     initializeCreateDowntimeFormio() {
-      if (Object.keys(this.createDowntimeFormio).length) {
-        return
-      }
-      let workCenter = this.$parent.workCenter
-      this.$store.dispatch('mes/initializeCreateDowntimeFormio', workCenter)
+      var me = this,
+        workCenter = this.workCenter,
+        formCode = workCenter.downtimeRegistrationFormCode,
+        properties = { RCENTR: workCenter.code },
+        fetchPolicy = 'network-only',
+        deviceSizeType = this.$vuetify.breakpoint.name
+
+      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
+        me.$store.commit('mes/setCreateDowntimeFormio', result)
+      })
     }
   }
 }
@@ -82,6 +98,7 @@ export default {
     display: flex;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     padding: 30px;
     /* background-color: #326da80d; */

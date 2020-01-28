@@ -1,29 +1,29 @@
 <template>
-    <v-layout row lg12 xs12 md12 sm12 show-arrows class="toolbar">
+    <v-layout  lg12 xs12 md12 sm12 show-arrows class="toolbar">
         <v-flex
-            class="toolbar-basebuttons"
+            :class="inTasksTable? 'task-toolbar-basebuttons' : 'toolbar-basebuttons'"
         >
-            <v-btn class="setup-installations-button" outlined @click="onclickSetupMaterial" color="#326DA8">Установить материалы</v-btn>
+            <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown && !inTasksTable" @click="changeTaskTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
+            <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp || inTasksTable" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
-            <v-btn class="status-task-btn"
+            <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp  || inTasksTable"
                 :disabled="selectedTask.state == 'DONE'"
                 outlined
-                color="rgba(7, 109, 0, 0.81)"
-                @click="onclickRegisterProduction"
+                :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' :  'rgba(7, 109, 0, 0.81)'"
+                @click="changeStatusTask"
             >
-                Взять в работу
+                {{selectedTask.inProgress ? this.$t('mes.buttons.Pause') :  this.$t('mes.buttons.TakeToWork')}}
             </v-btn>
 
-            <v-btn class="downtime-registration-button" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">Простой</v-btn>
-
-            <v-tooltip left>
+            <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.mdAndUp" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">{{this.$t('mes.buttons.Downtime')}}</v-btn>
+              <!-- <v-tooltip left>
               <template v-slot:activator="{ on }">
                 <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode" v-on="on">
                   <v-icon>control_camera</v-icon>
                 </v-btn>
               </template>
               <span>Режим корректировки</span>
-            </v-tooltip>
+            </v-tooltip> -->
         </v-flex>
     </v-layout>
 </template>
@@ -33,6 +33,12 @@
 
 export default {
   name: 'mes-task-main-layout-toolbar',
+  props:{
+    inTasksTable: {
+      required: false,
+      type: Boolean
+    }
+  },
   computed: {
     selectedTask() {
       return this.$store.getters['mes/selectedTask']
@@ -61,11 +67,15 @@ export default {
     onclickSetupMaterial() {
       this.$store.commit('mes/setCurrentLayout', 'installations')
     },
-    onclickRegisterProduction() {
-      this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask })
+    changeStatusTask() {
+      if (this.selectedTask.inProgress) {
+        this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
+        return
+      }
+      this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
     },
-    changeDragResizeMode () {
-      this.dragResizeMode = !this.dragResizeMode
+    changeDragResizeMode (mode) {
+      this.dragResizeMode = mode
       var splitter = document.getElementsByClassName('gutter gutter-horizontal')[0]
       if (!this.dragResizeMode) {
         splitter.style.cssText = 'width:0'
@@ -75,6 +85,14 @@ export default {
     },
     changeDowntimesOverlayVisible() {
       this.$emit('changeDowntimesOverlayVisible')
+    },
+    changeTaskTableView() {
+      this.$emit('changeTaskTableView',true)
+    }
+  },
+  created() {
+    if(this.$vuetify.breakpoint.smAndDown){
+      this.changeDragResizeMode(false)
     }
   }
 }
@@ -89,6 +107,12 @@ export default {
     width: 100%;
     margin: 0;
   }
+  .toolbar .task-toolbar-basebuttonss {
+    flex-direction: column !important;
+    justify-content: flex-start;
+    height: 100%;
+    border-bottom: none;
+  }
   .toolbar-basebuttons {
     display: flex;
     flex-wrap: nowrap;
@@ -96,6 +120,9 @@ export default {
     align-items: center;
     height: 63px;
     border-bottom: 1px solid rgba(2, 2, 2, 0.08);
+  }
+  .task-toolbar-basebuttons .v-btn {
+    min-width: 95%;
   }
   .status-task-btn {
     border-radius: 5px;

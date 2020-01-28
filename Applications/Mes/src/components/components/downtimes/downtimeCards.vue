@@ -6,10 +6,10 @@
         @click="changeCurrentDowntime(downtime)"
       >
         <v-card-text :class="selectedDowntime && downtime.id == selectedDowntime.id ? 'active-downtime-item' : 'inactive-downtime-item'">
-          <span><strong>Причина:</strong> {{downtime.description}}</span>
-          <span><strong>Начало:</strong> {{converDate(downtime.eventStart)}}</span>
-          <span v-if="downtime.eventEnd != '0001-01-01T00:00:00Z'"><strong>Окончание:</strong> {{converDate(downtime.eventEnd)}}</span>
-          <span><strong>Комментарий:</strong> {{downtime.comment ? downtime.comment : '- - -'}}</span>
+          <span><strong>{{$t('mes.cards.Cause')}}:</strong> {{downtime.description}}</span>
+          <span><strong>{{$t('mes.cards.Start')}}:</strong> {{converDate(downtime.eventStart)}}</span>
+          <span v-if="downtime.eventEnd != '0001-01-01T00:00:00Z'"><strong>{{$t('mes.cards.End')}}:</strong> {{converDate(downtime.eventEnd)}}</span>
+          <span><strong>{{$t('mes.cards.Comment')}}:</strong> {{downtime.comment ? downtime.comment : '- - -'}}</span>
         </v-card-text>
       </v-card>
     </div>
@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     changeCurrentDowntime(newDowntime) {
+      this.$emit('changeDowtimesTableView', false)
       this.$emit('changeCurrentDowntime', newDowntime)
     },
     converDate(date) {
@@ -59,7 +60,7 @@ export default {
   flex-direction: column;
 }
 .downtime-item {
-  margin: 10px;
+  margin: 5px 10px;
   cursor: pointer;
   text-align: center;
 }

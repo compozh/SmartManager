@@ -1,16 +1,25 @@
 <template>
   <v-list>
 
+    <!-- Лого -->
+    <v-list-item row v-if="$vuetify.breakpoint.smAndDown" class="logo">
+      <router-link tag="h1" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">
+        <a class="mes-title-link">MES</a>
+      </router-link>
+      <span v-if="properties && properties.brandName" class="brand-name" @click="refreshApp">{{properties.brandName}}</span>
+    </v-list-item>
+
     <!-- Пункт меню -->
-    <v-list-item v-for="route in links" :key="route.Id" :to="{name:route.Id}">
+    <v-list-item v-for="(route, i) in links" :key="route.id + i"  @click="toggleMenuMode"
+      :to="{ name: route.id, params: route.name == 'DYNAMIC'?  { id:  route.params} : {}, query : {fixedUuid: $route.query.fixedUuid}}">
       <v-list-item-action @click="reloadPage(route)">
-          <v-icon large>{{route.Image}}</v-icon>
-          <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' v-if="$route.name == route.Id">refresh</v-icon>
+        <v-icon large>{{route.image}}</v-icon>
+        <v-icon class="reload-icon" :color='obsoleteData.tasks ? "#009975" : "#326DA8"' >refresh</v-icon>
       </v-list-item-action>
 
       <!-- Описание пункта меню -->
       <v-list-item-content  @click="reloadPage(route)">
-        <v-list-item-title>{{ route.Name }}</v-list-item-title>
+        <v-list-item-title style="white-space: normal;">{{ route.name == 'DYNAMIC'? route.text : $t(route.text) }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -18,78 +27,42 @@
   </v-list>
 </template>
 <script>
+import Init from './components/Init'
+
 export default {
   name: 'mes-menu',
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
+    mobilityProperties() {
+      return this.$store.getters['mes/mobilityProperties']
+    },
     links() {
-      if (!this.$store.state.WebApps.applicationDescription) {
-        return []
-      }
-
-      const app = this.$store.state.WebApps.applicationDescription
-      const sections = app.Sections || []
-      var links = []
-      for (let index = 0; index < sections.length; index++) {
-        const section = sections[index]
-        links = links.concat(
-          (section.Routes || []).map(r => (r.section = section) && r)
-        )
-      }
-      var pages = []
-      for (let page of links[1].Children) {
-        if (this.workCenter)  {
-          switch (this.workCenter.accessPages) {
-          case 'ALL_PAGES':
-            pages.push(page)
-            break
-          case 'INSTALLATIONS':
-            if (page.id == 'INSTALLATIONS') {
-              pages.push(page)
-            }
-            break
-          case 'QUALITY':
-            if (page.id == 'QUALITY') {
-              pages.push(page)
-            }
-            break
-          }
-        }
-      }
-      if (this.workCenter && this.$route.path.replace('/', '').toLowerCase() == 'mes') {
-        var pagePath = ''
-        switch (this.workCenter.accessPages) {
-        case 'ALL_PAGES':
-          pagePath = '/MES/tasks'
-          break
-        case 'INSTALLATIONS':
-          pagePath = '/MES/installations'
-          break
-        case 'QUALITY':
-          pagePath = '/MES/quality'
-          break
-        }
-        this.$router.replace({path: pagePath})
-      }
-      pages = pages.sort((a,b) => {
-        return a.Sort > b.Sort ? 1 : (a.Sort == b.Sort ? 0 : -1)
-      })
-      links = links.concat(pages)
-      return links.filter(l => l.Name && l.Path)
+      return Init.prototype.preparePages(this)
     },
     obsoleteData() {
       return this.$store.getters['mes/obsoleteData']
     },
+    properties() {
+      return this.$store.getters['mes/properties']
+    },
   },
   methods: {
     reloadPage(route) {
-      if (this.$router.history.current.name != route.Id) {
+      if (this.$router.history.current.name != route.id) {
         return
       }
       this.$store.commit('mes/changeMainContainerKey')
-    }
+    },
+    refreshApp() {
+      this.$router.go()
+    },
+    toggleMenuMode() {
+      this.$vuetify.breakpoint.smAndDown ? 
+      this.$store.commit('mes/setMenuDrawerMode', false) :
+      this.$store.commit('mes/setMenuMiniMode', true)
+    },
   }
 }
 </script>
@@ -104,26 +77,60 @@ export default {
     height: 100%;
   }
   .v-navigation-drawer__content .v-list-item__title {
+    text-align: start;
     font-size: 14px;
-    height: 24px;
+    /* height: 24px; */
     line-height: 24px;
     font-weight: 500;
   }
   .v-navigation-drawer--mini-variant .v-list-item {
     justify-content: start;
   }
-  .reload-icon {
+  .v-list-item .reload-icon {
+    display: none;
+  }
+  .v-list-item--active .reload-icon {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 2px;
+    right: 0;
     font-size: 19px !important;
     font-weight: 800;
+    display: block;
   }
+
   .v-navigation-drawer__content .v-list .v-list-item__action {
-    margin-right: 0;
+    margin-right: 0 !important ;
   }
   .v-navigation-drawer__content .v-list-item__title {
     margin-left: 10px;
     margin-top: 5px;
   }
+
+.brand-name {
+  align-self: center;
+  padding: 0 10px;
+  color: #326da8;
+  font-size: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+h1 {
+  font-size: 30px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+.mes-title-link {
+  color: #326da8 !important;
+}
+
+.logo {
+  border-bottom: 1px solid silver;
+  height: 70px;
+}
 </style>

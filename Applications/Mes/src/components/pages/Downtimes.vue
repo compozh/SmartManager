@@ -14,14 +14,22 @@
         :sizes="this.defaultSizes"
       >
       <mes-downtimes-component
+        :currentDate=currentDate
+        :workCenter=workCenter
         id="downtimeList"
         :initializeDowntimes=initializeDowntimes
         @changeCurrentDowntime=changeCurrentDowntime
         @uploadDowntimeOnScroll=uploadDowntimeOnScroll
         :isUploadInProcess=isUploadInProcess
+        v-if="$vuetify.breakpoint.smAndDown? dowtimesTableView : true"
+        :class="$vuetify.breakpoint.smAndDown? 'dowtimes-table-small' : ''"
+        @changeDowtimesTableView=changeDowtimesTableView
       />
       <mes-downtime-main-layout
+        v-if="$vuetify.breakpoint.smAndDown? !dowtimesTableView : true"
         id="downtimeDescription"
+        :initializeDowntimes=initializeDowntimes
+        @changeDowtimesTableView=changeDowtimesTableView
       />
       </vue-split>
     </v-layout>
@@ -36,13 +44,9 @@ export default {
     return {
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       initializeDowntimes: false,
-      defaultSizes: [35, 65],
-      isUploadInProcess: false
-    }
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
+      defaultSizes: [25, 75],
+      isUploadInProcess: false,
+      dowtimesTableView: true
     }
   },
   created() {
@@ -67,20 +71,36 @@ export default {
   },
   methods: {
     async initialize() {
-      if (!this.downtimes.length) {
-        await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
+      if (this.downtimes.length) {
+        this.$store.commit('mes/setDowntimes', [])
       }
+      await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: this.currentDate })
       this.initializeDowntimes = true
       if (!this.selectedDowntime) {
         this.seelectFirstDowntime()
       }
     },
-    changeCurrentDowntime(newSelectedDowntime) {
-      if (this.selectedDowntime == newSelectedDowntime) {
+    async changeCurrentDowntime(newSelectedDowntime) {
+      var me = this
+      if (me.selectedDowntime == newSelectedDowntime) {
         return
       }
-      this.selectedDowntime = newSelectedDowntime
-      this.$store.dispatch('mes/initializeDowntimeFormio', { workCenter: this.workCenter, downtimeId: newSelectedDowntime.id } )
+      me.selectedDowntime = newSelectedDowntime
+
+      var formCode = me.workCenter.downtimeRegistrationFormCode,
+        properties = {
+          RCENTR: me.workCenter.code,
+          ID: newSelectedDowntime.id,
+          instance: newSelectedDowntime
+        },
+        deviceSizeType = this.$vuetify.breakpoint.name
+
+      me.$store.commit('mes/resetDowntimeFormio')
+      me.$store.commit('mes/setLinearLoader', true)
+      await me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy: 'network-only',deviceSizeType }).then(result => {
+        me.$store.commit('mes/setDowntimeFormio', result)
+      })
+      me.$store.commit('mes/setLinearLoader', false)
     },
     seelectFirstDowntime() {
       if (this.downtimes.length) {
@@ -91,6 +111,9 @@ export default {
       this.isUploadInProcess = true
       await this.$store.dispatch('mes/downloadDowntimes', { workCenterCode: this.workCenter.code, dateTime: lastDowntimeDate })
       this.isUploadInProcess = false
+    },
+    changeDowtimesTableView(mode) {
+      this.dowtimesTableView = mode
     }
   }
 }
@@ -102,5 +125,8 @@ export default {
 }
 .main-downtime-layout {
   width: 100%;
+}
+.dowtimes-table-small {
+    min-width: 100vw
 }
 </style>

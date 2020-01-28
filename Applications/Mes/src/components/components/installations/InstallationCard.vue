@@ -7,7 +7,7 @@
               <v-icon dark>delete_forever</v-icon>
             </v-btn>
           </template>
-          <span>Удалить инсталляцию</span>
+          <span>{{this.$t('mes.buttons.DeleteInstallation')}}</span>
         </v-tooltip>
     </v-card-text>
 </template>
@@ -50,6 +50,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 360px;
+  /* width: 360px; */
 }
 </style>

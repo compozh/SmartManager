@@ -17,6 +17,8 @@
 <script>
 /* eslint-disable */
 import { eventBus } from '../../main'
+import { events } from '../../constants'
+
 export default {
   name: 'formio-builder-container', 
   data() {
@@ -24,49 +26,50 @@ export default {
         callback: null,
         showFormioBuilder: false,
         buttonLoading: false,
+        isSystem: false,
         formDefinition: {}
     }
   },
   created() {
-    var me = this;
-    eventBus.$on('properties-panel.create-formio', (callback) => {
-        me.createForm(callback)
+    eventBus.$on(events.formio.createForm, (callback, isSystem) => {
+        this.createForm(callback, isSystem)
     })
-    eventBus.$on('properties-panel.edit-formio', (formCode) => {
-        me.editForm(formCode)
+    eventBus.$on(events.formio.editForm, (formCode) => {
+        this.editForm(formCode)
     })
   },
   methods: {
-    createForm(callback) {
+    createForm(callback, isSystem) {
         this.callback = callback
+        this.isSystem = Boolean(isSystem)
         this.formDefinition = {}
         this.changeFormVisible(true)
     },
     async editForm(formCode) {
-        var me = this
         this.$store.commit('formio/setLinearLoader', true)
         await this.$store.dispatch('formio/getForm', { formCode }).then(result => {
             if(result.success) {
-                me.formDefinition = result
-                me.formDefinition.formCode = formCode //todo: добавить в оъект FormDefinition formCode
+                this.formDefinition = result
+                this.isSystem = result.isSystem
+                this.formDefinition.formCode = formCode //todo: добавить в оъект FormDefinition formCode
 
                 this.$store.commit('formio/setLinearLoader', false)
-                me.changeFormVisible(true)
+                this.changeFormVisible(true)
             }
         })
     },
     async onAction(formDefinition) {
-        var me = this
         this.buttonLoading = true
-        if(!Object.keys(me.formDefinition).length) {
-            await me.$store.dispatch('formio/createForm', formDefinition).then(result => {
-                if(result.success && me.callback) {
-                    me.callback(formDefinition.formCode)
+        formDefinition.isSystem = this.isSystem
+        if(!Object.keys(this.formDefinition).length) {
+            await this.$store.dispatch('formio/createForm', formDefinition).then(result => {
+                if(result.success && this.callback) {
+                    this.callback(formDefinition.formCode, formDefinition.name)
                 }
-                me.callback = null
+                this.callback = null
             })
         } else {
-            await me.$store.dispatch('formio/saveForm', formDefinition)
+            await this.$store.dispatch('formio/saveForm', formDefinition)
         }
         this.buttonLoading = false
         this.changeFormVisible(false)
@@ -105,14 +108,16 @@ export default {
         z-index: 100;
     }
     .formio-builder-component {
+        text-align: left;
         background-color: #fff;
         z-index: 101;
         position: absolute;
-        top: 20px;
-        left: 20px;
-        bottom: 20px;
-        right: 20px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
         box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
         border-radius: 10px;
+        overflow: hidden;
     }
 </style>

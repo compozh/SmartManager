@@ -3,6 +3,7 @@
     folders {
       code
       count
+      folderId
       name
     }
   }

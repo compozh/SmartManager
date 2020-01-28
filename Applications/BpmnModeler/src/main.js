@@ -3,12 +3,10 @@ import WebApps from '@it-enterprise/webappscore';
 import Localization from '@it-enterprise/localization';
 import Eds from '@it-enterprise/eds';
 import GrapgQlCore from '@it-enterprise/graphql';
-import Authentication from '@it-enterprise/authentication';
-import '@it-enterprise/authentication/dist/authentication.css';
 import Router from '@it-enterprise/routercore';
-import ItCommon from '@it-enterprise/common';
-import '@it-enterprise/common/dist/common-components.css';
-
+import auth from '@it-enterprise/jwtauthentication';
+import formio from '@it-enterprise/formio'
+import '@it-enterprise/formio/dist/formio.css'
 
 // vue пакеты
 import Vue from 'vue';
@@ -20,56 +18,57 @@ import { i18n } from './plugins/i18n';
 import VueI18n from 'vue-i18n';
 import store from './store/index';
 import VueSplit from 'vue-split-panel'
-import { Tree } from 'element-ui';
-
-// apollo
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import VueApollo from 'vue-apollo';
+import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
+import './element-variables.scss';
+import '@mdi/font/css/materialdesignicons.min.css';
+import 'roboto-fontface/css/roboto/roboto-fontface.css';
 
 import { routerDependencies } from './router';
+const config = window.config;
 
-const apolloProvider = new VueApollo({
-  defaultClient: new ApolloClient({
-    link: new HttpLink({}),
-    cache: new InMemoryCache(),
-    connectToDevTools: true,
-  }),
-});
-
-
+auth.config(config.GrapgQlUrl);
 // объект с зависимостями
 let dependencies = {
   store,
   i18n,
-  apolloProvider,
   axios,
   ...routerDependencies
 };
 
 // Плагины стандартные
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  iconfont: 'mdi'
+})
 Vue.use(Vuex);
 Vue.use(VueI18n);
-Vue.use(VueApollo);
 
+// VueSplit
 Vue.use(VueSplit);
+
+// Element UI
 Vue.prototype.$ELEMENT = { size: 'small' };
 Vue.use(Tree);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+Vue.use(Tabs);
+Vue.use(TabPane);
 
 // Плагины it-enterprise
-Vue.use(ItCommon);
-Vue.use(GrapgQlCore, { options: window.myConfig, dependencies });
+Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
+Vue.use(Router, { options: config, dependencies }, () => auth.getToken());
+Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
-Vue.use(Authentication, { options: window.myConfig, dependencies });
-Vue.use(Router, { options: window.myConfig, dependencies });
 Vue.use(Eds, { dependencies });
-Vue.use(WebApps, { dependencies, options: window.myConfig });
 
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'))
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'))
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'))
+var formioOptions = {}
+formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
+formioOptions.routerDependencies = () => routerDependencies
+formioOptions.GraphQlUrl = config.GrapgQlUrl
+Vue.use(formio, { options: formioOptions, dependencies });
+
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'));
 
 // Шина событий
 export const eventBus = new Vue();
@@ -83,30 +82,18 @@ req.keys().map(key => {
   Vue.component(req(key).default.name, req(key).default);
 });
 
-const reqFormio = require.context('@/formio/', true, /\.(js|vue)$/i)
-reqFormio.keys().map(key => {
-  if (!(reqFormio(key).default || {}).name) {
-    return
-  }
-  Vue.component(reqFormio(key).default.name, reqFormio(key).default)
-})
-
 start();
 
+/**
+ * Загрузка приложения
+ */
 async function start()   {
-  // Загрузка приложения
   let webAppsCore = await Vue.prototype.$WebApps;
-
   let appComponent = await webAppsCore.GetApplicationComponent({
-
     properties: {
       i18n,
       store
     }
   });
-
   new Vue(appComponent).$mount('#app');
 }
-
-
-

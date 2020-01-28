@@ -1,9 +1,14 @@
+import Canvg from 'canvg';
+import { eventBus } from '../../main';
+import { events } from '../../constants';
+
 export const importMixin = {
   methods: {
     importItem(parent) {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = '.bpmn, .dmn';
+      input.style.display = 'none';
 
       input.addEventListener('change', () => {
         const [file] = input.files;
@@ -24,6 +29,12 @@ export const importMixin = {
   }
 };
 export const exportMixin = {
+  mounted() {
+    eventBus.$on(events.modeler.export, this.export);
+  },
+  beforeDestroy() {
+    eventBus.$off(events.modeler.export, this.export);
+  },
   methods: {
     export(type) {
       let fileName = 'diagram.' + type;
@@ -31,6 +42,7 @@ export const exportMixin = {
       const save = function (fileName, data) {
         const file = new Blob([data]);
         const a = document.createElement('a');
+        a.style.display = 'none';
         const url = URL.createObjectURL(file);
         a.href = url;
         a.download = fileName;
@@ -59,6 +71,26 @@ export const exportMixin = {
           }
           save(fileName, svg);
         });
+        break;
+      case 'png':
+        this.modeler.saveSVG((err, svg) => {
+          if (err) {
+            return;
+          }
+          var canvas = document.createElement('canvas');
+          Canvg(canvas, svg);
+
+          var dataURL = canvas.toDataURL('image/png');
+          var data = atob(dataURL.substring('data:image/png;base64,'.length)),
+            asArray = new Uint8Array(data.length);
+
+          for (var i = 0, len = data.length; i < len; ++i) {
+            asArray[i] = data.charCodeAt(i);
+          }
+
+          save(fileName, asArray.buffer);
+        });
+        break;
       }
     }
   }

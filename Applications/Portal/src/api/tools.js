@@ -1,16 +1,15 @@
 import {ApolloClient} from 'apollo-client'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {HttpLink} from 'apollo-link-http'
-import Vue from 'vue'
+import auth from '@it-enterprise/jwtauthentication'
 
-export const getClient = (schema) => {
-
-  const authHeader = Vue.prototype.$authentication ? Vue.prototype.$authentication.getAuthHeader() : undefined
+export const getClient = async schema => {
+  const token = await auth.getToken()
   const options = {
     uri: window.appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
-      ... authHeader,
+      'Authorization': `Bearer ${token}`,
       'schema': schema
     }
   }

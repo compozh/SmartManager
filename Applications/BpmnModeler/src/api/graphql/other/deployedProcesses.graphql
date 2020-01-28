@@ -1,0 +1,11 @@
+{
+  bpmnquery {
+    deployedProcesses {
+      deployId,
+      procDefId,
+      procDefKey,
+      procDefVer,
+      procName
+    }
+  }
+}

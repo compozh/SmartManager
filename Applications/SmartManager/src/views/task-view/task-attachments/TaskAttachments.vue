@@ -1,93 +1,128 @@
 <template>
-  <VuePerfectScrollbar
-    class="scroll-area md:px-8 pt-4 px-6 mb-4"
-    :settings="settings"
-  >
-    <div class="vx-row h-full">
-      <div class="vx-col w-full">
-        <vx-card class="px-4 h-full">
-          <!-- TASK ATTACHMENTS -->
-          <div class="vx-row">
-            <div>
-            </div>
-            <div class="flex flex-wrap">
-              <div
-                class="mail__attachment my-1"
-                v-for="(attachment, index) in attachments"
-                :key="index"
-                @click="currentFile = attachment"
-              >
-                <vx-tooltip :text="attachment.fileName" color="rgb(98, 98, 98, .95)">
-                  <vs-chip
-                    :color="attachment.id === currentFile.id ? 'warning' : 'primary'"
-                    class="mr-3 max-w-sm cursor-pointer"
-                  >
-                    <span class="flex mr-1"><file-icon size="1.6x"></file-icon></span>
-                    <span class="custom-truncate">{{ attachment.fileName }}</span>
-                  </vs-chip>
-                </vx-tooltip>
-              </div>
+  <div class="flex flex-col h-full bg-white" ref="container">
+        <VuePerfectScrollbar
+          class="scroll-area my-2"
+          :settings="settings"
+          style="height: auto; max-height: 15%">
+      <div class="vx-row m-0 px-6" ref="items">
+          <div class="flex flex-wrap">
+            <div
+              class="my-1"
+              v-for="(attachment, index) in task.originals"
+              :key="index"
+              @click="getUrl(attachment)">
+              <vx-tooltip
+                class="custom-tooltip"
+                :text="attachment.fileName"
+                color="rgb(98, 98, 98, .95)">
+                <vs-chip
+                  :color="attachment.id === fileId ? 'warning' : 'primary'"
+                  class="mr-3 max-w-sm cursor-pointer">
+                  <span class="flex mr-2">
+                    <file-icon :extention="attachment.fileExt"></file-icon>
+                  </span>
+                  <span class="custom-truncate">{{ attachment.fileName }}</span>
+                </vs-chip>
+              </vx-tooltip>
             </div>
           </div>
-          <div class="vx-row">
-            <vs-divider/>
-            <div class="vx-col w-full flex">
-              <vs-list>
-                <vs-list-item
-                  v-for="(field, index) in viewAttachment"
-                  :key="index"
-                  :title="index"
-                >{{ field }}</vs-list-item>
-              </vs-list>
-            </div>
-          </div>
-          <div class="vx-col w-full flex">
-              <img class="w-full" :src="currentFile.fileUrl">
-          </div>
-        </vx-card>
       </div>
-    </div>
-  </VuePerfectScrollbar>
+        </VuePerfectScrollbar>
+    <component :is="viewer" :url="fileUrl"></component>
+  </div>
 </template>
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import { FileIcon } from 'vue-feather-icons'
+import NotSupport from '@/components/NotSupport'
+import NoData from '@/components/NoData'
+import FileIcon from '@/components/FileIcon'
+
+const PdfViewer = () => import('@/components/pdf-viewer/Viewer')
+const ImgViewer = () => import('@/components/ImageViewer')
+const TxtViewer = () => import('@/components/TextViewer')
 
 export default {
   props: {
-    attachments: Array,
+    task: Object,
     index: Number
   },
   components: {
+    PdfViewer,
+    ImgViewer,
+    TxtViewer,
     VuePerfectScrollbar,
+    NotSupport,
+    NoData,
     FileIcon
   },
   data: () => ({
-    currentFile: {},
+    fileId: 0,
+    fileUrl: '',
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
-    },
+    }
   }),
+  created() {
+    if (!this.fileId && this.originals) {
+      const attachment = this.originals[this.index]
+      this.fileId = attachment.id || 0
+      this.getUrl(attachment)
+    }
+  },
   computed: {
-    viewAttachment() {
-      if (Object.keys(this.currentFile).length) {
-        return this.currentFile
+    originals() {
+      return this.task.originals.length
+        ? this.task.originals
+        : null
+    },
+    isImage() {
+      const image = ['png', 'jpeg', 'jpg', 'webp', 'bmp', 'gif']
+      return ext => image.some(i => i === ext)
+    },
+    isText() {
+      const text = ['txt', 'log', 'ini', 'dll', 'bat', 'config', 'json']
+      return ext => text.some(i => i === ext)
+    },
+    viewer() {
+      if (this.fileUrl) {
+        const ext = this.fileUrl.split('.').pop().toLowerCase()
+        switch (true) {
+          case ext === 'pdf': return 'pdf-viewer'
+          case this.isText(ext): return 'txt-viewer'
+          case this.isImage(ext): return 'img-viewer'
+          default: return 'not-support'
+        }
       }
-      return this.currentFile = this.attachments[this.index]
+      return 'no-data'
+    }
+  },
+  methods: {
+    async getUrl({id: fileId, fileExt, fileUrl}) {
+      const id = this.$route.params.id
+      this.fileId = fileId
+      this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {fileId, fileExt, id})
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
+
+  .vs-tooltip {
+    max-width: 300px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   .custom-truncate {
-    display: block;
-    max-width: 100px;
+    max-width: 200px;
     margin: 0;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
+    justify-content: flex-start;
   }
+
 </style>

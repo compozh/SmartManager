@@ -5,7 +5,7 @@
       <vx-card>
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row no-gutter justify-center items-center">
-            <div class="vx-col hidden lg:block lg:w-1/2">
+            <div class="vx-col lg:block lg:w-1/2">
               <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto">
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
@@ -55,12 +55,12 @@
 </template>
 
 <script>
-//import auth from '@/api/auth/auth'
 import templateConfig from '@/templateConfig'
 
 export default {
   data() {
     return {
+      code: '',
       login: '',
       password: '',
       checkbox_remember_me: false,
@@ -72,21 +72,20 @@ export default {
       return !this.errors.any() && this.login !== '' && this.password !== ''
     }
   },
+  created() {
+    this.$store.dispatch('auth/logout')
+  },
   methods: {
     loginMethod() {
-      // Loading
-      this.$vs.loading()
-
       const payload = {
-        checkbox_remember_me: this.checkbox_remember_me,
-        userDetails: {
-          email: this.login,
-          password: this.password
-        },
-        notify: this.$vs.notify,
-        closeAnimation: this.$vs.loading.close
+        login: this.login,
+        password: this.password,
+        rememberMe: this.checkbox_remember_me,
       }
       this.$store.dispatch('auth/login', payload)
+    },
+    loginByCode() {
+      this.$store.dispatch('auth/loginByCode', this.code)
     }
   }
 }

@@ -1,5 +1,3 @@
-import moment from 'moment'
-
 export default {
   setMessage(state, payload) {
     state.message = payload ? payload : {}
@@ -19,24 +17,41 @@ export default {
   setTaskInfo(state, payload) {
     state.taskInfo = Object.assign({}, state.taskInfo, payload)
   },
+  setFileUrl(state, {fileId, fileUrl, taskOrCaseId: id}) {
+    const task = state.taskInfo[id]
+      || state.caseDetails[id]
+    task.originals.forEach(original => {
+      if (original.id === fileId) {
+        original.fileUrl = fileUrl
+      }
+    })
+  },
   setSearch(state, payload) {
     state.search = payload
   },
   setUsers(state, payload) {
     state.users = payload
   },
-  addComment(state, payload) {
-    const user = JSON.parse(localStorage.currentUser)
-    const comment = {
-      date: moment().format('DD.MM.YYYY HH:mm'),
-      text: payload.text,
-      user: user.UserData.CurrentUserData.UserName,
-      userId: user.UserData.CurrentUserData.UserId,
-      userPhoto: user.UserData.CurrentUserData.UserPhoto
-    }
-    state.taskInfo[payload.id].comments.push(comment)
+  setCases(state, payload) {
+    state.cases = payload
+  },
+  setCaseDetails(state, payload) {
+    state.caseDetails = Object.assign({}, state.caseDetails, payload)
   },
   setBusinessProcesses(state, payload) {
     state.businessProcesses = payload
+  },
+  setTaskListPosition(state, {folder, page, scrollTop}) {
+    if (!state.taskListPosition[folder]) {
+      state.taskListPosition = Object
+        .assign({}, state.taskListPosition, {
+          [folder]: {page: 1, scrollTop: 0}
+        })
+    }
+    state.taskListPosition[folder] = Object
+      .assign({}, state.taskListPosition[folder], {
+        page: page || state.taskListPosition[folder].page,
+        scrollTop: scrollTop || state.taskListPosition[folder].scrollTop
+      })
   }
 }

@@ -6,6 +6,9 @@ export default {
     return state.error
   },
 
+  logoLink (state) {
+    return state.logoLink
+  },
   availableFilters (state) {
     return state.availableFilters
   },

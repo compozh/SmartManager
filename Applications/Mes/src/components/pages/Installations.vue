@@ -8,12 +8,11 @@
       @submitQrCode=submitQrCode
     />
 
-    <mes-content-loader v-if="!initializeInstallations && !installations.length" />
-
-    <mes-installations-component
-      ref="installationCards"
-    />
-    <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">Нет установленных партий</span>
+    <mes-content-loader v-if="!initializeInstallations && !installations.length" :loaderType="$vuetify.breakpoint.xs ? 'list' : ''" />
+      <mes-installations-component
+        ref="installationCards"
+      />
+    <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">{{this.$t('mes.labels.AbsentInstalledParties')}}</span>
   </v-layout>
 </template>
 
@@ -28,7 +27,14 @@ export default {
     }
   },
   created() {
-    this.initialize()
+    if(!this.cameraSettings.initialized) {
+      this.$store.dispatch('mes/verifyCamera').then(result => {
+        this.$store.commit('mes/setCameraInitialized',  true)
+      })
+    }
+    this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(() => {
+      this.initializeInstallations = true
+    })
   },
   computed: {
     workCenter() {
@@ -36,13 +42,12 @@ export default {
     },
     installations() {
       return this.$store.getters['mes/installations']
+    },
+    cameraSettings() {
+      return this.$store.getters['mes/cameraSettings']
     }
   },
   methods: {
-    async initialize() {
-      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code })
-      this.initializeInstallations = true
-    },
     removeAllInstallations() {
       for (let installation of this.installations) {
         this.removeInstallation(installation)
@@ -84,6 +89,8 @@ export default {
   }
   .mes-content-loader {
     z-index: 1;
+    
+    width: 100%;
   }
   .no-data-text {
     position: absolute;

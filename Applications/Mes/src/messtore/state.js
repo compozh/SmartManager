@@ -11,7 +11,7 @@ export default {
     selectedTasksTab: 0,
     currentLayout: 'main',
     dragResizeMode: false,
-    aspectRatioLayout: [35, 65],
+    aspectRatioLayout: [25, 75],
     filterValue: ''
   },
   productionPageState: {
@@ -28,27 +28,43 @@ export default {
     tasks: false
   },
   properties: null,
+  mobilityProperties: null,
   userName: null,
   workCenter: null,
   workCenterFixationData: {},
   initialWorkCenter: false,
   workCentersForWorker: [],
   selectedDowntime: null,
+  selectedQuality: null,
+  selectedDocument: null,
   tasks: [],
   downtimes: [],
+  qualities: [],
+  documents: [],
   installations: [],
   workCenterProductionEvents: [],
   usersProductionEvents: [],
   productionFormio: {},
   downtimeFormio: {},
+  qualityFormio: {},
+  documentFormio: {},
   createDowntimeFormio: {},
   menuMiniMode: true,
+  menuDrawerMode: true,
   ticket: '',
   mainContainerKey: 0,
-  actionsAfterInitializeProperties: []
-  // events: {
-  //   afterInitializeWorkCenter: [], //{ action }
-  //   afterChangeTaskStateEvents: []
-  //   afterDowntimeRegistrationEvents: []
-  // }
+  actionsAfterInitializeProperties: [],
+  initializeDocuments: false,
+  initializeQualities: false,
+  documentSearchValue: '',
+  dynamicPagesCache: [],
+  documentKey: 0,
+  cameraSettings: {
+    initialized: false,
+    cameraAvailability: false
+  },
+  iotSettings: {
+    iotSignalRUrl: '',
+    iotSignalRConnection: null
+  }
 }

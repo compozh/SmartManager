@@ -2,12 +2,11 @@
 import WebApps from '@it-enterprise/webappscore'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-import Authentication from '@it-enterprise/authentication'
-import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
 import ItCommon from '@it-enterprise/common'
 import '@it-enterprise/common/dist/common-components.css'
-
+import auth from '@it-enterprise/jwtauthentication'
+auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
 import Vue from 'vue'
@@ -26,13 +25,19 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
 import { routerDependencies } from './router'
+// import router from './router'
+//import LmsLayout from './components/LmsLayout.vue'
 
 // Редактор quill
-import VueQuill from 'vue-quill'
+import VueQuill from 'it-vue-quill'
 // require styles
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+
+// Режим разработки
+// Vue.config.productionTip = false
+// Vue.config.devtools = true
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -48,6 +53,7 @@ let dependencies = {
   i18n,
   apolloProvider,
   axios,
+  //...router
   ...routerDependencies
 }
 
@@ -61,14 +67,13 @@ Vue.use(VueApollo)
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
-Vue.use(Authentication, { options: window.myConfig, dependencies })
-Vue.use(Router, { options: window.myConfig, dependencies })
-Vue.use(WebApps, { dependencies, options: window.myConfig })
+Vue.use(WebApps, { dependencies, options: window.myConfig }, () => auth.getToken())
+Vue.use(Router, { options: window.myConfig, dependencies }, () => auth.getToken())
 
 // Дополнительные плагины приложения
 Vue.use(VueQuill)
 
-Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('lms', 'en', () => import('./plugins/resources/en.json'))
 
 // Шина событий
 export const eventBus = new Vue()
@@ -82,15 +87,19 @@ req.keys().map(key => {
   Vue.component(req(key).default.name, req(key).default)
 })
 
+/**
+ * Приложение в составе конструктора приложений
+*/
 start()
 
-async function start()   {
+async function start() {
   // Загрузка приложения
   let webAppsCore = await Vue.prototype.$WebApps
 
   let appComponent = await webAppsCore.GetApplicationComponent({
 
     properties: {
+      //router,
       i18n,
       store
     }
@@ -99,5 +108,13 @@ async function start()   {
   new Vue(appComponent).$mount('#app')
 }
 
-
-
+/**
+ * Приложение со своим роутером
+ */
+// new Vue({
+//   router,
+//   store,
+//   Vuetify,
+//   i18n,
+//   render: h => h(LmsLayout)
+// }).$mount('#app')

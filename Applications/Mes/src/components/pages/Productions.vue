@@ -4,10 +4,10 @@
         @changeProductionTab=changeProductionTab
       />
       <div class="production-main-block">
-        <mes-content-loader v-if="!initializeProductions && !productions.length"/>
-        <mes-productions-component :productions=productions />
+        <mes-content-loader v-if="!initializeProductions && !productions.length" :loaderType="$vuetify.breakpoint.xs ? 'list' : ''" />
+        <mes-productions-component :productions=productions  :properties=properties />
 
-        <span class="no-data-text" v-if="initializeProductions && !productions.length">Нет факта регистрации выработки за смену</span>
+        <span class="no-data-text" v-if="initializeProductions && !productions.length">{{this.$t('mes.labels.NoFactOfRegistration')}}</span>
       </div>
     </v-layout>
 </template>
@@ -23,12 +23,6 @@ export default {
   },
   created() {
     this.initialize()
-  },
-  mounted() {
-    if (this.initialWorkCenter && this.workCenter.accessPages == 'ONLY_INSTALLATION') {
-      this.$router.replace({path: '/MES/installations'})
-      return
-    }
   },
   computed: {
     initialWorkCenter() {

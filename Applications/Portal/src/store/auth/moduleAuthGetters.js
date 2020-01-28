@@ -1,11 +1,14 @@
-/*=========================================================================================
-  File Name: moduleAuthGetters.js
-  Description: Auth Module Getters
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
+export default {
+  // All user data
+  user: state => state.user || {},
 
-
-export default {}
+  // User data
+  userId: (state, getters) => getters.user.id || '',
+  userLogin: (state, getters) => getters.user.login || '',
+  userName: (state, getters) => getters.user.userName || '',
+  userPhoto: (state, getters) => {
+    let photoLink = getters.user.userPhoto
+    // Checking link is valid
+    return photoLink && photoLink.includes('=&') ? '' : photoLink
+  }
+}

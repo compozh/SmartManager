@@ -1,26 +1,8 @@
 <template>
   <div
-    class="layout--main"
+    class="layout--main h-full"
     :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]"
   >
-    <vx-tour
-      :steps="steps"
-      v-if="!disableThemeTour"/>
-
-    <!-- НАСТРОЙЩИК ТЕМЫ -->
-    <the-customizer
-      @updateNavbar="updateNavbar"
-      @updateNavbarColor="updateNavbarColor"
-      :navbarType="navbarType"
-      :navbarColor="navbarColor"
-      :footerType="footerType"
-      @updateFooter="updateFooter"
-      :routerTransition="routerTransition"
-      @updateRouterTransition="updateRouterTransition"
-      v-if="!disableCustomizer"
-      :hideScrollToTop="hideScrollToTop"
-      @toggleHideScrollToTop="toggleHideScrollToTop"
-    />
     <!-- БОКОВОЕ МЕНЮ -->
     <vx-sidebar
       :sidebarItems="sidebarItems"
@@ -29,31 +11,25 @@
 
     <!-- ЗОНА КОНТЕНТА -->
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
-
       <div id="content-overlay"></div>
-
       <div class="content-wrapper">
-
         <the-navbar
           :navbarColor="navbarColor"
           :class="[{'text-white': isNavbarDark && !isThemeDark}, {'text-base': !isNavbarDark && isThemeDark}]"/>
 
-        <div class="router-view">
+        <div class="router-view pb-0">
           <div class="router-content" :class="{'mt-0': navbarType == 'hidden'}">
 
             <div class="content-area__content">
-              <back-to-top bottom="5%" visibleoffset="500" v-if="!hideScrollToTop">
-                <vs-button icon-pack="feather" icon="icon-arrow-up" class="shadow-lg"/>
-              </back-to-top>
               <transition :name="routerTransition" mode="out-in">
-                <router-view @changeRouteTitle="changeRouteTitle"></router-view>
+                <keep-alive :include="['task-list', 'case-list']">
+                  <router-view @changeRouteTitle="changeRouteTitle"></router-view>
+                </keep-alive>
               </transition>
             </div>
           </div>
         </div>
-
       </div>
-
       <the-footer></the-footer>
     </div>
   </div>
@@ -61,17 +37,13 @@
 
 <script>
 import VxSidebar from '@/layouts/components/vx-sidebar/VxSidebar.vue'
-import TheCustomizer from '../components/customizer/TheCustomizer.vue'
 import TheNavbar from '../components/TheNavbar.vue'
 import TheFooter from '../components/TheFooter.vue'
 import themeConfig from '@/../themeConfig.js'
-import steps from '@/vtourSteps.js'
 import templateConfig from '@/templateConfig.js'
-import BackToTop from 'vue-backtotop'
-
-const VxTour = () => import('@/components/VxTour.vue')
 
 export default {
+  name: 'layout',
   data() {
     return {
       navbarType: themeConfig.navbarType || 'floating',
@@ -84,7 +56,6 @@ export default {
       windowWidth: window.innerWidth, //width of windows
       hideScrollToTop: themeConfig.hideScrollToTop,
       disableThemeTour: themeConfig.disableThemeTour,
-      steps,
       templateConfig,
     }
   },
@@ -103,17 +74,40 @@ export default {
       if (items) {
         return items.map(i => {
           return {
-            url: this.createUrl(i.code),
+            url: this.createUrl(i),
             name: i.name,
             slug: i.name,
             tag: i.count,
             tagColor: 'primary',
-            icon: this.setFolderIcon(i.code),
+            icon: this.menuItemIcon(i.code),
             code: i.code
           }
         })
       }
       return []
+    },
+    createUrl() {
+      return item => {
+        if (item.code === 'cases') {
+          return '/cases/ALL'
+        }
+        if (item.folderId) {
+          return '/cases/' + item.folderId
+        }
+        return '/tasks/' + (item.code === '' ? 'ALL' : item.code)
+      }
+    },
+    menuItemIcon() {
+      return code => {
+        switch (code) {
+          case '': return 'LayersIcon'
+          case 'filter_done': return 'CheckSquareIcon'
+          case 'filter_from_me': return 'UserIcon'
+          case 'filter_favorite': return 'StarIcon'
+          case 'cases': return 'BriefcaseIcon'
+          default: return 'FolderIcon'
+        }
+      }
     },
     isAppPage() {
       return !!this.$route.path.includes('/apps/')
@@ -156,18 +150,6 @@ export default {
   methods: {
     getFolders() {
       this.$store.dispatch('sm/getFolders')
-    },
-    createUrl(code) {
-      return '/tasks/' + (code === '' ? 'ALL' : code)
-    },
-    setFolderIcon(code) {
-      switch (code) {
-      case '': return 'LayersIcon'
-      case 'filter_done': return 'CheckSquareIcon'
-      case 'filter_from_me': return 'UserIcon'
-      case 'filter_favorite': return 'StarIcon'
-      default: return 'FolderIcon'
-      }
     },
     changeRouteTitle(title) {
       this.routeTitle = title
@@ -214,10 +196,7 @@ export default {
   components: {
     VxSidebar,
     TheNavbar,
-    TheFooter,
-    TheCustomizer,
-    BackToTop,
-    VxTour
+    TheFooter
   },
   created() {
     this.getFolders()

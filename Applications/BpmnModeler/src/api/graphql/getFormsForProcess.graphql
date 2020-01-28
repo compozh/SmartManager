@@ -1,8 +1,0 @@
-{
-  bpmnquery {
-    getFormsForProcess(processId: $processId) {
-      id,
-      name
-    }
-  }
-}

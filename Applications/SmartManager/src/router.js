@@ -1,31 +1,12 @@
-/*=========================================================================================
-  File Name: router.js
-  Description: Routes for vue-router. Lazy loading is enabled.
-  Object Strucutre:
-                    path => router path
-                    name => router name
-                    component(lazy loading) => component to load
-                    meta : {
-                      rule => which user can have access (ACL)
-                      breadcrumb => Add breadcrumb to specific page
-                        { title, url, active }
-                      pageTitle => Display title besides breadcrumb
-                    }
-==========================================================================================*/
-
 import Vue from 'vue'
-import auth from '@/api/auth/auth'
+import auth from '@it-enterprise/jwtauthentication'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 let router = new VueRouter({
   mode: 'history',
-  scrollBehavior () {
-    return { x: 0, y: 0 }
-  },
   base: window.appConfig.BASE_URL + 'SmartManager/',
   routes: [
-
     {
       // =============================================================================
       // MAIN LAYOUT ROUTES
@@ -62,6 +43,17 @@ let router = new VueRouter({
         {
           path: '/task-add/:id?',
           name: 'task-add',
+          props: true,
+          component: () => import('./views/task-add/TaskAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/task/:id/edit',
+          name: 'task-edit',
+          props: true,
           component: () => import('./views/task-add/TaskAdd.vue'),
           meta: {
             rule: 'admin'
@@ -72,6 +64,42 @@ let router = new VueRouter({
           path: '/work-flow',
           name: 'work-flow',
           component: () => import('./views/work-flow/WorkFlow.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/cases/:id',
+          name: 'case-list',
+          component: () => import('./views/case-list/CaseList.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case/:id',
+          name: 'case-view',
+          component: () => import('./views/case-view/CaseView.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case-add',
+          name: 'case-add',
+          component: () => import('./views/case-add/CaseAdd.vue'),
+          meta: {
+            rule: 'admin'
+          },
+          caseSensitive: false
+        },
+        {
+          path: '/case/:id/edit',
+          name: 'case-edit',
+          component: () => import('./views/case-add/CaseAdd.vue'),
           meta: {
             rule: 'admin'
           },
@@ -139,30 +167,19 @@ router.history.getCurrentLocation = function() {
   if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
     path = path.slice(base.length)
   }
-
   return (path || '/') + window.location.search + window.location.hash
 }
 
 // protection of paths from an unauthenticated access
-router.beforeEach((to, from, next) => {
-
-  // get current user
-  const currentUSer = auth.getCurrentUser()
-  if (
-    to.path === '/login' ||
-        to.path === '/error-404' ||
-        to.path === '/error-500' ||
-        to.path === '/callback' ||
-
-        !!currentUSer
-  ) {
+router.beforeEach(async (to, from, next) => {
+  const token = await auth.getToken()
+  const unProtectedRoutes = ['/login', '/error-404', '/error-500', '/not-authorized']
+  if (token || unProtectedRoutes.includes(to.path)) {
     return next()
   }
-
-  router.push({ path: '/login', query: { to: to.path } })
-  // Specify the current path as the customState parameter, meaning it
-  // will be returned to the application after auth
-  // auth.login({ target: to.path });
+  if (router.currentRoute.name !== 'login') {
+    await router.push({path: '/login', query: { to: to.path }})
+  }
 })
 
 router.afterEach(() => {

@@ -10,6 +10,7 @@
       :click-not-close="clickNotClose"
       :hidden-background="clickNotClose"
       reduce-not-rebound
+      reduce-not-hover-expand
       v-model="isTaskSidebarActive"
     >
       <task-sidebar
@@ -28,32 +29,26 @@
       <task-details v-if="currentTab === 'details'" :task="task" @open-attachment="openAttachment"></task-details>
 
       <!-- TASK ATTACHMENTS  -->
-      <task-attachments v-if="currentTab === 'attachments'" :attachments="attachments" :index="index"></task-attachments>
-
-      <!-- TASK DETAILS  -->
-      <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
+      <task-attachments v-if="currentTab === 'attachments'" :task="task" :index="index"></task-attachments>
 
       <!-- TASK COMMENTS  -->
-      <task-approvals v-if="currentTab === 'approvals'"></task-approvals>
-
+      <task-comments v-if="currentTab === 'comments'" :task="task"></task-comments>
     </div>
   </div>
 </template>
 
 <script>
+const TaskDetails = () => import('./task-details/TaskDetails.vue')
 import TaskSidebar from './TaskSidebar.vue'
-import TaskDetails from './task-details/TaskDetails.vue'
 import TaskAttachments from './task-attachments/TaskAttachments.vue'
 import TaskComments from './task-comments/TaskComments.vue'
-import TaskApprovals from './task-approvals/TaskApprovals.vue'
 
 export default {
   components: {
     TaskSidebar,
     TaskDetails,
     TaskComments,
-    TaskAttachments,
-    TaskApprovals
+    TaskAttachments
   },
   data: () => ({
     currentTab: 'details',
@@ -61,11 +56,7 @@ export default {
     reduce: true,
     clickNotClose: true,
     isTaskSidebarActive: true,
-    windowWidth: window.innerWidth,
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.30,
-    }
+    windowWidth: window.innerWidth
   }),
   created() {
     this.$store.commit('TOGGLE_REDUCE_BUTTON', true)
@@ -105,11 +96,11 @@ export default {
   },
   methods: {
     async getTask() {
-      const id = +this.$route.params.id
+      const taskId = +this.$route.params.id
       if (!this.task.id) {
         try {
           await this.$store.dispatch('sm/getTaskInfo', {
-            id, loading: true
+            taskId, loading: true
           })
         } catch (e) {
           console.log(e.message)
@@ -142,4 +133,20 @@ export default {
     width: calc(100% - 64px);
     margin-left: 64px;
   }
+
+  .app-fixed-height {
+    height: calc(100vh - 12rem);
+  }
+
+  @media (max-width: 768px) {
+    .vs-sidebar.vs-sidebar-reduce {
+      max-width: 38px;
+    }
+
+    .md-sidebar-spacer {
+      width: calc(100% - 38px);
+      margin-left: 38px;
+    }
+  }
+
 </style>

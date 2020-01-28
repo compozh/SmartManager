@@ -1,5 +1,5 @@
-query ($deployId: String!) {
+query ($procDefId: String!) {
   workFlowQuery {
-    formDefinition(deployId: $deployId)
+    formDefinition(procDefId: $procDefId)
   }
 }

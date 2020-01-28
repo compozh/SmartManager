@@ -1,0 +1,15 @@
+{
+  portalNabuQuery{
+    employeeInfo{
+      data{
+        gender
+        fullName
+        birthDate
+        photoFilePath
+        departmentTitle
+        positionCategory
+        parentDepartmentTitle
+      }
+    }
+  }
+}

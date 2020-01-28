@@ -17,9 +17,11 @@
     "PersonalInfo":{
         "FIO":"ПІБ",
         "BirthdayDate":"Дата народження",
-        "Adress":"Адреса",
+        "Gender": "Стать",
         "PhoneNumber":"Номер телефону",
-        "Department":"Департамент",
+        "Department":"Найменування підрозділу",
+        "Control": "Найменування управління",
+        "Position": "Категорія посади",
         "HireDate":"Дата прийому"
     },
     "Education":{
@@ -39,6 +41,24 @@
         "Duty": "Обов’язковість",
         "Priority": "Пріоритетність",
         "Provider": "Можл. провайдер",
-        "Status": "Статус"
+        "Status": "Статус",
+        "btnFormPlane": "Сформувати індивідуальний план розвитку",
+        "cantdoFormPlane": "Неможливо сформировать индивидуальный план развития",
+        "filePathNotFound": "Шлях до файлу не знайдено",
+        "getworkwear": "Отримане речове майно",
+        "getworkwearonplace": "Недоотриманий спецодяг на складі"
+    },
+    "agGrid":{
+        "contains": "Містить",
+        "notContains": "Не містить",
+        "startsWith": "Починається з",
+        "endsWith": "Закінчується",
+        "equals": "Дорівнює",
+        "notEqual": "Не дорівнює",
+        "andCondition": "І",
+        "orCondition": "АБО",
+        "NoRowsToShow": "Немає рядків для відображення",
+        "filter": "Фільтр...",
+        "noDataAvailabl": "Немає даних"
     }
 }

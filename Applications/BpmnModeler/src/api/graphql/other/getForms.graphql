@@ -1,0 +1,8 @@
+{
+  bpmnquery {
+    getFormsForProcess(onlySystem: $onlySystem) {
+      id,
+      name
+    }
+  }
+}

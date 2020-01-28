@@ -25,6 +25,9 @@ export default {
   setProperties(state, properties) {
     state.properties = properties
   },
+  setMobilityProperties(state, mobilityProperties) {
+    state.mobilityProperties = mobilityProperties
+  },
   setUserName(state, userName) {
     state.userName = userName
   },
@@ -40,8 +43,17 @@ export default {
   setFilterValue(state, filterValue) {
     state.tasksPageState.filterValue = filterValue
   },
+  setDocumentSearchValue(state, documentSearchValue) {
+    state.documentSearchValue = documentSearchValue
+  },
   setDowntimes(state, downtimes) {
     state.downtimes = downtimes
+  },
+  setQualities(state, qualities) {
+    state.qualities = qualities
+  },
+  setDocuments(state, documents) {
+    state.documents = documents
   },
   setInstallations(state, installations) {
     state.installations = installations
@@ -65,11 +77,29 @@ export default {
   setDowntimeFormio(state, formio) {
     state.downtimeFormio = formio
   },
+  setQualityFormio(state, formio) {
+    state.qualityFormio = formio
+  },
+  setDocumentFormio(state, formio) {
+    state.documentFormio = formio
+  },
+  setInitializeQualities(state, initializeQualities) {
+    state.initializeQualities = initializeQualities
+  },
+  setInitializeDocuments(state, initializeDocuments) {
+    state.initializeDocuments = initializeDocuments
+  },
   setCreateDowntimeFormio(state, formio) {
     state.createDowntimeFormio = formio
   },
   resetDowntimeFormio(state) {
     state.downtimeFormio = {}
+  },
+  resetQualityFormio(state) {
+    state.qualityFormio = {}
+  },
+  resetDocumentFormio(state) {
+    state.documentFormio = {}
   },
   removeProduction(state, production) {
     let index = state.usersProductionEvents.indexOf(production)
@@ -85,12 +115,19 @@ export default {
   changeMainContainerKey(state) {
     state.mainContainerKey += 1
   },
+  updateDocument(state){
+    state.documentKey += 1
+  },
   setMaterialProduction(state, production) {
     state.setMaterialProduction = production
   },
   setMenuMiniMode(state, menuMiniMode) {
     state.menuMiniMode = menuMiniMode
     localStorage.setItem('mesMenuMiniMode', menuMiniMode.toString())
+  },
+  setMenuDrawerMode(state, menuDrawerMode) {
+    state.menuDrawerMode = menuDrawerMode
+    localStorage.setItem('mesMenuDrawerMode', menuDrawerMode.toString())
   },
   setSelectedTasksTab(state, tabId) {
     state.tasksPageState.selectedTasksTab = tabId
@@ -104,8 +141,17 @@ export default {
   setSelectedDowntime(state, selectedDowntime) {
     state.selectedDowntime = selectedDowntime
   },
+  setSelectedQuality(state, selectedQuality) {
+    state.selectedQuality = selectedQuality
+  },
+  setSelectedDocument(state, selectedDocument) {
+    state.selectedDocument = selectedDocument
+  },
   setAspectRatioLayout(state, aspectRatioLayout) {
     state.tasksPageState.aspectRatioLayout = aspectRatioLayout
+  },
+  setDynamicPagesCache(state, dynamicPagesCache) {
+    state.dynamicPagesCache = dynamicPagesCache
   },
   changeDragResizeMode(state) {
     state.tasksPageState.dragResizeMode = !state.tasksPageState.dragResizeMode
@@ -131,22 +177,23 @@ export default {
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
-  // addAfterInitializeWorkCenterEvent(state, action) {
-  //   state.events.afterInitializeWorkCenter.push(action)
-  // },
-  // addAfterChangeTaskStateEvent(state, action) {
-  //   state.events.afterChangeTaskStateEvents.push(action)
-  // },
-  // addAfterDowntimeRegistrationEvent(state, action) {
-  //   state.events.afterDowntimeRegistrationEvents.push(action)
-  // },
+  setCameraAvailability(state, value) {
+    state.cameraSettings.cameraAvailability = value
+  },
+  setCameraInitialized(state, value) {
+    state.cameraSettings.initialized = value
+  },
   resetState(state) {
     state.tasks = []
     state.downtimes = []
+    state.qualities = []
+    state.documents = []
     state.createDowntimeFormio = {}
     state.installations = []
     state.tasksPageState.selectedTask = null
     state.selectedDowntime = null
+    state.selectedQuality = null
+    state.selectedDocument = null
     state.workCenterProductionEvents = []
   }
 }

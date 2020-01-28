@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    dropFolder(folderId: $folderId, parentId: $parentId)
-  }
-}

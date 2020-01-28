@@ -1,12 +1,15 @@
 <template>
-	<v-container fluid px-0 my-4>
+	<v-container fluid pa-0 ma-0>
 		<!--MODULE HEADER-->
-		<v-layout  my-2>
-			<v-flex id='modulesHeader'>
+		<v-layout mb-4>
+			<v-flex xs12>
+        <v-card >
+          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+        </v-card>
 				<v-card v-if="moduleData.data">
 					<v-layout wrap row justify-center>
 						<v-flex md1 xs2 class='pt-3' hidden-xs-only>
-							<v-card-media v-bind:src='moduleData.data.imageLink' height='80px' contain/>
+							<v-img v-bind:src='moduleData.data.imageLink' height='80px' contain/>
 						</v-flex>
 						<v-flex lg8 md10 sm10 xs12>
 							<v-card-text class='title font-weight-regular pt-4 pb-1' color="#424242">{{moduleData.data.type}}</v-card-text>
@@ -14,15 +17,12 @@
 							<v-card-text class='body-2 font-weight-medium pt-0 pb-3' color="#424242">{{moduleData.data.description}}</v-card-text>
 							<v-layout row wrap>
 								<v-flex md2 xs6>
+                  <v-card-text class='body-2 font-weight-medium pt-0 pb-1' color="#424242">{{moduleData.data.lessonsQtLabel}}</v-card-text>
 									<v-card-text class='body-2 font-weight-medium pt-0 pb-4' color="#424242">{{moduleData.data.durationMinutesLabel}}</v-card-text>
 								</v-flex>
 								<v-spacer/>
 								<v-flex xs12 mx-3>
 									<v-layout align-top justify-start row wrap>
-										<!-- <v-chip small v-for='role in moduleData.data.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
-										<v-chip small v-for='level in moduleData.data.levels' v-bind:key="level.code" @click="levelSearch(level)">{{level.name}}</v-chip>
-										<v-chip small v-for='product in moduleData.data.products' v-bind:key="product.code" @click="productSearch(product)">{{product.name}}</v-chip>
-										<v-chip small v-for='tag in moduleData.data.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip> -->
 										<v-layout align-top justify-end row>
 											<v-icon
 												id='favIcon'
@@ -42,7 +42,6 @@
 
 		<!--MODULES CONT-->
 		<v-layout v-if="moduleData.data" align-center justify-center>
-			<!--<v-flex xs9 style='border-right: darkgrey 1px solid'>!-->
 			<v-flex lg8 md10 sm10 xs12>
 				<v-layout wrap column>
 					<v-card class='mt-1 mb-0' hover>
@@ -58,13 +57,14 @@
 										<v-list-tile
 											v-for='lesson in moduleData.data.units'
 											:key='lesson.lessonGuid'
-											@click='$router.push({name: "LMSLESSON", params: {
+											@click='$router.push({name: "LMSMODULELESSON", params: {
 												moduleGuid: moduleGuid,
+                        moduleData: moduleData,
 												lessonGuid: lesson.lessonGuid,
 											}})'>
 											<v-list-tile-content class='px-2'>
 												<v-list-tile-title class='blue--text text--darken-4 font-weight-medium'>{{lesson.name}}</v-list-tile-title>
-												<v-list-tile-sub-title>{{lesson.durationMinutes}} mins</v-list-tile-sub-title>
+												<v-list-tile-sub-title>{{lesson.durationMinutesLabel}}</v-list-tile-sub-title>
 											</v-list-tile-content>
 											<v-list-tile-action>
 												<v-btn icon ripple>
@@ -91,22 +91,28 @@
 </template>
 
 <script>
+import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
 
 export default {
-  name: "lms-module-details",
+  name: 'lms-module-details',
   created() {
-    this.moduleGuid = this.$route.params.moduleGuid;
+    this.moduleGuid = this.$route.params.moduleGuid
     this.moduleData.data = this.$route.params.moduleData
-
-
   },
   data() {
     return {
-      moduleGuid : "",
-      moduleData : { data: undefined },
-      lessons : { data: undefined }
+      moduleGuid: '',
+      moduleData: { data: undefined },
+      lessons: { data: undefined }
     }
   },
+  computed: {
+    links() {
+      const thisLink = getThisLink(this.$route.params.moduleName, this.$route.path, true)
+      let links = getRoutesLinks(this.$route.params.links, thisLink)
+      return links
+    }
+  }
 }
 </script>
 

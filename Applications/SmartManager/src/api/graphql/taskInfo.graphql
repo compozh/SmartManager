@@ -1,100 +1,74 @@
 query ($taskId: Int) {
-  smtasks {
-    taskDetails(taskId: $taskId) {
-      ...taskFields
-      parentTasks {
-        ...taskFields
-      }
-      childTasks {
-        ...taskFields
-      }
-      parentTask {
-        ...taskFields
-      }
+    smtasks {
+        taskDetails(taskId: $taskId) {
+            ...mainTaskFields
+            ...detailTaskFields
+            parentTask {
+                ...mainTaskFields
+            }
+            childTasks {
+                ...mainTaskFields
+            }
+        }
     }
-  }
 }
 
-fragment taskFields on Task {
-  id
-  name
-  descript
-  htmlDescript
-  declarerId
-  declarer
-  declarerPhoto
-  performerId
-  performer
-  performerPhoto
-  dateplan
-  dateAdd
-  status
-  isMy
-  myControl
-  isGenerate
-  needApprov
-  needComm
-  arso
-  keyValue
-  kidCopy
-  hasOrig
-  hasComm
-  isAgree
-  isResponsible
-  childCount
-  childDoneCount
-  priority
-  dateRemind
-  addedId
-  addedFio
-  addedPhoto
-  dateFact
-  isRead
-  caseId
-  docCaption
-  docText
-  docPlanDate
-  docImportant
-  isDocTextHtml
-  docType
-  docOrg
-  nextButtonText
-  previousButtonText
-  role
-  participants {
-    userId
-    userFio
-    name
-    role
-  }
-  relArso
-  relKeyValue
-  relKidCopy
-  relType
-  relName
-  originals {
+fragment mainTaskFields on Task {
     id
-    ndor
-    fileName
-    user
-    date
+    name
+    descript
+    addedFio
+    addedPhoto
+    dateplan
+    status
     isMy
-    fileExt
-    comm
-    fileSize
-    type
-    typeName
-    typeDescription
-    isSign
-    fileUrl
-  }
-  comments {
-    userId
-    user
-    userPhoto
-    date
-    text
-    isAgree
-  }
-  hasNewComment
+    myControl
+    isGenerate
+    hasOrig
+    hasComm
+    priority
+    dateFact
+    isRead
+    caseId
+    isFavorite
+    docCaption
+    externalParams
+}
+
+fragment detailTaskFields on Task {
+    performerId
+    performer
+    performerPhoto
+    htmlDescript
+    declarer
+    declarerId
+    dateAdd
+    dateFact
+    docTextHtml
+    arso
+    keyValue
+    kidCopy
+    nextButtonText
+    previousButtonText
+    taskType
+    caseId
+    participants {
+        userId
+        userFio
+        name
+        role
+    }
+    originals {
+        id
+        fileName
+        fileExt
+        fileSize
+    }
+    comments {
+        userId
+        user
+        userPhoto
+        date
+        text
+    }
 }

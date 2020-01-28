@@ -8,6 +8,9 @@ export default {
   properties(state) {
     return state.properties
   },
+  mobilityProperties(state) {
+    return state.mobilityProperties
+  },
   userName(state) {
     return state.userName
   },
@@ -26,8 +29,23 @@ export default {
   filterValue(state) {
     return state.tasksPageState.filterValue
   },
+  documentSearchValue(state) {
+    return state.documentSearchValue
+  },
   downtimes(state) {
     return state.downtimes
+  },
+  qualities(state) {
+    return state.qualities
+  },
+  documents(state) {
+    return state.documents
+  },
+  initializeQualities(state) {
+    return state.initializeQualities
+  },
+  initializeDocuments(state) {
+    return state.initializeDocuments
   },
   installations(state) {
     return state.installations
@@ -44,6 +62,12 @@ export default {
   downtimeFormio(state) {
     return state.downtimeFormio
   },
+  qualityFormio(state) {
+    return state.qualityFormio
+  },
+  documentFormio(state) {
+    return state.documentFormio
+  },
   createDowntimeFormio(state) {
     return state.createDowntimeFormio
   },
@@ -52,6 +76,12 @@ export default {
       state.menuMiniMode = localStorage.getItem('mesMenuMiniMode') === 'true'
     }
     return state.menuMiniMode
+  },
+  menuDrawerMode(state) {
+    if (state.menuDrawerMode === null) {
+      state.menuDrawerMode = localStorage.getItem('mesMenuDrawerMode') === 'false'
+    }
+    return state.menuDrawerMode
   },
   tasksPageState(state) {
     return state.tasksPageState
@@ -68,11 +98,20 @@ export default {
   mainContainerKey(state) {
     return state.mainContainerKey
   },
+  documentKey(state){
+    return state.documentKey
+  },
   selectedTask(state) {
     return state.tasksPageState.selectedTask
   },
   selectedDowntime(state) {
     return state.selectedDowntime
+  },
+  selectedQuality(state) {
+    return state.selectedQuality
+  },
+  selectedDocument(state) {
+    return state.selectedDocument
   },
   initialWorkCenter(state) {
     return state.initialWorkCenter
@@ -86,13 +125,16 @@ export default {
   actionsAfterInitializeProperties(state) {
     return state.actionsAfterInitializeProperties
   },
-  // afterInitializeWorkCenterEvents(state) {
-  //   return state.events.afterInitializeWorkCenter
-  // },
-  // afterChangeTaskStateEvents(state) {
-  //   return state.events.afterChangeTaskStateEvents
-  // },
-  // afterDowntimeRegistrationEvents(state) {
-  //   return state.events.afterDowntimeRegistrationEvents
-  // }
+  dynamicPagesCache(state) {
+    return state.dynamicPagesCache
+  },
+  cameraAvailability(state){
+    return state.cameraSettings.cameraAvailability
+  },
+  cameraSettings(state) {
+    return state.cameraSettings
+  },
+  iotSettings(state) {
+    return state.iotSettings
+  }
 }

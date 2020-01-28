@@ -1,2 +1,3 @@
 **/dist/**
-/src/formio/lib/**
+/src/formio/**
+/src/bpmnModules/dmn-modeler.development.js

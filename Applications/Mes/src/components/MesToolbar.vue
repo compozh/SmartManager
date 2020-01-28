@@ -1,17 +1,24 @@
 <template>
   <v-container fluid pa-0>
-    <v-layout row align-center justify-space-beetwen class="main-toolbar">
+    <v-layout row align-center justify-space-beetwen class="main-toolbar pl-4">
 
       <!-- Лого -->
-      <v-flex row>
-        <router-link tag="h1" :to="{ name:'MESROOT'}">
+      <v-flex row v-if="!searchWorkCenter">
+        <router-link tag="h1" :to="{ name:'home', path: '/', query : {fixedUuid: $route.query.fixedUuid}}">
           <a class="mes-title-link">MES</a>
         </router-link>
-        <span v-if="properties && properties.brandName" class="brand-name">{{properties.brandName}}</span>
+        <span v-if="properties && properties.brandName && $vuetify.breakpoint.smAndUp" class="brand-name" @click="refreshApp">
+          {{properties.brandName}}
+        </span>
       </v-flex>
 
+      <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.smAndDown && !searchWorkCenter && $route.name !='MESLOGIN'"
+        icon  @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">
+        <v-icon>pause</v-icon>
+      </v-btn>
       <!-- Состояние РЦ -->
-      <v-tooltip :disabled="!workCenterFixationData.description" bottom v-if="workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY'">
+      <v-tooltip :disabled="!workCenterFixationData.description" bottom 
+        v-if="!searchWorkCenter && (workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY') && $route.name !='MESLOGIN'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
           <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
         </template>
@@ -19,36 +26,45 @@
       </v-tooltip>
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
-      <div class="work-centers-select" v-if="workCentersForWorker.length > 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+      <div :class="`work-centers-select ${$vuetify.breakpoint.mdAndUp ? 'static' : searchWorkCenter ? 'search' : 'small'}`"  
+        v-if="workCentersForWorker.length > 1 && $route.name !='MESLOGIN'">
+        <span class='work-centers-title' v-if="$vuetify.breakpoint.mdAndUp">
+          {{this.$t('mes.labels.WorkCenter')}}: 
+        </span>
+        <v-btn icon v-else-if="!searchWorkCenter" @click="searchWorkCenter = !searchWorkCenter">
+          <v-icon>work_outline</v-icon>
+        </v-btn>
         <v-autocomplete
+          v-if="searchWorkCenter || $vuetify.breakpoint.mdAndUp"
           autocomplete="off"
           :items="workCentersForWorker"
           :value="workCenter ? workCenter : ''"
           item-text="name"
           return-object
-          no-data-text="--- Рабочий центр отсутствует ---"
+          :no-data-text="this.$t('mes.labels.NoWorkCenter')"
           @change="changeWorkCenter"
-          class="work-centers-select-input"
+          @blur="searchWorkCenter = false"
+          :autofocus="$vuetify.breakpoint.smAndDown? true : false"
+          :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select-input' : 'work-centers-select-input-small'" 
         ></v-autocomplete>
       </div>
 
       <!-- Зафиксированый РЦ -->
-      <div class="work-centers-caption" v-if="workCenter && workCentersForWorker.length == 1">
-        <span class='work-centers-title'>Рабочий центр: </span>
+      <div class="work-centers-caption" v-if="!searchWorkCenter && workCenter && $route.name !='MESLOGIN' && workCentersForWorker.length == 1">
+        <span class='work-centers-title'>{{this.$t('mes.labels.WorkCenter')}}: </span>
         <span class='work-centers-name'>{{workCenter.name}}</span>
       </div>
 
       <!-- Информация Юзера -->
-      <div class="user-info-desc">
+      <div class="user-info-desc" v-if="!searchWorkCenter && $route.name !='MESLOGIN' && $vuetify.breakpoint.width > 1200">
         <span class="user-info-text">
-          {{currentUserData.UserName}}
+          {{userData.userName || userData.login }}
         </span>
       </div>
-
       <!-- Панель Юзера -->
-      <v-flex class="grow-0 user-description-block">
-        <user-panel hideDelegatedRightsButton="true" mini="true"></user-panel>
+      <v-flex class="grow-0 user-description-block" v-if="!searchWorkCenter && $route.name !='MESLOGIN'">
+        <user-panel hideDelegatedRightsButton="true" mini="true" >
+        </user-panel>
       </v-flex>
 
     </v-layout>
@@ -57,55 +73,27 @@
 
 <script>
 
-import Vue from 'vue'
+import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
+import { events } from '../constants'
+import { eventBus } from '../main'
+
 export default {
   name: 'mes-toolbar',
-  created() {
-    var me = this,
-      fixedUuid = me.$router.options.params.fixedUuid,
-      cookiesUuid = me.$cookies.get('mesUuid'),
-      sessionStorageUuid = window.sessionStorage.getItem('mesUuid'),
-      uuid
-    if (fixedUuid) {
-      uuid = fixedUuid
-    } else if (cookiesUuid) {
-      uuid = cookiesUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else if (sessionStorageUuid) {
-      uuid = sessionStorageUuid
-      me.$router.push({ query: { fixedUuid: uuid }})
-    } else {
-      uuid = this.generateUUID()
-      me.$router.push({ query: { fixedUuid: uuid }})
-    }
-    // eslint-disable-next-line
-    $cookies.set('mesUuid', uuid, '3y')
-    window.sessionStorage.setItem('mesUuid', uuid)
-    me.$store.dispatch('mes/initializeWorkCenter', uuid)
-    me.$store.dispatch('mes/initializeProperties')
-    me.$store.dispatch('formio/initializeTicket')
-    me.$store.dispatch('mes/initializeTicket')
-    Vue.prototype.$authentication.getCurrentUser().then(currentUSer => {
-      me.currentUserData = currentUSer.CurrentUserData
-    })
-
-    // var action = async () => {
-    //   var workCenterForWorker = await me.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: me.properties.workerCode, fetchPolicy: 'network-only' })
-    //   for (var fixation of workCenterForWorker) {
-    //     if (me.workCenter.code == fixation.code) {
-    //       me.$store.commit('mes/setWorkCenterFixationData', fixation)
-    //       return
-    //     }
-    //   }
-    // }
-
-    // me.$store.commit('mes/addAfterChangeTaskStateEvent', { action })
-    // me.$store.commit('mes/addAfterDowntimeRegistrationEvent', { action })
-  },
   data() {
-    return { currentUserData: {} }
+    return { searchWorkCenter: false }
+  },
+  components: {
+    UserPanel
+  },
+  created() {
+    if(this.$store.getters['auth/userId']) {
+      eventBus.$emit(events.initialize)
+    }
   },
   computed: {
+    userData() {
+      return this.$store.state.auth.user || {}
+    },
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
@@ -118,11 +106,11 @@ export default {
     properties() {
       return this.$store.getters['mes/properties']
     },
-    userName() {
-      return Vue.prototype.$authentication.getCurrentUser()
-    },
     tasksPageState() {
       return this.$store.getters['mes/tasksPageState']
+    },
+    ticket() {
+      return this.$store.getters['mes/ticket']
     }
   },
   methods: {
@@ -130,47 +118,32 @@ export default {
       if (!newWorkCenter) {
         return
       }
+      var unFixedWorkCenter = this.workCenter
       this.$store.commit('mes/setInitialWorkCenter', false)
       this.$store.commit('mes/setDialogLinearLoaderMessage', 'Смена рабочего центра')
-
-      const workCentersFixed =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
-      var currentWorkCetnerFixation = false
-      if (this.workCenter) {
-        for (let fixation of workCentersFixed) {
-          if (fixation.code == newWorkCenter.code) {
-            this.$store.commit('mes/setWorkCenterFixationData', fixation)
-            currentWorkCetnerFixation = true
-          }
-        }
+      const prevWorkCenterFixation =  await this.$store.dispatch('mes/getFixationWorkCenterForWorker', { workerCode: this.properties.workerCode, fetchPolicy: 'network-only' })
+      if (prevWorkCenterFixation && prevWorkCenterFixation.length) {
+        this.$store.commit('mes/resetState')
+        await this.$store.dispatch('mes/unfixWorkCenterForWorker', { fixationId: prevWorkCenterFixation[0].fixationId })
       }
-
-      this.$store.commit('mes/resetState')
-      if (!currentWorkCetnerFixation) {
-        await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
-      } else {
-        this.$store.commit('mes/setWorkCenter', newWorkCenter)
-      }
+      await this.$store.dispatch('mes/fixWorkCenterForWorker', { workCenter: newWorkCenter, workerCode: this.properties.workerCode })
+      this.$store.commit('mes/setWorkCenter', newWorkCenter)
       this.$store.commit('mes/closeDialogLinearLoader')
       this.$store.commit('mes/setInitialWorkCenter', true)
-    },
-    generateUUID() { // Public Domain/MIT
-      var d = new Date().getTime()
-      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now() //use high-precision timer if available
-      }
-      var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-      })
 
-      return newGuid
+      eventBus.$emit(events.workCenterChanged, unFixedWorkCenter)
+    },
+    refreshApp() {
+      this.$router.go()
+    },
+    changeDowntimesOverlayVisible() {
+      this.$emit('changeDowntimesOverlayVisible')
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
   font-size: 30px;
   text-align: left;
@@ -197,7 +170,7 @@ a {
   font-size: 16px;
   font-weight: 500;
   color: #326DA8;
-  width: 120px;
+  width: 150px;
 }
 .work-center-state {
   margin: 0 10px;
@@ -216,11 +189,26 @@ a {
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+}
+
+.work-centers-select.static {
   min-width: 450px;
+}
+
+.work-centers-select.search {
+  width: 100%;
 }
 .work-centers-select-input {
   margin: 0 5px;
   max-width: 330px;
+}
+
+.work-centers-select-input-small {
+  min-width: 100%;
+  height: 32px;
+}
+.work-centers-select-input-small .v-text-field__details {
+  height: 0;
 }
 .work-centers-select-input .v-input__control {
   width: inherit;
@@ -231,6 +219,7 @@ a {
   color: #326da8;
   font-size: 30px;
   font-weight: 700;
+  cursor: pointer;
 }
 .user-info-desc {
   display: flex;
@@ -256,5 +245,10 @@ a {
 }
 .v-tooltip__content.menuable__content__active.v-tooltip__content--fixed {
   padding: 16px;
+}
+.downtime-registration-button {
+  margin: 0;
+  // min-width: 50px !important;
+  // padding: 0 !important
 }
 </style>

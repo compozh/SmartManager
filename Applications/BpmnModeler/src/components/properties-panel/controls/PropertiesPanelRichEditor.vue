@@ -1,0 +1,143 @@
+<template>
+  <div class="editor" ref="editor">
+    <v-subheader v-if="label">{{ label }}</v-subheader>
+    <quill-editor ref="quillEditor" v-model="content" :options="editorOptions"></quill-editor>
+    <v-divider></v-divider>
+  </div>
+</template>
+
+<script>
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import { quillEditor } from 'vue-quill-editor';
+import { fullScreenMixin } from '../../mixins';
+
+const TOOLBAR_CONFIG = [
+  [{ header: ['1', '2', '3', false] }],
+  ['bold', 'italic', 'underline', 'link'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['clean'],
+  ['fullscreen']
+];
+
+export default {
+  name: 'properties-panel-rich-edit',
+  mixins: [fullScreenMixin],
+  components: {
+    quillEditor
+  },
+  props: {
+    label: {
+      type: String
+    },
+    value: {
+      type: String,
+      required: true
+    },
+    readonly: {
+      type: Boolean
+    }
+  },
+  data() {
+    return {
+      isfullscreen: false,
+      fullscreenEnabled: document.fullscreenEnabled,
+      editorOptions: { modules: { toolbar: TOOLBAR_CONFIG } },
+      content: ''
+    };
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(value) {
+        if (value === this.content) {
+          return;
+        }
+        this.content = value;
+      }
+    },
+    readonly: {
+      handler(value) {
+        this.changeReadOnly(value)
+      }
+    },
+    content(value) {
+      if (value !== this.value) {
+        this.$emit('input', value);
+      }
+    }
+  },
+  computed: {
+    editor() {
+      return this.$refs.quillEditor.quill;
+    }
+  },
+  mounted() {
+    this.changeReadOnly(this.readonly);
+    this.readonly = !!this.readonly;
+    const fullscreenBtn = document.querySelector('button.ql-fullscreen');
+    fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
+  },
+  methods: {
+    getFullScreenContainer() {
+      return this.$refs.quillEditor.$el;
+    },
+    changeReadOnly(value) {
+      this.editor.enable(!value);
+      this.getFullScreenContainer().querySelector('.ql-toolbar').style.display = value ? 'none' : '';
+    }
+  }
+};
+</script>
+<style>
+.quill-editor {
+  padding-bottom: 20px;
+  background-color: white;
+}
+
+.quill-editor:fullscreen {
+  padding: 20px;
+}
+
+.quill-editor:fullscreen .ql-container {
+  height: calc(100% - 40px);
+}
+
+.quill-editor:fullscreen .ql-editor {
+ overflow: auto;
+}
+
+.editor .v-subheader {
+  padding: 0;
+  height: 24px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.editor:fullscreen .v-subheader {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ql-fullscreen:focus{
+  outline: none;
+}
+
+.ql-fullscreen::after {
+  content: "\F293";
+  font-family: "Material Design Icons";
+  font-size: 24px;
+  position: relative;
+  top: -12px;
+  left: -4px;
+}
+
+.ql-container.ql-snow.ql-disabled {
+  border-top: 1px solid #ccc !important;
+}
+
+.ql-blank::before {
+  content: '' !important;
+}
+</style>
