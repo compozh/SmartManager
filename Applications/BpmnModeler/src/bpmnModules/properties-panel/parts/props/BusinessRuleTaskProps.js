@@ -42,7 +42,7 @@ export default function addBusinessRuleProps(group, element, entryFactory, comma
       });
     },
     validate: required,
-    appendIcon: 'search',
+    appendIcon: 'mdi-magnify',
     append: () => {
       eventBus.$emit(events.propertiesPanel.selectDeployedDecision, decisionRef, (decDefKey) => {
         const cmd = cmdHelper.updateBusinessObject(element, bo, { 'camunda:decisionRef': decDefKey });

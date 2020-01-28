@@ -30,7 +30,7 @@ export default class FormsGroup extends PropertiesPanelGroup {
 
     const formKey = bo.get('camunda:formKey');
     if (typeof formKey !== 'string' || formKey.trim() === '') {
-      options.prependIcon = 'add';
+      options.prependIcon = 'mdi-plus';
       options.prepend = () => {
         eventBus.$emit(events.formio.createForm, (formKey, name) => {
           api.addForm(formKey, name);
@@ -41,7 +41,7 @@ export default class FormsGroup extends PropertiesPanelGroup {
         }, diagram.isSystem);
       }
     } else {
-      options.prependIcon = 'edit';
+      options.prependIcon = 'mdi-pencil';
       options.prepend = () => {
         eventBus.$emit(events.formio.editForm, formKey);
       }

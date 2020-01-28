@@ -20,6 +20,8 @@ import store from './store/index';
 import VueSplit from 'vue-split-panel'
 import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 import './element-variables.scss';
+import '@mdi/font/css/materialdesignicons.min.css';
+import 'roboto-fontface/css/roboto/roboto-fontface.css';
 
 import { routerDependencies } from './router';
 const config = window.config;
@@ -34,7 +36,9 @@ let dependencies = {
 };
 
 // Плагины стандартные
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  iconfont: 'mdi'
+})
 Vue.use(Vuex);
 Vue.use(VueI18n);
 

@@ -4,7 +4,7 @@
       <v-subheader>{{ label }}</v-subheader>
       <v-spacer></v-spacer>
       <v-btn v-if="canCreate" icon small :title="$t('bpmn.buttons.Add')" @click="createElement()">
-        <v-icon>add</v-icon>
+        <v-icon>mdi-add</v-icon>
       </v-btn>
     </v-layout>
     <v-card class="tree-container">

@@ -21,12 +21,12 @@
           @export="exportItem">
           <template #activator="{ open }">
             <v-btn icon class="text-left blue--text text--darken-2" v-on="open" :title="$t('bpmn.buttons.AddElement')">
-              <v-icon>add</v-icon>
+              <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
         </bpmn-contex-menu>
         <v-btn icon class="text-left blue--text text--darken-2" :title="$t('bpmn.buttons.Refresh')" @click="onRouteChanged(true)">
-          <v-icon>refresh</v-icon>
+          <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </template>
       <v-spacer></v-spacer>
