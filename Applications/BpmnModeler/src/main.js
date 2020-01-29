@@ -56,10 +56,14 @@ Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
 Vue.use(Eds, { dependencies });
 
-var formioOptions = {}
-formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
-formioOptions.routerDependencies = () => routerDependencies
-formioOptions.GraphQlUrl = config.GrapgQlUrl
+var formioOptions = {
+  auth,
+  routerDependencies: () => routerDependencies,
+  GraphQlUrl: config.GrapgQlUrl,
+  onError: ({ message, networkError }) => {
+    //todo: Обработать ошибку
+  }
+}
 Vue.use(formio, { options: formioOptions, dependencies });
 
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'));

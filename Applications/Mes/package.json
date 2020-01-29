@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@it-enterprise/common": "^1.0.1",
-    "@it-enterprise/formio": "^1.0.14",
+    "@it-enterprise/formio": "^1.0.18",
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/localization": "^1.0.10",
