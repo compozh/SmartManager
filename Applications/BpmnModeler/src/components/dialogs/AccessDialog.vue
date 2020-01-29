@@ -26,7 +26,7 @@
                   v-model="form.editedItem.identities"
                   :queryItems="queryUsersAndGroups"
                   :disabled="form.loading || form.mode !== 'create'"
-                  :rules="[form.rules.selectOne]"
+                  :rules="$t([form.rules.selectOne])"
                   :label="$t('bpmn.labels.WhoHasAccess')"
                   multiple
                 >

@@ -5,8 +5,8 @@
       <h2>{{$t('bpmn.labels.LastChanged')}}</h2>
     </v-row>
     <v-divider class="elevation-5" />
-    <v-row class="layout recent-diagrams">
-      <v-col cols=4 v-for="item in items.slice(0, 3)" :key="item.id">
+    <v-row class="layout recent-diagrams py-3">
+      <v-col cols=4 v-for="item in recentDiagrams" :key="item.id">
         <item-card :item="item" :activeItem.sync="active"/>
       </v-col>
     </v-row>
@@ -36,7 +36,9 @@
  </v-container>
 </template>
 <script>
+import moment from 'moment'
 import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
+import treeSearch from '../../api/treeSearch'
 export default {
   name: 'bpmn-main',
   data () {
@@ -46,15 +48,35 @@ export default {
   },
   mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   props: {
-      activeItem: String
+    activeItem: String
   },
   methods: {
     addFolder() {
       this.createItem(null, 'folder');
       this.$forceUpdate()
-    },
+    }
   },
   computed: {
+    recentDiagrams() {
+      let diagrams = []
+      let findDiagr = (item) => {
+        if(item.isFolder){
+          item.items.forEach(elem => findDiagr(elem))
+        } else {
+          diagrams.push(item)
+        }
+      }
+      this.items.forEach(item => findDiagr(item))
+
+      let time = (el) => {
+        let res =  el.editTime ? 
+          moment(el.editTime).toDate().getTime()
+        : moment(el.creationTime).toDate().getTime()
+        return res
+      }
+      diagrams = diagrams.sort((a, b) => time(b) - time(a)).slice(0, 3)
+      return diagrams  
+    },
     active: {
       get() {
         return this.activeItem;

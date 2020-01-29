@@ -6,8 +6,8 @@ export default {
   logout({ commit }) {
     auth.clearTokens()
     commit('UPDATE_AUTHENTICATED_USER', null)
-    if (router.currentRoute.name !== 'BPMNLOGIN') {
-      router.push({ path: '/bpmnmodeler/login' })
+    if (router.currentRoute.name !== 'Login') {
+      router.push({ path: '/login', query: {to: router.currentRoute.path } })
     }
   },
   async login({ dispatch }, { login, password, remember }) {
@@ -42,7 +42,7 @@ export default {
     // If user is already logged in notify and exit
     if (state.user) {
       // TODO: Уведомление о том что пользователь уже вошел в систему
-      router.push('/bpmnmodeler')
+      router.push('/')
       return true
     }
     return false
@@ -50,11 +50,11 @@ export default {
   updateAuthenticatedUser({ commit }, result) {
     if (result.success) {
       commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
-      router.push(router.currentRoute.query.to || '/bpmnmodeler')
+      router.push(router.currentRoute.query.to || '/')
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
-      if (router.currentRoute.name !== 'BPMNLOGIN') {
-        router.push({ path: '/login' })
+      if (router.currentRoute.name !== 'Login') {
+        router.push({ path: '/login', query: {to: router.currentRoute.path } })
       }
     }
   }

@@ -1,22 +1,25 @@
 <template>
   <v-container column fluid> 
-    <v-row class="project-title py-0 " justify="space-between">
-      <v-col cols="5" class="justify-start">
-        <v-row class="align-center justify-start pt-4">
+    <v-row class="project-title py-0 " justify="space-between" :class="$vuetify.breakpoint.lgAndDown? 'text' : 'xl-text'">
+      <v-col cols="5" class="justify-start" >
+        <v-row class="align-center justify-start">
           <v-icon class="pr-2">mdi-folder-open</v-icon>
           <h1>{{item ? item.name : 'folder'}}</h1>
         </v-row>
       </v-col>
       <v-col cols="7" class="justify-end">
         <v-row class="align-center justify-end">
-          <v-btn  class="text-left white--text blue add-btn mx-3" @click="addProcess()">
+          <!-- <v-btn  class="add-btn" @click="importItem(item)">
+            {{ $t('bpmn.buttons.Import') }}
+          </v-btn> -->
+          <v-btn  class="add-btn mx-2" @click="addProcess()">
             {{ $t('bpmn.buttons.AddProcess') }}
           </v-btn>
-          <v-btn  class="text-left white--text blue add-btn" @click="addFolder()">
+          <v-btn  class="add-btn"  @click="addFolder()">
             {{ $t('bpmn.buttons.AddFolder') }}
           </v-btn>
-          <v-text-field 
-            class="search col-3 py-2 pl-3" solo
+          <v-text-field dense
+            class="search col-3 py-2 pl-2" solo
             clearable
             v-model="search"
             append-icon="search"
@@ -24,7 +27,7 @@
             single-line
             hide-details
           ></v-text-field>
-          <v-select
+          <v-select dense
             class="search col-3 py-2 pl-3"
             :items="selectItems"
             :label="$t('bpmn.labels.SortBy')"
@@ -54,19 +57,39 @@
       </v-row>
       <v-divider class="elevation-5" />
       <v-row class="layout diagrams" v-if="children && children.length > 0">
-        <v-col cols=4 v-for="item in hasElements('diagram')" :key="item.id">
-          <item-card :item="item" :activeItem.sync="active"/>
+        <v-col cols=3 v-for="item in hasElements('diagram')" :key="item.id">
+          <item-card :item="item" :activeItem.sync="active" :chosen.sync="chosen" @choosed="choosed"/>
         </v-col>
       </v-row>
     </template>
     <v-row v-else-if="children.length == 0" class="empty" >
       <bpmn-empty />
     </v-row>
+    <v-footer app color="white"
+      height="55px"
+      v-if="chosen.length > 0">
+      <div>{{chosen.length}}  {{ $t('bpmn.labels.Selected') }}</div>
+      <v-col class="pa-0">
+        <v-btn text class="menu-btn col col-1" >
+          <v-icon size="15">mdi-folder-move</v-icon>
+          {{ $t('bpmn.buttons.Move') }}
+        </v-btn>
+        <v-btn text class="menu-btn col col-1"  @click="copyItem(chosen)">
+          <v-icon size="15">mdi-content-copy</v-icon>
+          {{ $t('bpmn.buttons.Copy') }}
+        </v-btn>
+        <v-btn text class="menu-btn col col-1" @click="removeItem(chosen)">
+          <v-icon size="18">delete</v-icon>
+          {{ $t('bpmn.buttons.Delete') }}
+        </v-btn>
+      </v-col>
+      <v-btn icon @click="chosen = []"><v-icon>mdi-close</v-icon></v-btn>
+    </v-footer>
   </v-container>
 </template>
 <script>
-import { Folder, Diagram } from '../../api/models';
 import { formMixin, importMixin } from '../mixins';
+import moment from 'moment'
 export default {
   name: 'bpmn-project',
   mixins: [ formMixin, importMixin ],
@@ -74,23 +97,34 @@ export default {
     elements: [],
     search: '',
     sort: 'name',
-    sortedIn: 'name'
+    sortedIn: 'name',
+    chosen: []
   }),
   props: {
     activeItem: String
   },
   methods: {
+    choosed(val) {
+      let elem = this.chosen.find( el => el.id == val.id)
+      if(elem) {
+        this.chosen = this.chosen.filter( el => el.id != val.id)
+      } else {
+        this.chosen.push(val)
+      }
+    },
     getChildren(children) {
       let sorted
       if (this.search) {
         children = children.filter(el => el.name.toLowerCase().includes(this.search.toLowerCase()))
       }
-      if(this.sortedIn == this.sort){ 
+      if (this.sortedIn == this.sort) { 
         return children
       } else if ( this.sort == 'name') {
         sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name))
-      } else if (this.sort ==  'items') {
-        sorted = children.sort(( a, b ) => (a.items ? a.items.length : 0 ) - (b.items ? b.items.length : 0))
+      } else if (this.sort ==  'creationTime' || this.sort ==  'editTime' ) {
+        sorted = children.sort(( a, b ) =>{
+          return moment(a[this.sort]).toDate().getTime() - moment(b[this.sort]).toDate().getTime()
+        })
       } else  {
         this.sort = this.sortedIn
         sorted = children.reverse()
@@ -99,7 +133,7 @@ export default {
       return sorted
     },
     checkSort(value) {
-      if(this.sortedIn == value){
+      if (this.sortedIn == value) {
         this.sort = 'revert'
         this.sortedIn = value
       } else { 
@@ -107,25 +141,24 @@ export default {
       }
     },
     addFolder() {
-      this.createItem(null, 'folder');
-      this.$forceUpdate()
+      this.createItem(this.item, 'folder');
     },
     addProcess() {
       this.createItem(this.item, 'process');
     },
     hasElements(type) {
-      if(!this.children) return []
-      let elements = type == 'diagram'?
+      if(!this.children) { return [] }
+        let elements = type == 'diagram' ?
           this.children.filter( item => !item.isFolder)
-        : this.children.filter( item => item.isFolder)
-        console.log(elements)
+          : this.children.filter( item => item.isFolder)
       return elements
     },
   },
   computed: {
-    selectItems(){
+    selectItems() {
       return [{text: this.$t('bpmn.labels.Name'), value: 'name'},
-              {text: this.$t('bpmn.labels.Count'), value: 'items'}]
+              {text: this.$t('bpmn.labels.CreationTime'), value: 'creationTime'},
+              {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'}]
     },
     item() {      
       let itemId = this.$route.params.id
@@ -176,27 +209,45 @@ export default {
   color: #535353;
   font-size: 22px;
   font-weight: 700;
-  vertical-align: bottom;
 }
 h2{
   font-size: 18px;
   font-weight: 600;
-  vertical-align: bottom;
 }
 
 .empty {
   height: calc(100vh - 200px);
 }
 .add-btn {
-  // width: 120px;
-  height: 45px !important;
+  font-size: 11px;
+  color: white;
+  background-color: #1976d2 !important;
+  height: 40px !important;
 }
 .search {
-  max-height:66px;
+  max-height:55px;
+}
+
+.v-input.select-item .v-label {
+  font-size: 11px !important; 
 }
 .select-item {
-  font-size: 16px; 
   width: 100%;
-  height: 48px;
+  height: 45px;
+}
+.text {
+  font-size: 0.7em
+}
+.text h1 {
+  font-size: 1.5em
+}
+.xl-text {
+  label {
+    font-size: 0.76em
+  }
+}
+.menu-btn {
+  color: #535353;
+  font-size: 11px;
 }
 </style>

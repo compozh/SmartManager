@@ -30,7 +30,7 @@ export default {
       return !this.error && !this.result
     },
     routeToBack() {
-      return this.$route.params.routeToBack
+      return this.$route.query.to || '/'
     }
   },
 

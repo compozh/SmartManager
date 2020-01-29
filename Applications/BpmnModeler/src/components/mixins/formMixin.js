@@ -16,6 +16,7 @@ export default {
         }
         if (success) {
           this.activeItem = item.id;
+          this.$forceUpdate()
         } else {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
@@ -29,25 +30,55 @@ export default {
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
         }
+        this.$forceUpdate()
         this.activeItem = item.id;
         break;
       case 'delete':
-        success = await this.$store.dispatch('bpmn/deleteItem', item);
-        if (success) {
-          this.activeItem = item.parentId;
+        let deleting = async (elem) => {
+          success = await this.$store.dispatch('bpmn/deleteItem', elem);
+        }
+        if(type === 'all'){
+          let successes = []
+          item.forEach(async elem => {
+            await deleting(elem)
+            successes.push(success)
+          })
+          success = successes.every( el => el)
+          if (success) {
+            this.chosen = this.chosen.filter( el => !item.find(it => el.id == it.id))
+          }
         } else {
+          await deleting(item)
+          if (success) {
+            if(this.chosen) {this.chosen = this.chosen.filter( el => el.id != item.id)}
+            this.activeItem = item.parentId
+          }
+        }
+        if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
-          this.activeItem = item.id;
         }
         break;
       case 'copy':
-        if (type === 'folder') {
-          success = await this.$store.dispatch('bpmn/copyFolder', item);
-        } else {
-          success = await this.$store.dispatch('bpmn/copyProcess', item);
+        let copy = async (elem) => {
+          if (elem.isFolder) {
+            success = await this.$store.dispatch('bpmn/copyFolder', elem);
+          } else {
+            success = await this.$store.dispatch('bpmn/copyProcess', elem);
+          }
         }
+        if(type === 'all'){
+          let successes = []
+          item.forEach(async elem => {
+            await copy(elem)
+            successes.push(success)
+          })
+          success = successes.every( el => el)
+        } else {
+          copy(item)
+        }
+        
         if (success) {
-          this.activeItem = item.id;
+          if(this.chosen) {this.chosen = []}
         } else {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
@@ -72,20 +103,37 @@ export default {
         this.formSave);
     },
     removeItem(item) {
+      let  type, model
+      if(Array.isArray(item)){
+        type = 'all'
+        model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it))
+      } else {
+        
+        type = item.isFolder ? 'folder' : 'process'
+        model = item.isFolder ? new Folder(item) : new Diagram(item)
+      }
       eventBus.$emit(events.modeler.showForm,
         'delete',
-        item.isFolder ? 'folder' : 'process',
-        item.isFolder ? new Folder(item) : new Diagram(item),
+        type,
+        model,
         this.formSave);
     },
     copyItem(item) {
-      const model = item instanceof Folder ? new Folder(item) : new Diagram(item);
-      model.isSystem = false;
+      let  type, model
+      if(Array.isArray(item)){
+        type = 'all'
+        model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it))
+      } else {
+        
+        type = item.isFolder ? 'folder' : 'process'
+        model = item.isFolder ? new Folder(item) : new Diagram(item)
+      }
       eventBus.$emit(events.modeler.showForm,
         'copy',
-        this.formType = item.isFolder ? 'folder' : 'process',
+        type,
         model,
         this.formSave);
+
     }
   }
 }

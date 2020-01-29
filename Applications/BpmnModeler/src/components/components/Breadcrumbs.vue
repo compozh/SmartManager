@@ -5,7 +5,7 @@
         <v-icon class="pt-2" size="22">mdi-chevron-right</v-icon>
       </template>
       <template v-slot:item="crumbs">
-        <router-link class="crumbs row pt-4 px-0" :to="routeTo(crumbs.item)" :key="crumbs.item.name">
+        <div class="crumbs row pt-4 px-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
           <span v-if="!crumbs.item.name">{{ crumbs.item }}</span>
           <div v-if="crumbs.item.name" :title="crumbs.item.name">{{ crumbs.item.name }}</div>
           <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item()"
@@ -19,7 +19,7 @@
               </v-btn>
             </template>
           </bpmn-contex-menu>
-        </router-link>          
+        </div>          
       </template>
     </v-breadcrumbs>
 </template>
@@ -38,7 +38,17 @@ export default {
       this.item()
       return this.$store.state.bpmn.items;
     },
-
+    active: {
+      get() {
+        return this.activeItem;
+      },
+      set(value) {
+        if (value === this.activeItem) {
+          return;
+        }
+        this.$emit('update:activeItem', value);
+      }
+    },
     elements() {
       let item = this.item(),
         elements = [this.$t('bpmn.labels.Home')]
@@ -73,13 +83,8 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     routeTo(item) {
-      let to = item.id ?
-          item.isFolder ? 'Project' :
-            item.type == 'BPMN'  ? 'Process'
-              : 'Decision'
-          : 'Main',
-        id = item.id ? item.id : ''
-      return id ? {name: to, params: {id}} : {name: to}
+      let id = item.id ? item.id : ''
+      this.active = id
     },
     item() { 
       let itemId = this.$route.params.id

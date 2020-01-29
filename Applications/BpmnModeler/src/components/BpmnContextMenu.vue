@@ -7,7 +7,7 @@
       <slot name="activator" :open="on"></slot>
     </template>
     <v-list>
-      <template v-if="(!item || isFolder(item)) && !crumb ">
+      <template v-if="(!item || isFolder(item)) && !crumb && !onlyExport">
         <v-list-item @click="addFolder(item)">
           <v-list-item-avatar>
             <v-icon>mdi-folder-plus</v-icon>
@@ -27,14 +27,19 @@
           <v-list-item-title>{{ $t('bpmn.buttons.Import') }}</v-list-item-title>
         </v-list-item>
       </template>
-      <template v-else-if="isBpmn(item) && !crumb">
+      <template v-else-if="isBpmn(item) && onlyExport">
         <v-list-item @click="exportBpmn(item)">
           <v-list-item-avatar>
             <v-icon>mdi-file-code</v-icon>
           </v-list-item-avatar>
           <v-list-item-title>{{ $t('bpmn.buttons.ExportBpmn') }}</v-list-item-title>
         </v-list-item>
-        
+        <v-list-item @click="exportSvg(item)">
+          <v-list-item-avatar>
+            <v-icon>mdi-file-image</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-item-title>
+        </v-list-item>
         <v-list-item @click="exportPng(item)">
           <v-list-item-avatar>
             <v-icon>mdi-file-image-outline</v-icon>
@@ -42,7 +47,7 @@
           <v-list-item-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-item-title>
         </v-list-item>
       </template>
-      <template v-else-if="isDmn(item) && !crumb">
+      <template v-else-if="isDmn(item) && onlyExport">
         <v-list-item @click="exportDmn(item)">
           <v-list-item-avatar>
             <v-icon>mdi-file-code</v-icon>
@@ -50,12 +55,7 @@
           <v-list-item-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-item-title>
         </v-list-item>
       </template>
-      <template v-if="item"><v-list-item @click="exportSvg(item)">
-          <v-list-item-avatar>
-            <v-icon>mdi-file-image</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-item-title>
-        </v-list-item>
+      <template v-if="item  && !onlyExport">
         <v-list-item v-if="canDeploy(item) && !crumb" @click="deploy(item)">
           <v-list-item-avatar>
             <v-icon>save_alt</v-icon>
@@ -103,7 +103,8 @@ export default {
   props: {
     item: Object,
     offset: Boolean,
-    crumb: Boolean
+    crumb: Boolean,
+    onlyExport: Boolean
   },
   computed: {
     canModifySystemObjects() {
@@ -133,7 +134,6 @@ export default {
       this.$emit('export', item, 'dmn');
     },
     exportSvg(item) {
-      // debugger
       this.$emit('export', item, 'svg');
     },
     exportPng(item) {

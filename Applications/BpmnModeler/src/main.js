@@ -1,9 +1,7 @@
 // @it-enterprise пакеты
-// import WebApps from '@it-enterprise/webappscore';
 import Localization from '@it-enterprise/localization'
 import Eds from '@it-enterprise/eds'
 import GrapgQlCore from '@it-enterprise/graphql'
-// import Router from '@it-enterprise/routercore';
 import auth from '@it-enterprise/jwtauthentication'
 import formio from '@it-enterprise/formio'
 import '@it-enterprise/formio/dist/formio.css'
@@ -12,8 +10,6 @@ import '@it-enterprise/formio/dist/formio.css'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import vuetify from './plugins/vuetify'
-// import Vuetify from 'vuetify/lib';
-// import 'vuetify/dist/vuetify.min.css';
 import axios from 'axios'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
@@ -36,7 +32,6 @@ let dependencies = {
 };
 
 // Плагины стандартные
-// Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(VueI18n);
 
@@ -52,8 +47,6 @@ Vue.use(Tabs);
 Vue.use(TabPane);
 
 // Плагины it-enterprise
-// Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
-// Vue.use(Router, { options: config, dependencies }, () => auth.getToken());
 Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
 Vue.use(Eds, { dependencies });
@@ -68,29 +61,6 @@ Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugi
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'));
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'));
 
-
-// подключение vuetify
-
-// const opts = {
-//   theme: {
-//     light: true,
-//     breakpoint: {
-//       thresholds: {
-//         xs: 340,
-//         sm: 540,
-//         md: 800,
-//         lg: 1280,
-//         xl: 1920,
-//       },
-//       scrollBarWidth: 24
-//     }
-//   },
-//   icons: {
-//     iconfont: 'md',
-//   }
-// }
-// const vuetify = new Vuetify()
-// Шина событий
 export const eventBus = new Vue({
   router,
   vuetify,

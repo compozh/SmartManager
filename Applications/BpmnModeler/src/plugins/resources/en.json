@@ -21,7 +21,8 @@
 		"Share": "Share",
 		"Edit": "Edit",
 		"Add": "Add",
-		"OK": "OK"
+		"OK": "OK",
+		"Move" : "Move"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -87,13 +88,18 @@
 		"LastChanged": "Diagrams last changed by you",
 		"Projects" : "Projects",
 		"Count" : "Number of files or folders",
+		"CreationTime" : "Creation time",
+		"EditTime": "Recent changes",
+		"Editor" : "Editor",
+		"Owner": "Owner",
 		"PerPage" : "Elements on page",
 		"Of" : "of",
 		"Home" : "Home",
 		"SortBy": "Sort",
 		"NoDataText" : "No data",
 		"Folders" : "Folders",
-		"Diagrams": "Diagrams"
+		"Diagrams": "Diagrams",
+		"Selected": "Selected"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

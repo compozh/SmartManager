@@ -12,7 +12,7 @@ export default {
   }),
   computed: {
     routeToBack() {
-      return this.$route.params.routeToBack
+      return this.$route.query.to || '/'
     },
     needEnterTempPassword() {
       // Не реализовано

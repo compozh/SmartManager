@@ -13,39 +13,56 @@
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
     </v-layout>
     <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
-      <v-toolbar dense height="40" flat class="modeler-toolbar">
-        <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
-          <v-icon>undo</v-icon>
-        </v-btn>
-        <v-btn text :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
-          <v-icon>redo</v-icon>
-        </v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn text :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
-          <v-icon>zoom_in</v-icon>
-        </v-btn>
-        <v-btn text :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
-          <v-icon>zoom_out</v-icon>
-        </v-btn>
-        <v-btn text :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
-          <v-icon>mdi-magnify-close</v-icon>
-        </v-btn>
+      <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
         <v-spacer></v-spacer>
-        <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
-          <v-icon>map</v-icon>
-        </v-btn>
-        <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
-          <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
-          <v-icon v-else>fullscreen</v-icon>
-        </v-btn>
         <v-divider vertical></v-divider>
         <v-btn text @click="showPanel = !showPanel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
         </v-btn>
+         <v-btn text @click="share(diagram)" v-if="canShare()" :title="$t('bpmn.buttons.Share')">
+          <v-icon>mdi-account-plus</v-icon>
+        </v-btn>
+        <bpmn-contex-menu 
+          :item="diagram"
+          :onlyExport="true"
+          @export="exportItem"
+          offset>
+          <template #activator="{ open }">
+            <v-btn text icon v-on="open">
+              <v-icon>mdi-share-variant</v-icon>
+            </v-btn>
+          </template>
+        </bpmn-contex-menu>
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize">
           <div class="bpmn-diagram-container">
+            <v-row class="options-panel">
+              <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
+                <v-icon size="20">undo</v-icon>
+              </v-btn>
+              <v-btn text :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
+                <v-icon size="20">redo</v-icon>
+              </v-btn>
+              <v-divider vertical></v-divider>
+              <v-btn text :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
+                <v-icon size="20">zoom_in</v-icon>
+              </v-btn>
+              <v-btn text :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
+                <v-icon size="20">zoom_out</v-icon>
+              </v-btn>
+              <v-btn text :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
+                <v-icon size="20">mdi-magnify-close</v-icon>
+              </v-btn>
+              <v-divider vertical></v-divider>
+              <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
+                <v-icon size="20">map</v-icon>
+              </v-btn>
+              <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
+                <v-icon size="20" v-if="fullScreen">fullscreen_exit</v-icon>
+                <v-icon size="20" v-else>fullscreen</v-icon>
+              </v-btn>
+            </v-row>
             <slot name="modeler"></slot>
           </div>
         </SplitArea>
@@ -56,9 +73,18 @@
         </SplitArea>
       </Split>
       <div v-else class="bpmn-diagram-container">
+        <v-row class="options-panel grey lighten-4 ">
+            <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
+              <v-icon>map</v-icon>
+            </v-btn>
+            <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
+              <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
+              <v-icon v-else>fullscreen</v-icon>
+            </v-btn>
+          </v-row>
         <slot name="modeler"></slot>
       </div>
-      <v-tooltip v-model="saved" activator=".bpmn-diagram-container" bottom>
+      <v-tooltip v-model="saved" class="tooltip" >
         <span>{{ $t('bpmn.labels.ProcessSaved') }}</span>
       </v-tooltip>
     </div>
@@ -67,7 +93,10 @@
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
 import Diagram from '../../api/models/Diagram';
+import { eventBus } from '../../main';
+import { events } from '../../constants';
 import { fullScreenMixin } from '../mixins';
+import * as Models from '../../api/models';
 
 export default {
   name: 'modeler-layout',
@@ -95,7 +124,6 @@ export default {
       split: null
     }
   },
-  created() { console.log(this.saved) },
   computed: {
     showPanel: {
       get() {
@@ -106,8 +134,6 @@ export default {
           return;
         }
         this.splitSize = value ? 20 : 1;
-        console.log(value);
-        console.log(this.splitSize);
       }
     },
     splitSize: {
@@ -136,11 +162,22 @@ export default {
     },
     onSplitDragEnd(size) {
       this.splitSize = 100 - Number.parseInt(size);
-    }
+    },
+    share(item) {
+      eventBus.$emit(events.modeler.showAccessDialog, item.id);
+    },
+    exportItem(item, type) {
+      eventBus.$emit(events.modeler.export, type);
+    },
+    canShare(item) {
+      if(!this.diagram) return false
+      return this.diagram.rights.find(el => el == "SHARE")
+    },
   }
+  
 }
 </script>
-<style>
+<style lang="scss" >
 .modeler-grid {
   position: absolute;
   height: 100%;
@@ -169,6 +206,7 @@ export default {
   width: 100%;
   height: 100%;
   grid-area: modeler;
+  position: relative;
 }
 .modeler-grid.no-panel {
   height: calc(100% - 81px);
@@ -200,4 +238,16 @@ a.bjs-powered-by {
   font-family: "Material Design Icons";
   padding-top: 3px;
 }
+.options-panel {
+  position: absolute;
+  background-color: #f5f5f5;
+  bottom: 12px;
+  right: 30px;
+  border: 1px solid #CCC;
+  border-radius: 2px;
+  .v-btn {
+    min-width: 45px !important
+  }
+}
+
 </style>

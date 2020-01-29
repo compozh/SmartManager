@@ -1,17 +1,3 @@
-// import Vue from 'vue';
-// import VueRouter from 'vue-router';
-// import config from './config';
-// Vue.use(VueRouter);
-
-// // Роутер по умолчанию
-// export const routerDependencies = {
-//   router: new VueRouter({
-//     mode: 'history',
-//     base: config.BaseUrl,
-//     routes: [{ path: '/:ApplicationId', children: [{ path: '*' }] }]
-//   }),
-//   VueRouter
-// };
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -44,12 +30,10 @@ export const router = new VueRouter({
           meta: {
             rule: 'isPublic',
           },
-          // beforeEnter : func ,
         },
         {
           name: 'Project',
           path: '/project/:id?',
-          // id: 'TASKS',
           component: () => import('@/components/pages/Project.vue'),
           meta: {
             rule: 'isPublic',
@@ -59,104 +43,30 @@ export const router = new VueRouter({
           props: {
             item: Object
           },
-          // text: "mes.menu.tasks",
-          // sort: "1",
-          // image: "assignment",
         }, 
         {
           name: 'Decision',
           path: '/decision/:id?',
-          // id: 'TASKS',
           component: () => import('@/components/modelers/DmnModeler.vue'),
           meta: {
             rule: 'isPublic',
           },
           caseSensitive: false,
           allowAnonymous: false,
-          // text: "mes.menu.tasks",
-          // sort: "1",
-          // image: "assignment",
         },
         {
           name: 'Process',
           path: '/process/:id?',
-          // id: 'TASKS',
           component: () => import('@/components/modelers/BpmnModeler.vue'),
           meta: {
             rule: 'isPublic',
           },
           caseSensitive: false,
           allowAnonymous: false,
-          // text: "mes.menu.tasks",
-          // sort: "1",
-          // image: "assignment",
+          beforeRouteLeave (to, from, next) {
+            console.log(this, to, from, next)
+          }
         },
-        // { 
-        //   name: 'QUALITY',
-        //   path: "/quality",
-        //   id: "QUALITY",
-        //   component: () => import('@/components/pages/Quality.vue'),
-        //   meta: {
-        //     rule: 'onlyQuality',
-        //   },
-        //   caseSensitive: false,
-        //   allowAnonymous: false,
-        //   text: "mes.menu.quality",
-        //   sort: "5",
-        //   image: "bar_chart",
-        // },
-        // {
-        //   name: 'DOWNTIMES',
-        //   path: 'downtimes/',
-        //   id: "DOWNTIMES",
-        //   component: () => import('@/components/pages/Downtimes.vue'),
-        //   meta: {
-        //     rule: 'Production',
-        //   },
-        //   caseSensitive: false,
-        //   allowAnonymous: false,
-        //   text: "mes.menu.downtimes",
-        //   sort: "4",
-        //   image: "warning",
-        // },
-        // {
-        //   name: 'INSTALLATIONS',
-        //   path: 'installations/',
-        //   id: "INSTALLATIONS",
-        //   component: () => import('@/components/pages/Installations.vue'),
-        //   meta: {
-        //     rule: 'onlyInstallations',
-        //   },
-        //   caseSensitive: false,
-        //   allowAnonymous: false,
-        //   text: "mes.menu.installations",
-        //   sort: "3",
-        //   image: "archive",
-        // },
-        // {
-        //   name: 'PRODUCTIONS',
-        //   path: "productions",
-        //   id: "PRODUCTIONS",
-        //   component: () => import('@/components/pages/Productions.vue'),
-        //   meta: {
-        //     rule: 'Production',
-        //   },
-        //   caseSensitive: false,
-        //   allowAnonymous: false,
-        //   text: "mes.menu.productions",
-        //   sort: "2",
-        //   image: "chrome_reader_mode",
-        // },
-        // {
-        //   path: '/dynamic/:id',
-        //   name: 'DYNAMIC',
-        //   id: "DYNAMIC",
-        //   meta: {
-        //     rule: 'allPages',
-        //   },
-        //   component : () => import('@/components/pages/DynamicPage.vue'),
-        //   caseSensitive: false,
-        // },
         {
           path: 'error/:status_code/',
           name: 'ERROR',
@@ -179,26 +89,8 @@ export const router = new VueRouter({
   ]
 })
 
-// function func(to,from, next) {
-//   let workCenter = store.getters['mes/workCenter']
-//   let result
-//   if(workCenter) {
-//     let access =  workCenter.accessPages
-//     result = 
-//         access === 'QUALITY' ? '/quality' : 
-//         access === 'ONLY_INSTALLATION' ? '/installations' :
-//         access === 'PRODUCTION' ? '/productions' 
-//         : '/tasks'
-//     return next({ path: result, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
-//   } else if(!store.state.auth.user){
-//     router.go()
-//   } else {
-//     return next()
-//   }
-// }
 
 router.beforeEach((to, from, next) => {
-  // debugger
   if (
     to.path === '/login' ||
     to.path === '/error/404' ||
@@ -217,24 +109,4 @@ router.beforeEach((to, from, next) => {
   router.push({ name: 'Login', query: { to: to.path } })
 })
 
-// used routes
-
-// if (index < 0) {
-//   routeName = 'BPMNEMPTY';
-//   params = { };
-// } else if (item instanceof Folder) {
-//   routeName = 'BPMNFOLDER';
-//   params = { id: itemId };
-// } else if (item instanceof Diagram) {
-//   switch (item.type) {
-//   case DiagramType.BPMN:
-//     routeName = 'BPMNMODELER';
-//     params = { id: itemId };
-//     break;
-//   case DiagramType.DMN:
-//     routeName = 'DMNMODELER';
-//     params = { id: itemId };
-//     break;
-//   }
-// }
 export default router

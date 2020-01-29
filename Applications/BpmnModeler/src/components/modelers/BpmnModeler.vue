@@ -60,6 +60,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    this.$emit('loadItems')
   },
   watch: {
     process(value, oldValue) {
@@ -128,6 +129,10 @@ export default {
           // TODO: display exception
         }
       });
+      
+      this.$store.dispatch('bpmn/editProcess', this.process)
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId)
+      this.$store.dispatch('bpmn/editFolder', item)
     },
     onActiveModelChanged() {
       if (!this.process || !this.modeler || this.noAccess) {
@@ -187,6 +192,5 @@ export default {
   }
 };
 </script>
-<style>
-
+<style >
 </style>

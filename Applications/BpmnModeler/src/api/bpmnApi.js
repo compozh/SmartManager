@@ -299,7 +299,7 @@ function addAuthHeader(options, token) {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens();
-    router.push('/login');
+    router.push({path: '/login', query: {to: router.currentRoute.path }});
   }
   if (graphQLErrors) {
     return graphQLErrors.message;

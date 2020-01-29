@@ -18,8 +18,7 @@
           <span>{{ view.element.name || view.element.id }}</span>
         </v-tab>
       </v-tabs>
-      <div class="dmn-modeler-container" ref="container">
-      </div>
+      <div class="dmn-modeler-container" ref="container"></div>
     </template>
     <template #propertiesPanel>
       <div ref="propertiesPanel"></div>
@@ -91,6 +90,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    this.$emit('loadItems')
   },
   watch: {
     decision(value, oldValue) {
@@ -192,6 +192,9 @@ export default {
           // TODO: display exception
         }
       });
+      this.$store.dispatch('bpmn/editProcess', this.decision)
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.decision.parentId)
+      this.$store.dispatch('bpmn/editFolder', item)
     },
     onActiveModelChanged() {
       if (!this.decision || !this.modeler || this.noAccess) {
@@ -245,7 +248,8 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+
 .dmn-modeler-container {
   width: 100%;
   height: 100%;

@@ -4,7 +4,7 @@
     <v-card-title>
       <span class="headline">{{ $t(titles[type][mode]) }}</span>
       <v-spacer></v-spacer>
-      <v-btn-toggle v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
+      <v-btn-toggle v-if="type != 'all'" v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
         <v-btn :value="true" :disabled="!canChangeIsSystemProperty || loading" text style="flex-grow: 0">
           <v-icon v-if="model.isSystem">lock</v-icon>
           <v-icon v-else>lock_open</v-icon>
@@ -14,7 +14,7 @@
     <v-card-text>
       <v-form ref="form" v-model="valid" onSubmit="return false;">
         <v-text-field ref="nameField"
-          v-model="model.name"
+          v-model="names"
           :label="$t('bpmn.labels.Name')"
           :disabled="loading || mode === 'delete'"
           clearable
@@ -61,7 +61,11 @@ export default {
           'edit': 'bpmn.labels.EditFolder',
           'delete': 'bpmn.labels.DeleteFolder',
           'copy': 'bpmn.labels.CopyFolder',
-        }        
+        },
+        'all': {
+          'delete': 'bpmn.labels.Delete',
+          'copy': 'bpmn.buttons.Copy',
+        }    
       },
       actions: {
         'create': 'bpmn.buttons.Create',
@@ -83,6 +87,19 @@ export default {
   computed: {
     canChangeIsSystemProperty() {
       return ['create', 'copy'].includes(this.mode) && this.$store.state.bpmn.configuration.canModifySystemObjects;
+    },
+    names: {
+      get: function () {
+        return this.type == 'all' ? this.model.map(el => el.name).join(', ') : this.model.name
+      },
+      set: function (val) {
+        if(this.type == 'all' ) {
+          val = val.split(', ')
+          this.model.forEach((el, n) => el.name = val[n])
+        } else {
+          this.model.name = val
+        }
+      },
     }
   },
   methods: {
@@ -103,7 +120,7 @@ export default {
       }
       if (this.callback) {
         this.loading = true;
-        const success = await this.callback(this.model, this.type, this.mode);
+        let success = await this.callback(this.model, this.type, this.mode);
         this.loading = false;
         if (success) {
           this.cancel();
