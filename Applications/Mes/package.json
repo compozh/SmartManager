@@ -15,7 +15,11 @@
   },
   "dependencies": {
     "@it-enterprise/common": "^1.0.1",
+<<<<<<< HEAD
     "@it-enterprise/formio": "^1.0.18",
+=======
+    "@it-enterprise/formio": "^1.0.17",
+>>>>>>> 8158390114d465616eab04ea407205be99d01bf1
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/localization": "^1.0.10",
