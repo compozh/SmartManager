@@ -37,7 +37,7 @@ export default {
         let deleting = async (elem) => {
           success = await this.$store.dispatch('bpmn/deleteItem', elem);
         }
-        if(type === 'all'){
+        if (type === 'all') {
           let successes = []
           item.forEach(async elem => {
             await deleting(elem)
@@ -50,7 +50,7 @@ export default {
         } else {
           await deleting(item)
           if (success) {
-            if(this.chosen) {this.chosen = this.chosen.filter( el => el.id != item.id)}
+            if (this.chosen) { this.chosen = this.chosen.filter( el => el.id != item.id) }
             this.activeItem = item.parentId
           }
         }
@@ -66,7 +66,7 @@ export default {
             success = await this.$store.dispatch('bpmn/copyProcess', elem);
           }
         }
-        if(type === 'all'){
+        if (type === 'all') {
           let successes = []
           item.forEach(async elem => {
             await copy(elem)
@@ -78,7 +78,7 @@ export default {
         }
         
         if (success) {
-          if(this.chosen) {this.chosen = []}
+          if (this.chosen) { this.chosen = [] }
         } else {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
@@ -104,7 +104,7 @@ export default {
     },
     removeItem(item) {
       let  type, model
-      if(Array.isArray(item)){
+      if (Array.isArray(item)) {
         type = 'all'
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it))
       } else {
@@ -120,7 +120,7 @@ export default {
     },
     copyItem(item) {
       let  type, model
-      if(Array.isArray(item)){
+      if (Array.isArray(item)) {
         type = 'all'
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it))
       } else {

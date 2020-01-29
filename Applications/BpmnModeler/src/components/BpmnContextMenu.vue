@@ -34,12 +34,7 @@
           </v-list-item-avatar>
           <v-list-item-title>{{ $t('bpmn.buttons.ExportBpmn') }}</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="exportSvg(item)">
-          <v-list-item-avatar>
-            <v-icon>mdi-file-image</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-item-title>
-        </v-list-item>
+        
         <v-list-item @click="exportPng(item)">
           <v-list-item-avatar>
             <v-icon>mdi-file-image-outline</v-icon>
@@ -134,6 +129,7 @@ export default {
       this.$emit('export', item, 'dmn');
     },
     exportSvg(item) {
+      // debugger
       this.$emit('export', item, 'svg');
     },
     exportPng(item) {

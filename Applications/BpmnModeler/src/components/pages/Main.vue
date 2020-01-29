@@ -60,7 +60,7 @@ export default {
     recentDiagrams() {
       let diagrams = []
       let findDiagr = (item) => {
-        if(item.isFolder){
+        if (item.isFolder) {
           item.items.forEach(elem => findDiagr(elem))
         } else {
           diagrams.push(item)
@@ -71,7 +71,7 @@ export default {
       let time = (el) => {
         let res =  el.editTime ? 
           moment(el.editTime).toDate().getTime()
-        : moment(el.creationTime).toDate().getTime()
+          : moment(el.creationTime).toDate().getTime()
         return res
       }
       diagrams = diagrams.sort((a, b) => time(b) - time(a)).slice(0, 3)

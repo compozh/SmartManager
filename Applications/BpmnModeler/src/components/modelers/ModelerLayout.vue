@@ -124,6 +124,7 @@ export default {
       split: null
     }
   },
+  created() { console.log(this.saved) },
   computed: {
     showPanel: {
       get() {
@@ -170,8 +171,8 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     canShare(item) {
-      if(!this.diagram) return false
-      return this.diagram.rights.find(el => el == "SHARE")
+      if (!this.diagram) { return false }
+      return this.diagram.rights.find(el => el == 'SHARE')
     },
   }
   

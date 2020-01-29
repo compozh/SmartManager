@@ -113,7 +113,7 @@ export default {
     },
   },
   updated() {
-    if(!this.preview && !this.loading && this.item.type == 'BPMN'){
+    if (!this.preview && !this.loading && this.item.type == 'BPMN') {
       eventBus.$on(events.modeler.export, this.setSVG)
       eventBus.$emit(events.modeler.export, 'svg')
       eventBus.$off(events.modeler.export, this.setSVG)

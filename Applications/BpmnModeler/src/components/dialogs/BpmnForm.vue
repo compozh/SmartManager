@@ -93,7 +93,7 @@ export default {
         return this.type == 'all' ? this.model.map(el => el.name).join(', ') : this.model.name
       },
       set: function (val) {
-        if(this.type == 'all' ) {
+        if (this.type == 'all' ) {
           val = val.split(', ')
           this.model.forEach((el, n) => el.name = val[n])
         } else {

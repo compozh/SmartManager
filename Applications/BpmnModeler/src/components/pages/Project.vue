@@ -106,7 +106,7 @@ export default {
   methods: {
     choosed(val) {
       let elem = this.chosen.find( el => el.id == val.id)
-      if(elem) {
+      if (elem) {
         this.chosen = this.chosen.filter( el => el.id != val.id)
       } else {
         this.chosen.push(val)
@@ -122,7 +122,7 @@ export default {
       } else if ( this.sort == 'name') {
         sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name))
       } else if (this.sort ==  'creationTime' || this.sort ==  'editTime' ) {
-        sorted = children.sort(( a, b ) =>{
+        sorted = children.sort(( a, b ) => {
           return moment(a[this.sort]).toDate().getTime() - moment(b[this.sort]).toDate().getTime()
         })
       } else  {
@@ -147,18 +147,18 @@ export default {
       this.createItem(this.item, 'process');
     },
     hasElements(type) {
-      if(!this.children) { return [] }
-        let elements = type == 'diagram' ?
-          this.children.filter( item => !item.isFolder)
-          : this.children.filter( item => item.isFolder)
+      if (!this.children) { return [] }
+      let elements = type == 'diagram' ?
+        this.children.filter( item => !item.isFolder)
+        : this.children.filter( item => item.isFolder)
       return elements
     },
   },
   computed: {
     selectItems() {
       return [{text: this.$t('bpmn.labels.Name'), value: 'name'},
-              {text: this.$t('bpmn.labels.CreationTime'), value: 'creationTime'},
-              {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'}]
+        {text: this.$t('bpmn.labels.CreationTime'), value: 'creationTime'},
+        {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'}]
     },
     item() {      
       let itemId = this.$route.params.id
@@ -166,7 +166,7 @@ export default {
       return item
     },
     children: {
-      get: function(){
+      get: function() {
         if (!this.item) { return [] }
         let children = this.item.items
         children = this.getChildren(children)
