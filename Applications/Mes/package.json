@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@it-enterprise/common": "^1.0.1",
-    "@it-enterprise/formio": "^1.0.17",
+    "@it-enterprise/formio": "^1.0.18",
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/jwtauthentication": "^1.0.15",
     "@it-enterprise/localization": "^1.0.10",
@@ -63,7 +63,6 @@
     "apollo-link-error": "^1.1.12",
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
-    "compression-webpack-plugin": "^3.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "material-design-icons-iconfont": "^5.0.1",

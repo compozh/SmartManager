@@ -229,7 +229,6 @@ export default {
         }
         dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
-      linearLoader: true
     })
   },
 
@@ -252,7 +251,6 @@ export default {
       successAction: async () => {
         task.inProgress = false
       },
-      linearLoader: true
     })
   },
 
