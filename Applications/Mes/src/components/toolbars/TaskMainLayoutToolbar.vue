@@ -7,8 +7,9 @@
             <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp || inTasksTable" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
             <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp  || inTasksTable"
-                :disabled="selectedTask.state == 'DONE'"
                 outlined
+                :loading="this.changeStatusLoader"
+                :disabled="selectedTask.state == 'DONE'"
                 :color="selectedTask.inProgress ? 'rgba(179, 2, 2, 0.81)' :  'rgba(7, 109, 0, 0.81)'"
                 @click="changeStatusTask"
             >
@@ -16,14 +17,6 @@
             </v-btn>
 
             <v-btn class="downtime-registration-button" v-if="$vuetify.breakpoint.mdAndUp" outlined @click="changeDowntimesOverlayVisible" color="rgba(179, 2, 2, 0.81)">{{this.$t('mes.buttons.Downtime')}}</v-btn>
-              <!-- <v-tooltip left>
-              <template v-slot:activator="{ on }">
-                <v-btn outlined :class="dragResizeMode ? 'active-drag-resize-button' : 'drag-resize-button'" color="#326DA8" @click="changeDragResizeMode" v-on="on">
-                  <v-icon>control_camera</v-icon>
-                </v-btn>
-              </template>
-              <span>Режим корректировки</span>
-            </v-tooltip> -->
         </v-flex>
     </v-layout>
 </template>
@@ -33,6 +26,11 @@
 
 export default {
   name: 'mes-task-main-layout-toolbar',
+  data() {
+    return {
+      changeStatusLoader: false
+    }
+  },
   props:{
     inTasksTable: {
       required: false,
@@ -67,12 +65,15 @@ export default {
     onclickSetupMaterial() {
       this.$store.commit('mes/setCurrentLayout', 'installations')
     },
-    changeStatusTask() {
+    async changeStatusTask() {
+      this.changeStatusLoader = true
       if (this.selectedTask.inProgress) {
-        this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
+        await this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
+        this.changeStatusLoader = false
         return
       }
-      this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
+      await this.$store.dispatch('mes/registerProduction', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
+      this.changeStatusLoader = false
     },
     changeDragResizeMode (mode) {
       this.dragResizeMode = mode
