@@ -1,12 +1,11 @@
 <template>
-
     <v-breadcrumbs class="pa-0" :items="elements">
       <template v-slot:divider>
         <v-icon class="pt-2" size="22">mdi-chevron-right</v-icon>
       </template>
       <template v-slot:item="crumbs">
-        <div class="crumbs row pt-4 px-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
-          <span v-if="!crumbs.item.name">{{ crumbs.item }}</span>
+        <div class="crumbs row px-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
+          <div v-if="!crumbs.item.name">{{ crumbs.item }}</div>
           <div v-if="crumbs.item.name" :title="crumbs.item.name">{{ crumbs.item.name }}</div>
           <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item()"
             @edit="editItem" :crumb="true"
@@ -105,15 +104,17 @@ a{
   color: grey;
   font-size: 17px;
   height: 48px;
+  padding-top: 14px;
 }
 .crumbs div {
+  cursor: pointer;
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .text-left {
-  padding-bottom: 5px;
+  padding-bottom: 9px;
   height: 30px !important;
   width: 30px !important;
 }

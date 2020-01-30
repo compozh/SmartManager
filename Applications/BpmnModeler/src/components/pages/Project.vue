@@ -1,14 +1,14 @@
 <template>
   <v-container column fluid> 
-    <v-row class="project-title py-0 " justify="space-between" :class="$vuetify.breakpoint.lgAndDown? 'text' : 'xl-text'">
+    <v-row class="project-title py-0 " justify="space-between">
       <v-col cols="5" class="justify-start" >
         <v-row class="align-center justify-start">
           <v-icon class="pr-2">mdi-folder-open</v-icon>
           <h1>{{item ? item.name : 'folder'}}</h1>
         </v-row>
       </v-col>
-      <v-col cols="7" class="justify-end">
-        <v-row class="align-center justify-end">
+      <v-col cols="7" class="justify-end" >
+        <v-row class="align-center justify-end" :class="$vuetify.breakpoint.lgAndDown? 'text' : 'xl-text'">
           <!-- <v-btn  class="add-btn" @click="importItem(item)">
             {{ $t('bpmn.buttons.Import') }}
           </v-btn> -->
@@ -70,15 +70,15 @@
       v-if="chosen.length > 0">
       <div>{{chosen.length}}  {{ $t('bpmn.labels.Selected') }}</div>
       <v-col class="pa-0">
-        <v-btn text class="menu-btn col col-1" >
+        <v-btn text class="menu-btn " >
           <v-icon size="15">mdi-folder-move</v-icon>
           {{ $t('bpmn.buttons.Move') }}
         </v-btn>
-        <v-btn text class="menu-btn col col-1"  @click="copyItem(chosen)">
+        <v-btn text class="menu-btn "  @click="copyItem(chosen)">
           <v-icon size="15">mdi-content-copy</v-icon>
           {{ $t('bpmn.buttons.Copy') }}
         </v-btn>
-        <v-btn text class="menu-btn col col-1" @click="removeItem(chosen)">
+        <v-btn text class="menu-btn " @click="removeItem(chosen)">
           <v-icon size="18">delete</v-icon>
           {{ $t('bpmn.buttons.Delete') }}
         </v-btn>
@@ -123,7 +123,9 @@ export default {
         sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name))
       } else if (this.sort ==  'creationTime' || this.sort ==  'editTime' ) {
         sorted = children.sort(( a, b ) => {
-          return moment(a[this.sort]).toDate().getTime() - moment(b[this.sort]).toDate().getTime()
+          let first = !a[this.sort] ? a.creationTime : a[this.sort]
+          let second = !b[this.sort] ? b.creationTime : b[this.sort]
+          return moment(first).toDate().getTime() - moment(second).toDate().getTime()
         })
       } else  {
         this.sort = this.sortedIn
@@ -235,19 +237,23 @@ h2{
   width: 100%;
   height: 45px;
 }
-.text {
-  font-size: 0.7em
-}
-.text h1 {
-  font-size: 1.5em
-}
-.xl-text {
-  label {
-    font-size: 0.76em
-  }
-}
+
+
 .menu-btn {
   color: #535353;
   font-size: 11px;
+}
+</style>
+<style lang="scss">
+.text .add-btn{
+  font-size: 0.6em
+}
+.text .v-label {
+  font-size: 0.8em
+}
+.xl-text  {
+  label {
+    font-size: 0.76em
+  }
 }
 </style>

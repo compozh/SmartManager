@@ -42,7 +42,7 @@ import 'dmn-js/dist/assets/dmn-font/css/dmn-codes.css';
 import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 
 import { debounce } from 'throttle-debounce';
-import ModelerLayout from './ModelerLayout';
+// import ModelerLayout from './ModelerLayout';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
 import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
@@ -51,7 +51,7 @@ import { editorToolbarMixin, exportMixin } from '../mixins';
 export default {
   name: 'dmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  components: { ModelerLayout },
+  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,

@@ -16,10 +16,10 @@
       <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
         <v-spacer></v-spacer>
         <v-divider vertical></v-divider>
-        <v-btn text @click="showPanel = !showPanel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
+        <v-btn icon @click="showPanel = !showPanel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
         </v-btn>
-         <v-btn text @click="share(diagram)" v-if="canShare()" :title="$t('bpmn.buttons.Share')">
+        <v-btn icon @click="share(diagram)" :disabled="!canShare()" :title="$t('bpmn.buttons.Share')">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
         <bpmn-contex-menu 
@@ -28,7 +28,7 @@
           @export="exportItem"
           offset>
           <template #activator="{ open }">
-            <v-btn text icon v-on="open">
+            <v-btn icon v-on="open">
               <v-icon>mdi-share-variant</v-icon>
             </v-btn>
           </template>
@@ -124,7 +124,6 @@ export default {
       split: null
     }
   },
-  created() { console.log(this.saved) },
   computed: {
     showPanel: {
       get() {
@@ -246,6 +245,7 @@ a.bjs-powered-by {
   right: 30px;
   border: 1px solid #CCC;
   border-radius: 2px;
+  z-index: 50;
   .v-btn {
     min-width: 45px !important
   }
