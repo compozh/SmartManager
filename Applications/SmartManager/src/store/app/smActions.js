@@ -3,8 +3,9 @@ import {i18n} from '@/i18n/i18n'
 import {SmartManagerApi as api} from '@/api/smartManagerApi'
 
 const vs = new Vue().$vs
-const startLoading = vs.loading
-const stopLoading = vs.loading.close
+const startLoading = () => vs.loading()
+const stopLoading = () => vs.loading.close()
+
 const notify = (type, title, text) => {
   vs.notify({
     title: i18n.t(`notify.${title}`),
@@ -18,9 +19,9 @@ export default {
     !loading || startLoading()
     try {
       const result = await api.getFoldersFromGql()
-      !loading || stopLoading()
       const folders = result.data.smtasks.folders
       commit('setFolders', folders)
+      !loading || stopLoading()
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -31,18 +32,18 @@ export default {
     if (folderId === 'search') {
       return
     }
-    const loader = !state.tasks[folderId]
+    const loading = !state.tasks[folderId]
+    !loading || startLoading()
     commit('setSearch', null)
     commit('setCurrentFolder', folderId)
-    !loader || startLoading()
     try {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
       )
-      !loader || stopLoading()
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
+      !loading || stopLoading()
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -143,7 +144,11 @@ export default {
         notify('success', 'statusTitle', 'statChangeSuccess')
         return result.success
       } else {
-        notify('warning','statusTitle','statChangeFail')
+        vs.notify({
+          title: i18n.t('notify.statusTitle'),
+          text: result.errorMessage,
+          color: 'warning'
+        })
       }
     } catch (e) {
       stopLoading()
@@ -283,7 +288,6 @@ export default {
       stopLoading()
       const result = response.data.workFlowQuery.startBusinessProcess
       const startedProcess = JSON.parse(result)
-
       if (startedProcess.ProcessInstance) {
         notify('success', 'bpTitle', 'bpSuccess')
       }
@@ -297,9 +301,9 @@ export default {
     !loading || startLoading()
     try {
       const result = await api.getCasesFromGql()
-      !loading || stopLoading()
       const cases = result.data.smtasks.cases
       commit('setCases', cases)
+      !loading || stopLoading()
     } catch (e) {
       console.log(e.message)
       stopLoading()
