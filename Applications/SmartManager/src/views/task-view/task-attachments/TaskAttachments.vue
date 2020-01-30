@@ -123,8 +123,7 @@ export default {
         keyValue: this.task.keyValue,
         kidCopy: this.task.kidCopy
       }
-      const result = await this.$store.dispatch('sm/getAttachmentTypes', params)
-      this.types = result.data
+      this.types = await this.$store.dispatch('sm/getAttachmentTypes', params)
     }
   }
 }
