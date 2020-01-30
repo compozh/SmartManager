@@ -11,6 +11,7 @@
             @edit="editItem" :crumb="true"
             @remove="removeItem" 
             @export="exportItem"
+            @copy="copyItem"
             offset>
             <template #activator="{ open }">
               <v-btn icon class="text-left"  v-on="open">
@@ -32,6 +33,9 @@ import treeSearch from '../../api/treeSearch'
 export default {
   name: 'breadcrumbs',
   mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
+  props: {
+    activeItem: String
+  },
   computed: {
     items() {
       this.item()

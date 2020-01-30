@@ -51,7 +51,7 @@ export default {
           await deleting(item)
           if (success) {
             if (this.chosen) { this.chosen = this.chosen.filter( el => el.id != item.id) }
-            this.activeItem = item.parentId
+            this.active = item.parentId
           }
         }
         if (!success) {
@@ -74,11 +74,15 @@ export default {
           })
           success = successes.every( el => el)
         } else {
-          copy(item)
+          await copy(item)
         }
         
         if (success) {
-          if (this.chosen) { this.chosen = [] }
+          if (this.chosen) { 
+            this.chosen = [] 
+          } else {
+            this.active = item.id
+          }
         } else {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
