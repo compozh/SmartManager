@@ -31,8 +31,7 @@
             class="search col-3 py-2 pl-3"
             :items="selectItems"
             :label="$t('bpmn.labels.SortBy')"
-            solo
-          >
+            solo>
             <template v-slot:item="{ item }" >
               <div class="select-item py-3" @click="checkSort(item.value)">{{ item.text }}</div>
             </template>
