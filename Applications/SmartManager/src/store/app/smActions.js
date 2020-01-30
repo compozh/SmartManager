@@ -31,15 +31,15 @@ export default {
     if (folderId === 'search') {
       return
     }
-    const loading = !state.tasks[folderId]
+    const loader = !state.tasks[folderId]
     commit('setSearch', null)
     commit('setCurrentFolder', folderId)
-    !loading || startLoading()
+    !loader || startLoading()
     try {
       const result = await api.getTasksFromGql(
         folderId === 'ALL' ? '' : folderId
       )
-      !loading || stopLoading()
+      !loader || stopLoading()
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
@@ -452,12 +452,8 @@ export default {
     startLoading()
     try {
       const response = await api.getAttachmentTypesFromGql(paramsJson)
-      const result = response.data.smtasks.attachmentTypes
-      if (result.success) {
-        return result
-      } else {
-        notify('warning', 'commentsTitle', 'commentAddFail')
-      }
+      stopLoading()
+      return response.data.smtasks.attachmentTypes
     } catch (e) {
       stopLoading()
       console.log(e.message)
