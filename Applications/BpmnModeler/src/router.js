@@ -63,9 +63,6 @@ export const router = new VueRouter({
           },
           caseSensitive: false,
           allowAnonymous: false,
-          beforeRouteLeave (to, from, next) {
-            console.log(this, to, from, next)
-          }
         },
         {
           path: 'error/:status_code/',

@@ -19,7 +19,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
-import ModelerLayout from './ModelerLayout';
+// import ModelerLayout from './ModelerLayout';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
 import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
@@ -29,7 +29,7 @@ import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers
 export default {
   name: 'bpmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  components: { ModelerLayout },
+  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,

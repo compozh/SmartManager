@@ -1,16 +1,16 @@
 <template>
   <v-card class="item-card pa-2" elevation="5" :loading="loading">
-    <v-card-text @click="openProject(item)" ref="container" class="preview" :style="loading ? 'height: 45px' : 'height: 200px'">
+    <v-card-text @click="openProject(item)" ref="container" class="preview" :style="loading ? 'height: 0px' : 'height: 155px'">
     </v-card-text>
-    <v-card-title class="justify-space-between py-2 px-2 ma-0 row">
+    <v-card-title class="justify-space-between py-1 px-2 ma-0 row">
       <v-col class="py-0">
         <v-row>
           <bpmn-tree-icon :node="item"></bpmn-tree-icon>
           <h1 class="pl-2" :title="item.name">{{item.name}}</h1>
-          <h2>{{$t('bpmn.labels.EditTime')}}: {{item.editTime || item.creationTime | formatDate}}</h2>
+          <h2>{{$t('bpmn.labels.EditTime')}}: </h2> <h2 class="pl-1">{{item.editTime || item.creationTime | formatDate}}</h2>
         </v-row>
       </v-col>
-      <v-checkbox v-model="choose" v-if="chosen"/>
+      <v-checkbox v-model="choose" v-if="chosen" class="ma-0"/>
     </v-card-title>
   </v-card>
 </template>
@@ -21,7 +21,6 @@ import { events } from '../../constants';
 import { CancellationToken, editorFactory } from '../../api';
 import { eventBus } from '../../main';
 import { debounce } from 'throttle-debounce';
-import BpmnTreeIcon from '../functional/BpmnTreeIcon'
 export default {
   name: 'item-card',
   data() {
@@ -89,9 +88,13 @@ export default {
           return;
         }
         if (!xml || xml === '') {
-          this.modeler.createDiagram(() => {
+          if(this.modeler.createDiagram){
+            this.modeler.createDiagram(() => {
+              this.loading = false;
+            })
+          } else {
             this.loading = false;
-          });        
+            }
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
@@ -144,7 +147,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.v-card__title{
+.v-card__text{
   cursor: pointer;
 }
 
@@ -163,7 +166,8 @@ h1 {
 .preview {
   padding: 0;
 }
-h2{
+h2 {
+  line-height: 20px;
   color: #535353;
   font-size: 13px;
   font-weight: 500;

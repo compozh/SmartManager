@@ -23,7 +23,7 @@ export default {
     } else if (item instanceof Diagram) {
       switch (item.type) {
       case DiagramType.BPMN:
-        return createElement('v-icon', 'mdi-vector-line');
+        return createElement('v-icon', 'mdi-vector-polyline');
       case DiagramType.DMN:
         return createElement('v-icon', 'mdi-table');
       }

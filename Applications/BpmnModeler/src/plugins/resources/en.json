@@ -22,7 +22,8 @@
 		"Edit": "Edit",
 		"Add": "Add",
 		"OK": "OK",
-		"Move" : "Move"
+		"Move" : "Move",
+		"Replace" : "Replace"
 	},
 	"labels": {
 		"NewProcess": "New diagram",

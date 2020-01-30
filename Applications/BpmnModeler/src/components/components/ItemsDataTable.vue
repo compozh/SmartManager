@@ -19,19 +19,20 @@
       <template v-slot:header.name="{ header }" >
         <span style="font-size: 16px;" >{{ header.text }}</span>
       </template>
+      <template v-slot:header.items.length="{ header }" >
+        <div style="font-size: 16px; max-width: 150px" >{{ header.text }}</div>
+      </template>
       <template v-slot:item.name="{ item }">
-        <v-row style="width: 30vw; cursor: pointer;" >
-          <v-icon v-if="item.isFolder"  class="pr-2">mdi-folder</v-icon>
-          <v-icon v-else-if="item.type == 'BPMN'" class="pr-2">mdi-vector-line</v-icon>
-          <v-icon v-else class="pr-2">mdi-table</v-icon>
+        <v-row style="width: 25vw; cursor: pointer;" >
+          <bpmn-tree-icon :node="item"></bpmn-tree-icon>
           <span style="width: calc(100% - 35px);">{{ item.name }}</span>
         </v-row>
       </template>
       <template v-slot:item.creationTime="{ item }">
-        <span>{{item.creationTime | formatDate}}</span>
+        {{item.creationTime | formatDate}}
       </template>
       <template v-slot:item.editTime="{ item }">
-        <span>{{item.editTime | formatDate}}</span>
+        {{item.editTime | formatDate}}
       </template> 
     </v-data-table>
   </v-row>
@@ -39,7 +40,6 @@
 
 <script>
 import moment from 'moment'
-import BpmnTreeIcon from '../functional/BpmnTreeIcon'
 export default {
   name: 'item-data-table',
   data() {
@@ -109,13 +109,24 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 .projects-table {
   width: 100%;
   margin: 20px 10px;
   padding: 10px;
+  tr {
+    cursor: pointer;
+    td {
+      font-size: 12px;
+      padding: 0 10px;
+      .v-icon {
+        padding-right: 8px 
+      
+      }
+    }
+  }
 }
 thead.v-data-table-header span{
-  font-size: 16px
+  font-size: 14px
 }
 </style>
