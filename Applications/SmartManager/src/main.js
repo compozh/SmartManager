@@ -94,16 +94,12 @@ Vue.use(ItCommon)
 Vue.use(GraphQlCore, { options: window.appConfig, dependencies })
 Vue.use(Localization, { dependencies })
 
-const routerDependencies = {
-  router
-}
-
 Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
 
 const formioOptions = {}
-formioOptions.routerDependencies = () => routerDependencies
+formioOptions.routerDependencies = () => ({ router })
 formioOptions.GraphQlUrl = window.appConfig.GrapgQlUrl
 Vue.use(formio, { options: formioOptions, dependencies })
 

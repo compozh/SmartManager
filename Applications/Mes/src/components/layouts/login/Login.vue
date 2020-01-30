@@ -2,7 +2,7 @@
   <v-container fluid fill-height >
 
     <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md6 lg4>
+      <v-flex xs12 sm8 md6 lg4 class="application-login">
         <login-rl v-slot="{ userData, message, params, loading, needEnterTempPassword}">
 
           <v-container>
@@ -105,3 +105,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .application-login {
+    max-width: 100%;
+  }
+</style>

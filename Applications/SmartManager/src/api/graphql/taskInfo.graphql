@@ -32,6 +32,7 @@ fragment mainTaskFields on Task {
     caseId
     isFavorite
     docCaption
+    externalParams
 }
 
 fragment detailTaskFields on Task {

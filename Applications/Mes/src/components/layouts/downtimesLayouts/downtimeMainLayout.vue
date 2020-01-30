@@ -54,12 +54,12 @@ export default {
         formCode = me.workCenter.downtimeRegistrationFormCode,
         properties = { 
           workCenterCode: me.workCenter.code,
-          instance: selectedDowntime
+          instance: me.selectedDowntime
         },
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
         
       me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))
-      
+
       await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {
         me.$store.commit('mes/setDowntimes', [])
         me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })
@@ -70,7 +70,7 @@ export default {
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     getFormioData() {
-      return this.$refs.formioBuilder[0].getFormSubmission()
+      return this.$refs.formioFormComponent[0].getFormSubmission()
     },
     changeDowtimesTableView() {
       this.$emit('changeDowtimesTableView', true)

@@ -49,7 +49,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
       ]
     },
     validate: required,
-    appendIcon: 'search',
+    appendIcon: 'mdi-magnify',
     append: () => {
       eventBus.$emit(events.propertiesPanel.selectDeployedProcess, bo.calledElement, (procDefKey) => {
         const cmd = cmdHelper.updateBusinessObject(element, bo, { 'calledElement': procDefKey });

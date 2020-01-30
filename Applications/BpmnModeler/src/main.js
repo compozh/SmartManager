@@ -19,7 +19,7 @@ import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui'
 import './element-variables.scss'
 
 import router from './router'
-import config from './config'
+// import config from './config'
 import App from './App.vue'
 
 auth.config(config.GrapgQlUrl);

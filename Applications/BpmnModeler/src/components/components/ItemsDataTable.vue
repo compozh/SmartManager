@@ -14,7 +14,7 @@
           pageText : $t('bpmn.labels.Of') +' '+ items.length,
           showCurrentPage : true
         }"
-      class="projects-table elevation-5"
+      class="projects-table elevation-1"
     >
       <template v-slot:header.name="{ header }" >
         <span style="font-size: 16px;" >{{ header.text }}</span>

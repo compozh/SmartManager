@@ -7,9 +7,7 @@
         <v-card-title>
 				<h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
         </v-card-title>
-        <v-card-text>
         <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
-        </v-card-text>
         <v-card-actions>
 				<v-spacer></v-spacer>
 				<v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>

@@ -1,4 +1,6 @@
-import Init from '@/components/components/Init'
+import { events } from '../../../../constants'
+import { eventBus } from '../../../../main'
+
 export default {
   name: 'loginRl',
   data: () => ({
@@ -32,12 +34,12 @@ export default {
       try {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
-        const init = new Init()
-        init.initialize()
-        init.initializeSignalR()
+        
         if (!result.success) {
           throw result.errorMessage
         }
+        
+        eventBus.$emit(events.initialize)
       } catch (e) {
         this.loading = false
         return (this.message = e || 'Ошибка авторизации')

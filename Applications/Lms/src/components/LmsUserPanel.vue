@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex >
-      <v-menu v-if="currentUser"
+      <v-menu v-if="user"
         v-model="menu"
         :nudge-width="200"
         bottom
@@ -43,23 +43,17 @@ export default {
     }
   },
   methods: {
-    goHome() {
-      if (this.$router.history.current.name == 'LMSREALHOME') {
-        return
-      }
-      this.$router.push({name: 'LMSREALHOME'})
-    },
-    userProfile() {
-
-    },
     personalAccount() {
       this.$router.push({name: 'LMSPERSONALACCOUNT'})
     },
     signOut() {
-      this.$authentication.logOff()
-      this.$store.state.authentication.currentUser = null
-      this.goHome()
-    },
+      this.$store.dispatch('lms/logout')
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.lms.user
+    }
   }
 }
 </script>

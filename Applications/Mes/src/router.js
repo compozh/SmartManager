@@ -4,7 +4,7 @@ import store from './store/index'
 
 Vue.use(VueRouter)
 
-export const router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: window.myConfig.BASE_URL + "MES/",
   routes: [
@@ -15,11 +15,12 @@ export const router = new VueRouter({
         {
           name: 'MESLOGIN',
           path: '/login',
-          caseSensitive: false,
+          caseSensitive: false,          
           meta: {
             rule: 'isPublic',
           },
           component: () => import('@/components/layouts/login/Login.vue'),
+          props: { allowQrMode: true }
         },
         {
           path: '/',
@@ -133,8 +134,12 @@ export const router = new VueRouter({
 })
 
 function func(to,from, next) {
-  let workCenter = store.getters['mes/workCenter']
-  let result
+  let workCenter = store.getters['mes/workCenter'],
+    result,
+    query = { fixedUuid: router.currentRoute.query.fixedUuid }
+  if(window.myConfig.debugMode) {
+    console.log('router-func: 0.0.1')
+  }
   if(workCenter) {
     let access =  workCenter.accessPages
     result = 
@@ -142,9 +147,9 @@ function func(to,from, next) {
         access === 'ONLY_INSTALLATION' ? '/installations' :
         access === 'PRODUCTION' ? '/productions' 
         : '/tasks'
-    return next({ path: result, query: {fixedUuid: router.currentRoute.query.fixedUuid}})
-  } else if(!store.state.auth.user){
-    router.go()
+    return next({ path: result, query })
+  } else if(!store.state.auth.user) {
+    return next({ path: '/login', query })
   } else {
     return next()
   }

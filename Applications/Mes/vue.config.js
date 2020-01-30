@@ -24,7 +24,5 @@ module.exports = {
       openAnalyzer: false
     }
   },
-  configureWebpack: {
-    devtool: 'eval-source-map'
-  }
+  productionSourceMap: false
 }

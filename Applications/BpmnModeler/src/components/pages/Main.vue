@@ -21,7 +21,7 @@
             class="search col-6 py-2"
             clearable
             v-model="search"
-            append-icon="search"
+            append-icon="mdi-magnify"
             :label="$t('bpmn.labels.Search')"
             single-line
             hide-details

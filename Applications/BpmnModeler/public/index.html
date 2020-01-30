@@ -4,9 +4,15 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<script>
+		window.config = {
+			GrapgQlUrl: '<%= VUE_APP_GRAPHQL_PATH %>',
+			BaseUrl: '<%= VUE_APP_BASE_PATH %>',
+			WsUrl: '<%= VUE_APP_WS_PATH %>',
+			SignalRUrl: '<%= VUE_APP_SIGNALR_PATH %>'
+		};
+	</script>
 	<link rel="icon" href="<%= BASE_URL %>favicon.ico">
-	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
-	<link href="https://cdn.materialdesignicons.com/4.0.96/css/materialdesignicons.min.css" rel="stylesheet">
 	<title>IT-Enterprise.BPM Modeler</title>
 </head>
 <body>
@@ -16,7 +22,7 @@
 	<div id="app"></div>
 	<style>
 		#app {
-			font-family: "Roboto";
+			font-family: "Roboto", sans-serif;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
 			text-align: center;

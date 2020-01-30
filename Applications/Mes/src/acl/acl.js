@@ -8,7 +8,7 @@ Vue.use(AclInstaller)
 export default new AclCreate({
   initial: store.state.auth.user ? 'user' : 'public' ,
   notfound: {
-    path: '/error/403',
+    path: '/login', //path: '/error/403',
     forwardQueryParams: true,
   },
   router,
@@ -17,7 +17,7 @@ export default new AclCreate({
     isAdmin: new AclRule('admin').or('ALL_PAGES').generate(),
     isPublic: new AclRule('public').or('admin').or('ALL_PAGES').or('ONLY_INSTALLATION').or('ONLY_QUALITY').or(('PRODUCTION')).or('user').generate(),
     isUser: new AclRule('user').generate(),
-    onlyQuality : new AclRule('ONLY_QUALITY').or('ALL_PAGES').or('admin').or('user').generate(),
+    onlyQuality : new AclRule('QUALITY').or('ALL_PAGES').or('admin').or('user').generate(),
     Production : new AclRule('PRODUCTION').or('ALL_PAGES').or('admin').or('user').generate(),
     onlyInstallations : new AclRule('ONLY_INSTALLATION').or('PRODUCTION').or('ALL_PAGES').or('admin').or('user').generate(),
     allPages:  new AclRule('ALL_PAGES').or('admin').or('user').generate()

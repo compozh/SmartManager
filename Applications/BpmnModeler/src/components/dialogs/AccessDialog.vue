@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
-          append-icon="search"
+          append-icon="mdi-magnify"
           :label="$t('bpmn.labels.Search')"
           single-line
           hide-details
@@ -68,7 +68,7 @@
           </v-card>
         </v-dialog>
         <v-btn icon @click="show = false">
-          <v-icon>close</v-icon>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
       <v-card-text style="height: 500px; overflow-y: auto;">
@@ -86,8 +86,8 @@
           <template slot="items" slot-scope="props">
             <tr>
               <td class="text-xs-left">
-                <v-icon v-if="props.item.model.type === 'USER'" :title="$t('bpmn.labels.User')" small>person</v-icon>
-                <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>group</v-icon>
+                <v-icon v-if="props.item.model.type === 'USER'" :title="$t('bpmn.labels.User')" small>mdi-account</v-icon>
+                <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>mdi-account-multiple</v-icon>
               </td>
               <td class="text-xs-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
               <td 
@@ -102,8 +102,8 @@
                 </v-checkbox>
               </td>
               <td class="justify-left layout">
-                <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-                <v-icon :title="$t('bpmn.buttons.Delete')" small @click="deleteItem(props.item)">delete</v-icon>
+                <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">mdi-pencil</v-icon>
+                <v-icon :title="$t('bpmn.buttons.Delete')" small @click="deleteItem(props.item)">mdi-delete</v-icon>
               </td>
             </tr>
           </template>

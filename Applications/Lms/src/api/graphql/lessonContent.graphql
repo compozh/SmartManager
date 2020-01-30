@@ -1,11 +1,7 @@
 {
   lms{
-    lessonContent(lessonGuid: $lessonid){
+    lessonContent(lessonGuid: $lessonid, isFree: $isfree){
       content
-      course{
-        name
-        courseGuid
-      }
       module{
         name
         moduleGuid

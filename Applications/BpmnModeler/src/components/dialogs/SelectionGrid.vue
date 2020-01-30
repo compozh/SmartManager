@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
-          prepend-icon="search"
+          prepend-icon="mdi-magnify"
           :label="$t('bpmn.labels.Search')"
           single-line
           hide-details
@@ -35,7 +35,7 @@
                 :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
                 @click="changeSort(header.value)"
               >
-                <v-icon small>arrow_upward</v-icon>
+                <v-icon small>mdi-arrow-up</v-icon>
                 {{ header.text }}
               </th>
             </tr>

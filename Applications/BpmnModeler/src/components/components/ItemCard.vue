@@ -1,5 +1,5 @@
 <template>
-  <v-card class="item-card pa-2" elevation="5" :loading="loading">
+  <v-card class="item-card pa-2" elevation="1" :loading="loading">
     <v-card-text @click="openProject(item)" ref="container" class="preview" :style="loading ? 'height: 0px' : 'height: 155px'">
     </v-card-text>
     <v-card-title class="justify-space-between py-1 px-2 ma-0 row">

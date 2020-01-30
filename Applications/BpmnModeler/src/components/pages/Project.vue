@@ -22,7 +22,7 @@
             class="search col-3 py-2 pl-2" solo
             clearable
             v-model="search"
-            append-icon="search"
+            append-icon="mdi-magnify"
             :label="$t('bpmn.labels.Search')"
             single-line
             hide-details

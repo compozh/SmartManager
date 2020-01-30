@@ -17,7 +17,7 @@
         @onDragEnd="changeAspectRatioLayout"
       >
         <mes-documents-main-layout
-          v-if="this.pageProps.showListOnRightSide && !vuetify.breakpoint.smAndDown"
+          v-if="this.pageProps.showListOnRightSide && !$vuetify.breakpoint.smAndDown"
           id="dynamicPageDescription"
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
@@ -112,38 +112,42 @@ export default {
         this.$store.commit('mes/setInitializeDocuments', false)
         this.$store.commit('mes/setDocuments', [])
       }
+      var routeId = this.$route.params.id.toLowerCase()
       for (var j = 0; j < this.mobilityProperties.processesProperties.length; j++) {
-        var page = this.mobilityProperties.processesProperties[j];
-        var pageId = '_' + page.id
-        if (pageId.toLowerCase() == this.$route.name.toLowerCase()) {
+        var page = this.mobilityProperties.processesProperties[j]
+        if (page.id.toLowerCase() == routeId) {
           this.pageProps = page
          }
       }
-      await this.$store.dispatch('mes/downloadDocuments', { processTypeCode: this.pageProps.id, searchDateTime: this.currentDate, query: this.documentSearchValue, direction: 1 })
+      
+      await this.$store.dispatch('mes/downloadDocuments', 
+        { 
+          processTypeCode: this.pageProps.id,
+          searchDateTime: this.currentDate,
+          query: this.documentSearchValue,
+          direction: 1 
+        }
+      )
       this.selectFirstDocument()
-    },
-    changeCurrentDocument(newSelectedDocument) {
-      var me = this
-      if (me.selectedDocument == newSelectedDocument) {
-        return
-      }
-      me.selectedDocument = newSelectedDocument
-      me.$store.commit('mes/resetDocumentFormio')
 
-      var formCode = me.pageProps.id,
+      var formCode = this.pageProps.id,
         properties = {
-          RCENTR: me.workCenter.code,
-          ID: newSelectedDocument.id,
-          instance: newSelectedDocument
+          RCENTR: this.workCenter.code
         },
         fetchPolicy = 'network-only',
         deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
+      this.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
         if(result.success) {
-          me.$store.commit('mes/setDocumentFormio', result)
+          this.$store.commit('mes/setDocumentFormio', result)
         }
       })
+    },
+    changeCurrentDocument(newSelectedDocument) {
+      if (this.selectedDocument == newSelectedDocument) {
+        return
+      }
+      this.selectedDocument = newSelectedDocument
     },
     selectFirstDocument() {
       if (this.documents.length) {

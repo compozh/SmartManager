@@ -229,7 +229,6 @@ export default {
         }
         dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
       },
-      linearLoader: true
     })
   },
 
@@ -252,7 +251,6 @@ export default {
       successAction: async () => {
         task.inProgress = false
       },
-      linearLoader: true
     })
   },
 
@@ -455,10 +453,23 @@ export default {
   },
 
   async verifyCamera({ commit }) {
-    await navigator.mediaDevices.getUserMedia({video: true}).then(function() {
-      return commit('setCameraAvailability', true)
-    }).catch(function() {
-      return commit('setCameraAvailability', false)
+      await navigator.mediaDevices.getUserMedia({video: true}).then(() => {
+        return commit('setCameraAvailability', true)
+      }).catch(() => {
+        return commit('setCameraAvailability', false)
+      })
+  },
+
+  async initializeIotSignalRUrl ({ dispatch, commit, getters }, { thingId }) {
+    return await dispatch('graphqlQueryWithRequestResultWraper', {
+      queryAction: async () => {
+        return await api.getIotSignalRUrlFromGql(thingId)
+      },
+      successAction: result => {
+        if (result.success) {
+          getters['iotSettings'].iotSignalRUrl =  result.url
+        }
+      },
     })
   }
 }

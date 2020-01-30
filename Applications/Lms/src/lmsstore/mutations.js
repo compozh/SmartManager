@@ -1,5 +1,7 @@
 export default {
-
+  setUser(state, user) {
+    state.user = user
+  },
   setCircularLoader (state, payload ) {
     state.loading = payload
   },

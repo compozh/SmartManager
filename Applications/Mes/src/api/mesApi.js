@@ -19,8 +19,7 @@ import documents from './graphql/qualities/documents.graphql'
 import documentMethod from './graphql/qualities/documentMethod.graphql'
 import installations from './graphql/installations/installations.graphql'
 import removeInstallation from './graphql/installations/removeInstallation.graphql'
-import registerMaterialInstallation
-  from './graphql/installations/registerMaterialInstallation.graphql'
+import registerMaterialInstallation from './graphql/installations/registerMaterialInstallation.graphql'
 import registerProduction from './graphql/tasks/registerProduction.graphql'
 import cancelBeginRegistration from './graphql/tasks/cancelBeginRegistration.graphql'
 import usersProductionEvents from './graphql/productions/usersProductionEvents.graphql'
@@ -33,6 +32,7 @@ import ticket from './graphql/ticket.graphql'
 import fixWorkCenterForWorker from './graphql/fixWorkCenterForWorker.graphql'
 import unfixWorkCenterForWorker from './graphql/unfixWorkCenterForWorker.graphql'
 import mobilityProperties from './graphql/mobilityProperties.graphql'
+import iotSignalRUrl from './graphql/iot/iotSignalRUrl.graphql'
 
 //formio
 import productionFormio from './graphql/formio/productionForm.graphql'
@@ -301,5 +301,14 @@ export class MesApi {
       query: gql` ${downtimeGetTypes}`
     })
     return result.data.mes.downtimeTypes
+  }
+
+  async getIotSignalRUrlFromGql(thingId) {
+    const client = await getClient()
+    const result = await client.query({
+      query: gql` ${iotSignalRUrl}`,
+      variables: { thingId }
+    })
+    return result.data.mes.iotSignalRUrl
   }
 }

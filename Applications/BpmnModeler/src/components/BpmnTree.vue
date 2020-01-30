@@ -26,7 +26,7 @@
         <span class="treeview-node-content">
           <bpmn-tree-icon :node="node"></bpmn-tree-icon>
           <span class="treeview-node-label" :title="node.label">{{ node.label }}</span>
-          <v-icon v-if="data.isSystem" :title="$t('bpmn.labels.SystemRecord')">lock</v-icon>
+          <v-icon v-if="data.isSystem" :title="$t('bpmn.labels.SystemRecord')">mdi-lock</v-icon>
           <slot name="context-menu" :item="data"></slot>
         </span>
       </template>

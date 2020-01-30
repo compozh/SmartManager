@@ -15,14 +15,9 @@ export default {
     if (userIsLoggedIn) {
       return
     }
-    try {
-      const result = await auth.login(login, password, remember)
-      await dispatch('updateAuthenticatedUser', result)
-      return result
-    } catch (e) {
-      console.warn(e.message)
-      // TODO: Вывести уведомление об о ошибке для пользователя
-    }
+    const result = await auth.login(login, password, remember)
+    await dispatch('updateAuthenticatedUser', result)
+    return result
   },
   async loginByCode({ dispatch }, code) {
     const userIsLoggedIn = await dispatch('userIsLoggedIn')
