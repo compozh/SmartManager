@@ -355,7 +355,6 @@ export class SmartManagerApi {
         variables: {params}
       })
     } catch (e) {
-      console.log(e.message)
       throw new Error(e.message)
     }
   }
