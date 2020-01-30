@@ -51,6 +51,7 @@ export default {
   },
   async applyDelegatedRights(context, userId) {
     try {
+      vm.$vs.loading()
       const result = await auth.applyDelegatedRights(userId)
       if (result.success) {
         if (router.currentRoute.name !== 'task-list') {
@@ -75,8 +76,6 @@ export default {
   userIsLoggedIn({state}) {
     // If user is already logged in notify and exit
     if (state.user) {
-      // Close animation if passed as payload
-      !vm.$vs.loading || vm.$vs.loading.close()
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
         text: i18n.t('login.loggedIn'),
@@ -89,12 +88,11 @@ export default {
     }
     return false
   },
-  async updateAuthenticatedUser({commit}, result) {
-    // Close animation if passed as payload
-    !vm.$vs.loading || vm.$vs.loading.close()
+  async updateAuthenticatedUser({dispatch}, result) {
     if (result.success) {
-      commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
+      await dispatch('setUserData')
       await router.push(router.currentRoute.query.to || '/')
+      !vm.$vs.loading || vm.$vs.loading.close()
     } else {
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
@@ -105,5 +103,10 @@ export default {
         await router.push({path: '/login'})
       }
     }
+  },
+  async setUserData({commit}) {
+    const user = auth.getUserData()
+    user.delegatedRights = await auth.getDelegatedRights(user.id) || []
+    commit('UPDATE_AUTHENTICATED_USER', user)
   }
 }

@@ -98,9 +98,11 @@ Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('./i18n/reso
 Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('./i18n/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/resources/uk.json'))
 
-const formioOptions = {}
-formioOptions.routerDependencies = () => ({ router })
-formioOptions.GraphQlUrl = window.appConfig.GrapgQlUrl
+const formioOptions = {
+  auth,
+  routerDependencies: () => ({ router }),
+  GraphQlUrl: window.appConfig.GrapgQlUrl
+}
 Vue.use(formio, { options: formioOptions, dependencies })
 
 export const eventBus = new Vue()
