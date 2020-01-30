@@ -23,10 +23,10 @@
         <div style="font-size: 16px; max-width: 150px" >{{ header.text }}</div>
       </template>
       <template v-slot:item.name="{ item }">
-        <v-row style="width: 25vw; cursor: pointer;" >
+        <div style="width: 25vw; cursor: pointer;" >
           <bpmn-tree-icon :node="item"></bpmn-tree-icon>
-          <span style="width: calc(100% - 35px);">{{ item.name }}</span>
-        </v-row>
+          {{ item.name }}
+        </div>
       </template>
       <template v-slot:item.creationTime="{ item }">
         {{item.creationTime | formatDate}}
@@ -120,8 +120,9 @@ export default {
       font-size: 12px;
       padding: 0 10px;
       .v-icon {
-        padding-right: 8px 
-      
+        padding-right: 8px;
+        padding-bottom: 8px;
+        max-height: 12px;
       }
     }
   }

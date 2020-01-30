@@ -88,7 +88,6 @@ export default {
       await this.$store.dispatch('bpmn/loadConfiguration');
       if (!(await this.$store.dispatch('bpmn/loadItems'))) {
         Notification.error(this.$t('bpmn.errors.ProcessesNotLoaded'));
-        setInterval(() => this.loadItems(), 100000)
       }
       this.loading = false;
     },
@@ -123,9 +122,13 @@ export default {
       }
       if (!value.id) {
         let elem = this.$store.getters['bpmn/getItemById'](value)
+        if(!elem.item) {
+          this.$router.push({name: 'ERROR', params: {status_code: '404'}})
+          return
+        }
         value = elem.item
-      } 
-      if ( this.$route.params.id == value.id) { return }
+      }
+      if (this.$route.params.id == value.id) { return }
       value.type == 'BPMN' ? this.$router.push({name: 'Process', params: {id: value.id}}) 
         : value.type == 'DMN' ? this.$router.push({name: 'Decision', params: {id: value.id}})
           : this.$router.push({name: 'Project', params: {id: value.id}})
