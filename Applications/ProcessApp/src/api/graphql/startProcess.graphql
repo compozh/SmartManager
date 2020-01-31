@@ -1,0 +1,13 @@
+mutation($processParams: String!) {
+    processQueryMutation {
+        startProcess(formCode: $processParams) {
+            processInstance {
+                id
+            }
+            success
+            errorMessage
+            errorCode
+            statusCode
+        }
+    }
+}
