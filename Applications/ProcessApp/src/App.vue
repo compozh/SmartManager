@@ -32,9 +32,11 @@ export default {
   },
   methods: {
     onActionBtnClick () {
-      debugger
-      this.$store.commit('setSnackbarMessage', 'sasadasdassasada', 'error')
-      console.log('asdaasda')
+      // var params = {
+      //   message: 'sasadasdassasada',
+      //   type: 'error'
+      // }
+      // this.$store.commit('setSnackbarMessage', params)
     },
     formSubmit () {
       console.log('formio submit')

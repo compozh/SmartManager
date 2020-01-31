@@ -5,9 +5,9 @@ export default {
   closeSnackbar (state) {
     state.snackbar.visible = false
   },
-  setSnackbarMessage (state, message, type) {
-    state.snackbar.message = message
-    state.snackbar.type = type
+  setSnackbarMessage (state, params) {
+    state.snackbar.message = params.message
+    state.snackbar.type = params.type
     state.snackbar.visible = true
   }
 }

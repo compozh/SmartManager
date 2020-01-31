@@ -1,5 +1,6 @@
 <template>
-  <div id="snackbar">
+  <div v-if="snackbar.visible" id="snackbar" :style="'background-color:' + (snackbar.type == 'error' ? 'red' : 'green')">
+    {{ snackbar.message }}
   </div>
 </template>
 
@@ -12,13 +13,15 @@ export default {
       messageTimeout: 5000
     }
   },
+  watch: {
+    snackbar () {
+      return console.log('asfsfassffasfasfasfasfass')
+    }
+  },
   computed: {
   snackbar() {
      return this.$store.getters['snackbar']
     }
-  },
-  methods: {
-
   }
 }
 </script>
@@ -34,7 +37,6 @@ export default {
 	left: 50%;
 	transform: translate(-50%, 100%);
 	transition: 0.3s;
-	opacity: 0;
 	z-index: 101;
 	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
   .show {
