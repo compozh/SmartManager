@@ -96,8 +96,10 @@ export default {
       return false;
     }
     Object.assign(diagram, newDiagram);
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
+    if(newDiagram) {
+      await context.dispatch('resetCache');
+      await context.dispatch('loadItems');
+    }
     return true;
   },
   async editProcess(context, { id, name }) {
@@ -198,8 +200,10 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
+    
     await context.dispatch('resetCache');
     await context.dispatch('loadItems');
+  
     return true;
   },
   async editFolder(context, { id, name }) {
@@ -232,6 +236,7 @@ export default {
   //#region Common
 
   async deleteItem(context, { id }) {
+    debugger
     const { item, index } = context.getters.getItemById(id);
     if (index < 0) {
       return false;
@@ -246,8 +251,10 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
+    if(success) {
+      await context.dispatch('resetCache')
+      await context.dispatch('loadItems')
+    }
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {

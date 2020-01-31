@@ -1,7 +1,6 @@
 <template>
   <v-row class="px-3">
     <v-data-table
-      @click:row="openProject"
       calculate-widths
       :headers="headers"
       :items="rows"
@@ -14,16 +13,16 @@
           pageText : $t('bpmn.labels.Of') +' '+ items.length,
           showCurrentPage : true
         }"
-      class="projects-table elevation-1"
+      class="projects-table elevation-1 mt-0"
     >
-      <template v-slot:header.name="{ header }" >
+      <!-- <template v-slot:header.name="{ header }" >
         <span style="font-size: 16px;" >{{ header.text }}</span>
-      </template>
-      <template v-slot:header.items.length="{ header }" >
-        <div style="font-size: 16px; max-width: 150px" >{{ header.text }}</div>
+      </template> -->
+      <template v-slot:header.actions="{ header }" >
+        <v-row class="justify-end" style="max-width: 100%;" ><span  >{{ header.text }}</span></v-row>
       </template>
       <template v-slot:item.name="{ item }">
-        <div style="width: 25vw; cursor: pointer;" >
+        <div class="item-name"  @click="openProject(item)">
           <bpmn-tree-icon :node="item"></bpmn-tree-icon>
           {{ item.name }}
         </div>
@@ -33,15 +32,31 @@
       </template>
       <template v-slot:item.editTime="{ item }">
         {{item.editTime | formatDate}}
+      </template>
+      <template v-slot:item.actions="{ item }" >
+        <v-row class="justify-end" style="max-width: 100%">
+          <bpmn-contex-menu :item="item" 
+              @edit="editItem" :crumb="true"
+              @remove="removeItem" 
+              offset>
+            <template #activator="{ open }">
+              <v-btn icon class="options"  v-on="open">
+                <v-icon size="20">mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+          </bpmn-contex-menu>
+        </v-row>
       </template> 
     </v-data-table>
   </v-row>
 </template>
 
 <script>
+import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
 import moment from 'moment'
 export default {
   name: 'item-data-table',
+  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   data() {
     return {
       users: []
@@ -55,7 +70,8 @@ export default {
   filters: {
     formatDate(value) {
       if (value) {
-        return moment(value).format('DD.MM.YYYY HH:mm:ss')
+        moment.locale('ru')
+        return moment(value).format('DD MMMM  YYYY HH:mm')
       }
     },
   },
@@ -68,7 +84,11 @@ export default {
       this.users = await this.$store.dispatch('bpmn/queryUsers')
     },
     findUser(userId) {
+      if(userId == this.$store.state.auth.user.id) { 
+        return this.$t('bpmn.labels.You')
+      }
       if (this.users.length == 0) { return userId }
+      
       let user = this.users.find( user => user.id == userId ),
         result = user ? user.name : userId
       return result
@@ -101,7 +121,7 @@ export default {
         {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'},
         {text: this.$t('bpmn.labels.Editor'), value: 'editorId'},
         {text: this.$t('bpmn.labels.Owner'), value: 'ownerId'},
-        {text: this.$t('bpmn.labels.Count'), value: 'items.length'}]
+        {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}]
     },
   },
   created() {
@@ -115,19 +135,26 @@ export default {
   margin: 20px 10px;
   padding: 10px;
   tr {
-    cursor: pointer;
+    cursor: default;
+
+    th.text-start {
+      padding: 0 10px;
+      font-size: 13px
+    }
     td {
       font-size: 12px;
       padding: 0 10px;
-      .v-icon {
-        padding-right: 8px;
-        padding-bottom: 8px;
-        max-height: 12px;
+      .item-name {
+        min-width: 25vw; 
+        cursor: pointer;
+        .v-icon {
+          padding-right: 8px;
+          padding-bottom: 8px;
+          max-height: 12px;
+        }
       }
     }
   }
 }
-thead.v-data-table-header span{
-  font-size: 14px
-}
+
 </style>

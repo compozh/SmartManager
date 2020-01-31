@@ -15,7 +15,7 @@ export default {
           success = await this.$store.dispatch('bpmn/createProcess', item);
         }
         if (success) {
-          this.activeItem = item.id;
+          this.active = item.id;
           this.$forceUpdate()
         } else {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
@@ -31,9 +31,10 @@ export default {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
         }
         this.$forceUpdate()
-        this.activeItem = item.id;
+        // this.active = item.id;
         break;
       case 'delete':
+        debugger
         let deleting = async (elem) => {
           success = await this.$store.dispatch('bpmn/deleteItem', elem);
         }

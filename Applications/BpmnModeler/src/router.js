@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 
 export const router = new VueRouter({
   mode: 'history',
-  base: config.BaseUrl + 'BPMNMODELER/',
+  base: config.BaseUrl + 'newBPMNMODELER/',
   routes: [
     {
       path: '/',

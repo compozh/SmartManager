@@ -208,7 +208,7 @@ export default {
       this.loading = true;
       
       let items = await this.$store.dispatch('bpmn/getAccessRecordsForProcess', diagramId);
-      if (!items) {
+      if (!items || items.length == 0) {
         Notification.error(this.$t('bpmn.errors.AccessRecordsNotLoaded'));
         this.loading = false;
         this.show = false;

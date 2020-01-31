@@ -39,23 +39,24 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-divider class="elevation-5"/>
+    <v-divider class="elevation-3"/>
     <template v-if="hasElements('folder').length > 0">
-      <v-row class="layout-title pb-0 pt-7" justify="space-between">
+      <v-row class="layout-title pb-0 pt-2" justify="space-between">
         <h2>{{$t('bpmn.labels.Folders')}}</h2>
       </v-row>
-      <v-divider class="elevation-5" />
       <v-row>
         <item-data-table :items="hasElements('folder')" :activeItem.sync="active"/>
       </v-row>
     </template>
     
+    <v-divider class="elevation-3" />
+
     <template v-if="hasElements('diagram').length > 0">
-      <v-row class="layout-title pb-0 pt-7" justify="space-between">
+      <v-row class="layout-title py-0 " justify="space-between">
         <h2>{{$t('bpmn.labels.Diagrams')}}</h2>
       </v-row>
-      <v-divider class="elevation-5" />
-      <v-row class="layout diagrams pt-3" v-if="children && children.length > 0">
+      <!-- <v-divider class="elevation-3" /> -->
+      <v-row class="layout diagrams py-0" v-if="children && children.length > 0">
         <v-col cols=3 v-for="item in hasElements('diagram')" :key="item.id">
           <item-card :item="item" :activeItem.sync="active" :chosen.sync="chosen" @choosed="choosed"/>
         </v-col>
@@ -64,26 +65,7 @@
     <v-row v-else-if="children.length == 0" class="empty" >
       <bpmn-empty />
     </v-row>
-    <v-footer app color="white"
-      height="55px"
-      v-if="chosen.length > 0">
-      <div>{{chosen.length}}  {{ $t('bpmn.labels.Selected') }}</div>
-      <v-col class="pa-0">
-        <v-btn text class="menu-btn " >
-          <v-icon size="15">mdi-folder-move</v-icon>
-          {{ $t('bpmn.buttons.Move') }}
-        </v-btn>
-        <v-btn text class="menu-btn "  @click="copyItem(chosen)">
-          <v-icon size="15">mdi-content-copy</v-icon>
-          {{ $t('bpmn.buttons.Copy') }}
-        </v-btn>
-        <v-btn text class="menu-btn " @click="removeItem(chosen)">
-          <v-icon size="18">delete</v-icon>
-          {{ $t('bpmn.buttons.Delete') }}
-        </v-btn>
-      </v-col>
-      <v-btn icon @click="chosen = []"><v-icon>mdi-close</v-icon></v-btn>
-    </v-footer>
+    <folder-menu-footer  :item="item" :chosen.sync="chosen"/>
   </v-container>
 </template>
 <script>
@@ -202,17 +184,17 @@ export default {
   align-items: center;
 } 
 .layout-title {
-  height: 80px;
+  height: 60px;
 }
  h1, h2 {
   width: calc(100% - 40px);
   text-align: start;
   color: #535353;
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 700;
 }
 h2{
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -234,7 +216,9 @@ h2{
 }
 .select-item {
   width: 100%;
-  height: 45px;
+  height: 42px;
+  text-align: start;
+  font-size: 14px
 }
 
 

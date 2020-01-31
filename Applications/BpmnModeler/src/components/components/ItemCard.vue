@@ -1,9 +1,9 @@
 <template>
   <v-card class="item-card pa-2" elevation="1" :loading="loading">
-    <v-card-text @click="openProject(item)" ref="container" class="preview" :style="loading ? 'height: 0px' : 'height: 155px'">
+    <v-card-text @click="openProject(item)" ref="container" class="preview" >
     </v-card-text>
     <v-card-title class="justify-space-between py-1 px-2 ma-0 row">
-      <v-col class="py-0">
+      <v-col class="py-0 col-11">
         <v-row>
           <bpmn-tree-icon :node="item"></bpmn-tree-icon>
           <h1 class="pl-2" :title="item.name">{{item.name}}</h1>
@@ -40,7 +40,8 @@ export default {
   filters: {
     formatDate: (value) => {
       if (value) {
-        return moment(value).format('DD.MM.YYYY HH:mm:ss')
+        moment.locale('ru')
+        return moment(value).calendar();
       }
     },
   },
@@ -149,6 +150,10 @@ export default {
 
 .v-card__text{
   cursor: pointer;
+  height: 155px;
+}
+.v-card__title{
+  cursor: default
 }
 
 h1 {
@@ -164,6 +169,7 @@ h1 {
   white-space: nowrap;
 }
 .preview {
+  max-height: 155px;
   padding: 0;
 }
 h2 {
@@ -172,5 +178,8 @@ h2 {
   font-size: 13px;
   font-weight: 500;
   vertical-align: bottom;
+}
+.v-card__progress  {
+  height: 0;
 }
 </style>

@@ -1,19 +1,20 @@
 <template>
-<v-dialog v-if="show" :persistent="loading" v-model="show" max-width="500">
+<v-dialog v-if="show" :persistent="loading" v-model="show" max-width="500" @keydown.enter="save()">
   <v-card>
     <v-card-title>
       <span class="headline">{{ $t(titles[type][mode]) }}</span>
       <v-spacer></v-spacer>
       <v-btn-toggle v-if="type != 'all'" v-model="model.isSystem" :title="model.isSystem ? $t('bpmn.labels.SystemRecord') : $t('bpmn.labels.UserRecord')">
         <v-btn :value="true" :disabled="!canChangeIsSystemProperty || loading" text style="flex-grow: 0">
-          <v-icon v-if="model.isSystem">lock</v-icon>
-          <v-icon v-else>lock_open</v-icon>
+          <v-icon v-if="model.isSystem">mdi-lock</v-icon>
+          <v-icon v-else>mdi-lock-open</v-icon>
         </v-btn>
       </v-btn-toggle>
     </v-card-title>
     <v-card-text>
-      <v-form ref="form" v-model="valid" onSubmit="return false;">
-        <v-text-field ref="nameField"
+      <v-form ref="form" v-model="valid" onSubmit="return false;" @keydown.enter="save()">
+        <v-text-field ref="nameField" @keydown.enter="save()"
+          class="nameField"
           v-model="names"
           :label="$t('bpmn.labels.Name')"
           :disabled="loading || mode === 'delete'"
@@ -57,9 +58,9 @@ export default {
           'copy': 'bpmn.labels.CopyProcess',
         },
         'folder': {
-          'create': 'bpmn.labels.CreateFolder',
-          'edit': 'bpmn.labels.EditFolder',
-          'delete': 'bpmn.labels.DeleteFolder',
+          'create': this.$route.name == "Main" ? 'bpmn.labels.CreateProject' : 'bpmn.labels.CreateFolder',
+          'edit': this.$route.name == "Main" ? 'bpmn.labels.EditProject' :  'bpmn.labels.EditFolder',
+          'delete': this.$route.name == "Main" ? 'bpmn.labels.DeleteProject' :  'bpmn.labels.DeleteFolder',
           'copy': 'bpmn.labels.CopyFolder',
         },
         'all': {
@@ -109,12 +110,16 @@ export default {
       this.model = model;
       this.callback = callback;
       this.show = true;
+      setTimeout(()  => {
+        document.querySelector('input').focus()
+      }, 0)
     },
     cancel() {
       this.$refs.form.resetValidation();
       this.show = false;
     },
     async save() {
+      console.log(this)
       if (!this.$refs.form.validate()) {
         return;
       }

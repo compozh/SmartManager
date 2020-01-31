@@ -1,6 +1,6 @@
 <template>
   <modeler-layout 
-      :diagram="decision" :loading="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
+      :diagram="decision" :loading.sync="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
       :canMinimap="canMinimap" @minimap="onMinimap" 
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
       :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"

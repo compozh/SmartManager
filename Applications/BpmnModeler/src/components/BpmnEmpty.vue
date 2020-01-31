@@ -1,7 +1,7 @@
 <template>
   <v-layout align-center justify-center column fill-height>
-    <!-- <h2>{{ $t('bpmn.labels.SelectOrCreateProcess') }}</h2> -->
-    <v-btn class="add-btn" @click="addProcess">
+    <h2>{{ $t('bpmn.labels.SelectOrCreateProcess') }}</h2>
+    <!-- <v-btn class="add-btn" @click="addProcess">
       {{ $t('bpmn.buttons.AddProcess') }}
     </v-btn>
     <v-btn  class="add-btn" @click="importItem(item)">
@@ -9,7 +9,7 @@
     </v-btn>
     <v-btn  class="add-btn"  @click="addFolder">
       {{ $t('bpmn.buttons.AddFolder') }}
-    </v-btn>
+    </v-btn> -->
   </v-layout>
 </template>
 <script>

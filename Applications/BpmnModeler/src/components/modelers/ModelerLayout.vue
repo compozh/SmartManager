@@ -15,11 +15,14 @@
     <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
         <v-spacer></v-spacer>
+        <v-btn icon @click="deployItem(diagram)" :disabled="!canDeploy(diagram)" :title="$t('bpmn.buttons.Deploy')">
+          <v-icon>mdi-open-in-app</v-icon>
+        </v-btn>
         <v-divider vertical></v-divider>
         <v-btn icon @click="showPanel = !showPanel" :disabled="!canShowPanel" :title="$t('bpmn.labels.TogglePropertiesPanel')">
           <v-icon>mdi-settings</v-icon>
         </v-btn>
-        <v-btn icon @click="share(diagram)" :disabled="!canShare()" :title="$t('bpmn.buttons.Share')">
+        <v-btn icon @click="share(diagram)" :disabled="!canShare(diagram)" :title="$t('bpmn.buttons.Share')">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
         <bpmn-contex-menu 
@@ -39,28 +42,28 @@
           <div class="bpmn-diagram-container">
             <v-row class="options-panel">
               <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
-                <v-icon size="20">undo</v-icon>
+                <v-icon size="20">mdi-undo</v-icon>
               </v-btn>
               <v-btn text :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
-                <v-icon size="20">redo</v-icon>
+                <v-icon size="20">mdi-redo</v-icon>
               </v-btn>
               <v-divider vertical></v-divider>
               <v-btn text :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
-                <v-icon size="20">zoom_in</v-icon>
+                <v-icon size="20">mdi-magnify-plus-outline</v-icon>
               </v-btn>
               <v-btn text :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
-                <v-icon size="20">zoom_out</v-icon>
+                <v-icon size="20">mdi-magnify-minus-outline</v-icon>
               </v-btn>
               <v-btn text :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
                 <v-icon size="20">mdi-magnify-close</v-icon>
               </v-btn>
               <v-divider vertical></v-divider>
               <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
-                <v-icon size="20">map</v-icon>
+                <v-icon size="20">mdi-map</v-icon>
               </v-btn>
               <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
-                <v-icon size="20" v-if="fullScreen">fullscreen_exit</v-icon>
-                <v-icon size="20" v-else>fullscreen</v-icon>
+                <v-icon size="20" v-if="fullScreen">mdi-fullscreen-exit</v-icon>
+                <v-icon size="20" v-else>mdi-fullscreen</v-icon>
               </v-btn>
             </v-row>
             <slot name="modeler"></slot>
@@ -75,11 +78,11 @@
       <div v-else class="bpmn-diagram-container">
         <v-row class="options-panel grey lighten-4 ">
             <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
-              <v-icon>map</v-icon>
+              <v-icon>mdi-map</v-icon>
             </v-btn>
             <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
-              <v-icon v-if="fullScreen">fullscreen_exit</v-icon>
-              <v-icon v-else>fullscreen</v-icon>
+              <v-icon v-if="fullScreen">mdi-fullscreen-exit</v-icon>
+              <v-icon v-else>mdi-fullscreen</v-icon>
             </v-btn>
           </v-row>
         <slot name="modeler"></slot>
@@ -138,7 +141,6 @@ export default {
     },
     splitSize: {
       get() {
-        
         if (this.split === null) {
           let size = localStorage.getItem('properties-panel-split-size');
           if (typeof size !== 'string' || size === '') {
@@ -146,13 +148,22 @@ export default {
           }
           return Number.parseInt(size);
         }
-
-        
         return this.split;
       },
       set(value) {
         this.split = value;
         localStorage.setItem('properties-panel-split-size', value);
+      }
+    },
+    load: {
+      get() {
+        return this.loading;
+      },
+      set(value) {
+        if (value === this.loading) {
+          return;
+        }
+        this.$emit('update:loading', value);
       }
     }
   },
@@ -170,8 +181,20 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     canShare(item) {
-      if (!this.diagram) { return false }
-      return this.diagram.rights.find(el => el == 'SHARE')
+      return item.hasRight(Models.DiagramAccessRights.Share);
+    },
+    canDeploy(item) {
+      return item.hasRight(Models.DiagramAccessRights.Deploy);
+    },
+    async deployItem(item) {
+      this.loading = true;
+      var result = await this.$store.dispatch('bpmn/deployProcess', item.id);
+      if (result.success) {
+        Notification.success(result.message || this.$t('bpmn.errors.ProcessDeployed'));
+      } else {
+        Notification.error(result.message || this.$t('bpmn.errors.ProcessNotDeployed'));
+      }
+      this.loading = false;
     },
   }
   
@@ -200,7 +223,7 @@ export default {
   padding: 0;
 }
 .modeler-toolbar .v-divider.v-divider--vertical {
-  margin: 0 24px;
+  margin: 0 10px;
 }
 .bpmn-diagram-container {
   width: 100%;

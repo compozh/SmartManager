@@ -75,13 +75,13 @@
         <template v-if="canEdit(item)">
           <v-list-item @click="edit(item)">
             <v-list-item-avatar>
-              <v-icon>edit</v-icon>
+              <v-icon>mdi-pencil</v-icon>
             </v-list-item-avatar>
             <v-list-item-title>{{ $t('bpmn.buttons.Rename') }}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="remove(item)">
             <v-list-item-avatar>
-              <v-icon>delete</v-icon>
+              <v-icon>mdi-delete</v-icon>
             </v-list-item-avatar>
             <v-list-item-title>{{ $t('bpmn.buttons.Delete') }}</v-list-item-title>
           </v-list-item>
@@ -188,6 +188,7 @@ export default {
   margin-top: 0px;
 }
 .v-list-item__title {
-  text-align: start
+  text-align: start;
+  font-size: 14px
 }
 </style>
