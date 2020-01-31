@@ -23,6 +23,7 @@ export default {
       await dispatch('updateAuthenticatedUser', result)
       return result
     } catch (e) {
+      vm.$vs.loading.close()
       console.warn('', e.message)
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
@@ -41,6 +42,7 @@ export default {
       await dispatch('updateAuthenticatedUser', result)
       return result
     } catch (e) {
+      vm.$vs.loading.close()
       console.warn('', e.message)
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
@@ -59,6 +61,7 @@ export default {
         }
         window.location.reload()
       } else {
+        vm.$vs.loading.close()
         vm.$vs.notify({
           title: i18n.t('notify.applyRightsTittle'),
           text: result.errorMessage,
@@ -66,6 +69,7 @@ export default {
         })
       }
     } catch (e) {
+      vm.$vs.loading.close()
       vm.$vs.notify({
         title: i18n.t('notify.applyRightsTittle'),
         text: i18n.t('notify.applyRightsError'),
@@ -97,7 +101,7 @@ export default {
       vm.$vs.loading.close()
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
-        text: result.FAILREASON,
+        text: result.errorMessage,
         color: 'warning'
       })
       if (router.currentRoute.name !== 'login') {
