@@ -148,8 +148,11 @@ export default {
     }
   },
   methods: {
+    setUserData() {
+      this.$store.dispatch('auth/setUserData')
+    },
     getFolders() {
-      this.$store.dispatch('sm/getFolders')
+      this.$store.dispatch('sm/getFolders', 'loading')
     },
     changeRouteTitle(title) {
       this.routeTitle = title
@@ -162,11 +165,7 @@ export default {
     },
     updateNavbarColor(val) {
       this.navbarColor = val
-      if (val === '#fff') {
-        this.isNavbarDark = false
-      } else {
-        this.isNavbarDark = true
-      }
+      this.isNavbarDark = val !== '#fff'
     },
     updateFooter(val) {
       this.footerType = val
@@ -199,6 +198,7 @@ export default {
     TheFooter
   },
   created() {
+    this.setUserData()
     this.getFolders()
     this.setSidebarWidth()
     if (this.navbarColor === '#fff' && this.isThemeDark) {

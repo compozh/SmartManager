@@ -298,19 +298,10 @@ export default {
     submission() {
       const vars = {}
       if (this.externalParams.VARIABLES) {
-        this.externalParams.VARIABLES.forEach(v => vars[v['Key']] = v.Value.value)
+        this.externalParams.VARIABLES
+          .forEach(variable => vars[variable['Key']] = variable.Value.value)
       }
-      return {
-        data: vars
-      }
-    },
-    components() {
-      if (this.externalParams.FORM) {
-        const form = JSON.parse(this.externalParams.FORM) || {}
-        const components = JSON.parse(form.components)
-        return JSON.stringify(components)
-      }
-      return {}
+      return vars
     },
     time() {
       return dateTime => dateTime
@@ -385,7 +376,6 @@ export default {
         const form = this.$refs.form.$refs.formioComponent.formio
         try {
           const result = await form.submit()
-          console.log('', result)
           const success = await this.$store.dispatch('sm/changeStatus', {
             ...data,
             CompleteParams: JSON.stringify(result.data)

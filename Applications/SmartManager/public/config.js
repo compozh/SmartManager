@@ -1,4 +1,4 @@
-window.devMode = false
+window.devMode = true
 window.appConfig = {
   GrapgQlUrl: window.devMode ? 'http://localhost:5002/' : 'https://m.it.ua/GraphQlServer/',
   BASE_URL: window.VUE_APP_BASE_PATH,
