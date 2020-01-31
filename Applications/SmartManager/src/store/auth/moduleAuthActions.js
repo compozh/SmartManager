@@ -94,6 +94,7 @@ export default {
       await router.push(router.currentRoute.query.to || '/')
       !vm.$vs.loading || vm.$vs.loading.close()
     } else {
+      vm.$vs.loading.close()
       vm.$vs.notify({
         title: i18n.t('login.subTitle'),
         text: result.FAILREASON,
