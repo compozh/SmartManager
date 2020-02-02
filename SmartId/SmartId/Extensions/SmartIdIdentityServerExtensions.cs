@@ -39,7 +39,7 @@ namespace SmartId.Extensions
 				options.Events.RaiseFailureEvents = true;
 				options.Events.RaiseSuccessEvents = true;
 				//TODO: Поддержка IdentityModel3, убрать, после решения
-				options.AccessTokenJwtType = "JWT";
+				//options.AccessTokenJwtType = "JWT";
 			});
 			// настраиваем хранилище оперативных данных
 			builder.AddOperationalStore(options =>
@@ -60,7 +60,7 @@ namespace SmartId.Extensions
 			if (environment.IsDevelopment())
 			{
 				logger.LogInformation($"Development mode");
-				builder.AddDeveloperSigningCredential();
+				//builder.AddDeveloperSigningCredential();
 			}
 			else
 			{
@@ -150,12 +150,13 @@ namespace SmartId.Extensions
 		private static void addConfigurations(IIdentityServerBuilder builder, string connectionStrings, IConfigurationSection clientSection,
 			IConfigurationSection apiSection, IWebHostEnvironment environment, ILogger<Startup> logger)
 		{
+			var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 			if (!string.IsNullOrWhiteSpace(connectionStrings))
 			{
 				// this adds the config data from DB (clients, resources, CORS)
 				builder.AddConfigurationStore<ConfigurationDbContext>(options =>
 				{
-					options.ConfigureDbContext = contentBuilder => contentBuilder.UseSqlServer(connectionStrings);
+					options.ConfigureDbContext = contentBuilder => contentBuilder.UseSqlServer(connectionStrings, db => db.MigrationsAssembly(migrationsAssembly));
 				});
 				if (!environment.IsDevelopment())
 				{

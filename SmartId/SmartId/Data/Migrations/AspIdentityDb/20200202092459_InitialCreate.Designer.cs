@@ -10,14 +10,14 @@ using SmartId.Data;
 namespace SmartId.Data.Migrations.AspIdentityDb
 {
     [DbContext(typeof(AspIdentityDbContext))]
-    [Migration("20191108154720_InitialCreate")]
+    [Migration("20200202092459_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
