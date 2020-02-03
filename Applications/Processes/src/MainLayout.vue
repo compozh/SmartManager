@@ -24,20 +24,14 @@
 
     <v-content>
         <router-view/>
-        <processes-grid
-    />
     </v-content>
 
   </v-app>
 </template>
 
 <script>
-import ProcessesGrid from './pages/ProcessesGrid.vue'
 export default {
   name: 'main-processes',
-  components: {
-    ProcessesGrid
-  },
   computed: {
     error () {
       return this.$store.getters['error']

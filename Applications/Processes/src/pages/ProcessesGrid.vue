@@ -1,22 +1,23 @@
 <template>
   <v-flex>
     <v-card-title>
-      {{this.$t('processes.labels.processes')}}
+      {{$t('processes.labels.processes')}}
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="search"
-        :label="this.$t('processes.placeholders.Search')"
+        :label="$t('processes.placeholders.Search')"
         single-line
         hide-details
       ></v-text-field>
     </v-card-title>
     <v-data-table
       :loading="loadingProcesses"
+      :loading-text="$t('processes.placeholders.Search')"
       :headers="headers"
       :items="processes"
       :search="search"
-      :no-data-text="this.$t('processes.placeholders.NoDataText')"
+      :no-data-text="$t('processes.placeholders.LoadingDataText')"
       :hide-default-footer="true"
     ></v-data-table>
   </v-flex>

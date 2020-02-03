@@ -10,6 +10,7 @@
     },
     "placeholders": {
         "Search": "Пошук",
-        "NoDataText": "Відсутні дані"
+        "NoDataText": "Відсутні дані",
+        "LoadingDataText": "Завантаження"
     }
 }

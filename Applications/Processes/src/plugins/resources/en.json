@@ -10,6 +10,7 @@
     },
     "placeholders": {
         "Search" : "Search",
-        "NoDataText": "No data available"
+        "NoDataText": "No data available",
+        "LoadingDataText": "Loading"
     }
 }

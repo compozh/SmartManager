@@ -12,9 +12,15 @@ const router = new VueRouter({
       component: () => import('./MainLayout.vue'),
       children: [
         {
+          path: '/',
+          name: 'processes',
+          component: () => import('./pages/ProcessesGrid.vue'),
+          caseSensitive: false
+        },
+        {
           path: '/:id',
           name: 'process-form-page',
-          component: () => import('./pages/processForm.vue'),
+          component: () => import('./pages/ProcessForm.vue'),
           caseSensitive: false
         }
       ]
