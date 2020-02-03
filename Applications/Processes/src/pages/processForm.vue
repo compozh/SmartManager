@@ -2,13 +2,20 @@
     <div>
         <spinner v-if="isLoading" class="spinner" />
 
-        <div class="formio-container" v-if="form">
-            <formio-form-component
-                ref="formioFormComponent"
+        <v-flex class="formio-container" v-if="form">
 
-                :formDefinition="form"
-                :formCode="form.name"
-            />
+            <v-card-title>
+              {{form.name}}
+            </v-card-title>
+
+            <v-card class="card-form-component">
+              <formio-form-component
+                  ref="formioFormComponent"
+
+                  :formDefinition="form"
+                  :formCode="form.name"
+              />
+            </v-card>
 
             <v-btn
                 @click="onStartProcessClick"
@@ -16,10 +23,11 @@
                 outlined
                 color="primary"
                 :loading="startProcessLoading"
+                class="start-process-button"
             >
                 {{$t('processes.buttons.startProcess')}}
             </v-btn>
-        </div>
+        </v-flex>
     </div>
 </template>
 
@@ -50,7 +58,6 @@ export default {
     async onStartProcessClick (params) {
       let formComponent = this.$refs.formioFormComponent
       let submitResult = await formComponent.submit()
-      debugger
       let submitData = submitResult.data
       let processVariables = []
 
@@ -71,28 +78,15 @@ export default {
       })
     },
     typeToEnum (type) {
-      debugger
-      switch (type) {
-        case 'bollean':
-          break
-        default:
-          return 'STRING'
-      }
+      return 'STRING'
     }
   }
 }
 </script>
 
 <style scoped>
-  .actionBtn {
-    height: 40px;
-    min-width: 170px;
-    background: #fff;
-    border: 2px solid rgb(25, 118, 210);
-    color: rgb(25, 118, 210);
-    font-weight: 600;
-    text-transform: uppercase;
-    border-radius: 4px;
+  .card-form-component {
+    margin: 15px;
   }
   .spinner {
     position: fixed;
@@ -102,5 +96,9 @@ export default {
     bottom: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .start-process-button {
+    margin-bottom: 15px;
   }
 </style>
