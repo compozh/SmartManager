@@ -30,7 +30,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .add-btn {
   font-size: 11px;
   color: white !important;

@@ -2,7 +2,7 @@
   <v-card class="item-card pa-2" elevation="1" :loading="loading">
     <v-card-text @click="openProject(item)" ref="container" class="preview" >
     </v-card-text>
-    <v-card-title class="justify-space-between py-1 px-2 ma-0 row">
+    <v-card-title class="justify-space-between py-1 px-2 mt-auto mx-0 row">
       <v-col class="py-0 col-11">
         <v-row>
           <bpmn-tree-icon :node="item"></bpmn-tree-icon>
@@ -147,7 +147,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
+.item-card {
+  height: 100%;
+}
 .v-card__text{
   cursor: pointer;
   height: 155px;
@@ -155,6 +157,7 @@ export default {
   max-height: 155px;
 }
 .v-card__title {
+  height: calc(100% - 155px);
   flex-wrap: nowrap;
   cursor: default;
 }

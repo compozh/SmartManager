@@ -258,21 +258,23 @@ export default {
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {
-    switch (type) {
-    case 'before':
-    case 'after':
-      draggingItem.parentId = dropItem.parentId;
-      break;
-    case 'inner':
-      draggingItem.parentId = dropItem.id;
-      break;
-    }
+    console.log(draggingItem)
+    debugger
+    // switch (type) {
+    // case 'before':
+    // case 'after':
+    //   draggingItem.parentId = dropItem.parentId;
+    //   break;
+    // case 'inner':
+    //   draggingItem.parentId = dropItem.id;
+    //   break;
+    // }
     let success = false;
     try {
       if (draggingItem.isFolder) {
-        success = await api.moveFolder(draggingItem.id, draggingItem.parentId);
+        success = await api.moveFolder(draggingItem.id, dropItem.id);
       } else {
-        success = await api.moveDiagram(draggingItem.id, draggingItem.parentId);
+        success = await api.moveDiagram(draggingItem.id, dropItem.id);
       }
     } catch (error) {
       console.error(error);

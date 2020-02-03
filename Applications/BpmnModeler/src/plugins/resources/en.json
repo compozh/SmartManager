@@ -106,7 +106,8 @@
 		"Folders" : "Folders",
 		"Diagrams": "Diagrams",
 		"Selected": "Selected",
-		"You": "You"
+		"You": "You",
+		"AlreadyIn": "Item already in this folder"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

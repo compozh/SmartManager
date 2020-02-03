@@ -181,9 +181,11 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     canShare(item) {
+      if(!item) return false
       return item.hasRight(Models.DiagramAccessRights.Share);
     },
     canDeploy(item) {
+      if(!item) return false
       return item.hasRight(Models.DiagramAccessRights.Deploy);
     },
     async deployItem(item) {

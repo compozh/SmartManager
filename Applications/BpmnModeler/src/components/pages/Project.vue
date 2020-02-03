@@ -39,7 +39,7 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-divider class="elevation-3"/>
+    <v-divider />
     <template v-if="hasElements('folder').length > 0">
       <v-row class="layout-title pb-0 pt-2" justify="space-between">
         <h2>{{$t('bpmn.labels.Folders')}}</h2>
@@ -48,16 +48,14 @@
         <item-data-table :items="hasElements('folder')" :activeItem.sync="active"/>
       </v-row>
     </template>
-    
-    <v-divider class="elevation-3" />
-
+    <v-divider />
     <template v-if="hasElements('diagram').length > 0">
       <v-row class="layout-title py-0 " justify="space-between">
         <h2>{{$t('bpmn.labels.Diagrams')}}</h2>
       </v-row>
       <!-- <v-divider class="elevation-3" /> -->
       <v-row class="layout diagrams py-0" v-if="children && children.length > 0">
-        <v-col cols=3 v-for="item in hasElements('diagram')" :key="item.id">
+        <v-col cols=3 v-for="item in hasElements('diagram')" :key="item.id" class="pa-2">
           <item-card :item="item" :activeItem.sync="active" :chosen.sync="chosen" @choosed="choosed"/>
         </v-col>
       </v-row>
@@ -91,6 +89,7 @@ export default {
         this.chosen = this.chosen.filter( el => el.id != val.id)
       } else {
         this.chosen.push(val)
+        setTimeout(()=> this.$vuetify.goTo('.v-footer'), 0)
       }
     },
     getChildren(children) {

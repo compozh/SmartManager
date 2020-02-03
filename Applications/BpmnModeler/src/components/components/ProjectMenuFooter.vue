@@ -1,5 +1,5 @@
 <template>
-   <v-footer app color="white"
+   <v-footer app color="white" elevation="2"
       height="55px"
       v-if="chosen.length > 0">
       <div>{{chosen.length}}  {{ $t('bpmn.labels.Selected') }}</div>
@@ -23,14 +23,17 @@
                 <v-icon size="20">mdi-close</v-icon>
               </v-btn>
             </v-card-title>
-            <v-card-text class="px-3 elevation-1">
+            <v-card-text class="px-0 elevation-1">
               <v-list>
-                <v-list-item class="px-0" dense :key="index"
-                  v-for="(item, index) in choosedFolder.items.filter(it => it.isFolder)">
+                <v-list-item class="px-3" dense :key="index"
+                  v-for="(elem, index) in choosedFolder.items">
                   <v-list-item-content >
-                    <v-list-item-title :title="item.name">{{ item.name }}</v-list-item-title>
+                    <v-list-item-title :title="elem.name">
+                      <bpmn-tree-icon :node="elem"></bpmn-tree-icon>
+                      {{ elem.name }}
+                    </v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action class="ma-0" @click="changeFolder(item)">
+                  <v-list-item-action class="ma-0" @click="changeFolder(elem)" v-if="elem.isFolder">
                     <v-btn icon><v-icon color="blue">mdi-chevron-right</v-icon></v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -40,7 +43,8 @@
               <v-btn icon @click="addFolder" class="mr-auto">
                 <v-icon size="20">mdi-folder-plus</v-icon>
               </v-btn>
-              <v-btn text class="menu-btn">
+              <v-btn class="add-btn" :loading="loading" @click="moveHere(choosedFolder)"
+                :disabled="choosedFolder == item" :title="choosedFolder == item?  $t('bpmn.lebels.AlreadyIn') : $t('bpmn.buttons.MoveHere')">
                 <v-icon size="20">mdi-folder-move</v-icon>
                 {{ $t('bpmn.buttons.MoveHere') }}
               </v-btn>
@@ -69,15 +73,13 @@ export default {
   data() {
     return {
       explorer: false,
-      choosedFolder: this.item
+      choosedFolder: this.item,
+      loading: false,
     };
   },
   props: {
     item: Object,
     chosen: Array
-  },
-  mounted() {
-    // this.changeFolder(this.$route.params.id)
   },
   methods: {
     changeFolder(value) {
@@ -92,6 +94,21 @@ export default {
       } else {
         this.choosedFolder = value
       }
+    },
+    async moveHere(dropItem) {
+      this.loading = true
+      let success = []
+      await this.choose.forEach(async draggingItem => {
+        success.push(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem }))
+      })
+      success = success.every(el => el)
+      if (success) {
+        this.choose = []
+        this.$store.dispatch('bpmn/editFolder', dropItem)
+      } else {
+        Notification.error(this.$t('bpmn.errors.CantDrop'));
+      }
+      this.loading = false;
     },
     closeExpl() {
       this.explorer = false
@@ -122,9 +139,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 .file-explorer {
   width: 400px;
-  // height: 400px;
+
   .v-card__text {
     height: 320px;
     overflow: auto;
@@ -134,17 +152,25 @@ export default {
 
     .v-list-item {
       max-height: 42px;
+      cursor: default;
     }
   }
   .v-card__title {
     position: sticky;
-    background-color: white;
     .title {
       text-align: start;
       overflow: hidden;
       height: 46px;
     }
   }
-
+  .v-card__title, .v-card__actions, .v-list-item:hover {
+    background-color: rgba(226, 223, 223, 0.658);
+  }
+}
+.add-btn {
+  font-size: 11px;
+  color: white;
+  background-color: #1976d2 !important;
+  height: 30px !important;
 }
 </style>

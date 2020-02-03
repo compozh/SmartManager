@@ -4,9 +4,9 @@
       <h1>{{$t('bpmn.labels.RecentlyActive')}}</h1>
       <h2>{{$t('bpmn.labels.LastChanged')}}</h2>
     </v-row>
-    <v-divider class="elevation-3" />
+    <v-divider  />
     <v-row class="layout recent-diagrams py-3">
-      <v-col cols=4 v-for="item in recentDiagrams" :key="item.id">
+      <v-col cols=4 v-for="item in recentDiagrams" :key="item.id" class="pa-2">
         <item-card :item="item" :activeItem.sync="active"/>
       </v-col>
     </v-row>
@@ -29,7 +29,7 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-divider class="elevation-3" />
+    <!-- <v-divider class="elevation-1 pb-2" /> -->
     <v-row>
       <item-data-table :items="items.filter(it => it.isFolder)" :search="search" :activeItem.sync="active"/>
     </v-row>

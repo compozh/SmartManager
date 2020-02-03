@@ -106,7 +106,8 @@
 		"Folders" : "Папки",
 		"Diagrams": "Диаграммы",
 		"Selected": "Выбрано",
-		"You": "Вами"
+		"You": "Вами",
+		"AlreadyIn": "Элемент уже в этой папке"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

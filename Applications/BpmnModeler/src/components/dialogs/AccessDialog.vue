@@ -17,7 +17,7 @@
         <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
           <v-card>
             <v-card-title>
-              <span class="headline">{{ $t(form.titles[form.mode]) }}</span>
+              <span class="headline">{{ form.titles[form.mode] }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -26,7 +26,7 @@
                   v-model="form.editedItem.identities"
                   :queryItems="queryUsersAndGroups"
                   :disabled="form.loading || form.mode !== 'create'"
-                  :rules="$t([form.rules.selectOne])"
+                  :rules="[form.rules.selectOne]"
                   :label="$t('bpmn.labels.WhoHasAccess')"
                   multiple
                 >
@@ -62,8 +62,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ $t(form.actions[form.mode]) }}</v-btn>
+              <v-btn flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+              <v-btn flat @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -154,14 +154,14 @@ export default {
         title: '',
         mode: '',
         actions: {
-          'create': 'bpmn.buttons.Create',
-          'edit': 'bpmn.buttons.Save',
-          'delete': 'bpmn.buttons.Delete'
+          'create': this.$t('bpmn.buttons.Create'),
+          'edit': this.$t('bpmn.buttons.Save'),
+          'delete': this.$t('bpmn.buttons.Delete')
         },
         titles: {
-          'create': 'bpmn.labels.AddRights',
-          'edit': 'bpmn.labels.EditRights',
-          'delete': 'bpmn.labels.RemoveRights'
+          'create': this.$t('bpmn.labels.AddRights'),
+          'edit': this.$t('bpmn.labels.EditRights'),
+          'delete': this.$t('bpmn.labels.RemoveRights')
         },
         rules: {
           selectOne: value => (value && value.length > 0) || ' '
@@ -208,7 +208,7 @@ export default {
       this.loading = true;
       
       let items = await this.$store.dispatch('bpmn/getAccessRecordsForProcess', diagramId);
-      if (!items || items.length == 0) {
+      if (!items) {
         Notification.error(this.$t('bpmn.errors.AccessRecordsNotLoaded'));
         this.loading = false;
         this.show = false;

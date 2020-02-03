@@ -110,7 +110,8 @@
 		"Folder" : "Папки",
 		"Diagrams": "Діаграми",
 		"Selected": "Вибрано",
-		"You": "Вами"
+		"You": "Вами",
+		"AlreadyIn": "Елемент уже в цій папці"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
