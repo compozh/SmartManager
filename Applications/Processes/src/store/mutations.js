@@ -12,5 +12,10 @@ export default {
   },
   setProcesses (state, processes) {
     state.processes = processes
+  },
+  setSnackbarSuccessMessage (state, message) {
+    state.snackbar.message = message
+    state.snackbar.type = 'success'
+    state.snackbar.visible = true
   }
 }

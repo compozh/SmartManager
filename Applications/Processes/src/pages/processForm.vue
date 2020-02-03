@@ -48,7 +48,11 @@ export default {
       this.isLoading = true
       this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
         this.isLoading = false
-        this.form = result.form
+        if (!result.form) {
+          this.$store.commit('setError', this.$t('processes.errors.undefinedFormOfProcess'))
+        } else {
+          this.form = result.form
+        }
       })
     } else {
       this.$store.commit('setError', this.$t('processes.errors.processNotPassed'))
@@ -74,7 +78,8 @@ export default {
       this.startProcessLoading = true
       this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, processVariables }).then(result => {
         this.startProcessLoading = false
-        window.close()
+        this.$store.commit('setSnackbarSuccessMessage', this.$t('processes.messages.processSuccess'))
+        // window.close()
       })
     },
     typeToEnum (type) {

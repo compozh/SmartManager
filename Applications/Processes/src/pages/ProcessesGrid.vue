@@ -12,13 +12,14 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+      class="processes-table"
       :loading="loadingProcesses"
-      :loading-text="$t('processes.placeholders.Search')"
+      :loading-text="$t('processes.placeholders.LoadingDataText')"
       :headers="headers"
       :items="processes"
       :search="search"
-      :no-data-text="$t('processes.placeholders.LoadingDataText')"
-      :hide-default-footer="true"
+      @click:row="onRowClick"
+      :no-data-text="$t('processes.placeholders.NoDataText')"
     ></v-data-table>
   </v-flex>
 </template>
@@ -30,16 +31,8 @@ export default {
       search: '',
       loadingProcesses: false,
       headers: [
-        { text: 'id dsds', value: 'id' },
-        { text: 'key', value: 'key' },
-        { text: 'category', value: 'category' },
-        { text: 'name', value: 'name' },
-        { text: 'version', value: 'version' },
-        { text: 'resource', value: 'resource' },
-        { text: 'deploymentId', value: 'deploymentId' },
-        { text: 'diagram', value: 'diagram' },
-        { text: 'suspended', value: 'suspended' },
-        { text: 'tenantId', value: 'tenantId' }
+        { text: this.$t('processes.columns.name'), value: 'name' },
+        { text: this.$t('processes.columns.version'), value: 'version' }
       ]
     }
   },
@@ -53,6 +46,16 @@ export default {
     processes () {
       return this.$store.getters['processes']
     }
+  },
+  methods: {
+    onRowClick (item) {
+      this.$router.push(item.id)
+    }
   }
 }
 </script>
+<style>
+  .processes-table tr {
+    cursor: pointer !important;
+  }
+</style>

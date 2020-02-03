@@ -1,16 +1,25 @@
 {
     "buttons": {
-        "startProcess": "Start process"
+        "startProcess": "Start process",
+        "Close": "Close"
     },
     "labels": {
         "processes": "Processes"
     },
     "errors": {
-        "processNotPassed": "Process code not passed"
+        "processNotPassed": "Process code not passed",
+        "undefinedFormOfProcess": "Missing process form"
     },
     "placeholders": {
         "Search" : "Search",
         "NoDataText": "No data available",
-        "LoadingDataText": "Loading"
+        "LoadingDataText": "Loading..."
+    },
+    "columns" : {
+        "name": "Name",
+        "version": "Version"
+    },
+    "messages" : {
+        "processSuccess": "Process started successfully"
     }
 }

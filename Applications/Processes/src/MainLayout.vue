@@ -39,6 +39,11 @@ export default {
     snackbar () {
       return this.$store.getters['snackbar']
     }
+  },
+  methods: {
+    closeSnackbar () {
+      this.$store.commit('closeSnackbar')
+    }
   }
 }
 </script>
