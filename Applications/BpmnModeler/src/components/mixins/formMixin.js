@@ -9,7 +9,7 @@ export default {
       let success = false;
       switch (mode) {
       case 'create':
-        if (type === 'folder') {
+        if (type === 'folder' ) {
           success = await this.$store.dispatch('bpmn/createFolder', item);
         } else {
           success = await this.$store.dispatch('bpmn/createProcess', item);
@@ -22,7 +22,7 @@ export default {
         }
         break;
       case 'edit':
-        if (type === 'folder') {
+        if (type === 'folder' ) {
           success = await this.$store.dispatch('bpmn/editFolder', item);
         } else {
           success = await this.$store.dispatch('bpmn/editProcess', item);
@@ -31,10 +31,8 @@ export default {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
         }
         this.$forceUpdate()
-        // this.active = item.id;
         break;
       case 'delete':
-        debugger
         let deleting = async (elem) => {
           success = await this.$store.dispatch('bpmn/deleteItem', elem);
         }
@@ -55,6 +53,7 @@ export default {
             this.active = item.parentId
           }
         }
+        this.$forceUpdate()
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
         }
@@ -113,8 +112,7 @@ export default {
         type = 'all'
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it))
       } else {
-        
-        type = item.isFolder ? 'folder' : 'process'
+        type = item.isFolder ?  'folder' : 'process'
         model = item.isFolder ? new Folder(item) : new Diagram(item)
       }
       eventBus.$emit(events.modeler.showForm,

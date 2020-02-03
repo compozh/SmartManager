@@ -145,7 +145,8 @@ export default {
       font-size: 12px;
       padding: 0 10px;
       .item-name {
-        min-width: 25vw; 
+        min-width: 20vw; 
+        max-width: 30vw;
         cursor: pointer;
         .v-icon {
           padding-right: 8px;

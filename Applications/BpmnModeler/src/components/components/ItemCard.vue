@@ -10,7 +10,7 @@
           <h2>{{$t('bpmn.labels.EditTime')}}: </h2> <h2 class="pl-1">{{item.editTime || item.creationTime | formatDate}}</h2>
         </v-row>
       </v-col>
-      <v-checkbox v-model="choose" v-if="chosen" class="ma-0"/>
+      <v-checkbox v-model="choose" v-if="chosen" class="ma-0 checkbox"/>
     </v-card-title>
   </v-card>
 </template>
@@ -151,9 +151,12 @@ export default {
 .v-card__text{
   cursor: pointer;
   height: 155px;
+  min-height: 155px;
+  max-height: 155px;
 }
-.v-card__title{
-  cursor: default
+.v-card__title {
+  flex-wrap: nowrap;
+  cursor: default;
 }
 
 h1 {
@@ -182,4 +185,13 @@ h2 {
 .v-card__progress  {
   height: 0;
 }
+.checkbox {
+  height: 25px;
+  align-self: flex-end;
+}
+</style>
+<style>
+.checkbox  .v-messages {
+    display: none;
+  }
 </style>

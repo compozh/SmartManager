@@ -24,6 +24,7 @@
 		"Add": "Add",
 		"OK": "OK",
 		"Move" : "Move",
+		"MoveHere" : "Move here",
 		"Replace" : "Replace"
 	},
 	"labels": {

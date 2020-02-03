@@ -1,27 +1,29 @@
 <template>
-    <v-breadcrumbs class="pa-0" :items="elements">
-      <template v-slot:divider>
-        <v-icon class="pt-2" size="22">mdi-chevron-right</v-icon>
-      </template>
-      <template v-slot:item="crumbs">
-        <div class="crumbs row px-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
-          <div v-if="!crumbs.item.name">{{ crumbs.item }}</div>
-          <div v-if="crumbs.item.name" :title="crumbs.item.name">{{ crumbs.item.name }}</div>
-          <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item()"
-            @edit="editItem" :crumb="true"
-            @remove="removeItem" 
-            @export="exportItem"
-            @copy="copyItem"
-            offset>
-            <template #activator="{ open }">
-              <v-btn icon class="text-left"  v-on="open">
-                <v-icon size="20">mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-          </bpmn-contex-menu>
-        </div>          
-      </template>
-    </v-breadcrumbs>
+  <v-breadcrumbs class="pa-0" :items="elements">
+    <template v-slot:divider>
+      <v-icon class="pt-2" size="22">mdi-chevron-right</v-icon>
+    </template>
+    <template v-slot:item="crumbs">
+      <div class="crumbs row px-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
+        <!-- <div v-if="!crumbs.item.name">{{ crumbs.item }}</div> -->
+        <div v-if="crumbs.item.name" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}">
+          {{ crumbs.item.name }}
+        </div>
+        <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item()"
+          @edit="editItem" :crumb="true"
+          @remove="removeItem" 
+          @export="exportItem"
+          @copy="copyItem"
+          offset>
+          <template #activator="{ open }">
+            <v-btn icon class="text-left"  v-on="open">
+              <v-icon size="20">mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+        </bpmn-contex-menu>
+      </div>          
+    </template>
+  </v-breadcrumbs>
 </template>
 
 <script>
@@ -54,7 +56,8 @@ export default {
     },
     elements() {
       let item = this.item(),
-        elements = [this.$t('bpmn.labels.Home')]
+        elements = []
+        // [this.$t('bpmn.labels.Home')]
 
       if (item && item.parentId) {
         let el = treeSearch(this.items, e => {
@@ -121,5 +124,8 @@ a{
   padding-bottom: 9px;
   height: 30px !important;
   width: 30px !important;
+}
+.parent {
+  color: #1976d2;
 }
 </style>

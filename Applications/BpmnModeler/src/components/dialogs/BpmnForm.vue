@@ -58,10 +58,15 @@ export default {
           'copy': 'bpmn.labels.CopyProcess',
         },
         'folder': {
-          'create': this.$route.name == "Main" ? 'bpmn.labels.CreateProject' : 'bpmn.labels.CreateFolder',
-          'edit': this.$route.name == "Main" ? 'bpmn.labels.EditProject' :  'bpmn.labels.EditFolder',
-          'delete': this.$route.name == "Main" ? 'bpmn.labels.DeleteProject' :  'bpmn.labels.DeleteFolder',
+          'create':  'bpmn.labels.CreateFolder',
+          'edit': 'bpmn.labels.EditFolder',
+          'delete':  'bpmn.labels.DeleteFolder',
           'copy': 'bpmn.labels.CopyFolder',
+        },
+        'project': {
+          'create': 'bpmn.labels.CreateProject',
+          'edit': 'bpmn.labels.EditProject',
+          'delete': 'bpmn.labels.DeleteProject'
         },
         'all': {
           'delete': 'bpmn.labels.Delete',
@@ -106,7 +111,7 @@ export default {
   methods: {
     onShowForm(mode, type, model, callback) {
       this.mode = mode;
-      this.type = type;
+      this.type = this.$route.name == "Main" ? 'project' : type
       this.model = model;
       this.callback = callback;
       this.show = true;
@@ -119,12 +124,12 @@ export default {
       this.show = false;
     },
     async save() {
-      console.log(this)
       if (!this.$refs.form.validate()) {
         return;
       }
       if (this.callback) {
         this.loading = true;
+        if(this.type == 'project') { this.type = 'folder'}
         let success = await this.callback(this.model, this.type, this.mode);
         this.loading = false;
         if (success) {
