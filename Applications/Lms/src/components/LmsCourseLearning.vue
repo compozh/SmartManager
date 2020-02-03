@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height fluid px-0 py-0 mx-0 my-0>
-    <v-layout fill-height class="bgcolor">
+    <v-layout fill-height class="white">
       <v-flex>
         <v-layout>
           <v-flex>
@@ -21,7 +21,7 @@
                   <v-card-text px-2 py-2>
                     <v-layout fill-height justify-space-around align-center>
                       <v-flex hidden-xs-only align-self-center>
-                        <div>Ваш прогресс: {{progress.passed + ' из ' + progress.total}}</div>
+                        <div>Ваш прогресс: {{lessonsPassedQty + ' из ' + progress.total}}</div>
                       </v-flex>
                       <v-flex align-self-center>
                         <v-progress-circular
@@ -46,7 +46,7 @@
           <!-- Содержание курса: урок, обзор, вопросы и ответы + навигация -->
           <v-flex>
             <v-layout row wrap>
-              <v-flex grow md9 xs12>
+              <v-flex grow xl8 md7 sm12>
                 <v-layout column>
                   <v-flex grow>
                     <v-tabs
@@ -64,8 +64,8 @@
                         v-for="tabItem in tabItems"
                         :key="tabItem.title">
                         <v-card flat>
-                          <lesson-view v-if='tabItem.id==="l"' :lesson='currentLesson'></lesson-view>
-                          <lesson-materials v-if='tabItem.id==="m" && lesson' :lesson="currentLesson"></lesson-materials>
+                          <lesson-view v-if='tabItem.id==="l"' :unit='currentLesson'></lesson-view>
+                          <lesson-materials v-if='tabItem.id==="m"' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
                           <questions-and-answers v-if='tabItem.id==="q"'></questions-and-answers>
                         </v-card>
                       </v-tab-item>
@@ -88,44 +88,50 @@
                     </v-toolbar>
                   </v-flex>
                 </v-layout>
-
               </v-flex>
               <!-- Навигация -->
-              <v-flex md3 xs12>
+              <v-flex xl4 md5 sm12>
                 <v-card flat height='100%' width='100%'>
                   <v-card-title >
-                    <h3>Программа курса: <span class="indigo--text">{{course.name}}</span></h3>
+                    <h3>Программа курса:</h3>
                   </v-card-title>
-                  <v-card-text>
-                    <v-list>
+                  <v-card-text style="margin-top:-16px;">
+                    <v-list expand>
                       <v-list-group
                         v-for="moduleItem in modules"
                         :key="moduleItem.id"
                         v-model="moduleItem.active"
                         no-action
                       >
-                      <!-- :prepend-icon="item.action" -->
                         <template v-slot:activator>
-                          <v-list-tile>
+                          <v-list-tile class="grey lighten-2">
                             <v-list-tile-content>
-                              <v-list-tile-title>{{ moduleItem.name }}</v-list-tile-title>
+                              <v-list-tile-title class="subheading font-weight-bold">{{ moduleItem.name }}</v-list-tile-title>
+                              <v-list-tile-title>{{ moduleItem.durationMinutesLabel + ` (${lessonsModulePassed(moduleItem.moduleGuid)} / ${moduleItem.units.length})`}} </v-list-tile-title>
                             </v-list-tile-content>
                           </v-list-tile>
                         </template>
                         <v-list-tile
                           v-for="lesson in moduleItem.units"
                           :key="lesson.id"
-                          @click="getLesson(lesson.lessonGuid)"
+                          @click="getLesson(lesson.lessonGuid, lesson.isFree)"
                         >
                           <v-list-tile-action>
-                            <v-checkbox v-model='lesson.passed' :disabled="lesson.disabled"></v-checkbox>
+                            <v-checkbox
+                              v-model='lessonsPassed'
+                              :value="lesson.lessonGuid"
+                              :disabled="lesson.disabled"
+                              ></v-checkbox>
+                          </v-list-tile-action>
+                          <v-list-tile-action>
+                            <v-icon>theaters</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-action class="body-2">
+                            {{lesson.durationMunute | timeFormat}}
                           </v-list-tile-action>
                           <v-list-tile-content>
-                            <v-list-tile-title>{{ lesson.name }}</v-list-tile-title>
+                            <div class="body-2">{{ lesson.name }}</div>
                           </v-list-tile-content>
-                          <v-list-tile-action>
-                            <!-- <v-icon>{{ subItem.action }}</v-icon> -->
-                          </v-list-tile-action>
                         </v-list-tile>
                       </v-list-group>
                     </v-list>
@@ -168,6 +174,8 @@ export default {
       course: {},
       modules: [],
       lesson: {},
+      lessonsPassed: [],
+      modulesLessonsPassed: [],
       currentLessonGuid: '',
       currentModuleIndex: 0,
       // STUB materials
@@ -205,16 +213,6 @@ export default {
           ]
         }
       ],
-      // quilljs config
-      config: {
-        readOnly: true,
-        placeholder: '',
-        modules: {
-          syntax: false,
-          toolbar: false
-        },
-        theme: 'snow',
-      },
     }
   },
   created() {
@@ -223,6 +221,7 @@ export default {
     this.currentLessonGuid = this.$route.params.lessonGuid
     this.putPassedFieldToLessons(this.modules)
     this.progress = this.getInitialProgress(this.modules)
+    this.lessonPassed = this.getInitialPassedLesson(this.modules)
     // признак свободного доступа к уроку
     // isLessonFree(this.currentLessonGuid)
     const isFree = true
@@ -233,6 +232,17 @@ export default {
     async getLesson(lessonGuid, isFree) {
       // Получить урок
       await this.$store.dispatch('lms/getLessonContent', { lessonGuid, isFree })
+    },
+    // Общее количество пройденных уроков. Инициализация
+    getInitialPassedLesson(modules) {
+      const allLessons = modules.map(m => m.units)
+      let passedLessons = []
+      for (let i = 0; i < allLessons.length; i++) {
+        let lessons = allLessons[i].filter(l => l.passed)
+        let lessonsGuid = lessons.map(l => l.lessonGuid)
+        passedLessons = passedLessons.concat(lessonsGuid)
+      }
+      this.lessonsPassed = passedLessons
     },
     getInitialProgress(modules) {
       const modulesLessons = modules.map(m => m.units.length)
@@ -248,45 +258,70 @@ export default {
     putPassedFieldToLessons(modules) {
       for (const _module of modules) {
         _module.units.forEach((u) => {
+          u.lessonType = 'video'
           u.passed = false
           u.disabled = false
+          u.isFree = true
+
         })
       }
       modules[0].units[0].passed = true
       modules[0].units[0].disabled = false
+      modules[0].units[0].isFree = true
     },
-    getMaterials(lesson) {
-      lesson.type = 'video',
-      lesson.content = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS'
+    getMaterials(unit) {
+      unit.lesson.lessonType = 1
+      unit.content = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS'
       for (let i = 0; i < this.materials.length; i++) {
         const m = this.materials[i]
         if (m.enclosures) {
           m.enclosures.forEach(e => e.link = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS')
         }
       }
-      lesson.materials = this.materials
-      return lesson
+      unit.materials = this.materials
+      return unit
+    },
+    lessonsModulePassed(moduleGuid) {
+      const moduleItem = this.modules.find(m => m.moduleGuid === moduleGuid)
+      let lessonModulePassed = 0
+      for (let i = 0; i < this.lessonsPassed.length; i++) {
+        if (moduleItem.units.some(u => u.lessonGuid === this.lessonsPassed[i])) {
+          lessonModulePassed++
+        }
+      }
+      return lessonModulePassed
     }
   },
   computed: {
+    lessonsPassedQty() {
+      return this.lessonsPassed.length
+    },
     progressValue() {
       let value = this.progress.total
-        ? Math.round(this.progress.passed / this.progress.total * 100) : 0
+        ? Math.round(this.lessonsPassedQty / this.progress.total * 100) : 0
       return value + '%'
     },
     currentLesson() {
-      const currentLesson = this.$store.getters['lms/lessonContent']
-      return currentLesson ? this.getMaterials(currentLesson) : null
+      const unit = this.$store.getters['lms/unit']
+      return unit ? this.getMaterials(unit) : null
+    }
+  },
+  filters: {
+    timeFormat(value) {
+      let minutesVal = value % 60
+      let hoursVal = Math.floor(value / 60)
+      let minutesStr = minutesVal.toString()
+      let hoursStr = hoursVal.toString()
+      let hourse = hoursStr.length > 1 ? hoursStr : '0' + hoursStr
+      let minutes = minutesStr.length > 1 ? minutesStr : '0' + minutesStr
+      return `${hourse}:${minutes}`
     }
   }
 }
 </script>
 
 <style>
-.border-red {
-  border: solid red 1px;
-}
-.bgcolor {
+.bg-color-white {
   background-color:white;
 }
 </style>

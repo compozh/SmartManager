@@ -144,10 +144,10 @@ export default {
     try {
       const result = await api.getLessonContentFromGql(lessonGuid, isFree)
       const unit = result.data.lms.lessonContent
-      const lessonContent = JSON.parse(unit.content)
+      // const lessonContent = JSON.parse(unit.content)
 
       commit('setLesson', unit)
-      commit('setContent', lessonContent)
+      // commit('setContent', lessonContent)
       commit('setCircularLoader', false)
 
     } catch (error) {

@@ -22,7 +22,7 @@
 								<v-spacer/>
 								<v-flex xs12>
 									<v-layout align-top justify-end row wrap>
-                    <v-btn v-if="course" @click="$router.push({name: 'LMSCOURSELEARNING',
+                    <v-btn v-if="course && user" @click="$router.push({name: 'LMSCOURSELEARNING',
                         params: {
                           courseGuid: course.courseGuid,
                           lessonGuid: currentLessonGuid,
@@ -197,6 +197,9 @@ export default {
     }
   },
   computed: {
+    user() {
+      return this.$store.getters['lms/user']
+    },
     modules () {
       const courseDetails =  this.$store.getters['lms/courseDetails']
       return courseDetails !== null ? courseDetails.modules : null
@@ -259,7 +262,7 @@ export default {
       let statistic = []
       if (courseDetails) {
         let modulesLessons = courseDetails.modules.map(m => m.units.length)
-        let lessonsQty = modulesLessons.reduce((total, current) => total + current)
+        let lessonsQty = modulesLessons.reduce((total, current) => total + current, 0)
         statistic = [
           {
             title: '',

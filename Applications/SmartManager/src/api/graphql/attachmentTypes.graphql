@@ -1,0 +1,5 @@
+query ($params: String) {
+  smtasks {
+    attachmentTypes(params: $params)
+  }
+}
