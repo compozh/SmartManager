@@ -1,4 +1,7 @@
 export default {
+  user(state) {
+    return state.user
+  },
   circularLoader (state) {
     return state.circularLoader
   },
