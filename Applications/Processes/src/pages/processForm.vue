@@ -2,23 +2,24 @@
     <div>
         <spinner v-if="isLoading" class="spinner" />
 
-        <div class="formio-container">
+        <div class="formio-container" v-if="form">
             <formio-form-component
-            ref="formioFormComponent"
+                ref="formioFormComponent"
 
-            :formDefinition="form"
-            :formCode="form.name"
+                :formDefinition="form"
+                :formCode="form.name"
             />
-        </div>
 
-        <v-btn
-          @click="onActionBtnClick"
-          text
-          outlined
-          :loading="startProcessLoading"
-        >
-            {{$t('processes.buttons.startProcess')}}
-        </v-btn>
+            <v-btn
+                @click="onStartProcessClick"
+                text
+                outlined
+                color="primary"
+                :loading="startProcessLoading"
+            >
+                {{$t('processes.buttons.startProcess')}}
+            </v-btn>
+        </div>
     </div>
 </template>
 
@@ -34,12 +35,7 @@ export default {
     }
   },
   created () {
-    if (!this.$route.query) {
-      this.$store.commit('setError', this.$t('processes.errors.processNotPassed'))
-      return
-    }
-
-    this.processDefinitionId = this.$route.query.process
+    this.processDefinitionId = this.$route.params.id
     if (this.processDefinitionId) {
       this.isLoading = true
       this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
@@ -51,7 +47,7 @@ export default {
     }
   },
   methods: {
-    async onActionBtnClick (params) {
+    async onStartProcessClick (params) {
       let formComponent = this.$refs.formioFormComponent
       let submitResult = await formComponent.submit()
       debugger
@@ -59,10 +55,11 @@ export default {
       let processVariables = []
 
       for (var variable of Object.keys(submitData)) {
+        let value = submitData[variable]
         let processVariable = {
           name: variable,
-          value: submitData[variable],
-          type: 'STRING'
+          value,
+          type: this.typeToEnum(typeof (value))
         }
         processVariables.push(processVariable)
       }
@@ -72,6 +69,15 @@ export default {
         this.startProcessLoading = false
         window.close()
       })
+    },
+    typeToEnum (type) {
+      debugger
+      switch (type) {
+        case 'bollean':
+          break
+        default:
+          return 'STRING'
+      }
     }
   }
 }

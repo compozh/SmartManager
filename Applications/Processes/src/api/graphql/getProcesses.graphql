@@ -1,6 +1,6 @@
-query() {
-    processQuery {
-        getProcesses() {
+query {
+    processesQuery {
+        getProcesses {
             processes {
                 id
                 definitionId

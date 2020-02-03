@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import App from './App.vue'
+import Vuex from 'vuex'
+
 import router from './router'
 import Localization from '@it-enterprise/localization'
 import formio from '@it-enterprise/formio'
@@ -8,6 +9,12 @@ import GrapgQlCore from '@it-enterprise/graphql'
 import axios from 'axios'
 import store from './store/index'
 import { i18n } from './plugins/i18n'
+
+import vuetify from './plugins/vuetify'
+
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import App from './App.vue'
+
 // apollo
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -28,13 +35,14 @@ const apolloProvider = new VueApollo({
 })
 
 let dependencies = {
+  router,
   store,
   i18n,
   apolloProvider,
-  axios,
-  router
+  axios
 }
 
+Vue.use(Vuex)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 
@@ -61,8 +69,9 @@ req.keys().map(key => {
   Vue.component(req(key).default.name, req(key).default)
 })
 
-new Vue({
+export const eventBus = new Vue({
   router,
+  vuetify,
   store,
   i18n,
   apolloProvider,

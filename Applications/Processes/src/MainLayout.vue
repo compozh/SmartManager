@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-
-    <router-view></router-view>
+  <v-app>
 
     <v-snackbar
       v-if="snackbar.visible"
@@ -14,36 +12,39 @@
       :value="true"
     >
       {{ snackbar.message }}
+
       <v-btn @click.native="closeSnackbar" text color="white">
         {{this.$t('processes.buttons.Close')}}
       </v-btn>
+
     </v-snackbar>
 
     <div v-if="error" style="font-size: 40px;" justify="center" class="py-10">
       <p>{{error}}</p>
     </div>
 
-  </div>
+    <v-content>
+        <router-view/>
+    </v-content>
+
+  </v-app>
 </template>
 
 <script>
-
+import Vue from 'vue'
 export default {
+  name: 'main-processes',
   computed: {
     error () {
       return this.$store.getters['error']
+    },
+    snackbar () {
+      return this.$store.getters['snackbar']
     }
   }
 }
 </script>
 
 <style lang="scss">
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
 
 </style>

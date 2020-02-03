@@ -1,7 +1,7 @@
 
-import { ProcessApi } from '../api/processApi'
+import { ProcessesApi } from '../api/processesApi'
 
-const api = new ProcessApi()
+const api = new ProcessesApi()
 
 export default {
   async getProcesses ({ commit, dispatch }) {

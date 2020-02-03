@@ -25,7 +25,7 @@ const getClient = async () => {
     credentials: 'include',
     headers: {
       'Authorization': `Bearer ${token}`,
-      'schema': 'process'
+      'schema': 'processes'
     }
   }
 
@@ -36,7 +36,7 @@ const getClient = async () => {
   })
 }
 
-export class ProcessApi {
+export class ProcessesApi {
   async getProcessesFromGql () {
     const client = await getClient()
     const result = await client.query({
@@ -44,7 +44,7 @@ export class ProcessApi {
       fetchPolicy: 'network-only'
     })
 
-    return result.data.processQuery.getProcesses
+    return result.data.processesQuery.getProcesses
   }
 
   async getFormFromGql (processDefinitionId) {
@@ -55,7 +55,7 @@ export class ProcessApi {
       fetchPolicy: 'network-only'
     })
 
-    return result.data.processQuery.getForm
+    return result.data.processesQuery.getForm
   }
 
   async startProcessGql (startProcessParams) {
@@ -65,6 +65,6 @@ export class ProcessApi {
       variables: { startProcessParams }
     })
 
-    return result.data.processQueryMutation.startProcess
+    return result.data.processesQueryMutation.startProcess
   }
 }

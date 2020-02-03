@@ -1,7 +1,4 @@
 export default {
-  setForm (state, form) {
-    state.form = form
-  },
   closeSnackbar (state) {
     state.snackbar.visible = false
   },

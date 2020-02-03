@@ -1,5 +1,5 @@
 query($processDefinitionId: String!) {
-    processQuery {
+    processesQuery {
         getForm(processDefinitionId: $processDefinitionId) {
             formKey
             form {

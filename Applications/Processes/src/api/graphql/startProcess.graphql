@@ -1,5 +1,5 @@
 mutation($startProcessParams: StartProcessParamsInput!) {
-    processQueryMutation {
+    processesQueryMutation {
         startProcess(startProcessParams: $startProcessParams) {
             processInstance {
                 id

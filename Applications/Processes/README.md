@@ -1,4 +1,4 @@
-# processapp
+# processes
 
 ## Project setup
 ```
