@@ -7,9 +7,6 @@ export default {
     state.snackbar.type = params.type
     state.snackbar.visible = true
   },
-  setError (state, value) {
-    state.error = value
-  },
   setProcesses (state, processes) {
     state.processes = processes
   },

@@ -8,7 +8,7 @@
     },
     "errors": {
         "processNotPassed": "Не передано код процесу",
-        "undefinedFormOfProcess": "Відсутня форма процесу"
+        "undefinedFormOfProcess": "Відсутнє визначення форми процесу"
     },
     "placeholders": {
         "Search": "Пошук",

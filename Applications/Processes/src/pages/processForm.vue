@@ -2,6 +2,10 @@
     <div>
         <spinner v-if="isLoading" class="spinner" />
 
+        <div v-if="error" style="font-size: 40px;" justify="center" class="py-10">
+          <p>{{error}}</p>
+        </div>
+
         <v-flex class="formio-container" v-if="form">
 
             <v-card-title>
@@ -39,7 +43,8 @@ export default {
     return {
       form: null,
       isLoading: false,
-      startProcessLoading: false
+      startProcessLoading: false,
+      error: null
     }
   },
   created () {
@@ -49,13 +54,13 @@ export default {
       this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
         this.isLoading = false
         if (!result.form) {
-          this.$store.commit('setError', this.$t('processes.errors.undefinedFormOfProcess'))
+          this.error = this.$t('processes.errors.undefinedFormOfProcess')
         } else {
           this.form = result.form
         }
       })
     } else {
-      this.$store.commit('setError', this.$t('processes.errors.processNotPassed'))
+      this.error = this.$t('processes.errors.processNotPassed')
     }
   },
   methods: {

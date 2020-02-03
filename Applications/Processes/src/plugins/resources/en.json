@@ -8,7 +8,7 @@
     },
     "errors": {
         "processNotPassed": "Process code not passed",
-        "undefinedFormOfProcess": "Missing process form"
+        "undefinedFormOfProcess": "No definition of process form"
     },
     "placeholders": {
         "Search" : "Search",

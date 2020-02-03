@@ -8,7 +8,7 @@
     },
     "errors": {
         "processNotPassed": "Не передан код процесса",
-        "undefinedFormOfProcess": "Отсутствует форма процесса"
+        "undefinedFormOfProcess": "Отсутствует определение формы процесса"
     },
     "placeholders": {
         "Search" : "Поиск",

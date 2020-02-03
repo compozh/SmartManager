@@ -3,7 +3,7 @@
 
     <v-snackbar
       v-if="snackbar.visible"
-      :top="false"
+      :top="true"
       style="max-height: 100px; overflow: auto"
       :multi-line="true"
       :timeout="5000"
@@ -18,9 +18,6 @@
       </v-btn>
 
     </v-snackbar>
-    <div v-if="error" style="font-size: 40px;" justify="center" class="py-10">
-      <p>{{error}}</p>
-    </div>
 
     <v-content>
         <router-view/>
@@ -33,9 +30,6 @@
 export default {
   name: 'main-processes',
   computed: {
-    error () {
-      return this.$store.getters['error']
-    },
     snackbar () {
       return this.$store.getters['snackbar']
     }
