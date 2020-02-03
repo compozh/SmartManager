@@ -7,9 +7,9 @@
         moduleGuid
       }
       lesson{
-        unitId
-        name
         lessonGuid
+        lessonType
+        name
         durationMunute
         durationMinutesLabel
         surveyId
