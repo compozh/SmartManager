@@ -3,10 +3,13 @@ query {
         getProcesses {
             processes {
                 id
-                definitionId
-                businessKey
-                caseInstanceId
-                ended
+                key
+                category
+                name
+                version
+                resource
+                deploymentId
+                diagram
                 suspended
                 tenantId
             }

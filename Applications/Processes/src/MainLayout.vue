@@ -18,22 +18,26 @@
       </v-btn>
 
     </v-snackbar>
-
     <div v-if="error" style="font-size: 40px;" justify="center" class="py-10">
       <p>{{error}}</p>
     </div>
 
     <v-content>
         <router-view/>
+        <processes-grid
+    />
     </v-content>
 
   </v-app>
 </template>
 
 <script>
-import Vue from 'vue'
+import ProcessesGrid from './pages/ProcessesGrid.vue'
 export default {
   name: 'main-processes',
+  components: {
+    ProcessesGrid
+  },
   computed: {
     error () {
       return this.$store.getters['error']

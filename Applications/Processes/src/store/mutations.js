@@ -9,5 +9,8 @@ export default {
   },
   setError (state, value) {
     state.error = value
+  },
+  setProcesses (state, processes) {
+    state.processes = processes
   }
 }

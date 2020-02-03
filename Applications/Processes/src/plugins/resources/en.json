@@ -3,9 +3,13 @@
         "startProcess": "Start process"
     },
     "labels": {
-
+        "processes": "Processes"
     },
     "errors": {
         "processNotPassed": "Process code not passed"
+    },
+    "placeholders": {
+        "Search" : "Search",
+        "NoDataText": "No data available"
     }
 }

@@ -4,5 +4,6 @@ export default {
     message: '',
     visible: false
   },
-  error: ''
+  error: '',
+  processes: []
 }

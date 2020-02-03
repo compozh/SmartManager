@@ -50,7 +50,6 @@ export default {
     async onStartProcessClick (params) {
       let formComponent = this.$refs.formioFormComponent
       let submitResult = await formComponent.submit()
-      debugger
       let submitData = submitResult.data
       let processVariables = []
 
@@ -71,7 +70,6 @@ export default {
       })
     },
     typeToEnum (type) {
-      debugger
       switch (type) {
         case 'bollean':
           break

@@ -3,9 +3,13 @@
         "startProcess": "Запустить процесс"
     },
     "labels": {
-
+        "processes": "Процессы"
     },
     "errors": {
         "processNotPassed": "Не передан код процесса"
+    },
+    "placeholders": {
+        "Search" : "Поиск",
+        "NoDataText": "Данные отсутствуют"
     }
 }
