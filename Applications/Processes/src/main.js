@@ -49,9 +49,9 @@ var formioOptions = {
 
 Vue.use(formio, { options: formioOptions, dependencies })
 
-Vue.prototype.$localization.RegisterLanguage('startprocess', 'en', () => import('./plugins/resources/en.json'))
-Vue.prototype.$localization.RegisterLanguage('startprocess', 'ru', () => import('./plugins/resources/ru.json'))
-Vue.prototype.$localization.RegisterLanguage('startprocess', 'uk', () => import('./plugins/resources/uk.json'))
+Vue.prototype.$localization.RegisterLanguage('processes', 'en', () => import('./plugins/resources/en.json'))
+Vue.prototype.$localization.RegisterLanguage('processes', 'ru', () => import('./plugins/resources/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('processes', 'uk', () => import('./plugins/resources/uk.json'))
 
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
 req.keys().map(key => {

@@ -9,5 +9,8 @@ export default {
     state.snackbar.message = params.message
     state.snackbar.type = params.type
     state.snackbar.visible = true
+  },
+  setError (state, value) {
+    state.error = value
   }
 }

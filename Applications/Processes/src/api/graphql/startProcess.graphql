@@ -1,6 +1,6 @@
-mutation($processParams: String!) {
+mutation($startProcessParams: StartProcessParamsInput!) {
     processQueryMutation {
-        startProcess(formCode: $processParams) {
+        startProcess(startProcessParams: $startProcessParams) {
             processInstance {
                 id
             }

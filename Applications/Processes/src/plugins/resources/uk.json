@@ -1,0 +1,11 @@
+{
+    "buttons": {
+        "startProcess": "Запустити процес"
+    },
+    "labels": {
+
+    },
+    "errors": {
+        "processNotPassed": "Не передано код процесу"
+    }
+}

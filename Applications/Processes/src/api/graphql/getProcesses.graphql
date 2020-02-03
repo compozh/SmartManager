@@ -1,0 +1,19 @@
+query() {
+    processQuery {
+        getProcesses() {
+            processes {
+                id
+                definitionId
+                businessKey
+                caseInstanceId
+                ended
+                suspended
+                tenantId
+            }
+            success
+            errorMessage
+            errorCode
+            statusCode
+        }
+    }
+}

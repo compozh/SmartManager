@@ -1,0 +1,11 @@
+{
+    "buttons": {
+        "startProcess": "Start process"
+    },
+    "labels": {
+
+    },
+    "errors": {
+        "processNotPassed": "Process code not passed"
+    }
+}
