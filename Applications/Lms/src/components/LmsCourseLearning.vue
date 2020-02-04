@@ -65,8 +65,15 @@
                         v-for="tabItem in tabItems"
                         :key="tabItem.title">
                         <v-card flat>
-                          <lesson-view v-if='tabItem.id==="lesson" && currentLesson' :unit='currentLesson' :startPlay="startPlay" @ended="putNextLesson"></lesson-view>
-                          <lesson-materials v-if='tabItem.id==="materials" && currentLesson' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
+                          <lesson-view
+                            v-if='tabItem.id==="lesson" && currentLesson'
+                            :unit='currentLesson'
+                            :startPlay="startPlay"
+                            @ended="putNextLesson" />
+                          <lesson-materials
+                            v-if='tabItem.id==="materials" && currentLesson'
+                            :lesson="currentLesson.lesson"
+                            :materials="currentLesson.materials" />
                           <questions-and-answers v-if='tabItem.id==="questions"'></questions-and-answers>
                         </v-card>
                       </v-tab-item>
@@ -118,14 +125,18 @@
                           <v-list-tile class="grey lighten-2">
                             <v-list-tile-content>
                               <v-list-tile-title class="subheading font-weight-bold">{{ moduleItem.name }}</v-list-tile-title>
-                              <v-list-tile-title>{{ moduleItem.durationMinutesLabel + ` (${lessonsModulePassed(moduleItem.moduleGuid)} / ${moduleItem.units.length})`}} </v-list-tile-title>
+                              <v-list-tile-title>
+                                {{ moduleItem.durationMinutesLabel + ` (${lessonsModulePassed(moduleItem.moduleGuid)} / ${moduleItem.units.length})`}}
+                              </v-list-tile-title>
                             </v-list-tile-content>
                           </v-list-tile>
                         </template>
                         <v-list-tile
                           v-for="lesson in moduleItem.units"
                           :key="lesson.id"
+                          :data-guid="lesson.lessonGuid"
                           @click="setLesson(lesson)"
+                          :class="{active: lesson.lessonGuid === currentLessonGuid}"
                         >
                           <v-list-tile-action>
                             <v-checkbox
@@ -269,6 +280,7 @@ export default {
     nextLesson () {
       if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
         this.navigation.currentLessonIndex++
+        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       }
       const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setLesson (lesson)
@@ -276,12 +288,14 @@ export default {
     prevLesson () {
       if (this.navigation.currentLessonIndex > 0) {
         this.navigation.currentLessonIndex--
+        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       }
       const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setLesson (lesson)
     },
     setLesson ({lessonGuid, isFree}) {
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
+      this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       this.getLesson(lessonGuid, isFree)
     },
     async getLesson(lessonGuid, isFree) {
@@ -383,6 +397,9 @@ export default {
     },
     setCurrentTabName ( tabActive ) {
       this.currentTabName = tabActive
+    },
+    isCurrentLesson(lessonGuid) {
+      return this.currentLessonGuid === lessonGuid
     }
   },
   computed: {
@@ -443,5 +460,8 @@ export default {
 <style>
 .bg-color-white {
   background-color:white;
+}
+.active {
+  background: #E1F5FE;
 }
 </style>
