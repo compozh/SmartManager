@@ -4,12 +4,12 @@
         "Close": "Закрыть"
     },
     "labels": {
-        "processes": "Процессы",
-        "processesErrorLoad": "Ошибка загрузка процессов"
+        "processes": "Процессы"
     },
     "errors": {
         "processNotPassed": "Не передан код процесса",
-        "undefinedFormOfProcess": "Отсутствует определение формы процесса"
+        "undefinedFormOfProcess": "Отсутствует определение формы процесса",
+        "processesErrorLoad": "Ошибка загрузка процессов"
     },
     "placeholders": {
         "Search" : "Поиск",

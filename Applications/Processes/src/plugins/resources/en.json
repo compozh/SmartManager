@@ -4,12 +4,12 @@
         "Close": "Close"
     },
     "labels": {
-        "processes": "Processes",
-        "processesErrorLoad": "Error loading processes"
+        "processes": "Processes"
     },
     "errors": {
         "processNotPassed": "Process code not passed",
-        "undefinedFormOfProcess": "No definition of process form"
+        "undefinedFormOfProcess": "No definition of process form",
+        "processesErrorLoad": "Error loading processes"
     },
     "placeholders": {
         "Search" : "Search",

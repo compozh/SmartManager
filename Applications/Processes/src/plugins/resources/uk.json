@@ -4,12 +4,12 @@
         "Close": "Закрити"
     },
     "labels": {
-        "processes": "Процеси",
-        "processesErrorLoad": "Помилка завантаження процесів"
+        "processes": "Процеси"
     },
     "errors": {
         "processNotPassed": "Не передано код процесу",
-        "undefinedFormOfProcess": "Відсутнє визначення форми процесу"
+        "undefinedFormOfProcess": "Відсутнє визначення форми процесу",
+        "processesErrorLoad": "Помилка завантаження процесів"
     },
     "placeholders": {
         "Search": "Пошук",
