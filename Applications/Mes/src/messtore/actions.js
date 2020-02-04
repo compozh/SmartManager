@@ -6,7 +6,7 @@ const api = new MesApi()
 export default {
   async initializeUser({ commit, getters }) {
     await this.dispatch('mes/graphqlQueryWraper', {
-        
+
       action: async () => {
         await api.getUser()
       }
@@ -219,17 +219,20 @@ export default {
         return res
       },
       successAction: async () => {
-        //todo
-        commit('resetProductionFormio')
         task.inProgress = true
-        let properties = {
-          WORKCENTERCODE: workCenter.code,
-          WORKBARCODE: task.barcode,
-          instance: task
-        }
-        dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
+        dispatch('updateProductionFormio', { workCenter, deviceSizeType, task })
       },
     })
+  },
+
+  async updateProductionFormio ({ commit, dispatch }, params) {
+    commit('resetProductionFormio')
+    let properties = {
+      WORKCENTERCODE: params.workCenter.code,
+      WORKBARCODE: params.task.barcode,
+      instance: params.task
+    }
+    dispatch('createProductionFormio', { formCode: params.workCenter.productionRegistrationFormCode, properties, deviceSizeType: params.deviceSizeType })
   },
 
   async fixWorkCenterForWorker({ commit }, { workCenter, workerCode }) {
@@ -242,7 +245,7 @@ export default {
     })
   },
 
-  async cancelBeginRegistration({ commit, getters }, task) {
+  async cancelBeginRegistration({ commit, dispatch }, { task, deviceSizeType, workCenter }) {
     await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.cancelBeginRegistrationGql(task.shiftTaskId)
@@ -250,6 +253,7 @@ export default {
       },
       successAction: async () => {
         task.inProgress = false
+        dispatch('updateProductionFormio', { workCenter, deviceSizeType, task })
       },
     })
   },
@@ -306,7 +310,7 @@ export default {
   },
 
   async createProductionFormio({ commit, dispatch }, { formCode, properties, deviceSizeType }) {
-    var params = { 
+    var params = {
       params: JSON.stringify(properties || '', null, 4),
       deviceSizeType: deviceSizeType || 'lg'
     }

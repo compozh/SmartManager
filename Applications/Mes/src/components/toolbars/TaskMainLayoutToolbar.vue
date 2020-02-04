@@ -68,7 +68,7 @@ export default {
     async changeStatusTask() {
       this.changeStatusLoader = true
       if (this.selectedTask.inProgress) {
-        await this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
+        await this.$store.dispatch('mes/cancelBeginRegistration', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
         this.changeStatusLoader = false
         return
       }
