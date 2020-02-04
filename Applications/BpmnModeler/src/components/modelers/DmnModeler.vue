@@ -45,7 +45,7 @@ import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 import { debounce } from 'throttle-debounce';
 import ModelerLayout from './ModelerLayout';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
-import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
+import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 
@@ -86,7 +86,7 @@ export default {
       return null;
     },
     noAccess() {
-      return this.decision && !this.decision.hasRight(DiagramAccessRights.Read);
+      return this.decision && !this.decision.hasRight(AccessRights.Read);
     }
   },
   beforeDestroy: function () {
@@ -96,8 +96,9 @@ export default {
     decision(value, oldValue) {
       if (!value) {
         this.destroyModeler();
+        return;
       }
-      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(DiagramAccessRights.Write) !== oldValue.hasRight(DiagramAccessRights.Write))) {
+      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(AccessRights.Write) !== oldValue.hasRight(AccessRights.Write))) {
         this.createModeler();
       }
       this.onActiveModelChanged();
@@ -113,7 +114,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.decision.hasRight(DiagramAccessRights.Write);
+      const canEdit = this.decision.hasRight(AccessRights.Write);
       this.canShowPanel = canEdit;
       this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
       this.modeler.on('views.changed', ({ views, activeView }) => {

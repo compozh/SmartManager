@@ -1,7 +1,7 @@
 import DiagramType from './DiagramType';
 
 export default class Diagram {
-  constructor({ id = null, name = '', parentId = null, isSystem = false, type = DiagramType.BPMN, xmlView, rights = [ ], ownerId = '' } = {}) {
+  constructor({ id = null, name = '', parentId = null, isSystem = false, type = DiagramType.BPMN, xmlView, rights = [], ownerId = '', editorId = '', creationDate, editDate } = {}) {
     this.id = id;
     this.name = name;
     this.parentId = parentId;
@@ -10,6 +10,9 @@ export default class Diagram {
     this.isSystem = isSystem;
     this.rights = rights;
     this.ownerId = ownerId;
+    this.editorId = editorId;
+    this.creationDate = creationDate;
+    this.editDate = editDate;
   }
   get isFolder() {
     return false;

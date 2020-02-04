@@ -147,14 +147,17 @@ export class BpmnModelerApi {
 
   async giveAccessToDiagram(accessParams) {
     const result = await mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.giveAccessToDiagram}`,
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.giveAccessToDiagram}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
           userId: accessParams.userId,
           groupId: accessParams.groupId,
-          allowAccess: accessParams.allowAccess,
-          rights: accessParams.rights
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share
         }
       }
     });
@@ -163,34 +166,86 @@ export class BpmnModelerApi {
 
   async editAccessToDiagram(accessParams) {
     const result = await mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.editAccessToDiagram}`,
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.editAccessToDiagram}`,
       variables: {
         accessParams: {
+          id: accessParams.id,
           recordId: accessParams.recordId,
-          userId: accessParams.userId,
-          groupId: accessParams.groupId,
-          allowAccess: accessParams.allowAccess,
-          rights: accessParams.rights
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share
         }
       }
     });
     return result.data.bpmnqueryMutation.editAccessToDiagram;
   }
 
-  async removeAccessToDiagram(accessParams) {
+  async removeAccessToDiagram(id) {
     const result = await mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.removeAccessToDiagram}`,
+      mutation: gql`mutation ($accessParamsId: ID!) ${mutations.removeAccessToDiagram}`,
+      variables: {
+        accessParamsId: id
+      }
+    });
+    return result.data.bpmnqueryMutation.removeAccessToDiagram;
+  }
+
+  async getAccessRecordsForFolder(folderId) {
+    const result = await query({
+      query: gql`query ($folderId: ID!) ${queries.getAccessRecordsForFolder}`,
+      variables: { folderId },
+      fetchPolicy: 'no-cache'
+    });
+    return result.data.bpmnquery.getAccessRecordsForFolder;
+  }
+
+  async giveAccessToFolder(accessParams) {
+    const result = await mutate({
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.giveAccessToFolder}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
           userId: accessParams.userId,
           groupId: accessParams.groupId,
-          allowAccess: accessParams.allowAccess,
-          rights: accessParams.rights
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share
         }
       }
     });
-    return result.data.bpmnqueryMutation.removeAccessToDiagram;
+    return result.data.bpmnqueryMutation.giveAccessToFolder;
+  }
+
+  async editAccessToFolder(accessParams) {
+    const result = await mutate({
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.editAccessToFolder}`,
+      variables: {
+        accessParams: {
+          id: accessParams.id,
+          recordId: accessParams.recordId,
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.editAccessToFolder;
+  }
+
+  async removeAccessToFolder(id) {
+    const result = await mutate({
+      mutation: gql`mutation ($accessParamsId: ID!) ${mutations.removeAccessToFolder}`,
+      variables: {
+        accessParamsId: id
+      }
+    });
+    return result.data.bpmnqueryMutation.removeAccessToFolder;
   }
 
   //#endregion

@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 import { api } from '../api/bpmnApi';
-import { Folder, Diagram, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
+import { Folder, Diagram, Configuration, ActionDefinition, AccessParams } from '../api/models';
 
 export default {
   async resetCache() {
@@ -47,7 +47,7 @@ export default {
     });
     items = mapTree(items);
     context.commit('setItems', items);
-    await context.dispatch('checkForOwnFolder');
+    //await context.dispatch('checkForOwnFolder');
     return true;
   },
   async checkForOwnFolder(context) {
@@ -279,7 +279,7 @@ export default {
 
   //#region Access
 
-  async getAccessRecordsForProcess(context, diagramId) {
+  async getAccessRecordsForDiagram(context, diagramId) {
     let records;
     try {
       records = await api.getAccessRecordsForDiagram(diagramId);
@@ -287,10 +287,10 @@ export default {
       console.error(error);
       return false;
     }
-    return records.map(record => new DiagramAccess(record));
+    return records.map(record => new AccessParams(record));
   },
 
-  async giveAccessToProcess(context, accessParams) {
+  async giveAccessToDiagram(context, accessParams) {
     try {
       var result = await api.giveAccessToDiagram(accessParams);
       return result;
@@ -300,7 +300,7 @@ export default {
     }
   },
 
-  async editAccessToProcess(context, accessParams) {
+  async editAccessToDiagram(context, accessParams) {
     try {
       return await api.editAccessToDiagram(accessParams);
     } catch (error) {
@@ -309,9 +309,48 @@ export default {
     }
   },
 
-  async removeAccessToProcess(context, accessParams) {
+  async removeAccessToDiagram(context, accessParams) {
     try {
-      return await api.removeAccessToDiagram(accessParams);
+      return await api.removeAccessToDiagram(accessParams.id);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getAccessRecordsForFolder(context, folderId) {
+    let records;
+    try {
+      records = await api.getAccessRecordsForFolder(folderId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    return records.map(record => new AccessParams(record));
+  },
+
+  async giveAccessToFolder(context, accessParams) {
+    try {
+      var result = await api.giveAccessToFolder(accessParams);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async editAccessToFolder(context, accessParams) {
+    try {
+      return await api.editAccessToFolder(accessParams);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async removeAccessToFolder(context, accessParams) {
+    try {
+      return await api.removeAccessToFolder(accessParams.id);
     } catch (error) {
       console.error(error);
       return false;

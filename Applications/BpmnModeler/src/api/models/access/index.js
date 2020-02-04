@@ -1,6 +1,5 @@
 import AccessType from './AccessType';
-import DiagramAccess from './DiagramAccess';
-import DiagramAccessRights from './DiagramAccessRights';
-import FolderAccessRights from './FolderAccessRights';
+import AccessParams from './AccessParams';
+import AccessRights from './AccessRights';
 
-export { AccessType, DiagramAccess, DiagramAccessRights, FolderAccessRights };
+export { AccessType, AccessParams, AccessRights };
