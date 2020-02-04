@@ -2,13 +2,13 @@
   <v-container fluid>
     <v-layout column>
       <v-flex mx-2>
-        <v-card flat v-if="lesson">
-          <h3>Просмотр урока <span class="indigo--text">{{lesson.name}}</span></h3>
-          <div v-if='lesson.type==="video"'>
-            <video class="lesson-video" :src="lesson.content" controls='controls'></video>
+        <v-card flat v-if="unit">
+          <h3>Просмотр урока <span class="indigo--text">{{unit.lesson.name}}</span></h3>
+          <div v-if='unit.lesson.lessonType === lessonType.video'>
+            <video class="lesson-video" :src="unit.content" controls='controls'></video>
           </div>
-          <div v-if='lesson.type==="html"'>
-            <quill v-model="lesson.content" :config="config"></quill>
+          <div v-if='unit.lesson.lessonType===lessonType.text'>
+            <quill v-model="getLessonContent" :config="config"></quill>
           </div>
         </v-card>
       </v-flex>
@@ -17,19 +17,32 @@
 </template>
 
 <script>
+import {lessonType} from '../helpers/lesson.js'
 
 export default {
   name: 'lesson-view',
   props: {
-    lesson: Object
+    unit: Object
   },
   data() {
     return {
-
+      // quilljs config
+      config: {
+        readOnly: true,
+        placeholder: '',
+        modules: {
+          syntax: false,
+          toolbar: false
+        },
+        theme: 'snow',
+      },
+      lessonType: lessonType
     }
   },
-  methods: {
-
+  computed: {
+    getLessonContent() {
+      return JSON.parse(this.unit.content)
+    }
   }
 }
 </script>
