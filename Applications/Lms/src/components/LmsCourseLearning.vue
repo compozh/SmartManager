@@ -50,13 +50,14 @@
                 <v-layout column>
                   <v-flex grow>
                     <v-tabs
-                      v-model="active"
+                      v-model="tabActive"
                       color="grey"
                       dark
                       slider-color="blue">
                       <v-tab
                         v-for="tabItem in tabItems"
                         :key="tabItem.title"
+                        @click="setCurrentTabName(tabItem.id)"
                         ripple>
                         {{ tabItem.title }}
                       </v-tab>
@@ -64,26 +65,36 @@
                         v-for="tabItem in tabItems"
                         :key="tabItem.title">
                         <v-card flat>
-                          <lesson-view v-if='tabItem.id==="l"' :unit='currentLesson'></lesson-view>
-                          <lesson-materials v-if='tabItem.id==="m"' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
-                          <questions-and-answers v-if='tabItem.id==="q"'></questions-and-answers>
+                          <lesson-view v-if='tabItem.id==="lesson" && currentLesson' :unit='currentLesson'></lesson-view>
+                          <lesson-materials v-if='tabItem.id==="materials" && currentLesson' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
+                          <questions-and-answers v-if='tabItem.id==="questions"'></questions-and-answers>
                         </v-card>
                       </v-tab-item>
                     </v-tabs>
                   </v-flex>
                   <v-flex>
                     <v-toolbar dense flat>
-                      <v-btn flat>
-                        <v-icon left dark @click='nextLesson()'>keyboard_arrow_left</v-icon>
+                      <v-btn
+                        v-show="!isFirstLesson"
+                        @click="prevLesson()"
+                        flat>
+                        <v-icon left dark>keyboard_arrow_left</v-icon>
                         Предыдущий урок
                       </v-btn>
                       <v-spacer></v-spacer>
-                      <v-btn flat color='info'>
+                      <v-btn
+                        v-show="currentTabName === 'lesson'"
+                        :disabled="isTest || testIsPassed || lessonIsPassed"
+                        @click="finishLesson()"
+                        flat color='info'>
                         Завершить
                       </v-btn>
-                      <v-btn flat>
+                      <v-btn
+                        v-show="!isLastLesson"
+                        @click="nextLesson()"
+                        flat>
                         Следующий урок
-                        <v-icon right dark @click='prevLesson()'>keyboard_arrow_right</v-icon>
+                        <v-icon right dark>keyboard_arrow_right</v-icon>
                       </v-btn>
                     </v-toolbar>
                   </v-flex>
@@ -114,7 +125,7 @@
                         <v-list-tile
                           v-for="lesson in moduleItem.units"
                           :key="lesson.id"
-                          @click="getLesson(lesson.lessonGuid, lesson.isFree)"
+                          @click="setLesson(lesson)"
                         >
                           <v-list-tile-action>
                             <v-checkbox
@@ -124,7 +135,7 @@
                               ></v-checkbox>
                           </v-list-tile-action>
                           <v-list-tile-action>
-                            <v-icon>theaters</v-icon>
+                            <v-icon>{{lesson.icon}}</v-icon>
                           </v-list-tile-action>
                           <v-list-tile-action class="body-2">
                             {{lesson.durationMunute | timeFormat}}
@@ -151,6 +162,7 @@
 import LessonView from './LessonView.vue'
 import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
+import {lessonType} from '../helpers/lesson.js'
 
 export default {
   name: 'lms-course-learning',
@@ -161,12 +173,13 @@ export default {
   },
   data() {
     return {
-      active: null,
+      tabActive: null,
       tabItems: [
-        { id: 'l', title: 'Урок', nestedView: LessonView}, // 'Урок', 'Обзор', 'Вопросы и ответы'
-        { id: 'm', title: 'Материалы урока', nestedView: LessonMaterials},
-        { id: 'q', title: 'Вопросы и ответы', nestedView: QuestionsAndAnswers}
+        { id: 'lesson', title: 'Урок', nestedView: LessonView}, // 'Урок', 'Материалы урока', 'Вопросы и ответы'
+        { id: 'materials', title: 'Материалы урока', nestedView: LessonMaterials},
+        { id: 'questions', title: 'Вопросы и ответы', nestedView: QuestionsAndAnswers}
       ],
+      currentTabName: 'lesson',
       progress: {
         passed: 0,
         total: 29
@@ -177,7 +190,10 @@ export default {
       lessonsPassed: [],
       modulesLessonsPassed: [],
       currentLessonGuid: '',
-      currentModuleIndex: 0,
+      navigation: {
+        currentLessonIndex: 0,
+        lessons: []
+      },
       // STUB materials
       materials: [
         {
@@ -186,13 +202,15 @@ export default {
           icon: 'slideshow',
           enclosures: [
             {title: 'Конфiгурування. Частина 1', link: ''}
-          ]
+          ],
+          active: true
         },
         {
           title: 'Практика',
           type: 2,
           icon: 'attachment',
-          enclosures: null
+          enclosures: null,
+          active: true
         },
         {
           title: 'Файлы',
@@ -201,7 +219,8 @@ export default {
           enclosures: [
             {title: 'Определения', link: ''},
             {title: 'Програмнi продукти', link: ''}
-          ]
+          ],
+          active: true
         },
         {
           title: 'Ссылки',
@@ -210,9 +229,23 @@ export default {
           enclosures: [
             {title: 'Определения', link: ''},
             {title: 'Програмнi продукти', link: ''}
-          ]
+          ],
+          active: true
         }
       ],
+      // STUB иконки для типов уроков
+      lessonIcons: [
+        {
+          lessonType: lessonType.text,
+          icon: 'insert_drive_file'
+        },{
+          lessonType: lessonType.video,
+          icon: 'ondemand_video'
+        },{
+          lessonType: lessonType.test,
+          icon: 'playlist_add_check'
+        }
+      ]
     }
   },
   created() {
@@ -224,14 +257,56 @@ export default {
     this.lessonPassed = this.getInitialPassedLesson(this.modules)
     // признак свободного доступа к уроку
     // isLessonFree(this.currentLessonGuid)
+    // STUB признак прохождения урока пока добавлять программно
     const isFree = true
     this.getLesson(this.currentLessonGuid, isFree)
-    // STUB признак прохождения урока пока добавлять программно
+    // Получить все идентификаторы уроков
+    this.navigation.lessons = this.getAllLessons()
+    this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
   },
   methods: {
+    nextLesson () {
+      if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
+        this.navigation.currentLessonIndex++
+      }
+      const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
+      this.setLesson (lesson)
+    },
+    prevLesson () {
+      if (this.navigation.currentLessonIndex > 0) {
+        this.navigation.currentLessonIndex--
+      }
+      const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
+      this.setLesson (lesson)
+    },
+    setLesson ({lessonGuid, isFree}) {
+      this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
+      this.getLesson(lessonGuid, isFree)
+    },
     async getLesson(lessonGuid, isFree) {
       // Получить урок
       await this.$store.dispatch('lms/getLessonContent', { lessonGuid, isFree })
+    },
+    finishLesson () {
+      if ( !this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid) ) {
+        this.lessonsPassed.push(this.currentLesson.lesson.lessonGuid)
+      }
+      // отправить запрос на сервер (урок пройден)
+
+    },
+    // Навигация. Получить все уроки курса: идентификаторы и признак свободного доступа
+    getAllLessons () {
+      let allLessonsInfo = []
+      this.modules.forEach(m => {
+        allLessonsInfo = allLessonsInfo.concat(m.units)
+      })
+      let allLessons = allLessonsInfo.map(l => {
+        return { lessonGuid: l.lessonGuid, isFree: l.isFree}
+      })
+      return allLessons
+    },
+    getCurrentLessonIndex (currentLessonGuid) {
+      return this.navigation.lessons.findIndex(l => l.lessonGuid === currentLessonGuid)
     },
     // Общее количество пройденных уроков. Инициализация
     getInitialPassedLesson(modules) {
@@ -256,13 +331,23 @@ export default {
     },
     // Заглушка для получения статуса урока пройден/непройден
     putPassedFieldToLessons(modules) {
+      modules.forEach(m => m.active = true)
       for (const _module of modules) {
-        _module.units.forEach((u) => {
-          u.lessonType = 'video'
+        _module.units.forEach(function (u) {
+          u.lessonType = lessonType.video
           u.passed = false
           u.disabled = false
           u.isFree = true
-
+          switch (u.lessonType) {
+          case lessonType.video:
+            u.icon = 'ondemand_video'
+            break
+          case lessonType.text:
+            u.icon = 'insert_drive_file'
+            break
+          case lessonType.test:
+            u.icon = 'playlist_add_check'
+          }
         })
       }
       modules[0].units[0].passed = true
@@ -290,9 +375,39 @@ export default {
         }
       }
       return lessonModulePassed
+    },
+    setCurrentTabName ( tabActive ) {
+      this.currentTabName = tabActive
     }
   },
   computed: {
+    isTest() {
+      if (this.currentLesson) {
+        return this.currentLesson.lesson.lessonType === lessonType.test
+      } else {
+        return false
+      }
+    },
+    testIsPassed() {
+      return false
+    },
+    lessonIsPassed () {
+      return this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid)
+    },
+    isFirstLesson () {
+      if ( this.currentLesson ) {
+        return this.currentLesson.lesson.lessonGuid === this.navigation.lessons[0].lessonGuid
+      } else {
+        return false
+      }
+    },
+    isLastLesson () {
+      if ( this.currentLesson ) {
+        return this.currentLesson.lesson.lessonGuid === this.navigation.lessons[this.navigation.lessons.length - 1].lessonGuid
+      } else {
+        return false
+      }
+    },
     lessonsPassedQty() {
       return this.lessonsPassed.length
     },
