@@ -65,7 +65,7 @@
                         v-for="tabItem in tabItems"
                         :key="tabItem.title">
                         <v-card flat>
-                          <lesson-view v-if='tabItem.id==="lesson" && currentLesson' :unit='currentLesson'></lesson-view>
+                          <lesson-view v-if='tabItem.id==="lesson" && currentLesson' :unit='currentLesson' :startPlay="startPlay" @ended="putNextLesson"></lesson-view>
                           <lesson-materials v-if='tabItem.id==="materials" && currentLesson' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
                           <questions-and-answers v-if='tabItem.id==="questions"'></questions-and-answers>
                         </v-card>
@@ -190,6 +190,7 @@ export default {
       lessonsPassed: [],
       modulesLessonsPassed: [],
       currentLessonGuid: '',
+      startPlay: false,
       navigation: {
         currentLessonIndex: 0,
         lessons: []
@@ -293,6 +294,10 @@ export default {
       }
       // отправить запрос на сервер (урок пройден)
 
+    },
+    putNextLesson () {
+      this.nextLesson ()
+      this.startPlay = true
     },
     // Навигация. Получить все уроки курса: идентификаторы и признак свободного доступа
     getAllLessons () {
