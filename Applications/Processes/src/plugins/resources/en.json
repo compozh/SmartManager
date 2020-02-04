@@ -4,7 +4,8 @@
         "Close": "Close"
     },
     "labels": {
-        "processes": "Processes"
+        "processes": "Processes",
+        "processesErrorLoad": "Error loading processes"
     },
     "errors": {
         "processNotPassed": "Process code not passed",

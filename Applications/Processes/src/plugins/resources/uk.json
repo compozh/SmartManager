@@ -4,7 +4,8 @@
         "Close": "Закрити"
     },
     "labels": {
-        "processes": "Процеси"
+        "processes": "Процеси",
+        "processesErrorLoad": "Помилка завантаження процесів"
     },
     "errors": {
         "processNotPassed": "Не передано код процесу",

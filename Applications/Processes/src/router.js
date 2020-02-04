@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: window.myConfig.BASE_URL + 'PROCESSES/',
+  base: window.myConfig.BASE_URL + 'processes/',
   routes: [
     {
       path: '/',
