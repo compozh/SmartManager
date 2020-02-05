@@ -1,3 +1,4 @@
 import getAccessRecordsForDiagram from './getAccessRecordsForDiagram.graphql';
+import getAccessRecordsForFolder from './getAccessRecordsForFolder.graphql';
 
-export { getAccessRecordsForDiagram };
+export { getAccessRecordsForDiagram, getAccessRecordsForFolder };

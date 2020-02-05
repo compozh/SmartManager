@@ -1,6 +1,6 @@
 {
   bpmnquery {
-    getAccessRecordsForDiagram(diagramId: $diagramId) {
+    getAccessRecordsForFolder(folderId: $folderId) {
       id,
       recordId,
       groupId,

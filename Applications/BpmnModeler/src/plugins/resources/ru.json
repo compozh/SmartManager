@@ -112,7 +112,7 @@
 			"GROUP": "Группа",
 			"ALL": "Все"
 		},
-		"DiagramAccessRights": {
+		"AccessRights": {
 			"READ": "Просмотр",
 			"WRITE": "Корректировка",
 			"DELETE": "Удаление",
@@ -249,7 +249,7 @@
 		"Process Id": "Идентификатор процесса",
 		"Process Name": "Название процесса",
 		"Executable": "Исполняемый",
-		"Process Documentation": "Документация процесса",
+		"Process Documentation": "Описание процесса",
 		"Category Value": "Категория",
 		"Message": "Сообщение",
 		"Message Name": "Название сообщения",

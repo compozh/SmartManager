@@ -117,7 +117,7 @@
 			"GROUP": "Група",
 			"ALL": "Всі"
 		},
-		"DiagramAccessRights": {
+		"AccessRights": {
 			"READ": "Перегляд",
 			"WRITE": "Редагування",
 			"DELETE": "Видалення",
@@ -254,7 +254,7 @@
 		"Process Id": "Ідентифікатор процесу",
 		"Process Name": "Назва процесу",
 		"Executable": "Виконуваний",
-		"Process Documentation": "Документація процесу",
+		"Process Documentation": "Опис процесу",
 		"Category Value": "Категорія",
 		"Message": "Повідомлення",
 		"Message Name": "Назва повідомлення",

@@ -4,7 +4,8 @@ import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
 import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
 
-import DmnJS from '../bpmnModules/dmn-modeler.development';
+//import DmnJS from '../bpmnModules/dmn-modeler.development';
+import DmnModeler from 'dmn-js/lib/Modeler';
 import DmnViewer from 'dmn-js/lib/Viewer';
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
@@ -71,7 +72,7 @@ function createBpmnViewer(editorContainer, translate) {
 }
 
 function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
-  return new DmnJS({
+  return new DmnModeler({
     common: {
       keyboard: {
         bindTo: document
