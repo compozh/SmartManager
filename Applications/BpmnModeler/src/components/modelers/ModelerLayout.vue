@@ -182,11 +182,11 @@ export default {
     },
     canShare(item) {
       if(!item) return false
-      return item.hasRight(Models.DiagramAccessRights.Share);
+      return item.hasRight(Models.AccessRights.Share);
     },
     canDeploy(item) {
       if(!item) return false
-      return item.hasRight(Models.DiagramAccessRights.Deploy);
+      return item.hasRight(Models.AccessRights.Deploy);
     },
     async deployItem(item) {
       this.loading = true;
