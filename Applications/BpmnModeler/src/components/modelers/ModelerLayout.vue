@@ -232,6 +232,7 @@ export default {
   height: 100%;
   grid-area: modeler;
   position: relative;
+  top:2px
 }
 .modeler-grid.no-panel {
   height: calc(100% - 81px);

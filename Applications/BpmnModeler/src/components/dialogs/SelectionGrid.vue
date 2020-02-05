@@ -98,7 +98,6 @@ export default {
   },
   methods: {
     onShowSelectionGrid(title, items, selectedItem, callback) {
-      console.log(this)
       this.title = title;
       this.items = items;
       this.selected = [selectedItem];

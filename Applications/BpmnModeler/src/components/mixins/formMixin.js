@@ -15,8 +15,8 @@ export default {
           success = await this.$store.dispatch('bpmn/createProcess', item);
         }
         if (success) {
-          this.active = item.id;
           this.$forceUpdate()
+          this.active = item.id;
         } else {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
@@ -33,27 +33,28 @@ export default {
         this.$forceUpdate()
         break;
       case 'delete':
+        debugger
         let deleting = async (elem) => {
           success = await this.$store.dispatch('bpmn/deleteItem', elem);
         }
         if (type === 'all') {
           let successes = []
-          item.forEach(async elem => {
+          await item.forEach(async elem => {
             await deleting(elem)
             successes.push(success)
           })
           success = successes.every( el => el)
           if (success) {
-            this.chosen = this.chosen.filter( el => !item.find(it => el.id == it.id))
+            this.choose = this.choose.filter( el => !item.find(it => el.id == it.id))
           }
         } else {
           await deleting(item)
           if (success) {
-            if (this.chosen) { this.chosen = this.chosen.filter( el => el.id != item.id) }
+            if (this.choose) { this.choose = this.choose.filter( el => el.id != item.id) }
+            this.$forceUpdate()
             this.active = item.parentId
           }
         }
-        this.$forceUpdate()
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
         }
@@ -68,7 +69,7 @@ export default {
         }
         if (type === 'all') {
           let successes = []
-          item.forEach(async elem => {
+          await item.forEach(async elem => {
             await copy(elem)
             successes.push(success)
           })
@@ -78,8 +79,8 @@ export default {
         }
         
         if (success) {
-          if (this.chosen) { 
-            this.chosen = [] 
+          if (this.choose) { 
+            this.choose = [] 
           } else {
             this.active = item.id
           }

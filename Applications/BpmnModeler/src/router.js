@@ -15,7 +15,7 @@ export const router = new VueRouter({
       component: () => import('./components/BpmnLayout.vue'),
       children: [
         {
-          name: 'Login',
+          name: 'login',
           path: '/login',
           caseSensitive: false,
           meta: {
@@ -25,14 +25,14 @@ export const router = new VueRouter({
         },
         {
           path: '/',
-          name: 'Main',
+          name: 'main',
           component: () => import('@/components/pages/Main.vue'),
           meta: {
             rule: 'isPublic',
           },
         },
         {
-          name: 'Project',
+          name: 'project',
           path: '/project/:id?',
           component: () => import('@/components/pages/Project.vue'),
           meta: {
@@ -45,7 +45,7 @@ export const router = new VueRouter({
           },
         }, 
         {
-          name: 'Decision',
+          name: 'decision',
           path: '/decision/:id?',
           component: () => import('@/components/modelers/DmnModeler.vue'),
           meta: {
@@ -55,7 +55,7 @@ export const router = new VueRouter({
           allowAnonymous: false,
         },
         {
-          name: 'Process',
+          name: 'process',
           path: '/process/:id?',
           component: () => import('@/components/modelers/BpmnModeler.vue'),
           meta: {

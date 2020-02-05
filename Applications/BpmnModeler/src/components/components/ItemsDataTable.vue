@@ -76,7 +76,7 @@ export default {
     },
   },
   methods: {
-    
+
     openProject(el) { 
       this.active = el
     },
@@ -124,8 +124,8 @@ export default {
         {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}]
     },
   },
-  created() {
-    this.loadUsers()
+  mounted() {
+    if(this.items.length > 0){ this.loadUsers()}
   }
 };
 </script>

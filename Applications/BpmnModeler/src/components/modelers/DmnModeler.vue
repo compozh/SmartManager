@@ -274,4 +274,7 @@ div[data-group="historyConfiguration"] {
 div[data-entry="id"] > .dpp-field-description {
   display: none;
 }
+.v-tab {
+  color: black !important
+}
 </style>

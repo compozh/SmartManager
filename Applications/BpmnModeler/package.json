@@ -36,7 +36,7 @@
     "css-loader": "3.2.0",
     "diagram-js": "^6.2.2",
     "diagram-js-minimap": "^2.0.3",
-    "dmn-js": "^7.2.1",
+    "dmn-js": "^7.3.0",
     "element-ui": "^2.13.0",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",

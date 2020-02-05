@@ -236,7 +236,6 @@ export default {
   //#region Common
 
   async deleteItem(context, { id }) {
-    debugger
     const { item, index } = context.getters.getItemById(id);
     if (index < 0) {
       return false;
@@ -252,14 +251,12 @@ export default {
       console.error(error);
     }
     if(success) {
-      await context.dispatch('resetCache')
-      await context.dispatch('loadItems')
+      // await context.dispatch('resetCache')
+      // await context.dispatch('loadItems')
     }
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {
-    console.log(draggingItem)
-    debugger
     // switch (type) {
     // case 'before':
     // case 'after':
@@ -279,8 +276,8 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
+    // await context.dispatch('resetCache');
+    // await context.dispatch('loadItems');
     return success;
   },
 

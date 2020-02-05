@@ -14,7 +14,7 @@
       <h1>{{$t('bpmn.labels.Projects')}}</h1>
       <v-col cols="6" class="justify-end">
         <v-row class="align-center justify-end">
-          <v-btn  class="text-left white--text blue" @click="addFolder()">
+          <v-btn  class="add-btn mx-2" @click="addFolder()">
             {{ $t('bpmn.buttons.AddProject') }}
           </v-btn>
           <v-text-field 
@@ -113,5 +113,11 @@ export default {
     line-height: 1.2;
   }
 }
-
+.add-btn {
+  font-weight: 600;
+  font-size: 12px;
+  color: white;
+  background-color: #1976d2 !important;
+  // height: 40px !important;
+}
 </style>

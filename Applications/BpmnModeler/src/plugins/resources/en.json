@@ -132,6 +132,8 @@
 		"ElementsNotLoaded": "Failed to load element",
 		"NoConnection" : "Unable to verify your Internet connection",
     "Er404" : "Sory, we don't have such page",
+		"NoDiagram": "The diagram does not exist or you do not have access to it",
+		"NoFolder": "The project does not exist or you do not have access to it",
     "Search" : "You can search something else",
 		"GoTo" : "Or go to",
 		"HomePage" : "home page",

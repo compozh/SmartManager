@@ -1,8 +1,8 @@
 <template>
    <v-footer app color="white" elevation="2"
       height="55px"
-      v-if="chosen.length > 0">
-      <div>{{chosen.length}}  {{ $t('bpmn.labels.Selected') }}</div>
+      v-if="choose.length > 0">
+      <div>{{choose.length}}  {{ $t('bpmn.labels.Selected') }}</div>
       <v-col class="pa-0">
         <v-menu offset-y top
           v-model="explorer"
@@ -34,7 +34,7 @@
                     </v-list-item-title>
                   </v-list-item-content>
                   <v-list-item-action class="ma-0" @click="changeFolder(elem)" v-if="elem.isFolder">
-                    <v-btn icon><v-icon color="blue">mdi-chevron-right</v-icon></v-btn>
+                    <v-btn icon><v-icon >mdi-chevron-right</v-icon></v-btn>
                   </v-list-item-action>
                 </v-list-item>
               </v-list>
@@ -52,11 +52,11 @@
           </v-card>
         </v-menu>
         
-        <v-btn text class="menu-btn "  @click="copyItem(chosen)">
+        <v-btn text class="menu-btn "  @click="copyItem(choose)">
           <v-icon size="20">mdi-content-copy</v-icon>
           {{ $t('bpmn.buttons.Copy') }}
         </v-btn>
-        <v-btn text class="menu-btn " @click="removeItem(chosen)">
+        <v-btn text class="menu-btn " @click="removeItem(choose)">
           <v-icon size="20">mdi-delete</v-icon>
           {{ $t('bpmn.buttons.Delete') }}
         </v-btn>
@@ -101,10 +101,14 @@ export default {
       await this.choose.forEach(async draggingItem => {
         success.push(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem }))
       })
-      success = success.every(el => el)
+       success = await success.every(el => el)
+       debugger
       if (success) {
         this.choose = []
-        this.$store.dispatch('bpmn/editFolder', dropItem)
+        // console.log(success)
+        // await this.$store.dispatch('bpmn/editFolder', dropItem)
+        await this.$store.dispatch('bpmn/resetCache')
+        await this.$store.dispatch('bpmn/loadItems')
       } else {
         Notification.error(this.$t('bpmn.errors.CantDrop'));
       }
@@ -134,7 +138,12 @@ export default {
   watch: {
     items(val) {
       this.changeFolder(this.$route.params.id)
-    }
+    },
+    '$route'() {
+      this.changeFolder(this.$route.params.id)
+      this.choose = []
+      
+    },
   }
 };
 </script>

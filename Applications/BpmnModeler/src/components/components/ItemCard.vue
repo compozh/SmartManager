@@ -20,6 +20,7 @@ import moment from 'moment'
 import { events } from '../../constants';
 import { CancellationToken, editorFactory } from '../../api';
 import { eventBus } from '../../main';
+import { editorToolbarMixin } from '../mixins';
 import { debounce } from 'throttle-debounce';
 export default {
   name: 'item-card',
@@ -55,7 +56,7 @@ export default {
       this.modeler = editorFactory(this.item.type, true, this.$refs.container, null, () => {})
       this.loadXml();
     },
-    setSVG() {
+    setBpmnSvg() {
       let self = this
       this.modeler.saveSVG((err, svg) => {
         if (err) {
@@ -64,10 +65,14 @@ export default {
         }
         self.preview = svg 
         self.$refs.container.innerHTML = svg
-        let style = self.$refs.container.children[0].style
-        style.maxWidth = '100%'
-        style.maxHeight = '100%'
       });
+    },
+     setDmnSvg() {
+      let svg = this.$refs.container.querySelector('svg')
+      if(!svg) {return}
+      this.preview = svg 
+      svg.setAttribute('viewBox' , "0 0 1000 600")
+      this.$refs.container.innerHTML = svg.outerHTML
     },
     async loadXml() {
       if (!this.item || !this.modeler) {
@@ -117,10 +122,13 @@ export default {
     },
   },
   updated() {
-    if (!this.preview && !this.loading && this.item.type == 'BPMN') {
-      eventBus.$on(events.modeler.export, this.setSVG)
+    if (this.preview || this.loading) {return}
+    if (this.item.type == 'BPMN') {
+      eventBus.$on(events.modeler.export, this.setBpmnSvg)
       eventBus.$emit(events.modeler.export, 'svg')
-      eventBus.$off(events.modeler.export, this.setSVG)
+      eventBus.$off(events.modeler.export, this.setBpmnSvg)
+    }  else if (this.item.type == 'DMN'){
+      this.setDmnSvg()
     }
   },
   computed: {
@@ -175,7 +183,7 @@ h1 {
   white-space: nowrap;
 }
 .preview {
-  max-height: 155px;
+  max-height: 200px;
   padding: 0;
 }
 h2 {
@@ -193,8 +201,26 @@ h2 {
   align-self: flex-end;
 }
 </style>
-<style>
+<style lang="scss">
 .checkbox  .v-messages {
-    display: none;
+  display: none;
+}
+.item-card  svg, .item-card .js-container svg d{
+  max-width: 100%;
+  max-height: 155px;
+}
+.item-card .dmn-decision-table-container{
+  overflow: hidden;
+
+  th, td {
+    min-width: unset;
+    min-height: unset;
+    line-height: normal;
   }
+}
+.item-card .tjs-container {
+  position: relative;
+  top: -20px;
+  font-size: 0.7em
+}
 </style>

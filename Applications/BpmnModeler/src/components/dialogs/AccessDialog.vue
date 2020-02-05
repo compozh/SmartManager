@@ -124,12 +124,6 @@ export default {
   data() {
     return {
       show: false,
-      headers: [
-        { text: '', value: 'type' },
-        { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
-        ...map(Models.DiagramAccessRights, right => { return { text: this.$t('bpmn.enums.DiagramAccessRights.' + right), value: 'rights' } }),
-        { text: '', value: 'name', align: 'left', sortable: false }
-      ],
       pagination: {
         sortBy: 'type',
         rowsPerPage: -1
@@ -177,6 +171,14 @@ export default {
   },
   beforeDestroy() {
     eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog)
+  },
+  computed: {
+    headers() {
+      return [{ text: '', value: 'type' },
+      { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
+      ...map(Models.DiagramAccessRights, right => { return { text: this.$t('bpmn.enums.DiagramAccessRights.' + right), value: 'rights' } }),
+      { text: '', value: 'name', align: 'left', sortable: false }]
+    },
   },
   watch: {
     show(newValue, oldValue) {

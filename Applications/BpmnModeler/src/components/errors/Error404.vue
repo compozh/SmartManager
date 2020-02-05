@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row style="font-size: 40px;" justify="center" class="py-10">
-      <p>{{$t('bpmn.errors.Er404')}}</p>
+      <p>{{ $route.query.from == 'project' ? $t('bpmn.errors.NoFolder') : $t('bpmn.errors.NoDiagram')}}</p>
     </v-row>
     <v-row style="font-size: 20px;" justify="center" >
       <p>{{$t('bpmn.errors.Search')}}</p>

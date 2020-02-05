@@ -69,7 +69,7 @@ export default {
           'delete': 'bpmn.labels.DeleteProject'
         },
         'all': {
-          'delete': 'bpmn.labels.Delete',
+          'delete': 'bpmn.buttons.Delete',
           'copy': 'bpmn.buttons.Copy',
         }    
       },
@@ -115,9 +115,7 @@ export default {
       this.model = model;
       this.callback = callback;
       this.show = true;
-      setTimeout(()  => {
-        document.querySelector('input').focus()
-      }, 0)
+      setTimeout(() => document.querySelector('input').focus(), 0)
     },
     cancel() {
       this.$refs.form.resetValidation();
@@ -133,7 +131,9 @@ export default {
         let success = await this.callback(this.model, this.type, this.mode);
         this.loading = false;
         if (success) {
-          this.cancel();
+          await this.cancel();
+          await this.$store.dispatch('bpmn/resetCache')
+          await this.$store.dispatch('bpmn/loadItems')
         }
         this.callback = null;
       }

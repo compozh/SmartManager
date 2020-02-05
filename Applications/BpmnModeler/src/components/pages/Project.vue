@@ -201,7 +201,8 @@ h2{
   height: calc(100vh - 200px);
 }
 .add-btn {
-  font-size: 11px;
+  font-weight: 600;
+  font-size: 12px;
   color: white;
   background-color: #1976d2 !important;
   height: 40px !important;
@@ -219,8 +220,6 @@ h2{
   text-align: start;
   font-size: 14px
 }
-
-
 .menu-btn {
   color: #535353;
   font-size: 11px;
