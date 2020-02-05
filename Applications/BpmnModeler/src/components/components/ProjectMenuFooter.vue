@@ -6,6 +6,7 @@
       <v-col class="pa-0">
         <v-menu offset-y top
           v-model="explorer"
+          :close-on-click="false"
           :close-on-content-click="false">
           <template v-slot:activator="{ on }">
             <v-btn text class="menu-btn" v-on="on">
@@ -40,11 +41,11 @@
               </v-list>
             </v-card-text>
             <v-card-actions class="py-1 px-3">
-              <v-btn icon @click="addFolder" class="mr-auto">
+              <v-btn icon @click="addFolder" class="mr-auto" :title=" $t('bpmn.labels.CreateFolder')">
                 <v-icon size="20">mdi-folder-plus</v-icon>
               </v-btn>
               <v-btn class="add-btn" :loading="loading" @click="moveHere(choosedFolder)"
-                :disabled="choosedFolder == item" :title="choosedFolder == item?  $t('bpmn.lebels.AlreadyIn') : $t('bpmn.buttons.MoveHere')">
+                :disabled="choosedFolder == item" :title="choosedFolder == item ?  $t('bpmn.labels.AlreadyIn') : $t('bpmn.buttons.MoveHere')">
                 <v-icon size="20">mdi-folder-move</v-icon>
                 {{ $t('bpmn.buttons.MoveHere') }}
               </v-btn>
@@ -102,13 +103,12 @@ export default {
         success.push(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem }))
       })
        success = await success.every(el => el)
-       debugger
       if (success) {
         this.choose = []
-        // console.log(success)
-        // await this.$store.dispatch('bpmn/editFolder', dropItem)
         await this.$store.dispatch('bpmn/resetCache')
         await this.$store.dispatch('bpmn/loadItems')
+
+        this.closeExpl()
       } else {
         Notification.error(this.$t('bpmn.errors.CantDrop'));
       }
@@ -165,10 +165,12 @@ export default {
     }
   }
   .v-card__title {
+
     position: sticky;
     .title {
       text-align: start;
       overflow: hidden;
+      cursor: default;
       height: 46px;
     }
   }
@@ -182,4 +184,8 @@ export default {
   background-color: #1976d2 !important;
   height: 30px !important;
 }
+
+.v-btn--disabled {
+    pointer-events: auto !important;
+} 
 </style>

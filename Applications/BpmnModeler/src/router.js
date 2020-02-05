@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
     to.path === '/login' ||
     to.path === '/error/404' ||
     to.path === '/error/500' ||
-    !!store.state.auth.user
+    store.state.auth.user
   ) {
     let same = Object.values(to).every((el) => {
       return Object.values(from).find( fromEl =>  fromEl == el) 
@@ -103,7 +103,7 @@ router.beforeEach((to, from, next) => {
       return next()
     }
   }
-  router.push({ name: 'Login', query: { to: to.path } })
+  router.push({ name: 'login', query: { to: to.path } })
 })
 
 export default router

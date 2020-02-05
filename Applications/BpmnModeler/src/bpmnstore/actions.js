@@ -97,8 +97,8 @@ export default {
     }
     Object.assign(diagram, newDiagram);
     if(newDiagram) {
-      await context.dispatch('resetCache');
-      await context.dispatch('loadItems');
+      // await context.dispatch('resetCache');
+      // await context.dispatch('loadItems');
     }
     return true;
   },

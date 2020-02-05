@@ -177,7 +177,7 @@ export default {
     headers() {
       return [{ text: '', value: 'type' },
       { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
-      ...map(Models.DiagramAccessRights, right => { return { text: this.$t('bpmn.enums.DiagramAccessRights.' + right), value: 'rights' } }),
+      ...map(Models.AccessRights, right => { return { text: this.$t('bpmn.enums.AccessRights.' + right), value: 'rights' } }),
       { text: '', value: 'name', align: 'left', sortable: false }]
     },
   },

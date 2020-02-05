@@ -22,6 +22,7 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css';
 
 import router from './router'
 // import config from './config'
+const config = window.config;
 import App from './App.vue'
 
 auth.config(config.GrapgQlUrl);

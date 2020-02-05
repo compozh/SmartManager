@@ -8,8 +8,8 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('auth/logout')
-      if (this.$router.currentRoute.name !== 'BPMNLOGIN') {
-        this.$router.push({ path: '/bpmnmodeler/login' })
+      if (this.$router.currentRoute.name !== 'login') {
+        this.$router.push({ path: 'login', query: {to: this.$router.currentRoute.path } })
       }
     }
   },

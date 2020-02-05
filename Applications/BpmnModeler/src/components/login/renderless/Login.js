@@ -31,8 +31,8 @@ export default {
       try {
         const result = await this.$store.dispatch('auth/login', this.userData)
         this.loading = false
-        if (result.success) {
-          await this.$router.replace({ path: this.routeToBack })
+        if (result.success && this.$route.name == 'login') {
+          await this.$router.push({ path: this.routeToBack })
         } else {
           try {
             const resultMessage = JSON.parse(result.errorMessage.substring(result.errorMessage.indexOf(':') + 1));

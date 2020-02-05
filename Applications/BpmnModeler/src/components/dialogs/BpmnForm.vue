@@ -84,6 +84,9 @@ export default {
       }
     }
   },
+  props: {
+    activeItem: String
+  },
   mounted() {
     eventBus.$on(events.modeler.showForm, this.onShowForm);
   },
@@ -106,7 +109,18 @@ export default {
           this.model.name = val
         }
       },
-    }
+    },
+    active: {
+      get() {
+        return this.activeItem;
+      },
+      set(value) {
+        if (value === this.activeItem) {
+          return;
+        }
+        this.$emit('update:activeItem', value);
+      }
+    },
   },
   methods: {
     onShowForm(mode, type, model, callback) {
@@ -122,7 +136,7 @@ export default {
       this.show = false;
     },
     async save() {
-      if (!this.$refs.form.validate()) {
+      if (!this.$refs.form.validate() || this.loading) {
         return;
       }
       if (this.callback) {
@@ -131,9 +145,13 @@ export default {
         let success = await this.callback(this.model, this.type, this.mode);
         this.loading = false;
         if (success) {
-          await this.cancel();
-          await this.$store.dispatch('bpmn/resetCache')
-          await this.$store.dispatch('bpmn/loadItems')
+          this.cancel();
+          // await this.$store.dispatch('bpmn/resetCache')
+          // await this.$store.dispatch('bpmn/loadItems')
+          if(this.type == "process" && this.mode == "create") {
+            this.callback = null;
+            this.active = this.model.id
+          }
         }
         this.callback = null;
       }

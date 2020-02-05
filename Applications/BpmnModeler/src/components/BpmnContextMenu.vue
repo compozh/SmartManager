@@ -63,15 +63,14 @@
             <v-icon>save_alt</v-icon>
           </v-list-item-avatar>
           <v-list-item-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-item-title>
-        </v-list-item>
+        </v-list-item> </template>  -->
+      <template v-if="crumb">
         <v-list-item v-if="canShare(item)" @click="share(item)">
           <v-list-item-avatar>
-            <v-icon>share</v-icon>
+            <v-icon>mdi-account-plus</v-icon>
           </v-list-item-avatar>
           <v-list-item-title>{{ $t('bpmn.buttons.Share') }}</v-list-item-title>
         </v-list-item>
-      </template> -->
-      <template v-if="crumb">
         <template v-if="canEdit(item)">
           <v-list-item @click="edit(item)">
             <v-list-item-avatar>

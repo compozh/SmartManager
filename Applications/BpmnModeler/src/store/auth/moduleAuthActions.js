@@ -6,7 +6,7 @@ export default {
   logout({ commit }) {
     auth.clearTokens()
     commit('UPDATE_AUTHENTICATED_USER', null)
-    if (router.currentRoute.name !== 'Login') {
+    if (router.currentRoute.name !== 'login') {
       router.push({ path: '/login', query: {to: router.currentRoute.path } })
     }
   },
@@ -48,7 +48,7 @@ export default {
       router.push(router.currentRoute.query.to || '/')
     } else {
       // TODO: Вывести уведомление об о ошибке для пользователя
-      if (router.currentRoute.name !== 'Login') {
+      if (router.currentRoute.name !== 'login') {
         router.push({ path: '/login', query: {to: router.currentRoute.path } })
       }
     }

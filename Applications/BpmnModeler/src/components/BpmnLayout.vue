@@ -47,7 +47,7 @@
 
     <formio-builder-container />
     <formio-container />
-    <bpmn-form></bpmn-form>
+    <bpmn-form :activeItem.sync="activeItem"></bpmn-form>
     <selection-grid></selection-grid>
     <access-dialog></access-dialog>
   </v-app>
@@ -163,7 +163,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
-      if (from.name === 'Login') {
+      if (from.name === 'login') {
         this.appBar = true;
         this.onRouteChanged(true);
       }

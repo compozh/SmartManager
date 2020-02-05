@@ -175,7 +175,7 @@ export default {
       this.splitSize = 100 - Number.parseInt(size);
     },
     share(item) {
-      eventBus.$emit(events.modeler.showAccessDialog, item.id);
+      eventBus.$emit(events.modeler.showAccessDialog, item);
     },
     exportItem(item, type) {
       eventBus.$emit(events.modeler.export, type);

@@ -67,7 +67,7 @@ export default {
         self.$refs.container.innerHTML = svg
       });
     },
-     setDmnSvg() {
+    setDmnSvg() {
       let svg = this.$refs.container.querySelector('svg')
       if(!svg) {return}
       this.preview = svg 
