@@ -205,7 +205,7 @@ export default {
     })
   },
 
-  async registerProduction({ commit, dispatch }, { workCenter, task, deviceSizeType }) {
+  async registerProduction({ dispatch, getters }, { workCenter, task, deviceSizeType }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -225,14 +225,18 @@ export default {
     })
   },
 
-  async updateProductionFormio ({ commit, dispatch }, params) {
+  async updateProductionFormio ({ commit, dispatch, getters }, { workCenter, deviceSizeType, task }) {
+    var currentTask = getters['selectedTask']
+    if(!currentTask || currentTask.shiftTaskId !== task.shiftTaskId) {
+      return
+    }
     commit('resetProductionFormio')
     let properties = {
-      WORKCENTERCODE: params.workCenter.code,
-      WORKBARCODE: params.task.barcode,
-      instance: params.task
+      WORKCENTERCODE: workCenter.code,
+      WORKBARCODE: task.barcode,
+      instance: task
     }
-    dispatch('createProductionFormio', { formCode: params.workCenter.productionRegistrationFormCode, properties, deviceSizeType: params.deviceSizeType })
+    dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
   },
 
   async fixWorkCenterForWorker({ commit }, { workCenter, workerCode }) {
@@ -309,7 +313,7 @@ export default {
     })
   },
 
-  async createProductionFormio({ commit, dispatch }, { formCode, properties, deviceSizeType }) {
+  async createProductionFormio({ commit, dispatch, getters }, { formCode, properties, deviceSizeType }) {
     var params = {
       params: JSON.stringify(properties || '', null, 4),
       deviceSizeType: deviceSizeType || 'lg'
@@ -319,7 +323,14 @@ export default {
         const res = await api.getProductionFormioFromGql(formCode, params)
         return res
       },
-      successAction: async result => { commit('setProductionFormio', result) },
+      successAction: async result => {
+        var currentTask = getters['selectedTask']
+        var intance = properties.instance
+        if(!currentTask || !intance || currentTask.shiftTaskId !== intance.shiftTaskId) {
+          return
+        }
+        commit('setProductionFormio', result)
+      },
       linearLoader: true
     })
   },
@@ -457,6 +468,10 @@ export default {
   },
 
   async verifyCamera({ commit }) {
+      if(!navigator.mediaDevices) {
+        commit('setCameraAvailability', false)
+        return
+      }
       await navigator.mediaDevices.getUserMedia({video: true}).then(() => {
         return commit('setCameraAvailability', true)
       }).catch(() => {
