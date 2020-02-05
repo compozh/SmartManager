@@ -1,0 +1,25 @@
+{
+    "buttons": {
+        "startProcess": "Запустити процес",
+        "Close": "Закрити"
+    },
+    "labels": {
+        "processes": "Процеси"
+    },
+    "errors": {
+        "processNotPassed": "Не передано код процесу",
+        "undefinedFormOfProcess": "Відсутнє визначення форми процесу"
+    },
+    "placeholders": {
+        "Search": "Пошук",
+        "NoDataText": "Відсутні дані",
+        "LoadingDataText": "Завантаження..."
+    },
+    "columns" : {
+        "name": "Назва",
+        "version": "Версія"
+    },
+    "messages" : {
+        "processSuccess": "Процес успішно запущений"
+    }
+}

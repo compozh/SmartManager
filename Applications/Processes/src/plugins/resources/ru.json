@@ -1,0 +1,25 @@
+{
+    "buttons": {
+        "startProcess": "Запустить процесс",
+        "Close": "Закрыть"
+    },
+    "labels": {
+        "processes": "Процессы"
+    },
+    "errors": {
+        "processNotPassed": "Не передан код процесса",
+        "undefinedFormOfProcess": "Отсутствует определение формы процесса"
+    },
+    "placeholders": {
+        "Search" : "Поиск",
+        "NoDataText": "Данные отсутствуют",
+        "LoadingDataText": "Загрузка..."
+    },
+    "columns" : {
+        "name": "Наименование",
+        "version": "Версия"
+    },
+    "messages" : {
+        "processSuccess": "Процесс успешно запущен"
+    }
+}

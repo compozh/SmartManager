@@ -4,7 +4,7 @@
       <v-flex mx-2>
         <v-card flat v-if="unit">
           <h3>Просмотр урока <span class="indigo--text">{{unit.lesson.name}}</span></h3>
-          <div v-if='unit.lesson.lessonType===lessonType.video'>
+          <div v-if='unit.lesson.lessonType === lessonType.video'>
             <video class="lesson-video" :src="unit.content" controls='controls'></video>
           </div>
           <div v-if='unit.lesson.lessonType===lessonType.text'>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import {lessonType} from '../helpers/lesson.js'
 
 export default {
   name: 'lesson-view',
@@ -35,11 +36,7 @@ export default {
         },
         theme: 'snow',
       },
-      lessonType: {
-        text: 0,
-        video: 1,
-        test: 2
-      }
+      lessonType: lessonType
     }
   },
   computed: {

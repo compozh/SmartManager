@@ -149,7 +149,7 @@
 			"GROUP": "Group",
 			"ALL": "All"
 		},
-		"DiagramAccessRights": {
+		"AccessRights": {
 			"READ": "View",
 			"WRITE": "Edit",
 			"DELETE": "Delete",
@@ -286,7 +286,7 @@
 		"Process Id": "Process Id",
 		"Process Name": "Process Name",
 		"Executable": "Executable",
-		"Process Documentation": "Process Documentation",
+		"Process Documentation": "Process Description",
 		"Category Value": "Category Value",
 		"Message": "Message",
 		"Message Name": "Message Name",

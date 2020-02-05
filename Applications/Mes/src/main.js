@@ -65,7 +65,7 @@ Vue.use(Localization, { dependencies })
 var formioOptions = {
   auth,
   GraphQlUrl: window.myConfig.GrapgQlUrl,
-  routerDependencies: () => routerDependencies,
+  routerDependencies: () => router,
   onError: ({ message, networkError }) => {
     if (networkError && networkError.statusCode === 401) {
       auth.clearTokens()

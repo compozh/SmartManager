@@ -77,7 +77,6 @@ export default {
     };
   },
   mounted() {
-    // https://m.it.ua/GraphQlServer/
     this.onRouteChanged(false);
     eventBus.$on(events.modeler.createDiagram, this.onCreateDiagram);
   },

@@ -1,0 +1,5 @@
+{
+  bpmnqueryMutation {
+    giveAccessToFolder(accessParams: $accessParams)
+  }
+}

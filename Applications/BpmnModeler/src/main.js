@@ -15,8 +15,10 @@ import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
 import VueSplit from 'vue-split-panel'
-import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui'
-import './element-variables.scss'
+import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
+//import './element-variables.scss';
+import '@mdi/font/css/materialdesignicons.min.css';
+import 'roboto-fontface/css/roboto/roboto-fontface.css';
 
 import router from './router'
 // import config from './config'

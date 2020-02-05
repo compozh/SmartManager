@@ -157,19 +157,19 @@ export default {
       this.$emit('copy', item);
     },
     share(item) {
-      eventBus.$emit(events.modeler.showAccessDialog, item.id);
+      eventBus.$emit(events.modeler.showAccessDialog, item);
     },
     isFolder(item) {
       return item instanceof Models.Folder;
     },
     canDeploy(item) {
-      return item.hasRight(Models.DiagramAccessRights.Deploy);
+      return item.hasRight(Models.AccessRights.Deploy);
     },
     canEdit(item) {
-      return item.hasRight(this.isFolder(item) ? Models.FolderAccessRights.Write : Models.DiagramAccessRights.Write);
+      return item.hasRight(Models.AccessRights.Write);
     },
     canShare(item) {
-      return !this.isFolder(item) && item.hasRight(Models.DiagramAccessRights.Share);
+      return item.hasRight(Models.AccessRights.Share);
     },
     isBpmn(item) {
       if(!item) return false

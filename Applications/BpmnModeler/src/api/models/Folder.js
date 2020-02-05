@@ -1,6 +1,6 @@
 export default class Folder {
   constructor({ id, name = '', parentId, isSystem = false, items = [], rights = [ ],  ownerId = '', 
-    editorId = '', creationTime = '', editTime = '' } = {}) {
+    editorId = '', creationTime, editTime  } = {}) {
     this.id = id;
     this.name = name;
     this.parentId = parentId;
