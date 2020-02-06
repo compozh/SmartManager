@@ -17,7 +17,7 @@
         <v-data-table
           hide-default-footer
           v-model="selected"
-          :headers="columns"
+          :headers="headers"
           :items="items"
           :search="search"
           :options.sync="options"
@@ -52,9 +52,13 @@ export default {
       options: {
         sortBy: ['name'],
         rowsPerPage: -1
-      },
-      columns: [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ]
+      }
     };
+  },
+  computed: {
+    headers() {
+      return [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ];
+    }
   },
   mounted() {
     eventBus.$on(events.modeler.showSelectionGrid, this.onShowSelectionGrid);
@@ -75,21 +79,6 @@ export default {
       this.callback = callback;
       this.show = true;
     },
-    toggleAll () {
-      if (this.selected.length) { 
-        this.selected = [];
-      } else {
-        this.selected = this.desserts.slice();
-      }
-    },
-    changeSort (column) {
-      if (this.pagination.sortBy === column) {
-        this.pagination.descending = !this.pagination.descending;
-      } else {
-        this.pagination.sortBy = column;
-        this.pagination.descending = false;
-      }
-    },
     select() {
       if (!this.selected.length) {
         return;
@@ -99,12 +88,6 @@ export default {
         this.callback = null;
       }
       this.show = false;
-    },
-    selectProp(props) {
-      this.selected = [];
-      this.$nextTick(() => {
-        props.selected = !props.selected;
-      });
     }
   }
 };
