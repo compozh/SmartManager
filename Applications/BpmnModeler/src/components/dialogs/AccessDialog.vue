@@ -166,20 +166,20 @@ export default {
       },
       record: null,
       items: []
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.modeler.showAccessDialog, this.onShowAccessDialog);
   },
   beforeDestroy() {
-    eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog)
+    eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog);
   },
   computed: {
     headers() {
       return [
         { text: '', value: 'type' },
         { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
-        ...map(Models.AccessRights, right => { return { text: this.$t('bpmn.enums.AccessRights.' + right), value: 'rights' } }),
+        ...map(Models.AccessRights, right => { return { text: this.$t('bpmn.enums.AccessRights.' + right), value: 'rights' }; }),
         { text: '', value: 'name', align: 'left', sortable: false }
       ];
     },
@@ -238,7 +238,7 @@ export default {
           userName: item.userName,
           rights: item.rights,
           allowAccess: item.allowAccess ? this.$t('bpmn.labels.Allow') : this.$t('bpmn.labels.Decline')
-        }
+        };
       });
       this.loading = false;
       this.record = record;
@@ -273,14 +273,14 @@ export default {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Users')},
-          ...users.map(user => { return { ...user, type: 'user' } }),
+          ...users.map(user => { return { ...user, type: 'user' }; }),
         );
       }
       if (groups) {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Groups')},
-          ...groups.map(group => { return { ...group, type: 'group' } })
+          ...groups.map(group => { return { ...group, type: 'group' }; })
         );
       }
     },
@@ -376,7 +376,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 <style>
 .rights-checkbox {

@@ -40,6 +40,12 @@ module.exports = {
     'vuetify/no-deprecated-classes': 'error',
     'vuetify/grid-unknown-attributes': 'error',
     'vuetify/no-legacy-grid': 'error',
+    'semi': ['error', 'always'],
+    'no-dupe-else-if': 'error',
+    'no-await-in-loop': 'error',
+    'no-import-assign': 'error',
+    'array-callback-return': 'error',
+    'block-scoped-var': 'error'
   },
 
   parserOptions: {

@@ -22,6 +22,6 @@ export default class GeneralTab extends PropertiesPanelTab {
     groups.push(new DetailsGroup(diagram, element, entryFactory, bpmnFactory, commandStack, translate));
     groups.push(new DocumentationGroup(element, entryFactory, bpmnFactory, translate));
 
-    super('general', translate('General'), groups.filter(group => group.entries.length > 0))
+    super('general', translate('General'), groups.filter(group => group.entries.length > 0));
   }
 }

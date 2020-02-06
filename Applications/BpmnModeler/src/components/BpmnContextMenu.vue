@@ -177,7 +177,7 @@ export default {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
     }
   },
-}
+};
 </script>
 <style>
 .v-list-item__avatar {

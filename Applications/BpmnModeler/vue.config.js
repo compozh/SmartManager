@@ -1,6 +1,6 @@
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
-const path = require('path')
+const path = require('path');
 module.exports = {
   transpileDependencies: ['vuetify'],
   configureWebpack: {
@@ -40,4 +40,4 @@ module.exports = {
       openAnalyzer: true
     }
   }
-}
+};

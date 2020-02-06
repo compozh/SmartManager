@@ -29,7 +29,7 @@ export default function editorFactory(type, readonly, editorContainer, propertie
 function createTranslationModule(translate) {
   return {
     translate: ['value', (t, r) => translate(t, r)]
-  }
+  };
 }
 
 function createBpmnModeler(editorContainer, translate) {

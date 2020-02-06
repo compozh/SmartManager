@@ -49,19 +49,19 @@ export default class AccessParams {
     value.forEach(right => {
       switch (right) {
       case AccessRights.Read:
-        this.read = true
+        this.read = true;
         break;
       case AccessRights.Write:
-        this.write = true
+        this.write = true;
         break;
       case AccessRights.Deploy:
-        this.deploy = true
+        this.deploy = true;
         break;
       case AccessRights.Execute:
-        this.execute = true
+        this.execute = true;
         break;
       case AccessRights.Share:
-        this.share = true
+        this.share = true;
         break;
       }
     });

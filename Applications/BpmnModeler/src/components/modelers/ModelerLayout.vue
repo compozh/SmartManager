@@ -125,12 +125,12 @@ export default {
       panel: !this.$vuetify.breakpoint.xs,
       isFullScreen: false,
       split: null
-    }
+    };
   },
   computed: {
     showPanel: {
       get() {
-        return this.canShowPanel && this.splitSize > 1
+        return this.canShowPanel && this.splitSize > 1;
       },
       set(value) {
         if (value && this.splitSize > 1) {
@@ -181,11 +181,11 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     canShare(item) {
-      if (!item) { return false }
+      if (!item) { return false; }
       return item.hasRight(Models.AccessRights.Share);
     },
     canDeploy(item) {
-      if (!item) { return false }
+      if (!item) { return false; }
       return item.hasRight(Models.AccessRights.Deploy);
     },
     async deployItem(item) {
@@ -200,7 +200,7 @@ export default {
     },
   }
   
-}
+};
 </script>
 <style lang="scss" >
 .modeler-grid {

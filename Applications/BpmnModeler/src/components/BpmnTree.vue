@@ -35,7 +35,7 @@
 </template>
 <script>
 import treeSearch from '../api/treeSearch';
-import BpmnTreeIcon from './functional/BpmnTreeIcon'
+import BpmnTreeIcon from './functional/BpmnTreeIcon';
 import Folder from '../api/models/Folder';
 
 export default {

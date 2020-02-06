@@ -27,7 +27,7 @@ export default function addBusinessRuleProps(group, element, entryFactory, comma
     label: translate('Decision Ref'),
     model: 'camunda:decisionRef',
     loadItems: (async () => (await api.getDeployedDecisions())
-      .map(decision => { return { id: decision.decDefKey, name: decision.decDefName } })
+      .map(decision => { return { id: decision.decDefKey, name: decision.decDefName }; })
       .filter((decision, index, self) => self.indexOf(decision) === index))(),
     set: (element, value) => {
       if (!value) {
@@ -81,7 +81,7 @@ export default function addBusinessRuleProps(group, element, entryFactory, comma
         model: 'camunda:decisionRefVersion',
         loadItems: (async () => (await api.getDeployedDecisions())
           .filter(decision => decision.decDefKey === decisionRef)
-          .map(decison => { return { id: decison.decDefVer.toString(), name: decison.decDefVer } }))(),
+          .map(decison => { return { id: decison.decDefVer.toString(), name: decison.decDefVer }; }))(),
         set: (element, value) => {
           if (!value) {
             return cmdHelper.updateBusinessObject(element, bo, { 'camunda:decisionRefVersion': undefined });
@@ -89,7 +89,7 @@ export default function addBusinessRuleProps(group, element, entryFactory, comma
           return cmdHelper.updateBusinessObject(element, bo, { 'camunda:decisionRefVersion': value });
         },
         validate: required
-      }))
+      }));
     }
   }
 }

@@ -53,14 +53,14 @@
 
 <script>
 import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
-import moment from 'moment'
+import moment from 'moment';
 export default {
   name: 'item-data-table',
   mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   data() {
     return {
       users: []
-    }
+    };
   },
   props: {
     items: Array,
@@ -70,38 +70,38 @@ export default {
   filters: {
     formatDate(value) {
       if (value) {
-        moment.locale('ru')
-        return moment(value).format('DD MMMM  YYYY HH:mm')
+        moment.locale('ru');
+        return moment(value).format('DD MMMM  YYYY HH:mm');
       }
     },
   },
   methods: {
 
     openProject(el) { 
-      this.active = el
+      this.active = el;
     },
     async loadUsers() {
-      this.users = await this.$store.dispatch('bpmn/queryUsers')
+      this.users = await this.$store.dispatch('bpmn/queryUsers');
     },
     findUser(userId) {
       if (this.$store.state.auth.user && userId == this.$store.state.auth.user.id) { 
-        return this.$t('bpmn.labels.You')
+        return this.$t('bpmn.labels.You');
       }
-      if (this.users.length == 0) { return userId }
+      if (this.users.length == 0) { return userId; }
       
       let user = this.users.find( user => user.id == userId ),
-        result = user ? user.name : userId
-      return result
+        result = user ? user.name : userId;
+      return result;
     }
   },
   computed: {
     rows() {
       let rows = this.items.map(item => {
-        item.editorId = this.findUser(item.editorId)
-        item.ownerId = this.findUser(item.ownerId)
-        return item
-      })
-      return rows
+        item.editorId = this.findUser(item.editorId);
+        item.ownerId = this.findUser(item.ownerId);
+        return item;
+      });
+      return rows;
     },
     active: {
       get() {
@@ -121,11 +121,11 @@ export default {
         {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'},
         {text: this.$t('bpmn.labels.Editor'), value: 'editorId'},
         {text: this.$t('bpmn.labels.Owner'), value: 'ownerId'},
-        {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}]
+        {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}];
     },
   },
   mounted() {
-    if (this.items.length > 0) { this.loadUsers() }
+    if (this.items.length > 0) { this.loadUsers(); }
   }
 };
 </script>

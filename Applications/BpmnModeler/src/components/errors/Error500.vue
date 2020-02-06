@@ -25,8 +25,8 @@ export default {
   }),
   methods: {
     '$eval'(expr) {
-      return eval(expr)
+      return eval(expr);
     },
   }
-}
+};
 </script>

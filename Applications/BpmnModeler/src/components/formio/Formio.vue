@@ -30,7 +30,7 @@ export default {
       code: '',
       definition: null,
       callback: null
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.formio.showForm, this.onShowForm);
@@ -65,7 +65,7 @@ export default {
       this.show = false;
     }
   }
-}
+};
 </script>
 <style>
 </style>

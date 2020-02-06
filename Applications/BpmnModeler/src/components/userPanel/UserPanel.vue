@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import userPanelRl from './UserPanel'
+import userPanelRl from './UserPanel';
 
 export default {
   name: 'user-panel',
@@ -114,7 +114,7 @@ export default {
       { 'border-color': '#c6c6c6' }
     ]
   })
-}
+};
 </script>
 
 <style scoped>

@@ -1,14 +1,14 @@
 
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-// import config from './config'
-import store from './store/index'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from './store/index';
+const config = window.config;
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 export const router = new VueRouter({
   mode: 'history',
-  base: config.BaseUrl + 'newBPMNMODELER/',
+  base: config.BaseUrl + 'bpmnmodeler/',
   routes: [
     {
       path: '/',
@@ -84,7 +84,7 @@ export const router = new VueRouter({
       },
     }
   ]
-})
+});
 
 
 router.beforeEach((to, from, next) => {
@@ -95,15 +95,15 @@ router.beforeEach((to, from, next) => {
     store.state.auth.user
   ) {
     let same = Object.values(to).every((el) => {
-      return Object.values(from).find( fromEl =>  fromEl == el) 
-    })
+      return Object.values(from).find( fromEl =>  fromEl == el); 
+    });
     if ( same ) {
-      return 
+      return; 
     } else  {
-      return next()
+      return next();
     }
   }
-  router.push({ name: 'login', query: { to: to.path } })
-})
+  router.push({ name: 'login', query: { to: to.path } });
+});
 
-export default router
+export default router;

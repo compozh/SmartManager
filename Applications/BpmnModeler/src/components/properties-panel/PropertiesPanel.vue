@@ -31,7 +31,7 @@ export default {
       currentElement: null,
       tabs: [],
       currentTab: null
-    }
+    };
   },
   watch: {
     modeler(val, oldVal) {
@@ -150,7 +150,7 @@ export default {
       }
     }
   }
-}
+};
 
 function isImplicitRoot(element) {
   return element.id === '__implicitroot';

@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import { QrcodeStream } from 'vue-qrcode-reader'
+import { QrcodeStream } from 'vue-qrcode-reader';
 // Добавил импорт на компонент без отрисовки
-import QrLoginRl from './renderless/QrLogin'
+import QrLoginRl from './renderless/QrLogin';
 export default {
   components: {
     QrcodeStream,
@@ -45,7 +45,7 @@ export default {
       }
     }
   }
-}
+};
 
 </script>
 

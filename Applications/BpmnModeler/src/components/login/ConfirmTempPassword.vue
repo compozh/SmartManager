@@ -15,13 +15,13 @@
     </div>
 </template>
 <script>
-import confirmTempPassword from './renderless/ConfirmTempPassword'
+import confirmTempPassword from './renderless/ConfirmTempPassword';
 
 export default {
   components: {
     'confirmTempPassword': confirmTempPassword,
   }
-}
+};
 </script>
 
 <style scoped>

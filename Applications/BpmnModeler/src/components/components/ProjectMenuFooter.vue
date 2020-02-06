@@ -88,39 +88,39 @@ export default {
         this.choosedFolder = {
           name: this.$t('bpmn.labels.Projects'),
           items: this.items
-        }
+        };
       } else if (!value.id) {
-        let elem = this.$store.getters['bpmn/getItemById'](value)
-        this.choosedFolder = elem.item 
+        let elem = this.$store.getters['bpmn/getItemById'](value);
+        this.choosedFolder = elem.item; 
       } else {
-        this.choosedFolder = value
+        this.choosedFolder = value;
       }
     },
     async moveHere(dropItem) {
-      this.loading = true
-      let success
+      this.loading = true;
+      let success;
       let processArray =  async (array) => {
         const promises = array.map(async draggingItem => {
-          return await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem })
-        })
-        success =  await Promise.all(promises)
-        success = success.every( el => el)
+          return await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem });
+        });
+        success =  await Promise.all(promises);
+        success = success.every( el => el);
         if (success) {
-          this.choose = []
-          await this.$store.dispatch('bpmn/resetCache')
-          await this.$store.dispatch('bpmn/loadItems')
-          this.closeExpl()
+          this.choose = [];
+          await this.$store.dispatch('bpmn/resetCache');
+          await this.$store.dispatch('bpmn/loadItems');
+          this.closeExpl();
         } else {
           Notification.error(this.$t('bpmn.errors.CantDrop'));
         }
-      }
-      await processArray(this.choose)
+      };
+      await processArray(this.choose);
       
       this.loading = false;
     },
     closeExpl() {
-      this.explorer = false
-      this.choosedFolder = this.item
+      this.explorer = false;
+      this.choosedFolder = this.item;
     },
     addFolder() {
       this.createItem(this.choosedFolder, 'folder');
@@ -132,20 +132,20 @@ export default {
     },
     choose: {
       get() {
-        return this.chosen
+        return this.chosen;
       },
       set(value) {
-        this.$emit('update:chosen',value)        
+        this.$emit('update:chosen',value);        
       }
     }
   },
   watch: {
     items(val) {
-      this.changeFolder(this.$route.params.id)
+      this.changeFolder(this.$route.params.id);
     },
     '$route'() {
-      this.changeFolder(this.$route.params.id)
-      this.choose = []
+      this.changeFolder(this.$route.params.id);
+      this.choose = [];
       
     },
   }

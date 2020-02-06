@@ -109,20 +109,20 @@ export default {
     },
     navigateToItem(value) {
       if (!value) {
-        return this.$router.push({name: 'main'})
+        return this.$router.push({name: 'main'});
       }
       if (!value.id) {
-        let elem = this.$store.getters['bpmn/getItemById'](value)
+        let elem = this.$store.getters['bpmn/getItemById'](value);
         if (!elem.item) {
-          this.$router.push({name: 'ERROR', params: {status_code: '404'}, query: {from: this.$route.name, id: value }})
-          return
+          this.$router.push({name: 'ERROR', params: {status_code: '404'}, query: {from: this.$route.name, id: value }});
+          return;
         }
-        value = elem.item
+        value = elem.item;
       }
-      if (this.$route.params.id == value.id) { return }
+      if (this.$route.params.id == value.id) { return; }
       value.type == 'BPMN' ? this.$router.push({name: 'process', params: {id: value.id}}) 
         : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
-          : this.$router.push({name: 'project', params: {id: value.id}})
+          : this.$router.push({name: 'project', params: {id: value.id}});
     },
   },
   computed: {
@@ -140,7 +140,7 @@ export default {
       },
       set(value) {
         this.$store.dispatch('bpmn/setActiveItem', value);
-        this.navigateToItem(value)
+        this.navigateToItem(value);
       }
     },
     dataLoading() {

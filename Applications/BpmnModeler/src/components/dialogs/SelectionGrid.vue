@@ -83,7 +83,7 @@ export default {
         rowsPerPage: -1
       },
       columns: [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ]
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.modeler.showSelectionGrid, this.onShowSelectionGrid);
@@ -113,10 +113,10 @@ export default {
     },
     changeSort (column) {
       if (this.pagination.sortBy === column) {
-        this.pagination.descending = !this.pagination.descending
+        this.pagination.descending = !this.pagination.descending;
       } else {
-        this.pagination.sortBy = column
-        this.pagination.descending = false
+        this.pagination.sortBy = column;
+        this.pagination.descending = false;
       }
     },
     select() {
@@ -136,7 +136,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 <style>
 

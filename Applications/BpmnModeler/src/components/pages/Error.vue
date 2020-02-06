@@ -16,9 +16,9 @@ export default {
   computed: {      
     routeParamCode: {
       get: function() {
-        return this.$route.params.status_code ? this.$route.params.status_code : ''
+        return this.$route.params.status_code ? this.$route.params.status_code : '';
       }      
     }
   },
-}
+};
 </script>

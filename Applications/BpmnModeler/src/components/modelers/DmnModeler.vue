@@ -43,7 +43,7 @@ import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 
 import { debounce } from 'throttle-debounce';
 // import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
@@ -90,7 +90,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
-    this.$emit('loadItems')
+    this.$emit('loadItems');
   },
   watch: {
     decision(value, oldValue) {
@@ -193,9 +193,9 @@ export default {
           // TODO: display exception
         }
       });
-      this.$store.dispatch('bpmn/editProcess', this.decision)
-      const { item, index } = this.$store.getters['bpmn/getItemById'](this.decision.parentId)
-      this.$store.dispatch('bpmn/editFolder', item)
+      this.$store.dispatch('bpmn/editProcess', this.decision);
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.decision.parentId);
+      this.$store.dispatch('bpmn/editFolder', item);
     },
     onActiveModelChanged() {
       if (!this.decision || !this.modeler || this.noAccess) {

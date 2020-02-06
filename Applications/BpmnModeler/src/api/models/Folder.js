@@ -9,8 +9,8 @@ export default class Folder {
     this.rights = rights;
     this.ownerId = ownerId;
     this.editorId = editorId ;
-    this.creationTime = creationTime
-    this.editTime = editTime
+    this.creationTime = creationTime;
+    this.editTime = editTime;
   }
   get isFolder() {
     return true;

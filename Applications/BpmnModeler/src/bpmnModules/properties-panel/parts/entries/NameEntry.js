@@ -55,7 +55,7 @@ export default class NameEntry extends PropertiesPanelEntry {
       options = {
         label: translate('Text'),
         model: 'text'
-      }
+      };
     } else if (is(element, 'bpmn:Group')) {
       options = {
         label: translate('Category Value'),

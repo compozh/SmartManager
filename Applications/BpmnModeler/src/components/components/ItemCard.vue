@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment';
 import { events } from '../../constants';
 import { CancellationToken, editorFactory } from '../../api';
 import { eventBus } from '../../main';
@@ -41,38 +41,38 @@ export default {
   filters: {
     formatDate: (value) => {
       if (value) {
-        moment.locale('ru')
+        moment.locale('ru');
         return moment(value).calendar();
       }
     },
   },
   mounted() {
     if (this.item) {
-      this.createModeler()
+      this.createModeler();
     }
   },
   methods: {
     createModeler() {
-      this.modeler = editorFactory(this.item.type, true, this.$refs.container, null, () => {})
+      this.modeler = editorFactory(this.item.type, true, this.$refs.container, null, () => {});
       this.loadXml();
     },
     setBpmnSvg() {
-      let self = this
+      let self = this;
       this.modeler.saveSVG((err, svg) => {
         if (err) {
           console.error(err);
           return;
         }
-        self.preview = svg 
-        self.$refs.container.innerHTML = svg
+        self.preview = svg; 
+        self.$refs.container.innerHTML = svg;
       });
     },
     setDmnSvg() {
-      let svg = this.$refs.container.querySelector('svg')
-      if (!svg) { return }
-      this.preview = svg 
-      svg.setAttribute('viewBox' , '0 0 1000 600')
-      this.$refs.container.innerHTML = svg.outerHTML
+      let svg = this.$refs.container.querySelector('svg');
+      if (!svg) { return; }
+      this.preview = svg; 
+      svg.setAttribute('viewBox' , '0 0 1000 600');
+      this.$refs.container.innerHTML = svg.outerHTML;
     },
     async loadXml() {
       if (!this.item || !this.modeler) {
@@ -97,7 +97,7 @@ export default {
           if (this.modeler.createDiagram) {
             this.modeler.createDiagram(() => {
               this.loading = false;
-            })
+            });
           } else {
             this.loading = false;
           }
@@ -110,25 +110,25 @@ export default {
               this.modeler.createDiagram();
               this.loading = false;
             }
-          })
+          });
         }
-      })
+      });
 
       this.cancellationToken = new CancellationToken(debounced);
       debounced(this.cancellationToken);
     },
     openProject(el) {
-      this.active = el
+      this.active = el;
     },
   },
   updated() {
-    if (this.preview || this.loading) { return }
+    if (this.preview || this.loading) { return; }
     if (this.item.type == 'BPMN') {
-      eventBus.$on(events.modeler.export, this.setBpmnSvg)
-      eventBus.$emit(events.modeler.export, 'svg')
-      eventBus.$off(events.modeler.export, this.setBpmnSvg)
+      eventBus.$on(events.modeler.export, this.setBpmnSvg);
+      eventBus.$emit(events.modeler.export, 'svg');
+      eventBus.$off(events.modeler.export, this.setBpmnSvg);
     }  else if (this.item.type == 'DMN') {
-      this.setDmnSvg()
+      this.setDmnSvg();
     }
   },
   computed: {
@@ -148,7 +148,7 @@ export default {
         return this.chosen.find( el => el.id == this.item.id);
       },
       set(value) {
-        this.$emit('choosed', this.item)        
+        this.$emit('choosed', this.item);        
       }
     }
   },

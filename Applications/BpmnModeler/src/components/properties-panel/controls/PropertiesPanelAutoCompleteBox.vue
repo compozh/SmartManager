@@ -45,7 +45,7 @@ export default {
       items: [],
       loading: false,
       select: null
-    }
+    };
   },
   watch: {
     value: {
@@ -81,5 +81,5 @@ export default {
       return false;
     }
   }
-}
+};
 </script>

@@ -28,7 +28,7 @@ export default {
   async loadItems(context) {
     let items;
     try {
-      items = await api.getItems()
+      items = await api.getItems();
     } catch (error) {
       console.error(error);
       return false;
@@ -47,7 +47,7 @@ export default {
     });
     items = mapTree(items);
     context.commit('setItems', items);
-    //await context.dispatch('checkForOwnFolder');
+    await context.dispatch('checkForOwnFolder');
     return true;
   },
   async checkForOwnFolder(context) {
@@ -55,7 +55,7 @@ export default {
     if (folderExisit) {
       return;
     }
-    await context.dispatch('createFolder', new Folder({ name: context.rootState.auth.user.userName }))
+    await context.dispatch('createFolder', new Folder({ name: context.rootState.auth.user.userName }));
   },
   //#region Diagrams
   
@@ -96,10 +96,6 @@ export default {
       return false;
     }
     Object.assign(diagram, newDiagram);
-    if(newDiagram) {
-      // await context.dispatch('resetCache');
-      // await context.dispatch('loadItems');
-    }
     return true;
   },
   async editProcess(context, { id, name }) {
@@ -250,22 +246,9 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    // if(success) {
-      // await context.dispatch('resetCache')
-      // await context.dispatch('loadItems')
-    // }
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {
-    // switch (type) {
-    // case 'before':
-    // case 'after':
-    //   draggingItem.parentId = dropItem.parentId;
-    //   break;
-    // case 'inner':
-    //   draggingItem.parentId = dropItem.id;
-    //   break;
-    // }
     let success = false;
     try {
       if (draggingItem.isFolder) {
@@ -276,8 +259,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    // await context.dispatch('resetCache');
-    // await context.dispatch('loadItems');
     return success;
   },
 
