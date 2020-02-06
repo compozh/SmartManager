@@ -97,7 +97,7 @@ export default {
       }
       this.loading = false;
       items = items
-        .map(process => { return { id: process.procDefKey, name: process.procName } })
+        .map(process => { return { id: process.procDefKey, name: process.procName }; })
         .filter((process, index, self) => self.findIndex(p => p.id === process.id) === index);
 
       eventBus.$emit(events.modeler.showSelectionGrid,
@@ -116,7 +116,7 @@ export default {
       }
       this.loading = false;
       items = items
-        .map(decision => { return { id: decision.decDefKey, name: decision.decDefName } })
+        .map(decision => { return { id: decision.decDefKey, name: decision.decDefName }; })
         .filter((decision, index, self) => self.findIndex(p => p.id === decision.id) === index);
 
       eventBus.$emit(events.modeler.showSelectionGrid,
@@ -125,4 +125,4 @@ export default {
         (selectedItem) => callback(selectedItem.id));
     }
   }
-}
+};

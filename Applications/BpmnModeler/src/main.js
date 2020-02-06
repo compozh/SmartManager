@@ -1,30 +1,29 @@
 // @it-enterprise пакеты
-import WebApps from '@it-enterprise/webappscore';
 import Localization from '@it-enterprise/localization';
 import Eds from '@it-enterprise/eds';
 import GrapgQlCore from '@it-enterprise/graphql';
-import Router from '@it-enterprise/routercore';
 import auth from '@it-enterprise/jwtauthentication';
-import formio from '@it-enterprise/formio'
-import '@it-enterprise/formio/dist/formio.css'
+import formio from '@it-enterprise/formio';
+import '@it-enterprise/formio/dist/formio.css';
 
 // vue пакеты
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+import vuetify from './plugins/vuetify';
 import axios from 'axios';
 import { i18n } from './plugins/i18n';
 import VueI18n from 'vue-i18n';
 import store from './store/index';
-import VueSplit from 'vue-split-panel'
+import VueSplit from 'vue-split-panel';
 import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 //import './element-variables.scss';
 import '@mdi/font/css/materialdesignicons.min.css';
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
 
-import { routerDependencies } from './router';
+import router from './router';
+// import config from './config'
 const config = window.config;
+import App from './App.vue';
 
 auth.config(config.GrapgQlUrl);
 // объект с зависимостями
@@ -32,13 +31,10 @@ let dependencies = {
   store,
   i18n,
   axios,
-  ...routerDependencies
+  router
 };
 
 // Плагины стандартные
-Vue.use(Vuetify, {
-  iconfont: 'mdi'
-})
 Vue.use(Vuex);
 Vue.use(VueI18n);
 
@@ -54,28 +50,32 @@ Vue.use(Tabs);
 Vue.use(TabPane);
 
 // Плагины it-enterprise
-Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken());
-Vue.use(Router, { options: config, dependencies }, () => auth.getToken());
 Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
 Vue.use(Eds, { dependencies });
 
 var formioOptions = {
   auth,
-  routerDependencies: () => routerDependencies,
+  routerDependencies: () => router,
   GraphQlUrl: config.GrapgQlUrl,
   onError: ({ message, networkError }) => {
     //todo: Обработать ошибку
   }
-}
+};
 Vue.use(formio, { options: formioOptions, dependencies });
 
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'));
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'));
 Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'));
 
-// Шина событий
-export const eventBus = new Vue();
+export const eventBus = new Vue({
+  router,
+  vuetify,
+  store,
+  i18n,
+  render: h => h(App)
+}).$mount('#app');
+
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
@@ -85,19 +85,3 @@ req.keys().map(key => {
   }
   Vue.component(req(key).default.name, req(key).default);
 });
-
-start();
-
-/**
- * Загрузка приложения
- */
-async function start()   {
-  let webAppsCore = await Vue.prototype.$WebApps;
-  let appComponent = await webAppsCore.GetApplicationComponent({
-    properties: {
-      i18n,
-      store
-    }
-  });
-  new Vue(appComponent).$mount('#app');
-}

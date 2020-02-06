@@ -50,8 +50,8 @@
                   hide-details
                 ></v-checkbox>
               </td>
-              <td class="text-xs-left">{{ props.item.name }}</td>
-              <td class="text-xs-left">{{ props.item.id }}</td>
+              <td class="text-left">{{ props.item.name }}</td>
+              <td class="text-left">{{ props.item.id }}</td>
             </tr>
             
           </template>
@@ -59,8 +59,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="show = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-        <v-btn flat color="primary" :disabled="!selected.length" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
+        <v-btn text @click="show = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+        <v-btn text color="primary" :disabled="!selected.length" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -83,7 +83,7 @@ export default {
         rowsPerPage: -1
       },
       columns: [ { text: this.$t('bpmn.labels.Name'), value: 'name' }, { text: this.$t('bpmn.labels.Id'), value: 'id' } ]
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.modeler.showSelectionGrid, this.onShowSelectionGrid);
@@ -113,10 +113,10 @@ export default {
     },
     changeSort (column) {
       if (this.pagination.sortBy === column) {
-        this.pagination.descending = !this.pagination.descending
+        this.pagination.descending = !this.pagination.descending;
       } else {
-        this.pagination.sortBy = column
-        this.pagination.descending = false
+        this.pagination.sortBy = column;
+        this.pagination.descending = false;
       }
     },
     select() {
@@ -136,7 +136,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 <style>
 

@@ -8,7 +8,6 @@
     lazy
     transition="scale-transition"
     offset-y
-    full-width
     min-width="290px"
   >
     <template v-slot:activator="{ on }">
@@ -24,8 +23,8 @@
     </template>
     <v-date-picker v-model="date" no-title scrollable :readonly="readonly" :locale="locale" :first-day-of-week="1">
       <v-spacer></v-spacer>
-      <v-btn flat color="primary" @click="menu = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-      <v-btn flat color="primary" @click="save(date)">{{ $t('bpmn.buttons.OK') }}</v-btn>
+      <v-btn text color="primary" @click="menu = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+      <v-btn text color="primary" @click="save(date)">{{ $t('bpmn.buttons.OK') }}</v-btn>
     </v-date-picker>
   </v-menu>
 </template>
@@ -52,7 +51,7 @@ export default {
       menu: false,
       date: null,
       locale: currentLang()
-    }
+    };
   },
   watch: {
     value: {
@@ -74,5 +73,5 @@ export default {
       }
     }
   }
-}
+};
 </script>

@@ -58,7 +58,7 @@ export default function addUserTaskProps(group, diagram, element, entryFactory, 
       var actionId = bo.get('IT-Enterprise:actionDefinitionId');
       setServiceTaskParameters(element, bo, actionId, bpmnFactory, commandStack);
     }
-  })
+  });
 
   group.entries.push(actionDefinitionEntry, setTaskPropertiesEntry);
 }

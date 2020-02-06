@@ -26,7 +26,7 @@ export default class FormsGroup extends PropertiesPanelGroup {
       label: translate('Form Key'),
       model: 'formKey',
       loadItems: api.getForms(diagram.isSystem)
-    }
+    };
 
     const formKey = bo.get('camunda:formKey');
     if (typeof formKey !== 'string' || formKey.trim() === '') {
@@ -39,12 +39,12 @@ export default class FormsGroup extends PropertiesPanelGroup {
           });
           commandStack.execute(cmd.cmd, cmd.context);
         }, diagram.isSystem);
-      }
+      };
     } else {
       options.prependIcon = 'mdi-pencil';
       options.prepend = () => {
         eventBus.$emit(events.formio.editForm, formKey);
-      }
+      };
     }
 
     super('forms', translate('Forms'), [

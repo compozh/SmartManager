@@ -12,47 +12,47 @@ export default {
   }),
   computed: {
     routeToBack() {
-      return this.$route.params.routeToBack
+      return this.$route.query.to || '/';
     },
     needEnterTempPassword() {
       // Не реализовано
-      return false
+      return false;
     }
   },
   methods: {
     async login() {
       if (!this.userData.login) {
-        return (this.message = this.$t('bpmn.authentication.emptyLogin'))
+        return (this.message = this.$t('bpmn.authentication.emptyLogin'));
       }
       if (!this.userData.password) {
-        return (this.message = this.$t('bpmn.authentication.emptyPassword'))
+        return (this.message = this.$t('bpmn.authentication.emptyPassword'));
       }
-      this.loading = true
+      this.loading = true;
       try {
-        const result = await this.$store.dispatch('auth/login', this.userData)
-        this.loading = false
-        if (result.success) {
-          await this.$router.replace({ path: this.routeToBack })
+        const result = await this.$store.dispatch('auth/login', this.userData);
+        this.loading = false;
+        if (result.success && this.$route.name == 'login') {
+          await this.$router.push({ path: this.routeToBack });
         } else {
           try {
             const resultMessage = JSON.parse(result.errorMessage.substring(result.errorMessage.indexOf(':') + 1));
-            return (this.message = resultMessage.FAILREASON)
+            return (this.message = resultMessage.FAILREASON);
           } catch (error) {
             console.error(error);
-            return (this.message = this.$t('bpmn.authentication.error'))
+            return (this.message = this.$t('bpmn.authentication.error'));
           }
         }
       } catch (e) {
-        this.loading = false
-        return (this.message = e || this.$t('bpmn.authentication.error'))
+        this.loading = false;
+        return (this.message = e || this.$t('bpmn.authentication.error'));
       }
     },
     GetRecoveryPasswordUrl() {
-      console.log('функционал recovery password не реализован')
+      console.log('функционал recovery password не реализован');
     }
   },
   created() {
-    this.$store.dispatch('auth/logout')
+    this.$store.dispatch('auth/logout');
   },
   render() {
     return this.$scopedSlots.default({
@@ -71,9 +71,9 @@ export default {
           input: value => (this.userData.login = value),
           keydown: e => {
             if (e.key === 'Enter') {
-              this.userData.login = e.target.value
-              e.preventDefault()
-              this.login()
+              this.userData.login = e.target.value;
+              e.preventDefault();
+              this.login();
             }
           }
         },
@@ -88,9 +88,9 @@ export default {
           input: value => (this.userData.password = value),
           keydown: e => {
             if (e.key === 'Enter') {
-              this.userData.password = e.target.value
-              e.preventDefault()
-              this.login()
+              this.userData.password = e.target.value;
+              e.preventDefault();
+              this.login();
             }
           }
         },
@@ -115,6 +115,6 @@ export default {
           style: [{ display: this.message ? 'block' : 'none' }]
         }
       }
-    })
+    });
   }
-}
+};

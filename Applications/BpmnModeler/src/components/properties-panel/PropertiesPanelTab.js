@@ -17,4 +17,4 @@ export default {
       return createElement('properties-panel-group', { props: { group } });
     }));
   }
-}
+};

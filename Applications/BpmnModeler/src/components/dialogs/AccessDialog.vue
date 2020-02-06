@@ -32,19 +32,19 @@
                 >
                   <template #item="{ data }">
                     <template v-if="typeof data.item !== 'object'">
-                      <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                      <v-list-item-content v-text="data.item"></v-list-item-content>
                     </template>
                     <template v-else>
-                        <v-list-tile-content>
-                          <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
-                          <v-list-tile-sub-title v-html="data.item.id + ' ' + (data.item.login || '')"></v-list-tile-sub-title>
-                        </v-list-tile-content>
+                        <v-list-item-content>
+                          <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                          <v-list-item-subtitle class="text-left" v-html="data.item.id + ' ' + (data.item.login || '')"></v-list-item-subtitle>
+                        </v-list-item-content>
                     </template>
                   </template>
                 </autocompletebox>
                 <p style="text-align: left; margin: 0;">{{ $t('bpmn.labels.AccessRights') }}</p>
                 <v-container fluid>
-                  <v-layout column>
+                  <v-col>
                     <v-checkbox
                       class="rights-checkbox"
                       hide-details
@@ -55,15 +55,15 @@
                       :rules="[form.rules.selectOne]" 
                       :disabled="form.loading || form.mode === 'delete'">
                     </v-checkbox>
-                   </v-layout>
+                   </v-col>
                  </v-container>
               </v-form>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-              <v-btn flat @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
+              <v-btn text @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -76,23 +76,24 @@
           :headers="headers"
           :items="items"
           :search="search"
-          hide-actions
-          :pagination.sync="pagination"
+          hide-default-footer
+          :options.sync="options"
           item-key="id"
           :loading="loading"
+          loading-text=""
           :no-data-text="$t('bpmn.labels.NoData')"
           :no-results-text="$t('bpmn.labels.NoData')"
         >
-          <template slot="items" slot-scope="props">
+          <template slot="item" slot-scope="props">
             <tr>
-              <td class="text-xs-left">
+              <td class="text-sm-left">
                 <v-icon v-if="props.item.model.type === 'USER'" :title="$t('bpmn.labels.User')" small>mdi-account</v-icon>
                 <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>mdi-account-multiple</v-icon>
               </td>
-              <td class="text-xs-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
+              <td class="text-sm-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
               <td 
                 v-for="right in enums.accessRights" :key="right" 
-                class="text-xs-left">
+                class="text-sm-left">
                 <v-checkbox
                   class="rights-checkbox"
                   hide-details
@@ -124,14 +125,8 @@ export default {
   data() {
     return {
       show: false,
-      headers: [
-        { text: '', value: 'type' },
-        { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
-        ...map(Models.AccessRights, right => { return { text: this.$t('bpmn.enums.AccessRights.' + right), value: 'rights' } }),
-        { text: '', value: 'name', align: 'left', sortable: false }
-      ],
-      pagination: {
-        sortBy: 'type',
+      options: {
+        sortBy: ['type'],
         rowsPerPage: -1
       },
       search: '',
@@ -171,13 +166,23 @@ export default {
       },
       record: null,
       items: []
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.modeler.showAccessDialog, this.onShowAccessDialog);
   },
   beforeDestroy() {
-    eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog)
+    eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog);
+  },
+  computed: {
+    headers() {
+      return [
+        { text: '', value: 'type' },
+        { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
+        ...map(Models.AccessRights, right => { return { text: this.$t('bpmn.enums.AccessRights.' + right), value: 'rights' }; }),
+        { text: '', value: 'name', align: 'left', sortable: false }
+      ];
+    },
   },
   watch: {
     show(newValue, oldValue) {
@@ -209,7 +214,6 @@ export default {
       this.loading = true;
       let items;
 
-      console.log(record);
       if (record instanceof Models.Diagram) {
         items = await this.$store.dispatch('bpmn/getAccessRecordsForDiagram', record.id);
       } else if (record instanceof Models.Folder) {
@@ -234,7 +238,7 @@ export default {
           userName: item.userName,
           rights: item.rights,
           allowAccess: item.allowAccess ? this.$t('bpmn.labels.Allow') : this.$t('bpmn.labels.Decline')
-        }
+        };
       });
       this.loading = false;
       this.record = record;
@@ -269,14 +273,14 @@ export default {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Users')},
-          ...users.map(user => { return { ...user, type: 'user' } }),
+          ...users.map(user => { return { ...user, type: 'user' }; }),
         );
       }
       if (groups) {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Groups')},
-          ...groups.map(group => { return { ...group, type: 'group' } })
+          ...groups.map(group => { return { ...group, type: 'group' }; })
         );
       }
     },
@@ -372,10 +376,10 @@ export default {
       }
     }
   }
-}
+};
 </script>
 <style>
 .rights-checkbox {
-  margin: 0;
+  margin: 0 !important;
 }
 </style>

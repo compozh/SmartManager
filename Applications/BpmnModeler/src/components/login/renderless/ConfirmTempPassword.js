@@ -5,16 +5,16 @@ export default {
   }),
   computed: {
     routeToBack() {
-      return this.$route.params.routeToBack
+      return this.$route.query.to || '/';
     },
   },
   methods: {
     SendTempPassword() {
       this.$authentication.СonfirmTempPassword(this.code).then(res => {
         if (res) {
-          this.$router.replace({path: this.routeToBack})
+          this.$router.replace({path: this.routeToBack});
         }
-      })
+      });
     }
   },
   render() {
@@ -31,9 +31,9 @@ export default {
           input: value => (this.code = value),
           keydown: e => {
             if (e.key === 'Enter') {
-              this.code = e.target.value
-              e.preventDefault()
-              this.SendTempPassword()
+              this.code = e.target.value;
+              e.preventDefault();
+              this.SendTempPassword();
             }
           }
         },
@@ -41,7 +41,7 @@ export default {
           click: () => this.SendTempPassword()
         }
       }
-    })
+    });
   }
-}
+};
   

@@ -1,6 +1,6 @@
 <template>
   <modeler-layout 
-      :diagram="decision" :loading="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
+      :diagram="decision" :loading.sync="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
       :canMinimap="canMinimap" @minimap="onMinimap" 
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
       :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
@@ -18,8 +18,7 @@
           <span>{{ view.element.name || view.element.id }}</span>
         </v-tab>
       </v-tabs>
-      <div class="dmn-modeler-container" ref="container">
-      </div>
+      <div class="dmn-modeler-container" ref="container"></div>
     </template>
     <template #propertiesPanel>
       <div ref="propertiesPanel"></div>
@@ -43,8 +42,8 @@ import 'dmn-js/dist/assets/dmn-font/css/dmn-codes.css';
 import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 
 import { debounce } from 'throttle-debounce';
-import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+// import ModelerLayout from './ModelerLayout';
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
@@ -52,7 +51,7 @@ import { editorToolbarMixin, exportMixin } from '../mixins';
 export default {
   name: 'dmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  components: { ModelerLayout },
+  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,
@@ -91,6 +90,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    this.$emit('loadItems');
   },
   watch: {
     decision(value, oldValue) {
@@ -193,6 +193,9 @@ export default {
           // TODO: display exception
         }
       });
+      this.$store.dispatch('bpmn/editProcess', this.decision);
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.decision.parentId);
+      this.$store.dispatch('bpmn/editFolder', item);
     },
     onActiveModelChanged() {
       if (!this.decision || !this.modeler || this.noAccess) {
@@ -246,11 +249,13 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+
 .dmn-modeler-container {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 41px);
   position: absolute;
+  overflow: auto;
 }
 .dmn-literal-expression-container .powered-by-logo,
 .dmn-decision-table-container .powered-by-logo {
@@ -270,5 +275,8 @@ div[data-group="historyConfiguration"] {
 }
 div[data-entry="id"] > .dpp-field-description {
   display: none;
+}
+.v-tab {
+  color: black !important
 }
 </style>

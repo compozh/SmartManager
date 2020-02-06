@@ -5,7 +5,8 @@ import { onError } from 'apollo-link-error';
 import gql from 'graphql-tag';
 
 import auth from '@it-enterprise/jwtauthentication';
-import { routerDependencies } from '@/router';
+import router from '@/router';
+// import config from '../config';
 
 // Queries
 import * as queries from './graphql/queries';
@@ -255,14 +256,14 @@ export class BpmnModelerApi {
   async queryUsers() {
     const result = await query({
       query: gql`query ${queries.queryUsers}`
-    })
+    });
     return result.data.bpmnquery.queryUsers;
   }
 
   async queryGroups() {
     const result = await query({
       query: gql`query ${queries.queryGroups}`
-    })
+    });
     return result.data.bpmnquery.queryGroups;
   }
 
@@ -353,7 +354,9 @@ function addAuthHeader(options, token) {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens();
-    routerDependencies.router.push('/login');
+    if (router.currentRoute.name !== 'login') {
+      router.push({path: '/login', query: {to: router.currentRoute.path }});
+    }
   }
   if (graphQLErrors) {
     return graphQLErrors.message;

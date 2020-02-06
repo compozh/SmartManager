@@ -1,5 +1,5 @@
 <template>
-  <modeler-layout :diagram="process" :loading="loading" :saved="saved" :noAccess="noAccess"
+  <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
     :canMinimap="canMinimap" @minimap="onMinimap" 
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
@@ -19,8 +19,8 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
-import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+// import ModelerLayout from './ModelerLayout';
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
@@ -29,7 +29,7 @@ import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers
 export default {
   name: 'bpmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  components: { ModelerLayout },
+  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,
@@ -60,6 +60,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    this.$emit('loadItems');
   },
   watch: {
     process(value, oldValue) {
@@ -129,6 +130,10 @@ export default {
           // TODO: display exception
         }
       });
+      
+      this.$store.dispatch('bpmn/editProcess', this.process);
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
+      this.$store.dispatch('bpmn/editFolder', item);
     },
     onActiveModelChanged() {
       if (!this.process || !this.modeler || this.noAccess) {
@@ -188,6 +193,5 @@ export default {
   }
 };
 </script>
-<style>
-
+<style >
 </style>
