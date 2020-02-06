@@ -171,12 +171,10 @@ export default {
       return item.hasRight(Models.AccessRights.Share);
     },
     isBpmn(item) {
-      if(!item) return false
-      return item.type === Models.DiagramType.BPMN;
+      return item instanceof Models.Diagram && item.type === Models.DiagramType.BPMN;
     },
     isDmn(item) {
-      if(!item) return false
-      return item.type === Models.DiagramType.DMN;
+      return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
     }
   },
 }

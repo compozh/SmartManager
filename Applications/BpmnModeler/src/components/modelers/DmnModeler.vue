@@ -253,8 +253,9 @@ export default {
 
 .dmn-modeler-container {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 41px);
   position: absolute;
+  overflow: auto;
 }
 .dmn-literal-expression-container .powered-by-logo,
 .dmn-decision-table-container .powered-by-logo {

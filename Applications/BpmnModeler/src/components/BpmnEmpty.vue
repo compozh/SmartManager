@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-center justify-center column fill-height>
+  <v-row class="fill-height" align="center" justify="center" >
     <h2>{{ $t('bpmn.labels.SelectOrCreateProcess') }}</h2>
     <!-- <v-btn class="add-btn" @click="addProcess">
       {{ $t('bpmn.buttons.AddProcess') }}
@@ -10,7 +10,7 @@
     <v-btn  class="add-btn"  @click="addFolder">
       {{ $t('bpmn.buttons.AddFolder') }}
     </v-btn> -->
-  </v-layout>
+  </v-row>
 </template>
 <script>
 import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from './mixins';

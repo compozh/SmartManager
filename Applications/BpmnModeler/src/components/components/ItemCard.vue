@@ -69,9 +69,9 @@ export default {
     },
     setDmnSvg() {
       let svg = this.$refs.container.querySelector('svg')
-      if(!svg) {return}
+      if (!svg) { return }
       this.preview = svg 
-      svg.setAttribute('viewBox' , "0 0 1000 600")
+      svg.setAttribute('viewBox' , '0 0 1000 600')
       this.$refs.container.innerHTML = svg.outerHTML
     },
     async loadXml() {
@@ -94,13 +94,13 @@ export default {
           return;
         }
         if (!xml || xml === '') {
-          if(this.modeler.createDiagram){
+          if (this.modeler.createDiagram) {
             this.modeler.createDiagram(() => {
               this.loading = false;
             })
           } else {
             this.loading = false;
-            }
+          }
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
@@ -122,12 +122,12 @@ export default {
     },
   },
   updated() {
-    if (this.preview || this.loading) {return}
+    if (this.preview || this.loading) { return }
     if (this.item.type == 'BPMN') {
       eventBus.$on(events.modeler.export, this.setBpmnSvg)
       eventBus.$emit(events.modeler.export, 'svg')
       eventBus.$off(events.modeler.export, this.setBpmnSvg)
-    }  else if (this.item.type == 'DMN'){
+    }  else if (this.item.type == 'DMN') {
       this.setDmnSvg()
     }
   },
@@ -223,5 +223,4 @@ h2 {
   top: -20px;
   font-size: 0.7em
 }
-.v-input--selection-controls__ripple { z-index: 1; }
 </style>

@@ -58,9 +58,9 @@ export default {
           'copy': 'bpmn.labels.CopyProcess',
         },
         'folder': {
-          'create':  'bpmn.labels.CreateFolder',
+          'create': 'bpmn.labels.CreateFolder',
           'edit': 'bpmn.labels.EditFolder',
-          'delete':  'bpmn.labels.DeleteFolder',
+          'delete': 'bpmn.labels.DeleteFolder',
           'copy': 'bpmn.labels.CopyFolder',
         },
         'project': {
@@ -125,7 +125,7 @@ export default {
   methods: {
     onShowForm(mode, type, model, callback) {
       this.mode = mode;
-      this.type = this.$route.name == "Main" ? 'project' : type
+      this.type = this.$route.name == 'Main' ? 'project' : type
       this.model = model;
       this.callback = callback;
       this.show = true;
@@ -141,14 +141,14 @@ export default {
       }
       if (this.callback) {
         this.loading = true;
-        if(this.type == 'project') { this.type = 'folder'}
+        if (this.type == 'project') { this.type = 'folder' }
         let success = await this.callback(this.model, this.type, this.mode);
         
         if (success) {
           await this.$store.dispatch('bpmn/resetCache')
           await this.$store.dispatch('bpmn/loadItems')
           this.cancel();
-          if(this.type == "process" && (this.mode == "create" || this.mode == "copy" ) ) {
+          if (this.type == 'process' && (this.mode == 'create' || this.mode == 'copy' ) ) {
             this.active = this.model.id
           }
           this.callback = null;

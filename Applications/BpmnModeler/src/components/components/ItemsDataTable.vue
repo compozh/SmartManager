@@ -84,7 +84,7 @@ export default {
       this.users = await this.$store.dispatch('bpmn/queryUsers')
     },
     findUser(userId) {
-      if(this.$store.state.auth.user && userId == this.$store.state.auth.user.id) { 
+      if (this.$store.state.auth.user && userId == this.$store.state.auth.user.id) { 
         return this.$t('bpmn.labels.You')
       }
       if (this.users.length == 0) { return userId }
@@ -125,7 +125,7 @@ export default {
     },
   },
   mounted() {
-    if(this.items.length > 0){ this.loadUsers()}
+    if (this.items.length > 0) { this.loadUsers() }
   }
 };
 </script>

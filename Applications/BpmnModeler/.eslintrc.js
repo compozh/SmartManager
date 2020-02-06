@@ -10,11 +10,9 @@ module.exports = {
   ],
 
   'plugins': [
-    'vue'
+    'vue',
+    'vuetify'
   ],
-
-  'rules': {
-  },
 
   root: true,
 
@@ -38,7 +36,10 @@ module.exports = {
     "keyword-spacing":["error"],
     "brace-style":["error","1tbs", { "allowSingleLine": true }],
     "arrow-spacing":["error"],
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    'vuetify/no-deprecated-classes': 'error',
+    'vuetify/grid-unknown-attributes': 'error',
+    'vuetify/no-legacy-grid': 'error',
   },
 
   parserOptions: {

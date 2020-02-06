@@ -84,12 +84,12 @@ export default {
   },
   methods: {
     changeFolder(value) {
-      if(!value) {
+      if (!value) {
         this.choosedFolder = {
           name: this.$t('bpmn.labels.Projects'),
           items: this.items
         }
-      } else if(!value.id) {
+      } else if (!value.id) {
         let elem = this.$store.getters['bpmn/getItemById'](value)
         this.choosedFolder = elem.item 
       } else {

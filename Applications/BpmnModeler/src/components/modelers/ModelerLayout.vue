@@ -1,6 +1,6 @@
 <template>
-  <v-layout fill-height>
-    <v-layout v-if="loading" fill-height column justify-center align-center>
+  <v-row class="fill-height" >
+    <v-row class="fill-height" v-if="loading" justify="center" align="center">
       <v-progress-circular
         :size="70"
         :width="7"
@@ -8,10 +8,10 @@
         indeterminate
       >
       </v-progress-circular>
-    </v-layout>
-    <v-layout v-if="!loading && noAccess" column justify-center align-center>
+    </v-row>
+    <v-row v-if="!loading && noAccess" justify="center" align="center">
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
-    </v-layout>
+    </v-row>
     <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
         <v-spacer></v-spacer>
@@ -38,7 +38,7 @@
         </bpmn-contex-menu>
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
-        <SplitArea :size="100 - splitSize">
+        <SplitArea :size="100 - splitSize" class="diagram-section">
           <div class="bpmn-diagram-container">
             <v-row class="options-panel">
               <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
@@ -69,7 +69,7 @@
             <slot name="modeler"></slot>
           </div>
         </SplitArea>
-        <SplitArea :size="splitSize" :minSize="0">
+        <SplitArea :size="splitSize" :minSize="0" class="properties-panel-section">
           <div class="properties-panel-container" v-show="showPanel">
             <slot name="propertiesPanel"></slot>
           </div>
@@ -91,7 +91,7 @@
         <span>{{ $t('bpmn.labels.ProcessSaved') }}</span>
       </v-tooltip>
     </div>
-  </v-layout>
+  </v-row>
 </template>
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
@@ -181,11 +181,11 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     canShare(item) {
-      if(!item) return false
+      if (!item) { return false }
       return item.hasRight(Models.AccessRights.Share);
     },
     canDeploy(item) {
-      if(!item) return false
+      if (!item) { return false }
       return item.hasRight(Models.AccessRights.Deploy);
     },
     async deployItem(item) {
@@ -213,6 +213,7 @@ export default {
   grid-template-areas: 
     "toolbar"
     "modeler";
+  overflow: hidden;
 }
 .modeler-toolbar {
   grid-area: toolbar;
@@ -232,10 +233,8 @@ export default {
   height: 100%;
   grid-area: modeler;
   position: relative;
-  top:2px
-}
-.modeler-grid.no-panel {
-  height: calc(100% - 81px);
+  top:2px;
+  overflow: hidden;
 }
 .bpmn-diagram-container .workflow-modeler {
   width: 100%;
@@ -276,5 +275,7 @@ a.bjs-powered-by {
     min-width: 45px !important
   }
 }
-
+.diagram-section {
+  overflow: hidden;
+}
 </style>

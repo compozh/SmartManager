@@ -11,7 +11,7 @@
         </div>
         <div v-else-if="props.error">
           <div class="qr-error-text">{{props.error}}</div>
-          <v-btn class="cyan white--text text-xs-right"
+          <v-btn class="cyan white--text text-right"
           @click="props.readerEvents.tryAgain"
           >{{$t("qrlogin.tryAgain")}}</v-btn>
         </div>

@@ -1,5 +1,5 @@
 <template>
-  <v-container column fluid px-6> 
+  <v-container class="column px-6" fluid > 
     <v-row class="project-title py-0 " justify="space-between">
       <v-col cols="5" class="justify-start" >
         <v-row class="align-center justify-start">
@@ -89,7 +89,7 @@ export default {
         this.chosen = this.chosen.filter( el => el.id != val.id)
       } else {
         this.chosen.push(val)
-        setTimeout(()=> this.$vuetify.goTo('.v-footer'), 0)
+        setTimeout(() => this.$vuetify.goTo('.v-footer'), 0)
       }
     },
     getChildren(children) {

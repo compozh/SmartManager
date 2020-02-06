@@ -17,10 +17,10 @@
     @click:prepend="$emit('prepend')"
   >
     <template #item="data">
-      <v-list-tile-content :title="data.item.name">
-        <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
-        <v-list-tile-sub-title v-html="data.item.id"></v-list-tile-sub-title>
-      </v-list-tile-content>
+      <v-list-item-content :title="data.item.name">
+        <v-list-item-title v-html="data.item.name"></v-list-item-title>
+        <v-list-item-subtitle class="text-left" v-html="data.item.id"></v-list-item-subtitle>
+      </v-list-item-content>
     </template>
   </v-autocomplete>
 </template>

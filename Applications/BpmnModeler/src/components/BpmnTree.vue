@@ -1,5 +1,5 @@
 <template>
-  <v-layout column fill-height>
+  <v-col class="fill-height">
     <v-text-field
       v-model="search"
       :label="$tc('bpmn.labels.Search')"
@@ -31,7 +31,7 @@
         </span>
       </template>
     </el-tree>
-  </v-layout>
+  </v-col>
 </template>
 <script>
 import treeSearch from '../api/treeSearch';

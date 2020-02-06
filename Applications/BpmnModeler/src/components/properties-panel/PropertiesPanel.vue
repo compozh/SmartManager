@@ -1,5 +1,5 @@
 <template>
-<v-layout column fill-height>
+<v-col class="fill-height pa-0" >
   <el-tabs
     v-model="currentTab"
     class="properties-panel"
@@ -8,7 +8,7 @@
       <properties-panel-tab :tab="tab"></properties-panel-tab>
     </el-tab-pane>
   </el-tabs>
-</v-layout>
+</v-col>
 </template>
 <script>
 import PropertiesPanelTab from './PropertiesPanelTab';

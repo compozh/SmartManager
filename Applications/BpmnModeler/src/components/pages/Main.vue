@@ -1,5 +1,5 @@
 <template>
- <v-container align-center column py-0 px-6 fluid>
+ <v-container class="column py-0 px-6 align" fluid>
     <v-row class="layout-title">
       <h1>{{$t('bpmn.labels.RecentlyActive')}}</h1>
       <h2>{{$t('bpmn.labels.LastChanged')}}</h2>
