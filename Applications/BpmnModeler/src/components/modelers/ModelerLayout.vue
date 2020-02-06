@@ -276,6 +276,6 @@ a.bjs-powered-by {
   }
 }
 .diagram-section {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 </style>

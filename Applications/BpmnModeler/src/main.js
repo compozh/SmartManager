@@ -76,10 +76,9 @@ export const eventBus = new Vue({
   render: h => h(App)
 }).$mount('#app');
 
-
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i);
-req.keys().map(key => {
+req.keys().forEach(key => {
   if (!(req(key).default || {}).name) {
     return;
   }

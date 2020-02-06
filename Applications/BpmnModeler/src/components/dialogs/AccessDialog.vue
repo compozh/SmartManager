@@ -261,6 +261,7 @@ export default {
             }
           }
         }
+        return false;
       });
     },
     async loadUsersAndGroups() {
