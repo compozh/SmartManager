@@ -90,7 +90,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
-    this.$emit('loadItems');
+    //this.$emit('loadItems');
   },
   watch: {
     decision(value, oldValue) {
