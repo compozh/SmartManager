@@ -1,4 +1,6 @@
 ﻿using IdentityModel;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using SmartId.Models;
@@ -29,6 +31,7 @@ namespace SmartId.Authentication
 				});
 			}
 			//identity.AddClaim(new Claim("ContactName", user.ContactName ?? "[Click to edit profile]"));
+
 			return identity;
 		}
 	}

@@ -14,6 +14,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using IdentityServer4.Services;
+using SmartId.Authentication;
 
 namespace SmartId.Extensions
 {
@@ -56,11 +58,12 @@ namespace SmartId.Extensions
 			addConfigurations(builder, connectionStringConfiguration, clientSection, apiSection, environment, logger);
 			// добавляем механизм идентификации
 			builder.AddAspNetIdentity<SmartIdUser>();
+			services.AddTransient<IProfileService, IdentityWithAdditionalClaimsProfileService>();
 
 			if (environment.IsDevelopment())
 			{
 				logger.LogInformation($"Development mode");
-				//builder.AddDeveloperSigningCredential();
+				builder.AddDeveloperSigningCredential();
 			}
 			else
 			{

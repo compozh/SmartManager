@@ -64,7 +64,10 @@ namespace SmartId
 				options.Password.RequiredLength = 6;
 				options.Password.RequiredUniqueChars = 1;
 
+				// TODO: testit
 				options.SignIn.RequireConfirmedAccount = true;
+				// обязательно тербовать подтверждения почты
+				options.SignIn.RequireConfirmedEmail = true;
 			}).AddEntityFrameworkStores<AspIdentityDbContext>()
 				.AddUserManager<DualStorageUserManager<SmartIdUser>>()
 				.AddClaimsPrincipalFactory<SmartIdClaimsPrincipalFactory>()
@@ -86,8 +89,8 @@ namespace SmartId
 			services.AddSmartIdIdentityServer();
 
 			/* Настраиваем аутентификацию */
-			services.AddAuthentication();
-			//TODO: добавить внешних провайдеров
+			services.AddAuthentication()
+				.AddExternalAuthenticationProviders();
 
 			/* Внутренние сервисы */
 			services.AddMemoryCache();
