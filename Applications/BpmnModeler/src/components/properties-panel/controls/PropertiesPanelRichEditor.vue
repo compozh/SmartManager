@@ -62,7 +62,7 @@ export default {
     },
     readonly: {
       handler(value) {
-        this.changeReadOnly(value)
+        this.changeReadOnly(value);
       }
     },
     content(value) {

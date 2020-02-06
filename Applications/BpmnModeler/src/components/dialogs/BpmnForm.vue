@@ -59,9 +59,9 @@ export default {
           'copy': 'bpmn.labels.CopyProcess',
         },
         'folder': {
-          'create':  'bpmn.labels.CreateFolder',
+          'create': 'bpmn.labels.CreateFolder',
           'edit': 'bpmn.labels.EditFolder',
-          'delete':  'bpmn.labels.DeleteFolder',
+          'delete': 'bpmn.labels.DeleteFolder',
           'copy': 'bpmn.labels.CopyFolder',
         },
         'project': {
@@ -86,7 +86,7 @@ export default {
       rules: {
         required: value => !!value || this.$t('bpmn.labels.RequiredField')
       }
-    }
+    };
   },
   props: {
     activeItem: String
@@ -103,14 +103,14 @@ export default {
     },
     names: {
       get: function () {
-        return this.type == 'all' ? this.model.map(el => el.name).join(', ') : this.model.name
+        return this.type == 'all' ? this.model.map(el => el.name).join(', ') : this.model.name;
       },
       set: function (val) {
         if (this.type == 'all' ) {
           val = val.split(', ') || val
           this.model.forEach((el, n) => el.name = val[n])
         } else {
-          this.model.name = val
+          this.model.name = val;
         }
       },
     },
@@ -129,12 +129,11 @@ export default {
   methods: {
     onShowForm(mode, type, model, callback) {
       this.mode = mode;
-      this.type = this.$route.name == "main" ? 'project' : type
+      this.type = this.$route.name == 'main' ? 'project' : type;
       this.model = model;
       this.callback = callback;
       this.show = true;
-      setTimeout(() => document.querySelector('input').focus(), 1)
-      console.log(this)
+      setTimeout(() => document.querySelector('input').focus(), 1);
     },
     cancel() {
       this.$refs.form.resetValidation();
@@ -151,11 +150,11 @@ export default {
         let success = await this.callback(this.model, this.type, this.mode);
         
         if (success) {
-          await this.$store.dispatch('bpmn/resetCache')
-          await this.$store.dispatch('bpmn/loadItems')
+          await this.$store.dispatch('bpmn/resetCache');
+          await this.$store.dispatch('bpmn/loadItems');
           this.cancel();
-          if(this.type == "process" && (this.mode == "create" || this.mode == "copy" ) ) {
-            this.active = this.model.id
+          if (this.type == 'process' && (this.mode == 'create' || this.mode == 'copy' ) ) {
+            this.active = this.model.id;
           }
           this.callback = null;
         }
@@ -163,7 +162,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 <style>
 .v-input--radio-group__input > label.v-label {

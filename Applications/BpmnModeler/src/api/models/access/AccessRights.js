@@ -4,4 +4,4 @@ export default {
   Deploy: 'DEPLOY',
   Execute: 'EXECUTE',
   Share: 'SHARE'
-}
+};

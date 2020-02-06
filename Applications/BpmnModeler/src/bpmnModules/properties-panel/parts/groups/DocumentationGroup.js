@@ -22,7 +22,7 @@ export default class DocumentationGroup extends PropertiesPanelGroup {
           text = (documentations && documentations.length > 0) ? documentations[0].text : '';
 
         return text;
-      }
+      };
     }
 
     function setValue(bo) {
@@ -36,7 +36,7 @@ export default class DocumentationGroup extends PropertiesPanelGroup {
         }
 
         return cmdHelper.setList(element, bo, 'documentation', newObjectList);
-      }
+      };
     }
 
     var bo = getBusinessObject(element);
@@ -62,7 +62,7 @@ export default class DocumentationGroup extends PropertiesPanelGroup {
           model: 'documentation',
           get: getValue(processRef),
           set: setValue(processRef)
-        }))
+        }));
       }
     }
 

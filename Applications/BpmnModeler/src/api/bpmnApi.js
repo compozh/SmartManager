@@ -256,14 +256,14 @@ export class BpmnModelerApi {
   async queryUsers() {
     const result = await query({
       query: gql`query ${queries.queryUsers}`
-    })
+    });
     return result.data.bpmnquery.queryUsers;
   }
 
   async queryGroups() {
     const result = await query({
       query: gql`query ${queries.queryGroups}`
-    })
+    });
     return result.data.bpmnquery.queryGroups;
   }
 

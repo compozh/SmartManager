@@ -28,7 +28,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
     label: translate('Called Element'),
     model: 'calledElement',
     loadItems: (async () => (await api.getDeployedProcesses())
-      .map(process => { return { id: process.procDefKey, name: process.procName } })
+      .map(process => { return { id: process.procDefKey, name: process.procName }; })
       .filter((process, index, self) => self.indexOf(process) === index))(),
     set: (element, value) => {
       if (!value) {
@@ -39,14 +39,14 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
             'camunda:calledElementVersion': undefined
           }),
           ...deleteBusinessKey(element)
-        ]
+        ];
       }
       return [
         cmdHelper.updateBusinessObject(element, bo, {
           'calledElement': value
         }),
         ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
-      ]
+      ];
     },
     validate: required,
     appendIcon: 'mdi-magnify',
@@ -88,7 +88,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
         model: 'camunda:calledElementVersion',
         loadItems: (async () => (await api.getDeployedProcesses())
           .filter(process => process.procDefKey === bo.calledElement)
-          .map(process => { return { id: process.procDefVer.toString(), name: process.procDefVer } }))(),
+          .map(process => { return { id: process.procDefVer.toString(), name: process.procDefVer }; }))(),
         set: (element, value) => {
           if (!value) {
             return cmdHelper.updateBusinessObject(element, bo, { 'camunda:calledElementVersion': undefined });
@@ -96,7 +96,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
           return cmdHelper.updateBusinessObject(element, bo, { 'camunda:calledElementVersion': value });
         },
         validate: required
-      }))
+      }));
     }
   }
 }

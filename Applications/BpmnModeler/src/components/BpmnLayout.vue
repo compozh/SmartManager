@@ -9,12 +9,12 @@
       </router-link>
       <breadcrumbs class="pl-4" :activeItem.sync="activeItem" />
       <v-spacer></v-spacer>
-      <v-flex shrink class="icon-container" v-if="currentUser">
+      <v-col class="icon-container shrink" v-if="currentUser">
         <user-panel mini="true"></user-panel>
-      </v-flex>
+      </v-col>
     </v-app-bar>
     <v-content class="grey lighten-4">
-      <v-container fluid pa-0 fill-height class="align-start" >
+      <v-container fluid class="align-start pa-0 fill-height" >
         <router-view ref="modeler" v-if="!loading" 
           @loadItems="loadItems"
           :activeItem.sync="activeItem"/>
@@ -104,33 +104,25 @@ export default {
         }
       }
     },
-    // async dropItem(draggingItem, dropItem, type) {
-    //   this.loading = true;
-    //   if (!(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem, type }))) {
-    //     Notification.error(this.$t('bpmn.errors.CantDrop'));
-    //   }
-    //   this.activeItem = draggingItem.id;
-    //   this.loading = false;
-    // },
     onCreateDiagram() {
       this.createItem(this.$store.state.bpmn.activeItem, 'process');
     },
     navigateToItem(value) {
       if (!value) {
-        return this.$router.push({name: 'main'})
+        return this.$router.push({name: 'main'});
       }
       if (!value.id) {
-        let elem = this.$store.getters['bpmn/getItemById'](value)
-        if(!elem.item) {
-          this.$router.push({name: 'ERROR', params: {status_code: '404'}, query: {from: this.$route.name, id: value }})
-          return
+        let elem = this.$store.getters['bpmn/getItemById'](value);
+        if (!elem.item) {
+          this.$router.push({name: 'ERROR', params: {status_code: '404'}, query: {from: this.$route.name, id: value }});
+          return;
         }
-        value = elem.item
+        value = elem.item;
       }
-      if (this.$route.params.id == value.id) { return }
+      if (this.$route.params.id == value.id) { return; }
       value.type == 'BPMN' ? this.$router.push({name: 'process', params: {id: value.id}}) 
         : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
-          : this.$router.push({name: 'project', params: {id: value.id}})
+          : this.$router.push({name: 'project', params: {id: value.id}});
     },
   },
   computed: {
@@ -148,7 +140,7 @@ export default {
       },
       set(value) {
         this.$store.dispatch('bpmn/setActiveItem', value);
-        this.navigateToItem(value)
+        this.navigateToItem(value);
       }
     },
     dataLoading() {
@@ -222,22 +214,27 @@ export default {
     bottom: 12px !important;
     top: auto !important;
   }
-svg.it-logo {
-  height: 30px;
-  width: 170px;
-}
 
- svg.it-logo.master {
-  padding-left: 2px;
-}
-.logo {
-  text-decoration: none;
-  flex-direction: row; 
-  display: flex;
-  color: #1976d2;
-  fill: #1976d2;
-  h1 {
-    font-size: 24px
+  svg.it-logo {
+    height: 30px;
+    width: 170px;
   }
-}
+
+  svg.it-logo.master {
+    padding-left: 2px;
+  }
+  .logo {
+    text-decoration: none;
+    flex-direction: row; 
+    display: flex;
+    color: #1976d2;
+    fill: #1976d2;
+    h1 {
+      font-size: 24px
+    }
+  }
+
+  .v-input--selection-controls__ripple {
+    z-index: 1;
+  }
 </style>

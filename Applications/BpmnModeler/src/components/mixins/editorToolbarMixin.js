@@ -5,7 +5,7 @@ export default {
       canUndo: false,
       canMinimap: false,
       canZoom: false
-    }
+    };
   },
   methods: {
     onEditorChanged() {
@@ -63,4 +63,4 @@ export default {
       this.canZoom = this.getEditorModule('zoomScroll');
     }
   }
-}
+};

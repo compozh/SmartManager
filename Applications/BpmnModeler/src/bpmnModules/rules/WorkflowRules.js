@@ -19,4 +19,4 @@ BpmnRules.prototype.init = function () {
       return true;
     }
   });
-}
+};

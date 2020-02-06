@@ -20,7 +20,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
 // import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
@@ -60,7 +60,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
-    this.$emit('loadItems')
+    this.$emit('loadItems');
   },
   watch: {
     process(value, oldValue) {
@@ -131,9 +131,9 @@ export default {
         }
       });
       
-      this.$store.dispatch('bpmn/editProcess', this.process)
-      const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId)
-      this.$store.dispatch('bpmn/editFolder', item)
+      this.$store.dispatch('bpmn/editProcess', this.process);
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
+      this.$store.dispatch('bpmn/editFolder', item);
     },
     onActiveModelChanged() {
       if (!this.process || !this.modeler || this.noAccess) {

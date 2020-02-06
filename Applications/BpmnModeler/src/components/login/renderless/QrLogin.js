@@ -22,15 +22,15 @@ export default {
       result: this.result,
       processing: this.processing,
       state: this.state
-    })
+    });
   },
 
   computed: {
     showScanner() {
-      return !this.error && !this.result
+      return !this.error && !this.result;
     },
     routeToBack() {
-      return this.$route.query.to || '/'
+      return this.$route.query.to || '/';
     }
   },
 
@@ -49,41 +49,41 @@ export default {
 
   methods: {
     tryAgain() {
-      this.error = ''
-      this.result = ''
+      this.error = '';
+      this.result = '';
     },
     onDecode (decodedString) {
-      this.result = decodedString
-      this.processing = true
+      this.result = decodedString;
+      this.processing = true;
       this.$authentication.loginByQr(this.result)
         .then(result => {
-          this.processing = false
-          result ? this.$router.replace({path: this.routeToBack}) : ''
+          this.processing = false;
+          result ? this.$router.replace({path: this.routeToBack}) : '';
         }).catch( () => {
-          this.processing = false
-          this.error = this.$t('qrloginrl.loginError')
-        })
+          this.processing = false;
+          this.error = this.$t('qrloginrl.loginError');
+        });
     },
 
     async onInit (promise) {
       try {
-        await promise
+        await promise;
       } catch (error) {
         if (error.name === 'NotAllowedError') {
-          this.state = this.$t('qrloginrl.notAllowedError')
+          this.state = this.$t('qrloginrl.notAllowedError');
         } else if (error.name === 'NotFoundError') {
-          this.state = this.$t('qrloginrl.notFoundError')
+          this.state = this.$t('qrloginrl.notFoundError');
         } else if (error.name === 'NotSupportedError') {
-          this.state = 'ERROR: secure context required (HTTPS, localhost)'
+          this.state = 'ERROR: secure context required (HTTPS, localhost)';
         } else if (error.name === 'NotReadableError') {
-          this.state = 'ERROR: is the camera already in use?'
+          this.state = 'ERROR: is the camera already in use?';
         } else if (error.name === 'OverconstrainedError') {
-          this.state = 'ERROR: installed cameras are not suitable'
+          this.state = 'ERROR: installed cameras are not suitable';
         } else if (error.name === 'StreamApiNotSupportedError') {
-          this.state = this.$t('qrloginrl.streamApiNotSupportedError')
+          this.state = this.$t('qrloginrl.streamApiNotSupportedError');
         }
       }
     }
   }
 
-}
+};

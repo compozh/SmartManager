@@ -68,7 +68,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
         disabled(element) {
           var bo = getBusinessObject(element);
           var taskCode = bo.get('camunda:topic');
-          return typeof taskCode !== 'string' || taskCode.trim() === ''
+          return typeof taskCode !== 'string' || taskCode.trim() === '';
         },
         click(element) {
           var bo = getBusinessObject(element);

@@ -1,5 +1,5 @@
 <template>
-  <v-container column fluid px-6> 
+  <v-container class="column px-6" fluid > 
     <v-row class="project-title py-0 " justify="space-between">
       <v-col cols="5" class="justify-start" >
         <v-row class="align-center justify-start">
@@ -76,7 +76,7 @@
 <script>
 import { Notification } from 'element-ui';
 import { formMixin, importMixin } from '../mixins';
-import moment from 'moment'
+import moment from 'moment';
 export default {
   name: 'bpmn-project',
   mixins: [ formMixin, importMixin ],
@@ -131,42 +131,42 @@ export default {
   },
   methods: {
     choosed(val) {
-      let elem = this.chosen.find( el => el.id == val.id)
+      let elem = this.chosen.find( el => el.id == val.id);
       if (elem) {
-        this.chosen = this.chosen.filter( el => el.id != val.id)
+        this.chosen = this.chosen.filter( el => el.id != val.id);
       } else {
-        this.chosen.push(val)
-        setTimeout(()=> this.$vuetify.goTo('.v-footer'), 0)
+        this.chosen.push(val);
+        setTimeout(() => this.$vuetify.goTo('.v-footer'), 0);
       }
     },
     getChildren(children) {
-      let sorted
+      let sorted;
       if (this.search) {
-        children = children.filter(el => el.name.toLowerCase().includes(this.search.toLowerCase()))
+        children = children.filter(el => el.name.toLowerCase().includes(this.search.toLowerCase()));
       }
       if (this.sortedIn == this.sort) { 
-        return children
+        return children;
       } else if ( this.sort == 'name') {
-        sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name))
+        sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name));
       } else if (this.sort ==  'creationTime' || this.sort ==  'editTime' ) {
         sorted = children.sort(( a, b ) => {
-          let first = !a[this.sort] ? a.creationTime : a[this.sort]
-          let second = !b[this.sort] ? b.creationTime : b[this.sort]
-          return moment(first).toDate().getTime() - moment(second).toDate().getTime()
-        })
+          let first = !a[this.sort] ? a.creationTime : a[this.sort];
+          let second = !b[this.sort] ? b.creationTime : b[this.sort];
+          return moment(first).toDate().getTime() - moment(second).toDate().getTime();
+        });
       } else  {
-        this.sort = this.sortedIn
-        sorted = children.reverse()
+        this.sort = this.sortedIn;
+        sorted = children.reverse();
       }
-      this.sortedIn = this.sort
-      return sorted
+      this.sortedIn = this.sort;
+      return sorted;
     },
     checkSort(value) {
       if (this.sortedIn == value) {
-        this.sort = 'revert'
-        this.sortedIn = value
+        this.sort = 'revert';
+        this.sortedIn = value;
       } else { 
-        this.sort = value
+        this.sort = value;
       }
     },
     addFolder() {
@@ -176,33 +176,33 @@ export default {
       this.createItem(this.item, 'process');
     },
     hasElements(type) {
-      if (!this.children) { return [] }
+      if (!this.children) { return []; }
       let elements = type == 'diagram' ?
         this.children.filter( item => !item.isFolder)
-        : this.children.filter( item => item.isFolder)
-      return elements
+        : this.children.filter( item => item.isFolder);
+      return elements;
     },
   },
   computed: {
     selectItems() {
       return [{text: this.$t('bpmn.labels.Name'), value: 'name'},
         {text: this.$t('bpmn.labels.CreationTime'), value: 'creationTime'},
-        {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'}]
+        {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'}];
     },
     item() {      
-      let itemId = this.$route.params.id
-      const { item, index } = this.$store.getters['bpmn/getItemById'](itemId)
-      return item
+      let itemId = this.$route.params.id;
+      const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
+      return item;
     },
     children: {
       get: function() {
-        if (!this.item) { return [] }
-        let children = this.item.items
-        children = this.getChildren(children)
-        return children
+        if (!this.item) { return []; }
+        let children = this.item.items;
+        children = this.getChildren(children);
+        return children;
       },
       set: function(val) {
-        return val
+        return val;
       }
     },
     items() {

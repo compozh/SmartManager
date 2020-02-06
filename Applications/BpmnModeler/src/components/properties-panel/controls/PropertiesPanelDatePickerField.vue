@@ -51,7 +51,7 @@ export default {
       menu: false,
       date: null,
       locale: currentLang()
-    }
+    };
   },
   watch: {
     value: {
@@ -73,5 +73,5 @@ export default {
       }
     }
   }
-}
+};
 </script>

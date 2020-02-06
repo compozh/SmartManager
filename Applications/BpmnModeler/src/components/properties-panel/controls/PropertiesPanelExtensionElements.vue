@@ -1,12 +1,12 @@
 <template>
-  <v-layout column class="external-elements">
-    <v-layout row class="header">
+  <v-col class="external-elements">
+    <v-row  class="header">
       <v-subheader>{{ label }}</v-subheader>
       <v-spacer></v-spacer>
       <v-btn v-if="canCreate" icon small :title="$t('bpmn.buttons.Add')" @click="createElement()">
-        <v-icon>mdi-add</v-icon>
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
-    </v-layout>
+    </v-row>
     <v-card class="tree-container">
       <el-tree
         ref="tree"
@@ -19,12 +19,12 @@
         <template v-slot="{ data: field }">
           <span class="treeview-node-content">
             <span class="treeview-node-label">{{ field.label || field.id }}</span>
-            <v-btn v-if="canRemove" flat icon :title="$t('bpmn.buttons.Delete')" @click="removeElement(field)"><v-icon>mdi-close</v-icon></v-btn>
+            <v-btn v-if="canRemove" text icon :title="$t('bpmn.buttons.Delete')" @click="removeElement(field)"><v-icon>mdi-close</v-icon></v-btn>
           </span>
         </template>
       </el-tree>
     </v-card>
-  </v-layout>
+  </v-col>
 </template>
 <script>
 export default {
@@ -125,7 +125,7 @@ export default {
       }
     }
   }
-}
+};
 
 </script>
 <style>

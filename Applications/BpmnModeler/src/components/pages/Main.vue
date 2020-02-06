@@ -1,5 +1,5 @@
 <template>
- <v-container align-center column py-0 px-6 fluid>
+ <v-container class="column py-0 px-6 align" fluid>
     <v-row class="layout-title">
       <h1>{{$t('bpmn.labels.RecentlyActive')}}</h1>
       <h2>{{$t('bpmn.labels.LastChanged')}}</h2>
@@ -36,15 +36,15 @@
  </v-container>
 </template>
 <script>
-import moment from 'moment'
+import moment from 'moment';
 import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
-import treeSearch from '../../api/treeSearch'
+import treeSearch from '../../api/treeSearch';
 export default {
   name: 'bpmn-main',
   data () {
     return {
       search: '',
-    }
+    };
   },
   mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
   props: {
@@ -53,29 +53,29 @@ export default {
   methods: {
     addFolder() {
       this.createItem(null, 'folder');
-      this.$forceUpdate()
+      this.$forceUpdate();
     }
   },
   computed: {
     recentDiagrams() {
-      let diagrams = []
+      let diagrams = [];
       let findDiagr = (item) => {
         if (item.isFolder) {
-          item.items.forEach(elem => findDiagr(elem))
+          item.items.forEach(elem => findDiagr(elem));
         } else {
-          diagrams.push(item)
+          diagrams.push(item);
         }
-      }
-      this.items.forEach(item => findDiagr(item))
+      };
+      this.items.forEach(item => findDiagr(item));
 
       let time = (el) => {
         let res =  el.editTime ? 
           moment(el.editTime).toDate().getTime()
-          : moment(el.creationTime).toDate().getTime()
-        return res
-      }
-      diagrams = diagrams.sort((a, b) => time(b) - time(a)).slice(0, 3)
-      return diagrams  
+          : moment(el.creationTime).toDate().getTime();
+        return res;
+      };
+      diagrams = diagrams.sort((a, b) => time(b) - time(a)).slice(0, 3);
+      return diagrams;  
     },
     active: {
       get() {

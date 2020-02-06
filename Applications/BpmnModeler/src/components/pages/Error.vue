@@ -1,5 +1,5 @@
 <template>
-  <v-container align-center justify-center>
+  <v-container class="align justify" >
     <error-404 v-if="this.routeParamCode == '404'"/>
     <error-500 v-else-if="this.routeParamCode == '500'"/>
     <error-402 v-else-if="this.routeParamCode == '402'"/>
@@ -16,9 +16,9 @@ export default {
   computed: {      
     routeParamCode: {
       get: function() {
-        return this.$route.params.status_code ? this.$route.params.status_code : ''
+        return this.$route.params.status_code ? this.$route.params.status_code : '';
       }      
     }
   },
-}
+};
 </script>
