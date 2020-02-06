@@ -14,10 +14,7 @@ export default {
         } else {
           success = await this.$store.dispatch('bpmn/createProcess', item);
         }
-        if (success) {
-          // this.active = item.id;
-          // this.$forceUpdate()
-        } else {
+        if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
         break;
@@ -29,63 +26,61 @@ export default {
         }
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
+        } else {
+          this.$forceUpdate()
         }
-        this.$forceUpdate()
         break;
       case 'delete':
         let deleting = async (elem) => {
-          success = await this.$store.dispatch('bpmn/deleteItem', elem);
+          let val = await this.$store.dispatch('bpmn/deleteItem', elem);
+          return val
         }
-        if (type === 'all') {
-          let successes = []
-          await item.forEach(async elem => {
-            await deleting(elem)
-            successes.push(success)
-          })
-          success = successes.every( el => el)
-          if (success) {
-            this.choose = this.choose.filter( el => !item.find(it => el.id == it.id))
+        if (type === 'all') {          
+          let processArray =  async (array) => {
+            const promises = array.map(elem => (deleting(elem)))
+            success =  (await Promise.all(promises)).every( el => el)
           }
+          await processArray(item)
         } else {
-          await deleting(item)
-          if (success) {
-            if (this.choose) { this.choose = this.choose.filter( el => el.id != item.id) }
+          success = await deleting(item)
+          if (success ) {
             this.$forceUpdate()
             this.active = item.parentId
           }
         }
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
+        } else if (this.choose) {
+          this.choose = this.choose.filter( el => !item.find(it => el.id == it.id))
         }
         break;
       case 'copy':
         let copy = async (elem) => {
-          if (elem.isFolder) {
-            success = await this.$store.dispatch('bpmn/copyFolder', elem);
-          } else {
-            success = await this.$store.dispatch('bpmn/copyProcess', elem);
-          }
+          let val
+            if (elem.isFolder) {
+              val = await this.$store.dispatch('bpmn/copyFolder', elem);
+            } else {
+              val = await this.$store.dispatch('bpmn/copyProcess', elem);
+            }
+          return val
         }
         if (type === 'all') {
-          let successes = []
-          await item.forEach(async elem => {
-            await copy(elem)
-            successes.push(success)
-          })
-          success = successes.every( el => el)
+          let processArray =  async (array) => {
+            const promises = array.map(elem => copy(elem))
+            success =  await Promise.all(promises)
+            success = success.every( el => el)
+          }
+          await processArray(item)
         } else {
-          await copy(item)
+          success = await copy(item)
         }
         
-        if (success) {
-          if (this.choose) { 
-            this.choose = [] 
-          } else {
-            this.active = item.id
-          }
-        } else {
+        if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
+        } else if (this.choose) {
+          this.choose = this.choose.filter( el => item.find(it => el.id == it.id))
         }
+        
         break;
       }
       return success;

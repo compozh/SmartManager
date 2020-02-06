@@ -250,10 +250,10 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    if(success) {
+    // if(success) {
       // await context.dispatch('resetCache')
       // await context.dispatch('loadItems')
-    }
+    // }
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {
