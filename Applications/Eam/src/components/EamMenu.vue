@@ -40,7 +40,10 @@ export default {
       return links.filter(l => l.Name && l.Path)
     },
     isLoggedIn() {
-      return !!this.$authentication.currentUser
+      return !!this.currentUser
+    },
+    currentUser() {
+      return this.$store.getters['eam/auth/user']
     }
   }
 }

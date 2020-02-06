@@ -18,7 +18,7 @@
 export default {
   name: 'eam-base-select',
   props: {
-    value: [String, Array],
+    value: [String, Number, Array],
     constantFilter: Array,
     query: Object,
     queryName: String,

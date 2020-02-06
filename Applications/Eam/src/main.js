@@ -2,11 +2,8 @@
 import WebApps from '@it-enterprise/webappscore'
 import Localization from '@it-enterprise/localization'
 import GrapgQlCore from '@it-enterprise/graphql'
-import Authentication from '@it-enterprise/authentication'
-import '@it-enterprise/authentication/dist/authentication.css'
 import Router from '@it-enterprise/routercore'
-import ItCommon from '@it-enterprise/common'
-import '@it-enterprise/common/dist/common-components.css'
+import auth from '@it-enterprise/jwtauthentication'
 
 
 // vue пакеты
@@ -29,9 +26,13 @@ import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
+import { onError } from 'apollo-link-error'
 import VueApollo from 'vue-apollo'
 
 import { routerDependencies } from './router'
+const config = window.config
+
+auth.config(config.GrapgQlUrl)
 
 import signalR from './signalR'
 import './registerServiceWorker'
@@ -39,11 +40,12 @@ import './registerServiceWorker'
 const cache = new InMemoryCache()
 
 const httpLink = new HttpLink({
-  uri: window.myConfig.GrapgQlUrl + 'api/graphql',
+  uri: config.GrapgQlUrl + 'api/graphql',
 })
 
-const authLink = setContext((_, { headers }) => {
-  const authHeader = Vue.prototype.$authentication.getAuthHeader()
+const authLink = setContext(async function (_, { headers }) {
+  const token = await auth.getToken()
+  const authHeader = { Authorization: `Bearer ${token}` }
   return {
     headers: {
       ...headers,
@@ -53,8 +55,22 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  debugger
+  console.log(graphQLErrors.message)
+  console.log(networkError)
+  if (networkError && networkError.statusCode === 401) {
+    auth.clearTokens()
+    //routerDependencies.router.push({ name: 'EAMLOGIN' })
+    routerDependencies.router.push('login')
+  }
+  if (graphQLErrors) {
+    return graphQLErrors.message
+  }
+})
+
 const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: errorLink.concat(authLink.concat(httpLink)),
   cache,
   connectToDevTools: true
 })
@@ -81,17 +97,15 @@ Vue.use(DatetimePicker)
 Vue.use(Viewer)
 
 // Плагины it-enterprise
-Vue.use(ItCommon)
-Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
+Vue.use(GrapgQlCore, { options: config, dependencies })
 Vue.use(Localization, { dependencies })
-Vue.use(Authentication, { options: window.myConfig, dependencies })
-Vue.use(Router, { options: window.myConfig, dependencies })
-Vue.use(WebApps, { dependencies, options: window.myConfig })
+Vue.use(WebApps, { options: config, dependencies }, () => auth.getToken())
+Vue.use(Router, { options: config, dependencies }, () => auth.getToken())
 
 Vue.prototype.$localization.RegisterLanguage('test', 'en', () => import('./plugins/resources/en.json'))
 
 // Шина событий
-export const eventBus = new Vue()
+export const eventBus = new Vue({ store })
 
 // импорт компонентов
 const req = require.context('@/components/', true, /\.(js|vue)$/i)
