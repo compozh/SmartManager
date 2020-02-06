@@ -174,35 +174,38 @@ export default {
     })
   },
 
-  async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async initializeInstallations({ dispatch }, { workCenterCode }) {
+    var result = await dispatch('graphqlQueryWraper', {
       action: async () => {
-        let installations = await api.getInstallationsFromGql(workCenterCode, fetchPolicy)
-        commit('setInstallations', installations)
+        let installations = await api.getInstallationsFromGql(workCenterCode)
+        return installations
       }
     })
+
+    return result
   },
 
   async removeInstallation({ commit }, installation) {
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var result = await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.removeInstallationGql(installation.id)
         return res
-      },
-      successAction: async () => { commit('removeInstallation', installation) }
+      }
     })
+
+    return result
   },
 
   async registerMaterialInstallation({ commit }, { workCenterCode, batchBarcode, factId }) {
     var me = this
-    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var result = await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId)
         return res
-      },
-      successAction: async () => { await me.dispatch('mes/initializeInstallations', { workCenterCode, fetchPolicy: 'network-only' }) },
-      linearLoader: true
+      }
     })
+
+    return result
   },
 
   async registerProduction({ dispatch, getters }, { workCenter, task, deviceSizeType }) {
@@ -387,7 +390,7 @@ export default {
     var result
     try {
       result = await queryAction()
-      if (result.success == true) {
+      if (result.success) {
         if (successAction) {
           await successAction(result)
         }

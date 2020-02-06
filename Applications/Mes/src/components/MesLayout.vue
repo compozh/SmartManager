@@ -84,6 +84,7 @@ export default {
     if(this.$vuetify.breakpoint.smAndDown){
       this.$store.commit('mes/setMenuDrawerMode', false)
     }
+    //todo: вынести в логин
     eventBus.$on(events.scannedBarCode, barcode => {
       if(this.$route.name == "MESLOGIN") {
         this.$store.dispatch('auth/loginByCode', barcode).then(result => {
@@ -100,10 +101,6 @@ export default {
         }).catch(reason => {
           this.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
         })
-      }
-      var tasksPageState = this.$store.getters['mes/tasksPageState']
-      if(this.$route.name == "INSTALLATIONS" || (this.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
-        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: barcode, factId: 0 })
       }
     })
 

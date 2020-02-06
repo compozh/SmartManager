@@ -183,12 +183,12 @@ export class MesApi {
     return result.data.mesMutation.callProcessMethod
   }
 
-  async getInstallationsFromGql(workCenter, fetchPolicy) {
+  async getInstallationsFromGql(workCenter) {
     const client = await getClient()
     const result = await client.query({
       query: gql`query ($workCenter: String) ${installations}`,
       variables: {workCenter},
-      fetchPolicy: fetchPolicy || 'cache-first'
+      fetchPolicy: 'network-only'
     })
     return result.data.mes.installations.installations
   }

@@ -8,22 +8,25 @@
       @submitQrCode=submitQrCode
     />
 
-    <mes-content-loader v-if="!initializeInstallations && !installations.length" :loaderType="$vuetify.breakpoint.xs ? 'list' : ''" />
+    <mes-content-loader v-if="!installationsInitialized && !installations.length" :loaderType="$vuetify.breakpoint.xs ? 'list' : ''" />
       <mes-installations-component
+        :installations=installations
         ref="installationCards"
       />
-    <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">{{this.$t('mes.labels.AbsentInstalledParties')}}</span>
+    <span class="no-data-text" v-if="installationsInitialized && installations.length == 0">{{this.$t('mes.labels.AbsentInstalledParties')}}</span>
   </v-layout>
 </template>
 
 <script>
+import { events } from '../../constants'
+import { eventBus } from '../../main'
 
 export default {
   name: 'mes-installations',
-
   data() {
     return {
-      initializeInstallations: false
+      installations: [],
+      installationsInitialized: false
     }
   },
   created() {
@@ -32,29 +35,40 @@ export default {
         this.$store.commit('mes/setCameraInitialized',  true)
       })
     }
-    this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(() => {
-      this.initializeInstallations = true
-    })
+    this.initializeInstallations()
+
+    eventBus.$on(events.scannedBarCode, this.registerMaterialInstallation)
+  },
+  beforeDestroy() {
+    eventBus.$off(events.scannedBarCode, this.registerMaterialInstallation)
   },
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
-    },
-    installations() {
-      return this.$store.getters['mes/installations']
     },
     cameraSettings() {
       return this.$store.getters['mes/cameraSettings']
     }
   },
   methods: {
+    async initializeInstallations() {
+      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(result => {
+        this.installations = result
+        this.installationsInitialized = true
+      })
+    },
     removeAllInstallations() {
       for (let installation of this.installations) {
         this.removeInstallation(installation)
       }
     },
     removeInstallation(installation) {
-      this.$store.dispatch('mes/removeInstallation', installation)
+      this.$store.dispatch('mes/removeInstallation', installation).then(result => {
+         if(result.success) {
+          var index = this.installations.indexOf(installation)
+          this.installations.splice(index, 1)
+        }
+      })
     },
     async submitQrCode({ qrCodeValue, callback }) {
       let installationCards = this.$refs.installationCards,
@@ -70,10 +84,21 @@ export default {
         }
         return
       }
-      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: qrCodeValue, factId: 0 })
-      if (callback) {
-        callback()
+      this.registerMaterialInstallation(qrCodeValue).then(() => {
+        if (callback) {
+          callback()
+        }
+      })
+    },
+    async registerMaterialInstallation(batchBarcode) {
+      this.$store.commit('mes/setLinearLoader', true)
+      var result = await this.$store.dispatch('mes/registerMaterialInstallation',
+        { workCenterCode: this.workCenter.code, batchBarcode, factId: 0 }
+      )
+      if(result.success) {
+        await this.initializeInstallations()
       }
+      this.$store.commit('mes/setLinearLoader', false)
     }
   }
 }
