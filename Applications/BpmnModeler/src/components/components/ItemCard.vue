@@ -223,4 +223,5 @@ h2 {
   top: -20px;
   font-size: 0.7em
 }
+.v-input--selection-controls__ripple { z-index: 1; }
 </style>

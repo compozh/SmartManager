@@ -98,20 +98,24 @@ export default {
     },
     async moveHere(dropItem) {
       this.loading = true
-      let success = []
-      await this.choose.forEach(async draggingItem => {
-        success.push(await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem }))
-      })
-       success = await success.every(el => el)
-      if (success) {
-        this.choose = []
-        await this.$store.dispatch('bpmn/resetCache')
-        await this.$store.dispatch('bpmn/loadItems')
-
-        this.closeExpl()
-      } else {
-        Notification.error(this.$t('bpmn.errors.CantDrop'));
+      let success
+      let processArray =  async (array) => {
+        const promises = array.map(async draggingItem => {
+          return await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem })
+        })
+        success =  await Promise.all(promises)
+        success = success.every( el => el)
+        if (success) {
+          this.choose = []
+          await this.$store.dispatch('bpmn/resetCache')
+          await this.$store.dispatch('bpmn/loadItems')
+          this.closeExpl()
+        } else {
+          Notification.error(this.$t('bpmn.errors.CantDrop'));
+        }
       }
+      await processArray(this.choose)
+      
       this.loading = false;
     },
     closeExpl() {

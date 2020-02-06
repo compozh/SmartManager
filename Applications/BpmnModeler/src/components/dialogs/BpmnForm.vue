@@ -143,17 +143,17 @@ export default {
         this.loading = true;
         if(this.type == 'project') { this.type = 'folder'}
         let success = await this.callback(this.model, this.type, this.mode);
-        this.loading = false;
+        
         if (success) {
+          await this.$store.dispatch('bpmn/resetCache')
+          await this.$store.dispatch('bpmn/loadItems')
           this.cancel();
-          // await this.$store.dispatch('bpmn/resetCache')
-          // await this.$store.dispatch('bpmn/loadItems')
-          if(this.type == "process" && this.mode == "create") {
-            this.callback = null;
+          if(this.type == "process" && (this.mode == "create" || this.mode == "copy" ) ) {
             this.active = this.model.id
           }
+          this.callback = null;
         }
-        this.callback = null;
+        this.loading = false;
       }
     }
   }
