@@ -1,9 +1,11 @@
 import Oidc from 'oidc-client';
 
-var apppath = '/smartidcur/tools';
+//var apppath = '/smartidcur/tools';
+var apppath = '';
 var mgr = new Oidc.UserManager({
     userStore: new Oidc.WebStorageStateStore(),
-    authority: 'https://m.it.ua/smartidcur',
+    //authority: 'https://m.it.ua/smartidcur',
+    authority: 'https://localhost:44319/',
     client_id: 'local-dev-pkce',
     redirect_uri: window.location.origin + apppath + '/callback.html',
     response_type: 'code',
