@@ -9,14 +9,30 @@ export default {
       let success = false;
       switch (mode) {
       case 'create':
-        if (type === 'folder' ) {
-          success = await this.$store.dispatch('bpmn/createFolder', item);
-        } else {
-          success = await this.$store.dispatch('bpmn/createProcess', item);
+        let create = async (elem) => {
+          let val
+            if (elem.isFolder) {
+              val = await this.$store.dispatch('bpmn/createFolder', elem);
+            } else {
+              console.log(elem)
+              val = await this.$store.dispatch('bpmn/createProcess', elem);
+            }
+          return val
         }
+        if (type === 'all') {
+          let processArray =  async (array) => {
+            const promises = array.map(elem => create(elem))
+            success =  await Promise.all(promises)
+            success = success.every( el => el)
+          }
+          await processArray(item)
+        } else {
+          success = await create(item)
+        }
+        
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
-        }
+        } 
         break;
       case 'edit':
         if (type === 'folder' ) {
@@ -85,11 +101,18 @@ export default {
       }
       return success;
     },
-    createItem(parent, type, xmlView) {
+    createItem(parent, type, xmlView, options) {
+      let model, mode = options?  'import' : 'create'
       const parentId = parent ? parent.id : null;
-      const model = type === 'folder' ? new Folder({ parentId }) : new Diagram({ parentId, xmlView });
+      if ( type == 'all') {
+        model = options.map( it => new Diagram({ parentId, xmlView: it.xmlView, name: it.name, type: it.type}))
+      } else if(options) {
+        model =  new Diagram({ parentId, xmlView: options[0].xmlView || xmlView, name: options[0].name, type: options[0].type})
+      } else {
+        model = type === 'folder' ? new Folder({ parentId }) : new Diagram({ parentId, xmlView});
+      }
       eventBus.$emit(events.modeler.showForm,
-        'create',
+        mode,
         type,
         model,
         this.formSave);
@@ -118,13 +141,12 @@ export default {
     },
     copyItem(item) {
       let  type, model
-      if (Array.isArray(item)) {
+      if (Array.isArray(item) && item.length > 1) {
         type = 'all'
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it))
       } else {
-        
         type = item.isFolder ? 'folder' : 'process'
-        model = item.isFolder ? new Folder(item) : new Diagram(item)
+        model = item.isFolder ? new Folder(item) : new Diagram(Array.isArray(item) ? item[0] : item)
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',

@@ -100,6 +100,12 @@
           </v-list-item>
         </template>
       </template>
+      <v-list-item v-if="!canEdit(item) && !canShare(item)">
+        <v-list-item-avatar>
+          <v-icon>mdi-close</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-title>{{ $t('bpmn.errors.Er403') }}</v-list-item-title>
+      </v-list-item>
     </v-list>
   </v-menu>
 </template>
@@ -162,12 +168,15 @@ export default {
       return item instanceof Models.Folder;
     },
     canDeploy(item) {
+      if(!item) return false
       return item.hasRight(Models.AccessRights.Deploy);
     },
     canEdit(item) {
+      if(!item) return false
       return item.hasRight(Models.AccessRights.Write);
     },
     canShare(item) {
+      if(!item) return false
       return item.hasRight(Models.AccessRights.Share);
     },
     isBpmn(item) {

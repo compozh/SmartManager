@@ -55,6 +55,13 @@
       </v-row>
       <!-- <v-divider class="elevation-3" /> -->
       <v-row class="layout diagrams py-0" v-if="children && children.length > 0">
+        <v-col cols=3 class="pa-2">
+          <div  class="dropFile" ref="dropFile">
+            <div>Drag and drop or
+              <v-btn text class="import" @click="importItem(item)">Upload</v-btn>
+            </div>
+          </div>
+        </v-col>
         <v-col cols=3 v-for="item in hasElements('diagram')" :key="item.id" class="pa-2">
           <item-card :item="item" :activeItem.sync="active" :chosen.sync="chosen" @choosed="choosed"/>
         </v-col>
@@ -67,6 +74,7 @@
   </v-container>
 </template>
 <script>
+import { Notification } from 'element-ui';
 import { formMixin, importMixin } from '../mixins';
 import moment from 'moment'
 export default {
@@ -81,6 +89,45 @@ export default {
   }),
   props: {
     activeItem: String
+  },
+  mounted(){
+    if(!this.$refs.dropFile) {return}
+    
+    const element = this;
+    document.body.addEventListener('dragover', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+    document.body.addEventListener('drop', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+    this.$refs.dropFile.addEventListener( 'dragover', function(event) {
+      this.classList.add('dragFileOver');
+    });
+    this.$refs.dropFile.addEventListener('dragleave', function(event) {
+      this.classList.remove('dragFileOver');
+      event.preventDefault();
+    });
+    this.$refs.dropFile.addEventListener( 'drop', async function(event)  {
+      this.classList.remove('dragFileOver');
+      let options = []
+
+      let processArray =  async (array) => {
+        const promises = array.map(file => {
+          return file.text().then(xml => {
+            let type  = file.type || file.name.includes('.bpmn') ? 'BPMN' : file.name.includes('.dmn') ? 'DMN' : ''
+            if(type != 'BPMN' && type != 'DMN') {
+              return Notification.error(element.$t('bpmn.errors.ProcessNotCreated'))
+            }
+            return {xmlView: xml, name: file.name, type } 
+          })
+        })
+        options =  await Promise.all(promises)
+      }
+      await processArray([...event.dataTransfer.files])
+      element.createItem(element.item, options.length > 1 ? 'all' : 'process', '', options);
+    });
   },
   methods: {
     choosed(val) {
@@ -235,6 +282,27 @@ h2{
 .xl-text  {
   label {
     font-size: 0.76em
+  }
+}
+.dropFile {
+  height: 245px;
+  background: rgb(245, 245, 245);
+  border-width: 2px;
+  border-style: dashed;
+  border-color: rgb(209, 209, 209);
+  border-image: initial;
+  border-radius: 3px;
+  color: rgb(167, 167, 167);
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  cursor: default;
+  &:hover, &.dragFileOver{
+    border-color: rgb(209, 209, 209);
+    background: rgb(236, 236, 236);
+  }
+  .import {
+    color: #1976d2;
   }
 }
 </style>

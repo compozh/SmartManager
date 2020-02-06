@@ -52,6 +52,7 @@ export default {
       valid: true,
       titles: {
         'process': {
+          'import' : 'bpmn.buttons.Import',
           'create': 'bpmn.labels.CreateProcess',
           'edit': 'bpmn.labels.EditProcess',
           'delete': 'bpmn.labels.DeleteProcess',
@@ -69,11 +70,14 @@ export default {
           'delete': 'bpmn.labels.DeleteProject'
         },
         'all': {
+          'import' : 'bpmn.buttons.Import',
           'delete': 'bpmn.buttons.Delete',
           'copy': 'bpmn.buttons.Copy',
+          'create': 'bpmn.buttons.Create',
         }    
       },
       actions: {
+        'import' : 'bpmn.buttons.Import',
         'create': 'bpmn.buttons.Create',
         'edit': 'bpmn.buttons.Save',
         'delete': 'bpmn.buttons.Delete',
@@ -103,7 +107,7 @@ export default {
       },
       set: function (val) {
         if (this.type == 'all' ) {
-          val = val.split(', ')
+          val = val.split(', ') || val
           this.model.forEach((el, n) => el.name = val[n])
         } else {
           this.model.name = val
@@ -125,11 +129,12 @@ export default {
   methods: {
     onShowForm(mode, type, model, callback) {
       this.mode = mode;
-      this.type = this.$route.name == "Main" ? 'project' : type
+      this.type = this.$route.name == "main" ? 'project' : type
       this.model = model;
       this.callback = callback;
       this.show = true;
-      setTimeout(() => document.querySelector('input').focus(), 0)
+      setTimeout(() => document.querySelector('input').focus(), 1)
+      console.log(this)
     },
     cancel() {
       this.$refs.form.resetValidation();
@@ -142,6 +147,7 @@ export default {
       if (this.callback) {
         this.loading = true;
         if(this.type == 'project') { this.type = 'folder'}
+        if(this.mode == 'import') { this.mode = 'create'}
         let success = await this.callback(this.model, this.type, this.mode);
         
         if (success) {

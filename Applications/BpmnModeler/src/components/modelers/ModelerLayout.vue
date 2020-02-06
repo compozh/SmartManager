@@ -242,9 +242,12 @@ export default {
   height: 100%;
   position: relative;
 }
-.properties-panel-container > * >:first-child {
-  overflow-y: auto;
-  display: contents;
+.properties-panel-container{
+  height: 100%;
+  > * >:first-child {
+    overflow-y: auto;
+    display: contents;
+  }
 }
 a.bjs-powered-by {
   z-index: 4 !important;
