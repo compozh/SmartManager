@@ -5,7 +5,7 @@
 				<v-flex row wrap >
 					<span class="group-item">{{item.group}}</span>
 					<div v-for='(user, index) in item.users' :key='index'>
-						<desctop-mode-component :user='user'></desctop-mode-component>
+						<desktop-mode-component :user='user'></desktop-mode-component>
 					</div>
 				</v-flex>
 			</div>
@@ -23,11 +23,11 @@
 </template>
 <script>
 import mobileModeComponent from './MobileMode'
-import desctopModeComponent from './DesctopMode'
+import desktopModeComponent from './DesktopMode'
 export default {
   name: 'skd-list',
   components: {
-    'desctop-mode-component': desctopModeComponent,
+    'desktop-mode-component': desktopModeComponent,
     'mobile-mode-component': mobileModeComponent 
   },
   data: () => ({

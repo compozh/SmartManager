@@ -1,6 +1,6 @@
 <template>
     <v-layout wrap row class='user-container'>
-        <v-flex lg1 class='align-flex' xs2>
+        <v-flex lg1 class='align-flex' xs3>
             <user-photo :photo='user.photoProperty.photoUrl'></user-photo>
         </v-flex>
         <v-flex class='name-place-container align-flex' xs6>
