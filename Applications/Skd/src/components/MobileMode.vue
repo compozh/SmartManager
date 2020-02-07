@@ -1,11 +1,11 @@
 <template>
     <v-layout wrap row class='user-container'>
-        <v-flex lg1 class='align-flex' xs3>
+        <v-flex class='align-flex' xs3>
             <user-photo :photo='user.photoProperty.photoUrl'></user-photo>
         </v-flex>
         <v-flex class='name-place-container align-flex' xs6>
             <v-flex>
-						<v-flex>
+						<!-- <v-flex>
 							{{user.fullName}}
 							<svg-key  v-if='user.hasKey'></svg-key>
 						</v-flex>
@@ -14,11 +14,31 @@
 								<span class="user-date-date" v-if="!user.DateTimeText.Day">{{user.DateTimeText.Date}}</span>
 								<span class="user-date-day">{{user.DateTimeText.Day}}</span>
 							</div>
-							<div :class='[user.IsGone ? "user-gone" : "", user.IsAbsend ? "user-absent" : "","user-time"]'>
+							<div :class='[user.IsGone ? "user-gone" : "", user.IsAbsend ? "user-absend
+                            " : "","user-time"]'>
 								<span>{{user.DateTimeText.Time }}</span>
 								<span :class='user.IsAbsend ? "" : "placename"'>{{user.placeName}}</span> 
 							</div>
-						</v-flex>
+						</v-flex>-->
+
+                        <v-flex>
+                            <span>{{user.fullName}}</span>
+                            <svg-key v-if='user.hasKey'></svg-key>
+                        </v-flex>
+                        <v-flex>
+                            <div v-if="user.IsAbsend" class="user-absend">
+                                <span>{{user.placeName}}</span>
+                            </div>
+                            <div v-else :class='user.IsGone ? "user-gone" : "user-time"'>
+                                <div class="user-date-day">
+                                    <span v-if='!user.DateTimeText.Today' >{{user.DateTimeText.Day}}</span>
+                                </div>
+                                <div>
+                                    <span>{{user.DateTimeText.Time }}</span>
+                                    <span class="placename">{{user.placeName}}</span>
+                                </div>   
+                            </div>
+                        </v-flex>
 					</v-flex>
         </v-flex>
         <v-flex class='align-flex' xs3>
@@ -126,8 +146,9 @@ export default {
 .user-gone {
   color: red;
 }
-.user-absent {
+.user-absend {
   opacity: 0.5;
+  font-size: 0.9em;
 }
 .placename {
 	padding-left: 10px;
@@ -137,6 +158,7 @@ export default {
   font-size: 0.9em;
 }
 .user-date-day {
+  padding-right: 8px;
   color: #999;
   font-size: 0.9em;
 }

@@ -14,8 +14,8 @@ export default {
 <style lang='scss' scoped>
   .md-photo-container {
     margin: 5px;
-    height: 50px;
-    width: 50px;
+    height: 60px;
+    width: 60px;
 
     .material-icons {
       font-size: 50px;
