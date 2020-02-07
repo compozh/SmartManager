@@ -88,7 +88,6 @@ export default {
         return this.$t('bpmn.labels.You');
       }
       if (this.users.length == 0) { return userId; }
-      
       let user = this.users.find( user => user.id == userId ),
         result = user ? user.name : userId;
       return result;
@@ -96,6 +95,7 @@ export default {
   },
   computed: {
     rows() {
+      if (this.items.length > 0) {this.loadUsers()}
       let rows = this.items.map(item => {
         item.editorId = this.findUser(item.editorId);
         item.ownerId = this.findUser(item.ownerId);
@@ -124,9 +124,6 @@ export default {
         {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}];
     },
   },
-  mounted() {
-    if (this.items.length > 0) { this.loadUsers(); }
-  }
 };
 </script>
 <style lang="scss" >

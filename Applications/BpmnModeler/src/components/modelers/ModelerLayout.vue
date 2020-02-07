@@ -1,5 +1,5 @@
 <template>
-  <v-row class="fill-height" >
+  <v-container class="fill-height pa-0" fluid>
     <v-row class="fill-height" v-if="loading" justify="center" align="center">
       <v-progress-circular
         :size="70"
@@ -91,7 +91,7 @@
         <span>{{ $t('bpmn.labels.ProcessSaved') }}</span>
       </v-tooltip>
     </div>
-  </v-row>
+  </v-container>
 </template>
 <script>
 import 'diagram-js-minimap/assets/diagram-js-minimap.css';
@@ -189,14 +189,14 @@ export default {
       return item.hasRight(Models.AccessRights.Deploy);
     },
     async deployItem(item) {
-      this.loading = true;
+      this.load = true;
       var result = await this.$store.dispatch('bpmn/deployProcess', item.id);
       if (result.success) {
         Notification.success(result.message || this.$t('bpmn.errors.ProcessDeployed'));
       } else {
         Notification.error(result.message || this.$t('bpmn.errors.ProcessNotDeployed'));
       }
-      this.loading = false;
+      this.load = false;
     },
   }
   
