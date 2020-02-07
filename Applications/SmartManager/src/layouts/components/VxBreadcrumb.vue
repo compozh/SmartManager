@@ -73,6 +73,7 @@ export default {
     },
     breadcrumbData() {
       return breadcrumb => {
+        const attachmentId = +this.$route.params.attachmentId
         switch (breadcrumb) {
           case 'taskFolder': return {
             name: this.taskFolder ? this.taskFolder.name : '',
@@ -86,6 +87,10 @@ export default {
           case 'taskAttachments': return {
             name: this.$t('tabs.attachments'),
             url: '/task/' + this.task.id + '/attachments'
+          }
+          case 'taskAttachment': return {
+            name: (this.task.originals.find(o => o.id === attachmentId) || {}).fileName,
+            url: '/task/' + this.task.id + '/attachment/' + this.$route.params.attachmentId
           }
           case 'taskComments': return {
             name: this.$t('tabs.comments'),
