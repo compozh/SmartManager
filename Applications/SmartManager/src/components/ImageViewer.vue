@@ -2,10 +2,7 @@
   <div
     class="flex flex-col flex-1
            justify-center items-center
-           h-full overflow-hidden
-           border border-l-0 border-r-0
-           border-b-0 border-solid
-           d-theme-border-grey-light"
+           h-full overflow-hidden"
   >
     <viewer :options="options"
             :images="[url]"
