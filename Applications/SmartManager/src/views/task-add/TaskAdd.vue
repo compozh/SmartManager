@@ -253,7 +253,7 @@ export default {
   },
   methods: {
     async getTask() {
-      const taskId = +this.$route.params.id
+      const taskId = +this.$route.params.taskId
       await this.$store.dispatch('sm/getTaskInfo', {
         taskId, loading: true
       })
@@ -319,13 +319,13 @@ export default {
         priority: 0,
         caseId: this.newTask.case ? this.newTask.case.id : 0
       }
-      if (this.$route.params.id) {
-        newTask.parentTaskId = this.$route.params.id
+      if (this.$route.params.taskId) {
+        newTask.parentTaskId = this.$route.params.taskId
       }
       try {
         const result = await this.$store.dispatch('sm/addNewTask', newTask)
         if (result.success) {
-          await this.$router.push({name: 'task-view', params: {id: result.id}})
+          await this.$router.push({name: 'task-view', params: {taskId: result.id}})
         }
       } catch (e) {
         // Задержка нужна чтобы показать сообщение об ошибке
@@ -334,7 +334,7 @@ export default {
     },
     async updateTask() {
       const newTaskData = {
-        id: this.$route.params.id,
+        id: this.$route.params.taskId,
         name: this.newTask.title,
         performerId: this.newTask.performer.userId,
         descript: this.htmlDescription,
@@ -349,7 +349,7 @@ export default {
       }
       const result = await this.$store.dispatch('sm/updateTask', newTaskData)
       if (result) {
-        await this.$router.push({name: 'task-view', params: {id: newTaskData.id}})
+        await this.$router.push({name: 'task-view', params: {taskId: newTaskData.id}})
       }
     },
     getParticipants() {

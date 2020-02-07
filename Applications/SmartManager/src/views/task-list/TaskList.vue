@@ -62,9 +62,10 @@ export default {
   }),
   watch: {
     $route(to, from) {
-      const currentFolder = from.params.code
-      const targetFolder = to.params.code
+      const currentFolder = from.params.folderId
+      const targetFolder = to.params.folderId
       if (to.name === 'task-list' && currentFolder !== targetFolder) {
+
         if (!this.listPosition[targetFolder]) {
           this.$store.commit('sm/setTaskListPosition', {folder: targetFolder})
         }
@@ -75,7 +76,7 @@ export default {
     },
     currentPage(page) {
       this.updateScrollPosition(1)
-      const folder = this.$route.params.code
+      const folder = this.$route.params.folderId
       if (folder) {
         this.$store.commit('sm/setTaskListPosition', {folder, page})
       }
@@ -115,7 +116,7 @@ export default {
       }
     },
     folderCode() {
-      return this.$route.params.code
+      return this.$route.params.folderId
     },
     listPosition() {
       return this.$store.state.sm.taskListPosition
@@ -133,7 +134,7 @@ export default {
   },
   methods: {
     setScrollPosition(event) {
-      const folder = this.$route.params.code
+      const folder = this.$route.params.folderId
       if (folder) {
         this.$store.commit('sm/setTaskListPosition', {
           folder, scrollTop: event.target.scrollTop
