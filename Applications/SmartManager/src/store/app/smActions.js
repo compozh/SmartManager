@@ -38,7 +38,7 @@ export default {
     commit('setCurrentFolder', folderId)
     try {
       const result = await api.getTasksFromGql(
-        folderId === 'ALL' ? '' : folderId
+        folderId === 'active' ? '' : folderId
       )
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
