@@ -18,7 +18,7 @@ export default {
     width: 60px;
 
     .material-icons {
-      font-size: 50px;
+      font-size: 60px;
     }
   }
 
@@ -33,7 +33,6 @@ export default {
 
     .material-icons {
       color: #ddd;
-
     }
   }
 
