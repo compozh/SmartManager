@@ -238,7 +238,7 @@ export default {
     async addAttachments() {
       const attachments = JSON.stringify(this.attachments)
       const params = {
-        id: this.$route.params.id,
+        id: this.$route.params.caseId,
         type: 'CASE',
       }
       // Returns results list
