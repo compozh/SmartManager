@@ -108,6 +108,7 @@
     "complete": "Complete",
     "yes": "Yes",
     "no": "No",
+    "toBack": "Back",
     "globalSearch": "Search all documents"
   },
   "icons": {
@@ -143,7 +144,11 @@
   "table": {
     "name": "Name",
     "size": "Size",
-    "uploaded": "Uploaded"
+    "uploaded": "Upload",
+    "sign": "Sign",
+    "version": "Version",
+    "kind": "Type",
+    "status": "Status"
   },
   "comments": {
     "addComment": "Add comment",
