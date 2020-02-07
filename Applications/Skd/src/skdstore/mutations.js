@@ -54,5 +54,9 @@ export default {
   changeGrouping(state, value) {
     state.grouping = value
     localStorage.setItem('grouping',value)
+  },
+
+  setDrawer(state, value) {
+    state.drawer = value
   }
 }
