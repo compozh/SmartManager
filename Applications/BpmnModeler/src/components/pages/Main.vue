@@ -37,7 +37,7 @@
 </template>
 <script>
 import moment from 'moment';
-import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
+import { formMixin } from '../mixins';
 import treeSearch from '../../api/treeSearch';
 export default {
   name: 'bpmn-main',
@@ -46,7 +46,7 @@ export default {
       search: '',
     };
   },
-  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
+  mixins: [ formMixin ],
   props: {
     activeItem: String
   },

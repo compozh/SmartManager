@@ -14,6 +14,7 @@
           showCurrentPage : true
         }"
       class="projects-table elevation-1 mt-0"
+      @click:row="openProject"
     >
       <!-- <template v-slot:header.name="{ header }" >
         <span style="font-size: 16px;" >{{ header.text }}</span>
@@ -22,7 +23,7 @@
         <v-row class="justify-end" style="max-width: 100%;" ><span  >{{ header.text }}</span></v-row>
       </template>
       <template v-slot:item.name="{ item }">
-        <div class="item-name"  @click="openProject(item)">
+        <div class="item-name">
           <bpmn-tree-icon :node="item"></bpmn-tree-icon>
           {{ item.name }}
         </div>
@@ -52,11 +53,11 @@
 </template>
 
 <script>
-import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
+import { formMixin } from '../mixins';
 import moment from 'moment';
 export default {
   name: 'item-data-table',
-  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
+  mixins: [ formMixin ],
   data() {
     return {
       users: []
@@ -76,8 +77,7 @@ export default {
     },
   },
   methods: {
-
-    openProject(el) { 
+    openProject(el) {
       this.active = el;
     },
     async loadUsers() {

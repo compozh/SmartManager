@@ -17,7 +17,7 @@
         <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
           <v-card>
             <v-card-title>
-              <span class="headline">{{ form.titles[form.mode] }}</span>
+              <span class="headline">{{ $t(form.titles[form.mode]) }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -63,7 +63,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
+              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ $t(form.actions[form.mode]) }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -261,6 +261,7 @@ export default {
             }
           }
         }
+        return false;
       });
     },
     async loadUsersAndGroups() {

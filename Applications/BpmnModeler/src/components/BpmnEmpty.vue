@@ -13,13 +13,13 @@
   </v-row>
 </template>
 <script>
-import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from './mixins';
+import { formMixin } from './mixins';
 import { eventBus } from '../main';
 import { events } from '../constants';
 
 export default {
   name: 'bpmn-empty',
-  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
+  mixins: [ formMixin ],
   methods: {
     addProcess() {
       eventBus.$emit(events.modeler.createDiagram);
