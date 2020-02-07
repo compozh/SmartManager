@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import { formMixin, importMixin, propertiesPanelEventsHandlersMixin } from '../mixins';
+import { formMixin } from '../mixins';
 import { events } from '../../constants';
 import { eventBus } from '../../main';
 import treeSearch from '../../api/treeSearch';
 
 export default {
   name: 'breadcrumbs',
-  mixins: [ formMixin, importMixin, propertiesPanelEventsHandlersMixin ],
+  mixins: [ formMixin ],
   props: {
     activeItem: String
   },

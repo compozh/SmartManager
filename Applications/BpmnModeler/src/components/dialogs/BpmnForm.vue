@@ -133,7 +133,7 @@ export default {
       this.model = model;
       this.callback = callback;
       this.show = true;
-      setTimeout(() => document.querySelector('input').focus(), 1);
+      setTimeout(() => this.$refs.nameField.focus(), 1);
     },
     cancel() {
       this.$refs.form.resetValidation();
