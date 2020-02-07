@@ -1,34 +1,28 @@
 <template>
-  <div class="flex flex-col h-full bg-white" ref="container">
-        <VuePerfectScrollbar
-          class="scroll-area my-2"
-          :settings="settings"
-          style="height: auto; max-height: 15%">
-      <div class="vx-row m-0 px-6" ref="items">
-          <div class="flex flex-wrap">
-            <div
-              class="my-1"
-              v-for="(attachment, index) in task.originals"
-              :key="index"
-              @click="getUrl(attachment)">
-              <vx-tooltip
-                class="custom-tooltip"
-                :text="attachment.fileName"
-                color="rgb(98, 98, 98, .95)">
-                <vs-chip
-                  :color="attachment.id === fileId ? 'warning' : 'primary'"
-                  class="mr-3 max-w-sm cursor-pointer">
-                  <span class="flex mr-2">
-                    <file-icon :extention="attachment.fileExt"></file-icon>
-                  </span>
-                  <span class="custom-truncate">{{ attachment.fileName }}</span>
-                </vs-chip>
-              </vx-tooltip>
-            </div>
-          </div>
-      </div>
-        </VuePerfectScrollbar>
-    <component :is="viewer" :url="fileUrl"></component>
+  <div id="mainContainer" class="app-fixed-height flex flex-wrap">
+    <div class="flex w-1/2 h-full bg-white p-2 pr-0">
+      <VuePerfectScrollbar class="scroll-area" :settings="settings">
+        <table>
+          <tr>
+            <th>{{ $t('table.sign') }}</th>
+            <th>{{ $t('table.name') }}</th>
+            <th>{{ $t('table.size') }}</th>
+            <th>{{ $t('table.kind') }}</th>
+          </tr>
+          <tr v-for="(attachment, index) in originals" :key="index"
+              :class="{active: attachment.id === +$route.params.attachmentId}"
+              @click="toAttachment(attachment.id)">
+            <td>+</td>
+            <td class="text-left">{{ attachment.fileName }}</td>
+            <td>{{ fileSize(attachment.fileSize) }}</td>
+            <td>{{ attachment.fileExt }}</td>
+          </tr>
+        </table>
+      </VuePerfectScrollbar>
+    </div>
+    <div class="flex w-1/2 h-full bg-white justify-center">
+      <component :is="viewer" :url="fileUrl"></component>
+    </div>
   </div>
 </template>
 
@@ -43,10 +37,6 @@ const ImgViewer = () => import('@/components/ImageViewer')
 const TxtViewer = () => import('@/components/TextViewer')
 
 export default {
-  props: {
-    task: Object,
-    index: Number
-  },
   components: {
     PdfViewer,
     ImgViewer,
@@ -57,6 +47,7 @@ export default {
     FileIcon
   },
   data: () => ({
+    index: 0,
     fileId: 0,
     fileUrl: '',
     types: [],
@@ -66,18 +57,25 @@ export default {
     }
   }),
   created() {
-    if (!this.fileId && this.originals) {
-      const attachment = this.originals[this.index]
-      this.fileId = attachment.id || 0
-      this.getUrl(attachment)
-      this.getAttachmentTypes()
+    const attachmentId = this.$route.params.attachmentId
+    if (attachmentId) {
+      this.fileId = attachmentId
+    } else {
+      this.fileId = this.originals.length ? this.originals[0].id : 0
     }
+    this.toAttachment(this.fileId)
   },
   computed: {
+    task() {
+      const id = +this.$route.params.taskId
+      const task = this.$store.state.sm.taskInfo[id]
+      return task ? task : {}
+    },
     originals() {
-      return this.task.originals.length
+      return this.task.originals
+             && this.task.originals.length
         ? this.task.originals
-        : null
+        : []
     },
     isImage() {
       const image = ['png', 'jpeg', 'jpg', 'webp', 'bmp', 'gif']
@@ -91,13 +89,26 @@ export default {
       if (this.fileUrl) {
         const ext = this.fileUrl.split('.').pop().toLowerCase()
         switch (true) {
-          case ext === 'pdf': return 'pdf-viewer'
-          case this.isText(ext): return 'txt-viewer'
-          case this.isImage(ext): return 'img-viewer'
-          default: return 'not-support'
+          case ext === 'pdf':
+            return 'pdf-viewer'
+          case this.isText(ext):
+            return 'txt-viewer'
+          case this.isImage(ext):
+            return 'img-viewer'
+          default:
+            return 'not-support'
         }
       }
       return 'no-data'
+    },
+    fileSize() {
+      return size => {
+        switch (true) {
+          case size < 1024: return `${size} Byte`
+          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
+        }
+      }
     },
     type() {
       if (this.task.__typename === 'Task') {
@@ -110,15 +121,23 @@ export default {
     }
   },
   methods: {
+    toAttachment(id) {
+      if (id) {
+        this.$router.push({name: 'task-attachment', params: {attachmentId: id}})
+        const attachment = this.originals.find(o => o.id === id) || {}
+        this.getUrl(attachment)
+        this.getAttachmentTypes()
+      }
+    },
     async getUrl({id: fileId, fileExt, fileUrl}) {
-      const id = this.$route.params.id
+      const id = this.$route.params.taskId || this.$route.params.caseId
       this.fileId = fileId
       this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {fileId, fileExt, id})
     },
     async getAttachmentTypes() {
       const params = {
         type: this.type,
-        id: this.task.id || this.$route.params.id,
+        id: this.task.id || this.$route.params.taskId,
         arso: this.task.arso,
         keyValue: this.task.keyValue,
         kidCopy: this.task.kidCopy
@@ -130,20 +149,49 @@ export default {
 </script>
 
 <style>
-
-  .vs-tooltip {
-    max-width: 300px !important;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  #mainContainer {
+    box-shadow: 0 1px 3px 0 rgba(21,27,38,.15);
   }
 
-  .custom-truncate {
-    max-width: 200px;
+  #mainContainer > div.toolbar {
     margin: 0;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    justify-content: flex-start;
+  }
+
+  table {
+    min-width: 99%;
+    border-collapse: collapse;
+  }
+
+  tr {
+
+  }
+
+  tr:nth-child(odd) {
+    background: rgba(21,27,38,.02);
+  }
+
+  tr:hover {
+    background: rgba(21,27,38,.05);
+    cursor: pointer;
+  }
+
+  tr.active {
+    font-weight: bold;
+    color: rgba(var(--vs-primary),1);
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 10px 5px;
+    text-align: center;
+  }
+
+  td {
+    border: 1px solid rgba(21,27,38,.15);
+    padding: 5px;
+    text-align: center;
   }
 
 </style>
