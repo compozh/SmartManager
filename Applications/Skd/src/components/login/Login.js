@@ -33,6 +33,7 @@ export default {
       loading: this.loading,
       params: {
         loginAttrs: {
+          type: 'email',
           value: this.userData.login,
           label: 'Логин',
           placeholder: 'Введите логин...',
