@@ -1,27 +1,27 @@
 <template>
     <div>
         <confirmTempPassword v-slot="{ properties }">
-            <v-layout>
-                <v-flex>
+            <v-row>
+                <v-col>
                     <v-text-field   v-bind='properties.tempPasswordFieldAttrs' color="cyan"  v-on="properties.tempPasswordFieldEvents"></v-text-field>
-                </v-flex>
-                <v-flex>
-                    <v-btn  v-on="properties.sendTempPasswordFieldEvents" class="cyan white--text text-xs-right send-btn">
+                </v-col>
+                <v-col>
+                    <v-btn  v-on="properties.sendTempPasswordFieldEvents" class="cyan white--text text-right send-btn">
                        {{properties.buttonSendName}}
                     </v-btn>
-                </v-flex>
-            </v-layout>
+                </v-col>
+            </v-row>
         </confirmTempPassword>
     </div>
 </template>
 <script>
-import confirmTempPassword from './renderless/ConfirmTempPassword'
+import confirmTempPassword from './renderless/ConfirmTempPassword';
 
 export default {
   components: {
     'confirmTempPassword': confirmTempPassword,
   }
-}
+};
 </script>
 
 <style scoped>

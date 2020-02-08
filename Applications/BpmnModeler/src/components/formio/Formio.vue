@@ -1,6 +1,6 @@
 <template>
 <!-- TODO: После перехода на vuetify 2 сменить v-flex на v-overlay -->
-  <v-flex v-if="show" v-model="show">
+  <v-col v-if="show" v-model="show">
     <div class="v-overlay v-overlay--active" style="z-index:201" />
     <div class="v-dialog__content v-dialog__content--active" style="z-index:202;">
 			<v-card class="v-dialog v-dialog--active" max-width="800px">
@@ -10,12 +10,12 @@
         <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
         <v-card-actions>
 				<v-spacer></v-spacer>
-				<v-btn flat @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-				<v-btn flat @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
+				<v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+				<v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
         </v-card-actions>
 			</v-card>
 	</div>
-  </v-flex>
+  </v-col>
 </template>
 <script>
 import { eventBus } from '../../main';
@@ -30,7 +30,7 @@ export default {
       code: '',
       definition: null,
       callback: null
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.formio.showForm, this.onShowForm);
@@ -65,7 +65,7 @@ export default {
       this.show = false;
     }
   }
-}
+};
 </script>
 <style>
 </style>

@@ -56,7 +56,7 @@
          name
        }
        units{
-         unitId
+         lessonId
          lessonGuid
          name
          durationMinutesLabel

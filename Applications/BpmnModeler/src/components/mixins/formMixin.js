@@ -9,48 +9,78 @@ export default {
       let success = false;
       switch (mode) {
       case 'create':
-        if (type === 'folder') {
+        if (type === 'folder' ) {
           success = await this.$store.dispatch('bpmn/createFolder', item);
         } else {
           success = await this.$store.dispatch('bpmn/createProcess', item);
         }
-        if (success) {
-          this.activeItem = item.id;
-        } else {
+        if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         }
         break;
       case 'edit':
-        if (type === 'folder') {
+        if (type === 'folder' ) {
           success = await this.$store.dispatch('bpmn/editFolder', item);
         } else {
           success = await this.$store.dispatch('bpmn/editProcess', item);
         }
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
+        } else {
+          this.$forceUpdate();
         }
-        this.activeItem = item.id;
         break;
       case 'delete':
-        success = await this.$store.dispatch('bpmn/deleteItem', item);
-        if (success) {
-          this.activeItem = item.parentId;
+        let deleting = async (elem) => {
+          let val = await this.$store.dispatch('bpmn/deleteItem', elem);
+          return val;
+        };
+        if (type === 'all') {          
+          let processArray =  async (array) => {
+            const promises = array.map(elem => (deleting(elem)));
+            success =  (await Promise.all(promises)).every( el => el);
+          };
+          await processArray(item);
         } else {
+          success = await deleting(item);
+          if (success ) {
+            this.$forceUpdate();
+            this.active = item.parentId;
+          }
+        }
+        if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
-          this.activeItem = item.id;
+        } else if (this.choose) {
+          this.choose = this.choose.filter( el => !item.find(it => el.id == it.id));
         }
         break;
       case 'copy':
-        if (type === 'folder') {
-          success = await this.$store.dispatch('bpmn/copyFolder', item);
+        let copy = async (elem) => {
+          let val;
+          if (elem.isFolder) {
+            val = await this.$store.dispatch('bpmn/copyFolder', elem);
+          } else {
+            val = await this.$store.dispatch('bpmn/copyProcess', elem);
+          }
+          return val;
+        };
+        if (type === 'all') {
+          let processArray =  async (array) => {
+            const promises = array.map(elem => copy(elem));
+            success =  await Promise.all(promises);
+            success = success.every( el => el);
+          };
+          await processArray(item);
         } else {
-          success = await this.$store.dispatch('bpmn/copyProcess', item);
+          success = await copy(item);
         }
-        if (success) {
-          this.activeItem = item.id;
-        } else {
+        
+        if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
+        } else if (this.choose) {
+          this.choose = this.choose.filter( el => item.find(it => el.id == it.id));
         }
+        
         break;
       }
       return success;
@@ -72,20 +102,36 @@ export default {
         this.formSave);
     },
     removeItem(item) {
+      let  type, model;
+      if (Array.isArray(item)) {
+        type = 'all';
+        model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
+      } else {
+        type = item.isFolder ?  'folder' : 'process';
+        model = item.isFolder ? new Folder(item) : new Diagram(item);
+      }
       eventBus.$emit(events.modeler.showForm,
         'delete',
-        item.isFolder ? 'folder' : 'process',
-        item.isFolder ? new Folder(item) : new Diagram(item),
+        type,
+        model,
         this.formSave);
     },
     copyItem(item) {
-      const model = item instanceof Folder ? new Folder(item) : new Diagram(item);
-      model.isSystem = false;
+      let  type, model;
+      if (Array.isArray(item)) {
+        type = 'all';
+        model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
+      } else {
+        
+        type = item.isFolder ? 'folder' : 'process';
+        model = item.isFolder ? new Folder(item) : new Diagram(item);
+      }
       eventBus.$emit(events.modeler.showForm,
         'copy',
-        this.formType = item.isFolder ? 'folder' : 'process',
+        type,
         model,
         this.formSave);
+
     }
   }
-}
+};

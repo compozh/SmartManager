@@ -63,10 +63,10 @@
         }
         units{
           lessonGuid
+          lessonType
           name
           durationMunute
           durationMinutesLabel
-          unitId
           surveyId
         }
       }
