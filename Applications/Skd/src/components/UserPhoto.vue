@@ -26,14 +26,4 @@ export default {
       height: max-content;
     }
   }
-
-  .photo-container {
-    margin: 10px;
-    height: 80px;
-    width: 80px;
-
-    .material-icons {
-      font-size: 80px;
-    }
-  }
 </style>

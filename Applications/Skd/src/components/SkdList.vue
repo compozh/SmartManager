@@ -23,7 +23,7 @@
 </template>
 <script>
 import mobileModeComponent from './MobileMode/MobileMode'
-import desktopModeComponent from './DesktopMode'
+import desktopModeComponent from './DekstopMode/DesktopMode'
 export default {
   name: 'skd-list',
   components: {

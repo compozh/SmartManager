@@ -144,7 +144,7 @@ export default {
 }
 .mobile-photo-container-expanded {
   margin: 5px;
-  height: 90px;
-  width: 90px;
+  height: 95px;
+  width: 95px;
 }
 </style>

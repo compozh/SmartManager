@@ -1,7 +1,7 @@
 <template>
     <v-layout wrap class='user-container'>
 				<v-flex lg1 class='align-flex'>
-					<user-photo :photo='user.photoProperty.photoUrl'></user-photo>
+					<user-photo class="photo-container" :photo='user.photoProperty.photoUrl'></user-photo>
 				</v-flex>
 				<v-flex class='name-place-container align-flex'>
 					<v-flex>
@@ -64,13 +64,14 @@
 </template>
 
 <script>
-import userPhoto from './UserPhoto'
-import svgKey from '../svg/svgKey'
-import svgSkype from '../svg/svgSkype'
-import svgBirthday from '../svg/svgBirthday'
-import svgOfficePhone from '../svg/svgOfficePhone'
-import svgEmail from '../svg/svgEmail'
-import svgMobilePhone from '../svg/svgMobilePhone'
+import userPhoto from "../UserPhoto";
+import svgKey from "../../svg/svgKey";
+import svgSkype from "../../svg/svgSkype";
+import svgBirthday from "../../svg/svgBirthday";
+import svgOfficePhone from "../../svg/svgOfficePhone";
+import svgEmail from "../../svg/svgEmail";
+import svgMobilePhone from "../../svg/svgMobilePhone";
+
 export default {
   components: {
     'user-photo': userPhoto,
@@ -84,7 +85,7 @@ export default {
   props: ['user']
 }
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .align-flex {
 	flex-basis: 0;
 	flex-grow: 0.5;
@@ -129,4 +130,13 @@ export default {
   color: #999;
   font-size: 0.9em;
 }
+.photo-container {
+    margin: 10px;
+    height: 80px;
+    width: 80px;
+
+    .material-icons {
+      font-size: 80px;
+    }
+  }
 </style>
