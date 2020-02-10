@@ -22,7 +22,7 @@
 	</v-layout>
 </template>
 <script>
-import mobileModeComponent from './MobileMode'
+import mobileModeComponent from './MobileMode/MobileMode'
 import desktopModeComponent from './DesktopMode'
 export default {
   name: 'skd-list',

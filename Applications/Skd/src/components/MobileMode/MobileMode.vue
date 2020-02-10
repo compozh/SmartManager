@@ -1,9 +1,16 @@
 <template>
-  <v-layout wrap row class="user-container">
-    <v-flex class="align-flex" xs3>
-      <user-photo :photo="user.photoProperty.photoUrl"></user-photo>
+  <v-layout v-on:click="expanded =! expanded" class="user-container">
+    <v-flex v-if="!expanded">
+      <user-card :user="user"></user-card>
     </v-flex>
-    <v-flex class="name-place-container align-flex" xs6>
+    <v-flex v-else>
+      <user-card-expanded :user="user"></user-card-expanded>
+    </v-flex>
+
+    <!-- <v-flex class="user-photo" xs2>
+      <user-photo class="mobile-photo-container" :photo="user.photoProperty.photoUrl"></user-photo>
+    </v-flex>
+    <v-flex class="user-info" xs7>
       <v-flex>
         <v-flex>
           <span>{{user.fullName}}</span>
@@ -24,25 +31,10 @@
         </v-flex>
       </v-flex>
     </v-flex>
-    <v-flex class="align-flex" xs3>
-      <v-flex class="user-additional-data">
-        <v-flex>
-          <span>{{user.department}}</span>
-        </v-flex>
-        <v-flex>
-          <svg-key v-if="user.hasKey"></svg-key>
-        </v-flex>
-      </v-flex>
-    </v-flex>
-    <v-flex
-      v-on:click="openMoreInformation =! openMoreInformation"
-      class="container-information-arrow"
-      xs1
-    >
-      <i v-if="!openMoreInformation" class="material-icons information-arraw">keyboard_arrow_down</i>
-      <i v-if="openMoreInformation" class="material-icons information-arraw">keyboard_arrow_up</i>
-    </v-flex>
-    <v-layout v-if="openMoreInformation" wrap>
+    <v-flex class="user-department" xs3>
+      <span>{{user.department}}</span>
+    </v-flex> -->
+    <!-- <v-layout v-if="expanded" wrap>
       <v-flex>
         <v-flex>
           <v-flex v-if="user.email" class="text-svg-container">
@@ -75,45 +67,33 @@
           </v-flex>
         </v-flex>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
   </v-layout>
 </template>
 
 <script>
-import userPhoto from "./UserPhoto";
-import svgKey from "../svg/svgKey";
-import svgSkype from "../svg/svgSkype";
-import svgBirthday from "../svg/svgBirthday";
-import svgOfficePhone from "../svg/svgOfficePhone";
-import svgEmail from "../svg/svgEmail";
-import svgMobilePhone from "../svg/svgMobilePhone";
+import userCard from "./UserCard";
+import userCardExpanded from "./UserCardExpanded";
+
 export default {
   components: {
-    "user-photo": userPhoto,
-    "svg-key": svgKey,
-    "svg-skype": svgSkype,
-    "svg-birthday": svgBirthday,
-    "svg-office-phone": svgOfficePhone,
-    "svg-email": svgEmail,
-    "svg-mobile-phone": svgMobilePhone
+    "user-card": userCard,
+    "user-card-expanded": userCardExpanded
   },
   data() {
     return {
-      openMoreInformation: false
+      openMoreInformation: false,
+      expanded: false
     };
   },
   created() {
-    console.log(this.user);
+    //console.log(this.user);
   },
   props: ["user"]
 };
 </script>
 
-<style scoped>
-.align-flex {
-  flex-basis: 0;
-  flex-grow: 0.5;
-}
+<style lang='scss' scoped>
 .container-information-arrow {
   text-align: right;
 }
@@ -141,26 +121,9 @@ export default {
 .key-style {
   padding-left: 3px;
 }
-.user-gone {
-  color: red;
-}
-.user-absend {
-  opacity: 0.5;
-  font-size: 0.9em;
-}
-.placename {
-  padding-left: 10px;
-  font-weight: 400;
-}
-.user-date-date {
-  font-size: 0.9em;
-}
-.user-date-day {
-  padding-right: 8px;
-  color: #999;
-  font-size: 0.9em;
-}
-.user-additional-data {
-  padding-left: 9px;
+.mobile-photo-container-expanded {
+  margin: 5px;
+  height: 80px;
+  width: 80px;
 }
 </style>

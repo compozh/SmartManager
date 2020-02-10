@@ -1,0 +1,120 @@
+<template>
+  <v-layout>
+    <v-flex class="user-photo" xs4>
+      <user-photo class="mobile-photo-container-expanded" :photo="user.photoProperty.photoUrl"></user-photo>
+    </v-flex>
+    <v-flex class="user-info" xs8>
+      <v-flex>
+        <v-flex>
+          <span>{{user.fullName}}</span>
+        </v-flex>
+        <v-flex>
+          <div v-if="user.IsAbsend" class="user-absend">
+            <span>{{user.placeName}}</span>
+          </div>
+          <div v-else :class='user.IsGone ? "user-gone" : "user-time"'>
+            <div class="user-date-day">
+              <span v-if="!user.DateTimeText.Today">{{user.DateTimeText.Day}}</span>
+            </div>
+            <div>
+              <span>{{user.DateTimeText.Time }}</span>
+              <span class="placename">{{user.placeName}}</span>
+            </div>
+          </div>
+        </v-flex>
+      </v-flex>
+    </v-flex>
+    <v-flex class="user-department" xs3>
+      <span>{{user.department}}</span>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+import userPhoto from "../UserPhoto";
+import svgKey from "../../svg/svgKey";
+import svgSkype from "../../svg/svgSkype";
+import svgBirthday from "../../svg/svgBirthday";
+import svgOfficePhone from "../../svg/svgOfficePhone";
+import svgEmail from "../../svg/svgEmail";
+import svgMobilePhone from "../../svg/svgMobilePhone";
+
+export default {
+  name: "user-card-expanded",
+  components: {
+    "user-photo": userPhoto,
+    "svg-key": svgKey,
+    "svg-skype": svgSkype,
+    "svg-birthday": svgBirthday,
+    "svg-office-phone": svgOfficePhone,
+    "svg-email": svgEmail,
+    "svg-mobile-phone": svgMobilePhone
+  },
+  data: () => ({}),
+  props: ["user"]
+};
+</script>
+
+<style lang='scss' scoped>
+.container-information-arrow {
+  text-align: right;
+}
+.user-container {
+  box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.02),
+    0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 1px 0 rgba(0, 0, 0, 0.05) !important;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.text-svg-container {
+  padding-bottom: 3px;
+  padding-top: 5px;
+  padding-left: 10px;
+
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+}
+.container {
+  padding: 0px !important;
+}
+.text-container {
+  padding-left: 3px;
+}
+.key-style {
+  padding-left: 3px;
+}
+.user-gone {
+  color: red;
+}
+.user-absend {
+  opacity: 0.5;
+  font-size: 0.9em;
+}
+.placename {
+  padding-left: 10px;
+  font-weight: 400;
+}
+.user-date-date {
+  font-size: 0.9em;
+}
+.user-date-day {
+  padding-right: 8px;
+  color: #999;
+  font-size: 0.9em;
+}
+.user-info {
+  padding-left: 10px;
+  font-size: 1.1em;
+}
+.user-department {
+  text-align: right;
+  font-size: 0.8em;
+  color: #999;
+  padding-right: 1em;
+}
+.mobile-photo-container-expanded {
+  margin: 5px;
+  height: 90px;
+  width: 90px;
+}
+</style>
