@@ -86,15 +86,6 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.container-information-arrow {
-  text-align: right;
-}
-.user-container {
-  box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.02),
-    0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 1px 0 rgba(0, 0, 0, 0.05) !important;
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
 .text-svg-container {
   padding-bottom: 3px;
   padding-top: 5px;
@@ -103,9 +94,6 @@ export default {
   font-size: 1em;
   display: flex;
   align-items: center;
-}
-.container {
-  padding: 0px !important;
 }
 .text-container {
   padding-left: 3px;
@@ -124,18 +112,6 @@ export default {
   padding-left: 10px;
   font-weight: 400;
 }
-.user-date-date {
-  font-size: 0.9em;
-}
-.user-date-day {
-  padding-right: 8px;
-  color: #999;
-  font-size: 0.9em;
-}
-.user-info {
-  padding-left: 10px;
-  font-size: 1.1em;
-}
 .user-department {
   // text-align: right;
   font-size: 0.8em;
@@ -146,5 +122,10 @@ export default {
   margin: 5px;
   height: 95px;
   width: 95px;
+  
+  i#empty-person-icon {
+    color: #ddd;
+    font-size: 95px;
+  }
 }
 </style>

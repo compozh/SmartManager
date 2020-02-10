@@ -23,7 +23,7 @@ export default {
 
     .material-icons {
       color: #ddd;
-      height: max-content;
+      font-size: inherit;
     }
   }
 </style>
