@@ -15,11 +15,9 @@
 							<v-card-title :class='courseData.courseNameInfoClass'>{{courseData.name}}</v-card-title>
 							<v-card-text :class='courseData.courseDescriptionInfoClass'>{{courseData.description}}</v-card-text>
 							<v-layout row wrap>
-								<v-flex md3 xs6>
-									<!-- <v-card-text :class='courseData.modulesQtInfoClass'>{{courseData.modulesQtLabel}}</v-card-text> -->
-                  <!-- <v-card-text :class='courseData.courseDetailedDurationInfoClass'>{{courseData.durationMinutesLabel}}</v-card-text> -->
+								<!-- <v-flex md3 xs6>
 								</v-flex>
-								<v-spacer/>
+								<v-spacer/> -->
 								<v-flex xs12>
 									<v-layout align-top justify-end row wrap>
                     <v-btn v-if="course && user" @click="$router.push({name: 'LMSCOURSELEARNING',
@@ -39,7 +37,7 @@
 		</v-layout>
     <!-- Описание курса -->
     <!-- Статическая панель -->
-    <v-layout align-center justify-center mx-2 mb-4 v-if="courseDescription">
+    <v-layout align-center justify-center mx-2 mb-4 v-if="course && courseDescription">
       <v-flex lg8 mb10 sx12>
         <div v-for='item in courseDescription' :key="item.title">
           <v-card v-if="item.description">
@@ -54,7 +52,7 @@
     <!-- Сводка. Количественные характеристики -->
     <v-layout align-center justify-center mx-2 mb-4>
       <v-flex lg6 mb8 sm10 sx12>
-        <v-card v-if="courseStatistics">
+        <v-card v-if="course && courseStatistics">
           <v-card-title>
             <h3>Этот курс включает</h3>
           </v-card-title>
