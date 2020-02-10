@@ -1,9 +1,9 @@
 <template>
-  <v-layout>
+  <v-layout wrap row >
     <v-flex class="user-photo" xs4>
       <user-photo class="mobile-photo-container-expanded" :photo="user.photoProperty.photoUrl"></user-photo>
     </v-flex>
-    <v-flex class="user-info" xs8>
+    <v-flex class="user-info" xs7>
       <v-flex>
         <v-flex>
           <span>{{user.fullName}}</span>
@@ -22,11 +22,41 @@
             </div>
           </div>
         </v-flex>
+        <v-flex class="user-department">
+          <span>{{user.department}}</span>
+        </v-flex>
       </v-flex>
     </v-flex>
-    <v-flex class="user-department" xs3>
-      <span>{{user.department}}</span>
-    </v-flex>
+    <v-layout wrap>
+      <v-flex>
+        <v-flex v-if="user.email" class="text-svg-container">
+          <svg-email></svg-email>
+          <a href='ailto:" + user.email'>
+            <span class="text-container">{{user.email}}</span>
+          </a>
+        </v-flex>
+        <v-flex v-if="user.mobileTel" class="text-svg-container">
+          <svg-mobile-phone></svg-mobile-phone>
+          <a class="text-information" :href="'tel:'+user.mobileTel">
+            <span class="text-container">{{user.mobileTel}}</span>
+          </a>
+        </v-flex>
+        <v-flex v-if="user.workTel" class="text-svg-container">
+          <svg-office-phone></svg-office-phone>
+          <span class="text-container">{{user.workTel}}</span>
+        </v-flex>
+      </v-flex>
+      <v-flex>
+        <v-flex v-if="user.skype" class="text-svg-container">
+          <svg-skype></svg-skype>
+          <span class="text-container">{{user.skype}}</span>
+        </v-flex>
+        <v-flex v-if="user.birthday" class="text-svg-container">
+          <svg-birthday></svg-birthday>
+          <span class="text-container">{{user.birthday}}</span>
+        </v-flex>
+      </v-flex>
+    </v-layout>
   </v-layout>
 </template>
 
@@ -107,10 +137,10 @@ export default {
   font-size: 1.1em;
 }
 .user-department {
-  text-align: right;
+  // text-align: right;
   font-size: 0.8em;
   color: #999;
-  padding-right: 1em;
+  // padding-right: 1em;
 }
 .mobile-photo-container-expanded {
   margin: 5px;

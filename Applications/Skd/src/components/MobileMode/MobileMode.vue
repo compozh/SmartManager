@@ -6,68 +6,6 @@
     <v-flex v-else>
       <user-card-expanded :user="user"></user-card-expanded>
     </v-flex>
-
-    <!-- <v-flex class="user-photo" xs2>
-      <user-photo class="mobile-photo-container" :photo="user.photoProperty.photoUrl"></user-photo>
-    </v-flex>
-    <v-flex class="user-info" xs7>
-      <v-flex>
-        <v-flex>
-          <span>{{user.fullName}}</span>
-        </v-flex>
-        <v-flex>
-          <div v-if="user.IsAbsend" class="user-absend">
-            <span>{{user.placeName}}</span>
-          </div>
-          <div v-else :class='user.IsGone ? "user-gone" : "user-time"'>
-            <div class="user-date-day">
-              <span v-if="!user.DateTimeText.Today">{{user.DateTimeText.Day}}</span>
-            </div>
-            <div>
-              <span>{{user.DateTimeText.Time }}</span>
-              <span class="placename">{{user.placeName}}</span>
-            </div>
-          </div>
-        </v-flex>
-      </v-flex>
-    </v-flex>
-    <v-flex class="user-department" xs3>
-      <span>{{user.department}}</span>
-    </v-flex> -->
-    <!-- <v-layout v-if="expanded" wrap>
-      <v-flex>
-        <v-flex>
-          <v-flex v-if="user.email" class="text-svg-container">
-            <svg-email></svg-email>
-            <a href='mailto:" + user.email'>
-              <span class="text-container">{{user.email}}</span>
-            </a>
-          </v-flex>
-          <v-flex v-if="user.mobileTel" class="text-svg-container">
-            <svg-mobile-phone></svg-mobile-phone>
-            <a class="text-information" :href="'tel:'+user.mobileTel">
-              <span class="text-container">{{user.mobileTel}}</span>
-            </a>
-          </v-flex>
-          <v-flex v-if="user.workTel" class="text-svg-container">
-            <svg-office-phone></svg-office-phone>
-            <span class="text-container">{{user.workTel}}</span>
-          </v-flex>
-        </v-flex>
-      </v-flex>
-      <v-flex>
-        <v-flex>
-          <v-flex v-if="user.skype" class="text-svg-container">
-            <svg-skype></svg-skype>
-            <span class="text-container">{{user.skype}}</span>
-          </v-flex>
-          <v-flex v-if="user.birthday" class="text-svg-container">
-            <svg-birthday></svg-birthday>
-            <span class="text-container">{{user.birthday}}</span>
-          </v-flex>
-        </v-flex>
-      </v-flex>
-    </v-layout> -->
   </v-layout>
 </template>
 
