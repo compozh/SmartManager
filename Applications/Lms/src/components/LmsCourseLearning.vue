@@ -311,7 +311,6 @@ export default {
     // STUB признак прохождения урока пока добавлять программно
     const isFree = true
     this.getLesson(this.currentLessonGuid, isFree)
-    debugger
     this.navigation.modules = this.initMenu()
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
