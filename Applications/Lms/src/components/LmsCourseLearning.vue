@@ -1,158 +1,206 @@
 <template>
   <v-container fill-height fluid px-0 py-0 mx-0 my-0>
-    <v-layout fill-height class="white">
+    <v-layout row wrap class="color-white">
+      <!-- Заголовок курса, урока, прогресс
+            Урок, панель навигации по урокам
+            Закладки: ресурсы, вопросы и ответы -->
       <v-flex>
-        <v-layout>
-          <v-flex>
-            <!-- Заголовк курса и прогресс -->
-            <v-layout row wrap fill-height justify-space-around>
-              <!-- Заголовок -->
-              <v-flex md9 xs10 align-self-center>
-                <v-card flat>
-                  <v-card-title>
-                    <div class="headline">{{course.name}}</div>
-                  </v-card-title>
+        <v-layout column fill-height>
+          <!-- Заголовк курса и прогресс -->
+          <v-flex shrink>
+            <v-layout row justify-space-around class="color-grey">
+                <v-flex align-self-center>
+                  <v-card flat color="grey lighten-2">
+                      <div class="title px-3 pt-2">{{course.name}}</div>
+                    <div
+                      v-if='currentLesson'
+                      class="body-1 px-3 pb-2">
+                      <span class="indigo--text">{{currentLesson.lesson.name}}</span>
+                    </div>
+                  </v-card>
+                </v-flex>
+                <v-spacer></v-spacer>
+                <v-flex align-self-center shrink>
+                  <v-layout fill-height justify-space-around align-center>
+                    <v-flex fill-height hidden-sm-and-down align-self-center>
+                      <div>Ваш прогресс: {{lessonsPassedQty + ' из ' + progress.total}}</div>
+                    </v-flex>
+                    <v-flex align-self-center mx-2>
+                      <v-progress-circular
+                        :rotate="-90"
+                        :size="42"
+                        :width="7"
+                        :value="progressValue"
+                        color="primary"
+                      >
+                        {{ progressValue }}
+                      </v-progress-circular>
+                    </v-flex>
+                    <v-flex v-if="!menuRight" align-self-center>
+                      <v-btn
+                        @click="menuRight=true"
+                        round
+                        flat
+                        outline
+                        small color="grey darken-4" dark>
+                        Материалы курса
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+            </v-layout>
+          </v-flex>
+          <!-- Урок и панель навигации -->
+          <v-flex >
+            <v-layout column>
+              <v-flex>
+                <v-card flat >
+                  <lesson-view v-if='currentLesson' :unit='currentLesson'></lesson-view>
                 </v-card>
+                <v-flex>
+                  <v-toolbar dense flat>
+                    <v-btn
+                      v-show="!isFirstLesson"
+                      @click="prevLesson()"
+                      flat>
+                      <v-icon left dark>keyboard_arrow_left</v-icon>
+                      Предыдущий урок
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      :disabled="(isTest && !testIsPassed) || lessonIsPassed"
+                      @click="finishLesson()"
+                      flat color='info'>
+                      Завершить
+                    </v-btn>
+                    <v-btn
+                      v-show="!isLastLesson"
+                      @click="nextLesson()"
+                      flat>
+                      Следующий урок
+                      <v-icon right dark>keyboard_arrow_right</v-icon>
+                    </v-btn>
+                  </v-toolbar>
+                </v-flex>
               </v-flex>
+              <v-layout  justify-center>
+                <v-flex>
+                  <v-tabs
+                    v-model="tabActive"
+                    color="grey"
+                    dark
+                    slider-color="blue">
+                    <v-tab
+                      v-for="tabItem in tabItems"
+                      :key="tabItem.title"
+                      @click="setCurrentTabName(tabItem.id)"
+                      ripple>
+                      {{ tabItem.title }}
+                    </v-tab>
+                    <v-tab-item
+                      v-for="tabItem in tabItems"
+                      :key="tabItem.title">
+                      <v-card flat>
+                        <lesson-materials v-if='tabItem.id==="materials" && currentLesson' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
+                        <questions-and-answers v-if='tabItem.id==="questions"'></questions-and-answers>
+                      </v-card>
+                    </v-tab-item>
+                  </v-tabs>
+                </v-flex>
+              </v-layout>
 
-              <!-- Прогресс прохождения -->
-              <v-flex md3 xs2>
-                <v-card flat>
-                  <v-card-text px-2 py-2>
-                    <v-layout fill-height justify-space-around align-center>
-                      <v-flex hidden-xs-only align-self-center>
-                        <div>Ваш прогресс: {{lessonsPassedQty + ' из ' + progress.total}}</div>
-                      </v-flex>
-                      <v-flex align-self-center>
-                        <v-progress-circular
-                          :rotate="-90"
-                          :size="54"
-                          :width="9"
-                          :value="progressValue"
-                          color="primary"
-                        >
-                          {{ progressValue }}
-                        </v-progress-circular>
-                      </v-flex>
-                    </v-layout>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
             </v-layout>
           </v-flex>
         </v-layout>
-
-        <v-layout fill-height >
-          <!-- Содержание курса: урок, обзор, вопросы и ответы + навигация -->
-          <v-flex>
-            <v-layout row wrap>
-              <v-flex grow xl8 md7 sm12>
-                <v-layout column>
-                  <v-flex grow>
-                    <v-tabs
-                      v-model="tabActive"
-                      color="grey"
-                      dark
-                      slider-color="blue">
-                      <v-tab
-                        v-for="tabItem in tabItems"
-                        :key="tabItem.title"
-                        @click="setCurrentTabName(tabItem.id)"
-                        ripple>
-                        {{ tabItem.title }}
-                      </v-tab>
-                      <v-tab-item
-                        v-for="tabItem in tabItems"
-                        :key="tabItem.title">
-                        <v-card flat>
-                          <lesson-view v-if='tabItem.id==="lesson" && currentLesson' :unit='currentLesson'></lesson-view>
-                          <lesson-materials v-if='tabItem.id==="materials" && currentLesson' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
-                          <questions-and-answers v-if='tabItem.id==="questions"'></questions-and-answers>
-                        </v-card>
-                      </v-tab-item>
-                    </v-tabs>
-                  </v-flex>
-                  <v-flex>
-                    <v-toolbar dense flat>
-                      <v-btn
-                        v-show="!isFirstLesson"
-                        @click="prevLesson()"
-                        flat>
-                        <v-icon left dark>keyboard_arrow_left</v-icon>
-                        Предыдущий урок
-                      </v-btn>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        v-show="currentTabName === 'lesson'"
-                        :disabled="isTest || testIsPassed || lessonIsPassed"
-                        @click="finishLesson()"
-                        flat color='info'>
-                        Завершить
-                      </v-btn>
-                      <v-btn
-                        v-show="!isLastLesson"
-                        @click="nextLesson()"
-                        flat>
-                        Следующий урок
-                        <v-icon right dark>keyboard_arrow_right</v-icon>
-                      </v-btn>
-                    </v-toolbar>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-              <!-- Навигация -->
-              <v-flex xl4 md5 sm12>
-                <v-card flat height='100%' width='100%'>
-                  <v-card-title >
-                    <h3>Программа курса:</h3>
-                  </v-card-title>
-                  <v-card-text style="margin-top:-16px;">
-                    <v-list expand>
-                      <v-list-group
-                        v-for="moduleItem in modules"
-                        :key="moduleItem.id"
-                        v-model="moduleItem.active"
-                        no-action
-                      >
-                        <template v-slot:activator>
-                          <v-list-tile class="grey lighten-2">
-                            <v-list-tile-content>
-                              <v-list-tile-title class="subheading font-weight-bold">{{ moduleItem.name }}</v-list-tile-title>
-                              <v-list-tile-title>{{ moduleItem.durationMinutesLabel + ` (${lessonsModulePassed(moduleItem.moduleGuid)} / ${moduleItem.units.length})`}} </v-list-tile-title>
-                            </v-list-tile-content>
-                          </v-list-tile>
-                        </template>
-                        <v-list-tile
-                          v-for="lesson in moduleItem.units"
-                          :key="lesson.id"
-                          @click="setLesson(lesson)"
-                        >
-                          <v-list-tile-action>
-                            <v-checkbox
-                              v-model='lessonsPassed'
-                              :value="lesson.lessonGuid"
-                              :disabled="lesson.disabled"
-                              ></v-checkbox>
-                          </v-list-tile-action>
-                          <v-list-tile-action>
-                            <v-icon>{{lesson.icon}}</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-action class="body-2">
-                            {{lesson.durationMunute | timeFormat}}
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <div class="body-2">{{ lesson.name }}</div>
-                          </v-list-tile-content>
-                        </v-list-tile>
-                      </v-list-group>
-                    </v-list>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
-           </v-layout>
+      </v-flex>
+      <!-- Навигационное меню -->
+      <v-flex v-if="menuRight" lg4 md8 sm12>
+        <v-layout column fill-height>
+          <!-- Навигация -->
+          <v-flex grow>
+            <v-card flat height='100%' width='100%'>
+              <v-layout row align-center space-between nowrap pr-1 py-1>
+                <v-flex>
+                  <h3 class="px-3">Материалы курса</h3>
+                </v-flex>
+                <v-flex hidden-md-and-down shrink>
+                  <v-btn @click="menuRight=!menuRight"
+                    flat icon color="grey">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+              <!-- Список уроков по модулям -->
+              <v-layout fill-height>
+                <v-flex>
+                  <v-card
+                    color="grey lighten-2"
+                    flat
+                    v-for="(moduleItem, index) in modules" :key="moduleItem.moduleGuid">
+                    <div class="pl-3 pt-1">
+                      <v-layout nowrap align-center justify-space-between>
+                        <v-flex>
+                          <div class="subheading font-weight-bold">{{moduleItem.name}}</div>
+                          <div class="body-1">
+                            {{ moduleItem.durationMinutesLabel + ` (${lessonsModulePassed(moduleItem.moduleGuid)} / ${moduleItem.units.length})`}}
+                          </div>
+                        </v-flex>
+                        <v-spacer></v-spacer>
+                        <v-flex shrink>
+                          <v-btn icon @click="openClose(index)" color="white">
+                            <v-icon>{{ isActive(index) ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                          </v-btn>
+                        </v-flex>
+                      </v-layout>
+                    </div>
+                    <v-card-text v-show="isActive(index)" class="white py-0 px-0">
+                      <v-layout>
+                        <v-flex>
+                          <div
+                              v-for="lesson in moduleItem.units"
+                              :key="lesson.lessonGuid"
+                              @click="setLesson(lesson)"
+                              :class="{'active': lesson.lessonGuid === currentLessonGuid}"
+                              class="lesson-item">
+                            <v-layout nowrap justify-start>
+                              <v-flex pl-3 shrink align-self-center>
+                                <v-checkbox
+                                  v-model="lessonsPassed"
+                                  :value="lesson.lessonGuid"
+                                  :disabled="lesson.disabled"
+                                  height="6">
+                                </v-checkbox>
+                              </v-flex>
+                              <v-flex>
+                                <v-layout column>
+                                  <v-flex>
+                                    <v-layout>
+                                      <v-flex align-self-center>
+                                        <div><span class="grey--text text--darken-2">{{lesson.name}}</span></div>
+                                      </v-flex>
+                                    </v-layout>
+                                  </v-flex>
+                                </v-layout>
+                                <v-layout nowrap>
+                                  <v-flex shrink>
+                                    <v-icon small color="grey lighten-1">{{lesson.icon}}</v-icon>
+                                  </v-flex>
+                                  <v-flex>
+                                    <span class="ml-3 caption grey--text text-darken-1">{{lesson.durationMunute | timeFormat}}</span>
+                                  </v-flex>
+                                </v-layout>
+                              </v-flex>
+                            </v-layout>
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-card>
           </v-flex>
         </v-layout>
-
       </v-flex>
     </v-layout>
   </v-container>
@@ -173,10 +221,11 @@ export default {
   },
   data() {
     return {
+      menuRight: true,
+      openItem: true,
       tabActive: null,
       tabItems: [
-        { id: 'lesson', title: 'Урок', nestedView: LessonView}, // 'Урок', 'Материалы урока', 'Вопросы и ответы'
-        { id: 'materials', title: 'Материалы урока', nestedView: LessonMaterials},
+        { id: 'materials', title: 'Ресурсы', nestedView: LessonMaterials},
         { id: 'questions', title: 'Вопросы и ответы', nestedView: QuestionsAndAnswers}
       ],
       currentTabName: 'lesson',
@@ -190,14 +239,16 @@ export default {
       lessonsPassed: [],
       modulesLessonsPassed: [],
       currentLessonGuid: '',
+      startPlay: false,
       navigation: {
+        modules: [],
         currentLessonIndex: 0,
         lessons: []
       },
       // STUB materials
       materials: [
         {
-          title: 'Презентация',
+          title: 'Презентации',
           type: 1,
           icon: 'slideshow',
           enclosures: [
@@ -260,6 +311,7 @@ export default {
     // STUB признак прохождения урока пока добавлять программно
     const isFree = true
     this.getLesson(this.currentLessonGuid, isFree)
+    this.navigation.modules = this.initMenu()
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
@@ -268,6 +320,7 @@ export default {
     nextLesson () {
       if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
         this.navigation.currentLessonIndex++
+        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       }
       const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setLesson (lesson)
@@ -275,12 +328,14 @@ export default {
     prevLesson () {
       if (this.navigation.currentLessonIndex > 0) {
         this.navigation.currentLessonIndex--
+        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       }
       const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setLesson (lesson)
     },
     setLesson ({lessonGuid, isFree}) {
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
+      this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       this.getLesson(lessonGuid, isFree)
     },
     async getLesson(lessonGuid, isFree) {
@@ -293,6 +348,10 @@ export default {
       }
       // отправить запрос на сервер (урок пройден)
 
+    },
+    putNextLesson () {
+      this.nextLesson ()
+      this.startPlay = true
     },
     // Навигация. Получить все уроки курса: идентификаторы и признак свободного доступа
     getAllLessons () {
@@ -378,6 +437,23 @@ export default {
     },
     setCurrentTabName ( tabActive ) {
       this.currentTabName = tabActive
+    },
+    isCurrentLesson(lessonGuid) {
+      return this.currentLessonGuid === lessonGuid
+    },
+    initMenu() {
+      return this.modules.map( m => {
+        return {
+          moduleGuid: m.moduleGuid,
+          active: true
+        }
+      })
+    },
+    openClose(index) {
+      this.navigation.modules[index].active = !this.navigation.modules[index].active
+    },
+    isActive(index) {
+      return this.navigation.modules[index].active
     }
   },
   computed: {
@@ -389,10 +465,15 @@ export default {
       }
     },
     testIsPassed() {
-      return false
+      return this.lessonsPassed
     },
-    lessonIsPassed () {
-      return this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid)
+    lessonIsPassed() {
+      if (this.currentLesson) {
+        return this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid)
+      } else {
+        return false
+      }
+
     },
     isFirstLesson () {
       if ( this.currentLesson ) {
@@ -436,7 +517,20 @@ export default {
 </script>
 
 <style>
-.bg-color-white {
+.color-white {
   background-color:white;
+}
+.color-grey {
+  background-color: #E0E0E0;
+}
+.active {
+  background: #E1F5FE;
+}
+.lesson-item {
+  border-top: solid 1px #E0E0E0;
+  cursor: pointer;
+}
+.lesson-item:hover {
+  background: #EEEEEE;
 }
 </style>
