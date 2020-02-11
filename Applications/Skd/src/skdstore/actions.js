@@ -34,6 +34,7 @@ export default {
     try {
       const result = await api.getUsersFromGql()
       const users = result.data
+      commit('setLastUpdatedDataTime')
       commit('setUsersList', users.skd.personsTable.data)
       commit('setUsers', users)
     } catch (e) {

@@ -8,5 +8,6 @@ export default {
   grouping: localStorage.getItem('grouping') || 0,
   user: auth.getUserData(),
   sort: localStorage.getItem('sorting') || 0,
-  drawer: false
+  drawer: false,
+  lastUpdatedDateTime: {}
 }

@@ -58,5 +58,14 @@ export default {
 
   setDrawer(state, value) {
     state.drawer = value
+  },
+
+  setLastUpdatedDataTime(state) {
+    var dateTime = {
+      Date: moment().format('DD-MM-YYYY'),
+      Time: moment().format('HH:mm'),
+    }
+    
+    state.lastUpdatedDateTime = dateTime
   }
 }

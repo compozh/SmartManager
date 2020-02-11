@@ -15,20 +15,37 @@
         <router-view />
       </v-container>
     </v-content>
-    <v-footer app inset>
+    <v-footer class="flex-footer" app inset>
       <slot name="footer"></slot>
+        <span v-if="todayLastUpdated" class="relevance-data-status">{{refreshed}} {{getLastUpdatedDateTime.Time}}</span>
+        <span v-else-if="yesterdayLastUpdated" class="relevance-data-status">{{refreshed}} {{yesterday}} {{getLastUpdatedDateTime.Time}}</span>
+        <span v-else class="relevance-data-status">{{refreshed}} {{getLastUpdatedDateTime.Date}}</span>
     </v-footer>
   </v-app>
 </template>
 <script>
 // @ is an alias to /src
+var moment = require('moment')
+import 'moment/locale/ru'
 
 export default {
   name: 'skd-default-app',
-  data: () => ({}),
+  data: () => ({
+    yesterday: 'Вчера',
+    refreshed: 'Обновлено'
+  }),
   computed: {
     getDrawer() {
       return this.$store.state.skd.drawer
+    },
+    getLastUpdatedDateTime() {
+      return this.$store.getters['skd/getLastUpdatedDataTime']
+    },
+    todayLastUpdated() {
+      return this.getLastUpdatedDateTime.Date == moment().format('DD-MM-YYYY')
+    },
+    yesterdayLastUpdated() {
+      return this.getLastUpdatedDateTime.Date == moment(new Date()).add(-1,'days').format('DD-MM-YYYY') 
     }
   },
   methods: {
@@ -40,3 +57,13 @@ export default {
   props: ['toolbarTitle']
 }
 </script>
+
+<style scoped>
+.flex-footer {
+  display: flex;
+  justify-content: center;
+}
+.relevance-data-status {
+  font-size: 0.9em;
+}
+</style>
