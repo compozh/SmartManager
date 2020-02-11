@@ -105,7 +105,7 @@ router.beforeEach(async (to, from, next) => {
       return next();
     }
   } 
-  router.push({ name: 'login', query: { to: from.path } });
+  router.push({ name: 'login', query: { to: to.path } });
 });
 
 // Исправление для поддержки регистронезависимого base path
