@@ -12,18 +12,31 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-  .photo {
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 0 17px -7px black;
+.photo {
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 17px -7px black;
 
-    img {
-      width: inherit;
-    }
-
-    .material-icons {
-      color: #ddd;
-      font-size: inherit;
-    }
+  img {
+    width: inherit;
   }
+}  
+.desktop-photo-container {
+  .material-icons {
+    color: #ddd;
+    font-size: 80px;
+  }
+}
+.mobile-photo-container {
+  .material-icons {
+    color: #ddd;
+    font-size: 50px;
+  }
+}
+.mobile-photo-container-expanded {
+  .material-icons {
+    color: #ddd;
+    font-size: 95px;
+  }
+}
 </style>

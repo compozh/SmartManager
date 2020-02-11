@@ -113,19 +113,12 @@ export default {
   font-weight: 400;
 }
 .user-department {
-  // text-align: right;
   font-size: 0.8em;
-  color: #999;
-  // padding-right: 1em;
+  color: #999; 
 }
 .mobile-photo-container-expanded {
   margin: 5px;
   height: 95px;
   width: 95px;
-  
-  i#empty-person-icon {
-    color: #ddd;
-    font-size: 95px;
-  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <v-layout wrap class='user-container'>
 				<v-flex lg1 class='align-flex'>
-					<user-photo class="photo-container" :photo='user.photoProperty.photoUrl'></user-photo>
+					<user-photo class="desktop-photo-container" :photo='user.photoProperty.photoUrl'></user-photo>
 				</v-flex>
 				<v-flex class='name-place-container align-flex'>
 					<v-flex>
@@ -130,13 +130,9 @@ export default {
   color: #999;
   font-size: 0.9em;
 }
-.photo-container {
+.desktop-photo-container {
     margin: 10px;
     height: 80px;
     width: 80px;
-
-    .material-icons {
-      font-size: 80px;
-    }
-  }
+}
 </style>
