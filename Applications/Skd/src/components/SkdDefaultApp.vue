@@ -25,9 +25,7 @@
 
 export default {
   name: 'skd-default-app',
-  data: () => ({
-    //drawer: false
-  }),
+  data: () => ({}),
   computed: {
     getDrawer() {
       return this.$store.state.skd.drawer
