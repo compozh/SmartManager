@@ -1,6 +1,7 @@
 <template>
   <v-layout wrap row >
     <v-flex class="user-photo" xs4>
+      <svg-key class="user-key" v-if="user.hasKey"></svg-key>
       <user-photo class="mobile-photo-container-expanded" :photo="user.photoProperty.photoUrl"></user-photo>
     </v-flex>
     <v-flex class="user-info" xs7>
@@ -120,5 +121,16 @@ export default {
   margin: 5px;
   height: 95px;
   width: 95px;
+  z-index: 3;
+}
+.user-key {
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  z-index: 1;
+  transform: rotate(-45deg);
+}
+.user-photo {
+  position: relative;
 }
 </style>
