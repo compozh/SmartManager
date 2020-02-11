@@ -82,7 +82,7 @@ export default {
     close() {
       this.show = false;
       let overlays = document.querySelectorAll('.v-overlay');
-      overlays.forEach(el => el.parentNode.removeChild(el))
+      overlays.forEach(el => el.parentNode.removeChild(el));
     },
     select() {
       if (!this.selected.length) {
@@ -92,7 +92,7 @@ export default {
         this.callback(this.selected[0]);
         this.callback = null;
       }
-      this.close()
+      this.close();
     }
   }
 };

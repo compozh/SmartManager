@@ -85,14 +85,14 @@
             <v-list-item-title>{{ $t('bpmn.buttons.Delete') }}</v-list-item-title>
           </v-list-item>
         </template>
-        <template v-if="!isFolder(item)">
+        <template v-if="!isFolder(item) && canEdit(item)">
           <v-list-item @click="copy(item)">
             <v-list-item-avatar>
               <v-icon>mdi-content-copy</v-icon>
             </v-list-item-avatar>
             <v-list-item-title>{{ $t('bpmn.buttons.Copy') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="canEdit(item)">
+          <v-list-item>
             <v-list-item-avatar>
               <v-icon>mdi-repeat</v-icon>
             </v-list-item-avatar>
@@ -168,15 +168,15 @@ export default {
       return item instanceof Models.Folder;
     },
     canDeploy(item) {
-      if(!item) return false
+      if (!item) { return false; }
       return item.hasRight(Models.AccessRights.Deploy);
     },
     canEdit(item) {
-      if(!item) return false
+      if (!item) { return false; }
       return item.hasRight(Models.AccessRights.Write);
     },
     canShare(item) {
-      if(!item) return false
+      if (!item) { return false; }
       return item.hasRight(Models.AccessRights.Share);
     },
     isBpmn(item) {

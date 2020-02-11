@@ -210,7 +210,6 @@ export default {
   },
   methods: {
     async onShowAccessDialog(record) {
-      debugger
       this.show = true;
       this.loading = true;
       let items;
@@ -241,7 +240,6 @@ export default {
           allowAccess: item.allowAccess ? this.$t('bpmn.labels.Allow') : this.$t('bpmn.labels.Decline')
         };
       });
-      console.log(this.items)
       this.loading = false;
       this.record = record;
     },

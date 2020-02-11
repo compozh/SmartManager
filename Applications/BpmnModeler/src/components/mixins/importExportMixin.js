@@ -19,10 +19,10 @@ export const importMixin = {
           setTimeout(function () {
             document.body.removeChild(input);
           }, 0);
-          let type  = file.type || file.name.includes('.bpmn') ? 'BPMN' : file.name.includes('.dmn') ? 'DMN' : ''
-            if(type != 'BPMN' && type != 'DMN') {
-              return Notification.error(element.$t('bpmn.errors.ProcessNotCreated'))
-            }
+          let type  = file.type || file.name.includes('.bpmn') ? 'BPMN' : file.name.includes('.dmn') ? 'DMN' : '';
+          if (type != 'BPMN' && type != 'DMN') {
+            return Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
+          }
           this.createItem(parent, 'process', xml, [{name: file.name, type}]);
         });
       });

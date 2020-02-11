@@ -102,6 +102,14 @@ export default {
 .quill-editor {
   padding-bottom: 20px;
   background-color: white;
+  .ql-editor {
+    border-bottom: 1px solid silver;
+    border-top: 1px solid silver;
+    &:focus {
+      border-bottom: 1px solid #1976d2;
+      border-top: 1px solid #1976d2;
+    }
+  }
 }
 
 .quill-editor:fullscreen {

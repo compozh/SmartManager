@@ -65,8 +65,8 @@ export default {
             return  i.id === item.id; 
           });
         });
-        if(!el[0]) {
-          return [item]
+        if (!el[0]) {
+          return [item];
         }
         let parentId = el[0].item.id, parent;
         while (parentId) {
