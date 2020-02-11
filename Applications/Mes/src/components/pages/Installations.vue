@@ -37,10 +37,10 @@ export default {
     }
     this.initializeInstallations()
 
-    eventBus.$on(events.scannedBarCode, this.registerMaterialInstallation)
+    eventBus.$on(events.scannedBarCode, this.registerMaterialInstallationByScanned)
   },
   beforeDestroy() {
-    eventBus.$off(events.scannedBarCode, this.registerMaterialInstallation)
+    eventBus.$off(events.scannedBarCode, this.registerMaterialInstallationByScanned)
   },
   computed: {
     workCenter() {
@@ -70,25 +70,23 @@ export default {
         }
       })
     },
+    registerMaterialInstallationByScanned(qrCodeValue) {
+      this.submitQrCode({ qrCodeValue })
+    },
     async submitQrCode({ qrCodeValue, callback }) {
-      let installationCards = this.$refs.installationCards,
-        installationCard = installationCards.$refs[qrCodeValue],
-        installationsBlock = installationCards.$refs.installationsBlock
 
-      if (installationCard && installationCard.length &&  installationCard[0].$el) {
-        installationsBlock.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
-        installationCard[0].$el.classList.add('activeInstallation')
-        setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 2000)
+      if (this.highlightInstallation(qrCodeValue)) {        
         if (callback) {
           callback()
         }
         return
+      } else {
+        this.registerMaterialInstallation(qrCodeValue).then(() => {
+          if (callback) {
+            callback()
+          }
+        })
       }
-      this.registerMaterialInstallation(qrCodeValue).then(() => {
-        if (callback) {
-          callback()
-        }
-      })
     },
     async registerMaterialInstallation(batchBarcode) {
       this.$store.commit('mes/setLinearLoader', true)
@@ -99,6 +97,21 @@ export default {
         await this.initializeInstallations()
       }
       this.$store.commit('mes/setLinearLoader', false)
+    },
+    highlightInstallation(qrCodeValue) {
+      let installationCards = this.$refs.installationCards,
+        installationCard = installationCards.$refs[qrCodeValue],
+        installationsBlock = installationCards.$refs.installationsBlock
+
+      if (installationCard && installationCard.length) {
+        installationsBlock.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
+        installationCard[0].$el.classList.add('activeInstallation')
+        setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 2000)
+
+        return true
+      }
+
+      return false
     }
   }
 }

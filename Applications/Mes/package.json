@@ -17,7 +17,7 @@
     "@it-enterprise/common": "^1.0.1",
     "@it-enterprise/formio": "^1.0.19",
     "@it-enterprise/graphql": "^1.0.7",
-    "@it-enterprise/jwtauthentication": "^1.1.4",
+    "@it-enterprise/jwtauthentication": "^1.1.6",
     "@it-enterprise/localization": "^1.0.10",
     "@it-enterprise/modules-manager": "1.0.0",
     "@microsoft/signalr": "^3.1.0",
