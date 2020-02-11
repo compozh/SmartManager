@@ -89,9 +89,11 @@ export default {
     loadMore() {
       this.$store.dispatch('skd/setItemsOffset', 20)
     },
-    fetchUsers(loaded) {
+    fetchUsers(loaded) {      
       this.$store.dispatch('skd/getUsers')
-      loaded('done')
+        .then(() => {
+          loaded('done')
+        }) 
     }
   },
   created: function() {
