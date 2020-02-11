@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-if="show" v-model="show" max-width="800">
+  <v-dialog v-if="show" v-model="show" max-width="800" @keydown.enter="select()" ref="dialog" class="selection-grid">
     <v-card>
       <v-card-title primary-title>
         <h4 class="headline mb-0">{{ title }}</h4>
@@ -30,7 +30,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="show = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+        <v-btn text @click="close">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
         <v-btn text color="primary" :disabled="!selected.length" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
       </v-card-actions>
     </v-card>
@@ -79,6 +79,11 @@ export default {
       this.callback = callback;
       this.show = true;
     },
+    close() {
+      this.show = false;
+      let overlays = document.querySelectorAll('.v-overlay');
+      overlays.forEach(el => el.parentNode.removeChild(el));
+    },
     select() {
       if (!this.selected.length) {
         return;
@@ -87,7 +92,7 @@ export default {
         this.callback(this.selected[0]);
         this.callback = null;
       }
-      this.show = false;
+      this.close();
     }
   }
 };

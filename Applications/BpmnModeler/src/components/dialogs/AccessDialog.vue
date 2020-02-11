@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-if="show" v-model="show" max-width="1200px" scrollable>
+  <v-dialog v-if="show" v-model="show" max-width="1200px" scrollable @keydown.enter="formSave">
     <v-card>
       <v-card-title primary-title>
         <h4 class="headline mb-0">{{ $t('bpmn.labels.Sharing') }}</h4>

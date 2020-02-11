@@ -9,7 +9,7 @@
           :close-on-click="false"
           :close-on-content-click="false">
           <template v-slot:activator="{ on }">
-            <v-btn text class="menu-btn" v-on="on">
+            <v-btn text class="menu-btn" v-on="on" :disabled="!canEdit()" :title="canEdit() ?  $t('bpmn.buttons.Move') : $t('bpmn.errors.Er403')">
               <v-icon size="20">mdi-folder-move</v-icon>
               {{ $t('bpmn.buttons.Move') }}
             </v-btn>
@@ -53,11 +53,11 @@
           </v-card>
         </v-menu>
         
-        <v-btn text class="menu-btn "  @click="copyItem(choose)">
+        <v-btn text class="menu-btn "  @click="copyItem(choose)" :disabled="!canEdit()" :title="canEdit() ?  $t('bpmn.buttons.Copy') : $t('bpmn.errors.Er403')">
           <v-icon size="20">mdi-content-copy</v-icon>
           {{ $t('bpmn.buttons.Copy') }}
         </v-btn>
-        <v-btn text class="menu-btn " @click="removeItem(choose)">
+        <v-btn text class="menu-btn " @click="removeItem(choose)" :disabled="!canEdit()" :title="canEdit() ?  $t('bpmn.buttons.Delete') : $t('bpmn.errors.Er403')">
           <v-icon size="20">mdi-delete</v-icon>
           {{ $t('bpmn.buttons.Delete') }}
         </v-btn>
@@ -68,6 +68,7 @@
 
 <script>
 import { formMixin } from '../mixins';
+import * as Models from '../../api/models';
 export default {
   name: 'folder-menu-footer',
   mixins: [ formMixin ],
@@ -83,6 +84,9 @@ export default {
     chosen: Array
   },
   methods: {
+    canEdit() {
+      return this.item.hasRight(Models.AccessRights.Write);
+    },
     changeFolder(value) {
       if (!value) {
         this.choosedFolder = {
