@@ -111,7 +111,10 @@
 		"Diagrams": "Діаграми",
 		"Selected": "Вибрано",
 		"You": "Вами",
-		"AlreadyIn": "Елемент уже в цій папці"
+		"AlreadyIn": "Елемент уже в цій папці",
+		"Drag&drop" : "Перетягніть сюди або",
+		"Import" : "імпортуйте",
+		"Files" : ".bpmn або .dmn файли"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

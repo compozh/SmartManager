@@ -8,7 +8,7 @@
 
 <script>
 import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
 import { quillEditor } from 'vue-quill-editor';
 import { fullScreenMixin } from '../../mixins';
 
@@ -42,7 +42,11 @@ export default {
     return {
       isfullscreen: false,
       fullscreenEnabled: document.fullscreenEnabled,
-      editorOptions: { modules: { toolbar: TOOLBAR_CONFIG } },
+      editorOptions: {
+        theme: 'bubble', 
+        modules: { toolbar: TOOLBAR_CONFIG },
+        bounds: document.querySelector('.properties-panel-container')
+      },
       content: ''
     };
   },
@@ -89,10 +93,23 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss" >
+  .quill-editor,
+  .quill-code {
+    height: 20rem;
+  }
+
 .quill-editor {
   padding-bottom: 20px;
   background-color: white;
+  .ql-editor {
+    border-bottom: 1px solid silver;
+    border-top: 1px solid silver;
+    &:focus {
+      border-bottom: 1px solid #1976d2;
+      border-top: 1px solid #1976d2;
+    }
+  }
 }
 
 .quill-editor:fullscreen {
@@ -100,7 +117,7 @@ export default {
 }
 
 .quill-editor:fullscreen .ql-container {
-  height: calc(100% - 40px);
+  height: calc(100% - 40px); 
 }
 
 .quill-editor:fullscreen .ql-editor {
@@ -124,13 +141,13 @@ export default {
   outline: none;
 }
 
-.ql-fullscreen::after {
+.ql-fullscreen::after{
   content: "\F293";
   font-family: "Material Design Icons";
-  font-size: 24px;
+  font-size: 25px;
   position: relative;
-  top: -12px;
-  left: -4px;
+  top: -13px;
+  left: -12px;
 }
 
 .ql-container.ql-snow.ql-disabled {

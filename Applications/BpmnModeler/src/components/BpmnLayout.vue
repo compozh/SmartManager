@@ -9,13 +9,13 @@
       </router-link>
       <breadcrumbs class="pl-4" :activeItem.sync="activeItem" />
       <v-spacer></v-spacer>
-      <v-col class="icon-container shrink" v-if="currentUser">
+      <v-col class="icon-container shrink py-0" v-if="currentUser">
         <user-panel mini="true"></user-panel>
       </v-col>
     </v-app-bar>
     <v-content class="grey lighten-4">
       <v-container fluid class="align-start pa-0 fill-height" >
-        <router-view ref="modeler" v-if="!loading" 
+        <router-view ref="modeler"
           @loadItems="loadItems"
           :activeItem.sync="activeItem"/>
       </v-container>
@@ -131,9 +131,9 @@ export default {
       this.$store.state.auth.user = auth.getUserData();
       return this.$store.state.auth.user;
     },
-    items() {
-      return this.$store.state.bpmn.items;
-    },
+    // items() {
+    //   return this.$store.state.bpmn.items;
+    // },
     activeItem: {
       get() {
         return this.$store.getters['bpmn/getActiveItemId'];
