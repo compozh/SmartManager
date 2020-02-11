@@ -13,9 +13,12 @@
 		<v-flex v-if='$vuetify.breakpoint.mdAndDown && users_list'>
 			<div v-for='(item, index) in SlicedItems' :key='index'>
 				<v-flex row wrap >
-					<div v-for='(user, index) in item.users' :key='index'>
-						<mobile-mode-component :user='user'></mobile-mode-component>
-					</div>
+           <pull-to-component :top-load-method="fetchUsers"
+                              :top-config="pullToConfig">
+            <div v-for='(user, index) in item.users' :key='index'>
+              <mobile-mode-component :user='user'></mobile-mode-component>
+            </div>
+           </pull-to-component>
 				</v-flex>
 			</div>
 		</v-flex>
@@ -24,15 +27,27 @@
 <script>
 import mobileModeComponent from './MobileMode'
 import desctopModeComponent from './DesctopMode'
+import PullTo from 'vue-pull-to'
 export default {
   name: 'skd-list',
   components: {
     'desctop-mode-component': desctopModeComponent,
-    'mobile-mode-component': mobileModeComponent 
+    'mobile-mode-component': mobileModeComponent,
+    'pull-to-component': PullTo
   },
   data: () => ({
     pagSync: {
       rowsPerPage: -1
+    },
+    pullToConfig: {
+      pullText: 'Обновить список', // The text is displayed when you pull down
+      triggerText: 'Отпустите, что бы обновить список', // The text that appears when the trigger distance is pulled down
+      loadingText: 'Обновление...', // The text in the load
+      doneText: 'Готово', // Load the finished text
+      failText: '', // Load failed text
+      loadedStayTime: 400, // Time to stay after loading ms
+      stayDistance: 50, // Trigger the distance after the refresh
+      triggerDistance: 70 // Pull down the trigger to trigger the distance
     }
   }),
   computed: {
@@ -73,6 +88,10 @@ export default {
   methods: {
     loadMore() {
       this.$store.dispatch('skd/setItemsOffset', 20)
+    },
+    fetchUsers(loaded) {
+      this.$store.dispatch('skd/getUsers')
+      loaded('done')
     }
   },
   created: function() {
