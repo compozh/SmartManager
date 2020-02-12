@@ -17,7 +17,7 @@
     "@it-enterprise/eds": "^1.0.1",
     "@it-enterprise/formio": "1.0.18",
     "@it-enterprise/graphql": "^1.0.9",
-    "@it-enterprise/jwtauthentication": "^1.1.2",
+    "@it-enterprise/jwtauthentication": "^2.0.2",
     "@it-enterprise/localization": "^1.0.10",
     "@it-enterprise/modules-manager": "1.0.0",
     "@mdi/font": "^4.8.95",

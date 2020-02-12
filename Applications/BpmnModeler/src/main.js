@@ -25,7 +25,14 @@ import router from './router';
 const config = window.config;
 import App from './App.vue';
 
-auth.config(config.GrapgQlUrl);
+auth.config({
+  baseUrl: config.GrapgQlUrl,
+  onError: error => {
+    if (error.response && error.response.status == 400) {
+      store.dispatch('auth/logout');
+    }
+  }
+});
 // объект с зависимостями
 let dependencies = {
   store,
