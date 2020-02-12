@@ -124,6 +124,9 @@ export default {
         : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
           : this.$router.push({name: 'project', params: {id: value.id}});
     },
+    changeLoad() {
+      setTimeout(() => this.loading = false, 10); 
+    }
   },
   computed: {
     currentUser() {
@@ -131,9 +134,6 @@ export default {
       this.$store.state.auth.user = auth.getUserData();
       return this.$store.state.auth.user;
     },
-    // items() {
-    //   return this.$store.state.bpmn.items;
-    // },
     activeItem: {
       get() {
         return this.$store.getters['bpmn/getActiveItemId'];
@@ -155,8 +155,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
-      if (from.name === 'login') {
-        this.appBar = true;
+      if (from.name === 'login' || from.name === 'decision' || from.name === 'process') {
         this.onRouteChanged(true);
       }
     },

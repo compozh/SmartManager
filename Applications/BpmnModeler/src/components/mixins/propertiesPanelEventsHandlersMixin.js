@@ -23,11 +23,11 @@ export default {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getAvailableActions', { processId: this.activeItem, definitionType });
       if (!items) {
-        this.loading = false;
+        this.changeLoad();
         Notification.error(this.$t('bpmn.errors.ActionsNotLoaded'));
         return;
       }
-      this.loading = false;
+      this.changeLoad();
 
       eventBus.$emit(events.modeler.showSelectionGrid,
         ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction'),
@@ -38,11 +38,11 @@ export default {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getFormsForProcess', { processId: this.activeItem });
       if (!items) {
-        this.loading = false;
+        this.changeLoad();
         Notification.error(this.$t('bpmn.errors.FormsNotLoaded'));
         return;
       }
-      this.loading = false;
+      this.changeLoad();
 
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectForm'),
@@ -53,18 +53,18 @@ export default {
       this.loading = true;
       var action = await this.$store.dispatch('bpmn/getActionById', taskCode);
       if (!action) {
-        this.loading = false;
+        this.changeLoad();
         Notification.error(this.$t('bpmn.errors.ActionsNotLoaded'));
         return;
       }
       if (!action.unformio || action.unformio.trim() === '') {
-        this.loading = false;
+        this.changeLoad();
         Notification.warning(this.$t('bpmn.errors.ActionWithoutForm'));
         return;
       }
       var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
       if (!form) {
-        this.loading = false;
+        this.changeLoad();
         Notification.error(this.$t('bpmn.errors.FormNotLoaded'));
         return;
       }
@@ -77,7 +77,7 @@ export default {
         }
       }
       form.submission = JSON.stringify(submission);
-      this.loading = false;
+      this.changeLoad();
 
       eventBus.$emit(events.formio.showForm, action.unformio, form, (submission) => {
         var params = [];
@@ -91,11 +91,11 @@ export default {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getDeployedProcesses');
       if (!items) {
-        this.loading = false;
+        this.changeLoad();
         Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
         return;
       }
-      this.loading = false;
+      this.changeLoad();
       items = items
         .map(process => { return { id: process.procDefKey, name: process.procName }; })
         .filter((process, index, self) => self.findIndex(p => p.id === process.id) === index);
@@ -110,11 +110,11 @@ export default {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getDeployedDecisions');
       if (!items) {
-        this.loading = false;
+        this.changeLoad();
         Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
         return;
       }
-      this.loading = false;
+      this.changeLoad();
       items = items
         .map(decision => { return { id: decision.decDefKey, name: decision.decDefName }; })
         .filter((decision, index, self) => self.findIndex(p => p.id === decision.id) === index);

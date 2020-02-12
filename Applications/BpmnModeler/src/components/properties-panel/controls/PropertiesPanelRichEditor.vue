@@ -111,7 +111,12 @@ export default {
     }
   }
 }
-
+.ql-bubble .ql-toolbar .ql-formats {
+  margin: 4px 5px 4px 0px; 
+  &:first-child {
+    margin-left: 0px;
+  }
+}
 .quill-editor:fullscreen {
   padding: 20px;
 }
