@@ -10,7 +10,6 @@ import auth from '@it-enterprise/jwtauthentication'
 auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import vuetify from './plugins/vuetify'
@@ -39,7 +38,7 @@ const apolloProvider = new VueApollo({
     link: new HttpLink({}),
     cache: new InMemoryCache(),
     connectToDevTools: true,
-  }),
+  })
 })
 
 // объект с зависимостями
@@ -63,16 +62,28 @@ Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })
 Vue.use(Localization, { dependencies })
 
-var formioOptions = {}
-formioOptions.authHeader = () => Vue.prototype.$authentication.getAuthHeader()
-formioOptions.routerDependencies = () => routerDependencies
-formioOptions.GraphQlUrl = window.myConfig.GrapgQlUrl
+var formioOptions = {
+  auth,
+  GraphQlUrl: window.myConfig.GrapgQlUrl,
+  routerDependencies: () => router,
+  onError: ({ message, networkError }) => {
+    if (networkError) {
+      switch(networkError.statusCode) {
+        case 401:
+        case 400:
+          store.dispatch('auth/logout')
+          break;
+      }
+    }
+    console.log(message)
+  }
+}
+
 Vue.use(formio, { options: formioOptions, dependencies })
+
 Vue.prototype.$localization.RegisterLanguage('mes', 'en', () => import('./plugins/resources/en.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'ru', () => import('./plugins/resources/ru.json'))
 Vue.prototype.$localization.RegisterLanguage('mes', 'uk', () => import('./plugins/resources/uk.json'))
-
-
 
 // Шина событий
 export const eventBus = new Vue({

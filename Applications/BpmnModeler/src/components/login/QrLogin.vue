@@ -11,7 +11,7 @@
         </div>
         <div v-else-if="props.error">
           <div class="qr-error-text">{{props.error}}</div>
-          <v-btn class="cyan white--text text-xs-right"
+          <v-btn class="cyan white--text text-right"
           @click="props.readerEvents.tryAgain"
           >{{$t("qrlogin.tryAgain")}}</v-btn>
         </div>
@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import { QrcodeStream } from 'vue-qrcode-reader'
+import { QrcodeStream } from 'vue-qrcode-reader';
 // Добавил импорт на компонент без отрисовки
-import QrLoginRl from './renderless/QrLogin'
+import QrLoginRl from './renderless/QrLogin';
 export default {
   components: {
     QrcodeStream,
@@ -45,7 +45,7 @@ export default {
       }
     }
   }
-}
+};
 
 </script>
 

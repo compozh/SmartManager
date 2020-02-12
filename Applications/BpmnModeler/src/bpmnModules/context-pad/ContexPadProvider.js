@@ -48,7 +48,7 @@ ContextPadProvider.prototype.getContextPadEntries = function (element) {
 
     input.addEventListener('change', (event) => {
       const color = event.target.value;
-      const attrs = is(di, 'bpmndi:BPMNEdge') ? { stroke: color } : { fill: color }
+      const attrs = is(di, 'bpmndi:BPMNEdge') ? { stroke: color } : { fill: color };
       modeling.setColor(element, attrs);
       setTimeout(function () {
         document.body.removeChild(input);
@@ -72,4 +72,4 @@ ContextPadProvider.prototype.getContextPadEntries = function (element) {
     });
   }
   return actions;
-}
+};

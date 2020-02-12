@@ -73,7 +73,6 @@
 
 <script>
 
-import Init from './components/Init'
 import UserPanel from '@/components/layouts/userPanel/UserPanel.vue'
 import { events } from '../constants'
 import { eventBus } from '../main'
@@ -81,16 +80,15 @@ import { eventBus } from '../main'
 export default {
   name: 'mes-toolbar',
   data() {
-    return {searchWorkCenter: false}
+    return { searchWorkCenter: false }
   },
   components: {
-    Init,
     UserPanel
   },
   created() {
-    const init = new Init()
-    init.initialize()
-    init.initializeSignalR()
+    if(this.$store.getters['auth/userId']) {
+      eventBus.$emit(events.initialize)
+    }
   },
   computed: {
     userData() {

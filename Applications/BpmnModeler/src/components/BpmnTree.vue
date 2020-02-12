@@ -1,5 +1,5 @@
 <template>
-  <v-layout column fill-height>
+  <v-col class="fill-height">
     <v-text-field
       v-model="search"
       :label="$tc('bpmn.labels.Search')"
@@ -26,16 +26,16 @@
         <span class="treeview-node-content">
           <bpmn-tree-icon :node="node"></bpmn-tree-icon>
           <span class="treeview-node-label" :title="node.label">{{ node.label }}</span>
-          <v-icon v-if="data.isSystem" :title="$t('bpmn.labels.SystemRecord')">lock</v-icon>
+          <v-icon v-if="data.isSystem" :title="$t('bpmn.labels.SystemRecord')">mdi-lock</v-icon>
           <slot name="context-menu" :item="data"></slot>
         </span>
       </template>
     </el-tree>
-  </v-layout>
+  </v-col>
 </template>
 <script>
 import treeSearch from '../api/treeSearch';
-import BpmnTreeIcon from './functional/BpmnTreeIcon'
+import BpmnTreeIcon from './functional/BpmnTreeIcon';
 import Folder from '../api/models/Folder';
 
 export default {

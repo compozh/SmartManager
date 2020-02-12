@@ -35,7 +35,7 @@ export default function addUserTaskProps(group, diagram, element, entryFactory, 
       });
     },
     loadItems: api.getActions(ActionDefinitionType.UserTask, diagram.isSystem),
-    appendIcon: 'search',
+    appendIcon: 'mdi-magnify',
     append() {
       const value = bo.get('IT-Enterprise:actionDefinitionId');
       eventBus.$emit(events.propertiesPanel.selectAction, value, ActionDefinitionType.UserTask, (newValue) => {
@@ -58,7 +58,7 @@ export default function addUserTaskProps(group, diagram, element, entryFactory, 
       var actionId = bo.get('IT-Enterprise:actionDefinitionId');
       setServiceTaskParameters(element, bo, actionId, bpmnFactory, commandStack);
     }
-  })
+  });
 
   group.entries.push(actionDefinitionEntry, setTaskPropertiesEntry);
 }

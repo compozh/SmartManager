@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-if="show" v-model="show" max-width="1200px" scrollable>
+  <v-dialog v-if="show" v-model="show" max-width="1200px" scrollable @keydown.enter="formSave">
     <v-card>
       <v-card-title primary-title>
         <h4 class="headline mb-0">{{ $t('bpmn.labels.Sharing') }}</h4>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
-          append-icon="search"
+          append-icon="mdi-magnify"
           :label="$t('bpmn.labels.Search')"
           single-line
           hide-details
@@ -17,7 +17,7 @@
         <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
           <v-card>
             <v-card-title>
-              <span class="headline">{{ form.titles[form.mode] }}</span>
+              <span class="headline">{{ $t(form.titles[form.mode]) }}</span>
             </v-card-title>
 
             <v-card-text>
@@ -32,43 +32,43 @@
                 >
                   <template #item="{ data }">
                     <template v-if="typeof data.item !== 'object'">
-                      <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                      <v-list-item-content v-text="data.item"></v-list-item-content>
                     </template>
                     <template v-else>
-                        <v-list-tile-content>
-                          <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
-                          <v-list-tile-sub-title v-html="data.item.id + ' ' + (data.item.login || '')"></v-list-tile-sub-title>
-                        </v-list-tile-content>
+                        <v-list-item-content>
+                          <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                          <v-list-item-subtitle class="text-left" v-html="data.item.id + ' ' + (data.item.login || '')"></v-list-item-subtitle>
+                        </v-list-item-content>
                     </template>
                   </template>
                 </autocompletebox>
                 <p style="text-align: left; margin: 0;">{{ $t('bpmn.labels.AccessRights') }}</p>
                 <v-container fluid>
-                  <v-layout column>
+                  <v-col>
                     <v-checkbox
                       class="rights-checkbox"
                       hide-details
                       v-model="form.editedItem.rights" 
-                      v-for="right in enums.diagramRights" :key="right" 
-                      :label="$t('bpmn.enums.DiagramAccessRights.' + right)" 
+                      v-for="right in enums.accessRights" :key="right" 
+                      :label="$t('bpmn.enums.AccessRights.' + right)" 
                       :value="right"
                       :rules="[form.rules.selectOne]" 
                       :disabled="form.loading || form.mode === 'delete'">
                     </v-checkbox>
-                   </v-layout>
+                   </v-col>
                  </v-container>
               </v-form>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-              <v-btn flat @click="formSave" :loading="form.loading" color="primary">{{ form.actions[form.mode] }}</v-btn>
+              <v-btn text @click="formClose" :disabled="form.loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+              <v-btn text @click="formSave" :loading="form.loading" color="primary">{{ $t(form.actions[form.mode]) }}</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-btn icon @click="show = false">
-          <v-icon>close</v-icon>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
       <v-card-text style="height: 500px; overflow-y: auto;">
@@ -76,23 +76,24 @@
           :headers="headers"
           :items="items"
           :search="search"
-          hide-actions
-          :pagination.sync="pagination"
+          hide-default-footer
+          :options.sync="options"
           item-key="id"
           :loading="loading"
+          loading-text=""
           :no-data-text="$t('bpmn.labels.NoData')"
           :no-results-text="$t('bpmn.labels.NoData')"
         >
-          <template slot="items" slot-scope="props">
+          <template slot="item" slot-scope="props">
             <tr>
-              <td class="text-xs-left">
-                <v-icon v-if="props.item.model.type === 'USER'" :title="$t('bpmn.labels.User')" small>person</v-icon>
-                <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>group</v-icon>
+              <td class="text-sm-left">
+                <v-icon v-if="props.item.model.type === 'USER'" :title="$t('bpmn.labels.User')" small>mdi-account</v-icon>
+                <v-icon v-else-if="props.item.model.type === 'GROUP'" :title="$t('bpmn.labels.Group')" small>mdi-account-multiple</v-icon>
               </td>
-              <td class="text-xs-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
+              <td class="text-sm-left" :title="props.item.userId || props.item.groupId" >{{ props.item.userName || props.item.groupName || $t('bpmn.labels.All') }}</td>
               <td 
-                v-for="right in enums.diagramRights" :key="right" 
-                class="text-xs-left">
+                v-for="right in enums.accessRights" :key="right" 
+                class="text-sm-left">
                 <v-checkbox
                   class="rights-checkbox"
                   hide-details
@@ -102,8 +103,8 @@
                 </v-checkbox>
               </td>
               <td class="justify-left layout">
-                <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-                <v-icon :title="$t('bpmn.buttons.Delete')" small @click="deleteItem(props.item)">delete</v-icon>
+                <v-icon :title="$t('bpmn.buttons.Edit')" small class="mr-2" @click="editItem(props.item)">mdi-pencil</v-icon>
+                <v-icon :title="$t('bpmn.buttons.Delete')" small @click="deleteItem(props.item)">mdi-delete</v-icon>
               </td>
             </tr>
           </template>
@@ -124,26 +125,21 @@ export default {
   data() {
     return {
       show: false,
-      headers: [
-        { text: '', value: 'type' },
-        { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
-        ...map(Models.DiagramAccessRights, right => { return { text: this.$t('bpmn.enums.DiagramAccessRights.' + right), value: 'rights' } }),
-        { text: '', value: 'name', align: 'left', sortable: false }
-      ],
-      pagination: {
-        sortBy: 'type',
+      options: {
+        sortBy: ['type'],
         rowsPerPage: -1
       },
       search: '',
       loading: false,
       enums: {
         accessType: Models.AccessType,
-        diagramRights: Models.DiagramAccessRights
+        accessRights: Models.AccessRights
       },
       form: {
         editedIndex: -1,
         editedItem: { 
-          recordId: null, 
+          id: '',
+          record: null, 
           identities: [], 
           allowAccess: true, 
           type: Models.AccessType.All,
@@ -168,20 +164,30 @@ export default {
         },
         usersAndGroups: [],
       },
-      recordId: '',
+      record: null,
       items: []
-    }
+    };
   },
   mounted() {
     eventBus.$on(events.modeler.showAccessDialog, this.onShowAccessDialog);
   },
   beforeDestroy() {
-    eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog)
+    eventBus.$off(events.modeler.showAccessDialog, this.onShowAccessDialog);
+  },
+  computed: {
+    headers() {
+      return [
+        { text: '', value: 'type' },
+        { text: this.$t('bpmn.labels.UserOrGroup'), value: 'groupName' },
+        ...map(Models.AccessRights, right => { return { text: this.$t('bpmn.enums.AccessRights.' + right), value: 'rights' }; }),
+        { text: '', value: 'name', align: 'left', sortable: false }
+      ];
+    },
   },
   watch: {
     show(newValue, oldValue) {
       if (oldValue && !newValue) {
-        this.recordId = null;
+        this.record = null;
         this.items = [];
       }
     },
@@ -191,23 +197,29 @@ export default {
       }
     },
     'form.editedItem.rights'(value, oldValue) {
-      if (oldValue.includes(Models.DiagramAccessRights.Read) && !value.includes(Models.DiagramAccessRights.Read)) {
+      if (oldValue.includes(Models.AccessRights.Read) && !value.includes(Models.AccessRights.Read)) {
         this.$nextTick(() => {
           this.form.editedItem.rights = [];
         });
-      } else if (value.length && !value.includes(Models.DiagramAccessRights.Read)) {
+      } else if (value.length && !value.includes(Models.AccessRights.Read)) {
         this.$nextTick(() => {
-          this.form.editedItem.rights.push(Models.DiagramAccessRights.Read);
+          this.form.editedItem.rights.push(Models.AccessRights.Read);
         });
       }
     }
   },
   methods: {
-    async onShowAccessDialog(diagramId) {
+    async onShowAccessDialog(record) {
       this.show = true;
       this.loading = true;
-      
-      let items = await this.$store.dispatch('bpmn/getAccessRecordsForProcess', diagramId);
+      let items;
+
+      if (record instanceof Models.Diagram) {
+        items = await this.$store.dispatch('bpmn/getAccessRecordsForDiagram', record.id);
+      } else if (record instanceof Models.Folder) {
+        items = await this.$store.dispatch('bpmn/getAccessRecordsForFolder', record.id);
+      }
+     
       if (!items) {
         Notification.error(this.$t('bpmn.errors.AccessRecordsNotLoaded'));
         this.loading = false;
@@ -226,10 +238,10 @@ export default {
           userName: item.userName,
           rights: item.rights,
           allowAccess: item.allowAccess ? this.$t('bpmn.labels.Allow') : this.$t('bpmn.labels.Decline')
-        }
+        };
       });
       this.loading = false;
-      this.recordId = diagramId;
+      this.record = record;
     },
     async queryUsersAndGroups(filter) {
       if (!this.form.usersAndGroups.length) {
@@ -249,6 +261,7 @@ export default {
             }
           }
         }
+        return false;
       });
     },
     async loadUsersAndGroups() {
@@ -261,32 +274,36 @@ export default {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Users')},
-          ...users.map(user => { return { ...user, type: 'user' } }),
+          ...users.map(user => { return { ...user, type: 'user' }; }),
         );
       }
       if (groups) {
         this.form.usersAndGroups.push(
           { divider: true },
           { header: this.$t('bpmn.labels.Groups')},
-          ...groups.map(group => { return { ...group, type: 'group' } })
+          ...groups.map(group => { return { ...group, type: 'group' }; })
         );
       }
     },
     createItem() {
-      this.form.editedItem.recordId = this.recordId;
-      this.form.editedItem.rights = [ Models.DiagramAccessRights.Read ];
+      this.form.editedItem.record = this.record;
+      this.form.editedItem.rights = [ Models.AccessRights.Read ];
       this.form.mode = 'create';
       this.form.show = true;
     },
     editItem(item) {
-      this.form.editedItem.recordId = item.model.recordId;
+      console.log(this.record);
+      console.log(this);
+      this.form.editedItem.id = item.model.id;
+      this.form.editedItem.record = this.record;
       this.form.editedItem.rights = item.model.rights;
       this.form.editedItem.identities.push(item.model.identity);
       this.form.mode = 'edit';
       this.form.show = true;
     },
     deleteItem(item) {
-      this.form.editedItem.recordId = item.model.recordId;
+      this.form.editedItem.id = item.model.id;
+      this.form.editedItem.record = this.record;
       this.form.editedItem.rights = item.model.rights;
       this.form.editedItem.identities.push(item.model.identity);
       this.form.mode = 'delete';
@@ -295,7 +312,7 @@ export default {
     formClose() {
       this.form.loading = false;
       this.form.show = false;
-      this.form.editedItem.recordId = this.recordId;
+      this.form.editedItem.record = this.record;
       this.form.editedItem.identities = [];
       this.form.editedItem.rights = [];
     },
@@ -308,36 +325,43 @@ export default {
 
       let storeAction;
 
+      console.log(this.form.editedItem.record);
+      const entityType = this.form.editedItem.record instanceof Models.Diagram ? 'Diagram' : this.form.editedItem.record instanceof Models.Folder ? 'Folder' : '';
+
       switch (this.form.mode) {
       case 'create':
-        storeAction = 'bpmn/giveAccessToProcess';
+        storeAction = 'bpmn/giveAccessTo' + entityType;
         break;
       case 'edit':
-        storeAction = 'bpmn/editAccessToProcess';
+        storeAction = 'bpmn/editAccessTo' + entityType;
         break;
       case 'delete':
-        storeAction = 'bpmn/removeAccessToProcess';
+        storeAction = 'bpmn/removeAccessTo' + entityType;
         break;
       }
 
       for (let i = 0; i < this.form.editedItem.identities.length; i++) {
         const identity = this.form.editedItem.identities[i];
-        const access = new Models.DiagramAccess(this.form.editedItem);
+
+        const access = new Models.AccessParams({ id: this.form.editedItem.id, recordId: this.form.editedItem.record.id });
+        access.rights = this.form.editedItem.rights;
+
         const { type: identityType, name } = this.form.usersAndGroups.find(e => e.id === identity);
 
         switch (identityType) {
         case 'user':
           access.userId = identity;
-          result = await this.$store.dispatch(storeAction, access);
           break;
         case 'group':
           access.groupId = identity;
-          result = await this.$store.dispatch(storeAction, access);
           break;
         case 'all':
-          result = await this.$store.dispatch(storeAction, access);
           break;
+        default:
+          continue;
         }
+
+        result = await this.$store.dispatch(storeAction, access);
 
         if (!result) {
           Notification.error('bpmn.errors.AccessError', { identity: name });
@@ -346,17 +370,17 @@ export default {
 
       if (result) {
         this.formClose();
-        this.onShowAccessDialog(this.recordId);
+        this.onShowAccessDialog(this.record);
       } else {
         Notification.error('bpmn.errors.RequestError');
         this.form.loading = false;
       }
     }
   }
-}
+};
 </script>
 <style>
 .rights-checkbox {
-  margin: 0;
+  margin: 0 !important;
 }
 </style>

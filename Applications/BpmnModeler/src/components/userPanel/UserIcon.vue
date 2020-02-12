@@ -12,7 +12,7 @@
       class="user-icon"
       :size="size"
       color="#b3b3b3"
-    >account_circle
+    >mdi-account-circle
     </v-icon>
   </div>
 </template>
@@ -21,7 +21,7 @@
 export default {
   name: 'userIcon',
   props: ['src', 'size'],
-}
+};
 </script>
 
 <style scoped>

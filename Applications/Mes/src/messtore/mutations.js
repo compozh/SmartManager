@@ -55,13 +55,6 @@ export default {
   setDocuments(state, documents) {
     state.documents = documents
   },
-  setInstallations(state, installations) {
-    state.installations = installations
-  },
-  removeInstallation(state, installation) {
-    var index = state.installations.indexOf(installation)
-    state.installations.splice(index, 1)
-  },
   setUsersProductionEvents(state, usersProductionEvents) {
     state.usersProductionEvents = usersProductionEvents
   },
@@ -177,8 +170,11 @@ export default {
   setActionsAfterInitializeProperties(state, actionsAfterInitializeProperties) {
     state.actionsAfterInitializeProperties = actionsAfterInitializeProperties
   },
-  setCameraAvailability(state, cameraAvailability) {
-    state.cameraAvailability = cameraAvailability
+  setCameraAvailability(state, value) {
+    state.cameraSettings.cameraAvailability = value
+  },
+  setCameraInitialized(state, value) {
+    state.cameraSettings.initialized = value
   },
   resetState(state) {
     state.tasks = []

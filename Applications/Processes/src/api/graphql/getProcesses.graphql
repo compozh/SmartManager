@@ -1,0 +1,22 @@
+query {
+    processesQuery {
+        getProcesses {
+            processes {
+                id
+                key
+                category
+                name
+                version
+                resource
+                deploymentId
+                diagram
+                suspended
+                tenantId
+            }
+            success
+            errorMessage
+            errorCode
+            statusCode
+        }
+    }
+}

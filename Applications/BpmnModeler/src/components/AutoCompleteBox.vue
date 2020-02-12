@@ -46,7 +46,7 @@ export default {
       loading: false,
       search: '',
       query: null
-    }
+    };
   },
   watch: {
     queryItems() {
@@ -71,7 +71,7 @@ export default {
       this.loading = false;
     }
   }
-}
+};
 </script>
 <style>
 

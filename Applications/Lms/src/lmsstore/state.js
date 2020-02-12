@@ -1,4 +1,7 @@
+import auth from '@it-enterprise/jwtauthentication'
+
 export default {
+  user: auth.getUserData(),
   circularLoader: false, // Circular progress component
   error: null,    // SnackBar for errors
   logoLink: null,

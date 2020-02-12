@@ -84,19 +84,30 @@ export default {
     if(this.$vuetify.breakpoint.smAndDown){
       this.$store.commit('mes/setMenuDrawerMode', false)
     }
-
+    //todo: вынести в логин
     eventBus.$on(events.scannedBarCode, barcode => {
       if(this.$route.name == "MESLOGIN") {
-        Vue.prototype.$authentication.loginByQr(barcode).then(result => {
-          result && me.$router.replace({path: '/tasks', query: {fixedUuid: this.$router.currentRoute.query.fixedUuid}})
+        this.$store.dispatch('auth/loginByCode', barcode).then(result => {
+          if(result) {
+            if(result.success) {
+              this.$router.replace({path: '/tasks', query: {fixedUuid: this.$router.currentRoute.query.fixedUuid}})
+              eventBus.$emit(events.initialize)
+            } else {
+              this.$store.commit('mes/setSnackbarErrorMessage', result.errorMessage)
+            }
+          } else {
+            this.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
+          }
         }).catch(reason => {
           this.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
         })
       }
-      var tasksPageState = this.$store.getters['mes/tasksPageState']
-      if(this.$route.name == "INSTALLATIONS" || (this.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
-        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: barcode, factId: 0 })
-      }
+    })
+
+    eventBus.$on(events.initialize, () => {
+      const init = new Init()
+      init.initialize()
+      init.initializeSignalR()
     })
   },
   computed: {
@@ -115,7 +126,6 @@ export default {
     menuMiniMode() {
       return this.$store.getters['mes/menuMiniMode']
     },
-    
     menuDrawerMode: {
       get: function() { 
         return this.$store.getters['mes/menuDrawerMode']

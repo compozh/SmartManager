@@ -23,10 +23,6 @@
 								<v-spacer/>
 								<v-flex xs12 mx-3>
 									<v-layout align-top justify-start row wrap>
-										<!-- <v-chip small v-for='role in moduleData.data.roles' v-bind:key="role.code" @click="roleSearch(role)">{{role.name}}</v-chip>
-										<v-chip small v-for='level in moduleData.data.levels' v-bind:key="level.code" @click="levelSearch(level)">{{level.name}}</v-chip>
-										<v-chip small v-for='product in moduleData.data.products' v-bind:key="product.code" @click="productSearch(product)">{{product.name}}</v-chip>
-										<v-chip small v-for='tag in moduleData.data.tags' v-bind:key="tag.code" @click="tagSearch(tag)">{{tag.name}}</v-chip> -->
 										<v-layout align-top justify-end row>
 											<v-icon
 												id='favIcon'
@@ -46,7 +42,6 @@
 
 		<!--MODULES CONT-->
 		<v-layout v-if="moduleData.data" align-center justify-center>
-			<!--<v-flex xs9 style='border-right: darkgrey 1px solid'>!-->
 			<v-flex lg8 md10 sm10 xs12>
 				<v-layout wrap column>
 					<v-card class='mt-1 mb-0' hover>

@@ -1,5 +1,5 @@
 <template>
-  <modeler-layout :diagram="process" :loading="loading" :saved="saved" :noAccess="noAccess"
+  <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
     :canMinimap="canMinimap" @minimap="onMinimap" 
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
@@ -19,9 +19,9 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
-import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
-import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
+// import ModelerLayout from './ModelerLayout';
+import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
+import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
@@ -29,7 +29,7 @@ import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers
 export default {
   name: 'bpmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  components: { ModelerLayout },
+  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,
@@ -55,7 +55,7 @@ export default {
       return null;
     },
     noAccess() {
-      return this.process && !this.process.hasRight(DiagramAccessRights.Read);
+      return this.process && !this.process.hasRight(AccessRights.Read);
     }
   },
   beforeDestroy: function () {
@@ -65,8 +65,9 @@ export default {
     process(value, oldValue) {
       if (!value) {
         this.destroyModeler();
+        return;
       }
-      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(DiagramAccessRights.Write) !== oldValue.hasRight(DiagramAccessRights.Write))) {
+      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(AccessRights.Write) !== oldValue.hasRight(AccessRights.Write))) {
         this.createModeler();
       }
       this.onActiveModelChanged();
@@ -75,7 +76,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.process.hasRight(DiagramAccessRights.Write);
+      const canEdit = this.process.hasRight(AccessRights.Write);
       this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
@@ -128,6 +129,10 @@ export default {
           // TODO: display exception
         }
       });
+      
+      this.$store.dispatch('bpmn/editProcess', this.process);
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
+      this.$store.dispatch('bpmn/editFolder', item);
     },
     onActiveModelChanged() {
       if (!this.process || !this.modeler || this.noAccess) {
@@ -187,6 +192,5 @@ export default {
   }
 };
 </script>
-<style>
-
+<style >
 </style>

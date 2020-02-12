@@ -1,3 +1,6 @@
+import { events } from '../../../../constants'
+import { eventBus } from '../../../../main'
+
 export default {
   name: 'QrLoginRl',
 
@@ -55,10 +58,21 @@ export default {
     onDecode (decodedString) {
       this.result = decodedString
       this.processing = true
-      this.$authentication.loginByQr(this.result)
+
+      this.$store.dispatch('auth/loginByCode', this.result)
         .then(result => {
           this.processing = false
-          result ? this.$router.replace({path: this.routeToBack}) : ''
+
+          if(result) {
+            if(result.success) {
+              this.$router.replace({ path: this.routeToBack })
+              eventBus.$emit(events.initialize)
+            } else {
+              this.error = result.errorMessage
+            }
+          } else {
+            this.error = this.$t('qrloginrl.loginError')
+          }
         }).catch( () => {
           this.processing = false
           this.error = this.$t('qrloginrl.loginError')
