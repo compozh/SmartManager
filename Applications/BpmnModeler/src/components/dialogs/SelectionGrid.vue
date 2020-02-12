@@ -30,7 +30,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="close">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+        <v-btn text @click="this.show = false">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
         <v-btn text color="primary" :disabled="!selected.length" @click="select()">{{ $t('bpmn.buttons.Select') }}</v-btn>
       </v-card-actions>
     </v-card>
@@ -79,11 +79,6 @@ export default {
       this.callback = callback;
       this.show = true;
     },
-    close() {
-      this.show = false;
-      let overlays = document.querySelectorAll('.v-overlay');
-      overlays.forEach(el => el.parentNode.removeChild(el));
-    },
     select() {
       if (!this.selected.length) {
         return;
@@ -92,7 +87,7 @@ export default {
         this.callback(this.selected[0]);
         this.callback = null;
       }
-      this.close();
+      this.show = false;
     }
   }
 };
