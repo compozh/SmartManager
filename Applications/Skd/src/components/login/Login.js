@@ -7,7 +7,8 @@ export default {
       remember: false
     },
     message: '',
-    loading: false
+    loading: false,
+    loginFailed: false
   }),
   methods: {
     login() {
@@ -19,8 +20,15 @@ export default {
       }
       this.loading = true
       this.$store.dispatch('skd/login', this.userData)
-    },
-
+        .then(() => {
+          let loginStatus = this.$store.getters['skd/getLoginStatus']
+          if (!loginStatus.success) {
+            this.loginFailed = true;
+            this.loginFailedMessage = loginStatus.errorMessage
+            return;
+          }
+        })
+    }
   },
   created() {
     this.$store.dispatch('skd/logout')
@@ -31,6 +39,8 @@ export default {
       message: this.message,
       needEnterTempPassword: this.needEnterTempPassword,
       loading: this.loading,
+      loginFailed: this.loginFailed,
+      loginFailedMessage: this.loginFailedMessage,
       params: {
         loginAttrs: {
           type: 'email',
