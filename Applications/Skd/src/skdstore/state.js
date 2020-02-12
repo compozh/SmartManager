@@ -9,5 +9,6 @@ export default {
   user: auth.getUserData(),
   sort: localStorage.getItem('sorting') || 0,
   drawer: false,
+  loginStatus: {},
   lastUpdatedDateTime: {}
 }

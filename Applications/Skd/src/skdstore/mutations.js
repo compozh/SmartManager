@@ -55,17 +55,17 @@ export default {
     state.grouping = value
     localStorage.setItem('grouping',value)
   },
-
   setDrawer(state, value) {
     state.drawer = value
   },
-
   setLastUpdatedDataTime(state) {
     var dateTime = {
       Date: moment().format('DD-MM-YYYY'),
       Time: moment().format('HH:mm'),
     }
-    
     state.lastUpdatedDateTime = dateTime
+  },
+  setLoginStatus(state, value) {
+    state.loginStatus = value
   }
 }

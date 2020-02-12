@@ -109,6 +109,6 @@ export default {
     // Checking link is valid
     return photoLink && photoLink.includes('=&') ? '' : photoLink
   },
-
-  getLastUpdatedDataTime: state => state.lastUpdatedDateTime
+  getLastUpdatedDataTime: state => state.lastUpdatedDateTime,
+  getLoginStatus: state => state.loginStatus
 }

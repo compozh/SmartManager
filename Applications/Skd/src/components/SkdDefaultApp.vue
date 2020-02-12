@@ -5,7 +5,6 @@
     </v-navigation-drawer>
     <v-toolbar app color="cyan" dark>
       <v-toolbar-side-icon @click.stop="reverseDrawer"></v-toolbar-side-icon>
-      <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
       <router-view name="toolbar" />
       <v-spacer></v-spacer>
     <!-- <Localization-view-ChangeLanguage current-language="" /> -->
@@ -53,8 +52,7 @@ export default {
       var value = this.getDrawer
       this.$store.commit('skd/setDrawer', !value)
     }
-  },
-  props: ['toolbarTitle']
+  }
 }
 </script>
 

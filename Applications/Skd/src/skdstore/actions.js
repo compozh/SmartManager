@@ -18,6 +18,7 @@ export default {
     }
     try {
       const result = await auth.login(login, password, remember)
+      commit('setLoginStatus', result)
       if (result.success) {
         commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
         await router.push(router.currentRoute.query.to || {name: 'SKDALLUSERS'})
