@@ -108,5 +108,6 @@ export default {
     let photoLink = getters.user.userPhoto
     // Checking link is valid
     return photoLink && photoLink.includes('=&') ? '' : photoLink
-  }
+  },
+  getLoginStatus: state => state.loginStatus
 }

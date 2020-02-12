@@ -55,8 +55,10 @@ export default {
     state.grouping = value
     localStorage.setItem('grouping',value)
   },
-
   setDrawer(state, value) {
     state.drawer = value
+  },
+  setLoginStatus(state, value) {
+    state.loginStatus = value
   }
 }
