@@ -7,7 +7,6 @@ import formio from '@it-enterprise/formio'
 import '@it-enterprise/formio/dist/formio.css'
 
 import auth from '@it-enterprise/jwtauthentication'
-auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
 import Vue from 'vue'
@@ -32,6 +31,14 @@ import router from './router'
 
 import signalR from './signalR'
 import BarcodeScaner from './components/components/BarcodeScaner'
+
+auth.config({
+  baseUrl: window.myConfig.GrapgQlUrl,
+  onError: error => {
+    store.dispatch('auth/logout')
+  }
+})
+
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({

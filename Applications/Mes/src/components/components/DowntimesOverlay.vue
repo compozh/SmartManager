@@ -13,7 +13,7 @@
           v-if="!Object.keys(this.createDowntimeFormio).length"
           indeterminate
           color="primary"
-      ></v-progress-circular>
+        />
       <formio-form-component
         ref="formioFormComponent"
         @formSubmit=formSubmit
@@ -21,11 +21,11 @@
         :formCode=workCenter.downtimeRegistrationFormCode
         />
       </div>
-    <v-btn
-      class="close-overlay-btn"
-      icon
-      @click="closeOverlay"
-    >
+      <v-btn
+        class="close-overlay-btn"
+        icon
+        @click="closeOverlay"
+      >
       <v-icon color="rgba(179, 2, 2, 0.81)">close</v-icon>
     </v-btn>
   </v-card>
