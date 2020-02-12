@@ -26,7 +26,7 @@
 </template>
 <script>
 import mobileModeComponent from './MobileMode/MobileMode'
-import desktopModeComponent from './DekstopMode/DesktopMode'
+import desktopModeComponent from './DesktopMode/DesktopMode'
 import PullTo from 'vue-pull-to'
 export default {
   name: 'skd-list',
