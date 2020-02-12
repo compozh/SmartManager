@@ -35,7 +35,9 @@ import BarcodeScaner from './components/components/BarcodeScaner'
 auth.config({
   baseUrl: window.myConfig.GrapgQlUrl,
   onError: error => {
-    store.dispatch('auth/logout')
+    if(error.response && error.response.status == 400) {
+      store.dispatch('auth/logout')
+    }
   }
 })
 
