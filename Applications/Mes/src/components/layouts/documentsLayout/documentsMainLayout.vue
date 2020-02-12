@@ -52,7 +52,6 @@ export default {
         pageProps = me.pageProps,
         properties = {
           workCenterCode: me.workCenter.code,
-          id: me.selectedDocument.id,
           instance: me.selectedDocument
         },
         searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()

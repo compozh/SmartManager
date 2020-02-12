@@ -174,38 +174,41 @@ export default {
     })
   },
 
-  async initializeInstallations({ commit }, { workCenterCode, fetchPolicy }) {
-    await this.dispatch('mes/graphqlQueryWraper', {
+  async initializeInstallations({ dispatch }, { workCenterCode }) {
+    var result = await dispatch('graphqlQueryWraper', {
       action: async () => {
-        let installations = await api.getInstallationsFromGql(workCenterCode, fetchPolicy)
-        commit('setInstallations', installations)
+        let installations = await api.getInstallationsFromGql(workCenterCode)
+        return installations
       }
     })
+
+    return result
   },
 
   async removeInstallation({ commit }, installation) {
-    await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var result = await this.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.removeInstallationGql(installation.id)
         return res
-      },
-      successAction: async () => { commit('removeInstallation', installation) }
+      }
     })
+
+    return result
   },
 
   async registerMaterialInstallation({ commit }, { workCenterCode, batchBarcode, factId }) {
     var me = this
-    await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
+    var result = await me.dispatch('mes/graphqlQueryWithRequestResultWraper', {
       queryAction: async () =>  {
         const res = await api.registerMaterialInstallationGql(workCenterCode, batchBarcode, factId)
         return res
-      },
-      successAction: async () => { await me.dispatch('mes/initializeInstallations', { workCenterCode, fetchPolicy: 'network-only' }) },
-      linearLoader: true
+      }
     })
+
+    return result
   },
 
-  async registerProduction({ commit, dispatch }, { workCenter, task, deviceSizeType }) {
+  async registerProduction({ dispatch, getters }, { workCenter, task, deviceSizeType }) {
     var me = this,
       productionRegistrationParam = {
         workCenterCode: workCenter.code,
@@ -225,14 +228,18 @@ export default {
     })
   },
 
-  async updateProductionFormio ({ commit, dispatch }, params) {
+  async updateProductionFormio ({ commit, dispatch, getters }, { workCenter, deviceSizeType, task }) {
+    var currentTask = getters['selectedTask']
+    if(!currentTask || currentTask.shiftTaskId !== task.shiftTaskId) {
+      return
+    }
     commit('resetProductionFormio')
     let properties = {
-      WORKCENTERCODE: params.workCenter.code,
-      WORKBARCODE: params.task.barcode,
-      instance: params.task
+      WORKCENTERCODE: workCenter.code,
+      WORKBARCODE: task.barcode,
+      instance: task
     }
-    dispatch('createProductionFormio', { formCode: params.workCenter.productionRegistrationFormCode, properties, deviceSizeType: params.deviceSizeType })
+    dispatch('createProductionFormio', { formCode: workCenter.productionRegistrationFormCode, properties, deviceSizeType })
   },
 
   async fixWorkCenterForWorker({ commit }, { workCenter, workerCode }) {
@@ -309,7 +316,7 @@ export default {
     })
   },
 
-  async createProductionFormio({ commit, dispatch }, { formCode, properties, deviceSizeType }) {
+  async createProductionFormio({ commit, dispatch, getters }, { formCode, properties, deviceSizeType }) {
     var params = {
       params: JSON.stringify(properties || '', null, 4),
       deviceSizeType: deviceSizeType || 'lg'
@@ -319,7 +326,14 @@ export default {
         const res = await api.getProductionFormioFromGql(formCode, params)
         return res
       },
-      successAction: async result => { commit('setProductionFormio', result) },
+      successAction: async result => {
+        var currentTask = getters['selectedTask']
+        var intance = properties.instance
+        if(!currentTask || !intance || currentTask.shiftTaskId !== intance.shiftTaskId) {
+          return
+        }
+        commit('setProductionFormio', result)
+      },
       linearLoader: true
     })
   },
@@ -376,7 +390,7 @@ export default {
     var result
     try {
       result = await queryAction()
-      if (result.success == true) {
+      if (result.success) {
         if (successAction) {
           await successAction(result)
         }
@@ -457,6 +471,10 @@ export default {
   },
 
   async verifyCamera({ commit }) {
+      if(!navigator.mediaDevices) {
+        commit('setCameraAvailability', false)
+        return
+      }
       await navigator.mediaDevices.getUserMedia({video: true}).then(() => {
         return commit('setCameraAvailability', true)
       }).catch(() => {
