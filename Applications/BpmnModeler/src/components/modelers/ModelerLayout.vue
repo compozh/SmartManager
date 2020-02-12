@@ -281,4 +281,7 @@ a.bjs-powered-by {
 .diagram-section {
   overflow: hidden !important;
 }
+.djs-popup {
+  z-index: 100 !important;
+}
 </style>

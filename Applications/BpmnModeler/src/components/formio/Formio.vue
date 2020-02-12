@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-if="show" v-model="show">
-    <v-card  max-width="800px" style="margin: 0 auto">
+  <v-dialog v-if="show" v-model="show" class="formio-container" >
+    <v-card  max-width="800px" style="margin: 0 auto"  >
       <v-card-title>
         <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
       </v-card-title>
@@ -63,5 +63,15 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped lang="scss">
+
+</style>
+<style lang="scss">
+  .v-dialog.v-dialog--active {
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; 
+  }
 </style>
