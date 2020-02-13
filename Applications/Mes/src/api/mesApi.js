@@ -5,6 +5,7 @@ import {onError} from 'apollo-link-error'
 import gql from 'graphql-tag'
 import auth from '@it-enterprise/jwtauthentication'
 import router from '@/router'
+import store from '../store/index'
 
 // const router = routerDependencies.router
 
@@ -39,10 +40,12 @@ import productionFormio from './graphql/formio/productionForm.graphql'
 import productionFormioSubmit from './graphql/formio/productionFormSubmit.graphql'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
-  if (networkError && networkError.statusCode === 401) {
-    auth.clearTokens()
-    if (router.currentRoute.name !== 'MESLOGIN') {
-      router.push({path: '/login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
+  if (networkError) {
+    switch(networkError.statusCode) {
+      case 401:
+      case 400:
+        store.dispatch('auth/logout')
+        break;
     }
   }
   if (graphQLErrors) {
@@ -53,6 +56,9 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 
 const getClient = async () => {
   const token = await auth.getToken()
+  if(!token) {
+    store.dispatch('auth/logout')
+  }
   const options = {
     uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
@@ -183,12 +189,12 @@ export class MesApi {
     return result.data.mesMutation.callProcessMethod
   }
 
-  async getInstallationsFromGql(workCenter, fetchPolicy) {
+  async getInstallationsFromGql(workCenter) {
     const client = await getClient()
     const result = await client.query({
       query: gql`query ($workCenter: String) ${installations}`,
       variables: {workCenter},
-      fetchPolicy: fetchPolicy || 'cache-first'
+      fetchPolicy: 'network-only'
     })
     return result.data.mes.installations.installations
   }

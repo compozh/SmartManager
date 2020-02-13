@@ -67,10 +67,12 @@ var formioOptions = {
   GraphQlUrl: window.myConfig.GrapgQlUrl,
   routerDependencies: () => router,
   onError: ({ message, networkError }) => {
-    if (networkError && networkError.statusCode === 401) {
-      auth.clearTokens()
-      if (router.currentRoute.name !== 'MESLOGIN') {
-        router.push({path: '/login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
+    if (networkError) {
+      switch(networkError.statusCode) {
+        case 401:
+        case 400:
+          store.dispatch('auth/logout')
+          break;
       }
     }
     console.log(message)
