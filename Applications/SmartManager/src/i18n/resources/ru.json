@@ -109,7 +109,12 @@
     "yes": "Да",
     "no": "Нет",
     "toBack": "Назад",
-    "globalSearch": "Выполнить поиск по всем документам"
+    "globalSearch": "Выполнить поиск по всем документам",
+    "addAttachment": "Добавить",
+    "deleteAttachment": "Удалить",
+    "downloadAttachment": "Загрузить",
+    "attachmentVersions": "Версии",
+    "attachmentEds": "Електронные подписи"
   },
   "icons": {
     "priority": "Высокий приоритет",

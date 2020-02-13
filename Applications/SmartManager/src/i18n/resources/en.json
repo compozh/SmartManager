@@ -109,7 +109,12 @@
     "yes": "Yes",
     "no": "No",
     "toBack": "Back",
-    "globalSearch": "Search all documents"
+    "globalSearch": "Search all documents",
+    "addAttachment": "Add",
+    "deleteAttachment": "Delete",
+    "downloadAttachment": "Download",
+    "attachmentVersions": "Versions",
+    "attachmentEds": "EDS"
   },
   "icons": {
     "priority": "High priority",
