@@ -55,4 +55,8 @@ export default {
 .btn-sort-container {
   position: relative;
 }
+.v-toolbar__content .v-btn--icon,
+.v-toolbar__extension .v-btn--icon {
+  margin: 0px;
+}
 </style>
