@@ -15,7 +15,7 @@ export default class DocumentationGroup extends PropertiesPanelGroup {
    * @param {Function} translate - Функция перевода
    */
   constructor(element, entryFactory, cmmnFactory, translate) {
-    super('general', translate('General'), []);
+    super('documentation', translate('Item Description'), []);
 
     if (elementHelper.isCMMNEdge(element) && elementHelper.isDiscretionaryConnection(element)) {
       return;

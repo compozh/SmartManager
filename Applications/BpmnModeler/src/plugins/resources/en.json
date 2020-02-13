@@ -161,7 +161,16 @@
 			"EXECUTE": "Execute"
 		}
 	},
-	"modeler": {
+	"authentication": {
+		"login": "Login",
+		"userName": "Username",
+		"password": "Password",
+		"emptyLogin": "Enter username",
+		"emptyPassword": "Enter password",
+		"rememberMe": "Remember me",
+		"error": "Error"
+	},
+	"bpmn-modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
 		"Append {type}": "Append {type}",
 		"Append EndEvent": "Append End Event",
@@ -264,6 +273,8 @@
 		"Expanded Pool": "Expanded Pool",
 		"TextAnnotation": "TextAnnotation",
 		"Group": "Group",
+		"Default Flow": "Default Flow",
+		"Conditional Flow": "Conditional Flow",
 
 		"no parent for {element} in {parent}": "no parent for {element} in {parent}",
 		"no shape type specified": "no shape type specified",
@@ -388,15 +399,32 @@
 		"Decision Ref": "Decision Ref",
 		"Binding": "Binding",
 		"Latest": "Latest",
-		"Version": "Version"
+		"Version": "Version",
+		"Activity Type": "Activity Type",
+		"Called Case": "Called Case",
+		"Called Process": "Called Process"
 	},
-	"authentication": {
-		"login": "Login",
-		"userName": "Username",
-		"password": "Password",
-		"emptyLogin": "Enter username",
-		"emptyPassword": "Enter password",
-		"rememberMe": "Remember me",
-		"error": "Error"
+	"dmn-modeler": {
+
+	},
+	"cmmn-modeler": {
+		"Open minimap":"Open minimap",
+		"Close minimap":"Close minimap",
+		"General":"General",
+		"Id":"Id",
+		"Name":"Name",
+		"Case Id": "Case Id",
+		"Case Name": "Case Name",
+		"Item Description":"Item Description",
+		"Config": "Configuration",
+		"Standard Event": "Event Type",
+		"Show Standard Event": "Show Event",
+		"Reference": "Reference",
+		"Binding":"Binding",
+		"Version":"Version",
+		"Latest":"Latest",
+		"Definition":"Definition",
+		"Definition Id": "Definition Id",
+		"Definition Name": "Definition Name"
 	}
 }

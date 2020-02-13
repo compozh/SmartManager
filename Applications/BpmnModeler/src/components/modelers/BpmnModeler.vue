@@ -147,7 +147,7 @@ export default {
       this.loadXml();
     },
     translate(template, replacements) {
-      const translationPrefix = 'bpmn.modeler.';
+      const translationPrefix = 'bpmn.bpmn-modeler.';
       replacements = replacements || {};
 
       for (let replacement in replacements) {

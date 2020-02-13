@@ -14,7 +14,7 @@ export default class CmmnEntryFactory extends EntryFactoryBase {
   }
 
   set(options, value) {
-    if (this.readonly || !this.validate(options, value)) {
+    if (this.readonly || this.validate(options, value) !== true) {
       return;
     }
     const bo = getReferencedObject(this.element, options.reference);

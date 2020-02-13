@@ -204,7 +204,7 @@ export default {
       this.loadXml();
     },
     translate(template, replacements) {
-      const translationPrefix = 'bpmn.modeler.';
+      const translationPrefix = 'bpmn.dmn-modeler.';
       replacements = replacements || {};
 
       for (let replacement in replacements) {

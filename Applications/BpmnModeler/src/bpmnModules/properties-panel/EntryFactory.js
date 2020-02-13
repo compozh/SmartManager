@@ -221,7 +221,7 @@ export default class EntryFactory {
   }
 
   set(options, value) {
-    if (this.readonly || !this.validate(options, value)) {
+    if (this.readonly || this.validate(options, value) !== true) {
       return;
     }
     var command;
