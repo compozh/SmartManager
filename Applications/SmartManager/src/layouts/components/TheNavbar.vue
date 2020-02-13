@@ -89,12 +89,10 @@
                 </vs-dropdown-item>
               </vs-dropdown-menu>
             </vs-dropdown>
-
-
         </div>
         <vs-divider></vs-divider>
-        <div class="flex w-full h-8">
 
+        <div class="flex w-full h-8">
           <div v-if="$route.name === 'task-add'" class="text-primary truncate -ml-4">
             <i18n v-if="$route.params.taskId"
                   path="tasks.newSubTask" tag="div" class="truncate">
@@ -294,10 +292,49 @@
                        @click="confirmDelete"
             >{{ $t('buttons.delete') }}
             </vs-button>
-            <vs-spacer></vs-spacer>
-            <vs-button type="flat" class="flex items-center p-0">
-              <vs-icon size="small" icon="more_vert" class="p-0"></vs-icon>
-            </vs-button>
+
+          <!-- ATTACHMENT BUTTONS -->
+          <div class="flex -ml-3" v-if="attachmentView">
+            <vs-button icon="library_add"
+                       color="primary"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.addAttachment') }} </vs-button>
+
+            <vs-button icon="delete"
+                       color="danger"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.deleteAttachment') }} </vs-button>
+
+            <vs-button icon="cloud_download"
+                       color="success"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.downloadAttachment') }} </vs-button>
+
+            <vs-button icon="library_books"
+                       color="warning"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.attachmentVersions') }} </vs-button>
+
+            <vs-button icon="assignment"
+                       color="dark"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.attachmentEds') }} </vs-button>
+
+          </div>
+          <vs-spacer></vs-spacer>
+          <vs-button type="flat" class="flex items-center p-0">
+            <vs-icon size="small" icon="more_vert" class="p-0"></vs-icon>
+          </vs-button>
         </div>
 
       </vs-navbar>
@@ -398,6 +435,10 @@ export default {
     },
     taskOrCaseView() {
       return this.taskDetails || this.caseView
+    },
+    attachmentView() {
+      return this.$route.name === 'task-attachment'
+             || this.$route.name === 'case-attachment'
     },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork() {
