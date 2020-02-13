@@ -55,13 +55,6 @@ export default {
   setDocuments(state, documents) {
     state.documents = documents
   },
-  setInstallations(state, installations) {
-    state.installations = installations
-  },
-  removeInstallation(state, installation) {
-    var index = state.installations.indexOf(installation)
-    state.installations.splice(index, 1)
-  },
   setUsersProductionEvents(state, usersProductionEvents) {
     state.usersProductionEvents = usersProductionEvents
   },

@@ -58,7 +58,6 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
-    //this.$emit('loadItems');
   },
   watch: {
     process(value, oldValue) {

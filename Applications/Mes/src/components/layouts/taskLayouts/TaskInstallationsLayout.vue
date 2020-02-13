@@ -2,21 +2,25 @@
   <v-layout class="task-installations-layout-block">
 
     <mes-task-installations-layout-toolbar
+      :installations=installations
       @removeAllInstallations=removeAllInstallations
       @submitQrCode=submitQrCode
     />
-      <mes-content-loader class="mes-content-loader" v-if="!initializeInstallations && !installations.length" />
+      <mes-content-loader class="mes-content-loader" v-if="!installationsInitialized && !installations.length" />
 
       <mes-installations-component
+        :installations=installations
         ref="installationCards"
       />
 
-      <span class="no-data-text" v-if="initializeInstallations && installations.length == 0">{{this.$t('mes.labels.AbsentInstalledParties')}}</span>
+      <span class="no-data-text" v-if="installationsInitialized && !installations.length">{{$t('mes.labels.AbsentInstalledParties')}}</span>
 
   </v-layout>
 </template>
 
 <script>
+import { events } from '../../../constants'
+import { eventBus } from '../../../main'
 
 export default {
   name: 'mes-task-installations-layout',
@@ -26,19 +30,22 @@ export default {
         this.$store.commit('mes/setCameraInitialized',  true)
       })
     }
-    this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(() => {
-      this.initializeInstallations = true
-    })
+    this.initializeInstallations()
+
+    eventBus.$on(events.scannedBarCode, this.registerMaterialInstallationByScanned)
+  },
+  beforeDestroy() {
+    eventBus.$off(events.scannedBarCode, this.registerMaterialInstallationByScanned)
   },
   data() {
-    return { initializeInstallations: false }
+    return {
+      installations: [],
+      installationsInitialized: false
+    }
   },
   computed: {
     workCenter() {
       return this.$store.getters['mes/workCenter']
-    },
-    installations() {
-      return this.$store.getters['mes/installations']
     },
     selectedTask() {
       return this.$store.getters['mes/selectedTask']
@@ -48,7 +55,55 @@ export default {
     }
   },
   methods: {
+    async initializeInstallations() {
+      await this.$store.dispatch('mes/initializeInstallations', { workCenterCode: this.workCenter.code }).then(result => {
+        this.installations = result
+        this.installationsInitialized = true
+      })
+    },
+    registerMaterialInstallationByScanned(qrCodeValue) {
+      this.submitQrCode({ qrCodeValue })
+    },
     async submitQrCode({ qrCodeValue, callback}) {
+
+      if (this.highlightInstallation(qrCodeValue)) {
+        if (callback) {
+          callback()
+        }
+
+        return
+      } else {
+        this.registerMaterialInstallation(qrCodeValue).then(() => {
+          if (callback) {
+            callback()
+          }
+        })
+      }
+    },
+    async registerMaterialInstallation(batchBarcode) {
+      this.$store.commit('mes/setLinearLoader', true)
+      var result = await this.$store.dispatch('mes/registerMaterialInstallation',
+        { workCenterCode: this.workCenter.code, batchBarcode, factId: 0 }
+      )
+      if(result.success) {
+        await this.initializeInstallations()
+      }
+      this.$store.commit('mes/setLinearLoader', false)
+    },
+    removeAllInstallations() {
+      for (let installation of this.installations) {
+        this.removeInstallation(installation)
+      }
+    },
+    removeInstallation(installation) {
+      this.$store.dispatch('mes/removeInstallation', installation).then(result => {
+        if(result.success) {
+          var index = this.installations.indexOf(installation)
+          this.installations.splice(index, 1)
+        }
+      })
+    },
+    highlightInstallation(qrCodeValue) {
       let installationCards = this.$refs.installationCards,
         installationCard = installationCards.$refs[qrCodeValue],
         installationsBlock = installationCards.$refs.installationsBlock
@@ -57,23 +112,11 @@ export default {
         installationsBlock.scrollTo(0, installationCard[0].$el.offsetTop) // ToDo Проверить методв $vuetify.goto(target, option) после обновления Vuetify до 2.0
         installationCard[0].$el.classList.add('activeInstallation')
         setTimeout(() => { installationCard[0].$el.classList.remove('activeInstallation') }, 2000)
-        if (callback) {
-          callback()
-        }
-        return
+
+        return true
       }
-      await this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: qrCodeValue, factId: 0 })
-      if (callback) {
-        callback()
-      }
-    },
-    removeAllInstallations() {
-      for (let installation of this.installations) {
-        this.removeInstallation(installation)
-      }
-    },
-    removeInstallation(installation) {
-      this.$store.dispatch('mes/removeInstallation', installation)
+
+      return false
     }
   }
 }

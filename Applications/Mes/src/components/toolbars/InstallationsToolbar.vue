@@ -46,14 +46,14 @@
 <script>
 
 export default {
+  name: 'mes-installations-toolbar',
+  props: {
+    installations: Array
+  },
   data() {
     return { qrScanerVisible: false, inputQrCode: '', disableQrInput: false }
   },
-  name: 'mes-installations-toolbar',
   computed: {
-    installations() {
-      return this.$store.getters['mes/installations']
-    },
     properties() {
       return this.$store.getters['mes/properties']
     },

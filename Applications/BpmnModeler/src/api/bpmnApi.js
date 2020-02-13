@@ -365,6 +365,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       router.push({path: '/login', query: {to: router.currentRoute.path }});
     }
   }
+  if (networkError && networkError.statusCode == 500) {
+    router.push({name: 'page-error', params: { status_code: '500'}}, () => {},() => {});
+  }
   if (graphQLErrors) {
     return graphQLErrors.message;
   }

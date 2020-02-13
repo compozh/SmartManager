@@ -107,7 +107,10 @@
 		"Diagrams": "Diagrams",
 		"Selected": "Selected",
 		"You": "You",
-		"AlreadyIn": "Item already in this folder"
+		"AlreadyIn": "Item already in this folder",
+		"Drag&drop" : "Drag and drop or ",
+		"Import" : "import",
+		"Files" : ".bpmn or .dmn files"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
