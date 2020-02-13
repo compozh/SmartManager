@@ -1,18 +1,16 @@
 <template>
   <modeler-layout 
       :diagram="decision" :loading.sync="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
-      :canMinimap="canMinimap" @minimap="onMinimap" 
+      :canMinimap="canMinimap" @minimap="onMinimap" :onlyRead="onlyRead"
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
-      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
-    >
+      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset">
     <template #modeler>
       <v-tabs
         show-arrows
         height="40"
         color="transparent"
         v-model="activeView"
-        slider-color="primary"
-      >
+        slider-color="primary">
         <v-tab v-for="view in views" :key="view.element.id">
           <span class="dmn-tab-icon" :class="[ viewIcons[view.type] ]"></span>
           <span>{{ view.element.name || view.element.id }}</span>
@@ -70,6 +68,14 @@ export default {
       }
     };
   },
+  props: {
+    onlyRead: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    },
+  },
   mounted() {
     if (this.decision) {
       this.createModeler();
@@ -113,7 +119,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.decision.hasRight(AccessRights.Write);
+      const canEdit = this.decision.hasRight(AccessRights.Write)  ;
       this.canShowPanel = canEdit;
       this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
       this.modeler.on('views.changed', ({ views, activeView }) => {

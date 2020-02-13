@@ -99,7 +99,7 @@ export default {
       }
       if (this.$store.state.bpmn.items.length) {
         const itemId = this.$route.params.id;
-        if (itemId && itemId !== '') {
+        if (itemId && itemId !== '' && this.activeItem != itemId ) {
           this.activeItem = itemId;
         }
       }
@@ -119,7 +119,7 @@ export default {
         }
         value = elem.item;
       }
-      if (this.$route.params.id == value.id) { return; }
+      if (this.$route.params.id == value.id && this.$route.name != 'milestones' ||  this.activeItem == null) { return; }
       value.type == 'BPMN' ? this.$router.push({name: 'process', params: {id: value.id}}) 
         : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
           : this.$router.push({name: 'project', params: {id: value.id}});
@@ -139,8 +139,9 @@ export default {
         return this.$store.getters['bpmn/getActiveItemId'];
       },
       set(value) {
-        this.$store.dispatch('bpmn/setActiveItem', value);
+        console.log(value, this.$store.getters['bpmn/getActiveItemId']);
         this.navigateToItem(value);
+        this.$store.dispatch('bpmn/setActiveItem', value);
       }
     },
     dataLoading() {

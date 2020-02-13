@@ -12,8 +12,8 @@
     <v-row v-if="!loading && noAccess" justify="center" align="center">
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
     </v-row>
-    <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
-      <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
+    <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel, 'no-toolbar': onlyRead}" v-show="diagram && !loading && !noAccess"  ref="layout">
+      <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 " v-if="!onlyRead">
         <v-spacer></v-spacer>
         <v-btn icon @click="deployItem(diagram)" :disabled="!canDeploy(diagram)" :title="$t('bpmn.buttons.Deploy')">
           <v-icon>mdi-open-in-app</v-icon>
@@ -30,14 +30,14 @@
           :onlyExport="true"
           @export="exportItem"
           offset>
-          <template #activator="{ open }">
-            <v-btn icon v-on="open">
+          <template #activator="{ on }">
+            <v-btn icon v-on="on">
               <v-icon>mdi-share-variant</v-icon>
             </v-btn>
           </template>
         </bpmn-contex-menu>
       </v-toolbar>
-      <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
+      <Split v-if="canShowPanel && !onlyRead" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">
           <div class="bpmn-diagram-container">
             <v-row class="options-panel">
@@ -77,6 +77,16 @@
       </Split>
       <div v-else class="bpmn-diagram-container">
         <v-row class="options-panel grey lighten-4 ">
+           <v-btn text :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
+              <v-icon size="20">mdi-magnify-plus-outline</v-icon>
+            </v-btn>
+            <v-btn text :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
+              <v-icon size="20">mdi-magnify-minus-outline</v-icon>
+            </v-btn>
+            <v-btn text :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
+              <v-icon size="20">mdi-magnify-close</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
             <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
               <v-icon>mdi-map</v-icon>
             </v-btn>
@@ -118,7 +128,17 @@ export default {
         return true;
       }
     },
-    noAccess: Boolean
+    noAccess: Boolean,
+    onlyRead: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    },
+  },
+  
+  mounted() {
+    console.log(this);
   },
   data() { 
     return {
@@ -130,7 +150,7 @@ export default {
   computed: {
     showPanel: {
       get() {
-        return this.canShowPanel && this.splitSize > 1;
+        return this.canShowPanel && this.splitSize > 1 && !this.onlyRead;
       },
       set(value) {
         if (value && this.splitSize > 1) {
@@ -214,6 +234,9 @@ export default {
     "toolbar"
     "modeler";
   overflow: hidden;
+  &.no-toolbar {
+    display: block;
+  }
 }
 .modeler-toolbar {
   grid-area: toolbar;

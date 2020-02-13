@@ -18,28 +18,18 @@ const router = new VueRouter({
           name: 'login',
           path: '/login',
           caseSensitive: false,
-          meta: {
-            rule: 'isPublic',
-          },
           component: () => import('@/components/pages/Login.vue'),
         },
         {
           path: '/',
           name: 'main',
           component: () => import('@/components/pages/Main.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
         },
         {
           name: 'project',
           path: '/project/:id?',
           component: () => import('@/components/pages/Project.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false,
-          allowAnonymous: false,
           props: {
             item: Object
           },
@@ -48,29 +38,24 @@ const router = new VueRouter({
           name: 'decision',
           path: '/decision/:id?',
           component: () => import('@/components/modelers/DmnModeler.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false,
-          allowAnonymous: false,
         },
         {
           name: 'process',
           path: '/process/:id?',
           component: () => import('@/components/modelers/BpmnModeler.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false,
-          allowAnonymous: false,
+        },
+        {
+          name: 'milestones',
+          path: '/milestones/:id?',
+          component: () => import('@/components/pages/Milestones.vue'),
+          caseSensitive: false,
         },
         {
           path: 'error/:status_code/',
           name: 'ERROR',
           component: () => import('@/components/pages/Error.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false
         },
       ]

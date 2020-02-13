@@ -65,6 +65,15 @@
           <v-list-item-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-item-title>
         </v-list-item> </template>  -->
       <template v-if="crumb">
+        <router-link v-if="!isFolder(item)" :to="{ name: 'milestones', params: {id: $route.params.id}}" >
+          <v-list-item >
+            <v-list-item-avatar>
+              <v-icon>mdi-cards-outline</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.MilestonesHistory') }}</v-list-item-title>
+          </v-list-item>
+        <v-divider  />
+        </router-link>
         <v-list-item v-if="canShare(item)" @click="share(item)">
           <v-list-item-avatar>
             <v-icon>mdi-account-plus</v-icon>
@@ -86,12 +95,20 @@
           </v-list-item>
         </template>
         <template v-if="!isFolder(item) && canEdit(item)">
-          <v-list-item @click="copy(item)">
-            <v-list-item-avatar>
-              <v-icon>mdi-content-copy</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title>{{ $t('bpmn.buttons.Copy') }}</v-list-item-title>
-          </v-list-item>
+          <v-menu offset-x bottom
+            v-model="explorer"
+            :close-on-click="false"
+            :close-on-content-click="false">
+            <template v-slot:activator="{ on }">
+              <v-list-item  v-on="on">
+                <v-list-item-avatar>
+                  <v-icon>mdi-content-copy</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>{{ $t('bpmn.buttons.Copy') }}</v-list-item-title>
+              </v-list-item>
+            </template>
+            <file-explorer :itemId="item.parentId" :chosen="[item]" :explorer.sync="explorer" mode="copy"/>
+          </v-menu>
           <v-list-item>
             <v-list-item-avatar>
               <v-icon>mdi-repeat</v-icon>
@@ -116,6 +133,11 @@ import * as Models from '../api/models';
 
 export default {
   name: 'bpmn-contex-menu',
+  data() {
+    return {
+      explorer: false,
+    };
+  },
   props: {
     item: Object,
     offset: Boolean,
@@ -196,5 +218,8 @@ export default {
 .v-list-item__title {
   text-align: start;
   font-size: 14px
+}
+a {
+  text-decoration: none;
 }
 </style>

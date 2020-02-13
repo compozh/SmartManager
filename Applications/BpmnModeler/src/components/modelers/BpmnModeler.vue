@@ -1,6 +1,6 @@
 <template>
   <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
-    :canMinimap="canMinimap" @minimap="onMinimap" 
+    :canMinimap="canMinimap" @minimap="onMinimap"  :onlyRead="onlyRead"
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
   >
@@ -40,6 +40,14 @@ export default {
       propertiesProvider: null
     };
   },
+  props: {
+    onlyRead: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    },
+  },
   mounted() {
     if (this.process) {
       this.createModeler();
@@ -76,7 +84,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.process.hasRight(AccessRights.Write);
+      const canEdit = this.process.hasRight(AccessRights.Write) && !this.onlyRead;
       this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);

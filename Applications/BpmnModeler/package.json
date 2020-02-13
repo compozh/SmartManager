@@ -30,7 +30,9 @@
     "apollo-link-http": "^1.5.16",
     "babel-plugin-component": "^1.1.1",
     "bpmn-js": "^6.2.1",
-    "camunda-bpmn-moddle": "^4.3.0",
+    "bpmn-js-differ": "^2.0.2",
+    "bpmn-moddle": "^6.0.2",
+    "camunda-bpmn-moddle": "^4.4.0",
     "camunda-dmn-moddle": "^1.0.0",
     "canvg": "2.0.0",
     "core-js": "^3.6.4",
@@ -52,7 +54,7 @@
     "vue-router": "^3.1.5",
     "vue-split-panel": "^1.0.4",
     "vue-svg-loader": "^0.15.0",
-    "vuetify": "^2.2.4",
+    "vuetify": "^2.2.12",
     "vuex": "^3.1.2"
   },
   "devDependencies": {

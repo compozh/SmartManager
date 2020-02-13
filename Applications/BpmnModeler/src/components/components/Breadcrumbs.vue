@@ -4,12 +4,13 @@
       <v-icon style="padding-top: 2px" size="17">mdi-chevron-right</v-icon>
     </template>
     <template v-slot:item="crumbs">
-      <div class="crumbs row px-0 pb-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
-        <!-- <div v-if="!crumbs.item.name">{{ crumbs.item }}</div> -->
-        <div v-if="crumbs.item.name" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}">
+      <div class="crumbs row px-2 pb-0"  :key="crumbs.item.name">
+        <div v-if="!crumbs.item.name">{{ crumbs.item }}</div>
+        <div v-if="crumbs.item.name" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}" 
+          @click="routeTo(crumbs.item)">
           {{ crumbs.item.name }}
         </div>
-        <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item()"
+        <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item() && $route.name != 'milestones'"
           @edit="editItem" :crumb="true"
           @remove="removeItem" 
           @export="exportItem"
@@ -48,16 +49,12 @@ export default {
         return this.activeItem;
       },
       set(value) {
-        if (value === this.activeItem) {
-          return;
-        }
         this.$emit('update:activeItem', value);
       }
     },
     elements() {
       let item = this.item(),
         elements = [];
-        // [this.$t('bpmn.labels.Home')]
 
       if (item && item.parentId) {
         let el = treeSearch(this.items, e => {
@@ -82,6 +79,9 @@ export default {
       }
       if (item) {
         elements.push(item);
+      }
+      if (this.$route.name == 'milestones') {
+        elements.push(this.$t('bpmn.labels.Milestones'));
       }
       return elements;   
     },
@@ -114,6 +114,7 @@ a{
   color: grey;
   font-size: 15px;
   height: 48px;
+  min-width: 25px;
   padding-top: 14px;
 }
 .crumbs div {

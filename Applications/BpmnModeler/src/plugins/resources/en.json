@@ -25,7 +25,8 @@
 		"OK": "OK",
 		"Move" : "Move",
 		"MoveHere" : "Move here",
-		"Replace" : "Replace"
+		"Replace" : "Replace",
+		"MilestonesHistory" : "Show milestones history"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -107,10 +108,14 @@
 		"Diagrams": "Diagrams",
 		"Selected": "Selected",
 		"You": "You",
-		"AlreadyIn": "Item already in this folder",
+		"AlreadyIn": "Item already in this folder or you can't move here",
+		"CannotCopy" : "You can't copy it here",
+		"CannotCreateFolder": "You can't create folder",
 		"Drag&drop" : "Drag and drop or ",
 		"Import" : "import",
-		"Files" : ".bpmn or .dmn files"
+		"Files" : ".bpmn or .dmn files",
+		"Copy": "-copy",
+		"Milestones" : "Milestones" 
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

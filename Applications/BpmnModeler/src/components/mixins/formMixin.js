@@ -66,7 +66,7 @@ export default {
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
         } else if (this.choose) {
-          this.choose = this.choose.filter( el => !item.find(it => el.id == it.id));
+          this.choose = this.choose.filter( el =>  Array.isArray(item) ? !item.find(it => el.id == it.id) : item.id != el.id );
         }
         break;
       case 'copy':
@@ -93,7 +93,7 @@ export default {
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
         } else if (this.choose) {
-          this.choose = this.choose.filter( el => item.find(it => el.id == it.id));
+          this.choose = this.choose.filter( el => Array.isArray(item) ? item.find(it => el.id == it.id) : item.id == el.id);
         }
         
         break;
@@ -142,7 +142,7 @@ export default {
       let  type, model;
       if (Array.isArray(item) && item.length > 1) {
         type = 'all';
-        model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
+        model = item.map( it => new Diagram(it));
       } else {
         type = item.isFolder ? 'folder' : 'process';
         model = item.isFolder ? new Folder(item) : new Diagram(Array.isArray(item) ? item[0] : item);
