@@ -117,6 +117,8 @@
 		"ProcessNotCreated": "Failed to create item",
 		"ProcessNotEdited": "Failed to edit item",
 		"ProcessNotDeleted": "Failed to delete item",
+		"ProcessNotImported": "Failed to import diagram",
+		"ProcessNotSaved": "Failed to import diagram",
 		"CantDrop": "Failed to move item",
 		"ProcessDeployed": "Diagram deployed",
 		"ProcessNotDeployed": "Failed to deploy diagram",

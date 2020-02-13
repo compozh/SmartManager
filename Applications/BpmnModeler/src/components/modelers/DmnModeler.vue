@@ -42,16 +42,15 @@ import 'dmn-js/dist/assets/dmn-font/css/dmn-codes.css';
 import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 
 import { debounce } from 'throttle-debounce';
-// import ModelerLayout from './ModelerLayout';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'dmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,
@@ -155,7 +154,7 @@ export default {
         }
         if (xml === false) {
           this.loading = false;
-          // TODO: display exception
+          Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
           return;
         }
         if (!xml || xml === '') {
@@ -170,7 +169,7 @@ export default {
             this.loading = false;
             if (err) {
               console.error(err);
-              // TODO: display exception
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));
               var activeEditor = this.modeler.getActiveViewer();
 
               activeEditor.createDiagram();
@@ -189,7 +188,7 @@ export default {
           this.saved = true;
           setTimeout(() => this.saved = false, 1000);
         } else {
-          // TODO: display exception
+          Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
         }
       });
       this.$store.dispatch('bpmn/editProcess', this.decision);

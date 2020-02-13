@@ -117,6 +117,8 @@
 		"ProcessNotCreated": "Не удалось создать элемент",
 		"ProcessNotEdited": "Не удалось изменить элемент",
 		"ProcessNotDeleted": "Не удалось удалить элемент",
+		"ProcessNotImported": "Не удалось импортировать диаграмму",
+		"ProcessNotSaved": "Не удалось сохранить диаграмму",
 		"CantDrop": "Не удалось переместить элемент",
 		"ProcessDeployed": "Диаграмма опубликована",
 		"ProcessNotDeployed": "Не удалось опубликовать диаграмму",

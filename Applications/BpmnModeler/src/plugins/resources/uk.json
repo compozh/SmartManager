@@ -121,6 +121,8 @@
 		"ProcessNotCreated": "Не вдалося створити елемент",
 		"ProcessNotEdited": "Не вдалося змінити елемент",
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
+		"ProcessNotImported": "Не вдалося імпортувати діаграму",
+		"ProcessNotSaved": "Не вдалося зберегти діаграму",
 		"CantDrop": "Не вдалося перемістити елемент",
 		"ProcessDeployed": "Діаграму опубліковано",
 		"ProcessNotDeployed": "Не вдалося опублікувати діаграму",
