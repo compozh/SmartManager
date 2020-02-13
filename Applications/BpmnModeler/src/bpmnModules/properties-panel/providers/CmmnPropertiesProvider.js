@@ -1,12 +1,12 @@
 import { PropertiesPanelTab } from '../Models';
-import EntryFactory from '../EntryFactory';
-import { GeneralTab, FormsTab } from '../bpmn/parts/tabs';
+import EntryFactory from '../cmmn/CmmnEntryFactory';
+import { GeneralTab } from '../cmmn/parts/tabs';
 import { Diagram } from '../../../api/models';
 
 /**
- * Описание панели свойств для конструктора bpmn
+ * Описание панели свойств для конструктора cmmn
  */
-export default class BpmnPropertiesProvider {
+export default class CmmnPropertiesProvider {
   /**
    * @param {Diagram} diagram - Активная диаграммы
    * @param {Object} modeler - Конструктор bpmn
@@ -28,11 +28,10 @@ export default class BpmnPropertiesProvider {
       translate = getModule(this.modeler, 'translate'),
       commandStack = getModule(this.modeler, 'commandStack'),
       canvas = getModule(this.modeler, 'canvas'),
-      bpmnFactory = getModule(this.modeler, 'bpmnFactory'),
-      entryFactory = new EntryFactory(element, commandStack, bpmnFactory, this.readonly);
+      cmmnFactory = getModule(this.modeler, 'cmmnFactory'),
+      entryFactory = new EntryFactory(element, commandStack, cmmnFactory, this.readonly);
 
-    tabs.push(new GeneralTab(this.diagram, element, entryFactory, canvas, bpmnFactory, commandStack, translate));
-    tabs.push(new FormsTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, translate));
+    tabs.push(new GeneralTab(this.diagram, element, entryFactory, canvas, cmmnFactory, commandStack, translate));
 
     return tabs.filter(tab => tab.groups.length > 0);
   }

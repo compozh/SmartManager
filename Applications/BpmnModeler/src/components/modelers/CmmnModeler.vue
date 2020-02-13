@@ -13,21 +13,20 @@
   </modeler-layout>
 </template>
 <script>
-import 'bpmn-js/dist/assets/diagram-js.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+import 'cmmn-js/dist/assets/diagram-js.css';
+import 'cmmn-js/dist/assets/cmmn-font/css/cmmn-codes.css';
+import 'cmmn-js/dist/assets/cmmn-font/css/cmmn-embedded.css';
+import 'cmmn-js/dist/assets/cmmn-font/css/cmmn.css';
 
 import { debounce } from 'throttle-debounce';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
-import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
+import CmmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/CmmnPropertiesProvider';
 
 export default {
-  name: 'bpmn-modeler',
+  name: 'cmmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,
@@ -47,7 +46,7 @@ export default {
   computed: {
     process() {
       const activeItem = this.$store.state.bpmn.activeItem;
-      if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.BPMN) {
+      if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.CMMN) {
         return activeItem;
       }
       return null;
@@ -58,7 +57,6 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
-    //this.$emit('loadItems');
   },
   watch: {
     process(value, oldValue) {
@@ -78,7 +76,7 @@ export default {
       const canEdit = this.process.hasRight(AccessRights.Write);
       this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
-      this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
+      this.propertiesProvider = new CmmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();
     },    
     async loadXml() {

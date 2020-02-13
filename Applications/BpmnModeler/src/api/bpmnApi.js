@@ -324,6 +324,13 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.deployedDecisions;
   }
 
+  async getDeployedCases() {
+    const result = await query({
+      query: gql`query ${queries.getDeployedCases}`
+    });
+    return result.data.bpmnquery.deployedCases;
+  }
+
   //#endregion
 }
 

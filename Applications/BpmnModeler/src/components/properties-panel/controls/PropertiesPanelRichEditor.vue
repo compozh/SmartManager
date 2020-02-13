@@ -2,7 +2,6 @@
   <div class="editor" ref="editor">
     <v-subheader v-if="label">{{ label }}</v-subheader>
     <quill-editor ref="quillEditor" v-model="content" :options="editorOptions"></quill-editor>
-    <v-divider></v-divider>
   </div>
 </template>
 
@@ -31,7 +30,6 @@ export default {
       type: String
     },
     value: {
-      type: String,
       required: true
     },
     readonly: {

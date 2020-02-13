@@ -1,7 +1,7 @@
 import flattenDeep from 'lodash/flattenDeep';
-import elementHelper from './helpers/ElementHelper';
-import * as extensionElementsHelper from './helpers/ExtensionElementsHelper';
-import * as cmdHelper from './helpers/CmdHelper';
+import elementHelper from './bpmn/helpers/ElementHelper';
+import * as extensionElementsHelper from './bpmn/helpers/ExtensionElementsHelper';
+import * as cmdHelper from './bpmn/helpers/CmdHelper';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import Ids from 'ids';
