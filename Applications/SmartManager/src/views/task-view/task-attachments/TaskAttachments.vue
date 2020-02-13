@@ -1,6 +1,6 @@
 <template>
-  <div id="mainContainer" class="app-fixed-height flex flex-wrap">
-    <div class="flex w-1/2 h-full bg-white p-2 pr-0">
+  <div id="mainContainer" class="app-fixed-height flex flex-wrap items-center rounded-lg">
+    <div class="flex lg:w-1/2 h-full bg-white p-2 pr-0 rounded-l-lg">
       <VuePerfectScrollbar class="scroll-area" :settings="settings">
         <table>
           <tr>
@@ -20,8 +20,8 @@
         </table>
       </VuePerfectScrollbar>
     </div>
-    <div class="flex w-1/2 h-full bg-white justify-center">
-      <component :is="viewer" :url="fileUrl"></component>
+    <div class="flex lg:w-1/2 h-full bg-white justify-center rounded-r-lg">
+      <component class="rounded-r-lg" :is="viewer" :url="fileUrl"></component>
     </div>
   </div>
 </template>
@@ -162,8 +162,8 @@ export default {
     border-collapse: collapse;
   }
 
-  tr {
-
+  tr:nth-child(2) > td {
+    border-top: none;
   }
 
   tr:nth-child(odd) {
@@ -186,6 +186,7 @@ export default {
     background: white;
     padding: 10px 5px;
     text-align: center;
+    box-shadow: 1px 1px 3px 0 rgba(21,27,38,.15);
   }
 
   td {

@@ -1,5 +1,5 @@
 <template>
-  <div id="task-app" class="h-full relative">
+  <div id="task-app" class="h-full relative rounded-lg">
     <router-view></router-view>
   </div>
 </template>
