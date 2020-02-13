@@ -42,7 +42,7 @@ export default function NameProps(group, element, entryFactory, translate) {
 
   group.entries.push(entryFactory.checkbox({
     id: 'onPartIsStandardEventVisible',
-    label: 'Show Standard Event',
+    label: translate('Show Standard Event'),
     model: 'isStandardEventVisible'
   }));
 }

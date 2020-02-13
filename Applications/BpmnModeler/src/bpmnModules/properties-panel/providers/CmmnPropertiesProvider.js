@@ -1,6 +1,6 @@
 import { PropertiesPanelTab } from '../Models';
 import EntryFactory from '../cmmn/CmmnEntryFactory';
-import { GeneralTab } from '../cmmn/parts/tabs';
+import { GeneralTab, DefinitionTab } from '../cmmn/parts/tabs';
 import { Diagram } from '../../../api/models';
 
 /**
@@ -29,9 +29,11 @@ export default class CmmnPropertiesProvider {
       commandStack = getModule(this.modeler, 'commandStack'),
       canvas = getModule(this.modeler, 'canvas'),
       cmmnFactory = getModule(this.modeler, 'cmmnFactory'),
+      elementRegistry = getModule(this.modeler, 'elementRegistry'),
       entryFactory = new EntryFactory(element, commandStack, cmmnFactory, this.readonly);
 
     tabs.push(new GeneralTab(this.diagram, element, entryFactory, canvas, cmmnFactory, commandStack, translate));
+    tabs.push(new DefinitionTab(element, entryFactory, cmmnFactory, elementRegistry, translate));
 
     return tabs.filter(tab => tab.groups.length > 0);
   }

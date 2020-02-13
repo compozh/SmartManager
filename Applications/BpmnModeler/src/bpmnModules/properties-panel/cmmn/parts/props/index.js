@@ -3,5 +3,6 @@ import addIdProps from './IdProps';
 import addCaseProps from './CaseProps';
 import addCallableProps from './CallableProps';
 import addOnPartProps from './OnPartProps';
+import addDefinitionProps from './DefinitionProps';
 
-export { addNameProps, addIdProps, addCaseProps, addCallableProps, addOnPartProps };
+export { addNameProps, addIdProps, addCaseProps, addCallableProps, addOnPartProps, addDefinitionProps };

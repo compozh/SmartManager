@@ -111,8 +111,7 @@ export default function CaseProps(group, element, entryFactory, cmmnFactory, com
     append: () => {
       const definition = getDefinition(element);
       const bo = getBusinessObject(definition);
-
-      eventBus.$emit(events.propertiesPanel.selectDeployedCase, bo[getAttribute(definition, 'ref')], (refKey) => {
+      eventBus.$emit(getAttribute(definition, 'event'), bo[getAttribute(definition, 'ref')], (refKey) => {
         const cmd = concatCommands([
           cmdHelper.updateBusinessObject(element, bo, { [getAttribute(definition, 'ref')]: refKey }),
           ...setBusinessKey(element, '#{caseExecution.caseBusinessKey}', cmmnFactory)
@@ -124,7 +123,7 @@ export default function CaseProps(group, element, entryFactory, cmmnFactory, com
 
   group.entries.push(entryFactory.selectBox({
     id: 'callableBinding',
-    label: 'Binding',
+    label: translate('Binding'),
     items: [ { name: translate('Latest'), value: 'latest' }, { name: translate('Version'), value: 'version' } ],
     model: 'callableBinding',
     reference: 'definitionRef',
@@ -148,7 +147,7 @@ export default function CaseProps(group, element, entryFactory, cmmnFactory, com
   if (getCallableBindingValue(element) === 'version') {
     group.entries.push(entryFactory.autocompleteBox({
       id: 'callable-version',
-      label: 'Version',
+      label: translate('Version'),
       model: 'callableVersion',
       reference: 'definitionRef',
       get: getValue('callableVersion', getAttribute(getDefinition(element), 'version')),
@@ -171,7 +170,8 @@ const attributeInfo = {
     expression: 'caseRefExpression',
     binding: 'camunda:caseBinding',
     version: 'camunda:caseVersion',
-    tenantId: 'camunda:caseTenantId'
+    tenantId: 'camunda:caseTenantId',
+    event: events.propertiesPanel.selectDeployedCase
   },
 
   'cmmn:ProcessTask': {
@@ -179,7 +179,8 @@ const attributeInfo = {
     expression: 'processRefExpression',
     binding: 'camunda:processBinding',
     version: 'camunda:processVersion',
-    tenantId: 'camunda:processTenantId'
+    tenantId: 'camunda:processTenantId',
+    event: events.propertiesPanel.selectDeployedProcess
   },
 
   'cmmn:DecisionTask': {
@@ -187,7 +188,8 @@ const attributeInfo = {
     expression: 'decisionRefExpression',
     binding: 'camunda:decisionBinding',
     version: 'camunda:decisionVersion',
-    tenantId: 'camunda:decisionTenantId'
+    tenantId: 'camunda:decisionTenantId',
+    event: events.propertiesPanel.selectDeployedDecision
   }
 };
 
