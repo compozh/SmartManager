@@ -126,9 +126,9 @@ export default {
         let processArray =  async (array) => {
           const promises = array.map(file => {
             return file.text().then(xml => {
-              let fileTypeInName = file.name.includes('.bpmn') ? 'bpmn' : file.name.includes('.dmn') ? 'dmn' : '';
+              let fileTypeInName = file.name.includes('.bpmn') ? 'bpmn' : file.name.includes('.dmn') ? 'dmn' : file.name.includes('.cmmn') ? 'cmmn' : '';
               let type = fileTypeInName || file.type;
-              if (type.toLowerCase() != 'bpmn' && type.toLowerCase() != 'dmn') {
+              if (type.toLowerCase() != 'bpmn' && type.toLowerCase() != 'dmn' && type.toLowerCase() != 'cmmn') {
                 throw element.$t('bpmn.errors.ProcessNotCreated');
               }
               return {xmlView: xml, name: file.name, type }; 

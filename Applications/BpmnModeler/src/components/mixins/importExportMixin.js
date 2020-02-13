@@ -7,7 +7,7 @@ export const importMixin = {
     importItem(parent) {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = '.bpmn, .dmn';
+      input.accept = '.bpmn, .dmn, .cmmn';
       input.style.display = 'none';
 
       input.addEventListener('change', () => {
@@ -19,8 +19,8 @@ export const importMixin = {
           setTimeout(function () {
             document.body.removeChild(input);
           }, 0);
-          let type  = file.type || file.name.includes('.bpmn') ? 'BPMN' : file.name.includes('.dmn') ? 'DMN' : '';
-          if (type != 'BPMN' && type != 'DMN') {
+          let type = file.type || file.name.includes('.bpmn') ? 'BPMN' : file.name.includes('.dmn') ? 'DMN' : file.name.includes('.cmmn') ? 'CMMN' : '';
+          if (type != 'BPMN' && type != 'DMN' && type != 'CMMN') {
             return Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
           }
           this.createItem(parent, 'process', xml, [{name: file.name, type}]);
@@ -60,6 +60,7 @@ export const exportMixin = {
       switch (type) {
       case 'dmn':
       case 'bpmn':
+      case 'cmmn':
         this.modeler.saveXML({ format: true }, (err, xml) => {
           if (err) {
             return;

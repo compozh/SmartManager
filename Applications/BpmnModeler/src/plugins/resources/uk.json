@@ -15,6 +15,7 @@
 		"ExportSvg": "Експортувати в форматі SVG",
 		"ExportBpmn": "Експортувати в форматі BPMN",
 		"ExportDmn": "Експортувати в форматі DMN",
+		"ExportCmmn": "Експортувати в форматі CMMN",
 		"ExportPng": "Експортувати в форматі PNG",
 		"Deploy": "Опублікувати",
 		"Copy": "Додати за зразком",
@@ -102,7 +103,7 @@
 		"EditTime": "Остання зміна",
 		"Editor" : "Редактор",
 		"Owner": "Створено",
-		"PerPage" : "ЕлементіCreationTimeв на сторінці",
+		"PerPage" : "Елементів на сторінці",
 		"Of" : "з",
 		"Home" : "Робочий стіл",
 		"SortBy": "Сортувати",
@@ -114,7 +115,7 @@
 		"AlreadyIn": "Елемент уже в цій папці",
 		"Drag&drop" : "Перетягніть сюди або",
 		"Import" : "імпортуйте",
-		"Files" : ".bpmn або .dmn файли"
+		"Files" : ".bpmn, .dmn або .cmmn файли"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -133,7 +134,7 @@
 		"ActionWithoutForm": "До цієї дії не прив'язана форма",
 		"RuleWithoutForm": "До цього правила не прив'язана форма",
 		"InitializeSignalR": "Не вдалося ініціалізувати SignalR",
-		"AccessRecordsNotLoaded": "Не удалось завантажити налаштування доступу",
+		"AccessRecordsNotLoaded": "Не вдалося завантажити налаштування доступу",
 		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
 		"RequiredInputField": "Обов'язкове поле",

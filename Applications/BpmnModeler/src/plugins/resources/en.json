@@ -15,6 +15,7 @@
 		"ExportSvg": "Export SVG",
 		"ExportBpmn": "Export BPMN",
 		"ExportDmn": "Export DMN",
+		"ExportCmmn": "Export CMMN",
 		"ExportPng": "Export PNG",
 		"Deploy": "Deploy",
 		"Copy": "Add by sample",
@@ -110,7 +111,7 @@
 		"AlreadyIn": "Item already in this folder",
 		"Drag&drop" : "Drag and drop or ",
 		"Import" : "import",
-		"Files" : ".bpmn or .dmn files"
+		"Files" : ".bpmn, .dmn or .cmmn files"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
