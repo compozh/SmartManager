@@ -254,4 +254,11 @@ export default {
   .v-input--selection-controls__ripple {
     z-index: 1;
   }
+
+  .icon-container {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 </style>
