@@ -2,6 +2,7 @@
 	<v-app id="university">
 		<v-navigation-drawer
       app
+      temporary
       :clipped="$vuetify.breakpoint.lgAndUp"
 			v-model="drawer">
       <v-list dense>

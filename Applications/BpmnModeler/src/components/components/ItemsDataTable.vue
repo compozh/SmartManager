@@ -34,6 +34,12 @@
       <template v-slot:item.editTime="{ item }">
         {{item.editTime | formatDate}}
       </template>
+       <template v-slot:item.access="{ item }">
+        <v-avatar :color="item.color" size="41" :title="item.access" v-if="item.access">
+          <span class="white--text">{{item.access | formatAvatar}}</span>
+        </v-avatar>
+          <v-icon v-else color="grey" class="pl-2" :title=" $t('bpmn.errors.Er403')">mdi-close </v-icon>
+      </template>
       <template v-slot:item.actions="{ item }" >
         <v-row class="justify-end" style="max-width: 100%">
           <bpmn-contex-menu :item="item" 
@@ -41,7 +47,7 @@
               @remove="removeItem" 
               offset>
             <template #activator="{ open }">
-              <v-btn icon class="options"  v-on="open">
+              <v-btn icon class="options"  @click="ev => ev.stopPropagation()" v-on="open">
                 <v-icon size="20">mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -54,13 +60,15 @@
 
 <script>
 import { formMixin } from '../mixins';
+import * as Models from '../../api/models';
 import moment from 'moment';
 export default {
   name: 'item-data-table',
   mixins: [ formMixin ],
   data() {
     return {
-      users: []
+      users: [],
+      colors: []
     };
   },
   props: {
@@ -75,6 +83,9 @@ export default {
         return moment(value).format('DD MMMM  YYYY HH:mm');
       }
     },
+    formatAvatar(value) {
+      return value.length > 4 ? value.split(' ').map( el => el.slice(0,1)).join('') : value;
+    }
   },
   methods: {
     openProject(el) {
@@ -87,18 +98,52 @@ export default {
       if (this.$store.state.auth.user && userId == this.$store.state.auth.user.id) { 
         return this.$t('bpmn.labels.You');
       }
-      if (this.users.length == 0) { return userId; }
-      
+    
+      if (this.users.length == 0 || !this.users) { return userId; }
       let user = this.users.find( user => user.id == userId ),
         result = user ? user.name : userId;
       return result;
-    }
+    },
+    async getAccessRecords(item) {
+      let self = this;
+      let res;
+      if (!item.hasRight(Models.AccessRights.Share)) {
+        res =  null;
+      } else {
+        let [params] = await self.$store.dispatch('bpmn/getAccessRecordsForFolder', item.id);
+        let owner = item.ownerId == self.$t('bpmn.labels.You') ? this.$store.state.auth.user.userName : item.ownerId;
+        res = params ? params.userName || params.groupName  || self.$t('bpmn.enums.AccessType.' + params.type) || owner : owner;
+
+        let color = () => {
+          let r = Math.floor(Math.random() * (100 - 25) + 25);
+          let g = Math.floor(Math.random() * (206 - 25) + 25);
+          let b = Math.floor(Math.random() * (256 - 25) + 25);
+          let rgb = `rgb(${r}, ${g},${b})`;
+          return rgb ;
+        };
+        item.color = item.color ? item.color : color();
+      }
+     
+      item.access = res;
+      return res;
+    },
+    async getAccesses() {
+      let processArray =  async (array) => {
+        const promises = array.map(item => {
+          return this.getAccessRecords(item);
+        });
+        await Promise.all(promises);
+      };
+      await processArray(this.rows);
+      this.$forceUpdate();
+    },
   },
   computed: {
     rows() {
-      let rows = this.items.map(item => {
-        item.editorId = this.findUser(item.editorId);
-        item.ownerId = this.findUser(item.ownerId);
+      if (this.items.length > 0) { this.loadUsers(); }
+      let rows = this.items.map(  item => {
+        item.editorId =  this.findUser(item.editorId);
+        item.ownerId =  this.findUser(item.ownerId);
         return item;
       });
       return rows;
@@ -121,11 +166,15 @@ export default {
         {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'},
         {text: this.$t('bpmn.labels.Editor'), value: 'editorId'},
         {text: this.$t('bpmn.labels.Owner'), value: 'ownerId'},
+        {text: '', value: 'access' , sortable: false},
         {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}];
     },
   },
-  mounted() {
-    if (this.items.length > 0) { this.loadUsers(); }
+  updated() {
+    let property = !this.rows.every( it => it.hasOwnProperty('access'));
+    if (this.rows.length > 0 && property) {
+      this.getAccesses();
+    }
   }
 };
 </script>
@@ -135,7 +184,7 @@ export default {
   margin: 20px 10px;
   padding: 10px;
   tr {
-    cursor: default;
+   cursor: pointer;
 
     th.text-start {
       padding: 0 10px;
@@ -147,7 +196,6 @@ export default {
       .item-name {
         min-width: 20vw; 
         max-width: 30vw;
-        cursor: pointer;
         .v-icon {
           padding-right: 8px;
           padding-bottom: 8px;

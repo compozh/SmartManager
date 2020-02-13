@@ -48,16 +48,16 @@
 <script>
 
 export default {
+  name: 'mes-task-installations-layout-toolbar',
+  props: {
+    installations: Array
+  },
   data() {
     return { qrScanerVisible: false, inputQrCode: '', disableQrInput: false }
   },
-  name: 'mes-task-installations-layout-toolbar',
   computed: {
     selectedTask() {
       return this.$store.getters['mes/selectedTask']
-    },
-    installations() {
-      return this.$store.getters['mes/installations']
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']

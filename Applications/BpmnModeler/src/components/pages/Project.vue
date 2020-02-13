@@ -1,5 +1,5 @@
 <template>
-  <v-container class="column px-6" fluid > 
+  <v-container class="column px-6 " fluid > 
     <v-row class="project-title py-0 " justify="space-between">
       <v-col cols="5" class="justify-start" >
         <v-row class="align-center justify-start">
@@ -12,10 +12,10 @@
           <!-- <v-btn  class="add-btn" @click="importItem(item)">
             {{ $t('bpmn.buttons.Import') }}
           </v-btn> -->
-          <v-btn  class="add-btn mx-2" @click="addProcess()">
+          <v-btn  class="add-btn mx-2" @click="addProcess()" :disabled="!canEdit()">
             {{ $t('bpmn.buttons.AddProcess') }}
           </v-btn>
-          <v-btn  class="add-btn"  @click="addFolder()">
+          <v-btn  class="add-btn"  @click="addFolder()" :disabled="!canEdit()">
             {{ $t('bpmn.buttons.AddFolder') }}
           </v-btn>
           <v-text-field dense
@@ -49,24 +49,33 @@
       </v-row>
     </template>
     <v-divider />
-    <template v-if="hasElements('diagram').length > 0">
+    <template v-if="hasElements('diagram').length > 0 || canEdit()">
       <v-row class="layout-title py-0 " justify="space-between">
         <h2>{{$t('bpmn.labels.Diagrams')}}</h2>
       </v-row>
       <!-- <v-divider class="elevation-3" /> -->
-      <v-row class="layout diagrams py-0" v-if="children && children.length > 0">
+      <v-row class="layout diagrams py-0" >
+        <v-col cols=3 class="pa-2" v-if="canEdit()">
+          <div class="dropFile" ref="dropFile">
+              <span>{{$t('bpmn.labels.Drag&drop')}}</span>
+              <v-btn text class="import" @click="importItem(item)">{{$t('bpmn.labels.Import')}}</v-btn>
+              <span>{{$t('bpmn.labels.Files')}}</span>
+          </div>
+        </v-col>
         <v-col cols=3 v-for="item in hasElements('diagram')" :key="item.id" class="pa-2">
           <item-card :item="item" :activeItem.sync="active" :chosen.sync="chosen" @choosed="choosed"/>
         </v-col>
       </v-row>
     </template>
-    <v-row v-else-if="children.length == 0" class="empty" >
-      <bpmn-empty />
-    </v-row>
+    <!-- <v-container> -->
+      <bpmn-empty v-if="children.length == 0 && !canEdit()" class="empty"  />
+    <!-- </v-container> -->
     <folder-menu-footer  :item="item" :chosen.sync="chosen"/>
   </v-container>
 </template>
 <script>
+import { Notification } from 'element-ui';
+import * as Models from '../../api/models';
 import { formMixin, importMixin } from '../mixins';
 import moment from 'moment';
 export default {
@@ -82,7 +91,59 @@ export default {
   props: {
     activeItem: String
   },
+  mounted() {
+    this.dropFile();
+  },
   methods: {
+    canEdit() {
+      if (!this.item) { return false; }
+      return this.item.hasRight(Models.AccessRights.Write);
+    },
+    dropFile() {
+      const element = this;
+      document.body.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+      document.body.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+
+      if (!this.$refs.dropFile) { return; }
+
+      this.$refs.dropFile.addEventListener( 'dragover', function(event) {
+        this.classList.add('dragFileOver');
+      });
+      this.$refs.dropFile.addEventListener('dragleave', function(event) {
+        this.classList.remove('dragFileOver');
+        event.preventDefault();
+      });
+      this.$refs.dropFile.addEventListener( 'drop', async function(event)  {
+        this.classList.remove('dragFileOver');
+        let options = [];
+
+        let processArray =  async (array) => {
+          const promises = array.map(file => {
+            return file.text().then(xml => {
+              let fileTypeInName = file.name.includes('.bpmn') ? 'bpmn' : file.name.includes('.dmn') ? 'dmn' : '';
+              let type = fileTypeInName || file.type;
+              if (type.toLowerCase() != 'bpmn' && type.toLowerCase() != 'dmn') {
+                throw element.$t('bpmn.errors.ProcessNotCreated');
+              }
+              return {xmlView: xml, name: file.name, type }; 
+            });
+          });
+          await Promise.all(promises).then( el => options = el ).catch(er => Notification.error(er));
+        };
+        try {
+          await processArray([...event.dataTransfer.files]);
+          element.createItem(element.item, options.length > 1 ? 'all' : 'process', '', options);
+        } catch {
+          console.log();
+        }
+      });
+    },
     choosed(val) {
       let elem = this.chosen.find( el => el.id == val.id);
       if (elem) {
@@ -196,10 +257,6 @@ h2{
   font-size: 14px;
   font-weight: 600;
 }
-
-.empty {
-  height: calc(100vh - 200px);
-}
 .add-btn {
   font-weight: 600;
   font-size: 12px;
@@ -224,6 +281,11 @@ h2{
   color: #535353;
   font-size: 11px;
 }
+
+.empty {
+  height: calc(100vh - 300px);
+  display: flex;
+}
 </style>
 <style lang="scss">
 .text .add-btn{
@@ -235,6 +297,29 @@ h2{
 .xl-text  {
   label {
     font-size: 0.76em
+  }
+}
+.dropFile {
+  height: 245px;
+  background: rgb(245, 245, 245);
+  border-width: 2px;
+  border-style: dashed;
+  border-color: rgb(209, 209, 209);
+  border-image: initial;
+  border-radius: 3px;
+  color: rgb(167, 167, 167);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  justify-content: center;
+  cursor: default;
+  &:hover, &.dragFileOver{
+    border-color: rgb(209, 209, 209);
+    background: rgb(236, 236, 236);
+  }
+  .import {
+    color: #1976d2;
   }
 }
 </style>

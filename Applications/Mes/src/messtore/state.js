@@ -41,7 +41,6 @@ export default {
   downtimes: [],
   qualities: [],
   documents: [],
-  installations: [],
   workCenterProductionEvents: [],
   usersProductionEvents: [],
   productionFormio: {},

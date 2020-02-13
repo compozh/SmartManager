@@ -274,7 +274,11 @@ export default {
       console.error(error);
       return false;
     }
-    return records.map(record => new AccessParams(record));
+    if (records) {
+      return records.map(record => new AccessParams(record));
+    } else {
+      return records;
+    }
   },
 
   async giveAccessToDiagram(context, accessParams) {
@@ -313,7 +317,11 @@ export default {
       console.error(error);
       return false;
     }
-    return records.map(record => new AccessParams(record));
+    if (records) {
+      return records.map(record => new AccessParams(record));
+    } else {
+      return records;
+    }
   },
 
   async giveAccessToFolder(context, accessParams) {

@@ -1,21 +1,17 @@
 <template>
-<!-- TODO: После перехода на vuetify 2 сменить v-flex на v-overlay -->
-  <v-col v-if="show" v-model="show">
-    <div class="v-overlay v-overlay--active" style="z-index:201" />
-    <div class="v-dialog__content v-dialog__content--active" style="z-index:202;">
-			<v-card class="v-dialog v-dialog--active" max-width="800px">
-        <v-card-title>
-				<h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
-        </v-card-title>
-        <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
-        <v-card-actions>
-				<v-spacer></v-spacer>
-				<v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-				<v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
-        </v-card-actions>
-			</v-card>
-	</div>
-  </v-col>
+  <v-dialog v-if="show" v-model="show">
+    <v-card  max-width="800px" style="margin: 0 auto">
+      <v-card-title>
+        <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
+      </v-card-title>
+      <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+        <v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog >
 </template>
 <script>
 import { eventBus } from '../../main';

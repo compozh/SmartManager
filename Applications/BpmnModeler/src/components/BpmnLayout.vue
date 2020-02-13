@@ -9,13 +9,13 @@
       </router-link>
       <breadcrumbs class="pl-4" :activeItem.sync="activeItem" />
       <v-spacer></v-spacer>
-      <v-col class="icon-container shrink" v-if="currentUser">
+      <v-col class="icon-container shrink py-0" v-if="currentUser">
         <user-panel mini="true"></user-panel>
       </v-col>
     </v-app-bar>
     <v-content class="grey lighten-4">
       <v-container fluid class="align-start pa-0 fill-height" >
-        <router-view ref="modeler" v-if="!loading" 
+        <router-view ref="modeler"
           @loadItems="loadItems"
           :activeItem.sync="activeItem"/>
       </v-container>
@@ -124,15 +124,15 @@ export default {
         : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
           : this.$router.push({name: 'project', params: {id: value.id}});
     },
+    changeLoad() {
+      setTimeout(() => this.loading = false, 10); 
+    }
   },
   computed: {
     currentUser() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.$store.state.auth.user = auth.getUserData();
       return this.$store.state.auth.user;
-    },
-    items() {
-      return this.$store.state.bpmn.items;
     },
     activeItem: {
       get() {
@@ -155,8 +155,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
-      if (from.name === 'login') {
-        this.appBar = true;
+      if (from.name === 'login' || from.name === 'decision' || from.name === 'process') {
         this.onRouteChanged(true);
       }
     },

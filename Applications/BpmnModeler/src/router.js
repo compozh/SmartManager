@@ -91,7 +91,7 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   const token = await auth.getToken();
   if (
-    to.path === '/login' ||
+    to.path === '/login' || to.path === 'login' ||
     to.path === '/error/404' ||
     to.path === '/error/500' ||
     token
@@ -104,7 +104,7 @@ router.beforeEach(async (to, from, next) => {
     } else  {
       return next();
     }
-  }
+  } 
   router.push({ name: 'login', query: { to: to.path } });
 });
 
