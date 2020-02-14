@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap row >
+  <v-layout wrap row>
     <v-flex class="user-photo" xs4>
       <svg-key class="user-key" v-if="user.hasKey"></svg-key>
       <user-photo class="mobile-photo-container-expanded" :photo="user.photoProperty.photoUrl"></user-photo>
@@ -29,10 +29,10 @@
       </v-flex>
     </v-flex>
     <v-layout wrap>
-      <v-flex>
+      <v-flex class="user-details">
         <v-flex v-if="user.email" class="text-svg-container">
           <svg-email></svg-email>
-          <a href='ailto:" + user.email'>
+          <a href="ailto:' + user.email'">
             <span class="text-container">{{user.email}}</span>
           </a>
         </v-flex>
@@ -46,8 +46,6 @@
           <svg-office-phone></svg-office-phone>
           <span class="text-container">{{user.workTel}}</span>
         </v-flex>
-      </v-flex>
-      <v-flex>
         <v-flex v-if="user.skype" class="text-svg-container">
           <svg-skype></svg-skype>
           <span class="text-container">{{user.skype}}</span>
@@ -87,14 +85,15 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.text-svg-container {
-  padding-bottom: 3px;
-  padding-top: 5px;
+.user-details {
+  padding-top: 10px;
+  padding-bottom: 5px;
   padding-left: 10px;
-
-  font-size: 1em;
-  display: flex;
+}
+.text-svg-container {
+  margin-bottom: 10px;
   align-items: center;
+  font-size: 1.2em;
 }
 .text-container {
   padding-left: 3px;
@@ -114,8 +113,8 @@ export default {
   font-weight: 400;
 }
 .user-department {
-  font-size: 0.8em;
-  color: #999; 
+  font-size: 0.9em;
+  color: #999;
 }
 .mobile-photo-container-expanded {
   margin: 5px;
