@@ -123,11 +123,11 @@ export default {
   },
   updated() {
     if (this.preview || this.loading) { return; }
-    if (this.item.type == 'BPMN') {
+    if (this.item.type === 'BPMN' || this.item.type === 'CMMN') {
       eventBus.$on(events.modeler.export, this.setBpmnSvg);
       eventBus.$emit(events.modeler.export, 'svg');
       eventBus.$off(events.modeler.export, this.setBpmnSvg);
-    }  else if (this.item.type == 'DMN') {
+    }  else if (this.item.type === 'DMN') {
       this.setDmnSvg();
     }
   },
