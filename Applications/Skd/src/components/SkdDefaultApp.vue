@@ -4,19 +4,19 @@
       <router-view name="navigation-drawer" />
     </v-navigation-drawer>
     <v-toolbar v-if="$vuetify.breakpoint.mdAndDown" scroll-off-screen app color="cyan" dark>
-        <v-toolbar-side-icon @click="reverseDrawer"></v-toolbar-side-icon>
-        <router-view name="toolbar" />
-      </v-toolbar>
-      <v-toolbar v-else app color="cyan" dark>
-        <v-toolbar-side-icon @click="reverseDrawer"></v-toolbar-side-icon>
-        <router-view name="toolbar" />
-      </v-toolbar>
+      <v-toolbar-side-icon @click="reverseDrawer"></v-toolbar-side-icon>
+      <router-view name="toolbar" />
+    </v-toolbar>
+    <v-toolbar v-else app color="cyan" dark>
+      <v-toolbar-side-icon @click="reverseDrawer"></v-toolbar-side-icon>
+      <router-view name="toolbar" />
+    </v-toolbar>
     <v-content>
       <v-container fluid>
         <router-view />
       </v-container>
     </v-content>
-    <v-footer app inset>
+    <v-footer v-if="footer" app inset>
       <slot name="footer"></slot>
       <v-flex v-if="$vuetify.breakpoint.mdAndDown" class="relevance-data-status">
         <span v-if="todayLastUpdated">{{refreshed}} {{getLastUpdatedDateTime.Time}}</span>
@@ -66,6 +66,14 @@ export default {
           .add(-1, "days")
           .format("DD-MM-YYYY")
       );
+    },
+    footer() {
+      let loginStatus = this.$store.getters["skd/getLoginStatus"];
+      if (loginStatus == null) {
+        return false
+      }
+
+      return loginStatus.success;
     }
   },
   methods: {
