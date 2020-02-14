@@ -33,13 +33,13 @@
         <v-flex v-if="user.email" class="text-svg-container">
           <svg-email></svg-email>
           <a href="mailto:' + user.email'">
-            <span class="text-container">{{user.email}}</span>
+            <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.email}}</span>
           </a>
         </v-flex>
-        <v-flex v-if="user.mobileTel" class="text-svg-container">
+        <v-flex v-if="user.mobileTel"  class="text-svg-container">
           <svg-mobile-phone></svg-mobile-phone>
           <a class="text-information" :href="'tel:'+user.mobileTel">
-            <span class="text-container">{{user.mobileTel}}</span>
+            <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.mobileTel}}</span>
           </a>
         </v-flex>
         <v-flex v-if="user.workTel" class="text-svg-container">
@@ -79,7 +79,16 @@ export default {
     "svg-email": svgEmail,
     "svg-mobile-phone": svgMobilePhone
   },
-  data: () => ({}),
+  computed: {
+    userDataItemSelected: {
+      get() { 
+        return this.$store.getters['skd/getUserDataItemSelected'] 
+      },
+      set(value) {
+        this.$store.commit('skd/setUserDataItemSelected', value)
+      } 
+    },
+  },
   props: ["user"]
 };
 </script>

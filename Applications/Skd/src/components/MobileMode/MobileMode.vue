@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-on:click="expanded =! expanded" class="user-container">
+  <v-layout v-on:click="setUserCard" class="user-container">
     <v-flex v-if="!expanded">
       <user-card :user="user"></user-card>
     </v-flex>
@@ -22,6 +22,25 @@ export default {
     return {
       expanded: false
     };
+  },
+  computed: {
+    userDataItemSelected: {
+      get() { 
+        return this.$store.getters['skd/getUserDataItemSelected'] 
+      },
+      set(value) {
+        this.$store.commit('skd/setUserDataItemSelected', value)
+      } 
+    }
+  },
+  methods: {
+    setUserCard() {
+      if (this.userDataItemSelected) {
+        this.userDataItemSelected = !this.userDataItemSelected
+        return
+      }
+      this.expanded =! this.expanded
+    }
   },
   props: ["user"]
 };
