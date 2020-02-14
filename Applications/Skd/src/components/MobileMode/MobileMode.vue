@@ -20,12 +20,8 @@ export default {
   },
   data() {
     return {
-      openMoreInformation: false,
       expanded: false
     };
-  },
-  created() {
-    //console.log(this.user);
   },
   props: ["user"]
 };
