@@ -44,7 +44,7 @@
         </v-flex>
         <v-flex v-if="user.skype" class="text-svg-container">
           <svg-skype></svg-skype>
-          <a class="text-information" :href="'skype:'+user.skype">
+          <a class="text-information" :href="'skype:'+user.skype+'?call'">
           <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.skype}}</span>
           </a>
         </v-flex>
