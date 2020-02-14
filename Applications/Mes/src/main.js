@@ -73,6 +73,7 @@ Vue.use(Localization, { dependencies })
 
 var formioOptions = {
   auth,
+  WsUrl: window.myConfig.WsUrl,
   GraphQlUrl: window.myConfig.GrapgQlUrl,
   routerDependencies: () => router,
   onError: ({ message, networkError }) => {
