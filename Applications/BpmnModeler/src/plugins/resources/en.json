@@ -15,6 +15,7 @@
 		"ExportSvg": "Export SVG",
 		"ExportBpmn": "Export BPMN",
 		"ExportDmn": "Export DMN",
+		"ExportCmmn": "Export CMMN",
 		"ExportPng": "Export PNG",
 		"Deploy": "Deploy",
 		"Copy": "Add by sample",
@@ -110,13 +111,15 @@
 		"AlreadyIn": "Item already in this folder",
 		"Drag&drop" : "Drag and drop or ",
 		"Import" : "import",
-		"Files" : ".bpmn or .dmn files"
+		"Files" : ".bpmn, .dmn or .cmmn files"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
 		"ProcessNotCreated": "Failed to create item",
 		"ProcessNotEdited": "Failed to edit item",
 		"ProcessNotDeleted": "Failed to delete item",
+		"ProcessNotImported": "Failed to import diagram",
+		"ProcessNotSaved": "Failed to import diagram",
 		"CantDrop": "Failed to move item",
 		"ProcessDeployed": "Diagram deployed",
 		"ProcessNotDeployed": "Failed to deploy diagram",
@@ -161,7 +164,16 @@
 			"EXECUTE": "Execute"
 		}
 	},
-	"modeler": {
+	"authentication": {
+		"login": "Login",
+		"userName": "Username",
+		"password": "Password",
+		"emptyLogin": "Enter username",
+		"emptyPassword": "Enter password",
+		"rememberMe": "Remember me",
+		"error": "Error"
+	},
+	"bpmn-modeler": {
 		"Activate the global connect tool" : "Activate the global connect tool",
 		"Append {type}": "Append {type}",
 		"Append EndEvent": "Append End Event",
@@ -264,6 +276,8 @@
 		"Expanded Pool": "Expanded Pool",
 		"TextAnnotation": "TextAnnotation",
 		"Group": "Group",
+		"Default Flow": "Default Flow",
+		"Conditional Flow": "Conditional Flow",
 
 		"no parent for {element} in {parent}": "no parent for {element} in {parent}",
 		"no shape type specified": "no shape type specified",
@@ -388,15 +402,32 @@
 		"Decision Ref": "Decision Ref",
 		"Binding": "Binding",
 		"Latest": "Latest",
-		"Version": "Version"
+		"Version": "Version",
+		"Activity Type": "Activity Type",
+		"Called Case": "Called Case",
+		"Called Process": "Called Process"
 	},
-	"authentication": {
-		"login": "Login",
-		"userName": "Username",
-		"password": "Password",
-		"emptyLogin": "Enter username",
-		"emptyPassword": "Enter password",
-		"rememberMe": "Remember me",
-		"error": "Error"
+	"dmn-modeler": {
+
+	},
+	"cmmn-modeler": {
+		"Open minimap":"Open minimap",
+		"Close minimap":"Close minimap",
+		"General":"General",
+		"Id":"Id",
+		"Name":"Name",
+		"Case Id": "Case Id",
+		"Case Name": "Case Name",
+		"Item Description":"Item Description",
+		"Config": "Configuration",
+		"Standard Event": "Event Type",
+		"Show Standard Event": "Show Event",
+		"Reference": "Reference",
+		"Binding":"Binding",
+		"Version":"Version",
+		"Latest":"Latest",
+		"Definition":"Definition",
+		"Definition Id": "Definition Id",
+		"Definition Name": "Definition Name"
 	}
 }

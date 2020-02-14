@@ -31,12 +31,17 @@
 
 /**
  * @callback deployedProcessCallback
- * @param {string} procDefId - код задачи
+ * @param {string} procDefId - код процесса
  */
 
 /**
  * @callback deployedDecisionCallback
- * @param {string} decDefId - код задачи
+ * @param {string} decDefId - код таблицы решений
+ */
+
+/**
+ * @callback deployedCaseCallback
+ * @param {string} caseDefId - код кейса
  */
 
 /** События */
@@ -123,12 +128,20 @@ export const events = {
     selectDeployedProcess: 'properties-panel.select-deployed-process',
 
     /** 
-     * Отобразить диалог выбора опубликованных dmn решений
-     * @event PropertiesPanel#selectDeployedProcess
+     * Отобразить диалог выбора опубликованных таблиц решений
+     * @event PropertiesPanel#selectDeployedDecision
      * @param {string} decDefKey - ключ опубликованного dmn решения
-     * @param {deployedDecisionCallback} callback - коллбек, вызываемый после выбора dmn решения
+     * @param {deployedDecisionCallback} callback - коллбек, вызываемый после выбора таблицы решений
      */
     selectDeployedDecision: 'properties-panel.select-deployed-decision',
+
+    /** 
+     * Отобразить диалог выбора опубликованных кейсов
+     * @event PropertiesPanel#selectDeployedCase
+     * @param {string} caseDefKey - ключ опубликованного dmn решения
+     * @param {deployedCaseCallback} callback - коллбек, вызываемый после выбора кейса
+     */
+    selectDeployedCase: 'properties-panel.select-deployed-case',
   },
   /** События formio */
   formio: {

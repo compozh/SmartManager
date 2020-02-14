@@ -65,6 +65,16 @@ const router = new VueRouter({
           allowAnonymous: false,
         },
         {
+          name: 'case',
+          path: '/case/:id?',
+          component: () => import('@/components/modelers/CmmnModeler.vue'),
+          meta: {
+            rule: 'isPublic',
+          },
+          caseSensitive: false,
+          allowAnonymous: false,
+        },
+        {
           path: 'error/:status_code/',
           name: 'ERROR',
           component: () => import('@/components/pages/Error.vue'),

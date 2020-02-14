@@ -108,5 +108,9 @@ export default {
     let photoLink = getters.user.userPhoto
     // Checking link is valid
     return photoLink && photoLink.includes('=&') ? '' : photoLink
-  }
+  },
+  getLastUpdatedDataTime: state => state.lastUpdatedDateTime,
+  getLoginStatus: state => state.loginStatus,
+  getDrawer: state => state.drawer,
+  getUserDataItemSelected: state => state.userDataItemSelected
 }

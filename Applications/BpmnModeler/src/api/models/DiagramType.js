@@ -1,4 +1,5 @@
 export default {
   BPMN: 'BPMN',
-  DMN: 'DMN'
+  DMN: 'DMN',
+  CMMN: 'CMMN'
 };

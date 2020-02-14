@@ -15,6 +15,7 @@
 		"ExportSvg": "Експортувати в форматі SVG",
 		"ExportBpmn": "Експортувати в форматі BPMN",
 		"ExportDmn": "Експортувати в форматі DMN",
+		"ExportCmmn": "Експортувати в форматі CMMN",
 		"ExportPng": "Експортувати в форматі PNG",
 		"Deploy": "Опублікувати",
 		"Copy": "Додати за зразком",
@@ -102,7 +103,7 @@
 		"EditTime": "Остання зміна",
 		"Editor" : "Редактор",
 		"Owner": "Створено",
-		"PerPage" : "ЕлементіCreationTimeв на сторінці",
+		"PerPage" : "Елементів на сторінці",
 		"Of" : "з",
 		"Home" : "Робочий стіл",
 		"SortBy": "Сортувати",
@@ -114,13 +115,15 @@
 		"AlreadyIn": "Елемент уже в цій папці",
 		"Drag&drop" : "Перетягніть сюди або",
 		"Import" : "імпортуйте",
-		"Files" : ".bpmn або .dmn файли"
+		"Files" : ".bpmn, .dmn або .cmmn файли"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
 		"ProcessNotCreated": "Не вдалося створити елемент",
 		"ProcessNotEdited": "Не вдалося змінити елемент",
 		"ProcessNotDeleted": "Не вдалося видалити елемент",
+		"ProcessNotImported": "Не вдалося імпортувати діаграму",
+		"ProcessNotSaved": "Не вдалося зберегти діаграму",
 		"CantDrop": "Не вдалося перемістити елемент",
 		"ProcessDeployed": "Діаграму опубліковано",
 		"ProcessNotDeployed": "Не вдалося опублікувати діаграму",
@@ -131,7 +134,7 @@
 		"ActionWithoutForm": "До цієї дії не прив'язана форма",
 		"RuleWithoutForm": "До цього правила не прив'язана форма",
 		"InitializeSignalR": "Не вдалося ініціалізувати SignalR",
-		"AccessRecordsNotLoaded": "Не удалось завантажити налаштування доступу",
+		"AccessRecordsNotLoaded": "Не вдалося завантажити налаштування доступу",
 		"RequestError": "Помилка при виконанні запиту",
 		"InputCodeForm": "Введіть код форми",
 		"RequiredInputField": "Обов'язкове поле",
@@ -165,7 +168,16 @@
 			"EXECUTE": "Запуск"
 		}
 	},
-	"modeler": {
+	"authentication": {
+		"login": "Вхід",
+		"userName": "Ім'я користувача",
+		"password": "Пароль",
+		"emptyLogin": "Введіть ім'я користувача",
+		"emptyPassword": "Введіть пароль",
+		"rememberMe": "Запам'ятати мене",
+		"error": "Помилка при спробі входу"
+	},
+	"bpmn-modeler": {
 		"Activate the global connect tool": "Активувати інструмент для створення зв'язків",
 		"Append {type}": "Додати {type}",
 		"Append EndEvent": "Додати Кінцеву подію",
@@ -208,7 +220,7 @@
 		"Business Rule Task": "Бізнес-правило",
 		"Service Task": "Сервісне завдання",
 		"Script Task": "Завдання-сценарій",
-		"Call Activity": "Виклик процессу",
+		"Call Activity": "Виклик активності",
 		"Sub Process (collapsed)": "Підпроцес (згорнутий)",
 		"Sub Process (expanded)": "Підпроцес (розгорнутий)",
 		"Start Event": "Початкова подія",
@@ -268,6 +280,8 @@
 		"Expanded Pool": "Розгорнутий пул",
 		"TextAnnotation": "Коментар",
 		"Group": "Група",
+		"Default Flow": "Перехід за замовчуванням",
+		"Conditional Flow": "Перехід за умовою",
 
 		"no parent for {element} in {parent}": "батьківський елемент {element} в {parent} відсутній",
 		"no shape type specified": "не вказано тип фігури",
@@ -392,15 +406,32 @@
 		"Decision Ref": "Таблиця рішень",
 		"Binding": "Прив'язка",
 		"Latest": "Остання версія",
-		"Version": "Версія"
+		"Version": "Версія",
+		"Activity Type": "Тип активності",
+		"Called Case": "Кейс",
+		"Called Process": "Процес"
 	},
-	"authentication": {
-		"login": "Вхід",
-		"userName": "Ім'я користувача",
-		"password": "Пароль",
-		"emptyLogin": "Введіть ім'я користувача",
-		"emptyPassword": "Введіть пароль",
-		"rememberMe": "Запам'ятати мене",
-		"error": "Помилка при спробі входу"
+	"dmn-modeler": {
+
+	},
+	"cmmn-modeler": {
+		"Open minimap": "Відкрити мінікарту",
+		"Close minimap": "Закрити мінікарту",
+		"General": "Загальні",
+		"Id": "Ідентифікатор",
+		"Name": "Назва",
+		"Case Id": "Ідентифікатор кейсу",
+		"Case Name": "Назва кейсу",
+		"Item Description": "Опис",
+		"Config": "Налаштування",
+		"Standard Event": "Тип події",
+		"Show Standard Event": "Показувати подію",
+		"Reference": "Посилання",
+		"Binding": "Прив'язка",
+		"Version": "Версія",
+		"Latest": "Остання версія",
+		"Definition": "Визначення",
+		"Definition Id": "Ідентифікатор визначення",
+		"Definition Name": "Назва визначення"
 	}
 }

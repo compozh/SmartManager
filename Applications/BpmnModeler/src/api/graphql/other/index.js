@@ -6,5 +6,6 @@ import getActions from './getActions.graphql';
 import getForms from './getForms.graphql';
 import getDeployedProcesses from './deployedProcesses.graphql';
 import getDeployedDecisions from './deployedDecisions.graphql';
+import getDeployedCases from './deployedCases.graphql';
 
-export { getConfiguration, getActionById, queryUsers, queryGroups, getActions, getForms, getDeployedProcesses, getDeployedDecisions };
+export { getConfiguration, getActionById, queryUsers, queryGroups, getActions, getForms, getDeployedProcesses, getDeployedDecisions, getDeployedCases };

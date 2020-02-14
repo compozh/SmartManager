@@ -21,8 +21,8 @@ export default {}
 </script>
 <style scoped>
 svg{
-    height: 12px;
-    width: 12px;
+    height: 13px;
+    width: 13px;
 }
 </style>
 

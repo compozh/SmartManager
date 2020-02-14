@@ -120,9 +120,27 @@ export default {
         value = elem.item;
       }
       if (this.$route.params.id == value.id) { return; }
-      value.type == 'BPMN' ? this.$router.push({name: 'process', params: {id: value.id}}) 
-        : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
-          : this.$router.push({name: 'project', params: {id: value.id}});
+
+      if (value instanceof Folder) {
+        this.$router.push({name: 'project', params: {id: value.id}});
+      } else if (value instanceof Diagram) {
+        switch (value.type) {
+        case DiagramType.BPMN:
+          this.$router.push({name: 'process', params: {id: value.id}});
+          break;
+        case DiagramType.DMN:
+          this.$router.push({name: 'decision', params: {id: value.id}});
+          break;
+        case DiagramType.CMMN:
+          this.$router.push({name: 'case', params: {id: value.id}});
+          break;
+        default:
+          this.$router.push({name: 'ERROR', params: {status_code: '404'}, query: {from: this.$route.name, id: value }});
+          break;
+        }
+      } else {
+        this.$router.push({name: 'ERROR', params: {status_code: '404'}, query: {from: this.$route.name, id: value }});
+      }
     },
     changeLoad() {
       setTimeout(() => this.loading = false, 10); 
@@ -235,5 +253,12 @@ export default {
 
   .v-input--selection-controls__ripple {
     z-index: 1;
+  }
+
+  .icon-container {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 </style>

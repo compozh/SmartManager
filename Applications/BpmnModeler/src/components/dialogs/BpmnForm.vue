@@ -24,6 +24,7 @@
         <v-radio-group v-model="model.type" row v-if="mode !== 'edit' && type === 'process'" :disabled="mode !== 'create' || loading" :label="$t('bpmn.labels.Type')">
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
+          <v-radio label="CMMN" value="CMMN"></v-radio>
         </v-radio-group>   
       </v-form>
     </v-card-text>
