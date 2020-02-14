@@ -32,7 +32,7 @@
       <v-flex class="user-details">
         <v-flex v-if="user.email" class="text-svg-container">
           <svg-email></svg-email>
-          <a href="ailto:' + user.email'">
+          <a href="mailto:' + user.email'">
             <span class="text-container">{{user.email}}</span>
           </a>
         </v-flex>
