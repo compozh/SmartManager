@@ -37,7 +37,9 @@
 					<v-flex>
 						<v-flex v-if='user.skype' class='text-svg-container'>
 							<svg-skype></svg-skype>
+							<a class="text-information" :href="'skype:'+user.skype+'?call'">
 							<span class='text-container'>{{user.skype}}</span>
+							</a>
 						</v-flex>
 						<v-flex  v-if='user.workTel' class='text-svg-container'>
 							<svg-office-phone></svg-office-phone>

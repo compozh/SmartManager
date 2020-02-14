@@ -31,11 +31,6 @@ export default {
     "desktop-mode-component": desktopModeComponent,
     "mobile-mode-component": mobileModeComponent
   },
-  data: () => ({
-    pagSync: {
-      rowsPerPage: -1
-    }
-  }),
   computed: {
     users_list() {
       if (!this.$store.getters["skd/getGroupedUserList"]) {
