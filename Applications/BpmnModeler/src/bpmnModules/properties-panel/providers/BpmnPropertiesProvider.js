@@ -1,6 +1,6 @@
 import { PropertiesPanelTab } from '../Models';
 import EntryFactory from '../EntryFactory';
-import { GeneralTab, FormsTab } from '../parts/tabs';
+import { GeneralTab, FormsTab } from '../bpmn/parts/tabs';
 import { Diagram } from '../../../api/models';
 
 /**

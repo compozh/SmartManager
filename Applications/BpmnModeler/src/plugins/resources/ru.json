@@ -15,6 +15,7 @@
 		"ExportSvg": "Экспортировать в формате SVG",
 		"ExportBpmn": "Экспортировать в формате BPMN",
 		"ExportDmn": "Экспортировать в формате DMN",
+		"ExportCmmn": "Экспортировать в формате CMMN",
 		"ExportPng": "Экспортировать в формате PNG",
 		"Deploy": "Опубликовать",
 		"Copy": "Создать по образцу",
@@ -116,7 +117,7 @@
 		"CannotCreateFolder": "Вы не можете создать папку",
 		"Drag&drop" : "Перетащите сюда или ",
 		"Import" : "импортируйте",
-		"Files" : ".bpmn или .dmn файлы",
+		"Files" : ".bpmn, .dmn или .cmmn файлы",
 		"Copy": "-копия",
 		"Milestones" : "Версии",
 		"LatestVersion" : "Последняя версия"
@@ -126,6 +127,8 @@
 		"ProcessNotCreated": "Не удалось создать элемент",
 		"ProcessNotEdited": "Не удалось изменить элемент",
 		"ProcessNotDeleted": "Не удалось удалить элемент",
+		"ProcessNotImported": "Не удалось импортировать диаграмму",
+		"ProcessNotSaved": "Не удалось сохранить диаграмму",
 		"CantDrop": "Не удалось переместить элемент",
 		"ProcessDeployed": "Диаграмма опубликована",
 		"ProcessNotDeployed": "Не удалось опубликовать диаграмму",
@@ -170,7 +173,16 @@
 			"EXECUTE": "Запуск процесса"
 		}
 	},
-	"modeler": {
+	"authentication": {
+		"login": "Войти",
+		"userName": "Имя пользователя",
+		"password": "Пароль",
+		"emptyLogin": "Введите имя пользователя",
+		"emptyPassword": "Введите пароль",
+		"rememberMe": "Запомнить меня",
+		"error": "Ошибка при попытке входа"
+	},
+	"bpmn-modeler": {
 		"Activate the global connect tool": "Активировать инструмент для создания связей",
 		"Append {type}": "Добавить {type}",
 		"Append EndEvent": "Добавить Конечное событие",
@@ -213,7 +225,7 @@
 		"Business Rule Task": "Бизнес-правило",
 		"Service Task": "Сервисная задача",
 		"Script Task": "Задача-сценарий",
-		"Call Activity": "Вызов процесса",
+		"Call Activity": "Вызов активности",
 		"Sub Process (collapsed)": "Подпроцесс (свёрнутый)",
 		"Sub Process (expanded)": "Подпроцесс (развёрнутый)",
 		"Start Event": "Стартовое событие",
@@ -273,6 +285,8 @@
 		"Expanded Pool": "Развёрнутый пул",
 		"TextAnnotation": "Комментарий",
 		"Group": "Группа",
+		"Default Flow": "Переход по умолчанию",
+		"Conditional Flow": "Переход по условию",
 
 		"no parent for {element} in {parent}": "нет предка для {element} в {parent}",
 		"no shape type specified": "не указан тип фигуры",
@@ -397,15 +411,30 @@
 		"Decision Ref": "Таблица решений",
 		"Binding": "Привязка",
 		"Latest": "Последняя версия",
-		"Version": "Версия"
+		"Version": "Версия",
+		"Activity Type": "Тип активности",
+		"Called Case": "Кейс",
+		"Called Process": "Процесс"
 	},
-	"authentication": {
-		"login": "Войти",
-		"userName": "Имя пользователя",
-		"password": "Пароль",
-		"emptyLogin": "Введите имя пользователя",
-		"emptyPassword": "Введите пароль",
-		"rememberMe": "Запомнить меня",
-		"error": "Ошибка при попытке входа"
+	"dmn-modeler": {},
+	"cmmn-modeler": {
+		"Open minimap": "Открыть миникарту",
+		"Close minimap": "Закрыть миникарту",
+		"General": "Общие",
+		"Id": "Идентификатор",
+		"Name": "Название",
+		"Case Id": "Идентификатор кейса",
+		"Case Name": "Название кейса",
+		"Item Description": "Описание",
+		"Config": "Настройка",
+		"Standard Event": "Тип события",
+		"Show Standard Event": "Отображать событие",
+		"Reference": "Ссылка",
+		"Binding": "Привязка",
+		"Version": "Версия",
+		"Latest": "Последняя версия",
+		"Definition": "Определение",
+		"Definition Id": "Идентификатор определения",
+		"Definition Name": "Название определения"
 	}
 }

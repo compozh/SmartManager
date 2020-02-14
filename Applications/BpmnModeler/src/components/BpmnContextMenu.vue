@@ -55,6 +55,26 @@
             <v-list-item-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-item-title>
           </v-list-item>
         </template>
+        <template v-else-if="isCmmn(item)">
+          <v-list-item @click="exportCmmn(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-code</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportCmmn') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="exportSvg(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-image</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="exportPng(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-image-outline</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-item-title>
+          </v-list-item>
+        </template>
         <template v-else-if="isDmn(item)">
           <v-list-item @click="exportDmn(item)">
             <v-list-item-avatar>
@@ -218,6 +238,9 @@ export default {
     exportBpmn(item) {
       this.$emit('export', item, 'bpmn');
     },
+    exportCmmn(item) {
+      this.$emit('export', item, 'cmmn');
+    },
     exportDmn(item) {
       this.$emit('export', item, 'dmn');
     },
@@ -253,6 +276,9 @@ export default {
     },
     isBpmn(item) {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.BPMN;
+    },
+    isCmmn(item) {
+      return item instanceof Models.Diagram && item.type === Models.DiagramType.CMMN;
     },
     isDmn(item) {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;

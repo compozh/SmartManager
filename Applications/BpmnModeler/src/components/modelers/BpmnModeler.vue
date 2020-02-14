@@ -19,12 +19,11 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
-// import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'bpmn-modeler',
@@ -105,7 +104,7 @@ export default {
         }
         if (xml === false) {
           this.loading = false;
-          // TODO: display exception
+          Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
           return;
         }
         if (!xml || xml === '') {
@@ -117,7 +116,7 @@ export default {
             this.loading = false;
             if (err) {
               console.error(err);
-              // TODO: display exception
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));
               this.modeler.createDiagram();
               this.loading = false;
             }
@@ -134,7 +133,7 @@ export default {
           this.saved = true;
           setTimeout(() => this.saved = false, 1000);
         } else {
-          // TODO: display exception
+          Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
         }
       });
       
@@ -157,7 +156,7 @@ export default {
       this.loadXml();
     },
     translate(template, replacements) {
-      const translationPrefix = 'bpmn.modeler.';
+      const translationPrefix = 'bpmn.bpmn-modeler.';
       replacements = replacements || {};
 
       for (let replacement in replacements) {

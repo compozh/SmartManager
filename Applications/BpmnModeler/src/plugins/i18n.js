@@ -17,7 +17,7 @@ export const currentLang = () => {
 };
 
 export const i18n = new VueI18n({
-  silentTranslationWarn: true,
+  silentTranslationWarn: process.env.NODE_ENV === 'production',
   locale: currentLang(),
   messages: {
     ru: { bpmn: ru },

@@ -3,16 +3,21 @@ import BpmnViewer from 'bpmn-js/lib/NavigatedViewer';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
 import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
+import bpmnPropertiesPanelCommands from '../bpmnModules/properties-panel/bpmn/cmd';
 
-//import DmnJS from '../bpmnModules/dmn-modeler.development';
 import DmnModeler from 'dmn-js/lib/Modeler';
 import DmnViewer from 'dmn-js/lib/Viewer';
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 
+import CmmnModeler from 'cmmn-js/lib/Modeler';
+import CmmnViewer from 'cmmn-js/lib/NavigatedViewer';
+import camundaCmmnModdle from 'camunda-cmmn-moddle/resources/camunda';
+import cmmnPropertiesPanelCommands from '../bpmnModules/properties-panel/cmmn/cmd';
+
 import minimapModule from 'diagram-js-minimap';
 import DiagramType from './models/DiagramType';
 import ContextPadProvider from '../bpmnModules/context-pad/';
-import propertiesPanelCommands from '../bpmnModules/properties-panel/cmd';
+
 import WorkflowRules from '../bpmnModules/rules';
 
 export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
@@ -20,7 +25,9 @@ export default function editorFactory(type, readonly, editorContainer, propertie
   case DiagramType.BPMN:
     return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, translate);
   case DiagramType.DMN:
-    return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, propertiesPanelContainer, translate);
+    return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, translate);
+  case DiagramType.CMMN:
+    return readonly ? createCmmnViewer(editorContainer, translate) : createCmmnModeler(editorContainer, translate);
   default:
     return null;
   }
@@ -39,7 +46,7 @@ function createBpmnModeler(editorContainer, translate) {
       bindTo: document
     },
     additionalModules: [
-      propertiesPanelCommands,
+      bpmnPropertiesPanelCommands,
       camundaExtensionModule,
       minimapModule,
       createTranslationModule(translate),
@@ -71,7 +78,40 @@ function createBpmnViewer(editorContainer, translate) {
   });
 }
 
-function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
+function createCmmnModeler(editorContainer, translate) {
+  return new CmmnModeler({
+    container: editorContainer,
+    keyboard: {
+      bindTo: document
+    },
+    additionalModules: [
+      cmmnPropertiesPanelCommands,
+      minimapModule,
+      createTranslationModule(translate),
+    ],
+    moddleExtensions: {
+      camunda: camundaCmmnModdle,
+    }
+  });
+}
+
+function createCmmnViewer(editorContainer, translate) {
+  return new CmmnViewer({
+    container: editorContainer,
+    keyboard: {
+      bindTo: document
+    },
+    additionalModules: [
+      minimapModule,
+      createTranslationModule(translate)
+    ],
+    moddleExtensions: {
+      camunda: camundaCmmnModdle
+    }
+  });
+}
+
+function createDmnModeler(editorContainer, translate) {
   return new DmnModeler({
     common: {
       keyboard: {

@@ -1,17 +1,17 @@
 <template>
   <user-panel-rl v-slot="{ user, params }">
-    <v-row align="center">
-      <v-col>
+    <v-row align="center" class="no-margin">
+      <v-col class="no-margin">
         <v-menu
           :close-on-content-click="false"
           v-model="menu"
         >
           <template v-slot:activator="{on}">
             <v-row class="user-panel" v-on="on" align="center">
-              <v-col id="user-icon">
+              <v-col id="user-icon" class="no-margin">
                 <user-icon :src="user.photo" size="50"></user-icon>
               </v-col>
-              <v-col v-if="!mini" class="hidden-xs-only">
+              <v-col v-if="!mini" class="hidden-xs-only no-margin">
                 <p class="ma-0 pl-2 subheading">{{ user.name }}</p>
               </v-col>
             </v-row>
@@ -132,6 +132,24 @@ export default {
 
   .user-panel {
     cursor: pointer;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .user-icon {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .no-margin {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .delegated-menu-item {

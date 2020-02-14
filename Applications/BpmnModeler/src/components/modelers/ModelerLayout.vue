@@ -267,9 +267,6 @@ export default {
     display: contents;
   }
 }
-a.bjs-powered-by {
-  z-index: 4 !important;
-}
 .djs-minimap .toggle {
   display: none;
 }
@@ -277,7 +274,8 @@ a.bjs-powered-by {
   text-align: left;
 }
 .dmn-decision-table-container .powered-by-logo .logo,
-a.bjs-powered-by {
+a.bjs-powered-by,
+a.cjs-powered-by {
   display: none;
 }
 .bpmn-icon-colorize::before {
