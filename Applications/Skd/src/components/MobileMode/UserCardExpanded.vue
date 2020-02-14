@@ -42,13 +42,15 @@
             <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.mobileTel}}</span>
           </a>
         </v-flex>
+        <v-flex v-if="user.skype" class="text-svg-container">
+          <svg-skype></svg-skype>
+          <a class="text-information" :href="'skype:'+user.skype">
+          <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.skype}}</span>
+          </a>
+        </v-flex>
         <v-flex v-if="user.workTel" class="text-svg-container">
           <svg-office-phone></svg-office-phone>
           <span class="text-container">{{user.workTel}}</span>
-        </v-flex>
-        <v-flex v-if="user.skype" class="text-svg-container">
-          <svg-skype></svg-skype>
-          <span class="text-container">{{user.skype}}</span>
         </v-flex>
         <v-flex v-if="user.birthday" class="text-svg-container">
           <svg-birthday></svg-birthday>
@@ -105,9 +107,6 @@ export default {
   font-size: 1.2em;
 }
 .text-container {
-  padding-left: 3px;
-}
-.key-style {
   padding-left: 3px;
 }
 .user-gone {
