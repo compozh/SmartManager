@@ -3,8 +3,7 @@
     <v-navigation-drawer fixed app v-model="drawer">
       <router-view name="navigation-drawer" />
     </v-navigation-drawer>
-    <v-flex>
-      <v-toolbar v-if="$vuetify.breakpoint.mdAndDown" scroll-off-screen app color="cyan" dark>
+    <v-toolbar v-if="$vuetify.breakpoint.mdAndDown" scroll-off-screen app color="cyan" dark>
         <v-toolbar-side-icon @click="reverseDrawer"></v-toolbar-side-icon>
         <router-view name="toolbar" />
       </v-toolbar>
@@ -12,7 +11,6 @@
         <v-toolbar-side-icon @click="reverseDrawer"></v-toolbar-side-icon>
         <router-view name="toolbar" />
       </v-toolbar>
-    </v-flex>
     <v-content>
       <v-container fluid>
         <router-view />
