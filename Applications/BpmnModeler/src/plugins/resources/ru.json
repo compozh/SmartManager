@@ -26,7 +26,10 @@
 		"Move" : "Переместить",
 		"MoveHere" : "Переместить сюда",
 		"Replace" : "Заменить загруженной",
-		"MilestonesHistory" : "Показать историю версий"
+		"MilestonesHistory" : "Показать историю версий",
+		"AddMilestone" : "Создать версию",
+		"RestoreAsLatest" : "Відновити як найновішу",
+		"Compare" : "Сравнить"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -115,7 +118,8 @@
 		"Import" : "импортируйте",
 		"Files" : ".bpmn или .dmn файлы",
 		"Copy": "-копия",
-		"Milestones" : "Версии" 
+		"Milestones" : "Версии",
+		"LatestVersion" : "Последняя версия"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

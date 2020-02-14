@@ -26,7 +26,9 @@
 		"Move" : "Move",
 		"MoveHere" : "Move here",
 		"Replace" : "Replace",
-		"MilestonesHistory" : "Show milestones history"
+		"MilestonesHistory" : "Show milestones history",
+		"RestoreAsLatest" : "Restore as latest",
+		"Compare" : "Compare"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -115,7 +117,9 @@
 		"Import" : "import",
 		"Files" : ".bpmn or .dmn files",
 		"Copy": "-copy",
-		"Milestones" : "Milestones" 
+		"Milestones" : "Milestones",
+		"AddMilestone" : "Create milestone",
+		"LatestVersion" : "Latest version"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

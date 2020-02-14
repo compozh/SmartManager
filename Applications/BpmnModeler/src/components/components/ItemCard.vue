@@ -42,7 +42,9 @@ export default {
     formatDate: (value) => {
       if (value) {
         moment.locale('ru');
-        return moment(value).calendar();
+        return moment(value).calendar(null, {
+            sameElse: 'DD MMMM YYYY'
+        });
       }
     },
   },

@@ -105,14 +105,13 @@ export default {
       return result;
     },
     async getAccessRecords(item) {
-      let self = this;
       let res;
       if (!item.hasRight(Models.AccessRights.Share)) {
         res =  null;
       } else {
-        let [params] = await self.$store.dispatch('bpmn/getAccessRecordsForFolder', item.id);
-        let owner = item.ownerId == self.$t('bpmn.labels.You') ? this.$store.state.auth.user.userName : item.ownerId;
-        res = params ? params.userName || params.groupName  || self.$t('bpmn.enums.AccessType.' + params.type) || owner : owner;
+        let [params] = await this.$store.dispatch('bpmn/getAccessRecordsForFolder', item.id);
+        let owner = item.ownerId == this.$t('bpmn.labels.You') ? this.$store.state.auth.user.userName : item.ownerId;
+        res = params ? params.userName || params.groupName  || this.$t('bpmn.enums.AccessType.' + params.type) || owner : owner;
 
         let color = () => {
           let r = Math.floor(Math.random() * (100 - 25) + 25);

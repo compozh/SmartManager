@@ -76,7 +76,7 @@ export default {
       };
       diagrams = diagrams
         .sort((a, b) => time(b) - time(a))
-        .filter(it => it.editorId == this.$store.state.auth.user.id)
+        .filter(it => it.editorId == this.$store.state.auth.user.id || it.ownerId == this.$store.state.auth.user.id )
         .slice(0, 3);
       return diagrams;  
     },

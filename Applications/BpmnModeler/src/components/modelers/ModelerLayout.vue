@@ -136,10 +136,6 @@ export default {
       }
     },
   },
-  
-  mounted() {
-    console.log(this);
-  },
   data() { 
     return {
       panel: !this.$vuetify.breakpoint.xs,

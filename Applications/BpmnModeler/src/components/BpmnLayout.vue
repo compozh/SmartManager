@@ -109,7 +109,7 @@ export default {
     },
     navigateToItem(value) {
       if (!value) {
-        return this.$router.push({name: 'main'});
+        return this.$route.name != 'main' ? this.$router.push({name: 'main'}) : ''
       }
       if (!value.id) {
         let elem = this.$store.getters['bpmn/getItemById'](value);
@@ -119,7 +119,10 @@ export default {
         }
         value = elem.item;
       }
-      if (this.$route.params.id == value.id && this.$route.name != 'milestones' ||  this.activeItem == null) { return; }
+      if (this.$route.params.id == value.id && this.$route.name != 'milestones' 
+        || this.$route.name == 'milestones' && this.activeItem == null) {
+         return;
+      }
       value.type == 'BPMN' ? this.$router.push({name: 'process', params: {id: value.id}}) 
         : value.type == 'DMN' ? this.$router.push({name: 'decision', params: {id: value.id}})
           : this.$router.push({name: 'project', params: {id: value.id}});
@@ -139,7 +142,6 @@ export default {
         return this.$store.getters['bpmn/getActiveItemId'];
       },
       set(value) {
-        console.log(value, this.$store.getters['bpmn/getActiveItemId']);
         this.navigateToItem(value);
         this.$store.dispatch('bpmn/setActiveItem', value);
       }
