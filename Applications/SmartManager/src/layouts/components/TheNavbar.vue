@@ -35,7 +35,7 @@
             {{ $t('workflow.newBusinessProcess') }}</span>
 
           <!-- BREADCRUMB -->
-          <vx-breadcrumb class="md:block hidden" v-if="$route.meta.breadcrumb"/>
+          <vx-breadcrumb v-if="$route.meta.breadcrumb"/>
           <vs-spacer class="hidden"></vs-spacer>
 
           <!-- USER PANEL -->
@@ -314,6 +314,7 @@
                        type="flat"
                        size="small"
                        class="px-3 mr-2 fit"
+                       :href="currentAttachment.url"
             >{{ $t('buttons.downloadAttachment') }} </vs-button>
 
             <vs-button icon="library_books"
@@ -321,6 +322,7 @@
                        type="flat"
                        size="small"
                        class="px-3 mr-2 fit"
+                       :to="{name: 'versions'}"
             >{{ $t('buttons.attachmentVersions') }} </vs-button>
 
             <vs-button icon="assignment"
@@ -328,6 +330,7 @@
                        type="flat"
                        size="small"
                        class="px-3 mr-2 fit"
+                       @click="$store.commit('sm/TOGGLE_EDS_POPUP', true)"
             >{{ $t('buttons.attachmentEds') }} </vs-button>
 
           </div>
@@ -410,6 +413,9 @@ export default {
     },
     taskType() {
       return this.task.taskType
+    },
+    currentAttachment() {
+      return this.$store.state.sm.attachments.currentAttachment || {}
     },
     taskInWork() {
       return this.taskStatus === ''
