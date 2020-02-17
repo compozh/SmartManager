@@ -27,29 +27,32 @@ const router = new VueRouter({
         },
         {
           name: 'project',
-          path: '/project/:id?',
+          path: '/project/:id',
           component: () => import('@/components/pages/Project.vue'),
           caseSensitive: false,
-          props: {
-            item: Object
-          },
-        }, 
+        },
         {
           name: 'decision',
-          path: '/decision/:id?',
+          path: '/decision/:id',
           component: () => import('@/components/modelers/DmnModeler.vue'),
           caseSensitive: false,
         },
         {
           name: 'process',
-          path: '/process/:id?',
+          path: '/process/:id',
           component: () => import('@/components/modelers/BpmnModeler.vue'),
           caseSensitive: false,
         },
         {
           name: 'milestones',
-          path: '/milestones/:id?',
+          path: '/milestones/:id',
           component: () => import('@/components/pages/Milestones.vue'),
+          caseSensitive: false,
+        },
+        {
+          name: 'compare',
+          path: '/compare/:id',
+          component: () => import('@/components/pages/Compare.vue'),
           caseSensitive: false,
         },
         {

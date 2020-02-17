@@ -74,6 +74,7 @@ export default {
         return false;
       }
     },
+    diagram: Object
   },
   mounted() {
     if (this.decision) {
@@ -83,7 +84,7 @@ export default {
   },
   computed: {
     decision() {
-      const activeItem = this.$store.state.bpmn.activeItem;
+      const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.DMN) {
         return activeItem;
       }

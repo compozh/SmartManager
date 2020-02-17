@@ -90,7 +90,9 @@ export default {
     };
   },
   props: {
-    activeItem: String
+    activeItem: {
+      required: true
+    },
   },
   mounted() {
     eventBus.$on(events.modeler.showForm, this.onShowForm);

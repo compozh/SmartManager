@@ -36,7 +36,9 @@ export default {
       saved: false,
       cancellationToken: new CancellationToken(),
       onElementChanged: null,
-      propertiesProvider: null
+      propertiesProvider: null,
+      elementRegistry: {},
+      overlays: {}
     };
   },
   props: {
@@ -46,6 +48,7 @@ export default {
         return false;
       }
     },
+    diagram: Object
   },
   mounted() {
     if (this.process) {
@@ -55,7 +58,7 @@ export default {
   },
   computed: {
     process() {
-      const activeItem = this.$store.state.bpmn.activeItem;
+      const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.BPMN) {
         return activeItem;
       }
@@ -114,6 +117,9 @@ export default {
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
+            this.overlays = this.modeler.get('overlays');
+            this.elementRegistry = this.modeler.get('elementRegistry');
+            this.$emit('compare');
             if (err) {
               console.error(err);
               Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));

@@ -4,13 +4,12 @@
       <v-icon style="padding-top: 2px" size="17">mdi-chevron-right</v-icon>
     </template>
     <template v-slot:item="crumbs">
-      <div class="crumbs row px-2 pb-0"  :key="crumbs.item.name">
-        <div v-if="!crumbs.item.name">{{ crumbs.item }}</div>
-        <div v-if="crumbs.item.name" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}" 
-          @click="routeTo(crumbs.item)">
+      <div class="crumbs row px-2 pb-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
+        <div v-if="!crumbs.item.id" >{{ crumbs.item.name }}</div>
+        <div v-if="crumbs.item.id" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}" >
           {{ crumbs.item.name }}
         </div>
-        <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item() && $route.name != 'milestones'"
+        <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item() && $route.name != 'milestones' && $route.name != 'compare'"
           @edit="editItem" :crumb="true"
           @remove="removeItem" 
           @export="exportItem"
@@ -37,7 +36,9 @@ export default {
   name: 'breadcrumbs',
   mixins: [ formMixin ],
   props: {
-    activeItem: String
+    activeItem: {
+      required: true
+    },
   },
   computed: {
     items() {
@@ -79,9 +80,14 @@ export default {
       }
       if (item) {
         elements.push(item);
-      }
-      if (this.$route.name == 'milestones') {
-        elements.push(this.$t('bpmn.labels.Milestones'));
+        if (this.$route.name == 'milestones' || this.$route.name == 'compare') {
+          elements.push({ routeName: 'milestones', name: this.$t('bpmn.labels.Milestones')});
+        }
+        if (this.$route.name == 'compare') {
+          let elem1 = this.$store.getters['bpmn/getItemById'](this.$route.query.id2);
+          let elem2 = this.$store.getters['bpmn/getItemById'](this.$route.params.id);
+          elements.push({ name: this.$t('bpmn.buttons.Compare') + ' ' + elem1.item.name + ' / ' + elem2.item.name});
+        }
       }
       return elements;   
     },
@@ -92,8 +98,13 @@ export default {
       eventBus.$emit(events.modeler.export, type);
     },
     routeTo(item) {
-      let id = item.id ? item.id : '';
-      this.active = id;
+      if (item.id) {
+        this.active = item.id;
+      } else if (item.routeName && item.routeName != this.$route.name) {
+        this.$router.push({name: item.routeName, params: {id: this.$route.params.id} });
+      } else {
+        return;
+      }
     },
     item() { 
       let itemId = this.$route.params.id;
@@ -114,12 +125,12 @@ a{
   color: grey;
   font-size: 15px;
   height: 48px;
-  min-width: 25px;
   padding-top: 14px;
 }
 .crumbs div {
   cursor: pointer;
   max-width: 200px;
+  min-width: 25px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

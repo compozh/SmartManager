@@ -3,7 +3,8 @@
     <Split  @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize" class="diagram-section">
           <bpmn-modeler v-if="type == 'BPMN'" :onlyRead="true" ref="bpmnModeler"/>
-          <dmn-modeler v-else :onlyRead="true" ref="dmnModeler"/>
+          <dmn-modeler v-else-if="type == 'DMN'" :onlyRead="true" ref="dmnModeler"/>
+          <cmmn-modeler v-else :onlyRead="true" ref="cmmnModeler"/>
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="properties-panel-section">
         <div class="properties-panel-container" >
@@ -24,7 +25,8 @@
                 <v-list-item-action class="ma-0">
                   <bpmn-contex-menu :item="diagram" :milestones="true"
                     @edit="editItem" 
-                    @remove="removeItem" 
+                    @remove="removeItem"
+                    @compare="compare"
                     offset>
                   <template #activator="{ open }">
                     <v-btn icon class="options"   v-on="open">
@@ -80,7 +82,11 @@ export default {
       split: null,
     };
   },
-  
+  props: {
+    activeItem: {
+      required: true
+    },
+  },
   mounted() {
     // this.compare()
   },
@@ -90,7 +96,7 @@ export default {
       if (value) {
         moment.locale('ru');
         return moment(value).calendar(null, {
-            sameElse: 'DD MMMM YYYY'
+          sameElse: 'DD MMMM YYYY'
         }).split(',')[0];
       }
     },
@@ -109,14 +115,14 @@ export default {
     diagram() {
       const activeItem = this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram) {
-        this.loadUsers()
+        this.loadUsers();
         return activeItem;
       }
       return null;
     },
     type() {
-      if(!this.diagram) {return}
-      return this.diagram.type
+      if (!this.diagram) { return; }
+      return this.diagram.type;
     },
     splitSize: {
       get() {
@@ -132,6 +138,17 @@ export default {
       set(value) {
         this.split = value;
         localStorage.setItem('properties-panel-split-size', value);
+      }
+    },
+    active: {
+      get() {
+        return this.activeItem;
+      },
+      set(value) {
+        if (value === this.activeItem) {
+          return;
+        }
+        this.$emit('update:activeItem', value);
       }
     },
   },
@@ -151,33 +168,8 @@ export default {
         result = user ? user.name : userId;
       return result;
     },
-    async compare() {
-      let changes
-      this.diagram.xmlView = await this.$store.dispatch('bpmn/getXml', this.diagram.id)
-      let xml = await this.$store.dispatch('bpmn/getXml', "1c67ec53-cc27-4d10-9171-1610d595b23f")
-      function loadModels(a, b, done ) {
-
-        new BpmnModdle().fromXML(a, function(err, adefs) {
-
-          if (err) {
-            return done(err);
-          }
-
-          new BpmnModdle().fromXML(b, function(err, bdefs) {
-            if (err) {
-              return done(err);
-            } else {
-              return done(null, adefs, bdefs);
-            }
-          });
-        });
-      }
-
-      let self = this
-      await loadModels(this.diagram.xmlView, xml, function(err, aDefinitions, bDefinitions) {
-        changes = diff(aDefinitions, bDefinitions)
-      });
-      console.log(this.$refs.bpmnModeler, this.diagram)
+    compare(itemId1, itemId2) {
+      this.$router.push({name: 'compare', params: {id: itemId1}, query: {id2: itemId2} });
     }
   },
 };
