@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 import { api } from '../api/bpmnApi';
-import { Folder, Diagram, Configuration, ActionDefinition, AccessParams } from '../api/models';
+import { Folder, Diagram, Configuration, ActionDefinition, AccessParams, DiagramVersion } from '../api/models';
 
 export default {
   async resetCache() {
@@ -120,6 +120,9 @@ export default {
       result = await api.deployDiagram(id);
     } catch (error) {
       console.error(error);
+    }
+    if (!result) {
+      result = { success: false };
     }
     if (!result.success) {
       console.error(result);
@@ -386,6 +389,69 @@ export default {
   async getDeployedDecisions(context) {
     try {
       return await api.getDeployedDecisions();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  //#endregion
+
+  //#region Versions
+
+  async getVersionsForDiagram(context, diagramId) {
+    let result;
+    try {
+      result = await api.getVersionsForDiagram(diagramId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    if (Array.isArray(result)) {
+      return result.map(item => new DiagramVersion(item));
+    }
+    return result;
+  },
+
+  async createDiagramVersion(context, diagramId) {
+    try {
+      return await api.createDiagramVersion(diagramId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getDiagramVersionXml(context, {diagramId, versionId}) {
+    try {
+      return await api.getDiagramVersionXml(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async updateDiagramVersion(context, version) {
+    try {
+      return await api.updateDiagramVersion(version);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async deleteDiagramVersion(context, diagramId, versionId) {
+    try {
+      return await api.deleteDiagramVersion(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async applyDiagramVersion(context, diagramId, versionId) {
+    try {
+      return await api.applyDiagramVersion(diagramId, versionId);
     } catch (error) {
       console.error(error);
       return false;

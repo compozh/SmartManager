@@ -332,16 +332,88 @@ export class BpmnModelerApi {
   }
 
   //#endregion
+
+  //#region Versions
+
+  async getVersionsForDiagram(diagramId) {
+    const result = await query({
+      query: gql`query ($diagramId : ID!) ${queries.getDiagramVersions}`,
+      variables: { diagramId },
+      fetchPolicy: 'no-cache'
+    });
+    return result.data.bpmnquery.diagramVersions;
+  }
+
+  async createDiagramVersion(diagramId) {
+    const result = await mutate({
+      mutation: gql`mutation ($diagramId: ID!) ${mutations.createDiagramVersion}`,
+      variables: { diagramId }
+    });
+    return result.data.bpmnqueryMutation.createDiagramVersion;
+  }
+
+  async getDiagramVersionXml(diagramId, versionId) {
+    const result = await query({
+      query: gql`query ($diagramId: ID!, $versionId: ID!) ${queries.getDiagramVersionXml}`,
+      variables: { diagramId, versionId }
+    });
+    return result.data.bpmnquery.diagramVersionXml;
+  }
+
+  async updateDiagramVersion(version) {
+    const result = await mutate({
+      mutation: gql`mutation (version: DiagramVersionInput!) ${mutations.updateDiagramVersion}`,
+      variables: { diagramId: version.diagramId, versionId: version.versionId, name: version.versionId }
+    });
+    return result.data.bpmnqueryMutation.updateDiagramVersion;
+  }
+
+  async deleteDiagramVersion(diagramId, versionId) {
+    const result = await mutate({
+      mutation: gql`mutation ($diagramId: ID!, $versionId: ID!) ${mutations.deleteDiagramVersion}`,
+      variables: { diagramId, versionId }
+    });
+    return result.data.bpmnqueryMutation.deleteDiagramVersion;
+  }
+
+  async applyDiagramVersion(diagramId, versionId) {
+    const result = await mutate({
+      mutation: gql`mutation ($diagramId: ID!, $versionId: ID!) ${mutations.applyDiagramVersion}`,
+      variables: { diagramId, versionId }
+    });
+    const success = result.data.bpmnqueryMutation.applyDiagramVersion;
+    if (success) {
+      const xml = await this.getDiagramVersionXml(diagramId, versionId);
+      if (typeof xml === 'string') {
+        client.writeQuery({
+          query: gql`query ($id: ID!) ${queries.getXml}`,
+          variables: { id: diagramId },
+          data: { bpmnquery: { getXml: xml, __typename: 'String' } }
+        });
+      }
+      return xml;
+    }
+    return success;
+  }
+
+  //#endregion
+
 }
 
 export const api = new BpmnModelerApi();
 
+/**
+ * @param {import('apollo-client').QueryOptions} options 
+ */
 async function query(options) {
   const token = await auth.getToken();
   addAuthHeader(options, token);
   return await client.query(options);
 }
 
+/**
+ * @param {import('apollo-client').MutationOptions} options 
+ */
 async function mutate(options) {
   const token = await auth.getToken();
   addAuthHeader(options, token);

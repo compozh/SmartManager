@@ -1,0 +1,5 @@
+{
+  bpmnquery {
+    diagramVersionXml(diagramId: $diagramId, versionId: $versionId)
+  }
+}

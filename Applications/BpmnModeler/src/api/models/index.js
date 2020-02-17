@@ -4,6 +4,7 @@ import Configuration from './Configuration';
 import Folder from './Folder';
 import Diagram from './Diagram';
 import DiagramType from './DiagramType';
+import DiagramVersion from './DiagramVersion';
 
-export { ActionDefinition, ActionDefinitionType, Configuration, Folder, Diagram, DiagramType };
+export { ActionDefinition, ActionDefinitionType, Configuration, Folder, Diagram, DiagramType, DiagramVersion };
 export * from './access';
