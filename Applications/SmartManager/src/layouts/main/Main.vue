@@ -4,8 +4,7 @@
     :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]"
   >
     <!-- БОКОВОЕ МЕНЮ -->
-    <vx-sidebar v-if="$store.state.sm.folders && $store.state.sm.currentFolder"
-                :sidebarItems="sidebarItems"
+    <vx-sidebar :sidebarItems="sidebarItems"
                 :title="templateConfig.applicationTitle"
                 parent=".layout--main"/>
 
