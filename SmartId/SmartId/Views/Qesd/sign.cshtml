@@ -1,0 +1,95 @@
+﻿@using Shared.WebExtensions;
+@model DigitalSignatureViewModel
+
+<form id="wrapper-digital-signature">
+	<fieldset class="form-group">
+		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__279__BV_label_">Тип ключа</legend>
+		<div tabindex="-1" role="group" aria-labelledby="__BVID__279__BV_label_">
+			<select id="key-type-select-digital-signature" class="custom-select">
+				<option value="soft">Програмний (файл)</option>
+				<option value="hard">Апаратний (захищений носій)</option>
+				<option value="mobile">Mobile ID (SIM-картка)</option>
+			</select>
+		</div>
+	</fieldset>
+	<fieldset class="form-group" id="__BVID__333" aria-labelledby="__BVID__333__BV_label_">
+		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__333__BV_label_">Приватний ключ</legend>
+		<div tabindex="-1" role="group" aria-labelledby="__BVID__333__BV_label_">
+			<div id="key-file-digital-signature__BV_file_outer_" class="custom-file b-form-file">
+				<input type="file" id="key-file-digital-signature" class="custom-file-input">
+				<label for="key-file-digital-signature" id="key-file-digital-signature-label" class="custom-file-label">Оберіть файл приватного ключа</label>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset class="form-group" id="__BVID__335" aria-labelledby="__BVID__335__BV_label_">
+		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__335__BV_label_">Пароль захисту ключа</legend>
+		<div tabindex="-1" role="group" aria-labelledby="__BVID__335__BV_label_">
+			<input id="key-password-digital-signature" type="password" placeholder="Введіть пароль ключа" class="form-control">
+		</div>
+	</fieldset>
+	<button type="button" class="btn float-right btn-primary" id="exec-digital-signature">
+		<span class="mr-2">
+			<i class="fal fa-edit"></i>
+		</span>
+		<span>Підписати</span>
+	</button>
+</form>
+<form id="wrapper-result" class="d-none" action="@Model.ReturnUrl" method="post">
+	<input type="hidden" id="signedData" Name="SignedData" value="" />
+	<input type="hidden" Name="State" value="@Model.State" />
+</form>
+
+@section scripts {
+	<script src="~/js/eds/bluebird.min.js" type="text/javascript"></script>
+	<script src="~/js/eds/edswrapper.js?v=@Html.GetScriptNonce()" type="text/javascript"></script>
+	<script src="~/js/edsexecutor.js?v=@Html.GetScriptNonce()" type="text/javascript"></script>
+	<script type='text/javascript' nonce="@Html.GetScriptNonce()">
+		let edsExecutor = new EdsExecutor({
+			siteRoot: '@Model.SiteRoot',
+			language: '@Model.Language',
+			allowStore: @Model.AllowStore.ToString().ToLower(),
+			allowStoreLocal: @Model.AllowStoreLocal.ToString().ToLower(),
+			debugMode: @Model.DebugMode.ToString().ToLower(),
+			initialData: '@Model.InitialData',
+			setKeyType: keyType => {
+				$("select#key-type-select-digital-signature").val(keyType)
+			},
+			setUserCa: userCa => {
+				console.log("ui: User CA set", userCa, edsExecutor.needUserCertificates);
+			},
+			setWarning: warning => {
+				console.log("ui: warning set", warning);
+			},
+			setError: error => {
+				console.log("ui: warning set", error);
+			},
+			setError: error => {
+				console.log("ui: warning set", error);
+			},
+			postResult: result => {
+				$('input#signedData').val(result);
+				$('form#wrapper-result').submit();
+			}
+		});
+		$("form#wrapper-digital-signature").submit(function (event) {
+			event.preventDefault();
+			$("button#exec-digital-signature").click();
+		});
+		$("select#key-type-select-digital-signature").change(function () {
+			edsExecutor.keyType = this.value
+		});
+		$('input#key-file-digital-signature').change(function () {
+			var filename = $('input#key-file-digital-signature').prop('files')[0].name;
+			$('label#key-file-digital-signature-label').html(filename);
+		});
+		$('input#key-password-digital-signature').change(function () {
+
+		});
+		$("button#exec-digital-signature").click(function () {
+			var filename = $('input#key-file-digital-signature').prop('files')[0];
+			var pwd = $('input#key-password-digital-signature').val();
+			edsExecutor.handleSignClick(filename, pwd);
+		});
+		history.replaceState(null , document.title, window.location.href.split('?')[0] );
+	</script>
+}
