@@ -55,7 +55,11 @@
             <v-layout column>
               <v-flex>
                 <v-card flat >
-                  <lesson-view v-if='currentLesson' :unit='currentLesson'></lesson-view>
+                  <lesson-view
+                    v-if='currentLesson'
+                    :unit='currentLesson'
+                    :startPlay="startPlay"
+                    @ended="putNextLesson()"></lesson-view>
                 </v-card>
                 <v-flex>
                   <v-toolbar dense flat>
@@ -101,8 +105,12 @@
                       v-for="tabItem in tabItems"
                       :key="tabItem.title">
                       <v-card flat>
-                        <lesson-materials v-if='tabItem.id==="materials" && currentLesson' :lesson="currentLesson.lesson" :materials="currentLesson.materials"></lesson-materials>
-                        <questions-and-answers v-if='tabItem.id==="questions"'></questions-and-answers>
+                        <lesson-materials
+                          v-if='tabItem.id==="materials" && currentLesson'
+                          :lesson="currentLesson.lesson"
+                          :materials="currentLesson.materials"></lesson-materials>
+                        <questions-and-answers
+                          v-if='tabItem.id==="questions"'></questions-and-answers>
                       </v-card>
                     </v-tab-item>
                   </v-tabs>
@@ -350,6 +358,7 @@ export default {
 
     },
     putNextLesson () {
+      this.finishLesson()
       this.nextLesson ()
       this.startPlay = true
     },
