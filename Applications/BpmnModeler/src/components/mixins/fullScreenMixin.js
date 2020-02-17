@@ -2,7 +2,7 @@ export default {
   data() {
     return {
       isfullscreen: false
-    }
+    };
   },
   mounted() {
     document.addEventListener('fullscreenchange', this.onFullScreenChanged);
@@ -53,4 +53,4 @@ export default {
       this.isfullscreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
     },
   }
-}
+};

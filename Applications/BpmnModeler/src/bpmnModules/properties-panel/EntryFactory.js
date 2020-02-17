@@ -125,7 +125,7 @@ export default class EntryFactory {
         click: () => options.click ? options.click(this.element) : null
       },
       style: getDefaultStyle(options)
-    }, () => options.label)
+    }, () => options.label);
   }
 
   /**

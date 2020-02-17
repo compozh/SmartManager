@@ -9,6 +9,11 @@
         imageLink
         name
         description
+        coursGoals
+        audience
+        entryLvl
+        exitKnowledge
+        exitSkills
         isFavorite
         roles{
           name
@@ -58,10 +63,10 @@
         }
         units{
           lessonGuid
+          lessonType
           name
           durationMunute
           durationMinutesLabel
-          unitId
           surveyId
         }
       }

@@ -9,31 +9,31 @@
                 <v-card>
                   <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
                 </v-card>
-        			</v-flex>
+              </v-flex>
               <v-flex>
-         				<v-card v-bind:style="{'background-color': '#1a237e'}">
-        					<v-flex py-3>
-        						<h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми курсами</h4>
-        						<h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--lighten-3'>Курсы обучения - ориентированные учебные пути, которые комплексно повышают ваши навыки работы</h5>
-        					</v-flex>
-        					<v-flex py-2>
-        						<v-divider />
-        					</v-flex>
-        				</v-card>
+               <v-card v-bind:style="{'background-color': '#1a237e'}">
+                  <v-flex py-3>
+                    <h4 class='pt-3 pb-2 headline font-weight-medium text-xs-center white--text text--darken-3'>Ознакомьтесь с рекомендуемыми курсами</h4>
+                    <h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--lighten-3'>Курсы обучения - ориентированные учебные пути, которые комплексно повышают ваши навыки работы</h5>
+                  </v-flex>
+                  <v-flex py-2>
+                    <v-divider />
+                  </v-flex>
+                </v-card>
               </v-flex>
             </v-layout>
           </v-flex>
-         	<v-layout mb-3>
+          <v-layout mb-3>
              <v-flex>
                <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
              </v-flex>
-        	</v-layout>
-		    </v-layout>
-		    <v-layout wrap row>
-		    	<v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
+          </v-layout>
+        </v-layout>
+        <v-layout wrap row>
+          <v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
              <course-card v-if="course" :links="links" :course="course" />
-		    	</v-flex>
-		    </v-layout>
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
 	</v-container>
@@ -42,13 +42,11 @@
 
 <script>
 
-import CourseCard from './CourseCard.vue'
-import Filters from './LmsFilters.vue'
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
 import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
 
 export default {
-	name: 'lms-courses',
+  name: 'lms-courses',
   created() {
     if (this.$store.getters['lms/courses'] === null) {
       this.getCourses()
@@ -61,7 +59,7 @@ export default {
   data() {
     return {
       filterChanged: false,
-      allCourses: [],
+      // allCourses: [],
       coursesFiltered: []
     }
   },
@@ -75,7 +73,7 @@ export default {
       this.$router.push({ name: 'LMSCOURSES', params: { role: data.code } })
     },
     levelSearch: function(data) {
-      this.$router.push({ name: "LMSCOURSES", params: { level: data.code } })
+      this.$router.push({ name: 'LMSCOURSES', params: { level: data.code } })
     },
 
     refreshCoursesFilter: function(data) {
@@ -89,10 +87,10 @@ export default {
 
       // Если не установлены
       if (!setFilters) {
-        this.filterChanged = false;
+        this.filterChanged = false
       } else {
         this.coursesFiltered.length = 0
-        this.filterChanged = true;
+        this.filterChanged = true
 
         // разделить фильтры по категориям
         var separatedFilters = separateFilters(filters)
@@ -165,18 +163,20 @@ export default {
         for (let index = 0; index < filters.length; index++) {
           var filter = filters[index]
           for (let itemIndex = 0; itemIndex < filter.items.length; itemIndex++) {
-             filter.items[itemIndex].selected = false;
+            filter.items[itemIndex].selected = false
           }
         }
       }
       return filters
     },
+    allCourses() {
+      return this.$store.getters['lms/courses']
+    },
     courses () {
       if (this.filterChanged) {
         return this.coursesFiltered
       } else {
-        this.allCourses = this.$store.getters['lms/courses']
-        return this.allCourses
+        return this.$store.getters['lms/courses']
       }
     },
     links() {

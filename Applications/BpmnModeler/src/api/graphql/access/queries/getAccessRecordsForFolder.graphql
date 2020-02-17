@@ -1,0 +1,20 @@
+{
+  bpmnquery {
+    getAccessRecordsForFolder(folderId: $folderId) {
+      id,
+      recordId,
+      groupId,
+      groupName,
+      userId,
+      userName,
+      type,
+      read,
+      write,
+      deploy,
+      execute,
+      share,
+      parentId,
+      inherit
+    }
+  }
+}

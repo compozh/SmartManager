@@ -11,8 +11,8 @@
             flat
             class="hidden-xs-only">
             <v-label class="mr-0">
-				  		Фильтр:
-				    </v-label>
+              Фильтр:
+            </v-label>
 
 						<v-divider class="mx-2" vertical></v-divider>
 						<!-- Кнопки фильтров -->
@@ -61,7 +61,7 @@
                   <v-flex shrink>
                     <v-btn
                       flat
-									    @click.stop="applyFilter">Применить</v-btn>
+                      @click.stop="applyFilter">Применить</v-btn>
                   </v-flex>
                 </v-layout>
 							</v-card-actions>
@@ -74,16 +74,16 @@
           class="hidden-sm-and-up"
           xs12>
           <v-card flat transparen>
-			    		<v-card-title>
+              <v-card-title>
                 <v-label class="mr-2">
                   Фильтр:
                 </v-label>
-			    		</v-card-title>
+              </v-card-title>
             <v-list>
               <v-list-group
                 v-for="(item, index) in filters"
                 :key="index"
-			    			 v-if="item.items.length > 0"
+                v-if="item.items.length > 0"
                 v-model="item.active"
                 @click="setCurrentFilterIndex(index)"
                 no-action
@@ -103,7 +103,7 @@
                 </v-list-tile>
               </v-list-group>
             </v-list>
-			    	<v-divider
+            <v-divider
                 class="mx-2"
                 horisontal>
             </v-divider>
@@ -117,7 +117,7 @@
                 <v-flex shrink>
                   <v-btn
                     flat
-								    @click.stop="applyFilter">Применить</v-btn>
+                    @click.stop="applyFilter">Применить</v-btn>
                 </v-flex>
               </v-layout>
             </v-card-actions>
@@ -136,43 +136,43 @@ export default {
   },
   data() {
     return {
-			// текущий активный фильтр
-			currentFilterIndex: - 1,
-			filterButtonPressed: false,
-			currentFilters: [],
-			filtersLoaded: false
-		}
+      // текущий активный фильтр
+      currentFilterIndex: - 1,
+      filterButtonPressed: false,
+      currentFilters: [],
+      filtersLoaded: false
+    }
   },
   created() {
-		// загрузить данные из props в локльную переменную. однократно
-		for (let index = 0; index < this.filters.length; index++) {
-			this.currentFilters.push(this.filters[index])
-		}
+    // загрузить данные из props в локльную переменную. однократно
+    for (let index = 0; index < this.filters.length; index++) {
+      this.currentFilters.push(this.filters[index])
+    }
   },
-	methods: {
-		applyFilter() {
-			this.currentFilterIndex = -1
-			this.filterButtonPressed = false
-			// Применить фильтр к текущим модулям/курсам - передать текущий фильтр родителю
-			this.$emit('filterChanged', { currentFilters: this.currentFilters })
-		},
-		setFilter(index) {
-			if (this.currentFilterIndex === index) {
-				this.filterButtonPressed = !this.filterButtonPressed
-			} else {
-				this.filterButtonPressed = true
-			}
-		},
-		clearFilter() {
+  methods: {
+    applyFilter() {
+      this.currentFilterIndex = -1
+      this.filterButtonPressed = false
+      // Применить фильтр к текущим модулям/курсам - передать текущий фильтр родителю
+      this.$emit('filterChanged', { currentFilters: this.currentFilters })
+    },
+    setFilter(index) {
+      if (this.currentFilterIndex === index) {
+        this.filterButtonPressed = !this.filterButtonPressed
+      } else {
+        this.filterButtonPressed = true
+      }
+    },
+    clearFilter() {
       // сбросить выбор
-			for (let index = 0; index < this.currentFilters[this.currentFilterIndex].items.length; index++) {
-				this.currentFilters[this.currentFilterIndex].items[index].selected = false
-			}
+      for (let index = 0; index < this.currentFilters[this.currentFilterIndex].items.length; index++) {
+        this.currentFilters[this.currentFilterIndex].items[index].selected = false
+      }
     },
     setCurrentFilterIndex(index) {
       this.currentFilterIndex = index
     }
-	}
+  }
 }
 </script>
 

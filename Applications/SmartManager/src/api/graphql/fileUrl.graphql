@@ -1,5 +1,0 @@
-query ($id: Int!, $ext: String!) {
-  smtasks {
-      fileUrl(id: $id, ext: $ext)
-  }
-}

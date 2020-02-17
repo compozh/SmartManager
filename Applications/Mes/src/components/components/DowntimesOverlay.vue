@@ -50,17 +50,19 @@ export default {
     closeOverlay () {
       this.$emit('changeDowntimesOverlayVisible')
     },
-    async formSubmit(submission) {
+    async formSubmit({ submission, completeSubmissionCallback }) {
       var me = this,
         formCode = me.workCenter.downtimeRegistrationFormCode,
         properties = { workCenterCode: me.workCenter.code },
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
         
       me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))
-      
+
       await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {
         me.$store.commit('mes/setDowntimes', [])
-        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })        
+        me.$store.dispatch('mes/downloadDowntimes', { workCenterCode: me.workCenter.code, dateTime: currentDate, fetchPolicy: 'network-only' })  
+        
+        completeSubmissionCallback(result)
       })
 
       me.$store.commit('mes/closeDialogLinearLoader')
@@ -96,6 +98,7 @@ export default {
     display: flex;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     padding: 30px;
     /* background-color: #326da80d; */

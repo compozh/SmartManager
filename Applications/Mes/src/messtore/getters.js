@@ -47,9 +47,6 @@ export default {
   initializeDocuments(state) {
     return state.initializeDocuments
   },
-  installations(state) {
-    return state.installations
-  },
   usersProductionEvents(state) {
     return state.usersProductionEvents
   },
@@ -129,7 +126,10 @@ export default {
     return state.dynamicPagesCache
   },
   cameraAvailability(state){
-    return state.cameraAvailability
+    return state.cameraSettings.cameraAvailability
+  },
+  cameraSettings(state) {
+    return state.cameraSettings
   },
   iotSettings(state) {
     return state.iotSettings

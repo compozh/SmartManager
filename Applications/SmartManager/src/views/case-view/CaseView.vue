@@ -1,26 +1,5 @@
 <template>
-  <div
-    id="task-app"
-    class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
-  >
-    <vs-sidebar
-      class="items-no-padding"
-      parent="#task-app"
-      :reduce="mdAndDown"
-      :click-not-close="clickNotClose"
-      :hidden-background="clickNotClose"
-      reduce-not-rebound
-      reduce-not-hover-expand
-      v-model="isCaseSidebarActive"
-    >
-      <task-sidebar
-        @changeTab="currentTab = $event"
-        :currentTab="currentTab"
-        :attachments="attachments"
-        :comments="comments"
-      ></task-sidebar>
-    </vs-sidebar>
-
+  <div id="task-app" class="border border-solid d-theme-border-grey-light rounded relative">
     <div
       :class="{'sidebar-spacer': clickNotClose, 'md-sidebar-spacer': mdAndDown}"
       class="md:md-sidebar-spacer app-fixed-height border border-solid d-theme-border-grey-light border-r-0 border-t-0 border-b-0"
@@ -39,14 +18,12 @@
 
 <script>
 const CaseDetails = () => import('./case-details/CaseDetails.vue')
-import TaskSidebar from '../task-view/TaskSidebar.vue'
 import TaskAttachments from '../task-view/task-attachments/TaskAttachments.vue'
 import TaskComments from '../task-view/task-comments/TaskComments.vue'
 
 export default {
   components: {
     CaseDetails,
-    TaskSidebar,
     TaskComments,
     TaskAttachments
   },
@@ -58,9 +35,6 @@ export default {
     isCaseSidebarActive: true,
     windowWidth: window.innerWidth
   }),
-  created() {
-    this.$store.commit('TOGGLE_REDUCE_BUTTON', true)
-  },
   watch: {
     '$route'(route) {
       if (route.name === 'case-view') {
@@ -76,7 +50,7 @@ export default {
   },
   computed: {
     caseItem() {
-      const id = +this.$route.params.id
+      const id = +this.$route.params.caseId
       const caseItem = this.$store.state.sm.caseDetails[id]
       return caseItem ? caseItem : {}
     },
@@ -96,7 +70,7 @@ export default {
   },
   methods: {
     async getCase() {
-      const caseId = +this.$route.params.id
+      const caseId = +this.$route.params.caseId
       if (!this.caseItem.id) {
         try {
           await this.$store.dispatch('sm/getCaseDetails', {
@@ -135,7 +109,7 @@ export default {
   }
 
   .app-fixed-height {
-    height: calc(100vh - 12rem);
+    height: calc(100vh - 11rem);
   }
 
   @media (max-width: 768px) {

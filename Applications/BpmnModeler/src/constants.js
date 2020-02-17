@@ -156,4 +156,4 @@ export const events = {
      */
     editForm: 'formio.edit-form'
   }
-}
+};

@@ -1,5 +1,13 @@
-const path = require('path')
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+
+const path = require('path');
 module.exports = {
+  transpileDependencies: ['vuetify'],
+  configureWebpack: {
+    plugins: [
+      new VuetifyLoaderPlugin()
+    ]
+  },
   chainWebpack: config => {
     const svgRule = config.module.rule('svg');
 
@@ -32,4 +40,4 @@ module.exports = {
       openAnalyzer: true
     }
   }
-}
+};

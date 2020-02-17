@@ -1,21 +1,3 @@
-<!-- =========================================================================================
-    File Name: VxSidebar.vue
-    Description: Sidebar Component
-    Component Name: VxSidebar
-    ----------------------------------------------------------------------------------------
-    Sidebar items structure:
-          url     => router path
-          name    => name to display in sidebar
-          slug    => router path name
-          icon    => Feather Icon component/icon name
-          tag     => text to display on badge
-          tagColor  => class to apply on badge element
-          i18n    => Internationalization
-          submenu   => submenu of current item (current item will become dropdown )
-                NOTE: Submenu don't have any icon(you can add icon if u want to display)
-          isDisabled  => disable sidebar item/group
-========================================================================================== -->
-
 <template>
   <div class="parentx">
     <vs-sidebar
@@ -32,16 +14,16 @@
     >
       <div @mouseenter="sidebarMouseEntered" @mouseleave="sidebarMouseLeave">
         <div class="header-sidebar flex items-end justify-between" slot="header">
-          <div class="logo flex items-center">
+          <router-link tag="div" to="/" class="logo flex items-center cursor-pointer">
             <img :src="logo" alt="logo" class="w-10 mr-4" v-if="logo">
-            <span class="logo-text" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
-          </div>
+            <span class="logo-text" v-if="title && (isMouseEnter || !reduce)">{{ title }}</span>
+            <span class="logo-text" v-else>SM</span>
+          </router-link>
           <div>
             <template v-if="showCloseButton">
               <feather-icon
                 icon="XIcon"
                 class="m-0 cursor-pointer"
-
                 @click="$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', false)"
               >
               </feather-icon>
@@ -64,52 +46,38 @@
           :settings="settings"
           @ps-scroll-y="psSectionScroll"
         >
-          <template v-for="(sidebarItem, index) in sidebarItems">
-
-            <!-- GROUP ITEM HEADER -->
-            <span :key="`header-${index}`" v-if="sidebarItem.header && !sidebarItemsMin"
-                  class="navigation-header truncate">{{ $t(sidebarItem.i18n) || sidebarItem.header }}</span>
-            <template v-else-if="!sidebarItem.header">
-
-              <!-- IF IT'S SINGLE ITEM -->
-              <vx-sidebar-item
-                ref="sidebarLink"
-                :key="`sidebarItem-${index}`"
-                v-if="!sidebarItem.submenu"
-                :index="index"
-                :to="sidebarItem.slug !== 'external' ? sidebarItem.url : ''"
-                :href="sidebarItem.slug === 'external' ? sidebarItem.url : ''"
-                :icon="sidebarItem.icon"
-                :target="sidebarItem.target"
-                :isDisabled="sidebarItem.isDisabled"
-                :slug="sidebarItem.slug"
-                :style="{order: sidebarItem.code === '' ? -1 : 0}"
-              >
-                <span
-                  v-show="!sidebarItemsMin"
-                  class="truncate"
-                >{{ $t(sidebarItem.i18n) || sidebarItem.name }}
-                </span>
-                <vs-chip
-                  class="ml-auto"
-                  :color="sidebarItem.tagColor"
-                  v-if="sidebarItem.tag && (isMouseEnter || !reduce)"
-                >{{ sidebarItem.tag }}
-                </vs-chip>
-              </vx-sidebar-item>
-
-              <!-- IF HAVE SUBMENU / DROPDOWN -->
-              <template v-else>
-                <vx-sidebar-group
-                  ref="sidebarGrp"
-                  :key="`group-${index}`"
-                  :openHover="openGroupHover"
-                  :group="sidebarItem"
-                  :groupIndex="index"
-                  :open="isGroupActive(sidebarItem)"
-                ></vx-sidebar-group>
+            <template v-for="(sidebarItem, index) in sidebarItems">
+              <template>
+                <!-- IF IT'S SINGLE ITEM -->
+                <vx-sidebar-item ref="sidebarLink"
+                                 :key="`sidebarItem-${index}`"
+                                 :index="index"
+                                 :to="sidebarItem.slug !== 'external' ? sidebarItem.url : ''"
+                                 :href="sidebarItem.slug === 'external' ? sidebarItem.url : ''"
+                                 :icon="sidebarItem.icon"
+                                 :target="sidebarItem.target"
+                                 :isDisabled="sidebarItem.isDisabled"
+                                 :slug="sidebarItem.slug"
+                                 :style="{order: sidebarItem.code === '' ? -1 : 0}">
+                <span v-show="!sidebarItemsMin" class="truncate">{{ sidebarItem.name }}</span>
+                  <vs-chip class="ml-auto"
+                           :color="sidebarItem.tagColor"
+                           v-if="sidebarItem.tag && (isMouseEnter || !reduce)"
+                  >{{ sidebarItem.tag }}</vs-chip>
+                </vx-sidebar-item>
               </template>
             </template>
+          <template v-if="$route.path.includes('/task/')">
+            <vs-divider class="px-5"></vs-divider>
+            <vx-sidebar-item :to="'/tasks/' + taskCurrentFolder" icon="ArrowLeftIcon">
+              <span v-show="!sidebarItemsMin">{{ $t('buttons.toBack') }}</span>
+            </vx-sidebar-item>
+          </template>
+          <template v-if="$route.path.includes('/case/')">
+            <vs-divider class="px-5"></vs-divider>
+            <vx-sidebar-item :to="'/cases/' + caseCurrentFolder" icon="ArrowLeftIcon">
+              <span v-show="!sidebarItemsMin">{{ $t('buttons.toBack') }}</span>
+            </vx-sidebar-item>
           </template>
         </VuePerfectScrollbar>
       </div>
@@ -121,7 +89,6 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import VxSidebarGroup from './VxSidebarGroup.vue'
 import VxSidebarItem from './VxSidebarItem.vue'
 
 export default {
@@ -149,6 +116,10 @@ export default {
       default: true,
     }
   },
+  components: {
+    VxSidebarItem,
+    VuePerfectScrollbar
+  },
   data: () => ({
     clickNotClose: false, // disable close sidebar on outside click
     reduce: false, // determines if sidebar is reduce - component property
@@ -160,7 +131,7 @@ export default {
       swipeEasing: true
     },
     windowWidth: window.innerWidth, //width of windows
-    showShadowBottom: false,
+    showShadowBottom: false
   }),
   computed: {
     isSidebarActive: {
@@ -185,38 +156,40 @@ export default {
     sidebarItemsMin() {
       return this.$store.state.sidebarItemsMin
     },
-    isGroupActive() {
-      return (sidebarItem) => {
-        const path = this.$route.fullPath
-        let open = false
-        let func = function (sidebarItem) {
-          if (sidebarItem.submenu) {
-            sidebarItem.submenu.forEach((item) => {
-              if (path == item.url) {
-                open = true
-              } else if (item.submenu) {
-                func(item)
-              }
-            })
-          }
-        }
-        func(sidebarItem)
-        return open
-      }
+    folders() {
+      return this.$store.state.sm.folders
     },
+    folderCode() {
+      const folderCode = this.$store.state.sm.currentFolder
+      if (folderCode === 'active') {
+        return '' // conversion for all tasks
+      }
+      if (folderCode === 'all') {
+        return 0 // conversion for all cases
+      }
+      return folderCode
+    },
+    taskCurrentFolder() {
+      const folderId = this.folders
+        ? this.folders.find(folder => folder.code === this.folderCode).code
+        : 'active'
+      return folderId || 'active'
+    },
+    caseCurrentFolder() {
+      const folderId = this.folders
+        ? this.folders.find(folder => folder.folderId === +this.folderCode).folderId
+        : 'all'
+      return folderId || 'all'
+    }
   },
   watch: {
     reduce(val) {
-
       if (val === true) {
         this.$store.dispatch('updateSidebarWidth', 'reduced')
       } else {
         this.$store.dispatch('updateSidebarWidth', 'default')
       }
-
-      setTimeout(function () {
-        window.dispatchEvent(new Event('resize'))
-      }, 100)
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 100)
     },
     reduceButton() {
       this.setSidebarWidth()
@@ -306,11 +279,6 @@ export default {
         this.isSidebarActive = true
       }
     }
-  },
-  components: {
-    VxSidebarGroup,
-    VxSidebarItem,
-    VuePerfectScrollbar,
   },
   mounted() {
     this.$nextTick(() => {

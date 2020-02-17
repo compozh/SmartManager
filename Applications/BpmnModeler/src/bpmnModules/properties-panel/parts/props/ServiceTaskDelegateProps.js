@@ -51,7 +51,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             'camunda:topic': value
           });
         },
-        appendIcon: 'search',
+        appendIcon: 'mdi-magnify',
         append() {
           const value = bo.get('camunda:topic');
           eventBus.$emit(events.propertiesPanel.selectAction, value, ActionDefinitionType.ExternalTask, (newValue) => {
@@ -68,7 +68,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
         disabled(element) {
           var bo = getBusinessObject(element);
           var taskCode = bo.get('camunda:topic');
-          return typeof taskCode !== 'string' || taskCode.trim() === ''
+          return typeof taskCode !== 'string' || taskCode.trim() === '';
         },
         click(element) {
           var bo = getBusinessObject(element);

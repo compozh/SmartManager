@@ -21,7 +21,7 @@ const store = new Vuex.Store({
   state,
   modules: {
     [appModule.namespace]: appModule,
-    auth: authModule,
+    auth: authModule
   },
   strict: process.env.NODE_ENV !== 'production'
 })

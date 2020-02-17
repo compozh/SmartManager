@@ -15,7 +15,7 @@ import caseUpdate from './graphql/caseUpdate.graphql'
 import caseFolderCreate from './graphql/caseFolderCreate.graphql'
 import binding from './graphql/binding.graphql'
 import taskInfo from './graphql/taskInfo.graphql'
-import fileUrl from './graphql/fileUrl.graphql'
+import fileDetails from './graphql/fileDetails.graphql'
 import users from './graphql/users.graphql'
 import addTask from './graphql/addTask.graphql'
 import updateTask from './graphql/updateTask.graphql'
@@ -98,11 +98,11 @@ export class SmartManagerApi {
     }
   }
 
-  static async getFileUrlFromGql(id, ext) {
+  static async getFileDetailsFromGql(id, ext) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
-        query: gql`${fileUrl}`,
+        query: gql`${fileDetails}`,
         variables: {id, ext}
       })
     } catch (e) {

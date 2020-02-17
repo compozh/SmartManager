@@ -91,13 +91,13 @@ export default {
   }
   .v-list-item--active .reload-icon {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 2px;
+    right: 0;
     font-size: 19px !important;
     font-weight: 800;
     display: block;
   }
-  
+
   .v-navigation-drawer__content .v-list .v-list-item__action {
     margin-right: 0 !important ;
   }

@@ -15,4 +15,4 @@ export default {
       return createElement(entry.type, { ...entry.data }, entry.children(createElement));
     }));
   }
-}
+};
