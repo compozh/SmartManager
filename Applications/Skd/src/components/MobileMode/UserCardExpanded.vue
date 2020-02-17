@@ -32,23 +32,25 @@
       <v-flex class="user-details">
         <v-flex v-if="user.email" class="text-svg-container">
           <svg-email></svg-email>
-          <a href="ailto:' + user.email'">
-            <span class="text-container">{{user.email}}</span>
+          <a href="mailto:' + user.email'">
+            <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.email}}</span>
           </a>
         </v-flex>
-        <v-flex v-if="user.mobileTel" class="text-svg-container">
+        <v-flex v-if="user.mobileTel"  class="text-svg-container">
           <svg-mobile-phone></svg-mobile-phone>
           <a class="text-information" :href="'tel:'+user.mobileTel">
-            <span class="text-container">{{user.mobileTel}}</span>
+            <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.mobileTel}}</span>
+          </a>
+        </v-flex>
+        <v-flex v-if="user.skype" class="text-svg-container">
+          <svg-skype></svg-skype>
+          <a class="text-information" :href="'skype:'+user.skype+'?call'">
+          <span v-on:click="userDataItemSelected = !userDataItemSelected" class="text-container">{{user.skype}}</span>
           </a>
         </v-flex>
         <v-flex v-if="user.workTel" class="text-svg-container">
           <svg-office-phone></svg-office-phone>
           <span class="text-container">{{user.workTel}}</span>
-        </v-flex>
-        <v-flex v-if="user.skype" class="text-svg-container">
-          <svg-skype></svg-skype>
-          <span class="text-container">{{user.skype}}</span>
         </v-flex>
         <v-flex v-if="user.birthday" class="text-svg-container">
           <svg-birthday></svg-birthday>
@@ -79,7 +81,16 @@ export default {
     "svg-email": svgEmail,
     "svg-mobile-phone": svgMobilePhone
   },
-  data: () => ({}),
+  computed: {
+    userDataItemSelected: {
+      get() { 
+        return this.$store.getters['skd/getUserDataItemSelected'] 
+      },
+      set(value) {
+        this.$store.commit('skd/setUserDataItemSelected', value)
+      } 
+    },
+  },
   props: ["user"]
 };
 </script>
@@ -96,9 +107,6 @@ export default {
   font-size: 1.2em;
 }
 .text-container {
-  padding-left: 3px;
-}
-.key-style {
   padding-left: 3px;
 }
 .user-gone {

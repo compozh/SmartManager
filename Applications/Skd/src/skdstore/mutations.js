@@ -67,5 +67,8 @@ export default {
   },
   setLoginStatus(state, value) {
     state.loginStatus = value
+  },
+  setUserDataItemSelected(state, value) {
+    state.userDataItemSelected = value
   }
 }

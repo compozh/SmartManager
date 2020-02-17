@@ -111,5 +111,6 @@ export default {
   },
   getLastUpdatedDataTime: state => state.lastUpdatedDateTime,
   getLoginStatus: state => state.loginStatus,
-  getDrawer: state => state.drawer
+  getDrawer: state => state.drawer,
+  getUserDataItemSelected: state => state.userDataItemSelected
 }

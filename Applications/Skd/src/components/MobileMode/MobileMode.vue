@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-on:click="expanded =! expanded" class="user-container">
+  <v-layout v-on:click="setUserCard" class="user-container">
     <v-flex v-if="!expanded">
       <user-card :user="user"></user-card>
     </v-flex>
@@ -20,48 +20,37 @@ export default {
   },
   data() {
     return {
-      openMoreInformation: false,
       expanded: false
     };
   },
-  created() {
-    //console.log(this.user);
+  computed: {
+    userDataItemSelected: {
+      get() { 
+        return this.$store.getters['skd/getUserDataItemSelected'] 
+      },
+      set(value) {
+        this.$store.commit('skd/setUserDataItemSelected', value)
+      } 
+    }
+  },
+  methods: {
+    setUserCard() {
+      if (this.userDataItemSelected) {
+        this.userDataItemSelected = !this.userDataItemSelected
+        return
+      }
+      this.expanded =! this.expanded
+    }
   },
   props: ["user"]
 };
 </script>
 
 <style lang='scss' scoped>
-.container-information-arrow {
-  text-align: right;
-}
 .user-container {
   box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.02),
     0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 1px 0 rgba(0, 0, 0, 0.05) !important;
   margin-bottom: 5px;
   margin-top: 5px;
-}
-.text-svg-container {
-  padding-bottom: 3px;
-  padding-top: 5px;
-  padding-left: 10px;
-
-  font-size: 1em;
-  display: flex;
-  align-items: center;
-}
-.container {
-  padding: 0px !important;
-}
-.text-container {
-  padding-left: 3px;
-}
-.key-style {
-  padding-left: 3px;
-}
-.mobile-photo-container-expanded {
-  margin: 5px;
-  height: 80px;
-  width: 80px;
 }
 </style>
