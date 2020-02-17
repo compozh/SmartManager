@@ -61,8 +61,20 @@ let router = new VueRouter({
               name: 'task-attachment',
               component: () => import('./views/task-view/task-attachments/TaskAttachments.vue'),
               meta: {
+                parent: 'attachments',
                 breadcrumb: ['taskFolder', 'task', 'taskAttachments', 'taskAttachment']
-              }
+              },
+              children: [
+                {
+                  path: 'versions',
+                  name: 'versions',
+                  component: () => import('./views/task-view/task-attachments/VersionsAndRemarks.vue'),
+                  meta: {
+                    parent: 'attachments',
+                    breadcrumb: ['taskFolder', 'task', 'taskAttachments', 'taskAttachment', 'versions']
+                  },
+                }
+              ]
             }
           ]
         },
