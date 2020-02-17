@@ -62,13 +62,13 @@
                     @ended="putNextLesson()"></lesson-view>
                 </v-card>
                 <v-flex>
-                  <v-toolbar dense flat>
+                  <v-toolbar dense flat >
                     <v-btn
                       v-show="!isFirstLesson"
                       @click="prevLesson()"
                       flat>
                       <v-icon left dark>keyboard_arrow_left</v-icon>
-                      Предыдущий урок
+                      <span class="hidden-sm-and-down">Предыдущий урок</span>
                     </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -81,7 +81,7 @@
                       v-show="!isLastLesson"
                       @click="nextLesson()"
                       flat>
-                      Следующий урок
+                      <span class="hidden-sm-and-down">Следующий урок</span>
                       <v-icon right dark>keyboard_arrow_right</v-icon>
                     </v-btn>
                   </v-toolbar>
@@ -156,7 +156,7 @@
                         <v-spacer></v-spacer>
                         <v-flex shrink>
                           <v-btn icon @click="openClose(index)" color="white">
-                            <v-icon>{{ isActive(index) ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                            <v-icon>{{ isActive(index) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
                           </v-btn>
                         </v-flex>
                       </v-layout>
@@ -342,7 +342,7 @@ export default {
       this.setLesson (lesson)
     },
     setLesson ({lessonGuid, isFree}) {
-      this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
+      this.navigation.currentLessonIndex = this.getCurrentLessonIndexgetCurrentLessonIndex(lessonGuid)
       this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       this.getLesson(lessonGuid, isFree)
     },
@@ -354,6 +354,7 @@ export default {
       if ( !this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid) ) {
         this.lessonsPassed.push(this.currentLesson.lesson.lessonGuid)
       }
+
       // отправить запрос на сервер (урок пройден)
 
     },
@@ -405,7 +406,7 @@ export default {
           u.lessonType = lessonType.video
           u.passed = false
           u.disabled = false
-          u.isFree = true
+          u.isFree = false
           switch (u.lessonType) {
           case lessonType.video:
             u.icon = 'ondemand_video'
