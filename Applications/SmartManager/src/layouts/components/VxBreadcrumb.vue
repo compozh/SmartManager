@@ -38,6 +38,12 @@ export default {
     folders() {
       return this.$store.state.sm.folders
     },
+    tasks() {
+      return this.$store.state.sm.tasks
+    },
+    cases() {
+      return this.$store.state.sm.cases
+    },
     folderCode() {
       const folderCode = this.$store.state.sm.currentFolder
       if (folderCode === 'active') {
@@ -92,6 +98,10 @@ export default {
             name: (this.task.originals.find(o => o.id === attachmentId) || {}).fileName,
             url: '/task/' + this.task.id + '/attachment/' + this.$route.params.attachmentId
           }
+          case 'versions': return {
+            name: 'Versions',
+            url: '/task/' + this.task.id + '/attachment/' + this.$route.params.attachmentId
+          }
           case 'taskComments': return {
             name: this.$t('tabs.comments'),
             url: '/task/' + this.task.id + '/comments'
@@ -115,6 +125,24 @@ export default {
           default: return { name: '', url: ''}
         }
       }
+    }
+  },
+  created() {
+    const taskId = this.$route.params.taskId
+    const caseId = this.$route.params.caseId
+    if (!this.folder.length) {
+      this.$store.dispatch('sm/getFolders', 'loading')
+    }
+    if (taskId && !this.tasks['active']) {
+      this.$store.dispatch('sm/getTasks', 'active')
+    }
+    if (taskId && !this.task.id) {
+      this.$store.dispatch('sm/getTaskInfo', {
+        taskId, loading: true
+      })
+    }
+    if (caseId && !this.caseItem.id) {
+      this.$store.dispatch('sm/getCases', 'loading')
     }
   }
 }
