@@ -17,15 +17,6 @@ export default {
   setTaskInfo(state, payload) {
     state.taskInfo = Object.assign({}, state.taskInfo, payload)
   },
-  setFileUrl(state, {fileId, fileUrl, taskOrCaseId: id}) {
-    const task = state.taskInfo[id]
-      || state.caseDetails[id]
-    task.originals.forEach(original => {
-      if (original.id === fileId) {
-        original.fileUrl = fileUrl
-      }
-    })
-  },
   setSearch(state, payload) {
     state.search = payload
   },
