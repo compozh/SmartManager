@@ -1,36 +1,94 @@
 <template>
   <div id="mainContainer" class="app-fixed-height flex flex-wrap items-center rounded-lg">
-    <div class="flex lg:w-1/2 h-full bg-white p-2 pr-0 rounded-l-lg">
-      <VuePerfectScrollbar class="scroll-area" :settings="settings">
-        <table>
-          <tr>
-            <th>{{ $t('table.sign') }}</th>
-            <th>{{ $t('table.name') }}</th>
-            <th>{{ $t('table.size') }}</th>
-            <th>{{ $t('table.kind') }}</th>
-          </tr>
-          <tr v-for="(attachment, index) in originals" :key="index"
-              :class="{active: attachment.id === +$route.params.attachmentId}"
-              @click="toAttachment(attachment.id)">
-            <td>+</td>
-            <td class="text-left">{{ attachment.fileName }}</td>
-            <td>{{ fileSize(attachment.fileSize) }}</td>
-            <td>{{ attachment.fileExt }}</td>
-          </tr>
-        </table>
-      </VuePerfectScrollbar>
-    </div>
+    <attachment-list :originals="originals"
+                     :toAttachment="toAttachment"
+                     :fileSize="fileSize"/>
     <div class="flex lg:w-1/2 h-full bg-white justify-center rounded-r-lg">
       <component class="rounded-r-lg" :is="viewer" :url="fileUrl"></component>
     </div>
+    <div>
+      <vs-popup title="Електронно цифрові підписи до вкладення - _U0T4L1ZBL, версія 3"
+                :active.sync="edsPopup">
+        <vs-table stripe :data="edsItems">
+          <template slot="thead">
+            <vs-th active>
+              Статус
+            </vs-th>
+            <vs-th>
+              Дата
+            </vs-th>
+            <vs-th>
+              Підписант
+            </vs-th>
+            <vs-th>
+              Організація
+            </vs-th>
+            <vs-th>
+              Посада
+            </vs-th>
+            <vs-th>
+              ЄДРПОУ
+            </vs-th>
+            <vs-th>
+              ЦСК
+            </vs-th>
+            <vs-th>
+              Коментар
+            </vs-th>
+            <vs-th>
+              Дії
+            </vs-th>
+          </template>
+          <template slot-scope="{data}">
+            <vs-tr class="truncate" :key="indextr" v-for="(tr, indextr) in data">
+
+              <vs-td>
+                <feather-icon icon="UserCheckIcon"></feather-icon>
+              </vs-td>
+
+              <vs-td :data="data[indextr].date">
+                {{data[indextr].date}}
+              </vs-td>
+
+              <vs-td :data="data[indextr].signatory">
+                {{data[indextr].signatory}}
+              </vs-td>
+
+              <vs-td :data="data[indextr].organization">
+                {{data[indextr].organization}}
+              </vs-td>
+
+              <vs-td :data="data[indextr].position">
+                {{data[indextr].position}}
+              </vs-td>
+
+              <vs-td></vs-td>
+
+              <vs-td :data="data[indextr].keyCenter">
+                {{data[indextr].keyCenter}}
+              </vs-td>
+
+              <vs-td></vs-td>
+
+              <vs-td class="flex">
+                <vs-button color="primary" size="small" type="flat" icon="touch_app"/>
+                <vs-button color="success" size="small" type="flat" icon="check_circle"/>
+                <vs-button color="warning" size="small" type="flat" icon="vpn_key"/>
+                <vs-button color="danger" size="small" type="flat" icon="delete"/>
+              </vs-td>
+
+            </vs-tr>
+          </template>
+        </vs-table>
+      </vs-popup>
+    </div>
   </div>
 </template>
-
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import AttachmentList from './AttachmentList'
 import NotSupport from '@/components/NotSupport'
 import NoData from '@/components/NoData'
-import FileIcon from '@/components/FileIcon'
 
 const PdfViewer = () => import('@/components/pdf-viewer/Viewer')
 const ImgViewer = () => import('@/components/ImageViewer')
@@ -38,19 +96,95 @@ const TxtViewer = () => import('@/components/TextViewer')
 
 export default {
   components: {
+    AttachmentList,
     PdfViewer,
     ImgViewer,
     TxtViewer,
     VuePerfectScrollbar,
     NotSupport,
-    NoData,
-    FileIcon
+    NoData
   },
   data: () => ({
     index: 0,
     fileId: 0,
     fileUrl: '',
     types: [],
+    edsItems: [
+      {
+        status: 'Ok',
+        date: '10.01.2020 12:10',
+        signatory: 'Евгений Мелентьев',
+        organization: 'IT-Enterprise',
+        position: 'Фізична особа',
+        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
+      },
+      {
+        status: 'Ok',
+        date: '10.01.2020 12:10',
+        signatory: 'Виталий Бахарев',
+        organization: 'IT-Enterprise',
+        position: 'Фізична особа',
+        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
+      },
+      {
+        status: 'Ok',
+        date: '10.01.2020 12:10',
+        signatory: 'Игорь Певчев',
+        organization: 'IT-Enterprise',
+        position: 'Фізична особа',
+        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
+      },
+      {
+        status: 'Ok',
+        date: '10.01.2020 12:10',
+        signatory: 'Евгений Мелентьев',
+        organization: 'IT-Enterprise',
+        position: 'Фізична особа',
+        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
+      },
+      {
+        status: 'Ok',
+        date: '10.01.2020 12:10',
+        signatory: 'Виталий Бахарев',
+        organization: 'IT-Enterprise',
+        position: 'Фізична особа',
+        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
+      },
+      {
+        status: 'Ok',
+        date: '10.01.2020 12:10',
+        signatory: 'Игорь Певчев',
+        organization: 'IT-Enterprise',
+        position: 'Фізична особа',
+        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
+      }
+    ],
+    remarkItems: [
+      {
+        description: 'Граматичні помилки',
+        resolve: false,
+        date: '13.01.2020 15:16',
+        who: 'Виталий Бахарев',
+      },
+      {
+        description: 'Невірна структура',
+        resolve: true,
+        date: '15.01.2020 12:13',
+        who: 'Игорь Певчев',
+      },
+      {
+        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, quam?',
+        resolve: false,
+        date: '13.01.2020 15:16',
+        who: 'Виталий Бахарев',
+      },
+      {
+        description: 'Невірна структура',
+        resolve: true,
+        date: '15.01.2020 12:13',
+        who: 'Игорь Певчев',
+      }
+    ],
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
@@ -118,6 +252,21 @@ export default {
         return 'CASE'
       }
       return ''
+    },
+    edsPopup: {
+      get() {
+        return this.$store.state.sm.attachments.edsPopup
+      },
+      set(val) {
+        this.$store.commit('sm/TOGGLE_EDS_POPUP', val)
+      }
+    }
+  },
+  watch: {
+    $route(to) {
+      if (to.name === 'task-attachments') {
+        this.fileUrl = ''
+      }
     }
   },
   methods: {
@@ -125,14 +274,15 @@ export default {
       if (id) {
         this.$router.push({name: 'task-attachment', params: {attachmentId: id}})
         const attachment = this.originals.find(o => o.id === id) || {}
-        this.getUrl(attachment)
-        this.getAttachmentTypes()
+        this.getDetails(attachment)
+        //this.getAttachmentTypes()
       }
     },
-    async getUrl({id: fileId, fileExt, fileUrl}) {
-      const id = this.$route.params.taskId || this.$route.params.caseId
+    async getDetails({id: fileId, fileExt}) {
+      const id = +this.$route.params.taskId || +this.$route.params.caseId
+      const fileDetails = await this.$store.dispatch('sm/getFileDetails', {fileId, fileExt, id})
       this.fileId = fileId
-      this.fileUrl = fileUrl || await this.$store.dispatch('sm/getFileUrl', {fileId, fileExt, id})
+      this.fileUrl = fileDetails.FileUrl
     },
     async getAttachmentTypes() {
       const params = {
@@ -193,6 +343,17 @@ export default {
     border: 1px solid rgba(21,27,38,.15);
     padding: 5px;
     text-align: center;
+  }
+
+  .vs-component .vs-popup {
+    width: auto;
+    max-width: 80rem;
+  }
+
+
+  .vs-component .vs-popup td > span {
+      display: flex;
+      flex-wrap: nowrap;
   }
 
 </style>
