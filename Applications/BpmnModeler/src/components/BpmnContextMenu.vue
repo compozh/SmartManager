@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     compare(item1, item2) {
-      item2 = '1c67ec53-cc27-4d10-9171-1610d595b23f';
+      item2 = '';
       this.$emit('compare', item1.id || item1, item2.id || item2);
     },
     addFolder(item) {

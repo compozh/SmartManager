@@ -10,5 +10,6 @@ export default {
   sort: localStorage.getItem('sorting') || 0,
   drawer: false,
   loginStatus: {},
-  lastUpdatedDateTime: {}
+  lastUpdatedDateTime: {},
+  userDataItemSelected: false
 }
