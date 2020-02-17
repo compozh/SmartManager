@@ -152,8 +152,10 @@
     "uploaded": "Завантажено",
     "sign": "Підпис",
     "version": "Версія",
-    "kind": "Вид",
-    "status": "Статус"
+    "type": "Тип",
+    "status": "Статус",
+    "description": "Опис",
+    "date": "Дата"
   },
   "comments": {
     "addComment": "Додати коментар",

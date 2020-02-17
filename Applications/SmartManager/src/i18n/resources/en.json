@@ -152,8 +152,10 @@
     "uploaded": "Upload",
     "sign": "Sign",
     "version": "Version",
-    "kind": "Type",
-    "status": "Status"
+    "type": "Type",
+    "status": "Status",
+    "description": "Description",
+    "date": "Date"
   },
   "comments": {
     "addComment": "Add comment",

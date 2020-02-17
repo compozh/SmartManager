@@ -152,8 +152,10 @@
     "uploaded": "Загружено",
     "sign": "Подпись",
     "version": "Версия",
-    "kind": "Вид",
-    "status": "Статус"
+    "type": "Тип",
+    "status": "Статус",
+    "description": "Описание",
+    "date": "Дата"
   },
   "comments": {
     "addComment": "Добавить комментарий",
