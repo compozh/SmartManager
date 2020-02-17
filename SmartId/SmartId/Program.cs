@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+using Shared.DigitalSignature.Middlewares;
 using SmartId.Data;
 
 namespace SmartId
@@ -49,8 +50,11 @@ namespace SmartId
 			}
 		}
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-			Host.CreateDefaultBuilder(args)
+		public static IHostBuilder CreateHostBuilder(string[] args)
+		{
+			return Host.CreateDefaultBuilder(args)
+				// Загружаем библиотеки ЭЦП
+				.LoadIitLibrary()
 				.ConfigureAppConfiguration((context, config) =>
 				{
 					// добавляем опциональный файл настроек приложения для описания апи и клиентов
@@ -61,5 +65,6 @@ namespace SmartId
 					webBuilder.UseStartup<Startup>();
 					webBuilder.UseSerilog();
 				});
+		}
 	}
 }

@@ -139,7 +139,7 @@ namespace SmartId.Controllers
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme).ConfigureAwait(false);
 
             // retrieve return URL
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+            var returnUrl = result.Properties.Items.ContainsKey("returnUrl") ? result.Properties.Items["returnUrl"] : "~/";
 
             // проверить, находится ли внешний логин в контексте запроса OIDC
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
@@ -220,7 +220,7 @@ namespace SmartId.Controllers
             var claims = externalUser.Claims.ToList();
             claims.Remove(userIdClaim);
 
-            var provider = result.Properties.Items["scheme"];
+            var provider = result.Properties.Items.ContainsKey("scheme") ? result.Properties.Items["scheme"] : result.Properties.Items[".AuthScheme"];
             var providerUserId = userIdClaim.Value;
 
             // пытаемся найти пользователя по логину
@@ -270,6 +270,7 @@ namespace SmartId.Controllers
             {
                 filtered.Add(new Claim(JwtClaimTypes.Email, email));
             }
+            filtered.AddRange(claims.Where(i => new[] { "issuercn", "serial", "edrpoucode", "drfocode", "o", "state", "locality", "subjectcn" }.Contains(i.Type)));
 
             var user = new SmartIdUser
             {

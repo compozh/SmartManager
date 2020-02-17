@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.DigitalSignature.Authentication;
+using SmartId.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +21,16 @@ namespace SmartId.Extensions
 			var configuration = provider.GetService<IConfiguration>();
 			if (configuration["Authentication:Google:ClientId"] != null)
 			{
-				builder.AddGoogle(o =>
+				builder.AddGoogle(options =>
 				{
-					o.ClientId = configuration["Authentication:Google:ClientId"];
-					o.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+					options.ClientId = configuration["Authentication:Google:ClientId"];
+					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+				});
+			}
+			if (configuration.GetValue<bool>("Authentication:QesdUA"))
+			{
+				builder.AddQesdAuthentication(options => {
+					options.AuthorizationEndpoint = "/qesd/sign";
 				});
 			}
 			return builder;
