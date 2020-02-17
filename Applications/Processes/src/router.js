@@ -20,7 +20,7 @@ const router = new VueRouter({
         {
           path: '/:id',
           name: 'process-form-page',
-          component: () => import('./pages/ProcessForm.vue'),
+          component: () => import('./pages/Process.vue'),
           caseSensitive: false
         }
       ]

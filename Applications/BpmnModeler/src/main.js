@@ -25,7 +25,14 @@ import router from './router';
 const config = window.config;
 import App from './App.vue';
 
-auth.config(config.GrapgQlUrl);
+auth.config({
+  baseUrl: config.GrapgQlUrl,
+  onError: error => {
+    if (error.response && error.response.status == 400) {
+      store.dispatch('auth/logout');
+    }
+  }
+});
 // объект с зависимостями
 let dependencies = {
   store,
@@ -56,6 +63,7 @@ Vue.use(Eds, { dependencies });
 
 var formioOptions = {
   auth,
+  WsUrl: config.WsUrl,
   routerDependencies: () => router,
   GraphQlUrl: config.GrapgQlUrl,
   onError: ({ message, networkError }) => {
