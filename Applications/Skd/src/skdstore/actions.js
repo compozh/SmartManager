@@ -10,6 +10,7 @@ export default {
     if (router.currentRoute.name !== 'SKDLOGIN') {
       router.push({name: 'SKDLOGIN'})
     }
+    commit('setLoginStatus', null)
   },
   async login({commit, state}, {login, password, remember}) {
     if (state.user) {

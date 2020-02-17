@@ -1,120 +1,100 @@
 <template>
-	<v-layout>  
-		<v-flex v-if='!$vuetify.breakpoint.mdAndDown && users_list' offset-lg2 lg8>
-			<div v-for='(item, index) in SlicedItems' :key='index'>
-				<v-flex row wrap >
-					<span class="group-item">{{item.group}}</span>
-					<div v-for='(user, index) in item.users' :key='index'>
-						<desktop-mode-component :user='user'></desktop-mode-component>
-					</div>
-				</v-flex>
-			</div>
-		</v-flex>
-		<v-flex v-if='$vuetify.breakpoint.mdAndDown && users_list'>
-			<div v-for='(item, index) in SlicedItems' :key='index'>
-				<v-flex row wrap >
-           <pull-to-component :top-load-method="fetchUsers"
-                              :top-config="pullToConfig">
-            <div v-for='(user, index) in item.users' :key='index'>
-              <mobile-mode-component :user='user'></mobile-mode-component>
-            </div>
-           </pull-to-component>
-				</v-flex>
-			</div>
-		</v-flex>
-	</v-layout>
+  <v-layout>
+    <v-flex v-if="!$vuetify.breakpoint.mdAndDown && users_list" offset-lg2 lg8>
+      <div v-for="(item, index) in SlicedItems" :key="index">
+        <v-flex row wrap>
+          <span class="group-item">{{item.group}}</span>
+          <div v-for="(user, index) in item.users" :key="index">
+            <desktop-mode-component :user="user"></desktop-mode-component>
+          </div>
+        </v-flex>
+      </div>
+    </v-flex>
+    <v-flex v-if="$vuetify.breakpoint.mdAndDown && users_list">
+      <div v-for="(item, index) in SlicedItems" :key="index">
+        <v-flex row wrap>
+          <span v-if="item.group" class="group-item-mobile">{{item.group}}</span>
+          <div v-for="(user, index) in item.users" :key="index">
+            <mobile-mode-component :user="user"></mobile-mode-component>
+          </div>
+        </v-flex>
+      </div>
+    </v-flex>
+  </v-layout>
 </template>
 <script>
-import mobileModeComponent from './MobileMode/MobileMode'
-import desktopModeComponent from './DesktopMode/DesktopMode'
-import PullTo from 'vue-pull-to'
+import mobileModeComponent from "./MobileMode/MobileMode";
+import desktopModeComponent from "./DesktopMode/DesktopMode";
 export default {
-  name: 'skd-list',
+  name: "skd-list",
   components: {
-    'desktop-mode-component': desktopModeComponent,
-    'mobile-mode-component': mobileModeComponent,
-    'pull-to-component': PullTo 
+    "desktop-mode-component": desktopModeComponent,
+    "mobile-mode-component": mobileModeComponent
   },
-  data: () => ({
-    pagSync: {
-      rowsPerPage: -1
-    },
-    pullToConfig: {
-      pullText: 'Обновить список', // The text is displayed when you pull down
-      triggerText: 'Отпустите, что бы обновить список', // The text that appears when the trigger distance is pulled down
-      loadingText: 'Обновление...', // The text in the load
-      doneText: 'Готово', // Load the finished text
-      failText: '', // Load failed text
-      loadedStayTime: 400, // Time to stay after loading ms
-      stayDistance: 50, // Trigger the distance after the refresh
-      triggerDistance: 70 // Pull down the trigger to trigger the distance
-    }
-  }),
   computed: {
     users_list() {
-      if (!this.$store.getters['skd/getGroupedUserList']) {
-        return null
+      if (!this.$store.getters["skd/getGroupedUserList"]) {
+        return null;
       }
-      return this.$store.getters['skd/getGroupedUserList']
+      return this.$store.getters["skd/getGroupedUserList"];
     },
-    ItemsOffset () {
-      return this.$store.getters['skd/getItemsOffset']
+    ItemsOffset() {
+      return this.$store.getters["skd/getItemsOffset"];
     },
     SlicedItems() {
-      let grouped
-      let itemsenp = []
-      let insideCounter = 0
+      let grouped;
+      let itemsenp = [];
+      let insideCounter = 0;
       if (!this.users_list) {
-        return itemsenp
+        return itemsenp;
       }
       for (var i = 0; i < this.users_list.length; i++) {
-        let listUsers = []
+        let listUsers = [];
         for (var j = 0; j < this.users_list[i].users.length; j++) {
-          listUsers.push(this.users_list[i].users[j])
-          if (insideCounter == this.ItemsOffset ) {
-            break
+          listUsers.push(this.users_list[i].users[j]);
+          if (insideCounter == this.ItemsOffset) {
+            break;
           }
-          insideCounter++
+          insideCounter++;
         }
-        grouped = { group: this.users_list[i].group, users: listUsers }
-        itemsenp.push(grouped)
-        if (insideCounter == this.ItemsOffset ) {
-          break
+        grouped = { group: this.users_list[i].group, users: listUsers };
+        itemsenp.push(grouped);
+        if (insideCounter == this.ItemsOffset) {
+          break;
         }
       }
-      return itemsenp
+      return itemsenp;
     }
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('skd/setItemsOffset', 20)
+      this.$store.dispatch("skd/setItemsOffset", 20);
     },
-    fetchUsers(loaded) {      
-      this.$store.dispatch('skd/getUsers')
-        .then(() => {
-          loaded('done')
-        }) 
-    }
   },
   created: function() {
-    this.$store.dispatch('skd/getUsers')
+    this.$store.dispatch("skd/getUsers");
   },
   mounted() {
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (
         window.scrollY + window.innerHeight >=
         window.document.body.scrollHeight - 180
       ) {
-        this.loadMore()
+        this.loadMore();
       }
-    })
-  },
-}
+    });
+  }
+};
 </script>
 <style scoped>
-.group-item{
+.group-item {
   margin-left: 10px;
   font-weight: 600;
   font-size: 16px;
+}
+.group-item-mobile {
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: 1.2em;
 }
 </style>
