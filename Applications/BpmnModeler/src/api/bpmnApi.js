@@ -398,6 +398,34 @@ export class BpmnModelerApi {
 
   //#endregion
 
+  //#region BusinessObjects
+
+  async getBusinessObjects(onlySystem) {
+    const result = await query({
+      query: gql`query ($onlySystem: Boolean!) ${queries.businessObjects}`,
+      variables: { onlySystem }
+    });
+    return result.data.bpmnquery.businessObjects;
+  }
+
+  async getBusinessObjectActions(boDefCode, onlySystem) {
+    const result = await query({
+      query: gql`query ($boDefCode: String!, $onlySystem: Boolean!) ${queries.businessObjectActions}`,
+      variables: { boDefCode, onlySystem }
+    });
+    return result.data.bpmnquery.businessObjectActions;
+  }
+
+  async getBusinessObjectAccess(boDefCode, onlySystem) {
+    const result = await query({
+      query: gql`query ($boDefCode: String!, $onlySystem: Boolean!) ${queries.businessObjectAccess}`,
+      variables: { boDefCode, onlySystem }
+    });
+    return result.data.bpmnquery.businessObjectAccess;
+  }
+
+  //#endregion
+
 }
 
 export const api = new BpmnModelerApi();
