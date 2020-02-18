@@ -1,64 +1,137 @@
 <template>
   <div class="relative">
     <div class="vx-navbar-wrapper">
-      <vs-navbar class="vx-navbar navbar-custom" :color="navbarColor" :class="classObj">
-        <!-- SM - OPEN SIDEBAR BUTTON -->
-        <feather-icon
-          class="sm:inline-flex xl:hidden cursor-pointer mr-4"
-          icon="MenuIcon"
-          @click.stop="showSidebar"
-        ></feather-icon>
+      <vs-navbar class="vx-navbar navbar-custom flex flex-col"
+                 :color="navbarColor"
+                 :class="classObj">
+        <div class="flex w-full h-8 justify-between items-center">
+          <!-- SM - OPEN SIDEBAR BUTTON -->
+          <feather-icon
+            class="sm:inline-flex xl:hidden cursor-pointer mr-4"
+            icon="MenuIcon"
+            @click.stop="showSidebar"
+          ></feather-icon>
 
-        <div v-if="$route.name === 'task-add'" class="text-primary truncate">
-          <i18n v-if="$route.params.id"
-                path="tasks.newSubTask" tag="div" class="truncate">
-            <template v-slot:task>
-              <span class="text-success">"{{ task.name }}"</span>
-            </template>
-          </i18n>
-
-          <i18n v-if="$route.params.bindCaseId"
-                path="tasks.newTaskForCase" tag="div" class="truncate">
-            <template v-slot:case>
-              <span class="text-success">"{{ $route.params.bindCaseName }}"</span>
-            </template>
-          </i18n>
-
-          <span v-if="!$route.params.id && !$route.params.bindCaseId">
+          <span v-if="$route.name === 'task-add'
+                      && !$route.params.taskId
+                      && !$route.params.bindCaseId"
+                class="text-primary truncate">
               {{ $t('tasks.newTask') }}</span>
-        </div>
 
-        <span v-if="/task\/\d+\/edit/.test($route.path)"
-              class="text-primary truncate">
+          <span v-if="/task\/\d+\/edit/.test($route.path)"
+                class="text-primary truncate">
             {{ $t('tasks.edit') }}</span>
 
-        <span v-if="$route.name === 'case-add'"
-              class="text-primary truncate">
+          <span v-if="$route.name === 'case-add'"
+                class="text-primary truncate">
             {{ $t('cases.newCase') }}</span>
 
-        <span v-if="/case\/\d+\/edit/.test($route.path)"
-              class="text-primary truncate">
+          <span v-if="/case\/\d+\/edit/.test($route.path)"
+                class="text-primary truncate">
             {{ $t('cases.edit') }}</span>
 
-        <span v-if="$route.name === 'work-flow'"
-              class="text-primary truncate">
+          <span v-if="$route.name === 'work-flow'"
+                class="text-primary truncate">
             {{ $t('workflow.newBusinessProcess') }}</span>
 
-        <VuePerfectScrollbar class=flex :settings="settings">
+          <!-- BREADCRUMB -->
+          <vx-breadcrumb v-if="$route.meta.breadcrumb"/>
+          <vs-spacer class="hidden"></vs-spacer>
+
+          <!-- USER PANEL -->
+            <div class="the-navbar__user-meta flex items-center ">
+              <div class="text-right leading-tight
+                      xl:block lg:hidden md:hidden sm:hidden xs:hidden">
+                <p class="text-sm font-semibold">{{ userName }}</p>
+              </div>
+              <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+                <div class="con-img ml-3">
+                  <vs-avatar class="rounded-full cursor-pointer block m-0"
+                             :src="userPhoto"
+                             size="30px"/>
+                </div>
+                <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
+                  <div class="ml-3 leading-tight xl:hidden">
+                    <p class="font-semibold">{{ userName }}</p>
+                  </div>
+                  <vs-dropdown-group vs-collapse
+                                     vs-label="Делегированные права"
+                                     vs-icon="expand_more">
+                    <vs-dropdown-item v-for="rights in delegatedRights"
+                                      :key="rights.ID"
+                                      @click="applyDelegatedRights(rights.USERID)">
+                      <span :class="{'font-semibold': rights.IsActive}">{{ rights.USERNAME }}</span>
+                    </vs-dropdown-item>
+                    <vs-dropdown-item divider @click="setDelegation">
+                      Делегировать права
+                    </vs-dropdown-item>
+
+                  </vs-dropdown-group>
+
+                  <vs-dropdown-item divider @click="logout">
+                    <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
+                    {{ $t('buttons.logout') }}
+                  </vs-dropdown-item>
+                </vs-dropdown-menu>
+              </vs-dropdown>
+            </div>
+            <!-- I18N -->
+            <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+          <span class="cursor-pointer flex i18n-locale ml-3">
+           {{ getCurrentLocaleData.flag.toUpperCase() }}
+          </span>
+              <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
+                <vs-dropdown-item v-for="lang in localizations"
+                                  :key="lang.code"
+                                  @click="updateLocale(lang.code)"
+                                  :class="{'font-semibold': lang.code === getCurrentLocaleData.flag}">
+                  {{lang.flag.toUpperCase()}} ({{lang.name}})
+                </vs-dropdown-item>
+              </vs-dropdown-menu>
+            </vs-dropdown>
+        </div>
+        <vs-divider></vs-divider>
+
+        <div class="flex w-full h-8">
+          <div v-if="$route.name === 'task-add'" class="text-primary truncate -ml-4">
+            <i18n v-if="$route.params.taskId"
+                  path="tasks.newSubTask" tag="div" class="truncate">
+              <template v-slot:task>
+                <span class="text-success">"{{ task.name }}"</span>
+              </template>
+            </i18n>
+
+            <i18n v-if="$route.params.bindCaseId"
+                  path="tasks.newTaskForCase" tag="div" class="truncate">
+              <template v-slot:case>
+                <span class="text-success">"{{ $route.params.bindCaseName }}"</span>
+              </template>
+            </i18n>
+          </div>
+
+          <span v-if="/task\/\d+\/edit/.test($route.path)"
+                class="text-primary text-sm truncate">
+            {{ task.name }}</span>
+
+          <span v-if="/case\/\d+\/edit/.test($route.path)"
+                class="text-primary text-sm truncate">
+            {{ caseItem.name }}</span>
 
             <!-- CREATE TASK BUTTON -->
-            <vs-button v-if="taskView || taskList"
+            <vs-button v-if="taskDetails || taskList"
                        icon="library_add"
                        color="primary"
                        type="flat"
-                       class="px-3 mr-2 fit"
+                       size="small"
+                       class="px-3 mr-2 fit -ml-3"
                        to="/task-add"
             >{{ $t('buttons.addTask') }} </vs-button>
 
-            <vs-button v-if="taskView && externalTaskCamunda && userIsPerformer"
+            <vs-button v-if="taskDetails && externalTaskCamunda && userIsPerformer"
                        icon="done"
                        color="success"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        @click="changeStatus('+')"
             >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
@@ -69,7 +142,8 @@
                        icon="library_add"
                        color="primary"
                        type="flat"
-                       class="px-3 mr-2 fit"
+                       size="small"
+                       class="px-3 mr-2 fit -ml-3"
                        to="/case-add"
             >{{ $t('buttons.addCase') }}
             </vs-button>
@@ -78,6 +152,7 @@
                        icon="launch"
                        color="success"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        to="/work-flow"
             >{{ $t('buttons.startWorkflow') }}
@@ -87,17 +162,19 @@
                        icon="settings_backup_restore"
                        color="warning"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        @click="changeStatus('')"
             >{{ $t('buttons.returnToWork') }}
             </vs-button>
             <!-- APPROVE/FORVARD DROPDOWN BUTTON -->
-            <div class="flex fit" v-if="taskView && agreeTaskInWork">
+            <div class="flex fit" v-if="taskDetails && agreeTaskInWork">
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button icon="expand_more"
                            color="success"
                            class="px-3 btn-drop-approve"
                            type="flat"
+                           size="small"
                 >{{ buttonApprove }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -114,6 +191,7 @@
                            color="danger"
                            class="px-3 btn-drop-reject"
                            type="flat"
+                           size="small"
                 >{{ buttonReject }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -127,12 +205,13 @@
               </vs-dropdown>
             </div>
             <!-- REJECT/BACK DROPDOWN BUTTON -->
-            <div class="flex fit" v-if="taskView && workFlowTaskInWork">
+            <div class="flex fit" v-if="taskDetails && workFlowTaskInWork">
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button icon="expand_more"
                            color="success"
                            class="px-3 btn-drop-approve"
                            type="flat"
+                           size="small"
                 >{{ buttonForward }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -149,6 +228,7 @@
                            color="danger"
                            class="px-3 btn-drop-reject"
                            type="flat"
+                           size="small"
                 >{{ buttonBack }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -167,6 +247,7 @@
                        icon="done"
                        color="success"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        @click="changeStatus('+')"
             >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
@@ -176,6 +257,7 @@
                        icon="star"
                        color="warning"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        @click="taskPin(true)"
             >{{ $t('buttons.pin') }}
@@ -185,6 +267,7 @@
                        icon="star_border"
                        color="danger"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        @click="taskPin(false)"
             >{{ $t('buttons.unpin') }}
@@ -194,6 +277,7 @@
                        icon="edit"
                        color="dark"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        :to="$route.path + '/edit'"
             >{{ $t('buttons.edit') }}
@@ -203,67 +287,59 @@
                        icon="delete_forever"
                        color="danger"
                        type="flat"
+                       size="small"
                        class="px-3 mr-2 fit"
                        @click="confirmDelete"
             >{{ $t('buttons.delete') }}
             </vs-button>
 
-        </VuePerfectScrollbar>
+          <!-- ATTACHMENT BUTTONS -->
+          <div class="flex -ml-3" v-if="attachmentView">
+            <vs-button icon="library_add"
+                       color="primary"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.addAttachment') }} </vs-button>
 
-        <vs-spacer class="hidden"></vs-spacer>
+            <vs-button icon="delete"
+                       color="danger"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+            >{{ $t('buttons.deleteAttachment') }} </vs-button>
 
-        <!-- USER PANEL -->
-        <div class="the-navbar__user-meta flex items-center">
-          <div class="text-right leading-tight
-                      xl:block lg:hidden md:hidden sm:hidden xs:hidden">
-            <p class="font-semibold">{{ userName }}</p>
+            <vs-button icon="cloud_download"
+                       color="success"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+                       :href="currentAttachment.url"
+            >{{ $t('buttons.downloadAttachment') }} </vs-button>
+
+            <vs-button icon="library_books"
+                       color="warning"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+                       :to="{name: 'versions'}"
+            >{{ $t('buttons.attachmentVersions') }} </vs-button>
+
+            <vs-button icon="assignment"
+                       color="dark"
+                       type="flat"
+                       size="small"
+                       class="px-3 mr-2 fit"
+                       @click="$store.commit('sm/TOGGLE_EDS_POPUP', true)"
+            >{{ $t('buttons.attachmentEds') }} </vs-button>
+
           </div>
-          <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-            <div class="con-img ml-3">
-              <vs-avatar class="rounded-full shadow-md cursor-pointer block m-0 hover:shadow-2xl"
-                         :src="userPhoto"
-                         size="40px"/>
-            </div>
-            <vs-dropdown-menu class="vx-navbar-dropdown whitespace-no-wrap">
-              <div class="ml-3 leading-tight xl:hidden">
-                <p class="font-semibold">{{ userName }}</p>
-              </div>
-
-              <vs-dropdown-group vs-collapse
-                                 vs-label="Делегированные права"
-                                 vs-icon="expand_more">
-                <vs-dropdown-item v-for="rights in delegatedRights"
-                                  :key="rights.ID"
-                                  @click="applyDelegatedRights(rights.USERID)">
-                  <span :class="{'font-semibold': rights.IsActive}">{{ rights.USERNAME }}</span>
-                </vs-dropdown-item>
-                <vs-dropdown-item divider @click="setDelegation">
-                  Делегировать права
-                </vs-dropdown-item>
-
-              </vs-dropdown-group>
-
-              <vs-dropdown-item divider @click="logout">
-                <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"/>
-                {{ $t('buttons.logout') }}
-              </vs-dropdown-item>
-            </vs-dropdown-menu>
-          </vs-dropdown>
+          <vs-spacer></vs-spacer>
+          <vs-button type="flat" class="flex items-center p-0">
+            <vs-icon size="small" icon="more_vert" class="p-0"></vs-icon>
+          </vs-button>
         </div>
-        <!-- I18N -->
-        <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-          <span class="cursor-pointer flex i18n-locale ml-3">
-           {{ getCurrentLocaleData.flag.toUpperCase() }}
-          </span>
-          <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-            <vs-dropdown-item v-for="lang in localizations"
-                              :key="lang.code"
-                              @click="updateLocale(lang.code)"
-                              :class="{'font-semibold': lang.code === getCurrentLocaleData.flag}">
-              {{lang.flag.toUpperCase()}} ({{lang.name}})
-            </vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
+
       </vs-navbar>
     </div>
     <vs-prompt :title="$t('comments.addComment')"
@@ -285,16 +361,12 @@
 <script>
 
 import templateConfig from '@/templateConfig'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import 'swiper/dist/css/swiper.min.css'
 import {eventBus} from '@/main'
 import {mapGetters} from 'vuex'
 
 export default {
   name: 'the-navbar',
-  components: {
-    VuePerfectScrollbar
-  },
   props: {
     navbarColor: {
       type: String,
@@ -324,12 +396,12 @@ export default {
       'delegatedRights'
     ]),
     task() {
-      const id = +this.$route.params.id
+      const id = +this.$route.params.taskId
       const task = this.$store.state.sm.taskInfo[id]
       return task ? task : {}
     },
     caseItem() {
-      const id = +this.$route.params.id
+      const id = +this.$route.params.caseId
       const caseItem = this.$store.state.sm.caseDetails[id]
       return caseItem ? caseItem : {}
     },
@@ -341,6 +413,9 @@ export default {
     },
     taskType() {
       return this.task.taskType
+    },
+    currentAttachment() {
+      return this.$store.state.sm.attachments.currentAttachment || {}
     },
     taskInWork() {
       return this.taskStatus === ''
@@ -355,8 +430,8 @@ export default {
     taskList() {
       return this.$route.name === 'task-list'
     },
-    taskView() {
-      return this.$route.name === 'task-view'
+    taskDetails() {
+      return this.$route.name === 'task-details'
     },
     caseList() {
       return this.$route.name === 'case-list'
@@ -365,7 +440,11 @@ export default {
       return this.$route.name === 'case-view'
     },
     taskOrCaseView() {
-      return this.taskView || this.caseView
+      return this.taskDetails || this.caseView
+    },
+    attachmentView() {
+      return this.$route.name === 'task-attachment'
+             || this.$route.name === 'case-attachment'
     },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork() {
@@ -397,7 +476,7 @@ export default {
           && this.userId === this.caseItem.userAdd
     },
     allowedTaskEdit() {
-      return this.$route.name === 'task-view'
+      return this.$route.name === 'task-details'
           && this.internalTaskInWork
           && this.userId === this.task.declarerId
     },
@@ -486,7 +565,7 @@ export default {
       })
     },
     async changeStatus(status) {
-      if (this.$route.name === 'task-view') {
+      if (this.$route.name === 'task-details') {
         eventBus.$emit('changeStatus', {
           type: 'TASK',
           id: this.task.id,
@@ -544,8 +623,24 @@ export default {
 
 <style scoped>
 
+  .vs-navbar {
+
+  }
+
+  .vs-navbar >>> .vs-con-items {
+    flex-direction: column;
+  }
+
+  .vs-divider {
+    margin: .25em 0;
+  }
+
   .fit {
     min-width: max-content;
+  }
+
+  .vs-button >>> .vs-button-text {
+    display: flex !important;
   }
 
   button:hover > .btn-drop-approve {
