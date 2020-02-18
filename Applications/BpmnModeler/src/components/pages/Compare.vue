@@ -82,7 +82,9 @@ export default {
         let  overlayHtml;
         switch (elem.constructor.name) {
         case 'Shape':
-          overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${elem.width + 10}px; height: ${elem.height + 10}px" ><span class="v-icon mdi ${icon} black--text compare-icon" style="right: -${elem.width / 2 + 5}px"></span></div>`;
+          overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${elem.width + 10}px; height: ${elem.height + 10}px" >
+                          <span class="v-icon mdi ${icon} black--text compare-icon" style="right: -${elem.width / 2 + 5}px" title="${type.substr(1)}"></span>
+                        </div>`;
           break;
         case 'Connection':
           let polylines = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
@@ -95,7 +97,7 @@ export default {
           overlayHtml = `<div class="${elem.id}"></div>`;
           break;
         default:
-          
+          overlayHtml = `<div></div>`;
           break;
         }
        
@@ -134,7 +136,7 @@ export default {
           let color, icon;
           switch (item[0]) {
           case '_layoutChanged':
-            color = 'yellow';
+            color = 'blue';
             icon = 'mdi-pencil';
             break;
           case '_changed':
@@ -214,8 +216,8 @@ export default {
     background-color: rgba($color: green, $alpha: 0.2)
   }
   .layoutChanged {
-    border: 2px solid yellow;
-    background-color: rgba($color: yellow, $alpha: 0.2)
+    border: 2px solid blue;
+    background-color: rgba($color: blue, $alpha: 0.2)
   }
   .changed {
     border: 2px solid orange;

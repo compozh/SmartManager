@@ -197,9 +197,6 @@ export default {
     }
     Object.assign(folder, newFolder);
     
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
-  
     return true;
   },
   async editFolder(context, { id, name }) {

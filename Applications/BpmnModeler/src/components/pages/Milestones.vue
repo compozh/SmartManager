@@ -94,15 +94,14 @@ export default {
   filters: {
     formatDate(value) {
       if (value) {
-        moment.locale('ru');
+        let spliter = localStorage.language == 'uk' ? ' о' : localStorage.language == 'ru' ? ',' : 'at'
         return moment(value).calendar(null, {
           sameElse: 'DD MMMM YYYY'
-        }).split(',')[0];
+        }).split(spliter)[0];
       }
     },
     formatTime(value) {
       if (value) {
-        moment.locale('ru');
         return moment(value).format('HH:mm');
       }
     },

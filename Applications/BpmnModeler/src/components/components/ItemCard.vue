@@ -41,7 +41,6 @@ export default {
   filters: {
     formatDate: (value) => {
       if (value) {
-        moment.locale('ru');
         return moment(value).calendar(null, {
           sameElse: 'DD MMMM YYYY'
         });

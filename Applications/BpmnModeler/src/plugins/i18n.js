@@ -6,14 +6,18 @@ import uk from './resources/uk.json';
 
 Vue.use(VueI18n);
 
-const defaultLang = 'ru';
+// const defaultLang = 'ru';
+let language = window.navigator ? (window.navigator.language ||
+  window.navigator.systemLanguage ||
+  window.navigator.userLanguage) : "ru";
+language = language.substr(0, 2).toLowerCase();
 
 export const currentLang = () => {
   if (localStorage.language) {
     return localStorage.language;
   }
-  localStorage.language = defaultLang;
-  return defaultLang;
+  localStorage.language = language;
+  return language;
 };
 
 export const i18n = new VueI18n({

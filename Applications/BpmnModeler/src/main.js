@@ -21,8 +21,10 @@ import '@mdi/font/css/materialdesignicons.min.css';
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
 
 import router from './router';
+import moment from 'moment';
 // import config from './config'
 const config = window.config;
+moment.locale(localStorage.language);
 import App from './App.vue';
 
 auth.config(config.GrapgQlUrl);

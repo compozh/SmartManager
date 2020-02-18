@@ -186,12 +186,6 @@
         </v-menu>
       </template>
 
-      <v-list-item v-if="!canEdit(item) && !canShare(item)">
-        <v-list-item-avatar>
-          <v-icon>mdi-close</v-icon>
-        </v-list-item-avatar>
-        <v-list-item-title>{{ $t('bpmn.errors.Er403') }}</v-list-item-title>
-      </v-list-item>
     </v-list>
   </v-menu>
 </template>
@@ -221,7 +215,7 @@ export default {
   },
   methods: {
     compare(item1, item2) {
-      item2 = '';
+      item2 = '1c67ec53-cc27-4d10-9171-1610d595b23f';
       this.$emit('compare', item1.id || item1, item2.id || item2);
     },
     addFolder(item) {

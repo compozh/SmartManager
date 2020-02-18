@@ -9,7 +9,9 @@
         <div v-if="crumbs.item.id" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}" >
           {{ crumbs.item.name }}
         </div>
-        <bpmn-contex-menu :item="item()" v-if="crumbs.item.id == $route.params.id && item() && $route.name != 'milestones' && $route.name != 'compare'"
+        <bpmn-contex-menu :item="item()"
+          v-if="crumbs.item.id == $route.params.id && $route.name != 'milestones' && $route.name != 'compare' 
+          && canEdit(item()) && canShare(item())"
           @edit="editItem" :crumb="true"
           @remove="removeItem" 
           @export="exportItem"
@@ -31,6 +33,7 @@ import { formMixin } from '../mixins';
 import { events } from '../../constants';
 import { eventBus } from '../../main';
 import treeSearch from '../../api/treeSearch';
+import * as Models from '../../api/models';
 
 export default {
   name: 'breadcrumbs',
@@ -93,7 +96,14 @@ export default {
     },
   },
   methods: {
-    
+    canShare(item) {
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Share);
+    },
+    canEdit(item) {
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Write);
+    },
     exportItem(item, type) {
       eventBus.$emit(events.modeler.export, type);
     },

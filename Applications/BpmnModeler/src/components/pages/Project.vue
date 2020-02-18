@@ -12,10 +12,10 @@
           <!-- <v-btn  class="add-btn" @click="importItem(item)">
             {{ $t('bpmn.buttons.Import') }}
           </v-btn> -->
-          <v-btn  class="add-btn mx-2" @click="addProcess()" :disabled="!canEdit()">
+          <v-btn  class="add-btn mx-2" @click="addProcess()" v-if="canEdit()">
             {{ $t('bpmn.buttons.AddProcess') }}
           </v-btn>
-          <v-btn  class="add-btn"  @click="addFolder()" :disabled="!canEdit()">
+          <v-btn  class="add-btn"  @click="addFolder()" v-if="canEdit()">
             {{ $t('bpmn.buttons.AddFolder') }}
           </v-btn>
           <v-text-field dense

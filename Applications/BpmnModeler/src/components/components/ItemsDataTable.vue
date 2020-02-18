@@ -47,7 +47,7 @@
               @remove="removeItem" 
               offset>
             <template #activator="{ open }">
-              <v-btn icon class="options"  @click="ev => ev.stopPropagation()" v-on="open">
+              <v-btn icon class="options"  @click="ev => ev.stopPropagation()" v-on="open" v-if="canEdit(item) && canShare(item)">
                 <v-icon size="20">mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       users: [],
-      colors: []
+      colors: {},
     };
   },
   props: {
@@ -79,7 +79,6 @@ export default {
   filters: {
     formatDate(value) {
       if (value) {
-        moment.locale('ru');
         return moment(value).format('DD MMMM  YYYY HH:mm');
       }
     },
@@ -88,6 +87,14 @@ export default {
     }
   },
   methods: {
+    canShare(item) {
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Share);
+    },
+    canEdit(item) {
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Write);
+    },
     openProject(el) {
       this.active = el;
     },
@@ -99,14 +106,14 @@ export default {
         return this.$t('bpmn.labels.You');
       }
     
-      if (this.users.length == 0 || !this.users) { return userId; }
+      if (this.users.length == 0 ) { return userId; }
       let user = this.users.find( user => user.id == userId ),
         result = user ? user.name : userId;
       return result;
     },
     async getAccessRecords(item) {
       let res;
-      if (!item.hasRight(Models.AccessRights.Share)) {
+      if (!this.canShare(item)) {
         res =  null;
       } else {
         let [params] = await this.$store.dispatch('bpmn/getAccessRecordsForFolder', item.id);
@@ -120,7 +127,12 @@ export default {
           let rgb = `rgb(${r}, ${g},${b})`;
           return rgb ;
         };
-        item.color = item.color ? item.color : color();
+        if(!item.color && !Object.keys(this.colors).find(el => el == res)) {
+          item.color = color();
+          this.colors[res] = item.color
+        } else {
+          item.color = this.colors[res]
+        }
       }
      
       item.access = res;
