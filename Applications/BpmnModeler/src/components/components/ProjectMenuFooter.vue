@@ -111,8 +111,7 @@ export default {
         success = success.every( el => el);
         if (success) {
           this.choose = [];
-          await this.$store.dispatch('bpmn/resetCache');
-          await this.$store.dispatch('bpmn/loadItems');
+          await this.$store.dispatch('bpmn/loadItems', true);
           this.closeExpl();
         } else {
           Notification.error(this.$t('bpmn.errors.CantDrop'));

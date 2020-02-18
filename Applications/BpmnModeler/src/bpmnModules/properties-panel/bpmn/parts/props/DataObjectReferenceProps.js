@@ -1,7 +1,4 @@
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil';
-import eventDefinitionHelper from '../../helpers/EventDefinitionHelper';
-import elementHelper from '../../helpers/ElementHelper';
 import * as cmdHelper from '../../helpers/CmdHelper';
 import { PropertiesPanelGroup } from '../../../Models';
 import EntryFactory from '../../../EntryFactory';
@@ -19,7 +16,7 @@ import { Diagram } from '../../../../../api/models';
  * @param {Object} elementRegistry
  * @param {Function} translate 
  */
-export default function addDataObjectReferenceProps(group, diagram, element, entryFactory, translate) {
+export default function addDataObjectReferenceProps(group, diagram, element, entryFactory, commandStack, translate) {
 
   if (!is(element, 'bpmn:DataObjectReference')) {
     return;
@@ -34,10 +31,17 @@ export default function addDataObjectReferenceProps(group, diagram, element, ent
 
   group.entries.push(entryFactory.autocompleteBox({
     id: 'boReference',
-    label: translate('BusinessObject'),
+    label: translate('Business Object'),
     model: 'IT-Enterprise:businessObjectDefinitionCode',
     loadItems: (async () => (await api.getBusinessObjects(diagram.isSystem)).map(e => ({ id: e.boDefCode, name: e.name })))(),
     get: () => reference.get('IT-Enterprise:businessObjectDefinitionCode'),
-    set: (element, value) =>  cmdHelper.updateBusinessObject(element, reference, { 'IT-Enterprise:businessObjectDefinitionCode': value })
+    set: (element, value) => cmdHelper.updateBusinessObject(element, reference, { 'IT-Enterprise:businessObjectDefinitionCode': value }),
+    appendIcon: 'mdi-magnify',
+    append: () => {
+      eventBus.$emit(events.propertiesPanel.selectBusinessObject, reference.get('IT-Enterprise:businessObjectDefinitionCode', diagram.isSystem), (newValue) => {
+        var cmd = cmdHelper.updateBusinessObject(element, reference, { 'IT-Enterprise:businessObjectDefinitionCode': newValue });
+        commandStack.execute(cmd.cmd, cmd.context);
+      });
+    }
   }));
 }

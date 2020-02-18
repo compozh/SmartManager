@@ -16,7 +16,6 @@
     <v-content class="grey lighten-4">
       <v-container fluid class="align-start pa-0 fill-height" >
         <router-view ref="modeler"
-          @loadItems="loadItems"
           :activeItem.sync="activeItem"/>
       </v-container>
     </v-content>
@@ -173,7 +172,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
-      if (from.name === 'login' || from.name === 'decision' || from.name === 'process') {
+      if (from.name === 'login') {
         this.onRouteChanged(true);
       }
     },

@@ -10,6 +10,10 @@ export default {
     eventBus.$on(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
     eventBus.$on(events.propertiesPanel.selectDeployedProcess, this.onPropertiesPanelSelectDeployedProcess);
     eventBus.$on(events.propertiesPanel.selectDeployedDecision, this.onPropertiesPanelSelectDeployedDecision);
+    eventBus.$on(events.propertiesPanel.selectDeployedCase, this.onPropertiesPanelSelectDeployedCase);
+    eventBus.$on(events.propertiesPanel.selectBusinessObject, this.onPropertiesPanelSelectBusinessObject);
+    eventBus.$on(events.propertiesPanel.selectBusinessObjectAccess, this.onPropertiesPanelSelectBusinessObjectAccess);
+    eventBus.$on(events.propertiesPanel.selectBusinessObjectAction, this.onPropertiesPanelSelectBusinessObjectAction);
   },
   beforeDestroy() {
     eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
@@ -17,6 +21,10 @@ export default {
     eventBus.$off(events.propertiesPanel.selectForm, this.onPropertiesPanelSelectFormKey);
     eventBus.$off(events.propertiesPanel.selectDeployedProcess, this.onPropertiesPanelSelectDeployedProcess);
     eventBus.$off(events.propertiesPanel.selectDeployedDecision, this.onPropertiesPanelSelectDeployedDecision);
+    eventBus.$off(events.propertiesPanel.selectDeployedCase, this.onPropertiesPanelSelectDeployedCase);
+    eventBus.$off(events.propertiesPanel.selectBusinessObject, this.onPropertiesPanelSelectBusinessObject);
+    eventBus.$off(events.propertiesPanel.selectBusinessObjectAccess, this.onPropertiesPanelSelectBusinessObjectAccess);
+    eventBus.$off(events.propertiesPanel.selectBusinessObjectAction, this.onPropertiesPanelSelectBusinessObjectAction);
   },
   methods: {
     async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
@@ -104,8 +112,7 @@ export default {
         this.$t('bpmn.labels.SelectProcess'),
         items, items.find(item => item.id === procDefKey),
         (selectedItem) => callback(selectedItem.id));
-    }
-    ,
+    },
     async onPropertiesPanelSelectDeployedDecision(decDefKey, callback) {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getDeployedDecisions');
@@ -122,6 +129,69 @@ export default {
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectDecisionTable'),
         items, items.find(item => item.id === decDefKey),
+        (selectedItem) => callback(selectedItem.id));
+    },
+    async onPropertiesPanelSelectDeployedCase(caseDefKey, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getDeployedCases');
+      if (!items) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
+        return;
+      }
+      this.changeLoad();
+      items = items
+        .map(decision => { return { id: decision.caseDefKey, name: decision.caseName }; })
+        .filter((decision, index, self) => self.findIndex(p => p.id === decision.id) === index);
+      
+      eventBus.$emit(events.modeler.showSelectionGrid,
+        this.$t('bpmn.labels.SelectCase'),
+        items, items.find(item => item.id === caseDefKey),
+        (selectedItem) => callback(selectedItem.id));
+    },
+    async onPropertiesPanelSelectBusinessObject(boDefCode, onlySystem, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getBusinessObjects', onlySystem);
+      if (!items) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
+        return;
+      }
+      this.changeLoad();
+      items = items.map(bo => { return { id: bo.boDefCode, name: bo.name }; });
+      eventBus.$emit(events.modeler.showSelectionGrid,
+        this.$t('bpmn.labels.SelectBusinessObject'),
+        items, items.find(item => item.id === boDefCode),
+        (selectedItem) => callback(selectedItem.id));
+    },
+    async onPropertiesPanelSelectBusinessObjectAction(boDefCode, actDefCode, onlySystem, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getBusinessObjectAction', { boDefCode, onlySystem }, onlySystem);
+      if (!items) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
+        return;
+      }
+      this.changeLoad();
+      items = items.map(bo => { return { id: bo.actionDefCode, name: bo.name }; });
+      eventBus.$emit(events.modeler.showSelectionGrid,
+        this.$t('bpmn.labels.SelectBusinessObjectAction'),
+        items, items.find(item => item.id === actDefCode),
+        (selectedItem) => callback(selectedItem.id));
+    },
+    async onPropertiesPanelSelectBusinessObjectAccess(boDefCode, accDefCode, onlySystem, callback) {
+      this.loading = true;
+      var items = await this.$store.dispatch('bpmn/getBusinessObjectAccess', { boDefCode, onlySystem});
+      if (!items) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
+        return;
+      }
+      this.changeLoad();
+      items = items.map(bo => { return { id: bo.accessDefCode, name: bo.name }; });
+      eventBus.$emit(events.modeler.showSelectionGrid,
+        this.$t('bpmn.labels.SelectBusinessObjectAccess'),
+        items, items.find(item => item.id === accDefCode),
         (selectedItem) => callback(selectedItem.id));
     }
   }
