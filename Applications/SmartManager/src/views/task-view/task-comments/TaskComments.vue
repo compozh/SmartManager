@@ -1,21 +1,14 @@
 <template>
-  <div id="chat-app" class="rounded relative overflow-hidden">
-
+  <div id="chat-app" class="relative">
     <!-- RIGHT COLUMN -->
-    <div
-      class="chat__bg app-fixed-height chat-content-area"
-    >
+    <div class="chat__bg app-fixed-height chat-content-area">
       <template>
-        <VuePerfectScrollbar
-          class="comments-container chat-content-scroll-area"
-          :settings="settings"
-          ref="chatLogPS"
-        >
-          <div
-            v-if="comments.length"
-            class="chat__log"
-            ref="chatLog"
-          >
+        <VuePerfectScrollbar class="comments-container chat-content-scroll-area"
+                             :settings="settings"
+                             ref="chatLogPS">
+          <div v-if="comments.length"
+               class="chat__log"
+               ref="chatLog">
             <task-comments-log :comments="comments"></task-comments-log>
           </div>
           <div v-else class="no-comments flex flex-col items-center">
@@ -24,17 +17,13 @@
           </div>
         </VuePerfectScrollbar>
         <div class="chat__input flex p-4 bg-white">
-          <vs-input
-            class="flex-1"
-            :placeholder="$t('comments.placeholder')"
-            v-model="comment"
-            @keyup.enter="sendMsg"
-          />
-          <vs-button
-            class="bg-primary-gradient ml-4"
-            type="filled"
-            @click="sendMsg"
-          >{{ $t('buttons.send') }}
+          <vs-input class="flex-1"
+                    :placeholder="$t('comments.placeholder')"
+                    v-model="comment"
+                    @keyup.enter="sendMsg"/>
+          <vs-button class="bg-primary-gradient ml-4"
+                     type="filled"
+                     @click="sendMsg">{{ $t('buttons.send') }}
           </vs-button>
         </div>
       </template>
@@ -47,7 +36,6 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import TaskCommentsLog from './TaskCommentsLog.vue'
 
 export default {
-  props: ['task'],
   components: {
     VuePerfectScrollbar,
     TaskCommentsLog,
@@ -59,9 +47,7 @@ export default {
     activeProfileSidebar: false,
     activeChatUser: null,
     userProfileId: -1,
-
     comment: '',
-
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.70,
@@ -69,6 +55,11 @@ export default {
     windowWidth: window.innerWidth,
   }),
   computed: {
+    task() {
+      const id = +this.$route.params.taskId
+      const task = this.$store.state.sm.taskInfo[id]
+      return task ? task : {}
+    },
     comments() {
       return this.task.comments
         ? this.task.comments
@@ -91,7 +82,7 @@ export default {
           comment: this.comment,
           params: {
             type: this.type,
-            id: this.task.id || this.$route.params.id,
+            id: this.task.id || this.$route.params.taskId,
             arso: this.task.arso,
             keyValue: this.task.keyValue,
             kidCopy: this.task.kidCopy

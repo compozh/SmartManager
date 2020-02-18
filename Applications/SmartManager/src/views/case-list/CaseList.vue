@@ -69,10 +69,10 @@ export default {
   computed: {
     cases() {
       const cases = this.$store.getters['sm/cases']
-      if (this.$route.params.id === 'ALL') {
+      if (this.$route.params.folderId === 'all') {
         return cases
       }
-      return cases.filter(i => i.folderId === +this.$route.params.id)
+      return cases.filter(i => i.folderId === +this.$route.params.folderId)
     },
     pages() {
       return this.cases

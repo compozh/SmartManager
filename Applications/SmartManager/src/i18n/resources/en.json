@@ -108,7 +108,13 @@
     "complete": "Complete",
     "yes": "Yes",
     "no": "No",
-    "globalSearch": "Search all documents"
+    "toBack": "Back",
+    "globalSearch": "Search all documents",
+    "addAttachment": "Add",
+    "deleteAttachment": "Delete",
+    "downloadAttachment": "Download",
+    "attachmentVersions": "Versions",
+    "attachmentEds": "EDS"
   },
   "icons": {
     "priority": "High priority",
@@ -143,7 +149,13 @@
   "table": {
     "name": "Name",
     "size": "Size",
-    "uploaded": "Uploaded"
+    "uploaded": "Upload",
+    "sign": "Sign",
+    "version": "Version",
+    "type": "Type",
+    "status": "Status",
+    "description": "Description",
+    "date": "Date"
   },
   "comments": {
     "addComment": "Add comment",
