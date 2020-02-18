@@ -5,10 +5,18 @@ import './registerServiceWorker'
 import Localization from '@it-enterprise/localization'
 import GraphQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
-import auth from '@it-enterprise/jwtauthentication'
 import formio from '@it-enterprise/formio'
 import '@it-enterprise/formio/dist/formio.css'
-auth.config(window.appConfig.GrapgQlUrl)
+import auth from '@it-enterprise/jwtauthentication'
+
+auth.config({
+  baseUrl: window.appConfig.GrapgQlUrl,
+  onError: e => {
+    e.response && e.response.status === 400
+      ? store.dispatch('auth/logout')
+      : console.log(e)
+  }
+})
 
 // vue пакеты
 import Vue from 'vue'

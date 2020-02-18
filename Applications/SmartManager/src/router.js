@@ -16,94 +16,134 @@ let router = new VueRouter({
       children: [
         {
           path: '/',
-          redirect: '/tasks/ALL',
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          redirect: '/tasks/active'
         },
         {
-          path: '/tasks/:code',
+          path: '/tasks/:folderId',
           name: 'task-list',
           component: () => import('./views/task-list/TaskList.vue'),
           meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+            breadcrumb: ['taskFolder']
+          }
         },
         {
-          path: '/task/:id',
+          path: '/task/:taskId',
           name: 'task-view',
+          redirect: '/task/:taskId/details',
           component: () => import('./views/task-view/TaskView.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          children: [
+            {
+              path: 'details',
+              name: 'task-details',
+              component: () => import('./views/task-view/task-details/TaskDetails.vue'),
+              meta: {
+                breadcrumb: ['taskFolder', 'task']
+              }
+            },
+            {
+              path: 'comments',
+              name: 'task-comments',
+              component: () => import('./views/task-view/task-comments/TaskComments.vue'),
+              meta: {
+                breadcrumb: ['taskFolder', 'task', 'taskComments']
+              }
+            },
+            {
+              path: 'attachments',
+              name: 'task-attachments',
+              component: () => import('./views/task-view/task-attachments/TaskAttachments.vue'),
+              meta: {
+                breadcrumb: ['taskFolder', 'task', 'taskAttachments']
+              }
+            },
+            {
+              path: 'attachment/:attachmentId',
+              name: 'task-attachment',
+              component: () => import('./views/task-view/task-attachments/TaskAttachments.vue'),
+              meta: {
+                parent: 'attachments',
+                breadcrumb: ['taskFolder', 'task', 'taskAttachments', 'taskAttachment']
+              },
+              children: [
+                {
+                  path: 'versions',
+                  name: 'versions',
+                  component: () => import('./views/task-view/task-attachments/VersionsAndRemarks.vue'),
+                  meta: {
+                    parent: 'attachments',
+                    breadcrumb: ['taskFolder', 'task', 'taskAttachments', 'taskAttachment', 'versions']
+                  },
+                }
+              ]
+            }
+          ]
         },
         {
-          path: '/task-add/:id?',
+          path: '/task-add/:taskId?',
           name: 'task-add',
           props: true,
-          component: () => import('./views/task-add/TaskAdd.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          component: () => import('./views/task-add/TaskAdd.vue')
         },
         {
-          path: '/task/:id/edit',
+          path: '/task/:taskId/edit',
           name: 'task-edit',
           props: true,
-          component: () => import('./views/task-add/TaskAdd.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          component: () => import('./views/task-add/TaskAdd.vue')
         },
         {
           path: '/work-flow',
           name: 'work-flow',
-          component: () => import('./views/work-flow/WorkFlow.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          component: () => import('./views/work-flow/WorkFlow.vue')
         },
         {
-          path: '/cases/:id',
+          path: '/cases/:folderId',
           name: 'case-list',
           component: () => import('./views/case-list/CaseList.vue'),
           meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+            breadcrumb: ['caseFolder']
+          }
         },
         {
-          path: '/case/:id',
+          path: '/case/:caseId',
           name: 'case-view',
+          redirect: '/case/:caseId/details',
           component: () => import('./views/case-view/CaseView.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          children: [
+            {
+              path: 'details',
+              name: 'case-details',
+              component: () => import('./views/task-view/task-details/TaskDetails.vue'),
+              meta: {
+                breadcrumb: ['caseFolder', 'case']
+              }
+            },
+            {
+              path: 'attachments',
+              name: 'case-attachments',
+              component: () => import('./views/task-view/task-attachments/TaskAttachments.vue'),
+              meta: {
+                breadcrumb: ['caseFolder', 'case', 'caseAttachments']
+              }
+            },
+            {
+              path: 'comments',
+              name: 'case-comments',
+              component: () => import('./views/task-view/task-comments/TaskComments.vue'),
+              meta: {
+                breadcrumb: ['caseFolder', 'case', 'caseComments']
+              }
+            }
+          ]
         },
         {
           path: '/case-add',
           name: 'case-add',
-          component: () => import('./views/case-add/CaseAdd.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          component: () => import('./views/case-add/CaseAdd.vue')
         },
         {
-          path: '/case/:id/edit',
+          path: '/case/:caseId/edit',
           name: 'case-edit',
-          component: () => import('./views/case-add/CaseAdd.vue'),
-          meta: {
-            rule: 'admin'
-          },
-          caseSensitive: false
+          component: () => import('./views/case-add/CaseAdd.vue')
         }
       ]
     },

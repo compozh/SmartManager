@@ -1,20 +1,16 @@
 <template>
-  <VuePerfectScrollbar
-    class="scroll-area md:px-8 p-4"
-    :settings="settings"
-  >
+  <div>
     <div class="vx-row">
       <div class="vx-col w-full">
         <vx-card class="px-4">
-
           <!-- TASK META ROW -->
           <div class="vx-row border-b border-l-0 border-r-0
-                       border-t-0 d-theme-border-grey-light
-                       border-solid flex justify-between flex items-center">
+                         border-t-0 d-theme-border-grey-light
+                         border-solid flex justify-between flex items-center">
 
             <div class="vx-col sm:w-4/5 w-full flex items-center mb-2">
               <vs-avatar class="sender__avatar--single flex-shrink-0
-                                mr-3 border-2 border-solid border-white"
+                                  mr-3 border-2 border-solid border-white"
                          :src="task.performerPhoto"
                          size="65px"></vs-avatar>
 
@@ -26,9 +22,9 @@
               </div>
             </div>
             <div class="vx-col xs:w-10/12 lg:w-1/5 w-full flex lg:flex-col
-                        items-center xs:justify-start lg:justify-end mb-2">
-              <span class="flex lg:mr-0 xs:ml-2 mr-2 self-end whitespace-no-wrap lg:order-first"
-              >{{ time(task.dateAdd) }}</span>
+                          items-center xs:justify-start lg:justify-end mb-2">
+                <span class="flex lg:mr-0 xs:ml-2 mr-2 self-end whitespace-no-wrap lg:order-first"
+                >{{ time(task.dateAdd) }}</span>
               <span class="flex self-end lg:mt-2 mt-0 whitespace-no-wrap xs:order-first"
               >{{ date(task.dateAdd) }}</span>
               <span class="flex self-end lg:mt-2 mt-0 whitespace-no-wrap xs:hidden lg:block"
@@ -38,8 +34,8 @@
 
           <!-- TASK CONTENT -->
           <div class="vx-row border-b border-l-0 border-r-0
-                      border-t-0 d-theme-border-grey-light"
-                :class="{'border-solid': htmlDescription}">
+                        border-t-0 d-theme-border-grey-light"
+               :class="{'border-solid': htmlDescription}">
             <div class="vx-col w-full">
               <div v-if="htmlDescription" class="mail__content break-words mt-8 mb-4">
                 <iframe seamless
@@ -62,16 +58,15 @@
           <div v-if="Object.keys(form).length" class="w-full">
             <h5 class="mt-4">{{ form.name }}</h5>
 
-              <formio-form-component class="formio"
-                                     ref="form"
-                                     :formCode="form.unformio"
-                                     :formDefinition="form"
-                                     :submission="submission"/>
-
+            <formio-form-component class="formio"
+                                   ref="form"
+                                   :formCode="form.unformio"
+                                   :formDefinition="form"
+                                   :submission="submission"/>
           </div>
           <!-- TASK ATTACHMENTS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
-                      d-theme-border-grey-light border-solid flex">
+                        d-theme-border-grey-light border-solid flex">
             <div class="vx-col flex">
               <feather-icon icon="PaperclipIcon" class="mr-2"/>
               <span class="py-4">{{ $t('tabs.attachments').toUpperCase() }}</span>
@@ -84,9 +79,9 @@
                  @click="$emit('open-attachment', index)">
               <vx-tooltip :text="attachment.fileName" color="rgb(98, 98, 98, .95)">
                 <vs-chip class="mr-3 max-w-sm chips">
-                      <span class="icon flex mr-2">
-                        <file-icon :extention="attachment.fileExt"></file-icon>
-                      </span>
+                  <span class="icon flex mr-2">
+                    <file-icon :extention="attachment.fileExt"></file-icon>
+                  </span>
                   <span class="custom-truncate">{{ attachment.fileName }}</span>
                 </vs-chip>
               </vx-tooltip>
@@ -101,73 +96,6 @@
         </vx-card>
       </div>
     </div>
-    <!-- CASE -->
-    <div v-if="task.taskType === '' && !task.isGenerate"
-         class="vx-row"
-         style="margin-top: 2.2rem">
-      <div class="vx-col w-full">
-        <vx-card>
-          <div class="vx-row">
-            <div class="vx-col w-full flex flex-wrap justify-center">
-              <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid">
-                <div class="vx-col flex items-center pb-4">
-                  <feather-icon icon="BriefcaseIcon" class="mr-2"/>
-                  <span v-if="task.caseId" class="pt-1">{{ $t('cases.related').toUpperCase() }}</span>
-                  <span v-else class="pt-1">{{ $t('cases.noRelated').toUpperCase() }}</span>
-                </div>
-                <div class="flex pb-4">
-                  <vs-button v-if="task.caseId"
-                             @click="changeBinding(false)"
-                             class="ml-3"
-                             color="danger"
-                             size="small"
-                             type="border"
-                             icon="work_off">{{ $t('buttons.unbindFromCase') }}</vs-button>
-                  <vs-button v-if="caseForBind"
-                             @click="changeBinding(true)"
-                             class="ml-3"
-                             color="primary"
-                             size="small"
-                             type="border"
-                  icon="save">{{ $t('buttons.save') }}</vs-button>
-                <vs-button v-if="caseForBind"
-                           @click="caseForBind = null"
-                           class="ml-3"
-                           color="danger"
-                           size="small"
-                           type="border"
-                           icon="work_off">{{ $t('buttons.cancel') }}</vs-button>
-                </div>
-              </div>
-              <div class="vx-row w-full">
-                <div class="vx-col w-full">
-                  <transition-group v-if="caseItem.id"
-                                    name="list-enter-up"
-                                    class="task__tasks  -mx-4 mt-6"
-                                    tag="ul"
-                                    appear>
-                    <li class="cursor-pointer task__task-item" :key="caseItem.id">
-                      <case-list-item :caseItem="caseItem"></case-list-item>
-                    </li>
-                  </transition-group>
-                  <autocomplete v-if="!task.caseId"
-                                :items="cases"
-                                :multiple="false"
-                                label="name"
-                                v-model="caseForBind"
-                                :loading="caseListLoading"
-                                :disabled="caseListLoading"
-                                :placeholder="$t('buttons.bindToCase')"
-                                class="mt-6"
-                                icon="BriefcaseIcon"/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </vx-card>
-      </div>
-    </div>
     <!-- PARENT TASKS -->
     <div v-if="parentTask"
          class="vx-row"
@@ -177,7 +105,7 @@
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid mb-6">
+                            border-t-0 d-theme-border-grey-light border-solid mb-6">
                 <div class="vx-col w-full flex pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
                   <span class="self-end">{{ $t('tasks.base').toUpperCase() }}</span>
@@ -208,14 +136,14 @@
           <div class="vx-row">
             <div class="vx-col w-full flex flex-wrap justify-center">
               <div class="vx-row w-full justify-between border-b border-l-0 border-r-0
-                          border-t-0 d-theme-border-grey-light border-solid">
+                            border-t-0 d-theme-border-grey-light border-solid">
                 <div class="vx-col flex items-center pb-4">
                   <feather-icon icon="LayersIcon" class="mr-2"/>
                   <span v-if="childTasks.length" class="pt-1">{{ $t('tasks.subTasks').toUpperCase() }}</span>
                   <span v-else class="pt-1">{{ $t('tasks.noSubTasks').toUpperCase() }}</span>
                 </div>
                 <div class="flex pb-4">
-                  <vs-button :to="{name: 'task-add', params: {id: task.id}}"
+                  <vs-button :to="{name: 'task-add', params: {taskId: task.id}}"
                              class="ml-3"
                              color="primary"
                              size="small"
@@ -242,27 +170,18 @@
         </vx-card>
       </div>
     </div>
-  </VuePerfectScrollbar>
+  </div>
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import Autocomplete from '@/components/Autocomplete'
 import TaskListItem from '@/views/task-list/TaskListItem.vue'
-import CaseListItem from '@/views/case-list/CaseListItem.vue'
 import FilesUpload from '@/components/FilesUpload'
 import FileIcon from '@/components/FileIcon'
 import {eventBus} from '@/main'
 
 export default {
-  props: {
-    task: Object
-  },
   components: {
-    VuePerfectScrollbar,
-    Autocomplete,
     TaskListItem,
-    CaseListItem,
     FilesUpload,
     FileIcon
   },
@@ -270,10 +189,6 @@ export default {
     defaultDescHeight: 250,
     iFrameHeight: 250,
     showThread: false,
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.50,
-    },
     options: {noAlerts: true},
     attachments: [],
     filesUploading: false,
@@ -283,6 +198,11 @@ export default {
     caseForBind: null
   }),
   computed: {
+    task() {
+      const id = +this.$route.params.taskId
+      const task = this.$store.state.sm.taskInfo[id]
+      return task ? task : {}
+    },
     externalParams() {
       if (this.task.externalParams) {
         return JSON.parse(this.task.externalParams) || {}
@@ -340,13 +260,13 @@ export default {
         case 'EXTERNAL': return 'внешняя задача'
         default: return 'unknown type'
       }
-    },
-    cases() {
-      return this.$store.state.sm.cases
-    },
-    caseItem() {
-      return this.cases
-        .find(caseItem => caseItem.id === this.task.caseId) || {}
+    }
+  },
+  watch: {
+    '$route'(route) {
+      if (route.name === 'task-details') {
+        this.getTask()
+      }
     }
   },
   created() {
@@ -354,18 +274,23 @@ export default {
     eventBus.$on('changeStatus', async data => {
       await this.onChangeStatus(data)
     })
-    this.getCases()
+    this.getTask()
   },
   methods: {
+    async getTask() {
+      const taskId = +this.$route.params.taskId
+      if (!this.task.id) {
+        try {
+          await this.$store.dispatch('sm/getTaskInfo', {
+            taskId, loading: true
+          })
+        } catch (e) {
+          console.log(e.message)
+        }
+      }
+    },
     submit() {
       console.log('submit', )
-    },
-    async getCases() {
-      this.caseListLoading = true
-      if (this.cases.length === 0) {
-        await this.$store.dispatch('sm/getCases', false)
-      }
-      this.caseListLoading = false
     },
     iFrameOnLoad(event) {
       this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight * 1.2
@@ -405,7 +330,7 @@ export default {
     async addAttachments() {
       const attachments = JSON.stringify(this.attachments)
       const params = {
-        id: this.task.id || this.$route.params.id,
+        id: this.task.id || this.$route.params.taskId,
         type: this.task.isGenerate ? 'DOCUMENT' : 'TASK',
         arso: this.task.arso,
         keyValue: this.task.keyValue,
@@ -434,9 +359,6 @@ export default {
       } catch (e) {
         console.log(e.message)
       }
-    },
-    onFormSubmit() {
-      // console.log(data)
     }
   }
 }

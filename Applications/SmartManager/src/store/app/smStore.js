@@ -1,12 +1,10 @@
-/*=========================================================================================
-  File Name: smStore.js
-  Description: Smart Manager App Store
-==========================================================================================*/
-
 import actions from './smActions'
 import getters from './smGetters'
 import mutations from './smMutations'
 import state from './smState'
+
+// Modules
+import attachments from '../attachments/store'
 
 export default {
   namespaced: true,
@@ -14,5 +12,8 @@ export default {
   actions,
   getters,
   mutations,
-  state
+  state,
+  modules: {
+    attachments
+  }
 }

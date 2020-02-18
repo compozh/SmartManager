@@ -1,19 +1,11 @@
 <template>
-  <div
-    class="flex flex-col flex-1
-           justify-center items-center
-           h-full overflow-hidden
-           border border-l-0 border-r-0
-           border-b-0 border-solid
-           d-theme-border-grey-light"
-  >
+  <div class="flex flex-col flex-1 justify-center
+           items-center h-full overflow-hidden">
     <viewer :options="options"
             :images="[url]"
             @inited="init"
-            class="flex flex-col flex-1
-                   justify-center items-center
-                    h-full viewer"
-    >
+            class="flex flex-col flex-1 justify-center
+                   items-center h-full viewer">
       <template slot-scope="scope" class="test">
         <img v-for="src in scope.images"
              :src="src"

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name: 'task-view', params: {id: task.id}}"
+  <router-link :to="{name: 'task-view', params: {taskId: task.id}}"
                class="task__task-item block sm:px-4 px-2 py-3"
                :class="{'task__opened-task': task.isRead}">
     <!-- TASK ROW 1 : META -->
@@ -132,8 +132,8 @@ export default {
     }
   },
   methods: {
-    taskLink(id) {
-      this.$router.push({name: 'task-view', params: {id}})
+    taskLink(taskId) {
+      this.$router.push({name: 'task-view', params: {taskId}})
     }
   }
 }

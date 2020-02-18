@@ -110,6 +110,7 @@ import { eventBus } from '../../main';
 import { events } from '../../constants';
 import { fullScreenMixin } from '../mixins';
 import * as Models from '../../api/models';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'modeler-layout',
@@ -300,5 +301,8 @@ a.cjs-powered-by {
 }
 .djs-popup {
   z-index: 100 !important;
+}
+.djs-resizer-visual {
+  stroke: #000 !important;
 }
 </style>

@@ -1,0 +1,15 @@
+{
+  bpmnquery {
+    diagramVersions(diagramId: $diagramId) {
+      diagramId
+      versionId
+      name
+      creatorId
+      creatorName
+      creationTime
+      editorId
+      editorName
+      editTime
+    }
+  }
+}

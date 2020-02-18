@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name: 'case-view', params: {id: caseItem.id}}"
+  <router-link :to="{name: 'case-view', params: {caseId: caseItem.id}}"
                class="task__task-item task__opened-task block sm:px-4 px-2 py-3">
     <!-- CASE ROW 1 : META -->
     <div class="flex w-full items-center">

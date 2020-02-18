@@ -108,7 +108,13 @@
     "complete": "Завершити",
     "yes": "Так",
     "no": "Ні",
-    "globalSearch": "Виконати пошук по всіх документах"
+    "toBack": "Назад",
+    "globalSearch": "Виконати пошук по всіх документах",
+    "addAttachment": "Додати",
+    "deleteAttachment": "Видалити",
+    "downloadAttachment": "Завантажити",
+    "attachmentVersions": "Версії",
+    "attachmentEds": "Електронні підписи"
   },
   "icons": {
     "priority": "Високий пріоритет",
@@ -143,7 +149,13 @@
   "table": {
     "name": "Назва",
     "size": "Розмір",
-    "uploaded": "Завантажено"
+    "uploaded": "Завантажено",
+    "sign": "Підпис",
+    "version": "Версія",
+    "type": "Тип",
+    "status": "Статус",
+    "description": "Опис",
+    "date": "Дата"
   },
   "comments": {
     "addComment": "Додати коментар",

@@ -1,17 +1,17 @@
 <template>
-  <v-dialog v-if="show" v-model="show" class="formio-container" >
-    <v-card  max-width="800px" style="margin: 0 auto"  >
-      <v-card-title>
-        <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
-      </v-card-title>
-      <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-        <v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog >
+    <v-overlay v-if="show" v-model="show">
+      <v-card width="800px" light class="dialog">
+        <v-card-title>
+          <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
+        </v-card-title>
+        <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+          <v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-overlay>
 </template>
 <script>
 import { eventBus } from '../../main';
@@ -67,11 +67,10 @@ export default {
 
 </style>
 <style lang="scss">
-  .v-dialog.v-dialog--active {
+  .dialog{
     height: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1001; 
+  }
+  .v-overlay {
+    z-index: 1003 !important; 
   }
 </style>

@@ -204,9 +204,9 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    const folderId = from.params.id
+    const folderId = from.params.folderId
     next(vm => {
-      if (from.name === 'case-list' && folderId !== 'ALL') {
+      if (from.name === 'case-list' && folderId !== 'all') {
         vm.newCase.folder = vm.folderById(+folderId)
       }
     })
@@ -228,7 +228,7 @@ export default {
   },
   methods: {
     async getCase() {
-      const caseId = +this.$route.params.id
+      const caseId = +this.$route.params.caseId
       await this.$store.dispatch('sm/getCaseDetails', {
         caseId, loading: true
       })
@@ -297,14 +297,14 @@ export default {
       }
       try {
         const newCaseId = await this.$store.dispatch('sm/caseCreate', newCase)
-        await this.$router.push({name: 'case-view', params: {id: newCaseId}})
+        await this.$router.push({name: 'case-view', params: {caseId: newCaseId}})
       } catch (e) {
         setTimeout(() => this.$router.go(0), 1000)
       }
     },
     async caseUpdate() {
       const newCaseData = {
-        id: this.$route.params.id,
+        id: this.$route.params.caseId,
         name: this.newCase.name,
         dateFrom: this.dateServer(this.newCase.dateFrom),
         dateTo: this.dateServer(this.newCase.dateTo),
@@ -316,7 +316,7 @@ export default {
       }
       const result = await this.$store.dispatch('sm/caseUpdate', newCaseData)
       if (result) {
-        await this.$router.push({name: 'case-view', params: {id: newCaseData.id}})
+        await this.$router.push({name: 'case-view', params: {caseId: newCaseData.id}})
       }
     },
     getFormSnapshot() {

@@ -8,7 +8,7 @@ import { api } from '../../../../../api/bpmnApi';
 import { setServiceTaskParameters } from '../../../utils';
 import { eventBus } from '../../../../../main';
 import { events } from '../../../../../constants';
-import { is } from 'bpmn-js/lib/util/ModelUtil';
+import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 
 /**
  * Добавить в группу свойсва сервисной задачи
@@ -18,24 +18,41 @@ import { is } from 'bpmn-js/lib/util/ModelUtil';
  * @param {EntryFactory} entryFactory - Фабрика элементов панели свойств
  * @param {Object} bpmnFactory - Фабрика bpmn  элементов
  * @param {Object} commandStack - Стек комманд
+ * @param {Object} elementRegistry - Регистр элементов
  * @param {Function} translate - Функция перевода
  */
-export default function addServiceTaskProps(group, diagram, element, entryFactory, bpmnFactory, commandStack, translate) {
+export default function addServiceTaskProps(group, diagram, element, entryFactory, bpmnFactory, commandStack, elementRegistry, translate) {
   if (!isServiceTaskLike(element)) {
     return;
   }
 
-  var hasExternalSupport = isExternalCapable(getBusinessObject(element));
+  var hasExternalSupport = isExternalCapable(getServiceTaskLikeBusinessObject(element));
+  var businessObjectsExists = elementRegistry.filter(element => {
+    if (!is(element, 'bpmn:DataObjectReference')) {
+      return false;
+    }
+    var businessObject = getBusinessObject(element);
+    if (!businessObject) {
+      return false;
+    }
+    var reference = businessObject.get('dataObjectRef');
+    if (!reference) {
+      return false;
+    }
+    var boDefCode = reference.get('IT-Enterprise:businessObjectDefinitionCode');
+    return typeof boDefCode === 'string' && boDefCode != '';
+  }).length > 0;
 
   group.entries.push(new ImplementationTypeEntry(entryFactory, bpmnFactory, translate, {
-    getBusinessObject: getBusinessObject,
+    getBusinessObject: getServiceTaskLikeBusinessObject,
     getImplementationType: getImplementationType,
     hasExternalSupport: hasExternalSupport,
-    hasServiceTaskLikeSupport: true
+    hasServiceTaskLikeSupport: true,
+    businessObjectsExists
   }));
 
   if (isExternal(element)) {
-    var bo = getBusinessObject(element);
+    var bo = getServiceTaskLikeBusinessObject(element);
 
     group.entries.push(
       entryFactory.autocompleteBox({
@@ -66,17 +83,76 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
         id: 'externalTaskProperties',
         label: translate('Task properties'),
         disabled(element) {
-          var bo = getBusinessObject(element);
+          var bo = getServiceTaskLikeBusinessObject(element);
           var taskCode = bo.get('camunda:topic');
           return typeof taskCode !== 'string' || taskCode.trim() === '';
         },
         click(element) {
-          var bo = getBusinessObject(element);
+          var bo = getServiceTaskLikeBusinessObject(element);
           var actionId = bo.get('camunda:topic');
           setServiceTaskParameters(element, bo, actionId, bpmnFactory, commandStack);
         }
       })
     );
+  }
+
+  if (is(element, 'bpmn:ServiceTask')) {
+    const isBoAction = isBusinesssObjectAction(element),
+      isBoAccess = isBusinesssObjectAccess(element);
+
+    if (isBoAction || isBoAccess) {
+
+      const selectedBusinessObjects = elementRegistry
+        .filter((e) => {
+          if (!is(e, 'bpmn:DataObjectReference')) {
+            return false;
+          }
+          const bo = getBusinessObject(e);
+          if (!bo) {
+            return false;
+          }
+          const reference = bo.get('dataObjectRef');
+          if (!reference) {
+            return false;
+          }
+          return true;
+        }).map(e => {
+          const bo = getBusinessObject(e);
+          const reference = bo.get('dataObjectRef');
+          return reference.get('IT-Enterprise:businessObjectDefinitionCode');
+        });
+      
+      group.entries.push(entryFactory.autocompleteBox({
+        id: 'boDefCode',
+        label: translate('Business Object'),
+        model: 'IT-Enterprise:businessObjectDefinitionCode',
+        loadItems: (async () => (await api.getBusinessObjects(diagram.isSystem))
+          .filter(bo => selectedBusinessObjects.indexOf(bo.boDefCode) !== -1)
+          .map(bo => ({ id: bo.boDefCode, name: bo.name })))(),
+      }));
+
+      const businessObject = getServiceTaskLikeBusinessObject(element);
+      const boDefCode = businessObject.get('IT-Enterprise:businessObjectDefinitionCode');
+      if (typeof boDefCode === 'string' && boDefCode.trim() !== '') {
+        if (isBoAction) {
+          group.entries.push(entryFactory.autocompleteBox({
+            id: 'boActDefCode',
+            label: translate('Business Object Action'),
+            model: 'IT-Enterprise:businessObjectActionDefinitionCode',
+            loadItems: (async () => (await api.getBusinessObjectActions(boDefCode, diagram.isSystem))
+              .map(act => ({ id: act.actionDefCode, name: act.name })))()
+          }));
+        } else if (isBoAccess) {
+          group.entries.push(entryFactory.autocompleteBox({
+            id: 'boAccDefCode',
+            label: translate('Business Object Access'),
+            model: 'IT-Enterprise:businessObjectAccessDefinitionCode',
+            loadItems: (async () => (await api.getBusinessObjectAccess(boDefCode, diagram.isSystem))
+              .map(act => ({ id: act.accessDefCode, name: act.name })))()
+          }));
+        }
+      }
+    }
   }
 }
 
@@ -84,7 +160,7 @@ function getImplementationType(element) {
   return ImplementationTypeHelper.getImplementationType(element);
 }
 
-function getBusinessObject(element) {
+function getServiceTaskLikeBusinessObject(element) {
   return ImplementationTypeHelper.getServiceTaskLikeBusinessObject(element);
 }
 
@@ -99,4 +175,12 @@ function isServiceTaskLike(element) {
 
 function isExternal(element) {
   return getImplementationType(element) === 'external';
+}
+
+function isBusinesssObjectAction(element) {
+  return getImplementationType(element) === 'businessObjectAction';
+}
+
+function isBusinesssObjectAccess(element) {
+  return getImplementationType(element) === 'businessObjectAccess';
 }
