@@ -29,8 +29,8 @@ namespace SmartId.Extensions
 			}
 			if (configuration.GetValue<bool>("Authentication:QesdUA"))
 			{
-				builder.AddQesdAuthentication(options => {
-					options.AuthorizationEndpoint = "/qesd/sign";
+				builder.AddQedsAuthentication(options => {
+					options.AuthorizationEndpoint = "/qeds/sign";
 				});
 			}
 			return builder;

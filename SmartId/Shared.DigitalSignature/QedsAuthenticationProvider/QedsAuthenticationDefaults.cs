@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DigitalSignature.Authentication
 {
-	public class QesdAuthenticationDefaults
+	public class QedsAuthenticationDefaults
 	{
         /// <summary>
         /// The default authentication type used when registering the QesdAuthenticationHandler.

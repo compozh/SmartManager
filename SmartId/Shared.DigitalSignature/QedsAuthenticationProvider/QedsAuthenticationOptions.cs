@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Shared.DigitalSignature.Authentication
 {
-	public class QesdAuthenticationOptions : RemoteAuthenticationOptions
+	public class QedsAuthenticationOptions : RemoteAuthenticationOptions
     {
-        public QesdAuthenticationOptions()
+        public QedsAuthenticationOptions()
         {
             CallbackPath = new PathString("/signin-qesd");
         }
