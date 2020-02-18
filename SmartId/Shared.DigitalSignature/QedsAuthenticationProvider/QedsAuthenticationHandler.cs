@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace Shared.DigitalSignature.Authentication
 {
-	public class QesdAuthenticationHandler : RemoteAuthenticationHandler<QesdAuthenticationOptions>
+	public class QedsAuthenticationHandler : RemoteAuthenticationHandler<QedsAuthenticationOptions>
 	{
         protected HtmlEncoder HtmlEncoder { get; }
         protected DigitalSignature DigitalSignature { get; }
-        public QesdAuthenticationHandler(IOptionsMonitor<QesdAuthenticationOptions> options, ILoggerFactory logger, HtmlEncoder htmlEncoder, UrlEncoder encoder, ISystemClock clock, DigitalSignature digitalSignature)
+        public QedsAuthenticationHandler(IOptionsMonitor<QedsAuthenticationOptions> options, ILoggerFactory logger, HtmlEncoder htmlEncoder, UrlEncoder encoder, ISystemClock clock, DigitalSignature digitalSignature)
             : base(options, logger, encoder, clock)
         {
             HtmlEncoder = htmlEncoder;
@@ -46,7 +46,7 @@ namespace Shared.DigitalSignature.Authentication
             };
             var authorizationEndpoint = Options.AuthorizationEndpointBuilder == null ? QueryHelpers.AddQueryString(Options.AuthorizationEndpoint, parameters):
                 Options.AuthorizationEndpointBuilder(Options.AuthorizationEndpoint, parameters);
-            var redirectContext = new RedirectContext<QesdAuthenticationOptions>(
+            var redirectContext = new RedirectContext<QedsAuthenticationOptions>(
                 Context, Scheme, Options,
                 properties, authorizationEndpoint
                 );

@@ -72,7 +72,7 @@ const data = {
 		},
 		onWarning(e) {
 			var that = EdsExecutor.instance;
-			let msg = e;//that.checkKeyFile() || e;
+			let msg = e;//that.checkKeyFile() || e; //TODO
 			that.warning = msg;
 		},
 		onError(e) {

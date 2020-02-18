@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Shared.DigitalSignature.Authentication
 {
-	public static class QesdAuthenticationExtensions
+	public static class QedsAuthenticationExtensions
 	{
         /// <summary>
         /// Registers the <see cref="WsFederationHandler"/> using the default authentication scheme, display name, and options.
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddQesdAuthentication(this AuthenticationBuilder builder)
-            => builder.AddQesdAuthentication(QesdAuthenticationDefaults.AuthenticationScheme, _ => { });
+        public static AuthenticationBuilder AddQedsAuthentication(this AuthenticationBuilder builder)
+            => builder.AddQedsAuthentication(QedsAuthenticationDefaults.AuthenticationScheme, _ => { });
 
         /// <summary>
         /// Registers the <see cref="WsFederationHandler"/> using the default authentication scheme, display name, and the given options configuration.
@@ -25,8 +25,8 @@ namespace Shared.DigitalSignature.Authentication
         /// <param name="builder"></param>
         /// <param name="configureOptions">A delegate that configures the <see cref="WsFederationOptions"/>.</param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddQesdAuthentication(this AuthenticationBuilder builder, Action<QesdAuthenticationOptions> configureOptions)
-            => builder.AddQesdAuthentication(QesdAuthenticationDefaults.AuthenticationScheme, configureOptions);
+        public static AuthenticationBuilder AddQedsAuthentication(this AuthenticationBuilder builder, Action<QedsAuthenticationOptions> configureOptions)
+            => builder.AddQedsAuthentication(QedsAuthenticationDefaults.AuthenticationScheme, configureOptions);
 
         /// <summary>
         /// Registers the <see cref="WsFederationHandler"/> using the given authentication scheme, default display name, and the given options configuration.
@@ -35,8 +35,8 @@ namespace Shared.DigitalSignature.Authentication
         /// <param name="authenticationScheme"></param>
         /// <param name="configureOptions">A delegate that configures the <see cref="WsFederationOptions"/>.</param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddQesdAuthentication(this AuthenticationBuilder builder, string authenticationScheme, Action<QesdAuthenticationOptions> configureOptions)
-            => builder.AddQesdAuthentication(authenticationScheme, QesdAuthenticationDefaults.DisplayName, configureOptions);
+        public static AuthenticationBuilder AddQedsAuthentication(this AuthenticationBuilder builder, string authenticationScheme, Action<QedsAuthenticationOptions> configureOptions)
+            => builder.AddQedsAuthentication(authenticationScheme, QedsAuthenticationDefaults.DisplayName, configureOptions);
 
         /// <summary>
         /// Registers the <see cref="WsFederationHandler"/> using the given authentication scheme, display name, and options configuration.
@@ -46,10 +46,10 @@ namespace Shared.DigitalSignature.Authentication
         /// <param name="displayName"></param>
         /// <param name="configureOptions">A delegate that configures the <see cref="WsFederationOptions"/>.</param>
         /// <returns></returns>
-        public static AuthenticationBuilder AddQesdAuthentication(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<QesdAuthenticationOptions> configureOptions)
+        public static AuthenticationBuilder AddQedsAuthentication(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<QedsAuthenticationOptions> configureOptions)
         {
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<QesdAuthenticationOptions>, QesdAuthenticationPostConfigureOptions>());
-            return builder.AddRemoteScheme<QesdAuthenticationOptions, QesdAuthenticationHandler>(authenticationScheme, displayName, configureOptions);
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<QedsAuthenticationOptions>, QedsAuthenticationPostConfigureOptions>());
+            return builder.AddRemoteScheme<QedsAuthenticationOptions, QedsAuthenticationHandler>(authenticationScheme, displayName, configureOptions);
         }
     }
 }

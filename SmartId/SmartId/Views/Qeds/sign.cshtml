@@ -1,6 +1,16 @@
 ﻿@using Shared.WebExtensions;
 @model DigitalSignatureViewModel
 
+<div class="alert alert-danger d-none" id="danger-wrapper">
+	<strong>Error</strong>
+	<div class="danger" id="danger-message"></div>
+</div>
+
+<div class="alert alert-warning d-none" id="warning-wrapper">
+	<strong>Warning</strong>
+	<div class="warning" id="warning-message"></div>
+</div>
+
 <form id="wrapper-digital-signature">
 	<fieldset class="form-group">
 		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__279__BV_label_">Тип ключа</legend>
@@ -42,54 +52,15 @@
 @section scripts {
 	<script src="~/js/eds/bluebird.min.js" type="text/javascript"></script>
 	<script src="~/js/eds/edswrapper.js?v=@Html.GetScriptNonce()" type="text/javascript"></script>
-	<script src="~/js/edsexecutor.js?v=@Html.GetScriptNonce()" type="text/javascript"></script>
 	<script type='text/javascript' nonce="@Html.GetScriptNonce()">
-		let edsExecutor = new EdsExecutor({
+		window.edsModel = {
 			siteRoot: '@Model.SiteRoot',
 			language: '@Model.Language',
 			allowStore: @Model.AllowStore.ToString().ToLower(),
 			allowStoreLocal: @Model.AllowStoreLocal.ToString().ToLower(),
 			debugMode: @Model.DebugMode.ToString().ToLower(),
 			initialData: '@Model.InitialData',
-			setKeyType: keyType => {
-				$("select#key-type-select-digital-signature").val(keyType)
-			},
-			setUserCa: userCa => {
-				console.log("ui: User CA set", userCa, edsExecutor.needUserCertificates);
-			},
-			setWarning: warning => {
-				console.log("ui: warning set", warning);
-			},
-			setError: error => {
-				console.log("ui: warning set", error);
-			},
-			setError: error => {
-				console.log("ui: warning set", error);
-			},
-			postResult: result => {
-				$('input#signedData').val(result);
-				$('form#wrapper-result').submit();
-			}
-		});
-		$("form#wrapper-digital-signature").submit(function (event) {
-			event.preventDefault();
-			$("button#exec-digital-signature").click();
-		});
-		$("select#key-type-select-digital-signature").change(function () {
-			edsExecutor.keyType = this.value
-		});
-		$('input#key-file-digital-signature').change(function () {
-			var filename = $('input#key-file-digital-signature').prop('files')[0].name;
-			$('label#key-file-digital-signature-label').html(filename);
-		});
-		$('input#key-password-digital-signature').change(function () {
-
-		});
-		$("button#exec-digital-signature").click(function () {
-			var filename = $('input#key-file-digital-signature').prop('files')[0];
-			var pwd = $('input#key-password-digital-signature').val();
-			edsExecutor.handleSignClick(filename, pwd);
-		});
-		history.replaceState(null , document.title, window.location.href.split('?')[0] );
+		};
 	</script>
+	<script src="~/js/edsexecutor.js?v=@Html.GetScriptNonce()" type="text/javascript"></script>
 }

@@ -18,14 +18,12 @@ namespace SmartId.Controllers
 {
     [SecurityHeaders]
     [AllowAnonymous]
-    public class QesdController : Controller
+    public class QedsController : Controller
     {
 		private IWebHostEnvironment _environment { get; }
-		private TempFiles _tempFiles { get; }
-		public QesdController(IWebHostEnvironment environment, TempFiles tempFiles)
+		public QedsController(IWebHostEnvironment environment)
 		{
 			_environment = environment;
-			_tempFiles = tempFiles;
 		}
 
 		[HttpGet]

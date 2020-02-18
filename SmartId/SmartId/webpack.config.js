@@ -7,7 +7,7 @@ module.exports = (env, argv) => {
 		mode: argv.mode === "production" ? "production" : "development",
 		entry: {
 			index: './Frontend/index.js',
-			edsexecutor: './Frontend/edsexecutor.js'
+			edsexecutor: './Frontend/sign/index.js'
 		},
 		output: {
 			filename: '[name].js',
