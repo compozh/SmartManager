@@ -26,6 +26,6 @@ export default class DetailsGroup extends PropertiesPanelGroup {
     addConditionalProps(this, element, entryFactory, bpmnFactory, translate);
     addCallActivityProps(this, element, entryFactory, bpmnFactory, commandStack, translate);
     addBusinessRuleProps(this, element, entryFactory, commandStack, translate);
-    addDataObjectReferenceProps(this, diagram, element, entryFactory, translate);
+    addDataObjectReferenceProps(this, diagram, element, entryFactory, commandStack, translate);
   }
 }

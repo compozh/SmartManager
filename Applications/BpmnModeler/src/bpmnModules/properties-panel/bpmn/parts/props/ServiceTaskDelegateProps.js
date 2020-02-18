@@ -99,9 +99,9 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
   if (is(element, 'bpmn:ServiceTask')) {
     const isBoAction = isBusinesssObjectAction(element),
       isBoAccess = isBusinesssObjectAccess(element);
+    const businessObject = getServiceTaskLikeBusinessObject(element);
 
     if (isBoAction || isBoAccess) {
-
       const selectedBusinessObjects = elementRegistry
         .filter((e) => {
           if (!is(e, 'bpmn:DataObjectReference')) {
@@ -129,9 +129,19 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
         loadItems: (async () => (await api.getBusinessObjects(diagram.isSystem))
           .filter(bo => selectedBusinessObjects.indexOf(bo.boDefCode) !== -1)
           .map(bo => ({ id: bo.boDefCode, name: bo.name })))(),
+        appendIcon: 'mdi-magnify',
+        append: () => {
+          eventBus.$emit(events.propertiesPanel.selectBusinessObject, businessObject.get('IT-Enterprise:businessObjectDefinitionCode'), diagram.isSystem, (newValue) => {
+            var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
+              'IT-Enterprise:businessObjectDefinitionCode': newValue,
+              'IT-Enterprise:businessObjectActionDefinitionCode': undefined,
+              'IT-Enterprise:businessObjectAccessDefinitionCode': undefined
+            });
+            commandStack.execute(cmd.cmd, cmd.context);
+          });
+        }
       }));
-
-      const businessObject = getServiceTaskLikeBusinessObject(element);
+  
       const boDefCode = businessObject.get('IT-Enterprise:businessObjectDefinitionCode');
       if (typeof boDefCode === 'string' && boDefCode.trim() !== '') {
         if (isBoAction) {
@@ -140,7 +150,20 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             label: translate('Business Object Action'),
             model: 'IT-Enterprise:businessObjectActionDefinitionCode',
             loadItems: (async () => (await api.getBusinessObjectActions(boDefCode, diagram.isSystem))
-              .map(act => ({ id: act.actionDefCode, name: act.name })))()
+              .map(act => ({ id: act.actionDefCode, name: act.name })))(),
+            appendIcon: 'mdi-magnify',
+            append: () => {
+              eventBus.$emit(events.propertiesPanel.selectBusinessObjectAction,
+                businessObject.get('IT-Enterprise:businessObjectDefinitionCode'),
+                businessObject.get('IT-Enterprise:businessObjectActionDefinitionCode'),
+                diagram.isSystem,
+                (newValue) => {
+                  var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
+                    'IT-Enterprise:businessObjectActionDefinitionCode': newValue,
+                  });
+                  commandStack.execute(cmd.cmd, cmd.context);
+                });
+            }
           }));
         } else if (isBoAccess) {
           group.entries.push(entryFactory.autocompleteBox({
@@ -148,7 +171,20 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             label: translate('Business Object Access'),
             model: 'IT-Enterprise:businessObjectAccessDefinitionCode',
             loadItems: (async () => (await api.getBusinessObjectAccess(boDefCode, diagram.isSystem))
-              .map(act => ({ id: act.accessDefCode, name: act.name })))()
+              .map(act => ({ id: act.accessDefCode, name: act.name })))(),
+            appendIcon: 'mdi-magnify',
+            append: () => {
+              eventBus.$emit(events.propertiesPanel.selectBusinessObjectAccess,
+                businessObject.get('IT-Enterprise:businessObjectDefinitionCode'),
+                businessObject.get('IT-Enterprise:businessObjectAccessDefinitionCode'),
+                diagram.isSystem,
+                (newValue) => {
+                  var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
+                    'IT-Enterprise:businessObjectAccessDefinitionCode': newValue,
+                  });
+                  commandStack.execute(cmd.cmd, cmd.context);
+                });
+            }
           }));
         }
       }
