@@ -409,7 +409,11 @@
 		"Version": "Версія",
 		"Activity Type": "Тип активності",
 		"Called Case": "Кейс",
-		"Called Process": "Процес"
+		"Called Process": "Процес",
+
+		"Business Object": "Бізнес-об'єкт",
+		"Business Object Action": "Дія бізнес-об'єкту",
+		"Business Object Access": "Доступ до бізнес-об'єкта"
 	},
 	"dmn-modeler": {
 

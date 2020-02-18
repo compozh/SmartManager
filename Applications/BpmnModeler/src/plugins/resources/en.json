@@ -405,7 +405,11 @@
 		"Version": "Version",
 		"Activity Type": "Activity Type",
 		"Called Case": "Called Case",
-		"Called Process": "Called Process"
+		"Called Process": "Called Process",
+
+		"Business Object": "Business Object",
+		"Business Object Action": "Business Object Action",
+		"Business Object Access": "Business Object Access"
 	},
 	"dmn-modeler": {
 

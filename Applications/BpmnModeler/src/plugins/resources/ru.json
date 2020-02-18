@@ -405,7 +405,11 @@
 		"Version": "Версия",
 		"Activity Type": "Тип активности",
 		"Called Case": "Кейс",
-		"Called Process": "Процесс"
+		"Called Process": "Процесс",
+
+		"Business Object": "Бизнес-объект",
+		"Business Object Action": "Действие бизнес-объекта",
+		"Business Object Access": "Доступ к бизнес-объекту"
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {

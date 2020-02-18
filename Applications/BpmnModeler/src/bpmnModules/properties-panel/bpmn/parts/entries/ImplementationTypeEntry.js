@@ -9,6 +9,8 @@ import map from 'lodash/map';
 
 const DEFAULT_DELEGATE_PROPS = ['class', 'expression', 'delegateExpression'];
 
+const BUSINESS_OBJECT_PROPS = ['businessObjectAction', 'businessObjectAccess'];
+
 const DELEGATE_PROPS = {
   'camunda:class': undefined,
   'camunda:expression': undefined,
@@ -48,11 +50,18 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
 
     var DEFAULT_OPTIONS = [ { value: 'expression', name: translate('Expression') } ];
     var EXTERNAL_OPTION = { value: 'external', name: translate('Action') };
+    var BUSINESS_OBJECT_OPTIONS = [
+      { value: 'businessObjectAction', name: translate('Business Object Action') },
+      { value: 'businessObjectAccess', name: translate('Business Object Access') }
+    ];
     
     var selectOptions = DEFAULT_OPTIONS;
 
     if (hasExternalSupport) {
       selectOptions.push(EXTERNAL_OPTION);
+    }
+    if (options.businessObjectsExists) {
+      selectOptions.push(...BUSINESS_OBJECT_OPTIONS);
     }
     const comboBox = entryFactory.selectBox({
       id: 'implementation',
@@ -84,6 +93,17 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
             props['camunda:type'] = 'external';
             props['camunda:topic'] = '';
           }
+        }
+
+        if (BUSINESS_OBJECT_PROPS.indexOf(oldType) !== -1) {
+          props['IT-Enterprise:businessObjectTaskType'] = undefined;
+          props['IT-Enterprise:businessObjectDefinitionCode'] = undefined;
+          props['IT-Enterprise:businessObjectActionDefinitionCode'] = undefined;
+          props['IT-Enterprise:businessObjectAccessDefinitionCode'] = undefined;
+        }
+
+        if (BUSINESS_OBJECT_PROPS.indexOf(newType) !== -1) {
+          props['IT-Enterprise:businessObjectTaskType'] = newType;
         }
 
         var commands = [];
