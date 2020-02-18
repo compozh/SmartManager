@@ -130,7 +130,7 @@ export default {
   created() {
     const taskId = this.$route.params.taskId
     const caseId = this.$route.params.caseId
-    if (!this.folder.length) {
+    if (!this.folders) {
       this.$store.dispatch('sm/getFolders', 'loading')
     }
     if (taskId && !this.tasks['active']) {
