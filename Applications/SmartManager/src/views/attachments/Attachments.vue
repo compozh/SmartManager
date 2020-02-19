@@ -3,8 +3,10 @@
     <attachment-list :originals="originals"
                      :toAttachment="toAttachment"
                      :fileSize="fileSize"/>
-    <div class="flex lg:w-1/2 h-full bg-white justify-center rounded-r-lg">
-      <component class="rounded-r-lg" :is="viewer" :url="fileUrl"></component>
+    <div class="flex lg:w-1/2 h-full justify-center rounded-r-lg
+                border border-b-0 border-solid d-theme-border-grey-light">
+      <component v-if=viewer class="rounded-r-lg" :is="viewer" :url="fileUrl"></component>
+      <no-data v-else class="p-8">{{ currentAttachment.reason }}</no-data>
     </div>
     <div>
       <vs-popup title="Електронно цифрові підписи до вкладення - _U0T4L1ZBL, версія 3"
@@ -233,7 +235,7 @@ export default {
             return 'not-support'
         }
       }
-      return 'no-data'
+      return null
     },
     fileSize() {
       return size => {
@@ -243,6 +245,9 @@ export default {
           default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
         }
       }
+    },
+    currentAttachment() {
+      return this.$store.state.sm.attachments.currentAttachment || {}
     },
     type() {
       if (this.task.__typename === 'Task') {
@@ -282,7 +287,7 @@ export default {
       const id = +this.$route.params.taskId || +this.$route.params.caseId
       const fileDetails = await this.$store.dispatch('sm/getFileDetails', {fileId, fileExt, id})
       this.fileId = fileId
-      this.fileUrl = fileDetails.FileUrl
+      this.fileUrl = fileDetails.FileName ? fileDetails.FileUrl : null
     },
     async getAttachmentTypes() {
       const params = {

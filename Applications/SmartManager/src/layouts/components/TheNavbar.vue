@@ -122,8 +122,7 @@
                        icon="library_add"
                        color="primary"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit -ml-3"
+                       class="px-2 py-0 mr-2 fit -ml-3"
                        to="/task-add"
             >{{ $t('buttons.addTask') }} </vs-button>
 
@@ -131,8 +130,7 @@
                        icon="done"
                        color="success"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        @click="changeStatus('+')"
             >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
 
@@ -142,8 +140,7 @@
                        icon="library_add"
                        color="primary"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit -ml-3"
+                       class="px-2 py-0 mr-2 fit -ml-3"
                        to="/case-add"
             >{{ $t('buttons.addCase') }}
             </vs-button>
@@ -152,8 +149,7 @@
                        icon="launch"
                        color="success"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        to="/work-flow"
             >{{ $t('buttons.startWorkflow') }}
             </vs-button>
@@ -162,8 +158,7 @@
                        icon="settings_backup_restore"
                        color="warning"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        @click="changeStatus('')"
             >{{ $t('buttons.returnToWork') }}
             </vs-button>
@@ -172,9 +167,8 @@
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button icon="expand_more"
                            color="success"
-                           class="px-3 btn-drop-approve"
+                           class="px-2 py-0 btn-drop-approve"
                            type="flat"
-                           size="small"
                 >{{ buttonApprove }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -189,9 +183,8 @@
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button icon="expand_more"
                            color="danger"
-                           class="px-3 btn-drop-reject"
+                           class="px-2 py-0 btn-drop-reject"
                            type="flat"
-                           size="small"
                 >{{ buttonReject }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -209,9 +202,8 @@
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button icon="expand_more"
                            color="success"
-                           class="px-3 btn-drop-approve"
+                           class="px-2 py-0 btn-drop-approve"
                            type="flat"
-                           size="small"
                 >{{ buttonForward }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -226,9 +218,8 @@
               <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <vs-button icon="expand_more"
                            color="danger"
-                           class="px-3 btn-drop-reject"
+                           class="px-2 py-0 btn-drop-reject"
                            type="flat"
-                           size="small"
                 >{{ buttonBack }}
                 </vs-button>
                 <vs-dropdown-menu>
@@ -247,8 +238,7 @@
                        icon="done"
                        color="success"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        @click="changeStatus('+')"
             >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
             </vs-button>
@@ -257,8 +247,7 @@
                        icon="star"
                        color="warning"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        @click="taskPin(true)"
             >{{ $t('buttons.pin') }}
             </vs-button>
@@ -267,8 +256,7 @@
                        icon="star_border"
                        color="danger"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 py-0 mr-2 fit"
                        @click="taskPin(false)"
             >{{ $t('buttons.unpin') }}
             </vs-button>
@@ -277,8 +265,7 @@
                        icon="edit"
                        color="dark"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        :to="$route.path + '/edit'"
             >{{ $t('buttons.edit') }}
             </vs-button>
@@ -287,49 +274,43 @@
                        icon="delete_forever"
                        color="danger"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        @click="confirmDelete"
             >{{ $t('buttons.delete') }}
             </vs-button>
 
           <!-- ATTACHMENT BUTTONS -->
-          <div class="flex -ml-3" v-if="attachmentView">
+          <div class="flex -ml-2" v-if="attachmentView">
             <vs-button icon="library_add"
                        color="primary"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
             >{{ $t('buttons.addAttachment') }} </vs-button>
 
             <vs-button icon="delete"
                        color="danger"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
             >{{ $t('buttons.deleteAttachment') }} </vs-button>
 
             <vs-button icon="cloud_download"
                        color="success"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
-                       :href="currentAttachment.url"
+                       class="px-2 py-0 mr-2 fit"
+                       :href="currentAttachment.srcUrl"
             >{{ $t('buttons.downloadAttachment') }} </vs-button>
 
             <vs-button icon="library_books"
                        color="warning"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        :to="{name: 'versions'}"
             >{{ $t('buttons.attachmentVersions') }} </vs-button>
 
             <vs-button icon="assignment"
                        color="dark"
                        type="flat"
-                       size="small"
-                       class="px-3 mr-2 fit"
+                       class="px-2 py-0 mr-2 fit"
                        @click="$store.commit('sm/TOGGLE_EDS_POPUP', true)"
             >{{ $t('buttons.attachmentEds') }} </vs-button>
 

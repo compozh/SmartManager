@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import VxTooltip from './layouts/components/vx-tooltip/VxTooltip.vue'
-import VxCard  from './components/vx-card/VxCard.vue'
-import VxList  from './components/vx-list/VxList.vue'
-import FeatherIcon  from './components/FeatherIcon.vue'
-import VxInputGroup  from './components/vx-input-group/VxInputGroup.vue'
-import VxBreadcrumb  from './layouts/components/VxBreadcrumb.vue'
+import VxTooltip from '@/layouts/components/vx-tooltip/VxTooltip.vue'
+import VxCard  from '@/components/vx-card/VxCard.vue'
+import VxList  from '@/components/vx-list/VxList.vue'
+import FeatherIcon  from '@/components/FeatherIcon.vue'
+import VxInputGroup  from '@/components/vx-input-group/VxInputGroup.vue'
+import VxBreadcrumb  from '@/layouts/components/VxBreadcrumb.vue'
 
 Vue.component(VxTooltip.name, VxTooltip)
 Vue.component(VxCard.name, VxCard)

@@ -20,6 +20,13 @@ export default {
     try {
       const result = await api.getFileDetailsFromGql(fileId, fileExt)
       const fileDetails = JSON.parse(result.data.smtasks.fileDetails)
+      if (fileDetails.ErrorMessage) {
+        vs.notify({
+          title: i18n.t('notify.attachTitle'),
+          text: fileDetails.ErrorMessage,
+          color: 'warning'
+        })
+      }
       commit('SET_ATTACHMENT_DETAILS', {fileId, fileDetails, taskOrCaseId, rootState})
       stopLoading()
       return fileDetails

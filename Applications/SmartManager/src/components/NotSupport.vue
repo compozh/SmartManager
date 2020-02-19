@@ -1,6 +1,6 @@
 <template>
   <VuePerfectScrollbar
-    class="md:px-8 p-4 flex-1 border d-theme-border-grey-light border-solid p-6 m-6 mt-0"
+    class="md:px-8 p-4 flex-1 border d-theme-border-grey-light border-solid p-6"
     style="background: #f5f5f5;"
     :settings="settings"
   >
