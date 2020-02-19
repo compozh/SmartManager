@@ -38,7 +38,7 @@ export default function addDataObjectReferenceProps(group, diagram, element, ent
     set: (element, value) => cmdHelper.updateBusinessObject(element, reference, { 'IT-Enterprise:businessObjectDefinitionCode': value }),
     appendIcon: 'mdi-magnify',
     append: () => {
-      eventBus.$emit(events.propertiesPanel.selectBusinessObject, reference.get('IT-Enterprise:businessObjectDefinitionCode', diagram.isSystem), (newValue) => {
+      eventBus.$emit(events.propertiesPanel.selectBusinessObject, reference.get('IT-Enterprise:businessObjectDefinitionCode'), diagram.isSystem, (newValue) => {
         var cmd = cmdHelper.updateBusinessObject(element, reference, { 'IT-Enterprise:businessObjectDefinitionCode': newValue });
         commandStack.execute(cmd.cmd, cmd.context);
       });

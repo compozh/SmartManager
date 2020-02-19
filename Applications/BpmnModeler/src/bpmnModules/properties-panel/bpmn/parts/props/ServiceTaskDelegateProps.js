@@ -138,7 +138,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
               'IT-Enterprise:businessObjectAccessDefinitionCode': undefined
             });
             commandStack.execute(cmd.cmd, cmd.context);
-          });
+          }, selectedBusinessObjects);
         }
       }));
   
