@@ -149,7 +149,7 @@ export default {
         items, items.find(item => item.id === caseDefKey),
         (selectedItem) => callback(selectedItem.id));
     },
-    async onPropertiesPanelSelectBusinessObject(boDefCode, onlySystem, callback) {
+    async onPropertiesPanelSelectBusinessObject(boDefCode, onlySystem, callback, selectedBusinessObjects) {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getBusinessObjects', onlySystem);
       if (!items) {
@@ -159,6 +159,9 @@ export default {
       }
       this.changeLoad();
       items = items.map(bo => { return { id: bo.boDefCode, name: bo.name }; });
+      if (Array.isArray(selectedBusinessObjects)) {
+        items = items.filter(item => selectedBusinessObjects.indexOf(item.id) !== -1);
+      }
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectBusinessObject'),
         items, items.find(item => item.id === boDefCode),
