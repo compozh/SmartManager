@@ -25,10 +25,10 @@ export default {
     }
     context.state.configuration = new Configuration(configuration);
   },
-  async loadItems(context) {
+  async loadItems(context, refetch) {
     let items;
     try {
-      items = await api.getItems();
+      items = await api.getItems(refetch);
     } catch (error) {
       console.error(error);
       return false;
@@ -51,7 +51,7 @@ export default {
     return true;
   },
   async checkForOwnFolder(context) {
-    const folderExisit = context.state.items.findIndex(item => item instanceof Folder) >= 0;
+    const folderExisit = context.state.items.findIndex(item => item instanceof Folder && item.ownerId === context.rootState.auth.user.id) >= 0;
     if (folderExisit) {
       return;
     }
@@ -386,6 +386,42 @@ export default {
   async getDeployedDecisions(context) {
     try {
       return await api.getDeployedDecisions();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getDeployedCases(context) {
+    try {
+      return await api.getDeployedCases();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjects(context, onlySystem) {
+    try {
+      return await api.getBusinessObjects(onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectActions(context, { boDefCode, onlySystem }) {
+    try {
+      return await api.getBusinessObjectActions(boDefCode, onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectAccess(context, { boDefCode, onlySystem }) {
+    try {
+      return await api.getBusinessObjectAccess(boDefCode, onlySystem);
     } catch (error) {
       console.error(error);
       return false;

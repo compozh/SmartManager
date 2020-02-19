@@ -1,5 +1,5 @@
 <template>
-    <v-overlay v-if="show" v-model="show">
+    <v-overlay v-if="show" v-model="show" class="overlay-for-formio">
       <v-card width="800px" light class="dialog">
         <v-card-title>
           <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
@@ -70,7 +70,7 @@ export default {
   .dialog{
     height: 90%;
   }
-  .v-overlay {
+  .overlay-for-formio {
     z-index: 1003 !important; 
   }
 </style>

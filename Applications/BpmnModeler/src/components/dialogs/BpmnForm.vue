@@ -152,8 +152,7 @@ export default {
         let success = await this.callback(this.model, this.type == 'project' ? 'folder' : this.type , this.mode);
         
         if (success) {
-          await this.$store.dispatch('bpmn/resetCache');
-          await this.$store.dispatch('bpmn/loadItems');
+          await this.$store.dispatch('bpmn/loadItems', true);
           this.cancel();
           if ((this.type == 'process' || this.type == 'project') && (this.mode == 'create' || this.mode == 'copy' ) ) {
             this.active = this.model.id;
