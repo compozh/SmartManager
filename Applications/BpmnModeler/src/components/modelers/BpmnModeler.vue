@@ -19,7 +19,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
-import { Diagram, DiagramType, AccessRights } from '../../api/models';
+import { Diagram, DiagramType, AccessRights, DiagramVersion } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
@@ -61,6 +61,9 @@ export default {
       const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.BPMN) {
         return activeItem;
+      } else if(activeItem && activeItem instanceof DiagramVersion ) {
+        let mainDiagram = this.$store.getters['bpmn/getItemById'](activeItem.diagramId).item
+        return mainDiagram.type === DiagramType.BPMN ? mainDiagram : null
       }
       return null;
     },
@@ -101,7 +104,12 @@ export default {
         this.cancellationToken.cancel();
       }
       const debounced = debounce(500, async (cancellationToken) => {
-        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
+        let xml
+        if(this.diagram && this.diagram instanceof DiagramVersion) {
+          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.diagram.versionId, diagramId: this.process.id})
+        } else {
+          xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
+        }
         if (cancellationToken.isCancelled) {
           return;
         }

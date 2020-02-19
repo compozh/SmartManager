@@ -86,7 +86,7 @@
       </template>
       <template v-if="crumb">
         <template v-if="!isFolder(item)">
-          <v-list-item >
+          <v-list-item @click="createVersion(item)">
             <v-list-item-avatar>
               <v-icon>mdi-source-commit</v-icon>
             </v-list-item-avatar>
@@ -146,13 +146,13 @@
       </template>
 
       <template v-if="milestones" >
-        <v-list-item @click="edit(item)">
+        <v-list-item >
           <v-list-item-avatar>
             <v-icon>mdi-pencil</v-icon>
           </v-list-item-avatar>
           <v-list-item-title>{{ $t('bpmn.buttons.Rename') }}</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="remove(item)">
+        <v-list-item >
           <v-list-item-avatar>
             <v-icon>mdi-delete</v-icon>
           </v-list-item-avatar>
@@ -280,6 +280,9 @@ export default {
     },
     isDmn(item) {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
+    },
+    async createVersion(item) {
+      await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item)
     }
   },
 };

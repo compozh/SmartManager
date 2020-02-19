@@ -2,9 +2,9 @@
 	<v-container class="column pa-0 fill-height" fluid >
     <Split  @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize" class="diagram-section">
-          <bpmn-modeler v-if="type == 'BPMN'" :onlyRead="true" ref="bpmnModeler"/>
-          <dmn-modeler v-else-if="type == 'DMN'" :onlyRead="true" ref="dmnModeler"/>
-          <cmmn-modeler v-else :onlyRead="true" ref="cmmnModeler"/>
+          <bpmn-modeler v-if="type == 'BPMN'" :onlyRead="true" :diagram.sync="version"  ref="modeler"/>
+          <dmn-modeler v-else-if="type == 'DMN'" :onlyRead="true" :diagram="version" ref="modeler"/>
+          <cmmn-modeler v-else :onlyRead="true" :diagram="version" ref="modeler"/>
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="properties-panel-section">
         <div class="properties-panel-container" >
@@ -12,18 +12,21 @@
             {{$t('bpmn.labels.Milestones')}}
           </v-toolbar>
           <v-list class="milestones-list" v-if="diagram">
-            <v-list-item-group>
-              <v-subheader>{{ diagram.editTime || diagram.creationTime | formatDate }}</v-subheader>
-              <v-list-item class="row d-flex ma-1"  >
+            <v-list-item-group  v-for="group in groups" :key="group.name" >
+              <v-subheader>{{  group.name | formatDate }}</v-subheader>
+              <v-list-item class="row d-flex ma-1" :class="{'v-list-item--active ': item.versionId == version.versionId || version.id}"
+                v-for="item in versions"
+                :key="item.versionId"
+                @click="changeVersion(item)">
                 <v-list-item-avatar class="ma-0">
-                  <v-avatar color="blue-grey lighten-1" :title="findUser(diagram.editorId )"> {{findUser(diagram.editorId || diagram.ownerId) | formatAvatar}}</v-avatar>
+                  <v-avatar color="blue-grey lighten-1" :title="item.creatorName"> {{item.creatorName | formatAvatar}}</v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content style="text-align: start" class="px-2 py-2">
-                  <v-list-item-title>{{$t('bpmn.labels.LatestVersion')}}</v-list-item-title>
-                  <v-list-item-subtitle>{{ diagram.editTime || diagram.creationTime | formatTime }}</v-list-item-subtitle>
+                  <v-list-item-title>{{item.name == diagram.name ? $t('bpmn.labels.LatestVersion') : item.name}}</v-list-item-title>
+                  <v-list-item-subtitle>{{item.creationTime | formatTime }}</v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action class="ma-0">
-                  <bpmn-contex-menu :item="diagram" :milestones="true"
+                <v-list-item-action class="ma-0" v-if="item.name != diagram.name">
+                  <bpmn-contex-menu :item="item" :milestones="true"
                     @edit="editItem" 
                     @remove="removeItem"
                     @compare="compare"
@@ -36,28 +39,6 @@
                 </bpmn-contex-menu>
                 </v-list-item-action>
               </v-list-item>
-              <!-- <v-divider /> -->
-              <!-- <v-list-item class="row d-flex ma-1 v-list-item--link" >
-                <v-list-item-avatar class="ma-0">
-                  <v-icon size="18">mdi-pencil</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content style="text-align: start" class="px-2 py-2">
-                  <v-list-item-title> name of version</v-list-item-title>
-                  <v-list-item-subtitle> time  & created by who</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action class="ma-0">
-                  <bpmn-contex-menu :item="diagram"
-                      offset
-                      @edit="editItem" :crumb="true"
-                      @remove="removeItem" >
-                    <template #activator="{ on }">
-                      <v-btn icon v-on="on">
-                        <v-icon size="18" color="grey lighten-1">mdi-dots-vertical</v-icon>
-                      </v-btn>
-                  </template>
-                </bpmn-contex-menu>
-                </v-list-item-action>
-              </v-list-item> -->
             </v-list-item-group>
           </v-list>
         </div>
@@ -80,15 +61,15 @@ export default {
       users: [],
       loading: false,
       split: null,
+      versions: [],
+      version: {},
+      groups: []
     };
   },
   props: {
     activeItem: {
       required: true
     },
-  },
-  mounted() {
-    // this.compare()
   },
 
   filters: {
@@ -112,15 +93,16 @@ export default {
 
   computed: {
     diagram() {
-      const activeItem = this.$store.state.bpmn.activeItem;
+      const activeItem = this.$store.state.bpmn.activeItem || this.$store.getters['bpmn/getItemById'](this.$route.params.id);
       if (activeItem && activeItem instanceof Diagram) {
-        this.loadUsers();
+        // this.loadUsers();
         return activeItem;
       }
       return null;
     },
     type() {
       if (!this.diagram) { return; }
+      this.getVersions()
       return this.diagram.type;
     },
     splitSize: {
@@ -155,20 +137,52 @@ export default {
     onSplitDragEnd(size) {
       this.splitSize = 100 - Number.parseInt(size);
     },
-    async loadUsers() {
-      this.users = await this.$store.dispatch('bpmn/queryUsers');
-    },
-    findUser(userId) {
-      if (this.users.length == 0 || !this.users) { 
-        
+    async findUser(userId) {
+      let users = await this.$store.dispatch('bpmn/queryUsers');
+      if (users.length == 0 || !users) {
         return userId;
       }
-      let user = this.users.find( user => user.id == userId ),
+      let user = users.find( user => user.id == userId ),
         result = user ? user.name : userId;
       return result;
     },
     compare(itemId1, itemId2) {
       this.$router.push({name: 'compare', params: {id: itemId1}, query: {id2: itemId2} });
+    },
+    async getVersions() {
+      if (!this.diagram || this.versions.length > 0) { return; }
+      let versions = await this.$store.dispatch('bpmn/getVersionsForDiagram', this.diagram.id),
+      groups = []
+      if(versions.length == 0) {
+        versions = [this.diagram]
+          this.diagram.creatorName = await this.findUser(this.diagram.ownerId),
+          this.diagram.creationTime = new Date()
+      }
+      versions.forEach( item => {
+        let key = groups.find( el => el.name == item.creationTime)
+        if(!key) {
+          groups.push({
+            name: item.creationTime,
+            items: [item]
+          })
+        } else {
+          key.items.push(item)
+        }
+      })
+      this.groups = groups
+      this.versions = versions
+      this.changeVersion(versions[0])
+    },
+    async createVersion(item) {
+      await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item)
+    },
+    changeVersion(val) {
+      if(val.versionId == this.$route.query.version || this.version.versionId == val.versionId) {
+        this.version = val
+        return 
+      }
+      this.version = val
+      this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }})
     }
   },
 };

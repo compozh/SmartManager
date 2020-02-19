@@ -62,7 +62,6 @@ export default {
       }
     },
     select(value) {
-      debugger
       this.$emit('input', value);
     }
   },
