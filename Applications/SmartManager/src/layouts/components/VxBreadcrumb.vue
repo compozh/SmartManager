@@ -1,9 +1,9 @@
 <template>
   <div>
-    <ul class="flex items-center">
+    <ul class="flex items-center text-sm">
       <li class="flex items-center">
         <router-link to="/">
-          <feather-icon icon="HomeIcon" svgClasses="h-5 w-5 mt-1 stroke-current text-primary"/>
+          <feather-icon icon="HomeIcon" svgClasses="h-4 w-4 stroke-current text-primary" style="margin-top: 5px"/>
         </router-link>
         <span class="breadcrumb-separator mx-2 flex items-center">
           <feather-icon icon="ChevronsRightIcon" svgClasses="w-4 h-4"/></span>
