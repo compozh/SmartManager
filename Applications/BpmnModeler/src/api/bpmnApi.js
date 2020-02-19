@@ -6,7 +6,6 @@ import gql from 'graphql-tag';
 
 import auth from '@it-enterprise/jwtauthentication';
 import router from '@/router';
-// import config from '../config';
 
 // Queries
 import * as queries from './graphql/queries';
@@ -24,9 +23,10 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.getConfiguration;
   }
 
-  async getItems() {
+  async getItems(refetch) {
     const result = await query({
-      query: gql`query ${queries.items}`
+      query: gql`query ${queries.items}`,
+      fetchPolicy: refetch === true ? 'network-only' : 'cache-first'
     });
     return JSON.parse(result.data.bpmnquery.items);
   }

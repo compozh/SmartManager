@@ -15,7 +15,7 @@
             <v-list-item-group  v-for="group in groups" :key="group.name" >
               <v-subheader>{{  group.name | formatDate }}</v-subheader>
               <v-list-item class="row d-flex ma-1" :class="{'v-list-item--active ': item.versionId == version.versionId || version.id}"
-                v-for="item in versions"
+                v-for="item in group.items"
                 :key="item.versionId"
                 @click="changeVersion(item)">
                 <v-list-item-avatar class="ma-0">
@@ -158,6 +158,8 @@ export default {
           this.diagram.creatorName = await this.findUser(this.diagram.ownerId),
           this.diagram.creationTime = new Date()
       }
+      debugger
+
       versions.forEach( item => {
         let key = groups.find( el => el.name == item.creationTime)
         if(!key) {
