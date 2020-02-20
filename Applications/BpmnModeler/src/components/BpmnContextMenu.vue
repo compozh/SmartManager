@@ -173,6 +173,7 @@
 import { eventBus } from '../main';
 import { events } from '../constants';
 import * as Models from '../api/models';
+import { Notification } from 'element-ui'
 
 export default {
   name: 'bpmn-contex-menu',
