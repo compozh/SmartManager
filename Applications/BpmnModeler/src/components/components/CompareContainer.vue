@@ -4,25 +4,42 @@
       <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
     </v-row>
     <div class="modeler" ref="container"></div>
+    <v-row class="options-panel grey lighten-4 ">
+      <v-btn text :disabled="!canZoom" @click="onZoomIn" :title="$t('bpmn.labels.ZoomIn')">
+        <v-icon size="20">mdi-magnify-plus-outline</v-icon>
+      </v-btn>
+      <v-btn text :disabled="!canZoom" @click="onZoomOut" :title="$t('bpmn.labels.ZoomOut')">
+        <v-icon size="20">mdi-magnify-minus-outline</v-icon>
+      </v-btn>
+      <v-btn text :disabled="!canZoom" @click="onZoomReset" :title="$t('bpmn.labels.ResetZoom')">
+        <v-icon size="20">mdi-magnify-close</v-icon>
+      </v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn text :disabled="!canMinimap" @click="onMinimap" :title="$t('bpmn.labels.ToggleMinimap')">
+        <v-icon>mdi-map</v-icon>
+      </v-btn>
+      <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
+        <v-icon v-if="fullScreen">mdi-fullscreen-exit</v-icon>
+        <v-icon v-else>mdi-fullscreen</v-icon>
+      </v-btn>
+    </v-row>
 	</v-container>
 </template>
 
 <script>
-import { debounce } from 'throttle-debounce';
 import { Diagram, DiagramType, DiagramVersion } from '../../api/models';
-import { CancellationToken, editorFactory } from '../../api';
-import { editorToolbarMixin } from '../mixins';
+import { editorFactory } from '../../api';
+import { editorToolbarMixin, fullScreenMixin } from '../mixins';
 import { Notification } from 'element-ui';
 import moment from 'moment';
 export default {
   name: 'copmpare-modeler',
-  mixins: [ editorToolbarMixin ],
+  mixins: [ editorToolbarMixin, fullScreenMixin ],
   data () {
     return {
       loading: false,
       split: null,
       modeler: null,
-      cancellationToken: new CancellationToken(),
     };
   },
   props: {
@@ -44,49 +61,25 @@ export default {
       this.loadXml();
     },    
     async loadXml() {
-      if (!this.version || !this.modeler) {
-        return;
-      }
+      if (!this.version || !this.modeler) { return; }
       this.loading = true;
-      if (!this.cancellationToken.isCancelled) {
-        this.cancellationToken.cancel();
+      let xml;
+      if (this.version instanceof DiagramVersion) {
+        xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.version.versionId, diagramId: this.diagram.id});
+      } else {
+        xml = await this.$store.dispatch('bpmn/getXml', this.version.id);
       }
-      const debounced = debounce(500, async (cancellationToken) => {
-        let xml;
-        if (this.version instanceof DiagramVersion) {
-          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.version.versionId, diagramId: this.diagram.id});
-        } else {
-          xml = await this.$store.dispatch('bpmn/getXml', this.version.id);
-        }
-        
-        if (cancellationToken.isCancelled) {
-          return;
-        }
-        if (xml === false) {
+      if (xml) {
+        this.modeler.importXML(xml, (err) => {
           this.loading = false;
-          Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
-          return;
-        }
-        if (!xml || xml === '') {
-          this.modeler.createDiagram(() => {
+          this.$emit('compare');
+          if (err) {
+            console.error(err);
+            Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
             this.loading = false;
-          });        
-        } else {
-          this.modeler.importXML(xml, (err) => {
-            this.loading = false;
-            this.$emit('compare');
-            if (err) {
-              console.error(err);
-              Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
-              this.modeler.createDiagram();
-              this.loading = false;
-            }
-          });
-        }
-      });
-
-      this.cancellationToken = new CancellationToken(debounced);
-      debounced(this.cancellationToken);
+          }
+        });
+      }
     },
     translate(template, replacements) {
       const translationPrefix = 'bpmn.bpmn-modeler.';
@@ -138,7 +131,29 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" >
+  .modeler {
+    height: 100%;
+    width: 100%;
+    background: white;
+    position: relative;
+  }
+
+</style>
+<style lang="scss" scoped>
+  .options-panel {
+    position: absolute;
+    background-color: #f5f5f5;
+    bottom: 20px;
+    right: 30px;
+    // height: 20px;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+    z-index: 50;
+    .v-btn {
+      min-width: 45px !important
+    }
+  }
   .added {
     border: 2px solid green;
     background-color: rgba($color: green, $alpha: 0.2)
@@ -158,10 +173,5 @@ export default {
   .compare-icon::before {
     position: relative;
     top: -26px;
-  }
-  .modeler {
-    height: 100%;
-    width: 100%;
-    background: white
   }
 </style>
