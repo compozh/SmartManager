@@ -18,8 +18,14 @@ export default {
   async getFolders({commit}, loading) {
     !loading || startLoading()
     try {
-      const result = await api.getFoldersFromGql()
-      const folders = result.data.smtasks.folders
+      const response = await api.getFoldersFromGql()
+      const result = response.data.smtasks.folders
+      const folders = result.map(folder => {
+        if (folder.code === '') {
+          folder.name = i18n.t('folders.active')
+        }
+        return folder
+      })
       commit('setFolders', folders)
       !loading || stopLoading()
     } catch (e) {
