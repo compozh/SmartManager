@@ -292,8 +292,6 @@ export default {
       this.form.show = true;
     },
     editItem(item) {
-      console.log(this.record);
-      console.log(this);
       this.form.editedItem.id = item.model.id;
       this.form.editedItem.record = this.record;
       this.form.editedItem.rights = item.model.rights;
@@ -325,7 +323,6 @@ export default {
 
       let storeAction;
 
-      console.log(this.form.editedItem.record);
       const entityType = this.form.editedItem.record instanceof Models.Diagram ? 'Diagram' : this.form.editedItem.record instanceof Models.Folder ? 'Folder' : '';
 
       switch (this.form.mode) {
@@ -364,7 +361,7 @@ export default {
         result = await this.$store.dispatch(storeAction, access);
 
         if (!result) {
-          Notification.error('bpmn.errors.AccessError', { identity: name });
+          Notification.error(this.$t('bpmn.errors.AccessError', { identity: name }));
         }
       }
 
@@ -372,7 +369,7 @@ export default {
         this.formClose();
         this.onShowAccessDialog(this.record);
       } else {
-        Notification.error('bpmn.errors.RequestError');
+        Notification.error(this.$t('bpmn.errors.RequestError'));
         this.form.loading = false;
       }
     }

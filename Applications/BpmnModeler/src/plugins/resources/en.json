@@ -111,7 +111,10 @@
 		"AlreadyIn": "Item already in this folder",
 		"Drag&drop" : "Drag and drop or ",
 		"Import" : "import",
-		"Files" : ".bpmn, .dmn or .cmmn files"
+		"Files" : ".bpmn, .dmn or .cmmn files",
+		"SelectBusinessObject": "Select Business Object",
+		"SelectBusinessObjectAction": "Select Business Object Action",
+		"SelectBusinessObjectAccess": "Select Business Object Access"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -407,6 +410,7 @@
 		"Called Case": "Called Case",
 		"Called Process": "Called Process",
 
+		"Data Object": "Data Object",
 		"Business Object": "Business Object",
 		"Business Object Action": "Business Object Action",
 		"Business Object Access": "Business Object Access",

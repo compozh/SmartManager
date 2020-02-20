@@ -5,7 +5,7 @@ import EntryFactory from '../../../EntryFactory';
 import { PropertiesPanelGroup } from '../../../Models';
 import { Diagram, ActionDefinitionType } from '../../../../../api/models';
 import { api } from '../../../../../api/bpmnApi';
-import { setServiceTaskParameters } from '../../../utils';
+import { setServiceTaskParameters, findDataObject } from '../../../utils';
 import { eventBus } from '../../../../../main';
 import { events } from '../../../../../constants';
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
@@ -108,40 +108,40 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             return false;
           }
           const bo = getBusinessObject(e);
-          if (!bo) {
-            return false;
-          }
           const reference = bo.get('dataObjectRef');
           if (!reference) {
             return false;
           }
-          return true;
+          const boDefCode = reference.get('IT-Enterprise:businessObjectDefinitionCode');
+          return typeof boDefCode === 'string' && boDefCode.trim() != '';
         }).map(e => {
           const bo = getBusinessObject(e);
           const reference = bo.get('dataObjectRef');
-          return reference.get('IT-Enterprise:businessObjectDefinitionCode');
+          return {
+            value: reference.id,
+            name: bo.name
+          };
         });
       
-      group.entries.push(entryFactory.autocompleteBox({
+      const dataObjectRef = businessObject.get('IT-Enterprise:dataObjectRef');
+      
+      group.entries.push(entryFactory.selectBox({
         id: 'boDefCode',
-        label: translate('Business Object'),
-        model: 'IT-Enterprise:businessObjectDefinitionCode',
-        loadItems: (async () => (await api.getBusinessObjects(diagram.isSystem))
-          .filter(bo => selectedBusinessObjects.indexOf(bo.boDefCode) !== -1)
-          .map(bo => ({ id: bo.boDefCode, name: bo.name })))(),
-        appendIcon: 'mdi-magnify',
-        append: () => {
-          eventBus.$emit(events.propertiesPanel.selectBusinessObject, businessObject.get('IT-Enterprise:businessObjectDefinitionCode'), diagram.isSystem, (newValue) => {
-            var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
-              'IT-Enterprise:businessObjectDefinitionCode': newValue,
-              'camunda:topic': undefined
-            });
-            commandStack.execute(cmd.cmd, cmd.context);
-          }, selectedBusinessObjects);
+        label: translate('Data Object'),
+        model: 'IT-Enterprise:dataObjectRef',
+        items: selectedBusinessObjects,
+        get: () => dataObjectRef ? dataObjectRef.get('id') : undefined,
+        set: (element, value) => {
+          const bo = getBusinessObject(element);
+          const dataObject = findDataObject(bo, value);
+          return cmdHelper.updateBusinessObject(element, bo, {
+            'IT-Enterprise:dataObjectRef': dataObject,
+            'camunda:topic': undefined
+          });
         }
       }));
   
-      const boDefCode = businessObject.get('IT-Enterprise:businessObjectDefinitionCode');
+      const boDefCode = dataObjectRef ? dataObjectRef.get('IT-Enterprise:businessObjectDefinitionCode') : undefined;
       if (typeof boDefCode === 'string' && boDefCode.trim() !== '') {
         if (isBoAction) {
           group.entries.push(entryFactory.autocompleteBox({
@@ -153,7 +153,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAction,
-                businessObject.get('IT-Enterprise:businessObjectDefinitionCode'),
+                boDefCode,
                 businessObject.get('camunda:topic'),
                 diagram.isSystem,
                 (newValue) => {
@@ -174,7 +174,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAccess,
-                businessObject.get('IT-Enterprise:businessObjectDefinitionCode'),
+                boDefCode,
                 businessObject.get('camunda:topic'),
                 diagram.isSystem,
                 (newValue) => {
