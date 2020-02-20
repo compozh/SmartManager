@@ -70,9 +70,10 @@
           "type": "String"
         },
         {
-          "name": "businessObjectDefinitionCode",
+          "name": "dataObjectRef",
           "isAttr": true,
-          "type": "String"
+          "type": "bpmn:DataObject",
+          "isReference": true
         }
       ]
     }

@@ -364,7 +364,7 @@ export default {
         result = await this.$store.dispatch(storeAction, access);
 
         if (!result) {
-          Notification.error('bpmn.errors.AccessError', { identity: name });
+          Notification.error(this.$t('bpmn.errors.AccessError', { identity: name }));
         }
       }
 
@@ -372,7 +372,7 @@ export default {
         this.formClose();
         this.onShowAccessDialog(this.record);
       } else {
-        Notification.error('bpmn.errors.RequestError');
+        Notification.error(this.$t('bpmn.errors.RequestError'));
         this.form.loading = false;
       }
     }

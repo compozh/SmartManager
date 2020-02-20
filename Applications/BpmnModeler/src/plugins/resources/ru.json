@@ -111,7 +111,10 @@
 		"AlreadyIn": "Элемент уже в этой папке",
 		"Drag&drop" : "Перетащите сюда или ",
 		"Import" : "импортируйте",
-		"Files" : ".bpmn, .dmn или .cmmn файлы"
+		"Files" : ".bpmn, .dmn или .cmmn файлы",
+		"SelectBusinessObject": "Выберите бизнес-объект",
+		"SelectBusinessObjectAction": "Выберите действие над бизнес-объектом",
+		"SelectBusinessObjectAccess": "Выберите настройки доступа к бизнес-объекту"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -407,6 +410,7 @@
 		"Called Case": "Кейс",
 		"Called Process": "Процесс",
 
+		"Data Object": "Объект данных",
 		"Business Object": "Бизнес-объект",
 		"Business Object Action": "Действие бизнес-объекта",
 		"Business Object Access": "Доступ к бизнес-объекту",
