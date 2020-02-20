@@ -98,8 +98,7 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
         if (BUSINESS_OBJECT_PROPS.indexOf(oldType) !== -1) {
           props['IT-Enterprise:businessObjectTaskType'] = undefined;
           props['IT-Enterprise:businessObjectDefinitionCode'] = undefined;
-          props['IT-Enterprise:businessObjectActionDefinitionCode'] = undefined;
-          props['IT-Enterprise:businessObjectAccessDefinitionCode'] = undefined;
+          props['camunda:topic'] = undefined;
         }
 
         if (BUSINESS_OBJECT_PROPS.indexOf(newType) !== -1) {
