@@ -52,6 +52,11 @@
           "name": "businessObjectDefinitionCode",
           "isAttr": true,
           "type": "String"
+        },
+        {
+          "name": "businessObjectKeyVariableName",
+          "isAttr": true,
+          "type": "String"
         }
       ]
     },
@@ -66,16 +71,6 @@
         },
         {
           "name": "businessObjectDefinitionCode",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "businessObjectActionDefinitionCode",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "businessObjectAccessDefinitionCode",
           "isAttr": true,
           "type": "String"
         }

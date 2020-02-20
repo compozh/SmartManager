@@ -134,8 +134,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
           eventBus.$emit(events.propertiesPanel.selectBusinessObject, businessObject.get('IT-Enterprise:businessObjectDefinitionCode'), diagram.isSystem, (newValue) => {
             var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
               'IT-Enterprise:businessObjectDefinitionCode': newValue,
-              'IT-Enterprise:businessObjectActionDefinitionCode': undefined,
-              'IT-Enterprise:businessObjectAccessDefinitionCode': undefined
+              'camunda:topic': undefined
             });
             commandStack.execute(cmd.cmd, cmd.context);
           }, selectedBusinessObjects);
@@ -148,18 +147,18 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
           group.entries.push(entryFactory.autocompleteBox({
             id: 'boActDefCode',
             label: translate('Business Object Action'),
-            model: 'IT-Enterprise:businessObjectActionDefinitionCode',
+            model: 'camunda:topic',
             loadItems: (async () => (await api.getBusinessObjectActions(boDefCode, diagram.isSystem))
               .map(act => ({ id: act.actionDefCode, name: act.name })))(),
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAction,
                 businessObject.get('IT-Enterprise:businessObjectDefinitionCode'),
-                businessObject.get('IT-Enterprise:businessObjectActionDefinitionCode'),
+                businessObject.get('camunda:topic'),
                 diagram.isSystem,
                 (newValue) => {
                   var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
-                    'IT-Enterprise:businessObjectActionDefinitionCode': newValue,
+                    'camunda:topic': newValue,
                   });
                   commandStack.execute(cmd.cmd, cmd.context);
                 });
@@ -169,18 +168,18 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
           group.entries.push(entryFactory.autocompleteBox({
             id: 'boAccDefCode',
             label: translate('Business Object Access'),
-            model: 'IT-Enterprise:businessObjectAccessDefinitionCode',
+            model: 'camunda:topic',
             loadItems: (async () => (await api.getBusinessObjectAccess(boDefCode, diagram.isSystem))
               .map(act => ({ id: act.accessDefCode, name: act.name })))(),
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAccess,
                 businessObject.get('IT-Enterprise:businessObjectDefinitionCode'),
-                businessObject.get('IT-Enterprise:businessObjectAccessDefinitionCode'),
+                businessObject.get('camunda:topic'),
                 diagram.isSystem,
                 (newValue) => {
                   var cmd = cmdHelper.updateBusinessObject(element, businessObject, {
-                    'IT-Enterprise:businessObjectAccessDefinitionCode': newValue,
+                    'camunda:topic': newValue,
                   });
                   commandStack.execute(cmd.cmd, cmd.context);
                 });

@@ -413,7 +413,8 @@
 
 		"Business Object": "Бізнес-об'єкт",
 		"Business Object Action": "Дія бізнес-об'єкту",
-		"Business Object Access": "Доступ до бізнес-об'єкта"
+		"Business Object Access": "Доступ до бізнес-об'єкта",
+		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкту"
 	},
 	"dmn-modeler": {
 

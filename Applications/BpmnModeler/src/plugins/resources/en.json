@@ -409,7 +409,8 @@
 
 		"Business Object": "Business Object",
 		"Business Object Action": "Business Object Action",
-		"Business Object Access": "Business Object Access"
+		"Business Object Access": "Business Object Access",
+		"Business Object Key Variable Name": "Business Object Key Variable Name"
 	},
 	"dmn-modeler": {
 
