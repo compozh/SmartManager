@@ -8,6 +8,7 @@
     "timeFormat": "24hr"
   },
   "folders": {
+    "active": "Активні",
     "header": "Папки",
     "main": "Активні",
     "folder": "Папка",

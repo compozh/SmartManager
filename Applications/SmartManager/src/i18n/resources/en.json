@@ -8,6 +8,7 @@
     "timeFormat": "ampm"
   },
   "folders": {
+    "active": "Active",
     "header": "Folders",
     "main": "Active",
     "folder": "Folder",
