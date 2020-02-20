@@ -171,3 +171,20 @@ export function getRoot(businessObject) {
   }
   return parent;
 }
+
+
+export function findDataObject(businessObject, dataObjectId) {
+  const root = getRoot(businessObject);
+
+  for (let i = 0; i < root.rootElements.length; i++) {
+    const rootElement = root.rootElements[i];
+    if (Array.isArray(rootElement.flowElements)) {
+      for (let j = 0; j < rootElement.flowElements.length; j++) {
+        const element = rootElement.flowElements[j];
+        if (element.id === dataObjectId) {
+          return element;
+        }
+      }
+    }
+  }
+}

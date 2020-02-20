@@ -492,7 +492,7 @@ export default {
   },
   async copyVersion(context, process) {
     try {
-      process.xmlView = await context.dispatch('getDiagramVersionXml', {diagramId : process.diagramId, versionId: process.versionId});
+      process.xmlView = await context.dispatch('getDiagramVersionXml', {diagramId: process.diagramId, versionId: process.versionId});
       return await context.dispatch('createProcess', process);
     } catch (error) {
       console.error(error);

@@ -169,7 +169,7 @@ export default {
     },
     async onPropertiesPanelSelectBusinessObjectAction(boDefCode, actDefCode, onlySystem, callback) {
       this.loading = true;
-      var items = await this.$store.dispatch('bpmn/getBusinessObjectAction', { boDefCode, onlySystem }, onlySystem);
+      var items = await this.$store.dispatch('bpmn/getBusinessObjectActions', { boDefCode, onlySystem }, onlySystem);
       if (!items) {
         this.changeLoad();
         Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));

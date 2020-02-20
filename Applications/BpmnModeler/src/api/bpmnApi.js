@@ -158,7 +158,8 @@ export class BpmnModelerApi {
           write: accessParams.write,
           deploy: accessParams.deploy,
           execute: accessParams.execute,
-          share: accessParams.share
+          share: accessParams.share,
+          inherit: accessParams.inherit
         }
       }
     });
@@ -214,7 +215,8 @@ export class BpmnModelerApi {
           write: accessParams.write,
           deploy: accessParams.deploy,
           execute: accessParams.execute,
-          share: accessParams.share
+          share: accessParams.share,
+          inherit: accessParams.inherit
         }
       }
     });

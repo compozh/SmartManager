@@ -86,7 +86,7 @@ export default {
           let val;
           if (elem instanceof Folder ) {
             val = await this.$store.dispatch('bpmn/copyFolder', elem);
-          } else if(elem instanceof Diagram){
+          } else if (elem instanceof Diagram) {
             val = await this.$store.dispatch('bpmn/copyProcess', elem);
           } else {
             val = await this.$store.dispatch('bpmn/copyVersion', elem);
@@ -159,7 +159,7 @@ export default {
         model = item.map( it => new Diagram(it));
       } else {
         type = item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : Array.isArray(item) ? item[0] : item
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : Array.isArray(item) ? item[0] : item;
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',

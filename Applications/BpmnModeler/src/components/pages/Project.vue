@@ -139,8 +139,8 @@ export default {
         try {
           await processArray([...event.dataTransfer.files]);
           element.createItem(element.item, options.length > 1 ? 'all' : 'process', '', options);
-        } catch {
-          console.log();
+        } catch (e) {
+          console.error(e);
         }
       });
     },

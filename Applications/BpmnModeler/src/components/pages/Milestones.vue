@@ -140,8 +140,8 @@ export default {
       }
       
       versions.sort( (a, b) =>  {
-        let diff = moment(b.creationTime).toDate().getTime() - moment(a.creationTime).toDate().getTime()
-        return diff == 0 ? -1 : diff
+        let diff = moment(b.creationTime).toDate().getTime() - moment(a.creationTime).toDate().getTime();
+        return diff == 0 ? -1 : diff;
       }).forEach( item => {
         let key = groups.find( el => el.name == item.creationTime.slice(0,10));
         if (!key) {

@@ -63,7 +63,16 @@ export default {
   },
   computed: {
     getLessonContent () {
-      return JSON.parse(this.unit.content)
+      let content = null
+      if (this.unit.content) {
+        try {
+          content = JSON.parse(this.unit.content)
+          return content
+        } catch (error) {
+          console.log('Отсутствует контент урока!')
+        }
+      }
+      return { ops: {insert: 'Ошибка!'}}
     }
   }
 }

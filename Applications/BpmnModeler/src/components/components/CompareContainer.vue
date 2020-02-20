@@ -41,7 +41,7 @@ export default {
       this.destroyModeler();
       this.modeler = editorFactory(this.type, true, this.$refs.container, null, this.translate);
       this.onEditorChanged();
-      this.loadXml()
+      this.loadXml();
     },    
     async loadXml() {
       if (!this.version || !this.modeler) {
@@ -133,7 +133,7 @@ export default {
   },
   watch: {
     'version'() {
-      this.createModeler()
+      this.createModeler();
     }
   }
 };

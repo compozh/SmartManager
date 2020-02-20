@@ -292,8 +292,6 @@ export default {
       this.form.show = true;
     },
     editItem(item) {
-      console.log(this.record);
-      console.log(this);
       this.form.editedItem.id = item.model.id;
       this.form.editedItem.record = this.record;
       this.form.editedItem.rights = item.model.rights;
@@ -325,7 +323,6 @@ export default {
 
       let storeAction;
 
-      console.log(this.form.editedItem.record);
       const entityType = this.form.editedItem.record instanceof Models.Diagram ? 'Diagram' : this.form.editedItem.record instanceof Models.Folder ? 'Folder' : '';
 
       switch (this.form.mode) {
@@ -340,10 +337,12 @@ export default {
         break;
       }
 
+      const tasks = [];
+
       for (let i = 0; i < this.form.editedItem.identities.length; i++) {
         const identity = this.form.editedItem.identities[i];
 
-        const access = new Models.AccessParams({ id: this.form.editedItem.id, recordId: this.form.editedItem.record.id });
+        const access = new Models.AccessParams({ id: this.form.editedItem.id, recordId: this.form.editedItem.record.id, inherit: true });
         access.rights = this.form.editedItem.rights;
 
         const { type: identityType, name } = this.form.usersAndGroups.find(e => e.id === identity);
@@ -361,11 +360,20 @@ export default {
           continue;
         }
 
-        result = await this.$store.dispatch(storeAction, access);
+        tasks.push((async (action, access, name) => {
+          const result = await this.$store.dispatch(action, access);
+          if (!result) {
+            Notification.error(this.$t('bpmn.errors.AccessError', { identity: name }));
+          }
+          return result;
+        })(storeAction, access, name));
+      }
 
-        if (!result) {
-          Notification.error(this.$t('bpmn.errors.AccessError'), { identity: name });
-        }
+      try {
+        result = (await Promise.all(tasks)).every(r => r === true);
+      } catch (e) {
+        console.error(e);
+        result = false;
       }
 
       if (result) {

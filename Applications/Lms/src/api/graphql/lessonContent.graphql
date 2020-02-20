@@ -7,12 +7,18 @@
         moduleGuid
       }
       lesson{
-        lessonGuid
+        lessonId
         lessonType
         name
+        lessonGuid
         durationMunute
         durationMinutesLabel
         surveyId
+      }
+      lessonmaterials{
+        type
+        name
+        link
       }
     }
   }

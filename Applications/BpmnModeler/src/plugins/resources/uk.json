@@ -134,7 +134,10 @@
 		"changed" : "Змінено",
 		"removed" : "Вилучено",
 		"added" : "Додано",
-		"Element": "Елемент"
+		"Element": "Елемент",
+		"SelectBusinessObject": "Виберіть бізнес-об'єкт",
+		"SelectBusinessObjectAction": "Виберіть дію над бізнес-об'єктом",
+		"SelectBusinessObjectAccess": "Виберіть налаштування доступу до бізнес-об'єкта"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -430,10 +433,11 @@
 		"Called Case": "Кейс",
 		"Called Process": "Процес",
 
+		"Data Object": "Об'єкт даних",
 		"Business Object": "Бізнес-об'єкт",
-		"Business Object Action": "Дія бізнес-об'єкту",
+		"Business Object Action": "Дія бізнес-об'єкта",
 		"Business Object Access": "Доступ до бізнес-об'єкта",
-		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкту"
+		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкта"
 	},
 	"dmn-modeler": {
 

@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     diagram() {
-      const diagram = this.$store.state.bpmn.activeItem || this.$store.getters['bpmn/getItemById'](this.$route.params.id).item;;
+      const diagram = this.$store.state.bpmn.activeItem || this.$store.getters['bpmn/getItemById'](this.$route.params.id).item;
       if (diagram && diagram instanceof Diagram) {
         return diagram;
       }
@@ -226,17 +226,17 @@ export default {
       });
     },
     choose(id) {
-      let elements = document.querySelectorAll(`.${id}`)
-      elements.forEach( el => el.classList.toggle('choosed'))
-      let choosed = document.querySelector(`.choosed`)
-      if(choosed) {
-        choosed.classList.remove('choosed')
+      let choosed = document.querySelectorAll('.choosed');
+      if (choosed) {
+        choosed.forEach( el => el.classList.remove('choosed'));
       }
+      let elements = document.querySelectorAll(`.${id}`);
+      elements.forEach( el => el.classList.add('choosed'));
       
     },
     findElem(id) {
-      let elements = document.querySelectorAll(`.${id}`)
-      elements.forEach( el => el.classList.toggle('found'))
+      let elements = document.querySelectorAll(`.${id}`);
+      elements.forEach( el => el.classList.toggle('found'));
     }
   },
 };
