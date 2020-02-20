@@ -41,6 +41,8 @@
 		"CreateProcess": "Створити діаграму",
 		"EditProcess": "Редагувати діаграму",
 		"DeleteProcess": "Видалити діаграму",
+		"EditVersion": "Редагувати версію",
+		"DeleteVersion": "Видалити версію",
 		"CopyProcess": "Додати діаграму за зразком",
 		"CreateFolder": "Створити папку",
 		"EditFolder": "Редагувати папку",
@@ -124,7 +126,9 @@
 		"Files" : ".bpmn, .dmn або .cmmn файли",
 		"Copy": "-копія",
 		"Milestones" : "Версії",
-		"LatestVersion" : "Остання версія"
+		"LatestVersion" : "Остання версія",
+		"With" : "з",
+		"WithLastVersion" : "останніми змінами"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

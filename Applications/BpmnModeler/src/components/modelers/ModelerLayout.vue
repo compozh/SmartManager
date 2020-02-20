@@ -30,8 +30,8 @@
           :onlyExport="true"
           @export="exportItem"
           offset>
-          <template #activator="{ on }">
-            <v-btn icon v-on="on">
+          <template #activator="{ open }">
+            <v-btn icon v-on="open">
               <v-icon>mdi-share-variant</v-icon>
             </v-btn>
           </template>
@@ -39,12 +39,12 @@
       </v-toolbar>
       <Split v-if="canShowPanel && !onlyRead" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">
-          <div class="bpmn-diagram-container">
+          <div class="bpmn-diagram-container"  @keydown.ctrl.z.exact="$emit('undo')" @keydown.ctrl.shift.z.exact="$emit('redo')">
             <v-row class="options-panel">
               <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
                 <v-icon size="20">mdi-undo</v-icon>
               </v-btn>
-              <v-btn text :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
+              <v-btn text :disabled="!canRedo" @click="$emit('redo')"  :title="$t('bpmn.labels.Redo')">
                 <v-icon size="20">mdi-redo</v-icon>
               </v-btn>
               <v-divider vertical></v-divider>

@@ -70,6 +70,10 @@ export default {
           'edit': 'bpmn.labels.EditProject',
           'delete': 'bpmn.labels.DeleteProject'
         },
+        'version': {
+          'edit': 'bpmn.labels.EditVersion',
+          'delete': 'bpmn.labels.DeleteVersion'
+        },
         'all': {
           'import': 'bpmn.buttons.Import',
           'delete': 'bpmn.buttons.Delete',

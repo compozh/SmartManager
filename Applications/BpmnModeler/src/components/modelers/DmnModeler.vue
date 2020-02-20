@@ -41,7 +41,7 @@ import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 
 import { debounce } from 'throttle-debounce';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
-import { Diagram, DiagramType, AccessRights } from '../../api/models';
+import { Diagram, DiagramType, AccessRights, DiagramVersion } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import { Notification } from 'element-ui';
@@ -87,6 +87,9 @@ export default {
       const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.DMN) {
         return activeItem;
+      } else if(activeItem && activeItem instanceof DiagramVersion ) {
+        let mainDiagram = this.$store.getters['bpmn/getItemById'](activeItem.diagramId).item
+        return mainDiagram.type === DiagramType.DMN ? mainDiagram : null
       }
       return null;
     },
@@ -155,7 +158,12 @@ export default {
         this.cancellationToken.cancel();
       }
       const debounced = debounce(500, async (cancellationToken) => {
-        const xml = await this.$store.dispatch('bpmn/getXml', this.decision.id);
+        let xml
+        if(this.diagram && this.diagram instanceof DiagramVersion) {
+          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.diagram.versionId, diagramId: this.decision.id})
+        } else {
+          xml = await this.$store.dispatch('bpmn/getXml', this.decision.id);
+        }
         if (cancellationToken.isCancelled) {
           return;
         }

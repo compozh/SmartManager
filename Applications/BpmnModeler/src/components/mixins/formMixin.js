@@ -1,4 +1,4 @@
-import { Folder, Diagram } from '../../api/models';
+import { Folder, Diagram, DiagramVersion } from '../../api/models';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import { Notification } from 'element-ui';
@@ -36,18 +36,28 @@ export default {
       case 'edit':
         if (type === 'folder' ) {
           success = await this.$store.dispatch('bpmn/editFolder', item);
-        } else {
+        } else if (type === 'process'){
           success = await this.$store.dispatch('bpmn/editProcess', item);
+        } else {
+          success = await this.$store.dispatch('bpmn/updateDiagramVersion', item);
         }
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
-        } else {
+        } else if(type == 'version') {
+          await this.getVersions()
+        }  else {
           this.$forceUpdate();
         }
         break;
       case 'delete':
         let deleting = async (elem) => {
-          let val = await this.$store.dispatch('bpmn/deleteItem', elem);
+          let val
+          if (type == 'version' ){
+            val = await this.$store.dispatch('bpmn/deleteDiagramVersion', {diagramId: elem.diagramId, versionId: elem.versionId});
+            
+          } else {
+            val = await this.$store.dispatch('bpmn/deleteItem', elem);
+          }
           return val;
         };
         if (type === 'all') {          
@@ -58,16 +68,18 @@ export default {
           await processArray(item);
         } else {
           success = await deleting(item);
-          if (success ) {
+          if (success && type != 'version') {
             this.$forceUpdate();
             this.active = item.parentId;
-          }
+          } 
         }
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
         } else if (this.choose) {
           this.choose = this.choose.filter( el =>  Array.isArray(item) ? !item.find(it => el.id == it.id) : item.id != el.id );
-        }
+        } else if(type == 'version') {
+          await this.getVersions()
+        } 
         break;
       case 'copy':
         let copy = async (elem) => {
@@ -119,18 +131,18 @@ export default {
     editItem(item) {
       eventBus.$emit(events.modeler.showForm,
         'edit',
-        item.isFolder ? 'folder' : 'process',
-        item.isFolder ? new Folder(item) : new Diagram(item),
+        item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
+        item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : new DiagramVersion(item),
         this.formSave);
     },
     removeItem(item) {
       let  type, model;
-      if (Array.isArray(item)) {
+      if (Array.isArray(item && item.length > 1)) {
         type = 'all';
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
       } else {
-        type = item.isFolder ?  'folder' : 'process';
-        model = item.isFolder ? new Folder(item) : new Diagram(item);
+        type =  item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(item);
       }
       eventBus.$emit(events.modeler.showForm,
         'delete',
@@ -144,8 +156,8 @@ export default {
         type = 'all';
         model = item.map( it => new Diagram(it));
       } else {
-        type = item.isFolder ? 'folder' : 'process';
-        model = item.isFolder ? new Folder(item) : new Diagram(Array.isArray(item) ? item[0] : item);
+        item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(item) 
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',

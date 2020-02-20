@@ -1,8 +1,11 @@
 <template>
 	<v-container class="column pa-0 fill-height" fluid >
-    <Split  @onDragEnd="onSplitDragEnd" :gutterSize="12">
+    <v-row class="fill-height" v-if="loading" justify="center" align="center">
+      <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
+    </v-row>
+    <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize" class="diagram-section">
-          <bpmn-modeler v-if="type == 'BPMN'" :onlyRead="true" :diagram.sync="version"  ref="modeler"/>
+          <bpmn-modeler v-if="type == 'BPMN'" :onlyRead="true" :diagram="version"  ref="modeler"/>
           <dmn-modeler v-else-if="type == 'DMN'" :onlyRead="true" :diagram="version" ref="modeler"/>
           <cmmn-modeler v-else :onlyRead="true" :diagram="version" ref="modeler"/>
       </SplitArea>
@@ -19,7 +22,7 @@
                 :key="item.versionId"
                 @click="changeVersion(item)">
                 <v-list-item-avatar class="ma-0">
-                  <v-avatar color="blue-grey lighten-1" :title="item.creatorName"> {{item.creatorName | formatAvatar}}</v-avatar>
+                  <v-avatar color="blue-grey lighten-1" :title="item.creatorName || item.ownerName"> {{item.creatorName || item.ownerName | formatAvatar}}</v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content style="text-align: start" class="px-2 py-2">
                   <v-list-item-title>{{item.name == diagram.name ? $t('bpmn.labels.LatestVersion') : item.name}}</v-list-item-title>
@@ -30,6 +33,9 @@
                     @edit="editItem" 
                     @remove="removeItem"
                     @compare="compare"
+                    @copy="copyItem"
+                    :diagram="diagram"
+                    :version="version"
                     offset>
                   <template #activator="{ open }">
                     <v-btn icon class="options"   v-on="open">
@@ -63,7 +69,8 @@ export default {
       split: null,
       versions: [],
       version: {},
-      groups: []
+      groups: [],
+      loading: false
     };
   },
   props: {
@@ -95,7 +102,6 @@ export default {
     diagram() {
       const activeItem = this.$store.state.bpmn.activeItem || this.$store.getters['bpmn/getItemById'](this.$route.params.id);
       if (activeItem && activeItem instanceof Diagram) {
-        // this.loadUsers();
         return activeItem;
       }
       return null;
@@ -137,46 +143,38 @@ export default {
     onSplitDragEnd(size) {
       this.splitSize = 100 - Number.parseInt(size);
     },
-    async findUser(userId) {
-      let users = await this.$store.dispatch('bpmn/queryUsers');
-      if (users.length == 0 || !users) {
-        return userId;
-      }
-      let user = users.find( user => user.id == userId ),
-        result = user ? user.name : userId;
-      return result;
-    },
     compare(itemId1, itemId2) {
-      this.$router.push({name: 'compare', params: {id: itemId1}, query: {id2: itemId2} });
+      this.$router.push({name: 'compare', params: {id: this.diagram.id}, query: {id1: itemId1, id2: itemId2} });
     },
     async getVersions() {
-      if (!this.diagram || this.versions.length > 0) { return; }
+      if (!this.diagram ) { return; }
+      this.loading = true
       let versions = await this.$store.dispatch('bpmn/getVersionsForDiagram', this.diagram.id),
       groups = []
-      if(versions.length == 0) {
+      if(!versions || versions.length == 0) {
         versions = [this.diagram]
-          this.diagram.creatorName = await this.findUser(this.diagram.ownerId),
-          this.diagram.creationTime = new Date()
+        let date = new Date()
+        this.diagram.creationTime = moment(date).format()
       }
-      debugger
-
-      versions.forEach( item => {
-        let key = groups.find( el => el.name == item.creationTime)
+      
+      versions.reverse().forEach( item => {
+        let key = groups.find( el => el.name == item.creationTime.slice(0,10))
         if(!key) {
           groups.push({
-            name: item.creationTime,
+            name: item.creationTime.slice(0,10),
             items: [item]
           })
         } else {
           key.items.push(item)
         }
       })
+      groups = groups.sort( (a, b) =>  {
+        return moment(b.name).toDate().getTime() - moment(a.name).toDate().getTime()
+      })
       this.groups = groups
       this.versions = versions
-      this.changeVersion(versions[0])
-    },
-    async createVersion(item) {
-      await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item)
+      this.loading = false
+      this.changeVersion(groups[0].items[0])
     },
     changeVersion(val) {
       if(val.versionId == this.$route.query.version || this.version.versionId == val.versionId) {
@@ -185,6 +183,7 @@ export default {
       }
       this.version = val
       this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }})
+      
     }
   },
 };
@@ -226,6 +225,8 @@ export default {
 }
 
 .milestones-list {
+  height: 100%;
+
   .v-list-item__title {
     font-size: 13px;
   }

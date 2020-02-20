@@ -24,7 +24,6 @@ import router from './router';
 import moment from 'moment';
 // import config from './config'
 const config = window.config;
-moment.locale(localStorage.language);
 import App from './App.vue';
 
 auth.config({
@@ -35,6 +34,10 @@ auth.config({
     }
   }
 });
+moment.locale(localStorage.language);
+Vue.config.keyCodes = {
+  z: 90,
+}
 // объект с зависимостями
 let dependencies = {
   store,

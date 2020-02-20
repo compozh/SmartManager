@@ -51,7 +51,7 @@ const router = new VueRouter({
         },
         {
           name: 'compare',
-          path: '/compare/:id',
+          path: '/compare/:id?',
           component: () => import('@/components/pages/Compare.vue'),
           caseSensitive: false,
         },

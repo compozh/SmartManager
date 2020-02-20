@@ -41,6 +41,8 @@
 		"CreateProcess": "Создать диаграмму",
 		"EditProcess": "Переименовать диаграмму",
 		"DeleteProcess": "Удалить диаграмму",
+		"EditVersion": "Редагувати версию",
+		"DeleteVersion": "Видалити версию",
 		"CopyProcess": "Создать диаграмму по образцу",
 		"CreateFolder": "Создать папку",
 		"EditFolder": "Переименовать папку",
@@ -120,7 +122,9 @@
 		"Files" : ".bpmn, .dmn или .cmmn файлы",
 		"Copy": "-копия",
 		"Milestones" : "Версии",
-		"LatestVersion" : "Последняя версия"
+		"LatestVersion" : "Последняя версия",
+		"With" : "с",
+		"WithLastVersion" : "последними изменениями"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

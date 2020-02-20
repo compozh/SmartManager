@@ -19,7 +19,7 @@
 import BpmnModdle from 'bpmn-moddle';
 import { diff } from 'bpmn-js-differ';
 import moment from 'moment';
-import { Diagram, DiagramType, AccessRights } from '../../api/models';
+import { Diagram, DiagramVersion } from '../../api/models';
 import { formMixin } from '../mixins';
 export default {
   name: 'bpmn-milestones',
@@ -28,29 +28,42 @@ export default {
     return {
       loading: false,
       split: null,
+      versions: [],
     };
   },
   computed: {
+    diagram() {
+      if (!this.$store.state.bpmn.activeItem) { return null; }
+      const diagram = this.$store.state.bpmn.activeItem;
+      if (diagram && diagram instanceof Diagram) {
+        
+        return diagram;
+      }
+      return null;
+    },
     diagram1() {
-      if (!this.$store.state.bpmn.activeItem) { return; }
-      const activeId = this.$route.query.id2;
-      let item = this.$store.getters['bpmn/getItemById'](activeId).item;
-      if (activeId && item instanceof Diagram) {
+      const itemId = this.$route.query.id1;
+      const item = this.versions.find( el => itemId ==  el.versionId) || this.$store.getters['bpmn/getItemById'](itemId).item
+      if (itemId && item instanceof Diagram || item instanceof DiagramVersion) {
         return item;
       }
       return null;
     },
     diagram2() {
-      if (!this.$store.state.bpmn.activeItem) { return; }
-      const activeItem = this.$store.state.bpmn.activeItem;
-      if (activeItem && activeItem instanceof Diagram) {
-        return activeItem;
+      const itemId = this.$route.query.id2;
+      const item = this.versions.find( el => itemId ==  el.versionId) || this.$store.getters['bpmn/getItemById'](itemId).item
+      if (item && item instanceof Diagram || item instanceof DiagramVersion) {
+        return item;
       }
       return null;
     },
     type() {
-      if (!this.diagram1) { return; }
-      return this.diagram1.type;
+      if ( !this.$route.params.id && this.diagram1) { 
+        return this.diagram1.type;
+      } else if(this.diagram && this.$route.params.id) {
+        this.getVersions()
+        return this.diagram.type ;
+      } else {return }
     },
     splitSize: {
       get() {
@@ -73,10 +86,14 @@ export default {
     onSplitDragEnd(size) {
       this.splitSize = 100 - Number.parseInt(size);
     },
+    async getVersions() {
+      if (!this.diagram || this.versions.length > 0) { return; }
+      let versions = await this.$store.dispatch('bpmn/getVersionsForDiagram', this.diagram.id)
+      this.versions = versions
+    },
     addColor(changes, modeler, type, color, icon) {
-      let elements =  Object.keys(changes[type]);
-
-      let shapes = elements.map( el => modeler.elementRegistry.get(el));
+      let elements =  Object.keys(changes[type]),
+        shapes = elements.map( el => modeler.elementRegistry.get(el));
       shapes.forEach( elem => {
         if (!elem) { return; }
         let  overlayHtml;
@@ -93,14 +110,12 @@ export default {
             el.children[0].firstChild.style.stroke = color;
             el.children[0].firstChild.style.strokeWidth = '2px';
           });
-
           overlayHtml = `<div class="${elem.id}"></div>`;
           break;
         default:
           overlayHtml = `<div></div>`;
           break;
         }
-       
         modeler.overlays.add(elem.id , {
           position: {
             top: -5,
@@ -110,10 +125,19 @@ export default {
         });
       });
     },
+    async getXml(diagram) {
+      let xml
+      if(diagram instanceof DiagramVersion) {
+        xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: diagram.versionId, diagramId: this.diagram.id})
+      } else {
+        xml = await this.$store.dispatch('bpmn/getXml', diagram.id);
+      }
+      return xml 
+    },
     async compare() {
       let changes;
-      this.diagram1.xmlView = await this.$store.dispatch('bpmn/getXml', this.diagram1.id);
-      this.diagram2.xmlView = await this.$store.dispatch('bpmn/getXml', this.diagram2.id);
+      let xml1 = await this.getXml(this.diagram1),
+      xml2 = await this.getXml(this.diagram2);
       function loadModels(a, b, done ) {
         new BpmnModdle().fromXML(a, function(err, adefs) {
           if (err) {
@@ -130,7 +154,7 @@ export default {
       }
 
       let self = this;
-      await loadModels(this.diagram1.xmlView, this.diagram2.xmlView,  (err, aDefinitions, bDefinitions) => {
+      await loadModels(xml1, xml2,  (err, aDefinitions, bDefinitions) => {
         changes = diff(aDefinitions, bDefinitions);
         Object.entries(changes).forEach( item => {
           let color, icon;
@@ -138,25 +162,28 @@ export default {
           case '_layoutChanged':
             color = 'blue';
             icon = 'mdi-pencil';
+            self.addColor(changes, self.$refs.modeler1, item[0], color, icon);
+            self.addColor(changes, self.$refs.modeler2, item[0], color, icon);
             break;
           case '_changed':
             color = 'orange';
             icon = 'mdi-pencil';
+            self.addColor(changes, self.$refs.modeler1, item[0], color, icon);
+            self.addColor(changes, self.$refs.modeler2, item[0], color, icon);
             break;
           case '_removed':
             color = 'red';
             icon = 'mdi-minus-circle-outline';
+            self.addColor(changes, self.$refs.modeler1, item[0], color, icon);
             break;
           case '_added':
             color = 'green';
             icon = 'mdi-plus-circle-outline';
+            self.addColor(changes, self.$refs.modeler2, item[0], color, icon);
             break;
           default:
-            
             break;
           }
-          self.addColor(changes, self.$refs.modeler1, item[0], color, icon);
-          self.addColor(changes, self.$refs.modeler2, item[0], color, icon);
         }); 
       });
       

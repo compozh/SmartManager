@@ -473,7 +473,7 @@ export default {
     }
   },
 
-  async deleteDiagramVersion(context, diagramId, versionId) {
+  async deleteDiagramVersion(context, {diagramId, versionId}) {
     try {
       return await api.deleteDiagramVersion(diagramId, versionId);
     } catch (error) {
@@ -482,7 +482,7 @@ export default {
     }
   },
 
-  async applyDiagramVersion(context, diagramId, versionId) {
+  async applyDiagramVersion(context, {diagramId, versionId}) {
     try {
       return await api.applyDiagramVersion(diagramId, versionId);
     } catch (error) {

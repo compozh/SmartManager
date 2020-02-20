@@ -39,6 +39,8 @@
 		"Name": "Name",
 		"CreateProcess": "Create diagram",
 		"EditProcess": "Edit diagram",
+		"EditVersion": "Edit version",
+		"DeleteVersion": "Delete version",
 		"DeleteProcess": "Delete diagram",
 		"CopyProcess": "Add diagram by sample",
 		"CreateFolder": "Create folder",
@@ -120,7 +122,9 @@
 		"Copy": "-copy",
 		"Milestones" : "Milestones",
 		"AddMilestone" : "Create milestone",
-		"LatestVersion" : "Latest version"
+		"LatestVersion" : "Latest version",
+		"With" : "with",
+		"WithLastVersion" : "the latest changes"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
