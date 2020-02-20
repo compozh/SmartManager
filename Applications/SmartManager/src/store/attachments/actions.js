@@ -85,22 +85,32 @@ export default {
       notify('danger', 'attachTitle', 'attachAddError')
     }
   },
-  async attachmentDelete(context, id) {
+  async attachmentDelete({dispatch}, {fileId, taskId, caseId}) {
     startLoading()
     try {
-      const response = await api.attachmentDeleteInGql(id)
+      const response = await api.attachmentDeleteInGql(fileId)
       const result = response.data.smtasksMutation.attachmentDelete
-      stopLoading()
       if (result.success) {
+        await dispatch('updateAfterDelete', {taskId, caseId})
         notify('success', 'attachTitle', 'attachDelSuccess')
+        stopLoading()
       } else {
         notify('warning', 'attachTitle', 'attachDelFail')
+        stopLoading()
       }
       return result
     } catch (e) {
       stopLoading()
       console.log(e.message)
       notify('danger', 'attachTitle', 'attachDelError')
+    }
+  },
+  async updateAfterDelete({dispatch}, {taskId, caseId}) {
+    // Update task or case after delete if it needs
+    if (taskId || caseId) {
+      const id = taskId ? { taskId } : { caseId }
+      const action = taskId ? 'getTaskInfo' : 'getCaseDetails'
+      await dispatch(action, id)
     }
   }
 }

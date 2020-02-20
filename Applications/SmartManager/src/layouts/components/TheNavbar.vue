@@ -275,7 +275,7 @@
                        color="danger"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
-                       @click="confirmDelete"
+                       @click="confirmTaskDelete"
             >{{ $t('buttons.delete') }}
             </vs-button>
 
@@ -291,12 +291,15 @@
                        color="danger"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
+                       @click="confirmAttachmentDelete"
             >{{ $t('buttons.deleteAttachment') }} </vs-button>
 
             <vs-button icon="cloud_download"
                        color="success"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
                        :href="currentAttachment.srcUrl"
             >{{ $t('buttons.downloadAttachment') }} </vs-button>
 
@@ -304,6 +307,7 @@
                        color="warning"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
                        :to="{name: 'versions'}"
             >{{ $t('buttons.attachmentVersions') }} </vs-button>
 
@@ -311,6 +315,7 @@
                        color="dark"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
                        @click="$store.commit('sm/TOGGLE_EDS_POPUP', true)"
             >{{ $t('buttons.attachmentEds') }} </vs-button>
 
@@ -424,8 +429,7 @@ export default {
       return this.taskDetails || this.caseView
     },
     attachmentView() {
-      return this.$route.name === 'task-attachment'
-             || this.$route.name === 'case-attachment'
+      return this.$route.path.includes('attachment')
     },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork() {
@@ -517,7 +521,7 @@ export default {
         pin
       })
     },
-    confirmDelete() {
+    confirmTaskDelete() {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
@@ -577,6 +581,25 @@ export default {
     },
     setDelegation() {
       console.log('Делегировать права',)
+    },
+    confirmAttachmentDelete() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: this.$t('attachments.delConfirmTitle'),
+        text: this.$t('attachments.delConfirmText'),
+        cancelText: this.$t('buttons.cancel'),
+        acceptText: this.$t('buttons.delete'),
+        accept: this.removeAttachment
+      })
+    },
+    async removeAttachment() {
+      await this.$store.dispatch('sm/attachmentDelete', {
+        fileId: this.currentAttachment.id,
+        taskId: +this.$route.params.taskId,
+        caseId: +this.$route.params.caseId
+      })
+      await this.$router.push({name: 'task-attachments'})
     }
   },
   directives: {

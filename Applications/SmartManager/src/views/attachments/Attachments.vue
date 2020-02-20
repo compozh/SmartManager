@@ -249,6 +249,9 @@ export default {
     currentAttachment() {
       return this.$store.state.sm.attachments.currentAttachment || {}
     },
+    noDataMessage() {
+      return this.$route.name === 'attach'
+    },
     type() {
       if (this.task.__typename === 'Task') {
         return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
@@ -271,6 +274,12 @@ export default {
     $route(to) {
       if (to.name === 'task-attachments') {
         this.fileUrl = ''
+        // Clear  info about current attachment
+        this.$store.commit('sm/SET_ATTACHMENT_DETAILS', {
+          fileDetails: {
+            ErrorMessage: this.$t('attachments.notSelected'),
+          }
+        })
       }
     }
   },
