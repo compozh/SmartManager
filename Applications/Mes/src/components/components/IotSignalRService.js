@@ -6,22 +6,17 @@ export default class IotSignalRService {
         this.isConnected = false
     }
 
-    connect(url) {
+    async connect(url) {
         this.connection = new HubConnectionBuilder()
 		.withUrl(url)
 		.withAutomaticReconnect()
 		.build()
 
-        this.connection.start({ withCredentials: false }).then(() => {
-            this.isConnected = true
-            this.connection
-                .invoke("Enter", this.thingId)
-                .catch(err => console.error(err.toString()))
-        })
+        await this.connection.start({ withCredentials: false })
+        this.isConnected = true
+        await this.connection.invoke("Enter", this.thingId).catch(err => console.error(err.toString()))
 
-        this.connection.onreconnecting(error => {
-            console.log(error)
-        })
+        this.connection.onreconnecting(error => console.log(error))
     }
 
     get connected() {
