@@ -52,7 +52,9 @@ export default {
       case 'delete':
         let deleting = async (elem) => {
           let val;
+          debugger
           if (type == 'version' ) {
+            console.log('deleteDiagramVersion')
             val = await this.$store.dispatch('bpmn/deleteDiagramVersion', {diagramId: elem.diagramId, versionId: elem.versionId});
             
           } else {
@@ -143,8 +145,9 @@ export default {
         type = 'all';
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
       } else {
+        item = Array.isArray(item) ? item[0] : item
         type =  item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(Array.isArray(item) ? item[0] : item);
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : new DiagramVersion(item);
       }
       eventBus.$emit(events.modeler.showForm,
         'delete',
@@ -158,8 +161,9 @@ export default {
         type = 'all';
         model = item.map( it => new Diagram(it));
       } else {
+        item = Array.isArray(item) ? item[0] : item
         type = item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : Array.isArray(item) ? item[0] : item;
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : item;
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',
