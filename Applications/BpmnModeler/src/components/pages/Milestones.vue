@@ -1,13 +1,12 @@
 <template>
 	<v-container class="column pa-0 fill-height" fluid >
-    <v-row class="fill-height" v-if="loading" justify="center" align="center">
-      <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
-    </v-row>
+    
     <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize" class="diagram-section">
-          <bpmn-modeler v-if="type == 'BPMN'" :onlyRead="true" :diagram="version"  ref="modeler"/>
-          <dmn-modeler v-else-if="type == 'DMN'" :onlyRead="true" :diagram="version" ref="modeler"/>
-          <cmmn-modeler v-else :onlyRead="true" :diagram="version" ref="modeler"/>
+          <v-row class="fill-height" v-if="loading" justify="center" align="center">
+            <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
+          </v-row>
+        <copmpare-modeler :diagram="diagram" :version="version" :type="type" />
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="properties-panel-section">
         <div class="properties-panel-container" >
@@ -32,7 +31,7 @@
                   <bpmn-contex-menu :item="item" :milestones="true"
                     @edit="editItem" 
                     @remove="removeItem"
-                    @compare="compare"
+                    @compare="compareItems"
                     @copy="copyItem"
                     :diagram="diagram"
                     :version="version"
@@ -71,11 +70,6 @@ export default {
       version: {},
       groups: []
     };
-  },
-  props: {
-    activeItem: {
-      required: true
-    },
   },
 
   filters: {
@@ -126,24 +120,13 @@ export default {
         localStorage.setItem('properties-panel-split-size', value);
       }
     },
-    active: {
-      get() {
-        return this.activeItem;
-      },
-      set(value) {
-        if (value === this.activeItem) {
-          return;
-        }
-        this.$emit('update:activeItem', value);
-      }
-    },
   },
   methods: {
     onSplitDragEnd(size) {
       this.splitSize = 100 - Number.parseInt(size);
     },
-    compare(itemId1, itemId2) {
-      this.$router.push({name: 'compare', params: {id: this.diagram.id}, query: {id1: itemId1, id2: itemId2} });
+    compareItems(itemId1, itemId2) {
+      this.$router.push({name: 'compare', params: {id: this.diagram.id}, query: {left: itemId1, right: itemId2} });
     },
     async getVersions() {
       if (!this.diagram ) { return; }
@@ -156,7 +139,10 @@ export default {
         this.diagram.creationTime = moment(date).format();
       }
       
-      versions.reverse().forEach( item => {
+      versions.sort( (a, b) =>  {
+        let diff = moment(b.creationTime).toDate().getTime() - moment(a.creationTime).toDate().getTime()
+        return diff == 0 ? -1 : diff
+      }).forEach( item => {
         let key = groups.find( el => el.name == item.creationTime.slice(0,10));
         if (!key) {
           groups.push({

@@ -12,8 +12,8 @@
     <v-row v-if="!loading && noAccess" justify="center" align="center">
       <h2>{{ $t('bpmn.labels.NoReadAccess') }}</h2>
     </v-row>
-    <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel, 'no-toolbar': onlyRead}" v-show="diagram && !loading && !noAccess"  ref="layout">
-      <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 " v-if="!onlyRead">
+    <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
+      <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
         <v-spacer></v-spacer>
         <v-btn icon @click="deployItem(diagram)" :disabled="!canDeploy(diagram)" :title="$t('bpmn.buttons.Deploy')">
           <v-icon>mdi-open-in-app</v-icon>
@@ -37,14 +37,14 @@
           </template>
         </bpmn-contex-menu>
       </v-toolbar>
-      <Split v-if="canShowPanel && !onlyRead" @onDragEnd="onSplitDragEnd" :gutterSize="12">
+      <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">
-          <div class="bpmn-diagram-container"  @keydown.ctrl.z.exact="$emit('undo')" @keydown.ctrl.shift.z.exact="$emit('redo')">
+          <div class="bpmn-diagram-container"   @keydown.ctrl.z.exact="$emit('undo')" @keydown.ctrl.shift.z.exact="$emit('redo')">
             <v-row class="options-panel">
               <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
                 <v-icon size="20">mdi-undo</v-icon>
               </v-btn>
-              <v-btn text :disabled="!canRedo" @click="$emit('redo')"  :title="$t('bpmn.labels.Redo')">
+              <v-btn text :disabled="!canRedo" @click="$emit('redo')" :title="$t('bpmn.labels.Redo')">
                 <v-icon size="20">mdi-redo</v-icon>
               </v-btn>
               <v-divider vertical></v-divider>
@@ -129,13 +129,7 @@ export default {
         return true;
       }
     },
-    noAccess: Boolean,
-    onlyRead: {
-      type: Boolean,
-      default() {
-        return false;
-      }
-    },
+    noAccess: Boolean
   },
   data() { 
     return {
@@ -147,7 +141,7 @@ export default {
   computed: {
     showPanel: {
       get() {
-        return this.canShowPanel && this.splitSize > 1 && !this.onlyRead;
+        return this.canShowPanel && this.splitSize > 1;
       },
       set(value) {
         if (value && this.splitSize > 1) {
@@ -231,9 +225,6 @@ export default {
     "toolbar"
     "modeler";
   overflow: hidden;
-  &.no-toolbar {
-    display: block;
-  }
 }
 .modeler-toolbar {
   grid-area: toolbar;

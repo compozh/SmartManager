@@ -1,6 +1,6 @@
 <template>
   <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
-    :canMinimap="canMinimap" @minimap="onMinimap" :onlyRead="onlyRead"
+    :canMinimap="canMinimap" @minimap="onMinimap" 
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
   >
@@ -19,7 +19,7 @@ import 'cmmn-js/dist/assets/cmmn-font/css/cmmn-embedded.css';
 import 'cmmn-js/dist/assets/cmmn-font/css/cmmn.css';
 
 import { debounce } from 'throttle-debounce';
-import { Diagram, DiagramType, AccessRights, DiagramVersion } from '../../api/models';
+import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import CmmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/CmmnPropertiesProvider';
@@ -38,15 +38,6 @@ export default {
       propertiesProvider: null
     };
   },
-  props: {
-    onlyRead: {
-      type: Boolean,
-      default() {
-        return false;
-      }
-    },
-    diagram: Object
-  },
   mounted() {
     if (this.process) {
       this.createModeler();
@@ -55,12 +46,9 @@ export default {
   },
   computed: {
     process() {
-      const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
+      const activeItem = this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.CMMN) {
         return activeItem;
-      } else if (activeItem && activeItem instanceof DiagramVersion ) {
-        let mainDiagram = this.$store.getters['bpmn/getItemById'](activeItem.diagramId).item;
-        return mainDiagram.type === DiagramType.CMMN ? mainDiagram : null;
       }
       return null;
     },
@@ -86,7 +74,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.process.hasRight(AccessRights.Write) && !this.onlyRead;
+      const canEdit = this.process.hasRight(AccessRights.Write);
       this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new CmmnPropertiesProvider(this.process, this.modeler, !canEdit);
@@ -101,12 +89,7 @@ export default {
         this.cancellationToken.cancel();
       }
       const debounced = debounce(500, async (cancellationToken) => {
-        let xml;
-        if (this.diagram && this.diagram instanceof DiagramVersion) {
-          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.diagram.versionId, diagramId: this.process.id});
-        } else {
-          xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
-        }
+        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
         if (cancellationToken.isCancelled) {
           return;
         }
@@ -124,7 +107,7 @@ export default {
             this.loading = false;
             if (err) {
               console.error(err);
-              Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
               this.modeler.createDiagram();
               this.loading = false;
             }

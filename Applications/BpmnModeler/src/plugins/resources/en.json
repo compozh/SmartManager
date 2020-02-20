@@ -121,10 +121,16 @@
 		"Files" : ".bpmn, .dmn or .cmmn files",
 		"Copy": "-copy",
 		"Milestones" : "Milestones",
+		"Differences" : "Differences",
 		"AddMilestone" : "Create milestone",
 		"LatestVersion" : "Latest version",
 		"With" : "with",
-		"WithLastVersion" : "the latest changes"
+		"WithLastVersion" : "the latest changes",
+		"layoutChanged" : "Layout changed",
+		"changed" : "Changed",
+		"removed" : "Removed",
+		"added" : "Added",
+		"Element": "Element"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

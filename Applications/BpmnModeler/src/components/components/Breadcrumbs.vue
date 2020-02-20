@@ -130,8 +130,8 @@ export default {
       if (this.compare) { return; }
       let diagram = this.$store.getters['bpmn/getItemById'](this.$route.params.id).item;
       let versions = diagram ? await this.$store.dispatch('bpmn/getVersionsForDiagram',  diagram.id ) : [];
-      let first = versions.find( el => el.versionId == this.$route.query.id1) || this.$store.getters['bpmn/getItemById'](this.$route.query.id1).item; 
-      let second = versions.find( el => el.versionId == this.$route.query.id2) || this.$store.getters['bpmn/getItemById'](this.$route.query.id2).item;
+      let first = versions.find( el => el.versionId == this.$route.query.left) || this.$store.getters['bpmn/getItemById'](this.$route.query.left).item; 
+      let second = versions.find( el => el.versionId == this.$route.query.right) || this.$store.getters['bpmn/getItemById'](this.$route.query.right).item;
       if (!first && !second) {
         this.compare = '';
       } else {

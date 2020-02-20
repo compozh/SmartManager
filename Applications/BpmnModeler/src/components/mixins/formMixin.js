@@ -84,10 +84,12 @@ export default {
       case 'copy':
         let copy = async (elem) => {
           let val;
-          if (elem.isFolder) {
+          if (elem instanceof Folder ) {
             val = await this.$store.dispatch('bpmn/copyFolder', elem);
-          } else {
+          } else if(elem instanceof Diagram){
             val = await this.$store.dispatch('bpmn/copyProcess', elem);
+          } else {
+            val = await this.$store.dispatch('bpmn/copyVersion', elem);
           }
           return val;
         };
@@ -142,7 +144,7 @@ export default {
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
       } else {
         type =  item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(item);
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(Array.isArray(item) ? item[0] : item);
       }
       eventBus.$emit(events.modeler.showForm,
         'delete',
@@ -156,8 +158,8 @@ export default {
         type = 'all';
         model = item.map( it => new Diagram(it));
       } else {
-        item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(item); 
+        type = item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : Array.isArray(item) ? item[0] : item
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',

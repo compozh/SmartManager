@@ -126,9 +126,15 @@
 		"Files" : ".bpmn, .dmn або .cmmn файли",
 		"Copy": "-копія",
 		"Milestones" : "Версії",
+		"Differences" : "Відмінності",
 		"LatestVersion" : "Остання версія",
 		"With" : "з",
-		"WithLastVersion" : "останніми змінами"
+		"WithLastVersion" : "останніми змінами",
+		"layoutChanged" : "Змінено розташування",
+		"changed" : "Змінено",
+		"removed" : "Вилучено",
+		"added" : "Додано",
+		"Element": "Елемент"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

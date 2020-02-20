@@ -1,16 +1,18 @@
 <template>
   <modeler-layout 
       :diagram="decision" :loading.sync="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
-      :canMinimap="canMinimap" @minimap="onMinimap" :onlyRead="onlyRead"
+      :canMinimap="canMinimap" @minimap="onMinimap" 
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
-      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset">
+      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
+    >
     <template #modeler>
       <v-tabs
         show-arrows
         height="40"
         color="transparent"
         v-model="activeView"
-        slider-color="primary">
+        slider-color="primary"
+      >
         <v-tab v-for="view in views" :key="view.element.id">
           <span class="dmn-tab-icon" :class="[ viewIcons[view.type] ]"></span>
           <span>{{ view.element.name || view.element.id }}</span>
@@ -41,7 +43,7 @@ import 'dmn-js/dist/assets/dmn-font/css/animation.css';
 
 import { debounce } from 'throttle-debounce';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
-import { Diagram, DiagramType, AccessRights, DiagramVersion } from '../../api/models';
+import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import { Notification } from 'element-ui';
@@ -67,15 +69,6 @@ export default {
       }
     };
   },
-  props: {
-    onlyRead: {
-      type: Boolean,
-      default() {
-        return false;
-      }
-    },
-    diagram: Object
-  },
   mounted() {
     if (this.decision) {
       this.createModeler();
@@ -84,12 +77,9 @@ export default {
   },
   computed: {
     decision() {
-      const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
+      const activeItem = this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.DMN) {
         return activeItem;
-      } else if (activeItem && activeItem instanceof DiagramVersion ) {
-        let mainDiagram = this.$store.getters['bpmn/getItemById'](activeItem.diagramId).item;
-        return mainDiagram.type === DiagramType.DMN ? mainDiagram : null;
       }
       return null;
     },
@@ -122,7 +112,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.decision.hasRight(AccessRights.Write)  ;
+      const canEdit = this.decision.hasRight(AccessRights.Write);
       this.canShowPanel = canEdit;
       this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
       this.modeler.on('views.changed', ({ views, activeView }) => {
@@ -158,12 +148,7 @@ export default {
         this.cancellationToken.cancel();
       }
       const debounced = debounce(500, async (cancellationToken) => {
-        let xml;
-        if (this.diagram && this.diagram instanceof DiagramVersion) {
-          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.diagram.versionId, diagramId: this.decision.id});
-        } else {
-          xml = await this.$store.dispatch('bpmn/getXml', this.decision.id);
-        }
+        const xml = await this.$store.dispatch('bpmn/getXml', this.decision.id);
         if (cancellationToken.isCancelled) {
           return;
         }
@@ -184,7 +169,7 @@ export default {
             this.loading = false;
             if (err) {
               console.error(err);
-              Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
               var activeEditor = this.modeler.getActiveViewer();
 
               activeEditor.createDiagram();

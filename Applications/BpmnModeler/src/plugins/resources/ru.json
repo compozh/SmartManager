@@ -122,9 +122,15 @@
 		"Files" : ".bpmn, .dmn или .cmmn файлы",
 		"Copy": "-копия",
 		"Milestones" : "Версии",
+		"Differences" : "Различия",
 		"LatestVersion" : "Последняя версия",
 		"With" : "с",
-		"WithLastVersion" : "последними изменениями"
+		"WithLastVersion" : "последними изменениями",
+		"layoutChanged" : "Изменено расположение",
+		"changed" : "Изменено",
+		"removed" : "Удалено",
+		"added" : "Добавлено",
+		"Element": "Элемент"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
