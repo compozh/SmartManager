@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height fluid px-0 py-0 mx-0 my-0>
-    <v-layout row wrap class="color-white">
+    <v-layout row wrap class="color-white" v-resize="hideSidebar">
       <!-- Заголовок курса, урока, прогресс
             Урок, панель навигации по урокам
             Закладки: ресурсы, вопросы и ответы -->
@@ -36,9 +36,9 @@
                         {{ progressValue }}
                       </v-progress-circular>
                     </v-flex>
-                    <v-flex v-if="!menuRight" align-self-center>
+                    <v-flex v-if="!menuOnRight" align-self-center>
                       <v-btn
-                        @click="menuRight=true"
+                        @click="openMenuRight"
                         round
                         flat
                         outline
@@ -96,23 +96,32 @@
                     slider-color="blue">
                     <v-tab
                       v-for="tabItem in tabItems"
-                      :key="tabItem.title"
-                      @click="setCurrentTabName(tabItem.id)"
+                      :key="tabItem.id"
                       ripple>
                       {{ tabItem.title }}
                     </v-tab>
-                    <v-tab-item
-                      v-for="tabItem in tabItems"
-                      :key="tabItem.title">
-                      <v-card flat>
-                        <lesson-materials
-                          v-if='tabItem.id==="materials" && currentLesson'
-                          :lesson="currentLesson.lesson"
-                          :materials="currentLesson.materials"></lesson-materials>
-                        <questions-and-answers
-                          v-if='tabItem.id==="questions"'></questions-and-answers>
-                      </v-card>
-                    </v-tab-item>
+                    <v-tabs-items>
+                      <v-tab-item
+                        v-for="tabItem in tabItems"
+                        :key="tabItem.id">
+                        <v-card flat>
+                          <lessons-menu
+                            v-if="tabItem.id==='menu'"
+                            :modules="modules"
+                            :currentLessonId="currentLessonGuid"
+                            :passedList="lessonsPassed"
+                            @set-current-lesson="setCurrentLesson"
+                            @change-list="updateLessonPaseedList"
+                            ></lessons-menu>
+                          <lesson-materials
+                            v-if='tabItem.id==="materials" && currentLesson'
+                            :lesson="currentLesson.lesson"
+                            :materials="currentLesson.lessonmaterials"></lesson-materials>
+                          <questions-and-answers
+                            v-if='tabItem.id==="questions"'></questions-and-answers>
+                        </v-card>
+                      </v-tab-item>
+                    </v-tabs-items>
                   </v-tabs>
                 </v-flex>
               </v-layout>
@@ -122,9 +131,8 @@
         </v-layout>
       </v-flex>
       <!-- Навигационное меню -->
-      <v-flex v-if="menuRight" lg4 md8 sm12>
+      <v-flex v-if="menuOnRight" lg4 md8 sm12>
         <v-layout column fill-height>
-          <!-- Навигация -->
           <v-flex grow>
             <v-card flat height='100%' width='100%'>
               <v-layout row align-center space-between nowrap pr-1 py-1>
@@ -132,80 +140,19 @@
                   <h3 class="px-3">Материалы курса</h3>
                 </v-flex>
                 <v-flex hidden-md-and-down shrink>
-                  <v-btn @click="menuRight=!menuRight"
+                  <v-btn @click="closeMenuRight"
                     flat icon color="grey">
                     <v-icon>close</v-icon>
                   </v-btn>
                 </v-flex>
               </v-layout>
-              <!-- Список уроков по модулям -->
-              <v-layout fill-height>
-                <v-flex>
-                  <v-card
-                    color="grey lighten-2"
-                    flat
-                    v-for="(moduleItem, index) in modules" :key="moduleItem.moduleGuid">
-                    <div class="pl-3 pt-1">
-                      <v-layout nowrap align-center justify-space-between>
-                        <v-flex>
-                          <div class="subheading font-weight-bold">{{moduleItem.name}}</div>
-                          <div class="body-1">
-                            {{ moduleItem.durationMinutesLabel + ` (${lessonsModulePassed(moduleItem.moduleGuid)} / ${moduleItem.units.length})`}}
-                          </div>
-                        </v-flex>
-                        <v-spacer></v-spacer>
-                        <v-flex shrink>
-                          <v-btn icon @click="openClose(index)" color="white">
-                            <v-icon>{{ isActive(index) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-                          </v-btn>
-                        </v-flex>
-                      </v-layout>
-                    </div>
-                    <v-card-text v-show="isActive(index)" class="white py-0 px-0">
-                      <v-layout>
-                        <v-flex>
-                          <div
-                              v-for="lesson in moduleItem.units"
-                              :key="lesson.lessonGuid"
-                              @click="setLesson(lesson)"
-                              :class="{'active': lesson.lessonGuid === currentLessonGuid}"
-                              class="lesson-item">
-                            <v-layout nowrap justify-start>
-                              <v-flex pl-3 shrink align-self-center>
-                                <v-checkbox
-                                  v-model="lessonsPassed"
-                                  :value="lesson.lessonGuid"
-                                  :disabled="lesson.disabled"
-                                  height="6">
-                                </v-checkbox>
-                              </v-flex>
-                              <v-flex>
-                                <v-layout column>
-                                  <v-flex>
-                                    <v-layout>
-                                      <v-flex align-self-center>
-                                        <div><span class="grey--text text--darken-2">{{lesson.name}}</span></div>
-                                      </v-flex>
-                                    </v-layout>
-                                  </v-flex>
-                                </v-layout>
-                                <v-layout nowrap>
-                                  <v-flex shrink>
-                                    <v-icon small color="grey lighten-1">{{lesson.icon}}</v-icon>
-                                  </v-flex>
-                                  <v-flex>
-                                    <span class="ml-3 caption grey--text text-darken-1">{{lesson.durationMunute | timeFormat}}</span>
-                                  </v-flex>
-                                </v-layout>
-                              </v-flex>
-                            </v-layout>
-                          </div>
-                        </v-flex>
-                      </v-layout>
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
-              </v-layout>
+              <!-- Навигация -->
+              <lessons-menu
+                :modules="modules"
+                :currentLessonId="currentLessonGuid"
+                :passedList="lessonsPassed"
+                @set-current-lesson="setCurrentLesson"
+                @change-list="updateLessonPaseedList"></lessons-menu>
             </v-card>
           </v-flex>
         </v-layout>
@@ -216,95 +163,42 @@
 
 <script>
 import LessonView from './LessonView.vue'
+import LessonsMenu from './LessonsMenu.vue'
 import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
-import {lessonType} from '../helpers/lesson.js'
+import {lessonType, materialType} from '../helpers/lesson.js'
 
 export default {
   name: 'lms-course-learning',
   components: {
     LessonView,
+    LessonsMenu,
     LessonMaterials,
     QuestionsAndAnswers
   },
   data() {
     return {
-      menuRight: true,
+      menuOnRight: true,
       openItem: true,
       tabActive: null,
       tabItems: [
         { id: 'materials', title: 'Ресурсы', nestedView: LessonMaterials},
         { id: 'questions', title: 'Вопросы и ответы', nestedView: QuestionsAndAnswers}
       ],
-      currentTabName: 'lesson',
       progress: {
         passed: 0,
         total: 29
       },
       course: {},
       modules: [],
-      lesson: {},
       lessonsPassed: [],
       modulesLessonsPassed: [],
       currentLessonGuid: '',
       startPlay: false,
       navigation: {
-        modules: [],
         currentLessonIndex: 0,
         lessons: []
-      },
-      // STUB materials
-      materials: [
-        {
-          title: 'Презентации',
-          type: 1,
-          icon: 'slideshow',
-          enclosures: [
-            {title: 'Конфiгурування. Частина 1', link: ''}
-          ],
-          active: true
-        },
-        {
-          title: 'Практика',
-          type: 2,
-          icon: 'attachment',
-          enclosures: null,
-          active: true
-        },
-        {
-          title: 'Файлы',
-          type: 2,
-          icon: 'attachment',
-          enclosures: [
-            {title: 'Определения', link: ''},
-            {title: 'Програмнi продукти', link: ''}
-          ],
-          active: true
-        },
-        {
-          title: 'Ссылки',
-          type: 3,
-          icon: 'open_in_new',
-          enclosures: [
-            {title: 'Определения', link: ''},
-            {title: 'Програмнi продукти', link: ''}
-          ],
-          active: true
-        }
-      ],
-      // STUB иконки для типов уроков
-      lessonIcons: [
-        {
-          lessonType: lessonType.text,
-          icon: 'insert_drive_file'
-        },{
-          lessonType: lessonType.video,
-          icon: 'ondemand_video'
-        },{
-          lessonType: lessonType.test,
-          icon: 'playlist_add_check'
-        }
-      ]
+      }
     }
   },
   created() {
@@ -314,41 +208,45 @@ export default {
     this.putPassedFieldToLessons(this.modules)
     this.progress = this.getInitialProgress(this.modules)
     this.lessonPassed = this.getInitialPassedLesson(this.modules)
-    // признак свободного доступа к уроку
-    // isLessonFree(this.currentLessonGuid)
-    // STUB признак прохождения урока пока добавлять программно
-    const isFree = true
-    this.getLesson(this.currentLessonGuid, isFree)
-    this.navigation.modules = this.initMenu()
+    this.getLesson(this.currentLessonGuid)
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
   },
+  mounted() {
+    this.hideSidebar()
+  },
   methods: {
+    hideSidebar() {
+      let breackPoint = this.$vuetify.breakpoint.name
+      if (breackPoint === 'xs' || breackPoint === 'sm' || breackPoint === 'md') {
+        this.closeMenuRight()
+      }
+    },
     nextLesson () {
       if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
         this.navigation.currentLessonIndex++
         this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       }
-      const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
-      this.setLesson (lesson)
+      const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
+      this.setCurrentLesson (lessonId)
     },
     prevLesson () {
       if (this.navigation.currentLessonIndex > 0) {
         this.navigation.currentLessonIndex--
         this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
       }
-      const lesson = this.navigation.lessons[this.navigation.currentLessonIndex]
-      this.setLesson (lesson)
+      const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
+      this.setCurrentLesson (lessonId)
     },
-    setLesson ({lessonGuid, isFree}) {
-      this.navigation.currentLessonIndex = this.getCurrentLessonIndexgetCurrentLessonIndex(lessonGuid)
-      this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
-      this.getLesson(lessonGuid, isFree)
+    setCurrentLesson (lessonGuid) {
+      this.currentLessonGuid = lessonGuid
+      this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
+      this.getLesson(lessonGuid)
     },
-    async getLesson(lessonGuid, isFree) {
+    async getLesson(lessonGuid) {
       // Получить урок
-      await this.$store.dispatch('lms/getLessonContent', { lessonGuid, isFree })
+      await this.$store.dispatch('lms/getLessonContent', lessonGuid)
     },
     finishLesson () {
       if ( !this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid) ) {
@@ -369,13 +267,12 @@ export default {
       this.modules.forEach(m => {
         allLessonsInfo = allLessonsInfo.concat(m.units)
       })
-      let allLessons = allLessonsInfo.map(l => {
-        return { lessonGuid: l.lessonGuid, isFree: l.isFree}
-      })
+      let allLessons = allLessonsInfo.map(l => l.lessonGuid)
       return allLessons
     },
     getCurrentLessonIndex (currentLessonGuid) {
-      return this.navigation.lessons.findIndex(l => l.lessonGuid === currentLessonGuid)
+      let index = this.navigation.lessons.indexOf(currentLessonGuid)
+      return index === -1 ? 0 : index
     },
     // Общее количество пройденных уроков. Инициализация
     getInitialPassedLesson(modules) {
@@ -398,72 +295,96 @@ export default {
       }
       return {total: lessonsTotal, passed: lessonPassed}
     },
+    updateLessonPaseedList(list) {
+      this.lessonsPassed = list
+    },
     // Заглушка для получения статуса урока пройден/непройден
     putPassedFieldToLessons(modules) {
       modules.forEach(m => m.active = true)
       for (const _module of modules) {
         _module.units.forEach(function (u) {
-          u.lessonType = lessonType.video
           u.passed = false
           u.disabled = false
-          u.isFree = false
           switch (u.lessonType) {
           case lessonType.video:
-            u.icon = 'ondemand_video'
+            u.icon = 'ondemand_video' // lessonIcons.video
             break
           case lessonType.text:
-            u.icon = 'insert_drive_file'
+            u.icon = 'insert_drive_file' // lessonIcons.text
             break
           case lessonType.test:
-            u.icon = 'playlist_add_check'
+            u.icon = 'playlist_add_check' // lessonIcons.test
           }
         })
       }
       modules[0].units[0].passed = true
       modules[0].units[0].disabled = false
-      modules[0].units[0].isFree = true
     },
     getMaterials(unit) {
-      unit.lesson.lessonType = 1
-      unit.content = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS'
-      for (let i = 0; i < this.materials.length; i++) {
-        const m = this.materials[i]
-        if (m.enclosures) {
-          m.enclosures.forEach(e => e.link = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS')
+      const lessonmaterials = unit.lessonmaterials
+      let typeOfMaterials = new Set()
+      lessonmaterials.forEach(item => {
+        typeOfMaterials.add(item.type)
+      })
+      let materials = []
+      typeOfMaterials.forEach(type => {
+        let item = {
+          active: true,
+          type: type,
+          title: '',
+          icon: '',
+          enclosures: [],
         }
-      }
-      unit.materials = this.materials
+        switch (type) {
+        case materialType.file:
+          item.title = 'Файлы'
+          item.icon = 'attachment'
+          item.enclosures = lessonmaterials.filter(l => l.type === type).map(i => {
+            return {title: i.name, link: i.link}
+          })
+          break
+        case materialType.presentation:
+          item.title = 'Презентации'
+          item.icon = 'slideshow'
+          item.enclosures = lessonmaterials.filter(l => l.type === type).map(i => {
+            return {title: i.name, link: i.link}
+          })
+          break
+        case materialType.link:
+          item.title = 'Ссылки'
+          item.icon = 'open_in_new'
+          item.enclosures = lessonmaterials.filter(l => l.type === type).map(i => {
+            return {title: i.name, link: i.link}
+          })
+          break
+        default:
+          break
+        }
+        materials.push(item)
+      })
+
+      // unit.lesson.lessonType = 1
+      // unit.content = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS'
+
+      // for (let i = 0; i < this.materials.length; i++) {
+      //   const m = this.materials[i]
+      //   if (m.enclosures) {
+      //     m.enclosures.forEach(e => e.link = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS')
+      //   }
+      // }
+      unit.lessonmaterials = materials
       return unit
     },
-    lessonsModulePassed(moduleGuid) {
-      const moduleItem = this.modules.find(m => m.moduleGuid === moduleGuid)
-      let lessonModulePassed = 0
-      for (let i = 0; i < this.lessonsPassed.length; i++) {
-        if (moduleItem.units.some(u => u.lessonGuid === this.lessonsPassed[i])) {
-          lessonModulePassed++
-        }
+    closeMenuRight() {
+      if (this.menuOnRight) {
+        const lessonsMenu = { id: 'menu', title: 'Уроки', nestedView: LessonsMenu}
+        this.tabItems.unshift(lessonsMenu)
+        this.menuOnRight = !this.menuOnRight
       }
-      return lessonModulePassed
     },
-    setCurrentTabName ( tabActive ) {
-      this.currentTabName = tabActive
-    },
-    isCurrentLesson(lessonGuid) {
-      return this.currentLessonGuid === lessonGuid
-    },
-    initMenu() {
-      return this.modules.map( m => {
-        return {
-          moduleGuid: m.moduleGuid,
-          active: true
-        }
-      })
-    },
-    openClose(index) {
-      this.navigation.modules[index].active = !this.navigation.modules[index].active
-    },
-    isActive(index) {
-      return this.navigation.modules[index].active
+    openMenuRight() {
+      this.menuOnRight = !this.menuOnRight
+      this.tabItems.shift()
     }
   },
   computed: {
