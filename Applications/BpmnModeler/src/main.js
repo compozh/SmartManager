@@ -37,6 +37,7 @@ auth.config({
 moment.locale(localStorage.language);
 Vue.config.keyCodes = {
   z: 90,
+  y: 89
 };
 // объект с зависимостями
 let dependencies = {

@@ -13,11 +13,11 @@
           <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
             {{$t('bpmn.labels.Milestones')}}
           </v-toolbar>
-          <v-list class="milestones-list" v-if="diagram">
-            <v-list-item-group  v-for="group in groups" :key="group.name" >
+          <v-list class="milestones-list" v-if="diagram" >
+            <div  v-for="group in groups" :key="group.name" class="" >
               <v-subheader>{{  group.name | formatDate }}</v-subheader>
-              <v-list-item class="row d-flex ma-1" :class="{'v-list-item--active ': item.versionId == version.versionId || version.id}"
-                v-for="item in group.items"
+              <v-list-item class="row d-flex ma-1" :class="{'v-list-item--active ': item.versionId == $route.query.version }"
+                v-for="item in group.items" selectable
                 :key="item.versionId"
                 @click="changeVersion(item)">
                 <v-list-item-avatar class="ma-0">
@@ -44,7 +44,7 @@
                 </bpmn-contex-menu>
                 </v-list-item-action>
               </v-list-item>
-            </v-list-item-group>
+            </div>
           </v-list>
         </div>
       </SplitArea>
@@ -90,7 +90,6 @@ export default {
       return value.length > 4 ? value.split(' ').map( el => el.slice(0,1)).join('') : value;
     }
   },
-
   computed: {
     diagram() {
       const activeItem = this.$store.state.bpmn.activeItem || this.$store.getters['bpmn/getItemById'](this.$route.params.id);
@@ -159,15 +158,16 @@ export default {
       this.groups = groups;
       this.versions = versions;
       this.loading = false;
-      this.changeVersion(groups[0].items[0]);
+      this.changeVersion(this.versions.find( el => el.versionId == this.$route.query.version) || groups[0].items[0]);
     },
     changeVersion(val) {
-      if (val.versionId == this.$route.query.version || this.version.versionId == val.versionId) {
+      if (val.versionId == this.$route.query.version || this.version.versionId == val.versionId ) {
         this.version = val;
         return; 
+      } else {
+        this.version = val;
+        this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }});
       }
-      this.version = val;
-      this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }});
       
     }
   },

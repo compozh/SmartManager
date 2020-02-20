@@ -39,7 +39,7 @@
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">
-          <div class="bpmn-diagram-container"   @keydown.ctrl.z.exact="$emit('undo')" @keydown.ctrl.shift.z.exact="$emit('redo')">
+          <div class="bpmn-diagram-container"   @keydown.ctrl.z.exact="$emit('undo')" @keydown.ctrl.shift.z.exact="$emit('redo')" @keydown.ctrl.y.exact="$emit('redo')">
             <v-row class="options-panel">
               <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
                 <v-icon size="20">mdi-undo</v-icon>

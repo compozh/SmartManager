@@ -263,7 +263,9 @@ export default {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
     },
     async createVersion(item) {
-      await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item);
+       if (!(await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item))) {
+        Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
+      }
     },
     async apply(item) {
       await this.$store.dispatch('bpmn/applyDiagramVersion', {diagramId: item.diagramId, versionId: item.versionId});
