@@ -132,7 +132,6 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
         items: selectedBusinessObjects,
         get: () => dataObjectRef ? dataObjectRef.get('id') : undefined,
         set: (element, value) => {
-          console.log(value);
           const bo = getBusinessObject(element);
           const dataObject = findDataObject(bo, value);
           return cmdHelper.updateBusinessObject(element, bo, {

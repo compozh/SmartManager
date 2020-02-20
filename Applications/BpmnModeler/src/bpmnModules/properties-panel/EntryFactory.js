@@ -192,7 +192,6 @@ export default class EntryFactory {
   }
 
   getDefaultData(options) {
-    console.log(this.get(options));
     return {
       props: {
         key: options.id,
