@@ -108,23 +108,23 @@ export default {
       if (this.$store.state.auth.user && name == this.$store.state.auth.user.userName) { 
         return this.$t('bpmn.labels.You');
       } else {
-        return name
+        return name;
       }
     },
     getColor(item) {
       let result,
-       color = () => {
+        color = () => {
           let r = Math.floor(Math.random() * (100 - 25) + 25);
           let g = Math.floor(Math.random() * (206 - 25) + 25);
           let b = Math.floor(Math.random() * (256 - 25) + 25);
           let rgb = `rgb(${r}, ${g},${b})`;
           return rgb ;
         };
-      if(!Object.keys(this.colors).find(el => el == item)) {
+      if (!Object.keys(this.colors).find(el => el == item)) {
         result = color();
-        this.colors[item] = result
+        this.colors[item] = result;
       } else {
-        result = this.colors[item]
+        result = this.colors[item];
       }
       return result;
     },

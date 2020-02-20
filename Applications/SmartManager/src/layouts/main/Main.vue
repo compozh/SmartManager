@@ -39,7 +39,7 @@
 import VxSidebar from '@/layouts/components/vx-sidebar/VxSidebar.vue'
 import TheNavbar from '../components/TheNavbar.vue'
 import TheFooter from '../components/TheFooter.vue'
-import themeConfig from '@/../themeConfig.js'
+import themeConfig from '@/themeConfig.js'
 import templateConfig from '@/templateConfig.js'
 
 export default {

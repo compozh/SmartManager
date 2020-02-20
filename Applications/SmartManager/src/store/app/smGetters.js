@@ -1,5 +1,21 @@
 export default {
-  tasks(state) {
+  search: () => (item, searchFields, value) => {
+    for (let i = 0; i < searchFields.length; i++) {
+      let searchField = searchFields[i]
+      let taskField = item[searchField]
+      // Если такого поля нет - пропуск без проверки
+      if (!taskField) {
+        continue
+      }
+      let taskFieldValue = String(taskField).toLowerCase()
+      let isMatching = taskFieldValue.includes(value.toLowerCase())
+      // При первом же совпадении отбор и переход к следующей задаче
+      if (isMatching) {
+        return true
+      }
+    }
+  },
+  tasks(state, getters) {
     const folderId = state.currentFolder
     const tasks = state.tasks[folderId]
     const search = state.search ? state.search.trim() : ''
@@ -20,25 +36,9 @@ export default {
       'name',
       'performer'
     ]
-    return tasks.filter(task => {
-      // Цикл for по ключам задачи для возможности использовать continue
-      for (let i = 0; i < searchFields.length; i++) {
-        let searchField = searchFields[i]
-        let taskField = task[searchField]
-        // Если такого поля нет - пропуск без проверки
-        if (!taskField) {
-          continue
-        }
-        let taskFieldValue = String(taskField).toLowerCase()
-        let isMatching = taskFieldValue.includes(search.toLowerCase())
-        // При первом же совпадении отбор и переход к следующей задаче
-        if (isMatching) {
-          return true
-        }
-      }
-    })
+    return tasks.filter(task => getters.search(task, searchFields, search))
   },
-  cases(state) {
+  cases(state, getters) {
     const cases = state.cases
     const search = state.search ? state.search.trim() : ''
     // Определение необходимость поиска/фильтрации кейсов
@@ -55,22 +55,6 @@ export default {
       'fioAdd',
       'dateAdd'
     ]
-    return cases.filter(item => {
-      // Цикл for по ключам задачи для возможности использовать continue
-      for (let i = 0; i < searchFields.length; i++) {
-        let searchField = searchFields[i]
-        let caseField = item[searchField]
-        // Если такого поля нет - пропуск без проверки
-        if (!caseField) {
-          continue
-        }
-        let taskFieldValue = String(caseField).toLowerCase()
-        let isMatching = taskFieldValue.includes(search.toLowerCase())
-        // При первом же совпадении отбор и переход к следующей задаче
-        if (isMatching) {
-          return true
-        }
-      }
-    })
+    return cases.filter(caseItem => getters.search(caseItem, searchFields, search))
   }
 }

@@ -43,7 +43,7 @@ export default {
     },
     diagram1() {
       const itemId = this.$route.query.id1;
-      const item = this.versions.find( el => itemId ==  el.versionId) || this.$store.getters['bpmn/getItemById'](itemId).item
+      const item = this.versions.find( el => itemId ==  el.versionId) || this.$store.getters['bpmn/getItemById'](itemId).item;
       if (itemId && item instanceof Diagram || item instanceof DiagramVersion) {
         return item;
       }
@@ -51,7 +51,7 @@ export default {
     },
     diagram2() {
       const itemId = this.$route.query.id2;
-      const item = this.versions.find( el => itemId ==  el.versionId) || this.$store.getters['bpmn/getItemById'](itemId).item
+      const item = this.versions.find( el => itemId ==  el.versionId) || this.$store.getters['bpmn/getItemById'](itemId).item;
       if (item && item instanceof Diagram || item instanceof DiagramVersion) {
         return item;
       }
@@ -60,10 +60,10 @@ export default {
     type() {
       if ( !this.$route.params.id && this.diagram1) { 
         return this.diagram1.type;
-      } else if(this.diagram && this.$route.params.id) {
-        this.getVersions()
+      } else if (this.diagram && this.$route.params.id) {
+        this.getVersions();
         return this.diagram.type ;
-      } else {return }
+      } else { return ''; }
     },
     splitSize: {
       get() {
@@ -88,15 +88,15 @@ export default {
     },
     async getVersions() {
       if (!this.diagram || this.versions.length > 0) { return; }
-      let versions = await this.$store.dispatch('bpmn/getVersionsForDiagram', this.diagram.id)
-      this.versions = versions
+      let versions = await this.$store.dispatch('bpmn/getVersionsForDiagram', this.diagram.id);
+      this.versions = versions;
     },
     addColor(changes, modeler, type, color, icon) {
       let elements =  Object.keys(changes[type]),
-        shapes = elements.map( el => modeler.elementRegistry.get(el));
+        shapes = elements.map( el => modeler.elementRegistry.get(el)),
+        polylines, overlayHtml;
       shapes.forEach( elem => {
         if (!elem) { return; }
-        let  overlayHtml;
         switch (elem.constructor.name) {
         case 'Shape':
           overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${elem.width + 10}px; height: ${elem.height + 10}px" >
@@ -104,7 +104,7 @@ export default {
                         </div>`;
           break;
         case 'Connection':
-          let polylines = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
+          polylines = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
           polylines.forEach( el => {
             el.children[0].firstChild.style.strokeDasharray = '10,10';
             el.children[0].firstChild.style.stroke = color;
@@ -113,7 +113,7 @@ export default {
           overlayHtml = `<div class="${elem.id}"></div>`;
           break;
         default:
-          overlayHtml = `<div></div>`;
+          overlayHtml = '<div></div>';
           break;
         }
         modeler.overlays.add(elem.id , {
@@ -126,18 +126,18 @@ export default {
       });
     },
     async getXml(diagram) {
-      let xml
-      if(diagram instanceof DiagramVersion) {
-        xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: diagram.versionId, diagramId: this.diagram.id})
+      let xml;
+      if (diagram instanceof DiagramVersion) {
+        xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: diagram.versionId, diagramId: this.diagram.id});
       } else {
         xml = await this.$store.dispatch('bpmn/getXml', diagram.id);
       }
-      return xml 
+      return xml; 
     },
     async compare() {
       let changes;
       let xml1 = await this.getXml(this.diagram1),
-      xml2 = await this.getXml(this.diagram2);
+        xml2 = await this.getXml(this.diagram2);
       function loadModels(a, b, done ) {
         new BpmnModdle().fromXML(a, function(err, adefs) {
           if (err) {

@@ -38,7 +38,7 @@ import * as Models from '../../api/models';
 export default {
   name: 'breadcrumbs',
   mixins: [ formMixin ],
-    data () {
+  data () {
     return {
       compare: ''
     };
@@ -93,7 +93,7 @@ export default {
         }
       } 
       if (this.$route.name == 'compare') {
-        this.getVersions()
+        this.getVersions();
         elements.push(this.compare);
       }
       return elements;   
@@ -126,23 +126,23 @@ export default {
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
       return item;
     },
-    async getVersions(){
-      if(this.compare) {return}
-      let diagram = this.$store.getters['bpmn/getItemById'](this.$route.params.id).item
-      let versions = diagram ? await this.$store.dispatch('bpmn/getVersionsForDiagram',  diagram.id ) : []
-      let first = versions.find( el => el.versionId == this.$route.query.id1) || this.$store.getters['bpmn/getItemById'](this.$route.query.id1).item 
-      let second = versions.find( el => el.versionId == this.$route.query.id2) || this.$store.getters['bpmn/getItemById'](this.$route.query.id2).item
-      if(!first && !second) {
-        this.compare = ''
+    async getVersions() {
+      if (this.compare) { return; }
+      let diagram = this.$store.getters['bpmn/getItemById'](this.$route.params.id).item;
+      let versions = diagram ? await this.$store.dispatch('bpmn/getVersionsForDiagram',  diagram.id ) : [];
+      let first = versions.find( el => el.versionId == this.$route.query.id1) || this.$store.getters['bpmn/getItemById'](this.$route.query.id1).item; 
+      let second = versions.find( el => el.versionId == this.$route.query.id2) || this.$store.getters['bpmn/getItemById'](this.$route.query.id2).item;
+      if (!first && !second) {
+        this.compare = '';
       } else {
-        this.compare = `"${first.name}" / "${second.name}"`
+        this.compare = `"${first.name}" / "${second.name}"`;
       }
      
     }
   },
   watch: {
     '$route'() {
-      this.compare = ''
+      this.compare = '';
     },
   }
 };

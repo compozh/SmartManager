@@ -44,4 +44,18 @@ export default function addDataObjectReferenceProps(group, diagram, element, ent
       });
     }
   }));
+
+  const boDefCode = reference.get('IT-Enterprise:businessObjectDefinitionCode');
+
+  if (typeof boDefCode === 'string' && boDefCode.trim() !== '') {
+    const required = (element, value) => { if (typeof value !== 'string' || value.trim() === '') { return translate('Must provide a value'); } return true; };
+    group.entries.push(entryFactory.textField({
+      id: 'boKeyVar',
+      label: translate('Business Object Key Variable Name'),
+      model: 'IT:Enterprise:businessObjectKeyVariableName',
+      get: () => reference.get('IT-Enterprise:businessObjectKeyVariableName'),
+      set: (element, value) => cmdHelper.updateBusinessObject(element, reference, { 'IT-Enterprise:businessObjectKeyVariableName': value }),
+      validate: required
+    }));
+  }
 }

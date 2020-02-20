@@ -69,8 +69,7 @@ export default {
       split: null,
       versions: [],
       version: {},
-      groups: [],
-      loading: false
+      groups: []
     };
   },
   props: {
@@ -82,7 +81,7 @@ export default {
   filters: {
     formatDate(value) {
       if (value) {
-        let spliter = localStorage.language == 'uk' ? ' о' : localStorage.language == 'ru' ? ',' : 'at'
+        let spliter = localStorage.language == 'uk' ? ' о' : localStorage.language == 'ru' ? ',' : 'at';
         return moment(value).calendar(null, {
           sameElse: 'DD MMMM YYYY'
         }).split(spliter)[0];
@@ -108,7 +107,7 @@ export default {
     },
     type() {
       if (!this.diagram) { return; }
-      this.getVersions()
+      this.getVersions();
       return this.diagram.type;
     },
     splitSize: {
@@ -148,41 +147,41 @@ export default {
     },
     async getVersions() {
       if (!this.diagram ) { return; }
-      this.loading = true
+      this.loading = true;
       let versions = await this.$store.dispatch('bpmn/getVersionsForDiagram', this.diagram.id),
-      groups = []
-      if(!versions || versions.length == 0) {
-        versions = [this.diagram]
-        let date = new Date()
-        this.diagram.creationTime = moment(date).format()
+        groups = [];
+      if (!versions || versions.length == 0) {
+        versions = [this.diagram];
+        let date = new Date();
+        this.diagram.creationTime = moment(date).format();
       }
       
       versions.reverse().forEach( item => {
-        let key = groups.find( el => el.name == item.creationTime.slice(0,10))
-        if(!key) {
+        let key = groups.find( el => el.name == item.creationTime.slice(0,10));
+        if (!key) {
           groups.push({
             name: item.creationTime.slice(0,10),
             items: [item]
-          })
+          });
         } else {
-          key.items.push(item)
+          key.items.push(item);
         }
-      })
+      });
       groups = groups.sort( (a, b) =>  {
-        return moment(b.name).toDate().getTime() - moment(a.name).toDate().getTime()
-      })
-      this.groups = groups
-      this.versions = versions
-      this.loading = false
-      this.changeVersion(groups[0].items[0])
+        return moment(b.name).toDate().getTime() - moment(a.name).toDate().getTime();
+      });
+      this.groups = groups;
+      this.versions = versions;
+      this.loading = false;
+      this.changeVersion(groups[0].items[0]);
     },
     changeVersion(val) {
-      if(val.versionId == this.$route.query.version || this.version.versionId == val.versionId) {
-        this.version = val
-        return 
+      if (val.versionId == this.$route.query.version || this.version.versionId == val.versionId) {
+        this.version = val;
+        return; 
       }
-      this.version = val
-      this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }})
+      this.version = val;
+      this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }});
       
     }
   },

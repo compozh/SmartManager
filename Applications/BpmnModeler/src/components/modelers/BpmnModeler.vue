@@ -61,9 +61,9 @@ export default {
       const activeItem = this.diagram || this.$store.state.bpmn.activeItem;
       if (activeItem && activeItem instanceof Diagram && activeItem.type === DiagramType.BPMN) {
         return activeItem;
-      } else if(activeItem && activeItem instanceof DiagramVersion ) {
-        let mainDiagram = this.$store.getters['bpmn/getItemById'](activeItem.diagramId).item
-        return mainDiagram.type === DiagramType.BPMN ? mainDiagram : null
+      } else if (activeItem && activeItem instanceof DiagramVersion ) {
+        let mainDiagram = this.$store.getters['bpmn/getItemById'](activeItem.diagramId).item;
+        return mainDiagram.type === DiagramType.BPMN ? mainDiagram : null;
       }
       return null;
     },
@@ -104,9 +104,9 @@ export default {
         this.cancellationToken.cancel();
       }
       const debounced = debounce(500, async (cancellationToken) => {
-        let xml
-        if(this.diagram && this.diagram instanceof DiagramVersion) {
-          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.diagram.versionId, diagramId: this.process.id})
+        let xml;
+        if (this.diagram && this.diagram instanceof DiagramVersion) {
+          xml = await this.$store.dispatch('bpmn/getDiagramVersionXml', {versionId: this.diagram.versionId, diagramId: this.process.id});
         } else {
           xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
         }

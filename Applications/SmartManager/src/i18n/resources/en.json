@@ -170,7 +170,8 @@
     "closeForm": "Close the form",
     "noApprovals": "No approvals",
     "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
-    "downloadFile": "Download and open file"
+    "downloadFile": "Download and open file",
+    "noAccess": "You do not have access to the attachment"
   },
   "notify": {
     "foldersTitle": "Folders and filters",

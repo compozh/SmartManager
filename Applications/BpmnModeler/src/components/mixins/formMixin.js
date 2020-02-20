@@ -36,23 +36,23 @@ export default {
       case 'edit':
         if (type === 'folder' ) {
           success = await this.$store.dispatch('bpmn/editFolder', item);
-        } else if (type === 'process'){
+        } else if (type === 'process') {
           success = await this.$store.dispatch('bpmn/editProcess', item);
         } else {
           success = await this.$store.dispatch('bpmn/updateDiagramVersion', item);
         }
         if (!success) {
           Notification.error(this.$t('bpmn.errors.ProcessNotEdited'));
-        } else if(type == 'version') {
-          await this.getVersions()
+        } else if (type == 'version') {
+          await this.getVersions();
         }  else {
           this.$forceUpdate();
         }
         break;
       case 'delete':
         let deleting = async (elem) => {
-          let val
-          if (type == 'version' ){
+          let val;
+          if (type == 'version' ) {
             val = await this.$store.dispatch('bpmn/deleteDiagramVersion', {diagramId: elem.diagramId, versionId: elem.versionId});
             
           } else {
@@ -77,8 +77,8 @@ export default {
           Notification.error(this.$t('bpmn.errors.ProcessNotDeleted'));
         } else if (this.choose) {
           this.choose = this.choose.filter( el =>  Array.isArray(item) ? !item.find(it => el.id == it.id) : item.id != el.id );
-        } else if(type == 'version') {
-          await this.getVersions()
+        } else if (type == 'version') {
+          await this.getVersions();
         } 
         break;
       case 'copy':
@@ -157,7 +157,7 @@ export default {
         model = item.map( it => new Diagram(it));
       } else {
         item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(item) 
+        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(Array.isArray(item) ? item[0] : item) : new DiagramVersion(item); 
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',

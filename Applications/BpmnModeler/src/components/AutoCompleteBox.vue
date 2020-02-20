@@ -72,8 +72,8 @@ export default {
       this.loading = false;
     },
     change(ev) {
-      this.$refs.autocomplete.blur()
-      this.search = ''
+      this.$refs.autocomplete.blur();
+      this.search = '';
     }
   }
 };
