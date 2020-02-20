@@ -1,12 +1,18 @@
 export const lessonType = {
-  text: 0,
-  video: 1,
-  test: 2
+  text: 'TEXT',
+  video: 'VIDEO',
+  test: 'TEST'
 }
 
 export const materialType = {
-  file: 0,
-  presentation: 1,
-  link: 2
+  file: 'FILE',
+  presentation: 'PRESENTATION',
+  link: 'LINK'
 }
+
+export const lessonIcons = [
+  { text: 'insert_drive_file' },
+  { video: 'ondemand_video' },
+  { test: 'playlist_add_check' }
+]
 

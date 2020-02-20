@@ -99,7 +99,8 @@ export default {
       let iotSignalRUrl = this.iotSettings.iotSignalRUrl
 
       if(iotSignalRUrl) {
-        this.iotSettings.iotSignalRConnection.connect(iotSignalRUrl)
+        await this.iotSettings.iotSignalRConnection.connect(iotSignalRUrl)
+        this.$refs.formioFormComponent.$refs.formioComponent.formio.emit('onSignalRConnected')
       }
       
       return true

@@ -28,7 +28,6 @@
      }
      showLessonsTitle
      units{
-       unitId
        lessonGuid
        name
        durationMinutesLabel
