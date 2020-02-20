@@ -35,22 +35,28 @@
           <!-- TASK CONTENT -->
           <div class="vx-row border-b border-l-0 border-r-0
                         border-t-0 d-theme-border-grey-light"
-               :class="{'border-solid': htmlDescription}">
+               :class="{'border-solid': htmlDescription || docTextHtml}">
             <div class="vx-col w-full">
               <div v-if="htmlDescription" class="mail__content break-words mt-8 mb-4">
                 <iframe seamless
                         scrolling="no"
                         width="100%"
-                        :height="iFrameHeight"
+                        :height="iFrameHeight1"
                         frameborder="0"
                         :srcdoc="htmlDescription"
-                        @load="iFrameOnLoad"
-                        style="pointer-events: none;"
-                ></iframe>
+                        @load="iFrameOnLoad(1, $event)"
+                        style="pointer-events: none"/>
               </div>
-              <div v-if="task.docTextHtml"
-                   class="mail__content break-words mt-8 mb-4"
-                   v-html="task.docTextHtml"></div>
+              <div v-if="docTextHtml">
+                <iframe seamless
+                        scrolling="no"
+                        width="100%"
+                        :height="iFrameHeight2"
+                        frameborder="0"
+                        :srcdoc="docTextHtml"
+                        @load="iFrameOnLoad(2, $event)"
+                        style="pointer-events: none"/>
+              </div>
             </div>
           </div>
 
@@ -174,7 +180,7 @@
 </template>
 
 <script>
-import TaskListItem from '@/views/task-list/TaskListItem.vue'
+import TaskListItem from '@/views/tasks/task-list/TaskListItem.vue'
 import FilesUpload from '@/components/FilesUpload'
 import FileIcon from '@/components/FileIcon'
 import {eventBus} from '@/main'
@@ -187,7 +193,8 @@ export default {
   },
   data: () => ({
     defaultDescHeight: 250,
-    iFrameHeight: 250,
+    iFrameHeight1: 250,
+    iFrameHeight2: 250,
     showThread: false,
     options: {noAlerts: true},
     attachments: [],
@@ -233,11 +240,19 @@ export default {
         ? dateTime.split(' ').shift()
         : ''
     },
+    docTextHtml() {
+      return this.parseDescription(this.task.docTextHtml)
+    },
     htmlDescription() {
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(this.task.htmlDescript, 'text/html')
-      const body = doc.body.innerHTML.trim()
-      return body ? this.task.htmlDescript : body
+      return this.parseDescription(this.task.htmlDescript)
+    },
+    parseDescription() {
+      return description => {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(description, 'text/html')
+        const body = doc.body.innerHTML.trim()
+        return body ? description : body
+      }
     },
     parentTask() {
       return this.task.parentTask && this.task.parentTask.id
@@ -292,8 +307,8 @@ export default {
     submit() {
       console.log('submit', )
     },
-    iFrameOnLoad(event) {
-      this.iFrameHeight = event.path[0].contentDocument.body.scrollHeight * 1.2
+    iFrameOnLoad(frame, event) {
+      this['iFrameHeight' + frame] = event.path[0].contentDocument.body.scrollHeight * 1.2
     },
     // обработка смены статуса задачи
     async onChangeStatus(data) {

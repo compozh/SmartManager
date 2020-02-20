@@ -161,7 +161,7 @@
 <script>
 import moment from 'moment'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import TaskListItem from '@/views/task-list/TaskListItem.vue'
+import TaskListItem from '@/views/tasks/task-list/TaskListItem.vue'
 import FilesUpload from '@/components/FilesUpload'
 import FileIcon from '@/components/FileIcon'
 

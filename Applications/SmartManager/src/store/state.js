@@ -1,5 +1,5 @@
-import themeConfig from '@/../themeConfig.js'
-import colors from '@/../themeConfig.js'
+import themeConfig from '@/themeConfig.js'
+import colors from '@/themeConfig.js'
 
 const state = {
   isSidebarActive: true,
