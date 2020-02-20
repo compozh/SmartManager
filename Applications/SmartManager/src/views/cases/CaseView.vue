@@ -8,24 +8,24 @@
       <case-details v-if="currentTab === 'details'" :caseItem="caseItem" @open-attachment="openAttachment"></case-details>
 
       <!-- CASE ATTACHMENTS  -->
-      <task-attachments v-if="currentTab === 'attachments'" :task="caseItem" :index="index"></task-attachments>
+      <attachments v-if="currentTab === 'attachments'" :task="caseItem" :index="index"></attachments>
 
       <!-- CASE COMMENTS  -->
-      <task-comments v-if="currentTab === 'comments'" :task="caseItem"></task-comments>
+      <comments v-if="currentTab === 'comments'" :task="caseItem"></comments>
     </div>
   </div>
 </template>
 
 <script>
-const CaseDetails = () => import('./case-details/CaseDetails.vue')
-import TaskAttachments from '../task-view/task-attachments/TaskAttachments.vue'
-import TaskComments from '../task-view/task-comments/TaskComments.vue'
+const CaseDetails = () => import('./CaseDetails.vue')
+import Attachments from '@/views/attachments/Attachments.vue'
+import Comments from '@/views/comments/Comments.vue'
 
 export default {
   components: {
     CaseDetails,
-    TaskComments,
-    TaskAttachments
+    Comments,
+    Attachments
   },
   data: () => ({
     currentTab: 'details',

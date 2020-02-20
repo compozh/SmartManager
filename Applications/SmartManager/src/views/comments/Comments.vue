@@ -9,7 +9,7 @@
           <div v-if="comments.length"
                class="chat__log"
                ref="chatLog">
-            <task-comments-log :comments="comments"></task-comments-log>
+            <comments-log :comments="comments"></comments-log>
           </div>
           <div v-else class="no-comments flex flex-col items-center">
             <feather-icon icon="MessageSquareIcon" class="mb-4 bg-white p-8 shadow-md rounded-full" svgClasses="w-16 h-16"></feather-icon>
@@ -33,12 +33,12 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import TaskCommentsLog from './TaskCommentsLog.vue'
+import CommentsLog from './CommentsLog.vue'
 
 export default {
   components: {
     VuePerfectScrollbar,
-    TaskCommentsLog,
+    CommentsLog,
   },
   data: () => ({
     active: true,

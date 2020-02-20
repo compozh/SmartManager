@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {i18n} from '@/i18n/i18n'
 import router from '@/router'
-import auth from '@it-enterprise/jwtauthentication'
+import auth from '@/utils/auth'
 const vm = new Vue()
 
 export default {
