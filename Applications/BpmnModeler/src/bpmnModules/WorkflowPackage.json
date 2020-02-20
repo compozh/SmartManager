@@ -43,6 +43,38 @@
           "type": "String"
         }
       ]
+    },
+    {
+      "name": "DataObject",
+      "extends": [ "bpmn:DataObject" ],
+      "properties": [
+        {
+          "name": "businessObjectDefinitionCode",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "businessObjectKeyVariableName",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "ServiceTask",
+      "extends": [ "bpmn:ServiceTask" ],
+      "properties": [
+        {
+          "name": "businessObjectTaskType",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "businessObjectDefinitionCode",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
     }
   ],
   "enumerations": [

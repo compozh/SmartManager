@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 import { api } from '../api/bpmnApi';
-import { Folder, Diagram, Configuration, ActionDefinition, AccessParams } from '../api/models';
+import { Folder, Diagram, Configuration, ActionDefinition, AccessParams, DiagramVersion } from '../api/models';
 
 export default {
   async resetCache() {
@@ -25,10 +25,10 @@ export default {
     }
     context.state.configuration = new Configuration(configuration);
   },
-  async loadItems(context) {
+  async loadItems(context, refetch) {
     let items;
     try {
-      items = await api.getItems();
+      items = await api.getItems(refetch);
     } catch (error) {
       console.error(error);
       return false;
@@ -51,7 +51,7 @@ export default {
     return true;
   },
   async checkForOwnFolder(context) {
-    const folderExisit = context.state.items.findIndex(item => item instanceof Folder) >= 0;
+    const folderExisit = context.state.items.findIndex(item => item instanceof Folder && item.ownerId === context.rootState.auth.user.id) >= 0;
     if (folderExisit) {
       return;
     }
@@ -120,6 +120,9 @@ export default {
       result = await api.deployDiagram(id);
     } catch (error) {
       console.error(error);
+    }
+    if (!result) {
+      result = { success: false };
     }
     if (!result.success) {
       console.error(result);
@@ -196,9 +199,6 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
-    
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
   
     return true;
   },
@@ -386,6 +386,105 @@ export default {
   async getDeployedDecisions(context) {
     try {
       return await api.getDeployedDecisions();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getDeployedCases(context) {
+    try {
+      return await api.getDeployedCases();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjects(context, onlySystem) {
+    try {
+      return await api.getBusinessObjects(onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectActions(context, { boDefCode, onlySystem }) {
+    try {
+      return await api.getBusinessObjectActions(boDefCode, onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectAccess(context, { boDefCode, onlySystem }) {
+    try {
+      return await api.getBusinessObjectAccess(boDefCode, onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  //#endregion
+
+  //#region Versions
+
+  async getVersionsForDiagram(context, diagramId) {
+    let result;
+    try {
+      result = await api.getVersionsForDiagram(diagramId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    if (Array.isArray(result)) {
+      return result.map(item => new DiagramVersion(item));
+    }
+    return result;
+  },
+
+  async createDiagramVersion(context, diagramId) {
+    try {
+      return await api.createDiagramVersion(diagramId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getDiagramVersionXml(context, {diagramId, versionId}) {
+    try {
+      return await api.getDiagramVersionXml(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async updateDiagramVersion(context, version) {
+    try {
+      return await api.updateDiagramVersion(version);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async deleteDiagramVersion(context, diagramId, versionId) {
+    try {
+      return await api.deleteDiagramVersion(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async applyDiagramVersion(context, diagramId, versionId) {
+    try {
+      return await api.applyDiagramVersion(diagramId, versionId);
     } catch (error) {
       console.error(error);
       return false;

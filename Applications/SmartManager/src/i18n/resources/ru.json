@@ -108,7 +108,13 @@
     "complete": "Завершить",
     "yes": "Да",
     "no": "Нет",
-    "globalSearch": "Выполнить поиск по всем документам"
+    "toBack": "Назад",
+    "globalSearch": "Выполнить поиск по всем документам",
+    "addAttachment": "Добавить",
+    "deleteAttachment": "Удалить",
+    "downloadAttachment": "Загрузить",
+    "attachmentVersions": "Версии",
+    "attachmentEds": "Електронные подписи"
   },
   "icons": {
     "priority": "Высокий приоритет",
@@ -143,7 +149,13 @@
   "table": {
     "name": "Название",
     "size": "Размер",
-    "uploaded": "Загружено"
+    "uploaded": "Загружено",
+    "sign": "Подпись",
+    "version": "Версия",
+    "type": "Тип",
+    "status": "Статус",
+    "description": "Описание",
+    "date": "Дата"
   },
   "comments": {
     "addComment": "Добавить комментарий",
@@ -158,7 +170,8 @@
     "closeForm": "Для перехода в меню закройте форму",
     "noApprovals": "Нет данных о согласованиях",
     "notSupport": "ФАЙЛЫ {ext} НЕ ПОДДЕРЖИВАЮТСЯ",
-    "downloadFile": "Вы можете скачать файл и открыть его самостоятельно"
+    "downloadFile": "Вы можете скачать файл и открыть его самостоятельно",
+    "noAccess": "У вас нет доступа к вложению"
   },
   "notify": {
     "foldersTitle": "Папки и фильтры",

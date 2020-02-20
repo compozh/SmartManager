@@ -189,4 +189,9 @@ ImplementationTypeHelper.getImplementationType = function (element) {
     }
   }
 
+  var businessObjectTaskType = bo.get('IT-Enterprise:businessObjectTaskType');
+  if (typeof businessObjectTaskType === 'string') {
+    return businessObjectTaskType;
+  }
+
 };

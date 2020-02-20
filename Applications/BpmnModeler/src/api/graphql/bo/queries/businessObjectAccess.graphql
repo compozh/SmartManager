@@ -1,0 +1,10 @@
+{
+  bpmnquery {
+    businessObjectAccess(boDefCode: $boDefCode, onlySystem: $onlySystem) {
+      boDefCode
+      accessDefCode
+      name
+      isSystem
+    }
+  }
+}

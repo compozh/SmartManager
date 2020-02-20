@@ -7,7 +7,7 @@
         {'disabled-item pointer-events-none': isDisabled}
       ]"
   >
-    <vs-divider v-if="to === '/cases/ALL'" class="my-1"/>
+    <vs-divider v-if="to === '/cases/all'" class="my-1"/>
 
     <router-link v-if="to"
                  :to="to"
