@@ -17,11 +17,6 @@ export const lessonIcons = [
 ]
 
 export function addTicketToLink(rowLink) {
-  const token = sessionStorage.getItem('accessToken')
-  let link = clearLink(rowLink)
-  return link.concat(token)
-}
-
-function clearLink (rowLink) {
-  return rowLink.replace('#','%23').replace(/\s/g,'%20')
+  const token = sessionStorage.getItem('refreshToken')
+  return rowLink.concat(token)
 }

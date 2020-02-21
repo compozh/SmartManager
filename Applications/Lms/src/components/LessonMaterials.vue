@@ -62,7 +62,7 @@ export default {
   methods: {
     getEnclosure(type, enclosure) {
       // Передать данные слушателя и
-      const link = addTicketToLink(enclosure.link)
+      const link = type !== materialType.link ? addTicketToLink(enclosure.link) : enclosure.link
       window.open(link, enclosure.title)
     }
   }
