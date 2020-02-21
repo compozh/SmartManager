@@ -76,7 +76,7 @@ export default {
     createModeler() {
       this.destroyModeler();
       const canEdit = this.process.hasRight(AccessRights.Write);
-      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
+      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();

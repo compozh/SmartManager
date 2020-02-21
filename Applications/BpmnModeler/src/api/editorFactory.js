@@ -21,7 +21,7 @@ import ContextPadProvider from '../bpmnModules/context-pad/';
 
 import WorkflowRules from '../bpmnModules/rules';
 
-export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
+export default function editorFactory(type, readonly, editorContainer, translate) {
   switch (type) {
   case DiagramType.BPMN:
     return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, translate);

@@ -20,9 +20,6 @@
       </v-tabs>
       <div class="dmn-modeler-container" ref="container"></div>
     </template>
-    <template #propertiesPanel>
-      <div ref="propertiesPanel"></div>
-    </template>
     <template #tab="{ item: view }">
       <span class="dmn-tab-icon" :class="[ viewIcons[view.type] ]"></span>
       <span>{{ view.element.name || view.element.id }}</span>
@@ -114,7 +111,7 @@ export default {
       this.destroyModeler();
       const canEdit = this.decision.hasRight(AccessRights.Write);
       this.canShowPanel = canEdit;
-      this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.$refs.propertiesPanel, this.translate);
+      this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.translate);
       this.modeler.on('views.changed', ({ views, activeView }) => {
         this.views = views;
         this.activeView = views.indexOf(activeView);
