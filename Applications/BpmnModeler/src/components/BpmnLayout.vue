@@ -180,10 +180,12 @@ export default {
       if (this.snackbar.type === 'error') {
         console.error(this.snackbar.message);
       }
-      Notification({
-        message: this.snackbar.message,
-        type: this.snackbar.type
-      });
+      if (this.snackbar.visible) {
+        Notification({
+          message: this.snackbar.message,
+          type: this.snackbar.type
+        });
+      }
     }
   },
   beforeDestroy() {
