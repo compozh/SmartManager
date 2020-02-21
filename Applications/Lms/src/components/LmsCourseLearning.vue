@@ -324,7 +324,9 @@ export default {
       const lessonmaterials = unit.lessonmaterials
       let typeOfMaterials = new Set()
       lessonmaterials.forEach(item => {
-        typeOfMaterials.add(item.type)
+        if (item.link) {
+          typeOfMaterials.add(item.type)
+        }
       })
       let materials = []
       typeOfMaterials.forEach(type => {
@@ -339,21 +341,21 @@ export default {
         case materialType.file:
           item.title = 'Файлы'
           item.icon = 'attachment'
-          item.enclosures = lessonmaterials.filter(l => l.type === type).map(i => {
+          item.enclosures = lessonmaterials.filter(l => l.type === type && l.link).map(i => {
             return {title: i.name, link: i.link}
           })
           break
         case materialType.presentation:
           item.title = 'Презентации'
           item.icon = 'slideshow'
-          item.enclosures = lessonmaterials.filter(l => l.type === type).map(i => {
+          item.enclosures = lessonmaterials.filter(l => l.type === type && l.link).map(i => {
             return {title: i.name, link: i.link}
           })
           break
         case materialType.link:
           item.title = 'Ссылки'
           item.icon = 'open_in_new'
-          item.enclosures = lessonmaterials.filter(l => l.type === type).map(i => {
+          item.enclosures = lessonmaterials.filter(l => l.type === type && l.link).map(i => {
             return {title: i.name, link: i.link}
           })
           break

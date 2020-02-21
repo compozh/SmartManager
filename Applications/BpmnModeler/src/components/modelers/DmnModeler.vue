@@ -169,7 +169,7 @@ export default {
             this.loading = false;
             if (err) {
               console.error(err);
-              Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
               var activeEditor = this.modeler.getActiveViewer();
 
               activeEditor.createDiagram();

@@ -364,8 +364,8 @@ export class BpmnModelerApi {
 
   async updateDiagramVersion(version) {
     const result = await mutate({
-      mutation: gql`mutation (version: DiagramVersionInput!) ${mutations.updateDiagramVersion}`,
-      variables: { diagramId: version.diagramId, versionId: version.versionId, name: version.versionId }
+      mutation: gql`mutation ($version: DiagramVersionInput!) ${mutations.updateDiagramVersion}`,
+      variables: { version: {diagramId: version.diagramId, versionId: version.versionId, name: version.name }}
     });
     return result.data.bpmnqueryMutation.updateDiagramVersion;
   }

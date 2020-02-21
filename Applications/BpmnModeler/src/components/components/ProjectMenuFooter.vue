@@ -5,7 +5,7 @@
       <div>{{choose.length}}  {{ $t('bpmn.labels.Selected') }}</div>
       <v-col class="pa-0">
         <v-menu offset-y top
-          v-model="explorer"
+          v-model="moveExplorer"
           :close-on-click="false"
           :close-on-content-click="false">
           <template v-slot:activator="{ on }">
@@ -14,49 +14,22 @@
               {{ $t('bpmn.buttons.Move') }}
             </v-btn>
           </template>
-          <v-card class="file-explorer">
-            <v-card-title class="py-1 px-3 elevation-1">
-              <v-btn icon @click="changeFolder(choosedFolder.parentId)" v-if="choosedFolder.id">
-                <v-icon size="17">mdi-arrow-left</v-icon>
-              </v-btn>
-              <v-col class="title px-1 py-2">{{ choosedFolder.name}}</v-col>
-              <v-btn icon @click="closeExpl" class="ml-auto">
-                <v-icon size="20">mdi-close</v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-card-text class="px-0 elevation-1">
-              <v-list>
-                <v-list-item class="px-3" dense :key="index"
-                  v-for="(elem, index) in choosedFolder.items">
-                  <v-list-item-content >
-                    <v-list-item-title :title="elem.name">
-                      <bpmn-tree-icon :node="elem"></bpmn-tree-icon>
-                      {{ elem.name }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action class="ma-0" @click="changeFolder(elem)" v-if="elem.isFolder">
-                    <v-btn icon><v-icon >mdi-chevron-right</v-icon></v-btn>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-            <v-card-actions class="py-1 px-3">
-              <v-btn icon @click="addFolder" class="mr-auto" :title=" $t('bpmn.labels.CreateFolder')">
-                <v-icon size="20">mdi-folder-plus</v-icon>
-              </v-btn>
-              <v-btn class="add-btn" :loading="loading" @click="moveHere(choosedFolder)"
-                :disabled="choosedFolder == item" :title="choosedFolder == item ?  $t('bpmn.labels.AlreadyIn') : $t('bpmn.buttons.MoveHere')">
-                <v-icon size="20">mdi-folder-move</v-icon>
-                {{ $t('bpmn.buttons.MoveHere') }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <file-explorer :itemId="item.id" :chosen.sync="choose" :explorer.sync="moveExplorer" mode="move" />
         </v-menu>
         
-        <v-btn text class="menu-btn "  @click="copyItem(choose)" :disabled="!canEdit()" :title="canEdit() ?  $t('bpmn.buttons.Copy') : $t('bpmn.errors.Er403')">
-          <v-icon size="20">mdi-content-copy</v-icon>
-          {{ $t('bpmn.buttons.Copy') }}
-        </v-btn>
+        
+        <v-menu offset-y top
+          v-model="copyExplorer"
+          :close-on-click="false"
+          :close-on-content-click="false">
+          <template v-slot:activator="{ on }">
+            <v-btn text class="menu-btn "  v-on="on"  :disabled="!canEdit()" :title="canEdit() ?  $t('bpmn.buttons.Copy') : $t('bpmn.errors.Er403')">
+              <v-icon size="20">mdi-content-copy</v-icon>
+              {{ $t('bpmn.buttons.Copy') }}
+            </v-btn>
+          </template>
+          <file-explorer :itemId="item.id" :chosen.sync="choose" :explorer.sync="copyExplorer" mode="copy" />
+        </v-menu>
         <v-btn text class="menu-btn " @click="removeItem(choose)" :disabled="!canEdit()" :title="canEdit() ?  $t('bpmn.buttons.Delete') : $t('bpmn.errors.Er403')">
           <v-icon size="20">mdi-delete</v-icon>
           {{ $t('bpmn.buttons.Delete') }}
@@ -74,9 +47,8 @@ export default {
   mixins: [ formMixin ],
   data() {
     return {
-      explorer: false,
-      choosedFolder: this.item,
-      loading: false,
+      moveExplorer: false,
+      copyExplorer: false,
     };
   },
   props: {
@@ -87,52 +59,8 @@ export default {
     canEdit() {
       return this.item.hasRight(Models.AccessRights.Write);
     },
-    changeFolder(value) {
-      if (!value) {
-        this.choosedFolder = {
-          name: this.$t('bpmn.labels.Projects'),
-          items: this.items
-        };
-      } else if (!value.id) {
-        let elem = this.$store.getters['bpmn/getItemById'](value);
-        this.choosedFolder = elem.item; 
-      } else {
-        this.choosedFolder = value;
-      }
-    },
-    async moveHere(dropItem) {
-      this.loading = true;
-      let success;
-      let processArray =  async (array) => {
-        const promises = array.map(async draggingItem => {
-          return await this.$store.dispatch('bpmn/itemDropped', { draggingItem, dropItem });
-        });
-        success =  await Promise.all(promises);
-        success = success.every( el => el);
-        if (success) {
-          this.choose = [];
-          await this.$store.dispatch('bpmn/loadItems', true);
-          this.closeExpl();
-        } else {
-          Notification.error(this.$t('bpmn.errors.CantDrop'));
-        }
-      };
-      await processArray(this.choose);
-      
-      this.loading = false;
-    },
-    closeExpl() {
-      this.explorer = false;
-      this.choosedFolder = this.item;
-    },
-    addFolder() {
-      this.createItem(this.choosedFolder, 'folder');
-    },
   },
   computed: {
-    items() {
-      return this.$store.state.bpmn.items;
-    },
     choose: {
       get() {
         return this.chosen;
@@ -143,11 +71,7 @@ export default {
     }
   },
   watch: {
-    items(val) {
-      this.changeFolder(this.$route.params.id);
-    },
     '$route'() {
-      this.changeFolder(this.$route.params.id);
       this.choose = [];
       
     },
