@@ -70,6 +70,10 @@ export default {
           'edit': 'bpmn.labels.EditProject',
           'delete': 'bpmn.labels.DeleteProject'
         },
+        'version': {
+          'edit': 'bpmn.labels.EditVersion',
+          'delete': 'bpmn.labels.DeleteVersion'
+        },
         'all': {
           'import': 'bpmn.buttons.Import',
           'delete': 'bpmn.buttons.Delete',
@@ -90,7 +94,9 @@ export default {
     };
   },
   props: {
-    activeItem: String
+    activeItem: {
+      required: true
+    },
   },
   mounted() {
     eventBus.$on(events.modeler.showForm, this.onShowForm);
@@ -146,14 +152,13 @@ export default {
       }
       if (this.callback) {
         this.loading = true;
-        if (this.type == 'project') { this.type = 'folder'; }
         if (this.mode == 'import') { this.mode = 'create'; }
-        let success = await this.callback(this.model, this.type, this.mode);
+        let success = await this.callback(this.model, this.type == 'project' ? 'folder' : this.type , this.mode);
         
         if (success) {
           await this.$store.dispatch('bpmn/loadItems', true);
           this.cancel();
-          if (this.type == 'process' && (this.mode == 'create' || this.mode == 'copy' ) ) {
+          if ((this.type == 'process' || this.type == 'project') && (this.mode == 'create' || this.mode == 'copy' ) ) {
             this.active = this.model.id;
           }
           this.callback = null;

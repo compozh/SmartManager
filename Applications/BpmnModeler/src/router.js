@@ -18,51 +18,42 @@ const router = new VueRouter({
           name: 'login',
           path: '/login',
           caseSensitive: false,
-          meta: {
-            rule: 'isPublic',
-          },
           component: () => import('@/components/pages/Login.vue'),
         },
         {
           path: '/',
           name: 'main',
           component: () => import('@/components/pages/Main.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
         },
         {
           name: 'project',
-          path: '/project/:id?',
+          path: '/project/:id',
           component: () => import('@/components/pages/Project.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false,
-          allowAnonymous: false,
-          props: {
-            item: Object
-          },
-        }, 
+        },
         {
           name: 'decision',
-          path: '/decision/:id?',
+          path: '/decision/:id',
           component: () => import('@/components/modelers/DmnModeler.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false,
-          allowAnonymous: false,
         },
         {
           name: 'process',
-          path: '/process/:id?',
+          path: '/process/:id',
           component: () => import('@/components/modelers/BpmnModeler.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false,
-          allowAnonymous: false,
+        },
+        {
+          name: 'milestones',
+          path: '/milestones/:id',
+          component: () => import('@/components/pages/Milestones.vue'),
+          caseSensitive: false,
+        },
+        {
+          name: 'compare',
+          path: '/compare/:id?',
+          component: () => import('@/components/pages/Compare.vue'),
+          caseSensitive: false,
         },
         {
           name: 'case',
@@ -78,9 +69,6 @@ const router = new VueRouter({
           path: 'error/:status_code/',
           name: 'ERROR',
           component: () => import('@/components/pages/Error.vue'),
-          meta: {
-            rule: 'isPublic',
-          },
           caseSensitive: false
         },
       ]

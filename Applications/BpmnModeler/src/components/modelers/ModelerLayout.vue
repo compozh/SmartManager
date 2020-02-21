@@ -39,7 +39,7 @@
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">
-          <div class="bpmn-diagram-container">
+          <div class="bpmn-diagram-container"   @keydown.ctrl.z.exact="$emit('undo')" @keydown.ctrl.shift.z.exact="$emit('redo')" @keydown.ctrl.y.exact="$emit('redo')">
             <v-row class="options-panel">
               <v-btn text :disabled="!canUndo" @click="$emit('undo')" :title="$t('bpmn.labels.Undo')">
                 <v-icon size="20">mdi-undo</v-icon>
@@ -77,6 +77,16 @@
       </Split>
       <div v-else class="bpmn-diagram-container">
         <v-row class="options-panel grey lighten-4 ">
+           <v-btn text :disabled="!canZoom" @click="$emit('zoom-in')" :title="$t('bpmn.labels.ZoomIn')">
+              <v-icon size="20">mdi-magnify-plus-outline</v-icon>
+            </v-btn>
+            <v-btn text :disabled="!canZoom" @click="$emit('zoom-out')" :title="$t('bpmn.labels.ZoomOut')">
+              <v-icon size="20">mdi-magnify-minus-outline</v-icon>
+            </v-btn>
+            <v-btn text :disabled="!canZoom" @click="$emit('zoom-reset')" :title="$t('bpmn.labels.ResetZoom')">
+              <v-icon size="20">mdi-magnify-close</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
             <v-btn text :disabled="!canMinimap" @click="$emit('minimap')" :title="$t('bpmn.labels.ToggleMinimap')">
               <v-icon>mdi-map</v-icon>
             </v-btn>
@@ -279,6 +289,9 @@ a.cjs-powered-by {
 }
 .diagram-section {
   overflow: hidden !important;
+}
+.djs-popup {
+  z-index: 100 !important;
 }
 .djs-resizer-visual {
   stroke: #000 !important;

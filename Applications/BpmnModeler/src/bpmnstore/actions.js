@@ -199,7 +199,7 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
-  
+    
     return true;
   },
   async editFolder(context, { id, name }) {
@@ -473,7 +473,7 @@ export default {
     }
   },
 
-  async deleteDiagramVersion(context, diagramId, versionId) {
+  async deleteDiagramVersion(context, {diagramId, versionId}) {
     try {
       return await api.deleteDiagramVersion(diagramId, versionId);
     } catch (error) {
@@ -482,14 +482,23 @@ export default {
     }
   },
 
-  async applyDiagramVersion(context, diagramId, versionId) {
+  async applyDiagramVersion(context, {diagramId, versionId}) {
     try {
       return await api.applyDiagramVersion(diagramId, versionId);
     } catch (error) {
       console.error(error);
       return false;
     }
-  }
+  },
+  async copyVersion(context, process) {
+    try {
+      process.xmlView = await context.dispatch('getDiagramVersionXml', {diagramId: process.diagramId, versionId: process.versionId});
+      return await context.dispatch('createProcess', process);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
 
   //#endregion
 

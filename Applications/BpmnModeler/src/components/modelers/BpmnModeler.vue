@@ -108,7 +108,7 @@ export default {
             this.loading = false;
             if (err) {
               console.error(err);
-              Notification.error(this.$t('bpmn.Errors.ProcessesNotImported'));
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
               this.modeler.createDiagram();
               this.loading = false;
             }

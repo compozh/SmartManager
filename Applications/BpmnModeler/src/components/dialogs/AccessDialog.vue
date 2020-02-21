@@ -14,7 +14,7 @@
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-btn color="primary" dark class="mb-2" @click="createItem">{{ $t('bpmn.buttons.Add') }}</v-btn>
-        <v-dialog v-model="form.show" :persistent="form.loading" max-width="500px" scrollable>
+        <v-dialog v-model="form.show" persistent max-width="500px" scrollable >
           <v-card>
             <v-card-title>
               <span class="headline">{{ $t(form.titles[form.mode]) }}</span>
@@ -390,5 +390,8 @@ export default {
 <style>
 .rights-checkbox {
   margin: 0 !important;
+}
+.menuable__content__active.v-autocomplete__content {
+  max-width: 450px;
 }
 </style>

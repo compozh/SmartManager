@@ -98,7 +98,7 @@ export default {
       }
       if (this.$store.state.bpmn.items.length) {
         const itemId = this.$route.params.id;
-        if (itemId && itemId !== '') {
+        if (itemId && itemId !== '' && this.activeItem != itemId ) {
           this.activeItem = itemId;
         }
       }
@@ -108,7 +108,7 @@ export default {
     },
     navigateToItem(value) {
       if (!value) {
-        return this.$router.push({name: 'main'});
+        return this.$route.name != 'main' ? this.$router.push({name: 'main'}) : '';
       }
       if (!value.id) {
         let elem = this.$store.getters['bpmn/getItemById'](value);
@@ -118,7 +118,7 @@ export default {
         }
         value = elem.item;
       }
-      if (this.$route.params.id == value.id) { return; }
+      if (this.$route.params.id == value.id && (this.$route.name != 'milestones' && this.$route.name != 'compare' )) { return; }
 
       if (value instanceof Folder) {
         this.$router.push({name: 'project', params: {id: value.id}});
@@ -156,8 +156,10 @@ export default {
         return this.$store.getters['bpmn/getActiveItemId'];
       },
       set(value) {
+        if (this.$store.getters['bpmn/getActiveItemId'] != null && (this.$route.name != 'milestones' || this.$route.name != 'compare')) {
+          this.navigateToItem(value);
+        }
         this.$store.dispatch('bpmn/setActiveItem', value);
-        this.navigateToItem(value);
       }
     },
     dataLoading() {

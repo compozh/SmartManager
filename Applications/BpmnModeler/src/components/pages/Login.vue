@@ -15,12 +15,14 @@
             <v-col v-if="!qrMode && !needEnterTempPassword">
               <v-col>
                 <v-text-field
+                  :disabled="loading"
                   v-bind="params.loginAttrs"
                   v-on="params.loginEvents"
                 ></v-text-field>
               </v-col>
               <v-col>
                 <v-text-field
+                  :disabled="loading"
                   v-bind="params.passwordAttrs"
                   v-on="params.passwordEvents"
                 ></v-text-field>
@@ -32,6 +34,7 @@
                 >
                   <v-col class="align-left" >
                     <v-checkbox
+                      :disabled="loading"
                       v-bind="params.rememberAttrs"
                       v-on="params.rememberEvents"
                     ></v-checkbox>
