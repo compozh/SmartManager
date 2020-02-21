@@ -137,7 +137,8 @@
 		"Element": "Елемент",
 		"SelectBusinessObject": "Виберіть бізнес-об'єкт",
 		"SelectBusinessObjectAction": "Виберіть дію над бізнес-об'єктом",
-		"SelectBusinessObjectAccess": "Виберіть налаштування доступу до бізнес-об'єкта"
+		"SelectBusinessObjectAccess": "Виберіть налаштування доступу до бізнес-об'єкта",
+		"MilestoneCreated": "Версію створено"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

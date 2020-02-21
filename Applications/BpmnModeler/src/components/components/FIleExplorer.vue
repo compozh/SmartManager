@@ -129,7 +129,7 @@ export default {
       this.createItem(this.choosedFolder, 'folder');
     },
     canEdit(item) {
-      if (!item.rights) { return true; }
+      if (!item.rights) { return false; }
       return item.hasRight(Models.AccessRights.Write);
     },
   },

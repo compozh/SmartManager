@@ -133,7 +133,8 @@
 		"Element": "Элемент",
 		"SelectBusinessObject": "Выберите бизнес-объект",
 		"SelectBusinessObjectAction": "Выберите действие над бизнес-объектом",
-		"SelectBusinessObjectAccess": "Выберите настройки доступа к бизнес-объекту"
+		"SelectBusinessObjectAccess": "Выберите настройки доступа к бизнес-объекту",
+		"MilestoneCreated": "Версия создана"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

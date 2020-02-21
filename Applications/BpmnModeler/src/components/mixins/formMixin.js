@@ -52,9 +52,7 @@ export default {
       case 'delete':
         let deleting = async (elem) => {
           let val;
-          debugger
           if (type == 'version' ) {
-            console.log('deleteDiagramVersion')
             val = await this.$store.dispatch('bpmn/deleteDiagramVersion', {diagramId: elem.diagramId, versionId: elem.versionId});
             
           } else {
@@ -141,7 +139,7 @@ export default {
     },
     removeItem(item) {
       let  type, model;
-      if (Array.isArray(item && item.length > 1)) {
+      if (Array.isArray(item) && item.length > 1) {
         type = 'all';
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
       } else {

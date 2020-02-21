@@ -133,7 +133,8 @@
 		"Element": "Element",
 		"SelectBusinessObject": "Select Business Object",
 		"SelectBusinessObjectAction": "Select Business Object Action",
-		"SelectBusinessObjectAccess": "Select Business Object Access"
+		"SelectBusinessObjectAccess": "Select Business Object Access",
+		"MilestoneCreated": "Version created"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

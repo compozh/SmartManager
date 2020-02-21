@@ -10,7 +10,7 @@
           <h2>{{$t('bpmn.labels.EditTime')}}: </h2> <h2 class="pl-1">{{item.editTime || item.creationTime | formatDate}}</h2>
         </v-row>
       </v-col>
-      <v-checkbox v-model="choose" v-if="chosen" class="ma-0 checkbox"/>
+      <v-checkbox v-model="choose" v-if="chosen && canEdit(item)" class="ma-0 checkbox"/>
     </v-card-title>
   </v-card>
 </template>
@@ -21,6 +21,7 @@ import { events } from '../../constants';
 import { CancellationToken, editorFactory } from '../../api';
 import { eventBus } from '../../main';
 import { editorToolbarMixin } from '../mixins';
+import * as Models from '../../api/models';
 import { debounce } from 'throttle-debounce';
 export default {
   name: 'item-card',
@@ -53,6 +54,11 @@ export default {
     }
   },
   methods: {
+    
+    canEdit(item) {
+      if (!item.rights) { return false; }
+      return item.hasRight(Models.AccessRights.Write);
+    },
     createModeler() {
       this.modeler = editorFactory(this.item.type, true, this.$refs.container, null, () => {});
       this.loadXml();

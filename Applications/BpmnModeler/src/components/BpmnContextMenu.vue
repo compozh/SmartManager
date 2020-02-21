@@ -266,6 +266,8 @@ export default {
     async createVersion(item) {
        if (!(await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item))) {
         Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
+      } else {
+        Notification.success(this.$t('bpmn.labels.MilestoneCreated'));
       }
     },
     async apply(item) {
