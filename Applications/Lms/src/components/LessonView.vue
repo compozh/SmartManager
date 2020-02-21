@@ -7,7 +7,7 @@
             <video
               ref="lessonvideo"
               class="lesson-view"
-              :src="unit.content"
+              :src="getLink(unit.content)"
               @ended="getNextTrack()"
               controls='controls'></video>
           </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {lessonType} from '../helpers/lesson.js'
+import {lessonType, addTicketToLink} from '../helpers/lesson.js'
 
 export default {
   name: 'lesson-view',
@@ -49,7 +49,7 @@ export default {
         placeholder: '',
         modules: {
           syntax: false,
-          toolbar: false
+          toolbar: null
         },
         theme: 'snow',
       },
@@ -59,6 +59,11 @@ export default {
   methods: {
     getNextTrack () {
       this.$emit('ended')
+    },
+    getLink(content) {
+      // debugger
+      // let rowLink = content.concat('&ticket=')
+      return addTicketToLink(content)
     }
   },
   computed: {
@@ -72,7 +77,7 @@ export default {
           console.log('Отсутствует контент урока!')
         }
       }
-      return { ops: {insert: 'Ошибка!'}}
+      return { ops: [{insert: 'Контент отсутствует.'}]}
     }
   }
 }

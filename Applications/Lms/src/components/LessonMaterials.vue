@@ -3,7 +3,7 @@
     <v-layout >
       <v-flex>
         <v-card flat px-2 v-if="lesson">
-            <div class="body-2 px-3 py-3">Ресурсы урока <span class="indigo--text">{{materials ? '"' + lesson.name + '"' : ' не предусиотрены'}}</span></div>
+            <div class="body-2 px-3 py-3">Ресурсы урока <span class="indigo--text">{{lesson.name}}</span> <span v-if="!materials.length">&nbsp;не предусмотрены</span></div>
           <v-layout>
             <v-flex >
               <v-list v-if="materials" expand style="padding-top:0;!impotant">
@@ -11,7 +11,6 @@
                               :key="index"
                               :prepend-icon="material.icon"
                               v-model="material.active"
-                              v-if="material.enclosures"
                               no-action
                               >
                   <template v-slot:activator>
@@ -41,7 +40,7 @@
 </template>
 
 <script>
-import {materialType} from '../helpers/lesson.js'
+import {materialType, addTicketToLink} from '../helpers/lesson.js'
 
 export default {
   name: 'lesson-materials',
@@ -63,7 +62,8 @@ export default {
   methods: {
     getEnclosure(type, enclosure) {
       // Передать данные слушателя и
-      window.open(enclosure.link, enclosure.title)
+      const link = addTicketToLink(enclosure.link)
+      window.open(link, enclosure.title)
     }
   }
 }
