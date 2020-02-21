@@ -435,6 +435,11 @@
 		"Latest": "Последняя версия",
 		"Definition": "Определение",
 		"Definition Id": "Идентификатор определения",
-		"Definition Name": "Название определения"
+		"Definition Name": "Название определения",
+		"Task creation rule": "Правило создания задачи",
+		"Task properties": "Параметры задачи",
+		"Form Key": "Форма",
+		"Details": "Детали",
+		"If Part Condition": "Условие"
 	}
 }

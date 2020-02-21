@@ -441,6 +441,11 @@
 		"Latest": "Остання версія",
 		"Definition": "Визначення",
 		"Definition Id": "Ідентифікатор визначення",
-		"Definition Name": "Назва визначення"
+		"Definition Name": "Назва визначення",
+		"Task creation rule": "Правило створення задачі",
+		"Task properties": "Параметри задачі",
+		"Form Key": "Форма",
+		"Details": "Деталі",
+		"If Part Condition": "Умова"
 	}
 }

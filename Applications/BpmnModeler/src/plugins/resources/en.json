@@ -437,6 +437,11 @@
 		"Latest":"Latest",
 		"Definition":"Definition",
 		"Definition Id": "Definition Id",
-		"Definition Name": "Definition Name"
+		"Definition Name": "Definition Name",
+		"Task creation rule": "Task creation rule",
+		"Task properties": "Task properties",
+		"Form Key": "Form Key",
+		"Details": "Details",
+		"If Part Condition": "Condition"
 	}
 }

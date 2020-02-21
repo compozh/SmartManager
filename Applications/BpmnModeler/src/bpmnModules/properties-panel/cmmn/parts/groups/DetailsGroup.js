@@ -1,5 +1,5 @@
 import { PropertiesPanelGroup } from '../../../Models.js';
-import { addCallableProps, addOnPartProps } from '../props';
+import { addCallableProps, addOnPartProps, addHumanTaskProps, addCriterionProps } from '../props';
 import { Diagram } from '../../../../../api/models';
 import EntryFactory from '../../CmmnEntryFactory';
 
@@ -22,5 +22,7 @@ export default class DetailsGroup extends PropertiesPanelGroup {
 
     addOnPartProps(this, element, entryFactory, translate);
     addCallableProps(this, element, entryFactory, cmmnFactory, commandStack, translate);
+    addHumanTaskProps(this, diagram, element, entryFactory, cmmnFactory, commandStack, translate);
+    addCriterionProps(this, element, entryFactory, cmmnFactory, translate);
   }
 }

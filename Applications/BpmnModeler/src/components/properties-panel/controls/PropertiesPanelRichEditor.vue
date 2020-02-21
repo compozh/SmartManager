@@ -8,7 +8,6 @@
 <script>
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.bubble.css';
-import { quillEditor } from 'vue-quill-editor';
 import { fullScreenMixin } from '../../mixins';
 
 const TOOLBAR_CONFIG = [
@@ -23,7 +22,7 @@ export default {
   name: 'properties-panel-rich-edit',
   mixins: [fullScreenMixin],
   components: {
-    quillEditor
+    quillEditor: async () =>  (await import(/* webpackChunkName: "quill" */ 'vue-quill-editor')).quillEditor
   },
   props: {
     label: {
