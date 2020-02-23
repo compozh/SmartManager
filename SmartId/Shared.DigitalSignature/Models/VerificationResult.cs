@@ -1,6 +1,7 @@
 ﻿using Shared.DigitalSignature.Enums;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Shared.DigitalSignature.Models
@@ -15,7 +16,7 @@ namespace Shared.DigitalSignature.Models
 			var lines = resultString.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
 			Success = lines.Length >= 1 && lines[0] == "+";
 			SignerInfo = lines.Length >= 2 ? lines[1] : string.Empty;
-			SignDateTime = lines.Length >= 3 && !string.IsNullOrWhiteSpace(lines[2]) ? Convert.ToDateTime(lines[2]) : DateTime.MinValue;
+			SignDateTime = lines.Length >= 3 && !string.IsNullOrWhiteSpace(lines[2]) ? DateTime.ParseExact(lines[2], "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture) : DateTime.MinValue;
 			FailReason = lines.Length >= 4 ? lines[3] : string.Empty;
 			FailCode = lines.Length >= 5 && !string.IsNullOrWhiteSpace(lines[4]) ? Convert.ToInt32(lines[4]) : 0;
 

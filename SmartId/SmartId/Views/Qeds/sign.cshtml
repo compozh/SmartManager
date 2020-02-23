@@ -1,46 +1,84 @@
 ﻿@using Shared.WebExtensions;
 @model DigitalSignatureViewModel
 
-<div class="alert alert-danger d-none" id="danger-wrapper">
-	<strong>Error</strong>
+<div class="alert alert-danger d-none" id="danger-wrapper" aria-labelledby="danger-header">
+	<strong id="danger-header">Error</strong>
 	<div class="danger" id="danger-message"></div>
 </div>
 
-<div class="alert alert-warning d-none" id="warning-wrapper">
-	<strong>Warning</strong>
+<div class="alert alert-warning d-none" id="warning-wrapper" aria-labelledby="warning-header">
+	<strong id="warning-header">Warning</strong>
 	<div class="warning" id="warning-message"></div>
 </div>
 
 <form id="wrapper-digital-signature">
-	<fieldset class="form-group">
-		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__279__BV_label_">Тип ключа</legend>
-		<div tabindex="-1" role="group" aria-labelledby="__BVID__279__BV_label_">
-			<select id="key-type-select-digital-signature" class="custom-select">
+	<fieldset class="form-group" aria-labelledby="key-type-label">
+		<legend class="col-form-label pt-0" id="key-type-label">Тип ключа</legend>
+		<div role="group" aria-labelledby="key-type-label">
+			<select id="key-type-select" class="custom-select spinner-disabled">
 				<option value="soft">Програмний (файл)</option>
 				<option value="hard">Апаратний (захищений носій)</option>
-				<option value="mobile">Mobile ID (SIM-картка)</option>
 			</select>
 		</div>
 	</fieldset>
-	<fieldset class="form-group" id="__BVID__333" aria-labelledby="__BVID__333__BV_label_">
-		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__333__BV_label_">Приватний ключ</legend>
-		<div tabindex="-1" role="group" aria-labelledby="__BVID__333__BV_label_">
-			<div id="key-file-digital-signature__BV_file_outer_" class="custom-file b-form-file">
-				<input type="file" id="key-file-digital-signature" class="custom-file-input">
-				<label for="key-file-digital-signature" id="key-file-digital-signature-label" class="custom-file-label">Оберіть файл приватного ключа</label>
+	<label class="col-form-label pt-0" id="spinner-init">
+		<span class="spinner-grow spinner-grow-sm text-info" role="status"></span>
+		Подождите, загружаем библиотеку ЭЦП
+	</label>
+	<div id="soft-key-ui">
+		<label class="col-form-label pt-0 d-none" id="spinner-soft">
+			<span class="spinner-grow spinner-grow-sm text-info" role="status"></span>
+			Подождите, проверяем центр сертификации
+		</label>
+		<fieldset class="form-group d-none" id="key-ca-fieldset" aria-labelledby="key-ca-label">
+			<legend class="col-form-label pt-0" id="key-ca-label">Центр сертификации</legend>
+			<div role="group" aria-labelledby="key-ca-label">
+				<select id="key-ca" class="custom-select spinner-disabled">
+				</select>
 			</div>
-		</div>
+		</fieldset>
+		<fieldset class="form-group" aria-labelledby="file-private-key-label">
+			<legend class="col-form-label pt-0" id="file-private-key-label">Приватний ключ</legend>
+			<div class="custom-file">
+				<input type="file" class="custom-file-input spinner-disabled" id="file-private-key" aria-labelledby="file-private-key-label">
+				<label class="custom-file-label" id="file-private-key-hint" for="file-private-key">Оберіть файл приватного ключа</label>
+			</div>
+		</fieldset>
+		<fieldset class="form-group d-none" id="file-certificat-label-fieldset" aria-labelledby="file-certificat-label">
+			<legend class="col-form-label pt-0" id="file-certificat-label">Сертіфікат</legend>
+			<div class="custom-file">
+				<input type="file" multiple="multiple" name="files[]" class="custom-file-input spinner-disabled text-truncate" id="file-certificat-key" aria-labelledby="file-certificat-label">
+				<label class="custom-file-label" id="file-certificat-key-hint" for="file-certificat-key">Оберіть файл сертіфікату</label>
+			</div>
+		</fieldset>
+	</div>
+	<div id="hard-key-ui" class="d-none">
+		<label class="col-form-label pt-0 d-none" id="spinner-hard">
+			<span class="spinner-grow spinner-grow-sm text-info" role="status"></span>
+			Подождите, загружаем перечень носителей
+		</label>
+		<fieldset class="form-group" id="hardware-key-fieldset" aria-labelledby="hardware-key-label">
+			<legend class="col-form-label pt-0" id="hardware-key-label">Назва носія</legend>
+			<div role="group" aria-labelledby="hardware-key-label">
+				<div role="group" class="input-group">
+					<select id="hardware-key" class="custom-select spinner-disabled" placeholder="Оберіть тип носія">
+						<option value="">-</option>
+					</select>
+					<div class="input-group-append">
+						<button id="hardware-key-refresh-devices" title="" type="button" class="btn btn-secondary spinner-disabled" data-original-title="Оновити список носіїв">
+							<i class="fal fa-sync-alt"></i>Обновить
+						</button>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+	<fieldset class="form-group" aria-labelledby="password-private-key-label">
+		<legend class="col-form-label pt-0" id="password-private-key-label">Пароль захисту ключа</legend>
+		<input id="password-private-key" type="password" class="form-control spinner-disabled" placeholder="Введіть пароль ключа" aria-labelledby="password-private-key-label">
 	</fieldset>
-	<fieldset class="form-group" id="__BVID__335" aria-labelledby="__BVID__335__BV_label_">
-		<legend tabindex="-1" class="col-form-label pt-0" id="__BVID__335__BV_label_">Пароль захисту ключа</legend>
-		<div tabindex="-1" role="group" aria-labelledby="__BVID__335__BV_label_">
-			<input id="key-password-digital-signature" type="password" placeholder="Введіть пароль ключа" class="form-control">
-		</div>
-	</fieldset>
-	<button type="button" class="btn float-right btn-primary" id="exec-digital-signature">
-		<span class="mr-2">
-			<i class="fal fa-edit"></i>
-		</span>
+	<button type="button" class="btn float-right btn-primary spinner-disabled" id="exec-digital-signature">
+		<span id="spinner-sign" class="spinner-grow spinner-grow-sm d-none" role="status"></span>
 		<span>Підписати</span>
 	</button>
 </form>

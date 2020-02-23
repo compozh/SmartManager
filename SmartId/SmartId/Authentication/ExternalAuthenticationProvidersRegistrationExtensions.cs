@@ -27,7 +27,7 @@ namespace SmartId.Extensions
 					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
 				});
 			}
-			if (configuration.GetValue<bool>("Authentication:QesdUA"))
+			if (configuration.GetValue<bool>("Authentication:QedsUA"))
 			{
 				builder.AddQedsAuthentication(options => {
 					options.AuthorizationEndpoint = "/qeds/sign";

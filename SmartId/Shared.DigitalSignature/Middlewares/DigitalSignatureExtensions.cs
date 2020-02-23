@@ -31,11 +31,12 @@ namespace Shared.DigitalSignature
 
 		public static IServiceCollection AddDigitalSignature(this IServiceCollection services)
 		{
+			var digitalSignatureAssempbly = typeof(DigitalSignatureExtensions).GetTypeInfo().Assembly;
 			// Подключаем представления из сборки КЭЦП
 			services.Configure<MvcRazorRuntimeCompilationOptions>(options =>
 			{
 				options.FileProviders.Add(
-				 new EmbeddedFileProvider(typeof(DigitalSignatureExtensions).GetTypeInfo().Assembly));
+					new EmbeddedFileProvider(digitalSignatureAssempbly));
 			});
 			// Подключаем интерфейс
 			services.AddSingleton<DigitalSignature>();
