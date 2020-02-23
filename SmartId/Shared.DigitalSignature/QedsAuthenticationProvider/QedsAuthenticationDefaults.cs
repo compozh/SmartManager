@@ -15,6 +15,6 @@ namespace Shared.DigitalSignature.Authentication
         /// <summary>
         /// The default display name used when registering the QesdAuthenticationHandler.
         /// </summary>
-        public const string DisplayName = "QualifiedElectronicSignatureUA";
+        public const string DisplayName = "QesdUA";
     }
 }

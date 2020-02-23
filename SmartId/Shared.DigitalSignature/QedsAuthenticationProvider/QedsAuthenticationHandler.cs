@@ -36,16 +36,16 @@ namespace Shared.DigitalSignature.Authentication
             GenerateCorrelationId(properties);
             var data = Guid.NewGuid().ToString();
             writeSignCookie(data);
-            var redirectUri = OriginalPathBase + Options.CallbackPath;
+            var returnUrl = OriginalPathBase + Options.CallbackPath;
             var state = Options.StateDataFormat.Protect(properties);
             var parameters = new Dictionary<string, string>
             {
-                { "returnUrl", redirectUri },
+                { "returnUrl", returnUrl },
                 { "data", data },
                 { "state", state }
             };
-            var authorizationEndpoint = Options.AuthorizationEndpointBuilder == null ? QueryHelpers.AddQueryString(Options.AuthorizationEndpoint, parameters):
-                Options.AuthorizationEndpointBuilder(Options.AuthorizationEndpoint, parameters);
+            var authorizationEndpoint = Options.AuthorizationEndpointBuilder == null ? QueryHelpers.AddQueryString(OriginalPathBase + Options.AuthorizationEndpoint, parameters):
+                Options.AuthorizationEndpointBuilder(OriginalPathBase + Options.AuthorizationEndpoint, parameters);
             var redirectContext = new RedirectContext<QedsAuthenticationOptions>(
                 Context, Scheme, Options,
                 properties, authorizationEndpoint
