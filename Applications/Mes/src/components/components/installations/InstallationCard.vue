@@ -36,20 +36,23 @@ export default {
   }
 }
 </script>
-<style type="text/css" scoped>
+<style type="text/css" scoped>.
+.mes-installation-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 25px;
+}
 .mes-delete-installation {
   min-width: auto;
   position: absolute;
   right: 0;
   top: 0;
+  width: 25px;
+  height: 25px;
+  margin: 5px;
 }
 .mes-delete-installation.error--text {
-    color: rgba(179, 2, 2, 0.81) !important;
-  }
-.mes-installation-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* width: 360px; */
+  color: rgba(179, 2, 2, 0.81) !important;
 }
 </style>
