@@ -36,7 +36,7 @@ export default {
   }
 }
 </script>
-<style type="text/css" scoped>.
+<style type="text/css" scoped>
 .mes-installation-card {
   display: flex;
   align-items: center;
