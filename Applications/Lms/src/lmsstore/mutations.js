@@ -40,5 +40,9 @@ export default {
 
   setContent (state, payload) {
     state.lessonContent = payload
+  },
+
+  setCurrentTestPage(state, payload) {
+    state.currentTestPage = payload
   }
 }

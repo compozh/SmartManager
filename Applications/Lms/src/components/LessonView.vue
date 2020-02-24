@@ -12,9 +12,15 @@
               controls='controls'></video>
           </div>
           <div
-            v-if='unit.lesson.lessonType===lessonType.text'
+            v-if='unit.lesson.lessonType === lessonType.text'
             class="lesson-view">
             <quill v-model="getLessonContent" :config="config"></quill>
+          </div>
+          <div v-if="unit.lesson.lessonType === lessonType.test">
+            <test-view
+              class="lesson-view"
+              :test="unit"
+            ></test-view>
           </div>
         </v-card>
       </v-flex>
@@ -61,8 +67,6 @@ export default {
       this.$emit('ended')
     },
     getLink(content) {
-      // debugger
-      // let rowLink = content.concat('&ticket=')
       return addTicketToLink(content)
     }
   },
@@ -86,6 +90,7 @@ export default {
 <style>
 .lesson-view {
   width:100%;
+  min-height: 35vh;
   max-height: 75vh;
   overflow: hidden;
   border: solid lightgray 1px;
