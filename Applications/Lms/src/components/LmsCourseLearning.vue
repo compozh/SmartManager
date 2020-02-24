@@ -179,6 +179,10 @@ export default {
   },
   data() {
     return {
+      courseGuid: '',
+      course: {},
+      modules: [],
+      currentLessonGuid: '',
       menuOnRight: true,
       openItem: true,
       tabActive: null,
@@ -190,11 +194,8 @@ export default {
         passed: 0,
         total: 29
       },
-      course: {},
-      modules: [],
       lessonsPassed: [],
       modulesLessonsPassed: [],
-      currentLessonGuid: '',
       startPlay: false,
       navigation: {
         currentLessonIndex: 0,
@@ -204,12 +205,13 @@ export default {
   },
   created() {
     this.course = this.$route.params.course
+    this.courseGuid = this.$route.params.courseGuid
     this.modules = this.$route.params.modules
     this.currentLessonGuid = this.$route.params.lessonGuid
     this.putPassedFieldToLessons(this.modules)
     this.progress = this.getInitialProgress(this.modules)
     this.lessonPassed = this.getInitialPassedLesson(this.modules)
-    this.getLesson(this.currentLessonGuid)
+    this.getLesson(this.currentLessonGuid, this.courseGuid)
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
@@ -243,17 +245,16 @@ export default {
     setCurrentLesson (lessonGuid) {
       this.currentLessonGuid = lessonGuid
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
-      this.getLesson(lessonGuid)
+      this.getLesson(lessonGuid, this.courseGuid)
     },
-    async getLesson(lessonGuid) {
+    async getLesson(lessonGuid, courseGuid) {
       // Получить урок
-      await this.$store.dispatch('lms/getLessonContent', lessonGuid)
+      await this.$store.dispatch('lms/getLessonContent', {lessonGuid, courseGuid})
     },
     finishLesson () {
       if ( !this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid) ) {
         this.lessonsPassed.push(this.currentLesson.lesson.lessonGuid)
       }
-
       // отправить запрос на сервер (урок пройден)
 
     },

@@ -85,17 +85,19 @@ export class LmsApi {
     }
   }
 
-  static async getLessonContentFromGql(lessonid, isfree) {
+  static async getLessonContentFromGql(lessonid, courseGuid, isfree) {
     try {
       const client = await getClient()
       return await client.query({
-        query: gql`query ($lessonid: ID, $isfree: Boolean) ${lessonContent}`,
-        variables: {lessonid, isfree}
+        query: gql`query ($lessonid: ID, $courseGuid: ID, $isfree: Boolean) ${lessonContent}`,
+        variables: {lessonid, courseGuid, isfree}
       })
     } catch (e) {
       console.log(e.message)
     }
   }
+
+
 
   getLogo () {
     return 'https://m.it.ua/s00/ws/GetFile.ashx?file=itlogo.png&folder=DOCS'
