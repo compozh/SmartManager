@@ -16,3 +16,4 @@
 Applications/Eam/apollo.config.js
 SmartId/SmartId/Log/
 SmartId/SmartId/tempkey.rsa
+SmartId/SmartId/*.cap

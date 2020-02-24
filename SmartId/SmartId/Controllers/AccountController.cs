@@ -125,9 +125,11 @@ namespace SmartId.Controllers
 			{
 				var user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
 
-				if (user != null)
+				// TODO: testit
+				// проверяем подтвержден ли пользователь. Проверяем только если пользователь ввел корректный пароль
+				if (user != null && await _userManager.CheckPasswordAsync(user, model.Password).ConfigureAwait(false))
 				{
-					if (!await _userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false))
+					if (!await _signInManager.CanSignInAsync(user).ConfigureAwait(false))
 					{
 						await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "You must have a confirmed email to log on", clientId: context?.ClientId)).ConfigureAwait(false);
 						ModelState.AddModelError(string.Empty, "email not confirmed");
@@ -135,7 +137,7 @@ namespace SmartId.Controllers
 						return View("Login", vme);
 					}
 				}
-
+				
 				var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true).ConfigureAwait(false);
 				if (result.Succeeded)
 				{
@@ -317,14 +319,14 @@ namespace SmartId.Controllers
 				return RedirectToPage("~/");
 			}
 
-			var user = await _userManager.FindByIdAsync(userId);
+			var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 			if (user == null)
 			{
 				return NotFound($"Unable to load user with ID '{userId}'.");
 			}
 
 			code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-			var result = await _userManager.ConfirmEmailAsync(user, code);
+			var result = await _userManager.ConfirmEmailAsync(user, code).ConfigureAwait(false);
 			// TODO: Добавлять пользователя в СУС
 
 			return View(new StatusMessageViewModel { StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email." });
