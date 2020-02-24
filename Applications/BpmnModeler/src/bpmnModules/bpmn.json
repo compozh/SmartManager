@@ -1,5 +1,5 @@
 {
-  "name": "WorkflowPackage",
+  "name": "ForceBPM Package",
   "uri": "http://it-enterprise.com/schema/1.0/bpmn",
   "prefix": "IT-Enterprise",
   "xml": {

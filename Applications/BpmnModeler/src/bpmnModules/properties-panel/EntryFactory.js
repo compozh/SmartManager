@@ -115,6 +115,11 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание кнопки
    */
   button(options) {
+    if (!options.style) {
+      options.style = {};
+    }
+    options.style['margin-bottom'] = '20px';
+
     return new PropertiesPanelEntry('v-btn', {
       props: {
         key: options.id,

@@ -1,0 +1,51 @@
+{
+  "name": "ForceBPM Package",
+  "uri": "http://it-enterprise.com/schema/1.0/cmmn",
+  "prefix": "IT-Enterprise",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "types": [
+    {
+      "name": "HumanTask",
+      "extends": [
+        "cmmn:HumanTask"
+      ],
+      "properties": [
+        {
+          "name": "actionDefinitionId",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "ServiceTaskParameter",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "cmmn:HumanTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "type",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "value",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}

@@ -149,7 +149,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             label: translate('Business Object Action'),
             model: 'camunda:topic',
             loadItems: (async () => (await api.getBusinessObjectActions(boDefCode, diagram.isSystem))
-              .map(act => ({ id: act.actionDefCode, name: act.name })))(),
+              .map(act => ({ id: `${act.boDefCode}.${act.actionDefCode}`, name: act.name })))(),
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAction,
@@ -170,7 +170,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             label: translate('Business Object Access'),
             model: 'camunda:topic',
             loadItems: (async () => (await api.getBusinessObjectAccess(boDefCode, diagram.isSystem))
-              .map(act => ({ id: act.accessDefCode, name: act.name })))(),
+              .map(act => ({ id: `${act.boDefCode}.${act.accessDefCode}`, name: act.name })))(),
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAccess,

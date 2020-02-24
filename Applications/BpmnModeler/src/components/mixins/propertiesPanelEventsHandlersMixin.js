@@ -176,7 +176,7 @@ export default {
         return;
       }
       this.changeLoad();
-      items = items.map(bo => { return { id: bo.actionDefCode, name: bo.name }; });
+      items = items.map(bo => { return { id: `${bo.boDefCode}.${bo.actionDefCode}`, name: bo.name }; });
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectBusinessObjectAction'),
         items, items.find(item => item.id === actDefCode),
@@ -191,7 +191,7 @@ export default {
         return;
       }
       this.changeLoad();
-      items = items.map(bo => { return { id: bo.accessDefCode, name: bo.name }; });
+      items = items.map(bo => { return { id: `${bo.boDefCode}.${bo.accessDefCode}`, name: bo.name }; });
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectBusinessObjectAccess'),
         items, items.find(item => item.id === accDefCode),
