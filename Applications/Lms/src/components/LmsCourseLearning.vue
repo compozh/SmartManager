@@ -56,6 +56,7 @@
               <v-flex>
                 <v-card flat >
                   <lesson-view
+                    class="lesson-view"
                     v-if='currentLesson'
                     :unit='currentLesson'
                     :startPlay="startPlay"
@@ -465,5 +466,11 @@ export default {
 }
 .lesson-item:hover {
   background: #EEEEEE;
+}
+.lesson-view {
+  width:100%;
+  height: 65vh;
+  overflow: hidden;
+  border: solid lightgray 1px;
 }
 </style>

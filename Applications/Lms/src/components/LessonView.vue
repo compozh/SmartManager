@@ -1,7 +1,7 @@
 <template>
   <v-container py-0>
-    <v-layout column>
-      <v-flex mx-2 pt-2>
+    <v-layout column fill-height>
+      <v-flex mx-2 pt-2 shrink>
         <v-card flat v-if="unit">
           <div v-if='unit.lesson.lessonType === lessonType.video'>
             <video
@@ -90,9 +90,6 @@ export default {
 <style>
 .lesson-view {
   width:100%;
-  min-height: 35vh;
-  max-height: 75vh;
   overflow: hidden;
-  border: solid lightgray 1px;
 }
 </style>
