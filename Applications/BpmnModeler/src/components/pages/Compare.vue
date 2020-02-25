@@ -78,7 +78,7 @@ export default {
       return null;
     },
     type() {
-      if ( !this.$route.params.id && this.diagram1) { 
+      if ( !this.$route.params.id && this.diagram1) {
         return this.diagram1.type;
       } else if (this.diagram && this.$route.params.id) {
         this.getVersions();
@@ -171,7 +171,7 @@ export default {
       } else {
         xml = await this.$store.dispatch('bpmn/getXml', diagram.id);
       }
-      return xml; 
+      return xml;
     },
     async compare() {
       let xml1 = await this.getXml(this.diagram1),
@@ -222,8 +222,10 @@ export default {
           default:
             break;
           }
-        }); 
+        });
       });
+      self.syncViewers(self.$refs.modeler1.modeler, self.$refs.modeler2.modeler);
+
     },
     choose(id) {
       let choosed = document.querySelectorAll('.choosed');
@@ -232,11 +234,32 @@ export default {
       }
       let elements = document.querySelectorAll(`.${id}`);
       elements.forEach( el => el.classList.add('choosed'));
-      
+
     },
     findElem(id) {
       let elements = document.querySelectorAll(`.${id}`);
       elements.forEach( el => el.classList.toggle('found'));
+    },
+    syncViewers(currentDiagramm, milestoneDiagramm) {
+      if (this.initSyncViewers) {
+        return;
+      }
+      var changing = false;
+
+      function syncViewbox(a, b) {
+        a.on('canvas.viewbox.changed', (e) => {
+          if (changing) {
+            changing = false;
+            return;
+          }
+          b.get('canvas').viewbox(e.viewbox);
+          changing = true;
+        });
+      }
+
+      syncViewbox(currentDiagramm, milestoneDiagramm);
+      syncViewbox(milestoneDiagramm, currentDiagramm);
+      this.initSyncViewers = true;
     }
   },
 };
@@ -251,7 +274,7 @@ export default {
   overflow: hidden;
 }
 .difference-panel-section, .difference-panel-container {
-  
+
   height: 100%;
   position: relative;
   overflow: hidden;
@@ -271,7 +294,7 @@ export default {
   align-items: center;
   justify-content: start;
   display: flex;
-  
+
   font-size: 15px;
   font-weight: 500;
   background-color: transparent !important
@@ -281,7 +304,7 @@ export default {
   height: 100%;
 
   .list-icon {
-  }  
+  }
   .v-list-item__title {
     font-size: 13px;
   }
