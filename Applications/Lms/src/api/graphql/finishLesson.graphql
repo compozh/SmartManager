@@ -1,0 +1,10 @@
+mutation ($lessonGuid: ID) {
+  lmsMutatios {
+    fixLessonPassing(lessonGuid: $lessonGuid) {
+      success
+      successMessage
+      errorMessage
+      errorCode
+    }
+  }
+}

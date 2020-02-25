@@ -154,5 +154,22 @@ export default {
       commit('setError', error.message)
       commit('setCircularLoader', false)
     }
+  },
+
+  async fixLessonPassing ({commit}, payload) {
+    commit('setError', null)
+    commit('setCirularLoader', true)
+    try {
+      const result = await api.fixLessonPassingFromGql(payload)
+      if (result.success) {
+        console.log(`lesson: ${payload} finished!`)
+      } else {
+        console.log(`lesson: ${payload} not finished! Server answer: ${result.errorMessage}`)
+      }
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
+      console.log(`lesson: ${payload} not finished! Error: ${error}`)
+    }
   }
 }

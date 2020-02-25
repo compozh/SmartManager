@@ -10,6 +10,7 @@ import modules from './graphql/modules.graphql'
 import availableFilters from './graphql/availableFilters.graphql'
 import courseDetails from './graphql/courseDetails.graphql'
 import lessonContent from './graphql/lessonContent.graphql'
+import finishLesson from './graphql/finishLesson.graphql'
 
 const getClient = async () => {
   const token = await auth.getToken()
@@ -97,7 +98,17 @@ export class LmsApi {
     }
   }
 
-
+  static async fixLessonPassingFromGql(lessonGuid) {
+    try {
+      const client = await getClient()
+      return await client.mutate({
+        mutation: gql`${finishLesson}`,
+        variables: lessonGuid
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 
   getLogo () {
     return 'https://m.it.ua/s00/ws/GetFile.ashx?file=itlogo.png&folder=DOCS'

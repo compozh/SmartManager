@@ -253,16 +253,18 @@ export default {
       await this.$store.dispatch('lms/getLessonContent', {lessonGuid, courseGuid})
     },
     finishLesson () {
-      if ( !this.lessonsPassed.includes(this.currentLesson.lesson.lessonGuid) ) {
-        this.lessonsPassed.push(this.currentLesson.lesson.lessonGuid)
+      let currentLessonGuid = this.currentLesson.lesson.lessonGuid
+      if ( !this.lessonsPassed.includes(currentLessonGuid) ) {
+        this.lessonsPassed.push(currentLessonGuid)
       }
       // отправить запрос на сервер (урок пройден)
-
+      this.$store.dispatch('lms/fixLessonPassing', currentLessonGuid)
     },
     putNextLesson () {
       this.finishLesson()
       this.nextLesson ()
-      this.startPlay = true
+      const currentLessonType = this.currentLesson.lesson.lessonType
+      this.startPlay = currentLessonType === lessonType.video
     },
     // Навигация. Получить все уроки курса: идентификаторы и признак свободного доступа
     getAllLessons () {
@@ -299,6 +301,7 @@ export default {
       return {total: lessonsTotal, passed: lessonPassed}
     },
     updateLessonPaseedList(list) {
+      this.finishLesson()
       this.lessonsPassed = list
     },
     // Заглушка для получения статуса урока пройден/непройден
