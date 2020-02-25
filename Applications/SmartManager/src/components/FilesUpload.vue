@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-table v-if="files.length" stripe :data="files" class="mb-4 attachments-table">
+    <vs-table v-if="fileList && files.length" stripe :data="files" class="mb-4 attachments-table">
       <template slot="thead">
         <vs-th v-for="(header, index) in tableHeaders"
                :key="index"
@@ -93,6 +93,10 @@ export default {
     fileUpload
   },
   props: {
+    fileList: {
+      type: Boolean,
+      default: true
+    },
     existingFiles: {
       type: Array
     },
