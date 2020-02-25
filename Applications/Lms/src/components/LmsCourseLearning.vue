@@ -246,6 +246,7 @@ export default {
       this.currentLessonGuid = lessonGuid
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
       this.getLesson(lessonGuid, this.courseGuid)
+      window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
     },
     async getLesson(lessonGuid, courseGuid) {
       // Получить урок
