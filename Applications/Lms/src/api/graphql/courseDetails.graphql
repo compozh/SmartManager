@@ -33,6 +33,7 @@
         }
         modulesQtLabel
 				durationMinutesLabel
+        status
       }
       modules{
         moduleGuid

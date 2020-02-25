@@ -11,6 +11,7 @@ import availableFilters from './graphql/availableFilters.graphql'
 import courseDetails from './graphql/courseDetails.graphql'
 import lessonContent from './graphql/lessonContent.graphql'
 import finishLesson from './graphql/finishLesson.graphql'
+import fixStartCourse from './graphql/fixStartCourse.graphql'
 
 const getClient = async () => {
   const token = await auth.getToken()
@@ -18,9 +19,12 @@ const getClient = async () => {
     credentials: 'include',
     uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     headers: {
-      'Authorization': `Bearer ${token}`,
+
       'schema': 'LMSSCHEMA'
     }
+  }
+  if (token) {
+    options.headers['Authorization'] = `Bearer ${token}`
   }
   return new ApolloClient({
     cache: new InMemoryCache(),
@@ -86,24 +90,36 @@ export class LmsApi {
     }
   }
 
-  static async getLessonContentFromGql(lessonid, courseGuid, isfree) {
+  static async getLessonContentFromGql(lessonid, isfree) {
     try {
       const client = await getClient()
       return await client.query({
-        query: gql`query ($lessonid: ID, $courseGuid: ID, $isfree: Boolean) ${lessonContent}`,
-        variables: {lessonid, courseGuid, isfree}
+        query: gql`query ($lessonid: ID, $isfree: Boolean) ${lessonContent}`,
+        variables: {lessonid, isfree}
       })
     } catch (e) {
       console.log(e.message)
     }
   }
 
-  static async fixLessonPassingFromGql(lessonGuid) {
+  static async fixCourseStartFromGql(courseGuid) {
+    try {
+      const client = await getClient()
+      return await client.mutate({
+        mutation: gql`${fixStartCourse}`,
+        variables: {courseGuid}
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  static async fixLessonPassingFromGql({lessonGuid, courseGuid}) {
     try {
       const client = await getClient()
       return await client.mutate({
         mutation: gql`${finishLesson}`,
-        variables: lessonGuid
+        variables: {lessonGuid, courseGuid}
       })
     } catch (e) {
       console.log(e.message)

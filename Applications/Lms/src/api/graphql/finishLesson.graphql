@@ -1,10 +1,10 @@
-mutation ($lessonGuid: ID) {
-  lmsMutatios {
-    fixLessonPassing(lessonGuid: $lessonGuid) {
+mutation ($lessonGuid: String!, $courseGuid: String!) {
+  lmsMutation{
+    fixLessonPassing (lessonGuid: $lessonGuid){
       success
       successMessage
-      errorMessage
       errorCode
+      errorMessage
     }
   }
 }

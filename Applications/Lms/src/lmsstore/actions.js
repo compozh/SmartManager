@@ -138,11 +138,11 @@ export default {
     }
   },
 
-  async getLessonContent ({commit}, {lessonGuid, courseGuid}) {
+  async getLessonContent ({commit}, lessonGuid) {
     commit('setError', null)
     commit('setCircularLoader', true)
     try {
-      const result = await api.getLessonContentFromGql(lessonGuid, courseGuid, false)
+      const result = await api.getLessonContentFromGql(lessonGuid, false)
       const unit = result.data.lms.lessonContent
       // const lessonContent = JSON.parse(unit.content)
 
@@ -153,6 +153,23 @@ export default {
     } catch (error) {
       commit('setError', error.message)
       commit('setCircularLoader', false)
+    }
+  },
+
+  async fixStartCourse({commit}, payload) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    try {
+      const result = await api.fixCourseStartFromGql(payload)
+      if (result.success) {
+        console.log(`lesson: ${payload} finished!`)
+      } else {
+        console.log(`lesson: ${payload} not finished! Server answer: ${result.errorMessage}`)
+      }
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
+      console.log(`lesson: ${payload} not finished! Error: ${error}`)
     }
   },
 

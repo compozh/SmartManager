@@ -211,7 +211,7 @@ export default {
     this.putPassedFieldToLessons(this.modules)
     this.progress = this.getInitialProgress(this.modules)
     this.lessonPassed = this.getInitialPassedLesson(this.modules)
-    this.getLesson(this.currentLessonGuid, this.courseGuid)
+    this.getLesson(this.currentLessonGuid)
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
@@ -245,12 +245,12 @@ export default {
     setCurrentLesson (lessonGuid) {
       this.currentLessonGuid = lessonGuid
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
-      this.getLesson(lessonGuid, this.courseGuid)
+      this.getLesson(lessonGuid)
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
     },
-    async getLesson(lessonGuid, courseGuid) {
+    async getLesson(lessonGuid) {
       // Получить урок
-      await this.$store.dispatch('lms/getLessonContent', {lessonGuid, courseGuid})
+      await this.$store.dispatch('lms/getLessonContent', lessonGuid)
     },
     finishLesson () {
       let currentLessonGuid = this.currentLesson.lesson.lessonGuid
@@ -258,7 +258,7 @@ export default {
         this.lessonsPassed.push(currentLessonGuid)
       }
       // отправить запрос на сервер (урок пройден)
-      this.$store.dispatch('lms/fixLessonPassing', currentLessonGuid)
+      this.$store.dispatch('lms/fixLessonPassing', {currentLessonGuid, courseGuid: this.course.courseGuid})
     },
     putNextLesson () {
       this.finishLesson()
@@ -323,8 +323,6 @@ export default {
           }
         })
       }
-      modules[0].units[0].passed = true
-      modules[0].units[0].disabled = false
     },
     getMaterials(unit) {
       const lessonmaterials = unit.lessonmaterials

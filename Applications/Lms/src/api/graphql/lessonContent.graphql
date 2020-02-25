@@ -1,6 +1,6 @@
 {
   lms{
-    lessonContent(lessonGuid: $lessonid, courseGuid: $courseGuid, isFree: $isfree){
+    lessonContent(lessonGuid: $lessonid, isFree: $isfree){
       content
       module{
         name

@@ -20,13 +20,7 @@
 								<v-spacer/> -->
 								<v-flex xs12>
 									<v-layout align-top justify-end row wrap>
-                    <v-btn v-if="course && user" @click="$router.push({name: 'LMSCOURSELEARNING',
-                        params: {
-                          courseGuid: course.courseGuid,
-                          lessonGuid: currentLessonGuid,
-                          course,
-                          modules,
-                          }})">Начать курс</v-btn>
+                    <v-btn v-if="course && user" @click="startCourseLearning">Начать курс</v-btn>
 									</v-layout>
 								</v-flex>
 							</v-layout>
@@ -192,6 +186,19 @@ export default {
   methods: {
     getCourseDetails(courseGuid) {
       this.$store.dispatch('lms/getCourseDetails', courseGuid)
+    },
+    startCourseLearning() {
+      // Если слушатель еще не начал проходить курс
+      if (!this.course.status) {
+        this.$store.dispatch('lms/fixStartCourse', this.course.courseGuid)
+      }
+      this.$router.push({name: 'LMSCOURSELEARNING',
+        params: {
+          courseGuid: this.course.courseGuid,
+          lessonGuid: this.currentLessonGuid,
+          course: this.course,
+          modules: this.modules,
+        }})
     }
   },
   computed: {
