@@ -72,8 +72,8 @@ var formioOptions = {
   WsUrl: config.WsUrl,
   routerDependencies: () => router,
   GraphQlUrl: config.GrapgQlUrl,
-  onError: ({ message, networkError }) => {
-    //todo: Обработать ошибку
+  onError: (obj) => {
+    console.log(obj);
   }
 };
 Vue.use(formio, { options: formioOptions, dependencies });
