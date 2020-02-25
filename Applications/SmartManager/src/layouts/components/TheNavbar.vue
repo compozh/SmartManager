@@ -281,13 +281,14 @@
 
           <!-- ATTACHMENT BUTTONS -->
           <div class="flex -ml-2" v-if="attachmentView">
-            <vs-button icon="library_add"
-                       color="primary"
-                       type="flat"
-                       class="px-2 py-0 mr-2 fit"
-            >{{ $t('buttons.addAttachment') }} </vs-button>
 
-            <vs-button icon="delete"
+            <label id="addLabel" for="file"
+                   class="cursor-pointer text-primary">
+              <vs-icon style="margin: 0 5px 1px 0;">library_add</vs-icon>
+              {{ $t('buttons.addAttachment') }}
+            </label>
+
+           <vs-button icon="delete"
                        color="danger"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
@@ -594,12 +595,14 @@ export default {
       })
     },
     async removeAttachment() {
-      await this.$store.dispatch('sm/attachmentDelete', {
+      const result = await this.$store.dispatch('sm/attachmentDelete', {
         fileId: this.currentAttachment.id,
         taskId: +this.$route.params.taskId,
         caseId: +this.$route.params.caseId
       })
-      await this.$router.push({name: 'task-attachments'})
+      if (result.success) {
+        await this.$router.push({name: 'task-attachments'})
+      }
     }
   },
   directives: {
@@ -653,6 +656,20 @@ export default {
 
   button:hover > .btn-drop-reject {
     background: rgba(var(--vs-danger), .08) !important;;
+  }
+
+  #addLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 62px;
+    height: 28px;
+    padding-top: 1px;
+    border-radius: 0.375rem;
+  }
+
+  #addLabel:hover {
+    background: rgba(var(--vs-primary),.08)!important;
   }
 
 </style>
