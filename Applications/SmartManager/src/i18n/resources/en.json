@@ -167,6 +167,14 @@
     "noAccess": "You do not have access to the attachment",
     "notSelected": "File not selected"
   },
+  "eds": {
+    "eds": "Digital sign",
+    "popupTitle": "Electronic digital signs",
+    "sign": "Sign",
+    "delete": "Delete",
+    "check": "Check",
+    "clearKey": "Clear key"
+  },
   "comments": {
     "addComment": "Add comment",
     "placeholder": "Type your comment",
