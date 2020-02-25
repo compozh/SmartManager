@@ -8,87 +8,19 @@
       <component v-if=viewer class="rounded-r-lg" :is="viewer" :url="fileUrl"></component>
       <no-data v-else class="p-8">{{ currentAttachment.reason }}</no-data>
     </div>
-    <div>
-      <vs-popup title="Електронно цифрові підписи до вкладення - _U0T4L1ZBL, версія 3"
-                :active.sync="edsPopup">
-        <vs-table stripe :data="edsItems">
-          <template slot="thead">
-            <vs-th active>
-              Статус
-            </vs-th>
-            <vs-th>
-              Дата
-            </vs-th>
-            <vs-th>
-              Підписант
-            </vs-th>
-            <vs-th>
-              Організація
-            </vs-th>
-            <vs-th>
-              Посада
-            </vs-th>
-            <vs-th>
-              ЄДРПОУ
-            </vs-th>
-            <vs-th>
-              ЦСК
-            </vs-th>
-            <vs-th>
-              Коментар
-            </vs-th>
-            <vs-th>
-              Дії
-            </vs-th>
-          </template>
-          <template slot-scope="{data}">
-            <vs-tr class="truncate" :key="indextr" v-for="(tr, indextr) in data">
-
-              <vs-td>
-                <feather-icon icon="UserCheckIcon"></feather-icon>
-              </vs-td>
-
-              <vs-td :data="data[indextr].date">
-                {{data[indextr].date}}
-              </vs-td>
-
-              <vs-td :data="data[indextr].signatory">
-                {{data[indextr].signatory}}
-              </vs-td>
-
-              <vs-td :data="data[indextr].organization">
-                {{data[indextr].organization}}
-              </vs-td>
-
-              <vs-td :data="data[indextr].position">
-                {{data[indextr].position}}
-              </vs-td>
-
-              <vs-td></vs-td>
-
-              <vs-td :data="data[indextr].keyCenter">
-                {{data[indextr].keyCenter}}
-              </vs-td>
-
-              <vs-td></vs-td>
-
-              <vs-td class="flex">
-                <vs-button color="primary" size="small" type="flat" icon="touch_app"/>
-                <vs-button color="success" size="small" type="flat" icon="check_circle"/>
-                <vs-button color="warning" size="small" type="flat" icon="vpn_key"/>
-                <vs-button color="danger" size="small" type="flat" icon="delete"/>
-              </vs-td>
-
-            </vs-tr>
-          </template>
-        </vs-table>
-      </vs-popup>
-    </div>
+    <attachment-eds></attachment-eds>
+    <files-upload @attach="getAttachment($event)"
+                  :uploadErrors="uploadErrors"
+                  :fileList="false"
+                  uploadAuto
+                  id="file-upload"/>
   </div>
 </template>
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import AttachmentList from './AttachmentList'
+import AttachmentEds from './AttachmentEds'
+import FilesUpload from '@/components/FilesUpload'
 import NotSupport from '@/components/NotSupport'
 import NoData from '@/components/NoData'
 
@@ -99,6 +31,8 @@ const TxtViewer = () => import('@/components/TextViewer')
 export default {
   components: {
     AttachmentList,
+    AttachmentEds,
+    FilesUpload,
     PdfViewer,
     ImgViewer,
     TxtViewer,
@@ -111,82 +45,8 @@ export default {
     fileId: 0,
     fileUrl: '',
     types: [],
-    edsItems: [
-      {
-        status: 'Ok',
-        date: '10.01.2020 12:10',
-        signatory: 'Евгений Мелентьев',
-        organization: 'IT-Enterprise',
-        position: 'Фізична особа',
-        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
-      },
-      {
-        status: 'Ok',
-        date: '10.01.2020 12:10',
-        signatory: 'Виталий Бахарев',
-        organization: 'IT-Enterprise',
-        position: 'Фізична особа',
-        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
-      },
-      {
-        status: 'Ok',
-        date: '10.01.2020 12:10',
-        signatory: 'Игорь Певчев',
-        organization: 'IT-Enterprise',
-        position: 'Фізична особа',
-        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
-      },
-      {
-        status: 'Ok',
-        date: '10.01.2020 12:10',
-        signatory: 'Евгений Мелентьев',
-        organization: 'IT-Enterprise',
-        position: 'Фізична особа',
-        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
-      },
-      {
-        status: 'Ok',
-        date: '10.01.2020 12:10',
-        signatory: 'Виталий Бахарев',
-        organization: 'IT-Enterprise',
-        position: 'Фізична особа',
-        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
-      },
-      {
-        status: 'Ok',
-        date: '10.01.2020 12:10',
-        signatory: 'Игорь Певчев',
-        organization: 'IT-Enterprise',
-        position: 'Фізична особа',
-        keyCenter: 'Тестовий ЦСК АТ "ІІТ"',
-      }
-    ],
-    remarkItems: [
-      {
-        description: 'Граматичні помилки',
-        resolve: false,
-        date: '13.01.2020 15:16',
-        who: 'Виталий Бахарев',
-      },
-      {
-        description: 'Невірна структура',
-        resolve: true,
-        date: '15.01.2020 12:13',
-        who: 'Игорь Певчев',
-      },
-      {
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, quam?',
-        resolve: false,
-        date: '13.01.2020 15:16',
-        who: 'Виталий Бахарев',
-      },
-      {
-        description: 'Невірна структура',
-        resolve: true,
-        date: '15.01.2020 12:13',
-        who: 'Игорь Певчев',
-      }
-    ],
+    attachments: [],
+    uploadErrors: [],
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
@@ -251,19 +111,20 @@ export default {
     },
     type() {
       if (this.task.__typename === 'Task') {
-        return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
+        return this.task.keyValue ? 'DOCUMENT' : 'TASK'
       }
       if (this.task.__typename === 'Case') {
         return 'CASE'
       }
       return ''
     },
-    edsPopup: {
-      get() {
-        return this.$store.state.sm.attachments.edsPopup
-      },
-      set(val) {
-        this.$store.commit('sm/TOGGLE_EDS_POPUP', val)
+    attachmentParams() {
+      return {
+        id: +this.$route.params.taskId || +this.$route.params.caseId,
+        type: this.type,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy
       }
     }
   },
@@ -271,10 +132,19 @@ export default {
     $route(to) {
       if (to.name === 'task-attachments') {
         this.fileUrl = ''
+        // Clear  info about current attachment
+        this.$store.commit('sm/SET_ATTACHMENT_DETAILS', {
+          fileDetails: {
+            ErrorMessage: this.$t('attachments.notSelected'),
+          }
+        })
       }
     }
   },
   methods: {
+    uploadAdd() {
+      this.$refs.upload.add()
+    },
     toAttachment(id) {
       if (id) {
         this.$router.push({name: 'task-attachment', params: {attachmentId: id}})
@@ -290,14 +160,26 @@ export default {
       this.fileUrl = fileDetails.FileName ? fileDetails.FileUrl : null
     },
     async getAttachmentTypes() {
-      const params = {
-        type: this.type,
-        id: this.task.id || this.$route.params.taskId,
-        arso: this.task.arso,
-        keyValue: this.task.keyValue,
-        kidCopy: this.task.kidCopy
-      }
-      this.types = await this.$store.dispatch('sm/getAttachmentTypes', params)
+      this.types = await this.$store.dispatch('sm/getAttachmentTypes', this.attachmentParams)
+    },
+    getAttachment(event) {
+      this.attachments = event
+      this.addAttachments()
+    },
+    async addAttachments() {
+      const attachments = JSON.stringify(this.attachments)
+      const params = this.attachmentParams
+      // Returns results list
+      const results = await this.$store.dispatch('sm/addAttachments', {attachments, params})
+      results.forEach(result => {
+        if (!result.success) {
+          this.uploadErrors.push({
+            fileName: result.name,
+            message: result.errorMessage
+          })
+        }
+      })
+      this.attachments.length = 0
     }
   }
 }
@@ -360,5 +242,10 @@ export default {
       display: flex;
       flex-wrap: nowrap;
   }
+
+  #file-upload > span {
+    display: none;
+  }
+
 
 </style>
