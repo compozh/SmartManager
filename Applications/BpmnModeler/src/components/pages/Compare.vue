@@ -249,7 +249,7 @@ export default {
       var changing = false;
 
       function syncViewbox(a, b) {
-        a.on('canvas.viewbox.changed', (e) => {
+        a.on(['drag.init', 'canvas.viewbox.changed'], (e) => {
           if (changing) {
             changing = false;
             return;
@@ -259,7 +259,6 @@ export default {
           changing = true;
         });
       }
-
       syncViewbox(currentDiagramm, milestoneDiagramm);
       syncViewbox(milestoneDiagramm, currentDiagramm);
       this.initSyncViewers = true;
@@ -306,8 +305,6 @@ export default {
 .difference-list {
   height: 100%;
 
-  .list-icon {
-  }
   .v-list-item__title {
     font-size: 13px;
   }
