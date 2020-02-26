@@ -151,7 +151,7 @@ export default {
             el.children[0].firstChild.style.stroke = color;
             el.children[0].firstChild.style.strokeWidth = '2px';
           });
-          overlayHtml = `<div class="${elem.id}"></div>`;
+          overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:10px; height:10px"></div>`;
           break;
         default:
           overlayHtml = '<div></div>';
@@ -236,7 +236,6 @@ export default {
       }
       let elements = document.querySelectorAll(`.${id}`);
       elements.forEach( el => el.classList.add('choosed'));
-
     },
     findElem(id) {
       let elements = document.querySelectorAll(`.${id}`);
