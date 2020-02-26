@@ -2,16 +2,12 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RazorEngine;
-using RazorEngine.Configuration;
-using RazorEngine.Templating;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Razor.Parser;
 
 namespace SmartId.Services
 {
@@ -34,15 +30,6 @@ namespace SmartId.Services
 	/// </summary>
 	public static class TemplateExecutorExtentions
 	{
-		/// <summary>
-		/// Добавить шаблоны Razor
-		/// </summary>
-		public static void AddRazorTemplateExecutor(this IServiceCollection services, TemplateExecutorOptions razorTemplateFactoryOptions)
-		{
-			services.AddSingleton(razorTemplateFactoryOptions);
-			services.AddSingleton<IHtmlTemplateExecutor, RazorTemplateExecutor>();
-		}
-
 		/// <summary>
 		/// Добавить простые шаблоны
 		/// </summary>
@@ -118,34 +105,6 @@ namespace SmartId.Services
 				}
 			}
 			return template;
-		}
-	}
-
-	public class RazorTemplateExecutor : IHtmlTemplateExecutor
-	{
-		private readonly IRazorEngineService _service;
-		public RazorTemplateExecutor(TemplateExecutorOptions razorTemplateFactoryOptions, IWebHostEnvironment environment)
-		{
-			if (razorTemplateFactoryOptions == null) throw new ArgumentNullException(nameof(razorTemplateFactoryOptions));
-			// Find templates in a web application
-			var webPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", razorTemplateFactoryOptions.TemplatePath);
-			// Find templates from a unit test or console application
-			var libraryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, razorTemplateFactoryOptions.TemplatePath);
-
-			var config = new TemplateServiceConfiguration
-			{
-				TemplateManager = new ResolvePathTemplateManager(new[] { webPath, libraryPath })
-			};
-
-			_service = RazorEngineService.Create(config);
-		}
-
-		public string GetContent<T>(string templateName, T model)
-		{
-			var templateKey = _service.GetKey(templateName);
-			var body = Engine.Razor.RunCompile(templateKey, null, model);
-
-			return body;
 		}
 	}
 }

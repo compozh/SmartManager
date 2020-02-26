@@ -18,6 +18,12 @@ using Web.WebRequests;
 using SmartId.Authentication;
 using Serilog;
 using SmartId.Services;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
+using Shared.DigitalSignature;
+using Shared.WebExtensions;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 
 namespace SmartId
 {
@@ -64,14 +70,22 @@ namespace SmartId
 				options.Password.RequiredLength = 6;
 				options.Password.RequiredUniqueChars = 1;
 
+				// TODO: testit
 				options.SignIn.RequireConfirmedAccount = true;
+				// обязательно тербовать подтверждения почты
+				options.SignIn.RequireConfirmedEmail = true;
 			}).AddEntityFrameworkStores<AspIdentityDbContext>()
 				.AddUserManager<DualStorageUserManager<SmartIdUser>>()
 				.AddClaimsPrincipalFactory<SmartIdClaimsPrincipalFactory>()
 				.AddDefaultTokenProviders();
 
 			/* Настраиваем MVC */
-			services.AddControllersWithViews();
+			// Подключаем КЭЦП
+			services.AddDigitalSignature();
+			services.AddControllersWithViews()
+				.AddRazorRuntimeCompilation()
+				// Подключаем контроллеры из сборки КЭЦП
+				.AddApplicationPart(typeof(DigitalSignatureExtensions).GetTypeInfo().Assembly);
 			services.AddRazorPages();
 
 			/* Настраиваем IIS */
@@ -86,8 +100,8 @@ namespace SmartId
 			services.AddSmartIdIdentityServer();
 
 			/* Настраиваем аутентификацию */
-			services.AddAuthentication();
-			//TODO: добавить внешних провайдеров
+			services.AddAuthentication()
+				.AddExternalAuthenticationProviders();
 
 			/* Внутренние сервисы */
 			services.AddMemoryCache();
@@ -112,6 +126,8 @@ namespace SmartId
 			}
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+			// Подключаем скрипты из сборки КЭЦП
+			app.UseDigitalSignature();
 
 			app.UseRouting();
 			app.UseCors();
@@ -121,6 +137,8 @@ namespace SmartId
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			app.UseScriptNonce();
 
 			app.UseEndpoints(endpoints =>
 			{

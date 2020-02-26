@@ -8,6 +8,7 @@
     "timeFormat": "ampm"
   },
   "folders": {
+    "active": "Active",
     "header": "Folders",
     "main": "Active",
     "folder": "Folder",
@@ -157,6 +158,23 @@
     "description": "Description",
     "date": "Date"
   },
+  "attachments": {
+    "delConfirmTitle": "Attachment delete",
+    "delConfirmText": "Are you sure you want to delete the attachment?",
+    "noData": "No data",
+    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
+    "downloadFile": "Download and open file",
+    "noAccess": "You do not have access to the attachment",
+    "notSelected": "File not selected"
+  },
+  "eds": {
+    "eds": "Digital sign",
+    "popupTitle": "Electronic digital signs",
+    "sign": "Sign",
+    "delete": "Delete",
+    "check": "Check",
+    "clearKey": "Clear key"
+  },
   "comments": {
     "addComment": "Add comment",
     "placeholder": "Type your comment",
@@ -164,14 +182,10 @@
   },
   "messages": {
     "noMessages": "No messages",
-    "noData": "No data",
     "noFiles": "No files for view",
     "noComments": "No comments",
     "closeForm": "Close the form",
-    "noApprovals": "No approvals",
-    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
-    "downloadFile": "Download and open file",
-    "noAccess": "You do not have access to the attachment"
+    "noApprovals": "No approvals"
   },
   "notify": {
     "foldersTitle": "Folders and filters",

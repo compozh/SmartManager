@@ -56,7 +56,7 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      this.modeler = editorFactory(this.type, true, this.$refs.container, null, this.translate);
+      this.modeler = editorFactory(this.type, true, this.$refs.container, this.translate);
       this.onEditorChanged();
       this.loadXml();
     },    

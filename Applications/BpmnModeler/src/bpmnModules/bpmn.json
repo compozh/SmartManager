@@ -1,0 +1,83 @@
+{
+  "name": "ForceBPM Package",
+  "uri": "http://it-enterprise.com/schema/1.0/bpmn",
+  "prefix": "IT-Enterprise",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "types": [
+    {
+      "name": "UserTask",
+      "extends": [ "bpmn:UserTask" ],
+      "properties": [
+        {
+          "name": "actionDefinitionId",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "ServiceTaskParameter",
+      "superClass": [ "Element" ],
+      "meta": {
+        "allowedIn": [
+          "camunda:ExternalCapable",
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "type",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "value",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "DataObject",
+      "extends": [ "bpmn:DataObject" ],
+      "properties": [
+        {
+          "name": "businessObjectDefinitionCode",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "businessObjectKeyVariableName",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "ServiceTask",
+      "extends": [ "bpmn:ServiceTask" ],
+      "properties": [
+        {
+          "name": "businessObjectTaskType",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "dataObjectRef",
+          "isAttr": true,
+          "type": "bpmn:DataObject",
+          "isReference": true
+        }
+      ]
+    }
+  ],
+  "enumerations": [
+  ]
+}

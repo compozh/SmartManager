@@ -10,6 +10,7 @@ import router from '@/router';
 // Queries
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
+import { ActionDefinition } from './models';
 
 export class BpmnModelerApi {
   async reset() {
@@ -274,12 +275,16 @@ export class BpmnModelerApi {
       query: gql`query ($definitionType: ActionDefinitionType!, $onlySystem: Boolean!) ${queries.getActions}`,
       variables: { definitionType, onlySystem }
     });
-    return result.data.bpmnquery.getAvailableActions;
+    const actions = result.data.bpmnquery.getAvailableActions;
+    if (Array.isArray(actions)) {
+      return actions.map(action => new ActionDefinition(action));
+    }
+    return actions;
   }
 
   async getActionById(actionId) {
     const result = await query({
-      query: gql`query ($actionId: ID!) ${queries.getActionById}`,
+      query: gql`query ($actionId: String!) ${queries.getActionById}`,
       variables: { actionId }
     });
     return result.data.bpmnquery.getActionById;

@@ -60,7 +60,7 @@ export default {
       return item.hasRight(Models.AccessRights.Write);
     },
     createModeler() {
-      this.modeler = editorFactory(this.item.type, true, this.$refs.container, null, () => {});
+      this.modeler = editorFactory(this.item.type, true, this.$refs.container, () => {});
       this.loadXml();
     },
     setBpmnSvg() {

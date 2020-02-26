@@ -275,7 +275,7 @@ export default {
         case 'EXTERNAL': return 'внешняя задача'
         default: return 'unknown type'
       }
-    }
+    },
   },
   watch: {
     '$route'(route) {
@@ -308,7 +308,9 @@ export default {
       console.log('submit', )
     },
     iFrameOnLoad(frame, event) {
-      this['iFrameHeight' + frame] = event.path[0].contentDocument.body.scrollHeight * 1.2
+      const iFrameBody = event.path[0].contentDocument.body
+      this['iFrameHeight' + frame] = iFrameBody.scrollHeight * 1.2
+      iFrameBody.style.fontFamily = 'Helvetica, sans-serif'
     },
     // обработка смены статуса задачи
     async onChangeStatus(data) {

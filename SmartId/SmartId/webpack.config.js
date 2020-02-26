@@ -1,16 +1,17 @@
 ﻿const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const bundleFileName = 'index';
-const dirName = 'wwwroot/js';
-
+const jsDirName = 'wwwroot/js';
 module.exports = (env, argv) => {
 	return {
 		mode: argv.mode === "production" ? "production" : "development",
-		entry: ['./Frontend/index.js', './Frontend/sass/index.scss'],
+		entry: {
+			index: './Frontend/index.js',
+			edsexecutor: './Frontend/sign/index.js'
+		},
 		output: {
-			filename: bundleFileName + '.js',
-			path: path.resolve(__dirname, dirName)
+			filename: '[name].js',
+			path: path.resolve(__dirname, jsDirName)
 		},
 		module: {
 			rules: [
@@ -33,12 +34,22 @@ module.exports = (env, argv) => {
 							},
 							'sass-loader'
 						]
+				},
+				{
+					test: /\.m?js$/,
+					exclude: /(node_modules|bower_components)/,
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: ['@babel/preset-env']
+						}
+					}
 				}
 			]
 		},
 		plugins: [
 			new MiniCssExtractPlugin({
-				filename: '../css/' + bundleFileName + '.css'
+				filename: '../css/index.css'
 			})
 		]
 	};
