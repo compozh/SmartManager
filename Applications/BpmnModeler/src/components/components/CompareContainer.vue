@@ -1,5 +1,8 @@
 <template>
 	<v-container class="column pa-0 fill-height" fluid >
+    <v-card v-if="version" class="version-title-card" :style="attitude == 'right' ? 'right: 0;justify-content:flex-end;' : 'left: 0;justify-content:flex-start;' ">
+      {{version.name}}
+    </v-card>
     <v-row class="fill-height" v-if="loading" justify="center" align="center">
       <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
     </v-row>
@@ -18,7 +21,7 @@
       <v-btn text :disabled="!canMinimap" @click="onMinimap" :title="$t('bpmn.labels.ToggleMinimap')">
         <v-icon>mdi-map</v-icon>
       </v-btn>
-      <v-btn text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
+      <v-btn v-if="fullScreenVisible" text @click="fullScreen = !fullScreen" :title="$t('bpmn.labels.ToggleFullScreen')">
         <v-icon v-if="fullScreen">mdi-fullscreen-exit</v-icon>
         <v-icon v-else>mdi-fullscreen</v-icon>
       </v-btn>
@@ -45,7 +48,9 @@ export default {
   props: {
     diagram: Object,
     version: Object,
-    type: String
+    type: String,
+    fullScreenVisible: Boolean,
+    attitude: String
   },
 
   mounted() {
@@ -59,7 +64,7 @@ export default {
       this.modeler = editorFactory(this.type, true, this.$refs.container, this.translate);
       this.onEditorChanged();
       this.loadXml();
-    },    
+    },
     async loadXml() {
       if (!this.version || !this.modeler) { return; }
       this.loading = true;
@@ -122,7 +127,7 @@ export default {
         return false;
       }
     }
-  
+
   },
   watch: {
     'version'() {
@@ -173,5 +178,21 @@ export default {
   .compare-icon::before {
     position: relative;
     top: -26px;
+  }
+  .version-title-card {
+    position: absolute;
+    z-index: 100;
+    margin: 20px;
+    display: flex;
+    padding: 10px;
+    align-self: flex-start;
+    min-width: 150px;
+    background: rgb(	238, 238, 238 );
+    opacity: 0.6 !important;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+  .version-title-card:hover {
+    opacity: 1 !important;
   }
 </style>

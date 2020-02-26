@@ -1,12 +1,12 @@
 <template>
 	<v-container class="column pa-0 fill-height" fluid >
-    
+
     <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize" class="diagram-section">
           <v-row class="fill-height" v-if="loading" justify="center" align="center">
             <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
           </v-row>
-        <copmpare-modeler :diagram="diagram" :version="version" :type="type" />
+        <copmpare-modeler :fullScreenVisible="true" :diagram="diagram" :version="version" :type="type" />
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="properties-panel-section">
         <div class="properties-panel-container" >
@@ -21,15 +21,18 @@
                 :key="item.versionId"
                 @click="changeVersion(item)">
                 <v-list-item-avatar class="ma-0">
-                  <v-avatar color="blue-grey lighten-1" :title="item.creatorName || item.ownerName"> {{item.creatorName || item.ownerName | formatAvatar}}</v-avatar>
+                  <v-avatar color="blue-grey lighten-1" :title="item.creatorName || item.ownerName">
+                    <img v-if="userInfo && userInfo.userPhoto" :src="userInfo && userInfo.userPhoto ? userInfo.userPhoto : ''">
+                    {{!userInfo || !userInfo.userPhoto ? formatAvatar(item) : ''}}
+                    </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content style="text-align: start" class="px-2 py-2">
                   <v-list-item-title>{{item.name == diagram.name ? $t('bpmn.labels.LatestVersion') : item.name}}</v-list-item-title>
-                  <v-list-item-subtitle>{{item.creationTime | formatTime }}</v-list-item-subtitle>
+                  <v-list-item-subtitle style="white-space: normal;">{{item.creationTime | formatTime }}{{item.creatorName | formatCreator}}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action class="ma-0" v-if="item.name != diagram.name">
                   <bpmn-contex-menu :item="item" :milestones="true"
-                    @edit="editItem" 
+                    @edit="editItem"
                     @remove="removeItem"
                     @compare="compareItems"
                     @copy="copyItem"
@@ -68,7 +71,8 @@ export default {
       split: null,
       versions: [],
       version: {},
-      groups: []
+      groups: [],
+      userInfo: this.$store.state.auth.user || null
     };
   },
 
@@ -83,11 +87,11 @@ export default {
     },
     formatTime(value) {
       if (value) {
-        return moment(value).format('HH:mm');
+        return moment(value).format('HH:mm') + ' ';
       }
     },
-    formatAvatar(value) {
-      return value.length > 4 ? value.split(' ').map( el => el.slice(0,1)).join('') : value;
+    formatCreator(value) {
+      return ' ' + value;
     }
   },
   computed: {
@@ -137,7 +141,7 @@ export default {
         let date = new Date();
         this.diagram.creationTime = moment(date).format();
       }
-      
+
       versions.sort( (a, b) =>  {
         let diff = moment(b.creationTime).toDate().getTime() - moment(a.creationTime).toDate().getTime();
         return diff == 0 ? -1 : diff;
@@ -163,13 +167,16 @@ export default {
     changeVersion(val) {
       if (val.versionId == this.$route.query.version || this.version.versionId == val.versionId ) {
         this.version = val;
-        return; 
+        return;
       } else {
         this.version = val;
         this.$router.replace({name: 'milestones', params: {id: this.diagram.id}, query: {version: val.versionId }});
       }
-      
-    }
+
+    },
+    formatAvatar(value) {
+      return value.creatorName.length > 4 ? value.creatorName.split(' ').map( el => el.slice(0,1)).join('') : value.creatorName;
+    },
   },
 };
 </script>
@@ -183,7 +190,7 @@ export default {
   overflow: hidden;
 }
 .properties-panel-section {
-  
+
   height: 100%;
   position: relative;
   overflow: hidden;
@@ -203,7 +210,7 @@ export default {
   align-items: center;
   justify-content: start;
   display: flex;
-  
+
   font-size: 15px;
   font-weight: 500;
   background-color: transparent !important
