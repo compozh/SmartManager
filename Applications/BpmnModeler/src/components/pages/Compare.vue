@@ -13,19 +13,21 @@
             {{$t('bpmn.labels.Differences')}}
           </v-toolbar>
           <v-list class="difference-list" v-if="diagram">
-            <v-list-item-group  v-for="type in Object.entries(changes) " :key="type[0]"  v-if="Object.keys(type[1]).length > 0">
-              <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
-              <v-divider :class="type[0].substr(1)" style="width: 90%" />
-              <v-list-item class="row d-flex ma-1 pl-1" v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)">
-                <v-list-item-icon class="list-icon mx-0">
-                  <v-icon size="17">mdi-chevron-right</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content style="text-align: start" class="px-2 py-2">
-                  <v-list-item-title>{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
-                  <v-list-item-subtitle>{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider />
+            <v-list-item-group  v-for="type in Object.entries(changes) " :key="type[0]" >
+              <div v-if="Object.keys(type[1]).length > 0">
+                <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
+                <v-divider :class="type[0].substr(1)" style="width: 90%" />
+                <v-list-item class="row d-flex ma-1 pl-1" v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)">
+                  <v-list-item-icon class="list-icon mx-0">
+                    <v-icon size="17">mdi-chevron-right</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content style="text-align: start" class="px-2 py-2">
+                    <v-list-item-title>{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider />
+              </div>
             </v-list-item-group>
             <v-divider />
           </v-list>
@@ -252,7 +254,8 @@ export default {
             changing = false;
             return;
           }
-          b.get('canvas').viewbox(e.viewbox);
+          var box  = b.get('canvas');
+          box.viewbox(e.viewbox);
           changing = true;
         });
       }
