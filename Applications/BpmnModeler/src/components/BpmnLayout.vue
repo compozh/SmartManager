@@ -157,7 +157,7 @@ export default {
         return this.$store.getters['bpmn/getActiveItemId'];
       },
       set(value) {
-        if (this.$store.getters['bpmn/getActiveItemId'] != null && (this.$route.name != 'milestones' || this.$route.name != 'compare')) {
+        if (this.$route.name != 'milestones' || this.$route.name != 'compare') {
           this.navigateToItem(value);
         }
         this.$store.dispatch('bpmn/setActiveItem', value);
