@@ -15,6 +15,18 @@ const notify = (type, title, text) => {
 }
 
 export default {
+  async getApplicationParams({commit}) {
+    startLoading()
+    try {
+      const response = await api.getApplicationParamsFromGql()
+      const result = response.data.smtasks.applicationParams
+      commit('setApplicationParams', result)
+      stopLoading()
+    } catch (e) {
+      stopLoading()
+      console.error(e.message)
+    }
+  },
   async getFolders({commit}, loading) {
     !loading || startLoading()
     try {
@@ -34,18 +46,19 @@ export default {
       notify('danger', 'foldersTitle', 'foldersError')
     }
   },
-  async getTasks({commit, state}, folderId) {
+  async getTasks({commit, state}, {folderId, loader}) {
     if (folderId === 'search') {
       return
     }
-    const loading = !state.tasks[folderId]
+    const loading = loader || !state.tasks[folderId]
     !loading || startLoading()
     commit('setSearch', null)
     commit('setCurrentFolder', folderId)
     try {
-      const result = await api.getTasksFromGql(
-        folderId === 'active' ? '' : folderId
-      )
+      const result = await api.getTasksFromGql({
+        folderId: folderId === 'active' ? '' : folderId,
+        helperexec: state.helperexec
+      })
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
