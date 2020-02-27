@@ -275,28 +275,32 @@
                        color="danger"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
-                       @click="confirmDelete"
+                       @click="confirmTaskDelete"
             >{{ $t('buttons.delete') }}
             </vs-button>
 
           <!-- ATTACHMENT BUTTONS -->
           <div class="flex -ml-2" v-if="attachmentView">
-            <vs-button icon="library_add"
-                       color="primary"
-                       type="flat"
-                       class="px-2 py-0 mr-2 fit"
-            >{{ $t('buttons.addAttachment') }} </vs-button>
 
-            <vs-button icon="delete"
+            <label id="addLabel" for="file"
+                   class="cursor-pointer text-primary">
+              <vs-icon style="margin: 0 5px 1px 0;">library_add</vs-icon>
+              {{ $t('buttons.addAttachment') }}
+            </label>
+
+           <vs-button icon="delete"
                        color="danger"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
+                       @click="confirmAttachmentDelete"
             >{{ $t('buttons.deleteAttachment') }} </vs-button>
 
             <vs-button icon="cloud_download"
                        color="success"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
                        :href="currentAttachment.srcUrl"
             >{{ $t('buttons.downloadAttachment') }} </vs-button>
 
@@ -304,6 +308,7 @@
                        color="warning"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
                        :to="{name: 'versions'}"
             >{{ $t('buttons.attachmentVersions') }} </vs-button>
 
@@ -311,6 +316,7 @@
                        color="dark"
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
+                       :disabled="!currentAttachment.access"
                        @click="$store.commit('sm/TOGGLE_EDS_POPUP', true)"
             >{{ $t('buttons.attachmentEds') }} </vs-button>
 
@@ -424,8 +430,7 @@ export default {
       return this.taskDetails || this.caseView
     },
     attachmentView() {
-      return this.$route.name === 'task-attachment'
-             || this.$route.name === 'case-attachment'
+      return this.$route.path.includes('attachment')
     },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork() {
@@ -517,7 +522,7 @@ export default {
         pin
       })
     },
-    confirmDelete() {
+    confirmTaskDelete() {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
@@ -577,6 +582,27 @@ export default {
     },
     setDelegation() {
       console.log('Делегировать права',)
+    },
+    confirmAttachmentDelete() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: this.$t('attachments.delConfirmTitle'),
+        text: this.$t('attachments.delConfirmText'),
+        cancelText: this.$t('buttons.cancel'),
+        acceptText: this.$t('buttons.delete'),
+        accept: this.removeAttachment
+      })
+    },
+    async removeAttachment() {
+      const result = await this.$store.dispatch('sm/attachmentDelete', {
+        fileId: this.currentAttachment.id,
+        taskId: +this.$route.params.taskId,
+        caseId: +this.$route.params.caseId
+      })
+      if (result.success) {
+        await this.$router.push({name: 'task-attachments'})
+      }
     }
   },
   directives: {
@@ -630,6 +656,20 @@ export default {
 
   button:hover > .btn-drop-reject {
     background: rgba(var(--vs-danger), .08) !important;;
+  }
+
+  #addLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 62px;
+    height: 28px;
+    padding-top: 1px;
+    border-radius: 0.375rem;
+  }
+
+  #addLabel:hover {
+    background: rgba(var(--vs-primary),.08)!important;
   }
 
 </style>

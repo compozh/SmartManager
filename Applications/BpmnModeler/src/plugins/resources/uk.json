@@ -29,7 +29,7 @@
 		"Replace" : "Замінити завантаженою",
 		"MilestonesHistory" : "Показати історію версій",
 		"AddMilestone" : "Створити версію",
-		"RestoreAsLatest" : "Восстановить как последнюю",
+		"RestoreAsLatest" : "Відновити як найновішу",
 		"Compare" : "Порівняти"
 	},
 	"labels": {
@@ -461,6 +461,11 @@
 		"Latest": "Остання версія",
 		"Definition": "Визначення",
 		"Definition Id": "Ідентифікатор визначення",
-		"Definition Name": "Назва визначення"
+		"Definition Name": "Назва визначення",
+		"Task creation rule": "Правило створення задачі",
+		"Task properties": "Параметри задачі",
+		"Form Key": "Форма",
+		"Details": "Деталі",
+		"If Part Condition": "Умова"
 	}
 }

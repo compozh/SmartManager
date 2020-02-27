@@ -2,7 +2,7 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js/lib/NavigatedViewer';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
-import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
+import workflowBpmnModdle from '../bpmnModules/bpmn.json';
 import bpmnPropertiesPanelCommands from '../bpmnModules/properties-panel/bpmn/cmd';
 
 import DmnModeler from 'dmn-js/lib/Modeler';
@@ -12,6 +12,7 @@ import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
 import CmmnModeler from 'cmmn-js/lib/Modeler';
 import CmmnViewer from 'cmmn-js/lib/NavigatedViewer';
 import camundaCmmnModdle from 'camunda-cmmn-moddle/resources/camunda';
+import workflowCmmnModdle from '../bpmnModules/cmmn.json';
 import cmmnPropertiesPanelCommands from '../bpmnModules/properties-panel/cmmn/cmd';
 
 import minimapModule from 'diagram-js-minimap';
@@ -20,7 +21,7 @@ import ContextPadProvider from '../bpmnModules/context-pad/';
 
 import WorkflowRules from '../bpmnModules/rules';
 
-export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
+export default function editorFactory(type, readonly, editorContainer, translate) {
   switch (type) {
   case DiagramType.BPMN:
     return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, translate);
@@ -91,6 +92,7 @@ function createCmmnModeler(editorContainer, translate) {
     ],
     moddleExtensions: {
       camunda: camundaCmmnModdle,
+      workflow: workflowCmmnModdle
     }
   });
 }
@@ -106,7 +108,8 @@ function createCmmnViewer(editorContainer, translate) {
       createTranslationModule(translate)
     ],
     moddleExtensions: {
-      camunda: camundaCmmnModdle
+      camunda: camundaCmmnModdle,
+      workflow: workflowCmmnModdle
     }
   });
 }
