@@ -1,5 +1,5 @@
 <template>
-	<v-container class="column pa-0 fill-height" fluid >
+	<v-container class="column pa-0 fill-height compare-component" fluid>
     <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize - splitDiffSize " class="diagram-left-section diagram-section">
         <copmpare-modeler :fullScreenVisible="false" attitude="left" :diagram="diagram" :version="diagram1" ref="modeler1" :type="type" @compare="compare" />
@@ -12,20 +12,20 @@
           <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
             {{$t('bpmn.labels.Differences')}}
           </v-toolbar>
-          <v-list class="difference-list" v-if="diagram">
-            <v-list-item-group  v-for="type in Object.entries(changes) " :key="type[0]" >
+          <v-list class="difference-list md-scroll" v-if="diagram">
+            <v-list-item-group v-for="type in Object.entries(changes) " :key="type[0]" >
               <div v-if="Object.keys(type[1]).length > 0">
                 <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
                 <v-divider :class="type[0].substr(1)" style="width: 90%" />
-                <v-list-item class="row d-flex ma-1 pl-1" v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)">
-                  <v-list-item-icon class="list-icon mx-0">
-                    <v-icon size="17">mdi-chevron-right</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content style="text-align: start" class="px-2 py-2">
-                    <v-list-item-title>{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                <v-list-group v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple>
+                  <template v-slot:activator @leave="activator = !activator">
+                    <v-list-item-content>
+                      <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
+                      <v-list-item-subtitle class="item-subtitle">{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </template>
+                    <div class="difference-description">{{item}}</div>
+                </v-list-group>
                 <v-divider />
               </div>
             </v-list-item-group>
@@ -266,6 +266,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.compare-component {
+  max-height: calc(100vh - 50px);
+}
 .diagram-section {
   width: 100%;
   height: 100%;
@@ -302,17 +305,49 @@ export default {
 }
 
 .difference-list {
+  height: calc(100% - 40px) !important;
+  text-align: start;
   height: 100%;
-
-  .v-list-item__title {
+  overflow-y: auto;
+  padding: 0;
+  .item-title {
     font-size: 13px;
   }
-  .v-list-item__subtitle {
+  .item-subtitle {
     font-size: 12px;
   }
 }
+.difference-description {
+  padding: 0 20px !important;
+  color: #848484;
+  font-size: 12px;
+}
 
+.md-scroll::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px;
+    height: 16px
+  }
+  /* background of the scrollbar except button or resizer */
+  .md-scroll::-webkit-scrollbar-track {
+      background-color:#fff
+  }
+  .md-scroll::-webkit-scrollbar-track:hover {
+      background-color:#fff
+  }
 
+  /* scrollbar itself */
+  .md-scroll::-webkit-scrollbar-thumb {
+      background-color:#babac0;
+      border-radius:16px;
+      border:5px solid #fff
+  }
+  .md-scroll::-webkit-scrollbar-thumb:hover {
+      background-color:#a0a0a5;
+      border:4px solid #f4f4f4
+  }
+  /* set button(top and bottom of the scrollbar) */
+  .md-scroll::-webkit-scrollbar-button {display:none}
 
 </style>
 <style lang="scss">
