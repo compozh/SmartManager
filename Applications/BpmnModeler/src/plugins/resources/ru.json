@@ -28,8 +28,8 @@
 		"MoveHere" : "Переместить сюда",
 		"Replace" : "Заменить загруженной",
 		"MilestonesHistory" : "Показать историю версий",
+		"RestoreAsLatest" : "Восстановить как самую новую",
 		"AddMilestone" : "Создать версию",
-		"RestoreAsLatest" : "Відновити як найновішу",
 		"Compare" : "Сравнить"
 	},
 	"labels": {

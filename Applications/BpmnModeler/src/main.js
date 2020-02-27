@@ -70,7 +70,6 @@ Vue.use(Eds, { dependencies });
 var formioOptions = {
   auth,
   WsUrl: config.WsUrl,
-  routerDependencies: () => router,
   GraphQlUrl: config.GrapgQlUrl,
   onError: (obj) => {
     console.log(obj);
