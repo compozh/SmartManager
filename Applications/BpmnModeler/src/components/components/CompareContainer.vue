@@ -54,7 +54,7 @@ export default {
   },
 
   mounted() {
-    if (this.version) {
+    if (this.version && (this.version.id || this.version.versionId)) {
       this.createModeler();
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
-    :canMinimap="canMinimap" @minimap="onMinimap" 
+    :canMinimap="canMinimap" @minimap="onMinimap"
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
   >
@@ -80,7 +80,7 @@ export default {
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();
-    },    
+    },
     async loadXml() {
       if (!this.process || !this.modeler) {
         return;
@@ -89,35 +89,35 @@ export default {
       if (!this.cancellationToken.isCancelled) {
         this.cancellationToken.cancel();
       }
-      const debounced = debounce(500, async (cancellationToken) => {
-        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
+      const debounced = debounce(500, async (cancellationToken, me) => {
+        const xml = await me.$store.dispatch('bpmn/getXml', me.process.id);
         if (cancellationToken.isCancelled) {
           return;
         }
         if (xml === false) {
-          this.loading = false;
-          Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
+          me.loading = false;
+          Notification.error(me.$t('bpmn.Errors.ProcessesNotLoaded'));
           return;
         }
         if (!xml || xml === '') {
-          this.modeler.createDiagram(() => {
-            this.loading = false;
-          });        
+          me.modeler.createDiagram(() => {
+            me.loading = false;
+          });
         } else {
-          this.modeler.importXML(xml, (err) => {
-            this.loading = false;
+          me.modeler.importXML(xml, (err) => {
+            me.loading = false;
             if (err) {
               console.error(err);
-              Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
-              this.modeler.createDiagram();
-              this.loading = false;
+              Notification.error(me.$t('bpmn.Errors.ProcessesNotLoaded'));
+              me.modeler.createDiagram();
+              me.loading = false;
             }
           });
         }
       });
 
       this.cancellationToken = new CancellationToken(debounced);
-      debounced(this.cancellationToken);
+      debounced(this.cancellationToken, this);
     },
     setXML(id, xml) {
       this.$store.dispatch('bpmn/setXml', { id, xml }).then(success => {
@@ -128,7 +128,7 @@ export default {
           Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
         }
       });
-      
+
       this.$store.dispatch('bpmn/editProcess', this.process);
       const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
       this.$store.dispatch('bpmn/editFolder', item);
