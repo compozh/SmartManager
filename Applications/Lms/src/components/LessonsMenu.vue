@@ -28,7 +28,6 @@
               <div
                   v-for="lesson in moduleItem.units"
                   :key="lesson.lessonGuid"
-                  @click="setLesson(lesson.lessonGuid)"
                   :class="{'active': lesson.lessonGuid === currentLessonGuid}"
                   class="lesson-item">
                 <v-layout nowrap justify-start>
@@ -41,7 +40,7 @@
                       height="6">
                     </v-checkbox>
                   </v-flex>
-                  <v-flex>
+                  <v-flex @click="setLesson(lesson.lessonGuid)">
                     <v-layout column>
                       <v-flex>
                         <v-layout>

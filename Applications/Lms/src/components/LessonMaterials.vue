@@ -3,7 +3,7 @@
     <v-layout >
       <v-flex>
         <v-card flat px-2 v-if="lesson">
-            <div class="body-2 px-3 py-3">Ресурсы урока <span class="indigo--text">{{lesson.name}}</span> <span v-if="!materials.length">&nbsp;не предусмотрены</span></div>
+            <div class="body-1 px-3 py-3">Ресурсы урока <span class="indigo--text">{{lesson.name}}</span> <span v-if="!materials.length">&nbsp;не предусмотрены</span></div>
           <v-layout>
             <v-flex >
               <v-list v-if="materials" expand style="padding-top:0;!impotant">
@@ -62,7 +62,7 @@ export default {
   methods: {
     getEnclosure(type, enclosure) {
       // Передать данные слушателя и
-      const link = addTicketToLink(enclosure.link)
+      const link = type !== materialType.link ? addTicketToLink(enclosure.link) : enclosure.link
       window.open(link, enclosure.title)
     }
   }

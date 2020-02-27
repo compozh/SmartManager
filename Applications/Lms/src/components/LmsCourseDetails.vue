@@ -20,13 +20,7 @@
 								<v-spacer/> -->
 								<v-flex xs12>
 									<v-layout align-top justify-end row wrap>
-                    <v-btn v-if="course && user" @click="$router.push({name: 'LMSCOURSELEARNING',
-                        params: {
-                          courseGuid: course.courseGuid,
-                          lessonGuid: currentLessonGuid,
-                          course,
-                          modules,
-                          }})">Начать курс</v-btn>
+                    <v-btn v-if="course && user" @click="startCourseLearning">Начать курс</v-btn>
 									</v-layout>
 								</v-flex>
 							</v-layout>
@@ -163,13 +157,8 @@ export default {
   },
   created() {
     this.courseGuid = this.$route.params.courseGuid
-    if (this.$route.params.courseData) {
-      this.courseData = this.$route.params.courseData
-      this.getCourseDetails(this.courseGuid)
-    } else {
-      let courseDetails = this.$store.getters['lms/courseDetails']
-      this.courseData = courseDetails.course
-    }
+    this.courseData = this.$route.params.courseData
+    this.getCourseDetails(this.courseGuid)
     const course = this.courseData
     if (course.backgroundColor != undefined) {
       if (course.backgroundColor.toUpperCase() === '#FFFFFF') {
@@ -192,6 +181,19 @@ export default {
   methods: {
     getCourseDetails(courseGuid) {
       this.$store.dispatch('lms/getCourseDetails', courseGuid)
+    },
+    startCourseLearning() {
+      // Если слушатель еще не начал проходить курс
+      if (!this.course.status) {
+        this.$store.dispatch('lms/fixCourseStart', this.courseGuid)
+      }
+      this.$router.push({name: 'LMSCOURSELEARNING',
+        params: {
+          courseGuid: this.course.courseGuid,
+          lessonGuid: this.currentLessonGuid,
+          course: this.course,
+          modules: this.modules,
+        }})
     }
   },
   computed: {

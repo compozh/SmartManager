@@ -33,6 +33,7 @@
         }
         modulesQtLabel
 				durationMinutesLabel
+        status
       }
       modules{
         moduleGuid
@@ -68,6 +69,7 @@
           durationMunute
           durationMinutesLabel
           surveyId
+          passed
         }
       }
     }
