@@ -48,7 +48,8 @@
     "delConfirmTitle": "Task delete",
     "delConfirmText": "Are you sure you want to delete the task?",
     "saveDialogTitle": "Task not saved",
-    "saveDialogText": "Data has been changed. Exit without saving?"
+    "saveDialogText": "Data has been changed. Exit without saving?",
+    "handled": "Handled by assistant"
   },
   "cases": {
     "newCase": "New case",

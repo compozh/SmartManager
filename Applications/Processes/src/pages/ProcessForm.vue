@@ -53,10 +53,18 @@ export default {
       this.isLoading = true
       this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
         this.isLoading = false
-        if (!result.form) {
-          this.error = this.$t('processes.errors.undefinedFormOfProcess')
-        } else {
+
+        if (result.form) {
+          /* var query = this.$route.query
+          if (query && query.submission) {
+            try {
+              result.form.submission = JSON.parse(query.submission)
+            } catch (e) {
+            }
+          } */
           this.form = result.form
+        } else {
+          this.error = this.$t('processes.errors.undefinedFormOfProcess')
         }
       })
     } else {

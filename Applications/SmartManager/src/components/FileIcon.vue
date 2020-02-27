@@ -12,9 +12,13 @@ import {
   faFileAlt as txt,
   faFile as file
 } from '@fortawesome/free-solid-svg-icons'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
+
 library.add(xls, img, pdf, ppt, doc, txt, file)
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 export default {
   components: {
     FontAwesomeIcon

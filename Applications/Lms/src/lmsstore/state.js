@@ -11,5 +11,7 @@ export default {
   modules: null,        // Availabels modules
   courseDetails: null,  // Подробная информация о курсе
   unit: null,           // Информация об уроке
-  lessonContent: null   // Содержимое урока
+  lessonContent: null,  // Содержимое урока
+  currentTestPage: null, // Текущая страница теста
+  notification: null
 }

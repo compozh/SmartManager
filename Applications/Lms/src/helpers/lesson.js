@@ -10,18 +10,13 @@ export const materialType = {
   link: 'LINK'
 }
 
-export const lessonIcons = [
-  { text: 'insert_drive_file' },
-  { video: 'ondemand_video' },
-  { test: 'playlist_add_check' }
-]
-
-export function addTicketToLink(rowLink) {
-  const token = sessionStorage.getItem('accessToken')
-  let link = clearLink(rowLink)
-  return link.concat(token)
+export const lessonIcons = {
+  text: 'insert_drive_file',
+  video: 'ondemand_video',
+  test: 'playlist_add_check'
 }
 
-function clearLink (rowLink) {
-  return rowLink.replace('#','%23').replace(/\s/g,'%20')
+export function addTicketToLink(rowLink) {
+  const token = sessionStorage.getItem('refreshToken')
+  return rowLink.concat(token)
 }

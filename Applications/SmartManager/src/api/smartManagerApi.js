@@ -41,6 +41,17 @@ const getClient = async schema => {
 
 export class SmartManagerApi {
 
+  static async getApplicationParamsFromGql() {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        query: gql`${q.applicationParams}`
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
   static async getFoldersFromGql() {
     try {
       const client = await getClient('smartmanager')
@@ -52,12 +63,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async getTasksFromGql(folderId) {
+  static async getTasksFromGql({folderId, helperexec}) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.tasks}`,
-        variables: {folderId}
+        variables: {folderId, helperexec}
       })
     } catch (e) {
       throw new Error(e.message)

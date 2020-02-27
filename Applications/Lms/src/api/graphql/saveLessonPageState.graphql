@@ -1,0 +1,10 @@
+mutation($courseGuid: String!, $pageState: String!) {
+  lmsMutation{
+    saveLessonPageState(courseGuid: $courseGuid, pageStateParamsJson: $pageState){
+      success
+      successMessage
+      errorCode
+      errorMessage
+    }
+  }
+}

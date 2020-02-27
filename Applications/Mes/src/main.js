@@ -41,7 +41,6 @@ auth.config({
   }
 })
 
-
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
     link: new HttpLink({}),
@@ -75,7 +74,6 @@ var formioOptions = {
   auth,
   WsUrl: window.myConfig.WsUrl,
   GraphQlUrl: window.myConfig.GrapgQlUrl,
-  routerDependencies: () => router,
   onError: ({ message, networkError }) => {
     if (networkError) {
       switch(networkError.statusCode) {

@@ -1,9 +1,6 @@
 export default {
-  setMessage(state, payload) {
-    state.message = payload ? payload : {}
-  },
-  setTaskAddForm(state, payload) {
-    state.taskAddForm = payload
+  setApplicationParams(state, params) {
+    state.applicationParams = JSON.parse(params)
   },
   setFolders(state, payload) {
     state.folders = payload.sort(i => i.code === '' ? -1 : 0 )
@@ -16,6 +13,9 @@ export default {
   },
   setTaskInfo(state, payload) {
     state.taskInfo = Object.assign({}, state.taskInfo, payload)
+  },
+  setHelperexec(state, payload) {
+    state.helperexec = payload
   },
   setSearch(state, payload) {
     state.search = payload

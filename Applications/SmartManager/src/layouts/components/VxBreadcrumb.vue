@@ -83,8 +83,8 @@ export default {
         switch (breadcrumb) {
           case 'taskFolder': return {
             name: this.taskFolder ? this.taskFolder.name : '',
-            url: '/tasks/' + (this.taskFolder.code === '' && this.taskFolder.code !== null
-              ? 'active' : this.taskFolder.code)
+            url: '/tasks/' + (this.taskFolder ? this.taskFolder.code === ''
+              ? 'active' : this.taskFolder.code : '')
           }
           case 'task': return {
             name: this.task.name || this.task.docCaption || this.task.descript,
@@ -134,7 +134,7 @@ export default {
       this.$store.dispatch('sm/getFolders', 'loading')
     }
     if (taskId && !this.tasks['active']) {
-      this.$store.dispatch('sm/getTasks', 'active')
+      this.$store.dispatch('sm/getTasks', {folderId: 'active'})
     }
     if (taskId && !this.task.id) {
       this.$store.dispatch('sm/getTaskInfo', {

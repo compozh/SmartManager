@@ -151,7 +151,7 @@ export default {
       }
     },
     async getTasks(folderId) {
-      await this.$store.dispatch('sm/getTasks', folderId)
+      await this.$store.dispatch('sm/getTasks', {folderId})
     },
     async getCases() {
       if (this.cases.length === 0) {

@@ -101,6 +101,7 @@ Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/reso
 
 const formioOptions = {
   auth,
+  WsUrl: window.appConfig.WsUrl,
   routerDependencies: () => ({ router }),
   GraphQlUrl: window.appConfig.GrapgQlUrl
 }
