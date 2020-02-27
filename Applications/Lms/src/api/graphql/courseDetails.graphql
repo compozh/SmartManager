@@ -69,6 +69,7 @@
           durationMunute
           durationMinutesLabel
           surveyId
+          passed
         }
       }
     }

@@ -157,13 +157,8 @@ export default {
   },
   created() {
     this.courseGuid = this.$route.params.courseGuid
-    if (this.$route.params.courseData) {
-      this.courseData = this.$route.params.courseData
-      this.getCourseDetails(this.courseGuid)
-    } else {
-      let courseDetails = this.$store.getters['lms/courseDetails']
-      this.courseData = courseDetails.course
-    }
+    this.courseData = this.$route.params.courseData
+    this.getCourseDetails(this.courseGuid)
     const course = this.courseData
     if (course.backgroundColor != undefined) {
       if (course.backgroundColor.toUpperCase() === '#FFFFFF') {
@@ -190,7 +185,7 @@ export default {
     startCourseLearning() {
       // Если слушатель еще не начал проходить курс
       if (!this.course.status) {
-        this.$store.dispatch('lms/fixStartCourse', this.course.courseGuid)
+        this.$store.dispatch('lms/fixCourseStart', this.courseGuid)
       }
       this.$router.push({name: 'LMSCOURSELEARNING',
         params: {

@@ -1,6 +1,6 @@
 mutation ($lessonGuid: String!, $courseGuid: String!) {
   lmsMutation{
-    fixLessonPassing (lessonGuid: $lessonGuid){
+    fixLessonPassing (lessonGuid: $lessonGuid, courseGuid: $courseGuid){
       success
       successMessage
       errorCode

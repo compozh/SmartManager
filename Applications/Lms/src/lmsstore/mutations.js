@@ -42,6 +42,10 @@ export default {
     state.lessonContent = payload
   },
 
+  setNotification (state, payload) {
+    state.notification = payload
+  },
+
   setCurrentTestPage(state, payload) {
     state.currentTestPage = payload
   }

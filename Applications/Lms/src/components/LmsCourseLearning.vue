@@ -167,7 +167,8 @@ import LessonView from './LessonView.vue'
 import LessonsMenu from './LessonsMenu.vue'
 import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
-import {lessonType, materialType} from '../helpers/lesson.js'
+import {lessonType, materialType, lessonIcons} from '../helpers/lesson.js'
+import { LmsApi as api } from '../api/lmsApi'
 
 export default {
   name: 'lms-course-learning',
@@ -203,23 +204,38 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     this.course = this.$route.params.course
     this.courseGuid = this.$route.params.courseGuid
     this.modules = this.$route.params.modules
-    this.currentLessonGuid = this.$route.params.lessonGuid
-    this.putPassedFieldToLessons(this.modules)
     this.progress = this.getInitialProgress(this.modules)
-    this.lessonPassed = this.getInitialPassedLesson(this.modules)
+    const result = await api.restorePageStateFromGql(this.courseGuid)
+    const pageStateParams = result ? JSON.parse(result) : null
+    if (pageStateParams) {
+      this.currentLessonGuid = pageStateParams.currentLessonGuid
+      this.tabActive = pageStateParams.activeTab
+    } else {
+      this.currentLessonGuid = this.modules[0].units[0].lessonGuid
+      this.tabActive = 'materials'
+    }
+    this.putPassedFieldToLessons(this.modules)
     this.getLesson(this.currentLessonGuid)
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
   },
   mounted() {
+    this.lessonsPassed = this.getInitialPassedLesson(this.modules)
     this.hideSidebar()
   },
+  beforeDestroy() {
+    this.savePageState()
+  },
   methods: {
+    savePageState() {
+      const pageState = { currentLessonGuid: this.currentLessonGuid, activeTab: this.tabActive}
+      api.savePageStateFromGql(this.course.courseGuid, JSON.stringify(pageState))
+    },
     hideSidebar() {
       let breackPoint = this.$vuetify.breakpoint.name
       if (breackPoint === 'xs' || breackPoint === 'sm' || breackPoint === 'md') {
@@ -258,7 +274,7 @@ export default {
         this.lessonsPassed.push(currentLessonGuid)
       }
       // отправить запрос на сервер (урок пройден)
-      this.$store.dispatch('lms/fixLessonPassing', {currentLessonGuid, courseGuid: this.course.courseGuid})
+      this.$store.dispatch('lms/fixLessonPassing', { courseGuid: this.courseGuid, lessonGuid: currentLessonGuid})
     },
     putNextLesson () {
       this.finishLesson()
@@ -288,7 +304,7 @@ export default {
         let lessonsGuid = lessons.map(l => l.lessonGuid)
         passedLessons = passedLessons.concat(lessonsGuid)
       }
-      this.lessonsPassed = passedLessons
+      return passedLessons
     },
     getInitialProgress(modules) {
       const modulesLessons = modules.map(m => m.units.length)
@@ -304,22 +320,21 @@ export default {
       this.finishLesson()
       this.lessonsPassed = list
     },
-    // Заглушка для получения статуса урока пройден/непройден
+    //
     putPassedFieldToLessons(modules) {
       modules.forEach(m => m.active = true)
       for (const _module of modules) {
         _module.units.forEach(function (u) {
-          u.passed = false
           u.disabled = false
           switch (u.lessonType) {
           case lessonType.video:
-            u.icon = 'ondemand_video' // lessonIcons.video
+            u.icon = lessonIcons.video
             break
           case lessonType.text:
-            u.icon = 'insert_drive_file' // lessonIcons.text
+            u.icon = lessonIcons.text
             break
           case lessonType.test:
-            u.icon = 'playlist_add_check' // lessonIcons.test
+            u.icon = lessonIcons.test
           }
         })
       }
@@ -368,16 +383,6 @@ export default {
         }
         materials.push(item)
       })
-
-      // unit.lesson.lessonType = 1
-      // unit.content = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS'
-
-      // for (let i = 0; i < this.materials.length; i++) {
-      //   const m = this.materials[i]
-      //   if (m.enclosures) {
-      //     m.enclosures.forEach(e => e.link = 'https://m.it.ua/s00/ws/GetFile.ashx?file=_Z4DYZG0YD.mp4&folder=DOCS')
-      //   }
-      // }
       unit.lessonmaterials = materials
       return unit
     },

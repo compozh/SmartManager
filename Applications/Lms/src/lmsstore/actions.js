@@ -144,49 +144,56 @@ export default {
     try {
       const result = await api.getLessonContentFromGql(lessonGuid, false)
       const unit = result.data.lms.lessonContent
-      // const lessonContent = JSON.parse(unit.content)
-
       commit('setLesson', unit)
-      // commit('setContent', lessonContent)
       commit('setCircularLoader', false)
-
     } catch (error) {
       commit('setError', error.message)
       commit('setCircularLoader', false)
     }
   },
 
-  async fixStartCourse({commit}, payload) {
+  async fixCourseStart({commit}, courseGuid) {
     commit('setError', null)
     commit('setCircularLoader', true)
     try {
-      const result = await api.fixCourseStartFromGql(payload)
-      if (result.success) {
-        console.log(`lesson: ${payload} finished!`)
-      } else {
-        console.log(`lesson: ${payload} not finished! Server answer: ${result.errorMessage}`)
-      }
+      const result = await api.fixCourseStartFromGql(courseGuid)
+      const message = result.data.lmsMutation.fixLessonPassing.success ?
+        result.data.lmsMutation.fixLessonPassing.successMessage : result.data.lmsMutation.fixLessonPassing.errorMessage
+      commit('setNotification', message)
+      commit('setCircularLoader', false)
     } catch (error) {
       commit('setError', error.message)
       commit('setCircularLoader', false)
-      console.log(`lesson: ${payload} not finished! Error: ${error}`)
     }
   },
 
-  async fixLessonPassing ({commit}, payload) {
+  async saveLessonPageState({commit},courseGuid, pageState) {
     commit('setError', null)
-    commit('setCirularLoader', true)
+    commit('setCircularLoader', true)
     try {
-      const result = await api.fixLessonPassingFromGql(payload)
-      if (result.success) {
-        console.log(`lesson: ${payload} finished!`)
-      } else {
-        console.log(`lesson: ${payload} not finished! Server answer: ${result.errorMessage}`)
-      }
+      const result = await api.savePageStateFromGql(courseGuid, pageState)
+      const message = result.data.lmsMutation.saveLessonPageState.success ?
+        result.data.lmsMutation.saveLessonPageState.successMessage : result.data.lmsMutation.saveLessonPageState.errorMessage
+      commit('setNotification', message)
+      commit('setCircularLoader', false)
     } catch (error) {
       commit('setError', error.message)
       commit('setCircularLoader', false)
-      console.log(`lesson: ${payload} not finished! Error: ${error}`)
+    }
+  },
+
+  async fixLessonPassing({commit}, {courseGuid, lessonGuid}) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    try {
+      const result = await api.fixLessonPassingFromGql(courseGuid, lessonGuid)
+      const message = result.data.lmsMutation.fixLessonPassing.success ?
+        result.data.lmsMutation.fixLessonPassing.successMessage : result.data.lmsMutation.fixLessonPassing.errorMessage
+      commit('setNotification', message)
+      commit('setCircularLoader', false)
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
     }
   }
 }

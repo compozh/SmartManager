@@ -12,5 +12,6 @@ export default {
   courseDetails: null,  // Подробная информация о курсе
   unit: null,           // Информация об уроке
   lessonContent: null,  // Содержимое урока
-  currentTestPage: null // Текущая страница теста
+  currentTestPage: null, // Текущая страница теста
+  notification: null
 }
