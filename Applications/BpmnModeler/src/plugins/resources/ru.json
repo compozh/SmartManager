@@ -136,7 +136,8 @@
 		"SelectBusinessObjectAccess": "Выберите настройки доступа к бизнес-объекту",
 		"MilestoneCreated": "Версия создана",
 		"EnterVersionName": "Введите название версии",
-		"NewVersion": "Новая версия"
+		"NewVersion": "Новая версия",
+		"InsertTextHere": "Введите текст сюда ..."
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

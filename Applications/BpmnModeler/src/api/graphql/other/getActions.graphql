@@ -1,7 +1,7 @@
 {
   bpmnquery {
     getAvailableActions(definitionType: $definitionType, onlySystem: $onlySystem) {
-      code,
+      id,
       type,
       name,
       unformio,

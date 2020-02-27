@@ -136,7 +136,8 @@
 		"SelectBusinessObjectAccess": "Select Business Object Access",
 		"MilestoneCreated": "Version created",
 		"EnterVersionName": "Enter version name",
-		"NewVersion": "New version"
+		"NewVersion": "New version",
+		"InsertTextHere": "Insert text here ..."
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

@@ -140,7 +140,8 @@
 		"SelectBusinessObjectAccess": "Виберіть налаштування доступу до бізнес-об'єкта",
 		"MilestoneCreated": "Версію створено",
 		"EnterVersionName": "Введіть назву версії",
-		"NewVersion": "Нова версія"
+		"NewVersion": "Нова версія",
+		"InsertTextHere": "Введіть текст сюди ..."
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
