@@ -47,6 +47,7 @@
     <formio-builder-container />
     <formio-container />
     <bpmn-form :activeItem.sync="activeItem"></bpmn-form>
+    <create-version-dialog></create-version-dialog>
     <selection-grid></selection-grid>
     <access-dialog></access-dialog>
   </v-app>
@@ -142,7 +143,7 @@ export default {
       }
     },
     changeLoad() {
-      setTimeout(() => this.loading = false, 10); 
+      setTimeout(() => this.loading = false, 10);
     }
   },
   computed: {
@@ -166,10 +167,10 @@ export default {
       return this.$store.getters['formio/linearLoader'] || this.loading;
     },
     snackbar() {
-      return this.$store.getters['formio/snackbar']; 
+      return this.$store.getters['formio/snackbar'];
     },
     snackbarVisible() {
-      return this.snackbar.visible; 
+      return this.snackbar.visible;
     }
   },
   watch: {
@@ -245,7 +246,7 @@ export default {
   }
   .logo {
     text-decoration: none;
-    flex-direction: row; 
+    flex-direction: row;
     display: flex;
     color: #1976d2;
     fill: #1976d2;

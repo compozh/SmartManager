@@ -263,12 +263,8 @@ export default {
     isDmn(item) {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
     },
-    async createVersion(item) {
-      if (!(await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item))) {
-        Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
-      } else {
-        Notification.success(this.$t('bpmn.labels.MilestoneCreated'));
-      }
+    createVersion(item) {
+      eventBus.$emit(events.modeler.showCreateVersionDialog, item);
     },
     async apply(item) {
       await this.$store.dispatch('bpmn/applyDiagramVersion', {diagramId: item.diagramId, versionId: item.versionId});
