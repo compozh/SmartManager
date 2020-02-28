@@ -1,5 +1,5 @@
 {
   bpmnqueryMutation {
-    createDiagramVersion(diagramId: $diagramId)
+    createDiagramVersion(diagramId: $diagramId, versionName: $versionName)
   }
 }

@@ -47,7 +47,7 @@ export default {
         return;
       }
       this.show = false;
-      if (!(await this.$store.dispatch('bpmn/createDiagramVersion', this.item.id || this.item))) {
+      if (!(await this.$store.dispatch('bpmn/createDiagramVersion', { diagramId: this.item.id || this.item, versionName: this.value }))) {
         Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
       } else {
         Notification.success(this.$t('bpmn.labels.MilestoneCreated'));

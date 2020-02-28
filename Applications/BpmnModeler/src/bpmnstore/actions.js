@@ -446,9 +446,9 @@ export default {
     return result;
   },
 
-  async createDiagramVersion(context, diagramId) {
+  async createDiagramVersion(context, { diagramId, versionName}) {
     try {
-      return await api.createDiagramVersion(diagramId);
+      return await api.createDiagramVersion(diagramId, versionName);
     } catch (error) {
       console.error(error);
       return false;
