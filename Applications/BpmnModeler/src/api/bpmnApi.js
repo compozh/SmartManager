@@ -351,10 +351,10 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.diagramVersions;
   }
 
-  async createDiagramVersion(diagramId) {
+  async createDiagramVersion(diagramId, versionName) {
     const result = await mutate({
-      mutation: gql`mutation ($diagramId: ID!) ${mutations.createDiagramVersion}`,
-      variables: { diagramId }
+      mutation: gql`mutation ($diagramId: ID!, $versionName: String) ${mutations.createDiagramVersion}`,
+      variables: { diagramId, versionName }
     });
     return result.data.bpmnqueryMutation.createDiagramVersion;
   }

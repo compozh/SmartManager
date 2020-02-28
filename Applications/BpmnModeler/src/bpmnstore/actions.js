@@ -36,7 +36,7 @@ export default {
     if (!items) {
       return false;
     }
-    
+
     const mapTree = (items) => items.map(e => {
       if (e.$type.startsWith('Folder')) {
         e.items = mapTree(e.items);
@@ -58,7 +58,7 @@ export default {
     await context.dispatch('createFolder', new Folder({ name: context.rootState.auth.user.userName }));
   },
   //#region Diagrams
-  
+
   async getXml(context, id) {
     let xml;
     try {
@@ -199,7 +199,7 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
-    
+
     return true;
   },
   async editFolder(context, { id, name }) {
@@ -446,9 +446,9 @@ export default {
     return result;
   },
 
-  async createDiagramVersion(context, diagramId) {
+  async createDiagramVersion(context, { diagramId, versionName}) {
     try {
-      return await api.createDiagramVersion(diagramId);
+      return await api.createDiagramVersion(diagramId, versionName);
     } catch (error) {
       console.error(error);
       return false;

@@ -87,9 +87,17 @@ export const events = {
      * Отобразить диалог с настройками общего доступа
      * @event Modeler#showAccessDialog
      * @param {string} recordId - код диаграммы, для которой необходимо отобразить диалог с настройками общего доступа
-     * 
+     *
      */
-    showAccessDialog: 'modeler.show-access-dialog'
+    showAccessDialog: 'modeler.show-access-dialog',
+
+    /**
+     * Отобразить диалог с полем введения названия версии
+     * @event Modeler#showCreateVersionDialog
+     * @param {Object} item - обьэкт текущей версии
+     *
+     */
+    showCreateVersionDialog: 'modeler.show-create-version-dialog'
   },
   /** События в панели свойств */
   propertiesPanel: {
@@ -119,7 +127,7 @@ export const events = {
      */
     setServiceTaskProperties: 'properties-panel.set-service-task-parameters',
 
-    /** 
+    /**
      * Отобразить диалог выбора опубликованных процессов
      * @event PropertiesPanel#selectDeployedProcess
      * @param {string} procDefKey - ключ уже выбранного опубликованного процесса
@@ -127,7 +135,7 @@ export const events = {
      */
     selectDeployedProcess: 'properties-panel.select-deployed-process',
 
-    /** 
+    /**
      * Отобразить диалог выбора опубликованных таблиц решений
      * @event PropertiesPanel#selectDeployedDecision
      * @param {string} decDefKey - ключ уже выбранного опубликованного dmn решения
@@ -135,7 +143,7 @@ export const events = {
      */
     selectDeployedDecision: 'properties-panel.select-deployed-decision',
 
-    /** 
+    /**
      * Отобразить диалог выбора опубликованных кейсов
      * @event PropertiesPanel#selectDeployedCase
      * @param {string} caseDefKey - ключ уже выбранного опубликованного кейса
@@ -143,7 +151,7 @@ export const events = {
      */
     selectDeployedCase: 'properties-panel.select-deployed-case',
 
-    /** 
+    /**
      * Отобразить диалог выбора бизнес-обьекта
      * @event PropertiesPanel#selectBusinessObject
      * @param {string} boDefCode - ключ уже выбранного бизнес-обьекта
@@ -152,7 +160,7 @@ export const events = {
      */
     selectBusinessObject: 'properties-panel.select-business-object',
 
-    /** 
+    /**
      * Отобразить диалог выбора действия бизнес-обьекта
      * @event PropertiesPanel#selectBusinessObjectAction
      * @param {string} boDefCode - ключ бизнес-обьекта
@@ -162,7 +170,7 @@ export const events = {
      */
     selectBusinessObjectAction: 'properties-panel.select-business-objectAction',
 
-    /** 
+    /**
      * Отобразить диалог выбора доступа к бизнес-обьекту
      * @event PropertiesPanel#selectBusinessObjectAccess
      * @param {string} boDefCode - ключ бизнес-обьекта

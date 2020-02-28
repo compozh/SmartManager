@@ -1,31 +1,31 @@
 <template>
-	<v-container class="column pa-0 fill-height" fluid >
+	<v-container class="column pa-0 fill-height compare-component" fluid>
     <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize - splitDiffSize " class="diagram-left-section diagram-section">
-        <copmpare-modeler :diagram="diagram" :version="diagram1" ref="modeler1" :type="type" @compare="compare" />
+        <copmpare-modeler :fullScreenVisible="false" attitude="left" :diagram="diagram" :version="diagram1" ref="modeler1" :type="type" @compare="compare" />
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="diagram-right-section diagram-section">
-        <copmpare-modeler :diagram="diagram" :version="diagram2" :type="type" ref="modeler2"  @compare="compare" />
+        <copmpare-modeler :fullScreenVisible="false" attitude="right" :diagram="diagram" :version="diagram2" :type="type" ref="modeler2"  @compare="compare" />
       </SplitArea>
       <SplitArea :size="splitDiffSize" :minSize="0" class="difference-section difference-section">
         <div class="difference-panel-container" >
           <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
             {{$t('bpmn.labels.Differences')}}
           </v-toolbar>
-          <v-list class="difference-list" v-if="diagram">
-            <v-list-item-group  v-for="type in Object.entries(changes) " :key="type[0]" >
+          <v-list class="difference-list md-scroll" v-if="diagram">
+            <v-list-item-group v-for="type in Object.entries(changes) " :key="type[0]" >
               <div v-if="Object.keys(type[1]).length > 0">
                 <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
                 <v-divider :class="type[0].substr(1)" style="width: 90%" />
-                <v-list-item class="row d-flex ma-1 pl-1" v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)">
-                  <v-list-item-icon class="list-icon mx-0">
-                    <v-icon size="17">mdi-chevron-right</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content style="text-align: start" class="px-2 py-2">
-                    <v-list-item-title>{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                <v-list-group v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple>
+                  <template v-slot:activator @leave="activator = !activator">
+                    <v-list-item-content>
+                      <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
+                      <v-list-item-subtitle class="item-subtitle">{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </template>
+                    <div class="difference-description">{{item}}</div>
+                </v-list-group>
                 <v-divider />
               </div>
             </v-list-item-group>
@@ -151,7 +151,7 @@ export default {
             el.children[0].firstChild.style.stroke = color;
             el.children[0].firstChild.style.strokeWidth = '2px';
           });
-          overlayHtml = `<div class="${elem.id}"></div>`;
+          overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:10px; height:10px"></div>`;
           break;
         default:
           overlayHtml = '<div></div>';
@@ -236,7 +236,7 @@ export default {
       }
       let elements = document.querySelectorAll(`.${id}`);
       elements.forEach( el => el.classList.add('choosed'));
-
+      this.scrollToElement(id);
     },
     findElem(id) {
       let elements = document.querySelectorAll(`.${id}`);
@@ -262,11 +262,49 @@ export default {
       syncViewbox(currentDiagramm, milestoneDiagramm);
       syncViewbox(milestoneDiagramm, currentDiagramm);
       this.initSyncViewers = true;
+    },
+    scrollToElement(id) {
+      let modeler1 = this.$refs.modeler1,
+        modeler2 = this.$refs.modeler2;
+      if (!modeler1 || !modeler2 ) {
+        return;
+      }
+      var modeler = modeler1.modeler.get('elementRegistry').get(id) ? modeler1 : modeler2,
+        viewer = modeler.modeler,
+        modelerElement = modeler.$el,
+        element = viewer.get('elementRegistry').get(id);
+      if (!element || !modelerElement) {
+        return;
+      }
+      let modelerHeight = modelerElement.offsetHeight,
+        modelerWidth = modelerElement.offsetWidth,
+        x,
+        y;
+      if (element === viewer.get('canvas').getRootElement()) {
+        x = (modelerWidth / 2);
+        y = (modelerHeight / 2) - 100;
+      } else
+      if (element.waypoints) {
+        x = element.waypoints[0].x;
+        y = element.waypoints[0].y;
+      } else {
+        x = element.x + element.width / 2;
+        y = element.y + element.height / 2;
+      }
+      viewer.get('canvas').viewbox({
+        x: x - (modelerWidth / 2),
+        y: y - ((modelerHeight / 2) - 100),
+        width: modelerWidth,
+        height: modelerHeight
+      });
     }
   },
 };
 </script>
 <style lang="scss" scoped>
+.compare-component {
+  max-height: calc(100vh - 50px);
+}
 .diagram-section {
   width: 100%;
   height: 100%;
@@ -303,17 +341,49 @@ export default {
 }
 
 .difference-list {
+  height: calc(100% - 40px) !important;
+  text-align: start;
   height: 100%;
-
-  .v-list-item__title {
+  overflow-y: auto;
+  padding: 0;
+  .item-title {
     font-size: 13px;
   }
-  .v-list-item__subtitle {
+  .item-subtitle {
     font-size: 12px;
   }
 }
+.difference-description {
+  padding: 0 20px !important;
+  color: #848484;
+  font-size: 12px;
+}
 
+.md-scroll::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px;
+    height: 16px
+  }
+  /* background of the scrollbar except button or resizer */
+  .md-scroll::-webkit-scrollbar-track {
+      background-color:#fff
+  }
+  .md-scroll::-webkit-scrollbar-track:hover {
+      background-color:#fff
+  }
 
+  /* scrollbar itself */
+  .md-scroll::-webkit-scrollbar-thumb {
+      background-color:#babac0;
+      border-radius:16px;
+      border:5px solid #fff
+  }
+  .md-scroll::-webkit-scrollbar-thumb:hover {
+      background-color:#a0a0a5;
+      border:4px solid #f4f4f4
+  }
+  /* set button(top and bottom of the scrollbar) */
+  .md-scroll::-webkit-scrollbar-button {display:none}
 
 </style>
 <style lang="scss">

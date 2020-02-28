@@ -9,6 +9,7 @@
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.bubble.css';
 import { fullScreenMixin } from '../../mixins';
+import { quillEditor } from 'vue-quill-editor';
 
 const TOOLBAR_CONFIG = [
   [{ header: ['1', '2', '3', false] }],
@@ -22,7 +23,7 @@ export default {
   name: 'properties-panel-rich-edit',
   mixins: [fullScreenMixin],
   components: {
-    quillEditor: async () =>  (await import(/* webpackChunkName: "quill" */ 'vue-quill-editor')).quillEditor
+    quillEditor
   },
   props: {
     label: {
@@ -40,9 +41,13 @@ export default {
       isfullscreen: false,
       fullscreenEnabled: document.fullscreenEnabled,
       editorOptions: {
-        theme: 'bubble', 
-        modules: { toolbar: TOOLBAR_CONFIG },
-        bounds: document.querySelector('.properties-panel-container')
+        theme: 'bubble',
+        modules: {
+
+          toolbar: ['bold', 'italic', 'underline', 'strike']
+        },
+        bounds: document.querySelector('.properties-panel-container'),
+        placeholder: this.$t('bpmn.labels.InsertTextHere')
       },
       content: ''
     };
@@ -77,7 +82,7 @@ export default {
     this.changeReadOnly(this.readonly);
     this.readonly = !!this.readonly;
     const fullscreenBtn = document.querySelector('button.ql-fullscreen');
-    fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
+    // fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
   },
   methods: {
     getFullScreenContainer() {
@@ -90,7 +95,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" >
+<style lang="scss" scoped>
   .quill-editor,
   .quill-code {
     height: 20rem;
@@ -109,7 +114,7 @@ export default {
   }
 }
 .ql-bubble .ql-toolbar .ql-formats {
-  margin: 4px 5px 4px 0px; 
+  margin: 4px 5px 4px 0px;
   &:first-child {
     margin-left: 0px;
   }
@@ -119,7 +124,7 @@ export default {
 }
 
 .quill-editor:fullscreen .ql-container {
-  height: calc(100% - 40px); 
+  height: calc(100% - 40px);
 }
 
 .quill-editor:fullscreen .ql-editor {

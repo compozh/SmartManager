@@ -134,7 +134,10 @@
 		"SelectBusinessObject": "Select Business Object",
 		"SelectBusinessObjectAction": "Select Business Object Action",
 		"SelectBusinessObjectAccess": "Select Business Object Access",
-		"MilestoneCreated": "Version created"
+		"MilestoneCreated": "Version created",
+		"EnterVersionName": "Enter version name",
+		"NewVersion": "New version",
+		"InsertTextHere": "Insert text here ..."
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -170,7 +173,8 @@
     "Wait" : "Keep calm and wait for a while",
     "TryAgain" : "You can try again",
     "Er403" : "Sorry, but you do not have access",
-    "Er402" : "Sorry, this content was not purchased"
+	"Er402" : "Sorry, this content was not purchased",
+	"MinCharacters": "Min 3 characters"
 	},
 	"enums": {
 		"AccessType": {

@@ -129,7 +129,7 @@
             <v-list-item-title>{{ $t('bpmn.buttons.Delete') }}</v-list-item-title>
           </v-list-item>
         </template>
-        
+
         <template v-if="milestones || !onlyExport && !isFolder(item) && canEdit(item)">
           <v-menu offset-x bottom
             v-model="explorer"
@@ -157,13 +157,13 @@
           <v-list-item-avatar>
             <v-icon>mdi-compare</v-icon>
           </v-list-item-avatar>
-          <v-list-item-title>{{ $t('bpmn.buttons.Compare')}} {{ item.name}}  {{$t('bpmn.labels.With')}}  {{version.name}}</v-list-item-title>
+          <v-list-item-title>{{ $t('bpmn.buttons.Compare')}} {{'"' + item.name + '"'}}  {{$t('bpmn.labels.With')}}  {{'"' + version.name + '"'}}</v-list-item-title>
         </v-list-item>
         <v-list-item @click="compare(item, diagram)" >
           <v-list-item-avatar>
             <v-icon>mdi-compare</v-icon>
           </v-list-item-avatar>
-          <v-list-item-title>{{ $t('bpmn.buttons.Compare')}} {{ item.name}}  {{$t('bpmn.labels.With')}}  {{$t('bpmn.labels.WithLastVersion')}}</v-list-item-title>
+          <v-list-item-title>{{ $t('bpmn.buttons.Compare')}} {{'"' + item.name + '"'}}  {{$t('bpmn.labels.With')}}  {{$t('bpmn.labels.WithLastVersion')}}</v-list-item-title>
         </v-list-item>
       </template>
     </v-list>
@@ -173,7 +173,7 @@
 import { eventBus } from '../main';
 import { events } from '../constants';
 import * as Models from '../api/models';
-import { Notification } from 'element-ui'
+import { Notification } from 'element-ui';
 
 export default {
   name: 'bpmn-contex-menu',
@@ -263,12 +263,8 @@ export default {
     isDmn(item) {
       return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
     },
-    async createVersion(item) {
-       if (!(await this.$store.dispatch('bpmn/createDiagramVersion', item.id || item))) {
-        Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
-      } else {
-        Notification.success(this.$t('bpmn.labels.MilestoneCreated'));
-      }
+    createVersion(item) {
+      eventBus.$emit(events.modeler.showCreateVersionDialog, item);
     },
     async apply(item) {
       await this.$store.dispatch('bpmn/applyDiagramVersion', {diagramId: item.diagramId, versionId: item.versionId});

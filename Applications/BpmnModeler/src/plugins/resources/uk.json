@@ -138,7 +138,10 @@
 		"SelectBusinessObject": "Виберіть бізнес-об'єкт",
 		"SelectBusinessObjectAction": "Виберіть дію над бізнес-об'єктом",
 		"SelectBusinessObjectAccess": "Виберіть налаштування доступу до бізнес-об'єкта",
-		"MilestoneCreated": "Версію створено"
+		"MilestoneCreated": "Версію створено",
+		"EnterVersionName": "Введіть назву версії",
+		"NewVersion": "Нова версія",
+		"InsertTextHere": "Введіть текст сюди ..."
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -174,7 +177,8 @@
 		"Wait" : "Зберігайте спокій і зачекайте деякий час",
 		"TryAgain" : "Ви можете спробувати ще раз",
 		"Er403" : "Вибачте, але Вы не маєте доступу",
-		"Er402" : "Вибачте, цей контент не придбано"		
+		"Er402" : "Вибачте, цей контент не придбано",
+		"MinCharacters": "Мінімум 3 знаки"	
 	},
 	"enums": {
 		"AccessType": {
