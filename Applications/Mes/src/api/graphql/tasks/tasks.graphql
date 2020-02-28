@@ -20,6 +20,7 @@
 		manualBeginRegistration
 		productionRegistrationType
 		completionPercentage
+		isVisibleButtonToTakingTaskToWork
     }
   }
 }
