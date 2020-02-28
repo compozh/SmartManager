@@ -5,7 +5,7 @@ import GrapgQlCore from '@it-enterprise/graphql';
 import auth from '@it-enterprise/jwtauthentication';
 import formio from '@it-enterprise/formio';
 import '@it-enterprise/formio/dist/formio.css';
-
+// test
 // vue пакеты
 import Vue from 'vue';
 import Vuex from 'vuex';
