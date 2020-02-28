@@ -236,6 +236,7 @@ export default {
       }
       let elements = document.querySelectorAll(`.${id}`);
       elements.forEach( el => el.classList.add('choosed'));
+      this.scrollToElement(id);
     },
     findElem(id) {
       let elements = document.querySelectorAll(`.${id}`);
@@ -261,6 +262,41 @@ export default {
       syncViewbox(currentDiagramm, milestoneDiagramm);
       syncViewbox(milestoneDiagramm, currentDiagramm);
       this.initSyncViewers = true;
+    },
+    scrollToElement(id) {
+      let modeler1 = this.$refs.modeler1,
+        modeler2 = this.$refs.modeler2;
+      if (!modeler1 || !modeler2 ) {
+        return;
+      }
+      var modeler = modeler1.modeler.get('elementRegistry').get(id) ? modeler1 : modeler2,
+        viewer = modeler.modeler,
+        modelerElement = modeler.$el,
+        element = viewer.get('elementRegistry').get(id);
+      if (!element || !modelerElement) {
+        return;
+      }
+      let modelerHeight = modelerElement.offsetHeight,
+        modelerWidth = modelerElement.offsetWidth,
+        x,
+        y;
+      if (element === viewer.get('canvas').getRootElement()) {
+        x = (modelerWidth / 2);
+        y = (modelerHeight / 2) - 100;
+      } else
+      if (element.waypoints) {
+        x = element.waypoints[0].x;
+        y = element.waypoints[0].y;
+      } else {
+        x = element.x + element.width / 2;
+        y = element.y + element.height / 2;
+      }
+      viewer.get('canvas').viewbox({
+        x: x - (modelerWidth / 2),
+        y: y - ((modelerHeight / 2) - 100),
+        width: modelerWidth,
+        height: modelerHeight
+      });
     }
   },
 };
