@@ -150,7 +150,6 @@ export default {
         this.chosen = this.chosen.filter( el => el.id != val.id);
       } else {
         this.chosen.push(val);
-        setTimeout(() => this.$vuetify.goTo('.v-footer'), 0);
       }
     },
     getChildren(children) {
