@@ -41,5 +41,9 @@ export default {
 
   lessonContent(state) {
     return state.lessonContent
+  },
+
+  currentTestPage(state) {
+    return state.currentTestPage
   }
 }

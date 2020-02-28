@@ -224,6 +224,9 @@ export default {
     }
   },
   methods: {
+    getApplicationParams() {
+      this.$store.dispatch('sm/getApplicationParams')
+    },
     setUserData() {
       this.$store.dispatch('auth/setUserData')
     },
@@ -269,6 +272,7 @@ export default {
     }
   },
   created() {
+    this.getApplicationParams()
     this.setUserData()
     this.getFolders()
     this.setSidebarWidth()

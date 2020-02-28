@@ -10,6 +10,10 @@ import modules from './graphql/modules.graphql'
 import availableFilters from './graphql/availableFilters.graphql'
 import courseDetails from './graphql/courseDetails.graphql'
 import lessonContent from './graphql/lessonContent.graphql'
+import finishLesson from './graphql/finishLesson.graphql'
+import fixStartCourse from './graphql/fixStartCourse.graphql'
+import saveLessonPageState from './graphql/saveLessonPageState.graphql'
+import restoreLessonPageState from './graphql/restoreLessonPageState.graphql'
 
 const getClient = async () => {
   const token = await auth.getToken()
@@ -17,9 +21,12 @@ const getClient = async () => {
     credentials: 'include',
     uri: window.myConfig.GrapgQlUrl + 'api/graphql',
     headers: {
-      'Authorization': `Bearer ${token}`,
+
       'schema': 'LMSSCHEMA'
     }
+  }
+  if (token) {
+    options.headers['Authorization'] = `Bearer ${token}`
   }
   return new ApolloClient({
     cache: new InMemoryCache(),
@@ -85,12 +92,61 @@ export class LmsApi {
     }
   }
 
+  static async savePageStateFromGql(courseGuid, pageState) {
+    try {
+      const client = await getClient()
+      return await client.mutate({
+        mutation: gql` ${saveLessonPageState}`,
+        variables: {courseGuid, pageState}
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  static async restorePageStateFromGql(courseGuid) {
+    try {
+      const client = await getClient()
+      const result = await client.query({
+        query: gql`query ($courseGuid: String!) ${restoreLessonPageState}`,
+        variables: {courseGuid}
+      })
+      return result ? result.data.lms.restoreLessonPageState.pageStateParamsJson : ''
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
   static async getLessonContentFromGql(lessonid, isfree) {
     try {
       const client = await getClient()
       return await client.query({
         query: gql`query ($lessonid: ID, $isfree: Boolean) ${lessonContent}`,
         variables: {lessonid, isfree}
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  static async fixCourseStartFromGql(courseGuid) {
+    try {
+      const client = await getClient()
+      return await client.mutate({
+        mutation: gql`${fixStartCourse}`,
+        variables: {courseGuid}
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  static async fixLessonPassingFromGql(courseGuid, lessonGuid) {
+    try {
+      const client = await getClient()
+      return await client.mutate({
+        mutation: gql`${finishLesson}`,
+        variables: {lessonGuid, courseGuid}
       })
     } catch (e) {
       console.log(e.message)

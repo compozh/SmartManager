@@ -321,7 +321,14 @@
             >{{ $t('buttons.attachmentEds') }} </vs-button>
 
           </div>
+
           <vs-spacer></vs-spacer>
+
+          <div v-if="taskList" class="flex items-center mr-3">
+            <label for="helperexec" class="pr-4">{{ $t('tasks.handled') }}</label>
+            <vs-switch id="helperexec" v-model="helperexec"/>
+          </div>
+
           <vs-button type="flat" class="flex items-center p-0">
             <vs-icon size="small" icon="more_vert" class="p-0"></vs-icon>
           </vs-button>
@@ -346,14 +353,15 @@
 </template>
 
 <script>
-
 import templateConfig from '@/templateConfig'
 import 'swiper/dist/css/swiper.min.css'
 import {eventBus} from '@/main'
 import {mapGetters} from 'vuex'
+import {tasks} from '@/mixins/tasks'
 
 export default {
   name: 'the-navbar',
+  mixins: [tasks],
   props: {
     navbarColor: {
       type: String,
@@ -386,6 +394,14 @@ export default {
       const id = +this.$route.params.taskId
       const task = this.$store.state.sm.taskInfo[id]
       return task ? task : {}
+    },
+    helperexec: {
+      get() {
+        return this.$store.state.sm.helperexec
+      },
+      set (val) {
+        this.$store.commit('sm/setHelperexec', val)
+      }
     },
     caseItem() {
       const id = +this.$route.params.caseId
@@ -510,6 +526,12 @@ export default {
   beforeRouteEnter(to, from, next) {
     to.params.routeToBack = from.path
     next()
+  },
+  watch: {
+    helperexec() {
+      const folderCode = this.$store.state.sm.currentFolder
+      this.getTasks(folderCode, true)
+    }
   },
   methods: {
     getPrompt(stage) {

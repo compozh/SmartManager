@@ -1,6 +1,6 @@
-query ($folderId: String) {
+query ($folderId: String, $helperexec: Boolean) {
   smtasks {
-    tasks(folderId: $folderId) {
+    tasks(folderId: $folderId, helperexec: $helperexec) {
       id
       name
       descript
