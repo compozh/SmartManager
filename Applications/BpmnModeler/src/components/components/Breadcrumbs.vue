@@ -64,42 +64,40 @@ export default {
     elements() {
       let item = this.item(),
         elements = [];
+      if (!item) {
+        return elements;
+      }
+      var oneTierItems = this.flattenArr(this.items);
+      elements.push(item);
 
-      if (item && item.parentId) {
-        let el = treeSearch(this.items, e => {
-          return e.isFolder && e.items.find(i => { 
-            return  i.id === item.id; 
-          });
-        });
-        if (!el[0]) {
-          return [item];
+      var findParent = function(item, items, elements) {
+        if (item.parentId) {
+          let parent = items.find(i => i.id === item.parentId);
+          elements.unshift(parent);
+          findParent(parent, items, elements);
+        } else {
+          return elements;
         }
-        let parentId = el[0].item.id, parent;
-        while (parentId) {
-          parent  = treeSearch(this.items, e => e.isFolder && e.items.find(i => i.id === parentId));
-          if (parent[0]) {
-            parentId = parent[0].item.id;
-            elements.push(parent[0].item);
-          } else {
-            parentId = false;
-            elements.push(el[0].item);
-          }
-        }
-      }
-      if (item) {
-        elements.push(item);
-        if (this.$route.name == 'milestones' || this.$route.name == 'compare') {
-          elements.push({ routeName: 'milestones', name: this.$t('bpmn.labels.Milestones')});
-        }
-      } 
-      if (this.$route.name == 'compare') {
-        this.getVersions();
-        elements.push(this.compare);
-      }
-      return elements;   
+      };
+      findParent(item, oneTierItems, elements);
+      return elements;
     },
   },
   methods: {
+    flattenArr(items) {
+      var result = [];
+      result.push(items);
+      var flattenFn = function(items) {
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].items && items[i].items.length) {
+            flattenFn(items[i].items);
+          }
+          result.push(items[i]);
+        }
+      };
+      flattenFn(items);
+      return result;
+    },
     canShare(item) {
       if (!item) { return false; }
       return item.hasRight(Models.AccessRights.Share);
