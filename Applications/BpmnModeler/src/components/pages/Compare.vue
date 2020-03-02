@@ -192,7 +192,6 @@ export default {
           });
         });
       }
-
       let self = this;
       await loadModels(xml1, xml2,  (err, aDefinitions, bDefinitions) => {
         this.changes = diff(aDefinitions, bDefinitions);
@@ -249,14 +248,15 @@ export default {
       var changing = false;
 
       function syncViewbox(a, b) {
-        a.on(['drag.init', 'canvas.viewbox.changed'], (e) => {
+        a.on('canvas.viewbox.changed', (e) => {
           if (changing) {
             changing = false;
             return;
           }
+          changing = true;
           var box  = b.get('canvas');
           box.viewbox(e.viewbox);
-          changing = true;
+          changing = false;
         });
       }
       syncViewbox(currentDiagramm, milestoneDiagramm);

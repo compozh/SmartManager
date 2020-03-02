@@ -75,7 +75,10 @@ function createBpmnViewer(editorContainer, translate) {
     moddleExtensions: {
       camunda: camundaBpmnModdle,
       workflow: workflowBpmnModdle
-    }   
+    },
+    canvas: {
+      deferUpdate: false
+    }
   });
 }
 
@@ -110,6 +113,9 @@ function createCmmnViewer(editorContainer, translate) {
     moddleExtensions: {
       camunda: camundaCmmnModdle,
       workflow: workflowCmmnModdle
+    },
+    canvas: {
+      deferUpdate: false
     }
   });
 }
@@ -171,5 +177,8 @@ function createDmnViewer(editorContainer, translate) {
         createTranslationModule(translate)
       ]
     },
+    canvas: {
+      deferUpdate: false
+    }
   });
 }
