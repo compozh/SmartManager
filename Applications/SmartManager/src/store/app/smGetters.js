@@ -1,4 +1,5 @@
 export default {
+  appParams: state => state.applicationParams || {},
   search: () => (item, searchFields, value) => {
     for (let i = 0; i < searchFields.length; i++) {
       let searchField = searchFields[i]

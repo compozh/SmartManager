@@ -1,4 +1,7 @@
 export default {
+  SET_ATTACHMENT_TYPES(state, types) {
+    state.attachmentTypes = types
+  },
   SET_ATTACHMENT_DETAILS(state, {fileId, fileDetails, taskOrCaseId: id, rootState}) {
     if (fileDetails.ErrorMessage) {
       state.currentAttachment = {
@@ -23,5 +26,8 @@ export default {
   },
   TOGGLE_EDS_POPUP(state, payload) {
     state.edsPopup = payload
+  },
+  TOGGLE_TYPES_DIALOG(state, payload) {
+    state.addAttachmentDialog = payload
   }
 }
