@@ -7,7 +7,7 @@
       <SplitArea :size="splitSize" :minSize="0" class="diagram-right-section diagram-section">
         <copmpare-modeler :fullScreenVisible="false" attitude="right" :diagram="diagram" :version="diagram2" :type="type" ref="modeler2"  @compare="compare" />
       </SplitArea>
-      <SplitArea :size="splitDiffSize" :minSize="0" class="difference-section difference-section">
+      <SplitArea :size="splitDiffSize" :minSize="1" class="difference-section difference-section">
         <div class="difference-panel-container" >
           <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
             {{$t('bpmn.labels.Differences')}}
@@ -121,6 +121,7 @@ export default {
         if (this.type !== 'BPMN') {
           return;
         }
+        value = value == 0 ? 1 : value;
         this.splitDiff = value;
         localStorage.setItem('properties-panel-split-size', value);
       }
