@@ -21,7 +21,7 @@ import ContextPadProvider from '../bpmnModules/context-pad/';
 
 import WorkflowRules from '../bpmnModules/rules';
 
-import viewBox from '../bpmnModules/canvas';
+import CanvasModule from '../bpmnModules/canvas';
 
 export default function editorFactory(type, readonly, editorContainer, translate) {
   switch (type) {
@@ -55,7 +55,7 @@ function createBpmnModeler(editorContainer, translate) {
       createTranslationModule(translate),
       ContextPadProvider,
       WorkflowRules,
-      viewBox
+      CanvasModule
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
@@ -74,7 +74,7 @@ function createBpmnViewer(editorContainer, translate) {
       camundaExtensionModule,
       minimapModule,
       createTranslationModule(translate),
-      viewBox
+      CanvasModule
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,

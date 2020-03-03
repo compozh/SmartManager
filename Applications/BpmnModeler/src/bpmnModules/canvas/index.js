@@ -1,5 +1,9 @@
-import viewBox from './viewbox';
+import DrawModule from 'diagram-js/lib/draw';
+
+import Canvas from './Canvas';
 
 export default {
-  viewbox: ['type', viewBox]
+  depends: [ DrawModule ],
+  init: [ 'canvas' ],
+  canvas: [ 'type', Canvas ],
 };
