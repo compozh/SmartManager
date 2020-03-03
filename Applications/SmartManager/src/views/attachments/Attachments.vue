@@ -9,6 +9,28 @@
       <no-data v-else class="p-8">{{ currentAttachment.reason }}</no-data>
     </div>
     <attachment-eds></attachment-eds>
+
+    <vs-popup :title="$t('attachments.typesTitle')"
+              :active.sync="$store.state.sm.attachments.addAttachmentDialog">
+      <vs-list class="flex flex-col">
+        <vs-radio v-for="type in attachmentTypes"
+                  :key="type.CODE"
+                  v-model="attachmentType"
+                  :vs-value="type.CODE"
+                  class="p-1 px-2"
+                  :class="{'order-first': type.CODE === ''}">
+          <vs-list-item :title="type.NAME"/>
+        </vs-radio>
+      </vs-list>
+      <label v-if="attachmentType !== null"
+             id="addLabel" for="file"
+             class="cursor-pointer text-primary mt-2 float-right"
+             @click="$store.commit('sm/TOGGLE_TYPES_DIALOG', false)">
+        <vs-icon style="margin: 0 5px 1px 0;">library_add</vs-icon>
+        {{ $t('buttons.addAttachment') }}
+      </label>
+    </vs-popup>
+
     <files-upload @attach="getAttachment($event)"
                   :uploadErrors="uploadErrors"
                   :fileList="false"
@@ -44,9 +66,9 @@ export default {
     index: 0,
     fileId: 0,
     fileUrl: '',
-    types: [],
     attachments: [],
     uploadErrors: [],
+    attachmentType: null,
     settings: {
       maxScrollbarLength: 60,
       wheelSpeed: 0.50,
@@ -60,6 +82,7 @@ export default {
       this.fileId = this.originals.length ? this.originals[0].id : 0
     }
     this.toAttachment(this.fileId)
+    this.getAttachmentTypes()
   },
   computed: {
     task() {
@@ -68,8 +91,7 @@ export default {
       return task ? task : {}
     },
     originals() {
-      return this.task.originals
-             && this.task.originals.length
+      return this.task.originals && this.task.originals.length
         ? this.task.originals
         : []
     },
@@ -105,6 +127,9 @@ export default {
           default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
         }
       }
+    },
+    attachmentTypes() {
+      return this.$store.state.sm.attachments.attachmentTypes || []
     },
     currentAttachment() {
       return this.$store.state.sm.attachments.currentAttachment || {}
@@ -142,15 +167,11 @@ export default {
     }
   },
   methods: {
-    uploadAdd() {
-      this.$refs.upload.add()
-    },
     toAttachment(id) {
       if (id) {
         this.$router.push({name: 'task-attachment', params: {attachmentId: id}})
         const attachment = this.originals.find(o => o.id === id) || {}
         this.getDetails(attachment)
-        //this.getAttachmentTypes()
       }
     },
     async getDetails({id: fileId, fileExt}) {
@@ -160,14 +181,18 @@ export default {
       this.fileUrl = fileDetails.FileName ? fileDetails.FileUrl : null
     },
     async getAttachmentTypes() {
-      this.types = await this.$store.dispatch('sm/getAttachmentTypes', this.attachmentParams)
+      await this.$store.dispatch('sm/getAttachmentTypes', this.attachmentParams)
     },
     getAttachment(event) {
       this.attachments = event
       this.addAttachments()
     },
     async addAttachments() {
-      const attachments = JSON.stringify(this.attachments)
+      if (this.attachmentTypes.length === 1) {
+        this.attachmentType = this.attachmentTypes[0].CODE
+      }
+      this.attachments.forEach(a => a.type = this.attachmentType)
+      const attachments = this.attachments
       const params = this.attachmentParams
       // Returns results list
       const results = await this.$store.dispatch('sm/addAttachments', {attachments, params})
@@ -247,5 +272,17 @@ export default {
     display: none;
   }
 
+  #addLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 62px;
+    height: 28px;
+    padding-top: 1px;
+    border-radius: 0.375rem;
+  }
 
+  #addLabel:hover {
+    background: rgba(var(--vs-primary),.08)!important;
+  }
 </style>

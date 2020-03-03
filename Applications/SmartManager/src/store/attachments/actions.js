@@ -36,24 +36,26 @@ export default {
       notify('danger', 'taskTitle', 'taskError')
     }
   },
-  async getAttachmentTypes(context, params) {
+  async getAttachmentTypes({commit}, params) {
     const paramsJson = JSON.stringify(params)
     startLoading()
     try {
       const response = await api.getAttachmentTypesFromGql(paramsJson)
       stopLoading()
-      return response.data.smtasks.attachmentTypes
+      const result = JSON.parse(response.data.smtasks.attachmentTypes)
+      commit('SET_ATTACHMENT_TYPES', result)
     } catch (e) {
       stopLoading()
       console.log(e.message)
       notify('danger', 'commentsTitle', 'commentAddError')
     }
   },
-  async addAttachments({dispatch}, {attachments, params}) {
-    const paramsJson = JSON.stringify(params)
+  async addAttachments({dispatch}, payload) {
     startLoading()
+    const attachments = JSON.stringify(payload.attachments)
+    const params = JSON.stringify(payload.params)
     try {
-      const response = await api.addAttachmentsInGql(attachments, paramsJson)
+      const response = await api.addAttachmentsInGql(attachments, params)
       stopLoading()
       // Returns results list
       const results = response.data.smtasksMutation.addAttachments
@@ -75,8 +77,9 @@ export default {
         }
       })
       await dispatch('updateInfo', {
-        type: params.type,
-        id: params.id,
+        type: payload.params.type,
+        id: payload.params.id,
+        loading: true
       })
       return results
     } catch (e) {

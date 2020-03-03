@@ -166,7 +166,8 @@
     "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
     "downloadFile": "Download and open file",
     "noAccess": "You do not have access to the attachment",
-    "notSelected": "File not selected"
+    "notSelected": "File not selected",
+    "typesTitle": "Choose attachments type"
   },
   "eds": {
     "eds": "Digital sign",
