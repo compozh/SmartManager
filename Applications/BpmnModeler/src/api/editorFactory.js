@@ -21,6 +21,8 @@ import ContextPadProvider from '../bpmnModules/context-pad/';
 
 import WorkflowRules from '../bpmnModules/rules';
 
+import viewBox from '../bpmnModules/canvas';
+
 export default function editorFactory(type, readonly, editorContainer, translate) {
   switch (type) {
   case DiagramType.BPMN:
@@ -52,7 +54,8 @@ function createBpmnModeler(editorContainer, translate) {
       minimapModule,
       createTranslationModule(translate),
       ContextPadProvider,
-      WorkflowRules
+      WorkflowRules,
+      viewBox
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
@@ -92,6 +95,7 @@ function createCmmnModeler(editorContainer, translate) {
       cmmnPropertiesPanelCommands,
       minimapModule,
       createTranslationModule(translate),
+      viewBox
     ],
     moddleExtensions: {
       camunda: camundaCmmnModdle,
