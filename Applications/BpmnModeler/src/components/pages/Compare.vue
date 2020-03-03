@@ -17,8 +17,8 @@
               <div v-if="Object.keys(type[1]).length > 0">
                 <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
                 <v-divider :class="type[0].substr(1)" style="width: 90%" />
-                <v-list-group v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple>
-                  <template v-slot:activator @leave="activator = !activator">
+                <v-list-group v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple v-model="item.active">
+                  <template v-slot:activator>
                     <v-list-item-content>
                       <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
                       <v-list-item-subtitle class="item-subtitle">{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
@@ -150,10 +150,10 @@ export default {
           var shapes = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
           shapes.forEach(el => {
             el.children[0].firstChild.style.fill = color;
-            el.children[0].firstChild.style.fillOpacity = 0.25;
+            el.children[0].firstChild.style.fillOpacity = 0.5;
           });
           overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${elem.width + 10}px; height: ${elem.height + 10}px" >
-                          <i class="compare-icon mdi ${icon} text-primary"></i>
+                          <i class="compare-icon mdi ${icon}"></i>
                         </div>`;
           break;
         case 'Connection':
