@@ -160,6 +160,11 @@ ImplementationTypeHelper.getImplementationType = function (element) {
     }
   }
 
+  var businessObjectTaskType = bo.get('IT-Enterprise:businessObjectTaskType');
+  if (typeof businessObjectTaskType === 'string') {
+    return businessObjectTaskType;
+  }
+
   if (this.isExternalCapable(bo)) {
     var type = bo.get('camunda:type');
     if (type === 'external') {
@@ -187,11 +192,6 @@ ImplementationTypeHelper.getImplementationType = function (element) {
     if (typeof script !== 'undefined') {
       return 'script';
     }
-  }
-
-  var businessObjectTaskType = bo.get('IT-Enterprise:businessObjectTaskType');
-  if (typeof businessObjectTaskType === 'string') {
-    return businessObjectTaskType;
   }
 
 };

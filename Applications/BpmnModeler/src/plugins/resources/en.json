@@ -65,7 +65,8 @@
 		"Id": "Id",
 		"SelectAction": "Select action",
 		"SelectForm": "Select Form",
-		"EnterTaskParams": "Enter task params",
+		"EnterTaskParams": "Enter task properties",
+		"EnterActionParams": "Enter action properties",
 		"SelectTaskCreationRule": "Select task creation rule",
 		"SelectProcess": "Select process",
 		"SelectDecisionTable": "Select decision table",
@@ -438,7 +439,8 @@
 		"Business Object": "Business Object",
 		"Business Object Action": "Business Object Action",
 		"Business Object Access": "Business Object Access",
-		"Business Object Key Variable Name": "Business Object Key Variable Name"
+		"Business Object Key Variable Name": "Business Object Key Variable Name",
+		"Action Properties": "Action Properties"
 	},
 	"dmn-modeler": {
 

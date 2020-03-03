@@ -66,6 +66,7 @@
 		"SelectAction": "Виберіть дію",
 		"SelectForm": "Виберіть форму",
 		"EnterTaskParams": "Введіть параметри задачі",
+		"EnterActionParams": "Введіть параметри дії",
 		"SelectTaskCreationRule": "Виберіть правило створення задачі",
 		"SelectProcess": "Виберіть процес",
 		"SelectDecisionTable": "Виберіть таблицю рішень",
@@ -442,7 +443,8 @@
 		"Business Object": "Бізнес-об'єкт",
 		"Business Object Action": "Дія бізнес-об'єкта",
 		"Business Object Access": "Доступ до бізнес-об'єкта",
-		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкта"
+		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкта",
+		"Action Properties": "Параметри дії"
 	},
 	"dmn-modeler": {
 

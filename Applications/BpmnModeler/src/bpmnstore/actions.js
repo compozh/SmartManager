@@ -428,6 +428,19 @@ export default {
     }
   },
 
+  async getBusinessObjectActionForm(context, logicalKey) {
+    try {
+      const result = JSON.parse(await api.getBusinessObjectActionForm(logicalKey));
+      if (result.Success) {
+        return result.FormioForm;
+      }
+      return false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
   //#endregion
 
   //#region Versions

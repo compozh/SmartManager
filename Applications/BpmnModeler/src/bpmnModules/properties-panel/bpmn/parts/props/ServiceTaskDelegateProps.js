@@ -5,7 +5,7 @@ import EntryFactory from '../../../EntryFactory';
 import { PropertiesPanelGroup } from '../../../Models';
 import { Diagram, ActionDefinitionType } from '../../../../../api/models';
 import { api } from '../../../../../api/bpmnApi';
-import { setServiceTaskParameters, findDataObject } from '../../../utils';
+import { setServiceTaskParameters, findDataObject, setBusinessObjectActionParameters } from '../../../utils';
 import { eventBus } from '../../../../../main';
 import { events } from '../../../../../constants';
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
@@ -27,6 +27,8 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
   }
 
   var hasExternalSupport = isExternalCapable(getServiceTaskLikeBusinessObject(element));
+
+  // Проверить наличие бизнес-объектов, привязанных к DataObjectReference
   var businessObjectsExists = elementRegistry.filter(element => {
     if (!is(element, 'bpmn:DataObjectReference')) {
       return false;
@@ -51,7 +53,11 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
     businessObjectsExists
   }));
 
-  if (isExternal(element)) {
+  const isBoAction = isBusinesssObjectAction(element),
+    isBoAccess = isBusinesssObjectAccess(element);
+
+  // Обработка для внешних задач не по бизнес-объектам
+  if (isExternal(element) && !(isBoAction || isBoAccess)) {
     var bo = getServiceTaskLikeBusinessObject(element);
 
     group.entries.push(
@@ -96,9 +102,8 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
     );
   }
 
+  // Действия и настройки доступа к бизнес-объектам привязываются только к сервисным задачам
   if (is(element, 'bpmn:ServiceTask')) {
-    const isBoAction = isBusinesssObjectAction(element),
-      isBoAccess = isBusinesssObjectAccess(element);
     const businessObject = getServiceTaskLikeBusinessObject(element);
 
     if (isBoAction || isBoAccess) {
@@ -149,7 +154,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
             label: translate('Business Object Action'),
             model: 'camunda:topic',
             loadItems: (async () => (await api.getBusinessObjectActions(boDefCode, diagram.isSystem))
-              .map(act => ({ id: `${act.boDefCode}.${act.actionDefCode}`, name: act.name })))(),
+              .map(act => ({ id: act.logicalKey, name: act.name })))(),
             appendIcon: 'mdi-magnify',
             append: () => {
               eventBus.$emit(events.propertiesPanel.selectBusinessObjectAction,
@@ -164,6 +169,25 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
                 });
             }
           }));
+
+          const topic = businessObject.get('camunda:topic');
+          if (typeof topic === 'string' && topic.trim() != '') {
+            console.log('camunda:topic');
+            api.getBusinessObjectActions(boDefCode, diagram.isSystem).then((actions) => {
+              const action = actions.find(act => act.logicalKey === topic);
+              if (!action || !action.parametersExists) {
+                console.log(action);
+                return;
+              }
+              group.entries.push(entryFactory.button({
+                id: 'boActDefCodeParams',
+                label: translate('Action Properties'),
+                click(element) {
+                  setBusinessObjectActionParameters(element, businessObject, topic, bpmnFactory, commandStack);
+                }
+              }));
+            });
+          }
         } else if (isBoAccess) {
           group.entries.push(entryFactory.autocompleteBox({
             id: 'boAccDefCode',
@@ -212,10 +236,18 @@ function isExternal(element) {
   return getImplementationType(element) === 'external';
 }
 
+/**
+ * Проверить, является ли элемент действием над бизнес-объектом
+ * @param {*} element 
+ */
 function isBusinesssObjectAction(element) {
   return getImplementationType(element) === 'businessObjectAction';
 }
 
+/**
+ * Проверить, является ли элемент настройкой доступа к бизнес-объекту
+ * @param {*} element
+ */
 function isBusinesssObjectAccess(element) {
   return getImplementationType(element) === 'businessObjectAccess';
 }
