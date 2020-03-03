@@ -122,7 +122,7 @@
                        icon="library_add"
                        color="primary"
                        type="flat"
-                       class="px-2 py-0 mr-2 fit -ml-3"
+                       class="px-2 py-0 mr-2 fit -ml-2"
                        to="/task-add"
             >{{ $t('buttons.addTask') }} </vs-button>
 
@@ -133,17 +133,16 @@
                        class="px-2 py-0 mr-2 fit"
                        @click="changeStatus('+')"
             >{{ task.id ? $t('buttons.execute') : $t('buttons.complete') }}
-
             </vs-button>
+
             <!-- CREATE CASE BUTTON -->
             <vs-button v-if="caseView || caseList"
                        icon="library_add"
                        color="primary"
                        type="flat"
-                       class="px-2 py-0 mr-2 fit -ml-3"
+                       class="px-2 py-0 mr-2 fit -ml-2"
                        to="/case-add"
-            >{{ $t('buttons.addCase') }}
-            </vs-button>
+            >{{ $t('buttons.addCase') }}</vs-button>
             <!-- START BUSINESS PROCESS BUTTON -->
             <vs-button v-if="taskList || caseList"
                        icon="launch"
@@ -151,8 +150,7 @@
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
                        to="/work-flow"
-            >{{ $t('buttons.startWorkflow') }}
-            </vs-button>
+            >{{ $t('buttons.startWorkflow') }}</vs-button>
             <!-- RETURN TASK/CASE TO WORK BUTTON -->
             <vs-button v-if="taskCompleted || caseStatus === '+'"
                        icon="settings_backup_restore"
@@ -160,8 +158,7 @@
                        type="flat"
                        class="px-2 py-0 mr-2 fit"
                        @click="changeStatus('')"
-            >{{ $t('buttons.returnToWork') }}
-            </vs-button>
+            >{{ $t('buttons.returnToWork') }}</vs-button>
             <!-- APPROVE/FORVARD DROPDOWN BUTTON -->
             <div class="flex fit" v-if="taskDetails && agreeTaskInWork">
               <vs-dropdown vs-trigger-click class="cursor-pointer">
@@ -282,7 +279,17 @@
           <!-- ATTACHMENT BUTTONS -->
           <div class="flex -ml-2" v-if="attachmentView">
 
-            <label id="addLabel" for="file"
+            <!-- ADD ATTACHMENT BUTTON -->
+            <vs-button v-if="attachmentTypes.length > 1"
+                       icon="library_add"
+                       color="primary"
+                       type="flat"
+                       class="px-2 py-0 mr-2 fit"
+                       @click="$store.commit('sm/TOGGLE_TYPES_DIALOG', true)"
+            >{{ $t('buttons.addAttachment') }} </vs-button>
+
+            <label v-else
+                   id="addLabel" for="file"
                    class="cursor-pointer text-primary">
               <vs-icon style="margin: 0 5px 1px 0;">library_add</vs-icon>
               {{ $t('buttons.addAttachment') }}
@@ -324,7 +331,7 @@
 
           <vs-spacer></vs-spacer>
 
-          <div v-if="taskList" class="flex items-center mr-3">
+          <div v-if="existHelper && taskList" class="flex items-center mr-3">
             <label for="helperexec" class="pr-4">{{ $t('tasks.handled') }}</label>
             <vs-switch id="helperexec" v-model="helperexec"/>
           </div>
@@ -395,6 +402,9 @@ export default {
       const task = this.$store.state.sm.taskInfo[id]
       return task ? task : {}
     },
+    existHelper() {
+      return this.$store.getters['sm/appParams'].EXISTSHELPER
+    },
     helperexec: {
       get() {
         return this.$store.state.sm.helperexec
@@ -416,6 +426,9 @@ export default {
     },
     taskType() {
       return this.task.taskType
+    },
+    attachmentTypes() {
+      return this.$store.state.sm.attachments.attachmentTypes || []
     },
     currentAttachment() {
       return this.$store.state.sm.attachments.currentAttachment || {}
@@ -673,11 +686,11 @@ export default {
   }
 
   button:hover > .btn-drop-approve {
-    background: rgba(var(--vs-success), .08) !important;;
+    background: rgba(var(--vs-success), .08) !important;
   }
 
   button:hover > .btn-drop-reject {
-    background: rgba(var(--vs-danger), .08) !important;;
+    background: rgba(var(--vs-danger), .08) !important;
   }
 
   #addLabel {
