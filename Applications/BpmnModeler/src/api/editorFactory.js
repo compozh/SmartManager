@@ -21,6 +21,8 @@ import ContextPadProvider from '../bpmnModules/context-pad/';
 
 import WorkflowRules from '../bpmnModules/rules';
 
+import CanvasModule from '../bpmnModules/canvas';
+
 export default function editorFactory(type, readonly, editorContainer, translate) {
   switch (type) {
   case DiagramType.BPMN:
@@ -52,7 +54,8 @@ function createBpmnModeler(editorContainer, translate) {
       minimapModule,
       createTranslationModule(translate),
       ContextPadProvider,
-      WorkflowRules
+      WorkflowRules,
+      CanvasModule
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
@@ -70,12 +73,16 @@ function createBpmnViewer(editorContainer, translate) {
     additionalModules: [
       camundaExtensionModule,
       minimapModule,
-      createTranslationModule(translate)
+      createTranslationModule(translate),
+      CanvasModule
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
       workflow: workflowBpmnModdle
-    }   
+    },
+    canvas: {
+      deferUpdate: false
+    }
   });
 }
 
@@ -88,7 +95,7 @@ function createCmmnModeler(editorContainer, translate) {
     additionalModules: [
       cmmnPropertiesPanelCommands,
       minimapModule,
-      createTranslationModule(translate),
+      createTranslationModule(translate)
     ],
     moddleExtensions: {
       camunda: camundaCmmnModdle,
@@ -110,6 +117,9 @@ function createCmmnViewer(editorContainer, translate) {
     moddleExtensions: {
       camunda: camundaCmmnModdle,
       workflow: workflowCmmnModdle
+    },
+    canvas: {
+      deferUpdate: false
     }
   });
 }
@@ -171,5 +181,8 @@ function createDmnViewer(editorContainer, translate) {
         createTranslationModule(translate)
       ]
     },
+    canvas: {
+      deferUpdate: false
+    }
   });
 }
