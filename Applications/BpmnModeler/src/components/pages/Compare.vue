@@ -105,6 +105,9 @@ export default {
     },
     splitDiffSize: {
       get() {
+        if (this.type !== 'BPMN') {
+          return 0;
+        }
         if (this.splitDiff === null) {
           let size = localStorage.getItem('properties-panel-split-size');
           if (typeof size !== 'string' || size === '') {
@@ -115,6 +118,9 @@ export default {
         return this.splitDiff;
       },
       set(value) {
+        if (this.type !== 'BPMN') {
+          return;
+        }
         this.splitDiff = value;
         localStorage.setItem('properties-panel-split-size', value);
       }
