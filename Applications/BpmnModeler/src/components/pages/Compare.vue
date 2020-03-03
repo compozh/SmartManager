@@ -140,18 +140,27 @@ export default {
         if (!elem) { return; }
         switch (elem.constructor.name) {
         case 'Shape':
+          var shapes = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
+          shapes.forEach(el => {
+            el.children[0].firstChild.style.fill = color;
+            el.children[0].firstChild.style.fillOpacity = 0.25;
+          });
           overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${elem.width + 10}px; height: ${elem.height + 10}px" >
-                          <span class="v-icon mdi ${icon} black--text compare-icon" style="right: -${elem.width / 2 + 5}px" title="${type.substr(1)}"></span>
+                          <i class="compare-icon mdi ${icon} text-primary"></i>
                         </div>`;
           break;
         case 'Connection':
           polylines = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
           polylines.forEach( el => {
-            el.children[0].firstChild.style.strokeDasharray = '10,10';
+            el.children[0].firstChild.style.strokeDasharray = '10,2';
             el.children[0].firstChild.style.stroke = color;
+            el.children[0].firstChild.style.strokeOpacity = 0.7;
             el.children[0].firstChild.style.strokeWidth = '2px';
           });
-          overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:10px; height:10px"></div>`;
+          var length = elem.waypoints.length - 1,
+            width = Math.abs(elem.waypoints[0].x - elem.waypoints[length].x) + 10,
+            height = Math.abs(elem.waypoints[0].y - elem.waypoints[length].y) + 10;
+          overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${width}px; height:${height}px"></div>`;
           break;
         default:
           overlayHtml = '<div></div>';
@@ -388,48 +397,45 @@ export default {
 </style>
 <style lang="scss">
   .added {
-    border: 2px solid green;
-    background-color: rgba($color: green, $alpha: 0.2);
     &.v-divider {
-      background-color: green
+      border-width: 2px;
+      background-color: rgba(0,128,0,.5);
     }
     &.choosed, &.found {
-      box-shadow: 5px 5px 5px green, -5px -5px 5px green,  5px -5px 5px green, -5px 5px 5px green
+      box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.75)
     }
   }
   .layoutChanged {
-    border: 2px solid blue;
-    background-color: rgba($color: blue, $alpha: 0.2);
     &.v-divider {
-      background-color: blue
+      border-width: 2px;
+      background-color: rgba(0,0,255,.5);
     }
     &.choosed, &.found {
-      box-shadow: 5px 5px 5px blue, -5px -5px 5px blue,  5px -5px 5px blue, -5px 5px 5px blue
+      box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.75)
     }
   }
   .changed {
-    border: 2px solid orange;
-    background-color: rgba($color: orange, $alpha: 0.2);
     &.v-divider {
-      background-color: orange
+      border-width: 2px;
+      background-color: rgba(255, 165, 0,.5)
     }
     &.choosed, &.found {
-      box-shadow: 5px 5px 5px orange, -5px -5px 5px orange,  5px -5px 5px orange, -5px 5px 5px orange
+      box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.75)
     }
   }
   .removed {
-    border: 2px solid red;
-    background-color: rgba($color: red, $alpha: 0.2);
     &.v-divider {
-      background-color: red
+      border-width: 2px;
+      background-color: rgba(255, 0, 0,.5)
     }
     &.choosed, &.found {
-      box-shadow: 5px 5px 5px red, -5px -5px 5px red,  5px -5px 5px red, -5px 5px 5px red
+      box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.75)
     }
   }
-  .compare-icon::before {
-    position: relative;
-    top: -26px;
+  .compare-icon {
+    position: absolute;
+    right:0;
+    top: -3px;
   }
   .workflow-modeler {
     height: 100%;
