@@ -2,7 +2,7 @@
     <v-overlay v-if="show" v-model="show" class="overlay-for-formio">
       <v-card width="800px" light class="dialog">
         <v-card-title>
-          <h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
+          <h4 class="headline mb-0">{{ this.title }}</h4>
         </v-card-title>
         <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
         <v-card-actions>
@@ -25,7 +25,8 @@ export default {
       show: false,
       code: '',
       definition: null,
-      callback: null
+      callback: null,
+      title: ''
     };
   },
   mounted() {
@@ -35,27 +36,30 @@ export default {
     eventBus.$off(events.formio.showForm, this.onShowForm);
   },
   methods: {
-    onShowForm(code, definition, callback) {
+    onShowForm(code, definition, title, callback) {
       this.code = code;
       this.definition = definition;
       this.show = true;
       this.callback = callback;
+      this.title = title;
     },
     async onSubmit() {
       var form = this.$refs.formioForm;
-      var submission = JSON.parse(form.getFormSubmission());     
+      var submission = form.getFormSubmission();     
       this.loading = true;
 
-      var result = await this.$store.dispatch('formio/submitForm', { formCode: this.code, submission: JSON.stringify(submission) });
+      var result = typeof this.code === 'string' && this.code.trim() != ''
+        ? await this.$store.dispatch('formio/submitForm', { formCode: this.code, submission: submission })
+        : { success: true };
 
       if (result && result.success) {
-        this.$emit('submit', submission);
+        this.$emit('submit', JSON.parse(submission));
       }
 
       this.loading = false;
       
       if (this.callback) {
-        this.callback(submission);
+        this.callback(JSON.parse(submission));
         this.callback = null;
       }
       this.show = false;

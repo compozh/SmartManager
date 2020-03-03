@@ -14,6 +14,7 @@ export default {
     eventBus.$on(events.propertiesPanel.selectBusinessObject, this.onPropertiesPanelSelectBusinessObject);
     eventBus.$on(events.propertiesPanel.selectBusinessObjectAccess, this.onPropertiesPanelSelectBusinessObjectAccess);
     eventBus.$on(events.propertiesPanel.selectBusinessObjectAction, this.onPropertiesPanelSelectBusinessObjectAction);
+    eventBus.$on(events.propertiesPanel.setBusinessObjectActionProperties, this.onPropertiesPanelSetBusinessObjectActionProperties);
   },
   beforeDestroy() {
     eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
@@ -25,6 +26,7 @@ export default {
     eventBus.$off(events.propertiesPanel.selectBusinessObject, this.onPropertiesPanelSelectBusinessObject);
     eventBus.$off(events.propertiesPanel.selectBusinessObjectAccess, this.onPropertiesPanelSelectBusinessObjectAccess);
     eventBus.$off(events.propertiesPanel.selectBusinessObjectAction, this.onPropertiesPanelSelectBusinessObjectAction);
+    eventBus.$off(events.propertiesPanel.setBusinessObjectActionProperties, this.onPropertiesPanelSetBusinessObjectActionProperties);
   },
   methods: {
     async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
@@ -87,7 +89,34 @@ export default {
       form.submission = JSON.stringify(submission);
       this.changeLoad();
 
-      eventBus.$emit(events.formio.showForm, action.unformio, form, (submission) => {
+      eventBus.$emit(events.formio.showForm, action.unformio, form, this.$t('bpmn.labels.EnterTaskParams'), (submission) => {
+        var params = [];
+        for (var param in submission.data) {
+          params.push({ name: param, type: typeof (submission.data[param]), value: submission.data[param] });
+        }
+        callback(params);
+      });
+    },
+    async onPropertiesPanelSetBusinessObjectActionProperties(logicalKey, existingParameters, callback) {
+      this.loading = true;
+      const form = await this.$store.dispatch('bpmn/getBusinessObjectActionForm', logicalKey);
+      if (!form) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.FormNotLoaded'));
+        return;
+      }
+
+      let submission = {};
+      if (existingParameters && existingParameters.length) {
+        for (let index = 0; index < existingParameters.length; index++) {
+          const element = existingParameters[index];
+          submission[element.name] = element.value;
+        }
+      }
+      form.submission = JSON.stringify(submission);
+      this.changeLoad();
+
+      eventBus.$emit(events.formio.showForm, undefined, form, this.$t('bpmn.labels.EnterActionParams'), (submission) => {
         var params = [];
         for (var param in submission.data) {
           params.push({ name: param, type: typeof (submission.data[param]), value: submission.data[param] });

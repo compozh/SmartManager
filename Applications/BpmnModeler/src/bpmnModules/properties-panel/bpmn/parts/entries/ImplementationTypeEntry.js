@@ -78,6 +78,13 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
 
         var props = assign({}, DELEGATE_PROPS);
 
+        if (BUSINESS_OBJECT_PROPS.indexOf(oldType) !== -1) {
+          props['IT-Enterprise:businessObjectTaskType'] = undefined;
+          props['IT-Enterprise:businessObjectDefinitionCode'] = undefined;
+          props['camunda:topic'] = undefined;
+          props['camunda:type'] = undefined;
+        }
+
         if (DEFAULT_DELEGATE_PROPS.indexOf(newType) !== -1) {
 
           var newValue = '';
@@ -95,13 +102,8 @@ export default class ImplementationTypeEntry extends PropertiesPanelEntry {
           }
         }
 
-        if (BUSINESS_OBJECT_PROPS.indexOf(oldType) !== -1) {
-          props['IT-Enterprise:businessObjectTaskType'] = undefined;
-          props['IT-Enterprise:businessObjectDefinitionCode'] = undefined;
-          props['camunda:topic'] = undefined;
-        }
-
         if (BUSINESS_OBJECT_PROPS.indexOf(newType) !== -1) {
+          props['camunda:type'] = 'external';
           props['IT-Enterprise:businessObjectTaskType'] = newType;
         }
 

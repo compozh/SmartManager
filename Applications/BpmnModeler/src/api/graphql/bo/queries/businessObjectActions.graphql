@@ -5,6 +5,8 @@
       actionDefCode
       name
       isSystem
+      logicalKey
+      parametersExists
     }
   }
 }

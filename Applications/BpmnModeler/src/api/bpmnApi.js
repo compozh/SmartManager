@@ -431,6 +431,14 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.businessObjectAccess;
   }
 
+  async getBusinessObjectActionForm(logicalKey) {
+    const result = await query({
+      query: gql`query ($logicalKey: String!) ${queries.businessObjectActionForm}`,
+      variables: { logicalKey }
+    });
+    return result.data.bpmnquery.businessObjectActionForm;
+  }
+
   //#endregion
 
 }

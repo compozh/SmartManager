@@ -179,6 +179,15 @@ export const events = {
      * @param {deployedCaseCallback} callback - коллбек, вызываемый после выбора доступа к бизнес-обьекту
      */
     selectBusinessObjectAccess: 'properties-panel.select-business-objectAccess',
+
+    /**
+     * Отобразить диалог ввода параметров задачи
+     * @event PropertiesPanel#setBusinessObjectActionProperties
+     * @param {string} logicalKey - код действия
+     * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
+     * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
+     */
+    setBusinessObjectActionProperties: 'properties-panel.set-business-object-task-parameters',
   },
   /** События formio */
   formio: {
