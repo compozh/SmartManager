@@ -73,7 +73,8 @@ function createBpmnViewer(editorContainer, translate) {
     additionalModules: [
       camundaExtensionModule,
       minimapModule,
-      createTranslationModule(translate)
+      createTranslationModule(translate),
+      viewBox
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
@@ -94,8 +95,7 @@ function createCmmnModeler(editorContainer, translate) {
     additionalModules: [
       cmmnPropertiesPanelCommands,
       minimapModule,
-      createTranslationModule(translate),
-      viewBox
+      createTranslationModule(translate)
     ],
     moddleExtensions: {
       camunda: camundaCmmnModdle,
