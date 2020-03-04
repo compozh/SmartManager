@@ -19,6 +19,7 @@ import { Tree, Collapse, CollapseItem, Tabs, TabPane } from 'element-ui';
 //import './element-variables.scss';
 import '@mdi/font/css/materialdesignicons.min.css';
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
+import JsonViewer from 'vue-json-viewer';
 
 import router from './router';
 import moment from 'moment';
@@ -61,6 +62,9 @@ Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Tabs);
 Vue.use(TabPane);
+
+// JsonViewer
+Vue.use(JsonViewer);
 
 // Плагины it-enterprise
 Vue.use(GrapgQlCore, { options: config, dependencies });

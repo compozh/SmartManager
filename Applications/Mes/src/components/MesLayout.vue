@@ -33,7 +33,7 @@
         @input="closeSnackbar"
         :value="true"
       >
-        <span v-html="snackbar.message">{{ snackbar.message }}</p></span>
+        <span v-html="snackbar.message">{{ snackbar.message }}</span>
 
         <v-btn @click.native="closeSnackbar" text color="white">
           {{this.$t('mes.buttons.Close')}}
