@@ -1,6 +1,5 @@
 // @it-enterprise пакеты
 import Localization from '@it-enterprise/localization';
-import Eds from '@it-enterprise/eds';
 import GrapgQlCore from '@it-enterprise/graphql';
 import auth from '@it-enterprise/jwtauthentication';
 import formio from '@it-enterprise/formio';
@@ -65,21 +64,20 @@ Vue.use(TabPane);
 // Плагины it-enterprise
 Vue.use(GrapgQlCore, { options: config, dependencies });
 Vue.use(Localization, { dependencies });
-Vue.use(Eds, { dependencies });
 
 var formioOptions = {
   auth,
   WsUrl: config.WsUrl,
   GraphQlUrl: config.GrapgQlUrl,
   onError: (obj) => {
-    console.log(obj);
+    console.error(obj);
   }
 };
 Vue.use(formio, { options: formioOptions, dependencies });
 
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import('./plugins/resources/en.json'));
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import('./plugins/resources/ru.json'));
-Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import('./plugins/resources/uk.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'en', () => import(/* webpackChunkName: "resources" */ './plugins/resources/en.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'ru', () => import(/* webpackChunkName: "resources" */ './plugins/resources/ru.json'));
+Vue.prototype.$localization.RegisterLanguage('bpmn', 'uk', () => import(/* webpackChunkName: "resources" */ './plugins/resources/uk.json'));
 
 export const eventBus = new Vue({
   router,

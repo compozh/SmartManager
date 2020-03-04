@@ -1,8 +1,5 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import ru from './resources/ru.json';
-import en from './resources/en.json';
-import uk from './resources/uk.json';
 
 Vue.use(VueI18n);
 
@@ -22,10 +19,5 @@ export const currentLang = () => {
 
 export const i18n = new VueI18n({
   silentTranslationWarn: process.env.NODE_ENV === 'production',
-  locale: currentLang(),
-  messages: {
-    ru: { bpmn: ru },
-    en: { bpmn: en },
-    uk: { bpmn: uk }
-  }
+  locale: currentLang()
 });

@@ -1,29 +1,18 @@
 <template>
   <div class="editor" ref="editor">
     <v-subheader v-if="label">{{ label }}</v-subheader>
-    <quill-editor ref="quillEditor" v-model="content" :options="editorOptions"></quill-editor>
+    <quill-editor ref="quillEditor" v-model="content" :options="editorOptions" @ready="onEditorReady($event)"></quill-editor>
   </div>
 </template>
 
 <script>
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.bubble.css';
-import { fullScreenMixin } from '../../mixins';
-import { quillEditor } from 'vue-quill-editor';
-
-const TOOLBAR_CONFIG = [
-  [{ header: ['1', '2', '3', false] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  ['fullscreen']
-];
 
 export default {
   name: 'properties-panel-rich-edit',
-  mixins: [fullScreenMixin],
   components: {
-    quillEditor
+    quillEditor: async () => (await import(/* webpackChunkName: "quill" */ 'vue-quill-editor')).quillEditor
   },
   props: {
     label: {
@@ -62,10 +51,8 @@ export default {
         this.content = value;
       }
     },
-    readonly: {
-      handler(value) {
-        this.changeReadOnly(value);
-      }
+    readonly(value) {
+      this.changeReadOnly(value);
     },
     content(value) {
       if (value !== this.value) {
@@ -73,24 +60,9 @@ export default {
       }
     }
   },
-  computed: {
-    editor() {
-      return this.$refs.quillEditor.quill;
-    }
-  },
-  mounted() {
-    this.changeReadOnly(this.readonly);
-    this.readonly = !!this.readonly;
-    const fullscreenBtn = document.querySelector('button.ql-fullscreen');
-    // fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
-  },
   methods: {
-    getFullScreenContainer() {
-      return this.$refs.quillEditor.$el;
-    },
-    changeReadOnly(value) {
-      this.editor.enable(!value);
-      this.getFullScreenContainer().querySelector('.ql-toolbar').style.display = value ? 'none' : '';
+    onEditorReady(quill) {
+      quill.enable(!this.readonly);
     }
   }
 };

@@ -62,7 +62,6 @@ export default class DocumentationEntry extends PropertiesPanelEntry {
             );
           }
         }
-        console.log(cmds);
         return cmds;
       },
       validate: options.validate,
