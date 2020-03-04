@@ -29,6 +29,7 @@
 		"Replace" : "Replace",
 		"MilestonesHistory" : "Show milestones history",
 		"RestoreAsLatest" : "Restore as latest",
+		"AddMilestone" : "Create version",
 		"Compare" : "Compare"
 	},
 	"labels": {

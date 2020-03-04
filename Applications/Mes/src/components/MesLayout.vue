@@ -26,14 +26,15 @@
     <template v-if="snackbar.visible">
       <v-snackbar
         :top="false"
-        style="max-height: 100px; overflow: auto"
+        style="overflow: auto"
         :multi-line="true"
         :timeout="5000"
         :color=snackbar.type
         @input="closeSnackbar"
         :value="true"
       >
-        {{ snackbar.message }}
+        <span v-html="snackbar.message">{{ snackbar.message }}</span>
+
         <v-btn @click.native="closeSnackbar" text color="white">
           {{this.$t('mes.buttons.Close')}}
         </v-btn>
