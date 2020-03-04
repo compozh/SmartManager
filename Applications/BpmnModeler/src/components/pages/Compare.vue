@@ -145,8 +145,7 @@ export default {
         polylines, overlayHtml;
       shapes.forEach( elem => {
         if (!elem) { return; }
-        switch (elem.constructor.name) {
-        case 'Shape':
+        if (elem.width && elem.height) {
           var shapes = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
           shapes.forEach(el => {
             el.children[0].firstChild.style.fill = color;
@@ -155,8 +154,7 @@ export default {
           overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${elem.width + 10}px; height: ${elem.height + 10}px" >
                           <i class="compare-icon mdi ${icon}"></i>
                         </div>`;
-          break;
-        case 'Connection':
+        } else if (elem.waypoints) {
           polylines = document.querySelectorAll(`[data-element-id="${elem.id}"]`);
           polylines.forEach( el => {
             el.children[0].firstChild.style.strokeDasharray = '10,2';
@@ -168,10 +166,8 @@ export default {
             width = Math.abs(elem.waypoints[0].x - elem.waypoints[length].x) + 10,
             height = Math.abs(elem.waypoints[0].y - elem.waypoints[length].y) + 10;
           overlayHtml = `<div class="${type.substr(1)} ${elem.id}" style="width:${width}px; height:${height}px"></div>`;
-          break;
-        default:
+        } else {
           overlayHtml = '<div></div>';
-          break;
         }
         overlays.add(elem.id , {
           position: {
