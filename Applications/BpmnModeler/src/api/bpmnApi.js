@@ -61,7 +61,7 @@ export class BpmnModelerApi {
   async createDiagram(diagram) {
     const result = await mutate({
       mutation: gql`mutation ($diagram: DiagramInput!) ${mutations.createDiagram}`,
-      variables: { diagram: { name: diagram.name, parentId: diagram.parentId, isSystem: diagram.isSystem, type: diagram.type, xmlView: diagram.xmlView } }
+      variables: { diagram: { name: diagram.name, parentId: diagram.parentId, isSystem: diagram.isSystem, type: diagram.type, xmlView: diagram.xmlView, kobj: diagram.kobj } }
     });
     return result.data.bpmnqueryMutation.createDiagram;
   }
@@ -105,7 +105,7 @@ export class BpmnModelerApi {
   async createFolder(folder) {
     const result = await mutate({
       mutation: gql`mutation ($folder: FolderInput!) ${mutations.createFolder}`,
-      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId, isSystem: folder.isSystem } }
+      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId, isSystem: folder.isSystem, kobj: folder.kobj } }
     });
     return result.data.bpmnqueryMutation.createFolder;
   }

@@ -1,7 +1,6 @@
 <template>
   <v-row class="px-3">
     <v-data-table
-      calculate-widths
       :headers="headers"
       :items="items"
       :hide-default-footer="items.length < 11"
@@ -24,20 +23,16 @@
           {{ item.name }}
         </div>
       </template>
-      <template v-slot:item.creationTime="{ item }">
-        {{item.creationTime | formatDate}}
-      </template>
-      <template v-slot:item.editTime="{ item }">
-        {{item.editTime | formatDate}}
-      </template>
-      <template v-slot:item.editorName="{ item }">
-        {{findUser(item.editorName)}}
+      <template v-slot:item.kobj="{ item }" style="max-width: 80%;">
+        <div  class="item-name justify-end">
+          {{ item.kobj ? itObjects.userAccessObjects.find(o => o.kobj === item.kobj).nobj : '' }}
+        </div>
       </template>
       <template v-slot:item.ownerName="{ item }">
         {{findUser(item.ownerName)}}
       </template>
        <template v-slot:item.usersWithAccess="{ item }">
-          <v-row justify="end" style="max-width: 90%">
+          <v-row class="justify-end" style="max-width: 90%">
             <div v-for="(access, i) in item.usersWithAccess" :key="access + i" class="px-2">
               <v-avatar :color="getColor(access)" size="41" :title="access" v-if="access">
                 <span class="white--text">{{access | formatAvatar}}</span>
@@ -65,6 +60,8 @@
 </template>
 
 <script>
+const colors = {};
+
 import { formMixin } from '../mixins';
 import * as Models from '../../api/models';
 import moment from 'moment';
@@ -73,8 +70,7 @@ export default {
   mixins: [ formMixin ],
   data() {
     return {
-      users: [],
-      colors: {},
+      users: []
     };
   },
   props: {
@@ -120,11 +116,11 @@ export default {
           let rgb = `rgb(${r}, ${g},${b})`;
           return rgb ;
         };
-      if (!Object.keys(this.colors).find(el => el == item)) {
+      if (!Object.keys(colors).find(el => el == item)) {
         result = color();
-        this.colors[item] = result;
+        colors[item] = result;
       } else {
-        result = this.colors[item];
+        result = colors[item];
       }
       return result;
     },
@@ -143,13 +139,14 @@ export default {
     },
     headers() {
       return [
-        {text: this.$t('bpmn.labels.Name'), value: 'name'},
-        {text: this.$t('bpmn.labels.CreationTime'), value: 'creationTime'},
-        {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'},
-        {text: this.$t('bpmn.labels.Editor'), value: 'editorName'},
-        {text: this.$t('bpmn.labels.Owner'), value: 'ownerName'},
-        {text: '', value: 'usersWithAccess' , sortable: false},
-        {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false}];
+        {text: this.$t('bpmn.labels.Name'), value: 'name',},
+        this.items.some(item => typeof item.kobj === 'string' && item.kobj.trim() != '') ? { text: this.$t('bpmn.labels.AccessObject'), value: 'kobj', width: 250 } : undefined,
+        {text: this.$t('bpmn.labels.Owner'), value: 'ownerName', width: 250 },
+        {text: '', value: 'usersWithAccess' , sortable: false },
+        {text: this.$t('bpmn.labels.Actions'), value: 'actions', sortable: false }].filter(c => !!c);
+    },
+    itObjects() {
+      return this.$store.state.bpmn.configuration.itObjects;
     },
   },
 };

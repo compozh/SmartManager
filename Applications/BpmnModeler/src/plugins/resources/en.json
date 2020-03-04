@@ -138,7 +138,8 @@
 		"MilestoneCreated": "Version created",
 		"EnterVersionName": "Enter version name",
 		"NewVersion": "New version",
-		"InsertTextHere": "Insert text here ..."
+		"InsertTextHere": "Insert text here ...",
+		"AccessObject": "Access object"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

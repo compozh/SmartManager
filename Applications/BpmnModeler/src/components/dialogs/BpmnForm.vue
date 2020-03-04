@@ -13,6 +13,17 @@
     </v-card-title>
     <v-card-text>
       <v-form ref="form" v-model="valid" onSubmit="return false;" @keydown.enter="save()">
+        <v-select 
+          v-model="model.kobj" 
+          v-if="canSelectAccessObject" 
+          :items="itObjects.userAccessObjects" 
+          :item-text="'nobj'" 
+          :item-value="'kobj'"
+          :disabled="loading || accessObjectInherited || itObjects.userAccessObjects.length <= 1"
+          :rules="[rules.required]"
+          :label="$t('bpmn.labels.AccessObject')"
+          >
+        </v-select>
         <v-text-field ref="nameField" @keydown.enter="save()"
           class="nameField"
           v-model="names"
@@ -51,6 +62,7 @@ export default {
       model: null,
       callback: null,
       valid: true,
+      accessObjectInherited: true,
       titles: {
         'process': {
           'import': 'bpmn.buttons.Import',
@@ -108,6 +120,9 @@ export default {
     canChangeIsSystemProperty() {
       return ['create', 'copy'].includes(this.mode) && this.$store.state.bpmn.configuration.canModifySystemObjects;
     },
+    itObjects() {
+      return this.$store.state.bpmn.configuration.itObjects;
+    },
     names: {
       get: function () {
         return this.type == 'all' ? this.model.map(el => el.name).join(', ') : this.model.name;
@@ -119,7 +134,7 @@ export default {
         } else {
           this.model.name = val;
         }
-      },
+      }
     },
     active: {
       get() {
@@ -132,12 +147,19 @@ export default {
         this.$emit('update:activeItem', value);
       }
     },
+    canSelectAccessObject() {
+      return this.mode === 'create' && this.itObjects.isMobj;
+    }
   },
   methods: {
     onShowForm(mode, type, model, callback) {
       this.mode = mode;
       this.type = this.$route.name == 'main' ? 'project' : type;
       this.model = model;
+      this.accessObjectInherited = !!this.model.kobj;
+      if (!this.accessObjectInherited && this.canSelectAccessObject) {
+        this.model.kobj = this.itObjects.userDefaultObject;
+      }
       this.callback = callback;
       this.show = true;
       setTimeout(() => this.$refs.nameField.focus(), 1);

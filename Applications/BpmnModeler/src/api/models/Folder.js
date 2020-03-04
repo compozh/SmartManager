@@ -1,6 +1,6 @@
 export default class Folder {
   constructor({ id, name = '', parentId, isSystem = false, items = [], rights = [],  ownerId = '', 
-    editorId = '', creationTime, editTime, ownerName = '', editorName = '', usersWithAccess = [] } = {}) {
+    editorId = '', creationTime, editTime, ownerName = '', editorName = '', usersWithAccess = [], kobj } = {}) {
     this.id = id;
     this.name = name;
     this.parentId = parentId;
@@ -14,6 +14,7 @@ export default class Folder {
     this.creationTime = creationTime;
     this.editTime = editTime;
     this.usersWithAccess = usersWithAccess;
+    this.kobj = kobj;
   }
   get isFolder() {
     return true;
