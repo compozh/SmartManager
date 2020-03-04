@@ -24,7 +24,13 @@
                       <v-list-item-subtitle class="item-subtitle">{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
                     </v-list-item-content>
                   </template>
-                    <div class="difference-description">{{item}}</div>
+                    <div class="difference-description">
+                      <json-viewer
+                        class="json-viewer-component"
+                        :value="item"
+                        :expand-depth=1
+                        sort></json-viewer>
+                    </div>
                 </v-list-group>
                 <v-divider />
               </div>
@@ -351,7 +357,6 @@ export default {
   font-weight: 500;
   background-color: transparent !important
 }
-
 .difference-list {
   height: calc(100% - 40px) !important;
   text-align: start;
@@ -366,9 +371,12 @@ export default {
   }
 }
 .difference-description {
-  padding: 0 20px !important;
   color: #848484;
   font-size: 12px;
+  .json-viewer-component {
+    background-color: #00000012;
+    box-shadow: inset 0 0 5px 0px #00000047;
+  }
 }
 
 .md-scroll::-webkit-scrollbar {
