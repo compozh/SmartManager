@@ -1,0 +1,11 @@
+mutation($courseGuid: ID, $lessonGuid: ID, $parentPostId: ID, $post: String){
+  lmsMutation{
+  	addPost(courseGuid: $courseGuid, lessonGuid: $lessonGuid, parentPostId: $parentPostId, post: $post){
+      success
+      successMessage
+      errorCode
+      errorMessage
+      postId
+    }  
+  }
+}

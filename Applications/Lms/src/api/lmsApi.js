@@ -16,6 +16,7 @@ import saveLessonPageState from './graphql/saveLessonPageState.graphql'
 import restoreLessonPageState from './graphql/restoreLessonPageState.graphql'
 import questionsListOfLesson from './graphql/questionsListOfLesson.graphql'
 import discussionOfLesson from './graphql/discussionOfLesson.graphql'
+import addPost from './graphql/addPost.graphql'
 
 const getClient = async () => {
   const token = await auth.getToken()
@@ -179,22 +180,19 @@ export class LmsApi {
     }
   }
 
-  static async saveAnswerFromGql(courseGuid, lessonGuid, questionId) {
+  static async addPostFromGql(courseGuid, lessonGuid, parentPostId = 0, post) {
+    const param = { courseGuid, lessonGuid, parentPostId, post }
+    console.log('addPostFromGql: ', param)
     try {
       const client = await getClient()
       return await client.mutate({
-        mutation: gql``,
-        variables: {courseGuid, lessonGuid, questionId}
+        mutation: gql`${addPost}`,
+        variables: { courseGuid, lessonGuid, parentPostId, post: JSON.stringify(post) }
       })
-    } catch (e) {
-      console.log(e.message)
+    } catch (error) {
+      console.log(error.message)
+      throw error
     }
-  }
-
-  // STUB
-  static async addNewQuestionFromGql(courseGuid, lessonGuid, question) {
-    const param = { courseGuid, lessonGuid, question }
-    console.log('addNewQuestionFromGql: ', param)
   }
 
   getLogo () {

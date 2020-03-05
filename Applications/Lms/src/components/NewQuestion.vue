@@ -30,6 +30,7 @@
 
 <script>
 import { LmsApi as api } from '../api/lmsApi'
+import {addPrescriptionToPost} from '../helpers/questions'
 
 export default {
   name: 'new-question',
@@ -64,10 +65,11 @@ export default {
     goBackToQuestionsList() {
       this.$store.commit('lms/setQuestionsView', 'questions-list')
     },
-    addAnswer() {
+    async addAnswer() {
       // выпролнить проверки
       if (this.title) {
         const question = {
+          id: 0,
           dateTime: new Date().toLocaleString(),
           authorName: this.user.userName,
           avatar: this.user.userPhoto,
@@ -81,7 +83,18 @@ export default {
         const courseGuid = courseDetails.course.courseGuid
         const lessonGuid = this.$store.getters['lms/currentLessonGuid']
         // Отправить запрос на добавление вопроса
-        api.addNewQuestionFromGql(courseGuid, lessonGuid, question)
+        try {
+          await api.addPostFromGql(courseGuid, lessonGuid, 0, question)
+          // обновить список вопросов
+          const result = await api.fetchQuestionsListCurrentLessonFromGql(courseGuid, lessonGuid)
+          result.data.lms.discussions.forEach(d => d.prescription = addPrescriptionToPost(d.dateTime))
+          this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
+        } catch (error) {
+          console.log(error)
+          // TODO: сообщить, что вопрос не добавлен и вывести ошибку
+          // перейти к списку вопросов
+          this.goBackToQuestionsList()
+        }
         // перейти к списку вопросов
         this.goBackToQuestionsList()
       }
