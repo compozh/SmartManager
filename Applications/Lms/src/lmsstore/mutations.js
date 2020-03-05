@@ -38,6 +38,10 @@ export default {
     state.unit = payload
   },
 
+  setCurrentLessonGuid(state, payload) {
+    state.currentLessonGuid = payload
+  },
+
   setContent (state, payload) {
     state.lessonContent = payload
   },
@@ -48,5 +52,15 @@ export default {
 
   setCurrentTestPage(state, payload) {
     state.currentTestPage = payload
+  },
+
+  setQuestionsView(state, payload) {
+    state.currentQuestionsView = payload
+  },
+  setDiscussions(state, payload) {
+    state.discussions = payload
+  },
+  setDiscussionId(state, payload) {
+    state.discussionId = payload
   }
 }

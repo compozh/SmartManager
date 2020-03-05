@@ -14,6 +14,8 @@ import finishLesson from './graphql/finishLesson.graphql'
 import fixStartCourse from './graphql/fixStartCourse.graphql'
 import saveLessonPageState from './graphql/saveLessonPageState.graphql'
 import restoreLessonPageState from './graphql/restoreLessonPageState.graphql'
+import questionsListOfLesson from './graphql/questionsListOfLesson.graphql'
+import discussionOfLesson from './graphql/discussionOfLesson.graphql'
 
 const getClient = async () => {
   const token = await auth.getToken()
@@ -151,6 +153,48 @@ export class LmsApi {
     } catch (e) {
       console.log(e.message)
     }
+  }
+
+  static async fetchQuestionsListCurrentLessonFromGql(courseGuid, lessonGuid) {
+    try {
+      const client = await getClient()
+      return await client.query({
+        query: gql` query ($courseGuid: ID, $lessonGuid: ID) ${questionsListOfLesson}`,
+        variables: {courseGuid, lessonGuid}
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  static async fetchDiscassionOfLessonFromGql(courseGuid, lessonGuid, questionId) {
+    try {
+      const client = await getClient()
+      return await client.query({
+        query: gql` query ($courseGuid: ID, $lessonGuid: ID, $questionId:ID) ${discussionOfLesson}`,
+        variables: {courseGuid, lessonGuid, questionId}
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  static async saveAnswerFromGql(courseGuid, lessonGuid, questionId) {
+    try {
+      const client = await getClient()
+      return await client.mutate({
+        mutation: gql``,
+        variables: {courseGuid, lessonGuid, questionId}
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
+  // STUB
+  static async addNewQuestionFromGql(courseGuid, lessonGuid, question) {
+    const param = { courseGuid, lessonGuid, question }
+    console.log('addNewQuestionFromGql: ', param)
   }
 
   getLogo () {

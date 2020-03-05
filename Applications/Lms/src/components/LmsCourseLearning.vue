@@ -167,8 +167,9 @@ import LessonView from './LessonView.vue'
 import LessonsMenu from './LessonsMenu.vue'
 import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
-import {lessonType, materialType, lessonIcons} from '../helpers/lesson.js'
 import { LmsApi as api } from '../api/lmsApi'
+import {lessonType, materialType, lessonIcons} from '../helpers/lesson.js'
+import { addPrescriptionToPost } from '../helpers/questions'
 
 export default {
   name: 'lms-course-learning',
@@ -204,11 +205,16 @@ export default {
       }
     }
   },
-  async created() {
+  async mounted() {
+    // --->
+    console.log('lms-course-learning')
     this.course = this.$route.params.course
     this.courseGuid = this.$route.params.courseGuid
     this.modules = this.$route.params.modules
     this.progress = this.getInitialProgress(this.modules)
+    this.lessonsPassed = this.getInitialPassedLesson(this.modules)
+    this.hideSidebar()
+
     const result = await api.restorePageStateFromGql(this.courseGuid)
     const pageStateParams = result ? JSON.parse(result) : null
     if (pageStateParams) {
@@ -218,15 +224,18 @@ export default {
       this.currentLessonGuid = this.modules[0].units[0].lessonGuid
       this.tabActive = 'materials'
     }
+    this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
+    console.log('lms-course-learning: setCurrentLessonGuid')
     this.putPassedFieldToLessons(this.modules)
-    this.getLesson(this.currentLessonGuid)
+    await this.getLesson(this.currentLessonGuid)
+
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
-  },
-  mounted() {
-    this.lessonsPassed = this.getInitialPassedLesson(this.modules)
-    this.hideSidebar()
+    // <---
+    // Получить список вопросов слушателей урока
+    await this.fetchDiscussionsList(this.courseGuid, this.currentLessonGuid)
+    this.$store.commit('lms/setQuestionsView', 'questions-list')
   },
   beforeDestroy() {
     this.savePageState()
@@ -246,6 +255,7 @@ export default {
       if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
         this.navigation.currentLessonIndex++
         this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
+        this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
       }
       const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setCurrentLesson (lessonId)
@@ -254,19 +264,29 @@ export default {
       if (this.navigation.currentLessonIndex > 0) {
         this.navigation.currentLessonIndex--
         this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
+        this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
       }
       const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setCurrentLesson (lessonId)
     },
-    setCurrentLesson (lessonGuid) {
+    async setCurrentLesson (lessonGuid) {
       this.currentLessonGuid = lessonGuid
+      this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
       this.getLesson(lessonGuid)
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+      await this.fetchDiscussionsList(this.courseGuid, this.currentLessonGuid)
+      this.$store.commit('lms/setQuestionsView', 'questions-list')
     },
     async getLesson(lessonGuid) {
       // Получить урок
       await this.$store.dispatch('lms/getLessonContent', lessonGuid)
+    },
+    async fetchDiscussionsList(courseGuid,currentLessonGuid) {
+      // получить список вопросов слушателей урока
+      const result = await api.fetchQuestionsListCurrentLessonFromGql(courseGuid, currentLessonGuid)
+      result.data.lms.discussions.forEach(d => d.prescription = addPrescriptionToPost(d.dateTime))
+      this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
     },
     finishLesson () {
       let currentLessonGuid = this.currentLesson.lesson.lessonGuid
@@ -419,14 +439,14 @@ export default {
     },
     isFirstLesson () {
       if ( this.currentLesson ) {
-        return this.currentLesson.lesson.lessonGuid === this.navigation.lessons[0].lessonGuid
+        return this.currentLessonGuid === this.navigation.lessons[0]
       } else {
         return false
       }
     },
     isLastLesson () {
       if ( this.currentLesson ) {
-        return this.currentLesson.lesson.lessonGuid === this.navigation.lessons[this.navigation.lessons.length - 1].lessonGuid
+        return this.currentLessonGuid === this.navigation.lessons[this.navigation.lessons.length - 1]
       } else {
         return false
       }
@@ -477,7 +497,7 @@ export default {
 }
 .lesson-view {
   width:100%;
-  height: 65vh;
+  height: 60vh;
   overflow: hidden;
   border: solid lightgray 1px;
 }

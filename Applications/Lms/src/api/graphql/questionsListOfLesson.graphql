@@ -1,0 +1,14 @@
+{
+  lms{
+    discussions(courseGuid: $courseGuid, lessonGuid: $lessonGuid){
+      id
+      dateTime
+      authorName
+      avatar
+      title
+      voutsUpQty
+      voutsDownQty
+      answersQty
+    }
+  }
+}

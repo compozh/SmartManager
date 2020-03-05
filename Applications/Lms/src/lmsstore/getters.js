@@ -35,6 +35,10 @@ export default {
     return state.courseDetails
   },
 
+  currentLessonGuid (state) {
+    return state.currentLessonGuid
+  },
+
   unit(state) {
     return state.unit
   },
@@ -45,5 +49,16 @@ export default {
 
   currentTestPage(state) {
     return state.currentTestPage
+  },
+
+  currentQuestionsView(state) {
+    return state.currentQuestionsView
+  },
+
+  discussions (state) {
+    return state.discussions
+  },
+  discussionId (state) {
+    return state.discussionId
   }
 }
