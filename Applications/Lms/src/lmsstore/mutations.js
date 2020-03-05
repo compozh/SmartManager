@@ -62,5 +62,8 @@ export default {
   },
   setDiscussionId(state, payload) {
     state.discussionId = payload
+  },
+  addDiscussion(state, payload) {
+    state.discussions.push(payload)
   }
 }

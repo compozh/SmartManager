@@ -119,9 +119,8 @@ export default {
     AnswerCard
   },
   async mounted() {
-    /// TODO: получить вопрос и ответы на него
     console.log('question-view mounted')
-    // получить вопрос урока
+    // получить вопрос слушателя урока
     const courseDetails = this.$store.getters['lms/courseDetails']
     const currentLessonGuid = this.$store.getters['lms/currentLessonGuid']
     const questionId = this.$store.getters['lms/discussionId']
@@ -166,13 +165,13 @@ export default {
     addAnswer() {
       if (this.content) {
         const answer = {
+          dateTime: new Date().toLocaleString(),
           authorName: this.user.userName,
           avatar: this.user.userPhoto,
-          dateTime: new Date().toLocaleString(),
-          body: this.content,
-          likesQty: 0,
-          dislikesQty: 0,
-          prescription: 'Сейчас'
+          content: this.content,
+          voutsUpQty: 0,
+          voutsDownQty: 0,
+          answersQty: 0
         }
         this.question.answers.push(answer)
         this.content = ''

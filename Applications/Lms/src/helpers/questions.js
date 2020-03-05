@@ -13,7 +13,6 @@ export function addPrescriptionToPost(postDateTimeStamp) {
   const nowDate = now.getUTCDate()
   const diff = (now - postTiks) / 60 / 60 / 24 / 1000
   const diffDates = nowDate - postDate
-
   if (diff < 1) {
     if (diffDates === 0) {
       const diffHourse = diff * 24

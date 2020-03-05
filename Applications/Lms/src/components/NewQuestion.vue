@@ -84,11 +84,11 @@ export default {
         const lessonGuid = this.$store.getters['lms/currentLessonGuid']
         // Отправить запрос на добавление вопроса
         try {
-          await api.addPostFromGql(courseGuid, lessonGuid, 0, question)
-          // обновить список вопросов
-          const result = await api.fetchQuestionsListCurrentLessonFromGql(courseGuid, lessonGuid)
-          result.data.lms.discussions.forEach(d => d.prescription = addPrescriptionToPost(d.dateTime))
-          this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
+          const postResult = await api.addPostFromGql(courseGuid, lessonGuid, 0, question)
+          question.id = postResult.data.lmsMutation.addPost.id
+          question.prescription = addPrescriptionToPost(question.dateTime)
+          // добавить новый вопрос в список
+          this.$store.commit('lms/addDiscussion', question)
         } catch (error) {
           console.log(error)
           // TODO: сообщить, что вопрос не добавлен и вывести ошибку

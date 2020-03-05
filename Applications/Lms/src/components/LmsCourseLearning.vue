@@ -169,7 +169,6 @@ import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
 import { LmsApi as api } from '../api/lmsApi'
 import {lessonType, materialType, lessonIcons} from '../helpers/lesson.js'
-import { addPrescriptionToPost } from '../helpers/questions'
 
 export default {
   name: 'lms-course-learning',
@@ -206,8 +205,6 @@ export default {
     }
   },
   async mounted() {
-    // --->
-    console.log('lms-course-learning')
     this.course = this.$route.params.course
     this.courseGuid = this.$route.params.courseGuid
     this.modules = this.$route.params.modules
@@ -225,14 +222,12 @@ export default {
       this.tabActive = 'materials'
     }
     this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
-    console.log('lms-course-learning: setCurrentLessonGuid')
     this.putPassedFieldToLessons(this.modules)
     await this.getLesson(this.currentLessonGuid)
 
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
-    // <---
     // Получить список вопросов слушателей урока
     await this.fetchDiscussionsList(this.courseGuid, this.currentLessonGuid)
     this.$store.commit('lms/setQuestionsView', 'questions-list')
@@ -285,7 +280,6 @@ export default {
     async fetchDiscussionsList(courseGuid,currentLessonGuid) {
       // получить список вопросов слушателей урока
       const result = await api.fetchQuestionsListCurrentLessonFromGql(courseGuid, currentLessonGuid)
-      result.data.lms.discussions.forEach(d => d.prescription = addPrescriptionToPost(d.dateTime))
       this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
     },
     finishLesson () {
