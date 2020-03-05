@@ -105,15 +105,7 @@ export default {
       return this.originals.find(o => o.id === id) || {}
     },
     versions() {
-      // return this.attachment.versions
-      const versions = this.attachment.versions
-      const result = []
-      versions.map(v => {
-        for (let i = 0; i < 10; i++) {
-          result.push(v)
-        }
-      })
-      return result
+      return this.attachment.versions || []
     },
     fileSize() {
       return size => {
