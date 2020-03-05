@@ -83,7 +83,11 @@ export default {
       if (existingParameters && existingParameters.length) {
         for (let index = 0; index < existingParameters.length; index++) {
           const element = existingParameters[index];
-          submission[element.name] = element.value;
+          if (element.type === 'object') {
+            submission[element.name] = JSON.parse(element.value);
+          } else {
+            submission[element.name] = element.value;
+          }
         }
       }
       form.submission = JSON.stringify(submission);
@@ -92,7 +96,8 @@ export default {
       eventBus.$emit(events.formio.showForm, action.unformio, form, this.$t('bpmn.labels.EnterTaskParams'), (submission) => {
         var params = [];
         for (var param in submission.data) {
-          params.push({ name: param, type: typeof (submission.data[param]), value: submission.data[param] });
+          const value = submission.data[param];
+          params.push({ name: param, type: typeof value, value: typeof value === 'object' ? JSON.stringify(value) : value });
         }
         callback(params);
       });
@@ -110,7 +115,11 @@ export default {
       if (existingParameters && existingParameters.length) {
         for (let index = 0; index < existingParameters.length; index++) {
           const element = existingParameters[index];
-          submission[element.name] = element.value;
+          if (element.type === 'object') {
+            submission[element.name] = JSON.parse(element.value);
+          } else {
+            submission[element.name] = element.value;
+          }
         }
       }
       form.submission = JSON.stringify(submission);
@@ -119,7 +128,8 @@ export default {
       eventBus.$emit(events.formio.showForm, undefined, form, this.$t('bpmn.labels.EnterActionParams'), (submission) => {
         var params = [];
         for (var param in submission.data) {
-          params.push({ name: param, type: typeof (submission.data[param]), value: submission.data[param] });
+          const value = submission.data[param];
+          params.push({ name: param, type: typeof value, value: typeof value === 'object' ? JSON.stringify(value) : value });
         }
         callback(params);
       });
