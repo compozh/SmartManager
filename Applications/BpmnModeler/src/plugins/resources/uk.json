@@ -142,7 +142,8 @@
 		"MilestoneCreated": "Версію створено",
 		"EnterVersionName": "Введіть назву версії",
 		"NewVersion": "Нова версія",
-		"InsertTextHere": "Введіть текст сюди ..."
+		"InsertTextHere": "Введіть текст сюди ...",
+		"AccessObject": "Об'єкт доступу"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

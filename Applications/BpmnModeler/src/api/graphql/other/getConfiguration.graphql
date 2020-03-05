@@ -2,6 +2,14 @@
   bpmnquery {
     getConfiguration {
       canModifySystemObjects
+      itObjects {
+        isMobj
+        userDefaultObject
+        userAccessObjects {
+          kobj
+          nobj
+        }
+      }
     }
   }
 }

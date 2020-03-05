@@ -117,12 +117,13 @@ export default {
     createItem(parent, type, xmlView, options) {
       let model, mode = options ?  'import' : 'create';
       const parentId = parent ? parent.id : null;
+      const kobj = parent ? parent.kobj : null;
       if ( type == 'all') {
-        model = options.map( it => new Diagram({ parentId, xmlView: it.xmlView, name: it.name, type: it.type}));
+        model = options.map( it => new Diagram({ parentId, kobj, xmlView: it.xmlView, name: it.name, type: it.type}));
       } else if (options) {
-        model =  new Diagram({ parentId, xmlView: options[0].xmlView || xmlView, name: options[0].name, type: options[0].type});
+        model =  new Diagram({ parentId, kobj, xmlView: options[0].xmlView || xmlView, name: options[0].name, type: options[0].type});
       } else {
-        model = type === 'folder' ? new Folder({ parentId }) : new Diagram({ parentId, xmlView});
+        model = type === 'folder' ? new Folder({ parentId, kobj }) : new Diagram({ parentId, kobj, xmlView });
       }
       eventBus.$emit(events.modeler.showForm,
         mode,
@@ -143,7 +144,7 @@ export default {
         type = 'all';
         model = item.map( it => it.isFolder ? new Folder(it) : new Diagram(it));
       } else {
-        item = Array.isArray(item) ? item[0] : item
+        item = Array.isArray(item) ? item[0] : item;
         type =  item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
         model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : new DiagramVersion(item);
       }
@@ -159,7 +160,7 @@ export default {
         type = 'all';
         model = item.map( it => new Diagram(it));
       } else {
-        item = Array.isArray(item) ? item[0] : item
+        item = Array.isArray(item) ? item[0] : item;
         type = item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
         model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : item;
       }
