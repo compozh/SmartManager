@@ -15,13 +15,13 @@
           <v-list class="difference-list md-scroll" v-if="diagram">
             <v-list-item-group v-for="type in Object.entries(changes) " :key="type[0]" >
               <div v-if="Object.keys(type[1]).length > 0">
-                <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
+                <v-subheader class="compare-group">{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
                 <v-divider :class="type[0].substr(1)" style="width: 90%" />
                 <div v-if="type[0] == '_changed'">
                   <v-list-group class="compare_item" v-for="(item, index, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple v-model="item.active">
                     <template v-slot:activator>
                       <v-list-item-content>
-                        <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
+                        <v-list-item-title class="_changed-item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
                         <v-list-item-subtitle class="item-subtitle">{{ prepareSubTitle(item) }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </template>
@@ -39,7 +39,7 @@
                 <div v-else>
                   <v-list-item v-for="(item, index, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" no-action ripple v-model="item.active">
                     <v-list-item-content>
-                        <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
+                        <v-list-item-title :class="type[0] + '-item-title'">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
                         <v-list-item-subtitle class="item-subtitle">{{ prepareSubTitle(item) }}</v-list-item-subtitle>
                       </v-list-item-content>
                   </v-list-item>
@@ -405,14 +405,30 @@ export default {
   font-weight: 500;
   background-color: transparent !important
 }
+.compare-group {
+  font-size: 16px;
+}
 .difference-list {
   height: calc(100% - 40px) !important;
   text-align: start;
   height: 100%;
   overflow-y: auto;
   padding: 0;
-  .item-title {
-    font-size: 13px;
+  ._added-item-title {
+    color: rgb(0, 128, 0);
+    font-size: 14px;
+  }
+  ._removed-item-title {
+    color: rgb(255, 0, 0);
+    font-size: 14px;
+  }
+  ._layoutChanged-item-title {
+    color: rgb(0, 0, 255);
+    font-size: 14px;
+  }
+  ._changed-item-title {
+    color: rgb(255, 165, 0);
+    font-size: 14px;
   }
   .item-subtitle {
     font-size: 12px;
