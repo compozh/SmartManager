@@ -470,5 +470,42 @@
 		"Form Key": "Form Key",
 		"Details": "Details",
 		"If Part Condition": "Condition"
+	},
+	"compare-text": {
+		"newValue": "New value",
+		"oldValue": "Old value",
+		"null": "null",
+		"$type":"Type",
+		"id":"Id",
+		"lanes":"Lanes",
+		"values":"Values colection",
+		"name":"Name",
+		"value":"Value",
+		"type":"Type",
+		"text": "Text",
+		"businessKey": "Business key",
+		"variables": "Variables"
+	},
+	"compare-type": {
+		"Participant": "Participant",
+		"StartEvent": "Start event",
+		"SequenceFlow": "Sequence flow",
+		"EndEvent": "End event",
+		"UserTask": "User task",
+		"ExclusiveGateway": "Exclusive gateway",
+		"Task": "Task",
+		"DataObjectReference": "Data object reference",
+		"IntermediateThrowEvent": "Intermediate throw event",
+		"DataStoreReference": "Data store reference",
+		"SendTask": "Task with send message",
+		"ReceiveTask": "Task with receive message",
+		"ManualTask": "Manual execution task",
+		"BusinessRuleTask": "Task with business rule",
+		"ServiceTask": "Service task",
+		"ScriptTask": "Script task",
+		"CallActivity": "Task with call activity",
+		"SubProcess": "Subprocess",
+		"Transaction": "Transaction",
+		"Collaboration": "Collaboration"
 	}
 }
