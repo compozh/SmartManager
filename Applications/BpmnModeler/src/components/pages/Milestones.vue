@@ -1,5 +1,5 @@
 <template>
-	<v-container class="column pa-0 fill-height" fluid >
+	<v-container class="column pa-0 fill-height milistones-component" fluid >
 
     <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize" class="diagram-section">
@@ -13,7 +13,7 @@
           <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
             {{$t('bpmn.labels.Milestones')}}
           </v-toolbar>
-          <v-list class="milestones-list" v-if="diagram" >
+          <v-list class="milestones-list md-scroll" v-if="diagram" >
             <div  v-for="group in groups" :key="group.name" class="" >
               <v-subheader>{{  group.name | formatDate }}</v-subheader>
               <v-list-item class="row d-flex ma-1" :class="{'v-list-item--active ': item.versionId == $route.query.version }"
@@ -181,6 +181,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.milistones-component {
+  max-height: calc(100vh - 50px)
+}
 .diagram-section {
   width: 100%;
   height: 100%;
@@ -217,8 +220,8 @@ export default {
 }
 
 .milestones-list {
-  height: 100%;
-
+  height: calc(100% - 40px) !important;
+  overflow-y: auto;
   .v-list-item__title {
     font-size: 13px;
   }
@@ -226,4 +229,29 @@ export default {
     font-size: 12px;
   }
 }
+.md-scroll::-webkit-scrollbar {
+    background-color:#fff;
+    width:16px;
+    height: 16px
+  }
+  /* background of the scrollbar except button or resizer */
+  .md-scroll::-webkit-scrollbar-track {
+      background-color:#fff
+  }
+  .md-scroll::-webkit-scrollbar-track:hover {
+      background-color:#fff
+  }
+
+  /* scrollbar itself */
+  .md-scroll::-webkit-scrollbar-thumb {
+      background-color:#babac0;
+      border-radius:16px;
+      border:5px solid #fff
+  }
+  .md-scroll::-webkit-scrollbar-thumb:hover {
+      background-color:#a0a0a5;
+      border:4px solid #f4f4f4
+  }
+  /* set button(top and bottom of the scrollbar) */
+  .md-scroll::-webkit-scrollbar-button {display:none}
 </style>
