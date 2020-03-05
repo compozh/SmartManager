@@ -4,7 +4,9 @@
         <v-card-title>
           <h4 class="headline mb-0">{{ this.title }}</h4>
         </v-card-title>
-        <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
+        <div style="overflow: auto; max-height: calc(100vh - 140px);">
+          <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
+        </div>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
@@ -45,7 +47,7 @@ export default {
     },
     async onSubmit() {
       var form = this.$refs.formioForm;
-      var submission = form.getFormSubmission();     
+      var submission = form.getFormSubmission();
       this.loading = true;
 
       var result = typeof this.code === 'string' && this.code.trim() != ''
