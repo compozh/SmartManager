@@ -18,11 +18,11 @@
                 <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
                 <v-divider :class="type[0].substr(1)" style="width: 90%" />
                 <div v-if="type[0] == '_changed'">
-                  <v-list-group class="compare_item" v-for="(item, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple v-model="item.active">
+                  <v-list-group class="compare_item" v-for="(item, index, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple v-model="item.active">
                     <template v-slot:activator>
                       <v-list-item-content>
                         <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
-                        <v-list-item-subtitle class="item-subtitle">{{ $t('bpmn.compare-type.' + (item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', ''))) }}</v-list-item-subtitle>
+                        <v-list-item-subtitle class="item-subtitle">{{ prepareSubTitle(item) }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </template>
                       <div class="difference-description">
@@ -40,7 +40,7 @@
                   <v-list-item v-for="(item, index, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" no-action ripple v-model="item.active">
                     <v-list-item-content>
                         <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
-                        <v-list-item-subtitle class="item-subtitle">{{ $t('bpmn.compare-type.' + (item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', ''))) }}</v-list-item-subtitle>
+                        <v-list-item-subtitle class="item-subtitle">{{ prepareSubTitle(item) }}</v-list-item-subtitle>
                       </v-list-item-content>
                   </v-list-item>
                 </div>
@@ -353,6 +353,16 @@ export default {
       };
       value = replaceFn(value, this);
       return value;
+    },
+    prepareSubTitle(item) {
+      let str = '';
+      if (item.model) {
+        str = item.model.$type.replace('bpmn:', '');
+      } else {
+        str = item.$type.replace('bpmn:', '');
+      }
+      str = str.replace(/([A-Z])/g, ' $1').trim();
+      return this.$t('bpmn.bpmn-modeler.' + str);
     }
   },
 };

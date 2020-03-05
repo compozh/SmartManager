@@ -444,7 +444,15 @@
 		"Business Object Action": "Дія бізнес-об'єкта",
 		"Business Object Access": "Доступ до бізнес-об'єкта",
 		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкта",
-		"Action Properties": "Параметри дії"
+		"Action Properties": "Параметри дії",
+
+		"Participant": "Пул/Виконавець",
+		"Sequence Flow": "Потік",
+		"Collaboration": "Група",
+		"Data Store Reference": "База даних",
+		"Data Object Reference": "Об'єкт даних",
+		"Event Based Gateway": "Ексклюзивний шлюз по подіям",
+		"Intermediate Catch Event": "Проміжна подія (обробник)"
 	},
 	"dmn-modeler": {
 
@@ -488,27 +496,5 @@
 		"text": "Текст",
 		"businessKey": "Ключ бизнес-процессу",
 		"variables": "Змінні"
-	},
-	"compare-type": {
-		"Participant": "Пул/Виконавець",
-		"StartEvent": "Початкова задача",
-		"SequenceFlow": "Потік",
-		"EndEvent": "Кінцева подія",
-		"UserTask": "Користувацька задача",
-		"ExclusiveGateway": "Ексклюзивний шлюз",
-		"Task": "Задача",
-		"DataObjectReference": "Об'єкт даних",
-		"IntermediateThrowEvent": "Проміжна/Гранична подія",
-		"DataStoreReference": "База даних",
-		"SendTask": "Задача з відправкою повідомлень",
-		"ReceiveTask": "Задача з отриманням повідомлень",
-		"ManualTask": "Задача з ручним виконанням",
-		"BusinessRuleTask": "Задача з бізнес-правилом",
-		"ServiceTask": "Сервісна задача",
-		"ScriptTask": "Задача-сценарій",
-		"CallActivity": "Задача з викликом активності",
-		"SubProcess": "Подпроцесс",
-		"Transaction": "Транзакція",
-		"Collaboration": "Група"
 	}
 }

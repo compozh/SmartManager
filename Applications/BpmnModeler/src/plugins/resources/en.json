@@ -441,7 +441,15 @@
 		"Business Object Action": "Business Object Action",
 		"Business Object Access": "Business Object Access",
 		"Business Object Key Variable Name": "Business Object Key Variable Name",
-		"Action Properties": "Action Properties"
+		"Action Properties": "Action Properties",
+
+		"Participant": "Participant",
+		"SequenceFlow": "Sequence Flow",
+		"Collaboration": "Collaboration",
+		"Data Store Reference": "Data Store Reference",
+		"Data Object Reference": "Data Object Reference",
+		"Event Based Gateway": "Event Based Gateway",
+		"Intermediate Catch Event": "Intermediate Catch Event"
 	},
 	"dmn-modeler": {
 
@@ -485,27 +493,5 @@
 		"text": "Text",
 		"businessKey": "Business key",
 		"variables": "Variables"
-	},
-	"compare-type": {
-		"Participant": "Participant",
-		"StartEvent": "Start event",
-		"SequenceFlow": "Sequence flow",
-		"EndEvent": "End event",
-		"UserTask": "User task",
-		"ExclusiveGateway": "Exclusive gateway",
-		"Task": "Task",
-		"DataObjectReference": "Data object reference",
-		"IntermediateThrowEvent": "Intermediate throw event",
-		"DataStoreReference": "Data store reference",
-		"SendTask": "Task with send message",
-		"ReceiveTask": "Task with receive message",
-		"ManualTask": "Manual execution task",
-		"BusinessRuleTask": "Task with business rule",
-		"ServiceTask": "Service task",
-		"ScriptTask": "Script task",
-		"CallActivity": "Task with call activity",
-		"SubProcess": "Subprocess",
-		"Transaction": "Transaction",
-		"Collaboration": "Collaboration"
 	}
 }

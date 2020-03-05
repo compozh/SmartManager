@@ -293,7 +293,7 @@
 		"Signal Boundary Event (non-interrupting)": "Граничное событие - Сигнал (непрерывающее)",
 		"Compensation Boundary Event": "Граничное событие - Компенсация",
 		"Exclusive Gateway": "Эксклюзивный шлюз",
-		"Parallel Gateway": "Паралельный шлюз",
+		"Parallel Gateway": "Параллельный шлюз",
 		"Inclusive Gateway": "Неэксклюзивный шлюз",
 		"Complex Gateway": "Комплексный шлюз",
 		"Event based Gateway": "Эксклюзивный шлюз по событиям",
@@ -440,7 +440,15 @@
 		"Business Object Action": "Действие бизнес-объекта",
 		"Business Object Access": "Доступ к бизнес-объекту",
 		"Business Object Key Variable Name": "Имя переменной для получения ключа бизнес-объекта",
-		"Action Properties": "Параметры действия"
+		"Action Properties": "Параметры действия",
+		"Participant": "Пул/Исполнитель",
+		"Sequence Flow": "Поток",
+		"Collaboration": "Группа",
+		"Data Object Reference": "Обьект данных",
+		"Data Store Reference": "База данных",
+		"Event Based Gateway": "Эксклюзивный шлюз по событиям",
+		"Intermediate Catch Event": "Промежуточное событие (обработчик)"
+
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {
@@ -482,27 +490,5 @@
 		"text": "Текст",
 		"businessKey": "Ключ бизнес-процесса",
 		"variables": "Переменые"
-	},
-	"compare-type": {
-		"Participant": "Пул/Исполнитель",
-		"StartEvent": "Стартовое событие",
-		"SequenceFlow": "Поток",
-		"EndEvent": "Конечное событие",
-		"UserTask": "Пользовательская задача",
-		"ExclusiveGateway": "Эксклюзивный шлюз",
-		"Task": "Задача",
-		"DataObjectReference": "Обьект данных",
-		"IntermediateThrowEvent": "Промежуточное/Граничное событие",
-		"DataStoreReference": "База данных",
-		"SendTask": "Задача с отправкой сообщений",
-		"ReceiveTask": "Задача с получением сообщений",
-		"ManualTask": "Задача с ручным выполнением",
-		"BusinessRuleTask": "Задача с бизнес-правилом",
-		"ServiceTask": "Сервисная задача",
-		"ScriptTask": "Задача-сценарий",
-		"CallActivity": "Задача с вызовом активности",
-		"SubProcess": "Подпроцесс",
-		"Transaction": "Транзакция",
-		"Collaboration": "Группа"
 	}
 }
