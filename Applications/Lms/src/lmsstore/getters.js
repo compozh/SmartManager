@@ -2,9 +2,11 @@ export default {
   user(state) {
     return state.user
   },
+
   circularLoader (state) {
     return state.circularLoader
   },
+
   error (state) {
     return state.error
   },
@@ -12,6 +14,7 @@ export default {
   logoLink (state) {
     return state.logoLink
   },
+
   availableFilters (state) {
     return state.availableFilters
   },
@@ -19,19 +22,28 @@ export default {
   recommended (state) {
     return state.recommended
   },
+
   courses (state) {
     return state.courses
   },
+
   modules (state) {
     return state.modules
   },
+
   courseDetails (state) {
     return state.courseDetails
   },
+
   unit(state) {
     return state.unit
   },
+
   lessonContent(state) {
     return state.lessonContent
+  },
+
+  currentTestPage(state) {
+    return state.currentTestPage
   }
 }

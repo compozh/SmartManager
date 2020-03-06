@@ -15,11 +15,29 @@ const notify = (type, title, text) => {
 }
 
 export default {
+  async getApplicationParams({commit}) {
+    startLoading()
+    try {
+      const response = await api.getApplicationParamsFromGql()
+      const result = response.data.smtasks.applicationParams
+      commit('setApplicationParams', result)
+      stopLoading()
+    } catch (e) {
+      stopLoading()
+      console.error(e.message)
+    }
+  },
   async getFolders({commit}, loading) {
     !loading || startLoading()
     try {
-      const result = await api.getFoldersFromGql()
-      const folders = result.data.smtasks.folders
+      const response = await api.getFoldersFromGql()
+      const result = response.data.smtasks.folders
+      const folders = result.map(folder => {
+        if (folder.code === '') {
+          folder.name = i18n.t('folders.active')
+        }
+        return folder
+      })
       commit('setFolders', folders)
       !loading || stopLoading()
     } catch (e) {
@@ -28,18 +46,19 @@ export default {
       notify('danger', 'foldersTitle', 'foldersError')
     }
   },
-  async getTasks({commit, state}, folderId) {
+  async getTasks({commit, state}, {folderId, loader}) {
     if (folderId === 'search') {
       return
     }
-    const loading = !state.tasks[folderId]
+    const loading = loader || !state.tasks[folderId]
     !loading || startLoading()
     commit('setSearch', null)
     commit('setCurrentFolder', folderId)
     try {
-      const result = await api.getTasksFromGql(
-        folderId === 'ALL' ? '' : folderId
-      )
+      const result = await api.getTasksFromGql({
+        folderId: folderId === 'active' ? '' : folderId,
+        helperexec: state.helperexec
+      })
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
       commit('setTasks', tasks)
@@ -58,20 +77,6 @@ export default {
       const task = {[taskId]: taskInfo}
       commit('setTaskInfo', task)
       !loading || stopLoading()
-    } catch (e) {
-      stopLoading()
-      console.log(e.message)
-      notify('danger', 'taskTitle', 'taskError')
-    }
-  },
-  async getFileUrl({commit}, {fileId, fileExt, id: taskOrCaseId}) {
-    startLoading()
-    try {
-      const result = await api.getFileUrlFromGql(fileId, fileExt)
-      const fileUrl = result.data.smtasks.fileUrl
-      commit('setFileUrl', {fileId, fileUrl, taskOrCaseId})
-      stopLoading()
-      return fileUrl
     } catch (e) {
       stopLoading()
       console.log(e.message)
@@ -154,60 +159,6 @@ export default {
       stopLoading()
       console.log(e.message)
       notify('danger', 'statusTitle', 'statChangeError')
-    }
-  },
-  async addAttachments({dispatch}, {attachments, params}) {
-    const paramsJson = JSON.stringify(params)
-    startLoading()
-    try {
-      const response = await api.addAttachmentsInGql(attachments, paramsJson)
-      stopLoading()
-      // Returns results list
-      const results = response.data.smtasksMutation.addAttachments
-      results.forEach(result => {
-        if (result.success) {
-          vs.notify({
-            title: result.name,
-            text: i18n.t('notify.attachAddSuccess'),
-            color: 'success'
-          })
-        } else if (result.errorMessage) {
-          vs.notify({
-            title: result.name,
-            text: result.errorMessage,
-            color: 'warning'
-          })
-        } else {
-          notify('warning', 'attachTitle', 'attachAddFail')
-        }
-      })
-      await dispatch('updateInfo', {
-        type: params.type,
-        id: params.id,
-      })
-      return results
-    } catch (e) {
-      stopLoading()
-      console.log(e.message)
-      notify('danger', 'attachTitle', 'attachAddError')
-    }
-  },
-  async attachmentDelete(context, id) {
-    startLoading()
-    try {
-      const response = await api.attachmentDeleteInGql(id)
-      const result = response.data.smtasksMutation.attachmentDelete
-      stopLoading()
-      if (result.success) {
-        notify('success', 'attachTitle', 'attachDelSuccess')
-      } else {
-        notify('warning', 'attachTitle', 'attachDelFail')
-      }
-      return result
-    } catch (e) {
-      stopLoading()
-      console.log(e.message)
-      notify('danger', 'attachTitle', 'attachDelError')
     }
   },
   async changeStage({dispatch}, payload) {
@@ -449,19 +400,6 @@ export default {
       stopLoading()
       console.log(e.message)
       notify('danger', 'taskListTitle', 'taskListError')
-    }
-  },
-  async getAttachmentTypes(context, params) {
-    const paramsJson = JSON.stringify(params)
-    startLoading()
-    try {
-      const response = await api.getAttachmentTypesFromGql(paramsJson)
-      stopLoading()
-      return response.data.smtasks.attachmentTypes
-    } catch (e) {
-      stopLoading()
-      console.log(e.message)
-      notify('danger', 'commentsTitle', 'commentAddError')
     }
   },
   async updateInfo({dispatch}, {type, id, loading}) {

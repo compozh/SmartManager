@@ -1,37 +1,24 @@
 <template>
   <div class="editor" ref="editor">
     <v-subheader v-if="label">{{ label }}</v-subheader>
-    <quill-editor ref="quillEditor" v-model="content" :options="editorOptions"></quill-editor>
-    <v-divider></v-divider>
+    <quill-editor ref="quillEditor" v-model="content" :options="editorOptions" @ready="onEditorReady($event)"></quill-editor>
   </div>
 </template>
 
 <script>
 import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
-import { quillEditor } from 'vue-quill-editor';
-import { fullScreenMixin } from '../../mixins';
-
-const TOOLBAR_CONFIG = [
-  [{ header: ['1', '2', '3', false] }],
-  ['bold', 'italic', 'underline', 'link'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean'],
-  ['fullscreen']
-];
+import 'quill/dist/quill.bubble.css';
 
 export default {
   name: 'properties-panel-rich-edit',
-  mixins: [fullScreenMixin],
   components: {
-    quillEditor
+    quillEditor: async () => (await import(/* webpackChunkName: "quill" */ 'vue-quill-editor')).quillEditor
   },
   props: {
     label: {
       type: String
     },
     value: {
-      type: String,
       required: true
     },
     readonly: {
@@ -42,7 +29,15 @@ export default {
     return {
       isfullscreen: false,
       fullscreenEnabled: document.fullscreenEnabled,
-      editorOptions: { modules: { toolbar: TOOLBAR_CONFIG } },
+      editorOptions: {
+        theme: 'bubble',
+        modules: {
+
+          toolbar: ['bold', 'italic', 'underline', 'strike']
+        },
+        bounds: document.querySelector('.properties-panel-container'),
+        placeholder: this.$t('bpmn.labels.InsertTextHere')
+      },
       content: ''
     };
   },
@@ -56,10 +51,8 @@ export default {
         this.content = value;
       }
     },
-    readonly: {
-      handler(value) {
-        this.changeReadOnly(value)
-      }
+    readonly(value) {
+      this.changeReadOnly(value);
     },
     content(value) {
       if (value !== this.value) {
@@ -67,34 +60,37 @@ export default {
       }
     }
   },
-  computed: {
-    editor() {
-      return this.$refs.quillEditor.quill;
-    }
-  },
-  mounted() {
-    this.changeReadOnly(this.readonly);
-    this.readonly = !!this.readonly;
-    const fullscreenBtn = document.querySelector('button.ql-fullscreen');
-    fullscreenBtn.addEventListener('click', () => this.fullScreen = !this.fullScreen);
-  },
   methods: {
-    getFullScreenContainer() {
-      return this.$refs.quillEditor.$el;
-    },
-    changeReadOnly(value) {
-      this.editor.enable(!value);
-      this.getFullScreenContainer().querySelector('.ql-toolbar').style.display = value ? 'none' : '';
+    onEditorReady(quill) {
+      quill.enable(!this.readonly);
     }
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
+  .quill-editor,
+  .quill-code {
+    height: 20rem;
+  }
+
 .quill-editor {
   padding-bottom: 20px;
   background-color: white;
+  .ql-editor {
+    border-bottom: 1px solid silver;
+    border-top: 1px solid silver;
+    &:focus {
+      border-bottom: 1px solid #1976d2;
+      border-top: 1px solid #1976d2;
+    }
+  }
 }
-
+.ql-bubble .ql-toolbar .ql-formats {
+  margin: 4px 5px 4px 0px;
+  &:first-child {
+    margin-left: 0px;
+  }
+}
 .quill-editor:fullscreen {
   padding: 20px;
 }
@@ -124,13 +120,13 @@ export default {
   outline: none;
 }
 
-.ql-fullscreen::after {
+.ql-fullscreen::after{
   content: "\F293";
   font-family: "Material Design Icons";
-  font-size: 24px;
+  font-size: 25px;
   position: relative;
-  top: -12px;
-  left: -4px;
+  top: -13px;
+  left: -12px;
 }
 
 .ql-container.ql-snow.ql-disabled {

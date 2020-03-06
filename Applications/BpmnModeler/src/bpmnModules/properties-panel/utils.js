@@ -1,7 +1,7 @@
 import flattenDeep from 'lodash/flattenDeep';
-import elementHelper from './helpers/ElementHelper';
-import * as extensionElementsHelper from './helpers/ExtensionElementsHelper';
-import * as cmdHelper from './helpers/CmdHelper';
+import elementHelper from './bpmn/helpers/ElementHelper';
+import * as extensionElementsHelper from './bpmn/helpers/ExtensionElementsHelper';
+import * as cmdHelper from './bpmn/helpers/CmdHelper';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import Ids from 'ids';
@@ -43,6 +43,48 @@ export function setServiceTaskParameters(element, bo, actionId, bpmnFactory, com
   // По событию должен открыться диалог ввода параметров
   // Параметры собития: код действия из таблицы WFEXEC, значения введенных ранее параметров и callback, в который будут переданы новые параметры 
   eventBus.$emit(events.propertiesPanel.setServiceTaskProperties, actionId, existingParameters, (parameters) => {
+    // Если не получили новые парамерты - ничего не делаем
+    if (!parameters || !parameters.length) {
+      return;
+    }
+
+    var commands = [];
+
+    // Получаем элемент bpmn:ExtensionElements для хранения параметров
+    var extensionElements = bo.get('extensionElements');
+    if (!extensionElements) {
+      extensionElements = elementHelper.createElement('bpmn:ExtensionElements', { values: [] }, bo, bpmnFactory);
+      commands.push(cmdHelper.updateBusinessObject(element, bo, { 'extensionElements': extensionElements }));
+    }
+
+    // Записываем новые параметры и удаляем старые
+    commands.push(cmdHelper.addAndRemoveElementsFromList(element, extensionElements, 'values', 'extensionElements', parameters.map(param =>
+      elementHelper.createElement('IT-Enterprise:ServiceTaskParameter', param, extensionElements, bpmnFactory)), existingParameters));
+
+    // Применить изменения
+    const command = concatCommands(commands);
+    if (command) {
+      commandStack.execute(command.cmd, command.context || { element: element });
+    }
+  });
+}
+
+/**
+ * Установить параметры для сервисной или пользовательской задачи
+ * @param {Object} element - пользовательская/сервисная задача
+ * @param {Object} bo - бизнес-обьект
+ * @param {string} logicalKey - сохраненный код действия
+ * @param {Object} bpmnFactory - фабрика элементов
+ * @param {Object} commandStack - стек команд
+ */
+export function setBusinessObjectActionParameters(element, bo, logicalKey, bpmnFactory, commandStack) {
+  // Уже сохраненные параметры
+  var existingParameters = extensionElementsHelper.getExtensionElements(bo, 'IT-Enterprise:ServiceTaskParameter');
+
+  // Вызываем событие для ввода параметров задачи
+  // По событию должен открыться диалог ввода параметров
+  // Параметры собития: код действия из таблицы WFEXEC, значения введенных ранее параметров и callback, в который будут переданы новые параметры 
+  eventBus.$emit(events.propertiesPanel.setBusinessObjectActionProperties, logicalKey, existingParameters, (parameters) => {
     // Если не получили новые парамерты - ничего не делаем
     if (!parameters || !parameters.length) {
       return;
@@ -170,4 +212,21 @@ export function getRoot(businessObject) {
     parent = parent.$parent;
   }
   return parent;
+}
+
+
+export function findDataObject(businessObject, dataObjectId) {
+  const root = getRoot(businessObject);
+
+  for (let i = 0; i < root.rootElements.length; i++) {
+    const rootElement = root.rootElements[i];
+    if (Array.isArray(rootElement.flowElements)) {
+      for (let j = 0; j < rootElement.flowElements.length; j++) {
+        const element = rootElement.flowElements[j];
+        if (element.id === dataObjectId) {
+          return element;
+        }
+      }
+    }
+  }
 }

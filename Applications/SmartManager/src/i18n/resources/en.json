@@ -8,6 +8,7 @@
     "timeFormat": "ampm"
   },
   "folders": {
+    "active": "Active",
     "header": "Folders",
     "main": "Active",
     "folder": "Folder",
@@ -47,7 +48,8 @@
     "delConfirmTitle": "Task delete",
     "delConfirmText": "Are you sure you want to delete the task?",
     "saveDialogTitle": "Task not saved",
-    "saveDialogText": "Data has been changed. Exit without saving?"
+    "saveDialogText": "Data has been changed. Exit without saving?",
+    "handled": "Handled by assistant"
   },
   "cases": {
     "newCase": "New case",
@@ -108,7 +110,13 @@
     "complete": "Complete",
     "yes": "Yes",
     "no": "No",
-    "globalSearch": "Search all documents"
+    "toBack": "Back",
+    "globalSearch": "Search all documents",
+    "addAttachment": "Add",
+    "deleteAttachment": "Delete",
+    "downloadAttachment": "Download",
+    "attachmentVersions": "Versions",
+    "attachmentEds": "EDS"
   },
   "icons": {
     "priority": "High priority",
@@ -143,7 +151,31 @@
   "table": {
     "name": "Name",
     "size": "Size",
-    "uploaded": "Uploaded"
+    "uploaded": "Upload",
+    "sign": "Sign",
+    "version": "Version",
+    "type": "Type",
+    "status": "Status",
+    "description": "Description",
+    "date": "Date"
+  },
+  "attachments": {
+    "delConfirmTitle": "Attachment delete",
+    "delConfirmText": "Are you sure you want to delete the attachment?",
+    "noData": "No data",
+    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
+    "downloadFile": "Download and open file",
+    "noAccess": "You do not have access to the attachment",
+    "notSelected": "File not selected",
+    "typesTitle": "Choose attachments type"
+  },
+  "eds": {
+    "eds": "Digital sign",
+    "popupTitle": "Electronic digital signs",
+    "sign": "Sign",
+    "delete": "Delete",
+    "check": "Check",
+    "clearKey": "Clear key"
   },
   "comments": {
     "addComment": "Add comment",
@@ -152,13 +184,10 @@
   },
   "messages": {
     "noMessages": "No messages",
-    "noData": "No data",
     "noFiles": "No files for view",
     "noComments": "No comments",
     "closeForm": "Close the form",
-    "noApprovals": "No approvals",
-    "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
-    "downloadFile": "Download and open file"
+    "noApprovals": "No approvals"
   },
   "notify": {
     "foldersTitle": "Folders and filters",

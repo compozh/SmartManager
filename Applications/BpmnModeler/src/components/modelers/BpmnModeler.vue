@@ -1,6 +1,6 @@
 <template>
-  <modeler-layout :diagram="process" :loading="loading" :saved="saved" :noAccess="noAccess"
-    :canMinimap="canMinimap" @minimap="onMinimap" 
+  <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
+    :canMinimap="canMinimap" @minimap="onMinimap"
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
   >
@@ -19,17 +19,16 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 import { debounce } from 'throttle-debounce';
-import ModelerLayout from './ModelerLayout';
-import InitialDiagram from '../../bpmnModules/initialDiagram.dmn'
-import { Diagram, DiagramType, DiagramAccessRights } from '../../api/models';
+import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'bpmn-modeler',
   mixins: [ exportMixin, editorToolbarMixin ],
-  components: { ModelerLayout },
+  // components: { ModelerLayout },
   data() {
     return {
       modeler: null,
@@ -55,7 +54,7 @@ export default {
       return null;
     },
     noAccess() {
-      return this.process && !this.process.hasRight(DiagramAccessRights.Read);
+      return this.process && !this.process.hasRight(AccessRights.Read);
     }
   },
   beforeDestroy: function () {
@@ -65,8 +64,9 @@ export default {
     process(value, oldValue) {
       if (!value) {
         this.destroyModeler();
+        return;
       }
-      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(DiagramAccessRights.Write) !== oldValue.hasRight(DiagramAccessRights.Write))) {
+      if (!oldValue || !this.modeler || value.type !== oldValue.type || (value.hasRight(AccessRights.Write) !== oldValue.hasRight(AccessRights.Write))) {
         this.createModeler();
       }
       this.onActiveModelChanged();
@@ -75,12 +75,12 @@ export default {
   methods: {
     createModeler() {
       this.destroyModeler();
-      const canEdit = this.process.hasRight(DiagramAccessRights.Write);
-      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, null, this.translate);
+      const canEdit = this.process.hasRight(AccessRights.Write);
+      this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.translate);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();
-    },    
+    },
     async loadXml() {
       if (!this.process || !this.modeler) {
         return;
@@ -89,35 +89,35 @@ export default {
       if (!this.cancellationToken.isCancelled) {
         this.cancellationToken.cancel();
       }
-      const debounced = debounce(500, async (cancellationToken) => {
-        const xml = await this.$store.dispatch('bpmn/getXml', this.process.id);
+      const debounced = debounce(500, async (cancellationToken, me) => {
+        const xml = await me.$store.dispatch('bpmn/getXml', me.process.id);
         if (cancellationToken.isCancelled) {
           return;
         }
         if (xml === false) {
-          this.loading = false;
-          // TODO: display exception
+          me.loading = false;
+          Notification.error(me.$t('bpmn.Errors.ProcessesNotLoaded'));
           return;
         }
         if (!xml || xml === '') {
-          this.modeler.createDiagram(() => {
-            this.loading = false;
-          });        
+          me.modeler.createDiagram(() => {
+            me.loading = false;
+          });
         } else {
-          this.modeler.importXML(xml, (err) => {
-            this.loading = false;
+          me.modeler.importXML(xml, (err) => {
+            me.loading = false;
             if (err) {
               console.error(err);
-              // TODO: display exception
-              this.modeler.createDiagram();
-              this.loading = false;
+              Notification.error(me.$t('bpmn.Errors.ProcessesNotLoaded'));
+              me.modeler.createDiagram();
+              me.loading = false;
             }
           });
         }
       });
 
       this.cancellationToken = new CancellationToken(debounced);
-      debounced(this.cancellationToken);
+      debounced(this.cancellationToken, this);
     },
     setXML(id, xml) {
       this.$store.dispatch('bpmn/setXml', { id, xml }).then(success => {
@@ -125,9 +125,13 @@ export default {
           this.saved = true;
           setTimeout(() => this.saved = false, 1000);
         } else {
-          // TODO: display exception
+          Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
         }
       });
+
+      this.$store.dispatch('bpmn/editProcess', this.process);
+      const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
+      this.$store.dispatch('bpmn/editFolder', item);
     },
     onActiveModelChanged() {
       if (!this.process || !this.modeler || this.noAccess) {
@@ -144,7 +148,7 @@ export default {
       this.loadXml();
     },
     translate(template, replacements) {
-      const translationPrefix = 'bpmn.modeler.';
+      const translationPrefix = 'bpmn.bpmn-modeler.';
       replacements = replacements || {};
 
       for (let replacement in replacements) {
@@ -187,6 +191,5 @@ export default {
   }
 };
 </script>
-<style>
-
+<style >
 </style>

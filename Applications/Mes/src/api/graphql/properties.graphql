@@ -48,7 +48,8 @@
       productionAccountingType
       isVisibleWorkJournalWithLastProdReg
       accessDeleteOnlyMyProduction
-      brandName		
+      brandName
+      isVisibleButtonToTakingTaskToWork
     }
   }
 }

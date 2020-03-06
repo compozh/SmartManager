@@ -1,21 +1,21 @@
-const path = require('path')
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+
+const path = require('path');
 module.exports = {
+  transpileDependencies: ['vuetify'],
+  configureWebpack: {
+    plugins: [
+      new VuetifyLoaderPlugin()
+    ]
+  },
   chainWebpack: config => {
-    const svgRule = config.module.rule('svg');
-
-    svgRule.uses.clear();
-
-    svgRule
-      .use('vue-svg-loader')
-      .loader('vue-svg-loader');
-
     config.module
       .rule('graphql')
       .test(/\.(graphql|gql)$/)
       .use('graphql-tag/loader')
       .loader('graphql-tag/loader')
       .end();
-    
+
     config.module
       .rule('dmn')
       .test(/\.dmn$/)
@@ -32,4 +32,4 @@ module.exports = {
       openAnalyzer: true
     }
   }
-}
+};

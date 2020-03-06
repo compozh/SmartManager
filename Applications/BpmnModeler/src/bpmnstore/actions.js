@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 import { api } from '../api/bpmnApi';
-import { Folder, Diagram, Configuration, ActionDefinition, DiagramAccess } from '../api/models';
+import { Folder, Diagram, Configuration, ActionDefinition, AccessParams, DiagramVersion } from '../api/models';
 
 export default {
   async resetCache() {
@@ -25,10 +25,10 @@ export default {
     }
     context.state.configuration = new Configuration(configuration);
   },
-  async loadItems(context) {
+  async loadItems(context, refetch) {
     let items;
     try {
-      items = await api.getItems()
+      items = await api.getItems(refetch);
     } catch (error) {
       console.error(error);
       return false;
@@ -36,7 +36,7 @@ export default {
     if (!items) {
       return false;
     }
-    
+
     const mapTree = (items) => items.map(e => {
       if (e.$type.startsWith('Folder')) {
         e.items = mapTree(e.items);
@@ -51,14 +51,14 @@ export default {
     return true;
   },
   async checkForOwnFolder(context) {
-    const folderExisit = context.state.items.findIndex(item => item instanceof Folder) >= 0;
+    const folderExisit = context.state.items.findIndex(item => item instanceof Folder && item.ownerId === context.rootState.auth.user.id) >= 0;
     if (folderExisit) {
       return;
     }
-    await context.dispatch('createFolder', new Folder({ name: context.rootState.auth.user.userName }))
+    await context.dispatch('createFolder', new Folder({ name: context.rootState.auth.user.userName }));
   },
   //#region Diagrams
-  
+
   async getXml(context, id) {
     let xml;
     try {
@@ -96,8 +96,6 @@ export default {
       return false;
     }
     Object.assign(diagram, newDiagram);
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
     return true;
   },
   async editProcess(context, { id, name }) {
@@ -122,6 +120,9 @@ export default {
       result = await api.deployDiagram(id);
     } catch (error) {
       console.error(error);
+    }
+    if (!result) {
+      result = { success: false };
     }
     if (!result.success) {
       console.error(result);
@@ -198,8 +199,7 @@ export default {
       return false;
     }
     Object.assign(folder, newFolder);
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
+
     return true;
   },
   async editFolder(context, { id, name }) {
@@ -246,32 +246,19 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
     return success;
   },
   async itemDropped(context, { draggingItem, dropItem, type }) {
-    switch (type) {
-    case 'before':
-    case 'after':
-      draggingItem.parentId = dropItem.parentId;
-      break;
-    case 'inner':
-      draggingItem.parentId = dropItem.id;
-      break;
-    }
     let success = false;
     try {
       if (draggingItem.isFolder) {
-        success = await api.moveFolder(draggingItem.id, draggingItem.parentId);
+        success = await api.moveFolder(draggingItem.id, dropItem.id);
       } else {
-        success = await api.moveDiagram(draggingItem.id, draggingItem.parentId);
+        success = await api.moveDiagram(draggingItem.id, dropItem.id);
       }
     } catch (error) {
       console.error(error);
     }
-    await context.dispatch('resetCache');
-    await context.dispatch('loadItems');
     return success;
   },
 
@@ -279,7 +266,7 @@ export default {
 
   //#region Access
 
-  async getAccessRecordsForProcess(context, diagramId) {
+  async getAccessRecordsForDiagram(context, diagramId) {
     let records;
     try {
       records = await api.getAccessRecordsForDiagram(diagramId);
@@ -287,10 +274,14 @@ export default {
       console.error(error);
       return false;
     }
-    return records.map(record => new DiagramAccess(record));
+    if (records) {
+      return records.map(record => new AccessParams(record));
+    } else {
+      return records;
+    }
   },
 
-  async giveAccessToProcess(context, accessParams) {
+  async giveAccessToDiagram(context, accessParams) {
     try {
       var result = await api.giveAccessToDiagram(accessParams);
       return result;
@@ -300,7 +291,7 @@ export default {
     }
   },
 
-  async editAccessToProcess(context, accessParams) {
+  async editAccessToDiagram(context, accessParams) {
     try {
       return await api.editAccessToDiagram(accessParams);
     } catch (error) {
@@ -309,9 +300,52 @@ export default {
     }
   },
 
-  async removeAccessToProcess(context, accessParams) {
+  async removeAccessToDiagram(context, accessParams) {
     try {
-      return await api.removeAccessToDiagram(accessParams);
+      return await api.removeAccessToDiagram(accessParams.id);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getAccessRecordsForFolder(context, folderId) {
+    let records;
+    try {
+      records = await api.getAccessRecordsForFolder(folderId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    if (records) {
+      return records.map(record => new AccessParams(record));
+    } else {
+      return records;
+    }
+  },
+
+  async giveAccessToFolder(context, accessParams) {
+    try {
+      var result = await api.giveAccessToFolder(accessParams);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async editAccessToFolder(context, accessParams) {
+    try {
+      return await api.editAccessToFolder(accessParams);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async removeAccessToFolder(context, accessParams) {
+    try {
+      return await api.removeAccessToFolder(accessParams.id);
     } catch (error) {
       console.error(error);
       return false;
@@ -356,7 +390,128 @@ export default {
       console.error(error);
       return false;
     }
-  }
+  },
+
+  async getDeployedCases(context) {
+    try {
+      return await api.getDeployedCases();
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjects(context, onlySystem) {
+    try {
+      return await api.getBusinessObjects(onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectActions(context, { boDefCode, onlySystem }) {
+    try {
+      return await api.getBusinessObjectActions(boDefCode, onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectAccess(context, { boDefCode, onlySystem }) {
+    try {
+      return await api.getBusinessObjectAccess(boDefCode, onlySystem);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getBusinessObjectActionForm(context, logicalKey) {
+    try {
+      const result = JSON.parse(await api.getBusinessObjectActionForm(logicalKey));
+      if (result.Success) {
+        return result.FormioForm;
+      }
+      return false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  //#endregion
+
+  //#region Versions
+
+  async getVersionsForDiagram(context, diagramId) {
+    let result;
+    try {
+      result = await api.getVersionsForDiagram(diagramId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+    if (Array.isArray(result)) {
+      return result.map(item => new DiagramVersion(item));
+    }
+    return result;
+  },
+
+  async createDiagramVersion(context, { diagramId, versionName}) {
+    try {
+      return await api.createDiagramVersion(diagramId, versionName);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async getDiagramVersionXml(context, {diagramId, versionId}) {
+    try {
+      return await api.getDiagramVersionXml(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async updateDiagramVersion(context, version) {
+    try {
+      return await api.updateDiagramVersion(version);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async deleteDiagramVersion(context, {diagramId, versionId}) {
+    try {
+      return await api.deleteDiagramVersion(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+
+  async applyDiagramVersion(context, {diagramId, versionId}) {
+    try {
+      return await api.applyDiagramVersion(diagramId, versionId);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+  async copyVersion(context, process) {
+    try {
+      process.xmlView = await context.dispatch('getDiagramVersionXml', {diagramId: process.diagramId, versionId: process.versionId});
+      return await context.dispatch('createProcess', process);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
 
   //#endregion
 

@@ -1,21 +1,19 @@
 <template>
-<!-- TODO: После перехода на vuetify 2 сменить v-flex на v-overlay -->
-  <v-flex v-if="show" v-model="show">
-    <div class="v-overlay v-overlay--active" style="z-index:201" />
-    <div class="v-dialog__content v-dialog__content--active" style="z-index:202;">
-			<v-card class="v-dialog v-dialog--active" max-width="800px">
+    <v-overlay v-if="show" v-model="show" class="overlay-for-formio">
+      <v-card width="800px" light class="dialog">
         <v-card-title>
-				<h4 class="headline mb-0">{{ $t('bpmn.labels.EnterTaskParams') }}</h4>
+          <h4 class="headline mb-0">{{ this.title }}</h4>
         </v-card-title>
-        <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
+        <div style="overflow: auto; max-height: calc(100vh - 140px);">
+          <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
+        </div>
         <v-card-actions>
-				<v-spacer></v-spacer>
-				<v-btn flat @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
-				<v-btn flat @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text @click="show = false" :disabled="loading">{{ $t('bpmn.buttons.Cancel') }}</v-btn>
+          <v-btn text @click="onSubmit" color="primary" :loading="loading">{{ $t('bpmn.buttons.Save') }}</v-btn>
         </v-card-actions>
-			</v-card>
-	</div>
-  </v-flex>
+      </v-card>
+    </v-overlay>
 </template>
 <script>
 import { eventBus } from '../../main';
@@ -29,8 +27,9 @@ export default {
       show: false,
       code: '',
       definition: null,
-      callback: null
-    }
+      callback: null,
+      title: ''
+    };
   },
   mounted() {
     eventBus.$on(events.formio.showForm, this.onShowForm);
@@ -39,33 +38,45 @@ export default {
     eventBus.$off(events.formio.showForm, this.onShowForm);
   },
   methods: {
-    onShowForm(code, definition, callback) {
+    onShowForm(code, definition, title, callback) {
       this.code = code;
       this.definition = definition;
       this.show = true;
       this.callback = callback;
+      this.title = title;
     },
     async onSubmit() {
       var form = this.$refs.formioForm;
-      var submission = JSON.parse(form.getFormSubmission());     
+      var submission = form.getFormSubmission();
       this.loading = true;
 
-      var result = await this.$store.dispatch('formio/submitForm', { formCode: this.code, submission: JSON.stringify(submission) });
+      var result = typeof this.code === 'string' && this.code.trim() != ''
+        ? await this.$store.dispatch('formio/submitForm', { formCode: this.code, submission: submission })
+        : { success: true };
 
       if (result && result.success) {
-        this.$emit('submit', submission);
+        this.$emit('submit', JSON.parse(submission));
       }
 
       this.loading = false;
       
       if (this.callback) {
-        this.callback(submission);
+        this.callback(JSON.parse(submission));
         this.callback = null;
       }
       this.show = false;
     }
   }
-}
+};
 </script>
-<style>
+<style scoped lang="scss">
+
+</style>
+<style lang="scss">
+  .dialog{
+    height: 90%;
+  }
+  .overlay-for-formio {
+    z-index: 1003 !important; 
+  }
 </style>

@@ -1,26 +1,23 @@
-import Vue from 'vue'
-import VueI18n from 'vue-i18n'
-import ru from './resources/ru.json'
-import en from './resources/en.json'
-import uk from './resources/uk.json'
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 
-Vue.use(VueI18n)
+Vue.use(VueI18n);
 
-const defaultLang = 'ru'
+// const defaultLang = 'ru';
+let language = window.navigator ? (window.navigator.language ||
+  window.navigator.systemLanguage ||
+  window.navigator.userLanguage) : 'ru';
+language = language.substr(0, 2).toLowerCase();
 
 export const currentLang = () => {
   if (localStorage.language) {
-    return localStorage.language
+    return localStorage.language;
   }
-  localStorage.language = defaultLang
-  return defaultLang
-}
+  localStorage.language = language;
+  return language;
+};
 
 export const i18n = new VueI18n({
-  locale: currentLang(),
-  messages: {
-    ru: { bpmn: ru },
-    en: { bpmn: en },
-    uk: { bpmn: uk }
-  }
-})
+  silentTranslationWarn: process.env.NODE_ENV === 'production',
+  locale: currentLang()
+});

@@ -1,0 +1,5 @@
+{
+  bpmnqueryMutation {
+    removeAccessToFolder(accessParamsId: $accessParamsId)
+  }
+}

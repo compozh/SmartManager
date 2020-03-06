@@ -15,20 +15,12 @@
 							<v-card-title :class='courseData.courseNameInfoClass'>{{courseData.name}}</v-card-title>
 							<v-card-text :class='courseData.courseDescriptionInfoClass'>{{courseData.description}}</v-card-text>
 							<v-layout row wrap>
-								<v-flex md3 xs6>
-									<!-- <v-card-text :class='courseData.modulesQtInfoClass'>{{courseData.modulesQtLabel}}</v-card-text> -->
-                  <!-- <v-card-text :class='courseData.courseDetailedDurationInfoClass'>{{courseData.durationMinutesLabel}}</v-card-text> -->
+								<!-- <v-flex md3 xs6>
 								</v-flex>
-								<v-spacer/>
+								<v-spacer/> -->
 								<v-flex xs12>
 									<v-layout align-top justify-end row wrap>
-                    <v-btn v-if="course && user" @click="$router.push({name: 'LMSCOURSELEARNING',
-                        params: {
-                          courseGuid: course.courseGuid,
-                          lessonGuid: currentLessonGuid,
-                          course,
-                          modules,
-                          }})">Начать курс</v-btn>
+                    <v-btn v-if="course && user" @click="startCourseLearning">Начать курс</v-btn>
 									</v-layout>
 								</v-flex>
 							</v-layout>
@@ -39,7 +31,7 @@
 		</v-layout>
     <!-- Описание курса -->
     <!-- Статическая панель -->
-    <v-layout align-center justify-center mx-2 mb-4 v-if="courseDescription">
+    <v-layout align-center justify-center mx-2 mb-4 v-if="course && courseDescription">
       <v-flex lg8 mb10 sx12>
         <div v-for='item in courseDescription' :key="item.title">
           <v-card v-if="item.description">
@@ -54,7 +46,7 @@
     <!-- Сводка. Количественные характеристики -->
     <v-layout align-center justify-center mx-2 mb-4>
       <v-flex lg6 mb8 sm10 sx12>
-        <v-card v-if="courseStatistics">
+        <v-card v-if="course && courseStatistics">
           <v-card-title>
             <h3>Этот курс включает</h3>
           </v-card-title>
@@ -165,13 +157,8 @@ export default {
   },
   created() {
     this.courseGuid = this.$route.params.courseGuid
-    if (this.$route.params.courseData) {
-      this.courseData = this.$route.params.courseData
-      this.getCourseDetails(this.courseGuid)
-    } else {
-      let courseDetails = this.$store.getters['lms/courseDetails']
-      this.courseData = courseDetails.course
-    }
+    this.courseData = this.$route.params.courseData
+    this.getCourseDetails(this.courseGuid)
     const course = this.courseData
     if (course.backgroundColor != undefined) {
       if (course.backgroundColor.toUpperCase() === '#FFFFFF') {
@@ -194,6 +181,19 @@ export default {
   methods: {
     getCourseDetails(courseGuid) {
       this.$store.dispatch('lms/getCourseDetails', courseGuid)
+    },
+    startCourseLearning() {
+      // Если слушатель еще не начал проходить курс
+      if (!this.course.status) {
+        this.$store.dispatch('lms/fixCourseStart', this.courseGuid)
+      }
+      this.$router.push({name: 'LMSCOURSELEARNING',
+        params: {
+          courseGuid: this.course.courseGuid,
+          lessonGuid: this.currentLessonGuid,
+          course: this.course,
+          modules: this.modules,
+        }})
     }
   },
   computed: {

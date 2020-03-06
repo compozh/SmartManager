@@ -1,9 +1,5 @@
 <template>
-  <VuePerfectScrollbar
-    class="md:px-8 p-4 flex-1 border d-theme-border-grey-light border-solid p-6 m-6 mt-0"
-    style="background: #f5f5f5;"
-    :settings="settings"
-  >
+  <VuePerfectScrollbar class="p-4" :settings="settings">
     <div class="not-support-container">
       <i18n path="messages.notSupport" tag="div" class="mb-6 text-4xl">
         <template v-slot:ext>
@@ -14,7 +10,7 @@
                  color="primary"
                  type="border"
                  icon-pack="feather"
-                 icon="icon-download">{{ $t('messages.downloadFile') }}
+                 icon="icon-download">{{ $t('attachments.downloadFile') }}
       </vs-button>
     </div>
   </VuePerfectScrollbar>

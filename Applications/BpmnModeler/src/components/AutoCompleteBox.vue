@@ -14,7 +14,8 @@
     :multiple="multiple"
     :chips="multiple"
     deletable-chips
-    @change="search = ''"
+    @change="change"
+    ref="autocomplete"
   >
     <template #item="data">
       <slot name="item" :data="data"></slot>
@@ -46,7 +47,7 @@ export default {
       loading: false,
       search: '',
       query: null
-    }
+    };
   },
   watch: {
     queryItems() {
@@ -69,9 +70,13 @@ export default {
       this.loading = true;
       this.items = await this.queryItems(this.disabled && !this.search && this.value ? this.value : this.search);
       this.loading = false;
+    },
+    change(ev) {
+      this.$refs.autocomplete.blur();
+      this.search = '';
     }
   }
-}
+};
 </script>
 <style>
 

@@ -1,4 +1,5 @@
 export default {
+  applicationParams: null,
   folders: null,
   currentFolder: null,
   search: null,
@@ -8,5 +9,6 @@ export default {
   cases: [],
   caseDetails: {},
   taskListPosition: {},
-  caseListPosition: {}
+  caseListPosition: {},
+  helperexec: true
 }

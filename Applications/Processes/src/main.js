@@ -22,7 +22,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
 import auth from '@it-enterprise/jwtauthentication'
-auth.config(window.myConfig.GrapgQlUrl)
+auth.config({
+  baseUrl: window.myConfig.GrapgQlUrl
+  // onError: error => {
+  // todo: обработать
+  // }
+})
 
 Vue.config.productionTip = false
 
@@ -48,10 +53,10 @@ Vue.use(Localization, { dependencies })
 
 var formioOptions = {
   auth,
+  WsUrl: window.myConfig.WsUrl,
   GraphQlUrl: window.myConfig.GrapgQlUrl,
-  routerDependencies: () => router,
   onError: ({ message, networkError }) => {
-
+    console.log(message)
   }
 }
 

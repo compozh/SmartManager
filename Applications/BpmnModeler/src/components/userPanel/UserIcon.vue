@@ -21,7 +21,7 @@
 export default {
   name: 'userIcon',
   props: ['src', 'size'],
-}
+};
 </script>
 
 <style scoped>

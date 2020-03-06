@@ -27,9 +27,7 @@
 const groups = ['Все','В офисе','В офисе с ключами','Вне офиса','По командам','По комнатам','Кухня']
 export default {
   name: 'route-menu',
-  data: () => ({
-    drawer: false
-  }),
+  data: () => ({}),
   computed: {
     grouping () {
       return this.$store.state.skd.grouping
@@ -56,15 +54,13 @@ export default {
       this.$store.commit('skd/changeGrouping', value)
       this.$store.commit('skd/resetItemsOffset')
       if (this.$vuetify.breakpoint.mdAndDown) {
-        this.drawer = false
+        this.$store.commit('skd/setDrawer', false)
       }
     },
     logOut() {
-      this.drawer = false
-
+      this.$store.commit('skd/setDrawer', false)
     },
   }
-
 }
 </script>
 

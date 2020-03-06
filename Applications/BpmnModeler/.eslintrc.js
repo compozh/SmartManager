@@ -10,11 +10,9 @@ module.exports = {
   ],
 
   'plugins': [
-    'vue'
+    'vue',
+    'vuetify'
   ],
-
-  'rules': {
-  },
 
   root: true,
 
@@ -27,7 +25,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'indent': ['error', 2],
+    'indent': ['error', 2, {
+      "ignoredNodes": ["TemplateLiteral"]
+    }],
     'no-extra-semi':'error',
     'quotes':['error', 'single'],
     'curly':"error",
@@ -38,7 +38,16 @@ module.exports = {
     "keyword-spacing":["error"],
     "brace-style":["error","1tbs", { "allowSingleLine": true }],
     "arrow-spacing":["error"],
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    'vuetify/no-deprecated-classes': 'error',
+    'vuetify/grid-unknown-attributes': 'error',
+    'vuetify/no-legacy-grid': 'error',
+    'semi': ['error', 'always'],
+    'no-dupe-else-if': 'error',
+    'no-await-in-loop': 'error',
+    'no-import-assign': 'error',
+    'array-callback-return': 'error',
+    'block-scoped-var': 'error'
   },
 
   parserOptions: {

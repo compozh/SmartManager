@@ -31,12 +31,17 @@
 
 /**
  * @callback deployedProcessCallback
- * @param {string} procDefId - код задачи
+ * @param {string} procDefId - код процесса
  */
 
 /**
  * @callback deployedDecisionCallback
- * @param {string} decDefId - код задачи
+ * @param {string} decDefId - код таблицы решений
+ */
+
+/**
+ * @callback deployedCaseCallback
+ * @param {string} caseDefId - код кейса
  */
 
 /** События */
@@ -82,9 +87,17 @@ export const events = {
      * Отобразить диалог с настройками общего доступа
      * @event Modeler#showAccessDialog
      * @param {string} recordId - код диаграммы, для которой необходимо отобразить диалог с настройками общего доступа
-     * 
+     *
      */
-    showAccessDialog: 'modeler.show-access-dialog'
+    showAccessDialog: 'modeler.show-access-dialog',
+
+    /**
+     * Отобразить диалог с полем введения названия версии
+     * @event Modeler#showCreateVersionDialog
+     * @param {Object} item - обьэкт текущей версии
+     *
+     */
+    showCreateVersionDialog: 'modeler.show-create-version-dialog'
   },
   /** События в панели свойств */
   propertiesPanel: {
@@ -114,21 +127,67 @@ export const events = {
      */
     setServiceTaskProperties: 'properties-panel.set-service-task-parameters',
 
-    /** 
+    /**
      * Отобразить диалог выбора опубликованных процессов
      * @event PropertiesPanel#selectDeployedProcess
-     * @param {string} procDefKey - ключ опубликованного процесса
+     * @param {string} procDefKey - ключ уже выбранного опубликованного процесса
      * @param {deployedProcessCallback} callback - коллбек, вызываемый после выбора действия
      */
     selectDeployedProcess: 'properties-panel.select-deployed-process',
 
-    /** 
-     * Отобразить диалог выбора опубликованных dmn решений
-     * @event PropertiesPanel#selectDeployedProcess
-     * @param {string} decDefKey - ключ опубликованного dmn решения
-     * @param {deployedDecisionCallback} callback - коллбек, вызываемый после выбора dmn решения
+    /**
+     * Отобразить диалог выбора опубликованных таблиц решений
+     * @event PropertiesPanel#selectDeployedDecision
+     * @param {string} decDefKey - ключ уже выбранного опубликованного dmn решения
+     * @param {deployedDecisionCallback} callback - коллбек, вызываемый после выбора таблицы решений
      */
     selectDeployedDecision: 'properties-panel.select-deployed-decision',
+
+    /**
+     * Отобразить диалог выбора опубликованных кейсов
+     * @event PropertiesPanel#selectDeployedCase
+     * @param {string} caseDefKey - ключ уже выбранного опубликованного кейса
+     * @param {deployedCaseCallback} callback - коллбек, вызываемый после выбора кейса
+     */
+    selectDeployedCase: 'properties-panel.select-deployed-case',
+
+    /**
+     * Отобразить диалог выбора бизнес-обьекта
+     * @event PropertiesPanel#selectBusinessObject
+     * @param {string} boDefCode - ключ уже выбранного бизнес-обьекта
+     * @param {boolean} onlySystem - признак отбора только системных бизнес-обьектов
+     * @param {deployedCaseCallback} callback - коллбек, вызываемый после выбора бизнес-обьекта
+     */
+    selectBusinessObject: 'properties-panel.select-business-object',
+
+    /**
+     * Отобразить диалог выбора действия бизнес-обьекта
+     * @event PropertiesPanel#selectBusinessObjectAction
+     * @param {string} boDefCode - ключ бизнес-обьекта
+     * @param {string} actDefCode - ключ уже выбранного действия бизнес-обьекта
+     * @param {boolean} onlySystem - признак отбора только системных действий бизнес-обьектов
+     * @param {deployedCaseCallback} callback - коллбек, вызываемый после выбора бизнес-обьекта
+     */
+    selectBusinessObjectAction: 'properties-panel.select-business-objectAction',
+
+    /**
+     * Отобразить диалог выбора доступа к бизнес-обьекту
+     * @event PropertiesPanel#selectBusinessObjectAccess
+     * @param {string} boDefCode - ключ бизнес-обьекта
+     * @param {string} actDefCode - ключ уже выбранного доступа к бизнес-обьекту
+     * @param {boolean} onlySystem - признак отбора только системных доступов к бизнес-обьекту
+     * @param {deployedCaseCallback} callback - коллбек, вызываемый после выбора доступа к бизнес-обьекту
+     */
+    selectBusinessObjectAccess: 'properties-panel.select-business-objectAccess',
+
+    /**
+     * Отобразить диалог ввода параметров задачи
+     * @event PropertiesPanel#setBusinessObjectActionProperties
+     * @param {string} logicalKey - код действия
+     * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
+     * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
+     */
+    setBusinessObjectActionProperties: 'properties-panel.set-business-object-task-parameters',
   },
   /** События formio */
   formio: {
@@ -156,4 +215,4 @@ export const events = {
      */
     editForm: 'formio.edit-form'
   }
-}
+};

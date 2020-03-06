@@ -10,6 +10,7 @@ export default {
     if (router.currentRoute.name !== 'SKDLOGIN') {
       router.push({name: 'SKDLOGIN'})
     }
+    commit('setLoginStatus', null)
   },
   async login({commit, state}, {login, password, remember}) {
     if (state.user) {
@@ -18,6 +19,7 @@ export default {
     }
     try {
       const result = await auth.login(login, password, remember)
+      commit('setLoginStatus', result)
       if (result.success) {
         commit('UPDATE_AUTHENTICATED_USER', auth.getUserData())
         await router.push(router.currentRoute.query.to || {name: 'SKDALLUSERS'})
@@ -34,6 +36,7 @@ export default {
     try {
       const result = await api.getUsersFromGql()
       const users = result.data
+      commit('setLastUpdatedDataTime')
       commit('setUsersList', users.skd.personsTable.data)
       commit('setUsers', users)
     } catch (e) {

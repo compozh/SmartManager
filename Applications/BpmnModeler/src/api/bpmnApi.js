@@ -5,11 +5,12 @@ import { onError } from 'apollo-link-error';
 import gql from 'graphql-tag';
 
 import auth from '@it-enterprise/jwtauthentication';
-import { routerDependencies } from '@/router';
+import router from '@/router';
 
 // Queries
 import * as queries from './graphql/queries';
 import * as mutations from './graphql/mutations';
+import { ActionDefinition } from './models';
 
 export class BpmnModelerApi {
   async reset() {
@@ -23,9 +24,10 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.getConfiguration;
   }
 
-  async getItems() {
+  async getItems(refetch) {
     const result = await query({
-      query: gql`query ${queries.items}`
+      query: gql`query ${queries.items}`,
+      fetchPolicy: refetch === true ? 'network-only' : 'cache-first'
     });
     return JSON.parse(result.data.bpmnquery.items);
   }
@@ -59,7 +61,7 @@ export class BpmnModelerApi {
   async createDiagram(diagram) {
     const result = await mutate({
       mutation: gql`mutation ($diagram: DiagramInput!) ${mutations.createDiagram}`,
-      variables: { diagram: { name: diagram.name, parentId: diagram.parentId, isSystem: diagram.isSystem, type: diagram.type, xmlView: diagram.xmlView } }
+      variables: { diagram: { name: diagram.name, parentId: diagram.parentId, isSystem: diagram.isSystem, type: diagram.type, xmlView: diagram.xmlView, kobj: diagram.kobj } }
     });
     return result.data.bpmnqueryMutation.createDiagram;
   }
@@ -103,7 +105,7 @@ export class BpmnModelerApi {
   async createFolder(folder) {
     const result = await mutate({
       mutation: gql`mutation ($folder: FolderInput!) ${mutations.createFolder}`,
-      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId, isSystem: folder.isSystem } }
+      variables: { folder: { id: folder.id, name: folder.name, parentId: folder.parentId, isSystem: folder.isSystem, kobj: folder.kobj } }
     });
     return result.data.bpmnqueryMutation.createFolder;
   }
@@ -147,14 +149,18 @@ export class BpmnModelerApi {
 
   async giveAccessToDiagram(accessParams) {
     const result = await mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.giveAccessToDiagram}`,
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.giveAccessToDiagram}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
           userId: accessParams.userId,
           groupId: accessParams.groupId,
-          allowAccess: accessParams.allowAccess,
-          rights: accessParams.rights
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share,
+          inherit: accessParams.inherit
         }
       }
     });
@@ -163,34 +169,87 @@ export class BpmnModelerApi {
 
   async editAccessToDiagram(accessParams) {
     const result = await mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.editAccessToDiagram}`,
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.editAccessToDiagram}`,
       variables: {
         accessParams: {
+          id: accessParams.id,
           recordId: accessParams.recordId,
-          userId: accessParams.userId,
-          groupId: accessParams.groupId,
-          allowAccess: accessParams.allowAccess,
-          rights: accessParams.rights
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share
         }
       }
     });
     return result.data.bpmnqueryMutation.editAccessToDiagram;
   }
 
-  async removeAccessToDiagram(accessParams) {
+  async removeAccessToDiagram(id) {
     const result = await mutate({
-      mutation: gql`mutation ($accessParams: DiagramAccessParamsInput!) ${mutations.removeAccessToDiagram}`,
+      mutation: gql`mutation ($accessParamsId: ID!) ${mutations.removeAccessToDiagram}`,
+      variables: {
+        accessParamsId: id
+      }
+    });
+    return result.data.bpmnqueryMutation.removeAccessToDiagram;
+  }
+
+  async getAccessRecordsForFolder(folderId) {
+    const result = await query({
+      query: gql`query ($folderId: ID!) ${queries.getAccessRecordsForFolder}`,
+      variables: { folderId },
+      fetchPolicy: 'no-cache'
+    });
+    return result.data.bpmnquery.getAccessRecordsForFolder;
+  }
+
+  async giveAccessToFolder(accessParams) {
+    const result = await mutate({
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.giveAccessToFolder}`,
       variables: {
         accessParams: {
           recordId: accessParams.recordId,
           userId: accessParams.userId,
           groupId: accessParams.groupId,
-          allowAccess: accessParams.allowAccess,
-          rights: accessParams.rights
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share,
+          inherit: accessParams.inherit
         }
       }
     });
-    return result.data.bpmnqueryMutation.removeAccessToDiagram;
+    return result.data.bpmnqueryMutation.giveAccessToFolder;
+  }
+
+  async editAccessToFolder(accessParams) {
+    const result = await mutate({
+      mutation: gql`mutation ($accessParams: AccessParamsInput!) ${mutations.editAccessToFolder}`,
+      variables: {
+        accessParams: {
+          id: accessParams.id,
+          recordId: accessParams.recordId,
+          read: accessParams.read,
+          write: accessParams.write,
+          deploy: accessParams.deploy,
+          execute: accessParams.execute,
+          share: accessParams.share
+        }
+      }
+    });
+    return result.data.bpmnqueryMutation.editAccessToFolder;
+  }
+
+  async removeAccessToFolder(id) {
+    const result = await mutate({
+      mutation: gql`mutation ($accessParamsId: ID!) ${mutations.removeAccessToFolder}`,
+      variables: {
+        accessParamsId: id
+      }
+    });
+    return result.data.bpmnqueryMutation.removeAccessToFolder;
   }
 
   //#endregion
@@ -200,14 +259,14 @@ export class BpmnModelerApi {
   async queryUsers() {
     const result = await query({
       query: gql`query ${queries.queryUsers}`
-    })
+    });
     return result.data.bpmnquery.queryUsers;
   }
 
   async queryGroups() {
     const result = await query({
       query: gql`query ${queries.queryGroups}`
-    })
+    });
     return result.data.bpmnquery.queryGroups;
   }
 
@@ -216,12 +275,16 @@ export class BpmnModelerApi {
       query: gql`query ($definitionType: ActionDefinitionType!, $onlySystem: Boolean!) ${queries.getActions}`,
       variables: { definitionType, onlySystem }
     });
-    return result.data.bpmnquery.getAvailableActions;
+    const actions = result.data.bpmnquery.getAvailableActions;
+    if (Array.isArray(actions)) {
+      return actions.map(action => new ActionDefinition(action));
+    }
+    return actions;
   }
 
   async getActionById(actionId) {
     const result = await query({
-      query: gql`query ($actionId: ID!) ${queries.getActionById}`,
+      query: gql`query ($actionId: String!) ${queries.getActionById}`,
       variables: { actionId }
     });
     return result.data.bpmnquery.getActionById;
@@ -268,17 +331,132 @@ export class BpmnModelerApi {
     return result.data.bpmnquery.deployedDecisions;
   }
 
+  async getDeployedCases() {
+    const result = await query({
+      query: gql`query ${queries.getDeployedCases}`
+    });
+    return result.data.bpmnquery.deployedCases;
+  }
+
   //#endregion
+
+  //#region Versions
+
+  async getVersionsForDiagram(diagramId) {
+    const result = await query({
+      query: gql`query ($diagramId : ID!) ${queries.getDiagramVersions}`,
+      variables: { diagramId },
+      fetchPolicy: 'no-cache'
+    });
+    return result.data.bpmnquery.diagramVersions;
+  }
+
+  async createDiagramVersion(diagramId, versionName) {
+    const result = await mutate({
+      mutation: gql`mutation ($diagramId: ID!, $versionName: String) ${mutations.createDiagramVersion}`,
+      variables: { diagramId, versionName }
+    });
+    return result.data.bpmnqueryMutation.createDiagramVersion;
+  }
+
+  async getDiagramVersionXml(diagramId, versionId) {
+    const result = await query({
+      query: gql`query ($diagramId: ID!, $versionId: ID!) ${queries.getDiagramVersionXml}`,
+      variables: { diagramId, versionId }
+    });
+    return result.data.bpmnquery.diagramVersionXml;
+  }
+
+  async updateDiagramVersion(version) {
+    const result = await mutate({
+      mutation: gql`mutation ($version: DiagramVersionInput!) ${mutations.updateDiagramVersion}`,
+      variables: { version: {diagramId: version.diagramId, versionId: version.versionId, name: version.name }}
+    });
+    return result.data.bpmnqueryMutation.updateDiagramVersion;
+  }
+
+  async deleteDiagramVersion(diagramId, versionId) {
+    const result = await mutate({
+      mutation: gql`mutation ($diagramId: ID!, $versionId: ID!) ${mutations.deleteDiagramVersion}`,
+      variables: { diagramId, versionId }
+    });
+    return result.data.bpmnqueryMutation.deleteDiagramVersion;
+  }
+
+  async applyDiagramVersion(diagramId, versionId) {
+    const result = await mutate({
+      mutation: gql`mutation ($diagramId: ID!, $versionId: ID!) ${mutations.applyDiagramVersion}`,
+      variables: { diagramId, versionId }
+    });
+    const success = result.data.bpmnqueryMutation.applyDiagramVersion;
+    if (success) {
+      const xml = await this.getDiagramVersionXml(diagramId, versionId);
+      if (typeof xml === 'string') {
+        client.writeQuery({
+          query: gql`query ($id: ID!) ${queries.getXml}`,
+          variables: { id: diagramId },
+          data: { bpmnquery: { getXml: xml, __typename: 'String' } }
+        });
+      }
+      return xml;
+    }
+    return success;
+  }
+
+  //#endregion
+
+  //#region BusinessObjects
+
+  async getBusinessObjects(onlySystem) {
+    const result = await query({
+      query: gql`query ($onlySystem: Boolean!) ${queries.businessObjects}`,
+      variables: { onlySystem }
+    });
+    return result.data.bpmnquery.businessObjects;
+  }
+
+  async getBusinessObjectActions(boDefCode, onlySystem) {
+    const result = await query({
+      query: gql`query ($boDefCode: String!, $onlySystem: Boolean!) ${queries.businessObjectActions}`,
+      variables: { boDefCode, onlySystem }
+    });
+    return result.data.bpmnquery.businessObjectActions;
+  }
+
+  async getBusinessObjectAccess(boDefCode, onlySystem) {
+    const result = await query({
+      query: gql`query ($boDefCode: String!, $onlySystem: Boolean!) ${queries.businessObjectAccess}`,
+      variables: { boDefCode, onlySystem }
+    });
+    return result.data.bpmnquery.businessObjectAccess;
+  }
+
+  async getBusinessObjectActionForm(logicalKey) {
+    const result = await query({
+      query: gql`query ($logicalKey: String!) ${queries.businessObjectActionForm}`,
+      variables: { logicalKey }
+    });
+    return result.data.bpmnquery.businessObjectActionForm;
+  }
+
+  //#endregion
+
 }
 
 export const api = new BpmnModelerApi();
 
+/**
+ * @param {import('apollo-client').QueryOptions} options 
+ */
 async function query(options) {
   const token = await auth.getToken();
   addAuthHeader(options, token);
   return await client.query(options);
 }
 
+/**
+ * @param {import('apollo-client').MutationOptions} options 
+ */
 async function mutate(options) {
   const token = await auth.getToken();
   addAuthHeader(options, token);
@@ -298,7 +476,12 @@ function addAuthHeader(options, token) {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens();
-    routerDependencies.router.push('/login');
+    if (router.currentRoute.name !== 'login') {
+      router.push({path: '/login', query: {to: router.currentRoute.path }});
+    }
+  }
+  if (networkError && networkError.statusCode == 500) {
+    router.push({name: 'page-error', params: { status_code: '500'}}, () => {},() => {});
   }
   if (graphQLErrors) {
     return graphQLErrors.message;

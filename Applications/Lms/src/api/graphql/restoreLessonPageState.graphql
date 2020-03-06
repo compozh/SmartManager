@@ -1,0 +1,11 @@
+{
+  lms{
+    restoreLessonPageState(courseGuid: $courseGuid){
+      success
+      successMessage
+      errorCode
+      errorMessage
+      pageStateParamsJson
+    }
+  }
+}

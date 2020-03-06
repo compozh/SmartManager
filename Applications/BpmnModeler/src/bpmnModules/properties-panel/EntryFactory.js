@@ -1,7 +1,7 @@
 import { PropertiesPanelEntry } from './Models';
 import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
-import * as cmdHelper from './helpers/CmdHelper';
-import elementHelper from './helpers/ElementHelper';
+import * as cmdHelper from './bpmn/helpers/CmdHelper';
+import elementHelper from './bpmn/helpers/ElementHelper';
 import { nextId } from './utils';
 import { debounce } from 'min-dash';
 import { concatCommands } from './utils';
@@ -31,7 +31,7 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание текстового поля
    */
   textField(options) {
-    const data = getDefaultData(options, this.element, this.readonly, this.commandStack);
+    const data = this.getDefaultData(options);
     data.on.input = debounce(data.on.input, 800);
     if (options.type) {
       data.props.type = options.type;
@@ -45,7 +45,7 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание многострочного текстового поля
    */
   textArea(options) {
-    const data = getDefaultData(options, this.element, this.readonly, this.commandStack);
+    const data = this.getDefaultData(options);
     data.props.rows = typeof options.rows === 'number' ? options.rows : 1;
     data.props['auto-grow'] = true;
     data.on.input = debounce(data.on.input, 800);
@@ -58,7 +58,7 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание текстового редактора
    */
   richEdit(options) {
-    const data = getDefaultData(options, this.element, this.readonly, this.commandStack);
+    const data = this.getDefaultData(options);
     data.on.input = debounce(data.on.input, 800);
     return new PropertiesPanelEntry('properties-panel-rich-edit', data);
   }
@@ -69,7 +69,7 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание переключателя
    */
   checkbox(options) {
-    var data = getDefaultData(options, this.element, this.readonly, this.commandStack);
+    var data = this.getDefaultData(options);
     data.on.change = data.on.input;
     delete data.on.input;
     data.props['input-value'] = data.props.value;
@@ -83,7 +83,7 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание автодополняемого поля
    */
   autocompleteBox(options) {
-    var data = getDefaultData(options, this.element, this.readonly, this.commandStack);
+    var data = this.getDefaultData(options);
     data.props.loadItems = options.loadItems;
     data.props.prependIcon = options.prependIcon;
     data.props.appendIcon = options.appendIcon;
@@ -103,7 +103,7 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание поля с пыпадающим списком
    */
   selectBox(options) {
-    var data = getDefaultData(options, this.element, this.readonly, this.commandStack);
+    var data = this.getDefaultData(options);
     data.props['item-text'] = 'name';
     data.props.items = options.items;
     return new PropertiesPanelEntry('v-select', data);
@@ -115,6 +115,11 @@ export default class EntryFactory {
    * @returns {PropertiesPanelEntry} Описание кнопки
    */
   button(options) {
+    if (!options.style) {
+      options.style = {};
+    }
+    options.style['margin-bottom'] = '20px';
+
     return new PropertiesPanelEntry('v-btn', {
       props: {
         key: options.id,
@@ -125,7 +130,7 @@ export default class EntryFactory {
         click: () => options.click ? options.click(this.element) : null
       },
       style: getDefaultStyle(options)
-    }, () => options.label)
+    }, () => options.label);
   }
 
   /**
@@ -150,10 +155,10 @@ export default class EntryFactory {
             commands.push(cmdHelper.updateBusinessObject(this.element, bo, { extensionElements: extensionElements }));
           }
           commands.push(options.createExtensionElement(extensionElements, generateElementId(options.prefix)));
-          execute(commands.flat(), this.commandStack);
+          this.execute(commands.flat());
         },
         removeExtensionElement: (element) => {
-          execute(options.removeExtensionElement(element), this.commandStack);
+          this.execute(options.removeExtensionElement(element));
         },
         resetOnElementChanged: true
       },
@@ -171,7 +176,7 @@ export default class EntryFactory {
    * @returns Описание поля выбора даты
    */
   datePicker(options) {
-    return new PropertiesPanelEntry('properties-panel-date-picker-field', getDefaultData(options, this.element, this.readonly, this.commandStack));
+    return new PropertiesPanelEntry('properties-panel-date-picker-field', this.getDefaultData(options));
   }
 
   /**
@@ -190,58 +195,58 @@ export default class EntryFactory {
       style: getDefaultStyle(options)
     }, () => options.value);
   }
-}
 
-function getDefaultData(options, element, readonly, commandStack) {
-  return {
-    props: {
-      key: options.id,
-      label: options.label,
-      value: get(options, element),
-      rules: readonly ? [] : [(value) => validate(options, element, value)],
-      readonly: readonly,
-      clearable: !readonly
-    },
-    on: {
-      input: (value) => set(options, element, readonly, commandStack, value)
-    },
-    style: getDefaultStyle(options)
-  };
-}
-
-function validate(options, element, value) {
-  return options.validate ? options.validate(element, value) : true;
-}
-
-function get(options, element) {
-  if (options.get) {
-    return options.get(element);
-  } else {
-    return getBusinessObject(element).get(options.model);
+  getDefaultData(options) {
+    return {
+      props: {
+        key: options.id,
+        label: options.label,
+        value: this.get(options),
+        rules: this.readonly ? [] : [(value) => this.validate(options, value)],
+        readonly: this.readonly,
+        clearable: !this.readonly
+      },
+      on: {
+        input: (value) => { if (this.validate(options, value)) { this.set(options, value); } }
+      },
+      style: getDefaultStyle(options)
+    };
   }
-}
 
-function set(options, element, readonly, commandStack, value) {
-  if (readonly || !validate(options, element, value)) {
-    return;
+  validate(options, value) {
+    return options.validate ? options.validate(this.element, value) : true;
   }
-  var command;
-  if (options.set) {
-    command = options.set(element, value);
-  } else {
-    command = cmdHelper.updateProperties(element, { [options.model]: value });
-  }
-  execute(command, commandStack);
-}
 
-function execute(command, commandStack) {
-  if (Array.isArray(command)) {
-    command = concatCommands(command);
+  get(options) {
+    if (options.get) {
+      return options.get(this.element);
+    } else {
+      return getBusinessObject(this.element).get(options.model);
+    }
   }
-  try {
-    commandStack.execute(command.cmd, command.context);
-  } catch (error) {
-    console.error(error);
+
+  set(options, value) {
+    if (this.readonly || this.validate(options, value) !== true) {
+      return;
+    }
+    var command;
+    if (options.set) {
+      command = options.set(this.element, value);
+    } else {
+      command = cmdHelper.updateProperties(this.element, { [options.model]: value });
+    }
+    this.execute(command);
+  }
+
+  execute(command) {
+    if (Array.isArray(command)) {
+      command = concatCommands(command);
+    }
+    try {
+      this.commandStack.execute(command.cmd, command.context);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

@@ -7,7 +7,6 @@ import formio from '@it-enterprise/formio'
 import '@it-enterprise/formio/dist/formio.css'
 
 import auth from '@it-enterprise/jwtauthentication'
-auth.config(window.myConfig.GrapgQlUrl)
 
 // vue пакеты
 import Vue from 'vue'
@@ -32,6 +31,15 @@ import router from './router'
 
 import signalR from './signalR'
 import BarcodeScaner from './components/components/BarcodeScaner'
+
+auth.config({
+  baseUrl: window.myConfig.GrapgQlUrl,
+  onError: error => {
+    if(error.response && error.response.status == 400) {
+      store.dispatch('auth/logout')
+    }
+  }
+})
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -64,13 +72,15 @@ Vue.use(Localization, { dependencies })
 
 var formioOptions = {
   auth,
+  WsUrl: window.myConfig.WsUrl,
   GraphQlUrl: window.myConfig.GrapgQlUrl,
-  routerDependencies: () => router,
   onError: ({ message, networkError }) => {
-    if (networkError && networkError.statusCode === 401) {
-      auth.clearTokens()
-      if (router.currentRoute.name !== 'MESLOGIN') {
-        router.push({path: '/login', query: {to: router.currentRoute.path, fixedUuid: router.currentRoute.query.fixedUuid}})
+    if (networkError) {
+      switch(networkError.statusCode) {
+        case 401:
+        case 400:
+          store.dispatch('auth/logout')
+          break;
       }
     }
     console.log(message)

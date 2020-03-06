@@ -1,37 +1,33 @@
 <template>
-    <v-container fluid>
-    <v-layout>
+  <v-container fluid py-0>
+    <v-layout >
       <v-flex>
         <v-card flat px-2 v-if="lesson">
-          <v-card-title >
-            <h3>Материалы к уроку <span class="indigo--text">{{materials ? lesson.name : 'не предусиотрены'}}</span></h3>
-          </v-card-title>
+            <div class="body-1 px-3 py-3">Ресурсы урока <span class="indigo--text">{{lesson.name}}</span> <span v-if="!materials.length">&nbsp;не предусмотрены</span></div>
           <v-layout>
-            <v-flex xl6 md6 sm12>
-              <v-list v-if="materials">
+            <v-flex >
+              <v-list v-if="materials" expand style="padding-top:0;!impotant">
                 <v-list-group v-for="(material, index) in materials"
                               :key="index"
-                              v-model="material.active"
                               :prepend-icon="material.icon"
-                              v-if="material.enclosures"
-                              no-action>
+                              v-model="material.active"
+                              no-action
+                              >
                   <template v-slot:activator>
-                    <v-list-tile>
+                    <v-list-tile >
                       <v-list-tile-content>
-                        <v-list-tile-title>{{ material.title }}</v-list-tile-title>
+                        <v-list-tile-title class="body-2">{{ material.title }}</v-list-tile-title>
                       </v-list-tile-content>
                     </v-list-tile>
                   </template>
-                  <v-list-tile
+                  <v-list-tile class="grey lighten-2"
                     v-for="enclosure in material.enclosures"
                     :key="enclosure.id"
                     @click="getEnclosure(material.type, enclosure)"
                   >
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ enclosure.title }}</v-list-tile-title>
+                      <v-list-tile-title class="body-1">{{ enclosure.title }}</v-list-tile-title>
                     </v-list-tile-content>
-                    <v-list-tile-action>
-                    </v-list-tile-action>
                   </v-list-tile>
                 </v-list-group>
               </v-list>
@@ -44,6 +40,8 @@
 </template>
 
 <script>
+import {materialType, addTicketToLink} from '../helpers/lesson.js'
+
 export default {
   name: 'lesson-materials',
   props: {
@@ -58,17 +56,14 @@ export default {
   },
   data() {
     return {
-      materialsType: {
-        file: 0,
-        presentation: 1,
-        link: 2
-      },
+      materialType: materialType
     }
   },
   methods: {
     getEnclosure(type, enclosure) {
       // Передать данные слушателя и
-      window.open(enclosure.link, enclosure.title)
+      const link = type !== materialType.link ? addTicketToLink(enclosure.link) : enclosure.link
+      window.open(link, enclosure.title)
     }
   }
 }

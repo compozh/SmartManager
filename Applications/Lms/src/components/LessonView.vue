@@ -1,14 +1,26 @@
 <template>
-  <v-container fluid>
-    <v-layout column>
-      <v-flex mx-2>
+  <v-container py-0>
+    <v-layout column fill-height>
+      <v-flex mx-2 pt-2 shrink>
         <v-card flat v-if="unit">
-          <h3>Просмотр урока <span class="indigo--text">{{unit.lesson.name}}</span></h3>
-          <div v-if='unit.lesson.lessonType===lessonType.video'>
-            <video class="lesson-video" :src="unit.content" controls='controls'></video>
+          <div v-if='unit.lesson.lessonType === lessonType.video'>
+            <video
+              ref="lessonvideo"
+              class="lesson-view"
+              :src="getLink(unit.content)"
+              @ended="getNextTrack()"
+              controls='controls'></video>
           </div>
-          <div v-if='unit.lesson.lessonType===lessonType.text'>
+          <div
+            v-if='unit.lesson.lessonType === lessonType.text'
+            class="lesson-view">
             <quill v-model="getLessonContent" :config="config"></quill>
+          </div>
+          <div v-if="unit.lesson.lessonType === lessonType.test">
+            <test-view
+              class="lesson-view"
+              :test="unit"
+            ></test-view>
           </div>
         </v-card>
       </v-flex>
@@ -17,43 +29,67 @@
 </template>
 
 <script>
+import {lessonType, addTicketToLink} from '../helpers/lesson.js'
 
 export default {
   name: 'lesson-view',
   props: {
-    unit: Object
+    unit: Object,
+    startPlay: Boolean
   },
-  data() {
+  mounted () {
+    this.videoPlayer = this.$refs.lessonvideo
+  },
+  updated () {
+    if ( this.startPlay ) {
+      this.videoPlayer.play()
+    }
+  },
+  data () {
     return {
+      // HTMLMediaElement
+      videoPlayer: null,
       // quilljs config
       config: {
         readOnly: true,
         placeholder: '',
         modules: {
           syntax: false,
-          toolbar: false
+          toolbar: null
         },
         theme: 'snow',
       },
-      lessonType: {
-        text: 0,
-        video: 1,
-        test: 2
-      }
+      lessonType: lessonType
+    }
+  },
+  methods: {
+    getNextTrack () {
+      this.$emit('ended')
+    },
+    getLink(content) {
+      return addTicketToLink(content)
     }
   },
   computed: {
-    getLessonContent() {
-      return JSON.parse(this.unit.content)
+    getLessonContent () {
+      let content = null
+      if (this.unit.content) {
+        try {
+          content = JSON.parse(this.unit.content)
+          return content
+        } catch (error) {
+          console.log('Отсутствует контент урока!')
+        }
+      }
+      return { ops: [{insert: 'Контент отсутствует.'}]}
     }
   }
 }
 </script>
 
 <style>
-.lesson-video {
-  width: 100%;
-  height: 100%;
-  border: solid lightgray 1px;
+.lesson-view {
+  width:100%;
+  overflow: hidden;
 }
 </style>

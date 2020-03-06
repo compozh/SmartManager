@@ -6,89 +6,165 @@
     <template v-slot:activator="{ on }">
       <slot name="activator" :open="on"></slot>
     </template>
-    <v-list>
-      <template v-if="!item || isFolder(item)">
-        <v-list-tile @click="addFolder(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-folder</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.AddFolder') }}</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile v-if="item" @click="addProcess(item)">
-          <v-list-tile-avatar>
+    <v-list :dense="milestones" max-width="300px">
+      <!-- <template v-if="(!item || isFolder(item)) && !crumb && !onlyExport">
+        <v-list-item @click="addFolder(item)">
+          <v-list-item-avatar>
+            <v-icon>mdi-folder-plus</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.AddFolder') }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="addProcess(item)">
+          <v-list-item-avatar>
             <v-icon>mdi-file-tree</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.AddProcess') }}</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile v-if="item" @click="importBpmn(item)">
-          <v-list-tile-avatar>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.AddProcess') }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="importBpmn(item)">
+          <v-list-item-avatar>
             <v-icon>mdi-import</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.Import') }}</v-list-tile-title>
-        </v-list-tile>
-      </template>
-      <template v-else-if="isBpmn(item)">
-        <v-list-tile @click="exportBpmn(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-file-code</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.ExportBpmn') }}</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="exportSvg(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-file-image</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="exportPng(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-file-image-outline</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-tile-title>
-        </v-list-tile>
-      </template>
-      <template v-else-if="isDmn(item)">
-        <v-list-tile @click="exportDmn(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-file-code</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-tile-title>
-        </v-list-tile>
-      </template>
-      <template v-if="item">
-        <v-list-tile v-if="canDeploy(item)" @click="deploy(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-export</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-tile-title>
-        </v-list-tile>
-        <v-divider></v-divider>
-        <v-list-tile @click="copy(item)">
-            <v-list-tile-avatar>
-              <v-icon>mdi-content-copy</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-title>{{ $t('bpmn.buttons.Copy') }}</v-list-tile-title>
-          </v-list-tile>
-        <template v-if="canEdit(item)">
-          <v-list-tile @click="edit(item)">
-            <v-list-tile-avatar>
-              <v-icon>mdi-pencil</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-title>{{ $t('bpmn.buttons.Rename') }}</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile @click="remove(item)">
-            <v-list-tile-avatar>
-              <v-icon>mdi-delete</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-title>{{ $t('bpmn.buttons.Delete') }}</v-list-tile-title>
-          </v-list-tile>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.Import') }}</v-list-item-title>
+        </v-list-item>
+      </template> -->
+      <!-- <template v-if="item && !onlyExport">
+        <v-list-item v-if="canDeploy(item) && !crumb" @click="deploy(item)">
+          <v-list-item-avatar>
+            <v-icon>save_alt</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.Deploy') }}</v-list-item-title>
+        </v-list-item> </template>  -->
+      <template v-if="onlyExport">
+        <template v-if="isBpmn(item)">
+          <v-list-item @click="exportBpmn(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-code</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportBpmn') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="exportSvg(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-image</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="exportPng(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-image-outline</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-item-title>
+          </v-list-item>
         </template>
-        <v-list-tile v-if="canShare(item)" @click="share(item)">
-          <v-list-tile-avatar>
-            <v-icon>mdi-share-variant</v-icon>
-          </v-list-tile-avatar>
-          <v-list-tile-title>{{ $t('bpmn.buttons.Share') }}</v-list-tile-title>
-        </v-list-tile>
+        <template v-else-if="isCmmn(item)">
+          <v-list-item @click="exportCmmn(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-code</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportCmmn') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="exportSvg(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-image</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportSvg') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="exportPng(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-image-outline</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportPng') }}</v-list-item-title>
+          </v-list-item>
+        </template>
+        <template v-else-if="isDmn(item)">
+          <v-list-item @click="exportDmn(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-file-code</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.ExportDmn') }}</v-list-item-title>
+          </v-list-item>
+        </template>
+      </template>
+      <template v-if="crumb">
+        <template v-if="!isFolder(item)">
+          <v-list-item @click="createVersion(item)" v-if="canEdit(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-source-commit</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.AddMilestone') }}</v-list-item-title>
+          </v-list-item>
+          <router-link :to="{ name: 'milestones', params: {id: $route.params.id}}" tag="v-list-item">
+            <v-list-item-avatar>
+              <v-icon>mdi-cards-outline</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.MilestonesHistory') }}</v-list-item-title>
+          </router-link>
+          <v-divider  />
+        </template>
+        <v-list-item v-if="canShare(item)" @click="share(item)">
+          <v-list-item-avatar>
+            <v-icon>mdi-account-plus</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.Share') }}</v-list-item-title>
+        </v-list-item>
+        <template v-if="!isFolder(item) && canEdit(item)">
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-repeat</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.Replace') }}</v-list-item-title>
+          </v-list-item>
+        </template>
+      </template>
+      <template v-if="milestones || !onlyExport && canEdit(item)">
+          <v-list-item @click="edit(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-pencil</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.Rename') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="remove(item)">
+            <v-list-item-avatar>
+              <v-icon>mdi-delete</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ $t('bpmn.buttons.Delete') }}</v-list-item-title>
+          </v-list-item>
+        </template>
+
+        <template v-if="milestones || !onlyExport && !isFolder(item) && canEdit(item)">
+          <v-menu offset-x bottom
+            v-model="explorer"
+            :close-on-click="false"
+            :close-on-content-click="false">
+            <template v-slot:activator="{ on }">
+              <v-list-item  v-on="on">
+                <v-list-item-avatar>
+                  <v-icon>mdi-content-copy</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>{{ $t('bpmn.buttons.Copy') }}</v-list-item-title>
+              </v-list-item>
+            </template>
+            <file-explorer :itemId="item.parentId" :chosen="[item]" :explorer.sync="explorer" mode="copy"/>
+          </v-menu>
+        </template>
+      <template v-if="milestones" >
+        <v-list-item @click="apply(item)">
+          <v-list-item-avatar>
+            <v-icon>mdi-backup-restore</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.RestoreAsLatest') }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="compare(item, version)" :disabled="item.versionId == version.versionId" >
+          <v-list-item-avatar>
+            <v-icon>mdi-compare</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.Compare')}} {{'"' + item.name + '"'}}  {{$t('bpmn.labels.With')}}  {{'"' + version.name + '"'}}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="compare(item, diagram)" >
+          <v-list-item-avatar>
+            <v-icon>mdi-compare</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>{{ $t('bpmn.buttons.Compare')}} {{'"' + item.name + '"'}}  {{$t('bpmn.labels.With')}}  {{$t('bpmn.labels.WithLastVersion')}}</v-list-item-title>
+        </v-list-item>
       </template>
     </v-list>
   </v-menu>
@@ -97,12 +173,23 @@
 import { eventBus } from '../main';
 import { events } from '../constants';
 import * as Models from '../api/models';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'bpmn-contex-menu',
+  data() {
+    return {
+      explorer: false,
+    };
+  },
   props: {
     item: Object,
-    offset: Boolean
+    offset: Boolean,
+    crumb: Boolean,
+    onlyExport: Boolean,
+    milestones: Boolean,
+    version: Object,
+    diagram: Object
   },
   computed: {
     canModifySystemObjects() {
@@ -110,6 +197,9 @@ export default {
     },
   },
   methods: {
+    compare(item1, item2) {
+      this.$emit('compare', item1.versionId || item1.id || item1, item2.versionId || item2.id || item2);
+    },
     addFolder(item) {
       this.$emit('create', item, 'folder');
     },
@@ -128,6 +218,9 @@ export default {
     exportBpmn(item) {
       this.$emit('export', item, 'bpmn');
     },
+    exportCmmn(item) {
+      this.$emit('export', item, 'cmmn');
+    },
     exportDmn(item) {
       this.$emit('export', item, 'dmn');
     },
@@ -144,29 +237,52 @@ export default {
       this.$emit('copy', item);
     },
     share(item) {
-      eventBus.$emit(events.modeler.showAccessDialog, item.id);
+      eventBus.$emit(events.modeler.showAccessDialog, item);
     },
     isFolder(item) {
       return item instanceof Models.Folder;
     },
     canDeploy(item) {
-      return item.hasRight(Models.DiagramAccessRights.Deploy);
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Deploy);
     },
     canEdit(item) {
-      return item.hasRight(this.isFolder(item) ? Models.FolderAccessRights.Write : Models.DiagramAccessRights.Write);
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Write);
     },
     canShare(item) {
-      return !this.isFolder(item) && item.hasRight(Models.DiagramAccessRights.Share);
+      if (!item) { return false; }
+      return item.hasRight(Models.AccessRights.Share);
     },
     isBpmn(item) {
-      return item.type === Models.DiagramType.BPMN;
+      return item instanceof Models.Diagram && item.type === Models.DiagramType.BPMN;
+    },
+    isCmmn(item) {
+      return item instanceof Models.Diagram && item.type === Models.DiagramType.CMMN;
     },
     isDmn(item) {
-      return item.type === Models.DiagramType.DMN;
+      return item instanceof Models.Diagram && item.type === Models.DiagramType.DMN;
+    },
+    createVersion(item) {
+      eventBus.$emit(events.modeler.showCreateVersionDialog, item);
+    },
+    async apply(item) {
+      await this.$store.dispatch('bpmn/applyDiagramVersion', {diagramId: item.diagramId, versionId: item.versionId});
     }
-  },
-}
+  }
+};
 </script>
 <style>
-
+.v-list-item__avatar {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.v-list-item__title {
+  text-align: start;
+  font-size: 14px;
+  white-space: normal;
+}
+a {
+  text-decoration: none;
+}
 </style>

@@ -6,7 +6,7 @@
             <v-btn class="col-12 ma-0 " v-if="$vuetify.breakpoint.smAndDown && !inTasksTable" @click="changeTaskTableView" text outlined>{{ $t('mes.buttons.Close') }}</v-btn>
             <v-btn class="setup-installations-button" v-if="$vuetify.breakpoint.mdAndUp || inTasksTable" outlined @click="onclickSetupMaterial" color="#326DA8">{{this.$t('mes.buttons.SetupMaterial')}}</v-btn>
 
-            <v-btn class="status-task-btn" v-if="$vuetify.breakpoint.mdAndUp  || inTasksTable"
+            <v-btn class="status-task-btn" v-if="properties.isVisibleButtonToTakingTaskToWork && ($vuetify.breakpoint.mdAndUp  || inTasksTable)"
                 outlined
                 :loading="this.changeStatusLoader"
                 :disabled="selectedTask.state == 'DONE'"
@@ -44,6 +44,9 @@ export default {
     workCenter() {
       return this.$store.getters['mes/workCenter']
     },
+    properties() {
+      return this.$store.getters['mes/properties']
+    },
     dragResizeMode: {
       get() {
         return this.$store.getters['mes/dragResizeMode']
@@ -68,7 +71,7 @@ export default {
     async changeStatusTask() {
       this.changeStatusLoader = true
       if (this.selectedTask.inProgress) {
-        await this.$store.dispatch('mes/cancelBeginRegistration', this.selectedTask)
+        await this.$store.dispatch('mes/cancelBeginRegistration', { workCenter: this.workCenter, task: this.selectedTask, deviceSizeType: this.$vuetify.breakpoint.name })
         this.changeStatusLoader = false
         return
       }

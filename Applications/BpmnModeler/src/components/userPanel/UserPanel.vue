@@ -1,50 +1,47 @@
 <template>
   <user-panel-rl v-slot="{ user, params }">
-    <v-layout align-center>
-      <v-flex>
+    <v-row align="center" class="no-margin">
+      <v-col class="no-margin">
         <v-menu
           :close-on-content-click="false"
           v-model="menu"
         >
           <template v-slot:activator="{on}">
-            <v-layout class="user-panel" v-on="on" align-center>
-              <v-flex id="user-icon">
+            <v-row class="user-panel" v-on="on" align="center">
+              <v-col id="user-icon" class="no-margin">
                 <user-icon :src="user.photo" size="50"></user-icon>
-              </v-flex>
-              <v-flex v-if="!mini" class="hidden-xs-only">
+              </v-col>
+              <v-col v-if="!mini" class="hidden-xs-only no-margin">
                 <p class="ma-0 pl-2 subheading">{{ user.name }}</p>
-              </v-flex>
-            </v-layout>
+              </v-col>
+            </v-row>
           </template>
-          <v-layout column>
-            <v-flex>
-              <v-layout pa-2>
-                <v-flex class="grow-0">
+          <v-col>
+            <v-col>
+              <v-row class="pa-2" >
+                <v-col class="grow-0">
                   <user-icon
                     :src="user.photo"
                     size="60"
                   ></user-icon>
-                </v-flex>
-                <v-flex ml-3 class="text-xs-left">
+                </v-col>
+                <v-col class="text-left ml-3">
                   <p v-if="mini" class="mb-1">{{ user.name }}</p>
                     <a
                       v-on:click="params.changePassword"
                       @click="menu = !menu"
                     >Сменить пароль</a>
-                </v-flex>
-              </v-layout>
-            </v-flex>
+                </v-col>
+              </v-row>
+            </v-col>
             <v-divider></v-divider>
-            <v-flex>
-              <v-layout
-                pa-2
-                grey
-                lighten-4
-                class="#f5f5f5"
-                justify-space-between
+            <v-col>
+              <v-row
+                class="#f5f5f5 pa-2 grey lighten-4"
+                justify="space-between"
               >
-              <v-flex  v-show="hideDelegatedRightsButton"></v-flex>
-                <v-flex class="grow-0"  v-show="!hideDelegatedRightsButton">
+              <v-col  v-show="hideDelegatedRightsButton"></v-col>
+                <v-col class="grow-0"  v-show="!hideDelegatedRightsButton">
                   <v-menu auto>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -54,14 +51,9 @@
                       >Делегированные права
                       </v-btn>
                     </template>
-                    <v-layout
-                      column
-                      class="text-xs-left caption"
-                    >
-                      <v-flex
-                        d-flex
-                        py-1 px-2
-                        class="delegated-menu-item"
+                    <v-col class="text-left caption">
+                      <v-col
+                        class="delegated-menu-item d-flex py-1 px-2"
                         v-on="params.delegatedRights"
                         @click="menu = !menu"
                         v-for="(item, index) in user.rights"
@@ -71,40 +63,40 @@
                           <v-icon v-show="item.IsActive">mdi-check</v-icon>
                         </div>
                         <span :id="item.USERID">{{ item.USERNAME }}</span>
-                      </v-flex>
+                      </v-col>
                       <v-divider></v-divider>
-                      <v-flex
-                        d-flex
-                        py-1 px-2
-                        class="delegated-menu-item"
+                      <v-col
+                        
+                        
+                        class="delegated-menu-item d-flex py-1 px-2"
                         v-on="params.setDelegation"
                         @click="menu = !menu"
                       >
                         <div class="icon-container grow-0"></div>
                         <span>Делегировать права</span>
-                      </v-flex>
-                    </v-layout>
+                      </v-col>
+                    </v-col>
                   </v-menu>
-                </v-flex>
-                <v-flex class="grow-0">
+                </v-col>
+                <v-col class="grow-0">
                   <v-btn
                     outlined small
                     :style="userMenuBtnStyle"
                     v-on="params.logOut"
                   >Выход
                   </v-btn>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-col>
         </v-menu>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </user-panel-rl>
 </template>
 
 <script>
-import userPanelRl from './UserPanel'
+import userPanelRl from './UserPanel';
 
 export default {
   name: 'user-panel',
@@ -122,7 +114,7 @@ export default {
       { 'border-color': '#c6c6c6' }
     ]
   })
-}
+};
 </script>
 
 <style scoped>
@@ -140,6 +132,24 @@ export default {
 
   .user-panel {
     cursor: pointer;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .user-icon {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .no-margin {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .delegated-menu-item {

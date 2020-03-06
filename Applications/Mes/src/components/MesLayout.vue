@@ -26,14 +26,15 @@
     <template v-if="snackbar.visible">
       <v-snackbar
         :top="false"
-        style="max-height: 100px; overflow: auto"
+        style="overflow: auto"
         :multi-line="true"
         :timeout="5000"
         :color=snackbar.type
         @input="closeSnackbar"
         :value="true"
       >
-        {{ snackbar.message }}
+        <span v-html="snackbar.message">{{ snackbar.message }}</span>
+
         <v-btn @click.native="closeSnackbar" text color="white">
           {{this.$t('mes.buttons.Close')}}
         </v-btn>
@@ -84,6 +85,7 @@ export default {
     if(this.$vuetify.breakpoint.smAndDown){
       this.$store.commit('mes/setMenuDrawerMode', false)
     }
+    //todo: вынести в логин
     eventBus.$on(events.scannedBarCode, barcode => {
       if(this.$route.name == "MESLOGIN") {
         this.$store.dispatch('auth/loginByCode', barcode).then(result => {
@@ -100,10 +102,6 @@ export default {
         }).catch(reason => {
           this.$store.commit('mes/setSnackbarErrorMessage', this.$t('mes.errors.loginError'))
         })
-      }
-      var tasksPageState = this.$store.getters['mes/tasksPageState']
-      if(this.$route.name == "INSTALLATIONS" || (this.$route.name == "TASKS" && tasksPageState.currentLayout == 'installations')) {
-        this.$store.dispatch('mes/registerMaterialInstallation', { workCenterCode: this.workCenter.code, batchBarcode: barcode, factId: 0 })
       }
     })
 

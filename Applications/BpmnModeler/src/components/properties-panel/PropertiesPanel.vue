@@ -1,5 +1,5 @@
 <template>
-<v-layout column fill-height>
+<v-col class="fill-height pa-0" >
   <el-tabs
     v-model="currentTab"
     class="properties-panel"
@@ -8,7 +8,7 @@
       <properties-panel-tab :tab="tab"></properties-panel-tab>
     </el-tab-pane>
   </el-tabs>
-</v-layout>
+</v-col>
 </template>
 <script>
 import PropertiesPanelTab from './PropertiesPanelTab';
@@ -31,14 +31,16 @@ export default {
       currentElement: null,
       tabs: [],
       currentTab: null
-    }
+    };
   },
   watch: {
     modeler(val, oldVal) {
       if (oldVal) {
         this.detachEvents(oldVal);
       }
-      this.initialize();
+      if (val) {
+        this.initialize();
+      }
     },
     propertiesProvider(val) {
       const selection = this.getModule('selection');
@@ -148,7 +150,7 @@ export default {
       }
     }
   }
-}
+};
 
 function isImplicitRoot(element) {
   return element.id === '__implicitroot';
@@ -180,5 +182,14 @@ function isImplicitRoot(element) {
   }
   .properties-panel-label {
     font-weight: 500;
+  }
+  .properties-panel .el-tabs__item.is-active {
+    color: #1976d2;
+  }
+  .el-tabs__active-bar {
+    background-color: #1976d2;
+  }
+  .el-tabs__item:hover {
+    color: #1976d2;
   }
 </style>

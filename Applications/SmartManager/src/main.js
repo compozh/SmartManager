@@ -5,10 +5,11 @@ import './registerServiceWorker'
 import Localization from '@it-enterprise/localization'
 import GraphQlCore from '@it-enterprise/graphql'
 import ItCommon from '@it-enterprise/common'
-import auth from '@it-enterprise/jwtauthentication'
 import formio from '@it-enterprise/formio'
 import '@it-enterprise/formio/dist/formio.css'
-auth.config(window.appConfig.GrapgQlUrl)
+
+// Authentication
+import auth from '@/utils/auth'
 
 // vue пакеты
 import Vue from 'vue'
@@ -27,13 +28,13 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 // Theme Configurations
-import '../themeConfig.js'
+import '@/themeConfig.js'
 
 // Globally Registered Components
-import './globalComponents.js'
+import '@/utils/globalComponents.js'
 
 // Styles: SCSS
-import './assets/scss/main.scss'
+import '@/assets/scss/main.scss'
 
 // Tailwind
 import '@/assets/css/main.css'
@@ -42,13 +43,13 @@ import '@/assets/css/main.css'
 import router from './router'
 
 // Vuex Store
-import store from './store/index'
+import store from './store'
 
 // i18n
 import { i18n } from './i18n/i18n'
 
 // Vuesax Admin Filters
-import './filters/filters'
+import '@/utils/filters'
 
 // VeeValidate
 import VeeValidate from 'vee-validate'
@@ -100,6 +101,7 @@ Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('./i18n/reso
 
 const formioOptions = {
   auth,
+  WsUrl: window.appConfig.WsUrl,
   routerDependencies: () => ({ router }),
   GraphQlUrl: window.appConfig.GrapgQlUrl
 }

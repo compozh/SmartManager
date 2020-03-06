@@ -12,7 +12,7 @@ export default {
     }
   },
   render(createElement, { props }) {
-    const item = props.node.data;
+    const item = props.node;
     if (item instanceof Folder) {
       if (props.node.expanded) {
         return createElement('v-icon', 'mdi-folder-open');
@@ -23,10 +23,12 @@ export default {
       switch (item.type) {
       case DiagramType.BPMN:
         return createElement('v-icon', 'mdi-file-tree');
+      case DiagramType.CMMN:
+        return createElement('v-icon', 'mdi-vector-polyline');
       case DiagramType.DMN:
         return createElement('v-icon', 'mdi-table');
       }
     }
     return createElement('v-icon');
   }
-}
+};

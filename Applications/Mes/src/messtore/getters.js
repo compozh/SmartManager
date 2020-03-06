@@ -47,9 +47,6 @@ export default {
   initializeDocuments(state) {
     return state.initializeDocuments
   },
-  installations(state) {
-    return state.installations
-  },
   usersProductionEvents(state) {
     return state.usersProductionEvents
   },

@@ -2,14 +2,14 @@ export default {
   name: 'userPanelRl',
   computed: {
     userData() {
-      return this.$store.state.auth.user || {}
+      return this.$store.state.auth.user || {};
     }
   },
   methods: {
     logout() {
-      this.$store.dispatch('auth/logout')
-      if (this.$router.currentRoute.name !== 'BPMNLOGIN') {
-        this.$router.push({ path: '/bpmnmodeler/login' })
+      this.$store.dispatch('auth/logout');
+      if (this.$router.currentRoute.name !== 'login') {
+        this.$router.push({ path: 'login', query: {to: this.$router.currentRoute.path } });
       }
     }
   },
@@ -26,6 +26,6 @@ export default {
           click: () => this.logout()
         }
       }
-    })
+    });
   }
-}
+};

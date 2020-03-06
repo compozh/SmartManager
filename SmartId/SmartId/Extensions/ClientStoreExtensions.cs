@@ -1,4 +1,6 @@
 ﻿using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Mvc;
+using SmartId.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,14 @@ namespace SmartId.Extensions
 			}
 
 			return false;
+		}
+
+		public static IActionResult LoadingPage(this Controller controller, string viewName, string redirectUri)
+		{
+			controller.HttpContext.Response.StatusCode = 200;
+			controller.HttpContext.Response.Headers["Location"] = "";
+
+			return controller.View(viewName, new RedirectViewModel { RedirectUrl = redirectUri });
 		}
 	}
 }

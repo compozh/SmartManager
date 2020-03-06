@@ -1,0 +1,11 @@
+{
+  bpmnquery {
+    deployedCases {
+      deployId,
+      caseDefId,
+      caseDefKey,
+      caseDefVer,
+      caseName
+    }
+  }
+}

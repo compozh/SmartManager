@@ -1,0 +1,12 @@
+{
+  bpmnquery {
+    businessObjectActions(boDefCode: $boDefCode, onlySystem: $onlySystem) {
+      boDefCode
+      actionDefCode
+      name
+      isSystem
+      logicalKey
+      parametersExists
+    }
+  }
+}

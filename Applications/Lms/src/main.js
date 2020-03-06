@@ -25,8 +25,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 
 import { routerDependencies } from './router'
-// import router from './router'
-//import LmsLayout from './components/LmsLayout.vue'
 
 // Редактор quill
 import VueQuill from 'it-vue-quill'
@@ -34,10 +32,6 @@ import VueQuill from 'it-vue-quill'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
-// Режим разработки
-// Vue.config.productionTip = false
-// Vue.config.devtools = true
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
@@ -53,7 +47,6 @@ let dependencies = {
   i18n,
   apolloProvider,
   axios,
-  //...router
   ...routerDependencies
 }
 
@@ -107,14 +100,3 @@ async function start() {
 
   new Vue(appComponent).$mount('#app')
 }
-
-/**
- * Приложение со своим роутером
- */
-// new Vue({
-//   router,
-//   store,
-//   Vuetify,
-//   i18n,
-//   render: h => h(LmsLayout)
-// }).$mount('#app')

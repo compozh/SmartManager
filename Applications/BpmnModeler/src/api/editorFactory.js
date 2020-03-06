@@ -2,24 +2,35 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 import BpmnViewer from 'bpmn-js/lib/NavigatedViewer';
 import camundaExtensionModule from 'camunda-bpmn-moddle/lib';
 import camundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda';
-import workflowBpmnModdle from '../bpmnModules/WorkflowPackage.json';
+import workflowBpmnModdle from '../bpmnModules/bpmn.json';
+import bpmnPropertiesPanelCommands from '../bpmnModules/properties-panel/bpmn/cmd';
 
-import DmnJS from '../bpmnModules/dmn-modeler.development';
+import DmnModeler from 'dmn-js/lib/Modeler';
 import DmnViewer from 'dmn-js/lib/Viewer';
 import camundaDmnModdle from 'camunda-dmn-moddle/resources/camunda';
+
+import CmmnModeler from 'cmmn-js/lib/Modeler';
+import CmmnViewer from 'cmmn-js/lib/NavigatedViewer';
+import camundaCmmnModdle from 'camunda-cmmn-moddle/resources/camunda';
+import workflowCmmnModdle from '../bpmnModules/cmmn.json';
+import cmmnPropertiesPanelCommands from '../bpmnModules/properties-panel/cmmn/cmd';
 
 import minimapModule from 'diagram-js-minimap';
 import DiagramType from './models/DiagramType';
 import ContextPadProvider from '../bpmnModules/context-pad/';
-import propertiesPanelCommands from '../bpmnModules/properties-panel/cmd';
+
 import WorkflowRules from '../bpmnModules/rules';
 
-export default function editorFactory(type, readonly, editorContainer, propertiesPanelContainer, translate) {
+import CanvasModule from '../bpmnModules/canvas';
+
+export default function editorFactory(type, readonly, editorContainer, translate) {
   switch (type) {
   case DiagramType.BPMN:
     return readonly ? createBpmnViewer(editorContainer, translate) : createBpmnModeler(editorContainer, translate);
   case DiagramType.DMN:
-    return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, propertiesPanelContainer, translate);
+    return readonly ? createDmnViewer(editorContainer, translate) : createDmnModeler(editorContainer, translate);
+  case DiagramType.CMMN:
+    return readonly ? createCmmnViewer(editorContainer, translate) : createCmmnModeler(editorContainer, translate);
   default:
     return null;
   }
@@ -28,7 +39,7 @@ export default function editorFactory(type, readonly, editorContainer, propertie
 function createTranslationModule(translate) {
   return {
     translate: ['value', (t, r) => translate(t, r)]
-  }
+  };
 }
 
 function createBpmnModeler(editorContainer, translate) {
@@ -38,12 +49,13 @@ function createBpmnModeler(editorContainer, translate) {
       bindTo: document
     },
     additionalModules: [
-      propertiesPanelCommands,
+      bpmnPropertiesPanelCommands,
       camundaExtensionModule,
       minimapModule,
       createTranslationModule(translate),
       ContextPadProvider,
-      WorkflowRules
+      WorkflowRules,
+      CanvasModule
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
@@ -61,17 +73,59 @@ function createBpmnViewer(editorContainer, translate) {
     additionalModules: [
       camundaExtensionModule,
       minimapModule,
-      createTranslationModule(translate)
+      createTranslationModule(translate),
+      CanvasModule
     ],
     moddleExtensions: {
       camunda: camundaBpmnModdle,
       workflow: workflowBpmnModdle
-    }   
+    },
+    canvas: {
+      deferUpdate: false
+    }
   });
 }
 
-function createDmnModeler(editorContainer, propertiesPanelContainer, translate) {
-  return new DmnJS({
+function createCmmnModeler(editorContainer, translate) {
+  return new CmmnModeler({
+    container: editorContainer,
+    keyboard: {
+      bindTo: document
+    },
+    additionalModules: [
+      cmmnPropertiesPanelCommands,
+      minimapModule,
+      createTranslationModule(translate)
+    ],
+    moddleExtensions: {
+      camunda: camundaCmmnModdle,
+      workflow: workflowCmmnModdle
+    }
+  });
+}
+
+function createCmmnViewer(editorContainer, translate) {
+  return new CmmnViewer({
+    container: editorContainer,
+    keyboard: {
+      bindTo: document
+    },
+    additionalModules: [
+      minimapModule,
+      createTranslationModule(translate)
+    ],
+    moddleExtensions: {
+      camunda: camundaCmmnModdle,
+      workflow: workflowCmmnModdle
+    },
+    canvas: {
+      deferUpdate: false
+    }
+  });
+}
+
+function createDmnModeler(editorContainer, translate) {
+  return new DmnModeler({
     common: {
       keyboard: {
         bindTo: document
@@ -127,5 +181,8 @@ function createDmnViewer(editorContainer, translate) {
         createTranslationModule(translate)
       ]
     },
+    canvas: {
+      deferUpdate: false
+    }
   });
 }
