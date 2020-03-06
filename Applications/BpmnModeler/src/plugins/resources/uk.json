@@ -131,7 +131,7 @@
 		"LatestVersion" : "Остання версія",
 		"With" : "з",
 		"WithLastVersion" : "останніми змінами",
-		"layoutChanged" : "Змінено розташування",
+		"layoutChanged" : "Змінено відображення",
 		"changed" : "Змінено",
 		"removed" : "Вилучено",
 		"added" : "Додано",
@@ -445,7 +445,15 @@
 		"Business Object Action": "Дія бізнес-об'єкта",
 		"Business Object Access": "Доступ до бізнес-об'єкта",
 		"Business Object Key Variable Name": "Назва змінної для отримання ключа бізнес-об'єкта",
-		"Action Properties": "Параметри дії"
+		"Action Properties": "Параметри дії",
+
+		"Participant": "Пул/Виконавець",
+		"Sequence Flow": "Потік",
+		"Collaboration": "Група",
+		"Data Store Reference": "База даних",
+		"Data Object Reference": "Об'єкт даних",
+		"Event Based Gateway": "Ексклюзивний шлюз по подіям",
+		"Intermediate Catch Event": "Проміжна подія (обробник)"
 	},
 	"dmn-modeler": {
 
@@ -474,5 +482,20 @@
 		"Form Key": "Форма",
 		"Details": "Деталі",
 		"If Part Condition": "Умова"
+	},
+	"compare-text": {
+		"newValue": "Нове значення",
+		"oldValue": "Старе значення",
+		"null": "відсутне",
+		"$type":"Тип",
+		"id":"Індетифікатор",
+		"lanes":"Рамки",
+		"values":"Колекція значень",
+		"name":"Ім'я",
+		"value":"Значення",
+		"type":"Тип",
+		"text": "Текст",
+		"businessKey": "Ключ бизнес-процессу",
+		"variables": "Змінні"
 	}
 }

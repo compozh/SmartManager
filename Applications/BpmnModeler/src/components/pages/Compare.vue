@@ -15,23 +15,35 @@
           <v-list class="difference-list md-scroll" v-if="diagram">
             <v-list-item-group v-for="type in Object.entries(changes) " :key="type[0]" >
               <div v-if="Object.keys(type[1]).length > 0">
-                <v-subheader>{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
+                <v-subheader class="compare-group">{{ $t(`bpmn.labels.${type[0].substr(1)}`)}}</v-subheader>
                 <v-divider :class="type[0].substr(1)" style="width: 90%" />
-                <v-list-group v-for="item in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple v-model="item.active">
-                  <template v-slot:activator>
+                <div v-if="type[0] == '_changed'">
+                  <v-list-group class="compare_item" v-for="(item, index, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" sub-group no-action ripple v-model="item.active">
+                    <template v-slot:activator>
+                      <v-list-item-content>
+                        <v-list-item-title class="_changed-item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
+                        <v-list-item-subtitle class="item-subtitle">{{ prepareSubTitle(item) }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+                      <div class="difference-description">
+                        <json-viewer
+                          v-for="attr in item.attrs"
+                          :key="attr[0]"
+                          class="json-viewer-component"
+                          :value="replacer(attr)"
+                          :expand-depth=5
+                          sort></json-viewer>
+                      </div>
+                  </v-list-group>
+                </div>
+                <div v-else>
+                  <v-list-item v-for="(item, index, key) in type[1]" :key="item.id" @click="choose(item.model ? item.model.id : item.id)" no-action ripple v-model="item.active">
                     <v-list-item-content>
-                      <v-list-item-title class="item-title">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element')}}</v-list-item-title>
-                      <v-list-item-subtitle class="item-subtitle">{{ item.model ?  item.model.$type.replace('bpmn:', '') : item.$type.replace('bpmn:', '') }}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </template>
-                    <div class="difference-description">
-                      <json-viewer
-                        class="json-viewer-component"
-                        :value="item"
-                        :expand-depth=1
-                        sort></json-viewer>
-                    </div>
-                </v-list-group>
+                        <v-list-item-title :class="type[0] + '-item-title'">{{ (item.model ? item.model.name : item.name) || $t('bpmn.labels.Element') + ' ' + (key + 1)}}</v-list-item-title>
+                        <v-list-item-subtitle class="item-subtitle">{{ prepareSubTitle(item) }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                  </v-list-item>
+                </div>
                 <v-divider />
               </div>
             </v-list-item-group>
@@ -315,11 +327,47 @@ export default {
         width: modelerWidth,
         height: modelerHeight
       });
+    },
+    replacer(value) {
+      var replaceFn = function (colection, me) {
+        let result = {},
+          keys = Object.keys(colection);
+        if (keys.length) {
+          for (var i = 0; i < keys.length; i++) {
+            if (keys[i] == '$instanceOf') {
+              continue;
+            }
+            let key = isNaN(parseInt(keys[i])) ? me.$t('bpmn.compare-text.' + keys[i]) : parseInt(keys[i]);
+            if (typeof colection[keys[i]] == 'object') {
+              if (colection[keys[i]] == null) {
+                result[key] = me.$t('bpmn.compare-text.null');
+                continue;
+              }
+              result[key] = replaceFn(colection[keys[i]], me);
+            } else {
+              result[key] = colection[keys[i]] == undefined ? me.$t('bpmn.compare-text.null') : colection[keys[i]];
+            }
+          }
+        }
+        return result;
+      };
+      value = replaceFn(value, this);
+      return value;
+    },
+    prepareSubTitle(item) {
+      let str = '';
+      if (item.model) {
+        str = item.model.$type.replace('bpmn:', '');
+      } else {
+        str = item.$type.replace('bpmn:', '');
+      }
+      str = str.replace(/([A-Z])/g, ' $1').trim();
+      return this.$t('bpmn.bpmn-modeler.' + str);
     }
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .compare-component {
   max-height: calc(100vh - 50px);
 }
@@ -357,18 +405,37 @@ export default {
   font-weight: 500;
   background-color: transparent !important
 }
+.compare-group {
+  font-size: 16px;
+}
 .difference-list {
   height: calc(100% - 40px) !important;
   text-align: start;
   height: 100%;
   overflow-y: auto;
   padding: 0;
-  .item-title {
-    font-size: 13px;
+  ._added-item-title {
+    color: rgb(0, 128, 0);
+    font-size: 14px;
+  }
+  ._removed-item-title {
+    color: rgb(255, 0, 0);
+    font-size: 14px;
+  }
+  ._layoutChanged-item-title {
+    color: rgb(0, 0, 255);
+    font-size: 14px;
+  }
+  ._changed-item-title {
+    color: rgb(255, 165, 0);
+    font-size: 14px;
   }
   .item-subtitle {
     font-size: 12px;
   }
+}
+.compare_item div[role="button"] {
+  padding-left: 5px !important;
 }
 .difference-description {
   color: #848484;
