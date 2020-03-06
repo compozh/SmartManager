@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import auth from '@it-enterprise/jwtauthentication'
 
 Vue.use(VueRouter)
 
@@ -12,8 +13,15 @@ const router = new VueRouter({
       component: () => import('./MainLayout.vue'),
       children: [
         {
-          path: '/',
+          name: 'login',
+          path: '/login',
+          caseSensitive: false,
+          component: () => import('@/components/layouts/login/Login.vue'),
+          props: { allowQrMode: true }
+        },
+        {
           name: 'processes',
+          path: '/',
           component: () => import('./pages/ProcessesGrid.vue'),
           caseSensitive: false
         },
@@ -28,14 +36,17 @@ const router = new VueRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  let same = Object.values(to).every((el) => {
-    return Object.values(from).find(fromEl => fromEl === el)
-  })
-  if (same) {
-
+router.beforeEach(async (to, from, next) => {
+  const token = await auth.getToken()
+  if (to.path === '/login' || to.path === 'login' || token) {
+    let same = Object.values(to).every((el) => {
+      return Object.values(from).find(fromEl => fromEl === el)
+    })
+    if (!same) {
+      next()
+    }
   } else {
-    return next()
+    router.push({ name: 'login', query: { to: to.path } })
   }
 })
 
