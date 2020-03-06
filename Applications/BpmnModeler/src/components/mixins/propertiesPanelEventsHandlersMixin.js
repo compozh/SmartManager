@@ -2,6 +2,7 @@ import { Notification } from 'element-ui';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
 import ActionDefinitionType from '../../api/models/ActionDefinitionType';
+import FormioUtils from 'formiojs/utils';
 
 export default {
   mounted() {
@@ -79,12 +80,16 @@ export default {
         return;
       }
 
-      let submission = {};
+      const submission = {};
       if (existingParameters && existingParameters.length) {
         for (let index = 0; index < existingParameters.length; index++) {
           const element = existingParameters[index];
           if (element.type === 'object') {
-            submission[element.name] = JSON.parse(element.value);
+            try {
+              submission[element.name] = JSON.parse(element.value);
+            } catch {
+              Notification.error(this.$t('bpmn.errors.FormParameterImportError', { name: element.name }));
+            }
           } else {
             submission[element.name] = element.value;
           }
@@ -94,10 +99,17 @@ export default {
       this.changeLoad();
 
       eventBus.$emit(events.formio.showForm, action.unformio, form, this.$t('bpmn.labels.EnterTaskParams'), (submission) => {
-        var params = [];
+        const params = [];
         for (var param in submission.data) {
           const value = submission.data[param];
-          params.push({ name: param, type: typeof value, value: typeof value === 'object' ? JSON.stringify(value) : value });
+          let type = typeof value;
+          if (type === 'string') {
+            const component = FormioUtils.getComponent(form.components, param);
+            if (component.type === 'number' || component.type === 'datetime') {
+              type = component.type;
+            }
+          }
+          params.push({ name: param, type: type, value: typeof value === 'object' ? JSON.stringify(value) : value });
         }
         callback(params);
       });
@@ -111,12 +123,16 @@ export default {
         return;
       }
 
-      let submission = {};
+      const submission = {};
       if (existingParameters && existingParameters.length) {
         for (let index = 0; index < existingParameters.length; index++) {
           const element = existingParameters[index];
           if (element.type === 'object') {
-            submission[element.name] = JSON.parse(element.value);
+            try {
+              submission[element.name] = JSON.parse(element.value);
+            } catch {
+              Notification.error(this.$t('bpmn.errors.FormParameterImportError', { name: element.name }));
+            }
           } else {
             submission[element.name] = element.value;
           }
@@ -126,10 +142,17 @@ export default {
       this.changeLoad();
 
       eventBus.$emit(events.formio.showForm, undefined, form, this.$t('bpmn.labels.EnterActionParams'), (submission) => {
-        var params = [];
+        const params = [];
         for (var param in submission.data) {
           const value = submission.data[param];
-          params.push({ name: param, type: typeof value, value: typeof value === 'object' ? JSON.stringify(value) : value });
+          let type = typeof value;
+          if (type === 'string') {
+            const component = FormioUtils.getComponent(form.components, param);
+            if (component.type === 'number' || component.type === 'datetime') {
+              type = component.type;
+            }
+          }
+          params.push({ name: param, type: type, value: typeof value === 'object' ? JSON.stringify(value) : value });
         }
         callback(params);
       });
