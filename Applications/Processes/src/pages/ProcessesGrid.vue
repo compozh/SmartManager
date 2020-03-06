@@ -36,11 +36,16 @@ export default {
       ]
     }
   },
-  async created () {
+  created () {
     this.loadingProcesses = true
-    let res = await this.$store.dispatch('getProcesses')
-    this.$store.commit('setProcesses', res.processes)
-    this.loadingProcesses = false
+    this.$store.dispatch('getProcesses').then(result => {
+      this.loadingProcesses = false
+      if (result) {
+        this.$store.commit('setProcesses', result.processes)
+      } else {
+        this.$store.commit('setSnackbarErrorMessage', this.$t('processes.errors.processesErrorLoad'))
+      }
+    })
   },
   computed: {
     processes () {
