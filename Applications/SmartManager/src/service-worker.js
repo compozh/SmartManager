@@ -4,7 +4,7 @@ importScripts('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval-iife.mi
 workbox.core.setCacheNameDetails({prefix: 'SmartManager'})
 
 // Init indexedDB using idb-keyval, https://github.com/jakearchibald/idb-keyval
-const store = new idbKeyval.Store('SmartManager', '02-03-2020')
+const store = new idbKeyval.Store('SmartManager', '05-03-2020')
 
 if (workbox) {
   console.log('Workbox is loaded')

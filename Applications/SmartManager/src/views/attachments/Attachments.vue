@@ -27,8 +27,7 @@
              class="cursor-pointer text-primary mt-2 float-right"
              @click="$store.commit('sm/TOGGLE_TYPES_DIALOG', false)">
         <vs-icon style="margin: 0 5px 1px 0;">library_add</vs-icon>
-        {{ $t('buttons.addAttachment') }}
-      </label>
+        {{ $t('buttons.addAttachment') }}</label>
     </vs-popup>
 
     <files-upload @attach="getAttachment($event)"
@@ -39,7 +38,6 @@
   </div>
 </template>
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import AttachmentList from './AttachmentList'
 import AttachmentEds from './AttachmentEds'
 import FilesUpload from '@/components/FilesUpload'
@@ -58,7 +56,6 @@ export default {
     PdfViewer,
     ImgViewer,
     TxtViewer,
-    VuePerfectScrollbar,
     NotSupport,
     NoData
   },
@@ -119,13 +116,11 @@ export default {
       }
       return null
     },
-    fileSize() {
-      return size => {
-        switch (true) {
-          case size < 1024: return `${size} Byte`
-          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
-          default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
-        }
+    fileSize: () => size => {
+      switch (true) {
+        case size < 1024: return `${size} Byte`
+        case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+        default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
       }
     },
     attachmentTypes() {
@@ -276,9 +271,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 62px;
-    height: 28px;
-    padding-top: 1px;
+    min-width: 62px;
+    min-height: 28px;
+    padding: 1px 5px 0;
     border-radius: 0.375rem;
   }
 

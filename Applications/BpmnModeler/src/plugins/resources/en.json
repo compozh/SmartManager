@@ -442,7 +442,15 @@
 		"Business Object Action": "Business Object Action",
 		"Business Object Access": "Business Object Access",
 		"Business Object Key Variable Name": "Business Object Key Variable Name",
-		"Action Properties": "Action Properties"
+		"Action Properties": "Action Properties",
+
+		"Participant": "Participant",
+		"SequenceFlow": "Sequence Flow",
+		"Collaboration": "Collaboration",
+		"Data Store Reference": "Data Store Reference",
+		"Data Object Reference": "Data Object Reference",
+		"Event Based Gateway": "Event Based Gateway",
+		"Intermediate Catch Event": "Intermediate Catch Event"
 	},
 	"dmn-modeler": {
 
@@ -471,5 +479,20 @@
 		"Form Key": "Form Key",
 		"Details": "Details",
 		"If Part Condition": "Condition"
+	},
+	"compare-text": {
+		"newValue": "New value",
+		"oldValue": "Old value",
+		"null": "null",
+		"$type":"Type",
+		"id":"Id",
+		"lanes":"Lanes",
+		"values":"Values colection",
+		"name":"Name",
+		"value":"Value",
+		"type":"Type",
+		"text": "Text",
+		"businessKey": "Business key",
+		"variables": "Variables"
 	}
 }
