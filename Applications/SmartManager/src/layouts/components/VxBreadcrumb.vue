@@ -95,7 +95,9 @@ export default {
             url: '/task/' + this.task.id + '/attachments'
           }
           case 'taskAttachment': return {
-            name: (this.task.originals.find(o => o.id === attachmentId) || {}).fileName,
+            name: this.task.originals
+              ? (this.task.originals.find(o => o.id === attachmentId) || {}).fileName
+              : [],
             url: '/task/' + this.task.id + '/attachment/' + this.$route.params.attachmentId
           }
           case 'versions': return {
@@ -127,22 +129,22 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     const taskId = this.$route.params.taskId
     const caseId = this.$route.params.caseId
     if (!this.folders) {
-      this.$store.dispatch('sm/getFolders', 'loading')
+      await this.$store.dispatch('sm/getFolders', 'loading')
     }
     if (taskId && !this.tasks['active']) {
-      this.$store.dispatch('sm/getTasks', {folderId: 'active'})
+      await this.$store.dispatch('sm/getTasks', {folderId: 'active'})
     }
     if (taskId && !this.task.id) {
-      this.$store.dispatch('sm/getTaskInfo', {
+      await this.$store.dispatch('sm/getTaskInfo', {
         taskId, loading: true
       })
     }
     if (caseId && !this.caseItem.id) {
-      this.$store.dispatch('sm/getCases', 'loading')
+      await this.$store.dispatch('sm/getCases', 'loading')
     }
   }
 }
