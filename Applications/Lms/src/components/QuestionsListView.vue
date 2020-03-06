@@ -18,7 +18,7 @@
         <div v-for="question in questions" :key="question.id">
           <question-card
             :question="question"
-            @click="goToQuestion(question.id)">
+            @click="goToQuestion(question)">
           </question-card>
         </div>
       </v-flex>
@@ -34,10 +34,10 @@
 export default {
   name: 'questions-list',
   methods: {
-    goToQuestion(questionId) {
+    goToQuestion(question) {
       // Установить текущий вопрос
       // перейти к представлению вопроса
-      this.$store.commit('lms/setDiscussionId', questionId)
+      this.$store.commit('lms/setDiscussionId', question.id)
       this.$store.commit('lms/setQuestionsView', 'question-view')
     },
     addQuestion() {

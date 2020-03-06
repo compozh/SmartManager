@@ -21,7 +21,7 @@
       <v-flex py-2>
         <v-card flat>
           <quill v-model="content" output="html" :config="quillConfig" class="frame"></quill>
-          <v-btn color="red lighten-2" dark @click="addAnswer">Добавить вопрос</v-btn>
+          <v-btn color="red lighten-2" dark @click="addQuestion">Добавить вопрос</v-btn>
         </v-card>
       </v-flex>
     </v-layout>
@@ -30,7 +30,6 @@
 
 <script>
 import { LmsApi as api } from '../api/lmsApi'
-import {addPrescriptionToPost} from '../helpers/questions'
 
 export default {
   name: 'new-question',
@@ -65,12 +64,12 @@ export default {
     goBackToQuestionsList() {
       this.$store.commit('lms/setQuestionsView', 'questions-list')
     },
-    async addAnswer() {
+    async addQuestion() {
       // выпролнить проверки
       if (this.title) {
         const question = {
           id: 0,
-          dateTime: new Date().toLocaleString(),
+          dateTime: new Date().toString(),
           authorName: this.user.userName,
           avatar: this.user.userPhoto,
           title: this.title,
@@ -85,8 +84,8 @@ export default {
         // Отправить запрос на добавление вопроса
         try {
           const postResult = await api.addPostFromGql(courseGuid, lessonGuid, 0, question)
-          question.id = postResult.data.lmsMutation.addPost.id
-          question.prescription = addPrescriptionToPost(question.dateTime)
+          question.id = postResult.data.lmsMutation.addPost.postId
+          question.dateTime = new Date(question.dateTime).toLocaleString()
           // добавить новый вопрос в список
           this.$store.commit('lms/addDiscussion', question)
         } catch (error) {

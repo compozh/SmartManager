@@ -168,7 +168,7 @@ import LessonsMenu from './LessonsMenu.vue'
 import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
 import { LmsApi as api } from '../api/lmsApi'
-import {lessonType, materialType, lessonIcons} from '../helpers/lesson.js'
+import {lessonType, materialType, lessonIcons} from '../helpers/lesson'
 
 export default {
   name: 'lms-course-learning',
@@ -280,6 +280,8 @@ export default {
     async fetchDiscussionsList(courseGuid,currentLessonGuid) {
       // получить список вопросов слушателей урока
       const result = await api.fetchQuestionsListCurrentLessonFromGql(courseGuid, currentLessonGuid)
+      // преобразовать дату
+      result.data.lms.discussions.forEach(d => d.dateTime = new Date(d.dateTime).toLocaleString())
       this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
     },
     finishLesson () {

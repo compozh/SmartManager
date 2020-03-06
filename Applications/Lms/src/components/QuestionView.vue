@@ -66,7 +66,7 @@
                     <!-- Тело -->
                     <v-flex>
                       <v-card-text>
-                        <div v-html="question.body"></div>
+                        <div v-html="question.content"></div>
                       </v-card-text>
                     </v-flex>
                   </v-layout>
@@ -157,15 +157,19 @@ export default {
   methods: {
     addPrescriptionToPosts(discussion) {
       discussion.prescription = addPrescriptionToPost(discussion.dateTime)
+      discussion.dateTime = new Date(discussion.dateTime).toLocaleString()
       if (discussion.answers) {
-        discussion.answers.forEach(a => a.prescription = addPrescriptionToPost(a.dateTime))
+        discussion.answers.forEach(a => {
+          a.prescription = addPrescriptionToPost(a.dateTime)
+          a.dateTime = new Date(a.dateTime).toLocaleString()
+        })
       }
       return discussion
     },
-    addAnswer() {
+    async addAnswer() {
       if (this.content) {
         const answer = {
-          dateTime: new Date().toLocaleString(),
+          dateTime: new Date().toString(),
           authorName: this.user.userName,
           avatar: this.user.userPhoto,
           content: this.content,
@@ -173,10 +177,22 @@ export default {
           voutsDownQty: 0,
           answersQty: 0
         }
-        this.question.answers.push(answer)
-        this.content = ''
+        const courseDetails = this.$store.getters['lms/courseDetails']
+        const courseGuid = courseDetails.course.courseGuid
+        const lessonGuid = this.$store.getters['lms/currentLessonGuid']
         // отправить ответ на сервер
-        // this.$store.dispatch('lms/saveAnswer', {courseGuid, lessonGuid, questionId: this.question.id})
+        try {
+          const postResult = await api.addPostFromGql(courseGuid, lessonGuid, this.question.id, answer)
+          answer.id = postResult.data.lmsMutation.addPost.id
+          answer.prescription = addPrescriptionToPost(answer.dateTime)
+          answer.dateTime = new Date(answer.dateTime).toLocaleString()
+          this.question.answers.push(answer)
+          // добавить новый ответ в список ответов вопроса
+        } catch (error) {
+          console.log(error)
+          // TODO: сообщить, что ответ не добавлен и вывести ошибку
+        }
+        this.content = ''
       }
     },
     goBackToQuestionsList() {

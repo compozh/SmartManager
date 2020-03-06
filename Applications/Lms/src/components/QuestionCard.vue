@@ -24,7 +24,7 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-            <v-flex pl-3 class="border-top-bottom">
+            <v-flex pl-3 >
               <v-layout align-center>
                 <v-flex>
                   <div class="body-2">{{question.title}}</div>
@@ -39,7 +39,7 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-            <v-flex pl-3>
+            <v-flex pl-3 class="border-top">
               <!-- Likes, dislikes, oldest -->
               <v-layout nowrap>
                 <v-flex shrink>
@@ -102,6 +102,9 @@ export default {
 .border {
   border: solid 1px lightgray;
   border-radius: 5px;
+}
+.border-top {
+  border-top: solid 1px lightgray;
 }
 .border-top-bottom {
   border-top: solid 1px lightgray;

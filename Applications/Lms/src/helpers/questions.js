@@ -8,15 +8,16 @@ export function randomColor(colors) {
 export function addPrescriptionToPost(postDateTimeStamp) {
   const postDateTime = new Date(postDateTimeStamp)
   const postDate = postDateTime.getUTCDate()
-  const postTiks = Date.parse(postDateTime)
+  const postDateTicks = Date.parse(postDateTime)
   const now = new Date()
+  const nowTicks = Date.now()
   const nowDate = now.getUTCDate()
-  const diff = (now - postTiks) / 60 / 60 / 24 / 1000
+  const diff = (nowTicks - postDateTicks) / 60 / 60 / 24 / 1000
   const diffDates = nowDate - postDate
   if (diff < 1) {
     if (diffDates === 0) {
       const diffHourse = diff * 24
-      if (diffHourse) {
+      if (diffHourse <= 1) {
         return 'Сейчас'
       } else {
         return 'Сегодня'
