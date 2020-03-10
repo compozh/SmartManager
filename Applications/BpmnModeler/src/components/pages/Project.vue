@@ -167,8 +167,8 @@ export default {
         sorted = children.sort(( a, b ) => {
           let first = !a[this.sort] ? a.creationTime : a[this.sort];
           let second = !b[this.sort] ? b.creationTime : b[this.sort];
-          return moment(first).toDate().getTime() - moment(second).toDate().getTime();
-        }).reverse();
+          return moment(second).toDate().getTime() - moment(first).toDate().getTime();
+        });
       }
       this.sortedIn = this.sort;
       return sorted;
