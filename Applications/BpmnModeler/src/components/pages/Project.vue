@@ -31,6 +31,7 @@
             class="search col-3 py-2 pl-3"
             :items="selectItems"
             :label="$t('bpmn.labels.SortBy')"
+            :value="selectItems[0]"
             solo>
             <template v-slot:item="{ item }" >
               <div class="select-item py-3" @click="checkSort(item.value)">{{ item.text }}</div>
@@ -157,9 +158,7 @@ export default {
       if (this.search) {
         children = children.filter(el => el.name.toLowerCase().includes(this.search.toLowerCase()));
       }
-      if (this.sortedIn == this.sort) {
-        return children;
-      } else if ( this.sort == 'nameAsc') {
+      if ( this.sort == 'nameAsc') {
         sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name));
       } else if ( this.sort == 'nameDesc') {
         sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name)).reverse();
