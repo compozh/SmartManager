@@ -10,10 +10,10 @@
           {{ crumbs.item.name }}
         </div>
         <bpmn-contex-menu :item="item()"
-          v-if="crumbs.item.id == $route.params.id && $route.name != 'milestones' && $route.name != 'compare' 
+          v-if="crumbs.item.id == $route.params.id && $route.name != 'milestones' && $route.name != 'compare'
           && (canEdit(item()) && canShare(item()) || !item().isFolder)"
           @edit="editItem" :crumb="true"
-          @remove="removeItem" 
+          @remove="removeItem"
           @export="exportItem"
           @copy="copyItem"
           offset>
@@ -23,7 +23,7 @@
             </v-btn>
           </template>
         </bpmn-contex-menu>
-      </div>          
+      </div>
     </template>
   </v-breadcrumbs>
 </template>
@@ -73,6 +73,9 @@ export default {
       var findParent = function(item, items, elements) {
         if (item.parentId) {
           let parent = items.find(i => i.id === item.parentId);
+          if (!parent) {
+            return elements;
+          }
           elements.unshift(parent);
           findParent(parent, items, elements);
         } else {
@@ -86,7 +89,7 @@ export default {
   methods: {
     flattenArr(items) {
       var result = [];
-      result.push(items);
+      result.push(...items);
       var flattenFn = function(items) {
         for (var i = 0; i < items.length; i++) {
           if (items[i].items && items[i].items.length) {
@@ -118,7 +121,7 @@ export default {
         return;
       }
     },
-    item() { 
+    item() {
       let itemId = this.$route.params.id;
       if (!itemId) { return false; }
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
@@ -128,14 +131,14 @@ export default {
       if (this.compare) { return; }
       let diagram = this.$store.getters['bpmn/getItemById'](this.$route.params.id).item;
       let versions = diagram ? await this.$store.dispatch('bpmn/getVersionsForDiagram',  diagram.id ) : [];
-      let first = versions.find( el => el.versionId == this.$route.query.left) || this.$store.getters['bpmn/getItemById'](this.$route.query.left).item; 
+      let first = versions.find( el => el.versionId == this.$route.query.left) || this.$store.getters['bpmn/getItemById'](this.$route.query.left).item;
       let second = versions.find( el => el.versionId == this.$route.query.right) || this.$store.getters['bpmn/getItemById'](this.$route.query.right).item;
       if (!first && !second) {
         this.compare = '';
       } else {
         this.compare = `"${first.name}" / "${second.name}"`;
       }
-     
+
     }
   },
   watch: {
