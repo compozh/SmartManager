@@ -1,5 +1,5 @@
 <template>
-  <v-container class="column px-6 " fluid > 
+  <v-container class="column px-6 " fluid >
     <v-row class="project-title py-0 " justify="space-between">
       <v-col cols="5" class="justify-start" >
         <v-row class="align-center justify-start">
@@ -84,8 +84,8 @@ export default {
   data: () => ({
     elements: [],
     search: '',
-    sort: 'name',
-    sortedIn: 'name',
+    sort: 'nameAsc',
+    sortedIn: 'nameAsc',
     chosen: []
   }),
   props: {
@@ -131,7 +131,7 @@ export default {
               if (type.toLowerCase() != 'bpmn' && type.toLowerCase() != 'dmn' && type.toLowerCase() != 'cmmn') {
                 throw element.$t('bpmn.errors.ProcessNotCreated');
               }
-              return {xmlView: xml, name: file.name, type }; 
+              return {xmlView: xml, name: file.name, type };
             });
           });
           await Promise.all(promises).then( el => options = el ).catch(er => Notification.error(er));
@@ -157,30 +157,27 @@ export default {
       if (this.search) {
         children = children.filter(el => el.name.toLowerCase().includes(this.search.toLowerCase()));
       }
-      if (this.sortedIn == this.sort) { 
+      if (this.sortedIn == this.sort) {
         return children;
-      } else if ( this.sort == 'name') {
+      } else if ( this.sort == 'nameAsc') {
         sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name));
+      } else if ( this.sort == 'nameDesc') {
+        sorted = children.sort(( a, b ) =>  a.name.localeCompare(b.name)).reverse();
       } else if (this.sort ==  'creationTime' || this.sort ==  'editTime' ) {
         sorted = children.sort(( a, b ) => {
           let first = !a[this.sort] ? a.creationTime : a[this.sort];
           let second = !b[this.sort] ? b.creationTime : b[this.sort];
           return moment(first).toDate().getTime() - moment(second).toDate().getTime();
-        });
-      } else  {
-        this.sort = this.sortedIn;
-        sorted = children.reverse();
+        }).reverse();
       }
       this.sortedIn = this.sort;
       return sorted;
     },
     checkSort(value) {
       if (this.sortedIn == value) {
-        this.sort = 'revert';
-        this.sortedIn = value;
-      } else { 
-        this.sort = value;
+        return;
       }
+      this.sort = value;
     },
     addFolder() {
       this.createItem(this.item, 'folder');
@@ -198,11 +195,12 @@ export default {
   },
   computed: {
     selectItems() {
-      return [{text: this.$t('bpmn.labels.Name'), value: 'name'},
+      return [{text: this.$t('bpmn.labels.NameAsc'), value: 'nameAsc'},
+        {text: this.$t('bpmn.labels.NameDesc'), value: 'nameDesc'},
         {text: this.$t('bpmn.labels.CreationTime'), value: 'creationTime'},
         {text: this.$t('bpmn.labels.EditTime'), value: 'editTime'}];
     },
-    item() {      
+    item() {
       let itemId = this.$route.params.id;
       const { item, index } = this.$store.getters['bpmn/getItemById'](itemId);
       return item;
@@ -241,7 +239,7 @@ export default {
   padding: 25px;
   display: flex;
   align-items: center;
-} 
+}
 .layout-title {
   height: 60px;
 }
@@ -268,7 +266,7 @@ h2{
 }
 
 .v-input.select-item .v-label {
-  font-size: 11px !important; 
+  font-size: 11px !important;
 }
 .select-item {
   width: 100%;
