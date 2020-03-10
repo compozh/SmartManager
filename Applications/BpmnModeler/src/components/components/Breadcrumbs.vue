@@ -1,10 +1,10 @@
 <template>
-  <v-breadcrumbs class="pa-0" :items="elements">
+  <v-breadcrumbs :items="elements" class="breadcrumbs">
     <template v-slot:divider>
       <v-icon style="padding-top: 2px" size="17">mdi-chevron-right</v-icon>
     </template>
     <template v-slot:item="crumbs">
-      <div class="crumbs row px-2 pb-0" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
+      <div class="crumbs row" @click="routeTo(crumbs.item)" :key="crumbs.item.name">
         <div v-if="!crumbs.item.id" :title="crumbs.item.name || compare" >{{ crumbs.item.name || compare}}</div>
         <div v-if="crumbs.item.id" :title="crumbs.item.name" :class="{parent : crumbs.item.id != $route.params.id}" >
           {{ crumbs.item.name }}
@@ -150,14 +150,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.breadcrumbs {
+  max-height: 50px;
+  padding: 0 15px;
+  overflow: hidden;
+}
 a{
   text-decoration: none;
 }
 .crumbs{
   color: grey;
   font-size: 15px;
-  height: 48px;
-  padding-top: 14px;
+  align-items: center;
+  height: 25px;
 }
 .crumbs div {
   cursor: pointer;
