@@ -23,7 +23,7 @@ export const importMixin = {
           if (type != 'BPMN' && type != 'DMN' && type != 'CMMN') {
             return Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
           }
-          this.createItem(parent, 'process', xml, [{name: file.name, type}]);
+          this.createItem(parent, 'process', xml, [{name: file.name.split('.')[0], type}]);
         });
       });
       document.body.appendChild(input);

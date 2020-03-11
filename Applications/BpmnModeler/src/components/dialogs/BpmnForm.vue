@@ -155,9 +155,6 @@ export default {
     onShowForm(mode, type, model, callback) {
       this.mode = mode;
       this.type = this.$route.name == 'main' ? 'project' : type;
-      if (model.name) {
-        model.name = model.name.replace('.bpmn', '').replace('.cmmn', '').replace('.dmn', '');
-      }
       this.model = model;
       this.accessObjectInherited = !!this.model.kobj;
       if (!this.accessObjectInherited && this.canSelectAccessObject) {
