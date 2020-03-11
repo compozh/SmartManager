@@ -107,7 +107,7 @@ import 'diagram-js-minimap/assets/diagram-js-minimap.css';
 import Diagram from '../../api/models/Diagram';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
-import { fullScreenMixin, importMixin } from '../mixins';
+import { fullScreenMixin } from '../mixins';
 import * as Models from '../../api/models';
 import { Notification } from 'element-ui';
 import { currentLang } from '../../plugins/i18n';
