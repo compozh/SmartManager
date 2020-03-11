@@ -221,10 +221,10 @@ export default {
       const response = await api.getFormDefinitionFromGql(procDefId)
       const result = response.data.workFlowQuery.formDefinition
       stopLoading()
-      if (result.Success) {
-        return result.Data
+      if (result.success) {
+        return result.data
       }
-      notify('warning', 'bpTitle', result.ErrorMessage)
+      notify('warning', 'bpTitle', result.errorMessage)
     } catch (e) {
       stopLoading()
       console.log(e.message)
