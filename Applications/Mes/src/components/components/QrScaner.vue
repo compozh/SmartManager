@@ -11,9 +11,14 @@
     </v-tooltip>
     <div v-if="state" class="qr-state">
       {{state}}
+      <div class="qrcode-capture pt-5">
+        <qrcode-capture @decode="onDecode" />
+      </div>
     </div>
     <div class="qr-code-stream" v-else-if="showScanner">
-      <qrcode-stream  @decode="onDecode" @init="onInit"></qrcode-stream>
+      <qrcode-drop-zone @decode="onDecode" @init="logErrors">
+        <qrcode-stream @decode="onDecode" @init="onInit" />
+      </qrcode-drop-zone>
     </div>
   </v-dialog>
 </template>
@@ -89,12 +94,24 @@ export default {
           this.state = this.$t('qrScaner.streamApiNotSupportedError')
         }
       }
-    }
+    },
+    logErrors (promise) {
+      promise.catch(console.error)
+    },
   }
 }
 </script>
 
 <style scoped>
+  .qrcode-capture {
+    color: black;
+    line-height: 25px;
+    font-size: 17px;
+  }
+  .qr-scanner {
+    max-width: 100%;
+    max-height: 100%;
+  }
   .qr-code-stream {
     font-size: 1.2em;
     margin: 0 auto;

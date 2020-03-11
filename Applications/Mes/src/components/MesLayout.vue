@@ -1,5 +1,5 @@
 <template>
-  <v-app id="mes-app">
+  <v-app id="mes-app" v-resize="onResize">
     <!-- Меню -->
     <v-navigation-drawer  app clipped mobile-break-point="960" width="320" overlay-opacity="0.4" 
       :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
@@ -79,6 +79,23 @@ export default {
       mainContainer: 0,
       downtimesOverlayVisible: false,
 
+    }
+  },
+   mounted () {
+    this.onResize()
+    document.getElementById("app").addEventListener("touchstart", tapHandler);
+
+    let tapedTwice = false;
+
+    function tapHandler(event) {
+        if(!tapedTwice) {
+            tapedTwice = true;
+            setTimeout( function() { tapedTwice = false; }, 300 );
+            return false;
+        }
+        event.preventDefault();
+        //action on double tap goes below
+        console.log('You tapped me Twice !!!');
     }
   },
   created() {
@@ -167,7 +184,11 @@ export default {
     },
     changeDowntimesOverlayVisible() {
       this.downtimesOverlayVisible = !this.downtimesOverlayVisible
-    }
+    },
+    onResize (ev) {
+      console.log('resize', ev, ev.srcElement.visualViewport.width)
+      ev.preventDefault();
+    },
   }
 }
 </script>

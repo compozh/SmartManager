@@ -18,7 +18,8 @@ export default {
       readerEvents: {
         onDecode: this.onDecode,
         onInit: this.onInit,
-        tryAgain: this.tryAgain
+        tryAgain: this.tryAgain,
+        logErrors: this.logErrors
       },
       showScanner: this.showScanner,
       error: this.error,
@@ -97,7 +98,11 @@ export default {
           this.state = this.$t('qrloginrl.streamApiNotSupportedError')
         }
       }
-    }
+    },
+    
+    logErrors (promise) {
+      promise.catch(console.error)
+    },
   }
 
 }
