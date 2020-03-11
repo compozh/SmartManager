@@ -1,5 +1,9 @@
 query ($procDefId: String!) {
   workFlowQuery {
-    formDefinition(procDefId: $procDefId)
+    formDefinition(procDefId: $procDefId) {
+      data
+      success
+      errorMessage
+    }
   }
 }
