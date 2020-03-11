@@ -25,17 +25,20 @@
         <v-btn icon @click="share(diagram)" :disabled="!canShare(diagram)" :title="$t('bpmn.buttons.Share')">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
-        <bpmn-contex-menu 
+        <bpmn-contex-menu
           :item="diagram"
           :onlyExport="true"
           @export="exportItem"
           offset>
           <template #activator="{ open }">
             <v-btn icon v-on="open">
-              <v-icon>mdi-share-variant</v-icon>
+              <v-icon>mdi-export-variant</v-icon>
             </v-btn>
           </template>
         </bpmn-contex-menu>
+        <v-btn icon @click="$emit('updateByImport', diagram)" :title="$t('bpmn.buttons.Import')">
+          <v-icon>mdi-import</v-icon>
+        </v-btn>
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">
@@ -108,9 +111,10 @@ import 'diagram-js-minimap/assets/diagram-js-minimap.css';
 import Diagram from '../../api/models/Diagram';
 import { eventBus } from '../../main';
 import { events } from '../../constants';
-import { fullScreenMixin } from '../mixins';
+import { fullScreenMixin, importMixin } from '../mixins';
 import * as Models from '../../api/models';
 import { Notification } from 'element-ui';
+import { currentLang } from '../../plugins/i18n';
 
 export default {
   name: 'modeler-layout',
@@ -131,7 +135,7 @@ export default {
     },
     noAccess: Boolean
   },
-  data() { 
+  data() {
     return {
       panel: !this.$vuetify.breakpoint.xs,
       isFullScreen: false,
@@ -209,8 +213,11 @@ export default {
       }
       this.load = false;
     },
+    update() {
+      this.$router.push(this.$router.currentRoute.path);
+    }
   }
-  
+
 };
 </script>
 <style lang="scss" >
@@ -221,7 +228,7 @@ export default {
   background-color: white;
   display: grid;
   grid-template-rows: 40px 1fr;
-  grid-template-areas: 
+  grid-template-areas:
     "toolbar"
     "modeler";
   overflow: hidden;

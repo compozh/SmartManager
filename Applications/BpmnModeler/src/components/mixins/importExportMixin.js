@@ -29,6 +29,36 @@ export const importMixin = {
       document.body.appendChild(input);
       input.click();
     },
+    updateByImport(item) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = item.type == 'BPMN' ? '.bpmn' : item.type == 'CMMN' ? '.cmmn' : item.type == 'DMN' ? '.dmn' : '';
+      input.style.display = 'none';
+
+      input.addEventListener('change', () => {
+        const [file] = input.files;
+        if (!file) {
+          return;
+        }
+        file.text().then(xml => {
+          setTimeout(function () {
+            document.body.removeChild(input);
+          }, 0);
+          let id = item.id;
+          this.$store.dispatch('bpmn/setXml', { id, xml }).then(success => {
+            if (success) {
+              this.saved = true;
+              setTimeout(() => this.saved = false, 1000);
+              this.onActiveModelChanged();
+            } else {
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
+            }
+          });
+        });
+      });
+      document.body.appendChild(input);
+      input.click();
+    }
   }
 };
 export const exportMixin = {

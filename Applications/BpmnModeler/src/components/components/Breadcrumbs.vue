@@ -171,6 +171,7 @@ a{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  z-index: 1;
 }
 .text-left {
   padding-bottom: 5px ;

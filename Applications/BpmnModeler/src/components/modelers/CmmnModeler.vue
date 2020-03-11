@@ -1,8 +1,8 @@
 <template>
   <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
-    :canMinimap="canMinimap" @minimap="onMinimap" 
+    :canMinimap="canMinimap" @minimap="onMinimap"
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
-    :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
+    :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset" @updateByImport="updateByImport"
   >
     <template #modeler>
       <div class="workflow-modeler" ref="container"></div>
@@ -21,13 +21,13 @@ import 'cmmn-js/dist/assets/cmmn-font/css/cmmn.css';
 import { debounce } from 'throttle-debounce';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
-import { editorToolbarMixin, exportMixin } from '../mixins';
+import { editorToolbarMixin, exportMixin, importMixin } from '../mixins';
 import CmmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/CmmnPropertiesProvider';
 import { Notification } from 'element-ui';
 
 export default {
   name: 'cmmn-modeler',
-  mixins: [ exportMixin, editorToolbarMixin ],
+  mixins: [ exportMixin, editorToolbarMixin, importMixin ],
   data() {
     return {
       modeler: null,
@@ -79,7 +79,7 @@ export default {
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new CmmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();
-    },    
+    },
     async loadXml() {
       if (!this.process || !this.modeler) {
         return;
@@ -101,7 +101,7 @@ export default {
         if (!xml || xml === '') {
           this.modeler.createDiagram(() => {
             this.loading = false;
-          });        
+          });
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
@@ -127,7 +127,7 @@ export default {
           Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
         }
       });
-      
+
       this.$store.dispatch('bpmn/editProcess', this.process);
       const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
       this.$store.dispatch('bpmn/editFolder', item);

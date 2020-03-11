@@ -1,9 +1,9 @@
 <template>
-  <modeler-layout 
+  <modeler-layout
       :diagram="decision" :loading.sync="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
-      :canMinimap="canMinimap" @minimap="onMinimap" 
+      :canMinimap="canMinimap" @minimap="onMinimap"
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
-      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
+      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset" @updateByImport="updateByImport"
     >
     <template #modeler>
       <v-tabs
@@ -42,12 +42,12 @@ import { debounce } from 'throttle-debounce';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
-import { editorToolbarMixin, exportMixin } from '../mixins';
+import { editorToolbarMixin, exportMixin, importMixin } from '../mixins';
 import { Notification } from 'element-ui';
 
 export default {
   name: 'dmn-modeler',
-  mixins: [ exportMixin, editorToolbarMixin ],
+  mixins: [ exportMixin, editorToolbarMixin, importMixin ],
   data() {
     return {
       modeler: null,
@@ -115,7 +115,7 @@ export default {
       this.modeler.on('views.changed', ({ views, activeView }) => {
         this.views = views;
         this.activeView = views.indexOf(activeView);
-        
+
         var editor = this.modeler.getActiveViewer();
         if (this.activeEditor === editor) {
           return;
@@ -135,7 +135,7 @@ export default {
         this.activeEditor = editor;
         this.onEditorChanged();
       });
-    },    
+    },
     async loadXml() {
       if (!this.decision || !this.modeler) {
         return;
@@ -160,7 +160,7 @@ export default {
               console.error(error);
             }
             this.loading = false;
-          }); 
+          });
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
