@@ -9,7 +9,7 @@
           <template v-slot:activator="{on}">
             <v-layout class="user-panel" v-on="on" id="user-icon" align-center>
               <!-- <v-flex > -->
-                <v-img v-if="user.photo" :src="user.photo" width='50px'></v-img>
+                <v-img v-if="user.photo" :src="user.photo" width='50px' class="user-photo" ></v-img>
                 <v-icon v-else size=50>account_circle</v-icon>
                 <!-- <user-icon :src="user.photo" size="50" style="max-width:50px"></user-icon> -->
               <!-- </v-flex> -->
@@ -141,6 +141,9 @@ export default {
 
   .user-panel {
     cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 
   .delegated-menu-item {
@@ -171,6 +174,9 @@ export default {
   #user-icon .user-icon {
     max-width: 50px;
   }
+
+  .user-photo {
+    border-radius: 50%;
+    max-width: 45px;
+  }
 </style>
-
-

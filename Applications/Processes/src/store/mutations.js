@@ -14,5 +14,13 @@ export default {
     state.snackbar.message = message
     state.snackbar.type = 'success'
     state.snackbar.visible = true
+  },
+  setSnackbarErrorMessage (state, message) {
+    state.snackbar.message = message
+    state.snackbar.type = 'error'
+    state.snackbar.visible = true
+  },
+  UPDATE_AUTHENTICATED_USER (state, user) {
+    state.user = user
   }
 }

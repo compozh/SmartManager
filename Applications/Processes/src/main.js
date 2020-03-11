@@ -23,10 +23,12 @@ import VueApollo from 'vue-apollo'
 
 import auth from '@it-enterprise/jwtauthentication'
 auth.config({
-  baseUrl: window.myConfig.GrapgQlUrl
-  // onError: error => {
-  // todo: обработать
-  // }
+  baseUrl: window.myConfig.GrapgQlUrl,
+  onError: error => {
+    if (error.response && error.response.status === 400) {
+      store.dispatch('logout')
+    }
+  }
 })
 
 Vue.config.productionTip = false
