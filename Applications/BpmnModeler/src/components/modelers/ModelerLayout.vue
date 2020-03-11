@@ -14,7 +14,6 @@
     </v-row>
     <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
-        <v-spacer></v-spacer>
         <v-btn icon @click="deployItem(diagram)" :disabled="!canDeploy(diagram)" :title="$t('bpmn.buttons.Deploy')">
           <v-icon>mdi-open-in-app</v-icon>
         </v-btn>
@@ -234,6 +233,9 @@ export default {
   grid-area: toolbar;
   border-bottom: rgba(0,0,0,.12) 1px solid;
   grid-area: toolbar;
+}
+.modeler-toolbar .v-toolbar__content {
+  margin-left: auto;
 }
 .modeler-toolbar button {
   min-width: 36px;
