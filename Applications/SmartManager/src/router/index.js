@@ -5,13 +5,13 @@ import routes from './routes'
 import auth from '@/utils/auth'
 Vue.use(VueRouter)
 
-let router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: window.appConfig.BASE_URL + 'SmartManager/',
-  routes,
+  routes
 })
 
-router.history.getCurrentLocation = function() {
+router.history.getCurrentLocation = () => {
   let path = window.location.pathname
   let base = router.history.base
 
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
   if (token) {
     return next()
   }
-  if (router.currentRoute.name !== 'login') {
+  if (from.name !== 'login') {
     await router.push({path: '/login', query: { to: to.path }})
   }
 })

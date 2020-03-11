@@ -50,7 +50,8 @@ export default {
     version: Object,
     type: String,
     fullScreenVisible: Boolean,
-    attitude: String
+    attitude: String,
+    parrentEl: HTMLDivElement
   },
 
   mounted() {
@@ -59,6 +60,9 @@ export default {
     }
   },
   methods: {
+    getFullScreenContainer() {
+      return this.parrentEl;
+    },
     createModeler() {
       this.destroyModeler();
       this.modeler = editorFactory(this.type, true, this.$refs.container, this.translate);

@@ -1,6 +1,8 @@
 <template>
   <v-app>
 
+    <main-toolbar class="main-toolbar" />
+
     <v-snackbar
       v-if="snackbar.visible"
       :top="true"
@@ -27,8 +29,13 @@
 </template>
 
 <script>
+import MainToolbar from './MainToolbar'
+
 export default {
   name: 'main-processes',
+  components: {
+    MainToolbar
+  },
   computed: {
     snackbar () {
       return this.$store.getters['snackbar']
@@ -43,5 +50,9 @@ export default {
 </script>
 
 <style lang="scss">
-
+  .main-toolbar {
+    max-height: 50px;
+    border-bottom: 1px solid;
+    border-color: rgba(0, 0, 0, 0.12);
+  }
 </style>

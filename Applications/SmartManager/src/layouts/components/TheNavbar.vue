@@ -697,9 +697,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 62px;
-    height: 28px;
-    padding-top: 1px;
+    min-width: 62px;
+    min-height: 28px;
+    padding: 1px 5px 0;
     border-radius: 0.375rem;
   }
 

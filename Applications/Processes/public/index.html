@@ -2,9 +2,8 @@
 <html lang="en">
   <head>
     <script>
-      var devMode = false
       window.myConfig = {
-        GrapgQlUrl: devMode ? "http://localhost:5002/" : '<%= VUE_APP_GRAPHQL_PATH %>',
+        GrapgQlUrl: '<%= VUE_APP_GRAPHQL_PATH %>',
         WsUrl: '<%= VUE_APP_WS_PATH %>',
         BASE_URL: '<%= VUE_APP_BASE_PATH %>'
       };

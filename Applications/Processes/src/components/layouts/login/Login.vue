@@ -42,13 +42,13 @@
                     ></v-checkbox>
                   </v-flex>
                   <v-flex class="text-xs-right">
-                    <a v-on="params.buttonEventRecoverPasswordUrl">Забыли пароль?</a>
+                    <a v-on="params.buttonEventRecoverPasswordUrl">{{ $t("processes.login.forgetPassword")}}</a>
                     <v-btn
                       class="cyan white--text text-xs-right enter-button"
                       v-bind="params.buttonAttrs"
                       v-on="params.buttonEvents"
                       :loading="loading"
-                    >Войти
+                    >{{$t("processes.buttons.enter")}}
                     </v-btn>
                   </v-flex>
                 </v-layout>
@@ -62,7 +62,7 @@
                 <v-btn v-if="allowQrMode"
                   @click="qrMode = true"
                   class="cyan white--text text-xs-right">
-                  Войти с помощью QR
+                  {{ $t("processes.login.loginByQr") }}
                 </v-btn>
               </v-flex>
 
@@ -75,7 +75,7 @@
                 <v-btn
                   @click="qrMode = false"
                   class="cyan white--text text-xs-right">
-                  Ввести логин и пароль
+                  {{ $t("processes.login.inputLoginAndPassword") }}
                 </v-btn>
               </v-flex>
             </v-layout>
@@ -93,7 +93,7 @@ import confirmPassword from './ConfirmTempPassword.vue'
 export default {
   name: 'login',
   props: ['allowQrMode'],
-  data() {
+  data () {
     return {
       qrMode: false
     }
