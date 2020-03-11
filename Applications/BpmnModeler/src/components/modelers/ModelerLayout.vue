@@ -269,6 +269,50 @@ export default {
 .djs-popup-body .entry {
   text-align: left;
 }
+
+.djs-popup-body {
+  .entry {
+    margin: 5px 10px;
+    border-radius: 5px;
+  }
+  .palette-default {
+    background-color: #fff;
+    border: 1px solid black;
+    color: #000;
+    text-align: center;
+  }
+  .palette-blue {
+    background-color: rgb(190,223,251);
+    border: 1px solid rgb(30,126,229);
+    color: rgb(30,126,229);
+    text-align: center;
+  }
+  .palette-orange {
+    background-color: rgb(255,225,181);
+    border: 1px solid rgb(251,140,0);
+    color: rgb(251,140,0);
+    text-align: center;
+  }
+  .palette-green {
+    background-color: rgb(202,231,203);
+    border: 1px solid rgb(67,160,71);
+    color: rgb(67,160,71);
+    text-align: center;
+  }
+  .palette-red {
+    background-color: rgb(255,207,212);
+    border: 1px solid rgb(229,57,53);
+    color: rgb(229,57,53);
+    text-align: center;
+  }
+  .palette-purple {
+    background-color: rgb(226,193,232);
+    border: 1px solid rgb(142, 36, 170);
+    color: rgb(142,36,170);
+    text-align: center;
+  }
+}
+
 .dmn-decision-table-container .powered-by-logo .logo,
 a.bjs-powered-by,
 a.cjs-powered-by {
