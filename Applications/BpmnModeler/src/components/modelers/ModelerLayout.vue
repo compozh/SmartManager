@@ -209,9 +209,6 @@ export default {
       }
       this.load = false;
     },
-    update() {
-      this.$router.push(this.$router.currentRoute.path);
-    }
   }
 
 };
