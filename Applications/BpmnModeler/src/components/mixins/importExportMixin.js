@@ -47,9 +47,7 @@ export const importMixin = {
           let id = item.id;
           this.$store.dispatch('bpmn/setXml', { id, xml }).then(success => {
             if (success) {
-              this.saved = true;
-              setTimeout(() => this.saved = false, 1000);
-              this.onActiveModelChanged();
+              eventBus.$emit('updateCurrentDiagram');
             } else {
               Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
             }

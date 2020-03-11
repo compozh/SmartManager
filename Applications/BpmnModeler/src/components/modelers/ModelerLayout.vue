@@ -36,9 +36,6 @@
             </v-btn>
           </template>
         </bpmn-contex-menu>
-        <v-btn icon @click="$emit('updateByImport', diagram)" :title="$t('bpmn.buttons.Import')">
-          <v-icon>mdi-import</v-icon>
-        </v-btn>
       </v-toolbar>
       <Split v-if="canShowPanel" @onDragEnd="onSplitDragEnd" :gutterSize="12">
         <SplitArea :size="100 - splitSize" class="diagram-section">

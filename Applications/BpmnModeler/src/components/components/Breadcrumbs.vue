@@ -16,6 +16,7 @@
           @remove="removeItem"
           @export="exportItem"
           @copy="copyItem"
+          @updateByImport="updateByImport"
           offset>
           <template #activator="{ open }">
             <v-btn icon class="text-left"  v-on="open">
@@ -29,7 +30,7 @@
 </template>
 
 <script>
-import { formMixin } from '../mixins';
+import { formMixin, importMixin } from '../mixins';
 import { events } from '../../constants';
 import { eventBus } from '../../main';
 import treeSearch from '../../api/treeSearch';
@@ -37,7 +38,7 @@ import * as Models from '../../api/models';
 
 export default {
   name: 'breadcrumbs',
-  mixins: [ formMixin ],
+  mixins: [ formMixin, importMixin ],
   data () {
     return {
       compare: ''

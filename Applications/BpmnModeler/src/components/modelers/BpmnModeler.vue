@@ -2,7 +2,7 @@
   <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
     :canMinimap="canMinimap" @minimap="onMinimap"
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
-    :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset" @updateByImport="updateByImport"
+    :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
   >
     <template #modeler>
       <div class="workflow-modeler" ref="container"></div>
@@ -21,13 +21,14 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import { debounce } from 'throttle-debounce';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
-import { editorToolbarMixin, exportMixin, importMixin } from '../mixins';
+import { editorToolbarMixin, exportMixin } from '../mixins';
 import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
 import { Notification } from 'element-ui';
+import { eventBus } from '../../main';
 
 export default {
   name: 'bpmn-modeler',
-  mixins: [ exportMixin, editorToolbarMixin, importMixin ],
+  mixins: [ exportMixin, editorToolbarMixin ],
   // components: { ModelerLayout },
   data() {
     return {
@@ -77,6 +78,7 @@ export default {
       this.destroyModeler();
       const canEdit = this.process.hasRight(AccessRights.Write);
       this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.translate);
+      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();

@@ -3,7 +3,7 @@
       :diagram="decision" :loading.sync="loading" :saved="saved" :canShowPanel="false" :noAccess="noAccess"
       :canMinimap="canMinimap" @minimap="onMinimap"
       :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
-      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset" @updateByImport="updateByImport"
+      :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
     >
     <template #modeler>
       <v-tabs
@@ -42,12 +42,13 @@ import { debounce } from 'throttle-debounce';
 import InitialDiagram from '../../bpmnModules/initialDiagram.dmn';
 import { Diagram, DiagramType, AccessRights } from '../../api/models';
 import { CancellationToken, SavingContext, editorFactory } from '../../api';
-import { editorToolbarMixin, exportMixin, importMixin } from '../mixins';
+import { editorToolbarMixin, exportMixin } from '../mixins';
 import { Notification } from 'element-ui';
+import { eventBus } from '../../main';
 
 export default {
   name: 'dmn-modeler',
-  mixins: [ exportMixin, editorToolbarMixin, importMixin ],
+  mixins: [ exportMixin, editorToolbarMixin ],
   data() {
     return {
       modeler: null,
@@ -112,6 +113,7 @@ export default {
       const canEdit = this.decision.hasRight(AccessRights.Write);
       this.canShowPanel = canEdit;
       this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.translate);
+      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
       this.modeler.on('views.changed', ({ views, activeView }) => {
         this.views = views;
         this.activeView = views.indexOf(activeView);
