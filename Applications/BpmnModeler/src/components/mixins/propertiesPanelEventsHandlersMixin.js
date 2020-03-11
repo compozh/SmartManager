@@ -74,88 +74,12 @@ export default {
         return;
       }
       var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
-      if (!form) {
-        this.changeLoad();
-        Notification.error(this.$t('bpmn.errors.FormNotLoaded'));
-        return;
-      }
-
-      const submission = {};
-      if (existingParameters && existingParameters.length) {
-        for (let index = 0; index < existingParameters.length; index++) {
-          const element = existingParameters[index];
-          if (element.type === 'object') {
-            try {
-              submission[element.name] = JSON.parse(element.value);
-            } catch {
-              Notification.error(this.$t('bpmn.errors.FormParameterImportError', { name: element.name }));
-            }
-          } else {
-            submission[element.name] = element.value;
-          }
-        }
-      }
-      form.submission = JSON.stringify(submission);
-      this.changeLoad();
-
-      eventBus.$emit(events.formio.showForm, action.unformio, form, this.$t('bpmn.labels.EnterTaskParams'), (submission) => {
-        const params = [];
-        for (var param in submission.data) {
-          const value = submission.data[param];
-          let type = typeof value;
-          if (type === 'string') {
-            const component = FormioUtils.getComponent(form.components, param);
-            if (component.type === 'number' || component.type === 'datetime') {
-              type = component.type;
-            }
-          }
-          params.push({ name: param, type: type, value: typeof value === 'object' ? JSON.stringify(value) : value });
-        }
-        callback(params);
-      });
+      this.propertiesPanelShowForm(form, action.unformio, existingParameters, callback);
     },
     async onPropertiesPanelSetBusinessObjectActionProperties(logicalKey, existingParameters, callback) {
       this.loading = true;
       const form = await this.$store.dispatch('bpmn/getBusinessObjectActionForm', logicalKey);
-      if (!form) {
-        this.changeLoad();
-        Notification.error(this.$t('bpmn.errors.FormNotLoaded'));
-        return;
-      }
-
-      const submission = {};
-      if (existingParameters && existingParameters.length) {
-        for (let index = 0; index < existingParameters.length; index++) {
-          const element = existingParameters[index];
-          if (element.type === 'object') {
-            try {
-              submission[element.name] = JSON.parse(element.value);
-            } catch {
-              Notification.error(this.$t('bpmn.errors.FormParameterImportError', { name: element.name }));
-            }
-          } else {
-            submission[element.name] = element.value;
-          }
-        }
-      }
-      form.submission = JSON.stringify(submission);
-      this.changeLoad();
-
-      eventBus.$emit(events.formio.showForm, undefined, form, this.$t('bpmn.labels.EnterActionParams'), (submission) => {
-        const params = [];
-        for (var param in submission.data) {
-          const value = submission.data[param];
-          let type = typeof value;
-          if (type === 'string') {
-            const component = FormioUtils.getComponent(form.components, param);
-            if (component.type === 'number' || component.type === 'datetime') {
-              type = component.type;
-            }
-          }
-          params.push({ name: param, type: type, value: typeof value === 'object' ? JSON.stringify(value) : value });
-        }
-        callback(params);
-      });
+      this.propertiesPanelShowForm(form, undefined, existingParameters, callback);
     },
     async onPropertiesPanelSelectDeployedProcess(procDefKey, callback) {
       this.loading = true;
@@ -258,6 +182,47 @@ export default {
         this.$t('bpmn.labels.SelectBusinessObjectAccess'),
         items, items.find(item => item.id === accDefCode),
         (selectedItem) => callback(selectedItem.id));
+    },
+    propertiesPanelShowForm(form, unformio, existingParameters, callback) {
+      if (!form) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.FormNotLoaded'));
+        return;
+      }
+
+      const submission = {};
+      if (existingParameters && existingParameters.length) {
+        for (let index = 0; index < existingParameters.length; index++) {
+          const element = existingParameters[index];
+          if (element.type === 'object') {
+            try {
+              submission[element.name] = JSON.parse(element.value);
+            } catch {
+              Notification.error(this.$t('bpmn.errors.FormParameterImportError', { name: element.name }));
+            }
+          } else {
+            submission[element.name] = element.value;
+          }
+        }
+      }
+      form.submission = JSON.stringify(submission);
+      this.changeLoad();
+
+      eventBus.$emit(events.formio.showForm, unformio, form, this.$t('bpmn.labels.EnterTaskParams'), (submission) => {
+        const params = [];
+        for (var param in submission.data) {
+          const value = submission.data[param];
+          let type = typeof value;
+          if (type === 'string') {
+            const component = FormioUtils.getComponent(typeof form.components === 'string' ? JSON.parse(form.components) : form.components, param);
+            if (component.type === 'number' || component.type === 'datetime') {
+              type = component.type;
+            }
+          }
+          params.push({ name: param, type: type, value: typeof value === 'object' ? JSON.stringify(value) : value });
+        }
+        callback(params);
+      });
     }
   }
 };
