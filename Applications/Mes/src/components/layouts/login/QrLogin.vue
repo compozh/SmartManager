@@ -4,17 +4,13 @@
       <div class="qr-container">
         <div v-if="props.state" class="qr-state py-3">
           {{props.state}}
-          
           <div class="qrcode-capture">
             <qrcode-capture @decode="props.readerEvents.onDecode" />
           </div>
         </div>
         <div class="qr-code-stream" v-else-if="props.showScanner">
           {{$t("qrlogin.infoMessage")}}
-          <qrcode-stream  @decode="props.readerEvents.onDecode" @init="props.readerEvents.onInit"></qrcode-stream>
-          <qrcode-drop-zone @decode="props.readerEvents.onDecode" @init="props.readerEvents.logErrors">
-            <qrcode-stream @decode="props.readerEvents.onDecode" @init="props.readerEvents.onInit" />
-          </qrcode-drop-zone>          
+          <qrcode-stream @decode="props.readerEvents.onDecode" @init="props.readerEvents.onInit" />
         </div>
         <div v-else-if="props.error">
           <div class="qr-error-text">{{props.error}}</div>
@@ -53,7 +49,7 @@ export default {
         }
       }
     }
-  }
+  },
 }
 
 </script>
@@ -68,9 +64,11 @@ export default {
   .qr-scanner {
     max-width: 100%;
     max-height: 100%;
+    
   }
   .qr-code-stream{
-    font-size: 1.2em
+    font-size: 1.2em;
+    line-height: 30px;
   }
   .qr-loader{
     margin: 40px;

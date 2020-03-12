@@ -82,7 +82,6 @@ export default {
     }
   },
    mounted () {
-    this.onResize()
     document.getElementById("app").addEventListener("touchstart", tapHandler);
 
     let tapedTwice = false;
@@ -94,8 +93,6 @@ export default {
             return false;
         }
         event.preventDefault();
-        //action on double tap goes below
-        console.log('You tapped me Twice !!!');
     }
   },
   created() {
@@ -186,8 +183,9 @@ export default {
       this.downtimesOverlayVisible = !this.downtimesOverlayVisible
     },
     onResize (ev) {
-      console.log('resize', ev, ev.srcElement.visualViewport.width)
-      ev.preventDefault();
+      if(ev) {
+        ev.preventDefault();
+      }
     },
   }
 }
@@ -347,7 +345,7 @@ export default {
   /*Mes Login Style*/
   .mes-login-form .flex {
     text-align: center;
-    line-height: 64px;
+    line-height: 44px;
   }
   .mes-login-form .flex a {
     color: #326DA8 !important;
@@ -372,11 +370,13 @@ export default {
   }
   .qr-code-stream .camera {
     width: auto !important;
-    height: 80vh !important;
+    height: 70vh !important;
+    max-height: 100%;
+    max-width: 100%;
   }
 
   .formio-form-component {
-        position: relative;
+    position: relative;
   }
   .wait {
     font-size: 5em

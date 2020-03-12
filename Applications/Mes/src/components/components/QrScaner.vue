@@ -16,9 +16,7 @@
       </div>
     </div>
     <div class="qr-code-stream" v-else-if="showScanner">
-      <qrcode-drop-zone @decode="onDecode" @init="logErrors">
-        <qrcode-stream @decode="onDecode" @init="onInit" />
-      </qrcode-drop-zone>
+      <qrcode-stream @decode="onDecode" @init="onInit" />
     </div>
   </v-dialog>
 </template>
@@ -94,9 +92,6 @@ export default {
           this.state = this.$t('qrScaner.streamApiNotSupportedError')
         }
       }
-    },
-    logErrors (promise) {
-      promise.catch(console.error)
     },
   }
 }

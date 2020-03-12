@@ -1,6 +1,6 @@
 {
-  "name": "mes",
-  "short_name": "mes",
+  "name": "MES",
+  "short_name": "MES",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
@@ -14,7 +14,7 @@
     }
   ],
   "start_url": "./index.html",
-  "display": "fullscreen",
+  "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#ffffff"
 }

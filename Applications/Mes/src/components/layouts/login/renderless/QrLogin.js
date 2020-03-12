@@ -47,6 +47,14 @@ export default {
           notFoundError: 'На этом устройстве камера не обнаружена',
           streamApiNotSupportedError: 'Stream API не поддерживается в этом браузере. Попробуйте использовать GoogleChrome'
         }
+      },
+      uk: {
+        qrloginrl: {
+          loginError: 'По данному коду не удалось войти в систему',
+          notAllowedError: 'Для входа вам нужно дать разрешение на доступ к камере',
+          notFoundError: 'На этом устройстве камера не обнаружена',
+          streamApiNotSupportedError: 'Stream API не поддерживается в этом браузере. Попробуйте использовать GoogleChrome'
+        }
       }
     }
   },
@@ -99,10 +107,6 @@ export default {
         }
       }
     },
-    
-    logErrors (promise) {
-      promise.catch(console.error)
-    },
-  }
+  },
 
 }
