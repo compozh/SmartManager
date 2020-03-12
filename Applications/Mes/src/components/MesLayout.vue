@@ -1,5 +1,5 @@
 <template>
-  <v-app id="mes-app">
+  <v-app id="mes-app" v-resize="onResize">
     <!-- Меню -->
     <v-navigation-drawer  app clipped mobile-break-point="960" width="320" overlay-opacity="0.4" 
       :mini-variant.sync="$vuetify.breakpoint.smAndDown? false : menuMiniMode"
@@ -79,6 +79,20 @@ export default {
       mainContainer: 0,
       downtimesOverlayVisible: false,
 
+    }
+  },
+   mounted () {
+    document.getElementById("app").addEventListener("touchstart", tapHandler);
+
+    let tapedTwice = false;
+
+    function tapHandler(event) {
+        if(!tapedTwice) {
+            tapedTwice = true;
+            setTimeout( function() { tapedTwice = false; }, 300 );
+            return false;
+        }
+        event.preventDefault();
     }
   },
   created() {
@@ -167,7 +181,12 @@ export default {
     },
     changeDowntimesOverlayVisible() {
       this.downtimesOverlayVisible = !this.downtimesOverlayVisible
-    }
+    },
+    onResize (ev) {
+      if(ev) {
+        ev.preventDefault();
+      }
+    },
   }
 }
 </script>
@@ -326,7 +345,7 @@ export default {
   /*Mes Login Style*/
   .mes-login-form .flex {
     text-align: center;
-    line-height: 64px;
+    line-height: 44px;
   }
   .mes-login-form .flex a {
     color: #326DA8 !important;
@@ -351,11 +370,13 @@ export default {
   }
   .qr-code-stream .camera {
     width: auto !important;
-    height: 80vh !important;
+    height: 70vh !important;
+    max-height: 100%;
+    max-width: 100%;
   }
 
   .formio-form-component {
-        position: relative;
+    position: relative;
   }
   .wait {
     font-size: 5em

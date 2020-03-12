@@ -19,7 +19,7 @@
           <div class="documents-list-block-content" @scroll.passive="onScroll">
             <mes-document-cards
             @changeCurrentDocument=changeCurrentDocument
-            @changeDynamicTableView=changeDynamicTableView
+            @changeDynamicTableView="showFloatBtn ? '' : changeDynamicTableView"
             :initializeDocuments=initializeDocuments
             :pageProps=pageProps
             />
@@ -28,6 +28,10 @@
         </vue-pull-refresh>
         <span v-if="initializeDocuments && !documents.length" class="lack-of-documents-str">Документы отсутствуют</span>
       </v-flex>
+      <v-btn v-if="showFloatBtn" fab 
+        fixed bottom right color="rgb(185, 210, 250)" @click="changeDynamicTableView">
+        <v-icon size="30">add</v-icon>
+      </v-btn>
     </v-layout>
   </div>
 </template>
@@ -60,6 +64,9 @@ export default {
       set(documentSearchValue) {
         this.$store.commit('mes/setDocumentSearchValue', documentSearchValue)
       }
+    },
+    showFloatBtn() {
+      return this.$vuetify.breakpoint.smAndDown && this.$route.params.id.toLowerCase() == 'defectcorrection'
     }
   },
   methods: {

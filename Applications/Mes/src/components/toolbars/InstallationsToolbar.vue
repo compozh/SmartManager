@@ -58,7 +58,8 @@ export default {
       return this.$store.getters['mes/properties']
     },
     enableCamera() {
-      return this.$store.getters['mes/cameraAvailability']
+      return true
+      // return this.$store.getters['mes/cameraAvailability']
     }
   },
   methods: {
