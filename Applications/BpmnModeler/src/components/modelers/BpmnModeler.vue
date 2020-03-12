@@ -44,6 +44,7 @@ export default {
     if (this.process) {
       this.createModeler();
       this.onActiveModelChanged();
+      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
     }
   },
   computed: {
@@ -60,6 +61,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    eventBus.$off('updateCurrentDiagram', this.onActiveModelChanged);
   },
   watch: {
     process(value, oldValue) {
@@ -78,7 +80,6 @@ export default {
       this.destroyModeler();
       const canEdit = this.process.hasRight(AccessRights.Write);
       this.modeler = editorFactory(this.process.type, !canEdit, this.$refs.container, this.translate);
-      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new BpmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();

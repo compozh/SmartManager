@@ -71,6 +71,7 @@ export default {
     if (this.decision) {
       this.createModeler();
       this.onActiveModelChanged();
+      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
     }
   },
   computed: {
@@ -87,6 +88,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    eventBus.$off('updateCurrentDiagram', this.onActiveModelChanged);
   },
   watch: {
     decision(value, oldValue) {
@@ -113,7 +115,6 @@ export default {
       const canEdit = this.decision.hasRight(AccessRights.Write);
       this.canShowPanel = canEdit;
       this.modeler = editorFactory(this.decision.type, !canEdit, this.$refs.container, this.translate);
-      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
       this.modeler.on('views.changed', ({ views, activeView }) => {
         this.views = views;
         this.activeView = views.indexOf(activeView);
