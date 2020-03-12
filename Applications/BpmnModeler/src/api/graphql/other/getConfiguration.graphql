@@ -5,6 +5,7 @@
       itObjects {
         isMobj
         userDefaultObject
+        useAllObjects
         userAccessObjects {
           kobj
           nobj

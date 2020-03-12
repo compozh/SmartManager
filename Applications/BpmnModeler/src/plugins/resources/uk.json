@@ -143,7 +143,7 @@
 		"EnterVersionName": "Введіть назву версії",
 		"NewVersion": "Нова версія",
 		"InsertTextHere": "Введіть текст сюди ...",
-		"AccessObject": "Об'єкт доступу"
+		"AccessObject": "Об'єкт"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
