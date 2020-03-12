@@ -13,11 +13,11 @@
     </v-card-title>
     <v-card-text>
       <v-form ref="form" v-model="valid" onSubmit="return false;" @keydown.enter="save()">
-        <v-select 
-          v-model="model.kobj" 
-          v-if="canSelectAccessObject" 
-          :items="itObjects.userAccessObjects" 
-          :item-text="'nobj'" 
+        <v-select
+          v-model="model.kobj"
+          v-if="canSelectAccessObject"
+          :items="itObjects.userAccessObjects"
+          :item-text="'nobj'"
           :item-value="'kobj'"
           :disabled="loading || accessObjectInherited || itObjects.userAccessObjects.length <= 1"
           :rules="[rules.required]"
@@ -36,7 +36,7 @@
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
           <v-radio label="CMMN" value="CMMN"></v-radio>
-        </v-radio-group>   
+        </v-radio-group>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -91,7 +91,7 @@ export default {
           'delete': 'bpmn.buttons.Delete',
           'copy': 'bpmn.buttons.Copy',
           'create': 'bpmn.buttons.Create',
-        }    
+        }
       },
       actions: {
         'import': 'bpmn.buttons.Import',
@@ -176,7 +176,7 @@ export default {
         this.loading = true;
         if (this.mode == 'import') { this.mode = 'create'; }
         let success = await this.callback(this.model, this.type == 'project' ? 'folder' : this.type , this.mode);
-        
+
         if (success) {
           await this.$store.dispatch('bpmn/loadItems', true);
           this.cancel();

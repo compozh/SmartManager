@@ -7,7 +7,7 @@
         </svg>
         <h1 class="text-left blue--text text--darken-2 mr-5 ml-0">ForceBPM modeler</h1>
       </router-link>
-      <breadcrumbs class="pl-4" :activeItem.sync="activeItem" />
+      <breadcrumbs :activeItem.sync="activeItem" />
       <v-spacer></v-spacer>
       <v-col class="icon-container shrink py-0" v-if="currentUser">
         <user-panel mini="true"></user-panel>
@@ -245,6 +245,7 @@ export default {
     padding-left: 2px;
   }
   .logo {
+    min-width: 400px;
     text-decoration: none;
     flex-direction: row;
     display: flex;
