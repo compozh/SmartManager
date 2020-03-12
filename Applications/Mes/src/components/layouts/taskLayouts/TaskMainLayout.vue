@@ -45,9 +45,6 @@ export default {
       this.signalRDisconnect()
     }
   },
-  mounted() {
-    eventBus.$on(events.workCenterChanged, this.workCenterChanged)
-  },
   computed: {
     dragResizeMode() {
       return this.$store.getters['mes/dragResizeMode']
@@ -100,6 +97,7 @@ export default {
 
       if(iotSignalRUrl) {
         await this.iotSettings.iotSignalRConnection.connect(iotSignalRUrl)
+        this.$emit('onSignalRConnected')
         this.$refs.formioFormComponent.$refs.formioComponent.formio.emit('onSignalRConnected')
       }
       
@@ -130,13 +128,17 @@ export default {
     },
     async signalrROnRecieveMessage(params) {
       let connection = this.iotSettings.iotSignalRConnection
+
       if(!connection || !connection.connected) {
         var result = await this.signalRConnect()
         if(!result) {
+          this.$on('onSignalRConnected', () => {
+            this.iotSettings.iotSignalRConnection.onRecieveMessage(params)
+          })
           return
         }
       }
-      
+
       this.iotSettings.iotSignalRConnection.onRecieveMessage(params)
     },
     signalrROffRecieveMessage(params) {
@@ -145,10 +147,10 @@ export default {
         return
       }
       connection.offRecieveMessage(params)
-    },
-    workCenterChanged(workCenter) {
-      this.signalRDisconnect(workCenter.thingId)
     }
+  },
+  beforeDestroy() {
+    this.signalRDisconnect(this.workCenter.thingId)
   }
 }
 </script>

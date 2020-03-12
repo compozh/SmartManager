@@ -38,6 +38,8 @@
 		"ProcessSaved": "Збережено",
 		"SelectOrCreateProcess": "Папка порожня",
 		"Name": "Назва",
+		"NameAsc":"Наименование по зростанню",
+		"NameDesc": "Наименование по спаданню",
 		"CreateProcess": "Створити діаграму",
 		"EditProcess": "Редагувати діаграму",
 		"DeleteProcess": "Видалити діаграму",

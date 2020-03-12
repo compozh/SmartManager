@@ -107,7 +107,7 @@
           <v-list-item-title>{{ $t('bpmn.buttons.Share') }}</v-list-item-title>
         </v-list-item>
         <template v-if="!isFolder(item) && canEdit(item)">
-          <v-list-item>
+          <v-list-item @click="updateByImport(item)">
             <v-list-item-avatar>
               <v-icon>mdi-repeat</v-icon>
             </v-list-item-avatar>
@@ -235,6 +235,9 @@ export default {
     },
     copy(item) {
       this.$emit('copy', item);
+    },
+    updateByImport(item) {
+      this.$emit('updateByImport', item);
     },
     share(item) {
       eventBus.$emit(events.modeler.showAccessDialog, item);

@@ -1,6 +1,6 @@
 <template>
   <modeler-layout :diagram="process" :loading.sync="loading" :saved="saved" :noAccess="noAccess"
-    :canMinimap="canMinimap" @minimap="onMinimap" 
+    :canMinimap="canMinimap" @minimap="onMinimap"
     :canUndo="canUndo" :canRedo="canRedo" @undo="onUndo" @redo="onRedo"
     :canZoom="canZoom" @zoom-in="onZoomIn" @zoom-out="onZoomOut" @zoom-reset="onZoomReset"
   >
@@ -24,6 +24,7 @@ import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import CmmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/CmmnPropertiesProvider';
 import { Notification } from 'element-ui';
+import { eventBus } from '../../main';
 
 export default {
   name: 'cmmn-modeler',
@@ -42,6 +43,7 @@ export default {
     if (this.process) {
       this.createModeler();
       this.onActiveModelChanged();
+      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
     }
   },
   computed: {
@@ -58,6 +60,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    eventBus.$off('updateCurrentDiagram', this.onActiveModelChanged);
   },
   watch: {
     process(value, oldValue) {
@@ -79,7 +82,7 @@ export default {
       this.modeler.on('commandStack.changed', this.onCanUndoRedo);
       this.propertiesProvider = new CmmnPropertiesProvider(this.process, this.modeler, !canEdit);
       this.onEditorChanged();
-    },    
+    },
     async loadXml() {
       if (!this.process || !this.modeler) {
         return;
@@ -101,7 +104,7 @@ export default {
         if (!xml || xml === '') {
           this.modeler.createDiagram(() => {
             this.loading = false;
-          });        
+          });
         } else {
           this.modeler.importXML(xml, (err) => {
             this.loading = false;
@@ -127,7 +130,7 @@ export default {
           Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
         }
       });
-      
+
       this.$store.dispatch('bpmn/editProcess', this.process);
       const { item, index } = this.$store.getters['bpmn/getItemById'](this.process.parentId);
       this.$store.dispatch('bpmn/editFolder', item);
