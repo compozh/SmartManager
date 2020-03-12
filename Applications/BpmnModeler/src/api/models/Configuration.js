@@ -12,9 +12,10 @@ export default class Configuration {
 }
 
 class ItObjects {
-  constructor({ isMobj = false, userDefaultObject, userAccessObjects  = []} = {}) {
+  constructor({ isMobj = false, userDefaultObject, useAllObjects = false, userAccessObjects  = []} = {}) {
     this.isMobj = isMobj;
     this.userDefaultObject = userDefaultObject;
+    this.useAllObjects = useAllObjects;
     this.userAccessObjects = userAccessObjects.map(obj => new AccessObject(obj));
   }
 
@@ -23,6 +24,9 @@ class ItObjects {
 
   /** @type {string} */
   userDefaultObject
+
+  /** @type {boolean} */
+  useAllObjects
 
   /** @type {AccessObject[]} */
   userAccessObjects

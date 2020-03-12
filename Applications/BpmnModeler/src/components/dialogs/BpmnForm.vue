@@ -13,17 +13,6 @@
     </v-card-title>
     <v-card-text>
       <v-form ref="form" v-model="valid" onSubmit="return false;" @keydown.enter="save()">
-        <v-select
-          v-model="model.kobj"
-          v-if="canSelectAccessObject"
-          :items="itObjects.userAccessObjects"
-          :item-text="'nobj'"
-          :item-value="'kobj'"
-          :disabled="loading || accessObjectInherited || itObjects.userAccessObjects.length <= 1"
-          :rules="[rules.required]"
-          :label="$t('bpmn.labels.AccessObject')"
-          >
-        </v-select>
         <v-text-field ref="nameField" @keydown.enter="save()"
           class="nameField"
           v-model="names"
@@ -36,7 +25,19 @@
           <v-radio label="BPMN" value="BPMN"></v-radio>
           <v-radio label="DMN" value="DMN"></v-radio>
           <v-radio label="CMMN" value="CMMN"></v-radio>
-        </v-radio-group>
+        </v-radio-group>   
+        <v-select 
+          v-model="model.kobj" 
+          v-if="canSelectAccessObject" 
+          :items="itObjects.userAccessObjects"
+          :item-text="'nobj'" 
+          :item-value="'kobj'"
+          :disabled="loading || accessObjectInherited || (itObjects.userAccessObjects.length <= 1 && !itObjects.useAllObjects)"
+          :clearable="itObjects.useAllObjects"
+          :rules="[rules.kobj]"
+          :label="$t('bpmn.labels.AccessObject')"
+          >
+        </v-select>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -101,7 +102,8 @@ export default {
         'copy': 'bpmn.buttons.Copy',
       },
       rules: {
-        required: value => !!value || this.$t('bpmn.labels.RequiredField')
+        required: value => !!value || this.$t('bpmn.labels.RequiredField'),
+        kobj: value => this.itObjects.useAllObjects ? true : this.rules.required(value)
       }
     };
   },

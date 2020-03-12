@@ -142,7 +142,7 @@
 		"EnterVersionName": "Enter version name",
 		"NewVersion": "New version",
 		"InsertTextHere": "Insert text here ...",
-		"AccessObject": "Access object"
+		"AccessObject": "Object"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
