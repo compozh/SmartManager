@@ -14,7 +14,6 @@
     </v-row>
     <div class="modeler-grid" :class="{ 'no-panel': !canShowPanel }" v-show="diagram && !loading && !noAccess"  ref="layout">
       <v-toolbar dense height="40" flat class="modeler-toolbar elevation-1 ">
-        <v-spacer></v-spacer>
         <v-btn icon @click="deployItem(diagram)" :disabled="!canDeploy(diagram)" :title="$t('bpmn.buttons.Deploy')">
           <v-icon>mdi-open-in-app</v-icon>
         </v-btn>
@@ -25,14 +24,14 @@
         <v-btn icon @click="share(diagram)" :disabled="!canShare(diagram)" :title="$t('bpmn.buttons.Share')">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
-        <bpmn-contex-menu 
+        <bpmn-contex-menu
           :item="diagram"
           :onlyExport="true"
           @export="exportItem"
           offset>
           <template #activator="{ open }">
             <v-btn icon v-on="open">
-              <v-icon>mdi-share-variant</v-icon>
+              <v-icon>mdi-export-variant</v-icon>
             </v-btn>
           </template>
         </bpmn-contex-menu>
@@ -111,6 +110,7 @@ import { events } from '../../constants';
 import { fullScreenMixin } from '../mixins';
 import * as Models from '../../api/models';
 import { Notification } from 'element-ui';
+import { currentLang } from '../../plugins/i18n';
 
 export default {
   name: 'modeler-layout',
@@ -131,7 +131,7 @@ export default {
     },
     noAccess: Boolean
   },
-  data() { 
+  data() {
     return {
       panel: !this.$vuetify.breakpoint.xs,
       isFullScreen: false,
@@ -210,7 +210,7 @@ export default {
       this.load = false;
     },
   }
-  
+
 };
 </script>
 <style lang="scss" >
@@ -221,7 +221,7 @@ export default {
   background-color: white;
   display: grid;
   grid-template-rows: 40px 1fr;
-  grid-template-areas: 
+  grid-template-areas:
     "toolbar"
     "modeler";
   overflow: hidden;
@@ -230,6 +230,9 @@ export default {
   grid-area: toolbar;
   border-bottom: rgba(0,0,0,.12) 1px solid;
   grid-area: toolbar;
+}
+.modeler-toolbar .v-toolbar__content {
+  margin-left: auto;
 }
 .modeler-toolbar button {
   min-width: 36px;
@@ -265,6 +268,50 @@ export default {
 .djs-popup-body .entry {
   text-align: left;
 }
+
+.djs-popup-body {
+  .entry {
+    margin: 5px 10px;
+    border-radius: 5px;
+  }
+  .palette-default {
+    background-color: #fff;
+    border: 1px solid black;
+    color: #000;
+    text-align: center;
+  }
+  .palette-blue {
+    background-color: rgb(190,223,251);
+    border: 1px solid rgb(30,126,229);
+    color: rgb(30,126,229);
+    text-align: center;
+  }
+  .palette-orange {
+    background-color: rgb(255,225,181);
+    border: 1px solid rgb(251,140,0);
+    color: rgb(251,140,0);
+    text-align: center;
+  }
+  .palette-green {
+    background-color: rgb(202,231,203);
+    border: 1px solid rgb(67,160,71);
+    color: rgb(67,160,71);
+    text-align: center;
+  }
+  .palette-red {
+    background-color: rgb(255,207,212);
+    border: 1px solid rgb(229,57,53);
+    color: rgb(229,57,53);
+    text-align: center;
+  }
+  .palette-purple {
+    background-color: rgb(226,193,232);
+    border: 1px solid rgb(142, 36, 170);
+    color: rgb(142,36,170);
+    text-align: center;
+  }
+}
+
 .dmn-decision-table-container .powered-by-logo .logo,
 a.bjs-powered-by,
 a.cjs-powered-by {

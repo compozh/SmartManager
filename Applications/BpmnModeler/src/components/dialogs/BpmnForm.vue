@@ -92,7 +92,7 @@ export default {
           'delete': 'bpmn.buttons.Delete',
           'copy': 'bpmn.buttons.Copy',
           'create': 'bpmn.buttons.Create',
-        }    
+        }
       },
       actions: {
         'import': 'bpmn.buttons.Import',
@@ -178,7 +178,7 @@ export default {
         this.loading = true;
         if (this.mode == 'import') { this.mode = 'create'; }
         let success = await this.callback(this.model, this.type == 'project' ? 'folder' : this.type , this.mode);
-        
+
         if (success) {
           await this.$store.dispatch('bpmn/loadItems', true);
           this.cancel();

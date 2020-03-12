@@ -5,10 +5,10 @@ import routes from './routes'
 import auth from '@/utils/auth'
 Vue.use(VueRouter)
 
-let router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: window.appConfig.BASE_URL + 'SmartManager/',
-  routes,
+  routes
 })
 
 router.history.getCurrentLocation = () => {

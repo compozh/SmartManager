@@ -38,6 +38,8 @@
 		"ProcessSaved": "Diagram saved",
 		"SelectOrCreateProcess": "Folder is empty",
 		"Name": "Name",
+		"NameAsc":"Name by ascending",
+		"NameDesc": "Name by descending",
 		"CreateProcess": "Create diagram",
 		"EditProcess": "Edit diagram",
 		"EditVersion": "Edit version",

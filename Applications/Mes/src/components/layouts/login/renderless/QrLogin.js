@@ -18,7 +18,8 @@ export default {
       readerEvents: {
         onDecode: this.onDecode,
         onInit: this.onInit,
-        tryAgain: this.tryAgain
+        tryAgain: this.tryAgain,
+        logErrors: this.logErrors
       },
       showScanner: this.showScanner,
       error: this.error,
@@ -40,6 +41,14 @@ export default {
   i18n: {
     messages: {
       ru: {
+        qrloginrl: {
+          loginError: 'По данному коду не удалось войти в систему',
+          notAllowedError: 'Для входа вам нужно дать разрешение на доступ к камере',
+          notFoundError: 'На этом устройстве камера не обнаружена',
+          streamApiNotSupportedError: 'Stream API не поддерживается в этом браузере. Попробуйте использовать GoogleChrome'
+        }
+      },
+      uk: {
         qrloginrl: {
           loginError: 'По данному коду не удалось войти в систему',
           notAllowedError: 'Для входа вам нужно дать разрешение на доступ к камере',
@@ -97,7 +106,7 @@ export default {
           this.state = this.$t('qrloginrl.streamApiNotSupportedError')
         }
       }
-    }
-  }
+    },
+  },
 
 }

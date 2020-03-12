@@ -16,5 +16,18 @@ module.exports = {
       openAnalyzer: false
     }
   },
-  productionSourceMap: false
+  productionSourceMap: false,
+
+  pwa: {
+    name: 'mes',
+    themeColor: '#ffffff',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: 'src/service-worker.js',
+      exclude: [/\.svg$/]
+    }
+  }
 }

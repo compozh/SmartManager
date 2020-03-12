@@ -14,10 +14,12 @@ import Vuex from 'vuex'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import acl from './acl/acl'
+import $idb from './plugins/idb_keyval'
 import { i18n } from './plugins/i18n'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import './registerServiceWorker'
 import App from './App.vue'
 
 // apollo
@@ -61,10 +63,10 @@ let dependencies = {
 // Плагины стандартные
 Vue.use(Vuex)
 Vue.use(VueI18n)
+Vue.use($idb)
 Vue.use(VueApollo)
 Vue.use(VueCookies)
 Vue.use(signalR)
-
 // Плагины it-enterprise
 Vue.use(ItCommon)
 Vue.use(GrapgQlCore, { options: window.myConfig, dependencies })

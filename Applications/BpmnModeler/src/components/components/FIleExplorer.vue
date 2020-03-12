@@ -74,7 +74,14 @@ export default {
         };
       } else if (!value.id) {
         let elem = this.$store.getters['bpmn/getItemById'](value);
-        this.choosedFolder = elem.item; 
+        if (!elem.item) {
+          this.choosedFolder = {
+            name: this.$t('bpmn.labels.Projects'),
+            items: this.items
+          };
+        } else {
+          this.choosedFolder = elem.item;
+        }
       } else {
         this.choosedFolder = value;
       }
@@ -106,7 +113,7 @@ export default {
         }
       };
       await processArray(this.choose);
-      
+
       this.loading = false;
     },
     copyHere(parent) {
@@ -142,7 +149,7 @@ export default {
         return this.chosen;
       },
       set(value) {
-        this.$emit('update:chosen',value);        
+        this.$emit('update:chosen',value);
       }
     },
     show: {
@@ -150,7 +157,7 @@ export default {
         return this.explorer;
       },
       set(value) {
-        this.$emit('update:explorer',value);        
+        this.$emit('update:explorer',value);
       }
     }
   },
@@ -205,5 +212,5 @@ export default {
 
 .v-btn--disabled {
     pointer-events: auto !important;
-} 
+}
 </style>

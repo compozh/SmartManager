@@ -24,6 +24,7 @@ import { CancellationToken, SavingContext, editorFactory } from '../../api';
 import { editorToolbarMixin, exportMixin } from '../mixins';
 import BpmnPropertiesProvider from '../../bpmnModules/properties-panel/providers/BpmnPropertiesProvider';
 import { Notification } from 'element-ui';
+import { eventBus } from '../../main';
 
 export default {
   name: 'bpmn-modeler',
@@ -43,6 +44,7 @@ export default {
     if (this.process) {
       this.createModeler();
       this.onActiveModelChanged();
+      eventBus.$on('updateCurrentDiagram', this.onActiveModelChanged);
     }
   },
   computed: {
@@ -59,6 +61,7 @@ export default {
   },
   beforeDestroy: function () {
     this.destroyModeler();
+    eventBus.$off('updateCurrentDiagram', this.onActiveModelChanged);
   },
   watch: {
     process(value, oldValue) {
@@ -187,7 +190,7 @@ export default {
       } catch (error) {
         return false;
       }
-    }
+    },
   }
 };
 </script>

@@ -23,12 +23,40 @@ export const importMixin = {
           if (type != 'BPMN' && type != 'DMN' && type != 'CMMN') {
             return Notification.error(this.$t('bpmn.errors.ProcessNotCreated'));
           }
-          this.createItem(parent, 'process', xml, [{name: file.name, type}]);
+          this.createItem(parent, 'process', xml, [{name: file.name.split('.')[0], type}]);
         });
       });
       document.body.appendChild(input);
       input.click();
     },
+    updateByImport(item) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = item.type == 'BPMN' ? '.bpmn' : item.type == 'CMMN' ? '.cmmn' : item.type == 'DMN' ? '.dmn' : '';
+      input.style.display = 'none';
+
+      input.addEventListener('change', () => {
+        const [file] = input.files;
+        if (!file) {
+          return;
+        }
+        file.text().then(xml => {
+          setTimeout(function () {
+            document.body.removeChild(input);
+          }, 0);
+          let id = item.id;
+          this.$store.dispatch('bpmn/setXml', { id, xml }).then(success => {
+            if (success) {
+              eventBus.$emit('updateCurrentDiagram');
+            } else {
+              Notification.error(this.$t('bpmn.Errors.ProcessesNotSaved'));
+            }
+          });
+        });
+      });
+      document.body.appendChild(input);
+      input.click();
+    }
   }
 };
 export const exportMixin = {
