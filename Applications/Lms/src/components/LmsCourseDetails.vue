@@ -4,7 +4,12 @@
 		<v-layout v-if="course">
 			<v-flex xs12>
         <v-card >
-          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+          <v-breadcrumbs  :items="links" divider=">" :class="active-link">
+            <template v-slot:item="{ item }">
+              <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
+              <span v-else :class="disable-link">{{item.text}}</span>
+            </template>
+          </v-breadcrumbs>
         </v-card>
 				<v-card v-if="courseData" v-bind:style="{'background-color': courseData.backgroundColor}">
 					<v-layout wrap row justify-center>
@@ -303,5 +308,11 @@ export default {
 </script>
 
 <style scoped>
+.active-link {
+  text-decoration: none;
+}
 
+.disable-link {
+  color: grey;
+}
 </style>
