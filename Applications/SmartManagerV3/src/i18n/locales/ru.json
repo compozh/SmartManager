@@ -1,8 +1,13 @@
 {
   "search": "Поиск",
   "rights": "Все права защищены",
+  "navBar":{
+    "expandSideBar": "Развернуть боковую панель",
+    "collapseSideBar": "Свернуть боковую панель"
+  },
   "sideBar":{
-    "expandBtn": "Развернуть боковую панель"
+    "tasksBtn": "Задачи",
+    "caseBtn": "Кейсы"
   },
   "pickers": {
     "date": "Дата",
@@ -114,7 +119,7 @@
     "yes": "Да",
     "no": "Нет",
     "toBack": "Назад",
-    "globalSearch": "Выполнить поиск по всем документам",
+    "globalSearch": "Поиск по всем документам",
     "addAttachment": "Добавить",
     "deleteAttachment": "Удалить",
     "downloadAttachment": "Загрузить",

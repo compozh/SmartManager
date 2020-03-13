@@ -1,8 +1,13 @@
 {
   "search": "Search",
   "rights": "All rights Reserved",
+  "navBar":{
+    "expandSideBar": "Expand sidebar",
+    "collapseSideBar": "Collapse sidebar"
+  },
   "sideBar":{
-    "expandBtn": "Expand sidebar"
+    "tasksBtn": "Tasks",
+    "caseBtn": "Cases"
   },
   "pickers": {
     "date": "Date",
