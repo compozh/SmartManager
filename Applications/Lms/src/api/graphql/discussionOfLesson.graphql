@@ -1,6 +1,6 @@
 {
   lms{
-    discussion(courseGuid: $courseGuid, lessonGuid: $lessonGuid, questionId: $questionId){
+    discussion(questionId: $questionId){
 			id
       dateTime
       authorName

@@ -156,38 +156,38 @@ export class LmsApi {
     }
   }
 
-  static async fetchQuestionsListCurrentLessonFromGql(courseGuid, lessonGuid) {
+  static async fetchQuestionsListCurrentLessonFromGql(lessonGuid) {
     try {
       const client = await getClient()
       return await client.query({
-        query: gql` query ($courseGuid: ID, $lessonGuid: ID) ${questionsListOfLesson}`,
-        variables: {courseGuid, lessonGuid}
+        query: gql` query ($lessonGuid: ID) ${questionsListOfLesson}`,
+        variables: {lessonGuid}
       })
     } catch (e) {
       console.log(e.message)
     }
   }
 
-  static async fetchDiscassionOfLessonFromGql(courseGuid, lessonGuid, questionId) {
+  static async fetchDiscassionOfLessonFromGql(questionId) {
     try {
       const client = await getClient()
       return await client.query({
-        query: gql` query ($courseGuid: ID, $lessonGuid: ID, $questionId:ID) ${discussionOfLesson}`,
-        variables: {courseGuid, lessonGuid, questionId}
+        query: gql` query ($questionId:ID) ${discussionOfLesson}`,
+        variables: {questionId}
       })
     } catch (error) {
       console.log(error.message)
     }
   }
 
-  static async addPostFromGql(courseGuid, lessonGuid, parentPostId = 0, post) {
-    const param = { courseGuid, lessonGuid, parentPostId, post }
+  static async addPostFromGql(userId, lessonGuid, parentPostId = 0, post) {
+    const param = { userId, lessonGuid, parentPostId, post }
     console.log('addPostFromGql: ', param)
     try {
       const client = await getClient()
       return await client.mutate({
         mutation: gql`${addPost}`,
-        variables: { courseGuid, lessonGuid, parentPostId, post: JSON.stringify(post) }
+        variables: { userId, lessonGuid, parentPostId, post: JSON.stringify(post) }
       })
     } catch (error) {
       console.log(error.message)

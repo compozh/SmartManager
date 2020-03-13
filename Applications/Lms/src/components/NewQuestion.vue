@@ -78,12 +78,10 @@ export default {
           voutsDownQty: 0,
           answersQty: 0
         }
-        const courseDetails = this.$store.getters['lms/courseDetails']
-        const courseGuid = courseDetails.course.courseGuid
         const lessonGuid = this.$store.getters['lms/currentLessonGuid']
         // Отправить запрос на добавление вопроса
         try {
-          const postResult = await api.addPostFromGql(courseGuid, lessonGuid, 0, question)
+          const postResult = await api.addPostFromGql(this.user.id, lessonGuid, 0, question)
           question.id = postResult.data.lmsMutation.addPost.postId
           question.dateTime = new Date(question.dateTime).toLocaleString()
           // добавить новый вопрос в список

@@ -29,9 +29,10 @@
                       <v-progress-circular
                         :rotate="-90"
                         :size="42"
-                        :width="7"
+                        :width="5"
                         :value="progressValue"
                         color="primary"
+                        class="progress-label-size"
                       >
                         {{ progressValue }}
                       </v-progress-circular>
@@ -229,7 +230,7 @@ export default {
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
     // Получить список вопросов слушателей урока
-    await this.fetchDiscussionsList(this.courseGuid, this.currentLessonGuid)
+    await this.fetchDiscussionsList(this.currentLessonGuid)
     this.$store.commit('lms/setQuestionsView', 'questions-list')
   },
   beforeDestroy() {
@@ -270,16 +271,16 @@ export default {
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
       this.getLesson(lessonGuid)
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-      await this.fetchDiscussionsList(this.courseGuid, this.currentLessonGuid)
+      await this.fetchDiscussionsList(this.currentLessonGuid)
       this.$store.commit('lms/setQuestionsView', 'questions-list')
     },
     async getLesson(lessonGuid) {
       // Получить урок
       await this.$store.dispatch('lms/getLessonContent', lessonGuid)
     },
-    async fetchDiscussionsList(courseGuid,currentLessonGuid) {
+    async fetchDiscussionsList(currentLessonGuid) {
       // получить список вопросов слушателей урока
-      const result = await api.fetchQuestionsListCurrentLessonFromGql(courseGuid, currentLessonGuid)
+      const result = await api.fetchQuestionsListCurrentLessonFromGql(currentLessonGuid)
       // преобразовать дату
       result.data.lms.discussions.forEach(d => d.dateTime = new Date(d.dateTime).toLocaleString())
       this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
@@ -496,5 +497,8 @@ export default {
   height: 60vh;
   overflow: hidden;
   border: solid lightgray 1px;
+}
+.progress-label-size {
+  font-size: 85%;
 }
 </style>

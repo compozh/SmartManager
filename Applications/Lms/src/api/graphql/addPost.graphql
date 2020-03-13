@@ -1,6 +1,6 @@
-mutation($courseGuid: ID, $lessonGuid: ID, $parentPostId: ID, $post: String){
+mutation($userId: ID, $lessonGuid: ID, $parentPostId: ID, $post: String){
   lmsMutation{
-  	addPost(courseGuid: $courseGuid, lessonGuid: $lessonGuid, parentPostId: $parentPostId, post: $post){
+  	addPost(userId: $userId, lessonGuid: $lessonGuid, parentPostId: $parentPostId, post: $post){
       success
       successMessage
       errorCode

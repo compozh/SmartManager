@@ -37,7 +37,7 @@ export default {
     goToQuestion(question) {
       // Установить текущий вопрос
       // перейти к представлению вопроса
-      this.$store.commit('lms/setDiscussionId', question.id)
+      this.$store.commit('lms/setDiscussion', question)
       this.$store.commit('lms/setQuestionsView', 'question-view')
     },
     addQuestion() {
