@@ -28,8 +28,8 @@
                   <v-layout column>
                     <!-- Заголовок -->
                     <v-flex>
-                      <v-layout fill-height align-center>
-                        <v-flex>
+                      <v-layout fill-height align-start>
+                        <v-flex py-1>
                           <v-layout column>
                             <v-flex grow>
                               <div class="body-2 indigo--text text-darken-1">{{question.title}}</div>
@@ -43,23 +43,8 @@
                             </v-flex>
                           </v-layout>
                         </v-flex>
-                        <v-flex shrink>
-                          <v-layout column>
-                            <v-flex>
-                              <social-counter
-                                :icon="likesIcon"
-                                :vouts="question.voutsDownQty"
-                                :iconColor="likesIconColor"
-                                :voutsColor="likeColor"></social-counter>
-                            </v-flex>
-                            <v-flex>
-                              <social-counter
-                                :icon="dislikesIcon"
-                                :vouts="question.voutsDownQty"
-                                :iconColor="dislikesIconColor"
-                                :voutsColor="dislikeColor"></social-counter>
-                            </v-flex>
-                          </v-layout>
+                        <v-flex shrink px-2 py-1>
+                          <div class="body-2 text-darken-1">{{question.dateTime}}</div>
                         </v-flex>
                       </v-layout>
                     </v-flex>
@@ -68,6 +53,27 @@
                       <v-card-text>
                         <div v-html="question.content"></div>
                       </v-card-text>
+                    </v-flex>
+                    <!-- new position social counters -->
+                    <v-flex>
+                      <v-layout class="border-top">
+                        <v-flex shrink>
+                          <social-counter
+                            :icon="likesIcon"
+                            :vouts="question.voutsUpQty"
+                            :iconColor="likesIconColor"
+                            :voutsColor="likeColor"
+                            @socialchange="onSocialChange(1)"></social-counter>
+                        </v-flex>
+                        <v-flex shrink>
+                          <social-counter
+                            :icon="dislikesIcon"
+                            :vouts="question.voutsDownQty"
+                            :iconColor="dislikesIconColor"
+                            :voutsColor="dislikeColor"
+                            @socialchange="onSocialChange(-1)"></social-counter>
+                        </v-flex>
+                      </v-layout>
                     </v-flex>
                   </v-layout>
                 </v-flex>
@@ -109,6 +115,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import AnswerCard from './AnswerCard'
 import {LmsApi as api} from '../api/lmsApi'
 import {colors, randomColor, addPrescriptionToPost} from '../helpers/questions'
@@ -121,11 +128,11 @@ export default {
   async mounted() {
     console.log('question-view mounted')
     // получить вопрос слушателя урока
-    const courseDetails = this.$store.getters['lms/courseDetails']
-    const currentLessonGuid = this.$store.getters['lms/currentLessonGuid']
-    const questionId = this.$store.getters['lms/discussionId']
-    const result = await api.fetchDiscassionOfLessonFromGql(courseDetails.course.courseGuid, currentLessonGuid, questionId)
-    this.question = this.addPrescriptionToPosts(result.data.lms.discussion)
+    this.question = this.$store.state.lms.discussion
+    const result = await api.fetchDiscassionOfLessonFromGql(this.question.id)
+    Vue.set(this.question, 'content', result.data.lms.discussion.content)
+    Vue.set(this.question, 'answers', result.data.lms.discussion.answers)
+    this.addPrescriptionToPosts(result.data.lms.discussion)
   },
   data() {
     return {
@@ -155,16 +162,20 @@ export default {
     }
   },
   methods: {
+    onSocialChange(vout) {
+      this.$store.commit('lms/socialChange', vout)
+    },
+
     addPrescriptionToPosts(discussion) {
-      discussion.prescription = addPrescriptionToPost(discussion.dateTime)
-      discussion.dateTime = new Date(discussion.dateTime).toLocaleString()
+      Vue.set(this.question, 'prescription', addPrescriptionToPost(discussion.dateTime))
+      Vue.set(this.question, 'dateTime', new Date(discussion.dateTime).toLocaleString())
+      // TODO: построить для ответов
       if (discussion.answers) {
         discussion.answers.forEach(a => {
-          a.prescription = addPrescriptionToPost(a.dateTime)
-          a.dateTime = new Date(a.dateTime).toLocaleString()
+          Vue.set(a, 'prescription', addPrescriptionToPost(a.dateTime))
+          Vue.set(a, 'dateTime', new Date(a.dateTime).toLocaleString())
         })
       }
-      return discussion
     },
     async addAnswer() {
       if (this.content) {
@@ -177,12 +188,10 @@ export default {
           voutsDownQty: 0,
           answersQty: 0
         }
-        const courseDetails = this.$store.getters['lms/courseDetails']
-        const courseGuid = courseDetails.course.courseGuid
         const lessonGuid = this.$store.getters['lms/currentLessonGuid']
         // отправить ответ на сервер
         try {
-          const postResult = await api.addPostFromGql(courseGuid, lessonGuid, this.question.id, answer)
+          const postResult = await api.addPostFromGql(this.user.id, lessonGuid, this.question.id, answer)
           answer.id = postResult.data.lmsMutation.addPost.id
           answer.prescription = addPrescriptionToPost(answer.dateTime)
           answer.dateTime = new Date(answer.dateTime).toLocaleString()

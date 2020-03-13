@@ -65,5 +65,18 @@ export default {
   },
   addDiscussion(state, payload) {
     state.discussions.push(payload)
+  },
+
+  setDiscussion(state, payload) {
+    state.discussion = payload
+  },
+
+  socialChange(state, payload) {
+    if (payload > 0) {
+      state.discussion.voutsUpQty += payload
+    } else {
+      state.discussion.voutsDownQty -= payload
+    }
   }
+
 }
