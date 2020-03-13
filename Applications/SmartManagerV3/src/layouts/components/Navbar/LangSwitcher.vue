@@ -2,7 +2,7 @@
   <v-menu close-on-click
           close-on-content-click
           offset-y
-          transition="scale-transition">
+          transition="scroll-y-transition">
 
     <template v-slot:activator="{ on }">
       <v-btn icon v-on="on">{{ lang.flag }}</v-btn>

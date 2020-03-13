@@ -5,7 +5,7 @@
     <v-content class="grey lighten-3">
       <router-view/>
 
-      <v-card>
+      <v-card class="ma-3">
         <v-card-title>
           Nutrition
           <v-spacer></v-spacer>

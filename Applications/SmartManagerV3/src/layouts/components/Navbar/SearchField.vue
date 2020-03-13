@@ -9,12 +9,21 @@
     @focus="focused"
     @blur="blurred"
     class="body-2">
+
     <template #label>
       <span class="body-2">{{ $t('search') }}</span>
     </template>
+
+    <template #append>
+      <v-btn x-small outlined
+             v-show="active && search">{{ $t('buttons.globalSearch') }}
+      </v-btn>
+    </template>
+
     <template #append-outer>
       <v-icon small style="margin-top: 5px">fas fa-search</v-icon>
     </template>
+
   </v-text-field>
 </template>
 
@@ -22,7 +31,7 @@
 export default {
   name: 'SearchField',
   data: () => ({
-    hidden: false,
+    active: false,
     style: {
       maxWidth: '200px',
       transition: 'max-width 0.3s'
@@ -31,7 +40,7 @@ export default {
   computed: {
     search: {
       get () {
-        return this.$store.state.search
+        return this.$store.state.app.search
       },
       set (search) {
         this.$store.commit('SET_SEARCH', search)
@@ -40,9 +49,11 @@ export default {
   },
   methods: {
     focused () {
-      this.style.maxWidth = '600px'
+      this.active = true
+      this.style.maxWidth = '500px'
     },
     blurred () {
+      this.active = false
       this.style.maxWidth = '200px'
     },
     async globalSearch () {
@@ -54,7 +65,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

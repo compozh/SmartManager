@@ -1,10 +1,17 @@
 <template>
   <v-app-bar app flat dense color="white">
 
-    <v-app-bar-nav-icon class="hidden-sm-and-down"
-        @click="sideBarOpen = !sideBarOpen">
-      <v-icon small>fas fa-bars</v-icon>
-    </v-app-bar-nav-icon>
+    <v-tooltip right>
+      <template v-slot:activator="{ on }">
+        <v-app-bar-nav-icon class="hidden-sm-and-down" v-on="on"
+                            @click="sideBarOpen = !sideBarOpen">
+          <v-icon small>fas fa-bars</v-icon>
+        </v-app-bar-nav-icon>
+      </template>
+      <span>
+        {{ sideBarOpen ? $t('navBar.collapseSideBar') : $t('navBar.expandSideBar') }}
+      </span>
+    </v-tooltip>
 
     <v-breadcrumbs :items="items" class="hidden-md-and-down">
       <template v-slot:divider>
@@ -16,13 +23,23 @@
 
     <search-field/>
 
-    <v-btn icon>
-      <v-icon small>fas fa-lock</v-icon>
-    </v-btn>
+    <v-menu close-on-click
+            close-on-content-click
+            offset-y
+            transition="scroll-y-transition">
 
-    <v-btn icon>
-      <v-icon small>fas fa-list</v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on }">
+        <v-avatar v-on="on" color="primary" class="ml-4" size="35px">
+          <v-icon dark>fas fa-user-tie</v-icon>
+        </v-avatar>
+      </template>
+
+      <v-list dense nav>
+        <v-list-item v-for="item in 5" :key="item">
+          <v-list-item-title>Menu item {{ item }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <lang-switcher/>
 
