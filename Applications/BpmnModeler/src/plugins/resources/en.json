@@ -452,7 +452,11 @@
 		"Data Store Reference": "Data Store Reference",
 		"Data Object Reference": "Data Object Reference",
 		"Event Based Gateway": "Event Based Gateway",
-		"Intermediate Catch Event": "Intermediate Catch Event"
+		"Intermediate Catch Event": "Intermediate Catch Event",
+		"Loop Cardinality": "Loop Cardinality",
+		"Collection": "Collection",
+		"Element Variable": "Element Variable",
+		"Completion Condition": "Completition Condition"
 	},
 	"dmn-modeler": {
 

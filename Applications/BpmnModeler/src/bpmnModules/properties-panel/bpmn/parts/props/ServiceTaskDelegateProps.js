@@ -172,12 +172,13 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
 
           const topic = businessObject.get('camunda:topic');
           if (typeof topic === 'string' && topic.trim() != '') {
+            const position = group.entries.length;
             api.getBusinessObjectActions(boDefCode, diagram.isSystem).then((actions) => {
               const action = actions.find(act => act.logicalKey === topic);
               if (!action || !action.parametersExists) {
                 return;
               }
-              group.entries.push(entryFactory.button({
+              group.entries.splice(position, 0, entryFactory.button({
                 id: 'boActDefCodeParams',
                 label: translate('Action Properties'),
                 click(element) {
