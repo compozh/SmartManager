@@ -1,13 +1,17 @@
 {
   "search": "Пошук",
   "rights": "Всі права захищені",
+  "user": {
+    "delegatedRights": "Делеговані права"
+  },
   "navBar":{
     "expandSideBar": "Розгорнути бічну панель",
     "collapseSideBar": "Згорнути бічну панель"
   },
   "sideBar":{
     "tasksBtn": "Задачі",
-    "caseBtn": "Кейси"
+    "casesBtn": "Кейси",
+    "forceBpm": "Force BPM"
   },
   "pickers": {
     "date": "Дата",
@@ -124,7 +128,8 @@
     "deleteAttachment": "Видалити",
     "downloadAttachment": "Завантажити",
     "attachmentVersions": "Версії",
-    "attachmentEds": "Електронні підписи"
+    "attachmentEds": "Електронні підписи",
+    "close": "Закрити"
   },
   "icons": {
     "priority": "Високий пріоритет",

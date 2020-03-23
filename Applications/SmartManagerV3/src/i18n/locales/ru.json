@@ -1,13 +1,17 @@
 {
   "search": "Поиск",
   "rights": "Все права защищены",
+  "user": {
+    "delegatedRights": "Делегированные права"
+  },
   "navBar":{
     "expandSideBar": "Развернуть боковую панель",
     "collapseSideBar": "Свернуть боковую панель"
   },
   "sideBar":{
     "tasksBtn": "Задачи",
-    "caseBtn": "Кейсы"
+    "casesBtn": "Кейсы",
+    "forceBpm": "Force BPM"
   },
   "pickers": {
     "date": "Дата",
@@ -124,7 +128,8 @@
     "deleteAttachment": "Удалить",
     "downloadAttachment": "Загрузить",
     "attachmentVersions": "Версии",
-    "attachmentEds": "Електронные подписи"
+    "attachmentEds": "Електронные подписи",
+    "close": "Закрыть"
   },
   "icons": {
     "priority": "Высокий приоритет",
