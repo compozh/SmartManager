@@ -1,0 +1,5 @@
+query ($id: Int!, $ext: String!) {
+  smtasks {
+      fileDetails(id: $id, ext: $ext)
+  }
+}
