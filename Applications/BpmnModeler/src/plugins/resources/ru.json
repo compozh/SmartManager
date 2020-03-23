@@ -450,8 +450,11 @@
 		"Data Object Reference": "Обьект данных",
 		"Data Store Reference": "База данных",
 		"Event Based Gateway": "Эксклюзивный шлюз по событиям",
-		"Intermediate Catch Event": "Промежуточное событие (обработчик)"
-
+		"Intermediate Catch Event": "Промежуточное событие (обработчик)",
+		"Loop Cardinality": "Условие цикла",
+		"Collection": "Коллекция",
+		"Element Variable": "Переменная элемента",
+		"Completion Condition": "Условие выполнения"
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {

@@ -455,7 +455,11 @@
 		"Data Store Reference": "База даних",
 		"Data Object Reference": "Об'єкт даних",
 		"Event Based Gateway": "Ексклюзивний шлюз по подіям",
-		"Intermediate Catch Event": "Проміжна подія (обробник)"
+		"Intermediate Catch Event": "Проміжна подія (обробник)",
+		"Loop Cardinality": "Умова циклу",
+		"Collection": "Колекція",
+		"Element Variable": "Змінна елемента",
+		"Completion Condition": "Умова виконання"
 	},
 	"dmn-modeler": {
 
