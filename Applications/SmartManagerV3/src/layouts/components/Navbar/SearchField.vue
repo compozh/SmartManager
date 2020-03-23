@@ -8,7 +8,7 @@
     :style="style"
     @focus="focused"
     @blur="blurred"
-    class="body-2">
+    class="body-2 align-center">
 
     <template #label>
       <span class="body-2">{{ $t('search') }}</span>
@@ -21,7 +21,7 @@
     </template>
 
     <template #append-outer>
-      <v-icon small style="margin-top: 5px">fas fa-search</v-icon>
+      <fa-icon :icon="['fal', 'search']"/>
     </template>
 
   </v-text-field>
