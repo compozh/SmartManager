@@ -1,11 +1,9 @@
 <template>
-  <v-overlay app :value="preLoader">
-    <v-progress-circular
-      :size="50"
-      color="primary"
-      indeterminate
-    >
-      <v-img src="@/assets/logo.png"/>
+  <v-overlay :value="preLoader" z-index="7" light>
+    <v-progress-circular :size="70"
+                         color="#5F81FF"
+                         indeterminate>
+      <v-img src="@/assets/logo.png" max-width="50"/>
     </v-progress-circular>
   </v-overlay>
 </template>
