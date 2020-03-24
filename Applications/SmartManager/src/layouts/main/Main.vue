@@ -104,14 +104,14 @@ export default {
       return this.folderMenuItems
     },
     folderMenuItems() {
-      const items = this.$store.state.sm.folders
+      const items = this.$store.getters['sm/allFolders']
       if (items) {
         return items.map(i => {
           return {
             url: this.createUrl(i),
-            name: i.name,
-            slug: i.name,
-            tag: i.count,
+            name: i.Name,
+            slug: i.Name,
+            tag: i.Count,
             tagColor: 'primary',
             icon: this.menuItemIcon(i.code),
             code: i.code

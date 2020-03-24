@@ -202,11 +202,11 @@ export default {
       return this.date(this.caseItem.dateTo)
     },
     folders() {
-      const allFolders = this.$store.state.sm.folders || []
-      return allFolders.filter(i => !!i.folderId)
+      const allFolders = this.$store.getters['sm/allFolders']
+      return allFolders.filter(i => !!i.FolderId)
     },
     folderName() {
-      return id => this.folders.find(i => i.folderId === id).name || ''
+      return id => this.folders.find(i => i.FolderId === id).Name || ''
     },
     caseStatus() {
       return () => {

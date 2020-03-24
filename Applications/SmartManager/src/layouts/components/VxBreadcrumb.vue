@@ -36,7 +36,7 @@ export default {
       return this.breadcrumb[this.breadcrumb.length - 1]
     },
     folders() {
-      return this.$store.state.sm.folders
+      return this.$store.getters['sm/allFolders']
     },
     tasks() {
       return this.$store.state.sm.tasks
@@ -56,7 +56,7 @@ export default {
     },
     taskFolder() {
       return this.folders
-        ? this.folders.find(folder => folder.code === this.folderCode)
+        ? this.folders.find(folder => folder.Code === this.folderCode)
         : {}
     },
     task() {
@@ -67,9 +67,9 @@ export default {
     caseFolder() {
       return this.folders
         ? this.folders.find(folder => {
-          return folder.folderId === +this.folderCode
-                 && (folder.code === 'cases' || folder.code === null)
-                 && folder.count === 0
+          return folder.FolderId === +this.folderCode
+                 && (folder.Code === 'cases' || folder.Code === null)
+                 && folder.Count === 0
         }) : {}
     },
     caseItem() {
@@ -82,9 +82,9 @@ export default {
         const attachmentId = +this.$route.params.attachmentId
         switch (breadcrumb) {
           case 'taskFolder': return {
-            name: this.taskFolder ? this.taskFolder.name : '',
-            url: '/tasks/' + (this.taskFolder ? this.taskFolder.code === ''
-              ? 'active' : this.taskFolder.code : '')
+            name: this.taskFolder ? this.taskFolder.Name : '',
+            url: '/tasks/' + (this.taskFolder ? this.taskFolder.Code === ''
+              ? 'active' : this.taskFolder.Code : '')
           }
           case 'task': return {
             name: this.task.name || this.task.docCaption || this.task.descript,
@@ -109,8 +109,8 @@ export default {
             url: '/task/' + this.task.id + '/comments'
           }
           case 'caseFolder': return {
-            name: this.caseFolder ? this.caseFolder.name : '',
-            url: '/cases/' + (this.caseFolder.folderId === 0 ? 'all' : this.caseFolder.folderId)
+            name: this.caseFolder ? this.caseFolder.Name : '',
+            url: '/cases/' + (this.caseFolder.FolderId === 0 ? 'all' : this.caseFolder.FolderId)
           }
           case 'case': return {
             name: this.caseItem.name,
