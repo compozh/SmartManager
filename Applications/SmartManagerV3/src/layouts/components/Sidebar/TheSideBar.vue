@@ -1,66 +1,75 @@
 <template>
   <v-navigation-drawer id="navBar"
                        app permanent
-                       width="300"
+                       max-width="300"
                        :expand-on-hover="!sideBarOpen"
                        style="padding-left: 3.4em">
 
-      <v-navigation-drawer fixed dark
+      <v-navigation-drawer fixed
                            mini-variant
                            permanent>
 
-        <v-list-item class="px-2"
+        <v-list-item class="px-0 justify-center"
                      style="height: 48px">
           <v-list-item-avatar>
-            <v-img src="@/assets/logo.png"></v-img>
+            <v-img src="@/assets/logo.png"/>
           </v-list-item-avatar>
         </v-list-item>
 
         <v-divider/>
 
         <v-list dense nav>
-          <v-list-item v-for="item in items"
-                       :key="item.title"
-                       @click="mini = !mini">
-            <v-list-item-action nav>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
+          <v-list-item-group v-model="activeZone"
+                             active-class="item-active">
+            <v-list-item v-for="item in zones"
+                         :key="item.title">
+              <v-list-item-action class="justify-center">
+                <fa-icon :icon="['fal', item.icon]"/>
+              </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
         </v-list>
         <template #append>
           <v-list>
             <v-list-item>
-              <v-list-item-action>
-                <v-icon>fas fa-question-circle</v-icon>
+              <v-list-item-action class="justify-center">
+                <fa-icon :icon="['fal', 'question-square']" size="lg"/>
               </v-list-item-action>
             </v-list-item>
             <v-list-item>
-              <v-list-item-action>
-                <v-icon>fas fa-phone-square</v-icon>
+              <v-list-item-action class="justify-center">
+                <fa-icon :icon="['fal', 'phone-square']" size="lg"/>
               </v-list-item-action>
             </v-list-item>
             <v-list-item>
-              <v-list-item-action>
-                <v-icon>fas fa-rss-square</v-icon>
+              <v-list-item-action class="justify-center">
+                <fa-icon :icon="['fal', 'rss-square']" size="lg"/>
               </v-list-item-action>
             </v-list-item>
           </v-list>
         </template>
       </v-navigation-drawer>
 
-      <v-list dense rounded subheader>
-        <v-subheader>TASKS</v-subheader>
-          <v-list-item v-for="link in links"
-                       :key="link" link>
-            <v-list-item-icon class="mr-5">
-              <v-icon>fas fa-folder</v-icon>
+      <v-list dense nav subheader>
+        <v-subheader>{{ zones[activeZone].title.toUpperCase() }}</v-subheader>
+        <v-list-item-group v-model="activeFolder"
+                           active-class="item-active">
+          <v-list-item v-for="folder in zones[activeZone].folders"
+                       :key="folder.code"
+                       :to="'/tasks/' + folder.code"
+                       :value="activeFolder">
+            <v-list-item-icon class="mr-2 align-center">
+              <fa-icon :icon="['fal', 'folder-open']"
+                       v-if="folder.code === folderId"/>
+              <fa-icon v-else :icon="['fal', 'folder']"/>
             </v-list-item-icon>
-          <v-list-item-title v-text="link"/>
+          <v-list-item-title v-text="folder.name"/>
         </v-list-item>
+        </v-list-item-group>
       </v-list>
   </v-navigation-drawer>
 
@@ -68,23 +77,54 @@
 
 <script>
 import { sideBar } from '@/mixins/layout'
+import { folders, tasks } from '@/mixins/units'
 
 export default {
   name: 'TheSideBar',
-  mixins: [sideBar],
+  mixins: [sideBar, folders, tasks],
   data: () => ({
     drawer: false,
-    items: [
-      { title: 'Home', icon: 'fas fa-tasks' },
-      { title: 'About', icon: 'fas fa-suitcase' }
-    ],
-    links: ['Lorem ipsum dolor sit amet', 'Contacts', 'Settings']
-  })
+    activeZone: 0,
+    activeFolder: 0
+  }),
+  computed: {
+    zones () {
+      return [
+        {
+          title: this.$t('sideBar.tasksBtn'),
+          folders: this.taskFolders,
+          icon: 'tasks'
+        },
+        {
+          title: this.$t('sideBar.casesBtn'),
+          folders: this.caseFolders,
+          icon: 'suitcase'
+        },
+        {
+          title: this.$t('sideBar.forceBpm'),
+          folders: [],
+          icon: 'project-diagram'
+        }
+      ]
+    }
+  },
+  watch: {
+    $route (to) {
+      if (to.name.includes('list')) {
+        this.$store.commit('SET_CURRENT_FOLDER', to.params.folderId)
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
   #navBar >>> .v-navigation-drawer__content {
     position: relative;
+  }
+
+  .item-active {
+    background: #5F81FF;
+    color: white;
   }
 </style>

@@ -1,0 +1,24 @@
+query ($folderId: String, $helperexec: Boolean) {
+  smtasks {
+    tasks(folderId: $folderId, helperexec: $helperexec) {
+      id
+      name
+      descript
+      addedFio
+      addedPhoto
+      dateplan
+      status
+      isMy
+      myControl
+      isGenerate
+      hasOrig
+      hasComm
+      priority
+      dateFact
+      isRead
+      caseId
+      isFavorite
+      docCaption
+    }
+  }
+}

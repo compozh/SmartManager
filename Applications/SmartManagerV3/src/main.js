@@ -7,6 +7,7 @@ import apollo from '@/utils/apollo'
 import i18n from './i18n'
 import router from './router'
 import axios from 'axios'
+import '@/utils/faIcons'
 import './registerServiceWorker'
 
 Vue.config.productionTip = false

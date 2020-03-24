@@ -14,6 +14,12 @@ module.exports = {
   pluginOptions: {
     webpackBundleAnalyzer: {
       openAnalyzer: false
+    },
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'i18n',
+      enableInSFC: true
     }
   },
   transpileDependencies: [
