@@ -4,7 +4,7 @@
         <v-card-title>
           <h4 class="headline mb-0">{{ this.title }}</h4>
         </v-card-title>
-        <div style="overflow: auto; max-height: calc(100vh - 140px);">
+        <div style="max-height: calc(100vh - 140px);">
           <formio-form-component ref="formioForm" :formCode="code" :formDefinition="definition"/>
         </div>
         <v-card-actions>
@@ -69,9 +69,7 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss">
 
-</style>
 <style lang="scss">
   .dialog{
     height: 90%;
