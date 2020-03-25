@@ -30,7 +30,7 @@ import { onError } from 'apollo-link-error'
 import VueApollo from 'vue-apollo'
 
 import { routerDependencies } from './router'
-const config = window.config
+const config = window.appConfig
 
 auth.config(config.GrapgQlUrl)
 
@@ -43,20 +43,23 @@ const httpLink = new HttpLink({
   uri: config.GrapgQlUrl + 'api/graphql',
 })
 
-const authLink = setContext(async function (_, { headers }) {
+const defaultApplicationSchema = 'eam'
+
+const authLink = setContext(async function (request, { headers, ...context }) {
+  const currentSchema = request && request.variables ? request && request.variables.schema : {}
   const token = await auth.getToken()
   const authHeader = { Authorization: `Bearer ${token}` }
   return {
     headers: {
       ...headers,
       ...authHeader,
-      schema: 'eamschema'
-    }
+      schema: currentSchema || defaultApplicationSchema
+    },
+    ...context,
   }
 })
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  debugger
   console.log(graphQLErrors.message)
   console.log(networkError)
   if (networkError && networkError.statusCode === 401) {

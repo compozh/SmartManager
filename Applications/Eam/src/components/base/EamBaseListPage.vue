@@ -37,7 +37,8 @@ export default {
     groupingPath: String,
     isElasticSearch: Boolean,
     additionalVariables: Object,
-    updateEventName: String
+    updateEventName: String,
+    schema: String
   },
   apollo: {
     itemsCon: {
@@ -51,13 +52,14 @@ export default {
           first: initialRowsPerFetch,
           where: this.where,
           orderBy: this.orderBy,
-          search: this.isElasticSearch ? this.search : null
+          search: this.isElasticSearch ? this.search : null,
+          schema: this.schema
         }
       },
       update(data) {
-        return data.eam[this.queryName]
+        return data ? data[Object.keys(data)[0]][this.queryName] : []
       },
-      error(e) {        
+      error(e) {
         this.$store.commit('eam/setError', e.message)
       }
     }
@@ -136,16 +138,16 @@ export default {
             search: this.isElasticSearch ? this.search : null
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            const newEdges = fetchMoreResult.eam[this.queryName].edges
-            const pageInfo = fetchMoreResult.eam[this.queryName].pageInfo
-            const totalCount = fetchMoreResult.eam[this.queryName].totalCount
+            const newEdges = fetchMoreResult[Object.keys(fetchMoreResult)[0]][this.queryName].edges
+            const pageInfo = fetchMoreResult[Object.keys(fetchMoreResult)[0]][this.queryName].pageInfo
+            const totalCount = fetchMoreResult[Object.keys(fetchMoreResult)[0]][this.queryName].totalCount
 
             const res = {
-              __typename: previousResult.eam.__typename
+              __typename: previousResult[Object.keys(previousResult)[0]].__typename
             }
             res[this.queryName] = {
-              __typename: previousResult.eam[this.queryName].__typename,
-              edges: [...previousResult.eam[this.queryName].edges, ...newEdges],
+              __typename: previousResult[Object.keys(previousResult)[0]][this.queryName].__typename,
+              edges: [...previousResult[Object.keys(previousResult)[0]][this.queryName].edges, ...newEdges],
               totalCount,
               pageInfo
             }
@@ -159,7 +161,7 @@ export default {
         }
       }
     },
-    onScroll() {      
+    onScroll() {
       let bottomOfWindow =
         document.documentElement.scrollTop + window.innerHeight >
         0.8 * document.documentElement.offsetHeight
@@ -169,10 +171,10 @@ export default {
       }
     }
   },
-  mounted() {    
+  mounted() {
     window.addEventListener('scroll', this.onScroll, false)
   },
-  destroyed() {    
+  destroyed() {
     window.removeEventListener('scroll', this.onScroll, false)
   },
   created() {

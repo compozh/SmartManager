@@ -1,5 +1,5 @@
 mutation modifyEfficiencyLoss($efficiencyLoss: EfficiencyLossInput!) {
-  eamMutation {
+  efficiencyQueryMutation {
     modifyEfficiencyLoss(efficiencyLoss: $efficiencyLoss) {
       id
     }

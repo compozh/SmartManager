@@ -1,5 +1,5 @@
 query allConditionParameters($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  eam {
+  eamQuery {
     conditionParametersConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids) {
       edges {
         node {

@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 export const routerDependencies = {
   router: new VueRouter({
     mode: 'history',
-    base: window.config.BASE_URL,
+    base: window.appConfig.BASE_URL,
     routes: [{path: '/:ApplicationId', children: [{path: '*'}]}
     ]
   }),

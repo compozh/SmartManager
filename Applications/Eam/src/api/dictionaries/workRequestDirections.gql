@@ -1,5 +1,5 @@
 query directions($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  eam {
+  eamQuery {
     workRequestDirections(where: $where, orderBy: $orderBy, ids: $ids) {
       id
       name
