@@ -2,8 +2,13 @@ export default {
   SET_APPLICATIONS_PARAMS (state, params) {
     state.applicationParams = JSON.parse(params)
   },
-  SET_PRELOADER (state, preLoader) {
-    state.preLoader = preLoader
+  SET_PRELOADER (state, name) {
+    const loaders = state.preLoaders
+    if (loaders.includes(name)) {
+      state.preLoaders = loaders.filter(i => i !== name)
+    } else {
+      state.preLoaders.push(name)
+    }
   },
   TOGGLE_SIDEBAR_OPEN (state) {
     state.sideBarOpen = !state.sideBarOpen
@@ -15,7 +20,7 @@ export default {
     state.notify = notify
   },
   SET_FOLDERS (state, folders) {
-    state.folders = folders.sort(i => i.code === 'active' ? -1 : 0)
+    state.folders = folders
   },
   SET_CURRENT_FOLDER (state, folder) {
     state.currentFolder = folder

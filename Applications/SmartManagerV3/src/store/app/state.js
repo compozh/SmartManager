@@ -1,10 +1,10 @@
 export default {
   applicationParams: null,
-  preLoader: false,
+  preLoaders: [],
   sideBarOpen: false,
   search: '',
   notify: null,
-  helperexec: true,
+  helperExec: true,
   folders: null,
   currentFolder: null
 }

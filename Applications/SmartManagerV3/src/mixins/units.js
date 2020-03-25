@@ -5,7 +5,8 @@ export const folders = {
     ...mapGetters([
       'allFolders',
       'taskFolders',
-      'caseFolders'
+      'caseFolders',
+      'filters'
     ]),
     folderId () {
       return this.$route.params.folderId

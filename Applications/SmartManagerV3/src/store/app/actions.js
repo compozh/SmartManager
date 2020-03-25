@@ -3,7 +3,7 @@ import i18n from '@/i18n'
 
 export default {
   async getApplicationParams ({ commit }) {
-    commit('SET_PRELOADER', true)
+    commit('SET_PRELOADER', 'appParams')
     try {
       const response = await api.getApplicationParamsFromGql()
       const result = response.data.smtasks.applicationParams
@@ -11,17 +11,19 @@ export default {
     } catch (e) {
       console.error(e.message)
     }
-    commit('SET_PRELOADER', false)
+    commit('SET_PRELOADER', 'appParams')
   },
   async getFolders ({ commit }, preLoader) {
-    commit('SET_PRELOADER', preLoader)
+    !preLoader || commit('SET_PRELOADER', 'folders')
     try {
       const response = await api.getFoldersFromGql()
       const result = response.data.smtasks.folders
-      const folders = result.map(folder => {
-        if (folder.code === '') {
-          folder.code = 'active'
-          folder.name = i18n.t('folders.active')
+      const folders = JSON.parse(result)
+      // Change active folder code and name
+      folders.taskFolders = folders.taskFolders.map(folder => {
+        if (folder.Code === '') {
+          folder.Code = 'active'
+          folder.Name = i18n.t('folders.active')
         }
         return folder
       })
@@ -29,10 +31,10 @@ export default {
     } catch (e) {
       console.log(e.message)
       commit('SET_NOTIFY', {
-        text: i18n.t('login.foldersError'),
+        text: i18n.t('notify.foldersError'),
         color: 'error'
       })
     }
-    commit('SET_PRELOADER', false)
+    !preLoader || commit('SET_PRELOADER', 'folders')
   }
 }
