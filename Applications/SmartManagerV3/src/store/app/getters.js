@@ -27,5 +27,10 @@ export default {
     ...getters.taskFolders,
     ...getters.caseFolders,
     ...getters.filters
-  ]
+  ],
+  activeFolder: (state, getters) => {
+    return getters.allFolders.find(folder => {
+      return folder.Code === state.activeFolderId
+    }) || {}
+  }
 }
