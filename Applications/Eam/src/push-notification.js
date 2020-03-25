@@ -29,6 +29,7 @@ function sendTokenToServer(currentToken) {
       mutation: registerMobileDevice,
       variables: {
         token: currentToken,
+        schema: 'mobilenotifications'
       },
     }).then(() => { setTokenSentToServer(true) })
 
@@ -42,10 +43,8 @@ export async function unregisterDevice() {
     if (!firebase.apps.length) {
       firebase.initializeApp(config)
     }
-    debugger
     if (firebase.messaging.isSupported()) {
       if (isTokenSentToServer()) {
-        debugger
         console.log('Unregistering FCM token...')
         const messaging = firebase.messaging()
         await messaging.getToken().then((token) => {
@@ -54,6 +53,7 @@ export async function unregisterDevice() {
               mutation: unRegisterMobileDevice,
               variables: {
                 token: token,
+                schema: 'mobilenotifications'
               },
             }).then(() => { setTokenSentToServer(false) })
             console.log(`FCM token unregistered: ${token}`)
@@ -71,10 +71,8 @@ export async function registerDevice() {
     if (!firebase.apps.length) {
       firebase.initializeApp(config)
     }
-    debugger
     if (firebase.messaging.isSupported()) {
       if (!isTokenSentToServer()) {
-        debugger
         console.log('Registering FCM token...')
         const messaging = firebase.messaging()
         await messaging.getToken().then((token) => {

@@ -17,7 +17,6 @@ export default {
     }
   },
   render() {
-    debugger
     return this.$scopedSlots.default({
       user: {
         id: this.userData.id,
