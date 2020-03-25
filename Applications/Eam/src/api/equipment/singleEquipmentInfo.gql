@@ -1,5 +1,5 @@
 query singleEquipmentInfo($id: ID) {
-  eam {
+  eamQuery {
     equipments(id: $id) {
       id
       name

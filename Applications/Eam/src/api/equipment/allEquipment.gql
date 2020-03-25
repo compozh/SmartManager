@@ -1,5 +1,5 @@
 query allEquipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID], $search: String) {
-  eam {
+  eamQuery {
     equipmentsConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, search:$search) {
       edges {
         node {

@@ -5,9 +5,11 @@
     :required="required"
     label="Причина"
     icon="category"
+    :constantFilter="constantFilter"
     :multiple="multiple"
     v-model="internalValue"
     @input="$emit('input', internalValue)"
+    schema="oee"
   ></eam-base-select>
 </template>
 
@@ -17,11 +19,12 @@ import efficiencyLossReasons from '@/api/dictionaries/efficiencyLossReasons.gql'
 export default {
   name: 'efficiency-loss-reason-select',
   props: {
-    value: [String, Array],
+    value: [Number, Array],
     required: {
       type: Boolean,
       default: false
     },
+    constantFilter: Array,
     multiple: Boolean
   },
   data() {
