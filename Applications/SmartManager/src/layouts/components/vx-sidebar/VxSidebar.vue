@@ -157,7 +157,9 @@ export default {
       return this.$store.state.sidebarItemsMin
     },
     folders() {
-      return this.$store.state.sm.folders
+      // const folders = this.$store.getters['sm/allFolders']
+      // return folders.length ? folders : null
+      return this.$store.getters['sm/allFolders']
     },
     folderCode() {
       const folderCode = this.$store.state.sm.currentFolder
@@ -170,14 +172,12 @@ export default {
       return folderCode
     },
     taskCurrentFolder() {
-      const folderId = this.folders
-        ? this.folders.find(folder => folder.code === this.folderCode).code
-        : 'active'
-      return folderId || 'active'
+      const folder = this.folders.find(folder => folder.Code === this.folderCode)
+      return folder ? folder.Code : 'active'
     },
     caseCurrentFolder() {
       const folderId = this.folders
-        ? this.folders.find(folder => folder.folderId === +this.folderCode).folderId
+        ? this.folders.find(folder => folder.FolderId === +this.folderCode).FolderId
         : 'all'
       return folderId || 'all'
     }

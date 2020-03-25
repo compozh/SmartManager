@@ -59,15 +59,15 @@
         <v-list-item-group v-model="activeFolder"
                            active-class="item-active">
           <v-list-item v-for="folder in zones[activeZone].folders"
-                       :key="folder.code"
-                       :to="'/tasks/' + folder.code"
+                       :key="folder.Code"
+                       :to="'/tasks/' + folder.Code"
                        :value="activeFolder">
             <v-list-item-icon class="mr-2 align-center">
               <fa-icon :icon="['fal', 'folder-open']"
-                       v-if="folder.code === folderId"/>
+                       v-if="folder.Code === folderId"/>
               <fa-icon v-else :icon="['fal', 'folder']"/>
             </v-list-item-icon>
-          <v-list-item-title v-text="folder.name"/>
+          <v-list-item-title v-text="folder.Name"/>
         </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -92,7 +92,7 @@ export default {
       return [
         {
           title: this.$t('sideBar.tasksBtn'),
-          folders: this.taskFolders,
+          folders: [...this.taskFolders, ...this.filters],
           icon: 'tasks'
         },
         {

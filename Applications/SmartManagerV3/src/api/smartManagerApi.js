@@ -65,12 +65,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async getTasksFromGql ({ folderId, helperexec }) {
+  static async getTasksFromGql ({ folderId, helperExec }) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.tasks}`,
-        variables: { folderId, helperexec }
+        variables: { folderId, helperExec }
       })
     } catch (e) {
       throw new Error(e.message)

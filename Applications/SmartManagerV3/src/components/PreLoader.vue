@@ -13,7 +13,7 @@ export default {
   name: 'ThePreLoader',
   computed: {
     preLoader () {
-      return this.$store.state.app.preLoader
+      return this.$store.state.app.preLoaders.length
     }
   }
 }

@@ -10,5 +10,5 @@ export default {
   caseDetails: {},
   taskListPosition: {},
   caseListPosition: {},
-  helperexec: true
+  helperExec: true
 }
