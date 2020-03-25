@@ -3,7 +3,7 @@ import '@firebase/messaging'
 
 import { eventBus } from '@/main'
 import registerMobileDevice from '@/api/mobileNotifications/registerMobileDevice.gql'
-import unRegisterMobileDevice from '@/api/mobileNotifications/registerMobileDevice.gql'
+import unRegisterMobileDevice from '@/api/mobileNotifications/unRegisterMobileDevice.gql'
 
 const config = {
   apiKey: 'AIzaSyB9C0X6zWOmYtkGyh-nRvI5CPZjsbLtB2A',
