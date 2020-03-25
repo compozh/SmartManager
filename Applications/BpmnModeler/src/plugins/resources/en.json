@@ -179,7 +179,8 @@
     "TryAgain" : "You can try again",
     "Er403" : "Sorry, but you do not have access",
 	"Er402" : "Sorry, this content was not purchased",
-	"MinCharacters": "Min 3 characters"
+	"MinCharacters": "Min 3 characters",
+	"NoRightsToEditSystemForm": "No rights to edit system form"
 	},
 	"enums": {
 		"AccessType": {

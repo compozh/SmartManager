@@ -17,9 +17,13 @@
 <script>
 import { eventBus } from '../../main';
 import { events } from '../../constants';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'formio-builder-container',
+  props: {
+    activeItem: String
+  },
   data() {
     return {
       callback: null,
@@ -46,10 +50,14 @@ export default {
     },
     async editForm(formCode) {
       await this.$store.dispatch('formio/getFormExpansionsDefinition', { formCode }).then(result => {
+        let diagram = this.$store.getters['bpmn/getItemById'](this.activeItem).item;
         if (result.formExpansionsDefinition) {
           this.formDefinition = result.formExpansionsDefinition;
           this.isSystem = this.formDefinition.isSystem;
-
+          if (this.isSystem && !diagram.isSystem) {
+            Notification.error(this.$t('bpmn.errors.NoRightsToEditSystemForm'));
+            return;
+          }
           this.changeFormVisible(true);
         }
       });

@@ -44,7 +44,7 @@
       </v-btn>
     </v-snackbar>
 
-    <formio-builder-container />
+    <formio-builder-container :activeItem.sync="activeItem"/>
     <formio-container />
     <bpmn-form :activeItem.sync="activeItem"></bpmn-form>
     <create-version-dialog></create-version-dialog>
