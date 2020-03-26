@@ -22,7 +22,10 @@ export default {
   SET_FOLDERS (state, folders) {
     state.folders = folders
   },
-  SET_CURRENT_FOLDER (state, folder) {
-    state.currentFolder = folder
+  SET_ACTIVE_FOLDER (state, folderId) {
+    state.activeFolderId = folderId
+  },
+  SET_ACTIVE_ZONE (state, zone) {
+    state.activeZone = zone
   }
 }

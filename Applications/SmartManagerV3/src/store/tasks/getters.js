@@ -1,6 +1,6 @@
 export default {
-  tasks (state, getters, rootState) {
-    const folderId = rootState.app.currentFolder
+  tasks (state, getters) {
+    const folderId = getters.activeFolder.Code
     const tasks = state.tasks ? state.tasks[folderId] : null
     const search = state.search ? state.search.trim() : ''
     // Определение необходимость поиска/фильтрации задач
