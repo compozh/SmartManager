@@ -3,8 +3,6 @@
 
     <side-bar-btn/>
 
-    <bread-crumb/>
-
     <v-spacer/>
 
     <search-field/>
@@ -18,7 +16,6 @@
 
 <script>
 import SideBarBtn from './SideBarBtn'
-import BreadCrumb from './BreadCrumb'
 import LangSwitcher from './LangSwitcher'
 import UserPanel from './UserPanel'
 import SearchField from './SearchField'
@@ -27,14 +24,9 @@ export default {
   name: 'TheNavBar',
   components: {
     SideBarBtn,
-    BreadCrumb,
     LangSwitcher,
     UserPanel,
     SearchField
   }
 }
 </script>
-
-<style scoped>
-
-</style>
