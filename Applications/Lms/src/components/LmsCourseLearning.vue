@@ -113,7 +113,7 @@
                             :currentLessonId="currentLessonGuid"
                             :passedList="lessonsPassed"
                             @set-current-lesson="setCurrentLesson"
-                            @change-list="updateLessonPaseedList"
+                            @change-list="updateLessonPassedList"
                             ></lessons-menu>
                           <lesson-materials
                             v-if='tabItem.id==="materials" && currentLesson'
@@ -154,7 +154,7 @@
                 :currentLessonId="currentLessonGuid"
                 :passedList="lessonsPassed"
                 @set-current-lesson="setCurrentLesson"
-                @change-list="updateLessonPaseedList"></lessons-menu>
+                @change-list="updateLessonPassedList"></lessons-menu>
             </v-card>
           </v-flex>
         </v-layout>
@@ -182,9 +182,6 @@ export default {
   data() {
     return {
       courseGuid: '',
-      course: {},
-      modules: [],
-      currentLessonGuid: '',
       menuOnRight: true,
       openItem: true,
       tabActive: null,
@@ -197,7 +194,6 @@ export default {
         total: 29
       },
       lessonsPassed: [],
-      modulesLessonsPassed: [],
       startPlay: false,
       navigation: {
         currentLessonIndex: 0,
@@ -205,32 +201,18 @@ export default {
       }
     }
   },
-  async mounted() {
-    this.course = this.$route.params.course
+  created() {
     this.courseGuid = this.$route.params.courseGuid
-    this.modules = this.$route.params.modules
+    // this.tabActive = this.$store.getters['lms/tabActive']
     this.progress = this.getInitialProgress(this.modules)
     this.lessonsPassed = this.getInitialPassedLesson(this.modules)
     this.hideSidebar()
-
-    const result = await api.restorePageStateFromGql(this.courseGuid)
-    const pageStateParams = result ? JSON.parse(result) : null
-    if (pageStateParams) {
-      this.currentLessonGuid = pageStateParams.currentLessonGuid
-      this.tabActive = pageStateParams.activeTab
-    } else {
-      this.currentLessonGuid = this.modules[0].units[0].lessonGuid
-      this.tabActive = 'materials'
-    }
-    this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
     this.putPassedFieldToLessons(this.modules)
-    await this.getLesson(this.currentLessonGuid)
-
+    this.getLesson(this.$route.params.lessonGuid)
     // Получить все идентификаторы уроков
     this.navigation.lessons = this.getAllLessons()
-    this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
-    // Получить список вопросов слушателей урока
-    await this.fetchDiscussionsList(this.currentLessonGuid)
+    this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.$route.params.lessonGuid )
+    this.$store.dispatch('lms/getDiscussionList', this.$route.params.lessonGuid)
     this.$store.commit('lms/setQuestionsView', 'questions-list')
   },
   beforeDestroy() {
@@ -250,8 +232,8 @@ export default {
     nextLesson () {
       if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
         this.navigation.currentLessonIndex++
-        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
-        this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
+        this.$store.commit('lms/setCurrentLessonGuid',
+          this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid)
       }
       const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setCurrentLesson (lessonId)
@@ -259,31 +241,28 @@ export default {
     prevLesson () {
       if (this.navigation.currentLessonIndex > 0) {
         this.navigation.currentLessonIndex--
-        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
-        this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
+        // NEW 2020-03-26
+        this.$store.commit('lms/setCurrentLessonGuid', this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid)
       }
       const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setCurrentLesson (lessonId)
     },
-    async setCurrentLesson (lessonGuid) {
-      this.currentLessonGuid = lessonGuid
-      this.$store.commit('lms/setCurrentLessonGuid', this.currentLessonGuid)
+    setCurrentLesson (lessonGuid) {
+      this.$store.commit('lms/setCurrentLessonGuid', lessonGuid)
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
       this.getLesson(lessonGuid)
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-      await this.fetchDiscussionsList(this.currentLessonGuid)
+      this.$store.dispatch('lms/getDiscussionList', lessonGuid)
       this.$store.commit('lms/setQuestionsView', 'questions-list')
+      this.$router.push({name: 'LMSCOURSELEARNING',
+        params: {
+          courseGuid: this.courseGuid,
+          lessonGuid: lessonGuid,
+        }})
     },
-    async getLesson(lessonGuid) {
+    getLesson(lessonGuid) {
       // Получить урок
-      await this.$store.dispatch('lms/getLessonContent', lessonGuid)
-    },
-    async fetchDiscussionsList(currentLessonGuid) {
-      // получить список вопросов слушателей урока
-      const result = await api.fetchQuestionsListCurrentLessonFromGql(currentLessonGuid)
-      // преобразовать дату
-      result.data.lms.discussions.forEach(d => d.dateTime = new Date(d.dateTime).toLocaleString())
-      this.$store.commit('lms/setDiscussions', result.data.lms.discussions)
+      this.$store.dispatch('lms/getLessonContent', lessonGuid)
     },
     finishLesson () {
       let currentLessonGuid = this.currentLesson.lesson.lessonGuid
@@ -299,7 +278,7 @@ export default {
       const currentLessonType = this.currentLesson.lesson.lessonType
       this.startPlay = currentLessonType === lessonType.video
     },
-    // Навигация. Получить все уроки курса: идентификаторы и признак свободного доступа
+    // Навигация. Получить  идентификаторы всех уроков курса
     getAllLessons () {
       let allLessonsInfo = []
       this.modules.forEach(m => {
@@ -333,7 +312,7 @@ export default {
       }
       return {total: lessonsTotal, passed: lessonPassed}
     },
-    updateLessonPaseedList(list) {
+    updateLessonPassedList(list) {
       this.finishLesson()
       this.lessonsPassed = list
     },
@@ -416,6 +395,17 @@ export default {
     }
   },
   computed: {
+    course() {
+      const courseDetails = this.$store.getters['lms/courseDetails']
+      return courseDetails ? courseDetails.course : null
+    },
+    modules () {
+      const courseDetails = this.$store.getters['lms/courseDetails']
+      return courseDetails ? courseDetails.modules : null
+    },
+    currentLessonGuid() {
+      return this.$store.getters['lms/currentLessonGuid']
+    },
     isTest() {
       if (this.currentLesson) {
         return this.currentLesson.lesson.lessonType === lessonType.test

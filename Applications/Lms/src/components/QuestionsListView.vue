@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout column class="frame" px-2 v-if="questions">
+    <v-layout column class="frame" px-2 v-if="!circularLoader">
       <v-flex>
         <v-layout align-center py-2>
           <v-flex>
@@ -26,6 +26,17 @@
         <v-btn flat color="info">Показать больше</v-btn>
       </v-flex>
     </v-layout>
+    <v-layout v-else align-center justify-space-between column fill-height>
+      <v-flex>
+        <v-progress-circular
+          :value="80"
+          :size="100"
+          :width="10"
+          indeterminate
+          color="blue-grey">
+        </v-progress-circular>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -45,6 +56,9 @@ export default {
     }
   },
   computed: {
+    circularLoader() {
+      return this.$store.getters['lms/questionCircularLoader']
+    },
     questions() {
       return this.$store.getters['lms/discussions']
     }

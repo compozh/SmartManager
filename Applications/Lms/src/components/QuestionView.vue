@@ -126,7 +126,6 @@ export default {
     AnswerCard
   },
   async mounted() {
-    console.log('question-view mounted')
     // получить вопрос слушателя урока
     this.question = this.$store.state.lms.discussion
     const result = await api.fetchDiscassionOfLessonFromGql(this.question.id)

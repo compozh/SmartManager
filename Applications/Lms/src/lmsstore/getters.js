@@ -35,6 +35,14 @@ export default {
     return state.courseDetails
   },
 
+  moduleDetails: state => moduleGuid => {
+    return state.modules.find(m => m.moduleGuid === moduleGuid)
+  },
+
+  coursesDetails(state) {
+    return state.coursesDetails
+  },
+
   currentLessonGuid (state) {
     return state.currentLessonGuid
   },
@@ -53,6 +61,10 @@ export default {
 
   currentQuestionsView(state) {
     return state.currentQuestionsView
+  },
+
+  questionCircularLoader(state) {
+    return state.questionCircularLoader
   },
 
   discussions (state) {

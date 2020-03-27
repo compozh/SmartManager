@@ -3,7 +3,7 @@ export default {
     state.user = user
   },
   setCircularLoader (state, payload ) {
-    state.loading = payload
+    state.circularLoader = payload
   },
   setError (state, payload ) {
     state.error = payload
@@ -18,6 +18,14 @@ export default {
     state.availableFilters = payload
   },
 
+  setLinks(state, payload) {
+    state.links = payload
+  },
+
+  addRouteToLinks(state, payload) {
+    state.links.push(payload)
+  },
+
   setRecommended (state, payload) {
     state.recommended = payload
   },
@@ -30,6 +38,10 @@ export default {
     state.modules = payload
   },
 
+  setCurrentCourseGuid(state, payload) {
+    state.currentCourseGuid = payload
+  },
+
   setCourseDetails (state, payload) {
     state.courseDetails = payload
   },
@@ -40,6 +52,10 @@ export default {
 
   setCurrentLessonGuid(state, payload) {
     state.currentLessonGuid = payload
+  },
+
+  setTabActive(state, payload) {
+    state.tabActive = payload
   },
 
   setContent (state, payload) {
@@ -57,6 +73,10 @@ export default {
   setQuestionsView(state, payload) {
     state.currentQuestionsView = payload
   },
+  setQuestionCircularLoader(state, payload) {
+    state.questionCircularLoader = payload
+  },
+
   setDiscussions(state, payload) {
     state.discussions = payload
   },
