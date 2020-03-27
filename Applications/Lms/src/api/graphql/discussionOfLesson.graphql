@@ -1,0 +1,23 @@
+{
+  lms{
+    discussion(questionId: $questionId){
+			id
+      dateTime
+      authorName
+      avatar
+      title
+      content
+      voutsUpQty
+      voutsDownQty
+      answers {
+        id
+        dateTime
+        authorName
+        avatar
+        content
+        voutsUpQty
+        voutsDownQty
+      }
+    }
+  }
+}
