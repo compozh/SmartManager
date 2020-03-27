@@ -40,9 +40,8 @@ export default {
       }
       this.changeLoad();
 
-      eventBus.$emit(events.modeler.showSelectionGrid,
-        ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction'),
-        items, items.find(item => item.id === taskCode),
+      eventBus.$emit(events.modeler.showSelectionAssistant,
+        items,
         (selectedItem) => callback(selectedItem.id));
     },
     async onPropertiesPanelSelectFormKey(formKey, callback) {
@@ -129,7 +128,7 @@ export default {
       items = items
         .map(decision => { return { id: decision.caseDefKey, name: decision.caseName }; })
         .filter((decision, index, self) => self.findIndex(p => p.id === decision.id) === index);
-      
+
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectCase'),
         items, items.find(item => item.id === caseDefKey),

@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Показати історію версій",
 		"AddMilestone" : "Створити версію",
 		"RestoreAsLatest" : "Відновити як найновішу",
-		"Compare" : "Порівняти"
+		"Compare" : "Порівняти",
+		"Overview": "Перегляд"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",

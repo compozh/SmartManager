@@ -74,6 +74,18 @@ export const events = {
     showSelectionGrid: 'modeler.show-selection-grid',
 
     /**
+     * Отобразить диалог выбора элемента из списка
+     * @event Modeler#showSelectionAssistant
+     * @param {string} title - Заголовок диалога
+     * @param {Object[]} items - элеиенты для выбора
+     * @param {string} items.id - код элемента
+     * @param {string} items.name - название элемента
+     * @param {Object} selectedItem - выбранный элемент
+     * @param {itemSelectedCallback} callback - коллбек, вызываемый при выборе элемента
+     */
+    showSelectionAssistant: 'modeler.show-selection-assistant',
+
+    /**
      * Отобразить форму корректировки элемента
      * @event Modeler#showForm
      * @param {string} mode - режим формы (create/edit/delete/copy)

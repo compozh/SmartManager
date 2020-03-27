@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Show milestones history",
 		"RestoreAsLatest" : "Restore as latest",
 		"AddMilestone" : "Create version",
-		"Compare" : "Compare"
+		"Compare" : "Compare",
+		"Overview": "Overview"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
