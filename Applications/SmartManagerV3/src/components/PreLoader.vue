@@ -3,7 +3,6 @@
     <v-progress-circular :size="70"
                          color="#5F81FF"
                          indeterminate>
-      <v-img src="@/assets/logo.png" max-width="50"/>
     </v-progress-circular>
   </v-overlay>
 </template>

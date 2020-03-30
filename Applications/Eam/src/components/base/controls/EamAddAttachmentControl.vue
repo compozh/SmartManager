@@ -50,6 +50,15 @@
             :multiple="true"
             :drop="true"
             :drop-directory="true"
+            :headers="headers"
+            :size="size"
+            :chunk-enabled="chunk"
+            :chunk="{
+              action,
+              minSize,
+              maxActive,
+              maxRetries,
+            }"
             @input-filter="inputFilter"
             v-model="files"
             ref="upload"
@@ -86,7 +95,13 @@ export default {
   data: () => {
     return {
       imageFormats: ['jpg', 'jpeg', 'png'],
-      files: []
+      files: [],
+      size: 1048576 * 100, // one file size limit - 100 Mb
+      chunk: true,
+      minSize: 512000,
+      maxActive: 1,
+      maxRetries: 10,
+      headers: { 'Upload-Type': 'single' }
     }
   },
 
@@ -95,10 +110,11 @@ export default {
       return this.$store.getters['eam/loading']
     },
     uploaded() {
-      return this.files.every(f => f.response && typeof f.response === 'string')
+      return this.files.every(f => f.response && f.response.fileName) || (this.$refs.upload && this.$refs.upload.uploaded)
     },
     postPath() {
-      return `${window.myConfig.WsPath}AddFile.ashx`
+      // eslint-disable-next-line no-undef
+      return appConfig.GrapgQlUrl + 'upload'
     }
   },
 
@@ -106,7 +122,7 @@ export default {
     uploaded(value) {
       if (this.files && this.files.length && value) {
         const fileNames = this.files.map(f => f.name)
-        const filePaths = this.files.map(f => f.response)
+        const filePaths = this.files.map(f => f.response.fileName)
         const variablesValues = {
           ...this.variables,
           fileNames,

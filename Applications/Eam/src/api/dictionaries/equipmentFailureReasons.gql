@@ -1,5 +1,5 @@
 query equipmentFailureReasons($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  eam {
+  eamQuery {
     equipmentFailureReasons(where: $where, orderBy: $orderBy, ids: $ids) {
       id
       name

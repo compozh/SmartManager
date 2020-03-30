@@ -1,5 +1,5 @@
 query singleEfficiencyLoss($id: ID) {
-  eam {
+  efficiencyQuery {
     efficiencyLosses(id: $id) {
       id
       workCenter {

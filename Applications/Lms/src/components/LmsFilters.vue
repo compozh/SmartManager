@@ -83,11 +83,11 @@
               <v-list-group
                 v-for="(item, index) in filters"
                 :key="index"
-                v-if="item.items.length > 0"
                 v-model="item.active"
                 @click="setCurrentFilterIndex(index)"
                 no-action
               >
+              <!-- v-if="item.items.length > 0" -->
                 <template v-slot:activator>
                   <v-list-tile>
                     <v-list-tile-content>
@@ -145,16 +145,19 @@ export default {
   },
   created() {
     // загрузить данные из props в локльную переменную. однократно
+    let filters = []
     for (let index = 0; index < this.filters.length; index++) {
-      this.currentFilters.push(this.filters[index])
+      filters.push(this.filters[index])
     }
+    this.currentFilters = filters.filter(f => f.items.length)
   },
+
   methods: {
     applyFilter() {
       this.currentFilterIndex = -1
       this.filterButtonPressed = false
       // Применить фильтр к текущим модулям/курсам - передать текущий фильтр родителю
-      this.$emit('filterChanged', { currentFilters: this.currentFilters })
+      this.$emit('applyFilter', { currentFilters: this.currentFilters })
     },
     setFilter(index) {
       if (this.currentFilterIndex === index) {
@@ -175,8 +178,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>

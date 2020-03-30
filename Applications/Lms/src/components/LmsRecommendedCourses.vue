@@ -1,14 +1,15 @@
 <template>
-	<v-container fluid>
-		<v-layout wrap row align-center justify-center>
-			<v-flex v-for='course in recommendedCourses' :key='course.courseId' lg4 md4 sm6 xs122>
+  <v-container fluid>
+    <v-layout wrap row align-center justify-center>
+      <v-flex v-for='course in recommendedCourses' :key='course.courseId' lg4 md4 sm6 xs12>
+        <course-card v-if="course"
+          :item="course"
+          class="card-item"
+          @click='goToCourseDetails(course)' />
+      </v-flex>
+    </v-layout>
 
-        <course-card v-if="course" :links="links" :course="course" />
-
-			</v-flex>
-		</v-layout>
-
-	</v-container>
+  </v-container>
 </template>
 
 <script>
@@ -29,41 +30,24 @@ export default {
     this.links.push( getThisLink('Главная', this.$route.path, false))
   },
   methods: {
+    goToCourseDetails(course) {
+      this.$router.push({name: 'LMSCOURSEDETAILS',
+        params: {
+          courseGuid: course.courseGuid,
+          links: this.links
+        }
+      })
+    },
     changeFavoriteState: function(course) {
       course.isFavorite = !course.isFavorite
-
     },
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#favIcon {
-  margin: 8px 0px 6px 8px;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-}
-.roleBtn {
-  transform: translate(23px, 0px) scale(0.8);
-}
-.lvlBtn {
-  transform: scale(0.8);
-}
-.roleBtn,
-.lvlBtn {
-  font-size: 13px;
-  color: rgb(120, 120, 120) !important;
-}
-.v-card--hover {
-  cursor: default !important;
-}
-.cardTitle,
-.v-card__media {
+
+.card-item:hover {
   cursor: pointer;
 }
 </style>

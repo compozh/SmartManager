@@ -1,5 +1,5 @@
 mutation registerMobileDevice($token: String!) {
-  mobilenotificationMutation {
+  mobileNotificationQueryMutation {
     registerMobileDevice(device: {applicationId: "_eamweb", deviceId: $token})
   }
 }

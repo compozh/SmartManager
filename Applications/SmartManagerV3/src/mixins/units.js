@@ -1,15 +1,63 @@
 import { mapGetters } from 'vuex'
 
+export const zones = {
+  computed: {
+    zones () {
+      return [
+        {
+          id: 0,
+          title: this.$t('sideBar.tasksBtn'),
+          folders: [...this.taskFolders, ...this.filters],
+          icon: 'tasks'
+        },
+        {
+          id: 1,
+          title: this.$t('sideBar.casesBtn'),
+          folders: this.caseFolders,
+          icon: 'suitcase'
+        },
+        {
+          id: 2,
+          title: this.$t('sideBar.forceBpm'),
+          folders: [],
+          icon: 'project-diagram'
+        }
+      ]
+    },
+    activeZone: {
+      get () {
+        return this.$store.state.app.activeZone || {}
+      }
+    },
+    activeZoneId: {
+      get () {
+        return this.activeZone.id || 0
+      },
+      set (zone) {
+        this.$store.commit('SET_ACTIVE_ZONE', this.zones[zone])
+      }
+    }
+  }
+}
+
 export const folders = {
   computed: {
     ...mapGetters([
       'allFolders',
       'taskFolders',
       'caseFolders',
-      'filters'
+      'filters',
+      'activeFolder'
     ]),
-    folderId () {
-      return this.$route.params.folderId
+    activeFolderId: {
+      get () {
+        return this.$route.params.folderId ||
+          this.$store.state.folders.activeFolderId ||
+          'active'
+      },
+      set (folderId) {
+        this.$store.commit('SET_ACTIVE_FOLDER', { folderId, source: 'units' })
+      }
     }
   },
   methods: {
@@ -21,13 +69,32 @@ export const folders = {
 
 export const tasks = {
   computed: {
+    task () {
+      const id = +this.$route.params.taskId
+      const task = this.$store.state.tasks.taskDetails[id]
+      return task || {}
+    },
     tasks () {
       return this.$store.getters.tasks
     }
   },
   methods: {
     async getTasks (folderId) {
-      await this.$store.dispatch('getTasks', { folderId })
+      await this.$store.dispatch('getTasks', {
+        folderId, preLoader: true
+      })
+    },
+    async getTask () {
+      const taskId = +this.$route.params.taskId
+      if (!this.task.id) {
+        try {
+          await this.$store.dispatch('getTaskDetails', {
+            taskId, preLoader: true
+          })
+        } catch (e) {
+          console.log(e.message)
+        }
+      }
     }
   }
 }

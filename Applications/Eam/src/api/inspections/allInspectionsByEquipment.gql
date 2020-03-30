@@ -1,5 +1,5 @@
 query allInspectionsByEquipment($after: String, $first: Int, $where: [WhereExpressionGraph], $orderBy:[OrderByGraph], $ids: [ID], $equipmentId: String ) {
-  eam {
+  eamQuery {
     conditionParameterByEquipmentValuesConnection(after: $after, first: $first, where: $where, orderBy: $orderBy, ids: $ids, equipmentId:$equipmentId) {
       edges {
         node {

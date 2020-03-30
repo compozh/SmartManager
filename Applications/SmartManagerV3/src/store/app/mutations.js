@@ -19,10 +19,7 @@ export default {
   SET_NOTIFY (state, notify) {
     state.notify = notify
   },
-  SET_FOLDERS (state, folders) {
-    state.folders = folders
-  },
-  SET_CURRENT_FOLDER (state, folder) {
-    state.currentFolder = folder
+  SET_ACTIVE_ZONE (state, zone) {
+    state.activeZone = zone
   }
 }

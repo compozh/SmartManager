@@ -77,11 +77,11 @@ export class SmartManagerApi {
     }
   }
 
-  static async getTaskInfoFromGql (taskId) {
+  static async getTaskDetailsFromGql (taskId) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
-        query: gql`${q.taskInfo}`,
+        query: gql`${q.taskDetails}`,
         variables: { taskId }
       })
     } catch (e) {

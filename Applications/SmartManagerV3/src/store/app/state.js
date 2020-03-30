@@ -5,6 +5,5 @@ export default {
   search: '',
   notify: null,
   helperExec: true,
-  folders: null,
-  currentFolder: null
+  activeZone: null
 }

@@ -1,4 +1,4 @@
 export default {
   tasks: null,
-  taskInfo: {}
+  taskDetails: {}
 }
