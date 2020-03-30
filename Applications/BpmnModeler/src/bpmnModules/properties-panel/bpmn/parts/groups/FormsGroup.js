@@ -28,8 +28,10 @@ export default class FormsGroup extends PropertiesPanelGroup {
       loadItems: api.getForms(diagram.isSystem)
     };
 
-    const formKey = bo.get('camunda:formKey');
-    if (typeof formKey !== 'string' || formKey.trim() === '') {
+    const formKey = bo.get('camunda:formKey'),
+      hasValue = typeof formKey == 'string' && formKey.trim() !== '';
+
+    if (!hasValue) {
       options.prependIcon = 'mdi-plus';
       options.prepend = () => {
         eventBus.$emit(events.formio.createForm, (formKey, name) => {
@@ -47,8 +49,18 @@ export default class FormsGroup extends PropertiesPanelGroup {
       };
     }
 
+    const buttonOptions = {
+      id: 'overviewForm',
+      label: translate('Overview form'),
+      disabled: () => !hasValue,
+      click: () => {
+        eventBus.$emit(events.formio.showFormOverview, formKey);
+      }
+    };
+
     super('forms', translate('Forms'), [
-      entryFactory.autocompleteBox(options)
+      entryFactory.autocompleteBox(options),
+      entryFactory.button(buttonOptions)
     ]);
   }
 }

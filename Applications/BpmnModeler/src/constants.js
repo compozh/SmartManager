@@ -201,6 +201,14 @@ export const events = {
     showForm: 'formio.show-form',
 
     /**
+     * Отобразить просмотр формы formio
+     * @event Formio#showFormOverview
+     * @param {string} code - код формы
+     * @param {Object} definition - определение формы
+     */
+    showFormOverview: 'formio.show-form-overview',
+
+    /**
      * Отобразить диалог создания формы formio
      * @event Formio#createForm
      * @param {formioCallback} callback - коллбек, вызываемый при успешном создании формы
