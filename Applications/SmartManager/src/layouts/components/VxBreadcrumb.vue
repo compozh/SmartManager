@@ -8,17 +8,17 @@
         <span class="breadcrumb-separator mx-2 flex items-center">
           <feather-icon icon="ChevronsRightIcon" svgClasses="w-4 h-4"/></span>
       </li>
-      <li v-for="(segment, index) in breadcrumb" :key="index" class="flex items-center">
+      <li v-for="(segment, index) in breadcrumb" :key="index" class="flex items-center" style="max-width: 300px">
         <router-link v-if="index !== breadcrumb.length - 1"
                      :to="breadcrumbData(segment).url"
-                     style="margin-top: 2px"
+                     style="margin-top: 2px" class="truncate"
         >{{ breadcrumbData(segment).name }}</router-link>
         <span v-if="index !== breadcrumb.length - 1"
               class="breadcrumb-separator mx-2 flex items-center">
           <feather-icon icon="ChevronsRightIcon" svgClasses="w-4 h-4"/></span>
       </li>
-      <li class="flex items-center">
-        <span style="margin-top: 2px">{{ breadcrumbData(lastBreadcrumb).name }}</span>
+      <li class="flex items-center" style="max-width: 300px">
+        <span style="margin-top: 2px" class="truncate">{{ breadcrumbData(lastBreadcrumb).name }}</span>
       </li>
     </ul>
   </div>
@@ -46,9 +46,6 @@ export default {
     },
     folderCode() {
       const folderCode = this.$store.state.sm.currentFolder
-      if (folderCode === 'active') {
-        return '' // conversion for all tasks
-      }
       if (folderCode === 'all') {
         return 0 // conversion for all cases
       }

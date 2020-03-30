@@ -63,11 +63,14 @@ export default {
     const folders = [...(getters.folders.taskFolders || [])]
     return folders.sort(i => i.Code === 'active' ? -1 : 0)
   },
-  caseFolders: (state, getters) => getters.folders.caseFolders || [],
+  caseFolders: (state, getters) => {
+    const folders = [...(getters.folders.caseFolders || [])]
+    return folders.sort(i => i.Code === 'cases' ? -1 : 0)
+  },
   filters: (state, getters) => getters.folders.filters || [],
   allFolders: (state, getters) => [
     ...getters.taskFolders,
-    ...getters.caseFolders,
-    ...getters.filters
+    ...getters.filters,
+    ...getters.caseFolders
   ]
 }
