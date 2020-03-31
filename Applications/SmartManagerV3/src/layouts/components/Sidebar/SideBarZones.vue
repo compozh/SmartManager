@@ -6,7 +6,7 @@
     <v-list-item class="px-0 justify-center"
                  style="height: 48px">
       <v-list-item-avatar>
-        <v-img src="@/assets/logo.png"/>
+        <v-img src="@/assets/logo.svg"/>
       </v-list-item-avatar>
     </v-list-item>
 

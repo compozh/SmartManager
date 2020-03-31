@@ -1,8 +1,9 @@
 <template>
+  <v-app>
     <v-content class="layout--full-page">
       <div class="header--full-page d-flex align-center px-5"
            style="width: 100%">
-        <v-img src="@/assets/logo.png" contain max-width="65"/>
+        <v-img src="@/assets/it-logo.svg" contain max-width="120"/>
         <v-spacer/>
         <div class="justify-end">
           <lang-switcher/>
@@ -10,6 +11,7 @@
       </div>
       <router-view/>
     </v-content>
+  </v-app>
 </template>
 
 <script>
