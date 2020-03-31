@@ -1,14 +1,24 @@
 <template>
-  <v-content class="grey lighten-3">
+  <v-app>
+
     <notify/>
+    <pre-loader/>
     <the-side-bar/>
     <the-nav-bar/>
-    <router-view class="pa-2"/>
-  </v-content>
+
+    <v-content class="grey lighten-3">
+      <v-container fluid style="height: 100%"
+                   class="d-flex flex-column">
+        <router-view/>
+      </v-container>
+    </v-content>
+
+  </v-app>
 </template>
 
 <script>
 import Notify from '@/components/Notify'
+import PreLoader from '@/components/PreLoader'
 import TheNavBar from './components/Navbar/TheNavBar'
 import TheSideBar from './components/Sidebar/TheSideBar'
 import { userInfo, userMethods } from '@/mixins/user'
@@ -19,6 +29,7 @@ export default {
   mixins: [userInfo, userMethods, folders],
   components: {
     Notify,
+    PreLoader,
     TheNavBar,
     TheSideBar
   },
@@ -37,7 +48,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
