@@ -19,6 +19,10 @@ export default {
     return state.availableFilters
   },
 
+  links(state) {
+    return state.links
+  },
+
   recommended (state) {
     return state.recommended
   },

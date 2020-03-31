@@ -14,7 +14,6 @@
 
 <script>
 import CourseCard from './CourseCard.vue'
-import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-recommended-courses',
@@ -24,17 +23,12 @@ export default {
   props: ['recommendedCourses'],
   data: () => ({
     favIconColor: 'grey',
-    links: []
   }),
-  created () {
-    this.links.push( getThisLink('Главная', this.$route.path, false))
-  },
   methods: {
     goToCourseDetails(course) {
       this.$router.push({name: 'LMSCOURSEDETAILS',
         params: {
           courseGuid: course.courseGuid,
-          links: this.links
         }
       })
     },
