@@ -163,11 +163,11 @@ export default {
       return this.$store.state.sm.users
     },
     folders() {
-      const allFolders = this.$store.state.sm.folders || []
-      return allFolders.filter(i => !!i.folderId)
+      const allFolders = this.$store.getters['sm/allFolders']
+      return allFolders.filter(i => !!i.FolderId)
     },
     folderById() {
-      return id => this.folders.filter(i => i.folderId === id)
+      return id => this.folders.filter(i => i.FolderId === id)
     },
     members() {
       const oldMembers = this.oldMembers

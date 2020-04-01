@@ -3,7 +3,7 @@ export default {
     state.user = user
   },
   setCircularLoader (state, payload ) {
-    state.loading = payload
+    state.circularLoader = payload
   },
   setError (state, payload ) {
     state.error = payload
@@ -18,6 +18,14 @@ export default {
     state.availableFilters = payload
   },
 
+  setLinks(state, payload) {
+    state.links = payload
+  },
+
+  addRouteToLinks(state, payload) {
+    state.links.push(payload)
+  },
+
   setRecommended (state, payload) {
     state.recommended = payload
   },
@@ -30,12 +38,24 @@ export default {
     state.modules = payload
   },
 
+  setCurrentCourseGuid(state, payload) {
+    state.currentCourseGuid = payload
+  },
+
   setCourseDetails (state, payload) {
     state.courseDetails = payload
   },
 
   setLesson (state, payload) {
     state.unit = payload
+  },
+
+  setCurrentLessonGuid(state, payload) {
+    state.currentLessonGuid = payload
+  },
+
+  setTabActive(state, payload) {
+    state.tabActive = payload
   },
 
   setContent (state, payload) {
@@ -48,5 +68,35 @@ export default {
 
   setCurrentTestPage(state, payload) {
     state.currentTestPage = payload
+  },
+
+  setQuestionsView(state, payload) {
+    state.currentQuestionsView = payload
+  },
+  setQuestionCircularLoader(state, payload) {
+    state.questionCircularLoader = payload
+  },
+
+  setDiscussions(state, payload) {
+    state.discussions = payload
+  },
+  setDiscussionId(state, payload) {
+    state.discussionId = payload
+  },
+  addDiscussion(state, payload) {
+    state.discussions.push(payload)
+  },
+
+  setDiscussion(state, payload) {
+    state.discussion = payload
+  },
+
+  socialChange(state, payload) {
+    if (payload > 0) {
+      state.discussion.voutsUpQty += payload
+    } else {
+      state.discussion.voutsDownQty -= payload
+    }
   }
+
 }

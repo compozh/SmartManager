@@ -1,5 +1,5 @@
 query categories($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  eam {
+  eamQuery {
     workRequestCategories(where: $where, orderBy: $orderBy, ids: $ids) {
       id
       name

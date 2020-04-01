@@ -6,8 +6,13 @@
           <v-flex>
             <v-layout column>
               <v-flex xs12>
-                <v-card>
-                  <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+                <v-card v-if="links">
+                  <v-breadcrumbs  :items="links" divider=">" :class="active-link">
+                    <template v-slot:item="{ item }">
+                      <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
+                      <span v-else :class="disable-link">{{item.text}}</span>
+                    </template>
+                  </v-breadcrumbs>
                 </v-card>
               </v-flex>
               <v-flex>
@@ -26,13 +31,16 @@
           <v-layout mb-3>
             <v-flex>
               <!-- Filters -->
-              <Filters :filters="availableFilters" @filterChanged="refreshModulesFilter"></Filters>
+              <Filters :filters="availableFilters" @applyFilter="refreshModulesFilter"></Filters>
             </v-flex>
           </v-layout>
         </v-layout>
         <v-layout wrap row mx-2 mt-2 mb-4>
           <v-flex v-for='moduleData in modules' :key='moduleData.courseId' lg3 md4 sm6 xs12>
-            <module-card v-if="moduleData" :links="links" :moduleData="moduleData" />
+            <module-card v-if="moduleData"
+              :item="moduleData"
+              class="card-item"
+              @click='goToModuleDetails(moduleData)' />
           </v-flex>
         </v-layout>
       </v-flex>
@@ -70,15 +78,17 @@ export default {
   },
 
   methods: {
+    goToModuleDetails(moduleData) {
+      this.$router.push({name: 'LMSMODULEDETAILS',
+        params: {
+          moduleGuid: moduleData.moduleGuid,
+          moduleName: moduleData.name,
+          links: this.links
+        }
+      })
+    },
     getModules () {
       this.$store.dispatch('lms/getModules')
-    },
-
-    roleSearch: function(data) {
-      this.$router.push({ name: 'LMSMODULES', params: { role: data.code } })
-    },
-    levelSearch: function(data) {
-      this.$router.push({ name: 'LMSMODULES', params: { level: data.code } })
     },
 
     refreshModulesFilter: function(data) {

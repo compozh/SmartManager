@@ -32,8 +32,9 @@ export default {
         }
       },
       update(data) {
-        if (data.eam && data.eam.equipments && data.eam.equipments.length) {
-          return data.eam.equipments[0]
+        const queryData = data[Object.keys(data)[0]]
+        if (queryData && queryData.equipments && queryData.equipments.length) {
+          return queryData.equipments[0]
         } else {
           this.$store.commit('eam/setError', 'Оборудование не найдено')
           return null

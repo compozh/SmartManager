@@ -1,90 +1,67 @@
 <template>
-  <v-navigation-drawer id="navBar"
+  <v-navigation-drawer id="sideBar"
                        app permanent
-                       width="300"
+                       max-width="300"
                        :expand-on-hover="!sideBarOpen"
                        style="padding-left: 3.4em">
+    <side-bar-zones/>
+    <v-list dense nav subheader>
+      <v-subheader>{{ zones[activeZoneId].title.toUpperCase() }}</v-subheader>
+      <v-list-item-group v-model="activeFolderId"
+                         mandatory>
 
-      <v-navigation-drawer fixed dark
-                           mini-variant
-                           permanent>
+        <v-list-item v-for="folder in zones[activeZoneId].folders"
+                     :key="folder.Code"
+                     :to="'/tasks/' + folder.Code"
+                     :class="{ 'item-active': folder.Code === activeFolderId}"
+                     :value="folder.Code">
 
-        <v-list-item class="px-2"
-                     style="height: 48px">
-          <v-list-item-avatar>
-            <v-img src="@/assets/logo.png"></v-img>
-          </v-list-item-avatar>
-        </v-list-item>
+          <v-list-item-icon class="mr-2 align-center">
+            <fa-icon :icon="['fal', 'folder-open']"
+                     v-if="folder.Code === activeFolderId"/>
+            <fa-icon v-else :icon="['fal', 'folder']"/>
+          </v-list-item-icon>
 
-        <v-divider/>
-
-        <v-list dense nav>
-          <v-list-item v-for="item in items"
-                       :key="item.title"
-                       @click="mini = !mini">
-            <v-list-item-action nav>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <template #append>
-          <v-list>
-            <v-list-item>
-              <v-list-item-action>
-                <v-icon>fas fa-question-circle</v-icon>
-              </v-list-item-action>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-icon>fas fa-phone-square</v-icon>
-              </v-list-item-action>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-action>
-                <v-icon>fas fa-rss-square</v-icon>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-        </template>
-      </v-navigation-drawer>
-
-      <v-list dense rounded subheader>
-        <v-subheader>TASKS</v-subheader>
-          <v-list-item v-for="link in links"
-                       :key="link" link>
-            <v-list-item-icon class="mr-5">
-              <v-icon>fas fa-folder</v-icon>
-            </v-list-item-icon>
-          <v-list-item-title v-text="link"/>
-        </v-list-item>
-      </v-list>
+        <v-list-item-title v-text="folder.Name"/>
+      </v-list-item>
+      </v-list-item-group>
+    </v-list>
   </v-navigation-drawer>
-
 </template>
 
 <script>
+import SideBarZones from './SideBarZones'
 import { sideBar } from '@/mixins/layout'
+import { zones, folders } from '@/mixins/units'
 
 export default {
   name: 'TheSideBar',
-  mixins: [sideBar],
+  mixins: [sideBar, zones, folders],
+  components: {
+    SideBarZones
+  },
   data: () => ({
-    drawer: false,
-    items: [
-      { title: 'Home', icon: 'fas fa-tasks' },
-      { title: 'About', icon: 'fas fa-suitcase' }
-    ],
-    links: ['Lorem ipsum dolor sit amet', 'Contacts', 'Settings']
-  })
+    drawer: false
+  }),
+  watch: {
+    $route (to) {
+      if (to.name.includes('list')) {
+        this.$store.commit('SET_ACTIVE_FOLDER',
+          { folderId: to.params.folderId, source: 'watcher' })
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-  #navBar >>> .v-navigation-drawer__content {
+  #sideBar >>> .v-navigation-drawer__content {
     position: relative;
   }
+
+  .item-active {
+    background: #5F81FF;
+    color: white;
+  }
+
 </style>

@@ -6,7 +6,6 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
@@ -27,10 +26,15 @@
     "vue-cookies": "^1.7.0",
     "vue-i18n": "^8.0.0",
     "vue-router": "^3.1.5",
+    "vue-split-panel": "^1.0.4",
+    "vue2-perfect-scrollbar": "^1.4.0",
     "vuetify": "^2.2.11",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/pro-light-svg-icons": "^5.12.1",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
     "@kazupon/vue-i18n-loader": "^0.3.0",
     "@vue/cli-plugin-babel": "~4.2.0",
     "@vue/cli-plugin-eslint": "~4.2.0",

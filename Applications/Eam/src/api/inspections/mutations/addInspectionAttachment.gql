@@ -1,5 +1,5 @@
 mutation addInspectionAttachment($inspectionId: Int!, $fileNames: [String]!, $filePaths: [String]!, $attachmentType: String) {
-  eamMutation {
+  eamQueryMutation {
     addInspectionAttachment(inspectionId: $inspectionId, fileNames: $fileNames, filePaths: $filePaths, attachmentType: $attachmentType)
   }
 }

@@ -27,7 +27,8 @@ export default {
     constantOrderBy: Array,
     headers: Array,
     search: String,
-    updateEventName: String
+    updateEventName: String,
+    schema: String
   },
   apollo: {
     itemsCon: {
@@ -39,11 +40,12 @@ export default {
           after: this.itemsAfter,
           first: this.rowsPerPage,
           where: this.where,
-          orderBy: this.orderBy
+          orderBy: this.orderBy,
+          schema: this.schema
         }
       },
       update(data) {
-        return data.eam[this.queryName]
+        return data ? data[Object.keys(data)[0]][this.queryName] : []
       },
       skip() {
         return !this.rowsPerPage

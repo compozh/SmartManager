@@ -6,8 +6,13 @@
           <v-flex>
             <v-layout column>
               <v-flex xs12>
-                <v-card>
-                  <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
+                <v-card v-if="links">
+                  <v-breadcrumbs  :items="links" divider=">" :class="active-link">
+                    <template v-slot:item="{ item }">
+                      <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
+                      <span v-else :class="disable-link">{{item.text}}</span>
+                    </template>
+                  </v-breadcrumbs>
                 </v-card>
               </v-flex>
               <v-flex>
@@ -25,13 +30,16 @@
           </v-flex>
           <v-layout mb-3>
              <v-flex>
-               <Filters :filters="availableFilters" @filterChanged="refreshCoursesFilter"></Filters>
+               <Filters :filters="availableFilters" @applyFilter="refreshCoursesFilter"></Filters>
              </v-flex>
           </v-layout>
         </v-layout>
         <v-layout wrap row>
           <v-flex v-for='course in courses' :key='course.courseId' lg3 md4 sm6 xs12>
-             <course-card v-if="course" :links="links" :course="course" />
+             <course-card v-if="course"
+              :item="course"
+              class="card-item"
+              @click="goToCourseDetails(course)" />
           </v-flex>
         </v-layout>
       </v-flex>
@@ -55,7 +63,6 @@ export default {
       this.getAvailableFilters()
     }
   },
-
   data() {
     return {
       filterChanged: false,
@@ -65,6 +72,16 @@ export default {
   },
 
   methods: {
+    goToCourseDetails(course) {
+      this.$store.commit('lms/')
+      this.$router.push({name: 'LMSCOURSEDETAILS',
+        params: {
+          courseGuid: course.courseGuid,
+          courseName: course.name,
+          links: this.links
+        }
+      })
+    },
     getCourses () {
       this.$store.dispatch('lms/getCourses')
     },
@@ -187,8 +204,15 @@ export default {
       } */
       const thisLink = getThisLink('Курсы', this.$route.path, true)
       let links = getRoutesLinks(this.$route.params.links, thisLink)
+      // const links = this.$store.state.lms.links
       return links
     }
   },
 }
 </script>
+
+<style>
+.card-item:hover {
+  cursor: pointer;
+}
+</style>

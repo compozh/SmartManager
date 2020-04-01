@@ -1,8 +1,17 @@
 {
   "search": "Search",
   "rights": "All rights Reserved",
+  "user": {
+    "delegatedRights": "Delegated rights"
+  },
+  "navBar":{
+    "expandSideBar": "Expand sidebar",
+    "collapseSideBar": "Collapse sidebar"
+  },
   "sideBar":{
-    "expandBtn": "Expand sidebar"
+    "tasksBtn": "Tasks",
+    "casesBtn": "Cases",
+    "forceBpm": "Force BPM"
   },
   "pickers": {
     "date": "Date",
@@ -119,7 +128,8 @@
     "deleteAttachment": "Delete",
     "downloadAttachment": "Download",
     "attachmentVersions": "Versions",
-    "attachmentEds": "EDS"
+    "attachmentEds": "EDS",
+    "close": "Close"
   },
   "icons": {
     "priority": "High priority",

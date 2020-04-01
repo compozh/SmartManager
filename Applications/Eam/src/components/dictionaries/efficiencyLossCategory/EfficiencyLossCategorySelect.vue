@@ -5,9 +5,11 @@
     :required="required"
     label="Категория"
     icon="category"
+    :constantFilter="constantFilter"
     :multiple="multiple"
     v-model="internalValue"
     @input="$emit('input', internalValue)"
+    schema="oee"
   ></eam-base-select>
 </template>
 
@@ -22,6 +24,7 @@ export default {
       type: Boolean,
       default: false
     },
+    constantFilter: Array,
     multiple: Boolean
   },
   data() {

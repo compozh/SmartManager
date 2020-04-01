@@ -1,8 +1,17 @@
 {
   "search": "Пошук",
   "rights": "Всі права захищені",
+  "user": {
+    "delegatedRights": "Делеговані права"
+  },
+  "navBar":{
+    "expandSideBar": "Розгорнути бічну панель",
+    "collapseSideBar": "Згорнути бічну панель"
+  },
   "sideBar":{
-    "expandBtn": "Розгорнути бічну панель"
+    "tasksBtn": "Задачі",
+    "casesBtn": "Кейси",
+    "forceBpm": "Force BPM"
   },
   "pickers": {
     "date": "Дата",
@@ -114,12 +123,13 @@
     "yes": "Так",
     "no": "Ні",
     "toBack": "Назад",
-    "globalSearch": "Виконати пошук по всіх документах",
+    "globalSearch": "Пошук по всіх документах",
     "addAttachment": "Додати",
     "deleteAttachment": "Видалити",
     "downloadAttachment": "Завантажити",
     "attachmentVersions": "Версії",
-    "attachmentEds": "Електронні підписи"
+    "attachmentEds": "Електронні підписи",
+    "close": "Закрити"
   },
   "icons": {
     "priority": "Високий пріоритет",

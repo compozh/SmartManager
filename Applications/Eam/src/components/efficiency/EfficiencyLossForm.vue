@@ -55,13 +55,21 @@
               ></v-select>
             </v-flex>
             <v-flex xs12>
-              <efficiency-loss-category-select v-model="internalItem.categoryId" required></efficiency-loss-category-select>
+              <efficiency-loss-category-select
+                v-model="internalItem.categoryId"
+                required
+                :constantFilter="categoryFilter"
+              ></efficiency-loss-category-select>
             </v-flex>
             <v-flex xs12>
-              <efficiency-loss-reason-select v-model="internalItem.reasonId" required></efficiency-loss-reason-select>
+              <efficiency-loss-reason-select
+                v-model="internalItem.reasonId"
+                required
+                :constantFilter="reasonFilter"
+              ></efficiency-loss-reason-select>
             </v-flex>
             <v-flex xs12>
-              <efficiency-loss-source-select v-model="internalItem.sourceId" required></efficiency-loss-source-select>
+              <efficiency-loss-source-select v-model="internalItem.sourceId"></efficiency-loss-source-select>
             </v-flex>
             <!-- <v-flex xs12>
               <v-textarea
@@ -89,7 +97,11 @@
               <v-switch label="Утвердить" v-model="internalItem.isApproved" class="justify-center"></v-switch>
             </v-flex>
             <v-flex xs6>
-              <v-switch label="Отменить" v-model="internalItem.isValid" class="justify-center"></v-switch>
+              <v-switch
+                :label="internalItem.isValid ? 'Действует' : 'Отменен'"
+                v-model="internalItem.isValid"
+                class="justify-center"
+              ></v-switch>
             </v-flex>
           </v-layout>
         </v-container>
@@ -165,6 +177,24 @@ export default {
       return this.item.endTime
         ? moment(this.item.endTime).format('DD.MM.YYYY HH:mm')
         : '...'
+    },
+    categoryFilter() {
+      return [
+        {
+          path: 'id',
+          comparison: 'startsWith',
+          value: this.internalItem.indicator.charAt(0)
+        }
+      ]
+    },
+    reasonFilter() {
+      return [
+        {
+          path: 'categoryId',
+          comparison: 'startsWith',
+          value: this.internalItem.categoryId
+        }
+      ]
     }
   },
 
@@ -200,7 +230,8 @@ export default {
         .mutate({
           mutation: modifyEfficiencyLoss,
           variables: {
-            efficiencyLoss: input
+            efficiencyLoss: input,
+            schema: 'oee'
           }
         })
         .then(() => {

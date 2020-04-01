@@ -1,0 +1,56 @@
+query($caseId: Int!) {
+    smtasks {
+        caseDetails(caseId: $caseId) {
+            id
+            name
+            purpose
+            dateFrom
+            dateTo
+            comm
+            userAdd
+            fioAdd
+            dateAdd
+            hasOrig
+            hasComm
+            folderId
+            status
+            tasks {
+                id
+                name
+                descript
+                performerId
+                performer
+                performerPhoto
+                dateplan
+                dateAdd
+                addedFio
+                status
+                isMy
+                myControl
+                isGenerate
+                hasOrig
+                hasComm
+                priority
+                dateFact
+                isRead
+            }
+            originals {
+                id
+                fileName
+                fileExt
+                fileSize
+            }
+            comments {
+                userId
+                user
+                userPhoto
+                date
+                text
+            }
+            participants {
+                userId
+                name
+            }
+        }
+    }
+}
