@@ -42,6 +42,7 @@ export default {
 
       eventBus.$emit(events.modeler.showSelectionAssistant,
         items,
+        'testASD',
         (selectedItem) => callback(selectedItem.id));
     },
     async onPropertiesPanelSelectFormKey(formKey, callback) {

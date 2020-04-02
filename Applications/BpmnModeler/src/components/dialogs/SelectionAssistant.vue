@@ -1,11 +1,25 @@
 <template>
-  <v-dialog v-if="show" v-model="show" max-width="80%" ref="dialog" content-class="selection-assistant">
-    <v-card>
-        <v-tabs vertical>
-          <v-tab v-for="category in caltegories" :key="category.title">
+  <v-dialog v-if="show" v-model="show" width="80%" ref="dialog" content-class="selection-assistant">
+    <v-card class="selection-assistant-card">
+      <v-card-title class="py-2">
+        <v-col class="title py-2">{{title}}</v-col>
+        <v-text-field
+          v-model="search"
+          class="search-input"
+          label="Search"
+          @keyup.enter="filterItems"
+          outlined
+        ></v-text-field>
+        <v-btn icon @click="closeAssistant" class="ml-auto">
+          <v-icon size="20">mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-divider></v-divider>
+        <v-tabs vertical hide-slider active-class="assistant-category-active">
+          <v-tab v-for="category in categories" :key="category.title" class="assistant-category">
             {{category.title}}
           </v-tab>
-          <v-tab-item class="category-item md-scroll" v-for="category in caltegories" :key="category.title">
+          <v-tab-item class="category-item" v-for="category in categories" :key="category.title">
             <v-container fluid>
               <v-row dense>
                 <v-col
@@ -17,7 +31,7 @@
                     <v-card-text v-if="item.type">
                       Category: {{item.type}}
                     </v-card-text>
-                     <v-card-actions class="item-card-actions">
+                    <v-card-actions class="item-card-actions">
                       <v-btn text @click="select(item)">{{ $t('bpmn.buttons.Select') }}</v-btn>
                       <v-btn text @click="showOverview(item)">{{ $t('bpmn.buttons.Overview')}}</v-btn>
                     </v-card-actions>
@@ -38,9 +52,11 @@ export default {
   name: 'selection-assistant',
   data() {
     return {
-      caltegories: {},
+      categories: {},
+      originalData: {},
       show: false,
-      search: ''
+      search: '',
+      title: ''
     };
   },
   mounted() {
@@ -50,31 +66,36 @@ export default {
     eventBus.$off(events.modeler.showSelectionAssistant, this.onShowSelectionAssistant);
   },
   methods: {
-    onShowSelectionAssistant(items, callback) {
-      this.caltegories = {};
+    onShowSelectionAssistant(items, title, callback) {
+      this.categories = {};
       this.callback = callback;
+      this.title = title;
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
+        if (i <= 10) {
+          item.type = 'test' + i
+        }
         if (!item.type) {
-          if (!this.caltegories['default']) {
-            this.caltegories['default'] = {
-              title: item.type,
+          if (!this.categories['default']) {
+            this.categories['default'] = {
+              title: 'default',
               items: [item]
             };
           } else {
-            this.caltegories.default.items.push(item);
+            this.categories.default.items.push(item);
           }
         } else {
-          if (!this.caltegories[item.type]) {
-            this.caltegories[item.type] = {
+          if (!this.categories[item.type]) {
+            this.categories[item.type] = {
               title: item.type,
               items: [item]
             };
           } else {
-            this.caltegories[item.type].items.push(item);
+            this.categories[item.type].items.push(item);
           }
         }
       }
+      this.originalData = this.categories;
       this.show = true;
     },
     select(item) {
@@ -84,54 +105,103 @@ export default {
       }
       this.show = false;
     },
+    closeAssistant() {
+      this.show = false;
+    },
     showOverview(item) {
       if (!item.unformio) {
         return;
       }
       this.show = false;
       eventBus.$emit(events.formio.showFormOverview, item.unformio);
+    },
+    filterItems() {
+      var keys =  Object.keys(this.originalData),
+        filteredCategories = {};
+      for (var i = 0; i < keys.length; i++) {
+        var category = this.originalData[keys[i]],
+          newItems = category.items.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()) || item.type.toLowerCase().includes(this.search.toLowerCase()));
+        if (newItems.length) {
+          filteredCategories[keys[i]] = {
+            title: keys[i],
+            items: newItems
+          };
+        }
+      }
+      this.categories = filteredCategories;
     }
   }
 };
 </script>
-<style>
-  .selection-assistant {
+<style lang="scss">
+.selection-assistant{
     overflow: inherit;
-  }
-  .category-item {
-    height: 90vh;
-    overflow-y: auto;
-  }
-  .item-card {
-    height: 200px;
-    margin: 10px;
-    text-align: start;
-  }
-  .item-card-actions {
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
-  }
+    .title {
+      text-align: left;
+    }
+    .search-input {
+      height: 55px;
+      max-width: 400px;
+      margin: 0 20px;
+    }
+    .selection-assistant-cardtext {
+      padding: 0 !important;
+    }
+    .v-tabs-bar {
+      border-right: 1px solid #00000014;
+    }
+    .assistant-category {
+      width: 200px;
+    }
 
-  /* background of the scrollbar except button or resizer */
-  .md-scroll::-webkit-scrollbar-track {
-      background-color:#fff
-  }
-  .md-scroll::-webkit-scrollbar-track:hover {
-      background-color:#fff
-  }
+    .assistant-category {
+      height: 100% !important;
+    }
+    .assistant-category-active {
+      box-shadow: inset 0 0 3px 0px #0000006b;
+    }
+    .item-card {
+      height: 200px;
+      margin: 10px;
+      text-align: start;
+    }
+    .item-card-actions {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+    }
 
-  /* scrollbar itself */
-  .md-scroll::-webkit-scrollbar-thumb {
-      background-color:#babac0;
-      border-radius:16px;
-      border:5px solid #fff
-  }
-  .md-scroll::-webkit-scrollbar-thumb:hover {
-      background-color:#a0a0a5;
-      border:4px solid #f4f4f4
-  }
-  /* set button(top and bottom of the scrollbar) */
-  .md-scroll::-webkit-scrollbar-button {display:none}
+    .category-item {
+      height: 80vh;
+      overflow-y: auto;
+    }
 
+    .category-item::-webkit-scrollbar {
+      background-color:#fff;
+      width:16px;
+      height: 16px
+    }
+    /* background of the scrollbar except button or resizer */
+    .category-item::-webkit-scrollbar-track {
+        background-color:#fff
+    }
+    .category-item::-webkit-scrollbar-track:hover {
+        background-color:#fff
+    }
+
+    /* scrollbar itself */
+    .category-item::-webkit-scrollbar-thumb {
+        background-color:#babac0;
+        border-radius:16px;
+        border:5px solid #fff
+    }
+    .category-item::-webkit-scrollbar-thumb:hover {
+        background-color:#a0a0a5;
+        border:4px solid #f4f4f4
+    }
+    /* set button(top and bottom of the scrollbar) */
+    .category-item::-webkit-scrollbar-button {display:none}
+
+
+  }
 </style>
