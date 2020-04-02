@@ -42,7 +42,7 @@ export default {
 
       eventBus.$emit(events.modeler.showSelectionAssistant,
         items,
-        'testASD',
+        ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction'),
         (selectedItem) => callback(selectedItem.id));
     },
     async onPropertiesPanelSelectFormKey(formKey, callback) {
