@@ -68,13 +68,13 @@ export default {
         Notification.error(this.$t('bpmn.errors.ActionsNotLoaded'));
         return;
       }
-      if (!action.unformio || action.unformio.trim() === '') {
+      if (!action.formCode || action.formCode.trim() === '') {
         this.changeLoad();
         Notification.warning(this.$t('bpmn.errors.ActionWithoutForm'));
         return;
       }
-      var form = await this.$store.dispatch('formio/getForm', { formCode: action.unformio });
-      this.propertiesPanelShowForm(form, action.unformio, existingParameters, callback);
+      var form = await this.$store.dispatch('formio/getForm', { formCode: action.formCode });
+      this.propertiesPanelShowForm(form, action.formCode, existingParameters, callback);
     },
     async onPropertiesPanelSetBusinessObjectActionProperties(logicalKey, existingParameters, callback) {
       this.loading = true;

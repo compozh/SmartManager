@@ -55,11 +55,12 @@ export default {
         }
       },
       update(data) {
-        return data.eam &&
-          data.eam.conditionParameterValues &&
-          data.eam.conditionParameterValues.length &&
-          data.eam.conditionParameterValues[0].attachments.length
-          ? data.eam.conditionParameterValues[0].attachments
+        const queryData = data[Object.keys(data)[0]]
+        return queryData &&
+          queryData.conditionParameterValues &&
+          queryData.conditionParameterValues.length &&
+          queryData.conditionParameterValues[0].attachments.length
+          ? queryData.conditionParameterValues[0].attachments
           : null
       },
       skip() {

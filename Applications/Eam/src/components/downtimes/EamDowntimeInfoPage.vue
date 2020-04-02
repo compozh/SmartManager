@@ -24,8 +24,9 @@ export default {
         }
       },
       update(data) {
-        if (data.eam && data.eam.downTimes && data.eam.downTimes.length) {
-          return data.eam.downTimes[0]
+        const queryData = data[Object.keys(data)[0]]
+        if (queryData && queryData.downTimes && queryData.downTimes.length) {
+          return queryData.downTimes[0]
         } else {
           this.$store.commit('eam/setError', 'Простой не найден')
           return null

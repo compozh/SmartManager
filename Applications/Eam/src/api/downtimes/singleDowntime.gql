@@ -1,5 +1,5 @@
 query singleDowntime($id: ID) {
-  eam {
+  eamQuery {
     downTimes(id: $id) {
       id
       date

@@ -8,7 +8,7 @@
         <!-- <date-text-field :dateType="item" :editable="true"></date-text-field> -->
         <v-datetime-picker
           label
-          :datetime="item.date"
+          :datetime="dateTimeInner"
           locale="ru"
           :disabled="item.additionalData && !item.additionalData.isValid || item.isClosed"
           @input="setValue()"
@@ -135,11 +135,12 @@ export default {
   props: {
     item: Object
   },
-  data() {
+  data(vm) {
     return {
       addAttachmentQuery: addInspectionAttachment,
       attachmentDialog: false,
-      colors: ['red', 'orange', 'orange', 'green', 'green']
+      colors: ['red', 'orange', 'orange', 'green', 'green'],
+      dateTimeInner: moment(vm.item.date).format('DD.MM.YYYY HH:mm')
     }
   },
   computed: {
@@ -178,7 +179,7 @@ export default {
         description,
         isClosed
       }))(this.item)
-      inspectionInput.date = moment(this.item.date).format('YYYY-MM-DD HH:mm')
+      inspectionInput.date = moment(this.dateTimeInner, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD HH:mm')
       if (this.item.additionalData) {
         inspectionInput.additionalData = (({
           isValid,

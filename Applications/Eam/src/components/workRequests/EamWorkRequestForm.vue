@@ -121,22 +121,27 @@ export default {
           }
         })
         .then(result => {
+          const mutationResult = result[Object.keys(result)[0]]
+          const innerResult = mutationResult
+            ? mutationResult[Object.keys(mutationResult)[0]]
+            : {}
           if (
-            result.data &&
-            result.data.eamMutation &&
-            result.data.eamMutation.createWorkRequest &&
-            result.data.eamMutation.createWorkRequest.id
+            innerResult &&
+            innerResult.createWorkRequest &&
+            innerResult.createWorkRequest.id
           ) {
-            this.workRequestId = result.data.eamMutation.createWorkRequest.id
-            if (attachments && attachments.upload && attachments.files && attachments.files.length) {
+            this.workRequestId = innerResult.createWorkRequest.id
+            if (
+              attachments &&
+              attachments.upload &&
+              attachments.files &&
+              attachments.files.length
+            ) {
               attachments.upload()
             } else {
               this.internalItem.content = ''
             }
-            eventBus.$emit(
-              'workRequestAdded',
-              result.data.eamMutation.createWorkRequest
-            )
+            eventBus.$emit('workRequestAdded', innerResult.createWorkRequest)
           }
         })
     },

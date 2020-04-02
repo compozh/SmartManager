@@ -29,9 +29,10 @@
                       <v-progress-circular
                         :rotate="-90"
                         :size="42"
-                        :width="7"
+                        :width="5"
                         :value="progressValue"
                         color="primary"
+                        class="progress-label-size"
                       >
                         {{ progressValue }}
                       </v-progress-circular>
@@ -112,7 +113,7 @@
                             :currentLessonId="currentLessonGuid"
                             :passedList="lessonsPassed"
                             @set-current-lesson="setCurrentLesson"
-                            @change-list="updateLessonPaseedList"
+                            @change-list="updateLessonPassedList"
                             ></lessons-menu>
                           <lesson-materials
                             v-if='tabItem.id==="materials" && currentLesson'
@@ -153,7 +154,7 @@
                 :currentLessonId="currentLessonGuid"
                 :passedList="lessonsPassed"
                 @set-current-lesson="setCurrentLesson"
-                @change-list="updateLessonPaseedList"></lessons-menu>
+                @change-list="updateLessonPassedList"></lessons-menu>
             </v-card>
           </v-flex>
         </v-layout>
@@ -167,8 +168,8 @@ import LessonView from './LessonView.vue'
 import LessonsMenu from './LessonsMenu.vue'
 import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
-import {lessonType, materialType, lessonIcons} from '../helpers/lesson.js'
 import { LmsApi as api } from '../api/lmsApi'
+import {lessonType, materialType, lessonIcons} from '../helpers/lesson'
 
 export default {
   name: 'lms-course-learning',
@@ -181,9 +182,6 @@ export default {
   data() {
     return {
       courseGuid: '',
-      course: {},
-      modules: [],
-      currentLessonGuid: '',
       menuOnRight: true,
       openItem: true,
       tabActive: null,
@@ -196,7 +194,6 @@ export default {
         total: 29
       },
       lessonsPassed: [],
-      modulesLessonsPassed: [],
       startPlay: false,
       navigation: {
         currentLessonIndex: 0,
@@ -204,29 +201,19 @@ export default {
       }
     }
   },
-  async created() {
-    this.course = this.$route.params.course
+  created() {
     this.courseGuid = this.$route.params.courseGuid
-    this.modules = this.$route.params.modules
+    // this.tabActive = this.$store.getters['lms/tabActive']
     this.progress = this.getInitialProgress(this.modules)
-    const result = await api.restorePageStateFromGql(this.courseGuid)
-    const pageStateParams = result ? JSON.parse(result) : null
-    if (pageStateParams) {
-      this.currentLessonGuid = pageStateParams.currentLessonGuid
-      this.tabActive = pageStateParams.activeTab
-    } else {
-      this.currentLessonGuid = this.modules[0].units[0].lessonGuid
-      this.tabActive = 'materials'
-    }
-    this.putPassedFieldToLessons(this.modules)
-    this.getLesson(this.currentLessonGuid)
-    // Получить все идентификаторы уроков
-    this.navigation.lessons = this.getAllLessons()
-    this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.currentLessonGuid )
-  },
-  mounted() {
     this.lessonsPassed = this.getInitialPassedLesson(this.modules)
     this.hideSidebar()
+    this.putPassedFieldToLessons(this.modules)
+    this.getLesson(this.$route.params.lessonGuid)
+    // Получить все идентификаторы уроков
+    this.navigation.lessons = this.getAllLessons()
+    this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.$route.params.lessonGuid )
+    this.$store.dispatch('lms/getDiscussionList', this.$route.params.lessonGuid)
+    this.$store.commit('lms/setQuestionsView', 'questions-list')
   },
   beforeDestroy() {
     this.savePageState()
@@ -245,7 +232,8 @@ export default {
     nextLesson () {
       if (this.navigation.currentLessonIndex < this.navigation.lessons.length - 1) {
         this.navigation.currentLessonIndex++
-        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
+        this.$store.commit('lms/setCurrentLessonGuid',
+          this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid)
       }
       const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setCurrentLesson (lessonId)
@@ -253,20 +241,28 @@ export default {
     prevLesson () {
       if (this.navigation.currentLessonIndex > 0) {
         this.navigation.currentLessonIndex--
-        this.currentLessonGuid = this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid
+        // NEW 2020-03-26
+        this.$store.commit('lms/setCurrentLessonGuid', this.navigation.lessons[this.navigation.currentLessonIndex].lessonGuid)
       }
       const lessonId = this.navigation.lessons[this.navigation.currentLessonIndex]
       this.setCurrentLesson (lessonId)
     },
     setCurrentLesson (lessonGuid) {
-      this.currentLessonGuid = lessonGuid
+      this.$store.commit('lms/setCurrentLessonGuid', lessonGuid)
       this.navigation.currentLessonIndex = this.getCurrentLessonIndex(lessonGuid)
       this.getLesson(lessonGuid)
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+      this.$store.dispatch('lms/getDiscussionList', lessonGuid)
+      this.$store.commit('lms/setQuestionsView', 'questions-list')
+      this.$router.push({name: 'LMSCOURSELEARNING',
+        params: {
+          courseGuid: this.courseGuid,
+          lessonGuid: lessonGuid,
+        }})
     },
-    async getLesson(lessonGuid) {
+    getLesson(lessonGuid) {
       // Получить урок
-      await this.$store.dispatch('lms/getLessonContent', lessonGuid)
+      this.$store.dispatch('lms/getLessonContent', lessonGuid)
     },
     finishLesson () {
       let currentLessonGuid = this.currentLesson.lesson.lessonGuid
@@ -282,7 +278,7 @@ export default {
       const currentLessonType = this.currentLesson.lesson.lessonType
       this.startPlay = currentLessonType === lessonType.video
     },
-    // Навигация. Получить все уроки курса: идентификаторы и признак свободного доступа
+    // Навигация. Получить  идентификаторы всех уроков курса
     getAllLessons () {
       let allLessonsInfo = []
       this.modules.forEach(m => {
@@ -316,7 +312,7 @@ export default {
       }
       return {total: lessonsTotal, passed: lessonPassed}
     },
-    updateLessonPaseedList(list) {
+    updateLessonPassedList(list) {
       this.finishLesson()
       this.lessonsPassed = list
     },
@@ -399,6 +395,17 @@ export default {
     }
   },
   computed: {
+    course() {
+      const courseDetails = this.$store.getters['lms/courseDetails']
+      return courseDetails ? courseDetails.course : null
+    },
+    modules () {
+      const courseDetails = this.$store.getters['lms/courseDetails']
+      return courseDetails ? courseDetails.modules : null
+    },
+    currentLessonGuid() {
+      return this.$store.getters['lms/currentLessonGuid']
+    },
     isTest() {
       if (this.currentLesson) {
         return this.currentLesson.lesson.lessonType === lessonType.test
@@ -419,14 +426,14 @@ export default {
     },
     isFirstLesson () {
       if ( this.currentLesson ) {
-        return this.currentLesson.lesson.lessonGuid === this.navigation.lessons[0].lessonGuid
+        return this.currentLessonGuid === this.navigation.lessons[0]
       } else {
         return false
       }
     },
     isLastLesson () {
       if ( this.currentLesson ) {
-        return this.currentLesson.lesson.lessonGuid === this.navigation.lessons[this.navigation.lessons.length - 1].lessonGuid
+        return this.currentLessonGuid === this.navigation.lessons[this.navigation.lessons.length - 1]
       } else {
         return false
       }
@@ -477,8 +484,11 @@ export default {
 }
 .lesson-view {
   width:100%;
-  height: 65vh;
+  height: 60vh;
   overflow: hidden;
   border: solid lightgray 1px;
+}
+.progress-label-size {
+  font-size: 85%;
 }
 </style>

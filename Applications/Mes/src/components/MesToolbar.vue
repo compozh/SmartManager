@@ -17,7 +17,7 @@
         <v-icon>pause</v-icon>
       </v-btn>
       <!-- Состояние РЦ -->
-      <v-tooltip :disabled="!workCenterFixationData.description" bottom 
+      <v-tooltip :key="workCenterFixationData.state" :disabled="!workCenterFixationData.description" bottom
         v-if="!searchWorkCenter && (workCenterFixationData.state == 'DOWN_TIME' || workCenterFixationData.state == 'EMERGENCY') && $route.name !='MESLOGIN'">
         <template v-slot:activator="{ on }"  class="work-center-state-tooltip">
           <v-icon large class="work-center-state" :color="workCenterFixationData.state == 'DOWN_TIME' ? 'error' : 'warning'" v-on="on">warning</v-icon>
@@ -26,10 +26,10 @@
       </v-tooltip>
 
       <!-- Выпадающий лист с рабочими центрами для фиксации -->
-      <div :class="`work-centers-select ${$vuetify.breakpoint.mdAndUp ? 'static' : searchWorkCenter ? 'search' : 'small'}`"  
+      <div :class="`work-centers-select ${$vuetify.breakpoint.mdAndUp ? 'static' : searchWorkCenter ? 'search' : 'small'}`"
         v-if="workCentersForWorker.length > 1 && $route.name !='MESLOGIN'">
         <span class='work-centers-title' v-if="$vuetify.breakpoint.mdAndUp">
-          {{this.$t('mes.labels.WorkCenter')}}: 
+          {{this.$t('mes.labels.WorkCenter')}}:
         </span>
         <v-btn icon v-else-if="!searchWorkCenter" @click="searchWorkCenter = !searchWorkCenter">
           <v-icon>work_outline</v-icon>
@@ -45,7 +45,7 @@
           @change="changeWorkCenter"
           @blur="searchWorkCenter = false"
           :autofocus="$vuetify.breakpoint.smAndDown? true : false"
-          :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select-input' : 'work-centers-select-input-small'" 
+          :class="$vuetify.breakpoint.mdAndUp ? 'work-centers-select-input' : 'work-centers-select-input-small'"
         ></v-autocomplete>
       </div>
 

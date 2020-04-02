@@ -1,92 +1,113 @@
 <template>
-	<v-container fluid pa-0 ma-0>
-		<!--MODULE HEADER-->
-		<v-layout mb-4>
-			<v-flex xs12>
-        <v-card >
-          <v-breadcrumbs :items="links" divider=">"></v-breadcrumbs>
-        </v-card>
-				<v-card v-if="moduleData.data">
-					<v-layout wrap row justify-center>
-						<v-flex md1 xs2 class='pt-3' hidden-xs-only>
-							<v-img v-bind:src='moduleData.data.imageLink' height='80px' contain/>
-						</v-flex>
-						<v-flex lg8 md10 sm10 xs12>
-							<v-card-text class='title font-weight-regular pt-4 pb-1' color="#424242">{{moduleData.data.type}}</v-card-text>
-							<v-card-title class='display-1 font-weight-medium pt-0 pb-2' color="#424242">{{moduleData.data.name}}</v-card-title>
-							<v-card-text class='body-2 font-weight-medium pt-0 pb-3' color="#424242">{{moduleData.data.description}}</v-card-text>
-							<v-layout row wrap>
-								<v-flex md2 xs6>
-                  <v-card-text class='body-2 font-weight-medium pt-0 pb-1' color="#424242">{{moduleData.data.lessonsQtLabel}}</v-card-text>
-									<v-card-text class='body-2 font-weight-medium pt-0 pb-4' color="#424242">{{moduleData.data.durationMinutesLabel}}</v-card-text>
-								</v-flex>
-								<v-spacer/>
-								<v-flex xs12 mx-3>
-									<v-layout align-top justify-start row wrap>
-										<v-layout align-top justify-end row>
-											<v-icon
-												id='favIcon'
-												v-bind:color='moduleData.data.isFavorite ? "red" : "grey"'
-												@mouseenter='favIconColor = "red"'
-												@mouseleave='favIconColor = "grey"'
-												@click='changeFavoriteState(moduleData.data)'>{{moduleData.data.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
-										</v-layout>
-									</v-layout>
-								</v-flex>
-							</v-layout>
-						</v-flex>
-					</v-layout>
-				</v-card>
-			</v-flex>
-		</v-layout>
-
-		<!--MODULES CONT-->
-		<v-layout v-if="moduleData.data" align-center justify-center>
-			<v-flex lg8 md10 sm10 xs12>
-				<v-layout wrap column>
-					<v-card class='mt-1 mb-0' hover>
-						<v-layout reverse column>
-							<v-flex xs12>
-								<v-list two-line class='py-0' expand>
-									<v-list-group value='true'>
-										<v-list-tile slot="activator" v-bind:style='{"height":"48px"}'>
-											<v-list-tile-content class='pb-4'>
-												<v-list-tile-title class='blue--text text--darken-4'>{{moduleData.data.lessonsQtLabel}}</v-list-tile-title>
-											</v-list-tile-content>
-										</v-list-tile>
-										<v-list-tile
-											v-for='lesson in moduleData.data.units'
-											:key='lesson.lessonGuid'
-											@click='$router.push({name: "LMSMODULELESSON", params: {
-												moduleGuid: moduleGuid,
-                        moduleData: moduleData,
-												lessonGuid: lesson.lessonGuid,
-											}})'>
-											<v-list-tile-content class='px-2'>
-												<v-list-tile-title class='blue--text text--darken-4 font-weight-medium'>{{lesson.name}}</v-list-tile-title>
-												<v-list-tile-sub-title>{{lesson.durationMinutesLabel}}</v-list-tile-sub-title>
-											</v-list-tile-content>
-											<v-list-tile-action>
-												<v-btn icon ripple>
-													<v-icon color="grey lighten-1">info</v-icon>
-												</v-btn>
-											</v-list-tile-action>
-										</v-list-tile>
-										<v-divider/>
-									</v-list-group>
-								</v-list>
-							</v-flex>
-						</v-layout>
-					</v-card>
-				</v-layout>
-			</v-flex>
-
-			<!--RIGHT PANEL-->
-			<v-flex xs3 class='py-5 px-4' v-if="moduleData.data" v-show="moduleData.data.additionalInfo">
-				<h3>Про этот курс</h3>
-				<p>{{moduleData.data.additionalInfo}}</p>
-			</v-flex>
-		</v-layout>
+	<v-container fill-height fluid pa-0 ma-0>
+		<v-layout justify-center fill-height>
+      <v-flex v-if="!circularLoader">
+        <!--MODULE HEADER-->
+        <v-layout mb-4>
+          <v-flex xs12>
+            <v-card v-if="links">
+              <v-breadcrumbs  :items="links" divider=">" class="activelink">
+                <template v-slot:item="{ item }">
+                  <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
+                  <span v-else class="disablelink">{{item.text}}</span>
+                </template>
+              </v-breadcrumbs>
+            </v-card>
+            <v-card v-if="moduleData">
+              <v-layout wrap row justify-center>
+                <v-flex md1 xs2 class='pt-3' hidden-xs-only>
+                  <v-img v-bind:src='moduleData.imageLink' height='80px' contain/>
+                </v-flex>
+                <v-flex lg8 md10 sm10 xs12>
+                  <v-card-text class='title font-weight-regular pt-4 pb-1' color="#424242">{{moduleData.type}}</v-card-text>
+                  <v-card-title class='display-1 font-weight-medium pt-0 pb-2' color="#424242">{{moduleData.name}}</v-card-title>
+                  <v-card-text class='body-2 font-weight-medium pt-0 pb-3' color="#424242">{{moduleData.description}}</v-card-text>
+                  <v-layout row wrap>
+                    <v-flex md2 xs6>
+                      <v-card-text class='body-2 font-weight-medium pt-0 pb-1' color="#424242">{{moduleData.lessonsQtLabel}}</v-card-text>
+                      <v-card-text class='body-2 font-weight-medium pt-0 pb-4' color="#424242">{{moduleData.durationMinutesLabel}}</v-card-text>
+                    </v-flex>
+                    <v-spacer/>
+                    <v-flex xs12 mx-3>
+                      <v-layout align-top justify-start row wrap>
+                        <v-layout align-top justify-end row>
+                          <v-icon
+                            id='favIcon'
+                            v-bind:color='moduleData.isFavorite ? "red" : "grey"'
+                            @mouseenter='favIconColor = "red"'
+                            @mouseleave='favIconColor = "grey"'
+                            @click='changeFavoriteState(moduleData)'>{{moduleData.isFavorite === true ? 'favorite' : 'favorite_border'}}</v-icon>
+                        </v-layout>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-card>
+          </v-flex>
+        </v-layout>
+        <!--MODULES CONT-->
+        <v-layout v-if="moduleData" align-center justify-center>
+          <v-flex lg8 md10 sm10 xs12>
+            <v-layout wrap column>
+              <v-card class='mt-1 mb-0' hover>
+                <v-layout reverse column>
+                  <v-flex xs12>
+                    <v-list two-line class='py-0' expand>
+                      <v-list-group value='true'>
+                        <v-list-tile slot="activator" v-bind:style='{"height":"48px"}'>
+                          <v-list-tile-content class='pb-4'>
+                            <v-list-tile-title class='blue--text text--darken-4'>{{moduleData.lessonsQtLabel}}</v-list-tile-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile
+                          v-for='lesson in moduleData.units'
+                          :key='lesson.lessonGuid'>
+                          <!-- @click='$router.push({name: "LMSMODULELESSON", params: {
+                            moduleGuid: moduleGuid,
+                            moduleData: moduleData,
+                            lessonGuid: lesson.lessonGuid,
+                          }})' -->
+                          <v-list-tile-content class='px-2'>
+                            <v-list-tile-title class='blue--text text--darken-4 font-weight-medium'>{{lesson.name}}</v-list-tile-title>
+                            <v-list-tile-sub-title>{{lesson.durationMinutesLabel}}</v-list-tile-sub-title>
+                          </v-list-tile-content>
+                          <v-list-tile-action>
+                            <v-btn icon ripple>
+                              <v-icon color="grey lighten-1">info</v-icon>
+                            </v-btn>
+                          </v-list-tile-action>
+                        </v-list-tile>
+                        <v-divider/>
+                      </v-list-group>
+                    </v-list>
+                  </v-flex>
+                </v-layout>
+              </v-card>
+            </v-layout>
+          </v-flex>
+          <!--RIGHT PANEL-->
+          <v-flex xs3 class='py-5 px-4' v-if="moduleData" v-show="moduleData.additionalInfo">
+            <h3>Про этот курс</h3>
+            <p>{{moduleData.additionalInfo}}</p>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+      <v-flex v-else align-self-center>
+        <v-layout align-center justify-space-between column fill-height>
+          <v-flex >
+            <!-- align-self-center -->
+            <v-progress-circular
+              :value="80"
+              :size="100"
+              :width="10"
+              indeterminate
+              color="blue-grey">
+            </v-progress-circular>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
 	</v-container>
 </template>
 
@@ -97,25 +118,36 @@ export default {
   name: 'lms-module-details',
   created() {
     this.moduleGuid = this.$route.params.moduleGuid
-    this.moduleData.data = this.$route.params.moduleData
+    const moduleData = this.moduleData
+    const moduleIdLoaded = moduleData ? moduleData.units.length !== 0 : false
+    if (!moduleIdLoaded) {
+      this.$store.dispatch('lms/getModules')
+    }
+    const thisLink = getThisLink(this.moduleData.name, this.$route.path, true)
+    this.links = getRoutesLinks(this.$route.params.links, thisLink)
   },
   data() {
     return {
       moduleGuid: '',
-      moduleData: { data: undefined },
-      lessons: { data: undefined }
+      links: null
     }
   },
   computed: {
-    links() {
-      const thisLink = getThisLink(this.$route.params.moduleName, this.$route.path, true)
-      let links = getRoutesLinks(this.$route.params.links, thisLink)
-      return links
+    circularLoader() {
+      return this.$store.getters['lms/circularLoader']
+    },
+    moduleData() {
+      return this.$store.getters['lms/moduleDetails'](this.moduleGuid)
     }
   }
 }
 </script>
 
 <style scoped>
-
+.activelink {
+  text-decoration: none;
+}
+.disablelink {
+  color: grey;
+}
 </style>

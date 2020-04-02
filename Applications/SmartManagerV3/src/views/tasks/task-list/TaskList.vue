@@ -1,45 +1,54 @@
 <template>
-  <v-container fluid>
-    <v-row dense align-content="start" justify="start">
-      <v-col class="d-flex">
-        <h3 class="ml-1 mt-1">Task list:
-          <span class="primary--text">{{ $route.params.folderId }}</span>
-        </h3>
-        <v-switch v-model="viewMode" label="View mode" class="mt-0 ml-3"/>
-      </v-col>
-      <v-spacer/>
-    </v-row>
+  <v-row no-gutters>
+    <v-col>
+      <v-row dense align-content="start" justify="start">
+        <v-col class="d-flex">
+          <h4 class="ml-1 mt-1">{{ activeZone.title }}:
+            <span class="primary--text">{{ activeFolder.Name }}</span>
+            <span class="grey--text"> ({{ activeFolder.Count }})</span>
+          </h4>
+          <v-spacer/>
+          <v-btn-toggle v-model="viewMode" mandatory>
+            <v-btn small>
+              <fa-icon :icon="['fal', 'list-alt']" size="lg"/>
+            </v-btn>
+            <v-btn small>
+              <fa-icon :icon="['fal', 'table']" size="lg"/>
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
+      </v-row>
 
-    <v-row v-if="viewMode">
-      <v-col>
-        <v-data-table
-          :headers="headers"
-          :items="tasks"
-          :items-per-page="10"
-          class="elevation-1"
-        ></v-data-table>
-      </v-col>
-    </v-row>
+      <v-row v-if="viewMode">
+        <v-col>
+          <v-data-table
+            :headers="headers"
+            :items="tasks"
+            :items-per-page="10"
+            class="elevation-1 caption"
+            style="font-size: 10px"
+          ></v-data-table>
+        </v-col>
+      </v-row>
 
-    <v-row v-else>
-      <v-col>
-        List with cards
-      </v-col>
-    </v-row>
+      <data-iterator v-else :tasks="tasks"/>
 
-    <action-button/>
-  </v-container>
+      <action-button/>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 import ActionButton from '@/components/ActionButton'
-import { folders, tasks } from '@/mixins/units'
+import DataIterator from './DataIterator'
+import { zones, folders, tasks } from '@/mixins/units'
 
 export default {
   name: 'TaskList',
-  mixins: [folders, tasks],
+  mixins: [zones, folders, tasks],
   components: {
-    ActionButton
+    ActionButton,
+    DataIterator
   },
   data: () => ({
     viewMode: false,
@@ -61,15 +70,15 @@ export default {
   }),
   watch: {
     $route (to, from) {
-      const currentFolder = from.params.folderId
+      const activeFolder = from.params.folderId
       const targetFolder = to.params.folderId
-      if (to.name === 'task-list' && currentFolder !== targetFolder) {
+      if (to.name === 'task-list' && activeFolder !== targetFolder) {
         this.getTasks(targetFolder)
       }
     }
   },
   created () {
-    this.getTasks(this.folderId)
+    this.getTasks(this.activeFolderId)
   }
 }
 </script>

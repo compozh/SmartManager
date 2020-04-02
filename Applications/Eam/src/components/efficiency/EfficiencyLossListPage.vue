@@ -5,6 +5,7 @@
     :constantOrderBy="[{path:'startTime', descending:true}]"
     searchPath="workCenter.name"
     updateEventName="efficiencyLossChanged"
+    schema="oee"
   >
     <efficiency-loss-card slot="card" slot-scope="props" :item="props.item" />
   </eam-base-list-page>

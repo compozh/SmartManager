@@ -29,8 +29,9 @@ export default function CaseProps(group, diagram, element, entryFactory, cmmnFac
       loadItems: api.getForms(diagram.isSystem)
     };
 
-    const formKey = bo.get('camunda:formKey');
-    if (typeof formKey !== 'string' || formKey.trim() === '') {
+    const formKey = bo.get('camunda:formKey'),
+      hasValue = typeof formKey == 'string' && formKey.trim() !== '';
+    if (!hasValue) {
       options.prependIcon = 'mdi-plus';
       options.prepend = () => {
         eventBus.$emit(events.formio.createForm, (formKey, name) => {
@@ -48,7 +49,17 @@ export default function CaseProps(group, diagram, element, entryFactory, cmmnFac
       };
     }
 
+    const buttonOptions = {
+      id: 'overviewForm',
+      label: translate('Overview form'),
+      disabled: () => !hasValue,
+      click: () => {
+        eventBus.$emit(events.formio.showFormOverview, formKey);
+      }
+    };
+
     group.entries.push(entryFactory.autocompleteBox(options));
+    group.entries.push(entryFactory.button(buttonOptions));
   }
 
   if (isHumanTask(element)) {

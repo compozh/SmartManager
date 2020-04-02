@@ -38,10 +38,10 @@
 
 			<v-spacer/>
 			<v-toolbar-items>
-        <v-btn @click="search" icon large>
+        <v-btn @click.stop="search" icon large>
           <v-icon>search</v-icon>
         </v-btn>
-        <v-btn v-if="!user" @click="openLoginDialog" icon large>
+        <v-btn v-if="!user" @click.stop="openLoginDialog" icon large>
           <v-icon>input</v-icon>
         </v-btn>
 
