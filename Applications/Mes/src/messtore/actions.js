@@ -50,11 +50,8 @@ export default {
     await me.dispatch('mes/graphqlQueryWraper', {
       action: async ( ) => {
         console.log('Current UUID - ' + uuid)
-        let workCenters = await Vue.prototype.$idb.get('workCenters',new Vue.prototype.$idb.Store('WorkCenters', 'WorkCenters'))
-        if(!workCenters) {
-          workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
-          Vue.prototype.$idb.set('workCenters', workCenters, new Vue.prototype.$idb.Store('WorkCenters', 'WorkCenters'))
-        }
+        var workCenters = await api.getWorkCentersFromGql(uuid, undefined, fetchPolicy)
+
         commit('setWorkCentersForWorker', workCenters)
           var setWorkCenterForWorker = async (properties) => {
             var fixationForWorker = await dispatch('getFixationWorkCenterForWorker', { workerCode: properties.workerCode, fetchPolicy: 'network-only' })

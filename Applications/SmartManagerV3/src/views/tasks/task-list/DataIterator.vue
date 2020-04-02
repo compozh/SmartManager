@@ -2,7 +2,8 @@
   <v-data-iterator :items="tasks"
                    items-per-page.sync="itemsPerPage"
                    :page="page"
-                   :search="search">
+                   :search="search"
+                   class="mb-12">
 
     <template v-slot:default="props">
       <v-row>
@@ -32,7 +33,7 @@
                   <fa-icon v-if="task.caseId" class="ml-2 blue-grey--text" :icon="['fal', 'suitcase']"/>
                   <fa-icon v-if="task.hasCom" class="ml-2" :icon="['fal', 'comment-alt-lines']"/>
                   <fa-icon v-if="task.hasOrig" class="ml-2 brown--text" :icon="['fal', 'paperclip']"/>
-                  <fa-icon v-if="task.isFavorite" class="ml-2" :icon="['fal', 'star']"/>
+                  <fa-icon v-if="task.isFavorite" class="ml-2 blue--text text--lighten-2" :icon="['fal', 'star']"/>
                   <fa-icon v-if="task.isGenerated" class="ml-2 " :icon="['fal', 'layer-plus']"/>
                   <fa-icon v-if="task.isMy" class="ml-2 orange--text" :icon="['fal', 'portrait']"/>
                   <fa-icon v-if="task.myControl" class="ml-2 indigo--text" :icon="['fal', 'eye']"/>
