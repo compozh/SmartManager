@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-if="show" v-model="show" width="80%" ref="dialog" content-class="selection-assistant">
     <v-card class="selection-assistant-card">
-      <v-card-title class="py-2">
+      <v-card-title class="py-2 assistant-title">
         <v-col class="title py-2">{{title}}</v-col>
         <v-text-field
           v-model="search"
@@ -179,6 +179,9 @@ export default {
 <style lang="scss">
 .selection-assistant{
     overflow: inherit;
+    .assistant-title {
+      background-color: rgba(226, 223, 223, 0.658);
+    }
     .title {
       text-align: left;
     }
