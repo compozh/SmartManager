@@ -1,49 +1,46 @@
 <template>
-  <div class="ma-8">
+  <div class="d-flex flex-column mb-10">
     <div v-for="(comment, index) in comments"
-         class="msg-grp-container"
          :key="index">
       <!-- If previouse msg is older than current time -->
       <template v-if="comments[index - 1]">
-        <v-divider v-if="!isSameDay(comment.date, comments[index - 1].date)">
-          <span>{{ toDate(comment.date) }}</span>
-        </v-divider>
-        <div class="spacer mt-8"
-             v-if="!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)">
+        <div v-if="!isSameDay(comment.date, comments[index - 1].date)"
+             class="d-flex align-center mt-5">
+          <v-divider class="mx-3"/>
+          <span class="py-1 px-3 white caption elevation-3">{{ toDate(comment.date) }}</span>
+          <v-divider class="mx-3"/>
         </div>
+        <div v-if="!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)" class="mt-5"></div>
       </template>
 
-      <div :class="['flex', currentUserIsSender(comment.userId) ? 'flex-row-reverse' : 'items-start']">
+      <div :class="['d-flex', 'align-center', { 'flex-row-reverse': currentUserIsSender(comment.userId) }]">
         <template v-if="comments[index - 1]">
           <template v-if="(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)
                            || !isSameDay(comment.date, comments[index - 1].date))">
-            <v-avatar size="40px"
-              class="border-2 shadow border-solid border-white m-0 flex-shrink-0"
-              :class="currentUserIsSender(comment.userId) ? 'sm:ml-5 ml-3' : 'sm:mr-5 mr-3'"
-              :src="comment.userPhoto"/>
+            <v-avatar class="mx-4" color="grey lighten-1 elevation-3" size="40px"
+                      :class="currentUserIsSender(comment.userId) ? 'ml-4' : 'mr-4'">
+              <fa-icon v-if="!comment.userPhoto" :icon="['fal', 'user']" inverse/>
+              <v-img v-else :src="comment.userPhoto"/>
+            </v-avatar>
           </template>
         </template>
 
         <template v-if="index === 0">
-          <vs-avatar
-            size="40px" class="border-2 shadow border-solid border-white m-0 flex-shrink-0"
-            :class="currentUserIsSender(comment.userId) ? 'sm:ml-5 ml-3' : 'sm:mr-5 mr-3'"
-            :src="comment.userPhoto"
-          ></vs-avatar>
+          <v-avatar class="mx-4 grey lighten-1 elevation-3" size="40px">
+            <fa-icon v-if="!comment.userPhoto" :icon="['fal', 'user']" inverse/>
+            <v-img v-else :src="comment.userPhoto"/>
+          </v-avatar>
         </template>
 
         <template v-if="comments[index - 1]">
-          <div
-            class="mr-16"
-            v-if="!(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId) || !isSameDay(comment.date, comments[index - 1].date))"
-          ></div>
+          <div v-if="!(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)
+                       || !isSameDay(comment.date, comments[index - 1].date))"
+               class="mx-9"></div>
         </template>
 
-        <div
-          class="msg break-words relative shadow-md rounded py-3 px-4 mb-2 rounded-lg max-w-sm"
-          :class="currentUserIsSender(comment.userId) ? 'bg-primary-gradient text-white' : 'border border-solid border-grey-light bg-white'"
-        >
-          <span>{{ comment.text }}</span>
+        <div class="msg mt-1 px-2 py-1 d-flex align-center elevation-3"
+             :class="{ 'self-msg': currentUserIsSender(comment.userId) }">
+          <span class="white--text">{{ comment.text }}</span>
         </div>
       </div>
     </div>
@@ -93,3 +90,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  .msg {
+    max-width: 70%;
+    border-radius: 5px;
+    background: linear-gradient(to right, rgba(130,130,130,1) 0%, rgba(189,189,189,1) 100%);
+  }
+
+  .self-msg {
+    align-self: flex-end;
+    background: linear-gradient(to right, rgba(95,129,255,1) 0%, rgba(63,86,171,1) 100%);
+  }
+
+</style>
