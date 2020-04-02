@@ -69,13 +69,22 @@ export const folders = {
 
 export const tasks = {
   computed: {
+    tasks () {
+      return this.$store.getters.tasks
+    },
     task () {
       const id = +this.$route.params.taskId
       const task = this.$store.state.tasks.taskDetails[id]
       return task || {}
     },
-    tasks () {
-      return this.$store.getters.tasks
+    type () {
+      if (this.task.__typename === 'Case') {
+        return 'CASE'
+      }
+      if (this.task.keyValue) {
+        return 'DOCUMENT'
+      }
+      return 'TASK'
     }
   },
   methods: {
