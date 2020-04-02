@@ -157,6 +157,9 @@ export default {
       if (item.name.toLowerCase().includes(this.search.toLowerCase())) {
         return true;
       }
+      if (item.formCode.toLowerCase().includes(this.search.toLowerCase())) {
+        return true;
+      }
       for (var i = 0; i < item.categories.length; i++) {
         var category = item.categories[i];
         if (category.name.toLowerCase().includes(this.search.toLowerCase())) {
