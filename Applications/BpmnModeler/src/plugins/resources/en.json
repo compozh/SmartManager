@@ -144,7 +144,8 @@
 		"NewVersion": "New version",
 		"InsertTextHere": "Insert text here ...",
 		"AccessObject": "Object",
-		"NoCategory": "Without category"
+		"NoCategory": "Without category",
+		"FormCode": "Form сode"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",

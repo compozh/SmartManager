@@ -147,7 +147,8 @@
 		"NewVersion": "Нова версія",
 		"InsertTextHere": "Введіть текст сюди ...",
 		"AccessObject": "Об'єкт",
-		"NoCategory": "Без категорії"
+		"NoCategory": "Без категорії",
+		"FormCode": "Код форми"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

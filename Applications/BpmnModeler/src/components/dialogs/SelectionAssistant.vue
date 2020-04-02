@@ -6,11 +6,10 @@
         <v-text-field
           v-model="search"
           class="search-input"
-          label="Search"
+          :label="this.$t('bpmn.labels.Search')"
           @keyup.enter="filterItems"
           @click:clear="clearSearch"
           clearable
-          outlined
         ></v-text-field>
         <v-btn icon @click="closeAssistant" class="ml-auto">
           <v-icon size="20">mdi-close</v-icon>
@@ -31,6 +30,7 @@
                 >
                   <v-card class='item-card'>
                     <v-card-title v-text="item.name" style="word-break: break-word;"></v-card-title>
+                    <span v-if="item.formCode" class="form-code">{{ $t('bpmn.labels.FormCode') + ': ' + item.formCode}}</span>
                     <v-card-text v-if="item.categories && item.categories.length">
                       <v-chip
                         v-for="category in item.categories"
@@ -48,7 +48,7 @@
                     </v-card-text>
                     <v-card-actions class="item-card-actions">
                       <v-btn text @click="select(item)">{{ $t('bpmn.buttons.Select') }}</v-btn>
-                      <v-btn text @click="showOverview(item)">{{ $t('bpmn.buttons.Overview')}}</v-btn>
+                      <v-btn text v-if="item.formCode" @click="showOverview(item)">{{ $t('bpmn.buttons.Overview')}}</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-col>
@@ -197,10 +197,6 @@ export default {
       width: 220px;
       justify-content: start;
     }
-
-    .assistant-category {
-      height: 100% !important;
-    }
     .category-icon {
       margin: 0 5px !important;
     }
@@ -217,7 +213,12 @@ export default {
       bottom: 0px;
       width: 100%;
     }
-
+    .form-code {
+      margin: 0px 17px;
+      padding: 5px;
+      background-color: #8080801f;
+      border: 1px solid #8080802e;
+    }
     .category-item {
       height: 80vh;
       overflow-y: auto;
