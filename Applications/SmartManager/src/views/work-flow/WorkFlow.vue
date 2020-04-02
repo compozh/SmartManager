@@ -24,9 +24,9 @@
                     </span>
 
                     <formio-form-component class="formio mt-4"
-                            ref="form"
-                            :formCode="form.unformio"
-                            :formDefinition="form"/>
+                                           ref="form"
+                                           :formCode="formCode"
+                                           :formDefinition="formDefinition"/>
 
                     <no-data v-if="!this.formDefinition">{{ $t('workflow.bpSelectLabel') }}</no-data>
 
@@ -66,7 +66,8 @@ export default {
     bpListLoading: false,
     businessProcesses: [],
     businessProcess: null,
-    formDefinition: null,
+    formCode: '',
+    formDefinition: {},
     options: {noAlerts: true},
     submission: {},
     settings: {
@@ -75,12 +76,6 @@ export default {
     },
   }),
   computed: {
-    form() {
-      if (this.formDefinition) {
-        return JSON.parse(this.formDefinition)
-      }
-      return {}
-    },
     userId() {
       return this.$store.getters['auth/userId']
     }
@@ -103,7 +98,15 @@ export default {
       const result = await this.$store.dispatch(
         'sm/getFormDefinition', bp.procDefId
       )
-      this.formDefinition = result || null
+      if (result && result.formKey) {
+        this.formCode = result.formKey
+        this.formDefinition = await this.$store.dispatch(
+          'formio/getForm', {
+            formCode: result.formKey,
+            deviceSizeType: this.$store.state.breakpoint
+          }
+        )
+      }
     },
     getVariables(data) {
       const variables = []
@@ -130,9 +133,24 @@ export default {
       })
     },
     async onSubmit() {
-      const form = this.$refs.form.$refs.formioComponent.formio
+      const form = this.$refs.form
       try {
         const result = await form.submit()
+        if (result) {
+          if (result.success) {
+            this.$vs.notify({
+              title: 'Task form',
+              text: result.successMessage || 'Form submit successful',
+              color: 'success'
+            })
+          } else {
+            this.$vs.notify({
+              title: 'Task form',
+              text: result.errorMessage || 'Form submit fail',
+              color: 'error'
+            })
+          }
+        }
         await this.startBusinessProcess(result.data)
       } catch (errors) {
         if (errors.length) {

@@ -24,7 +24,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@it-enterprise/jwtauthentication": "^2.0.2",
     "@it-enterprise/common": "^1.0.1",
-    "@it-enterprise/formio": "^1.1.6",
+    "@it-enterprise/formio": "^1.1.20",
     "@it-enterprise/graphql": "^1.0.7",
     "@it-enterprise/localization": "^1.0.10",
     "apollo-cache-inmemory": "^1.6.5",

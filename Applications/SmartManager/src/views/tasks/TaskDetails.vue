@@ -70,6 +70,8 @@
                                    :formDefinition="form"
                                    :submission="submission"/>
           </div>
+
+          <vs-button @click="onChangeStatus">Submit</vs-button>
           <!-- TASK ATTACHMENTS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
                         d-theme-border-grey-light border-solid flex">
@@ -313,18 +315,35 @@ export default {
       iFrameBody.style.fontFamily = 'Helvetica, sans-serif'
     },
     // обработка смены статуса задачи
-    async onChangeStatus(data) {
+    async onChangeStatus() {
       if (this.$refs.form) {
-        const form = this.$refs.form.$refs.formioComponent.formio
+        const form = this.$refs.form
+        const taskId = this.task.id || +this.$route.params.taskId
         try {
-          const result = await form.submit()
-          const success = await this.$store.dispatch('sm/changeStatus', {
-            ...data,
-            CompleteParams: JSON.stringify(result.data)
-          })
-          if (data.status === '+' && success) {
-            await this.$router.push('/')
+          const result = await form.submit({taskId})
+          if (result) {
+            if (result.success) {
+              this.$vs.notify({
+                title: 'Task form',
+                text: result.successMessage || 'Form submit successful',
+                color: 'success'
+              })
+            } else {
+              this.$vs.notify({
+                title: 'Task form',
+                text: result.errorMessage || 'Form submit fail',
+                color: 'error'
+              })
+            }
           }
+
+          // const success = await this.$store.dispatch('sm/changeStatus', {
+          //   ...data,
+          //   CompleteParams: JSON.stringify(result.data)
+          // })
+          // if (data.status === '+' && success) {
+          //   await this.$router.push('/')
+          // }
         } catch (errors) {
           if (errors.length) {
             errors.forEach(e => {
