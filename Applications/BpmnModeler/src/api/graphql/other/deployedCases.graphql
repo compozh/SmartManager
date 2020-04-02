@@ -5,7 +5,8 @@
       caseDefId,
       caseDefKey,
       caseDefVer,
-      caseName
+      caseName,
+      diagramId
     }
   }
 }
