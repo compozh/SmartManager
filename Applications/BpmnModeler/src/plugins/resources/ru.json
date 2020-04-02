@@ -142,7 +142,8 @@
 		"EnterVersionName": "Введите название версии",
 		"NewVersion": "Новая версия",
 		"InsertTextHere": "Введите текст сюда ...",
-		"AccessObject": "Объект"
+		"AccessObject": "Объект",
+		"NoCategory": "Без категории"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

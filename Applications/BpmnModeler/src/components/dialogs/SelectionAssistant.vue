@@ -8,6 +8,8 @@
           class="search-input"
           label="Search"
           @keyup.enter="filterItems"
+          @click:clear="clearSearch"
+          clearable
           outlined
         ></v-text-field>
         <v-btn icon @click="closeAssistant" class="ml-auto">
@@ -17,6 +19,7 @@
       <v-divider></v-divider>
         <v-tabs vertical hide-slider active-class="assistant-category-active">
           <v-tab v-for="category in categories" :key="category.title" class="assistant-category">
+            <v-icon class="category-icon">{{ 'mdi-' + category.icon }}</v-icon>
             {{category.title}}
           </v-tab>
           <v-tab-item class="category-item" v-for="category in categories" :key="category.title">
@@ -28,8 +31,20 @@
                 >
                   <v-card class='item-card'>
                     <v-card-title v-text="item.name" style="word-break: break-word;"></v-card-title>
-                    <v-card-text v-if="item.type">
-                      Category: {{item.type}}
+                    <v-card-text v-if="item.categories && item.categories.length">
+                      <v-chip
+                        v-for="category in item.categories"
+                        :key="category.id"
+                        class="ma-2"
+                        color="primary"
+                        text-color="white"
+                        @click="chipClick(category)"
+                      >
+                        <v-avatar left>
+                          <v-icon>{{ 'mdi-' + (category.icon || 'cogs') }}</v-icon>
+                        </v-avatar>
+                        {{ category.name }}
+                      </v-chip>
                     </v-card-text>
                     <v-card-actions class="item-card-actions">
                       <v-btn text @click="select(item)">{{ $t('bpmn.buttons.Select') }}</v-btn>
@@ -67,32 +82,36 @@ export default {
   },
   methods: {
     onShowSelectionAssistant(items, title, callback) {
+      var defaultTitle = this.$t('bpmn.labels.NoCategory').replace(' ', '');
       this.categories = {};
       this.callback = callback;
       this.title = title;
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        if (i <= 10) {
-          item.type = 'test' + i
-        }
-        if (!item.type) {
+        if (!item.categories || !item.categories.length) {
           if (!this.categories['default']) {
             this.categories['default'] = {
-              title: 'default',
+              title: this.$t('bpmn.labels.NoCategory'),
+              icon: 'cogs',
               items: [item]
             };
           } else {
             this.categories.default.items.push(item);
           }
         } else {
-          if (!this.categories[item.type]) {
-            this.categories[item.type] = {
-              title: item.type,
-              items: [item]
-            };
-          } else {
-            this.categories[item.type].items.push(item);
+          for (var j = 0; j <  item.categories.length; j++) {
+            var category = item.categories[j];
+            if (!this.categories[category.name]) {
+              this.categories[category.name] = {
+                title: category.name,
+                icon: category.icon || 'cogs',
+                items: [item]
+              };
+            } else {
+              this.categories[category.name].items.push(item);
+            }
           }
+
         }
       }
       this.originalData = this.categories;
@@ -109,18 +128,22 @@ export default {
       this.show = false;
     },
     showOverview(item) {
-      if (!item.unformio) {
+      if (!item.formCode) {
         return;
       }
       this.show = false;
-      eventBus.$emit(events.formio.showFormOverview, item.unformio);
+      eventBus.$emit(events.formio.showFormOverview, item.formCode);
     },
     filterItems() {
+      if (!this.search) {
+        this.categories = this.originalData;
+        return;
+      }
       var keys =  Object.keys(this.originalData),
         filteredCategories = {};
       for (var i = 0; i < keys.length; i++) {
         var category = this.originalData[keys[i]],
-          newItems = category.items.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()) || item.type.toLowerCase().includes(this.search.toLowerCase()));
+          newItems = category.items.filter(this.filterFn);
         if (newItems.length) {
           filteredCategories[keys[i]] = {
             title: keys[i],
@@ -129,6 +152,26 @@ export default {
         }
       }
       this.categories = filteredCategories;
+    },
+    filterFn (item) {
+      if (item.name.toLowerCase().includes(this.search.toLowerCase())) {
+        return true;
+      }
+      for (var i = 0; i < item.categories.length; i++) {
+        var category = item.categories[i];
+        if (category.name.toLowerCase().includes(this.search.toLowerCase())) {
+          return true;
+        }
+      }
+      return false;
+    },
+    chipClick(category) {
+      this.search = category.name;
+      this.filterItems();
+    },
+    clearSearch() {
+      this.search = '';
+      this.filterItems();
     }
   }
 };
@@ -151,11 +194,15 @@ export default {
       border-right: 1px solid #00000014;
     }
     .assistant-category {
-      width: 200px;
+      width: 220px;
+      justify-content: start;
     }
 
     .assistant-category {
       height: 100% !important;
+    }
+    .category-icon {
+      margin: 0 5px !important;
     }
     .assistant-category-active {
       box-shadow: inset 0 0 3px 0px #0000006b;
