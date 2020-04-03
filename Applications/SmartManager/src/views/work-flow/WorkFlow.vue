@@ -23,12 +23,16 @@
                     >{{ $t('validate.required') }}
                     </span>
 
-                    <formio-form-component class="formio mt-4"
-                                           ref="form"
-                                           :formCode="formCode"
-                                           :formDefinition="formDefinition"/>
+                    <div v-if="Object.keys(formDefinition).length" class="w-full">
+                      <h5 class="mt-4">{{ formDefinition.name }}</h5>
 
-                    <no-data v-if="!this.formDefinition">{{ $t('workflow.bpSelectLabel') }}</no-data>
+                      <formio-form-component class="formio mt-4"
+                                             ref="form"
+                                             :formCode="formCode"
+                                             :formDefinition="formDefinition"/>
+                    </div>
+
+                    <no-data v-else class="mt-5">{{ $t('workflow.bpSelectLabel') }}</no-data>
 
                     <div class="flex justify-end">
                       <vs-button class="mx-6"
@@ -39,7 +43,7 @@
                       </vs-button>
                       <vs-button type="gradient"
                                  @click="onSubmit"
-                                 :disabled="!this.formDefinition"
+                                 :disabled="!Object.keys(formDefinition).length"
                       >{{ $t('buttons.start') }}</vs-button>
                     </div>
                   </form>
@@ -151,7 +155,7 @@ export default {
             })
           }
         }
-        await this.startBusinessProcess(result.data)
+        await this.startBusinessProcess(result.submission)
       } catch (errors) {
         if (errors.length) {
           errors.forEach(e => {
