@@ -66,12 +66,9 @@
 
             <formio-form-component class="formio"
                                    ref="form"
-                                   :formCode="form.unformio"
-                                   :formDefinition="form"
-                                   :submission="submission"/>
+                                   :formCode="form.FORMCODE"
+                                   :formDefinition="formDefinition"/>
           </div>
-
-          <vs-button @click="onChangeStatus">Submit</vs-button>
           <!-- TASK ATTACHMENTS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
                         d-theme-border-grey-light border-solid flex">
@@ -213,24 +210,21 @@ export default {
       return task ? task : {}
     },
     externalParams() {
-      if (this.task.externalParams) {
-        return JSON.parse(this.task.externalParams) || {}
-      }
-      return {}
+      return this.task.externalParams
+        ? JSON.parse(this.task.externalParams)
+        : {}
+
     },
     form() {
-      if (this.externalParams.FORM) {
-        return JSON.parse(this.externalParams.FORM) || {}
-      }
-      return {}
+      return this.externalParams.FORM || {}
     },
-    submission() {
-      const vars = {}
-      if (this.externalParams.VARIABLES) {
-        this.externalParams.VARIABLES
-          .forEach(variable => vars[variable['Key']] = variable.Value.value)
+    formDefinition() {
+      return {
+        components: this.form.COMPONENTS,
+        submission: this.form.SUBMISSION,
+        display: this.form.DISPLAY,
+        settings: this.form.SETTINGS
       }
-      return vars
     },
     time() {
       return dateTime => dateTime
@@ -315,7 +309,7 @@ export default {
       iFrameBody.style.fontFamily = 'Helvetica, sans-serif'
     },
     // обработка смены статуса задачи
-    async onChangeStatus() {
+    async onChangeStatus(data) {
       if (this.$refs.form) {
         const form = this.$refs.form
         const taskId = this.task.id || +this.$route.params.taskId
@@ -337,13 +331,13 @@ export default {
             }
           }
 
-          // const success = await this.$store.dispatch('sm/changeStatus', {
-          //   ...data,
-          //   CompleteParams: JSON.stringify(result.data)
-          // })
-          // if (data.status === '+' && success) {
-          //   await this.$router.push('/')
-          // }
+          const success = await this.$store.dispatch('sm/changeStatus', {
+            ...data,
+            CompleteParams: JSON.stringify(result.data)
+          })
+          if (data.status === '+' && success) {
+            await this.$router.push('/')
+          }
         } catch (errors) {
           if (errors.length) {
             errors.forEach(e => {
