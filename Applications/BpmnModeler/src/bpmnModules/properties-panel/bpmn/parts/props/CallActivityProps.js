@@ -47,14 +47,14 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
     group.entries.push(entryFactory.selectBox({
       id: 'binding-type',
       label: translate('Definition Mode'),
-      model: 'wfa:definitionMode',
+      model: 'IT-Enterprise:definitionMode',
       items: [
         { name: translate(typeof bo.calledElement === 'string' ? 'Called Process' : 'Called Case'), value: 'identifier' },
         { name: translate('Variable'), value: 'variable' },
         { name: translate('Expression'), value: 'expression' }
       ],
       get: () => {
-        const value = bo.get('wfa:definitionMode');
+        const value = bo.get('IT-Enterprise:definitionMode');
         if (typeof value !== 'string' || value.trim() == '') {
           return 'identifier';
         }
@@ -65,7 +65,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
 
   if (typeof bo.calledElement === 'string') {
 
-    if (bo.get('wfa:definitionMode') === 'variable') {
+    if (bo.get('IT-Enterprise:definitionMode') === 'variable') {
       group.entries.push(entryFactory.textField({
         id: 'callable-process',
         label: translate('Variable'),
@@ -89,8 +89,8 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
                 'calledElement': undefined,
                 'camunda:calledElementBinding': undefined,
                 'camunda:calledElementVersion': undefined,
-                'wfa:definitionMode': undefined,
-                'wfa:versionDefinitionMode': undefined
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
               }),
               ...deleteBusinessKey(element)
             ];
@@ -104,7 +104,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
         },
         validate: required
       }));
-    } else if (bo.get('wfa:definitionMode') === 'expression') {
+    } else if (bo.get('IT-Enterprise:definitionMode') === 'expression') {
       group.entries.push(entryFactory.textArea({
         id: 'callable-process',
         label: translate('Expression'),
@@ -116,8 +116,8 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
                 'calledElement': undefined,
                 'camunda:calledElementBinding': undefined,
                 'camunda:calledElementVersion': undefined,
-                'wfa:definitionMode': undefined,
-                'wfa:versionDefinitionMode': undefined
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
               }),
               ...deleteBusinessKey(element)
             ];
@@ -146,8 +146,8 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
                 'calledElement': undefined,
                 'camunda:calledElementBinding': undefined,
                 'camunda:calledElementVersion': undefined,
-                'wfa:definitionMode': undefined,
-                'wfa:versionDefinitionMode': undefined
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
               }),
               ...deleteBusinessKey(element)
             ];
@@ -175,7 +175,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
     
   } else if (typeof bo.get('camunda:caseRef') === 'string') {
 
-    if (bo.get('wfa:definitionMode') === 'variable') {
+    if (bo.get('IT-Enterprise:definitionMode') === 'variable') {
       group.entries.push(entryFactory.textField({
         id: 'callable-case',
         label: translate('Variable'),
@@ -199,8 +199,8 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
                 'camunda:caseRef': undefined,
                 'camunda:caseBinding': undefined,
                 'camunda:caseVersion': undefined,
-                'wfa:definitionMode': undefined,
-                'wfa:versionDefinitionMode': undefined
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
               }),
               ...deleteBusinessKey(element)
             ];
@@ -214,7 +214,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
         },
         validate: required
       }));
-    } else if (bo.get('wfa:definitionMode') === 'expression') {
+    } else if (bo.get('IT-Enterprise:definitionMode') === 'expression') {
       group.entries.push(entryFactory.textArea({
         id: 'callable-case',
         label: translate('Expression'),
@@ -226,8 +226,8 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
                 'camunda:caseRef': undefined,
                 'camunda:caseBinding': undefined,
                 'camunda:caseVersion': undefined,
-                'wfa:definitionMode': undefined,
-                'wfa:versionDefinitionMode': undefined
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
               }),
               ...deleteBusinessKey(element)
             ];
@@ -256,8 +256,8 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
                 'camunda:caseRef': undefined,
                 'camunda:caseBinding': undefined,
                 'camunda:caseVersion': undefined,
-                'wfa:definitionMode': undefined,
-                'wfa:versionDefinitionMode': undefined
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
               }),
               ...deleteBusinessKey(element)
             ];
@@ -312,14 +312,14 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
       group.entries.push(entryFactory.selectBox({
         id: 'version-definition-mode',
         label: translate('Version Definition Mode'),
-        model: 'wfa:versionDefinitionMode',
+        model: 'IT-Enterprise:versionDefinitionMode',
         items: [
           { name: translate('Version'), value: 'identifier' },
           { name: translate('Variable'), value: 'variable' },
           { name: translate('Expression'), value: 'expression' }
         ],
         get: () => {
-          const value = bo.get('wfa:versionDefinitionMode');
+          const value = bo.get('IT-Enterprise:versionDefinitionMode');
           if (typeof value !== 'string' || value.trim() == '') {
             return 'identifier';
           }
@@ -327,7 +327,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
         }
       }));
 
-      if (bo.get('wfa:versionDefinitionMode') === 'variable') {
+      if (bo.get('IT-Enterprise:versionDefinitionMode') === 'variable') {
         group.entries.push(entryFactory.textField({
           id: 'version',
           label: translate('Variable'),
@@ -356,7 +356,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
           },
           validate: required
         }));
-      } else if (bo.get('wfa:versionDefinitionMode') === 'expression') {
+      } else if (bo.get('IT-Enterprise:versionDefinitionMode') === 'expression') {
         group.entries.push(entryFactory.textArea({
           id: 'version',
           label: translate('Expression'),
@@ -419,14 +419,14 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
       group.entries.push(entryFactory.selectBox({
         id: 'version-definition-model',
         label: translate('Version Definition Mode'),
-        model: 'wfa:versionDefinitionMode',
+        model: 'IT-Enterprise:versionDefinitionMode',
         items: [
           { name: translate('Version'), value: 'identifier' },
           { name: translate('Variable'), value: 'variable' },
           { name: translate('Expression'), value: 'expression' }
         ],
         get: () => {
-          const value = bo.get('wfa:versionDefinitionMode');
+          const value = bo.get('IT-Enterprise:versionDefinitionMode');
           if (typeof value !== 'string' || value.trim() == '') {
             return 'identifier';
           }
@@ -434,7 +434,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
         }
       }));
 
-      if (bo.get('wfa:versionDefinitionMode') === 'variable') {
+      if (bo.get('IT-Enterprise:versionDefinitionMode') === 'variable') {
         group.entries.push(entryFactory.textField({
           id: 'version',
           label: translate('Variable'),
@@ -463,7 +463,7 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
           },
           validate: required
         }));
-      } else if (bo.get('wfa:versionDefinitionMode') === 'expression') {
+      } else if (bo.get('IT-Enterprise:versionDefinitionMode') === 'expression') {
         group.entries.push(entryFactory.textArea({
           id: 'version',
           label: translate('Expression'),
@@ -512,8 +512,8 @@ const DEFAULT_PROPS = {
   'camunda:caseBinding': 'latest',
   'camunda:caseVersion': undefined,
   'camunda:caseTenantId': undefined,
-  'wfa:definitionMode': undefined,
-  'wfa:versionDefinitionMode': undefined
+  'IT-Enterprise:definitionMode': undefined,
+  'IT-Enterprise:versionDefinitionMode': undefined
 };
 
 function getCallableType(element) {
