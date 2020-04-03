@@ -216,7 +216,8 @@ export default {
 
     },
     form() {
-      return this.externalParams.FORM || {}
+      return this.externalParams && this.externalParams.FORM
+        ? this.externalParams.FORM : {}
     },
     formDefinition() {
       return {
