@@ -76,6 +76,24 @@
           "isReference": true
         }
       ]
+    },
+    {
+      "name": "CallActivity",
+      "extends": [ "bpmn:CallActivity" ],
+      "properties": [
+        {
+          "name": "definitionMode",
+          "isAttr": true,
+          "type": "String",
+          "default": "identifier"
+        },
+        {
+          "name": "versionDefinitionMode",
+          "isAttr": true,
+          "type": "String",
+          "default": "identifier"
+        }
+      ]
     }
   ],
   "enumerations": [

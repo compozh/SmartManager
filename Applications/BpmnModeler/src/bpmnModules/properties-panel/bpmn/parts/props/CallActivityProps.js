@@ -43,82 +43,245 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
     }
   }));
 
+  if (typeof bo.calledElement === 'string' || typeof bo.get('camunda:caseRef') === 'string') {
+    group.entries.push(entryFactory.selectBox({
+      id: 'binding-type',
+      label: translate('Definition Mode'),
+      model: 'IT-Enterprise:definitionMode',
+      items: [
+        { name: translate(typeof bo.calledElement === 'string' ? 'Called Process' : 'Called Case'), value: 'identifier' },
+        { name: translate('Variable'), value: 'variable' },
+        { name: translate('Expression'), value: 'expression' }
+      ],
+      get: () => {
+        const value = bo.get('IT-Enterprise:definitionMode');
+        if (typeof value !== 'string' || value.trim() == '') {
+          return 'identifier';
+        }
+        return value;
+      }
+    }));
+  }
+
   if (typeof bo.calledElement === 'string') {
-    group.entries.push(entryFactory.autocompleteBox({
-      id: 'callable-process',
-      label: translate('Called Process'),
-      model: 'calledElement',
-      loadItems: (async () => (await api.getDeployedProcesses())
-        .map(process => { return { id: process.procDefKey, name: process.procName }; })
-        .filter((process, index, self) => self.indexOf(process) === index))(),
-      set: (element, value) => {
-        if (!value) {
+
+    if (bo.get('IT-Enterprise:definitionMode') === 'variable') {
+      group.entries.push(entryFactory.textField({
+        id: 'callable-process',
+        label: translate('Variable'),
+        model: 'calledElement',
+        get: () => {
+          let value = bo.get('calledElement');
+          if (typeof value === 'string') {
+            if (value.startsWith('${')) {
+              value = value.substring(2);
+            }
+            if (value.endsWith('}')) {
+              value = value.substring(0, value.length - 1);
+            }
+          }
+          return value;
+        },
+        set: (element, value) => {
+          if (!value) {
+            return [
+              cmdHelper.updateBusinessObject(element, bo, {
+                'calledElement': undefined,
+                'camunda:calledElementBinding': undefined,
+                'camunda:calledElementVersion': undefined,
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
+              }),
+              ...deleteBusinessKey(element)
+            ];
+          }
           return [
             cmdHelper.updateBusinessObject(element, bo, {
-              'calledElement': undefined,
-              'camunda:calledElementBinding': undefined,
-              'camunda:calledElementVersion': undefined
+              'calledElement': '${' + value + '}'
             }),
-            ...deleteBusinessKey(element)
-          ];
-        }
-        return [
-          cmdHelper.updateBusinessObject(element, bo, {
-            'calledElement': value
-          }),
-          ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
-        ];
-      },
-      validate: required,
-      appendIcon: 'mdi-magnify',
-      append: () => {
-        eventBus.$emit(events.propertiesPanel.selectDeployedProcess, bo.calledElement, (procDefKey) => {
-          const cmd = concatCommands([
-            cmdHelper.updateBusinessObject(element, bo, { 'calledElement': procDefKey }),
             ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
-          ]);
-          commandStack.execute(cmd.cmd, cmd.context);
-        });
-      }
-    }));
+          ];
+        },
+        validate: required
+      }));
+    } else if (bo.get('IT-Enterprise:definitionMode') === 'expression') {
+      group.entries.push(entryFactory.textArea({
+        id: 'callable-process',
+        label: translate('Expression'),
+        model: 'calledElement',
+        set: (element, value) => {
+          if (!value) {
+            return [
+              cmdHelper.updateBusinessObject(element, bo, {
+                'calledElement': undefined,
+                'camunda:calledElementBinding': undefined,
+                'camunda:calledElementVersion': undefined,
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
+              }),
+              ...deleteBusinessKey(element)
+            ];
+          }
+          return [
+            cmdHelper.updateBusinessObject(element, bo, {
+              'calledElement': value
+            }),
+            ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
+          ];
+        },
+        validate: required
+      }));
+    } else {
+      group.entries.push(entryFactory.autocompleteBox({
+        id: 'callable-process',
+        label: translate('Called Process'),
+        model: 'calledElement',
+        loadItems: (async () => (await api.getDeployedProcesses())
+          .map(process => { return { id: process.procDefKey, name: process.procName }; })
+          .filter((process, index, self) => self.indexOf(process) === index))(),
+        set: (element, value) => {
+          if (!value) {
+            return [
+              cmdHelper.updateBusinessObject(element, bo, {
+                'calledElement': undefined,
+                'camunda:calledElementBinding': undefined,
+                'camunda:calledElementVersion': undefined,
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
+              }),
+              ...deleteBusinessKey(element)
+            ];
+          }
+          return [
+            cmdHelper.updateBusinessObject(element, bo, {
+              'calledElement': value
+            }),
+            ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
+          ];
+        },
+        validate: required,
+        appendIcon: 'mdi-magnify',
+        append: () => {
+          eventBus.$emit(events.propertiesPanel.selectDeployedProcess, bo.calledElement, (procDefKey) => {
+            const cmd = concatCommands([
+              cmdHelper.updateBusinessObject(element, bo, { 'calledElement': procDefKey }),
+              ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
+            ]);
+            commandStack.execute(cmd.cmd, cmd.context);
+          });
+        }
+      }));
+    }
+    
   } else if (typeof bo.get('camunda:caseRef') === 'string') {
-    group.entries.push(entryFactory.autocompleteBox({
-      id: 'callable-case',
-      label: translate('Called Case'),
-      model: 'calledElement',
-      loadItems: (async () => (await api.getDeployedCases())
-        .map(element => { return { id: element.caseDefKey, name: element.caseName }; })
-        .filter((element, index, self) => self.indexOf(element) === index))(),
-      set: (element, value) => {
-        if (!value) {
+
+    if (bo.get('IT-Enterprise:definitionMode') === 'variable') {
+      group.entries.push(entryFactory.textField({
+        id: 'callable-case',
+        label: translate('Variable'),
+        model: 'camunda:caseRef',
+        get: () => {
+          let value = bo.get('camunda:caseRef');
+          if (typeof value === 'string') {
+            if (value.startsWith('${')) {
+              value = value.substring(2);
+            }
+            if (value.endsWith('}')) {
+              value = value.substring(0, value.length - 1);
+            }
+          }
+          return value;
+        },
+        set: (element, value) => {
+          if (!value) {
+            return [
+              cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:caseRef': undefined,
+                'camunda:caseBinding': undefined,
+                'camunda:caseVersion': undefined,
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
+              }),
+              ...deleteBusinessKey(element)
+            ];
+          }
           return [
             cmdHelper.updateBusinessObject(element, bo, {
-              'camunda:caseRef': undefined,
-              'camunda:caseBinding': undefined,
-              'camunda:caseVersion': undefined
+              'calledElement': '${' + value + '}'
             }),
-            ...deleteBusinessKey(element)
-          ];
-        }
-        return [
-          cmdHelper.updateBusinessObject(element, bo, {
-            'camunda:caseRef': value
-          }),
-          ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
-        ];
-      },
-      validate: required,
-      appendIcon: 'mdi-magnify',
-      append: () => {
-        eventBus.$emit(events.propertiesPanel.selectDeployedCase, bo['camunda:caseRef'], (caseDefKey) => {
-          const cmd = concatCommands([
-            cmdHelper.updateBusinessObject(element, bo, { 'camunda:caseRef': caseDefKey }),
             ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
-          ]);
-          commandStack.execute(cmd.cmd, cmd.context);
-        });
-      }
-    }));
+          ];
+        },
+        validate: required
+      }));
+    } else if (bo.get('IT-Enterprise:definitionMode') === 'expression') {
+      group.entries.push(entryFactory.textArea({
+        id: 'callable-case',
+        label: translate('Expression'),
+        model: 'camunda:caseRef',
+        set: (element, value) => {
+          if (!value) {
+            return [
+              cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:caseRef': undefined,
+                'camunda:caseBinding': undefined,
+                'camunda:caseVersion': undefined,
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
+              }),
+              ...deleteBusinessKey(element)
+            ];
+          }
+          return [
+            cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:caseRef': value
+            }),
+            ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
+          ];
+        },
+        validate: required
+      }));
+    } else {
+      group.entries.push(entryFactory.autocompleteBox({
+        id: 'callable-case',
+        label: translate('Called Case'),
+        model: 'camunda:caseRef',
+        loadItems: (async () => (await api.getDeployedCases())
+          .map(element => { return { id: element.caseDefKey, name: element.caseName }; })
+          .filter((element, index, self) => self.indexOf(element) === index))(),
+        set: (element, value) => {
+          if (!value) {
+            return [
+              cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:caseRef': undefined,
+                'camunda:caseBinding': undefined,
+                'camunda:caseVersion': undefined,
+                'IT-Enterprise:definitionMode': undefined,
+                'IT-Enterprise:versionDefinitionMode': undefined
+              }),
+              ...deleteBusinessKey(element)
+            ];
+          }
+          return [
+            cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:caseRef': value
+            }),
+            ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
+          ];
+        },
+        validate: required,
+        appendIcon: 'mdi-magnify',
+        append: () => {
+          eventBus.$emit(events.propertiesPanel.selectDeployedCase, bo['camunda:caseRef'], (caseDefKey) => {
+            const cmd = concatCommands([
+              cmdHelper.updateBusinessObject(element, bo, { 'camunda:caseRef': caseDefKey }),
+              ...setBusinessKey(element, '#{execution.processBusinessKey}', bpmnFactory)
+            ]);
+            commandStack.execute(cmd.cmd, cmd.context);
+          });
+        }
+      }));
+    }
   }
 
   if (typeof bo.calledElement === 'string' && bo.calledElement !== '') {
@@ -145,21 +308,88 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
 
     const binding = bo.get('camunda:calledElementBinding');
     if (binding === 'version') {
-      group.entries.push(entryFactory.autocompleteBox({
-        id: 'version',
-        label: translate('Version'),
-        model: 'camunda:calledElementVersion',
-        loadItems: (async () => (await api.getDeployedProcesses())
-          .filter(process => process.procDefKey === bo.calledElement)
-          .map(process => { return { id: process.procDefVer.toString(), name: process.procDefVer }; }))(),
-        set: (element, value) => {
-          if (!value) {
-            return cmdHelper.updateBusinessObject(element, bo, { 'camunda:calledElementVersion': undefined });
+
+      group.entries.push(entryFactory.selectBox({
+        id: 'version-definition-mode',
+        label: translate('Version Definition Mode'),
+        model: 'IT-Enterprise:versionDefinitionMode',
+        items: [
+          { name: translate('Version'), value: 'identifier' },
+          { name: translate('Variable'), value: 'variable' },
+          { name: translate('Expression'), value: 'expression' }
+        ],
+        get: () => {
+          const value = bo.get('IT-Enterprise:versionDefinitionMode');
+          if (typeof value !== 'string' || value.trim() == '') {
+            return 'identifier';
           }
-          return cmdHelper.updateBusinessObject(element, bo, { 'camunda:calledElementVersion': value });
-        },
-        validate: required
+          return value;
+        }
       }));
+
+      if (bo.get('IT-Enterprise:versionDefinitionMode') === 'variable') {
+        group.entries.push(entryFactory.textField({
+          id: 'version',
+          label: translate('Variable'),
+          model: 'camunda:calledElementVersion',
+          get: () => {
+            let value = bo.get('camunda:calledElementVersion');
+            if (typeof value === 'string') {
+              if (value.startsWith('${')) {
+                value = value.substring(2);
+              }
+              if (value.endsWith('}')) {
+                value = value.substring(0, value.length - 1);
+              }
+            }
+            return value;
+          },
+          set: (element, value) => {
+            if (!value) {
+              return cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:calledElementVersion': undefined
+              });
+            }
+            return cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:calledElementVersion': '${' + value + '}'
+            });
+          },
+          validate: required
+        }));
+      } else if (bo.get('IT-Enterprise:versionDefinitionMode') === 'expression') {
+        group.entries.push(entryFactory.textArea({
+          id: 'version',
+          label: translate('Expression'),
+          model: 'camunda:calledElementVersion',
+          set: (element, value) => {
+            if (!value) {
+              return cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:calledElementVersion': undefined
+              });
+            }
+            return cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:calledElementVersion': value
+            });
+          },
+          validate: required
+        }));
+      } else {
+        group.entries.push(entryFactory.autocompleteBox({
+          id: 'version',
+          label: translate('Version'),
+          model: 'camunda:calledElementVersion',
+          loadItems: (async () => (await api.getDeployedProcesses())
+            .filter(process => process.procDefKey === bo.calledElement)
+            .map(process => { return { id: process.procDefVer.toString(), name: process.procDefVer }; }))(),
+          set: (element, value) => {
+            if (!value) {
+              return cmdHelper.updateBusinessObject(element, bo, { 'camunda:calledElementVersion': undefined });
+            }
+            return cmdHelper.updateBusinessObject(element, bo, { 'camunda:calledElementVersion': value });
+          },
+          validate: required
+        }));
+      }
     }
   } else if (typeof bo.get('camunda:caseRef') === 'string' && bo.get('camunda:caseRef') !== '') {
     group.entries.push(entryFactory.selectBox({
@@ -185,21 +415,88 @@ export default function addCallActivityProps(group, element, entryFactory, bpmnF
 
     const binding = bo.get('camunda:caseBinding');
     if (binding === 'version') {
-      group.entries.push(entryFactory.autocompleteBox({
-        id: 'version',
-        label: translate('Version'),
-        model: 'camunda:caseVersion',
-        loadItems: (async () => (await api.getDeployedCases())
-          .filter(element => element.caseDefKey === bo['camunda:caseRef'])
-          .map(element => { return { id: element.caseDefVer.toString(), name: element.caseDefVer }; }))(),
-        set: (element, value) => {
-          if (!value) {
-            return cmdHelper.updateBusinessObject(element, bo, { 'camunda:caseVersion': undefined });
+
+      group.entries.push(entryFactory.selectBox({
+        id: 'version-definition-model',
+        label: translate('Version Definition Mode'),
+        model: 'IT-Enterprise:versionDefinitionMode',
+        items: [
+          { name: translate('Version'), value: 'identifier' },
+          { name: translate('Variable'), value: 'variable' },
+          { name: translate('Expression'), value: 'expression' }
+        ],
+        get: () => {
+          const value = bo.get('IT-Enterprise:versionDefinitionMode');
+          if (typeof value !== 'string' || value.trim() == '') {
+            return 'identifier';
           }
-          return cmdHelper.updateBusinessObject(element, bo, { 'camunda:caseVersion': value });
-        },
-        validate: required
+          return value;
+        }
       }));
+
+      if (bo.get('IT-Enterprise:versionDefinitionMode') === 'variable') {
+        group.entries.push(entryFactory.textField({
+          id: 'version',
+          label: translate('Variable'),
+          model: 'camunda:caseVersion',
+          get: () => {
+            let value = bo.get('camunda:caseVersion');
+            if (typeof value === 'string') {
+              if (value.startsWith('${')) {
+                value = value.substring(2);
+              }
+              if (value.endsWith('}')) {
+                value = value.substring(0, value.length - 1);
+              }
+            }
+            return value;
+          },
+          set: (element, value) => {
+            if (!value) {
+              return cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:caseVersion': undefined
+              });
+            }
+            return cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:caseVersion': '${' + value + '}'
+            });
+          },
+          validate: required
+        }));
+      } else if (bo.get('IT-Enterprise:versionDefinitionMode') === 'expression') {
+        group.entries.push(entryFactory.textArea({
+          id: 'version',
+          label: translate('Expression'),
+          model: 'camunda:caseVersion',
+          set: (element, value) => {
+            if (!value) {
+              return cmdHelper.updateBusinessObject(element, bo, {
+                'camunda:caseVersion': undefined
+              });
+            }
+            return cmdHelper.updateBusinessObject(element, bo, {
+              'camunda:caseVersion': value
+            });
+          },
+          validate: required
+        }));
+      } else {
+        group.entries.push(entryFactory.autocompleteBox({
+          id: 'version',
+          label: translate('Version'),
+          model: 'camunda:caseVersion',
+          loadItems: (async () => (await api.getDeployedCases())
+            .filter(element => element.caseDefKey === bo['camunda:caseRef'])
+            .map(element => { return { id: element.caseDefVer.toString(), name: element.caseDefVer }; }))(),
+          set: (element, value) => {
+            if (!value) {
+              return cmdHelper.updateBusinessObject(element, bo, { 'camunda:caseVersion': undefined });
+            }
+            return cmdHelper.updateBusinessObject(element, bo, { 'camunda:caseVersion': value });
+          },
+          validate: required
+        }));
+      }
     }
   }
 }
@@ -214,7 +511,9 @@ const DEFAULT_PROPS = {
   'camunda:caseRef': undefined,
   'camunda:caseBinding': 'latest',
   'camunda:caseVersion': undefined,
-  'camunda:caseTenantId': undefined
+  'camunda:caseTenantId': undefined,
+  'IT-Enterprise:definitionMode': undefined,
+  'IT-Enterprise:versionDefinitionMode': undefined
 };
 
 function getCallableType(element) {
