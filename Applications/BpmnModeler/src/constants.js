@@ -75,6 +75,18 @@ export const events = {
 
     /**
      * Отобразить диалог выбора элемента из списка
+     * @event Modeler#showSelectionExplorer
+     * @param {string} title - Заголовок диалога
+     * @param {Object[]} items - элеиенты для выбора
+     * @param {string} items.id - код элемента
+     * @param {string} items.name - название элемента
+     * @param {Object} selectedItem - выбранный элемент
+     * @param {itemSelectedCallback} callback - коллбек, вызываемый при выборе элемента
+     */
+    showSelectionExplorer: 'modeler.show-selection-explorer',
+
+    /**
+     * Отобразить диалог выбора элемента из списка
      * @event Modeler#showSelectionAssistant
      * @param {string} title - Заголовок диалога
      * @param {Object[]} items - элеиенты для выбора

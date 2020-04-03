@@ -102,6 +102,7 @@ export default {
     async onPropertiesPanelSelectDeployedDecision(decDefKey, callback) {
       this.loading = true;
       var items = await this.$store.dispatch('bpmn/getDeployedDecisions');
+
       if (!items) {
         this.changeLoad();
         Notification.error(this.$t('bpmn.errors.ElementsNotLoaded'));
@@ -109,11 +110,10 @@ export default {
       }
       this.changeLoad();
       items = items
-        .map(decision => { return { id: decision.decDefKey, name: decision.decDefName }; })
+        .map(decision => { return { id: decision.decDefKey, name: decision.decDefName, diagramId: decision.diagramId }; })
         .filter((decision, index, self) => self.findIndex(p => p.id === decision.id) === index);
 
-      eventBus.$emit(events.modeler.showSelectionGrid,
-        this.$t('bpmn.labels.SelectDecisionTable'),
+      eventBus.$emit(events.modeler.showSelectionExplorer,
         items, items.find(item => item.id === decDefKey),
         (selectedItem) => callback(selectedItem.id));
     },
@@ -148,6 +148,7 @@ export default {
       if (Array.isArray(selectedBusinessObjects)) {
         items = items.filter(item => selectedBusinessObjects.indexOf(item.id) !== -1);
       }
+
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectBusinessObject'),
         items, items.find(item => item.id === boDefCode),
@@ -163,6 +164,7 @@ export default {
       }
       this.changeLoad();
       items = items.map(bo => { return { id: `${bo.boDefCode}.${bo.actionDefCode}`, name: bo.name }; });
+
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectBusinessObjectAction'),
         items, items.find(item => item.id === actDefCode),
@@ -178,6 +180,7 @@ export default {
       }
       this.changeLoad();
       items = items.map(bo => { return { id: `${bo.boDefCode}.${bo.accessDefCode}`, name: bo.name }; });
+
       eventBus.$emit(events.modeler.showSelectionGrid,
         this.$t('bpmn.labels.SelectBusinessObjectAccess'),
         items, items.find(item => item.id === accDefCode),
