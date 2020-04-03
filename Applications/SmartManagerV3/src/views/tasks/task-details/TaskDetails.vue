@@ -112,15 +112,15 @@
       <!-- RIGHT CONTENT AREA -->
       <SplitArea class="d-flex flex-column">
         <div class="side-header">
-          <v-tabs v-model="tab" grow>
+          <v-tabs v-model="tab" grow height="75px">
             <v-tab>Attachments</v-tab>
-            <v-tab>Comments</v-tab>
+            <v-tab>
+              Comments
+            </v-tab>
           </v-tabs>
         </div>
         <perfect-scrollbar class="pa-3">
-
           <comments></comments>
-
         </perfect-scrollbar>
       </SplitArea>
     </Split>

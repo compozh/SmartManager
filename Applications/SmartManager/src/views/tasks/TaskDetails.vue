@@ -66,9 +66,8 @@
 
             <formio-form-component class="formio"
                                    ref="form"
-                                   :formCode="form.unformio"
-                                   :formDefinition="form"
-                                   :submission="submission"/>
+                                   :formCode="form.FORMCODE"
+                                   :formDefinition="formDefinition"/>
           </div>
           <!-- TASK ATTACHMENTS -->
           <div class="vx-row border-b border-l-0 border-r-0 border-t-0
@@ -211,24 +210,22 @@ export default {
       return task ? task : {}
     },
     externalParams() {
-      if (this.task.externalParams) {
-        return JSON.parse(this.task.externalParams) || {}
-      }
-      return {}
+      return this.task.externalParams
+        ? JSON.parse(this.task.externalParams)
+        : {}
+
     },
     form() {
-      if (this.externalParams.FORM) {
-        return JSON.parse(this.externalParams.FORM) || {}
-      }
-      return {}
+      return this.externalParams && this.externalParams.FORM
+        ? this.externalParams.FORM : {}
     },
-    submission() {
-      const vars = {}
-      if (this.externalParams.VARIABLES) {
-        this.externalParams.VARIABLES
-          .forEach(variable => vars[variable['Key']] = variable.Value.value)
+    formDefinition() {
+      return {
+        components: this.form.COMPONENTS,
+        submission: this.form.SUBMISSION,
+        display: this.form.DISPLAY,
+        settings: this.form.SETTINGS
       }
-      return vars
     },
     time() {
       return dateTime => dateTime
@@ -315,9 +312,26 @@ export default {
     // обработка смены статуса задачи
     async onChangeStatus(data) {
       if (this.$refs.form) {
-        const form = this.$refs.form.$refs.formioComponent.formio
+        const form = this.$refs.form
+        const taskId = this.task.id || +this.$route.params.taskId
         try {
-          const result = await form.submit()
+          const result = await form.submit({taskId})
+          if (result) {
+            if (result.success) {
+              this.$vs.notify({
+                title: 'Task form',
+                text: result.successMessage || 'Form submit successful',
+                color: 'success'
+              })
+            } else {
+              this.$vs.notify({
+                title: 'Task form',
+                text: result.errorMessage || 'Form submit fail',
+                color: 'error'
+              })
+            }
+          }
+
           const success = await this.$store.dispatch('sm/changeStatus', {
             ...data,
             CompleteParams: JSON.stringify(result.data)
