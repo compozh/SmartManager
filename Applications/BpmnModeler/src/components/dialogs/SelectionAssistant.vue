@@ -16,7 +16,7 @@
         </v-btn>
       </v-card-title>
       <v-divider></v-divider>
-        <v-tabs vertical hide-slider active-class="assistant-category-active">
+        <v-tabs vertical hide-slider class="assistant-tabs" active-class="assistant-category-active">
           <v-tab v-for="category in categories" :key="category.title" class="assistant-category">
             <v-icon class="category-icon">{{ 'mdi-' + category.icon }}</v-icon>
             {{category.title}}
@@ -184,6 +184,9 @@ export default {
     overflow: inherit;
     .assistant-title {
       background-color: rgba(226, 223, 223, 0.658);
+    }
+    .assistant-tabs {
+      min-height: 80vh;
     }
     .title {
       text-align: left;
