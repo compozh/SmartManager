@@ -439,6 +439,9 @@
 		"Activity Type": "Тип активности",
 		"Called Case": "Кейс",
 		"Called Process": "Процесс",
+		"Variable": "Переменная",
+		"Definition Mode": "Режим определения",
+		"Version Definition Mode": "Режим определения версии",
 
 		"Data Object": "Объект данных",
 		"Business Object": "Бизнес-объект",
