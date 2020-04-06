@@ -1,5 +1,5 @@
 <template>
-    <div class="chat-bg d-flex flex-column justify-space-between fill-height">
+    <div class="chat-bg border-light d-flex flex-column justify-space-between fill-height">
       <perfect-scrollbar class="pa-3">
         <div v-if="comments.length">
           <comments-log :comments="comments"/>
@@ -73,13 +73,14 @@ export default {
 </script>
 
 <style scoped>
-
-  .chat-bg {
-    /*background: #f9f9f9;*/
-    background: url('../../assets/chat_bg.png');
-    box-shadow: inset 0 0 30px 0 #00000050;
+  /* TODO: output border-light class to common styles */
+  .border-light {
     border: 1px solid #e5e5e5;
     border-radius: 5px;
+  }
+
+  .chat-bg {
+    background: url('../../assets/chat_bg.png');
   }
 
   .msg-input {

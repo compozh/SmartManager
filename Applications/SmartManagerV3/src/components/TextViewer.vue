@@ -1,18 +1,12 @@
 <template>
-  <VuePerfectScrollbar class="p-4"
-                       style="background: #f5f5f5;"
-                       :settings="settings">
+  <div class="border-light pa-3 fill-height" style="background: #f9f9f9">
     <span>{{ sourceText }}</span>
-  </VuePerfectScrollbar>
+  </div>
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
-  components: {
-    VuePerfectScrollbar
-  },
   props: {
     url: String
   },
@@ -20,30 +14,30 @@ export default {
     sourceText: '',
     settings: {
       maxScrollbarLength: 60,
-      wheelSpeed: 0.50,
+      wheelSpeed: 0.50
     }
   }),
   watch: {
-    url(newVal, oldVal) {
+    url (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.getText()
       }
     }
   },
-  created() {
+  created () {
     this.getText()
   },
   methods: {
-    async getText() {
+    async getText () {
       try {
         const result = await fetch(this.url)
         this.sourceText = await result.text()
       } catch (e) {
-        this.$vs.notify({
-          title: 'Error read text',
-          text: e.message,
-          color: 'danger'
-        })
+        // this.$vs.notify({
+        //   title: 'Error read text',
+        //   text: e.message,
+        //   color: 'danger'
+        // })
       }
     }
   }
@@ -51,5 +45,11 @@ export default {
 </script>
 
 <style scoped>
+
+  /* TODO: output border-light class to common styles */
+  .border-light {
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+  }
 
 </style>
