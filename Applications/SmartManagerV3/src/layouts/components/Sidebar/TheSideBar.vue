@@ -17,12 +17,14 @@
                      :value="folder.Code">
 
           <v-list-item-icon class="mr-2 align-center">
-            <fa-icon :icon="['fal', 'folder-open']"
+            <fa-icon :icon="['fal', 'folder-open']" color="white"
                      v-if="folder.Code === activeFolderId"/>
             <fa-icon v-else :icon="['fal', 'folder']"/>
           </v-list-item-icon>
 
-        <v-list-item-title v-text="folder.Name"/>
+          <v-list-item-title v-text="folder.Name"
+                             :class="{ 'white--text': folder.Code === activeFolderId}"/>
+
       </v-list-item>
       </v-list-item-group>
     </v-list>
