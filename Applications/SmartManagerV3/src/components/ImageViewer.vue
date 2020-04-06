@@ -1,16 +1,14 @@
 <template>
-  <div class="d-flex flex-column flex-grow-1 justify-center
-           align-center fill-height overflow-hidden">
+  <div class="fill-height">
     <viewer :options="options"
             :images="[url]"
             @inited="init"
-            class="d-flex flex-column flex-grow-1 justify-center
-                   align-center fill-height viewer">
-      <template slot-scope="scope" class="test">
-        <img v-for="src in scope.images"
+            class="fill-height">
+      <template v-slot="{ images }">
+        <img v-for="src in images"
              :src="src"
              :key="src"
-             :class="{hidden: !options.background}">
+             :class="{'d-none': !options.background}">
       </template>
     </viewer>
   </div>
@@ -68,6 +66,7 @@ export default {
     .viewer-container {
       &.viewer-backdrop {
         background-color: #fff !important;
+        width: 100% !important;
       }
 
       &.viewer-fixed {
