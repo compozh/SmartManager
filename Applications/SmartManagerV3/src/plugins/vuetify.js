@@ -11,6 +11,13 @@ import uk from 'vuetify/es5/locale/uk'
 Vue.use(Vuetify)
 
 export default new Vuetify({
+  theme: {
+    themes: {
+      light: {
+        primary: '#5F81FF'
+      }
+    }
+  },
   lang: {
     locales: { en, ru, uk },
     current: localStorage.getItem('lang') || cookies.get('c') || 'en'
