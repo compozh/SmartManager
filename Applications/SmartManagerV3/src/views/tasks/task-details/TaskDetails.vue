@@ -93,41 +93,43 @@
           <div v-if="baseTask" class="my-5">
             <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
             <span>{{ $t('tasks.base').toUpperCase() }}</span>
-            <data-iterator :tasks="[baseTask]"/>
+            <data-iterator :tasks="[baseTask]" class="mt-3"/>
           </div>
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
             <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
             <span>PARENT TASKS</span>
-            <data-iterator :tasks="task.parentTasks"/>
+            <data-iterator :tasks="task.parentTasks" class="mt-3"/>
           </div>
           <!-- SUB TASKS-->
-          <div v-if="task.childTasks.length" class="my-5">
+          <div v-if="childTasks" class="my-5">
             <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
             <span>{{ $t('tasks.subTasks').toUpperCase() }}</span>
-            <data-iterator :tasks="task.childTasks"/>
+            <data-iterator :tasks="childTasks" class="mt-3"/>
           </div>
         </perfect-scrollbar>
       </SplitArea>
       <!-- RIGHT CONTENT AREA -->
       <SplitArea class="d-flex flex-column">
-        <div class="side-header">
-          <v-tabs v-model="tab" grow height="75px">
-            <v-tab>Attachments</v-tab>
-            <v-tab>
-              Comments
-            </v-tab>
-          </v-tabs>
-        </div>
-        <perfect-scrollbar class="pa-3">
-          <comments></comments>
-        </perfect-scrollbar>
+        <v-tabs v-model="tab" grow height="75px">
+          <v-tab>
+            <fa-icon :icon="['fal', 'paperclip']" class="mr-3" size="lg"/>
+            {{ $t('tabs.attachments') }}
+          </v-tab>
+          <v-tab>
+            <fa-icon :icon="['fal', 'comment-alt-dots']" class="mr-3" size="lg"/>
+            {{ $t('tabs.comments') }}
+          </v-tab>
+        </v-tabs>
+          <attachments v-if="tab === 0"></attachments>
+          <comments v-if="tab === 1"></comments>
       </SplitArea>
     </Split>
 </template>
 
 <script>
 import DataIterator from '@/views/tasks/task-list/DataIterator'
+import Attachments from '@/views/attachments/Attachments.vue'
 import Comments from '@/views/comments/Comments.vue'
 import { tasks } from '@/mixins/units'
 
@@ -136,10 +138,11 @@ export default {
   mixins: [tasks],
   components: {
     DataIterator,
+    Attachments,
     Comments
   },
   data: () => ({
-    tab: null,
+    tab: 1,
     iFrameHeight1: 250,
     iFrameHeight2: 250
   }),
@@ -161,6 +164,11 @@ export default {
     baseTask () {
       return this.task.parentTask && this.task.parentTask.id
         ? this.task.parentTask
+        : null
+    },
+    childTasks () {
+      return this.task.childTasks && this.task.childTasks.length
+        ? this.task.childTasks
         : null
     },
     taskType () {
@@ -215,10 +223,11 @@ export default {
 
 <style scoped>
 
- .border-light {
-   border: 1px solid #e5e5e5;
-   border-radius: 5px;
- }
+  /* TODO: output border-light class to common styles */
+  .border-light {
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+  }
 
  .side-header {
    display: flex;

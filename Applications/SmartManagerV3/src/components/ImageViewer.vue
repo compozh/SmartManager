@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-column flex-1 justify-center
-           align-center h-full overflow-hidden">
+  <div class="d-flex flex-column flex-grow-1 justify-center
+           align-center fill-height overflow-hidden">
     <viewer :options="options"
             :images="[url]"
             @inited="init"
-            class="flex flex-column flex-1 justify-center
-                   align-center h-full viewer">
+            class="d-flex flex-column flex-grow-1 justify-center
+                   align-center fill-height viewer">
       <template slot-scope="scope" class="test">
         <img v-for="src in scope.images"
              :src="src"
@@ -52,10 +52,10 @@ export default {
       keyboard: true,
       background: false,
       url: 'data-source'
-    },
+    }
   }),
   methods: {
-    init(viewer) {
+    init (viewer) {
       this.$viewer = viewer
     }
   }
