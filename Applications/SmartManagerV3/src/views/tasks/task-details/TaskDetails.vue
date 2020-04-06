@@ -28,14 +28,13 @@
             <div v-if="task.priority" class="deep-orange--text">
               <fa-icon :icon="['fal', 'exclamation-square']" class="mr-2"/>
               <span class="caption">{{ $t('icons.priority') }}</span>
-              <v-divider vertical class="mx-2"></v-divider>
             </div>
+            <v-divider v-if="task.priority" vertical class="mx-2"/>
             <div v-if="task.myControl" class="red--text text--darken-4">
               <fa-icon :icon="['fal', 'eye']" class="mr-2"/>
               <span class="caption">{{ $t('icons.control') }}</span>
             </div>
-            <v-spacer/>
-            <div>
+            <div class="ml-auto">
               <fa-icon :icon="['fal', 'print']" class="blue--text text--darken-4"/>
               <fa-icon :icon="['fal', 'history']" class="mx-3 green--text"/>
               <fa-icon :icon="['fal', 'expand-alt']" class="grey--text"/>
@@ -83,7 +82,10 @@
             <fa-icon :icon="['fal', 'paperclip']" class="mr-3" size="lg"/>
             <span>{{ $t('tabs.attachments').toUpperCase() }}</span>
             <div class="py-2">
-              <v-chip v-for="item in task.originals" :key="item.id" class="my-2 mr-2" @click="() => ({})">
+              <v-chip v-for="item in task.originals"
+                      :key="item.id"
+                      class="my-2 mr-2"
+                      @click="setActiveAttachment(item)">
                 <fa-icon :icon="['fal', 'file-alt']" class="mr-3"/>
                 <span>{{ item.fileName }}</span>
               </v-chip>
@@ -111,18 +113,19 @@
       </SplitArea>
       <!-- RIGHT CONTENT AREA -->
       <SplitArea class="d-flex flex-column">
-        <v-tabs v-model="tab" grow height="75px">
-          <v-tab>
-            <fa-icon :icon="['fal', 'paperclip']" class="mr-3" size="lg"/>
-            {{ $t('tabs.attachments') }}
-          </v-tab>
-          <v-tab>
-            <fa-icon :icon="['fal', 'comment-alt-dots']" class="mr-3" size="lg"/>
-            {{ $t('tabs.comments') }}
+        <v-tabs v-model="tab" grow height="75px" class="flex-grow-0">
+          <v-tab v-for="tab in tabItems" :key="tab.name">
+            <fa-icon :icon="['fal', tab.icon]" class="mr-3" size="lg"/>
+            {{ tab.name }}
           </v-tab>
         </v-tabs>
-          <attachments v-if="tab === 0"></attachments>
-          <comments v-if="tab === 1"></comments>
+        <v-tabs-items v-model="tab" class="fill-height">
+          <v-tab-item v-for="tab in tabItems"
+                      :key="tab.name"
+                      class="fill-height">
+            <component :is="tab.component"/>
+          </v-tab-item>
+        </v-tabs-items>
       </SplitArea>
     </Split>
 </template>
@@ -142,7 +145,7 @@ export default {
     Comments
   },
   data: () => ({
-    tab: 1,
+    tab: 0,
     iFrameHeight1: 250,
     iFrameHeight2: 250
   }),
@@ -176,12 +179,23 @@ export default {
     },
     typeName () {
       switch (this.taskType) {
-        case '': return 'обычная задача/документ'
-        case 'AGREE': return 'согласование'
-        case 'WORKFLOW': return 'выполнение БП'
-        case 'EXTERNAL': return 'внешняя задача'
-        default: return 'unknown type'
+        case '':
+          return 'обычная задача/документ'
+        case 'AGREE':
+          return 'согласование'
+        case 'WORKFLOW':
+          return 'выполнение БП'
+        case 'EXTERNAL':
+          return 'внешняя задача'
+        default:
+          return 'unknown type'
       }
+    },
+    tabItems () {
+      return [
+        { name: this.$t('tabs.attachments'), component: 'attachments', icon: 'paperclip' },
+        { name: this.$t('tabs.comments'), component: 'comments', icon: 'paperclip' }
+      ]
     },
     taskStatus () {
       return () => {
@@ -208,15 +222,22 @@ export default {
       }
     }
   },
-  created () {
-    this.getTask()
+  async created () {
+    await this.getTask()
   },
   methods: {
+    setActiveAttachment (attachment) {
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
+    },
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
       this['iFrameHeight' + frame] = iFrameBody.scrollHeight * 1.2
       iFrameBody.style.fontFamily = 'Roboto, sans-serif'
     }
+  },
+  beforeDestroy () {
+    this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
+    this.$store.commit('SET_ATTACHMENT_DETAILS', {})
   }
 }
 </script>
