@@ -1,5 +1,5 @@
 <template>
-  <div id="viewerComponent" class="flex-grow-1">
+  <div id="viewerComponent">
     <div id="outerContainer">
       <div id="sidebarContainer">
         <div id="toolbarSidebar">

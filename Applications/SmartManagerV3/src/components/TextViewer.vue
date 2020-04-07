@@ -1,6 +1,9 @@
 <template>
-  <div class="border-light pa-3 fill-height" style="background: #f9f9f9">
-    <span>{{ sourceText }}</span>
+  <div class="pa-3 fill-height d-flex flex-column">
+    <perfect-scrollbar class="border-light pa-3 flex-grow-1"
+         style="flex-basis: 0; background: #f9f9f9">
+      {{ sourceText }}
+    </perfect-scrollbar>
   </div>
 </template>
 

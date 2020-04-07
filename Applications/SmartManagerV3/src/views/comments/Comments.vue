@@ -1,7 +1,8 @@
 <template>
-    <div class="chat-bg border-light d-flex flex-column justify-space-between fill-height">
-      <perfect-scrollbar class="pa-3">
-        <div v-if="comments.length">
+  <div class="pa-3 d-flex flex-column fill-height">
+    <div class="d-flex flex-column flex-grow-1 justify-space-between chat-bg border-light">
+      <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3" style="flex-basis: 0;">
+        <div v-if="comments.length" class="d-flex flex-column">
           <comments-log :comments="comments"/>
         </div>
         <div v-else>
@@ -30,6 +31,7 @@
         </v-text-field>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -80,7 +82,7 @@ export default {
   }
 
   .chat-bg {
-    background: url('../../assets/chat_bg.png');
+    background: url('../../assets/noise_bg.png');
   }
 
   .msg-input {
