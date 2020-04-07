@@ -27,6 +27,7 @@ export default {
         state.attachmentDetails = Object.assign({}, attachment)
       }
     } else {
+      // Reset value when mutation called with empty object
       state.attachmentDetails = null
     }
   }

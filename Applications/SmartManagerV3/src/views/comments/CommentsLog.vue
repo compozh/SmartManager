@@ -46,13 +46,13 @@
 </template>
 
 <script>
-
-import moment from 'moment'
+import { commentDates } from '@/mixins/dateTime'
 
 export default {
   props: {
     comments: Array
   },
+  mixins: [commentDates],
   computed: {
     currentUserIsSender () {
       const currentUserId = this.$store.getters.userId
@@ -63,17 +63,6 @@ export default {
     }
   },
   methods: {
-    isSameDay (dateTimeTo, dateTimeFrom) {
-      const formal = 'DD.MM.YYYY HH:mm'
-      const dateTo = moment(dateTimeTo, formal).format('LL')
-      const dateFrom = moment(dateTimeFrom, formal).format('LL')
-      return dateTo === dateFrom
-    },
-    toDate (dateTime) {
-      moment.locale(this.$i18n.locale)
-      return moment(dateTime, 'DD.MM.YYYY HH:mm')
-        .format('D MMM YYYY')
-    },
     scrollToBottom () {
       this.$nextTick(() => {
         this.$parent.$el.scrollTop = this.$parent.$el.scrollHeight

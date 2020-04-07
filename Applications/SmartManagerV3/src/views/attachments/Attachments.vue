@@ -10,7 +10,7 @@
 <script>
 import NotSupport from '@/components/NotSupport'
 import NoData from '@/components/NoData'
-import { tasks } from '@/mixins/units'
+import { tasks, attachments } from '@/mixins/units'
 
 const PdfViewer = () => import('@/components/pdf-viewer/Viewer')
 const ImgViewer = () => import('@/components/ImageViewer')
@@ -24,13 +24,8 @@ export default {
     NotSupport,
     NoData
   },
-  mixins: [tasks],
+  mixins: [tasks, attachments],
   computed: {
-    originals () {
-      return this.task.originals && this.task.originals.length
-        ? this.task.originals
-        : []
-    },
     isImage () {
       const image = ['png', 'jpeg', 'jpg', 'webp', 'bmp', 'gif']
       return ext => image.some(i => i === ext)
@@ -55,17 +50,10 @@ export default {
         }
       }
       return null
-    },
-    activeAttachment () {
-      return this.$store.state.attachments.activeAttachment ||
-        this.originals[0] || {}
-    },
-    attachmentDetails () {
-      return this.$store.state.attachments.attachmentDetails || {}
     }
   },
   watch: {
-    originals () {
+    attachments () {
       this.getAttachmentDetails()
     },
     activeAttachment (newAt, oldAt) {
@@ -74,15 +62,6 @@ export default {
   },
   created () {
     this.getAttachmentDetails()
-  },
-  methods: {
-    getAttachmentDetails () {
-      const { id: fileId, fileExt } = this.activeAttachment
-      if (fileId && fileExt) {
-        const id = +this.$route.params.taskId || +this.$route.params.caseId
-        this.$store.dispatch('getFileDetails', { fileId, fileExt, id })
-      }
-    }
   }
 }
 </script>

@@ -2,19 +2,34 @@
     <Split style="flex-basis: 0; border-radius: 5px;"
            class="flex-grow-1 overflow-hidden white">
       <!-- LEFT CONTENT AREA -->
-      <SplitArea class="d-flex flex-column">
+      <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
-        <div class="side-header pa-5">
-          <v-avatar color="grey lighten-1" class="mr-3" size="40px">
-            <fa-icon v-if="!task.performerPhoto" :icon="['fal', 'user']" inverse/>
-            <v-img v-else :src="task.performerPhoto"/>
-          </v-avatar>
-          <span class="body-2">{{ task.performer }}</span>
-          <v-spacer></v-spacer>
-          <v-btn small depressed color="primary" class="mr-2">IN PROGRESS</v-btn>
-          <v-btn small outlined color="success">
-            <fa-icon :icon="['fal', 'check']" size="lg"/>
-          </v-btn>
+        <div class="side-header px-5 d-flex flex-wrap">
+          <div v-show="task.performer" class="d-flex align-center py-3">
+            <v-avatar color="grey lighten-1" class="mr-3" size="40px">
+              <fa-icon v-if="!task.performerPhoto" :icon="['fal', 'user']" inverse/>
+              <v-img v-else :src="task.performerPhoto"/>
+            </v-avatar>
+            <div class="d-flex flex-column">
+              <span class="overline">{{ $t('tasks.performer') }}:</span>
+              <span class="body-2 indigo--text" style="flex: 0;">{{ task.performer }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex align-center mx-5 py-3">
+            <v-divider vertical class="mr-5"></v-divider>
+            <div class="d-flex flex-column"
+                 style="white-space: nowrap">
+              <div class="overline">
+                <fa-icon :icon="['fal', 'clock']"
+                         class="text--secondary mr-1" size="lg"/>
+                {{ $t('tasks.deadline') }}:</div>
+              <div class="caption red--text text--darken-4">{{ task.dateplan }}</div>
+            </div>
+          </div>
+
+          <task-buttons class="ml-auto py-3"/>
+
         </div>
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
@@ -77,17 +92,50 @@
             </v-chip>
           </div>
           <v-divider></v-divider>
+          <!-- TASK PARTICIPANTS -->
+          <div v-if="participants.length" class="d-flex justify-space-between my-5">
+            <div v-if="coExecutors.length">
+              <fa-icon :icon="['fal', 'users']" class="mr-3" size="lg"/>
+              <span>{{ $t('roles.coExecutors').toUpperCase() }}</span>
+              <div class="py-2 d-flex flex-wrap">
+                <v-chip v-for="participant in coExecutors"
+                        :key="participant.userId"
+                        class="my-2 mr-2" small pill>
+                  <v-avatar left>
+                    <fa-icon :icon="['fal', 'user-circle']" size="lg"/>
+                  </v-avatar>
+                  {{ participant.name }}
+                </v-chip>
+              </div>
+            </div>
+            <div v-if="observers.length">
+              <fa-icon :icon="['fal', 'concierge-bell']" class="mr-3" size="lg"/>
+              <span>{{ $t('roles.notify').toUpperCase() }}</span>
+              <div class="py-2 d-flex flex-wrap">
+                <v-chip v-for="participant in observers"
+                        :key="participant.userId"
+                        class="my-2 ml-2" small pill>
+                  <v-avatar left>
+                    <fa-icon :icon="['fal', 'user-circle']" size="lg"/>
+                  </v-avatar>
+                  {{ participant.name }}
+                </v-chip>
+              </div>
+            </div>
+          </div>
           <!-- TASK ATTACHMENTS -->
           <div class="my-5">
             <fa-icon :icon="['fal', 'paperclip']" class="mr-3" size="lg"/>
             <span>{{ $t('tabs.attachments').toUpperCase() }}</span>
-            <div class="py-2">
+            <div class="py-2 d-flex flex-wrap">
               <v-chip v-for="item in task.originals"
-                      :key="item.id"
-                      class="my-2 mr-2"
+                      :key="item.id" small
+                      class="my-2 mr-2 text-truncate"
+                      :class="{ warning: item.id === activeAttachment.id }"
+                      style="min-width: 100px; max-width: 200px; flex: 1 1 20%"
                       @click="setActiveAttachment(item)">
-                <fa-icon :icon="['fal', 'file-alt']" class="mr-3"/>
-                <span>{{ item.fileName }}</span>
+                <fa-icon :icon="['fal', 'file-alt']" class="mr-3" size="lg"/>
+                <span class="text-truncate">{{ item.fileName }}</span>
               </v-chip>
             </div>
           </div>
@@ -95,24 +143,24 @@
           <div v-if="baseTask" class="my-5">
             <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
             <span>{{ $t('tasks.base').toUpperCase() }}</span>
-            <data-iterator :tasks="[baseTask]" class="mt-3"/>
+            <data-iterator :tasks="[baseTask]" class="mt-3" hide-footer/>
           </div>
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
             <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
             <span>PARENT TASKS</span>
-            <data-iterator :tasks="task.parentTasks" class="mt-3"/>
+            <data-iterator :tasks="task.parentTasks" class="mt-3" hide-footer/>
           </div>
           <!-- SUB TASKS-->
           <div v-if="childTasks" class="my-5">
             <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
             <span>{{ $t('tasks.subTasks').toUpperCase() }}</span>
-            <data-iterator :tasks="childTasks" class="mt-3"/>
+            <data-iterator :tasks="childTasks" class="mt-3" hide-footer/>
           </div>
         </perfect-scrollbar>
       </SplitArea>
       <!-- RIGHT CONTENT AREA -->
-      <SplitArea class="d-flex flex-column">
+      <SplitArea class="d-flex flex-column" :size="45">
         <v-tabs v-model="tab" grow height="75px" class="flex-grow-0">
           <v-tab v-for="tab in tabItems" :key="tab.name">
             <fa-icon :icon="['fal', tab.icon]" class="mr-3" size="lg"/>
@@ -132,18 +180,20 @@
 
 <script>
 import DataIterator from '@/views/tasks/task-list/DataIterator'
-import Attachments from '@/views/attachments/Attachments.vue'
-import Comments from '@/views/comments/Comments.vue'
-import { tasks } from '@/mixins/units'
+import Attachments from '@/views/attachments/Attachments'
+import Comments from '@/views/comments/Comments'
+import TaskButtons from '@/views/tasks/task-details/TaskButtons'
+import { tasks, attachments } from '@/mixins/units'
 
 export default {
   name: 'TaskDetails',
-  mixins: [tasks],
   components: {
     DataIterator,
     Attachments,
-    Comments
+    Comments,
+    TaskButtons
   },
+  mixins: [tasks, attachments],
   data: () => ({
     tab: 0,
     iFrameHeight1: 250,
@@ -194,7 +244,7 @@ export default {
     tabItems () {
       return [
         { name: this.$t('tabs.attachments'), component: 'attachments', icon: 'paperclip' },
-        { name: this.$t('tabs.comments'), component: 'comments', icon: 'paperclip' }
+        { name: this.$t('tabs.comments'), component: 'comments', icon: 'comment-alt-dots' }
       ]
     },
     taskStatus () {
@@ -220,15 +270,21 @@ export default {
             }
         }
       }
+    },
+    participants () {
+      return this.task.participants || []
+    },
+    coExecutors () {
+      return this.participants.filter(i => i.role === 'COEXECUTOR')
+    },
+    observers () {
+      return this.participants.filter(i => i.role === 'OBSERVER')
     }
   },
   async created () {
     await this.getTask()
   },
   methods: {
-    setActiveAttachment (attachment) {
-      this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
-    },
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
       this['iFrameHeight' + frame] = iFrameBody.scrollHeight * 1.2
@@ -236,8 +292,7 @@ export default {
     }
   },
   beforeDestroy () {
-    this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
-    this.$store.commit('SET_ATTACHMENT_DETAILS', {})
+    this.resetAttachmentData()
   }
 }
 </script>
@@ -254,7 +309,6 @@ export default {
    display: flex;
    align-items: center;
    min-height: 75px;
-   max-height: 75px;
    border-bottom: 1px solid #e5e5e5;
  }
 

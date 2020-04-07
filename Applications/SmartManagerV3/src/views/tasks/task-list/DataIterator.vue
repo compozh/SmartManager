@@ -3,6 +3,7 @@
                    items-per-page.sync="itemsPerPage"
                    :page="page"
                    :search="search"
+                   :hide-default-footer="hideFooter"
                    class="mb-12">
 
     <template v-slot:default="props">
@@ -50,7 +51,7 @@
 <script>
 export default {
   name: 'DataIterator',
-  props: ['tasks'],
+  props: ['tasks', 'hideFooter'],
   data: () => ({
     search: '',
     filter: {},
