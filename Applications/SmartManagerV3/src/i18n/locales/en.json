@@ -61,7 +61,11 @@
     "delConfirmText": "Are you sure you want to delete the task?",
     "saveDialogTitle": "Task not saved",
     "saveDialogText": "Data has been changed. Exit without saving?",
-    "handled": "Handled by assistant"
+    "handled": "Handled by assistant",
+    "controler": "Controler",
+    "coexecutor": "Co executor",
+    "childsDone": "Executed by subordinates",
+    "childsAssigned": "Issued to subordinates"
   },
   "cases": {
     "newCase": "New case",
