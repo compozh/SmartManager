@@ -104,17 +104,17 @@ export default {
       return this.folderMenuItems
     },
     folderMenuItems() {
-      const items = this.$store.state.sm.folders
+      const items = this.$store.getters['sm/allFolders']
       if (items) {
         return items.map(i => {
           return {
             url: this.createUrl(i),
-            name: i.name,
-            slug: i.name,
-            tag: i.count,
+            name: i.Name,
+            slug: i.Name,
+            tag: i.Count,
             tagColor: 'primary',
-            icon: this.menuItemIcon(i.code),
-            code: i.code
+            icon: this.menuItemIcon(i.Code),
+            code: i.Code
           }
         })
       }
@@ -164,13 +164,13 @@ export default {
     },
     createUrl() {
       return item => {
-        if (item.code === 'cases') {
+        if (item.Code === 'cases') {
           return '/cases/all'
         }
-        if (item.folderId) {
-          return '/cases/' + item.folderId
+        if (item.FolderId) {
+          return '/cases/' + item.FolderId
         }
-        return '/tasks/' + (item.code === '' ? 'active' : item.code)
+        return '/tasks/' + (item.Code === '' ? 'active' : item.Code)
       }
     },
     menuItemIcon() {

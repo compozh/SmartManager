@@ -332,8 +332,8 @@
           <vs-spacer></vs-spacer>
 
           <div v-if="existHelper && taskList" class="flex items-center mr-3">
-            <label for="helperexec" class="pr-4">{{ $t('tasks.handled') }}</label>
-            <vs-switch id="helperexec" v-model="helperexec"/>
+            <label for="helperExec" class="pr-4">{{ $t('tasks.handled') }}</label>
+            <vs-switch id="helperExec" v-model="helperExec"/>
           </div>
 
           <vs-button type="flat" class="flex items-center p-0">
@@ -405,12 +405,12 @@ export default {
     existHelper() {
       return this.$store.getters['sm/appParams'].EXISTSHELPER
     },
-    helperexec: {
+    helperExec: {
       get() {
-        return this.$store.state.sm.helperexec
+        return this.$store.state.sm.helperExec
       },
       set (val) {
-        this.$store.commit('sm/setHelperexec', val)
+        this.$store.commit('sm/setHelperExec', val)
       }
     },
     caseItem() {
@@ -541,7 +541,7 @@ export default {
     next()
   },
   watch: {
-    helperexec() {
+    helperExec() {
       const folderCode = this.$store.state.sm.currentFolder
       this.getTasks(folderCode, true)
     }

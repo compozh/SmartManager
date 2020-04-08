@@ -2,8 +2,8 @@ export default {
   setApplicationParams(state, params) {
     state.applicationParams = JSON.parse(params)
   },
-  setFolders(state, payload) {
-    state.folders = payload.sort(i => i.code === '' ? -1 : 0 )
+  setFolders(state, folders) {
+    state.folders = folders
   },
   setCurrentFolder(state, payload) {
     state.currentFolder = payload
@@ -14,8 +14,8 @@ export default {
   setTaskInfo(state, payload) {
     state.taskInfo = Object.assign({}, state.taskInfo, payload)
   },
-  setHelperexec(state, payload) {
-    state.helperexec = payload
+  setHelperExec(state, payload) {
+    state.helperExec = payload
   },
   setSearch(state, payload) {
     state.search = payload

@@ -32,9 +32,12 @@ export default {
     try {
       const response = await api.getFoldersFromGql()
       const result = response.data.smtasks.folders
-      const folders = result.map(folder => {
-        if (folder.code === '') {
-          folder.name = i18n.t('folders.active')
+      const folders = JSON.parse(result)
+      // Change active folder code and name
+      folders.taskFolders = folders.taskFolders.map(folder => {
+        if (folder.Code === '') {
+          folder.Code = 'active'
+          folder.Name = i18n.t('folders.active')
         }
         return folder
       })
@@ -57,7 +60,7 @@ export default {
     try {
       const result = await api.getTasksFromGql({
         folderId: folderId === 'active' ? '' : folderId,
-        helperexec: state.helperexec
+        helperExec: state.helperExec
       })
       const taskList = result.data.smtasks.tasks
       const tasks = {[folderId]: taskList}
@@ -222,7 +225,7 @@ export default {
       const result = response.data.workFlowQuery.formDefinition
       stopLoading()
       if (result.success) {
-        return result.data
+        return result
       }
       notify('warning', 'bpTitle', result.errorMessage)
     } catch (e) {
