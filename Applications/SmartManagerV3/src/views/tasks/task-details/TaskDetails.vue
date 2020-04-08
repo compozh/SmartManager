@@ -28,7 +28,9 @@
             </div>
           </div>
 
-          <task-buttons class="ml-auto py-3"/>
+          <v-spacer></v-spacer>
+
+          <task-buttons class="py-3" @submit="formSubmit"/>
 
         </div>
         <!-- LEFT SCROLL AREA -->
@@ -49,12 +51,18 @@
               <fa-icon :icon="['fal', 'eye']" class="mr-2"/>
               <span class="caption">{{ $t('icons.control') }}</span>
             </div>
-            <div class="ml-auto">
-              <fa-icon :icon="['fal', 'print']" class="blue--text text--darken-4"/>
-              <fa-icon :icon="['fal', 'history']" class="mx-3 green--text"/>
-              <fa-icon :icon="['fal', 'expand-alt']" class="grey--text"/>
-            </div>
           </div>
+
+          <!-- FORMIO -->
+          <div v-if="Object.keys(form).length" class="w-full">
+            <h3 v-if="form.NAME" class="font-weight-light mt-4">{{ form.NAME }}</h3>
+
+            <formio-form-component class="formio"
+                                   ref="form"
+                                   :formCode="form.FORMCODE"
+                                   :formDefinition="formDefinition"/>
+          </div>
+
           <!-- HTML DESCRIPTION-->
           <div v-if="htmlDescription" class="border-light mb-5">
             <iframe seamless
@@ -200,6 +208,23 @@ export default {
     iFrameHeight2: 250
   }),
   computed: {
+    externalParams () {
+      return this.task.externalParams
+        ? JSON.parse(this.task.externalParams)
+        : {}
+    },
+    form () {
+      return this.externalParams && this.externalParams.FORM
+        ? this.externalParams.FORM : {}
+    },
+    formDefinition () {
+      return {
+        components: this.form.COMPONENTS,
+        submission: this.form.SUBMISSION,
+        display: this.form.DISPLAY,
+        settings: this.form.SETTINGS
+      }
+    },
     docTextHtml () {
       return this.parseDescription(this.task.docTextHtml)
     },
@@ -262,6 +287,12 @@ export default {
               icon: 'check-circle',
               text: this.$t('statuses.done')
             }
+          case '#':
+            return {
+              color: 'yellow darken-2',
+              icon: 'file-search',
+              text: this.$t('statuses.review')
+            }
           default:
             return {
               color: 'primary',
@@ -287,8 +318,36 @@ export default {
   methods: {
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
-      this['iFrameHeight' + frame] = iFrameBody.scrollHeight * 1.2
+      this['iFrameHeight' + frame] = Math.round(iFrameBody.scrollHeight * 1.2)
       iFrameBody.style.fontFamily = 'Roboto, sans-serif'
+    },
+    async formSubmit () {
+      if (this.$refs.form) {
+        const form = this.$refs.form
+        const taskId = this.task.id || +this.$route.params.taskId
+        try {
+          const result = await form.submit({ taskId })
+          if (result) {
+            if (result.success) {
+              this.$store.commit('SET_NOTIFY', {
+                text: result.successMessage || 'Form submit successful',
+                color: 'success'
+              })
+            } else {
+              this.$store.commit('SET_NOTIFY', {
+                text: result.errorMessage || 'Form submit fail',
+                color: 'warning'
+              })
+            }
+          }
+        } catch (error) {
+          console.error(error)
+          this.$store.commit('SET_NOTIFY', {
+            text: error.message || 'Form submit error',
+            color: 'error'
+          })
+        }
+      }
     }
   },
   beforeDestroy () {
