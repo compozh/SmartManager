@@ -10,6 +10,16 @@
       {{ $t('buttons.execute') }}
     </v-btn>
 
+    <!-- EXECUTE BUTTON FOR EXTERNAL-->
+    <v-btn v-if="externalTaskCamunda"
+           color="primary"
+           class="mx-2" small
+           @click="$emit('submit')">
+      <fa-icon :icon="['fal', 'check']"
+               class="mr-2" size="lg"/>
+      {{ $t('buttons.submit') }}
+    </v-btn>
+
     <!-- RETURN BUTTON -->
     <v-btn v-if="taskCompleted"
            color="warning"
@@ -21,7 +31,7 @@
     </v-btn>
 
     <!-- APPROVE/REJECT BUTTONS -->
-    <div v-if="agreeTaskInWork">
+    <div v-if="agreeTaskInWork || taskAtApproval">
       <v-btn color="error"
              class="mx-2" small
              @click="() => ({})">
@@ -72,6 +82,9 @@ export default {
     taskInWork () {
       return this.task.status === '' ||
         this.task.status === '*'
+    },
+    taskAtApproval () {
+      return this.task.status === '#'
     },
     internalTask () {
       return this.taskType === '' ||

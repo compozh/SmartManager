@@ -22,6 +22,9 @@ import TaskListItem from '@/views/tasks/task-list/TaskListItem.vue'
 
 export default {
   name: 'DataIterator',
+  components: {
+    TaskListItem
+  },
   props: ['tasks', 'hideFooter'],
   data: () => ({
     search: '',
