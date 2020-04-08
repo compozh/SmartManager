@@ -64,8 +64,13 @@
     "handled": "Обработанные помощником",
     "controler": "Контроль",
     "coexecutor": "Соисполнитель",
+    "executor": "Исполнитель",
+    "initiator": "Инициатор",
+    "inform": "К сведенью",
     "childsDone": "Зделано подчиненными",
-    "childsAssigned": "Выдано подчиненным"
+    "childsAssigned": "Выдано подчиненным",
+    "returnedInitiator": "Возращено инициатору",
+    "days": "дн."
   },
   "cases": {
     "newCase": "Новый кейс",

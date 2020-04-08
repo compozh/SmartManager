@@ -64,8 +64,13 @@
     "handled": "Handled by assistant",
     "controler": "Controler",
     "coexecutor": "Co executor",
+    "executor": "Executor",
+    "initiator": "Initiator",
+    "inform": "To attention",
     "childsDone": "Executed by subordinates",
-    "childsAssigned": "Issued to subordinates"
+    "childsAssigned": "Issued to subordinates",
+    "returnedInitiator": "Returned initiator",
+    "days": "d"
   },
   "cases": {
     "newCase": "New case",
