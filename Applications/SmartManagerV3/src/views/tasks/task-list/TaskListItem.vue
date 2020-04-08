@@ -2,9 +2,12 @@
   <router-link :to="{name: 'task-details', params: {taskId: task.id}}"
                tag="v-card" :style="cardStyle">
     <div class="item-title">
-      <div class="column-element">
-        <span class=" ma-0 pl-1 subtitle-1">{{ task.docCaption || task.descript }}</span>
-        <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary">{{ task.docText }}</span>
+      <div class="item-title-desc">
+        <fa-icon v-if="!task.isRead" class="blue--text isRead-icon" :icon="['fal', 'dot-circle']"/>
+        <div class="column-element">
+          <span class=" ma-0 pl-1 subtitle-1">{{ task.docCaption || task.descript }}</span>
+          <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary">{{ task.docText }}</span>
+        </div>
       </div>
       <div class="align-center justify-end icons-block">
         <fa-icon v-if="task.caseId" class="ml-2 blue-grey--text" :icon="['fal', 'suitcase']"/>
@@ -43,7 +46,7 @@
         </div>
       </div>
       <div class="task-times">
-        <span v-if="this.taskInProgress()" class="caption mb-0 red--text">{{ task.dateplan }}</span>
+        <span v-if="this.taskInProgress()" :class="'caption mb-0 ' + (overdue ? 'red--text' : 'blue--text')">{{ task.dateplan }}</span>
         <span v-if="this.taskIsDone()" class="caption mb-0 green--text"><fa-icon class="green--text" :icon="['fal', 'check']"/> {{ task.dateFact }}</span>
         <span v-if="this.taskIsDone() && overdue" class="caption mb-0 red--text"><fa-icon class="red--text" :icon="['fal', 'clock']"/> {{ overdue }} {{$t('tasks.days')}}</span>
       </div>
@@ -90,6 +93,9 @@ export default {
 </script>
 
 <style scoped>
+  .isRead-icon {
+    margin-top: 4px;
+  }
   .item-title {
     display: flex;
     flex-direction: row;
@@ -97,6 +103,9 @@ export default {
   }
   .item-title .icons-block {
     padding: 5px;
+  }
+  .item-title-desc {
+    display: flex;
   }
   .item-body {
     display: flex;
