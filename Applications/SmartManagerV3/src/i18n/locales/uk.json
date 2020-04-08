@@ -64,8 +64,13 @@
     "handled": "Оброблені помічником",
     "controler": "Контроль",
     "coexecutor": "Співвиконавець",
+    "executor": "Виконавець",
+    "initiator": "Ініціатор",
+    "inform": "До відома",
     "childsDone": "Виконано підлеглими",
-    "childsAssigned": "Видано підлеглим"
+    "childsAssigned": "Видано підлеглим",
+    "returnedInitiator": "Повернуто ініціатору",
+    "days": "дн."
   },
   "cases": {
     "newCase": "Новий кейс",
