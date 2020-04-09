@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Показать историю версий",
 		"RestoreAsLatest" : "Восстановить как самую новую",
 		"AddMilestone" : "Создать версию",
-		"Compare" : "Сравнить"
+		"Compare" : "Сравнить",
+		"Overview": "Просмотр"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -141,7 +142,9 @@
 		"EnterVersionName": "Введите название версии",
 		"NewVersion": "Новая версия",
 		"InsertTextHere": "Введите текст сюда ...",
-		"AccessObject": "Объект"
+		"AccessObject": "Объект",
+		"NoCategory": "Без категории",
+		"FormCode": "Код формы"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",

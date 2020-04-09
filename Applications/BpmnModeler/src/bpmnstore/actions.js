@@ -149,7 +149,7 @@ export default {
     if (!items) {
       return false;
     }
-    return items.map(action => new ActionDefinition(action));
+    return items;
   },
   async getFormsForProcess(context, { processId: id }) {
     const { item: diagram } = context.getters.getItemById(id);

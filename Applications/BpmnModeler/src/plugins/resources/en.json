@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Show milestones history",
 		"RestoreAsLatest" : "Restore as latest",
 		"AddMilestone" : "Create version",
-		"Compare" : "Compare"
+		"Compare" : "Compare",
+		"Overview": "Overview"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -142,7 +143,9 @@
 		"EnterVersionName": "Enter version name",
 		"NewVersion": "New version",
 		"InsertTextHere": "Insert text here ...",
-		"AccessObject": "Object"
+		"AccessObject": "Object",
+		"NoCategory": "Without category",
+		"FormCode": "Form сode"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
