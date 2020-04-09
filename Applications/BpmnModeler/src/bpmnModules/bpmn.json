@@ -94,6 +94,82 @@
           "default": "identifier"
         }
       ]
+    },
+    {
+      "name": "BusinessObjectAccessData",
+      "superClass": [ "Element" ],
+      "meta": {
+        "allowedIn": [
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "rules",
+          "type": "BusinessObjectAccessRule",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "BusinessObjectAccessRule",
+      "superClass": [ "Element" ],
+      "meta": {
+        "allowedIn": [
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "id",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "dataObjectRef",
+          "isAttr": true,
+          "type": "bpmn:DataObject",
+          "isReference": true
+        },
+        {
+          "name": "businessObjectAccessDefinitionCode",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "parameters",
+          "type": "BusinessObjectAccessParameter",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "BusinessObjectAccessParameter",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "type",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "value",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
     }
   ],
   "enumerations": [

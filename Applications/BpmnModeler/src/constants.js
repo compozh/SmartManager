@@ -187,7 +187,16 @@ export const events = {
      * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
      * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
      */
-    setBusinessObjectActionProperties: 'properties-panel.set-business-object-task-parameters',
+    setBusinessObjectActionProperties: 'properties-panel.set-business-object-action-parameters',
+
+    /**
+     * Отобразить диалог ввода параметров задачи
+     * @event PropertiesPanel#setBusinessObjectAccessProperties
+     * @param {string} boAccDef - код действия
+     * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
+     * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
+     */
+    setBusinessObjectAccessProperties: 'properties-panel.set-business-object-access-parameters',
   },
   /** События formio */
   formio: {
