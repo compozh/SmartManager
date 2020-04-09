@@ -19,6 +19,12 @@ query ($folderId: String, $helperExec: Boolean) {
       caseId
       isFavorite
       docCaption
+      docText
+      declarer
+      declarerPhoto
+      role
+      childCount
+      childDoneCount
     }
   }
 }

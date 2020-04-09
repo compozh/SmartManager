@@ -1,0 +1,151 @@
+<template>
+  <div>
+    <!-- EXECUTE BUTTON -->
+    <v-btn v-if="internalTaskInWork && taskType === ''"
+           color="success"
+           class="mx-2" small
+           @click="() => ({})">
+      <fa-icon :icon="['fal', 'check']"
+               class="mr-2" size="lg"/>
+      {{ $t('buttons.execute') }}
+    </v-btn>
+
+    <!-- EXECUTE BUTTON FOR EXTERNAL-->
+    <v-btn v-if="externalTaskCamunda"
+           color="primary"
+           class="mx-2" small
+           @click="$emit('submit')">
+      <fa-icon :icon="['fal', 'check']"
+               class="mr-2" size="lg"/>
+      {{ $t('buttons.submit') }}
+    </v-btn>
+
+    <!-- RETURN BUTTON -->
+    <v-btn v-if="taskCompleted"
+           color="warning"
+           class="mx-2" small
+           @click="() => ({})">
+      <fa-icon :icon="['fal', 'undo']"
+               class="mr-2" size="lg"/>
+      {{ $t('buttons.returnToWork') }}
+    </v-btn>
+
+    <!-- APPROVE/REJECT BUTTONS -->
+    <div v-if="agreeTaskInWork || taskAtApproval">
+      <v-btn color="error"
+             class="mx-2" small
+             @click="() => ({})">
+        <fa-icon :icon="['fal', 'thumbs-down']"
+                 class="mr-2" size="lg"/>
+        {{ buttonReject }}
+      </v-btn>
+
+      <v-btn color="success" small
+             @click="() => ({})">
+        <fa-icon :icon="['fal', 'thumbs-up']"
+                 class="mr-2" size="lg"/>
+        {{ buttonApprove }}
+      </v-btn>
+    </div>
+
+    <!-- FORWARD/BACK BUTTONS -->
+    <div v-if="workFlowTaskInWork">
+      <v-btn color="error"
+             class="mx-2" small
+             @click="() => ({})">
+        <fa-icon :icon="['fal', 'arrow-alt-left']"
+                 class="mr-2" size="lg"/>
+        {{ buttonBack }}
+      </v-btn>
+
+      <v-btn color="success" small
+             @click="() => ({})">
+        {{ buttonForward }}
+        <fa-icon :icon="['fal', 'arrow-alt-right']"
+                 class="ml-2" size="lg"/>
+      </v-btn>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import { tasks } from '@/mixins/units'
+
+export default {
+  name: 'TaskButtons',
+  mixins: [tasks],
+  computed: {
+    taskType () {
+      return this.task.taskType
+    },
+    taskInWork () {
+      return this.task.status === '' ||
+        this.task.status === '*'
+    },
+    taskAtApproval () {
+      return this.task.status === '#'
+    },
+    internalTask () {
+      return this.taskType === '' ||
+        this.taskType === 'AGREE' ||
+        this.taskType === 'WORKFLOW'
+    },
+    // CONDITIONS FOR BUTTONS
+    internalTaskInWork () {
+      return this.internalTask && this.taskInWork
+    },
+    taskCompleted () {
+      return this.taskType === '' && this.task.status === '+'
+    },
+    agreeTaskInWork () {
+      return this.taskType === 'AGREE' && this.taskInWork
+    },
+    workFlowTaskInWork () {
+      return this.taskType === 'WORKFLOW' && this.taskInWork
+    },
+    externalTaskCamunda () {
+      if (!this.task.externalParams) {
+        return
+      }
+      const externalParams = JSON.parse(this.task.externalParams)
+      return this.taskType === 'EXTERNAL' &&
+        externalParams.EXTERNALSOURCE === 'C'
+    },
+    userIsPerformer () {
+      return this.userId === this.task.performerId
+    },
+    allowedCaseEdit () {
+      return this.$route.name === 'case-view' &&
+        this.caseStatus === '' &&
+        this.userId === this.caseItem.userAdd
+    },
+    allowedTaskEdit () {
+      return this.$route.name === 'task-details' &&
+        this.internalTaskInWork &&
+        this.userId === this.task.declarerId
+    },
+    // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
+    buttonBack () {
+      return this.task.previousButtonText ||
+        this.$t('buttons.back')
+    },
+    buttonForward () {
+      return this.task.nextButtonText ||
+        this.$t('buttons.forward')
+    },
+    buttonReject () {
+      return this.task.previousButtonText ||
+        this.$t('buttons.reject')
+    },
+    buttonApprove () {
+      return this.task.nextButtonText ||
+        this.$t('buttons.approve')
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

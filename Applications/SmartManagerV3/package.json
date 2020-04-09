@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js build --open",
     "lint": "vue-cli-service lint",
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@it-enterprise/formio": "^1.1.10",
+    "@it-enterprise/formio": "^1.1.21",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^2.0.2",
     "apollo-cache-inmemory": "^1.6.5",
@@ -18,10 +18,13 @@
     "apollo-link-http": "^1.5.16",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "crypto-js": "^4.0.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "moment": "^2.24.0",
+    "pdfjs-dist": "^2.3.200",
     "register-service-worker": "^1.6.2",
+    "v-viewer": "^1.5.1",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.3",
     "vue-cookies": "^1.7.0",
@@ -30,7 +33,8 @@
     "vue-split-panel": "^1.0.4",
     "vue2-perfect-scrollbar": "^1.4.0",
     "vuetify": "^2.2.11",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.2",
+    "web-streams-polyfill": "^2.1.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
@@ -53,7 +57,9 @@
     "eslint-plugin-vue": "^6.1.2",
     "vue-cli-plugin-i18n": "~0.6.1",
     "vue-cli-plugin-vuetify": "~2.0.5",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "node-sass": "^4.13.1",
+    "sass-loader": "^8.0.2"
   },
   "browserslist": [
     "> 1%",

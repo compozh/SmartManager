@@ -122,3 +122,36 @@ export const cases = {
     }
   }
 }
+
+export const attachments = {
+  computed: {
+    attachments () {
+      return this.task.originals && this.task.originals.length
+        ? this.task.originals
+        : []
+    },
+    activeAttachment () {
+      return this.$store.state.attachments.activeAttachment ||
+        this.attachments[0] || {}
+    },
+    attachmentDetails () {
+      return this.$store.state.attachments.attachmentDetails || {}
+    }
+  },
+  methods: {
+    setActiveAttachment (attachment) {
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
+    },
+    getAttachmentDetails () {
+      const { id: fileId, fileExt } = this.activeAttachment
+      if (fileId && fileExt) {
+        const id = +this.$route.params.taskId || +this.$route.params.caseId
+        this.$store.dispatch('getFileDetails', { fileId, fileExt, id })
+      }
+    },
+    resetAttachmentData () {
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
+      this.$store.commit('SET_ATTACHMENT_DETAILS', {})
+    }
+  }
+}

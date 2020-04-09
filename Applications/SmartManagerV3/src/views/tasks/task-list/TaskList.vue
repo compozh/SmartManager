@@ -5,7 +5,7 @@
         <v-col class="d-flex">
           <h4 class="ml-1 mt-1">{{ activeZone.title }}:
             <span class="primary--text">{{ activeFolder.Name }}</span>
-            <span class="grey--text"> ({{ activeFolder.Count }})</span>
+            <span class="grey--text"> ({{ tasks.length }})</span>
           </h4>
           <v-spacer/>
           <v-btn-toggle v-model="viewMode" mandatory>

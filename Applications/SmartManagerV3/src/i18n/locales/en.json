@@ -61,7 +61,16 @@
     "delConfirmText": "Are you sure you want to delete the task?",
     "saveDialogTitle": "Task not saved",
     "saveDialogText": "Data has been changed. Exit without saving?",
-    "handled": "Handled by assistant"
+    "handled": "Handled by assistant",
+    "controler": "Controler",
+    "coexecutor": "Co executor",
+    "executor": "Executor",
+    "initiator": "Initiator",
+    "inform": "To attention",
+    "childsDone": "Executed by subordinates",
+    "childsAssigned": "Issued to subordinates",
+    "returnedInitiator": "Returned initiator",
+    "days": "d"
   },
   "cases": {
     "newCase": "New case",
@@ -85,6 +94,7 @@
     "saveDialogText": "Data has been changed. Exit without saving?"
   },
   "buttons": {
+    "submit": "Submit",
     "addTask": "Add task",
     "addSubTask": "Add subtask",
     "addCaseTask": "Add task to case",
@@ -153,7 +163,8 @@
     "inWork": "In work",
     "rejected": "Rejected",
     "done": "Done",
-    "completed": "Completed"
+    "completed": "Completed",
+    "review": "At approval"
   },
   "roles": {
     "responsible": "Responsible",
