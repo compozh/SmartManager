@@ -12,6 +12,9 @@ import router from './router'
 import axios from 'axios'
 import '@/utils/faIcons'
 import './registerServiceWorker'
+import auth from './utils/auth'
+import formio from '@it-enterprise/formio'
+import '@it-enterprise/formio/dist/formio.css'
 
 Vue.config.productionTip = false
 
@@ -24,6 +27,23 @@ Vue.use(GraphQlCore, {
     axios
   }
 })
+
+const formioOptions = {
+  auth,
+  WsUrl: window.appConfig.WsUrl,
+  routerDependencies: () => ({ router }),
+  GraphQlUrl: window.appConfig.GrapgQlUrl
+}
+
+const dependencies = {
+  store,
+  i18n,
+  apolloProvider: apollo,
+  axios,
+  ...router
+}
+
+Vue.use(formio, { options: formioOptions, dependencies })
 
 new Vue({
   router,

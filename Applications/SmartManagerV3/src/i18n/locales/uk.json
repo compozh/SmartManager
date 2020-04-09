@@ -296,6 +296,12 @@
   "processes": {
     "runProcess": "Запустити процес",
     "name": "Назва",
-    "version": "Версія"
+    "version": "Версія",
+    "startProcess": "Запустити процес",
+    "errors": {
+      "processNotPassed": "Не передано код процесу",
+      "undefinedFormOfProcess": "Відсутнє визначення форми процесу",
+      "processesErrorLoad": "Помилка завантаження процесів"
+    }
   }
 }

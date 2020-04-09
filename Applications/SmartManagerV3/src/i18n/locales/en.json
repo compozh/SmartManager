@@ -295,6 +295,12 @@
   "processes": {
     "runProcess": "Run process",
     "name": "Name",
-    "version": "Version"
+    "version": "Version",
+    "startProcess": "Start process",
+    "errors": {
+      "processNotPassed": "Process code not passed",
+      "undefinedFormOfProcess": "No definition of process form",
+      "processesErrorLoad": "Error loading processes"
+    }
   }
 }

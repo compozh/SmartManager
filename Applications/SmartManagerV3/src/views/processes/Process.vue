@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="process-component">
         <div v-if="error" style="font-size: 40px;" justify="center" class="py-10">
           <p>{{error}}</p>
         </div>
@@ -27,7 +27,7 @@
                 :loading="startProcessLoading"
                 class="start-process-button"
             >
-                {{$t('processes.buttons.startProcess')}}
+                {{$t('processes.startProcess')}}
             </v-btn>
         </v-flex>
     </div>
@@ -49,19 +49,10 @@ export default {
     this.processDefinitionId = this.$route.query.processId
     if (this.processDefinitionId) {
       this.isLoading = true
-      debugger
-
       this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
         this.isLoading = false
 
         if (result.form) {
-          /* var query = this.$route.query
-          if (query && query.submission) {
-            try {
-              result.form.submission = JSON.parse(query.submission)
-            } catch (e) {
-            }
-          } */
           this.form = result.form
         } else {
           this.error = this.$t('processes.errors.undefinedFormOfProcess')
@@ -103,17 +94,11 @@ export default {
 </script>
 
 <style scoped>
+  .process-component {
+    height: 100%;
+  }
   .card-form-component {
     margin: 15px;
-  }
-  .spinner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .start-process-button {
