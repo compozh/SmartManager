@@ -77,6 +77,9 @@ export const tasks = {
       const task = this.$store.state.tasks.taskDetails[id]
       return task || {}
     },
+    taskId () {
+      return this.task.id || +this.$route.params.taskId
+    },
     type () {
       if (this.task.__typename === 'Case') {
         return 'CASE'
