@@ -225,7 +225,7 @@ export default {
       const result = response.data.workFlowQuery.formDefinition
       stopLoading()
       if (result.success) {
-        return result.data
+        return result
       }
       notify('warning', 'bpTitle', result.errorMessage)
     } catch (e) {

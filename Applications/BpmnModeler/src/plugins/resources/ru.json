@@ -182,7 +182,9 @@
     "Wait" : "Сохраняй спокойствие и подожди немного",
 		"TryAgain" : "Вы можете попробовать еще раз",
 		"MinCharacters": "Минимум 3 знака",
-		"NoRightsToEditSystemForm": "Нет прав на редактирование системной формы"
+		"NoRightsToEditSystemForm": "Нет прав на редактирование системной формы",
+		"RecordNotFound": "Запись не найдена",
+		"FormNotSpecified": "Не указана форма"
 	},
 	"enums": {
 		"AccessType": {
@@ -442,6 +444,9 @@
 		"Activity Type": "Тип активности",
 		"Called Case": "Кейс",
 		"Called Process": "Процесс",
+		"Variable": "Переменная",
+		"Definition Mode": "Режим определения",
+		"Version Definition Mode": "Режим определения версии",
 
 		"Data Object": "Объект данных",
 		"Business Object": "Бизнес-объект",
@@ -459,7 +464,10 @@
 		"Loop Cardinality": "Условие цикла",
 		"Collection": "Коллекция",
 		"Element Variable": "Переменная элемента",
-		"Completion Condition": "Условие выполнения"
+		"Completion Condition": "Условие выполнения",
+		"Access": "Доступ",
+		"Rules": "Правила",
+		"Access Parameters": "Настройки доступа"
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {

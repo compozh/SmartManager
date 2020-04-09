@@ -13,7 +13,6 @@ if (workbox) {
 }
 
 self.__precacheManifest = [].concat(self.__precacheManifest || [])
-workbox.precaching.suppressWarnings()
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
 
 workbox.skipWaiting()
@@ -63,9 +62,9 @@ async function postHandler (event) {
   }
 }
 
-async function serializeResponse(response) {
+async function serializeResponse (response) {
   const serializedHeaders = {}
-  for (let entry of response.headers.entries()) {
+  for (const entry of response.headers.entries()) {
     serializedHeaders[entry[0]] = entry[1]
   }
   const serialized = {
@@ -113,7 +112,7 @@ async function getCache (request) {
   }
 }
 
-async function getPostKey(request) {
+async function getPostKey (request) {
   try {
     const userId = request.headers.get('X-User-Id')
     const reqJson = await request.clone().json()

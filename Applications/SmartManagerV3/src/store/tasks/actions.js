@@ -40,5 +40,45 @@ export default {
       })
     }
     !preLoader || commit('SET_PRELOADER', 'task')
+  },
+  async addComment ({ dispatch, commit }, { comment, params }) {
+    const paramsJson = JSON.stringify(params)
+    try {
+      const response = await api.addCommentToGql(comment, paramsJson)
+      const result = response.data.smtasksMutation.addComment
+      if (result.success) {
+        await dispatch('updateInfo', {
+          type: params.type,
+          id: params.id,
+          loading: true
+        })
+      } else {
+        commit('SET_NOTIFY', {
+          text: i18n.t('notify.commentAddFail'),
+          color: 'error'
+        })
+      }
+      return result
+    } catch (e) {
+      console.log(e.message)
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.commentAddError'),
+        color: 'error'
+      })
+    }
+  },
+  updateInfo ({ dispatch }, { type, id, loading }) {
+    if (type === 'TASK' || type === 'DOCUMENT') {
+      return dispatch('getTaskDetails', {
+        taskId: id,
+        loading
+      })
+    }
+    if (type === 'CASE') {
+      return dispatch('getCaseDetails', {
+        caseId: id,
+        loading: true
+      })
+    }
   }
 }

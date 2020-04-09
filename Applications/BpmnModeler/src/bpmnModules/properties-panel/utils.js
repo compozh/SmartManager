@@ -78,14 +78,11 @@ export function setServiceTaskParameters(element, bo, actionId, bpmnFactory, com
  * @param {Object} commandStack - стек команд
  */
 export function setBusinessObjectActionParameters(element, bo, logicalKey, bpmnFactory, commandStack) {
-  // Уже сохраненные параметры
+
   var existingParameters = extensionElementsHelper.getExtensionElements(bo, 'IT-Enterprise:ServiceTaskParameter');
 
-  // Вызываем событие для ввода параметров задачи
-  // По событию должен открыться диалог ввода параметров
-  // Параметры собития: код действия из таблицы WFEXEC, значения введенных ранее параметров и callback, в который будут переданы новые параметры 
+
   eventBus.$emit(events.propertiesPanel.setBusinessObjectActionProperties, logicalKey, existingParameters, (parameters) => {
-    // Если не получили новые парамерты - ничего не делаем
     if (!parameters || !parameters.length) {
       return;
     }
@@ -102,6 +99,37 @@ export function setBusinessObjectActionParameters(element, bo, logicalKey, bpmnF
     // Записываем новые параметры и удаляем старые
     commands.push(cmdHelper.addAndRemoveElementsFromList(element, extensionElements, 'values', 'extensionElements', parameters.map(param =>
       elementHelper.createElement('IT-Enterprise:ServiceTaskParameter', param, extensionElements, bpmnFactory)), existingParameters));
+
+    // Применить изменения
+    const command = concatCommands(commands);
+    if (command) {
+      commandStack.execute(command.cmd, command.context || { element: element });
+    }
+  });
+}
+
+/**
+ * Установить параметры доступа к бизне-объекту
+ * @param {Object} element - пользовательская/сервисная задача
+ * @param {Object} bo - бизнес-обьект
+ * @param {string} logicalKey - сохраненный код действия
+ * @param {Object} bpmnFactory - фабрика элементов
+ * @param {Object} commandStack - стек команд
+ */
+export function setBusinessObjectAccessParameters(element, rule, boDefCode, boAccDefCode, bpmnFactory, commandStack) {
+
+  var existingParameters = rule.get('parameters');
+
+  eventBus.$emit(events.propertiesPanel.setBusinessObjectAccessProperties, boDefCode, boAccDefCode, existingParameters, (parameters) => {
+    if (!parameters || !parameters.length) {
+      return;
+    }
+
+    var commands = [];
+
+    // Записываем новые параметры и удаляем старые
+    commands.push(cmdHelper.addAndRemoveElementsFromList(element, rule, 'parameters', 'rules',
+      parameters.map(param => elementHelper.createElement('IT-Enterprise:BusinessObjectAccessParameter', param, rule, bpmnFactory)), existingParameters));
 
     // Применить изменения
     const command = concatCommands(commands);
@@ -212,21 +240,4 @@ export function getRoot(businessObject) {
     parent = parent.$parent;
   }
   return parent;
-}
-
-
-export function findDataObject(businessObject, dataObjectId) {
-  const root = getRoot(businessObject);
-
-  for (let i = 0; i < root.rootElements.length; i++) {
-    const rootElement = root.rootElements[i];
-    if (Array.isArray(rootElement.flowElements)) {
-      for (let j = 0; j < rootElement.flowElements.length; j++) {
-        const element = rootElement.flowElements[j];
-        if (element.id === dataObjectId) {
-          return element;
-        }
-      }
-    }
-  }
 }

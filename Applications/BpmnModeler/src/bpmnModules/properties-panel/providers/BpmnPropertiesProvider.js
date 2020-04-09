@@ -1,6 +1,6 @@
 import { PropertiesPanelTab } from '../Models';
 import EntryFactory from '../EntryFactory';
-import { GeneralTab, FormsTab } from '../bpmn/parts/tabs';
+import { GeneralTab, FormsTab, BusinessObjectAccessTab } from '../bpmn/parts/tabs';
 import { Diagram } from '../../../api/models';
 
 /**
@@ -34,6 +34,7 @@ export default class BpmnPropertiesProvider {
 
     tabs.push(new GeneralTab(this.diagram, element, entryFactory, canvas, bpmnFactory, commandStack, elementRegistry, translate));
     tabs.push(new FormsTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, translate));
+    tabs.push(new BusinessObjectAccessTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, elementRegistry, translate));
 
     return tabs.filter(tab => tab.groups.length > 0);
   }

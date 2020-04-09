@@ -117,16 +117,7 @@ export default {
       this.loading = false;
     },
     copyHere(parent) {
-      let items = [];
-      this.choose.forEach(el => {
-        items.push(Object.assign({}, el));
-      });
-      items = items.map( it => {
-        it.name = it.name + this.$t('bpmn.labels.Copy');
-        it.parentId = parent.id;
-        return it;
-      });
-      this.copyItem(items);
+      this.copyItem(this.choose, parent.id);
     },
     closeExpl() {
       this.show = false;
