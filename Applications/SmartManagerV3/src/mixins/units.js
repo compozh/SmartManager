@@ -122,3 +122,18 @@ export const cases = {
     }
   }
 }
+
+export const processes = {
+  computed: {
+    processes () {
+      return this.$store.state.processes.processes
+    }
+  },
+  methods: {
+    async getProcesses () {
+      if (this.processes.length === 0) {
+        await this.$store.dispatch('getProcesses', false)
+      }
+    }
+  }
+}
