@@ -16,6 +16,7 @@ export default {
     eventBus.$on(events.propertiesPanel.selectBusinessObjectAccess, this.onPropertiesPanelSelectBusinessObjectAccess);
     eventBus.$on(events.propertiesPanel.selectBusinessObjectAction, this.onPropertiesPanelSelectBusinessObjectAction);
     eventBus.$on(events.propertiesPanel.setBusinessObjectActionProperties, this.onPropertiesPanelSetBusinessObjectActionProperties);
+    eventBus.$on(events.propertiesPanel.setBusinessObjectAccessProperties, this.onPropertiesPanelSetBusinessObjectAccessProperties);
   },
   beforeDestroy() {
     eventBus.$off(events.propertiesPanel.setServiceTaskProperties, this.onPropertiesPanelSetExternalTaskProperties);
@@ -28,6 +29,7 @@ export default {
     eventBus.$off(events.propertiesPanel.selectBusinessObjectAccess, this.onPropertiesPanelSelectBusinessObjectAccess);
     eventBus.$off(events.propertiesPanel.selectBusinessObjectAction, this.onPropertiesPanelSelectBusinessObjectAction);
     eventBus.$off(events.propertiesPanel.setBusinessObjectActionProperties, this.onPropertiesPanelSetBusinessObjectActionProperties);
+    eventBus.$off(events.propertiesPanel.setBusinessObjectAccessProperties, this.onPropertiesPanelSetBusinessObjectAccessProperties);
   },
   methods: {
     async onPropertiesPanelSelectTask(taskCode, definitionType, callback) {
@@ -80,6 +82,25 @@ export default {
       this.loading = true;
       const form = await this.$store.dispatch('bpmn/getBusinessObjectActionForm', logicalKey);
       this.propertiesPanelShowForm(form, undefined, existingParameters, callback);
+    },
+    async onPropertiesPanelSetBusinessObjectAccessProperties(boDefCode, boAccDefCode, existingParameters, callback) {
+      this.loading = true;
+      const accessRecords = await this.$store.dispatch('bpmn/getBusinessObjectAccess', { boDefCode, onlySystem: false });
+
+      const access = Array.isArray(accessRecords) ? accessRecords.find(rec => rec.accessDefCode === boAccDefCode) : undefined;
+      if (!access) {
+        this.changeLoad();
+        Notification.error(this.$t('bpmn.errors.RecordNotFound'));
+        return;
+      }
+      if (typeof access.unformio !== 'string' || access.unformio.trim() == '') {
+        this.changeLoad();
+        Notification.warning(this.$t('bpmn:errors.FormNotSpecified'));
+        return;
+      }
+      
+      const form = await this.$store.dispatch('formio/getForm', { formCode: access.unformio });
+      this.propertiesPanelShowForm(form, access.unformio, existingParameters, callback);
     },
     async onPropertiesPanelSelectDeployedProcess(procDefKey, callback) {
       this.loading = true;

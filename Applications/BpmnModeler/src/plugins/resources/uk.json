@@ -183,7 +183,9 @@
 		"Er403" : "Вибачте, але Вы не маєте доступу",
 		"Er402" : "Вибачте, цей контент не придбано",
 		"MinCharacters": "Мінімум 3 знаки",
-		"NoRightsToEditSystemForm": "Немає прав на редагування системної форми"
+		"NoRightsToEditSystemForm": "Немає прав на редагування системної форми",
+		"RecordNotFound": "Запис не знайдено",
+		"FormNotSpecified": "Не вказана форма"
 	},
 	"enums": {
 		"AccessType": {
@@ -464,7 +466,10 @@
 		"Loop Cardinality": "Умова циклу",
 		"Collection": "Колекція",
 		"Element Variable": "Змінна елемента",
-		"Completion Condition": "Умова виконання"
+		"Completion Condition": "Умова виконання",
+		"Access": "Доступ",
+		"Rules": "Правила",
+		"Access Parameters": "Параметри доступу"
 	},
 	"dmn-modeler": {
 
