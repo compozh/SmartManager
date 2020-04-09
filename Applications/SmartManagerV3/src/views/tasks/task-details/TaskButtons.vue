@@ -12,12 +12,12 @@
 
     <!-- EXECUTE BUTTON FOR EXTERNAL-->
     <v-btn v-if="externalTaskCamunda"
-           color="primary"
+           color="success"
            class="mx-2" small
-           @click="$emit('submit')">
+           @click="$emit('executeExternalTask')">
       <fa-icon :icon="['fal', 'check']"
                class="mr-2" size="lg"/>
-      {{ $t('buttons.submit') }}
+      {{ $t('buttons.execute') }}
     </v-btn>
 
     <!-- RETURN BUTTON -->
