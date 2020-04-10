@@ -1,7 +1,7 @@
 <template>
     <div class="fill-height">
       <component v-if=viewer :is="viewer" :url="attachmentDetails.url"/>
-      <no-data v-else class="pa-8 title font-weight-light">
+      <no-data v-else class="fill-height pa-2">
         <span v-if="attachmentDetails.reason">{{ attachmentDetails.reason }}</span>
       </no-data>
     </div>
@@ -65,7 +65,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
