@@ -346,7 +346,7 @@ export default {
         }
       }
     },
-    changeStatus (status, CompleteParams) {
+    async changeStatus (status, CompleteParams) {
       const statusParams = {
         type: 'TASK',
         id: this.taskId,
@@ -354,7 +354,10 @@ export default {
         comment: '',
         CompleteParams
       }
-      this.$store.dispatch('changeTaskStatus', statusParams)
+      const success = await this.$store.dispatch('changeTaskStatus', statusParams)
+      if (success) {
+        await this.$router.push('/')
+      }
     },
     async executeExternalTask () {
       const status = '+' // Task complete
@@ -363,6 +366,11 @@ export default {
         const completeParams = submitResult.submission
           ? JSON.stringify(submitResult.submission) : null
         this.changeStatus(status, completeParams)
+      } else if (submitResult) {
+        this.$store.commit('SET_NOTIFY', {
+          text: submitResult.errorMessage || 'Form submit fail',
+          color: 'warning'
+        })
       }
     },
     selectAttachment (attachment) {
