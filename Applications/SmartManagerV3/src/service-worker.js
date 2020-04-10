@@ -15,8 +15,6 @@ if (workbox) {
 self.__precacheManifest = [].concat(self.__precacheManifest || [])
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
 
-workbox.skipWaiting()
-
 workbox.routing.registerRoute(/\/webapps\/SmartManager\//,
   new workbox.strategies.CacheFirst({
     plugins: [

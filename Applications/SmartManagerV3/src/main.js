@@ -10,7 +10,6 @@ import '@/utils/localization'
 import '@/utils/formio'
 import '@/utils/faIcons'
 import './registerServiceWorker'
-import '@it-enterprise/formio/dist/formio.css'
 
 Vue.config.productionTip = false
 

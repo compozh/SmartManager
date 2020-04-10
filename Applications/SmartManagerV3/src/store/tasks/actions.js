@@ -47,8 +47,7 @@ export default {
       const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
       if (result.success) {
-        await dispatch('updateInfo', {
-          type: params.type,
+        await dispatch('getTaskDetails', {
           id: params.id,
           loading: true
         })
@@ -67,18 +66,35 @@ export default {
       })
     }
   },
-  updateInfo ({ dispatch }, { type, id, loading }) {
-    if (type === 'TASK' || type === 'DOCUMENT') {
-      return dispatch('getTaskDetails', {
-        taskId: id,
-        loading
+  async changeTaskStatus ({ dispatch, commit }, params) {
+    const paramsJson = JSON.stringify(params)
+    commit('SET_PRELOADER', 'status')
+    try {
+      const response = await api.changeTaskStatusInGql(paramsJson)
+      const result = response.data.smtasksMutation.changeStatus
+      if (result.success) {
+        await dispatch('getTaskDetails', {
+          id: params.id,
+          loading: true
+        })
+        commit('SET_NOTIFY', {
+          text: result.successMessage || i18n.t('notify.statChangeSuccess'),
+          color: 'success'
+        })
+        return result.success
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || i18n.t('notify.statChangeFail'),
+          color: 'warning'
+        })
+      }
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.statChangeError'),
+        color: 'error'
       })
     }
-    if (type === 'CASE') {
-      return dispatch('getCaseDetails', {
-        caseId: id,
-        loading: true
-      })
-    }
+    commit('SET_PRELOADER', 'status')
   }
 }
