@@ -30,7 +30,7 @@
 
           <v-spacer></v-spacer>
 
-          <task-buttons class="py-3" @submit="formSubmit"/>
+          <task-buttons class="py-3" @executeExternalTask="executeExternalTask"/>
 
         </div>
         <!-- LEFT SCROLL AREA -->
@@ -191,7 +191,7 @@ import DataIterator from '@/views/tasks/task-list/DataIterator'
 import Attachments from '@/views/attachments/Attachments'
 import Comments from '@/views/comments/Comments'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
-import { tasks, attachments } from '@/mixins/units'
+import { attachments, tasks } from '@/mixins/units'
 
 export default {
   name: 'TaskDetails',
@@ -315,6 +315,12 @@ export default {
   async created () {
     await this.getTask()
   },
+  mounted () {
+    // If task no attachment show comments tab
+    if (this.attachments.length === 0) {
+      this.tab = 1
+    }
+  },
   methods: {
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
@@ -324,29 +330,49 @@ export default {
     async formSubmit () {
       if (this.$refs.form) {
         const form = this.$refs.form
-        const taskId = this.task.id || +this.$route.params.taskId
+        const taskId = this.taskId
         try {
-          const result = await form.submit({ taskId })
-          if (result) {
-            if (result.success) {
+          return await form.submit({ taskId })
+        } catch (e) {
+          if (e.length) {
+            e.forEach(e => {
               this.$store.commit('SET_NOTIFY', {
-                text: result.successMessage || 'Form submit successful',
-                color: 'success'
-              })
-            } else {
-              this.$store.commit('SET_NOTIFY', {
-                text: result.errorMessage || 'Form submit fail',
+                text: e.message || 'Form submit error',
                 color: 'warning'
               })
-            }
+            })
+          } else {
+            console.error(e)
+            this.$store.commit('SET_NOTIFY', {
+              text: e.message || 'Form submit error',
+              color: 'error'
+            })
           }
-        } catch (error) {
-          console.error(error)
-          this.$store.commit('SET_NOTIFY', {
-            text: error.message || 'Form submit error',
-            color: 'error'
-          })
         }
+      }
+    },
+    changeStatus (status, CompleteParams) {
+      const statusParams = {
+        type: 'TASK',
+        id: this.taskId,
+        status,
+        comment: '',
+        CompleteParams
+      }
+      this.$store.dispatch('changeTaskStatus', statusParams)
+    },
+    async executeExternalTask () {
+      const status = '+' // Task complete
+      const submitResult = await this.formSubmit()
+      if (submitResult && submitResult.success) {
+        const completeParams = submitResult.submission
+          ? JSON.stringify(submitResult.submission) : null
+        this.changeStatus(status, completeParams)
+      } else {
+        this.$store.commit('SET_NOTIFY', {
+          text: submitResult.errorMessage || 'Form submit fail',
+          color: 'warning'
+        })
       }
     }
   },

@@ -349,4 +349,22 @@ export class SmartManagerApi {
       throw new Error(e.message)
     }
   }
+
+  static async getProcessesFromGql () {
+    const client = await getClient('processes')
+    const result = await client.query({
+      query: gql`${q.getProcesses}`
+    })
+    return result.data.processesQuery.getProcesses
+  }
+
+  static async getFormFromGql (processDefinitionId) {
+    const client = await getClient('processes')
+    const result = await client.query({
+      query: gql`${q.getForm}`,
+      variables: { processDefinitionId }
+    })
+
+    return result.data.processesQuery.getForm
+  }
 }

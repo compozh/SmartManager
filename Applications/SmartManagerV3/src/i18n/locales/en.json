@@ -154,7 +154,7 @@
   },
   "tabs": {
     "details": "Details",
-    "attachments": "Attachments",
+    "attachments": "Attachment",
     "comments": "Comments",
     "approvals": "Approvals"
   },
@@ -293,5 +293,16 @@
     "loginSuccess": "Login successful",
     "loginFail": "Failed to login, try again later",
     "loginError": "Error trying to login, contact support"
+  },
+  "processes": {
+    "runProcess": "Run process",
+    "name": "Name",
+    "version": "Version",
+    "startProcess": "Start process",
+    "errors": {
+      "processNotPassed": "Process code not passed",
+      "undefinedFormOfProcess": "No definition of process form",
+      "processesErrorLoad": "Error loading processes"
+    }
   }
 }

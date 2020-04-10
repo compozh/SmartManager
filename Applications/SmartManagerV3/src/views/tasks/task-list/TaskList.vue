@@ -32,7 +32,6 @@
       </v-row>
 
       <data-iterator v-else :tasks="tasks"/>
-
       <action-button/>
     </v-col>
   </v-row>

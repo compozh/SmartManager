@@ -7,6 +7,7 @@ import auth from './auth'
 import folders from './folders'
 import tasks from './tasks'
 import attachments from './attachments'
+import processes from './processes'
 
 Vue.use(Vuex)
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     auth,
     folders,
     tasks,
-    attachments
+    attachments,
+    processes
   },
   strict: process.env.NODE_ENV !== 'production'
 })

@@ -1,12 +1,15 @@
 <template>
   <div class="pa-3 d-flex flex-column fill-height">
-    <div class="d-flex flex-column flex-grow-1 justify-space-between chat-bg border-light">
+    <div class="d-flex flex-column flex-grow-1 justify-space-between noise-bg border-light">
       <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3" style="flex-basis: 0;">
         <div v-if="comments.length" class="d-flex flex-column">
           <comments-log :comments="comments"/>
         </div>
-        <div v-else>
-          <h4>{{ $t('messages.noComments') }}</h4>
+        <div v-else
+             class="fill-height d-flex justify-center align-center">
+          <span class="headline font-weight-light grey--text">
+            {{ $t('messages.noComments') }}
+          </span>
         </div>
       </perfect-scrollbar>
       <div class="msg-input white d-flex pa-3">
@@ -80,8 +83,8 @@ export default {
     border: 1px solid #e5e5e5;
     border-radius: 5px;
   }
-
-  .chat-bg {
+  /* TODO: output noise-bg class to common styles */
+  .noise-bg {
     background: url('../../assets/noise_bg.png');
   }
 
