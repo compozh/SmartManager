@@ -9,8 +9,7 @@
  * @param {Boolean} isDisabled  доступность
  */
 export function getThisLink(title, thisRoutPath, isDisabled) {
-  let base = window.myConfig.BASE_URL
-  let href = base.slice(0, base.length - 1) + thisRoutPath
+  let href = thisRoutPath
   let link = {
     text: title,
     disabled: isDisabled,

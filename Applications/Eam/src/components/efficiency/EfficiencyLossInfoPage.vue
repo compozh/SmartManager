@@ -17,12 +17,14 @@ export default {
       },
       variables() {
         return {
-          id: this.efficiencyLossId
+          id: this.efficiencyLossId,
+          schema: 'oee'
         }
       },
       update(data) {
-        if (data.eam && data.eam.efficiencyLosses && data.eam.efficiencyLosses.length) {
-          return data.eam.efficiencyLosses[0]
+        const queryData = data[Object.keys(data)[0]]
+        if (queryData && queryData.efficiencyLosses && queryData.efficiencyLosses.length) {
+          return queryData.efficiencyLosses[0]
         } else {
           this.$store.commit('eam/setError', 'Запись не найдена')
           return null

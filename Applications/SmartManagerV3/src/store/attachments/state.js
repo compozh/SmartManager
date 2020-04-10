@@ -1,6 +1,7 @@
 export default {
   edsPopup: false,
-  currentAttachment: null,
+  activeAttachment: null,
+  attachmentDetails: null,
   attachmentTypes: null,
   addAttachmentDialog: false
 }

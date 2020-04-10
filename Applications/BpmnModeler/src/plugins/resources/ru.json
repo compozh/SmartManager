@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Показать историю версий",
 		"RestoreAsLatest" : "Восстановить как самую новую",
 		"AddMilestone" : "Создать версию",
-		"Compare" : "Сравнить"
+		"Compare" : "Сравнить",
+		"Overview": "Просмотр"
 	},
 	"labels": {
 		"NewProcess": "Новая диаграмма",
@@ -141,7 +142,9 @@
 		"EnterVersionName": "Введите название версии",
 		"NewVersion": "Новая версия",
 		"InsertTextHere": "Введите текст сюда ...",
-		"AccessObject": "Объект"
+		"AccessObject": "Объект",
+		"NoCategory": "Без категории",
+		"FormCode": "Код формы"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
@@ -178,7 +181,10 @@
 		"Er402" : "Простите, этот контент не был Вами приобретен",
     "Wait" : "Сохраняй спокойствие и подожди немного",
 		"TryAgain" : "Вы можете попробовать еще раз",
-		"MinCharacters": "Минимум 3 знака"
+		"MinCharacters": "Минимум 3 знака",
+		"NoRightsToEditSystemForm": "Нет прав на редактирование системной формы",
+		"RecordNotFound": "Запись не найдена",
+		"FormNotSpecified": "Не указана форма"
 	},
 	"enums": {
 		"AccessType": {
@@ -392,6 +398,7 @@
 		"Properties": "Свойства",
 		"Add Property": "Добавить свойство",
 		"Value": "Значение",
+		"Overview form": "Просмотр формы",
 
 		"Implementation": "Реализация",
 		"External": "Внешняя задача",
@@ -437,6 +444,9 @@
 		"Activity Type": "Тип активности",
 		"Called Case": "Кейс",
 		"Called Process": "Процесс",
+		"Variable": "Переменная",
+		"Definition Mode": "Режим определения",
+		"Version Definition Mode": "Режим определения версии",
 
 		"Data Object": "Объект данных",
 		"Business Object": "Бизнес-объект",
@@ -450,8 +460,14 @@
 		"Data Object Reference": "Обьект данных",
 		"Data Store Reference": "База данных",
 		"Event Based Gateway": "Эксклюзивный шлюз по событиям",
-		"Intermediate Catch Event": "Промежуточное событие (обработчик)"
-
+		"Intermediate Catch Event": "Промежуточное событие (обработчик)",
+		"Loop Cardinality": "Условие цикла",
+		"Collection": "Коллекция",
+		"Element Variable": "Переменная элемента",
+		"Completion Condition": "Условие выполнения",
+		"Access": "Доступ",
+		"Rules": "Правила",
+		"Access Parameters": "Настройки доступа"
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {

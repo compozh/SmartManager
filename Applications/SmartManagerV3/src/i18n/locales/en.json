@@ -94,6 +94,7 @@
     "saveDialogText": "Data has been changed. Exit without saving?"
   },
   "buttons": {
+    "submit": "Submit",
     "addTask": "Add task",
     "addSubTask": "Add subtask",
     "addCaseTask": "Add task to case",
@@ -162,7 +163,8 @@
     "inWork": "In work",
     "rejected": "Rejected",
     "done": "Done",
-    "completed": "Completed"
+    "completed": "Completed",
+    "review": "At approval"
   },
   "roles": {
     "responsible": "Responsible",

@@ -44,11 +44,14 @@
       </v-btn>
     </v-snackbar>
 
-    <formio-builder-container />
+    <formio-builder-container :activeItem.sync="activeItem"/>
     <formio-container />
+    <formio-overview-container />
     <bpmn-form :activeItem.sync="activeItem"></bpmn-form>
     <create-version-dialog></create-version-dialog>
     <selection-grid></selection-grid>
+    <selection-explorer></selection-explorer>
+    <selection-assistant></selection-assistant>
     <access-dialog></access-dialog>
   </v-app>
 </template>

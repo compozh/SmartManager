@@ -1,5 +1,5 @@
 query inspectionAttachments($id: ID) {
-  eam {
+  eamQuery {
     conditionParameterValues(id: $id) {
       id
       attachments {

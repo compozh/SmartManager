@@ -1,5 +1,5 @@
 query equipmentImages($id: ID) {
-  eam {
+  eamQuery {
     equipment(id: $id) {
       id
       images {

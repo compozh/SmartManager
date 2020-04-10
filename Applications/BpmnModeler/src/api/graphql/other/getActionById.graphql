@@ -2,9 +2,8 @@
   bpmnquery {
     getActionById(actionId: $actionId) {
       code,
-      type,
       name,
-      unformio,
+      formCode,
       isSystem
     }
   }

@@ -6,7 +6,7 @@
         <div class="overlay"/>
         <formio-builder-component
             class="formio-builder-component"
-            :formDefinition=formDefinition
+            :formExpansionDefinition=formDefinition
             :buttonLoading=buttonLoading
             @action=onAction
             @cancel=onCancel
@@ -15,74 +15,78 @@
 </template>
 
 <script>
-/* eslint-disable */
-import { eventBus } from '../../main'
-import { events } from '../../constants'
+import { eventBus } from '../../main';
+import { events } from '../../constants';
+import { Notification } from 'element-ui';
 
 export default {
   name: 'formio-builder-container',
+  props: {
+    activeItem: String
+  },
   data() {
     return {
-        callback: null,
-        showFormioBuilder: false,
-        buttonLoading: false,
-        isSystem: false,
-        formDefinition: {}
-    }
+      callback: null,
+      showFormioBuilder: false,
+      buttonLoading: false,
+      isSystem: false,
+      formDefinition: {}
+    };
   },
   created() {
     eventBus.$on(events.formio.createForm, (callback, isSystem) => {
-        this.createForm(callback, isSystem)
-    })
+      this.createForm(callback, isSystem);
+    });
     eventBus.$on(events.formio.editForm, (formCode) => {
-        this.editForm(formCode)
-    })
+      this.editForm(formCode);
+    });
   },
   methods: {
     createForm(callback, isSystem) {
-        this.callback = callback
-        this.isSystem = Boolean(isSystem)
-        this.formDefinition = {}
-        this.changeFormVisible(true)
+      this.callback = callback;
+      this.isSystem = Boolean(isSystem);
+      this.formDefinition = {};
+      this.changeFormVisible(true);
     },
     async editForm(formCode) {
-        this.$store.commit('formio/setLinearLoader', true)
-        await this.$store.dispatch('formio/getForm', { formCode }).then(result => {
-            if(result.success) {
-                this.formDefinition = result
-                this.isSystem = result.isSystem
-                this.formDefinition.formCode = formCode //todo: добавить в оъект FormDefinition formCode
-
-                this.$store.commit('formio/setLinearLoader', false)
-                this.changeFormVisible(true)
-            }
-        })
+      await this.$store.dispatch('formio/getFormExpansionsDefinition', { formCode }).then(result => {
+        let diagram = this.$store.getters['bpmn/getItemById'](this.activeItem).item;
+        if (result.formExpansionsDefinition) {
+          this.formDefinition = result.formExpansionsDefinition;
+          this.isSystem = this.formDefinition.isSystem;
+          if (this.isSystem && !diagram.isSystem) {
+            Notification.error(this.$t('bpmn.errors.NoRightsToEditSystemForm'));
+            return;
+          }
+          this.changeFormVisible(true);
+        }
+      });
     },
     async onAction(formDefinition) {
-        this.buttonLoading = true
-        formDefinition.isSystem = this.isSystem
-        if(!Object.keys(this.formDefinition).length) {
-            await this.$store.dispatch('formio/createForm', formDefinition).then(result => {
-                if(result.success && this.callback) {
-                    this.callback(formDefinition.formCode, formDefinition.name)
-                }
-                this.callback = null
-            })
-        } else {
-            await this.$store.dispatch('formio/saveForm', formDefinition)
-        }
-        this.buttonLoading = false
-        this.changeFormVisible(false)
+      this.buttonLoading = true;
+      formDefinition.isSystem = this.isSystem;
+      if (!Object.keys(this.formDefinition).length) {
+        await this.$store.dispatch('formio/createForm', formDefinition).then(result => {
+          if (result.success && this.callback) {
+            this.callback(formDefinition.formCode, formDefinition.name);
+          }
+          this.callback = null;
+        });
+      } else {
+        await this.$store.dispatch('formio/saveForm', formDefinition);
+      }
+      this.buttonLoading = false;
+      this.changeFormVisible(false);
     },
     onCancel(formDefinition) {
-        this.changeFormVisible(false)
+      this.changeFormVisible(false);
     },
     changeFormVisible(state) {
-        this.showFormioBuilder = state
-        this.$emit('changeFormVisible', state)
+      this.showFormioBuilder = state;
+      this.$emit('changeFormVisible', state);
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

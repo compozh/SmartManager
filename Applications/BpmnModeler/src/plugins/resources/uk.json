@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Показати історію версій",
 		"AddMilestone" : "Створити версію",
 		"RestoreAsLatest" : "Відновити як найновішу",
-		"Compare" : "Порівняти"
+		"Compare" : "Порівняти",
+		"Overview": "Перегляд"
 	},
 	"labels": {
 		"NewProcess": "Новий діаграму",
@@ -145,7 +146,9 @@
 		"EnterVersionName": "Введіть назву версії",
 		"NewVersion": "Нова версія",
 		"InsertTextHere": "Введіть текст сюди ...",
-		"AccessObject": "Об'єкт"
+		"AccessObject": "Об'єкт",
+		"NoCategory": "Без категорії",
+		"FormCode": "Код форми"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",
@@ -182,7 +185,10 @@
 		"TryAgain" : "Ви можете спробувати ще раз",
 		"Er403" : "Вибачте, але Вы не маєте доступу",
 		"Er402" : "Вибачте, цей контент не придбано",
-		"MinCharacters": "Мінімум 3 знаки"	
+		"MinCharacters": "Мінімум 3 знаки",
+		"NoRightsToEditSystemForm": "Немає прав на редагування системної форми",
+		"RecordNotFound": "Запис не знайдено",
+		"FormNotSpecified": "Не вказана форма"
 	},
 	"enums": {
 		"AccessType": {
@@ -396,6 +402,7 @@
 		"Properties": "Властивості",
 		"Add Property": "Додати властивість",
 		"Value": "Значення",
+		"Overview form": "Перегляд форми",
 
 		"Implementation": "Реалізація",
 		"External": "Зовнішня задача",
@@ -441,6 +448,9 @@
 		"Activity Type": "Тип активності",
 		"Called Case": "Кейс",
 		"Called Process": "Процес",
+		"Definition Mode": "Режим визначення",
+		"Variable": "Змінна",
+		"Version Definition Mode": "Режим визначення версії",
 
 		"Data Object": "Об'єкт даних",
 		"Business Object": "Бізнес-об'єкт",
@@ -455,7 +465,14 @@
 		"Data Store Reference": "База даних",
 		"Data Object Reference": "Об'єкт даних",
 		"Event Based Gateway": "Ексклюзивний шлюз по подіям",
-		"Intermediate Catch Event": "Проміжна подія (обробник)"
+		"Intermediate Catch Event": "Проміжна подія (обробник)",
+		"Loop Cardinality": "Умова циклу",
+		"Collection": "Колекція",
+		"Element Variable": "Змінна елемента",
+		"Completion Condition": "Умова виконання",
+		"Access": "Доступ",
+		"Rules": "Правила",
+		"Access Parameters": "Параметри доступу"
 	},
 	"dmn-modeler": {
 

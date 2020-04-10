@@ -154,15 +154,21 @@ export default {
         model,
         this.formSave);
     },
-    copyItem(item) {
+    copyItem(item, parentId) {
       let  type, model;
       if (Array.isArray(item) && item.length > 1) {
         type = 'all';
-        model = item.map( it => new Diagram(it));
+        model = item.map(it => new Diagram(it));
+        model.forEach(it => {
+          it.name += ' ' + this.$t('bpmn.labels.Copy');
+          it.parentId = parentId;
+        });
       } else {
         item = Array.isArray(item) ? item[0] : item;
         type = item instanceof Folder ? 'folder' : item instanceof Diagram ? 'process' : 'version',
-        model =  item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : item;
+        model = item instanceof Folder ? new Folder(item) : item instanceof Diagram ? new Diagram(item) : new DiagramVersion(item);
+        model.name += ' ' + this.$t('bpmn.labels.Copy');
+        model.parentId = parentId;
       }
       eventBus.$emit(events.modeler.showForm,
         'copy',

@@ -1,11 +1,13 @@
-import ActionDefinitionType from './ActionDefinitionType';
+import ActionCategory from './ActionCategory';
 
 export default class ActionDefinition {
-  constructor({ code, name = '', type = ActionDefinitionType.ExternalTask, unformio, isSystem = false } = {}) {
+  constructor({ code, name = '', formCode, isSystem = false, categories = [] } = {}) {
     this.id = code;
     this.name = name;
-    this.type = type;
-    this.unformio = unformio;
+    this.formCode = formCode;
     this.isSystem = isSystem;
+    if (Array.isArray(categories)) {
+      this.categories = categories.map(c => new ActionCategory(c));
+    }
   }
 }

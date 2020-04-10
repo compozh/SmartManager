@@ -5,10 +5,11 @@ import EntryFactory from '../../../EntryFactory';
 import { PropertiesPanelGroup } from '../../../Models';
 import { Diagram, ActionDefinitionType } from '../../../../../api/models';
 import { api } from '../../../../../api/bpmnApi';
-import { setServiceTaskParameters, findDataObject, setBusinessObjectActionParameters } from '../../../utils';
+import { setServiceTaskParameters, setBusinessObjectActionParameters } from '../../../utils';
 import { eventBus } from '../../../../../main';
 import { events } from '../../../../../constants';
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
+import { getSelectedBusinessObjects, findDataObject } from '../../helpers/DataObjectHelper';
 
 /**
  * Добавить в группу свойсва сервисной задачи
@@ -107,26 +108,7 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
     const businessObject = getServiceTaskLikeBusinessObject(element);
 
     if (isBoAction || isBoAccess) {
-      const selectedBusinessObjects = elementRegistry
-        .filter((e) => {
-          if (!is(e, 'bpmn:DataObjectReference')) {
-            return false;
-          }
-          const bo = getBusinessObject(e);
-          const reference = bo.get('dataObjectRef');
-          if (!reference) {
-            return false;
-          }
-          const boDefCode = reference.get('IT-Enterprise:businessObjectDefinitionCode');
-          return typeof boDefCode === 'string' && boDefCode.trim() != '';
-        }).map(e => {
-          const bo = getBusinessObject(e);
-          const reference = bo.get('dataObjectRef');
-          return {
-            value: reference.id,
-            name: bo.name
-          };
-        });
+      const selectedBusinessObjects = getSelectedBusinessObjects(elementRegistry);
       
       const dataObjectRef = businessObject.get('IT-Enterprise:dataObjectRef');
       
@@ -172,12 +154,13 @@ export default function addServiceTaskProps(group, diagram, element, entryFactor
 
           const topic = businessObject.get('camunda:topic');
           if (typeof topic === 'string' && topic.trim() != '') {
+            const position = group.entries.length;
             api.getBusinessObjectActions(boDefCode, diagram.isSystem).then((actions) => {
               const action = actions.find(act => act.logicalKey === topic);
               if (!action || !action.parametersExists) {
                 return;
               }
-              group.entries.push(entryFactory.button({
+              group.entries.splice(position, 0, entryFactory.button({
                 id: 'boActDefCodeParams',
                 label: translate('Action Properties'),
                 click(element) {

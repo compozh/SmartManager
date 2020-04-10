@@ -3,6 +3,7 @@
                    items-per-page.sync="itemsPerPage"
                    :page="page"
                    :search="search"
+                   :hide-default-footer="hideFooter"
                    class="mb-12">
 
     <template v-slot:default="props">
@@ -21,10 +22,10 @@ import TaskListItem from '@/views/tasks/task-list/TaskListItem.vue'
 
 export default {
   name: 'DataIterator',
-  props: ['tasks'],
   components: {
     TaskListItem
   },
+  props: ['tasks', 'hideFooter'],
   data: () => ({
     search: '',
     filter: {},

@@ -1,6 +1,7 @@
 import { LmsApi as api } from '../api/lmsApi'
 import auth from '@it-enterprise/jwtauthentication'
 import { routerDependencies } from '@/router'
+import { addStyles } from '../helpers/coursesModules'
 const router = routerDependencies.router
 
 export default {
@@ -66,10 +67,8 @@ export default {
       ]
 
       commit('setAvailableFilters', availableFilters)
-      commit('setCircularLoader', false)
 
     } catch (error) {
-      commit('setCircularLoader', false)
       commit('setError', error.message)
     }
   },
@@ -80,8 +79,11 @@ export default {
     try {
       const result = await api.getRecommendedFromGql()
       const recommended = result.data.lms.recommended
-
-      commit('setRecommended', recommended)
+      recommended.courses.forEach(c => addStyles(c))
+      recommended.modules.forEach(m => addStyles(m))
+      commit('setCourses', recommended.courses)
+      commit('setModules', recommended.modules)
+      commit('setRecommended', true)
       commit('setCircularLoader', false)
 
     } catch (error) {
@@ -123,13 +125,14 @@ export default {
     }
   },
 
-  async getCourseDetails({commit}, payload) {
+  async getCourseDetails({commit}, courseGuid) {
     commit('setError', null)
     commit('setCircularLoader', true)
 
     try {
-      const result = await api.getCourseDetailFromGql(payload)
+      const result = await api.getCourseDetailFromGql(courseGuid)
       const courseDetails = result.data.lms.courseDetails
+      addStyles(courseDetails.course)
       commit('setCourseDetails', courseDetails)
       commit('setCircularLoader', false)
     } catch (error) {
@@ -149,6 +152,21 @@ export default {
     } catch (error) {
       commit('setError', error.message)
       commit('setCircularLoader', false)
+    }
+  },
+
+  async getDiscussionList({commit}, lessonGuid) {
+    commit('setError', null)
+    commit('setQuestionCircularLoader', true)
+    try {
+      const result = await api.fetchQuestionsListCurrentLessonFromGql(lessonGuid)
+      // преобразовать дату
+      result.data.lms.discussions.forEach(d => d.dateTime = new Date(d.dateTime).toLocaleString())
+      commit('setDiscussions', result.data.lms.discussions)
+      commit('setQuestionCircularLoader', false)
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setQuestionCircularLoader', false)
     }
   },
 
@@ -179,6 +197,19 @@ export default {
     } catch (error) {
       commit('setError', error.message)
       commit('setCircularLoader', false)
+    }
+  },
+
+  async restoreCourseLearningPageState({commit}, courseGuid) {
+    try {
+      const result = await api.restorePageStateFromGql(courseGuid)
+      const pageStateParams = result ? JSON.parse(result) : null
+      if (pageStateParams) {
+        commit('setCurrentLessonGuid',pageStateParams.currentLessonGuid)
+        commit('setTabActive', pageStateParams.activeTab)
+      }
+    } catch (error) {
+      commit('setError', error.message)
     }
   },
 

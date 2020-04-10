@@ -1,6 +1,9 @@
 <template>
-  <div class="border-light pa-3 fill-height" style="background: #f9f9f9">
-    <span>{{ sourceText }}</span>
+  <div class="pa-3 fill-height d-flex flex-column">
+    <perfect-scrollbar class="noise-bg border-light pa-3 flex-grow-1"
+                       style="flex-basis: 0; white-space: pre;">
+      {{ sourceText }}
+    </perfect-scrollbar>
   </div>
 </template>
 
@@ -33,11 +36,10 @@ export default {
         const result = await fetch(this.url)
         this.sourceText = await result.text()
       } catch (e) {
-        // this.$vs.notify({
-        //   title: 'Error read text',
-        //   text: e.message,
-        //   color: 'danger'
-        // })
+        this.$store.commit('SET_NOTIFY', {
+          text: 'Error text reading',
+          color: 'error'
+        })
       }
     }
   }
@@ -50,6 +52,10 @@ export default {
   .border-light {
     border: 1px solid #e5e5e5;
     border-radius: 5px;
+  }
+
+  .noise-bg {
+    background: url('../assets/noise_bg.png');
   }
 
 </style>
