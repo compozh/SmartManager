@@ -6,6 +6,17 @@ import addConditionalProps from './ConditionalProps';
 import addCallActivityProps from './CallActivityProps';
 import addBusinessRuleProps from './BusinessRuleTaskProps';
 import addDataObjectReferenceProps from './DataObjectReferenceProps';
+import addMultiInstanceLoopProps from './MultiInstanceLoopProps';
 
 
-export { addExecutableProps, addProcessProps, addUserTaskProps, addServiceTaskProps, addConditionalProps, addCallActivityProps, addBusinessRuleProps, addDataObjectReferenceProps };
+export {
+  addExecutableProps,
+  addProcessProps,
+  addUserTaskProps,
+  addServiceTaskProps,
+  addConditionalProps,
+  addCallActivityProps,
+  addBusinessRuleProps,
+  addDataObjectReferenceProps,
+  addMultiInstanceLoopProps
+};

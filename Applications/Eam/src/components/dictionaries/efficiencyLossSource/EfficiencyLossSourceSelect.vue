@@ -8,6 +8,7 @@
     :multiple="multiple"
     v-model="internalValue"
     @input="$emit('input', internalValue)"
+    schema="oee"
   ></eam-base-select>
 </template>
 

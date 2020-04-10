@@ -48,16 +48,17 @@ export default {
         }
       },
       update(data) {
-        return data.eam &&
-          data.eam.equipment &&
-          data.eam.equipment.images &&
-          data.eam.equipment.images.length
-          ? data.eam.equipment.images
-          : data.eam &&
-            data.eam.equipment &&
-            data.eam.equipment.model &&
-            data.eam.equipment.model.attachments
-            ? data.eam.equipment.model.attachments
+        const queryData = data[Object.keys(data)[0]]
+        return queryData &&
+          queryData.equipment &&
+          queryData.equipment.images &&
+          queryData.equipment.images.length
+          ? queryData.equipment.images
+          : queryData &&
+            queryData.equipment &&
+            queryData.equipment.model &&
+            queryData.equipment.model.attachments
+            ? queryData.equipment.model.attachments
             : null
       },
       skip() {

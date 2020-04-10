@@ -1,5 +1,5 @@
 import { PropertiesPanelGroup } from '../../../Models.js';
-import { addUserTaskProps, addServiceTaskProps, addConditionalProps, addCallActivityProps, addBusinessRuleProps, addDataObjectReferenceProps } from '../props';
+import { addUserTaskProps, addServiceTaskProps, addConditionalProps, addCallActivityProps, addBusinessRuleProps, addDataObjectReferenceProps, addMultiInstanceLoopProps } from '../props';
 import { Diagram } from '../../../../../api/models';
 import EntryFactory from '../../../EntryFactory';
 import addEventProps from '../props/EventProps';
@@ -27,5 +27,6 @@ export default class DetailsGroup extends PropertiesPanelGroup {
     addCallActivityProps(this, element, entryFactory, bpmnFactory, commandStack, translate);
     addBusinessRuleProps(this, element, entryFactory, commandStack, translate);
     addDataObjectReferenceProps(this, diagram, element, entryFactory, commandStack, translate);
+    addMultiInstanceLoopProps(this, element, entryFactory, bpmnFactory, translate);
   }
 }

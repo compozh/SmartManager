@@ -30,7 +30,8 @@
 		"MilestonesHistory" : "Show milestones history",
 		"RestoreAsLatest" : "Restore as latest",
 		"AddMilestone" : "Create version",
-		"Compare" : "Compare"
+		"Compare" : "Compare",
+		"Overview": "Overview"
 	},
 	"labels": {
 		"NewProcess": "New diagram",
@@ -142,7 +143,9 @@
 		"EnterVersionName": "Enter version name",
 		"NewVersion": "New version",
 		"InsertTextHere": "Insert text here ...",
-		"AccessObject": "Object"
+		"AccessObject": "Object",
+		"NoCategory": "Without category",
+		"FormCode": "Form сode"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Failed to move items",
@@ -178,8 +181,11 @@
     "Wait" : "Keep calm and wait for a while",
     "TryAgain" : "You can try again",
     "Er403" : "Sorry, but you do not have access",
-	"Er402" : "Sorry, this content was not purchased",
-	"MinCharacters": "Min 3 characters"
+		"Er402" : "Sorry, this content was not purchased",
+		"MinCharacters": "Min 3 characters",
+		"NoRightsToEditSystemForm": "No rights to edit system form",
+		"RecordNotFound": "Record not found",
+		"FormNotSpecified": "Form not specified"
 	},
 	"enums": {
 		"AccessType": {
@@ -393,6 +399,7 @@
 		"Properties": "Properties",
 		"Add Property": "Add Property",
 		"Value": "Value",
+		"Overview form": "Overview form",
 
 		"Implementation": "Implementation",
 		"External": "External task",
@@ -438,6 +445,9 @@
 		"Activity Type": "Activity Type",
 		"Called Case": "Called Case",
 		"Called Process": "Called Process",
+		"Definition Mode": "Definition Mode",
+		"Variable": "Variable",
+		"Version Definition Mode": "Version Definition Mode",
 
 		"Data Object": "Data Object",
 		"Business Object": "Business Object",
@@ -452,7 +462,14 @@
 		"Data Store Reference": "Data Store Reference",
 		"Data Object Reference": "Data Object Reference",
 		"Event Based Gateway": "Event Based Gateway",
-		"Intermediate Catch Event": "Intermediate Catch Event"
+		"Intermediate Catch Event": "Intermediate Catch Event",
+		"Loop Cardinality": "Loop Cardinality",
+		"Collection": "Collection",
+		"Element Variable": "Element Variable",
+		"Completion Condition": "Completition Condition",
+		"Access": "Access",
+		"Rules": "Rules",
+		"Access Parameters": "Access Parameters"
 	},
 	"dmn-modeler": {
 

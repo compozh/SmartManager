@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@it-enterprise/eds": "^1.0.1",
-    "@it-enterprise/formio": "^1.1.9",
+    "@it-enterprise/formio": "^1.1.16",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^2.0.2",
     "@it-enterprise/localization": "^1.0.10",
@@ -44,7 +44,7 @@
     "diagram-js-minimap": "^2.0.3",
     "dmn-js": "^7.4.3",
     "element-ui": "^2.13.0",
-    "formiojs": "^4.9.0-rc.5",
+    "formiojs": "^4.9.0-rc.7",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
     "lodash": "^4.17.15",

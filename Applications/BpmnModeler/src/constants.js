@@ -74,6 +74,30 @@ export const events = {
     showSelectionGrid: 'modeler.show-selection-grid',
 
     /**
+     * Отобразить диалог выбора элемента из списка
+     * @event Modeler#showSelectionExplorer
+     * @param {string} title - Заголовок диалога
+     * @param {Object[]} items - элеиенты для выбора
+     * @param {string} items.id - код элемента
+     * @param {string} items.name - название элемента
+     * @param {Object} selectedItem - выбранный элемент
+     * @param {itemSelectedCallback} callback - коллбек, вызываемый при выборе элемента
+     */
+    showSelectionExplorer: 'modeler.show-selection-explorer',
+
+    /**
+     * Отобразить диалог выбора элемента из списка
+     * @event Modeler#showSelectionAssistant
+     * @param {string} title - Заголовок диалога
+     * @param {Object[]} items - элеиенты для выбора
+     * @param {string} items.id - код элемента
+     * @param {string} items.name - название элемента
+     * @param {Object} selectedItem - выбранный элемент
+     * @param {itemSelectedCallback} callback - коллбек, вызываемый при выборе элемента
+     */
+    showSelectionAssistant: 'modeler.show-selection-assistant',
+
+    /**
      * Отобразить форму корректировки элемента
      * @event Modeler#showForm
      * @param {string} mode - режим формы (create/edit/delete/copy)
@@ -187,7 +211,16 @@ export const events = {
      * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
      * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
      */
-    setBusinessObjectActionProperties: 'properties-panel.set-business-object-task-parameters',
+    setBusinessObjectActionProperties: 'properties-panel.set-business-object-action-parameters',
+
+    /**
+     * Отобразить диалог ввода параметров задачи
+     * @event PropertiesPanel#setBusinessObjectAccessProperties
+     * @param {string} boAccDef - код действия
+     * @param {ServiceTaskParameter[]} parameters - сохраненные параметры
+     * @param {setParametersCallback} callback - коллбек, вызываемый после ввода значений параметров
+     */
+    setBusinessObjectAccessProperties: 'properties-panel.set-business-object-access-parameters',
   },
   /** События formio */
   formio: {
@@ -199,6 +232,14 @@ export const events = {
      * @param {submitFormioCallback} callback - коллбек, вызываемый при нажатие на кнопку submit
      */
     showForm: 'formio.show-form',
+
+    /**
+     * Отобразить просмотр формы formio
+     * @event Formio#showFormOverview
+     * @param {string} code - код формы
+     * @param {Object} definition - определение формы
+     */
+    showFormOverview: 'formio.show-form-overview',
 
     /**
      * Отобразить диалог создания формы formio

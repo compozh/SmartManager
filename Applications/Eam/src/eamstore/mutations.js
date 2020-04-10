@@ -12,6 +12,10 @@ export default {
     state.menuMiniMode = payload
     localStorage.setItem('eamMenuMiniMode', payload.toString())
   },
+  setNotifications(state, payload) {
+    state.notifications = payload
+    localStorage.setItem('eamNotifications', payload.toString())
+  },
   setSearch(state, payload) {
     state.search = payload
   },

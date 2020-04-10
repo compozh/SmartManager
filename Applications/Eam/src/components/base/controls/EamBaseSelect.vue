@@ -18,7 +18,7 @@
 export default {
   name: 'eam-base-select',
   props: {
-    value: [String, Array],
+    value: [String, Number, Array],
     constantFilter: Array,
     query: Object,
     queryName: String,
@@ -36,7 +36,8 @@ export default {
       default: 'Значение'
     },
     icon: String,
-    multiple: Boolean
+    multiple: Boolean,
+    schema: String
   },
   apollo: {
     itemsQuery: {
@@ -46,11 +47,12 @@ export default {
       variables() {
         return {
           where: this.where,
-          orderBy: this.orderBy
+          orderBy: this.orderBy,
+          schema: this.schema
         }
       },
       update(data) {        
-        return data.eam[this.queryName]
+        return data ? data[Object.keys(data)[0]][this.queryName] : []
       },
       skip() {
         return !this.change

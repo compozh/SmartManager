@@ -87,6 +87,8 @@ export default {
     searchPhraseChangedForce: function() {
       const phrase = this.searchParams.phrase
       if (!phrase) {
+        this.searchResult.results = null
+        this.searchResult.resultsQt = 0
         return
       }
       if (this.searchTimeoutId > 0) {
@@ -94,9 +96,9 @@ export default {
       }
       // выполнить поиск по фразе
       const modules = this.$store.getters['lms/modules']
-      var searchRegExp = new RegExp(phrase, 'i')
-      var searchResult = modules.filter(m => searchRegExp.test(m.name)
-            || searchRegExp.test(m.description))
+      var searchRegExp = new RegExp(phrase, 'ig')
+      var searchResult = modules.filter(m => m.name.match(searchRegExp)
+            || m.description.match(searchRegExp))
       this.searchResult.results = searchResult
       this.searchResult.resultsQt = searchResult.length
     },

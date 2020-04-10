@@ -1,9 +1,12 @@
 <template>
-  <v-container fluid>
+  <v-container fluid py-0>
     <v-layout fill-height>
       <v-flex grow>
         <v-card flat>
-          <p class="headline qa">Вопросы и ответы</p>
+          <v-card-title>
+            <p class="body-2 qa">Вопросы и ответы</p>
+            <component v-bind:is="currentComponent"></component>
+          </v-card-title>
         </v-card>
       </v-flex>
     </v-layout>
@@ -11,8 +14,18 @@
 </template>
 
 <script>
+
 export default {
   name: 'question-and-answers',
+  data() {
+    return {
+    }
+  },
+  computed: {
+    currentComponent() {
+      return this.$store.getters['lms/currentQuestionsView']
+    }
+  }
 }
 </script>
 

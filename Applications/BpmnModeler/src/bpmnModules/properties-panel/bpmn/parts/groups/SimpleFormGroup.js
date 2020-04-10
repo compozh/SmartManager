@@ -52,9 +52,9 @@ export default class SimpleFormGroup extends PropertiesPanelGroup {
         }
         return commands;
       },
-      removeExtensionElement: (field) => {
+      removeExtensionElement: (fieldId) => {
         var formData = getExtensionElements(getBusinessObject(element), 'camunda:FormData')[0],
-          entry = field,
+          entry = formHelper.getFormFieldById(element, fieldId),
           commands = [];
 
         if (formData.fields.length < 2) {
