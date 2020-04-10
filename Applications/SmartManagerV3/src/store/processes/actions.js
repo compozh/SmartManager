@@ -16,5 +16,13 @@ export default {
     } catch (e) {
       console.error(e.message)
     }
+  },
+  async startProcess ({ dispatch }, params) {
+    try {
+      const startProcessResult = await api.startProcessGql(params)
+      return startProcessResult
+    } catch (e) {
+      console.error(e.message)
+    }
   }
 }

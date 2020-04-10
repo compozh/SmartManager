@@ -48,7 +48,7 @@ export default {
       const result = response.data.smtasksMutation.addComment
       if (result.success) {
         await dispatch('getTaskDetails', {
-          id: params.id,
+          taskId: params.id,
           loading: true
         })
       } else {

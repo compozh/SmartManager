@@ -1,11 +1,12 @@
 <template>
   <v-navigation-drawer id="sideBar"
-                       app permanent
-                       max-width="300"
-                       :expand-on-hover="!sideBarOpen"
+                       app
+                       permanent
+                       :mini-variant="miniVariant"
+                       :expand-on-hover="expandOnHover"
                        style="padding-left: 3.4em">
     <side-bar-zones/>
-    <v-list dense nav subheader>
+    <v-list dense nav subheader v-if="activeZoneId !== 2">
       <v-subheader>{{ zones[activeZoneId].title.toUpperCase() }}</v-subheader>
       <v-list-item-group v-model="activeFolderId"
                          mandatory>
@@ -21,10 +22,11 @@
                      v-if="folder.Code === activeFolderId"/>
             <fa-icon v-else :icon="['fal', 'folder']"/>
           </v-list-item-icon>
-
           <v-list-item-title v-text="folder.Name"
                              :class="{ 'white--text': folder.Code === activeFolderId}"/>
-
+          <v-list-item-action v-if="folder.Count" class="justify-end">
+            <v-badge inline color="red darken-4" :content="folder.Count"/>
+          </v-list-item-action>
       </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -42,9 +44,6 @@ export default {
   components: {
     SideBarZones
   },
-  data: () => ({
-    drawer: false
-  }),
   watch: {
     $route (to) {
       if (to.name.includes('list')) {

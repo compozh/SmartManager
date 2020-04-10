@@ -2,22 +2,24 @@
   <v-tooltip right>
     <template v-slot:activator="{ on }">
       <v-app-bar-nav-icon class="hidden-sm-and-down" v-on="on"
-                          @click="sideBarOpen = !sideBarOpen">
+                          :disabled="activeZoneId === 2"
+                          @click="toggleSideBar">
         <fa-icon :icon="['fal', 'bars']" size="lg"/>
       </v-app-bar-nav-icon>
     </template>
     <span>
-        {{ sideBarOpen ? $t('navBar.collapseSideBar') : $t('navBar.expandSideBar') }}
-      </span>
+      {{ sideBarOpen ? $t('navBar.collapseSideBar') : $t('navBar.expandSideBar') }}
+    </span>
   </v-tooltip>
 </template>
 
 <script>
 import { sideBar } from '@/mixins/layout'
+import { zones } from '@/mixins/units'
 
 export default {
   name: 'SideBarBtn',
-  mixins: [sideBar]
+  mixins: [sideBar, zones]
 }
 </script>
 
