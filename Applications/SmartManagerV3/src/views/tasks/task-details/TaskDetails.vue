@@ -317,7 +317,7 @@ export default {
   },
   mounted () {
     // If task no attachment show comments tab
-    if (this.attachments.length === 0) {
+    if (this.task.originals.length === 0) {
       this.tab = 1
     }
   },
@@ -368,11 +368,6 @@ export default {
         const completeParams = submitResult.submission
           ? JSON.stringify(submitResult.submission) : null
         this.changeStatus(status, completeParams)
-      } else {
-        this.$store.commit('SET_NOTIFY', {
-          text: submitResult.errorMessage || 'Form submit fail',
-          color: 'warning'
-        })
       }
     }
   },
