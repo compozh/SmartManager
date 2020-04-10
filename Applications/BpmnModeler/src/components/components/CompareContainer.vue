@@ -36,7 +36,7 @@ import { editorToolbarMixin, fullScreenMixin } from '../mixins';
 import { Notification } from 'element-ui';
 import moment from 'moment';
 export default {
-  name: 'copmpare-modeler',
+  name: 'compare-modeler',
   mixins: [ editorToolbarMixin, fullScreenMixin ],
   data () {
     return {
@@ -51,7 +51,7 @@ export default {
     type: String,
     fullScreenVisible: Boolean,
     attitude: String,
-    parrentEl: HTMLDivElement
+    parentEl: HTMLDivElement
   },
 
   mounted() {
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     getFullScreenContainer() {
-      return this.parrentEl;
+      return this.parentEl;
     },
     createModeler() {
       this.destroyModeler();
@@ -86,6 +86,9 @@ export default {
             console.error(err);
             Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
             this.loading = false;
+          } else {
+            const canvas = this.modeler.get('canvas');
+            canvas.zoom('fit-viewport');
           }
         });
       }
