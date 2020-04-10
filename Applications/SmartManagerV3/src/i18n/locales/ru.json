@@ -154,9 +154,9 @@
   },
   "tabs": {
     "details": "Детально",
-    "attachments": "Вложения",
+    "attachments": "Вложение",
     "comments": "Комментарии",
-    "approvals": "Согласования"
+    "approvals": "Согласование"
   },
   "statuses": {
     "status": "Статус",
