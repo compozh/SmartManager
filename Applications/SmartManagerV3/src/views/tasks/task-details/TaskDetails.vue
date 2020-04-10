@@ -315,6 +315,12 @@ export default {
   async created () {
     await this.getTask()
   },
+  mounted () {
+    // If task no attachment show comments tab
+    if (this.attachments.length === 0) {
+      this.tab = 1
+    }
+  },
   methods: {
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
@@ -327,12 +333,21 @@ export default {
         const taskId = this.taskId
         try {
           return await form.submit({ taskId })
-        } catch (error) {
-          console.error(error)
-          this.$store.commit('SET_NOTIFY', {
-            text: error.message || 'Form submit error',
-            color: 'error'
-          })
+        } catch (e) {
+          if (e.length) {
+            e.forEach(e => {
+              this.$store.commit('SET_NOTIFY', {
+                text: e.message || 'Form submit error',
+                color: 'warning'
+              })
+            })
+          } else {
+            console.error(e)
+            this.$store.commit('SET_NOTIFY', {
+              text: e.message || 'Form submit error',
+              color: 'error'
+            })
+          }
         }
       }
     },
