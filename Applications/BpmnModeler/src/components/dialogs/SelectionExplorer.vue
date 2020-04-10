@@ -43,6 +43,8 @@
 <script>
 import { eventBus } from '../../main';
 import { events } from '../../constants';
+import treeSearch from '../../api/treeSearch';
+import { Folder } from '../../api/models';
 
 export default {
   name: 'selection-explorer',
@@ -74,8 +76,8 @@ export default {
           items: this.items
         };
       } else if (!value.id) {
-        let elem = this.$store.getters['bpmn/getItemById'](value);
-        this.choosedFolder = elem.item;
+        let [{ item = null, index = -1 } = {}] = treeSearch(this.items, (item) => item.id === value);
+        this.choosedFolder = item;
       } else {
         this.choosedFolder = value;
       }
@@ -96,8 +98,17 @@ export default {
         return;
       }
       this.items = this.filterItems(this.availableItems, originalItems);
+
+      if (selectedItem && selectedItem.id && selectedItem.diagramId) {
+        let searchItem = treeSearch(this.items, (elem) => elem.id === selectedItem.diagramId),
+          searchItemFolder = searchItem[0] && searchItem[0].item && searchItem[0].item.parentId ? searchItem[0].item.parentId : null;
+        if (searchItemFolder) {
+          this.changeFolder(searchItemFolder);
+        }
+      } else {
+        this.changeFolder();
+      }
       this.callback = callback;
-      this.changeFolder();
       this.show = true;
 
     },
@@ -109,6 +120,7 @@ export default {
         if (storeItem.isFolder) {
           storeItem.items = this.filterItems(items, storeItem.items);
           if (storeItem.items && storeItem.items.length) {
+            storeItem = new Folder(storeItem);
             resStore.push(storeItem);
           }
         } else {
