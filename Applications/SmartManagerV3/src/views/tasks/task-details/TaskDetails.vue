@@ -141,7 +141,7 @@
                       class="my-2 mr-2 text-truncate"
                       :class="{ warning: item.id === activeAttachment.id }"
                       style="min-width: 100px; max-width: 200px; flex: 1 1 20%"
-                      @click="setActiveAttachment(item)">
+                      @click="selectAttachment(item)">
                 <fa-icon :icon="['fal', 'file-alt']" class="mr-3" size="lg"/>
                 <span class="text-truncate">{{ item.fileName }}</span>
               </v-chip>
@@ -314,12 +314,7 @@ export default {
   },
   async created () {
     await this.getTask()
-  },
-  mounted () {
-    // If task no attachment show comments tab
-    if (this.attachments.length === 0) {
-      this.tab = 1
-    }
+    this.tab = this.attachments.length ? 0 : 1
   },
   methods: {
     iFrameOnLoad (frame, event) {
@@ -368,12 +363,11 @@ export default {
         const completeParams = submitResult.submission
           ? JSON.stringify(submitResult.submission) : null
         this.changeStatus(status, completeParams)
-      } else {
-        this.$store.commit('SET_NOTIFY', {
-          text: submitResult.errorMessage || 'Form submit fail',
-          color: 'warning'
-        })
       }
+    },
+    selectAttachment (attachment) {
+      this.setActiveAttachment(attachment)
+      this.tab = 0
     }
   },
   beforeDestroy () {
