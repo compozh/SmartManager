@@ -96,6 +96,7 @@ export default {
 <style scoped>
   .process-component {
     height: 100%;
+    overflow: hidden;
   }
   .card-form-component {
     margin: 15px;
