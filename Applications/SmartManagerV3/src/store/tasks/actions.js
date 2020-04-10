@@ -81,20 +81,21 @@ export default {
           text: result.successMessage || i18n.t('notify.statChangeSuccess'),
           color: 'success'
         })
-        return result.success
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || i18n.t('notify.statChangeFail'),
           color: 'warning'
         })
       }
+      commit('SET_PRELOADER', 'status')
+      return result.success
     } catch (error) {
       console.error(error.message || error)
+      commit('SET_PRELOADER', 'status')
       commit('SET_NOTIFY', {
         text: error.message || i18n.t('notify.statChangeError'),
         color: 'error'
       })
     }
-    commit('SET_PRELOADER', 'status')
   }
 }
