@@ -154,7 +154,7 @@
   },
   "tabs": {
     "details": "Детально",
-    "attachments": "Додатки",
+    "attachments": "Додаток",
     "comments": "Коментарі",
     "approvals": "Погодження"
   },
@@ -294,5 +294,16 @@
     "loginSuccess": "Вхід успішно виконано",
     "loginFail": "Не вдалося увійти в систему, cпробуйте пізніше",
     "loginError": "Помилка входу в систему, зверніться у підтримку"
+  },
+  "processes": {
+    "runProcess": "Запустити процес",
+    "name": "Назва",
+    "version": "Версія",
+    "startProcess": "Запустити процес",
+    "errors": {
+      "processNotPassed": "Не передано код процесу",
+      "undefinedFormOfProcess": "Відсутнє визначення форми процесу",
+      "processesErrorLoad": "Помилка завантаження процесів"
+    }
   }
 }

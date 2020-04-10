@@ -16,7 +16,7 @@
       <v-list-item-group v-model="activeZoneId"
                          mandatory
                          active-class="item-active">
-        <v-list-item v-for="item in zones"
+        <v-list-item v-for="item in zones" @click="changeRoute(item)"
                      :key="item.title">
           <v-list-item-action class="justify-center">
             <fa-icon :icon="['fal', item.icon]"/>
@@ -58,6 +58,21 @@ export default {
   mixins: [zones, folders],
   created () {
     this.activeZoneId = 0
+  },
+  methods: {
+    changeRoute (zone) {
+      switch (zone.id) {
+        case 0:
+          this.$router.push('/tasks/active')
+          break
+        case 1:
+          this.$router.push('/tasks/cases')
+          break
+        case 2:
+          this.$router.push('/processes')
+          break
+      }
+    }
   }
 }
 </script>

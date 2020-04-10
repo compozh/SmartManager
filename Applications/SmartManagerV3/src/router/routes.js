@@ -19,6 +19,16 @@ export default [
         path: '/task/:taskId',
         name: 'task-details',
         component: () => import('@/views/tasks/task-details/TaskDetails.vue')
+      },
+      {
+        path: '/processes',
+        name: 'processes',
+        component: () => import('@/views/processes/Processes.vue')
+      },
+      {
+        path: '/process',
+        name: 'process',
+        component: () => import('@/views/processes/Process.vue')
       }
     ]
   },

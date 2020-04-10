@@ -77,6 +77,9 @@ export const tasks = {
       const task = this.$store.state.tasks.taskDetails[id]
       return task || {}
     },
+    taskId () {
+      return this.task.id || +this.$route.params.taskId
+    },
     type () {
       if (this.task.__typename === 'Case') {
         return 'CASE'
@@ -152,6 +155,21 @@ export const attachments = {
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
       this.$store.commit('SET_ATTACHMENT_DETAILS', {})
+    }
+  }
+}
+
+export const processes = {
+  computed: {
+    processes () {
+      return this.$store.state.processes.processes
+    }
+  },
+  methods: {
+    async getProcesses () {
+      if (this.processes.length === 0) {
+        await this.$store.dispatch('getProcesses', false)
+      }
     }
   }
 }
