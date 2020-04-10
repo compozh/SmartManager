@@ -6,7 +6,7 @@
           <v-row class="fill-height" v-if="loading" justify="center" align="center">
             <v-progress-circular :size="70" :width="7" color="primary" indeterminate />
           </v-row>
-        <copmpare-modeler :parrentEl="this.$refs.page" :fullScreenVisible="true" :diagram="diagram" :version="version" :type="type" />
+        <compare-modeler :parentEl="this.$refs.page" :fullScreenVisible="true" :diagram="diagram" :version="version" :type="type" />
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="properties-panel-section">
         <div class="properties-panel-container" >
