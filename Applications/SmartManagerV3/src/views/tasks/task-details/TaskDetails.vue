@@ -191,7 +191,7 @@ import DataIterator from '@/views/tasks/task-list/DataIterator'
 import Attachments from '@/views/attachments/Attachments'
 import Comments from '@/views/comments/Comments'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
-import { attachments, tasks } from '@/mixins/units'
+import { folders, tasks, attachments } from '@/mixins/units'
 
 export default {
   name: 'TaskDetails',
@@ -201,7 +201,7 @@ export default {
     Comments,
     TaskButtons
   },
-  mixins: [tasks, attachments],
+  mixins: [folders, tasks, attachments],
   data: () => ({
     tab: 0,
     iFrameHeight1: 250,
@@ -315,6 +315,7 @@ export default {
   async created () {
     await this.getTask()
     this.tab = this.attachments.length ? 0 : 1
+    this.task.isRead || this.getFolders()
   },
   methods: {
     iFrameOnLoad (frame, event) {

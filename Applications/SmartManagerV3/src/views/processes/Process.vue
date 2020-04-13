@@ -94,6 +94,7 @@ export default {
   .process-component {
     height: 100%;
     overflow: hidden;
+    text-align: center;
   }
   .card-form-component {
     margin: 15px;
