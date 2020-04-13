@@ -12,7 +12,7 @@
         <div v-if="!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)" class="mt-5"></div>
       </template>
 
-      <div :class="['d-flex', 'align-center', { 'flex-row-reverse': currentUserIsSender(comment.userId) }]">
+      <div :class="['d-flex', 'align-center', 'mt-1', { 'flex-row-reverse': currentUserIsSender(comment.userId) }]">
         <template v-if="comments[index - 1]">
           <template v-if="(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)
                            || !isSameDay(comment.date, comments[index - 1].date))">
