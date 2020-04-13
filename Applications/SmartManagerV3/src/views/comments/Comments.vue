@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-3 d-flex flex-column fill-height">
+  <div class="pa-2 d-flex flex-column fill-height">
     <div class="d-flex flex-column flex-grow-1 justify-space-between noise-bg border-light">
       <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3" style="flex-basis: 0;">
         <div v-if="comments.length" class="d-flex flex-column">
@@ -12,26 +12,24 @@
           </span>
         </div>
       </perfect-scrollbar>
-      <div class="msg-input white d-flex pa-3">
-        <v-text-field dense class="align-baseline"
-                      style="margin-bottom: -22px;"
+      <div class="msg-input white d-flex pa-3 align-center">
+        <v-text-field dense class="align-center"
                       v-model="comment"
                       :label="$t('comments.placeholder')"
                       outlined
                       clearable
+                      hide-details
                       :loading="loading"
                       :disabled="loading"
                       @keyup.enter="sendMsg">
-          <template #append-outer>
-            <v-btn color="blue-grey"
-                   class="ml-2 white--text"
-                   :disabled="loading"
-                   @click="sendMsg">
-              {{ $t('buttons.send') }}
-              <fa-icon :icon="['fal', 'paper-plane']" class="ml-2"/>
-            </v-btn>
-          </template>
         </v-text-field>
+        <v-btn color="blue-grey"
+               class="ml-2 white--text"
+               :disabled="loading"
+               @click="sendMsg">
+          {{ $t('buttons.send') }}
+          <fa-icon :icon="['fal', 'paper-plane']" class="ml-2"/>
+        </v-btn>
       </div>
     </div>
   </div>
@@ -63,7 +61,7 @@ export default {
           comment: this.comment,
           params: {
             type: this.type,
-            id: this.task.id || this.$route.params.taskId,
+            id: this.taskId,
             arso: this.task.arso,
             keyValue: this.task.keyValue,
             kidCopy: this.task.kidCopy
