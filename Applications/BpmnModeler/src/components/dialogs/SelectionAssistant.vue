@@ -18,8 +18,8 @@
       <v-divider></v-divider>
         <v-tabs vertical hide-slider class="assistant-tabs" active-class="assistant-category-active">
           <v-tab v-for="category in categories" :key="category.title" class="assistant-category">
-            <v-icon class="category-icon">{{ 'mdi-' + category.icon }}</v-icon>
-            {{category.title}}
+            <v-icon class="category-icon">{{ 'mdi-' + (category.icon ? category.icon : 'cogs') }}</v-icon>
+            {{category.title == 'default' ? $t('bpmn.labels.NoCategory') : category.title}}
           </v-tab>
           <v-tab-item class="category-item" v-for="category in categories" :key="category.title">
             <v-container fluid>
@@ -83,7 +83,7 @@ export default {
     eventBus.$off(events.modeler.showSelectionAssistant, this.onShowSelectionAssistant);
   },
   methods: {
-    onShowSelectionAssistant(items, type, title, callback) {
+    onShowSelectionAssistant(items, type, selectedItem, title, callback) {
       var defaultTitle = this.$t('bpmn.labels.NoCategory').replace(' ', '');
       this.categories = {};
       this.callback = callback;
@@ -104,6 +104,7 @@ export default {
         } else {
           for (var j = 0; j <  item.categories.length; j++) {
             var category = item.categories[j];
+
             if (!this.categories[category.name]) {
               this.categories[category.name] = {
                 title: category.name,
@@ -114,7 +115,9 @@ export default {
               this.categories[category.name].items.push(item);
             }
           }
-
+        }
+        if (selectedItem && selectedItem.id == item.id) {
+          this.setCurentItem(item);
         }
       }
       this.originalData = this.categories;
@@ -128,6 +131,7 @@ export default {
       this.show = false;
     },
     closeAssistant() {
+      this.search = '';
       this.show = false;
     },
     showOverview(item) {
