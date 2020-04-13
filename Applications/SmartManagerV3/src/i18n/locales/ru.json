@@ -67,7 +67,7 @@
     "executor": "Исполнитель",
     "initiator": "Инициатор",
     "inform": "К сведенью",
-    "childsDone": "Зделано подчиненными",
+    "childsDone": "Выполнено подчиненными",
     "childsAssigned": "Выдано подчиненным",
     "returnedInitiator": "Возращено инициатору",
     "days": "дн."
