@@ -28,7 +28,7 @@
                 v-for="item in category.items" :key="item.name"
                   :cols="4"
                 >
-                  <v-card class='item-card'>
+                  <v-card class='item-card' @click="setCurentItem(item)" :style="'background-color:'+ (item == curentItem ? '#eaeefb' : '#fff')">
                     <v-card-title v-text="item.name" style="word-break: break-word;"></v-card-title>
                     <span v-if="item.formCode" class="form-code">{{ $t('bpmn.labels.' + type + 'Code') + ': ' + item.formCode}}</span>
                     <v-card-text v-if="item.categories && item.categories.length">
@@ -72,6 +72,7 @@ export default {
       show: false,
       search: '',
       title: '',
+      curentItem: {},
       type: ''
     };
   },
@@ -133,7 +134,7 @@ export default {
       if (!item.formCode) {
         return;
       }
-      this.show = false;
+      this.setCurentItem(item);
       eventBus.$emit(events.formio.showFormOverview, item.formCode);
     },
     filterItems() {
@@ -177,6 +178,9 @@ export default {
     clearSearch() {
       this.search = '';
       this.filterItems();
+    },
+    setCurentItem(item) {
+      this.curentItem = item;
     }
   }
 };
