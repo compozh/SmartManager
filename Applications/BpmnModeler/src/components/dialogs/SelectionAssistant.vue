@@ -30,7 +30,7 @@
                 >
                   <v-card class='item-card'>
                     <v-card-title v-text="item.name" style="word-break: break-word;"></v-card-title>
-                    <span v-if="item.formCode" class="form-code">{{ $t('bpmn.labels.FormCode') + ': ' + item.formCode}}</span>
+                    <span v-if="item.formCode" class="form-code">{{ $t('bpmn.labels.' + type + 'Code') + ': ' + item.formCode}}</span>
                     <v-card-text v-if="item.categories && item.categories.length">
                       <v-chip
                         v-for="category in item.categories"
@@ -71,7 +71,8 @@ export default {
       originalData: {},
       show: false,
       search: '',
-      title: ''
+      title: '',
+      type: ''
     };
   },
   mounted() {
@@ -81,10 +82,11 @@ export default {
     eventBus.$off(events.modeler.showSelectionAssistant, this.onShowSelectionAssistant);
   },
   methods: {
-    onShowSelectionAssistant(items, title, callback) {
+    onShowSelectionAssistant(items, type, title, callback) {
       var defaultTitle = this.$t('bpmn.labels.NoCategory').replace(' ', '');
       this.categories = {};
       this.callback = callback;
+      this.type = type;
       this.title = title;
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
@@ -224,9 +226,8 @@ export default {
     }
     .form-code {
       margin: 0px 17px;
-      padding: 5px;
-      background-color: #8080801f;
-      border: 1px solid #8080802e;
+      font-size: 14px;
+      color: #a3a0a0;
     }
     .category-item {
       height: 80vh;

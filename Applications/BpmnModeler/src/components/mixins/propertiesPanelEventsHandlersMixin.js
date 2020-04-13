@@ -44,6 +44,7 @@ export default {
 
       eventBus.$emit(events.modeler.showSelectionAssistant,
         items,
+        definitionType == 'USER_TASK' ? 'form' : 'action',
         ActionDefinitionType.UserTask ? this.$t('bpmn.labels.SelectTaskCreationRule') : this.$t('bpmn.labels.SelectAction'),
         (selectedItem) => callback(selectedItem.id));
     },
@@ -98,7 +99,7 @@ export default {
         Notification.warning(this.$t('bpmn.errors.FormNotSpecified'));
         return;
       }
-      
+
       const form = await this.$store.dispatch('formio/getForm', { formCode: access.unformio });
       this.propertiesPanelShowForm(form, access.unformio, existingParameters, callback);
     },
@@ -174,9 +175,10 @@ export default {
       //   this.$t('bpmn.labels.SelectBusinessObject'),
       //   items, items.find(item => item.id === boDefCode),
       //   (selectedItem) => callback(selectedItem.id));
-      
+
       eventBus.$emit(events.modeler.showSelectionAssistant,
         items,
+        'form',
         this.$t('bpmn.labels.SelectBusinessObject'),
         (selectedItem) => callback(selectedItem.id));
     },
@@ -198,6 +200,7 @@ export default {
 
       eventBus.$emit(events.modeler.showSelectionAssistant,
         items,
+        'action',
         this.$t('bpmn.labels.SelectBusinessObjectAction'),
         (selectedItem) => callback(selectedItem.id));
     },
@@ -219,6 +222,7 @@ export default {
 
       eventBus.$emit(events.modeler.showSelectionAssistant,
         items,
+        'form',
         this.$t('bpmn.labels.SelectBusinessObjectAccess'),
         (selectedItem) => callback(selectedItem.id));
     },
