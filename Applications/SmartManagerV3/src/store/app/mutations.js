@@ -2,13 +2,11 @@ export default {
   SET_APPLICATIONS_PARAMS (state, params) {
     state.applicationParams = JSON.parse(params)
   },
-  SET_PRELOADER (state, name) {
-    const loaders = state.preLoaders
-    if (loaders.includes(name)) {
-      state.preLoaders = loaders.filter(i => i !== name)
-    } else {
-      state.preLoaders.push(name)
-    }
+  START_PRELOADER (state, preLoader) {
+    state.preLoaders.push(preLoader)
+  },
+  STOP_PRELOADER (state, preLoader) {
+    state.preLoaders = state.preLoaders.filter(i => i !== preLoader)
   },
   TOGGLE_SIDEBAR_OPEN (state, value) {
     state.sideBarOpen = value

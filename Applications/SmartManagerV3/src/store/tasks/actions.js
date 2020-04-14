@@ -6,7 +6,7 @@ export default {
     if (folderId === 'search') {
       return
     }
-    !preLoader || commit('SET_PRELOADER', 'tasks')
+    !preLoader || commit('START_PRELOADER', 'tasks')
     commit('SET_SEARCH', null)
     commit('SET_ACTIVE_FOLDER', { folderId, source: 'action' })
     try {
@@ -24,10 +24,10 @@ export default {
         color: 'error'
       })
     }
-    !preLoader || commit('SET_PRELOADER', 'tasks')
+    commit('STOP_PRELOADER', 'tasks')
   },
   async getTaskDetails ({ commit }, { taskId, preLoader }) {
-    !preLoader || commit('SET_PRELOADER', 'task')
+    !preLoader || commit('START_PRELOADER', 'task')
     try {
       const result = await api.getTaskDetailsFromGql(taskId)
       const taskDetails = result.data.smtasks.taskDetails
@@ -39,7 +39,7 @@ export default {
         color: 'error'
       })
     }
-    !preLoader || commit('SET_PRELOADER', 'task')
+    commit('STOP_PRELOADER', 'task')
   },
   async addComment ({ dispatch, commit }, { comment, params }) {
     const paramsJson = JSON.stringify(params)
@@ -68,7 +68,7 @@ export default {
   },
   async changeTaskStatus ({ dispatch, commit }, params) {
     const paramsJson = JSON.stringify(params)
-    commit('SET_PRELOADER', 'status')
+    commit('START_PRELOADER', 'status')
     try {
       const response = await api.changeTaskStatusInGql(paramsJson)
       const result = response.data.smtasksMutation.changeStatus
@@ -87,15 +87,15 @@ export default {
           color: 'warning'
         })
       }
-      commit('SET_PRELOADER', 'status')
       return result.success
     } catch (error) {
       console.error(error.message || error)
-      commit('SET_PRELOADER', 'status')
       commit('SET_NOTIFY', {
         text: error.message || i18n.t('notify.statChangeError'),
         color: 'error'
       })
+    } finally {
+      commit('STOP_PRELOADER', 'status')
     }
   }
 }
