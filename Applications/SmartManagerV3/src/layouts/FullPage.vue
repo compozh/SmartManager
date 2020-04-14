@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <notify/>
     <v-content class="layout--full-page">
       <div class="header--full-page d-flex align-center px-5"
            style="width: 100%">
@@ -15,10 +16,13 @@
 </template>
 
 <script>
+import Notify from '@/components/Notify'
 import LangSwitcher from '@/layouts/components/Navbar/LangSwitcher'
+
 export default {
   name: 'FullPage',
   components: {
+    Notify,
     LangSwitcher
   }
 }
