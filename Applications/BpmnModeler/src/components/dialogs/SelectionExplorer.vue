@@ -13,7 +13,8 @@
         </v-card-title>
         <v-card-text class="px-0 elevation-1 item">
           <v-list :width="!currentItem || currentItem.isFolder ? '100%' : '50%'">
-            <v-list-item class="px-3" dense :key="index"
+            <span v-if="!choosedFolder.items">{{$t('bpmn.labels.NoDataText')}}</span>
+            <v-list-item v-else class="px-3" dense :key="index"
               v-for="(elem, index) in choosedFolder.items"
               @click="selectItem(elem)"
               >
@@ -31,7 +32,7 @@
             </v-list-item>
           </v-list>
           <v-card v-model="currentItem" v-show="currentItem && !currentItem.isFolder" class="preview-content" :key="updatePreview" ref="fullScreenParent">
-            <compare-modeler v-if="currentItem" :version="currentItem" :type="currentItem.type" :fullScreenVisible="true" :parentEl="this.$refs.fullScreenParent.$el" ></compare-modeler>
+            <compare-modeler v-if="currentItem" :version="currentItem" :type="currentItem.type" :fullScreenVisible="false" ></compare-modeler>
           </v-card>
         </v-card-text>
 

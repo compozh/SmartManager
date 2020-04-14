@@ -148,7 +148,8 @@
 		"InsertTextHere": "Введіть текст сюди ...",
 		"AccessObject": "Об'єкт",
 		"NoCategory": "Без категорії",
-		"FormCode": "Код форми"
+		"formCode": "Код форми",
+		"actionCode": "Дія"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не вдалося завантажити дані",

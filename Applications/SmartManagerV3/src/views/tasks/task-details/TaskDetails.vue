@@ -141,7 +141,7 @@
                       class="my-2 mr-2 text-truncate"
                       :class="{ warning: item.id === activeAttachment.id }"
                       style="min-width: 100px; max-width: 200px; flex: 1 1 20%"
-                      @click="setActiveAttachment(item)">
+                      @click="selectAttachment(item)">
                 <fa-icon :icon="['fal', 'file-alt']" class="mr-3" size="lg"/>
                 <span class="text-truncate">{{ item.fileName }}</span>
               </v-chip>
@@ -191,7 +191,7 @@ import DataIterator from '@/views/tasks/task-list/DataIterator'
 import Attachments from '@/views/attachments/Attachments'
 import Comments from '@/views/comments/Comments'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
-import { attachments, tasks } from '@/mixins/units'
+import { folders, tasks, attachments } from '@/mixins/units'
 
 export default {
   name: 'TaskDetails',
@@ -201,7 +201,7 @@ export default {
     Comments,
     TaskButtons
   },
-  mixins: [tasks, attachments],
+  mixins: [folders, tasks, attachments],
   data: () => ({
     tab: 0,
     iFrameHeight1: 250,
@@ -314,12 +314,8 @@ export default {
   },
   async created () {
     await this.getTask()
-  },
-  mounted () {
-    // If task no attachment show comments tab
-    if (this.attachments.length === 0) {
-      this.tab = 1
-    }
+    this.tab = this.attachments.length ? 0 : 1
+    this.task.isRead || this.getFolders()
   },
   methods: {
     iFrameOnLoad (frame, event) {
@@ -351,7 +347,7 @@ export default {
         }
       }
     },
-    changeStatus (status, CompleteParams) {
+    async changeStatus (status, CompleteParams) {
       const statusParams = {
         type: 'TASK',
         id: this.taskId,
@@ -359,7 +355,10 @@ export default {
         comment: '',
         CompleteParams
       }
-      this.$store.dispatch('changeTaskStatus', statusParams)
+      const success = await this.$store.dispatch('changeTaskStatus', statusParams)
+      if (success) {
+        await this.$router.push('/')
+      }
     },
     async executeExternalTask () {
       const status = '+' // Task complete
@@ -368,12 +367,16 @@ export default {
         const completeParams = submitResult.submission
           ? JSON.stringify(submitResult.submission) : null
         this.changeStatus(status, completeParams)
-      } else {
+      } else if (submitResult) {
         this.$store.commit('SET_NOTIFY', {
           text: submitResult.errorMessage || 'Form submit fail',
           color: 'warning'
         })
       }
+    },
+    selectAttachment (attachment) {
+      this.setActiveAttachment(attachment)
+      this.tab = 0
     }
   },
   beforeDestroy () {

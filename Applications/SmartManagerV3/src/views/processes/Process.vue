@@ -78,12 +78,9 @@ export default {
         }
         processVariables.push(processVariable)
       }
-
       this.startProcessLoading = true
       this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, processVariables }).then(result => {
         this.startProcessLoading = false
-        this.$store.commit('setSnackbarSuccessMessage', this.$t('processes.messages.processSuccess'))
-        // window.close()
       })
     },
     typeToEnum (type) {
@@ -96,6 +93,8 @@ export default {
 <style scoped>
   .process-component {
     height: 100%;
+    overflow: hidden;
+    text-align: center;
   }
   .card-form-component {
     margin: 15px;

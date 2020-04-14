@@ -10,8 +10,14 @@ export default {
       state.preLoaders.push(name)
     }
   },
-  TOGGLE_SIDEBAR_OPEN (state) {
-    state.sideBarOpen = !state.sideBarOpen
+  TOGGLE_SIDEBAR_OPEN (state, value) {
+    state.sideBarOpen = value
+  },
+  EXPAND_ON_HOVER (state, value) {
+    state.expandOnHover = value
+  },
+  MINI_VARIANT (state, value) {
+    state.miniVariant = value
   },
   SET_SEARCH (state, search) {
     state.search = search

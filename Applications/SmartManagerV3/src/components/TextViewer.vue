@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-3 fill-height d-flex flex-column">
+  <div class="pa-2 fill-height d-flex flex-column">
     <perfect-scrollbar class="noise-bg border-light pa-3 flex-grow-1"
                        style="flex-basis: 0; white-space: pre;">
       {{ sourceText }}

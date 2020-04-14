@@ -24,7 +24,7 @@ export default {
       showFormioOverview: false,
       buttonLoading: false,
       code: '',
-      formDefinition: null,
+      formDefinition: null
     };
   },
   mounted() {
@@ -57,7 +57,7 @@ export default {
         height: 100%;
         width: 100%;
         position: absolute;
-        z-index: 100;
+        z-index: 210;
     }
     .overlay {
         opacity: 0.46;

@@ -86,9 +86,6 @@ export default {
             console.error(err);
             Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
             this.loading = false;
-          } else {
-            const canvas = this.modeler.get('canvas');
-            canvas.zoom('fit-viewport');
           }
         });
       }
@@ -149,8 +146,10 @@ export default {
     width: 100%;
     background: white;
     position: relative;
+    .tjs-table {
+      width: 100%
+    }
   }
-
 </style>
 <style lang="scss" scoped>
   .options-panel {

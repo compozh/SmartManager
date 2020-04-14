@@ -2,7 +2,10 @@
     <div class="fill-height">
       <component v-if=viewer :is="viewer" :url="attachmentDetails.url"/>
       <no-data v-else class="fill-height pa-2">
-        <span v-if="attachmentDetails.reason">{{ attachmentDetails.reason }}</span>
+        <span v-if="attachmentDetails.reason"
+              class="headline font-weight-light grey--text">
+          {{ attachmentDetails.reason }}
+        </span>
       </no-data>
     </div>
 </template>

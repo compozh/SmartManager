@@ -18,8 +18,8 @@
       <v-divider></v-divider>
         <v-tabs vertical hide-slider class="assistant-tabs" active-class="assistant-category-active">
           <v-tab v-for="category in categories" :key="category.title" class="assistant-category">
-            <v-icon class="category-icon">{{ 'mdi-' + category.icon }}</v-icon>
-            {{category.title}}
+            <v-icon class="category-icon">{{ 'mdi-' + (category.icon ? category.icon : 'cogs') }}</v-icon>
+            {{category.title == 'default' ? $t('bpmn.labels.NoCategory') : category.title}}
           </v-tab>
           <v-tab-item class="category-item" v-for="category in categories" :key="category.title">
             <v-container fluid>
@@ -28,9 +28,9 @@
                 v-for="item in category.items" :key="item.name"
                   :cols="4"
                 >
-                  <v-card class='item-card'>
+                  <v-card class='item-card' @click="setCurentItem(item)" :style="'background-color:'+ (item == curentItem ? '#eaeefb' : '#fff')">
                     <v-card-title v-text="item.name" style="word-break: break-word;"></v-card-title>
-                    <span v-if="item.formCode" class="form-code">{{ $t('bpmn.labels.FormCode') + ': ' + item.formCode}}</span>
+                    <span v-if="item.formCode" class="form-code">{{ $t('bpmn.labels.' + type + 'Code') + ': ' + item.formCode}}</span>
                     <v-card-text v-if="item.categories && item.categories.length">
                       <v-chip
                         v-for="category in item.categories"
@@ -38,7 +38,6 @@
                         class="ma-2"
                         color="primary"
                         text-color="white"
-                        @click="chipClick(category)"
                       >
                         <v-avatar left>
                           <v-icon>{{ 'mdi-' + (category.icon || 'cogs') }}</v-icon>
@@ -71,7 +70,9 @@ export default {
       originalData: {},
       show: false,
       search: '',
-      title: ''
+      title: '',
+      curentItem: {},
+      type: ''
     };
   },
   mounted() {
@@ -81,10 +82,11 @@ export default {
     eventBus.$off(events.modeler.showSelectionAssistant, this.onShowSelectionAssistant);
   },
   methods: {
-    onShowSelectionAssistant(items, title, callback) {
+    onShowSelectionAssistant(items, type, selectedItem, title, callback) {
       var defaultTitle = this.$t('bpmn.labels.NoCategory').replace(' ', '');
       this.categories = {};
       this.callback = callback;
+      this.type = type;
       this.title = title;
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
@@ -101,6 +103,7 @@ export default {
         } else {
           for (var j = 0; j <  item.categories.length; j++) {
             var category = item.categories[j];
+
             if (!this.categories[category.name]) {
               this.categories[category.name] = {
                 title: category.name,
@@ -111,7 +114,9 @@ export default {
               this.categories[category.name].items.push(item);
             }
           }
-
+        }
+        if (selectedItem && selectedItem.id == item.id) {
+          this.setCurentItem(item);
         }
       }
       this.originalData = this.categories;
@@ -125,13 +130,14 @@ export default {
       this.show = false;
     },
     closeAssistant() {
+      this.search = '';
       this.show = false;
     },
     showOverview(item) {
       if (!item.formCode) {
         return;
       }
-      this.show = false;
+      this.setCurentItem(item);
       eventBus.$emit(events.formio.showFormOverview, item.formCode);
     },
     filterItems() {
@@ -175,6 +181,9 @@ export default {
     clearSearch() {
       this.search = '';
       this.filterItems();
+    },
+    setCurentItem(item) {
+      this.curentItem = item;
     }
   }
 };
@@ -224,9 +233,8 @@ export default {
     }
     .form-code {
       margin: 0px 17px;
-      padding: 5px;
-      background-color: #8080801f;
-      border: 1px solid #8080802e;
+      font-size: 14px;
+      color: #a3a0a0;
     }
     .category-item {
       height: 80vh;
