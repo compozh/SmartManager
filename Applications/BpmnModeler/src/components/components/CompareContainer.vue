@@ -86,9 +86,6 @@ export default {
             console.error(err);
             Notification.error(this.$t('bpmn.Errors.ProcessesNotLoaded'));
             this.loading = false;
-          } else {
-            const canvas = this.modeler.get('canvas');
-            canvas.zoom('fit-viewport');
           }
         });
       }
