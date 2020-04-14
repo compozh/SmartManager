@@ -32,7 +32,7 @@
             </v-list-item>
           </v-list>
           <v-card v-model="currentItem" v-show="currentItem && !currentItem.isFolder" class="preview-content" :key="updatePreview" ref="fullScreenParent">
-            <compare-modeler v-if="currentItem" :version="currentItem" :type="currentItem.type" :fullScreenVisible="false" :parentEl="this.$refs.fullScreenParent.$el" ></compare-modeler>
+            <compare-modeler v-if="currentItem" :version="currentItem" :type="currentItem.type" :fullScreenVisible="false" ></compare-modeler>
           </v-card>
         </v-card-text>
 

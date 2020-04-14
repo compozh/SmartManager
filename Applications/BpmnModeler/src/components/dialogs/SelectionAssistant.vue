@@ -38,7 +38,6 @@
                         class="ma-2"
                         color="primary"
                         text-color="white"
-                        @click="chipClick(category)"
                       >
                         <v-avatar left>
                           <v-icon>{{ 'mdi-' + (category.icon || 'cogs') }}</v-icon>

@@ -149,8 +149,10 @@ export default {
     width: 100%;
     background: white;
     position: relative;
+    .tjs-table {
+      width: 100%
+    }
   }
-
 </style>
 <style lang="scss" scoped>
   .options-panel {
