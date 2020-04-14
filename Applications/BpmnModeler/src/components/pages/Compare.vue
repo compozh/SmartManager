@@ -2,10 +2,10 @@
 	<v-container class="column pa-0 fill-height compare-component" fluid>
     <Split @onDragEnd="onSplitDragEnd" :gutterSize="12">
       <SplitArea :size="100 - splitSize - splitDiffSize " class="diagram-left-section diagram-section">
-        <copmpare-modeler :fullScreenVisible="false" attitude="left" :diagram="diagram" :version="diagram1" ref="modeler1" :type="type" @compare="compare" />
+        <compare-modeler :fullScreenVisible="false" attitude="left" :diagram="diagram" :version="diagram1" ref="modeler1" :type="type" @compare="compare" />
       </SplitArea>
       <SplitArea :size="splitSize" :minSize="0" class="diagram-right-section diagram-section">
-        <copmpare-modeler :fullScreenVisible="false" attitude="right" :diagram="diagram" :version="diagram2" :type="type" ref="modeler2"  @compare="compare" />
+        <compare-modeler :fullScreenVisible="false" attitude="right" :diagram="diagram" :version="diagram2" :type="type" ref="modeler2"  @compare="compare" />
       </SplitArea>
       <SplitArea :size="splitDiffSize" :minSize="1" class="difference-section difference-section">
         <div class="difference-panel-container" >

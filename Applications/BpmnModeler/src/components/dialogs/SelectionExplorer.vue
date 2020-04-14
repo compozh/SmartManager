@@ -13,7 +13,8 @@
         </v-card-title>
         <v-card-text class="px-0 elevation-1 item">
           <v-list :width="!currentItem || currentItem.isFolder ? '100%' : '50%'">
-            <v-list-item class="px-3" dense :key="index"
+            <span v-if="!choosedFolder.items">{{$t('bpmn.labels.NoDataText')}}</span>
+            <v-list-item v-else class="px-3" dense :key="index"
               v-for="(elem, index) in choosedFolder.items"
               @click="selectItem(elem)"
               >
@@ -30,8 +31,8 @@
               </v-list-item-action>
             </v-list-item>
           </v-list>
-          <v-card v-model="currentItem" v-if="currentItem && !currentItem.isFolder" class="preview-content" :key="updatePreview">
-            <item-card :item="currentItem" :activeItem="currentItem.diagramId"/>
+          <v-card v-model="currentItem" v-show="currentItem && !currentItem.isFolder" class="preview-content" :key="updatePreview" ref="fullScreenParent">
+            <compare-modeler v-if="currentItem" :version="currentItem" :type="currentItem.type" :fullScreenVisible="false" ></compare-modeler>
           </v-card>
         </v-card-text>
 
@@ -43,6 +44,8 @@
 <script>
 import { eventBus } from '../../main';
 import { events } from '../../constants';
+import treeSearch from '../../api/treeSearch';
+import { Folder } from '../../api/models';
 
 export default {
   name: 'selection-explorer',
@@ -74,8 +77,8 @@ export default {
           items: this.items
         };
       } else if (!value.id) {
-        let elem = this.$store.getters['bpmn/getItemById'](value);
-        this.choosedFolder = elem.item;
+        let [{ item = null, index = -1 } = {}] = treeSearch(this.items, (item) => item.id === value);
+        this.choosedFolder = item;
       } else {
         this.choosedFolder = value;
       }
@@ -96,8 +99,17 @@ export default {
         return;
       }
       this.items = this.filterItems(this.availableItems, originalItems);
+
+      if (selectedItem && selectedItem.id && selectedItem.diagramId) {
+        let searchItem = treeSearch(this.items, (elem) => elem.id === selectedItem.diagramId),
+          searchItemFolder = searchItem[0] && searchItem[0].item && searchItem[0].item.parentId ? searchItem[0].item.parentId : null;
+        if (searchItemFolder) {
+          this.changeFolder(searchItemFolder);
+        }
+      } else {
+        this.changeFolder();
+      }
       this.callback = callback;
-      this.changeFolder();
       this.show = true;
 
     },
@@ -109,6 +121,7 @@ export default {
         if (storeItem.isFolder) {
           storeItem.items = this.filterItems(items, storeItem.items);
           if (storeItem.items && storeItem.items.length) {
+            storeItem = new Folder(storeItem);
             resStore.push(storeItem);
           }
         } else {

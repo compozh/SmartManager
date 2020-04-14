@@ -144,7 +144,8 @@
 		"InsertTextHere": "Введите текст сюда ...",
 		"AccessObject": "Объект",
 		"NoCategory": "Без категории",
-		"FormCode": "Код формы"
+		"formCode": "Код формы",
+		"actionCode": "Действие"
 	},
 	"errors": {
 		"ProcessesNotLoaded": "Не удалось загрузить данные",
