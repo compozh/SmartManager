@@ -33,7 +33,7 @@ export default class BpmnPropertiesProvider {
       entryFactory = new EntryFactory(element, commandStack, bpmnFactory, this.readonly);
 
     tabs.push(new GeneralTab(this.diagram, element, entryFactory, canvas, bpmnFactory, commandStack, elementRegistry, translate));
-    tabs.push(new FormsTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, translate));
+    tabs.push(new FormsTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, elementRegistry, translate));
     tabs.push(new BusinessObjectAccessTab(this.diagram, element, entryFactory, commandStack, bpmnFactory, elementRegistry, translate));
 
     return tabs.filter(tab => tab.groups.length > 0);

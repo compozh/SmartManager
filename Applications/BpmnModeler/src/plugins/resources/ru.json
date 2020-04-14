@@ -468,7 +468,8 @@
 		"Completion Condition": "Условие выполнения",
 		"Access": "Доступ",
 		"Rules": "Правила",
-		"Access Parameters": "Настройки доступа"
+		"Access Parameters": "Настройки доступа",
+		"Attachments": "Вложения"
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {

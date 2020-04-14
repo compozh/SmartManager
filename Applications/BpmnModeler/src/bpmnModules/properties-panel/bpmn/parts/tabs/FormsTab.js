@@ -1,5 +1,5 @@
 import { PropertiesPanelTab } from '../../../Models';
-import { FormsGroup, SimpleFormGroup } from '../groups';
+import { FormsGroup, SimpleFormGroup, AttachmentsGroup } from '../groups';
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import { Diagram } from '../../../../../api/models';
 import EntryFactory from '../../../EntryFactory';
@@ -16,12 +16,13 @@ export default class FormsTab extends PropertiesPanelTab {
    * @param {Object} commandStack - Стек комманд
    * @param {Function} translate - Функция перевода
    */
-  constructor(diagram, element, entryFactory, commandStack, bpmnFactory, translate) {
+  constructor(diagram, element, entryFactory, commandStack, bpmnFactory, elementRegistry, translate) {
     super('forms', translate('Forms'), []);
 
     if (ensureFormKeyAndDataSupported(element)) {
       this.groups.push(new FormsGroup(diagram, element, entryFactory, commandStack, translate));
       this.groups.push(new SimpleFormGroup(element, entryFactory, bpmnFactory, translate));
+      this.groups.push(new AttachmentsGroup(element, entryFactory, bpmnFactory, elementRegistry, translate));
     }
   }
 }

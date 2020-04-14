@@ -170,6 +170,53 @@
           "type": "String"
         }
       ]
+    },
+    {
+      "name": "BusinessObjectAttachmentsData",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "attachments",
+          "type": "BusinessObjectAttachments",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "BusinessObjectAttachments",
+      "superClass": [
+        "Element"
+      ],
+      "meta": {
+        "allowedIn": [
+          "bpmn:UserTask"
+        ]
+      },
+      "properties": [
+        {
+          "name": "id",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "dataObjectRef",
+          "isAttr": true,
+          "type": "bpmn:DataObject",
+          "isReference": true
+        },
+        {
+          "name": "businessObjectAccessDefinitionCode",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
     }
   ],
   "enumerations": [
