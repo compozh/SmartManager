@@ -472,7 +472,8 @@
 		"Completion Condition": "Умова виконання",
 		"Access": "Доступ",
 		"Rules": "Правила",
-		"Access Parameters": "Параметри доступу"
+		"Access Parameters": "Параметри доступу",
+		"Attachments": "Вкладення"
 	},
 	"dmn-modeler": {
 
