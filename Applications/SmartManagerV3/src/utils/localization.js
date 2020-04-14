@@ -1,15 +1,9 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
+import Localization from '@it-enterprise/localization'
 
-// Реализация метода регистрации файлов локализации для пакета it-enterprise/formio
-// ...имитация логики пакета it-enterprise/localization
-const localization = {
-  __i18n: i18n,
-  RegisterLanguage (namespace, lang, getMessagePromise) {
-    // TODO: add formio messages to i18n
-  }
-}
+Vue.use(Localization, { dependencies: { i18n } })
 
-Object.defineProperty(Vue.prototype, '$localization', {
-  get: () => localization
-})
+Vue.prototype.$localization.RegisterLanguage('', 'ru', () => import('@/i18n/locales/ru.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'en', () => import('@/i18n/locales/en.json'))
+Vue.prototype.$localization.RegisterLanguage('', 'uk', () => import('@/i18n/locales/uk.json'))

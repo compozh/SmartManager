@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import cookies from 'vue-cookies'
+import { folders } from '@/mixins/units'
 
 export default {
   name: 'LangSwitcher',
@@ -31,9 +31,10 @@ export default {
     locales: [
       { code: 'uk', name: 'Українська', flag: 'ua' },
       { code: 'ru', name: 'Русский', flag: 'ru' },
-      { code: 'en', name: 'English', flag: 'us' }
+      { code: 'en', name: 'English', flag: 'en' }
     ]
   }),
+  mixins: [folders],
   computed: {
     lang: {
       get () {
@@ -42,16 +43,15 @@ export default {
       },
       set (lang) {
         this.setLang(lang)
-        // TODO: импортировать и задействовать миксин для перечитки папок
+        // Перечитка папок для обновления локализации
+        this.getFolders()
       }
     }
   },
   methods: {
     setLang (lang) {
-      this.$i18n.locale = this.$vuetify.lang.current = lang
-      cookies.set('c', lang)
-      localStorage.setItem('lang', lang)
-      document.querySelector('html').setAttribute('lang', lang)
+      this.$vuetify.lang.current = lang
+      this.$localization.SetLocalization(lang)
     }
   }
 }

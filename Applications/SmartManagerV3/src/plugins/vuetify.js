@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import cookies from 'vue-cookies'
 
 // Translation provided by Vuetify (javascript)
 import en from 'vuetify/es5/locale/en'
@@ -20,7 +19,7 @@ export default new Vuetify({
   },
   lang: {
     locales: { en, ru, uk },
-    current: localStorage.getItem('lang') || cookies.get('c') || 'en'
+    current: localStorage.getItem('language') || 'en'
   },
   icons: {
     iconfont: 'fa'
