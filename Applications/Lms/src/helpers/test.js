@@ -1,4 +1,15 @@
 /**
+ * LMS. Состояние теста
+ */
+export const testStatus = {
+  open: 1,
+  closed: 2,
+  finished: 3,
+  notActual: 4,
+  canseled: 5
+}
+
+/**
  * LMS. перечисление типы вопросов
  */
 export const questionType = {

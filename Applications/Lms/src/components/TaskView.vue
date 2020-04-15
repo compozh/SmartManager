@@ -32,7 +32,7 @@ export default {
     }
   },
   mounted() {
-    this.expanedEl = this.$refs.task // document.getElementById('task')
+    this.expanedEl = this.$refs.task
   },
   methods: {
     toggleFullScreen() {

@@ -97,6 +97,18 @@ export default {
     } else {
       state.discussion.voutsDownQty -= payload
     }
-  }
+  },
 
+  // Тест
+  setTestInfo(state, payload) {
+    state.test.commonInfo = payload
+  },
+
+  setErrorMessage(state, payload) {
+    state.errorMessage = payload
+  },
+
+  setTestAttemptId(state, payload) {
+    state.test.attemptId = payload
+  }
 }

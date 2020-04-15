@@ -2,6 +2,7 @@ import { LmsApi as api } from '../api/lmsApi'
 import auth from '@it-enterprise/jwtauthentication'
 import { routerDependencies } from '@/router'
 import { addStyles } from '../helpers/coursesModules'
+import { testStatus } from '../helpers/test'
 const router = routerDependencies.router
 
 export default {
@@ -12,6 +13,7 @@ export default {
       router.push({name: 'LMSREALHOME'})
     }
   },
+
   async login({commit, state}, {login, password, remember}) {
     if (state.user) {
       console.log('User is logged in')
@@ -30,10 +32,11 @@ export default {
       console.log(e.message)
     }
   },
-  getLogoLink({commit}) {
+
+  async getLogoLink({commit}) {
     commit('setError', null)
     try {
-      const result = api.getLogo()
+      const result = await api.getLogo()
       const link = result
       commit('setLogoLink', link)
     } catch (error) {
@@ -226,5 +229,73 @@ export default {
       commit('setError', error.message)
       commit('setCircularLoader', false)
     }
+  },
+
+  async getTestInfo({commit}, testGuid) {
+    let result = false
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    try {
+      const response = await api.getTestInfoFromGql(testGuid)
+      commit('setCircularLoader', false)
+      if (response.success) {
+        // проверить состояние опроса
+        const status = response.test.surveyStatus
+        switch (status) {
+        case testStatus.open:
+          commit('setTestInfo', response.test)
+          result = true
+          break
+        case testStatus.closed:
+          // проверить количество доступных попыток
+          if ( response.test.attemptsAvailable ) {
+            commit('setTestInfo', response.test)
+            result = true
+          } else {
+            commit('setErrorMessage', 'Доступное количество попыток исчерпано.')
+            result = false
+          }
+          break
+        case testStatus.finished:
+          commit('setErrorMessage', 'Период прохождения опроса закончился.')
+          result = false
+          break
+        case testStatus.notActual:
+          commit('setErrorMessage', 'Текущая дата не попадает в период проведения теста. Перейдите к тесту позже.')
+          result = false
+          break
+        case testStatus.canseled:
+          commit('setErrorMessage', 'Данный тест отменен.')
+          result = false
+          break
+        default:
+          break
+        }
+      } else {
+        commit('setErrorMessage', response.errormessage)
+      }
+      return result
+    } catch (error) {
+      commit('setError', error.message)
+      return result
+    }
+  },
+
+  async initializeTest({commit}, {surveyId, userId}) {
+    commit('setError', null)
+    commit('setCircularLoader', true)
+    try {
+      const response = await api.initializeTestFromGql(surveyId, userId)
+      if (response.success) {
+        commit('setTestAttemptId', response.answerHeaderId)
+      } else {
+        commit('setErrorMessage', response.errormessage)
+      }
+      commit('setCircularLoader', false)
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setCircularLoader', false)
+    }
   }
+
 }

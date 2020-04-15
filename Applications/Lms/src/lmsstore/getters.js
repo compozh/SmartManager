@@ -76,5 +76,18 @@ export default {
   },
   discussionId (state) {
     return state.discussionId
+  },
+
+  // Тест
+  testCommonInfo(state) {
+    return state.test.commonInfo
+  },
+
+  errorMessage(state) {
+    return state.errorMessage
+  },
+
+  testTitleColors(state) {
+    return state.test.titleColors
   }
 }

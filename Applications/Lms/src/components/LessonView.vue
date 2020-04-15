@@ -1,7 +1,7 @@
 <template>
   <v-container py-0>
     <v-layout column fill-height>
-      <v-flex mx-2 py-2 grow v-if="unit">
+      <v-flex v-if="unit" class="height100">
         <div class="height100" v-if='unit.lesson.lessonType === lessonType.video'>
           <video
             ref="lessonvideo"
@@ -19,15 +19,15 @@
           v-if="unit.lesson.lessonType === lessonType.test">
           <test-view
             class="lesson-content-view"
-            :test="unit" />
+            :testGuid="unit.lesson.surveyId" />
         </div>
-        <div class="height100"
-          v-if="unit.lesson.lessonType === lessonType.task">
+        <!-- <div class="height100"
+          v-if="unit.lesson.lessonType === lessonType.text">
           <task-view
             class="lesson-content-view"
             :task="lessonContent"
             :config="config" />
-        </div>
+        </div> -->
       </v-flex>
     </v-layout>
   </v-container>
@@ -94,12 +94,11 @@ export default {
 
 <style>
 .height100 {
-  max-height: 100%;
-  overflow-y: auto;
+  height: 100%;
+  /* overflow-y: auto; */
 }
 .lesson-content-view {
   width:100%;
   height: 100%;
-  /* overflow-y: auto; */
 }
 </style>

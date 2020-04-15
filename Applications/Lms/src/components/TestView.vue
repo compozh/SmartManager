@@ -1,6 +1,7 @@
 <template>
-  <v-container>
-    <v-layout>
+  <v-container py-0 >
+    <v-layout
+      class="height100">
       <component v-bind:is="currentComponent"></component>
     </v-layout>
   </v-container>
@@ -14,10 +15,19 @@ import testResults from './TestResults'
 export default {
   name: 'test-view',
   props: {
-    test: Object
+    testGuid: String
   },
-  created() {
-    this.$store.commit('lms/setCurrentTestPage', 'test-start')
+  async mounted() {
+    this.expanedEl = this.$refs.task
+    const success = await this.$store.dispatch('lms/getTestInfo', this.testGuid)
+    if (success) {
+      this.$store.commit('lms/setCurrentTestPage', 'test-start')
+    } else {
+      this.$store.commit('lms/setCurrentTestPage', 'error-message')
+    }
+  },
+  beforeDestroy() {
+    this.$store.commit('lms/setTestInfo', null)
   },
   data() {
     return {
@@ -26,93 +36,8 @@ export default {
         testPassing,
         testResults
       ],
-      // STUB для уроков
-      questions: [
-        {
-          id: 1,
-          qtype: 1,
-          qtext: 'Ваш рост',
-          answered: '',
-          isCorrect: '',
-          isRequired: '',
-          attributes: [
-            {
-              id: 10,
-              title: '',
-              rangeNumber: 0,
-              rightAnswer: 0,
-              answerDetail: '',
-              typeField: 1,
-              inputValue: '',
-            },
-            {
-              id: 11,
-              title: '',
-              rangeNumber: 0,
-              rightAnswer: 0,
-              answerDetail: '',
-              typeField: 1,
-              inputValue: '',
-            },
-            {
-              id: 12,
-              title: '',
-              rangeNumber: 0,
-              rightAnswer: 0,
-              answerDetail: '',
-              typeField: 1,
-              inputValue: '',
-            }
-          ]
-        },
-        {
-          id: 2,
-          qtype: 2,
-          qtext: '',
-          answered: '',
-          isCorrect: '',
-          isRequired: '',
-          attributes: [
-            {
-              id: 21,
-              title: '',
-              rangeNumber: 0,
-              rightAnswer: 0,
-              answerDetail: '',
-              typeField: 1,
-              inputValue: '',
-            },
-            {
-              id: 22,
-              title: '',
-              rangeNumber: 0,
-              rightAnswer: 0,
-              answerDetail: '',
-              typeField: 1,
-              inputValue: '',
-            }
-          ]
-        },
-        {
-          id: 3,
-          qtype: 1,
-          qtext: '',
-          answered: '',
-          isCorrect: '',
-          isRequired: '',
-          attributes: [
-            {
-              id: 30,
-              title: '',
-              rangeNumber: 0,
-              rightAnswer: 0,
-              answerDetail: '',
-              typeField: 1,
-              inputValue: '',
-            }
-          ]
-        }
-      ]
+      collapse: true,
+      expanedEl: null
     }
   },
   computed: {
@@ -125,5 +50,15 @@ export default {
 </script>
 
 <style>
-
+.btn-over {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transition: 0.7s;
+  z-index: 99;
+}
+.screen {
+  position: relative;
+  display: block;
+}
 </style>
