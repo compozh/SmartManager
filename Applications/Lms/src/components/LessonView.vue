@@ -1,28 +1,33 @@
 <template>
   <v-container py-0>
     <v-layout column fill-height>
-      <v-flex mx-2 pt-2 shrink>
-        <v-card flat v-if="unit">
-          <div v-if='unit.lesson.lessonType === lessonType.video'>
-            <video
-              ref="lessonvideo"
-              class="lesson-view"
-              :src="getLink(unit.content)"
-              @ended="getNextTrack()"
-              controls='controls'></video>
-          </div>
-          <div
-            v-if='unit.lesson.lessonType === lessonType.text'
-            class="lesson-view">
-            <quill v-model="getLessonContent" :config="config"></quill>
-          </div>
-          <div v-if="unit.lesson.lessonType === lessonType.test">
-            <test-view
-              class="lesson-view"
-              :test="unit"
-            ></test-view>
-          </div>
-        </v-card>
+      <v-flex v-if="unit" class="height100">
+        <div class="height100" v-if='unit.lesson.lessonType === lessonType.video'>
+          <video
+            ref="lessonvideo"
+            class="lesson-content-view"
+            :src="getLink(unit.content)"
+            @ended="getNextTrack()"
+            controls='controls'></video>
+        </div>
+        <div
+          v-if='unit.lesson.lessonType === lessonType.text'
+          class="height100 lesson-content-view">
+          <quill v-model="lessonContent" :config="config"></quill>
+        </div>
+        <div class="height100"
+          v-if="unit.lesson.lessonType === lessonType.test">
+          <test-view
+            class="lesson-content-view"
+            :testGuid="unit.lesson.surveyId" />
+        </div>
+        <!-- <div class="height100"
+          v-if="unit.lesson.lessonType === lessonType.text">
+          <task-view
+            class="lesson-content-view"
+            :task="lessonContent"
+            :config="config" />
+        </div> -->
       </v-flex>
     </v-layout>
   </v-container>
@@ -71,7 +76,7 @@ export default {
     }
   },
   computed: {
-    getLessonContent () {
+    lessonContent () {
       let content = null
       if (this.unit.content) {
         try {
@@ -88,8 +93,12 @@ export default {
 </script>
 
 <style>
-.lesson-view {
+.height100 {
+  height: 100%;
+  /* overflow-y: auto; */
+}
+.lesson-content-view {
   width:100%;
-  overflow: hidden;
+  height: 100%;
 }
 </style>

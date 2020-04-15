@@ -6,14 +6,7 @@
           <v-flex>
             <v-layout column>
               <v-flex xs12>
-                <v-card v-if="links">
-                  <v-breadcrumbs  :items="links" divider=">" :class="active-link">
-                    <template v-slot:item="{ item }">
-                      <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
-                      <span v-else :class="disable-link">{{item.text}}</span>
-                    </template>
-                  </v-breadcrumbs>
-                </v-card>
+                <bread-crumbs :links="links" @linkChoiced="goToRoute" />
               </v-flex>
               <v-flex>
                <v-card v-bind:style="{'background-color': '#1a237e'}">
@@ -47,11 +40,9 @@
 	</v-container>
 </template>
 
-
 <script>
-
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
-import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
+import { getLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-courses',
@@ -62,24 +53,26 @@ export default {
     if (this.$store.getters['lms/availableFilters'] === null) {
       this.getAvailableFilters()
     }
+    let linksOld = this.$store.getters['lms/links']
+    this.links = getLinks(this.title, this.$route, linksOld)
+    this.$store.commit('lms/setLinks', this.links)
   },
   data() {
     return {
       filterChanged: false,
-      // allCourses: [],
-      coursesFiltered: []
+      coursesFiltered: [],
+      links: null,
+      title: 'Курсы'
     }
   },
 
   methods: {
+    goToRoute(index) {
+      this.$router.push({name: this.links[index].name, params: this.links[index].params})
+    },
     goToCourseDetails(course) {
-      this.$store.commit('lms/')
       this.$router.push({name: 'LMSCOURSEDETAILS',
-        params: {
-          courseGuid: course.courseGuid,
-          courseName: course.name,
-          links: this.links
-        }
+        params: { courseGuid: course.courseGuid }
       })
     },
     getCourses () {
@@ -195,17 +188,6 @@ export default {
       } else {
         return this.$store.getters['lms/courses']
       }
-    },
-    links() {
-      /*{
-        text: 'Курсы',
-        disabled: true,
-        href: window.myConfig.BASE_URL + this.$route.path
-      } */
-      const thisLink = getThisLink('Курсы', this.$route.path, true)
-      let links = getRoutesLinks(this.$route.params.links, thisLink)
-      // const links = this.$store.state.lms.links
-      return links
     }
   },
 }

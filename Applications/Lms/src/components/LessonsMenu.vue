@@ -6,7 +6,7 @@
         color="grey lighten-2"
         flat
         v-for="(moduleItem, index) in modules" :key="moduleItem.moduleGuid">
-        <div class="pl-3 pt-1">
+        <div class="pl-3 py-1">
           <v-layout nowrap align-center justify-space-between>
             <v-flex>
               <div class="subheading font-weight-bold">{{moduleItem.name}}</div>

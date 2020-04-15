@@ -5,14 +5,7 @@
         <!--COURSE HEADER-->
         <v-layout>
           <v-flex xs12>
-            <v-card v-if="links">
-              <v-breadcrumbs  :items="links" divider=">" class="activelink">
-                <template v-slot:item="{ item }">
-                  <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
-                  <span v-else class="disablelink">{{item.text}}</span>
-                </template>
-              </v-breadcrumbs>
-            </v-card>
+            <bread-crumbs :links="links" @linkChoiced="goToRoute" />
             <v-card v-if="course" v-bind:style="{'background-color': course.backgroundColor}">
               <v-layout wrap row justify-center>
                 <v-flex md1 xs2 class='pt-5' hidden-xs-only>
@@ -173,7 +166,7 @@
 </template>
 
 <script>
-import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
+import { getLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-course-details',
@@ -181,18 +174,24 @@ export default {
     return {
       courseGuid: '',
       loading: false,
-      links: null
+      links: null,
+      title: ''
     }
   },
-  created() {
+  async created() {
     this.courseGuid = this.$route.params.courseGuid
-    this.getCourseDetails(this.courseGuid)
-    const thisLink = getThisLink(this.course.name, this.$route.path, true)
-    this.links = getRoutesLinks(this.$route.params.links, thisLink)
+    await this.getCourseDetails(this.courseGuid)
+    this.title = this.course.name
+    let linksOld = this.$store.getters['lms/links']
+    this.links = getLinks(this.title, this.$route, linksOld)
+    this.$store.commit('lms/setLinks', this.links)
   },
   methods: {
-    getCourseDetails(courseGuid) {
-      this.$store.dispatch('lms/getCourseDetails', courseGuid)
+    goToRoute(index) {
+      this.$router.push({name: this.links[index].name, params: this.links[index].params})
+    },
+    async getCourseDetails(courseGuid) {
+      await this.$store.dispatch('lms/getCourseDetails', courseGuid)
     },
     async startCourseLearning() {
       // Если слушатель еще не начал проходить курс

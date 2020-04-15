@@ -188,6 +188,9 @@ export default {
           answersQty: 0
         }
         const lessonGuid = this.$store.getters['lms/currentLessonGuid']
+        // TODO: 2020-04-07 заменить lessonGuid на lessonId
+        //const unit = this.$store.getters['lms/unit']
+        // const lessonId = unit.lesson.lessonId
         // отправить ответ на сервер
         try {
           const postResult = await api.addPostFromGql(this.user.id, lessonGuid, this.question.id, answer)

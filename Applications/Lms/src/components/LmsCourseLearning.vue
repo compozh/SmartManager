@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height fluid px-0 py-0 mx-0 my-0>
-    <v-layout row wrap class="color-white" v-resize="hideSidebar">
+    <v-layout row nowrap class="color-white" v-resize="hideSidebar">
       <!-- Заголовок курса, урока, прогресс
             Урок, панель навигации по урокам
             Закладки: ресурсы, вопросы и ответы -->
@@ -37,7 +37,7 @@
                         {{ progressValue }}
                       </v-progress-circular>
                     </v-flex>
-                    <v-flex v-if="!menuOnRight" align-self-center>
+                    <v-flex v-if="!menuOnRight && !isMobile" align-self-center>
                       <v-btn
                         @click="openMenuRight"
                         round
@@ -54,17 +54,17 @@
           <!-- Урок и панель навигации -->
           <v-flex >
             <v-layout column>
-              <v-flex>
-                <v-card flat >
+              <!-- <v-flex> -->
+                <!-- <v-card flat > -->
                   <lesson-view
                     class="lesson-view"
                     v-if='currentLesson'
                     :unit='currentLesson'
                     :startPlay="startPlay"
                     @ended="putNextLesson()"></lesson-view>
-                </v-card>
+                <!-- </v-card> -->
                 <v-flex>
-                  <v-toolbar dense flat >
+                  <v-toolbar dense flat v-if="!isTest">
                     <v-btn
                       v-show="!isFirstLesson"
                       @click="prevLesson()"
@@ -88,7 +88,7 @@
                     </v-btn>
                   </v-toolbar>
                 </v-flex>
-              </v-flex>
+              <!-- </v-flex> -->
               <v-layout  justify-center>
                 <v-flex>
                   <v-tabs
@@ -127,13 +127,12 @@
                   </v-tabs>
                 </v-flex>
               </v-layout>
-
             </v-layout>
           </v-flex>
         </v-layout>
       </v-flex>
       <!-- Навигационное меню -->
-      <v-flex v-if="menuOnRight" lg4 md8 sm12>
+      <v-flex v-if="menuOnRight" grow lg4 md8 sm12>
         <v-layout column fill-height>
           <v-flex grow>
             <v-card flat height='100%' width='100%'>
@@ -213,6 +212,8 @@ export default {
     this.navigation.lessons = this.getAllLessons()
     this.navigation.currentLessonIndex = this.getCurrentLessonIndex( this.$route.params.lessonGuid )
     this.$store.dispatch('lms/getDiscussionList', this.$route.params.lessonGuid)
+    // TODO: 2020-04-07 Заменить lessonGuid на lessonId
+    // this.$store.dispatch('lms/getDiscussionList', this.unit.lesson.lessonId)
     this.$store.commit('lms/setQuestionsView', 'questions-list')
   },
   beforeDestroy() {
@@ -395,6 +396,10 @@ export default {
     }
   },
   computed: {
+    isMobile() {
+      let breackPoint = this.$vuetify.breakpoint.name
+      return breackPoint === 'xs' || breackPoint === 'sm'
+    },
     course() {
       const courseDetails = this.$store.getters['lms/courseDetails']
       return courseDetails ? courseDetails.course : null
@@ -472,9 +477,6 @@ export default {
 .color-grey {
   background-color: #E0E0E0;
 }
-.active {
-  background: #E1F5FE;
-}
 .lesson-item {
   border-top: solid 1px #E0E0E0;
   cursor: pointer;
@@ -484,8 +486,9 @@ export default {
 }
 .lesson-view {
   width:100%;
+  /* width: auto; */
   height: 60vh;
-  overflow: hidden;
+  /* overflow: auto; */
   border: solid lightgray 1px;
 }
 .progress-label-size {

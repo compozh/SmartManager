@@ -181,8 +181,6 @@ export class LmsApi {
   }
 
   static async addPostFromGql(userId, lessonGuid, parentPostId = 0, post) {
-    const param = { userId, lessonGuid, parentPostId, post }
-    console.log('addPostFromGql: ', param)
     try {
       const client = await getClient()
       return await client.mutate({
@@ -195,7 +193,83 @@ export class LmsApi {
     }
   }
 
-  getLogo () {
+  // STUB
+  // TODO: реализовать запрос и обработку после добавления реализации на сервере
+  static async getTestInfoFromGql(surveyGuid) {
+    if (surveyGuid !== '00000000-0000-0000-0000-000000000000') {
+      return {
+        success: false,
+        successmessage: null,
+        errormessage: 'Ошибка! Запрошенный тест отсутствует',
+        errorcode: '',
+        test: {
+          surveyId: 0,
+          userId: 0,
+          surveyStatus: 2,
+          surveyName: null,
+          surveyDescription: null,
+          surveyLanguage: null,
+          surveyType: null,
+          attemptsTotal: 0,
+          attemptsAvailable: 0
+        }
+      }
+    } else {
+      return {
+        success: true,
+        successmessage: '',
+        errormessage: '',
+        errorcode: '',
+        test: {
+          surveyId: 10,
+          userId: 7,
+          surveyStatus: 2, // open
+          surveyName: 'Тестирование отображения теста в LMS',
+          surveyDescription: `Пройдите тест.<br>
+          Время отведенное для теста - 15 мин.<br>
+          Для ответа нажмите кнопку "Ответить".
+          Если вопрос покажется сложным перейдите к следующему, а позже, когда останется время - вернитесть, выбрав его по номеру в списке над текстом вопроса.<br>
+          Для  досрочного завершения теста нажмите кнопку <b>"Завершить"</b>.
+          <hr>
+          Время отведенное для теста - 15 мин.<br>
+          Для ответа нажмите кнопку "Ответить".
+          Если вопрос покажется сложным перейдите к следующему, а позже, когда останется время - вернитесть, выбрав его по номеру в списке над текстом вопроса.<br>
+          Для  досрочного завершения теста нажмите кнопку <b>"Завершить"</b>
+          `,
+          surveyLanguage: 'RU',
+          surveyType: 1,
+          attemptsTotal: 2,
+          attemptsAvailable: 1
+        }
+      }
+    }
+  }
+
+  // STUB
+  // TODO: реализовать запрос и обработку после добавления реализации на сервере
+  static async initializeTestFromGql(surveyId, userId) {
+    const params = {surveyId, userId}
+    console.log('initializeTestFromGql', params)
+    if (surveyId === 10) {
+      return {
+        success: true,
+        successmessage: null,
+        errormessage: '',
+        errorcode: '',
+        answerHeader: 101
+      }
+    } else {
+      return {
+        success: false,
+        successmessage: null,
+        errormessage: 'Произошла ошибка! Продолжение прохождения теста невозможно!',
+        errorcode: '',
+        answerHeader: 0
+      }
+    }
+  }
+
+  async getLogo () {
     return 'https://m.it.ua/s00/ws/GetFile.ashx?file=itlogo.png&folder=DOCS'
   }
 }

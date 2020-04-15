@@ -19,6 +19,10 @@ export default {
     return state.availableFilters
   },
 
+  links(state) {
+    return state.links
+  },
+
   recommended (state) {
     return state.recommended
   },
@@ -72,5 +76,18 @@ export default {
   },
   discussionId (state) {
     return state.discussionId
+  },
+
+  // Тест
+  testCommonInfo(state) {
+    return state.test.commonInfo
+  },
+
+  errorMessage(state) {
+    return state.errorMessage
+  },
+
+  testTitleColors(state) {
+    return state.test.titleColors
   }
 }

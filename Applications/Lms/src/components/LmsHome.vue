@@ -45,18 +45,22 @@
 <script>
 
 import image from '../assets/home.jpg'
-import { getThisLink } from '../helpers/navihelp.js'
+import { getLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-home',
   mounted () {
-    this.$store.commit('lms/addRouteToLinks', getThisLink('Главная', this.$route.path, false) )
+    let linksOld = this.$store.getters['lms/links']
+    const links = getLinks(this.title, this.$route, linksOld)
+    this.$store.commit('lms/setLinks', links)
+
     this.getAvailableFilters()
     this.getRecommended()
   },
   data: () => ({
     gradient: 'to top, rgba(0,0,0,.8),rgba(0,0,0,.3), rgba(0,0,0,0)',
-    image
+    image,
+    title: 'Главная'
   }),
   methods: {
     getAvailableFilters() {

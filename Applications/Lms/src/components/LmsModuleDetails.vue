@@ -5,14 +5,7 @@
         <!--MODULE HEADER-->
         <v-layout mb-4>
           <v-flex xs12>
-            <v-card v-if="links">
-              <v-breadcrumbs  :items="links" divider=">" class="activelink">
-                <template v-slot:item="{ item }">
-                  <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
-                  <span v-else class="disablelink">{{item.text}}</span>
-                </template>
-              </v-breadcrumbs>
-            </v-card>
+            <bread-crumbs :links="links" @linkChoiced="goToRoute" />
             <v-card v-if="moduleData">
               <v-layout wrap row justify-center>
                 <v-flex md1 xs2 class='pt-3' hidden-xs-only>
@@ -112,7 +105,7 @@
 </template>
 
 <script>
-import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
+import { getLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-module-details',
@@ -123,14 +116,21 @@ export default {
     if (!moduleIdLoaded) {
       this.$store.dispatch('lms/getModules')
     }
-    const thisLink = getThisLink(this.moduleData.name, this.$route.path, true)
-    this.links = getRoutesLinks(this.$route.params.links, thisLink)
+
+    let linksOld = this.$store.getters['lms/links']
+    this.links = getLinks(this.moduleData.name, this.$route, linksOld)
+    this.$store.commit('lms/setLinks', this.links)
   },
   data() {
     return {
       moduleGuid: '',
       links: null
     }
+  },
+  methods: {
+    goToRoute(index) {
+      this.$router.push({name: this.links[index].name, params: this.links[index].params})
+    },
   },
   computed: {
     circularLoader() {

@@ -6,14 +6,12 @@
  * Получить ссылку для текущего марщрута
  * @param {String} title        Название для отображения
  * @param {String} thisRoutPath путь текущего марщрута
- * @param {Boolean} isDisabled  доступность
  */
-export function getThisLink(title, thisRoutPath, isDisabled) {
-  let href = thisRoutPath
+export function getThisLink(title, thisRout) {
   let link = {
-    text: title,
-    disabled: isDisabled,
-    href: href
+    title,
+    name: thisRout.name,
+    params: thisRout.params
   }
   return link
 }
@@ -30,4 +28,22 @@ export function getRoutesLinks(inputLinks, thisLink) {
     links[links.length - 2].disabled = false
   }
   return links
+}
+
+
+export function getLinks(title, route, links) {
+  let linksNew = links.slice()
+  // найти текущий
+  let index = linksNew.findIndex(item => item.title === title)
+  if (index === -1) {
+    linksNew.push({
+      title,
+      name: route.name,
+      params: route.params
+    })
+  } else {
+    linksNew = linksNew.slice(0, index + 1)
+    linksNew[linksNew.length - 1].params = route.params
+  }
+  return linksNew
 }
