@@ -291,7 +291,7 @@
     "subTitle": "Login",
     "loggedIn": "You are already logged in!",
     "loginSuccess": "Login successful",
-    "loginFail": "Failed to login, try again later",
+    "loginFail": "Failed to login, try again",
     "loginError": "Error trying to login, contact support"
   },
   "processes": {

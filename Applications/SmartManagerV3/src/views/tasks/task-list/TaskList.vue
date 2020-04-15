@@ -32,13 +32,12 @@
       </v-row>
 
       <data-iterator v-else :tasks="tasks"/>
-      <action-button/>
+
     </v-col>
   </v-row>
 </template>
 
 <script>
-import ActionButton from '@/components/ActionButton'
 import DataIterator from './DataIterator'
 import { zones, folders, tasks } from '@/mixins/units'
 
@@ -46,7 +45,6 @@ export default {
   name: 'TaskList',
   mixins: [zones, folders, tasks],
   components: {
-    ActionButton,
     DataIterator
   },
   data: () => ({
@@ -81,7 +79,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

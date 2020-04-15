@@ -3,8 +3,7 @@
                    items-per-page.sync="itemsPerPage"
                    :page="page"
                    :search="search"
-                   :hide-default-footer="hideFooter"
-                   class="mb-12">
+                   :hide-default-footer="hideFooter">
 
     <template v-slot:default="props">
       <v-row>
@@ -57,5 +56,10 @@ export default {
 </script>
 
 <style scoped>
+
+  /* Set pagination to left */
+  .v-data-iterator >>> .v-data-footer {
+    justify-content: flex-start;
+  }
 
 </style>

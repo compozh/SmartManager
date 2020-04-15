@@ -11,18 +11,18 @@ export default {
     }
   },
   async login ({ commit, dispatch }, { login, password, rememberMe }) {
-    // loading...
     const userIsLoggedIn = await dispatch('userIsLoggedIn')
     if (userIsLoggedIn) {
       return
     }
+    commit('START_PRELOADER', 'login')
     try {
       const result = await auth.login(login, password, rememberMe)
       await dispatch('updateAuthenticatedUser', result)
       return result
     } catch (e) {
-      // stop loading
       console.warn('', e.message)
+      commit('STOP_PRELOADER', 'login')
       commit('SET_NOTIFY', {
         text: i18n.t('login.loginError'),
         color: 'error'
@@ -31,7 +31,7 @@ export default {
   },
   async applyDelegatedRights ({ commit }, userId) {
     try {
-      // loading...
+      commit('START_PRELOADER', 'applyDelegatedRights')
       const result = await auth.applyDelegatedRights(userId)
       if (result.success) {
         if (router.currentRoute.name !== 'task-list') {
@@ -39,14 +39,14 @@ export default {
         }
         window.location.reload()
       } else {
-        // stop loading
+        commit('STOP_PRELOADER', 'applyDelegatedRights')
         commit('SET_NOTIFY', {
           text: result.errorMessage,
           color: 'warning'
         })
       }
     } catch (e) {
-      // stop loading
+      commit('STOP_PRELOADER', 'applyDelegatedRights')
       commit('SET_NOTIFY', {
         text: i18n.t('notify.applyRightsError'),
         color: 'error'
@@ -69,11 +69,11 @@ export default {
     if (result.success) {
       await dispatch('setUserData')
       await router.push(router.currentRoute.query.to || '/')
-      //  if !loading || stop loading...
+      commit('STOP_PRELOADER', 'login')
     } else {
-      // stop loading
+      commit('STOP_PRELOADER', 'login')
       commit('SET_NOTIFY', {
-        text: result.errorMessage,
+        text: result.errorMessage || i18n.t('login.loginFail'),
         color: 'warning'
       })
       if (router.currentRoute.name !== 'login') {

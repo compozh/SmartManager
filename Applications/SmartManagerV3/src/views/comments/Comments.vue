@@ -87,6 +87,7 @@ export default {
   }
 
   .msg-input {
+    border-top: 1px solid #e5e5e5;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }

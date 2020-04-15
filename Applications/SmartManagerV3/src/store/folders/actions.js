@@ -3,7 +3,7 @@ import i18n from '@/i18n'
 
 export default {
   async getFolders ({ commit }, preLoader) {
-    !preLoader || commit('SET_PRELOADER', 'folders')
+    !preLoader || commit('START_PRELOADER', 'folders')
     try {
       const response = await api.getFoldersFromGql()
       const result = response.data.smtasks.folders
@@ -23,7 +23,8 @@ export default {
         text: i18n.t('notify.foldersError'),
         color: 'error'
       })
+    } finally {
+      commit('STOP_PRELOADER', 'folders')
     }
-    !preLoader || commit('SET_PRELOADER', 'folders')
   }
 }
