@@ -132,7 +132,7 @@
         </v-layout>
       </v-flex>
       <!-- Навигационное меню -->
-      <v-flex v-if="menuOnRight" grow lg4 md8 sm12>
+      <v-flex v-if="menuOnRight" grow lg4>
         <v-layout column fill-height>
           <v-flex grow>
             <v-card flat height='100%' width='100%'>
@@ -486,9 +486,7 @@ export default {
 }
 .lesson-view {
   width:100%;
-  /* width: auto; */
   height: 60vh;
-  /* overflow: auto; */
   border: solid lightgray 1px;
 }
 .progress-label-size {

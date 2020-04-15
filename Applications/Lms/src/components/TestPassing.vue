@@ -29,6 +29,7 @@
             </v-card>
           </v-flex>
           <v-flex shrink  py-2 class="border-bottom">
+            <!-- class="btn-list-container" -->
             <v-layout>
               <v-flex justify-content-start class="btn-list btn-list__max-height" ref="buttonlist">
                   <button v-for="(question, index) in questions" :key="question.id"
@@ -39,9 +40,12 @@
                   </button>
               </v-flex>
               <!-- открыть/закрыть слайдер  -->
-              <!-- <button v-if="isSliderHeightOverflow" class="open-close-btn">
+              <button
+                v-if="isSliderHeightOverflow"
+                class="open-close-btn"
+                @click="openCloseSlider">
                 <v-icon>{{ sliderOpened ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-              </button> -->
+              </button>
             </v-layout>
           </v-flex>
           <v-flex class="width100 overflow-scroll" mt-4>
@@ -113,7 +117,7 @@ export default {
       expanedEl: null,
       slider: null,
       isSliderHeightOverflow: false,
-      slierOpened: false,
+      sliderOpened: false,
       questions: [
         {
           id: 101,
@@ -440,6 +444,10 @@ export default {
         return null
       }
     },
+    openCloseSlider() {
+      this.sliderOpened = !this.sliderOpened
+      this.slider.classList.toggle('btn-list__max-height')
+    },
     toggleFullScreen() {
       this.collapse = false
       var fullScreenElement =
@@ -540,6 +548,9 @@ export default {
 .btn-question:hover {
   background-color: lightgray;
 }
+.btn-question:focus, .open-close-btn:focus {
+  outline:none;
+}
 .btn-current {
   background-color: sandybrown;
   color: #fff;
@@ -559,12 +570,7 @@ export default {
   cursor:default;
 }
 .open-close-btn {
-  position: relative;
-  width: 1.5em;
-  height: 1.5em;
-  top:0;
-  right:0;
-  z-index: 99;
+  background-color: darkgrey;
 }
 .border-bottom {
   border-bottom: 1px solid lightslategray;
