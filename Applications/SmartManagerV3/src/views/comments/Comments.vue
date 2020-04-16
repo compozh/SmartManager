@@ -28,7 +28,7 @@
                :disabled="loading"
                @click="sendMsg">
           {{ $t('buttons.send') }}
-          <fa-icon :icon="['fal', 'paper-plane']" class="ml-2"/>
+          <fa-icon icon="paper-plane" class="ml-2"/>
         </v-btn>
       </div>
     </div>

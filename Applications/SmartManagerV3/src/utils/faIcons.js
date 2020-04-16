@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fal } from '@fortawesome/pro-light-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { far } from '@fortawesome/pro-regular-svg-icons'
+import FaIcon from '@/components/FaIcon'
 
-// TODO: иконки по типам
+// TODO: импорт иконок по названиям
 
-library.add(fal)
+library.add(fal, far)
 
-Vue.component('fa-icon', FontAwesomeIcon)
+Vue.component('fa-icon', FaIcon)

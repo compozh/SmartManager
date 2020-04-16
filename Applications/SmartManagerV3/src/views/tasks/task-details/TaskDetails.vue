@@ -7,7 +7,7 @@
         <div class="side-header px-5 d-flex flex-wrap">
           <div v-show="task.performer" class="d-flex align-center py-3">
             <v-avatar color="grey lighten-1" class="mr-3" size="40px">
-              <fa-icon v-if="!task.performerPhoto" :icon="['fal', 'user']" inverse/>
+              <fa-icon v-if="!task.performerPhoto" icon="user" inverse/>
               <v-img v-else :src="task.performerPhoto"/>
             </v-avatar>
             <div class="d-flex flex-column">
@@ -21,7 +21,7 @@
             <div class="d-flex flex-column"
                  style="white-space: nowrap">
               <div class="overline">
-                <fa-icon :icon="['fal', 'clock']"
+                <fa-icon icon="clock"
                          class="text--secondary mr-1" size="lg"/>
                 {{ $t('tasks.deadline') }}:</div>
               <div class="caption red--text text--darken-4">{{ task.dateplan }}</div>
@@ -43,12 +43,12 @@
           </h3>
           <div class="d-flex mb-3">
             <div v-if="task.priority" class="deep-orange--text">
-              <fa-icon :icon="['fal', 'exclamation-square']" class="mr-2"/>
+              <fa-icon icon="exclamation-square" class="mr-2"/>
               <span class="caption">{{ $t('icons.priority') }}</span>
             </div>
             <v-divider v-if="task.priority" vertical class="mx-2"/>
             <div v-if="task.myControl" class="red--text text--darken-4">
-              <fa-icon :icon="['fal', 'eye']" class="mr-2"/>
+              <fa-icon icon="eye" class="mr-2"/>
               <span class="caption">{{ $t('icons.control') }}</span>
             </div>
           </div>
@@ -89,13 +89,13 @@
           <div class="d-flex mb-5 align-center">
             <v-chip small color="blue-grey"
                     label text-color="white">
-              <fa-icon :icon="['fal', 'hurricane']" class="mr-3"/>
+              <fa-icon icon="hurricane" class="mr-3"/>
               {{ typeName }}
             </v-chip>
             <v-divider vertical class="mx-2"></v-divider>
             <v-chip small :color="taskStatus().color"
                     label text-color="white">
-              <fa-icon :icon="['fal', taskStatus().icon]" class="mr-3"/>
+              <fa-icon :icon="taskStatus().icon" class="mr-3"/>
               {{ taskStatus().text }}
             </v-chip>
           </div>
@@ -103,28 +103,28 @@
           <!-- TASK PARTICIPANTS -->
           <div v-if="participants.length" class="d-flex justify-space-between my-5">
             <div v-if="coExecutors.length">
-              <fa-icon :icon="['fal', 'users']" class="mr-3" size="lg"/>
+              <fa-icon icon="users" class="mr-3" size="lg"/>
               <span>{{ $t('roles.coExecutors').toUpperCase() }}</span>
               <div class="py-2 d-flex flex-wrap">
                 <v-chip v-for="participant in coExecutors"
                         :key="participant.userId"
                         class="my-2 mr-2" small pill>
                   <v-avatar left>
-                    <fa-icon :icon="['fal', 'user-circle']" size="lg"/>
+                    <fa-icon icon="user-circle" size="lg"/>
                   </v-avatar>
                   {{ participant.name }}
                 </v-chip>
               </div>
             </div>
             <div v-if="observers.length">
-              <fa-icon :icon="['fal', 'concierge-bell']" class="mr-3" size="lg"/>
+              <fa-icon icon="concierge-bell" class="mr-3" size="lg"/>
               <span>{{ $t('roles.notify').toUpperCase() }}</span>
               <div class="py-2 d-flex flex-wrap">
                 <v-chip v-for="participant in observers"
                         :key="participant.userId"
                         class="my-2 ml-2" small pill>
                   <v-avatar left>
-                    <fa-icon :icon="['fal', 'user-circle']" size="lg"/>
+                    <fa-icon icon="user-circle" size="lg"/>
                   </v-avatar>
                   {{ participant.name }}
                 </v-chip>
@@ -133,7 +133,7 @@
           </div>
           <!-- TASK ATTACHMENTS -->
           <div class="my-5">
-            <fa-icon :icon="['fal', 'paperclip']" class="mr-3" size="lg"/>
+            <fa-icon icon="paperclip" class="mr-3" size="lg"/>
             <span>{{ $t('tabs.attachments').toUpperCase() }}</span>
             <div class="py-2 d-flex flex-wrap">
               <v-chip v-for="item in task.originals"
@@ -142,26 +142,26 @@
                       :class="{ warning: item.id === activeAttachment.id }"
                       style="min-width: 100px; max-width: 200px; flex: 1 1 20%"
                       @click="selectAttachment(item)">
-                <fa-icon :icon="['fal', 'file-alt']" class="mr-3" size="lg"/>
+                <fa-icon icon="file-alt" class="mr-3" size="lg"/>
                 <span class="text-truncate">{{ item.fileName }}</span>
               </v-chip>
             </div>
           </div>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
-            <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
+            <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
             <span>{{ $t('tasks.base').toUpperCase() }}</span>
             <data-iterator :tasks="[baseTask]" class="mt-3" hide-footer/>
           </div>
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
-            <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
+            <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
             <span>PARENT TASKS</span>
             <data-iterator :tasks="task.parentTasks" class="mt-3" hide-footer/>
           </div>
           <!-- SUB TASKS-->
           <div v-if="childTasks" class="my-5">
-            <fa-icon :icon="['fal', 'tasks-alt']" class="mr-3" size="lg"/>
+            <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
             <span>{{ $t('tasks.subTasks').toUpperCase() }}</span>
             <data-iterator :tasks="childTasks" class="mt-3" hide-footer/>
           </div>
@@ -171,7 +171,7 @@
       <SplitArea class="d-flex flex-column" :size="45">
         <v-tabs v-model="tab" grow height="75px" class="flex-grow-0">
           <v-tab v-for="tab in tabItems" :key="tab.name">
-            <fa-icon :icon="['fal', tab.icon]" class="mr-3" size="lg"/>
+            <fa-icon :icon="tab.icon" class="mr-3" size="lg"/>
             {{ tab.name }}
           </v-tab>
         </v-tabs>
