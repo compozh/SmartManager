@@ -21,6 +21,9 @@ router.beforeEach(async (to, from, next) => {
   if (token) {
     return next()
   }
+  if (from.path === '/') {
+    await router.push({ path: '/login' })
+  }
   if (from.name !== 'login') {
     await router.push({ path: '/login', query: { to: to.path } })
   }
