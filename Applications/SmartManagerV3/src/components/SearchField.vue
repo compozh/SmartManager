@@ -14,14 +14,14 @@
       <span class="body-2">{{ $t('search') }}</span>
     </template>
 
-    <template #append>
-      <v-btn x-small outlined
-             v-show="active && search">{{ $t('buttons.globalSearch') }}
-      </v-btn>
+    <template #prepend>
+      <fa-icon icon="search"/>
     </template>
 
-    <template #append-outer>
-      <fa-icon :icon="['fal', 'search']"/>
+    <template #append>
+      <v-btn x-small outlined class="mx-2"
+             v-show="active && search">{{ $t('buttons.globalSearch') }}
+      </v-btn>
     </template>
 
   </v-text-field>
