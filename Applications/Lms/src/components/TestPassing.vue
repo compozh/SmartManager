@@ -1,22 +1,23 @@
 <template>
-  <v-layout fill-height ref="test">
+  <v-layout wrap fill-height ref="test">
     <v-flex class="width100 height100">
-        <v-layout align-center column class="height100">
-          <v-flex shrink class="width100">
-            <v-card flat>
+      <v-layout align-center column class="height100">
+        <!-- Название -->
+        <v-flex shrink class="width100">
+          <v-card flat>
               <v-card-text v-if="commonInfo" class="test-title-colors">
                 <v-layout >
                   <v-flex pr-1>
-                    <div class="subheading">
+                    <div :class="{subheading: !mobile, 'body-2': mobile}">
                       {{commonInfo.surveyName}}
                     </div>
                   </v-flex>
                   <v-flex shrink pl-1>
-                    <div class="subheading text-center">
+                    <div class="text-center" :class="{subheading: !mobile, 'body-2': mobile}">
                       00:00:01
                     </div>
                   </v-flex>
-                  <v-flex shrink>
+                  <v-flex shrink v-if="!mobile">
                       <button
                         class="ml-2"
                         @click="toggleFullScreen">
@@ -26,36 +27,57 @@
                     </v-flex>
                 </v-layout>
               </v-card-text>
-            </v-card>
-          </v-flex>
-          <v-flex shrink  py-2 class="border-bottom">
-            <!-- class="btn-list-container" -->
-            <v-layout>
-              <v-flex justify-content-start class="btn-list btn-list__max-height" ref="buttonlist">
-                  <button v-for="(question, index) in questions" :key="question.id"
-                    class="btn-question"
-                    :class="{'btn-current': !isAnswered(index) && currentQuestionNumber === index + 1, 'btn-answered': isAnswered(index)}"
-                    @click="setCurrentQuestion(index)">
-                    {{index + 1}}
-                  </button>
-              </v-flex>
-              <!-- открыть/закрыть слайдер  -->
-              <button
-                v-if="isSliderHeightOverflow"
-                class="open-close-btn"
-                @click="openCloseSlider">
-                <v-icon>{{ sliderOpened ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-              </button>
-            </v-layout>
-          </v-flex>
-          <v-flex class="width100 overflow-scroll" mt-4>
-            <v-layout column fill-height px-4>
-              <v-flex shrink>
-                <div
-                  class="subheading"
-                  v-html="question.qtext"></div>
-              </v-flex>
-              <v-flex>
+          </v-card>
+        </v-flex>
+        <!-- слайдер -->
+        <v-flex v-if="!mobile" shrink py-2 class="width100 border-bottom">
+          <v-layout>
+            <v-flex justify-content-start class="btn-list btn-list__max-height" ref="buttonlist">
+                <button v-for="(question, index) in questions" :key="question.id"
+                  class="btn-question"
+                  :class="{'btn-current': !isAnswered(index) && currentQuestionNumber === index + 1, 'btn-answered': isAnswered(index)}"
+                  @click="setCurrentQuestion(index)">
+                  {{index + 1}}
+                </button>
+            </v-flex>
+            <!-- открыть/закрыть слайдер  -->
+            <button
+              v-if="isSliderHeightOverflow"
+              class="open-close-btn"
+              @click="openCloseSlider">
+              <v-icon>{{ sliderOpened ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
+            </button>
+          </v-layout>
+        </v-flex>
+        <!-- кнопка слайдера (v.2) -->
+        <!-- <v-flex v-else shrink class="width100 grey lighten-3">
+          <v-toolbar-side-icon
+              @click.stop='drawer = !drawer'>
+          </v-toolbar-side-icon>
+          <span>Вопросы</span>
+        </v-flex> -->
+        <!-- слайер с горизонтальным скролом (v.3) -->
+        <v-flex v-if="mobile" shrink py-2 class="width100 border-bottom">
+          <v-layout justify-content-start class="btn-list-mobile" ref="btnlistmobile">
+            <!-- <div class="btn-list-mobile">
+            </div> -->
+            <button v-for="(question, index) in questions" :key="question.id"
+              class="btn-question-mobile"
+              :class="{'btn-current': !isAnswered(index) && currentQuestionNumber === index + 1, 'btn-answered': isAnswered(index)}"
+              @click="setCurrentQuestion(index)">
+              {{index + 1}}
+            </button>
+          </v-layout>
+        </v-flex>
+        <!-- вопрос -->
+        <v-flex class="width100 overflow-scroll" mt-4>
+          <v-layout column fill-height px-4>
+            <v-flex shrink>
+              <div
+                :class="{subheading: !mobile, 'body-2': mobile}"
+                v-html="question.qtext"></div>
+            </v-flex>
+            <v-flex>
                 <div v-if="question.Type === 1">
                   <v-radio-group v-model="question.userChoice">
                     <v-radio class="caption"
@@ -75,10 +97,11 @@
                     :label="attribute.text"
                     :value="attribute.id"></v-checkbox>
                 </div>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-          <v-flex shrink class="width100">
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <!-- кнопки -->
+        <v-flex shrink class="width100">
             <v-toolbar dense flat>
               <v-btn
                 @click="finish"
@@ -101,8 +124,26 @@
                 <v-icon right dark>keyboard_arrow_right</v-icon>
               </v-btn>
             </v-toolbar>
+        </v-flex>
+      </v-layout>
+      <!-- боковой слайдер вопросов (v.2) -->
+      <!-- <v-navigation-drawer
+        v-if="mobile"
+        v-model="drawer"
+        absolute
+        clipped
+        temporery>
+        <v-layout>
+          <v-flex justify-content-start class="btn-list-free">
+              <button v-for="(question, index) in questions" :key="question.id"
+                class="btn-question"
+                :class="{'btn-current': !isAnswered(index) && currentQuestionNumber === index + 1, 'btn-answered': isAnswered(index)}"
+                @click="setCurrentQuestion(index)">
+                {{index + 1}}
+              </button>
           </v-flex>
         </v-layout>
+      </v-navigation-drawer> -->
     </v-flex>
   </v-layout>
 </template>
@@ -111,13 +152,16 @@
 
 export default {
   name: 'test-passing',
+  props: ['mobile'],
   data() {
     return {
+      // drawer: false,
       collapse: true,
       expanedEl: null,
       slider: null,
       isSliderHeightOverflow: false,
       sliderOpened: false,
+      btnWidth: 0.0,
       questions: [
         {
           id: 101,
@@ -391,14 +435,8 @@ export default {
       currentQuestionNum: 0
     }
   },
-  mounted() {
-    this.expanedEl = this.$refs.test
-    this.slider = this.$refs.buttonlist
-    // определить переполнение слайдера по высоте
-    this.checkHeightOverflowAfterResize()
-    // добавить обработчик на изменение размеров экрана
-    window.addEventListener('resize', this.checkHeightOverflowAfterResize)
-    // получить вопросы теста
+  created() {
+    // STUB получить вопросы теста
     for (let i = 0; i < 25; i++) {
       this.questions.push({
         id: 160 + i,
@@ -421,12 +459,28 @@ export default {
           },
         ]
       })
-
     }
+  },
+  mounted() {
+    if (!this.mobile) {
+      this.expanedEl = this.$refs.test
+      this.slider = this.$refs.buttonlist
+      // определить переполнение слайдера по высоте
+      this.checkHeightOverflowAfterResize()
+      // добавить обработчик на изменение размеров экрана
+      window.addEventListener('resize', this.checkHeightOverflowAfterResize)
+    } else {
+      this.slider = this.$refs.btnlistmobile
+      const btn = document.getElementsByClassName('btn-question-mobile')[0]
+      this.btnWidth = btn.offsetWidth
+    }
+
     // инициализировать дополнительные поля
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.checkHeightOverflowAfterResize)
+    if (!this.mobile) {
+      window.removeEventListener('resize', this.checkHeightOverflowAfterResize)
+    }
   },
   methods: {
     checkHeightOverflowAfterResize() {
@@ -485,14 +539,17 @@ export default {
       if (this.currentQuestionNum < this.questions.length) {
         this.currentQuestionNum++
       }
+      if (this.mobile) {
+        debugger
+        let scroll =  this.currentQuestionNum * (this.btnWidth + 3)
+        this.slider.scrollLeft = scroll
+      }
     },
     sendAnswer() {
       // Отправить ответ
       this.questions[this.currentQuestionNum].answered = true
       // перейти к следующему неотвеченному вопросу
-      if (this.currentQuestionNum < this.questions.length - 1) {
-        this.currentQuestionNum++
-      }
+      this.nextQuestion()
     },
     finish() {
       this.$store.commit('lms/setCurrentTestPage', 'test-results')
@@ -577,5 +634,40 @@ export default {
 }
 .correct-margin {
   margin-bottom: -38px !important;
+}
+/* Mobile */
+/* .btn-list-free {
+  width: 6.8em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  flex-wrap: wrap;
+  overflow: auto;
+} */
+.btn-list-mobile {
+  height: 3.4em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+ }
+ .btn-question-mobile {
+  flex: 0 0 auto;
+  width: 3em;
+  height: 3em;
+  border-left: 2px solid lightgray;
+  border-top:  2px solid lightgray;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+  margin-top: 2px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+ }
+ .btn-question-mobile:focus {
+  outline:none;
 }
 </style>
