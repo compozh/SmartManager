@@ -1,10 +1,10 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js')
 importScripts('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval-iife.min.js')
 
-workbox.core.setCacheNameDetails({prefix: 'SmartManager'})
+workbox.core.setCacheNameDetails({prefix: 'SmartManagerV1'})
 
 // Init indexedDB using idb-keyval, https://github.com/jakearchibald/idb-keyval
-const store = new idbKeyval.Store('SmartManager', '05-03-2020')
+const store = new idbKeyval.Store('SmartManagerV1', new Date().toLocaleDateString())
 
 if (workbox) {
   console.log('Workbox is loaded')
