@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon class="hidden-sm-and-down" v-on="on"
                           :disabled="activeZoneId === 2"
                           @click="toggleSideBar">
-        <fa-icon :icon="['fal', 'bars']" size="lg"/>
+        <fa-icon icon="bars" size="lg"/>
       </v-app-bar-nav-icon>
     </template>
     <span>

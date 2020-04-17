@@ -3,33 +3,33 @@
                tag="v-card" :style="cardStyle">
     <div class="item-title">
       <div class="item-title-desc">
-        <fa-icon v-if="!task.isRead" class="blue--text isRead-icon" :icon="['fal', 'dot-circle']"/>
+        <fa-icon v-if="!task.isRead" class="blue--text isRead-icon" icon="dot-circle"/>
         <div class="column-element">
           <span class=" ma-0 pl-1 subtitle-1">{{ task.docCaption || task.descript }}</span>
           <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary">{{ task.docText }}</span>
         </div>
       </div>
       <div class="align-center justify-end icons-block">
-        <fa-icon v-show="task.caseId" class="ml-2 blue-grey--text" :icon="['fal', 'suitcase']"/>
-        <fa-icon v-show="task.hasCom" class="ml-2" :icon="['fal', 'comment-alt-lines']"/>
-        <fa-icon v-show="task.hasOrig" class="ml-2 brown--text" :icon="['fal', 'paperclip']"/>
-        <fa-icon v-show="task.isFavorite" class="ml-2 blue--text text--lighten-2" :icon="['fal', 'star']"/>
-        <fa-icon v-show="task.isGenerated" class="ml-2 " :icon="['fal', 'layer-plus']"/>
-        <fa-icon v-show="task.isMy" class="ml-2 orange--text" :icon="['fal', 'portrait']"/>
-        <fa-icon v-show="task.myControl" class="ml-2 indigo--text" :icon="['fal', 'eye']"/>
+        <fa-icon v-show="task.caseId" class="ml-2 blue-grey--text" icon="suitcase"/>
+        <fa-icon v-show="task.hasCom" class="ml-2" icon="comment-alt-lines"/>
+        <fa-icon v-show="task.hasOrig" class="ml-2 brown--text" icon="paperclip"/>
+        <fa-icon v-show="task.isFavorite" class="ml-2 blue--text text--lighten-2" icon="star"/>
+        <fa-icon v-show="task.isGenerated" class="ml-2 " icon="layer-plus"/>
+        <fa-icon v-show="task.isMy" class="ml-2 orange--text" icon="portrait"/>
+        <fa-icon v-show="task.myControl" class="ml-2 indigo--text" icon="eye"/>
       </div>
     </div>
     <v-divider class="mx-2"></v-divider>
     <div class="item-body">
       <div class="row-element">
         <v-avatar color="grey lighten-1" class="mx-3" size="50px">
-          <fa-icon v-if="!task.addedPhoto" :icon="['fal', 'user']" inverse/>
+          <fa-icon v-if="!task.addedPhoto" icon="user" inverse/>
           <v-img v-else :src="task.addedPhoto"/>
         </v-avatar>
         <div class="column-element">
           <span class="body-2 text--secondary">{{ task.addedFio }}</span>
           <span class="ma-0 pl-0 subtitle-1">
-            <fa-icon v-show="task.priority === 1" class="red--text" :icon="['fal', 'fire']"/>
+            <fa-icon v-show="task.priority === 1" class="red--text" icon="fire"/>
             {{ task.name }}
           </span>
           <div class="item-status">
@@ -43,16 +43,16 @@
             <div class="task-status">
               <span v-show="task.childCount > 0 && task.childCount !== task.childDoneCount && task.role !== 'INITIATOR'"
                     class="caption text--secondary">
-                <fa-icon class="text--secondary" :icon="['fal', 'hourglass']"/>
+                <fa-icon class="text--secondary" icon="hourglass"/>
                 {{$t('tasks.childsAssigned')}}
               </span>
               <span v-show="task.childCount > 0 && task.childCount === task.childDoneCount && task.role !== 'INITIATOR'"
                     class="green--text caption">
-                <fa-icon class="green--text" :icon="['fal', 'check-double']"/>
+                <fa-icon class="green--text" icon="check-double"/>
                 {{$t('tasks.childsDone')}}
               </span>
               <span v-show="task.role === 'INITIATOR'" class="red--text caption">
-                <fa-icon class="red--text" :icon="['fal', 'reply']"/>
+                <fa-icon class="red--text" icon="reply"/>
                 {{$t('tasks.returnedInitiator')}}
               </span>
             </div>
@@ -65,11 +65,11 @@
               :class="overdue ? 'red--text' : 'blue--text'">
           {{ task.dateplan }}</span>
         <span v-if="taskIsDone" class="caption mb-0 green--text">
-          <fa-icon class="green--text" :icon="['fal', 'check']"/>
+          <fa-icon class="green--text" icon="check"/>
           {{ task.dateFact }}
         </span>
         <span v-if="taskIsDone && overdue" class="caption mb-0 red--text">
-          <fa-icon class="red--text" :icon="['fal', 'clock']"/>
+          <fa-icon class="red--text" icon="clock"/>
           {{ overdue }} {{$t('tasks.days')}}
         </span>
       </div>

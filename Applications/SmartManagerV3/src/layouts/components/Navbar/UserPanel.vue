@@ -5,23 +5,23 @@
           transition="scroll-y-transition">
 
     <template v-slot:activator="{ on }">
-      <v-avatar v-on="on" color="primary" class="ml-4" size="30px">
+      <v-avatar v-on="on" color="primary" class="ml-4" size="32px">
         <v-img v-if="userPhoto" :src="userPhoto"/>
-        <fa-icon v-else :icon="['fal', 'user']" inverse/>
+        <fa-icon v-else icon="user" inverse/>
       </v-avatar>
     </template>
 
     <v-list dense nav>
       <v-list-item>
         <v-list-item-icon class="mr-1 align-center">
-          <fa-icon :icon="['fal', 'user']"/>
+          <fa-icon icon="user"/>
         </v-list-item-icon>
         <v-list-item-title>{{ userName }}</v-list-item-title>
       </v-list-item>
 
       <v-list-item>
         <v-list-item-icon class="mr-1 align-center">
-          <fa-icon :icon="['fal', 'at']"/>
+          <fa-icon icon="at"/>
         </v-list-item-icon>
         <v-list-item-title class="caption">{{ userLogin }}</v-list-item-title>
       </v-list-item>
@@ -39,7 +39,7 @@
                      class="mr-2"
                      @click="applyDelegatedRights(rights.USERID)">
           <v-list-item-icon class="mr-1 align-center">
-            <fa-icon :icon="['fal', 'user-tag']"/>
+            <fa-icon icon="user-tag"/>
           </v-list-item-icon>
           <v-list-item-title>{{ rights.USERNAME }}</v-list-item-title>
         </v-list-item>
@@ -50,7 +50,7 @@
 
       <v-list-item @click="logout">
         <v-list-item-icon class="mr-1 align-center">
-          <fa-icon :icon="['fal', 'sign-out-alt']"/>
+          <fa-icon icon="sign-out-alt"/>
         </v-list-item-icon>
         <v-list-item-title>{{ $t('buttons.logout') }}</v-list-item-title>
       </v-list-item>

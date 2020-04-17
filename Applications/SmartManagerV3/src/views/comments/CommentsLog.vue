@@ -18,7 +18,7 @@
                            || !isSameDay(comment.date, comments[index - 1].date))">
             <v-avatar class="mx-4" color="grey lighten-1" size="40px"
                       :class="currentUserIsSender(comment.userId) ? 'ml-4' : 'mr-4'">
-              <fa-icon v-if="!comment.userPhoto" :icon="['fal', 'user']" inverse/>
+              <fa-icon v-if="!comment.userPhoto" icon="user" inverse/>
               <v-img v-else :src="comment.userPhoto"/>
             </v-avatar>
           </template>
@@ -26,7 +26,7 @@
 
         <template v-if="index === 0">
           <v-avatar class="mx-4 grey lighten-1" size="40px">
-            <fa-icon v-if="!comment.userPhoto" :icon="['fal', 'user']" inverse/>
+            <fa-icon v-if="!comment.userPhoto" icon="user" inverse/>
             <v-img v-else :src="comment.userPhoto"/>
           </v-avatar>
         </template>

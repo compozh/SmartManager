@@ -3,17 +3,14 @@
     <v-col>
       <v-row dense align-content="start" justify="start">
         <v-col class="d-flex">
-          <h4 class="ml-1 mt-1">{{ activeZone.title }}:
-            <span class="primary--text">{{ activeFolder.Name }}</span>
-            <span class="grey--text"> ({{ tasks.length }})</span>
-          </h4>
+          <search-field class="mt-n3 ml-1"/>
           <v-spacer/>
-          <v-btn-toggle v-model="viewMode" mandatory>
+          <v-btn-toggle v-model="viewMode" mandatory class="mt-n1">
             <v-btn small>
-              <fa-icon :icon="['fal', 'list-alt']" size="lg"/>
+              <fa-icon icon="list-alt" size="lg"/>
             </v-btn>
             <v-btn small>
-              <fa-icon :icon="['fal', 'table']" size="lg"/>
+              <fa-icon icon="table" size="lg"/>
             </v-btn>
           </v-btn-toggle>
         </v-col>
@@ -38,6 +35,7 @@
 </template>
 
 <script>
+import SearchField from '@/components/SearchField'
 import DataIterator from './DataIterator'
 import { zones, folders, tasks } from '@/mixins/units'
 
@@ -45,6 +43,7 @@ export default {
   name: 'TaskList',
   mixins: [zones, folders, tasks],
   components: {
+    SearchField,
     DataIterator
   },
   data: () => ({

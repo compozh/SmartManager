@@ -3,9 +3,9 @@
 
     <side-bar-btn/>
 
-    <v-spacer/>
+    <breadcrumb/>
 
-    <search-field/>
+    <v-spacer/>
 
     <user-panel/>
 
@@ -16,17 +16,19 @@
 
 <script>
 import SideBarBtn from './SideBarBtn'
+import Breadcrumb from './Breadcrumb'
 import LangSwitcher from './LangSwitcher'
 import UserPanel from './UserPanel'
-import SearchField from './SearchField'
+import { zones, folders, tasks } from '@/mixins/units'
 
 export default {
   name: 'TheNavBar',
+  mixins: [zones, folders, tasks],
   components: {
     SideBarBtn,
+    Breadcrumb,
     LangSwitcher,
-    UserPanel,
-    SearchField
+    UserPanel
   }
 }
 </script>

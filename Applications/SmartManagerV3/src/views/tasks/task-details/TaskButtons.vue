@@ -5,8 +5,7 @@
            color="success"
            class="mx-2" small
            @click="() => ({})">
-      <fa-icon :icon="['fal', 'check']"
-               class="mr-2" size="lg"/>
+      <fa-icon icon="check" class="mr-2" size="lg"/>
       {{ $t('buttons.execute') }}
     </v-btn>
 
@@ -15,8 +14,7 @@
            color="success"
            class="mx-2" small
            @click="$emit('executeExternalTask')">
-      <fa-icon :icon="['fal', 'check']"
-               class="mr-2" size="lg"/>
+      <fa-icon icon="check" class="mr-2" size="lg"/>
       {{ $t('buttons.execute') }}
     </v-btn>
 
@@ -25,8 +23,7 @@
            color="warning"
            class="mx-2" small
            @click="() => ({})">
-      <fa-icon :icon="['fal', 'undo']"
-               class="mr-2" size="lg"/>
+      <fa-icon icon="undo" class="mr-2" size="lg"/>
       {{ $t('buttons.returnToWork') }}
     </v-btn>
 
@@ -35,15 +32,13 @@
       <v-btn color="error"
              class="mx-2" small
              @click="() => ({})">
-        <fa-icon :icon="['fal', 'thumbs-down']"
-                 class="mr-2" size="lg"/>
+        <fa-icon icon="thumbs-down" class="mr-2" size="lg"/>
         {{ buttonReject }}
       </v-btn>
 
       <v-btn color="success" small
              @click="() => ({})">
-        <fa-icon :icon="['fal', 'thumbs-up']"
-                 class="mr-2" size="lg"/>
+        <fa-icon icon="thumbs-up" class="mr-2" size="lg"/>
         {{ buttonApprove }}
       </v-btn>
     </div>
@@ -53,16 +48,14 @@
       <v-btn color="error"
              class="mx-2" small
              @click="() => ({})">
-        <fa-icon :icon="['fal', 'arrow-alt-left']"
-                 class="mr-2" size="lg"/>
+        <fa-icon icon="arrow-alt-left" class="mr-2" size="lg"/>
         {{ buttonBack }}
       </v-btn>
 
       <v-btn color="success" small
              @click="() => ({})">
         {{ buttonForward }}
-        <fa-icon :icon="['fal', 'arrow-alt-right']"
-                 class="ml-2" size="lg"/>
+        <fa-icon icon="arrow-alt-right" class="ml-2" size="lg"/>
       </v-btn>
     </div>
 

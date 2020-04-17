@@ -12,7 +12,10 @@ export default {
       folders.taskFolders = folders.taskFolders.map(folder => {
         if (folder.Code === '') {
           folder.Code = 'active'
+          folder.Parent = ''
           folder.Name = i18n.t('folders.active')
+        } else {
+          folder.Parent = 'active'
         }
         return folder
       })
