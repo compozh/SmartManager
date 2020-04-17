@@ -2,7 +2,7 @@
   <v-container py-0 >
     <v-layout
       class="height100">
-      <component v-bind:is="currentComponent"></component>
+      <component v-bind:is="currentComponent" :mobile="mobile"></component>
     </v-layout>
   </v-container>
 </template>
@@ -11,11 +11,15 @@
 import testStart from './TestStart'
 import testPassing from './TestPassing'
 import testResults from './TestResults'
+import { isMobile } from '../helpers/application'
 
 export default {
   name: 'test-view',
   props: {
     testGuid: String
+  },
+  created() {
+    this.mobile = isMobile()
   },
   async mounted() {
     this.expanedEl = this.$refs.task
@@ -31,6 +35,7 @@ export default {
   },
   data() {
     return {
+      mobile: false,
       components: [
         testStart,
         testPassing,

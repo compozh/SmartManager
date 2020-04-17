@@ -1,6 +1,7 @@
 <template>
   <v-container fill-height fluid px-0 py-0 mx-0 my-0>
-    <v-layout row nowrap class="color-white" v-resize="hideSidebar">
+    <!-- Desctop -->
+    <v-layout v-if="!(mobile && isTest)" row nowrap class="color-white" v-resize="hideSidebar">
       <!-- Заголовок курса, урока, прогресс
             Урок, панель навигации по урокам
             Закладки: ресурсы, вопросы и ответы -->
@@ -63,6 +64,7 @@
                     :startPlay="startPlay"
                     @ended="putNextLesson()"></lesson-view>
                 <!-- </v-card> -->
+                <!-- панель управления -->
                 <v-flex>
                   <v-toolbar dense flat v-if="!isTest">
                     <v-btn
@@ -89,6 +91,7 @@
                   </v-toolbar>
                 </v-flex>
               <!-- </v-flex> -->
+              <!-- Табы -->
               <v-layout  justify-center>
                 <v-flex>
                   <v-tabs
@@ -132,7 +135,7 @@
         </v-layout>
       </v-flex>
       <!-- Навигационное меню -->
-      <v-flex v-if="menuOnRight" grow lg4 md8 sm12>
+      <v-flex v-if="menuOnRight" grow lg4>
         <v-layout column fill-height>
           <v-flex grow>
             <v-card flat height='100%' width='100%'>
@@ -159,6 +162,76 @@
         </v-layout>
       </v-flex>
     </v-layout>
+    <!-- Mobile -->
+    <v-layout v-if="mobile && isTest" column fill-height class="color-white">
+      <!-- Название курса, прогрес -->
+      <v-flex shrink>
+        <v-layout row justify-space-around class="color-grey">
+          <v-flex align-self-center class="title-container">
+            <v-card flat color="grey lighten-2">
+              <div class="title-no-wrap body-2 px-2 py-1 ">{{course.name}}</div>
+            </v-card>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <!-- class="progress-container" -->
+          <v-flex align-self-center>
+            <v-layout fill-height justify-space-around align-center>
+              <v-flex align-self-center mx-2 py-1>
+                <v-progress-circular
+                  :rotate="-90"
+                  :size="30"
+                  :width="3"
+                  :value="progressValue"
+                  color="primary"
+                  class="progress-label-size-smal"
+                >
+                  {{ progressValue }}
+                </v-progress-circular>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+      <!-- Окно урока/материалов/меню уроков (управление табами) -->
+      <v-flex grow>
+        <!-- Тест -->
+        <v-layout column fill-height>
+          <lesson-view
+            v-if='currentLesson && activeMobileTab === "test"'
+            class="lesson-view"
+            :unit='currentLesson'
+            :startPlay="startPlay"
+            @ended="putNextLesson()">
+          </lesson-view>
+          <lessons-menu
+            v-if="activeMobileTab === 'menu'"
+            :modules="modules"
+            :currentLessonId="currentLessonGuid"
+            :passedList="lessonsPassed"
+            @set-current-lesson="setCurrentLesson"
+            @change-list="updateLessonPassedList"
+            ></lessons-menu>
+          <lesson-materials
+            v-if='activeMobileTab === "materials" && currentLesson'
+            :lesson="currentLesson.lesson"
+            :materials="currentLesson.lessonmaterials"></lesson-materials>
+          <questions-and-answers
+            v-if='activeMobileTab === "questions"'></questions-and-answers>
+        </v-layout>
+      </v-flex>
+      <!-- табы -->
+      <v-flex shrink>
+        <v-layout class="grey">
+          <v-flex shrink
+            v-for="(tab, index) in mobileTabs" :key="index"
+            class="tab-mobile"
+            :class="{activetab: tab.active}"
+            @click="activateTab(index)">
+            {{tab.title}}
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -169,6 +242,7 @@ import LessonMaterials from './LessonMaterials.vue'
 import QuestionsAndAnswers from './QuestionsAndAnswers.vue'
 import { LmsApi as api } from '../api/lmsApi'
 import {lessonType, materialType, lessonIcons} from '../helpers/lesson'
+import { isMobile } from '../helpers/application'
 
 export default {
   name: 'lms-course-learning',
@@ -180,6 +254,7 @@ export default {
   },
   data() {
     return {
+      mobile: false,
       courseGuid: '',
       menuOnRight: true,
       openItem: true,
@@ -187,6 +262,13 @@ export default {
       tabItems: [
         { id: 'materials', title: 'Ресурсы', nestedView: LessonMaterials},
         { id: 'questions', title: 'Вопросы и ответы', nestedView: QuestionsAndAnswers}
+      ],
+      activeMobileTab: 'test',
+      mobileTabs: [
+        { id: 'test', title: 'Тест', active: true},
+        { id: 'menu', title: 'Уроки', active: false},
+        { id: 'materials', title: 'Ресурсы', active: false},
+        { id: 'questions', title: 'Вопросы и ответы', active: false}
       ],
       progress: {
         passed: 0,
@@ -201,7 +283,9 @@ export default {
     }
   },
   created() {
+    this.mobile = isMobile()
     this.courseGuid = this.$route.params.courseGuid
+    this.activeMobileTab = 'test'
     // this.tabActive = this.$store.getters['lms/tabActive']
     this.progress = this.getInitialProgress(this.modules)
     this.lessonsPassed = this.getInitialPassedLesson(this.modules)
@@ -393,6 +477,11 @@ export default {
     openMenuRight() {
       this.menuOnRight = !this.menuOnRight
       this.tabItems.shift()
+    },
+    activateTab(index) {
+      this.mobileTabs.forEach(t => t.active = false)
+      this.mobileTabs[index].active = true
+      this.activeMobileTab = this.mobileTabs[index].id
     }
   },
   computed: {
@@ -486,12 +575,32 @@ export default {
 }
 .lesson-view {
   width:100%;
-  /* width: auto; */
   height: 60vh;
-  /* overflow: auto; */
   border: solid lightgray 1px;
 }
 .progress-label-size {
   font-size: 85%;
+}
+.progress-label-size-smal {
+  font-size: 65%;
+}
+.title-container {
+  width:85%;
+}
+.title-no-wrap {
+  max-height: 2em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tab-mobile {
+  min-width: 2em;
+  padding: 2px 0.5em;
+  text-transform: uppercase;
+  /* background-color: darkgray; */
+}
+.activetab {
+  color:#fff;
+  border-bottom: solid 2px darkcyan;
 }
 </style>

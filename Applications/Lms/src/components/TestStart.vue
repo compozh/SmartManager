@@ -8,13 +8,13 @@
             <v-card-text v-if="commonInfo" class="test-title-colors">
               <v-layout justify-space-between>
                 <v-flex pr-1>
-                  <div class="subheading" >
+                  <div :class="{subheading: !mobile, 'body-2': mobile}">
                     {{commonInfo.surveyName}}
                   </div>
                 </v-flex>
                 <v-flex shrink pl-1>
-                  <div class="subheading text-center" >
-                    Время теста: 15 мин.
+                  <div class="text-center" :class="{subheading: !mobile, 'body-2': mobile}">
+                    Время теста: 15мин.
                   </div>
                 </v-flex>
               </v-layout>
@@ -45,8 +45,18 @@
 </template>
 
 <script>
+// import { isMobile } from '../helpers/application'
 export default {
   name: 'test-start',
+  props: ['mobile'],
+  // data() {
+  //   return {
+  //     mobile: false
+  //   }
+  // },
+  // created() {
+  //   this.mobile = isMobile()
+  // },
   methods: {
     start() {
       // выполнить инициализацию теста

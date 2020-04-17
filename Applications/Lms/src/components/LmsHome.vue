@@ -23,13 +23,13 @@
               <div v-else>
                 <h4 class='pt-3 pb-1 headline font-weight-medium text-xs-center grey--text text--darken-3'>Ознакомьтесь с рекомендуемыми курсами</h4>
                 <h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--darken-3'>Курсы обучения - ориентированные учебные пути, которые комплексно повышают ваши навыки работы</h5>
-                <v-layout mt-4 align-center justify-end column fill-height>
+                <v-layout mt-4 align-center column fill-height>
                  <lms-recommended-courses v-if='recommended' :recommendedCourses='courses'>
                  </lms-recommended-courses>
                 </v-layout>
                 <h4 class='pt-3 pb-1 headline font-weight-medium text-xs-center grey--text text--darken-3'>Ознакомьтесь с рекомендуемыми модулями</h4>
                 <h5 class='mx-3 subheading font-weight-regular text-xs-center grey--text text--darken-3'>Модули - короткие самостоятельные учебные пособия, которые охватывают отдельные темы и задачи</h5>
-                <v-layout mt-4 align-center justify-end column fill-height>
+                <v-layout mt-4 align-center column fill-height>
                   <lms-recommended-modules v-if='recommended' :recommendedModules='modules'>
                   </lms-recommended-modules>
                 </v-layout>
