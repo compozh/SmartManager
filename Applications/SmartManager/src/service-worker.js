@@ -1,10 +1,10 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js')
 importScripts('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval-iife.min.js')
 
-workbox.core.setCacheNameDetails({prefix: 'SmartManager'})
+workbox.core.setCacheNameDetails({ prefix: 'SmartManager' })
 
 // Init indexedDB using idb-keyval, https://github.com/jakearchibald/idb-keyval
-const store = new idbKeyval.Store('SmartManager', '05-03-2020')
+const store = new idbKeyval.Store('SmartManager', new Date().toLocaleDateString())
 
 if (workbox) {
   console.log('Workbox is loaded')
@@ -15,21 +15,19 @@ if (workbox) {
 self.__precacheManifest = [].concat(self.__precacheManifest || [])
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
 
-workbox.skipWaiting()
-
 workbox.routing.registerRoute(/\/webapps\/SmartManager\//,
   new workbox.strategies.CacheFirst({
     plugins: [
       new workbox.cacheableResponse.Plugin({
-        statuses: [0, 200],
-      }),
-    ],
+        statuses: [0, 200]
+      })
+    ]
   })
 )
 
 workbox.routing.registerRoute(
   /\/GraphQlServer\/api\//,
-  ({event}) => postHandler(event),
+  ({ event }) => postHandler(event),
   'POST'
 )
 
@@ -43,7 +41,7 @@ self.addEventListener('fetch', event => {
   }
 })
 
-async function postHandler(event) {
+async function postHandler (event) {
   // Запросы связанные с авторизацией не кешируем
   if (event.request.url.includes('authentication')) {
     return await fetch(event.request.clone())
@@ -62,9 +60,9 @@ async function postHandler(event) {
   }
 }
 
-async function serializeResponse(response) {
+async function serializeResponse (response) {
   const serializedHeaders = {}
-  for (let entry of response.headers.entries()) {
+  for (const entry of response.headers.entries()) {
     serializedHeaders[entry[0]] = entry[1]
   }
   const serialized = {
@@ -76,7 +74,7 @@ async function serializeResponse(response) {
   return serialized
 }
 
-async function setCache(request, response) {
+async function setCache (request, response) {
   try {
     const id = await getPostKey(request)
     const reqJson = await request.clone().json()
@@ -91,7 +89,7 @@ async function setCache(request, response) {
   }
 }
 
-async function getCache(request) {
+async function getCache (request) {
   try {
     const id = await getPostKey(request)
     const data = await idbKeyval.get(id, store)
@@ -112,7 +110,7 @@ async function getCache(request) {
   }
 }
 
-async function getPostKey(request) {
+async function getPostKey (request) {
   try {
     const userId = request.headers.get('X-User-Id')
     const reqJson = await request.clone().json()

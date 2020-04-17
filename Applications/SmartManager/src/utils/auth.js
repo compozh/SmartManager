@@ -8,10 +8,10 @@ auth.config({
     console.log('', e.response.status, e.response.status === 400)
     switch (true) {
       case e.response && e.response.status === 400:
-        router.push({name: 'login'})
+        router.push({ name: 'login' })
         break
       case e.response && e.response.status <= 500:
-        router.push({name: 'page-error-500'})
+        router.push({ name: 'page-error-500' })
         break
       default: console.log(e)
     }

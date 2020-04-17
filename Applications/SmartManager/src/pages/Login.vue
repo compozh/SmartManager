@@ -1,92 +1,63 @@
 <template>
-  <div class="h-screen flex w-full bg-img vx-row no-gutter items-center justify-center"
-       id="page-login">
-    <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
-      <vx-card>
-        <div slot="no-body" class="full-page-bg-color">
-          <div class="vx-row no-gutter justify-center items-center">
-            <div class="vx-col lg:block lg:w-1/2">
-              <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto">
-            </div>
-            <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
-              <div class="p-8">
-                <div class="vx-card__title mb-8">
-                  <h4 class="mb-4">{{ $t('login.title') }}</h4>
-                  <p>{{ $t('login.welcome') }}</p>
-                </div>
-                <vs-input
-                  v-validate="'required'"
-                  data-vv-validate-on="blur"
-                  name="login"
-                  icon="icon icon-user"
-                  icon-pack="feather"
-                  :label-placeholder="$t('login.placeholder')"
-                  v-model="login"
-                  class="w-full no-icon-border"/>
-                <span class="text-danger text-sm">{{ errors.first('login') }}</span>
+  <v-container fluid class="fill-height justify-center">
+    <v-row align="center" justify="center">
+      <v-col cols="10" sm="7" md="5" lg="4" xl="3">
+      <v-card>
+        <v-row class="pa-5" align="center">
+          <v-col class="d-flex flex-column">
+            <h3 class="mb-4">{{ $t('login.title') }}</h3>
+            <p>{{ $t('login.welcome') }}</p>
 
-                <vs-input
-                  data-vv-validate-on="blur"
-                  v-validate="'required'"
-                  type="password"
-                  name="password"
-                  icon="icon icon-lock"
-                  icon-pack="feather"
-                  :label-placeholder="$t('login.password')"
-                  v-model="password"
-                  class="w-full mt-8 no-icon-border"/>
-                <span class="text-danger text-sm">{{ errors.first('password') }}</span>
+              <v-form>
+                <v-text-field v-model="login"
+                              :label="$t('login.placeholder')"
+                              outlined
+                              name="login"
+                              type="text"
+                              autocomplete="username"
+                              class="body-2">
+                  <template #prepend-inner>
+                    <v-icon small class="pt-1 pr-2">fas fa-user</v-icon>
+                  </template>
+                </v-text-field>
 
-                <div class="flex flex-wrap justify-between my-5">
-                  <vs-checkbox v-model="checkbox_remember_me">{{ $t('login.rememberMe') }}
-                  </vs-checkbox>
-                </div>
-                <!-- ВХОД -->
-                <vs-button class="float-right mb-8" :disabled="!validateForm" @click="loginMethod">
-                  {{ $t('buttons.login') }}
-                </vs-button>
-              </div>
+                <v-text-field v-model="password"
+                              :label="$t('login.password')"
+                              outlined
+                              name="password"
+                              type="password"
+                              autocomplete="current-password"
+                              class="body-2">
+                  <template #prepend-inner>
+                    <v-icon small class="pt-1 pr-2">fas fa-key</v-icon>
+                  </template>
+                </v-text-field>
+              </v-form>
+            <div class="d-flex align-center justify-space-between">
+              <v-checkbox :label="$t('login.rememberMe')"
+                          v-model="checkbox_remember_me"/>
+              <v-btn color="primary" @click="loginMethod">
+                {{ $t('buttons.login') }}
+              </v-btn>
             </div>
-          </div>
-        </div>
-      </vx-card>
-    </div>
-  </div>
+          </v-col>
+        </v-row>
+      </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import templateConfig from '@/templateConfig'
+import { userMethods } from '@/mixins/user'
 
 export default {
-  data() {
-    return {
-      code: '',
-      login: '',
-      password: '',
-      checkbox_remember_me: false,
-      config: templateConfig.login
-    }
-  },
-  computed: {
-    validateForm() {
-      return !this.errors.any() && this.login !== '' && this.password !== ''
-    }
-  },
-  created() {
-    this.$store.dispatch('auth/logout')
-  },
-  methods: {
-    loginMethod() {
-      const payload = {
-        login: this.login,
-        password: this.password,
-        rememberMe: this.checkbox_remember_me,
-      }
-      this.$store.dispatch('auth/login', payload)
-    },
-    loginByCode() {
-      this.$store.dispatch('auth/loginByCode', this.code)
-    }
-  }
+  name: 'Login',
+  mixins: [userMethods],
+  data: () => ({
+    login: '',
+    password: '',
+    checkbox_remember_me: false
+  })
 }
 </script>

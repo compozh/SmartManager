@@ -14,6 +14,12 @@ module.exports = {
   pluginOptions: {
     webpackBundleAnalyzer: {
       openAnalyzer: false
+    },
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'i18n',
+      enableInSFC: true
     }
   },
   transpileDependencies: [
@@ -25,7 +31,7 @@ module.exports = {
   pwa: {
     name: 'Smart Manager',
     short_name: 'Smart Manager',
-    themeColor: '#7367F0',
+    themeColor: '#5F81FF',
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       swSrc: 'src/service-worker.js'

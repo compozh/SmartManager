@@ -1,29 +1,22 @@
 module.exports = {
-  'env': [
-    'eslint:recommended',
-    'plugin:vue/essential'
-  ],
-
-  'extends': [
-    'eslint:recommended',
-    'plugin:vue/essential'
-  ],
-
-  'plugins': [
-    'vue'
-  ],
-
-  'rules': {
-  },
-
   root: true,
-
   env: {
     browser: true,
     es6: true,
     node: true
   },
-
+  extends: [
+    "plugin:vue/essential",
+    "@vue/standard"
+  ],
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    parser: 'babel-eslint'
+  },
+  plugins: [
+    'vue'
+  ],
   rules: {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -39,11 +32,5 @@ module.exports = {
     "keyword-spacing":["error"],
     "brace-style":["error","1tbs", { "allowSingleLine": true }],
     "arrow-spacing":["error"]
-  },
-
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
-    parser: 'babel-eslint'
   }
 }

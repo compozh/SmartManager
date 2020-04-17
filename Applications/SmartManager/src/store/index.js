@@ -1,29 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// Store functionality
-import actions from './actions'
-import getters from './getters'
-import mutations from './mutations'
-import state from './state'
-
 // Modules
-import appModule from './app/smStore'
-import authModule from './auth/moduleAuth'
+import app from './app'
+import auth from './auth'
+import folders from './folders'
+import tasks from './tasks'
+import attachments from './attachments'
+import processes from './processes'
 
 Vue.use(Vuex)
 
-// Create a new store
-const store = new Vuex.Store({
-  actions,
-  getters,
-  mutations,
-  state,
+export default new Vuex.Store({
+  state: {},
+  mutations: {},
+  actions: {},
   modules: {
-    [appModule.namespace]: appModule,
-    auth: authModule
+    app,
+    auth,
+    folders,
+    tasks,
+    attachments,
+    processes
   },
   strict: process.env.NODE_ENV !== 'production'
 })
-
-export default store

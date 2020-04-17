@@ -1,130 +1,95 @@
 <template>
-  <div id="chat-app" class="relative">
-    <!-- RIGHT COLUMN -->
-    <div class="chat__bg app-fixed-height chat-content-area">
-      <template>
-        <VuePerfectScrollbar class="comments-container chat-content-scroll-area"
-                             :settings="settings"
-                             ref="chatLogPS">
-          <div v-if="comments.length"
-               class="chat__log"
-               ref="chatLog">
-            <comments-log :comments="comments"></comments-log>
-          </div>
-          <div v-else class="no-comments flex flex-col items-center">
-            <feather-icon icon="MessageSquareIcon" class="mb-4 bg-white p-8 shadow-md rounded-full" svgClasses="w-16 h-16"></feather-icon>
-            <h4 class="py-2 px-4 bg-white shadow-md rounded-full">{{ $t('messages.noComments') }}</h4>
-          </div>
-        </VuePerfectScrollbar>
-        <div class="chat__input flex p-4 bg-white">
-          <vs-input class="flex-1"
-                    :placeholder="$t('comments.placeholder')"
-                    v-model="comment"
-                    @keyup.enter="sendMsg"/>
-          <vs-button class="bg-primary-gradient ml-4"
-                     type="filled"
-                     @click="sendMsg">{{ $t('buttons.send') }}
-          </vs-button>
+  <div class="pa-2 d-flex flex-column fill-height">
+    <div class="d-flex flex-column flex-grow-1 justify-space-between noise-bg border-light">
+      <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3" style="flex-basis: 0;">
+        <div v-if="comments.length" class="d-flex flex-column">
+          <comments-log :comments="comments"/>
         </div>
-      </template>
+        <div v-else
+             class="fill-height d-flex justify-center align-center">
+          <span class="headline font-weight-light grey--text">
+            {{ $t('messages.noComments') }}
+          </span>
+        </div>
+      </perfect-scrollbar>
+      <div class="msg-input white d-flex pa-3 align-center">
+        <v-text-field dense class="align-center"
+                      v-model="comment"
+                      :label="$t('comments.placeholder')"
+                      outlined
+                      clearable
+                      hide-details
+                      :loading="loading"
+                      :disabled="loading"
+                      @keyup.enter="sendMsg">
+        </v-text-field>
+        <v-btn color="blue-grey"
+               class="ml-2 white--text"
+               :disabled="loading"
+               @click="sendMsg">
+          {{ $t('buttons.send') }}
+          <fa-icon icon="paper-plane" class="ml-2"/>
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import CommentsLog from './CommentsLog.vue'
+import { tasks } from '@/mixins/units'
 
 export default {
+  mixins: [tasks],
   components: {
-    VuePerfectScrollbar,
-    CommentsLog,
+    CommentsLog
   },
   data: () => ({
-    active: true,
-    isHidden: false,
-    searchContact: '',
-    activeProfileSidebar: false,
-    activeChatUser: null,
-    userProfileId: -1,
     comment: '',
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.70,
-    },
-    windowWidth: window.innerWidth,
+    loading: false
   }),
   computed: {
-    task() {
-      const id = +this.$route.params.taskId
-      const task = this.$store.state.sm.taskInfo[id]
-      return task ? task : {}
-    },
-    comments() {
-      return this.task.comments
-        ? this.task.comments
-        : []
-    },
-    type() {
-      if (this.task.__typename === 'Task') {
-        return this.task.isGenerate ? 'DOCUMENT' : 'TASK'
-      }
-      if (this.task.__typename === 'Case') {
-        return 'CASE'
-      }
-      return ''
+    comments () {
+      return this.task.comments || []
     }
   },
   methods: {
-    sendMsg() {
+    async sendMsg () {
+      this.loading = true
       if (this.comment) {
-        this.$store.dispatch('sm/addComment', {
+        await this.$store.dispatch('addComment', {
           comment: this.comment,
           params: {
             type: this.type,
-            id: this.task.id || this.$route.params.taskId,
+            id: this.taskId,
             arso: this.task.arso,
             keyValue: this.task.keyValue,
             kidCopy: this.task.kidCopy
           }
         })
         this.comment = ''
+        this.loading = false
       }
-    },
-    handleWindowResize(event) {
-      this.windowWidth = event.currentTarget.innerWidth
     }
-  },
-  created() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.handleWindowResize)
-    })
-  },
-  beforeDestroy: function () {
-    window.removeEventListener('resize', this.handleWindowResize)
-  },
+  }
 }
 </script>
 
-<style lang="scss">
-  @import "@/assets/scss/vuesax/apps/chat.scss";
-
-  #chat-app {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
+<style scoped>
+  /* TODO: output border-light class to common styles */
+  .border-light {
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+  }
+  /* TODO: output noise-bg class to common styles */
+  .noise-bg {
+    background: url('../../assets/noise_bg.png');
   }
 
-  .comments-container {
-    display: flex;
-    justify-content: space-between;
+  .msg-input {
+    border-top: 1px solid #e5e5e5;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 
-  .chat__log {
-    flex-grow: 1;
-  }
-
-  .no-comments {
-    align-self: center;
-    margin: 0 auto;
-  }
 </style>
