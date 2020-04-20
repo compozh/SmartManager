@@ -474,7 +474,24 @@
 		"Access": "Доступ",
 		"Rules": "Правила",
 		"Access Parameters": "Параметри доступу",
-		"Attachments": "Вкладення"
+		"Attachments": "Вкладення",
+
+		"Listeners": "Обробники подій",
+		"Task Listeners": "Обробники подій задачі",
+		"Execution Listeners": "Обробники подій виконання",
+		"Listener Type": "Тип обробника",
+		"Listener Id": "Идентификатор обработчика",
+		"Event Type": "Тип події",
+		"start": "початок",
+		"end": "закінчення",
+		"take": "перехід",
+		"create": "створення",
+		"assignment": "призначення",
+		"complete": "виконання",
+		"delete": "видалення",
+		"update": "оновлення",
+		"timeout": "таймаут",
+		"<empty>": "<пусто>"
 	},
 	"dmn-modeler": {
 
