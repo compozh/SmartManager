@@ -14,7 +14,7 @@ export default class Configuration {
 class ItObjects {
   constructor({ isMobj = false, userDefaultObject, useAllObjects = false, userAccessObjects  = []} = {}) {
     this.isMobj = isMobj;
-    this.userDefaultObject = userDefaultObject;
+    this.userDefaultObject = userDefaultObject == '*' ? '' : userDefaultObject;
     this.useAllObjects = useAllObjects;
     this.userAccessObjects = userAccessObjects.map(obj => new AccessObject(obj));
   }
