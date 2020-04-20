@@ -5,13 +5,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<script>
-		window.config = {
-			GrapgQlUrl: '<%= VUE_APP_GRAPHQL_PATH %>',
-			BaseUrl: '<%= VUE_APP_BASE_PATH %>',
-			WsUrl: '<%= VUE_APP_WS_PATH %>',
-			SignalRUrl: '<%= VUE_APP_SIGNALR_PATH %>'
-		};
+		window.devMode = '<%= NODE_ENV %>' == "development"
+		window.VUE_APP_BASE_PATH = '<%= VUE_APP_BASE_PATH %>'
 	</script>
+	<script src="<%= BASE_URL %>config.js"></script>
 	<link rel="icon" href="<%= BASE_URL %>favicon.ico">
 	<title>IT-Enterprise.BPM Modeler</title>
 </head>
