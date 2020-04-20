@@ -1,0 +1,10 @@
+query ($procDefId: String!) {
+  workFlowQuery {
+    formDefinition(procDefId: $procDefId) {
+      formKey
+      data
+      success
+      errorMessage
+    }
+  }
+}

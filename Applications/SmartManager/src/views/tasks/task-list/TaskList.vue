@@ -1,176 +1,80 @@
 <template>
-  <div>
-    <div id="task-app"
-         class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden">
-      <div class="app-fixed-height">
-        <!-- SEARCH BAR -->
-        <search-bar @search="currentPage = 1"></search-bar>
-        <!-- TASK LIST -->
-        <VuePerfectScrollbar class="task-content-scroll-area"
-                             id="scrollArea"
-                             :settings="settings"
-                             ref="taskListPS"
-                             @ps-x-reach-end="setScrollPosition">
-          <transition-group id="task-list"
-                            name="list-enter-up"
-                            class="task__tasks"
-                            tag="ul"
-                            appear>
-              <li class="cursor-pointer task__task-item"
-                  v-for="(task, index) in tasksToPage"
-                  :key="String(task.id)"
-                  :style="{transitionDelay: (index * 0.1) + 's'}">
-                <task-list-item :task="task"/>
-              </li>
-          </transition-group>
-          <no-data v-if="!this.tasksToPage.length">{{ $t('tasks.noTasks') }}</no-data>
-        </VuePerfectScrollbar>
-      </div>
+  <v-row no-gutters>
+    <v-col>
+      <v-row dense align-content="start" justify="start">
+        <v-col class="d-flex">
+          <search-field class="mt-n3 ml-1"/>
+          <v-spacer/>
+          <v-btn-toggle v-model="viewMode" mandatory class="mt-n1">
+            <v-btn small>
+              <fa-icon icon="list-alt" size="lg"/>
+            </v-btn>
+            <v-btn small>
+              <fa-icon icon="table" size="lg"/>
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
+      </v-row>
 
-    </div>
-    <vs-pagination v-if="pages > 1"
-                  :total="pages"
-                   :max="breakpoint === 'md' ? 5 : 9"
-                  v-model="currentPage"
-                  class="-mb-10 mt-3"/>
-  </div>
+      <v-row v-if="viewMode">
+        <v-col>
+          <v-data-table
+            :headers="headers"
+            :items="tasks"
+            :items-per-page="10"
+            class="elevation-1 caption"
+            style="font-size: 10px"
+          ></v-data-table>
+        </v-col>
+      </v-row>
+
+      <data-iterator v-else :tasks="tasks"/>
+
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import SearchBar from '@/components/SearchBar.vue'
-import TaskListItem from './TaskListItem.vue'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import NoData from '@/components/NoData'
+import SearchField from '@/components/SearchField'
+import DataIterator from './DataIterator'
+import { zones, folders, tasks } from '@/mixins/units'
 
 export default {
-  name: 'task-list',
+  name: 'TaskList',
+  mixins: [zones, folders, tasks],
   components: {
-    SearchBar,
-    TaskListItem,
-    VuePerfectScrollbar,
-    NoData
+    SearchField,
+    DataIterator
   },
   data: () => ({
-    currentPage: 1,
-    taskPerPage: 20,
-    windowWidth: window.innerWidth,
-    settings: {
-      maxScrollbarLength: 60,
-      wheelSpeed: 0.30,
-      scrollYMarginOffset: 100
-    }
+    viewMode: false,
+    headers: [
+      { text: 'Id', value: 'id' },
+      {
+        text: 'Name',
+        align: 'start',
+        sortable: false,
+        value: 'name'
+      },
+      { text: 'Added', value: 'addedFio' },
+      { text: 'Description', value: 'descript' },
+      { text: 'Caption', value: 'docCaption' },
+      { text: 'Date plan', value: 'dateplan' },
+      { text: 'Date fact', value: 'dateFact' },
+      { text: 'Status', value: 'status' }
+    ]
   }),
   watch: {
-    $route(to, from) {
-      const currentFolder = from.params.folderId
+    $route (to, from) {
+      const activeFolder = from.params.folderId
       const targetFolder = to.params.folderId
-      if (to.name === 'task-list' && currentFolder !== targetFolder) {
-
-        if (!this.listPosition[targetFolder]) {
-          this.$store.commit('sm/setTaskListPosition', {folder: targetFolder})
-        }
-        this.currentPage = this.listPosition[targetFolder].page
-        this.updateScrollPosition()
+      if (to.name === 'task-list' && activeFolder !== targetFolder) {
         this.getTasks(targetFolder)
       }
-    },
-    currentPage(page) {
-      this.updateScrollPosition(1)
-      const folder = this.$route.params.folderId
-      if (folder) {
-        this.$store.commit('sm/setTaskListPosition', {folder, page})
-      }
-    },
-  },
-  computed: {
-    breakpoint() {
-      return this.$store.state.breakpoint
-    },
-    tasks() {
-      return this.$store.getters['sm/tasks']
-    },
-    cases() {
-      return this.$store.state.sm.cases
-    },
-    pages() {
-      return this.tasks
-        ? Math.ceil(this.tasks.length / this.taskPerPage)
-        : 0
-    },
-    tasksToPage() {
-      const pageTo = this.currentPage * this.taskPerPage
-      const pageFrom = pageTo - this.taskPerPage
-      if (this.tasks) {
-        return this.tasks
-          .filter((task, index) => pageFrom <= index && index < pageTo)
-      }
-      return []
-    },
-    search: {
-      get() {
-        return this.$store.state.sm.search
-      },
-      set(search) {
-        this.currentPage = 1
-        this.$store.commit('sm/setSearch', search)
-      }
-    },
-    folderCode() {
-      return this.$route.params.folderId
-    },
-    listPosition() {
-      return this.$store.state.sm.taskListPosition
     }
   },
-  mounted() {
-    this.getTasks(this.folderCode)
-    this.getCases()
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.handleWindowResize)
-    })
-  },
-  activated() {
-    this.updateScrollPosition()
-  },
-  methods: {
-    setScrollPosition(event) {
-      const folder = this.$route.params.folderId
-      if (folder) {
-        this.$store.commit('sm/setTaskListPosition', {
-          folder, scrollTop: event.target.scrollTop
-        })
-      }
-    },
-    updateScrollPosition(pos) {
-      const scrollArea = document.querySelector('#scrollArea')
-      try {
-        scrollArea.scrollTop = pos || this.listPosition[this.folderCode].scrollTop
-        // eslint-disable-next-line no-unused-vars, no-empty
-      } catch (e) {
-        // provides clear console when scrollArea is null
-      }
-    },
-    async getTasks(folderId) {
-      await this.$store.dispatch('sm/getTasks', {folderId})
-    },
-    async getCases() {
-      if (this.cases.length === 0) {
-        await this.$store.dispatch('sm/getCases', false)
-      }
-    },
-    handleWindowResize(event) {
-      this.windowWidth = event.currentTarget.innerWidth
-    }
-  },
-  deactivated() {
-    window.removeEventListener('resize', this.handleWindowResize)
-  },
+  created () {
+    this.getTasks(this.activeFolderId)
+  }
 }
 </script>
-
-<style lang="scss">
-  @import '@/assets/scss/vuesax/apps/task.scss';
-  .-mb-10 {
-    margin-bottom: -2.7rem !important;
-  }
-</style>

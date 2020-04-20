@@ -6,14 +6,7 @@
           <v-flex>
             <v-layout column>
               <v-flex xs12>
-                <v-card v-if="links">
-                  <v-breadcrumbs  :items="links" divider=">" :class="active-link">
-                    <template v-slot:item="{ item }">
-                      <router-link :to="item.href" v-if="!item.disabled">{{item.text}}</router-link>
-                      <span v-else :class="disable-link">{{item.text}}</span>
-                    </template>
-                  </v-breadcrumbs>
-                </v-card>
+                <bread-crumbs :links="links" @linkChoiced="goToRoute" />
               </v-flex>
               <v-flex>
                 <v-card v-bind:style="{'background-color': '#1a237e'}">
@@ -52,7 +45,7 @@
 import ModuleCard from './ModuleCard.vue'
 import Filters from './LmsFilters.vue'
 import { checkFiltersChanges, separateFilters } from '../helpers/filters.js'
-import { getThisLink, getRoutesLinks } from '../helpers/navihelp.js'
+import { getLinks } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-modules',
@@ -67,23 +60,29 @@ export default {
     if (this.$store.getters['lms/availableFilters'] === null) {
       this.getAvailableFilters()
     }
+    let linksOld = this.$store.getters['lms/links']
+    this.links = getLinks(this.title, this.$route, linksOld)
+    this.$store.commit('lms/setLinks', this.links)
   },
 
   data() {
     return {
       filterChanged: false,
-      // allModules: [],
-      modulesFiltered: []
+      modulesFiltered: [],
+      title: 'Модули',
+      links: null
     }
   },
 
   methods: {
+    goToRoute(index) {
+      this.$router.push({name: this.links[index].name, params: this.links[index].params})
+    },
     goToModuleDetails(moduleData) {
       this.$router.push({name: 'LMSMODULEDETAILS',
         params: {
           moduleGuid: moduleData.moduleGuid,
           moduleName: moduleData.name,
-          links: this.links
         }
       })
     },
@@ -189,11 +188,6 @@ export default {
       } else {
         return this.$store.getters['lms/modules']
       }
-    },
-    links() {
-      const thisLink = getThisLink('Модули', this.$route.path, true)
-      let links = getRoutesLinks(this.$route.params.links, thisLink)
-      return links
     }
   }
 }

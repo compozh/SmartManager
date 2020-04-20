@@ -1,7 +1,8 @@
 export const lessonType = {
   text: 'TEXT',
   video: 'VIDEO',
-  test: 'TEST'
+  test: 'TEST',
+  task: 'TASK'
 }
 
 export const materialType = {

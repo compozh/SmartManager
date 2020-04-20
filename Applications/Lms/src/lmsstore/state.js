@@ -17,9 +17,20 @@ export default {
   currentLessonGuid: '',      // Идентификатор текущего урока
   unit: null,                 // Информация об уроке
   lessonContent: null,        // Содержимое урока
-  currentTestPage: null,      // Текущая страница теста
   currentQuestionsView: null, // Текущее представление секции "Вопросы и ответы"
   discussions: [],            // Список вопросов к текущему уроку
   discussionId: null,          // идентификатор выбранного пользователем вопроса к уроку
-  questionCircularLoader: false // прогресс загрузки дискуссий
+  questionCircularLoader: false, // прогресс загрузки дискуссий
+  // тест
+  currentTestPage: null,      // Текущая страница теста
+  currentTestId: 0,           // Текущий тест. Id
+  currentTestIndex: -1,       // Текущий тест. Индекс в кеше
+  errorMessage: null,         // сообщение об ошибке во время прохождения теста
+  tests: [],                  // Тесты курса. Кеш
+  /// TODO: удалить после реализации кеширования
+  test: {                     // Тест:
+    commonInfo: null,         //      общая информация (id теста, id респондента, назавание, описание, тип, язык)
+    titleColors: null,        //      цвет фона и текста названия теста
+    data: null                //      данные: показатели (формы, группы, лимит времени), вопросы
+  }
 }

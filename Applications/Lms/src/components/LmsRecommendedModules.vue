@@ -13,7 +13,6 @@
 
 <script>
 import ModuleCard from './ModuleCard.vue'
-import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-recommended-modules',
@@ -23,17 +22,12 @@ export default {
   props: ['recommendedModules'],
   data: () => ({
     favIconColor: 'grey',
-    links: []
   }),
-  created() {
-    this.links.push(getThisLink('Главная', this.$route.path, false))
-  },
   methods: {
     goToModuleDetails(moduleData) {
       this.$router.push({name: 'LMSMODULEDETAILS',
         params: {
           moduleGuid: moduleData.moduleGuid,
-          links: this.links
         }
       })
     },

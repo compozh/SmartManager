@@ -1,0 +1,67 @@
+<template>
+  <v-text-field
+    v-model.lazy="search"
+    dense
+    clearable
+    single-line
+    hide-details
+    :style="style"
+    @focus="focused"
+    @blur="blurred"
+    class="body-2 align-center">
+
+    <template #label>
+      <span class="body-2">{{ $t('search') }}</span>
+    </template>
+
+    <template #prepend>
+      <fa-icon icon="search"/>
+    </template>
+
+    <template #append>
+      <v-btn x-small outlined class="mx-2"
+             v-show="active && search">{{ $t('buttons.globalSearch') }}
+      </v-btn>
+    </template>
+
+  </v-text-field>
+</template>
+
+<script>
+export default {
+  name: 'SearchField',
+  data: () => ({
+    active: false,
+    style: {
+      maxWidth: '200px',
+      transition: 'max-width 0.3s'
+    }
+  }),
+  computed: {
+    search: {
+      get () {
+        return this.$store.state.app.search
+      },
+      set (search) {
+        this.$store.commit('SET_SEARCH', search)
+      }
+    }
+  },
+  methods: {
+    focused () {
+      this.active = true
+      this.style.maxWidth = '500px'
+    },
+    blurred () {
+      this.active = false
+      this.style.maxWidth = '200px'
+    },
+    async globalSearch () {
+      await this.$store.dispatch('globalSearch')
+      if (this.$route.path !== '/tasks/search') {
+        await this.$router.push('/tasks/search')
+      }
+    }
+  }
+}
+</script>

@@ -1,16 +1,19 @@
-import {ApolloClient} from 'apollo-client'
-import {InMemoryCache} from 'apollo-cache-inmemory'
-import {HttpLink} from 'apollo-link-http'
-import {onError} from 'apollo-link-error'
+import { ApolloClient } from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { HttpLink } from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
 import gql from 'graphql-tag'
 import auth from '@/utils/auth'
 import router from '@/router'
+
 // QUERIES
 const q = {}
 const queries = require.context('./graphql/', true, /\.graphql$/)
-queries.keys().forEach(key => q[key.replace(/\.(\/|graphql)/g, '')] = queries(key))
+queries.keys().forEach(key => {
+  q[key.replace(/\.(\/|graphql)/g, '')] = queries(key)
+})
 
-const errorLink = onError(({graphQLErrors, networkError}) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError && networkError.statusCode === 401) {
     auth.clearTokens()
     router.push('/login')
@@ -28,8 +31,8 @@ const getClient = async schema => {
     uri: appConfig.GrapgQlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'schema': schema
+      Authorization: `Bearer ${token}`,
+      schema: schema
     }
   }
   const httpLink = new HttpLink(options)
@@ -40,8 +43,7 @@ const getClient = async schema => {
 }
 
 export class SmartManagerApi {
-
-  static async getApplicationParamsFromGql() {
+  static async getApplicationParamsFromGql () {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
@@ -52,7 +54,7 @@ export class SmartManagerApi {
     }
   }
 
-  static async getFoldersFromGql() {
+  static async getFoldersFromGql () {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
@@ -63,126 +65,126 @@ export class SmartManagerApi {
     }
   }
 
-  static async getTasksFromGql({folderId, helperExec}) {
+  static async getTasksFromGql ({ folderId, helperExec }) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.tasks}`,
-        variables: {folderId, helperExec}
+        variables: { folderId, helperExec }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async getTaskInfoFromGql(taskId) {
+  static async getTaskDetailsFromGql (taskId) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
-        query: gql`${q.taskInfo}`,
-        variables: {taskId}
+        query: gql`${q.taskDetails}`,
+        variables: { taskId }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async getFileDetailsFromGql(id, ext) {
+  static async getFileDetailsFromGql (id, ext) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.fileDetails}`,
-        variables: {id, ext}
+        variables: { id, ext }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async getUsersFromGql() {
+  static async getUsersFromGql () {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
-        query: gql`${q.users}`,
+        query: gql`${q.users}`
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async addNewTaskToGql(newTask) {
+  static async addNewTaskToGql (newTask) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.addTask}`,
-        variables: {newTask}
+        variables: { newTask }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async updateTaskInGql(taskData) {
+  static async updateTaskInGql (taskData) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.updateTask}`,
-        variables: {taskData}
+        variables: { taskData }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async changeTaskStatusInGql(statusParams) {
+  static async changeTaskStatusInGql (statusParams) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.changeStatus}`,
-        variables: {statusParams}
+        variables: { statusParams }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async addAttachmentsInGql(attachments, params) {
+  static async addAttachmentsInGql (attachments, params) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.addAttachments}`,
-        variables: {attachments, params}
+        variables: { attachments, params }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async changeTaskStageInGql(stageParams) {
+  static async changeTaskStageInGql (stageParams) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.changeStage}`,
-        variables: {stageParams}
+        variables: { stageParams }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async addCommentToGql(comment, params) {
+  static async addCommentToGql (comment, params) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.addComment}`,
-        variables: {comment, params}
+        variables: { comment, params }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async getBusinessProcessesFromGql() {
+  static async getBusinessProcessesFromGql () {
     try {
       const client = await getClient('workFlow')
       return await client.query({
@@ -193,31 +195,31 @@ export class SmartManagerApi {
     }
   }
 
-  static async getFormDefinitionFromGql(procDefId) {
+  static async getFormDefinitionFromGql (procDefId) {
     try {
       const client = await getClient('workFlow')
       return await client.query({
         query: gql`${q.formDefinition}`,
-        variables: {procDefId}
+        variables: { procDefId }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async startBusinessProcessInGql(processData) {
+  static async startBusinessProcessInGql (processData) {
     try {
       const client = await getClient('workFlow')
       return await client.query({
         query: gql`${q.startBusinessProcess}`,
-        variables: {processData}
+        variables: { processData }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async getCasesFromGql() {
+  static async getCasesFromGql () {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
@@ -228,123 +230,151 @@ export class SmartManagerApi {
     }
   }
 
-  static async getCaseDetailsFromGql(caseId) {
+  static async getCaseDetailsFromGql (caseId) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.caseDetails}`,
-        variables: {caseId}
+        variables: { caseId }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async caseCreateInGql(newCase) {
+  static async caseCreateInGql (newCase) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.caseCreate}`,
-        variables: {newCase}
+        variables: { newCase }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async updateCaseInGql(caseData) {
+  static async updateCaseInGql (caseData) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.caseUpdate}`,
-        variables: {caseData}
+        variables: { caseData }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async caseFolderCreateInGql(folderName) {
+  static async caseFolderCreateInGql (folderName) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.caseFolderCreate}`,
-        variables: {folderName}
+        variables: { folderName }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async changeBindingInGql(caseId, taskId, bind) {
+  static async changeBindingInGql (caseId, taskId, bind) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.binding}`,
-        variables: {caseId, taskId, bind}
+        variables: { caseId, taskId, bind }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async taskDeleteInGql(taskId) {
+  static async taskDeleteInGql (taskId) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.taskDelete}`,
-        variables: {taskId}
+        variables: { taskId }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async taskPinInGql(taskId, pin) {
+  static async taskPinInGql (taskId, pin) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.taskPin}`,
-        variables: {taskId, pin}
+        variables: { taskId, pin }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async attachmentDeleteInGql(id) {
+  static async attachmentDeleteInGql (id) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
         mutation: gql`${q.attachmentDelete}`,
-        variables: {id}
+        variables: { id }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async globalSearchInGql(searchText) {
+  static async globalSearchInGql (searchText) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.globalSearch}`,
-        variables: {searchText}
+        variables: { searchText }
       })
     } catch (e) {
       throw new Error(e.message)
     }
   }
 
-  static async getAttachmentTypesFromGql(params) {
+  static async getAttachmentTypesFromGql (params) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.attachmentTypes}`,
-        variables: {params}
+        variables: { params }
       })
     } catch (e) {
       throw new Error(e.message)
     }
+  }
+
+  static async getProcessesFromGql () {
+    const client = await getClient('processes')
+    const result = await client.query({
+      query: gql`${q.getProcesses}`
+    })
+    return result.data.processesQuery.getProcesses
+  }
+
+  static async getFormFromGql (processDefinitionId) {
+    const client = await getClient('processes')
+    const result = await client.query({
+      query: gql`${q.getForm}`,
+      variables: { processDefinitionId }
+    })
+
+    return result.data.processesQuery.getForm
+  }
+
+  static async startProcessGql (startProcessParams) {
+    const client = await getClient('processes')
+    const result = await client.mutate({
+      mutation: gql`${q.startProcess}`,
+      variables: { startProcessParams }
+    })
+
+    return result.data.processesQueryMutation.startProcess
   }
 }

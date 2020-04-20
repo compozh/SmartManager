@@ -9,7 +9,7 @@
         <v-list-tile
           v-for="(link, index) in links"
           :key="index"
-          :to="{name: link.Id, params: {links: prevLinks}}"
+          :to="{name: link.Id}"
           >
           <v-list-tile-action>
             <v-icon>{{ link.Image }}</v-icon>
@@ -114,7 +114,6 @@
 </template>
 
 <script>
-import { getThisLink } from '../helpers/navihelp.js'
 
 export default {
   name: 'lms-layout',
@@ -123,7 +122,6 @@ export default {
       drawer: false,
       error: '',
       links: [],
-      prevLinks: [],
       logoLink: null,
       menu: false,
       userMenuItems: [
@@ -136,7 +134,6 @@ export default {
   created() {
     this.getLogoLink()
     this.goHome()
-    this.prevLinks.push(getThisLink('Главная', this.$route.path, false))
   },
   beforeMount: function () {
     // Маршруты из конструктора
