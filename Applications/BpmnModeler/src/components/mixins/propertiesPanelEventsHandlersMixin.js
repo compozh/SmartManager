@@ -262,7 +262,7 @@ export default {
           let type = typeof value;
           if (type === 'string') {
             const component = FormioUtils.getComponent(typeof form.components === 'string' ? JSON.parse(form.components) : form.components, param);
-            if (component.type === 'number' || component.type === 'datetime') {
+            if (component && (component.type === 'number' || component.type === 'datetime')) {
               type = component.type;
             }
           }
