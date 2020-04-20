@@ -11,5 +11,7 @@
  */
 export default {
   ExternalTask: 'EXTERNAL_TASK',
-  UserTask: 'USER_TASK'
+  UserTask: 'USER_TASK',
+  ExecutionEventHandler: 'EXECUTION_EVENT_HANDLER',
+  UserTaskEventHandler: 'USER_TASK_EVENT_HANDLER'
 };

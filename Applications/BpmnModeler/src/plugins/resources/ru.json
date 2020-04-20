@@ -469,7 +469,24 @@
 		"Access": "Доступ",
 		"Rules": "Правила",
 		"Access Parameters": "Настройки доступа",
-		"Attachments": "Вложения"
+		"Attachments": "Вложения",
+
+		"Listeners": "Обработчики событий",
+		"Task Listeners": "Обработчики событий задачи",
+		"Execution Listeners": "Обработчики событий выполнения",
+		"Listener Type": "Тип обработчика",
+		"Listener Id": "Идентификатор обработчика",
+		"Event Type": "Тип события",
+		"start": "начало",
+		"end": "завершение",
+		"take": "переход",
+		"create": "создание",
+		"assigment": "назначение",
+		"complete": "выполение",
+		"delete": "удаление",
+		"update": "обновление",
+		"timeout": "таймаут",
+		"<empty>": "<пусто>"
 	},
 	"dmn-modeler": {},
 	"cmmn-modeler": {

@@ -406,16 +406,16 @@ export class ExtensionElementsOptions {
    * @param {string} label - Метка
    * @param {string} prefix - Префикс идентификаторов дочерних элементов
    * @param {Function} getExtensionElements - Функция, возвращающая список элементов расширения
-   * @param {Function} addExtensionElement - Функция, добавляющая новый элемент
+   * @param {Function} createExtensionElement - Функция, добавляющая новый элемент
    * @param {Function} removeExtensionElement - Функция, удаляющая указанный элемент
    * @param {Function} onActiveElementChanged - Функция, вызываемая при смене выбранного элемента
    */
-  constructor(id, label, prefix, getExtensionElements, addExtensionElement, removeExtensionElement, onActiveElementChanged) {
+  constructor(id, label, prefix, getExtensionElements, createExtensionElement, removeExtensionElement, onActiveElementChanged) {
     this.id = id;
     this.label = label;
     this.prefix = prefix;
     this.getExtensionElements = getExtensionElements;
-    this.addExtensionElement = addExtensionElement;
+    this.createExtensionElement = createExtensionElement;
     this.removeExtensionElement = removeExtensionElement;
     this.onActiveElementChanged = onActiveElementChanged;
   }

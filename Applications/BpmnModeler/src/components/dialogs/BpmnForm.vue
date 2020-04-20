@@ -26,7 +26,7 @@
           <v-radio label="DMN" value="DMN"></v-radio>
           <v-radio label="CMMN" value="CMMN"></v-radio>
         </v-radio-group>   
-        <v-select 
+        <v-autocomplete 
           v-model="model.kobj" 
           v-if="canSelectAccessObject" 
           :items="itObjects.userAccessObjects"
@@ -37,7 +37,7 @@
           :rules="[rules.kobj]"
           :label="$t('bpmn.labels.AccessObject')"
           >
-        </v-select>
+        </v-autocomplete>
       </v-form>
     </v-card-text>
     <v-card-actions>
