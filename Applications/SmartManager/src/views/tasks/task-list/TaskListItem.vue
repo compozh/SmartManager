@@ -3,10 +3,10 @@
                tag="v-card" :style="cardStyle">
     <div class="item-title">
       <div class="item-title-desc">
-        <fa-icon v-if="!task.isRead" class="blue--text isRead-icon" icon="dot-circle"/>
+        <div v-if="!task.isRead"  class="isRead-icon"></div>
         <div class="column-element">
           <span class=" ma-0 pl-1 subtitle-1">{{ task.docCaption || task.descript }}</span>
-          <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary">{{ task.docText }}</span>
+          <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary doc-text">{{ task.docText }}</span>
         </div>
       </div>
       <div class="align-center justify-end icons-block">
@@ -15,24 +15,23 @@
         <fa-icon v-show="task.hasOrig" class="ml-2 brown--text" icon="paperclip"/>
         <fa-icon v-show="task.isFavorite" class="ml-2 blue--text text--lighten-2" icon="star"/>
         <fa-icon v-show="task.isGenerated" class="ml-2 " icon="layer-plus"/>
-        <fa-icon v-show="task.isMy" class="ml-2 orange--text" icon="portrait"/>
         <fa-icon v-show="task.myControl" class="ml-2 indigo--text" icon="eye"/>
       </div>
     </div>
     <v-divider class="mx-2"></v-divider>
     <div class="item-body">
       <div class="row-element">
-        <v-avatar color="grey lighten-1" class="mx-3" size="50px">
+        <v-avatar color="grey lighten-1" class="mx-3" size="40px">
           <fa-icon v-if="!task.addedPhoto" icon="user" inverse/>
           <v-img v-else :src="task.addedPhoto"/>
         </v-avatar>
         <div class="column-element">
-          <span class="body-2 text--secondary">{{ task.addedFio }}</span>
+          <span class="caption text--secondary">{{ task.addedFio }}</span>
           <span class="ma-0 pl-0 subtitle-1">
             <fa-icon v-show="task.priority === 1" class="red--text" icon="fire"/>
-            {{ task.name }}
+            <span class=" ma-0 pl-0 subtitle-2">{{ task.name }}</span>
           </span>
-          <div class="item-status">
+          <div class="item-status" v-if="task.role || task.childCount > 0">
             <div class="declarer-role">
               <span v-show="task.role === 'COEXECUTOR'" class="caption">{{$t('tasks.coexecutor')}}</span>
               <span v-show="task.role === 'CONTROLER'" class="red--text caption">{{  $t('tasks.controler') }}</span>
@@ -104,9 +103,7 @@ export default {
       return {
         padding: '5px',
         borderLeft: '5px solid transparent',
-        borderRight: '5px solid transparent',
-        borderLeftColor: this.task.status === '' ? '#43A047' : '#FF5722',
-        borderRightColor: this.task.isRead ? 'grey' : '#009688'
+        borderRight: '5px solid transparent'
       }
     }
   }
@@ -115,7 +112,12 @@ export default {
 
 <style scoped>
   .isRead-icon {
-    margin-top: 4px;
+    background: #2196f3;
+    display: flex;
+    margin-top: 9px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
   }
   .item-title {
     display: flex;
@@ -128,6 +130,9 @@ export default {
   .item-title-desc {
     display: flex;
   }
+  .doc-text {
+    font-weight: 400;
+  }
   .item-body {
     display: flex;
     flex-direction: row;
@@ -137,7 +142,10 @@ export default {
     display: flex;
   }
   .item-status div {
+    height: 20px;
     padding-right:5px;
+    display: flex;
+    align-items: center;
   }
   .task-times {
     display: flex;
@@ -153,5 +161,12 @@ export default {
   .column-element {
     display: flex;
     flex-direction: column;
+    padding: 8px 0;
+  }
+
+  .column-element .subtitle-1 {
+    height: 18px;
+    display: flex;
+    align-items: center;
   }
 </style>
