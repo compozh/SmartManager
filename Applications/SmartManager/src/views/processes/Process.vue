@@ -6,10 +6,20 @@
 
         <v-flex class="formio-container" v-if="form">
 
-            <v-card-title>
-              {{form.name}}
-            </v-card-title>
-
+            <div class="process-header">
+              <v-btn
+                @click="onComeBackBtn"
+                text
+                outlined
+                color="primary"
+                class="come-back-button"
+              >
+                <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
+              </v-btn>
+              <v-card-title>
+                {{form.name}}
+              </v-card-title>
+            </div>
             <v-card class="card-form-component">
               <formio-form-component
                   ref="formioFormComponent"
@@ -85,6 +95,9 @@ export default {
     },
     typeToEnum (type) {
       return 'STRING'
+    },
+    onComeBackBtn () {
+      this.$router.push({ path: 'processes' })
     }
   }
 }
@@ -99,7 +112,15 @@ export default {
   .card-form-component {
     margin: 15px;
   }
-
+  .process-header {
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+  }
+  .come-back-button {
+    height: 58px !important;
+    min-width: 40px !important;
+  }
   .start-process-button {
     margin-bottom: 15px;
   }
