@@ -7,6 +7,7 @@ import addCallActivityProps from './CallActivityProps';
 import addBusinessRuleProps from './BusinessRuleTaskProps';
 import addDataObjectReferenceProps from './DataObjectReferenceProps';
 import addMultiInstanceLoopProps from './MultiInstanceLoopProps';
+import addLinkProps from './LinkProps';
 
 
 export {
@@ -18,5 +19,6 @@ export {
   addCallActivityProps,
   addBusinessRuleProps,
   addDataObjectReferenceProps,
-  addMultiInstanceLoopProps
+  addMultiInstanceLoopProps,
+  addLinkProps
 };
