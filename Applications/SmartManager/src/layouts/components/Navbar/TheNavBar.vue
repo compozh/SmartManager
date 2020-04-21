@@ -11,14 +11,17 @@
 
     <lang-switcher/>
 
+    <linear-pre-loader/>
+
   </v-app-bar>
 </template>
 
 <script>
 import SideBarBtn from './SideBarBtn'
 import Breadcrumb from './Breadcrumb'
-import LangSwitcher from './LangSwitcher'
 import UserPanel from './UserPanel'
+import LangSwitcher from './LangSwitcher'
+import LinearPreLoader from './LinearPreLoader'
 import { zones, folders, tasks } from '@/mixins/units'
 
 export default {
@@ -27,8 +30,9 @@ export default {
   components: {
     SideBarBtn,
     Breadcrumb,
+    UserPanel,
     LangSwitcher,
-    UserPanel
+    LinearPreLoader
   }
 }
 </script>
