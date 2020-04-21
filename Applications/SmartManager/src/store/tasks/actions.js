@@ -2,17 +2,19 @@ import { SmartManagerApi as api } from '@/api/smartManagerApi'
 import i18n from '@/i18n'
 
 export default {
-  async getTasks ({ commit, state }, { folderId, preLoader }) {
+  async getTasks ({ state, commit, rootState }, folderId) {
     if (folderId === 'search') {
       return
     }
-    !preLoader || commit('START_PRELOADER', 'tasks')
+    commit('SET_LINEAR_PRELOADER', true)
+    const preLoader = (state.tasks && state.tasks[folderId])
+    preLoader || commit('START_PRELOADER', 'tasks')
     commit('SET_SEARCH', null)
     commit('SET_ACTIVE_FOLDER', { folderId, source: 'action' })
     try {
       const result = await api.getTasksFromGql({
         folderId: folderId === 'active' ? '' : folderId,
-        helperExec: state.helperExec
+        helperExec: rootState.helperExec
       })
       const taskList = result.data.smtasks.tasks
       const tasks = { [folderId]: taskList }
@@ -24,6 +26,7 @@ export default {
         color: 'error'
       })
     }
+    commit('SET_LINEAR_PRELOADER', false)
     commit('STOP_PRELOADER', 'tasks')
   },
   async getTaskDetails ({ commit }, { taskId, preLoader }) {
