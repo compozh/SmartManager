@@ -19,13 +19,14 @@
           :activeItem.sync="activeItem"/>
       </v-container>
     </v-content>
-    <v-dialog v-model="dataLoading" persistent>
+    <v-overlay v-model="dataLoading">
       <v-progress-circular
+        color="black"
         :size="70"
         :width="7"
         indeterminate>
       </v-progress-circular>
-    </v-dialog>
+    </v-overlay>
     <v-snackbar
       v-model="displayMessage"
       :color="messageType"
