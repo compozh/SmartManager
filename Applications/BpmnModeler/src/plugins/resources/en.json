@@ -471,7 +471,24 @@
 		"Access": "Access",
 		"Rules": "Rules",
 		"Access Parameters": "Access Parameters",
-		"Attachments": "Attachments"
+		"Attachments": "Attachments",
+
+		"Listeners": "Listeners",
+		"Task Listeners": "Task Listeners",
+		"Execution Listeners": "Execution Listeners",
+		"Listener Type": "Listener Type",
+		"Listener Id": "Listener Id",
+		"Event Type": "Event Type",
+		"start": "start",
+		"end": "end",
+		"take": "take",
+		"create": "create",
+		"assignment": "assignment",
+		"complete": "complete",
+		"delete": "delete",
+		"update": "update",
+		"timeout": "timeout",
+		"<empty>": "<empty>"
 	},
 	"dmn-modeler": {
 
