@@ -30,17 +30,38 @@
 
           <v-spacer></v-spacer>
 
-          <task-buttons class="py-3" @executeExternalTask="executeExternalTask"/>
+          <task-buttons class="py-3"
+                        @changeStage="changeStage"
+                        @changeStatus="changeStatus"
+                        @executeExternalTask="executeExternalTask"/>
 
         </div>
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
-          <h3 v-if="task.docCaption" class="mb-3">
-            {{ task.docCaption }}
-          </h3>
-          <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
-            {{ task.name }}
-          </h3>
+          <div class="d-flex align-baseline">
+            <h3 v-if="task.docCaption" class="mb-3">
+              {{ task.docCaption }}
+            </h3>
+            <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
+              {{ task.name }}
+            </h3>
+            <!-- TOGGLE PIN TASK BUTTON -->
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn v-on="on"
+                       class="ml-auto"
+                       color="teal"
+                       fab x-small dark depressed
+                       :outlined="!task.isFavorite"
+                       @click="toggleTaskPin">
+                  <fa-icon icon="thumbtack" size="lg"/>
+                </v-btn>
+              </template>
+              <span>
+                {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
+              </span>
+            </v-tooltip>
+          </div>
           <div class="d-flex mb-3">
             <div v-if="task.priority" class="deep-orange--text">
               <fa-icon icon="exclamation-square" class="mr-2"/>
@@ -360,6 +381,17 @@ export default {
         await this.$router.push('/')
       }
     },
+    changeStage (moveMode, comment) {
+      this.$store.dispatch('changeStage', {
+        id: this.taskId,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy,
+        moveMode,
+        comment,
+        processParams: null
+      })
+    },
     async executeExternalTask () {
       const status = '+' // Task complete
       const submitResult = await this.formSubmit()
@@ -373,6 +405,12 @@ export default {
           color: 'warning'
         })
       }
+    },
+    toggleTaskPin () {
+      this.$store.dispatch('taskPin', {
+        taskId: this.task.id,
+        pin: !this.task.isFavorite
+      })
     },
     selectAttachment (attachment) {
       this.setActiveAttachment(attachment)
