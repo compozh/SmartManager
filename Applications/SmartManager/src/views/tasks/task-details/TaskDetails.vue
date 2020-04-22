@@ -4,9 +4,12 @@
       <!-- LEFT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
-        <div class="side-header px-5 d-flex flex-wrap">
-          <div v-show="task.performer" class="d-flex align-center py-3">
-            <v-avatar color="grey lighten-1" class="mr-3" size="40px">
+        <div class="side-header px-5 d-flex flex-wrap"
+             style="position: relative; padding-right: 3.5em !important;">
+          <div v-show="task.performer"
+               class="d-flex align-center py-3">
+            <v-avatar color="grey lighten-1"
+                      class="mr-3" size="40px">
               <fa-icon v-if="!task.performerPhoto" icon="user" inverse/>
               <v-img v-else :src="task.performerPhoto"/>
             </v-avatar>
@@ -29,12 +32,13 @@
           </div>
 
           <v-spacer></v-spacer>
-
+          <!-- TASK MENU - MORE BTN -->
+          <task-menu/>
+          <!-- TASK MANAGEMENT BUTTONS -->
           <task-buttons class="py-3"
                         @changeStage="changeStage"
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
-
         </div>
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
@@ -42,19 +46,16 @@
             <h3 v-if="task.docCaption" class="mb-3">
               {{ task.docCaption }}
             </h3>
-            <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
-              {{ task.name }}
-            </h3>
             <!-- TOGGLE PIN TASK BUTTON -->
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on"
                        class="ml-auto"
-                       color="teal"
+                       color="deep-orange"
                        fab x-small dark depressed
                        :outlined="!task.isFavorite"
                        @click="toggleTaskPin">
-                  <fa-icon icon="thumbtack" size="lg"/>
+                  <fa-icon icon="star" size="lg"/>
                 </v-btn>
               </template>
               <span>
@@ -62,6 +63,9 @@
               </span>
             </v-tooltip>
           </div>
+          <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
+            {{ task.name }}
+          </h3>
           <div class="d-flex mb-3">
             <div v-if="task.priority" class="deep-orange--text">
               <fa-icon icon="exclamation-square" class="mr-2"/>
@@ -211,6 +215,7 @@
 import DataIterator from '@/views/tasks/task-list/DataIterator'
 import Attachments from '@/views/attachments/Attachments'
 import Comments from '@/views/comments/Comments'
+import TaskMenu from '@/views/tasks/task-details/TaskMenu'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
 import { folders, tasks, attachments } from '@/mixins/units'
 
@@ -220,6 +225,7 @@ export default {
     DataIterator,
     Attachments,
     Comments,
+    TaskMenu,
     TaskButtons
   },
   mixins: [folders, tasks, attachments],
