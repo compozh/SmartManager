@@ -64,7 +64,6 @@ export class ProcessesApi {
       mutation: gql`${startProcess}`,
       variables: { startProcessParams }
     })
-
     return result.data.processesQueryMutation.startProcess
   }
 }
