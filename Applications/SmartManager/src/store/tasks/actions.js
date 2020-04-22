@@ -172,8 +172,9 @@ export default {
       if (result.success) {
         await dispatch('getTaskDetails', { taskId, preLoader: true })
         commit('SET_NOTIFY', {
-          text: result.successMessages || i18n.t('notify.taskPinSuccess'),
-          color: 'success'
+          text: result.successMessages ||
+            pin ? i18n.t('notify.taskPinedSuccess') : i18n.t('notify.taskUnPinedSuccess'),
+          color: pin ? 'success' : 'info'
         })
       } else {
         commit('SET_NOTIFY', {

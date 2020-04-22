@@ -1,4 +1,5 @@
 import { SmartManagerApi as api } from '@/api/smartManagerApi'
+import i18n from '@/i18n'
 
 export default {
   async getProcesses ({ commit }) {
@@ -17,12 +18,27 @@ export default {
       console.error(e.message)
     }
   },
-  async startProcess ({ dispatch }, params) {
+  async startProcess ({ dispatch, commit }, data) {
+    const processData = JSON.stringify(data)
+    commit('START_PRELOADER', 'process')
     try {
-      const startProcessResult = await api.startProcessGql(params)
-      return startProcessResult
-    } catch (e) {
-      console.error(e.message)
+      const response = await api.startProcessInGql(processData)
+      const result = response.data.workFlowQuery.startBusinessProcess
+      const startedProcess = JSON.parse(result)
+      if (startedProcess.ProcessInstance) {
+        commit('SET_NOTIFY', {
+          text: i18n.t('notify.bpSuccess'),
+          color: 'success'
+        })
+      }
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.bpError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'process')
     }
   }
 }

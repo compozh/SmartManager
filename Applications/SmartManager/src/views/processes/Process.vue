@@ -1,69 +1,54 @@
 <template>
-    <div class="process-component">
-        <div v-if="error" style="font-size: 40px;" justify="center" class="py-10 process-error">
-          <v-btn
-            @click="onComeBackBtn"
-            text
-            outlined
-            color="primary"
-            class="come-back-button"
-          >
-            <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
-          </v-btn>
-          <p>{{error}}</p>
-        </div>
-
-        <v-flex class="formio-container" v-if="form">
-
-            <div class="process-header">
-              <v-btn
-                @click="onComeBackBtn"
-                text
-                outlined
-                color="primary"
-                class="come-back-button"
-              >
-                <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
-              </v-btn>
-              <v-card-title>
-                {{form.name}}
-              </v-card-title>
-            </div>
-            <v-card class="card-form-component">
-              <formio-form-component
-                  ref="formioFormComponent"
-
-                  :formDefinition="form"
-                  :formCode="form.name"
-              />
-            </v-card>
-
-            <v-btn
-                @click="onStartProcessClick"
-                text
-                outlined
-                color="primary"
-                :loading="startProcessLoading"
-                class="start-process-button"
-            >
-                {{$t('processes.startProcess')}}
-            </v-btn>
-        </v-flex>
+  <div class="process-component">
+    <div v-if="error" style="font-size: 40px;" justify="center" class="py-10 process-error">
+      <v-btn @click="onComeBackBtn"
+             text outlined
+             color="primary"
+             class="come-back-button">
+        <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
+      </v-btn>
+      <p>{{error}}</p>
     </div>
+
+    <v-flex class="formio-container" v-if="form">
+
+      <div class="process-header">
+        <v-btn @click="onComeBackBtn"
+               text outlined
+               color="primary"
+               class="come-back-button">
+          <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
+        </v-btn>
+        <v-card-title>
+          {{form.name}}
+        </v-card-title>
+      </div>
+      <v-card class="card-form-component">
+        <formio-form-component ref="form"
+                               :formCode="form.formCode"
+                               :formDefinition="form"/>
+      </v-card>
+
+      <v-btn @click="formSubmit"
+             text outlined
+             color="primary"
+             :loading="startProcessLoading"
+             class="start-process-button">
+        {{$t('processes.startProcess')}}
+      </v-btn>
+    </v-flex>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'process-form-page',
-
-  data () {
-    return {
-      form: null,
-      isLoading: false,
-      startProcessLoading: false,
-      error: null
-    }
-  },
+  data: () => ({
+    form: null,
+    isLoading: false,
+    startProcessLoading: false,
+    error: null
+  }),
   created () {
     this.processDefinitionId = this.$route.query.processId
     if (this.processDefinitionId) {
@@ -82,31 +67,78 @@ export default {
     }
   },
   methods: {
-    async onStartProcessClick (params) {
-      const formComponent = this.$refs.formioFormComponent
-      const submitResult = await formComponent.submit()
-      const submitData = submitResult.submission
-      const processVariables = []
-      for (var variable of Object.keys(submitData)) {
-        const value = submitData[variable]
-        const processVariable = {
-          name: variable,
-          value,
-          type: this.typeToEnum(typeof (value))
+    async formSubmit () {
+      const form = this.$refs.form
+      try {
+        const result = await form.submit()
+        if (result) {
+          if (result.success) {
+            this.$store.commit('SET_NOTIFY', {
+              text: result.successMessage || 'Form submit successful',
+              color: 'success'
+            })
+          } else {
+            this.$store.commit('SET_NOTIFY', {
+              text: result.errorMessage || 'Form submit fail',
+              color: 'warning'
+            })
+          }
         }
-        processVariables.push(processVariable)
-      }
-      this.startProcessLoading = true
-      this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, processVariables }).then(result => {
-        this.startProcessLoading = false
-        if (result.success) {
-          this.$router.push({ path: 'processes' })
+        await this.startProcess(result.submission)
+        await this.$router.push('/')
+      } catch (e) {
+        if (e.length) {
+          e.forEach(e => {
+            this.$store.commit('SET_NOTIFY', {
+              text: e.message || 'Form submit error',
+              color: 'warning'
+            })
+          })
         } else {
+          console.error(e)
           this.$store.commit('SET_NOTIFY', {
-            text: result.errorMessage || 'Form submit error',
+            text: e.message || 'Form submit error',
             color: 'error'
           })
         }
+      }
+    },
+    async startProcess (data) {
+      const processData = {
+        ProcessDefinitionId: this.$route.query.processId,
+        BusinessKey: `USER[${this.userId}]`,
+        Variables: this.getVariables(data)
+      }
+      try {
+        await this.$store.dispatch('startProcess', processData)
+        const routeToBack = this.$route.params.routeToBack
+        await this.$router.push(routeToBack)
+      } catch (e) {
+        console.log(e.message)
+      }
+    },
+    getVariables (data) {
+      const variables = []
+      for (const field in data) {
+        const Name = field
+        const Value = data[Name]
+        variables.push({ Name, Value })
+      }
+      this.defineTypes(variables)
+      return variables
+    },
+    defineTypes (variables) {
+      variables.forEach(variable => {
+        const value = variable.Value
+        let type = typeof value
+        if (type === 'number') {
+          type = value.toString().includes('.')
+            ? 'Double' : 'Integer'
+        } else {
+          // Capitalize
+          type = type.replace(/\S/, s => s.toUpperCase())
+        }
+        variable.Type = type
       })
     },
     typeToEnum (type) {
@@ -120,27 +152,34 @@ export default {
 </script>
 
 <style scoped>
+
   .process-error {
     display: flex;
   }
+
   .process-component {
     height: 100%;
     overflow: hidden;
     text-align: center;
   }
+
   .card-form-component {
     margin: 15px;
   }
+
   .process-header {
     display: flex;
     align-items: center;
     padding: 0 13px;
   }
+
   .come-back-button {
     height: 58px !important;
     min-width: 40px !important;
   }
+
   .start-process-button {
     margin-bottom: 15px;
   }
+
 </style>

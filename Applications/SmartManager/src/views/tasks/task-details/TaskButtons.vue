@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="d-flex">
     <!-- EXECUTE BUTTON -->
     <v-btn v-if="internalTaskInWork && taskType === ''"
            color="success"
-           class="mx-2" small
+           class="ml-2"
+           small depressed
            @click="$emit('changeStatus', '+')">
       <fa-icon icon="check" class="mr-2" size="lg"/>
       {{ $t('buttons.execute') }}
@@ -12,7 +13,7 @@
     <!-- EXECUTE BUTTON FOR EXTERNAL-->
     <v-btn v-if="externalTaskCamunda"
            color="success"
-           class="mx-2" small
+           class="ml-2" small
            @click="$emit('executeExternalTask')">
       <fa-icon icon="check" class="mr-2" size="lg"/>
       {{ $t('buttons.execute') }}
@@ -30,16 +31,18 @@
     <!-- APPROVE/REJECT BUTTONS -->
     <div v-if="agreeTaskInWork || taskAtApproval">
       <v-btn color="error"
-             class="mx-2" small
+             class="mx-2"
+             small depressed
              @click="$emit('changeStatus', '-')">
-        <fa-icon icon="thumbs-down" class="mr-2" size="lg"/>
-        {{ buttonReject }}
+        <fa-icon icon="thumbs-down" size="lg"/>
+        <span class="ml-2 hidden-lg-and-down">{{ buttonReject }}</span>
       </v-btn>
 
-      <v-btn color="success" small
+      <v-btn color="success"
+             small depressed
              @click="$emit('changeStatus', '+')">
-        <fa-icon icon="thumbs-up" class="mr-2" size="lg"/>
-        {{ buttonApprove }}
+        <fa-icon icon="thumbs-up" size="lg"/>
+        <span class="ml-2 hidden-lg-and-down">{{ buttonApprove }}</span>
       </v-btn>
     </div>
 
@@ -58,7 +61,6 @@
         <fa-icon icon="arrow-alt-right" class="ml-2" size="lg"/>
       </v-btn>
     </div>
-
   </div>
 </template>
 
