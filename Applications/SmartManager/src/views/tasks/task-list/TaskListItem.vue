@@ -5,7 +5,7 @@
       <div class="item-title-desc">
         <div v-if="!task.isRead"  class="isRead-icon"></div>
         <div class="column-element">
-          <span class=" ma-0 pl-1 subtitle-1">{{ task.docCaption || task.descript }}</span>
+          <span class=" ma-0 pl-1 subtitle-1 task-doc-caption">{{ task.docCaption || task.descript }}</span>
           <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary doc-text">{{ task.docText }}</span>
         </div>
       </div>
@@ -29,7 +29,7 @@
           <span class="caption text--secondary">{{ task.addedFio }}</span>
           <span class="ma-0 pl-0 subtitle-1">
             <fa-icon v-show="task.priority === 1" class="red--text" icon="fire"/>
-            <span class=" ma-0 pl-0 subtitle-2">{{ task.name }}</span>
+            <span class=" ma-0 pl-0 subtitle-2 task-name">{{ task.name }}</span>
           </span>
           <div class="item-status" v-if="task.role || task.childCount > 0">
             <div class="declarer-role">
@@ -124,6 +124,9 @@ export default {
     flex-direction: row;
     justify-content: space-between;
   }
+  .task-doc-caption {
+    line-height: 14px;
+  }
   .item-title .icons-block {
     padding: 5px;
   }
@@ -146,6 +149,9 @@ export default {
     padding-right:5px;
     display: flex;
     align-items: center;
+  }
+  .task-name {
+    line-height: 12px;
   }
   .task-times {
     display: flex;

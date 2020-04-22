@@ -4,7 +4,7 @@
     <v-btn v-if="internalTaskInWork && taskType === ''"
            color="success"
            class="mx-2" small
-           @click="() => ({})">
+           @click="$emit('changeStatus', '+')">
       <fa-icon icon="check" class="mr-2" size="lg"/>
       {{ $t('buttons.execute') }}
     </v-btn>
@@ -22,7 +22,7 @@
     <v-btn v-if="taskCompleted"
            color="warning"
            class="mx-2" small
-           @click="() => ({})">
+           @click="$emit('changeStatus', '')">
       <fa-icon icon="undo" class="mr-2" size="lg"/>
       {{ $t('buttons.returnToWork') }}
     </v-btn>
@@ -31,13 +31,13 @@
     <div v-if="agreeTaskInWork || taskAtApproval">
       <v-btn color="error"
              class="mx-2" small
-             @click="() => ({})">
+             @click="$emit('changeStatus', '-')">
         <fa-icon icon="thumbs-down" class="mr-2" size="lg"/>
         {{ buttonReject }}
       </v-btn>
 
       <v-btn color="success" small
-             @click="() => ({})">
+             @click="$emit('changeStatus', '+')">
         <fa-icon icon="thumbs-up" class="mr-2" size="lg"/>
         {{ buttonApprove }}
       </v-btn>
@@ -47,13 +47,13 @@
     <div v-if="workFlowTaskInWork">
       <v-btn color="error"
              class="mx-2" small
-             @click="() => ({})">
+             @click="$emit('changeStage', 0)">
         <fa-icon icon="arrow-alt-left" class="mr-2" size="lg"/>
         {{ buttonBack }}
       </v-btn>
 
       <v-btn color="success" small
-             @click="() => ({})">
+             @click="$emit('changeStage', 1)">
         {{ buttonForward }}
         <fa-icon icon="arrow-alt-right" class="ml-2" size="lg"/>
       </v-btn>

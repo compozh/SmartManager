@@ -1,15 +1,34 @@
 <template>
     <div class="process-component">
-        <div v-if="error" style="font-size: 40px;" justify="center" class="py-10">
+        <div v-if="error" style="font-size: 40px;" justify="center" class="py-10 process-error">
+          <v-btn
+            @click="onComeBackBtn"
+            text
+            outlined
+            color="primary"
+            class="come-back-button"
+          >
+            <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
+          </v-btn>
           <p>{{error}}</p>
         </div>
 
         <v-flex class="formio-container" v-if="form">
 
-            <v-card-title>
-              {{form.name}}
-            </v-card-title>
-
+            <div class="process-header">
+              <v-btn
+                @click="onComeBackBtn"
+                text
+                outlined
+                color="primary"
+                class="come-back-button"
+              >
+                <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
+              </v-btn>
+              <v-card-title>
+                {{form.name}}
+              </v-card-title>
+            </div>
             <v-card class="card-form-component">
               <formio-form-component
                   ref="formioFormComponent"
@@ -66,9 +85,8 @@ export default {
     async onStartProcessClick (params) {
       const formComponent = this.$refs.formioFormComponent
       const submitResult = await formComponent.submit()
-      const submitData = submitResult.data
+      const submitData = submitResult.submission
       const processVariables = []
-
       for (var variable of Object.keys(submitData)) {
         const value = submitData[variable]
         const processVariable = {
@@ -81,16 +99,30 @@ export default {
       this.startProcessLoading = true
       this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, processVariables }).then(result => {
         this.startProcessLoading = false
+        if (result.success) {
+          this.$router.push({ path: 'processes' })
+        } else {
+          this.$store.commit('SET_NOTIFY', {
+            text: result.errorMessage || 'Form submit error',
+            color: 'error'
+          })
+        }
       })
     },
     typeToEnum (type) {
       return 'STRING'
+    },
+    onComeBackBtn () {
+      this.$router.push({ path: 'processes' })
     }
   }
 }
 </script>
 
 <style scoped>
+  .process-error {
+    display: flex;
+  }
   .process-component {
     height: 100%;
     overflow: hidden;
@@ -99,7 +131,15 @@ export default {
   .card-form-component {
     margin: 15px;
   }
-
+  .process-header {
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+  }
+  .come-back-button {
+    height: 58px !important;
+    min-width: 40px !important;
+  }
   .start-process-button {
     margin-bottom: 15px;
   }
