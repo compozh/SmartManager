@@ -34,7 +34,7 @@
                   ref="formioFormComponent"
 
                   :formDefinition="form"
-                  :formCode="form.name"
+                  :formCode="form.formCode"
               />
             </v-card>
 
@@ -86,7 +86,7 @@ export default {
       const formComponent = this.$refs.formioFormComponent
       const submitResult = await formComponent.submit()
       const submitData = submitResult.submission
-      const processVariables = []
+      const variables = []
       for (var variable of Object.keys(submitData)) {
         const value = submitData[variable]
         const processVariable = {
@@ -94,10 +94,11 @@ export default {
           value,
           type: this.typeToEnum(typeof (value))
         }
-        processVariables.push(processVariable)
+        variables.push(processVariable)
       }
       this.startProcessLoading = true
-      this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, processVariables }).then(result => {
+
+      this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, variables }).then(result => {
         this.startProcessLoading = false
         if (result.success) {
           this.$router.push({ path: 'processes' })
