@@ -3,7 +3,7 @@
     <!-- EXECUTE BUTTON -->
     <v-btn v-if="internalTaskInWork && taskType === ''"
            color="success"
-           class="mx-2"
+           class="ml-2"
            small depressed
            @click="$emit('changeStatus', '+')">
       <fa-icon icon="check" class="mr-2" size="lg"/>
@@ -13,7 +13,7 @@
     <!-- EXECUTE BUTTON FOR EXTERNAL-->
     <v-btn v-if="externalTaskCamunda"
            color="success"
-           class="mx-2" small
+           class="ml-2" small
            @click="$emit('executeExternalTask')">
       <fa-icon icon="check" class="mr-2" size="lg"/>
       {{ $t('buttons.execute') }}
