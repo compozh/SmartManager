@@ -73,9 +73,6 @@ export default {
   setQualityFormio(state, formio) {
     state.qualityFormio = formio
   },
-  setDocumentFormio(state, formio) {
-    state.documentFormio = formio
-  },
   setInitializeQualities(state, initializeQualities) {
     state.initializeQualities = initializeQualities
   },
@@ -90,9 +87,6 @@ export default {
   },
   resetQualityFormio(state) {
     state.qualityFormio = {}
-  },
-  resetDocumentFormio(state) {
-    state.documentFormio = {}
   },
   removeProduction(state, production) {
     let index = state.usersProductionEvents.indexOf(production)

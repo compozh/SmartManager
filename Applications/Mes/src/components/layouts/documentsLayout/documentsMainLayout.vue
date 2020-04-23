@@ -21,7 +21,8 @@ export default {
   name: 'mes-documents-main-layout',
   props: {
     initializeDocuments: Boolean,
-    pageProps:Object
+    pageProps: Object,
+    documentFormio: Object 
   },
   computed: {
     selectedDocument() {
@@ -32,9 +33,6 @@ export default {
     },
     workCenter() {
       return this.$store.getters['mes/workCenter']
-    },
-    documentFormio() {
-      return this.$store.getters['mes/documentFormio']
     },
     dragResizeMode: {
       get() {
@@ -50,11 +48,10 @@ export default {
       var me = this,
         direction = 1,
         pageProps = me.pageProps,
-        properties = {
-          workCenterCode: me.workCenter.code,
-          instance: me.selectedDocument
-        },
         searchDateTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
+
+      let formioFormComponent = this.$refs.formioFormComponent
+      var properties = formioFormComponent.properties
 
       me.$store.commit('mes/setDialogLinearLoaderMessage', this.$t('mes.dialogs.RegistrationDocument'))
       await me.$store.dispatch('formio/submitForm', { formCode: pageProps.formCode, submission, properties }).then(result => {
