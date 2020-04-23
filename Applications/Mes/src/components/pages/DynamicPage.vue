@@ -127,22 +127,22 @@ export default {
         }
       }
 
-      await this.$store.dispatch('mes/downloadDocuments', 
-        { 
+      await this.$store.dispatch('mes/downloadDocuments',
+        {
           processTypeCode: this.pageProps.id,
           searchDateTime: this.currentDate,
           query: this.documentSearchValue,
-          direction: 1 
+          direction: 1
         }
       )
-      
+
       this.selectFirstDocument()
 
       var properties = {
           RCENTR: this.workCenter.code,
           workCenterCode: this.workCenter.code,
         }
-      
+
       var selectedDocument = this.selectedDocument
       if(!this.pageProps.showListOnRightSide && selectedDocument) {
         properties.ID = selectedDocument.id
@@ -155,7 +155,7 @@ export default {
         fetchPolicy: 'network-only',
         deviceSizeType: this.$vuetify.breakpoint.name
       }).then(result => {
-        if(result.success) {
+        if(result && result.success) {
           this.documentFormio = result
         }
       })
