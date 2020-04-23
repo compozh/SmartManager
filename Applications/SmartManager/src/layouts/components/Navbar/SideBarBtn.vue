@@ -2,6 +2,7 @@
   <v-tooltip right>
     <template v-slot:activator="{ on }">
       <v-app-bar-nav-icon class="hidden-sm-and-down" v-on="on"
+                          small
                           :disabled="activeZoneId === 2"
                           @click="toggleSideBar">
         <fa-icon icon="bars" size="lg"/>

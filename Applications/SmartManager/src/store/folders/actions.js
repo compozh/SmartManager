@@ -20,10 +20,10 @@ export default {
         return folder
       })
       commit('SET_FOLDERS', folders)
-    } catch (e) {
-      console.log(e.message)
+    } catch (error) {
+      console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: i18n.t('notify.foldersError'),
+        text: error.message || i18n.t('notify.foldersError'),
         color: 'error'
       })
     } finally {

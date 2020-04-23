@@ -6,8 +6,8 @@
               @input="closeNotify"
               :timeout=5000>
     {{ text }}
-    <v-btn dark text @click="closeNotify">
-      {{ $t('buttons.close') }}
+    <v-btn icon dark @click="closeNotify">
+      <fa-icon icon="times" size="lg"/>
     </v-btn>
   </v-snackbar>
 </template>

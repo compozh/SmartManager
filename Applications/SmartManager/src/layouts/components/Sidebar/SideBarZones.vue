@@ -6,7 +6,7 @@
     <v-list-item class="px-0 justify-center"
                  style="height: 48px">
       <v-list-item-avatar>
-        <v-img src="@/assets/logo.svg"
+        <v-img src="@/assets/logo.png"
                max-height="32px"
                max-width="32px"/>
       </v-list-item-avatar>
@@ -73,7 +73,7 @@ export default {
 <style scoped>
 
   .item-active {
-    background: #5F81FF;
+    background: #42A5F6;
     color: white;
   }
 
