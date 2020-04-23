@@ -28,11 +28,11 @@
         <div class="column-element">
           <span class="caption text--secondary">{{ task.addedFio }}</span>
           <span class="ma-0 pl-0 subtitle-1">
-            <fa-icon v-show="task.priority === 1" class="red--text" icon="fire"/>
+            <fa-icon v-show="task.priority === 1" class="red--text task-priority-icon" icon="fire"/>
             <span class=" ma-0 pl-0 subtitle-2 task-name">{{ task.name }}</span>
           </span>
           <div class="item-status" v-if="task.role || task.childCount > 0">
-            <div class="declarer-role">
+            <div class="declarer-role" v-if="task.role">
               <span v-show="task.role === 'COEXECUTOR'" class="caption">{{$t('tasks.coexecutor')}}</span>
               <span v-show="task.role === 'CONTROLER'" class="red--text caption">{{  $t('tasks.controler') }}</span>
               <span v-show="task.role === 'EXECUTOR'" class="blue--text caption">{{ $t('tasks.executor') }}</span>
@@ -125,7 +125,7 @@ export default {
     justify-content: space-between;
   }
   .task-doc-caption {
-    line-height: 14px;
+    line-height: 18px;
   }
   .item-title .icons-block {
     padding: 5px;
@@ -135,6 +135,7 @@ export default {
   }
   .doc-text {
     font-weight: 400;
+    line-height: 16px;
   }
   .item-body {
     display: flex;
@@ -145,13 +146,17 @@ export default {
     display: flex;
   }
   .item-status div {
-    height: 20px;
+    /* height: 20px; */
     padding-right:5px;
     display: flex;
     align-items: center;
   }
+  .task-priority-icon {
+    margin: 2px;
+  }
   .task-name {
-    line-height: 12px;
+    line-height: 16px;
+    padding: 4px 0;
   }
   .task-times {
     display: flex;
@@ -171,8 +176,8 @@ export default {
   }
 
   .column-element .subtitle-1 {
-    height: 18px;
+    /* height: 18px; */
     display: flex;
-    align-items: center;
+    align-items: start;
   }
 </style>
