@@ -63,6 +63,11 @@ export default {
       dynamicTableView: true
     }
   },
+  watch: {
+    '$route.params.id': function (id) {
+      this.$store.commit('mes/changeMainContainerKey')
+    }
+  },
   created() {
     this.initialize()
   },

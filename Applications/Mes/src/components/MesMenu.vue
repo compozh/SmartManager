@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     reloadPage(route) {
-      if (this.$router.history.current.name != route.id) {
+      if (this.$router.history.current.name != route.id || (route.id == "DYNAMIC" && route.params != this.$router.history.current.params.id)) {
         return
       }
       this.$store.commit('mes/changeMainContainerKey')
