@@ -70,7 +70,14 @@
     "childsDone": "Виконано підлеглими",
     "childsAssigned": "Видано підлеглим",
     "returnedInitiator": "Повернуто ініціатору",
-    "days": "дн."
+    "days": "дн.",
+    "status": "Статус",
+    "from": "Від",
+    "content": "Зміст",
+    "role": "Роль",
+    "source": "Джерело",
+    "actualDate": "Фактична дата",
+    "hasOrig": "Нявність вкладень"
   },
   "cases": {
     "newCase": "Новий кейс",

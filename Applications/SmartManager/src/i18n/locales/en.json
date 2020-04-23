@@ -70,7 +70,14 @@
     "childsDone": "Executed by subordinates",
     "childsAssigned": "Issued to subordinates",
     "returnedInitiator": "Returned initiator",
-    "days": "d"
+    "days": "d",
+    "status": "Status",
+    "from": "From",
+    "content": "Content",
+    "role": "Role",
+    "source": "Source",
+    "actualDate": "Actual date",
+    "hasOrig": "Has attachments"
   },
   "cases": {
     "newCase": "New case",
