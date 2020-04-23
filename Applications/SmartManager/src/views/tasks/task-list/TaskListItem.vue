@@ -2,11 +2,11 @@
   <router-link :to="{name: 'task-details', params: {taskId: task.id}}"
                tag="v-card" :style="cardStyle">
     <div class="item-title">
-      <div class="item-title-desc">
+      <div class="item-title-desc text-truncate">
         <div v-if="!task.isRead"  class="isRead-icon"></div>
         <div class="column-element">
-          <span class=" ma-0 pl-1 subtitle-1 task-doc-caption">{{ task.docCaption || task.descript }}</span>
-          <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary doc-text">{{ task.docText }}</span>
+          <span class=" ma-0 pl-1 subtitle-1 task-doc-caption text-truncate d-inline-block">{{ task.docCaption || task.descript }}</span>
+          <span v-if="task.docText" class=" ma-0 pl-1 subtitle-2 text--secondary doc-text text-truncate d-inline-block">{{ task.docText }}</span>
         </div>
       </div>
       <div class="align-center justify-end icons-block">
@@ -29,7 +29,7 @@
           <span class="caption text--secondary">{{ task.addedFio }}</span>
           <span class="ma-0 pl-0 subtitle-1">
             <fa-icon v-show="task.priority === 1" class="red--text task-priority-icon" icon="fire"/>
-            <span class=" ma-0 pl-0 subtitle-2 task-name">{{ task.name }}</span>
+            <span class=" ma-0 pl-0 subtitle-2 task-name text-truncate d-inline-block">{{ task.name }}</span>
           </span>
           <div class="item-status" v-if="task.role || task.childCount > 0">
             <div class="declarer-role" v-if="task.role">
@@ -115,8 +115,10 @@ export default {
     background: #2196f3;
     display: flex;
     margin-top: 9px;
-    width: 12px;
-    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
     border-radius: 50%;
   }
   .item-title {
@@ -131,7 +133,7 @@ export default {
     padding: 5px;
   }
   .item-title-desc {
-    display: flex;
+    display: flex !important;
   }
   .doc-text {
     font-weight: 400;
@@ -146,7 +148,6 @@ export default {
     display: flex;
   }
   .item-status div {
-    /* height: 20px; */
     padding-right:5px;
     display: flex;
     align-items: center;
@@ -156,7 +157,6 @@ export default {
   }
   .task-name {
     line-height: 16px;
-    padding: 4px 0;
   }
   .task-times {
     display: flex;
@@ -168,16 +168,17 @@ export default {
     flex-direction: row;
     align-items: center;
     padding: 2px 0;
+    overflow: hidden;
   }
   .column-element {
     display: flex;
     flex-direction: column;
     padding: 8px 0;
+    overflow: hidden;
   }
 
   .column-element .subtitle-1 {
-    /* height: 18px; */
     display: flex;
-    align-items: start;
+    align-items: flex-start;
   }
 </style>
