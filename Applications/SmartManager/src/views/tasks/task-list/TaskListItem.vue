@@ -130,7 +130,14 @@ export default {
     line-height: 18px;
   }
   .item-title .icons-block {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     padding: 5px;
+    min-width: 90px;
+  }
+  .icons-block svg {
+    margin: 2px 0;
   }
   .item-title-desc {
     display: flex !important;
@@ -162,6 +169,8 @@ export default {
     display: flex;
     flex-direction: column;
     text-align: right;
+    padding: 5px;
+    min-width: 90px;
   }
   .row-element {
     display: flex;
