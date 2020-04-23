@@ -92,9 +92,7 @@ export const tasks = {
   },
   methods: {
     async getTasks (folderId) {
-      await this.$store.dispatch('getTasks', {
-        folderId, preLoader: true
-      })
+      await this.$store.dispatch('getTasks', folderId)
     },
     async getTask () {
       const taskId = +this.$route.params.taskId

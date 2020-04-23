@@ -12,8 +12,7 @@
 
     <div v-else-if="activeFolder.Name" class="subtitle-1 font-weight-medium">
       <span @click="$route.name === 'task-details' ? $router.go(-1) : null"
-            :class="{'blue-grey--text': $route.name === 'task-details'}"
-            :style="{'cursor': $route.name === 'task-details' ? 'pointer' : 'not-allowed'}">
+            :class="{'blue-grey--text': $route.name === 'task-details'}">
         {{ activeFolder.Name }}
       </span>
     </div>
