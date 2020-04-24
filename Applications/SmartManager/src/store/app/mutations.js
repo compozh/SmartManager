@@ -28,5 +28,8 @@ export default {
   },
   SET_ACTIVE_ZONE (state, zone) {
     state.activeZone = zone
+  },
+  SET_USERS (state, users) {
+    state.users = users
   }
 }

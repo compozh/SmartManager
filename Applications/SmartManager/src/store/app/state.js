@@ -8,5 +8,6 @@ export default {
   search: '',
   notify: null,
   helperExec: true,
-  activeZone: null
+  activeZone: null,
+  users: null
 }
