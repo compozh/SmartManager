@@ -40,10 +40,11 @@
         />
         <mes-documents-main-layout
           @changeDynamicTableView=changeDynamicTableView
-          v-if="$vuetify.breakpoint.smAndDown? !dynamicTableView : !this.pageProps.showListOnRightSide "
+          v-if="$vuetify.breakpoint.smAndDown? !dynamicTableView : !this.pageProps.showListOnRightSide"
           id="dynamicPageDescription"
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
+          :documentFormio=documentFormio
         />
       </vue-split>
     </v-layout>
