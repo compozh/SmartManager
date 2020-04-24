@@ -62,9 +62,6 @@ export default {
   qualityFormio(state) {
     return state.qualityFormio
   },
-  documentFormio(state) {
-    return state.documentFormio
-  },
   createDowntimeFormio(state) {
     return state.createDowntimeFormio
   },

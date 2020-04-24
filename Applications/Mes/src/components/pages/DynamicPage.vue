@@ -21,7 +21,9 @@
           id="dynamicPageDescription"
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
+          :documentFormio=documentFormio
         />
+
         <mes-documents-component
           ref="dynamicPageList"
           id="dynamicPageList"
@@ -38,10 +40,11 @@
         />
         <mes-documents-main-layout
           @changeDynamicTableView=changeDynamicTableView
-          v-if="$vuetify.breakpoint.smAndDown? !dynamicTableView : !this.pageProps.showListOnRightSide "
+          v-if="$vuetify.breakpoint.smAndDown? !dynamicTableView : !this.pageProps.showListOnRightSide"
           id="dynamicPageDescription"
           :initializeDocuments=initializeDocuments
           :pageProps=pageProps
+          :documentFormio=documentFormio
         />
       </vue-split>
     </v-layout>
@@ -55,9 +58,15 @@ export default {
   data() {
     return {
       pageProps: {},
+      documentFormio: {},
       currentDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON(),
       isUploadInProcess: false,
       dynamicTableView: true
+    }
+  },
+  watch: {
+    '$route.params.id': function (id) {
+      this.$store.commit('mes/changeMainContainerKey')
     }
   },
   created() {
@@ -113,33 +122,42 @@ export default {
         this.$store.commit('mes/setDocuments', [])
       }
       var routeId = this.$route.params.id.toLowerCase()
-      for (var j = 0; j < this.mobilityProperties.processesProperties.length; j++) {
-        var page = this.mobilityProperties.processesProperties[j]
+      for(var page of this.mobilityProperties.processesProperties) {
         if (page.id.toLowerCase() == routeId) {
           this.pageProps = page
-         }
+        }
       }
-      
-      await this.$store.dispatch('mes/downloadDocuments', 
-        { 
+
+      await this.$store.dispatch('mes/downloadDocuments',
+        {
           processTypeCode: this.pageProps.id,
           searchDateTime: this.currentDate,
           query: this.documentSearchValue,
-          direction: 1 
+          direction: 1
         }
       )
+
       this.selectFirstDocument()
 
-      var formCode = this.pageProps.id,
-        properties = {
-          RCENTR: this.workCenter.code
-        },
-        fetchPolicy = 'network-only',
-        deviceSizeType = this.$vuetify.breakpoint.name
+      var properties = {
+          RCENTR: this.workCenter.code,
+          workCenterCode: this.workCenter.code,
+        }
 
-      this.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
-        if(result.success) {
-          this.$store.commit('mes/setDocumentFormio', result)
+      var selectedDocument = this.selectedDocument
+      if(!this.pageProps.showListOnRightSide && selectedDocument) {
+        properties.ID = selectedDocument.id
+        properties.instance = selectedDocument
+      }
+
+      this.$store.dispatch('formio/getForm', {
+        formCode: this.pageProps.formCode,
+        properties,
+        fetchPolicy: 'network-only',
+        deviceSizeType: this.$vuetify.breakpoint.name
+      }).then(result => {
+        if(result && result.success) {
+          this.documentFormio = result
         }
       })
     },
@@ -176,13 +194,13 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-.mes-dynamic-page {
-  height: 100%;
-}
-.main-dynamic-page-layout {
-  width: 100%;
-}
-.dynamic-table-small {
-    min-width: 100vw
-}
+  .mes-dynamic-page {
+    height: 100%;
+  }
+  .main-dynamic-page-layout {
+    width: 100%;
+  }
+  .dynamic-table-small {
+      min-width: 100vw
+  }
 </style>

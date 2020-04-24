@@ -17,7 +17,7 @@
                   ref="formioFormComponent"
 
                   :formDefinition="form"
-                  :formCode="form.name"
+                  :formCode="form.formCode"
               />
             </v-card>
 
@@ -75,8 +75,8 @@ export default {
     async onStartProcessClick (params) {
       let formComponent = this.$refs.formioFormComponent
       let submitResult = await formComponent.submit()
-      let submitData = submitResult.data
-      let processVariables = []
+      let submitData = submitResult.submission
+      let variables = []
 
       for (var variable of Object.keys(submitData)) {
         let value = submitData[variable]
@@ -85,11 +85,12 @@ export default {
           value,
           type: this.typeToEnum(typeof (value))
         }
-        processVariables.push(processVariable)
+        variables.push(processVariable)
       }
 
       this.startProcessLoading = true
-      this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, processVariables }).then(result => {
+
+      this.$store.dispatch('startProcess', { processDefinitionId: this.processDefinitionId, variables }).then(result => {
         this.startProcessLoading = false
         this.$store.commit('setSnackbarSuccessMessage', this.$t('processes.messages.processSuccess'))
         // window.close()

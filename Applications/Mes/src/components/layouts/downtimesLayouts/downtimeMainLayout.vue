@@ -57,7 +57,7 @@ export default {
           instance: me.selectedDowntime
         },
         currentDate = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toJSON()
-        
+      
       me.$store.commit('mes/setDialogLinearLoaderMessage', me.$t('mes.dialogs.RegistrationDowntime'))
 
       await me.$store.dispatch('formio/submitForm', { formCode, submission, properties }).then(result => {

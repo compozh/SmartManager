@@ -10,14 +10,14 @@
       <div class="downtimes-block">
         <v-progress-circular
           class='downtime-progress-circular'
-          v-if="!Object.keys(this.createDowntimeFormio).length"
+          v-if="!Object.keys(this.downtimeFormio).length"
           indeterminate
           color="primary"
         />
       <formio-form-component
         ref="formioFormComponent"
         @formSubmit=formSubmit
-        :formDefinition=createDowntimeFormio
+        :formDefinition=downtimeFormio
         :formCode=workCenter.downtimeRegistrationFormCode
         />
       </div>
@@ -39,7 +39,7 @@ export default {
     this.initializeCreateDowntimeFormio()
   },
   computed: {
-    createDowntimeFormio() {
+    downtimeFormio() {
       return this.$store.getters['mes/createDowntimeFormio']
     },
     workCenter() {
@@ -70,15 +70,17 @@ export default {
       me.$store.commit('mes/closeDialogLinearLoader')
     },
     initializeCreateDowntimeFormio() {
-      var me = this,
-        workCenter = this.workCenter,
+      var workCenter = this.workCenter,
         formCode = workCenter.downtimeRegistrationFormCode,
-        properties = { RCENTR: workCenter.code },
+        properties = {
+          RCENTR: workCenter.code,
+          workCenterCode: workCenter.code
+        },
         fetchPolicy = 'network-only',
         deviceSizeType = this.$vuetify.breakpoint.name
 
-      me.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
-        me.$store.commit('mes/setCreateDowntimeFormio', result)
+      this.$store.dispatch('formio/getForm', { formCode, properties, fetchPolicy, deviceSizeType }).then(result => {
+        this.$store.commit('mes/setCreateDowntimeFormio', result)
       })
     }
   }

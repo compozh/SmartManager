@@ -138,6 +138,8 @@ export default {
     )
   },
 
+  //#region Documents
+
   async downloadDocuments({ commit, getters }, retrieveParams) {
     await this.dispatch('mes/graphqlQueryWraper', {
         action: async () => {
@@ -162,7 +164,6 @@ export default {
       }
     )
   },
-
   async applyDocumentMethod ({ dispatch, commit }, processMethodParamsInput ) {
     return await dispatch('graphqlQueryWithRequestResultWraper', {
       queryAction: async () => {
@@ -172,9 +173,11 @@ export default {
         if (result.reRead){
           commit('updateDocument')
         }
-      },
+      }
     })
   },
+
+  //#endregion
 
   async initializeInstallations({ dispatch }, { workCenterCode }) {
     var result = await dispatch('graphqlQueryWraper', {

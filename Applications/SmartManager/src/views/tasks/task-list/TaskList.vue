@@ -26,6 +26,7 @@
             class="elevation-1 caption"
             style="font-size: 10px"
             min-width= '90px'
+            @click:row="item => rowClick(item)"
           >
             <!--status-->
             <template v-slot:item.status="{ item }">
@@ -128,6 +129,12 @@ export default {
   methods: {
     taskInProgress (task) {
       return task.status === '' || task.status === '*'
+    },
+    rowClick (item) {
+      if (!item.id) {
+        return
+      }
+      this.$router.push({ name: 'task-details', params: { taskId: item.id } })
     }
   }
 }
