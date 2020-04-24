@@ -27,9 +27,9 @@
         </v-avatar>
         <div class="column-element">
           <span class="caption text--secondary">{{ task.addedFio }}</span>
-          <span class="ma-0 pl-0 subtitle-1">
-            <fa-icon v-show="task.priority === 1" class="red--text task-priority-icon" icon="fire"/>
-            <span class=" ma-0 pl-0 subtitle-2 task-name text-truncate d-inline-block">{{ task.name }}</span>
+          <span class="ma-0 pl-0 subtitle-1 d-flex align-center">
+            <fa-icon v-show="task.priority === 1" class="red--text mr-1" icon="fire"/>
+            <span class=" ma-0 pl-0 pt-1 subtitle-2 text-truncate">{{ task.name }}</span>
           </span>
           <div class="item-status" v-if="task.role || task.childCount > 0">
             <div class="declarer-role" v-if="task.role">
@@ -158,12 +158,6 @@ export default {
     padding-right:5px;
     display: flex;
     align-items: center;
-  }
-  .task-priority-icon {
-    margin: 2px;
-  }
-  .task-name {
-    line-height: 16px;
   }
   .task-times {
     display: flex;
