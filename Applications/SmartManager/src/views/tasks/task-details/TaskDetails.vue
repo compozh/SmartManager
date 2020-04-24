@@ -247,7 +247,8 @@ export default {
         components: this.form.COMPONENTS,
         submission: this.form.SUBMISSION,
         display: this.form.DISPLAY,
-        settings: this.form.SETTINGS
+        settings: this.form.SETTINGS,
+        properties: JSON.stringify({ taskId: this.taskId })
       }
     },
     docTextHtml () {

@@ -51,14 +51,14 @@
              small depressed
              @click="$emit('changeStage', 0)">
         <fa-icon icon="arrow-alt-left" size="lg"/>
-        <span class="mr-2 hidden-lg-and-down">{{ buttonBack }}}</span>
+        <span class="ml-2 hidden-lg-and-down">{{ buttonBack }}</span>
       </v-btn>
 
       <v-btn color="success"
              small depressed
              class="ml-2"
              @click="$emit('changeStage', 1)">
-        <span class="ml-2 hidden-lg-and-down">{{ buttonForward }}</span>
+        <span class="mr-2 hidden-lg-and-down">{{ buttonForward }}</span>
         <fa-icon icon="arrow-alt-right" size="lg"/>
       </v-btn>
     </div>
