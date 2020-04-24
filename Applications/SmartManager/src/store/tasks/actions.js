@@ -134,34 +134,42 @@ export default {
       commit('STOP_PRELOADER', 'stage')
     }
   },
-  async taskDelete ({ dispatch, state }, taskId) {
-    // startLoading()
+  async taskDelete ({ dispatch, commit, state }, taskId) {
+    commit('START_PRELOADER', 'delete')
     try {
       const response = await api.taskDeleteInGql(taskId)
       const result = response.data.smtasksMutation.taskDelete
-      // stopLoading()
       if (result.success) {
         // If deleted task has parent - update parent
-        const parentId = state.taskInfo[taskId].parentTask.id
+        const parentId = state.taskDetails[taskId].parentTask.id
         if (parentId) {
-          await dispatch('getTaskInfo', { taskId: parentId })
+          await dispatch('getTaskDetails', { taskId })
         }
         // If deleted task bind to case - update case
-        const caseId = state.taskInfo[taskId].caseId
+        const caseId = state.taskDetails[taskId].caseId
         if (caseId) {
-          await dispatch('getCaseDetails', { caseId: caseId })
+          await dispatch('getCaseDetails', { caseId })
         }
         // TODO: If deleted task has child tasks - update child tasks
-        // notify('success', 'taskTitle', 'taskDelSuccess')
+        commit('SET_NOTIFY', {
+          text: result.successMessage || i18n.t('notify.taskDelSuccess'),
+          color: 'success'
+        })
       } else {
-        // notify('warning', 'taskTitle', 'taskDelFail')
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || i18n.t('notify.taskDelFail'),
+          color: 'warning'
+        })
       }
       return result.success
-    } catch (e) {
-      console.log(e.message)
-      // stopLoading()
-      // notify('danger', 'taskTitle', 'taskDelError')
-      return false
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.taskDelError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'delete')
     }
   },
   async taskPin ({ dispatch, commit }, { taskId, pin }) {

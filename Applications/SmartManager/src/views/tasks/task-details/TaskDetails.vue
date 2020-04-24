@@ -32,7 +32,7 @@
 
           <v-spacer></v-spacer>
           <!-- TASK MENU - MORE BTN -->
-          <task-menu/>
+          <task-menu @taskDelete="taskDelete"/>
           <!-- TASK MANAGEMENT BUTTONS -->
           <task-buttons class="py-3"
                         @changeStage="changeStage"
@@ -50,11 +50,10 @@
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on"
                        class="ml-auto"
-                       color="deep-orange"
-                       fab x-small dark depressed
-                       :outlined="!task.isFavorite"
+                       :color="task.isFavorite ? 'cyan' : 'grey'"
+                       text fab small dark depressed
                        @click="toggleTaskPin">
-                  <fa-icon icon="star" size="lg"/>
+                  <fa-icon icon="star" :type="task.isFavorite ? 'far' : 'fal'" size="2x"/>
                 </v-btn>
               </template>
               <span>
@@ -414,9 +413,15 @@ export default {
     },
     toggleTaskPin () {
       this.$store.dispatch('taskPin', {
-        taskId: this.task.id,
+        taskId: this.taskId,
         pin: !this.task.isFavorite
       })
+    },
+    async taskDelete () {
+      const success = await this.$store.dispatch('taskDelete', this.taskId)
+      if (success) {
+        await this.$router.push('/')
+      }
     },
     selectAttachment (attachment) {
       this.setActiveAttachment(attachment)
