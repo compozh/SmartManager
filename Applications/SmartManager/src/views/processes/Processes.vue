@@ -27,15 +27,11 @@
 </template>
 
 <script>
-import ActionButton from '@/components/ActionButton'
 import { zones, processes } from '@/mixins/units'
 
 export default {
   name: 'TaskList',
   mixins: [zones, processes],
-  components: {
-    ActionButton
-  },
   data () {
     return {
       search: '',
