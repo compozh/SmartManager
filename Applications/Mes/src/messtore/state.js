@@ -46,7 +46,6 @@ export default {
   productionFormio: {},
   downtimeFormio: {},
   qualityFormio: {},
-  documentFormio: {},
   createDowntimeFormio: {},
   menuMiniMode: true,
   menuDrawerMode: true,

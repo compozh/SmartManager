@@ -3,6 +3,7 @@ query($processDefinitionId: String!) {
         getForm(processDefinitionId: $processDefinitionId) {
             formKey
             form {
+                formCode
                 name
                 components
                 submission

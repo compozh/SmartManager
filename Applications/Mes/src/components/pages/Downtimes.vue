@@ -90,6 +90,7 @@ export default {
       var formCode = me.workCenter.downtimeRegistrationFormCode,
         properties = {
           RCENTR: me.workCenter.code,
+          workCenterCode: me.workCenter.code,
           ID: newSelectedDowntime.id,
           instance: newSelectedDowntime
         },
