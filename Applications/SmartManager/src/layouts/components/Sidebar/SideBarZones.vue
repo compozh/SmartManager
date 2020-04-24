@@ -4,9 +4,9 @@
                        permanent>
 
     <v-list-item class="px-0 justify-center"
-                 style="height: 48px">
+                 style="min-height: 47px; height: 47px;">
       <v-list-item-avatar>
-        <v-img src="@/assets/logo.svg"
+        <v-img src="@/assets/logo.png"
                max-height="32px"
                max-width="32px"/>
       </v-list-item-avatar>
@@ -47,15 +47,11 @@ export default {
     changeZone (zone) {
       switch (zone.id) {
         case 0:
-          this.sideBarOpen = true
-          this.expandOnHover = false
-          this.miniVariant = false
+          this.setInitialValues()
           this.$router.push('/tasks/active')
           break
         case 1:
-          this.sideBarOpen = true
-          this.expandOnHover = false
-          this.miniVariant = false
+          this.setInitialValues()
           this.$router.push('/tasks/cases')
           break
         case 2:
@@ -65,6 +61,11 @@ export default {
           this.$router.push('/processes')
           break
       }
+    },
+    setInitialValues () {
+      this.sideBarOpen = true
+      this.expandOnHover = false
+      this.miniVariant = false
     }
   }
 }
@@ -73,7 +74,7 @@ export default {
 <style scoped>
 
   .item-active {
-    background: #5F81FF;
+    background: #42A5F6;
     color: white;
   }
 

@@ -1,6 +1,7 @@
 <template>
-  <v-row no-gutters>
-    <v-col>
+  <v-row no-gutters style="flex-basis: 0;"
+         class="flex-grow-1">
+    <v-col class="pa-0">
       <v-row dense align-content="start" justify="start">
         <v-col class="d-flex">
           <search-field class="mt-n3 ml-1"/>
@@ -71,9 +72,7 @@
           </v-data-table>
         </v-col>
       </v-row>
-
       <data-iterator v-else :tasks="tasks"/>
-
     </v-col>
   </v-row>
 </template>

@@ -207,7 +207,7 @@ export class SmartManagerApi {
     }
   }
 
-  static async startBusinessProcessInGql (processData) {
+  static async startProcessInGql (processData) {
     try {
       const client = await getClient('workFlow')
       return await client.query({
@@ -364,17 +364,6 @@ export class SmartManagerApi {
       query: gql`${q.getForm}`,
       variables: { processDefinitionId }
     })
-
     return result.data.processesQuery.getForm
-  }
-
-  static async startProcessGql (startProcessParams) {
-    const client = await getClient('processes')
-    const result = await client.mutate({
-      mutation: gql`${q.startProcess}`,
-      variables: { startProcessParams }
-    })
-
-    return result.data.processesQueryMutation.startProcess
   }
 }

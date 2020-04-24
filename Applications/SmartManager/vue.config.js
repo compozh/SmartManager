@@ -31,7 +31,7 @@ module.exports = {
   pwa: {
     name: 'Smart Manager',
     short_name: 'Smart Manager',
-    themeColor: '#5F81FF',
+    themeColor: '#42A5F6',
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       swSrc: 'src/service-worker.js'

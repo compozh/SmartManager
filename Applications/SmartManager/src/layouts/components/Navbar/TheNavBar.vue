@@ -1,5 +1,6 @@
 <template>
-  <v-app-bar app flat dense color="white">
+  <v-app-bar app flat dense color="white"
+             style="border-bottom: 1px solid #E0E0E0 !important;">
 
     <side-bar-btn/>
 

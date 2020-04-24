@@ -80,7 +80,7 @@ export default {
   }
 
   .item-active {
-    background: #5F81FF;
+    background: #42A5F6;
     color: white;
   }
 
