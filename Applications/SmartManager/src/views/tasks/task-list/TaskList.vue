@@ -73,6 +73,15 @@
         </v-col>
       </v-row>
       <data-iterator v-else :tasks="tasks"/>
+
+      <v-btn fixed
+        dark fab
+        bottom right
+        color="primary"
+        to="/task/create">
+        <fa-icon icon="plus"/>
+      </v-btn>
+
     </v-col>
   </v-row>
 </template>
