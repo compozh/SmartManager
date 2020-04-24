@@ -4,8 +4,7 @@
       <!-- LEFT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
-        <div class="side-header px-5 d-flex flex-wrap"
-             style="position: relative; padding-right: 3.5em !important;">
+        <div class="side-header px-5 d-flex flex-wrap">
           <div v-show="task.performer"
                class="d-flex align-center py-3">
             <v-avatar color="grey lighten-1"
@@ -43,8 +42,8 @@
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
           <div class="d-flex align-baseline">
-            <h3 v-if="task.docCaption" class="mb-3">
-              {{ task.docCaption }}
+            <h3 v-if="task.name" class="mb-3">
+              {{ task.name }}
             </h3>
             <!-- TOGGLE PIN TASK BUTTON -->
             <v-tooltip right>
@@ -64,7 +63,7 @@
             </v-tooltip>
           </div>
           <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
-            {{ task.name }}
+            {{ task.docCaption }}
           </h3>
           <div class="d-flex mb-3">
             <div v-if="task.priority" class="deep-orange--text">
@@ -355,7 +354,15 @@ export default {
         const form = this.$refs.form
         const taskId = this.taskId
         try {
-          return await form.submit({ taskId })
+          const result = await form.submit({ taskId })
+          if (result && result.success) {
+            return result
+          } else {
+            this.$store.commit('SET_NOTIFY', {
+              text: result.errorMessage || 'Form submit fail',
+              color: 'warning'
+            })
+          }
         } catch (e) {
           if (e.length) {
             e.forEach(e => {
@@ -400,17 +407,10 @@ export default {
     },
     async executeExternalTask () {
       const status = '+' // Task complete
-      const submitResult = await this.formSubmit()
-      if (submitResult && submitResult.success) {
-        const completeParams = submitResult.submission
-          ? JSON.stringify(submitResult.submission) : null
-        this.changeStatus(status, completeParams)
-      } else if (submitResult) {
-        this.$store.commit('SET_NOTIFY', {
-          text: submitResult.errorMessage || 'Form submit fail',
-          color: 'warning'
-        })
-      }
+      const result = await this.formSubmit()
+      const completeParams = result && result.submission
+        ? JSON.stringify(result.submission) : null
+      this.changeStatus(status, completeParams)
     },
     toggleTaskPin () {
       this.$store.dispatch('taskPin', {
@@ -438,10 +438,17 @@ export default {
   }
 
  .side-header {
+   position: relative;
    display: flex;
    align-items: center;
    min-height: 75px;
    border-bottom: 1px solid #e5e5e5;
  }
+
+  @media (min-width: 850px) {
+    .side-header {
+      padding-right: 3.5em !important;
+    }
+  }
 
 </style>

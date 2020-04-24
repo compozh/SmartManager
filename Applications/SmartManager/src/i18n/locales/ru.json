@@ -70,7 +70,14 @@
     "childsDone": "Выполнено подчиненными",
     "childsAssigned": "Выдано подчиненным",
     "returnedInitiator": "Возращено инициатору",
-    "days": "дн."
+    "days": "дн.",
+    "status": "Статус",
+    "from": "От",
+    "content": "Содержание",
+    "role": "Роль",
+    "source": "Источник",
+    "actualDate": "Фактическая дата",
+    "hasOrig": "Есть вложения"
   },
   "cases": {
     "newCase": "Новый кейс",

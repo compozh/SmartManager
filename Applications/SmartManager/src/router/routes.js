@@ -16,6 +16,11 @@ export default [
         component: () => import('@/views/tasks/task-list/TaskList.vue')
       },
       {
+        path: '/task/create',
+        name: 'task-create',
+        component: () => import('@/views/tasks/task-create/TaskForm.vue')
+      },
+      {
         path: '/task/:taskId',
         name: 'task-details',
         component: () => import('@/views/tasks/task-details/TaskDetails.vue')
