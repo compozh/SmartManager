@@ -6,37 +6,35 @@
                   :multiple="multiple"
                   :loading="loading"
                   :disabled="loading"
-                  outlined
-                  dense
-                  chips
+                  solo flat dense chips
                   item-text="fio"
-                  item-value="userId">
+                  return-object>
 
     <template v-slot:selection="data">
       <v-chip v-bind="data.attrs"
               :input-value="data.selected"
-              close
+              outlined close
               @click="data.select"
               @click:close="remove(data.item)">
-        <v-avatar left>
-          <v-img :src="data.item.avatar"></v-img>
+        <v-avatar left color="primary">
+          <fa-icon v-if="!data.item.photo" icon="user"
+                   size="xs" inverse/>
+          <v-img v-else :src="data.item.photo"/>
         </v-avatar>
-        {{ data.item.name }}
+        {{ data.item.fio }}
       </v-chip>
     </template>
-
     <template v-slot:item="data">
-      <template v-if="typeof data.item !== 'object'">
-        <v-list-item-content v-text="data.item"></v-list-item-content>
-      </template>
-      <template v-else>
-        <v-list-item-avatar>
-          <img :src="data.item.photo">
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title v-html="data.item.fio"></v-list-item-title>
-        </v-list-item-content>
-      </template>
+        <div class="d-flex align-center">
+          <v-avatar color="primary" class="mr-2" size="20px">
+            <fa-icon v-if="!data.item.photo"
+                     icon="user" size="xs" inverse/>
+            <v-img v-else :src="data.item.photo"/>
+          </v-avatar>
+          <div class="caption">
+            {{ data.item.fio }}
+          </div>
+        </div>
     </template>
   </v-autocomplete>
 </template>
@@ -50,8 +48,8 @@ export default {
       required: true
     },
     items: {
-      type: [Object, Array],
-      required: true
+      type: Array,
+      default: () => []
     },
     label: String,
     multiple: Boolean,
@@ -61,5 +59,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .v-list--dense >>> .v-list-item, .v-list-item--dense {
+    min-height: 25px !important;
+  }
 </style>
