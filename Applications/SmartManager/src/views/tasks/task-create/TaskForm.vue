@@ -1,57 +1,54 @@
 <template>
-  <v-form class="pa-10 flex-grow-1 overflow-hidden white"
-          style="flex-basis: 0; border-radius: 5px;">
-    <v-text-field v-model="name"
-                  :label="$t('tasks.taskName')"
-                  outlined
-                  name="login"
-                  type="text"
-                  autocomplete="username"
-                  class="body-2">
-      <template #prepend-inner>
-        <fa-icon class="mr-2 primary--text" icon="file-signature" type="fal" size="lg"/>
-      </template>
-    </v-text-field>
+  <v-menu v-model="form"
+          :close-on-content-click="false"
+          max-width="800"
+          min-height="800"
+          max-height="800"
+          :nudge-right="100"
+          offset-x offset-y
+          transition="scroll-y-transition">
+    <template v-slot:activator="{ on }">
+      <v-btn fixed
+             dark fab
+             bottom right
+             color="primary"
+             v-on="on">
+        <fa-icon icon="plus"/>
+      </v-btn>
+    </template>
 
-    <task-autocomplete v-model="performer"
-                       :items="users"
-                       :loading="userListLoading"
-                       :label="$t('tasks.performer')"/>
+    <v-card tile class="pa-3">
+      <perfect-scrollbar>
+        <v-form>
+          <v-text-field v-model="name"
+                        :label="$t('tasks.taskName')"
+                        solo flat dense
+                        name="login"
+                        type="text"
+                        autocomplete="username"
+                        class="caption font-weight-bold">
+            <template #prepend-inner>
+              <fa-icon class="mr-2 primary--text"
+                       icon="file-signature"
+                       type="fal" size="lg"/>
+            </template>
+          </v-text-field>
 
-    <span>{{ performer }}</span>
+          <task-autocomplete v-model="performer"
+                             :items="users"
+                             :loading="userListLoading"
+                             :label="$t('tasks.performer')"/>
 
-    <v-text-field v-model="description"
-                  :label="$t('tasks.description')"
-                  outlined
-                  name="description"
-                  type="text"
-                  autocomplete="username"
-                  class="body-2">
-      <template #prepend-inner>
-        <fa-icon class="mr-3 primary--text" icon="user" type="fal" size="lg"/>
-      </template>
-    </v-text-field>
+          <quill-editor v-model="description"
+                        :options="editorOption"
+                        class="mb-8"/>
 
-    <quill-editor v-model="description"
-                  :options="editorOption"
-                  class="mb-8"/>
-
-    <v-text-field v-model="performer"
-                  :label="$t('task.performer')"
-                  outlined
-                  name="login"
-                  type="text"
-                  autocomplete="username"
-                  class="body-2">
-      <template #prepend-inner>
-        <v-icon small class="pt-1 pr-2">fas fa-user</v-icon>
-      </template>
-    </v-text-field>
-    <div>
-      <v-btn class="mr-4" @click="() => ({})">{{ $t('buttons.cancel') }}</v-btn>
-      <v-btn color="primary" @click="() => ({})">{{ $t('buttons.create') }}</v-btn>
-    </div>
-  </v-form>
+          <v-btn class="ml-auto" color="primary"
+                 @click="() => ({})">{{ $t('buttons.create') }}</v-btn>
+        </v-form>
+      </perfect-scrollbar>
+    </v-card>
+  </v-menu>
 </template>
 
 <script>
@@ -69,6 +66,7 @@ export default {
   },
   data () {
     return {
+      form: false,
       name: '',
       description: '',
       performer: '',
@@ -97,7 +95,7 @@ export default {
   },
   computed: {
     users () {
-      return this.$store.state.app.users || []
+      return this.$store.state.app.users
     }
   },
   created () {
@@ -116,12 +114,6 @@ export default {
 </script>
 
 <style scoped>
-
-  /* TODO: output border-light class to common styles */
-  .border-light {
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-  }
 
   .quill-editor {
     border: 1px solid #9e9e9e;
