@@ -379,6 +379,8 @@ export default {
             })
           }
         }
+      } else {
+        return true
       }
     },
     async changeStatus (status, CompleteParams) {
@@ -408,9 +410,11 @@ export default {
     async executeExternalTask () {
       const status = '+' // Task complete
       const result = await this.formSubmit()
-      const completeParams = result && result.submission
-        ? JSON.stringify(result.submission) : null
-      this.changeStatus(status, completeParams)
+      if (result) {
+        const completeParams = result.submission
+          ? JSON.stringify(result.submission) : null
+        this.changeStatus(status, completeParams)
+      }
     },
     toggleTaskPin () {
       this.$store.dispatch('taskPin', {
