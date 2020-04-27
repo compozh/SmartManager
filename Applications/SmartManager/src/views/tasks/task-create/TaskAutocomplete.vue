@@ -44,7 +44,7 @@ export default {
   name: 'TaskAutocomplete',
   props: {
     value: {
-      type: [Object, String],
+      type: [Object, Array],
       required: true
     },
     items: {

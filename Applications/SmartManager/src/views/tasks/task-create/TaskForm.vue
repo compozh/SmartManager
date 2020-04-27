@@ -69,7 +69,7 @@ export default {
       form: false,
       name: '',
       description: '',
-      performer: '',
+      performer: [],
       editorOption: {
         modules: {
           toolbar: [
