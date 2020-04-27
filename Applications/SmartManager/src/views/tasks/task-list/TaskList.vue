@@ -75,14 +75,7 @@
       </v-row>
       <data-iterator v-else :tasks="tasks"/>
 
-      <v-btn fixed
-        dark fab
-        bottom right
-        color="primary"
-        to="/task/create">
-        <fa-icon icon="plus"/>
-      </v-btn>
-
+      <task-form/>
     </v-col>
   </v-row>
 </template>
@@ -90,6 +83,7 @@
 <script>
 import SearchField from '@/components/SearchField'
 import DataIterator from './DataIterator'
+import TaskForm from '@/views/tasks/task-create/TaskForm'
 import { zones, folders, tasks } from '@/mixins/units'
 
 export default {
@@ -97,7 +91,8 @@ export default {
   mixins: [zones, folders, tasks],
   components: {
     SearchField,
-    DataIterator
+    DataIterator,
+    TaskForm
   },
   data () {
     return {
