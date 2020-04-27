@@ -5,7 +5,6 @@ import router from '@/router'
 auth.config({
   baseUrl: window.appConfig.GrapgQlUrl,
   onError: e => {
-    console.log('', e.response.status, e.response.status === 400)
     switch (true) {
       case e.response && e.response.status === 400:
         router.push({ name: 'login' })
