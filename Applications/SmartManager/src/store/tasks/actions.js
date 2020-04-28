@@ -199,5 +199,35 @@ export default {
     } finally {
       commit('STOP_PRELOADER', 'pin')
     }
+  },
+  async createTask ({ dispatch, commit }, newTask) {
+    const taskParams = JSON.stringify(newTask)
+    commit('START_PRELOADER', 'createTask')
+    try {
+      const response = await api.addNewTaskToGql(taskParams)
+      const result = response.data.smtasksMutation.addTask
+      commit('STOP_PRELOADER', 'createTask')
+      if (result.success) {
+        await dispatch('getFolders')
+        commit('SET_NOTIFY', {
+          text: result.successMessages || i18n.t('notify.taskAddSuccess'),
+          color: 'success'
+        })
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessages || i18n.t('notify.taskAddFail'),
+          color: 'warning'
+        })
+      }
+      return result
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.taskAddError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'createTask')
+    }
   }
 }
