@@ -60,6 +60,9 @@ export default {
     login: '',
     password: '',
     checkbox_remember_me: false
-  })
+  }),
+  created () {
+    this.logout()
+  }
 }
 </script>
