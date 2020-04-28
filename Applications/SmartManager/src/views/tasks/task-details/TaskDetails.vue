@@ -46,20 +46,14 @@
               {{ task.name }}
             </h3>
             <!-- TOGGLE PIN TASK BUTTON -->
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on"
-                       class="ml-auto"
-                       :color="task.isFavorite ? 'cyan' : 'grey'"
-                       text fab small dark depressed
-                       @click="toggleTaskPin">
-                  <fa-icon icon="star" :type="task.isFavorite ? 'far' : 'fal'" size="2x"/>
-                </v-btn>
-              </template>
-              <span>
-                {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
-              </span>
-            </v-tooltip>
+            <icon-tooltip-btn btnClass="ml-auto"
+                              :btnColor="task.isFavorite ? 'cyan' : 'grey'"
+                              :btnClick="toggleTaskPin"
+                              icon="star" iconSize="2x"
+                              :iconType="task.isFavorite ? 'far' : 'fal'"
+                              tooltipPosition="right">
+              {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
+            </icon-tooltip-btn>
           </div>
           <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
             {{ task.docCaption }}
@@ -215,6 +209,7 @@ import Attachments from '@/views/attachments/Attachments'
 import Comments from '@/views/comments/Comments'
 import TaskMenu from '@/views/tasks/task-details/TaskMenu'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
+import IconTooltipBtn from '@/components/IconTooltipBtn'
 import { folders, tasks, attachments } from '@/mixins/units'
 
 export default {
@@ -224,7 +219,8 @@ export default {
     Attachments,
     Comments,
     TaskMenu,
-    TaskButtons
+    TaskButtons,
+    IconTooltipBtn
   },
   mixins: [folders, tasks, attachments],
   data: () => ({
