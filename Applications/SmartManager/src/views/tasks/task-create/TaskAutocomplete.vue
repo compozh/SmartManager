@@ -7,8 +7,10 @@
                   :loading="loading"
                   :disabled="loading"
                   solo flat dense chips
+                  hide-details
                   item-text="fio"
-                  return-object>
+                  return-object
+                  class="font-weight-bold">
 
     <template v-slot:selection="data">
       <v-chip v-bind="data.attrs"
@@ -26,15 +28,19 @@
     </template>
     <template v-slot:item="data">
         <div class="d-flex align-center">
-          <v-avatar color="primary" class="mr-2" size="20px">
+          <v-avatar color="primary" class="mr-2" size="25px">
             <fa-icon v-if="!data.item.photo"
                      icon="user" size="xs" inverse/>
             <v-img v-else :src="data.item.photo"/>
           </v-avatar>
-          <div class="caption">
+          <div>
             {{ data.item.fio }}
           </div>
         </div>
+    </template>
+    <template #prepend-inner>
+      <fa-icon class="mr-2 primary--text"
+               :icon="icon"/>
     </template>
   </v-autocomplete>
 </template>
@@ -52,6 +58,7 @@ export default {
       default: () => []
     },
     label: String,
+    icon: String,
     multiple: Boolean,
     loading: Boolean
   }
@@ -59,7 +66,12 @@ export default {
 </script>
 
 <style scoped>
+
+  .v-input >>> .v-input__slot {
+    padding: 0 !important;
+  }
+
   .v-list--dense >>> .v-list-item, .v-list-item--dense {
-    min-height: 25px !important;
+    min-height: 30px !important;
   }
 </style>
