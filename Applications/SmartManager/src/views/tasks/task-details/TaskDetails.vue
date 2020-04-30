@@ -76,7 +76,7 @@
 
             <formio-form-component class="formio"
                                    ref="form"
-                                   :formCode="form.FORMCODE"
+                                   :formCode="form.UNFORMIO"
                                    :formDefinition="formDefinition"/>
           </div>
 
@@ -244,7 +244,9 @@ export default {
         submission: this.form.SUBMISSION,
         display: this.form.DISPLAY,
         settings: this.form.SETTINGS,
-        properties: JSON.stringify({ taskId: this.taskId })
+        properties: this.form.PROPERTIES,
+        isSystem: this.form.ISSYSTEM,
+        name: this.form.NAME
       }
     },
     docTextHtml () {
