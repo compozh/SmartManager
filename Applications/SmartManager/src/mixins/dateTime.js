@@ -1,8 +1,16 @@
 import moment from 'moment'
 
 export const date = {
+  filters: {
+    date: value => {
+      const formatDate = moment(value, 'DD.MM.YYYY').format('DD.MM.YYYY')
+      return formatDate === '01.01.0001' ? '' : formatDate
+    }
+  },
   computed: {
-
+    defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
+    formatDate: () => date => moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY'),
+    parseDate: () => date => moment(date, 'DD.MM.YYYY')
   }
 }
 
