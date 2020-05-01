@@ -150,10 +150,14 @@
     "close": "Close"
   },
   "icons": {
-    "priority": "High priority",
+    "priority": "Priority",
+    "highPriority": "High priority",
+    "lowPriority": "Low priority",
     "attachments": "Has attachments",
     "approve": "Need approve",
     "comment": "Has comments",
+    "needComment": "Need comment",
+    "needApprove": "Need approve",
     "fromMe": "From me",
     "control": "On control",
     "notRush": "Not rush",
