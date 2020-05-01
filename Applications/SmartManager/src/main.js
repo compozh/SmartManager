@@ -9,6 +9,7 @@ import '@/utils/graphql'
 import '@/utils/localization'
 import '@/utils/formio'
 import '@/utils/faIcons'
+import '@/utils/fonts'
 import './registerServiceWorker'
 
 Vue.config.productionTip = false
