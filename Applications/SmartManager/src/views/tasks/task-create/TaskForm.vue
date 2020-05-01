@@ -18,24 +18,22 @@
     <v-card tile style="flex-basis: 0;"
             class="flex-grow-1 overflow-hidden">
       <v-form class="pa-2 d-flex flex-column fill-height"
+              ref="form"
+              v-model="valid"
               @wheel.native.prevent>
-        <div class="pa-2 d-flex">
-          <v-text-field v-model="name"
+        <div class="px-2 pt-2 d-flex">
+          <v-text-field id="taskName"
+                        v-model="name"
+                        :rules="required"
                         :label="$t('tasks.taskName')"
                         solo flat dense
                         clearable
-                        hide-details
-                        name="login"
                         type="text"
                         autocomplete="off"
-                        class="font-weight-bold red--text">
-            <template #prepend-inner>
-              <fa-icon class="mr-2 primary--text"
-                       icon="file-signature"/>
-            </template>
+                        class="black--text">
           </v-text-field>
           <icon-tooltip-btn btnColor="#343434"
-                            :btnClick="() => form = false "
+                            :btnClick="closeForm"
                             icon="times" iconSize="2x"
                             tooltipPosition="top">
             {{ $t('buttons.close') }}
@@ -43,17 +41,39 @@
         </div>
 
         <perfect-scrollbar class="px-5">
-          <task-autocomplete v-model="performer"
-                             :items="users"
-                             :loading="userListLoading"
-                             :label="$t('tasks.performer')"
-                             icon="user"/>
-
-          <date-time-pickers/>
+          <div class="d-flex align-start">
+            <task-autocomplete v-model="performer"
+                               @remove="performer = {}"
+                               :items="users"
+                               :loading="userListLoading"
+                               :label="$t('tasks.performer')"
+                               icon="user"
+                               class="mr-3"
+            style="width: 50%">
+              <template #icon>
+                <v-btn text fab x-small
+                       dark depressed
+                       color="grey" class="mr-2"
+                       style="border: 1px dashed;">
+                  <fa-icon icon="user" type="fal" size="lg"/>
+                </v-btn>
+              </template>
+            </task-autocomplete >
+            <date-time-pickers class="ml-auto"/>
+          </div>
 
           <quill-editor v-model="description"
                         :options="editorOption"
                         class="mb-8"/>
+
+        <div>
+          <fa-icon class="mr-1 text--secondary" icon="paperclip" type="fal" size="sm"/>
+          <span class="body-2 font-italic font-weight-light grey--text">
+            {{ 'Drag & Drop files to attach or' /* TODO: Add resource */ }}
+            <em class="blue--text"
+                style="border-bottom: 1px dashed #42A5F6;">Browse</em>
+          </span>
+        </div>
 
         </perfect-scrollbar>
         <v-spacer></v-spacer>
@@ -65,16 +85,16 @@
                             icon="flag" iconSize="lg"
                             :iconType="priority ? 'far' : 'fal'"
                             tooltipPosition="top">
-            {{ 'Priority' /* Add resources */ }}
+            {{ $t('icons.priority') }}
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
                             :btnColor="myControl ? 'red' : 'grey'"
                             :btnClick="() => myControl = !myControl"
-                            icon="exclamation" iconSize="lg"
+                            icon="eye" iconSize="lg"
                             :iconType="myControl ? 'far' : 'fal'"
                             tooltipPosition="top">
-            {{ 'Control' /* Add resources */ }}
+            {{ $t('icons.control') }}
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
@@ -83,7 +103,7 @@
                             icon="clipboard-check" iconSize="lg"
                             :iconType="needApprove ? 'far' : 'fal'"
                             tooltipPosition="top">
-            {{ 'Approve' /* Add resources */ }}
+            {{ $t('icons.needApprove') }}
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
@@ -92,11 +112,15 @@
                             icon="comment-alt-lines" iconSize="lg"
                             :iconType="needComment ? 'far' : 'fal'"
                             tooltipPosition="top">
-            {{ 'Comment' /* Add resources */ }}
+            {{ $t('icons.needComment') }}
           </icon-tooltip-btn>
           <v-spacer></v-spacer>
-          <v-btn class="ml-auto" color="primary" small
-                 @click="createTask">{{ $t('buttons.create') }}</v-btn>
+          <v-btn class="ml-auto"
+                 color="primary" small
+                 :disabled="!valid"
+                 @click="createTask">
+            {{ $t('buttons.create') }}
+          </v-btn>
         </div>
       </v-form>
     </v-card>
@@ -111,9 +135,11 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
+import { date } from '@/mixins/dateTime'
 
 export default {
   name: 'TaskForm',
+  mixins: [date],
   components: {
     TaskAutocomplete,
     DateTimePickers,
@@ -123,14 +149,36 @@ export default {
   data () {
     return {
       form: false,
+      valid: '',
       name: '',
+      planDate: {
+        value: ''
+      },
       description: '',
       performer: [],
+      attachments: [],
       priority: false,
       myControl: false,
       needApprove: false,
       needComment: false,
-      editorOption: {
+      userListLoading: false
+    }
+  },
+  computed: {
+    users () {
+      return this.$store.state.app.users
+    },
+    htmlDescription () {
+      const description = this.description
+      return description ? `<body>${description}</body>` : ''
+    },
+    required () {
+      return [
+        v => !!v || this.$t('validate.required')
+      ]
+    },
+    editorOption () {
+      return {
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'], // toggled buttons
@@ -144,13 +192,7 @@ export default {
           ]
         },
         placeholder: this.$t('tasks.description') + '...'
-      },
-      userListLoading: false
-    }
-  },
-  computed: {
-    users () {
-      return this.$store.state.app.users
+      }
     }
   },
   created () {
@@ -168,14 +210,14 @@ export default {
       const newTask = {
         name: this.name,
         performerId: this.performer.userId,
+        descript: this.htmlDescription,
         needApprove: this.needApprove,
         needComm: this.needComment,
         priority: Number(this.priority),
+        attachments: [],
         caseId: 0
       }
-      if (this.$route.params.taskId) {
-        newTask.parentTaskId = this.$route.params.taskId
-      }
+      this.closeForm()
       try {
         const result = await this.$store.dispatch('createTask', newTask)
         if (result.success) {
@@ -188,6 +230,21 @@ export default {
         // Задержка нужна чтобы показать сообщение об ошибке
         setTimeout(() => this.$router.go(0), 1000)
       }
+    },
+    closeForm () {
+      this.resetForm()
+      this.form = false
+    },
+    validate () {
+      this.$refs.form.validate()
+    },
+    resetForm () {
+      this.$refs.form.reset()
+      this.description = ''
+      this.priority = false
+      this.myControl = false
+      this.needApprove = false
+      this.needComment = false
     }
   }
 }
@@ -197,6 +254,11 @@ export default {
 
   #addBtn {
     background: url(../../../assets/action_btn_bg.png) center/contain no-repeat #7b68ee;
+  }
+
+  .v-form {
+    font-family: "Proxima Nova Regular", Roboto, sans-serif;
+    font-size: 18px
   }
 
   .v-menu__content {
@@ -210,21 +272,33 @@ export default {
     width: 600px;
   }
 
+  .v-input >>> label[for="taskName"],
+  .v-input >>> input {
+    color: #9e9e9e !important;
+    font-size: 18px;
+  }
+
+  .v-input >>> input {
+    color: #343434 !important;
+  }
+
   .quill-editor {
-    border: 1px solid #9e9e9e;
+    border: 1px solid #e2e2e2;
     border-radius: 5px;
+    font-family: "Proxima Nova Regular, Roboto", sans-serif !important;
   }
 
   .quill-editor:hover {
-    border-color: black;
+    border-color: #cbcbcb;
   }
 
   .quill-editor >>> .ql-toolbar {
-    background: #f5f5f5;
     border: none;
-    border-bottom: 1px solid #9e9e9e;
+    border-bottom: 1px solid #e2e2e2;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+    padding: 2px 0;
+    text-align: center;
   }
 
   .quill-editor >>> .ql-toolbar button {
@@ -233,14 +307,38 @@ export default {
     padding: 3px;
   }
 
-  .quill-editor >>> .ql-container {
+  .quill-editor >>> .ql-container .ql-editor::before {
     border: none;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
   }
 
+  .quill-editor >>> .ql-container {
+    border: none;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-style: normal;
+  }
+
   .quill-editor >>> .ql-editor {
     min-height: 100px;
+  }
+
+  .quill-editor >>> .ql-editor::before {
+    font-family: "Proxima Nova Light", Roboto sans-serif !important;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: #cccccc;
+    letter-spacing: 1px;
+  }
+
+  .quill-editor >>> .ql-editor p {
+    font-family: "Proxima Nova Light", Roboto sans-serif !important;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: #343434;
   }
 
   .circle-border {
