@@ -1,46 +1,48 @@
 <template>
   <v-autocomplete :value="value"
                   @input="$emit('input', $event)"
+                  :rules="required"
                   :items="items"
                   :label="label"
                   :multiple="multiple"
                   :loading="loading"
                   :disabled="loading"
+                  cache-items
                   solo flat dense chips
-                  hide-details
                   item-text="fio"
-                  return-object
-                  class="font-weight-bold">
+                  return-object>
 
     <template v-slot:selection="data">
       <v-chip v-bind="data.attrs"
               :input-value="data.selected"
               outlined close
               @click="data.select"
-              @click:close="remove(data.item)">
+              @click:close="$emit('remove', data.item)">
         <v-avatar left color="primary">
           <fa-icon v-if="!data.item.photo" icon="user"
                    size="xs" inverse/>
           <v-img v-else :src="data.item.photo"/>
         </v-avatar>
-        {{ data.item.fio }}
+        <span class="text-truncate">{{ data.item.fio }}</span>
       </v-chip>
     </template>
     <template v-slot:item="data">
         <div class="d-flex align-center">
-          <v-avatar color="primary" class="mr-2" size="25px">
+          <v-avatar color="primary" class="mr-3" size="25px">
             <fa-icon v-if="!data.item.photo"
                      icon="user" size="xs" inverse/>
             <v-img v-else :src="data.item.photo"/>
           </v-avatar>
-          <div>
+          <div class="grey--text">
             {{ data.item.fio }}
           </div>
         </div>
     </template>
     <template #prepend-inner>
-      <fa-icon class="mr-2 primary--text"
-               :icon="icon"/>
+      <slot name="icon">
+          <fa-icon class="mr-2 primary--text"
+                   :icon="icon"/>
+      </slot>
     </template>
   </v-autocomplete>
 </template>
@@ -61,6 +63,14 @@ export default {
     icon: String,
     multiple: Boolean,
     loading: Boolean
+  },
+  computed: {
+    // TODO: adjust validation
+    required () {
+      return [
+        v => !!v || this.$t('validate.required')
+      ]
+    }
   }
 }
 </script>
@@ -71,7 +81,16 @@ export default {
     padding: 0 !important;
   }
 
+  .v-input >>> label {
+    color: #9e9e9e;
+    font-size: 18px;
+    font-weight: normal;
+  }
+
   .v-list--dense >>> .v-list-item, .v-list-item--dense {
-    min-height: 30px !important;
+    min-height: 35px !important;
+    padding: 0 8px;
+    font-family: "Proxima Nova Regular", Roboto, sans-serif;
+    font-size: 16px;
   }
 </style>
