@@ -5,13 +5,13 @@
     <template v-slot:activator="{ on }">
       <v-btn id="addBtn"
              fixed
-             width="50"
-             height="50"
+             width="45"
+             height="45"
              dark fab
              bottom right
              color="primary"
              v-on="on">
-          <span class="display-1">+</span>
+          <span class="display-1 white--text font-weight-bold">+</span>
       </v-btn>
     </template>
 
@@ -65,15 +65,6 @@
           <quill-editor v-model="description"
                         :options="editorOption"
                         class="mb-8"/>
-
-        <div>
-          <fa-icon class="mr-1 text--secondary" icon="paperclip" type="fal" size="sm"/>
-          <span class="body-2 font-italic font-weight-light grey--text">
-            {{ 'Drag & Drop files to attach or' /* TODO: Add resource */ }}
-            <em class="blue--text"
-                style="border-bottom: 1px dashed #42A5F6;">Browse</em>
-          </span>
-        </div>
 
         </perfect-scrollbar>
         <v-spacer></v-spacer>
@@ -257,7 +248,6 @@ export default {
   }
 
   .v-form {
-    font-family: "Proxima Nova Regular", Roboto, sans-serif;
     font-size: 18px
   }
 
@@ -266,8 +256,8 @@ export default {
     flex-direction: column;
     top: auto !important;
     left: auto !important;
-    bottom: 60px;
-    right: 60px;
+    bottom: 55px;
+    right: 55px;
     height: 450px;
     width: 600px;
   }
@@ -278,14 +268,9 @@ export default {
     font-size: 18px;
   }
 
-  .v-input >>> input {
-    color: #343434 !important;
-  }
-
   .quill-editor {
     border: 1px solid #e2e2e2;
     border-radius: 5px;
-    font-family: "Proxima Nova Regular, Roboto", sans-serif !important;
   }
 
   .quill-editor:hover {
@@ -325,7 +310,6 @@ export default {
   }
 
   .quill-editor >>> .ql-editor::before {
-    font-family: "Proxima Nova Light", Roboto sans-serif !important;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -334,11 +318,9 @@ export default {
   }
 
   .quill-editor >>> .ql-editor p {
-    font-family: "Proxima Nova Light", Roboto sans-serif !important;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
-    color: #343434;
   }
 
   .circle-border {

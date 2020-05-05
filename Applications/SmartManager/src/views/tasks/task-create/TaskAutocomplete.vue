@@ -90,7 +90,6 @@ export default {
   .v-list--dense >>> .v-list-item, .v-list-item--dense {
     min-height: 35px !important;
     padding: 0 8px;
-    font-family: "Proxima Nova Regular", Roboto, sans-serif;
     font-size: 16px;
   }
 </style>
