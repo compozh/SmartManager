@@ -67,6 +67,15 @@ export default {
   mixins: [tasks, attachments],
   components: {
     FilesUpload
+  },
+  data: () => ({
+    attachmentsListMode: false
+  }),
+  methods: {
+    selectAttachment (attachment) {
+      this.setActiveAttachment(attachment)
+      this.$emit('input')
+    }
   }
 }
 </script>
