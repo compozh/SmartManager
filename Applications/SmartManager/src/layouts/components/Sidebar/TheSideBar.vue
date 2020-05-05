@@ -8,7 +8,7 @@
                        style="padding-left: 3.4em">
     <side-bar-zones/>
     <v-list dense nav subheader v-if="activeZoneId !== 2">
-      <v-subheader class="subtitle-2" style="color: #343434;">
+      <v-subheader class="subtitle-1 font-weight-bold">
         {{ zones[activeZoneId].title }}
       </v-subheader>
       <v-list-item-group v-model="activeFolderId"
@@ -26,10 +26,10 @@
             <fa-icon :icon="folderIcons(folder.Code)"/>
           </v-list-item-icon>
           <v-list-item-title v-text="folder.Name"
+                             class="body-1"
                              :class="{ 'white--text': folder.Code === activeFolderId}"/>
           <v-list-item-action v-if="folder.Count" class="ma-0 justify-end">
-            <span class="caption"
-                  :class="folder.Code === activeFolderId ? 'white--text' : 'grey--text'">
+            <span class="body-1" :class="folder.Code === activeFolderId ? 'white--text' : 'grey--text'">
             {{ folder.Count }}</span>
           </v-list-item-action>
       </v-list-item>
