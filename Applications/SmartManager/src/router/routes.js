@@ -46,6 +46,7 @@ export default [
     children: [
       {
         path: '/login',
+        name: 'login',
         component: () => import('@/pages/Login.vue')
       }
     ]
