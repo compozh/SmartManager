@@ -166,8 +166,11 @@
   },
   "tabs": {
     "details": "Детально",
-    "attachments": "Додаток",
+    "attachments": "Додатки",
+    "attachment": "Додаток",
     "comments": "Коментарі",
+    "analytics": "Аналітика",
+    "diagram": "Діаграма",
     "approvals": "Погодження"
   },
   "statuses": {

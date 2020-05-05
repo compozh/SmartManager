@@ -166,8 +166,11 @@
   },
   "tabs": {
     "details": "Детально",
-    "attachments": "Вложение",
+    "attachments": "Вложения",
+    "attachment": "Вложение",
     "comments": "Комментарии",
+    "analytics": "Аналитика",
+    "diagram": "Диаграмма",
     "approvals": "Согласование"
   },
   "statuses": {

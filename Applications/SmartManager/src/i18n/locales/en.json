@@ -166,8 +166,11 @@
   },
   "tabs": {
     "details": "Details",
-    "attachments": "Attachment",
+    "attachments": "Attachments",
+    "attachment": "Attachment",
     "comments": "Comments",
+    "analytics": "Analytics",
+    "diagram": "Diagram",
     "approvals": "Approvals"
   },
   "statuses": {
