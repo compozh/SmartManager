@@ -1,5 +1,0 @@
-mutation($favList:FavListInput!){
-  purchasesMutation{
-    mutationEditFavList(favList:$favList)
-  }
-}

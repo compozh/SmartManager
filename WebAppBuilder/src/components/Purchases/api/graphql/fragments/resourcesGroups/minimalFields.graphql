@@ -1,4 +1,0 @@
-fragment resourcesGroupFields on ResourceGroup {
-  id
-  name
-}
