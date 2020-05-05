@@ -18,10 +18,9 @@
         :items-per-page="10"
         :search="search"
          @click:row="onRowClick"
-        class="elevation-1 caption"
+        class="elevation-1 body-2"
         style="font-size: 10px"
       ></v-data-table>
-      <action-button/>
     </v-col>
   </v-row>
 </template>
