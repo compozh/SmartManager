@@ -1,5 +1,29 @@
 import { mapGetters } from 'vuex'
 
+export const common = {
+  computed: {
+    type () {
+      // TODO: check for case from case object or route
+      if (this.task.__typename === 'Case') {
+        return 'CASE'
+      }
+      if (this.task.keyValue) {
+        return 'DOCUMENT'
+      }
+      return 'TASK'
+    },
+    params () {
+      return {
+        id: this.taskId || this.caseId,
+        type: this.type,
+        arso: this.task.arso,
+        keyValue: this.task.keyValue,
+        kidCopy: this.task.kidCopy
+      }
+    }
+  }
+}
+
 export const zones = {
   computed: {
     zones () {
@@ -80,14 +104,39 @@ export const tasks = {
     taskId () {
       return this.task.id || +this.$route.params.taskId
     },
-    type () {
-      if (this.task.__typename === 'Case') {
-        return 'CASE'
+    // CONDITIONS FOR BUTTONS
+    internalTaskInWork () {
+      return this.internalTask && this.taskInWork
+    },
+    taskCompleted () {
+      return this.taskType === '' && this.task.status === '+'
+    },
+    agreeTaskInWork () {
+      return this.taskType === 'AGREE' && this.taskInWork
+    },
+    workFlowTaskInWork () {
+      return this.taskType === 'WORKFLOW' && this.taskInWork
+    },
+    externalTaskCamunda () {
+      if (!this.task.externalParams) {
+        return
       }
-      if (this.task.keyValue) {
-        return 'DOCUMENT'
-      }
-      return 'TASK'
+      const externalParams = JSON.parse(this.task.externalParams)
+      return this.taskType === 'EXTERNAL' &&
+        externalParams.EXTERNALSOURCE === 'C'
+    },
+    userIsPerformer () {
+      return this.userId === this.task.performerId
+    },
+    allowedCaseEdit () {
+      return this.$route.name === 'case-view' &&
+        this.caseStatus === '' &&
+        this.userId === this.caseItem.userAdd
+    },
+    allowedTaskEdit () {
+      return this.$route.name === 'task-details' &&
+        this.internalTaskInWork &&
+        this.userId === this.task.declarerId
     }
   },
   methods: {
@@ -113,6 +162,9 @@ export const cases = {
   computed: {
     cases () {
       return this.$store.state.sm.cases
+    },
+    caseId () {
+      return this.case.id || +this.$route.params.caseId
     }
   },
   methods: {
@@ -125,6 +177,11 @@ export const cases = {
 }
 
 export const attachments = {
+  data: () => ({
+    attachmentsList: [],
+    uploadErrors: [],
+    attachmentType: null
+  }),
   computed: {
     attachments () {
       return this.task.originals && this.task.originals.length
@@ -137,6 +194,18 @@ export const attachments = {
     },
     attachmentDetails () {
       return this.$store.state.attachments.attachmentDetails || {}
+    },
+    attachmentTypes () {
+      return this.$store.state.attachments.attachmentTypes || []
+    },
+    fileSize () {
+      return size => {
+        switch (true) {
+          case size < 1024: return `${size} Byte`
+          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
+        }
+      }
     }
   },
   methods: {
@@ -153,6 +222,32 @@ export const attachments = {
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
       this.$store.commit('SET_ATTACHMENT_DETAILS', {})
+    },
+    async getAttachmentTypes () {
+      await this.$store.dispatch('getAttachmentTypes', this.params)
+    },
+    getAttachments (attachments) {
+      this.attachmentsList = attachments
+    },
+    async addAttachments () {
+      if (this.attachmentTypes.length === 1) {
+        this.attachmentType = this.attachmentTypes[0].CODE
+      }
+      this.attachments.forEach(a => { a.type = this.attachmentType })
+      // Returns results list
+      const results = await this.$store.dispatch('addAttachments', {
+        attachments: this.attachments,
+        params: this.params
+      })
+      results.forEach(result => {
+        if (!result.success) {
+          this.uploadErrors.push({
+            fileName: result.name,
+            message: result.errorMessage
+          })
+        }
+      })
+      this.attachments.length = 0
     }
   }
 }
