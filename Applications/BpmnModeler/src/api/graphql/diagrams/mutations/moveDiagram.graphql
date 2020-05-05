@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    moveDiagram(diagramId: $diagramId, parentId: $parentId)
-  }
-}

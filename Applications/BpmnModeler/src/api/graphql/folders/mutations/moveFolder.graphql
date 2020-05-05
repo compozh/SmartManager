@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    moveFolder(folderId: $folderId, parentId: $parentId)
-  }
-}

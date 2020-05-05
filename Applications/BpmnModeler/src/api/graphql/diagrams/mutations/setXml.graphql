@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    setXml(id: $id, xml: $xml)
-  }
-}

@@ -1,9 +1,0 @@
-query categories($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  eamQuery {
-    workRequestCategories(where: $where, orderBy: $orderBy, ids: $ids) {
-      id
-      name
-      isValid
-    }
-  }
-}

@@ -1,9 +1,0 @@
-{
-  bpmnqueryMutation {
-    createFolder(folder: $folder) {
-      id
-      name
-      parentId
-    }
-  }
-}

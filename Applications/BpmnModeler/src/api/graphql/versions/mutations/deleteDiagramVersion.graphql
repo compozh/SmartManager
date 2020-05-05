@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    deleteDiagramVersion(diagramId: $diagramId, versionId: $versionId)
-  }
-}

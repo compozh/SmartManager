@@ -1,7 +1,0 @@
-query ($group: String) {
-purchases{
-  resourcesGroups(group:$group){
-    id, name,children{id,name},resources{id,name,favListId}
-    }
-  }
-}

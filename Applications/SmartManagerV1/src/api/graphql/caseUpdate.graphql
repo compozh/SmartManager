@@ -1,7 +1,0 @@
-mutation ($caseData: String) {
-    smtasksMutation {
-        caseUpdate(caseData: $caseData) {
-            success
-        }
-    }
-}

@@ -1,9 +1,0 @@
-{
-  bpmnquery {
-    businessObjects(onlySystem: $onlySystem) {
-      boDefCode
-      name
-      isSystem
-    }
-  }
-}

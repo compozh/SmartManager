@@ -1,9 +1,0 @@
-{
-  bpmnquery {
-    queryUsers {
-      id,
-      name,
-      login
-    }
-  }
-}

@@ -1,7 +1,0 @@
-fragment main on PurchasesQuery {
-  resource(id: $id) {
-    attachments {
-      url
-    }
-  }
-}

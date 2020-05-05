@@ -1,9 +1,0 @@
-{
-  bpmnqueryMutation {
-    createDiagram(diagram: $diagram) {
-      id
-      name
-      parentId
-    }
-  }
-}

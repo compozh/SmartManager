@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    updateDiagramVersion(version: $version)
-  }
-}

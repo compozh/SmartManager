@@ -1,5 +1,0 @@
-mutation($alias:String!){
-  purchasesMutation{
-    mutationCreateFavList(alias:$alias)
-  }
-}

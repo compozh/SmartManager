@@ -1,5 +1,0 @@
-mutation addWorkRequestAttachment($workRequestId: Int!, $fileNames: [String]!, $filePaths: [String]!, $attachmentType: String) {
-  eamQueryMutation {
-    addWorkRequestAttachment(workRequestId: $workRequestId, fileNames: $fileNames, filePaths: $filePaths, attachmentType: $attachmentType)
-  }
-}

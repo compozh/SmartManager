@@ -1,7 +1,0 @@
-mutation modifyEfficiencyLoss($efficiencyLoss: EfficiencyLossInput!) {
-  efficiencyQueryMutation {
-    modifyEfficiencyLoss(efficiencyLoss: $efficiencyLoss) {
-      id
-    }
-  }
-}
