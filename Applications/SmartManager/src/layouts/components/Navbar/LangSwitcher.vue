@@ -5,7 +5,9 @@
           transition="scroll-y-transition">
 
     <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">{{ lang.flag }}</v-btn>
+      <v-btn icon small v-on="on">
+        <span class="body-1">{{ lang.flag }}</span>
+      </v-btn>
     </template>
 
     <v-list dense nav>
@@ -14,7 +16,7 @@
                    :key="locale.code"
                    @click="lang = locale.code">
 
-        <v-list-item-title :class="{'primary--text': locale.code === lang.code}"
+        <v-list-item-title :class="{ 'body-1': true, 'primary--text': locale.code === lang.code}"
         >{{ locale.flag.toUpperCase() }} ({{ locale.name }})</v-list-item-title>
 
       </v-list-item>
