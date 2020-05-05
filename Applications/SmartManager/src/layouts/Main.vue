@@ -8,7 +8,7 @@
 
     <v-content class="grey lighten-3">
       <v-container fluid style="height: 100%"
-                   class="d-flex flex-column">
+                   class="d-flex flex-column pa-2">
         <router-view/>
       </v-container>
     </v-content>
