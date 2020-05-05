@@ -23,7 +23,7 @@
             :headers="headers"
             :items="tasks"
             :items-per-page="10"
-            class="elevation-1 caption"
+            class="elevation-1 body-2"
             style="font-size: 10px"
             min-width= '90px'
             @click:row="item => rowClick(item)"

@@ -26,31 +26,31 @@
           <v-img v-else :src="task.addedPhoto"/>
         </v-avatar>
         <div class="column-element">
-          <span class="caption text--secondary">{{ task.addedFio }}</span>
+          <span class="body-2 text--secondary">{{ task.addedFio }}</span>
           <span class="ma-0 pl-0 subtitle-1 d-flex align-center">
             <fa-icon v-show="task.priority === 1" class="red--text mr-1" icon="fire"/>
             <span class=" ma-0 pl-0 pt-1 subtitle-2 text-truncate">{{ task.name }}</span>
           </span>
           <div class="item-status" v-if="task.role || task.childCount > 0">
             <div class="declarer-role" v-if="task.role">
-              <span v-show="task.role === 'COEXECUTOR'" class="caption">{{$t('tasks.coexecutor')}}</span>
-              <span v-show="task.role === 'CONTROLER'" class="red--text caption">{{  $t('tasks.controler') }}</span>
-              <span v-show="task.role === 'EXECUTOR'" class="blue--text caption">{{ $t('tasks.executor') }}</span>
-              <span v-show="task.role === 'INITIATOR'" class="red--text caption">{{ $t('tasks.initiator')  }}</span>
-              <span v-show="task.role === 'INFORM'" class=" text--secondary caption">{{$t('tasks.inform') }}</span>
+              <span v-show="task.role === 'COEXECUTOR'" class="body-2">{{$t('tasks.coexecutor')}}</span>
+              <span v-show="task.role === 'CONTROLER'" class="red--text body-2">{{  $t('tasks.controler') }}</span>
+              <span v-show="task.role === 'EXECUTOR'" class="blue--text body-2">{{ $t('tasks.executor') }}</span>
+              <span v-show="task.role === 'INITIATOR'" class="red--text body-2">{{ $t('tasks.initiator')  }}</span>
+              <span v-show="task.role === 'INFORM'" class=" text--secondary body-2">{{$t('tasks.inform') }}</span>
             </div>
             <div class="task-status">
               <span v-show="task.childCount > 0 && task.childCount !== task.childDoneCount && task.role !== 'INITIATOR'"
-                    class="caption text--secondary">
+                    class="body-2 text--secondary">
                 <fa-icon class="text--secondary" icon="hourglass"/>
                 {{$t('tasks.childsAssigned')}}
               </span>
               <span v-show="task.childCount > 0 && task.childCount === task.childDoneCount && task.role !== 'INITIATOR'"
-                    class="green--text caption">
+                    class="green--text body-2">
                 <fa-icon class="green--text" icon="check-double"/>
                 {{$t('tasks.childsDone')}}
               </span>
-              <span v-show="task.role === 'INITIATOR'" class="red--text caption">
+              <span v-show="task.role === 'INITIATOR'" class="red--text body-2">
                 <fa-icon class="red--text" icon="reply"/>
                 {{$t('tasks.returnedInitiator')}}
               </span>
@@ -60,14 +60,14 @@
       </div>
       <div class="task-times">
         <span v-if="taskInProgress"
-              class="caption mb-0"
+              class="body-2 mb-0"
               :class="overdue ? 'red--text' : 'blue--text'">
           {{ task.dateplan }}</span>
-        <span v-if="taskIsDone" class="caption mb-0 green--text">
+        <span v-if="taskIsDone" class="body-2 mb-0 green--text">
           <fa-icon class="green--text" icon="check"/>
           {{ task.dateFact }}
         </span>
-        <span v-if="taskIsDone && overdue" class="caption mb-0 red--text">
+        <span v-if="taskIsDone && overdue" class="body-2 mb-0 red--text">
           <fa-icon class="red--text" icon="clock"/>
           {{ overdue }} {{$t('tasks.days')}}
         </span>
