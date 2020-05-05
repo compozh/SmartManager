@@ -6,7 +6,7 @@
         <div v-if="!isSameDay(comment.date, comments[index - 1].date)"
              class="d-flex align-center mt-5">
           <v-divider class="mx-3"/>
-          <span class="border-light py-1 px-3 caption" style="background: white">{{ toDate(comment.date) }}</span>
+          <span class="border-light py-1 px-3 body-2" style="background: white">{{ toDate(comment.date) }}</span>
           <v-divider class="mx-3"/>
         </div>
         <div v-if="!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)" class="mt-5"></div>
@@ -38,7 +38,7 @@
         </template>
 
         <div class="msg border-light px-2 py-1 d-flex align-center">
-          <span class="caption font-weight-light text--secondary">{{ comment.text }}</span>
+          <span class="body-2 font-weight-light text--secondary">{{ comment.text }}</span>
         </div>
       </div>
     </div>

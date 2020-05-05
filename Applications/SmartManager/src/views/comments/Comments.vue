@@ -1,6 +1,6 @@
 <template>
-  <div class="pa-2 d-flex flex-column fill-height">
-    <div class="d-flex flex-column flex-grow-1 justify-space-between noise-bg border-light">
+  <div class="d-flex flex-column fill-height" style="background: #fbfbfb;">
+    <div class="d-flex flex-column flex-grow-1 justify-space-between">
       <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3" style="flex-basis: 0;">
         <div v-if="comments.length" class="d-flex flex-column">
           <comments-log :comments="comments"/>
@@ -16,14 +16,16 @@
         <v-text-field dense class="align-center"
                       v-model="comment"
                       :label="$t('comments.placeholder')"
-                      outlined
+                      flat solo
                       clearable
                       hide-details
                       :loading="loading"
                       :disabled="loading"
                       @keyup.enter="sendMsg">
         </v-text-field>
-        <v-btn color="blue-grey"
+        <v-btn v-show="comment"
+               depressed
+               color="blue-grey"
                class="ml-2 white--text"
                :disabled="loading"
                @click="sendMsg">
@@ -37,10 +39,10 @@
 
 <script>
 import CommentsLog from './CommentsLog.vue'
-import { tasks } from '@/mixins/units'
+import { common, tasks } from '@/mixins/units'
 
 export default {
-  mixins: [tasks],
+  mixins: [common, tasks],
   components: {
     CommentsLog
   },
@@ -55,17 +57,11 @@ export default {
   },
   methods: {
     async sendMsg () {
-      this.loading = true
       if (this.comment) {
+        this.loading = true
         await this.$store.dispatch('addComment', {
           comment: this.comment,
-          params: {
-            type: this.type,
-            id: this.taskId,
-            arso: this.task.arso,
-            keyValue: this.task.keyValue,
-            kidCopy: this.task.kidCopy
-          }
+          params: this.params
         })
         this.comment = ''
         this.loading = false
@@ -76,18 +72,10 @@ export default {
 </script>
 
 <style scoped>
-  /* TODO: output border-light class to common styles */
-  .border-light {
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-  }
-  /* TODO: output noise-bg class to common styles */
-  .noise-bg {
-    background: url('../../assets/noise_bg.png');
-  }
 
   .msg-input {
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid;
+    border-color: #e5e5e5 !important;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
