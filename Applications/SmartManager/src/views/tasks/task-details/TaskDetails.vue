@@ -1,6 +1,7 @@
 <template>
     <Split style="flex-basis: 0; border-radius: 5px;"
-           class="flex-grow-1 overflow-hidden white">
+           class="flex-grow-1 overflow-hidden white"
+          :gutter-size="4">
       <!-- LEFT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
@@ -26,7 +27,7 @@
                 <fa-icon icon="clock"
                          class="text--secondary mr-1" size="lg"/>
                 {{ $t('tasks.deadline') }}:</div>
-              <div class="caption red--text text--darken-4">{{ task.dateplan }}</div>
+              <div class="body-2 red--text text--darken-4">{{ task.dateplan }}</div>
             </div>
           </div>
 
@@ -39,6 +40,7 @@
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
         </div>
+        <v-divider/>
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
           <div class="d-flex align-baseline">
@@ -61,12 +63,12 @@
           <div class="d-flex mb-3">
             <div v-if="task.priority" class="deep-orange--text">
               <fa-icon icon="exclamation-square" class="mr-2"/>
-              <span class="caption">{{ $t('icons.priority') }}</span>
+              <span class="body-2">{{ $t('icons.priority') }}</span>
             </div>
             <v-divider v-if="task.priority" vertical class="mx-2"/>
             <div v-if="task.myControl" class="red--text text--darken-4">
               <fa-icon icon="eye" class="mr-2"/>
-              <span class="caption">{{ $t('icons.control') }}</span>
+              <span class="body-2">{{ $t('icons.control') }}</span>
             </div>
           </div>
 
@@ -118,7 +120,8 @@
           </div>
           <v-divider></v-divider>
           <!-- TASK PARTICIPANTS -->
-          <div v-if="participants.length" class="d-flex justify-space-between my-5">
+          <div v-if="participants.length"
+               class="d-flex justify-space-between mt-5">
             <div v-if="coExecutors.length">
               <fa-icon icon="users" class="mr-3" size="lg"/>
               <span>{{ $t('roles.coExecutors').toUpperCase() }}</span>
@@ -149,21 +152,7 @@
             </div>
           </div>
           <!-- TASK ATTACHMENTS -->
-          <div class="my-5">
-            <fa-icon icon="paperclip" class="mr-3" size="lg"/>
-            <span>{{ $t('tabs.attachments').toUpperCase() }}</span>
-            <div class="py-2 d-flex flex-wrap">
-              <v-chip v-for="item in task.originals"
-                      :key="item.id" small
-                      class="my-2 mr-2 text-truncate"
-                      :class="{ warning: item.id === activeAttachment.id }"
-                      style="min-width: 100px; max-width: 200px; flex: 1 1 20%"
-                      @click="selectAttachment(item)">
-                <fa-icon icon="file-alt" class="mr-3" size="lg"/>
-                <span class="text-truncate">{{ item.fileName }}</span>
-              </v-chip>
-            </div>
-          </div>
+          <attachments-list class="my-5" @input="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
@@ -192,6 +181,7 @@
             {{ tab.name }}
           </v-tab>
         </v-tabs>
+        <v-divider/>
         <v-tabs-items v-model="tab" class="fill-height">
           <v-tab-item v-for="tab in tabItems"
                       :key="tab.name"
@@ -205,8 +195,10 @@
 
 <script>
 import DataIterator from '@/views/tasks/task-list/DataIterator'
-import Attachments from '@/views/attachments/Attachments'
+import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
+import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
 import Comments from '@/views/comments/Comments'
+import Diagram from '@/views/diagram/Diagram'
 import TaskMenu from '@/views/tasks/task-details/TaskMenu'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
 import IconTooltipBtn from '@/components/IconTooltipBtn'
@@ -216,8 +208,10 @@ export default {
   name: 'TaskDetails',
   components: {
     DataIterator,
-    Attachments,
+    AttachmentsList,
+    AttachmentsViewer,
     Comments,
+    Diagram,
     TaskMenu,
     TaskButtons,
     IconTooltipBtn
@@ -291,10 +285,14 @@ export default {
       }
     },
     tabItems () {
-      return [
-        { name: this.$t('tabs.attachments'), component: 'attachments', icon: 'paperclip' },
+      const tabs = [
+        { name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' },
         { name: this.$t('tabs.comments'), component: 'comments', icon: 'comment-alt-dots' }
       ]
+      if (this.externalTaskCamunda) {
+        tabs.push({ name: this.$t('tabs.diagram'), component: 'diagram', icon: 'project-diagram' })
+      }
+      return tabs
     },
     taskStatus () {
       return () => {
@@ -345,7 +343,7 @@ export default {
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
       this['iFrameHeight' + frame] = Math.round(iFrameBody.scrollHeight * 1.2)
-      iFrameBody.style.fontFamily = 'Roboto, sans-serif'
+      iFrameBody.style.fontFamily = '"Proxima Nova Regular", sans-serif'
     },
     async formSubmit () {
       if (this.$refs.form) {
@@ -425,10 +423,6 @@ export default {
       if (success) {
         await this.$router.push('/')
       }
-    },
-    selectAttachment (attachment) {
-      this.setActiveAttachment(attachment)
-      this.tab = 0
     }
   },
   beforeDestroy () {
@@ -450,13 +444,21 @@ export default {
    display: flex;
    align-items: center;
    min-height: 75px;
-   border-bottom: 1px solid #e5e5e5;
  }
 
   @media (min-width: 850px) {
     .side-header {
       padding-right: 3.5em !important;
     }
+  }
+
+  .split >>> .gutter {
+    background: #eee;
+    transition: background .2s linear .1s;
+  }
+
+  .split >>> .gutter:hover {
+    background: rgba(123, 104, 238, .3);
   }
 
 </style>

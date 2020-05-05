@@ -87,40 +87,6 @@ export default {
         this.taskType === 'AGREE' ||
         this.taskType === 'WORKFLOW'
     },
-    // CONDITIONS FOR BUTTONS
-    internalTaskInWork () {
-      return this.internalTask && this.taskInWork
-    },
-    taskCompleted () {
-      return this.taskType === '' && this.task.status === '+'
-    },
-    agreeTaskInWork () {
-      return this.taskType === 'AGREE' && this.taskInWork
-    },
-    workFlowTaskInWork () {
-      return this.taskType === 'WORKFLOW' && this.taskInWork
-    },
-    externalTaskCamunda () {
-      if (!this.task.externalParams) {
-        return
-      }
-      const externalParams = JSON.parse(this.task.externalParams)
-      return this.taskType === 'EXTERNAL' &&
-        externalParams.EXTERNALSOURCE === 'C'
-    },
-    userIsPerformer () {
-      return this.userId === this.task.performerId
-    },
-    allowedCaseEdit () {
-      return this.$route.name === 'case-view' &&
-        this.caseStatus === '' &&
-        this.userId === this.caseItem.userAdd
-    },
-    allowedTaskEdit () {
-      return this.$route.name === 'task-details' &&
-        this.internalTaskInWork &&
-        this.userId === this.task.declarerId
-    },
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonBack () {
       return this.task.previousButtonText ||
