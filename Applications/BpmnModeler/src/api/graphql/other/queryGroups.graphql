@@ -1,8 +1,0 @@
-{
-  bpmnquery {
-    queryGroups {
-      id,
-      name
-    }
-  }
-}

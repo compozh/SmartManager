@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    editDiagram(diagram: $diagram)
-  }
-}

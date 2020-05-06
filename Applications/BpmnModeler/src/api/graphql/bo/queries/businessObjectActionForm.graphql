@@ -1,5 +1,0 @@
-{
-  bpmnquery {
-    businessObjectActionForm(logicalKey: $logicalKey)
-  }
-}

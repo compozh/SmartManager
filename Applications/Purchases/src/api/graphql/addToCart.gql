@@ -1,7 +1,0 @@
-mutation($resourceId:String!){
-  purchasesMutation{
-    addToCart(resourceId:$resourceId){
-      id,resource{id,name,resourceGroup{id,name}},measurementUnit{id,name},resourceName,quantity,dateDelivery
-    }
-  }
-}

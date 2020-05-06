@@ -1,7 +1,0 @@
-mutation ($taskId: Int!) {
-    smtasksMutation {
-        taskDelete(taskId: $taskId) {
-            success
-        }
-    }
-}

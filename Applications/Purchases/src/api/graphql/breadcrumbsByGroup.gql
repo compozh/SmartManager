@@ -1,7 +1,0 @@
-query($group:String){
-	purchases{
-    resourcesGroupsBreadcrumbs(group:$group){
-      id,text
-  	}
-  }
-}

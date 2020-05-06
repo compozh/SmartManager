@@ -1,5 +1,0 @@
-mutation createWorkRequest($workRequest:WorkRequestInput!){
-  eamQueryMutation {
-    createWorkRequest(workRequest: $workRequest) {id}
-  }
-}

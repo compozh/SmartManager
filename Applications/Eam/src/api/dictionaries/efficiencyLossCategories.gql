@@ -1,9 +1,0 @@
-query efficiencyLossCategories($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  efficiencyQuery {
-    efficiencyLossCategories(where: $where, orderBy: $orderBy, ids: $ids) {
-      id
-      name
-      isValid
-    }
-  }
-}

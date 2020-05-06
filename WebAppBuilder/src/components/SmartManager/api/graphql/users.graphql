@@ -1,9 +1,0 @@
-{
-  smtasks {
-    users {
-      userId
-      fio
-      photo
-    }
-  }
-}

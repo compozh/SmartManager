@@ -1,8 +1,0 @@
-
-mutation update($email:String!, $skype:String!, $phone:String!) {
-  personalInfoQueryMutation{
-    setFullInfo(email:$email, skype:$skype, phone:$phone){
-      adress birthdayDate departmentTitle email fullName hireDate phone skype photo
-    }
-  }
-}

@@ -1,6 +1,0 @@
-fragment resourcesFields on Resource {
-  id
-  name
-  designation,
-  favListId
-}

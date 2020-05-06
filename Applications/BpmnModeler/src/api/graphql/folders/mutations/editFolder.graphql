@@ -1,5 +1,0 @@
-{
-  bpmnqueryMutation {
-    editFolder(folder: $folder)
-  }
-}

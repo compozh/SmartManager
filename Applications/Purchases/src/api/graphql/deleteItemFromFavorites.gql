@@ -1,7 +1,0 @@
-mutation($alias:String!,$keyValue:String!){
-  purchasesMutation{
-    deleteItemFromFavorites(alias:$alias, keyValue:$keyValue){
-      id
-    }
-  }
-}

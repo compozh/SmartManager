@@ -1,7 +1,0 @@
-{
-  personalInfoQuery{
-    fullInfo{
-      adress birthdayDate departmentTitle email fullName hireDate phone skype photo
-    }
-  }
-}

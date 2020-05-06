@@ -1,8 +1,0 @@
-{
-  smtasksMutation {
-    changeStatus(id: $id, status: $status, comment: $comment) {
-      success,
-      errorMessage
-    }
-  }
-}

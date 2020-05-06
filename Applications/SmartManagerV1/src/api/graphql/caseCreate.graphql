@@ -1,5 +1,0 @@
-mutation ($newCase: String) {
-    smtasksMutation {
-        newCase(newCase: $newCase)
-    }
-}

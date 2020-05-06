@@ -1,9 +1,0 @@
-query equipmentFailureReasons($where: [WhereExpressionGraph], $orderBy: [OrderByGraph], $ids: [ID]) {
-  eamQuery {
-    equipmentFailureReasons(where: $where, orderBy: $orderBy, ids: $ids) {
-      id
-      name
-      isValid
-    }
-  }
-}

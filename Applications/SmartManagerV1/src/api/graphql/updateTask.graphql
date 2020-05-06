@@ -1,7 +1,0 @@
-mutation ($taskData: String) {
-    smtasksMutation {
-        taskUpdating(taskData: $taskData) {
-            success
-        }
-    }
-}

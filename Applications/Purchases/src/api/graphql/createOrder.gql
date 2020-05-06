@@ -1,5 +1,0 @@
-mutation($orderInput:OrderInput!){
-  purchasesMutation{
-    createOrder(orderInput:$orderInput)
-  }
-}

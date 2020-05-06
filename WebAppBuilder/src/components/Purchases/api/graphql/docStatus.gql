@@ -1,9 +1,0 @@
-{
-  purchases {
-    docStatus {
-    id,
-    sortOrder, 
-    name
-  	}
-  }
-}
