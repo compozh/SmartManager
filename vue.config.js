@@ -9,7 +9,7 @@ module.exports = {
       .end()
   },
   publicPath: process.env.NODE_ENV === 'production'
-    ? process.env.VUE_APP_BASE_PATH + path.basename(process.cwd(), path.extname(process.cwd()))
+    ? process.env.VUE_APP_BASE_PATH + 'SmartManager'
     : '/',
   pluginOptions: {
     webpackBundleAnalyzer: {
