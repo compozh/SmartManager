@@ -40,5 +40,17 @@ export default {
     } finally {
       commit('STOP_PRELOADER', 'process')
     }
+  },
+  async getExternalTaskInfo ({ commit }, externalId) {
+    try {
+      const response = await api.getExternalTaskInfo(externalId)
+      return response.data.workFlowQuery.externalTaskInfo
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.taskError'),
+        color: 'error'
+      })
+    }
   }
 }

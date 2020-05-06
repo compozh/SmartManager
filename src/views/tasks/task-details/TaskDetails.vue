@@ -223,11 +223,6 @@ export default {
     iFrameHeight2: 250
   }),
   computed: {
-    externalParams () {
-      return this.task.externalParams
-        ? JSON.parse(this.task.externalParams)
-        : {}
-    },
     form () {
       return this.externalParams && this.externalParams.FORM
         ? this.externalParams.FORM : {}
