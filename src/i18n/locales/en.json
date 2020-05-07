@@ -77,7 +77,12 @@
     "role": "Role",
     "source": "Source",
     "actualDate": "Actual date",
-    "hasOrig": "Has attachments"
+    "hasOrig": "Has attachments",
+    "simple": "Common task/document",
+    "agree": "Agree",
+    "workflow": "Execute BP",
+    "external": "External task",
+    "unknown": "Unknown type"
   },
   "cases": {
     "newCase": "New case",
