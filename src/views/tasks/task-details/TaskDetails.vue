@@ -68,7 +68,7 @@
             <v-divider v-if="task.priority" vertical class="mx-2"/>
             <div v-if="task.myControl" class="red--text text--darken-4">
               <fa-icon icon="eye" class="mr-2"/>
-              <span class="body-2">{{ $t('icons.control') }}</span>
+              <span class="body-2 red--text text--darken-4">{{ $t('icons.control') }}</span>
             </div>
           </div>
 
@@ -104,16 +104,20 @@
                     style="pointer-events: none"/>
           </div>
           <p v-if="task.name !== task.descript" class="mb-5">{{ task.descript }}</p>
-          <!-- PROGRESS-->
+          <!-- LABELS -->
           <div class="d-flex mb-5 align-center">
-            <v-chip small color="blue-grey"
-                    label text-color="white">
+            <v-chip small label
+                    class="body-2"
+                    color="blue-grey"
+                    text-color="white">
               <fa-icon icon="hurricane" class="mr-3"/>
               {{ typeName }}
             </v-chip>
             <v-divider vertical class="mx-2"></v-divider>
-            <v-chip small :color="taskStatus().color"
-                    label text-color="white">
+            <v-chip small label
+                    class="body-2"
+                    text-color="white"
+                    :color="taskStatus().color">
               <fa-icon :icon="taskStatus().icon" class="mr-3"/>
               {{ taskStatus().text }}
             </v-chip>
@@ -273,15 +277,15 @@ export default {
     typeName () {
       switch (this.taskType) {
         case '':
-          return 'обычная задача/документ'
+          return this.$t('tasks.simple')
         case 'AGREE':
-          return 'согласование'
+          return this.$t('tasks.agree')
         case 'WORKFLOW':
-          return 'выполнение БП'
+          return this.$t('tasks.workflow')
         case 'EXTERNAL':
-          return 'внешняя задача'
+          return this.$t('tasks.external')
         default:
-          return 'unknown type'
+          return this.$t('tasks.unknown')
       }
     },
     tabItems () {
