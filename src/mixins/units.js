@@ -178,6 +178,7 @@ export const cases = {
 
 export const attachments = {
   data: () => ({
+    fileList: [],
     attachmentsList: [],
     uploadErrors: [],
     attachmentType: null
@@ -248,6 +249,16 @@ export const attachments = {
         }
       })
       this.attachments.length = 0
+    },
+    async removeAttachment () {
+      const result = await this.$store.dispatch('attachmentDelete', {
+        fileId: this.currentAttachment.id,
+        taskId: +this.$route.params.taskId,
+        caseId: +this.$route.params.caseId
+      })
+      if (result.success) {
+        // await this.$router.push({ name: 'task-attachments' })
+      }
     }
   }
 }
