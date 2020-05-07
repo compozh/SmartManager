@@ -219,6 +219,18 @@ export class SmartManagerApi {
     }
   }
 
+  static async getExternalTaskInfo (externalId) {
+    try {
+      const client = await getClient('workFlow')
+      return await client.query({
+        query: gql`${q.externalTaskInfo}`,
+        variables: { externalId }
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
   static async getCasesFromGql () {
     try {
       const client = await getClient('smartmanager')

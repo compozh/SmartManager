@@ -117,13 +117,17 @@ export const tasks = {
     workFlowTaskInWork () {
       return this.taskType === 'WORKFLOW' && this.taskInWork
     },
+    externalParams () {
+      return this.task.externalParams
+        ? JSON.parse(this.task.externalParams)
+        : {}
+    },
     externalTaskCamunda () {
       if (!this.task.externalParams) {
         return
       }
-      const externalParams = JSON.parse(this.task.externalParams)
       return this.taskType === 'EXTERNAL' &&
-        externalParams.EXTERNALSOURCE === 'C'
+        this.externalParams.EXTERNALSOURCE === 'C'
     },
     userIsPerformer () {
       return this.userId === this.task.performerId
@@ -178,6 +182,7 @@ export const cases = {
 
 export const attachments = {
   data: () => ({
+    fileList: [],
     attachmentsList: [],
     uploadErrors: [],
     attachmentType: null
@@ -248,6 +253,16 @@ export const attachments = {
         }
       })
       this.attachments.length = 0
+    },
+    async removeAttachment () {
+      const result = await this.$store.dispatch('attachmentDelete', {
+        fileId: this.currentAttachment.id,
+        taskId: +this.$route.params.taskId,
+        caseId: +this.$route.params.caseId
+      })
+      if (result.success) {
+        // await this.$router.push({ name: 'task-attachments' })
+      }
     }
   }
 }

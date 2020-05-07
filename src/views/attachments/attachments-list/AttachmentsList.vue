@@ -5,26 +5,49 @@
       <span class="mr-3">{{ $t('tabs.attachments').toUpperCase() }}</span>
       <v-btn v-if="attachmentTypes.length > 1">
         {{ $t('buttons.addAttachment') }}</v-btn>
-      <v-btn v-else outlined small color="primary">
-        <label id="addLabel" for="file"
-               style="cursor: pointer;">
+      <v-btn v-else outlined x-small
+             color="primary"
+             class="add-btn pa-0">
+        <label for="file" class="add-label">
           {{ $t('buttons.addAttachment') }}
         </label>
       </v-btn>
-      <files-upload @attach="getAttachments($event)"/>
       <v-spacer/>
-      <v-btn-toggle v-model="attachmentsListMode" mandatory>
-        <v-btn text small depressed>
+
+      <v-btn-toggle v-show="attachments.length"
+                    v-model="attachmentsListMode"
+                    mandatory>
+        <v-btn text x-small depressed min-height="25">
           <fa-icon icon="border-all" size="lg"/>
         </v-btn>
-        <v-btn text small depressed>
+        <v-btn text x-small depressed min-height="25">
           <fa-icon icon="bars" size="lg"/>
         </v-btn>
       </v-btn-toggle>
     </div>
-    <perfect-scrollbar>
+
+    <!-- UPLOAD COMPONENT -->
+    <files-upload v-slot="{ files }"
+                  @attach="getAttachments($event)"
+                  :attachmentsList.sync="attachmentsList"
+                  upload-auto>
+      <div>File list:</div>
+      <v-simple-table>
+        <template>
+          <tbody>
+            <tr v-for="item in files" :key="item.id">
+              <td></td>
+              <td>{{ item.name }}</td>
+              <td>{{ fileSize(item.size) }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </files-upload>
+
+    <perfect-scrollbar v-show="attachments.length">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
-        <v-chip v-for="item in task.originals"
+        <v-chip v-for="item in attachments"
                 :key="item.id" small
                 class="my-2 mr-2 text-truncate"
                 :class="{ warning: item.id === activeAttachment.id }"
@@ -81,5 +104,25 @@ export default {
 </script>
 
 <style scoped>
+
+ .add-btn {
+   min-height: 25px;
+   min-width: 50px;
+ }
+
+ .add-btn >>> span {
+   height: 25px;
+   width: 50px;
+ }
+
+ .add-btn .add-label {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   height: 100%;
+   width: 100%;
+   font-size: 12px;
+ }
 
 </style>
