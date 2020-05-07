@@ -274,6 +274,7 @@
     "bpSuccess": "Business processes successfully ran",
     "bpFail": "Business process start fail",
     "bpError": "Business process start error, contact support",
+    "bpImportError": "Diagram display error, contact support",
     "applyRightsTittle": "Delegated rights",
     "applyRightsSuccess": "Rights changed successfully",
     "applyRightsFail": "Apply delegated rights failed",

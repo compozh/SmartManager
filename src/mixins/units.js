@@ -117,13 +117,17 @@ export const tasks = {
     workFlowTaskInWork () {
       return this.taskType === 'WORKFLOW' && this.taskInWork
     },
+    externalParams () {
+      return this.task.externalParams
+        ? JSON.parse(this.task.externalParams)
+        : {}
+    },
     externalTaskCamunda () {
       if (!this.task.externalParams) {
         return
       }
-      const externalParams = JSON.parse(this.task.externalParams)
       return this.taskType === 'EXTERNAL' &&
-        externalParams.EXTERNALSOURCE === 'C'
+        this.externalParams.EXTERNALSOURCE === 'C'
     },
     userIsPerformer () {
       return this.userId === this.task.performerId
