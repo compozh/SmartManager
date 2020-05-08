@@ -80,21 +80,12 @@
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
-                            :btnColor="myControl ? 'red' : 'grey'"
-                            :btnClick="() => myControl = !myControl"
-                            icon="eye" iconSize="lg"
-                            :iconType="myControl ? 'far' : 'fal'"
-                            tooltipPosition="top">
-            {{ $t('icons.control') }}
-          </icon-tooltip-btn>
-          <icon-tooltip-btn btnClass="mr-3"
-                            btnStyle="border: 1px dashed;"
                             :btnColor="needApprove ? 'green' : 'grey'"
                             :btnClick="() => needApprove = !needApprove"
                             icon="clipboard-check" iconSize="lg"
                             :iconType="needApprove ? 'far' : 'fal'"
                             tooltipPosition="top">
-            {{ $t('icons.needApprove') }}
+            {{ $t('icons.control') }}
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
