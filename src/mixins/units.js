@@ -299,12 +299,14 @@ export const attachments = {
 export const processes = {
   computed: {
     processes () {
-      return this.$store.state.processes.processes
+      return this.$store.state.processes
+        ? this.$store.state.processes.processes
+        : []
     }
   },
   methods: {
     async getProcesses () {
-      if (this.processes.length === 0) {
+      if (!this.processes.length) {
         await this.$store.dispatch('getProcesses', false)
       }
     }

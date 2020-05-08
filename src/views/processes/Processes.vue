@@ -36,7 +36,7 @@ export default {
       search: '',
       headers: [
         { text: this.$t('processes.name'), value: 'name' },
-        { text: this.$t('processes.version'), value: 'version' }
+        { text: this.$t('processes.version'), value: 'procDefId' }
       ]
     }
   },
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     onRowClick (item) {
-      var itemId = item.id
+      const itemId = item.procDefId
       this.$router.push({ path: 'process', query: { processId: itemId } })
     }
   }
