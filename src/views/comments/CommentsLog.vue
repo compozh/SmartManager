@@ -6,7 +6,7 @@
         <div v-if="!isSameDay(comment.date, comments[index - 1].date)"
              class="d-flex align-center mt-5">
           <v-divider class="mx-3"/>
-          <span class="border-light py-1 px-3 body-2" style="background: white">{{ toDate(comment.date) }}</span>
+          <span class="border-light px-3 caption grey--text">{{ toDate(comment.date) }}</span>
           <v-divider class="mx-3"/>
         </div>
         <div v-if="!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)" class="mt-5"></div>
@@ -16,7 +16,7 @@
         <template v-if="comments[index - 1]">
           <template v-if="(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)
                            || !isSameDay(comment.date, comments[index - 1].date))">
-            <v-avatar class="mx-4" color="grey lighten-1" size="40px"
+            <v-avatar class="mx-4 my-n2" color="grey lighten-1" size="40px"
                       :class="currentUserIsSender(comment.userId) ? 'ml-4' : 'mr-4'">
               <fa-icon v-if="!comment.userPhoto" icon="user" inverse/>
               <v-img v-else :src="comment.userPhoto"/>
@@ -25,7 +25,7 @@
         </template>
 
         <template v-if="index === 0">
-          <v-avatar class="mx-4 grey lighten-1" size="40px">
+          <v-avatar class="mx-4 my-n2 grey lighten-1" size="40px">
             <fa-icon v-if="!comment.userPhoto" icon="user" inverse/>
             <v-img v-else :src="comment.userPhoto"/>
           </v-avatar>
