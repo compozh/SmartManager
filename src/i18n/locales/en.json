@@ -82,7 +82,8 @@
     "agree": "Agree",
     "workflow": "Execute BP",
     "external": "External task",
-    "unknown": "Unknown type"
+    "unknown": "Unknown type",
+    "perPage": "Tasks per page"
   },
   "cases": {
     "newCase": "New case",
