@@ -33,7 +33,8 @@
 
           <v-spacer></v-spacer>
           <!-- TASK MENU - MORE BTN -->
-          <task-menu @taskDelete="taskDelete"/>
+          <task-menu @taskDelete="taskDelete"
+                     @changeStatus="changeStatus"/>
           <!-- TASK MANAGEMENT BUTTONS -->
           <task-buttons class="py-3"
                         @changeStage="changeStage"
@@ -122,7 +123,7 @@
               {{ taskStatus().text }}
             </v-chip>
           </div>
-          <v-divider></v-divider>
+          <v-divider/>
           <!-- TASK PARTICIPANTS -->
           <div v-if="participants.length"
                class="d-flex justify-space-between mt-5">
@@ -265,23 +266,6 @@ export default {
       return this.task.childTasks && this.task.childTasks.length
         ? this.task.childTasks
         : null
-    },
-    taskType () {
-      return this.task ? this.task.taskType : null
-    },
-    typeName () {
-      switch (this.taskType) {
-        case '':
-          return this.$t('tasks.simple')
-        case 'AGREE':
-          return this.$t('tasks.agree')
-        case 'WORKFLOW':
-          return this.$t('tasks.workflow')
-        case 'EXTERNAL':
-          return this.$t('tasks.external')
-        default:
-          return this.$t('tasks.unknown')
-      }
     },
     tabItems () {
       const tabs = [

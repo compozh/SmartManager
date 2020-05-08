@@ -72,21 +72,6 @@ export default {
   name: 'TaskButtons',
   mixins: [tasks],
   computed: {
-    taskType () {
-      return this.task.taskType
-    },
-    taskInWork () {
-      return this.task.status === '' ||
-        this.task.status === '*'
-    },
-    taskAtApproval () {
-      return this.task.status === '#'
-    },
-    internalTask () {
-      return this.taskType === '' ||
-        this.taskType === 'AGREE' ||
-        this.taskType === 'WORKFLOW'
-    },
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonBack () {
       return this.task.previousButtonText ||

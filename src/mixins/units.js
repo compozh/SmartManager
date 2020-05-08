@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export const common = {
   computed: {
@@ -104,6 +105,35 @@ export const tasks = {
     taskId () {
       return this.task.id || +this.$route.params.taskId
     },
+    taskType () {
+      return this.task.taskType
+    },
+    typeName () {
+      switch (this.taskType) {
+        case '':
+          return this.$t('tasks.simple')
+        case 'AGREE':
+          return this.$t('tasks.agree')
+        case 'WORKFLOW':
+          return this.$t('tasks.workflow')
+        case 'EXTERNAL':
+          return this.$t('tasks.external')
+        default:
+          return this.$t('tasks.unknown')
+      }
+    },
+    taskInWork () {
+      return this.task.status === '' ||
+        this.task.status === '*'
+    },
+    taskAtApproval () {
+      return this.task.status === '#'
+    },
+    internalTask () {
+      return this.taskType === '' ||
+        this.taskType === 'AGREE' ||
+        this.taskType === 'WORKFLOW'
+    },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork () {
       return this.internalTask && this.taskInWork
@@ -123,9 +153,6 @@ export const tasks = {
         : {}
     },
     externalTaskCamunda () {
-      if (!this.task.externalParams) {
-        return
-      }
       return this.taskType === 'EXTERNAL' &&
         this.externalParams.EXTERNALSOURCE === 'C'
     },
@@ -182,16 +209,22 @@ export const cases = {
 
 export const attachments = {
   data: () => ({
-    fileList: [],
-    attachmentsList: [],
     uploadErrors: [],
     attachmentType: null
   }),
   computed: {
     attachments () {
-      return this.task.originals && this.task.originals.length
-        ? this.task.originals
-        : []
+      const attachments = []
+      if (this.task.originals && this.task.originals.length) {
+        this.task.originals.forEach(o => {
+          attachments.push(Object.assign({}, o))
+        })
+        attachments.forEach(a => {
+          a.parseDate = moment(a.date, 'DD.MM.YYYY HH:mm')
+        })
+        attachments.sort((a, b) => b.parseDate - a.parseDate)
+      }
+      return attachments
     },
     activeAttachment () {
       return this.$store.state.attachments.activeAttachment ||
@@ -231,17 +264,14 @@ export const attachments = {
     async getAttachmentTypes () {
       await this.$store.dispatch('getAttachmentTypes', this.params)
     },
-    getAttachments (attachments) {
-      this.attachmentsList = attachments
-    },
-    async addAttachments () {
+    async addAttachments (attachment) {
       if (this.attachmentTypes.length === 1) {
         this.attachmentType = this.attachmentTypes[0].CODE
       }
-      this.attachments.forEach(a => { a.type = this.attachmentType })
+      attachment.type = this.attachmentType
       // Returns results list
       const results = await this.$store.dispatch('addAttachments', {
-        attachments: this.attachments,
+        attachments: [attachment],
         params: this.params
       })
       results.forEach(result => {
@@ -252,11 +282,10 @@ export const attachments = {
           })
         }
       })
-      this.attachments.length = 0
     },
-    async removeAttachment () {
+    async attachmentDelete (id) {
       const result = await this.$store.dispatch('attachmentDelete', {
-        fileId: this.currentAttachment.id,
+        fileId: id,
         taskId: +this.$route.params.taskId,
         caseId: +this.$route.params.caseId
       })

@@ -60,9 +60,18 @@ fragment detailTaskFields on Task {
     }
     originals {
         id
+        ndor
         fileName
+        user
+        date
+        isMy
         fileExt
+        comm
         fileSize
+        type
+        typeName
+        typeDescription
+        isSign
     }
     comments {
         userId
