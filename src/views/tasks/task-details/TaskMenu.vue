@@ -25,6 +25,7 @@
         <v-list-item-icon class="ma-0 mr-2 align-self-center align-center">
           <fa-icon :icon="item.icon" :class="item.color + '--text'"/>
         </v-list-item-icon>
+        <v-list-item-title>{{ item.title }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>

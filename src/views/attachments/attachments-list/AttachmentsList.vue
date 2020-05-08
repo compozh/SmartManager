@@ -87,18 +87,13 @@
                   <file-type-icon :extension="item.fileExt"/>
                 </td>
                 <td class="text-truncate" style="max-width: 0;">{{ item.fileName }}</td>
-                <td v-show="!hover" class="text-center text-truncate" style="width: 150px; max-width: 120px;">{{ item.date }}</td>
-                <td v-show="!hover" class="text-center text-truncate" style="width: 100px; max-width: 0;">{{ fileSize(item.fileSize) }}</td>
-                <td v-show="!hover" class="text-center" style="width: 20px;">
-                  <fa-icon v-if="item.isSign" icon="medal" size="lg"/>
-                  <span v-else>-</span>
-                </td>
-                <td v-show="hover" colspan="3">
-                  <v-tooltip top>
+                <td :class="hover ? 'text-right' : 'text-center text-truncate'"
+                    style="width: 150px; max-width: 120px;">
+                  <span v-if="!hover">{{ item.date }}</span>
+                  <v-tooltip v-else top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on"
                              :href="item.url"
-                             class="mr-3"
                              color="grey"
                              style="border: 1px dashed;"
                              text fab x-small dark depressed>
@@ -107,7 +102,11 @@
                     </template>
                     <span>{{ 'Download' /* TODO: add resource */ }}</span>
                   </v-tooltip>
-                  <v-tooltip top>
+                </td>
+                <td :class="hover ? 'text-left' : 'text-center text-truncate'"
+                    style="width: 100px; max-width: 0;">
+                  <span v-if="!hover">{{ fileSize(item.fileSize) }}</span>
+                  <v-tooltip v-else top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on"
                              color="grey"
@@ -119,6 +118,12 @@
                     </template>
                     <span>{{ 'Delete' /* TODO: add resource */ }}</span>
                   </v-tooltip>
+                </td>
+                <td class="text-center" style="width: 20px;">
+                  <div v-if="!hover">
+                    <fa-icon v-if="item.isSign" icon="medal" size="lg"/>
+                    <span v-else>-</span>
+                  </div>
                 </td>
               </tr>
             </v-hover>

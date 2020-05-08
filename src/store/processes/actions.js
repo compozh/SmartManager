@@ -4,18 +4,37 @@ import i18n from '@/i18n'
 export default {
   async getProcesses ({ commit }) {
     try {
-      const processes = await api.getProcessesFromGql()
-      commit('SET_PROCESSES', processes.processes)
-    } catch (e) {
-      console.error(e.message)
+      const result = await api.getBusinessProcessesFromGql()
+      const processes = result.data.workFlowQuery.businessProcesses
+      commit('SET_PROCESSES', processes)
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.bpError'),
+        color: 'error'
+      })
     }
   },
-  async getForm ({ dispatch }, processDefinitionId) {
+  async getFormDefinition ({ commit }, procDefId) {
+    commit('START_PRELOADER', 'formDefinition')
     try {
-      const processDefinition = await api.getFormFromGql(processDefinitionId)
-      return processDefinition
-    } catch (e) {
-      console.error(e.message)
+      const response = await api.getFormDefinitionFromGql(procDefId)
+      const result = response.data.workFlowQuery.formDefinition
+      if (result.success) {
+        return result
+      }
+      commit('SET_NOTIFY', {
+        text: result.errorMessage || i18n.t('notify.bpError'),
+        color: 'warning'
+      })
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.bpError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'formDefinition')
     }
   },
   async startProcess ({ dispatch, commit }, data) {

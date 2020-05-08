@@ -25,7 +25,7 @@
       </div>
       <v-card class="card-form-component">
         <formio-form-component ref="form"
-                               :formCode="form.formCode"
+                               :formCode="formCode"
                                :formDefinition="form"/>
       </v-card>
 
@@ -44,24 +44,26 @@
 export default {
   name: 'process-form-page',
   data: () => ({
-    form: null,
-    isLoading: false,
+    formCode: '',
+    form: {},
     startProcessLoading: false,
     error: null
   }),
-  created () {
+  async created () {
     this.processDefinitionId = this.$route.query.processId
     if (this.processDefinitionId) {
-      this.isLoading = true
-      this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
-        this.isLoading = false
-
-        if (result.form) {
-          this.form = result.form
-        } else {
-          this.error = this.$t('processes.errors.undefinedFormOfProcess')
-        }
-      })
+      const result = await this.$store.dispatch(
+        'getFormDefinition', this.processDefinitionId)
+      if (result) {
+        const data = JSON.parse(result.data)
+        const formCode = this.formCode = data.unformio
+        const deviceSizeType = this.$vuetify.breakpoint.name
+        // this.formCode = data.unformio
+        this.form = await this.$store.dispatch(
+          'formio/getForm', { formCode, deviceSizeType })
+      } else {
+        this.error = this.$t('processes.errors.undefinedFormOfProcess')
+      }
     } else {
       this.error = this.$t('processes.errors.processNotPassed')
     }
