@@ -74,7 +74,6 @@
         </v-col>
       </v-row>
       <data-iterator v-else :tasks="tasks"/>
-
       <task-form/>
     </v-col>
   </v-row>
