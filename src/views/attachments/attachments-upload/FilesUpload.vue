@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <perfect-scrollbar >
     <file-upload ref="upload"
                  class="upload-action"
                  v-model="files"
@@ -15,19 +15,20 @@
                  @input-filter="inputFilter">
     </file-upload>
     <slot :files="files"></slot>
-  </div>
+  </perfect-scrollbar>
 </template>
 
 <script>
 import fileUpload from 'vue-upload-with-credential'
+import { common, tasks, attachments } from '@/mixins/units'
 
 export default {
+  name: 'FilesUpload',
   components: {
     fileUpload
   },
+  mixins: [common, tasks, attachments],
   props: {
-    attachmentsList: Array,
-    existingFiles: Array,
     uploading: {
       type: Boolean,
       default: false
@@ -43,12 +44,10 @@ export default {
     uploadAuto: {
       type: Boolean,
       default: false
-    },
-    uploadErrors: Array
+    }
   },
   data: () => ({
     files: [],
-    attachments: [],
     loading: false,
     size: 1048576 * 100, // one file size limit - 100 Mb
     headers: { 'Upload-Type': 'single' },
@@ -134,11 +133,11 @@ export default {
         if (newFile && oldFile && newFile.success !== oldFile.success) {
           const fileName = newFile.file.name
           const filePath = newFile.response.fileName
-          this.attachments.push({ fileName, filePath })
+          this.addAttachments({ fileName, filePath })
+          this.files.shift()
         }
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
-          this.$emit('update:attachmentsList', this.attachments)
           this.$refs.upload.active = this.loading = false
         }
       }
