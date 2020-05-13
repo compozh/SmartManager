@@ -11,8 +11,8 @@
       <template v-slot:activator="{ on }">
         <v-text-field :value="formatDate(date)"
                       :label="$t('pickers.date')"
+                      tabindex="3"
                       solo flat dense
-                      readonly
                       v-on="on"
                       style="width: 155px !important;">
           <template #prepend-inner>
@@ -52,8 +52,8 @@
       <template v-slot:activator="{ on }">
         <v-text-field v-model="time"
                       :label="$t('pickers.time')"
+                      tabindex="4"
                       solo flat dense
-                      readonly
                       v-on="on"
                       style="width: 80px !important;">
         </v-text-field>

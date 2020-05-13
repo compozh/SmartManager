@@ -24,6 +24,9 @@
         <div class="px-2 pt-2 d-flex">
           <v-text-field id="taskName"
                         v-model="name"
+                        autofocus
+                        tabindex="1"
+                        @focus.once="formFocus"
                         :rules="required"
                         :label="$t('tasks.taskName')"
                         solo flat dense
@@ -99,6 +102,7 @@
           <v-spacer></v-spacer>
           <v-btn class="ml-auto"
                  color="primary" small
+                 tabindex="6"
                  :disabled="!valid"
                  @click="createTask">
             {{ $t('buttons.create') }}
@@ -187,6 +191,12 @@ export default {
         await this.$store.dispatch('getUsers')
       }
       this.userListLoading = false
+    },
+    formFocus () {
+      const quill = document.querySelector('.ql-editor')
+      if (quill) {
+        quill.setAttribute('tabindex', 5)
+      }
     },
     async createTask () {
       const newTask = {

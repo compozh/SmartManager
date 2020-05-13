@@ -7,6 +7,7 @@
                   :multiple="multiple"
                   :loading="loading"
                   :disabled="loading"
+                  tabindex="2"
                   cache-items
                   solo flat dense chips
                   item-text="fio"
