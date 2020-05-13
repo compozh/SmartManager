@@ -334,13 +334,19 @@ export default {
         const taskId = this.taskId
         try {
           const result = await form.submit({ taskId })
-          if (result && result.success) {
+          if (result) {
+            if (result.success && result.successMessage) {
+              this.$store.commit('SET_NOTIFY', {
+                text: result.successMessage,
+                color: 'success'
+              })
+            } else if (result.errorMessage) {
+              this.$store.commit('SET_NOTIFY', {
+                text: result.errorMessage,
+                color: 'warning'
+              })
+            }
             return result
-          } else {
-            this.$store.commit('SET_NOTIFY', {
-              text: result.errorMessage || 'Form submit fail',
-              color: 'warning'
-            })
           }
         } catch (e) {
           if (e.length) {
