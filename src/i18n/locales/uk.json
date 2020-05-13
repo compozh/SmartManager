@@ -323,6 +323,7 @@
     "name": "Назва",
     "version": "Версія",
     "startProcess": "Запустити процес",
+    "perPage": "Процесів на сторінці",
     "errors": {
       "processNotPassed": "Не передано код процесу",
       "undefinedFormOfProcess": "Відсутнє визначення форми процесу",

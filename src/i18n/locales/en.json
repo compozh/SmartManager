@@ -322,6 +322,7 @@
     "name": "Name",
     "version": "Version",
     "startProcess": "Start process",
+    "perPage": "Processes per page",
     "errors": {
       "processNotPassed": "Process code not passed",
       "undefinedFormOfProcess": "No definition of process form",
