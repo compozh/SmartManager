@@ -20,7 +20,7 @@
          @click:row="onRowClick"
         class="elevation-1 body-2"
         style="font-size: 10px"
-      ></v-data-table>
+        :footer-props="{itemsPerPageText: $t('processes.perPage')}"/>
     </v-col>
   </v-row>
 </template>
@@ -53,6 +53,7 @@ export default {
 </script>
 
 <style scoped>
+
   .page-header {
     display: flex;
     justify-content: space-between;
@@ -68,4 +69,9 @@ export default {
     padding: 0;
     max-width: 500px;
   }
+
+  .v-data-table >>> .v-data-footer {
+    font-size: 14px;
+  }
+
 </style>
