@@ -210,7 +210,7 @@ export const cases = {
 export const attachments = {
   data: () => ({
     uploadErrors: [],
-    attachmentType: null
+    attachmentType: ''
   }),
   computed: {
     attachments () {

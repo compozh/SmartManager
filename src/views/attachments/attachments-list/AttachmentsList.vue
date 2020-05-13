@@ -1,30 +1,6 @@
 <template>
   <div>
-    <div class="d-flex align-center font-weight-light">
-      <fa-icon icon="paperclip" class="mr-3" size="lg"/>
-      <span class="mr-3">{{ $t('tabs.attachments').toUpperCase() }}</span>
-      <v-btn v-if="attachmentTypes.length > 1">
-        {{ $t('buttons.addAttachment') }}</v-btn>
-      <v-btn v-else outlined x-small
-             color="primary"
-             class="add-btn pa-0">
-        <label for="file" class="add-label pa-2">
-          {{ $t('buttons.addAttachment') }}
-        </label>
-      </v-btn>
-      <v-spacer/>
-
-      <v-btn-toggle v-show="attachments.length"
-                    v-model="attachmentsListMode"
-                    mandatory>
-        <v-btn text x-small depressed min-height="25">
-          <fa-icon icon="bars" size="lg"/>
-        </v-btn>
-        <v-btn text x-small depressed min-height="25">
-          <fa-icon icon="border-all" size="lg"/>
-        </v-btn>
-      </v-btn-toggle>
-    </div>
+    <list-header v-model="attachmentsListMode"/>
 
     <!-- UPLOAD COMPONENT -->
     <files-upload v-slot="{ files }" upload-auto>
@@ -89,11 +65,12 @@
                 <td class="text-truncate" style="max-width: 0;">{{ item.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
-                  <span v-if="!hover">{{ item.date }}</span>
-                  <v-tooltip v-else top>
+                  <span v-show="!hover">{{ item.date }}</span>
+                  <v-tooltip v-show="hover" top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on"
-                             :href="item.url"
+                             :href="item.srcUrl"
+                             @click.stop
                              color="grey"
                              style="border: 1px dashed;"
                              text fab x-small dark depressed>
@@ -136,6 +113,7 @@
 </template>
 
 <script>
+import ListHeader from './ListHeader'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, attachments } from '@/mixins/units'
@@ -144,6 +122,7 @@ export default {
   name: 'AttachmentsList',
   mixins: [common, tasks, attachments],
   components: {
+    ListHeader,
     FilesUpload,
     FileTypeIcon
   },
@@ -163,25 +142,5 @@ export default {
 </script>
 
 <style scoped>
-
- .add-btn {
-   min-height: 25px;
-   min-width: 50px;
- }
-
- .add-btn >>> span {
-   height: 25px;
-   width: 100%;
- }
-
- .add-btn .add-label {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   cursor: pointer;
-   height: 100%;
-   width: 100%;
-   font-size: 12px;
- }
 
 </style>

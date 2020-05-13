@@ -9,6 +9,7 @@
              :color="btnColor"
              :style="btnStyle"
              @click="btnClick"
+             tabindex="-1"
              text fab x-small dark depressed>
           <fa-icon :icon="icon" :type="iconType" :size="iconSize"/>
       </v-btn>
