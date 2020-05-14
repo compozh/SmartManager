@@ -9,6 +9,7 @@
     "collapseSideBar": "Згорнути бічну панель"
   },
   "sideBar":{
+    "toHome": "На головну",
     "tasksBtn": "Задачі",
     "casesBtn": "Кейси",
     "forceBpm": "Force BPM"
