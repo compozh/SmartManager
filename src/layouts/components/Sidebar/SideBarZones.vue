@@ -6,9 +6,17 @@
     <v-list-item class="px-0 justify-center"
                  style="min-height: 47px; height: 47px;">
       <v-list-item-avatar>
-        <v-img src="@/assets/logo.png"
-               max-height="32px"
-               max-width="32px"/>
+        <v-tooltip right>
+          <template #activator="{ on }">
+              <v-img v-on="on"
+                     src="@/assets/logo.png"
+                     max-height="32px"
+                     max-width="32px"
+                     style="cursor: pointer;"
+                     @click="$router.push({ name: 'home' })"/>
+          </template>
+          {{ $t('sideBar.toHome') }}
+        </v-tooltip>
       </v-list-item-avatar>
     </v-list-item>
 
