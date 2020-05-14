@@ -3,12 +3,11 @@
           close-on-content-click
           offset-y
           transition="scroll-y-transition">
-    <template v-slot:activator="{ on: menu }">
-      <v-tooltip right>
-        <template v-slot:activator="{ on: tooltip }">
+    <template #activator="{ on: menu }">
+      <v-tooltip top>
+        <template #activator="{ on: tooltip }">
           <v-btn v-on="{ ...tooltip, ...menu }"
                  small depressed
-                 class="position-absolute"
                  style="position: absolute; top: 2em; right: 1.6em;"
                  min-width="20"
                  :disabled="!menuItems.length">
