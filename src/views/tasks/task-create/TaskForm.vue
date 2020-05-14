@@ -1,6 +1,7 @@
 <template>
   <v-menu v-model="form"
           :close-on-content-click="false"
+          :close-on-click="false"
           transition="slide-y-reverse-transition">
     <template v-slot:activator="{ on }">
       <v-btn id="addBtn"
