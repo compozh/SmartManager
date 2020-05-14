@@ -27,6 +27,11 @@ export default [
         component: () => import('@/views/tasks/task-details/TaskDetails.vue')
       },
       {
+        path: '/cases/:folderId',
+        name: 'case-list',
+        component: () => import('@/views/cases/case-list/CaseList.vue')
+      },
+      {
         path: '/processes',
         name: 'processes',
         component: () => import('@/views/processes/Processes.vue')
