@@ -9,6 +9,7 @@
     "collapseSideBar": "Collapse sidebar"
   },
   "sideBar":{
+    "toHome": "To home",
     "tasksBtn": "Tasks",
     "casesBtn": "Cases",
     "forceBpm": "Force BPM"

@@ -25,6 +25,9 @@ router.history.getCurrentLocation = () => {
 const unProtectedRoutes = ['/login', '/error-404', '/error-500']
 
 router.beforeEach(async (to, from, next) => {
+  if (from.path === to.path) {
+    return
+  }
   if (unProtectedRoutes.includes(to.path)) {
     return next()
   }
