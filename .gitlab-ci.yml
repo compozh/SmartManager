@@ -11,6 +11,8 @@ build_job:
     tags:
     - tfs2017 
     script:
+    - 'npm install'
+    - 'npm run build'
     - 'dir'
     when: always
     
