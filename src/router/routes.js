@@ -8,6 +8,7 @@ export default [
     children: [
       {
         path: '/',
+        name: 'home',
         redirect: 'tasks/active'
       },
       {
