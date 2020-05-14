@@ -1,11 +1,16 @@
 <template>
-  $END$
+  <no-data/>
 </template>
 
 <script>
-  export default {
-    name: 'case-list'
+import NoData from '@/views/attachments/attachments-viewers/NoData'
+
+export default {
+  name: 'CaseList',
+  components: {
+    NoData
   }
+}
 </script>
 
 <style scoped>
