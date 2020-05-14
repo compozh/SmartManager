@@ -27,15 +27,22 @@
                          mandatory
                          active-class="item-active"
                          class="d-flex flex-column align-center">
-        <v-list-item v-for="item in zones"
-                     @click="changeZone(item)"
-                     :key="item.title"
-                     class="pa-0 d-flex justify-center"
-                     style="min-height: 36px; min-width: 36px">
-          <v-list-item-action class="ma-0 pa-0 justify-center">
-            <fa-icon :icon="item.icon"/>
-          </v-list-item-action>
-        </v-list-item>
+
+        <v-tooltip right
+                   v-for="item in zones"
+                   :key="item.title">
+          <template #activator="{ on }">
+            <v-list-item v-on="on"
+                         @click="changeZone(item)"
+                         class="pa-0 d-flex justify-center"
+                         style="min-height: 36px; min-width: 36px">
+              <v-list-item-action class="ma-0 pa-0 justify-center">
+                <fa-icon :icon="item.icon"/>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
+          {{ item.title }}
+        </v-tooltip>
       </v-list-item-group>
     </v-list>
   </v-navigation-drawer>
@@ -53,27 +60,16 @@ export default {
   },
   methods: {
     changeZone (zone) {
-      switch (zone.id) {
-        case 0:
-          this.setInitialValues()
-          this.$router.push('/tasks/active')
-          break
-        case 1:
-          this.setInitialValues()
-          this.$router.push('/tasks/cases')
-          break
-        case 2:
-          this.sideBarOpen = false
-          this.expandOnHover = false
-          this.miniVariant = true
-          this.$router.push('/processes')
-          break
+      if (zone.group === 'processes') {
+        this.sideBarOpen = false
+        this.expandOnHover = false
+        this.miniVariant = true
+      } else {
+        this.sideBarOpen = true
+        this.expandOnHover = false
+        this.miniVariant = false
       }
-    },
-    setInitialValues () {
-      this.sideBarOpen = true
-      this.expandOnHover = false
-      this.miniVariant = false
+      this.$router.push(zone.link)
     }
   }
 }
