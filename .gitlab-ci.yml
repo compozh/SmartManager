@@ -1,7 +1,7 @@
 variables:
-  NUGET_PATH: 'C:\Program Files (x86)\NuGet\nuget.exe'
-  MSBUILD_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe'
-  DOTNET_PUBLISH: 'C:\Program Files\dotnet.exe publish'
+  PROJECT_NAME: 'SmartManager'
+  SP_DIRECTORY: ''
+ 
 stages:
   - build
   - deploy
@@ -11,10 +11,7 @@ build_job:
     tags:
     - tfs2017 
     script:
-    - 'cd .\RichEdit\RichEdit_Viewer'
-    - '& "$env:NUGET_PATH" restore RichEdit_Viewer.sln'
-    - '& "$env:MSBUILD_PATH" /p:Configuration=Release /p:VisualStudioVersion=19.0 RichEdit_Viewer.sln'
-    - '& "$env:MSBUILD_PATH" RichEdit_Viewer\RichEdit_Viewer.csproj /p:DeployOnBuild=true /p:Configuration=Release /P:PublishProfile=FolderProfile.pubxml'
+    - 'dir'
     when: always
     
 deploy_job:
@@ -22,6 +19,4 @@ deploy_job:
     tags:
     - tfs2017
     script:
-    - echo $env:CURRENT_PATH
-    - 'cd .\RichEdit\RichEdit_Viewer\RichEdit_Viewer'
     - 'dir'
