@@ -27,6 +27,8 @@ build_job:
 deploy_job:
     only:
     - master
+    except:
+    - $SP_BRANCH_NAME
     stage: deploy
     cache:
       key: "bin"
