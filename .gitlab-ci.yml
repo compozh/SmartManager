@@ -8,11 +8,10 @@ stages:
 
 build_job:
     only:
-    - branches
+    - master
     except:
       variables:
       - $SP_DIRECTORY != ''
-
     stage: build
     tags:
     - tfs2017 
@@ -27,6 +26,7 @@ build_job:
     
 deploy_job:
     only:
+    - master
     except:
       variables:
       - $SP_DIRECTORY != ''
