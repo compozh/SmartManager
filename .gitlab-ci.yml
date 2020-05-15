@@ -7,7 +7,6 @@ stages:
   - deploy
 
 build_job:
-    when: manual
     stage: build
     tags:
     - tfs2017 
