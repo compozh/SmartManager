@@ -1,6 +1,6 @@
 <template>
     <div class="fill-height">
-      <component v-if=viewer :is="viewer" :url="attachmentDetails.url"/>
+      <component v-if=viewer :is="viewer" :url="attachmentDetails.srcUrl"/>
       <no-data v-else class="fill-height">
         <span v-if="attachmentDetails.reason"
               class="headline font-weight-light grey--text">

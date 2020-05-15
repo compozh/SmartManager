@@ -15,7 +15,7 @@
                               name="login"
                               type="text"
                               autocomplete="username"
-                              class="body-2"
+                              class="body-1"
                               @keyup.enter="loginMethod">
                   <template #prepend-inner>
                     <v-icon small class="pt-1 pr-2">fas fa-user</v-icon>
@@ -28,7 +28,7 @@
                               name="password"
                               type="password"
                               autocomplete="current-password"
-                              class="body-2"
+                              class="body-1"
                               @keyup.enter="loginMethod">
                   <template #prepend-inner>
                     <v-icon small class="pt-1 pr-2">fas fa-key</v-icon>

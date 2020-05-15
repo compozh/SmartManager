@@ -33,18 +33,24 @@ export const zones = {
           id: 0,
           title: this.$t('sideBar.tasksBtn'),
           folders: [...this.taskFolders, ...this.filters],
+          group: 'tasks',
+          link: '/tasks/active',
           icon: 'tasks'
         },
         {
           id: 1,
           title: this.$t('sideBar.casesBtn'),
           folders: this.caseFolders,
+          group: 'cases',
+          link: '/cases/all',
           icon: 'suitcase'
         },
         {
           id: 2,
           title: this.$t('sideBar.forceBpm'),
           folders: [],
+          group: 'processes',
+          link: '/processes',
           icon: 'project-diagram'
         }
       ]
@@ -81,7 +87,7 @@ export const folders = {
           'active'
       },
       set (folderId) {
-        this.$store.commit('SET_ACTIVE_FOLDER', { folderId, source: 'units' })
+        this.$store.commit('SET_ACTIVE_FOLDER', { folderId })
       }
     }
   },

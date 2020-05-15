@@ -32,14 +32,16 @@
           </div>
 
           <v-spacer></v-spacer>
-          <!-- TASK MENU - MORE BTN -->
-          <task-menu @taskDelete="taskDelete"
-                     @changeStatus="changeStatus"/>
+          <!-- TASK SAVE BUTTON -->
+          <task-save-btn v-show="false"/>
           <!-- TASK MANAGEMENT BUTTONS -->
           <task-buttons class="py-3"
                         @changeStage="changeStage"
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
+          <!-- TASK MENU - MORE BTN -->
+          <task-menu @taskDelete="taskDelete"
+                     @changeStatus="changeStatus"/>
         </div>
         <v-divider/>
         <!-- LEFT SCROLL AREA -->
@@ -54,7 +56,7 @@
                               :btnClick="toggleTaskPin"
                               icon="star" iconSize="2x"
                               :iconType="task.isFavorite ? 'far' : 'fal'"
-                              tooltipPosition="right">
+                              tooltipPosition="top">
               {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
             </icon-tooltip-btn>
           </div>
@@ -206,6 +208,7 @@ import Comments from '@/views/comments/Comments'
 import Diagram from '@/views/diagram/Diagram'
 import TaskMenu from '@/views/tasks/task-details/TaskMenu'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
+import TaskSaveBtn from '@/views/tasks/task-details/TaskSaveBtn'
 import IconTooltipBtn from '@/components/IconTooltipBtn'
 import { folders, tasks, attachments } from '@/mixins/units'
 
@@ -219,6 +222,7 @@ export default {
     Diagram,
     TaskMenu,
     TaskButtons,
+    TaskSaveBtn,
     IconTooltipBtn
   },
   mixins: [folders, tasks, attachments],
