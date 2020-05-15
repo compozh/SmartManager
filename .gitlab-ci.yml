@@ -8,6 +8,8 @@ stages:
   - deploy
 
 build_job:
+    only:
+      refs: ['master', 'merge_requests']
     stage: build
     tags:
     - tfs2017 
@@ -21,6 +23,8 @@ build_job:
       - .\dist\
     
 deploy_job:
+    only:
+      refs: ['master', 'merge_requests']
     stage: deploy
     cache:
       key: "bin"
