@@ -9,7 +9,8 @@ stages:
 
 build_job:
     only:
-      refs: ['merge_requests']
+      refs: 
+      - branches@gitlab-org/gitlab-ce
     stage: build
     tags:
     - tfs2017 
@@ -24,7 +25,8 @@ build_job:
     
 deploy_job:
     only:
-      refs: ['merge_requests']
+      refs: 
+      - branches@gitlab-org/gitlab-ce
     stage: deploy
     cache:
       key: "bin"
