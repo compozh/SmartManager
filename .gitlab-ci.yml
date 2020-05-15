@@ -1,7 +1,6 @@
 variables:
   PROJECT_NAME: 'SmartManager'
   SP_DIRECTORY: ''
-  SP_BRANCH_NAME: ''
   
 stages:
   - build
@@ -9,8 +8,10 @@ stages:
 
 build_job:
     only:
-      refs: 
-      - branches@gitlab-org/gitlab-ce
+    except:
+      variables:
+      - $SP_DIRECTORY != ''
+
     stage: build
     tags:
     - tfs2017 
@@ -25,8 +26,9 @@ build_job:
     
 deploy_job:
     only:
-      refs: 
-      - branches@gitlab-org/gitlab-ce
+    except:
+      variables:
+      - $SP_DIRECTORY != ''
     stage: deploy
     cache:
       key: "bin"
