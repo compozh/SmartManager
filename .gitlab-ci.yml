@@ -7,8 +7,6 @@ stages:
   - deploy
 
 build_job:
-    only:
-    - master
     except:
       variables:
       - $SP_DIRECTORY != ''
@@ -25,8 +23,6 @@ build_job:
       - .\dist\
     
 deploy_job:
-    only:
-    - master
     except:
       variables:
       - $SP_DIRECTORY != ''
