@@ -8,8 +8,6 @@ stages:
 
 build_job:
     only:
-    - branches
-    except:
     - master
     stage: build
     tags:
@@ -22,9 +20,10 @@ build_job:
       key: "bin"
       paths:
       - .\dist\
-
     
 deploy_job:
+    only:
+    - master
     stage: deploy
     cache:
       key: "bin"
