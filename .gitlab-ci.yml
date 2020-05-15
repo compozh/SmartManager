@@ -1,7 +1,8 @@
 variables:
   PROJECT_NAME: 'SmartManager'
   SP_DIRECTORY: ''
- 
+  SP_BRANCH_NAME: ''
+  
 stages:
   - build
   - deploy
@@ -9,6 +10,8 @@ stages:
 build_job:
     only:
     - master
+    except:
+    - $SP_BRANCH_NAME
     stage: build
     tags:
     - tfs2017 
