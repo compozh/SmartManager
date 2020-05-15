@@ -19,7 +19,6 @@ build_job:
       key: "bin"
       paths:
       - .\dist\
-    when: always
 
     
 deploy_job:
