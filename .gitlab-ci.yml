@@ -8,6 +8,7 @@ stages:
 
 build_job:
     only:
+    - branches
     except:
       variables:
       - $SP_DIRECTORY != ''
