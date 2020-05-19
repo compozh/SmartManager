@@ -2,9 +2,9 @@
   <v-app>
     <notify/>
     <v-content class="layout--full-page">
-      <div class="header--full-page d-flex align-center px-5"
+      <div class="header--full-page d-flex align-center pa-4"
            style="width: 100%">
-        <v-img src="@/assets/it-logo.svg" contain max-width="120"/>
+        <v-img src="@/assets/it-logo.svg" contain max-width="150"/>
         <v-spacer/>
         <div class="justify-end">
           <lang-switcher/>
