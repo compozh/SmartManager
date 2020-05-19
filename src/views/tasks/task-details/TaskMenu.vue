@@ -10,7 +10,7 @@
                  small depressed
                  style="position: absolute; top: 2em; right: 1.6em;"
                  min-width="20"
-                 :disabled="!menuItems.length">
+                 :disabled="!menuItems.length || taskDataChanged">
             <fa-icon icon="ellipsis-v" size="lg"/>
           </v-btn>
         </template>
