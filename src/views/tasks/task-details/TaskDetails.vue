@@ -6,36 +6,17 @@
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
         <div class="side-header px-5 d-flex flex-wrap">
-          <div v-show="task.performer"
-               class="d-flex align-center py-3">
-            <v-avatar color="grey lighten-1"
-                      class="mr-3" size="40px">
-              <fa-icon v-if="!task.performerPhoto" icon="user" inverse/>
-              <v-img v-else :src="task.performerPhoto"/>
-            </v-avatar>
-            <div class="d-flex flex-column">
-              <span class="overline">{{ $t('tasks.performer') }}:</span>
-              <span class="body-2 indigo--text" style="flex: 0;">{{ task.performer }}</span>
-            </div>
-          </div>
-
-          <div class="d-flex align-center mx-5 py-3">
-            <v-divider vertical class="mr-5"></v-divider>
-            <div class="d-flex flex-column"
-                 style="white-space: nowrap">
-              <div class="overline">
-                <fa-icon icon="clock"
-                         class="text--secondary mr-1" size="lg"/>
-                {{ $t('tasks.deadline') }}:</div>
-              <div class="body-2 red--text text--darken-4">{{ task.dateplan }}</div>
-            </div>
-          </div>
-
-          <v-spacer></v-spacer>
+          <!-- TASK PERFORMER -->
+          <task-performer v-model="taskData.performer"/>
+          <!-- TASK DATE PLAN -->
+          <task-date-plan v-model="taskData.datePlan"/>
+          <v-spacer/>
           <!-- TASK SAVE BUTTON -->
-          <task-save-btn v-show="false"/>
+          <task-save-btn v-if="taskDataChanged"
+                         @click.native="updateTask"/>
           <!-- TASK MANAGEMENT BUTTONS -->
-          <task-buttons class="py-3"
+          <task-buttons v-if="!taskDataChanged"
+                        class="py-3"
                         @changeStage="changeStage"
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
@@ -47,9 +28,18 @@
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
           <div class="d-flex align-baseline">
-            <h3 v-if="task.name" class="mb-3">
-              {{ task.name }}
-            </h3>
+
+            <v-text-field id="taskName"
+                          v-model="taskName"
+                          @blur="checkTaskName"
+                          :rules="[v => !!v || $t('validate.required')]"
+                          solo flat dense
+                          class="title font-weight-bold">
+              <template #message>
+                <span class="pa-0 font-weight-light">{{ $t('validate.required') }}</span>
+              </template>
+            </v-text-field>
+
             <!-- TOGGLE PIN TASK BUTTON -->
             <icon-tooltip-btn btnClass="ml-auto"
                               :btnColor="task.isFavorite ? 'cyan' : 'grey'"
@@ -201,37 +191,57 @@
 </template>
 
 <script>
+import { folders, tasks, attachments } from '@/mixins/units'
+import TaskPerformer from '@/views/tasks/task-edit/TaskPerformer'
+import TaskDatePlan from '@/views/tasks/task-edit/TaskDatePlan'
+import TaskSaveBtn from '@/views/tasks/task-edit/TaskSaveBtn'
+import TaskButtons from '@/views/tasks/task-details/TaskButtons'
+import TaskMenu from '@/views/tasks/task-details/TaskMenu'
 import DataIterator from '@/views/tasks/task-list/DataIterator'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
 import Comments from '@/views/comments/Comments'
 import Diagram from '@/views/diagram/Diagram'
-import TaskMenu from '@/views/tasks/task-details/TaskMenu'
-import TaskButtons from '@/views/tasks/task-details/TaskButtons'
-import TaskSaveBtn from '@/views/tasks/task-details/TaskSaveBtn'
 import IconTooltipBtn from '@/components/IconTooltipBtn'
-import { folders, tasks, attachments } from '@/mixins/units'
 
 export default {
   name: 'TaskDetails',
   components: {
+    TaskPerformer,
+    TaskDatePlan,
+    TaskSaveBtn,
+    TaskButtons,
+    TaskMenu,
     DataIterator,
     AttachmentsList,
     AttachmentsViewer,
     Comments,
     Diagram,
-    TaskMenu,
-    TaskButtons,
-    TaskSaveBtn,
     IconTooltipBtn
   },
   mixins: [folders, tasks, attachments],
   data: () => ({
     tab: 0,
     iFrameHeight1: 250,
-    iFrameHeight2: 250
+    iFrameHeight2: 250,
+    taskData: {
+      performer: {},
+      datePlan: '',
+      name: ''
+    }
   }),
   computed: {
+    taskName: {
+      get () {
+        return this.taskData.name
+      },
+      set (name) {
+        if (name && name !== this.taskData.name) {
+          this.taskData.name = name
+          this.taskDataChanged || this.setTaskChanged(true)
+        }
+      }
+    },
     form () {
       return this.externalParams && this.externalParams.FORM
         ? this.externalParams.FORM : {}
@@ -323,10 +333,25 @@ export default {
   },
   async created () {
     await this.getTask()
+    this.initTaskData()
     this.tab = this.attachments.length ? 0 : 1
     this.task.isRead || this.getFolders()
   },
   methods: {
+    initTaskData () {
+      this.taskData.performer = {
+        fio: this.task.performer,
+        userId: this.task.performerId,
+        photo: this.task.performerPhoto
+      }
+      this.taskData.datePlan = this.task.dateplan
+      this.taskData.name = this.task.name
+    },
+    checkTaskName (event) {
+      if (!event.target.value) {
+        event.target.value = this.taskData.name
+      }
+    },
     iFrameOnLoad (frame, event) {
       const iFrameBody = event.path[0].contentDocument.body
       this['iFrameHeight' + frame] = Math.round(iFrameBody.scrollHeight * 1.2)
@@ -416,6 +441,11 @@ export default {
       if (success) {
         await this.$router.push('/')
       }
+    },
+    async updateTask () {
+      this.setTaskChanged(false)
+      this.$store.commit('START_PRELOADER', 'updateTask')
+      await setTimeout(() => this.$store.commit('STOP_PRELOADER', 'updateTask'), 2000)
     }
   },
   beforeDestroy () {
@@ -425,12 +455,6 @@ export default {
 </script>
 
 <style scoped>
-
-  /* TODO: output border-light class to common styles */
-  .border-light {
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-  }
 
  .side-header {
    position: relative;
@@ -453,5 +477,10 @@ export default {
   .split >>> .gutter:hover {
     background: rgba(123, 104, 238, .3);
   }
+
+ .v-input >>> .v-input__slot,
+ .v-input >>> .v-text-field__details {
+   padding: 0 !important;
+ }
 
 </style>

@@ -229,5 +229,34 @@ export default {
     } finally {
       commit('STOP_PRELOADER', 'createTask')
     }
+  },
+  async updateTask ({ dispatch, commit }, taskData) {
+    const taskDataJson = JSON.stringify(taskData)
+    commit('START_PRELOADER', 'updateTask')
+    try {
+      const response = await api.updateTaskInGql(taskDataJson)
+      const result = response.data.smtasksMutation.taskUpdating
+      if (result.success) {
+        dispatch('getTaskInfo', { taskId: taskData.id })
+        commit('SET_NOTIFY', {
+          text: result.successMessages || i18n.t('notify.updateSuccess'),
+          color: 'success'
+        })
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessages || i18n.t('notify.updateFail'),
+          color: 'warning'
+        })
+      }
+      return result.success
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.updateError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'createTask')
+    }
   }
 }

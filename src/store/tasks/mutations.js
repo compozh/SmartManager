@@ -4,5 +4,8 @@ export default {
   },
   SET_TASK_DETAILS (state, task) {
     state.taskDetails = Object.assign({}, state.taskDetails, task)
+  },
+  SET_TASK_CHANGED (state, isChanged) {
+    state.taskDataChanged = isChanged
   }
 }

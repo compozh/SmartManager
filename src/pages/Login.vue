@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { userMethods } from '@/mixins/user'
+import { userMethods } from '@/mixins/users'
 
 export default {
   name: 'Login',

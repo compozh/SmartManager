@@ -21,7 +21,7 @@ import Notify from '@/components/Notify'
 import PreLoader from '@/components/PreLoader'
 import TheNavBar from './components/Navbar/TheNavBar'
 import TheSideBar from './components/Sidebar/TheSideBar'
-import { userInfo, userMethods } from '@/mixins/user'
+import { userInfo, userMethods } from '@/mixins/users'
 import { folders } from '@/mixins/units'
 
 export default {

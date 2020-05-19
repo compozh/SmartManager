@@ -123,10 +123,11 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
 import { date } from '@/mixins/dateTime'
+import { users } from '@/mixins/users'
 
 export default {
   name: 'TaskForm',
-  mixins: [date],
+  mixins: [date, users],
   components: {
     TaskAutocomplete,
     DateTimePickers,
@@ -147,14 +148,10 @@ export default {
       priority: false,
       myControl: false,
       needApprove: false,
-      needComment: false,
-      userListLoading: false
+      needComment: false
     }
   },
   computed: {
-    users () {
-      return this.$store.state.app.users
-    },
     htmlDescription () {
       const description = this.description
       return description ? `<body>${description}</body>` : ''
@@ -182,17 +179,7 @@ export default {
       }
     }
   },
-  created () {
-    this.getUsers()
-  },
   methods: {
-    async getUsers () {
-      this.userListLoading = true
-      if (!this.users) {
-        await this.$store.dispatch('getUsers')
-      }
-      this.userListLoading = false
-    },
     formFocus () {
       const quill = document.querySelector('.ql-editor')
       if (quill) {

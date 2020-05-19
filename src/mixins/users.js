@@ -32,3 +32,26 @@ export const userMethods = {
     }
   }
 }
+
+export const users = {
+  data: () => ({
+    userListLoading: false
+  }),
+  computed: {
+    users () {
+      return this.$store.state.app.users || []
+    }
+  },
+  created () {
+    this.getUsers()
+  },
+  methods: {
+    async getUsers () {
+      this.userListLoading = true
+      if (!this.users.length) {
+        await this.$store.dispatch('getUsers')
+      }
+      this.userListLoading = false
+    }
+  }
+}

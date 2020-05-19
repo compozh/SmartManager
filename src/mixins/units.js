@@ -174,6 +174,9 @@ export const tasks = {
       return this.$route.name === 'task-details' &&
         this.internalTaskInWork &&
         this.userId === this.task.declarerId
+    },
+    taskDataChanged () {
+      return this.$store.state.tasks.taskDataChanged
     }
   },
   methods: {
@@ -191,6 +194,9 @@ export const tasks = {
           console.log(e.message)
         }
       }
+    },
+    setTaskChanged (isChanged) {
+      this.$store.commit('SET_TASK_CHANGED', isChanged)
     }
   }
 }
