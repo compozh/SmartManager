@@ -1,10 +1,18 @@
 <template>
-  <router-view/>
+  <div>
+    <pre-loader/>
+    <router-view/>
+  </div>
 </template>
 
 <script>
+import PreLoader from '@/components/PreLoader'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    PreLoader
+  }
 }
 </script>
 
