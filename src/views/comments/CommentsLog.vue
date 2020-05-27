@@ -38,7 +38,9 @@
         </template>
 
         <div class="msg border-light px-2 py-1 d-flex align-center">
-          <span class="body-2 font-weight-light text--secondary">{{ comment.text }}</span>
+          <span class="body-2 font-weight-light text--secondary"
+                :class="{'text-truncate': !comment.text.includes(' ')}">
+            {{ comment.text }}</span>
         </div>
       </div>
     </div>
