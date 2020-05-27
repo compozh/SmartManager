@@ -10,7 +10,8 @@
 
               <v-form>
                 <v-text-field v-model="login"
-                              :label="$t('login.placeholder')"
+                              :label="$t('login.login')"
+                              :placeholder="$t('login.loginPlaceholder')"
                               outlined
                               name="login"
                               type="text"
@@ -24,6 +25,7 @@
 
                 <v-text-field v-model="password"
                               :label="$t('login.password')"
+                              :placeholder="$t('login.passwordPlaceholder')"
                               outlined
                               name="password"
                               type="password"
@@ -62,7 +64,7 @@ export default {
     checkbox_remember_me: false
   }),
   created () {
-    this.logout()
+    // this.logout()
   }
 }
 </script>
