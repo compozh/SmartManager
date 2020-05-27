@@ -5,8 +5,8 @@
     <v-btn outlined x-small
            color="primary"
            class="add-btn pa-0"
-           @click="attachmentTypes.length <= 1 ? showTypeList = true : ''">
-      <label :for="attachmentTypes.length > 1 ? 'file' : ''"
+           @click="attachmentTypes.length > 1 ? showTypeList = true : ''">
+      <label :for="attachmentTypes.length <= 1 ? 'file' : ''"
              class="add-label pa-2">
         {{ $t('buttons.addAttachment') }}
       </label>
