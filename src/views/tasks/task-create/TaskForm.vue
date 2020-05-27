@@ -118,12 +118,10 @@
 import TaskAutocomplete from './TaskAutocomplete'
 import DateTimePickers from './DateTimePickers'
 import IconTooltipBtn from '@/components/IconTooltipBtn'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-import { quillEditor } from 'vue-quill-editor'
 import { date } from '@/mixins/dateTime'
 import { users } from '@/mixins/users'
+import { quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.snow.css'
 
 export default {
   name: 'TaskForm',
@@ -310,10 +308,6 @@ export default {
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
-  }
-
-  .circle-border {
-    border: 1px dashed grey;
   }
 
 </style>
