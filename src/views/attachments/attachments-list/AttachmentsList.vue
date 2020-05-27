@@ -28,7 +28,7 @@
 
     <perfect-scrollbar v-show="attachments.length"
                        class="pr-3"
-                       style="height: 300px;">
+                       style="max-height: 300px;">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
         <v-chip v-for="item in attachments"
                 :key="item.id" small
