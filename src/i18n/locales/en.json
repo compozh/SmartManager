@@ -186,7 +186,8 @@
     "rejected": "Rejected",
     "done": "Done",
     "completed": "Completed",
-    "review": "At approval"
+    "review": "At approval",
+    "undefined": "Status undefined"
   },
   "roles": {
     "responsible": "Responsible",
