@@ -17,7 +17,6 @@
                       hide-no-data
                       item-text="fio"
                       return-object
-                      @change="performerChanged($event.fio)"
                       class="body-2 text-truncate">
       </v-autocomplete>
     </div>
@@ -37,21 +36,25 @@ export default {
     performer: Object
   },
   data: () => ({
-    needInitValue: true
+    needInitValue: true,
+    initTaskPerformerId: ''
   }),
   watch: {
-    performer (performer) {
-      if (this.needInitValue && performer.fio) {
+    performer (performer, oldPerformer) {
+      const userId = performer.userId
+      if (this.needInitValue) {
         this.needInitValue = false
+        this.initTaskPerformerId = userId
+      }
+      if (performer.fio) {
         this.setPerformerInputWidth(performer.fio)
+      }
+      if (userId !== oldPerformer.userId && userId !== this.initTaskPerformerId) {
+        this.$store.commit('SET_TASK_CHANGED', true)
       }
     }
   },
   methods: {
-    performerChanged (userName) {
-      this.$store.commit('SET_TASK_CHANGED', true)
-      this.setPerformerInputWidth(userName)
-    },
     setPerformerInputWidth (userName) {
       const input = document.querySelector('#performer')
       if (input && userName) {

@@ -8,59 +8,40 @@
                  class="text--secondary mr-1" size="lg"/>
         {{ $t('tasks.deadline') }}:</div>
       <div class="d-flex">
-        <!-- DATE PICKER -->
-        <v-menu ref="datePicker"
-                v-model="dateMenu"
-                :close-on-content-click="false"
-                :return-value.sync="date"
+        <!-- DATE PICKER MENU -->
+        <v-menu :close-on-content-click="false"
                 transition="scale-transition"
-                offset-y
-                min-width="200px">
+                offset-y min-width="200px">
           <template v-slot:activator="{ on }">
-            <v-text-field id="date"
+            <v-text-field id="date" v-on="on"
                           :value="textFieldDate"
-                          readonly
-                          hide-details
+                          readonly hide-details
                           solo flat dense
-                          v-on="on"
                           class="body-2 red--text text--darken-4"/>
           </template>
           <v-date-picker v-model="date"
+                         @change="dateTimeChanged"
                          first-day-of-week="1"
                          no-title
                          scrollable>
             <v-spacer/>
-            <v-btn text color="primary"
-                   @click="dateMenu = false">
-              {{ $t('buttons.cancel') }}</v-btn>
-            <v-btn text color="primary"
-                   @click="changeDate">OK</v-btn>
           </v-date-picker>
         </v-menu>
 
-        <!-- TIME PICKER -->
-        <v-menu ref="timePicker"
-                v-model="timeMenu"
-                :close-on-content-click="false"
-                :return-value.sync="time"
+        <!-- TIME PICKER MENU -->
+        <v-menu :close-on-content-click="false"
                 transition="scale-transition"
-                offset-y
-                max-width="250px"
-                min-width="250px">
+                offset-y>
           <template v-slot:activator="{ on }">
-            <v-text-field id="time"
+            <v-text-field id="time" v-on="on"
                           :value="time"
-                          readonly
-                          hide-details
+                          readonly hide-details
                           solo flat dense
-                          v-on="on"
                           class="body-2 red--text text--darken-4"/>
           </template>
           <v-time-picker v-model="time"
-                         no-title full-width
-                         scrollable
-                         format="24hr"
-                         @click:minute="changeTime"/>
+                         @change="dateTimeChanged"
+                         scrollable format="24hr"/>
         </v-menu>
       </div>
     </div>
@@ -80,8 +61,6 @@ export default {
     datePlan: String
   },
   data: () => ({
-    dateMenu: false,
-    timeMenu: false,
     inputDate: '',
     inputTime: ''
   }),
@@ -117,12 +96,7 @@ export default {
     }
   },
   methods: {
-    changeDate () {
-      this.$refs.datePicker.save(this.date)
-      this.$store.commit('SET_TASK_CHANGED', true)
-    },
-    changeTime () {
-      this.$refs.timePicker.save(this.time)
+    dateTimeChanged () {
       this.$store.commit('SET_TASK_CHANGED', true)
     }
   }

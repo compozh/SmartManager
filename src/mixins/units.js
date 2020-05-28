@@ -114,20 +114,6 @@ export const tasks = {
     taskType () {
       return this.task.taskType
     },
-    typeName () {
-      switch (this.taskType) {
-        case '':
-          return this.$t('tasks.simple')
-        case 'AGREE':
-          return this.$t('tasks.agree')
-        case 'WORKFLOW':
-          return this.$t('tasks.workflow')
-        case 'EXTERNAL':
-          return this.$t('tasks.external')
-        default:
-          return this.$t('tasks.unknown')
-      }
-    },
     taskInWork () {
       return this.task.status === '' ||
         this.task.status === '*'
@@ -175,8 +161,8 @@ export const tasks = {
         this.internalTaskInWork &&
         this.userId === this.task.declarerId
     },
-    taskDataChanged () {
-      return this.$store.state.tasks.taskDataChanged
+    taskChanged () {
+      return this.$store.state.tasks.taskChanged
     }
   },
   methods: {

@@ -12,10 +12,11 @@
           <task-date-plan v-model="taskData.datePlan"/>
           <v-spacer/>
           <!-- TASK SAVE BUTTON -->
-          <task-save-btn v-if="taskDataChanged"
-                         @click.native="updateTask"/>
+          <task-save-btn v-if="taskChanged"
+                         @save="updateTaskData"
+                         @cancel="initTaskData"/>
           <!-- TASK MANAGEMENT BUTTONS -->
-          <task-buttons v-if="!taskDataChanged"
+          <task-buttons v-if="!taskChanged"
                         class="py-3"
                         @changeStage="changeStage"
                         @changeStatus="changeStatus"
@@ -28,17 +29,8 @@
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
           <div class="d-flex align-baseline">
-
-            <v-text-field id="taskName"
-                          v-model="taskName"
-                          @blur="checkTaskName"
-                          :rules="[v => !!v || $t('validate.required')]"
-                          solo flat dense
-                          class="title font-weight-bold">
-              <template #message>
-                <span class="pa-0 font-weight-light">{{ $t('validate.required') }}</span>
-              </template>
-            </v-text-field>
+            <!-- TASK NAME -->
+            <task-name v-model="taskData.name"/>
 
             <!-- TOGGLE PIN TASK BUTTON -->
             <icon-tooltip-btn btnClass="ml-auto"
@@ -50,25 +42,13 @@
               {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
             </icon-tooltip-btn>
           </div>
-          <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
-            {{ task.docCaption }}
-          </h3>
-          <div class="d-flex mb-3">
-            <div v-if="task.priority" class="deep-orange--text">
-              <fa-icon icon="exclamation-square" class="mr-2"/>
-              <span class="body-2">{{ $t('icons.priority') }}</span>
-            </div>
-            <v-divider v-if="task.priority" vertical class="mx-2"/>
-            <div v-if="task.myControl" class="red--text text--darken-4">
-              <fa-icon icon="eye" class="mr-2"/>
-              <span class="body-2 red--text text--darken-4">{{ $t('icons.control') }}</span>
-            </div>
-          </div>
+          <!-- TASK DOC CAPTION -->
+          <h3 v-if="task.name !== task.docCaption"
+              class="font-weight-light mb-3">
+            {{ task.docCaption }}</h3>
 
           <!-- FORMIO -->
           <div v-if="Object.keys(form).length" class="w-full">
-            <h3 v-if="form.NAME" class="font-weight-light mt-4">{{ form.NAME }}</h3>
-
             <formio-form-component class="formio"
                                    ref="form"
                                    :formCode="form.UNFORMIO"
@@ -76,45 +56,10 @@
           </div>
 
           <!-- HTML DESCRIPTION-->
-          <div v-if="htmlDescription" class="border-light mb-5">
-            <iframe seamless
-                    scrolling="no"
-                    width="100%"
-                    :height="iFrameHeight1"
-                    frameborder="0"
-                    :srcdoc="htmlDescription"
-                    @load="iFrameOnLoad(1, $event)"
-                    style="pointer-events: none"/>
-          </div>
-          <div v-if="docTextHtml" class="border-light mb-5">
-            <iframe seamless
-                    scrolling="no"
-                    width="100%"
-                    :height="iFrameHeight2"
-                    frameborder="0"
-                    :srcdoc="docTextHtml"
-                    @load="iFrameOnLoad(2, $event)"
-                    style="pointer-events: none"/>
-          </div>
-          <p v-if="task.name !== task.descript" class="mb-5">{{ task.descript }}</p>
+          <task-description v-model="taskData.description"
+                            :docTextHtml="task.docTextHtml"/>
           <!-- LABELS -->
-          <div class="d-flex mb-5 align-center">
-            <v-chip small label
-                    class="body-2"
-                    color="blue-grey"
-                    text-color="white">
-              <fa-icon icon="hurricane" class="mr-3"/>
-              {{ typeName }}
-            </v-chip>
-            <v-divider vertical class="mx-2"></v-divider>
-            <v-chip small label
-                    class="body-2"
-                    text-color="white"
-                    :color="taskStatus().color">
-              <fa-icon :icon="taskStatus().icon" class="mr-3"/>
-              {{ taskStatus().text }}
-            </v-chip>
-          </div>
+          <task-labels :task="task"/>
           <v-divider/>
           <!-- TASK PARTICIPANTS -->
           <div v-if="participants.length"
@@ -191,12 +136,16 @@
 </template>
 
 <script>
+import { date } from '@/mixins/dateTime'
 import { folders, tasks, attachments } from '@/mixins/units'
 import TaskPerformer from '@/views/tasks/task-edit/TaskPerformer'
 import TaskDatePlan from '@/views/tasks/task-edit/TaskDatePlan'
 import TaskSaveBtn from '@/views/tasks/task-edit/TaskSaveBtn'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
 import TaskMenu from '@/views/tasks/task-details/TaskMenu'
+import TaskName from '@/views/tasks/task-edit/TaskName'
+import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
+import TaskLabels from '@/views/tasks/task-details/TaskLabels'
 import DataIterator from '@/views/tasks/task-list/DataIterator'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
@@ -212,6 +161,9 @@ export default {
     TaskSaveBtn,
     TaskButtons,
     TaskMenu,
+    TaskName,
+    TaskDescription,
+    TaskLabels,
     DataIterator,
     AttachmentsList,
     AttachmentsViewer,
@@ -219,29 +171,17 @@ export default {
     Diagram,
     IconTooltipBtn
   },
-  mixins: [folders, tasks, attachments],
+  mixins: [folders, tasks, attachments, date],
   data: () => ({
     tab: 0,
-    iFrameHeight1: 250,
-    iFrameHeight2: 250,
     taskData: {
       performer: {},
       datePlan: '',
-      name: ''
+      name: '',
+      description: ''
     }
   }),
   computed: {
-    taskName: {
-      get () {
-        return this.taskData.name
-      },
-      set (name) {
-        if (name && name !== this.taskData.name) {
-          this.taskData.name = name
-          this.taskDataChanged || this.setTaskChanged(true)
-        }
-      }
-    },
     form () {
       return this.externalParams && this.externalParams.FORM
         ? this.externalParams.FORM : {}
@@ -255,20 +195,6 @@ export default {
         properties: this.form.PROPERTIES,
         isSystem: this.form.ISSYSTEM,
         name: this.form.NAME
-      }
-    },
-    docTextHtml () {
-      return this.parseDescription(this.task.docTextHtml)
-    },
-    htmlDescription () {
-      return this.parseDescription(this.task.htmlDescript)
-    },
-    parseDescription () {
-      return description => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(description, 'text/html')
-        const body = doc.body.innerHTML.trim()
-        return body ? description : body
       }
     },
     baseTask () {
@@ -291,36 +217,6 @@ export default {
       }
       return tabs
     },
-    taskStatus () {
-      return () => {
-        switch (this.task.status) {
-          case '-':
-            return {
-              color: 'error',
-              icon: 'exclamation-circle',
-              text: this.$t('statuses.rejected')
-            }
-          case '+':
-            return {
-              color: 'success',
-              icon: 'check-circle',
-              text: this.$t('statuses.done')
-            }
-          case '#':
-            return {
-              color: 'yellow darken-2',
-              icon: 'file-search',
-              text: this.$t('statuses.review')
-            }
-          default:
-            return {
-              color: 'primary',
-              icon: 'recycle',
-              text: this.$t('statuses.inWork')
-            }
-        }
-      }
-    },
     participants () {
       return this.task.participants || []
     },
@@ -329,6 +225,13 @@ export default {
     },
     observers () {
       return this.participants.filter(i => i.role === 'OBSERVER')
+    }
+  },
+  watch: {
+    '$route' (route) {
+      if (route.name === 'task-details') {
+        this.getTask()
+      }
     }
   },
   async created () {
@@ -346,16 +249,8 @@ export default {
       }
       this.taskData.datePlan = this.task.dateplan
       this.taskData.name = this.task.name
-    },
-    checkTaskName (event) {
-      if (!event.target.value) {
-        event.target.value = this.taskData.name
-      }
-    },
-    iFrameOnLoad (frame, event) {
-      const iFrameBody = event.path[0].contentDocument.body
-      this['iFrameHeight' + frame] = Math.round(iFrameBody.scrollHeight * 1.2)
-      iFrameBody.style.fontFamily = '"Proxima Nova Regular", sans-serif'
+      this.taskData.description = this.task.htmlDescript
+      this.setTaskChanged(false)
     },
     async formSubmit () {
       if (this.$refs.form) {
@@ -442,13 +337,21 @@ export default {
         await this.$router.push('/')
       }
     },
-    async updateTask () {
+    async updateTaskData () {
       this.setTaskChanged(false)
-      this.$store.commit('START_PRELOADER', 'updateTask')
-      await setTimeout(() => this.$store.commit('STOP_PRELOADER', 'updateTask'), 2000)
+      const taskData = {
+        id: this.taskId,
+        name: this.taskData.name,
+        performerId: this.taskData.performer.userId,
+        dateplan: this.formatDateTime(this.taskData.datePlan),
+        descript: this.taskData.description
+      }
+
+      await this.$store.dispatch('updateTask', taskData)
     }
   },
   beforeDestroy () {
+    this.setTaskChanged(false)
     this.resetAttachmentData()
   }
 }

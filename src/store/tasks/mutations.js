@@ -6,6 +6,6 @@ export default {
     state.taskDetails = Object.assign({}, state.taskDetails, task)
   },
   SET_TASK_CHANGED (state, isChanged) {
-    state.taskDataChanged = isChanged
+    state.taskChanged = isChanged
   }
 }

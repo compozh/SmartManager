@@ -30,7 +30,6 @@
       </v-card>
 
       <v-btn @click="formSubmit"
-             text outlined
              color="primary"
              :loading="startProcessLoading"
              class="start-process-button">
@@ -161,7 +160,6 @@ export default {
   .process-component {
     height: 100%;
     overflow: hidden;
-    text-align: center;
   }
 
   .card-form-component {
@@ -180,7 +178,8 @@ export default {
   }
 
   .start-process-button {
-    margin-bottom: 15px;
+    margin: 0 15px 15px 15px;
+    font-weight: 500;
   }
 
 </style>

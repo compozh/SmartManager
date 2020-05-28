@@ -237,7 +237,10 @@ export default {
       const response = await api.updateTaskInGql(taskDataJson)
       const result = response.data.smtasksMutation.taskUpdating
       if (result.success) {
-        dispatch('getTaskInfo', { taskId: taskData.id })
+        await dispatch('getTaskDetails', {
+          taskId: taskData.id,
+          preLoader: true
+        })
         commit('SET_NOTIFY', {
           text: result.successMessages || i18n.t('notify.updateSuccess'),
           color: 'success'
@@ -248,7 +251,6 @@ export default {
           color: 'warning'
         })
       }
-      return result.success
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
@@ -256,7 +258,7 @@ export default {
         color: 'error'
       })
     } finally {
-      commit('STOP_PRELOADER', 'createTask')
+      commit('STOP_PRELOADER', 'updateTask')
     }
   }
 }
