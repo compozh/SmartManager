@@ -2,6 +2,7 @@
   <div>
     <quill-editor v-model="htmlDescription"
                   :options="editorOption"
+                  ref="editor"
                   class="mb-5"/>
     <div v-if="docTextHtml" class="border-light">
       <iframe seamless
@@ -35,7 +36,6 @@ export default {
   },
   data: () => ({
     initDescription: '',
-    currentDescription: '',
     iFrameHeight: 250
   }),
   computed: {
@@ -92,6 +92,21 @@ export default {
         this.initDescription = this.description
       }
     }
+  },
+  mounted () {
+    const quill = this.$refs.editor.quill
+    // console.log('getFormat', quill.getFormat())
+    this.$refs.editor.quill.blur()
+    quill.on('text-change', (delta, oldDelta, source) => {
+      if (source === 'api') {
+        // console.log('An API call triggered this change.')
+      } else if (source === 'user') {
+        console.log('A user action triggered this change.')
+      }
+      // console.log('delta', delta)
+      // console.log('oldDelta', oldDelta)
+    })
+    // console.log(this.$refs.editor.quill)
   },
   methods: {
     iFrameOnLoad (frame) {
