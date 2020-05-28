@@ -42,6 +42,8 @@ export default {
   watch: {
     performer (performer, oldPerformer) {
       const userId = performer.userId
+      const userExist = this.users.some(i => i.userId === userId)
+      userExist || this.addUser(this.performer)
       if (this.needInitValue) {
         this.needInitValue = false
         this.initTaskPerformerId = userId
