@@ -1,6 +1,6 @@
 <template>
     <div class="fill-height">
-      <component v-if=viewer :is="viewer" :url="attachmentDetails.url"/>
+      <component v-if=viewer :is="viewer" :url="attachmentDetails.srcUrl"/>
       <no-data v-else class="fill-height">
         <span v-if="attachmentDetails.reason"
               class="headline font-weight-light grey--text">
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import EjsPdfViewer from './viewers/ejs-pdf-viewer'
+
 import NotSupport from './NotSupport'
 import NoData from './NoData'
 import { tasks, attachments } from '@/mixins/units'
@@ -25,7 +27,8 @@ export default {
     ImgViewer,
     TxtViewer,
     NotSupport,
-    NoData
+    NoData,
+    EjsPdfViewer
   },
   mixins: [tasks, attachments],
   computed: {
@@ -42,6 +45,8 @@ export default {
       if (url) {
         const ext = url.split('.').pop().toLowerCase()
         switch (true) {
+          // case ext === 'pdf':
+          //   return 'ejs-pdf-viewer'
           case ext === 'pdf':
             return 'pdf-viewer'
           case this.isText(ext):

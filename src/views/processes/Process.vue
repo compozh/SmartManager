@@ -25,12 +25,11 @@
       </div>
       <v-card class="card-form-component">
         <formio-form-component ref="form"
-                               :formCode="form.formCode"
+                               :formCode="formCode"
                                :formDefinition="form"/>
       </v-card>
 
       <v-btn @click="formSubmit"
-             text outlined
              color="primary"
              :loading="startProcessLoading"
              class="start-process-button">
@@ -44,24 +43,25 @@
 export default {
   name: 'process-form-page',
   data: () => ({
-    form: null,
-    isLoading: false,
+    formCode: '',
+    form: {},
     startProcessLoading: false,
     error: null
   }),
-  created () {
+  async created () {
     this.processDefinitionId = this.$route.query.processId
     if (this.processDefinitionId) {
-      this.isLoading = true
-      this.$store.dispatch('getForm', this.processDefinitionId).then(result => {
-        this.isLoading = false
-
-        if (result.form) {
-          this.form = result.form
-        } else {
-          this.error = this.$t('processes.errors.undefinedFormOfProcess')
-        }
-      })
+      const result = await this.$store.dispatch(
+        'getFormDefinition', this.processDefinitionId)
+      if (result) {
+        const data = JSON.parse(result.data)
+        const formCode = this.formCode = data.unformio
+        const deviceSizeType = this.$vuetify.breakpoint.name
+        this.form = await this.$store.dispatch(
+          'formio/getForm', { formCode, deviceSizeType })
+      } else {
+        this.error = this.$t('processes.errors.undefinedFormOfProcess')
+      }
     } else {
       this.error = this.$t('processes.errors.processNotPassed')
     }
@@ -72,14 +72,14 @@ export default {
       try {
         const result = await form.submit()
         if (result) {
-          if (result.success) {
+          if (result.success && result.successMessage) {
             this.$store.commit('SET_NOTIFY', {
-              text: result.successMessage || 'Form submit successful',
+              text: result.successMessage,
               color: 'success'
             })
-          } else {
+          } else if (result.errorMessage) {
             this.$store.commit('SET_NOTIFY', {
-              text: result.errorMessage || 'Form submit fail',
+              text: result.errorMessage,
               color: 'warning'
             })
           }
@@ -160,7 +160,6 @@ export default {
   .process-component {
     height: 100%;
     overflow: hidden;
-    text-align: center;
   }
 
   .card-form-component {
@@ -179,7 +178,8 @@ export default {
   }
 
   .start-process-button {
-    margin-bottom: 15px;
+    margin: 0 15px 15px 15px;
+    font-weight: 500;
   }
 
 </style>

@@ -8,9 +8,16 @@ export const date = {
     }
   },
   computed: {
+    parseDateTime: () => dateTime => moment(dateTime, 'DD.MM.YYYY HH:mm'),
+    parsePickerDate: () => date => moment(date, 'YYYY-MM-DD'),
     defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
-    formatDate: () => date => moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY'),
-    parseDate: () => date => moment(date, 'DD.MM.YYYY')
+    formatPickerDate: () => date => date.format('YYYY-MM-DD'),
+    formatDate () {
+      return date => this.parsePickerDate(date).format('DD.MM.YYYY')
+    },
+    formatDateTime () {
+      return dateTime => this.parseDateTime(dateTime).format('YYYY-MM-DD HH:mm')
+    }
   }
 }
 

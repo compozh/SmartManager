@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { userInfo, userMethods } from '@/mixins/user'
+import { userInfo, userMethods } from '@/mixins/users'
 
 export default {
   name: 'UserPanel',

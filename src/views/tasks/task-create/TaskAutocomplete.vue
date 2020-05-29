@@ -7,6 +7,7 @@
                   :multiple="multiple"
                   :loading="loading"
                   :disabled="loading"
+                  tabindex="2"
                   cache-items
                   solo flat dense chips
                   item-text="fio"
@@ -27,16 +28,16 @@
       </v-chip>
     </template>
     <template v-slot:item="data">
-        <div class="d-flex align-center">
-          <v-avatar color="primary" class="mr-3" size="25px">
-            <fa-icon v-if="!data.item.photo"
-                     icon="user" size="xs" inverse/>
-            <v-img v-else :src="data.item.photo"/>
-          </v-avatar>
-          <div class="grey--text">
-            {{ data.item.fio }}
-          </div>
+      <div class="d-flex align-center">
+        <v-avatar color="primary" class="mr-3" size="25px">
+          <fa-icon v-if="!data.item.photo"
+                   icon="user" size="xs" inverse/>
+          <v-img v-else :src="data.item.photo"/>
+        </v-avatar>
+        <div class="grey--text">
+          {{ data.item.fio }}
         </div>
+      </div>
     </template>
     <template #prepend-inner>
       <slot name="icon">

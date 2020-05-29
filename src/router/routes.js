@@ -8,6 +8,7 @@ export default [
     children: [
       {
         path: '/',
+        name: 'home',
         redirect: 'tasks/active'
       },
       {
@@ -24,6 +25,11 @@ export default [
         path: '/task/:taskId',
         name: 'task-details',
         component: () => import('@/views/tasks/task-details/TaskDetails.vue')
+      },
+      {
+        path: '/cases/:folderId',
+        name: 'case-list',
+        component: () => import('@/views/cases/case-list/CaseList.vue')
       },
       {
         path: '/processes',

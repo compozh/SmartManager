@@ -9,6 +9,7 @@
     "collapseSideBar": "Collapse sidebar"
   },
   "sideBar":{
+    "toHome": "To home",
     "tasksBtn": "Tasks",
     "casesBtn": "Cases",
     "forceBpm": "Force BPM"
@@ -77,7 +78,13 @@
     "role": "Role",
     "source": "Source",
     "actualDate": "Actual date",
-    "hasOrig": "Has attachments"
+    "hasOrig": "Has attachments",
+    "simple": "Common task/document",
+    "agree": "Agree",
+    "workflow": "Execute BP",
+    "external": "External task",
+    "unknown": "Unknown type",
+    "perPage": "Tasks per page"
   },
   "cases": {
     "newCase": "New case",
@@ -179,7 +186,8 @@
     "rejected": "Rejected",
     "done": "Done",
     "completed": "Completed",
-    "review": "At approval"
+    "review": "At approval",
+    "undefined": "Status undefined"
   },
   "roles": {
     "responsible": "Responsible",
@@ -303,8 +311,10 @@
     "title": "Sign In",
     "welcome": "Welcome, please log in with your account.",
     "rememberMe": "Remember me",
-    "placeholder": "Login",
+    "login": "Login",
+    "loginPlaceholder": "Type login...",
     "password": "Password",
+    "passwordPlaceholder": "Type password...",
     "subTitle": "Login",
     "loggedIn": "You are already logged in!",
     "loginSuccess": "Login successful",
@@ -316,6 +326,7 @@
     "name": "Name",
     "version": "Version",
     "startProcess": "Start process",
+    "perPage": "Processes per page",
     "errors": {
       "processNotPassed": "Process code not passed",
       "undefinedFormOfProcess": "No definition of process form",

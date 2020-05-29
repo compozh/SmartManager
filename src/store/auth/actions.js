@@ -20,13 +20,16 @@ export default {
       const result = await auth.login(login, password, rememberMe)
       await dispatch('updateAuthenticatedUser', result)
       return result
-    } catch (e) {
-      console.warn('', e.message)
-      commit('STOP_PRELOADER', 'login')
+    } catch (error) {
+      if (error) {
+        console.error(error.message || error)
+      }
       commit('SET_NOTIFY', {
         text: i18n.t('login.loginError'),
         color: 'error'
       })
+    } finally {
+      commit('STOP_PRELOADER', 'login')
     }
   },
   async applyDelegatedRights ({ commit }, userId) {
@@ -45,12 +48,16 @@ export default {
           color: 'warning'
         })
       }
-    } catch (e) {
-      commit('STOP_PRELOADER', 'applyDelegatedRights')
+    } catch (error) {
+      if (error) {
+        console.error(error.message || error)
+      }
       commit('SET_NOTIFY', {
         text: i18n.t('notify.applyRightsError'),
         color: 'error'
       })
+    } finally {
+      commit('STOP_PRELOADER', 'applyDelegatedRights')
     }
   },
   userIsLoggedIn ({ state, commit }) {

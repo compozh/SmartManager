@@ -1,6 +1,7 @@
 <template>
   <v-menu v-model="form"
           :close-on-content-click="false"
+          :close-on-click="false"
           transition="slide-y-reverse-transition">
     <template v-slot:activator="{ on }">
       <v-btn id="addBtn"
@@ -24,6 +25,9 @@
         <div class="px-2 pt-2 d-flex">
           <v-text-field id="taskName"
                         v-model="name"
+                        autofocus
+                        tabindex="1"
+                        @focus.once="formFocus"
                         :rules="required"
                         :label="$t('tasks.taskName')"
                         solo flat dense
@@ -80,21 +84,12 @@
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
-                            :btnColor="myControl ? 'red' : 'grey'"
-                            :btnClick="() => myControl = !myControl"
-                            icon="eye" iconSize="lg"
-                            :iconType="myControl ? 'far' : 'fal'"
-                            tooltipPosition="top">
-            {{ $t('icons.control') }}
-          </icon-tooltip-btn>
-          <icon-tooltip-btn btnClass="mr-3"
-                            btnStyle="border: 1px dashed;"
                             :btnColor="needApprove ? 'green' : 'grey'"
                             :btnClick="() => needApprove = !needApprove"
                             icon="clipboard-check" iconSize="lg"
                             :iconType="needApprove ? 'far' : 'fal'"
                             tooltipPosition="top">
-            {{ $t('icons.needApprove') }}
+            {{ $t('icons.control') }}
           </icon-tooltip-btn>
           <icon-tooltip-btn btnClass="mr-3"
                             btnStyle="border: 1px dashed;"
@@ -108,6 +103,7 @@
           <v-spacer></v-spacer>
           <v-btn class="ml-auto"
                  color="primary" small
+                 tabindex="6"
                  :disabled="!valid"
                  @click="createTask">
             {{ $t('buttons.create') }}
@@ -122,15 +118,14 @@
 import TaskAutocomplete from './TaskAutocomplete'
 import DateTimePickers from './DateTimePickers'
 import IconTooltipBtn from '@/components/IconTooltipBtn'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-import { quillEditor } from 'vue-quill-editor'
 import { date } from '@/mixins/dateTime'
+import { users } from '@/mixins/users'
+import { quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.snow.css'
 
 export default {
   name: 'TaskForm',
-  mixins: [date],
+  mixins: [date, users],
   components: {
     TaskAutocomplete,
     DateTimePickers,
@@ -151,14 +146,10 @@ export default {
       priority: false,
       myControl: false,
       needApprove: false,
-      needComment: false,
-      userListLoading: false
+      needComment: false
     }
   },
   computed: {
-    users () {
-      return this.$store.state.app.users
-    },
     htmlDescription () {
       const description = this.description
       return description ? `<body>${description}</body>` : ''
@@ -186,16 +177,12 @@ export default {
       }
     }
   },
-  created () {
-    this.getUsers()
-  },
   methods: {
-    async getUsers () {
-      this.userListLoading = true
-      if (!this.users) {
-        await this.$store.dispatch('getUsers')
+    formFocus () {
+      const quill = document.querySelector('.ql-editor')
+      if (quill) {
+        quill.setAttribute('tabindex', 5)
       }
-      this.userListLoading = false
     },
     async createTask () {
       const newTask = {
@@ -321,10 +308,6 @@ export default {
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
-  }
-
-  .circle-border {
-    border: 1px dashed grey;
   }
 
 </style>

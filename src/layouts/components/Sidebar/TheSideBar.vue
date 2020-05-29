@@ -7,32 +7,38 @@
                        width="300"
                        style="padding-left: 3.4em">
     <side-bar-zones/>
-    <v-list dense nav subheader v-if="activeZoneId !== 2">
+    <v-list v-if="activeZoneId !== 2"
+            dense nav subheader >
       <v-subheader class="subtitle-1 font-weight-bold">
-        {{ zones[activeZoneId].title }}
+        {{ activeZone.title }}
       </v-subheader>
       <v-list-item-group v-model="activeFolderId"
                          mandatory>
-
-        <v-list-item v-for="folder in zones[activeZoneId].folders"
-                     :key="folder.Code"
-                     :to="'/tasks/' + folder.Code"
-                     :class="{'item-active': folder.Code === activeFolderId,
-                              'ml-5': folder.Parent}"
-                     :value="folder.Code"
-                      style="min-height: 32px;">
-
-          <v-list-item-icon class="ma-0 mr-2 align-self-center align-center">
-            <fa-icon :icon="folderIcons(folder.Code)"/>
-          </v-list-item-icon>
-          <v-list-item-title v-text="folder.Name"
-                             class="body-1"
-                             :class="{ 'white--text': folder.Code === activeFolderId}"/>
-          <v-list-item-action v-if="folder.Count" class="ma-0 justify-end">
-            <span class="body-1" :class="folder.Code === activeFolderId ? 'white--text' : 'grey--text'">
-            {{ folder.Count }}</span>
-          </v-list-item-action>
-      </v-list-item>
+        <v-tooltip v-for="(folder, index) in zones[activeZoneId].folders"
+                   :key="index" top>
+          <template #activator="{ on }">
+            <v-list-item v-on="on"
+                         :to="'/' + activeZone.group + '/' + folder.Code"
+                         :class="{ 'item-active': folder.Code === activeFolderId,
+                                  'ml-4': folder.Parent }"
+                         :value="folder.Code"
+                         style="min-height: 32px;">
+              <v-list-item-icon class="ma-0 mr-1 align-self-center align-center"
+                                :class="{ 'white--text': folder.Code === activeFolderId }">
+                <fa-icon :icon="folderIcons(folder.Code)"/>
+              </v-list-item-icon>
+              <v-list-item-title class="body-1"
+                                 :class="{ 'white--text': folder.Code === activeFolderId }">
+                {{ folder.Name }}</v-list-item-title>
+              <v-list-item-action v-if="folder.Count" class="ma-0 justify-end">
+                <span class="body-1"
+                      :class="folder.Code === activeFolderId ? 'white--text' : 'grey--text'">
+                {{ folder.Count }}</span>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
+          {{ folder.Name }}
+        </v-tooltip>
       </v-list-item-group>
     </v-list>
   </v-navigation-drawer>
@@ -81,7 +87,7 @@ export default {
 
   .item-active {
     background: #42A5F6;
-    color: white;
+    color: white !important;
   }
 
 </style>

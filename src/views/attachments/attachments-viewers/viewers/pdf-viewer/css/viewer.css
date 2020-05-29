@@ -413,14 +413,6 @@
   margin: 0;
 }
 
-input,
-button,
-select {
-  font: message-box;
-  font-family: "Montserrat", Helvetica, Arial, sans-serif;
-  outline: none;
-}
-
 .hidden {
   display: none !important;
 }

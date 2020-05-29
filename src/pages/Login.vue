@@ -10,12 +10,13 @@
 
               <v-form>
                 <v-text-field v-model="login"
-                              :label="$t('login.placeholder')"
+                              :label="$t('login.login')"
+                              :placeholder="$t('login.loginPlaceholder')"
                               outlined
                               name="login"
                               type="text"
                               autocomplete="username"
-                              class="body-2"
+                              class="body-1"
                               @keyup.enter="loginMethod">
                   <template #prepend-inner>
                     <v-icon small class="pt-1 pr-2">fas fa-user</v-icon>
@@ -24,11 +25,12 @@
 
                 <v-text-field v-model="password"
                               :label="$t('login.password')"
+                              :placeholder="$t('login.passwordPlaceholder')"
                               outlined
                               name="password"
                               type="password"
                               autocomplete="current-password"
-                              class="body-2"
+                              class="body-1"
                               @keyup.enter="loginMethod">
                   <template #prepend-inner>
                     <v-icon small class="pt-1 pr-2">fas fa-key</v-icon>
@@ -51,7 +53,7 @@
 </template>
 
 <script>
-import { userMethods } from '@/mixins/user'
+import { userMethods } from '@/mixins/users'
 
 export default {
   name: 'Login',
@@ -62,7 +64,7 @@ export default {
     checkbox_remember_me: false
   }),
   created () {
-    this.logout()
+    // this.logout()
   }
 }
 </script>

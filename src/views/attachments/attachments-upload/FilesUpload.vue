@@ -1,40 +1,34 @@
 <template>
-  <file-upload ref="upload"
-               class="upload-action"
-               v-model="files"
-               :multiple="multiple"
-               :drop="true"
-               :dropDirectory="true"
-               :headers="headers"
-               :size="size"
-               :chunk-enabled="chunk"
-               :chunk="{
-                 action,
-                 minSize,
-                 maxActive,
-                 maxRetries,
-               }"
-               :post-action="action"
-               @input-file="inputFile"
-               @input-filter="inputFilter">
-  </file-upload>
+  <perfect-scrollbar >
+    <file-upload ref="upload"
+                 class="upload-action"
+                 v-model="files"
+                 multiple
+                 drop
+                 dropDirectory
+                 :headers="headers"
+                 :size="size"
+                 :chunk-enabled="true"
+                 :chunk="chunk"
+                 :post-action="chunk.action"
+                 @input-file="inputFile"
+                 @input-filter="inputFilter">
+    </file-upload>
+    <slot :files="files"></slot>
+  </perfect-scrollbar>
 </template>
 
 <script>
 import fileUpload from 'vue-upload-with-credential'
+import { common, tasks, attachments } from '@/mixins/units'
 
 export default {
+  name: 'FilesUpload',
   components: {
     fileUpload
   },
+  mixins: [common, tasks, attachments],
   props: {
-    fileList: {
-      type: Boolean,
-      default: true
-    },
-    existingFiles: {
-      type: Array
-    },
     uploading: {
       type: Boolean,
       default: false
@@ -50,25 +44,19 @@ export default {
     uploadAuto: {
       type: Boolean,
       default: false
-    },
-    uploadErrors: {
-      type: Array,
-      default: null
     }
   },
   data: () => ({
     files: [],
-    attachments: [],
     loading: false,
-    // eslint-disable-next-line no-undef
-    action: appConfig.GrapgQlUrl + 'upload',
-    multiple: true,
     size: 1048576 * 100, // one file size limit - 100 Mb
-    chunk: true,
-    minSize: 512000,
-    maxActive: 1,
-    maxRetries: 10,
-    headers: { 'Upload-Type': 'single' }
+    headers: { 'Upload-Type': 'single' },
+    chunk: {
+      action: window.appConfig.GrapgQlUrl + 'upload',
+      minSize: 512000,
+      maxActive: 1,
+      maxRetries: 10
+    }
   }),
   computed: {
     fileSize () {
@@ -79,14 +67,6 @@ export default {
           default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
         }
       }
-    },
-    tableHeaders () {
-      return [
-        { text: this.$t('table.name'), value: 'name' },
-        { text: this.$t('table.size'), value: 'size', align: 'center' },
-        { text: this.$t('table.uploaded'), value: 'upload', align: 'center' },
-        { text: '', value: 'delete' }
-      ]
     },
     active () {
       return this.$refs.upload ? this.$refs.upload.active : ''
@@ -102,7 +82,7 @@ export default {
         if (newFiles.length) {
           this.startUpload()
         } else {
-          this.$emit('attach', [])
+          this.$emit('update:attachments', [])
         }
       }
     },
@@ -123,12 +103,11 @@ export default {
         // будет поочередный вывод предупреждений через setTimeout
         let timeOut = 0
         if (this.files.some((file, index) => {
-          timeOut = 300 * index
+          timeOut = 1000 * index
           return file.name === newFile.name
         })) {
           setTimeout(() => {
-            this.$vs.notify({
-              title: this.$t('notify.attachTitle'),
+            this.$store.commit('SET_NOTIFY', {
               text: this.$t('notify.fileAlreadyAdded', { file: newFile.name }),
               color: 'warning'
             })
@@ -145,22 +124,20 @@ export default {
         // File upload error
         if (newFile.error !== oldFile.error) {
           // notify
-          // this.$vs.notify({
-          //   title: this.$t('notify.attachTitle'),
-          //   text: this.$t('notify.uploadError', { file: newFile.name }),
-          //   color: 'danger'
-          // })
+          this.$store.commit('SET_NOTIFY', {
+            text: this.$t('notify.uploadError', { file: newFile.name }),
+            color: 'error'
+          })
         }
-
         // File upload success
         if (newFile && oldFile && newFile.success !== oldFile.success) {
           const fileName = newFile.file.name
           const filePath = newFile.response.fileName
-          this.attachments.push({ fileName, filePath })
+          this.addAttachments({ fileName, filePath })
+          this.files.shift()
         }
         // All files uploaded
         if (newFile && oldFile && this.$refs.upload && this.$refs.upload.uploaded) {
-          this.$emit('attach', this.attachments)
           this.$refs.upload.active = this.loading = false
         }
       }

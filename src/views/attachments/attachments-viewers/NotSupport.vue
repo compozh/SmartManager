@@ -1,15 +1,16 @@
 <template>
   <div class="not-support-container">
-    <i18n path="messages.notSupport" tag="div" class="mb-6 text-4xl">
-      <template v-slot:ext>
+    <i18n path="attachments.notSupport"
+          tag="span" class="mb-5">
+      <template #ext>
         <b>{{ ext }}</b>
       </template>
     </i18n>
     <v-btn :href="url"
-               color="primary"
-               type="border"
-               icon-pack="feather"
-               icon="icon-download">{{ $t('attachments.downloadFile') }}
+           outlined
+           color="primary">
+      <fa-icon icon="download" size="lg" type="fal" class="mr-3"/>
+      {{ $t('attachments.downloadFile') }}
     </v-btn>
   </div>
 </template>
@@ -39,10 +40,11 @@ export default {
 
   .not-support-container {
     display: flex;
+    flex-direction: column;
     height: 100%;
     justify-content: center;
     align-items: center;
-    font-size: 2.25rem;
+    font-size: 1.8rem;
     color: #dae1e7;
     text-align: center;
     background: #fbfbfb;

@@ -6,76 +6,49 @@
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
         <div class="side-header px-5 d-flex flex-wrap">
-          <div v-show="task.performer"
-               class="d-flex align-center py-3">
-            <v-avatar color="grey lighten-1"
-                      class="mr-3" size="40px">
-              <fa-icon v-if="!task.performerPhoto" icon="user" inverse/>
-              <v-img v-else :src="task.performerPhoto"/>
-            </v-avatar>
-            <div class="d-flex flex-column">
-              <span class="overline">{{ $t('tasks.performer') }}:</span>
-              <span class="body-2 indigo--text" style="flex: 0;">{{ task.performer }}</span>
-            </div>
-          </div>
-
-          <div class="d-flex align-center mx-5 py-3">
-            <v-divider vertical class="mr-5"></v-divider>
-            <div class="d-flex flex-column"
-                 style="white-space: nowrap">
-              <div class="overline">
-                <fa-icon icon="clock"
-                         class="text--secondary mr-1" size="lg"/>
-                {{ $t('tasks.deadline') }}:</div>
-              <div class="body-2 red--text text--darken-4">{{ task.dateplan }}</div>
-            </div>
-          </div>
-
-          <v-spacer></v-spacer>
-          <!-- TASK MENU - MORE BTN -->
-          <task-menu @taskDelete="taskDelete"/>
+          <!-- TASK PERFORMER -->
+          <task-performer v-model="taskData.performer"/>
+          <!-- TASK DATE PLAN -->
+          <task-date-plan v-model="taskData.datePlan"/>
+          <v-spacer/>
+          <!-- TASK SAVE BUTTON -->
+          <task-save-btn v-if="taskChanged"
+                         @save="updateTaskData"
+                         @cancel="initTaskData"/>
           <!-- TASK MANAGEMENT BUTTONS -->
-          <task-buttons class="py-3"
+          <task-buttons v-if="!taskChanged"
+                        class="py-3"
                         @changeStage="changeStage"
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
+          <!-- TASK MENU - MORE BTN -->
+          <task-menu @taskDelete="taskDelete"
+                     @changeStatus="changeStatus"/>
         </div>
         <v-divider/>
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
           <div class="d-flex align-baseline">
-            <h3 v-if="task.name" class="mb-3">
-              {{ task.name }}
-            </h3>
+            <!-- TASK NAME -->
+            <task-name v-model="taskData.name"/>
+
             <!-- TOGGLE PIN TASK BUTTON -->
             <icon-tooltip-btn btnClass="ml-auto"
                               :btnColor="task.isFavorite ? 'cyan' : 'grey'"
                               :btnClick="toggleTaskPin"
                               icon="star" iconSize="2x"
                               :iconType="task.isFavorite ? 'far' : 'fal'"
-                              tooltipPosition="right">
+                              tooltipPosition="top">
               {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
             </icon-tooltip-btn>
           </div>
-          <h3 v-if="task.name !== task.docCaption" class="font-weight-light mb-3">
-            {{ task.docCaption }}
-          </h3>
-          <div class="d-flex mb-3">
-            <div v-if="task.priority" class="deep-orange--text">
-              <fa-icon icon="exclamation-square" class="mr-2"/>
-              <span class="body-2">{{ $t('icons.priority') }}</span>
-            </div>
-            <v-divider v-if="task.priority" vertical class="mx-2"/>
-            <div v-if="task.myControl" class="red--text text--darken-4">
-              <fa-icon icon="eye" class="mr-2"/>
-              <span class="body-2">{{ $t('icons.control') }}</span>
-            </div>
-          </div>
+          <!-- TASK DOC CAPTION -->
+          <h3 v-if="task.name !== task.docCaption"
+              class="font-weight-light mb-3">
+            {{ task.docCaption }}</h3>
 
           <!-- FORMIO -->
           <div v-if="Object.keys(form).length" class="w-full">
-            <h3 v-if="form.NAME" class="font-weight-light mt-4">{{ form.NAME }}</h3>
-
             <formio-form-component class="formio"
                                    ref="form"
                                    :formCode="form.UNFORMIO"
@@ -83,42 +56,11 @@
           </div>
 
           <!-- HTML DESCRIPTION-->
-          <div v-if="htmlDescription" class="border-light mb-5">
-            <iframe seamless
-                    scrolling="no"
-                    width="100%"
-                    :height="iFrameHeight1"
-                    frameborder="0"
-                    :srcdoc="htmlDescription"
-                    @load="iFrameOnLoad(1, $event)"
-                    style="pointer-events: none"/>
-          </div>
-          <div v-if="docTextHtml" class="border-light mb-5">
-            <iframe seamless
-                    scrolling="no"
-                    width="100%"
-                    :height="iFrameHeight2"
-                    frameborder="0"
-                    :srcdoc="docTextHtml"
-                    @load="iFrameOnLoad(2, $event)"
-                    style="pointer-events: none"/>
-          </div>
-          <p v-if="task.name !== task.descript" class="mb-5">{{ task.descript }}</p>
-          <!-- PROGRESS-->
-          <div class="d-flex mb-5 align-center">
-            <v-chip small color="blue-grey"
-                    label text-color="white">
-              <fa-icon icon="hurricane" class="mr-3"/>
-              {{ typeName }}
-            </v-chip>
-            <v-divider vertical class="mx-2"></v-divider>
-            <v-chip small :color="taskStatus().color"
-                    label text-color="white">
-              <fa-icon :icon="taskStatus().icon" class="mr-3"/>
-              {{ taskStatus().text }}
-            </v-chip>
-          </div>
-          <v-divider></v-divider>
+          <task-description v-model="taskData.description"
+                            :docTextHtml="task.docTextHtml"/>
+          <!-- LABELS -->
+          <task-labels :task="task"/>
+          <v-divider/>
           <!-- TASK PARTICIPANTS -->
           <div v-if="participants.length"
                class="d-flex justify-space-between mt-5">
@@ -194,33 +136,50 @@
 </template>
 
 <script>
+import { date } from '@/mixins/dateTime'
+import { folders, tasks, attachments } from '@/mixins/units'
+import TaskPerformer from '@/views/tasks/task-edit/TaskPerformer'
+import TaskDatePlan from '@/views/tasks/task-edit/TaskDatePlan'
+import TaskSaveBtn from '@/views/tasks/task-edit/TaskSaveBtn'
+import TaskButtons from '@/views/tasks/task-details/TaskButtons'
+import TaskMenu from '@/views/tasks/task-details/TaskMenu'
+import TaskName from '@/views/tasks/task-edit/TaskName'
+import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
+import TaskLabels from '@/views/tasks/task-details/TaskLabels'
 import DataIterator from '@/views/tasks/task-list/DataIterator'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
 import Comments from '@/views/comments/Comments'
 import Diagram from '@/views/diagram/Diagram'
-import TaskMenu from '@/views/tasks/task-details/TaskMenu'
-import TaskButtons from '@/views/tasks/task-details/TaskButtons'
 import IconTooltipBtn from '@/components/IconTooltipBtn'
-import { folders, tasks, attachments } from '@/mixins/units'
 
 export default {
   name: 'TaskDetails',
   components: {
+    TaskPerformer,
+    TaskDatePlan,
+    TaskSaveBtn,
+    TaskButtons,
+    TaskMenu,
+    TaskName,
+    TaskDescription,
+    TaskLabels,
     DataIterator,
     AttachmentsList,
     AttachmentsViewer,
     Comments,
     Diagram,
-    TaskMenu,
-    TaskButtons,
     IconTooltipBtn
   },
-  mixins: [folders, tasks, attachments],
+  mixins: [folders, tasks, attachments, date],
   data: () => ({
     tab: 0,
-    iFrameHeight1: 250,
-    iFrameHeight2: 250
+    taskData: {
+      performer: {},
+      datePlan: '',
+      name: '',
+      description: ''
+    }
   }),
   computed: {
     form () {
@@ -238,20 +197,6 @@ export default {
         name: this.form.NAME
       }
     },
-    docTextHtml () {
-      return this.parseDescription(this.task.docTextHtml)
-    },
-    htmlDescription () {
-      return this.parseDescription(this.task.htmlDescript)
-    },
-    parseDescription () {
-      return description => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(description, 'text/html')
-        const body = doc.body.innerHTML.trim()
-        return body ? description : body
-      }
-    },
     baseTask () {
       return this.task.parentTask && this.task.parentTask.id
         ? this.task.parentTask
@@ -261,23 +206,6 @@ export default {
       return this.task.childTasks && this.task.childTasks.length
         ? this.task.childTasks
         : null
-    },
-    taskType () {
-      return this.task ? this.task.taskType : null
-    },
-    typeName () {
-      switch (this.taskType) {
-        case '':
-          return 'обычная задача/документ'
-        case 'AGREE':
-          return 'согласование'
-        case 'WORKFLOW':
-          return 'выполнение БП'
-        case 'EXTERNAL':
-          return 'внешняя задача'
-        default:
-          return 'unknown type'
-      }
     },
     tabItems () {
       const tabs = [
@@ -289,36 +217,6 @@ export default {
       }
       return tabs
     },
-    taskStatus () {
-      return () => {
-        switch (this.task.status) {
-          case '-':
-            return {
-              color: 'error',
-              icon: 'exclamation-circle',
-              text: this.$t('statuses.rejected')
-            }
-          case '+':
-            return {
-              color: 'success',
-              icon: 'check-circle',
-              text: this.$t('statuses.done')
-            }
-          case '#':
-            return {
-              color: 'yellow darken-2',
-              icon: 'file-search',
-              text: this.$t('statuses.review')
-            }
-          default:
-            return {
-              color: 'primary',
-              icon: 'recycle',
-              text: this.$t('statuses.inWork')
-            }
-        }
-      }
-    },
     participants () {
       return this.task.participants || []
     },
@@ -329,16 +227,30 @@ export default {
       return this.participants.filter(i => i.role === 'OBSERVER')
     }
   },
+  watch: {
+    '$route' (route) {
+      if (route.name === 'task-details') {
+        this.getTask()
+      }
+    }
+  },
   async created () {
     await this.getTask()
+    this.initTaskData()
     this.tab = this.attachments.length ? 0 : 1
     this.task.isRead || this.getFolders()
   },
   methods: {
-    iFrameOnLoad (frame, event) {
-      const iFrameBody = event.path[0].contentDocument.body
-      this['iFrameHeight' + frame] = Math.round(iFrameBody.scrollHeight * 1.2)
-      iFrameBody.style.fontFamily = '"Proxima Nova Regular", sans-serif'
+    initTaskData () {
+      this.taskData.performer = {
+        fio: this.task.performer,
+        userId: this.task.performerId,
+        photo: this.task.performerPhoto
+      }
+      this.taskData.datePlan = this.task.dateplan
+      this.taskData.name = this.task.name
+      this.taskData.description = this.task.htmlDescript
+      this.setTaskChanged(false)
     },
     async formSubmit () {
       if (this.$refs.form) {
@@ -346,13 +258,19 @@ export default {
         const taskId = this.taskId
         try {
           const result = await form.submit({ taskId })
-          if (result && result.success) {
+          if (result) {
+            if (result.success && result.successMessage) {
+              this.$store.commit('SET_NOTIFY', {
+                text: result.successMessage,
+                color: 'success'
+              })
+            } else if (result.errorMessage) {
+              this.$store.commit('SET_NOTIFY', {
+                text: result.errorMessage,
+                color: 'warning'
+              })
+            }
             return result
-          } else {
-            this.$store.commit('SET_NOTIFY', {
-              text: result.errorMessage || 'Form submit fail',
-              color: 'warning'
-            })
           }
         } catch (e) {
           if (e.length) {
@@ -418,21 +336,28 @@ export default {
       if (success) {
         await this.$router.push('/')
       }
+    },
+    async updateTaskData () {
+      this.setTaskChanged(false)
+      const taskData = {
+        id: this.taskId,
+        name: this.taskData.name,
+        performerId: this.taskData.performer.userId,
+        dateplan: this.formatDateTime(this.taskData.datePlan),
+        descript: this.taskData.description
+      }
+
+      await this.$store.dispatch('updateTask', taskData)
     }
   },
   beforeDestroy () {
+    this.setTaskChanged(false)
     this.resetAttachmentData()
   }
 }
 </script>
 
 <style scoped>
-
-  /* TODO: output border-light class to common styles */
-  .border-light {
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-  }
 
  .side-header {
    position: relative;
@@ -455,5 +380,10 @@ export default {
   .split >>> .gutter:hover {
     background: rgba(123, 104, 238, .3);
   }
+
+ .v-input >>> .v-input__slot,
+ .v-input >>> .v-text-field__details {
+   padding: 0 !important;
+ }
 
 </style>

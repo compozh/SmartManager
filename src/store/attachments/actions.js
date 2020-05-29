@@ -1,13 +1,9 @@
 import { SmartManagerApi as api } from '@/api/smartManagerApi'
-
-const startLoading = () => ({})
-const stopLoading = () => ({})
-
-const notify = (type, title, text) => ({})
+import i18n from '@/i18n'
 
 export default {
   async getFileDetails ({ commit, rootState }, { fileId, fileExt, id: taskOrCaseId }) {
-    startLoading()
+    // startLoading()
     try {
       const result = await api.getFileDetailsFromGql(fileId, fileExt)
       const fileDetails = JSON.parse(result.data.smtasks.fileDetails)
@@ -19,99 +15,97 @@ export default {
         // })
       }
       commit('SET_ATTACHMENT_DETAILS', { fileId, fileDetails, taskOrCaseId, rootState })
-      stopLoading()
+      // stopLoading()
       return fileDetails
     } catch (e) {
-      stopLoading()
+      // stopLoading()
       console.log(e.message)
-      notify('danger', 'taskTitle', 'taskError')
+      // notify('danger', 'taskTitle', 'taskError')
     }
   },
   async getAttachmentTypes ({ commit }, params) {
     const paramsJson = JSON.stringify(params)
-    startLoading()
+    // startLoading()
     try {
       const response = await api.getAttachmentTypesFromGql(paramsJson)
-      stopLoading()
+      // stopLoading()
       const result = JSON.parse(response.data.smtasks.attachmentTypes)
       commit('SET_ATTACHMENT_TYPES', result)
     } catch (e) {
-      stopLoading()
+      // stopLoading()
       console.log(e.message)
-      notify('danger', 'commentsTitle', 'commentAddError')
+      // notify('danger', 'commentsTitle', 'commentAddError')
     }
   },
-  async addAttachment ({ dispatch }, payload) {
-    startLoading()
+  async addAttachments ({ dispatch, commit }, payload) {
     const attachments = JSON.stringify(payload.attachments)
     const params = JSON.stringify(payload.params)
     try {
       const response = await api.addAttachmentsInGql(attachments, params)
-      stopLoading()
       // Returns results list
       const results = response.data.smtasksMutation.addAttachments
       results.forEach(result => {
         if (result.success) {
-          // vs.notify({
-          //   title: result.name,
-          //   text: i18n.t('notify.attachAddSuccess'),
-          //   color: 'success'
-          // })
-        } else if (result.errorMessage) {
-          // vs.notify({
-          //   title: result.name,
-          //   text: result.errorMessage,
-          //   color: 'warning'
-          // })
+          commit('SET_NOTIFY', {
+            text: result.successMessage || i18n.t('notify.attachAddSuccess'),
+            color: 'success'
+          })
         } else {
-          notify('warning', 'attachTitle', 'attachAddFail')
+          commit('SET_NOTIFY', {
+            text: result.errorMessage || i18n.t('notify.attachAddFail'),
+            color: 'warning'
+          })
         }
       })
-      await dispatch('updateInfo', {
-        type: payload.params.type,
-        id: payload.params.id,
-        loading: true
+      await dispatch('getTaskDetails', {
+        taskId: payload.params.id,
+        preLoader: false
       })
       return results
-    } catch (e) {
-      stopLoading()
-      console.log(e.message)
-      notify('danger', 'attachTitle', 'attachAddError')
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.attachAddError'),
+        color: 'error'
+      })
     }
   },
-  async attachmentDelete ({ dispatch }, { fileId, taskId, caseId }) {
-    startLoading()
+  async attachmentDelete ({ dispatch, commit }, { fileId, taskId, caseId }) {
+    commit('START_PRELOADER', 'attachmentDelete')
     try {
       const response = await api.attachmentDeleteInGql(fileId)
-      stopLoading()
       const result = response.data.smtasksMutation.attachmentDelete
       if (result.success) {
         await dispatch('updateAfterDelete', { taskId, caseId })
-        notify('success', 'attachTitle', 'attachDelSuccess')
-      } else if (result.errorMessage) {
-        // vs.notify({
-        //   title: i18n.t('notify.attachTitle'),
-        //   text: result.errorMessage,
-        //   color: 'warning'
-        // })
+        commit('SET_NOTIFY', {
+          text: result.successMessage || i18n.t('notify.attachDelSuccess'),
+          color: 'success'
+        })
       } else {
-        notify('warning', 'attachTitle', 'attachDelFail')
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || i18n.t('notify.attachDelFail'),
+          color: 'warning'
+        })
       }
       return result
-    } catch (e) {
-      stopLoading()
-      console.log(e.message)
-      notify('danger', 'attachTitle', 'attachDelError')
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.attachDelError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'attachmentDelete')
     }
   },
-  async updateAfterDelete ({ dispatch }, { taskId, caseId }) {
+  async updateAfterDelete ({ dispatch, commit }, { taskId, caseId }) {
     // Update task or case after delete if it needs
     if (taskId || caseId) {
-      startLoading()
+      commit('START_PRELOADER', 'updateAfterDelete')
       const id = taskId ? { taskId } : { caseId }
       const action = taskId ? 'getTaskDetails' : 'getCaseDetails'
       await dispatch(action, id)
-      stopLoading()
+      commit('STOP_PRELOADER', 'updateAfterDelete')
     }
   }
 }

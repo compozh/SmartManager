@@ -3,9 +3,10 @@
                    items-per-page.sync="itemsPerPage"
                    :page="page"
                    :search="search"
-                   :hide-default-footer="hideFooter">
+                   :hide-default-footer="hideFooter"
+                   :footer-props="{itemsPerPageText: $t('tasks.perPage')}">
 
-    <template v-slot:default="props">
+    <template #default="props">
       <v-row>
         <v-col v-for="task in props.items"
           :key="task.id" cols="12" class="py-1">
@@ -13,6 +14,11 @@
         </v-col>
       </v-row>
     </template>
+
+    <template #no-data>
+      <div class="primary--text body-2 ml-3 mt-3">{{ $t('tasks.noTasks') }}</div>
+    </template>
+
   </v-data-iterator>
 </template>
 
@@ -27,11 +33,8 @@ export default {
   props: ['tasks', 'hideFooter'],
   data: () => ({
     search: '',
-    filter: {},
-    sortDesc: false,
     page: 1,
-    itemsPerPage: 1,
-    sortBy: 'name'
+    itemsPerPage: 1
   }),
   computed: {
     numberOfPages () {
@@ -60,6 +63,7 @@ export default {
   /* Set pagination to left */
   .v-data-iterator >>> .v-data-footer {
     justify-content: flex-start;
+    font-size: 14px;
   }
 
 </style>

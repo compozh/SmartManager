@@ -8,7 +8,7 @@ export default {
       const response = await api.getFoldersFromGql()
       const result = response.data.smtasks.folders
       const folders = JSON.parse(result)
-      // Change active folder code and name
+      // Supplement task folders
       folders.taskFolders = folders.taskFolders.map(folder => {
         if (folder.Code === '') {
           folder.Code = 'active'
@@ -16,6 +16,17 @@ export default {
           folder.Name = i18n.t('folders.active')
         } else {
           folder.Parent = 'active'
+        }
+        return folder
+      })
+      // Supplement case folders
+      folders.caseFolders = folders.caseFolders.map(folder => {
+        if (folder.Code === 'cases') {
+          folder.Code = 'all'
+          folder.Parent = ''
+        } else {
+          folder.Code = folder.FolderId
+          folder.Parent = 'all'
         }
         return folder
       })

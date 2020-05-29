@@ -9,6 +9,7 @@
     "collapseSideBar": "Згорнути бічну панель"
   },
   "sideBar":{
+    "toHome": "На головну",
     "tasksBtn": "Задачі",
     "casesBtn": "Кейси",
     "forceBpm": "Force BPM"
@@ -77,7 +78,13 @@
     "role": "Роль",
     "source": "Джерело",
     "actualDate": "Фактична дата",
-    "hasOrig": "Нявність вкладень"
+    "hasOrig": "Нявність вкладень",
+    "simple": "Звичайна задача/документ",
+    "agree": "Погодження",
+    "workflow": "Виконання БП",
+    "external": "Зовнішня задача",
+    "unknown": "Невідомий тип",
+    "perPage": "Задач на сторінці"
   },
   "cases": {
     "newCase": "Новий кейс",
@@ -179,7 +186,8 @@
     "rejected": "Відхилено",
     "done": "Виконано",
     "completed": "Завершено",
-    "review": "На погодженні"
+    "review": "На погодженні",
+    "undefined": "Статус не визначено"
   },
   "roles": {
     "responsible": "Відповідальний",
@@ -304,8 +312,10 @@
     "title": "Вхід",
     "welcome": "Ласкаво просимо, будь ласка, увійдіть під своїм обліковим записом.",
     "rememberMe": "Запам'ятати мене",
-    "placeholder": "Логін",
+    "login": "Логін",
+    "loginPlaceholder": "Введіть логін...",
     "password": "Пароль",
+    "passwordPlaceholder": "Введіть пароль...",
     "subTitle": "Вхід в систему",
     "loggedIn": "Ви вже увійшли в систему!",
     "loginSuccess": "Вхід успішно виконано",
@@ -317,6 +327,7 @@
     "name": "Назва",
     "version": "Версія",
     "startProcess": "Запустити процес",
+    "perPage": "Процесів на сторінці",
     "errors": {
       "processNotPassed": "Не передано код процесу",
       "undefinedFormOfProcess": "Відсутнє визначення форми процесу",
