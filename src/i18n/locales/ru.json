@@ -154,7 +154,11 @@
     "downloadAttachment": "Загрузить",
     "attachmentVersions": "Версии",
     "attachmentEds": "Електронные подписи",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "zoomIn": "Приблизить",
+    "zoomOut": "Отдалить",
+    "zoomReset": "Восстановить масштаб",
+    "toggleFullscreen": "Переключить полноэкранный режим"
   },
   "icons": {
     "priority": "Приоритет",

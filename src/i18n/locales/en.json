@@ -154,7 +154,11 @@
     "downloadAttachment": "Download",
     "attachmentVersions": "Versions",
     "attachmentEds": "EDS",
-    "close": "Close"
+    "close": "Close",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomReset": "Reset zoom",
+    "toggleFullscreen": "Toggle full screen mode"
   },
   "icons": {
     "priority": "Priority",
