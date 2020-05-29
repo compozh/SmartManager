@@ -52,6 +52,9 @@ export const users = {
         await this.$store.dispatch('getUsers')
       }
       this.userListLoading = false
+    },
+    addUser (user) {
+      this.$store.commit('ADD_USER', user)
     }
   }
 }

@@ -48,6 +48,13 @@ export default {
     taskStatus () {
       return () => {
         switch (this.task.status) {
+          case '':
+          case '*':
+            return {
+              color: 'primary',
+              icon: 'recycle',
+              text: this.$t('statuses.inWork')
+            }
           case '-':
             return {
               color: 'error',
@@ -68,9 +75,9 @@ export default {
             }
           default:
             return {
-              color: 'primary',
-              icon: 'recycle',
-              text: this.$t('statuses.inWork')
+              color: 'grey',
+              icon: 'times',
+              text: this.$t('statuses.undefined')
             }
         }
       }

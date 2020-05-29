@@ -6,7 +6,7 @@
                    :hide-default-footer="hideFooter"
                    :footer-props="{itemsPerPageText: $t('tasks.perPage')}">
 
-    <template v-slot:default="props">
+    <template #default="props">
       <v-row>
         <v-col v-for="task in props.items"
           :key="task.id" cols="12" class="py-1">
@@ -14,6 +14,11 @@
         </v-col>
       </v-row>
     </template>
+
+    <template #no-data>
+      <div class="primary--text body-2 ml-3 mt-3">{{ $t('tasks.noTasks') }}</div>
+    </template>
+
   </v-data-iterator>
 </template>
 
