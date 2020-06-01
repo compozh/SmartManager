@@ -59,7 +59,10 @@
                        dark depressed
                        color="grey" class="mr-2"
                        style="border: 1px dashed;">
-                  <fa-icon icon="user" type="fal" size="lg"/>
+                  <v-avatar v-if="performer && performer.photo" size="32">
+                    <v-img :src="performer.photo"/>
+                  </v-avatar>
+                  <fa-icon v-else icon="user" type="fal" size="lg"/>
                 </v-btn>
               </template>
             </task-autocomplete >
