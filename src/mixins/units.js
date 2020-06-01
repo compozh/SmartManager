@@ -181,6 +181,9 @@ export const tasks = {
         }
       }
     },
+    setTaskEditable (isEditable) {
+      this.$store.commit('SET_TASK_EDITABLE', isEditable)
+    },
     setTaskChanged (isChanged) {
       this.$store.commit('SET_TASK_CHANGED', isChanged)
     }

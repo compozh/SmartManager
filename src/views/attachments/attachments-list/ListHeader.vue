@@ -2,7 +2,8 @@
   <div class="d-flex align-center font-weight-light">
     <fa-icon icon="paperclip" class="mr-3" size="lg"/>
     <span class="mr-3">{{ $t('tabs.attachments').toUpperCase() }}</span>
-    <v-btn outlined x-small
+    <v-btn v-if="!externalTaskCamunda"
+           outlined x-small
            color="primary"
            class="add-btn pa-0"
            @click="attachmentTypes.length > 1 ? showTypeList = true : ''">

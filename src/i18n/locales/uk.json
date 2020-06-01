@@ -2,7 +2,7 @@
   "search": "Пошук",
   "rights": "Всі права захищені",
   "user": {
-    "delegatedRights": "Делеговані права"
+    "delegatedRights": "Використати права"
   },
   "navBar":{
     "expandSideBar": "Розгорнути бічну панель",
@@ -54,6 +54,7 @@
     "related": "Зв'язані задачі",
     "noRelatedTasks": "Не має зв'язаних задач",
     "base": "Базова задача",
+    "parentTasks": "Батьківські задачі",
     "subTasks": "Підзадачі",
     "noSubTasks": "Не має підзадач",
     "done": "Завершено",
@@ -65,6 +66,8 @@
     "handled": "Оброблені помічником",
     "controler": "Контроль",
     "coexecutor": "Співвиконавець",
+    "addCoexecutor": "Додати співвиконавця...",
+    "addNotify": "Поставити до відома...",
     "executor": "Виконавець",
     "initiator": "Ініціатор",
     "inform": "До відома",
@@ -154,7 +157,11 @@
     "downloadAttachment": "Завантажити",
     "attachmentVersions": "Версії",
     "attachmentEds": "Електронні підписи",
-    "close": "Закрити"
+    "close": "Закрити",
+    "zoomIn": "Збільшити масштаб",
+    "zoomOut": "Зменшити масштаб",
+    "zoomReset": "Відновити масштаб",
+    "toggleFullscreen": "Перемикнути повноекранний режим"
   },
   "icons": {
     "priority": "Пріоритет",

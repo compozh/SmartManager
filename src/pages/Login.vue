@@ -64,7 +64,7 @@ export default {
     checkbox_remember_me: false
   }),
   created () {
-    // this.logout()
+    this.logout()
   }
 }
 </script>

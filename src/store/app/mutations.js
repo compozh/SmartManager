@@ -30,7 +30,7 @@ export default {
     state.activeZone = zone
   },
   SET_USERS (state, users) {
-    state.users = users
+    state.users = [...state.users, ...users]
   },
   ADD_USER (state, user) {
     state.users.push(user)

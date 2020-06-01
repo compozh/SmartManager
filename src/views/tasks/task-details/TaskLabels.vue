@@ -1,24 +1,25 @@
 <template>
   <div class="d-flex align-center flex-wrap mt-3">
-    <div class="mb-3 mr-2">
+    <div v-if="task.taskType !== 'EXTERNAL' && task.status !== ''"
+         class="d-flex mb-3 mr-2">
       <v-chip small label
               text-color="white"
               :color="taskStatus().color">
         <fa-icon :icon="taskStatus().icon" class="mr-3"/>
         {{ taskStatus().text }}
       </v-chip>
+      <v-divider vertical class="ml-2"/>
     </div>
     <div v-if="task.priority" class="d-flex mb-3 mr-2">
-      <v-divider vertical class="mr-2"/>
       <v-chip small label
               color="warning"
               text-color="white">
         <fa-icon icon="exclamation-square" class="mr-3"/>
         {{ $t('icons.priority') }}
       </v-chip>
+      <v-divider vertical class="ml-2"/>
     </div>
     <div v-if="task.myControl" class="d-flex mb-3 mr-2">
-      <v-divider vertical class="mr-2"/>
       <v-chip small label
               color="red darken-4"
               text-color="white">
@@ -48,7 +49,6 @@ export default {
     taskStatus () {
       return () => {
         switch (this.task.status) {
-          case '':
           case '*':
             return {
               color: 'primary',

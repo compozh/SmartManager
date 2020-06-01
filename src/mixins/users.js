@@ -39,7 +39,7 @@ export const users = {
   }),
   computed: {
     users () {
-      return this.$store.state.app.users || []
+      return this.$store.state.app.users
     }
   },
   created () {

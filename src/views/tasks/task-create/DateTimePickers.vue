@@ -85,9 +85,7 @@ export default {
   },
   computed: {
     dateplan () {
-      const formatDate = this.parseDate(this.date)
-        .format('YYYY-MM-DD')
-      return `${formatDate} ${this.time}`
+      return `${this.date} ${this.time}`
     }
   },
   methods: {

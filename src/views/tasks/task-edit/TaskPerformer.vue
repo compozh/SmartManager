@@ -11,6 +11,7 @@
                       :value="performer"
                       @input="$emit('input', $event)"
                       :items="users"
+                      :readonly="!taskEditable"
                       append-icon
                       solo flat dense
                       hide-details
@@ -39,6 +40,11 @@ export default {
     needInitValue: true,
     initTaskPerformerId: ''
   }),
+  computed: {
+    taskEditable () {
+      return this.$store.state.tasks.taskEditable
+    }
+  },
   watch: {
     performer (performer, oldPerformer) {
       const userId = performer.userId

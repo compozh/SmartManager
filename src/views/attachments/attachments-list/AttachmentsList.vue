@@ -27,7 +27,6 @@
     </files-upload>
 
     <perfect-scrollbar v-show="attachments.length"
-                       class="pr-3"
                        style="max-height: 300px;">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
         <v-chip v-for="item in attachments"

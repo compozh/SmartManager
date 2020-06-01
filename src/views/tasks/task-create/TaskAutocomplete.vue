@@ -17,13 +17,9 @@
       <v-chip v-bind="data.attrs"
               :input-value="data.selected"
               outlined close
+              class="ml-n2"
               @click="data.select"
               @click:close="$emit('remove', data.item)">
-        <v-avatar left color="primary">
-          <fa-icon v-if="!data.item.photo" icon="user"
-                   size="xs" inverse/>
-          <v-img v-else :src="data.item.photo"/>
-        </v-avatar>
         <span class="text-truncate">{{ data.item.fio }}</span>
       </v-chip>
     </template>
@@ -54,7 +50,7 @@ export default {
   props: {
     value: {
       type: [Object, Array],
-      required: true
+      default: () => {}
     },
     items: {
       type: Array,
