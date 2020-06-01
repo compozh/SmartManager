@@ -9,5 +9,5 @@ export default {
   notify: null,
   helperExec: true,
   activeZone: null,
-  users: null
+  users: []
 }
