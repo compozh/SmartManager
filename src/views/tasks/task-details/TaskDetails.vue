@@ -1,7 +1,8 @@
 <template>
     <Split style="flex-basis: 0; border-radius: 5px;"
            class="flex-grow-1 overflow-hidden white"
-          :gutter-size="4">
+          :gutter-size="4"
+           :direction="$vuetify.breakpoint.smAndDown ? 'vertical' : 'horizontal'">
       <!-- LEFT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
@@ -31,7 +32,6 @@
           <div class="d-flex align-baseline">
             <!-- TASK NAME -->
             <task-name v-model="taskData.name"/>
-
             <!-- TOGGLE PIN TASK BUTTON -->
             <icon-tooltip-btn btnClass="ml-auto"
                               :btnColor="task.isFavorite ? 'cyan' : 'grey'"
@@ -54,7 +54,6 @@
                                    :formCode="form.UNFORMIO"
                                    :formDefinition="formDefinition"/>
           </div>
-
           <!-- HTML DESCRIPTION-->
           <task-description v-model="taskData.description"
                             :docTextHtml="task.docTextHtml"/>
@@ -62,55 +61,30 @@
           <task-labels :task="task"/>
           <v-divider/>
           <!-- TASK PARTICIPANTS -->
-          <div v-if="participants.length"
-               class="d-flex justify-space-between mt-5">
-            <div v-if="coExecutors.length">
-              <fa-icon icon="users" class="mr-3" size="lg"/>
-              <span>{{ $t('roles.coExecutors').toUpperCase() }}</span>
-              <div class="py-2 d-flex flex-wrap">
-                <v-chip v-for="participant in coExecutors"
-                        :key="participant.userId"
-                        class="my-2 mr-2" small pill>
-                  <v-avatar left>
-                    <fa-icon icon="user-circle" size="lg"/>
-                  </v-avatar>
-                  {{ participant.name }}
-                </v-chip>
-              </div>
-            </div>
-            <div v-if="observers.length">
-              <fa-icon icon="concierge-bell" class="mr-3" size="lg"/>
-              <span>{{ $t('roles.notify').toUpperCase() }}</span>
-              <div class="py-2 d-flex flex-wrap">
-                <v-chip v-for="participant in observers"
-                        :key="participant.userId"
-                        class="my-2 ml-2" small pill>
-                  <v-avatar left>
-                    <fa-icon icon="user-circle" size="lg"/>
-                  </v-avatar>
-                  {{ participant.name }}
-                </v-chip>
-              </div>
-            </div>
-          </div>
+          <task-participants v-if="!externalTaskCamunda"
+                             v-model="taskData.participants"/>
           <!-- TASK ATTACHMENTS -->
-          <attachments-list class="my-5" @input="tab = 0"/>
+          <attachments-list v-if="!externalTaskCamunda"
+                            class="my-5" @input="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
-            <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
-            <span>{{ $t('tasks.base').toUpperCase() }}</span>
+            <fa-icon icon="sitemap" class="mr-3" size="lg"/>
+            <span class="font-weight-light">
+              {{ $t('tasks.base').toUpperCase() }}</span>
             <data-iterator :tasks="[baseTask]" class="mt-3" hide-footer/>
           </div>
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
-            <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
-            <span>PARENT TASKS</span>
+            <fa-icon icon="sitemap" class="mr-3" size="lg"/>
+            <span class="font-weight-light">
+              {{ $t('tasks.parentTasks').toUpperCase() }}</span>
             <data-iterator :tasks="task.parentTasks" class="mt-3" hide-footer/>
           </div>
           <!-- SUB TASKS-->
           <div v-if="childTasks" class="my-5">
-            <fa-icon icon="tasks-alt" class="mr-3" size="lg"/>
-            <span>{{ $t('tasks.subTasks').toUpperCase() }}</span>
+            <fa-icon icon="folder-tree" class="mr-3" size="lg"/>
+            <span class="font-weight-light">
+              {{ $t('tasks.subTasks').toUpperCase() }}</span>
             <data-iterator :tasks="childTasks" class="mt-3" hide-footer/>
           </div>
         </perfect-scrollbar>
@@ -124,13 +98,15 @@
           </v-tab>
         </v-tabs>
         <v-divider/>
-        <v-tabs-items v-model="tab" class="fill-height">
-          <v-tab-item v-for="tab in tabItems"
-                      :key="tab.name"
-                      class="fill-height">
-            <component :is="tab.component"/>
-          </v-tab-item>
-        </v-tabs-items>
+        <perfect-scrollbar class="fill-height">
+          <v-tabs-items v-model="tab" class="fill-height">
+            <v-tab-item v-for="tab in tabItems"
+                        :key="tab.name"
+                        class="fill-height">
+              <component :is="tab.component"/>
+            </v-tab-item>
+          </v-tabs-items>
+        </perfect-scrollbar>
       </SplitArea>
     </Split>
 </template>
@@ -146,6 +122,7 @@ import TaskMenu from '@/views/tasks/task-details/TaskMenu'
 import TaskName from '@/views/tasks/task-edit/TaskName'
 import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
 import TaskLabels from '@/views/tasks/task-details/TaskLabels'
+import TaskParticipants from '@/views/tasks/task-edit/TaskParticipants'
 import DataIterator from '@/views/tasks/task-list/DataIterator'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
@@ -164,6 +141,7 @@ export default {
     TaskName,
     TaskDescription,
     TaskLabels,
+    TaskParticipants,
     DataIterator,
     AttachmentsList,
     AttachmentsViewer,
@@ -178,7 +156,8 @@ export default {
       performer: {},
       datePlan: '',
       name: '',
-      description: ''
+      description: '',
+      participants: []
     }
   }),
   computed: {
@@ -209,22 +188,14 @@ export default {
     },
     tabItems () {
       const tabs = [
-        { name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' },
         { name: this.$t('tabs.comments'), component: 'comments', icon: 'comment-alt-dots' }
       ]
       if (this.externalTaskCamunda) {
         tabs.push({ name: this.$t('tabs.diagram'), component: 'diagram', icon: 'project-diagram' })
+      } else {
+        tabs.unshift({ name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' })
       }
       return tabs
-    },
-    participants () {
-      return this.task.participants || []
-    },
-    coExecutors () {
-      return this.participants.filter(i => i.role === 'COEXECUTOR')
-    },
-    observers () {
-      return this.participants.filter(i => i.role === 'OBSERVER')
     }
   },
   watch: {
@@ -236,6 +207,7 @@ export default {
   },
   async created () {
     await this.getTask()
+    this.setTaskEditable(!this.externalTaskCamunda)
     this.initTaskData()
     this.tab = this.attachments.length ? 0 : 1
     this.task.isRead || this.getFolders()
@@ -250,6 +222,7 @@ export default {
       this.taskData.datePlan = this.task.dateplan
       this.taskData.name = this.task.name
       this.taskData.description = this.task.htmlDescript
+      this.taskData.participants = this.task.participants || []
       this.setTaskChanged(false)
     },
     async formSubmit () {
