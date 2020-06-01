@@ -61,10 +61,10 @@
           <task-labels :task="task"/>
           <v-divider/>
           <!-- TASK PARTICIPANTS -->
-          <task-participants v-if="!externalTaskCamunda"
-                             v-model="taskData.participants"/>
+<!--          <task-participants v-if="!externalTaskCamunda"-->
+<!--                             v-model="taskData.participants"/>-->
           <!-- TASK ATTACHMENTS -->
-          <attachments-list v-if="!externalTaskCamunda"
+          <attachments-list v-if="!externalTaskCamunda || attachments.length"
                             class="my-5" @input="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
@@ -190,10 +190,11 @@ export default {
       const tabs = [
         { name: this.$t('tabs.comments'), component: 'comments', icon: 'comment-alt-dots' }
       ]
+      if (this.attachments.length) {
+        tabs.unshift({ name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' })
+      }
       if (this.externalTaskCamunda) {
         tabs.push({ name: this.$t('tabs.diagram'), component: 'diagram', icon: 'project-diagram' })
-      } else {
-        tabs.unshift({ name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' })
       }
       return tabs
     }
@@ -292,7 +293,7 @@ export default {
     async executeExternalTask () {
       const status = '+' // Task complete
       const result = await this.formSubmit()
-      if (result) {
+      if (result.success) {
         const completeParams = result.submission
           ? JSON.stringify(result.submission) : null
         this.changeStatus(status, completeParams)
