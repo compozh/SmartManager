@@ -2,7 +2,7 @@
   "search": "Пошук",
   "rights": "Всі права захищені",
   "user": {
-    "delegatedRights": "Делеговані права"
+    "delegatedRights": "Використати права"
   },
   "navBar":{
     "expandSideBar": "Розгорнути бічну панель",
@@ -54,6 +54,7 @@
     "related": "Зв'язані задачі",
     "noRelatedTasks": "Не має зв'язаних задач",
     "base": "Базова задача",
+    "parentTasks": "Батьківські задачі",
     "subTasks": "Підзадачі",
     "noSubTasks": "Не має підзадач",
     "done": "Завершено",
@@ -65,6 +66,8 @@
     "handled": "Оброблені помічником",
     "controler": "Контроль",
     "coexecutor": "Співвиконавець",
+    "addCoexecutor": "Додати співвиконавця...",
+    "addNotify": "Поставити до відома...",
     "executor": "Виконавець",
     "initiator": "Ініціатор",
     "inform": "До відома",
