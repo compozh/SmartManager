@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-center flex-wrap mt-3">
-    <div class="mb-3 mr-2">
+    <div class="mb-3 mr-2" v-if="task.taskType !== 'EXTERNAL'">
       <v-chip small label
               text-color="white"
               :color="taskStatus().color">

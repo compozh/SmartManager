@@ -1,5 +1,6 @@
 <template>
   <v-textarea ref="taskNameField"
+              :readonly="!taskEditable"
               v-model="name"
               @blur="checkTaskName"
               :rules="[v => !!v || this.$t('validate.required')]"
@@ -48,6 +49,9 @@ export default {
           this.$emit('input', name)
         }
       }
+    },
+    taskEditable () {
+      return this.$store.state.tasks.taskEditable
     },
     taskChanged () {
       return this.$store.state.tasks.taskChanged

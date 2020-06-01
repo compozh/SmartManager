@@ -20,6 +20,7 @@
                           class="body-2 red--text text--darken-4"/>
           </template>
           <v-date-picker v-model="date"
+                         :readonly="!taskEditable"
                          @change="dateTimeChanged"
                          first-day-of-week="1"
                          no-title
@@ -40,6 +41,7 @@
                           class="body-2 red--text text--darken-4"/>
           </template>
           <v-time-picker v-model="time"
+                         :readonly="!taskEditable"
                          @change="dateTimeChanged"
                          scrollable format="24hr"/>
         </v-menu>
@@ -93,6 +95,9 @@ export default {
           this.$emit('input', `${this.textFieldDate} ${this.inputTime}`)
         }
       }
+    },
+    taskEditable () {
+      return this.$store.state.tasks.taskEditable
     }
   },
   methods: {

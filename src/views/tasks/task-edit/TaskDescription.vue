@@ -1,8 +1,10 @@
 <template>
   <div>
-    <quill-editor v-model="htmlDescription"
+    <quill-editor ref="editor"
+                  v-if="taskEditable || htmlDescription"
+                  :disabled="!taskEditable"
+                  v-model="htmlDescription"
                   :options="editorOption"
-                  ref="editor"
                   class="mb-5"/>
     <div v-if="docTextHtml" class="border-light">
       <iframe seamless
@@ -74,6 +76,9 @@ export default {
         placeholder: this.$t('tasks.description') + '...'
       }
     },
+    taskEditable () {
+      return this.$store.state.tasks.taskEditable
+    },
     taskChanged () {
       return this.$store.state.tasks.taskChanged
     }
@@ -94,19 +99,21 @@ export default {
     }
   },
   mounted () {
-    const quill = this.$refs.editor.quill
-    // console.log('getFormat', quill.getFormat())
-    this.$refs.editor.quill.blur()
-    quill.on('text-change', (delta, oldDelta, source) => {
-      if (source === 'api') {
-        // console.log('An API call triggered this change.')
-      } else if (source === 'user') {
-        console.log('A user action triggered this change.')
-      }
-      // console.log('delta', delta)
-      // console.log('oldDelta', oldDelta)
-    })
-    // console.log(this.$refs.editor.quill)
+    if (this.taskEditable) {
+      const quill = this.$refs.editor.quill
+      // console.log('getFormat', quill.getFormat())
+      this.$refs.editor.quill.blur()
+      quill.on('text-change', (delta, oldDelta, source) => {
+        if (source === 'api') {
+          // console.log('An API call triggered this change.')
+        } else if (source === 'user') {
+          console.log('A user action triggered this change.')
+        }
+        // console.log('delta', delta)
+        // console.log('oldDelta', oldDelta)
+      })
+      // console.log(this.$refs.editor.quill)
+    }
   },
   methods: {
     iFrameOnLoad (frame) {
