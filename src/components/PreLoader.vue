@@ -1,5 +1,5 @@
 <template>
-  <v-overlay :value="preLoader" z-index="7">
+  <v-overlay :value="preLoader" z-index="203">
     <div class="lds-spinner">
       <div v-for="i in 12" :key="i"></div>
     </div>
