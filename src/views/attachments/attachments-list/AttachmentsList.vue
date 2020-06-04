@@ -142,4 +142,8 @@ export default {
 
 <style scoped>
 
+  .v-data-table >>> .v-data-table__wrapper {
+    overflow-x: hidden;
+  }
+
 </style>
