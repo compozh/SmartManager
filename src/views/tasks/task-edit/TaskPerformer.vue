@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center py-3">
+  <div class="d-flex align-center py-3 mr-5">
     <v-avatar color="grey lighten-1"
               class="mr-3" size="40px">
       <fa-icon v-if="!performer.photo" icon="user" inverse/>
