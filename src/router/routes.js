@@ -9,22 +9,24 @@ export default [
       {
         path: '/',
         name: 'home',
-        redirect: 'tasks/active'
+        redirect: '/tasks/active'
       },
       {
         path: '/tasks/:folderId',
         name: 'task-list',
-        component: () => import('@/views/tasks/task-list/TaskList.vue')
-      },
-      {
-        path: '/task/create',
-        name: 'task-create',
-        component: () => import('@/views/tasks/task-create/TaskForm.vue')
+        component: () => import('@/views/tasks/task-list/TaskList.vue'),
+        children: [
+          {
+            path: ':taskId',
+            name: 'task-details',
+            component: () => import('@/views/tasks/task-details/TaskDetails.vue')
+          }
+        ]
       },
       {
         path: '/task/:taskId',
-        name: 'task-details',
-        component: () => import('@/views/tasks/task-details/TaskDetails.vue')
+        name: 'task',
+        redirect: '/tasks/active/:taskId'
       },
       {
         path: '/cases/:folderId',

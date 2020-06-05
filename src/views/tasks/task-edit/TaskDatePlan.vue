@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex align-center mx-5 py-3">
-    <v-divider vertical class="mr-5"></v-divider>
+  <div class="d-flex align-center mr-5 py-3">
+    <v-divider vertical class="mr-5"/>
     <div class="d-flex flex-column"
          style="white-space: nowrap">
       <div class="overline">
@@ -13,7 +13,8 @@
                 transition="scale-transition"
                 offset-y min-width="200px">
           <template v-slot:activator="{ on }">
-            <v-text-field id="date" v-on="on"
+            <v-text-field id="date"
+                          v-on="taskEditable ? on : ''"
                           :value="textFieldDate"
                           readonly hide-details
                           solo flat dense
@@ -34,7 +35,8 @@
                 transition="scale-transition"
                 offset-y>
           <template v-slot:activator="{ on }">
-            <v-text-field id="time" v-on="on"
+            <v-text-field id="time"
+                          v-on="taskEditable ? on : ''"
                           :value="time"
                           readonly hide-details
                           solo flat dense

@@ -5,6 +5,9 @@ export default {
   SET_TASK_DETAILS (state, task) {
     state.taskDetails = Object.assign({}, state.taskDetails, task)
   },
+  SHOW_TASK_DIALOG (state, toShow) {
+    state.taskDialog = toShow
+  },
   SET_TASK_EDITABLE (state, isEditable) {
     state.taskEditable = isEditable
   },

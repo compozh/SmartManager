@@ -161,6 +161,17 @@ export const tasks = {
         this.internalTaskInWork &&
         this.userId === this.task.declarerId
     },
+    taskDialog: {
+      get () {
+        return this.$store.state.tasks.taskDialog
+      },
+      set (val) {
+        this.showTaskDialog(val)
+      }
+    },
+    taskEditable () {
+      return this.$store.state.tasks.taskEditable
+    },
     taskChanged () {
       return this.$store.state.tasks.taskChanged
     }
@@ -176,10 +187,14 @@ export const tasks = {
           await this.$store.dispatch('getTaskDetails', {
             taskId, preLoader: true
           })
+          this.showTaskDialog(true)
         } catch (e) {
           console.log(e.message)
         }
       }
+    },
+    showTaskDialog (toShow) {
+      this.$store.commit('SHOW_TASK_DIALOG', toShow)
     },
     setTaskEditable (isEditable) {
       this.$store.commit('SET_TASK_EDITABLE', isEditable)

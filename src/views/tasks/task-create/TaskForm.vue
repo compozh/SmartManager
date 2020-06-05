@@ -2,19 +2,22 @@
   <v-menu v-model="form"
           :close-on-content-click="false"
           :close-on-click="false"
-          transition="slide-y-reverse-transition">
-    <template v-slot:activator="{ on }">
-      <v-btn id="addBtn"
-             fixed
-             width="45"
-             height="45"
-             dark fab
-             bottom right
-             color="primary"
-             v-on="on">
-          <span class="display-1 white--text font-weight-bold">+</span>
-      </v-btn>
-    </template>
+          transition="slide-y-transition">
+
+      <template v-slot:activator="{ on }">
+        <slot name="activator" :on="on">
+          <v-btn id="addBtn"
+                 fixed
+                 width="45"
+                 height="45"
+                 dark fab
+                 bottom right
+                 color="primary"
+                 v-on="on">
+            <span class="display-1 white--text font-weight-bold">+</span>
+          </v-btn>
+        </slot>
+      </template>
 
     <v-card tile style="flex-basis: 0;"
             class="flex-grow-1 overflow-hidden">
@@ -198,6 +201,9 @@ export default {
         attachments: [],
         caseId: 0
       }
+      if (this.$route.params.taskId) {
+        newTask.parentTaskId = this.$route.params.taskId
+      }
       this.closeForm()
       try {
         const result = await this.$store.dispatch('createTask', newTask)
@@ -244,10 +250,6 @@ export default {
   .v-menu__content {
     display: flex;
     flex-direction: column;
-    top: auto !important;
-    left: auto !important;
-    bottom: 55px;
-    right: 55px;
     height: 450px;
     width: 600px;
   }

@@ -1,12 +1,35 @@
 <template>
+  <v-dialog v-model="taskDialog"
+            persistent
+            no-click-animation>
+
+    <div class="d-flex justify-space-between align-center mb-3">
+      <div class="d-flex white px-2"
+           style="height: 25px; border-radius: 5px;">
+        <div class="px-3" style="color: #2D469C;">Smart Manager</div>
+        <v-img v-if="activeZone.title"
+               src="@/assets/chevron.svg" width="10px"/>
+        <div v-if="activeZone.title" class="px-3 success--text">
+          {{ activeZone.title }}</div>
+        <v-img v-if="activeFolder.Name"
+               src="@/assets/chevron.svg" width="10px"/>
+        <div v-if="activeFolder.Name" class="px-3 primary--text">
+          {{ activeFolder.Name }}
+        </div>
+      </div>
+      <v-btn fab x-small color="white" @click="closeTaskDetails">
+        <fa-icon icon="times" type="fal" size="2x"/>
+      </v-btn>
+    </div>
+
     <Split style="flex-basis: 0; border-radius: 5px;"
            class="flex-grow-1 overflow-hidden white"
-          :gutter-size="4"
+           :gutter-size="4"
            :direction="$vuetify.breakpoint.smAndDown ? 'vertical' : 'horizontal'">
       <!-- LEFT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
-        <div class="side-header px-5 d-flex flex-wrap">
+        <div class="side-header">
           <!-- TASK PERFORMER -->
           <task-performer v-model="taskData.performer"/>
           <!-- TASK DATE PLAN -->
@@ -23,8 +46,9 @@
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
           <!-- TASK MENU - MORE BTN -->
-          <task-menu @taskDelete="taskDelete"
-                     @changeStatus="changeStatus"/>
+          <!--TODO: need define task menu btn position-->
+          <!--          <task-menu @taskDelete="taskDelete"-->
+          <!--                     @changeStatus="changeStatus"/>-->
         </div>
         <v-divider/>
         <!-- LEFT SCROLL AREA -->
@@ -61,8 +85,8 @@
           <task-labels :task="task"/>
           <v-divider/>
           <!-- TASK PARTICIPANTS -->
-<!--          <task-participants v-if="!externalTaskCamunda"-->
-<!--                             v-model="taskData.participants"/>-->
+          <!--          <task-participants v-if="!externalTaskCamunda"-->
+          <!--                             v-model="taskData.participants"/>-->
           <!-- TASK ATTACHMENTS -->
           <attachments-list v-if="!externalTaskCamunda || attachments.length"
                             class="my-5" @input="tab = 0"/>
@@ -81,10 +105,20 @@
             <data-iterator :tasks="task.parentTasks" class="mt-3" hide-footer/>
           </div>
           <!-- SUB TASKS-->
-          <div v-if="childTasks" class="my-5">
-            <fa-icon icon="folder-tree" class="mr-3" size="lg"/>
-            <span class="font-weight-light">
-              {{ $t('tasks.subTasks').toUpperCase() }}</span>
+          <div class="my-5">
+            <div class="d-flex align-center font-weight-light">
+              <fa-icon icon="folder-tree" class="mr-3" size="lg"/>
+              <span class="mr-3">
+                {{ $t('tasks.subTasks').toUpperCase() }}</span>
+              <task-form #activator="{ on }">
+                <v-btn v-on="on"
+                       outlined x-small
+                       color="primary"
+                       class="add-btn pa-2">
+                  {{ $t('buttons.addSubTask') }}
+                </v-btn>
+              </task-form>
+            </div>
             <data-iterator :tasks="childTasks" class="mt-3" hide-footer/>
           </div>
         </perfect-scrollbar>
@@ -109,11 +143,12 @@
         </perfect-scrollbar>
       </SplitArea>
     </Split>
+  </v-dialog>
 </template>
 
 <script>
 import { date } from '@/mixins/dateTime'
-import { folders, tasks, attachments } from '@/mixins/units'
+import { zones, folders, tasks, attachments } from '@/mixins/units'
 import TaskPerformer from '@/views/tasks/task-edit/TaskPerformer'
 import TaskDatePlan from '@/views/tasks/task-edit/TaskDatePlan'
 import TaskSaveBtn from '@/views/tasks/task-edit/TaskSaveBtn'
@@ -123,6 +158,7 @@ import TaskName from '@/views/tasks/task-edit/TaskName'
 import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
 import TaskLabels from '@/views/tasks/task-details/TaskLabels'
 import TaskParticipants from '@/views/tasks/task-edit/TaskParticipants'
+import TaskForm from '@/views/tasks/task-create/TaskForm'
 import DataIterator from '@/views/tasks/task-list/DataIterator'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
@@ -142,6 +178,7 @@ export default {
     TaskDescription,
     TaskLabels,
     TaskParticipants,
+    TaskForm,
     DataIterator,
     AttachmentsList,
     AttachmentsViewer,
@@ -149,7 +186,7 @@ export default {
     Diagram,
     IconTooltipBtn
   },
-  mixins: [folders, tasks, attachments, date],
+  mixins: [zones, folders, tasks, attachments, date],
   data: () => ({
     tab: 0,
     taskData: {
@@ -225,6 +262,10 @@ export default {
       this.taskData.description = this.task.htmlDescript
       this.taskData.participants = this.task.participants || []
       this.setTaskChanged(false)
+    },
+    closeTaskDetails () {
+      this.showTaskDialog(true)
+      this.$router.push('/tasks/' + this.activeFolder.Code)
     },
     async formSubmit () {
       if (this.$refs.form) {
@@ -325,6 +366,7 @@ export default {
     }
   },
   beforeDestroy () {
+    console.log('beforeDestroy')
     this.setTaskChanged(false)
     this.resetAttachmentData()
   }
@@ -333,18 +375,26 @@ export default {
 
 <style scoped>
 
- .side-header {
+  .v-dialog__content {
+    flex-direction: column;
+    padding: 0 3em;
+  }
+
+  .v-dialog__content >>> .v-dialog {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .side-header {
    position: relative;
    display: flex;
    align-items: center;
+   flex-wrap: wrap;
+   flex-shrink: 0;
+   padding: 0 1.25em;
    min-height: 75px;
  }
-
-  @media (min-width: 850px) {
-    .side-header {
-      padding-right: 3.5em !important;
-    }
-  }
 
   .split >>> .gutter {
     background: #eee;
@@ -359,5 +409,16 @@ export default {
  .v-input >>> .v-text-field__details {
    padding: 0 !important;
  }
+
+  .add-btn {
+    min-height: 25px;
+    min-width: 50px;
+    font-size: 12px;
+  }
+
+  .add-btn >>> span {
+    height: 25px;
+    width: 100%;
+  }
 
 </style>

@@ -19,12 +19,13 @@
 
       <v-row v-if="viewMode">
         <v-col>
-        <data-table :tasks="tasks"/>
+          <data-table :tasks="tasks"/>
         </v-col>
       </v-row>
       <data-iterator v-else :tasks="tasks"/>
       <task-form/>
     </v-col>
+    <router-view/>
   </v-row>
 </template>
 
