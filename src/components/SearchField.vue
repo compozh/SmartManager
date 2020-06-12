@@ -20,7 +20,7 @@
 
     <template #append>
       <v-btn x-small outlined class="mx-2"
-             v-show="active && search">{{ $t('buttons.globalSearch') }}
+             v-if="active && search">{{ $t('buttons.globalSearch') }}
       </v-btn>
     </template>
 
