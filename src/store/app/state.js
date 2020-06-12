@@ -1,7 +1,7 @@
 export default {
   applicationParams: null,
   preLoaders: [],
-  linearPreLoader: false,
+  linearPreLoaders: [],
   sideBarOpen: false,
   expandOnHover: true,
   miniVariant: true,
