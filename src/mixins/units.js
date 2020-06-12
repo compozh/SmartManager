@@ -208,7 +208,7 @@ export const tasks = {
 export const cases = {
   computed: {
     cases () {
-      return this.$store.state.sm.cases
+      return this.$store.state.cases
     },
     caseId () {
       return this.case.id || +this.$route.params.caseId
@@ -216,9 +216,7 @@ export const cases = {
   },
   methods: {
     async getCases () {
-      if (this.cases.length === 0) {
-        await this.$store.dispatch('getCases', false)
-      }
+      await this.$store.dispatch('getCases')
     }
   }
 }
@@ -264,6 +262,7 @@ export const attachments = {
   },
   methods: {
     setActiveAttachment (attachment) {
+      console.log(this.tab)
       this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
     },
     getAttachmentDetails () {
