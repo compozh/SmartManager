@@ -69,11 +69,10 @@ export default {
   computed: {
     transformParticipants () {
       return this.participants.map(participant => {
-        return {
-          fio: participant.name.trim(),
-          userId: participant.userId,
-          role: participant.role
-        }
+        const user = this.users.find(user => user.userId === participant.userId)
+        const existingParticipant = Object.assign({}, user)
+        existingParticipant.role = participant.role
+        return existingParticipant
       })
     },
     taskParticipants () {
@@ -100,6 +99,7 @@ export default {
       const otherParticipants = group === 'COEXECUTOR'
         ? this.taskParticipants.observers.users
         : this.taskParticipants.coExecutors.users
+      debugger
       const newParticipants = participants.map(participant => {
         // For prevent changing the original user object
         const newParticipant = Object.assign({}, participant)
