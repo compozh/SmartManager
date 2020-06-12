@@ -6,9 +6,9 @@ export default {
     if (folderId === 'search') {
       return
     }
-    commit('SET_LINEAR_PRELOADER', true)
     const preLoader = (state.tasks && state.tasks[folderId])
     preLoader || commit('START_PRELOADER', 'tasks')
+    commit('START_LINEAR_PRELOADER', 'tasks')
     commit('SET_SEARCH', null)
     commit('SET_ACTIVE_FOLDER', { folderId, source: 'action' })
     try {
@@ -26,12 +26,14 @@ export default {
         color: 'error'
       })
     } finally {
-      commit('SET_LINEAR_PRELOADER', false)
       commit('STOP_PRELOADER', 'tasks')
+      commit('STOP_LINEAR_PRELOADER', 'tasks')
     }
   },
-  async getTaskDetails ({ commit }, { taskId, preLoader }) {
-    !preLoader || commit('START_PRELOADER', 'task')
+  async getTaskDetails ({ state, commit }, { taskId }) {
+    const preLoader = (state.task && state.taskDetails[taskId])
+    preLoader || commit('START_PRELOADER', 'task')
+    commit('START_LINEAR_PRELOADER', 'task')
     try {
       const result = await api.getTaskDetailsFromGql(taskId)
       const taskDetails = result.data.smtasks.taskDetails
@@ -44,6 +46,7 @@ export default {
       })
     } finally {
       commit('STOP_PRELOADER', 'task')
+      commit('STOP_LINEAR_PRELOADER', 'task')
     }
   },
   async addComment ({ dispatch, commit }, { comment, params }) {
@@ -52,10 +55,7 @@ export default {
       const response = await api.addCommentToGql(comment, paramsJson)
       const result = response.data.smtasksMutation.addComment
       if (result.success) {
-        await dispatch('getTaskDetails', {
-          taskId: params.id,
-          preLoader: true
-        })
+        await dispatch('getTaskDetails', { taskId: params.id })
       } else {
         commit('SET_NOTIFY', {
           text: i18n.t('notify.commentAddFail'),
@@ -71,21 +71,19 @@ export default {
       })
     }
   },
-  async changeTaskStatus ({ dispatch, commit }, params) {
+  async changeTaskStatus ({ dispatch, commit, rootState }, params) {
     const statusParams = JSON.stringify(params)
     commit('START_PRELOADER', 'status')
     try {
       const response = await api.changeTaskStatusInGql(statusParams)
       const result = response.data.smtasksMutation.changeStatus
       if (result.success) {
-        await dispatch('getTaskDetails', {
-          taskId: params.id,
-          preLoader: true
-        })
         commit('SET_NOTIFY', {
           text: result.successMessage || i18n.t('notify.statChangeSuccess'),
           color: 'success'
         })
+        await dispatch('getTasks', rootState.folders.activeFolderId)
+        await dispatch('getTaskDetails', { taskId: params.id })
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || i18n.t('notify.statChangeFail'),
@@ -110,10 +108,7 @@ export default {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
       if (result.success) {
-        await dispatch('getTaskDetails', {
-          taskId: params.id,
-          preLoader: true
-        })
+        await dispatch('getTaskDetails', { taskId: params.id })
         commit('SET_NOTIFY', {
           text: result.log || i18n.t('notify.stageChangeSuccess'),
           color: 'success'
@@ -173,12 +168,12 @@ export default {
     }
   },
   async taskPin ({ dispatch, commit }, { taskId, pin }) {
-    commit('START_PRELOADER', 'pin')
+    commit('START_LINEAR_PRELOADER', 'pin')
     try {
       const response = await api.taskPinInGql(taskId, pin)
       const result = response.data.smtasksMutation.taskPin
       if (result.success) {
-        await dispatch('getTaskDetails', { taskId, preLoader: true })
+        await dispatch('getTaskDetails', { taskId })
         commit('SET_NOTIFY', {
           text: result.successMessages ||
             pin ? i18n.t('notify.taskPinedSuccess') : i18n.t('notify.taskUnPinedSuccess'),
@@ -197,7 +192,7 @@ export default {
         color: 'error'
       })
     } finally {
-      commit('STOP_PRELOADER', 'pin')
+      commit('STOP_LINEAR_PRELOADER', 'pin')
     }
   },
   async createTask ({ dispatch, commit }, newTask) {
@@ -219,6 +214,9 @@ export default {
           color: 'warning'
         })
       }
+      !newTask.parentId || await dispatch('getTaskDetails', {
+        taskId: newTask.parentId
+      })
       return result
     } catch (error) {
       console.error(error.message || error)
@@ -237,10 +235,7 @@ export default {
       const response = await api.updateTaskInGql(taskDataJson)
       const result = response.data.smtasksMutation.taskUpdating
       if (result.success) {
-        await dispatch('getTaskDetails', {
-          taskId: taskData.id,
-          preLoader: true
-        })
+        await dispatch('getTaskDetails', { taskId: taskData.id })
         commit('SET_NOTIFY', {
           text: result.successMessages || i18n.t('notify.updateSuccess'),
           color: 'success'

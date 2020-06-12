@@ -8,8 +8,14 @@ export default {
   STOP_PRELOADER (state, preLoader) {
     state.preLoaders = state.preLoaders.filter(i => i !== preLoader)
   },
-  SET_LINEAR_PRELOADER (state, value) {
-    state.linearPreLoader = value
+  START_LINEAR_PRELOADER (state, preLoader) {
+    state.linearPreLoaders.push(preLoader)
+  },
+  STOP_LINEAR_PRELOADER (state, preLoader) {
+    state.linearPreLoaders = state.linearPreLoaders.filter(i => i !== preLoader)
+  },
+  SET_LINEAR_PRELOADER (state, preLoader) {
+    console.log('', preLoader)
   },
   TOGGLE_SIDEBAR_OPEN (state, value) {
     state.sideBarOpen = value
