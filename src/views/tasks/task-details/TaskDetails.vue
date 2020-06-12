@@ -46,7 +46,7 @@
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
           <!-- TASK MENU - MORE BTN -->
-          <!--TODO: need define task menu btn position-->
+          <!-- TODO: need define task menu btn position-->
           <!--          <task-menu @taskDelete="taskDelete"-->
           <!--                     @changeStatus="changeStatus"/>-->
         </div>
@@ -85,24 +85,25 @@
           <task-labels :task="task"/>
           <v-divider/>
           <!-- TASK PARTICIPANTS -->
-          <!--          <task-participants v-if="!externalTaskCamunda"-->
-          <!--                             v-model="taskData.participants"/>-->
+            <task-participants v-model="taskData.participants"
+                               class="mb-10"/>
           <!-- TASK ATTACHMENTS -->
           <attachments-list v-if="!externalTaskCamunda || attachments.length"
-                            class="my-5" @input="tab = 0"/>
+                            class="mb-10" @input="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
             <span class="font-weight-light">
               {{ $t('tasks.base').toUpperCase() }}</span>
-            <data-iterator :tasks="[baseTask]" class="mt-3" hide-footer/>
+            <task-cards :tasks="[baseTask]" class="mt-3"
+                           hide-footer/>
           </div>
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
             <span class="font-weight-light">
               {{ $t('tasks.parentTasks').toUpperCase() }}</span>
-            <data-iterator :tasks="task.parentTasks" class="mt-3" hide-footer/>
+            <task-cards :tasks="task.parentTasks" class="mt-3" hide-footer/>
           </div>
           <!-- SUB TASKS-->
           <div class="my-5">
@@ -115,11 +116,12 @@
                        outlined x-small
                        color="primary"
                        class="add-btn pa-2">
-                  {{ $t('buttons.addSubTask') }}
+                  {{ $t('buttons.add') }}
                 </v-btn>
               </task-form>
             </div>
-            <data-iterator :tasks="childTasks" class="mt-3" hide-footer/>
+            <task-cards :tasks="childTasks" class="mt-3"
+                           hide-footer :hide-no-data="true"/>
           </div>
         </perfect-scrollbar>
       </SplitArea>
@@ -159,7 +161,7 @@ import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
 import TaskLabels from '@/views/tasks/task-details/TaskLabels'
 import TaskParticipants from '@/views/tasks/task-edit/TaskParticipants'
 import TaskForm from '@/views/tasks/task-create/TaskForm'
-import DataIterator from '@/views/tasks/task-list/DataIterator'
+import TaskCards from '@/views/tasks/task-list/TaskCards'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
 import Comments from '@/views/comments/Comments'
@@ -179,7 +181,7 @@ export default {
     TaskLabels,
     TaskParticipants,
     TaskForm,
-    DataIterator,
+    TaskCards,
     AttachmentsList,
     AttachmentsViewer,
     Comments,
@@ -221,7 +223,7 @@ export default {
     childTasks () {
       return this.task.childTasks && this.task.childTasks.length
         ? this.task.childTasks
-        : null
+        : []
     },
     tabItems () {
       const tabs = [
@@ -359,14 +361,14 @@ export default {
         name: this.taskData.name,
         performerId: this.taskData.performer.userId,
         dateplan: this.formatDateTime(this.taskData.datePlan),
-        descript: this.taskData.description
+        descript: this.taskData.description,
+        participants: this.taskData.participants
       }
 
       await this.$store.dispatch('updateTask', taskData)
     }
   },
   beforeDestroy () {
-    console.log('beforeDestroy')
     this.setTaskChanged(false)
     this.resetAttachmentData()
   }
@@ -384,6 +386,7 @@ export default {
     display: flex;
     flex-direction: column;
     flex: 1;
+    margin: 0;
   }
 
   .side-header {
