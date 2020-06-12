@@ -12,12 +12,17 @@ export const userInfo = {
 }
 
 export const userMethods = {
+  data: () => ({
+    login: '',
+    password: '',
+    rememberMe: false
+  }),
   methods: {
     async loginMethod () {
       const payload = {
         login: this.login,
         password: this.password,
-        rememberMe: this.checkbox_remember_me
+        rememberMe: this.rememberMe
       }
       await this.$store.dispatch('login', payload)
     },
