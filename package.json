@@ -27,6 +27,7 @@
     "moment": "^2.24.0",
     "pdfjs-dist": "^2.3.200",
     "register-service-worker": "^1.6.2",
+    "signalr-no-jquery": "^0.1.10",
     "v-viewer": "^1.5.1",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.3",
@@ -42,8 +43,8 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
-    "@fortawesome/pro-regular-svg-icons": "^5.13.0",
     "@fortawesome/pro-light-svg-icons": "^5.12.1",
+    "@fortawesome/pro-regular-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@kazupon/vue-i18n-loader": "^0.3.0",
     "@vue/cli-plugin-babel": "~4.2.0",
@@ -60,11 +61,11 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.1.2",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2",
     "vue-cli-plugin-i18n": "~0.6.1",
     "vue-cli-plugin-vuetify": "~2.0.5",
-    "vue-template-compiler": "^2.6.11",
-    "node-sass": "^4.13.1",
-    "sass-loader": "^8.0.2"
+    "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
     "> 1%",
