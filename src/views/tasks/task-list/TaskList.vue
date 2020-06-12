@@ -19,10 +19,10 @@
 
       <v-row v-if="viewMode">
         <v-col>
-          <data-table :tasks="tasks"/>
+          <task-table :tasks="tasks"/>
         </v-col>
       </v-row>
-      <data-iterator v-else :tasks="tasks"/>
+      <task-cards v-else :tasks="tasks"/>
       <task-form/>
     </v-col>
     <router-view/>
@@ -31,8 +31,8 @@
 
 <script>
 import SearchField from '@/components/SearchField'
-import DataIterator from './DataIterator'
-import DataTable from './DataTable'
+import TaskCards from './TaskCards'
+import TaskTable from './TaskTable'
 import TaskForm from '@/views/tasks/task-create/TaskForm'
 import { zones, folders, tasks } from '@/mixins/units'
 
@@ -41,8 +41,8 @@ export default {
   mixins: [zones, folders, tasks],
   components: {
     SearchField,
-    DataIterator,
-    DataTable,
+    TaskCards,
+    TaskTable,
     TaskForm
   },
   data () {
@@ -64,8 +64,11 @@ export default {
   }
 }
 </script>
+
 <style>
+
   .grid-headers {
     min-width: 110px;
   }
+
 </style>
