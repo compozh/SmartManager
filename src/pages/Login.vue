@@ -39,7 +39,7 @@
               </v-form>
             <div class="d-flex align-center justify-space-between">
               <v-checkbox :label="$t('login.rememberMe')"
-                          v-model="checkbox_remember_me"/>
+                          v-model="rememberMe"/>
               <v-btn color="primary" @click="loginMethod">
                 {{ $t('buttons.login') }}
               </v-btn>
@@ -58,11 +58,6 @@ import { userMethods } from '@/mixins/users'
 export default {
   name: 'Login',
   mixins: [userMethods],
-  data: () => ({
-    login: '',
-    password: '',
-    checkbox_remember_me: false
-  }),
   created () {
     this.logout()
   }

@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: 'DataTable',
+  name: 'TaskTable',
   props: {
     tasks: Array
   },

@@ -23,7 +23,7 @@
                       :disabled="loading"
                       @keyup.enter="sendMsg">
         </v-text-field>
-        <v-btn v-show="comment"
+        <v-btn v-if="comment"
                depressed
                color="blue-grey"
                class="ml-2 white--text"

@@ -64,11 +64,11 @@
                 <td class="text-truncate" style="max-width: 0;">{{ item.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
-                  <span v-show="!hover">{{ item.date }}</span>
-                  <v-tooltip v-show="hover" top>
-                    <template v-slot:activator="{ on }">
+                  <span v-if="!hover">{{ item.date }}</span>
+                  <v-tooltip v-if="hover" top>
+                    <template #activator="{ on }">
                       <v-btn v-on="on"
-                             :href="item.srcUrl"
+                             :to="item.srcUrl"
                              @click.stop
                              color="grey"
                              style="border: 1px dashed;"

@@ -4,6 +4,7 @@
                    :page="page"
                    :search="search"
                    :hide-default-footer="hideFooter"
+                   :no-data-text="hideNoData ? '' : $t('tasks.noTasks')"
                    :footer-props="{itemsPerPageText: $t('tasks.perPage')}">
 
     <template #default="props">
@@ -15,7 +16,7 @@
       </v-row>
     </template>
 
-    <template #no-data>
+    <template #no-data v-if="!hideNoData">
       <div class="primary--text body-2 ml-3 mt-3">{{ $t('tasks.noTasks') }}</div>
     </template>
 
@@ -26,11 +27,11 @@
 import TaskListItem from '@/views/tasks/task-list/TaskListItem.vue'
 
 export default {
-  name: 'DataIterator',
+  name: 'TaskCards',
   components: {
     TaskListItem
   },
-  props: ['tasks', 'hideFooter'],
+  props: ['tasks', 'hideNoData', 'hideFooter'],
   data: () => ({
     search: '',
     page: 1,

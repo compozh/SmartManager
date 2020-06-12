@@ -12,7 +12,7 @@ export default {
   name: 'LinearPreLoader',
   computed: {
     loading () {
-      return this.$store.state.app.linearPreLoader
+      return !!this.$store.state.app.linearPreLoaders.length
     }
   }
 }

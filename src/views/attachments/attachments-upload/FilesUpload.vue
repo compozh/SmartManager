@@ -1,5 +1,5 @@
 <template>
-  <perfect-scrollbar >
+  <perfect-scrollbar>
     <file-upload ref="upload"
                  class="upload-action"
                  v-model="files"
@@ -14,7 +14,7 @@
                  @input-file="inputFile"
                  @input-filter="inputFilter">
     </file-upload>
-    <slot :files="files"></slot>
+    <slot :files="files"/>
   </perfect-scrollbar>
 </template>
 

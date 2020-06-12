@@ -3,38 +3,37 @@ import i18n from '@/i18n'
 
 export default {
   async getFileDetails ({ commit, rootState }, { fileId, fileExt, id: taskOrCaseId }) {
-    // startLoading()
+    commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
       const result = await api.getFileDetailsFromGql(fileId, fileExt)
       const fileDetails = JSON.parse(result.data.smtasks.fileDetails)
       if (fileDetails.ErrorMessage) {
-        // vs.notify({
-        //   title: i18n.t('notify.attachTitle'),
-        //   text: fileDetails.ErrorMessage,
-        //   color: 'warning'
-        // })
+        commit('SET_NOTIFY', {
+          text: fileDetails.ErrorMessage,
+          color: 'warning'
+        })
       }
       commit('SET_ATTACHMENT_DETAILS', { fileId, fileDetails, taskOrCaseId, rootState })
-      // stopLoading()
       return fileDetails
     } catch (e) {
-      // stopLoading()
       console.log(e.message)
       // notify('danger', 'taskTitle', 'taskError')
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'fileDetails')
     }
   },
   async getAttachmentTypes ({ commit }, params) {
     const paramsJson = JSON.stringify(params)
-    // startLoading()
+    commit('START_LINEAR_PRELOADER', 'attachmentTypes')
     try {
       const response = await api.getAttachmentTypesFromGql(paramsJson)
-      // stopLoading()
       const result = JSON.parse(response.data.smtasks.attachmentTypes)
       commit('SET_ATTACHMENT_TYPES', result)
     } catch (e) {
-      // stopLoading()
       console.log(e.message)
       // notify('danger', 'commentsTitle', 'commentAddError')
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'attachmentTypes')
     }
   },
   async addAttachments ({ dispatch, commit }, payload) {
