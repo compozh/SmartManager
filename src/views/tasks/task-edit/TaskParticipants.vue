@@ -99,7 +99,6 @@ export default {
       const otherParticipants = group === 'COEXECUTOR'
         ? this.taskParticipants.observers.users
         : this.taskParticipants.coExecutors.users
-      debugger
       const newParticipants = participants.map(participant => {
         // For prevent changing the original user object
         const newParticipant = Object.assign({}, participant)
