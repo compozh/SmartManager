@@ -108,7 +108,8 @@
     "comm": "Note",
     "purpose": "Purpose",
     "saveDialogTitle": "Case not saved",
-    "saveDialogText": "Data has been changed. Exit without saving?"
+    "saveDialogText": "Data has been changed. Exit without saving?",
+    "perPage": "Cases per page"
   },
   "buttons": {
     "submit": "Submit",
