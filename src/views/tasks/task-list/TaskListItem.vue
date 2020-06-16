@@ -12,14 +12,14 @@
         </div>
         <div class="align-center justify-end icons-block">
           <fa-icon v-show="task.caseId" class="ml-2 blue-grey--text" icon="suitcase"/>
-          <fa-icon v-show="task.hasCom" class="ml-2" icon="comment-alt-lines"/>
+          <fa-icon v-show="task.hasComm" class="ml-2" icon="comment-alt-lines"/>
           <fa-icon v-show="task.hasOrig" class="ml-2 brown--text" icon="paperclip"/>
           <fa-icon v-show="task.isFavorite" class="ml-2 blue--text text--lighten-2" icon="star"/>
           <fa-icon v-show="task.isGenerated" class="ml-2 " icon="layer-plus"/>
           <fa-icon v-show="task.myControl" class="ml-2 indigo--text" icon="eye"/>
         </div>
       </div>
-      <v-divider class="mx-2"></v-divider>
+      <v-divider class="mx-2"/>
       <div class="item-body">
         <div class="row-element">
           <v-avatar color="grey lighten-1" class="mx-3" size="40px">
@@ -29,9 +29,9 @@
           <div class="column-element">
             <span class="body-2 text--secondary">{{ task.addedFio }}</span>
             <span class="ma-0 pl-0 subtitle-1 d-flex align-center">
-            <fa-icon v-show="task.priority === 1" class="red--text mr-1" icon="fire"/>
-            <span class=" ma-0 pl-0 pt-1 subtitle-2 text-truncate">{{ task.name }}</span>
-          </span>
+              <fa-icon v-show="task.priority === 1" class="red--text mr-1" icon="fire"/>
+              <span class=" ma-0 pl-0 pt-1 subtitle-2 text-truncate">{{ task.name }}</span>
+            </span>
             <div class="item-status" v-if="task.role || task.childCount > 0">
               <div class="declarer-role" v-if="task.role">
                 <span v-show="task.role === 'COEXECUTOR'" class="body-2">{{$t('tasks.coexecutor')}}</span>
@@ -60,18 +60,18 @@
           </div>
         </div>
         <div class="task-times">
-        <span v-if="taskInProgress"
-              class="body-2 mb-0"
-              :class="overdue ? 'red--text' : 'blue--text'">
-          {{ task.dateplan }}</span>
-          <span v-if="taskIsDone" class="body-2 mb-0 green--text">
-          <fa-icon class="green--text" icon="check"/>
-          {{ task.dateFact }}
-        </span>
-          <span v-if="taskIsDone && overdue" class="body-2 mb-0 red--text">
-          <fa-icon class="red--text" icon="clock"/>
-          {{ overdue }} {{$t('tasks.days')}}
-        </span>
+          <span v-if="taskInProgress"
+                class="body-2 mb-0"
+                :class="overdue ? 'red--text' : 'blue--text'">
+            {{ task.dateplan }}</span>
+            <span v-if="taskIsDone" class="body-2 mb-0 green--text">
+            <fa-icon class="green--text" icon="check"/>
+            {{ task.dateFact }}
+          </span>
+            <span v-if="taskIsDone && overdue" class="body-2 mb-0 red--text">
+            <fa-icon class="red--text" icon="clock"/>
+            {{ overdue }} {{$t('tasks.days')}}
+          </span>
         </div>
       </div>
     </v-card>
@@ -85,7 +85,6 @@ export default {
   props: {
     task: Object
   },
-  data: () => ({}),
   computed: {
     taskInProgress () {
       return this.task.status === '' || this.task.status === '*'

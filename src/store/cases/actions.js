@@ -1,17 +1,24 @@
 import { SmartManagerApi as api } from '@/api/smartManagerApi'
-// import i18n from '@/i18n'
+import i18n from '@/i18n'
 
 export default {
-  async getCases ({ commit }) {
+  async getCases ({ state, commit }) {
+    commit('SET_SEARCH', null)
+    commit('START_LINEAR_PRELOADER', 'cases')
+    state.cases || commit('START_PRELOADER', 'cases')
     try {
       const result = await api.getCasesFromGql()
       const cases = result.data.smtasks.cases
-      commit('setCases', cases)
-      // !loading || stopLoading()
+      commit('SET_CASES', cases)
     } catch (e) {
       console.log(e.message)
-      // stopLoading()
-      // notify('danger', 'casesTitle', 'caseListError')
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.caseListError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'cases')
+      commit('STOP_LINEAR_PRELOADER', 'cases')
     }
   },
   async getCaseDetails ({ commit }, { caseId }) {

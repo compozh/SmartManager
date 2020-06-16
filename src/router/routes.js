@@ -31,7 +31,14 @@ export default [
       {
         path: '/cases/:folderId',
         name: 'case-list',
-        component: () => import('@/views/cases/case-list/CaseList.vue')
+        component: () => import('@/views/cases/case-list/CaseList.vue'),
+        children: [
+          {
+            path: ':caseId',
+            name: 'case-details',
+            component: () => import('@/views/cases/case-details/CaseDetails.vue')
+          }
+        ]
       },
       {
         path: '/processes',
@@ -72,6 +79,6 @@ export default [
   // Redirect to 404 page, if no match found
   {
     path: '*',
-    redirect: '/pages/error-404'
+    redirect: '/error-404'
   }
 ]

@@ -1,38 +1,38 @@
 <template>
-  <v-data-iterator :items="tasks"
+  <v-data-iterator :items="cases"
                    items-per-page.sync="itemsPerPage"
                    :page="page"
                    :search="search"
                    :hide-default-footer="hideFooter"
-                   :no-data-text="hideNoData ? '' : $t('tasks.noTasks')"
-                   :footer-props="{itemsPerPageText: $t('tasks.perPage')}">
+                   :no-data-text="hideNoData ? '' : $t('cases.noCases')"
+                   :footer-props="{itemsPerPageText: $t('cases.perPage')}">
 
-    <template #default="props">
+    <template #default="{ items }">
       <v-row>
-        <v-col v-for="task in props.items"
-          :key="task.id" cols="12" class="py-1">
-          <task-list-item :task="task"/>
+        <v-col v-for="caseItem in items"
+               :key="caseItem.id" cols="12" class="py-1">
+          <case-list-item :caseItem="caseItem"/>
         </v-col>
       </v-row>
     </template>
 
     <template #no-data v-if="!hideNoData">
-      <div class="primary--text body-2 ml-3 mt-3">{{ $t('tasks.noTasks') }}</div>
+      <div class="primary--text body-2 ml-3 mt-3">{{ $t('cases.noCases') }}</div>
     </template>
 
   </v-data-iterator>
 </template>
 
 <script>
-import TaskListItem from '@/views/tasks/task-list/TaskListItem.vue'
+import CaseListItem from '@/views/cases/case-list/CaseListItem.vue'
 
 export default {
-  name: 'TaskCards',
+  name: 'CaseCards',
   components: {
-    TaskListItem
+    CaseListItem
   },
   props: {
-    tasks: Array,
+    cases: Array,
     hideNoData: Boolean,
     hideFooter: Boolean
   },

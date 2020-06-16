@@ -14,9 +14,6 @@ export default {
   STOP_LINEAR_PRELOADER (state, preLoader) {
     state.linearPreLoaders = state.linearPreLoaders.filter(i => i !== preLoader)
   },
-  SET_LINEAR_PRELOADER (state, preLoader) {
-    console.log('', preLoader)
-  },
   TOGGLE_SIDEBAR_OPEN (state, value) {
     state.sideBarOpen = value
   },

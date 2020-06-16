@@ -56,10 +56,7 @@ export default {
           })
         }
       })
-      await dispatch('getTaskDetails', {
-        taskId: payload.params.id,
-        preLoader: false
-      })
+      await dispatch('getTaskDetails', { taskId: payload.params.id })
       return results
     } catch (error) {
       console.error(error.message || error)
