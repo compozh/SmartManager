@@ -181,12 +181,12 @@ export const tasks = {
       await this.$store.dispatch('getTasks', folderId)
     },
     async getTask () {
-      const taskId = +this.$route.params.taskId
       if (!this.task.id) {
         try {
-          await this.$store.dispatch('getTaskDetails', {
-            taskId, preLoader: true
+          const result = await this.$store.dispatch('getTaskDetails', {
+            taskId: this.taskId
           })
+          result.success || await this.$router.push('/error404')
           this.showTaskDialog(true)
         } catch (e) {
           console.log(e.message)
@@ -208,15 +208,45 @@ export const tasks = {
 export const cases = {
   computed: {
     cases () {
-      return this.$store.state.cases
+      return this.$store.getters.cases
     },
     caseId () {
       return this.case.id || +this.$route.params.caseId
+    },
+    caseDialog: {
+      get () {
+        return this.$store.state.cases.caseDialog
+      },
+      set (val) {
+        this.showCaseDialog(val)
+      }
     }
   },
   methods: {
     async getCases () {
       await this.$store.dispatch('getCases')
+    },
+    async getCase () {
+      if (!this.case.id) {
+        try {
+          const result = await this.$store.dispatch('getCaseDetails', {
+            caseId: this.caseId
+          })
+          result.success || await this.$router.push('/error404')
+          this.showCaseDialog(true)
+        } catch (e) {
+          console.log(e.message)
+        }
+      }
+    },
+    showCaseDialog (toShow) {
+      this.$store.commit('SHOW_CASE_DIALOG', toShow)
+    },
+    setCaseEditable (isEditable) {
+      this.$store.commit('SET_CASE_EDITABLE', isEditable)
+    },
+    setCaseChanged (isChanged) {
+      this.$store.commit('SET_CASE_CHANGED', isChanged)
     }
   }
 }
