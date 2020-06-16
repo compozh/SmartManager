@@ -7,7 +7,7 @@
         </div>
         <div v-else
              class="fill-height d-flex justify-center align-center">
-          <span class="headline font-weight-light grey--text">
+          <span class="headline font-weight-light grey--text text-center">
             {{ $t('messages.noComments') }}
           </span>
         </div>
