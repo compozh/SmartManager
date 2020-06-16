@@ -3,7 +3,7 @@
             persistent
             no-click-animation>
 
-    <div class="d-flex justify-space-between align-center mb-3">
+    <div class="d-flex justify-space-between align-center mb-2">
       <div class="d-flex white px-2"
            style="height: 25px; border-radius: 5px;">
         <div class="px-3" style="color: #2D469C;">Smart Manager</div>
@@ -379,14 +379,18 @@ export default {
 
   .v-dialog__content {
     flex-direction: column;
-    padding: 0 3em;
+    padding: 0 2em;
   }
 
   .v-dialog__content >>> .v-dialog {
     display: flex;
     flex-direction: column;
     flex: 1;
-    margin: 0;
+    margin: 0.5em 0 2em;
+  }
+
+  .v-dialog__content >>> .v-dialog:not(.v-dialog--fullscreen) {
+    max-height: 96%;
   }
 
   .side-header {
