@@ -31,12 +31,14 @@ export default {
     }
   },
   async getTaskDetails ({ state, commit }, { taskId }) {
+    const result = { success: false }
     const preLoader = (state.task && state.taskDetails[taskId])
     preLoader || commit('START_PRELOADER', 'task')
     commit('START_LINEAR_PRELOADER', 'task')
     try {
-      const result = await api.getTaskDetailsFromGql(taskId)
-      const taskDetails = result.data.smtasks.taskDetails
+      const response = await api.getTaskDetailsFromGql(taskId)
+      const taskDetails = response.data.smtasks.taskDetails
+      result.success = !!taskDetails
       commit('SET_TASK_DETAILS', { [taskId]: taskDetails })
     } catch (e) {
       console.log(e.message)
@@ -48,6 +50,7 @@ export default {
       commit('STOP_PRELOADER', 'task')
       commit('STOP_LINEAR_PRELOADER', 'task')
     }
+    return result
   },
   async addComment ({ dispatch, commit }, { comment, params }) {
     const paramsJson = JSON.stringify(params)
