@@ -1,0 +1,12 @@
+{
+    "SettingsVersion":"1",
+    "Releases":
+    [
+        {
+            "Project":"DEV",
+            "Name":"smartmanager-ita-dev",
+            "Branch":"master",
+            "UserValues":"smartmanager-ita-dev-values.yaml"
+        }
+    ]
+}

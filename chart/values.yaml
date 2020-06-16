@@ -1,0 +1,7 @@
+graphqlUrl: /it-graphql-ita/
+signalrUrl: https://m.it.ua/ws/signalr/hubs
+scaling:
+  replicas: 1 #3
+  affinity:
+    enableNodeAntiAfinity: false #true
+    nodeLabelSelector: "" #dep: itenterprise

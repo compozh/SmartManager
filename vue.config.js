@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   chainWebpack: config => {
     config.module
@@ -7,9 +9,6 @@ module.exports = {
       .loader('graphql-tag/loader')
       .end()
   },
-  publicPath: process.env.NODE_ENV === 'production'
-    ? process.env.VUE_APP_BASE_PATH + 'SmartManager'
-    : '/',
   pluginOptions: {
     webpackBundleAnalyzer: {
       openAnalyzer: false
@@ -21,6 +20,9 @@ module.exports = {
       enableInSFC: true
     }
   },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? process.env.VUE_APP_BASE_PATH + (process.env.VUE_APP_DOCKERMODE ? '' : 'SmartManager')
+    : '/',
   transpileDependencies: [
     'resize-detector'
   ],
