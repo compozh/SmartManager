@@ -31,7 +31,11 @@ export default {
   components: {
     TaskListItem
   },
-  props: ['tasks', 'hideNoData', 'hideFooter'],
+  props: {
+    tasks: Array,
+    hideNoData: Boolean,
+    hideFooter: Boolean
+  },
   data: () => ({
     search: '',
     page: 1,
@@ -40,9 +44,6 @@ export default {
   computed: {
     numberOfPages () {
       return Math.ceil(this.items.length / this.itemsPerPage)
-    },
-    filteredKeys () {
-      return this.keys.filter(key => key !== 'Name')
     }
   },
   methods: {

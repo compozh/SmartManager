@@ -35,10 +35,11 @@ import TaskCards from './TaskCards'
 import TaskTable from './TaskTable'
 import TaskForm from '@/views/tasks/task-create/TaskForm'
 import { zones, folders, tasks } from '@/mixins/units'
+import signalR from '@/mixins/signalR'
 
 export default {
   name: 'TaskList',
-  mixins: [zones, folders, tasks],
+  mixins: [zones, folders, tasks, signalR],
   components: {
     SearchField,
     TaskCards,
@@ -61,6 +62,7 @@ export default {
   },
   created () {
     this.getTasks(this.activeFolderId)
+    this.startSignalRConnection()
   }
 }
 </script>
