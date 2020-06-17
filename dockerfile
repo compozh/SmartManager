@@ -1,4 +1,4 @@
-FROM node:14.1.0-stretch AS build
+FROM node:14.4.0-stretch AS build
 # создание директории приложения
 WORKDIR /app
 # установка зависимостей
