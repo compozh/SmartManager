@@ -66,6 +66,7 @@
     "handled": "Handled by assistant",
     "controler": "Controler",
     "coexecutor": "Co executor",
+    "observer": "Notify",
     "addCoexecutor": "Add co-executor...",
     "addNotify": "Add for notify...",
     "executor": "Executor",
