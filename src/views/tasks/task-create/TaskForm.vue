@@ -240,6 +240,7 @@ export default {
 <style scoped>
 
   #addBtn {
+    bottom: 8px;
     background: url(../../../assets/action_btn_bg.png) center/contain no-repeat #7b68ee;
   }
 
