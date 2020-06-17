@@ -56,7 +56,8 @@ export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
   created () {
-    this.activeZoneId = 0
+    const zone = this.zones.find(zone => zone.group === this.$route.meta.zone)
+    this.activeZoneId = zone ? zone.id : 0
   },
   methods: {
     changeZone (zone) {
