@@ -5,7 +5,7 @@
     <the-nav-bar/>
     <v-content class="grey lighten-3">
       <v-container fluid style="height: 100%"
-                   class="d-flex flex-column pa-2">
+                   class="d-flex flex-column pa-2 pb-0">
         <router-view/>
       </v-container>
     </v-content>

@@ -8,6 +8,7 @@
     :style="style"
     @focus="focused"
     @blur="blurred"
+    clear-icon="+"
     class="body-2 align-center">
 
     <template #label>
@@ -19,7 +20,7 @@
     </template>
 
     <template #append>
-      <v-btn x-small outlined class="mx-2"
+      <v-btn x-small outlined style="margin-top: 0.3em;"
              v-if="active && search">{{ $t('buttons.globalSearch') }}
       </v-btn>
     </template>
@@ -65,3 +66,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  .v-input >>> input {
+    padding-bottom: 6px;
+  }
+
+  .v-input >>> .v-input__append-inner > div > button {
+    transform: rotate(45deg);
+    font-size: 30px;
+    user-select: none;
+    margin-top: 0.1em;
+ }
+
+</style>
