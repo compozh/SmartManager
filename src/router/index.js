@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: window.appConfig.BASE_URL + 'SmartManager/',
+  base: window.appConfig.BASE_URL + (window.DOCKERMODE ? '/' : 'SmartManager/'),
   routes
 })
 
