@@ -215,8 +215,18 @@ export const cases = {
       }
       return cases.filter(i => i.folderId === +this.$route.params.folderId)
     },
+    caseItem () {
+      const id = +this.$route.params.caseId
+      const caseItem = this.$store.state.cases.caseDetails[id]
+      return caseItem || {}
+    },
     caseId () {
-      return this.case.id || +this.$route.params.caseId
+      return this.caseItem.id || +this.$route.params.caseId
+    },
+    caseTasks () {
+      return this.caseItem.tasks
+        ? this.caseItem.tasks
+        : []
     },
     caseDialog: {
       get () {
@@ -232,7 +242,7 @@ export const cases = {
       await this.$store.dispatch('getCases')
     },
     async getCase () {
-      if (!this.case.id) {
+      if (!this.caseItem.id) {
         try {
           const result = await this.$store.dispatch('getCaseDetails', {
             caseId: this.caseId
