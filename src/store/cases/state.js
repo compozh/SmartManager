@@ -1,5 +1,7 @@
 export default {
   cases: null,
   caseDialog: false,
-  caseDetails: {}
+  caseDetails: {},
+  caseEditable: false,
+  caseChanged: false
 }
