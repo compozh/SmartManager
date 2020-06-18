@@ -249,6 +249,7 @@ export default {
           color: 'warning'
         })
       }
+      return result
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {

@@ -182,17 +182,11 @@ export const tasks = {
       await this.$store.dispatch('getTasks', folderId)
     },
     async getTask () {
-      if (!this.task.id) {
-        try {
-          const result = await this.$store.dispatch('getTaskDetails', {
-            taskId: this.taskId
-          })
-          result.success || await this.$router.push('/error404')
-          this.showTaskDialog(true)
-        } catch (e) {
-          console.log(e.message)
-        }
-      }
+      const result = await this.$store.dispatch('getTaskDetails', {
+        taskId: this.taskId
+      })
+      result.success || await this.$router.push('/error404')
+      this.showTaskDialog(true)
     },
     showTaskDialog (toShow) {
       this.$store.commit('SHOW_TASK_DIALOG', toShow)
@@ -307,7 +301,6 @@ export const attachments = {
   },
   methods: {
     setActiveAttachment (attachment) {
-      console.log(this.tab)
       this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
     },
     getAttachmentDetails () {
