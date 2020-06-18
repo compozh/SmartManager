@@ -271,7 +271,7 @@ export default {
       this.setTaskChanged(false)
     },
     closeTaskDetails () {
-      this.showTaskDialog(true)
+      this.showTaskDialog(false)
       this.$router.push('/tasks/' + this.activeFolder.Code)
     },
     async formSubmit () {
