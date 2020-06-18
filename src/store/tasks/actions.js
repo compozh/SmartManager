@@ -10,7 +10,7 @@ export default {
     preLoader || commit('START_PRELOADER', 'tasks')
     commit('START_LINEAR_PRELOADER', 'tasks')
     commit('SET_SEARCH', null)
-    commit('SET_ACTIVE_FOLDER', { folderId, source: 'action' })
+    commit('SET_ACTIVE_FOLDER', { folderId })
     try {
       const result = await api.getTasksFromGql({
         folderId: folderId === 'active' ? '' : folderId,

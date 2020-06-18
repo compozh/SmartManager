@@ -16,7 +16,7 @@ export default {
   ],
   activeFolder: (state, getters) => {
     return getters.allFolders.find(folder => {
-      return folder.Code === state.activeFolderId
+      return String(folder.Code) === String(state.activeFolderId)
     }) || {}
   }
 }

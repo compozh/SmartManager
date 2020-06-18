@@ -82,11 +82,12 @@ export const folders = {
     ]),
     activeFolderId: {
       get () {
-        return this.$route.params.folderId ||
-          this.$store.state.folders.activeFolderId ||
+        return this.$store.state.folders.activeFolderId ||
           'active'
       },
       set (folderId) {
+        /* TODO: fix define activeFolderId value when folder page apdate
+            in TheSideBar -> v-list-item-group v-model="activeFolderId" */
         this.$store.commit('SET_ACTIVE_FOLDER', { folderId })
       }
     }
@@ -208,7 +209,11 @@ export const tasks = {
 export const cases = {
   computed: {
     cases () {
-      return this.$store.getters.cases
+      const cases = this.$store.getters.cases
+      if (this.$route.params.folderId === 'all') {
+        return cases
+      }
+      return cases.filter(i => i.folderId === +this.$route.params.folderId)
     },
     caseId () {
       return this.case.id || +this.$route.params.caseId

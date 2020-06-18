@@ -19,20 +19,20 @@
           <template #activator="{ on }">
             <v-list-item v-on="on"
                          :to="'/' + activeZone.group + '/' + folder.Code"
-                         :class="{ 'item-active': folder.Code === activeFolderId,
+                         :class="{ 'item-active': String(folder.Code) === String(activeFolderId),
                                   'ml-4': folder.Parent }"
                          :value="folder.Code"
                          style="min-height: 32px;">
               <v-list-item-icon class="ma-0 mr-1 align-self-center align-center"
-                                :class="{ 'white--text': folder.Code === activeFolderId }">
+                                :class="{ 'white--text': String(folder.Code) === String(activeFolderId) }">
                 <fa-icon :icon="folderIcons(folder.Code)"/>
               </v-list-item-icon>
               <v-list-item-title class="body-1"
-                                 :class="{ 'white--text': folder.Code === activeFolderId }">
+                                 :class="{ 'white--text': String(folder.Code) === String(activeFolderId) }">
                 {{ folder.Name }}</v-list-item-title>
               <v-list-item-action v-if="folder.Count" class="ma-0 justify-end">
                 <span class="body-1"
-                      :class="folder.Code === activeFolderId ? 'white--text' : 'grey--text'">
+                      :class="String(folder.Code) === String(activeFolderId) ? 'white--text' : 'grey--text'">
                 {{ folder.Count }}</span>
               </v-list-item-action>
             </v-list-item>
@@ -59,7 +59,7 @@ export default {
     $route (to) {
       if (to.name.includes('list')) {
         this.$store.commit('SET_ACTIVE_FOLDER',
-          { folderId: to.params.folderId, source: 'watcher' })
+          { folderId: to.params.folderId })
       }
     }
   },
