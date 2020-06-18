@@ -24,21 +24,28 @@
                         return-object>
 
           <template #selection="data">
-            <v-chip v-bind="data.attrs"
-                    :input-value="data.selected"
-                    outlined small
-                    color="blue-grey"
-                    @click="data.select"
-                    class="d-flex justify-space-between"
-                    style="flex: 0 0 30%;">
+            <v-tooltip top>
+              <template #activator="{ on }">
+                <v-chip v-on="on"
+                        v-bind="data.attrs"
+                        :input-value="data.selected"
+                        outlined small
+                        color="blue-grey"
+                        @click="data.select"
+                        class="d-flex justify-space-between mb-1"
+                        style="flex-basis: 45%;">
               <span class="text-truncate" style="color: #343434">
                 {{ data.item.fio }}</span>
-              <v-btn icon depressed x-small
-                     class="mr-n2"
-                     @click="remove(data.item.userId, participants.group)">
-                <fa-icon icon="times" color="#343434" size="lg"/>
-              </v-btn>
-            </v-chip>
+                  <v-btn icon depressed x-small
+                         class="mr-n2"
+                         @click="remove(data.item.userId, participants.group)">
+                    <fa-icon icon="times" color="#343434" size="lg"/>
+                  </v-btn>
+                </v-chip>
+              </template>
+              <span>{{ data.item.fio }}</span>
+            </v-tooltip>
+
           </template>
 
           <template #item="data">
@@ -153,6 +160,13 @@ export default {
 
   .v-input >>> .v-input__slot {
     padding: 0 !important;
+  }
+
+  .v-input >>> .v-input__slot input {
+    min-height: 26px;
+    align-self: start;
+    padding: 0;
+    text-overflow: ellipsis;
   }
 
   .v-input >>> .v-input__slot .v-select__selections {
