@@ -5,7 +5,7 @@
       <v-row dense justify="start"
              align-content="start"
              class="flex-grow-0">
-        <v-col class="d-flex">
+        <v-col class="d-flex py-2">
           <search-field class="mt-n3 ml-1"/>
           <v-spacer/>
         </v-col>
