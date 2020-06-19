@@ -369,8 +369,10 @@ export default {
         descript: this.taskData.description,
         participants: this.taskData.participants
       }
-
-      await this.$store.dispatch('updateTask', taskData)
+      const result = await this.$store.dispatch('updateTask', taskData)
+      if (!result.success) {
+        this.initTaskData()
+      }
     }
   },
   beforeDestroy () {
