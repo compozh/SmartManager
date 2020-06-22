@@ -213,7 +213,8 @@
     "type": "Тип",
     "status": "Статус",
     "description": "Опис",
-    "date": "Дата"
+    "date": "Дата",
+    "fioAdd": "Створено"
   },
   "attachments": {
     "delConfirmTitle": "Видалити додаток",

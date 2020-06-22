@@ -213,7 +213,8 @@
     "type": "Type",
     "status": "Status",
     "description": "Description",
-    "date": "Date"
+    "date": "Date",
+    "fioAdd": "Created"
   },
   "attachments": {
     "delConfirmTitle": "Attachment delete",
