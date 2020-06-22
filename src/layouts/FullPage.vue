@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <notify/>
-    <v-content class="layout--full-page">
+    <v-main class="layout--full-page">
       <div class="header--full-page d-flex align-center pa-4"
            style="width: 100%">
         <v-img src="@/assets/it-logo.svg" contain max-width="150"/>
@@ -11,7 +11,7 @@
         </div>
       </div>
       <router-view/>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
