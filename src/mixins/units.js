@@ -1,5 +1,4 @@
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 
 export const common = {
   computed: {
@@ -263,28 +262,15 @@ export const cases = {
 export const attachments = {
   data: () => ({
     uploadErrors: [],
-    attachmentType: ''
+    attachmentType: '',
+    loading: false
   }),
   computed: {
     attachments () {
-      const attachments = []
-      if (this.task.originals && this.task.originals.length) {
-        this.task.originals.forEach(o => {
-          attachments.push(Object.assign({}, o))
-        })
-        attachments.forEach(a => {
-          a.parseDate = moment(a.date, 'DD.MM.YYYY HH:mm')
-        })
-        attachments.sort((a, b) => b.parseDate - a.parseDate)
-      }
-      return attachments
+      return this.$store.getters.attachments
     },
     activeAttachment () {
-      return this.$store.state.attachments.activeAttachment ||
-        this.attachments[0] || {}
-    },
-    attachmentDetails () {
-      return this.$store.state.attachments.attachmentDetails || {}
+      return this.$store.state.attachments.activeAttachment || {}
     },
     attachmentTypes () {
       return this.$store.state.attachments.attachmentTypes || []
@@ -303,16 +289,16 @@ export const attachments = {
     setActiveAttachment (attachment) {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
     },
-    getAttachmentDetails () {
-      const { id: fileId, fileExt } = this.activeAttachment
+    async getAttachmentDetails (attachment) {
+      const { id: fileId, fileExt } = attachment || this.activeAttachment
       if (fileId && fileExt) {
-        const id = +this.$route.params.taskId || +this.$route.params.caseId
-        this.$store.dispatch('getFileDetails', { fileId, fileExt, id })
+        this.loading = true
+        await this.$store.dispatch('getFileDetails', { fileId, fileExt })
+        this.loading = false
       }
     },
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
-      this.$store.commit('SET_ATTACHMENT_DETAILS', {})
     },
     async getAttachmentTypes () {
       await this.$store.dispatch('getAttachmentTypes', this.params)

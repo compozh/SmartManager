@@ -31,6 +31,7 @@ export default {
       const caseDetails = response.data.smtasks.caseDetails
       result.success = !!caseDetails
       commit('SET_CASE_DETAILS', { [caseId]: caseDetails })
+      commit('SET_ATTACHMENTS', caseDetails.originals)
     } catch (e) {
       console.log(e.message)
       commit('SET_NOTIFY', {
