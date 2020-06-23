@@ -40,6 +40,7 @@ export default {
       const taskDetails = response.data.smtasks.taskDetails
       result.success = !!taskDetails
       commit('SET_TASK_DETAILS', { [taskId]: taskDetails })
+      commit('SET_ATTACHMENTS', taskDetails.originals)
     } catch (e) {
       console.log(e.message)
       commit('SET_NOTIFY', {
