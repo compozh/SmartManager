@@ -2,7 +2,7 @@ import { SmartManagerApi as api } from '@/api/smartManagerApi'
 import i18n from '@/i18n'
 
 export default {
-  async getFileDetails ({ commit, rootState }, { fileId, fileExt, id: taskOrCaseId }) {
+  async getFileDetails ({ commit, rootState }, { fileId, fileExt }) {
     commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
       const result = await api.getFileDetailsFromGql(fileId, fileExt)
@@ -13,7 +13,7 @@ export default {
           color: 'warning'
         })
       }
-      commit('SET_ATTACHMENT_DETAILS', { fileId, fileDetails, taskOrCaseId, rootState })
+      commit('SET_ATTACHMENT_DETAILS', { fileId, fileDetails })
       return fileDetails
     } catch (e) {
       console.log(e.message)
