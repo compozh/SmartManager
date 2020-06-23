@@ -94,7 +94,7 @@
                                class="mb-10"/>
           <!-- TASK ATTACHMENTS -->
           <attachments-list v-if="!externalTaskCamunda || attachments.length"
-                            class="mb-10" @input="tab = 0"/>
+                            class="mb-10" @selectAttachment="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>

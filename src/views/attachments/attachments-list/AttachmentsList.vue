@@ -26,8 +26,8 @@
         </v-simple-table>
     </files-upload>
 
-    <perfect-scrollbar v-show="attachments.length"
-                       style="max-height: 300px;">
+    <perfect-scrollbar v-show="attachments.length">
+<!--                       style="max-height: 300px;"-->
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
         <v-chip v-for="item in attachments"
                 :key="item.id" small
@@ -40,35 +40,61 @@
         </v-chip>
       </div>
       <div v-else>
-        <v-simple-table>
-          <template>
-            <thead>
-              <tr>
-                <th class="text-center">{{ $t('table.type') }}</th>
-                <th class="text-center">{{ $t('table.name') }}</th>
-                <th class="text-center">{{ $t('table.date') }}</th>
-                <th class="text-center">{{ $t('table.size') }}</th>
-                <th class="text-center">{{ $t('table.sign') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-            <v-hover v-slot:default="{ hover }" v-for="item in this.attachments"
-                     :key="item.id">
+        <v-data-table
+          :headers="headers"
+          :items="attachments"
+          item-key="id"
+          show-expand
+          :expanded.sync="expanded"
+          disable-filtering
+          disable-pagination
+          disable-sort
+          hide-default-footer>
+
+          <template #item="{ item, index, headers, expand, isExpanded }">
+            <v-hover #default="{ hover }">
               <tr style="cursor: pointer; width: 100%;"
                   :class="{ 'light-blue lighten-5': item.id === activeAttachment.id }"
                   @click="selectAttachment(item)">
-                <td class="text-center"
+                <td class="px-1">
+                  <v-btn icon :loading="item.loading"
+                         @click.stop="expandVersions(item, expand, isExpanded)">
+                    <fa-icon icon="chevron-right" size="xs"
+                             style="transition: transform .2s"
+                             :style="{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }"/>
+                    <template #loader>
+                      <span class="custom-loader">
+                        <fa-icon icon="sync"/>
+                      </span>
+                    </template>
+                  </v-btn>
+                </td>
+                <td class="text-center px-0"
                     style="width: 30px;">
                   <file-type-icon :extension="item.fileExt"/>
                 </td>
-                <td class="text-truncate" style="max-width: 0;">{{ item.fileName }}</td>
+                <td class="text-truncate"
+                    style="max-width: 0;">{{ item.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
                   <span v-if="!hover">{{ item.date }}</span>
                   <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
-                             :to="item.srcUrl"
+                             @click.stop
+                             color="grey"
+                             class="mr-8"
+                             style="border: 1px dashed;"
+                             text fab x-small dark depressed>
+                        <fa-icon icon="files-medical" type="fal" size="2x"/>
+                      </v-btn>
+                    </template>
+                    <span>{{ 'Add version' /* TODO: add resource */ }}</span>
+                  </v-tooltip>
+                  <v-tooltip v-if="hover && item.srcUrl" top>
+                    <template #activator="{ on }">
+                      <v-btn v-on="on"
+                             :href="item.srcUrl"
                              @click.stop
                              color="grey"
                              style="border: 1px dashed;"
@@ -103,9 +129,41 @@
                 </td>
               </tr>
             </v-hover>
-            </tbody>
           </template>
-        </v-simple-table>
+
+          <template #expanded-item="{ item }">
+            <tr class="expanded" style="transition: all .4s">
+                <td :colspan="headers.length + 1" class="pl-10 pr-0 pb-5">
+                  <v-simple-table dense>
+                    <template>
+                      <thead>
+                      <tr>
+                        <th>{{ $t('table.sign') }}</th>
+                        <th>{{ $t('table.date') }}</th>
+                        <th>{{ $t('table.version') }}</th>
+                        <th>{{ $t('table.fioAdd') }}</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr v-for="(version, index) in item.versions"
+                          :key="index"
+                          :class="{'font-weight-medium': version.IsActive}"
+                          @click="() => {}">
+                        <td>Sign</td>
+                        <td>{{ version.Date }}</td>
+                        <td>{{ version.Version }}</td>
+                        <td>{{ version.User }}</td>
+                      </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </td>
+              </tr>
+          </template>
+          <template #group="{ group }">
+            group {{ group }}
+          </template>
+        </v-data-table>
       </div>
     </perfect-scrollbar>
   </div>
@@ -126,15 +184,41 @@ export default {
     FileTypeIcon
   },
   data: () => ({
-    attachmentsListMode: false
+    attachmentsListMode: false,
+    loading: false,
+    expanded: []
   }),
+  computed: {
+    headers () {
+      return [
+        { text: this.$t('table.type'), value: 'type', align: 'center' },
+        { text: this.$t('table.name'), value: 'name', align: 'center' },
+        { text: this.$t('table.date'), value: 'date', align: 'center' },
+        { text: this.$t('table.size'), value: 'size', align: 'center' },
+        { text: this.$t('table.sign'), value: 'sign', align: 'center' }
+      ]
+    }
+  },
   created () {
     this.getAttachmentTypes()
+    if (this.attachments.length && !this.activeAttachment.id) {
+      this.selectAttachment(this.attachments[0])
+    }
   },
   methods: {
     selectAttachment (attachment) {
       this.setActiveAttachment(attachment)
-      this.$emit('input')
+      this.$emit('selectAttachment')
+    },
+    async expandVersions (item, expand, isExpanded) {
+      if (item.versions || isExpanded) {
+        expand(!isExpanded)
+      } else {
+        item.loading = true
+        await this.getAttachmentDetails(item)
+        item.loading = false
+        expand(!isExpanded)
+      }
     }
   }
 }
@@ -142,8 +226,27 @@ export default {
 
 <style scoped>
 
-  .v-data-table >>> .v-data-table__wrapper {
-    overflow-x: hidden;
+  .v-data-table >>> th:nth-child(2) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  tr.expanded:hover {
+    background: none !important;
+  }
+
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
 </style>
