@@ -3,7 +3,7 @@
     <file-upload ref="upload"
                  class="upload-action"
                  v-model="files"
-                 multiple
+                 :multiple="isMultiple"
                  drop
                  dropDirectory
                  :headers="headers"
@@ -29,6 +29,14 @@ export default {
   },
   mixins: [common, tasks, attachments],
   props: {
+    uploadType: {
+      type: String,
+      default: 'attachment'
+    },
+    uploadHandler: {
+      type: Function,
+      default: () => this.addAttachments
+    },
     uploading: {
       type: Boolean,
       default: false
@@ -59,6 +67,9 @@ export default {
     }
   }),
   computed: {
+    isMultiple () {
+      return this.uploadType !== 'version'
+    },
     fileSize () {
       return size => {
         switch (true) {
@@ -123,7 +134,7 @@ export default {
       if (newFile && oldFile) {
         // File upload error
         if (newFile.error !== oldFile.error) {
-          // notify
+          this.files = []
           this.$store.commit('SET_NOTIFY', {
             text: this.$t('notify.uploadError', { file: newFile.name }),
             color: 'error'
@@ -133,7 +144,7 @@ export default {
         if (newFile && oldFile && newFile.success !== oldFile.success) {
           const fileName = newFile.file.name
           const filePath = newFile.response.fileName
-          this.addAttachments({ fileName, filePath })
+          this.uploadHandler({ fileName, filePath })
           this.files.shift()
         }
         // All files uploaded
