@@ -6,7 +6,7 @@
            outlined x-small
            color="primary"
            class="add-btn pa-0"
-           @click="attachmentTypes.length > 1 ? showTypeList = true : ''">
+           @click="newAttachment()">
       <label :for="attachmentTypes.length <= 1 ? 'file' : ''"
              class="add-label pa-2">
         {{ $t('buttons.addAttachment') }}
@@ -46,7 +46,13 @@ export default {
   },
   data: () => ({
     showTypeList: false
-  })
+  }),
+  methods: {
+    newAttachment () {
+      this.$emit('update:uploadType', 'attachments')
+      this.showTypeList = this.attachmentTypes.length > 1
+    }
+  }
 }
 </script>
 

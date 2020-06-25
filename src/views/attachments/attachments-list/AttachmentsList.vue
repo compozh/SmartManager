@@ -1,25 +1,27 @@
 <template>
   <div>
-    <list-header v-model="attachmentsListMode"/>
+    <list-header v-model="attachmentsListMode"
+                 :uploadType.sync="uploadType"/>
 
     <!-- UPLOAD COMPONENT -->
-    <files-upload v-slot="{ files }" upload-auto>
+    <files-upload v-slot="{ files }"
+                  upload-auto
+                  :uploadHandler="uploadHandler"
+                  :uploadType="uploadType">
         <v-simple-table>
           <template>
             <tbody>
-            <tr v-for="item in files"
-                :key="item.id"
+            <tr v-for="file in files"
+                :key="file.id"
                 class="grey--text">
               <td style="width: 30px;">
-                <v-progress-circular
-                  :size="25"
-                  :value="item.progress"
-                  :width="3"
-                  color="primary"
-                  class="caption"/>
+                <v-progress-circular :size="25" :width="3"
+                                     :value="file.progress"
+                                     color="primary"
+                                     class="caption"/>
               </td>
-              <td class="text-truncate" style="max-width: 0;">{{ item.name }}</td>
-              <td style="width: 100px;">{{ fileSize(item.size) }}</td>
+              <td class="text-truncate" style="max-width: 0;">{{ file.name }}</td>
+              <td style="width: 100px;">{{ fileSize(file.size) }}</td>
             </tr>
             </tbody>
           </template>
@@ -29,14 +31,14 @@
     <perfect-scrollbar v-show="attachments.length">
 <!--                       style="max-height: 300px;"-->
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
-        <v-chip v-for="item in attachments"
-                :key="item.id" small
+        <v-chip v-for="attachment in attachments"
+                :key="attachment.id" small
                 class="my-2 mr-2 text-truncate"
-                :class="{ warning: item.id === activeAttachment.id }"
+                :class="{ warning: attachment.id === activeAttachment.id }"
                 style="min-width: 100px; max-width: 33%; flex: 1 1 24%"
-                @click="selectAttachment(item)">
+                @click="selectAttachment(attachment)">
           <fa-icon icon="file-alt" class="mr-3" size="lg"/>
-          <span class="text-truncate">{{ item.fileName }}</span>
+          <span class="text-truncate">{{ attachment.fileName }}</span>
         </v-chip>
       </div>
       <div v-else>
@@ -45,20 +47,19 @@
           :items="attachments"
           item-key="id"
           show-expand
-          :expanded.sync="expanded"
           disable-filtering
           disable-pagination
           disable-sort
           hide-default-footer>
 
-          <template #item="{ item, index, headers, expand, isExpanded }">
+          <template #item="{ item: attachment, index, headers, expand, isExpanded }">
             <v-hover #default="{ hover }">
               <tr style="cursor: pointer; width: 100%;"
-                  :class="{ 'light-blue lighten-5': item.id === activeAttachment.id }"
-                  @click="selectAttachment(item)">
+                  :class="{ 'light-blue lighten-5': attachment.id === activeAttachment.id }"
+                  @click="selectAttachment(attachment)">
                 <td class="px-1">
-                  <v-btn icon :loading="item.loading"
-                         @click.stop="expandVersions(item, expand, isExpanded)">
+                  <v-btn icon :loading="attachment.loading"
+                         @click.stop="expandVersions(attachment, expand, isExpanded)">
                     <fa-icon icon="chevron-right" size="xs"
                              style="transition: transform .2s"
                              :style="{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }"/>
@@ -71,35 +72,45 @@
                 </td>
                 <td class="text-center px-0"
                     style="width: 30px;">
-                  <file-type-icon :extension="item.fileExt"/>
+                  <file-type-icon :extension="attachment.fileExt"/>
                 </td>
                 <td class="text-truncate"
-                    style="max-width: 0;">{{ item.fileName }}</td>
+                    style="max-width: 0;">{{ attachment.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
-                  <span v-if="!hover">{{ item.date }}</span>
+                  <span v-if="!hover">{{ attachment.date }}</span>
                   <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
-                             @click.stop
+                             id="addBtn"
+                             @click.stop="newVersion(attachment.id, attachment.fileExt)"
                              color="grey"
                              class="mr-8"
                              style="border: 1px dashed;"
                              text fab x-small dark depressed>
-                        <fa-icon icon="files-medical" type="fal" size="2x"/>
+                        <label for="file"
+                               class="add-label pa-2">
+                          <fa-icon icon="files-medical" type="fal" size="2x"/>
+                        </label>
                       </v-btn>
                     </template>
                     <span>{{ 'Add version' /* TODO: add resource */ }}</span>
                   </v-tooltip>
-                  <v-tooltip v-if="hover && item.srcUrl" top>
+                  <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
-                             :href="item.srcUrl"
-                             @click.stop
+                             :href="attachment.srcUrl"
+                             :loading="attachment.downloading"
+                             @click.stop="downloadAttachment(attachment)"
                              color="grey"
                              style="border: 1px dashed;"
                              text fab x-small dark depressed>
                         <fa-icon icon="arrow-alt-down" type="fal" size="2x"/>
+                        <template #loader>
+                          <span class="custom-loader">
+                            <fa-icon icon="sync"/>
+                          </span>
+                        </template>
                       </v-btn>
                     </template>
                     <span>{{ 'Download' /* TODO: add resource */ }}</span>
@@ -107,13 +118,13 @@
                 </td>
                 <td :class="hover ? 'text-left' : 'text-center text-truncate'"
                     style="width: 100px; max-width: 0;">
-                  <span v-if="!hover">{{ fileSize(item.fileSize) }}</span>
+                  <span v-if="!hover">{{ fileSize(attachment.fileSize) }}</span>
                   <v-tooltip v-else top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on"
                              color="grey"
                              style="border: 1px dashed;"
-                             @click="attachmentDelete(item.id)"
+                             @click="attachmentDelete(attachment.id)"
                              text fab x-small dark depressed>
                         <fa-icon icon="trash" type="fal" size="lg"/>
                       </v-btn>
@@ -123,7 +134,7 @@
                 </td>
                 <td class="text-center" style="width: 20px;">
                   <div v-if="!hover">
-                    <fa-icon v-if="item.isSign" icon="medal" size="lg"/>
+                    <fa-icon v-if="attachment.isSign" icon="medal" size="lg"/>
                     <span v-else>-</span>
                   </div>
                 </td>
@@ -131,37 +142,97 @@
             </v-hover>
           </template>
 
-          <template #expanded-item="{ item }">
-            <tr class="expanded" style="transition: all .4s">
+          <template #expanded-item="{ item: attachment }">
+            <tr class="expanded" style="border: 1px solid grey;">
                 <td :colspan="headers.length + 1" class="pl-10 pr-0 pb-5">
                   <v-simple-table dense>
                     <template>
                       <thead>
                       <tr>
-                        <th>{{ $t('table.sign') }}</th>
-                        <th>{{ $t('table.date') }}</th>
-                        <th>{{ $t('table.version') }}</th>
-                        <th>{{ $t('table.fioAdd') }}</th>
+                        <th class="text-center px-0">{{ $t('table.type') }}</th>
+                        <th class="text-center">{{ $t('table.name') }}</th>
+                        <th class="text-center">{{ $t('table.date') }}</th>
+                        <th class="text-center">{{ $t('table.version') }}</th>
+                        <th class="text-center">{{ $t('table.fioAdd') }}</th>
+                        <th class="text-center">{{ 'Действия' /* TODO: add resource */ }}</th>
+                        <th class="text-center">{{ $t('table.sign') }}</th>
                       </tr>
                       </thead>
                       <tbody>
-                      <tr v-for="(version, index) in item.versions"
+                        <tr v-for="(version, index) in attachment.versions"
                           :key="index"
-                          :class="{'font-weight-medium': version.IsActive}"
-                          @click="() => {}">
-                        <td>Sign</td>
-                        <td>{{ version.Date }}</td>
-                        <td>{{ version.Version }}</td>
-                        <td>{{ version.User }}</td>
-                      </tr>
+                          :class="{'light-blue--text text--darken-4': version.IsActive}"
+                          style="cursor: pointer; width: 100%;"
+                            @click="viewVersion(attachment.id, version.Details)">
+                          <td class="text-center px-1"
+                              style="width: 25px;">
+                            <file-type-icon :size="18"
+                                            :extension="version.Details.FileType"/>
+                          </td>
+                          <td class="text-truncate"
+                              style="max-width: 200px; font-size: 13px;">
+                            {{ version.Details.FileName }}</td>
+                          <td class="text-center" style="font-size: 13px;">{{ version.Date }}</td>
+                          <td class="text-center" style="font-size: 13px;">
+                            {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
+                          </td>
+                          <td class="text-center text-truncate"
+                              style="max-width: 100px; font-size: 13px;">
+                            {{ version.User }}</td>
+                          <td class="text-center">
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       @click.stop="setActiveVersion(attachment.id, version.Id)"
+                                       color="green"
+                                       class="mr-4"
+                                       style="border: 1px dashed;"
+                                       :disabled="version.IsActive"
+                                       icon x-small depressed>
+                                  <fa-icon icon="check" type="fal" size="lg"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ 'Set active version' /* TODO: add resource */ }}</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       @click.stop="() => {}"
+                                       color="blue"
+                                       class="mr-4"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="bars" type="fal" size="lg"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ 'Замечания' /* TODO: add resource */ }}</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       @click.stop="deleteVersion(attachment.id, version.Id)"
+                                       color="red darken-4"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="times" type="fal"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ 'Delete version' /* TODO: add resource */ }}</span>
+                            </v-tooltip>
+                          </td>
+                          <td class="text-center" style="width: 20px;">
+                            <div>
+                              <fa-icon v-if="version.Signatures && version.Signatures.length"
+                                       icon="medal" size="lg"/>
+                              <span v-else>-</span>
+                            </div>
+                          </td>
+                        </tr>
                       </tbody>
                     </template>
                   </v-simple-table>
                 </td>
               </tr>
-          </template>
-          <template #group="{ group }">
-            group {{ group }}
           </template>
         </v-data-table>
       </div>
@@ -174,6 +245,7 @@ import ListHeader from './ListHeader'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, attachments } from '@/mixins/units'
+import axios from 'axios'
 
 export default {
   name: 'AttachmentsList',
@@ -185,8 +257,8 @@ export default {
   },
   data: () => ({
     attachmentsListMode: false,
-    loading: false,
-    expanded: []
+    uploadType: 'attachments',
+    versionParams: null
   }),
   computed: {
     headers () {
@@ -197,6 +269,16 @@ export default {
         { text: this.$t('table.size'), value: 'size', align: 'center' },
         { text: this.$t('table.sign'), value: 'sign', align: 'center' }
       ]
+    },
+    uploadHandler () {
+      if (this.uploadType === 'version') {
+        return ({ filePath }) => {
+          const { fileId, fileExt } = this.versionParams
+          this.addVersion(fileId, fileExt, filePath)
+        }
+      } else {
+        return this.addAttachments
+      }
     }
   },
   created () {
@@ -210,15 +292,25 @@ export default {
       this.setActiveAttachment(attachment)
       this.$emit('selectAttachment')
     },
-    async expandVersions (item, expand, isExpanded) {
-      if (item.versions || isExpanded) {
+    async expandVersions (attachment, expand, isExpanded) {
+      if (attachment.versions || isExpanded) {
         expand(!isExpanded)
       } else {
-        item.loading = true
-        await this.getAttachmentDetails(item)
-        item.loading = false
+        attachment.loading = true
+        await this.getAttachmentDetails(attachment)
+        attachment.loading = false
         expand(!isExpanded)
       }
+    },
+    newVersion (fileId, fileExt) {
+      this.uploadType = 'version'
+      this.versionParams = { fileId, fileExt }
+    },
+    async downloadAttachment (attachment) {
+      attachment.downloading = true
+      attachment.srcUrl || await this.getAttachmentDetails(attachment)
+      attachment.downloading = false
+      await axios.get(attachment.srcUrl)
     }
   }
 }
@@ -238,6 +330,11 @@ export default {
   .custom-loader {
     animation: loader 1s infinite;
     display: flex;
+  }
+
+  #addBtn >>> .v-btn__content {
+    border-radius: 50%;
+    overflow: hidden;
   }
 
   @keyframes loader {
