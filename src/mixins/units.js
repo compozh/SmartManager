@@ -263,7 +263,7 @@ export const attachments = {
   data: () => ({
     uploadErrors: [],
     attachmentType: '',
-    loading: false
+    loading: false // for viewers
   }),
   computed: {
     attachments () {
@@ -271,6 +271,9 @@ export const attachments = {
     },
     activeAttachment () {
       return this.$store.state.attachments.activeAttachment || {}
+    },
+    attachmentDetails () {
+      return this.$store.state.attachments.attachmentDetails || {}
     },
     attachmentTypes () {
       return this.$store.state.attachments.attachmentTypes || []
@@ -286,7 +289,7 @@ export const attachments = {
     }
   },
   methods: {
-    setActiveAttachment (attachment) {
+    async setActiveAttachment (attachment) {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
     },
     async getAttachmentDetails (attachment) {
@@ -299,6 +302,7 @@ export const attachments = {
     },
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
+      this.$store.commit('SET_ATTACHMENT_DETAILS', {})
     },
     async getAttachmentTypes () {
       await this.$store.dispatch('getAttachmentTypes', this.params)
@@ -322,6 +326,19 @@ export const attachments = {
         }
       })
     },
+    async addVersion (fileId, fileExt, filePath) {
+      await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
+    },
+    viewVersion (attachmentId, version) {
+      this.$store.commit('VIEW_VERSION', { attachmentId, version })
+    },
+    async setActiveVersion (attachmentId, versionId) {
+      await this.$store.dispatch('setActiveVersion', { attachmentId, versionId })
+    },
+    async deleteVersion (attachmentId, versionId) {
+      await this.$store.dispatch('deleteVersion', { attachmentId, versionId })
+    },
+
     async attachmentDelete (id) {
       const result = await this.$store.dispatch('attachmentDelete', {
         fileId: id,
