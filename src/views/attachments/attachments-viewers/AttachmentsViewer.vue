@@ -1,6 +1,6 @@
 <template>
   <div class="fill-height">
-    <component v-if="viewer" :is="viewer" :url="activeAttachment.url"/>
+    <component v-if="viewer" :is="viewer" :url="attachmentDetails.url"/>
 
     <no-data v-else-if="loading" class="fill-height flex-wrap">
       <div class="headline font-weight-light grey--text d-flex flex-column align-center">
@@ -23,9 +23,9 @@
     </no-data>
 
     <no-data v-else class="fill-height">
-        <span v-if="activeAttachment.reason"
+        <span v-if="attachmentDetails.reason"
               class="headline font-weight-light grey--text">
-          {{ activeAttachment.reason }}
+          {{ attachmentDetails.reason }}
         </span>
     </no-data>
   </div>
@@ -43,10 +43,6 @@ const ImgViewer = () => import('./viewers/ImageViewer')
 const TxtViewer = () => import('./viewers/TextViewer')
 
 export default {
-  data: () => ({
-    url: '',
-    loading: false
-  }),
   components: {
     PdfViewer,
     ImgViewer,
@@ -66,7 +62,7 @@ export default {
       return ext => text.some(i => i === ext)
     },
     viewer () {
-      const url = this.activeAttachment.url
+      const url = this.attachmentDetails.url
       if (url) {
         const ext = url.split('.').pop().toLowerCase()
         switch (true) {

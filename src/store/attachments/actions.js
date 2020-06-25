@@ -2,7 +2,7 @@ import { SmartManagerApi as api } from '@/api/smartManagerApi'
 import i18n from '@/i18n'
 
 export default {
-  async getFileDetails ({ commit, rootState }, { fileId, fileExt }) {
+  async getFileDetails ({ commit }, { fileId, fileExt }) {
     commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
       const result = await api.getFileDetailsFromGql(fileId, fileExt)
@@ -29,14 +29,18 @@ export default {
       const response = await api.getAttachmentTypesFromGql(paramsJson)
       const result = JSON.parse(response.data.smtasks.attachmentTypes)
       commit('SET_ATTACHMENT_TYPES', result)
-    } catch (e) {
-      console.log(e.message)
-      // notify('danger', 'commentsTitle', 'commentAddError')
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || 'Type getting error' /* TODO: add resource notify.typeGettingError */,
+        color: 'error'
+      })
     } finally {
       commit('STOP_LINEAR_PRELOADER', 'attachmentTypes')
     }
   },
   async addAttachments ({ dispatch, commit }, payload) {
+    commit('START_LINEAR_PRELOADER', 'addAttachments')
     const attachments = JSON.stringify(payload.attachments)
     const params = JSON.stringify(payload.params)
     try {
@@ -64,6 +68,80 @@ export default {
         text: error.message || i18n.t('notify.attachAddError'),
         color: 'error'
       })
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'addAttachments')
+    }
+  },
+  async addVersion ({ dispatch, commit }, { fileId, fileExt, filePath }) {
+    commit('START_LINEAR_PRELOADER', 'addVersion')
+    try {
+      const response = await api.addAttachmentVersionInGql(fileId, filePath)
+      const result = response.data.smtasksMutation.addAttachmentVersion
+      if (result.success) {
+        dispatch('getFileDetails', { fileId, fileExt })
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || 'Version adding fail', /* TODO: add resource notify.versionAddingFail */
+          color: 'warning'
+        })
+      }
+      return result
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || 'Version adding error', /* TODO: add resource notify.versionAddingError */
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'addVersion')
+    }
+  },
+  async setActiveVersion ({ dispatch, commit }, { attachmentId, versionId }) {
+    commit('START_LINEAR_PRELOADER', 'setActiveVersion')
+    try {
+      const response = await api.setActiveVersionInGql(versionId)
+      const result = response.data.smtasksMutation.setActiveVersion
+      if (result.success) {
+        dispatch('getFileDetails', { fileId: attachmentId })
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || 'Active version setting fail', /* TODO: add resource notify.versionAddingFail */
+          color: 'warning'
+        })
+      }
+      return result
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || 'Active version setting error', /* TODO: add resource notify.versionAddingError */
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'setActiveVersion')
+    }
+  },
+  async deleteVersion ({ dispatch, commit }, { attachmentId, versionId }) {
+    commit('START_LINEAR_PRELOADER', 'deleteVersion')
+    try {
+      const response = await api.deleteVersionInGql(versionId)
+      const result = response.data.smtasksMutation.deleteVersion
+      if (result.success) {
+        dispatch('getFileDetails', { fileId: attachmentId })
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || 'Version delete fail', /* TODO: add resource notify.versionAddingFail */
+          color: 'warning'
+        })
+      }
+      return result
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || 'Version delete error', /* TODO: add resource notify.versionAddingError */
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'deleteVersion')
     }
   },
   async attachmentDelete ({ dispatch, commit }, { fileId, taskId, caseId }) {
@@ -97,11 +175,11 @@ export default {
   async updateAfterDelete ({ dispatch, commit }, { taskId, caseId }) {
     // Update task or case after delete if it needs
     if (taskId || caseId) {
-      commit('START_PRELOADER', 'updateAfterDelete')
+      commit('START_LINEAR_PRELOADER', 'updateAfterDelete')
       const id = taskId ? { taskId } : { caseId }
       const action = taskId ? 'getTaskDetails' : 'getCaseDetails'
       await dispatch(action, id)
-      commit('STOP_PRELOADER', 'updateAfterDelete')
+      commit('STOP_LINEAR_PRELOADER', 'updateAfterDelete')
     }
   }
 }

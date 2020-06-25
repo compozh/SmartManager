@@ -1,6 +1,13 @@
 export default {
   SET_ATTACHMENTS (state, attachments) {
-    state.attachments = attachments
+    if (state.attachments && state.attachments.length) {
+      state.attachments = attachments.map(attachment => {
+        const existingAttachment = state.attachments.find(i => i.id === attachment.id)
+        return Object.assign(attachment, existingAttachment || {})
+      })
+    } else {
+      state.attachments = attachments
+    }
   },
   SET_ATTACHMENT_TYPES (state, types) {
     state.attachmentTypes = types
@@ -11,7 +18,7 @@ export default {
   SET_ATTACHMENT_DETAILS (state, { fileId, fileDetails }) {
     if (fileId) {
       if (fileDetails.ErrorMessage) {
-        state.attachments[fileId] = {
+        state.attachmentDetails = {
           fileId,
           access: false,
           reason: fileDetails.ErrorMessage
@@ -28,7 +35,21 @@ export default {
         attachment.notes = fileDetails.Notes
         attachment.signatures = fileDetails.Signatures
         state.attachments = attachments
+        if (state.activeAttachment.id === attachment.id) {
+          state.attachmentDetails = Object.assign({}, attachment)
+        }
       }
+    } else {
+      // Reset value when mutation called with empty object
+      state.attachmentDetails = null
+    }
+  },
+  VIEW_VERSION (state, { attachmentId, version }) {
+    state.attachmentDetails = {
+      url: version.FileUrl
+    }
+    state.activeAttachment = {
+      id: attachmentId
     }
   }
 }

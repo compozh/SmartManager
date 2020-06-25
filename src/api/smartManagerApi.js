@@ -160,6 +160,42 @@ export class SmartManagerApi {
     }
   }
 
+  static async addAttachmentVersionInGql (fileId, filePath) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.mutate({
+        mutation: gql`${q.addAttachmentVersion}`,
+        variables: { id: fileId, name: filePath }
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async setActiveVersionInGql (id) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.mutate({
+        mutation: gql`${q.setActiveVersion}`,
+        variables: { id }
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
+  static async deleteVersionInGql (id) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.mutate({
+        mutation: gql`${q.deleteVersion}`,
+        variables: { id }
+      })
+    } catch (e) {
+      throw new Error(e.message)
+    }
+  }
+
   static async changeTaskStageInGql (stageParams) {
     try {
       const client = await getClient('smartmanager')

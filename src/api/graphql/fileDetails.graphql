@@ -1,4 +1,4 @@
-query ($id: Int!, $ext: String!) {
+query ($id: Int!, $ext: String) {
   smtasks {
       fileDetails(id: $id, ext: $ext)
   }
