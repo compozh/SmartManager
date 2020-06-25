@@ -1,0 +1,8 @@
+mutation ($id: Int!, $name: String!) {
+    smtasksMutation {
+        addAttachmentVersion(id: $id, name: $name) {
+            success
+            errorMessage
+        }
+    }
+}
