@@ -5,16 +5,19 @@ export default {
   async getFileDetails ({ commit }, { fileId, fileExt }) {
     commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
-      const result = await api.getFileDetailsFromGql(fileId, fileExt)
-      const fileDetails = JSON.parse(result.data.smtasks.fileDetails)
+      const result = { success: true, errorMessage: '' }
+      const response = await api.getFileDetailsFromGql(fileId, fileExt)
+      const fileDetails = JSON.parse(response.data.smtasks.fileDetails)
       if (fileDetails.ErrorMessage) {
+        result.success = false
+        result.errorMessage = fileDetails.ErrorMessage
         commit('SET_NOTIFY', {
           text: fileDetails.ErrorMessage,
           color: 'warning'
         })
       }
       commit('SET_ATTACHMENT_DETAILS', { fileId, fileDetails })
-      return fileDetails
+      return result
     } catch (e) {
       console.log(e.message)
       // notify('danger', 'taskTitle', 'taskError')
@@ -28,7 +31,7 @@ export default {
     try {
       const response = await api.getAttachmentTypesFromGql(paramsJson)
       const result = JSON.parse(response.data.smtasks.attachmentTypes)
-      commit('SET_ATTACHMENT_TYPES', result)
+      commit('SET_ATTACHMENT_TYPES', { [params.BusinessObjectKey || params.id]: result })
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {

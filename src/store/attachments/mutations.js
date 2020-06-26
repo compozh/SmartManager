@@ -10,7 +10,7 @@ export default {
     }
   },
   SET_ATTACHMENT_TYPES (state, types) {
-    state.attachmentTypes = types
+    state.attachmentTypes = Object.assign({}, state.attachmentTypes, types)
   },
   SET_ACTIVE_ATTACHMENT (state, attachment) {
     state.activeAttachment = attachment
