@@ -93,8 +93,16 @@
             <task-participants v-model="taskData.participants"
                                class="mb-10"/>
           <!-- TASK ATTACHMENTS -->
-          <attachments-list v-if="!externalTaskCamunda || attachments.length"
-                            class="mb-10" @selectAttachment="tab = 0"/>
+          <template v-if="externalTaskCamunda">
+            <attachments-list v-for="businessObject in externalParams.BUSINESSOBJECTKEYS"
+                              :key="businessObject.BusinessObjectKey"
+                              :businessObject="businessObject"
+                              :attachmentList="attachmentList(businessObject.BusinessObjectKey)"
+                              class="mb-10" @selectAttachment="tab = 0"/>
+          </template>
+          <attachments-list v-else class="mb-10"
+                            :attachmentList="attachments"
+                             @selectAttachment="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
@@ -241,6 +249,17 @@ export default {
         tabs.push({ name: this.$t('tabs.diagram'), component: 'diagram', icon: 'project-diagram' })
       }
       return tabs
+    },
+    attachmentList () {
+      return key => {
+        if (key) {
+          return this.attachments.filter(attachment => {
+            return attachment.businessObjectKey === key
+          })
+        } else {
+          return this.attachments
+        }
+      }
     }
   },
   watch: {
