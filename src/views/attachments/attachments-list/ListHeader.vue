@@ -1,18 +1,35 @@
 <template>
   <div class="d-flex align-center font-weight-light">
     <fa-icon icon="paperclip" class="mr-3" size="lg"/>
-    <span class="mr-3">{{ $t('tabs.attachments').toUpperCase() }}</span>
-    <v-btn v-if="!externalTaskCamunda"
-           outlined x-small
+    <span class="mr-3">{{ listTitle.toUpperCase() }}</span>
+    <v-btn outlined x-small
            color="primary"
-           class="add-btn pa-0"
+           class="add-btn pa-0 mr-5"
            @click="newAttachment()">
-      <label :for="attachmentTypes.length <= 1 ? 'file' : ''"
+      <label :for="attachmentTypes(objectId).length <= 1 ? 'file' : ''"
              class="add-label pa-2">
         {{ $t('buttons.addAttachment') }}
       </label>
     </v-btn>
     <v-spacer/>
+
+    <template v-if="businessObject.References.length">
+      <v-tooltip v-for="(reference, idx) in businessObject.References"
+                 :key="idx" top>
+        <template #activator="{ on }">
+          <v-btn v-on="on"
+                 :href="reference.Hyperlink"
+                 outlined x-small
+                 color="success"
+                 class="add-btn mr-5"
+                 @click="newAttachment()">
+<!--            <fa-icon :icon="reference.Icon"/>-->
+            {{ reference.Name }}
+          </v-btn>
+        </template>
+        <span>{{ reference.Description }}</span>
+      </v-tooltip>
+    </template>
 
     <v-btn-toggle v-show="attachments.length"
                   :value="value"
@@ -26,7 +43,7 @@
       </v-btn>
     </v-btn-toggle>
     <types-list :showTypeList.sync="showTypeList"
-                :typeList="attachmentTypes"
+                :typeList="attachmentTypes(objectId)"
                 v-model="attachmentType"/>
   </div>
 </template>
@@ -39,7 +56,8 @@ export default {
   name: 'ListHeader',
   mixins: [tasks, attachments],
   props: {
-    value: [Boolean, Number]
+    value: [Boolean, Number],
+    businessObject: Object
   },
   components: {
     TypesList
@@ -47,10 +65,20 @@ export default {
   data: () => ({
     showTypeList: false
   }),
+  computed: {
+    objectId () {
+      return this.businessObject.BusinessObjectKey || this.taskId || this.caseId
+    },
+    listTitle () {
+      return this.businessObject
+        ? this.businessObject.BusinessObjectDefinitionName
+        : this.$t('tabs.attachments')
+    }
+  },
   methods: {
     newAttachment () {
       this.$emit('update:uploadType', 'attachments')
-      this.showTypeList = this.attachmentTypes.length > 1
+      this.showTypeList = this.attachmentTypes(this.objectId).length > 1
     }
   }
 }

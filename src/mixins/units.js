@@ -276,7 +276,8 @@ export const attachments = {
       return this.$store.state.attachments.attachmentDetails || {}
     },
     attachmentTypes () {
-      return this.$store.state.attachments.attachmentTypes || []
+      const types = this.$store.state.attachments.attachmentTypes
+      return objectId => types && types[objectId] ? types[objectId] : []
     },
     fileSize () {
       return size => {
@@ -293,19 +294,27 @@ export const attachments = {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
     },
     async getAttachmentDetails (attachment) {
+      this.loading = true
+      let result = null
       const { id: fileId, fileExt } = attachment || this.activeAttachment
       if (fileId && fileExt) {
-        this.loading = true
-        await this.$store.dispatch('getFileDetails', { fileId, fileExt })
-        this.loading = false
+        result = await this.$store.dispatch('getFileDetails', {
+          fileId, fileExt
+        })
       }
+      this.loading = false
+      return result
     },
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
       this.$store.commit('SET_ATTACHMENT_DETAILS', {})
     },
-    async getAttachmentTypes () {
-      await this.$store.dispatch('getAttachmentTypes', this.params)
+    async getAttachmentTypes ({ BusinessObjectDefinitionCode, BusinessObjectKey }) {
+      await this.$store.dispatch('getAttachmentTypes', {
+        ...this.params,
+        BusinessObjectDefinitionCode,
+        BusinessObjectKey
+      })
     },
     async addAttachments (attachment) {
       if (this.attachmentTypes.length === 1) {

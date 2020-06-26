@@ -1,6 +1,8 @@
 <template>
   <div>
     <list-header v-model="attachmentsListMode"
+                 :businessObject="businessObject"
+                 :references="businessObject.References"
                  :uploadType.sync="uploadType"/>
 
     <!-- UPLOAD COMPONENT -->
@@ -28,10 +30,10 @@
         </v-simple-table>
     </files-upload>
 
-    <perfect-scrollbar v-show="attachments.length">
+    <perfect-scrollbar v-show="attachmentList.length">
 <!--                       style="max-height: 300px;"-->
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
-        <v-chip v-for="attachment in attachments"
+        <v-chip v-for="attachment in attachmentList"
                 :key="attachment.id" small
                 class="my-2 mr-2 text-truncate"
                 :class="{ warning: attachment.id === activeAttachment.id }"
@@ -44,7 +46,7 @@
       <div v-else>
         <v-data-table
           :headers="headers"
-          :items="attachments"
+          :items="attachmentList"
           item-key="id"
           show-expand
           disable-filtering
@@ -58,7 +60,7 @@
                   :class="{ 'light-blue lighten-5': attachment.id === activeAttachment.id }"
                   @click="selectAttachment(attachment)">
                 <td class="px-1">
-                  <v-btn icon :loading="attachment.loading"
+                  <v-btn icon :loading="versionLoaders.includes(attachment.id)"
                          @click.stop="expandVersions(attachment, expand, isExpanded)">
                     <fa-icon icon="chevron-right" size="xs"
                              style="transition: transform .2s"
@@ -74,8 +76,7 @@
                     style="width: 30px;">
                   <file-type-icon :extension="attachment.fileExt"/>
                 </td>
-                <td class="text-truncate"
-                    style="max-width: 0;">{{ attachment.fileName }}</td>
+                <td class="text-truncate" style="max-width: 0;">{{ attachment.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
                   <span v-if="!hover">{{ attachment.date }}</span>
@@ -99,8 +100,7 @@
                   <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
-                             :href="attachment.srcUrl"
-                             :loading="attachment.downloading"
+                             :loading="downLoaders.includes(attachment.id)"
                              @click.stop="downloadAttachment(attachment)"
                              color="grey"
                              style="border: 1px dashed;"
@@ -108,7 +108,7 @@
                         <fa-icon icon="arrow-alt-down" type="fal" size="2x"/>
                         <template #loader>
                           <span class="custom-loader">
-                            <fa-icon icon="sync"/>
+                            <fa-icon icon="sync" size="lg"/>
                           </span>
                         </template>
                       </v-btn>
@@ -171,7 +171,7 @@
                           </td>
                           <td class="text-truncate"
                               style="max-width: 200px; font-size: 13px;">
-                            {{ version.Details.FileName }}</td>
+                            {{ version.Name }}</td>
                           <td class="text-center" style="font-size: 13px;">{{ version.Date }}</td>
                           <td class="text-center" style="font-size: 13px;">
                             {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
@@ -183,11 +183,11 @@
                             <v-tooltip top>
                               <template #activator="{ on }">
                                 <v-btn v-on="on"
+                                       :disabled="version.IsActive"
                                        @click.stop="setActiveVersion(attachment.id, version.Id)"
                                        color="green"
                                        class="mr-4"
                                        style="border: 1px dashed;"
-                                       :disabled="version.IsActive"
                                        icon x-small depressed>
                                   <fa-icon icon="check" type="fal" size="lg"/>
                                 </v-btn>
@@ -210,6 +210,21 @@
                             <v-tooltip top>
                               <template #activator="{ on }">
                                 <v-btn v-on="on"
+                                       :href="version.Details.SrcUrl"
+                                       @click.stop="() => {}"
+                                       color="warning"
+                                       class="mr-4"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="arrow-alt-down" type="fal" size="lg"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ 'Download' /* TODO: add resource */ }}</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       :disabled="version.IsActive"
                                        @click.stop="deleteVersion(attachment.id, version.Id)"
                                        color="red darken-4"
                                        style="border: 1px dashed;"
@@ -245,11 +260,14 @@ import ListHeader from './ListHeader'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, attachments } from '@/mixins/units'
-import axios from 'axios'
 
 export default {
   name: 'AttachmentsList',
   mixins: [common, tasks, attachments],
+  props: {
+    businessObject: Object,
+    attachmentList: Array
+  },
   components: {
     ListHeader,
     FilesUpload,
@@ -258,7 +276,9 @@ export default {
   data: () => ({
     attachmentsListMode: false,
     uploadType: 'attachments',
-    versionParams: null
+    versionParams: null,
+    versionLoaders: [],
+    downLoaders: []
   }),
   computed: {
     headers () {
@@ -282,7 +302,7 @@ export default {
     }
   },
   created () {
-    this.getAttachmentTypes()
+    this.getAttachmentTypes(this.businessObject)
     if (this.attachments.length && !this.activeAttachment.id) {
       this.selectAttachment(this.attachments[0])
     }
@@ -293,24 +313,24 @@ export default {
       this.$emit('selectAttachment')
     },
     async expandVersions (attachment, expand, isExpanded) {
+      this.versionLoaders.push(attachment.id)
       if (attachment.versions || isExpanded) {
         expand(!isExpanded)
       } else {
-        attachment.loading = true
-        await this.getAttachmentDetails(attachment)
-        attachment.loading = false
-        expand(!isExpanded)
+        const result = await this.getAttachmentDetails(attachment)
+        !result.success || expand(!isExpanded)
       }
+      this.versionLoaders = this.versionLoaders.filter(i => i !== attachment.id)
     },
     newVersion (fileId, fileExt) {
       this.uploadType = 'version'
       this.versionParams = { fileId, fileExt }
     },
     async downloadAttachment (attachment) {
-      attachment.downloading = true
+      this.downLoaders.push(attachment.id)
       attachment.srcUrl || await this.getAttachmentDetails(attachment)
-      attachment.downloading = false
-      await axios.get(attachment.srcUrl)
+      window.open(attachment.srcUrl, '_self')
+      this.downLoaders = this.downLoaders.filter(i => i !== attachment.id)
     }
   }
 }
@@ -321,6 +341,10 @@ export default {
   .v-data-table >>> th:nth-child(2) {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  tr {
+    transition: background .5s;
   }
 
   tr.expanded:hover {

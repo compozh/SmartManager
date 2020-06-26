@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{name: 'task-details', params: {taskId: task.id}}"
                style="text-decoration: none">
-    <v-card class="pa-2">
+    <v-card class="pa-2" ripple>
       <div class="item-title">
         <div class="item-title-desc text-truncate">
           <div v-if="!task.isRead"  class="isRead-icon"></div>
