@@ -9,6 +9,7 @@ export const date = {
   },
   computed: {
     parseDateTime: () => dateTime => moment(dateTime, 'DD.MM.YYYY HH:mm'),
+    parseVersionDate: () => dateTime => moment(dateTime, 'YYYY-MM-DD HH:mm:ss'),
     parsePickerDate: () => date => moment(date, 'YYYY-MM-DD'),
     defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
     formatPickerDate: () => date => date.format('YYYY-MM-DD'),
@@ -17,6 +18,9 @@ export const date = {
     },
     formatDateTime () {
       return dateTime => this.parseDateTime(dateTime).format('YYYY-MM-DD HH:mm')
+    },
+    formatVersionDate () {
+      return dateTime => this.parseVersionDate(dateTime).format('DD.MM.YYYY HH:mm')
     }
   }
 }
