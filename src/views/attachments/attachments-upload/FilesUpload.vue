@@ -1,6 +1,7 @@
 <template>
   <perfect-scrollbar>
     <file-upload ref="upload"
+                 :inputId="String(inputId)"
                  class="upload-action"
                  v-model="files"
                  :multiple="isMultiple"
@@ -29,6 +30,7 @@ export default {
   },
   mixins: [common, tasks, attachments],
   props: {
+    inputId: [String, Number],
     uploadType: {
       type: String,
       default: 'attachment'
