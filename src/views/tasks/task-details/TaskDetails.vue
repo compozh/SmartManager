@@ -94,7 +94,7 @@
                                class="mb-10"/>
           <!-- TASK ATTACHMENTS -->
           <template v-if="externalTaskCamunda">
-            <attachments-list v-for="businessObject in externalParams.BUSINESSOBJECTKEYS"
+            <attachments-list v-for="businessObject in businessObjects"
                               :key="businessObject.BusinessObjectKey"
                               :businessObject="businessObject"
                               :attachmentList="attachmentList(businessObject.BusinessObjectKey)"

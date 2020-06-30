@@ -44,12 +44,8 @@ export default {
       state.attachmentDetails = null
     }
   },
-  VIEW_VERSION (state, { attachmentId, version }) {
-    state.attachmentDetails = {
-      url: version.FileUrl
-    }
-    state.activeAttachment = {
-      id: attachmentId
-    }
+  VIEW_VERSION (state, { attachment, version }) {
+    state.attachmentDetails = { url: version.FileUrl }
+    state.activeAttachment = attachment
   }
 }

@@ -6,24 +6,24 @@
            color="primary"
            class="add-btn pa-0 mr-5"
            @click="newAttachment()">
-      <label :for="attachmentTypes(objectId).length <= 1 ? 'file' : ''"
+      <label :for="attachmentTypes.length <= 1 ? objectId : ''"
              class="add-label pa-2">
         {{ $t('buttons.addAttachment') }}
       </label>
     </v-btn>
     <v-spacer/>
 
-    <template v-if="businessObject.References.length">
-      <v-tooltip v-for="(reference, idx) in businessObject.References"
+    <template v-if="references(businessObject).length">
+      <v-tooltip v-for="(reference, idx) in references(businessObject)"
                  :key="idx" top>
         <template #activator="{ on }">
           <v-btn v-on="on"
                  :href="reference.Hyperlink"
+                 target="_blank"
                  outlined x-small
                  color="success"
-                 class="add-btn mr-5"
-                 @click="newAttachment()">
-<!--            <fa-icon :icon="reference.Icon"/>-->
+                 class="add-btn mr-5">
+            <v-icon>mdi-home</v-icon>
             {{ reference.Name }}
           </v-btn>
         </template>
@@ -43,7 +43,7 @@
       </v-btn>
     </v-btn-toggle>
     <types-list :showTypeList.sync="showTypeList"
-                :typeList="attachmentTypes(objectId)"
+                :typeList="attachmentTypes"
                 v-model="attachmentType"/>
   </div>
 </template>
@@ -66,9 +66,6 @@ export default {
     showTypeList: false
   }),
   computed: {
-    objectId () {
-      return this.businessObject.BusinessObjectKey || this.taskId || this.caseId
-    },
     listTitle () {
       return this.businessObject
         ? this.businessObject.BusinessObjectDefinitionName
@@ -78,7 +75,7 @@ export default {
   methods: {
     newAttachment () {
       this.$emit('update:uploadType', 'attachments')
-      this.showTypeList = this.attachmentTypes(this.objectId).length > 1
+      this.showTypeList = this.attachmentTypes.length > 1
     }
   }
 }

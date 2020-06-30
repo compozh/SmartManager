@@ -2,12 +2,12 @@
   <div>
     <list-header v-model="attachmentsListMode"
                  :businessObject="businessObject"
-                 :references="businessObject.References"
                  :uploadType.sync="uploadType"/>
 
     <!-- UPLOAD COMPONENT -->
     <files-upload v-slot="{ files }"
                   upload-auto
+                  :inputId="objectId"
                   :uploadHandler="uploadHandler"
                   :uploadType="uploadType">
         <v-simple-table>
@@ -89,7 +89,7 @@
                              class="mr-8"
                              style="border: 1px dashed;"
                              text fab x-small dark depressed>
-                        <label for="file"
+                        <label :for="objectId"
                                class="add-label pa-2">
                           <fa-icon icon="files-medical" type="fal" size="2x"/>
                         </label>
@@ -149,10 +149,10 @@
                     <template>
                       <thead>
                       <tr>
+                        <th class="text-center">{{ $t('table.version') }}</th>
                         <th class="text-center px-0">{{ $t('table.type') }}</th>
                         <th class="text-center">{{ $t('table.name') }}</th>
                         <th class="text-center">{{ $t('table.date') }}</th>
-                        <th class="text-center">{{ $t('table.version') }}</th>
                         <th class="text-center">{{ $t('table.fioAdd') }}</th>
                         <th class="text-center">{{ 'Действия' /* TODO: add resource */ }}</th>
                         <th class="text-center">{{ $t('table.sign') }}</th>
@@ -163,7 +163,10 @@
                           :key="index"
                           :class="{'light-blue--text text--darken-4': version.IsActive}"
                           style="cursor: pointer; width: 100%;"
-                            @click="viewVersion(attachment.id, version.Details)">
+                            @click="viewVersion(attachment, version.Details)">
+                          <td class="text-center" style="font-size: 13px;">
+                            {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
+                          </td>
                           <td class="text-center px-1"
                               style="width: 25px;">
                             <file-type-icon :size="18"
@@ -172,9 +175,8 @@
                           <td class="text-truncate"
                               style="max-width: 200px; font-size: 13px;">
                             {{ version.Name }}</td>
-                          <td class="text-center" style="font-size: 13px;">{{ version.Date }}</td>
                           <td class="text-center" style="font-size: 13px;">
-                            {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
+                            {{ formatVersionDate(version.Date) }}
                           </td>
                           <td class="text-center text-truncate"
                               style="max-width: 100px; font-size: 13px;">
@@ -184,7 +186,7 @@
                               <template #activator="{ on }">
                                 <v-btn v-on="on"
                                        :disabled="version.IsActive"
-                                       @click.stop="setActiveVersion(attachment.id, version.Id)"
+                                       @click.stop="setActiveVersion(attachment, version.Id)"
                                        color="green"
                                        class="mr-4"
                                        style="border: 1px dashed;"
@@ -225,7 +227,7 @@
                               <template #activator="{ on }">
                                 <v-btn v-on="on"
                                        :disabled="version.IsActive"
-                                       @click.stop="deleteVersion(attachment.id, version.Id)"
+                                       @click.stop="deleteVersion(attachment, version.Id)"
                                        color="red darken-4"
                                        style="border: 1px dashed;"
                                        icon x-small depressed>
@@ -260,10 +262,11 @@ import ListHeader from './ListHeader'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, attachments } from '@/mixins/units'
+import { date } from '@/mixins/dateTime'
 
 export default {
   name: 'AttachmentsList',
-  mixins: [common, tasks, attachments],
+  mixins: [common, date, tasks, attachments],
   props: {
     businessObject: Object,
     attachmentList: Array
@@ -294,10 +297,10 @@ export default {
       if (this.uploadType === 'version') {
         return ({ filePath }) => {
           const { fileId, fileExt } = this.versionParams
-          this.addVersion(fileId, fileExt, filePath)
+          this.addVersion(fileId, fileExt, filePath, this.businessObject)
         }
       } else {
-        return this.addAttachments
+        return attachment => this.addAttachments(attachment, this.businessObject)
       }
     }
   },

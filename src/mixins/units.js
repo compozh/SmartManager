@@ -139,14 +139,43 @@ export const tasks = {
     workFlowTaskInWork () {
       return this.taskType === 'WORKFLOW' && this.taskInWork
     },
+    externalTaskCamunda () {
+      return this.taskType === 'EXTERNAL' &&
+        this.externalParams.EXTERNALSOURCE === 'C'
+    },
     externalParams () {
       return this.task.externalParams
         ? JSON.parse(this.task.externalParams)
         : {}
     },
-    externalTaskCamunda () {
-      return this.taskType === 'EXTERNAL' &&
-        this.externalParams.EXTERNALSOURCE === 'C'
+    objectId () {
+      if (this.businessObject) {
+        return this.businessObject.BusinessObjectKey
+      } else {
+        return +this.$route.params.taskId || +this.$route.params.caseId
+      }
+    },
+    businessObjects () {
+      return this.externalParams.BUSINESSOBJECTKEYS || []
+    },
+    businessObjectParams () {
+      return businessObject => {
+        let businessObjectParams = {}
+        if (businessObject) {
+          businessObjectParams = {
+            BusinessObjectDefinitionCode: businessObject.BusinessObjectDefinitionCode || '',
+            BusinessObjectKey: businessObject.BusinessObjectKey || 0
+          }
+        }
+        return businessObjectParams
+      }
+    },
+    references () {
+      return businessObject => {
+        return businessObject && businessObject.References
+          ? businessObject.References
+          : []
+      }
     },
     userIsPerformer () {
       return this.userId === this.task.performerId
@@ -277,7 +306,7 @@ export const attachments = {
     },
     attachmentTypes () {
       const types = this.$store.state.attachments.attachmentTypes
-      return objectId => types && types[objectId] ? types[objectId] : []
+      return types && types[this.objectId] ? types[this.objectId] : []
     },
     fileSize () {
       return size => {
@@ -309,14 +338,13 @@ export const attachments = {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
       this.$store.commit('SET_ATTACHMENT_DETAILS', {})
     },
-    async getAttachmentTypes ({ BusinessObjectDefinitionCode, BusinessObjectKey }) {
+    async getAttachmentTypes (businessObject) {
       await this.$store.dispatch('getAttachmentTypes', {
         ...this.params,
-        BusinessObjectDefinitionCode,
-        BusinessObjectKey
+        ...this.businessObjectParams(businessObject)
       })
     },
-    async addAttachments (attachment) {
+    async addAttachments (attachment, businessObject) {
       if (this.attachmentTypes.length === 1) {
         this.attachmentType = this.attachmentTypes[0].CODE
       }
@@ -324,7 +352,10 @@ export const attachments = {
       // Returns results list
       const results = await this.$store.dispatch('addAttachments', {
         attachments: [attachment],
-        params: this.params
+        params: {
+          ...this.params,
+          ...this.businessObjectParams(businessObject)
+        }
       })
       results.forEach(result => {
         if (!result.success) {
@@ -338,14 +369,14 @@ export const attachments = {
     async addVersion (fileId, fileExt, filePath) {
       await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
     },
-    viewVersion (attachmentId, version) {
-      this.$store.commit('VIEW_VERSION', { attachmentId, version })
+    viewVersion (attachment, version) {
+      this.$store.commit('VIEW_VERSION', { attachment, version })
     },
-    async setActiveVersion (attachmentId, versionId) {
-      await this.$store.dispatch('setActiveVersion', { attachmentId, versionId })
+    async setActiveVersion (attachment, versionId) {
+      await this.$store.dispatch('setActiveVersion', { attachment, versionId })
     },
-    async deleteVersion (attachmentId, versionId) {
-      await this.$store.dispatch('deleteVersion', { attachmentId, versionId })
+    async deleteVersion (attachment, versionId) {
+      await this.$store.dispatch('deleteVersion', { attachment, versionId })
     },
 
     async attachmentDelete (id) {
