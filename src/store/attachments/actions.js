@@ -99,13 +99,16 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addVersion')
     }
   },
-  async setActiveVersion ({ dispatch, commit }, { attachmentId, versionId }) {
+  async setActiveVersion ({ dispatch, commit }, { attachment, versionId }) {
     commit('START_LINEAR_PRELOADER', 'setActiveVersion')
     try {
       const response = await api.setActiveVersionInGql(versionId)
       const result = response.data.smtasksMutation.setActiveVersion
       if (result.success) {
-        dispatch('getFileDetails', { fileId: attachmentId })
+        dispatch('getFileDetails', {
+          fileId: attachment.id,
+          fileExt: attachment.fileExt
+        })
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || 'Active version setting fail', /* TODO: add resource notify.versionAddingFail */
@@ -123,13 +126,16 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'setActiveVersion')
     }
   },
-  async deleteVersion ({ dispatch, commit }, { attachmentId, versionId }) {
+  async deleteVersion ({ dispatch, commit }, { attachment, versionId }) {
     commit('START_LINEAR_PRELOADER', 'deleteVersion')
     try {
       const response = await api.deleteVersionInGql(versionId)
       const result = response.data.smtasksMutation.deleteVersion
       if (result.success) {
-        dispatch('getFileDetails', { fileId: attachmentId })
+        dispatch('getFileDetails', {
+          fileId: attachment.id,
+          fileExt: attachment.fileExt
+        })
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || 'Version delete fail', /* TODO: add resource notify.versionAddingFail */
