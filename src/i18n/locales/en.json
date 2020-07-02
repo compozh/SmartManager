@@ -1,6 +1,7 @@
 {
   "search": "Search",
   "rights": "All rights Reserved",
+  "appUpdate": "Application is updating ... Please wait...",
   "user": {
     "delegatedRights": "Use rights"
   },
@@ -214,17 +215,27 @@
     "status": "Status",
     "description": "Description",
     "date": "Date",
-    "fioAdd": "Created"
+    "fioAdd": "Created",
+    "actions": "Actions"
   },
   "attachments": {
-    "delConfirmTitle": "Attachment delete",
+    "delete": "Attachment delete",
     "delConfirmText": "Are you sure you want to delete the attachment?",
     "noData": "No data",
     "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
     "downloadFile": "Download and open file",
     "noAccess": "You do not have access to the attachment",
     "notSelected": "File not selected",
-    "typesTitle": "Choose attachments type"
+    "typesTitle": "Choose attachments type",
+    "download": "Download attachment",
+    "preparation": "Attachment preparation..."
+  },
+  "versions": {
+    "add": "Add version",
+    "delete": "Delete version",
+    "setActive": "Set active",
+    "notes": "Notes",
+    "download": "Download version"
   },
   "eds": {
     "eds": "Digital sign",
