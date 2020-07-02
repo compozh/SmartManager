@@ -2,6 +2,9 @@ export default {
   SET_APPLICATIONS_PARAMS (state, params) {
     state.applicationParams = JSON.parse(params)
   },
+  SET_REFRESH_LOADER (state, refreshLoader) {
+    state.refreshLoader = refreshLoader
+  },
   START_PRELOADER (state, preLoader) {
     state.preLoaders.push(preLoader)
   },

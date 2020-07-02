@@ -47,5 +47,17 @@ export default {
   VIEW_VERSION (state, { attachment, version }) {
     state.attachmentDetails = { url: version.FileUrl }
     state.activeAttachment = attachment
+  },
+  SET_ACTIVE_VERSION (state, { attachmentId, versionId }) {
+    const attachments = state.attachments
+    const attachment = attachments.find(attachment => attachment.id === attachmentId)
+    attachment.versions.forEach(version => { version.IsActive = version.Id === versionId })
+    state.attachments = JSON.parse(JSON.stringify(attachments))
+  },
+  DELETE_VERSION (state, { attachmentId, versionId }) {
+    const attachments = state.attachments
+    const attachment = attachments.find(attachment => attachment.id === attachmentId)
+    attachment.versions.filter(version => version.Id !== versionId)
+    state.attachments = JSON.parse(JSON.stringify(attachments))
   }
 }

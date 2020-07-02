@@ -1,5 +1,6 @@
 <template>
   <div>
+    <refresh-loader/>
     <pre-loader/>
     <router-view/>
   </div>
@@ -7,10 +8,12 @@
 
 <script>
 import PreLoader from '@/components/PreLoader'
+import RefreshLoader from '@/components/RefreshLoader'
 
 export default {
   name: 'App',
   components: {
+    RefreshLoader,
     PreLoader
   }
 }

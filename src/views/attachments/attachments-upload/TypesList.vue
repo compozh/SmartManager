@@ -1,12 +1,13 @@
 <template>
   <v-dialog :value="showTypeList"
-            scrollable max-width="300px">
+            @input="$emit('update:showTypeList', $event)"
+            scrollable max-width="600px">
     <v-card>
       <v-card-title>
         {{ $t('attachments.typesTitle') }}
       </v-card-title>
       <v-divider/>
-      <v-card-text style="height: 300px;">
+      <v-card-text style="height: 400px;">
         <v-radio-group :value="value"
                        column mandatory>
           <v-radio v-for="type in typeList"
@@ -14,17 +15,17 @@
                    :label="type.NAME"
                    :value="type.CODE"
                    @change="$emit('input', type.CODE)"
-                   :class="{'order-first': type.CODE === ''}">
+                   :class="['mb-5', {'order-first': type.CODE === ''}]">
           </v-radio>
         </v-radio-group>
       </v-card-text>
-      <v-divider></v-divider>
-      <v-card-actions>
+      <v-divider/>
+      <v-card-actions class="justify-end">
         <v-btn color="blue darken-1" text
                @click="closeTypeList">
           {{ $t('buttons.close') }}</v-btn>
         <v-btn color="blue darken-1 pa-0" text @click="closeTypeList">
-          <label for="file" class="add-label pa-2">
+          <label :for="objectId" class="add-label pa-2">
             {{ $t('buttons.addAttachment') }}
           </label>
         </v-btn>
@@ -34,12 +35,14 @@
 </template>
 
 <script>
+
 export default {
   name: 'TypesList',
   props: {
     showTypeList: Boolean,
     typeList: Array,
-    value: String
+    value: String,
+    objectId: [String, Number]
   },
   methods: {
     closeTypeList () {

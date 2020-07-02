@@ -1,6 +1,8 @@
 import auth from '@it-enterprise/jwtauthentication'
 import router from '@/router'
+import store from '@/store'
 
+const setRefreshLoader = loader => store.commit('SET_REFRESH_LOADER', loader)
 // Authentication configuration
 auth.config({
   baseUrl: window.appConfig.GrapgQlUrl,
@@ -14,7 +16,9 @@ auth.config({
         break
       default: console.log(e)
     }
-  }
+  },
+  onBeforeRefresh: () => setRefreshLoader(true),
+  onAfterRefresh: () => setRefreshLoader(false)
 })
 
 export default auth

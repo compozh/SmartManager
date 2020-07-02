@@ -31,7 +31,6 @@
     </files-upload>
 
     <perfect-scrollbar v-show="attachmentList.length">
-<!--                       style="max-height: 300px;"-->
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
         <v-chip v-for="attachment in attachmentList"
                 :key="attachment.id" small
@@ -95,7 +94,7 @@
                         </label>
                       </v-btn>
                     </template>
-                    <span>{{ 'Add version' /* TODO: add resource */ }}</span>
+                    <span>{{ $t('versions.add') }}</span>
                   </v-tooltip>
                   <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
@@ -113,7 +112,7 @@
                         </template>
                       </v-btn>
                     </template>
-                    <span>{{ 'Download' /* TODO: add resource */ }}</span>
+                    <span>{{ $t('attachments.download') }}</span>
                   </v-tooltip>
                 </td>
                 <td :class="hover ? 'text-left' : 'text-center text-truncate'"
@@ -129,7 +128,7 @@
                         <fa-icon icon="trash" type="fal" size="lg"/>
                       </v-btn>
                     </template>
-                    <span>{{ 'Delete' /* TODO: add resource */ }}</span>
+                    <span>{{ $t('attachments.delete') }}</span>
                   </v-tooltip>
                 </td>
                 <td class="text-center" style="width: 20px;">
@@ -149,13 +148,13 @@
                     <template>
                       <thead>
                       <tr>
-                        <th class="text-center">{{ $t('table.version') }}</th>
-                        <th class="text-center px-0">{{ $t('table.type') }}</th>
+                        <th class="text-center px-1">{{ $t('table.version') }}</th>
+                        <th class="text-center px-1">{{ $t('table.type') }}</th>
                         <th class="text-center">{{ $t('table.name') }}</th>
                         <th class="text-center">{{ $t('table.date') }}</th>
                         <th class="text-center">{{ $t('table.fioAdd') }}</th>
-                        <th class="text-center">{{ 'Действия' /* TODO: add resource */ }}</th>
-                        <th class="text-center">{{ $t('table.sign') }}</th>
+                        <th class="text-center">{{ $t('table.actions') }}</th>
+                        <th class="text-center px-1">{{ $t('table.sign') }}</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -164,80 +163,103 @@
                           :class="{'light-blue--text text--darken-4': version.IsActive}"
                           style="cursor: pointer; width: 100%;"
                             @click="viewVersion(attachment, version.Details)">
-                          <td class="text-center" style="font-size: 13px;">
+                          <td class="text-center" style="width: 50px; font-size: 13px;">
                             {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
                           </td>
-                          <td class="text-center px-1"
-                              style="width: 25px;">
+                          <td style="width: 35px;">
+                            <div class="d-flex justify-center">
                             <file-type-icon :size="18"
                                             :extension="version.Details.FileType"/>
+                            </div>
                           </td>
                           <td class="text-truncate"
-                              style="max-width: 200px; font-size: 13px;">
-                            {{ version.Name }}</td>
-                          <td class="text-center" style="font-size: 13px;">
-                            {{ formatVersionDate(version.Date) }}
+                              style="min-width: 5px; max-width: 200px; font-size: 13px;">
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <span v-on="on">{{ version.Name }}</span>
+                              </template>
+                              <span>{{ version.Name }}</span>
+                            </v-tooltip>
                           </td>
                           <td class="text-center text-truncate"
                               style="max-width: 100px; font-size: 13px;">
-                            {{ version.User }}</td>
-                          <td class="text-center">
                             <v-tooltip top>
                               <template #activator="{ on }">
-                                <v-btn v-on="on"
-                                       :disabled="version.IsActive"
-                                       @click.stop="setActiveVersion(attachment, version.Id)"
-                                       color="green"
-                                       class="mr-4"
-                                       style="border: 1px dashed;"
-                                       icon x-small depressed>
-                                  <fa-icon icon="check" type="fal" size="lg"/>
-                                </v-btn>
+                                <span v-on="on">
+                                  {{ formatVersionDate(version.Date) }}
+                                </span>
                               </template>
-                              <span>{{ 'Set active version' /* TODO: add resource */ }}</span>
-                            </v-tooltip>
-                            <v-tooltip top>
-                              <template #activator="{ on }">
-                                <v-btn v-on="on"
-                                       @click.stop="() => {}"
-                                       color="blue"
-                                       class="mr-4"
-                                       style="border: 1px dashed;"
-                                       icon x-small depressed>
-                                  <fa-icon icon="bars" type="fal" size="lg"/>
-                                </v-btn>
-                              </template>
-                              <span>{{ 'Замечания' /* TODO: add resource */ }}</span>
-                            </v-tooltip>
-                            <v-tooltip top>
-                              <template #activator="{ on }">
-                                <v-btn v-on="on"
-                                       :href="version.Details.SrcUrl"
-                                       @click.stop="() => {}"
-                                       color="warning"
-                                       class="mr-4"
-                                       style="border: 1px dashed;"
-                                       icon x-small depressed>
-                                  <fa-icon icon="arrow-alt-down" type="fal" size="lg"/>
-                                </v-btn>
-                              </template>
-                              <span>{{ 'Download' /* TODO: add resource */ }}</span>
-                            </v-tooltip>
-                            <v-tooltip top>
-                              <template #activator="{ on }">
-                                <v-btn v-on="on"
-                                       :disabled="version.IsActive"
-                                       @click.stop="deleteVersion(attachment, version.Id)"
-                                       color="red darken-4"
-                                       style="border: 1px dashed;"
-                                       icon x-small depressed>
-                                  <fa-icon icon="times" type="fal"/>
-                                </v-btn>
-                              </template>
-                              <span>{{ 'Delete version' /* TODO: add resource */ }}</span>
+                              <span>{{ formatVersionDate(version.Date) }}</span>
                             </v-tooltip>
                           </td>
-                          <td class="text-center" style="width: 20px;">
+                          <td class="text-center text-truncate"
+                              style="max-width: 150px; font-size: 13px;">
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <span v-on="on">{{ version.User }}</span>
+                              </template>
+                              <span>{{ version.User }}</span>
+                            </v-tooltip>
+                          </td>
+                          <td class="text-center px-2">
+                            <div class="d-flex justify-center">
+                              <v-tooltip top>
+                                <template #activator="{ on }">
+                                  <v-btn v-on="on"
+                                         :disabled="version.IsActive"
+                                         @click.stop="setActiveVersion(attachment, version.Id)"
+                                         color="green"
+                                         class="mr-2"
+                                         style="border: 1px dashed;"
+                                         icon x-small depressed>
+                                    <fa-icon icon="check" type="fal" size="lg"/>
+                                  </v-btn>
+                                </template>
+                                <span>{{ $t('versions.setActive') }}</span>
+                              </v-tooltip>
+                              <v-tooltip top>
+                                <template #activator="{ on }">
+                                  <v-btn v-on="on"
+                                         @click.stop="() => {}"
+                                         color="blue"
+                                         class="mr-2"
+                                         style="border: 1px dashed;"
+                                         icon x-small depressed>
+                                    <fa-icon icon="bars" type="fal" size="lg"/>
+                                  </v-btn>
+                                </template>
+                                <span>{{ $t('versions.notes') }}</span>
+                              </v-tooltip>
+                              <v-tooltip top>
+                                <template #activator="{ on }">
+                                  <v-btn v-on="on"
+                                         :href="version.Details.SrcUrl"
+                                         @click.stop="() => {}"
+                                         color="warning"
+                                         class="mr-2"
+                                         style="border: 1px dashed;"
+                                         icon x-small depressed>
+                                    <fa-icon icon="arrow-alt-down" type="fal" size="lg"/>
+                                  </v-btn>
+                                </template>
+                                <span>{{ $t('versions.download') }}</span>
+                              </v-tooltip>
+                              <v-tooltip top>
+                                <template #activator="{ on }">
+                                  <v-btn v-on="on"
+                                         :disabled="version.IsActive"
+                                         @click.stop="deleteVersion(attachment, version.Id)"
+                                         color="red darken-4"
+                                         style="border: 1px dashed;"
+                                         icon x-small depressed>
+                                    <fa-icon icon="times" type="fal"/>
+                                  </v-btn>
+                                </template>
+                                <span>{{ $t('versions.delete') }}</span>
+                              </v-tooltip>
+                            </div>
+                          </td>
+                          <td class="text-center">
                             <div>
                               <fa-icon v-if="version.Signatures && version.Signatures.length"
                                        icon="medal" size="lg"/>
