@@ -367,7 +367,10 @@ export const attachments = {
       })
     },
     async addVersion (fileId, fileExt, filePath) {
-      await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
+      const result = await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
+      if (result.success) {
+        this.$forceUpdate()
+      }
     },
     viewVersion (attachment, version) {
       this.$store.commit('VIEW_VERSION', { attachment, version })
