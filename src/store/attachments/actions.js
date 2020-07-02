@@ -35,7 +35,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || 'Type getting error' /* TODO: add resource notify.typeGettingError */,
+        text: error.message || 'Ошибка получения типов' /* TODO: add resource notify.typeGettingError */,
         color: 'error'
       })
     } finally {
@@ -84,7 +84,7 @@ export default {
         dispatch('getFileDetails', { fileId, fileExt })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || 'Version adding fail', /* TODO: add resource notify.versionAddingFail */
+          text: result.errorMessage || 'Не удалось добавить версию', /* TODO: add resource notify.versionAddingFail */
           color: 'warning'
         })
       }
@@ -92,7 +92,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || 'Version adding error', /* TODO: add resource notify.versionAddingError */
+        text: error.message || 'Ошибка добавления новой версии', /* TODO: add resource notify.versionAddingError */
         color: 'error'
       })
     } finally {
@@ -105,13 +105,14 @@ export default {
       const response = await api.setActiveVersionInGql(versionId)
       const result = response.data.smtasksMutation.setActiveVersion
       if (result.success) {
+        commit('SET_ACTIVE_VERSION', { attachmentId: attachment.id, versionId })
         dispatch('getFileDetails', {
           fileId: attachment.id,
           fileExt: attachment.fileExt
         })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || 'Active version setting fail', /* TODO: add resource notify.versionAddingFail */
+          text: result.errorMessage || 'Не удалось изменить активную версию', /* TODO: add resource notify.versionAddingFail */
           color: 'warning'
         })
       }
@@ -119,7 +120,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || 'Active version setting error', /* TODO: add resource notify.versionAddingError */
+        text: error.message || 'Ошибка установки активной версии', /* TODO: add resource notify.versionAddingError */
         color: 'error'
       })
     } finally {
@@ -132,13 +133,14 @@ export default {
       const response = await api.deleteVersionInGql(versionId)
       const result = response.data.smtasksMutation.deleteVersion
       if (result.success) {
+        commit('DELETE_VERSION', { attachmentId: attachment.id, versionId })
         dispatch('getFileDetails', {
           fileId: attachment.id,
           fileExt: attachment.fileExt
         })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || 'Version delete fail', /* TODO: add resource notify.versionAddingFail */
+          text: result.errorMessage || 'Не удалось удалить версию', /* TODO: add resource notify.versionAddingFail */
           color: 'warning'
         })
       }
@@ -146,7 +148,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || 'Version delete error', /* TODO: add resource notify.versionAddingError */
+        text: error.message || 'Ошибка при удалении версии', /* TODO: add resource notify.versionAddingError */
         color: 'error'
       })
     } finally {
