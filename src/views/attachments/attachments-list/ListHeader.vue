@@ -44,6 +44,7 @@
     </v-btn-toggle>
     <types-list :showTypeList.sync="showTypeList"
                 :typeList="attachmentTypes"
+                :objectId="objectId"
                 v-model="attachmentType"/>
   </div>
 </template>
