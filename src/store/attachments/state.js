@@ -1,7 +1,7 @@
 export default {
   attachments: null,
-  attachmentDetails: null,
   activeAttachment: null,
+  currentVersion: null,
   attachmentTypes: null,
   addAttachmentDialog: false
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-overlay :value="loader" z-index="203" opacity="0.7">
+  <v-overlay :value="loader" z-index="208" opacity="0.7">
         <div class="title">{{ $t('appUpdate') }}</div>
         <div class="lds-ellipsis">
           <div></div>

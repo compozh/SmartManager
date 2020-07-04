@@ -5,7 +5,7 @@ export default {
   async getFileDetails ({ commit }, { fileId, fileExt }) {
     commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
-      const result = { success: true, errorMessage: '' }
+      const result = { success: true, errorMessage: '', data: null }
       const response = await api.getFileDetailsFromGql(fileId, fileExt)
       const fileDetails = JSON.parse(response.data.smtasks.fileDetails)
       if (fileDetails.ErrorMessage) {
@@ -17,10 +17,14 @@ export default {
         })
       }
       commit('SET_ATTACHMENT_DETAILS', { fileId, fileDetails })
+      result.data = fileDetails
       return result
-    } catch (e) {
-      console.log(e.message)
-      // notify('danger', 'taskTitle', 'taskError')
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || 'Ошибка получения информации о вложении' /* TODO: add resource notify.typeGettingError */,
+        color: 'error'
+      })
     } finally {
       commit('STOP_LINEAR_PRELOADER', 'fileDetails')
     }
@@ -81,7 +85,8 @@ export default {
       const response = await api.addAttachmentVersionInGql(fileId, filePath)
       const result = response.data.smtasksMutation.addAttachmentVersion
       if (result.success) {
-        dispatch('getFileDetails', { fileId, fileExt })
+        await dispatch('getFileDetails', { fileId, fileExt })
+        commit('SET_ACTIVE_VERSION', fileId)
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || 'Не удалось добавить версию', /* TODO: add resource notify.versionAddingFail */
@@ -99,17 +104,14 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addVersion')
     }
   },
-  async setActiveVersion ({ dispatch, commit }, { attachment, versionId }) {
+  async setActiveVersion ({ dispatch, commit }, { attachmentId, version }) {
     commit('START_LINEAR_PRELOADER', 'setActiveVersion')
     try {
-      const response = await api.setActiveVersionInGql(versionId)
+      const response = await api.setActiveVersionInGql(version.Id)
       const result = response.data.smtasksMutation.setActiveVersion
       if (result.success) {
-        commit('SET_ACTIVE_VERSION', { attachmentId: attachment.id, versionId })
-        dispatch('getFileDetails', {
-          fileId: attachment.id,
-          fileExt: attachment.fileExt
-        })
+        commit('CHANGE_ACTIVE_VERSION', { attachmentId, versionId: version.Id })
+        commit('SET_ACTIVE_VERSION', attachmentId)
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || 'Не удалось изменить активную версию', /* TODO: add resource notify.versionAddingFail */
@@ -133,11 +135,8 @@ export default {
       const response = await api.deleteVersionInGql(versionId)
       const result = response.data.smtasksMutation.deleteVersion
       if (result.success) {
+        // If the server responds successfully, delete the version on the client
         commit('DELETE_VERSION', { attachmentId: attachment.id, versionId })
-        dispatch('getFileDetails', {
-          fileId: attachment.id,
-          fileExt: attachment.fileExt
-        })
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || 'Не удалось удалить версию', /* TODO: add resource notify.versionAddingFail */
@@ -161,10 +160,10 @@ export default {
       const response = await api.attachmentDeleteInGql(fileId)
       const result = response.data.smtasksMutation.attachmentDelete
       if (result.success) {
-        await dispatch('updateAfterDelete', { taskId, caseId })
+        await dispatch('updateAfterChanges', { taskId, caseId })
         commit('SET_NOTIFY', {
           text: result.successMessage || i18n.t('notify.attachDelSuccess'),
-          color: 'success'
+          color: 'info'
         })
       } else {
         commit('SET_NOTIFY', {
@@ -183,14 +182,14 @@ export default {
       commit('STOP_PRELOADER', 'attachmentDelete')
     }
   },
-  async updateAfterDelete ({ dispatch, commit }, { taskId, caseId }) {
-    // Update task or case after delete if it needs
+  async updateAfterChanges ({ dispatch, commit }, { taskId, caseId }) {
+    // Update task or case after changes
     if (taskId || caseId) {
-      commit('START_LINEAR_PRELOADER', 'updateAfterDelete')
+      commit('START_LINEAR_PRELOADER', 'updateAfterChanges')
       const id = taskId ? { taskId } : { caseId }
       const action = taskId ? 'getTaskDetails' : 'getCaseDetails'
       await dispatch(action, id)
-      commit('STOP_LINEAR_PRELOADER', 'updateAfterDelete')
+      commit('STOP_LINEAR_PRELOADER', 'updateAfterChanges')
     }
   }
 }

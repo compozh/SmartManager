@@ -32,8 +32,8 @@
 
     <perfect-scrollbar v-show="attachmentList.length">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
-        <v-chip v-for="attachment in attachmentList"
-                :key="attachment.id" small
+        <v-chip v-for="(attachment, idx) in attachmentList"
+                :key="idx" small
                 class="my-2 mr-2 text-truncate"
                 :class="{ warning: attachment.id === activeAttachment.id }"
                 style="min-width: 100px; max-width: 33%; flex: 1 1 24%"
@@ -123,7 +123,7 @@
                       <v-btn v-on="on"
                              color="grey"
                              style="border: 1px dashed;"
-                             @click="attachmentDelete(attachment.id)"
+                             @click.stop="attachmentDeleteDialog(attachment)"
                              text fab x-small dark depressed>
                         <fa-icon icon="trash" type="fal" size="lg"/>
                       </v-btn>
@@ -143,144 +143,150 @@
 
           <template #expanded-item="{ item: attachment }">
             <tr class="expanded" style="border: 1px solid grey;">
-                <td :colspan="headers.length + 1" class="pl-10 pr-0 pb-5">
-                  <v-simple-table dense>
-                    <template>
-                      <thead>
-                      <tr>
-                        <th class="text-center px-1">{{ $t('table.version') }}</th>
-                        <th class="text-center px-1">{{ $t('table.type') }}</th>
-                        <th class="text-center">{{ $t('table.name') }}</th>
-                        <th class="text-center">{{ $t('table.date') }}</th>
-                        <th class="text-center">{{ $t('table.fioAdd') }}</th>
-                        <th class="text-center">{{ $t('table.actions') }}</th>
-                        <th class="text-center px-1">{{ $t('table.sign') }}</th>
+              <td :colspan="headers.length + 1" class="pl-10 pr-0 pb-5">
+                <v-simple-table dense>
+                  <template>
+                    <thead>
+                    <tr>
+                      <th class="text-center px-1">{{ $t('table.version') }}</th>
+                      <th class="text-center px-1">{{ $t('table.type') }}</th>
+                      <th class="text-center">{{ $t('table.name') }}</th>
+                      <th class="text-center">{{ $t('table.date') }}</th>
+                      <th class="text-center">{{ $t('table.fioAdd') }}</th>
+                      <th class="text-center">{{ $t('table.actions') }}</th>
+                      <th class="text-center px-1">{{ $t('table.sign') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(version, idx) in attachment.versions" :key="idx"
+                        :class="{'light-blue--text text--darken-4': version.IsActive,
+                                 'lime lighten-5': version.Id === currentVersion.Id}"
+                        style="cursor: pointer; width: 100%;"
+                          @click="setActiveAttachment(attachment, version)">
+                        <td class="text-center" style="width: 50px; font-size: 13px;">
+                          {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
+                        </td>
+                        <td style="width: 35px;">
+                          <div class="d-flex justify-center">
+                          <file-type-icon :size="18"
+                                          :extension="version.Details.FileType"/>
+                          </div>
+                        </td>
+                        <td class="text-truncate"
+                            style="min-width: 5px; max-width: 200px; font-size: 13px;">
+                          <v-tooltip top>
+                            <template #activator="{ on }">
+                              <span v-on="on">{{ version.Name }}</span>
+                            </template>
+                            <span>{{ version.Name }}</span>
+                          </v-tooltip>
+                        </td>
+                        <td class="text-center text-truncate"
+                            style="max-width: 100px; font-size: 13px;">
+                          <v-tooltip top>
+                            <template #activator="{ on }">
+                              <span v-on="on">
+                                {{ formatVersionDate(version.Date) }}
+                              </span>
+                            </template>
+                            <span>{{ formatVersionDate(version.Date) }}</span>
+                          </v-tooltip>
+                        </td>
+                        <td class="text-center text-truncate"
+                            style="max-width: 150px; font-size: 13px;">
+                          <v-tooltip top>
+                            <template #activator="{ on }">
+                              <span v-on="on">{{ version.User }}</span>
+                            </template>
+                            <span>{{ version.User }}</span>
+                          </v-tooltip>
+                        </td>
+                        <td class="text-center px-2">
+                          <div class="d-flex justify-center">
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       :disabled="version.IsActive"
+                                       @click.stop="setActiveVersion(attachment.id, version)"
+                                       color="green"
+                                       class="mr-2"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="check" type="fal" size="lg"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ $t('versions.setActive') }}</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       @click.stop="() => {}"
+                                       color="blue"
+                                       class="mr-2"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="bars" type="fal" size="lg"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ $t('versions.notes') }}</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       :href="version.Details.SrcUrl"
+                                       @click.stop="() => {}"
+                                       color="warning"
+                                       class="mr-2"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="arrow-alt-down" type="fal" size="lg"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ $t('versions.download') }}</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                              <template #activator="{ on }">
+                                <v-btn v-on="on"
+                                       :disabled="version.IsActive"
+                                       @click.stop="versionDeleteDialog(attachment, version)"
+                                       color="red darken-4"
+                                       style="border: 1px dashed;"
+                                       icon x-small depressed>
+                                  <fa-icon icon="times" type="fal"/>
+                                </v-btn>
+                              </template>
+                              <span>{{ $t('versions.delete') }}</span>
+                            </v-tooltip>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                          <div>
+                            <fa-icon v-if="version.Signatures && version.Signatures.length"
+                                     icon="medal" size="lg"/>
+                            <span v-else>-</span>
+                          </div>
+                        </td>
                       </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(version, index) in attachment.versions"
-                          :key="index"
-                          :class="{'light-blue--text text--darken-4': version.IsActive}"
-                          style="cursor: pointer; width: 100%;"
-                            @click="viewVersion(attachment, version.Details)">
-                          <td class="text-center" style="width: 50px; font-size: 13px;">
-                            {{ attachment.versions.length === 1 && version.Version === 0 ? 1 : version.Version }}
-                          </td>
-                          <td style="width: 35px;">
-                            <div class="d-flex justify-center">
-                            <file-type-icon :size="18"
-                                            :extension="version.Details.FileType"/>
-                            </div>
-                          </td>
-                          <td class="text-truncate"
-                              style="min-width: 5px; max-width: 200px; font-size: 13px;">
-                            <v-tooltip top>
-                              <template #activator="{ on }">
-                                <span v-on="on">{{ version.Name }}</span>
-                              </template>
-                              <span>{{ version.Name }}</span>
-                            </v-tooltip>
-                          </td>
-                          <td class="text-center text-truncate"
-                              style="max-width: 100px; font-size: 13px;">
-                            <v-tooltip top>
-                              <template #activator="{ on }">
-                                <span v-on="on">
-                                  {{ formatVersionDate(version.Date) }}
-                                </span>
-                              </template>
-                              <span>{{ formatVersionDate(version.Date) }}</span>
-                            </v-tooltip>
-                          </td>
-                          <td class="text-center text-truncate"
-                              style="max-width: 150px; font-size: 13px;">
-                            <v-tooltip top>
-                              <template #activator="{ on }">
-                                <span v-on="on">{{ version.User }}</span>
-                              </template>
-                              <span>{{ version.User }}</span>
-                            </v-tooltip>
-                          </td>
-                          <td class="text-center px-2">
-                            <div class="d-flex justify-center">
-                              <v-tooltip top>
-                                <template #activator="{ on }">
-                                  <v-btn v-on="on"
-                                         :disabled="version.IsActive"
-                                         @click.stop="setActiveVersion(attachment, version.Id)"
-                                         color="green"
-                                         class="mr-2"
-                                         style="border: 1px dashed;"
-                                         icon x-small depressed>
-                                    <fa-icon icon="check" type="fal" size="lg"/>
-                                  </v-btn>
-                                </template>
-                                <span>{{ $t('versions.setActive') }}</span>
-                              </v-tooltip>
-                              <v-tooltip top>
-                                <template #activator="{ on }">
-                                  <v-btn v-on="on"
-                                         @click.stop="() => {}"
-                                         color="blue"
-                                         class="mr-2"
-                                         style="border: 1px dashed;"
-                                         icon x-small depressed>
-                                    <fa-icon icon="bars" type="fal" size="lg"/>
-                                  </v-btn>
-                                </template>
-                                <span>{{ $t('versions.notes') }}</span>
-                              </v-tooltip>
-                              <v-tooltip top>
-                                <template #activator="{ on }">
-                                  <v-btn v-on="on"
-                                         :href="version.Details.SrcUrl"
-                                         @click.stop="() => {}"
-                                         color="warning"
-                                         class="mr-2"
-                                         style="border: 1px dashed;"
-                                         icon x-small depressed>
-                                    <fa-icon icon="arrow-alt-down" type="fal" size="lg"/>
-                                  </v-btn>
-                                </template>
-                                <span>{{ $t('versions.download') }}</span>
-                              </v-tooltip>
-                              <v-tooltip top>
-                                <template #activator="{ on }">
-                                  <v-btn v-on="on"
-                                         :disabled="version.IsActive"
-                                         @click.stop="deleteVersion(attachment, version.Id)"
-                                         color="red darken-4"
-                                         style="border: 1px dashed;"
-                                         icon x-small depressed>
-                                    <fa-icon icon="times" type="fal"/>
-                                  </v-btn>
-                                </template>
-                                <span>{{ $t('versions.delete') }}</span>
-                              </v-tooltip>
-                            </div>
-                          </td>
-                          <td class="text-center">
-                            <div>
-                              <fa-icon v-if="version.Signatures && version.Signatures.length"
-                                       icon="medal" size="lg"/>
-                              <span v-else>-</span>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
-                </td>
-              </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </td>
+            </tr>
           </template>
         </v-data-table>
       </div>
     </perfect-scrollbar>
+    <delete-confirm v-model="deleteConfirmDialog"
+                    @confirm="deleteHandler(deleteParams)">
+      <template #title>{{ deleteParams.title }}</template>
+      <template #text>{{ deleteParams.text }}<br><br>{{ deleteParams.fileName }}</template>
+    </delete-confirm>
   </div>
 </template>
 
 <script>
 import ListHeader from './ListHeader'
+import DeleteConfirm from './DeleteConfirm'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, attachments } from '@/mixins/units'
@@ -295,11 +301,15 @@ export default {
   },
   components: {
     ListHeader,
+    DeleteConfirm,
     FilesUpload,
     FileTypeIcon
   },
   data: () => ({
     attachmentsListMode: false,
+    deleteConfirmDialog: false,
+    deleteDialogType: '',
+    deleteParams: { title: '', text: '' },
     uploadType: 'attachments',
     versionParams: null,
     versionLoaders: [],
@@ -316,14 +326,27 @@ export default {
       ]
     },
     uploadHandler () {
+      let handler = () => {}
       if (this.uploadType === 'version') {
-        return ({ filePath }) => {
+        handler = ({ filePath }) => {
           const { fileId, fileExt } = this.versionParams
           this.addVersion(fileId, fileExt, filePath, this.businessObject)
         }
-      } else {
-        return attachment => this.addAttachments(attachment, this.businessObject)
       }
+      if (this.uploadType === 'version') {
+        handler = attachment => this.addAttachments(attachment, this.businessObject)
+      }
+      return handler
+    },
+    deleteHandler () {
+      let handler = () => {}
+      if (this.deleteDialogType === 'attachments') {
+        handler = ({ attachmentId }) => this.attachmentDelete(attachmentId)
+      }
+      if (this.deleteDialogType === 'version') {
+        handler = ({ attachment, versionId }) => this.deleteVersion(attachment, versionId)
+      }
+      return handler
     }
   },
   created () {
@@ -333,13 +356,13 @@ export default {
     }
   },
   methods: {
-    selectAttachment (attachment) {
-      this.setActiveAttachment(attachment)
+    selectAttachment (attachment, version) {
+      this.setActiveAttachment(attachment, version)
       this.$emit('selectAttachment')
     },
     async expandVersions (attachment, expand, isExpanded) {
       this.versionLoaders.push(attachment.id)
-      if (attachment.versions || isExpanded) {
+      if (attachment.hasDetails || isExpanded) {
         expand(!isExpanded)
       } else {
         const result = await this.getAttachmentDetails(attachment)
@@ -356,6 +379,27 @@ export default {
       attachment.srcUrl || await this.getAttachmentDetails(attachment)
       window.open(attachment.srcUrl, '_self')
       this.downLoaders = this.downLoaders.filter(i => i !== attachment.id)
+    },
+    attachmentDeleteDialog (attachment) {
+      this.deleteConfirmDialog = true
+      this.deleteDialogType = 'attachment'
+      this.deleteParams = {
+        attachmentId: attachment.id,
+        title: this.$t('attachments.delete'),
+        text: this.$t('attachments.delConfirmText'),
+        fileName: attachment.fileName
+      }
+    },
+    versionDeleteDialog (attachment, version) {
+      this.deleteConfirmDialog = true
+      this.deleteDialogType = 'version'
+      this.deleteParams = {
+        attachment,
+        versionId: version.Id,
+        title: this.$t('versions.delete'),
+        text: this.$t('versions.delConfirmText'),
+        fileName: `${version.Name} (${this.$t('table.version')} ${version.Version})`
+      }
     }
   }
 }
