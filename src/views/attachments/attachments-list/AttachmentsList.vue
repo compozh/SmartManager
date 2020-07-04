@@ -340,7 +340,7 @@ export default {
     },
     deleteHandler () {
       let handler = () => {}
-      if (this.deleteDialogType === 'attachments') {
+      if (this.deleteDialogType === 'attachment') {
         handler = ({ attachmentId }) => this.attachmentDelete(attachmentId)
       }
       if (this.deleteDialogType === 'version') {
