@@ -235,7 +235,8 @@
     "delete": "Delete version",
     "setActive": "Set active",
     "notes": "Notes",
-    "download": "Download version"
+    "download": "Download version",
+    "delConfirmText": "Are you sure you want to delete the version?"
   },
   "eds": {
     "eds": "Digital sign",
