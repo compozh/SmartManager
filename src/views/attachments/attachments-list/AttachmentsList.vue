@@ -327,14 +327,14 @@ export default {
     },
     uploadHandler () {
       let handler = () => {}
+      if (this.uploadType === 'attachments') {
+        handler = attachment => this.addAttachments(attachment, this.businessObject)
+      }
       if (this.uploadType === 'version') {
         handler = ({ filePath }) => {
           const { fileId, fileExt } = this.versionParams
           this.addVersion(fileId, fileExt, filePath, this.businessObject)
         }
-      }
-      if (this.uploadType === 'version') {
-        handler = attachment => this.addAttachments(attachment, this.businessObject)
       }
       return handler
     },
