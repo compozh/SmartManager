@@ -292,7 +292,7 @@ export const attachments = {
   data: () => ({
     uploadErrors: [],
     attachmentType: '',
-    loading: false // for viewers
+    loading: true // for viewers
   }),
   computed: {
     attachments () {
@@ -301,8 +301,8 @@ export const attachments = {
     activeAttachment () {
       return this.$store.state.attachments.activeAttachment || {}
     },
-    attachmentDetails () {
-      return this.$store.state.attachments.attachmentDetails || {}
+    currentVersion () {
+      return this.$store.state.attachments.currentVersion || {}
     },
     attachmentTypes () {
       const types = this.$store.state.attachments.attachmentTypes
@@ -319,11 +319,12 @@ export const attachments = {
     }
   },
   methods: {
-    async setActiveAttachment (attachment) {
-      this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
+    async setActiveAttachment (attachment, version) {
+      this.resetAttachmentData()
+      attachment.hasDetails || await this.getAttachmentDetails(attachment)
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', { attachment, version })
     },
     async getAttachmentDetails (attachment) {
-      this.loading = true
       let result = null
       const { id: fileId, fileExt } = attachment || this.activeAttachment
       if (fileId && fileExt) {
@@ -331,12 +332,7 @@ export const attachments = {
           fileId, fileExt
         })
       }
-      this.loading = false
       return result
-    },
-    resetAttachmentData () {
-      this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
-      this.$store.commit('SET_ATTACHMENT_DETAILS', {})
     },
     async getAttachmentTypes (businessObject) {
       await this.$store.dispatch('getAttachmentTypes', {
@@ -365,32 +361,37 @@ export const attachments = {
           })
         }
       })
+      await this.setActiveAttachment(this.attachments[0])
     },
     async addVersion (fileId, fileExt, filePath) {
-      const result = await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
-      if (result.success) {
-        this.$forceUpdate()
-      }
+      await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
+      const attachment = this.attachments.find(i => i.id === fileId)
+      await this.setActiveAttachment(attachment)
     },
-    viewVersion (attachment, version) {
-      this.$store.commit('VIEW_VERSION', { attachment, version })
-    },
-    async setActiveVersion (attachment, versionId) {
-      await this.$store.dispatch('setActiveVersion', { attachment, versionId })
+    async setActiveVersion (attachmentId, version) {
+      await this.$store.dispatch('setActiveVersion', { attachmentId, version })
     },
     async deleteVersion (attachment, versionId) {
       await this.$store.dispatch('deleteVersion', { attachment, versionId })
+      // If the deleted version is current, will be shown the active version
+      if (this.currentVersion.Id === versionId) {
+        await this.setActiveAttachment(attachment)
+      }
     },
 
     async attachmentDelete (id) {
-      const result = await this.$store.dispatch('attachmentDelete', {
+      await this.$store.dispatch('attachmentDelete', {
         fileId: id,
         taskId: +this.$route.params.taskId,
         caseId: +this.$route.params.caseId
       })
-      if (result.success) {
-        // await this.$router.push({ name: 'task-attachments' })
-      }
+      await this.setActiveAttachment(this.attachments[0])
+    },
+    resetAttachmentData () {
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', {
+        attachment: {},
+        version: {}
+      })
     }
   }
 }
