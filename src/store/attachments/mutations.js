@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import moment from 'moment'
+
 export default {
   SET_ATTACHMENTS (state, attachments) {
     if (state.attachments && state.attachments.length) {
@@ -12,52 +15,51 @@ export default {
   SET_ATTACHMENT_TYPES (state, types) {
     state.attachmentTypes = Object.assign({}, state.attachmentTypes, types)
   },
-  SET_ACTIVE_ATTACHMENT (state, attachment) {
+  SET_ACTIVE_ATTACHMENT (state, { attachment, version }) {
     state.activeAttachment = attachment
+    state.currentVersion = version || attachment.versions.find(i => i.IsActive)
   },
   SET_ATTACHMENT_DETAILS (state, { fileId, fileDetails }) {
-    if (fileId) {
-      if (fileDetails.ErrorMessage) {
-        state.attachmentDetails = {
-          fileId,
-          access: false,
-          reason: fileDetails.ErrorMessage
-        }
-        return
-      }
-      const attachments = state.attachments
-      const attachment = attachments.find(i => i.id === fileId)
-      if (attachment) {
-        attachment.access = true
-        attachment.url = fileDetails.FileUrl
-        attachment.srcUrl = fileDetails.SrcUrl + attachment.fileName
-        attachment.versions = fileDetails.Versions
-        attachment.notes = fileDetails.Notes
-        attachment.signatures = fileDetails.Signatures
-        state.attachments = attachments
-        if (state.activeAttachment.id === attachment.id) {
-          state.attachmentDetails = Object.assign({}, attachment)
-        }
-      }
-    } else {
-      // Reset value when mutation called with empty object
-      state.attachmentDetails = null
-    }
-  },
-  VIEW_VERSION (state, { attachment, version }) {
-    state.attachmentDetails = { url: version.FileUrl }
-    state.activeAttachment = attachment
-  },
-  SET_ACTIVE_VERSION (state, { attachmentId, versionId }) {
     const attachments = state.attachments
-    const attachment = attachments.find(attachment => attachment.id === attachmentId)
+    const index = attachments.findIndex(i => i.id === fileId)
+    const attachment = attachments.find(i => i.id === fileId)
+    Vue.set(attachment, 'hasDetails', true)
+    if (fileDetails.ErrorMessage) {
+      attachment.access = false
+      attachment.reason = fileDetails.ErrorMessage
+      return
+    }
+    attachment.access = true
+    attachment.url = fileDetails.FileUrl
+    attachment.srcUrl = fileDetails.SrcUrl + attachment.fileName
+    attachment.versions = fileDetails.Versions
+    attachment.notes = fileDetails.Notes
+    attachment.signatures = fileDetails.Signatures
+    Vue.set(attachments, index, attachment)
+  },
+  CHANGE_ACTIVE_VERSION (state, { attachmentId, versionId }) {
+    const attachments = state.attachments
+    const attachment = attachments.find(i => i.id === attachmentId)
     attachment.versions.forEach(version => { version.IsActive = version.Id === versionId })
-    state.attachments = JSON.parse(JSON.stringify(attachments))
+    Vue.set(state, 'attachments', attachments)
+  },
+  SET_ACTIVE_VERSION (state, fileId) {
+    const attachments = state.attachments
+    const index = attachments.findIndex(i => i.id === fileId)
+    const attachment = attachments.find(i => i.id === fileId)
+    const version = attachment.versions.find(i => i.IsActive)
+    // При изменении ID сворачивается список версий
+    attachment.fileName = version.Name
+    attachment.srcUrl = version.Details.SrcUrl
+    attachment.fileExt = version.Details.FileType
+    attachment.date = moment(version.Date).format('DD.MM.YYYY HH:mm')
+    Vue.set(attachments, index, attachment)
   },
   DELETE_VERSION (state, { attachmentId, versionId }) {
     const attachments = state.attachments
-    const attachment = attachments.find(attachment => attachment.id === attachmentId)
-    attachment.versions.filter(version => version.Id !== versionId)
-    state.attachments = JSON.parse(JSON.stringify(attachments))
+    const index = attachments.findIndex(i => i.id === attachmentId)
+    const attachment = attachments.find(i => i.id === attachmentId)
+    attachment.versions = attachment.versions.filter(version => version.Id !== versionId)
+    Vue.set(attachments, index, attachment)
   }
 }
