@@ -49,7 +49,9 @@ export default {
     },
     color () {
       return extension => {
-        const ext = extension.toLowerCase()
+        const ext = extension
+          ? extension.toLowerCase()
+          : 'file'
         switch (true) {
           case ext === 'pdf': return 'red'
           case this.isImage(ext): return 'warning'
