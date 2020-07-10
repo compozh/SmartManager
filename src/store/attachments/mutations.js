@@ -3,14 +3,14 @@ import moment from 'moment'
 
 export default {
   SET_ATTACHMENTS (state, attachments) {
-    if (state.attachments && state.attachments.length) {
-      state.attachments = attachments.map(attachment => {
+    state.attachments = attachments.map((attachment, idx) => {
+      attachment.index = idx
+      if (state.attachments && state.attachments.length) {
         const existingAttachment = state.attachments.find(i => i.id === attachment.id)
         return Object.assign(attachment, existingAttachment || {})
-      })
-    } else {
-      state.attachments = attachments
-    }
+      }
+      return attachment
+    })
   },
   SET_ATTACHMENT_TYPES (state, types) {
     state.attachmentTypes = Object.assign({}, state.attachmentTypes, types)
@@ -39,9 +39,10 @@ export default {
   },
   CHANGE_ACTIVE_VERSION (state, { attachmentId, versionId }) {
     const attachments = state.attachments
+    const index = attachments.findIndex(i => i.id === attachmentId)
     const attachment = attachments.find(i => i.id === attachmentId)
     attachment.versions.forEach(version => { version.IsActive = version.Id === versionId })
-    Vue.set(state, 'attachments', attachments)
+    Vue.set(attachments, index, attachment)
   },
   SET_ACTIVE_VERSION (state, fileId) {
     const attachments = state.attachments
@@ -49,6 +50,7 @@ export default {
     const attachment = attachments.find(i => i.id === fileId)
     const version = attachment.versions.find(i => i.IsActive)
     // При изменении ID сворачивается список версий
+    attachment.id = version.Id
     attachment.fileName = version.Name
     attachment.srcUrl = version.Details.SrcUrl
     attachment.fileExt = version.Details.FileType
@@ -61,5 +63,41 @@ export default {
     const attachment = attachments.find(i => i.id === attachmentId)
     attachment.versions = attachment.versions.filter(version => version.Id !== versionId)
     Vue.set(attachments, index, attachment)
+  },
+  ADD_NOTE (state, { roots, noteText, rootState }) {
+    const attachments = state.attachments
+    const index = attachments.findIndex(i => i.id === roots.attachmentId)
+    const attachment = attachments.find(i => i.id === roots.attachmentId)
+    const version = attachment.versions.find(i => i.Id === roots.versionId)
+    const newNote = {
+      Corrected: false,
+      DateAdd: moment().format('YYYY-MM-DD HH:mm'),
+      DateCorr: '0001-01-01T02:00:00+02:00',
+      Editable: true,
+      NoteId: Date.now(),
+      Text: noteText,
+      UserAdd: rootState.auth.user.userName,
+      UserCorr: ''
+    }
+    version.Details.Notes.unshift(newNote)
+    Vue.set(attachments, index, attachment)
+  },
+  UPDATE_NOTE (state, { roots, noteId, noteText }) {
+    const attachments = state.attachments
+    const index = attachments.findIndex(i => i.id === roots.attachmentId)
+    const attachment = attachments.find(i => i.id === roots.attachmentId)
+    const version = attachment.versions.find(i => i.Id === roots.versionId)
+    const note = version.Details.Notes.find(i => i.NoteId === noteId)
+    note.Text = noteText
+    Vue.set(attachments, index, attachment)
+  },
+  DELETE_NOTE (state, { roots, noteId }) {
+    const attachments = state.attachments
+    const indexA = attachments.findIndex(i => i.id === roots.attachmentId)
+    const attachment = attachments.find(i => i.id === roots.attachmentId)
+    const version = attachment.versions.find(i => i.Id === roots.versionId)
+    const indexN = version.Details.Notes.findIndex(i => i.NoteId === noteId)
+    version.Details.Notes.splice(indexN, 1)
+    Vue.set(attachments, indexA, attachment)
   }
 }

@@ -363,9 +363,12 @@ export const attachments = {
       })
       await this.setActiveAttachment(this.attachments[0])
     },
-    async addVersion (fileId, fileExt, filePath) {
-      await this.$store.dispatch('addVersion', { fileId, fileExt, filePath })
-      const attachment = this.attachments.find(i => i.id === fileId)
+    async addVersion (attachment, filePath) {
+      await this.$store.dispatch('addVersion', {
+        fileId: attachment.id,
+        fileExt: attachment.fileExt,
+        filePath
+      })
       await this.setActiveAttachment(attachment)
     },
     async setActiveVersion (attachmentId, version) {
@@ -378,14 +381,18 @@ export const attachments = {
         await this.setActiveAttachment(attachment)
       }
     },
-
-    async attachmentDelete (id) {
+    async attachmentDelete (attachment) {
       await this.$store.dispatch('attachmentDelete', {
-        fileId: id,
+        fileId: this.getActiveId(attachment),
         taskId: +this.$route.params.taskId,
         caseId: +this.$route.params.caseId
       })
       await this.setActiveAttachment(this.attachments[0])
+    },
+    getActiveId (attachment) {
+    // Active version ID need instead attachment ID for accuracy
+      const activeVersion = attachment.versions.find(i => i.IsActive)
+      return activeVersion.Id
     },
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', {

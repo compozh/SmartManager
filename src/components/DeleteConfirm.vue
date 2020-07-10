@@ -4,7 +4,7 @@
               @input="$emit('input', $event)"
               persistent max-width="400">
       <v-card>
-        <v-card-title class="headline">
+        <v-card-title class="subtitle-1 white--text blue-grey py-1 mb-4">
           <slot name="title"/>
         </v-card-title>
         <v-card-text>
@@ -12,12 +12,16 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-4" text @click="closeDialog">
-            {{ $t('buttons.cancel') }}
-          </v-btn>
-          <v-btn color="red darken-4" text @click="confirm">
-            {{ $t('buttons.delete') }}
-          </v-btn>
+          <outlined-btn icon="times"
+                        color="blue-grey"
+                        :handler="closeDialog">
+            <span>{{ $t('buttons.cancel') }}</span>
+          </outlined-btn>
+          <outlined-btn icon="trash"
+                        color="red darken-4"
+                        :handler="confirm">
+            <span>{{ $t('buttons.delete') }}</span>
+          </outlined-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -25,6 +29,8 @@
 </template>
 
 <script>
+import OutlinedBtn from '@/components/OutlinedBtn'
+
 export default {
   name: 'DeleteConfirm',
   model: {
@@ -32,6 +38,9 @@ export default {
   },
   props: {
     dialog: Boolean
+  },
+  components: {
+    OutlinedBtn
   },
   methods: {
     closeDialog () {
