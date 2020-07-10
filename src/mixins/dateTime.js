@@ -22,6 +22,14 @@ export const date = {
     formatVersionDate () {
       return dateTime => this.parseVersionDate(dateTime).format('DD.MM.YYYY HH:mm')
     }
+  },
+  methods: {
+    dateSort (itemsArray, fieldName = 'date') {
+      return [...itemsArray].sort((a, b) => {
+        return this.parseVersionDate(a[fieldName])
+          .isBefore(this.parseVersionDate(b[fieldName])) ? 1 : -1
+      })
+    }
   }
 }
 
