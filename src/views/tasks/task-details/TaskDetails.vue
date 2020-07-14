@@ -17,8 +17,13 @@
           {{ activeFolder.Name }}
         </div>
       </div>
-      <v-btn fab x-small color="white" @click="closeTaskDetails">
-        <fa-icon icon="times" type="fal" size="2x"/>
+      <v-btn fab x-small
+             depressed
+             color="white"
+             class="task-close"
+             @click="closeTaskDetails">
+        <fa-icon icon="times" type="fal"
+                 size="2x" color="#979797"/>
       </v-btn>
     </div>
 
@@ -387,10 +392,15 @@ export default {
     flex-direction: column;
     flex: 1;
     margin: 0.5em 0 2em;
+    overflow: hidden;
   }
 
   .v-dialog__content >>> .v-dialog:not(.v-dialog--fullscreen) {
     max-height: 96%;
+  }
+
+  .task-close:hover {
+    transform: rotate(180deg);
   }
 
   .side-header {

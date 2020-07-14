@@ -1,8 +1,10 @@
 <template>
   <v-row no-gutters style="flex-basis: 0;"
-         class="flex-grow-1">
-    <v-col class="pa-0">
-      <v-row dense align-content="start" justify="start">
+         class="flex-grow-1 overflow-hidden">
+    <v-col class="d-flex flex-column fill-height pa-0">
+      <v-row dense justify="start"
+             align-content="start"
+             class="flex-grow-0">
         <v-col class="d-flex">
           <search-field class="mt-n3 ml-1"/>
           <v-spacer/>

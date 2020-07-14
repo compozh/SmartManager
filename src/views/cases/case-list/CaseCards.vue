@@ -5,15 +5,17 @@
                    :search="search"
                    :hide-default-footer="hideFooter"
                    :no-data-text="hideNoData ? '' : $t('cases.noCases')"
-                   :footer-props="{itemsPerPageText: $t('cases.perPage')}">
+                   :footer-props="{itemsPerPageText: $t('cases.perPage')}"
+                   class="d-flex flex-column"
+                   style="min-height: 0">
 
     <template #default="{ items }">
-      <v-row>
+      <perfect-scrollbar tag="v-row" :options="scrollOptions">
         <v-col v-for="caseItem in items"
                :key="caseItem.id" cols="12" class="py-1">
           <case-list-item :caseItem="caseItem"/>
         </v-col>
-      </v-row>
+      </perfect-scrollbar>
     </template>
 
     <template #no-data v-if="!hideNoData">
@@ -39,7 +41,11 @@ export default {
   data: () => ({
     search: '',
     page: 1,
-    itemsPerPage: 1
+    itemsPerPage: 1,
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
+    }
   }),
   computed: {
     numberOfPages () {

@@ -15,6 +15,9 @@ export default [
         path: '/tasks/:folderId',
         name: 'task-list',
         component: () => import('@/views/tasks/task-list/TaskList.vue'),
+        meta: {
+          zone: 'tasks'
+        },
         children: [
           {
             path: ':taskId',
@@ -32,6 +35,9 @@ export default [
         path: '/cases/:folderId',
         name: 'case-list',
         component: () => import('@/views/cases/case-list/CaseList.vue'),
+        meta: {
+          zone: 'cases'
+        },
         children: [
           {
             path: ':caseId',
@@ -43,12 +49,18 @@ export default [
       {
         path: '/processes',
         name: 'processes',
-        component: () => import('@/views/processes/Processes.vue')
+        component: () => import('@/views/processes/Processes.vue'),
+        meta: {
+          zone: 'processes'
+        }
       },
       {
         path: '/process',
         name: 'process',
-        component: () => import('@/views/processes/Process.vue')
+        component: () => import('@/views/processes/Process.vue'),
+        meta: {
+          zone: 'processes'
+        }
       }
     ]
   },

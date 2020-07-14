@@ -66,6 +66,10 @@ export default {
   props: {
     participants: Array
   },
+  data: () => ({
+    needInitValue: true,
+    initTaskParticipants: ''
+  }),
   computed: {
     transformParticipants () {
       return this.participants.map(participant => {
@@ -92,6 +96,27 @@ export default {
           group: 'OBSERVER'
         }
       }
+    },
+    participantsAreEqual () {
+      const a1 = this.participants.filter(p => p.role).sort()
+      const a2 = this.initTaskParticipants.filter(p => p.role).sort()
+      if (a1.length === a2.length) {
+        return a1.every((i, idx) => {
+          return i.userId === a2[idx].userId &&
+            i.role === a2[idx].role
+        })
+      }
+      return false
+    }
+  },
+  watch: {
+    participants (participants) {
+      if (this.needInitValue) {
+        this.needInitValue = false
+        this.initTaskParticipants = participants
+      } else {
+        this.$store.commit('SET_TASK_CHANGED', !this.participantsAreEqual)
+      }
     }
   },
   methods: {
@@ -113,7 +138,6 @@ export default {
           return theParticipant
         })
       this.$emit('input', allParticipants)
-      this.$store.commit('SET_TASK_CHANGED', true)
     },
     remove (id, role) {
       const filteredParticipants = this.participants.filter(participant => {

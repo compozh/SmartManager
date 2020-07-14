@@ -5,15 +5,17 @@
                    :search="search"
                    :hide-default-footer="hideFooter"
                    :no-data-text="hideNoData ? '' : $t('tasks.noTasks')"
-                   :footer-props="{itemsPerPageText: $t('tasks.perPage')}">
+                   :footer-props="{itemsPerPageText: $t('tasks.perPage')}"
+                   class="d-flex flex-column"
+                   style="min-height: 0">
 
     <template #default="props">
-      <v-row>
-        <v-col v-for="task in props.items"
-          :key="task.id" cols="12" class="py-1">
-          <task-list-item :task="task"/>
-        </v-col>
-      </v-row>
+      <perfect-scrollbar tag="v-row" :options="scrollOptions">
+          <v-col v-for="task in props.items"
+                 :key="task.id" cols="12" class="py-1">
+            <task-list-item :task="task"/>
+          </v-col>
+      </perfect-scrollbar>
     </template>
 
     <template #no-data v-if="!hideNoData">
@@ -39,7 +41,11 @@ export default {
   data: () => ({
     search: '',
     page: 1,
-    itemsPerPage: 1
+    itemsPerPage: 1,
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
+    }
   }),
   computed: {
     numberOfPages () {
