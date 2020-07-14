@@ -21,19 +21,28 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'cases')
     }
   },
-  async getCaseDetails ({ commit }, { caseId }) {
-    // startLoading()
+  async getCaseDetails ({ state, commit }, { caseId }) {
+    const result = { success: false }
+    const preLoader = (state.case && state.caseDetails[caseId])
+    preLoader || commit('START_PRELOADER', 'case')
+    commit('START_LINEAR_PRELOADER', 'case')
     try {
-      const result = await api.getCaseDetailsFromGql(caseId)
-      // stopLoading()
-      const caseDetails = result.data.smtasks.caseDetails
-      const caseItem = { [caseId]: caseDetails }
-      commit('setCaseDetails', caseItem)
+      const response = await api.getCaseDetailsFromGql(caseId)
+      const caseDetails = response.data.smtasks.caseDetails
+      result.success = !!caseDetails
+      commit('SET_CASE_DETAILS', { [caseId]: caseDetails })
+      commit('SET_ATTACHMENTS', caseDetails.originals)
     } catch (e) {
       console.log(e.message)
-      // stopLoading()
-      // notify('danger', 'casesTitle', 'caseDetailsError')
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.caseDetailsError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'case')
+      commit('STOP_LINEAR_PRELOADER', 'case')
     }
+    return result
   },
   async caseCreate (context, newCase) {
     const newCaseJson = JSON.stringify(newCase)

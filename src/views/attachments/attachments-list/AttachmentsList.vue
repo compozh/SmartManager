@@ -1,118 +1,171 @@
 <template>
   <div>
-    <list-header v-model="attachmentsListMode"/>
+    <list-header v-model="attachmentsListMode"
+                 :businessObject="businessObject"
+                 :uploadType.sync="uploadType"/>
 
     <!-- UPLOAD COMPONENT -->
-    <files-upload v-slot="{ files }" upload-auto>
+    <files-upload v-slot="{ files }"
+                  upload-auto
+                  :inputId="objectId"
+                  :uploadHandler="uploadHandler"
+                  :uploadType="uploadType">
         <v-simple-table>
           <template>
             <tbody>
-            <tr v-for="item in files"
-                :key="item.id"
+            <tr v-for="file in files"
+                :key="file.id"
                 class="grey--text">
               <td style="width: 30px;">
-                <v-progress-circular
-                  :size="25"
-                  :value="item.progress"
-                  :width="3"
-                  color="primary"
-                  class="caption"/>
+                <v-progress-circular :size="25" :width="3"
+                                     :value="file.progress"
+                                     color="primary"
+                                     class="caption"/>
               </td>
-              <td class="text-truncate" style="max-width: 0;">{{ item.name }}</td>
-              <td style="width: 100px;">{{ fileSize(item.size) }}</td>
+              <td class="text-truncate" style="max-width: 0;">{{ file.name }}</td>
+              <td style="width: 100px;">{{ fileSize(file.size) }}</td>
             </tr>
             </tbody>
           </template>
         </v-simple-table>
     </files-upload>
 
-    <perfect-scrollbar v-show="attachments.length"
-                       style="max-height: 300px;">
+    <perfect-scrollbar v-show="attachmentList.length">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
-        <v-chip v-for="item in attachments"
-                :key="item.id" small
+        <v-chip v-for="(attachment, idx) in attachmentList"
+                :key="idx" small
                 class="my-2 mr-2 text-truncate"
-                :class="{ warning: item.id === activeAttachment.id }"
+                :class="{ warning: attachment.id === activeAttachment.id }"
                 style="min-width: 100px; max-width: 33%; flex: 1 1 24%"
-                @click="selectAttachment(item)">
+                @click="selectAttachment(attachment)">
           <fa-icon icon="file-alt" class="mr-3" size="lg"/>
-          <span class="text-truncate">{{ item.fileName }}</span>
+          <span class="text-truncate">{{ attachment.fileName }}</span>
         </v-chip>
       </div>
       <div v-else>
-        <v-simple-table>
-          <template>
-            <thead>
-              <tr>
-                <th class="text-center">{{ $t('table.type') }}</th>
-                <th class="text-center">{{ $t('table.name') }}</th>
-                <th class="text-center">{{ $t('table.date') }}</th>
-                <th class="text-center">{{ $t('table.size') }}</th>
-                <th class="text-center">{{ $t('table.sign') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-            <v-hover v-slot:default="{ hover }" v-for="item in this.attachments"
-                     :key="item.id">
+        <v-data-table
+          :headers="headers"
+          :items="attachmentList"
+          item-key="index"
+          show-expand
+          disable-filtering
+          disable-pagination
+          disable-sort
+          hide-default-footer>
+
+          <template #item="{ item: attachment, index, headers, expand, isExpanded }">
+            <v-hover #default="{ hover }">
               <tr style="cursor: pointer; width: 100%;"
-                  :class="{ 'light-blue lighten-5': item.id === activeAttachment.id }"
-                  @click="selectAttachment(item)">
-                <td class="text-center"
-                    style="width: 30px;">
-                  <file-type-icon :extension="item.fileExt"/>
+                  :class="{ 'light-blue lighten-5': attachment.id === activeAttachment.id }"
+                  @click="selectAttachment(attachment)">
+                <td class="px-1">
+                  <v-btn icon :loading="versionLoaders.includes(attachment.id)"
+                         @click.stop="expandVersions(attachment, expand, isExpanded)">
+                    <fa-icon icon="chevron-right" size="xs"
+                             style="transition: transform .2s"
+                             :style="{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }"/>
+                    <template #loader>
+                      <span class="custom-loader">
+                        <fa-icon icon="sync"/>
+                      </span>
+                    </template>
+                  </v-btn>
                 </td>
-                <td class="text-truncate" style="max-width: 0;">{{ item.fileName }}</td>
+                <td class="text-center px-0"
+                    style="width: 30px;">
+                  <file-type-icon :extension="attachment.fileExt"/>
+                </td>
+                <td class="text-truncate" style="max-width: 0;">{{ attachment.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
-                  <span v-if="!hover">{{ item.date }}</span>
+                  <span v-if="!hover">{{ attachment.date }}</span>
                   <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
-                             :to="item.srcUrl"
-                             @click.stop
+                             id="addBtn"
+                             @click.stop="newVersion(attachment)"
+                             color="grey"
+                             class="mr-8"
+                             style="border: 1px dashed;"
+                             text fab x-small dark depressed>
+                        <label :for="objectId"
+                               class="add-label pa-2">
+                          <fa-icon icon="files-medical" type="fal" size="2x"/>
+                        </label>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('versions.add') }}</span>
+                  </v-tooltip>
+                  <v-tooltip v-if="hover" top>
+                    <template #activator="{ on }">
+                      <v-btn v-on="on"
+                             :loading="downLoaders.includes(attachment.id)"
+                             @click.stop="downloadAttachment(attachment)"
                              color="grey"
                              style="border: 1px dashed;"
                              text fab x-small dark depressed>
                         <fa-icon icon="arrow-alt-down" type="fal" size="2x"/>
+                        <template #loader>
+                          <span class="custom-loader">
+                            <fa-icon icon="sync" size="lg"/>
+                          </span>
+                        </template>
                       </v-btn>
                     </template>
-                    <span>{{ 'Download' /* TODO: add resource */ }}</span>
+                    <span>{{ $t('attachments.download') }}</span>
                   </v-tooltip>
                 </td>
                 <td :class="hover ? 'text-left' : 'text-center text-truncate'"
                     style="width: 100px; max-width: 0;">
-                  <span v-if="!hover">{{ fileSize(item.fileSize) }}</span>
+                  <span v-if="!hover">{{ fileSize(attachment.fileSize) }}</span>
                   <v-tooltip v-else top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on"
                              color="grey"
                              style="border: 1px dashed;"
-                             @click="attachmentDelete(item.id)"
+                             @click.stop="attachmentDeleteDialog(attachment)"
                              text fab x-small dark depressed>
                         <fa-icon icon="trash" type="fal" size="lg"/>
                       </v-btn>
                     </template>
-                    <span>{{ 'Delete' /* TODO: add resource */ }}</span>
+                    <span>{{ $t('attachments.delete') }}</span>
                   </v-tooltip>
                 </td>
                 <td class="text-center" style="width: 20px;">
                   <div v-if="!hover">
-                    <fa-icon v-if="item.isSign" icon="medal" size="lg"/>
+                    <fa-icon v-if="attachment.isSign" icon="medal" size="lg"/>
                     <span v-else>-</span>
                   </div>
                 </td>
               </tr>
             </v-hover>
-            </tbody>
           </template>
-        </v-simple-table>
+
+          <template #expanded-item="{ item: attachment }">
+            <tr class="expanded" style="border: 1px solid grey;">
+              <td :colspan="headers.length + 1" class="pl-10 pr-0 pb-5">
+                <version-list :attachment="attachment"></version-list>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
       </div>
     </perfect-scrollbar>
+    <delete-confirm v-model="deleteConfirmDialog"
+                    @confirm="attachmentDelete(deleteParams.attachment)">
+      <template #title>{{ $t('attachments.delete') }}</template>
+      <template #text>
+        <span class="subtitle-2">{{ $t('attachments.delConfirmText') }}</span>
+        <br><br>{{ '- ' + deleteParams.fileName }}
+      </template>
+    </delete-confirm>
   </div>
 </template>
 
 <script>
 import ListHeader from './ListHeader'
+import VersionList from './VersionList'
+import DeleteConfirm from '../../../components/DeleteConfirm'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, attachments } from '@/mixins/units'
@@ -120,21 +173,86 @@ import { common, tasks, attachments } from '@/mixins/units'
 export default {
   name: 'AttachmentsList',
   mixins: [common, tasks, attachments],
+  props: {
+    businessObject: Object,
+    attachmentList: Array
+  },
   components: {
     ListHeader,
+    VersionList,
+    DeleteConfirm,
     FilesUpload,
     FileTypeIcon
   },
   data: () => ({
-    attachmentsListMode: false
+    attachmentsListMode: false,
+    deleteConfirmDialog: false,
+    deleteDialogType: '',
+    deleteParams: {},
+    uploadType: 'attachments',
+    versionParams: null,
+    versionLoaders: [],
+    downLoaders: []
   }),
+  computed: {
+    headers () {
+      return [
+        { text: this.$t('table.type'), value: 'type', align: 'center' },
+        { text: this.$t('table.name'), value: 'name', align: 'center' },
+        { text: this.$t('table.date'), value: 'date', align: 'center' },
+        { text: this.$t('table.size'), value: 'size', align: 'center' },
+        { text: this.$t('table.sign'), value: 'sign', align: 'center' }
+      ]
+    },
+    uploadHandler () {
+      let handler = () => {}
+      if (this.uploadType === 'attachments') {
+        handler = attachment => this.addAttachments(attachment, this.businessObject)
+      }
+      if (this.uploadType === 'version') {
+        handler = ({ filePath }) => {
+          const attachment = this.versionParams.attachment
+          this.addVersion(attachment, filePath, this.businessObject)
+        }
+      }
+      return handler
+    }
+  },
   created () {
-    this.getAttachmentTypes()
+    this.getAttachmentTypes(this.businessObject)
+    if (this.attachments.length && !this.activeAttachment.id) {
+      this.selectAttachment(this.attachments[0])
+    }
   },
   methods: {
-    selectAttachment (attachment) {
-      this.setActiveAttachment(attachment)
-      this.$emit('input')
+    selectAttachment (attachment, version) {
+      this.setActiveAttachment(attachment, version)
+      this.$emit('selectAttachment')
+    },
+    async expandVersions (attachment, expand, isExpanded) {
+      this.versionLoaders.push(attachment.id)
+      if (attachment.hasDetails || isExpanded) {
+        expand(!isExpanded)
+      } else {
+        const result = await this.getAttachmentDetails(attachment)
+        !result.success || expand(!isExpanded)
+      }
+      this.versionLoaders = this.versionLoaders.filter(i => i !== attachment.id)
+    },
+    newVersion (attachment) {
+      this.uploadType = 'version'
+      this.versionParams = { attachment }
+    },
+    async downloadAttachment (attachment) {
+      this.downLoaders.push(attachment.id)
+      attachment.srcUrl || await this.getAttachmentDetails(attachment)
+      window.open(attachment.srcUrl, '_self')
+      this.downLoaders = this.downLoaders.filter(i => i !== attachment.id)
+    },
+    attachmentDeleteDialog (attachment) {
+      this.deleteConfirmDialog = true
+      this.deleteParams.attachment = attachment
+      this.deleteParams.fileName = attachment.fileName
     }
   }
 }
@@ -142,8 +260,36 @@ export default {
 
 <style scoped>
 
-  .v-data-table >>> .v-data-table__wrapper {
-    overflow-x: hidden;
+  .v-data-table >>> th:nth-child(2) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  tr {
+    transition: background .5s;
+  }
+
+  tr.expanded:hover {
+    background: none !important;
+  }
+
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+
+  #addBtn >>> .v-btn__content {
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
 </style>

@@ -1,6 +1,7 @@
 {
   "search": "Search",
   "rights": "All rights Reserved",
+  "appUpdate": "Application is updating ... Please wait...",
   "user": {
     "delegatedRights": "Use rights"
   },
@@ -163,7 +164,8 @@
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "zoomReset": "Reset zoom",
-    "toggleFullscreen": "Toggle full screen mode"
+    "toggleFullscreen": "Toggle full screen mode",
+    "change": "Change"
   },
   "icons": {
     "priority": "Priority",
@@ -213,21 +215,44 @@
     "type": "Type",
     "status": "Status",
     "description": "Description",
-    "date": "Date"
+    "date": "Date",
+    "fioAdd": "Created",
+    "actions": "Actions"
   },
   "attachments": {
-    "delConfirmTitle": "Attachment delete",
+    "delete": "Attachment delete",
     "delConfirmText": "Are you sure you want to delete the attachment?",
     "noData": "No data",
     "notSupport": "FILES OF {ext} TYPE ARE NOT SUPPORTED",
     "downloadFile": "Download and open file",
     "noAccess": "You do not have access to the attachment",
     "notSelected": "File not selected",
-    "typesTitle": "Choose attachments type"
+    "typesTitle": "Choose attachments type",
+    "download": "Download attachment",
+    "preparation": "Attachment preparation..."
+  },
+  "versions": {
+    "add": "Add version",
+    "setActive": "Set active",
+    "notes": "Notes",
+    "download": "Download version",
+    "delete": "Delete version",
+    "delConfirmText": "Are you sure you want to delete the version?"
+  },
+  "notes": {
+    "fioAdd": "User",
+    "dateAdd": "Date",
+    "result": "Result",
+    "fioWatch": "Who reviewed",
+    "dateWatch": "Review date",
+    "comment": "Comment",
+    "noNotes": "No notes",
+    "delete": "Delete note",
+    "delConfirmText": "Are you sure you want to delete the note?"
   },
   "eds": {
     "eds": "Digital sign",
-    "popupTitle": "Electronic digital signs",
+    "title": "Electronic digital signs",
     "sign": "Sign",
     "delete": "Delete",
     "check": "Check",
@@ -284,7 +309,7 @@
     "uploadError": "File {file} upload error, contact support",
     "bpTitle": "Business processes",
     "bpSuccess": "Business processes successfully ran",
-    "bpFail": "Business process start fail",
+    "bpFail": "Business process start failed",
     "bpError": "Business process start error, contact support",
     "bpImportError": "Diagram display error, contact support",
     "applyRightsTittle": "Delegated rights",
@@ -298,18 +323,32 @@
     "caseCreateError": "Case create error, contact support",
     "caseUpdateSuccess": "Case update successfully",
     "caseUpdateError": "Case update error, contact support",
-    "bindingFail": "Binding changing fail",
+    "bindingFail": "Binding changing failed",
     "bindingError": "Binding changing error, contact support",
     "taskDelSuccess": "Task delete successfully",
-    "taskDelFail": "Task delete fail",
+    "taskDelFail": "Task delete failed",
     "taskDelError": "Task delete error, contact support",
     "taskPinedSuccess": "Added to favorites",
     "taskUnPinedSuccess": "Removed from favorites",
-    "taskPinFail": "Favorite tasks change fail",
+    "taskPinFail": "Favorite tasks change failed",
     "taskPinError":  "Favorite tasks change error, contact support",
     "updateSuccess": "Update success",
-    "updateFail" : "Update fail",
-    "updateError": "Update error, contact support"
+    "updateFail" : "Update failed",
+    "updateError": "Update error, contact support",
+    "typeGettingError": "Type getting error",
+    "fileDetailsError": "File details getting error",
+    "versionAddingFail": "Version adding failed",
+    "versionAddingError": "Version adding error",
+    "setActiveVersionFail": "Set active version failed",
+    "setActiveVersionError": "Set active version error",
+    "deleteVersionFail": "Delete version failed",
+    "deleteVersionError": "Delete version error",
+    "noteAddingFail": "Note adding failed",
+    "noteAddingError": "Note adding error",
+    "updateNoteFail": "Note updating failed",
+    "updateNoteError": "Note updating error",
+    "deleteNoteFail": "Note deleting failed",
+    "deleteNoteError": "Note deleting error"
   },
   "workflow": {
     "businessProcess": "Business process",

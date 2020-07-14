@@ -1,5 +1,4 @@
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 
 export const common = {
   computed: {
@@ -140,14 +139,43 @@ export const tasks = {
     workFlowTaskInWork () {
       return this.taskType === 'WORKFLOW' && this.taskInWork
     },
+    externalTaskCamunda () {
+      return this.taskType === 'EXTERNAL' &&
+        this.externalParams.EXTERNALSOURCE === 'C'
+    },
     externalParams () {
       return this.task.externalParams
         ? JSON.parse(this.task.externalParams)
         : {}
     },
-    externalTaskCamunda () {
-      return this.taskType === 'EXTERNAL' &&
-        this.externalParams.EXTERNALSOURCE === 'C'
+    objectId () {
+      if (this.businessObject) {
+        return this.businessObject.BusinessObjectKey
+      } else {
+        return +this.$route.params.taskId || +this.$route.params.caseId
+      }
+    },
+    businessObjects () {
+      return this.externalParams.BUSINESSOBJECTKEYS || []
+    },
+    businessObjectParams () {
+      return businessObject => {
+        let businessObjectParams = {}
+        if (businessObject) {
+          businessObjectParams = {
+            BusinessObjectDefinitionCode: businessObject.BusinessObjectDefinitionCode || '',
+            BusinessObjectKey: businessObject.BusinessObjectKey || 0
+          }
+        }
+        return businessObjectParams
+      }
+    },
+    references () {
+      return businessObject => {
+        return businessObject && businessObject.References
+          ? businessObject.References
+          : []
+      }
     },
     userIsPerformer () {
       return this.userId === this.task.performerId
@@ -182,17 +210,11 @@ export const tasks = {
       await this.$store.dispatch('getTasks', folderId)
     },
     async getTask () {
-      if (!this.task.id) {
-        try {
-          const result = await this.$store.dispatch('getTaskDetails', {
-            taskId: this.taskId
-          })
-          result.success || await this.$router.push('/error404')
-          this.showTaskDialog(true)
-        } catch (e) {
-          console.log(e.message)
-        }
-      }
+      const result = await this.$store.dispatch('getTaskDetails', {
+        taskId: this.taskId
+      })
+      result.success || await this.$router.push('/error404')
+      this.showTaskDialog(true)
     },
     showTaskDialog (toShow) {
       this.$store.commit('SHOW_TASK_DIALOG', toShow)
@@ -215,8 +237,18 @@ export const cases = {
       }
       return cases.filter(i => i.folderId === +this.$route.params.folderId)
     },
+    caseItem () {
+      const id = +this.$route.params.caseId
+      const caseItem = this.$store.state.cases.caseDetails[id]
+      return caseItem || {}
+    },
     caseId () {
-      return this.case.id || +this.$route.params.caseId
+      return this.caseItem.id || +this.$route.params.caseId
+    },
+    caseTasks () {
+      return this.caseItem.tasks
+        ? this.caseItem.tasks
+        : []
     },
     caseDialog: {
       get () {
@@ -232,7 +264,7 @@ export const cases = {
       await this.$store.dispatch('getCases')
     },
     async getCase () {
-      if (!this.case.id) {
+      if (!this.caseItem.id) {
         try {
           const result = await this.$store.dispatch('getCaseDetails', {
             caseId: this.caseId
@@ -259,31 +291,22 @@ export const cases = {
 export const attachments = {
   data: () => ({
     uploadErrors: [],
-    attachmentType: ''
+    attachmentType: '',
+    loading: true // for viewers
   }),
   computed: {
     attachments () {
-      const attachments = []
-      if (this.task.originals && this.task.originals.length) {
-        this.task.originals.forEach(o => {
-          attachments.push(Object.assign({}, o))
-        })
-        attachments.forEach(a => {
-          a.parseDate = moment(a.date, 'DD.MM.YYYY HH:mm')
-        })
-        attachments.sort((a, b) => b.parseDate - a.parseDate)
-      }
-      return attachments
+      return this.$store.getters.attachments
     },
     activeAttachment () {
-      return this.$store.state.attachments.activeAttachment ||
-        this.attachments[0] || {}
+      return this.$store.state.attachments.activeAttachment || {}
     },
-    attachmentDetails () {
-      return this.$store.state.attachments.attachmentDetails || {}
+    currentVersion () {
+      return this.$store.state.attachments.currentVersion || {}
     },
     attachmentTypes () {
-      return this.$store.state.attachments.attachmentTypes || []
+      const types = this.$store.state.attachments.attachmentTypes
+      return types && types[this.objectId] ? types[this.objectId] : []
     },
     fileSize () {
       return size => {
@@ -296,25 +319,28 @@ export const attachments = {
     }
   },
   methods: {
-    setActiveAttachment (attachment) {
-      console.log(this.tab)
-      this.$store.commit('SET_ACTIVE_ATTACHMENT', attachment)
+    async setActiveAttachment (attachment, version) {
+      this.resetAttachmentData()
+      attachment.hasDetails || await this.getAttachmentDetails(attachment)
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', { attachment, version })
     },
-    getAttachmentDetails () {
-      const { id: fileId, fileExt } = this.activeAttachment
+    async getAttachmentDetails (attachment) {
+      let result = null
+      const { id: fileId, fileExt } = attachment || this.activeAttachment
       if (fileId && fileExt) {
-        const id = +this.$route.params.taskId || +this.$route.params.caseId
-        this.$store.dispatch('getFileDetails', { fileId, fileExt, id })
+        result = await this.$store.dispatch('getFileDetails', {
+          fileId, fileExt
+        })
       }
+      return result
     },
-    resetAttachmentData () {
-      this.$store.commit('SET_ACTIVE_ATTACHMENT', null)
-      this.$store.commit('SET_ATTACHMENT_DETAILS', {})
+    async getAttachmentTypes (businessObject) {
+      await this.$store.dispatch('getAttachmentTypes', {
+        ...this.params,
+        ...this.businessObjectParams(businessObject)
+      })
     },
-    async getAttachmentTypes () {
-      await this.$store.dispatch('getAttachmentTypes', this.params)
-    },
-    async addAttachments (attachment) {
+    async addAttachments (attachment, businessObject) {
       if (this.attachmentTypes.length === 1) {
         this.attachmentType = this.attachmentTypes[0].CODE
       }
@@ -322,7 +348,10 @@ export const attachments = {
       // Returns results list
       const results = await this.$store.dispatch('addAttachments', {
         attachments: [attachment],
-        params: this.params
+        params: {
+          ...this.params,
+          ...this.businessObjectParams(businessObject)
+        }
       })
       results.forEach(result => {
         if (!result.success) {
@@ -332,16 +361,44 @@ export const attachments = {
           })
         }
       })
+      await this.setActiveAttachment(this.attachments[0])
     },
-    async attachmentDelete (id) {
-      const result = await this.$store.dispatch('attachmentDelete', {
-        fileId: id,
+    async addVersion (attachment, filePath) {
+      await this.$store.dispatch('addVersion', {
+        fileId: attachment.id,
+        fileExt: attachment.fileExt,
+        filePath
+      })
+      await this.setActiveAttachment(attachment)
+    },
+    async setActiveVersion (attachmentId, version) {
+      await this.$store.dispatch('setActiveVersion', { attachmentId, version })
+    },
+    async deleteVersion (attachment, versionId) {
+      await this.$store.dispatch('deleteVersion', { attachment, versionId })
+      // If the deleted version is current, will be shown the active version
+      if (this.currentVersion.Id === versionId) {
+        await this.setActiveAttachment(attachment)
+      }
+    },
+    async attachmentDelete (attachment) {
+      await this.$store.dispatch('attachmentDelete', {
+        fileId: this.getActiveId(attachment),
         taskId: +this.$route.params.taskId,
         caseId: +this.$route.params.caseId
       })
-      if (result.success) {
-        // await this.$router.push({ name: 'task-attachments' })
-      }
+      await this.setActiveAttachment(this.attachments[0])
+    },
+    getActiveId (attachment) {
+    // Active version ID need instead attachment ID for accuracy
+      const activeVersion = attachment.versions.find(i => i.IsActive)
+      return activeVersion.Id
+    },
+    resetAttachmentData () {
+      this.$store.commit('SET_ACTIVE_ATTACHMENT', {
+        attachment: {},
+        version: {}
+      })
     }
   }
 }

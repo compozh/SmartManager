@@ -2,7 +2,7 @@
   <v-img src="@/assets/file-icon.svg"
          contain :max-width="size"
          :style="{'font-size': size + 'px'}"
-         class="d-flex align-center">
+         class="d-flex align-center justify-center">
     <div class="extension text-truncate"
          :class="color(extension)"
          :style="{height: size/1.8 + 'px'}">
@@ -49,7 +49,9 @@ export default {
     },
     color () {
       return extension => {
-        const ext = extension.toLowerCase()
+        const ext = extension
+          ? extension.toLowerCase()
+          : 'file'
         switch (true) {
           case ext === 'pdf': return 'red'
           case this.isImage(ext): return 'warning'

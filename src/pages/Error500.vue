@@ -2,7 +2,7 @@
   <v-container fluid class="fill-height justify-center">
     <v-row align="center" justify="center">
       <v-col cols="6">
-        <v-card class="d-flex flex-column align-center pa-5">
+        <v-card class="d-flex flex-column align-center py-5">
           <v-img src="@/assets/error500.png"/>
           <p class="display-1 font-weight-light text-center mb-10">Internal Server Error!</p>
           <v-btn class="primary mb-10" max-width="200px" x-large to="/" >Back to home</v-btn>

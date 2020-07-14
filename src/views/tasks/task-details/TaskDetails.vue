@@ -93,8 +93,16 @@
             <task-participants v-model="taskData.participants"
                                class="mb-10"/>
           <!-- TASK ATTACHMENTS -->
-          <attachments-list v-if="!externalTaskCamunda || attachments.length"
-                            class="mb-10" @input="tab = 0"/>
+          <template v-if="externalTaskCamunda">
+            <attachments-list v-for="businessObject in businessObjects"
+                              :key="businessObject.BusinessObjectKey"
+                              :businessObject="businessObject"
+                              :attachmentList="attachmentList(businessObject.BusinessObjectKey)"
+                              class="mb-10" @selectAttachment="tab = 0"/>
+          </template>
+          <attachments-list v-else class="mb-10"
+                            :attachmentList="attachments"
+                             @selectAttachment="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
@@ -132,8 +140,9 @@
       </SplitArea>
       <!-- RIGHT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="45">
-        <v-tabs v-model="tab" grow height="75px" class="flex-grow-0">
-          <v-tab v-for="tab in tabItems" :key="tab.name">
+        <v-tabs v-model="tab" grow
+                height="75px" class="flex-grow-0">
+          <v-tab v-for="(tab, idx) in visibleTabs" :key="idx">
             <fa-icon :icon="tab.icon" class="mr-3" size="lg"/>
             {{ tab.name }}
           </v-tab>
@@ -141,9 +150,8 @@
         <v-divider/>
         <perfect-scrollbar class="fill-height">
           <v-tabs-items v-model="tab" class="fill-height">
-            <v-tab-item v-for="tab in tabItems"
-                        :key="tab.name"
-                        class="fill-height">
+            <v-tab-item v-for="(tab, idx) in visibleTabs"
+                        :key="idx" class="fill-height">
               <component :is="tab.component"/>
             </v-tab-item>
           </v-tabs-items>
@@ -230,17 +238,41 @@ export default {
         ? this.task.childTasks
         : []
     },
+    visibleTabs () {
+      return this.tabItems.filter(tab => tab.isVisible)
+    },
     tabItems () {
-      const tabs = [
-        { name: this.$t('tabs.comments'), component: 'comments', icon: 'comment-alt-dots' }
+      return [
+        {
+          name: this.$t('tabs.attachment'),
+          component: 'attachments-viewer',
+          icon: 'paperclip',
+          isVisible: !!this.attachments.length
+        },
+        {
+          name: this.$t('tabs.comments'),
+          component: 'comments',
+          icon: 'comment-alt-dots',
+          isVisible: true
+        },
+        {
+          name: this.$t('tabs.diagram'),
+          component: 'diagram',
+          icon: 'project-diagram',
+          isVisible: this.externalTaskCamunda
+        }
       ]
-      if (this.attachments.length) {
-        tabs.unshift({ name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' })
+    },
+    attachmentList () {
+      return key => {
+        if (key) {
+          return this.attachments.filter(attachment => {
+            return attachment.businessObjectKey === key
+          })
+        } else {
+          return this.attachments
+        }
       }
-      if (this.externalTaskCamunda) {
-        tabs.push({ name: this.$t('tabs.diagram'), component: 'diagram', icon: 'project-diagram' })
-      }
-      return tabs
     }
   },
   watch: {
@@ -271,7 +303,7 @@ export default {
       this.setTaskChanged(false)
     },
     closeTaskDetails () {
-      this.showTaskDialog(true)
+      this.showTaskDialog(false)
       this.$router.push('/tasks/' + this.activeFolder.Code)
     },
     async formSubmit () {
@@ -369,8 +401,10 @@ export default {
         descript: this.taskData.description,
         participants: this.taskData.participants
       }
-
-      await this.$store.dispatch('updateTask', taskData)
+      const result = await this.$store.dispatch('updateTask', taskData)
+      if (!result.success) {
+        this.initTaskData()
+      }
     }
   },
   beforeDestroy () {

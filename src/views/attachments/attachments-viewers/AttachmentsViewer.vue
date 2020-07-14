@@ -1,19 +1,24 @@
 <template>
-    <div class="fill-height">
-      <component v-if=viewer :is="viewer" :url="attachmentDetails.url"/>
-      <no-data v-else class="fill-height">
-        <span v-if="attachmentDetails.reason"
-              class="headline font-weight-light grey--text">
-          {{ attachmentDetails.reason }}
+  <div class="fill-height">
+    <component v-if="viewer" :is="viewer" :url="url"/>
+
+    <no-data v-else-if="activeAttachment.reason" class="fill-height">
+        <span class="headline font-weight-light grey--text">
+          {{ activeAttachment.reason }}
         </span>
-      </no-data>
-    </div>
+    </no-data>
+
+    <no-data v-else class="fill-height flex-wrap">
+      <attachment-pre-loader/>
+    </no-data>
+
+  </div>
 </template>
 
 <script>
 import EjsPdfViewer from './viewers/ejs-pdf-viewer'
-
 import NotSupport from './NotSupport'
+import AttachmentPreLoader from './AttachmentPreLoader'
 import NoData from './NoData'
 import { tasks, attachments } from '@/mixins/units'
 
@@ -28,6 +33,7 @@ export default {
     TxtViewer,
     NotSupport,
     NoData,
+    AttachmentPreLoader,
     EjsPdfViewer
   },
   mixins: [tasks, attachments],
@@ -41,7 +47,7 @@ export default {
       return ext => text.some(i => i === ext)
     },
     viewer () {
-      const url = this.attachmentDetails.url
+      const url = this.url
       if (url) {
         const ext = url.split('.').pop().toLowerCase()
         switch (true) {
@@ -58,18 +64,12 @@ export default {
         }
       }
       return null
-    }
-  },
-  watch: {
-    attachments () {
-      this.getAttachmentDetails()
     },
-    activeAttachment (newAt, oldAt) {
-      newAt.id === oldAt.id || this.getAttachmentDetails()
+    url () {
+      return this.currentVersion.Details
+        ? this.currentVersion.Details.FileUrl
+        : ''
     }
-  },
-  created () {
-    this.getAttachmentDetails()
   }
 }
 </script>

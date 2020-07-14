@@ -59,7 +59,7 @@ export default {
         } catch (error) {
           console.error(error)
           this.$store.commit('SET_NOTIFY', {
-            text: error.message || this.$t('notify.bpImportError'),
+            text: (error && error.message) || this.$t('notify.bpImportError'),
             color: 'error'
           })
           this.loading = false
@@ -69,7 +69,7 @@ export default {
           if (error) {
             console.error(error)
             this.$store.commit('SET_NOTIFY', {
-              text: error.message || this.$t('notify.bpImportError'),
+              text: (error && error.message) || this.$t('notify.bpImportError'),
               color: 'error'
             })
             this.loading = false
@@ -112,15 +112,20 @@ export default {
 
           if (extTaskInfo.history) {
             extTaskInfo.history.forEach((elementId, i, array) => {
-              const di = plane.planeElement.find(el => el.bpmnElement.id === elementId)
-              di.stroke = '#808080'
-
-              const nextElelemtId = array[i + 1]
-              if (nextElelemtId) {
-                const el = di.bpmnElement
-                const conn = el.get('outgoing').find(conn => conn.targetRef && conn.targetRef.id === nextElelemtId)
-                const connDI = plane.planeElement.find(el => el.bpmnElement.id === conn.id)
-                connDI.stroke = '#808080'
+              const di = plane.planeElement.find(el => el.bpmnElement && el.bpmnElement.id === elementId)
+              if (di) {
+                di.set('stroke', '#808080')
+                const nextElelemtId = array[i + 1]
+                if (nextElelemtId) {
+                  const el = di.bpmnElement
+                  if (el) {
+                    const conn = el.get('outgoing').find(conn => conn.targetRef && conn.targetRef.id === nextElelemtId)
+                    if (conn) {
+                      const connDI = plane.planeElement.find(el => el.bpmnElement && el.bpmnElement.id === conn.id)
+                      connDI && connDI.set('stroke', '#808080')
+                    }
+                  }
+                }
               }
             })
           }

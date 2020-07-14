@@ -9,9 +9,9 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@it-enterprise/formio": "^1.1.25",
+    "@it-enterprise/formio": "^1.1.40",
     "@it-enterprise/graphql": "^1.0.9",
-    "@it-enterprise/jwtauthentication": "^2.0.3",
+    "@it-enterprise/jwtauthentication": "^2.0.5",
     "@it-enterprise/localization": "^1.0.10",
     "@syncfusion/ej2-vue-pdfviewer": "^18.1.48",
     "apollo-cache-inmemory": "^1.6.5",
@@ -37,7 +37,7 @@
     "vue-split-panel": "^1.0.4",
     "vue-upload-with-credential": "^2.8.21",
     "vue2-perfect-scrollbar": "^1.4.0",
-    "vuetify": "^2.2.11",
+    "vuetify": "^2.3.1",
     "vuex": "^3.1.2",
     "web-streams-polyfill": "^2.1.0"
   },
