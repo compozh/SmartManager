@@ -1,31 +1,67 @@
 <template>
-  <div>
-    <div class="control-section">
-      <ejs-pdfviewer id="pdfviewer"
-                     :serviceUrl="serviceUrl"
-                     :documentPath="documentPath"/>
-    </div>
-  </div>
+  <ejs-pdfviewer id="pdfviewer"
+                 class="flex-grow-1"
+                 :serviceUrl="serviceUrl"
+                 :documentPath="url"
+                 :locale="$i18n.locale"/>
 </template>
 
 <script>
 import Vue from 'vue'
-import { PdfViewerPlugin, Toolbar, Magnification, Navigation, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection, TextSearch, Annotation, FormFields } from '@syncfusion/ej2-vue-pdfviewer'
+import {
+  PdfViewerPlugin,
+  Toolbar,
+  Magnification,
+  Navigation,
+  LinkAnnotation,
+  BookmarkView,
+  ThumbnailView,
+  Print,
+  TextSelection,
+  TextSearch,
+  Annotation,
+  FormFields
+} from '@syncfusion/ej2-vue-pdfviewer'
+import { L10n } from '@syncfusion/ej2-base'
 
 Vue.use(PdfViewerPlugin)
 
-export default Vue.extend({
+export default {
   props: {
     url: String
   },
   data: () => ({
-    serviceUrl: 'https://ej2services.syncfusion.com/production/web-services/api/pdfviewer',
-    documentPath: 'PDF_Succinctly.pdf'
+    serviceUrl: window.appConfig.GrapgQlUrl + 'api/pdfviewer'
   }),
   provide: {
     PdfViewer: [Toolbar, Magnification, Navigation, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection, TextSearch, Annotation, FormFields]
+  },
+  computed: {
+    locale () {
+      return this.$i18n.locale
+    }
+  },
+  watch: {
+    locale (newLocale, oldLocale) {
+      if (newLocale !== oldLocale) {
+        this.setLocale()
+      }
+    }
+  },
+  created () {
+    this.setLocale()
+  },
+  methods: {
+    setLocale () {
+      L10n.load({
+        [this.locale]: {
+          PdfViewer: this.$t('pdfViewer')
+        }
+      })
+    }
   }
-})
+}
+
 </script>
 
 <style scoped>
@@ -38,9 +74,5 @@ export default Vue.extend({
   @import '~@syncfusion/ej2-popups/styles/material.css';
   @import '~@syncfusion/ej2-splitbuttons/styles/material.css';
   @import "~@syncfusion/ej2-vue-pdfviewer/styles/material.css";
-
-  #pdfviewer {
-    height: 820px;
-  }
 
 </style>
