@@ -1,9 +1,11 @@
 <template>
-  <ejs-pdfviewer id="pdfviewer"
+  <ejs-pdfviewer id="pdfViewer"
+                 ref="pdfviewer"
                  class="flex-grow-1"
                  :serviceUrl="serviceUrl"
                  :documentPath="url"
-                 :locale="$i18n.locale"/>
+                 :locale="$i18n.locale"
+                 :documentLoad="documentLoad"/>
 </template>
 
 <script>
@@ -58,6 +60,10 @@ export default {
           PdfViewer: this.$t('pdfViewer')
         }
       })
+    },
+    documentLoad () {
+      const viewer = this.$refs.pdfviewer.ej2Instances
+      viewer.toolbar.showToolbarItem(['OpenOption'], false)
     }
   }
 }
