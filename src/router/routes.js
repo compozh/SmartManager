@@ -85,6 +85,11 @@ export default [
         path: '/error-500',
         name: 'page-error-500',
         component: () => import('@/pages/Error500.vue')
+      },
+      {
+        path: '/network-error',
+        name: 'page-network-error',
+        component: () => import('@/pages/NetworkError.vue')
       }
     ]
   },

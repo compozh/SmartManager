@@ -14,6 +14,9 @@ auth.config({
       case e.response && e.response.status <= 500:
         router.push({ name: 'page-error-500' })
         break
+      case String(e).includes('Network Error'):
+        router.push({ name: 'page-network-error' })
+        break
       default: console.log(e)
     }
   },

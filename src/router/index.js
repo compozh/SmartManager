@@ -22,7 +22,7 @@ router.history.getCurrentLocation = () => {
 }
 
 // protection of paths from an unauthenticated access
-const unProtectedRoutes = ['/login', '/error-404', '/error-500']
+const unProtectedRoutes = ['/login', '/error-404', '/error-500', '/network-error']
 
 router.beforeEach(async (to, from, next) => {
   if (from.path === to.path) {
