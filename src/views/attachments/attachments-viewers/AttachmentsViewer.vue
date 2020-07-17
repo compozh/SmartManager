@@ -1,5 +1,5 @@
 <template>
-  <div class="fill-height">
+  <div class="d-flex flex-column fill-height">
     <component v-if="viewer" :is="viewer" :url="url"/>
 
     <no-data v-else-if="activeAttachment.reason" class="fill-height">
@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import EjsPdfViewer from './viewers/ejs-pdf-viewer'
+
 import NotSupport from './NotSupport'
 import AttachmentPreLoader from './AttachmentPreLoader'
 import NoData from './NoData'
 import { tasks, attachments } from '@/mixins/units'
 
-const PdfViewer = () => import('./viewers/pdf-viewer/Viewer')
+const PdfViewer = () => import('./viewers/ejs-pdf-viewer')
 const ImgViewer = () => import('./viewers/ImageViewer')
 const TxtViewer = () => import('./viewers/TextViewer')
 
@@ -33,8 +33,7 @@ export default {
     TxtViewer,
     NotSupport,
     NoData,
-    AttachmentPreLoader,
-    EjsPdfViewer
+    AttachmentPreLoader
   },
   mixins: [tasks, attachments],
   computed: {
@@ -51,16 +50,10 @@ export default {
       if (url) {
         const ext = url.split('.').pop().toLowerCase()
         switch (true) {
-          // case ext === 'pdf':
-          //   return 'ejs-pdf-viewer'
-          case ext === 'pdf':
-            return 'pdf-viewer'
-          case this.isText(ext):
-            return 'txt-viewer'
-          case this.isImage(ext):
-            return 'img-viewer'
-          default:
-            return 'not-support'
+          case ext === 'pdf': return 'pdf-viewer'
+          case this.isText(ext): return 'txt-viewer'
+          case this.isImage(ext): return 'img-viewer'
+          default: return 'not-support'
         }
       }
       return null

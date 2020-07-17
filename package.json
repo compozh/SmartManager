@@ -25,7 +25,6 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "moment": "^2.24.0",
-    "pdfjs-dist": "^2.3.200",
     "register-service-worker": "^1.6.2",
     "signalr-no-jquery": "^0.1.10",
     "v-viewer": "^1.5.1",
