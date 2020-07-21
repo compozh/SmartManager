@@ -53,7 +53,7 @@ export default {
             return {
               color: 'primary',
               icon: 'recycle',
-              text: this.$t('statuses.inWork')
+              text: this.$t('statuses.inProgress')
             }
           case '-':
             return {
