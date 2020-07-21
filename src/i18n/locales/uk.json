@@ -193,7 +193,7 @@
   },
   "statuses": {
     "status": "Статус",
-    "inWork": "В роботі",
+    "inProgress": "В роботі",
     "rejected": "Відхилено",
     "done": "Виконано",
     "completed": "Завершено",
