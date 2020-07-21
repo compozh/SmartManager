@@ -114,9 +114,12 @@ export const tasks = {
     taskType () {
       return this.task.taskType
     },
-    taskInWork () {
-      return this.task.status === '' ||
-        this.task.status === '*'
+    taskInProgress () {
+      return this.task.status === '' || this.task.status === '*'
+    },
+    taskIsDone () {
+      return this.taskType === '' &&
+        (this.task.status === '+' || this.task.status === '#')
     },
     taskAtApproval () {
       return this.task.status === '#'
@@ -128,16 +131,13 @@ export const tasks = {
     },
     // CONDITIONS FOR BUTTONS
     internalTaskInWork () {
-      return this.internalTask && this.taskInWork
-    },
-    taskCompleted () {
-      return this.taskType === '' && this.task.status === '+'
+      return this.internalTask && this.taskInProgress
     },
     agreeTaskInWork () {
-      return this.taskType === 'AGREE' && this.taskInWork
+      return this.taskType === 'AGREE' && this.taskInProgress
     },
     workFlowTaskInWork () {
-      return this.taskType === 'WORKFLOW' && this.taskInWork
+      return this.taskType === 'WORKFLOW' && this.taskInProgress
     },
     externalTaskCamunda () {
       return this.taskType === 'EXTERNAL' &&
