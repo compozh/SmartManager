@@ -5,7 +5,7 @@
                    :search="search"
                    :hide-default-footer="hideFooter"
                    :no-data-text="hideNoData ? '' : $t('tasks.noTasks')"
-                   :footer-props="{itemsPerPageText: $t('tasks.perPage')}"
+                   :footer-props="footerProps"
                    class="d-flex flex-column"
                    style="min-height: 0">
 
@@ -48,6 +48,12 @@ export default {
     }
   }),
   computed: {
+    footerProps () {
+      return {
+        itemsPerPageOptions: [10, 20, 50, -1],
+        itemsPerPageText: this.$t('tasks.perPage')
+      }
+    },
     numberOfPages () {
       return Math.ceil(this.items.length / this.itemsPerPage)
     }
