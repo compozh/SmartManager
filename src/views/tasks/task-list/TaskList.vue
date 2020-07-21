@@ -19,11 +19,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-if="viewMode">
-        <v-col>
-          <task-table :tasks="tasks"/>
-        </v-col>
-      </v-row>
+      <task-table v-if="viewMode" :tasks="tasks"/>
       <task-cards v-else :tasks="tasks"/>
       <task-form/>
     </v-col>

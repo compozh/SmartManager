@@ -193,7 +193,7 @@
   },
   "statuses": {
     "status": "Status",
-    "inWork": "In work",
+    "inProgress": "In progress",
     "rejected": "Rejected",
     "done": "Done",
     "completed": "Completed",

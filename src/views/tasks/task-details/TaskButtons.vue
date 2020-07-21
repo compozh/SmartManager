@@ -29,7 +29,7 @@
     </v-tooltip>
 
     <!-- RETURN BUTTON -->
-    <v-tooltip top v-if="taskCompleted">
+    <v-tooltip top v-if="taskIsDone">
       <template #activator="{ on }">
         <v-btn v-on="$vuetify.breakpoint.mdAndDown ? on : ''"
                color="warning"
