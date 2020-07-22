@@ -20,8 +20,9 @@ publish_smartManager:
     stage: publish
     tags:
       - tfs2017 
-    only: 
-      - master/@it-enterprise/web-apps/smartmanager-web
+    only:
+      variables:
+      - $CI_COMMIT_REF_NAME  == 'master'
     script:
     - 'xcopy /S /E /Y ".\dist\*" "\\m\web\webapps\SmartManager"'
     cache:
