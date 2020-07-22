@@ -12,7 +12,7 @@ build_smartManager:
       - 'npm run build'
       - 'dir'
     cache:
-      key: dist
+      key: $CI_COMMIT_REF_NAME
       paths:
         - dist
       policy: push
@@ -28,7 +28,7 @@ publish_smartManager:
     #rules:
     #- if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     cache:
-      key: dist
+      key: $CI_COMMIT_REF_NAME
       paths:
         - dist
       policy: pull
@@ -44,7 +44,7 @@ publish_smartManager_SP:
       - /^202*/@it-enterprise/web-apps/smartmanager-web
 
     cache:
-      key: dist
+      key: $CI_COMMIT_REF_NAME
       paths:
         - dist
       policy: pull
