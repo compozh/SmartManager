@@ -17,8 +17,8 @@ build_smartManager_to:
     
 publish_smartManager_to_SP_folder:
     rules:
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != master'
-      when: manual
+      - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "master"'
+        when: manual
     stage: publish
     cache:
       key: "bin"
