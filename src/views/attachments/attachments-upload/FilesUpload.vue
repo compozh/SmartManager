@@ -9,6 +9,8 @@
                  dropDirectory
                  :headers="headers"
                  :size="size"
+                 :extensions="fileExtensions"
+                 :accept="fileExtensions"
                  :chunk-enabled="true"
                  :chunk="chunk"
                  :post-action="chunk.action"

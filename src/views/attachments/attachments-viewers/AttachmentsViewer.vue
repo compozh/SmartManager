@@ -22,15 +22,11 @@ import AttachmentPreLoader from './AttachmentPreLoader'
 import NoData from './NoData'
 import { tasks, attachments } from '@/mixins/units'
 
-const PdfViewer = () => import('./viewers/ejs-pdf-viewer')
-const ImgViewer = () => import('./viewers/ImageViewer')
-const TxtViewer = () => import('./viewers/TextViewer')
-
 export default {
   components: {
-    PdfViewer,
-    ImgViewer,
-    TxtViewer,
+    PdfViewer: () => import('./viewers/ejs-pdf-viewer'),
+    ImgViewer: () => import('./viewers/ImageViewer'),
+    TxtViewer: () => import('./viewers/TextViewer'),
     NotSupport,
     NoData,
     AttachmentPreLoader

@@ -3,5 +3,6 @@ export default {
   activeAttachment: null,
   currentVersion: null,
   attachmentTypes: null,
+  currentType: null,
   addAttachmentDialog: false
 }

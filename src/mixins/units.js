@@ -308,6 +308,20 @@ export const attachments = {
       const types = this.$store.state.attachments.attachmentTypes
       return types && types[this.objectId] ? types[this.objectId] : []
     },
+    currentType () {
+      return this.$store.state.attachments.currentType || {}
+    },
+    fileExtensions () {
+      let extensions = this.currentType.FILEEXTENSIONS
+      if (extensions) {
+        extensions = typeof extensions === 'string'
+          ? [extensions]
+          : [...extensions]
+      } else {
+        extensions = []
+      }
+      return extensions.map(extension => `.${extension.toLowerCase()}`).join(',')
+    },
     fileSize () {
       return size => {
         switch (true) {

@@ -8,13 +8,12 @@
       </v-card-title>
       <v-divider/>
       <v-card-text style="height: 400px;">
-        <v-radio-group :value="value"
-                       column mandatory>
-          <v-radio v-for="type in typeList"
-                   :key="type.CODE"
+        <v-radio-group column mandatory>
+          <v-radio v-for="(type, idx) in typeList"
+                   :key="idx"
                    :label="type.NAME"
                    :value="type.CODE"
-                   @change="$emit('input', type.CODE)"
+                   @change="setType(type)"
                    :class="['mb-5', {'order-first': type.CODE === ''}]">
           </v-radio>
         </v-radio-group>
@@ -45,6 +44,11 @@ export default {
     objectId: [String, Number]
   },
   methods: {
+    setType (type) {
+      this.$emit('input', type.CODE)
+      // Adding type object to store for file extensions allowed to upload
+      this.$store.commit('SET_CURRENT_TYPE', type)
+    },
     closeTypeList () {
       this.$emit('update:showTypeList', false)
     }

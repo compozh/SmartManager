@@ -41,7 +41,7 @@ export default {
       const items = []
       if (!this.externalTaskCamunda) {
         items.push({
-          title: this.$t('buttons.cancelOff'),
+          title: this.$t('buttons.cancel'),
           action: () => this.$emit('changeStatus', '-'),
           icon: 'horizontal-rule',
           color: 'deep-orange'

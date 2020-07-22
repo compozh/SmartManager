@@ -1,7 +1,7 @@
 {
   "search": "Search",
   "rights": "All rights Reserved",
-  "appUpdate": "Application is updating ... Please wait...",
+  "updating": "Application is updating ... Please wait...",
   "user": {
     "delegatedRights": "Use rights"
   },
@@ -127,7 +127,6 @@
     "returnToWork": "Return to work",
     "create": "Create",
     "cancel": "Cancel",
-    "cancelOff": "Cancel off",
     "ok": "Ok",
     "upload": "Upload",
     "more": "More",

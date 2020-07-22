@@ -12,8 +12,8 @@
         <v-card-actions class="pa-6 pt-0">
           <v-spacer/>
           <v-btn outlined x-small
-                 color="primary"
-                 class="notes-btn mr-5"
+                 color="warning"
+                 class="notes-btn"
                  :disabled="loading"
                  @click="closeDialog">
             <fa-icon icon="times" size="lg" class="mr-1"/>
