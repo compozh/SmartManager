@@ -3,7 +3,7 @@ stages:
   - publish
   - publish_SP
 
-npm_build:
+build_smartManager:
     stage: build
     tags:
       - tfs2017 
@@ -20,7 +20,7 @@ npm_build:
 publish_smartManager:
     stage: publish
     tags:
-    - tfs2017 
+      - tfs2017 
     script:
     - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\publish"'
     #rules:
@@ -32,19 +32,17 @@ publish_smartManager:
       policy: pull
 
 publish_smartManager_SP:
-  stage: publish_SP
+    stage: publish_SP
     tags:
     - tfs2017 
     script:
       - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME'
       - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"'
     rules:
-      - if: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "master"
-      when: manual
+      - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "master"'
+        when: manual
     cache:
       key: dist
       paths:
         - dist
       policy: pull
-
-
