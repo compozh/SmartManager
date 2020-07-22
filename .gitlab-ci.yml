@@ -21,6 +21,8 @@ publish_smartManager:
     stage: publish
     tags:
       - tfs2017 
+    only: 
+      - master/@it-enterprise/web-apps/smartmanager-web
     script:
     - 'xcopy /S /E /Y ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\publish"'
     #rules:
@@ -39,7 +41,8 @@ publish_smartManager_SP:
       - 'mkdir -p \\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME'
       - 'xcopy /S /E /Y".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME"'
     only:
-    - /^202/.*$
+      - /^202*/@it-enterprise/web-apps/smartmanager-web
+
     cache:
       key: dist
       paths:
