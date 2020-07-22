@@ -1,15 +1,14 @@
 variables:
-  PROJECT_NAME: 'SmartManager'
-  SP_DIRECTORY: ''
+  SP_DIR: ''
   
 stages:
   - build
-  - deploy
+  - publish
 
-build_job:
+build_smartManager:
     only:
       variables:
-      - $SP_DIRECTORY != ''
+      - $SP_DIR != ''
     stage: build
     tags:
     - tfs2017 
@@ -22,17 +21,18 @@ build_job:
       paths:
       - .\dist\
     
-deploy_job:
+publish_smartManager_sp_dir:
     only:
       variables:
-      - $SP_DIRECTORY != ''
-    stage: deploy
+      - $SP_DIR != ''
+    stage: publish
     cache:
       key: "bin"
       paths:
       - .\dist\
     script:
-    - 'mkdir \\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME'
-    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME"'
+    - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$SP_DIR'
+    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$SP_DIR\'
     tags:
     - tfs2017
+    when: manual
