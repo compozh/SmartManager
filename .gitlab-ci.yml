@@ -10,7 +10,6 @@ build_smartManager:
     script:
       - 'npm install'
       - 'npm run build'
-      - 'dir'
     cache:
       key: $CI_COMMIT_REF_NAME
       paths:
@@ -24,9 +23,7 @@ publish_smartManager:
     only: 
       - master/@it-enterprise/web-apps/smartmanager-web
     script:
-    - 'xcopy /S /E /Y ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\SmartManager"'
-    #rules:
-    #- if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - 'xcopy /S /E /Y ".\dist\*" "\\m\web\webapps\SmartManager"'
     cache:
       key: $CI_COMMIT_REF_NAME
       paths:
@@ -38,8 +35,8 @@ publish_smartManager_SP:
     tags:
     - tfs2017 
     script:
-      - 'mkdir -p \\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME\SmartManager'
-      - 'xcopy /S /E /Y ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME\SmartManager"'
+      - 'mkdir -p \\m\web2\WEBAPPS_VERSIONS\$CI_COMMIT_REF_NAME\SmartManager'
+      - 'xcopy /S /E /Y ".\dist\*" "\\m\web2\WEBAPPS_VERSIONS\$CI_COMMIT_REF_NAME\SmartManager"'
     only:
       - /^202*/@it-enterprise/web-apps/smartmanager-web
 
