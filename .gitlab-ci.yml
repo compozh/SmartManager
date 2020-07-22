@@ -1,14 +1,8 @@
-variables:
-  SP_DIR: ''
-  
 stages:
   - build
   - publish
 
-build_smartManager:
-    only:
-      variables:
-      - $SP_DIR != ''
+build_smartManager_to:
     stage: build
     tags:
     - tfs2017 
@@ -21,18 +15,17 @@ build_smartManager:
       paths:
       - .\dist\
     
-publish_smartManager_sp_dir:
-    only:
-      variables:
-      - $SP_DIR != ''
+publish_smartManager_to_SP_folder:
+    rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != master'
+      when: manual
     stage: publish
     cache:
       key: "bin"
       paths:
       - .\dist\
     script:
-    - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$SP_DIR'
-    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$SP_DIR\'
+    - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME'
+    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\"'
     tags:
     - tfs2017
-    when: manual
