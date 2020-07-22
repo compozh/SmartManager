@@ -59,16 +59,17 @@
                   </td>
                   <td class="text-center text-truncate"
                       style="max-width: 150px; font-size: 13px;">
-                    <v-tooltip top>
+                    <v-tooltip v-if="note.UserCorr" top>
                       <template #activator="{ on }">
                         <span v-on="on">{{ note.UserCorr }}</span>
                       </template>
                       <span>{{ note.UserCorr }}</span>
                     </v-tooltip>
+                    <span v-else>-</span>
                   </td>
                   <td class="text-center text-truncate"
                       style="max-width: 100px; font-size: 13px;">
-                    <v-tooltip top>
+                    <v-tooltip v-if="note.DateAdd <= note.DateCorr" top>
                       <template #activator="{ on }">
                           <span v-on="on">
                             {{ formatVersionDate(note.DateCorr) }}
@@ -76,15 +77,17 @@
                       </template>
                       <span>{{ formatVersionDate(note.DateCorr) }}</span>
                     </v-tooltip>
+                    <span v-else>-</span>
                   </td>
-                  <td class="text-truncate"
+                  <td class="text-center text-truncate"
                       style="min-width: 5px; max-width: 100px; font-size: 13px;">
-                    <v-tooltip top>
+                    <v-tooltip v-if="note.Comment" top>
                       <template #activator="{ on }">
                         <span v-on="on">{{ note.Comment }}</span>
                       </template>
                       <span>{{ note.Comment }}</span>
                     </v-tooltip>
+                    <span v-else>-</span>
                   </td>
                 </tr>
                 </tbody>
