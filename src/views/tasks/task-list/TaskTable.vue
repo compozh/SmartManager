@@ -162,4 +162,8 @@ export default {
     font-size: 14px;
   }
 
+  .v-data-table >>> tr {
+    cursor: pointer;
+  }
+
 </style>
