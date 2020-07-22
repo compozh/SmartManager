@@ -36,10 +36,10 @@ publish_smartManager_SP:
     tags:
     - tfs2017 
     script:
-      - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME'
-      - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"'
+      - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_BRANCH'
+      - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_BRANCH"'
     rules:
-      - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "master"'
+      - if: '$CI_COMMIT_BRANCH != "master"'
         when: manual
     cache:
       key: dist
