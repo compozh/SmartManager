@@ -22,7 +22,7 @@ publish_smartManager:
     tags:
       - tfs2017 
     script:
-    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\publish"'
+    - 'xcopy /S /E /Y ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\publish"'
     #rules:
     #- if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     cache:
@@ -37,7 +37,7 @@ publish_smartManager_SP:
     - tfs2017 
     script:
       - 'mkdir \\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME'
-      - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME"'
+      - 'xcopy /S /E /Y".\dist\*" "\\it.ua\dfs\private\Bakharev\sm\$CI_COMMIT_REF_NAME"'
     rules:
       - if: '$CI_COMMIT_REF_NAME != "master"'
         when: manual
