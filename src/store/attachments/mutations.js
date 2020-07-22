@@ -15,6 +15,9 @@ export default {
   SET_ATTACHMENT_TYPES (state, types) {
     state.attachmentTypes = Object.assign({}, state.attachmentTypes, types)
   },
+  SET_CURRENT_TYPE (state, type) {
+    state.currentType = type
+  },
   SET_ACTIVE_ATTACHMENT (state, { attachment, version }) {
     state.activeAttachment = attachment
     state.currentVersion = version || attachment.versions.find(i => i.IsActive)
