@@ -1,3 +1,40 @@
+# old pipeline
+#variables:
+#  PROJECT_NAME: 'SmartManager'
+#  SP_DIRECTORY: ''
+
+#build_job:
+#    only:
+#      variables:
+#      - $SP_DIRECTORY != ''
+#    stage: build
+#    tags:
+#    - tfs2017 
+#    script:
+#    - 'npm install'
+#    - 'npm run build'
+#    - 'dir'
+#    cache:
+#      key: "bin"
+#      paths:
+#      - .\dist\
+
+#deploy_job:
+#    only:
+#      variables:
+#      - $SP_DIRECTORY != ''
+#    stage: deploy
+#    cache:
+#      key: "bin"
+#      paths:
+#      - .\dist\
+#    script:
+#    - 'mkdir \\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME'
+#    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME"'
+#    tags:
+#    - tfs2017
+
+# new pipeline
 stages:
   - build
   - publish
