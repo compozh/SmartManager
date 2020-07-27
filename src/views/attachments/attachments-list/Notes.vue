@@ -1,132 +1,119 @@
 <template>
   <v-row justify="center">
-    <v-dialog :value="showNotes"
-              @input="$emit('input', $event)"
-              width="1000px">
-      <v-card class="d-flex flex-column flex-grow-1 overflow-hidden">
-        <v-card-title class="subtitle-1 white--text blue-grey py-1">
-          {{ $t('versions.notes') }}
-          <v-spacer/>
-          <v-btn icon small
-                 depressed
-                 class="notes-close mr-n5"
-                 @click="$emit('input', false)">
-            <fa-icon icon="times" type="fal"
-                     size="lg" color="#fff"/>
-          </v-btn>
-        </v-card-title>
-        <v-card-text class="d-flex flex-column flex-grow-1">
-            <v-simple-table dense v-if="notes.length" fixed-header height="300px">
-              <template>
-                <thead>
-                <tr>
-                  <th class="text-center px-1">{{ $t('notes.fioAdd') }}</th>
-                  <th class="text-center px-1">{{ $t('notes.dateAdd') }}</th>
-                  <th class="text-center">{{ $t('notes.result') }}</th>
-                  <th class="text-center">{{ $t('notes.fioWatch') }}</th>
-                  <th class="text-center">{{ $t('notes.dateWatch') }}</th>
-                  <th class="text-center">{{ $t('notes.comment') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(note, idx) in sortedNotes" :key="idx"
-                    :class="{'lime lighten-5': note.NoteId === currentNote.NoteId}"
-                    style="cursor: pointer; width: 100%;"
-                    @click="currentNote = note">
-                  <td class="text-center text-truncate"
-                      style="max-width: 160px; font-size: 13px;">
-                    <v-tooltip top>
-                      <template #activator="{ on }">
-                        <span v-on="on">{{ note.UserAdd }}</span>
-                      </template>
-                      <span>{{ note.UserAdd }}</span>
-                    </v-tooltip>
-                  </td>
-                  <td class="text-center text-truncate"
-                      style="max-width: 120px; font-size: 13px;">
-                    <v-tooltip top>
-                      <template #activator="{ on }">
+    <dialog-card :value="showNotes" width="1000px"
+                 @input="$emit('input', $event)"
+                 :title="$t('versions.notes')"
+                  @close="$emit('input', false)">
+      <template #text>
+        <v-simple-table dense v-if="notes.length" fixed-header height="300px">
+          <template>
+            <thead>
+            <tr>
+              <th class="text-center px-1">{{ $t('notes.fioAdd') }}</th>
+              <th class="text-center px-1">{{ $t('notes.dateAdd') }}</th>
+              <th class="text-center">{{ $t('notes.result') }}</th>
+              <th class="text-center">{{ $t('notes.fioWatch') }}</th>
+              <th class="text-center">{{ $t('notes.dateWatch') }}</th>
+              <th class="text-center">{{ $t('notes.comment') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(note, idx) in sortedNotes" :key="idx"
+                :class="{'lime lighten-5': note.NoteId === currentNote.NoteId}"
+                style="cursor: pointer; width: 100%;"
+                @click="currentNote = note">
+              <td class="text-center text-truncate"
+                  style="max-width: 160px; font-size: 13px;">
+                <v-tooltip top>
+                  <template #activator="{ on }">
+                    <span v-on="on">{{ note.UserAdd }}</span>
+                  </template>
+                  <span>{{ note.UserAdd }}</span>
+                </v-tooltip>
+              </td>
+              <td class="text-center text-truncate"
+                  style="max-width: 120px; font-size: 13px;">
+                <v-tooltip top>
+                  <template #activator="{ on }">
                               <span v-on="on">
                                 {{ formatVersionDate(note.DateAdd) }}
                               </span>
-                      </template>
-                      <span>{{ formatVersionDate(note.DateAdd) }}</span>
-                    </v-tooltip>
-                  </td>
-                  <td class="text-center" style="width: 20px;">
-                    <fa-icon v-if="note.Corrected" icon="check" size="lg"/>
-                    <span v-else>-</span>
-                  </td>
-                  <td class="text-center text-truncate"
-                      style="max-width: 150px; font-size: 13px;">
-                    <v-tooltip v-if="note.UserCorr" top>
-                      <template #activator="{ on }">
-                        <span v-on="on">{{ note.UserCorr }}</span>
-                      </template>
-                      <span>{{ note.UserCorr }}</span>
-                    </v-tooltip>
-                    <span v-else>-</span>
-                  </td>
-                  <td class="text-center text-truncate"
-                      style="max-width: 100px; font-size: 13px;">
-                    <v-tooltip v-if="note.DateAdd <= note.DateCorr" top>
-                      <template #activator="{ on }">
+                  </template>
+                  <span>{{ formatVersionDate(note.DateAdd) }}</span>
+                </v-tooltip>
+              </td>
+              <td class="text-center" style="width: 20px;">
+                <fa-icon v-if="note.Corrected" icon="check" size="lg"/>
+                <span v-else>-</span>
+              </td>
+              <td class="text-center text-truncate"
+                  style="max-width: 150px; font-size: 13px;">
+                <v-tooltip v-if="note.UserCorr" top>
+                  <template #activator="{ on }">
+                    <span v-on="on">{{ note.UserCorr }}</span>
+                  </template>
+                  <span>{{ note.UserCorr }}</span>
+                </v-tooltip>
+                <span v-else>-</span>
+              </td>
+              <td class="text-center text-truncate"
+                  style="max-width: 100px; font-size: 13px;">
+                <v-tooltip v-if="note.DateAdd <= note.DateCorr" top>
+                  <template #activator="{ on }">
                           <span v-on="on">
                             {{ formatVersionDate(note.DateCorr) }}
                           </span>
-                      </template>
-                      <span>{{ formatVersionDate(note.DateCorr) }}</span>
-                    </v-tooltip>
-                    <span v-else>-</span>
-                  </td>
-                  <td class="text-center text-truncate"
-                      style="min-width: 5px; max-width: 100px; font-size: 13px;">
-                    <v-tooltip v-if="note.Comment" top>
-                      <template #activator="{ on }">
-                        <span v-on="on">{{ note.Comment }}</span>
-                      </template>
-                      <span>{{ note.Comment }}</span>
-                    </v-tooltip>
-                    <span v-else>-</span>
-                  </td>
-                </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-            <div v-else
-                 class="subtitle-1 font-weight-light grey--text text--lighten-1">
-              {{ $t('notes.noNotes') }}</div>
-          <v-divider/>
-          <perfect-scrollbar class="flex-grow-1 pt-2" style="height: 200px;">
-            {{ currentNote.Text }}
-          </perfect-scrollbar>
-        </v-card-text>
+                  </template>
+                  <span>{{ formatVersionDate(note.DateCorr) }}</span>
+                </v-tooltip>
+                <span v-else>-</span>
+              </td>
+              <td class="text-center text-truncate"
+                  style="min-width: 5px; max-width: 100px; font-size: 13px;">
+                <v-tooltip v-if="note.Comment" top>
+                  <template #activator="{ on }">
+                    <span v-on="on">{{ note.Comment }}</span>
+                  </template>
+                  <span>{{ note.Comment }}</span>
+                </v-tooltip>
+                <span v-else>-</span>
+              </td>
+            </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+        <div v-else
+             class="subtitle-1 font-weight-light grey--text text--lighten-1">
+          {{ $t('notes.noNotes') }}</div>
         <v-divider/>
-        <v-card-actions class="pa-4">
-          <outlined-btn x-small
-                        color="success"
-                        icon="layer-plus"
-                        :handler="() => noteInputDialog = true">
-            <span>{{ $t('buttons.add') }}</span>
-          </outlined-btn>
-          <v-spacer/>
-          <outlined-btn x-small
-                        color="primary"
-                        icon="edit"
-                        :disabled="!currentNote.NoteId"
-                        :handler="() => editNote()">
-            <span>{{ $t('buttons.edit') }}</span>
-          </outlined-btn>
-          <outlined-btn x-small
-                        color="red darken-4"
-                        icon="trash"
-                        :disabled="!currentNote.NoteId"
-                        :handler="() => deleteConfirmDialog = true">
-            <span>{{ $t('buttons.delete') }}</span>
-          </outlined-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        <perfect-scrollbar class="flex-grow-1 pt-2" style="height: 200px;">
+          {{ currentNote.Text }}
+        </perfect-scrollbar>
+      </template>
+      <template #actions>
+        <outlined-btn x-small
+                      color="success"
+                      icon="layer-plus"
+                      :handler="() => noteInputDialog = true">
+          <span>{{ $t('buttons.add') }}</span>
+        </outlined-btn>
+        <v-spacer/>
+        <outlined-btn x-small
+                      color="primary"
+                      icon="edit"
+                      :disabled="!currentNote.NoteId"
+                      :handler="() => editNote()">
+          <span>{{ $t('buttons.edit') }}</span>
+        </outlined-btn>
+        <outlined-btn x-small
+                      color="red darken-4"
+                      icon="trash"
+                      :disabled="!currentNote.NoteId"
+                      :handler="() => deleteConfirmDialog = true">
+          <span>{{ $t('buttons.delete') }}</span>
+        </outlined-btn>
+      </template>
+    </dialog-card>
     <note-input v-model="noteInputDialog"
                 :roots="roots"
                 :note="note"/>
@@ -142,6 +129,7 @@
 </template>
 
 <script>
+import DialogCard from '@/components/DialogCard'
 import DeleteConfirm from '@/components/DeleteConfirm'
 import OutlinedBtn from '@/components/OutlinedBtn'
 import NoteInput from './NoteInput'
@@ -159,8 +147,9 @@ export default {
     showNotes: Boolean
   },
   components: {
-    NoteInput,
+    DialogCard,
     DeleteConfirm,
+    NoteInput,
     OutlinedBtn
   },
   data: () => ({
