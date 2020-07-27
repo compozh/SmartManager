@@ -76,6 +76,7 @@ export default {
   methods: {
     newAttachment () {
       this.$emit('update:uploadType', 'attachments')
+      this.$store.commit('SET_CURRENT_TYPE', this.attachmentTypes[0])
       this.showTypeList = this.attachmentTypes.length > 1
     }
   }
