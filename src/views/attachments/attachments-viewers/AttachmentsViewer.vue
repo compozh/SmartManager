@@ -16,7 +16,9 @@
 </template>
 
 <script>
-
+import PdfViewer from './viewers/ejs-pdf-viewer'
+import ImgViewer from './viewers/ImageViewer'
+import TxtViewer from './viewers/TextViewer'
 import NotSupport from './NotSupport'
 import AttachmentPreLoader from './AttachmentPreLoader'
 import NoData from './NoData'
@@ -24,9 +26,9 @@ import { tasks, attachments } from '@/mixins/units'
 
 export default {
   components: {
-    PdfViewer: () => import('./viewers/ejs-pdf-viewer'),
-    ImgViewer: () => import('./viewers/ImageViewer'),
-    TxtViewer: () => import('./viewers/TextViewer'),
+    PdfViewer,
+    ImgViewer,
+    TxtViewer,
     NotSupport,
     NoData,
     AttachmentPreLoader

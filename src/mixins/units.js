@@ -306,7 +306,8 @@ export const attachments = {
     },
     attachmentTypes () {
       const types = this.$store.state.attachments.attachmentTypes
-      return types && types[this.objectId] ? types[this.objectId] : []
+      const typeList = types && types[this.objectId] ? types[this.objectId] : []
+      return [...typeList].sort(a => a.CODE === '' ? -1 : 0)
     },
     currentType () {
       return this.$store.state.attachments.currentType || {}
