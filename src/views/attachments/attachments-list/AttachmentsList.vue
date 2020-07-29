@@ -168,11 +168,11 @@ import VersionList from './VersionList'
 import DeleteConfirm from '../../../components/DeleteConfirm'
 import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
 import FileTypeIcon from '@/components/FileTypeIcon'
-import { common, tasks, attachments } from '@/mixins/units'
+import { common, tasks, cases, attachments } from '@/mixins/units'
 
 export default {
   name: 'AttachmentsList',
-  mixins: [common, tasks, attachments],
+  mixins: [common, tasks, cases, attachments],
   props: {
     businessObject: Object,
     attachmentList: Array

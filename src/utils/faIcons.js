@@ -57,6 +57,7 @@ import { faTable } from '@fortawesome/pro-regular-svg-icons/faTable'
 import { faFire } from '@fortawesome/pro-regular-svg-icons/faFire'
 import { faHourglass } from '@fortawesome/pro-regular-svg-icons/faHourglass'
 import { faCheckDouble } from '@fortawesome/pro-regular-svg-icons/faCheckDouble'
+import { faLink } from '@fortawesome/pro-regular-svg-icons/faLink'
 import { faReply } from '@fortawesome/pro-regular-svg-icons/faReply'
 import { faStar as falStar } from '@fortawesome/pro-light-svg-icons/faStar'
 import { faFilesMedical as falFilesMedical } from '@fortawesome/pro-light-svg-icons/faFilesMedical'
@@ -69,6 +70,9 @@ import { faDownload as falDownload } from '@fortawesome/pro-light-svg-icons/faDo
 import { faCalendarDay as falCalendarDay } from '@fortawesome/pro-light-svg-icons/faCalendarDay'
 import { faUser as falUser } from '@fortawesome/pro-light-svg-icons/faUser'
 import { faSave as falSave } from '@fortawesome/pro-light-svg-icons/faSave'
+import { faFlag as falFlag } from '@fortawesome/pro-light-svg-icons/faFlag'
+import { faClipboardCheck as falClipboardCheck } from '@fortawesome/pro-light-svg-icons/faClipboardCheck'
+import { faCommentAltLines as falCommentAltLines } from '@fortawesome/pro-light-svg-icons/faCommentAltLines'
 
 import FaIcon from '@/components/FaIcon'
 
@@ -131,6 +135,7 @@ library.add(
   faHourglass,
   faCheckDouble,
   faReply,
+  faLink,
   falStar,
   falFilesMedical,
   falArrowAltDown,
@@ -142,6 +147,9 @@ library.add(
   falDownload,
   falCalendarDay,
   falUser,
-  falSave)
+  falSave,
+  falFlag,
+  falClipboardCheck,
+  falCommentAltLines)
 
 Vue.component('fa-icon', FaIcon)

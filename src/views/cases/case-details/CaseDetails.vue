@@ -20,7 +20,7 @@
       <v-btn fab x-small
              depressed
              color="white"
-             class="task-close"
+             class="case-close"
              @click="closeCaseDetails">
         <fa-icon icon="times" type="fal"
                  size="2x" color="#979797"/>
@@ -32,109 +32,83 @@
            :gutter-size="4"
            :direction="$vuetify.breakpoint.smAndDown ? 'vertical' : 'horizontal'">
       <!-- LEFT CONTENT AREA -->
-      <SplitArea class="d-flex flex-column justify-center" :size="55">
+      <SplitArea class="d-flex flex-column" :size="55">
         <!-- LEFT HEADER -->
         <div class="side-header">
-          <!-- TASK PERFORMER -->
-<!--          <task-performer v-model="taskData.performer"/>-->
-          <!-- TASK DATE PLAN -->
-<!--          <task-date-plan v-model="caseData.dateTo"/>-->
+          <!-- CASE CREATOR -->
+          <case-creator :userId="caseItem.userAdd"/>
+          <!-- CASE DATES -->
+          <div class="d-flex flex-wrap">
+            <case-date v-model="caseData.dateFrom" :title="$t('cases.dateStart')"/>
+            <case-date v-model="caseData.dateTo" :title="$t('cases.dateEnd')"/>
+          </div>
           <v-spacer/>
-          <!-- TASK SAVE BUTTON -->
-<!--          <task-save-btn v-if="taskChanged"-->
-<!--                         @save="updateTaskData"-->
-<!--                         @cancel="initTaskData"/>-->
-          <!-- TASK MANAGEMENT BUTTONS -->
-<!--          <task-buttons v-if="!taskChanged"-->
-<!--                        class="py-3"-->
-<!--                        @changeStage="changeStage"-->
-<!--                        @changeStatus="changeStatus"-->
-<!--                        @executeExternalTask="executeExternalTask"/>-->
-          <!-- TASK MENU - MORE BTN -->
-          <!-- TODO: need define task menu btn position-->
-          <!--          <task-menu @taskDelete="taskDelete"-->
-          <!--                     @changeStatus="changeStatus"/>-->
+          <!-- CASE SAVE BUTTON -->
+          <save-button v-if="caseChanged"
+                         @save="updateCaseData"
+                         @cancel="initCaseData"/>
         </div>
-<!--        <v-divider/>-->
-        <div class="title text-center">Page in develop... Coming soon!</div>
+        <v-divider/>
         <!-- LEFT SCROLL AREA -->
-<!--        <perfect-scrollbar class="pa-5">-->
-<!--          <div class="d-flex align-baseline">-->
-<!--            &lt;!&ndash; TASK NAME &ndash;&gt;-->
-<!--            <task-name v-model="taskData.name"/>-->
-<!--            &lt;!&ndash; TOGGLE PIN TASK BUTTON &ndash;&gt;-->
-<!--            <icon-tooltip-btn btnClass="ml-auto"-->
-<!--                              :btnColor="task.isFavorite ? 'cyan' : 'grey'"-->
-<!--                              :btnClick="toggleTaskPin"-->
-<!--                              icon="star" iconSize="2x"-->
-<!--                              :iconType="task.isFavorite ? 'far' : 'fal'"-->
-<!--                              tooltipPosition="top">-->
-<!--              {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}-->
-<!--            </icon-tooltip-btn>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; TASK DOC CAPTION &ndash;&gt;-->
-<!--          <h3 v-if="task.name !== task.docCaption"-->
-<!--              class="font-weight-light mb-3">-->
-<!--            {{ task.docCaption }}</h3>-->
-
-<!--          &lt;!&ndash; FORMIO &ndash;&gt;-->
-<!--          <div v-if="Object.keys(form).length" class="w-full">-->
-<!--            <formio-form-component class="formio"-->
-<!--                                   ref="form"-->
-<!--                                   :formCode="form.UNFORMIO"-->
-<!--                                   :formDefinition="formDefinition"/>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; HTML DESCRIPTION&ndash;&gt;-->
-<!--          <task-description v-model="taskData.description"-->
-<!--                            :docTextHtml="task.docTextHtml"/>-->
-<!--          &lt;!&ndash; LABELS &ndash;&gt;-->
-<!--          <task-labels :task="task"/>-->
-<!--          <v-divider/>-->
-<!--          &lt;!&ndash; TASK PARTICIPANTS &ndash;&gt;-->
-<!--          <task-participants v-model="taskData.participants"-->
-<!--                             class="mb-10"/>-->
-<!--          &lt;!&ndash; TASK ATTACHMENTS &ndash;&gt;-->
-<!--          <attachments-list v-if="!externalTaskCamunda || attachments.length"-->
-<!--                            class="mb-10" @input="tab = 0"/>-->
-<!--          &lt;!&ndash; BASE TASK &ndash;&gt;-->
-<!--          <div v-if="baseTask" class="my-5">-->
-<!--            <fa-icon icon="sitemap" class="mr-3" size="lg"/>-->
-<!--            <span class="font-weight-light">-->
-<!--              {{ $t('tasks.base').toUpperCase() }}</span>-->
-<!--            <task-cards :tasks="[baseTask]" class="mt-3"-->
-<!--                        hide-footer/>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; PARENT TASKS &ndash;&gt;-->
-<!--          <div v-if="task.parentTasks" class="my-5">-->
-<!--            <fa-icon icon="sitemap" class="mr-3" size="lg"/>-->
-<!--            <span class="font-weight-light">-->
-<!--              {{ $t('tasks.parentTasks').toUpperCase() }}</span>-->
-<!--            <task-cards :tasks="task.parentTasks" class="mt-3" hide-footer/>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; SUB TASKS&ndash;&gt;-->
-<!--          <div class="my-5">-->
-<!--            <div class="d-flex align-center font-weight-light">-->
-<!--              <fa-icon icon="folder-tree" class="mr-3" size="lg"/>-->
-<!--              <span class="mr-3">-->
-<!--                {{ $t('tasks.subTasks').toUpperCase() }}</span>-->
-<!--              <task-form #activator="{ on }">-->
-<!--                <v-btn v-on="on"-->
-<!--                       outlined x-small-->
-<!--                       color="primary"-->
-<!--                       class="add-btn pa-2">-->
-<!--                  {{ $t('buttons.add') }}-->
-<!--                </v-btn>-->
-<!--              </task-form>-->
-<!--            </div>-->
-<!--            <task-cards :tasks="childTasks" class="mt-3"-->
-<!--                        hide-footer :hide-no-data="true"/>-->
-<!--          </div>-->
-<!--        </perfect-scrollbar>-->
+        <perfect-scrollbar class="pa-5">
+          <div class="d-flex align-baseline">
+            <!-- CASE NAME -->
+            <editable-text-field v-model="caseData.name"
+                                 required
+                                 :editable="caseEditable"
+                                 :changed="caseChanged"
+                                 :changeHandler="setCaseChanged"
+                                 class="title font-weight-bold"/>
+          </div>
+          <!-- CASE PURPOSE -->
+          <editable-text-field v-model="caseData.purpose"
+                               outlined
+                               :editable="caseEditable"
+                               :changed="caseChanged"
+                               :placeholder="$t('cases.purpose')"
+                               :changeHandler="setCaseChanged"/>
+          <!-- CASE COMMENT-->
+          <editable-text-field v-model="caseData.comment"
+                               outlined
+                               :editable="caseEditable"
+                               :changed="caseChanged"
+                               :placeholder="$t('cases.comment')"
+                               :changeHandler="setCaseChanged"/>
+          <!-- LABELS
+          <case-labels :case="caseItem"/> -->
+          <v-divider/>
+          <!-- CASE PARTICIPANTS
+          <task-participants v-model="caseData.participants"
+                             class="mb-10"/> -->
+          <!-- CASE ATTACHMENTS -->
+          <attachments-list class="mb-10"
+                            :attachmentList="attachments"
+                            @selectAttachment="tab = 0"/>
+          <!-- RELATIVE TASKS-->
+          <div class="my-5">
+            <div class="d-flex align-center font-weight-light">
+              <fa-icon icon="link" class="mr-3" size="lg"/>
+              <span class="mr-3">
+                {{ $t('cases.relatedTasks').toUpperCase() }}</span>
+              <task-form #activator="{ on }">
+                <v-btn v-on="on"
+                       outlined x-small
+                       color="primary"
+                       class="add-btn pa-2">
+                  {{ $t('buttons.add') }}
+                </v-btn>
+              </task-form>
+            </div>
+            <task-cards :tasks="relatedTasks" class="mt-3"
+                        hide-footer :hide-no-data="true"/>
+          </div>
+        </perfect-scrollbar>
       </SplitArea>
       <!-- RIGHT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="45">
-        <v-tabs v-model="tab" grow height="75px" class="flex-grow-0">
-          <v-tab v-for="tab in tabItems" :key="tab.name">
+        <v-tabs v-model="tab" grow
+                height="75px" class="flex-grow-0">
+          <v-tab v-for="(tab, idx) in visibleTabs" :key="idx">
             <fa-icon :icon="tab.icon" class="mr-3" size="lg"/>
             {{ tab.name }}
           </v-tab>
@@ -142,10 +116,9 @@
         <v-divider/>
         <perfect-scrollbar class="fill-height">
           <v-tabs-items v-model="tab" class="fill-height">
-            <v-tab-item v-for="tab in tabItems"
-                        :key="tab.name"
-                        class="fill-height">
-<!--              <component :is="tab.component"/>-->
+            <v-tab-item v-for="(tab, idx) in visibleTabs"
+                        :key="idx" class="fill-height">
+              <component :is="tab.component"/>
             </v-tab-item>
           </v-tabs-items>
         </perfect-scrollbar>
@@ -155,31 +128,69 @@
 </template>
 
 <script>
+import SaveButton from '@/components/SaveButton'
+import EditableTextField from '@/components/EditableTextField'
+import CaseCreator from '@/views/cases/case-details/CaseCreator'
+import TaskForm from '@/views/tasks/task-create/TaskForm'
+import TaskCards from '@/views/tasks/task-list/TaskCards'
+import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
+import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
+import Comments from '@/views/comments/Comments'
+import CaseDate from '@/views/cases/case-edit/CaseDate'
 import { date } from '@/mixins/dateTime'
 import { zones, folders, cases, attachments } from '@/mixins/units'
 
 export default {
   name: 'CaseDetails',
   mixins: [zones, folders, cases, attachments, date],
+  components: {
+    SaveButton,
+    EditableTextField,
+    CaseCreator,
+    TaskForm,
+    TaskCards,
+    CaseDate,
+    AttachmentsList,
+    AttachmentsViewer,
+    Comments
+  },
   data: () => ({
     tab: 0,
     caseData: {
       name: '',
-      fioAdded: '',
       dateFrom: '',
       dateTo: '',
+      fioAdded: '',
       purpose: '',
-      note: '',
+      comment: '',
+      folder: {},
       participants: []
     }
   }),
   computed: {
+    visibleTabs () {
+      return this.tabItems.filter(tab => tab.isVisible)
+    },
     tabItems () {
-      const tabs = [
-        { name: this.$t('tabs.comments'), component: 'comments', icon: 'comment-alt-dots' }
+      return [
+        {
+          name: this.$t('tabs.attachment'),
+          component: 'attachments-viewer',
+          icon: 'paperclip',
+          isVisible: !!this.attachments.length
+        },
+        {
+          name: this.$t('tabs.comments'),
+          component: 'comments',
+          icon: 'comment-alt-dots',
+          isVisible: true
+        }
       ]
-      tabs.unshift({ name: this.$t('tabs.attachment'), component: 'attachments-viewer', icon: 'paperclip' })
-      return tabs
+    },
+    relatedTasks () {
+      return this.caseItem.tasks && this.caseItem.tasks.length
+        ? this.caseItem.tasks
+        : []
     }
   },
   watch: {
@@ -193,8 +204,11 @@ export default {
     await this.getCase()
     this.setCaseEditable(true)
     this.initCaseData()
-    // TODO: create caseAttachment computed property
-    this.tab = 1 // this.attachments.length ? 0 : 1
+    this.tab = this.attachments.length ? 0 : 1
+  },
+  beforeDestroy () {
+    this.setCaseChanged(false)
+    this.resetAttachmentData()
   },
   methods: {
     initCaseData () {
@@ -203,12 +217,33 @@ export default {
       this.caseData.dateTo = this.caseItem.dateTo
       this.caseData.fioAdd = this.caseItem.fioAdd
       this.caseData.purpose = this.caseItem.purpose
+      this.caseData.comment = this.caseItem.comm
+      this.caseData.folder = this.caseFolders.find(folder => {
+        return folder.id === this.caseItem.folderId
+      })
       this.caseData.participants = this.caseItem.participants || []
       this.setCaseChanged(false)
     },
     closeCaseDetails () {
       this.showCaseDialog(false)
       this.$router.push('/cases/' + this.activeFolder.Code)
+    },
+    async updateCaseData () {
+      this.setCaseChanged(false)
+      const caseData = {
+        id: this.caseId,
+        name: this.caseData.name,
+        dateFrom: this.formatDateTime(this.caseData.dateFrom),
+        dateTo: this.formatDateTime(this.caseData.dateTo),
+        purpose: this.caseData.purpose,
+        comm: this.caseData.comment,
+        folderId: this.caseData.folder ? this.newCase.folder.folderId : 0,
+        participants: this.caseData.participants
+      }
+      const result = await this.$store.dispatch('updateCase', caseData)
+      if (!result.success) {
+        this.initCaseData()
+      }
     }
   }
 }
@@ -233,7 +268,7 @@ export default {
     max-height: 96%;
   }
 
-  .task-close:hover {
+  .case-close:hover {
     transform: rotate(180deg);
   }
 
@@ -256,10 +291,10 @@ export default {
     background: rgba(123, 104, 238, .3);
   }
 
-  .v-input >>> .v-input__slot,
-  .v-input >>> .v-text-field__details {
-    padding: 0 !important;
-  }
+  /*.v-input >>> .v-input__slot,*/
+  /*.v-input >>> .v-text-field__details {*/
+  /*  padding: 0 !important;*/
+  /*}*/
 
   .add-btn {
     min-height: 25px;

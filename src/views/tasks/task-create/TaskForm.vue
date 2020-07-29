@@ -199,10 +199,8 @@ export default {
         needComm: this.needComment,
         priority: Number(this.priority),
         attachments: [],
-        caseId: 0
-      }
-      if (this.$route.params.taskId) {
-        newTask.parentTaskId = this.$route.params.taskId
+        parentTaskId: this.$route.params.taskId || 0,
+        caseId: this.$route.params.caseId || 0
       }
       this.closeForm()
       try {
