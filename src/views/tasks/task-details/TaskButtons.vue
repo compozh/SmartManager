@@ -22,10 +22,10 @@
                small depressed
                @click="$emit('executeExternalTask')">
           <fa-icon icon="check" size="lg"/>
-          <span class="ml-2 hidden-md-and-down">{{ $t('buttons.execute') }}</span>
+          <span class="ml-2 hidden-md-and-down">{{ buttonExecute }}</span>
         </v-btn>
       </template>
-      <span class="hidden-lg-and-up">{{ $t('buttons.execute') }}</span>
+      <span class="hidden-lg-and-up">{{ buttonExecute }}</span>
     </v-tooltip>
 
     <!-- RETURN BUTTON -->
@@ -111,6 +111,10 @@ export default {
   mixins: [tasks],
   computed: {
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
+    buttonExecute () {
+      return this.task.completeButtonText ||
+          this.$t('buttons.execute')
+    },
     buttonBack () {
       return this.task.previousButtonText ||
           this.$t('buttons.back')

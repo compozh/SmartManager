@@ -41,7 +41,7 @@
           <task-date-plan v-model="taskData.datePlan"/>
           <v-spacer/>
           <!-- TASK SAVE BUTTON -->
-          <task-save-btn v-if="taskChanged"
+          <save-button v-if="taskChanged"
                          @save="updateTaskData"
                          @cancel="initTaskData"/>
           <!-- TASK MANAGEMENT BUTTONS -->
@@ -60,7 +60,12 @@
         <perfect-scrollbar class="pa-5">
           <div class="d-flex align-baseline">
             <!-- TASK NAME -->
-            <task-name v-model="taskData.name"/>
+            <editable-text-field v-model="taskData.name"
+                                 required
+                                 :editable="taskEditable"
+                                 :changed="taskChanged"
+                                 :changeHandler="setTaskChanged"
+                                 class="title font-weight-bold"/>
             <!-- TOGGLE PIN TASK BUTTON -->
             <icon-tooltip-btn btnClass="ml-auto"
                               :btnColor="task.isFavorite ? 'cyan' : 'grey'"
@@ -162,14 +167,13 @@
 </template>
 
 <script>
-import { date } from '@/mixins/dateTime'
-import { zones, folders, tasks, attachments } from '@/mixins/units'
+import IconTooltipBtn from '@/components/IconTooltipBtn'
+import SaveButton from '@/components/SaveButton'
 import TaskPerformer from '@/views/tasks/task-edit/TaskPerformer'
 import TaskDatePlan from '@/views/tasks/task-edit/TaskDatePlan'
-import TaskSaveBtn from '@/views/tasks/task-edit/TaskSaveBtn'
 import TaskButtons from '@/views/tasks/task-details/TaskButtons'
 import TaskMenu from '@/views/tasks/task-details/TaskMenu'
-import TaskName from '@/views/tasks/task-edit/TaskName'
+import EditableTextField from '@/components/EditableTextField'
 import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
 import TaskLabels from '@/views/tasks/task-details/TaskLabels'
 import TaskParticipants from '@/views/tasks/task-edit/TaskParticipants'
@@ -179,17 +183,19 @@ import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsLis
 import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
 import Comments from '@/views/comments/Comments'
 import Diagram from '@/views/diagram/Diagram'
-import IconTooltipBtn from '@/components/IconTooltipBtn'
+import { zones, folders, tasks, attachments } from '@/mixins/units'
+import { date } from '@/mixins/dateTime'
 
 export default {
   name: 'TaskDetails',
   components: {
+    SaveButton,
+    IconTooltipBtn,
     TaskPerformer,
     TaskDatePlan,
-    TaskSaveBtn,
     TaskButtons,
     TaskMenu,
-    TaskName,
+    EditableTextField,
     TaskDescription,
     TaskLabels,
     TaskParticipants,
@@ -198,8 +204,7 @@ export default {
     AttachmentsList,
     AttachmentsViewer,
     Comments,
-    Diagram,
-    IconTooltipBtn
+    Diagram
   },
   mixins: [zones, folders, tasks, attachments, date],
   data: () => ({
