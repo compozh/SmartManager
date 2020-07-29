@@ -54,10 +54,8 @@ export const zones = {
         }
       ]
     },
-    activeZone: {
-      get () {
-        return this.$store.state.app.activeZone || {}
-      }
+    activeZone () {
+      return this.$store.state.app.activeZone || {}
     },
     activeZoneId: {
       get () {
@@ -81,8 +79,9 @@ export const folders = {
     ]),
     activeFolderId: {
       get () {
+        const activeZone = this.$store.state.app.activeZone
         return this.$store.state.folders.activeFolderId ||
-          'active'
+          (activeZone === 'cases' ? 'all' : 'active')
       },
       set (folderId) {
         /* TODO: fix define activeFolderId value when folder page apdate
@@ -216,13 +215,13 @@ export const tasks = {
       result.success || await this.$router.push('/error404')
       this.showTaskDialog(true)
     },
-    showTaskDialog (toShow) {
+    showTaskDialog (toShow = true) {
       this.$store.commit('SHOW_TASK_DIALOG', toShow)
     },
-    setTaskEditable (isEditable) {
+    setTaskEditable (isEditable = true) {
       this.$store.commit('SET_TASK_EDITABLE', isEditable)
     },
-    setTaskChanged (isChanged) {
+    setTaskChanged (isChanged = true) {
       this.$store.commit('SET_TASK_CHANGED', isChanged)
     }
   }
@@ -257,6 +256,12 @@ export const cases = {
       set (val) {
         this.showCaseDialog(val)
       }
+    },
+    caseEditable () {
+      return this.$store.state.cases.caseEditable
+    },
+    caseChanged () {
+      return this.$store.state.cases.caseChanged
     }
   },
   methods: {
@@ -264,25 +269,19 @@ export const cases = {
       await this.$store.dispatch('getCases')
     },
     async getCase () {
-      if (!this.caseItem.id) {
-        try {
-          const result = await this.$store.dispatch('getCaseDetails', {
-            caseId: this.caseId
-          })
-          result.success || await this.$router.push('/error404')
-          this.showCaseDialog(true)
-        } catch (e) {
-          console.log(e.message)
-        }
-      }
+      const result = await this.$store.dispatch('getCaseDetails', {
+        caseId: this.caseId
+      })
+      result.success || await this.$router.push('/error404')
+      this.showCaseDialog(true)
     },
-    showCaseDialog (toShow) {
+    showCaseDialog (toShow = true) {
       this.$store.commit('SHOW_CASE_DIALOG', toShow)
     },
-    setCaseEditable (isEditable) {
+    setCaseEditable (isEditable = true) {
       this.$store.commit('SET_CASE_EDITABLE', isEditable)
     },
-    setCaseChanged (isChanged) {
+    setCaseChanged (isChanged = true) {
       this.$store.commit('SET_CASE_CHANGED', isChanged)
     }
   }
