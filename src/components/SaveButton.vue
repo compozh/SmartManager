@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'TaskSaveBtn'
+  name: 'SaveButton'
 }
 </script>
 
