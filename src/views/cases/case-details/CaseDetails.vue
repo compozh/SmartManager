@@ -74,10 +74,14 @@
           </div>
           <!-- LABELS
           <case-labels :case="caseItem"/> -->
-          <v-divider/>
-          <!-- CASE PARTICIPANTS
-          <task-participants v-model="caseData.participants"
-                             class="mb-10"/> -->
+          <!-- CASE FOLDER -->
+          <div v-if="caseData.folder">
+              <fa-icon icon="folder" class="mr-2" size="lg"/>
+            {{ caseData.folder.Name }}
+          </div>
+          <!-- CASE PARTICIPANTS -->
+          <case-participants v-model="caseData.participants"
+                             class="mb-10"/>
           <!-- CASE ATTACHMENTS -->
           <attachments-list class="mb-10"
                             :attachmentList="attachments"
@@ -129,6 +133,7 @@
 import SaveButton from '@/components/SaveButton'
 import EditableTextField from '@/components/EditableTextField'
 import CaseCreator from '@/views/cases/case-details/CaseCreator'
+import CaseParticipants from '@/views/cases/case-edit/CaseParticipants'
 import TaskForm from '@/views/tasks/task-create/TaskForm'
 import TaskCards from '@/views/tasks/task-list/TaskCards'
 import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
@@ -145,6 +150,7 @@ export default {
     SaveButton,
     EditableTextField,
     CaseCreator,
+    CaseParticipants,
     TaskForm,
     TaskCards,
     CaseDate,
@@ -161,7 +167,7 @@ export default {
       fioAdded: '',
       purpose: '',
       comment: '',
-      folder: {},
+      folder: null,
       participants: []
     }
   }),
@@ -217,7 +223,7 @@ export default {
       this.caseData.purpose = this.caseItem.purpose
       this.caseData.comment = this.caseItem.comm
       this.caseData.folder = this.caseFolders.find(folder => {
-        return folder.id === this.caseItem.folderId
+        return folder.FolderId === this.caseItem.folderId
       })
       this.caseData.participants = this.caseItem.participants || []
       this.setCaseChanged(false)
