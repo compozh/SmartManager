@@ -51,29 +51,27 @@
         <v-divider/>
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5">
-          <div class="d-flex align-baseline">
+          <div class="d-flex flex-column">
             <!-- CASE NAME -->
             <editable-text-field v-model="caseData.name"
-                                 required
+                                 required flat
                                  :editable="caseEditable"
                                  :changed="caseChanged"
                                  :changeHandler="setCaseChanged"
                                  class="title font-weight-bold"/>
+            <!-- CASE PURPOSE -->
+            <editable-text-field v-model="caseData.purpose"
+                                 :editable="caseEditable"
+                                 :changed="caseChanged"
+                                 :placeholder="$t('cases.purpose')"
+                                 :changeHandler="setCaseChanged"/>
+            <!-- CASE COMMENT-->
+            <editable-text-field v-model="caseData.comment"
+                                 :editable="caseEditable"
+                                 :changed="caseChanged"
+                                 :placeholder="$t('cases.comment')"
+                                 :changeHandler="setCaseChanged"/>
           </div>
-          <!-- CASE PURPOSE -->
-          <editable-text-field v-model="caseData.purpose"
-                               outlined
-                               :editable="caseEditable"
-                               :changed="caseChanged"
-                               :placeholder="$t('cases.purpose')"
-                               :changeHandler="setCaseChanged"/>
-          <!-- CASE COMMENT-->
-          <editable-text-field v-model="caseData.comment"
-                               outlined
-                               :editable="caseEditable"
-                               :changed="caseChanged"
-                               :placeholder="$t('cases.comment')"
-                               :changeHandler="setCaseChanged"/>
           <!-- LABELS
           <case-labels :case="caseItem"/> -->
           <v-divider/>
@@ -291,10 +289,10 @@ export default {
     background: rgba(123, 104, 238, .3);
   }
 
-  /*.v-input >>> .v-input__slot,*/
-  /*.v-input >>> .v-text-field__details {*/
-  /*  padding: 0 !important;*/
-  /*}*/
+  .v-input >>> .v-input__slot,
+  .v-input >>> .v-text-field__details {
+    padding: 0 !important;
+  }
 
   .add-btn {
     min-height: 25px;
