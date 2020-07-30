@@ -105,8 +105,9 @@ export default {
       }
     },
     participantsAreEqual () {
-      const a1 = this.participants.filter(p => p.role).sort()
-      const a2 = this.initTaskParticipants.filter(p => p.role).sort()
+      const compare = (a, b) => a.userId > b.userId ? 1 : -1
+      const a1 = this.participants.filter(p => p.role).sort(compare)
+      const a2 = this.initTaskParticipants.filter(p => p.role).sort(compare)
       if (a1.length === a2.length) {
         return a1.every((i, idx) => {
           return i.userId === a2[idx].userId &&
