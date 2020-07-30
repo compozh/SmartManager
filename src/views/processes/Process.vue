@@ -118,11 +118,17 @@ export default {
       }
     },
     getVariables (data) {
+      if (typeof data === 'string') {
+        data = JSON.parse(data)
+      }
       const variables = []
       for (const field in data) {
-        const Name = field
-        const Value = data[Name]
-        variables.push({ Name, Value })
+        // eslint-disable-next-line no-prototype-builtins
+        if (data.hasOwnProperty(field)) {
+          const Name = field
+          const Value = data[Name]
+          variables.push({ Name, Value })
+        }
       }
       this.defineTypes(variables)
       return variables
