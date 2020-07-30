@@ -378,7 +378,6 @@ export default {
     async executeExternalTask () {
       const status = '+' // Task complete
       const result = await this.formSubmit()
-      debugger
       if (result.success) {
         const completeParams = result.submission
           ? JSON.stringify(result.submission) : null
