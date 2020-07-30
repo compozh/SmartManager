@@ -39,10 +39,10 @@
 
 <script>
 import CommentsLog from './CommentsLog.vue'
-import { common, tasks } from '@/mixins/units'
+import { common, tasks, cases } from '@/mixins/units'
 
 export default {
-  mixins: [common, tasks],
+  mixins: [common, tasks, cases],
   components: {
     CommentsLog
   },
@@ -52,14 +52,15 @@ export default {
   }),
   computed: {
     comments () {
-      return this.task.comments || []
+      return this.task.comments || this.caseItem.comments || []
     }
   },
   methods: {
     async sendMsg () {
       if (this.comment) {
         this.loading = true
-        await this.$store.dispatch('addComment', {
+        const action = this.type === 'CASE' ? 'addCaseComment' : 'addTaskComment'
+        await this.$store.dispatch(action, {
           comment: this.comment,
           params: this.params
         })

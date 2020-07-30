@@ -4,7 +4,7 @@ export const common = {
   computed: {
     type () {
       // TODO: check for case from case object or route
-      if (this.task.__typename === 'Case') {
+      if (this.$route.params.caseId) {
         return 'CASE'
       }
       if (this.task.keyValue) {
