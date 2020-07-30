@@ -61,7 +61,7 @@
           <div class="d-flex align-baseline">
             <!-- TASK NAME -->
             <editable-text-field v-model="taskData.name"
-                                 required
+                                 required flat
                                  :editable="taskEditable"
                                  :changed="taskChanged"
                                  :changeHandler="setTaskChanged"
@@ -348,7 +348,7 @@ export default {
           }
         }
       } else {
-        return true
+        return { success: true }
       }
     },
     async changeStatus (status, CompleteParams) {
@@ -378,6 +378,7 @@ export default {
     async executeExternalTask () {
       const status = '+' // Task complete
       const result = await this.formSubmit()
+      debugger
       if (result.success) {
         const completeParams = result.submission
           ? JSON.stringify(result.submission) : null

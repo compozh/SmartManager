@@ -30,22 +30,22 @@
 
       <v-list-group no-action>
 
-        <template v-slot:activator>
+        <template #activator>
           <v-list-item-title class="body-1">{{ $t('user.delegatedRights') }}</v-list-item-title>
         </template>
-
-        <v-list-item v-for="rights in delegatedRights"
-                     :key="rights.ID"
-                     class="pl-5"
-                     @click="applyDelegatedRights(rights.USERID)">
-          <v-list-item-icon class="mr-2 align-center">
-            <fa-icon icon="user-tag"/>
-          </v-list-item-icon>
-          <v-list-item-title class="body-1"
-                            :class="{ 'font-weight-bold': rights.IsActive }"
-          >{{ rights.USERNAME }}</v-list-item-title>
-        </v-list-item>
-
+        <perfect-scrollbar style="max-height: 50vh;">
+          <v-list-item v-for="rights in delegatedRights"
+                       :key="rights.ID"
+                       class="pl-5"
+                       @click="applyDelegatedRights(rights.USERID)">
+            <v-list-item-icon class="mr-2 align-center">
+              <fa-icon icon="user-tag"/>
+            </v-list-item-icon>
+            <v-list-item-title class="body-1"
+                              :class="{ 'font-weight-bold': rights.IsActive }"
+            >{{ rights.USERNAME }}</v-list-item-title>
+          </v-list-item>
+        </perfect-scrollbar>
       </v-list-group>
 
       <v-divider/>

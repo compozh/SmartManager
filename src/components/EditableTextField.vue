@@ -1,8 +1,6 @@
 <template>
   <v-textarea v-model="text" dense
-              :outlined="outlined"
-              :solo="!outlined"
-              :flat="!outlined"
+              :solo="flat" :flat="flat"
               :label="text ? placeholder : ''"
               :placeholder="placeholder ? placeholder + '...' : ''"
               :readonly="!editable"
@@ -38,7 +36,7 @@ export default {
       type: Boolean,
       default: false
     },
-    outlined: {
+    flat: {
       type: Boolean,
       default: false
     },
@@ -93,6 +91,14 @@ export default {
 
   .v-textarea >>> .v-messages__message {
     font-weight: normal;
+  }
+
+  .v-textarea >>> .v-input__control > .v-input__slot:before {
+    border-color: rgba(0, 0, 0, .12) !important;
+  }
+
+  .v-textarea:hover >>> .v-input__control > .v-input__slot:before {
+    border-color: rgba(0, 0, 0, .22) !important;
   }
 
 </style>
