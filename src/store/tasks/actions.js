@@ -53,7 +53,7 @@ export default {
     }
     return result
   },
-  async addComment ({ dispatch, commit }, { comment, params }) {
+  async addTaskComment ({ dispatch, commit }, { comment, params }) {
     const paramsJson = JSON.stringify(params)
     try {
       const response = await api.addCommentToGql(comment, paramsJson)
