@@ -82,10 +82,7 @@ export default {
       const response = await api.changeTaskStatusInGql(statusParams)
       const result = response.data.smtasksMutation.changeStatus
       if (result.success) {
-        commit('SET_NOTIFY', {
-          text: result.successMessage || i18n.t('notify.statChangeSuccess'),
-          color: 'success'
-        })
+        // Without success notify - PLD 787658 from 31.07.20
         await dispatch('getTasks', rootState.folders.activeFolderId)
         await dispatch('getTaskDetails', { taskId: params.id })
       } else {
@@ -113,10 +110,7 @@ export default {
       const result = response.data.smtasksMutation.changeStage
       if (result.success) {
         await dispatch('getTaskDetails', { taskId: params.id })
-        commit('SET_NOTIFY', {
-          text: result.log || i18n.t('notify.stageChangeSuccess'),
-          color: 'success'
-        })
+        // Without success notify - PLD 787658 from 31.07.20
       } else {
         commit('SET_NOTIFY', {
           text: result.log || i18n.t('notify.stageChangeFail'),
