@@ -1,5 +1,5 @@
 window.devMode = false
-var DM = window.DOCKERMODE
+const DM = window.DOCKERMODE
 window.appConfig = {
   GrapgQlUrl: DM ? '*GRAPHQLURL*' : (window.devMode ? 'http://localhost:5002/' : 'https://m.it.ua/GraphQlServer/'),
   BASE_URL: window.VUE_APP_BASE_PATH,

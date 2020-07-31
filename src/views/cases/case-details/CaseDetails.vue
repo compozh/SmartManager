@@ -72,16 +72,15 @@
                                  :placeholder="$t('cases.comment')"
                                  :changeHandler="setCaseChanged"/>
           </div>
-          <!-- LABELS
-          <case-labels :case="caseItem"/> -->
-          <!-- CASE FOLDER -->
-          <div v-if="caseData.folder">
-              <fa-icon icon="folder" class="mr-2" size="lg"/>
-            {{ caseData.folder.Name }}
+          <div class="d-flex justify-space-between align-baseline flex-wrap">
+            <!-- CASE STATUS -->
+            <case-status :status="caseItem.status" class="mb-5"/>
+            <!-- CASE FOLDER -->
+            <case-folder v-model="caseData.folder" class="mb-5"/>
           </div>
           <!-- CASE PARTICIPANTS -->
           <case-participants v-model="caseData.participants"
-                             class="mb-10"/>
+                             class="mb-5"/>
           <!-- CASE ATTACHMENTS -->
           <attachments-list class="mb-10"
                             :attachmentList="attachments"
@@ -133,6 +132,8 @@
 import SaveButton from '@/components/SaveButton'
 import EditableTextField from '@/components/EditableTextField'
 import CaseCreator from '@/views/cases/case-details/CaseCreator'
+import CaseStatus from '@/views/cases/case-details/CaseStatus'
+import CaseFolder from '@/views/cases/case-edit/CaseFolder'
 import CaseParticipants from '@/views/cases/case-edit/CaseParticipants'
 import TaskForm from '@/views/tasks/task-create/TaskForm'
 import TaskCards from '@/views/tasks/task-list/TaskCards'
@@ -150,6 +151,8 @@ export default {
     SaveButton,
     EditableTextField,
     CaseCreator,
+    CaseStatus,
+    CaseFolder,
     CaseParticipants,
     TaskForm,
     TaskCards,

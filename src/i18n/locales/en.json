@@ -26,8 +26,10 @@
     "header": "Folders",
     "main": "Active",
     "folder": "Folder",
+    "currentFolder": "Current folder",
     "createFolder": "Add folder",
     "placeholderNew": "New folder",
+    "placeholderSelect": "Select folder",
     "placeholderCreate": "Enter folder name"
   },
   "validate": {
@@ -193,6 +195,7 @@
   },
   "statuses": {
     "status": "Status",
+    "currentStatus": "Current status",
     "inProgress": "In progress",
     "rejected": "Rejected",
     "done": "Done",
