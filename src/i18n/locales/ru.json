@@ -26,8 +26,10 @@
     "header": "Папки",
     "main": "Активные",
     "folder": "Папка",
+    "currentFolder": "Текущая папка",
     "createFolder": "Добавить новую папку",
     "placeholderNew": "Новая папка",
+    "placeholderSelect": "Выбрать папку",
     "placeholderCreate": "Введите название папки"
   },
   "validate": {
@@ -193,6 +195,7 @@
   },
   "statuses": {
     "status": "Статус",
+    "currentStatus": "Текущий статус",
     "inProgress": "В работе",
     "rejected": "Отменено",
     "done": "Выполнено",
