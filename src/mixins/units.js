@@ -67,6 +67,10 @@ export const zones = {
       set (zone) {
         this.$store.commit('SET_ACTIVE_ZONE', this.zones[zone])
       }
+    },
+    customLinks () {
+      const links = [...this.$store.state.app.applicationParams.CUSTOMLINKS || []]
+      return links.sort((a, b) => a.Order - b.Order)
     }
   }
 }
