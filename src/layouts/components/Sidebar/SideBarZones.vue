@@ -33,7 +33,7 @@
                    :key="item.title">
           <template #activator="{ on }">
             <v-list-item v-on="on"
-                         @click="changeZone(item)"
+                         :to="item.link"
                          class="pa-0 d-flex justify-center"
                          style="min-height: 36px; min-width: 36px">
               <v-list-item-action class="ma-0 pa-0 justify-center">
@@ -55,22 +55,49 @@ import { zones, folders } from '@/mixins/units'
 export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
+  data: () => ({
+    sideBarLocked: false,
+    initValues: {
+      sideBarOpen: true,
+      expandOnHover: false,
+      miniVariant: false
+    }
+  }),
   created () {
-    const zone = this.zones.find(zone => zone.group === this.$route.meta.zone)
-    this.activeZoneId = zone ? zone.id : 0
+    this.activeZoneId = this.routeZone.id || 0
+  },
+  watch: {
+    $route () {
+      const zone = this.routeZone.group
+      if (zone !== this.activeZone.group) {
+        this.activeZoneId = this.routeZone.id
+      }
+      if (zone === 'processes') {
+        this.lockSideBar()
+      }
+      if (zone !== 'processes' && this.sideBarLocked) {
+        this.unlockSideBar()
+      }
+    }
   },
   methods: {
-    changeZone (zone) {
-      if (zone.group === 'processes') {
-        this.sideBarOpen = false
-        this.expandOnHover = false
-        this.miniVariant = true
-      } else {
-        this.sideBarOpen = true
-        this.expandOnHover = false
-        this.miniVariant = false
-      }
-      this.$router.push(zone.link)
+    setInitValues () {
+      this.initValues.sideBarOpen = this.sideBarOpen
+      this.initValues.expandOnHover = this.expandOnHover
+      this.initValues.miniVariant = this.miniVariant
+    },
+    lockSideBar () {
+      // this.setInitValues()
+      this.sideBarLocked = true
+      this.sideBarOpen = false
+      this.expandOnHover = false
+      this.miniVariant = true
+    },
+    unlockSideBar () {
+      this.sideBarLocked = false
+      this.sideBarOpen = this.initValues.sideBarOpen
+      this.expandOnHover = this.initValues.expandOnHover
+      this.miniVariant = this.initValues.miniVariant
     }
   }
 }
