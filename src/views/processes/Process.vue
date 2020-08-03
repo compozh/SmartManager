@@ -66,6 +66,11 @@ export default {
       this.error = this.$t('processes.errors.processNotPassed')
     }
   },
+  computed: {
+    userId () {
+      return this.$store.getters.userId
+    }
+  },
   methods: {
     async formSubmit () {
       const form = this.$refs.form
