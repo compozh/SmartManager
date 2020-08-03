@@ -46,13 +46,16 @@ export const zones = {
         },
         {
           id: 2,
-          title: this.$t('sideBar.forceBpm'),
+          title: this.$t('sideBar.processes'),
           folders: [],
           group: 'processes',
           link: '/processes',
           icon: 'project-diagram'
         }
       ]
+    },
+    routeZone () {
+      return this.zones.find(zone => zone.group === this.$route.meta.zone) || {}
     },
     activeZone () {
       return this.$store.state.app.activeZone || {}
