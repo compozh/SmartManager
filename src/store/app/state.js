@@ -1,5 +1,5 @@
 export default {
-  applicationParams: null,
+  applicationParams: {},
   refreshLoader: false,
   preLoaders: [],
   linearPreLoaders: [],
