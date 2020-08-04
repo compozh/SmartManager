@@ -45,6 +45,23 @@
         </v-tooltip>
       </v-list-item-group>
     </v-list>
+    <template #append>
+      <div class="d-flex flex-column align-center mb-4">
+        <v-tooltip right
+                   v-for="(item, idx) in customLinks"
+                   :key="idx">
+          <template #activator="{ on }">
+            <v-btn v-on="on" icon
+                   :href="item.HyperLink"
+                   target="_blank">
+              <fa-icon :icon="item.Icon || 'question-circle'"
+                       size="lg" color="#343434"/>
+            </v-btn>
+          </template>
+          {{ item.Name }}
+        </v-tooltip>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -56,8 +73,14 @@ export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
   created () {
-    const zone = this.zones.find(zone => zone.group === this.$route.meta.zone)
-    this.activeZoneId = zone ? zone.id : 0
+    this.activeZoneId = this.routeZone.id || 0
+  },
+  watch: {
+    $route () {
+      if (this.routeZone.id !== this.activeZone.id) {
+        this.activeZoneId = this.routeZone.id
+      }
+    }
   },
   methods: {
     changeZone (zone) {

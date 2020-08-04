@@ -36,10 +36,7 @@ export default {
     btnStyle: String,
     btnClick: Function,
     icon: String,
-    iconType: {
-      type: String,
-      default: 'fas'
-    },
+    iconType: String,
     iconSize: {
       type: String,
       default: '2x'

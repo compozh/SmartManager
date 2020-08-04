@@ -3,12 +3,12 @@
     <div v-if="activeZone.title" class="subtitle-1 font-weight-medium">
       {{ activeZone.title }}
     </div>
-    <div v-if="activeFolder.Name || activeZone.title === 'Force BPM'">
+    <div v-if="activeFolder.Name || $route.query.processId">
       <fa-icon icon="chevron-right" size="xs" class="mx-3 grey--text"/>
     </div>
 
-    <div v-if="activeZone.title === 'Force BPM'"
-         class="subtitle-1 font-weight-medium text-capitalize">{{ $route.name }}</div>
+    <div v-if="activeZone.group === 'processes'"
+         class="subtitle-1 font-weight-medium text-capitalize">{{ $route.query.processId }}</div>
 
     <div v-else-if="activeFolder.Name" class="subtitle-1 font-weight-medium">
       <span @click="$route.name === 'task-details' ? $router.push('/tasks/' + activeFolderId) : null"

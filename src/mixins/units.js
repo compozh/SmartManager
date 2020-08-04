@@ -46,13 +46,16 @@ export const zones = {
         },
         {
           id: 2,
-          title: this.$t('sideBar.forceBpm'),
+          title: this.$t('sideBar.processes'),
           folders: [],
           group: 'processes',
           link: '/processes',
           icon: 'project-diagram'
         }
       ]
+    },
+    routeZone () {
+      return this.zones.find(zone => zone.group === this.$route.meta.zone) || {}
     },
     activeZone () {
       return this.$store.state.app.activeZone || {}
@@ -64,6 +67,10 @@ export const zones = {
       set (zone) {
         this.$store.commit('SET_ACTIVE_ZONE', this.zones[zone])
       }
+    },
+    customLinks () {
+      const links = [...this.$store.state.app.applicationParams.CUSTOMLINKS || []]
+      return links.sort((a, b) => a.Order - b.Order)
     }
   }
 }
