@@ -56,11 +56,9 @@ export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
   data: () => ({
-    sideBarLocked: false,
     initValues: {
-      sideBarOpen: true,
-      expandOnHover: false,
-      miniVariant: false
+      miniVariant: false,
+      expandOnHover: false
     }
   }),
   created () {
@@ -82,20 +80,21 @@ export default {
   },
   methods: {
     setInitValues () {
-      this.initValues.sideBarOpen = this.sideBarOpen
-      this.initValues.expandOnHover = this.expandOnHover
       this.initValues.miniVariant = this.miniVariant
+      this.initValues.expandOnHover = this.expandOnHover
     },
     lockSideBar () {
-      // this.setInitValues()
-      this.sideBarLocked = true
-      this.sideBarOpen = false
+      this.setInitValues()
+      if (!this.miniVariant) {
+        this.miniVariant = true
+      }
       this.expandOnHover = false
-      this.miniVariant = true
+      // Locking must be last
+      this.sideBarLocked = true
     },
     unlockSideBar () {
+      // unlocking must be first
       this.sideBarLocked = false
-      this.sideBarOpen = this.initValues.sideBarOpen
       this.expandOnHover = this.initValues.expandOnHover
       this.miniVariant = this.initValues.miniVariant
     }
