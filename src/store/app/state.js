@@ -3,7 +3,7 @@ export default {
   refreshLoader: false,
   preLoaders: [],
   linearPreLoaders: [],
-  sideBarOpen: false,
+  sideBarLocked: false,
   expandOnHover: true,
   miniVariant: true,
   search: '',
