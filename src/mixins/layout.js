@@ -1,11 +1,11 @@
 export const sideBar = {
   computed: {
-    sideBarOpen: {
+    sideBarLocked: {
       get () {
-        return this.$store.state.app.sideBarOpen
+        return this.$store.state.app.sideBarLocked
       },
       set (val) {
-        this.$store.commit('TOGGLE_SIDEBAR_OPEN', val)
+        this.$store.commit('SIDE_BAR_LOCKED', val)
       }
     },
     expandOnHover: {
@@ -13,7 +13,9 @@ export const sideBar = {
         return this.$store.state.app.expandOnHover
       },
       set (val) {
-        this.$store.commit('EXPAND_ON_HOVER', val)
+        if (!this.sideBarLocked) {
+          this.$store.commit('EXPAND_ON_HOVER', val)
+        }
       }
     },
     miniVariant: {
@@ -21,15 +23,16 @@ export const sideBar = {
         return this.$store.state.app.miniVariant
       },
       set (val) {
-        this.$store.commit('MINI_VARIANT', val)
+        if (!this.sideBarLocked) {
+          this.$store.commit('MINI_VARIANT', val)
+        }
       }
     }
   },
   methods: {
     toggleSideBar () {
-      this.sideBarOpen = !this.sideBarOpen
-      this.expandOnHover = !this.expandOnHover
       this.miniVariant = !this.miniVariant
+      this.expandOnHover = !this.expandOnHover
     }
   }
 }
