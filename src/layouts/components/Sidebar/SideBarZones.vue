@@ -82,16 +82,17 @@ export default {
     this.activeZoneId = this.routeZone.id || 0
   },
   watch: {
+    activeZone (activeZone) {
+      if (activeZone.group === 'processes') {
+        this.sideBarLocked || this.lockSideBar()
+      } else {
+        !this.sideBarLocked || this.unlockSideBar()
+      }
+    },
     $route () {
       const zone = this.routeZone.group
       if (zone !== this.activeZone.group) {
         this.activeZoneId = this.routeZone.id
-      }
-      if (zone === 'processes') {
-        this.lockSideBar()
-      }
-      if (zone !== 'processes' && this.sideBarLocked) {
-        this.unlockSideBar()
       }
     }
   },
