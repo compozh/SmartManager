@@ -17,8 +17,8 @@ export default {
   STOP_LINEAR_PRELOADER (state, preLoader) {
     state.linearPreLoaders = state.linearPreLoaders.filter(i => i !== preLoader)
   },
-  TOGGLE_SIDEBAR_OPEN (state, value) {
-    state.sideBarOpen = value
+  SIDE_BAR_LOCKED (state, value) {
+    state.sideBarLocked = value
   },
   EXPAND_ON_HOVER (state, value) {
     state.expandOnHover = value

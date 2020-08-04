@@ -33,7 +33,7 @@
                    :key="item.title">
           <template #activator="{ on }">
             <v-list-item v-on="on"
-                         @click="changeZone(item)"
+                         :to="item.link"
                          class="pa-0 d-flex justify-center"
                          style="min-height: 36px; min-width: 36px">
               <v-list-item-action class="ma-0 pa-0 justify-center">
@@ -72,28 +72,48 @@ import { zones, folders } from '@/mixins/units'
 export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
+  data: () => ({
+    initValues: {
+      miniVariant: false,
+      expandOnHover: false
+    }
+  }),
   created () {
     this.activeZoneId = this.routeZone.id || 0
   },
   watch: {
     $route () {
-      if (this.routeZone.id !== this.activeZone.id) {
+      const zone = this.routeZone.group
+      if (zone !== this.activeZone.group) {
         this.activeZoneId = this.routeZone.id
+      }
+      if (zone === 'processes') {
+        this.lockSideBar()
+      }
+      if (zone !== 'processes' && this.sideBarLocked) {
+        this.unlockSideBar()
       }
     }
   },
   methods: {
-    changeZone (zone) {
-      if (zone.group === 'processes') {
-        this.sideBarOpen = false
-        this.expandOnHover = false
+    setInitValues () {
+      this.initValues.miniVariant = this.miniVariant
+      this.initValues.expandOnHover = this.expandOnHover
+    },
+    lockSideBar () {
+      this.setInitValues()
+      if (!this.miniVariant) {
         this.miniVariant = true
-      } else {
-        this.sideBarOpen = true
-        this.expandOnHover = false
-        this.miniVariant = false
       }
-      this.$router.push(zone.link)
+      this.expandOnHover = false
+      // Locking must be last
+      this.sideBarLocked = true
+    },
+    unlockSideBar () {
+      // unlocking must be first
+      this.sideBarLocked = false
+      this.expandOnHover = this.initValues.expandOnHover
+      this.miniVariant = this.initValues.miniVariant
     }
   }
 }
