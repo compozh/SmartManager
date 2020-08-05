@@ -1,6 +1,7 @@
 <template>
   <v-navigation-drawer id="sideBar"
                        app
+                       permanent
                        :mini-variant.sync="miniVariant"
                        :expand-on-hover="expandOnHover"
                        width="300"
