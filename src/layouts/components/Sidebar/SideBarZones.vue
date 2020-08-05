@@ -54,8 +54,9 @@
             <v-btn v-on="on" icon
                    :href="item.HyperLink"
                    target="_blank">
-              <fa-icon :icon="item.Icon || 'question-circle'"
-                       size="lg" color="#343434"/>
+              <span v-if="item.Icon" v-html="item.Icon"
+                    style="height: 19px; width: 19px; color: #343434; margin: 1px 1px 0 0"/>
+              <fa-icon v-else icon="question-circle" size="lg" color="#343434"/>
             </v-btn>
           </template>
           {{ item.Name }}
@@ -72,6 +73,9 @@ import { zones, folders } from '@/mixins/units'
 export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
+  components: {
+    // SvgIcons
+  },
   data: () => ({
     initValues: {
       miniVariant: false,
