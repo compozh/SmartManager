@@ -69,7 +69,7 @@ export const zones = {
       }
     },
     customLinks () {
-      const links = [...this.$store.state.app.applicationParams.CUSTOMLINKS || []]
+      const links = [...(this.$store.state.app.applicationParams.CUSTOMLINKS || [])]
       return links.sort((a, b) => a.Order - b.Order)
     }
   }
