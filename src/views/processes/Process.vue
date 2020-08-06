@@ -1,11 +1,13 @@
 <template>
   <div class="process-component">
-    <div v-if="error" style="font-size: 40px;" justify="center" class="py-10 process-error">
+    <div v-if="error"
+         style="font-size: 40px;"
+         class="d-flex py-10">
       <v-btn @click="onComeBackBtn"
              text outlined small
              color="primary"
              class="come-back-button mr-3">
-        <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
+        <fa-icon icon="arrow-alt-left" size="lg" class="primary--text"/>
       </v-btn>
       <p>{{error}}</p>
     </div>
@@ -49,7 +51,7 @@ export default {
     error: null
   }),
   async created () {
-    this.processDefinitionId = this.$route.query.processId
+    this.processDefinitionId = this.$route.query.id
     if (this.processDefinitionId) {
       const result = await this.$store.dispatch(
         'getFormDefinition', this.processDefinitionId)
@@ -110,7 +112,7 @@ export default {
     },
     async startProcess (data) {
       const processData = {
-        ProcessDefinitionId: this.$route.query.processId,
+        ProcessDefinitionId: this.$route.query.id,
         BusinessKey: `USER[${this.userId}]`,
         Variables: this.getVariables(data)
       }
@@ -163,10 +165,6 @@ export default {
 </script>
 
 <style scoped>
-
-  .process-error {
-    display: flex;
-  }
 
   .process-component {
     height: 100%;

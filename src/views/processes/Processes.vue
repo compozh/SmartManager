@@ -2,25 +2,24 @@
   <v-row no-gutters>
     <v-col>
       <div class="page-header">
-        <span class="page-title">{{ this.$t('processes.runProcess') }}</span>
-         <v-text-field
-          v-model="search"
-          append-icon="fa-search"
-          :label="this.$t('search')"
-          class="data-search"
-          single-line
-          hide-details
-        ></v-text-field>
+        <span class="page-title">
+          {{ this.$t('processes.runProcess') }}
+        </span>
+         <v-text-field v-model="search"
+                       append-icon="fa-search"
+                       :label="this.$t('search')"
+                       class="data-search"
+                       single-line
+                       hide-details/>
       </div>
-      <v-data-table
-        :headers="headers"
-        :items="processes"
-        :items-per-page="10"
-        :search="search"
-         @click:row="onRowClick"
-        class="elevation-1 body-2"
-        style="font-size: 10px"
-        :footer-props="{itemsPerPageText: $t('processes.perPage')}"/>
+      <v-data-table :headers="headers"
+                    :items="processes"
+                    :items-per-page="10"
+                    :search="search"
+                    @click:row="onRowClick"
+                    class="elevation-1 body-2"
+                    style="font-size: 10px"
+                    :footer-props="{itemsPerPageText: $t('processes.perPage')}"/>
     </v-col>
   </v-row>
 </template>
@@ -45,8 +44,13 @@ export default {
   },
   methods: {
     onRowClick (item) {
-      const itemId = item.procDefId
-      this.$router.push({ path: 'process', query: { processId: itemId } })
+      this.$router.push({
+        path: 'process',
+        query: {
+          id: item.procDefId,
+          name: item.name
+        }
+      })
     }
   }
 }
