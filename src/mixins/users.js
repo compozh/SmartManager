@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex'
 export const userInfo = {
   computed: {
     ...mapGetters([
+      'userId',
       'userLogin',
       'userName',
       'userPhoto',
