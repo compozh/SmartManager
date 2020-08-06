@@ -4,11 +4,11 @@
       {{ activeZone.title }}
     </div>
 
-    <div v-if="activeZone.group === 'processes' && $route.query.processId"
+    <div v-if="activeZone.group === 'processes' && $route.query.id"
          class="subtitle-1 font-weight-medium text-capitalize">
       <fa-icon icon="chevron-right" size="xs" class="ml-3 mr-2 grey--text"/>
       <span class="subtitle-1 font-weight-medium text-capitalize">
-        {{ $route.query.processId }}
+        {{ $route.query.name }}
       </span>
     </div>
 

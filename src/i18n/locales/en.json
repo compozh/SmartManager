@@ -2,8 +2,14 @@
   "search": "Search",
   "rights": "All rights Reserved",
   "updating": "Application is updating ... Please wait...",
+  "listNumber": "No.",
   "user": {
-    "delegatedRights": "Use rights"
+    "name": "Name",
+    "id": "User Id",
+    "login": "Login",
+    "isActive": "Current rights",
+    "delegatedRights": "Delegated rights",
+    "delegateRights": "Delegate rights"
   },
   "navBar":{
     "expandSideBar": "Expand sidebar",
@@ -167,7 +173,8 @@
     "zoomOut": "Zoom out",
     "zoomReset": "Reset zoom",
     "toggleFullscreen": "Toggle full screen mode",
-    "change": "Change"
+    "change": "Change",
+    "apply": "Apply"
   },
   "icons": {
     "priority": "Priority",
