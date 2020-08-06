@@ -2,8 +2,15 @@
   "search": "Поиск",
   "rights": "Все права защищены",
   "updating": "Приложение обновляется... Пожалуйста подождите...",
+  "listNumber": "№ п/п",
   "user": {
-    "delegatedRights": "Использовать права"
+    "name": "Имя",
+    "id": "ID пользователя",
+    "login": "Логин",
+    "isActive": "Текущие права",
+    "useDelegatedRights": "Использовать права",
+    "delegatedRights": "Делегированные права",
+    "delegateRights": "Делегировать права"
   },
   "navBar":{
     "expandSideBar": "Развернуть боковую панель",
@@ -167,7 +174,8 @@
     "zoomOut": "Отдалить",
     "zoomReset": "Восстановить масштаб",
     "toggleFullscreen": "Переключить полноэкранный режим",
-    "change": "Изменить"
+    "change": "Изменить",
+    "apply": "Применить"
   },
   "icons": {
     "priority": "Приоритет",
