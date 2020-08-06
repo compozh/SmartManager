@@ -1,15 +1,14 @@
 <template>
   <v-tooltip right>
-    <template v-slot:activator="{ on }">
-      <v-app-bar-nav-icon class="hidden-sm-and-down" v-on="on"
-                          small
+    <template #activator="{ on }">
+      <v-app-bar-nav-icon v-on="on" small
                           :disabled="activeZoneId === 2"
                           @click="toggleSideBar">
         <fa-icon icon="bars" size="lg"/>
       </v-app-bar-nav-icon>
     </template>
     <span>
-      {{ sideBarOpen ? $t('navBar.collapseSideBar') : $t('navBar.expandSideBar') }}
+      {{ miniVariant ? $t('navBar.expandSideBar') : $t('navBar.collapseSideBar') }}
     </span>
   </v-tooltip>
 </template>

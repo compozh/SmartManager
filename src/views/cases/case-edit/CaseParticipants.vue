@@ -3,7 +3,7 @@
     <div class="d-flex" style="flex-basis: 100%">
       <fa-icon icon="users" class="mr-3" size="lg"/>
       <span class="font-weight-light text-truncate">
-      {{ $t('cases.participants') }}</span>
+      {{ $t('cases.participants').toUpperCase() }}</span>
     </div>
     <div class="py-2 d-flex flex-wrap">
       <v-autocomplete :value="caseParticipants"

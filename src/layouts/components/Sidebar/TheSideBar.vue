@@ -2,7 +2,7 @@
   <v-navigation-drawer id="sideBar"
                        app
                        permanent
-                       :mini-variant="miniVariant"
+                       :mini-variant.sync="miniVariant"
                        :expand-on-hover="expandOnHover"
                        width="300"
                        style="padding-left: 3.4em">

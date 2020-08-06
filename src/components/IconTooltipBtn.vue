@@ -3,7 +3,7 @@
              :left="tooltipPosition === 'left'"
              :top="tooltipPosition === 'top'"
              :bottom="tooltipPosition === 'bottom'">
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <v-btn v-on="on"
              :class="btnClass"
              :color="btnColor"
@@ -28,16 +28,19 @@ export default {
       type: String,
       default: () => 'right'
     },
-    tooltipText: {
-      type: String
-    },
     btnClass: String,
-    btnColor: String,
+    btnColor: {
+      type: String,
+      default: 'grey'
+    },
     btnStyle: String,
     btnClick: Function,
     icon: String,
     iconType: String,
-    iconSize: String
+    iconSize: {
+      type: String,
+      default: '2x'
+    }
   }
 }
 </script>

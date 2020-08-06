@@ -33,7 +33,7 @@
                    :key="item.title">
           <template #activator="{ on }">
             <v-list-item v-on="on"
-                         @click="changeZone(item)"
+                         :to="item.link"
                          class="pa-0 d-flex justify-center"
                          style="min-height: 36px; min-width: 36px">
               <v-list-item-action class="ma-0 pa-0 justify-center">
@@ -45,6 +45,24 @@
         </v-tooltip>
       </v-list-item-group>
     </v-list>
+    <template #append>
+      <div class="d-flex flex-column align-center mb-4">
+        <v-tooltip right
+                   v-for="(item, idx) in customLinks"
+                   :key="idx">
+          <template #activator="{ on }">
+            <v-btn v-on="on" icon
+                   :href="item.HyperLink"
+                   target="_blank">
+              <span v-if="item.Icon" v-html="item.Icon"
+                    style="height: 19px; width: 19px; color: #343434; margin: 1px 1px 0 0"/>
+              <fa-icon v-else icon="question-circle" size="lg" color="#343434"/>
+            </v-btn>
+          </template>
+          {{ item.Name }}
+        </v-tooltip>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -55,22 +73,52 @@ import { zones, folders } from '@/mixins/units'
 export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
+  components: {
+    // SvgIcons
+  },
+  data: () => ({
+    initValues: {
+      miniVariant: false,
+      expandOnHover: false
+    }
+  }),
   created () {
-    const zone = this.zones.find(zone => zone.group === this.$route.meta.zone)
-    this.activeZoneId = zone ? zone.id : 0
+    this.activeZoneId = this.routeZone.id || 0
+  },
+  watch: {
+    activeZone (activeZone) {
+      if (activeZone.group === 'processes') {
+        this.sideBarLocked || this.lockSideBar()
+      } else {
+        !this.sideBarLocked || this.unlockSideBar()
+      }
+    },
+    $route () {
+      const zone = this.routeZone.group
+      if (zone !== this.activeZone.group) {
+        this.activeZoneId = this.routeZone.id
+      }
+    }
   },
   methods: {
-    changeZone (zone) {
-      if (zone.group === 'processes') {
-        this.sideBarOpen = false
-        this.expandOnHover = false
+    setInitValues () {
+      this.initValues.miniVariant = this.miniVariant
+      this.initValues.expandOnHover = this.expandOnHover
+    },
+    lockSideBar () {
+      this.setInitValues()
+      if (!this.miniVariant) {
         this.miniVariant = true
-      } else {
-        this.sideBarOpen = true
-        this.expandOnHover = false
-        this.miniVariant = false
       }
-      this.$router.push(zone.link)
+      this.expandOnHover = false
+      // Locking must be last
+      this.sideBarLocked = true
+    },
+    unlockSideBar () {
+      // unlocking must be first
+      this.sideBarLocked = false
+      this.expandOnHover = this.initValues.expandOnHover
+      this.miniVariant = this.initValues.miniVariant
     }
   }
 }

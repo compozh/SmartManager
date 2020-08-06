@@ -1,9 +1,9 @@
 export default {
-  applicationParams: null,
+  applicationParams: {},
   refreshLoader: false,
   preLoaders: [],
   linearPreLoaders: [],
-  sideBarOpen: false,
+  sideBarLocked: false,
   expandOnHover: true,
   miniVariant: true,
   search: '',

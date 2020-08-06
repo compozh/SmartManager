@@ -24,7 +24,6 @@
                          :readonly="!caseEditable"
                          @change="dateTimeChanged"
                          first-day-of-week="1"
-                         no-title
                          scrollable>
             <v-spacer/>
           </v-date-picker>

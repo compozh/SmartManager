@@ -2,15 +2,15 @@
   <div class="process-component">
     <div v-if="error" style="font-size: 40px;" justify="center" class="py-10 process-error">
       <v-btn @click="onComeBackBtn"
-             text outlined
+             text outlined small
              color="primary"
-             class="come-back-button">
+             class="come-back-button mr-3">
         <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
       </v-btn>
       <p>{{error}}</p>
     </div>
 
-    <v-flex class="formio-container" v-if="form">
+    <div class="formio-container" v-if="form.name">
 
       <div class="process-header">
         <v-btn @click="onComeBackBtn"
@@ -35,7 +35,7 @@
              class="start-process-button">
         {{$t('processes.startProcess')}}
       </v-btn>
-    </v-flex>
+    </div>
   </div>
 </template>
 
@@ -64,6 +64,11 @@ export default {
       }
     } else {
       this.error = this.$t('processes.errors.processNotPassed')
+    }
+  },
+  computed: {
+    userId () {
+      return this.$store.getters.userId
     }
   },
   methods: {

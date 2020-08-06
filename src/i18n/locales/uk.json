@@ -13,7 +13,7 @@
     "toHome": "На головну",
     "tasksBtn": "Задачі",
     "casesBtn": "Кейси",
-    "forceBpm": "Force BPM"
+    "processes": "Процеси"
   },
   "pickers": {
     "date": "Дата",
@@ -26,8 +26,10 @@
     "header": "Папки",
     "main": "Активні",
     "folder": "Папка",
+    "currentFolder": "Поточна папка",
     "createFolder": "Додати нову папку",
     "placeholderNew": "Нова папка",
+    "placeholderSelect": "Вибрати папку",
     "placeholderCreate": "Введіть назву папки"
   },
   "validate": {
@@ -193,6 +195,7 @@
   },
   "statuses": {
     "status": "Статус",
+    "currentStatus": "Поточний статус",
     "inProgress": "В роботі",
     "rejected": "Відхилено",
     "done": "Виконано",
