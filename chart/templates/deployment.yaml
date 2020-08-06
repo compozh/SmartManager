@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
       - name: engine
-        image: itenterprise.azurecr.io/it/smartmanager #:{{ .Chart.AppVersion }}
+        image: itenterprise.azurecr.io/it/smartmanager:{{ .Chart.AppVersion }}
         env:
         - name: APP_VERSION
           value: "{{ .Chart.AppVersion }}"

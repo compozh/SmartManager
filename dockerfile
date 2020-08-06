@@ -2,9 +2,7 @@ FROM node:14.4.0-stretch AS build
 # создание директории приложения
 WORKDIR /app
 # установка зависимостей
-# символ астериск ("*") используется для того чтобы по возможности 
-# скопировать оба файла: package.json и package-lock.json
-COPY package*.json ./
+COPY package.json ./
 COPY .npmrc .
 RUN npm install
 # копируем исходный код

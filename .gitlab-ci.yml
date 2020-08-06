@@ -1,38 +1,85 @@
-variables:
-  PROJECT_NAME: 'SmartManager'
-  SP_DIRECTORY: ''
-  
+# old pipeline
+#variables:
+#  PROJECT_NAME: 'SmartManager'
+#  SP_DIRECTORY: ''
+
+#build_job:
+#    only:
+#      variables:
+#      - $SP_DIRECTORY != ''
+#    stage: build
+#    tags:
+#    - tfs2017 
+#    script:
+#    - 'npm install'
+#    - 'npm run build'
+#    - 'dir'
+#    cache:
+#      key: "bin"
+#      paths:
+#      - .\dist\
+
+#deploy_job:
+#    only:
+#      variables:
+#      - $SP_DIRECTORY != ''
+#    stage: deploy
+#    cache:
+#      key: "bin"
+#      paths:
+#      - .\dist\
+#    script:
+#    - 'mkdir \\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME'
+#    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME"'
+#    tags:
+#    - tfs2017
+
+# new pipeline
 stages:
   - build
-  - deploy
+  - publish
+  - publish_SP
 
-build_job:
+build_smartManager:
+    stage: build
+    tags:
+      - tfs2017 
+    script:
+      - 'npm install'
+      - 'npm run build'
+    cache:
+      key: $CI_COMMIT_REF_NAME
+      paths:
+        - dist
+      policy: push
+
+publish_smartManager:
+    stage: publish
+    tags:
+      - tfs2017 
     only:
       variables:
-      - $SP_DIRECTORY != ''
-    stage: build
+      - $CI_COMMIT_REF_NAME  == 'master'
+    script:
+    - 'xcopy /S /E /Y ".\dist\*" "\\m\web\webapps\SmartManager"'
+    cache:
+      key: $CI_COMMIT_REF_NAME
+      paths:
+        - dist
+      policy: pull
+
+publish_smartManager_SP:
+    stage: publish_SP
     tags:
     - tfs2017 
     script:
-    - 'npm install'
-    - 'npm run build'
-    - 'dir'
-    cache:
-      key: "bin"
-      paths:
-      - .\dist\
-    
-deploy_job:
+      - 'mkdir -p \\m\web2\WEBAPPS_VERSIONS\$CI_COMMIT_REF_NAME\SmartManager'
+      - 'xcopy /S /E /Y ".\dist\*" "\\m\web2\WEBAPPS_VERSIONS\$CI_COMMIT_REF_NAME\SmartManager"'
     only:
-      variables:
-      - $SP_DIRECTORY != ''
-    stage: deploy
+      - /^202*/@it-enterprise/web-apps/smartmanager-web
+
     cache:
-      key: "bin"
+      key: $CI_COMMIT_REF_NAME
       paths:
-      - .\dist\
-    script:
-    - 'mkdir \\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME'
-    - 'xcopy /S /E ".\dist\*" "\\it.ua\dfs\dev\itversion\$SP_DIRECTORY\$CI_COMMIT_REF_NAME\$PROJECT_NAME"'
-    tags:
-    - tfs2017
+        - dist
+      policy: pull
