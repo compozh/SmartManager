@@ -8,7 +8,6 @@
     "id": "ID пользователя",
     "login": "Логин",
     "isActive": "Текущие права",
-    "useDelegatedRights": "Использовать права",
     "delegatedRights": "Делегированные права",
     "delegateRights": "Делегировать права"
   },

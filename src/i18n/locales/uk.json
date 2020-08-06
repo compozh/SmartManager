@@ -8,7 +8,6 @@
     "id": "ID користувача",
     "login": "Логін",
     "isActive": "Поточні права",
-    "useDelegatedRights": "Використати права",
     "delegatedRights": "Делеговані права",
     "delegateRights": "Делегувати права"
   },

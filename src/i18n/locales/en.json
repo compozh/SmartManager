@@ -8,7 +8,6 @@
     "id": "User Id",
     "login": "Login",
     "isActive": "Current rights",
-    "useDelegatedRights": "Use rights",
     "delegatedRights": "Delegated rights",
     "delegateRights": "Delegate rights"
   },

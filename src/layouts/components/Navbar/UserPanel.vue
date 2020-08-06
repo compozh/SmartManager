@@ -34,7 +34,7 @@
           <fa-icon icon="user-tag"/>
         </v-list-item-icon>
         <v-list-item-title class="body-1">
-          {{ $t('user.useDelegatedRights') }}
+          {{ $t('user.delegatedRights') }}
         </v-list-item-title>
       </v-list-item>
 
