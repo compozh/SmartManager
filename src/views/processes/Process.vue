@@ -89,6 +89,7 @@ export default {
               text: result.errorMessage,
               color: 'warning'
             })
+            return
           }
         }
         await this.startProcess(result.submission)

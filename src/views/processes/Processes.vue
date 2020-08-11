@@ -1,14 +1,14 @@
 <template>
   <v-row no-gutters>
     <v-col>
-      <div class="page-header">
-        <span class="page-title">
+      <div class="processes-page-header">
+        <span class="processes-page-title">
           {{ this.$t('processes.runProcess') }}
         </span>
          <v-text-field v-model="search"
                        append-icon="fa-search"
                        :label="this.$t('search')"
-                       class="data-search"
+                       class="processes-search"
                        single-line
                        hide-details/>
       </div>
@@ -17,7 +17,7 @@
                     :items-per-page="10"
                     :search="search"
                     @click:row="onRowClick"
-                    class="elevation-1 body-2"
+                    class="elevation-1 body-2 processes-table"
                     style="font-size: 10px"
                     :footer-props="{itemsPerPageText: $t('processes.perPage')}"/>
     </v-col>
@@ -56,26 +56,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
-  .page-header {
+  .processes-page-header {
     display: flex;
     justify-content: space-between;
     height: 60px;
     align-items: center;
     padding: 0 10px;
   }
-  .page-title {
+  .processes-page-title {
     font-size: 28px;
   }
-  .data-search {
+  .processes-search {
     margin: 0;
     padding: 0;
     max-width: 500px;
   }
 
-  .v-data-table >>> .v-data-footer {
+  .processes-table >>> .v-data-footer {
     font-size: 14px;
+  }
+
+  .processes-table tr {
+    cursor: pointer !important;
   }
 
 </style>
