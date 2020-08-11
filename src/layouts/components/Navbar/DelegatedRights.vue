@@ -23,6 +23,7 @@
       </v-text-field>
       <v-data-table dense
                     height="400px"
+                    fixed-header
                     disable-pagination
                     hide-default-footer
                     :headers="headers"
@@ -104,6 +105,9 @@ export default {
         { text: this.$t('user.isActive'), align: 'center', value: 'IsActive', filterable: false }
       ]
     }
+  },
+  beforeDestroy () {
+    this.search = ''
   }
 }
 </script>
