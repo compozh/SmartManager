@@ -8,10 +8,12 @@ export const date = {
     }
   },
   computed: {
+    currentDate: () => moment(),
     parseDateTime: () => dateTime => moment(dateTime, 'DD.MM.YYYY HH:mm'),
     parseVersionDate: () => dateTime => moment(dateTime, 'YYYY-MM-DD HH:mm:ss'),
     parsePickerDate: () => date => moment(date, 'YYYY-MM-DD'),
     defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
+    delegationDateEnd: () => moment().add(1, 'months'),
     formatPickerDate: () => date => date.format('YYYY-MM-DD'),
     formatDate () {
       return date => this.parsePickerDate(date).format('DD.MM.YYYY')
