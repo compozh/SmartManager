@@ -38,11 +38,11 @@
         </v-list-item-title>
       </v-list-item>
 
-      <v-list-item @click="() => {}" disabled>
+      <v-list-item @click="delegateDialog = true">
         <v-list-item-icon class="mr-2 align-center">
           <fa-icon icon="user-plus"/>
         </v-list-item-icon>
-        <v-list-item-title class="body-1 grey--text">
+        <v-list-item-title class="body-1">
           {{ $t('user.delegateRights') }}
         </v-list-item-title>
       </v-list-item>
@@ -58,22 +58,26 @@
 
     </v-list>
     <delegated-rights v-model="rightsDialog"/>
+    <delegate-user v-model="delegateDialog"/>
   </v-menu>
 </template>
 
 <script>
 import DelegatedRights from './DelegatedRights'
+import DelegateUser from './DelegateUser'
 import { userInfo, userMethods } from '@/mixins/users'
 
 export default {
   name: 'UserPanel',
   mixins: [userInfo, userMethods],
   components: {
-    DelegatedRights
+    DelegatedRights,
+    DelegateUser
   },
   data: () => ({
     menu: false,
-    rightsDialog: false
+    rightsDialog: false,
+    delegateDialog: false
   })
 }
 </script>
