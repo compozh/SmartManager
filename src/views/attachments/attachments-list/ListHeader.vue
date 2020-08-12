@@ -23,7 +23,13 @@
                  outlined x-small
                  color="success"
                  class="add-btn mr-5">
-            <v-icon>mdi-home</v-icon>
+            <span v-if="reference.Icon"
+                  v-html="reference.Icon"
+                  class="linkIcon"/>
+            <fa-icon v-else
+                     icon="question-circle"
+                     size="lg"
+                     color="#343434"/>
             {{ reference.Name }}
           </v-btn>
         </template>
@@ -103,6 +109,13 @@ export default {
     height: 100%;
     width: 100%;
     font-size: 12px;
+  }
+
+  .linkIcon {
+    height: 19px;
+    width: 19px;
+    color: #343434;
+    margin: 1px 1px 0 0;
   }
 
 </style>
