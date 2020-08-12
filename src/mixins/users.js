@@ -49,7 +49,9 @@ export const users = {
     }
   },
   created () {
-    this.getUsers()
+    if (!this.users || !this.users.length) {
+      this.getUsers()
+    }
   },
   methods: {
     async getUsers () {

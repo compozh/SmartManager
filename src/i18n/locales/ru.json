@@ -9,7 +9,8 @@
     "login": "Логин",
     "isActive": "Текущие права",
     "delegatedRights": "Делегированные права",
-    "delegateRights": "Делегировать права"
+    "delegateRights": "Делегировать права",
+    "usersPerPage": "Пользователей на странице"
   },
   "navBar":{
     "expandSideBar": "Развернуть боковую панель",
@@ -23,9 +24,12 @@
   },
   "pickers": {
     "date": "Дата",
+    "dateFrom": "Дата с",
+    "dateTo": "Дата по",
     "time": "Время",
     "locale": "ru",
-    "timeFormat": "24hr"
+    "timeFormat": "24hr",
+    "maxDate": "Максимальный срок"
   },
   "folders": {
     "active": "Активные",
@@ -174,7 +178,8 @@
     "zoomReset": "Восстановить масштаб",
     "toggleFullscreen": "Переключить полноэкранный режим",
     "change": "Изменить",
-    "apply": "Применить"
+    "apply": "Применить",
+    "delegate": "Делегировать"
   },
   "icons": {
     "priority": "Приоритет",
@@ -358,7 +363,10 @@
     "updateNoteFail": "Не удалось изменить замечание",
     "updateNoteError": "Ошибка изменения замечания",
     "deleteNoteFail": "Не удалось удалить замечание",
-    "deleteNoteError": "Ошибка при удалении замечания"
+    "deleteNoteError": "Ошибка при удалении замечания",
+    "addDelegateSuccess": "Ваши права успешно делегированы другому пользователю",
+    "addDelegateFail": "Не удалось делегировать права другому пользователю",
+    "addDelegateError": "Ошибка при попытке делегирования прав"
   },
   "workflow": {
     "businessProcess": "Бизнес-процесс",

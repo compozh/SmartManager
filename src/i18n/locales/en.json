@@ -9,7 +9,8 @@
     "login": "Login",
     "isActive": "Current rights",
     "delegatedRights": "Delegated rights",
-    "delegateRights": "Delegate rights"
+    "delegateRights": "Delegate rights",
+    "usersPerPage": "Users per page"
   },
   "navBar":{
     "expandSideBar": "Expand sidebar",
@@ -23,9 +24,12 @@
   },
   "pickers": {
     "date": "Date",
+    "dateFrom": "Date from",
+    "dateTo": "Date to",
     "time": "Time",
     "locale": "en",
-    "timeFormat": "ampm"
+    "timeFormat": "ampm",
+    "maxDate": "Maximum term"
   },
   "folders": {
     "active": "Active",
@@ -174,7 +178,8 @@
     "zoomReset": "Reset zoom",
     "toggleFullscreen": "Toggle full screen mode",
     "change": "Change",
-    "apply": "Apply"
+    "apply": "Apply",
+    "delegate": "Delegate"
   },
   "icons": {
     "priority": "Priority",
@@ -358,7 +363,10 @@
     "updateNoteFail": "Note updating failed",
     "updateNoteError": "Note updating error",
     "deleteNoteFail": "Note deleting failed",
-    "deleteNoteError": "Note deleting error"
+    "deleteNoteError": "Note deleting error",
+    "addDelegateSuccess": "Your rights have been successfully delegated to another user",
+    "addDelegateFail": "Failed to delegate rights to another user",
+    "addDelegateError": "Error while trying to delegate rights"
   },
   "workflow": {
     "businessProcess": "Business process",

@@ -1,6 +1,8 @@
 <template>
   <v-dialog :value="value" :width="width"
-            @input="$emit('input', $event)">
+            @input="$emit('input', $event)"
+            @click:outside="persistent ? '' : $emit('close')"
+            persistent="persistent">
     <v-card class="d-flex flex-column flex-grow-1 overflow-hidden">
       <v-card-title class="subtitle-1 white--text blue-grey py-1">
         {{ title || 'Dialog title' }}
@@ -28,6 +30,7 @@ export default {
   name: 'DialogCard',
   props: {
     value: Boolean,
+    persistent: Boolean,
     width: String,
     title: String
   }

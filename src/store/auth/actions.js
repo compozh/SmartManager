@@ -60,6 +60,35 @@ export default {
       commit('STOP_PRELOADER', 'applyDelegatedRights')
     }
   },
+  async addDelegateUser ({ commit }, params) {
+    try {
+      commit('START_PRELOADER', 'addDelegateUser')
+      const result = await auth.addDelegateUser(params)
+      if (result.success) {
+        commit('SET_NOTIFY', {
+          text: i18n.t('notify.addDelegateSuccess'),
+          color: 'success'
+        })
+        return true
+      } else {
+        commit('STOP_PRELOADER', 'addDelegateUser')
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || i18n.t('notify.addDelegateFail'),
+          color: 'warning'
+        })
+      }
+    } catch (error) {
+      if (error) {
+        console.error(error.message || error)
+      }
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.addDelegateError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'addDelegateUser')
+    }
+  },
   userIsLoggedIn ({ state, commit }) {
     // If user is already logged in notify and exit
     if (state.user) {
