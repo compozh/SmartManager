@@ -6,7 +6,7 @@
 
     <div v-if="activeZone.group === 'processes' && $route.query.id"
          class="subtitle-1 font-weight-medium text-capitalize">
-      <fa-icon icon="chevron-right" size="xs" class="ml-3 mr-2 grey--text"/>
+      <fa-icon icon="chevron-right" size="xs" class="mx-3 grey--text"/>
       <span class="subtitle-1 font-weight-medium text-capitalize">
         {{ $route.query.name }}
       </span>
@@ -14,7 +14,7 @@
 
     <div v-else-if="activeZone.group !== 'processes' && activeFolder.Name"
          class="d-flex align-center">
-      <fa-icon icon="chevron-right" size="xs" class="ml-3 mr-2 grey--text"/>
+      <fa-icon icon="chevron-right" size="xs" class="mx-3 grey--text"/>
       <span @click="$route.name === 'task-details' ? $router.push('/tasks/' + activeFolderId) : null"
             class="subtitle-1 font-weight-medium"
             :class="{'blue-grey--text': $route.name === 'task-details'}"
