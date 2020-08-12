@@ -365,7 +365,7 @@ export const attachments = {
       if (this.attachmentTypes.length === 1) {
         this.attachmentType = this.attachmentTypes[0].CODE
       }
-      attachment.type = this.attachmentType
+      attachment.type = this.currentType.CODE
       // Returns results list
       const results = await this.$store.dispatch('addAttachments', {
         attachments: [attachment],
