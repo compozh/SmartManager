@@ -49,7 +49,7 @@ export default {
       fullscreen: true,
       keyboard: true,
       background: false,
-      url: 'data-source'
+      url: 'src'
     }
   }),
   methods: {
