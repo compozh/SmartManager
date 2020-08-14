@@ -1,7 +1,9 @@
 <template>
   <div class="d-flex flex-column fill-height" style="background: #fbfbfb;">
     <div class="d-flex flex-column flex-grow-1 justify-space-between">
-      <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3" style="flex-basis: 0;">
+      <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3"
+                         :options="scrollOptions"
+                         style="flex-basis: 0;">
         <div v-if="comments.length" class="d-flex flex-column">
           <comments-log :comments="comments"/>
         </div>
@@ -48,7 +50,11 @@ export default {
   },
   data: () => ({
     comment: '',
-    loading: false
+    loading: false,
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
+    }
   }),
   computed: {
     comments () {

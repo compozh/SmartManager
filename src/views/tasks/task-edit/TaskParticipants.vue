@@ -3,12 +3,13 @@
     <div v-for="(participants, index) in taskParticipants"
          :key="index" style="flex: 1"
          :class="{'mr-10': index === 'coExecutors'}">
-      <div :class="['d-flex', {'justify-end': index === 'observers'}]">
+      <div v-if="!readonly || participants.users.length"
+           :class="['d-flex', {'justify-end': index === 'observers'}]">
         <fa-icon :icon="participants.icon" class="mr-3" size="lg"/>
         <span class="font-weight-light text-truncate">
         {{ participants.title.toUpperCase() }}</span>
       </div>
-      <div class="py-2 d-flex flex-wrap">
+      <div v-if="!readonly || participants.users.length" class="py-2 d-flex flex-wrap">
         <v-autocomplete :value="participants.users"
                         @change="changeParticipants($event, participants.group)"
                         :items="users"
@@ -21,6 +22,7 @@
                         hide-no-data
                         item-text="fio"
                         :reverse="index === 'observers'"
+                        :readonly="readonly"
                         return-object>
 
           <template #selection="data">
@@ -71,7 +73,8 @@ export default {
     prop: 'participants'
   },
   props: {
-    participants: Array
+    participants: Array,
+    readonly: Boolean
   },
   data: () => ({
     needInitValue: true,

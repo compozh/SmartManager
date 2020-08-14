@@ -13,5 +13,11 @@ export default {
   },
   SET_TASK_CHANGED (state, isChanged) {
     state.taskChanged = isChanged
+  },
+  SET_TASK_IS_READ (state, { taskId, folderId }) {
+    const task = state.tasks[folderId].find(task => task.id === taskId)
+    if (task && !task.isRead) {
+      task.isRead = 1
+    }
   }
 }

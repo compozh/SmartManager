@@ -86,7 +86,9 @@
              class="subtitle-1 font-weight-light grey--text text--lighten-1">
           {{ $t('notes.noNotes') }}</div>
         <v-divider/>
-        <perfect-scrollbar class="flex-grow-1 pt-2" style="height: 200px;">
+        <perfect-scrollbar class="flex-grow-1 pt-2"
+                           style="height: 200px;"
+                           :options="scrollOptions">
           {{ currentNote.Text }}
         </perfect-scrollbar>
       </template>
@@ -156,7 +158,11 @@ export default {
     currentNote: {},
     noteInputDialog: false,
     note: {},
-    deleteConfirmDialog: false
+    deleteConfirmDialog: false,
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
+    }
   }),
   computed: {
     sortedNotes () {

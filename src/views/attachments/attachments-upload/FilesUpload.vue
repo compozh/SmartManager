@@ -1,5 +1,5 @@
 <template>
-  <perfect-scrollbar>
+  <perfect-scrollbar :options="scrollOptions">
     <file-upload ref="upload"
                  :inputId="String(inputId)"
                  class="upload-action"
@@ -68,6 +68,10 @@ export default {
       minSize: 512000,
       maxActive: 1,
       maxRetries: 10
+    },
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
     }
   }),
   computed: {

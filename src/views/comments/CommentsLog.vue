@@ -2,20 +2,19 @@
   <div class="d-flex flex-column mb-10">
     <div v-for="(comment, index) in comments"
          :key="index">
-      <template v-if="comments[index - 1]">
-        <div v-if="!isSameDay(comment.date, comments[index - 1].date)"
-             class="d-flex align-center mt-5">
+      <template v-if="index === 0 || !isSameDay(comment.date, comments[index - 1].date)">
+        <div class="d-flex align-center mb-5"
+             :class="{'mt-5': index !== 0}">
           <v-divider class="mx-3"/>
           <span class="border-light px-3 caption grey--text">{{ toDate(comment.date) }}</span>
           <v-divider class="mx-3"/>
         </div>
-        <div v-if="!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)" class="mt-5"></div>
       </template>
 
       <div :class="['d-flex', 'align-center', 'mt-1', { 'flex-row-reverse': currentUserIsSender(comment.userId) }]">
         <template v-if="comments[index - 1]">
-          <template v-if="(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)
-                           || !isSameDay(comment.date, comments[index - 1].date))">
+          <template v-if="comment.userId !== comments[index - 1].userId
+                           || !isSameDay(comment.date, comments[index - 1].date)">
             <v-avatar class="mx-4 my-n2" color="grey lighten-1" size="40px"
                       :class="currentUserIsSender(comment.userId) ? 'ml-4' : 'mr-4'">
               <fa-icon v-if="!comment.userPhoto" icon="user" inverse/>
@@ -32,15 +31,25 @@
         </template>
 
         <template v-if="comments[index - 1]">
-          <div v-if="!(!hasSentPreviousMsg(comment.userId, comments[index - 1].userId)
-                       || !isSameDay(comment.date, comments[index - 1].date))"
-               class="mx-9"></div>
+          <div v-if="!(comment.userId !== comments[index - 1].userId
+                     || !isSameDay(comment.date, comments[index - 1].date))"
+               class="mx-9"/>
         </template>
 
-        <div class="msg border-light px-2 py-1 d-flex align-center">
+        <div class="msg border-light px-2 py-1 d-flex flex-column">
+          <div class="d-flex justify-space-between caption">
+            <span v-if="index === 0 || !isSameDay(comment.date, comments[index - 1].date)
+                        || comment.userId !== comments[index - 1].userId"
+                  :class="{'order-1': currentUserIsSender(comment.userId)}">
+              {{ comment.user }}
+            </span>
+            <span class="font-weight-light grey--text text--lighten-2"
+                  :class="currentUserIsSender(comment.userId) ? 'mr-5' : 'ml-5'">{{ comment.date.split(' ').pop() }}</span>
+          </div>
           <span class="body-2 font-weight-light text--secondary"
                 :class="{'text-truncate': !comment.text.includes(' ')}">
             {{ comment.text }}</span>
+          <span class="msgTime"></span>
         </div>
       </div>
     </div>
@@ -59,9 +68,6 @@ export default {
     currentUserIsSender () {
       const currentUserId = this.$store.getters.userId
       return userId => userId === currentUserId
-    },
-    hasSentPreviousMsg () {
-      return (lastSender, currentSender) => lastSender === currentSender
     }
   },
   methods: {
@@ -89,8 +95,14 @@ export default {
   }
 
   .msg {
+    position: relative;
     max-width: 70%;
     background: white;
+  }
+
+  .msgTime {
+    position: absolute;
+    bottom: 10px;
   }
 
 </style>

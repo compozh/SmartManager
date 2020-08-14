@@ -91,7 +91,7 @@ export const folders = {
           (activeZone === 'cases' ? 'all' : 'active')
       },
       set (folderId) {
-        /* TODO: fix define activeFolderId value when folder page apdate
+        /* TODO: fix define activeFolderId value when folder page update
             in TheSideBar -> v-list-item-group v-model="activeFolderId" */
         this.$store.commit('SET_ACTIVE_FOLDER', { folderId })
       }
