@@ -50,7 +50,7 @@
         </div>
         <v-divider/>
         <!-- LEFT SCROLL AREA -->
-        <perfect-scrollbar class="pa-5">
+        <perfect-scrollbar class="pa-5" :options="scrollOptions">
           <div class="d-flex flex-column">
             <!-- CASE NAME -->
             <editable-text-field v-model="caseData.name"
@@ -115,7 +115,7 @@
           </v-tab>
         </v-tabs>
         <v-divider/>
-        <perfect-scrollbar class="fill-height">
+        <perfect-scrollbar class="fill-height" :options="scrollOptions">
           <v-tabs-items v-model="tab" class="fill-height">
             <v-tab-item v-for="(tab, idx) in visibleTabs"
                         :key="idx" class="fill-height">
@@ -172,6 +172,10 @@ export default {
       comment: '',
       folder: null,
       participants: []
+    },
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
     }
   }),
   computed: {

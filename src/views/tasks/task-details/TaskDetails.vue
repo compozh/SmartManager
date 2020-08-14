@@ -57,7 +57,7 @@
         </div>
         <v-divider/>
         <!-- LEFT SCROLL AREA -->
-        <perfect-scrollbar class="pa-5">
+        <perfect-scrollbar class="pa-5" :options="scrollOptions">
           <div class="d-flex align-baseline">
             <!-- TASK NAME -->
             <editable-text-field v-model="taskData.name"
@@ -96,6 +96,7 @@
           <v-divider/>
           <!-- TASK PARTICIPANTS -->
             <task-participants v-model="taskData.participants"
+                               :readonly="externalTaskCamunda"
                                class="mb-10"/>
           <!-- TASK ATTACHMENTS -->
           <template v-if="externalTaskCamunda">
@@ -153,7 +154,7 @@
           </v-tab>
         </v-tabs>
         <v-divider/>
-        <perfect-scrollbar class="fill-height">
+        <perfect-scrollbar class="fill-height" :options="scrollOptions">
           <v-tabs-items v-model="tab" class="fill-height">
             <v-tab-item v-for="(tab, idx) in visibleTabs"
                         :key="idx" class="fill-height">
@@ -215,6 +216,10 @@ export default {
       name: '',
       description: '',
       participants: []
+    },
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
     }
   }),
   computed: {
@@ -292,7 +297,11 @@ export default {
     this.setTaskEditable(!this.externalTaskCamunda)
     this.initTaskData()
     this.tab = this.attachments.length ? 0 : 1
-    this.task.isRead || this.getFolders()
+    this.$store.commit('SET_TASK_IS_READ', {
+      taskId: this.taskId,
+      folderId: this.activeFolderId
+    })
+    !this.task.isRead || this.getFolders()
   },
   methods: {
     initTaskData () {

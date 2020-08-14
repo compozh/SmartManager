@@ -30,7 +30,7 @@
         </v-simple-table>
     </files-upload>
 
-    <perfect-scrollbar v-show="attachmentList.length">
+    <perfect-scrollbar v-show="attachmentList.length" :options="scrollOptions">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
         <v-chip v-for="(attachment, idx) in attachmentList"
                 :key="idx" small
@@ -192,7 +192,11 @@ export default {
     uploadType: 'attachments',
     versionParams: null,
     versionLoaders: [],
-    downLoaders: []
+    downLoaders: [],
+    scrollOptions: {
+      wheelSpeed: 0.3,
+      suppressScrollX: true
+    }
   }),
   computed: {
     headers () {
