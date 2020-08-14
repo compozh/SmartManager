@@ -62,10 +62,9 @@ export default {
     loading: Boolean
   },
   computed: {
-    // TODO: adjust validation
     required () {
       return [
-        v => !!v || this.$t('validate.required')
+        v => v.userId || this.$t('validate.required')
       ]
     }
   }
