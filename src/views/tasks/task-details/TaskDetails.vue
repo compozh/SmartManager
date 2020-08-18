@@ -235,6 +235,7 @@ export default {
         settings: this.form.SETTINGS,
         properties: this.form.PROPERTIES,
         isSystem: this.form.ISSYSTEM,
+        customStyles: this.form.customStyles,
         name: this.form.NAME
       }
     },
