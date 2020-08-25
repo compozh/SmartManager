@@ -64,7 +64,7 @@ export default {
   computed: {
     required () {
       return [
-        v => v.userId || this.$t('validate.required')
+        v => !!v.userId || this.$t('validate.required')
       ]
     }
   }
