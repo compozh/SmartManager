@@ -9,7 +9,7 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@it-enterprise/formio": "^2.0.8",
+    "@it-enterprise/formio": "^2.0.9-alpha.1",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^2.0.6",
     "@it-enterprise/localization": "^1.0.10",
