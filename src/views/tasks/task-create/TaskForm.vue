@@ -225,6 +225,7 @@ export default {
     },
     resetForm () {
       this.$refs.form.reset()
+      this.$refs.form.resetValidation()
       this.description = ''
       this.priority = false
       this.myControl = false
