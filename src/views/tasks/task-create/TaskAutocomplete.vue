@@ -73,7 +73,8 @@ export default {
 
 <style scoped>
 
-  .v-input >>> .v-input__slot {
+  .v-input >>> .v-input__slot,
+  .v-input >>> .v-text-field__details {
     padding: 0 !important;
   }
 
