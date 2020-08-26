@@ -64,7 +64,7 @@ export default {
   computed: {
     required () {
       return [
-        v => !!v.userId || this.$t('validate.required')
+        v => !!(v && v.userId) || this.$t('validate.required')
       ]
     }
   }
@@ -73,7 +73,8 @@ export default {
 
 <style scoped>
 
-  .v-input >>> .v-input__slot {
+  .v-input >>> .v-input__slot,
+  .v-input >>> .v-text-field__details {
     padding: 0 !important;
   }
 
