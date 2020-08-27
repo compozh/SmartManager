@@ -302,7 +302,7 @@ export const attachments = {
   }),
   computed: {
     attachments () {
-      return this.$store.getters.attachments
+      return this.$store.state.attachments.attachments || []
     },
     activeAttachment () {
       return this.$store.state.attachments.activeAttachment || {}
