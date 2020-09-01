@@ -33,7 +33,7 @@
 
       <v-btn @click="formSubmit"
              color="primary"
-             :loading="startProcessLoading"
+             :disabled="startProcessLoading"
              class="start-process-button">
         {{$t('processes.startProcess')}}
       </v-btn>
@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     async formSubmit () {
+      this.startProcessLoading = true
       const form = this.$refs.form
       try {
         const result = await form.submit()
@@ -93,6 +94,7 @@ export default {
           }
         }
         await this.startProcess(result.submission)
+        this.startProcessLoading = false
         await this.$router.push('/')
       } catch (e) {
         if (e.length) {

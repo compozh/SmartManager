@@ -47,6 +47,7 @@
           <!-- TASK MANAGEMENT BUTTONS -->
           <task-buttons v-if="!taskChanged"
                         class="py-3"
+                        :buttonIsBlocked="buttonIsBlocked"
                         @changeStage="changeStage"
                         @changeStatus="changeStatus"
                         @executeExternalTask="executeExternalTask"/>
@@ -220,7 +221,8 @@ export default {
     scrollOptions: {
       wheelSpeed: 0.3,
       suppressScrollX: true
-    }
+    },
+    buttonIsBlocked: false
   }),
   computed: {
     form () {
@@ -362,6 +364,7 @@ export default {
       }
     },
     async changeStatus (status, CompleteParams) {
+      this.buttonIsBlocked = true
       const statusParams = {
         type: 'TASK',
         id: this.taskId,
@@ -370,12 +373,14 @@ export default {
         CompleteParams
       }
       const success = await this.$store.dispatch('changeTaskStatus', statusParams)
+      this.buttonIsBlocked = false
       if (success) {
         await this.$router.push('/')
       }
     },
-    changeStage (moveMode, comment) {
-      this.$store.dispatch('changeStage', {
+    async changeStage (moveMode, comment) {
+      this.buttonIsBlocked = true
+      await this.$store.dispatch('changeStage', {
         id: this.taskId,
         arso: this.task.arso,
         keyValue: this.task.keyValue,
@@ -384,15 +389,18 @@ export default {
         comment,
         processParams: null
       })
+      this.buttonIsBlocked = false
     },
     async executeExternalTask () {
+      this.buttonIsBlocked = true
       const status = '+' // Task complete
       const result = await this.formSubmit()
       if (result.success) {
         const completeParams = result.submission
           ? JSON.stringify(result.submission) : null
-        this.changeStatus(status, completeParams)
+        await this.changeStatus(status, completeParams)
       }
+      this.buttonIsBlocked = false
     },
     toggleTaskPin () {
       this.$store.dispatch('taskPin', {

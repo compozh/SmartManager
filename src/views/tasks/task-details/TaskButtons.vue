@@ -6,6 +6,7 @@
         <v-btn v-on="$vuetify.breakpoint.mdAndDown ? on : ''"
                color="success"
                small depressed
+               :disabled="buttonIsBlocked"
                @click="$emit('changeStatus', '+')">
           <fa-icon icon="check" size="lg"/>
           <span class="ml-2 hidden-md-and-down">{{ $t('buttons.execute') }}</span>
@@ -15,11 +16,12 @@
     </v-tooltip>
 
     <!-- EXECUTE BUTTON FOR EXTERNAL-->
-    <v-tooltip top v-if="externalTaskCamunda">
+    <v-tooltip top v-if="externalTaskCamunda && taskInProgress">
       <template #activator="{ on }">
         <v-btn v-on="$vuetify.breakpoint.mdAndDown ? on : ''"
                color="success"
                small depressed
+               :disabled="buttonIsBlocked"
                @click="$emit('executeExternalTask')">
           <fa-icon icon="check" size="lg"/>
           <span class="ml-2 hidden-md-and-down">{{ buttonExecute }}</span>
@@ -109,6 +111,9 @@ import { tasks } from '@/mixins/units'
 export default {
   name: 'TaskButtons',
   mixins: [tasks],
+  props: {
+    buttonIsBlocked: Boolean
+  },
   computed: {
     // BUTTONS FROM BACKEND FOR TASK TYPE "AGREE" and "WF"
     buttonExecute () {
