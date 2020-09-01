@@ -27,7 +27,7 @@
             <v-text-field v-on="on"
                           :value="formatDate(dateEnd)"
                           :label="$t('pickers.dateTo')"
-                          :disabled="maxDate"
+                          :disabled="noTimeLimit"
                           readonly hide-details
                           outlined dense
                           class="body-2"/>
@@ -39,7 +39,8 @@
         </v-menu>
       </v-card-text>
       <v-card-actions class="pa-6 pt-0">
-        <v-checkbox v-model="maxDate" :label="$t('pickers.maxDate')"></v-checkbox>
+        <v-checkbox v-model="noTimeLimit"
+                    :label="$t('pickers.noTimeLimit')"/>
         <v-spacer/>
         <outlined-btn x-small
                       color="red darken-4"
@@ -75,7 +76,7 @@ export default {
   data: () => ({
     dateFrom: '',
     dateTo: '',
-    maxDate: false
+    noTimeLimit: false
   }),
   computed: {
     dateStart: {
@@ -107,7 +108,7 @@ export default {
       const result = await this.$store.dispatch('addDelegateUser', {
         userId: this.userId,
         dateFrom: this.formatDateTime(this.dateFrom),
-        dateTo: this.maxDate
+        dateTo: this.noTimeLimit
           ? '9999-12-31 23:59'
           : this.formatDateTime(this.dateTo)
       })
