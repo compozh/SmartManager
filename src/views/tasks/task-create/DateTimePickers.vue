@@ -1,19 +1,19 @@
 <template>
-  <div class="d-flex" :value="dateplan">
+  <div class="d-flex">
     <!-- DATE PICKER -->
-    <v-menu ref="datePicker"
-            v-model="dateMenu"
+    <v-menu v-model="dateMenu"
             :close-on-content-click="false"
-            :return-value.sync="date"
             transition="scale-transition"
             offset-y
             min-width="200px">
-      <template v-slot:activator="{ on }">
-        <v-text-field :value="formatDate(date)"
+      <template #activator="{ on }">
+        <v-text-field v-on="on"
+                      :value="formatDate(date)"
                       :label="$t('pickers.date')"
+                      :hint="checkDate"
+                      persistent-hint
                       tabindex="3"
-                      solo flat dense
-                      v-on="on"
+                      readonly solo flat dense
                       style="width: 155px !important;">
           <template #prepend-inner>
             <v-btn v-on="on"
@@ -26,77 +26,88 @@
           </template>
         </v-text-field>
       </template>
-      <v-date-picker :value="date"
-                     @input="inputDate"
+      <v-date-picker v-model="date"
                      first-day-of-week="1"
                      no-title
                      scrollable>
-        <v-spacer></v-spacer>
-        <v-btn text color="primary"
-               @click="dateMenu = false">
-          {{ $t('buttons.cancel') }}</v-btn>
-        <v-btn text color="primary"
-               @click="$refs.datePicker.save(date)">OK</v-btn>
       </v-date-picker>
     </v-menu>
     <v-spacer></v-spacer>
+    <!-- TIME PICKER -->
     <v-menu ref="timePicker"
             v-model="timeMenu"
             :close-on-content-click="false"
             :nudge-right="40"
-            :return-value.sync="time"
             transition="scale-transition"
             offset-y
             max-width="250px"
             min-width="250px">
-      <template v-slot:activator="{ on }">
-        <v-text-field v-model="time"
+      <template #activator="{ on }">
+        <v-text-field v-on="on"
+                      :value="time"
                       :label="$t('pickers.time')"
                       tabindex="4"
-                      solo flat dense
-                      v-on="on"
-                      style="width: 80px !important;">
-        </v-text-field>
+                      readonly solo flat dense
+                      style="width: 80px !important;"/>
       </template>
-      <v-time-picker v-model="time"
+      <v-time-picker v-if="timeMenu"
+                     v-model="time"
                      no-title full-width
                      scrollable
                      format="24hr"
-                    @click:minute="$refs.timePicker.save(time)"
-      ></v-time-picker>
+                     @click:minute="$refs.timePicker.save(time)"/>
     </v-menu>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
 import { date } from '@/mixins/dateTime'
 
 export default {
   name: 'DateTimePickers',
   mixins: [date],
-  data () {
-    return {
-      time: '12:00',
-      date: moment().add(1, 'days').format('YYYY-MM-DD'),
-      dateMenu: false,
-      timeMenu: false
-    }
+  model: {
+    prop: 'datePlan'
   },
+  props: {
+    datePlan: String
+  },
+  data: () => ({
+    dateMenu: false,
+    timeMenu: false
+  }),
   computed: {
-    dateplan () {
-      return `${this.date} ${this.time}`
-    }
-  },
-  methods: {
-    inputDate (value) {
-      this.date = value
-      this.$emit('inputDate', this.dateplan)
+    dateTime () {
+      return this.parseVersionDate(this.datePlan)
+    },
+    date: {
+      get () {
+        return this.datePlan.split(' ').shift() || this.defaultPlanDate
+      },
+      set (date) {
+        this.$emit('input', `${date} ${this.time}`)
+      }
+    },
+    time: {
+      get () {
+        return this.datePlan.split(' ').pop() || '12:00'
+      },
+      set (time) {
+        this.$emit('input', `${this.date} ${time}`)
+      }
+    },
+    checkDate () {
+      return this.compareCurrentDate(this.date) ? '' : this.$t('pickers.pastDate')
     }
   }
 }
 </script>
 
 <style scoped>
+
+  .v-text-field >>> .v-messages__message {
+    padding-left: 2.5em;
+    color: blue;
+  }
 
 </style>
