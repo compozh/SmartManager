@@ -4,8 +4,7 @@
     <v-menu v-model="dateMenu"
             :close-on-content-click="false"
             transition="scale-transition"
-            offset-y
-            min-width="200px">
+            offset-y min-width="200px">
       <template #activator="{ on }">
         <v-text-field v-on="on"
                       :value="formatDate(date)"
