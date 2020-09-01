@@ -29,7 +29,8 @@
     "time": "Час",
     "locale": "uk",
     "timeFormat": "24hr",
-    "maxDate": "Максимальний термін"
+    "maxDate": "Максимальний термін",
+    "pastDate": "Минула дата!"
   },
   "folders": {
     "active": "Активні",

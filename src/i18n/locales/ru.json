@@ -29,7 +29,8 @@
     "time": "Время",
     "locale": "ru",
     "timeFormat": "24hr",
-    "maxDate": "Максимальный срок"
+    "maxDate": "Максимальный срок",
+    "pastDate": "Прошедшая дата!"
   },
   "folders": {
     "active": "Активные",
