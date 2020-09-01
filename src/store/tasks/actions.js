@@ -226,18 +226,16 @@ export default {
       commit('STOP_PRELOADER', 'createTask')
     }
   },
-  async updateTask ({ dispatch, commit }, taskData) {
+  async updateTask ({ dispatch, commit, rootState }, taskData) {
     const taskDataJson = JSON.stringify(taskData)
     commit('START_PRELOADER', 'updateTask')
     try {
       const response = await api.updateTaskInGql(taskDataJson)
       const result = response.data.smtasksMutation.taskUpdating
       if (result.success) {
+        // Without success notify - PLD 787658 from 31.07.20
+        dispatch('getTasks', rootState.folders.activeFolderId)
         await dispatch('getTaskDetails', { taskId: taskData.id })
-        commit('SET_NOTIFY', {
-          text: result.successMessages || i18n.t('notify.updateSuccess'),
-          color: 'success'
-        })
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessages || i18n.t('notify.updateFail'),
