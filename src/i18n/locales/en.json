@@ -30,6 +30,7 @@
     "locale": "en",
     "timeFormat": "ampm",
     "maxDate": "Maximum term",
+    "noTimeLimit": "No time limit",
     "pastDate": "Past date!"
   },
   "folders": {
