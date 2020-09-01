@@ -62,12 +62,15 @@
           <span v-if="taskInProgress"
                 class="body-2 mb-0"
                 :class="overdue ? 'red--text' : 'blue--text'">
-            {{ task.dateplan }}</span>
-            <span v-if="taskIsDone" class="body-2 mb-0 green--text">
+            {{ task.dateplan.includes('01.01.0001')
+                ? $t('pickers.noTimeLimit')
+                : task.dateplan }}
+          </span>
+          <span v-if="taskIsDone" class="body-2 mb-0 green--text">
             <fa-icon class="green--text" icon="check"/>
             {{ task.dateFact }}
           </span>
-            <span v-if="taskIsDone && overdue" class="body-2 mb-0 red--text">
+          <span v-if="taskIsDone && overdue" class="body-2 mb-0 red--text">
             <fa-icon class="red--text" icon="clock"/>
             {{ overdue }} {{$t('tasks.days')}}
           </span>
