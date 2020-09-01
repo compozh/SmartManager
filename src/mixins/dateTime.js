@@ -23,6 +23,9 @@ export const date = {
     },
     formatVersionDate () {
       return dateTime => this.parseVersionDate(dateTime).format('DD.MM.YYYY HH:mm')
+    },
+    compareCurrentDate () {
+      return date => this.parsePickerDate(date).isSameOrAfter(this.currentDate, 'day')
     }
   },
   methods: {
