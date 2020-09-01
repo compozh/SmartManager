@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="attachmentList.length || attachmentTypes.length">
     <list-header v-model="attachmentsListMode"
                  :businessObject="businessObject"
                  :uploadType.sync="uploadType"/>

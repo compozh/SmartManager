@@ -29,7 +29,9 @@
     "time": "Час",
     "locale": "uk",
     "timeFormat": "24hr",
-    "maxDate": "Максимальний термін"
+    "maxDate": "Максимальний термін",
+    "noTimeLimit": "Без терміну",
+    "pastDate": "Минула дата!"
   },
   "folders": {
     "active": "Активні",
@@ -403,7 +405,11 @@
   "pdfViewer": {
     "PdfViewer": "PDF переглядач",
     "Cancel": "Скасувати",
-    "Download file": "Останні коментарі",
+    "Clear": "Очистити",
+    "Create": "Створити",
+    "Close": "Закрити",
+    "Draw Signature": "Підпис",
+    "Download file": "Завантажити файл",
     "Download": "Завантажити",
     "Enter Password": "Введіть пароль",
     "File Corrupted": "Файл пошкоджений",
@@ -461,6 +467,11 @@
     "Pan text": "Інструмент« Рука »",
     "Print text": "Друк",
     "Search text": "Пошук",
-    "Annotation Edit text": "Редагувати анотацію"
+    "Annotation Edit text": "Редагувати анотацію",
+    "Add Comments": "Додати коментар",
+    "Add Shapes": "Додати фігури",
+    "Calibrate": "Відкалібрувати",
+    "Free Text": "Вільний текст",
+    "Add Stamp": "Додати штамп"
   }
 }

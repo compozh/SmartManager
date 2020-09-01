@@ -29,7 +29,9 @@
     "time": "Время",
     "locale": "ru",
     "timeFormat": "24hr",
-    "maxDate": "Максимальный срок"
+    "maxDate": "Максимальный срок",
+    "noTimeLimit": "Без срока",
+    "pastDate": "Прошедшая дата!"
   },
   "folders": {
     "active": "Активные",
@@ -402,6 +404,10 @@
   "pdfViewer": {
     "PdfViewer": "PDF просмотрщик",
     "Cancel": "Отменить",
+    "Clear": "Очистить",
+    "Create": "Создать",
+    "Close": "Закрыть",
+    "Draw Signature": "Подпись",
     "Download file": "Загрузить файл",
     "Download": "Загрузить",
     "Enter Password": "Введите пароль",
@@ -460,6 +466,11 @@
     "Pan text": "Инструмент «Рука»",
     "Print text": "Печать",
     "Search text": "Поиск",
-    "Annotation Edit text": "Редактировать аннотацию"
+    "Annotation Edit text": "Редактировать аннотацию",
+    "Add Comments": "Добавить комментарий",
+    "Add Shapes": "Добавить фигуры",
+    "Calibrate": "Откалибровать",
+    "Free Text": "Свободный текст",
+    "Add Stamp": "Добавить штамп"
   }
 }

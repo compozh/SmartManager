@@ -1,5 +1,5 @@
 import moment from 'moment'
-
+// Attachments sorting by adding date
 export default {
   attachments: state => {
     if (state.attachments) {

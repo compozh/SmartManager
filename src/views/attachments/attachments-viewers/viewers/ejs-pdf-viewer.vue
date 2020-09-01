@@ -63,7 +63,7 @@ export default {
     },
     documentLoad () {
       const viewer = this.$refs.pdfviewer.ej2Instances
-      viewer.toolbar.showToolbarItem(['OpenOption'], false)
+      viewer.toolbar.showToolbarItem(['OpenOption', 'DownloadOption', 'SubmitForm'], false)
     }
   }
 }
