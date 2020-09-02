@@ -9,10 +9,11 @@
         {{ $t('tasks.deadline') }}:</div>
       <div class="d-flex">
         <!-- DATE PICKER MENU -->
-        <v-menu :close-on-content-click="false"
+        <v-menu v-model="dateMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y min-width="200px">
-          <template v-slot:activator="{ on }">
+          <template #activator="{ on }">
             <v-text-field id="date"
                           v-on="taskEditable ? on : ''"
                           :value="textFieldDate"
@@ -24,27 +25,34 @@
                          :readonly="!taskEditable"
                          @change="dateTimeChanged"
                          first-day-of-week="1"
+                         no-title
                          scrollable>
             <v-spacer/>
           </v-date-picker>
         </v-menu>
 
         <!-- TIME PICKER MENU -->
-        <v-menu :close-on-content-click="false"
+        <v-menu ref="timePicker"
+                v-model="timeMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y>
-          <template v-slot:activator="{ on }">
+          <template #activator="{ on }">
             <v-text-field id="time"
+                          v-show="!datePlan.includes('01.01.0001')"
                           v-on="taskEditable ? on : ''"
                           :value="time"
                           readonly hide-details
                           solo flat dense
                           class="body-2 red--text text--darken-4"/>
           </template>
-          <v-time-picker v-model="time"
+          <v-time-picker v-if="timeMenu"
+                         v-model="time"
                          :readonly="!taskEditable"
                          @change="dateTimeChanged"
-                         scrollable format="24hr"/>
+                         no-title
+                         scrollable format="24hr"
+                         @click:minute="$refs.timePicker.save(time)"/>
         </v-menu>
       </div>
     </div>
@@ -64,6 +72,8 @@ export default {
     datePlan: String
   },
   data: () => ({
+    dateMenu: false,
+    timeMenu: false,
     inputDate: '',
     inputTime: ''
   }),
@@ -72,11 +82,15 @@ export default {
       return this.parseDateTime(this.datePlan)
     },
     textFieldDate () {
-      return this.datePlan.split(' ').shift()
+      return this.datePlan.includes('01.01.0001')
+        ? this.$t('pickers.noTimeLimit')
+        : this.datePlan.split(' ').shift()
     },
     date: {
       get () {
-        return this.formatPickerDate(this.dateTime)
+        return this.datePlan.includes('01.01.0001')
+          ? this.defaultPlanDate
+          : this.formatPickerDate(this.dateTime)
       },
       set (val) {
         const date = this.formatDate(val)

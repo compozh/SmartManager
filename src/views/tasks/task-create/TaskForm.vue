@@ -4,7 +4,7 @@
           :close-on-click="false"
           transition="slide-y-transition">
 
-      <template v-slot:activator="{ on }">
+      <template #activator="{ on }">
         <slot name="activator" :on="on">
           <v-btn id="addBtn"
                  fixed
@@ -49,6 +49,7 @@
 
         <perfect-scrollbar class="px-5">
           <div class="d-flex align-start">
+            <!-- PERFORMER SELECTION -->
             <task-autocomplete v-model="performer"
                                @remove="performer = {}"
                                :items="users"
@@ -68,8 +69,8 @@
                   <fa-icon v-else icon="user" type="fal" size="lg"/>
                 </v-btn>
               </template>
-            </task-autocomplete >
-            <date-time-pickers class="ml-auto"/>
+            </task-autocomplete>
+            <date-time-pickers v-model="datePlan" class="ml-auto"/>
           </div>
 
           <quill-editor v-model="description"
@@ -141,13 +142,13 @@ export default {
   data () {
     return {
       form: false,
+      dateMenu: false,
+      timeMenu: false,
       valid: '',
       name: '',
-      planDate: {
-        value: ''
-      },
+      datePlan: '',
       description: '',
-      performer: [],
+      performer: {},
       attachments: [],
       priority: false,
       myControl: false,
@@ -195,6 +196,7 @@ export default {
         name: this.name,
         performerId: this.performer.userId,
         descript: this.htmlDescription,
+        dateplan: this.datePlan,
         needApprove: this.needApprove,
         needComm: this.needComment,
         priority: Number(this.priority),
@@ -220,17 +222,18 @@ export default {
       this.resetForm()
       this.form = false
     },
-    validate () {
-      this.$refs.form.validate()
-    },
     resetForm () {
-      this.$refs.form.reset()
-      this.$refs.form.resetValidation()
+      // "this.$refs.form.reset" don't use
+      // because date default values will cleared
+      this.name = ''
+      this.performer = {}
       this.description = ''
+      this.datePlan = this.defaultPlanDate + ' 12:00'
       this.priority = false
       this.myControl = false
       this.needApprove = false
       this.needComment = false
+      this.$refs.form.resetValidation()
     }
   }
 }
@@ -254,8 +257,7 @@ export default {
     width: 600px;
   }
 
-  .v-input >>> label[for="taskName"],
-  .v-input >>> input {
+  .v-input >>> label[for="taskName"] {
     color: #9e9e9e !important;
     font-size: 18px;
   }

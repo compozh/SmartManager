@@ -29,7 +29,9 @@
     "time": "Time",
     "locale": "en",
     "timeFormat": "ampm",
-    "maxDate": "Maximum term"
+    "maxDate": "Maximum term",
+    "noTimeLimit": "No time limit",
+    "pastDate": "Past date!"
   },
   "folders": {
     "active": "Active",

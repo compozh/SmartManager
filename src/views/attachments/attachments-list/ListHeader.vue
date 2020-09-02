@@ -2,7 +2,8 @@
   <div class="d-flex align-center font-weight-light">
     <fa-icon icon="paperclip" class="mr-3" size="lg"/>
     <span class="mr-3">{{ listTitle.toUpperCase() }}</span>
-    <v-btn outlined x-small
+    <v-btn v-if="attachmentTypes.length"
+           outlined x-small
            color="primary"
            class="add-btn pa-0 mr-5"
            @click="newAttachment()">
