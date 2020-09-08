@@ -328,6 +328,7 @@ export default {
         const form = this.$refs.form
         const taskId = this.taskId
         try {
+          this.$store.commit('START_PRELOADER', 'formSubmit')
           const result = await form.submit({ taskId })
           if (result) {
             if (result.success && result.successMessage) {
@@ -358,6 +359,8 @@ export default {
               color: 'error'
             })
           }
+        } finally {
+          this.$store.commit('STOP_PRELOADER', 'formSubmit')
         }
       } else {
         return { success: true }
@@ -395,7 +398,7 @@ export default {
       this.buttonIsBlocked = true
       const status = '+' // Task complete
       const result = await this.formSubmit()
-      if (result.success) {
+      if (result && result.success) {
         const completeParams = result.submission
           ? JSON.stringify(result.submission) : null
         await this.changeStatus(status, completeParams)

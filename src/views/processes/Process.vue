@@ -78,6 +78,7 @@ export default {
       this.startProcessLoading = true
       const form = this.$refs.form
       try {
+        this.$store.commit('START_PRELOADER', 'formSubmit')
         const result = await form.submit()
         if (result) {
           if (result.success && result.successMessage) {
@@ -94,7 +95,6 @@ export default {
           }
         }
         await this.startProcess(result.submission)
-        this.startProcessLoading = false
         await this.$router.push('/')
       } catch (e) {
         if (e.length) {
@@ -111,6 +111,9 @@ export default {
             color: 'error'
           })
         }
+      } finally {
+        this.startProcessLoading = false
+        this.$store.commit('STOP_PRELOADER', 'formSubmit')
       }
     },
     async startProcess (data) {

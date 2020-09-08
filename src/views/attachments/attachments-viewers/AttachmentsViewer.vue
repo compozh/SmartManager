@@ -17,6 +17,7 @@
 
 <script>
 import PdfViewer from './viewers/ejs-pdf-viewer'
+import SpreadsheetViewer from './viewers/SpreadsheetViewer'
 import ImgViewer from './viewers/ImageViewer'
 import TxtViewer from './viewers/TextViewer'
 import NotSupport from './NotSupport'
@@ -27,6 +28,7 @@ import { tasks, attachments } from '@/mixins/units'
 export default {
   components: {
     PdfViewer,
+    SpreadsheetViewer,
     ImgViewer,
     TxtViewer,
     NotSupport,
@@ -43,14 +45,19 @@ export default {
       const text = ['txt', 'log', 'ini', 'dll', 'bat', 'config', 'json']
       return ext => text.some(i => i === ext)
     },
+    isExcel () {
+      const text = ['xls', 'xlsx', 'csv']
+      return ext => text.some(i => i === ext)
+    },
     viewer () {
       const url = this.url
       if (url) {
         const ext = url.split('.').pop().toLowerCase()
         switch (true) {
-          case ext === 'pdf': return 'pdf-viewer'
+          case ext === 'pdf': return 'spreadsheet-viewer'
           case this.isText(ext): return 'txt-viewer'
           case this.isImage(ext): return 'img-viewer'
+          case this.isExcel(ext): return 'spreadsheet-viewer'
           default: return 'not-support'
         }
       }
