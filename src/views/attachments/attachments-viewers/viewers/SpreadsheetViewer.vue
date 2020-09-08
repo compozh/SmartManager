@@ -15,7 +15,7 @@ Vue.use(SpreadsheetPlugin)
 export default {
   name: 'SpreadsheetViewer',
   props: {
-    srcUrl: String
+    url: String
   },
   data: () => ({
     openUrl: window.appConfig.GrapgQlUrl + 'api/spreadsheet/open'
@@ -30,7 +30,7 @@ export default {
   methods: {
     created () {
       const spreadsheet = this.$refs.spreadsheet
-      spreadsheet.open({ file: this.srcUrl })
+      spreadsheet.open({ file: this.url })
     }
   }
 }

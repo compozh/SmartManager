@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column fill-height">
-    <component v-if="viewer" :is="viewer" :url="url" :srcUrl="srcUrl"/>
+    <component v-if="viewer" :is="viewer" :url="url"/>
 
     <no-data v-else-if="activeAttachment.reason" class="fill-height">
         <span class="headline font-weight-light grey--text">
@@ -66,11 +66,6 @@ export default {
     url () {
       return this.currentVersion.Details
         ? this.currentVersion.Details.FileUrl
-        : ''
-    },
-    srcUrl () {
-      return this.currentVersion.Details
-        ? this.currentVersion.Details.SrcUrl
         : ''
     }
   }
