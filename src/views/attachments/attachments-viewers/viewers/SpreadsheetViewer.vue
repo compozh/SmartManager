@@ -21,7 +21,7 @@ export default {
     openUrl: window.appConfig.GrapgQlUrl + 'api/spreadsheet/open'
   }),
   watch: {
-    srcUrl (url, oldUrl) {
+    url (url, oldUrl) {
       if (url !== oldUrl) {
         this.$refs.spreadsheet.open({ file: url })
       }

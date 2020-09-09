@@ -15,6 +15,9 @@ export const date = {
     defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
     delegationDateEnd: () => moment().add(1, 'months'),
     formatPickerDate: () => date => date.format('YYYY-MM-DD'),
+    defaultDateTime () {
+      return this.defaultPlanDate + ' 12:00'
+    },
     formatDate () {
       return date => this.parsePickerDate(date).format('DD.MM.YYYY')
     },
