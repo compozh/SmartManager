@@ -146,7 +146,7 @@
         </perfect-scrollbar>
       </SplitArea>
       <!-- RIGHT CONTENT AREA -->
-      <SplitArea class="d-flex flex-column" :size="45">
+      <SplitArea class="d-flex flex-column overflow-hidden" :size="45">
         <v-tabs v-model="tab" grow
                 height="75px" class="flex-grow-0">
           <v-tab v-for="(tab, idx) in visibleTabs" :key="idx">
@@ -155,14 +155,12 @@
           </v-tab>
         </v-tabs>
         <v-divider/>
-        <perfect-scrollbar class="fill-height" :options="scrollOptions">
-          <v-tabs-items v-model="tab" class="fill-height">
-            <v-tab-item v-for="(tab, idx) in visibleTabs"
-                        :key="idx" class="fill-height">
-              <component :is="tab.component"/>
-            </v-tab-item>
-          </v-tabs-items>
-        </perfect-scrollbar>
+        <v-tabs-items v-model="tab" class="fill-height">
+          <v-tab-item v-for="(tab, idx) in visibleTabs"
+                      :key="idx" class="fill-height">
+            <component :is="tab.component"/>
+          </v-tab-item>
+        </v-tabs-items>
       </SplitArea>
     </Split>
   </v-dialog>
