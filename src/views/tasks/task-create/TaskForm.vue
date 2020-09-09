@@ -196,7 +196,7 @@ export default {
         name: this.name,
         performerId: this.performer.userId,
         descript: this.htmlDescription,
-        dateplan: this.datePlan,
+        dateplan: this.datePlan || this.defaultDateTime,
         needApprove: this.needApprove,
         needComm: this.needComment,
         priority: Number(this.priority),
@@ -228,7 +228,7 @@ export default {
       this.name = ''
       this.performer = {}
       this.description = ''
-      this.datePlan = this.defaultPlanDate + ' 12:00'
+      this.datePlan = this.defaultDateTime
       this.priority = false
       this.myControl = false
       this.needApprove = false
