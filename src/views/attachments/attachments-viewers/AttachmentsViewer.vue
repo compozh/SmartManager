@@ -54,7 +54,7 @@ export default {
       if (url) {
         const ext = url.split('.').pop().toLowerCase()
         switch (true) {
-          case ext === 'pdf': return 'spreadsheet-viewer'
+          case ext === 'pdf': return 'pdf-viewer'
           case this.isText(ext): return 'txt-viewer'
           case this.isImage(ext): return 'img-viewer'
           case this.isExcel(ext): return 'spreadsheet-viewer'
