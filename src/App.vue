@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import PreLoader from '@/components/PreLoader'
-import RefreshLoader from '@/components/RefreshLoader'
+const PreLoader = () => import('@/components/PreLoader')
+const RefreshLoader = () => import('@/components/RefreshLoader')
 
 export default {
   name: 'App',

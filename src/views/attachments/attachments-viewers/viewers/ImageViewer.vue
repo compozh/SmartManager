@@ -13,12 +13,13 @@
     </viewer>
   </div>
 </template>
-<script>
 
-import 'viewerjs/dist/viewer.css'
-import Viewer from 'v-viewer/src/component.vue'
-import ViewerP from 'v-viewer'
+<script>
 import Vue from 'vue'
+import ViewerP from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
+const Viewer = () => import('v-viewer/src/component.vue')
 
 Vue.use(ViewerP, {
   defaultOptions: {

@@ -167,24 +167,25 @@
 </template>
 
 <script>
-import IconTooltipBtn from '@/components/IconTooltipBtn'
-import SaveButton from '@/components/SaveButton'
-import TaskPerformer from '@/views/tasks/task-edit/TaskPerformer'
-import TaskDatePlan from '@/views/tasks/task-edit/TaskDatePlan'
-import TaskButtons from '@/views/tasks/task-details/TaskButtons'
-import TaskMenu from '@/views/tasks/task-details/TaskMenu'
-import EditableTextField from '@/components/EditableTextField'
-import TaskDescription from '@/views/tasks/task-edit/TaskDescription'
-import TaskLabels from '@/views/tasks/task-details/TaskLabels'
-import TaskParticipants from '@/views/tasks/task-edit/TaskParticipants'
-import TaskForm from '@/views/tasks/task-create/TaskForm'
-import TaskCards from '@/views/tasks/task-list/TaskCards'
-import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
-import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
-import Comments from '@/views/comments/Comments'
-import Diagram from '@/views/diagram/Diagram'
 import { zones, folders, tasks, attachments } from '@/mixins/units'
 import { date } from '@/mixins/dateTime'
+
+const IconTooltipBtn = () => import('@/components/IconTooltipBtn')
+const SaveButton = () => import('@/components/SaveButton')
+const TaskPerformer = () => import('@/views/tasks/task-edit/TaskPerformer')
+const TaskDatePlan = () => import('@/views/tasks/task-edit/TaskDatePlan')
+const TaskButtons = () => import('@/views/tasks/task-details/TaskButtons')
+const TaskMenu = () => import('@/views/tasks/task-details/TaskMenu')
+const EditableTextField = () => import('@/components/EditableTextField')
+const TaskDescription = () => import('@/views/tasks/task-edit/TaskDescription')
+const TaskLabels = () => import('@/views/tasks/task-details/TaskLabels')
+const TaskParticipants = () => import('@/views/tasks/task-edit/TaskParticipants')
+const TaskForm = () => import('@/views/tasks/task-create/TaskForm')
+const TaskCards = () => import('@/views/tasks/task-list/TaskCards')
+const AttachmentsList = () => import('@/views/attachments/attachments-list/AttachmentsList')
+const AttachmentsViewer = () => import('@/views/attachments/attachments-viewers/AttachmentsViewer')
+const Comments = () => import('@/views/comments/Comments')
+const Diagram = () => import('@/views/diagram/Diagram')
 
 export default {
   name: 'TaskDetails',

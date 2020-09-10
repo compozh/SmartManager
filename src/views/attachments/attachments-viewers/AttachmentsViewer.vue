@@ -16,14 +16,15 @@
 </template>
 
 <script>
-import PdfViewer from './viewers/ejs-pdf-viewer'
-import SpreadsheetViewer from './viewers/SpreadsheetViewer'
-import ImgViewer from './viewers/ImageViewer'
-import TxtViewer from './viewers/TextViewer'
-import NotSupport from './NotSupport'
-import AttachmentPreLoader from './AttachmentPreLoader'
-import NoData from './NoData'
 import { tasks, attachments } from '@/mixins/units'
+
+const PdfViewer = () => import('./viewers/ejs-pdf-viewer')
+const SpreadsheetViewer = () => import('./viewers/SpreadsheetViewer')
+const ImgViewer = () => import('./viewers/ImageViewer')
+const TxtViewer = () => import('./viewers/TextViewer')
+const NotSupport = () => import('./NotSupport')
+const AttachmentPreLoader = () => import('./AttachmentPreLoader')
+const NoData = () => import('./NoData')
 
 export default {
   components: {

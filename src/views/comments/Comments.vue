@@ -40,8 +40,9 @@
 </template>
 
 <script>
-import CommentsLog from './CommentsLog.vue'
 import { common, tasks, cases } from '@/mixins/units'
+
+const CommentsLog = () => import('./CommentsLog.vue')
 
 export default {
   mixins: [common, tasks, cases],

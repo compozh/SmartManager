@@ -72,6 +72,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'TaskTable',
   props: {

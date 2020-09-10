@@ -17,9 +17,10 @@
 </template>
 
 <script>
-import SearchField from '@/components/SearchField'
-import CaseCards from './CaseCards'
 import { zones, folders, cases } from '@/mixins/units'
+
+const SearchField = () => import('@/components/SearchField')
+const CaseCards = () => import('./CaseCards')
 
 export default {
   name: 'CaseList',

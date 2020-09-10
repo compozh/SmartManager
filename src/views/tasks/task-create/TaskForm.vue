@@ -122,13 +122,14 @@
 </template>
 
 <script>
-import TaskAutocomplete from './TaskAutocomplete'
-import DateTimePickers from './DateTimePickers'
-import IconTooltipBtn from '@/components/IconTooltipBtn'
 import { date } from '@/mixins/dateTime'
 import { users } from '@/mixins/users'
 import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.snow.css'
+
+const TaskAutocomplete = () => import('./TaskAutocomplete')
+const DateTimePickers = () => import('./DateTimePickers')
+const IconTooltipBtn = () => import('@/components/IconTooltipBtn')
 
 export default {
   name: 'TaskForm',
