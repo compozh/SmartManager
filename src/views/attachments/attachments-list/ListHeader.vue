@@ -57,8 +57,9 @@
 </template>
 
 <script>
-import TypesList from '../attachments-upload/TypesList'
 import { tasks, attachments } from '@/mixins/units'
+
+const TypesList = () => import('../attachments-upload/TypesList')
 
 export default {
   name: 'ListHeader',

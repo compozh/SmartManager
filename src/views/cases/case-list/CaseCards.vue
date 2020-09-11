@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import CaseListItem from '@/views/cases/case-list/CaseListItem.vue'
+const CaseListItem = () => import('@/views/cases/case-list/CaseListItem.vue')
 
 export default {
   name: 'CaseCards',

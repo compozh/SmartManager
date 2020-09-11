@@ -163,12 +163,13 @@
 </template>
 
 <script>
-import ListHeader from './ListHeader'
-import VersionList from './VersionList'
-import DeleteConfirm from '../../../components/DeleteConfirm'
-import FilesUpload from '@/views/attachments/attachments-upload/FilesUpload'
-import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, cases, attachments } from '@/mixins/units'
+
+const ListHeader = () => import('./ListHeader')
+const VersionList = () => import('./VersionList')
+const DeleteConfirm = () => import('@/components/DeleteConfirm')
+const FilesUpload = () => import('@/views/attachments/attachments-upload/FilesUpload')
+const FileTypeIcon = () => import('@/components/FileTypeIcon')
 
 export default {
   name: 'AttachmentsList',

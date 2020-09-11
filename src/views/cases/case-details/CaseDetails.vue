@@ -129,20 +129,21 @@
 </template>
 
 <script>
-import SaveButton from '@/components/SaveButton'
-import EditableTextField from '@/components/EditableTextField'
-import CaseCreator from '@/views/cases/case-details/CaseCreator'
-import CaseStatus from '@/views/cases/case-details/CaseStatus'
-import CaseFolder from '@/views/cases/case-edit/CaseFolder'
-import CaseParticipants from '@/views/cases/case-edit/CaseParticipants'
-import TaskForm from '@/views/tasks/task-create/TaskForm'
-import TaskCards from '@/views/tasks/task-list/TaskCards'
-import AttachmentsList from '@/views/attachments/attachments-list/AttachmentsList'
-import AttachmentsViewer from '@/views/attachments/attachments-viewers/AttachmentsViewer'
-import Comments from '@/views/comments/Comments'
-import CaseDate from '@/views/cases/case-edit/CaseDate'
 import { date } from '@/mixins/dateTime'
 import { zones, folders, cases, attachments } from '@/mixins/units'
+
+const SaveButton = () => import('@/components/SaveButton')
+const EditableTextField = () => import('@/components/EditableTextField')
+const CaseCreator = () => import('@/views/cases/case-details/CaseCreator')
+const CaseStatus = () => import('@/views/cases/case-details/CaseStatus')
+const CaseFolder = () => import('@/views/cases/case-edit/CaseFolder')
+const CaseParticipants = () => import('@/views/cases/case-edit/CaseParticipants')
+const TaskForm = () => import('@/views/tasks/task-create/TaskForm')
+const TaskCards = () => import('@/views/tasks/task-list/TaskCards')
+const AttachmentsList = () => import('@/views/attachments/attachments-list/AttachmentsList')
+const AttachmentsViewer = () => import('@/views/attachments/attachments-viewers/AttachmentsViewer')
+const Comments = () => import('@/views/comments/Comments')
+const CaseDate = () => import('@/views/cases/case-edit/CaseDate')
 
 export default {
   name: 'CaseDetails',

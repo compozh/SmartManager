@@ -131,11 +131,12 @@
 </template>
 
 <script>
-import DialogCard from '@/components/DialogCard'
-import DeleteConfirm from '@/components/DeleteConfirm'
-import OutlinedBtn from '@/components/OutlinedBtn'
-import NoteInput from './NoteInput'
 import { date } from '@/mixins/dateTime'
+
+const DialogCard = () => import('@/components/DialogCard')
+const DeleteConfirm = () => import('@/components/DeleteConfirm')
+const OutlinedBtn = () => import('@/components/OutlinedBtn')
+const NoteInput = () => import('./NoteInput')
 
 export default {
   name: 'Notes',

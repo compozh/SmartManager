@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import DialogCard from '@/components/DialogCard'
+const DialogCard = () => import('@/components/DialogCard')
 
 export default {
   name: 'TypesList',

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import IconTooltipBtn from '@/components/IconTooltipBtn'
+const IconTooltipBtn = () => import('@/components/IconTooltipBtn')
 
 export default {
   name: 'CaseFolder',

@@ -22,8 +22,9 @@
 </template>
 
 <script>
-import fileUpload from 'vue-upload-with-credential'
 import { common, tasks, attachments } from '@/mixins/units'
+
+const fileUpload = () => import('vue-upload-with-credential')
 
 export default {
   name: 'FilesUpload',

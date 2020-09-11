@@ -139,11 +139,12 @@
 </template>
 
 <script>
-import FileTypeIcon from '@/components/FileTypeIcon'
-import DeleteConfirm from '@/components/DeleteConfirm'
-import Notes from './Notes'
 import { attachments } from '@/mixins/units'
 import { date } from '@/mixins/dateTime'
+
+const FileTypeIcon = () => import('@/components/FileTypeIcon')
+const DeleteConfirm = () => import('@/components/DeleteConfirm')
+const Notes = () => import('./Notes')
 
 export default {
   name: 'VersionList',

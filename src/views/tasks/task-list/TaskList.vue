@@ -28,12 +28,13 @@
 </template>
 
 <script>
-import SearchField from '@/components/SearchField'
-import TaskCards from './TaskCards'
-import TaskTable from './TaskTable'
-import TaskForm from '@/views/tasks/task-create/TaskForm'
 import { zones, folders, tasks } from '@/mixins/units'
 import signalR from '@/mixins/signalR'
+
+const SearchField = () => import('@/components/SearchField')
+const TaskCards = () => import('./TaskCards')
+const TaskTable = () => import('./TaskTable')
+const TaskForm = () => import('@/views/tasks/task-create/TaskForm')
 
 export default {
   name: 'TaskList',
