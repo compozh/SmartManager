@@ -9,10 +9,11 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@it-enterprise/formio": "^2.0.14",
+    "@it-enterprise/formio": "^2.0.15",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^2.0.6",
     "@it-enterprise/localization": "^1.0.10",
+    "@syncfusion/ej2-vue-documenteditor": "^18.2.57",
     "@syncfusion/ej2-vue-pdfviewer": "^18.2.45",
     "@syncfusion/ej2-vue-spreadsheet": "^18.2.56",
     "apollo-cache-inmemory": "^1.6.5",
