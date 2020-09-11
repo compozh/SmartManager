@@ -18,8 +18,9 @@
 <script>
 import { tasks, attachments } from '@/mixins/units'
 
-const PdfViewer = () => import('./viewers/ejs-pdf-viewer')
+const PdfViewer = () => import('./viewers/PdfViewer')
 const SpreadsheetViewer = () => import('./viewers/SpreadsheetViewer')
+const DocumentEditor = () => import('./viewers/DocumentEditor')
 const ImgViewer = () => import('./viewers/ImageViewer')
 const TxtViewer = () => import('./viewers/TextViewer')
 const NotSupport = () => import('./NotSupport')
@@ -30,6 +31,7 @@ export default {
   components: {
     PdfViewer,
     SpreadsheetViewer,
+    DocumentEditor,
     ImgViewer,
     TxtViewer,
     NotSupport,
@@ -50,6 +52,10 @@ export default {
       const text = ['xls', 'xlsx', 'csv']
       return ext => text.some(i => i === ext)
     },
+    isWord () {
+      const text = ['doc', 'docx', 'rtf']
+      return ext => text.some(i => i === ext)
+    },
     viewer () {
       const url = this.url
       if (url) {
@@ -59,6 +65,7 @@ export default {
           case this.isText(ext): return 'txt-viewer'
           case this.isImage(ext): return 'img-viewer'
           case this.isExcel(ext): return 'spreadsheet-viewer'
+          case this.isWord(ext): return 'document-editor'
           default: return 'not-support'
         }
       }
