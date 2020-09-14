@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-center font-weight-light">
-    <fa-icon icon="paperclip" class="mr-3" size="lg"/>
+    <fa-icon :icon="businessObject ? 'cubes' : 'paperclip'" class="mr-3" size="lg"/>
     <span class="mr-3">{{ listTitle.toUpperCase() }}</span>
     <v-btn v-if="attachmentTypes.length"
            outlined x-small

@@ -62,6 +62,7 @@ import { faReply } from '@fortawesome/pro-regular-svg-icons/faReply'
 import { faTags } from '@fortawesome/pro-regular-svg-icons/faTags'
 import { faQuestionCircle } from '@fortawesome/pro-regular-svg-icons/faQuestionCircle'
 import { faUserPlus } from '@fortawesome/pro-regular-svg-icons/faUserPlus'
+import { faCubes } from '@fortawesome/pro-regular-svg-icons/faCubes'
 import { faStar as falStar } from '@fortawesome/pro-light-svg-icons/faStar'
 import { faFilesMedical as falFilesMedical } from '@fortawesome/pro-light-svg-icons/faFilesMedical'
 import { faArrowAltDown as falArrowAltDown } from '@fortawesome/pro-light-svg-icons/faArrowAltDown'
@@ -143,6 +144,7 @@ library.add(
   faTags,
   faQuestionCircle,
   faUserPlus,
+  faCubes,
   falStar,
   falFilesMedical,
   falArrowAltDown,
