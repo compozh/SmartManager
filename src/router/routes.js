@@ -12,6 +12,11 @@ export default [
         redirect: '/tasks/active'
       },
       {
+        path: '/tasks',
+        name: 'task-list',
+        redirect: '/tasks/active'
+      },
+      {
         path: '/tasks/:folderId',
         name: 'task-list',
         component: () => import('@/views/tasks/task-list/TaskList.vue'),
@@ -30,6 +35,11 @@ export default [
         path: '/task/:taskId',
         name: 'task',
         redirect: '/tasks/active/:taskId'
+      },
+      {
+        path: '/cases',
+        name: 'case-list',
+        redirect: '/cases/all'
       },
       {
         path: '/cases/:folderId',
