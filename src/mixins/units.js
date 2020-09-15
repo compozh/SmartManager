@@ -430,6 +430,11 @@ export const processes = {
       return this.$store.state.processes
         ? this.$store.state.processes.processes
         : []
+    },
+    process () {
+      return this.processes.find(process => {
+        return process.procDefId === this.$route.params.processId
+      })
     }
   },
   methods: {
