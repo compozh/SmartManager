@@ -33,7 +33,7 @@ export const zones = {
           title: this.$t('sideBar.tasksBtn'),
           folders: [...this.taskFolders, ...this.filters],
           group: 'tasks',
-          link: '/tasks/active',
+          link: '/tasks',
           icon: 'tasks'
         },
         {
@@ -41,7 +41,7 @@ export const zones = {
           title: this.$t('sideBar.casesBtn'),
           folders: this.caseFolders,
           group: 'cases',
-          link: '/cases/all',
+          link: '/cases',
           icon: 'suitcase'
         },
         {
