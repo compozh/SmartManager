@@ -1,5 +1,9 @@
 <template>
-  <ejs-documenteditorcontainer ref='documenteditor' :serviceUrl='serviceUrl' style='height:800px;' id='container' :enableToolbar='true'></ejs-documenteditorcontainer>
+  <ejs-documenteditorcontainer id='container'
+                               :serviceUrl='serviceUrl'
+                               height="100%"
+                               style='flex: 1 1 0;'
+                               :enableToolbar='true'/>
 </template>
 
 <script>
