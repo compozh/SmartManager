@@ -9,10 +9,11 @@
              class="come-back-button mr-3">
         <fa-icon icon="arrow-alt-left" size="lg" class="primary--text"/>
       </v-btn>
-      <p>{{error}}</p>
+      <p>{{ error }}</p>
     </div>
 
-    <div class="formio-container" v-if="form.name">
+    <div v-if="form.name"
+         class="formio-container">
 
       <div class="process-header">
         <v-btn @click="onComeBackBtn"
@@ -22,7 +23,7 @@
           <fa-icon class="primary--text" icon="arrow-alt-left" size="lg"/>
         </v-btn>
         <v-card-title>
-          {{form.name}}
+          {{ form.name }}
         </v-card-title>
       </div>
       <v-card class="card-form-component">
@@ -35,7 +36,7 @@
              color="primary"
              :disabled="startProcessLoading"
              class="start-process-button">
-        {{$t('processes.startProcess')}}
+        {{ $t('processes.startProcess') }}
       </v-btn>
     </div>
   </div>
@@ -44,7 +45,7 @@
 <script>
 
 export default {
-  name: 'process-form-page',
+  name: 'Process',
   data: () => ({
     formCode: '',
     form: {},
@@ -52,7 +53,7 @@ export default {
     error: null
   }),
   async created () {
-    this.processDefinitionId = this.$route.query.id
+    this.processDefinitionId = this.$route.params.processId
     if (this.processDefinitionId) {
       const result = await this.$store.dispatch(
         'getFormDefinition', this.processDefinitionId)
@@ -165,7 +166,7 @@ export default {
       return 'STRING'
     },
     onComeBackBtn () {
-      this.$router.push({ path: 'processes' })
+      this.$router.push({ name: 'processes' })
     }
   }
 }
