@@ -33,7 +33,7 @@ export const zones = {
           title: this.$t('sideBar.tasksBtn'),
           folders: [...this.taskFolders, ...this.filters],
           group: 'tasks',
-          link: '/tasks/active',
+          link: '/tasks',
           icon: 'tasks'
         },
         {
@@ -41,7 +41,7 @@ export const zones = {
           title: this.$t('sideBar.casesBtn'),
           folders: this.caseFolders,
           group: 'cases',
-          link: '/cases/all',
+          link: '/cases',
           icon: 'suitcase'
         },
         {
@@ -430,6 +430,11 @@ export const processes = {
       return this.$store.state.processes
         ? this.$store.state.processes.processes
         : []
+    },
+    process () {
+      return this.processes.find(process => {
+        return process.procDefId === this.$route.params.processId
+      })
     }
   },
   methods: {

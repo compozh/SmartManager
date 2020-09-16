@@ -1,6 +1,7 @@
 <template>
   <v-row no-gutters>
-    <v-col>
+    <router-view v-if="$route.name === 'process'" class="flex-grow-1"/>
+    <v-col v-else>
       <div class="processes-page-header">
         <span class="processes-page-title">
           {{ this.$t('processes.runProcess') }}
@@ -28,7 +29,7 @@
 import { zones, processes } from '@/mixins/units'
 
 export default {
-  name: 'TaskList',
+  name: 'Processes',
   mixins: [zones, processes],
   data () {
     return {
@@ -45,9 +46,9 @@ export default {
   methods: {
     onRowClick (item) {
       this.$router.push({
-        path: 'process',
-        query: {
-          id: item.procDefId,
+        name: 'process',
+        params: {
+          processId: item.procDefId,
           name: item.name
         }
       })

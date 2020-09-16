@@ -4,12 +4,11 @@
       {{ activeZone.title }}
     </div>
 
-    <div v-if="activeZone.group === 'processes' && $route.query.id"
-         class="subtitle-1 font-weight-medium text-capitalize">
+    <div v-if="activeZone.group === 'processes' && this.process"
+         class="subtitle-1 font-weight-medium">
       <fa-icon icon="chevron-right" size="xs" class="mx-3 grey--text"/>
-      <span class="subtitle-1 font-weight-medium text-capitalize">
-        {{ $route.query.name }}
-      </span>
+      <span class="subtitle-1 font-weight-medium"
+      >{{ this.process.name | capitalize }}</span>
     </div>
 
     <div v-else-if="activeZone.group !== 'processes' && activeFolder.Name"
@@ -26,19 +25,16 @@
 </template>
 
 <script>
-import { zones, folders } from '@/mixins/units'
+import { zones, folders, processes } from '@/mixins/units'
 
 export default {
   name: 'Breadcrumb',
-  mixins: [zones, folders],
-  computed: {
-    items () {
-      return []
+  mixins: [zones, folders, processes],
+  filters: {
+    capitalize (value) {
+      if (!value) { return '' }
+      return value.charAt(0).toUpperCase() + value.slice(1)
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -12,6 +12,11 @@ export default [
         redirect: '/tasks/active'
       },
       {
+        path: '/tasks',
+        name: 'task-list',
+        redirect: '/tasks/active'
+      },
+      {
         path: '/tasks/:folderId',
         name: 'task-list',
         component: () => import('@/views/tasks/task-list/TaskList.vue'),
@@ -22,7 +27,10 @@ export default [
           {
             path: ':taskId',
             name: 'task-details',
-            component: () => import('@/views/tasks/task-details/TaskDetails.vue')
+            component: () => import('@/views/tasks/task-details/TaskDetails.vue'),
+            meta: {
+              zone: 'tasks'
+            }
           }
         ]
       },
@@ -30,6 +38,11 @@ export default [
         path: '/task/:taskId',
         name: 'task',
         redirect: '/tasks/active/:taskId'
+      },
+      {
+        path: '/cases',
+        name: 'case-list',
+        redirect: '/cases/all'
       },
       {
         path: '/cases/:folderId',
@@ -42,7 +55,10 @@ export default [
           {
             path: ':caseId',
             name: 'case-details',
-            component: () => import('@/views/cases/case-details/CaseDetails.vue')
+            component: () => import('@/views/cases/case-details/CaseDetails.vue'),
+            meta: {
+              zone: 'cases'
+            }
           }
         ]
       },
@@ -52,15 +68,17 @@ export default [
         component: () => import('@/views/processes/Processes.vue'),
         meta: {
           zone: 'processes'
-        }
-      },
-      {
-        path: '/process',
-        name: 'process',
-        component: () => import('@/views/processes/Process.vue'),
-        meta: {
-          zone: 'processes'
-        }
+        },
+        children: [
+          {
+            path: ':processId',
+            name: 'process',
+            component: () => import('@/views/processes/Process.vue'),
+            meta: {
+              zone: 'processes'
+            }
+          }
+        ]
       }
     ]
   },
