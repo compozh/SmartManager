@@ -29,19 +29,19 @@
                          class="d-flex flex-column align-center">
 
         <v-tooltip right
-                   v-for="item in zones"
-                   :key="item.title">
+                   v-for="zone in zones"
+                   :key="zone.title">
           <template #activator="{ on }">
             <v-list-item v-on="on"
-                         :to="item.link"
+                         @click="zoneSelect(zone)"
                          class="pa-0 d-flex justify-center"
                          style="min-height: 36px; min-width: 36px">
               <v-list-item-action class="ma-0 pa-0 justify-center">
-                <fa-icon :icon="item.icon"/>
+                <fa-icon :icon="zone.icon"/>
               </v-list-item-action>
             </v-list-item>
           </template>
-          {{ item.title }}
+          {{ zone.title }}
         </v-tooltip>
       </v-list-item-group>
     </v-list>
@@ -102,6 +102,11 @@ export default {
     }
   },
   methods: {
+    zoneSelect (zone) {
+      if (zone.id !== this.activeZoneId) {
+        this.$router.push(zone.link)
+      }
+    },
     setInitValues () {
       this.initValues.miniVariant = this.miniVariant
       this.initValues.expandOnHover = this.expandOnHover

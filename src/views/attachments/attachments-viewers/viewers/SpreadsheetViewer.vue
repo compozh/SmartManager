@@ -3,7 +3,8 @@
                    :created="created"
                    :openUrl="openUrl"
                    :allowSave="false"
-                   locale="ru-RU">
+                   height="100%"
+                   style='flex: 1 1 0;'>
   </ejs-spreadsheet>
 </template>
 

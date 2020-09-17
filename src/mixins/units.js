@@ -88,7 +88,7 @@ export const folders = {
       get () {
         const activeZone = this.$store.state.app.activeZone
         return this.$store.state.folders.activeFolderId ||
-          (activeZone === 'cases' ? 'all' : 'active')
+          (activeZone.group === 'cases' ? 'all' : 'active')
       },
       set (folderId) {
         /* TODO: fix define activeFolderId value when folder page update

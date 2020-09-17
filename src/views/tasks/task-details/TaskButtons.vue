@@ -51,7 +51,7 @@
           <v-btn v-on="$vuetify.breakpoint.lgAndDown ? on : ''"
                  color="error"
                  small depressed
-                 @click="$emit('changeStatus', '-')">
+                 @click="$emit('changeStage', 0)">
             <fa-icon icon="thumbs-down" size="lg"/>
             <span class="ml-2 hidden-lg-and-down">{{ buttonReject }}</span>
           </v-btn>
@@ -65,7 +65,7 @@
                  color="success"
                  small depressed
                  class="ml-2"
-                 @click="$emit('changeStatus', '+')">
+                 @click="$emit('changeStage', 1)">
             <fa-icon icon="thumbs-up" size="lg"/>
             <span class="ml-2 hidden-lg-and-down">{{ buttonApprove }}</span>
           </v-btn>
