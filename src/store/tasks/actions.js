@@ -109,8 +109,11 @@ export default {
       const response = await api.changeTaskStageInGql(stageParams)
       const result = response.data.smtasksMutation.changeStage
       if (result.success) {
+        !result.log || commit('SET_NOTIFY', {
+          text: result.log,
+          color: 'info'
+        })
         await dispatch('getTaskDetails', { taskId: params.id })
-        // Without success notify - PLD 787658 from 31.07.20
       } else {
         commit('SET_NOTIFY', {
           text: result.log || i18n.t('notify.stageChangeFail'),

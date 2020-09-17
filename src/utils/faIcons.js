@@ -47,6 +47,7 @@ import { faFlag } from '@fortawesome/pro-regular-svg-icons/faFlag'
 import { faClipboardCheck } from '@fortawesome/pro-regular-svg-icons/faClipboardCheck'
 import { faUndo } from '@fortawesome/pro-regular-svg-icons/faUndo'
 import { faThumbsUp } from '@fortawesome/pro-regular-svg-icons/faThumbsUp'
+import { faThumbsDown } from '@fortawesome/pro-regular-svg-icons/faThumbsDown'
 import { faArrowAltRight } from '@fortawesome/pro-regular-svg-icons/faArrowAltRight'
 import { faStar } from '@fortawesome/pro-regular-svg-icons/faStar'
 import { faSitemap } from '@fortawesome/pro-regular-svg-icons/faSitemap'
@@ -129,6 +130,7 @@ library.add(
   faClipboardCheck,
   faUndo,
   faThumbsUp,
+  faThumbsDown,
   faArrowAltRight,
   faStar,
   faSitemap,
