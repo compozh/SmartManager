@@ -303,7 +303,9 @@ export default {
       taskId: this.taskId,
       folderId: this.activeFolderId
     })
-    !this.task.isRead || this.getFolders()
+    if (!this.task.isRead) {
+      this.getFolders()
+    }
   },
   methods: {
     initTaskData () {
