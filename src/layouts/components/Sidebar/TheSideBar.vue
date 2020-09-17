@@ -58,9 +58,17 @@ export default {
   watch: {
     $route (to) {
       if (to.name.includes('list')) {
-        this.$store.commit('SET_ACTIVE_FOLDER',
-          { folderId: to.params.folderId })
+        this.activeFolderId = to.params.folderId
       }
+    }
+  },
+  created () {
+    const activeZone = this.routeZone.group
+    const folderId = this.$route.params.folderId
+    if (activeZone === 'cases') {
+      this.activeFolderId = +folderId || 'all'
+    } else {
+      this.activeFolderId = folderId || 'active'
     }
   },
   computed: {
