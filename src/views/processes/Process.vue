@@ -120,7 +120,7 @@ export default {
     },
     async startProcess (data) {
       const processData = {
-        ProcessDefinitionId: this.$route.query.id,
+        ProcessDefinitionId: this.$route.params.processId,
         BusinessKey: `USER[${this.userId}]`,
         Variables: this.getVariables(data)
       }
