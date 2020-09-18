@@ -74,4 +74,8 @@ export default {
     margin-top: 0.1em;
  }
 
+  .v-text-field >>> .v-label {
+    top: 4px !important;
+  }
+
 </style>
