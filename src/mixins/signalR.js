@@ -22,7 +22,9 @@ export default {
       const hubProxy = connection.createHubProxy(hubName)
       hubProxy.on('receiveMessage', message => {
         const parsedMessage = JSON.parse(message)
-        !parsedMessage.TASKID || this.getTasks(this.activeFolderId)
+        if (parsedMessage.TASKID) {
+          this.getTasks(this.activeFolderId)
+        }
       })
 
       const subscribeFunc = () => {
