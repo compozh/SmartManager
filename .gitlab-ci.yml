@@ -72,6 +72,9 @@ publish_smartManager_SP:
     stage: publish_SP
     tags:
     - tfs2017 
+    only:
+      variables:
+      - $WebAppArtifactPath != null
     script:
       - 'mkdir -p $WebAppArtifactPath\$CI_COMMIT_REF_NAME\SmartManager'
       - 'xcopy /S /E /Y ".\dist\*" "$WebAppArtifactPath\$CI_COMMIT_REF_NAME\SmartManager"'
