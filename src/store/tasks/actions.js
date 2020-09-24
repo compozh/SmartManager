@@ -83,8 +83,11 @@ export default {
       const result = response.data.smtasksMutation.changeStatus
       if (result.success) {
         // Without success notify - PLD 787658 from 31.07.20
-        await dispatch('getTasks', rootState.folders.activeFolderId)
-        await dispatch('getTaskDetails', { taskId: params.id })
+        // disabled task and folder rereading 24.09.2020
+        commit('DROP_TASK_IN_FOLDER', {
+          folderId: rootState.folders.activeFolderId,
+          taskId: params.id
+        })
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || i18n.t('notify.statChangeFail'),
