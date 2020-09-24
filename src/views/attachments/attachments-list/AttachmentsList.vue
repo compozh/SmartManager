@@ -223,15 +223,9 @@ export default {
       return handler
     }
   },
-  created () {
-    this.getAttachmentTypes(this.businessObject)
-    if (this.attachments.length && !this.activeAttachment.id) {
-      this.selectAttachment(this.attachments[0])
-    }
-  },
   methods: {
-    selectAttachment (attachment, version) {
-      this.setActiveAttachment(attachment, version)
+    async selectAttachment (attachment, version) {
+      await this.setActiveAttachment(attachment, version)
       this.$emit('selectAttachment')
     },
     async expandVersions (attachment, expand, isExpanded) {
