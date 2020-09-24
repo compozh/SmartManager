@@ -296,6 +296,13 @@ export default {
   },
   async created () {
     await this.getTask()
+    // Work with attachments must starting after task details info loaded
+    await this.getAttachmentTypes(this.businessObject)
+    if (this.attachments.length && !this.activeAttachment.id) {
+      await this.setActiveAttachment(this.attachments[0])
+      this.tab = 0
+    }
+
     this.setTaskEditable(!this.externalTaskCamunda)
     this.initTaskData()
     this.tab = this.attachments.length ? 0 : 1
