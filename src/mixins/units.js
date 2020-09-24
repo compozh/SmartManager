@@ -313,6 +313,7 @@ export const attachments = {
     attachmentTypes () {
       const types = this.$store.state.attachments.attachmentTypes
       const typeList = types && types[this.objectId] ? types[this.objectId] : []
+      // Set simple attachments type to top of list
       return [...typeList].sort(a => a.CODE === '' ? -1 : 0)
     },
     currentType () {
@@ -342,7 +343,9 @@ export const attachments = {
   methods: {
     async setActiveAttachment (attachment, version) {
       this.resetAttachmentData()
-      attachment.hasDetails || await this.getAttachmentDetails(attachment)
+      if (!(attachment && attachment.hasDetails)) {
+        await this.getAttachmentDetails(attachment)
+      }
       this.$store.commit('SET_ACTIVE_ATTACHMENT', { attachment, version })
     },
     async getAttachmentDetails (attachment) {
