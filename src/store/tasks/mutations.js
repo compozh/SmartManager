@@ -22,5 +22,8 @@ export default {
         task.isRead = 1
       }
     }
+  },
+  DROP_TASK_IN_FOLDER (state, { folderId, taskId }) {
+    state.tasks[folderId] = state.tasks[folderId].filter(task => task.id !== taskId)
   }
 }
