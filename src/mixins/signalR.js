@@ -23,6 +23,10 @@ export default {
       hubProxy.on('receiveMessage', message => {
         const parsedMessage = JSON.parse(message)
         if (parsedMessage.TASKID) {
+          // Re-reading folders to update counters
+          this.getFolders()
+        }
+        if (parsedMessage.MODE === 'Add') {
           this.getTasks(this.activeFolderId)
         }
       })

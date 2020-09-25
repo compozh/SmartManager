@@ -306,11 +306,13 @@ export default {
     this.initTaskData()
     this.tab = this.attachments.length ? 0 : 1
     if (!this.task.isRead) {
-      this.$store.commit('CHANGE_TASKS_COUNT', this.activeFolderId)
       this.$store.commit('SET_TASK_IS_READ', {
         taskId: this.taskId,
         folderId: this.activeFolderId
       })
+      // this.$store.commit('CHANGE_TASKS_COUNT', this.activeFolderId)
+      // Re-reading folders to update counters
+      this.getFolders()
     }
   },
   methods: {
