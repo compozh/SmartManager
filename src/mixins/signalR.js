@@ -12,8 +12,6 @@ export default {
     async startSignalRConnection () {
       const url = window.appConfig.SignalRUrl
       const hubName = 'messagehub'
-      // eslint-disable-next-line no-return-await
-      // const token = async () => '6F88DE61-4BBE-4E54-8B7F-5237A65C23AA' // await auth._getRefreshToken()
       const connection = this.signalRConnection = hubConnection(url, {
         logging: true,
         useDefaultPath: false
@@ -23,10 +21,10 @@ export default {
       hubProxy.on('receiveMessage', message => {
         const parsedMessage = JSON.parse(message)
         if (parsedMessage.TASKID) {
-          // Re-reading folders to update counters
           this.getFolders()
         }
         if (parsedMessage.MODE === 'Add') {
+          // Re-reading tasks to view new tasks
           this.getTasks(this.activeFolderId)
         }
       })
