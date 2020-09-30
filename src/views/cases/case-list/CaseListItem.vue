@@ -30,10 +30,10 @@
         <span v-if="caseInProgress"
               class="body-2 mb-0"
               :class="overdue ? 'red--text' : 'blue--text'">
-          {{ caseItem.dateTo }}</span>
+          {{ toLocalString(caseItem.dateTo) }}</span>
         <span v-if="caseIsDone" class="body-2 mb-0 green--text">
           <fa-icon class="green--text" icon="check"/>
-          {{ caseItem.dateTo }}
+          {{ toLocalString(caseItem.dateTo) }}
         </span>
         <span v-if="caseIsDone && overdue" class="body-2 mb-0 red--text">
           <fa-icon class="red--text" icon="clock"/>

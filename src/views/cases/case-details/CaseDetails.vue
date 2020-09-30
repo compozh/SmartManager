@@ -225,8 +225,9 @@ export default {
   methods: {
     initCaseData () {
       this.caseData.name = this.caseItem.name
-      this.caseData.dateFrom = this.caseItem.dateFrom
-      this.caseData.dateTo = this.caseItem.dateTo
+      // Convert dateTime UTC to local
+      this.caseData.dateFrom = this.toLocalString(this.caseItem.dateFrom)
+      this.caseData.dateTo = this.toLocalString(this.caseItem.dateTo)
       this.caseData.fioAdd = this.caseItem.fioAdd
       this.caseData.purpose = this.caseItem.purpose
       this.caseData.comment = this.caseItem.comm
@@ -245,8 +246,8 @@ export default {
       const caseData = {
         id: this.caseId,
         name: this.caseData.name,
-        dateFrom: this.formatDateTime(this.caseData.dateFrom),
-        dateTo: this.formatDateTime(this.caseData.dateTo),
+        dateFrom: this.toIsoLocalString(this.caseData.dateFrom),
+        dateTo: this.toIsoLocalString(this.caseData.dateTo),
         purpose: this.caseData.purpose,
         comm: this.caseData.comment,
         folderId: this.caseData.folder ? this.newCase.folder.folderId : 0,
