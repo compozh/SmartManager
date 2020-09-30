@@ -78,7 +78,7 @@
                 <td class="text-truncate" style="max-width: 0;">{{ attachment.fileName }}</td>
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
-                  <span v-if="!hover">{{ attachment.date }}</span>
+                  <span v-if="!hover">{{ toLocalString(attachment.date) }}</span>
                   <v-tooltip v-if="hover" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
@@ -164,6 +164,7 @@
 
 <script>
 import { common, tasks, cases, attachments } from '@/mixins/units'
+import { date } from '@/mixins/dateTime'
 
 const ListHeader = () => import('./ListHeader')
 const VersionList = () => import('./VersionList')
@@ -173,7 +174,7 @@ const FileTypeIcon = () => import('@/components/FileTypeIcon')
 
 export default {
   name: 'AttachmentsList',
-  mixins: [common, tasks, cases, attachments],
+  mixins: [common, tasks, cases, attachments, date],
   props: {
     businessObject: Object,
     attachmentList: Array

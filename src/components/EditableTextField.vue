@@ -6,6 +6,7 @@
               :readonly="!editable"
               @blur="checkText"
               :rules="required ? requiredRule : []"
+              :hide-details="!editable"
               auto-grow rows="1"/>
 </template>
 
