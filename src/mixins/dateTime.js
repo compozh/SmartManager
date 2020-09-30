@@ -10,22 +10,31 @@ export const date = {
   computed: {
     currentDate: () => moment(),
     parseDateTime: () => dateTime => moment(dateTime, 'DD.MM.YYYY HH:mm'),
-    parseVersionDate: () => dateTime => moment(dateTime, 'YYYY-MM-DD HH:mm:ss'),
+    parseUtcDateTime: () => dateTime => moment.utc(dateTime, 'DD.MM.YYYY HH:mm'),
+    parseVersionDate: () => dateTime => moment.utc(dateTime, 'YYYY-MM-DD HH:mm:ss'),
     parsePickerDate: () => date => moment(date, 'YYYY-MM-DD'),
+    parsePickerTime: () => date => moment(date, 'HH:mm'),
     defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
     delegationDateEnd: () => moment().add(1, 'months'),
     formatPickerDate: () => date => date.format('YYYY-MM-DD'),
+    formatPickerTime: () => date => date.format('HH:mm'),
     defaultDateTime () {
       return this.defaultPlanDate + ' 12:00'
     },
     formatDate () {
       return date => this.parsePickerDate(date).format('DD.MM.YYYY')
     },
+    toLocalString () {
+      return dateTime => this.parseUtcDateTime(dateTime).local().format('DD.MM.YYYY HH:mm')
+    },
+    toIsoLocalString () {
+      return dateTime => this.parseDateTime(dateTime).local().format()
+    },
     formatDateTime () {
       return dateTime => this.parseDateTime(dateTime).format('YYYY-MM-DD HH:mm')
     },
     formatVersionDate () {
-      return dateTime => this.parseVersionDate(dateTime).format('DD.MM.YYYY HH:mm')
+      return dateTime => this.parseVersionDate(dateTime).local().format('DD.MM.YYYY HH:mm')
     },
     compareCurrentDate () {
       return date => this.parsePickerDate(date).isSameOrAfter(this.currentDate, 'day')

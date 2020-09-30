@@ -64,11 +64,11 @@
                 :class="overdue ? 'red--text' : 'blue--text'">
             {{ task.dateplan.includes('01.01.0001')
                 ? $t('pickers.noTimeLimit')
-                : task.dateplan }}
+                : toLocalString(task.dateplan) }}
           </span>
           <span v-if="taskIsDone" class="body-2 mb-0 green--text">
             <fa-icon class="green--text" icon="check"/>
-            {{ task.dateFact }}
+            {{ toLocalString(task.dateFact) }}
           </span>
           <span v-if="taskIsDone && overdue" class="body-2 mb-0 red--text">
             <fa-icon class="red--text" icon="clock"/>
@@ -80,10 +80,11 @@
 </template>
 
 <script>
-import moment from 'moment'
+import { date } from '@/mixins/dateTime'
 
 export default {
   name: 'TaskListItem',
+  mixins: [date],
   props: {
     task: Object
   },
@@ -95,12 +96,12 @@ export default {
       return this.task.status === '+' || this.task.status === '#'
     },
     overdue () {
-      const planDate = moment(this.task.dateplan, 'DD.MM.YYYY HH:mm').format()
-      const factDate = moment(this.task.dateFact, 'DD.MM.YYYY HH:mm').format()
-      if (new Date(planDate).getTime() >= new Date(factDate).getTime()) {
+      const planDate = this.parseUtcDateTime(this.task.dateplan)
+      const factDate = this.parseUtcDateTime(this.task.dateFact)
+      if (planDate.isSameOrAfter(factDate)) {
         return false
       }
-      return moment(factDate).diff(moment(planDate), 'days')
+      return factDate.diff(planDate, 'days')
     }
   }
 }

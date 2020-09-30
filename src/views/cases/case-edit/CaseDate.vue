@@ -70,7 +70,7 @@ export default {
   }),
   computed: {
     dateTime () {
-      return this.parseDateTime(this.dateInit)
+      return this.parseUtcDateTime(this.dateInit)
     },
     textFieldDate () {
       return this.dateInit.split(' ').shift()

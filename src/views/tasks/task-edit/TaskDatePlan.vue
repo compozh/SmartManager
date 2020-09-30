@@ -90,7 +90,7 @@ export default {
       get () {
         return this.datePlan.includes('01.01.0001')
           ? this.defaultPlanDate
-          : this.formatPickerDate(this.dateTime)
+          : this.dateTime.format('YYYY-MM-DD')
       },
       set (val) {
         const date = this.formatDate(val)
