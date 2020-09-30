@@ -78,7 +78,7 @@
             </icon-tooltip-btn>
           </div>
           <!-- TASK DOC CAPTION -->
-          <h3 v-if="task.name !== task.docCaption"
+          <h3 v-if="task.docCaption && task.docCaption !== task.name"
               class="font-weight-light mb-3">
             {{ task.docCaption }}</h3>
 
@@ -322,7 +322,8 @@ export default {
         userId: this.task.performerId,
         photo: this.task.performerPhoto
       }
-      this.taskData.datePlan = this.task.dateplan
+      // Convert dateTime UTC to local
+      this.taskData.datePlan = this.toLocalString(this.task.dateplan)
       this.taskData.name = this.task.name
       this.taskData.description = this.task.htmlDescript
       this.taskData.participants = this.task.participants || []
@@ -432,7 +433,7 @@ export default {
         id: this.taskId,
         name: this.taskData.name,
         performerId: this.taskData.performer.userId,
-        dateplan: this.formatDateTime(this.taskData.datePlan),
+        dateplan: this.toIsoLocalString(this.taskData.datePlan),
         descript: this.taskData.description,
         participants: this.taskData.participants
       }
