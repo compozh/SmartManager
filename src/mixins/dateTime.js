@@ -13,11 +13,10 @@ export const date = {
     parseUtcDateTime: () => dateTime => moment.utc(dateTime, 'DD.MM.YYYY HH:mm'),
     parseVersionDate: () => dateTime => moment.utc(dateTime, 'YYYY-MM-DD HH:mm:ss'),
     parsePickerDate: () => date => moment(date, 'YYYY-MM-DD'),
-    parsePickerTime: () => date => moment(date, 'HH:mm'),
+    parsePickerDateTime: () => date => moment(date, 'YYYY-MM-DD HH:mm'),
     defaultPlanDate: () => moment().add(1, 'days').format('YYYY-MM-DD'),
     delegationDateEnd: () => moment().add(1, 'months'),
     formatPickerDate: () => date => date.format('YYYY-MM-DD'),
-    formatPickerTime: () => date => date.format('HH:mm'),
     defaultDateTime () {
       return this.defaultPlanDate + ' 12:00'
     },
