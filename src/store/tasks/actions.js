@@ -6,7 +6,7 @@ export default {
     if (folderId === 'search') {
       return
     }
-    const preLoader = (state.tasks && state.tasks[folderId])
+    const preLoader = state.tasks && folderId in state.tasks
     preLoader || commit('START_PRELOADER', 'tasks')
     commit('START_LINEAR_PRELOADER', 'tasks')
     commit('SET_SEARCH', null)
@@ -32,7 +32,7 @@ export default {
   },
   async getTaskDetails ({ state, commit }, { taskId }) {
     const result = { success: false }
-    const preLoader = (state.task && state.taskDetails[taskId])
+    const preLoader = state.taskDetails && taskId in state.taskDetails
     preLoader || commit('START_PRELOADER', 'task')
     commit('START_LINEAR_PRELOADER', 'task')
     try {

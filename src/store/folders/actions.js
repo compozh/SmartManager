@@ -3,7 +3,7 @@ import i18n from '@/i18n'
 
 export default {
   async getFolders ({ state, commit }) {
-    const preLoader = (state.folders && state.folders.folderGroups)
+    const preLoader = 'folderGroups' in state
     preLoader || commit('START_PRELOADER', 'folders')
     commit('START_LINEAR_PRELOADER', 'folders')
     try {
