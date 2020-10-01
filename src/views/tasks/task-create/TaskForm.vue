@@ -183,6 +183,9 @@ export default {
         },
         placeholder: this.$t('tasks.description') + '...'
       }
+    },
+    datePlanIso () {
+      return this.parsePickerDateTime(this.datePlan || this.defaultDateTime).format()
     }
   },
   methods: {
@@ -197,7 +200,7 @@ export default {
         name: this.name,
         performerId: this.performer.userId,
         descript: this.htmlDescription,
-        dateplan: this.datePlan || this.defaultDateTime,
+        dateplan: this.datePlanIso,
         needApprove: this.needApprove,
         needComm: this.needComment,
         priority: Number(this.priority),

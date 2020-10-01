@@ -23,7 +23,7 @@ export default {
   },
   async getCaseDetails ({ state, commit }, { caseId }) {
     const result = { success: false }
-    const preLoader = (state.case && state.caseDetails[caseId])
+    const preLoader = state.caseDetails && caseId in state.caseDetails
     preLoader || commit('START_PRELOADER', 'case')
     commit('START_LINEAR_PRELOADER', 'case')
     try {
