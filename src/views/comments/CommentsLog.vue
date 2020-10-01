@@ -40,16 +40,16 @@
           <div class="d-flex justify-space-between caption">
             <span v-if="index === 0 || !isSameDay(comment.date, comments[index - 1].date)
                         || comment.userId !== comments[index - 1].userId"
-                  :class="{'order-1': currentUserIsSender(comment.userId)}">
+                  :class="currentUserIsSender(comment.userId) ? 'order-1 ml-5' : 'mr-5'">
               {{ comment.user }}
             </span>
-            <span class="font-weight-light grey--text text--lighten-2"
-                  :class="currentUserIsSender(comment.userId) ? 'mr-5' : 'ml-5'">{{ comment.date.split(' ').pop() }}</span>
+            <span class="font-weight-thin grey--text text--lighten-2 "
+                  :class="currentUserIsSender(comment.userId) ? 'mr-auto' : 'ml-auto'">
+              {{ toTime(comment.date) }}</span>
           </div>
           <span class="body-2 font-weight-light text--secondary"
                 :class="{'text-truncate': !comment.text.includes(' ')}">
             {{ comment.text }}</span>
-          <span class="msgTime"></span>
         </div>
       </div>
     </div>
@@ -98,11 +98,6 @@ export default {
     position: relative;
     max-width: 70%;
     background: white;
-  }
-
-  .msgTime {
-    position: absolute;
-    bottom: 10px;
   }
 
 </style>
