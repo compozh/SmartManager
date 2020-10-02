@@ -66,8 +66,14 @@ export const commentDates = {
     },
     toDate (dateTime) {
       moment.locale(this.$i18n.locale)
-      return moment(dateTime, 'DD.MM.YYYY HH:mm')
+      return moment.utc(dateTime, 'DD.MM.YYYY HH:mm')
+        .local()
         .format('D MMM YYYY')
+    },
+    toTime (dateTime) {
+      return moment.utc(dateTime, 'DD.MM.YYYY HH:mm')
+        .local()
+        .format('HH:mm')
     }
   }
 }
