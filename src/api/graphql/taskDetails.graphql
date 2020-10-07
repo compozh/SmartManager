@@ -72,6 +72,8 @@ fragment detailTaskFields on Task {
         typeName
         typeDescription
         isSign
+        hash
+        editDate
         businessObjectDefinitionCode
         businessObjectKey
     }
