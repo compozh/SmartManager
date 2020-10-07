@@ -6,9 +6,11 @@
               @input="closeNotify"
               :timeout=5000>
     {{ text }}
-    <v-btn icon dark @click="closeNotify">
-      <fa-icon icon="times" size="lg"/>
-    </v-btn>
+    <template #action>
+      <v-btn icon dark @click="closeNotify">
+        <fa-icon icon="times" size="lg"/>
+      </v-btn>
+    </template>
   </v-snackbar>
 </template>
 
