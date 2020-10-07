@@ -6,7 +6,9 @@ export default {
     state.attachments = attachments.map((attachment, idx) => {
       attachment.index = idx
       if (state.attachments && state.attachments.length) {
-        const existingAttachment = state.attachments.find(i => i.id === attachment.id)
+        const existingAttachment = state.attachments.find(i => {
+          return i.id === attachment.id && i.hash === attachment.hash
+        })
         return Object.assign(attachment, existingAttachment || {})
       }
       return attachment
