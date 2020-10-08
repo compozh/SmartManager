@@ -224,6 +224,9 @@ export default {
       return handler
     }
   },
+  created () {
+    this.getAttachmentTypes(this.businessObject)
+  },
   methods: {
     async selectAttachment (attachment, version) {
       await this.setActiveAttachment(attachment, version)
