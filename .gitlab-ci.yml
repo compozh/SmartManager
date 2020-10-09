@@ -78,8 +78,6 @@ publish_smartManager_SP:
     script:
       - 'mkdir -p $WebAppArtifactPath\$CI_COMMIT_REF_NAME\SmartManager'
       - 'xcopy /S /E /Y ".\dist\*" "$WebAppArtifactPath\$CI_COMMIT_REF_NAME\SmartManager"'
-    only:
-      - /^202*/@it-enterprise/web-apps/smartmanager-web
 
     cache:
       key: $CI_COMMIT_REF_NAME
