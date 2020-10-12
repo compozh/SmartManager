@@ -61,7 +61,7 @@
             <v-tooltip top>
               <template #activator="{ on }">
                 <v-btn v-on="on"
-                       :disabled="version.IsActive"
+                       :disabled="version.IsActive || !attachment.access.changeActiveVersion"
                        @click.stop="setActiveVersion(attachment.id, version)"
                        color="green"
                        class="mr-2"
@@ -76,6 +76,7 @@
               <template #activator="{ on }">
                 <v-btn v-on="on"
                        :href="version.Details.SrcUrl"
+                       :disabled="!attachment.access.download"
                        @click.stop="() => {}"
                        color="blue"
                        class="mr-2"
@@ -89,6 +90,7 @@
             <v-tooltip top>
               <template #activator="{ on }">
                 <v-btn v-on="on"
+                       :disabled="!attachment.access.remarksView"
                        @click.stop="showNotes(version)"
                        color="warning"
                        class="mr-2"
@@ -102,7 +104,7 @@
             <v-tooltip top>
               <template #activator="{ on }">
                 <v-btn v-on="on"
-                       :disabled="version.IsActive"
+                       :disabled="version.IsActive || !attachment.access.deleteVersion"
                        @click.stop="versionDeleteDialog(version)"
                        color="red darken-4"
                        style="border: 1px dashed;"
@@ -125,6 +127,7 @@
       </tbody>
     </template>
     <notes v-model="notesDialog"
+           :access="attachment.access"
            :notes="notes"
            :roots="roots"/>
     <delete-confirm v-model="deleteConfirmDialog"
@@ -177,7 +180,7 @@ export default {
       if (version.Details) {
         // Notes must always be array, because adding note mutation used "unshift" method
         // and will be fail if value of notes be null as it is in initial object
-        this.notes = version.Details.Notes = version.Details.Notes || []
+        this.notes = version.Details.Notes || []
       }
     }
   }
