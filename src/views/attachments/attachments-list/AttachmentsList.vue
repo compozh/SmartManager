@@ -79,7 +79,7 @@
                 <td :class="hover ? 'text-right' : 'text-center text-truncate'"
                     style="width: 150px; max-width: 120px;">
                   <span v-if="!hover">{{ toLocalString(attachment.date) }}</span>
-                  <v-tooltip v-if="hover" top>
+                  <v-tooltip v-if="hover && attachment.access.editNewVersion" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
                              id="addBtn"
@@ -96,7 +96,7 @@
                     </template>
                     <span>{{ $t('versions.add') }}</span>
                   </v-tooltip>
-                  <v-tooltip v-if="hover" top>
+                  <v-tooltip v-if="hover && attachment.access.download" top>
                     <template #activator="{ on }">
                       <v-btn v-on="on"
                              :loading="downLoaders.includes(attachment.id)"
@@ -118,7 +118,7 @@
                 <td :class="hover ? 'text-left' : 'text-center text-truncate'"
                     style="width: 100px; max-width: 0;">
                   <span v-if="!hover">{{ fileSize(attachment.fileSize) }}</span>
-                  <v-tooltip v-else top>
+                  <v-tooltip v-else-if="attachment.access.delete" top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on"
                              color="grey"
