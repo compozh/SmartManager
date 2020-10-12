@@ -5,6 +5,23 @@ export default {
   SET_ATTACHMENTS (state, attachments) {
     state.attachments = attachments.map((attachment, idx) => {
       attachment.index = idx
+      // Set attachment access defaults
+      if (!attachment.access) {
+        attachment.access = {
+          download: true,
+          changeActiveVersion: true,
+          editFile: true,
+          editNewVersion: true,
+          deleteVersion: true,
+          annotationsEdit: true,
+          commentsEdit: true,
+          delete: true,
+          remarksView: true,
+          remarksAdd: true,
+          othersRemarksEdit: true,
+          othersRemarksDelete: true
+        }
+      }
       if (state.attachments && state.attachments.length) {
         const existingAttachment = state.attachments.find(i => {
           return i.id === attachment.id && i.hash === attachment.hash
@@ -30,11 +47,9 @@ export default {
     const attachment = attachments.find(i => i.id === fileId)
     Vue.set(attachment, 'hasDetails', true)
     if (fileDetails.ErrorMessage) {
-      attachment.access = false
       attachment.reason = fileDetails.ErrorMessage
       return
     }
-    attachment.access = true
     attachment.url = fileDetails.FileUrl
     attachment.srcUrl = fileDetails.SrcUrl + attachment.fileName
     attachment.versions = fileDetails.Versions
