@@ -93,21 +93,24 @@
         </perfect-scrollbar>
       </template>
       <template #actions>
-        <outlined-btn x-small
+        <outlined-btn v-if="access.remarksAdd"
+                      x-small
                       color="success"
                       icon="layer-plus"
                       :handler="() => noteInputDialog = true">
           <span>{{ $t('buttons.add') }}</span>
         </outlined-btn>
         <v-spacer/>
-        <outlined-btn x-small
+        <outlined-btn v-if="access.othersRemarksDelete"
+                      x-small
                       color="primary"
                       icon="edit"
                       :disabled="!currentNote.NoteId"
                       :handler="() => editNote()">
           <span>{{ $t('buttons.edit') }}</span>
         </outlined-btn>
-        <outlined-btn x-small
+        <outlined-btn v-if="access.othersRemarksDelete"
+                      x-small
                       color="red darken-4"
                       icon="trash"
                       :disabled="!currentNote.NoteId"
@@ -145,6 +148,7 @@ export default {
     prop: 'showNotes'
   },
   props: {
+    access: Object,
     notes: Array,
     roots: Object,
     showNotes: Boolean
