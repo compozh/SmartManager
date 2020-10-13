@@ -5,16 +5,21 @@
                                height="100%"
                                style='flex: 1 1 0;'
                                :enableToolbar='true'
-                               :toolbarItems='items'/>
+                               :toolbarItems='items'
+                               :locale="$i18n.locale"
+                               :showPropertiesPane="false"/>
 </template>
 
 <script>
 import Vue from 'vue'
 import axios from 'axios'
 import { DocumentEditorContainerPlugin, Toolbar } from '@syncfusion/ej2-vue-documenteditor'
-
+import viewersMixin from '@/mixins/viewers'
 Vue.use(DocumentEditorContainerPlugin)
+
 export default {
+  name: 'documenteditorcontainer',
+  mixins: [viewersMixin],
   props: {
     url: String
   },
@@ -22,7 +27,25 @@ export default {
     DocumentEditorContainer: [Toolbar]
   },
   data: () => ({
-    items: ['Undo', 'Redo', 'Separator', 'Image', 'Table', 'Hyperlink', 'Comments', 'Header', 'Footer', 'PageSetup', 'PageNumber', 'Separator', 'Find', 'Separator', 'LocalClipboard', 'RestrictEditing'],
+    localization: 'documentEditor',
+    items: [
+      'Undo',
+      'Redo',
+      'Separator',
+      'Image',
+      'Table',
+      'Hyperlink',
+      'Comments',
+      'Header',
+      'Footer',
+      'PageSetup',
+      'PageNumber',
+      'Separator',
+      'Find',
+      'Separator',
+      'LocalClipboard',
+      'RestrictEditing'
+    ],
     serviceUrl: window.appConfig.GrapgQlUrl + 'api/documenteditor/'
   }),
   async mounted () {
