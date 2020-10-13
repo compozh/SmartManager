@@ -76,6 +76,20 @@ fragment detailTaskFields on Task {
         editDate
         businessObjectDefinitionCode
         businessObjectKey
+        access {
+            download
+            changeActiveVersion
+            editFile
+            editNewVersion
+            deleteVersion
+            annotationsEdit
+            commentsEdit
+            delete
+            remarksView
+            remarksAdd
+            othersRemarksEdit
+            othersRemarksDelete
+        }
     }
     comments {
         userId

@@ -318,6 +318,7 @@
     "attachDelSuccess": "Attachment delete successfully",
     "attachDelFail": "Attachment delete failed",
     "attachDelError": "Attachment delete error, contact support",
+    "attachOpenFail": "Attachment open failed",
     "commentAddSuccess": "Comment added successfully",
     "commentAddFail": "Comment adding failed",
     "commentAddError": "Comment adding error, contact support",

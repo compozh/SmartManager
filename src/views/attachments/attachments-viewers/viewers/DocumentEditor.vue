@@ -1,22 +1,48 @@
 <template>
   <ejs-documenteditorcontainer id='container'
+                               ref="doceditcontainer"
                                :serviceUrl='serviceUrl'
                                height="100%"
                                style='flex: 1 1 0;'
-                               :enableToolbar='true'/>
+                               :enableToolbar='true'
+                               :toolbarItems='items'/>
 </template>
 
 <script>
 import Vue from 'vue'
+import axios from 'axios'
 import { DocumentEditorContainerPlugin, Toolbar } from '@syncfusion/ej2-vue-documenteditor'
 
 Vue.use(DocumentEditorContainerPlugin)
 export default {
-  data: () => ({
-    serviceUrl: 'https://ej2services.syncfusion.com/production/web-services/api/documenteditor/'
-  }),
+  props: {
+    url: String
+  },
   provide: {
     DocumentEditorContainer: [Toolbar]
+  },
+  data: () => ({
+    items: ['Undo', 'Redo', 'Separator', 'Image', 'Table', 'Hyperlink', 'Comments', 'Header', 'Footer', 'PageSetup', 'PageNumber', 'Separator', 'Find', 'Separator', 'LocalClipboard', 'RestrictEditing'],
+    serviceUrl: window.appConfig.GrapgQlUrl + 'api/documenteditor/'
+  }),
+  async mounted () {
+    const data = { fileUrl: this.url }
+    try {
+      const result = await axios.post(this.serviceUrl + 'importFromUrl', data)
+      this.loadFile(result.data)
+    } catch (e) {
+      console.error(e.request ? e.request.statusText : e.message)
+      this.$store.commit('SET_NOTIFY', {
+        text: this.$t('notify.attachOpenFail'),
+        color: 'warning'
+      })
+    }
+  },
+  methods: {
+    loadFile (file) {
+      const editor = this.$refs.doceditcontainer.ej2Instances.documentEditor
+      editor.open(file)
+    }
   }
 }
 </script>
