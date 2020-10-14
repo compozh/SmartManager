@@ -24,43 +24,24 @@ import {
   Annotation,
   FormFields
 } from '@syncfusion/ej2-vue-pdfviewer'
-import { L10n } from '@syncfusion/ej2-base'
+import viewersMixin from '@/mixins/viewers'
 
 Vue.use(PdfViewerPlugin)
 
 export default {
+  name: 'PdfViewer',
+  mixins: [viewersMixin],
   props: {
     url: String
   },
   data: () => ({
+    localization: 'pdfViewer',
     serviceUrl: window.appConfig.GrapgQlUrl + 'api/pdfviewer'
   }),
   provide: {
     PdfViewer: [Toolbar, Magnification, Navigation, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection, TextSearch, Annotation, FormFields]
   },
-  computed: {
-    locale () {
-      return this.$i18n.locale
-    }
-  },
-  watch: {
-    locale (newLocale, oldLocale) {
-      if (newLocale !== oldLocale) {
-        this.setLocale()
-      }
-    }
-  },
-  created () {
-    this.setLocale()
-  },
   methods: {
-    setLocale () {
-      L10n.load({
-        [this.locale]: {
-          PdfViewer: this.$t('pdfViewer')
-        }
-      })
-    },
     documentLoad () {
       const viewer = this.$refs.pdfviewer.ej2Instances
       viewer.toolbar.showToolbarItem(['OpenOption', 'DownloadOption', 'SubmitForm'], false)
