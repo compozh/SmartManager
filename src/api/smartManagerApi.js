@@ -89,12 +89,12 @@ export class SmartManagerApi {
     }
   }
 
-  static async getFileDetailsFromGql (id, ext) {
+  static async getFileDetailsFromGql (id, ext, size) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
         query: gql`${q.fileDetails}`,
-        variables: { id, ext }
+        variables: { id, ext, size }
       })
     } catch (e) {
       console.error(e.message)

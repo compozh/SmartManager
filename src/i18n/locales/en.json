@@ -388,7 +388,8 @@
     "loggedIn": "You are already logged in!",
     "loginSuccess": "Login successful",
     "loginFail": "Failed to login, try again",
-    "loginError": "Error trying to login, contact support"
+    "loginError": "Error trying to login, contact support",
+    "forgotPassword": "Forgot password?"
   },
   "processes": {
     "runProcess": "Run process",

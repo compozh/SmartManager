@@ -334,7 +334,7 @@ export const attachments = {
       return size => {
         switch (true) {
           case size < 1024: return `${size} Byte`
-          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          case size < 1048576: return `${(size / 1024).toFixed(1)} Kb`
           default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
         }
       }
@@ -350,10 +350,10 @@ export const attachments = {
     },
     async getAttachmentDetails (attachment) {
       let result = null
-      const { id: fileId, fileExt } = attachment || this.activeAttachment
+      const { id: fileId, fileExt, fileSize } = attachment || this.activeAttachment
       if (fileId && fileExt) {
         result = await this.$store.dispatch('getFileDetails', {
-          fileId, fileExt
+          fileId, fileExt, fileSize
         })
       }
       return result
@@ -391,6 +391,7 @@ export const attachments = {
       await this.$store.dispatch('addVersion', {
         fileId: attachment.id,
         fileExt: attachment.fileExt,
+        fileSize: attachment.fileSize,
         filePath
       })
       await this.setActiveAttachment(attachment)

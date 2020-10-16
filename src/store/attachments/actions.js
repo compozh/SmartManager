@@ -19,11 +19,11 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'attachmentTypes')
     }
   },
-  async getFileDetails ({ commit }, { fileId, fileExt }) {
+  async getFileDetails ({ commit }, { fileId, fileExt, fileSize }) {
     commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
       const result = { success: true, errorMessage: '', data: null }
-      const response = await api.getFileDetailsFromGql(fileId, fileExt)
+      const response = await api.getFileDetailsFromGql(fileId, fileExt, fileSize)
       const fileDetails = JSON.parse(response.data.smtasks.fileDetails)
       if (fileDetails.ErrorMessage) {
         result.success = false
@@ -107,13 +107,13 @@ export default {
       commit('STOP_PRELOADER', 'attachmentDelete')
     }
   },
-  async addVersion ({ dispatch, commit }, { fileId, fileExt, filePath }) {
+  async addVersion ({ dispatch, commit }, { fileId, fileExt, fileSize, filePath }) {
     commit('START_LINEAR_PRELOADER', 'addVersion')
     try {
       const response = await api.addAttachmentVersionInGql(fileId, filePath)
       const result = response.data.smtasksMutation.addAttachmentVersion
       if (result.success) {
-        await dispatch('getFileDetails', { fileId, fileExt })
+        await dispatch('getFileDetails', { fileId, fileExt, fileSize })
         commit('SET_ACTIVE_VERSION', fileId)
       } else {
         commit('SET_NOTIFY', {
