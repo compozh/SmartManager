@@ -350,10 +350,10 @@ export const attachments = {
     },
     async getAttachmentDetails (attachment) {
       let result = null
-      const { id: fileId, fileExt } = attachment || this.activeAttachment
+      const { id: fileId, fileExt, fileSize } = attachment || this.activeAttachment
       if (fileId && fileExt) {
         result = await this.$store.dispatch('getFileDetails', {
-          fileId, fileExt
+          fileId, fileExt, fileSize
         })
       }
       return result
@@ -391,6 +391,7 @@ export const attachments = {
       await this.$store.dispatch('addVersion', {
         fileId: attachment.id,
         fileExt: attachment.fileExt,
+        fileSize: attachment.fileSize,
         filePath
       })
       await this.setActiveAttachment(attachment)
