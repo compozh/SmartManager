@@ -44,6 +44,9 @@
                 {{ $t('buttons.login') }}
               </v-btn>
             </div>
+            <div class="d-flex justify-end subtitle-2">
+              <a :href="forgotPasswordUrl" target="_blank">{{ $t('login.forgotPassword') }}</a>
+            </div>
           </v-col>
         </v-row>
       </v-card>
@@ -60,6 +63,12 @@ export default {
   mixins: [userMethods],
   created () {
     this.logout()
+  },
+  computed: {
+    forgotPasswordUrl () {
+      const forgotPasswordUrl = '/webparts/?id=LOGIN_REQUESTRECOVERPASSWORD&devexpress_theme=moderno&itLanguage='
+      return window.appConfig.SiteUrl + forgotPasswordUrl + this.$i18n.locale
+    }
   }
 }
 </script>
