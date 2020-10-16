@@ -334,7 +334,7 @@ export const attachments = {
       return size => {
         switch (true) {
           case size < 1024: return `${size} Byte`
-          case size < 1024000: return `${(size / 1024).toFixed(1)} Kb`
+          case size < 1048576: return `${(size / 1024).toFixed(1)} Kb`
           default: return `${(size / 1024 / 1024).toFixed(2)} Mb`
         }
       }
