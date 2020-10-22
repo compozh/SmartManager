@@ -2,8 +2,7 @@
   <div class="d-flex flex-column fill-height">
     <component v-if="viewer"
                :is="viewer"
-               :url="url"
-               :access="activeAttachment.access"/>
+               :url="url"/>
 
     <no-data v-else-if="activeAttachment.reason" class="fill-height">
         <span class="headline font-weight-light grey--text">

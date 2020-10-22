@@ -20,6 +20,7 @@
                       :label="$t('comments.placeholder')"
                       flat solo
                       clearable
+                      clear-icon="+"
                       hide-details
                       :loading="loading"
                       :disabled="loading"
@@ -86,6 +87,12 @@ export default {
     border-color: #e5e5e5 !important;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+
+  .v-input >>> .v-input__append-inner > div > button {
+    transform: rotate(45deg);
+    font-size: 30px;
+    user-select: none;
   }
 
 </style>
