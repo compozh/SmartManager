@@ -343,10 +343,12 @@ export const attachments = {
   methods: {
     async setActiveAttachment (attachment, version) {
       this.resetAttachmentData()
-      if (!(attachment && attachment.hasDetails)) {
-        await this.getAttachmentDetails(attachment)
+      if (attachment) {
+        if (!attachment.hasDetails) {
+          await this.getAttachmentDetails(attachment)
+        }
+        this.$store.commit('SET_ACTIVE_ATTACHMENT', { attachment, version })
       }
-      this.$store.commit('SET_ACTIVE_ATTACHMENT', { attachment, version })
     },
     async getAttachmentDetails (attachment) {
       let result = null
@@ -385,7 +387,8 @@ export const attachments = {
           })
         }
       })
-      await this.setActiveAttachment(this.attachments[0])
+      const newAttachment = this.attachments.find(i => i.id === results[0].id)
+      await this.setActiveAttachment(newAttachment)
     },
     async addVersion (attachment, filePath) {
       await this.$store.dispatch('addVersion', {
@@ -400,9 +403,9 @@ export const attachments = {
       await this.$store.dispatch('setActiveVersion', { attachmentId, version })
     },
     async deleteVersion (attachment, versionId) {
-      await this.$store.dispatch('deleteVersion', { attachment, versionId })
+      const result = await this.$store.dispatch('deleteVersion', { attachment, versionId })
       // If the deleted version is current, will be shown the active version
-      if (this.currentVersion.Id === versionId) {
+      if (result.success && this.currentVersion.Id === versionId) {
         await this.setActiveAttachment(attachment)
       }
     },
@@ -415,9 +418,12 @@ export const attachments = {
       await this.setActiveAttachment(this.attachments[0])
     },
     getActiveId (attachment) {
-    // Active version ID need instead attachment ID for accuracy
-      const activeVersion = attachment.versions.find(i => i.IsActive)
-      return activeVersion.Id
+    // Instead attachment ID need active version ID for accuracy
+      if (attachment.versions) {
+        const activeVersion = attachment.versions.find(i => i.IsActive)
+        return activeVersion.Id
+      }
+      return attachment.id
     },
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', {

@@ -21,7 +21,7 @@ export default {
     },
     extension: {
       type: String,
-      default: () => 'file'
+      default: 'file'
     }
   },
   data: () => ({
