@@ -254,7 +254,8 @@
     "notes": "Notes",
     "download": "Download version",
     "delete": "Delete version",
-    "delConfirmText": "Are you sure you want to delete the version?"
+    "delConfirmText": "Are you sure you want to delete the version?",
+    "showInPDF": "Show in PDF"
   },
   "notes": {
     "fioAdd": "User",
