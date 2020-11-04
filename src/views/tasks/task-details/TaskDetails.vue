@@ -152,6 +152,14 @@
           <v-tab v-for="(tab, idx) in visibleTabs" :key="idx">
             <fa-icon :icon="tab.icon" class="mr-3" size="lg"/>
             {{ tab.name }}
+            <v-btn  v-if="showConvertBtn && tab.component === 'attachments-viewer'"
+                   color="red darken-4"
+                   class="ml-8"
+                   style="border: 1px dashed;"
+                   @click.stop="() => {}"
+                   text x-small dark depressed>
+              {{ $t('versions.showInPDF') }}
+            </v-btn>
           </v-tab>
         </v-tabs>
         <v-divider/>
@@ -285,6 +293,14 @@ export default {
           return this.attachments
         }
       }
+    },
+    showConvertBtn () {
+      const version = this.currentVersion.Details || {}
+      if (version.FileName) {
+        const ext = version.FileName.split('.').pop().toLowerCase()
+        return ['doc', 'docx', 'rtf'].some(i => i === ext)
+      }
+      return false
     }
   },
   watch: {

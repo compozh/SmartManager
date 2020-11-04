@@ -402,6 +402,9 @@ export const attachments = {
     async setActiveVersion (attachmentId, version) {
       await this.$store.dispatch('setActiveVersion', { attachmentId, version })
     },
+    async convertVersion () {
+      await this.$store.dispatch('convertVersion', this.currentVersion.Id)
+    },
     async deleteVersion (attachment, versionId) {
       const result = await this.$store.dispatch('deleteVersion', { attachment, versionId })
       // If the deleted version is current, will be shown the active version

@@ -196,6 +196,18 @@ export class SmartManagerApi {
     }
   }
 
+  static async convertVersionInGql (id) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        mutation: gql`${q.convertVersion}`,
+        variables: { id }
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
+
   static async deleteVersionInGql (id) {
     try {
       const client = await getClient('smartmanager')

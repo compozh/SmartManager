@@ -132,7 +132,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addVersion')
     }
   },
-  async setActiveVersion ({ dispatch, commit }, { attachmentId, version }) {
+  async setActiveVersion ({ commit }, { attachmentId, version }) {
     commit('START_LINEAR_PRELOADER', 'setActiveVersion')
     try {
       const response = await api.setActiveVersionInGql(version.Id)
@@ -157,7 +157,30 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'setActiveVersion')
     }
   },
-  async deleteVersion ({ dispatch, commit }, { attachment, versionId }) {
+  async convertVersion ({ commit }, versionId) {
+    commit('START_PRELOADER', 'convertVersion')
+    try {
+      const response = await api.convertVersionInGql(versionId)
+      const result = JSON.parse(response.data.smtasks.convertedVersion)
+      if (result.ErrorMessage) {
+        commit('SET_NOTIFY', {
+          text: result.ErrorMessage,
+          color: 'warning'
+        })
+      }
+      commit('SET_CONVERTED_VERSION', result)
+      return result
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('convertVersionError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_LINEAR_PRELOADER', 'convertVersion')
+    }
+  },
+  async deleteVersion ({ commit }, { attachment, versionId }) {
     commit('START_LINEAR_PRELOADER', 'deleteVersion')
     try {
       const response = await api.deleteVersionInGql(versionId)
@@ -182,7 +205,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'deleteVersion')
     }
   },
-  async addNote ({ dispatch, commit, rootState }, { roots, noteText }) {
+  async addNote ({ commit, rootState }, { roots, noteText }) {
     commit('START_LINEAR_PRELOADER', 'addNote')
     try {
       const response = await api.addNoteInGql(roots.versionId, noteText)
@@ -205,7 +228,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addNote')
     }
   },
-  async updateNote ({ dispatch, commit }, { roots, noteId, noteText }) {
+  async updateNote ({ commit }, { roots, noteId, noteText }) {
     commit('START_LINEAR_PRELOADER', 'updateNote')
     try {
       const response = await api.updateNoteInGql(noteId, noteText)
@@ -228,7 +251,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'updateNote')
     }
   },
-  async deleteNote ({ dispatch, commit }, { roots, noteId }) {
+  async deleteNote ({ commit }, { roots, noteId }) {
     commit('START_LINEAR_PRELOADER', 'deleteNote')
     try {
       const response = await api.deleteNoteFromGql(noteId)
