@@ -13,7 +13,6 @@ export default [
       },
       {
         path: '/tasks',
-        name: 'task-list',
         redirect: '/tasks/active'
       },
       {
@@ -41,7 +40,6 @@ export default [
       },
       {
         path: '/cases',
-        name: 'case-list',
         redirect: '/cases/all'
       },
       {
