@@ -196,11 +196,11 @@ export class SmartManagerApi {
     }
   }
 
-  static async convertVersionInGql (id) {
+  static async getPdfUrlFromGql (id) {
     try {
       const client = await getClient('smartmanager')
       return await client.query({
-        mutation: gql`${q.convertVersion}`,
+        query: gql`${q.getPdfUrl}`,
         variables: { id }
       })
     } catch (e) {

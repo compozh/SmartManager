@@ -152,13 +152,15 @@
           <v-tab v-for="(tab, idx) in visibleTabs" :key="idx">
             <fa-icon :icon="tab.icon" class="mr-3" size="lg"/>
             {{ tab.name }}
-            <v-btn  v-if="showConvertBtn && tab.component === 'attachments-viewer'"
-                   color="red darken-4"
+            <v-btn v-if="showConvertBtn && tab.component === 'attachments-viewer'"
+                   :color="`${showOriginal ? 'red' : 'green'} darken-4`"
                    class="ml-8"
                    style="border: 1px dashed;"
-                   @click.stop="() => {}"
+                   @click.stop="toggleSwitchFile"
                    text x-small dark depressed>
-              {{ $t('versions.showInPDF') }}
+              {{ $t('versions.showInPDF', {
+                   ext: showOriginal ? 'PDF' : showConvertBtn
+                 }) }}
             </v-btn>
           </v-tab>
         </v-tabs>
@@ -166,7 +168,7 @@
         <v-tabs-items v-model="tab" class="fill-height">
           <v-tab-item v-for="(tab, idx) in visibleTabs"
                       :key="idx" class="fill-height">
-            <component :is="tab.component"/>
+            <component :is="tab.component" :show-original="showOriginal"/>
           </v-tab-item>
         </v-tabs-items>
       </SplitArea>
@@ -229,7 +231,8 @@ export default {
       wheelSpeed: 0.3,
       suppressScrollX: true
     },
-    buttonIsBlocked: false
+    buttonIsBlocked: false,
+    showOriginal: true
   }),
   computed: {
     form () {
@@ -298,7 +301,8 @@ export default {
       const version = this.currentVersion.Details || {}
       if (version.FileName) {
         const ext = version.FileName.split('.').pop().toLowerCase()
-        return ['doc', 'docx', 'rtf'].some(i => i === ext)
+        const matching = ['doc', 'docx', 'rtf'].some(i => i === ext)
+        if (matching) return ext.toUpperCase()
       }
       return false
     }
@@ -453,6 +457,18 @@ export default {
       const result = await this.$store.dispatch('updateTask', taskData)
       if (!result.success) {
         this.initTaskData()
+      }
+    },
+    async toggleSwitchFile () {
+      if (!this.showOriginal) {
+        this.showOriginal = true
+      } else if (this.currentVersion.Details.Pdf) {
+        this.showOriginal = false
+      } else {
+        const result = await this.getPdfUrl()
+        if (result) {
+          this.showOriginal = false
+        }
       }
     }
   },

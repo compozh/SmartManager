@@ -157,19 +157,14 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'setActiveVersion')
     }
   },
-  async convertVersion ({ commit }, versionId) {
-    commit('START_PRELOADER', 'convertVersion')
+  async getPdfUrl ({ commit, state }) {
+    const versionId = state.currentVersion.Id
+    commit('START_PRELOADER', 'getPdfUrl')
     try {
-      const response = await api.convertVersionInGql(versionId)
-      const result = JSON.parse(response.data.smtasks.convertedVersion)
-      if (result.ErrorMessage) {
-        commit('SET_NOTIFY', {
-          text: result.ErrorMessage,
-          color: 'warning'
-        })
-      }
-      commit('SET_CONVERTED_VERSION', result)
-      return result
+      const response = await api.getPdfUrlFromGql(versionId)
+      const pdfUrl = response.data.smtasks.pdfUrl
+      commit('SET_PDF_URL', pdfUrl)
+      return true
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
@@ -177,7 +172,7 @@ export default {
         color: 'error'
       })
     } finally {
-      commit('STOP_LINEAR_PRELOADER', 'convertVersion')
+      commit('STOP_PRELOADER', 'getPdfUrl')
     }
   },
   async deleteVersion ({ commit }, { attachment, versionId }) {

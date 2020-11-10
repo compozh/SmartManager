@@ -1,7 +1,0 @@
-mutation ($id: Int!) {
-    smtasks {
-        convertVersion(id: $id) {
-            url
-        }
-    }
-}
