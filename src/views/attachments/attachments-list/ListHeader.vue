@@ -26,11 +26,12 @@
                  class="add-btn mr-5">
             <span v-if="reference.Icon"
                   v-html="reference.Icon"
-                  class="linkIcon"/>
+                  class="linkIcon mr-2 success--text"/>
             <fa-icon v-else
                      icon="question-circle"
                      size="lg"
-                     color="#343434"/>
+                     class="mr-2"
+                     color="success"/>
             {{ reference.Name }}
           </v-btn>
         </template>
@@ -116,7 +117,6 @@ export default {
   .linkIcon {
     height: 19px;
     width: 19px;
-    color: #343434;
     margin: 1px 1px 0 0;
   }
 

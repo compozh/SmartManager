@@ -77,6 +77,14 @@ export default {
     attachment.date = moment(version.Date).format('DD.MM.YYYY HH:mm')
     Vue.set(attachments, index, attachment)
   },
+  SET_PDF_URL (state, pdfUrl) {
+    const versionId = state.currentVersion.Id
+    const attachmentId = state.activeAttachment.id
+    const attachments = state.attachments
+    const attachment = attachments.find(i => i.id === attachmentId)
+    const version = attachment.versions.find(i => i.Id === versionId)
+    version.Details.Pdf = pdfUrl
+  },
   DELETE_VERSION (state, { attachmentId, versionId }) {
     const attachments = state.attachments
     const index = attachments.findIndex(i => i.id === attachmentId)

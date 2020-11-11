@@ -402,8 +402,8 @@ export const attachments = {
     async setActiveVersion (attachmentId, version) {
       await this.$store.dispatch('setActiveVersion', { attachmentId, version })
     },
-    async convertVersion () {
-      await this.$store.dispatch('convertVersion', this.currentVersion.Id)
+    async getPdfUrl () {
+      return await this.$store.dispatch('getPdfUrl')
     },
     async deleteVersion (attachment, versionId) {
       const result = await this.$store.dispatch('deleteVersion', { attachment, versionId })

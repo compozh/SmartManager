@@ -30,6 +30,8 @@ const AttachmentPreLoader = () => import('./AttachmentPreLoader')
 const NoData = () => import('./NoData')
 
 export default {
+  name: 'AttachmentsViewer',
+  props: ['showOriginal'],
   components: {
     PdfViewer,
     SpreadsheetViewer,
@@ -74,9 +76,12 @@ export default {
       return null
     },
     url () {
-      return this.currentVersion.Details
-        ? this.currentVersion.Details.FileUrl
-        : ''
+      if (this.currentVersion.Details) {
+        return this.showOriginal
+          ? this.currentVersion.Details.FileUrl
+          : this.currentVersion.Details.Pdf
+      }
+      return ''
     }
   }
 }
