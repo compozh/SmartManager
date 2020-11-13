@@ -76,66 +76,24 @@
                   <file-type-icon :extension="attachment.fileExt"/>
                 </td>
                 <td class="text-truncate" style="max-width: 0;">{{ attachment.fileName }}</td>
-                <td :class="hover ? 'text-right' : 'text-center text-truncate'"
-                    style="width: 150px; max-width: 120px;">
+                <td class="text-center text-truncate" style="width: 150px; max-width: 120px;">
                   <span v-if="!hover">{{ toLocalString(attachment.date) }}</span>
-                  <v-tooltip v-if="hover && attachment.access.editNewVersion" top>
-                    <template #activator="{ on }">
-                      <v-btn v-on="on"
-                             id="addBtn"
-                             @click.stop="newVersion(attachment)"
-                             color="grey"
-                             class="mr-8"
-                             style="border: 1px dashed;"
-                             text fab x-small dark depressed>
-                        <label :for="objectId"
-                               class="add-label pa-2">
-                          <fa-icon icon="files-medical" type="fal" size="2x"/>
-                        </label>
-                      </v-btn>
-                    </template>
-                    <span>{{ $t('versions.add') }}</span>
-                  </v-tooltip>
-                  <v-tooltip v-if="hover && attachment.access.download" top>
-                    <template #activator="{ on }">
-                      <v-btn v-on="on"
-                             :loading="downLoaders.includes(attachment.id)"
-                             @click.stop="downloadAttachment(attachment)"
-                             color="grey"
-                             style="border: 1px dashed;"
-                             text fab x-small dark depressed>
-                        <fa-icon icon="arrow-alt-down" type="fal" size="2x"/>
-                        <template #loader>
-                          <span class="custom-loader">
-                            <fa-icon icon="sync" size="lg"/>
-                          </span>
-                        </template>
-                      </v-btn>
-                    </template>
-                    <span>{{ $t('attachments.download') }}</span>
-                  </v-tooltip>
                 </td>
-                <td :class="hover ? 'text-left' : 'text-center text-truncate'"
-                    style="width: 100px; max-width: 0;">
+                <td class="text-center text-truncate" style="width: 100px; max-width: 0;">
                   <span v-if="!hover">{{ fileSize(attachment.fileSize) }}</span>
-                  <v-tooltip v-else-if="attachment.access.delete" top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn v-on="on"
-                             color="grey"
-                             style="border: 1px dashed;"
-                             @click.stop="attachmentDeleteDialog(attachment)"
-                             text fab x-small dark depressed>
-                        <fa-icon icon="trash" type="fal" size="lg"/>
-                      </v-btn>
-                    </template>
-                    <span>{{ $t('attachments.delete') }}</span>
-                  </v-tooltip>
                 </td>
-                <td class="text-center" style="width: 20px;">
+                <td class="text-center" style="width: 20px; position: relative">
                   <div v-if="!hover">
-                    <fa-icon v-if="attachment.isSign" icon="medal" size="lg"/>
+                    <fa-icon v-if="attachment.isSign" color="#FFC107" icon="medal" size="lg"/>
                     <span v-else>-</span>
                   </div>
+                  <attachment-btns v-if="hover" :objectId="objectId"
+                                   :access="attachment.access"
+                                   :loading="downLoaders.includes(attachment.id)"
+                                   @new-version="newVersion(attachment)"
+                                   @download="downloadAttachment(attachment)"
+                                   @delete="attachmentDeleteDialog(attachment)"
+                                   @eds="showEds(attachment)"/>
                 </td>
               </tr>
             </v-hover>
@@ -159,18 +117,21 @@
         <br><br>{{ '- ' + deleteParams.fileName }}
       </template>
     </delete-confirm>
+    <eds v-model="edsDialog" :signatures="signatures"/>
   </div>
 </template>
 
 <script>
+import ListHeader from './ListHeader'
+import AttachmentBtns from './AttachmentBtns'
+import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, cases, attachments } from '@/mixins/units'
 import { date } from '@/mixins/dateTime'
 
-const ListHeader = () => import('./ListHeader')
 const VersionList = () => import('./VersionList')
+const Eds = () => import('../attachment-eds/EdsList')
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
-const FilesUpload = () => import('@/views/attachments/attachments-upload/FilesUpload')
-const FileTypeIcon = () => import('@/components/FileTypeIcon')
+const FilesUpload = () => import('@/views/attachments/attachment-upload/FilesUpload')
 
 export default {
   name: 'AttachmentsList',
@@ -180,8 +141,10 @@ export default {
     attachmentList: Array
   },
   components: {
+    Eds,
     ListHeader,
     VersionList,
+    AttachmentBtns,
     DeleteConfirm,
     FilesUpload,
     FileTypeIcon
@@ -194,6 +157,8 @@ export default {
     uploadType: 'attachments',
     versionParams: null,
     versionLoaders: [],
+    signatures: [],
+    edsDialog: false,
     downLoaders: [],
     scrollOptions: {
       wheelSpeed: 0.3,
@@ -256,6 +221,10 @@ export default {
       this.deleteConfirmDialog = true
       this.deleteParams.attachment = attachment
       this.deleteParams.fileName = attachment.fileName
+    },
+    showEds (attachment) {
+      this.edsDialog = true
+      this.signatures = attachment.signatures || []
     }
   }
 }

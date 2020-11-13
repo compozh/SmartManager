@@ -57,70 +57,28 @@
           </v-tooltip>
         </td>
         <td class="text-center px-2">
-          <div class="d-flex justify-center">
-            <v-tooltip top>
-              <template #activator="{ on }">
-                <v-btn v-on="on"
-                       :disabled="version.IsActive || !attachment.access.changeActiveVersion"
-                       @click.stop="setActiveVersion(attachment.id, version)"
-                       color="green"
-                       class="mr-2"
-                       style="border: 1px dashed;"
-                       icon x-small depressed>
-                  <fa-icon icon="check" type="fal" size="lg"/>
-                </v-btn>
-              </template>
-              <span>{{ $t('versions.setActive') }}</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template #activator="{ on }">
-                <v-btn v-on="on"
-                       :href="version.Details.SrcUrl"
-                       :disabled="!attachment.access.download"
-                       @click.stop="() => {}"
-                       color="blue"
-                       class="mr-2"
-                       style="border: 1px dashed;"
-                       icon x-small depressed>
-                  <fa-icon icon="arrow-alt-down" type="fal" size="lg"/>
-                </v-btn>
-              </template>
-              <span>{{ $t('versions.download') }}</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template #activator="{ on }">
-                <v-btn v-on="on"
-                       :disabled="!attachment.access.remarksView"
-                       @click.stop="showNotes(version)"
-                       color="warning"
-                       class="mr-2"
-                       style="border: 1px dashed;"
-                       icon x-small depressed>
-                  <fa-icon icon="exclamation" type="fal" size="lg"/>
-                </v-btn>
-              </template>
-              <span>{{ $t('versions.notes') }}</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template #activator="{ on }">
-                <v-btn v-on="on"
-                       :disabled="version.IsActive || !attachment.access.deleteVersion"
-                       @click.stop="versionDeleteDialog(version)"
-                       color="red darken-4"
-                       style="border: 1px dashed;"
-                       icon x-small depressed>
-                  <fa-icon icon="times" type="fal"/>
-                </v-btn>
-              </template>
-              <span>{{ $t('versions.delete') }}</span>
-            </v-tooltip>
-          </div>
+          <version-btns :version="version"
+                        :access="attachment.access"
+                        @set-active="setActiveVersion(attachment.id, version)"
+                        @show-notes="showNotes(version)"
+                        @delete="versionDeleteDialog(version)"/>
         </td>
         <td class="text-center">
           <div>
-            <fa-icon v-if="version.Signatures && version.Signatures.length"
-                     icon="medal" size="lg"/>
-            <span v-else>-</span>
+            <!-- EDS dialog button -->
+            <v-tooltip top>
+              <template #activator="{ on }">
+                <v-btn v-on="on"
+                       :color="isSign(version) ? 'amber' : 'purple'"
+                       class="btn-border"
+                       @click.stop="showEds(version)"
+                       icon small depressed>
+                  <fa-icon :icon="isSign(version) ? 'medal' : 'signature'"
+                           size="lg"/>
+                </v-btn>
+              </template>
+              <span>{{ $t('eds.title') }}</span>
+            </v-tooltip>
           </div>
         </td>
       </tr>
@@ -138,16 +96,19 @@
         <br><br>{{ '- ' + deleteParams.fileName }}
       </template>
     </delete-confirm>
+    <eds v-model="edsDialog" :signatures="signatures"/>
   </v-simple-table>
 </template>
 
 <script>
+import FileTypeIcon from '@/components/FileTypeIcon'
+import VersionBtns from './VersionBtns'
 import { attachments } from '@/mixins/units'
 import { date } from '@/mixins/dateTime'
 
-const FileTypeIcon = () => import('@/components/FileTypeIcon')
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
-const Notes = () => import('./Notes')
+const Notes = () => import('../attachment-notes/Notes')
+const Eds = () => import('../attachment-eds/EdsList')
 
 export default {
   name: 'VersionList',
@@ -158,15 +119,22 @@ export default {
   components: {
     FileTypeIcon,
     DeleteConfirm,
-    Notes
+    Notes,
+    VersionBtns,
+    Eds
   },
   data: () => ({
     deleteConfirmDialog: false,
     deleteParams: {},
-    notes: [],
     roots: {},
-    notesDialog: false
+    notes: [],
+    signatures: [],
+    notesDialog: false,
+    edsDialog: false
   }),
+  computed: {
+    isSign: () => version => version.Details.Signatures && version.Details.Signatures.length
+  },
   methods: {
     versionDeleteDialog (version) {
       this.deleteConfirmDialog = true
@@ -181,6 +149,12 @@ export default {
         // Notes must always be array, because adding note mutation used "unshift" method
         // and will be fail if value of notes be null as it is in initial object
         this.notes = version.Details.Notes || []
+      }
+    },
+    showEds (version) {
+      this.edsDialog = true
+      if (version.Details) {
+        this.signatures = version.Details.Signatures || []
       }
     }
   }

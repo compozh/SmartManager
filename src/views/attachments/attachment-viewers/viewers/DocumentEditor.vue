@@ -9,7 +9,7 @@
                                :locale="$i18n.locale"
                                :showPropertiesPane="false"
                                :currentUser="userName"
-                               :restrictEditing="access.editFile"
+                               :restrictEditing="!access.editFile"
                                :toolbarClick="saveVersion"
                                :contentChange="enableSaveBtn">
   </ejs-documenteditorcontainer>
