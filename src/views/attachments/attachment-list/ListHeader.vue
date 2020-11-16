@@ -60,7 +60,7 @@
 <script>
 import { tasks, attachments } from '@/mixins/units'
 
-const TypesList = () => import('../attachments-upload/TypesList')
+const TypesList = () => import('../attachment-upload/TypesList')
 
 export default {
   name: 'ListHeader',
