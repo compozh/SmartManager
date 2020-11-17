@@ -7,6 +7,7 @@ export const userInfo = {
       'userLogin',
       'userName',
       'userPhoto',
+      'delegatedUsers',
       'delegatedRights'
     ])
   }

@@ -2,7 +2,8 @@ export default {
   // All user data
   user: state => state.user || {},
 
-  // Delegated rights
+  // Delegations
+  delegatedUsers: (state, getters) => getters.user.delegatedUsers || [],
   delegatedRights: (state, getters) => getters.user.delegatedRights || [],
 
   // User data
