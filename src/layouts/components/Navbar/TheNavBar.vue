@@ -20,7 +20,7 @@
 <script>
 import SideBarBtn from './SideBarBtn'
 import Breadcrumb from './Breadcrumb'
-import UserPanel from './UserPanel'
+import UserPanel from './user-panel/UserPanel'
 import LangSwitcher from './LangSwitcher'
 import LinearPreLoader from './LinearPreLoader'
 import { zones, folders, tasks } from '@/mixins/units'
