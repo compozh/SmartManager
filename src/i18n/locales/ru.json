@@ -5,11 +5,16 @@
   "listNumber": "№ п/п",
   "user": {
     "name": "Имя",
+    "header": "Пользователь",
+    "subUser": "Заместитель",
     "id": "ID пользователя",
     "login": "Логин",
     "isActive": "Текущие права",
-    "delegatedRights": "Делегированные права",
+    "delegatedUsers": "Делегированные права",
+    "delegatedRights": "Управление правами",
     "delegateRights": "Делегировать права",
+    "delete": "Удаление делегированных прав",
+    "delConfirmText": "Вы уверены, что хотите удалить делегированные права?",
     "usersPerPage": "Пользователей на странице"
   },
   "navBar":{
@@ -234,7 +239,8 @@
     "description": "Описание",
     "date": "Дата",
     "fioAdd": "Создано",
-    "actions": "Действия"
+    "actions": "Действия",
+    "comment": "Примечание"
   },
   "attachments": {
     "delete": "Удалить вложение",
@@ -279,7 +285,7 @@
     "clearKey": "Очистить ключ",
     "noEds": "Нет подписей",
     "signatory": "Подписант",
-    "organization": "Огранизация",
+    "organization": "Организация",
     "position": "Должность",
     "code": "ЕГРПОУ",
     "keyCenter": "ЦСК",
@@ -387,7 +393,9 @@
     "deleteNoteError": "Ошибка при удалении замечания",
     "addDelegateSuccess": "Ваши права успешно делегированы другому пользователю",
     "addDelegateFail": "Не удалось делегировать права другому пользователю",
-    "addDelegateError": "Ошибка при попытке делегирования прав"
+    "addDelegateError": "Ошибка при попытке делегирования прав",
+    "editDelegationFail": "Не удалось изменить делегированные права",
+    "editDelegationError": "Ошибка изменения делегированных прав"
   },
   "workflow": {
     "businessProcess": "Бизнес-процесс",

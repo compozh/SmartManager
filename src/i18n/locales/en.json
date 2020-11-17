@@ -5,11 +5,16 @@
   "listNumber": "No.",
   "user": {
     "name": "Name",
+    "header": "User",
+    "subUser": "Deputy",
     "id": "User Id",
     "login": "Login",
     "isActive": "Current rights",
-    "delegatedRights": "Delegated rights",
+    "delegatedUsers": "Delegated rights",
+    "delegatedRights": "Rights management",
     "delegateRights": "Delegate rights",
+    "delete": "Delete delegated rights",
+    "delConfirmText": "Are you sure you want to remove delegated rights?",
     "usersPerPage": "Users per page"
   },
   "navBar":{
@@ -234,7 +239,8 @@
     "description": "Description",
     "date": "Date",
     "fioAdd": "Created",
-    "actions": "Actions"
+    "actions": "Actions",
+    "comment": "Note"
   },
   "attachments": {
     "delete": "Attachment delete",
@@ -272,9 +278,26 @@
     "eds": "Digital sign",
     "title": "Electronic digital signs",
     "sign": "Sign",
+    "addFromFile": "Add from file",
     "delete": "Delete",
+    "delConfirmText": "Are you sure you want to remove the signature?",
     "check": "Check",
-    "clearKey": "Clear key"
+    "clearKey": "Clear key",
+    "noEds": "No signatures",
+    "signatory": "Signatory",
+    "organization": "Organization",
+    "position": "Position",
+    "code": "Registry code",
+    "keyCenter": "Key center",
+    "comment": "Comment",
+    "fileKey": "File key",
+    "hardwareKey": "Hardware key",
+    "mobileId": "MobileID",
+    "widget": "Widget",
+    "depositSign": "DepositSign",
+    "signType": "Sign type",
+    "privateKey": "Private key",
+    "selectKey": "Select file key..."
   },
   "comments": {
     "addComment": "Add comment",
@@ -370,7 +393,9 @@
     "deleteNoteError": "Note deleting error",
     "addDelegateSuccess": "Your rights have been successfully delegated to another user",
     "addDelegateFail": "Failed to delegate rights to another user",
-    "addDelegateError": "Error while trying to delegate rights"
+    "addDelegateError": "Error while trying to delegate rights",
+    "editDelegationFail": "Delegate rights changing failed",
+    "editDelegationError": "Delegate rights changing error"
   },
   "workflow": {
     "businessProcess": "Business process",

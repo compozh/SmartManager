@@ -5,11 +5,16 @@
   "listNumber": "№ п/п",
   "user": {
     "name": "Ім'я",
+    "header": "Користувач",
+    "subUser": "Заступник",
     "id": "ID користувача",
     "login": "Логін",
     "isActive": "Поточні права",
-    "delegatedRights": "Делеговані права",
+    "delegatedUsers": "Делеговані права",
+    "delegatedRights": "Керування правами",
     "delegateRights": "Делегувати права",
+    "delete": "Видалення делегованих прав",
+    "delConfirmText": "Ви впевнені, що бажаєте видалити делеговані права?",
     "usersPerPage": "Користувачів на сторінці"
   },
   "navBar":{
@@ -234,7 +239,8 @@
     "description": "Опис",
     "date": "Дата",
     "fioAdd": "Створено",
-    "actions": "Дії"
+    "actions": "Дії",
+    "comment": "Примітка"
   },
   "attachments": {
     "delete": "Видалити вкладення",
@@ -272,9 +278,26 @@
     "eds": "Цифровий підпис",
     "title": "Електронно-цифрові підписи",
     "sign": "Підписати",
+    "addFromFile": "Додати із файлу",
     "delete": "Видалити",
+    "delConfirmText": "Ви впевнені, що бажаєте видалити підпис?",
     "check": "Перевірити",
-    "clearKey": "Очистити ключ"
+    "clearKey": "Очистити ключ",
+    "noEds": "Не має підписів",
+    "signatory": "Підписант",
+    "organization": "Організація",
+    "position": "Посада",
+    "code": "ЕДРПОУ",
+    "keyCenter": "ЦСК",
+    "comment": "Коментар",
+    "fileKey": "Файловий ключ",
+    "hardwareKey": "Апаратний ключ",
+    "mobileId": "MobileID",
+    "widget": "Widget",
+    "depositSign": "DepositSign",
+    "signType": "Тип підпису",
+    "privateKey": "Приватний ключ",
+    "selectKey": "Оберіть файл ключа..."
   },
   "comments": {
     "addComment": "Додати коментар",
@@ -371,7 +394,9 @@
     "deleteNoteError": "Помилка при видаленні зауваження",
     "addDelegateSuccess": "Ваші права успішно делеговані іншому користувачу",
     "addDelegateFail": "Не вдалося делегувати права іншому користувачу",
-    "addDelegateError": "Помилка при спробі делегувати права іншому користувачу"
+    "addDelegateError": "Помилка при спробі делегувати права іншому користувачу",
+    "editDelegationFail": "Не вдалося змінити делеговні права",
+    "editDelegationError": "Помилка при зміні делегованих прав"
   },
   "workflow": {
     "businessProcess": "Почати бізнес-процес",
