@@ -9,6 +9,7 @@ export const date = {
   },
   computed: {
     currentDate: () => moment(),
+    parseTimeStamp: () => timeStamp => moment(timeStamp),
     parseDateTime: () => dateTime => moment(dateTime, 'DD.MM.YYYY HH:mm'),
     parseUtcDateTime: () => dateTime => moment.utc(dateTime, 'DD.MM.YYYY HH:mm'),
     parseVersionDate: () => dateTime => moment.utc(dateTime, 'YYYY-MM-DD HH:mm:ss'),
@@ -22,6 +23,9 @@ export const date = {
     },
     formatDate () {
       return date => this.parsePickerDate(date).format('DD.MM.YYYY')
+    },
+    formatTimeStamp () {
+      return timeStamp => this.parseTimeStamp(timeStamp).format('DD.MM.YYYY')
     },
     toLocalString () {
       return dateTime => this.parseUtcDateTime(dateTime).local().format('DD.MM.YYYY HH:mm')
