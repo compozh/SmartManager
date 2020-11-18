@@ -2,7 +2,7 @@
   <dialog-card :value="showRights" width="700px"
                @close="$emit('input', false)"
                @input="$emit('input', $event)"
-               :title="$t('user.delegatedRights')">
+               :title="$t('user.delegatedRights')" persistent>
     <template #text>
       <v-text-field v-model="search"
                     clearable
@@ -27,7 +27,7 @@
                     disable-pagination
                     hide-default-footer
                     :headers="headers"
-                    :items="delegatedRights"
+                    :items="delegatedUsers"
                     :search="search">
         <template #item="{ item: rights, index }">
           <tr :class="{'lime lighten-5': selectedRights === rights.USERID }"
@@ -82,7 +82,7 @@ import OutlinedBtn from '@/components/OutlinedBtn'
 import { userInfo, userMethods } from '@/mixins/users'
 
 export default {
-  name: 'DelegatedRights',
+  name: 'DelegatedUsers',
   mixins: [userInfo, userMethods],
   model: {
     prop: 'showRights'

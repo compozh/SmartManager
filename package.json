@@ -9,9 +9,9 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@it-enterprise/formio": "^2.0.24",
+    "@it-enterprise/formio": "^2.0.27",
     "@it-enterprise/graphql": "^1.0.9",
-    "@it-enterprise/jwtauthentication": "^2.0.8",
+    "@it-enterprise/jwtauthentication": "^2.1.1",
     "@it-enterprise/localization": "^1.0.10",
     "@syncfusion/ej2-vue-documenteditor": "^18.2.57",
     "@syncfusion/ej2-vue-pdfviewer": "^18.2.45",

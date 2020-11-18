@@ -60,11 +60,13 @@ export default {
       commit('STOP_PRELOADER', 'applyDelegatedRights')
     }
   },
-  async addDelegateUser ({ commit }, params) {
+  async addDelegateUser ({ dispatch, commit }, params) {
     try {
       commit('START_PRELOADER', 'addDelegateUser')
       const result = await auth.addDelegateUser(params)
       if (result.success) {
+        dispatch('setUserData')
+        commit('UPDATE_DELEGATED_RIGHTS', params)
         commit('SET_NOTIFY', {
           text: i18n.t('notify.addDelegateSuccess'),
           color: 'success'
@@ -87,6 +89,32 @@ export default {
       })
     } finally {
       commit('STOP_PRELOADER', 'addDelegateUser')
+    }
+  },
+  async editDelegatedRights ({ commit }, params) {
+    try {
+      commit('START_PRELOADER', 'editDelegatedRights')
+      const result = await auth.editDelegation(params)
+      if (result.success) {
+        commit('UPDATE_DELEGATED_RIGHTS', params)
+      } else {
+        commit('STOP_PRELOADER', 'editDelegatedRights')
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || i18n.t('notify.editDelegationFail'),
+          color: 'warning'
+        })
+      }
+      return true
+    } catch (error) {
+      if (error) {
+        console.error(error.message || error)
+      }
+      commit('SET_NOTIFY', {
+        text: i18n.t('notify.editDelegationError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'editDelegatedRights')
     }
   },
   userIsLoggedIn ({ state, commit }) {
@@ -119,7 +147,8 @@ export default {
   },
   async setUserData ({ commit }) {
     const user = auth.getUserData()
-    user.delegatedRights = await auth.getDelegatedRights(user.id) || []
+    user.delegatedUsers = await auth.getDelegatedUsers(user.id) || []
+    user.delegatedRights = await auth.getDelegatedRights() || []
     commit('UPDATE_AUTHENTICATED_USER', user)
   }
 }

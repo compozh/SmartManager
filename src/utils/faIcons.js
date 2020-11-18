@@ -68,6 +68,7 @@ import { faSave } from '@fortawesome/pro-regular-svg-icons/faSave'
 import { faFileContract } from '@fortawesome/pro-regular-svg-icons/faFileContract'
 import { faFileSignature } from '@fortawesome/pro-regular-svg-icons/faFileSignature'
 import { faSignature } from '@fortawesome/pro-regular-svg-icons/faSignature'
+import { faUserCog } from '@fortawesome/pro-regular-svg-icons/faUserCog'
 import { faUnlock as falUnlock } from '@fortawesome/pro-light-svg-icons/faUnlock'
 import { faStar as falStar } from '@fortawesome/pro-light-svg-icons/faStar'
 import { faFilesMedical as falFilesMedical } from '@fortawesome/pro-light-svg-icons/faFilesMedical'
@@ -157,6 +158,7 @@ library.add(
   faFileContract,
   faFileSignature,
   faSignature,
+  faUserCog,
   falUnlock,
   falStar,
   falFilesMedical,
