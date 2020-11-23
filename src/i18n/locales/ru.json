@@ -395,7 +395,8 @@
     "addDelegateFail": "Не удалось делегировать права другому пользователю",
     "addDelegateError": "Ошибка при попытке делегирования прав",
     "editDelegationFail": "Не удалось изменить делегированные права",
-    "editDelegationError": "Ошибка изменения делегированных прав"
+    "editDelegationError": "Ошибка изменения делегированных прав",
+    "signCheckFail": "Не удалось проверить подпись"
   },
   "workflow": {
     "businessProcess": "Бизнес-процесс",
