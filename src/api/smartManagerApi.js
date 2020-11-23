@@ -462,4 +462,16 @@ export class SmartManagerApi {
     })
     return result.data.processesQuery.getForm
   }
+
+  static async checkSignInGql (id) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        query: gql`${q.signCheck}`,
+        variables: { id }
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
 }

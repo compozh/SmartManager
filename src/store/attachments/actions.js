@@ -39,7 +39,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('fileDetailsError'),
+        text: error.message || i18n.t('notify.fileDetailsError'),
         color: 'error'
       })
     } finally {
@@ -100,7 +100,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('notify.attachDelError'),
+        text: error.message || i18n.t('notify.notify.attachDelError'),
         color: 'error'
       })
     } finally {
@@ -117,7 +117,7 @@ export default {
         commit('SET_ACTIVE_VERSION', fileId)
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || i18n.t('versionAddingFail'),
+          text: result.errorMessage || i18n.t('notify.versionAddingFail'),
           color: 'warning'
         })
       }
@@ -125,7 +125,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('versionAddingError'),
+        text: error.message || i18n.t('notify.versionAddingError'),
         color: 'error'
       })
     } finally {
@@ -142,7 +142,7 @@ export default {
         commit('SET_ACTIVE_VERSION', attachmentId)
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || i18n.t('setActiveVersionFail'),
+          text: result.errorMessage || i18n.t('notify.setActiveVersionFail'),
           color: 'warning'
         })
       }
@@ -150,7 +150,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('setActiveVersionError'),
+        text: error.message || i18n.t('notify.setActiveVersionError'),
         color: 'error'
       })
     } finally {
@@ -168,7 +168,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('convertVersionError'),
+        text: error.message || i18n.t('notify.convertVersionError'),
         color: 'error'
       })
     } finally {
@@ -185,7 +185,7 @@ export default {
         commit('DELETE_VERSION', { attachmentId: attachment.id, versionId })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || i18n.t('deleteVersionFail'),
+          text: result.errorMessage || i18n.t('notify.deleteVersionFail'),
           color: 'warning'
         })
       }
@@ -193,7 +193,7 @@ export default {
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('deleteVersionError'),
+        text: error.message || i18n.t('notify.deleteVersionError'),
         color: 'error'
       })
     } finally {
@@ -209,14 +209,14 @@ export default {
         commit('ADD_NOTE', { roots, noteText, rootState })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || i18n.t('noteAddingFail'),
+          text: result.errorMessage || i18n.t('notify.noteAddingFail'),
           color: 'warning'
         })
       }
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('noteAddingError'),
+        text: error.message || i18n.t('notify.noteAddingError'),
         color: 'error'
       })
     } finally {
@@ -232,14 +232,14 @@ export default {
         commit('UPDATE_NOTE', { roots, noteId, noteText })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || i18n.t('updateNoteFail'),
+          text: result.errorMessage || i18n.t('notify.updateNoteFail'),
           color: 'warning'
         })
       }
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('updateNoteError'),
+        text: error.message || i18n.t('notify.updateNoteError'),
         color: 'error'
       })
     } finally {
@@ -255,14 +255,14 @@ export default {
         commit('DELETE_NOTE', { roots, noteId })
       } else {
         commit('SET_NOTIFY', {
-          text: result.errorMessage || i18n.t('deleteNoteFail'),
+          text: result.errorMessage || i18n.t('notify.deleteNoteFail'),
           color: 'warning'
         })
       }
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {
-        text: error.message || i18n.t('deleteNoteError'),
+        text: error.message || i18n.t('notify.deleteNoteError'),
         color: 'error'
       })
     } finally {
@@ -277,6 +277,21 @@ export default {
       const action = taskId ? 'getTaskDetails' : 'getCaseDetails'
       await dispatch(action, id)
       commit('STOP_LINEAR_PRELOADER', 'updateAfterChanges')
+    }
+  },
+  async checkSign ({ commit }, signId) {
+    commit('START_PRELOADER', 'checkSign')
+    try {
+      const response = await api.checkSignInGql(signId)
+      return JSON.parse(response.data.smtasks.checkResult)
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.signCheckFail'),
+        color: 'warning'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'checkSign')
     }
   }
 }
