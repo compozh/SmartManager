@@ -3,14 +3,14 @@
     <v-dialog :value="dialog"
               @input="$emit('input', $event)"
               persistent max-width="400">
-      <v-card>
-        <v-card-title class="subtitle-1 white--text blue-grey py-1 mb-4">
+      <v-card class="red darken-4">
+        <v-card-title class="subtitle-1 white--text py-1">
           <slot name="title"/>
         </v-card-title>
-        <v-card-text>
+        <v-card-text class="white pt-4">
           <slot name="text"/>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="white">
           <v-spacer></v-spacer>
           <outlined-btn icon="times"
                         color="blue-grey"

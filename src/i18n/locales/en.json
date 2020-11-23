@@ -395,7 +395,8 @@
     "addDelegateFail": "Failed to delegate rights to another user",
     "addDelegateError": "Error while trying to delegate rights",
     "editDelegationFail": "Delegate rights changing failed",
-    "editDelegationError": "Delegate rights changing error"
+    "editDelegationError": "Delegate rights changing error",
+    "signCheckFail": "Sign checking fail"
   },
   "workflow": {
     "businessProcess": "Business process",

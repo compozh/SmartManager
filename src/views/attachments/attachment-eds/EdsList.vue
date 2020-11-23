@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col>
-      <dialog-card :value="showEds" width="70%"
+      <dialog-card :value="showEds" width="70%" min-height="400px"
                    @input="$emit('input', $event)"
                    :title="$t('eds.title')"
                    @close="$emit('input', false)">
@@ -25,7 +25,10 @@
                   :class="{'lime lighten-5': eds.Id === currentEds.Id}"
                   style="cursor: pointer; width: 100%;"
                   @click="currentEds = eds">
-                <td class="text-center">{{ eds.Verification }}</td>
+                <td class="text-center">
+                  <fa-icon icon="check-circle" size="lg"
+                           :color="verifiedSigns.includes(eds.Id) ? 'green' : 'grey'"/>
+                </td>
                 <td class="text-center">{{ formatVersionDate(eds.SignDate) }}</td>
                 <td>{{ eds.Fio }}</td>
                 <td>{{ eds.Organization }}</td>
@@ -45,12 +48,14 @@
           <outlined-btn x-small
                         color="success"
                         icon="file-signature"
+                        disabled
                         :handler="() => edsCreateDialog = true">
             <span>{{ $t('eds.sign') }}</span>
           </outlined-btn>
           <outlined-btn x-small
                         color="purple"
                         icon="file-contract"
+                        disabled
                         :handler="() => {}">
             <span>{{ $t('eds.addFromFile') }}</span>
           </outlined-btn>
@@ -62,13 +67,13 @@
                         :handler="() => checkEds()">
             <span>{{ $t('eds.check') }}</span>
           </outlined-btn>
-          <outlined-btn x-small
-                        color="red darken-4"
-                        icon="trash"
-                        :disabled="!currentEds.Id"
-                        :handler="() => deleteConfirmDialog = true">
-            <span>{{ $t('buttons.delete') }}</span>
-          </outlined-btn>
+<!--          <outlined-btn x-small-->
+<!--                        color="red darken-4"-->
+<!--                        icon="trash"-->
+<!--                        :disabled="!currentEds.Id"-->
+<!--                        :handler="() => deleteConfirmDialog = true">-->
+<!--            <span>{{ $t('buttons.delete') }}</span>-->
+<!--          </outlined-btn>-->
         </template>
       </dialog-card>
 
@@ -114,12 +119,14 @@ export default {
   },
   data: () => ({
     currentEds: {},
+    verifiedSigns: [],
     edsCreateDialog: false,
     deleteConfirmDialog: false
   }),
   methods: {
-    checkEds () {
-      console.log('checkNote')
+    async checkEds () {
+      const result = await this.$store.dispatch('checkSign', this.currentEds.Id)
+      if (result.VERIFICATION === '+') this.verifiedSigns.push(this.currentEds.Id)
     },
     deleteEds () {
       console.log('deleteNote')
