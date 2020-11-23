@@ -41,6 +41,9 @@ stages:
   - publish_SP
 
 build_smartManager:
+    only:
+      variables:
+      - $CI_COMMIT_REF_NAME  == 'master' || $WebAppArtifactPath != null
     stage: build
     tags:
       - tfs2017 
