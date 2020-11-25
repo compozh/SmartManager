@@ -12,7 +12,7 @@
         <v-card-actions class="pa-6 pt-0">
           <v-spacer/>
           <v-btn outlined x-small
-                 color="warning"
+                 color="blue-grey"
                  class="notes-btn"
                  :disabled="loading"
                  @click="closeDialog">

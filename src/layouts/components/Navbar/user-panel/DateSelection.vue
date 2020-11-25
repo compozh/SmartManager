@@ -43,7 +43,7 @@
                     :label="$t('pickers.noTimeLimit')"/>
         <v-spacer/>
         <outlined-btn x-small
-                      color="red darken-4"
+                      color="blue-grey"
                       icon="times"
                       :handler="() => closeDialog()">
           <span>{{ $t('buttons.cancel') }}</span>

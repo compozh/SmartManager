@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
       <dialog-card :value="showRights" width="800px"
-                   @close="$emit('input', false)"
+                   @close="closeDialog"
                    @input="$emit('input', $event)"
                    :title="$t('user.delegatedRights')" persistent>
         <template #text>
@@ -82,8 +82,8 @@
           <outlined-btn x-small
                         color="primary"
                         icon="edit"
-                        disabled
-                        :handler="() => editDialog = true">
+                        :disabled="!selectedRights.ID"
+                        :handler="() => rightsEditDialog = true">
             <span>{{ $t('buttons.edit') }}</span>
           </outlined-btn>
           <outlined-btn x-small
@@ -96,6 +96,9 @@
 
         </template>
       </dialog-card>
+
+      <!-- Edit dialog-->
+      <delegation-edit v-model="rightsEditDialog" :rights="selectedRights"/>
 
       <!-- Delete dialog-->
       <delete-confirm v-model="deleteConfirmDialog"
@@ -115,6 +118,7 @@ import OutlinedBtn from '@/components/OutlinedBtn'
 import { userInfo, userMethods } from '@/mixins/users'
 import { date } from '@/mixins/dateTime'
 
+const DelegationEdit = () => import('./DelegationEdit')
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
 
 export default {
@@ -127,11 +131,13 @@ export default {
   components: {
     DialogCard,
     OutlinedBtn,
+    DelegationEdit,
     DeleteConfirm
   },
   data: () => ({
     search: '',
     selectedRights: {},
+    rightsEditDialog: false,
     deleteConfirmDialog: false
   }),
   computed: {
@@ -148,22 +154,19 @@ export default {
   },
   beforeDestroy () {
     this.search = ''
+    this.selectedRights = {}
   },
   methods: {
-    editRights () {
-      this.$store.dispatch('editDelegatedRights', {
-        mode: 'edit',
-        id: this.selectedRights.ID,
-        dateFrom: this.selectedRights.ID,
-        dateTo: this.selectedRights.ID,
-        comm: this.selectedRights.ID
-      })
-    },
     deleteRights () {
       this.$store.dispatch('editDelegatedRights', {
         mode: 'DELETE',
         id: this.selectedRights.ID
       }).then(result => !result || (this.selectedRights = {}))
+    },
+    closeDialog () {
+      this.$emit('input', false)
+      this.search = ''
+      this.selectedRights = {}
     }
   }
 }
