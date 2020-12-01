@@ -63,11 +63,17 @@ export default {
   mixins: [userMethods],
   created () {
     this.logout()
+    this.getAuthTypes()
   },
   computed: {
     forgotPasswordUrl () {
       const forgotPasswordUrl = '/webparts/?id=LOGIN_REQUESTRECOVERPASSWORD&devexpress_theme=moderno&itLanguage='
       return window.appConfig.SiteUrl + forgotPasswordUrl + this.$i18n.locale
+    }
+  },
+  methods: {
+    async getAuthTypes () {
+      await this.$store.dispatch('authTypes')
     }
   }
 }

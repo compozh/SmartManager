@@ -4,8 +4,14 @@ query ($folderId: String, $helperExec: Boolean) {
       id
       name
       descript
+      addedId
       addedFio
       addedPhoto
+      declarer
+      declarerId
+      declarerPhoto
+      performer
+      performerPhoto
       dateplan
       status
       isMy
@@ -20,8 +26,6 @@ query ($folderId: String, $helperExec: Boolean) {
       isFavorite
       docCaption
       docText
-      declarer
-      declarerPhoto
       role
       childCount
       childDoneCount

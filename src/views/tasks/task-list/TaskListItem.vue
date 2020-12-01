@@ -22,11 +22,11 @@
       <div class="item-body">
         <div class="row-element">
           <v-avatar color="grey lighten-1" class="mx-3" size="40px">
-            <fa-icon v-if="!task.addedPhoto" icon="user" inverse/>
-            <v-img v-else :src="task.addedPhoto"/>
+            <fa-icon v-if="!user.photo" icon="user" inverse/>
+            <v-img v-else :src="user.photo"/>
           </v-avatar>
           <div class="column-element">
-            <span class="body-2 text--secondary">{{ task.addedFio }}</span>
+            <span class="body-2 text--secondary">{{ user.name }}</span>
             <span class="ma-0 pl-0 subtitle-1 d-flex align-center">
               <fa-icon v-show="task.priority === 1" class="red--text mr-1" icon="fire"/>
               <span class=" ma-0 pl-0 pt-1 subtitle-2 text-truncate">{{ task.name }}</span>
@@ -89,6 +89,15 @@ export default {
     task: Object
   },
   computed: {
+    user () {
+      const userId = this.$store.getters.userId
+      return userId === this.task.declarerId || userId === this.task.addedId
+        ? { name: this.task.performer, photo: this.task.performerPhoto }
+        : {
+          name: this.task.declarer || this.task.addedFio,
+          photo: this.task.declarerPhoto || this.task.addedPhoto
+        }
+    },
     taskInProgress () {
       return this.task.status === '' || this.task.status === '*'
     },

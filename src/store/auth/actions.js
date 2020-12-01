@@ -3,6 +3,17 @@ import router from '@/router'
 import auth from '@/utils/auth'
 
 export default {
+  async authTypes ({ commit }) {
+    commit('START_PRELOADER', 'authTypes')
+    try {
+      const result = await auth.getAllowedAuthTypes()
+      commit('SET_AUTH_TYPES', result.AllowedAuthTypes)
+    } catch (error) {
+      console.error(error.message || error)
+    } finally {
+      commit('STOP_PRELOADER', 'authTypes')
+    }
+  },
   logout ({ commit }) {
     auth.clearTokens()
     commit('UPDATE_AUTHENTICATED_USER', null)
@@ -91,12 +102,13 @@ export default {
       commit('STOP_PRELOADER', 'addDelegateUser')
     }
   },
-  async editDelegatedRights ({ commit }, params) {
+  async editDelegatedRights ({ dispatch, commit }, params) {
     try {
       commit('START_PRELOADER', 'editDelegatedRights')
       const result = await auth.editDelegation(params)
       if (result.success) {
-        commit('UPDATE_DELEGATED_RIGHTS', params)
+        await dispatch('setUserData')
+        // commit('UPDATE_DELEGATED_RIGHTS', params)
       } else {
         commit('STOP_PRELOADER', 'editDelegatedRights')
         commit('SET_NOTIFY', {

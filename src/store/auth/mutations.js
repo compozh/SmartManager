@@ -1,4 +1,7 @@
 export default {
+  SET_AUTH_TYPES (state, authTypes) {
+    state.authTypes = authTypes.split(',')
+  },
   UPDATE_AUTHENTICATED_USER (state, user) {
     state.user = user
   },

@@ -17,6 +17,7 @@
                             class="body-2 mr-5"/>
             </template>
             <v-date-picker v-model="dateStart"
+                           :max="dateEnd"
                            first-day-of-week="1"
                            scrollable/>
           </v-menu>
@@ -32,6 +33,7 @@
                             class="body-2"/>
             </template>
             <v-date-picker v-model="dateEnd"
+                           :min="dateStart"
                            first-day-of-week="1"
                            scrollable/>
           </v-menu>
@@ -84,7 +86,9 @@ export default {
   computed: {
     dateStart: {
       get () {
-        return !this.dateFrom || this.formatPickerDate(this.dateFrom)
+        return this.dateFrom
+          ? this.formatPickerDate(this.dateFrom)
+          : this.dateFrom
       },
       set (date) {
         this.dateFrom = this.parsePickerDate(date)
@@ -92,7 +96,9 @@ export default {
     },
     dateEnd: {
       get () {
-        return !this.dateTo || this.formatPickerDate(this.dateTo)
+        return this.dateTo
+          ? this.formatPickerDate(this.dateTo)
+          : this.dateTo
       },
       set (date) {
         this.dateTo = this.parsePickerDate(date)
@@ -113,7 +119,6 @@ export default {
         id: this.rights.ID,
         dateFrom: this.formatPickerDate(this.dateFrom),
         dateTo: this.formatPickerDate(this.dateTo),
-        pdDo: false,
         comm: this.comm
       })
       !result || this.closeDialog()

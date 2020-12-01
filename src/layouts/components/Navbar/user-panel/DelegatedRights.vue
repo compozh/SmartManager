@@ -1,114 +1,113 @@
 <template>
   <v-row justify="center">
-      <dialog-card :value="showRights" width="800px"
-                   @close="closeDialog"
-                   @input="$emit('input', $event)"
-                   :title="$t('user.delegatedRights')" persistent>
-        <template #text>
-          <v-text-field v-model="search"
-                        clearable
-                        clear-icon="+"
-                        class="mb-5"
-                        single-line
-                        hide-details>
-            <template #label>
-          <span class="subtitle-2 font-weight-light font-italic"
-                style="color: #9e9e9e">{{ $t('search') }}</span>
-            </template>
+    <dialog-card :value="showRights" width="70%"
+                 @close="closeDialog"
+                 @input="$emit('input', $event)"
+                 :title="$t('user.delegatedRights')" persistent>
+      <template #text>
+        <v-text-field v-model="search"
+                      clearable
+                      clear-icon="+"
+                      class="mb-5"
+                      single-line
+                      hide-details>
+          <template #label>
+        <span class="subtitle-2 font-weight-light font-italic"
+              style="color: #9e9e9e">{{ $t('search') }}</span>
+          </template>
 
-            <template #append>
-              <fa-icon icon="search" color="#9e9e9e"
-                       flip="horizontal" size="sm"
-                       class="mt-2"/>
-            </template>
-          </v-text-field>
-          <v-data-table dense
-                        height="400px"
-                        fixed-header
-                        disable-pagination
-                        hide-default-footer
-                        :headers="headers"
-                        :items="delegatedRights"
-                        :search="search">
-            <template #item="{ item: rights, index }">
-              <tr :class="{'lime lighten-5': selectedRights.ID === rights.ID }"
-                  style="cursor: pointer; width: 100%;"
-                  @click="selectedRights = rights">
-                <td class="text-center text-truncate"
-                    style="max-width: 20px; font-size: 13px;">
-                  {{ index + 1 }}
-                </td>
-                <td class="text-truncate"
-                    style="max-width: 250px; font-size: 13px;">
-                  <v-tooltip top>
-                    <template #activator="{ on }">
-                      <span v-on="on">{{ rights.FIO }}</span>
-                    </template>
-                    <span>{{ rights.FIO }}</span>
-                  </v-tooltip>
-                </td>
-                <td class="text-truncate"
-                    style="max-width: 250px; font-size: 13px;">
-                  <v-tooltip top>
-                    <template #activator="{ on }">
-                      <span v-on="on">{{ rights.FIOSUB }}</span>
-                    </template>
-                    <span>{{ rights.FIOSUB }}</span>
-                  </v-tooltip>
-                </td>
-                <td class="text-center text-truncate"
-                    style="max-width: 100px; font-size: 13px;">
-                  {{ formatTimeStamp(rights.DATEFROM) }}
-                </td>
-                <td class="text-center text-truncate"
-                    style="max-width: 100px; font-size: 13px;">
-                  {{ formatTimeStamp(rights.DATETO) }}
-                </td>
-                <td class="text-truncate"
-                    style="max-width: 250px; font-size: 13px;">{{ rights.COMM }}
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
-        </template>
-        <template #actions>
-          <outlined-btn x-small
-                        color="success"
-                        icon="layer-plus"
-                        :handler="() => $emit('add-delegation')">
-            <span>{{ $t('buttons.add') }}</span>
-          </outlined-btn>
-          <v-spacer/>
-          <outlined-btn x-small
-                        color="primary"
-                        icon="edit"
-                        :disabled="!selectedRights.ID"
-                        :handler="() => rightsEditDialog = true">
-            <span>{{ $t('buttons.edit') }}</span>
-          </outlined-btn>
-          <outlined-btn x-small
-                        color="red darken-4"
-                        icon="trash"
-                        :disabled="!selectedRights.ID"
-                        :handler="() => deleteConfirmDialog = true">
-            <span>{{ $t('buttons.delete') }}</span>
-          </outlined-btn>
+          <template #append>
+            <fa-icon icon="search" color="#9e9e9e"
+                     flip="horizontal" size="sm"
+                     class="mt-2"/>
+          </template>
+        </v-text-field>
+        <v-data-table dense
+                      height="400px"
+                      fixed-header
+                      disable-pagination
+                      hide-default-footer
+                      :headers="headers"
+                      :items="delegatedRights"
+                      :search="search">
+          <template #item="{ item: rights, index }">
+            <tr :class="{'lime lighten-5': selectedRights.ID === rights.ID }"
+                style="cursor: pointer; width: 100%;"
+                @click="selectedRights = rights">
+              <td class="text-center text-truncate"
+                  style="min-width: 70px; font-size: 13px;">
+                {{ index + 1 }}
+              </td>
+              <td class="text-truncate"
+                  style="max-width: 250px; font-size: 13px;">
+                <v-tooltip top>
+                  <template #activator="{ on }">
+                    <span v-on="on">{{ rights.FIO }}</span>
+                  </template>
+                  <span>{{ rights.FIO }}</span>
+                </v-tooltip>
+              </td>
+              <td class="text-truncate"
+                  style="max-width: 250px; font-size: 13px;">
+                <v-tooltip top>
+                  <template #activator="{ on }">
+                    <span v-on="on">{{ rights.FIOSUB }}</span>
+                  </template>
+                  <span>{{ rights.FIOSUB }}</span>
+                </v-tooltip>
+              </td>
+              <td class="text-center text-truncate"
+                  style="max-width: 100px; font-size: 13px;">
+                {{ formatTimeStamp(rights.DATEFROM) }}
+              </td>
+              <td class="text-center text-truncate"
+                  style="max-width: 100px; font-size: 13px;">
+                {{ formatTimeStamp(rights.DATETO) }}
+              </td>
+              <td class="text-truncate"
+                  style="max-width: 250px; font-size: 13px;">{{ rights.COMM }}
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </template>
+      <template #actions>
+        <outlined-btn x-small
+                      color="success"
+                      icon="layer-plus"
+                      :handler="() => $emit('add-delegation')">
+          <span>{{ $t('buttons.add') }}</span>
+        </outlined-btn>
+        <v-spacer/>
+        <outlined-btn x-small
+                      color="primary"
+                      icon="edit"
+                      :disabled="!selectedRights.ID"
+                      :handler="() => rightsEditDialog = true">
+          <span>{{ $t('buttons.edit') }}</span>
+        </outlined-btn>
+        <outlined-btn x-small
+                      color="red darken-4"
+                      icon="trash"
+                      :disabled="!selectedRights.ID"
+                      :handler="() => deleteConfirmDialog = true">
+          <span>{{ $t('buttons.delete') }}</span>
+        </outlined-btn>
 
-        </template>
-      </dialog-card>
+      </template>
+    </dialog-card>
+    <!-- Edit dialog-->
+    <delegation-edit v-model="rightsEditDialog" :rights="selectedRights"/>
 
-      <!-- Edit dialog-->
-      <delegation-edit v-model="rightsEditDialog" :rights="selectedRights"/>
-
-      <!-- Delete dialog-->
-      <delete-confirm v-model="deleteConfirmDialog"
-                      @confirm="deleteRights">
-        <template #title>{{ $t('user.delete') }}</template>
-        <template #text>
-          <span class="subtitle-2">{{ $t('user.delConfirmText') }}</span>
-          <br><br>{{ `- ${selectedRights.ID} ${selectedRights.FIOSUB}` }}
-        </template>
-      </delete-confirm>
+    <!-- Delete dialog-->
+    <delete-confirm v-model="deleteConfirmDialog"
+                    @confirm="deleteRights">
+      <template #title>{{ $t('user.delete') }}</template>
+      <template #text>
+        <span class="subtitle-2">{{ $t('user.delConfirmText') }}</span>
+        <br><br>{{ `- ${selectedRights.ID} ${selectedRights.FIOSUB}` }}
+      </template>
+    </delete-confirm>
   </v-row>
 </template>
 
