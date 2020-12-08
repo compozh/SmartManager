@@ -7,3 +7,7 @@ window.appConfig = {
   SignalRUrl: DM ? '*SIGNALRURL*' : 'https://m.it.ua/ws/signalr/hubs',
   SiteUrl: DM ? '*SITEURL*' : 'https://m.it.ua'
 }
+
+if (!window.appConfig.WsUrl) {
+  window.appConfig.WsUrl = '/ws'
+}
