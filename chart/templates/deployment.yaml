@@ -85,3 +85,8 @@ spec:
         backend:
           serviceName: {{ .Release.Name }}-smartmanager
           servicePort: 80
+  template:
+    metadata:
+      namespace: itenterprise
+  nodeSelector:
+    dep: itenterprise
