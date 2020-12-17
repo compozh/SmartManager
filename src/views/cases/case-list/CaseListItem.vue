@@ -45,10 +45,11 @@
 </template>
 
 <script>
-import moment from 'moment'
+import { date } from '@/mixins/dateTime'
 
 export default {
   name: 'CaseListItem',
+  mixins: [date],
   props: {
     caseItem: Object
   },
@@ -60,11 +61,11 @@ export default {
       return this.caseItem.status === '+' || this.caseItem.status === '#'
     },
     overdue () {
-      const planDate = moment(this.caseItem.dateTo, 'DD.MM.YYYY HH:mm').format()
-      if (new Date(planDate).getTime() >= new Date().getTime()) {
+      const planDate = this.parseDateTime(this.caseItem.dateTo)
+      if (new Date(planDate.format()).getTime() >= new Date().getTime()) {
         return false
       }
-      return moment().diff(moment(planDate), 'days')
+      return this.currentDate.diff(planDate, 'days')
     }
   }
 }

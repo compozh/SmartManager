@@ -19,6 +19,9 @@ export const userMethods = {
     password: '',
     rememberMe: false
   }),
+  computed: {
+
+  },
   methods: {
     async loginMethod () {
       const payload = {
@@ -30,6 +33,9 @@ export const userMethods = {
     },
     async logout () {
       await this.$store.dispatch('logout')
+    },
+    async smartId () {
+      await this.$store.dispatch('smartId')
     },
     async applyDelegatedRights (userId) {
       await this.$store.dispatch('applyDelegatedRights', userId)

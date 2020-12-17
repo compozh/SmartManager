@@ -6,6 +6,8 @@ const setRefreshLoader = loader => store.commit('SET_REFRESH_LOADER', loader)
 // Authentication configuration
 auth.config({
   baseUrl: window.appConfig.GrapgQlUrl,
+  webUrl: `${window.location.origin}${window.appConfig.BASE_URL}${window.DOCKERMODE ? '/' : 'SmartManager/'}`,
+  oidc: window.appConfig.oidc,
   onError: e => {
     switch (true) {
       case e.response && e.response.status === 400:

@@ -2,6 +2,14 @@ import i18n from '@/i18n'
 import router from '@/router'
 import auth from '@/utils/auth'
 
+const languageTag = () => {
+  switch (i18n.locale) {
+    case 'ru': return 'ru-RU'
+    case 'uk': return 'uk-UA'
+    default: return 'en-US'
+  }
+}
+
 export default {
   async authTypes ({ commit }) {
     commit('START_PRELOADER', 'authTypes')
@@ -41,6 +49,25 @@ export default {
       })
     } finally {
       commit('STOP_PRELOADER', 'login')
+    }
+  },
+  async smartId ({ commit }) {
+    try {
+      const result = await auth.loginByOidc({ lang: languageTag() })
+      if (!result.success) {
+        commit('SET_NOTIFY', {
+          text: result.errorMessage,
+          color: 'warning'
+        })
+      }
+    } catch (error) {
+      if (error) {
+        console.error(error.message || error)
+      }
+      commit('SET_NOTIFY', {
+        text: 'SmartId use error',
+        color: 'error'
+      })
     }
   },
   async applyDelegatedRights ({ commit }, userId) {
