@@ -16,3 +16,7 @@ window.appConfig = {
 if (!window.appConfig.WsUrl) {
   window.appConfig.WsUrl = '/ws'
 }
+
+if (!window.appConfig.WsUrl) {
+  window.appConfig.WsUrl = '/ws'
+}
