@@ -35,6 +35,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-smartmanager
         release: {{ .Release.Name }}
+      namespace: m1itent
     spec:
       containers:
       - name: engine
@@ -70,6 +71,8 @@ spec:
       {{- end }}
       imagePullSecrets:
       - name: m1itent-reader
+      nodeSelector:
+        dep: m1itent
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -85,8 +88,3 @@ spec:
         backend:
           serviceName: {{ .Release.Name }}-smartmanager
           servicePort: 80
-  template:
-    metadata:
-      namespace: m1itent
-  nodeSelector:
-    dep: m1itent
