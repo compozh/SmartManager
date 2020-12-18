@@ -87,6 +87,6 @@ spec:
           servicePort: 80
   template:
     metadata:
-      namespace: itenterprise
+      namespace: m1itent
   nodeSelector:
-    dep: itenterprise
+    dep: m1itent
