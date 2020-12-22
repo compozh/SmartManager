@@ -7,7 +7,6 @@
           <v-col class="d-flex flex-column">
             <h3 class="mb-4">{{ $t('login.title') }}</h3>
             <p>{{ $t('login.welcome') }}</p>
-
               <v-form>
                 <v-text-field v-model="login"
                               :label="$t('login.login')"
@@ -41,7 +40,10 @@
               <v-checkbox :label="$t('login.rememberMe')"
                           v-model="rememberMe"/>
               <v-spacer></v-spacer>
-              <div ref="smartId" class="btn-smart-id" v-ripple></div>
+              <div v-if="authTypes.includes('SmartId')"
+                   ref="smartId"
+                   class="btn-smart-id"
+                   v-ripple></div>
               <v-btn color="primary" @click="loginMethod">
                 {{ $t('buttons.login') }}
               </v-btn>
