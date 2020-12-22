@@ -20,7 +20,9 @@ export const userMethods = {
     rememberMe: false
   }),
   computed: {
-
+    authTypes () {
+      return this.$store.state.auth.authTypes
+    }
   },
   methods: {
     async loginMethod () {
