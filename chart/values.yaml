@@ -14,3 +14,8 @@ resources:
   limits:
     cpu: "1"
     memory: "4Gi"
+DepSettings:
+  Namespace: 
+  NodeSelector: { }  #dep: itenterprise
+  OuterClusterRoot: 
+  Tolerations: []
