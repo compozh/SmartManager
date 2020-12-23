@@ -9,6 +9,7 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
+    "@microsoft/signalr": "^5.0.1",
     "@it-enterprise/formio": "^2.0.28",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^3.1.0",
