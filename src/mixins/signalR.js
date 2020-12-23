@@ -1,5 +1,6 @@
 import { hubConnection } from 'signalr-no-jquery'
 import auth from '@/utils/auth'
+import { signalRConnect } from './newSignalRConnect'
 
 export default {
   data: () => ({
@@ -16,9 +17,10 @@ export default {
         logging: true,
         useDefaultPath: false
       })
-
+      const appName = 'SMARTMANAGER'
+      const token = auth._getRefreshToken()
       const hubProxy = connection.createHubProxy(hubName)
-      hubProxy.on('receiveMessage', message => {
+      var onReceive = message => {
         const parsedMessage = JSON.parse(message)
         if (parsedMessage.TASKID) {
           this.getFolders()
@@ -27,11 +29,10 @@ export default {
           // Re-reading tasks to view new tasks
           this.getTasks(this.activeFolderId)
         }
-      })
+      }
+      hubProxy.on('receiveMessage', onReceive)
 
       const subscribeFunc = () => {
-        const appName = 'SMARTMANAGER'
-        const token = auth._getRefreshToken()
         const args = [appName, token]
         connection.send({ H: hubName, M: 'Subscribe', A: args, I: 0 })
       }
@@ -40,7 +41,10 @@ export default {
 
       connection.start({ withCredentials: false })
         .done(subscribeFunc)
-        .fail(() => console.error('SignalR not connected'))
+        .fail(() => {
+          console.error('Old SignalR not connected')
+          signalRConnect(appName, url, onReceive, token)
+        })
     },
     stopSignalRConnection () {
       if (this.signalRConnection) {
