@@ -71,8 +71,14 @@ spec:
       {{- end }}
       imagePullSecrets:
       - name: m1itent-reader
+      {{- if .Values.DepSettings.NodeSelector }}
       nodeSelector:
-        dep: m1itent
+        {{- toYaml .Values.DepSettings.NodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.DepSettings.Tolerations }}
+      tolerations:
+        {{- toYaml .Values.DepSettings.Tolerations | nindent 8 }}
+      {{- end }}
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
