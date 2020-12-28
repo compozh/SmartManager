@@ -9,10 +9,13 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@it-enterprise/formio": "^2.0.28",
+    "@it-enterprise/formio": "^2.0.30",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^3.1.0",
     "@it-enterprise/localization": "^1.0.10",
+    "@it-enterprise/page-player": "0.2.55",
+    "@it-enterprise/page-player-vuetify-widgets": "^2.0.35",
+    "@it-enterprise/web-app-runtime": "2.3.8",
     "@syncfusion/ej2-vue-documenteditor": "^18.2.57",
     "@syncfusion/ej2-vue-pdfviewer": "^18.2.45",
     "@syncfusion/ej2-vue-spreadsheet": "^18.2.56",
