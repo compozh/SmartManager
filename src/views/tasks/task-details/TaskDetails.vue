@@ -109,14 +109,15 @@
           </template>
           <attachments-list v-else class="mb-10"
                             :attachmentList="attachments"
-                             @selectAttachment="tab = 0"/>
+                            @selectAttachment="tab = 0"/>
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
             <span class="font-weight-light">
               {{ $t('tasks.base').toUpperCase() }}</span>
-            <task-cards :tasks="[baseTask]" class="mt-3"
-                           hide-footer/>
+            <task-cards :tasks="[baseTask]"
+                        class="mt-3"
+                        hide-footer/>
           </div>
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
@@ -140,8 +141,10 @@
                 </v-btn>
               </task-form>
             </div>
-            <task-cards :tasks="childTasks" class="mt-3"
-                           hide-footer :hide-no-data="true"/>
+            <task-cards :tasks="childTasks"
+                        class="mt-3"
+                        hide-footer
+                        :hide-no-data="true"/>
           </div>
         </perfect-scrollbar>
       </SplitArea>

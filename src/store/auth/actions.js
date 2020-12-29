@@ -53,13 +53,7 @@ export default {
   },
   async smartId ({ commit }) {
     try {
-      const result = await auth.loginByOidc({ lang: languageTag() })
-      if (!result.success) {
-        commit('SET_NOTIFY', {
-          text: result.errorMessage,
-          color: 'warning'
-        })
-      }
+      await auth.loginByOidc({ lang: languageTag() })
     } catch (error) {
       if (error) {
         console.error(error.message || error)

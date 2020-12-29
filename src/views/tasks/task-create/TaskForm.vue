@@ -6,16 +6,20 @@
 
       <template #activator="{ on }">
         <slot name="activator" :on="on">
-          <v-btn id="addBtn"
-                 fixed
-                 width="45"
-                 height="45"
-                 dark fab
-                 bottom right
-                 color="primary"
-                 v-on="on">
-            <span class="display-1 white--text font-weight-bold">+</span>
-          </v-btn>
+          <v-tooltip left activator="#addBtn">
+            {{ $t('buttons.addTask') }}
+          </v-tooltip>
+            <v-btn id="addBtn"
+                   fixed
+                   width="45"
+                   height="45"
+                   dark fab
+                   bottom right
+                   color="primary"
+                   v-on="on">
+              <span class="display-1 white--text font-weight-bold">+</span>
+            </v-btn>
+
         </slot>
       </template>
 
