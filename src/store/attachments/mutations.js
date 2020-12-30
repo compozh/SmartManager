@@ -127,5 +127,14 @@ export default {
     const indexN = version.Details.Notes.findIndex(i => i.NoteId === noteId)
     version.Details.Notes.splice(indexN, 1)
     Vue.set(attachments, indexA, attachment)
+  },
+  DELETE_SIGN (state, { attachmentId, signId }) {
+    debugger
+    const attachments = state.attachments
+    const index = attachments.findIndex(i => i.id === attachmentId)
+    const attachment = attachments.find(i => i.id === attachmentId)
+    attachment.signatures = attachment.signatures.filter(i => i.Id !== signId)
+    if (attachment.signatures.length === 0) attachment.isSign = false
+    Vue.set(attachments, index, attachment)
   }
 }

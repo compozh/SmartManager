@@ -293,5 +293,29 @@ export default {
     } finally {
       commit('STOP_PRELOADER', 'checkSign')
     }
+  },
+  async deleteSign ({ commit }, { attachmentId, signId }) {
+    commit('START_PRELOADER', 'deleteSign')
+    try {
+      const response = await api.deleteSignFromGql(signId)
+      const result = response.data.smtasksMutation.deleteSign
+      if (result === 'True') {
+        commit('DELETE_SIGN', { attachmentId, signId })
+      }
+      if (result === 'False') {
+        commit('SET_NOTIFY', {
+          text: i18n.t('notify.signDeleteFail'),
+          color: 'warning'
+        })
+      }
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.signDeleteError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'deleteSign')
+    }
   }
 }
