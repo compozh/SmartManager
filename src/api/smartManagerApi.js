@@ -474,4 +474,16 @@ export class SmartManagerApi {
       console.error(e.message)
     }
   }
+
+  static async deleteSignFromGql (id) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.mutate({
+        mutation: gql`${q.signDelete}`,
+        variables: { id }
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
 }
