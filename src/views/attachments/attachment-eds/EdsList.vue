@@ -1,96 +1,101 @@
 <template>
-  <v-row justify="center">
-    <v-col>
-      <dialog-card :value="showEds" width="70%" min-height="400px"
-                   @input="$emit('input', $event)"
-                   :title="$t('eds.title')"
-                   @close="$emit('input', false)">
-        <template #text>
-          <v-simple-table dense v-if="signatures.length" fixed-header height="300px">
-            <template>
-              <thead>
-              <tr>
-                <th class="text-center">{{ $t('table.status') }}</th>
-                <th class="text-center">{{ $t('table.date') }}</th>
-                <th class="text-center">{{ $t('eds.signatory') }}</th>
-                <th class="text-center">{{ $t('eds.organization') }}</th>
-                <th class="text-center">{{ $t('eds.position') }}</th>
-                <th class="text-center">{{ $t('eds.code') }}</th>
-                <th class="text-center">{{ $t('eds.keyCenter') }}</th>
-                <th class="text-center">{{ $t('eds.comment') }}</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(eds, idx) in signatures" :key="idx"
-                  :class="{'lime lighten-5': eds.Id === currentEds.Id}"
-                  style="cursor: pointer; width: 100%;"
-                  @click="currentEds = eds">
-                <td class="text-center">
-                  <fa-icon icon="check-circle" size="lg"
-                           :color="verifiedSigns.includes(eds.Id) ? 'green' : 'grey'"/>
-                </td>
-                <td class="text-center">{{ formatVersionDate(eds.SignDate) }}</td>
-                <td>{{ eds.Fio }}</td>
-                <td>{{ eds.Organization }}</td>
-                <td>{{ eds.Post }}</td>
-                <td class="text-center">{{ eds.OrganizationStateCode }}</td>
-                <td>{{ eds.KeyCenter }}</td>
-                <td>{{ eds.Comm }}</td>
-              </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-          <div v-else
-               class="subtitle-1 font-weight-light grey--text text--lighten-1">
-            {{ $t('eds.noEds') }}</div>
-        </template>
-        <template #actions>
-          <outlined-btn x-small
-                        color="success"
-                        icon="file-signature"
-                        disabled
-                        :handler="() => edsCreateDialog = true">
-            <span>{{ $t('eds.sign') }}</span>
-          </outlined-btn>
-          <outlined-btn x-small
-                        color="purple"
-                        icon="file-contract"
-                        disabled
-                        :handler="() => {}">
-            <span>{{ $t('eds.addFromFile') }}</span>
-          </outlined-btn>
-          <v-spacer/>
-          <outlined-btn x-small
-                        color="primary"
-                        icon="clipboard-check"
-                        :disabled="!currentEds.Id"
-                        :handler="() => checkEds()">
-            <span>{{ $t('eds.check') }}</span>
-          </outlined-btn>
-<!--          <outlined-btn x-small-->
-<!--                        color="red darken-4"-->
-<!--                        icon="trash"-->
-<!--                        :disabled="!currentEds.Id"-->
-<!--                        :handler="() => deleteConfirmDialog = true">-->
-<!--            <span>{{ $t('buttons.delete') }}</span>-->
-<!--          </outlined-btn>-->
-        </template>
-      </dialog-card>
+  <div>
+    <dialog-card :value="showEds" width="80%"
+                 @input="$emit('input', $event)"
+                 :title="$t('eds.title')"
+                 @close="$emit('input', false)">
+      <template #text>
+        <v-simple-table v-if="eds.signatures && eds.signatures.length"
+                        dense fixed-header height="300px">
+          <template>
+            <thead>
+            <tr>
+              <th class="text-center">{{ $t('table.status') }}</th>
+              <th class="text-center">{{ $t('table.date') }}</th>
+              <th class="text-center">{{ $t('eds.signatory') }}</th>
+              <th class="text-center">{{ $t('eds.organization') }}</th>
+              <th class="text-center">{{ $t('eds.position') }}</th>
+              <th class="text-center">{{ $t('eds.code') }}</th>
+              <th class="text-center">{{ $t('eds.keyCenter') }}</th>
+              <th class="text-center">{{ $t('eds.comment') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(sign, idx) in eds.signatures" :key="idx"
+                :class="{'lime lighten-5': sign.Id === currentEds.Id}"
+                style="cursor: pointer; width: 100%;"
+                @click="currentEds = sign">
 
-      <!-- Create eds dialog -->
-      <eds-create v-model="edsCreateDialog"/>
+              <td class="text-center px-0">
+                <fa-icon v-if="checkingSigns === sign.Id" icon="sync" class="custom-loader" color="grey"/>
+                <fa-icon v-else icon="award" size="lg" :color="checkIconColor(sign.Id)"/>
+              </td>
 
-      <!-- Delete eds dialog -->
-      <delete-confirm v-model="deleteConfirmDialog"
-                      @confirm="deleteEds">
-        <template #title>{{ $t('eds.delete') }}</template>
-        <template #text>
-          <span class="subtitle-2">{{ $t('eds.delConfirmText') }}</span>
-          <br><br>{{ '- ' + currentEds.KeyNumber }}
-        </template>
-      </delete-confirm>
-    </v-col>
-  </v-row>
+              <td class="text-center text-field text-truncate px-0"
+                  style="max-width: 90px;">{{ formatVersionDate(sign.SignDate) }}</td>
+
+              <td class="text-field text-truncate">{{ sign.Fio | capitalize }}</td>
+              <td class="text-field text-truncate">{{ sign.Organization }}</td>
+              <td class="text-field text-truncate">{{ sign.Post }}</td>
+              <td class="text-field text-center text-truncate">{{ sign.OrganizationStateCode }}</td>
+              <td class="text-field text-truncate">{{ sign.KeyCenter }}</td>
+              <td class="text-field text-truncate">{{ sign.Comm }}</td>
+            </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+        <div v-else
+             class="subtitle-1 font-weight-light grey--text text--lighten-1">
+          {{ $t('eds.noEds') }}</div>
+      </template>
+      <template #actions>
+        <outlined-btn x-small
+                      color="success"
+                      icon="file-signature"
+                      :handler="() => edsCreateDialog = true">
+          <span>{{ $t('eds.sign') }}</span>
+        </outlined-btn>
+        <v-spacer/>
+        <outlined-btn x-small
+                      color="purple"
+                      icon="info-circle"
+                      :disabled="!currentEds.Id"
+                      :handler="() => showDetails = true">
+          <span>{{ $t('eds.details') }}</span>
+        </outlined-btn>
+        <outlined-btn x-small
+                      color="primary"
+                      icon="clipboard-check"
+                      :disabled="!currentEds.Id"
+                      :handler="() => checkEds()">
+          <span>{{ $t('eds.check') }}</span>
+        </outlined-btn>
+        <outlined-btn x-small
+                      color="red darken-4"
+                      icon="trash"
+                      :disabled="!currentEds.Id"
+                      :handler="() => deleteConfirmDialog = true">
+          <span>{{ $t('buttons.delete') }}</span>
+        </outlined-btn>
+      </template>
+    </dialog-card>
+
+    <!-- Create eds dialog -->
+    <eds-create v-model="edsCreateDialog"/>
+
+    <!-- Eds details dialog -->
+    <eds-details v-model="showDetails" :signature="currentEds"/>
+
+    <!-- Delete eds dialog -->
+    <delete-confirm v-model="deleteConfirmDialog"
+                    @confirm="deleteEds">
+      <template #title>{{ $t('eds.delete') }}</template>
+      <template #text>
+        <span class="subtitle-2">{{ $t('eds.delConfirmText') }}</span>
+        <br><br>{{ '- ' + currentEds.KeyNumber }}
+      </template>
+    </delete-confirm>
+  </div>
 </template>
 
 <script>
@@ -99,37 +104,71 @@ import OutlinedBtn from '@/components/OutlinedBtn'
 import { date } from '@/mixins/dateTime'
 
 const EdsCreate = () => import('./eds-create/EdsCreate')
+const EdsDetails = () => import('./EdsDetails')
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
 
 export default {
   name: 'Eds',
   mixins: [date],
+  filters: {
+    capitalize (value) {
+      if (!value) { return '' }
+      const transform = i => {
+        return i.charAt(0).toUpperCase() + i.slice(1).toLowerCase()
+      }
+      return value.split(' ').map(transform).join(' ')
+    }
+  },
   model: {
     prop: 'showEds'
   },
   props: {
-    signatures: Array,
+    eds: Object,
     showEds: Boolean
   },
   components: {
     DialogCard,
     OutlinedBtn,
     EdsCreate,
+    EdsDetails,
     DeleteConfirm
   },
   data: () => ({
     currentEds: {},
+    checkingSigns: null,
     verifiedSigns: [],
+    filedSigns: [],
     edsCreateDialog: false,
-    deleteConfirmDialog: false
+    deleteConfirmDialog: false,
+    showDetails: false
   }),
+  computed: {
+    checkIconColor () {
+      return id => {
+        switch (true) {
+          case this.verifiedSigns.includes(id):
+            return '#33691E'
+          case this.filedSigns.includes(id):
+            return '#B71C1C'
+          default: return 'grey'
+        }
+      }
+    }
+  },
   methods: {
     async checkEds () {
+      this.checkingSigns = this.currentEds.Id
       const result = await this.$store.dispatch('checkSign', this.currentEds.Id)
       if (result.VERIFICATION === '+') this.verifiedSigns.push(this.currentEds.Id)
+      if (result.VERIFICATION === '-') this.filedSigns.push(this.currentEds.Id)
+      this.checkingSigns = null
     },
-    deleteEds () {
-      console.log('deleteNote')
+    async deleteEds () {
+      await this.$store.dispatch('deleteSign', {
+        attachmentId: this.eds.attachmentId,
+        signId: this.currentEds.Id
+      })
+      this.$emit('update:eds', {})
     }
   },
   beforeDestroy () {
@@ -139,5 +178,22 @@ export default {
 </script>
 
 <style scoped>
+
+  .text-field {
+    font-size: 13px !important;
+  }
+
+  .custom-loader {
+    animation: loader 1s infinite;
+  }
+
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
 </style>
