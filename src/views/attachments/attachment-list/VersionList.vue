@@ -73,7 +73,7 @@
                        class="btn-border"
                        @click.stop="showEds(version)"
                        icon small depressed>
-                  <fa-icon :icon="isSign(version) ? 'medal' : 'signature'"
+                  <fa-icon :icon="isSign(version) ? 'award' : 'signature'"
                            size="lg"/>
                 </v-btn>
               </template>
@@ -96,7 +96,8 @@
         <br><br>{{ '- ' + deleteParams.fileName }}
       </template>
     </delete-confirm>
-    <eds v-model="edsDialog" :signatures="signatures"/>
+    <!-- Eds list-->
+    <eds v-model="edsDialog" :eds.sync="signatures"/>
   </v-simple-table>
 </template>
 
@@ -128,7 +129,7 @@ export default {
     deleteParams: {},
     roots: {},
     notes: [],
-    signatures: [],
+    signatures: {},
     notesDialog: false,
     edsDialog: false
   }),
@@ -146,15 +147,16 @@ export default {
       this.roots.attachmentId = this.attachment.id
       this.roots.versionId = version.Id
       if (version.Details) {
-        // Notes must always be array, because adding note mutation used "unshift" method
-        // and will be fail if value of notes be null as it is in initial object
         this.notes = version.Details.Notes || []
       }
     },
     showEds (version) {
       this.edsDialog = true
       if (version.Details) {
-        this.signatures = version.Details.Signatures || []
+        this.signatures = {
+          attachmentId: version.Id,
+          signatures: version.Details.Signatures || []
+        }
       }
     }
   }

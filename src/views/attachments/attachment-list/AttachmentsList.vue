@@ -84,7 +84,7 @@
                 </td>
                 <td class="text-center" style="width: 20px; position: relative">
                   <div v-if="!hover">
-                    <fa-icon v-if="attachment.isSign" color="#FFC107" icon="medal" size="lg"/>
+                    <fa-icon v-if="attachment.isSign" color="#FFC107" icon="award" size="lg"/>
                     <span v-else>-</span>
                   </div>
                   <attachment-btns v-if="hover" :objectId="objectId"
@@ -117,7 +117,8 @@
         <br><br>{{ '- ' + deleteParams.fileName }}
       </template>
     </delete-confirm>
-    <eds v-model="edsDialog" :signatures="signatures"/>
+    <!-- Eds list-->
+    <eds v-model="edsDialog" :eds.sync="signatures"/>
   </div>
 </template>
 
@@ -157,7 +158,7 @@ export default {
     uploadType: 'attachments',
     versionParams: null,
     versionLoaders: [],
-    signatures: [],
+    signatures: {},
     edsDialog: false,
     downLoaders: [],
     scrollOptions: {
@@ -224,7 +225,10 @@ export default {
     },
     showEds (attachment) {
       this.edsDialog = true
-      this.signatures = attachment.signatures || []
+      this.signatures = {
+        attachmentId: attachment.id,
+        signatures: attachment.signatures || []
+      }
     }
   }
 }
