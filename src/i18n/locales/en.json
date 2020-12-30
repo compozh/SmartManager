@@ -148,6 +148,7 @@
     "create": "Create",
     "cancel": "Cancel",
     "ok": "Ok",
+    "select": "Select",
     "upload": "Upload",
     "more": "More",
     "addAttachLong": "Click here to select files or drag&drop to this area, (max 100mb)",
@@ -282,8 +283,10 @@
     "delete": "Delete",
     "delConfirmText": "Are you sure you want to remove the signature?",
     "check": "Check",
+    "details": "Details",
     "clearKey": "Clear key",
     "noEds": "No signatures",
+    "name": "Name",
     "signatory": "Signatory",
     "organization": "Organization",
     "position": "Position",
@@ -297,7 +300,17 @@
     "depositSign": "DepositSign",
     "signType": "Sign type",
     "privateKey": "Private key",
-    "selectKey": "Select file key..."
+    "selectKey": "Select file key...",
+    "detailInfo": "Details of the signature",
+    "signatoryInfo": "Signatory Details",
+    "additionalInfo": "Additional information",
+    "certificateInfo": "Signer certificate information",
+    "city": "City",
+    "email": "Email address",
+    "organizationCode": "Organization code",
+    "signatoryCode": "Signatory code",
+    "serialNumber": "Serial number",
+    "timeStamp": "Timestamp"
   },
   "comments": {
     "addComment": "Add comment",
@@ -375,7 +388,7 @@
     "taskPinFail": "Favorite tasks change failed",
     "taskPinError":  "Favorite tasks change error, contact support",
     "updateSuccess": "Update success",
-    "updateFail" : "Update failed",
+    "updateFail" : "Update failed, maybe you have no rights",
     "updateError": "Update error, contact support",
     "typeGettingError": "Type getting error",
     "fileDetailsError": "File details getting error",
@@ -396,7 +409,9 @@
     "addDelegateError": "Error while trying to delegate rights",
     "editDelegationFail": "Delegate rights changing failed",
     "editDelegationError": "Delegate rights changing error",
-    "signCheckFail": "Sign checking fail"
+    "signCheckFail": "Sign checking fail",
+    "signDeleteFail": "Sign delete fail, maybe you have no rights",
+    "signDeleteError": "An error occurred while deleting the signature"
   },
   "workflow": {
     "businessProcess": "Business process",
