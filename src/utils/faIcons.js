@@ -30,7 +30,7 @@ import { faUserTag } from '@fortawesome/pro-regular-svg-icons/faUserTag'
 import { faSignOutAlt } from '@fortawesome/pro-regular-svg-icons/faSignOutAlt'
 import { faFileAlt } from '@fortawesome/pro-regular-svg-icons/faFileAlt'
 import { faSync } from '@fortawesome/pro-regular-svg-icons/faSync'
-import { faMedal } from '@fortawesome/pro-regular-svg-icons/faMedal'
+import { faAward } from '@fortawesome/pro-regular-svg-icons/faAward'
 import { faBorderAll } from '@fortawesome/pro-regular-svg-icons/faBorderAll'
 import { faCheck } from '@fortawesome/pro-regular-svg-icons/faCheck'
 import { faLayerPlus } from '@fortawesome/pro-regular-svg-icons/faLayerPlus'
@@ -69,6 +69,7 @@ import { faFileContract } from '@fortawesome/pro-regular-svg-icons/faFileContrac
 import { faFileSignature } from '@fortawesome/pro-regular-svg-icons/faFileSignature'
 import { faSignature } from '@fortawesome/pro-regular-svg-icons/faSignature'
 import { faUserCog } from '@fortawesome/pro-regular-svg-icons/faUserCog'
+import { faInfoCircle } from '@fortawesome/pro-regular-svg-icons/faInfoCircle'
 import { faUnlock as falUnlock } from '@fortawesome/pro-light-svg-icons/faUnlock'
 import { faStar as falStar } from '@fortawesome/pro-light-svg-icons/faStar'
 import { faFilesMedical as falFilesMedical } from '@fortawesome/pro-light-svg-icons/faFilesMedical'
@@ -120,7 +121,7 @@ library.add(
   faSignOutAlt,
   faFileAlt,
   faSync,
-  faMedal,
+  faAward,
   faBorderAll,
   faCheck,
   faLayerPlus,
@@ -159,6 +160,7 @@ library.add(
   faFileSignature,
   faSignature,
   faUserCog,
+  faInfoCircle,
   falUnlock,
   falStar,
   falFilesMedical,
