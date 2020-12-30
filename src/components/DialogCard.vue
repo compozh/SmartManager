@@ -1,22 +1,22 @@
 <template>
   <v-dialog :value="value" :width="width"
             @input="$emit('input', $event)"
-            @click:outside="persistent ? '' : $emit('close')"
-            persistent="persistent">
-    <v-card :height="height"
+            @click:outside="persistent ? '' : $emit('input', false)"
+            :persistent="persistent">
+    <v-card :min-height="minHeight"
             class="d-flex flex-column flex-grow-1 overflow-hidden blue-grey">
       <v-card-title class="subtitle-1 white--text py-1">
         {{ title || 'Dialog title' }}
         <v-spacer/>
         <v-btn icon small depressed
                class="close mr-n5"
-               @click="$emit('close')">
+               @click="$emit('input', false)">
           <fa-icon icon="times" type="fal"
                    size="lg" color="#fff"/>
         </v-btn>
       </v-card-title>
       <v-card-text class="d-flex flex-column flex-grow-1 white">
-        <slot name="text">'Dialog title'</slot>
+        <slot name="text">Dialog content</slot>
       </v-card-text>
       <v-divider style="background: #e0e0e0"/>
       <v-card-actions class="pa-4 white">
@@ -33,8 +33,11 @@ export default {
     value: Boolean,
     persistent: Boolean,
     width: String,
-    height: String,
-    title: String
+    title: String,
+    minHeight: {
+      type: String,
+      default: '400px'
+    }
   }
 }
 </script>

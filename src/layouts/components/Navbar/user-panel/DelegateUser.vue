@@ -54,7 +54,7 @@
                     icon="check-circle"
                     :disabled="!selectedUser"
                     :handler="() => dateSelection = true">
-        <span>{{ $t('buttons.ok') }}</span>
+        <span>{{ $t('buttons.select') }}</span>
       </outlined-btn>
       <date-selection v-model="dateSelection" :user-id="selectedUser"/>
     </template>
