@@ -129,7 +129,6 @@ export default {
     Vue.set(attachments, indexA, attachment)
   },
   DELETE_SIGN (state, { attachmentId, signId }) {
-    debugger
     const attachments = state.attachments
     const index = attachments.findIndex(i => i.id === attachmentId)
     const attachment = attachments.find(i => i.id === attachmentId)
