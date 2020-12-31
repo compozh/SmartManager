@@ -52,6 +52,7 @@
         <outlined-btn x-small
                       color="success"
                       icon="file-signature"
+                      disabled
                       :handler="() => edsCreateDialog = true">
           <span>{{ $t('eds.sign') }}</span>
         </outlined-btn>
