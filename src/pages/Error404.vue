@@ -3,7 +3,7 @@
     <v-row align="center" justify="center">
       <v-col cols="4">
         <v-card class="d-flex flex-column align-center pa-5">
-          <v-img src="@/assets/error404.png"/>
+          <v-img src="@/assets/images/error404.png"/>
           <p class="display-1 font-weight-light text-center mb-10">Page not found</p>
           <v-btn class="primary mb-10" max-width="200px" x-large to="/" >Back to home</v-btn>
         </v-card>

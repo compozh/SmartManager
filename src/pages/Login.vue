@@ -89,7 +89,7 @@ export default {
 <style scoped>
 
   .btn-smart-id {
-    background: url("../assets/smart_id_btn_bg.png") no-repeat center center;
+    background: url("../assets/images/smart_id_btn_bg.png") no-repeat center center;
     background-color: #e6e6e6;
     background-size: 85%;
     border-radius: 4px;

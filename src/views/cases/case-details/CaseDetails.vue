@@ -8,11 +8,11 @@
            style="height: 25px; border-radius: 5px;">
         <div class="px-3" style="color: #2D469C;">Smart Manager</div>
         <v-img v-if="activeZone.title"
-               src="@/assets/chevron.svg" width="10px"/>
+               src="@/assets/images/chevron.svg" width="10px"/>
         <div v-if="activeZone.title" class="px-3 success--text">
           {{ activeZone.title }}</div>
         <v-img v-if="activeFolder.Name"
-               src="@/assets/chevron.svg" width="10px"/>
+               src="@/assets/images/chevron.svg" width="10px"/>
         <div v-if="activeFolder.Name" class="px-3 primary--text">
           {{ activeFolder.Name }}
         </div>

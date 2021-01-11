@@ -251,7 +251,7 @@ export default {
 
   #addBtn {
     bottom: 8px;
-    background: url(../../../assets/action_btn_bg.png) center/contain no-repeat #7b68ee;
+    background: url(../../../assets/images/action_btn_bg.png) center/contain no-repeat #7b68ee;
   }
 
   .v-form {

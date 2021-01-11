@@ -9,7 +9,7 @@
         <v-tooltip right>
           <template #activator="{ on }">
               <v-img v-on="on"
-                     src="@/assets/logo.png"
+                     src="@/assets/images/logo.png"
                      max-height="32px"
                      max-width="32px"
                      style="cursor: pointer;"
