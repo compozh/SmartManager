@@ -40,11 +40,11 @@
               <v-checkbox :label="$t('login.rememberMe')"
                           v-model="rememberMe"/>
               <v-spacer></v-spacer>
-              <div v-if="authTypes.includes('SmartId')"
+              <div v-show="authTypes.includes('SmartId')"
                    ref="smartId"
                    class="btn-smart-id"
                    v-ripple></div>
-              <v-btn color="primary" @click="loginMethod">
+              <v-btn color="primary" @click="loginMethod" elevation="0">
                 {{ $t('buttons.login') }}
               </v-btn>
             </div>
@@ -85,21 +85,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-  .btn-smart-id {
-    background: url("../assets/images/smart_id_btn_bg.png") no-repeat center center;
-    background-color: #e6e6e6;
-    background-size: 85%;
-    border-radius: 4px;
-    height: 36px;
-    width: 76px;
-    margin-right: 0.75rem;
-    cursor: pointer;
-    box-shadow: 0 1px 1px -2px rgba(0,0,0,.2),
-                0 2px 2px 0 rgba(0,0,0,.14),
-                0 1px 5px 0 rgba(0,0,0,.12)!important;
-  }
-
-</style>

@@ -1,4 +1,4 @@
 export default {
-  authTypes: null,
+  authTypes: [],
   user: null
 }
