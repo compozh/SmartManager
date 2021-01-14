@@ -3,6 +3,7 @@
     <dialog-card :value="showEds" width="80%"
                  @input="$emit('input', $event)"
                  :title="$t('eds.title')"
+                 :loading="loading"
                  @close="$emit('input', false)">
       <template #text>
         <v-simple-table v-if="eds.signatures && eds.signatures.length"
@@ -52,8 +53,7 @@
         <outlined-btn x-small
                       color="success"
                       icon="file-signature"
-                      disabled
-                      :handler="() => edsCreateDialog = true">
+                      :handler="showEdsCreateDialog">
           <span>{{ $t('eds.sign') }}</span>
         </outlined-btn>
         <v-spacer/>
@@ -82,14 +82,21 @@
     </dialog-card>
 
     <!-- Create eds dialog -->
-    <eds-create v-model="edsCreateDialog"/>
+    <eds-create v-if="edsCreateDialog"
+                v-model="edsCreateDialog"
+                :loading.sync="loading"
+                :attachment="eds.attachment"/>
 
     <!-- Eds details dialog -->
-    <eds-details v-model="showDetails" :signature="currentEds"/>
+    <eds-details v-if="showDetails"
+                 v-model="showDetails"
+                 :signature="currentEds"/>
 
     <!-- Delete eds dialog -->
-    <delete-confirm v-model="deleteConfirmDialog"
+    <delete-confirm v-if="deleteConfirmDialog"
+                    v-model="deleteConfirmDialog"
                     @confirm="deleteEds">
+
       <template #title>{{ $t('eds.delete') }}</template>
       <template #text>
         <span class="subtitle-2">{{ $t('eds.delConfirmText') }}</span>
@@ -141,7 +148,8 @@ export default {
     filedSigns: [],
     edsCreateDialog: false,
     deleteConfirmDialog: false,
-    showDetails: false
+    showDetails: false,
+    loading: false
   }),
   computed: {
     checkIconColor () {
@@ -164,11 +172,16 @@ export default {
       if (result.VERIFICATION === '-') this.filedSigns.push(this.currentEds.Id)
       this.checkingSigns = null
     },
+    showEdsCreateDialog () {
+      this.loading = true
+      this.edsCreateDialog = true
+    },
     async deleteEds () {
       await this.$store.dispatch('deleteSign', {
         attachmentId: this.eds.attachmentId,
         signId: this.currentEds.Id
       })
+      this.currentEds = {}
       this.$emit('update:eds', {})
     }
   },

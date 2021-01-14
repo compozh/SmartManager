@@ -1,6 +1,6 @@
 <template>
-  <dialog-card :value="showEdsDetails"
-               width="60%"
+  <dialog-card :value="showEdsReadInfo"
+               width="60%" persistent
                @input="$emit('input', $event)"
                :title="$t('eds.detailInfo')">
     <template #text>
@@ -8,28 +8,32 @@
         <template>
           <tbody>
             <tr>
-              <td class="font-weight-bold">{{ $t('eds.signatory') }}</td>
-              <td>{{ signature.Fio }}</td>
-            </tr>
-            <tr>
               <td class="font-weight-bold"
                   colspan="2">{{ $t('eds.signatoryInfo') }}</td>
             </tr>
             <tr>
-              <td>{{ $t('eds.name') }}</td>
-              <td>{{ signature.Fio }}</td>
+              <td>{{ $t('eds.signatory') }}</td>
+              <td>{{ signature.subjCN || signature.subjFullName }}</td>
             </tr>
             <tr>
               <td>{{ $t('eds.organization') }}</td>
-              <td>{{ signature.Organization }}</td>
+              <td>{{ signature.subjOrg }}</td>
             </tr>
             <tr>
               <td>{{ $t('eds.position') }}</td>
-              <td>{{ signature.Post }}</td>
+              <td>{{ signature.subjTitle }}</td>
             </tr>
             <tr>
               <td>{{ $t('eds.city') }}</td>
-              <td>{{ signature.City }}</td>
+              <td>{{ signature.subjLocality }}</td>
+            </tr>
+            <tr>
+              <td>{{ $t('eds.address') }}</td>
+              <td>{{ signature.subjAddress }}</td>
+            </tr>
+            <tr>
+              <td>{{ $t('eds.phone') }}</td>
+              <td>{{ signature.subjPhone }}</td>
             </tr>
             <tr>
               <td class="font-weight-bold"
@@ -37,15 +41,11 @@
             </tr>
             <tr>
               <td>{{ $t('eds.email') }}</td>
-              <td>{{ signature.Email }}</td>
+              <td>{{ signature.subjEMail }}</td>
             </tr>
             <tr>
               <td>{{ $t('eds.organizationCode') }}</td>
-              <td>{{ signature.OrganizationStateCode }}</td>
-            </tr>
-            <tr>
-              <td>{{ $t('eds.signatoryCode') }}</td>
-              <td>{{ signature.UserStateCode }}</td>
+              <td>{{ signature.subjEDRPOUCode || signature.subjDRFOCode }}</td>
             </tr>
             <tr>
               <td class="font-weight-bold"
@@ -53,23 +53,11 @@
             </tr>
             <tr>
               <td>{{ $t('eds.keyCenter') }}</td>
-              <td>{{ signature.KeyCenter }}</td>
+              <td>{{ signature.issuerCN }}</td>
             </tr>
             <tr>
               <td>{{ $t('eds.serialNumber') }}</td>
-              <td>{{ signature.KeyNumber }}</td>
-            </tr>
-            <tr>
-              <td>{{ $t('pickers.dateFrom') }}</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>{{ $t('pickers.dateTo') }}</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="font-weight-bold">{{ $t('eds.timeStamp') }}</td>
-              <td>{{ formatVersionDate(signature.SignDate) }}</td>
+              <td>{{ signature.serial }}</td>
             </tr>
           </tbody>
         </template>
@@ -77,11 +65,18 @@
     </template>
     <template #actions>
       <v-spacer/>
-      <outlined-btn x-small
-                    color="primary"
-                    icon="check"
+      <outlined-btn icon="times"
+                    class="mr-2"
+                    color="blue-grey"
                     :handler="() => $emit('input', false)">
-        {{ $t('buttons.ok') }}</outlined-btn>
+        <span>{{ $t('buttons.cancel') }}</span>
+      </outlined-btn>
+      <outlined-btn x-small
+                    color="success"
+                    icon="check"
+                    :handler="() =>  $emit('sign')">
+        <span>{{ $t('eds.sign') }}</span>
+      </outlined-btn>
     </template>
   </dialog-card>
 </template>
@@ -89,17 +84,15 @@
 <script>
 import DialogCard from '@/components/DialogCard'
 import OutlinedBtn from '@/components/OutlinedBtn'
-import { date } from '@/mixins/dateTime'
 
 export default {
-  name: 'EdsDetails',
-  mixins: [date],
+  name: 'EdsReadInfo',
   model: {
-    prop: 'showEdsDetails'
+    prop: 'showEdsReadInfo'
   },
   props: {
     signature: Object,
-    showEdsDetails: Boolean
+    showEdsReadInfo: Boolean
   },
   components: {
     DialogCard,
