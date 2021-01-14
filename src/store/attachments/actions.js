@@ -294,6 +294,33 @@ export default {
       commit('STOP_PRELOADER', 'checkSign')
     }
   },
+  async signAttachment ({ dispatch, commit }, { attachment, params, taskId, caseId }) {
+    commit('START_PRELOADER', 'deleteSign')
+    try {
+      const response = await api.signAttachmentInGql(attachment.id, params)
+      const result = response.data.smtasksMutation.signAttachment
+      if (result.success) {
+        commit('SET_NOTIFY', {
+          text: i18n.t('notify.signAttachmentSuccess'),
+          color: 'success'
+        })
+        dispatch('updateAfterChanges', { taskId, caseId })
+      } else {
+        commit('SET_NOTIFY', {
+          text: result.errorMessage || i18n.t('notify.signAttachmentFail'),
+          color: 'warning'
+        })
+      }
+    } catch (error) {
+      console.error(error.message || error)
+      commit('SET_NOTIFY', {
+        text: error.message || i18n.t('notify.signAttachmentError'),
+        color: 'error'
+      })
+    } finally {
+      commit('STOP_PRELOADER', 'deleteSign')
+    }
+  },
   async deleteSign ({ commit }, { attachmentId, signId }) {
     commit('START_PRELOADER', 'deleteSign')
     try {
