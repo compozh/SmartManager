@@ -1,0 +1,21 @@
+.btn-smart-id {
+  background: url("../images/smart_id_btn_bg.png") no-repeat center center #e6e6e6;
+  background-size: 85%;
+  border-radius: 4px;
+  height: 36px;
+  width: 76px;
+  margin-right: 0.75rem;
+  cursor: pointer;
+
+  &:hover {
+    opacity: .9;
+  }
+}
+
+.clearable .v-input__append-inner {
+  margin-top: 6px !important;
+}
+
+.clear-btn {
+
+}

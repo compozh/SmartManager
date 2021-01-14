@@ -9,7 +9,8 @@ import '@/utils/graphql'
 import '@/utils/localization'
 import '@/utils/formio'
 import '@/utils/faIcons'
-import '@/utils/fonts'
+import '@/assets/fonts/proxima.css'
+import '@/assets/scss/main.scss'
 import './registerServiceWorker'
 
 Vue.config.productionTip = false
