@@ -1,5 +1,5 @@
 <template>
-  <v-img src="@/assets/images/file-icon.svg"
+  <v-img src="@/assets/icons/file-icon.svg"
          contain :max-width="size"
          :style="{'font-size': size + 'px'}"
          class="d-flex align-center justify-center">
