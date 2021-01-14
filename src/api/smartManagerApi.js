@@ -475,6 +475,18 @@ export class SmartManagerApi {
     }
   }
 
+  static async signAttachmentInGql (id, params) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.mutate({
+        mutation: gql`${q.signAttachment}`,
+        variables: { id, params }
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
+
   static async deleteSignFromGql (id) {
     try {
       const client = await getClient('smartmanager')

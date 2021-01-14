@@ -1,0 +1,8 @@
+mutation ($id: Int!, $params: String!) {
+    smtasksMutation  {
+        signAttachment(id: $id, params: $params) {
+            success,
+            errorMessage
+        }
+    }
+}
