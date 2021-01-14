@@ -10,7 +10,8 @@
         <v-card-text class="white pt-4">
           <slot name="text"/>
         </v-card-text>
-        <v-card-actions class="white">
+        <v-divider style="background: #e0e0e0"/>
+        <v-card-actions class="pa-4 white">
           <v-spacer></v-spacer>
           <outlined-btn icon="times"
                         color="blue-grey"
