@@ -310,7 +310,11 @@
     "organizationCode": "Organization code",
     "signatoryCode": "Signatory code",
     "serialNumber": "Serial number",
-    "timeStamp": "Timestamp"
+    "timeStamp": "Timestamp",
+    "serviceProvider": "Qualified service provider",
+    "providerPlaceholder": "Select service provider",
+    "readEds": "Read",
+    "autoDetect": "Detect automatically"
   },
   "comments": {
     "addComment": "Add comment",
@@ -411,7 +415,10 @@
     "editDelegationError": "Delegate rights changing error",
     "signCheckFail": "Sign checking fail",
     "signDeleteFail": "Sign delete fail, maybe you have no rights",
-    "signDeleteError": "An error occurred while deleting the signature"
+    "signDeleteError": "An error occurred while deleting the signature",
+    "signAttachmentSuccess": "Attachment signed success",
+    "signAttachmentFail": "Sign attachment fail",
+    "signAttachmentError": "An error occurred while sign attachment"
   },
   "workflow": {
     "businessProcess": "Business process",

@@ -310,7 +310,11 @@
     "organizationCode": "Код ЕГРПОУ",
     "signatoryCode": "Код ГРФЛ",
     "serialNumber": "Серийный номер",
-    "timeStamp": "Отметка времени"
+    "timeStamp": "Отметка времени",
+    "serviceProvider": "Квалифицированный поставщик услуг",
+    "providerPlaceholder": "Выберите поставщика услуг",
+    "readEds": "Считать",
+    "autoDetect": "Определить автоматически"
   },
   "comments": {
     "addComment": "Добавить комментарий",
@@ -411,7 +415,10 @@
     "editDelegationError": "Ошибка изменения делегированных прав",
     "signCheckFail": "Не удалось проверить подпись",
     "signDeleteFail": "Не удалось удалить подпись, возможно у вас нет прав",
-    "signDeleteError": "Произошла ошибка при удалении подписи"
+    "signDeleteError": "Произошла ошибка при удалении подписи",
+    "signAttachmentSuccess": "Вложение успешно подписано",
+    "signAttachmentFail": "Не удалось подписать вложение",
+    "signAttachmentError": "Произошла ошибка при попытке подписи вложения"
   },
   "workflow": {
     "businessProcess": "Бизнес-процесс",
