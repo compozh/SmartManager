@@ -109,7 +109,8 @@
         </v-data-table>
       </div>
     </perfect-scrollbar>
-    <delete-confirm v-model="deleteConfirmDialog"
+    <delete-confirm v-if="deleteConfirmDialog"
+                    v-model="deleteConfirmDialog"
                     @confirm="attachmentDelete(deleteParams.attachment)">
       <template #title>{{ $t('attachments.delete') }}</template>
       <template #text>
@@ -118,7 +119,7 @@
       </template>
     </delete-confirm>
     <!-- Eds list-->
-    <eds v-model="edsDialog" :eds.sync="signatures"/>
+    <eds v-if="edsDialog" v-model="edsDialog" :eds.sync="signatures"/>
   </div>
 </template>
 
@@ -223,11 +224,17 @@ export default {
       this.deleteParams.attachment = attachment
       this.deleteParams.fileName = attachment.fileName
     },
-    showEds (attachment) {
+    async showEds (attachment) {
       this.edsDialog = true
+      attachment.url || await this.getAttachmentDetails(attachment)
       this.signatures = {
-        attachmentId: attachment.id,
-        signatures: attachment.signatures || []
+        signatures: attachment.signatures || [],
+        attachment: {
+          id: attachment.id,
+          url: attachment.url,
+          size: attachment.fileSize,
+          ext: attachment.fileExt
+        }
       }
     }
   }

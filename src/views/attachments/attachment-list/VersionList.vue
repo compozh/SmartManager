@@ -154,8 +154,13 @@ export default {
       this.edsDialog = true
       if (version.Details) {
         this.signatures = {
-          attachmentId: version.Id,
-          signatures: version.Details.Signatures || []
+          signatures: version.Details.Signatures || [],
+          attachment: {
+            id: version.Id,
+            url: version.Details.FileUrl,
+            size: version.FileSize,
+            ext: version.FileExt
+          }
         }
       }
     }
