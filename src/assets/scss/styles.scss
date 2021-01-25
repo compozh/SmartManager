@@ -16,6 +16,24 @@
   margin-top: 6px !important;
 }
 
-.clear-btn {
+.btns-container {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  height: 100%;
+}
 
+.btn-border {
+  border: 1px dashed;
+}
+
+.v-btn.v-btn--disabled.no-active-btn {
+  color: #bbbbbb !important;
+}
+
+.eds-save {
+  label {
+    font-size: 14px !important;
+    white-space: pre-line;
+  }
 }
