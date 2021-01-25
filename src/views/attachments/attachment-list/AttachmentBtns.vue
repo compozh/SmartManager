@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex align-center btns-container">
+
     <!-- New version button -->
     <v-tooltip top>
       <template #activator="{ on }">
@@ -17,6 +18,7 @@
       </template>
       <span>{{ $t('versions.add') }}</span>
     </v-tooltip>
+
     <!-- Download attachment button -->
     <v-tooltip top>
       <template #activator="{ on }">
@@ -37,6 +39,7 @@
       </template>
       <span>{{ $t('attachments.download') }}</span>
     </v-tooltip>
+
     <!-- Delete attachment button -->
     <v-tooltip top>
       <template #activator="{ on }">
@@ -46,11 +49,28 @@
                class="ml-5 btn-border"
                @click.stop="$emit('delete')"
                text fab x-small dark depressed>
-          <fa-icon icon="times" type="fal" size="lg"/>
+          <fa-icon icon="times" type="fal" fixed-size="18"/>
         </v-btn>
       </template>
       <span>{{ $t('attachments.delete') }}</span>
     </v-tooltip>
+
+    <!-- Sing button -->
+    <v-tooltip top>
+      <template #activator="{ on }">
+        <v-btn v-on="on"
+               color="warning"
+               class="ml-5 btn-border"
+               :class="{'no-active-btn': !signBtnActive}"
+               @click.stop="$emit('sign')"
+               text fab x-small dark depressed
+               :disabled="!signBtnActive">
+          <fa-icon icon="file-signature" type="fal" fixed-size="18" class="ml-1"/>
+        </v-btn>
+      </template>
+      <span>{{ $t('eds.signAttachment') }}</span>
+    </v-tooltip>
+
     <!-- EDS dialog button -->
     <v-tooltip top>
       <template #activator="{ on }">
@@ -59,7 +79,7 @@
                class="ml-5 btn-border"
                @click.stop="$emit('eds')"
                text fab x-small dark depressed>
-          <fa-icon icon="file-signature" type="fal" size="lg"/>
+          <fa-icon icon="file-contract" type="fal" fixed-size="18"/>
         </v-btn>
       </template>
       <span>{{ $t('eds.title') }}</span>
@@ -73,22 +93,8 @@ export default {
   props: {
     objectId: [String, Number],
     access: Object,
-    loading: Boolean
+    loading: Boolean,
+    signBtnActive: Boolean
   }
 }
 </script>
-
-<style scoped>
-
-  .btns-container {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    height: 100%;
-  }
-
-  .btn-border {
-    border: 1px dashed;
-  }
-
-</style>

@@ -84,11 +84,13 @@
                 </td>
                 <td class="text-center" style="width: 20px; position: relative">
                   <div v-if="!hover">
-                    <fa-icon v-if="attachment.isSign" color="#FFC107" icon="award" size="lg"/>
+                    <fa-icon v-if="attachment.isSign" color="#FFC107"
+                             icon="award" type="fal" fixed-size="20"/>
                     <span v-else>-</span>
                   </div>
                   <attachment-btns v-if="hover" :objectId="objectId"
                                    :access="attachment.access"
+                                   :sign-btn-active="isPrivateKey"
                                    :loading="downLoaders.includes(attachment.id)"
                                    @new-version="newVersion(attachment)"
                                    @download="downloadAttachment(attachment)"
@@ -119,7 +121,10 @@
       </template>
     </delete-confirm>
     <!-- Eds list-->
-    <eds v-if="edsDialog" v-model="edsDialog" :eds.sync="signatures"/>
+    <eds v-if="edsDialog"
+         v-model="edsDialog"
+         :signatures="attachment.signatures"
+         :attachmentParams="attachmentParams"/>
   </div>
 </template>
 
@@ -129,6 +134,7 @@ import AttachmentBtns from './AttachmentBtns'
 import FileTypeIcon from '@/components/FileTypeIcon'
 import { common, tasks, cases, attachments } from '@/mixins/units'
 import { date } from '@/mixins/dateTime'
+import eds from '@/mixins/eds'
 
 const VersionList = () => import('./VersionList')
 const Eds = () => import('../attachment-eds/EdsList')
@@ -137,7 +143,7 @@ const FilesUpload = () => import('@/views/attachments/attachment-upload/FilesUpl
 
 export default {
   name: 'AttachmentsList',
-  mixins: [common, tasks, cases, attachments, date],
+  mixins: [common, tasks, cases, attachments, eds, date],
   props: {
     businessObject: Object,
     attachmentList: Array
@@ -159,7 +165,9 @@ export default {
     uploadType: 'attachments',
     versionParams: null,
     versionLoaders: [],
-    signatures: {},
+    signatures: [],
+    attachment: {},
+    attachmentParams: {},
     edsDialog: false,
     downLoaders: [],
     scrollOptions: {
@@ -227,14 +235,13 @@ export default {
     async showEds (attachment) {
       this.edsDialog = true
       attachment.url || await this.getAttachmentDetails(attachment)
-      this.signatures = {
-        signatures: attachment.signatures || [],
-        attachment: {
-          id: attachment.id,
-          url: attachment.url,
-          size: attachment.fileSize,
-          ext: attachment.fileExt
-        }
+      this.attachment = attachment
+      this.attachmentParams = {
+        isVersion: false,
+        fileId: attachment.id,
+        fileUrl: attachment.url,
+        fileSize: attachment.fileSize,
+        fileExt: attachment.fileExt
       }
     }
   }
