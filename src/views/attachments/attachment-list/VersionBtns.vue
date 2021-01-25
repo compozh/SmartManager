@@ -47,12 +47,27 @@
                :disabled="version.IsActive || !access.deleteVersion"
                @click.stop="$emit('delete')"
                color="red darken-4"
-               class="btn-border"
+               class="mr-2 btn-border"
                icon x-small depressed>
-          <fa-icon icon="times" type="fal"/>
+          <fa-icon icon="times" type="fal" fixed-size="12"/>
         </v-btn>
       </template>
       <span>{{ $t('versions.delete') }}</span>
+    </v-tooltip>
+
+    <v-tooltip top>
+      <template #activator="{ on }">
+        <v-btn v-on="on"
+               @click.stop="$emit('sign')"
+               color="warning"
+               class="btn-border"
+               icon x-small depressed
+               :disabled="!signBtnActive">
+          <fa-icon icon="file-signature" type="fal"
+                   fixed-size="12" style="margin-left: 2px;"/>
+        </v-btn>
+      </template>
+      <span>{{ $t('eds.signVersion') }}</span>
     </v-tooltip>
   </div>
 </template>
@@ -62,15 +77,8 @@ export default {
   name: 'VersionBtns',
   props: {
     version: Object,
-    access: Object
+    access: Object,
+    signBtnActive: Boolean
   }
 }
 </script>
-
-<style scoped>
-
-  .btn-border {
-    border: 1px dashed;
-  }
-
-</style>

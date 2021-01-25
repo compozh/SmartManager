@@ -59,6 +59,7 @@
         <td class="text-center px-2">
           <version-btns :version="version"
                         :access="attachment.access"
+                        :sign-btn-active="isPrivateKey"
                         @set-active="setActiveVersion(attachment.id, version)"
                         @show-notes="showNotes(version)"
                         @delete="versionDeleteDialog(version)"/>
@@ -70,11 +71,10 @@
               <template #activator="{ on }">
                 <v-btn v-on="on"
                        :color="isSign(version) ? 'amber' : 'purple'"
-                       class="btn-border"
                        @click.stop="showEds(version)"
                        icon small depressed>
-                  <fa-icon :icon="isSign(version) ? 'award' : 'signature'"
-                           size="lg"/>
+                  <fa-icon :icon="isSign(version) ? 'award' : 'file-contract'"
+                           type="fal" fixed-size="20"/>
                 </v-btn>
               </template>
               <span>{{ $t('eds.title') }}</span>
@@ -96,8 +96,12 @@
         <br><br>{{ '- ' + deleteParams.fileName }}
       </template>
     </delete-confirm>
+
     <!-- Eds list-->
-    <eds v-model="edsDialog" :eds.sync="signatures"/>
+    <eds v-if="edsDialog"
+         v-model="edsDialog"
+         :signatures="version.Details.Signatures"
+         :attachmentParams="versionParams"/>
   </v-simple-table>
 </template>
 
@@ -106,6 +110,7 @@ import FileTypeIcon from '@/components/FileTypeIcon'
 import VersionBtns from './VersionBtns'
 import { attachments } from '@/mixins/units'
 import { date } from '@/mixins/dateTime'
+import eds from '@/mixins/eds'
 
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
 const Notes = () => import('../attachment-notes/Notes')
@@ -113,7 +118,7 @@ const Eds = () => import('../attachment-eds/EdsList')
 
 export default {
   name: 'VersionList',
-  mixins: [attachments, date],
+  mixins: [attachments, eds, date],
   props: {
     attachment: Object
   },
@@ -129,7 +134,8 @@ export default {
     deleteParams: {},
     roots: {},
     notes: [],
-    signatures: {},
+    version: {},
+    versionParams: {},
     notesDialog: false,
     edsDialog: false
   }),
@@ -153,14 +159,13 @@ export default {
     showEds (version) {
       this.edsDialog = true
       if (version.Details) {
-        this.signatures = {
-          signatures: version.Details.Signatures || [],
-          attachment: {
-            id: version.Id,
-            url: version.Details.FileUrl,
-            size: version.FileSize,
-            ext: version.FileExt
-          }
+        this.version = version
+        this.versionParams = {
+          isVersion: true,
+          fileId: version.Id,
+          fileUrl: version.Details.FileUrl,
+          fileSize: version.FileSize,
+          fileExt: version.FileExt
         }
       }
     }
