@@ -295,9 +295,9 @@ export default {
     }
   },
   async signAttachment ({ dispatch, commit }, { attachment, params, taskId, caseId }) {
-    commit('START_PRELOADER', 'deleteSign')
+    commit('START_PRELOADER', 'signAttachment')
     try {
-      const response = await api.signAttachmentInGql(attachment.id, params)
+      const response = await api.signAttachmentInGql(attachment.fileId, params)
       const result = response.data.smtasksMutation.signAttachment
       if (result.success) {
         commit('SET_NOTIFY', {
@@ -305,6 +305,7 @@ export default {
           color: 'success'
         })
         dispatch('updateAfterChanges', { taskId, caseId })
+        dispatch('getFileDetails', attachment)
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || i18n.t('notify.signAttachmentFail'),
@@ -318,7 +319,7 @@ export default {
         color: 'error'
       })
     } finally {
-      commit('STOP_PRELOADER', 'deleteSign')
+      commit('STOP_PRELOADER', 'signAttachment')
     }
   },
   async deleteSign ({ commit }, { attachmentId, signId }) {

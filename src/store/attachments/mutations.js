@@ -26,7 +26,11 @@ export default {
         const existingAttachment = state.attachments.find(i => {
           return i.id === attachment.id && i.hash === attachment.hash
         })
-        return Object.assign(attachment, existingAttachment || {})
+        // Изменение порядка замены объекта вложения при обновлении
+        // для корректного обновления ключевых свойств
+        // В старом варианте значения нового объекта заменялись старыми!
+        // return Object.assign(attachment, existingAttachment || {})
+        return Object.assign(existingAttachment || {}, attachment)
       }
       return attachment
     })
@@ -127,6 +131,9 @@ export default {
     const indexN = version.Details.Notes.findIndex(i => i.NoteId === noteId)
     version.Details.Notes.splice(indexN, 1)
     Vue.set(attachments, indexA, attachment)
+  },
+  SET_ATTACHMENT_SIGN (state, { attachmentId, sign }) {
+
   },
   DELETE_SIGN (state, { attachmentId, signId }) {
     const attachments = state.attachments
