@@ -170,7 +170,7 @@ export const tasks = {
         if (businessObject) {
           businessObjectParams = {
             BusinessObjectDefinitionCode: businessObject.BusinessObjectDefinitionCode || '',
-            BusinessObjectKey: businessObject.BusinessObjectKey || 0
+            BusinessObjectKey: businessObject.BusinessObjectKey || ''
           }
         }
         return businessObjectParams
