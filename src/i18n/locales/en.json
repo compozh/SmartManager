@@ -314,7 +314,12 @@
     "serviceProvider": "Qualified service provider",
     "providerPlaceholder": "Select service provider",
     "readEds": "Read",
-    "autoDetect": "Detect automatically"
+    "autoDetect": "Detect automatically",
+    "signAttachment": "Sign attachment",
+    "signVersion": "Sign version",
+    "notSaveKey": "Do not save key",
+    "saveKeyInSession": "Remember in the tab\n (the key will be saved in memory until the browser tab is closed)",
+    "saveKeyInBrowser": "Remember in the browser\n (the key will be saved in the browser for later use. To delete the key from the browser, call 'Clear key' in the user menu or in the signature window)"
   },
   "comments": {
     "addComment": "Add comment",
