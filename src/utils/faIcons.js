@@ -71,6 +71,8 @@ import { faSignature } from '@fortawesome/pro-regular-svg-icons/faSignature'
 import { faUserCog } from '@fortawesome/pro-regular-svg-icons/faUserCog'
 import { faInfoCircle } from '@fortawesome/pro-regular-svg-icons/faInfoCircle'
 import { faInboxIn } from '@fortawesome/pro-regular-svg-icons/faInboxIn'
+import { faFileTimes } from '@fortawesome/pro-regular-svg-icons/faFileTimes'
+import { faClipboardListCheck } from '@fortawesome/pro-regular-svg-icons/faClipboardListCheck'
 import { faUnlock as falUnlock } from '@fortawesome/pro-light-svg-icons/faUnlock'
 import { faStar as falStar } from '@fortawesome/pro-light-svg-icons/faStar'
 import { faFilesMedical as falFilesMedical } from '@fortawesome/pro-light-svg-icons/faFilesMedical'
@@ -88,6 +90,9 @@ import { faClipboardCheck as falClipboardCheck } from '@fortawesome/pro-light-sv
 import { faCommentAltLines as falCommentAltLines } from '@fortawesome/pro-light-svg-icons/faCommentAltLines'
 import { faFolderPlus as falFolderPlus } from '@fortawesome/pro-light-svg-icons/faFolderPlus'
 import { faFileSignature as falFileSignature } from '@fortawesome/pro-light-svg-icons/faFileSignature'
+import { faAward as falAward } from '@fortawesome/pro-light-svg-icons/faAward'
+import { faClipboardListCheck as falClipboardListCheck } from '@fortawesome/pro-light-svg-icons/faClipboardListCheck'
+import { faFileContract as falFileContract } from '@fortawesome/pro-light-svg-icons/faFileContract'
 
 import FaIcon from '@/components/FaIcon'
 
@@ -163,6 +168,8 @@ library.add(
   faUserCog,
   faInfoCircle,
   faInboxIn,
+  faFileTimes,
+  faClipboardListCheck,
   falUnlock,
   falStar,
   falFilesMedical,
@@ -180,6 +187,9 @@ library.add(
   falClipboardCheck,
   falCommentAltLines,
   falFolderPlus,
-  falFileSignature)
+  falFileSignature,
+  falAward,
+  falClipboardListCheck,
+  falFileContract)
 
 Vue.component('fa-icon', FaIcon)

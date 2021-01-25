@@ -5,7 +5,8 @@
                      :flip="flip"
                      :rotation="rotation"
                      :inverse="inverse"
-                     :color="color"/>
+                     :color="color"
+                     :style="{'font-size': fixedSize + 'px'}"/>
 </template>
 
 <script>
@@ -29,6 +30,9 @@ export default {
       validator: function validator (value) {
         return ['lg', 'xs', 'sm', '1x', '2x', '3x', '4x', '5x', '6x', '7x', '8x', '9x', '10x'].indexOf(value) > -1
       }
+    },
+    fixedSize: {
+      type: [String, Number]
     },
     border: {
       type: Boolean,
@@ -56,6 +60,13 @@ export default {
   },
   components: {
     FontAwesomeIcon
+  },
+  computed: {
+    fontSize () {
+      return {
+        fontSize: this.sizePx + 'px !important;'
+      }
+    }
   }
 }
 </script>
