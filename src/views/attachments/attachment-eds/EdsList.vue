@@ -6,7 +6,7 @@
                  :loading="loading"
                  @close="$emit('input', false)">
       <template #text>
-        <v-simple-table v-if="eds.signatures && eds.signatures.length"
+        <v-simple-table v-if="signatures && signatures.length"
                         dense fixed-header height="300px">
           <template>
             <thead>
@@ -22,7 +22,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(sign, idx) in eds.signatures" :key="idx"
+            <tr v-for="(sign, idx) in signatures" :key="idx"
                 :class="{'lime lighten-5': sign.Id === currentEds.Id}"
                 style="cursor: pointer; width: 100%;"
                 @click="currentEds = sign">
@@ -56,6 +56,13 @@
                       :handler="showEdsCreateDialog">
           <span>{{ $t('eds.sign') }}</span>
         </outlined-btn>
+        <outlined-btn v-if="isPrivateKey"
+                      x-small
+                      color="warning"
+                      icon="file-times"
+                      :handler="() => window.ds.resetPrivateKey()">
+          <span>{{ $t('eds.clearKey') }}</span>
+        </outlined-btn>
         <v-spacer/>
         <outlined-btn x-small
                       color="purple"
@@ -85,7 +92,7 @@
     <eds-create v-if="edsCreateDialog"
                 v-model="edsCreateDialog"
                 :loading.sync="loading"
-                :attachment="eds.attachment"/>
+                :attachment="attachmentParams"/>
 
     <!-- Eds details dialog -->
     <eds-details v-if="showDetails"
@@ -110,14 +117,15 @@
 import DialogCard from '@/components/DialogCard'
 import OutlinedBtn from '@/components/OutlinedBtn'
 import { date } from '@/mixins/dateTime'
+import eds from '@/mixins/eds'
 
 const EdsCreate = () => import('./eds-create/EdsCreate')
 const EdsDetails = () => import('./EdsDetails')
 const DeleteConfirm = () => import('@/components/DeleteConfirm')
 
 export default {
-  name: 'Eds',
-  mixins: [date],
+  name: 'EdsList',
+  mixins: [eds, date],
   filters: {
     capitalize (value) {
       if (!value) { return '' }
@@ -131,7 +139,8 @@ export default {
     prop: 'showEds'
   },
   props: {
-    eds: Object,
+    signatures: Array,
+    attachmentParams: Object,
     showEds: Boolean
   },
   components: {
@@ -178,7 +187,7 @@ export default {
     },
     async deleteEds () {
       await this.$store.dispatch('deleteSign', {
-        attachmentId: this.eds.attachmentId,
+        attachmentId: this.attachmentParams.fileId,
         signId: this.currentEds.Id
       })
       this.currentEds = {}
