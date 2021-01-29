@@ -32,8 +32,9 @@ export default {
   data: () => ({
     locales: [
       { code: 'uk', name: 'Українська', flag: 'ua' },
-      { code: 'ru', name: 'Русский', flag: 'ru' },
-      { code: 'en', name: 'English', flag: 'en' }
+      { code: 'en', name: 'English', flag: 'en' },
+      { code: 'zh', name: 'Chinese', flag: 'zh' },
+      { code: 'ru', name: 'Русский', flag: 'ru' }
     ]
   }),
   mixins: [folders],

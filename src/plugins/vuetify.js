@@ -5,6 +5,7 @@ import Vuetify from 'vuetify'
 import en from 'vuetify/es5/locale/en'
 import ru from 'vuetify/es5/locale/ru'
 import uk from 'vuetify/es5/locale/uk'
+import zh from 'vuetify/es5/locale/zh-Hans'
 
 Vue.use(Vuetify)
 
@@ -17,7 +18,7 @@ export default new Vuetify({
     }
   },
   lang: {
-    locales: { en, ru, uk },
+    locales: { en, ru, uk, zh },
     current: localStorage.getItem('language') || 'en'
   },
   icons: {
