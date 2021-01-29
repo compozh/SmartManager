@@ -1,23 +1,28 @@
 <template>
   <div>
     <!-- File key input -->
+    <!--    TODO: Add :placeholder="$t('eds.selectKey')" after vuetify fix in 2.5v-->
     <v-file-input :value="fileKey"
                   @change="$emit('input', $event)"
                   :label="$t('eds.privateKey')"
-                  :placeholder="$t('eds.selectKey')"
+                  persistent-placeholder
+                  hide-details
                   outlined dense
                   prepend-icon=""
                   :clearable="false"
                   :show-size="1000"
                   :disabled="loading"
                   autocomplete="off"
-                  class="body-1 clearable">
+                  class="body-1 clearable mb-8">
+
       <template #prepend-inner>
         <v-icon small class="pt-1 pr-2">fas fa-paperclip</v-icon>
       </template>
+
       <template #selection="{ text }">
         <v-chip label small color="primary">{{ text }}</v-chip>
       </template>
+
       <template #append>
         <v-btn icon small class="clear-btn"
                @click="$emit('input', null)">
@@ -35,13 +40,15 @@
                   name="password"
                   type="password"
                   hide-details
-                  :disabled="loading"
+                  :disabled="loading || !fileKey"
                   autocomplete="off"
-                  @keyup.enter="$emit('read-key')"
-                  class="body-1 clearable">
+                  @keyup.enter="$emit('sign')"
+                  class="body-1 clearable mb-8">
+
       <template #prepend-inner>
         <v-icon small class="pt-1 pr-2">fas fa-unlock</v-icon>
       </template>
+
       <template #append>
         <v-btn icon small class="clear-btn"
                @click="$emit('update:password', null)">
@@ -59,9 +66,16 @@ export default {
     prop: 'fileKey'
   },
   props: {
-    fileKey: [File, null],
-    password: [String, null],
-    loading: Boolean
+    fileKey: {
+      type: [File, null]
+    },
+    password: {
+      type: [String, null]
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>

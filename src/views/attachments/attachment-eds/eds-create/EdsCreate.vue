@@ -1,23 +1,30 @@
 <template>
   <dialog-card :value="showDialog"
-               width="450px" height="500px"
+               width="400px"
+               min-height="500px"
                :title="$t('eds.eds')"
                :loading="loading"
                persistent
                @input="$emit('input', $event)">
+
+    <!-- Main content -->
     <template #text>
       <v-row>
-        <v-col class="pb-0">
+        <v-col class="pb-0 pt-12">
+
           <!-- Sign type selection -->
-          <v-select v-model="signType"
+          <v-select v-model="keyType"
+                    color="primary"
                     :label="$t('eds.signType')"
                     :items="signItems"
-                    item-text="name"
+                    item-text="label"
                     item-value="value"
+                    return-object
+                    hide-details
                     menu-props="offsetY"
                     outlined dense
                     :disabled="loading"
-                    class="body-1 mt-4">
+                    class="body-1 mb-8">
             <template #prepend-inner>
               <v-icon small class="pt-1 pr-2">fas fa-key</v-icon>
             </template>
@@ -27,7 +34,8 @@
           <v-autocomplete :items="issuerCNs"
                           v-model="issuerCN"
                           outlined dense
-                          class="body-1"
+                          hide-details
+                          class="body-1 mb-8"
                           autocomplete="off"
                           :disabled="loading"
                           :label="$t('eds.serviceProvider')"
@@ -38,35 +46,69 @@
           </v-autocomplete>
 
           <!-- File key -->
-          <eds-file-key v-if="signType === 'fileKey'"
+          <eds-file-key v-if="keyType.name === 'fileKey'"
                         v-model="fileKey"
                         :loading="loading"
                         :password.sync="password"
-                        @read-key="readPrivateKey"/>
+                        @sign="toSign"/>
 
           <!-- Hardware key -->
-          <eds-hardware-key v-if="signType === 'hardwareKey'"/>
+          <eds-hardware-key v-if="keyType.name === 'hardwareKey'"
+                            v-model="hardwareKey"
+                            :key-medias="keyMedias"
+                            :loading="loading"
+                            :password.sync="password"
+                            @reload="reload"
+                            @sign="toSign"/>
 
           <!-- Save key options -->
-          <v-radio-group v-model="saveKeyOption"
-                         hide-details
-                         dense class="eds-save">
-            <v-radio :label="$t('eds.notSaveKey')"
-                     value="notSave"
-                     class="align-start mb-4"/>
-            <v-radio :label="$t('eds.saveKeyInSession')"
-                     value="saveInSession"
-                     class="align-start mb-4"/>
-            <v-radio :label="$t('eds.saveKeyInBrowser')"
-                     value="saveInBrowser"
-                     class="align-start"
-                     disabled/>
-          </v-radio-group>
+<!--          <v-radio-group v-model="saveKeyOption"-->
+<!--                         hide-details-->
+<!--                         dense class="eds-save">-->
+<!--            <v-radio :label="$t('eds.notSaveKey')"-->
+<!--                     value="notSave"-->
+<!--                     class="align-start mb-4"/>-->
+<!--            <v-radio :label="$t('eds.saveKeyInSession')"-->
+<!--                     value="saveInSession"-->
+<!--                     class="align-start mb-4"/>-->
+<!--            <v-radio :label="$t('eds.saveKeyInBrowser')"-->
+<!--                     value="saveInBrowser"-->
+<!--                     class="align-start"-->
+<!--                     disabled/>-->
+<!--          </v-radio-group>-->
+
+          <!-- Error message -->
+          <v-alert v-if="error"
+                   outlined prominent
+                   color="warning"
+                   class="mb-6"
+                   border="left">
+
+            <div class="body-2"
+                 v-html="error.message"
+                 style="word-break: break-word">
+            </div>
+
+            <!-- Refresh button -->
+            <outlined-btn v-if="error.code === 3"
+                          x-small
+                          class="mt-4"
+                          color="secondary"
+                          icon="redo"
+                          :handler="reload">
+              <span>{{ $t('buttons.refresh') }}</span>
+            </outlined-btn>
+          </v-alert>
+
         </v-col>
       </v-row>
     </template>
+
+    <!-- Dialog actions -->
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer/>
+
+      <!-- Cancel button -->
       <outlined-btn icon="times"
                     class="mr-2"
                     color="blue-grey"
@@ -74,13 +116,16 @@
                     :handler="() => $emit('input', false)">
         <span>{{ $t('buttons.cancel') }}</span>
       </outlined-btn>
+
+      <!-- Sign button -->
       <outlined-btn x-small
                     color="success"
                     icon="check"
-                    :disabled="!fileKey || !password || loading"
-                    :handler="() => readPrivateKey()">
+                    :disabled="isSignBtnDisabled"
+                    :handler="toSign">
         <span>{{ $t('eds.sign') }}</span>
       </outlined-btn>
+
     </template>
   </dialog-card>
 </template>
@@ -95,6 +140,7 @@ import eds from '@/mixins/eds'
 export default {
   name: 'EdsCreate',
   mixins: [eds],
+
   model: {
     prop: 'showDialog'
   },
@@ -102,62 +148,54 @@ export default {
     attachment: Object,
     showDialog: Boolean
   },
+
   components: {
     EdsFileKey,
     EdsHardwareKey,
     DialogCard,
     OutlinedBtn
   },
+
   data: () => ({
-    signType: 'fileKey',
     fileKey: null,
+    hardwareKey: null,
+    password: null,
     issuerCN: null,
     issuerCNs: [],
-    password: null,
-    hardwareKey: null,
     saveKeyOption: 'notSave'
   }),
+
   computed: {
     signItems () {
       return [
         {
-          name: this.$t('eds.fileKey'),
-          value: 'fileKey'
+          name: 'fileKey',
+          label: this.$t('eds.fileKey'),
+          value: 0
         },
         {
-          name: this.$t('eds.hardwareKey'),
-          value: 'hardwareKey'
+          name: 'hardwareKey',
+          label: this.$t('eds.hardwareKey'),
+          value: 1
         }
-        // {
-        //   name: this.$t('eds.depositSign'),
-        //   value: 'depositSign'
-        // }
       ]
     },
-    signParams () {
-      if (this.signResult) {
-        const sign = this.signResult.SignatureInfo.OwnerInfo
-        const date = this.signResult.SignatureInfo.DateTimeStr
-        return {
-          signature: this.signResult.Sign,
-          signDate: date,
-          fio: sign.subjCN || sign.subjFullName,
-          email: sign.subjEMail,
-          post: sign.subjTitle,
-          organization: sign.subjOrg,
-          city: sign.subjLocality,
-          organizationStateCode: sign.subjEDRPOUCode,
-          userStateCode: sign.subjDRFOCode,
-          keyCenter: sign.issuerCN,
-          keyNumber: sign.serial
-        }
+
+    isSignBtnDisabled () {
+      switch (this.keyType.name) {
+        case 'fileKey':
+          return !this.fileKey || !this.password || this.loading
+        case 'hardwareKey':
+          return !this.password || this.loading
+        default: return false
       }
-      return null
     }
   },
+
   created () {
     this.$emit('update:loading', false)
   },
+
   async mounted () {
     this.loading = true
     this.dsInit()
@@ -165,7 +203,8 @@ export default {
     if (this.saveKeyOption === 'saveInSession') {
       window.ds = this.ds
     }
-    await this.ds.initialise()
+    const preferKeyType = await this.ds.initialise()
+    this.keyType = this.signItems.find(type => type.value === preferKeyType)
     const getCAsResult = await this.ds.getCAs()
     const issuerCNs = getCAsResult.map(ca => ({ text: ca.issuerCNs[0], value: ca }))
     const autoDetect = { text: this.$t('eds.autoDetect'), value: null }

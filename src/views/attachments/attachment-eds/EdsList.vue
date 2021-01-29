@@ -175,11 +175,13 @@ export default {
   },
   methods: {
     async checkEds () {
+      this.loading = true
       this.checkingSigns = this.currentEds.Id
       const result = await this.$store.dispatch('checkSign', this.currentEds.Id)
       if (result.VERIFICATION === '+') this.verifiedSigns.push(this.currentEds.Id)
       if (result.VERIFICATION === '-') this.filedSigns.push(this.currentEds.Id)
       this.checkingSigns = null
+      this.loading = false
     },
     showEdsCreateDialog () {
       this.loading = true

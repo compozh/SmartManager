@@ -5,7 +5,10 @@ export default {
   data: () => ({
     ds: null,
     isPrivateKey: false,
-    keyType: 0,
+    keyType: {
+      name: 'fileKey',
+      value: 0
+    },
     isJKSContainer: false,
     JKSPrivateKeys: [],
     JKSPrivateKey: null,
@@ -14,13 +17,39 @@ export default {
     signatureInfo: null,
     signResult: null,
     keyMedias: [],
-    loading: false
+    loading: false,
+    error: null
   }),
+
+  computed: {
+    signParams () {
+      if (this.signResult) {
+        const sign = this.signResult.SignatureInfo.OwnerInfo
+        const date = this.signResult.SignatureInfo.DateTimeStr
+        return {
+          signature: this.signResult.Sign,
+          signDate: date,
+          fio: sign.subjCN || sign.subjFullName,
+          email: sign.subjEMail,
+          post: sign.subjTitle,
+          organization: sign.subjOrg,
+          city: sign.subjLocality,
+          organizationStateCode: sign.subjEDRPOUCode,
+          userStateCode: sign.subjDRFOCode,
+          keyCenter: sign.issuerCN,
+          keyNumber: sign.serial
+        }
+      }
+      return null
+    }
+  },
+
   async created () {
     if (window.ds) {
       this.isPrivateKey = await window.ds.isPrivateKeyReaded()
     }
   },
+
   watch: {
     fileKey (key) {
       if (!key || !(key instanceof File)) {
@@ -29,6 +58,7 @@ export default {
       }
       this.isJKSContainer = this.ds.isJKSContainer(key)
     },
+
     async isJKSContainer (value) {
       if (!value) {
         this.JKSPrivateKeys = []
@@ -38,108 +68,123 @@ export default {
       this.JKSPrivateKeys = await this.ds.getJKSPrivateKeys(this.fileKey)
       this.JKSPrivateKey = this.JKSPrivateKeys[0]
     },
+
     async issuerCN (CA) {
       await this.ds.setCA(CA)
       this.needPrivateKeyCertificates = this.ds.needPrivateKeyCertificates()
     },
-    async keyType (value, oldValue) {
-      if (value === oldValue) {
-        return
-      }
-      this.loading = true
+
+    keyType (type, oldType) {
+      if (type.value === oldType.value) return
+      this.initLocalState()
+      this.setLibraryType()
+    }
+  },
+
+  methods: {
+    initLocalState () {
       this.password = null
       this.needPrivateKeyCertificates = false
       this.privateKeyCertificates = []
       this.signatureInfo = false
-      this.password = null
       this.isJKSContainer = false
       this.JKSPrivateKeys = []
       this.JKSPrivateKey = null
+      this.error = null
 
+      if (Array.isArray(this.issuerCNs) && this.issuerCNs.length > 0) {
+        this.issuerCN = this.issuerCNs[0].value
+      }
+    },
+
+    async setLibraryType () {
+      this.loading = true
       try {
-        await this.ds.setLibraryType(value)
-        if (value === Models.DigitalSignatureLibraryType.SW && !this.keyMedias.length) {
+        await this.ds.setLibraryType()
+        const { SW: hardKey } = Models.DigitalSignatureLibraryType
+        if (this.keyType.value === hardKey && !this.keyMedias.length) {
           this.keyMedias = await this.ds.getKeyMedias()
-          this.hardwareKey = this.keyMedias[0]
         }
       } catch (e) {
         console.error(e)
+        this.error = e
       }
       this.loading = false
-    }
-  },
-  methods: {
+    },
+
     dsInit () {
-      this.ds = new DigitalSignature(new Models.GraphQlSettingProvider(
-        this.$i18n.locale,
-        window.appConfig.GrapgQlUrl,
-        'https://m.it.ua/ws/',
-        auth))
+      const locale = this.$i18n.locale
+      const { GqlUrl, WsUrl } = window.appConfig
+      const models = new Models.GraphQlSettingProvider(locale, GqlUrl, WsUrl, auth)
+      this.ds = new DigitalSignature(models)
     },
-    async readPrivateKey () {
-      console.log('readPrivateKey')
+
+    async toSign () {
+      this.error = null
       this.loading = true
-      if (this.keyType === Models.DigitalSignatureLibraryType.JS) {
-        let privateKey
-
-        if (this.isJKSContainer) {
-          if (!this.JKSPrivateKey) {
-            this.loading = false
-            return
-          }
-          privateKey = this.JKSPrivateKey.privateKey
-        } else {
-          privateKey = this.fileKey
-        }
-
-        try {
-          this.signatureInfo = await this.ds.readFileKey(
-            privateKey,
-            this.password,
-            this.privateKeyCertificates)
-          // Calling sign method after getting signatureInfo
-          await this.sign()
-        } catch (e) {
-          console.error(e)
-          if (e.code === 51) {
-            this.needPrivateKeyCertificates = true
-            this.loading = false
-            return
-          }
-        }
-      } else if (this.keyType === Models.DigitalSignatureLibraryType.SW) {
-        try {
-          this.hardwareKey.password = this.password
-          this.signatureInfo = await this.ds.readHardwareKey(
-            this.hardwareKey,
-            this.privateKeyCertificates)
-        } catch (e) {
-          console.error(e)
-          if (e.code === 51) {
-            this.needPrivateKeyCertificates = true
-            this.loading = false
-            return
-          }
-        }
+      try {
+        await this.readPrivateKey()
+        await this.getSign()
+        await this.signAttachment()
+        this.$emit('input', false)
+      } catch (e) {
+        this.error = e
       }
       this.loading = false
     },
-    async sign () {
-      this.loading = true
-      await this.getSign()
-      await this.signAttachment()
-      this.loading = false
-      this.$emit('input', false)
+
+    async readPrivateKey () {
+      const { JS: fileKey, SW: hardKey } = Models.DigitalSignatureLibraryType
+      if (this.keyType.value === fileKey) await this.readFileKey()
+      if (this.keyType.value === hardKey) await this.readHardwareKey()
     },
-    async getSign () {
-      this.signResult = await this.ds.signFileEx(this.attachment.fileUrl, false)
+
+    readFileKey () {
+      if (this.isJKSContainer && !this.JKSPrivateKey) return
+      const privateKey = this.JKSPrivateKey
+        ? this.JKSPrivateKey.privateKey
+        : this.fileKey
+
+      return this.ds.readFileKey(privateKey, this.password, this.privateKeyCertificates)
+        .then(result => { this.signatureInfo = result })
+        .catch(e => { this.needPrivateKeyCertificates = e.code === 51 })
+        .catch(e => { throw Error(e.message) })
     },
+
+    readHardwareKey () {
+      this.hardwareKey.password = this.password
+      return this.ds.readHardwareKey(this.hardwareKey, this.privateKeyCertificates)
+        .then(result => { this.signatureInfo = result })
+        .catch(e => { this.needPrivateKeyCertificates = e.code === 51 })
+        .catch(e => { throw Error(e.message) })
+    },
+
+    getSign () {
+      return this.ds.signFileEx(this.attachment.fileUrl, false)
+        .then(result => { this.signResult = result })
+        .catch(e => { throw Error(e.message) })
+    },
+
     signAttachment () {
       const attachment = this.attachment
       const params = JSON.stringify(this.signParams)
       const { taskId, caseId } = this.$route.params
       const payload = { attachment, params, taskId, caseId }
-      this.$store.dispatch('signAttachment', payload)
+      return this.$store.dispatch('signAttachment', payload)
+    },
+
+    async reload () {
+      this.loading = true
+      try {
+        await this.ds.initialise()
+        this.initLocalState()
+        await this.setLibraryType()
+        this.error = null
+      } catch (e) {
+        console.error(e)
+        this.error = e
+      }
+      this.loading = false
     }
   }
 }
