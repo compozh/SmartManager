@@ -3,26 +3,38 @@
             @input="$emit('input', $event)"
             @click:outside="persistent || $emit('input', false)"
             :persistent="persistent">
+
     <v-card :min-height="minHeight"
             :loading="loading"
             class="d-flex flex-column flex-grow-1 overflow-hidden blue-grey">
+
       <v-card-title class="subtitle-1 white--text py-1">
         {{ title || 'Dialog title' }}
+
         <v-spacer/>
+
+        <!-- Close button-->
         <v-btn icon small depressed
                class="close mr-n5"
                @click="loading || $emit('input', false)">
           <fa-icon icon="times" type="fal"
                    size="lg" color="#fff"/>
         </v-btn>
+
       </v-card-title>
+
+      <!-- Main dialog content -->
       <v-card-text class="d-flex flex-column flex-grow-1 white">
         <slot name="text">Dialog content</slot>
       </v-card-text>
+
       <v-divider style="background: #e0e0e0"/>
+
+      <!-- Dialog actions -->
       <v-card-actions class="pa-4 white">
         <slot name="actions">Dialog actions</slot>
       </v-card-actions>
+
     </v-card>
   </v-dialog>
 </template>

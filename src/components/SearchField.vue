@@ -1,22 +1,29 @@
 <template>
-  <v-text-field
-    v-model.lazy="search"
-    dense
-    clearable
-    single-line
-    hide-details
-    :style="style"
-    @focus="focused"
-    @blur="blurred"
-    clear-icon="+"
-    class="body-2 align-center">
+  <v-text-field v-model.lazy="search"
+                dense single-line
+                :clearable="false"
+                hide-details
+                :style="style"
+                @focus="focused"
+                @blur="blurred"
+                clear-icon="+"
+                class="body-2 align-center clearable">
 
     <template #label>
-      <span class="body-2">{{ $t('search') }}</span>
+      <span class="body-2" v-text="$t('search')"/>
     </template>
 
     <template #prepend>
       <fa-icon icon="search"/>
+    </template>
+
+    <template #append>
+      <v-btn v-if="search"
+             icon small color="primary"
+             class="clear-btn"
+             @click="search = null">
+        <fa-icon icon="times" type="fal" size="lg"/>
+      </v-btn>
     </template>
 
   </v-text-field>

@@ -6,15 +6,14 @@
                    :hide-default-footer="hideFooter"
                    :no-data-text="hideNoData ? '' : $t('tasks.noTasks')"
                    :footer-props="footerProps"
-                   class="d-flex flex-column"
-                   style="min-height: 0">
+                   class="d-flex flex-column fill-height">
 
-    <template #default="props">
-      <perfect-scrollbar tag="v-row" :options="scrollOptions">
-          <v-col v-for="task in props.items"
-                 :key="task.id" cols="12" class="py-1">
-            <task-list-item :task="task"/>
-          </v-col>
+    <template #default="{ items }">
+      <perfect-scrollbar :options="scrollOptions"
+                         style="flex-basis: 0;"
+                         class="flex-grow-1">
+        <task-list-item v-for="task in items" :key="task.id"
+                        :task="task" class="mb-2"/>
       </perfect-scrollbar>
     </template>
 
@@ -78,6 +77,10 @@ export default {
   .v-data-iterator >>> .v-data-footer {
     justify-content: flex-start;
     font-size: 14px;
+  }
+
+  .ps >>> .ps__rail-y {
+    display: none;
   }
 
 </style>

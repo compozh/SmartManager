@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-2" ripple
+  <v-card class="pa-2" ripple elevation="1"
           :to="{name: 'task-details', params: {taskId: task.id}}">
       <div class="item-title">
         <div class="item-title-desc text-truncate">

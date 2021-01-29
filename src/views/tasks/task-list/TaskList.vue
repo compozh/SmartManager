@@ -1,28 +1,38 @@
 <template>
-  <v-row no-gutters style="flex-basis: 0;"
-         class="flex-grow-1 overflow-hidden">
-    <v-col class="d-flex flex-column fill-height pa-0">
-      <v-row dense justify="start"
-             align-content="start"
-             class="flex-grow-0">
-        <v-col class="d-flex">
-          <search-field class="mt-n3 ml-1"/>
-          <v-spacer/>
-          <v-btn-toggle v-model="viewMode" mandatory class="mt-n1">
-            <v-btn small>
-              <fa-icon icon="list-alt" size="lg"/>
-            </v-btn>
-            <v-btn small>
-              <fa-icon icon="table" size="lg"/>
-            </v-btn>
-          </v-btn-toggle>
-        </v-col>
-      </v-row>
+  <!-- Task list -->
+  <v-row no-gutters class="flex-column">
+    <v-col class="flex-grow-0 d-flex align-center">
+      <!-- Task search field -->
+      <search-field class="mt-0 mb-1 pl-1"/>
 
-      <task-table v-if="viewMode" :tasks="tasks"/>
-      <task-cards v-else :tasks="tasks"/>
-      <task-form/>
+      <v-spacer/>
+
+      <!-- List/table view mode switch -->
+      <v-btn-toggle v-model="viewMode"
+                    class="transparent"
+                    mandatory>
+        <v-btn small>
+          <fa-icon icon="list-alt" size="lg"/>
+        </v-btn>
+        <v-btn small>
+          <fa-icon icon="table" size="lg"/>
+        </v-btn>
+      </v-btn-toggle>
     </v-col>
+
+    <!-- Task items -->
+    <v-col class="pt-2">
+      <!-- Tasks table -->
+      <task-table v-if="viewMode" :tasks="tasks"/>
+
+      <!-- Tasks cards -->
+      <task-cards v-else :tasks="tasks"/>
+    </v-col>
+
+    <!-- Create task form button -->
+    <task-form/>
+
+    <!-- Task page router view -->
     <router-view/>
   </v-row>
 </template>
@@ -45,11 +55,13 @@ export default {
     TaskTable,
     TaskForm
   },
+
   data () {
     return {
       viewMode: false
     }
   },
+
   watch: {
     $route (to, from) {
       const activeFolder = from.params.folderId
@@ -59,17 +71,10 @@ export default {
       }
     }
   },
+
   created () {
     this.getTasks(this.activeFolderId)
     this.startSignalRConnection()
   }
 }
 </script>
-
-<style>
-
-  .grid-headers {
-    min-width: 110px;
-  }
-
-</style>
