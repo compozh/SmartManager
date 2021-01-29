@@ -20,15 +20,19 @@ export default {
       const appName = 'SMARTMANAGER'
       const token = auth._getRefreshToken()
       const hubProxy = connection.createHubProxy(hubName)
-      var onReceive = message => {
+      const onReceive = message => {
         const parsedMessage = JSON.parse(message)
         if (parsedMessage.TASKID) {
           this.getFolders()
         }
+
         if (parsedMessage.MODE === 'Add') {
           // Re-reading tasks to view new tasks
           this.getTasks(this.activeFolderId)
         }
+
+        // TODO: Добавить обработку добавления новых комментариев
+        // TODO: Добавить обработку изменения статуса
       }
       hubProxy.on('receiveMessage', onReceive)
 

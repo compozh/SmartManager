@@ -6,7 +6,7 @@ Oidc.Log.level = Oidc.Log.INFO
 new Oidc.UserManager({ response_mode: 'query' }).signinRedirectCallback()
   .then(function (req) {
     if (req.profile && req.access_token) {
-      auth.config({ baseUrl: window.appConfig.GrapgQlUrl })
+      auth.config({ baseUrl: window.appConfig.GqlUrl })
       auth.loginByOidcRedirectComplite(req.access_token)
     }
     window.location.href = req.state && req.state.returnUrl

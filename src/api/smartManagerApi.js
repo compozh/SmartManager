@@ -28,7 +28,7 @@ const getClient = async schema => {
   const token = await auth.getToken()
   const options = {
     // eslint-disable-next-line no-undef
-    uri: appConfig.GrapgQlUrl + 'api/graphql',
+    uri: appConfig.GqlUrl + 'api/graphql',
     credentials: 'include',
     headers: {
       Authorization: `Bearer ${token}`,
