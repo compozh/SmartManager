@@ -55,21 +55,21 @@
       <span>{{ $t('attachments.delete') }}</span>
     </v-tooltip>
 
-    <!-- Sing button -->
-    <v-tooltip top>
-      <template #activator="{ on }">
-        <v-btn v-on="on"
-               color="warning"
-               class="ml-5 btn-border"
-               :class="{'no-active-btn': !signBtnActive}"
-               @click.stop="$emit('sign')"
-               text fab x-small dark depressed
-               :disabled="!signBtnActive">
-          <fa-icon icon="file-signature" type="fal" fixed-size="18" class="ml-1"/>
-        </v-btn>
-      </template>
-      <span>{{ $t('eds.signAttachment') }}</span>
-    </v-tooltip>
+    <!-- Sing attachment button -->
+<!--    <v-tooltip top>-->
+<!--      <template #activator="{ on }">-->
+<!--        <v-btn v-on="on"-->
+<!--               color="warning"-->
+<!--               class="ml-5 btn-border"-->
+<!--               :class="{'no-active-btn': !signBtnActive}"-->
+<!--               @click.stop="$emit('sign')"-->
+<!--               text fab x-small dark depressed-->
+<!--               :disabled="!signBtnActive">-->
+<!--          <fa-icon icon="file-signature" type="fal" fixed-size="18" class="ml-1"/>-->
+<!--        </v-btn>-->
+<!--      </template>-->
+<!--      <span>{{ $t('eds.signAttachment') }}</span>-->
+<!--    </v-tooltip>-->
 
     <!-- EDS dialog button -->
     <v-tooltip top>

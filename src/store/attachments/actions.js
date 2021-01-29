@@ -280,7 +280,6 @@ export default {
     }
   },
   async checkSign ({ commit }, signId) {
-    commit('START_PRELOADER', 'checkSign')
     try {
       const response = await api.checkSignInGql(signId)
       return JSON.parse(response.data.smtasks.checkResult)
@@ -290,8 +289,6 @@ export default {
         text: error.message || i18n.t('notify.signCheckFail'),
         color: 'warning'
       })
-    } finally {
-      commit('STOP_PRELOADER', 'checkSign')
     }
   },
   async signAttachment ({ dispatch, commit }, { attachment, params, taskId, caseId }) {

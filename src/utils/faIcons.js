@@ -73,6 +73,8 @@ import { faInfoCircle } from '@fortawesome/pro-regular-svg-icons/faInfoCircle'
 import { faInboxIn } from '@fortawesome/pro-regular-svg-icons/faInboxIn'
 import { faFileTimes } from '@fortawesome/pro-regular-svg-icons/faFileTimes'
 import { faClipboardListCheck } from '@fortawesome/pro-regular-svg-icons/faClipboardListCheck'
+import { faRedo } from '@fortawesome/pro-regular-svg-icons/faRedo'
+import { faUsbDrive } from '@fortawesome/pro-regular-svg-icons/faUsbDrive'
 import { faUnlock as falUnlock } from '@fortawesome/pro-light-svg-icons/faUnlock'
 import { faStar as falStar } from '@fortawesome/pro-light-svg-icons/faStar'
 import { faFilesMedical as falFilesMedical } from '@fortawesome/pro-light-svg-icons/faFilesMedical'
@@ -170,6 +172,8 @@ library.add(
   faInboxIn,
   faFileTimes,
   faClipboardListCheck,
+  faRedo,
+  faUsbDrive,
   falUnlock,
   falStar,
   falFilesMedical,
