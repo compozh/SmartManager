@@ -5,7 +5,7 @@ import store from '@/store'
 const setRefreshLoader = loader => store.commit('SET_REFRESH_LOADER', loader)
 // Authentication configuration
 auth.config({
-  baseUrl: window.appConfig.GrapgQlUrl,
+  baseUrl: window.appConfig.GqlUrl,
   webUrl: `${window.location.origin}${window.appConfig.BASE_URL}${window.DOCKERMODE ? '/' : 'SmartManager/'}`,
   oidc: window.appConfig.oidc,
   onError: e => {

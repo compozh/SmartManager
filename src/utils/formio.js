@@ -9,7 +9,7 @@ const options = {
   auth,
   WsUrl: window.appConfig.WsUrl,
   routerDependencies: () => ({ router }),
-  GraphQlUrl: window.appConfig.GrapgQlUrl
+  GraphQlUrl: window.appConfig.GqlUrl
 }
 
 Vue.use(formio, {

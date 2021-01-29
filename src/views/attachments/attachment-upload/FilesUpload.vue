@@ -65,7 +65,7 @@ export default {
     size: 1048576 * 100, // one file size limit - 100 Mb
     headers: { 'Upload-Type': 'single' },
     chunk: {
-      action: window.appConfig.GrapgQlUrl + 'upload',
+      action: window.appConfig.GqlUrl + 'upload',
       minSize: 512000,
       maxActive: 1,
       maxRetries: 10

@@ -1,18 +1,18 @@
 <template>
-  <ejs-documenteditorcontainer id='container'
-                               ref="doceditcontainer"
-                               :serviceUrl='serviceUrl'
-                               height="100%"
-                               style='flex: 1 1 0;'
-                               :enableToolbar='true'
-                               :toolbarItems='items'
-                               :locale="$i18n.locale"
-                               :showPropertiesPane="false"
-                               :currentUser="userName"
-                               :restrictEditing="!access.editFile"
-                               :toolbarClick="saveVersion"
-                               :contentChange="enableSaveBtn">
-  </ejs-documenteditorcontainer>
+  <ejs-documenteditorcontainer
+    id='container'
+    ref="doceditcontainer"
+    :serviceUrl='serviceUrl'
+    height="100%"
+    style='flex: 1 1 0;'
+    :enableToolbar='true'
+    :toolbarItems='items'
+    :locale="$i18n.locale"
+    :showPropertiesPane="false"
+    :currentUser="userName"
+    :restrictEditing="!access.editFile"
+    :toolbarClick="saveVersion"
+    :contentChange="enableSaveBtn"/>
 </template>
 
 <script>
@@ -55,8 +55,8 @@ export default {
       'LocalClipboard',
       'RestrictEditing'
     ],
-    serviceUrl: window.appConfig.GrapgQlUrl + 'api/documenteditor/',
-    exportUrl: window.appConfig.GrapgQlUrl + 'upload'
+    serviceUrl: window.appConfig.GqlUrl + 'api/documenteditor/',
+    exportUrl: window.appConfig.GqlUrl + 'upload'
   }),
   computed: {
     access () {

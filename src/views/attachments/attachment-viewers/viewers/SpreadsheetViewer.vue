@@ -19,7 +19,7 @@ export default {
     url: String
   },
   data: () => ({
-    openUrl: window.appConfig.GrapgQlUrl + 'api/spreadsheet/open'
+    openUrl: window.appConfig.GqlUrl + 'api/spreadsheet/open'
   }),
   watch: {
     url (url, oldUrl) {

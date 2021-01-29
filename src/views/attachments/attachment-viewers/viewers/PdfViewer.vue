@@ -36,7 +36,7 @@ export default {
   },
   data: () => ({
     localization: 'pdfViewer',
-    serviceUrl: window.appConfig.GrapgQlUrl + 'api/pdfviewer'
+    serviceUrl: window.appConfig.GqlUrl + 'api/pdfviewer'
   }),
   provide: {
     PdfViewer: [Toolbar, Magnification, Navigation, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection, TextSearch, Annotation, FormFields]
