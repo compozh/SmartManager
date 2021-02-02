@@ -37,3 +37,24 @@
     white-space: pre-line;
   }
 }
+
+.comment-input {
+  border-top: 1px solid !important;;
+  border-bottom-left-radius: 5px !important;;
+  border-bottom-right-radius: 5px !important;;
+
+  &.white {
+    border-color: #e5e5e5 !important;
+  }
+}
+
+.comment-msg {
+  position: relative !important;;
+  max-width: 70% !important;;
+  background: white !important;;
+}
+
+.border-light {
+  border: 1px solid #e5e5e5 !important;;
+  border-radius: 5px !important;;
+}

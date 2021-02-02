@@ -1,5 +1,6 @@
 <template>
-  <div class="d-flex flex-column fill-height" style="background: #fbfbfb;">
+  <div class="d-flex flex-column fill-height"
+       style="background: #fbfbfb;">
     <div class="d-flex flex-column flex-grow-1 justify-space-between">
       <perfect-scrollbar class="d-flex flex-column flex-grow-1 pa-3"
                          :options="scrollOptions"
@@ -14,33 +15,45 @@
           </span>
         </div>
       </perfect-scrollbar>
-      <div class="msg-input white d-flex pa-3 align-center">
+      <div class="comment-input white d-flex pa-3 align-center">
+
+        <!-- Comment input field -->
         <v-text-field dense class="align-center"
                       v-model="comment"
-                      :label="$t('comments.placeholder')"
+                      :label="$t('comments.placeholder') + '...'"
                       flat solo
-                      clearable
-                      clear-icon="+"
                       hide-details
                       :loading="loading"
                       :disabled="loading"
                       @keyup.enter="sendMsg">
+
+          <!-- Comment clear button -->
+          <template #append>
+            <v-btn v-if="comment"
+                   icon small class="clear-btn"
+                   @click="comment = null">
+              <fa-icon icon="times" type="fal" size="lg"/>
+            </v-btn>
+          </template>
+
         </v-text-field>
-        <v-btn v-if="comment"
-               depressed
-               color="blue-grey"
-               class="ml-2 white--text"
-               :disabled="loading"
-               @click="sendMsg">
-          {{ $t('buttons.send') }}
-          <fa-icon icon="paper-plane" class="ml-2"/>
-        </v-btn>
+
+        <!-- Comment send button -->
+        <outlined-btn v-if="comment"
+                      x-small
+                      color="blue-grey"
+                      icon="paper-plane"
+                      :disabled="loading"
+                      :handler="sendMsg">
+          <span>{{ $t('buttons.send') }}</span>
+        </outlined-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import OutlinedBtn from '@/components/OutlinedBtn'
 import { common, tasks, cases } from '@/mixins/units'
 
 const CommentsLog = () => import('./CommentsLog.vue')
@@ -48,10 +61,11 @@ const CommentsLog = () => import('./CommentsLog.vue')
 export default {
   mixins: [common, tasks, cases],
   components: {
+    OutlinedBtn,
     CommentsLog
   },
   data: () => ({
-    comment: '',
+    comment: null,
     loading: false,
     scrollOptions: {
       wheelSpeed: 0.3,
@@ -79,20 +93,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-  .msg-input {
-    border-top: 1px solid;
-    border-color: #e5e5e5 !important;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-
-  .v-input >>> .v-input__append-inner > div > button {
-    transform: rotate(45deg);
-    font-size: 30px;
-    user-select: none;
-  }
-
-</style>
