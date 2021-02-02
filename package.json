@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@it-enterprise/digital-signature": "^0.2.0",
-    "@it-enterprise/formio": "^2.0.35",
+    "@it-enterprise/formio": "^2.0.36",
     "@microsoft/signalr": "^5.0.1",
     "@it-enterprise/graphql": "^1.0.9",
     "@it-enterprise/jwtauthentication": "^3.1.0",
