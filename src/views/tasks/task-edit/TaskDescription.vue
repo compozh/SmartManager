@@ -6,7 +6,7 @@
                   v-model="htmlDescription"
                   :options="editorOption"
                   class="mb-5"/>
-    <div v-if="docTextHtml" class="border-light">
+    <div v-if="docTextHtml">
       <iframe seamless
               scrolling="no"
               width="100%"

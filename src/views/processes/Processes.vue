@@ -15,6 +15,7 @@
       </div>
       <v-data-table :headers="headers"
                     :items="processes"
+                    item-key="procDefId"
                     :items-per-page="10"
                     :search="search"
                     @click:row="onRowClick"

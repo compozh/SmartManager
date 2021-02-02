@@ -97,7 +97,6 @@ export default {
           }
         }
         await this.startProcess(result.submission)
-        await this.$router.push('/')
       } catch (e) {
         if (e.length) {
           e.forEach(e => {
@@ -125,9 +124,13 @@ export default {
         Variables: this.getVariables(data)
       }
       try {
-        await this.$store.dispatch('startProcess', processData)
-        const routeToBack = this.$route.params.routeToBack
-        await this.$router.push(routeToBack)
+        const result = await this.$store.dispatch('startProcess', processData)
+        if (result.SmartManagerTaskId) {
+          await this.$router.push('/tasks/active/' + result.SmartManagerTaskId)
+        } else {
+          const routeToBack = this.$route.params.routeToBack || '/'
+          await this.$router.push(routeToBack)
+        }
       } catch (e) {
         console.log(e.message)
       }
