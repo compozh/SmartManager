@@ -50,6 +50,7 @@ export default {
           color: 'success'
         })
       }
+      return startedProcess
     } catch (error) {
       console.error(error.message || error)
       commit('SET_NOTIFY', {

@@ -22,6 +22,7 @@ export default {
       const hubProxy = connection.createHubProxy(hubName)
       const onReceive = message => {
         const parsedMessage = JSON.parse(message)
+
         if (parsedMessage.TASKID) {
           this.getFolders()
         }
@@ -31,7 +32,11 @@ export default {
           this.getTasks(this.activeFolderId)
         }
 
-        // TODO: Добавить обработку добавления новых комментариев
+        if (parsedMessage.MODE === 'AddComment') {
+          // Re-reading tasks to view new tasks
+          // TODO: Добавить перечитку комментариев через вызов отдельного экшена
+        }
+
         // TODO: Добавить обработку изменения статуса
       }
       hubProxy.on('receiveMessage', onReceive)
