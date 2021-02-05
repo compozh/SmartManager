@@ -75,11 +75,12 @@
     <v-tooltip top>
       <template #activator="{ on }">
         <v-btn v-on="on"
-               color="purple"
+               :color="isSign ? '#FFC107' : 'purple'"
                class="ml-5 btn-border"
                @click.stop="$emit('eds')"
                text fab x-small dark depressed>
-          <fa-icon icon="file-contract" type="fal" fixed-size="18"/>
+          <fa-icon v-if="isSign" icon="award" type="fal" fixed-size="18"/>
+          <fa-icon v-else icon="file-contract" type="fal" fixed-size="18"/>
         </v-btn>
       </template>
       <span>{{ $t('eds.title') }}</span>
@@ -94,7 +95,8 @@ export default {
     objectId: [String, Number],
     access: Object,
     loading: Boolean,
-    signBtnActive: Boolean
+    signBtnActive: Boolean,
+    isSign: Boolean
   }
 }
 </script>

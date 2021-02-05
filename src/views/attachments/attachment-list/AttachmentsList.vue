@@ -90,6 +90,7 @@
                   </div>
                   <attachment-btns v-if="hover" :objectId="objectId"
                                    :access="attachment.access"
+                                   :is-sign="attachment.isSign"
                                    :sign-btn-active="isPrivateKey"
                                    :loading="downLoaders.includes(attachment.id)"
                                    @new-version="newVersion(attachment)"
