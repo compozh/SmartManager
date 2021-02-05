@@ -6,6 +6,7 @@ const languageTag = () => {
   switch (i18n.locale) {
     case 'ru': return 'ru-RU'
     case 'uk': return 'uk-UA'
+    case 'zh': return 'zh-Hans'
     default: return 'en-US'
   }
 }
