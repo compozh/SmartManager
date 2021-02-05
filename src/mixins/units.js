@@ -170,7 +170,8 @@ export const tasks = {
         if (businessObject) {
           businessObjectParams = {
             BusinessObjectDefinitionCode: businessObject.BusinessObjectDefinitionCode || '',
-            BusinessObjectKey: businessObject.BusinessObjectKey || ''
+            BusinessObjectKey: businessObject.BusinessObjectKey || '',
+            BusinessObjectType: businessObject.BusinessObjectKeyType || 0
           }
         }
         return businessObjectParams
@@ -350,6 +351,7 @@ export const attachments = {
         this.$store.commit('SET_ACTIVE_ATTACHMENT', { attachment, version })
       }
     },
+
     async getAttachmentDetails (attachment) {
       let result = null
       const { id: fileId, fileExt, fileSize } = attachment || this.activeAttachment
@@ -366,6 +368,7 @@ export const attachments = {
         ...this.businessObjectParams(businessObject)
       })
     },
+
     async addAttachments (attachment, businessObject) {
       if (this.attachmentTypes.length === 1) {
         this.attachmentType = this.attachmentTypes[0].CODE
@@ -390,6 +393,7 @@ export const attachments = {
       const newAttachment = this.attachments.find(i => i.id === results[0].id)
       await this.setActiveAttachment(newAttachment)
     },
+
     async addVersion (attachment, filePath) {
       await this.$store.dispatch('addVersion', {
         fileId: attachment.id,
@@ -399,12 +403,15 @@ export const attachments = {
       })
       await this.setActiveAttachment(attachment)
     },
+
     async setActiveVersion (attachmentId, version) {
       await this.$store.dispatch('setActiveVersion', { attachmentId, version })
     },
+
     async getPdfUrl () {
       return await this.$store.dispatch('getPdfUrl')
     },
+
     async deleteVersion (attachment, versionId) {
       const result = await this.$store.dispatch('deleteVersion', { attachment, versionId })
       // If the deleted version is current, will be shown the active version
@@ -412,6 +419,7 @@ export const attachments = {
         await this.setActiveAttachment(attachment)
       }
     },
+
     async attachmentDelete (attachment) {
       await this.$store.dispatch('attachmentDelete', {
         fileId: this.getActiveId(attachment),
@@ -420,6 +428,7 @@ export const attachments = {
       })
       await this.setActiveAttachment(this.attachments[0])
     },
+
     getActiveId (attachment) {
     // Instead attachment ID need active version ID for accuracy
       if (attachment.versions) {
@@ -428,6 +437,7 @@ export const attachments = {
       }
       return attachment.id
     },
+
     resetAttachmentData () {
       this.$store.commit('SET_ACTIVE_ATTACHMENT', {
         attachment: {},

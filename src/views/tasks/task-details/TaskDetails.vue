@@ -31,19 +31,26 @@
            class="flex-grow-1 overflow-hidden white"
            :gutter-size="4"
            :direction="$vuetify.breakpoint.smAndDown ? 'vertical' : 'horizontal'">
+
       <!-- LEFT CONTENT AREA -->
       <SplitArea class="d-flex flex-column" :size="55">
+
         <!-- LEFT HEADER -->
         <div class="side-header">
+
           <!-- TASK PERFORMER -->
           <task-performer v-model="taskData.performer"/>
+
           <!-- TASK DATE PLAN -->
           <task-date-plan v-model="taskData.datePlan"/>
+
           <v-spacer/>
+
           <!-- TASK SAVE BUTTON -->
           <save-button v-if="taskChanged"
                          @save="updateTaskData"
                          @cancel="initTaskData"/>
+
           <!-- TASK MANAGEMENT BUTTONS -->
           <task-buttons v-if="!taskChanged"
                         class="py-3"
@@ -57,9 +64,11 @@
           <!--                     @changeStatus="changeStatus"/>-->
         </div>
         <v-divider/>
+
         <!-- LEFT SCROLL AREA -->
         <perfect-scrollbar class="pa-5" :options="scrollOptions">
           <div class="d-flex align-baseline">
+
             <!-- TASK NAME -->
             <editable-text-field v-model="taskData.name"
                                  required flat
@@ -67,6 +76,7 @@
                                  :changed="taskChanged"
                                  :changeHandler="setTaskChanged"
                                  class="title font-weight-bold"/>
+
             <!-- TOGGLE PIN TASK BUTTON -->
             <icon-tooltip-btn btnClass="ml-auto"
                               :btnColor="task.isFavorite ? 'cyan' : 'grey'"
@@ -77,6 +87,7 @@
               {{ task.isFavorite ? $t('buttons.unpin') : $t('buttons.pin') }}
             </icon-tooltip-btn>
           </div>
+
           <!-- TASK DOC CAPTION -->
           <h3 v-if="task.docCaption && task.docCaption !== task.name"
               class="font-weight-light mb-3">
@@ -89,16 +100,21 @@
                                    :formCode="form.UNFORMIO"
                                    :formDefinition="formDefinition"/>
           </div>
+
           <!-- HTML DESCRIPTION-->
           <task-description v-model="taskData.description"
                             :docTextHtml="task.docTextHtml"/>
+
           <!-- LABELS -->
           <task-labels :task="task"/>
+
           <v-divider/>
+
           <!-- TASK PARTICIPANTS -->
             <task-participants v-model="taskData.participants"
                                :readonly="externalTaskCamunda"
                                class="mb-10"/>
+
           <!-- TASK ATTACHMENTS -->
           <template v-if="externalTaskCamunda">
             <attachments-list v-for="businessObject in businessObjects"
@@ -110,22 +126,26 @@
           <attachments-list v-else class="mb-10"
                             :attachmentList="attachments"
                             @selectAttachment="tab = 0"/>
+
           <!-- BASE TASK -->
           <div v-if="baseTask" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
             <span class="font-weight-light">
               {{ $t('tasks.base').toUpperCase() }}</span>
-            <task-cards :tasks="[baseTask]"
-                        class="mt-3"
-                        hide-footer/>
+            <task-list-item :task="baseTask" class="my-2"/>
           </div>
+
           <!-- PARENT TASKS -->
           <div v-if="task.parentTasks" class="my-5">
             <fa-icon icon="sitemap" class="mr-3" size="lg"/>
             <span class="font-weight-light">
               {{ $t('tasks.parentTasks').toUpperCase() }}</span>
-            <task-cards :tasks="task.parentTasks" class="mt-3" hide-footer/>
+            <task-list-item v-for="task in task.parentTasks"
+                            :key="task.id"
+                            :task="task"
+                            class="my-2"/>
           </div>
+
           <!-- SUB TASKS-->
           <div class="my-5">
             <div class="d-flex align-center font-weight-light">
@@ -141,13 +161,14 @@
                 </v-btn>
               </task-form>
             </div>
-            <task-cards :tasks="childTasks"
-                        class="mt-3"
-                        hide-footer
-                        :hide-no-data="true"/>
+            <task-list-item v-for="task in childTasks"
+                            :key="task.id"
+                            :task="task"
+                            class="my-2"/>
           </div>
         </perfect-scrollbar>
       </SplitArea>
+
       <!-- RIGHT CONTENT AREA -->
       <SplitArea class="d-flex flex-column overflow-hidden" :size="45">
         <v-tabs v-model="tab" grow
@@ -194,7 +215,7 @@ const TaskDescription = () => import('@/views/tasks/task-edit/TaskDescription')
 const TaskLabels = () => import('@/views/tasks/task-details/TaskLabels')
 const TaskParticipants = () => import('@/views/tasks/task-edit/TaskParticipants')
 const TaskForm = () => import('@/views/tasks/task-create/TaskForm')
-const TaskCards = () => import('@/views/tasks/task-list/TaskCards')
+const TaskListItem = () => import('@/views/tasks/task-list/TaskListItem.vue')
 const AttachmentsList = () => import('@/views/attachments/attachment-list/AttachmentsList')
 const AttachmentsViewer = () => import('@/views/attachments/attachment-viewers/AttachmentsViewer')
 const Comments = () => import('@/views/comments/Comments')
@@ -214,7 +235,7 @@ export default {
     TaskLabels,
     TaskParticipants,
     TaskForm,
-    TaskCards,
+    TaskListItem,
     AttachmentsList,
     AttachmentsViewer,
     Comments,

@@ -2,6 +2,7 @@ import { SmartManagerApi as api } from '@/api/smartManagerApi'
 import i18n from '@/i18n'
 
 export default {
+
   async getAttachmentTypes ({ commit }, params) {
     const paramsJson = JSON.stringify(params)
     commit('START_LINEAR_PRELOADER', 'attachmentTypes')
@@ -19,6 +20,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'attachmentTypes')
     }
   },
+
   async getFileDetails ({ commit }, { fileId, fileExt, fileSize }) {
     commit('START_LINEAR_PRELOADER', 'fileDetails')
     try {
@@ -46,6 +48,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'fileDetails')
     }
   },
+
   async addAttachments ({ dispatch, commit }, payload) {
     commit('START_LINEAR_PRELOADER', 'addAttachments')
     const attachments = JSON.stringify(payload.attachments)
@@ -79,6 +82,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addAttachments')
     }
   },
+
   async attachmentDelete ({ dispatch, commit }, { fileId, taskId, caseId }) {
     commit('START_PRELOADER', 'attachmentDelete')
     try {
@@ -107,6 +111,7 @@ export default {
       commit('STOP_PRELOADER', 'attachmentDelete')
     }
   },
+
   async addVersion ({ dispatch, commit }, { fileId, fileExt, fileSize, filePath }) {
     commit('START_LINEAR_PRELOADER', 'addVersion')
     try {
@@ -132,6 +137,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addVersion')
     }
   },
+
   async setActiveVersion ({ commit }, { attachmentId, version }) {
     commit('START_LINEAR_PRELOADER', 'setActiveVersion')
     try {
@@ -157,6 +163,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'setActiveVersion')
     }
   },
+
   async getPdfUrl ({ commit, state }) {
     const versionId = state.currentVersion.Id
     commit('START_PRELOADER', 'getPdfUrl')
@@ -175,6 +182,7 @@ export default {
       commit('STOP_PRELOADER', 'getPdfUrl')
     }
   },
+
   async deleteVersion ({ commit }, { attachment, versionId }) {
     commit('START_LINEAR_PRELOADER', 'deleteVersion')
     try {
@@ -200,6 +208,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'deleteVersion')
     }
   },
+
   async addNote ({ commit, rootState }, { roots, noteText }) {
     commit('START_LINEAR_PRELOADER', 'addNote')
     try {
@@ -223,6 +232,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'addNote')
     }
   },
+
   async updateNote ({ commit }, { roots, noteId, noteText }) {
     commit('START_LINEAR_PRELOADER', 'updateNote')
     try {
@@ -246,6 +256,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'updateNote')
     }
   },
+
   async deleteNote ({ commit }, { roots, noteId }) {
     commit('START_LINEAR_PRELOADER', 'deleteNote')
     try {
@@ -269,6 +280,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'deleteNote')
     }
   },
+
   async updateAfterChanges ({ dispatch, commit }, { taskId, caseId }) {
     // Update task or case after changes
     if (taskId || caseId) {
@@ -279,6 +291,7 @@ export default {
       commit('STOP_LINEAR_PRELOADER', 'updateAfterChanges')
     }
   },
+
   async checkSign ({ commit }, signId) {
     try {
       const response = await api.checkSignInGql(signId)
@@ -291,6 +304,7 @@ export default {
       })
     }
   },
+
   async signAttachment ({ dispatch, commit }, { attachment, params, taskId, caseId }) {
     commit('START_PRELOADER', 'signAttachment')
     try {
@@ -319,6 +333,7 @@ export default {
       commit('STOP_PRELOADER', 'signAttachment')
     }
   },
+
   async deleteSign ({ commit }, { attachmentId, signId }) {
     commit('START_PRELOADER', 'deleteSign')
     try {
