@@ -20,24 +20,32 @@ export default {
       const appName = 'SMARTMANAGER'
       const token = auth._getRefreshToken()
       const hubProxy = connection.createHubProxy(hubName)
-      const onReceive = message => {
-        const parsedMessage = JSON.parse(message)
+      const onReceive = receivedMessage => {
+        const message = JSON.parse(receivedMessage)
+        console.log(message)
 
-        if (parsedMessage.TASKID) {
+        if (message.TASKID) {
           this.getFolders()
         }
 
-        if (parsedMessage.MODE === 'Add') {
+        if (message.MODE === 'Add') {
           // Re-reading tasks to view new tasks
           this.getTasks(this.activeFolderId)
         }
 
-        if (parsedMessage.MODE === 'AddComment') {
+        if (message.MODE === 'AddComment') {
           // Re-reading tasks to view new tasks
           // TODO: Добавить перечитку комментариев через вызов отдельного экшена
         }
 
-        // TODO: Добавить обработку изменения статуса
+        if (message.MODE === 'TASK_SABTASKS_CHANGED') {
+          this.getTask()
+        }
+
+        if (message.MODE === 'ChangeStatus') {
+          console.log('Status changed', message.TASKID)
+          // TODO: Добавить обработку изменения статуса
+        }
       }
       hubProxy.on('receiveMessage', onReceive)
 
