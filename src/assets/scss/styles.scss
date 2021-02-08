@@ -1,3 +1,11 @@
+.layout--full-page {
+  background: url("../images/full-page-bg.svg") center bottom/cover no-repeat;
+}
+
+.header--full-page {
+  position: fixed;
+}
+
 .btn-smart-id {
   background: url("../images/smart_id_btn_bg.png") no-repeat center center #e6e6e6;
   background-size: 85%;

@@ -4,11 +4,24 @@
     <v-main class="layout--full-page">
       <div class="header--full-page d-flex align-center pa-4"
            style="width: 100%">
-        <v-img src="@/assets/images/it-logo.svg" contain max-width="150"/>
+
+        <!-- Master logo -->
+        <v-img v-if="iconset === 'Master'"
+               src="@/assets/icons/master-logo.svg"
+               contain max-width="150"/>
+
+        <!-- It-interprise logo -->
+        <v-img v-else
+               src="@/assets/images/it-logo.svg"
+               contain max-width="150"/>
+
         <v-spacer/>
+
+        <!-- Lang switcher -->
         <div class="justify-end">
           <lang-switcher/>
         </div>
+
       </div>
       <router-view/>
     </v-main>
@@ -24,16 +37,11 @@ export default {
   components: {
     Notify,
     LangSwitcher
+  },
+  computed: {
+    iconset () {
+      return window.appConfig.iconset
+    }
   }
 }
 </script>
-
-<style scoped>
-  .layout--full-page {
-    background: url(../assets/images/full-page-bg.svg) center bottom/cover no-repeat;
-  }
-
-  .header--full-page {
-    position: fixed;
-  }
-</style>

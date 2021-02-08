@@ -8,12 +8,24 @@
       <v-list-item-avatar>
         <v-tooltip right>
           <template #activator="{ on }">
-              <v-img v-on="on"
+
+              <!-- Master icon -->
+              <v-img v-if="iconset === 'Master'"
+                     src="@/assets/icons/master-icon.svg"
+                     max-height="35px"
+                     max-width="35px"
+                     style="cursor: pointer;"
+                     @click="$router.push({ name: 'home' })"
+                     v-on="on"/>
+
+              <!-- It-interprise icon -->
+              <v-img v-else
                      src="@/assets/images/logo.png"
                      max-height="32px"
                      max-width="32px"
                      style="cursor: pointer;"
-                     @click="$router.push({ name: 'home' })"/>
+                     @click="$router.push({ name: 'home' })"
+                     v-on="on"/>
           </template>
           {{ $t('sideBar.toHome') }}
         </v-tooltip>
@@ -56,7 +68,7 @@
                    target="_blank">
               <span v-if="item.Icon"
                     v-html="item.Icon"
-                    class="linkIcon"/>
+                    class="link-icon"/>
               <fa-icon v-else
                        icon="question-circle"
                        size="lg"
@@ -77,15 +89,24 @@ import { zones, folders } from '@/mixins/units'
 export default {
   name: 'SideBarZones',
   mixins: [sideBar, zones, folders],
+
   data: () => ({
     initValues: {
       miniVariant: false,
       expandOnHover: false
     }
   }),
+
+  computed: {
+    iconset () {
+      return window.appConfig.iconset
+    }
+  },
+
   created () {
     this.activeZoneId = this.routeZone.id || 0
   },
+
   watch: {
     activeZone (activeZone) {
       if (activeZone.group === 'processes') {
@@ -101,6 +122,7 @@ export default {
       }
     }
   },
+
   methods: {
     zoneSelect (zone) {
       if (zone.id !== this.activeZoneId) {
@@ -137,7 +159,7 @@ export default {
     color: white;
   }
 
-  .linkIcon {
+  .link-icon {
     height: 19px;
     width: 19px;
     color: #343434;
