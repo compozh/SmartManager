@@ -1,4 +1,4 @@
-window.devMode = true
+window.devMode = false
 const DM = window.DOCKERMODE
 window.appConfig = {
   BASE_URL: window.VUE_APP_BASE_PATH,
