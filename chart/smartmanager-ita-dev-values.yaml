@@ -2,6 +2,7 @@ graphqlUrl: /it-graphql-ita/
 signalrUrl: https://m.it.ua/ws/signalr/hubs
 siteUrl: https://m.it.ua
 webServiceUrl: https://m.it.ua
+iconset: ""
 scaling:
   replicas: 1 #3
   affinity:
@@ -15,7 +16,7 @@ resources:
     cpu: "1"
     memory: "4Gi"
 DepSettings:
-  Namespace: 
+  Namespace:
   NodeSelector: { }  #dep: itenterprise
-  OuterClusterRoot: 
+  OuterClusterRoot:
   Tolerations: []
