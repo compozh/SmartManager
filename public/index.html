@@ -19,7 +19,8 @@
           crossorigin="anonymous">
     <script>
       const favicon = document.querySelector('link[rel="icon"]')
-      window.appConfig.iconset !== 'Master'|| (favicon.href = '/favicon-master.ico')
+      const baseUrl = window.appConfig.BASE_URL
+      window.appConfig.iconset !== 'Master'|| (favicon.href = baseUrl + '/favicon-master.ico')
     </script>
   </head>
   <body>
