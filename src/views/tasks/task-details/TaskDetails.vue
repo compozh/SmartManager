@@ -314,7 +314,9 @@ export default {
       return key => {
         if (key) {
           return this.attachments.filter(attachment => {
-            return attachment.businessObjectKey === key
+            // Не строгое сравнение необходимо из-за разности типов businessObjectKey
+            // в task.originals и task.externalParams.businessObjects
+            return attachment.businessObjectKey == key
           })
         } else {
           return this.attachments

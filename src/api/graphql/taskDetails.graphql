@@ -76,6 +76,7 @@ fragment detailTaskFields on Task {
         editDate
         businessObjectDefinitionCode
         businessObjectKey
+        businessObjectKeyType
         access {
             download
             changeActiveVersion

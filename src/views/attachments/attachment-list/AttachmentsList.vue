@@ -30,6 +30,7 @@
         </v-simple-table>
     </files-upload>
 
+    <!-- Attachment list chips mode-->
     <perfect-scrollbar v-show="attachmentList.length" :options="scrollOptions">
       <div v-if="attachmentsListMode" class="py-2 d-flex flex-wrap">
         <v-chip v-for="(attachment, idx) in attachmentList"
@@ -42,16 +43,17 @@
           <span class="text-truncate">{{ attachment.fileName }}</span>
         </v-chip>
       </div>
+
+      <!-- Attachment list table mode-->
       <div v-else>
-        <v-data-table
-          :headers="headers"
-          :items="attachmentList"
-          item-key="index"
-          show-expand
-          disable-filtering
-          disable-pagination
-          disable-sort
-          hide-default-footer>
+        <v-data-table :headers="headers"
+                      :items="attachmentList"
+                      item-key="index"
+                      show-expand
+                      disable-filtering
+                      disable-pagination
+                      disable-sort
+                      hide-default-footer>
 
           <template #item="{ item: attachment, index, headers, expand, isExpanded }">
             <v-hover #default="{ hover }">
