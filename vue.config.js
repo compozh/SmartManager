@@ -12,7 +12,7 @@ module.exports = {
       openAnalyzer: false
     },
     i18n: {
-      locale: 'en',
+      locale: 'uk',
       fallbackLocale: 'en',
       localeDir: 'i18n',
       enableInSFC: true
@@ -26,15 +26,6 @@ module.exports = {
   ],
   configureWebpack: {
     devtool: 'eval-source-map'
-  },
-  pwa: {
-    name: 'Smart Manager',
-    short_name: 'Smart Manager',
-    themeColor: '#42A5F6',
-    workboxPluginMode: 'InjectManifest',
-    workboxOptions: {
-      swSrc: 'src/service-worker.js'
-    }
   },
   pages: {
     index: {
