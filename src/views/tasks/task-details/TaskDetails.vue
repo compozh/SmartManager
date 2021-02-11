@@ -316,6 +316,7 @@ export default {
           return this.attachments.filter(attachment => {
             // Не строгое сравнение необходимо из-за разности типов businessObjectKey
             // в task.originals и task.externalParams.businessObjects
+            // eslint-disable-next-line eqeqeq
             return attachment.businessObjectKey == key
           })
         } else {
