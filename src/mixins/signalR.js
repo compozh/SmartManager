@@ -38,7 +38,7 @@ export default {
           // TODO: Добавить перечитку комментариев через вызов отдельного экшена
         }
 
-        if (message.MODE === 'TASK_SABTASKS_CHANGED') {
+        if (message.MODE === 'TASK_SUBTASKS_CHANGED') {
           this.getTask()
         }
 
