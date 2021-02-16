@@ -3,12 +3,14 @@
     <div v-for="(participants, index) in taskParticipants"
          :key="index" style="flex: 1"
          :class="{'mr-10': index === 'coExecutors'}">
+
       <div v-if="!readonly || participants.users.length"
            :class="['d-flex', {'justify-end': index === 'observers'}]">
         <fa-icon :icon="participants.icon" class="mr-3" size="lg"/>
         <span class="font-weight-light text-truncate">
         {{ participants.title.toUpperCase() }}</span>
       </div>
+
       <div v-if="!readonly || participants.users.length" class="py-2 d-flex flex-wrap">
         <v-autocomplete :value="participants.users"
                         @change="changeParticipants($event, participants.group)"

@@ -1,10 +1,14 @@
 <template>
   <div class="d-flex align-center py-3 mr-5">
+
+    <!-- Performer photo -->
     <v-avatar color="grey lighten-1"
               class="mr-3" size="45px">
       <fa-icon v-if="!performer.photo" icon="user" inverse/>
       <v-img v-else :src="performer.photo"/>
     </v-avatar>
+
+    <!-- Performer name -->
     <div class="d-flex flex-column">
       <span class="overline">{{ $t('tasks.performer') }}:</span>
       <v-autocomplete id="performer"
@@ -12,7 +16,7 @@
                       @input="$emit('input', $event)"
                       :items="users"
                       :readonly="!taskEditable"
-                      append-icon
+                      append-icon=""
                       solo flat dense
                       hide-details
                       hide-no-data

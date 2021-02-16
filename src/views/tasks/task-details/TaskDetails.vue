@@ -47,12 +47,12 @@
           <v-spacer/>
 
           <!-- TASK SAVE BUTTON -->
-          <save-button v-if="taskChanged"
+          <save-button v-if="taskChanged && taskEditable"
                          @save="updateTaskData"
                          @cancel="initTaskData"/>
 
           <!-- TASK MANAGEMENT BUTTONS -->
-          <task-buttons v-if="!taskChanged"
+          <task-buttons v-if="!taskChanged || taskEditable"
                         class="py-3"
                         :buttonIsBlocked="buttonIsBlocked"
                         @changeStage="changeStage"
@@ -334,32 +334,39 @@ export default {
       return false
     }
   },
+
   watch: {
     '$route' (route) {
       if (route.name === 'task-details') {
-        this.getTask()
+        this.openTask()
       }
     }
   },
+
   async created () {
-    await this.getTask()
-    // Work with attachments must starting after task details info loaded
-    if (this.attachments.length && !this.activeAttachment.id) {
-      await this.setActiveAttachment(this.attachments[0])
-      this.tab = 0
-    }
-    this.setTaskEditable(!this.externalTaskCamunda)
-    this.initTaskData()
-    this.tab = this.attachments.length ? 0 : 1
-    // Re-reading folders to update counters
-    this.getFolders()
-    // Always send commit to set task as read
-    this.$store.commit('SET_TASK_IS_READ', {
-      taskId: this.taskId,
-      folderId: this.activeFolderId
-    })
+    await this.openTask()
   },
+
   methods: {
+    async openTask () {
+      await this.getTask()
+      // Work with attachments must starting after task details info loaded
+      if (this.attachments.length && !this.activeAttachment.id) {
+        await this.setActiveAttachment(this.attachments[0])
+        this.tab = 0
+      }
+      this.setTaskEditable(!this.externalTaskCamunda)
+      this.initTaskData()
+      this.tab = this.attachments.length ? 0 : 1
+      // Re-reading folders to update counters
+      this.getFolders()
+      // Always send commit to set task as read
+      this.$store.commit('SET_TASK_IS_READ', {
+        taskId: this.taskId,
+        folderId: this.activeFolderId
+      })
+    },
+
     initTaskData () {
       this.taskData.performer = {
         fio: this.task.performer,
@@ -373,10 +380,12 @@ export default {
       this.taskData.participants = this.task.participants || []
       this.setTaskChanged(false)
     },
+
     closeTaskDetails () {
       this.showTaskDialog(false)
       this.$router.push('/tasks/' + this.activeFolder.Code)
     },
+
     async formSubmit () {
       if (this.$refs.form) {
         const form = this.$refs.form
@@ -420,6 +429,7 @@ export default {
         return { success: true }
       }
     },
+
     async changeStatus (status, CompleteParams) {
       this.buttonIsBlocked = true
       const statusParams = {
@@ -435,6 +445,7 @@ export default {
         await this.$router.push('/')
       }
     },
+
     async changeStage (moveMode, comment) {
       this.buttonIsBlocked = true
       await this.$store.dispatch('changeStage', {
@@ -448,6 +459,7 @@ export default {
       })
       this.buttonIsBlocked = false
     },
+
     async executeExternalTask () {
       this.buttonIsBlocked = true
       const status = '+' // Task complete
@@ -459,6 +471,7 @@ export default {
       }
       this.buttonIsBlocked = false
     },
+
     toggleTaskPin () {
       this.$store.dispatch('taskPin', {
         taskId: this.taskId,
@@ -471,6 +484,7 @@ export default {
         await this.$router.push('/')
       }
     },
+
     async updateTaskData () {
       this.setTaskChanged(false)
       const taskData = {
@@ -486,6 +500,7 @@ export default {
         this.initTaskData()
       }
     },
+
     async toggleSwitchFile () {
       if (!this.showOriginal) {
         this.showOriginal = true
@@ -499,6 +514,7 @@ export default {
       }
     }
   },
+
   beforeDestroy () {
     this.setTaskChanged(false)
     this.resetAttachmentData()

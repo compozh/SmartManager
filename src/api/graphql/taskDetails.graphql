@@ -50,6 +50,7 @@ fragment detailTaskFields on Task {
     kidCopy
     nextButtonText
     previousButtonText
+    type
     taskType
     caseId
     participants {

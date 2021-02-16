@@ -22,7 +22,6 @@ export default {
       const hubProxy = connection.createHubProxy(hubName)
       const onReceive = receivedMessage => {
         const message = JSON.parse(receivedMessage)
-        console.log(message)
 
         if (message.TASKID) {
           this.getFolders()
