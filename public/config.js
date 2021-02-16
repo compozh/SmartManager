@@ -7,6 +7,7 @@ window.appConfig = {
   SignalRUrl: DM ? '*SIGNALRURL*' : 'https://m.it.ua/ws/signalr/hubs',
   SiteUrl: DM ? '*SITEURL*' : 'https://m.it.ua',
   iconset: DM ? '*ICONSET*' : '',
+  rtl: DM ? '*RTL*' : false,
   oidc: {
     authority: 'https://smartid.smarttender.biz/login/',
     client: 'smartmanager.fb02fc7e-b33e-47a8-8ce3-c3ad9a986d66',
