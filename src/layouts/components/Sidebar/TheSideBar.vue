@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer id="sideBar"
-                       app
-                       permanent
+                       app permanent
+                       :right="rtl"
                        :mini-variant.sync="miniVariant"
                        :expand-on-hover="expandOnHover"
                        width="300"
@@ -83,6 +83,10 @@ export default {
           default: return 'folder'
         }
       }
+    },
+
+    rtl () {
+      return window.appConfig.rtl
     }
   }
 }

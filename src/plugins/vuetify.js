@@ -10,6 +10,7 @@ import zh from 'vuetify/es5/locale/zh-Hans'
 Vue.use(Vuetify)
 
 export default new Vuetify({
+  rtl: window.appConfig.rtl,
   theme: {
     themes: {
       light: {

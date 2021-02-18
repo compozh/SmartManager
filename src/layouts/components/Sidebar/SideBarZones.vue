@@ -1,7 +1,7 @@
 <template>
-  <v-navigation-drawer fixed
-                       mini-variant
-                       permanent>
+  <v-navigation-drawer fixed permanent
+                       :right="rtl"
+                       mini-variant>
 
     <v-list-item class="px-0 justify-center"
                  style="min-height: 47px; height: 47px;">
@@ -18,7 +18,7 @@
                      @click="$router.push({ name: 'home' })"
                      v-on="on"/>
 
-              <!-- It-interprise icon -->
+              <!-- It-enterprise icon -->
               <v-img v-else
                      src="@/assets/images/logo.png"
                      max-height="32px"
@@ -100,6 +100,10 @@ export default {
   computed: {
     iconset () {
       return window.appConfig.iconset
+    },
+
+    rtl () {
+      return window.appConfig.rtl
     }
   },
 
