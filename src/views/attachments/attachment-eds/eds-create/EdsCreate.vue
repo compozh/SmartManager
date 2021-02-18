@@ -198,18 +198,22 @@ export default {
 
   async mounted () {
     this.loading = true
-    this.dsInit()
-    // Save key in current session
-    if (this.saveKeyOption === 'saveInSession') {
-      window.ds = this.ds
+    try {
+      this.dsInit()
+      // Save key in current session
+      if (this.saveKeyOption === 'saveInSession') {
+        window.ds = this.ds
+      }
+      const preferKeyType = await this.ds.initialise()
+      this.keyType = this.signItems.find(type => type.value === preferKeyType)
+      const getCAsResult = await this.ds.getCAs()
+      const issuerCNs = getCAsResult.map(ca => ({ text: ca.issuerCNs[0], value: ca }))
+      const autoDetect = { text: this.$t('eds.autoDetect'), value: null }
+      this.issuerCNs = [autoDetect, ...issuerCNs]
+      this.issuerCN = this.issuerCNs[0].value
+    } catch (e) {
+      this.error = e
     }
-    const preferKeyType = await this.ds.initialise()
-    this.keyType = this.signItems.find(type => type.value === preferKeyType)
-    const getCAsResult = await this.ds.getCAs()
-    const issuerCNs = getCAsResult.map(ca => ({ text: ca.issuerCNs[0], value: ca }))
-    const autoDetect = { text: this.$t('eds.autoDetect'), value: null }
-    this.issuerCNs = [autoDetect, ...issuerCNs]
-    this.issuerCN = this.issuerCNs[0].value
     this.loading = false
   }
 }
