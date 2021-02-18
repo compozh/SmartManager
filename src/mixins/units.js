@@ -171,7 +171,7 @@ export const tasks = {
           businessObjectParams = {
             BusinessObjectDefinitionCode: businessObject.BusinessObjectDefinitionCode || '',
             BusinessObjectKey: businessObject.BusinessObjectKey || '',
-            BusinessObjectType: businessObject.BusinessObjectKeyType || 0
+            BusinessObjectKeyType: businessObject.BusinessObjectKeyType || 0
           }
         }
         return businessObjectParams
