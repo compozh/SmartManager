@@ -103,7 +103,7 @@ export default {
     },
 
     rtl () {
-      return window.appConfig.rtl
+      return Boolean(window.appConfig.rtl)
     }
   },
 
