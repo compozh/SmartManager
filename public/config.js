@@ -3,10 +3,11 @@ const DM = window.DOCKERMODE
 window.appConfig = {
   BASE_URL: window.VUE_APP_BASE_PATH,
   GqlUrl: DM ? '*GRAPHQLURL*' : (window.devMode ? 'http://localhost:5002/' : 'https://m.it.ua/GraphQlServer/'),
-  WsUrl: DM ? '*WEBSERVICEURL*' : (window.devMode ? 'http://localhost:64137/ws' : 'https://m.it.ua/ws/'),
+  WsUrl: DM ? '*WEBSERVICEURL*' : 'https://m.it.ua/ws/',
   SignalRUrl: DM ? '*SIGNALRURL*' : 'https://m.it.ua/ws/signalr/hubs',
   SiteUrl: DM ? '*SITEURL*' : 'https://m.it.ua',
   iconset: DM ? '*ICONSET*' : '',
+  lang: DM ? '*LANG*' : '',
   rtl: DM ? '*RTL*' : false,
   oidc: {
     authority: 'https://smartid.smarttender.biz/login/',

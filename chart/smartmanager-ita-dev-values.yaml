@@ -3,6 +3,7 @@ signalrUrl: https://m.it.ua/ws/signalr/hubs
 siteUrl: https://m.it.ua
 webServiceUrl: https://m.it.ua
 iconset: ""
+lang: ""
 rtl: ""
 scaling:
   replicas: 1 #3
