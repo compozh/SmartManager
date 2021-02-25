@@ -66,6 +66,7 @@
         </td>
         <td class="text-center">
           <div>
+
             <!-- EDS dialog button -->
             <v-tooltip top>
               <template #activator="{ on }">
@@ -119,9 +120,11 @@ const Eds = () => import('../attachment-eds/EdsList')
 export default {
   name: 'VersionList',
   mixins: [attachments, eds, date],
+
   props: {
     attachment: Object
   },
+
   components: {
     FileTypeIcon,
     DeleteConfirm,
@@ -129,6 +132,7 @@ export default {
     VersionBtns,
     Eds
   },
+
   data: () => ({
     deleteConfirmDialog: false,
     deleteParams: {},
@@ -139,15 +143,18 @@ export default {
     notesDialog: false,
     edsDialog: false
   }),
+
   computed: {
-    isSign: () => version => version.Details.Signatures && version.Details.Signatures.length
+    isSign: () => version => !!version.Details?.Signatures?.length
   },
+
   methods: {
     versionDeleteDialog (version) {
       this.deleteConfirmDialog = true
       this.deleteParams.versionId = version.Id
       this.deleteParams.fileName = `${version.Name} (${this.$t('table.version')} ${version.Version})`
     },
+
     showNotes (version) {
       this.notesDialog = true
       this.roots.attachmentId = this.attachment.id
@@ -156,6 +163,7 @@ export default {
         this.notes = version.Details.Notes || []
       }
     },
+
     showEds (version) {
       this.edsDialog = true
       if (version.Details) {
@@ -172,7 +180,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

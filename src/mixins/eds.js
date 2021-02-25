@@ -196,9 +196,9 @@ export default {
         const result = await this.$store.dispatch('beforeSignAttachment', {
           attachment, keyParams
         })
-        if (result?.url) {
-          await this.getSign(result.url)
-          await this.signAttachment(result.id)
+        if (result?.FileUrl) {
+          await this.getSign(result.FileUrl)
+          await this.signAttachmentMultiple(result.Id)
         }
         if (result === null) {
           await this.getSign(attachment.url)

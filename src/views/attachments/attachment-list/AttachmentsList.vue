@@ -99,7 +99,7 @@
                 <!-- Signed file icon -->
                 <td class="text-center" style="width: 20px; position: relative">
                   <div v-if="!hover">
-                    <fa-icon v-if="attachment.isSign" color="#FFC107"
+                    <fa-icon v-if="isSign(attachment)" color="#FFC107"
                              icon="award" type="fal" fixed-size="20"/>
                     <span v-else>-</span>
                   </div>
@@ -107,7 +107,7 @@
                   <!-- Buttons for attachment management -->
                   <attachment-btns v-if="hover" :objectId="objectId"
                                    :access="attachment.access"
-                                   :is-sign="attachment.isSign"
+                                   :is-sign="isSign(attachment)"
                                    :sign-btn-active="isPrivateKey"
                                    :loading="downLoaders.includes(attachment.id)"
                                    @new-version="newVersion(attachment)"
@@ -225,6 +225,10 @@ export default {
         }
       }
       return handler
+    },
+
+    isSign () {
+      return attachment => !!attachment?.signatures?.length
     }
   },
 
