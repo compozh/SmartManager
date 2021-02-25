@@ -60,6 +60,8 @@
               <tr style="cursor: pointer; width: 100%;"
                   :class="{ 'light-blue lighten-5': attachment.id === activeAttachment.id }"
                   @click="selectAttachment(attachment)">
+
+                <!-- Expand icon for versions view -->
                 <td class="px-1">
                   <v-btn icon :loading="versionLoaders.includes(attachment.id)"
                          @click.stop="expandVersions(attachment, expand, isExpanded)">
@@ -73,23 +75,36 @@
                     </template>
                   </v-btn>
                 </td>
-                <td class="text-center px-0"
-                    style="width: 30px;">
+
+                <!-- File type icon -->
+                <td class="text-center px-0" style="width: 30px;">
                   <file-type-icon :extension="attachment.fileExt"/>
                 </td>
+
+                <!-- File name -->
                 <td class="text-truncate" style="max-width: 0;">{{ attachment.fileName }}</td>
-                <td class="text-center text-truncate" style="width: 150px; max-width: 120px;">
+
+                <!-- Date file adding -->
+                <td class="text-center text-truncate"
+                    style="width: 150px; max-width: 120px;">
                   <span v-if="!hover">{{ toLocalString(attachment.date) }}</span>
                 </td>
-                <td class="text-center text-truncate" style="width: 100px; max-width: 0;">
+
+                <!-- File size -->
+                <td class="text-center text-truncate"
+                    style="width: 100px; max-width: 0;">
                   <span v-if="!hover">{{ fileSize(attachment.fileSize) }}</span>
                 </td>
+
+                <!-- Signed file icon -->
                 <td class="text-center" style="width: 20px; position: relative">
                   <div v-if="!hover">
                     <fa-icon v-if="attachment.isSign" color="#FFC107"
                              icon="award" type="fal" fixed-size="20"/>
                     <span v-else>-</span>
                   </div>
+
+                  <!-- Buttons for attachment management -->
                   <attachment-btns v-if="hover" :objectId="objectId"
                                    :access="attachment.access"
                                    :is-sign="attachment.isSign"
@@ -104,6 +119,7 @@
             </v-hover>
           </template>
 
+          <!-- Expand slot - version list -->
           <template #expanded-item="{ item: attachment }">
             <tr class="expanded" style="border: 1px solid grey;">
               <td :colspan="headers.length + 1" class="pl-10 pr-0 pb-5">
@@ -111,9 +127,12 @@
               </td>
             </tr>
           </template>
+
         </v-data-table>
       </div>
     </perfect-scrollbar>
+
+    <!-- Attachment delete confirm dialog -->
     <delete-confirm v-if="deleteConfirmDialog"
                     v-model="deleteConfirmDialog"
                     @confirm="attachmentDelete(deleteParams.attachment)">
@@ -123,6 +142,7 @@
         <br><br>{{ '- ' + deleteParams.fileName }}
       </template>
     </delete-confirm>
+
     <!-- Eds list-->
     <eds v-if="edsDialog"
          v-model="edsDialog"
@@ -147,10 +167,12 @@ const FilesUpload = () => import('@/views/attachments/attachment-upload/FilesUpl
 export default {
   name: 'AttachmentsList',
   mixins: [common, tasks, cases, attachments, eds, date],
+
   props: {
     businessObject: Object,
     attachmentList: Array
   },
+
   components: {
     Eds,
     ListHeader,
@@ -160,6 +182,7 @@ export default {
     FilesUpload,
     FileTypeIcon
   },
+
   data: () => ({
     attachmentsListMode: false,
     deleteConfirmDialog: false,
@@ -178,6 +201,7 @@ export default {
       suppressScrollX: true
     }
   }),
+
   computed: {
     headers () {
       return [
@@ -188,6 +212,7 @@ export default {
         { text: this.$t('table.sign'), value: 'sign', align: 'center' }
       ]
     },
+
     uploadHandler () {
       let handler = () => {}
       if (this.uploadType === 'attachments') {
@@ -202,14 +227,17 @@ export default {
       return handler
     }
   },
+
   created () {
     this.getAttachmentTypes(this.businessObject)
   },
+
   methods: {
     async selectAttachment (attachment, version) {
       await this.setActiveAttachment(attachment, version)
       this.$emit('selectAttachment')
     },
+
     async expandVersions (attachment, expand, isExpanded) {
       this.versionLoaders.push(attachment.id)
       if (attachment.hasDetails || isExpanded) {
@@ -220,21 +248,25 @@ export default {
       }
       this.versionLoaders = this.versionLoaders.filter(i => i !== attachment.id)
     },
+
     newVersion (attachment) {
       this.uploadType = 'version'
       this.versionParams = { attachment }
     },
+
     async downloadAttachment (attachment) {
       this.downLoaders.push(attachment.id)
       attachment.srcUrl || await this.getAttachmentDetails(attachment)
       window.open(attachment.srcUrl, '_self')
       this.downLoaders = this.downLoaders.filter(i => i !== attachment.id)
     },
+
     attachmentDeleteDialog (attachment) {
       this.deleteConfirmDialog = true
       this.deleteParams.attachment = attachment
       this.deleteParams.fileName = attachment.fileName
     },
+
     async showEds (attachment) {
       this.edsDialog = true
       attachment.url || await this.getAttachmentDetails(attachment)

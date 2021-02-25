@@ -305,18 +305,41 @@ export default {
     }
   },
 
-  async signAttachment ({ dispatch, commit }, { attachment, params, taskId, caseId }) {
+  async beforeSignAttachment ({ dispatch, commit }, { attachment, keyParams }) {
+    const response = await api.beforeSignInGql(attachment.id, keyParams)
+    const result = JSON.parse(response.data.smtasks.beforeSign)
+    // If receive a converted file, need to request detailed information about it
+    if (result?.FILENAME) {
+      const response = await api.getFileDetailsFromGql(result.ID, result.FILETYPE, 0)
+      return JSON.parse(response.data.smtasks.fileDetails)
+    }
+
+    if (!result && !attachment.hasDetails) {
+      await dispatch('getFileDetails', {
+        fileId: attachment.id,
+        fileExt: attachment.fileExt,
+        fileSize: attachment.fileSize
+      })
+    }
+    return result
+  },
+
+  async signAttachment ({ dispatch, commit }, payload) {
     commit('START_PRELOADER', 'signAttachment')
     try {
-      const response = await api.signAttachmentInGql(attachment.fileId, params)
+      const fileId = payload.fileId || payload.attachment.fileId
+      const response = await api.signAttachmentInGql(fileId, payload.signParams)
       const result = response.data.smtasksMutation.signAttachment
       if (result.success) {
         commit('SET_NOTIFY', {
           text: i18n.t('notify.signAttachmentSuccess'),
           color: 'success'
         })
-        dispatch('updateAfterChanges', { taskId, caseId })
-        dispatch('getFileDetails', attachment)
+        if (payload.needUpdate) {
+          const { taskId, caseId } = payload
+          dispatch('updateAfterChanges', { taskId, caseId })
+          dispatch('getFileDetails', payload.attachment)
+        }
       } else {
         commit('SET_NOTIFY', {
           text: result.errorMessage || i18n.t('notify.signAttachmentFail'),

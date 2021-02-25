@@ -18,10 +18,30 @@ export default {
     signResult: null,
     keyMedias: [],
     loading: false,
-    error: null
+    error: null,
+    progressBar: false,
+    progressBarValue: 0
   }),
 
   computed: {
+    keyParams () {
+      if (this.signatureInfo) {
+        const sign = this.signatureInfo
+        return {
+          fio: sign.subjCN || sign.subjFullName,
+          email: sign.subjEMail,
+          post: sign.subjTitle,
+          organization: sign.subjOrg,
+          city: sign.subjLocality,
+          organizationStateCode: sign.subjEDRPOUCode,
+          userStateCode: sign.subjDRFOCode,
+          keyCenter: sign.issuerCN,
+          keyNumber: sign.serial
+        }
+      }
+      return null
+    },
+
     signParams () {
       if (this.signResult) {
         const sign = this.signResult.SignatureInfo.OwnerInfo
@@ -75,7 +95,7 @@ export default {
     },
 
     keyType (type, oldType) {
-      if (type.value === oldType.value) return
+      if (type === oldType) return
       this.initLocalState()
       this.setLibraryType()
     }
@@ -124,8 +144,14 @@ export default {
       this.loading = true
       try {
         await this.readPrivateKey()
-        await this.getSign()
-        await this.signAttachment()
+
+        if (this.multipleSign) {
+          await this.runMultipleSign()
+        } else {
+          await this.getSign(this.attachment.fileUrl)
+          await this.signAttachment()
+        }
+
         this.$emit('input', false)
       } catch (e) {
         this.error = e
@@ -146,31 +172,63 @@ export default {
         : this.fileKey
 
       return this.ds.readFileKey(privateKey, this.password, this.privateKeyCertificates)
-        .then(result => { this.signatureInfo = result })
-        .catch(e => { this.needPrivateKeyCertificates = e.code === 51 })
-        .catch(e => { throw Error(e.message) })
+        .then(result => { this.signatureInfo = result.ownerInfo })
+        .catch(e => {
+          this.needPrivateKeyCertificates = e.code === 51
+          throw Error(e.message)
+        })
     },
 
     readHardwareKey () {
       this.hardwareKey.password = this.password
       return this.ds.readHardwareKey(this.hardwareKey, this.privateKeyCertificates)
-        .then(result => { this.signatureInfo = result })
-        .catch(e => { this.needPrivateKeyCertificates = e.code === 51 })
-        .catch(e => { throw Error(e.message) })
+        .then(result => { this.signatureInfo = result.ownerInfo })
+        .catch(e => {
+          this.needPrivateKeyCertificates = e.code === 51
+          throw Error(e.message)
+        })
     },
 
-    getSign () {
-      return this.ds.signFileEx(this.attachment.fileUrl, false)
+    async runMultipleSign () {
+      this.progressBar = true
+      const keyParams = JSON.stringify(this.keyParams)
+      for (const attachment of this.attachments) {
+        const result = await this.$store.dispatch('beforeSignAttachment', {
+          attachment, keyParams
+        })
+        if (result?.url) {
+          await this.getSign(result.url)
+          await this.signAttachment(result.id)
+        }
+        if (result === null) {
+          await this.getSign(attachment.url)
+          await this.signAttachmentMultiple(attachment.id)
+        }
+        this.progressBarValue++
+      }
+      // Timeout for show progress bar end
+      await new Promise(resolve => {
+        setTimeout(() => resolve(this.$emit('sign-done')), 500)
+      })
+    },
+
+    getSign (fileUrl) {
+      return this.ds.signFileEx(fileUrl, false)
         .then(result => { this.signResult = result })
         .catch(e => { throw Error(e.message) })
     },
 
     signAttachment () {
       const attachment = this.attachment
-      const params = JSON.stringify(this.signParams)
+      const signParams = JSON.stringify(this.signParams)
       const { taskId, caseId } = this.$route.params
-      const payload = { attachment, params, taskId, caseId }
+      const payload = { attachment, signParams, taskId, caseId, needUpdate: true }
       return this.$store.dispatch('signAttachment', payload)
+    },
+
+    signAttachmentMultiple (fileId) {
+      const signParams = JSON.stringify(this.signParams)
+      return this.$store.dispatch('signAttachment', { fileId, signParams })
     },
 
     async reload () {

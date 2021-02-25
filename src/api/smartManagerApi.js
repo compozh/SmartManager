@@ -268,11 +268,23 @@ export class SmartManagerApi {
     }
   }
 
+  static async getCommentsFromGql (type, id) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        query: gql`${q.commentsGet}`,
+        variables: { type, id }
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
+
   static async addCommentToGql (comment, params) {
     try {
       const client = await getClient('smartmanager')
       return await client.mutate({
-        mutation: gql`${q.addComment}`,
+        mutation: gql`${q.commentAdd}`,
         variables: { comment, params }
       })
     } catch (e) {
@@ -469,6 +481,18 @@ export class SmartManagerApi {
       return await client.query({
         query: gql`${q.signCheck}`,
         variables: { id }
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
+
+  static async beforeSignInGql (id, params) {
+    try {
+      const client = await getClient('smartmanager')
+      return await client.query({
+        query: gql`${q.signBefore}`,
+        variables: { id, params }
       })
     } catch (e) {
       console.error(e.message)

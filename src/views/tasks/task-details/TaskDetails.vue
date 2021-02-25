@@ -3,20 +3,31 @@
             persistent
             no-click-animation>
 
+    <!-- Dialog header -->
     <div class="d-flex justify-space-between align-center mb-2">
+
+      <!-- Breadcrumb -->
       <div class="d-flex white px-2"
            style="height: 25px; border-radius: 5px;">
+
+        <!-- App name -->
         <div class="px-3" style="color: #2D469C;">Smart Manager</div>
         <v-img v-if="activeZone.title"
                src="@/assets/icons/chevron.svg" width="10px"/>
+
+        <!-- Zone name -->
         <div v-if="activeZone.title" class="px-3 success--text">
           {{ activeZone.title }}</div>
         <v-img v-if="activeFolder.Name"
                src="@/assets/icons/chevron.svg" width="10px"/>
+
+        <!-- Folder name -->
         <div v-if="activeFolder.Name" class="px-3 primary--text">
           {{ activeFolder.Name }}
         </div>
       </div>
+
+      <!-- Close task details button -->
       <v-btn fab x-small
              depressed
              color="white"
@@ -55,9 +66,9 @@
           <task-buttons v-if="!taskChanged || taskEditable"
                         class="py-3"
                         :buttonIsBlocked="buttonIsBlocked"
-                        @changeStage="changeStage"
-                        @changeStatus="changeStatus"
-                        @executeExternalTask="executeExternalTask"/>
+                        @changeStage="executeTask(changeStage)"
+                        @changeStatus="executeTask(changeStatus)"
+                        @executeExternalTask="executeTask(executeExternalTask)"/>
           <!-- TASK MENU - MORE BTN -->
           <!-- TODO: need define task menu btn position-->
           <!--          <task-menu @taskDelete="taskDelete"-->
@@ -197,6 +208,14 @@
         </v-tabs-items>
       </SplitArea>
     </Split>
+
+    <!-- Sign attachments dialog -->
+    <eds-create v-if="signAttachmentsDialog"
+                v-model="signAttachmentsDialog"
+                multiple-sign
+                :attachments="attachments"
+                @sign-done="taskExecuteMethod"/>
+
   </v-dialog>
 </template>
 
@@ -220,6 +239,7 @@ const AttachmentsList = () => import('@/views/attachments/attachment-list/Attach
 const AttachmentsViewer = () => import('@/views/attachments/attachment-viewers/AttachmentsViewer')
 const Comments = () => import('@/views/comments/Comments')
 const Diagram = () => import('@/views/diagram/Diagram')
+const EdsCreate = () => import('@/views/attachments/attachment-eds/eds-create/EdsCreate')
 
 export default {
   name: 'TaskDetails',
@@ -239,7 +259,8 @@ export default {
     AttachmentsList,
     AttachmentsViewer,
     Comments,
-    Diagram
+    Diagram,
+    EdsCreate
   },
   mixins: [zones, folders, tasks, attachments, date],
   data: () => ({
@@ -256,13 +277,16 @@ export default {
       suppressScrollX: true
     },
     buttonIsBlocked: false,
-    showOriginal: true
+    showOriginal: true,
+    signAttachmentsDialog: false,
+    taskExecuteMethod: null
   }),
   computed: {
     form () {
       return this.externalParams && this.externalParams.FORM
         ? this.externalParams.FORM : {}
     },
+
     formDefinition () {
       return {
         components: this.form.COMPONENTS,
@@ -275,19 +299,23 @@ export default {
         name: this.form.NAME
       }
     },
+
     baseTask () {
       return this.task.parentTask && this.task.parentTask.id
         ? this.task.parentTask
         : null
     },
+
     childTasks () {
       return this.task.childTasks && this.task.childTasks.length
         ? this.task.childTasks
         : []
     },
+
     visibleTabs () {
       return this.tabItems.filter(tab => tab.isVisible)
     },
+
     tabItems () {
       return [
         {
@@ -310,6 +338,7 @@ export default {
         }
       ]
     },
+
     attachmentList () {
       return key => {
         if (key) {
@@ -324,6 +353,7 @@ export default {
         }
       }
     },
+
     showConvertBtn () {
       const version = this.currentVersion.Details || {}
       if (version.FileName) {
@@ -332,6 +362,10 @@ export default {
         if (matching) return ext.toUpperCase()
       }
       return false
+    },
+
+    needAttachmentsSign () {
+      return this.task.type === 'DLPSIGNDOC' && this.attachments.length
     }
   },
 
@@ -430,6 +464,15 @@ export default {
       }
     },
 
+    executeTask (executor) {
+      if (this.needAttachmentsSign) {
+        this.taskExecuteMethod = executor
+        this.signAttachmentsDialog = true
+      } else {
+        executor()
+      }
+    },
+
     async changeStatus (status, CompleteParams) {
       this.buttonIsBlocked = true
       const statusParams = {
@@ -478,6 +521,7 @@ export default {
         pin: !this.task.isFavorite
       })
     },
+
     async taskDelete () {
       const success = await this.$store.dispatch('taskDelete', this.taskId)
       if (success) {

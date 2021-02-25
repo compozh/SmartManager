@@ -100,6 +100,14 @@
             </outlined-btn>
           </v-alert>
 
+          <v-progress-linear v-if="progressBar"
+                             color="primary"
+                             height="30"
+                             :value="progressBarValue / attachments.length * 100"
+                             striped>
+            {{ progressBarValue }} / {{ attachments.length }}
+          </v-progress-linear>
+
         </v-col>
       </v-row>
     </template>
@@ -127,6 +135,7 @@
       </outlined-btn>
 
     </template>
+
   </dialog-card>
 </template>
 
@@ -146,7 +155,9 @@ export default {
   },
   props: {
     attachment: Object,
-    showDialog: Boolean
+    attachments: Array,
+    showDialog: Boolean,
+    multipleSign: Boolean
   },
 
   components: {
@@ -206,9 +217,11 @@ export default {
       }
       const preferKeyType = await this.ds.initialise()
       this.keyType = this.signItems.find(type => type.value === preferKeyType)
+
       const getCAsResult = await this.ds.getCAs()
       const issuerCNs = getCAsResult.map(ca => ({ text: ca.issuerCNs[0], value: ca }))
       const autoDetect = { text: this.$t('eds.autoDetect'), value: null }
+
       this.issuerCNs = [autoDetect, ...issuerCNs]
       this.issuerCN = this.issuerCNs[0].value
     } catch (e) {

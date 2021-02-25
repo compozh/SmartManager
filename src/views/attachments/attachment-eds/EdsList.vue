@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dialog-card :value="showEds" width="80%"
+    <dialog-card :value="showEds" width="70%"
                  @input="$emit('input', $event)"
                  :title="$t('eds.title')"
                  :loading="loading"
